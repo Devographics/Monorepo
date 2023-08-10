@@ -27,29 +27,29 @@
   path: /
   showTitle: false
   blocks:
-    # - id: survey_livestream
-    #   blockType: LivestreamBlock
-    #   disableExport: true
-    #   wrapBlock: false
-    - id: survey_intro
-      blockType: SurveyIntroBlock
-      disableExport: true
-      wrapBlock: false
-    - id: survey_credits
-      template: credits
-    - id: survey_newsletter
-      blockType: NewsletterBlock
-      disableExport: true
-      wrapBlock: false
-    - id: survey_sponsors
-      template: sponsors
-    - id: survey_partners
-      blockType: PartnersBlock
-      template: sponsors
-    - id: survey_translators
-      blockType: TranslatorsBlock
-      disableExport: true
-      wrapBlock: false
+      # - id: survey_livestream
+      #   blockType: LivestreamBlock
+      #   disableExport: true
+      #   wrapBlock: false
+      - id: survey_intro
+        blockType: SurveyIntroBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_credits
+        template: credits
+      - id: survey_newsletter
+        blockType: NewsletterBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_sponsors
+        template: sponsors
+      - id: survey_partners
+        blockType: PartnersBlock
+        template: sponsors
+      - id: survey_translators
+        blockType: TranslatorsBlock
+        disableExport: true
+        wrapBlock: false
 
 # - id: tshirt
 #   path: /tshirt
@@ -66,146 +66,151 @@
   titleId: sections.demographics.title
   path: /demographics
   blocks:
-    - template: page_introduction
+      - template: page_introduction
 
-    - id: country
-      template: demographics
-      blockType: ParticipationByCountryBlock
+      - id: country
+        template: demographics
+        blockType: ParticipationByCountryBlock
 
-    - id: locale
-      template: demographics
-      blockType: HorizontalBarBlock
-      translateData: true
-      variables:
-        options: {cutoff: 20}
+      - id: locale
+        template: demographics
+        blockType: HorizontalBarBlock
+        translateData: true
+        variables:
+            options: { cutoff: 20 }
 
-    - id: completion_stats
-      template: demographics
-      blockType: KnowledgeScoreBlock
-      translateData: true
+      - id: completion_stats
+        template: demographics
+        blockType: KnowledgeScoreBlock
+        translateData: true
 
-    - id: hint_hint
-      template: hint
-      
-    - id: age
-      template: demographics
+      - id: hint_hint
+        template: hint
 
-    - id: years_of_experience
-      template: demographics
-      variants:
-        - id: years_of_experience_by_salary
-          blockNamespace: user_info
-          tabId: tabs.by_salary
-          template: by_facet
-          variables:  
-            fieldId: years_of_experience
-            facetId: yearly_salary
-            options: {facetSort: {order: ___asc___, property: mean}, facetMinCount: 100}
+      - id: age
+        template: demographics
 
-    - id: company_size
-      template: demographics
+      - id: years_of_experience
+        template: demographics
+        # variants:
+        #     - id: years_of_experience_by_salary
+        #       blockNamespace: user_info
+        #       tabId: tabs.by_salary
+        #       template: by_facet
+        #       variables:
+        #           fieldId: years_of_experience
+        #           facetId: yearly_salary
+        #           options: { facetSort: { order: ___asc___, property: mean }, facetMinCount: 100 }
 
-    - id: variants_hint
-      template: hint
+      - id: company_size
+        template: demographics
 
-    - id: higher_education_degree
-      template: demographics
+      - id: variants_hint
+        template: hint
 
-    - id: yearly_salary
-      template: demographics
-      variants:
-        - id: yearly_salary_by_degree
-          blockNamespace: user_info
-          tabId: tabs.by_degree
-          template: by_facet
-          variables:  
-            fieldId: yearly_salary
-            facetId: higher_education_degree
-            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
-        - id: yearly_salary_by_experience
-          blockNamespace: user_info
-          tabId: tabs.by_experience
-          template: by_facet
-          variables:  
-            fieldId: yearly_salary
-            facetId: years_of_experience
-            options: {facetSort: {order: ___desc___, property: mean}, facetMinCount: 100}
+      - id: higher_education_degree
+        template: demographics
 
-    - id: source
-      template: source
-      blockType: HorizontalBarBlock
-      dataFunction: cleanUpSources
-      variables:
-        options: {limit: 20}
-      
-    - id: gender
-      template: demographics
+      - id: yearly_salary
+        template: demographics
+        # variants:
+        #     - id: yearly_salary_by_degree
+        #       blockNamespace: user_info
+        #       tabId: tabs.by_degree
+        #       template: by_facet
+        #       variables:
+        #           fieldId: yearly_salary
+        #           facetId: higher_education_degree
+        #           options: { facetSort: { order: ___desc___, property: mean }, facetMinCount: 100 }
+        #     - id: yearly_salary_by_experience
+        #       blockNamespace: user_info
+        #       tabId: tabs.by_experience
+        #       template: by_facet
+        #       variables:
+        #           fieldId: yearly_salary
+        #           facetId: years_of_experience
+        #           options: { facetSort: { order: ___desc___, property: mean }, facetMinCount: 100 }
 
-    - id: race_ethnicity
-      template: demographics
-      blockType: HorizontalBarBlock
-      translateData: true
-      variants:
-        - id: race_ethnicity_by_years_of_experience
-          blockNamespace: user_info
-          tabId: tabs.by_experience
-          template: by_facet
-          variables:  
-            fieldId: race_ethnicity
-            facetId: years_of_experience
-            options: {facetSort: {order: ___asc___, property: mean}, limit: 11, facetMinCount: 100}
+      - id: source
+        template: demographics
+        blockType: HorizontalBarBlock
+        dataFunction: cleanUpSources
+        variables:
+            options: { limit: 20 }
 
-    - id: disability_status
-      template: demographics
-      blockType: HorizontalBarBlock
-      translateData: true
-      # variants:
-      #   - id: disability_status_others
-      #     template: demographics
-      #     blockType: HorizontalBarBlock
-      #     units: count
-      #     translateData: true
+      - id: gender
+        template: demographics
 
-    # - id: user_info_resources
-    #   items: [fm-homepage]
-    #   template: recommended_resources
+      - id: race_ethnicity
+        template: demographics
+        blockType: HorizontalBarBlock
+        translateData: true
+        # variants:
+        #     - id: race_ethnicity_by_years_of_experience
+        #       blockNamespace: user_info
+        #       tabId: tabs.by_experience
+        #       template: by_facet
+        #       variables:
+        #           fieldId: race_ethnicity
+        #           facetId: years_of_experience
+        #           options:
+        #               {
+        #                   facetSort: { order: ___asc___, property: mean },
+        #                   limit: 11,
+        #                   facetMinCount: 100
+        #               }
+
+      - id: disability_status
+        template: demographics
+        blockType: HorizontalBarBlock
+        translateData: true
+        # variants:
+        #   - id: disability_status_others
+        #     template: demographics
+        #     blockType: HorizontalBarBlock
+        #     units: count
+        #     translateData: true
+
+      # - id: user_info_resources
+      #   items: [fm-homepage]
+      #   template: recommended_resources
 
 - id: features
   path: /features
   blocks:
-    - template: page_introduction
+      - template: page_introduction
 
-    - id: features_overview
-      template: features_overview
+      - id: features_overview
+        template: features_overview
 
-    - id: features_graphql_language
-      template: multi_features_experience
-      variables:
-        categoryId: graphql_language
+      - id: features_graphql_language
+        template: multi_features_experience
+        variables:
+            categoryId: graphql_language
 
-    - id: features_directives
-      template: multi_features_experience
-      variables:
-        categoryId: directives
+      - id: features_directives
+        template: multi_features_experience
+        variables:
+            categoryId: directives
 
-    - id: features_security_performance
-      template: multi_features_experience
-      variables:
-        categoryId: security_performance
+      - id: features_security_performance
+        template: multi_features_experience
+        variables:
+            categoryId: security_performance
 
-    - id: features_other_features
-      template: multi_features_experience
-      variables:
-        categoryId: other_features
+      - id: features_other_features
+        template: multi_features_experience
+        variables:
+            categoryId: other_features
 
-    - id: knowledge_score
-      template: demographics
-      blockNamespace: features
-      blockType: KnowledgeScoreBlock
+      - id: knowledge_score
+        template: demographics
+        blockNamespace: features
+        blockType: KnowledgeScoreBlock
 
-    # - id: features_resources
-    #   items: [fm-javascript]
-    #   template: recommended_resources
+      # - id: features_resources
+      #   items: [fm-javascript]
+      #   template: recommended_resources
 
   # children:
   #   - id: graphql_language
@@ -271,7 +276,7 @@
   #   - id: security_performance
   #     path: /security-performance
   #     blocks:
-        
+
   #     - id: query_timeouts
   #       template: feature_experience
   #     - id: query_rate_limit
@@ -301,11 +306,10 @@
   #       items: [fm-web-assembly, fm-pwas]
   #       template: recommended_resources
 
-
   #   - id: other_features
   #     path: /other-features
   #     blocks:
-        
+
   #     - id: graphql_subscriptions
   #       template: feature_experience
 
@@ -327,636 +331,635 @@
 - id: libraries
   path: /libraries
   blocks:
-    - id: librariesIntroduction
-      template: page_introduction
+      - id: librariesIntroduction
+        template: page_introduction
 
-    # - id: tools_arrows
-    #   template: tools_arrows
+      # - id: tools_arrows
+      #   template: tools_arrows
 
-    # - id: tier_list
-    #   template: tier_list
+      # - id: tier_list
+      #   template: tier_list
 
-    - id: scatterplot_overview
-      template: scatterplot_overview
+      - id: scatterplot_overview
+        template: scatterplot_overview
 
-    - id: all_sections_tools_cardinality_by_user
-      template: tools_cardinality_by_user_graphql
+      # - id: all_sections_tools_cardinality_by_user
+      #   template: tools_cardinality_by_user_graphql
 
   children:
-    - id: graphql_servers
-      path: /servers
-      blocks:
-        - template: page_introduction
+      - id: graphql_servers
+        path: /servers
+        blocks:
+            - template: page_introduction
 
-        - template: tools_experience_ranking
-          blockType: ToolsExperienceRankingSingleYearBlock
+            - template: tools_experience_ranking
+              blockType: ToolsExperienceRankingSingleYearBlock
 
-        - id: tool_modal_hint
-          template: hint
-          
-        - template: tools_experience_marimekko
+            - id: tool_modal_hint
+              template: hint
 
-        - template: section_other_tools
-          variables:
-            limit: 10
+            - template: tools_experience_marimekko
 
-        - id: jamie_barton
-          template: picks
-          variables:
-            url: https://www.the-guild.dev/graphql/mesh
+            - template: section_other_tools
+              variables:
+                  limit: 10
 
-        - template: happiness
-          variables:
-            fieldId: graphql_servers
+            - id: jamie_barton
+              template: picks
+              variables:
+                  url: https://www.the-guild.dev/graphql/mesh
 
-        - id: graphql_servers_resources
-          items: [fm-server-graphql, tg-yoga]
-          template: recommended_resources
+            - template: happiness
+              variables:
+                  fieldId: graphql_servers
 
-        - id: apollo_server
-          template: tool_experience
-        - id: yoga
-          template: tool_experience
-        - id: graphql_js
-          template: tool_experience
-        - id: helix
-          template: tool_experience
-        - id: express_graphql
-          template: tool_experience
-        - id: mercurius
-          template: tool_experience
-        - id: dgs
-          template: tool_experience
-        - id: graphql_dotnet
-          template: tool_experience
-        - id: absinthe
-          template: tool_experience
-        - id: graphql_go
-          template: tool_experience
+            - id: graphql_servers_resources
+              items: [fm-server-graphql, tg-yoga]
+              template: recommended_resources
 
-    - id: graphql_clients
-      path: /clients
-      blocks:
-        - template: page_introduction
+            - id: apollo_server
+              template: tool_experience
+            - id: yoga
+              template: tool_experience
+            - id: graphql_js
+              template: tool_experience
+            - id: helix
+              template: tool_experience
+            - id: express_graphql
+              template: tool_experience
+            - id: mercurius
+              template: tool_experience
+            - id: dgs
+              template: tool_experience
+            - id: graphql_dotnet
+              template: tool_experience
+            - id: absinthe
+              template: tool_experience
+            - id: graphql_go
+              template: tool_experience
 
-        - template: tools_experience_ranking
-          blockType: ToolsExperienceRankingSingleYearBlock
+      - id: graphql_clients
+        path: /clients
+        blocks:
+            - template: page_introduction
 
-        - id: tool_modal_hint
-          template: hint
-          
-        - template: tools_experience_marimekko
+            - template: tools_experience_ranking
+              blockType: ToolsExperienceRankingSingleYearBlock
 
-        - template: section_other_tools
-          variables:
-            limit: 10
+            - id: tool_modal_hint
+              template: hint
 
-        - id: tanmai_gopal
-          template: picks
-          variables:
-            url: https://www.youtube.com/watch?v=C1TDDlXPSmI
+            - template: tools_experience_marimekko
 
-        - template: happiness
-          variables:
-            fieldId: graphql_clients
+            - template: section_other_tools
+              variables:
+                  limit: 10
 
-        - id: graphql_clients_resources
-          items: [fm-client-graphql, tg-best-practices]
-          template: recommended_resources
-        
-        - id: apollo_client
-          template: tool_experience
-        - id: urql
-          template: tool_experience
-        - id: react_query
-          template: tool_experience
-        - id: relay
-          template: tool_experience
-        - id: apollo_ios
-          template: tool_experience
-        - id: swift_graphql
-          template: tool_experience
-        - id: apollo_kotlin
-          template: tool_experience
-        - id: graphql_hooks
-          template: tool_experience
-        - id: graphql_request
-          template: tool_experience
-        - id: no_client
-          template: tool_experience
+            - id: tanmai_gopal
+              template: picks
+              variables:
+                  url: https://www.youtube.com/watch?v=C1TDDlXPSmI
 
-    - id: api_generators
-      path: /api-generators
-      blocks:
-        - template: page_introduction
+            - template: happiness
+              variables:
+                  fieldId: graphql_clients
 
-        - template: tools_experience_ranking
-          blockType: ToolsExperienceRankingSingleYearBlock
+            - id: graphql_clients_resources
+              items: [fm-client-graphql, tg-best-practices]
+              template: recommended_resources
 
-        - id: tool_modal_hint
-          template: hint
-          
-        - template: tools_experience_marimekko
+            - id: apollo_client
+              template: tool_experience
+            - id: urql
+              template: tool_experience
+            - id: react_query
+              template: tool_experience
+            - id: relay
+              template: tool_experience
+            - id: apollo_ios
+              template: tool_experience
+            - id: swift_graphql
+              template: tool_experience
+            - id: apollo_kotlin
+              template: tool_experience
+            - id: graphql_hooks
+              template: tool_experience
+            - id: graphql_request
+              template: tool_experience
+            - id: no_client
+              template: tool_experience
 
-        - template: section_other_tools
-          variables:
-            limit: 10
+      - id: api_generators
+        path: /api-generators
+        blocks:
+            - template: page_introduction
 
-        - id: tim_suchanek
-          template: picks
-          variables:
-            url: https://github.com/benjie
+            - template: tools_experience_ranking
+              blockType: ToolsExperienceRankingSingleYearBlock
 
-        - template: happiness
-          variables:
-            fieldId: api_generators
+            - id: tool_modal_hint
+              template: hint
 
-        - id: api_generators_resources
-          items: [ha-subscriptions, tg-mesh]
-          template: recommended_resources
+            - template: tools_experience_marimekko
 
-        - id: postgraphile
-          template: tool_experience
-        - id: hasura
-          template: tool_experience
-        - id: graphcms
-          template: tool_experience
-        - id: datocms
-          template: tool_experience
-        - id: sanity
-          template: tool_experience
-        - id: wpgraphql
-          template: tool_experience
-        - id: wundergraph
-          template: tool_experience
-        - id: fauna
-          template: tool_experience
-        - id: dgraph
-          template: tool_experience
-        - id: graphql_editor
-          template: tool_experience
-        - id: strapi
-          template: tool_experience
-        - id: appsync
-          template: tool_experience
-        - id: contentful
-          template: tool_experience
-        - id: graphene
-          template: tool_experience
-        - id: graphql_mesh
-          template: tool_experience
- 
-    - id: schema_builders
-      path: /schema-builders
-      blocks:
-        - template: page_introduction
+            - template: section_other_tools
+              variables:
+                  limit: 10
 
-        - template: tools_experience_ranking
-          blockType: ToolsExperienceRankingSingleYearBlock
+            - id: tim_suchanek
+              template: picks
+              variables:
+                  url: https://github.com/benjie
 
-        - id: tool_modal_hint
-          template: hint
-          
-        - template: tools_experience_marimekko
+            - template: happiness
+              variables:
+                  fieldId: api_generators
 
-        - template: section_other_tools
-          variables:
-            limit: 5
+            - id: api_generators_resources
+              items: [ha-subscriptions, tg-mesh]
+              template: recommended_resources
 
-        - id: uri_goldshtein
-          template: picks
-          variables:
-            url: https://pothos-graphql.dev/
+            - id: postgraphile
+              template: tool_experience
+            - id: hasura
+              template: tool_experience
+            - id: graphcms
+              template: tool_experience
+            - id: datocms
+              template: tool_experience
+            - id: sanity
+              template: tool_experience
+            - id: wpgraphql
+              template: tool_experience
+            - id: wundergraph
+              template: tool_experience
+            - id: fauna
+              template: tool_experience
+            - id: dgraph
+              template: tool_experience
+            - id: graphql_editor
+              template: tool_experience
+            - id: strapi
+              template: tool_experience
+            - id: appsync
+              template: tool_experience
+            - id: contentful
+              template: tool_experience
+            - id: graphene
+              template: tool_experience
+            - id: graphql_mesh
+              template: tool_experience
 
-        - template: happiness
-          variables:
-            fieldId: schema_builders
+      - id: schema_builders
+        path: /schema-builders
+        blocks:
+            - template: page_introduction
 
-        - id: schema_builders_resources
-          items: [tg-mesh-hive, fm-fullstack-typescript]
-          template: recommended_resources
+            - template: tools_experience_ranking
+              blockType: ToolsExperienceRankingSingleYearBlock
 
-        - id: nexus
-          template: tool_experience
-        - id: typegraphql
-          template: tool_experience
-        - id: pothos
-          template: tool_experience
-        - id: strawberry
-          template: tool_experience
-        - id: sangria
-          template: tool_experience
-        - id: graphql_java
-          template: tool_experience
-        - id: gqlgen
-          template: tool_experience
-        - id: graphql_zeus
-          template: tool_experience
-        - id: genql
-          template: tool_experience
-        - id: graphql_code_generator
-          template: tool_experience
+            - id: tool_modal_hint
+              template: hint
+
+            - template: tools_experience_marimekko
+
+            - template: section_other_tools
+              variables:
+                  limit: 5
+
+            - id: uri_goldshtein
+              template: picks
+              variables:
+                  url: https://pothos-graphql.dev/
+
+            - template: happiness
+              variables:
+                  fieldId: schema_builders
+
+            - id: schema_builders_resources
+              items: [tg-mesh-hive, fm-fullstack-typescript]
+              template: recommended_resources
+
+            - id: nexus
+              template: tool_experience
+            - id: typegraphql
+              template: tool_experience
+            - id: pothos
+              template: tool_experience
+            - id: strawberry
+              template: tool_experience
+            - id: sangria
+              template: tool_experience
+            - id: graphql_java
+              template: tool_experience
+            - id: gqlgen
+              template: tool_experience
+            - id: graphql_zeus
+              template: tool_experience
+            - id: genql
+              template: tool_experience
+            - id: graphql_code_generator
+              template: tool_experience
 
 - id: tools_others
   path: /other-tools
   blocks:
-    - id: tools_others_intro
-      template: page_introduction
+      - id: tools_others_intro
+        template: page_introduction
 
-    - id: combining_schemas
-      tabId: tabs.main_answers
-      blockNamespace: tools_others  
-      template: multiple_options
-      variables:
-        fieldId: tools_others
-      variants:
-        - id: combining_schemas_others
-          blockNamespace: tools_others  
-          template: multiple_options
-          defaultUnits: count
-          variables:
+      - id: combining_schemas
+        tabId: tabs.main_answers
+        blockNamespace: tools_others
+        template: multiple_options
+        variables:
             fieldId: tools_others
-            options: { limit: 15 }
+        variants:
+            - id: combining_schemas_others
+              blockNamespace: tools_others
+              template: multiple_options
+              defaultUnits: count
+              variables:
+                  fieldId: tools_others
+                  options: { limit: 15 }
 
-    - id: benjie_gillam
-      template: picks
-      variables:
-        url: https://specnewspod.com/
+      - id: benjie_gillam
+        template: picks
+        variables:
+            url: https://specnewspod.com/
 
-    - id: web_frameworks
-      tabId: tabs.main_answers
-      blockNamespace: tools_others  
-      template: multiple_options
-      variables:
-        fieldId: tools_others
-      variants: 
-        - id: web_frameworks_others
-          blockNamespace: tools_others  
-          template: multiple_options
-          defaultUnits: count
-          variables:
+      - id: web_frameworks
+        tabId: tabs.main_answers
+        blockNamespace: tools_others
+        template: multiple_options
+        variables:
             fieldId: tools_others
-            options: { limit: 15 }
+        variants:
+            - id: web_frameworks_others
+              blockNamespace: tools_others
+              template: multiple_options
+              defaultUnits: count
+              variables:
+                  fieldId: tools_others
+                  options: { limit: 15 }
 
-    - id: sharing_hint
-      template: hint
+      - id: sharing_hint
+        template: hint
 
-    - id: databases
-      tabId: tabs.main_answers
-      blockNamespace: tools_others  
-      template: multiple_options
-      variables:
-        fieldId: tools_others
-      variants: 
-        - id: databases_others
-          blockNamespace: tools_others  
-          template: multiple_options
-          defaultUnits: count
-          variables:
+      - id: databases
+        tabId: tabs.main_answers
+        blockNamespace: tools_others
+        template: multiple_options
+        variables:
             fieldId: tools_others
-            options: { limit: 15 }
+        variants:
+            - id: databases_others
+              blockNamespace: tools_others
+              template: multiple_options
+              defaultUnits: count
+              variables:
+                  fieldId: tools_others
+                  options: { limit: 15 }
 
-    - id: server_languages
-      tabId: tabs.main_answers
-      blockNamespace: tools_others  
-      template: multiple_options
-      variables:
-        fieldId: tools_others
-      variants: 
-        - id: server_languages_others
-          blockNamespace: tools_others  
-          template: multiple_options
-          defaultUnits: count
-          variables:
+      - id: server_languages
+        tabId: tabs.main_answers
+        blockNamespace: tools_others
+        template: multiple_options
+        variables:
             fieldId: tools_others
-            options: { limit: 15 }
+        variants:
+            - id: server_languages_others
+              blockNamespace: tools_others
+              template: multiple_options
+              defaultUnits: count
+              variables:
+                  fieldId: tools_others
+                  options: { limit: 15 }
 
+      # - id: kent_c_dodds
+      #   template: picks
 
-    # - id: kent_c_dodds
-    #   template: picks
-      
-    - id: graphql_ides
-      tabId: tabs.main_answers
-      blockNamespace: tools_others  
-      template: multiple_options
-      variables:
-        fieldId: tools_others
-      variants: 
-        - id: graphql_ides_others
-          blockNamespace: tools_others  
-          template: multiple_options
-          defaultUnits: count
-          variables:
+      - id: graphql_ides
+        tabId: tabs.main_answers
+        blockNamespace: tools_others
+        template: multiple_options
+        variables:
             fieldId: tools_others
-            options: { limit: 15 }
+        variants:
+            - id: graphql_ides_others
+              blockNamespace: tools_others
+              template: multiple_options
+              defaultUnits: count
+              variables:
+                  fieldId: tools_others
+                  options: { limit: 15 }
 
-    - id: other_tools
-      tabId: tabs.main_answers
-      blockNamespace: tools_others  
-      template: multiple_options
-      variables:
-        fieldId: tools_others
-      variants: 
-        - id: other_tools_others
-          blockNamespace: tools_others  
-          template: multiple_options
-          defaultUnits: count
-          variables:
+      - id: other_tools
+        tabId: tabs.main_answers
+        blockNamespace: tools_others
+        template: multiple_options
+        variables:
             fieldId: tools_others
-            options: { limit: 15 }
+        variants:
+            - id: other_tools_others
+              blockNamespace: tools_others
+              template: multiple_options
+              defaultUnits: count
+              variables:
+                  fieldId: tools_others
+                  options: { limit: 15 }
 
-    - id: tools_others_resources
-      items: [tg-hive]
-      template: recommended_resources
+      - id: tools_others_resources
+        items: [tg-hive]
+        template: recommended_resources
 
 - id: usage
   titleId: sections.usage_graphql.title
   path: /usage
   blocks:
-    - template: page_introduction
+      - template: page_introduction
 
-    - id: graphql_experience
-      blockNamespace: usage
-      chartNamespace: graphql_experience
-      tabId: tabs.main_answers
-      template: single_option
-      translateData: true
-      # dataFunction: sortGraphQLExperience
-      variables:
-        fieldId: usage
-
-    - id: api_type
-      blockNamespace: usage
-      chartNamespace: api_type
-      tabId: tabs.main_answers
-      template: multiple_options
-      translateData: true
-      variables:
-        fieldId: usage
-      # variants:
-      #   - id: api_type_others
-      #     defaultUnits: count
-      #     blockNamespace: usage
-      #     chartNamespace: api_type
-      #     tabId: tabs.other_answers
-      #     template: multiple_options
-      #     translateData: true
-      #     variables:
-      #       fieldId: usage
-      #       options: { limit: 15 }
-
-    - id: client_type
-      blockNamespace: usage
-      chartNamespace: client_type
-      tabId: tabs.main_answers
-      template: multiple_options
-      translateData: true
-      variables:
-        fieldId: usage
-      variants:
-        - id: client_type_others
-          defaultUnits: count
-          blockNamespace: usage
-          chartNamespace: client_type
-          tabId: tabs.other_answers
-          template: multiple_options
-          translateData: true
-          variables:
+      - id: graphql_experience
+        blockNamespace: usage
+        chartNamespace: graphql_experience
+        tabId: tabs.main_answers
+        template: single_option
+        translateData: true
+        # dataFunction: sortGraphQLExperience
+        variables:
             fieldId: usage
-            options: { limit: 15 }
 
-    - id: data_sources
-      blockNamespace: usage
-      chartNamespace: data_sources
-      tabId: tabs.main_answers
-      template: multiple_options
-      translateData: true
-      variables:
-        fieldId: usage
-      variants:
-        - id: data_sources_others
-          defaultUnits: count
-          blockNamespace: usage
-          chartNamespace: data_sources
-          tabId: tabs.other_answers
-          template: multiple_options
-          translateData: true
-          variables:
+      - id: api_type
+        blockNamespace: usage
+        chartNamespace: api_type
+        tabId: tabs.main_answers
+        template: multiple_options
+        translateData: true
+        variables:
             fieldId: usage
-            options: { limit: 15 }
+        # variants:
+        #   - id: api_type_others
+        #     defaultUnits: count
+        #     blockNamespace: usage
+        #     chartNamespace: api_type
+        #     tabId: tabs.other_answers
+        #     template: multiple_options
+        #     translateData: true
+        #     variables:
+        #       fieldId: usage
+        #       options: { limit: 15 }
 
-    - id: code_generation_type
-      blockNamespace: usage
-      chartNamespace: code_generation_type
-      tabId: tabs.main_answers
-      template: single_option
-      translateData: true
-      variables:
-        fieldId: usage
-      variants:
-        - id: code_generation_type_others
-          defaultUnits: count
-          blockNamespace: usage
-          chartNamespace: code_generation_type
-          tabId: tabs.other_answers
-          template: multiple_options
-          translateData: true
-          variables:
+      - id: client_type
+        blockNamespace: usage
+        chartNamespace: client_type
+        tabId: tabs.main_answers
+        template: multiple_options
+        translateData: true
+        variables:
             fieldId: usage
-            options: { limit: 15 }
+        variants:
+            - id: client_type_others
+              defaultUnits: count
+              blockNamespace: usage
+              chartNamespace: client_type
+              tabId: tabs.other_answers
+              template: multiple_options
+              translateData: true
+              variables:
+                  fieldId: usage
+                  options: { limit: 15 }
 
-    - id: code_generation_target
-      blockNamespace: usage
-      chartNamespace: code_generation_target
-      tabId: tabs.main_answers
-      template: multiple_options
-      translateData: true
-      variables:
-        fieldId: usage
-      variants:
-        - id: code_generation_target_others
-          defaultUnits: count
-          blockNamespace: usage
-          chartNamespace: code_generation_target
-          tabId: tabs.other_answers
-          template: multiple_options
-          translateData: true
-          variables:
+      - id: data_sources
+        blockNamespace: usage
+        chartNamespace: data_sources
+        tabId: tabs.main_answers
+        template: multiple_options
+        translateData: true
+        variables:
             fieldId: usage
-            options: { limit: 15 }
+        variants:
+            - id: data_sources_others
+              defaultUnits: count
+              blockNamespace: usage
+              chartNamespace: data_sources
+              tabId: tabs.other_answers
+              template: multiple_options
+              translateData: true
+              variables:
+                  fieldId: usage
+                  options: { limit: 15 }
 
-    - id: industry_sector
-      blockNamespace: usage
-      chartNamespace: industry_sector
-      tabId: tabs.main_answers
-      template: multiple_options
-      translateData: true
-      variables:
-        fieldId: usage
-      variants:
-        - id: industry_sector_others
-          defaultUnits: count
-          blockNamespace: usage
-          chartNamespace: industry_sector
-          tabId: tabs.other_answers
-          template: multiple_options
-          translateData: true
-          variables:
+      - id: code_generation_type
+        blockNamespace: usage
+        chartNamespace: code_generation_type
+        tabId: tabs.main_answers
+        template: single_option
+        translateData: true
+        variables:
             fieldId: usage
-            options: { limit: 15 }
+        variants:
+            - id: code_generation_type_others
+              defaultUnits: count
+              blockNamespace: usage
+              chartNamespace: code_generation_type
+              tabId: tabs.other_answers
+              template: multiple_options
+              translateData: true
+              variables:
+                  fieldId: usage
+                  options: { limit: 15 }
 
-    - id: bracket_hint
-      template: hint
+      - id: code_generation_target
+        blockNamespace: usage
+        chartNamespace: code_generation_target
+        tabId: tabs.main_answers
+        template: multiple_options
+        translateData: true
+        variables:
+            fieldId: usage
+        variants:
+            - id: code_generation_target_others
+              defaultUnits: count
+              blockNamespace: usage
+              chartNamespace: code_generation_target
+              tabId: tabs.other_answers
+              template: multiple_options
+              translateData: true
+              variables:
+                  fieldId: usage
+                  options: { limit: 15 }
 
-    - id: graphql_strong_points
-      tabId: tabs.bracket_wins
-      template: bracket_wins
-      blockNamespace: usage
-      chartNamespace: graphql_strong_points
-      variables:
-        fieldId: usage__graphql_strong_points
-      variants: 
-        - id: graphql_strong_points_matchups
-          tabId: tabs.bracket_matchups
-          blockNamespace: usage
-          chartNamespace: graphql_strong_points
-          variables:
+      - id: industry_sector
+        blockNamespace: usage
+        chartNamespace: industry_sector
+        tabId: tabs.main_answers
+        template: multiple_options
+        translateData: true
+        variables:
+            fieldId: usage
+        variants:
+            - id: industry_sector_others
+              defaultUnits: count
+              blockNamespace: usage
+              chartNamespace: industry_sector
+              tabId: tabs.other_answers
+              template: multiple_options
+              translateData: true
+              variables:
+                  fieldId: usage
+                  options: { limit: 15 }
+
+      - id: bracket_hint
+        template: hint
+
+      - id: graphql_strong_points
+        tabId: tabs.bracket_wins
+        template: bracket_wins
+        blockNamespace: usage
+        chartNamespace: graphql_strong_points
+        variables:
             fieldId: usage__graphql_strong_points
-          template: bracket_matchups
-        - id: graphql_strong_points_others
-          defaultUnits: count
-          blockNamespace: usage
-          chartNamespace: graphql_strong_points
-          tabId: tabs.other_answers
-          template: multiple_options
-          translateData: true
-          variables:
-            fieldId: usage
-            options: { limit: 15 }
+        variants:
+            - id: graphql_strong_points_matchups
+              tabId: tabs.bracket_matchups
+              blockNamespace: usage
+              chartNamespace: graphql_strong_points
+              variables:
+                  fieldId: usage__graphql_strong_points
+              template: bracket_matchups
+            - id: graphql_strong_points_others
+              defaultUnits: count
+              blockNamespace: usage
+              chartNamespace: graphql_strong_points
+              tabId: tabs.other_answers
+              template: multiple_options
+              translateData: true
+              variables:
+                  fieldId: usage
+                  options: { limit: 15 }
 
-    - id: graphql_pain_points
-      tabId: tabs.bracket_wins
-      template: bracket_wins
-      blockNamespace: usage
-      chartNamespace: graphql_pain_points
-      variables:
-        fieldId: usage__graphql_pain_points
-      variants: 
-        - id: graphql_pain_points_matchups
-          tabId: tabs.bracket_matchups
-          blockNamespace: usage
-          chartNamespace: graphql_pain_points
-          variables:
+      - id: graphql_pain_points
+        tabId: tabs.bracket_wins
+        template: bracket_wins
+        blockNamespace: usage
+        chartNamespace: graphql_pain_points
+        variables:
             fieldId: usage__graphql_pain_points
-          template: bracket_matchups
-        - id: graphql_pain_points_others
-          defaultUnits: count
-          blockNamespace: usage
-          chartNamespace: graphql_pain_points
-          tabId: tabs.other_answers
-          template: multiple_options
-          translateData: true
-          variables:
-            fieldId: usage
-            options: { limit: 15 }
+        variants:
+            - id: graphql_pain_points_matchups
+              tabId: tabs.bracket_matchups
+              blockNamespace: usage
+              chartNamespace: graphql_pain_points
+              variables:
+                  fieldId: usage__graphql_pain_points
+              template: bracket_matchups
+            - id: graphql_pain_points_others
+              defaultUnits: count
+              blockNamespace: usage
+              chartNamespace: graphql_pain_points
+              tabId: tabs.other_answers
+              template: multiple_options
+              translateData: true
+              variables:
+                  fieldId: usage
+                  options: { limit: 15 }
 
-    - id: state_of_graphql
-      template: happiness
-      variables:
-        fieldId: state_of_graphql
+      - id: state_of_graphql
+        template: happiness
+        variables:
+            fieldId: state_of_graphql
 
-    - id: resources_usage
-      items: [ha-backend]
-      template: recommended_resources
+      - id: resources_usage
+        items: [ha-backend]
+        template: recommended_resources
 
 - id: resources
   intlId: resources_graphql
   path: /resources
   blocks:
-    - template: page_introduction
+      - template: page_introduction
 
-    - id: first_steps
-      blockNamespace: resources
-      chartNamespace: first_steps
-      tabId: tabs.main_answers
-      template: multiple_options
-      translateData: true
-      variables:
-        fieldId: resources
-      variants:
-        - id: first_steps_others
-          defaultUnits: count
-          blockNamespace: resources
-          chartNamespace: first_steps
-          tabId: tabs.other_answers
-          template: multiple_options
-          translateData: true
-          variables:
+      - id: first_steps
+        blockNamespace: resources
+        chartNamespace: first_steps
+        tabId: tabs.main_answers
+        template: multiple_options
+        translateData: true
+        variables:
+            fieldId: resources
+        variants:
+            - id: first_steps_others
+              defaultUnits: count
+              blockNamespace: resources
+              chartNamespace: first_steps
+              tabId: tabs.other_answers
+              template: multiple_options
+              translateData: true
+              variables:
+                  fieldId: resources
+                  options: { limit: 15 }
+
+      - id: sites_courses
+        blockNamespace: resources
+        chartNamespace: sites_courses
+        tabId: tabs.main_answers
+        template: multiple_options
+        variables:
+            fieldId: resources
+        variants:
+            - id: sites_courses_others
+              defaultUnits: count
+              blockNamespace: resources
+              chartNamespace: sites_courses
+              tabId: tabs.other_answers
+              template: multiple_options
+              variables:
+                  fieldId: resources
+                  options: { limit: 15 }
+
+      # - id: miguel_angel_duran
+      #   template: picks
+
+      - id: podcasts_others
+        intlId: podcasts_graphql_others
+        defaultUnits: count
+        blockNamespace: resources
+        chartNamespace: podcasts
+        tabId: tabs.other_answers
+        template: multiple_options
+        variables:
             fieldId: resources
             options: { limit: 15 }
 
-    - id: sites_courses
-      blockNamespace: resources
-      chartNamespace: sites_courses
-      tabId: tabs.main_answers
-      template: multiple_options
-      variables:
-        fieldId: resources
-      variants:
-        - id: sites_courses_others
-          defaultUnits: count
-          blockNamespace: resources
-          chartNamespace: sites_courses
-          tabId: tabs.other_answers
-          template: multiple_options
-          variables:
+      - id: people_others
+        defaultUnits: count
+        blockNamespace: resources
+        chartNamespace: people
+        template: multiple_options
+        variables:
+            options: { limit: 25 }
             fieldId: resources
-            options: { limit: 15 }
 
-    # - id: miguel_angel_duran
-    #   template: picks
+      - id: other_surveys
+        blockNamespace: resources
+        chartNamespace: other_surveys
+        tabId: tabs.main_answers
+        template: multiple_options
+        variables:
+            fieldId: resources
+        # variants:
+        #   - id: other_surveys_others
+        #     defaultUnits: count
+        #     blockNamespace: resources
+        #     chartNamespace: other_surveys
+        #     tabId: tabs.other_answers
+        #     template: multiple_options
+        #     variables:
+        #       fieldId: resources
+        #       options: { limit: 15 }
 
-    - id: podcasts_others
-      intlId: podcasts_graphql_others
-      defaultUnits: count
-      blockNamespace: resources
-      chartNamespace: podcasts
-      tabId: tabs.other_answers
-      template: multiple_options
-      variables:
-        fieldId: resources
-        options: { limit: 15 }
-
-    - id: people_others
-      defaultUnits: count
-      blockNamespace: resources
-      chartNamespace: people
-      template: multiple_options
-      variables:
-        options: { limit: 25 }
-        fieldId: resources
-
-    - id: other_surveys
-      blockNamespace: resources
-      chartNamespace: other_surveys
-      tabId: tabs.main_answers
-      template: multiple_options
-      variables:
-        fieldId: resources
-      # variants:
-      #   - id: other_surveys_others
-      #     defaultUnits: count
-      #     blockNamespace: resources
-      #     chartNamespace: other_surveys
-      #     tabId: tabs.other_answers
-      #     template: multiple_options
-      #     variables:
-      #       fieldId: resources
-      #       options: { limit: 15 }
-
-    - id: resources_resources
-      items: [tg-wtf]
-      template: recommended_resources
+      - id: resources_resources
+        items: [tg-wtf]
+        template: recommended_resources
 
 # - id: awards
 #   path: /awards
@@ -1018,21 +1021,19 @@
 #             - id: platzi
 #               value: "100"
 
-
 - id: conclusion
   path: /conclusion
   blocks:
+      - id: conclusion
+        template: conclusion
+        variables:
+            author: jamie_barton
+            entities: '"jamie_barton"'
 
-    - id: conclusion
-      template: conclusion
-      variables:
-        author: jamie_barton
-        entities: '"jamie_barton"'
-
-    - id: conclusion_newsletter
-      blockType: NewsletterBlock
-      wrapBlock: false
-      disableExport: true
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+        wrapBlock: false
+        disableExport: true
 
 # note: other pages need to be included in the sitemap too so they can get the proper
 # locale passed to them
@@ -1040,11 +1041,10 @@
 - id: about
   path: /about
   blocks:
-
-    - id: about_contents
-      blockType: AboutBlock
-      wrapBlock: false
-      disableExport: true
+      - id: about_contents
+        blockType: AboutBlock
+        wrapBlock: false
+        disableExport: true
 
 # - id: how_to_help
 #   path: /how_to_help
@@ -1059,22 +1059,22 @@
   path: /support
   is_hidden: true
   blocks:
-    - id: support
-      template: page_introduction
+      - id: support
+        template: page_introduction
 
 - id: sponsor_finish
   path: /sponsor-chart-finish
   is_hidden: true
   blocks:
-    - id: sponsor_finish
-      blockType: SponsorFinishBlock
-      wrapBlock: false
+      - id: sponsor_finish
+        blockType: SponsorFinishBlock
+        wrapBlock: false
 
 - id: notfound
   titleId: notfound.title
   path: /404
   is_hidden: true
   blocks:
-    - id: notfound
-      blockType: NotFoundBlock
-      wrapBlock: false
+      - id: notfound
+        blockType: NotFoundBlock
+        wrapBlock: false
