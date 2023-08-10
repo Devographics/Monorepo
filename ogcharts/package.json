@@ -20,6 +20,8 @@
     },
     "dependencies": {
         "graphql": "^16.7.1",
-        "graphql-tag": "^2.12.6"
+        "graphql-tag": "^2.12.6",
+        "@devographics/helpers": "workspace:^1.0.0",
+        "@devographics/types": "workspace:^1.0.0"
     }
 }

@@ -21,13 +21,19 @@ export interface ChartData {
 
 }
 
+/**
+ * Valid query parameters are survey, edition, section, question and lang
+ * @param req 
+ * @returns 
+ */
 export function getChartParams(req: Request): ChartParams {
     // TODO: validate with zod
     return {
-        survey: req.params.survey,
-        edition: req.params.edition,
-        section: req.params.section,
-        question: req.params.question
+        survey: req.query.survey,
+        edition: req.query.edition,
+        section: req.query.section,
+        question: req.query.question,
+        lang: req.query.lang || "en-US"
     }
 }
 

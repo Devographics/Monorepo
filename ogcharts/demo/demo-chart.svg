@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="demo-chart.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.73228114"
+     inkscape:cx="409.67872"
+     inkscape:cy="572.86741"
+     inkscape:window-width="2488"
+     inkscape:window-height="1376"
+     inkscape:window-x="72"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#ff00ff;fill-rule:evenodd;stroke:#00ffff;stroke-width:0.79375;stroke-linecap:square"
+       id="rect846"
+       width="23.521326"
+       height="63.324955"
+       x="63.888317"
+       y="82.154274"
+       rx="4.3986716" />
+    <rect
+       style="fill:#333333;fill-rule:evenodd;stroke:#999999;stroke-width:0.356723;stroke-linecap:square"
+       id="rect1010"
+       width="23.521326"
+       height="12.789919"
+       x="95.142693"
+       y="131.94586"
+       rx="4.3986716" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="28.951883"
+       y="75.880737"
+       id="text3390"><tspan
+         sodipodi:role="line"
+         id="tspan3388"
+         style="stroke-width:0.264583"
+         x="28.951883"
+         y="75.880737">IS DEVOGRAPHICS FLY?</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="65.24604"
+       y="157.44046"
+       id="text5498"><tspan
+         sodipodi:role="line"
+         id="tspan5496"
+         style="stroke-width:0.264583"
+         x="65.24604"
+         y="157.44046">Yes</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="97.861588"
+       y="157.57953"
+       id="text5498-4"><tspan
+         sodipodi:role="line"
+         id="tspan5496-8"
+         style="stroke-width:0.264583"
+         x="97.861588"
+         y="157.57953">No</tspan></text>
+    <path
+       style="fill:#00ff00;stroke:#00ffff;stroke-width:0.187704px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 57.709697,155.91582 -7.763351,-58.323233 -5.140427,1.00496 4.050493,-17.864354 10.214041,16.346074 h -5.869437 z"
+       id="path8921" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.9455px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.148638"
+       x="67.483292"
+       y="89.961548"
+       id="text12079"><tspan
+         sodipodi:role="line"
+         id="tspan12077"
+         style="fill:#00ff00;stroke-width:0.148638"
+         x="67.483292"
+         y="89.961548">100%</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="103.85303"
+       y="128.0941"
+       id="text14535"><tspan
+         sodipodi:role="line"
+         id="tspan14533"
+         style="font-style:italic;font-size:3.52778px;stroke-width:0.264583"
+         x="103.85303"
+         y="128.0941">0%</tspan></text>
+    <path
+       style="fill:#00ff00;stroke:#00ffff;stroke-width:0.187704px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 61.191542,168.73545 58.518718,-6.11792 -0.85981,-5.16669 17.74321,4.55194 -16.62721,9.74969 0.16528,-5.86711 z"
+       id="path20101" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff00ff;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="29.48105"
+       y="75.35157"
+       id="text24483"><tspan
+         sodipodi:role="line"
+         id="tspan24481"
+         style="stroke-width:0.264583;fill:#ff00ff"
+         x="29.48105"
+         y="75.35157">IS DEVOGRAPHICS FLY?</tspan></text>
+  </g>
+</svg>

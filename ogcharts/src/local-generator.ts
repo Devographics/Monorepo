@@ -16,6 +16,7 @@ import { ChartFilter, fetchChartData, getChartParams } from "./chart-data-fetche
 import { getConfig } from "./config"
 import fsPromises from "fs/promises"
 import { renderChartSvg, svg2png } from "./chart-renderer"
+import { metadataHtml } from "./metadata-html"
 
 /**
  * Endpoints:
@@ -85,9 +86,7 @@ localGenerator.get("/serve/:imgUniqueName", async (req, res) => {
  * Server the open graph headers as a web page
  */
 localGenerator.get("/og/:imgUniqueName", async (req, res) => {
-    res.send(`
-    <meta property="og:image" content="${imgPublicUrl(req.params.imgUniqueName)}"
-    <meta http-equiv="refresh" content="5; URL=TODO THE RESULT APP URL">
-    `)
+    const imgUrl = imgPublicUrl(req.params.imgUniqueName)
+    res.send(metadataHtml(req, imgUrl))
 })
 

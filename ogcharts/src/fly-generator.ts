@@ -6,9 +6,10 @@
  * - Cannot support filters, that are too big to fit a URL 
  */
 import express from "express"
-import { ChartFilter, fetchChartData, getChartParams } from "./chart-data-fetcher"
+import { fetchChartData, getChartParams } from "./chart-data-fetcher"
 import { renderChartSvg, svg2png } from "./chart-renderer"
 import { getConfig } from "./config"
+import { metadataHtml } from "./metadata-html"
 
 export const FLY_PREFIX = "/fly"
 /**
@@ -52,9 +53,7 @@ flyGenerator.get("/og", async (req, res) => {
     const { appUrl } = getConfig()
     // validate the provided query params and pass them down
     const chartSearchParams = new URLSearchParams(getChartParams(req) as any).toString()
+    const imgUrl = `${appUrl}/${FLY_PREFIX}/serve?${chartSearchParams}`
     // TODO see https://github.com/Devographics/Monorepo/blob/main/results/src/core/helpers/blockHelpers.ts#L174
-    res.send(`
-    <meta property="og:image" content="${appUrl}/${FLY_PREFIX}/serve?${chartSearchParams}"
-    <meta http-equiv="refresh" content="5; URL=TODO THE RESULT APP URL">
-    `)
+    res.send(metadataHtml(req, imgUrl))
 })
