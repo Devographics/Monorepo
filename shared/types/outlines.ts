@@ -47,6 +47,7 @@ export type Edition = {
     socialImageUrl: string
     faviconUrl: string
     status: SurveyStatus
+    resultsStatus: ResultsStatus
     tshirt: Tshirt
     colors: Colors
     enableReadingList: boolean
@@ -64,6 +65,7 @@ export type Edition = {
  * 4 hidden
  */
 export type SurveyStatus = 1 | 2 | 3 | 4
+export type ResultsStatus = 1 | 2 | 3
 export type SurveyStatusLabel = 'preview' | 'open' | 'closed' | 'hidden'
 
 export enum SurveyStatusEnum {
@@ -71,6 +73,12 @@ export enum SurveyStatusEnum {
     OPEN = 2,
     CLOSED = 3,
     HIDDEN = 4
+}
+
+export enum ResultsStatusEnum {
+    HIDDEN = 1,
+    PREVIEW = 2,
+    PUBLISHED = 3
 }
 
 export type Colors = {
