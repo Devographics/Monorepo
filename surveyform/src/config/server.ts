@@ -29,7 +29,6 @@ export function serverConfig() {
      */
     translationAPI: process.env.API_URL!,
     mongoUri: process.env.MONGO_PUBLIC_URI!,
-    redisUrl: process.env.REDIS_UPSTASH_URL!,
     // Won't work with upstash, which accepts only HTTP
     // || "redis://localhost:6379",
     redisToken: process.env.REDIS_TOKEN || "",
