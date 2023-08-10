@@ -12,7 +12,7 @@
 import express from "express"
 import path from "path"
 import os from "os"
-import { ChartFilter, fetchChartData } from "./chart-data-fetcher"
+import { ChartFilter, fetchChartData, getChartParams } from "./chart-data-fetcher"
 import { getConfig } from "./config"
 import fsPromises from "fs/promises"
 import { renderChartSvg, svg2png } from "./chart-renderer"
@@ -56,8 +56,9 @@ async function generateImgPublicUrlLocal(img: Buffer): Promise<string> {
  */
 localGenerator.post("/generate", async (req, res) => {
     // Compute the chart data
+    const params = getChartParams(req)
     const filter = req.body.filter as ChartFilter
-    const data = await fetchChartData(filter)
+    const data = await fetchChartData(params, filter)
     // Generate the image
     const chartSvg = await renderChartSvg(data)
     const chartPng = await svg2png(chartSvg)
