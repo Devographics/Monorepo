@@ -348,11 +348,13 @@ export const getQuery = ({
     } else {
         queryContents = query
     }
-    if (queryArgs) {
+    if (!isEmpty(queryArgs)) {
         const queryArgsString = getQueryArgsString(queryArgs)
         if (queryArgsString) {
             queryContents = queryContents.replace(argumentsPlaceholder, queryArgsString)
         }
+    } else {
+        queryContents = queryContents.replace(argumentsPlaceholder, '')
     }
     const wrappedQuery = wrapQuery({
         queryName,
