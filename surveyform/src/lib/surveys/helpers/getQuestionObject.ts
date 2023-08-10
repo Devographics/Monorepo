@@ -20,6 +20,9 @@ export const getQuestionObject = ({
     question.template
   ] as TemplateFunction;
   if (!templateFunction) {
+    console.warn(
+      `getQuestionObject: could not find template ${question.template} for question ${question.id}`
+    );
     return question as QuestionTemplateOutput;
     // throw new Error(
     //   `getQuestionObject: could not find template ${question.template} for question ${question.id}`

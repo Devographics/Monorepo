@@ -71,8 +71,9 @@
   }
 }
 
-.admin-cache {
+.api-dashboard,
+.cache-dashboard {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: $spacing;
 }

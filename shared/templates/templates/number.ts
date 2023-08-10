@@ -7,6 +7,7 @@ export const number: TemplateFunction = options => {
 
     const question = {
         optionsAreNumeric: true,
+        inputComponent: 'number',
         ...options.question
     } as QuestionTemplateOutput
 

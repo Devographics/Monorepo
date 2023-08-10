@@ -21,23 +21,41 @@ export const actions = [
 export const APIDashboard = () => (
   <div>
     <h2>API</h2>
-    <h3>Development</h3>
-    <ul>
-      {actions.map((action) => (
-        <li key={action.label}>
-          <Action {...action} target="development" />
-        </li>
-      ))}
-    </ul>
 
-    <h3>Production</h3>
-    <ul>
-      {actions.map((action) => (
-        <li key={action.label}>
-          <Action {...action} target="production" />
-        </li>
-      ))}
-    </ul>
+    <div className="api-dashboard">
+      <section>
+        <h3>Development</h3>
+        <ul>
+          {actions.map((action) => (
+            <li key={action.label}>
+              <Action {...action} target="development" />
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h3>Staging</h3>
+        <ul>
+          {actions.map((action) => (
+            <li key={action.label}>
+              <Action {...action} target="staging" />
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h3>Production</h3>
+        <ul>
+          {actions.map((action) => (
+            <li key={action.label}>
+              <Action {...action} target="production" />
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
   </div>
 );
 
