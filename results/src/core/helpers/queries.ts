@@ -135,7 +135,7 @@ export const getQueryArgsString = ({
         args.axis2 = xAxis
     }
     if (isEmpty(args)) {
-        return
+        return ''
     } else {
         return wrapArguments(args)
     }

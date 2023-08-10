@@ -238,7 +238,7 @@ export const getQueryArgsString = ({ facet, filters, parameters, xAxis, yAxis })
         args.axis2 = xAxis
     }
     if (isEmpty(args)) {
-        return
+        return ''
     } else {
         return wrapArguments(args)
     }

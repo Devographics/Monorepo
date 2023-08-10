@@ -576,7 +576,7 @@
         variants:
             - id: combining_schemas_others
               blockNamespace: tools_others
-              template: multiple_options
+              template: multiple_options_freeform
               defaultUnits: count
               variables:
                   fieldId: tools_others
@@ -596,7 +596,7 @@
         variants:
             - id: web_frameworks_others
               blockNamespace: tools_others
-              template: multiple_options
+              template: multiple_options_freeform
               defaultUnits: count
               variables:
                   fieldId: tools_others
@@ -614,7 +614,7 @@
         variants:
             - id: databases_others
               blockNamespace: tools_others
-              template: multiple_options
+              template: multiple_options_freeform
               defaultUnits: count
               variables:
                   fieldId: tools_others
@@ -629,7 +629,7 @@
         variants:
             - id: server_languages_others
               blockNamespace: tools_others
-              template: multiple_options
+              template: multiple_options_freeform
               defaultUnits: count
               variables:
                   fieldId: tools_others
@@ -647,7 +647,7 @@
         variants:
             - id: graphql_ides_others
               blockNamespace: tools_others
-              template: multiple_options
+              template: multiple_options_freeform
               defaultUnits: count
               variables:
                   fieldId: tools_others
@@ -662,7 +662,7 @@
         variants:
             - id: other_tools_others
               blockNamespace: tools_others
-              template: multiple_options
+              template: multiple_options_freeform
               defaultUnits: count
               variables:
                   fieldId: tools_others
@@ -722,7 +722,7 @@
               blockNamespace: usage
               chartNamespace: client_type
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               translateData: true
               variables:
                   fieldId: usage
@@ -742,7 +742,7 @@
               blockNamespace: usage
               chartNamespace: data_sources
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               translateData: true
               variables:
                   fieldId: usage
@@ -762,7 +762,7 @@
               blockNamespace: usage
               chartNamespace: code_generation_type
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               translateData: true
               variables:
                   fieldId: usage
@@ -782,7 +782,7 @@
               blockNamespace: usage
               chartNamespace: code_generation_target
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               translateData: true
               variables:
                   fieldId: usage
@@ -802,71 +802,70 @@
               blockNamespace: usage
               chartNamespace: industry_sector
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               translateData: true
               variables:
                   fieldId: usage
                   options: { limit: 15 }
 
-      - id: bracket_hint
-        template: hint
+      # - id: bracket_hint
+      #   template: hint
 
-      - id: graphql_strong_points
-        tabId: tabs.bracket_wins
-        template: bracket_wins
-        blockNamespace: usage
-        chartNamespace: graphql_strong_points
-        variables:
-            fieldId: usage__graphql_strong_points
-        variants:
-            - id: graphql_strong_points_matchups
-              tabId: tabs.bracket_matchups
-              blockNamespace: usage
-              chartNamespace: graphql_strong_points
-              variables:
-                  fieldId: usage__graphql_strong_points
-              template: bracket_matchups
-            - id: graphql_strong_points_others
-              defaultUnits: count
-              blockNamespace: usage
-              chartNamespace: graphql_strong_points
-              tabId: tabs.other_answers
-              template: multiple_options
-              translateData: true
-              variables:
-                  fieldId: usage
-                  options: { limit: 15 }
+      # - id: graphql_strong_points
+      #   tabId: tabs.bracket_wins
+      #   template: bracket_wins
+      #   blockNamespace: usage
+      #   chartNamespace: graphql_strong_points
+      #   variables:
+      #       fieldId: usage__graphql_strong_points
+      #   variants:
+      #       - id: graphql_strong_points_matchups
+      #         tabId: tabs.bracket_matchups
+      #         blockNamespace: usage
+      #         chartNamespace: graphql_strong_points
+      #         variables:
+      #             fieldId: usage__graphql_strong_points
+      #         template: bracket_matchups
+      #       - id: graphql_strong_points_others
+      #         defaultUnits: count
+      #         blockNamespace: usage
+      #         chartNamespace: graphql_strong_points
+      #         tabId: tabs.other_answers
+      #         template: multiple_options_freeform
+      #         translateData: true
+      #         variables:
+      #             fieldId: usage
+      #             options: { limit: 15 }
 
-      - id: graphql_pain_points
-        tabId: tabs.bracket_wins
-        template: bracket_wins
-        blockNamespace: usage
-        chartNamespace: graphql_pain_points
-        variables:
-            fieldId: usage__graphql_pain_points
-        variants:
-            - id: graphql_pain_points_matchups
-              tabId: tabs.bracket_matchups
-              blockNamespace: usage
-              chartNamespace: graphql_pain_points
-              variables:
-                  fieldId: usage__graphql_pain_points
-              template: bracket_matchups
-            - id: graphql_pain_points_others
-              defaultUnits: count
-              blockNamespace: usage
-              chartNamespace: graphql_pain_points
-              tabId: tabs.other_answers
-              template: multiple_options
-              translateData: true
-              variables:
-                  fieldId: usage
-                  options: { limit: 15 }
+      # - id: graphql_pain_points
+      #   tabId: tabs.bracket_wins
+      #   template: bracket_wins
+      #   blockNamespace: usage
+      #   chartNamespace: graphql_pain_points
+      #   variables:
+      #       fieldId: usage__graphql_pain_points
+      #   variants:
+      #       - id: graphql_pain_points_matchups
+      #         tabId: tabs.bracket_matchups
+      #         blockNamespace: usage
+      #         chartNamespace: graphql_pain_points
+      #         variables:
+      #             fieldId: usage__graphql_pain_points
+      #         template: bracket_matchups
+      #       - id: graphql_pain_points_others
+      #         defaultUnits: count
+      #         blockNamespace: usage
+      #         chartNamespace: graphql_pain_points
+      #         tabId: tabs.other_answers
+      #         template: multiple_options_freeform
+      #         translateData: true
+      #         variables:
+      #             fieldId: usage
+      #             options: { limit: 15 }
 
-      - id: state_of_graphql
-        template: happiness
-        variables:
-            fieldId: state_of_graphql
+      - template: happiness
+        id: state_of_graphql_happiness
+        titleId: happiness.state_of_graphql
 
       - id: resources_usage
         items: [ha-backend]
@@ -892,7 +891,7 @@
               blockNamespace: resources
               chartNamespace: first_steps
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               translateData: true
               variables:
                   fieldId: resources
@@ -911,7 +910,7 @@
               blockNamespace: resources
               chartNamespace: sites_courses
               tabId: tabs.other_answers
-              template: multiple_options
+              template: multiple_options_freeform
               variables:
                   fieldId: resources
                   options: { limit: 15 }
@@ -925,7 +924,7 @@
         blockNamespace: resources
         chartNamespace: podcasts
         tabId: tabs.other_answers
-        template: multiple_options
+        template: multiple_options_freeform
         variables:
             fieldId: resources
             options: { limit: 15 }
@@ -934,7 +933,7 @@
         defaultUnits: count
         blockNamespace: resources
         chartNamespace: people
-        template: multiple_options
+        template: multiple_options_freeform
         variables:
             options: { limit: 25 }
             fieldId: resources
