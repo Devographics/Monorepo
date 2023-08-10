@@ -10,6 +10,8 @@
  * + map the S3 url to a shorter unique ID in a database
  */
 import express from "express"
+import path from "path"
+import os from "os"
 import { ChartFilter, fetchChartData } from "./chart-data-fetcher"
 import { getConfig } from "./config"
 import fsPromises from "fs/promises"
@@ -23,10 +25,10 @@ import { renderChartSvg, svg2png } from "./chart-renderer"
  */
 export const localGenerator = express.Router()
 
-function imgDiskPath(imgUniqueName) {
-    return "/tmp/" + imgUniqueName + ".png"
+function imgDiskPath(imgUniqueName: string) {
+    return path.join(os.tmpdir(), imgUniqueName + ".png")
 }
-function imgPublicUrl(imgUniqueName) {
+function imgPublicUrl(imgUniqueName: string) {
     const { appUrl } = getConfig()
     // keep in sync with the corresponding endpoint
     return `${appUrl}/local/${imgUniqueName}`
