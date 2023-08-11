@@ -179,9 +179,10 @@ export async function fetchChartData(chart: ChartParams, filter?: ChartFilter): 
             }
         })
         const data = await res.json()
-        console.log(data.errors)
-        console.log({ data })
-        return data
+        if (data.errors?.length) throw new Error(`API returned some errors: ${data.errors.join("")}`)
+        const chartData = data.data["surveys"][chart.survey][chart.edition][chart.section][chart.question]
+        console.log("chartData:", chartData)
+        return chartData
     } catch (err) {
         console.error(err)
         // TODO: just for the demo
