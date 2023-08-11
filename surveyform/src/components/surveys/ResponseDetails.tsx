@@ -16,7 +16,7 @@ export const ResponseDetails = ({
   return (
     <div className="response-details">
       {response && <ResponseMetadata response={response} />}
-      {resultsUrl && resultsStatus === ResultsStatusEnum.OPEN && (
+      {resultsUrl && resultsStatus === ResultsStatusEnum.PUBLISHED && (
         <p>
           <a href={resultsUrl}>
             <FormattedMessage id="general.survey_results" />
