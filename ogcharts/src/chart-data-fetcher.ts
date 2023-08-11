@@ -39,6 +39,15 @@ export function getChartParams(req: Request): ChartParams {
 }
 
 async function queryForChart(chart: ChartParams): Promise<string> {
+    // 1. informations about a specific chart are located in the raw_sitemap
+    // for instance"results/surveys/css2021/config/raw_sitemap.yml"
+    // results/node_src/create_pages.mjs can turn it into a flatter sitemap,
+    // we should assess what format is best suited here + add typings
+
+    // 2. from there we get the block type and can deduce a query
+    // This is done in "results/node_src/helpers.mjs" within the "runPageQuery" function
+
+    // TODO:
     return print(gql`
 query surveyApi {
     survey(survey: state_of_css) {

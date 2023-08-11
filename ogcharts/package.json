@@ -30,6 +30,7 @@
         "graphql": "^16.7.1",
         "graphql-tag": "^2.12.6",
         "js-yaml": "^4.1.0",
-        "node-cache": "^5.1.2"
+        "node-cache": "^5.1.2",
+        "zod": "^3.21.4"
     }
 }

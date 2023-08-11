@@ -12,7 +12,7 @@ export function getAppConfig() {
         /**
          * Devographics API
          */
-        chartDataApi: devographicsEnv.API_URL!, // TODO: reuse name from variables yml
+        chartDataApi: devographicsEnv.API_URL!,
         port,
         /**
          * Absolute URL of the application that serves the charts

@@ -23,7 +23,6 @@ export async function metadataHtml(req: Request, imgUrl: string) {
             editionId: chartParams.edition,
         })
         if (error) throw new Error(`Error while fetchin edition metadata (survey: ${chartParams.survey}, edition: ${chartParams.edition}): ${error.toString()}`)
-        //  TODO: get the right metadata
         const blockMeta = getBlockMeta({
             block: {
                 id: chartParams.question,
@@ -31,15 +30,35 @@ export async function metadataHtml(req: Request, imgUrl: string) {
                 parameters: {}
             },
             currentEdition,
+            // TODO
             currentPath: "TODO: section for this chart",
             host: "TODO: result app url for this edition",
-            getString: (key) => ({ t: "TODO getString:" + key, locale: { id: chartParams.lang } }),
+            // TODO: do an actual translation, we can take the surveyform as inspiration
+            // for loading and translating locales in the backend
+            getString: (key) => ({ t: key, locale: { id: chartParams.lang } }),
         })
         console.log({ blockMeta })
-        // TODO: find where "getBlockMeta" is used in the Gatsby app to get the proper HTML
+        // Fields are based on what the Gatsby app produces (via React Helmet)
         return `
+        <html lang="${chartParams.lang}" data-react-helmet="lang">
+        <head>
+            <meta http-equiv="refresh" content="5; URL="${blockMeta.link}">
+            <title>${blockMeta.title}</title>
+            <meta charset="utf-8">
+            <meta property="description" content="${blockMeta.subtitle}>
+            <meta property="og:title" content="${blockMeta.title}>
+            <meta property="og:description" content="${blockMeta.subtitle}>
+            <meta property="og:type" content="article">
             <meta property="og:image" content="${imgUrl}">
-            <meta http-equiv="refresh" content="5; URL=TODO THE RESULT APP URL">
+            <meta property="og:url" content="${blockMeta.link}">
+            <meta name="twitter:card" content="summary_large_image">
+            <meta name="twitter:image:src" content="${imgUrl}">
+            <meta name="twitter:title" content="${blockMeta.title}">
+            </head>
+        <body>
+            Redirecting to the Devographics survey page...
+        </body>
+        </html>
             `
     } catch (err) {
         console.error(err)

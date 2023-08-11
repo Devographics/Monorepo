@@ -33,7 +33,7 @@ module.exports = ({ defaultConfig }) => {
   extendedConfig = extendNextConfig(defaultConfig);
 
   extendedConfig.env = {
-    NEXT_PUBLIC_IS_USING_LOCAL_DATABASE: !!(process.env.MONGO_URI || "").match(
+    NEXT_PUBLIC_IS_USING_LOCAL_DATABASE: !!(process.env.MONGO_PRIVATE_URI || "").match(
       /localhost/
     ),
   };

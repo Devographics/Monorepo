@@ -1,35 +1,15 @@
-query surveyApi {
-    survey(survey: state_of_css) {
-        browsers: environments(id: browsers, filters: {}, options: {}) {
-            id
-            year(year: 2021) {
-                year
-                completion {
-                    total
-                    count
-                    percentage_survey
-                }
-                facets {
-                    id
-                    type
-                    completion {
-                        total
-                        percentage_question
-                        percentage_survey
-                        count
-                    }
-                    buckets {
+query Responses {
+    surveys {
+        state_of_css {
+            css2021 {
+                environments {
+                    browsers {
                         id
-                        count
-                        percentage_question
-                        percentage_survey
-                        entity {
-                            homepage {
-                                url
-                            }
-                            name
-                            github {
-                                url
+                        responses {
+                            currentEdition {
+                                buckets {
+                                    count
+                                }
                             }
                         }
                     }
