@@ -30,8 +30,18 @@ export interface BlockQueryOptions {
 }
 
 export interface BlockDefinition {
+    /**
+     * @example browsers
+     */
     id: string
+    /**
+     * @example environments
+     */
     sectionId: string
+    // ?
+    facet: any,
+    // ?
+    fieldId?: string,
     template?: string
     blockType?: string
     tabId?: string

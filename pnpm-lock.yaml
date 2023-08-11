@@ -186,6 +186,7 @@ importers:
       '@devographics/redis': workspace:^1.0.0
       '@devographics/types': workspace:^1.0.0
       '@types/express': ^4.17.17
+      '@types/lodash': ^4.14.197
       '@upstash/redis': ^1.21.0
       dotenv: ^16.3.1
       esbuild-plugin-yaml: ^0.0.1
@@ -193,6 +194,7 @@ importers:
       graphql: ^16.7.1
       graphql-tag: ^2.12.6
       js-yaml: ^4.1.0
+      lodash: ^4.17.21
       node-cache: ^5.1.2
       nodemon: ^3.0.1
       tsup: ^7.2.0
@@ -203,11 +205,13 @@ importers:
       '@devographics/helpers': link:../shared/helpers
       '@devographics/redis': link:../shared/redis
       '@devographics/types': link:../shared/types
+      '@types/lodash': 4.14.197
       '@upstash/redis': 1.22.0
       dotenv: 16.3.1
       graphql: 16.7.1
       graphql-tag: 2.12.6_graphql@16.7.1
       js-yaml: 4.1.0
+      lodash: 4.17.21
       node-cache: 5.1.2
       zod: 3.21.4
     devDependencies:
@@ -10372,6 +10376,10 @@ packages:
 
   /@types/lodash/4.14.196:
     resolution: {integrity: sha512-22y3o88f4a94mKljsZcanlNWPzO0uBsBdzLAngf2tp533LzZcQzb6+eZPJ+vCTt+bqF2XnvT9gejTLsAcJAJyQ==}
+
+  /@types/lodash/4.14.197:
+    resolution: {integrity: sha512-BMVOiWs0uNxHVlHBgzTIqJYmj+PgCo4euloGF+5m4okL3rEYzM2EEv78mw8zWSMM57dM7kVIgJ2QDvwHSoCI5g==}
+    dev: false
 
   /@types/long/4.0.2:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}

@@ -3,6 +3,8 @@ import type { Request } from "express"
 import gql from "graphql-tag"
 import { print } from "graphql"
 import { getAppConfig } from "./config"
+import { getBlockQuery } from "./block/block-query"
+import { BlockDefinition } from "./block/typings"
 
 /**
  * TODO: cf API code that uses this a lot to generate the charts
@@ -14,6 +16,7 @@ export interface ChartParams {
     question: string
     lang: string
 }
+
 export interface ChartFilter {
     // TODO: get from shared code?
 }
@@ -43,44 +46,99 @@ async function queryForChart(chart: ChartParams): Promise<string> {
     // for instance"results/surveys/css2021/config/raw_sitemap.yml"
     // results/node_src/create_pages.mjs can turn it into a flatter sitemap,
     // we should assess what format is best suited here + add typings
+    // @ts-ignore
+    const block: BlockDefinition = {
+        id: chart.question,
+        sectionId: chart.section,
+        // TODO: get all fields based on the yml sitemap
+    }
 
     // 2. from there we get the block type and can deduce a query
     // This is done in "results/node_src/helpers.mjs" within the "runPageQuery" function
+    const query = getBlockQuery({ block, surveyId: chart.survey, editionId: chart.edition })
 
     // TODO:
     return print(gql`
-query surveyApi {
-    survey(survey: state_of_css) {
-        browsers: environments(id: browsers, filters: {}, options: {}) {
-            id
-            year(year: 2021) {
-                year
-                completion {
-                    total
-                    count
-                    percentage_survey
-                }
-                facets {
-                    id
-                    type
-                    completion {
-                        total
-                        percentage_question
-                        percentage_survey
-                        count
-                    }
-                    buckets {
-                        id
-                        count
-                        percentage_question
-                        percentage_survey
-                        entity {
-                            homepage {
-                                url
+query css2022cssFrameworksExperienceLinechartQuery {
+        surveys {
+        state_of_css {
+            css2022 {
+                css_frameworks {
+                    css_frameworks_experience_linechart_1: css_frameworks_ratios {
+                        years
+                        items(filters: {user_info__gender:{eq:male}}) {
+                            id
+                            usage {
+                                year
+                                rank
+                                percentageQuestion
                             }
-                            name
-                            github {
-                                url
+                            awareness {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                            interest {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                            satisfaction {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                        }
+                    }
+                    css_frameworks_experience_linechart_2: css_frameworks_ratios {
+                        years
+                        items(filters: {user_info__gender:{eq:female}}) {
+                            id
+                            usage {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                            awareness {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                            interest {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                            satisfaction {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                        }
+                    }
+                    css_frameworks_experience_linechart_3: css_frameworks_ratios {
+                        years
+                        items(filters: {user_info__gender:{eq:non_binary}}) {
+                            id
+                            usage {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                            awareness {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                            interest {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                            satisfaction {
+                                year
+                                rank
+                                percentageQuestion
                             }
                         }
                     }
@@ -88,6 +146,7 @@ query surveyApi {
             }
         }
     }
+
 }
         `)
 
