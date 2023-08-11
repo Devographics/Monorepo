@@ -1,10 +1,18 @@
-export function getConfig() {
-    const port = process.env.PORT || 4444
+import "dotenv/config"
+import { getConfig } from "@devographics/helpers"
+
+/**
+ * Shared config of the Devographics infrastructure
+ */
+const devographicsEnv = getConfig()
+
+export function getAppConfig() {
+    const port = devographicsEnv.PORT || 4444
     return {
         /**
          * Devographics API
          */
-        chartDataApi: process.env.API_URL!, // TODO: reuse name from variables yml
+        chartDataApi: devographicsEnv.API_URL!, // TODO: reuse name from variables yml
         port,
         /**
          * Absolute URL of the application that serves the charts

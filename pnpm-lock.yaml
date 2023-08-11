@@ -180,21 +180,37 @@ importers:
 
   ogcharts:
     specifiers:
+      '@devographics/debug': workspace:^1.0.0
+      '@devographics/fetch': workspace:^1.0.0
       '@devographics/helpers': workspace:^1.0.0
+      '@devographics/redis': workspace:^1.0.0
       '@devographics/types': workspace:^1.0.0
       '@types/express': ^4.17.17
+      '@upstash/redis': ^1.21.0
+      dotenv: ^16.3.1
+      esbuild-plugin-yaml: ^0.0.1
       express: ^4.18.2
       graphql: ^16.7.1
       graphql-tag: ^2.12.6
+      js-yaml: ^4.1.0
+      node-cache: ^5.1.2
       nodemon: ^3.0.1
       tsup: ^7.2.0
     dependencies:
+      '@devographics/debug': link:../shared/debug
+      '@devographics/fetch': link:../shared/fetch
       '@devographics/helpers': link:../shared/helpers
+      '@devographics/redis': link:../shared/redis
       '@devographics/types': link:../shared/types
+      '@upstash/redis': 1.22.0
+      dotenv: 16.3.1
       graphql: 16.7.1
       graphql-tag: 2.12.6_graphql@16.7.1
+      js-yaml: 4.1.0
+      node-cache: 5.1.2
     devDependencies:
       '@types/express': 4.17.17
+      esbuild-plugin-yaml: 0.0.1
       express: 4.18.2
       nodemon: 3.0.1
       tsup: 7.2.0

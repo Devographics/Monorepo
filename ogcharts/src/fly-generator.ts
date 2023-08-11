@@ -8,7 +8,7 @@
 import express from "express"
 import { fetchChartData, getChartParams } from "./chart-data-fetcher"
 import { renderChartSvg, svg2png } from "./chart-renderer"
-import { getConfig } from "./config"
+import { getAppConfig } from "./config"
 import { metadataHtml } from "./metadata-html"
 
 export const FLY_PREFIX = "/fly"
@@ -50,7 +50,7 @@ flyGenerator.get("/serve", async (req, res) => {
  * /fly/og?survey=state-of-js&edition=js2022&section=environment&chart=browser
  */
 flyGenerator.get("/og", async (req, res) => {
-    const { appUrl } = getConfig()
+    const { appUrl } = getAppConfig()
     // validate the provided query params and pass them down
     const chartSearchParams = new URLSearchParams(getChartParams(req) as any).toString()
     const imgUrl = `${appUrl}/${FLY_PREFIX}/serve?${chartSearchParams}`

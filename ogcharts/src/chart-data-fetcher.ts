@@ -2,7 +2,7 @@
 import type { Request } from "express"
 import gql from "graphql-tag"
 import { print } from "graphql"
-import { getConfig } from "./config"
+import { getAppConfig } from "./config"
 
 /**
  * TODO: cf API code that uses this a lot to generate the charts
@@ -12,6 +12,7 @@ export interface ChartParams {
     edition: string,
     section: string,
     question: string
+    lang: string
 }
 export interface ChartFilter {
     // TODO: get from shared code?
@@ -29,11 +30,11 @@ export interface ChartData {
 export function getChartParams(req: Request): ChartParams {
     // TODO: validate with zod
     return {
-        survey: req.query.survey,
-        edition: req.query.edition,
-        section: req.query.section,
-        question: req.query.question,
-        lang: req.query.lang || "en-US"
+        survey: req.query.survey as string,
+        edition: req.query.edition as string,
+        section: req.query.section as string,
+        question: req.query.question as string,
+        lang: req.query.lang as string || "en-US"
     }
 }
 
@@ -90,7 +91,7 @@ query surveyApi {
  */
 export async function fetchChartData(chart: ChartParams, filter?: ChartFilter): Promise<ChartData> {
     // TODO: validate filter structure with zod
-    const { chartDataApi } = getConfig()
+    const { chartDataApi } = getAppConfig()
     const query = await queryForChart(chart)
     try {
 

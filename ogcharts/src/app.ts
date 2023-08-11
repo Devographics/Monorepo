@@ -1,11 +1,11 @@
 import express, { json } from "express"
-import { getConfig } from "./config"
+import { getAppConfig } from "./config"
 import { flyGenerator, FLY_PREFIX } from "./fly-generator"
 import { localGenerator } from "./local-generator"
 import { s3Generator } from "./s3-generator"
 
 const app = express()
-const { port, appUrl } = getConfig()
+const { port, appUrl } = getAppConfig()
 
 app.use(json())
 

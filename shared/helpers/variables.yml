@@ -15,6 +15,7 @@
       - surveyform
       - surveyadmin
       - homepage
+      - ogcharts
 
 - id: API_URL
   aliases:
@@ -93,6 +94,7 @@
       - surveyadmin
       - results
       - homepage
+      - ogcharts
 
 - id: REDIS_TOKEN
   description: >
@@ -105,6 +107,7 @@
       - surveyadmin
       - results
       - homepage
+      - ogcharts
 
 ### GitHub
 

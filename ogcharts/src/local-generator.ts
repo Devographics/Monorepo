@@ -13,7 +13,7 @@ import express from "express"
 import path from "path"
 import os from "os"
 import { ChartFilter, fetchChartData, getChartParams } from "./chart-data-fetcher"
-import { getConfig } from "./config"
+import { getAppConfig } from "./config"
 import fsPromises from "fs/promises"
 import { renderChartSvg, svg2png } from "./chart-renderer"
 import { metadataHtml } from "./metadata-html"
@@ -30,7 +30,7 @@ function imgDiskPath(imgUniqueName: string) {
     return path.join(os.tmpdir(), imgUniqueName + ".png")
 }
 function imgPublicUrl(imgUniqueName: string) {
-    const { appUrl } = getConfig()
+    const { appUrl } = getAppConfig()
     // keep in sync with the corresponding endpoint
     return `${appUrl}/local/${imgUniqueName}`
 }
@@ -65,7 +65,7 @@ localGenerator.post("/generate", async (req, res) => {
     const chartPng = await svg2png(chartSvg)
     // Make the image publicly available (eg storing in a public AWS S3 bucket)
     const imgUniqueName = await generateImgPublicUrlLocal(chartPng)
-    const { appUrl } = getConfig()
+    const { appUrl } = getAppConfig()
     // Craft the URL to be shared (the one that servers the OG headers, so different from the image public URL)
     return `${appUrl}/og/${imgUniqueName}`
 })

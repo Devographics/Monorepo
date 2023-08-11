@@ -12,8 +12,10 @@
 // import { getSiteTitle } from './pageHelpers'
 
 // TODO: enable shared folders
-import { Entity } from '@devographics/types'
+import { EditionMetadata, Entity, SurveyMetadata } from '@devographics/types'
 import { BlockDefinition } from "./typings"
+import type { StringTranslator } from "../i18n"
+
 
 export const replaceOthers = (s: string) => s?.replace('_others', '.others')
 
@@ -37,24 +39,21 @@ const getBlockTitleKey = ({
     block
 }: {
     block: BlockDefinition
-    pageContext: PageContextValue
 }) => block.titleId || `${getBlockKey({ block })}`
 
 const getBlockTitle = ({
     block,
-    pageContext,
     getString,
     entities
 }: {
     block: BlockDefinition
-    pageContext: PageContextValue
     getString: StringTranslator
     entities?: Entity[]
 }) => {
     const entity = entities?.find(e => e.id === block.id)
     const entityName = entity?.nameClean || entity?.name
     const blockTitle = block.titleId && getString(block.titleId)?.t
-    const key = getBlockTitleKey({ block, pageContext })
+    const key = getBlockTitleKey({ block })
 
     const translation = getString(key)
     return blockTitle || translation?.tClean || translation?.t || entityName || key
@@ -72,21 +71,22 @@ In order of priority, use:
 */
 const getBlockDescription = ({
     block,
-    pageContext,
+    currentEdition,
     getString,
     values,
-    options
+    // options
 }: {
     block: BlockDefinition
-    pageContext: PageContextValue
     getString: StringTranslator
+    // in the Gatsby result app this is provided by the page context
+    currentEdition: EditionMetadata,
     values?: any
+    /*
     options?: {
         isHtml?: boolean
-    }
+    }*/
 }) => {
     const descriptionKey = `${getBlockKey({ block })}.description`
-    const { currentEdition } = pageContext
     const blockDescription = block.descriptionId && getString(block.descriptionId, values)?.t
     const editionDescription = getString(`${descriptionKey}.${currentEdition.id}`, values)?.t
     const genericDescription = getString(descriptionKey, values)?.t
@@ -110,14 +110,25 @@ export const getBlockImage = ({
 }
 */
 
+/**
+ * Redirection link associated with a chart
+ * => points to the chart in the context of the survey
+ * @param param0 
+ * @returns 
+ */
 const getBlockLink = ({
     block,
-    pageContext,
+    currentPath,
+    host,
     params,
     useRedirect = true
 }: {
     block: BlockDefinition
-    pageContext: PageContextValue
+    /** TODO: in the Gatsby app its "pageContext.currentPath" but we have no currentPath, can we derive it from the block definition? */
+    currentPath: string,
+    /** TODO: this is the result app URL, how to get it reliably? From the edition definition? */
+    host: string,
+    // pageContext: PageContextValue
     params?: any
     useRedirect?: boolean
 }) => {
@@ -125,35 +136,44 @@ const getBlockLink = ({
     const paramsString = new URLSearchParams(params).toString()
 
     let path = useRedirect
-        ? `${pageContext.currentPath}/${id}?${paramsString}`
-        : `${pageContext.currentPath}/?${paramsString}#${id}`
+        ? `${currentPath}/${id}?${paramsString}`
+        : `${currentPath}/?${paramsString}#${id}`
 
     // remove any double slashes
+    // @ts-ignore TODO: setting lib to ES2021 in tsconfig will make "fetch" being unreckognized in Node code
     path = path.replaceAll('//', '/')
-    const link = `${pageContext.host}${path}`
+    const link = `${host}${path}`
     return link
+}
+
+function getSiteTitle({ currentEdition }: { currentEdition: EditionMetadata }) {
+    return `${currentEdition.survey.name} ${currentEdition.year}`
 }
 
 export const getBlockMeta = ({
     block,
-    pageContext,
     getString,
+    currentEdition,
+    currentPath,
+    host,
     title
 }: {
     block: BlockDefinition
-    pageContext: PageContextValue
+    currentEdition: EditionMetadata,
+    currentPath: string,
+    host: string,
     getString: StringTranslator
     title?: string
 }) => {
     const { id } = block
-    const link = getBlockLink({ block, pageContext })
-    const { currentEdition } = pageContext
-    const { year, hashtag } = currentEdition
-    const trackingId = `${pageContext.currentPath}${id}`.replace(/^\//, '')
+    const link = getBlockLink({ block, currentPath, host })
+    // TODO: what is hashtag now?
+    const { year/*, hashtag*/ } = currentEdition
+    const trackingId = `${currentPath}${id}`.replace(/^\//, '')
 
-    title = title || getBlockTitle({ block, pageContext, getString })
+    title = title || getBlockTitle({ block, getString })
 
-    const subtitle = getBlockDescription({ block, pageContext, getString })
+    const subtitle = getBlockDescription({ block, currentEdition, getString })
 
     // TODO: in this app it should be already provided
     // const imageUrl = getBlockImage({ block, pageContext })
@@ -161,9 +181,9 @@ export const getBlockMeta = ({
     const values = {
         title,
         link,
-        hashtag,
+        // hashtag,
         year,
-        siteTitle: getSiteTitle({ pageContext })
+        siteTitle: getSiteTitle({ currentEdition })
     }
 
     const twitterText = getString('share.block.twitter_text', {
