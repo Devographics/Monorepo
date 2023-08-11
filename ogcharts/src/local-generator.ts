@@ -16,7 +16,7 @@ import { ChartFilter, fetchChartData, getChartParams } from "./chart-data-fetche
 import { getAppConfig } from "./config"
 import fsPromises from "fs/promises"
 import { renderChartSvg, svg2png } from "./chart-renderer"
-import { metadataHtml } from "./metadata-html"
+import { renderMetadata } from "./metadata-html"
 
 /**
  * Endpoints:
@@ -87,6 +87,6 @@ localGenerator.get("/serve/:imgUniqueName", async (req, res) => {
  */
 localGenerator.get("/og/:imgUniqueName", async (req, res) => {
     const imgUrl = imgPublicUrl(req.params.imgUniqueName)
-    res.send(metadataHtml(req, imgUrl))
+    res.send(renderMetadata(req, imgUrl))
 })
 

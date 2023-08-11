@@ -9,7 +9,7 @@ import express from "express"
 import { fetchChartData, getChartParams } from "./chart-data-fetcher"
 import { renderChartSvg, svg2png } from "./chart-renderer"
 import { getAppConfig } from "./config"
-import { metadataHtml } from "./metadata-html"
+import { renderMetadata } from "./metadata-html"
 
 export const FLY_PREFIX = "/fly"
 /**
@@ -53,7 +53,8 @@ flyGenerator.get("/og", async (req, res) => {
     const { appUrl } = getAppConfig()
     // validate the provided query params and pass them down
     const chartSearchParams = new URLSearchParams(getChartParams(req) as any).toString()
-    const imgUrl = `${appUrl}/${FLY_PREFIX}/serve?${chartSearchParams}`
+    const imgUrl = `${appUrl}${FLY_PREFIX}/serve?${chartSearchParams}`
     // TODO see https://github.com/Devographics/Monorepo/blob/main/results/src/core/helpers/blockHelpers.ts#L174
-    res.send(metadataHtml(req, imgUrl))
+    const html = await renderMetadata(req, imgUrl)
+    res.send(html)
 })

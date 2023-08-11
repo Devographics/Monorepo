@@ -3,6 +3,8 @@ import { getConfig } from "@devographics/helpers"
 
 /**
  * Shared config of the Devographics infrastructure
+ * Variables must be listed in "shared/helpers/variables.yml"
+ * (unless they are strictly specific to the ogchart app)
  */
 const devographicsEnv = getConfig()
 

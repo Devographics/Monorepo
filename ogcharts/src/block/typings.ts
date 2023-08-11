@@ -38,8 +38,11 @@ export interface BlockDefinition {
      * @example environments
      */
     sectionId: string
-    // ?
-    facet: any,
+    /** 
+     * Note sure of their role?
+    * @example user_info__gender
+    */
+    facet?: any,
     // ?
     fieldId?: string,
     template?: string
@@ -51,8 +54,14 @@ export interface BlockDefinition {
 
     defaultUnits?: BucketUnits
 
-    // data
-    query?: string
+    /**
+     * Can be:
+     * - name of a default query
+     * - name of any other query
+     * - a complete query (not just the name)
+     * The query field seems to be computed when we flatten the sitemap in the reulst app
+     */
+    query?: "currentEditionData" | "allEditionsData" | string
     variables?: any
     parameters: ResponsesParameters
     filters?: FilterType[]

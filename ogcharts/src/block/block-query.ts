@@ -9,13 +9,17 @@ function logToFile(...args) {
     console.log("LOG TO FILE:", ...args)
 }
 
+/**
+ * 
+ * @param param0 
+ * @returns The block query with parameters already injected in it
+ */
 export async function getBlockQuery({ block, surveyId, editionId }: {
     block: BlockDefinition,
     surveyId: string,
     editionId: string,
 }) {
     if (!block.query) return
-    let data
     /*
     Mostly for caching see results/node_src/helpers.mjs
     const dataDirPath = path.resolve(`${basePath}/data/${page.id}`)
@@ -70,12 +74,14 @@ export async function getBlockQuery({ block, surveyId, editionId }: {
     })
 
     // TODO: what's the purpose of this?
+    // TODO: it seems that it's needed otherwise we have an additional dataApi
     if (query.includes('dataAPI')) {
         const queryLog = buildBlockQuery({
             query: block.query,
             queryOptions: { ...queryOptions, isLog: true, addRootNode: false },
             queryArgs
         })
+        return queryLog
         /*
         logToFile(queryFileName, queryLog, {
             mode: 'overwrite',

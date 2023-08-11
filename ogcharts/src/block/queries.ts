@@ -260,6 +260,10 @@ interface QueryOptions {
     addQuestionEntity?: boolean,
     addQuestionComments?: boolean,
     isLog?: boolean
+    /**
+     * If true add a "dataAPI" rootNode
+     * TODO: this might be a Gatsby specific thing so we might want to get rid of this altogether?
+     */
     addRootNode?: boolean
 }
 const getDefaultQuery = ({ queryOptions, queryArgs = {} }: {
@@ -296,7 +300,7 @@ surveys {
         ${questionIdString} {
           ${addQuestionEntity ? getEntityFragment() : ''}
           ${addQuestionComments ? getCommentsCountFragment() : ''}
-          ${subField}${queryArgsString} {
+          ${subField}${queryArgsString || ''} {
             ${editionType} {
               ${allEditions ? allEditionsFragment : ''}
               completion {
@@ -353,8 +357,15 @@ Take query, queryOptions, and queryArgs, and return full query
 
 Note: query can be either a query name, or the full query text
 
+@return The query with parameters already injected in it
+
 */
-export const buildBlockQuery = ({ query: query_, queryOptions, queryArgs }: { query?: any, queryOptions: QueryOptions, queryArgs: QueryArgs }) => {
+export const buildBlockQuery = ({
+    query: query_, queryOptions, queryArgs }:
+    {
+        query: string,
+        queryOptions: QueryOptions, queryArgs: QueryArgs
+    }): string => {
     let queryContents,
         query = query_
 

@@ -29,6 +29,7 @@
       - surveyform
       - surveyadmin
       - homepage
+      - ogcharts
 
 - id: API_URL_PRODUCTION
   optional: true

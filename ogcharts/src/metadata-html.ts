@@ -15,14 +15,14 @@ import { getChartParams } from "./chart-data-fetcher"
  * @param imgUrl 
  * @returns 
  */
-export async function metadataHtml(req: Request, imgUrl: string) {
+export async function renderMetadata(req: Request, imgUrl: string) {
     const chartParams = getChartParams(req)
     try {
         const { data: currentEdition, error } = await fetchEditionMetadata({
             surveyId: chartParams.survey,
             editionId: chartParams.edition,
         })
-        if (error) throw new Error(`Error while fetchin edition metadata (survey: ${chartParams.survey}, edition: ${chartParams.edition}): ${error.toString()}`)
+        if (error) throw new Error(`Error while fetching edition metadata (survey: ${chartParams.survey}, edition: ${chartParams.edition}): ${error.toString()}`)
         const blockMeta = getBlockMeta({
             block: {
                 id: chartParams.question,

@@ -41,24 +41,26 @@ export function getChartParams(req: Request): ChartParams {
     }
 }
 
-async function queryForChart(chart: ChartParams): Promise<string> {
+async function queryForChart(chart: ChartParams): Promise<string | undefined> {
     // 1. informations about a specific chart are located in the raw_sitemap
     // for instance"results/surveys/css2021/config/raw_sitemap.yml"
     // results/node_src/create_pages.mjs can turn it into a flatter sitemap,
     // we should assess what format is best suited here + add typings
-    // @ts-ignore
     const block: BlockDefinition = {
         id: chart.question,
         sectionId: chart.section,
-        // TODO: get all fields based on the yml sitemap
+        parameters: {},
+        // TODO: get all fields based on the yml sitemap/flattened sitemap
+        query: "currentEditionData"
     }
 
     // 2. from there we get the block type and can deduce a query
     // This is done in "results/node_src/helpers.mjs" within the "runPageQuery" function
-    const query = getBlockQuery({ block, surveyId: chart.survey, editionId: chart.edition })
-
+    const query = await getBlockQuery({ block, surveyId: chart.survey, editionId: chart.edition })
+    console.log({ query })
     // TODO:
-    return print(gql`
+    return query
+    /*print(gql`
 query css2022cssFrameworksExperienceLinechartQuery {
         surveys {
         state_of_css {
@@ -148,8 +150,7 @@ query css2022cssFrameworksExperienceLinechartQuery {
     }
 
 }
-        `)
-
+        `)*/
 }
 /**
  * https://github.com/Devographics/Monorepo/blob/main/results/src/core/helpers/blockHelpers.ts#L174
@@ -161,20 +162,25 @@ export async function fetchChartData(chart: ChartParams, filter?: ChartFilter): 
     // TODO: validate filter structure with zod
     const { chartDataApi } = getAppConfig()
     const query = await queryForChart(chart)
+    if (!query) return {}
     try {
-
-        const data = await fetch(chartDataApi, {
+        console.log(`Fetching data ${chartDataApi}`)
+        const res = await fetch(chartDataApi, {
             method: "POST",
             // Print + gql is a trick to get formatting
             // TODO: how to get this query based on the chart parameters ?
+            // @ts-ignore
             body: JSON.stringify({
                 query,
-                params: {}
+                // Params are already injected in the query, no need to add them separately
             }),
             headers: {
                 "content-type": "application/json"
             }
         })
+        const data = await res.json()
+        console.log(data.errors)
+        console.log({ data })
         return data
     } catch (err) {
         console.error(err)

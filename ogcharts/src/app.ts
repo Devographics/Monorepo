@@ -18,9 +18,9 @@ app.use("/cloud", s3Generator)
 app.use("/", (req, res) => {
     res.send(`
     <h2>Image:</h2>
-        <img src="/fly/serve?survey=stateofjs&edition=js2022&section=environment&question=browser"  />
+        <img src="/fly/serve?survey=state_of_css&edition=css2021&section=environments&question=browsers"  />
     <h2>Meta:</h2>
-        <a href="/fly/og?survey=stateofjs&edition=js2022&section=environment&question=browser">Access meta page</a>
+        <a href="/fly/og?survey=state_of_css&edition=css2021&section=environments&question=browsers">Access meta page</a>
     `)
 })
 
