@@ -10,11 +10,23 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { getBlockQuery } from 'core/helpers/queries'
 
 const BlockData = props => {
+    const { block } = props
+    const pageContext = usePageContext()
+
+    const query = getBlockQuery({
+        block,
+        pageContext,
+        queryOptions: {
+            addArgumentsPlaceholder: false,
+            addBucketFacetsPlaceholder: false
+        }
+    })
+
     return (
         <>
             <ExportWrapper>
                 <JSONTrigger {...props} />
-                <GraphQLTrigger {...props} />
+                <GraphQLTrigger query={query} />
             </ExportWrapper>
             <Table {...props} />
         </>
@@ -35,27 +47,17 @@ export const JSONTrigger = props => (
 )
 
 export const GraphQLTrigger = props => {
-    const { block } = props
-    const pageContext = usePageContext()
+    const { query, buttonProps = {} } = props
     return (
         <ModalTrigger
             trigger={
-                <ExportButton className="ExportButton" size="small" {...props.buttonProps}>
+                <ExportButton className="ExportButton" size="small" {...buttonProps}>
                     <T k="export.export_graphql" />
                     {/* <ExportIcon /> */}
                 </ExportButton>
             }
         >
-            <GraphQLExport
-                query={getBlockQuery({
-                    block,
-                    pageContext,
-                    queryOptions: {
-                        addArgumentsPlaceholder: false,
-                        addBucketFacetsPlaceholder: false
-                    }
-                })}
-            />
+            <GraphQLExport query={query} />
         </ModalTrigger>
     )
 }

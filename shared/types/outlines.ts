@@ -42,12 +42,12 @@ export type Edition = {
     year: number
     credits: Credit[]
     resultsUrl: string
+    resultsStatus: ResultsStatus
     questionsUrl: string
     imageUrl: string
     socialImageUrl: string
     faviconUrl: string
     status: SurveyStatus
-    resultsStatus: ResultsStatus
     tshirt: Tshirt
     colors: Colors
     enableReadingList: boolean

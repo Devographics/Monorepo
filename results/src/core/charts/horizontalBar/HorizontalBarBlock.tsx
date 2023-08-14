@@ -99,6 +99,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
             <DynamicDataLoader
                 block={block}
                 chartFilters={chartFilters}
+                units={units}
                 setUnits={setUnits}
                 layout="grid"
                 defaultSeries={defaultSeries}

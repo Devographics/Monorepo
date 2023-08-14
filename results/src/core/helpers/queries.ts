@@ -332,7 +332,9 @@ export const getQuery = ({
 }) => {
     let queryContents
 
-    if (queryOptions.isLog) {
+    const { isLog, addArgumentsPlaceholder } = queryOptions
+
+    if (isLog) {
         // when logging we can leave out enableCache parameter
         delete queryArgs?.parameters?.enableCache
     }
@@ -354,7 +356,9 @@ export const getQuery = ({
             queryContents = queryContents.replace(argumentsPlaceholder, queryArgsString)
         }
     } else {
-        queryContents = queryContents.replace(argumentsPlaceholder, '')
+        if (!addArgumentsPlaceholder) {
+            queryContents = queryContents.replace(argumentsPlaceholder, '')
+        }
     }
     const wrappedQuery = wrapQuery({
         queryName,

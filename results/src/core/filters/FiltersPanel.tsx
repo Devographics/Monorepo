@@ -106,6 +106,15 @@ const FiltersPanel = ({
         })
     }
 
+    const query = getFiltersQuery({
+        block,
+        pageContext,
+        chartFilters: filtersState,
+        currentYear: currentEdition.year
+    })?.query
+
+    console.log('// query fp')
+    console.log(query)
     return (
         <Filters_>
             <FiltersTop_>
@@ -144,18 +153,7 @@ const FiltersPanel = ({
 
             <FiltersBottom_>
                 <FooterLeft_>
-                    <GraphQLTrigger
-                        block={block}
-                        query={
-                            getFiltersQuery({
-                                block,
-                                pageContext,
-                                chartFilters: filtersState,
-                                currentYear: currentEdition.year
-                            })?.query
-                        }
-                        buttonProps={{ variant: 'link' }}
-                    />
+                    <GraphQLTrigger block={block} query={query} buttonProps={{ variant: 'link' }} />
                     <CopyLink link={filtersLink} />
                 </FooterLeft_>
                 <Button onClick={handleSubmit}>

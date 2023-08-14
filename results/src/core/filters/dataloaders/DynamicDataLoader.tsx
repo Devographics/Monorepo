@@ -10,6 +10,7 @@ import FacetDataLoader from './FacetDataLoader'
 export interface DynamicDataLoaderProps {
     defaultSeries: DataSeries<AllQuestionData>
     block: BlockDefinition
+    units: BucketUnits
     setUnits: Dispatch<SetStateAction<BucketUnits>>
     children: ReactNode
     chartFilters: CustomizationDefinition

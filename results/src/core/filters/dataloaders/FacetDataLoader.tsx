@@ -10,6 +10,8 @@ import styled from 'styled-components'
 import { DataSeries } from '../types'
 import { JSONTrigger } from 'core/blocks/block/BlockData'
 import { BucketUnits } from '@devographics/types'
+import T from 'core/i18n/T'
+import { Note_ } from 'core/blocks/block/BlockNote'
 
 interface FacetDataLoaderProps extends DynamicDataLoaderProps {
     defaultSeries: DataSeries<AllQuestionData>
@@ -20,6 +22,7 @@ const FacetDataLoader = ({
     block,
     children,
     chartFilters,
+    units,
     setUnits
 }: FacetDataLoaderProps) => {
     const pageContext = usePageContext()
@@ -65,6 +68,11 @@ const FacetDataLoader = ({
             {isLoading && <Loading />}
             {series && (
                 <JSONTrigger block={block} data={series} buttonProps={{ variant: 'link' }} />
+            )}
+            {units === BucketUnits.PERCENTAGE_BUCKET && (
+                <Note_>
+                    <T k="charts.facets_clarification" />
+                </Note_>
             )}
         </Wrapper_>
     )
