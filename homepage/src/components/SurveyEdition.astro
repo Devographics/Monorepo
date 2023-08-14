@@ -3,6 +3,7 @@ import T from '@components/T'
 import { statuses } from '@helpers/constants'
 import TakeSurvey from '@components/TakeSurvey'
 import { getLocaleSubset } from '@helpers/translator'
+import { ResultsStatusEnum } from '@devographics/types'
 
 const { survey, edition, locale, isLast } = Astro.props
 const { year, questionsUrl, resultsUrl, imageUrl, status, colors = {} } = edition
@@ -56,7 +57,7 @@ if (isOpen) {
                         />
                     </a>
                 )}
-                {resultsUrl ? (
+                {resultsUrl && edition.resultsStatus === ResultsStatusEnum.PUBLISHED ? (
                     <a href={resultsUrl} class="button">
                         <T locale={locale} k="homepage.view_results" />
                     </a>

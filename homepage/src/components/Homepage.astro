@@ -13,8 +13,6 @@ const allEditions = (editions)
     .filter(e => [statuses.preview, statuses.open, statuses.closed].includes(e.status))
 const { id } = survey
 
-console.log(editions.map(e=>e.id))
-console.log(allEditions.map(e=>e.id))
 const [lastEdition, ...pastEditions] = allEditions
 // const openEdition = allEditions.find(e => e.status === statuses.open)
 // const closedEditions = allEditions.filter(e => e.status === statuses.closed)

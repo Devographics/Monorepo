@@ -9,8 +9,6 @@ const lastEdition = survey.editions.sort((e1, e2) => e2.year - e1.year)[0]
 const { faviconUrl } = lastEdition
 
 const locale = locales.find(l => l.id === 'en-US')
-console.log('// locale')
-console.log(locale)
 const meta = getMeta({ survey, locale, lastEdition })
 
 // server-side redirect

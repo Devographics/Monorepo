@@ -224,6 +224,9 @@ importers:
       '@devographics/helpers':
         specifier: workspace:^
         version: link:../shared/helpers
+      '@devographics/types':
+        specifier: workspace:^
+        version: link:../shared/types
       '@types/react':
         specifier: ^18.2.17
         version: 18.2.17
