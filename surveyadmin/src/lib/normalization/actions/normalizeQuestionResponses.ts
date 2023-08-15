@@ -25,6 +25,7 @@ export const normalizeQuestionResponses = async (
   const { data: edition } = await fetchEditionMetadataAdmin({
     surveyId,
     editionId,
+    shouldGetFromCache: false,
   });
   const rawResponsesCollection = await getRawResponsesCollection(survey);
 

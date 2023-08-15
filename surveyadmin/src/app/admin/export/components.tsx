@@ -165,7 +165,11 @@ export const AdminExportPage = ({
             })}
           </select>
         )}
-        <button type="submit" disabled={state.loading}>
+        <button
+          type="submit"
+          aria-busy={state.loading}
+          disabled={state.loading}
+        >
           {!state.loading ? "Download exports zip" : "Loading..."}
         </button>
       </form>

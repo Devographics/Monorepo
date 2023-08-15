@@ -40,6 +40,8 @@ export const NormalizeEdition = ({
 
   return (
     <div className="admin-normalization admin-content">
+      <h4>Normalize Edition</h4>
+
       <button
         onClick={() => {
           initializeSegments({

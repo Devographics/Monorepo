@@ -10,6 +10,7 @@ import {
 } from "../types";
 import clone from "lodash/clone";
 import { QuestionTemplateOutput, SectionMetadata } from "@devographics/types";
+import { getFieldsToCopy } from "./steps";
 
 interface NormalizeFieldOptions extends NormalizationParams {
   questionObject: QuestionTemplateOutput;
@@ -50,7 +51,10 @@ export const normalizeField = async ({
     );
   }
 
-  const prefixWithEditionId = (s) => `${edition.id}__${s}`;
+  const prefixWithEditionId = (s) => {
+    // note: fields starting with `common` don't need to be prefixed with the edition id
+    return s.slice(0, 8) === "common__" ? s : `${edition.id}__${s}`;
+  };
 
   // automatically add question's own id as a potential match tag
   const matchTags = [...(matchTags_ || []), questionObject.id];
@@ -178,7 +182,7 @@ export const normalizeField = async ({
     await processOtherField();
   }
 
-  return {
+  const result = {
     normalizedResponse: normResp,
     modified,
     regularFields,
@@ -186,4 +190,5 @@ export const normalizeField = async ({
     prenormalizedFields,
     commentFields,
   };
+  return result;
 };

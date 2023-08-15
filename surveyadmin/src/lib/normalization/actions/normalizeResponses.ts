@@ -12,7 +12,7 @@ export type NormalizeResponsesArgs = {
 
 /*
 
-Normalize all questions for a specific set of responses (probably never used?)
+Normalize all questions for a specific set of responses
 
 */
 export const normalizeResponses = async (args: NormalizeResponsesArgs) => {
@@ -22,6 +22,7 @@ export const normalizeResponses = async (args: NormalizeResponsesArgs) => {
   const { data: edition } = await fetchEditionMetadataAdmin({
     surveyId,
     editionId,
+    shouldGetFromCache: false,
   });
   const rawResponsesCollection = await getRawResponsesCollection(survey);
 
@@ -36,7 +37,12 @@ export const normalizeResponses = async (args: NormalizeResponsesArgs) => {
     `⛰️ Renormalizing responses [${responsesIds.join(", ")}]… (${startAt})`
   );
 
-  const mutationResult = await normalizeInBulk({ survey, edition, responses });
+  const mutationResult = await normalizeInBulk({
+    survey,
+    edition,
+    responses,
+    verbose: true,
+  });
 
   return mutationResult;
 };

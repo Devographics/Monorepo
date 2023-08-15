@@ -43,6 +43,7 @@ export const normalizeInBulk = async (options: {
   questionId?: string;
   isRenormalization?: boolean;
   isFirstNormalization?: boolean;
+  verbose?: boolean;
 }) => {
   const {
     survey,
@@ -52,6 +53,7 @@ export const normalizeInBulk = async (options: {
     questionId,
     isRenormalization = false,
     isFirstNormalization = false,
+    verbose = false,
   } = options;
   const startAt = new Date();
   const timestamp = startAt.toISOString();

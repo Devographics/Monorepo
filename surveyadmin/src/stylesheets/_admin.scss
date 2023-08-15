@@ -12,6 +12,12 @@
   }
 }
 
+.normalize-responses {
+  display: flex;
+  align-items: center;
+  gap: $spacing;
+}
+
 .normalization-progress {
   // padding: $spacing;
   // border: 1px solid grey;

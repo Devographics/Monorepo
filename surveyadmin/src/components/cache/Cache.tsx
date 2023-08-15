@@ -9,7 +9,12 @@ export const actions = [
     script: "refreshSurveysCache",
   },
   {
-    label: "Refresh Locales Cache",
+    label: "Refresh Locales Cache (en-US)",
+    script: "refreshLocalesCache",
+    args: { localeIds: ["en-US"] },
+  },
+  {
+    label: "Refresh Locales Cache (all)",
     script: "refreshLocalesCache",
   },
 ];
@@ -53,12 +58,15 @@ export const CacheDashboard = () => (
   </div>
 );
 
-const Action = ({ label, script, target }) => {
+const Action = ({ label, script, args = {}, target }) => {
   const [loading, setLoading] = useState(false);
   const handleClick = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const result = await runScript({ id: script, scriptArgs: { target } });
+    const result = await runScript({
+      id: script,
+      scriptArgs: { ...args, target },
+    });
     console.log(result);
     setLoading(false);
   };
