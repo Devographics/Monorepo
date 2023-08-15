@@ -82,6 +82,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
               limit
               template
               inputComponent
+              hidden
               # contentType
               allowOther
               allowComment

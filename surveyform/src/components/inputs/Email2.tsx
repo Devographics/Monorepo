@@ -15,6 +15,8 @@ import debounce from "lodash/debounce.js";
 export const Email2 = (props: FormInputProps) => {
   const { response, question, updateCurrentValues, readOnly } = props;
 
+  const disabled = !!readOnly;
+
   const { id: questionId } = question;
   const checkboxValue = response?.receiveNotifications;
   const intl = useIntlContext();
@@ -54,6 +56,7 @@ export const Email2 = (props: FormInputProps) => {
               id="show_email"
               checked={receiveNotifications}
               type="checkbox"
+              disabled={disabled}
               onChange={(event) => {
                 setReceiveNotifications(!receiveNotifications);
                 updateCurrentValues({
@@ -77,7 +80,7 @@ export const Email2 = (props: FormInputProps) => {
             value={localValue}
             onChange={handleChangeDebounced}
             onBlur={handleChange}
-            disabled={readOnly}
+            disabled={disabled}
           />
         </div>
       )}

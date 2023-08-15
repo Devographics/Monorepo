@@ -62,17 +62,19 @@ const SurveySectionHeading = ({
         </div>
         <div className="section-toc">
           <ol>
-            {section.questions.map((question) => (
-              <QuestionItem
-                key={question.id}
-                edition={edition}
-                section={section}
-                question={question}
-                scrollPosition={scrollPosition}
-                itemPositions={itemPositions}
-                response={response}
-              />
-            ))}
+            {section.questions
+              .filter((q) => !q.hidden)
+              .map((question) => (
+                <QuestionItem
+                  key={question.id}
+                  edition={edition}
+                  section={section}
+                  question={question}
+                  scrollPosition={scrollPosition}
+                  itemPositions={itemPositions}
+                  response={response}
+                />
+              ))}
           </ol>
         </div>
       </div>
