@@ -8,6 +8,8 @@ import { ResponsiveCirclePacking, ComputedDatum } from '@nivo/circle-packing'
 import ChartLabel from 'core/components/ChartLabel'
 // @ts-ignore: no typings yet for this
 import { FeaturesCirclePackingChartTooltip } from './FeaturesCirclePackingChartTooltip'
+import { Entity } from '@devographics/types'
+import { useI18n } from 'core/i18n/i18nContext'
 
 const LABEL_FONT_SIZE = 12
 const GRID_COLUMNS = 8
@@ -34,6 +36,7 @@ interface FeatureNodeData {
     usage_ratio: number
     usage_ratio_rank: number
     unused_count: number
+    entity?: Entity
 }
 
 interface SectionNodeData {
@@ -163,6 +166,7 @@ const FeatureNode = ({
         opacity: number
     }>
 }) => {
+    const { getString } = useI18n()
     const theme = useTheme()
     // @ts-ignore: sections depend on the survey, and we didn't solved this issue
     const color = theme.colors.ranges.features_categories[node.data.sectionId]
@@ -179,6 +183,11 @@ const FeatureNode = ({
     )
     const handleMouseLeave = useCallback(hideTooltip, [hideTooltip])
 
+    const tString = getString(`features.${node.data.id}`)
+    const translatedName = tString?.tClean || tString.t
+    const entityName = node.data.entity?.nameClean || node.data.entity?.name
+    const label = translatedName || entityName
+
     return (
         <animated.g
             key={node.data.id}
@@ -192,7 +201,7 @@ const FeatureNode = ({
             <circle r={usageRadius} fill={color} />
             <ChartLabel
                 transform={`translate(0,${offset})`}
-                label={truncate(node.data.name, { length: 12, omission: '…' })}
+                label={truncate(label, { length: 12, omission: '…' })}
                 fontSize={LABEL_FONT_SIZE}
             />
         </animated.g>

@@ -182,27 +182,29 @@
         template: demographics
         blockType: HorizontalBarBlock
         translateData: true
-        # variants:
-        #     - id: race_ethnicity
-        #       facet: user_info__years_of_experience
-        #       tabId: tabs.by_experience
-        #       template: demographics # facet
-        #       parameters: { facetSort: { order: asc, property: mean }, limit: 11, facetCutoff: 100 }
-
+        variants:
+            - id: race_ethnicity_freeform
+              fieldId: race_ethnicity
+              defaultUnits: count
+              template: multiple_options_freeform
+              blockType: HorizontalBarBlock
+              units: count
+              translateData: true
+              parameters: { cutoff: 10 }
       - id: disability_status
         defaultUnits: count
         template: demographics
         blockType: HorizontalBarBlock
         translateData: true
-        # variants:
-        #     - id: disability_status_freeform
-        #       fieldId: disability_status
-        #       defaultUnits: count
-        #       template: multiple_options_freeform
-        #       blockType: HorizontalBarBlock
-        #       units: count
-        #       translateData: true
-        #       parameters: { cutoff: 10 }
+        variants:
+            - id: disability_status_freeform
+              fieldId: disability_status
+              defaultUnits: count
+              template: multiple_options_freeform
+              blockType: HorizontalBarBlock
+              units: count
+              translateData: true
+              parameters: { cutoff: 10 }
 
       - id: user_info_resources
         items: [fm-homepage]
