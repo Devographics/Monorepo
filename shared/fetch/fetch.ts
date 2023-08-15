@@ -149,7 +149,7 @@ export async function getFromCache<T = any>({
 
     try {
         // 1. we have the a promise that resolve to the data in memory => return that
-        if (memoryCache.has(key)) {
+        if (shouldGetFromCache && memoryCache.has(key)) {
             console.debug(`🟢 [${key}] in-memory cache hit ${calledFromLog}`)
             inMemory = true
             resultPromise = memoryCache.get<Promise<FetchPayloadSuccessOrError<T>>>(key)!

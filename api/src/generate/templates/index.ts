@@ -44,7 +44,9 @@ export {
     browser,
     device,
     os,
-    version
+    version,
+    referrer,
+    sourcetag
 } from '@devographics/templates'
 
 export * from './data_explorer'

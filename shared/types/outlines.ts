@@ -152,6 +152,8 @@ export type Question = {
     from?: number
     to?: number
 
+    // a question that has a data field but does not show up in the form
+    hidden?: boolean
     allowMultiple?: boolean
     allowOther?: boolean
     allowPrenormalized?: boolean
