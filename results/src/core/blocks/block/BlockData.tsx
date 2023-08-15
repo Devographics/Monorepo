@@ -11,6 +11,7 @@ import { getBlockQuery } from 'core/helpers/queries'
 
 const BlockData = props => {
     const { block } = props
+    const { parameters } = block
     const pageContext = usePageContext()
 
     const query = getBlockQuery({
@@ -19,7 +20,8 @@ const BlockData = props => {
         queryOptions: {
             addArgumentsPlaceholder: false,
             addBucketFacetsPlaceholder: false
-        }
+        },
+        queryArgs: { parameters }
     })
 
     return (

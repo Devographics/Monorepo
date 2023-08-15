@@ -113,8 +113,6 @@ const FiltersPanel = ({
         currentYear: currentEdition.year
     })?.query
 
-    console.log('// query fp')
-    console.log(query)
     return (
         <Filters_>
             <FiltersTop_>
