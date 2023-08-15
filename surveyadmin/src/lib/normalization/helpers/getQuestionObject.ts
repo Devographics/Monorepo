@@ -1,5 +1,5 @@
 import { TemplateArguments, TemplateFunction } from "@devographics/types";
-import * as templateFunctions from "@devographics/templates";
+import { templateFunctions } from "@devographics/templates";
 
 export const getQuestionObject = ({
   survey,

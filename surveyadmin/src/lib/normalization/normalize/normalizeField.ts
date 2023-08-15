@@ -11,6 +11,7 @@ import {
 import clone from "lodash/clone";
 import { QuestionTemplateOutput, SectionMetadata } from "@devographics/types";
 import { getFieldsToCopy } from "./steps";
+import { prefixWithEditionId } from "@devographics/templates";
 
 interface NormalizeFieldOptions extends NormalizationParams {
   questionObject: QuestionTemplateOutput;
@@ -51,18 +52,13 @@ export const normalizeField = async ({
     );
   }
 
-  const prefixWithEditionId = (s) => {
-    // note: fields starting with `common` don't need to be prefixed with the edition id
-    return s.slice(0, 8) === "common__" ? s : `${edition.id}__${s}`;
-  };
-
   // automatically add question's own id as a potential match tag
   const matchTags = [...(matchTags_ || []), questionObject.id];
 
   const processResponseField = async () => {
     // start by copying over the "main" response value
     if (rawPaths.response) {
-      const fieldPath = prefixWithEditionId(rawPaths.response);
+      const fieldPath = prefixWithEditionId(rawPaths.response, edition.id);
       const responseValue = cleanupValue(response[fieldPath]);
       if (responseValue) {
         set(normResp, normPaths.response!, responseValue);
@@ -82,7 +78,7 @@ export const normalizeField = async ({
   const processCommentField = async () => {
     // copy over the comment value
     if (rawPaths.comment) {
-      const fieldPath = prefixWithEditionId(rawPaths.comment);
+      const fieldPath = prefixWithEditionId(rawPaths.comment, edition.id);
       const responseCommentValue = cleanupValue(response[fieldPath]);
       if (responseCommentValue) {
         set(normResp, normPaths.comment!, responseCommentValue);
@@ -102,7 +98,10 @@ export const normalizeField = async ({
   const processPrenormalizedField = async () => {
     // when encountering a prenormalized field, we just copy its value as is
     if (rawPaths.prenormalized) {
-      const fieldPath = prefixWithEditionId(rawPaths?.prenormalized);
+      const fieldPath = prefixWithEditionId(
+        rawPaths?.prenormalized,
+        edition.id
+      );
       const prenormalizedValue = response[fieldPath];
       if (prenormalizedValue) {
         set(normResp, normPaths.raw!, prenormalizedValue);
@@ -124,7 +123,7 @@ export const normalizeField = async ({
   const processOtherField = async () => {
     // if a field has an "other" path defined, we normalize its contents
     if (rawPaths.other) {
-      const fieldPath = prefixWithEditionId(rawPaths?.other);
+      const fieldPath = prefixWithEditionId(rawPaths?.other, edition.id);
       const otherValue = cleanupValue(response[fieldPath]);
       if (otherValue) {
         set(normResp, normPaths.raw!, otherValue);

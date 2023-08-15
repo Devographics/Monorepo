@@ -237,7 +237,7 @@ const normalizeResponse = async (
     "setUuid",
     "handleLocale",
     "normalizeCountryField",
-    "normalizeSourceField",
+    // "normalizeSourceField",
   ];
   for (const stepName of baseSteps) {
     const step: StepFunction = steps[stepName];

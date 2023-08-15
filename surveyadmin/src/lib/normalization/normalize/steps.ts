@@ -115,33 +115,33 @@ export const normalizeCountryField: StepFunction = async ({
   return normResp;
 };
 
-export const normalizeSourceField: StepFunction = async ({
-  normResp: normResp_,
-  entityRules,
-  survey,
-  verbose,
-  edition,
-}: NormalizationParams) => {
-  const normResp = clone(normResp_);
+// export const normalizeSourceField: StepFunction = async ({
+//   normResp: normResp_,
+//   entityRules,
+//   survey,
+//   verbose,
+//   edition,
+// }: NormalizationParams) => {
+//   const normResp = clone(normResp_);
 
-  const normSource = await normalizeSource({
-    normResp,
-    entityRules,
-    survey,
-    edition,
-    verbose,
-  });
-  if (normSource.raw) {
-    set(normResp, "user_info.source.raw", normSource.raw);
-  }
-  if (normSource.id) {
-    set(normResp, "user_info.source.normalized", normSource.id);
-  }
-  if (normSource.pattern) {
-    set(normResp, "user_info.source.pattern", normSource.pattern.toString());
-  }
-  return normResp;
-};
+//   const normSource = await normalizeSource({
+//     normResp,
+//     entityRules,
+//     survey,
+//     edition,
+//     verbose,
+//   });
+//   if (normSource.raw) {
+//     set(normResp, "user_info.source.raw", normSource.raw);
+//   }
+//   if (normSource.id) {
+//     set(normResp, "user_info.source.normalized", normSource.id);
+//   }
+//   if (normSource.pattern) {
+//     set(normResp, "user_info.source.pattern", normSource.pattern.toString());
+//   }
+//   return normResp;
+// };
 
 export const setUuid: StepFunction = async ({
   response,
