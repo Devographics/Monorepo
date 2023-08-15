@@ -12,14 +12,16 @@ import { useState } from "react";
 import { FormInputProps } from "./typings";
 import Button from "react-bootstrap/esm/Button";
 import { getSectioni18nIds } from "@devographics/i18n";
+import { FormLayoutProps } from "./FormLayout";
 
-interface FormSubmitProps extends FormInputProps {
+interface FormSubmitProps extends FormLayoutProps {
+  path: string;
   sectionNumber: number;
   nextSection: SectionMetadata;
   previousSection: SectionMetadata;
 }
 
-export const FormSubmit = (props: FormSubmitProps) => {
+export const FormSubmit = (props: FormLayoutProps) => {
   const { response, sectionNumber, nextSection, previousSection, readOnly } =
     props;
 

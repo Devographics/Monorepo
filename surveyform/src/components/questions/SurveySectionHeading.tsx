@@ -5,6 +5,7 @@ import { FormInputProps } from "../form/typings";
 import { getSectioni18nIds } from "@devographics/i18n";
 import { questionIsCompleted } from "~/lib/responses/helpers";
 import { useIntlContext } from "@devographics/react-i18n";
+import { FormLayoutProps } from "../form/FormLayout";
 
 const SurveySectionHeading = ({
   section,
@@ -12,7 +13,7 @@ const SurveySectionHeading = ({
   edition,
   stateStuff,
   response,
-}: FormInputProps) => {
+}: FormLayoutProps) => {
   const { id, intlId } = section;
   const { itemPositions } = stateStuff;
   const intl = useIntlContext();

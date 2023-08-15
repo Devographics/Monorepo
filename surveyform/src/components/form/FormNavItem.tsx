@@ -9,8 +9,9 @@ import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormInputProps } from "./typings";
 import { getSectioni18nIds } from "@devographics/i18n";
+import { FormLayoutProps } from "./FormLayout";
 
-interface SurveyNavItemProps extends Omit<FormInputProps, "section"> {
+interface SurveyNavItemProps extends Omit<FormLayoutProps, "section"> {
   setShown: any;
   number: number;
   sectionNumber: number;

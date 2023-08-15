@@ -14,6 +14,7 @@ import {
   SectionMetadata,
 } from "@devographics/types";
 import ItemLabel from "./ItemLabel";
+import { FormLayoutProps } from "../form/FormLayout";
 
 const cutoff = 5;
 const animationDurationInMs = 700;
@@ -31,7 +32,7 @@ const usePrevious = (value) => {
   return ref.current;
 };
 
-export const ReadingList = (props: FormInputProps) => {
+export const ReadingList = (props: FormLayoutProps) => {
   const { edition, response, updateCurrentValues } = props;
   const allQuestions = getEditionQuestions(edition);
   const allEntities = getEditionEntities(edition);

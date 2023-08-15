@@ -10,7 +10,11 @@ import ReadingList from "../reading_list/ReadingList";
 import FormSectionMessage from "./FormSectionMessage";
 import FormMessages from "./FormMessages";
 
-interface FormLayoutProps extends FormInputProps {
+export interface FormLayoutProps
+  extends Omit<
+    FormInputProps,
+    "path" | "value" | "question" | "questionNumber"
+  > {
   children: ReactNode;
   sectionNumber: number;
   nextSection: SectionMetadata;
