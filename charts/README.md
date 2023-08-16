@@ -1,6 +1,23 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Charts
+
+## About
+
+Charts is bound to replace the "result" application
+
+It also provides opengraph metadata and image generating for sharing charts.
+
+### Roadmap
+
+- [ ] Support serving prerendered open graph images of charts
+- [ ] Support generating open graph images of charts on-the-fly (no filters) => this involves reusing a lot of logic
+from the "results" app and the "ogserve" demo
+- [ ] Support generating open graph images of charts with filters
+- [ ] Display survey results
 
 ## Getting Started
+
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
 
 First, run the development server:
 

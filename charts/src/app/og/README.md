@@ -1,8 +1,8 @@
 ## Rendering mode
 
-### Static
+### Prerendered
 
-In **Static mode**, chart image is prerendered statically based on the Gatsby app,
+In **Prerendered mode**, chart image is prerendered statically based on the Gatsby app,
 hosted on a cloud service.
 
 This is the historical architecture that reuses the existing result app and

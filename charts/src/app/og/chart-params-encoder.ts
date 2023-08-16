@@ -1,4 +1,6 @@
 /**
+ * Keep me middleware friendly
+ * 
  * Megaparam pattern for the chart parameters
  * 
  * Allow to statically render some charts

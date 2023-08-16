@@ -11,12 +11,12 @@ export function middleware(request: NextRequest) {
     // => this enables static rendering based on search params too at the cost of a small URL rewrite
     // NOTE: for debugging purpose you can access the encoded URL directly 
     console.log("middleware pathname", request.nextUrl.pathname)
-    if (request.nextUrl.pathname === "/og/static") {
+    if (request.nextUrl.pathname === "/og/prerendered") {
         const chartParams = [...request.nextUrl.searchParams.entries()]
             .reduce((asObject, [key, val]) => ({ ...asObject, [key]: val }), {}) as ChartParams
         chartParams.lang = "en-US"
         console.log("middleware", { chartParams })
-        const encodedUrl = new URL(`/og/static/${encodeChartParams(chartParams)}`, request.url)
+        const encodedUrl = new URL(`/og/prerendered/${encodeChartParams(chartParams)}`, request.url)
         console.log("middleware encodedUrl", encodedUrl.toString())
         return NextResponse.rewrite(encodedUrl)
     }
