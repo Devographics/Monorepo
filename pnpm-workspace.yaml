@@ -3,12 +3,11 @@ packages:
     - 'shared/*'
     # API
     - 'api'
-    - 'ogserve' # Will be replaced by "charts"
     # Webapps
     - 'surveyform'
     - 'surveyadmin'
     - 'results'
-    - 'charts' # WIP will replace both results and ogserve
+    - 'charts' # WIP will replace results
     - 'jobs'
     - 'homepage'
     - 'graphiql'

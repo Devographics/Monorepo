@@ -1,6 +1,3 @@
-/**
- * Keep in sync with ogserve/tsup.config.ts
- */
 import yamlPluginPkg from 'esbuild-plugin-yaml'
 const { yamlPlugin } = yamlPluginPkg
 import graphqlLoaderPluginPkg from '@luckycatfactory/esbuild-graphql-loader'

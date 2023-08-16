@@ -15,7 +15,6 @@
       - surveyform
       - surveyadmin
       - homepage
-      - ogserve
       - charts
 
 - id: API_URL
@@ -30,7 +29,6 @@
       - surveyform
       - surveyadmin
       - homepage
-      - ogserve
       - charts
 
 - id: API_URL_PRODUCTION
@@ -97,7 +95,6 @@
       - surveyadmin
       - results
       - homepage
-      - ogserve
       - charts
 
 - id: REDIS_TOKEN
@@ -111,7 +108,6 @@
       - surveyadmin
       - results
       - homepage
-      - ogserve
       - charts
 
 ### GitHub
