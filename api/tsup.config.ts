@@ -1,5 +1,5 @@
 /**
- * Keep in sync with ogcharts/tsup.config.ts
+ * Keep in sync with ogserve/tsup.config.ts
  */
 import yamlPluginPkg from 'esbuild-plugin-yaml'
 const { yamlPlugin } = yamlPluginPkg

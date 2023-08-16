@@ -1,5 +1,5 @@
 {
-    "name": "ogcharts",
+    "name": "ogserve",
     "version": "1.0.0",
     "description": "Open Graph Charts generator",
     "main": "dist/app.mjs",

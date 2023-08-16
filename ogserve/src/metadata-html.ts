@@ -40,7 +40,7 @@ export async function renderMetadata(req: Request, imgUrl: string) {
         console.log({ blockMeta })
         // Fields are based on what the Gatsby app produces (via React Helmet)
         return `
-        <html lang="${chartParams.lang}" data-react-helmet="lang">
+        <html lang="${chartParams.lang}">
         <head>
             <meta http-equiv="refresh" content="5; URL="${blockMeta.link}">
             <title>${blockMeta.title}</title>

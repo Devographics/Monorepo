@@ -1,5 +1,5 @@
 /**
- * Keep in sync with ogcharts/tsup.config.ts
+ * Keep in sync with ogserve/tsup.config.ts
  * 
  * Tsup takes care of transpiling and bundling our app
  * but also the shared packages that are provided as-is (as untranspiled, unbundled TS files)

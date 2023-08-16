@@ -1,7 +1,5 @@
 // *** Getting charts data
 import type { Request } from "express"
-import gql from "graphql-tag"
-import { print } from "graphql"
 import { getAppConfig } from "./config"
 import { getBlockQuery } from "./block/block-query"
 import { BlockDefinition } from "./block/typings"
@@ -41,6 +39,10 @@ export function getChartParams(req: Request): ChartParams {
     }
 }
 
+/**
+ * @deprecated  We should build the chart graphql query 
+ * using TypeScript code instead of injecting values
+ */
 async function queryForChart(chart: ChartParams): Promise<string | undefined> {
     // 1. informations about a specific chart are located in the raw_sitemap
     // for instance"results/surveys/css2021/config/raw_sitemap.yml"
