@@ -17,7 +17,10 @@ import fs, { promises as fsPromises } from "fs";
 import { logToFile } from "@devographics/debug";
 import { normalizeDocument } from "~/lib/normalization/normalize/normalize";
 import { getEditionQuestions } from "~/lib/normalization/helpers/getEditionQuestions";
-import * as templateFunctions from "@devographics/templates";
+import {
+  templateFunctions,
+  prefixWithEditionId,
+} from "@devographics/templates";
 import { fetchEntities, fetchSurveysMetadata } from "@devographics/fetch";
 
 const readFile = fsPromises.readFile;
@@ -229,8 +232,6 @@ export const loadTokyoDevCSV = async () => {
 
   // iterate over all editions
   for (const edition of allEditions) {
-    const prefixWithEditionId = (s) => `${edition.editionId}__${s}`;
-
     const { editionId, year, data, outline, metadata } = edition;
     let i = 0;
 
@@ -319,22 +320,24 @@ export const loadTokyoDevCSV = async () => {
                     ["single", "dropdown"].includes(questionObject.template)
                   ) {
                     // this field accepts a single answer
-                    document[prefixWithEditionId(rawPaths.response)] =
-                      convertToType(optionsValues[0]);
+                    document[
+                      prefixWithEditionId(rawPaths.response!, editionId)
+                    ] = convertToType(optionsValues[0]);
                   } else {
                     // this field accepts an array of answers
-                    document[prefixWithEditionId(rawPaths.response)] =
-                      optionsValues.map(convertToType);
+                    document[
+                      prefixWithEditionId(rawPaths.response!, editionId)
+                    ] = optionsValues.map(convertToType);
                   }
                 }
                 if (otherValue) {
                   // handle "other" answer
-                  document[prefixWithEditionId(rawPaths.other)] =
+                  document[prefixWithEditionId(rawPaths.other!, editionId)] =
                     convertToType(otherValue);
                 }
               } else {
                 // freeform field
-                document[prefixWithEditionId(rawPaths.response)] =
+                document[prefixWithEditionId(rawPaths.response!, editionId)] =
                   convertToType(questionValue);
               }
             }

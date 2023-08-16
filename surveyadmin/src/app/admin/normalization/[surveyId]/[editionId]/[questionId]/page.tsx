@@ -6,11 +6,14 @@ import { getEditionQuestions } from "~/lib/normalization/helpers/getEditionQuest
 
 export default async function Page({ params }) {
   const { surveyId, editionId, questionId } = params;
-  const { data: surveys } = await fetchSurveysMetadata();
+  const { data: surveys } = await fetchSurveysMetadata({
+    shouldGetFromCache: false,
+  });
   const survey = surveys.find((s) => s.id === surveyId)!;
   const { data: edition } = await fetchEditionMetadataAdmin({
     surveyId,
     editionId,
+    shouldGetFromCache: false,
   });
 
   const question = getEditionQuestions(edition).find(

@@ -11,7 +11,9 @@ const CreditItem = ({ entity, role, labelId }) => {
     const { name, twitter, company } = entity
     return (
         <CreditItemDiv>
-            <Avatar entity={entity} />
+            <CreditAvatar_>
+                <Avatar entity={entity} />
+            </CreditAvatar_>
             <Details>
                 <Name>
                     <a href={twitter.url}>{name}</a>
@@ -37,7 +39,10 @@ export default CreditItem
 const CreditItemDiv = styled.div`
     display: flex;
     align-items: center;
+    gap: ${spacing()};
 `
+
+const CreditAvatar_ = styled.div``
 
 const Details = styled.div`
     position: relative;

@@ -14,13 +14,14 @@ import { Button } from "~/components/ui/Button";
 import { Loading } from "~/components/ui/Loading";
 import { useEdition } from "../SurveyContext/Provider";
 import { FormInputProps } from "~/components/form/typings";
+import { FormLayoutProps } from "./FormLayout";
 
 // TODO
 // const getOverallCompletionPercentage = (response) => {
 
 // }
 
-const SurveyNav = (props: FormInputProps) => {
+const SurveyNav = (props: FormLayoutProps) => {
   const { section: currentSection, ...propsWithoutSection } = props;
   const { readOnly, response, stateStuff } = propsWithoutSection;
   const {

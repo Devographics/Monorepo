@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useContext } from "react";
 
-export const FormContext = createContext(undefined);
+export const FormContext = createContext<any>(undefined);
 
 export const useFormContext = () => {
   const formContext = useContext(FormContext);

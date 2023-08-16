@@ -164,14 +164,33 @@ importers:
       react-dom: ^18.2.0
       sass: ^1.64.1
     dependencies:
-      '@devographics/fetch': link:../shared/fetch
-      '@devographics/helpers': link:../shared/helpers
-      '@types/react': 18.2.19
-      '@types/react-dom': 18.2.7
-      lodash: 4.17.21
-      qs: 6.11.2
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
+      '@devographics/fetch':
+        specifier: workspace:^
+        version: link:../shared/fetch
+      '@devographics/helpers':
+        specifier: workspace:^
+        version: link:../shared/helpers
+      '@devographics/types':
+        specifier: workspace:^
+        version: link:../shared/types
+      '@types/react':
+        specifier: ^18.2.17
+        version: 18.2.17
+      '@types/react-dom':
+        specifier: ^18.2.7
+        version: 18.2.7
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      qs:
+        specifier: ^6.11.2
+        version: 6.11.2
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
     devDependencies:
       '@astrojs/react': 2.2.1_ml6diaeoljuxdq7psn5bilsrme
       '@rollup/plugin-yaml': 4.1.1

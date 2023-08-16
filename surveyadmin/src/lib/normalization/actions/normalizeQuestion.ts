@@ -36,6 +36,7 @@ export const normalizeQuestion = async (args: NormalizeQuestionArgs) => {
   const { data: edition } = await fetchEditionMetadataAdmin({
     surveyId,
     editionId,
+    shouldGetFromCache: false,
   });
   const question = getEditionQuestionById({ edition, questionId });
 

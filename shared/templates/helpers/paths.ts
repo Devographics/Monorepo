@@ -10,6 +10,11 @@ import {
     QuestionTemplateOutput
 } from '@devographics/types'
 
+export const prefixWithEditionId = (s: string, editionId: string) => {
+    // note: fields starting with `common` don't need to be prefixed with the edition id
+    return s.slice(0, 8) === 'common__' ? s : `${editionId}__${s}`
+}
+
 export const getRawPaths = (
     {
         survey,
@@ -135,7 +140,7 @@ export const getFormPaths = ({
         ;(Object.keys(question.rawPaths) as Array<keyof DbPaths>).forEach(key => {
             const path = question?.rawPaths?.[key]
             if (path) {
-                paths[key] = `${edition.id}__${path}`
+                paths[key] = prefixWithEditionId(path, edition.id)
             }
         })
     }

@@ -43,7 +43,7 @@ export default {
         },
         'gatsby-plugin-react-helmet',
         'gatsby-plugin-sass',
-        { resolve: 'gatsby-plugin-netlify', options: {} },
+        // { resolve: 'gatsby-plugin-netlify', options: {} },
         'gatsby-plugin-styled-components',
         `gatsby-plugin-mdx`,
         'gatsby-plugin-bundle-stats'

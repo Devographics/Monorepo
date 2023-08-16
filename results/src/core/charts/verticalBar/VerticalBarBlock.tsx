@@ -98,6 +98,7 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
             <DynamicDataLoader
                 block={block}
                 chartFilters={chartFilters}
+                units={units}
                 setUnits={setUnits}
                 defaultSeries={defaultSeries}
             >

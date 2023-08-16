@@ -43,6 +43,7 @@ export const getFieldsToCopy = (editionId) => [
   ["updatedAt"],
   ["finishedAt"],
   ["completion", "user_info.completion"],
+  ["duration", "user_info.duration"],
   ["userId"],
   ["isFake"],
   ["isFinished"],
@@ -51,14 +52,16 @@ export const getFieldsToCopy = (editionId) => [
   ["common__user_info__browser", "user_info.browser"],
   ["common__user_info__version", "user_info.version"],
   ["common__user_info__os", "user_info.os"],
-  ["common__user_info__referrer", "user_info.referrer"],
-  ["common__user_info__source", "user_info.sourcetag"],
+  // ["common__user_info__referrer", "user_info.referrer"],
+  // ["common__user_info__source", "user_info.sourcetag"],
   ["common__user_info__authmode", "user_info.authmode"],
   [
     `${editionId}__user_info__how_did_user_find_out_about_the_survey`,
     "user_info.how_did_user_find_out_about_the_survey",
   ],
 ];
+
+const emptyValues = ["undefined", ""];
 
 export const copyFields: StepFunction = async ({
   normResp: normResp_,
@@ -69,7 +72,8 @@ export const copyFields: StepFunction = async ({
   const normResp = clone(normResp_);
   getFieldsToCopy(edition.id).forEach((field) => {
     const [fieldName, fieldPath = fieldName] = field;
-    if (response[fieldName]) {
+    const value = response[fieldName];
+    if (value && !emptyValues.includes(value)) {
       set(normResp, fieldPath, response[fieldName]);
     }
   });
@@ -111,33 +115,33 @@ export const normalizeCountryField: StepFunction = async ({
   return normResp;
 };
 
-export const normalizeSourceField: StepFunction = async ({
-  normResp: normResp_,
-  entityRules,
-  survey,
-  verbose,
-  edition,
-}: NormalizationParams) => {
-  const normResp = clone(normResp_);
+// export const normalizeSourceField: StepFunction = async ({
+//   normResp: normResp_,
+//   entityRules,
+//   survey,
+//   verbose,
+//   edition,
+// }: NormalizationParams) => {
+//   const normResp = clone(normResp_);
 
-  const normSource = await normalizeSource({
-    normResp,
-    entityRules,
-    survey,
-    edition,
-    verbose,
-  });
-  if (normSource.raw) {
-    set(normResp, "user_info.source.raw", normSource.raw);
-  }
-  if (normSource.id) {
-    set(normResp, "user_info.source.normalized", normSource.id);
-  }
-  if (normSource.pattern) {
-    set(normResp, "user_info.source.pattern", normSource.pattern.toString());
-  }
-  return normResp;
-};
+//   const normSource = await normalizeSource({
+//     normResp,
+//     entityRules,
+//     survey,
+//     edition,
+//     verbose,
+//   });
+//   if (normSource.raw) {
+//     set(normResp, "user_info.source.raw", normSource.raw);
+//   }
+//   if (normSource.id) {
+//     set(normResp, "user_info.source.normalized", normSource.id);
+//   }
+//   if (normSource.pattern) {
+//     set(normResp, "user_info.source.pattern", normSource.pattern.toString());
+//   }
+//   return normResp;
+// };
 
 export const setUuid: StepFunction = async ({
   response,

@@ -5,13 +5,30 @@ import ModalTrigger from 'core/components/ModalTrigger'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
+import { getFiltersQuery } from 'core/filters/helpers'
+import { usePageContext } from 'core/helpers/pageContext'
+import { getBlockQuery } from 'core/helpers/queries'
 
 const BlockData = props => {
+    const { block } = props
+    const { parameters } = block
+    const pageContext = usePageContext()
+
+    const query = getBlockQuery({
+        block,
+        pageContext,
+        queryOptions: {
+            addArgumentsPlaceholder: false,
+            addBucketFacetsPlaceholder: false
+        },
+        queryArgs: { parameters }
+    })
+
     return (
         <>
             <ExportWrapper>
                 <JSONTrigger {...props} />
-                <GraphQLTrigger {...props} />
+                <GraphQLTrigger query={query} />
             </ExportWrapper>
             <Table {...props} />
         </>
@@ -31,18 +48,21 @@ export const JSONTrigger = props => (
     </ModalTrigger>
 )
 
-export const GraphQLTrigger = props => (
-    <ModalTrigger
-        trigger={
-            <ExportButton className="ExportButton" size="small" {...props.buttonProps}>
-                <T k="export.export_graphql" />
-                {/* <ExportIcon /> */}
-            </ExportButton>
-        }
-    >
-        <GraphQLExport {...props} />
-    </ModalTrigger>
-)
+export const GraphQLTrigger = props => {
+    const { query, buttonProps = {} } = props
+    return (
+        <ModalTrigger
+            trigger={
+                <ExportButton className="ExportButton" size="small" {...buttonProps}>
+                    <T k="export.export_graphql" />
+                    {/* <ExportIcon /> */}
+                </ExportButton>
+            }
+        >
+            <GraphQLExport query={query} />
+        </ModalTrigger>
+    )
+}
 
 export const JSONExport = ({ block, data }) => {
     const isArray = Array.isArray(data)

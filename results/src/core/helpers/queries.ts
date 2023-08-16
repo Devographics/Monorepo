@@ -135,7 +135,7 @@ export const getQueryArgsString = ({
         args.axis2 = xAxis
     }
     if (isEmpty(args)) {
-        return
+        return ''
     } else {
         return wrapArguments(args)
     }
@@ -332,7 +332,9 @@ export const getQuery = ({
 }) => {
     let queryContents
 
-    if (queryOptions.isLog) {
+    const { isLog, addArgumentsPlaceholder } = queryOptions
+
+    if (isLog) {
         // when logging we can leave out enableCache parameter
         delete queryArgs?.parameters?.enableCache
     }
@@ -348,10 +350,14 @@ export const getQuery = ({
     } else {
         queryContents = query
     }
-    if (queryArgs) {
+    if (!isEmpty(queryArgs)) {
         const queryArgsString = getQueryArgsString(queryArgs)
         if (queryArgsString) {
             queryContents = queryContents.replace(argumentsPlaceholder, queryArgsString)
+        }
+    } else {
+        if (!addArgumentsPlaceholder) {
+            queryContents = queryContents.replace(argumentsPlaceholder, '')
         }
     }
     const wrappedQuery = wrapQuery({
