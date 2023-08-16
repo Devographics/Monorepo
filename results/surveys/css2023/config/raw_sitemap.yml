@@ -165,6 +165,7 @@
         template: demographics
         blockType: HorizontalBarBlock
         parameters: { limit: 20 }
+        translateData: true
         queryOptions:
             addBucketsEntities: true
 
