@@ -16,6 +16,7 @@
       - surveyadmin
       - homepage
       - ogserve
+      - charts
 
 - id: API_URL
   aliases:
@@ -30,6 +31,7 @@
       - surveyadmin
       - homepage
       - ogserve
+      - charts
 
 - id: API_URL_PRODUCTION
   optional: true
@@ -96,6 +98,7 @@
       - results
       - homepage
       - ogserve
+      - charts
 
 - id: REDIS_TOKEN
   description: >
@@ -109,6 +112,7 @@
       - results
       - homepage
       - ogserve
+      - charts
 
 ### GitHub
 

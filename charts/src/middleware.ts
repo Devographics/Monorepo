@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
     // => this enables static rendering based on search params too at the cost of a small URL rewrite
     // NOTE: for debugging purpose you can access the encoded URL directly 
     console.log("middleware pathname", request.nextUrl.pathname)
-    if (request.nextUrl.pathname.startsWith("/og/static")) {
+    if (request.nextUrl.pathname === "/og/static") {
         const chartParams = [...request.nextUrl.searchParams.entries()]
             .reduce((asObject, [key, val]) => ({ ...asObject, [key]: val }), {}) as ChartParams
         chartParams.lang = "en-US"
@@ -20,6 +20,7 @@ export function middleware(request: NextRequest) {
         console.log("middleware encodedUrl", encodedUrl.toString())
         return NextResponse.rewrite(encodedUrl)
     }
+    return NextResponse.next()
 }
 
 // See "Matching Paths" below to learn more

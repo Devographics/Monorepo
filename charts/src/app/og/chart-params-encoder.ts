@@ -1,5 +1,7 @@
 /**
- * Megaparam pattern
+ * Megaparam pattern for the chart parameters
+ * 
+ * Allow to statically render some charts
  * 
  * https://blog.vulcanjs.org/render-anything-statically-with-next-js-and-the-megaparam-4039e66ffde
  */

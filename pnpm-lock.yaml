@@ -168,6 +168,9 @@ importers:
       '@devographics/fetch':
         specifier: workspace:^1.0.0
         version: link:../shared/fetch
+      '@devographics/helpers':
+        specifier: workspace:^1.0.0
+        version: link:../shared/helpers
       '@devographics/types':
         specifier: workspace:^1.0.0
         version: link:../shared/types
@@ -16487,6 +16490,7 @@ packages:
 
   /eslint-config-next@13.4.16(eslint@8.47.0)(typescript@5.1.6):
     resolution: {integrity: sha512-Of73d/FiaGf0GLCxxTGdh4rW8bRDvsqypylefkshE/uDDpQr8ifVQsD4UiB99rhegks7nJGkYtUnR3dC7kfFlw==}
+    requiresBuild: true
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0
       typescript: '>=3.3.1'
@@ -16890,7 +16894,6 @@ packages:
   /eslint-plugin-react-hooks@5.0.0-canary-7118f5dd7-20230705(eslint@7.32.0):
     resolution: {integrity: sha512-AZYbMo/NW9chdL7vk6HQzQhT+PvTAEVqWk9ziruUoW2kAOcN5qNyelv70e0F1VNQAbvutOC9oc+xfWycI9FxDw==}
     engines: {node: '>=10'}
-    requiresBuild: true
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
     dependencies:

@@ -22,5 +22,4 @@ export function getAppConfig() {
          */
         appUrl: process.env.APP_URL || "http://localhost:" + port,
     }
-
 }

@@ -1,40 +1,28 @@
-import { fetchEditionMetadata } from '@devographics/fetch'
 import { NextPageParams } from '@/app/typings'
-import { decodeChartParams } from '@/app/og/chart-params-encoder'
-import { getBlockMeta } from '@/app/og/metadata'
+import { decodeChartParams, encodeChartParams } from '@/app/og/chart-params-encoder'
+import { getBlockMetaFromParams } from '@/app/og/metadata'
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { ChartParams } from '@/app/og/typings'
 
-export async function getStaticParams() {}
-
-async function getBlockMetaFromParams(chartParams: ChartParams) {
-    const { data: currentEdition, error } = await fetchEditionMetadata({
-        surveyId: chartParams.survey,
-        editionId: chartParams.edition
-    })
-    if (error)
-        throw new Error(
-            `Error while fetching edition metadata (survey: ${chartParams.survey}, edition: ${
-                chartParams.edition
-            }): ${error.toString()}`
-        )
-    const blockMeta = getBlockMeta({
-        block: {
-            id: chartParams.question,
-            sectionId: chartParams.section,
-            parameters: {}
-        },
-        currentEdition,
-        // TODO
-        currentPath: 'TODO: section for this chart',
-        host: 'TODO: result app url for this edition',
-        // TODO: do an actual translation, we can take the surveyform as inspiration
-        // for loading and translating locales in the backend
-        getString: key => ({ t: key, locale: { id: chartParams.lang } })
-    })
-    return blockMeta
+export async function generateStaticParams(): Promise<Array<{ chartParams: string }>> {
+    const prerendered: Array<ChartParams> = [
+        {
+            lang: 'en-US',
+            survey: 'state_of_css',
+            edition: 'css2022',
+            section: 'environment',
+            question: 'browser'
+        }
+        // Prerender wharever combination you want
+        // other combinations will be rendered on demand
+    ]
+    // encode the params in a single route parameters
+    return prerendered.map(chartParams => ({
+        chartParams: encodeChartParams(chartParams)
+    }))
 }
+
 export async function generateMetadata({
     params
 }: NextPageParams<{ chartParams: string }>): Promise<Metadata> {
@@ -76,5 +64,5 @@ export default async function StaticChartRedirectionPage({
     redirect(blockMeta.link)
     // TODO: we could go further and render the whole chart
     // here directly, with a button to manually access the results?
-    return <div>Redirecting to the result app...</div>
+    // return <div>Redirecting to the result app...</div>
 }
