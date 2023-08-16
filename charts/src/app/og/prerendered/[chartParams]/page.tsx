@@ -61,8 +61,9 @@ export default async function StaticChartRedirectionPage({
     const blockMeta = await getBlockMetaFromParams(chartParams)
     // https://nextjs.org/docs/app/api-reference/functions/generate-metadata#unsupported-metadata
     // equivalent to <meta http-equiv="refresh" content="5; URL=...">
-    redirect(blockMeta.link)
+    // TODO: the URL is not correct yet
+    // redirect(blockMeta.link)
     // TODO: we could go further and render the whole chart
     // here directly, with a button to manually access the results?
-    // return <div>Redirecting to the result app...</div>
+    return <div>Redirecting to the result app to: {blockMeta.link}</div>
 }
