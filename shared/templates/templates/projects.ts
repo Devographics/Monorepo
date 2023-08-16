@@ -11,7 +11,7 @@ export const projects: TemplateFunction = options => {
     const basePath = `${sectionSegment}.${questionSegment}.${DbSuffixes.OTHERS}`
 
     const rawPaths: DbPaths = {
-        prenormalized: `${sectionSegment}__${questionSegment}__${DbSuffixes.PRENORMALIZED}`
+        response: `${sectionSegment}__${questionSegment}__${DbSuffixes.PRENORMALIZED}`
     }
 
     const normPaths: DbPaths = {

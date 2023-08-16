@@ -9,7 +9,7 @@ export const text: TemplateFunction = options => {
     const questionSegment = question.id
 
     const rawPaths: DbPaths = {
-        other: `${sectionSegment}__${questionSegment}`
+        response: `${sectionSegment}__${questionSegment}`
     }
 
     const basePath = `${sectionSegment}.${questionSegment}`
