@@ -220,7 +220,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                         })
                     }
 
-                    const result = await graphql(query)
+                    const result = removeNull(await graphql(query))
                     data = result.data
 
                     logToFile(dataFileName, data, {
@@ -275,3 +275,12 @@ export const sleep = ms => {
 }
 
 export const getQuestionId = (id, facet) => (facet ? `${id}_by_${facet}` : id)
+
+export function removeNull(obj) {
+    var clean = Object.fromEntries(
+        Object.entries(obj)
+            .map(([k, v]) => [k, v === Object(v) ? removeNull(v) : v])
+            .filter(([_, v]) => v != null && (v !== Object(v) || Object.keys(v).length))
+    )
+    return Array.isArray(obj) ? Object.values(clean) : clean
+}

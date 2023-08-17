@@ -5,7 +5,8 @@ import {
     getCleanLocales,
     createBlockPages,
     runPageQueries,
-    getLoadMethod
+    getLoadMethod,
+    removeNull
 } from './helpers.mjs'
 import { getSendOwlData } from './sendowl.mjs'
 import yaml from 'js-yaml'
@@ -69,6 +70,7 @@ export const createPagesSingleLoop = async ({
 
     console.log(
         `Building ${surveyId}/${editionId}… 
+• 📁 cache disabled = ${process.env.DISABLE_CACHE === 'true'}
 • ⏱️ fast build = ${USE_FAST_BUILD}
 • 📖 load method = ${getLoadMethod()}`
     )
@@ -116,10 +118,12 @@ export const createPagesSingleLoop = async ({
         editionId
     })
 
-    const metadataResults = await graphql(
-        `
-            ${metadataQuery}
-        `
+    const metadataResults = removeNull(
+        await graphql(
+            `
+                ${metadataQuery}
+            `
+        )
     )
     const metadataData = metadataResults?.data?.dataAPI
     logToFile('metadataData.json', metadataData, {

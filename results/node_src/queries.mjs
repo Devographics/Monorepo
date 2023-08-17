@@ -252,7 +252,7 @@ export const getDefaultQuery = ({ queryOptions, queryArgs = {} }) => {
         questionId,
         fieldId,
         subField = 'responses',
-        addBucketsEntities = false,
+        addBucketsEntities = true,
         allEditions = false,
         addArgumentsPlaceholder = false,
         addBucketFacetsPlaceholder = false,
