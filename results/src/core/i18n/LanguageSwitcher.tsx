@@ -1,10 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
+import { spacing, fontSize } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
 // import { useI18n } from 'core/i18n/i18nContext'
 import Locales from './Locales'
-import get from 'lodash/get'
 import Popover from 'core/components/Popover'
 import T from 'core/i18n/T'
 
@@ -15,10 +14,10 @@ import T from 'core/i18n/T'
 
 const translationLink = 'https://github.com/Devographics/locale-en-US'
 
-const LanguageSwitcher = ({ position = 'bottom', positionOpen = 'top' }) => {
+const LanguageSwitcher = (/*{ position = 'bottom', positionOpen = 'top' }*/) => {
     const context = usePageContext()
     return (
-        <Popover label={get(context, 'locale.label')}>
+        <Popover label={context?.locale?.label}>
             <Locales />
             <LanguageSwitcherHelp className="LanguageSwitcherHelp">
                 <a href={translationLink}>

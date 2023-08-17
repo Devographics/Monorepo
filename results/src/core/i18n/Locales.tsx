@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { usePageContext } from 'core/helpers/pageContext'
 import { Link } from 'gatsby'
 import { mq, spacing, fontSize, fontWeight } from 'core/theme'
-import get from 'lodash/get'
 import BlockCompletionIndicator from 'core/blocks/block/BlockCompletionIndicator'
 
 const Container = styled.div`
@@ -33,7 +32,8 @@ const Item = styled.span`
 
 const Locales = () => {
     const context = usePageContext()
-    const links = get(context, 'locales', []).map(locale => {
+    const locales = context?.locales || []
+    const links = locales.map(locale => {
         return {
             ...locale,
             link: locale.path + context.basePath,

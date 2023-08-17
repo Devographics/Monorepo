@@ -36,8 +36,20 @@ const StyledLink = styled(PageLink)`
     }
 `
 
-const PaginationLink = ({ page, type }: { page: PageContextValue; type: string }) => (
-    <StyledLink page={page} className={`pagination__link pagination__${type}`} type={type}>
+const PaginationLink = ({
+    page,
+    type,
+    className = ''
+}: {
+    page: PageContextValue
+    type: string
+    className: string
+}) => (
+    <StyledLink
+        page={page}
+        className={`pagination__link pagination__${type} ${className}`}
+        type={type}
+    >
         {type === 'previous' && (
             <span>
                 «&nbsp;
