@@ -1,5 +1,4 @@
 import { cache } from "react";
-import { serverConfig } from "~/config/server";
 import { fetchSurveysMetadata } from "@devographics/fetch";
 import type { Metadata } from "next";
 import { publicConfig } from "~/config/public";
@@ -9,13 +8,14 @@ import { rscIntlContext } from "~/i18n/rsc-fetchers";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
 import { getSectioni18nIds } from "@devographics/i18n";
-import { FetchPayloadResultType } from "@devographics/fetch";
-import { AppName } from "@devographics/types";
+import { FetcherFunctionOptions } from "@devographics/fetch/types";
+import { serverConfig } from "~/config/server";
 
-export const rscFetchSurveysMetadata = cache(async (options?: any) => {
+export const rscFetchSurveysMetadata = cache(async (options?: FetcherFunctionOptions) => {
   const result = await fetchSurveysMetadata({
     ...options,
     calledFrom: __filename,
+    getServerConfig: serverConfig
   });
   // remove survey editions with no questions
   result.data = result.data?.map((survey) => ({

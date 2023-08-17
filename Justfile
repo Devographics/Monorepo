@@ -14,6 +14,10 @@ install:
 dbs:
     cd {{justfile_directory()}} && docker-compose up
 
+# Kill the containers
+drop-bs:
+
+
 # (nx experiment) Create local build
 # Don't forget to run Redis and Mongo dbs
 # build:
