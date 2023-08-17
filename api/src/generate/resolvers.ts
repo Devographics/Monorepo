@@ -286,7 +286,7 @@ Responses
 */
 export const allEditionsResolver: ResolverType = async (parent, args, context, info) => {
     console.log('// allEditionsResolver')
-    const subField = info?.path?.prev?.key
+    const subField: ResultsSubFieldEnum = info?.path?.prev?.key
 
     const { survey, edition, section, question, responseArguments, questionObjects } = parent
     const { parameters = {}, filters, facet, responsesType = subField } = responseArguments || {}
@@ -309,6 +309,7 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
         key: getGenericCacheKey({
             edition,
             question,
+            subField,
             selectedEditionId,
             parameters,
             filters,

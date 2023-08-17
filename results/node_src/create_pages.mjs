@@ -4,7 +4,8 @@ import {
     getLocalizedPath,
     getCleanLocales,
     createBlockPages,
-    runPageQueries
+    runPageQueries,
+    getLoadMethod
 } from './helpers.mjs'
 import { getSendOwlData } from './sendowl.mjs'
 import yaml from 'js-yaml'
@@ -66,7 +67,11 @@ export const createPagesSingleLoop = async ({
         translationContexts: config.translationContexts
     }
 
-    console.log(`// Building ${surveyId}/${editionId}… (USE_FAST_BUILD = ${USE_FAST_BUILD})`)
+    console.log(
+        `Building ${surveyId}/${editionId}… 
+• ⏱️ fast build = ${USE_FAST_BUILD}
+• 📖 load method = ${getLoadMethod()})`
+    )
 
     // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster
     const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []

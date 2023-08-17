@@ -687,6 +687,7 @@
         template: multiple_options
         variants:
             - id: pre_post_processors_freeform
+              titleId: other_tools.pre_post_processors.others
               fieldId: pre_post_processors
               template: multiple_options_freeform
               defaultUnits: count
@@ -703,6 +704,7 @@
         template: multiple_options
         variants:
             - id: utilities_freeform
+              titleId: other_tools.utilities.others
               fieldId: utilities
               template: multiple_options_freeform
               defaultUnits: count
@@ -719,6 +721,7 @@
         template: multiple_options
         variants:
             - id: browsers_freeform
+              titleId: other_tools.browsers.others
               fieldId: browsers
               template: multiple_options_freeform
               defaultUnits: count

@@ -110,14 +110,15 @@ export const createBlockPages = (page, context, createPage, locales, buildInfo) 
 Get a file from the disk or from GitHub
 
 */
-export const getExistingData = async ({ dataFileName, dataFilePath, baseUrl }) => {
+export const getExistingData = async ({ dataFileName, dataFilePath, sectionId, baseUrl }) => {
     let contents, data
+    const remoteUrl = `${baseUrl}/data/${sectionId}/${dataFileName}`
     if (getLoadMethod() === 'local') {
         if (fs.existsSync(dataFilePath)) {
             contents = fs.readFileSync(dataFilePath, 'utf8')
         }
     } else {
-        const response = await fetch(`${baseUrl}/data/${dataFileName}`)
+        const response = await fetch(remoteUrl)
         contents = await response.text()
     }
     try {
@@ -171,7 +172,8 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                 const existingData = await getExistingData({
                     dataFileName,
                     dataFilePath,
-                    baseUrl
+                    baseUrl,
+                    sectionId: page.id
                 })
                 if (existingData && useCache) {
                     console.log(
