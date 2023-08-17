@@ -725,6 +725,7 @@
               fieldId: browsers
               template: multiple_options_freeform
               defaultUnits: count
+              parameters: { limit: 10 }
 
       - id: tools_others_resources
         items: [fm-storybook]
@@ -740,6 +741,15 @@
         # i18nNamespace: environments
         translateData: true
         template: multiple_options
+        variants:
+            - id: form_factors_freeform
+              fieldId: form_factors
+              defaultUnits: count
+              # i18nNamespace: environments
+              tabId: tabs.other_answers
+              translateData: true
+              template: multiple_options_freeform
+              parameters: { limit: 5 }
 
       - id: sharing_hint
         template: hint
@@ -757,6 +767,7 @@
               tabId: tabs.other_answers
               translateData: true
               template: multiple_options_freeform
+              parameters: { limit: 5 }
 
       - id: sara_soueidan
         template: picks
@@ -774,65 +785,71 @@
               tabId: tabs.other_answers
               translateData: true
               template: multiple_options_freeform
+              parameters: { limit: 10 }
 
       - id: usage_type
+        titleId: usage.css_usage_type
         tabId: tabs.main_answers
         translateData: true
         template: multiple_options
-        variants:
-            - id: usage_type_freeform
-              fieldId: usage_type
-              defaultUnits: count
-              tabId: tabs.other_answers
-              translateData: true
-              template: multiple_options_freeform
+        # variants:
+        #     - id: usage_type_freeform
+        #       fieldId: usage_type
+        #       defaultUnits: count
+        #       tabId: tabs.other_answers
+        #       translateData: true
+        #       template: multiple_options_freeform
 
       - id: css_js_balance
         tabId: tabs.main_answers
         translateData: true
         template: single_option
+        parameters: { showNoAnswer: true }
 
       - id: css_interoperability_features
         defaultUnits: count
         translateData: true
         template: multiple_options
         isFreeform: true
-        parameters: { limit: 20, cutoff: 20 }
         variants:
             - id: css_interoperability_features_freeform
               fieldId: css_interoperability_features
+              i18nNamespace: features
               defaultUnits: count
               tabId: tabs.other_answers
               translateData: true
               template: multiple_options_freeform
+              parameters: { limit: 10 }
 
       - id: css_missing_features
         defaultUnits: count
         translateData: true
         template: multiple_options
         isFreeform: true
-        parameters: { limit: 20, cutoff: 20 }
         variants:
             - id: css_interoperability_features_freeform
               fieldId: css_interoperability_features
+              i18nNamespace: features
               defaultUnits: count
               tabId: tabs.other_answers
               translateData: true
               template: multiple_options_freeform
+              parameters: { limit: 10 }
 
       - id: css_pain_points
         defaultUnits: count
         translateData: true
         template: multiple_options
         isFreeform: true
-        parameters: { limit: 20, cutoff: 20 }
         variants:
             - id: css_pain_points_freeform
               fieldId: css_pain_points
+              i18nNamespace: features
               defaultUnits: count
               tabId: tabs.other_answers
               translateData: true
               template: multiple_options_freeform
+              parameters: { limit: 10 }
 
       - id: adam_wathan
         template: picks
@@ -854,6 +871,7 @@
       - template: page_introduction
 
       - id: learning_methods
+        titleId: resources.learning_methods_css
         defaultUnits: count
         tabId: tabs.main_answers
         template: multiple_options
@@ -866,7 +884,7 @@
               tabId: tabs.other_answers
               template: multiple_options_freeform
               translateData: true
-              parameters: { cutoff: 10 }
+              parameters: { limit: 10 }
 
       - id: blogs_news_magazines
         defaultUnits: count
@@ -881,7 +899,7 @@
               defaultUnits: count
               tabId: tabs.other_answers
               template: multiple_options_freeform
-              parameters: { cutoff: 10 }
+              parameters: { limit: 10 }
 
       - id: sites_courses
         defaultUnits: count
@@ -896,7 +914,7 @@
               defaultUnits: count
               tabId: tabs.other_answers
               template: multiple_options_freeform
-              parameters: { cutoff: 10 }
+              parameters: { limit: 10 }
 
       - id: jen_simmons
         template: picks
@@ -916,7 +934,7 @@
               i18nNamespace: podcasts
               tabId: tabs.other_answers
               template: multiple_options_freeform
-              parameters: { cutoff: 10 }
+              parameters: { limit: 10 }
 
       - id: people
         defaultUnits: count
@@ -931,7 +949,7 @@
               i18nNamespace: people
               tabId: tabs.other_answers
               template: multiple_options_freeform
-              parameters: { cutoff: 10 }
+              parameters: { limit: 10 }
 
       - id: ahmad_shadeed
         template: picks
@@ -951,7 +969,7 @@
               i18nNamespace: other_surveys
               tabId: tabs.other_answers
               template: multiple_options_freeform
-              parameters: { cutoff: 5 }
+              parameters: { limit: 10 }
 
       - items: [renderatl]
         template: recommended_resources

@@ -5,3 +5,4 @@ showDescription: false
 i18nNamespace: happiness
 hasSponsor: true
 query: currentEditionData
+parameters: { showNoAnswer: true }

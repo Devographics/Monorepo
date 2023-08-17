@@ -25,7 +25,11 @@ const getLabel = (props: any, getString: StringTranslator) => {
             ? { id: NO_ANSWER, label: getString('charts.no_answer').t }
             : legends && legends.find(b => b.id === indexValue)
     const { entity, label } = data
-    const s = getString(`options.${i18nNamespace}.${indexValue}`)
+    const key =
+        i18nNamespace === 'features'
+            ? `features.${indexValue}`
+            : `options.${i18nNamespace}.${indexValue}`
+    const s = getString(key)
     let extraLabel = ''
 
     if (facet) {
@@ -56,10 +60,11 @@ const getLabel = (props: any, getString: StringTranslator) => {
         return label
     } else if (bucketKey?.label) {
         return bucketKey.label + extraLabel
-    } else if (shouldTranslate && !s.missing) {
-        return s.t + extraLabel
+    } else if (!s.missing) {
+        const translatedLabel = s.tClean || s.t
+        return translatedLabel + extraLabel
     } else if (entity) {
-        return entity.name
+        return entity.nameClean || entity.name
     } else {
         return indexValue
     }

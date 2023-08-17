@@ -23,7 +23,7 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
         mode = 'relative',
         defaultUnits = BucketUnits.COUNT,
         translateData,
-        i18nNamespace = block.id
+        i18nNamespace = block.fieldId || block.id
     } = block
 
     const [units, setUnits] = useState(defaultUnits)

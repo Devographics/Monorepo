@@ -99,7 +99,7 @@ export const getBucketLabel = args => {
         key = 'charts.no_answer'
         label = getString('charts.no_answer').t
     } else {
-        key = `options.${i18nNamespace}.${id}`
+        key = i18nNamespace === 'features' ? `features.${id}` : `options.${i18nNamespace}.${id}`
         const s = getString(key)
 
         if (providedLabel) {

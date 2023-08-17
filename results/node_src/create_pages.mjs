@@ -70,7 +70,7 @@ export const createPagesSingleLoop = async ({
     console.log(
         `Building ${surveyId}/${editionId}… 
 • ⏱️ fast build = ${USE_FAST_BUILD}
-• 📖 load method = ${getLoadMethod()})`
+• 📖 load method = ${getLoadMethod()}`
     )
 
     // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster

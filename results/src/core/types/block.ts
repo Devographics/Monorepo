@@ -31,6 +31,7 @@ export interface BlockQueryOptions {
 
 export interface BlockDefinition {
     id: string
+    fieldId?: string
     sectionId: string
     template?: string
     blockType?: string
