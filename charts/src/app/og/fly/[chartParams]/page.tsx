@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     // the image URL should be "/og/fly/[chartParams]/serve"
     return {}
 }
-export async function FlyChartRedirectionPage() {
+export default async function FlyChartRedirectionPage() {
     // TODO: similar to /og/static/[chartParams]
     // redirect user to the chart in context
     redirect('/')

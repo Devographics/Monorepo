@@ -1,3 +1,8 @@
+/**
+ * Serve images prerendered by our Capture tool
+ * See https://github.com/Devographics/capture
+ * for instructions
+ */
 import { NextPageParams } from '@/app/typings'
 import { decodeChartParams, encodeChartParams } from '@/app/og/chart-params-encoder'
 import { getBlockMetaFromParams } from '@/app/og/metadata'

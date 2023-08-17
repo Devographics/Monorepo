@@ -8,3 +8,7 @@ export interface ChartParams {
     question: string
     lang: string
 }
+
+export interface ChartFilter {
+    // TODO
+}
