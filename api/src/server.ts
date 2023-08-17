@@ -209,16 +209,14 @@ const start = async () => {
     //     await initDbCache({ context, data })
     // }
 
-    if (process.env.LOAD_DATA === 'local') {
-        await watchFiles({
-            context,
-            config: {
-                entities: getEnvVar(EnvVar.ENTITIES_PATH),
-                surveys: getEnvVar(EnvVar.SURVEYS_PATH),
-                locales: getEnvVar(EnvVar.LOCALES_PATH)
-            }
-        })
-    }
+    await watchFiles({
+        context,
+        config: {
+            entities: getEnvVar(EnvVar.ENTITIES_PATH),
+            surveys: getEnvVar(EnvVar.SURVEYS_PATH),
+            locales: getEnvVar(EnvVar.LOCALES_PATH)
+        }
+    })
 
     const finishedAt = new Date()
 
