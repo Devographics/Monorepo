@@ -40,7 +40,8 @@ import {
     SurveyMetadata,
     EditionMetadata,
     ResponsesParameters,
-    Filters
+    Filters,
+    ResultsSubFieldEnum
 } from '@devographics/types'
 import { getCollection } from '../helpers/db'
 import { getPastEditions } from '../helpers/surveys'
@@ -75,6 +76,7 @@ export const getDbPath = (
 export const getGenericCacheKey = ({
     edition,
     question,
+    subField = ResultsSubFieldEnum.RESPONSES,
     selectedEditionId,
     parameters,
     filters,
@@ -82,6 +84,7 @@ export const getGenericCacheKey = ({
 }: {
     edition: EditionApiObject
     question: QuestionApiObject
+    subField: ResultsSubFieldEnum
     selectedEditionId: string
     parameters?: ResponsesParameters
     filters?: Filters
@@ -89,7 +92,8 @@ export const getGenericCacheKey = ({
 }) => {
     const cacheKeyOptions: any = {
         editionId: selectedEditionId || `allEditions(${edition.id})`,
-        questionId: question.id
+        questionId: question.id,
+        subField
     }
     if (!isEmpty(parameters)) {
         const { enableCache, ...cacheKeyParameters } = parameters

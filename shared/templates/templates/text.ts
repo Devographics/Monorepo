@@ -1,4 +1,10 @@
-import { DbPaths, DbSuffixes, QuestionTemplateOutput, TemplateFunction } from '@devographics/types'
+import {
+    DbPaths,
+    DbPathsEnum,
+    DbSuffixes,
+    QuestionTemplateOutput,
+    TemplateFunction
+} from '@devographics/types'
 import { getPaths, checkHasId } from '../helpers'
 
 export const text: TemplateFunction = options => {
@@ -8,17 +14,20 @@ export const text: TemplateFunction = options => {
     const sectionSegment = section.template === 'tool' ? 'tools_others' : section.slug || section.id
     const questionSegment = question.id
 
+    // TODO: currently surveyform looks in "response" for all fields,
+    // but surveyadmin looks in "other", "prenormalize", etc. for different fields
     const rawPaths: DbPaths = {
-        other: `${sectionSegment}__${questionSegment}`
+        [DbPathsEnum.RESPONSE]: `${sectionSegment}__${questionSegment}`,
+        [DbPathsEnum.OTHER]: `${sectionSegment}__${questionSegment}`
     }
 
     const basePath = `${sectionSegment}.${questionSegment}`
     const normPaths: DbPaths = {
-        base: basePath,
-        raw: `${basePath}.${DbSuffixes.RAW}`,
-        patterns: `${basePath}.${DbSuffixes.PATTERNS}`,
-        error: `${basePath}.${DbSuffixes.ERROR}`,
-        other: `${basePath}.${DbSuffixes.NORMALIZED}`
+        [DbPathsEnum.BASE]: basePath,
+        [DbPathsEnum.RAW]: `${basePath}.${DbSuffixes.RAW}`,
+        [DbPathsEnum.PATTERNS]: `${basePath}.${DbSuffixes.PATTERNS}`,
+        [DbPathsEnum.ERROR]: `${basePath}.${DbSuffixes.ERROR}`,
+        [DbPathsEnum.OTHER]: `${basePath}.${DbSuffixes.NORMALIZED}`
     }
 
     const output: QuestionTemplateOutput = {

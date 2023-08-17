@@ -1,6 +1,7 @@
 import { getLocalesQuery, getLocaleContextQuery } from './queries.mjs'
 import { logToFile } from './log_to_file.mjs'
 import { getRedisClient } from './redis.mjs'
+import { removeNull } from './helpers.mjs'
 
 const getAllLocalesCacheKey = () => `${process.env.APP_NAME}__allLocales__metadata`
 const getLocaleContextCacheKey = (localeId, context) =>
@@ -10,10 +11,12 @@ export const getLocalesGraphQL = async ({ graphql, contexts, key }) => {
     const localesQuery = getLocalesQuery(contexts, false)
     logToFile(`locales/${key}.graphql`, localesQuery)
 
-    const localesResults = await graphql(
-        `
-            ${localesQuery}
-        `
+    const localesResults = removeNull(
+        await graphql(
+            `
+                ${localesQuery}
+            `
+        )
     )
     logToFile(`locales/${key}.json`, localesResults)
     const locales = localesResults.data.dataAPI.locales
@@ -24,10 +27,12 @@ export const getLocaleContextGraphQL = async ({ localeId, context, graphql, key 
     const localesQuery = getLocaleContextQuery(localeId, context)
     logToFile(`locales/${key}.graphql`, localesQuery)
 
-    const localesResults = await graphql(
-        `
-            ${localesQuery}
-        `
+    const localesResults = removeNull(
+        await graphql(
+            `
+                ${localesQuery}
+            `
+        )
     )
     logToFile(`locales/${key}.json`, localesResults)
     const locale = localesResults.data.dataAPI.locale

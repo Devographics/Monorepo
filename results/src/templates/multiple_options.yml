@@ -2,3 +2,4 @@ blockType: HorizontalBarBlock
 hasSponsor: true
 query: currentEditionData
 translateData: true
+parameters: { showNoAnswer: true }

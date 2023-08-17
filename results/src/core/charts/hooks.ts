@@ -180,12 +180,22 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }))
 
+    const naGradient = {
+        id: `Gradient${orientation}Na`,
+        type: 'linearGradient',
+        colors: [
+            { offset: 0, color: 'rgba(255,255,255,0.6)' },
+            { offset: 100, color: 'rgba(255,255,255,0.2)' }
+        ],
+        ...(orientation === HORIZONTAL ? horizontalDefs : {})
+    }
+
     const noAnswerGradient = {
         id: `Gradient${orientation}NoAnswer`,
         type: 'linearGradient',
         colors: [
-            { offset: 0, color: colors.barColorNoAnswer.gradient[1] },
-            { offset: 100, color: colors.barColorNoAnswer.gradient[0] }
+            { offset: 0, color: 'rgba(255,255,255,0.3)' },
+            { offset: 100, color: 'rgba(255,255,255,0.05)' }
         ],
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }
@@ -200,7 +210,7 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }
 
-    return [...barColors, ...velocity, defaultGradient, noAnswerGradient]
+    return [...barColors, ...velocity, defaultGradient, noAnswerGradient, naGradient]
 }
 
 type UseColorFillsOptions = {
@@ -235,6 +245,11 @@ export const useColorFills = (options: UseColorFillsOptions) => {
         showDefaultSeries
     } = options
 
+    const naFill = {
+        match: d => d.data.indexValue === 'na',
+        id: `Gradient${orientation}Na`
+    }
+
     const noAnswerFill = {
         match: d => d.data.indexValue === 'no_answer',
         id: `Gradient${orientation}NoAnswer`
@@ -252,7 +267,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
             const id = isDefault
                 ? `Gradient${orientation}Default`
                 : `Gradient${orientation}${gridIndex + gridIndexOffset}`
-            return [noAnswerFill, { match: '*', id }]
+            return [noAnswerFill, naFill, { match: '*', id }]
         }
         case CHART_MODE_STACKED: {
             /*
@@ -282,7 +297,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
                 id: `${prefix}${orientation}${i + 2}`
             }))
 
-            return [noAnswerFill, averageFill, ...facetFills]
+            return [noAnswerFill, naFill, averageFill, ...facetFills]
         }
         case CHART_MODE_GROUPED: {
             /*
@@ -296,7 +311,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
                 },
                 id: `Gradient${orientation}${i + 1}`
             }))
-            return [noAnswerFill, ...numberedSeriesFills]
+            return [noAnswerFill, naFill, ...numberedSeriesFills]
         }
         default: {
             /*
@@ -305,7 +320,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
 
             */
             const defaultFill = { match: '*', id: `Gradient${orientation}Default` }
-            return [noAnswerFill, defaultFill]
+            return [noAnswerFill, naFill, defaultFill]
         }
     }
 }

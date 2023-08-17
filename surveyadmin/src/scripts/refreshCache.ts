@@ -26,7 +26,7 @@ export const refreshSurveysCache = async (args) => {
   if (target === "development" || target === "staging") {
     console.log("-> Target: staging cache database");
     options.redisUrl = process.env.REDIS_UPSTASH_URL_STAGING;
-    options.redisToken = process.env.REDIS_UPSTASH_TOKEN_STAGING;
+    options.redisToken = process.env.REDIS_TOKEN_STAGING;
   } else {
     console.log("-> Target: production cache database");
   }

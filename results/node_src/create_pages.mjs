@@ -4,7 +4,10 @@ import {
     getLocalizedPath,
     getCleanLocales,
     createBlockPages,
-    runPageQueries
+    runPageQueries,
+    getLoadMethod,
+    removeNull,
+    getCachingMethods
 } from './helpers.mjs'
 import { getSendOwlData } from './sendowl.mjs'
 import yaml from 'js-yaml'
@@ -66,7 +69,14 @@ export const createPagesSingleLoop = async ({
         translationContexts: config.translationContexts
     }
 
-    console.log(`// Building ${surveyId}/${editionId}… (USE_FAST_BUILD = ${USE_FAST_BUILD})`)
+    const cachingMethods = getCachingMethods()
+
+    console.log(
+        `Building ${surveyId}/${editionId}… 
+• 📁 caching methods = ${cachingMethods.length > 0 ? cachingMethods.join(', ') : 'disabled'}
+• ⏱️ fast build = ${USE_FAST_BUILD}
+• 📖 load method = ${getLoadMethod()}`
+    )
 
     // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster
     const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []
@@ -111,10 +121,12 @@ export const createPagesSingleLoop = async ({
         editionId
     })
 
-    const metadataResults = await graphql(
-        `
-            ${metadataQuery}
-        `
+    const metadataResults = removeNull(
+        await graphql(
+            `
+                ${metadataQuery}
+            `
+        )
     )
     const metadataData = metadataResults?.data?.dataAPI
     logToFile('metadataData.json', metadataData, {

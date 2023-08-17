@@ -128,13 +128,14 @@ export async function getFromCache<T = any>({
     key,
     fetchFunction: fetchFromSource,
     calledFrom,
-    serverConfig = () => ({}),
+    redisUrl,
+    redisToken,
     shouldGetFromCache: shouldGetFromCacheOptions,
     shouldUpdateCache = true,
     shouldThrow = true
 }: GetFromCacheOptions<T>) {
     let inMemory = false
-    initRedis(serverConfig().redisUrl, serverConfig().redisToken)
+    initRedis(redisUrl, redisToken)
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
 
     const shouldGetFromCacheEnv = !(process.env.DISABLE_CACHE === 'true')

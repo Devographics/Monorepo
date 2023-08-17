@@ -92,9 +92,10 @@ export interface VerticalBarChartProps extends ChartComponentProps {
     series: DataSeries<StandardQuestionData>[]
     gridIndex?: number
     chartDisplayMode?: ChartModes
+    showDefaultSeries?: boolean
     facet?: FacetItem
     filters?: CustomizationFiltersSeries[]
-    showDefaultSeries?: boolean
+    filterLegends?: any
 }
 
 const VerticalBarChart = (props: VerticalBarChartProps) => {
@@ -103,7 +104,6 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
         viewportWidth,
         className,
         legends,
-        filterLegends,
         total,
         i18nNamespace,
         translateData,
@@ -115,6 +115,7 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
         chartDisplayMode = ChartModes.CHART_MODE_DEFAULT,
         facet,
         filters,
+        filterLegends,
         showDefaultSeries,
         series
     } = props

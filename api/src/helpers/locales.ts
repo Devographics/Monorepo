@@ -199,6 +199,8 @@ export const processLocale = (
     enParsedStringFiles: Array<StringFile>
 ): Locale => {
     const parsedStringFiles: StringFile[] = []
+    const missingContexts = []
+
     // always use en-US as reference to know what to include
     for (const enStringFile of enParsedStringFiles) {
         const localeStringFile = locale.stringFiles.find(
@@ -209,9 +211,7 @@ export const processLocale = (
         if (!localeStringFile) {
             // this context does not exist in the current locale
             // use en-US with every string marked as being a fallback instead
-            console.warn(
-                `  !! File for context ${locale.id}/${enStringFile.context} is missing, using en-US/${enStringFile.context} instead.`
-            )
+            missingContexts.push(enStringFile.context)
             stringFile = {
                 context: enStringFile.context,
                 strings: enStringFile.strings.map((s: TranslationStringObject) => ({
@@ -224,7 +224,12 @@ export const processLocale = (
             // this context does exist, go through parsing process
             stringFile = processStringFile({ locale, stringFile: localeStringFile, enStringFile })
         }
+
         parsedStringFiles.push(stringFile)
+    }
+
+    if (missingContexts.length > 0) {
+        console.warn(`${missingContexts.length} missing contexts: ${missingContexts.join(', ')}`)
     }
 
     const allLocaleStrings: TranslationStringObject[] = flattenStringFiles(parsedStringFiles)
@@ -261,7 +266,7 @@ export const processLocales = (allLocalesRawData: Array<RawLocale>): Array<Local
     for (const locale of allLocalesRawData) {
         let j = 0
         i++
-        console.log(`\n\n// Processing locale ${locale.id} (${i}/${allLocalesRawData.length})`)
+        console.log(`\n🌐 Processing locale [${locale.id}] (${i}/${allLocalesRawData.length})`)
         allLocales.push(processLocale(locale, enParsedStringFiles))
     }
     return allLocales
