@@ -52,8 +52,8 @@ export const getFieldsToCopy = (editionId) => [
   ["common__user_info__browser", "user_info.browser"],
   ["common__user_info__version", "user_info.version"],
   ["common__user_info__os", "user_info.os"],
-  // ["common__user_info__referrer", "user_info.referrer"],
-  // ["common__user_info__source", "user_info.sourcetag"],
+  ["common__user_info__referrer", "user_info.referrer_raw"],
+  ["common__user_info__source", "user_info.sourcetag_raw"],
   ["common__user_info__authmode", "user_info.authmode"],
   [
     `${editionId}__user_info__how_did_user_find_out_about_the_survey`,

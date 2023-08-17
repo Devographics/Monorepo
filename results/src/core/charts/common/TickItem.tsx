@@ -13,6 +13,7 @@ import { CloseIcon, DotsIcon } from 'core/icons'
 import TickItemLinks, { getSocialLinks } from 'core/charts/common/TickItemLinks'
 import Popover from 'core/components/Popover2'
 import { NO_ANSWER } from '@devographics/constants'
+import { getItemLabel } from 'core/helpers/labels'
 
 const labelMaxLength = 20
 
@@ -138,11 +139,11 @@ export const TickItem = (tick: TickItemProps) => {
     let link,
         description = tick.description
 
-    const { key, label: tickLabel } = getBucketLabel({
-        shouldTranslate,
+    const { key, label: tickLabel } = getItemLabel({
         i18nNamespace,
         entity,
-        id: tick.value,
+        id: tick.value!,
+        getString,
         label
     })
 
