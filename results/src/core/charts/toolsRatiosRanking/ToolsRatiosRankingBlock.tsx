@@ -47,13 +47,15 @@ const processBlockData = (
         return {
             id: tool.id,
             name: getEntityName(entities.find(e => e.id === tool.id)),
-            data: tool[controlledMetric]?.map(bucket => {
-                return {
-                    x: bucket.year,
-                    y: bucket.rank,
-                    percentageQuestion: bucket.percentageQuestion
-                }
-            })
+            data: tool[controlledMetric]
+                ?.filter(bucket => bucket.rank && bucket.percentageQuestion)
+                .map(bucket => {
+                    return {
+                        x: bucket.year,
+                        y: bucket.rank,
+                        percentageQuestion: bucket.percentageQuestion
+                    }
+                })
         }
     })
 }
