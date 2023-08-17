@@ -8,6 +8,7 @@ import { TwitterApi } from 'twitter-api-v2'
 import { logToFile } from './log_to_file.mjs'
 import { getQuery } from './queries.mjs'
 import { fileURLToPath } from 'url'
+import without from 'lodash/without.js'
 
 const __filename = fileURLToPath(import.meta.url)
 
@@ -147,8 +148,9 @@ Try loading data from disk or GitHub, or else run queries for *each block* in a 
 */
 export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => {
     const startedAt = new Date()
-    const useCache = process.env.DISABLE_CACHE === 'true' ? false : true
-    console.log(`// 🔍 Running GraphQL queries for page ${page.id}… (useCache=${useCache})`)
+    const useFilesystemCache = getCachingMethods().includes('filesystem')
+    const useApiCache = getCachingMethods().includes('api')
+    console.log(`// 🔍 Running GraphQL queries for page ${page.id}…`)
 
     const paths = getDataLocations(surveyId, editionId)
 
@@ -175,7 +177,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                     baseUrl,
                     sectionId: page.id
                 })
-                if (existingData && useCache) {
+                if (existingData && useFilesystemCache) {
                     console.log(
                         `// 🎯 File ${dataFileName} found on ${getLoadMethod()}, loading its contents…`
                     )
@@ -196,7 +198,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                     const queryArgs = {
                         facet: block.facet,
                         filters: block.filters,
-                        parameters: { ...block.parameters, enableCache: useCache },
+                        parameters: { ...block.parameters, enableCache: useApiCache },
                         xAxis: block?.variables?.xAxis,
                         yAxis: block?.variables?.yAxis
                     }
@@ -283,4 +285,19 @@ export function removeNull(obj) {
             .filter(([_, v]) => v != null && (v !== Object(v) || Object.keys(v).length))
     )
     return Array.isArray(obj) ? Object.values(clean) : clean
+}
+
+export const getCachingMethods = () => {
+    let cacheLevel = ['filesystem', 'api']
+    if (process.env.DISABLE_CACHE === 'true') {
+        cacheLevel = []
+    } else {
+        if (process.env.DISABLE_FILESYSTEM_CACHE === 'true') {
+            cacheLevel = without(cacheLevel, 'filesystem')
+        }
+        if (process.env.DISABLE_API_CACHE === 'true') {
+            cacheLevel = without(cacheLevel, 'api')
+        }
+    }
+    return cacheLevel
 }

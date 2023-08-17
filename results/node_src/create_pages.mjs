@@ -6,7 +6,8 @@ import {
     createBlockPages,
     runPageQueries,
     getLoadMethod,
-    removeNull
+    removeNull,
+    getCachingMethods
 } from './helpers.mjs'
 import { getSendOwlData } from './sendowl.mjs'
 import yaml from 'js-yaml'
@@ -68,9 +69,11 @@ export const createPagesSingleLoop = async ({
         translationContexts: config.translationContexts
     }
 
+    const cachingMethods = getCachingMethods()
+
     console.log(
         `Building ${surveyId}/${editionId}… 
-• 📁 cache disabled = ${process.env.DISABLE_CACHE === 'true'}
+• 📁 caching methods = ${cachingMethods.length > 0 ? cachingMethods.join(', ') : 'disabled'}
 • ⏱️ fast build = ${USE_FAST_BUILD}
 • 📖 load method = ${getLoadMethod()}`
     )
