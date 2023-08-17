@@ -3,3 +3,4 @@ defaultUnits: percentageSurvey
 # blockNamespace: user_info
 hasSponsor: true
 query: currentEditionData
+parameters: { showNoAnswer: true }

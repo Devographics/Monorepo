@@ -70,7 +70,18 @@ const getExtraLabel = ({
  * - VerticalBarChart
  */
 const BarTooltip = props => {
-    const { id, entity, units, indexValue, data, legends, filterLegends, facet, filters } = props
+    const {
+        id,
+        i18nNamespace,
+        entity,
+        units,
+        indexValue,
+        data,
+        legends,
+        filterLegends,
+        facet,
+        filters
+    } = props
     const { getString } = useI18n()
     const extraLabel = getExtraLabel({
         id,
@@ -82,7 +93,13 @@ const BarTooltip = props => {
         filters,
         getString
     })
-    const { key, label } = getItemLabel({ getString, id: indexValue, entity, extraLabel })
+    const { key, label } = getItemLabel({
+        getString,
+        i18nNamespace,
+        id: indexValue,
+        entity,
+        extraLabel
+    })
 
     const nivoTheme = useTheme()
 
