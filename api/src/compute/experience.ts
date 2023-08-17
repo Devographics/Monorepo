@@ -76,7 +76,7 @@ export async function computeExperienceOverYears({
     const path = `tools.${tool}.experience`
 
     const match = {
-        survey: survey.id,
+        surveyId: survey.id,
         [path]: { $nin: [null, ''] },
         ...generateFiltersQuery({ filters })
     }

@@ -15,7 +15,7 @@ const getResolverMap = (): ResolverMap => ({
         const { filters, parameters = {} } = args
         const { enableCache } = parameters
 
-        const tools = getSectionToolsIds(section)
+        const tools = getSectionToolsIds(section).slice(0, 2)
         return await useCache({
             key: computeKey(computeToolsExperienceRatios, {
                 editionId: edition.id,
