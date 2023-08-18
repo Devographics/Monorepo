@@ -43,6 +43,7 @@ export const getFieldsToCopy = (editionId) => [
   ["updatedAt"],
   ["finishedAt"],
   ["completion", "user_info.completion"],
+  ["readingList", "reading_list"],
   ["duration", "user_info.duration"],
   ["userId"],
   ["isFake"],

@@ -17,11 +17,11 @@ type NormalizationResultProps = NormalizeInBulkResult & {
 };
 export const NormalizationResult = (props: NormalizationResultProps) => {
   const {
-    normalizedDocuments,
-    unmatchedDocuments,
-    unnormalizableDocuments,
-    errorDocuments,
-    emptyDocuments,
+    normalizedDocuments = [],
+    unmatchedDocuments = [],
+    unnormalizableDocuments = [],
+    errorDocuments = [],
+    emptyDocuments = [],
     showQuestionId = true,
     showSummary = true,
   } = props;
@@ -73,10 +73,10 @@ export const NormalizationResult = (props: NormalizationResultProps) => {
 };
 
 export const NormalizationSummary = ({
-  normalizedDocuments,
-  unmatchedDocuments,
-  unnormalizableDocuments,
-  emptyDocuments,
+  normalizedDocuments = [],
+  unmatchedDocuments = [],
+  unnormalizableDocuments = [],
+  emptyDocuments = [],
   duration,
   isSimulation,
   errorCount,

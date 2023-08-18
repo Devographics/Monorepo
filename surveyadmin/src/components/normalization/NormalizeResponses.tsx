@@ -3,6 +3,7 @@ import { useState } from "react";
 import Options from "./Options";
 import { normalizeResponses } from "~/lib/normalization/services";
 import { LoadingButton } from "./NormalizeQuestionActions";
+import { NormalizationResult } from "./NormalizationResult";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
 export const NormalizeResponses = ({ survey, edition }) => {
@@ -36,6 +37,7 @@ export const NormalizeResponses = ({ survey, edition }) => {
           label="Normalize Response(s)"
         />
       </div>
+      {result && <NormalizationResult {...result} />}
     </section>
   );
 };
