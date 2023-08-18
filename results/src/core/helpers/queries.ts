@@ -15,6 +15,11 @@ export const getEntityFragment = () => `entity {
     nameHtml
     nameClean
     id
+    example {
+      language
+      code
+      codeHighlighted
+    }
     homepage {
       url
     }
@@ -41,6 +46,16 @@ export const getEntityFragment = () => `entity {
     }
     npm {
         url
+    }
+    mdn {
+        url
+    }
+    caniuse {
+        url
+    }
+    resources {
+        url
+        title
     }
 }`
 

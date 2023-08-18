@@ -61,6 +61,9 @@ export const getBlockTitle = ({
     const blockTitle = block.titleId && getString(block.titleId)?.t
     const key = getBlockTitleKey({ block, pageContext })
 
+    console.log(block.id)
+    console.log(entity)
+    console.log(entityName)
     const translation = getString(key)
     return blockTitle || translation?.tClean || translation?.t || entityName || key
 }
@@ -98,9 +101,9 @@ export const getBlockDescription = ({
 }) => {
     const descriptionKey = `${getBlockKey({ block })}.description`
     const { currentEdition } = pageContext
-    const blockDescription = block.descriptionId && getString(block.descriptionId, values)?.t
-    const editionDescription = getString(`${descriptionKey}.${currentEdition.id}`, values)?.t
-    const genericDescription = getString(descriptionKey, values)?.t
+    const blockDescription = block.descriptionId && getString(block.descriptionId, { values })?.t
+    const editionDescription = getString(`${descriptionKey}.${currentEdition.id}`, { values })?.t
+    const genericDescription = getString(descriptionKey, { values })?.t
     return blockDescription || editionDescription || genericDescription
 }
 

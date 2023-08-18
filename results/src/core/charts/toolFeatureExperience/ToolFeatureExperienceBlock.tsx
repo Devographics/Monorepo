@@ -74,6 +74,7 @@ export const ToolFeatureExperienceBlock = ({
             setUnits={setUnits}
             block={{ ...block, title, titleLink, description }}
             data={data}
+            entity={data.entity}
             originalData={data}
             titleProps={{ closeComponent }}
             legends={legends}
