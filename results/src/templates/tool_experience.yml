@@ -9,5 +9,5 @@ query: allEditionsData
 parameters: { showNoAnswer: true }
 hidden: true
 queryOptions:
-    # addQuestionEntity: true
+    addQuestionEntity: true
     addQuestionComments: true

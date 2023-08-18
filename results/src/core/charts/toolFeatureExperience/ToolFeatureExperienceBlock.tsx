@@ -11,6 +11,7 @@ import { useEntity } from 'core/helpers/entities'
 import { BucketUnits, FeatureQuestionData, ToolQuestionData } from '@devographics/types'
 import { BlockComponentProps } from 'core/types'
 import { ExperienceByYearBarChart } from 'core/charts/toolFeatureExperience/ExperienceByYearBarChart'
+import { FEATURES_OPTIONS, TOOLS_OPTIONS } from '@devographics/constants'
 
 export const BAR_THICKNESS = 28
 export const BAR_SPACING = 16
@@ -22,14 +23,13 @@ interface ToolFeatureExperienceBlockProps extends BlockComponentProps {
 
 export const ToolFeatureExperienceBlock = ({
     block,
-    keys,
     data,
     defaultUnits = BucketUnits.PERCENTAGE_QUESTION,
     closeComponent
 }: ToolFeatureExperienceBlockProps) => {
     const context = usePageContext()
     const { locale } = context
-
+    const { i18nNamespace } = block
     const [units, setUnits] = useState(defaultUnits)
 
     const entity = useEntity(block.id)
@@ -56,6 +56,18 @@ export const ToolFeatureExperienceBlock = ({
 
     const defaultSeries = { name: 'default', data }
 
+    const keys = i18nNamespace === 'features' ? FEATURES_OPTIONS : TOOLS_OPTIONS
+
+    const tables = [
+        getTableData({
+            title: data?.entity?.name,
+            data: groupDataByYears({ keys, data: allYears }),
+            years: data.responses.allEditions.map(editionData => editionData.year),
+            translateData: true,
+            i18nNamespace
+        })
+    ]
+
     return (
         <Block
             units={units}
@@ -65,15 +77,7 @@ export const ToolFeatureExperienceBlock = ({
             originalData={data}
             titleProps={{ closeComponent }}
             legends={legends}
-            tables={[
-                getTableData({
-                    title: data?.entity?.name,
-                    data: groupDataByYears({ keys, data: data.responses.allEditions }),
-                    years: data.responses.allEditions.map(editionData => editionData.year),
-                    translateData: true,
-                    i18nNamespace: 'tools'
-                })
-            ]}
+            tables={tables}
             completion={completion}
             chartFilters={chartFilters}
             setChartFilters={setChartFilters}
