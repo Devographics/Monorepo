@@ -61,9 +61,6 @@ export const getBlockTitle = ({
     const blockTitle = block.titleId && getString(block.titleId)?.t
     const key = getBlockTitleKey({ block, pageContext })
 
-    console.log(block.id)
-    console.log(entity)
-    console.log(entityName)
     const translation = getString(key)
     return blockTitle || translation?.tClean || translation?.t || entityName || key
 }

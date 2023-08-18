@@ -309,6 +309,7 @@ export const getBlockQuery = ({
     // addBucketFacetsPlaceholder?: boolean
     queryArgs?: QueryArgs
 }) => {
+    let stringQuery
     const { query, queryOptions: blockQueryOptions } = block
 
     const defaultQueryOptions = {
@@ -321,11 +322,11 @@ export const getBlockQuery = ({
     const queryOptions = { ...defaultQueryOptions, ...providedQueryOptions, ...blockQueryOptions }
 
     if (!query) {
-        return ''
+        stringQuery = ''
     } else {
-        const stringQuery = getQuery({ query, queryOptions, queryArgs })
-        return stringQuery
+        stringQuery = getQuery({ query, queryOptions, queryArgs })
     }
+    return stringQuery
 }
 
 /*

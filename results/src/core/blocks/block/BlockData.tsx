@@ -24,7 +24,7 @@ const BlockData = props => {
             addArgumentsPlaceholder: false,
             addBucketFacetsPlaceholder: false
         },
-        queryArgs: { parameters }
+        queryArgs: parameters ? { parameters } : {}
     })
 
     return (
