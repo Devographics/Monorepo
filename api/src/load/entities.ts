@@ -10,7 +10,20 @@ import { logToFile } from '@devographics/debug'
 
 import path from 'path'
 import marked from 'marked'
-import hljs from 'highlight.js/lib/common'
+
+// import hljs from 'highlight.js/lib/common'
+import hljs from 'highlight.js/lib/core'
+import javascript from 'highlight.js/lib/languages/javascript'
+import html from 'highlight.js/lib/languages/xml'
+import http from 'highlight.js/lib/languages/http'
+import css from 'highlight.js/lib/languages/css'
+import graphql from 'highlight.js/lib/languages/graphql'
+hljs.registerLanguage('javascript', javascript)
+hljs.registerLanguage('html', html)
+hljs.registerLanguage('http', http)
+hljs.registerLanguage('css', css)
+hljs.registerLanguage('graphql', graphql)
+
 import { appSettings } from '../helpers/settings'
 import sanitizeHtml from 'sanitize-html'
 import { RequestContext } from '../types'
