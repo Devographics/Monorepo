@@ -224,6 +224,10 @@
       - id: knowledge_score
         template: demographics
 
+      - id: reading_list
+        template: reading_list
+        parameters: { limit: 20 }
+
       - id: features_resources
         items: [fm-learncss]
         template: recommended_resources
@@ -627,6 +631,9 @@
       - template: page_introduction
 
       - template: tools_experience_linechart
+        variants:
+            - template: tools_experience_ranking
+              tabId: blocks.tools_experience_ranking.rankings
 
       - template: tools_experience_ranking
 
@@ -990,22 +997,22 @@
             - id: feature_adoption_delta_award
               template: award
               awards:
-                  - id: flexbox_gap
-                    value: '+25.4%'
-                  - id: aspect_ratio
-                    value: '+17.9%'
-                  - id: intrinsic_sizing
+                  - id: has_selector
+                    value: '+16.4%'
+                  - id: at_container
+                    value: '+14.1%'
+                  - id: viewport_percentage_length_units
                     value: '+13%'
 
             - id: most_commented_feature_award
               template: award
               awards:
                   - id: subgrid
-                    value: 126
-                  - id: css_nesting
-                    value: 60
+                    value: 531
                   - id: at_container
-                    value: 50
+                    value: 78
+                  - id: css_nesting
+                    value: 65
 
             # - id: tool_usage_delta_award
             #   template: award
@@ -1020,12 +1027,12 @@
             - id: tool_satisfaction_award
               template: award
               awards:
+                  - id: open_props
+                    value: '91%'
                   - id: css_modules
-                    value: '85.6%'
-                  - id: tailwind_css
-                    value: '79%'
-                  - id: vanilla_extract
-                    value: '78.8%'
+                    value: '84.5%'
+                  - id: uno_css
+                    value: '82%'
 
             # - id: tool_interest_award
             #   template: award
@@ -1040,12 +1047,12 @@
             - id: most_write_ins_award
               template: award
               awards:
-                  - id: arc
-                    value: 113
-                  - id: uno_css
-                    value: 105
-                  - id: open_props
-                    value: 68
+                  - id: panda
+                    value: 52
+                  - id: material_ui
+                    value: 38
+                  - id: yandex
+                    value: 24
 
 - id: conclusion
   path: /conclusion

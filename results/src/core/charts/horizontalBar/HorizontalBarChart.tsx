@@ -247,7 +247,10 @@ const HorizontalBarChart = ({
                             <TickItem
                                 i18nNamespace={i18nNamespace}
                                 shouldTranslate={translateData}
-                                entity={entities.find(e => e?.id === tick.value)}
+                                entity={
+                                    buckets.find(b => b.id === tick.value)?.entity ||
+                                    entities.find(e => e?.id === tick.value)
+                                }
                                 label={buckets.find(b => b.id === tick.value)?.label}
                                 itemCount={buckets.length}
                                 {...tick}
@@ -264,7 +267,10 @@ const HorizontalBarChart = ({
                         facet={facet}
                         filters={filters}
                         filterLegends={filterLegends}
-                        entity={entities.find(e => e?.id === barProps.data.id)}
+                        entity={
+                            buckets.find(b => b.id === barProps.data.id)?.entity ||
+                            entities.find(e => e?.id === barProps.data.id)
+                        }
                         {...barProps}
                     />
                 )}
