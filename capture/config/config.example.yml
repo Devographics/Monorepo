@@ -1,0 +1,12 @@
+# the base URL to use, can be either local or remote,
+baseUrl: https://2022.stateofcss.com
+#http://localhost:9000
+sitemap: './sitemap.yml'
+# configuration for mosaic generation
+mosaic:
+    thumb_width: 500
+    thumb_height: 400
+    columns: 14
+    # background color to use for the generated image
+    # which should be aligned with the survey styles
+    background: 0x232840FF

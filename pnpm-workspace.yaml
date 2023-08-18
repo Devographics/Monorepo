@@ -1,6 +1,8 @@
 packages:
     # Packages
     - 'shared/*'
+    # CLI tools
+    - 'capture'
     # API
     - 'api'
     # Webapps
