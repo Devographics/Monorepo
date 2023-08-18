@@ -2,6 +2,7 @@ import { ApiTemplateFunction, ResolverMap, SectionApiObject } from '../../types/
 import { graphqlize } from '../helpers'
 import { computeKey, useCache } from '../../helpers/caching'
 import { computeToolsExperienceRatios } from '../../compute/experience'
+import { getToolsEnumTypeName } from '../../graphql/templates/tools_enum'
 
 const getSectionToolsIds = (section: SectionApiObject) => {
     const sectionTools = section.questions.filter(q => q.template === 'tool')
@@ -12,10 +13,10 @@ const getSectionToolsIds = (section: SectionApiObject) => {
 const getResolverMap = (): ResolverMap => ({
     items: async (parent, args, context, info) => {
         const { survey, edition, section, question } = parent
-        const { filters, parameters = {} } = args
+        const { itemIds, filters, parameters = {} } = args
         const { enableCache } = parameters
 
-        const tools = getSectionToolsIds(section)
+        const tools = itemIds || getSectionToolsIds(section)
         return await useCache({
             key: computeKey(computeToolsExperienceRatios, {
                 editionId: edition.id,
@@ -28,8 +29,8 @@ const getResolverMap = (): ResolverMap => ({
             enableCache
         })
     },
-    ids: ({ section }) => {
-        return getSectionToolsIds(section)
+    ids: ({ section }, { itemIds }) => {
+        return itemIds || getSectionToolsIds(section)
     },
     years: ({ survey }) => {
         return survey.editions.map(e => e.year)
@@ -43,7 +44,7 @@ export const section_tools_ratios: ApiTemplateFunction = ({
     question
 }) => {
     const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(section.id)}ToolsRatios`
-
+    const toolsEnumTypeName = getToolsEnumTypeName(survey)
     return {
         ...question,
         id: `${section.id}_ratios`,
@@ -51,9 +52,9 @@ export const section_tools_ratios: ApiTemplateFunction = ({
         typeDef: `type ${fieldTypeName} {
             ids: [String]
             years: [Int]
-            items(parameters: ToolRatiosParameters, filters: ${graphqlize(
-                survey.id
-            )}Filters): [ToolRatiosItemData]
+            items(itemIds: [${toolsEnumTypeName}], parameters: ToolRatiosParameters, filters: ${graphqlize(
+            survey.id
+        )}Filters): [ToolRatiosItemData]
         }`,
         resolverMap: getResolverMap()
     }

@@ -1,4 +1,5 @@
 import { generateAllEditionsEnumType } from '../graphql/templates/all_editions_enum'
+import { generateFeaturesEnumType } from '../graphql/templates/features_enum'
 import {
     generateFacetsType,
     generateFiltersType,
@@ -17,6 +18,8 @@ import {
     generateSurveysEnumType
 } from '../graphql/templates/index'
 import {} from '../graphql/templates/locale_id_enum'
+import { generateToolsEnumType } from '../graphql/templates/tools_enum'
+import { TypeDefTemplateOutput } from '../types'
 import { SurveyApiObject, QuestionApiObject, TypeObject } from '../types/surveys'
 import { getPath } from './helpers'
 import isEmpty from 'lodash/isEmpty.js'
@@ -28,41 +31,49 @@ export const generateI18nTypeObjects = async ({}) => {
     typeObjects.push(await generateLocaleIDEnum({ path }))
     return typeObjects
 }
+
 /*
 
 Generate typeDefs corresponding to survey arborescence
 
 */
 export const generateSurveysTypeObjects = async ({ surveys }: { surveys: SurveyApiObject[] }) => {
-    let typeObjects = []
+    let typeObjects: TypeDefTemplateOutput[] = []
 
     // store all options for all fields contained in survey question outlines
     // const allQuestions: Question[] = []
 
+    const addToTypeObjects = (typeDef: TypeDefTemplateOutput | null) => {
+        if (typeDef) {
+            typeObjects.push(typeDef)
+        }
+    }
     // type for all surveys
     let path = getPath({})
-    typeObjects.push(generateSurveysEnumType({ surveys, path }))
-    typeObjects.push(generateSurveysType({ surveys, path }))
-    typeObjects.push(generateAllEditionsEnumType({ surveys, path }))
+    addToTypeObjects(generateSurveysEnumType({ surveys, path }))
+    addToTypeObjects(generateSurveysType({ surveys, path }))
+    addToTypeObjects(generateAllEditionsEnumType({ surveys, path }))
 
     for (const survey of surveys) {
         path = getPath({ survey })
         // type for a single kind of survey (state of js, state of css, etc.)
-        typeObjects.push(generateSurveyType({ survey, path }))
-        typeObjects.push(generateSurveyEditionsEnumType({ survey, path }))
-        typeObjects.push(generateResponsesType({ survey, path }))
+        addToTypeObjects(generateSurveyType({ survey, path }))
+        addToTypeObjects(generateSurveyEditionsEnumType({ survey, path }))
+        addToTypeObjects(generateResponsesType({ survey, path }))
+        addToTypeObjects(generateFeaturesEnumType({ survey, path }))
+        addToTypeObjects(generateToolsEnumType({ survey, path }))
 
         for (const edition of survey.editions) {
             path = getPath({ survey, edition })
             // type for all editions of a survey
-            typeObjects.push(generateEditionType({ survey, edition, path }))
+            addToTypeObjects(generateEditionType({ survey, edition, path }))
 
             if (!isEmpty(edition.sections)) {
                 for (const section of edition.sections) {
                     path = getPath({ survey, edition, section })
 
                     // type for all sections of a survey edition
-                    typeObjects.push(
+                    addToTypeObjects(
                         generateSectionType({
                             survey,
                             edition,
