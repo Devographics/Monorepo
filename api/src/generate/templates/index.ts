@@ -11,6 +11,8 @@ export * from './section_tools_ratios'
 export * from './completion_stats'
 export * from './knowledge_score'
 
+export * from './data_explorer'
+
 export {
     age,
     age_number,
@@ -46,7 +48,6 @@ export {
     os,
     version,
     referrer,
-    sourcetag
+    sourcetag,
+    reading_list
 } from '@devographics/templates'
-
-export * from './data_explorer'

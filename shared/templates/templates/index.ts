@@ -21,6 +21,7 @@ export * from './tool'
 
 export * from './locale'
 export * from './completion_stats'
+export * from './reading_list'
 export * from './knowledge_score'
 export * from './source'
 export * from './country'
