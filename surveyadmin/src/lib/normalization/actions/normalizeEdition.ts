@@ -13,6 +13,7 @@ export type NormalizeEditionArgs = {
   startFrom?: number;
   limit?: number;
   onlyUnnormalized?: boolean;
+  isFirstNormalization?: boolean;
 };
 
 /*
@@ -66,10 +67,13 @@ export const normalizeEdition = async (args: NormalizeEditionArgs) => {
     `⛰️ Renormalizing all questions for edition ${editionId}… Found ${responses.length} responses to renormalize (startFrom: ${startFrom}, limit: ${limit}). (${startAt})`
   );
 
-  // delete any previous normalized responses just to be safe and avoid
-  // any inconsistencies
-  const normalizedResponses = await getNormResponsesCollection();
-  await normalizedResponses.deleteMany({ editionId: edition.id });
+  if (startFrom === 0) {
+    // delete any previous normalized responses just to be safe and avoid
+    // any inconsistencies
+    console.log("⛰️ Deleting all previous normalized responses… (first batch)");
+    const normalizedResponses = await getNormResponsesCollection();
+    await normalizedResponses.deleteMany({ editionId: edition.id });
+  }
 
   const mutationResult = await normalizeInBulk({
     survey,
