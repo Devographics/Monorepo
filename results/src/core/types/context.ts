@@ -1,5 +1,4 @@
 import { EditionMetadata, SurveyMetadata } from '@devographics/types'
-import { any } from 'prop-types'
 import { Locale } from './i18n'
 
 export interface PageDef {
@@ -23,6 +22,10 @@ export interface PageContextValue {
     host: string,
     titleId: string,
     intlId: string,
+    previous?: PageContextValue,
+    next?: PageContextValue,
     //
     block: any
+    // 
+    locales?: Array<any>
 }

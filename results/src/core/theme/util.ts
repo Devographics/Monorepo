@@ -45,25 +45,25 @@ type ZIndexKeys = 'popover' | 'modal'
 
 export const spacing =
     (multiplier = 1) =>
-    ({ theme }: ThemeProps) =>
-        `${theme.dimensions.spacing * multiplier}px`
+        ({ theme }: ThemeProps) =>
+            `${theme.dimensions.spacing * multiplier}px`
 
 export const fontSize =
     (size: SizeKeys) =>
-    ({ theme }: ThemeProps) =>
-        theme.typography.size[size]
+        ({ theme }: ThemeProps) =>
+            theme.typography.size[size]
 
 export const fontWeight =
     (weight: WeightKeys) =>
-    ({ theme }: ThemeProps) =>
-        theme.typography.weight[weight]
+        ({ theme }: ThemeProps) =>
+            theme.typography.weight[weight]
 
 export const color =
     (id: ColorKeys) =>
-    ({ theme }: ThemeProps) =>
-        theme.colors[id]
+        ({ theme }: ThemeProps) =>
+            theme.colors[id] as string
 
 export const zIndex =
     (id: ZIndexKeys) =>
-    ({ theme }: ThemeProps) =>
-        theme.zIndexes[id]
+        ({ theme }: ThemeProps) =>
+            theme.zIndexes[id]

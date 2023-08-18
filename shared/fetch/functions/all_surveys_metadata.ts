@@ -5,9 +5,15 @@ import { getSurveysQuery } from '../queries'
 import { FetcherFunctionOptions } from '../types'
 
 const filterSurveys = (surveys: SurveyMetadata[], options: FetcherFunctionOptions = {}) => {
-    const { serverConfig } = options
+    const { getServerConfig } = options
     let filteredSurveys = surveys
-    if (serverConfig && serverConfig().isProd && !serverConfig()?.isTest) {
+    // in test or dev mode, the app can specify they want to keep the demo survey around
+    if (getServerConfig) {
+        const serverConfig = getServerConfig()
+        if (!(serverConfig.isDev || serverConfig.isTest)) {
+            filteredSurveys = surveys?.filter(s => s.id !== 'demo_survey')
+        }
+    } else {
         filteredSurveys = surveys?.filter(s => s.id !== 'demo_survey')
     }
     return filteredSurveys
@@ -27,6 +33,7 @@ export const fetchSurveysMetadata = async (options?: FetcherFunctionOptions) => 
         fetchFunction: async () => {
             const result = await fetchGraphQLApi({ query, key })
             if (!result) throw new Error(`Couldn't fetch surveys`)
+            console.log("result", result._metadata.surveys.map(s => s.name))
             return filterSurveys(result._metadata.surveys, options) as SurveyMetadata[]
         },
         ...options

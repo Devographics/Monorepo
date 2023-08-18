@@ -87,7 +87,7 @@ const start = async () => {
 
     const db = await getPublicDb()
 
-    const entities = await loadOrGetEntities({})
+    // const entities = await loadOrGetEntities({})
     const context = { db, redisClient }
 
     const isDevOrTest = !!(
@@ -222,8 +222,7 @@ const start = async () => {
 
     app.listen({ port: port }, () =>
         console.log(
-            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${
-                finishedAt.getTime() - startedAt.getTime()
+            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${finishedAt.getTime() - startedAt.getTime()
             }ms)`
         )
     )

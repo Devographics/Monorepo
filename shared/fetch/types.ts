@@ -2,7 +2,7 @@ import { AppName } from '@devographics/types'
 
 export interface CommonOptions {
     calledFrom?: string
-    serverConfig?: Function
+    getServerConfig?: () => { isProd?: boolean, isTest?: boolean, isDev?: boolean }
     redisUrl?: string
     redisToken?: string
     shouldGetFromCache?: boolean

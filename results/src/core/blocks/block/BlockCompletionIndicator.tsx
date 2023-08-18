@@ -4,7 +4,13 @@ import styled from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import { color, spacing, fontSize } from 'core/theme'
 
-const BlockCompletionIndicator = ({ completion, variant = 'pink' }) => {
+const BlockCompletionIndicator = ({
+    completion,
+    variant = 'pink'
+}: {
+    completion: { count: number; percentage: number }
+    variant: 'grey' | 'pink' | string
+}) => {
     const { translate } = useI18n()
     const colorName1 = variant === 'pink' ? 'link' : 'text'
     const colorName2 = variant === 'pink' ? 'link' : 'textAlt'
