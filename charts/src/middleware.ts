@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { encodeChartParams } from './app/og/chart-params-encoder'
-import { ChartParams } from './app/og/typings'
+import { encodeChartParams } from './app/share/chart-params-encoder'
+import { ChartParams } from './app/share/typings'
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
@@ -13,7 +13,7 @@ export function middleware(request: NextRequest) {
     console.log("middleware pathname", request.nextUrl.pathname)
     if (
         // (it must be an exact match, otherwise it means we already have encoded the chartparam)
-        ["/og/prerendered", "/og/fly", "/og/fly/serve"].includes(
+        ["/share/prerendered", "/share/fly", "/share/fly/serve"].includes(
             request.nextUrl.pathname
         )) {
         const chartParams = [...request.nextUrl.searchParams.entries()]
@@ -30,5 +30,5 @@ export function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-    matcher: '/og/:path*',
+    matcher: '/share/:path*',
 }

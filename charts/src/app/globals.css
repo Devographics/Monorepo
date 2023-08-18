@@ -81,6 +81,7 @@
 
 html,
 body {
+  height: 100%;
   max-width: 100vw;
   overflow-x: hidden;
 }
@@ -97,7 +98,6 @@ body {
 
 a {
   color: inherit;
-  text-decoration: none;
 }
 
 @media (prefers-color-scheme: dark) {

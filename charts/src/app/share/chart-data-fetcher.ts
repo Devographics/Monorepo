@@ -1,4 +1,7 @@
-// *** Getting charts data
+/**
+ * Getting charts data
+ * TODO: this is based on legacy results app
+ */
 import { ChartFilter, ChartParams } from "./typings"
 import { BlockDefinition } from "@/block/typings"
 import { getAppConfig } from "@/config/server"

@@ -3,7 +3,7 @@ import { fetchEditionMetadata } from "@devographics/fetch"
 import { ChartParams } from "./typings"
 
 export async function getBlockMetaFromParams(chartParams: ChartParams) {
-    const { data: currentEdition, error } = await fetchEditionMetadata({
+    const { data: edition, error } = await fetchEditionMetadata({
         surveyId: chartParams.survey,
         editionId: chartParams.edition
     })
@@ -18,10 +18,7 @@ export async function getBlockMetaFromParams(chartParams: ChartParams) {
             sectionId: chartParams.section,
             parameters: {}
         },
-        currentEdition,
-        // TODO
-        currentPath: 'TODO: section for this chart',
-        host: 'TODO: result app url for this edition',
+        edition,
         // TODO: do an actual translation, we can take the surveyform as inspiration
         // for loading and translating locales in the backend
         getString: key => ({ t: key, locale: { id: chartParams.lang } })

@@ -1,6 +1,6 @@
-import { fetchChartData } from "@/app/og/chart-data-fetcher";
-import { decodeChartParams } from "@/app/og/chart-params-encoder";
-import { renderChartSvg, svg2png } from "@/app/og/chart-renderer";
+import { fetchChartData } from "@/app/share/chart-data-fetcher";
+import { decodeChartParams } from "@/app/share/chart-params-encoder";
+import { renderChartSvg, svg2png } from "@/app/share/chart-renderer";
 import { NextRequest, NextResponse } from "next/server";
 
 /**

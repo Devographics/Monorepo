@@ -71,15 +71,14 @@ In order of priority, use:
 */
 const getBlockDescription = ({
     block,
-    currentEdition,
+    edition,
     getString,
     values,
     // options
 }: {
     block: BlockDefinition
     getString: StringTranslator
-    // in the Gatsby result app this is provided by the page context
-    currentEdition: EditionMetadata,
+    edition: EditionMetadata,
     values?: any
     /*
     options?: {
@@ -88,27 +87,10 @@ const getBlockDescription = ({
 }) => {
     const descriptionKey = `${getBlockKey({ block })}.description`
     const blockDescription = block.descriptionId && getString(block.descriptionId, values)?.t
-    const editionDescription = getString(`${descriptionKey}.${currentEdition.id}`, values)?.t
+    const editionDescription = getString(`${descriptionKey}.${edition.id}`, values)?.t
     const genericDescription = getString(descriptionKey, values)?.t
     return blockDescription || editionDescription || genericDescription
 }
-
-
-/**
- * TODO: this URL should be replaced by the URL generated on the fly
- */
-/*
-export const getBlockImage = ({
-    block,
-    pageContext
-}: {
-    block: BlockDefinition
-    pageContext: PageContextValue
-}) => {
-    const capturesUrl = `https://assets.devographics.com/captures/${pageContext.currentEdition.id}`
-    return `${capturesUrl}${pageContext.locale.path}/${block.id}.png`
-}
-*/
 
 /**
  * Redirection link associated with a chart
@@ -117,73 +99,79 @@ export const getBlockImage = ({
  * @returns 
  */
 const getBlockLink = ({
-    block,
-    currentPath,
-    host,
-    params,
+    blockId,
+    section,
+    editionResultUrl,
+    lang = "en-US",
     useRedirect = true
 }: {
-    block: BlockDefinition
-    /** TODO: in the Gatsby app its "pageContext.currentPath" but we have no currentPath, can we derive it from the block definition? */
-    currentPath: string,
-    /** TODO: this is the result app URL, how to get it reliably? From the edition definition? */
-    host: string,
-    // pageContext: PageContextValue
-    params?: any
+    /**
+     * environments
+     */
+    section: string,
+    /**
+     * browsers
+     */
+    blockId: string,
+    /**
+     * https://2021.stateofcss.com/
+     */
+    editionResultUrl: string,
+    lang?: string,
     useRedirect?: boolean
 }) => {
-    const { id } = block
-    const paramsString = new URLSearchParams(params).toString()
+    // TODO: we are always in "redirect" context here?
+    let link = useRedirect
+        ? `${editionResultUrl}/${lang}/${section}/${blockId}`
+        : `${editionResultUrl}/${lang}/#${blockId}`
 
-    let path = useRedirect
-        ? `${currentPath}/${id}?${paramsString}`
-        : `${currentPath}/?${paramsString}#${id}`
-
-    // remove any double slashes
-    // @ts-ignore TODO: setting lib to ES2021 in tsconfig will make "fetch" being unreckognized in Node code
-    path = path.replaceAll('//', '/')
-    const link = `${host}${path}`
+    link = link.replaceAll('//', '/')
     return link
 }
 
-function getSiteTitle({ currentEdition }: { currentEdition: EditionMetadata }) {
-    return `${currentEdition.survey.name} ${currentEdition.year}`
+function getSiteTitle({ edition }: { edition: EditionMetadata }) {
+    return `${edition.survey.name} ${edition.year}`
 }
 
+/**
+ * NOTE: block image is NOT handled here,
+ * because the URL depends on the way this image is generated
+ * (prerendering, on the fly, storing a filtered version...)
+ * @param param0 
+ * @returns 
+ */
 export const getBlockMeta = ({
     block,
     getString,
-    currentEdition,
-    currentPath,
-    host,
+    edition,
+    lang = "en-US",
     title
 }: {
     block: BlockDefinition
-    currentEdition: EditionMetadata,
-    currentPath: string,
-    host: string,
+    edition: EditionMetadata,
+    lang?: string,
     getString: StringTranslator
     title?: string
 }) => {
-    const { id } = block
-    const link = getBlockLink({ block, currentPath, host })
+    const { year } = edition
+    const link = getBlockLink({
+        editionResultUrl: edition.resultsUrl,
+        blockId: block.id,
+        section: block.sectionId,
+    })
     // TODO: what is hashtag now?
-    const { year/*, hashtag*/ } = currentEdition
-    const trackingId = `${currentPath}${id}`.replace(/^\//, '')
+    const trackingId = `${lang}/${block.sectionId}${block.id}`.replace(/^\//, '')
 
     title = title || getBlockTitle({ block, getString })
 
-    const subtitle = getBlockDescription({ block, currentEdition, getString })
-
-    // TODO: in this app it should be already provided
-    // const imageUrl = getBlockImage({ block, pageContext })
+    const subtitle = getBlockDescription({ block, edition, getString })
 
     const values = {
         title,
         link,
         // hashtag,
         year,
-        siteTitle: getSiteTitle({ currentEdition })
+        siteTitle: getSiteTitle({ edition })
     }
 
     const twitterText = getString('share.block.twitter_text', {
@@ -204,7 +192,6 @@ export const getBlockMeta = ({
         twitterText,
         emailSubject,
         emailBody,
-        //imageUrl
     }
 }
 

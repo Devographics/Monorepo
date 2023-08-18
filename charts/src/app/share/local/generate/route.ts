@@ -25,7 +25,7 @@ localGenerator.post("/generate", async (req, res) => {
     const imgUniqueName = await generateImgPublicUrlLocal(chartPng)
     const { appUrl } = getAppConfig()
     // Craft the URL to be shared (the one that servers the OG headers, so different from the image public URL)
-    return `${appUrl}/og/${imgUniqueName}`
+    return `${appUrl}/share/${imgUniqueName}`
 })
 
 */

@@ -7,14 +7,14 @@ import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
 export async function generateMetadata(): Promise<Metadata> {
-    // TODO: similar to /og/static/[chartParams]
+    // TODO: similar to /share/static/[chartParams]
     // generate the right metadata for the chart
     // The difference is that here
-    // the image URL should be "/og/local/serve/<imgUniqueName>"
+    // the image URL should be "/share/fly/[chartParams]/serve"
     return {}
 }
-export async function LocalChartRedirectionPage() {
-    // TODO: similar to /og/static/[chartParams]
+export default async function FlyChartRedirectionPage() {
+    // TODO: similar to /share/static/[chartParams]
     // redirect user to the chart in context
     redirect('/')
 }

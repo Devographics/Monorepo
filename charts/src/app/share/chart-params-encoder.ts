@@ -35,9 +35,9 @@ export async function decodeChartParams(chartParamsStr: string): Promise<ChartPa
  * We do not validate the params at this point
  * 
  * @example
- * /og/static?lang=fr&survey=state_of_js&edition=js2022&section=environment&question=browser
+ * /share/static?lang=fr&survey=state_of_js&edition=js2022&section=environment&question=browser
  * becomes a route parameter:
- * /og/static/lang%3Dfr%26survey%3Dstate_of_js%26edition%3Djs2022%26section%3Denvironment%26question%3Dbrowser"/
+ * /share/static/lang%3Dfr%26survey%3Dstate_of_js%26edition%3Djs2022%26section%3Denvironment%26question%3Dbrowser"/
  */
 export function encodeChartParams(chartParams: ChartParams): string {
     const params = new URLSearchParams(chartParams as any)

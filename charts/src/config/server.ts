@@ -18,7 +18,7 @@ export function getAppConfig() {
         port,
         /**
          * Absolute URL of the application that serves the charts
-         * @example https://og.devographics.com/
+         * @example https://share.devographics.com/
          */
         appUrl: process.env.APP_URL || "http://localhost:" + port,
     }
