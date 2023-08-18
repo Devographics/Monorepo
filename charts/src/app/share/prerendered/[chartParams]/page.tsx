@@ -7,6 +7,7 @@ import { NextPageParams } from '@/app/typings'
 import { decodeChartParams, encodeChartParams } from '@/app/share/chart-params-encoder'
 import { getBlockMetaFromParams } from '@/app/share/metadata'
 import { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import { ChartParams } from '@/app/share/typings'
 
 export async function generateStaticParams(): Promise<Array<{ chartParams: string }>> {
@@ -138,5 +139,5 @@ export default async function StaticChartRedirectionPage({
     // equivalent to <meta http-equiv="refresh" content="5; URL=...">
     // TODO: we could go further and render the whole chart
     // here directly, with a button to manually access the results?
-    window.location.replace(blockMeta.link)
+    redirect(blockMeta.link)
 }
