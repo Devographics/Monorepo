@@ -7,6 +7,7 @@ import { CommentIcon } from 'core/icons'
 import { runQuery } from 'core/explorer/data'
 import newGithubIssueUrl from 'new-github-issue-url'
 import { usePageContext } from 'core/helpers/pageContext'
+import { useBlockTitle } from 'core/helpers/blockHelpers'
 
 type GetQueryNameProps = {
     editionId: string
@@ -124,7 +125,9 @@ const Comment = ({ message, responseId, index, name }) => {
 }
 
 const CommentsTrigger = props => {
-    const entityName = props?.originalData?.entity?.nameClean || props?.originalData?.entity?.name
+    const { block } = props
+    const title = useBlockTitle({ block })
+
     return (
         <ModalTrigger
             trigger={
@@ -136,7 +139,7 @@ const CommentsTrigger = props => {
                 </span>
             }
         >
-            <CommentsWrapper {...props} name={entityName} />
+            <CommentsWrapper {...props} name={title} />
         </ModalTrigger>
     )
 }

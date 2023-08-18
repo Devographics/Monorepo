@@ -6,9 +6,6 @@ import { PageContextValue } from 'core/types/context'
 import isEmpty from 'lodash/isEmpty'
 import { FacetItem } from 'core/filters/types'
 
-import { parse } from 'graphql'
-import { print } from 'graphql-print'
-
 export const argumentsPlaceholder = '<ARGUMENTS_PLACEHOLDER>'
 
 export const bucketFacetsPlaceholder = '<BUCKETFACETS_PLACEHOLDER>'
@@ -312,8 +309,7 @@ export const getBlockQuery = ({
         return ''
     } else {
         const stringQuery = getQuery({ query, queryOptions, queryArgs })
-        const ast = parse(stringQuery)
-        return print(ast, { preserveComments: true })
+        return stringQuery
     }
 }
 

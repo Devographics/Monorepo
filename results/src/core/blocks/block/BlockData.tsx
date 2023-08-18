@@ -9,6 +9,9 @@ import { getFiltersQuery } from 'core/filters/helpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getBlockQuery } from 'core/helpers/queries'
 
+import { parse } from 'graphql'
+import { print } from 'graphql-print'
+
 const BlockData = props => {
     const { block } = props
     const { parameters } = block
@@ -85,9 +88,17 @@ export const JSONExport = ({ block, data }) => {
 }
 
 export const GraphQLExport = ({ query }: { query: string }) => {
+    let stringQuery = query
+    try {
+        const ast = parse(query)
+        stringQuery = print(ast, { preserveComments: true })
+    } catch (error) {
+        console.warn(error)
+        console.warn(stringQuery)
+    }
     return (
         <div>
-            <AutoSelectText value={query} />
+            <AutoSelectText value={stringQuery} />
             <Message>
                 <T k={'export.graphql'} html={true} />
             </Message>
