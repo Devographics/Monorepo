@@ -139,5 +139,6 @@ export default async function StaticChartRedirectionPage({
     // equivalent to <meta http-equiv="refresh" content="5; URL=...">
     // TODO: we could go further and render the whole chart
     // here directly, with a button to manually access the results?
+    console.log('Redirecting to:', blockMeta.link)
     redirect(blockMeta.link)
 }
