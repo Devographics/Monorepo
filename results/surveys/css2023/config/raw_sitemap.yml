@@ -635,8 +635,6 @@
             - template: tools_experience_ranking
               tabId: blocks.tools_experience_ranking.rankings
 
-      - template: tools_experience_ranking
-
       - template: tools_section_streams
 
       - template: tools_experience_marimekko
