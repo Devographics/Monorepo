@@ -423,6 +423,9 @@ importers:
       gatsby-transformer-yaml:
         specifier: ^5.11.0
         version: 5.11.0(gatsby@5.11.0)
+      graphql-print:
+        specifier: ^1.0.1
+        version: 1.0.1(graphql@16.7.1)
       html-loader:
         specifier: ^4.2.0
         version: 4.2.0(webpack@5.88.2)
@@ -12504,7 +12507,6 @@ packages:
       typescript: 4.9.3
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@typescript-eslint/parser@5.45.0(eslint@8.28.0)(typescript@5.1.6):
     resolution: {integrity: sha512-brvs/WSM4fKUmF5Ot/gEve6qYiCMjm6w4HkHPfS6ZNmxTS0m0iNN4yOChImaCkqc1hRwFGqUyanMXuGal6oyyQ==}
@@ -12772,7 +12774,6 @@ packages:
       typescript: 4.9.3
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@typescript-eslint/typescript-estree@5.45.0(typescript@5.1.3):
     resolution: {integrity: sha512-maRhLGSzqUpFcZgXxg1qc/+H0bT36lHK4APhp0AEUVrpSwXiRAomm/JGjSG+kNUio5kAa3uekCYu/47cnGn5EQ==}
@@ -18575,7 +18576,7 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 5.45.0(eslint@8.28.0)(typescript@5.1.6)
+      '@typescript-eslint/parser': 5.45.0(eslint@8.28.0)(typescript@4.9.3)
       debug: 3.2.7(supports-color@8.1.1)
       eslint: 8.28.0
       eslint-import-resolver-node: 0.3.6
@@ -18703,7 +18704,7 @@ packages:
       '@typescript-eslint/parser':
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 5.45.0(eslint@8.28.0)(typescript@5.1.6)
+      '@typescript-eslint/parser': 5.45.0(eslint@8.28.0)(typescript@4.9.3)
       array-includes: 3.1.6
       array.prototype.flat: 1.3.1
       debug: 2.6.9
@@ -21252,6 +21253,14 @@ packages:
       graphql: 16.7.1
       nullthrows: 1.1.1
       vscode-languageserver-types: 3.17.2
+    dev: false
+
+  /graphql-print@1.0.1(graphql@16.7.1):
+    resolution: {integrity: sha512-ECtpDsVmW/ValKRee2mBHRcVRtVPFU7QPIf686KsgoT3q32DL5RIoeGCnvBIh787RfkfSdL1IPCF7l/vCxDyKQ==}
+    peerDependencies:
+      graphql: '>=15.0.0'
+    dependencies:
+      graphql: 16.7.1
     dev: false
 
   /graphql-subscriptions@1.2.1(graphql@16.7.1):

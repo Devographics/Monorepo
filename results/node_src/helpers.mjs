@@ -10,6 +10,9 @@ import { getQuery } from './queries.mjs'
 import { fileURLToPath } from 'url'
 import without from 'lodash/without.js'
 
+import { parse } from 'graphql'
+import { print } from 'graphql-print'
+
 const __filename = fileURLToPath(import.meta.url)
 
 const __dirname = path.dirname(__filename)
@@ -215,7 +218,15 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                             queryOptions: { ...queryOptions, isLog: true, addRootNode: false },
                             queryArgs
                         })
-                        logToFile(queryFileName, queryLog, {
+                        let prettyQueryLog = queryLog
+                        try {
+                            const ast = parse(queryLog)
+                            prettyQueryLog = print(ast, { preserveComments: true })
+                        } catch (error) {
+                            console.log(`error parsing query for ${block.id}`)
+                            console.log(queryLog)
+                        }
+                        logToFile(queryFileName, prettyQueryLog, {
                             mode: 'overwrite',
                             dirPath: queryDirPath,
                             editionId

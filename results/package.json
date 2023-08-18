@@ -73,6 +73,8 @@
         "gatsby-source-graphql": "^5.11.0",
         "gatsby-transformer-remark": "^6.11.0",
         "gatsby-transformer-yaml": "^5.11.0",
+        "graphql": "16.7.1",
+        "graphql-print": "^1.0.1",
         "html-loader": "^4.2.0",
         "indent-string": "^5.0.0",
         "js-yaml": "^4.1.0",
@@ -128,7 +130,6 @@
         "eslint-plugin-import": "^2.26.0",
         "eslint-plugin-react": "^7.31.11",
         "gatsby-plugin-bundle-stats": "^4.1.4",
-        "graphql": "16.7.1",
         "graphql-compose": "^9.0.10",
         "prettier": "^2.8.0",
         "react-is": "^18.2.0"

@@ -354,6 +354,7 @@ export const getQuery = ({ query: query_, queryOptions, queryArgs }) => {
     if (queryOptions.isLog) {
         // when logging we can leave out enableCache parameter
         delete queryArgs?.parameters?.enableCache
+        queryOptions.addArgumentsPlaceholder = false
     }
 
     const { editionId, questionId } = queryOptions
