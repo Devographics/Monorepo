@@ -1,7 +1,7 @@
 import { getLocalesQuery, getLocaleContextQuery } from './queries.mjs'
 import { logToFile } from './log_to_file.mjs'
 import { getRedisClient } from './redis.mjs'
-import { removeNull } from './helpers.mjs'
+import { getCachingMethods, removeNull } from './helpers.mjs'
 
 const getAllLocalesCacheKey = () => `${process.env.APP_NAME}__allLocales__metadata`
 const getLocaleContextCacheKey = (localeId, context) =>
@@ -44,11 +44,16 @@ export const getLocales = async ({ localeIds, graphql, contexts }) => {
     let locales
     const redisClient = getRedisClient()
     const allLocalesKey = getAllLocalesCacheKey()
-    const localesRaw = await redisClient.get(allLocalesKey)
+    const useRedisCache = getCachingMethods().redis
+    const localesRaw = useRedisCache && (await redisClient.get(allLocalesKey))
     if (localesRaw) {
         locales = localesRaw
     } else {
-        console.log(`Redis key ${allLocalesKey} was empty, fetching from API…`)
+        if (useRedisCache) {
+            console.log(`🌐 Redis key ${allLocalesKey} was empty, fetching from API…`)
+        } else {
+            console.log(`🌐 Redis cache disabled, fetching ${allLocalesKey} from API…`)
+        }
         locales = await getLocalesGraphQL({ graphql, contexts, key: allLocalesKey })
         await redisClient.set(allLocalesKey, locales)
     }
@@ -64,13 +69,17 @@ export const getLocales = async ({ localeIds, graphql, contexts }) => {
 
         for (const context of contexts) {
             const key = getLocaleContextCacheKey(locale.id, context)
-            const dataRaw = await redisClient.get(key)
+            const dataRaw = useRedisCache && (await redisClient.get(key))
             let strings
             if (dataRaw) {
                 const data = dataRaw
                 strings = data.strings
             } else {
-                console.log(`Redis key ${key} was empty, fetching from API…`)
+                if (useRedisCache) {
+                    console.log(`🌐 Redis key ${key} was empty, fetching from API…`)
+                } else {
+                    console.log(`🌐 Redis cache disabled, fetching ${key} from API…`)
+                }
                 const data = await getLocaleContextGraphQL({
                     localeId: locale.id,
                     context,

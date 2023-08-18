@@ -151,8 +151,8 @@ Try loading data from disk or GitHub, or else run queries for *each block* in a 
 */
 export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => {
     const startedAt = new Date()
-    const useFilesystemCache = getCachingMethods().includes('filesystem')
-    const useApiCache = getCachingMethods().includes('api')
+    const useFilesystemCache = getCachingMethods().filesystem
+    const useApiCache = getCachingMethods().api
     console.log(`// 🔍 Running GraphQL queries for page ${page.id}…`)
 
     const paths = getDataLocations(surveyId, editionId)
@@ -299,15 +299,18 @@ export function removeNull(obj) {
 }
 
 export const getCachingMethods = () => {
-    let cacheLevel = ['filesystem', 'api']
+    let cacheLevel = { filesystem: true, api: true, redis: true }
     if (process.env.DISABLE_CACHE === 'true') {
-        cacheLevel = []
+        cacheLevel = { filesystem: false, api: false, redis: false }
     } else {
         if (process.env.DISABLE_FILESYSTEM_CACHE === 'true') {
-            cacheLevel = without(cacheLevel, 'filesystem')
+            cacheLevel.filesystem = false
         }
         if (process.env.DISABLE_API_CACHE === 'true') {
-            cacheLevel = without(cacheLevel, 'api')
+            cacheLevel.api = false
+        }
+        if (process.env.DISABLE_REDIS_CACHE === 'true') {
+            cacheLevel.redis = false
         }
     }
     return cacheLevel

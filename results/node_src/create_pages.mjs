@@ -48,6 +48,13 @@ const config = {
     editionId: process.env.EDITIONID
 }
 
+function strikeThrough(text) {
+    return text
+        .split('')
+        .map(char => char + '\u0336')
+        .join('')
+}
+
 export const createPagesSingleLoop = async ({
     graphql,
     actions: { createPage, createRedirect }
@@ -70,10 +77,13 @@ export const createPagesSingleLoop = async ({
     }
 
     const cachingMethods = getCachingMethods()
+    const cachingMethodsString = Object.keys(cachingMethods)
+        .map(cm => (cachingMethods[cm] ? cm : strikeThrough(cm)))
+        .join(', ')
 
     console.log(
         `Building ${surveyId}/${editionId}… 
-• 📁 caching methods = ${cachingMethods.length > 0 ? cachingMethods.join(', ') : 'disabled'}
+• 📁 caching methods = ${cachingMethodsString}
 • ⏱️ fast build = ${USE_FAST_BUILD}
 • 📖 load method = ${getLoadMethod()}`
     )
@@ -81,7 +91,6 @@ export const createPagesSingleLoop = async ({
     // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster
     const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []
 
-    // Redis version: many small fast queries (without null fields)
     const locales = await getLocales({
         localeIds,
         graphql,

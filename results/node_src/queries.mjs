@@ -367,6 +367,9 @@ export const getQuery = ({ query: query_, queryOptions, queryArgs }) => {
         queryContents = getDefaultQuery({ queryOptions, queryArgs })
     } else {
         queryContents = query
+        if (queryOptions.isLog) {
+            queryContents = queryContents.replace(argumentsPlaceholder, '')
+        }
     }
     if (queryArgs) {
         const queryArgsString = getQueryArgsString(queryArgs)

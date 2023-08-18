@@ -1053,8 +1053,8 @@
       - id: conclusion
         template: conclusion
         variables:
-            author: lea_verou
-            entities: '"lea_verou"'
+            author: chen_hui_jing
+            entities: '"chen_hui_jing"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock

@@ -178,7 +178,7 @@ export const getSendOwlData = async ({ flat, surveyId, editionId, siteUrl }) => 
     if (!process.env.SENDOWL_API_KEY || !process.env.SENDOWL_SECRET) {
         return {}
     }
-    const useCache = getCachingMethods().includes('filesystem')
+    const useCache = getCachingMethods().filesystem
 
     console.log(`// 🦉 Getting SendOwl data… (useCache=${useCache})`)
 
