@@ -20,7 +20,7 @@ export function middleware(request: NextRequest) {
             .reduce((asObject, [key, val]) => ({ ...asObject, [key]: val }), {}) as ChartParams
         chartParams.lang = "en-US"
         const encodedChartRouteParam = encodeChartParams(chartParams)
-        const encodedUrl = new URL(`${request.nextUrl.pathname}/${encodedChartRouteParam}`, request.url)
+        const encodedUrl = new URL(`${request.nextUrl.pathname}/${encodeURIComponent(encodedChartRouteParam)}`, request.url)
         console.log("middleware encoded params", encodedChartRouteParam)
         console.log("middleware encodedUrl", encodedUrl.toString())
         return NextResponse.rewrite(encodedUrl)

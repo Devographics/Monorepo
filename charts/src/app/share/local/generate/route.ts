@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest) {
-    return NextResponse("TODO")
+    return new NextResponse("TODO")
 }
 /**
  * Using a POST method let's us handle complex filters

@@ -222,6 +222,9 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      mongodb:
+        specifier: ^5.7.0
+        version: 5.7.0(mongodb-client-encryption@2.9.0)(snappy@7.2.2)
       next:
         specifier: 13.4.16
         version: 13.4.16(@babel/core@7.22.10)(react-dom@18.2.0)(react@18.2.0)(sass@1.64.2)
@@ -234,6 +237,10 @@ importers:
       typescript:
         specifier: 5.1.6
         version: 5.1.6
+    devDependencies:
+      '@types/mongodb':
+        specifier: ^4.0.7
+        version: 4.0.7
 
   graphiql:
     dependencies:
@@ -886,9 +893,15 @@ importers:
         specifier: ^5.1.2
         version: 5.1.2
     devDependencies:
+      '@types/mongodb':
+        specifier: ^4.0.7
+        version: 4.0.7
       '@types/node':
         specifier: ^18.11.18
         version: 18.17.4
+      mongodb:
+        specifier: ^5.7.0
+        version: 5.7.0(mongodb-client-encryption@2.9.0)(snappy@7.2.2)
 
   surveyadmin:
     dependencies:
@@ -11142,6 +11155,19 @@ packages:
     dependencies:
       '@types/bson': 4.2.0
       '@types/node': 20.5.0
+    dev: true
+
+  /@types/mongodb@4.0.7:
+    resolution: {integrity: sha512-lPUYPpzA43baXqnd36cZ9xxorprybxXDzteVKCPAdp14ppHtFJHnXYvNpmBvtMUTb5fKXVv6sVbzo1LHkWhJlw==}
+    deprecated: mongodb provides its own types. @types/mongodb is no longer needed.
+    dependencies:
+      mongodb: 5.7.0(mongodb-client-encryption@2.9.0)(snappy@7.2.2)
+    transitivePeerDependencies:
+      - '@aws-sdk/credential-providers'
+      - '@mongodb-js/zstd'
+      - kerberos
+      - mongodb-client-encryption
+      - snappy
     dev: true
 
   /@types/ms@0.7.31:

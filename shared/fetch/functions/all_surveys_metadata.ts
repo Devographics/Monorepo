@@ -33,8 +33,9 @@ export const fetchSurveysMetadata = async (options?: FetcherFunctionOptions) => 
         fetchFunction: async () => {
             const result = await fetchGraphQLApi({ query, key })
             if (!result) throw new Error(`Couldn't fetch surveys`)
-            console.log("result", result._metadata.surveys.map(s => s.name))
-            return filterSurveys(result._metadata.surveys, options) as SurveyMetadata[]
+            const surveys = result._metadata.surveys as SurveyMetadata[]
+            //console.log("result", surveys.map(s => s.name))
+            return filterSurveys(surveys, options)
         },
         ...options
     })

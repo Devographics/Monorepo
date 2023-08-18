@@ -118,6 +118,7 @@ export default async function StaticChartRedirectionPage({
     params
 }: NextPageParams<{ chartParams: string }>) {
     const chartParams = await decodeChartParams(params.chartParams)
+    console.log('PARAMS', chartParams, params.chartParams)
     const blockMeta = await getBlockMetaFromParams(chartParams)
     if (process.env.NODE_ENV === 'development') {
         const imgUrl = devographicsUrl({

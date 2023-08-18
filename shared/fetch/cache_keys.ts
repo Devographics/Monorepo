@@ -2,7 +2,7 @@ type CacheKeyOptions = {
     appName?: string
 }
 
-const getAppName = options => options?.appName || process.env.APP_NAME
+const getAppName = (options?: { appName?: string }) => options?.appName || process.env.APP_NAME
 
 export const editionMetadataCacheKey = (
     options: CacheKeyOptions & {

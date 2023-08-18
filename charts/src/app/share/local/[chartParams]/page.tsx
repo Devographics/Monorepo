@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     // the image URL should be "/share/local/serve/<imgUniqueName>"
     return {}
 }
-export async function LocalChartRedirectionPage() {
+export default async function LocalChartRedirectionPage() {
     // TODO: similar to /share/static/[chartParams]
     // redirect user to the chart in context
     redirect('/')

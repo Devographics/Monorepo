@@ -1,28 +1,26 @@
-import React, { FC } from 'react'
-import { PageContextValue } from '@types/context'
+import React from 'react'
 import { BucketUnits, ResponsesParameters, ResultsSubFieldEnum } from '@devographics/types'
 
-export type BlockUnits =
+type BlockUnits =
     | 'count'
     | 'percentageSurvey'
     | 'percentageQuestion'
     | 'percentageFacet'
     | 'percentageBucket'
     | 'average'
-export type BlockRatioUnits =
+type BlockRatioUnits =
     | 'satisfaction_percentage'
     | 'interest_percentage'
     | 'awareness_percentage'
     | 'usage_percentage'
-export type BlockSetUnits = React.Dispatch<React.SetStateAction<string>>
-export type BlockMode = 'absolute' | 'relative'
+type BlockSetUnits = React.Dispatch<React.SetStateAction<string>>
+type BlockMode = 'absolute' | 'relative'
 
-export interface BlockComponentProps {
+interface BlockComponentProps {
     block: BlockDefinition
-    context: PageContextValue
 }
 
-export interface BlockQueryOptions {
+interface BlockQueryOptions {
     addBucketsEntities?: boolean
     addQuestionEntity?: boolean
     addQuestionComments?: boolean
@@ -83,7 +81,7 @@ export interface BlockDefinition {
 
 type FilterType = 'filters' | 'facets'
 
-export interface BlockLegend {
+interface BlockLegend {
     id: string
     label: string
     shortLabel?: string

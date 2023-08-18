@@ -37,6 +37,8 @@
         "node-cache": "^5.1.2"
     },
     "devDependencies": {
-        "@types/node": "^18.11.18"
+        "@types/mongodb": "^4.0.7",
+        "@types/node": "^18.11.18",
+        "mongodb": "^5.7.0"
     }
 }

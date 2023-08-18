@@ -30,9 +30,13 @@ export async function decodeChartParams(chartParamsStr: string): Promise<ChartPa
 }
 /**
  * Encode chart params provided as search parameters
- * into a string that can be used as a route params
+ * into a string
+ * 
+ * NOTE: we do not URI encode the parameter to avoid double encoding
+ * (because Next generateStaticParams will automatically do it under the hood)
  * 
  * We do not validate the params at this point
+ * 
  * 
  * @example
  * /share/static?lang=fr&survey=state_of_js&edition=js2022&section=environment&question=browser
@@ -41,5 +45,5 @@ export async function decodeChartParams(chartParamsStr: string): Promise<ChartPa
  */
 export function encodeChartParams(chartParams: ChartParams): string {
     const params = new URLSearchParams(chartParams as any)
-    return encodeURIComponent(params.toString())
+    return params.toString()
 }
