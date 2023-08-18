@@ -9,6 +9,7 @@ import { getBlockMetaFromParams } from '@/app/share/metadata'
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { ChartParams } from '@/app/share/typings'
+import { RedirectType } from 'next/dist/client/components/redirect'
 
 export async function generateStaticParams(): Promise<Array<{ chartParams: string }>> {
     const prerendered: Array<ChartParams> = [
@@ -139,5 +140,5 @@ export default async function StaticChartRedirectionPage({
     // equivalent to <meta http-equiv="refresh" content="5; URL=...">
     // TODO: we could go further and render the whole chart
     // here directly, with a button to manually access the results?
-    redirect(blockMeta.link)
+    redirect(blockMeta.link, RedirectType.push)
 }
