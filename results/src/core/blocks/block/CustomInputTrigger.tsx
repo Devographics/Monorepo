@@ -5,7 +5,7 @@ import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
 import get from 'lodash/get'
-import { AutoSelectText, TextArea, Message } from 'core/blocks/block/BlockData'
+import { AutoSelectText, TextArea, Message_ } from 'core/blocks/block/BlockData'
 import { EditIcon } from 'core/icons'
 import isEmpty from 'lodash/isEmpty'
 import { getBlockQuery } from 'core/helpers/queries'
@@ -57,9 +57,9 @@ const InputData = ({ block, closeModal }) => {
                     <DataTextArea value={contents} onChange={handleChange} size="s" />
                 </TextFieldContainer>
             </TextFieldWrapper>
-            <Message>
+            <Message_>
                 <T k="custom_data.details" md={true} />
-            </Message>
+            </Message_>
             <Button onClick={handleClick}>
                 <T k="custom_data.customize" />
             </Button>

@@ -58,7 +58,7 @@ const getExtraLabel = ({
     } else if (filters) {
         const [units, filterIndex] = id.split('__')
         const legendItem = filterLegends[Number(filterIndex) - 1]
-        extraLabel = legendItem.label
+        extraLabel = legendItem?.label
     }
 
     return extraLabel

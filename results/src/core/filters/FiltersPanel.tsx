@@ -8,7 +8,13 @@ import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from 'core/i18n/i18nContext'
 import isEmpty from 'lodash/isEmpty.js'
-import { GraphQLTrigger, JSONTrigger } from 'core/blocks/block/BlockData'
+import {
+    AutoSelectText,
+    ExportButton,
+    GraphQLTrigger,
+    JSONTrigger,
+    Message_
+} from 'core/blocks/block/BlockData'
 import * as Tabs from '@radix-ui/react-tabs'
 import { TabsList, TabsTrigger } from 'core/blocks/block/BlockTabsWrapper'
 import FacetSelection from './FacetSelection'
@@ -21,6 +27,7 @@ import { CheckIcon } from 'core/icons'
 import { CustomizationDefinition, SupportedMode } from './types'
 import { useAllFilters } from 'core/charts/hooks'
 import { useEntities } from 'core/helpers/entities'
+import ModalTrigger from 'core/components/ModalTrigger'
 
 type FiltersPanelPropsType = {
     block: BlockDefinition
@@ -153,6 +160,7 @@ const FiltersPanel = ({
                 <FooterLeft_>
                     <GraphQLTrigger block={block} query={query} buttonProps={{ variant: 'link' }} />
                     <CopyLink link={filtersLink} />
+                    <CopyFilters filtersState={filtersState} />
                 </FooterLeft_>
                 <Button onClick={handleSubmit}>
                     <T k="filters.submit" />
@@ -192,6 +200,26 @@ const CopyLink = ({ link }: { link: string }) => {
             <T k="filters.copy_link" />
             {isCopied && <CheckIcon />}
         </CopyLink_>
+    )
+}
+
+const CopyFilters = ({ filtersState }: { filtersState: CustomizationDefinition }) => {
+    return (
+        <ModalTrigger
+            trigger={
+                <ExportButton className="ExportButton" size="small" variant="link">
+                    <T k="filters.get_code" />
+                    {/* <ExportIcon /> */}
+                </ExportButton>
+            }
+        >
+            <div>
+                <AutoSelectText value={JSON.stringify(filtersState, null, 2)} />
+                <Message_>
+                    <T k={'filters.get_code'} html={true} />
+                </Message_>
+            </div>
+        </ModalTrigger>
     )
 }
 

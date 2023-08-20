@@ -99,9 +99,9 @@ export const GraphQLExport = ({ query }: { query: string }) => {
     return (
         <div>
             <AutoSelectText value={stringQuery} />
-            <Message>
+            <Message_>
                 <T k={'export.graphql'} html={true} />
-            </Message>
+            </Message_>
         </div>
     )
 }
@@ -126,7 +126,7 @@ export const AutoSelectText = ({ value }) => {
     return <TextArea value={value} readOnly ref={text} onClick={handleClick} />
 }
 
-export const Message = styled.div`
+export const Message_ = styled.div`
     margin-top: ${spacing(0.5)};
     font-size: ${fontSize('small')};
 `
