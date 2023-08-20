@@ -67,16 +67,27 @@ export const GraphQLTrigger = props => {
     )
 }
 
+export function removeNull(obj: any): any {
+    const clean = Object.fromEntries(
+        Object.entries(obj)
+            .map(([k, v]) => [k, v === Object(v) ? removeNull(v) : v])
+            .filter(([_, v]) => v != null && (v !== Object(v) || Object.keys(v).length))
+    )
+    return Array.isArray(obj) ? Object.values(clean) : clean
+}
+
 export const JSONExport = ({ block, data }) => {
     const isArray = Array.isArray(data)
 
     // try to remove entities data
-    const cleanedData = isArray
-        ? data.map(row => {
-              const { entity, ...rest } = row
-              return rest
-          })
-        : data
+    const cleanedData = removeNull(
+        isArray
+            ? data.map(row => {
+                  const { entity, ...rest } = row
+                  return rest
+              })
+            : data
+    )
 
     const jsonExport = JSON.stringify(cleanedData, '', 2)
 

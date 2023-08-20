@@ -98,11 +98,15 @@ export const getBlockSeriesData = ({
         const dataPath = getBlockDataPath({ block, pageContext, suffix })
         return [{ dataPath, name: block.id + suffix, data: get(pageContext.pageData, dataPath) }]
     } else {
-        const seriesCount = filtersState.filters.length
-        return [...Array(seriesCount)].map((x, i) => {
+        return filtersState.filters.map((filters, i) => {
             const suffix = `_${i + 1}`
             const dataPath = getBlockDataPath({ block, pageContext, suffix })
-            return { dataPath, name: block.id + suffix, data: get(pageContext.pageData, dataPath) }
+            return {
+                dataPath,
+                filters,
+                name: block.id + suffix,
+                data: get(pageContext.pageData, dataPath)
+            }
         })
     }
 }
