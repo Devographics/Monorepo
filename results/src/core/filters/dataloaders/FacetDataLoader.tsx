@@ -23,14 +23,15 @@ const FacetDataLoader = ({
     children,
     chartFilters,
     units,
-    setUnits
+    setUnits,
+    providedSeries
 }: FacetDataLoaderProps) => {
     const pageContext = usePageContext()
     const year = pageContext.currentEdition.year
     const showDefaultSeries = chartFilters.options.showDefaultSeries
 
     const [isLoading, setIsLoading] = useState(false)
-    const [series, setSeries] = useState([defaultSeries])
+    const [series, setSeries] = useState(providedSeries || [defaultSeries])
 
     useEffect(() => {
         const getData = async () => {
@@ -48,7 +49,7 @@ const FacetDataLoader = ({
             setUnits(BucketUnits.PERCENTAGE_BUCKET)
         }
 
-        if (!isEmpty(chartFilters.facet)) {
+        if (!chartFilters.options.preventQuery && !isEmpty(chartFilters.facet)) {
             getData()
         }
     }, [chartFilters])

@@ -135,12 +135,39 @@
       - id: yearly_salary
         template: demographics
         parameters: { showNoAnswer: true }
-        # variants:
-        #     - id: yearly_salary
-        #       facet: user_info__gender
-        #       tabId: tabs.by_gender
-        #       template: demographics # facet
-        #       parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
+        variants:
+            - id: yearly_salary_by_gender
+              fieldId: yearly_salary
+              # facet: user_info__gender
+              tabId: tabs.by_gender
+              template: demographics # facet
+              # parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
+              filtersState:
+                  options:
+                      showDefaultSeries: false
+                      enableYearSelect: false
+                      mode: combined
+                      queryOnLoad: false
+                      supportedModes:
+                          - combined
+                          - facet
+                  filters:
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: male
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: female
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: non_binary
+
         #     - id: yearly_salary
         #       facet: user_info__country
         #       tabId: tabs.by_country

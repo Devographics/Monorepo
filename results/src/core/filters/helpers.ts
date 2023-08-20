@@ -34,7 +34,8 @@ import {
     getQueryArgsString,
     argumentsPlaceholder,
     bucketFacetsPlaceholder,
-    getFacetFragment
+    getFacetFragment,
+    ProvidedQueryOptions
 } from 'core/helpers/queries'
 import { PageContextValue } from 'core/types/context'
 import {
@@ -205,12 +206,14 @@ export const getFiltersQuery = ({
     block,
     chartFilters,
     currentYear,
-    pageContext
+    pageContext,
+    queryOptions
 }: {
     block: BlockDefinition
     chartFilters: CustomizationDefinition
     currentYear: number
     pageContext: PageContextValue
+    queryOptions?: ProvidedQueryOptions
 }) => {
     const { options = {}, filters, facet } = chartFilters
     const { enableYearSelect, mode } = options
@@ -218,6 +221,7 @@ export const getFiltersQuery = ({
         block,
         pageContext,
         queryOptions: {
+            ...queryOptions,
             addArgumentsPlaceholder: true,
             addBucketFacetsPlaceholder: true
         }
@@ -733,10 +737,12 @@ Hook to initialize chart filters
 */
 export const useChartFilters = ({
     block,
-    options
+    options,
+    providedFiltersState
 }: {
     block: BlockDefinition
     options: CustomizationOptions
+    providedFiltersState?: CustomizationDefinition
 }) => {
     let loadFiltersFromUrl = false,
         urlFilters = {} as CustomizationDefinition
@@ -747,12 +753,14 @@ export const useChartFilters = ({
         loadFiltersFromUrl = urlFilters && block.id === queryParams.blockId
     }
 
-    // contains the filters that define the series
-    const [chartFilters, setChartFilters] = useState(
-        loadFiltersFromUrl
+    const initFiltersState =
+        providedFiltersState ||
+        (loadFiltersFromUrl
             ? { ...urlFilters, options: { queryOnLoad: true } }
-            : getInitFilters(options)
-    )
+            : getInitFilters(options))
+
+    // contains the filters that define the series
+    const [chartFilters, setChartFilters] = useState(initFiltersState)
 
     const filterLegends = useFilterLegends({
         chartFilters,
@@ -801,12 +809,12 @@ export type FetchSeriesDataOptions = {
     year: number
 }
 
-export const fetchSeriesData = async ({
+export async function fetchSeriesData({
     block,
     pageContext,
     chartFilters,
     year
-}: FetchSeriesDataOptions): Promise<DataSeries[]> => {
+}: FetchSeriesDataOptions): Promise<Array<DataSeries<AllQuestionData>>> {
     const { query, seriesNames } = getFiltersQuery({
         block,
         pageContext,

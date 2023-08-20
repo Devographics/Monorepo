@@ -301,7 +301,7 @@ export const getBlockQuery = ({
     queryArgs = {}
 }: {
     block: BlockDefinition
-    pageContext: PageContextValue
+    pageContext?: PageContextValue
     queryOptions?: ProvidedQueryOptions
     // isLog?: boolean
     // enableCache?: boolean
@@ -313,9 +313,9 @@ export const getBlockQuery = ({
     const { query, queryOptions: blockQueryOptions } = block
 
     const defaultQueryOptions = {
-        surveyId: pageContext.currentSurvey.id,
-        editionId: pageContext.currentEdition.id,
-        sectionId: pageContext.id,
+        surveyId: pageContext?.currentSurvey?.id,
+        editionId: pageContext?.currentEdition?.id,
+        sectionId: pageContext?.id,
         questionId: block.id
     }
 

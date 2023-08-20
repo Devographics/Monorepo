@@ -9,6 +9,8 @@ import {
 import { PageContextValue } from 'core/types'
 import { BlockDefinition, BlockUnits } from '../types/block'
 import get from 'lodash/get.js'
+import { MODE_FACET } from 'core/filters/constants'
+import { CustomizationDefinition, DataSeries } from 'core/filters/types'
 
 interface HandleNoAnswerBucketOptions {
     buckets: Bucket[]
@@ -40,26 +42,30 @@ export const getDefaultDataPath = ({
     edition,
     section,
     question,
+    suffix = '',
     addRootNode = true
 }: {
     survey: SurveyMetadata
     edition: EditionMetadata
     section: SectionMetadata
     question: QuestionMetadata
+    suffix?: string
     addRootNode: boolean
 }) =>
     `${addRootNode ? 'dataAPI.' : ''}surveys.${survey.id}.${edition.id}.${section.id}.${
         question.id
-    }`
+    }${suffix}`
 
 export const getBlockDataPath = ({
     block,
     pageContext,
-    addRootNode = true
+    addRootNode = true,
+    suffix = ''
 }: {
     block: BlockDefinition
     pageContext: PageContextValue
     addRootNode?: boolean
+    suffix?: string
 }) => {
     const { currentSurvey: survey, currentEdition: edition } = pageContext
     const section = { id: pageContext.id } as SectionMetadata
@@ -71,11 +77,37 @@ export const getBlockDataPath = ({
             edition,
             section,
             question,
-            addRootNode
+            addRootNode,
+            suffix
         })
     return dataPath
 }
 
+export const getBlockSeriesData = ({
+    block,
+    pageContext,
+    filtersState
+}: {
+    block: BlockDefinition
+    pageContext: PageContextValue
+    filtersState: CustomizationDefinition
+}): Array<DataSeries<any>> => {
+    if (filtersState.options.mode === MODE_FACET) {
+        const facetId = filtersState?.facet?.id
+        const suffix = `_by_${facetId}`
+        const dataPath = getBlockDataPath({ block, pageContext, suffix })
+        return [{ dataPath, name: block.id + suffix, data: get(pageContext.pageData, dataPath) }]
+    } else {
+        const seriesCount = filtersState.filters.length
+        return [...Array(seriesCount)].map((x, i) => {
+            const suffix = `_${i + 1}`
+            const dataPath = getBlockDataPath({ block, pageContext, suffix })
+            return { dataPath, name: block.id + suffix, data: get(pageContext.pageData, dataPath) }
+        })
+    }
+}
+
+// simple legacy version when there is no filters and only one series
 export const getBlockData = ({
     block,
     pageContext
@@ -84,5 +116,6 @@ export const getBlockData = ({
     pageContext: PageContextValue
 }) => {
     const dataPath = getBlockDataPath({ block, pageContext })
-    return get(pageContext.pageData, dataPath)
+    const data = get(pageContext.pageData, dataPath)
+    return { dataPath, data }
 }

@@ -14,17 +14,21 @@ import { MAIN_UNITS } from '@devographics/constants'
 import { BoxPlotChart } from 'core/charts/boxPlot/BoxPlotChart'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
+    // legacy
     data: StandardQuestionData
+    // new: charts should always accept an array of series just in case
+    series: StandardQuestionData[]
 }
 
-const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
+const VerticalBarBlock = ({ block, data, series, pageContext }: VerticalBarBlockProps) => {
     const {
         defaultUnits = BucketUnits.PERCENTAGE_SURVEY,
         translateData,
-        i18nNamespace = block.id
+        i18nNamespace = block.id,
+        filtersState
     } = block
 
-    const { width } = context
+    const { width } = pageContext
 
     const [units, setUnits] = useState(defaultUnits)
 
@@ -33,12 +37,12 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
     const chartLegends = useLegends({ block, addNoAnswer })
 
     const completion = data?.responses?.currentEdition?.completion
-
-    const { total } = completion
+    const total = completion?.total
 
     const { chartFilters, setChartFilters, filterLegends } = useChartFilters({
         block,
-        options: { supportedModes: [MODE_COMBINED, MODE_FACET] }
+        options: { supportedModes: [MODE_COMBINED, MODE_FACET] },
+        providedFiltersState: filtersState
     })
 
     const allChartsOptions = useAllChartsOptions()
@@ -71,36 +75,45 @@ const VerticalBarBlock = ({ block, data, context }: VerticalBarBlockProps) => {
         units,
         viewportWidth: width,
         colorVariant: 'primary',
-        series: [defaultSeries]
+        series: series || [defaultSeries]
     }
+
+    const blockVariantProps = {
+        units,
+        setUnits,
+        completion,
+        data: getChartData(data),
+        block,
+        unitsOptions,
+        chartFilters,
+        setChartFilters,
+        legendProps: { layout: 'vertical' }
+    }
+
+    if (data) {
+        blockVariantProps.tables = [
+            getTableData({
+                // legends: bucketKeys,
+                data: getChartData(data),
+                valueKeys: MAIN_UNITS,
+                translateData,
+                i18nNamespace: i18nNamespace
+            })
+        ]
+    }
+    if (filterLegends.length > 0) {
+        blockVariantProps.legends = filterLegends
+    }
+
     return (
-        <BlockVariant
-            tables={[
-                getTableData({
-                    // legends: bucketKeys,
-                    data: getChartData(data),
-                    valueKeys: MAIN_UNITS,
-                    translateData,
-                    i18nNamespace: i18nNamespace
-                })
-            ]}
-            units={units}
-            setUnits={setUnits}
-            completion={completion}
-            data={getChartData(data)}
-            block={block}
-            unitsOptions={unitsOptions}
-            chartFilters={chartFilters}
-            setChartFilters={setChartFilters}
-            legendProps={{ layout: 'vertical' }}
-            {...(filterLegends.length > 0 ? { legends: filterLegends } : {})}
-        >
+        <BlockVariant {...blockVariantProps}>
             <DynamicDataLoader
                 block={block}
                 chartFilters={chartFilters}
                 units={units}
                 setUnits={setUnits}
                 defaultSeries={defaultSeries}
+                providedSeries={series}
             >
                 <ChartContainer fit={true}>
                     {units === BucketUnits.PERCENTILES ? (

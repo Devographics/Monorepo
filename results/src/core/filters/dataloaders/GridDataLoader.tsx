@@ -21,7 +21,8 @@ const GridDataLoader = ({
     defaultSeries,
     children,
     chartFilters,
-    layout = 'column'
+    layout = 'column',
+    providedSeries
 }: GridDataLoaderProps) => {
     const pageContext = usePageContext()
     const year = pageContext.currentEdition.year
@@ -33,7 +34,7 @@ const GridDataLoader = ({
     })
 
     const [isLoading, setIsLoading] = useState(false)
-    const [series, setSeries] = useState([defaultSeries])
+    const [series, setSeries] = useState(providedSeries || [defaultSeries])
 
     useEffect(() => {
         const getData = async () => {
@@ -52,7 +53,7 @@ const GridDataLoader = ({
             setIsLoading(false)
         }
 
-        if (chartFilters?.filters?.length > 0) {
+        if (!chartFilters.options.preventQuery && chartFilters?.filters?.length > 0) {
             getData()
         }
     }, [chartFilters])

@@ -15,6 +15,7 @@ export interface DynamicDataLoaderProps {
     children: ReactNode
     chartFilters: CustomizationDefinition
     layout?: 'grid' | 'column'
+    providedSeries?: DataSeries<AllQuestionData> | DataSeries<AllQuestionData>[]
 }
 
 const DynamicDataLoader = (props: DynamicDataLoaderProps) => {

@@ -16,6 +16,7 @@ interface CombinedDataLoaderProps extends DynamicDataLoaderProps {
 
 const CombinedDataLoader = ({
     block,
+    providedSeries,
     defaultSeries,
     setUnits,
     chartFilters,
@@ -25,7 +26,7 @@ const CombinedDataLoader = ({
     const year = pageContext.currentEdition.year
 
     const [isLoading, setIsLoading] = useState(false)
-    const [series, setSeries] = useState([defaultSeries])
+    const [series, setSeries] = useState(providedSeries || [defaultSeries])
 
     useEffect(() => {
         const getData = async () => {
@@ -48,7 +49,7 @@ const CombinedDataLoader = ({
             setIsLoading(false)
         }
 
-        if (chartFilters?.filters?.length > 0) {
+        if (!chartFilters.options.preventQuery && chartFilters?.filters?.length > 0) {
             getData()
         }
     }, [chartFilters])
