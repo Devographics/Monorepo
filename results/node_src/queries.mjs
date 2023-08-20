@@ -3,7 +3,20 @@ import { indentString } from './indent_string.mjs'
 import { getQuestionId } from './helpers.mjs'
 import isEmpty from 'lodash/isEmpty.js'
 
-const argumentsPlaceholder = '<ARGUMENTS_PLACEHOLDER>'
+const MODE_COMBINED = 'combined'
+const MODE_GRID = 'grid'
+const MODE_FACET = 'facet'
+
+// export const START_MARKER = '# fragmentStart'
+// export const END_MARKER = '# fragmentEnd'
+
+export const OPERATORS = ['eq', 'in', 'nin']
+
+const BucketUnits = {
+    AVERAGE: 'averageByFacet'
+}
+
+export const argumentsPlaceholder = '<ARGUMENTS_PLACEHOLDER>'
 
 export const bucketFacetsPlaceholder = '<BUCKETFACETS_PLACEHOLDER>'
 
@@ -66,6 +79,16 @@ query {
 }
 `
 }
+
+export const getPercentilesFragment = () => `
+    percentilesByFacet {
+        p0
+        p25
+        p50
+        p75
+        p100
+    }
+`
 
 const getEntityFragment = () => `entity {
     name
@@ -303,6 +326,8 @@ surveys {
                 percentageQuestion
                 percentageSurvey
                 ${addBucketsEntities ? getEntityFragment() : ''}
+                ${queryArgs.facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
+                ${queryArgs.facet || addBucketFacetsPlaceholder ? getPercentilesFragment() : ''}
                 ${queryArgs.facet ? getFacetFragment(addBucketsEntities) : ''}
                 ${addBucketFacetsPlaceholder ? bucketFacetsPlaceholder : ''}
               }
@@ -369,7 +394,6 @@ export const getQuery = ({ query: query_, queryOptions, queryArgs }) => {
     if (queryOptions.isLog) {
         // when logging we can leave out enableCache parameter
         delete queryArgs?.parameters?.enableCache
-        queryOptions.addArgumentsPlaceholder = false
     }
 
     const { editionId, questionId } = queryOptions
@@ -392,10 +416,180 @@ export const getQuery = ({ query: query_, queryOptions, queryArgs }) => {
             queryContents = queryContents.replace(argumentsPlaceholder, queryArgsString)
         }
     }
-    const wrappedQuery = wrapQuery({
+    let wrappedQuery = wrapQuery({
         queryName,
         queryContents,
         addRootNode: queryOptions.addRootNode
     })
     return wrappedQuery
+}
+
+/*
+
+Note: the following is a duplicated non-Typescript version of the code in 
+core/filters/helpers
+
+*/
+
+/*
+
+For a given block and pageContext, generate query and query options and return result
+
+*/
+export const getBlockQuery = ({
+    block,
+    pageContext,
+    queryOptions: providedQueryOptions = {},
+    queryArgs = {}
+}) => {
+    let stringQuery
+    const { query, queryOptions: blockQueryOptions } = block
+
+    const defaultQueryOptions = {
+        surveyId: pageContext?.currentSurvey?.id,
+        editionId: pageContext?.currentEdition?.id,
+        sectionId: pageContext?.id,
+        questionId: block.id
+    }
+
+    const queryOptions = { ...defaultQueryOptions, ...providedQueryOptions, ...blockQueryOptions }
+
+    if (!query) {
+        stringQuery = ''
+    } else {
+        stringQuery = getQuery({ query, queryOptions, queryArgs })
+    }
+    return stringQuery
+}
+
+function getNthPosition(s, subString, count, fromEnd = false) {
+    const regex = new RegExp(subString, 'g')
+    const totalCount = (s.match(regex) || []).length
+    const nthIndex = fromEnd ? totalCount - count : count
+    return s.split(subString, nthIndex).join(subString).length
+}
+
+const conditionsToFilters = conditions => {
+    const filters = {}
+    conditions.forEach(condition => {
+        const { sectionId, fieldId, operator, value } = condition
+        filters[`${sectionId}__${fieldId}`] = { [operator]: value }
+    })
+    return filters
+}
+
+/*
+
+Generate query used for filtering
+
+TODO: currently lots of search-and-replace for strings going on which 
+could be avoided by making template query definitions JS/TS objects that 
+define how to accept filters and series themselves.
+
+*/
+export const getFiltersQuery = ({ block, chartFilters, currentYear, queryOptions }) => {
+    const { options = {}, filters, facet } = chartFilters
+    const { enableYearSelect, mode } = options
+    const query = getBlockQuery({
+        block,
+        queryOptions: {
+            ...queryOptions,
+            addArgumentsPlaceholder: true,
+            addBucketFacetsPlaceholder: true
+        }
+    })
+    // fragment starts after fourth "{"
+    const fragmentStartIndex = getNthPosition(query, '{', 5) + 1
+    // fragment ends before fourth "}" when counting from the end
+    const fragmentEndIndex = getNthPosition(query, '}', 5, true) + 1
+    const queryHeader = query.slice(0, fragmentStartIndex)
+    const queryFragment = query.slice(fragmentStartIndex, fragmentEndIndex)
+    let queryBody = queryFragment
+
+    const seriesNames = []
+
+    const queryFooter = query.slice(fragmentEndIndex)
+
+    if (filters && (mode === MODE_GRID || mode === MODE_COMBINED)) {
+        queryBody = filters
+            .map((singleSeries, seriesIndex) => {
+                let seriesFragment = queryFragment
+
+                // {gender: {eq: male}, company_size: {eq: range_1}}
+                // const filtersObject: FiltersObject = {}
+                // singleSeries.conditions.forEach(condition => {
+                //     const { fieldId, operator, value } = condition
+                //     // transform e.g. es-ES into es_ES
+                //     const cleanValue: FilterValue = Array.isArray(value)
+                //         ? value.map(cleanUpValue)
+                //         : cleanUpValue(value)
+                //     filtersObject[fieldId] = { [operator]: cleanValue }
+                // })
+
+                const seriesName = `${block.id}_${seriesIndex + 1}`
+                seriesNames.push(seriesName)
+
+                const alreadyHasAlias = seriesFragment.includes(':')
+                if (alreadyHasAlias) {
+                    seriesFragment = seriesFragment.replace(block.id, `${seriesName}`)
+                } else {
+                    seriesFragment = seriesFragment.replace(block.id, `${seriesName}: ${block.id}`)
+                }
+
+                const queryArgs = getQueryArgsString({
+                    filters: conditionsToFilters(singleSeries.conditions),
+                    parameters: block.parameters
+                })
+
+                seriesFragment = seriesFragment.replace(argumentsPlaceholder, queryArgs || '')
+
+                if (enableYearSelect && singleSeries.year) {
+                    seriesFragment = seriesFragment.replace(
+                        `year: ${currentYear}`,
+                        `year: ${singleSeries.year}`
+                    )
+                }
+                return seriesFragment
+            })
+            .join('')
+    } else if (facet && mode === MODE_FACET) {
+        const queryArgs = getQueryArgsString({
+            facet,
+            parameters: block.parameters
+        })
+
+        const seriesName = `${block.id}_by_${facet.id}`
+        seriesNames.push(seriesName)
+
+        const alreadyHasAlias = queryBody.includes(':')
+        if (alreadyHasAlias) {
+            queryBody = queryBody.replace(block.id, `${seriesName}`)
+        } else {
+            queryBody = queryBody.replace(block.id, `${seriesName}: ${block.id}`)
+        }
+        queryBody = queryBody.replace(argumentsPlaceholder, queryArgs || '')
+
+        queryBody = queryBody.replace(bucketFacetsPlaceholder, getFacetFragment() || '')
+
+        // if (block?.variables?.fixedIds) {
+        //     /*
+
+        //     Because facets are obtained in a "reversed" structure from the API, in some cases
+        //     (e.g. countries) we need to fix the ids to ensure each facet contains the same items.
+
+        //     TODO: return proper structure from API and delete this step
+
+        //     */
+        //     const fixedIdsFilter = `{ ids: { in: [${block?.variables?.fixedIds
+        //         .map(id => `"${id}"`)
+        //         .join()}] } }`
+        //     queryBody = queryBody.replace('filters: {}', `filters: ${fixedIdsFilter}`)
+        // }
+    }
+    queryBody = queryBody.replace(argumentsPlaceholder, '')
+    queryBody = queryBody?.replaceAll(bucketFacetsPlaceholder, '')
+
+    const newQuery = queryHeader + queryBody + queryFooter
+
+    return { query: newQuery, seriesNames }
 }

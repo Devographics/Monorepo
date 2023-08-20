@@ -6,7 +6,7 @@ import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { TwitterApi } from 'twitter-api-v2'
 import { logToFile } from './log_to_file.mjs'
-import { getQuery } from './queries.mjs'
+import { argumentsPlaceholder, getFiltersQuery, getQuery } from './queries.mjs'
 import { fileURLToPath } from 'url'
 import without from 'lodash/without.js'
 
@@ -149,7 +149,7 @@ export const getDataLocations = (surveyId, editionId) => {
 Try loading data from disk or GitHub, or else run queries for *each block* in a page
 
 */
-export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => {
+export const runPageQueries = async ({ page, graphql, surveyId, editionId, currentEdition }) => {
     const startedAt = new Date()
     const useFilesystemCache = getCachingMethods().filesystem
     const useApiCache = getCachingMethods().api
@@ -206,19 +206,45 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                         yAxis: block?.variables?.yAxis
                     }
 
-                    const query = getQuery({
-                        query: block.query,
-                        queryOptions,
-                        queryArgs
-                    })
+                    let query
 
-                    if (query.includes('dataAPI')) {
-                        const queryLog = getQuery({
+                    if (block.filtersState) {
+                        const filtersQueryResult = getFiltersQuery({
+                            block,
+                            queryOptions,
+                            chartFilters: block.filtersState,
+                            currentYear: currentEdition.year
+                        })
+                        query = filtersQueryResult.query
+                    } else {
+                        query = getQuery({
                             query: block.query,
-                            queryOptions: { ...queryOptions, isLog: true, addRootNode: false },
+                            queryOptions,
                             queryArgs
                         })
-                        let prettyQueryLog = queryLog
+                    }
+
+                    if (query.includes('dataAPI')) {
+                        // note: this duplicates the if (block.filtersState) {...} logic above
+                        // TODO: group getFiltersQuery and getQuery in a single function
+                        let queryLog
+                        if (block.filtersState) {
+                            const filtersQueryResult = getFiltersQuery({
+                                block,
+                                queryOptions: { ...queryOptions, isLog: true, addRootNode: false },
+                                chartFilters: block.filtersState,
+                                currentYear: currentEdition.year
+                            })
+                            queryLog = filtersQueryResult.query
+                        } else {
+                            queryLog = getQuery({
+                                query: block.query,
+                                queryOptions: { ...queryOptions, isLog: true, addRootNode: false },
+                                queryArgs
+                            })
+                        }
+
+                        let prettyQueryLog = queryLog.replace(argumentsPlaceholder, '')
                         try {
                             const ast = parse(queryLog)
                             prettyQueryLog = print(ast, { preserveComments: true })

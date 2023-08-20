@@ -171,7 +171,7 @@ export const createPagesSingleLoop = async ({
 
         try {
             // pageData = await runPageQuery({ page, graphql })
-            pageData = await runPageQueries({ page, graphql, surveyId, editionId })
+            pageData = await runPageQueries({ page, graphql, surveyId, editionId, currentEdition })
         } catch (error) {
             console.log(`// GraphQL error for page ${page.id}`)
             console.log(page)
