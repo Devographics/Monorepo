@@ -5,7 +5,8 @@ import { ChartParams } from "./typings"
 export async function getBlockMetaFromParams(chartParams: ChartParams) {
     const { data: edition, error } = await fetchEditionMetadata({
         surveyId: chartParams.survey,
-        editionId: chartParams.edition
+        editionId: chartParams.edition,
+        calledFrom: "charts",
     })
     if (error)
         throw new Error(

@@ -126,6 +126,7 @@ const getBlockLink = ({
         : `${editionResultUrl}/${lang}/#${blockId}`
 
     link = link.replaceAll('//', '/')
+    console.log("Block link:", link, "(editionResultUrl:", editionResultUrl, ")")
     return link
 }
 

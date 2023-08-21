@@ -1,7 +1,7 @@
 import { AppName } from '@devographics/types'
 
 export interface CommonOptions {
-    calledFrom?: string
+    calledFrom?: "surveyform" | "charts" | string
     getServerConfig?: () => { isProd?: boolean, isTest?: boolean, isDev?: boolean }
     redisUrl?: string
     redisToken?: string
