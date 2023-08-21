@@ -31,17 +31,22 @@
         blockType: SurveyIntroBlock
         disableExport: true
         wrapBlock: false
+
       - id: survey_sponsors
         template: sponsors
+
       - id: survey_partners
         template: sponsors
         blockType: PartnersBlock
+
       - id: survey_credits
         template: credits
+
       - id: survey_newsletter
         blockType: NewsletterBlock
         disableExport: true
         wrapBlock: false
+
       - id: survey_translators
         blockType: TranslatorsBlock
         disableExport: true
