@@ -1,6 +1,5 @@
 import camelCase from 'lodash/camelCase.js'
 import { indentString } from './indent_string.mjs'
-import { getQuestionId } from './helpers.mjs'
 import isEmpty from 'lodash/isEmpty.js'
 
 const MODE_COMBINED = 'combined'
@@ -560,7 +559,16 @@ export const getFiltersQuery = ({ block, chartFilters, currentYear, queryOptions
             parameters: block.parameters
         })
 
-        const seriesName = `${block.fieldId || block.id}_by_${facet.id}`
+        // DIFFERENCE WITH CLIENT (TS) VERSION
+        // const seriesName = `${block.fieldId || block.id}_by_${facet.id}`
+        /* 
+        
+        Note: in the client version, we customize a basic chart so we
+        need to build a new ID. Here, we can just use the ID defined in raw_sitemap
+        
+        */
+
+        const seriesName = block.id
         seriesNames.push(seriesName)
 
         const alreadyHasAlias = queryBody.includes(':')

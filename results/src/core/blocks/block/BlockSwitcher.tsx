@@ -54,7 +54,7 @@ const BlockSwitcherWithSeriesData = (
 
     const series = getBlockSeriesData({ block, pageContext, filtersState })
 
-    if (block.query && (!series || isEmpty(series) || series.length === 0)) {
+    if (block.query && (!series || isEmpty(series) || series.length === 0 || !series[0].data)) {
         return (
             <BlockError
                 block={block}
