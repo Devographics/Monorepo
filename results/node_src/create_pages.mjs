@@ -55,8 +55,14 @@ function strikeThrough(text) {
         .join('')
 }
 
+/**
+ * @see createPages https://www.gatsbyjs.com/docs/how-to/querying-data/using-gatsby-without-graphql/#the-approach-fetch-data-and-use-gatsbys-createpages-api
+ */
 export const createPagesSingleLoop = async ({
     graphql,
+    /**
+     * @see https://www.gatsbyjs.com/docs/reference/config-files/actions/#createPage
+     */
     actions: { createPage, createRedirect }
 }) => {
     await initRedis()

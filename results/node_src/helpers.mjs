@@ -38,6 +38,7 @@ export const getCleanLocales = locales =>
 /*
 
 Get a page's context
+= the information that are passed down from Gatsby to the page
 
 */
 export const getPageContext = page => {

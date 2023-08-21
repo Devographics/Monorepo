@@ -1,13 +1,12 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
-import { mq, spacing } from 'core/theme'
+import styled from 'styled-components'
 
-const EssayLayout = ({ props }) => {
+const EssayLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <Page>
             <PageContent className="PageContent">
                 {/* <PageMetaDebug /> */}
-                {props.children}
+                {children}
             </PageContent>
         </Page>
     )
@@ -19,7 +18,5 @@ const PageContent = styled.main`
 `
 
 const Page = styled.div``
-
-const PageMain = styled.main``
 
 export default EssayLayout

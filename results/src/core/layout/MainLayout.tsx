@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import Pagination from 'core/pages/Pagination'
 import { Sidebar } from 'core/components/sidebar'
 import { mq, spacing, screenReadersOnlyMixin } from 'core/theme'
@@ -15,7 +15,14 @@ const MainLayout = ({
     showSidebar,
     toggleSidebar,
     closeSidebar,
-    props
+    children
+}: {
+    context: any
+    showPagination?: boolean
+    showSidebar?: boolean
+    toggleSidebar?: () => void
+    closeSidebar: () => void
+    children?: React.ReactNode
 }) => {
     const { translate } = useI18n()
     return (
@@ -39,15 +46,15 @@ const MainLayout = ({
                         <ScreenReadersHint>{translate('general.open_nav')}</ScreenReadersHint>
                         <Hamburger />
                     </MenuToggle>
-                    <Sidebar {...props} showSidebar={showSidebar} closeSidebar={closeSidebar} />
+                    <Sidebar showSidebar={showSidebar} closeSidebar={closeSidebar} />
                 </header>
                 <PageContent className="PageContent">
                     <PaginationWrapper>
-                        {showPagination && <Pagination position="top" />}
+                        {showPagination && <Pagination /*position="top"*/ />}
                     </PaginationWrapper>
                     <PageMain id="page-main">
                         {/* <PageMetaDebug /> */}
-                        {props.children}
+                        {children}
                     </PageMain>
                 </PageContent>
             </Page>

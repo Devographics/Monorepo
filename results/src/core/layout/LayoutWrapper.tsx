@@ -12,8 +12,17 @@ import { GlobalStyle } from 'core/theme'
 import MainLayout from 'core/layout/MainLayout'
 import ReportLayout from 'core/report/ReportLayout'
 import theme from 'Theme/index.ts'
+import { PageContextValue } from 'core/types'
 
-const ThemedLayout = props => {
+interface LayoutProps {
+    context: any
+    showPagination?: boolean
+    showSidebar?: boolean
+    toggleSidebar?: () => void
+    closeSidebar: () => void
+    children: React.ReactNode
+}
+const ThemedLayout = (props: LayoutProps) => {
     return (
         <ThemeProvider theme={theme}>
             <GlobalStyle />
@@ -27,7 +36,24 @@ const ThemedLayout = props => {
     )
 }
 
-export default class Layout extends PureComponent {
+export default class Layout extends PureComponent<
+    {
+        showPagination: boolean
+        location: {
+            hash: string
+            host: string
+            pathname: string
+            href: string
+            port: string
+            search: string
+            key: string
+            protocol: string
+        }
+        pageContext: PageContextValue
+        children?: React.ReactNode
+    },
+    { showSidebar?: boolean; width?: number; height?: number }
+> {
     static propTypes = {
         showPagination: propTypes.bool.isRequired
     }
@@ -36,8 +62,8 @@ export default class Layout extends PureComponent {
         showPagination: true
     }
 
-    constructor() {
-        super()
+    constructor(props: any) {
+        super(props)
         this.state = {
             showSidebar: false
         }
@@ -69,9 +95,10 @@ export default class Layout extends PureComponent {
     }
 
     render() {
-        const { showPagination, location, pageContext } = this.props
+        const { showPagination, location, pageContext, children } = this.props
         const { showSidebar } = this.state
         const context = mergePageContext(pageContext, location, this.state)
+        console.log({ props: this.props, context, pageContext, location }, this.state)
         return (
             <KeydownContextProvider>
                 <PageContextProvider value={context}>
@@ -82,8 +109,10 @@ export default class Layout extends PureComponent {
                             showSidebar={showSidebar}
                             toggleSidebar={this.toggleSidebar}
                             closeSidebar={this.closeSidebar}
-                            props={this.props}
-                        />
+                            //props={this.props}
+                        >
+                            {children}
+                        </ThemedLayout>
                     </I18nContextProvider>
                 </PageContextProvider>
             </KeydownContextProvider>

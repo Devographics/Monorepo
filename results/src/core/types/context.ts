@@ -1,4 +1,5 @@
 import { EditionMetadata, SurveyMetadata } from '@devographics/types'
+import React from 'react'
 import { Locale } from './i18n'
 
 export interface PageDef {
@@ -28,4 +29,6 @@ export interface PageContextValue {
     block: any
     // 
     locales?: Array<any>
+    // TODO: actually could be an array too
+    children?: React.ReactNode
 }

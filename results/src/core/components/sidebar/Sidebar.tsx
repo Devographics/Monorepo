@@ -19,7 +19,13 @@ const CloseIcon = () => (
     </svg>
 )
 
-export const Sidebar = ({ showSidebar, closeSidebar, rest }) => {
+export const Sidebar = ({
+    showSidebar,
+    closeSidebar
+}: {
+    showSidebar?: boolean
+    closeSidebar: () => void
+}) => {
     const { translate } = useI18n()
     const pageContext = usePageContext()
 
@@ -41,7 +47,7 @@ export const Sidebar = ({ showSidebar, closeSidebar, rest }) => {
                     <ScreenReadersHint>{translate('general.back_to_intro')}</ScreenReadersHint>
                 </SidebarLogoLink>
             </SidebarHeader>
-            <Nav {...rest} closeSidebar={closeSidebar} />
+            <Nav closeSidebar={closeSidebar} />
             <ShareSite />
         </SidebarContainer>
     )

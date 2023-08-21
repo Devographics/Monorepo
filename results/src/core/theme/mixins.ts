@@ -3,7 +3,7 @@ import { transparentize } from 'polished'
 
 export interface FancyLinkMixinProps {
     color: string
-    activeClassName: string
+    activeClassName?: string
     activeColor: string
 }
 

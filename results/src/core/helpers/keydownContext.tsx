@@ -4,19 +4,19 @@ const keydownContext = createContext({})
 
 const targetKey = 'Alt'
 
-const KeydownContextProviderInner = ({ children }) => {
+const KeydownContextProviderInner = ({ children }: { children: React.ReactNode }) => {
     const [modKeyDown, setModKeyDown] = useState(false)
     const value = {
-        modKeyDown,
+        modKeyDown
     }
 
-    function downHandler({ key }) {
+    function downHandler({ key }: { key: string }) {
         if (key === targetKey) {
             setModKeyDown(true)
         }
     }
 
-    const upHandler = ({ key }) => {
+    const upHandler = ({ key }: { key: string }) => {
         if (key === targetKey) {
             setModKeyDown(false)
         }
@@ -38,7 +38,7 @@ const KeydownContextProviderInner = ({ children }) => {
     )
 }
 
-export const KeydownContextProvider = ({ children }) => {
+export const KeydownContextProvider = ({ children }: { children: React.ReactNode }) => {
     return <KeydownContextProviderInner>{children}</KeydownContextProviderInner>
 }
 

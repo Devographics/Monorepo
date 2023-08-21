@@ -309,27 +309,6 @@ Emojis to distinguish commits within the monorepo:
 
 ---
 
-## Setup
-
-We use [pnpm](https://pnpm.io/).
-
-### Folder Structure
-
-Expected folder structure:
-
-```sh
-devographics
-|_ monorepo (this repo)
-|_ locales
-|____locale-en-US
-|____locale-fr-FR
-|____....
-|_ surveys
-|_ images
-```
-
----
-
 ## Env Variables
 
 See "shared/helpers/variables.yml" for a more up to date list.
