@@ -87,6 +87,43 @@
         translateData: true
         # blockType: ParticipationByCountryBlock
         parameters: { limit: 20 }
+        variants:
+            - id: country_low_vs_high_income
+              descriptionId: user_info.country_low_vs_high_income.description.css2023
+              fieldId: country
+              i18nNamespace: country
+              tabId: tabs.low_vs_high_income
+              defaultUnits: count
+              template: demographics
+              blockType: HorizontalBarBlock
+              parameters: { limit: 20 }
+              filtersState:
+                  options:
+                      showDefaultSeries: false
+                      enableYearSelect: false
+                      mode: grid
+                      queryOnLoad: false
+                      supportedModes:
+                          - grid
+                          - facet
+                      preventQuery: false
+                  filters:
+                      - conditions:
+                            - fieldId: yearly_salary
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_0_10
+                                  - range_10_30
+                                  - range_30_50
+                      - conditions:
+                            - fieldId: yearly_salary
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_50_100
+                                  - range_100_200
+                                  - range_more_than_200
 
       - id: locale
         template: demographics
@@ -219,36 +256,6 @@
         #     facet: years_of_experience
         #     parameters: {facetSort: {order: desc, property: mean}, facetCutoff: 100}
 
-      - id: source
-        template: demographics
-        blockType: HorizontalBarBlock
-        parameters: { limit: 20 }
-        translateData: true
-        queryOptions:
-            addBucketsEntities: true
-        variants:
-            - id: source_by_gender
-              descriptionId: user_info.source_by_gender.description.css2023
-              fieldId: source
-              tabId: tabs.by_gender
-              i18nNamespace: source
-              template: demographics
-              defaultUnits: percentageBucket
-              filtersState:
-                  options:
-                      showDefaultSeries: true
-                      enableYearSelect: false
-                      mode: facet
-                      queryOnLoad: false
-                      supportedModes:
-                          - grid
-                          - facet
-                      preventQuery: false
-                  filters: []
-                  facet:
-                      sectionId: user_info
-                      id: gender
-
       - id: gender
         template: demographics
         parameters: { showNoAnswer: true }
@@ -290,6 +297,61 @@
               units: count
               translateData: true
               parameters: { cutoff: 10 }
+
+      - id: source
+        template: demographics
+        blockType: HorizontalBarBlock
+        parameters: { limit: 20 }
+        translateData: true
+        queryOptions:
+            addBucketsEntities: true
+        variants:
+            - id: source_by_gender
+              descriptionId: user_info.source_by_gender.description.css2023
+              fieldId: source
+              tabId: tabs.by_gender
+              i18nNamespace: source
+              template: demographics
+              blockType: HorizontalBarBlock
+              defaultUnits: percentageBucket
+              parameters: { limit: 20 }
+              filtersState:
+                  options:
+                      showDefaultSeries: true
+                      enableYearSelect: false
+                      mode: facet
+                      queryOnLoad: false
+                      supportedModes:
+                          - grid
+                          - facet
+                      preventQuery: false
+                  filters: []
+                  facet:
+                      sectionId: user_info
+                      id: gender
+            - id: source_by_race_ethnicity
+              descriptionId: user_info.source_by_race_ethnicity.description.css2023
+              fieldId: source
+              tabId: tabs.by_race_ethnicity
+              i18nNamespace: source
+              template: demographics
+              blockType: HorizontalBarBlock
+              defaultUnits: percentageBucket
+              parameters: { limit: 20 }
+              filtersState:
+                  options:
+                      showDefaultSeries: true
+                      enableYearSelect: false
+                      mode: facet
+                      queryOnLoad: false
+                      supportedModes:
+                          - grid
+                          - facet
+                      preventQuery: false
+                  filters: []
+                  facet:
+                      sectionId: user_info
+                      id: race_ethnicity
 
       - id: user_info_resources
         items: [fm-homepage]

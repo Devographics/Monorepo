@@ -138,7 +138,7 @@ const HorizontalBarChart = ({
     series,
     total,
     i18nNamespace,
-    translateData = false,
+    shouldTranslate = true,
     mode,
     units,
     chartProps,
@@ -188,7 +188,7 @@ const HorizontalBarChart = ({
         buckets,
         total,
         i18nNamespace,
-        shouldTranslate: translateData,
+        shouldTranslate,
         mode,
         units
     })
@@ -202,7 +202,7 @@ const HorizontalBarChart = ({
 
     const left = getLeftMargin({
         buckets: sortedBuckets,
-        shouldTranslate: translateData,
+        shouldTranslate,
         i18nNamespace
     })
 
@@ -246,7 +246,7 @@ const HorizontalBarChart = ({
                         return (
                             <TickItem
                                 i18nNamespace={i18nNamespace}
-                                shouldTranslate={translateData}
+                                shouldTranslate={shouldTranslate}
                                 entity={
                                     buckets.find(b => b.id === tick.value)?.entity ||
                                     entities.find(e => e?.id === tick.value)
@@ -263,7 +263,7 @@ const HorizontalBarChart = ({
                         units={units}
                         legends={legends}
                         i18nNamespace={i18nNamespace}
-                        shouldTranslate={translateData}
+                        shouldTranslate={shouldTranslate}
                         facet={facet}
                         filters={filters}
                         filterLegends={filterLegends}
