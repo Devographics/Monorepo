@@ -152,6 +152,7 @@
         parameters: { showNoAnswer: true }
         variants:
             - id: average_income_by_years_of_experience
+              descriptionId: user_info.average_income_by_company_size.description.css2023
               fieldId: years_of_experience
               i18nNamespace: years_of_experience
               defaultUnits: averageByFacet
@@ -174,6 +175,26 @@
       - id: company_size
         template: demographics
         parameters: { showNoAnswer: true }
+        variants:
+            - id: average_income_by_company_size
+              fieldId: company_size
+              i18nNamespace: company_size
+              defaultUnits: averageByFacet
+              tabId: tabs.by_salary
+              template: demographics
+              filtersState:
+                  options:
+                      showDefaultSeries: true
+                      enableYearSelect: false
+                      mode: facet
+                      queryOnLoad: false
+                      supportedModes:
+                          - combined
+                          - facet
+                  filters: []
+                  facet:
+                      sectionId: user_info
+                      id: yearly_salary
 
       - id: variants_hint
         template: hint
@@ -206,40 +227,38 @@
       - id: yearly_salary
         template: demographics
         parameters: { showNoAnswer: true }
-        # variants:
-        #     - id: yearly_salary_by_gender
-        #       fieldId: yearly_salary
-        #       i18nNamespace: yearly_salary
-        #       defaultUnits: percentageQuestion
-        #       # facet: user_info__gender
-        #       tabId: tabs.by_gender
-        #       template: demographics # facet
-        #       # parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
-        #       filtersState:
-        #           options:
-        #               showDefaultSeries: false
-        #               enableYearSelect: false
-        #               mode: combined
-        #               queryOnLoad: false
-        #               supportedModes:
-        #                   - combined
-        #                   - facet
-        #           filters:
-        #               - conditions:
-        #                     - fieldId: gender
-        #                       sectionId: user_info
-        #                       operator: eq
-        #                       value: male
-        #               - conditions:
-        #                     - fieldId: gender
-        #                       sectionId: user_info
-        #                       operator: eq
-        #                       value: female
-        #               - conditions:
-        #                     - fieldId: gender
-        #                       sectionId: user_info
-        #                       operator: eq
-        #                       value: non_binary
+        variants:
+            - id: yearly_salary_usa_vs_the_world
+              descriptionId: user_info.yearly_salary_usa_vs_the_world.description.css2023
+              fieldId: yearly_salary
+              i18nNamespace: yearly_salary
+              tabId: tabs.usa_vs_the_world
+              template: demographics
+              defaultUnits: percentageQuestion
+              filtersState:
+                  options:
+                      showDefaultSeries: false
+                      enableYearSelect: false
+                      mode: combined
+                      queryOnLoad: false
+                      supportedModes:
+                          - combined
+                          - facet
+                      preventQuery: false
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: eq
+                              value: USA
+                      - year: 2023
+                        conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value:
+                                  - USA
 
         #     - id: yearly_salary
         #       facet: user_info__country
