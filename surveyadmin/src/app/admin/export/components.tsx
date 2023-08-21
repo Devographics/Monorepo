@@ -1,7 +1,9 @@
 "use client";
 import React, { useReducer, useState } from "react";
-import { SurveyMetadata } from "@devographics/types";
+import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { apiRoutes } from "~/lib/apiRoutes";
+import { convertSurveyToMarkdown } from "~/lib/export/outlineExport";
+import { Loading } from "~/components/ui/Loading";
 
 // import { ExportOptions, ExportOptionsStr } from "~/admin/models/export";
 //  import { SurveyMarkdownOutline } from "~/core/components/survey/SurveyExport";
@@ -60,21 +62,38 @@ const reducer = (state, action) => {
   }
 };
 
+const useMutateSurveyId = ({ surveyId, editionId }) => {
+  function setSurveyId(surveyId: string) {
+    const params: any = { surveyId };
+    if (editionId) params.editionId = editionId;
+    window.location.search = new URLSearchParams(params).toString();
+  }
+  function setEditionId(editionId: string) {
+    const params: any = { editionId };
+    if (surveyId) params.surveyId = surveyId;
+    window.location.search = new URLSearchParams(params).toString();
+  }
+  return { setSurveyId, setEditionId };
+};
+
 export const AdminExportPage = ({
   surveys,
+  edition,
+  surveyId,
+  editionId,
 }: {
   surveys: Array<SurveyMetadata>;
+  edition?: EditionMetadata;
+  surveyId?: string | null;
+  editionId?: string | null;
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [editionId, setEditionId] = useState<string | undefined>();
-  const [surveyId, setSurveyId] = useState<string | undefined>();
+  const { setSurveyId, setEditionId } = useMutateSurveyId({
+    surveyId,
+    editionId,
+  });
 
   const survey = surveyId ? surveys.find((s) => s.id === surveyId) : null;
-  const edition =
-    survey && editionId
-      ? survey.editions.find((e) => e.id === editionId)
-      : null;
-
   const surveyIds = surveys.map((s) => s.id);
   const editionIds = survey ? survey.editions.map((e) => e.id) : [];
 
@@ -134,8 +153,9 @@ export const AdminExportPage = ({
           onChange={(evt) => {
             setSurveyId(evt.target.value);
           }}
+          value={surveyId || ""}
         >
-          <option disabled selected value="">
+          <option disabled value="">
             {" "}
             -- select an option --{" "}
           </option>
@@ -155,7 +175,12 @@ export const AdminExportPage = ({
             onChange={(evt) => {
               setEditionId(evt.target.value);
             }}
+            value={editionId || ""}
           >
+            <option disabled value="">
+              {" "}
+              -- select an option --{" "}
+            </option>
             {editionIds.map((id) => {
               return (
                 <option key={id} value={id}>
@@ -182,10 +207,54 @@ export const AdminExportPage = ({
       <h2>Outline</h2>
       <p>You can share this markdown content to better describe the survey</p>
       {edition ? (
-        <div>TODO</div> //<SurveyMarkdownOutline survey={edition} />
+        <SurveyMarkdownOutline edition={edition} />
       ) : (
         <p>Pick a valid editionId above...</p>
       )}
+    </div>
+  );
+};
+
+export const SurveyMarkdownOutline = ({
+  edition,
+}: {
+  edition: EditionMetadata;
+}) => {
+  const [showFieldName, setShowFieldName] = useState<boolean>(false);
+  // const intl = useIntlContext();
+  // TODO: filter for the current survey only, but we need a tag to do so
+  //const { data, loading, error } = useEntitiesQuery();
+
+  //if (loading) return <Loading />;
+  //if (error) return <span>Could not load entities</span>;
+  //if (!data) return <span>No entities found</span>;
+  //const { entities } = data;
+
+  return (
+    <div className="survey-section-wrapper">
+      <div>
+        <label htmlFor="fieldname">Show fieldName? (for CSV/JSON export)</label>
+        <input
+          type="checkbox"
+          id="fieldname"
+          name="fieldname"
+          onChange={(evt) => {
+            setShowFieldName(evt.target.checked);
+          }}
+        />
+      </div>
+      <textarea
+        style={{ width: 800, height: 600 }}
+        readOnly={true}
+        value={convertSurveyToMarkdown({
+          formatMessage: (key) => key, // intl.formatMessage,
+          edition,
+          entities: {},
+          options: {
+            showFieldName,
+          },
+        })}
+      />
     </div>
   );
 };

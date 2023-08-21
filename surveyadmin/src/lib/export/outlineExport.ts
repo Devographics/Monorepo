@@ -6,6 +6,7 @@
  */
 
 import type {
+  EditionMetadata,
   QuestionMetadata,
   SectionMetadata,
 } from "@devographics/types";
@@ -14,20 +15,20 @@ interface MarkdownOptions {
   showFieldName?: boolean;
 }
 export const convertSurveyToMarkdown = ({
+  edition,
   formatMessage,
   entities,
-  survey,
   options,
 }: {
   formatMessage?: any;
   entities: any;
-  // TODO: what's the right type here?
-  survey: any;
+  edition: EditionMetadata,
   options?: MarkdownOptions;
 }) => {
+  console.log({ edition })
   let surveyString = "";
-  surveyString += `# ${survey.name}\n\n`;
-  survey?.outline?.forEach((section) => {
+  surveyString += `# ${edition.survey?.name}\n\n`;
+  edition?.sections?.forEach((section) => {
     surveyString += convertSection({
       formatMessage,
       entities,

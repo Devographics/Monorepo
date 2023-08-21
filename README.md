@@ -289,6 +289,24 @@ Static image files.
 
 -   https://assets.devographics.com
 
+
+## Contribute
+
+Emojis to distinguish commits within the monorepo:
+- 🅿️ `:parking:` for the whole monorepo ("P" for "Pnpm")
+- ⚙  `:gear:` for the shared folder
+- 🔍 `:mag:` for graphiql
+- 📡 `:satellite:`for the api
+- 📊 `:bar_chart:`for the results
+- 🏠 `:house:`for the homepage
+- ✍ ️`:writhing_hand:` for the surveyform
+- 🔒 `:lock:` for the surveyadmin
+- 🌐 `:globe_with_meridians:` for the locales
+- 📖 `:book:` for the surveys
+- 🙎 `:person_pouting:` for the entities
+- 🖼️ `:frame_photo:` for the images
+
+
 ---
 
 ## Setup
