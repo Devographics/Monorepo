@@ -257,10 +257,12 @@ const wrapArguments = args => {
         : ''
 }
 
+const facetItemToFacet = ({ sectionId, id }) => `${sectionId}__${id}`
+
 export const getQueryArgsString = ({ facet, filters, parameters, xAxis, yAxis }) => {
     const args = {}
     if (facet) {
-        args.facet = facet
+        args.facet = facetItemToFacet(facet)
     }
     if (filters && !isEmpty(filters)) {
         args.filters = unquote(JSON.stringify(filters))
@@ -558,14 +560,14 @@ export const getFiltersQuery = ({ block, chartFilters, currentYear, queryOptions
             parameters: block.parameters
         })
 
-        const seriesName = `${block.id}_by_${facet.id}`
+        const seriesName = `${block.fieldId || block.id}_by_${facet.id}`
         seriesNames.push(seriesName)
 
         const alreadyHasAlias = queryBody.includes(':')
         if (alreadyHasAlias) {
             queryBody = queryBody.replace(block.id, `${seriesName}`)
         } else {
-            queryBody = queryBody.replace(block.id, `${seriesName}: ${block.id}`)
+            queryBody = queryBody.replace(block.id, `${seriesName}: ${block.fieldId || block.id}`)
         }
         queryBody = queryBody.replace(argumentsPlaceholder, queryArgs || '')
 

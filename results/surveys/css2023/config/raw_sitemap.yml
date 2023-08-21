@@ -108,12 +108,26 @@
       - id: years_of_experience
         template: demographics
         parameters: { showNoAnswer: true }
-        # variants:
-        #     - id: years_of_experience
-        #       facet: user_info__yearly_salary
-        #       tabId: tabs.by_salary
-        #       template: demographics # facet
-        #       parameters: { facetSort: { order: asc, property: mean }, facetCutoff: 100 }
+        variants:
+            - id: average_income_by_years_of_experience
+              fieldId: years_of_experience
+              i18nNamespace: years_of_experience
+              defaultUnits: averageByFacet
+              tabId: tabs.by_salary
+              template: demographics
+              filtersState:
+                  options:
+                      showDefaultSeries: true
+                      enableYearSelect: false
+                      mode: facet
+                      queryOnLoad: false
+                      supportedModes:
+                          - combined
+                          - facet
+                  filters: []
+                  facet:
+                      sectionId: user_info
+                      id: yearly_salary
 
       - id: company_size
         template: demographics
@@ -125,12 +139,27 @@
       - id: higher_education_degree
         template: demographics
         parameters: { showNoAnswer: true }
-        # variants:
-        #     - id: higher_education_degree
-        #       facet: user_info__gender
-        #       tabId: tabs.by_gender
-        #       template: demographics # facet
-        #       parameters: { facetSort: { order: asc, property: mean }, facetCutoff: 100 }
+        variants:
+            - id: higher_education_degree_by_gender
+              descriptionId: user_info.higher_education_degree_by_gender.description.css2023
+              fieldId: higher_education_degree
+              i18nNamespace: higher_education_degree
+              tabId: tabs.by_gender
+              template: demographics
+              defaultUnits: percentageBucket
+              filtersState:
+                  options:
+                      showDefaultSeries: true
+                      enableYearSelect: false
+                      mode: facet
+                      queryOnLoad: false
+                      supportedModes:
+                          - combined
+                          - facet
+                  filters: []
+                  facet:
+                      sectionId: user_info
+                      id: gender
 
       - id: yearly_salary
         template: demographics
@@ -138,6 +167,8 @@
         variants:
             - id: yearly_salary_by_gender
               fieldId: yearly_salary
+              i18nNamespace: yearly_salary
+              defaultUnits: percentageQuestion
               # facet: user_info__gender
               tabId: tabs.by_gender
               template: demographics # facet
@@ -195,10 +226,33 @@
         translateData: true
         queryOptions:
             addBucketsEntities: true
+        variants:
+            - id: source_by_gender
+              descriptionId: user_info.source_by_gender.description.css2023
+              fieldId: source
+              tabId: tabs.by_gender
+              i18nNamespace: source
+              template: demographics
+              defaultUnits: percentageBucket
+              filtersState:
+                  options:
+                      showDefaultSeries: true
+                      enableYearSelect: false
+                      mode: facet
+                      queryOnLoad: false
+                      supportedModes:
+                          - grid
+                          - facet
+                      preventQuery: false
+                  filters: []
+                  facet:
+                      sectionId: user_info
+                      id: gender
 
       - id: gender
         template: demographics
         parameters: { showNoAnswer: true }
+        noteId: null
         # variants:
         #     - id: gender
         #       facet: user_info__country
@@ -212,6 +266,7 @@
         template: demographics
         blockType: HorizontalBarBlock
         translateData: true
+        noteId: null
         variants:
             - id: race_ethnicity_freeform
               fieldId: race_ethnicity

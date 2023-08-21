@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useFilterLegends } from '../helpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { DynamicDataLoaderProps } from './DynamicDataLoader'
+import { DataLoaderFooter } from './DataLoaderFooter'
 import WrapperGrid from './WrapperGrid'
 import { fetchSeriesData } from '../helpers'
 import { DataSeries } from 'core/filters/types'
@@ -21,6 +22,7 @@ const GridDataLoader = ({
     defaultSeries,
     children,
     chartFilters,
+    setChartFilters,
     layout = 'column',
     providedSeries
 }: GridDataLoaderProps) => {
@@ -69,9 +71,12 @@ const GridDataLoader = ({
             >
                 {children}
             </WrapperGrid>
-            {series && (
-                <JSONTrigger block={block} data={series} buttonProps={{ variant: 'link' }} />
-            )}
+            <DataLoaderFooter
+                data={series}
+                block={block}
+                chartFilters={chartFilters}
+                setChartFilters={setChartFilters}
+            />
         </>
     )
 }

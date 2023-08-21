@@ -10,6 +10,10 @@ import { BlockDefinition } from 'core/types'
 const BlockNote = ({ block }: { block: BlockDefinition }) => {
     const pageContext = usePageContext()
     const { translate } = useI18n()
+    if (block.noteId === null) {
+        // hacky way to override default block notes
+        return null
+    }
     const key = getBlockNoteKey({ block })
     const blockNote = translate(key, {}, null)
     if (blockNote) {

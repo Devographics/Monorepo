@@ -45,7 +45,8 @@ import {
     BucketUnits,
     Bucket,
     CombinedBucket,
-    OptionMetadata
+    OptionMetadata,
+    CombinedBucketData
 } from '@devographics/types'
 import { runQuery } from 'core/explorer/data'
 // import { spacing, mq, fontSize } from 'core/theme'
@@ -54,6 +55,7 @@ import { getBlockDataPath } from 'core/helpers/data'
 import { QueryData, AllQuestionData } from '@devographics/types'
 import { NO_ANSWER } from '@devographics/constants'
 import clone from 'lodash/clone'
+import pick from 'lodash/pick'
 
 export const getNewCondition = ({
     filter,
@@ -261,7 +263,10 @@ export const getFiltersQuery = ({
                 if (alreadyHasAlias) {
                     seriesFragment = seriesFragment.replace(block.id, `${seriesName}`)
                 } else {
-                    seriesFragment = seriesFragment.replace(block.id, `${seriesName}: ${block.id}`)
+                    seriesFragment = seriesFragment.replace(
+                        block.id,
+                        `${seriesName}: ${block.fieldId || block.id}`
+                    )
                 }
 
                 const queryArgs = getQueryArgsString({
@@ -286,14 +291,14 @@ export const getFiltersQuery = ({
             parameters: block.parameters
         })
 
-        const seriesName = `${block.id}_by_${facet.id}`
+        const seriesName = `${block.fieldId || block.id}_by_${facet.id}`
         seriesNames.push(seriesName)
 
         const alreadyHasAlias = queryBody.includes(':')
         if (alreadyHasAlias) {
             queryBody = queryBody.replace(block.id, `${seriesName}`)
         } else {
-            queryBody = queryBody.replace(block.id, `${seriesName}: ${block.id}`)
+            queryBody = queryBody.replace(block.id, `${seriesName}: ${block.fieldId || block.id}`)
         }
         queryBody = queryBody.replace(argumentsPlaceholder, queryArgs || '')
 
@@ -331,36 +336,68 @@ multiple series (e.g. { count, count_1, percentageQuestion, percentageQuestion_1
 
 */
 type CombineBucketsOptions = {
-    allBuckets: Bucket[][]
+    allSeriesBuckets: Bucket[][]
+    showDefaultSeries?: boolean
 }
-export const combineBuckets = ({ allBuckets }: CombineBucketsOptions) => {
-    const [defaultBuckets, ...otherBucketsArray] = allBuckets as CombinedBucket[][]
-    const mergedBuckets = cloneDeep(defaultBuckets)
-    otherBucketsArray.forEach((otherBuckets: Bucket[], index: number) => {
-        // default series is series 0, first custom series is series 1, etc.
-        const seriesIndex = index + 1
-        // TODO: add this later
-        // const bucketsWithNoAnswerBucket = addNoAnswerBucket({ buckets, completion })
-        mergedBuckets.forEach(bucket => {
-            const { id } = bucket
-            const otherSeriesBucket = otherBuckets.find(b => b.id === id)
-            if (otherSeriesBucket) {
-                baseUnits.forEach(unit => {
-                    const unitName = `${unit}__${seriesIndex}` as `${BucketUnits}__${number}`
-                    const value = otherSeriesBucket[unit]
-                    if (typeof value !== 'undefined') {
-                        bucket[unitName] = value
-                    }
-                })
-            } else {
-                // series might have returned undefined;
-                // or else default buckets contains bucket items not in series buckets
-                baseUnits.forEach(field => {
-                    bucket[`${field}__${seriesIndex}`] = 0
-                })
-            }
+
+// only keep properties that are common to the same buckets
+// across all data series (id, entity, etc.)
+const getBucketWithoutData = (bucket: Bucket): Bucket => {
+    return pick(bucket, ['id', 'facetBuckets', 'entity'])
+}
+
+// prefix a bucket's data properties with a __1, __2, etc. suffix
+// (count__1, percentageQuestion__1, etc.)
+const getBucketDataWithSuffix = (bucket: Bucket, index: number) => {
+    const newBucket: CombinedBucketData = {}
+    Object.keys(bucket).forEach(key => {
+        const unit = key as BucketUnits
+        if (Object.values(BucketUnits).includes(unit)) {
+            const value = bucket[unit] as number
+            newBucket[`${unit}__${index}`] = value
+        }
+    })
+    return newBucket
+}
+
+export const combineBuckets = ({ allSeriesBuckets, showDefaultSeries }: CombineBucketsOptions) => {
+    const mergedBuckets = allSeriesBuckets[0].map(bucket => getBucketWithoutData(bucket))
+
+    allSeriesBuckets.forEach((seriesBuckets, i) => {
+        seriesBuckets.forEach((bucket, j) => {
+            const bucketDataWithSuffix = getBucketDataWithSuffix(bucket, i + 1)
+            mergedBuckets[j] = { ...mergedBuckets[j], ...bucketDataWithSuffix }
         })
     })
+
+    // const [defaultBuckets, ...otherBucketsArray] = allSeriesBuckets as CombinedBucket[][]
+    // const mergedBuckets = cloneDeep(defaultBuckets)
+    // otherBucketsArray.forEach((otherBuckets: Bucket[], index: number) => {
+    //     // default series is series 0, first custom series is series 1, etc.
+    //     const seriesIndex = index + 1
+    //     // TODO: add this later
+    //     // const bucketsWithNoAnswerBucket = addNoAnswerBucket({ buckets, completion })
+    //     mergedBuckets.forEach(bucket => {
+    //         const { id } = bucket
+    //         const otherSeriesBucket = otherBuckets.find(b => b.id === id)
+    //         if (otherSeriesBucket) {
+    //             baseUnits.forEach(unit => {
+    //                 const unitName = `${unit}__${seriesIndex}` as `${BucketUnits}__${number}`
+    //                 const value = otherSeriesBucket[unit]
+    //                 if (typeof value !== 'undefined') {
+    //                     bucket[unitName] = value
+    //                 }
+    //             })
+    //         } else {
+    //             // series might have returned undefined;
+    //             // or else default buckets contains bucket items not in series buckets
+    //             baseUnits.forEach(field => {
+    //                 bucket[`${field}__${seriesIndex}`] = 0
+    //             })
+    //         }
+    //     })
+    // })
+
     return mergedBuckets
 }
 
@@ -688,7 +725,9 @@ export const useFilterLegends = ({
                 }
                 return legendItem
             })
-            results = [...(showDefaultSeries ? [defaultLegendItem] : []), ...seriesLegendItems]
+            results = showDefaultSeries
+                ? [defaultLegendItem, ...seriesLegendItems]
+                : seriesLegendItems
         }
     } else if (chartFilters.options.mode === MODE_FACET && chartFilters.facet) {
         const facetField = allFilters.find(f => f.id === chartFilters?.facet?.id) as FilterItem

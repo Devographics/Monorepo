@@ -210,7 +210,7 @@ const HorizontalBarChart = ({
 
     const labelFormatter = useChartLabelFormatter({ units, facet })
 
-    const labelsLayer = useMemo(() => getLabelsLayer(labelFormatter), [units, facet])
+    const labelsLayer = useMemo(() => getLabelsLayer(d => labelFormatter(d.value)), [units, facet])
 
     return (
         <div style={{ height: buckets.length * baseSize + 80 }}>
@@ -271,6 +271,7 @@ const HorizontalBarChart = ({
                             buckets.find(b => b.id === barProps.data.id)?.entity ||
                             entities.find(e => e?.id === barProps.data.id)
                         }
+                        labelFormatter={labelFormatter}
                         {...barProps}
                     />
                 )}

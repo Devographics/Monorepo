@@ -254,6 +254,7 @@ export async function genericComputeFunction({
                 { colors: true, depth: null }
             )
         )
+        console.log(JSON.stringify(results, null, 2))
     }
 
     if (!axis2) {

@@ -59,7 +59,7 @@ const VerticalBarBlock = ({ block, data, series, pageContext }: VerticalBarBlock
         // if this facet can be quantified numerically and has averages, add that as unit too
         if (facetQuestion?.optionsAreRange) {
             unitsOptions.push(BucketUnits.AVERAGE)
-            unitsOptions.push(BucketUnits.PERCENTILES)
+            // unitsOptions.push(BucketUnits.PERCENTILES)
         }
     }
 
@@ -101,7 +101,15 @@ const VerticalBarBlock = ({ block, data, series, pageContext }: VerticalBarBlock
             })
         ]
     }
-    if (filterLegends.length > 0) {
+    if (
+        filterLegends.length > 0 &&
+        [
+            BucketUnits.COUNT,
+            BucketUnits.PERCENTAGE_SURVEY,
+            BucketUnits.PERCENTAGE_QUESTION,
+            BucketUnits.PERCENTAGE_BUCKET
+        ].includes(units)
+    ) {
         blockVariantProps.legends = filterLegends
     }
 
@@ -110,6 +118,7 @@ const VerticalBarBlock = ({ block, data, series, pageContext }: VerticalBarBlock
             <DynamicDataLoader
                 block={block}
                 chartFilters={chartFilters}
+                setChartFilters={setChartFilters}
                 units={units}
                 setUnits={setUnits}
                 defaultSeries={defaultSeries}

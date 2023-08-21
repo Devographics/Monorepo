@@ -93,10 +93,8 @@ export const getBlockSeriesData = ({
     filtersState: CustomizationDefinition
 }): Array<DataSeries<any>> => {
     if (filtersState.options.mode === MODE_FACET) {
-        const facetId = filtersState?.facet?.id
-        const suffix = `_by_${facetId}`
-        const dataPath = getBlockDataPath({ block, pageContext, suffix })
-        return [{ dataPath, name: block.id + suffix, data: get(pageContext.pageData, dataPath) }]
+        const dataPath = getBlockDataPath({ block, pageContext })
+        return [{ dataPath, name: block.id, data: get(pageContext.pageData, dataPath) }]
     } else {
         return filtersState.filters.map((filters, i) => {
             const suffix = `_${i + 1}`

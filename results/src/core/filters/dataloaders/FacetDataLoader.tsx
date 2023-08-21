@@ -5,6 +5,7 @@ import { usePageContext } from 'core/helpers/pageContext'
 import isEmpty from 'lodash/isEmpty'
 import { CHART_MODE_STACKED } from '../constants'
 import { DynamicDataLoaderProps } from './DynamicDataLoader'
+import { DataLoaderFooter } from './DataLoaderFooter'
 import Loading from 'core/explorer/Loading'
 import styled from 'styled-components'
 import { DataSeries } from '../types'
@@ -22,6 +23,7 @@ const FacetDataLoader = ({
     block,
     children,
     chartFilters,
+    setChartFilters,
     units,
     setUnits,
     providedSeries
@@ -67,12 +69,21 @@ const FacetDataLoader = ({
         <Wrapper_>
             <Contents_>{React.cloneElement(children, props)}</Contents_>
             {isLoading && <Loading />}
-            {series && (
-                <JSONTrigger block={block} data={series} buttonProps={{ variant: 'link' }} />
-            )}
+
+            <DataLoaderFooter
+                data={series}
+                block={block}
+                chartFilters={chartFilters}
+                setChartFilters={setChartFilters}
+            />
             {units === BucketUnits.PERCENTAGE_BUCKET && (
                 <Note_>
                     <T k="charts.facets_clarification" />
+                </Note_>
+            )}
+            {units === BucketUnits.AVERAGE && (
+                <Note_>
+                    <T k="charts.average_clarification" />
                 </Note_>
             )}
         </Wrapper_>

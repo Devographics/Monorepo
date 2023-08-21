@@ -80,7 +80,8 @@ const BarTooltip = props => {
         legends,
         filterLegends,
         facet,
-        filters
+        filters,
+        labelFormatter
     } = props
     const { getString } = useI18n()
     const extraLabel = getExtraLabel({
@@ -108,10 +109,7 @@ const BarTooltip = props => {
         <div style={{ ...nivoTheme.tooltip.container, maxWidth: 300 }}>
             <span dangerouslySetInnerHTML={{ __html: label }} />
             :&nbsp;
-            <strong>
-                {data[units_]}
-                {isPercentage(units) && '%'}
-            </strong>
+            <strong>{labelFormatter(data[units_])}</strong>
         </div>
     )
 }

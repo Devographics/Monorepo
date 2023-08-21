@@ -14,6 +14,7 @@ export interface DynamicDataLoaderProps {
     setUnits: Dispatch<SetStateAction<BucketUnits>>
     children: ReactNode
     chartFilters: CustomizationDefinition
+    setChartFilters: Dispatch<SetStateAction<CustomizationDefinition>>
     layout?: 'grid' | 'column'
     providedSeries?: DataSeries<AllQuestionData> | DataSeries<AllQuestionData>[]
 }

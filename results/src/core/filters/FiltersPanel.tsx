@@ -46,8 +46,7 @@ const FiltersPanel = ({
     block,
     chartFilters,
     setChartFilters,
-    closeModal,
-    data
+    closeModal
 }: FiltersPanelPropsType) => {
     const { getString } = useI18n()
     const pageContext = usePageContext()
@@ -63,6 +62,8 @@ const FiltersPanel = ({
     const [customPresets, setCustomPresets] = useStickyState([], 'filters_panel_presets')
 
     const handleSubmit = () => {
+        // in case filtersState has been inherited from filtersState defined at build time
+        filtersState.options.preventQuery = false
         setChartFilters(filtersState)
         closeModal()
     }

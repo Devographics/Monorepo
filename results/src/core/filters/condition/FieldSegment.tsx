@@ -53,7 +53,7 @@ export const FieldSegment = ({
             >
                 <ItemSelectOptions
                     allFilters={allFilters}
-                    currentQuestionId={block.id}
+                    currentQuestionId={block.fieldId || block.id}
                     disabledList={disabledList}
                 />
             </Select_>
