@@ -1,18 +1,15 @@
 packages:
     # Packages
     - 'shared/*'
+    # CLI tools
+    - 'capture'
     # API
     - 'api'
-    - 'api2'
-    - 'api-internal'
     # Webapps
     - 'surveyform'
     - 'surveyadmin'
-    - 'surveyadmin2'
-    # Tmp remove Gatsby so it uses its own @apollo/client
-    # until we figure https://github.com/apollographql/apollo-client
-    # The patch used for Next breaks Gatsby... and no patch breaks Next
     - 'results'
+    - 'charts' # WIP will replace results
     - 'jobs'
     - 'homepage'
     - 'graphiql'

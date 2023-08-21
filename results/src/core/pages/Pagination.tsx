@@ -3,13 +3,21 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import isEmpty from 'lodash/isEmpty'
 import { mq, spacing } from 'core/theme'
-import Hamburger from 'core/components/Hamburger'
 import { usePageContext } from 'core/helpers/pageContext'
 import LanguageSwitcher from 'core/i18n/LanguageSwitcher'
 import PaginationLink from './PaginationLink'
-import { Sidebar } from 'core/components/sidebar'
 
-const Pagination = ({ toggleSidebar, showSidebar, closeSidebar, pagination }) => {
+const Pagination = (/*{
+    toggleSidebar,
+    showSidebar,
+    closeSidebar,
+    pagination
+}: {
+    toggleSideBar: any
+    showSidebar: any
+    closeSidebar: any
+    pagination: any
+}*/) => {
     const context = usePageContext()
 
     let previous = <span />

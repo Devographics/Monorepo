@@ -1,0 +1,32 @@
+{
+    "name": "charts",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "typecheck": "tsc --noEmit --p tsconfig.json"
+    },
+    "dependencies": {
+        "@devographics/fetch": "workspace:^1.0.0",
+        "@devographics/helpers": "workspace:^1.0.0",
+        "@devographics/types": "workspace:^1.0.0",
+        "@types/lodash": "^4.14.197",
+        "@types/node": "20.5.0",
+        "@types/react": "18.2.20",
+        "@types/react-dom": "18.2.7",
+        "eslint": "8.47.0",
+        "eslint-config-next": "13.4.16",
+        "lodash": "^4.17.21",
+        "mongodb": "^5.7.0",
+        "next": "13.4.16",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "typescript": "5.1.6"
+    },
+    "devDependencies": {
+        "@types/mongodb": "^4.0.7"
+    }
+}

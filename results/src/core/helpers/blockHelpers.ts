@@ -32,8 +32,8 @@ export const getBlockTabKey = ({
     block.tabId
         ? block.tabId
         : variantIndex === 0
-        ? 'tabs.all_respondents'
-        : getBlockTitleKey({ block, pageContext })
+            ? 'tabs.all_respondents'
+            : getBlockTitleKey({ block, pageContext })
 
 export const getBlockNoteKey = ({ block }: { block: BlockDefinition }) =>
     block.noteId || `${getBlockKey({ block })}.note`

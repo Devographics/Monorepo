@@ -27,8 +27,8 @@ export const flushCache = () => {
  * GraphQL objects have explicit "foo: null" fields, we can remove them to save space
  * @returns
  */
-function removeNull(obj) {
-    var clean = Object.fromEntries(
+function removeNull(obj: any): any {
+    let clean = Object.fromEntries(
         Object.entries(obj)
             .map(([k, v]) => [k, v === Object(v) ? removeNull(v) : v])
             .filter(([_, v]) => v != null && (v !== Object(v) || Object.keys(v).length))
@@ -78,14 +78,14 @@ export interface FetchPayloadSuccessOrError<T> {
     cacheKey?: string
 }
 
-export function processFetchData<T>(data, source, key): FetchPayloadSuccessOrError<T> {
+export function processFetchData<T>(data: any, source: SourceType, key: string): FetchPayloadSuccessOrError<T> {
     const timestamp = new Date().toISOString()
     const ___metadata: Metadata = { key, source, timestamp }
     const result = { data, ___metadata, cacheKey: key }
     return removeNull(result)
 }
 
-const setResultSource = (result, source) => {
+const setResultSource = (result: any, source: SourceType) => {
     return {
         ...result,
         ___metadata: { ...result.___metadata, source }
@@ -141,7 +141,7 @@ export async function getFromCache<T = any>({
     const shouldGetFromCacheEnv = !(process.env.DISABLE_CACHE === 'true')
     const shouldGetFromCache = shouldGetFromCacheOptions ?? shouldGetFromCacheEnv
 
-    async function fetchAndProcess<T>(source) {
+    async function fetchAndProcess<T>(source: SourceType) {
         const data = await fetchFromSource()
         return processFetchData<T>(data, source, key)
     }
@@ -187,7 +187,7 @@ export async function getFromCache<T = any>({
             })
         }
         return result
-    } catch (error) {
+    } catch (error: any) {
         console.error('// getFromCache error')
         console.error(error)
         console.debug(`🔴 [${key}] error when fetching from Redis or source ${calledFromLog}`)
@@ -209,7 +209,7 @@ export const getApiUrl = () => {
     return apiUrl
 }
 
-function extractQueryName(queryString) {
+function extractQueryName(queryString: string) {
     const regex = /query\s+(\w+)/
     const match = regex.exec(queryString)
     return match ? match[1] : null

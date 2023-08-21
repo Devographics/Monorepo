@@ -1,0 +1,20 @@
+query Responses {
+    surveys {
+        state_of_css {
+            css2021 {
+                environments {
+                    browsers {
+                        id
+                        responses {
+                            currentEdition {
+                                buckets {
+                                    count
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

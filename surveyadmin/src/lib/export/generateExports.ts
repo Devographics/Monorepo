@@ -96,7 +96,7 @@ function mongoExportCmd({
   filePath: string;
   edition: EditionMetadata;
   format: SupportedFormat;
-  normalizedResponsesCollectionName: string
+  normalizedResponsesCollectionName?: string
 }) {
   const editionId = edition.id!;
   /**
@@ -167,7 +167,7 @@ async function generateMongoExport({
   format,
   edition,
 }: {
-  format: "json" | "csv";
+  format: SupportedFormat;
   edition: EditionMetadata;
 }): Promise<string> {
   const editionId = edition.id!;

@@ -1,4 +1,4 @@
-import React, { memo, useState, useCallback, useEffect, useRef } from 'react'
+import React, { memo, useState, useCallback, useRef, ReactNode, ReactElement } from 'react'
 import styled from 'styled-components'
 import { mq, spacing, fontSize, color, zIndex } from 'core/theme'
 
@@ -11,9 +11,16 @@ const Popover = ({
     position = 'bottom',
     positionOpen = 'top',
     trigger,
-    label,
+    label = '',
     addPadding = true,
     children
+}: {
+    position?: 'bottom' | 'top'
+    positionOpen?: 'top' | 'bottom'
+    trigger?: ReactElement
+    label?: string | ReactNode
+    addPadding?: boolean
+    children: ReactNode
 }) => {
     const wrapperRef = useRef(null)
 
@@ -22,6 +29,7 @@ const Popover = ({
         setIsOpened(flag => !flag)
     }, [setIsOpened])
 
+    /*
     const handleClickOutside = useCallback(
         event => {
             if (isOpened && wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -30,6 +38,7 @@ const Popover = ({
         },
         [isOpened]
     )
+    */
 
     // TODO: make this work again, currently it breaks toggle open/close
     // useEffect(() => {

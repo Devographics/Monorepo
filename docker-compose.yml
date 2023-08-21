@@ -14,7 +14,8 @@ services:
       SRH_TOKEN: fake-dev-token # Token to use to connect to the server
       SRH_CONNECTION_STRING: 'redis://redis:6379' # Using `redis` hostname since they're in the same Docker network.
   mongodb:
-    image: mongo:4.0.4
+  # keep version in sync with what we use in prod
+    image: mongo:5.0.19
     ports:
       - '27017:27017'
     volumes:
