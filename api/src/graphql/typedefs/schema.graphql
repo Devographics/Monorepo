@@ -142,6 +142,8 @@ type QuestionMetadata {
     optionsAreSequential: Boolean
     # whether a question only exists in the API and not the ouline
     apiOnly: Boolean
+    # whether a question should be hidden in the survey form
+    hidden: Boolean
 }
 
 type RawDbPaths {

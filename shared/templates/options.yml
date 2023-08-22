@@ -36,6 +36,27 @@ years_of_experience:
         - id: range_more_than_20
           average: 20
 
+# years_of_experience_v2:
+#     defaultSort: options
+#     optionsAreRange: true
+#     options:
+#         - id: range_less_than_1
+#           average: 1
+#         - id: range_1_3
+#           average: 2
+#         - id: range_4_6
+#           average: 4
+#         - id: range_7_9
+#           average: 8
+#         - id: range_10_12
+#           average: 8
+#         - id: range_13_15
+#           average: 15
+#         - id: range_16_20
+#           average: 15
+#         - id: range_more_than_20
+#           average: 20
+
 company_size:
     defaultSort: options
     optionsAreRange: true
@@ -58,6 +79,24 @@ company_size:
         - id: range_more_than_1000
           average: 1000
 
+# company_size_v2:
+#     defaultSort: options
+#     optionsAreRange: true
+#     options:
+#         - id: na
+#         - id: range_1
+#           average: 1
+#         - id: range_2_10
+#           average: 3
+#         - id: range_11_50
+#           average: 7
+#         - id: range_51_200
+#           average: 15
+#         - id: range_201_1000
+#           average: 35
+#         - id: range_more_than_1000
+#           average: 1000
+
 yearly_salary:
     defaultSort: options
     optionsAreRange: true
@@ -74,6 +113,30 @@ yearly_salary:
         - id: range_50_100
           average: 75000
         - id: range_100_200
+          average: 150000
+        - id: range_more_than_200
+          average: 200000
+
+yearly_salary_v2:
+    defaultSort: options
+    optionsAreRange: true
+    options:
+        - id: na
+        # - id: range_work_for_free
+        #   average: 0
+        - id: range_0_20
+          average: 5000
+        - id: range_20_40
+          average: 40000
+        - id: range_40_60
+          average: 75000
+        - id: range_60_80
+          average: 150000
+        - id: range_80_100
+          average: 150000
+        - id: range_100_150
+          average: 150000
+        - id: range_150_200
           average: 150000
         - id: range_more_than_200
           average: 200000

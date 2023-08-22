@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { PageContextValue } from '@types/context'
 import { BucketUnits, ResponsesParameters, ResultsSubFieldEnum } from '@devographics/types'
+import { CustomizationDefinition } from 'core/filters/types'
 
 export type BlockUnits =
     | 'count'
@@ -19,7 +20,7 @@ export type BlockMode = 'absolute' | 'relative'
 
 export interface BlockComponentProps {
     block: BlockDefinition
-    context: PageContextValue
+    pageContext: PageContextValue
 }
 
 export interface BlockQueryOptions {
@@ -31,6 +32,7 @@ export interface BlockQueryOptions {
 
 export interface BlockDefinition {
     id: string
+    fieldId?: string
     sectionId: string
     template?: string
     blockType?: string
@@ -47,6 +49,9 @@ export interface BlockDefinition {
     parameters: ResponsesParameters
     filters?: FilterType[]
     queryOptions?: BlockQueryOptions
+
+    // predefined filters state
+    filtersState?: CustomizationDefinition
 
     // config
     mode?: BlockMode

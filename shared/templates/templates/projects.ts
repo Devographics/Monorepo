@@ -1,4 +1,10 @@
-import { DbPaths, QuestionTemplateOutput, TemplateFunction, DbSuffixes } from '@devographics/types'
+import {
+    DbPaths,
+    QuestionTemplateOutput,
+    TemplateFunction,
+    DbSuffixes,
+    DbPathsEnum
+} from '@devographics/types'
 import { checkHasId } from '../helpers'
 
 export const projects: TemplateFunction = options => {
@@ -11,15 +17,16 @@ export const projects: TemplateFunction = options => {
     const basePath = `${sectionSegment}.${questionSegment}.${DbSuffixes.OTHERS}`
 
     const rawPaths: DbPaths = {
-        prenormalized: `${sectionSegment}__${questionSegment}__${DbSuffixes.PRENORMALIZED}`
+        [DbPathsEnum.RESPONSE]: `${sectionSegment}__${questionSegment}__${DbSuffixes.PRENORMALIZED}`,
+        [DbPathsEnum.PRENORMALIZED]: `${sectionSegment}__${questionSegment}__${DbSuffixes.PRENORMALIZED}`
     }
 
     const normPaths: DbPaths = {
-        base: basePath,
-        raw: `${basePath}.${DbSuffixes.RAW}`,
-        patterns: `${basePath}.${DbSuffixes.PATTERNS}`,
-        error: `${basePath}.${DbSuffixes.ERROR}`,
-        prenormalized: `${basePath}.${DbSuffixes.NORMALIZED}`
+        [DbPathsEnum.BASE]: basePath,
+        [DbPathsEnum.RAW]: `${basePath}.${DbSuffixes.RAW}`,
+        [DbPathsEnum.PATTERNS]: `${basePath}.${DbSuffixes.PATTERNS}`,
+        [DbPathsEnum.ERROR]: `${basePath}.${DbSuffixes.ERROR}`,
+        [DbPathsEnum.PRENORMALIZED]: `${basePath}.${DbSuffixes.NORMALIZED}`
     }
 
     const output: QuestionTemplateOutput = {

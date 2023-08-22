@@ -13,9 +13,12 @@ import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
 const getResponses = cache(
   async ({ currentUser }: { currentUser: UserDocument }) => {
     const RawResponses = await getRawResponsesCollection<ResponseDocument>();
-    const responsesFromDb = await RawResponses.find({
-      userId: currentUser._id,
-    }).toArray();
+    const responsesFromDb = await RawResponses.find(
+      {
+        userId: currentUser._id,
+      },
+      { sort: { createdAt: -1 } }
+    ).toArray();
     const responses = responsesFromDb as Array<ResponseDocument>;
     return responses;
   }
@@ -53,6 +56,9 @@ const Profile = async ({ params }) => {
       </p>
       <p>
         <LogoutButton />
+      </p>
+      <p className="account-userId">
+        ID: <code>{currentUser._id}</code>
       </p>
     </div>
   );

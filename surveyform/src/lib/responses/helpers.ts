@@ -131,15 +131,17 @@ export const getSectionCompletionPercentage = ({
   }
   // don't count text questions towards completion score
   // TODO: we may have array of fields in a question yet it doesn't seem supported
-  const completableQuestions = section.questions.filter((question) => {
-    const formPaths = getFormPaths({ edition, question });
-    const fieldName = formPaths?.response!;
-    // NOTE: if question has no template it's a valid one, it will use the default radiogroup input
-    const isValidTemplate =
-      !question.template || !ignoredFieldTypes.includes(question.template);
-    const isCompletable = !!(isValidTemplate && fieldName);
-    return isCompletable;
-  });
+  const completableQuestions = section.questions
+    .filter((q) => !q.hidden)
+    .filter((question) => {
+      const formPaths = getFormPaths({ edition, question });
+      const fieldName = formPaths?.response!;
+      // NOTE: if question has no template it's a valid one, it will use the default radiogroup input
+      const isValidTemplate =
+        !question.template || !ignoredFieldTypes.includes(question.template);
+      const isCompletable = !!(isValidTemplate && fieldName);
+      return isCompletable;
+    });
   const questionsCount = completableQuestions.length;
   if (!questionsCount) return null;
 

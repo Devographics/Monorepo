@@ -7,6 +7,7 @@ import debounce from "lodash/debounce.js";
 import FormControl from "react-bootstrap/FormControl";
 import { OPTION_NA } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
+import { useIntlContext } from "@devographics/react-i18n";
 
 const OtherOption = (
   props: FormInputProps & {
@@ -30,6 +31,8 @@ const OtherOption = (
   const formPaths = getFormPaths({ edition, question });
   const path = formPaths.other!;
   const value = response?.[path];
+
+  const { formatMessage } = useIntlContext();
 
   // keep track of "other" field value locally
   const [localValue, setLocalValue] = useState(value);
@@ -87,6 +90,7 @@ const OtherOption = (
           onChange={handleChangeDebounced}
           onBlur={handleChange}
           disabled={disabled}
+          placeholder={formatMessage({ id: "options.other.placeholder" })}
         />
       )}
     </div>

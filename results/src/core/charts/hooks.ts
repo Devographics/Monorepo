@@ -10,6 +10,7 @@ import { CHART_MODE_GRID, CHART_MODE_STACKED, CHART_MODE_GROUPED } from 'core/fi
 import { ChartModes, FacetItem, FilterItem } from 'core/filters/types'
 import { Bucket, BucketUnits } from '@devographics/types'
 import { NO_ANSWER } from '@devographics/constants'
+import pickBy from 'lodash/pickBy'
 
 /*
 
@@ -31,11 +32,20 @@ const getMode = (units: Units, mode: Mode) => {
     }
 }
 
+// get all of one type of unit for a buucket
+// (count__1, count__2, etc. )
+const getAllBucketUnits = (bucket: Bucket, unit: BucketUnits) => {
+    const bucketWithAllOneUnits = pickBy(bucket, (value, key) => key.includes(unit))
+    const values = Object.values(bucketWithAllOneUnits)
+    return values as number[]
+}
+
 /*
 
 Get chart's max value
 
 */
+
 const getMaxValue = (units: BucketUnits, mode: Mode, buckets: Bucket[], total: number) => {
     if (units === BucketUnits.AVERAGE) {
         return Math.max(...buckets.map(b => b[BucketUnits.AVERAGE]))
@@ -43,7 +53,8 @@ const getMaxValue = (units: BucketUnits, mode: Mode, buckets: Bucket[], total: n
         if (units === BucketUnits.PERCENTAGE_BUCKET) {
             return 100
         } else {
-            const maxBucketPercentage = Math.max(...buckets.map(b => b[units]))
+            const allPercentages = buckets.map(b => getAllBucketUnits(b, units)).flat()
+            const maxBucketPercentage = Math.max(...allPercentages)
             return ceil(maxBucketPercentage, -1)
         }
 
@@ -57,7 +68,8 @@ const getMaxValue = (units: BucketUnits, mode: Mode, buckets: Bucket[], total: n
         if (getMode(units, mode) === 'absolute') {
             return ceil(total, -3)
         } else {
-            const maxBucketCount = Math.max(...buckets.map(b => b.count))
+            const allCounts = buckets.map(b => getAllBucketUnits(b, units)).flat()
+            const maxBucketCount = Math.max(...allCounts)
             const precision = `${maxBucketCount}`.length - 2
             return ceil(maxBucketCount, -precision)
         }
@@ -180,12 +192,22 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }))
 
+    const naGradient = {
+        id: `Gradient${orientation}Na`,
+        type: 'linearGradient',
+        colors: [
+            { offset: 0, color: 'rgba(255,255,255,0.6)' },
+            { offset: 100, color: 'rgba(255,255,255,0.2)' }
+        ],
+        ...(orientation === HORIZONTAL ? horizontalDefs : {})
+    }
+
     const noAnswerGradient = {
         id: `Gradient${orientation}NoAnswer`,
         type: 'linearGradient',
         colors: [
-            { offset: 0, color: colors.barColorNoAnswer.gradient[1] },
-            { offset: 100, color: colors.barColorNoAnswer.gradient[0] }
+            { offset: 0, color: 'rgba(255,255,255,0.3)' },
+            { offset: 100, color: 'rgba(255,255,255,0.05)' }
         ],
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }
@@ -200,7 +222,7 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }
 
-    return [...barColors, ...velocity, defaultGradient, noAnswerGradient]
+    return [...barColors, ...velocity, defaultGradient, noAnswerGradient, naGradient]
 }
 
 type UseColorFillsOptions = {
@@ -235,6 +257,11 @@ export const useColorFills = (options: UseColorFillsOptions) => {
         showDefaultSeries
     } = options
 
+    const naFill = {
+        match: d => d.data.indexValue === 'na',
+        id: `Gradient${orientation}Na`
+    }
+
     const noAnswerFill = {
         match: d => d.data.indexValue === 'no_answer',
         id: `Gradient${orientation}NoAnswer`
@@ -252,7 +279,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
             const id = isDefault
                 ? `Gradient${orientation}Default`
                 : `Gradient${orientation}${gridIndex + gridIndexOffset}`
-            return [noAnswerFill, { match: '*', id }]
+            return [noAnswerFill, naFill, { match: '*', id }]
         }
         case CHART_MODE_STACKED: {
             /*
@@ -282,7 +309,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
                 id: `${prefix}${orientation}${i + 2}`
             }))
 
-            return [noAnswerFill, averageFill, ...facetFills]
+            return [noAnswerFill, naFill, averageFill, ...facetFills]
         }
         case CHART_MODE_GROUPED: {
             /*
@@ -296,7 +323,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
                 },
                 id: `Gradient${orientation}${i + 1}`
             }))
-            return [noAnswerFill, ...numberedSeriesFills]
+            return [noAnswerFill, naFill, ...numberedSeriesFills]
         }
         default: {
             /*
@@ -305,7 +332,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
 
             */
             const defaultFill = { match: '*', id: `Gradient${orientation}Default` }
-            return [noAnswerFill, defaultFill]
+            return [noAnswerFill, naFill, defaultFill]
         }
     }
 }
@@ -390,7 +417,7 @@ export const useChartKeys = ({
         if (showDefaultSeries) {
             return [...Array(seriesCount)].map((x, i) => (i === 0 ? units : `${units}__${i}`))
         } else {
-            return [...Array(seriesCount - 1)].map((x, i) => `${units}__${i + 1}`)
+            return [...Array(seriesCount)].map((x, i) => `${units}__${i + 1}`)
         }
     } else {
         return [units]
@@ -408,12 +435,20 @@ const formatter = new Intl.NumberFormat('en-US', {
     maximumFractionDigits: 0
 })
 
-export const useChartLabelFormatter = ({ units, facet }) => {
+const isDollar = (facetId: string) => ['yearly_salary'].includes(facetId)
+
+export const useChartLabelFormatter = ({
+    units,
+    facet
+}: {
+    units: BucketUnits
+    facet: FacetItem
+}) => {
     if (isPercentage(units)) {
-        return d => `${round(d.value, 1)}%`
-    } else if (units === 'average' && facet === 'yearly_salary') {
-        return d => formatter.format(d.value)
+        return (value: number) => `${round(value, 1)}%`
+    } else if (facet && units === BucketUnits.AVERAGE && isDollar(facet.id)) {
+        return (value: number) => formatter.format(value)
     } else {
-        return d => d.value
+        return (value: number) => value
     }
 }

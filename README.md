@@ -200,6 +200,15 @@ MongoDB database.
 
 -   https://www.mongodb.com/atlas/database
 
+##### Local dev
+
+You can plug to a staging database or run Mongo locally via Docker.
+
+See "docker-compose.yml" and "Justfile" for our local setup.
+When running locally, data are stored in a ".mongo" folder in the monorepo folder.
+You can delete this folder to reset the local database.
+
+
 ### 💾 Cache Database
 
 Redis database.
@@ -211,6 +220,19 @@ Redis database.
 ##### Hosted On
 
 -   https://upstash.com/
+
+
+##### Local dev
+
+You can plug to a staging database or run Redis locally.
+
+Since we use Upstash, which rely on HTTP requests instead of direct Redis connection,
+we also setup an HTTP proxy.
+
+See "docker-compose.yml" and "Justfile" for our local setup.
+
+To reset the local Redis instance, the best approach is to remove the Redis container.
+This might be needed if you don't see the "demo_survey" in surveyform during local dev or testing.
 
 ---
 
@@ -267,26 +289,23 @@ Static image files.
 
 -   https://assets.devographics.com
 
----
 
-## Setup
+## Contribute
 
-We use [pnpm](https://pnpm.io/).
+Emojis to distinguish commits within the monorepo:
+- 🅿️ `:parking:` for the whole monorepo ("P" for "Pnpm")
+- ⚙  `:gear:` for the shared folder
+- 🔍 `:mag:` for graphiql
+- 📡 `:satellite:`for the api
+- 📊 `:bar_chart:`for the results
+- 🏠 `:house:`for the homepage
+- ✍ ️`:writhing_hand:` for the surveyform
+- 🔒 `:lock:` for the surveyadmin
+- 🌐 `:globe_with_meridians:` for the locales
+- 📖 `:book:` for the surveys
+- 🙎 `:person_pouting:` for the entities
+- 🖼️ `:frame_photo:` for the images
 
-### Folder Structure
-
-Expected folder structure:
-
-```sh
-devographics
-|_ monorepo (this repo)
-|_ locales
-|____locale-en-US
-|____locale-fr-FR
-|____....
-|_ surveys
-|_ images
-```
 
 ---
 

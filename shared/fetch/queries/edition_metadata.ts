@@ -24,6 +24,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
           faviconUrl
           socialImageUrl
           faq
+          enableReadingList
           colors {
             primary
             secondary
@@ -81,6 +82,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
               limit
               template
               inputComponent
+              hidden
               # contentType
               allowOther
               allowComment

@@ -15,6 +15,11 @@ export const getEntityFragment = () => `entity {
     nameHtml
     nameClean
     id
+    example {
+      language
+      code
+      codeHighlighted
+    }
     homepage {
       url
     }
@@ -41,6 +46,16 @@ export const getEntityFragment = () => `entity {
     }
     npm {
         url
+    }
+    mdn {
+        url
+    }
+    caniuse {
+        url
+    }
+    resources {
+        url
+        title
     }
 }`
 
@@ -135,7 +150,7 @@ export const getQueryArgsString = ({
         args.axis2 = xAxis
     }
     if (isEmpty(args)) {
-        return
+        return ''
     } else {
         return wrapArguments(args)
     }
@@ -175,7 +190,7 @@ export const getDefaultQuery = ({
         questionId,
         fieldId,
         subField = 'responses',
-        addBucketsEntities = false,
+        addBucketsEntities = true,
         allEditions = false,
         addArgumentsPlaceholder = false,
         addBucketFacetsPlaceholder = false,
@@ -286,7 +301,7 @@ export const getBlockQuery = ({
     queryArgs = {}
 }: {
     block: BlockDefinition
-    pageContext: PageContextValue
+    pageContext?: PageContextValue
     queryOptions?: ProvidedQueryOptions
     // isLog?: boolean
     // enableCache?: boolean
@@ -294,22 +309,24 @@ export const getBlockQuery = ({
     // addBucketFacetsPlaceholder?: boolean
     queryArgs?: QueryArgs
 }) => {
+    let stringQuery
     const { query, queryOptions: blockQueryOptions } = block
 
     const defaultQueryOptions = {
-        surveyId: pageContext.currentSurvey.id,
-        editionId: pageContext.currentEdition.id,
-        sectionId: pageContext.id,
+        surveyId: pageContext?.currentSurvey?.id,
+        editionId: pageContext?.currentEdition?.id,
+        sectionId: pageContext?.id,
         questionId: block.id
     }
 
     const queryOptions = { ...defaultQueryOptions, ...providedQueryOptions, ...blockQueryOptions }
 
     if (!query) {
-        return ''
+        stringQuery = ''
     } else {
-        return getQuery({ query, queryOptions, queryArgs })
+        stringQuery = getQuery({ query, queryOptions, queryArgs })
     }
+    return stringQuery
 }
 
 /*
@@ -332,7 +349,9 @@ export const getQuery = ({
 }) => {
     let queryContents
 
-    if (queryOptions.isLog) {
+    const { isLog, addArgumentsPlaceholder } = queryOptions
+
+    if (isLog) {
         // when logging we can leave out enableCache parameter
         delete queryArgs?.parameters?.enableCache
     }
@@ -348,10 +367,14 @@ export const getQuery = ({
     } else {
         queryContents = query
     }
-    if (queryArgs) {
+    if (!isEmpty(queryArgs)) {
         const queryArgsString = getQueryArgsString(queryArgs)
         if (queryArgsString) {
             queryContents = queryContents.replace(argumentsPlaceholder, queryArgsString)
+        }
+    } else {
+        if (!addArgumentsPlaceholder) {
+            queryContents = queryContents.replace(argumentsPlaceholder, '')
         }
     }
     const wrappedQuery = wrapQuery({

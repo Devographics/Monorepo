@@ -166,8 +166,6 @@ export const mergeSections = (sections1: Section[] = [], sections2: Section[] = 
     return sections
 }
 
-// in any given section, the features or tools will be the questions
-// which don't have a template defined
 export const getSectionItems = (section: SectionApiObject, type: 'tools' | 'features') =>
     type === 'tools' ? getSectionTools(section) : getSectionFeatures(section)
 export const getSectionFeatures = (section: SectionApiObject) =>

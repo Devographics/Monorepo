@@ -4,29 +4,38 @@ import { useTheme } from '@nivo/core'
 import { useI18n } from 'core/i18n/i18nContext'
 import { isPercentage } from 'core/helpers/units'
 import { BucketUnits } from '@devographics/types'
-import { StringTranslator } from 'core/types'
+import { BlockLegend, StringTranslator } from 'core/types'
 import { NO_ANSWER } from '@devographics/constants'
+import { getItemLabel } from 'core/helpers/labels'
+import { CustomizationFiltersSeries, FacetItem } from 'core/filters/types'
 
-const getLabel = (props: any, getString: StringTranslator) => {
-    const {
-        id,
-        legends,
-        filterLegends,
-        units,
-        indexValue,
-        data,
-        i18nNamespace,
-        shouldTranslate,
-        facet,
-        filters
-    } = props
-    const bucketKey =
-        indexValue === NO_ANSWER
-            ? { id: NO_ANSWER, label: getString('charts.no_answer').t }
-            : legends && legends.find(b => b.id === indexValue)
-    const { entity, label } = data
-    const s = getString(`options.${i18nNamespace}.${indexValue}`)
-    let extraLabel = ''
+const getExtraLabel = ({
+    id,
+    legends,
+    filterLegends,
+    units,
+    indexValue,
+    facet,
+    filters,
+    getString
+}: {
+    id: string
+    legends?: BlockLegend[]
+    filterLegends?: any
+    units: BucketUnits
+    indexValue: number
+    facet?: FacetItem
+    filters?: CustomizationFiltersSeries[]
+    getString: StringTranslator
+}) => {
+    // const bucketKey =
+    //     indexValue === NO_ANSWER
+    //         ? { id: NO_ANSWER, label: getString('charts.no_answer').t }
+    //         : legends && legends.find(b => b.id === indexValue)
+
+    // console.log(bucketKey)
+
+    let extraLabel: string | undefined = ''
 
     if (facet) {
         if (units === BucketUnits.AVERAGE || units === BucketUnits.PERCENTILES) {
@@ -35,7 +44,7 @@ const getLabel = (props: any, getString: StringTranslator) => {
             if (s?.t) {
                 values.axis = s.t
             }
-            extraLabel = `, ${getString('chart_units.average', { values })?.t}`
+            extraLabel = getString('chart_units.average', { values })?.t
         } else {
             const [units, facetBucketId] = id.split('__')
             const labelKey =
@@ -44,25 +53,15 @@ const getLabel = (props: any, getString: StringTranslator) => {
                     : `options.${facet.id}.${facetBucketId}`
             const s2 = getString(labelKey, {}, `${facet.id}: ${facetBucketId}`)
 
-            extraLabel = `, ${s2.t}`
+            extraLabel = s2.t
         }
     } else if (filters) {
         const [units, filterIndex] = id.split('__')
-        const legendItem = filterLegends[filterIndex - 1]
-        extraLabel = `, ${legendItem.label}`
+        const legendItem = filterLegends[Number(filterIndex) - 1]
+        extraLabel = legendItem?.label
     }
 
-    if (label) {
-        return label
-    } else if (bucketKey?.label) {
-        return bucketKey.label + extraLabel
-    } else if (shouldTranslate && !s.missing) {
-        return s.t + extraLabel
-    } else if (entity) {
-        return entity.name
-    } else {
-        return indexValue
-    }
+    return extraLabel
 }
 
 /**
@@ -71,9 +70,37 @@ const getLabel = (props: any, getString: StringTranslator) => {
  * - VerticalBarChart
  */
 const BarTooltip = props => {
-    const { id, bucketKeys, units, indexValue, data, i18nNamespace, shouldTranslate, facet } = props
+    const {
+        id,
+        i18nNamespace,
+        entity,
+        units,
+        indexValue,
+        data,
+        legends,
+        filterLegends,
+        facet,
+        filters,
+        labelFormatter
+    } = props
     const { getString } = useI18n()
-    const label = getLabel(props, getString)
+    const extraLabel = getExtraLabel({
+        id,
+        legends,
+        filterLegends,
+        units,
+        indexValue,
+        facet,
+        filters,
+        getString
+    })
+    const { key, label } = getItemLabel({
+        getString,
+        i18nNamespace,
+        id: indexValue,
+        entity,
+        extraLabel
+    })
 
     const nivoTheme = useTheme()
 
@@ -82,10 +109,7 @@ const BarTooltip = props => {
         <div style={{ ...nivoTheme.tooltip.container, maxWidth: 300 }}>
             <span dangerouslySetInnerHTML={{ __html: label }} />
             :&nbsp;
-            <strong>
-                {data[units_]}
-                {isPercentage(units) && '%'}
-            </strong>
+            <strong>{labelFormatter(data[units_])}</strong>
         </div>
     )
 }

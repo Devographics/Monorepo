@@ -5,6 +5,7 @@ import { FormInputProps } from "../form/typings";
 import { getSectioni18nIds } from "@devographics/i18n";
 import { questionIsCompleted } from "~/lib/responses/helpers";
 import { useIntlContext } from "@devographics/react-i18n";
+import { FormLayoutProps } from "../form/FormLayout";
 
 const SurveySectionHeading = ({
   section,
@@ -12,7 +13,7 @@ const SurveySectionHeading = ({
   edition,
   stateStuff,
   response,
-}: FormInputProps) => {
+}: FormLayoutProps) => {
   const { id, intlId } = section;
   const { itemPositions } = stateStuff;
   const intl = useIntlContext();
@@ -61,17 +62,19 @@ const SurveySectionHeading = ({
         </div>
         <div className="section-toc">
           <ol>
-            {section.questions.map((question) => (
-              <QuestionItem
-                key={question.id}
-                edition={edition}
-                section={section}
-                question={question}
-                scrollPosition={scrollPosition}
-                itemPositions={itemPositions}
-                response={response}
-              />
-            ))}
+            {section.questions
+              .filter((q) => !q.hidden)
+              .map((question) => (
+                <QuestionItem
+                  key={question.id}
+                  edition={edition}
+                  section={section}
+                  question={question}
+                  scrollPosition={scrollPosition}
+                  itemPositions={itemPositions}
+                  response={response}
+                />
+              ))}
           </ol>
         </div>
       </div>

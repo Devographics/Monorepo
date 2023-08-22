@@ -1,4 +1,8 @@
-import { EditionMetadata, ResponseDocument } from "@devographics/types";
+import {
+  EditionMetadata,
+  ResponseDocument,
+  ResultsStatusEnum,
+} from "@devographics/types";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 
 export const ResponseDetails = ({
@@ -8,11 +12,11 @@ export const ResponseDetails = ({
   edition: EditionMetadata;
   response?: ResponseDocument;
 }) => {
-  const { resultsUrl } = edition;
+  const { resultsUrl, resultsStatus } = edition;
   return (
     <div className="response-details">
       {response && <ResponseMetadata response={response} />}
-      {resultsUrl && (
+      {resultsUrl && resultsStatus === ResultsStatusEnum.PUBLISHED && (
         <p>
           <a href={resultsUrl}>
             <FormattedMessage id="general.survey_results" />
@@ -40,9 +44,11 @@ const ResponseMetadata = ({ response }: { response: ResponseDocument }) => {
           />
         )}
       </p>
-      <p>
-        <FormattedMessage id="general.completion" values={{ completion }} />
-      </p>
+      {typeof completion !== "undefined" && (
+        <p>
+          <FormattedMessage id="general.completion" values={{ completion }} />
+        </p>
+      )}
     </>
   );
 };

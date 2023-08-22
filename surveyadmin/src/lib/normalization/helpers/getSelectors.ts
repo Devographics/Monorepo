@@ -56,6 +56,7 @@ export const ignoreValues = [
   "no comment",
   "Nil",
   "nil",
+  "undefined",
 ];
 
 export const existsSelector = { $exists: true, $nin: ignoreValues };

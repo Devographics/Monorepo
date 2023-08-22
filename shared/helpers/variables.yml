@@ -15,6 +15,7 @@
       - surveyform
       - surveyadmin
       - homepage
+      - charts
 
 - id: API_URL
   aliases:
@@ -28,6 +29,7 @@
       - surveyform
       - surveyadmin
       - homepage
+      - charts
 
 - id: API_URL_PRODUCTION
   optional: true
@@ -93,6 +95,7 @@
       - surveyadmin
       - results
       - homepage
+      - charts
 
 - id: REDIS_TOKEN
   description: >
@@ -105,6 +108,7 @@
       - surveyadmin
       - results
       - homepage
+      - charts
 
 ### GitHub
 

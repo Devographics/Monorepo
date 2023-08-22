@@ -42,6 +42,7 @@ export type Edition = {
     year: number
     credits: Credit[]
     resultsUrl: string
+    resultsStatus: ResultsStatus
     questionsUrl: string
     imageUrl: string
     socialImageUrl: string
@@ -64,6 +65,7 @@ export type Edition = {
  * 4 hidden
  */
 export type SurveyStatus = 1 | 2 | 3 | 4
+export type ResultsStatus = 1 | 2 | 3
 export type SurveyStatusLabel = 'preview' | 'open' | 'closed' | 'hidden'
 
 export enum SurveyStatusEnum {
@@ -71,6 +73,12 @@ export enum SurveyStatusEnum {
     OPEN = 2,
     CLOSED = 3,
     HIDDEN = 4
+}
+
+export enum ResultsStatusEnum {
+    HIDDEN = 1,
+    PREVIEW = 2,
+    PUBLISHED = 3
 }
 
 export type Colors = {
@@ -144,6 +152,8 @@ export type Question = {
     from?: number
     to?: number
 
+    // a question that has a data field but does not show up in the form
+    hidden?: boolean
     allowMultiple?: boolean
     allowOther?: boolean
     allowPrenormalized?: boolean

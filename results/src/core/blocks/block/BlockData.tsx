@@ -5,13 +5,33 @@ import ModalTrigger from 'core/components/ModalTrigger'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
+import { getFiltersQuery } from 'core/filters/helpers'
+import { usePageContext } from 'core/helpers/pageContext'
+import { getBlockQuery } from 'core/helpers/queries'
+
+import { parse } from 'graphql'
+import { print } from 'graphql-print'
 
 const BlockData = props => {
+    const { block } = props
+    const { parameters } = block
+    const pageContext = usePageContext()
+
+    const query = getBlockQuery({
+        block,
+        pageContext,
+        queryOptions: {
+            addArgumentsPlaceholder: false,
+            addBucketFacetsPlaceholder: false
+        },
+        queryArgs: parameters ? { parameters } : {}
+    })
+
     return (
         <>
             <ExportWrapper>
                 <JSONTrigger {...props} />
-                <GraphQLTrigger {...props} />
+                <GraphQLTrigger query={query} />
             </ExportWrapper>
             <Table {...props} />
         </>
@@ -31,29 +51,43 @@ export const JSONTrigger = props => (
     </ModalTrigger>
 )
 
-export const GraphQLTrigger = props => (
-    <ModalTrigger
-        trigger={
-            <ExportButton className="ExportButton" size="small" {...props.buttonProps}>
-                <T k="export.export_graphql" />
-                {/* <ExportIcon /> */}
-            </ExportButton>
-        }
-    >
-        <GraphQLExport {...props} />
-    </ModalTrigger>
-)
+export const GraphQLTrigger = props => {
+    const { query, buttonProps = {} } = props
+    return (
+        <ModalTrigger
+            trigger={
+                <ExportButton className="ExportButton" size="small" {...buttonProps}>
+                    <T k="export.export_graphql" />
+                    {/* <ExportIcon /> */}
+                </ExportButton>
+            }
+        >
+            <GraphQLExport query={query} />
+        </ModalTrigger>
+    )
+}
+
+export function removeNull(obj: any): any {
+    const clean = Object.fromEntries(
+        Object.entries(obj)
+            .map(([k, v]) => [k, v === Object(v) ? removeNull(v) : v])
+            .filter(([_, v]) => v != null && (v !== Object(v) || Object.keys(v).length))
+    )
+    return Array.isArray(obj) ? Object.values(clean) : clean
+}
 
 export const JSONExport = ({ block, data }) => {
     const isArray = Array.isArray(data)
 
     // try to remove entities data
-    const cleanedData = isArray
-        ? data.map(row => {
-              const { entity, ...rest } = row
-              return rest
-          })
-        : data
+    const cleanedData = removeNull(
+        isArray
+            ? data.map(row => {
+                  const { entity, ...rest } = row
+                  return rest
+              })
+            : data
+    )
 
     const jsonExport = JSON.stringify(cleanedData, '', 2)
 
@@ -65,12 +99,20 @@ export const JSONExport = ({ block, data }) => {
 }
 
 export const GraphQLExport = ({ query }: { query: string }) => {
+    let stringQuery = query
+    try {
+        const ast = parse(query)
+        stringQuery = print(ast, { preserveComments: true })
+    } catch (error) {
+        console.warn(error)
+        console.warn(stringQuery)
+    }
     return (
         <div>
-            <AutoSelectText value={query} />
-            <Message>
+            <AutoSelectText value={stringQuery} />
+            <Message_>
                 <T k={'export.graphql'} html={true} />
-            </Message>
+            </Message_>
         </div>
     )
 }
@@ -95,7 +137,7 @@ export const AutoSelectText = ({ value }) => {
     return <TextArea value={value} readOnly ref={text} onClick={handleClick} />
 }
 
-export const Message = styled.div`
+export const Message_ = styled.div`
     margin-top: ${spacing(0.5)};
     font-size: ${fontSize('small')};
 `

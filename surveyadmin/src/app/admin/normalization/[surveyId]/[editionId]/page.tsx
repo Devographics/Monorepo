@@ -9,14 +9,18 @@ import {
 } from "~/lib/normalization/normalize/helpers";
 import { getNormalizableQuestions } from "~/lib/normalization/helpers/getNormalizableQuestions";
 import { routes } from "~/lib/routes";
+import NormalizeResponses from "~/components/normalization/NormalizeResponses";
 
 export default async function Page({ params }) {
   const { surveyId, editionId } = params;
-  const { data: surveys } = await fetchSurveysMetadata();
+  const { data: surveys } = await fetchSurveysMetadata({
+    shouldGetFromCache: false,
+  });
   const survey = surveys.find((s) => s.id === surveyId)!;
   const { data: edition } = await fetchEditionMetadataAdmin({
     surveyId,
     editionId,
+    shouldGetFromCache: false,
   });
   const questions = getNormalizableQuestions({ survey, edition });
   const responsesCount = await getEditionResponsesCount({ survey, edition });
@@ -32,6 +36,8 @@ export default async function Page({ params }) {
         {responsesCount} raw responses, {normResponsesCount} normalized
         responses
       </p>
+
+      <NormalizeResponses survey={survey} edition={edition} />
 
       <NormalizeEdition
         responsesCount={responsesCount}

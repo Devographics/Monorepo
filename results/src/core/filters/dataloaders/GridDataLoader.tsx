@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useFilterLegends } from '../helpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { DynamicDataLoaderProps } from './DynamicDataLoader'
+import { DataLoaderFooter } from './DataLoaderFooter'
 import WrapperGrid from './WrapperGrid'
 import { fetchSeriesData } from '../helpers'
 import { DataSeries } from 'core/filters/types'
@@ -21,7 +22,9 @@ const GridDataLoader = ({
     defaultSeries,
     children,
     chartFilters,
-    layout = 'column'
+    setChartFilters,
+    layout = 'column',
+    providedSeries
 }: GridDataLoaderProps) => {
     const pageContext = usePageContext()
     const year = pageContext.currentEdition.year
@@ -33,7 +36,7 @@ const GridDataLoader = ({
     })
 
     const [isLoading, setIsLoading] = useState(false)
-    const [series, setSeries] = useState([defaultSeries])
+    const [series, setSeries] = useState(providedSeries || [defaultSeries])
 
     useEffect(() => {
         const getData = async () => {
@@ -52,7 +55,7 @@ const GridDataLoader = ({
             setIsLoading(false)
         }
 
-        if (chartFilters?.filters?.length > 0) {
+        if (!chartFilters.options.preventQuery && chartFilters?.filters?.length > 0) {
             getData()
         }
     }, [chartFilters])
@@ -68,9 +71,12 @@ const GridDataLoader = ({
             >
                 {children}
             </WrapperGrid>
-            {series && (
-                <JSONTrigger block={block} data={series} buttonProps={{ variant: 'link' }} />
-            )}
+            <DataLoaderFooter
+                data={series}
+                block={block}
+                chartFilters={chartFilters}
+                setChartFilters={setChartFilters}
+            />
         </>
     )
 }

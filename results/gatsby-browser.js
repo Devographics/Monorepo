@@ -11,11 +11,28 @@ export const onRouteUpdate = ({ location }) => {
     ReactGA.pageview(location.pathname)
 }
 
+/**
+ *  @typedef {{element: any, 
+ *              props: { 
+ *                  location: any
+ *                  pageContext: any,
+ *                  data: {allSiteFunction: any, allSitePage: any},
+ *                  pageResources: any,
+ *                  uri: string,
+ *                  path: string,
+ *                  serverData?: any,
+ *                  custom404?: any,
+ *                  children?: React.ReactNode
+ *              }
+ * }} PageElementProps 
+ */
+/**
+ * @param {PageElementProps}
+ * @returns 
+ */
 export const wrapPageElement = ({ element, props }) => {
-    const { pageContext, ...rest } = props
-
     return (
-        <LayoutWrapper {...rest} pageContext={pageContext}>
+        <LayoutWrapper {...props}>
             {element}
         </LayoutWrapper>
     )

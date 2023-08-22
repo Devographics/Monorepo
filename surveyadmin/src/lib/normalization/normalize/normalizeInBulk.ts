@@ -26,6 +26,17 @@ export const defaultLimit = 999;
 const isSimulation = false;
 const verbose = false;
 
+interface NormalizeInBulkOption {
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  responses: ResponseDocument[];
+  limit?: number;
+  questionId?: string;
+  isRenormalization?: boolean;
+  isFirstNormalization?: boolean;
+  verbose?: boolean;
+}
+
 /*
 
 We can normalize:
@@ -35,15 +46,7 @@ B) a specific question on *all* documents (if questionId) is passed
 C) *all* questions on *all* documents (if neither is passed)
 
 */
-export const normalizeInBulk = async (options: {
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-  responses: ResponseDocument[];
-  limit?: number;
-  questionId?: string;
-  isRenormalization?: boolean;
-  isFirstNormalization?: boolean;
-}) => {
+export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
   const {
     survey,
     edition,
@@ -52,6 +55,7 @@ export const normalizeInBulk = async (options: {
     questionId,
     isRenormalization = false,
     isFirstNormalization = false,
+    verbose = false,
   } = options;
   const startAt = new Date();
   const timestamp = startAt.toISOString();

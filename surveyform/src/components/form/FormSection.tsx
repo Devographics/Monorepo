@@ -12,8 +12,10 @@ import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { useResponse } from "../ResponseContext/ResponseProvider";
 import {
   Edition,
+  EditionMetadata,
   ResponseDocument,
   Section,
+  SectionMetadata,
   Survey,
 } from "@devographics/types";
 import { Message } from "./FormMessages";
@@ -39,16 +41,14 @@ const mergeWithResponse = (
   return { ...response, ...currentValues };
 };
 
-export const FormSection = (
-  props: {
-    edition: Edition;
-    section: Section;
-    // in outline mode there is no response
-    response?: ResponseDocument;
-    sectionNumber: number;
-    readOnly?: boolean;
-  } & any /** TODO: those are form input props? */
-) => {
+export const FormSection = (props: {
+  edition: EditionMetadata;
+  section: SectionMetadata;
+  // in outline mode there is no response
+  response?: ResponseDocument;
+  sectionNumber: number;
+  readOnly?: boolean;
+}) => {
   const {
     edition,
     section,
@@ -217,26 +217,28 @@ export const FormSection = (
     <div>
       <FormContext.Provider value={formProps}>
         <FormLayout {...formProps}>
-          {section.questions.map((question, index) => (
-            // TODO: the boundary "render" function has some where typings
-            // @ts-ignore
-            <ErrorBoundary
-              key={question.id}
-              fallbackComponent={({ error }) => (
-                <p>
-                  Could not load question {question.id} ({error?.message})
-                </p>
-              )}
-            >
-              <FormQuestion
-                {...formProps}
+          {section.questions
+            .filter((q) => !q.hidden)
+            .map((question, index) => (
+              // TODO: the boundary "render" function has some where typings
+              // @ts-ignore
+              <ErrorBoundary
                 key={question.id}
-                question={question}
-                sectionNumber={sectionNumber}
-                questionNumber={index + 1}
-              />
-            </ErrorBoundary>
-          ))}
+                fallbackComponent={({ error }) => (
+                  <p>
+                    Could not load question {question.id} ({error?.message})
+                  </p>
+                )}
+              >
+                <FormQuestion
+                  {...formProps}
+                  key={question.id}
+                  question={question}
+                  sectionNumber={sectionNumber}
+                  questionNumber={index + 1}
+                />
+              </ErrorBoundary>
+            ))}
         </FormLayout>
       </FormContext.Provider>
     </div>

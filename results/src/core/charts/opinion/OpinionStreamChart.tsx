@@ -42,7 +42,7 @@ const OpinionStreamChart = ({
 
     const getLayerColor = props => {
         const { id } = props
-        const color = legends.find(b => b.id === String(id))?.color
+        const color = legends[id]?.color
         if (current !== null && current !== id) {
             return `${color}33`
         }

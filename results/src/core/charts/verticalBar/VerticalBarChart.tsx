@@ -33,11 +33,15 @@ export const getChartData = (data: StandardQuestionData) => data?.responses?.cur
 Combine multiple series into a single chart
 
 */
-export const combineSeries = (dataSeries: DataSeries<StandardQuestionData>[]) => {
-    const allBuckets = dataSeries.map(series => getChartData(series.data))
+export const combineSeries = (
+    dataSeries: DataSeries<StandardQuestionData>[],
+    showDefaultSeries: boolean
+) => {
+    const allSeriesBuckets = dataSeries.map(series => getChartData(series.data))
     // get chart data (buckets) for each series
     const combinedBuckets = combineBuckets({
-        allBuckets
+        allSeriesBuckets,
+        showDefaultSeries
     })
     return combinedBuckets
 }
@@ -92,9 +96,10 @@ export interface VerticalBarChartProps extends ChartComponentProps {
     series: DataSeries<StandardQuestionData>[]
     gridIndex?: number
     chartDisplayMode?: ChartModes
+    showDefaultSeries?: boolean
     facet?: FacetItem
     filters?: CustomizationFiltersSeries[]
-    showDefaultSeries?: boolean
+    filterLegends?: any
 }
 
 const VerticalBarChart = (props: VerticalBarChartProps) => {
@@ -103,7 +108,6 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
         viewportWidth,
         className,
         legends,
-        filterLegends,
         total,
         i18nNamespace,
         translateData,
@@ -115,6 +119,7 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
         chartDisplayMode = ChartModes.CHART_MODE_DEFAULT,
         facet,
         filters,
+        filterLegends,
         showDefaultSeries,
         series
     } = props
@@ -158,7 +163,7 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
 
     const labelFormatter = useChartLabelFormatter({ units, facet })
 
-    const labelsLayer = useMemo(() => getLabelsLayer(labelFormatter), [units, facet])
+    const labelsLayer = useMemo(() => getLabelsLayer(d => labelFormatter(d.value)), [units, facet])
 
     const colors = [theme.colors.barChart[colorVariant]]
 
@@ -208,6 +213,7 @@ const VerticalBarChart = (props: VerticalBarChartProps) => {
                         shouldTranslate={translateData}
                         facet={facet}
                         filters={filters}
+                        labelFormatter={labelFormatter}
                         {...barProps}
                     />
                 )}

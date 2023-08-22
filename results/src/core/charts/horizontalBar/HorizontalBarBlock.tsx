@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react'
-import Block from 'core/blocks/block/BlockVariant'
+import BlockVariant from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
 import HorizontalBarChart, {
     getChartData,
@@ -18,12 +18,13 @@ export interface HorizontalBarBlockProps extends BlockComponentProps {
     data: StandardQuestionData
 }
 
-const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
+const HorizontalBarBlock = ({ block, data, series }: HorizontalBarBlockProps) => {
     const {
         mode = 'relative',
         defaultUnits = BucketUnits.COUNT,
         translateData,
-        i18nNamespace = block.id
+        i18nNamespace = block.fieldId || block.id,
+        filtersState
     } = block
 
     const [units, setUnits] = useState(defaultUnits)
@@ -36,7 +37,8 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
 
     const { chartFilters, setChartFilters, filterLegends } = useChartFilters({
         block,
-        options: { supportedModes: [MODE_GRID, MODE_FACET] }
+        options: { supportedModes: [MODE_GRID, MODE_FACET] },
+        providedFiltersState: filtersState
     })
 
     const allFilters = useAllFilters(block.id)
@@ -57,68 +59,78 @@ const HorizontalBarBlock = ({ block, data }: HorizontalBarBlockProps) => {
 
     const defaultSeries = { name: 'default', data }
 
-    // TODO: kind of hacky?
     const chartData = getChartData(data, block)
-    if (!chartData) {
-        return (
-            <div>
-                <h4>HorizontalBarBlock: No data (dataPath: {getChartDataPath(block)})</h4>
-                <pre>
-                    <code>{JSON.stringify(data, null, 2)}</code>
-                </pre>
-            </div>
-        )
+
+    const blockVariantProps = {
+        units,
+        setUnits,
+        unitsOptions,
+        data,
+        getChartData,
+        block,
+        completion,
+        chartFilters,
+        setChartFilters,
+        legendProps: { layout: 'vertical' }
+    }
+
+    if (data) {
+        blockVariantProps.tables = [
+            getTableData({
+                data: chartData,
+                valueKeys: [
+                    BucketUnits.PERCENTAGE_SURVEY,
+                    BucketUnits.PERCENTAGE_QUESTION,
+                    BucketUnits.COUNT
+                ],
+                translateData,
+                i18nNamespace: i18nNamespace
+            })
+        ]
+    }
+
+    if (
+        filterLegends.length > 0 &&
+        [
+            BucketUnits.COUNT,
+            BucketUnits.PERCENTAGE_SURVEY,
+            BucketUnits.PERCENTAGE_QUESTION,
+            BucketUnits.PERCENTAGE_BUCKET
+        ].includes(units)
+    ) {
+        blockVariantProps.legends = filterLegends
+    }
+
+    const chartProps = {
+        block,
+        total,
+        series: series || [{ name: 'default', data }],
+        i18nNamespace,
+        translateData,
+        mode,
+        units,
+        colorVariant: 'primary',
+        facet: chartFilters.facet,
+        legends: chartLegends
     }
 
     return (
-        <Block
-            units={units}
-            setUnits={setUnits}
-            unitsOptions={unitsOptions}
-            data={data}
-            getChartData={getChartData}
-            tables={[
-                getTableData({
-                    data: chartData,
-                    valueKeys: [
-                        BucketUnits.PERCENTAGE_SURVEY,
-                        BucketUnits.PERCENTAGE_QUESTION,
-                        BucketUnits.COUNT
-                    ],
-                    translateData,
-                    i18nNamespace: i18nNamespace
-                })
-            ]}
-            block={block}
-            completion={completion}
-            chartFilters={chartFilters}
-            setChartFilters={setChartFilters}
-            legendProps={{ layout: 'vertical' }}
-            {...(filterLegends.length > 0 ? { legends: filterLegends } : {})}
-        >
+        <BlockVariant {...blockVariantProps}>
             <DynamicDataLoader
                 block={block}
                 chartFilters={chartFilters}
+                setChartFilters={setChartFilters}
+                units={units}
                 setUnits={setUnits}
                 layout="grid"
                 defaultSeries={defaultSeries}
+                providedSeries={series}
             >
                 <ChartContainer fit={false}>
-                    <HorizontalBarChart
-                        block={block}
-                        total={total}
-                        series={[{ name: 'default', data }]}
-                        i18nNamespace={i18nNamespace}
-                        translateData={translateData}
-                        mode={mode}
-                        units={units}
-                        colorVariant={'primary'}
-                        facet={chartFilters.facet}
-                        legends={chartLegends}
-                    />
+                    <HorizontalBarChart {...chartProps} />
                 </ChartContainer>
             </DynamicDataLoader>
-        </Block>
+        </BlockVariant>
     )
 }
 

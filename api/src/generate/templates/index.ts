@@ -11,8 +11,11 @@ export * from './section_tools_ratios'
 export * from './completion_stats'
 export * from './knowledge_score'
 
+export * from './data_explorer'
+
 export {
     age,
+    age_number,
     company_size,
     country,
     defaultTemplateFunction,
@@ -36,9 +39,15 @@ export {
     tokyodev_nationality,
     yearly_salary,
     years_of_experience,
+    years_of_experience_number,
     quiz,
     text,
-    longtext
+    longtext,
+    browser,
+    device,
+    os,
+    version,
+    referrer,
+    sourcetag,
+    reading_list
 } from '@devographics/templates'
-
-export * from './data_explorer'

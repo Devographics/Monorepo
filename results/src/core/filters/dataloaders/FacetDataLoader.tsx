@@ -5,11 +5,14 @@ import { usePageContext } from 'core/helpers/pageContext'
 import isEmpty from 'lodash/isEmpty'
 import { CHART_MODE_STACKED } from '../constants'
 import { DynamicDataLoaderProps } from './DynamicDataLoader'
+import { DataLoaderFooter } from './DataLoaderFooter'
 import Loading from 'core/explorer/Loading'
 import styled from 'styled-components'
 import { DataSeries } from '../types'
 import { JSONTrigger } from 'core/blocks/block/BlockData'
 import { BucketUnits } from '@devographics/types'
+import T from 'core/i18n/T'
+import { Note_ } from 'core/blocks/block/BlockNote'
 
 interface FacetDataLoaderProps extends DynamicDataLoaderProps {
     defaultSeries: DataSeries<AllQuestionData>
@@ -20,14 +23,17 @@ const FacetDataLoader = ({
     block,
     children,
     chartFilters,
-    setUnits
+    setChartFilters,
+    units,
+    setUnits,
+    providedSeries
 }: FacetDataLoaderProps) => {
     const pageContext = usePageContext()
     const year = pageContext.currentEdition.year
     const showDefaultSeries = chartFilters.options.showDefaultSeries
 
     const [isLoading, setIsLoading] = useState(false)
-    const [series, setSeries] = useState([defaultSeries])
+    const [series, setSeries] = useState(providedSeries || [defaultSeries])
 
     useEffect(() => {
         const getData = async () => {
@@ -45,7 +51,7 @@ const FacetDataLoader = ({
             setUnits(BucketUnits.PERCENTAGE_BUCKET)
         }
 
-        if (!isEmpty(chartFilters.facet)) {
+        if (!chartFilters.options.preventQuery && !isEmpty(chartFilters.facet)) {
             getData()
         }
     }, [chartFilters])
@@ -63,8 +69,22 @@ const FacetDataLoader = ({
         <Wrapper_>
             <Contents_>{React.cloneElement(children, props)}</Contents_>
             {isLoading && <Loading />}
-            {series && (
-                <JSONTrigger block={block} data={series} buttonProps={{ variant: 'link' }} />
+
+            <DataLoaderFooter
+                data={series}
+                block={block}
+                chartFilters={chartFilters}
+                setChartFilters={setChartFilters}
+            />
+            {units === BucketUnits.PERCENTAGE_BUCKET && (
+                <Note_>
+                    <T k="charts.facets_clarification" />
+                </Note_>
+            )}
+            {units === BucketUnits.AVERAGE && (
+                <Note_>
+                    <T k="charts.average_clarification" />
+                </Note_>
             )}
         </Wrapper_>
     )

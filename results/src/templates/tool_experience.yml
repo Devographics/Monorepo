@@ -1,5 +1,5 @@
 blockType: ToolFeatureExperienceBlock
-titleId: blocks.tool_experience
+# titleId: blocks.tool_experience
 descriptionId: blocks.tool_experience.description
 noteId: blocks.tool_experience.note
 i18nNamespace: tools
@@ -9,5 +9,5 @@ query: allEditionsData
 parameters: { showNoAnswer: true }
 hidden: true
 queryOptions:
-    # addQuestionEntity: true
+    addQuestionEntity: true
     addQuestionComments: true

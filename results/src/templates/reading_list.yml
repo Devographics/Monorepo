@@ -1,0 +1,38 @@
+defaultUnits: count
+blockType: HorizontalBarBlock
+
+# note: reading list can contain tools as well as features, but non-feature
+# items will generally not need to be translated
+i18nNamespace: features
+
+# note: this needs its own separate query because reading_list appears
+# in the features section; but it's part of its own reading_list sub-section
+# in the API
+query: >
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                # hack to make this work when appearing in features section
+                features: reading_list {
+                    reading_list {
+                        responses<ARGUMENTS_PLACEHOLDER> {
+                            currentEdition {
+                                buckets {
+                                    id
+                                    count
+                                    entity {
+                                        name
+                                        nameClean
+                                        nameHtml
+                                        mdn {
+                                          url
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

@@ -4,7 +4,10 @@ import {
     getLocalizedPath,
     getCleanLocales,
     createBlockPages,
-    runPageQueries
+    runPageQueries,
+    getLoadMethod,
+    removeNull,
+    getCachingMethods
 } from './helpers.mjs'
 import { getSendOwlData } from './sendowl.mjs'
 import yaml from 'js-yaml'
@@ -45,8 +48,21 @@ const config = {
     editionId: process.env.EDITIONID
 }
 
+function strikeThrough(text) {
+    return text
+        .split('')
+        .map(char => char + '\u0336')
+        .join('')
+}
+
+/**
+ * @see createPages https://www.gatsbyjs.com/docs/how-to/querying-data/using-gatsby-without-graphql/#the-approach-fetch-data-and-use-gatsbys-createpages-api
+ */
 export const createPagesSingleLoop = async ({
     graphql,
+    /**
+     * @see https://www.gatsbyjs.com/docs/reference/config-files/actions/#createPage
+     */
     actions: { createPage, createRedirect }
 }) => {
     await initRedis()
@@ -66,12 +82,21 @@ export const createPagesSingleLoop = async ({
         translationContexts: config.translationContexts
     }
 
-    console.log(`// Building ${surveyId}/${editionId}… (USE_FAST_BUILD = ${USE_FAST_BUILD})`)
+    const cachingMethods = getCachingMethods()
+    const cachingMethodsString = Object.keys(cachingMethods)
+        .map(cm => (cachingMethods[cm] ? cm : strikeThrough(cm)))
+        .join(', ')
+
+    console.log(
+        `Building ${surveyId}/${editionId}… 
+• 📁 caching methods = ${cachingMethodsString}
+• ⏱️ fast build = ${USE_FAST_BUILD}
+• 📖 load method = ${getLoadMethod()}`
+    )
 
     // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster
     const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []
 
-    // Redis version: many small fast queries (without null fields)
     const locales = await getLocales({
         localeIds,
         graphql,
@@ -111,10 +136,12 @@ export const createPagesSingleLoop = async ({
         editionId
     })
 
-    const metadataResults = await graphql(
-        `
-            ${metadataQuery}
-        `
+    const metadataResults = removeNull(
+        await graphql(
+            `
+                ${metadataQuery}
+            `
+        )
     )
     const metadataData = metadataResults?.data?.dataAPI
     logToFile('metadataData.json', metadataData, {
@@ -126,7 +153,11 @@ export const createPagesSingleLoop = async ({
     const currentEdition = metadataData.surveys[surveyId][editionId]._metadata
 
     const siteUrl = currentEdition.resultsUrl
-    const chartSponsors = await getSendOwlData({ flat, surveyId, editionId, siteUrl })
+
+    let chartSponsors = []
+    if (!USE_FAST_BUILD) {
+        chartSponsors = await getSendOwlData({ flat, surveyId, editionId, siteUrl })
+    }
 
     for (const page of flat) {
         let pageData = {}
@@ -146,7 +177,7 @@ export const createPagesSingleLoop = async ({
 
         try {
             // pageData = await runPageQuery({ page, graphql })
-            pageData = await runPageQueries({ page, graphql, surveyId, editionId })
+            pageData = await runPageQueries({ page, graphql, surveyId, editionId, currentEdition })
         } catch (error) {
             console.log(`// GraphQL error for page ${page.id}`)
             console.log(page)

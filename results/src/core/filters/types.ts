@@ -20,6 +20,8 @@ export type CustomizationOptions = {
     mode?: SupportedMode
     supportedModes?: SupportedMode[]
     queryOnLoad?: boolean
+    // if true these filters will not trigger a fetch() call
+    preventQuery?: boolean
 }
 
 export type CustomizationFiltersSeries = {
@@ -60,6 +62,8 @@ export type PanelState = {
 
 export type DataSeries<QuestionDataType> = {
     name: string
+    // for series obtained at build time through API, path to locate data in page context
+    dataPath?: string
     data: QuestionDataType
     filters?: CustomizationFiltersSeries
     facet?: FacetItem

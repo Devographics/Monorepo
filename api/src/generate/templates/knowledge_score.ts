@@ -26,8 +26,12 @@ export const transformFunction: TransformFunction = (
     data.forEach(editionData => {
         editionData.buckets = range(0, 100 / groupBy).map(n => {
             const [lowerBound, upperBound] = getBounds(n)
+            // note: when building the first bucket (n = 0) we also
+            // include the "id: 0" bucket in the source data
             const selectedBuckets = editionData.buckets.filter(
-                b => Number(b.id) >= lowerBound && Number(b.id) < upperBound
+                b =>
+                    (n === 0 && Number(b.id) === 0) ||
+                    (Number(b.id) > lowerBound && Number(b.id) <= upperBound)
             )
             const bucket = {
                 id: getId(n),
@@ -38,6 +42,7 @@ export const transformFunction: TransformFunction = (
                     Math.round(100 * sumBy(selectedBuckets, 'percentageQuestion')) / 100,
                 facetBuckets: []
             }
+
             return bucket
         })
     })

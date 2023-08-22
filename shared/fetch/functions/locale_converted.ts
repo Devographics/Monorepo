@@ -21,7 +21,7 @@ export const fetchLocaleConverted = async (
     const result = await getFromCache<LocaleDefWithStrings>({
         key,
         fetchFunction: async () => {
-            const result = await fetchGraphQLApi({
+            const result = await fetchGraphQLApi<{ locale: { strings: Array<{ key: string, t: string, tHtml: string }> } }>({
                 query,
                 key
             })
@@ -30,7 +30,7 @@ export const fetchLocaleConverted = async (
 
             // react-i18n expects {foo1: bar1, foo2: bar2} etc. map whereas
             // api returns [{key: foo1, t: bar1}, {key: foo2, t: bar2}] etc. array
-            const convertedStrings = {}
+            const convertedStrings: { [key: string]: string } = {}
             locale.strings &&
                 locale.strings.forEach(({ key, t, tHtml }) => {
                     convertedStrings[key] = tHtml || t

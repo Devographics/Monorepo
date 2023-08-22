@@ -13,6 +13,7 @@ import { CloseIcon, DotsIcon } from 'core/icons'
 import TickItemLinks, { getSocialLinks } from 'core/charts/common/TickItemLinks'
 import Popover from 'core/components/Popover2'
 import { NO_ANSWER } from '@devographics/constants'
+import { getItemLabel } from 'core/helpers/labels'
 
 const labelMaxLength = 20
 
@@ -99,7 +100,7 @@ export const getBucketLabel = args => {
         key = 'charts.no_answer'
         label = getString('charts.no_answer').t
     } else {
-        key = `options.${i18nNamespace}.${id}`
+        key = i18nNamespace === 'features' ? `features.${id}` : `options.${i18nNamespace}.${id}`
         const s = getString(key)
 
         if (providedLabel) {
@@ -138,17 +139,17 @@ export const TickItem = (tick: TickItemProps) => {
     let link,
         description = tick.description
 
-    const { key, label: tickLabel } = getBucketLabel({
-        shouldTranslate,
+    const { key, label: tickLabel } = getItemLabel({
         i18nNamespace,
         entity,
-        id: tick.value,
+        id: tick.value!,
+        getString,
         label
     })
 
     if (entity) {
-        const { homepage, github } = entity
-        link = homepage?.url || github?.url
+        const { homepage, github, mdn } = entity
+        link = homepage?.url || github?.url || mdn?.url
     }
     if (shouldTranslate) {
         const descriptionString = getString(`options.${i18nNamespace}.${value}.description`)

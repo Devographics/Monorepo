@@ -5,5 +5,5 @@ hasSponsor: true
 query: allEditionsData
 parameters: { showNoAnswer: true }
 queryOptions:
-    # addQuestionEntity: true
+    addQuestionEntity: true
     addQuestionComments: true

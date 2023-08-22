@@ -31,17 +31,22 @@
         blockType: SurveyIntroBlock
         disableExport: true
         wrapBlock: false
+
       - id: survey_sponsors
         template: sponsors
+
       - id: survey_partners
         template: sponsors
         blockType: PartnersBlock
+
       - id: survey_credits
         template: credits
+
       - id: survey_newsletter
         blockType: NewsletterBlock
         disableExport: true
         wrapBlock: false
+
       - id: survey_translators
         blockType: TranslatorsBlock
         disableExport: true
@@ -87,6 +92,43 @@
         translateData: true
         # blockType: ParticipationByCountryBlock
         parameters: { limit: 20 }
+        variants:
+            - id: country_low_vs_high_income
+              descriptionId: user_info.country_low_vs_high_income.description.css2023
+              fieldId: country
+              i18nNamespace: country
+              tabId: tabs.low_vs_high_income
+              defaultUnits: count
+              template: demographics
+              blockType: HorizontalBarBlock
+              parameters: { limit: 20 }
+              filtersState:
+                  options:
+                      showDefaultSeries: false
+                      enableYearSelect: false
+                      mode: grid
+                      queryOnLoad: false
+                      supportedModes:
+                          - grid
+                          - facet
+                      preventQuery: false
+                  filters:
+                      - conditions:
+                            - fieldId: yearly_salary
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_0_10
+                                  - range_10_30
+                                  - range_30_50
+                      - conditions:
+                            - fieldId: yearly_salary
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_50_100
+                                  - range_100_200
+                                  - range_more_than_200
 
       - id: locale
         template: demographics
@@ -109,15 +151,50 @@
         template: demographics
         parameters: { showNoAnswer: true }
         variants:
-            - id: years_of_experience
-              facet: user_info__yearly_salary
+            - id: average_income_by_years_of_experience
+              descriptionId: user_info.average_income_by_company_size.description.css2023
+              fieldId: years_of_experience
+              i18nNamespace: years_of_experience
+              defaultUnits: averageByFacet
               tabId: tabs.by_salary
-              template: demographics # facet
-              parameters: { facetSort: { order: asc, property: mean }, facetCutoff: 100 }
+              template: demographics
+              filtersState:
+                  options:
+                      showDefaultSeries: true
+                      enableYearSelect: false
+                      mode: facet
+                      queryOnLoad: false
+                      supportedModes:
+                          - combined
+                          - facet
+                  filters: []
+                  facet:
+                      sectionId: user_info
+                      id: yearly_salary
 
       - id: company_size
         template: demographics
         parameters: { showNoAnswer: true }
+        variants:
+            - id: average_income_by_company_size
+              fieldId: company_size
+              i18nNamespace: company_size
+              defaultUnits: averageByFacet
+              tabId: tabs.by_salary
+              template: demographics
+              filtersState:
+                  options:
+                      showDefaultSeries: true
+                      enableYearSelect: false
+                      mode: facet
+                      queryOnLoad: false
+                      supportedModes:
+                          - combined
+                          - facet
+                  filters: []
+                  facet:
+                      sectionId: user_info
+                      id: yearly_salary
 
       - id: variants_hint
         template: hint
@@ -126,69 +203,110 @@
         template: demographics
         parameters: { showNoAnswer: true }
         variants:
-            - id: higher_education_degree
-              facet: user_info__gender
+            - id: higher_education_degree_by_gender
+              descriptionId: user_info.higher_education_degree_by_gender.description.css2023
+              fieldId: higher_education_degree
+              i18nNamespace: higher_education_degree
               tabId: tabs.by_gender
-              template: demographics # facet
-              parameters: { facetSort: { order: asc, property: mean }, facetCutoff: 100 }
+              template: demographics
+              defaultUnits: percentageBucket
+              filtersState:
+                  options:
+                      showDefaultSeries: true
+                      enableYearSelect: false
+                      mode: facet
+                      queryOnLoad: false
+                      supportedModes:
+                          - combined
+                          - facet
+                  filters: []
+                  facet:
+                      sectionId: user_info
+                      id: gender
 
       - id: yearly_salary
         template: demographics
         parameters: { showNoAnswer: true }
         variants:
-            - id: yearly_salary
-              facet: user_info__gender
-              tabId: tabs.by_gender
-              template: demographics # facet
-              parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
-            - id: yearly_salary
-              facet: user_info__country
-              tabId: tabs.by_country
-              template: demographics # facet
-              parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
-            # - id: yearly_salary_by_degree
-            #   tabId: tabs.by_degree
-            #   template: demographics
-            #   variables:
-            #     fieldId: yearly_salary
-            #     facet: higher_education_degree
-            #     parameters: {facetSort: {order: desc, property: mean}, facetCutoff: 100}
-            # - id: yearly_salary_by_experience
-            #   tabId: tabs.by_experience
-            #   template: demographics
-            #   variables:
-            #     fieldId: yearly_salary
-            #     facet: years_of_experience
-            #     parameters: {facetSort: {order: desc, property: mean}, facetCutoff: 100}
+            - id: yearly_salary_usa_vs_the_world
+              descriptionId: user_info.yearly_salary_usa_vs_the_world.description.css2023
+              fieldId: yearly_salary
+              i18nNamespace: yearly_salary
+              tabId: tabs.usa_vs_the_world
+              template: demographics
+              defaultUnits: percentageQuestion
+              filtersState:
+                  options:
+                      showDefaultSeries: false
+                      enableYearSelect: false
+                      mode: combined
+                      queryOnLoad: false
+                      supportedModes:
+                          - combined
+                          - facet
+                      preventQuery: false
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: eq
+                              value: USA
+                      - year: 2023
+                        conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value:
+                                  - USA
 
-      - id: source
-        template: demographics
-        blockType: HorizontalBarBlock
-        parameters: { limit: 20 }
+        #     - id: yearly_salary
+        #       facet: user_info__country
+        #       tabId: tabs.by_country
+        #       template: demographics # facet
+        #       parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
+        # - id: yearly_salary_by_degree
+        #   tabId: tabs.by_degree
+        #   template: demographics
+        #   variables:
+        #     fieldId: yearly_salary
+        #     facet: higher_education_degree
+        #     parameters: {facetSort: {order: desc, property: mean}, facetCutoff: 100}
+        # - id: yearly_salary_by_experience
+        #   tabId: tabs.by_experience
+        #   template: demographics
+        #   variables:
+        #     fieldId: yearly_salary
+        #     facet: years_of_experience
+        #     parameters: {facetSort: {order: desc, property: mean}, facetCutoff: 100}
 
       - id: gender
         template: demographics
         parameters: { showNoAnswer: true }
-        variants:
-            - id: gender
-              facet: user_info__country
-              tabId: tabs.by_country
-              template: demographics # facet
-              parameters:
-                  { facetSort: { order: desc, property: mean }, limit: 11, facetCutoff: 100 }
+        noteId: null
+        # variants:
+        #     - id: gender
+        #       facet: user_info__country
+        #       tabId: tabs.by_country
+        #       template: demographics # facet
+        #       parameters:
+        #           { facetSort: { order: desc, property: mean }, limit: 11, facetCutoff: 100 }
 
       - id: race_ethnicity
         defaultUnits: count
         template: demographics
         blockType: HorizontalBarBlock
         translateData: true
+        noteId: null
         variants:
-            - id: race_ethnicity
-              facet: user_info__years_of_experience
-              tabId: tabs.by_experience
-              template: demographics # facet
-              parameters: { facetSort: { order: asc, property: mean }, limit: 11, facetCutoff: 100 }
-
+            - id: race_ethnicity_freeform
+              fieldId: race_ethnicity
+              defaultUnits: count
+              template: multiple_options_freeform
+              blockType: HorizontalBarBlock
+              units: count
+              translateData: true
+              parameters: { cutoff: 10 }
       - id: disability_status
         defaultUnits: count
         template: demographics
@@ -204,6 +322,61 @@
               translateData: true
               parameters: { cutoff: 10 }
 
+      - id: source
+        template: demographics
+        blockType: HorizontalBarBlock
+        parameters: { limit: 20 }
+        translateData: true
+        queryOptions:
+            addBucketsEntities: true
+        variants:
+            - id: source_by_gender
+              descriptionId: user_info.source_by_gender.description.css2023
+              fieldId: source
+              tabId: tabs.by_gender
+              i18nNamespace: source
+              template: demographics
+              blockType: HorizontalBarBlock
+              defaultUnits: percentageBucket
+              parameters: { limit: 20 }
+              filtersState:
+                  options:
+                      showDefaultSeries: true
+                      enableYearSelect: false
+                      mode: facet
+                      queryOnLoad: false
+                      supportedModes:
+                          - grid
+                          - facet
+                      preventQuery: false
+                  filters: []
+                  facet:
+                      sectionId: user_info
+                      id: gender
+            - id: source_by_race_ethnicity
+              descriptionId: user_info.source_by_race_ethnicity.description.css2023
+              fieldId: source
+              tabId: tabs.by_race_ethnicity
+              i18nNamespace: source
+              template: demographics
+              blockType: HorizontalBarBlock
+              defaultUnits: percentageBucket
+              parameters: { limit: 20 }
+              filtersState:
+                  options:
+                      showDefaultSeries: true
+                      enableYearSelect: false
+                      mode: facet
+                      queryOnLoad: false
+                      supportedModes:
+                          - grid
+                          - facet
+                      preventQuery: false
+                  filters: []
+                  facet:
+                      sectionId: user_info
+                      id: race_ethnicity
+
       - id: user_info_resources
         items: [fm-homepage]
         template: recommended_resources
@@ -218,6 +391,10 @@
 
       - id: knowledge_score
         template: demographics
+
+      - id: reading_list
+        template: reading_list
+        parameters: { limit: 20 }
 
       - id: features_resources
         items: [fm-learncss]
@@ -622,8 +799,9 @@
       - template: page_introduction
 
       - template: tools_experience_linechart
-
-      - template: tools_experience_ranking
+        variants:
+            - template: tools_experience_ranking
+              tabId: blocks.tools_experience_ranking.rankings
 
       - template: tools_section_streams
 
@@ -682,6 +860,7 @@
         template: multiple_options
         variants:
             - id: pre_post_processors_freeform
+              titleId: other_tools.pre_post_processors.others
               fieldId: pre_post_processors
               template: multiple_options_freeform
               defaultUnits: count
@@ -698,6 +877,7 @@
         template: multiple_options
         variants:
             - id: utilities_freeform
+              titleId: other_tools.utilities.others
               fieldId: utilities
               template: multiple_options_freeform
               defaultUnits: count
@@ -714,9 +894,11 @@
         template: multiple_options
         variants:
             - id: browsers_freeform
+              titleId: other_tools.browsers.others
               fieldId: browsers
               template: multiple_options_freeform
               defaultUnits: count
+              parameters: { limit: 10 }
 
       - id: tools_others_resources
         items: [fm-storybook]
@@ -732,6 +914,15 @@
         # i18nNamespace: environments
         translateData: true
         template: multiple_options
+        variants:
+            - id: form_factors_freeform
+              fieldId: form_factors
+              defaultUnits: count
+              # i18nNamespace: environments
+              tabId: tabs.other_answers
+              translateData: true
+              template: multiple_options_freeform
+              parameters: { limit: 5 }
 
       - id: sharing_hint
         template: hint
@@ -749,6 +940,7 @@
               tabId: tabs.other_answers
               translateData: true
               template: multiple_options_freeform
+              parameters: { limit: 5 }
 
       - id: sara_soueidan
         template: picks
@@ -766,65 +958,71 @@
               tabId: tabs.other_answers
               translateData: true
               template: multiple_options_freeform
+              parameters: { limit: 10 }
 
       - id: usage_type
+        titleId: usage.css_usage_type
         tabId: tabs.main_answers
         translateData: true
         template: multiple_options
-        variants:
-            - id: usage_type_freeform
-              fieldId: usage_type
-              defaultUnits: count
-              tabId: tabs.other_answers
-              translateData: true
-              template: multiple_options_freeform
+        # variants:
+        #     - id: usage_type_freeform
+        #       fieldId: usage_type
+        #       defaultUnits: count
+        #       tabId: tabs.other_answers
+        #       translateData: true
+        #       template: multiple_options_freeform
 
       - id: css_js_balance
         tabId: tabs.main_answers
         translateData: true
         template: single_option
+        parameters: { showNoAnswer: true }
 
       - id: css_interoperability_features
         defaultUnits: count
         translateData: true
         template: multiple_options
         isFreeform: true
-        parameters: { limit: 20, cutoff: 20 }
         variants:
             - id: css_interoperability_features_freeform
               fieldId: css_interoperability_features
+              i18nNamespace: features
               defaultUnits: count
               tabId: tabs.other_answers
               translateData: true
               template: multiple_options_freeform
+              parameters: { limit: 10 }
 
       - id: css_missing_features
         defaultUnits: count
         translateData: true
         template: multiple_options
         isFreeform: true
-        parameters: { limit: 20, cutoff: 20 }
         variants:
             - id: css_interoperability_features_freeform
               fieldId: css_interoperability_features
+              i18nNamespace: features
               defaultUnits: count
               tabId: tabs.other_answers
               translateData: true
               template: multiple_options_freeform
+              parameters: { limit: 10 }
 
       - id: css_pain_points
         defaultUnits: count
         translateData: true
         template: multiple_options
         isFreeform: true
-        parameters: { limit: 20, cutoff: 20 }
         variants:
             - id: css_pain_points_freeform
               fieldId: css_pain_points
+              i18nNamespace: features
               defaultUnits: count
               tabId: tabs.other_answers
               translateData: true
               template: multiple_options_freeform
+              parameters: { limit: 10 }
 
       - id: adam_wathan
         template: picks
@@ -846,6 +1044,7 @@
       - template: page_introduction
 
       - id: learning_methods
+        titleId: resources.learning_methods_css
         defaultUnits: count
         tabId: tabs.main_answers
         template: multiple_options
@@ -858,7 +1057,7 @@
               tabId: tabs.other_answers
               template: multiple_options_freeform
               translateData: true
-              parameters: { cutoff: 10 }
+              parameters: { limit: 10 }
 
       - id: blogs_news_magazines
         defaultUnits: count
@@ -873,7 +1072,7 @@
               defaultUnits: count
               tabId: tabs.other_answers
               template: multiple_options_freeform
-              parameters: { cutoff: 10 }
+              parameters: { limit: 10 }
 
       - id: sites_courses
         defaultUnits: count
@@ -888,7 +1087,7 @@
               defaultUnits: count
               tabId: tabs.other_answers
               template: multiple_options_freeform
-              parameters: { cutoff: 10 }
+              parameters: { limit: 10 }
 
       - id: jen_simmons
         template: picks
@@ -908,7 +1107,7 @@
               i18nNamespace: podcasts
               tabId: tabs.other_answers
               template: multiple_options_freeform
-              parameters: { cutoff: 10 }
+              parameters: { limit: 10 }
 
       - id: people
         defaultUnits: count
@@ -923,7 +1122,7 @@
               i18nNamespace: people
               tabId: tabs.other_answers
               template: multiple_options_freeform
-              parameters: { cutoff: 10 }
+              parameters: { limit: 10 }
 
       - id: ahmad_shadeed
         template: picks
@@ -943,7 +1142,7 @@
               i18nNamespace: other_surveys
               tabId: tabs.other_answers
               template: multiple_options_freeform
-              parameters: { cutoff: 5 }
+              parameters: { limit: 10 }
 
       - items: [renderatl]
         template: recommended_resources
@@ -964,22 +1163,22 @@
             - id: feature_adoption_delta_award
               template: award
               awards:
-                  - id: flexbox_gap
-                    value: '+25.4%'
-                  - id: aspect_ratio
-                    value: '+17.9%'
-                  - id: intrinsic_sizing
+                  - id: has_selector
+                    value: '+16.4%'
+                  - id: at_container
+                    value: '+14.1%'
+                  - id: viewport_percentage_length_units
                     value: '+13%'
 
             - id: most_commented_feature_award
               template: award
               awards:
                   - id: subgrid
-                    value: 126
-                  - id: css_nesting
-                    value: 60
+                    value: 531
                   - id: at_container
-                    value: 50
+                    value: 78
+                  - id: css_nesting
+                    value: 65
 
             # - id: tool_usage_delta_award
             #   template: award
@@ -994,12 +1193,12 @@
             - id: tool_satisfaction_award
               template: award
               awards:
+                  - id: open_props
+                    value: '91%'
                   - id: css_modules
-                    value: '85.6%'
-                  - id: tailwind_css
-                    value: '79%'
-                  - id: vanilla_extract
-                    value: '78.8%'
+                    value: '84.5%'
+                  - id: uno_css
+                    value: '82%'
 
             # - id: tool_interest_award
             #   template: award
@@ -1014,12 +1213,12 @@
             - id: most_write_ins_award
               template: award
               awards:
-                  - id: arc
-                    value: 113
-                  - id: uno_css
-                    value: 105
-                  - id: open_props
-                    value: 68
+                  - id: panda
+                    value: 52
+                  - id: material_ui
+                    value: 38
+                  - id: yandex
+                    value: 24
 
 - id: conclusion
   path: /conclusion
@@ -1027,8 +1226,8 @@
       - id: conclusion
         template: conclusion
         variables:
-            author: lea_verou
-            entities: '"lea_verou"'
+            author: chen_hui_jing
+            entities: '"chen_hui_jing"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock

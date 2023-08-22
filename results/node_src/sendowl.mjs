@@ -1,4 +1,10 @@
-import { sleep, getTwitterUser, getDataLocations, getExistingData } from './helpers.mjs'
+import {
+    sleep,
+    getTwitterUser,
+    getDataLocations,
+    getExistingData,
+    getCachingMethods
+} from './helpers.mjs'
 import fetch from 'node-fetch'
 import _ from 'lodash'
 import FormData from 'form-data'
@@ -172,7 +178,7 @@ export const getSendOwlData = async ({ flat, surveyId, editionId, siteUrl }) => 
     if (!process.env.SENDOWL_API_KEY || !process.env.SENDOWL_SECRET) {
         return {}
     }
-    const useCache = process.env.DISABLE_CACHE === 'true' ? false : true
+    const useCache = getCachingMethods().filesystem
 
     console.log(`// 🦉 Getting SendOwl data… (useCache=${useCache})`)
 

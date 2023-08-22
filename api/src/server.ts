@@ -87,7 +87,7 @@ const start = async () => {
 
     const db = await getPublicDb()
 
-    const entities = await loadOrGetEntities({})
+    // const entities = await loadOrGetEntities({})
     const context = { db, redisClient }
 
     const isDevOrTest = !!(
@@ -209,23 +209,20 @@ const start = async () => {
     //     await initDbCache({ context, data })
     // }
 
-    if (process.env.LOAD_DATA === 'local') {
-        await watchFiles({
-            context,
-            config: {
-                entities: getEnvVar(EnvVar.ENTITIES_PATH),
-                surveys: getEnvVar(EnvVar.SURVEYS_PATH),
-                locales: getEnvVar(EnvVar.LOCALES_PATH)
-            }
-        })
-    }
+    await watchFiles({
+        context,
+        config: {
+            entities: getEnvVar(EnvVar.ENTITIES_PATH),
+            surveys: getEnvVar(EnvVar.SURVEYS_PATH),
+            locales: getEnvVar(EnvVar.LOCALES_PATH)
+        }
+    })
 
     const finishedAt = new Date()
 
     app.listen({ port: port }, () =>
         console.log(
-            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${
-                finishedAt.getTime() - startedAt.getTime()
+            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${finishedAt.getTime() - startedAt.getTime()
             }ms)`
         )
     )

@@ -6,8 +6,12 @@ import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { TwitterApi } from 'twitter-api-v2'
 import { logToFile } from './log_to_file.mjs'
-import { getQuery } from './queries.mjs'
+import { argumentsPlaceholder, getFiltersQuery, getQuery } from './queries.mjs'
 import { fileURLToPath } from 'url'
+import without from 'lodash/without.js'
+
+import { parse } from 'graphql'
+import { print } from 'graphql-print'
 
 const __filename = fileURLToPath(import.meta.url)
 
@@ -34,6 +38,7 @@ export const getCleanLocales = locales =>
 /*
 
 Get a page's context
+= the information that are passed down from Gatsby to the page
 
 */
 export const getPageContext = page => {
@@ -110,14 +115,15 @@ export const createBlockPages = (page, context, createPage, locales, buildInfo) 
 Get a file from the disk or from GitHub
 
 */
-export const getExistingData = async ({ dataFileName, dataFilePath, baseUrl }) => {
+export const getExistingData = async ({ dataFileName, dataFilePath, sectionId, baseUrl }) => {
     let contents, data
+    const remoteUrl = `${baseUrl}/data/${sectionId}/${dataFileName}`
     if (getLoadMethod() === 'local') {
         if (fs.existsSync(dataFilePath)) {
             contents = fs.readFileSync(dataFilePath, 'utf8')
         }
     } else {
-        const response = await fetch(`${baseUrl}/data/${dataFileName}`)
+        const response = await fetch(remoteUrl)
         contents = await response.text()
     }
     try {
@@ -144,10 +150,11 @@ export const getDataLocations = (surveyId, editionId) => {
 Try loading data from disk or GitHub, or else run queries for *each block* in a page
 
 */
-export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => {
+export const runPageQueries = async ({ page, graphql, surveyId, editionId, currentEdition }) => {
     const startedAt = new Date()
-    const useCache = process.env.DISABLE_CACHE === 'true' ? false : true
-    console.log(`// 🔍 Running GraphQL queries for page ${page.id}… (useCache=${useCache})`)
+    const useFilesystemCache = getCachingMethods().filesystem
+    const useApiCache = getCachingMethods().api
+    console.log(`// 🔍 Running GraphQL queries for page ${page.id}…`)
 
     const paths = getDataLocations(surveyId, editionId)
 
@@ -171,9 +178,10 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                 const existingData = await getExistingData({
                     dataFileName,
                     dataFilePath,
-                    baseUrl
+                    baseUrl,
+                    sectionId: page.id
                 })
-                if (existingData && useCache) {
+                if (existingData && useFilesystemCache) {
                     console.log(
                         `// 🎯 File ${dataFileName} found on ${getLoadMethod()}, loading its contents…`
                     )
@@ -194,31 +202,65 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId }) => 
                     const queryArgs = {
                         facet: block.facet,
                         filters: block.filters,
-                        parameters: { ...block.parameters, enableCache: useCache },
+                        parameters: { ...block.parameters, enableCache: useApiCache },
                         xAxis: block?.variables?.xAxis,
                         yAxis: block?.variables?.yAxis
                     }
 
-                    const query = getQuery({
-                        query: block.query,
-                        queryOptions,
-                        queryArgs
-                    })
+                    let query
 
-                    if (query.includes('dataAPI')) {
-                        const queryLog = getQuery({
+                    if (block.filtersState) {
+                        const filtersQueryResult = getFiltersQuery({
+                            block,
+                            queryOptions,
+                            chartFilters: block.filtersState,
+                            currentYear: currentEdition.year
+                        })
+                        query = filtersQueryResult.query
+                    } else {
+                        query = getQuery({
                             query: block.query,
-                            queryOptions: { ...queryOptions, isLog: true, addRootNode: false },
+                            queryOptions,
                             queryArgs
                         })
-                        logToFile(queryFileName, queryLog, {
+                    }
+
+                    if (query.includes('dataAPI')) {
+                        // note: this duplicates the if (block.filtersState) {...} logic above
+                        // TODO: group getFiltersQuery and getQuery in a single function
+                        let queryLog
+                        if (block.filtersState) {
+                            const filtersQueryResult = getFiltersQuery({
+                                block,
+                                queryOptions: { ...queryOptions, isLog: true, addRootNode: false },
+                                chartFilters: block.filtersState,
+                                currentYear: currentEdition.year
+                            })
+                            queryLog = filtersQueryResult.query
+                        } else {
+                            queryLog = getQuery({
+                                query: block.query,
+                                queryOptions: { ...queryOptions, isLog: true, addRootNode: false },
+                                queryArgs
+                            })
+                        }
+
+                        let prettyQueryLog = queryLog.replace(argumentsPlaceholder, '')
+                        try {
+                            const ast = parse(queryLog)
+                            prettyQueryLog = print(ast, { preserveComments: true })
+                        } catch (error) {
+                            console.log(`error parsing query for ${block.id}`)
+                            console.log(queryLog)
+                        }
+                        logToFile(queryFileName, prettyQueryLog, {
                             mode: 'overwrite',
                             dirPath: queryDirPath,
                             editionId
                         })
                     }
 
-                    const result = await graphql(query)
+                    const result = removeNull(await graphql(query))
                     data = result.data
 
                     logToFile(dataFileName, data, {
@@ -273,3 +315,30 @@ export const sleep = ms => {
 }
 
 export const getQuestionId = (id, facet) => (facet ? `${id}_by_${facet}` : id)
+
+export function removeNull(obj) {
+    var clean = Object.fromEntries(
+        Object.entries(obj)
+            .map(([k, v]) => [k, v === Object(v) ? removeNull(v) : v])
+            .filter(([_, v]) => v != null && (v !== Object(v) || Object.keys(v).length))
+    )
+    return Array.isArray(obj) ? Object.values(clean) : clean
+}
+
+export const getCachingMethods = () => {
+    let cacheLevel = { filesystem: true, api: true, redis: true }
+    if (process.env.DISABLE_CACHE === 'true') {
+        cacheLevel = { filesystem: false, api: false, redis: false }
+    } else {
+        if (process.env.DISABLE_FILESYSTEM_CACHE === 'true') {
+            cacheLevel.filesystem = false
+        }
+        if (process.env.DISABLE_API_CACHE === 'true') {
+            cacheLevel.api = false
+        }
+        if (process.env.DISABLE_REDIS_CACHE === 'true') {
+            cacheLevel.redis = false
+        }
+    }
+    return cacheLevel
+}

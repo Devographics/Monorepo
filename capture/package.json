@@ -1,0 +1,25 @@
+{
+    "name": "state-of-x-captures",
+    "version": "1.0.0",
+    "main": "capture.js",
+    "license": "MIT",
+    "engineStrict": true,
+    "engines": {
+        "node": ">=15.0.0"
+    },
+    "dependencies": {
+        "@types/puppeteer": "^7.0.4",
+        "@types/yamljs": "^0.2.31",
+        "jimp": "^0.16.2",
+        "prettier": "^2.8.0",
+        "puppeteer": "^19.3.0",
+        "typescript": "^4.9.3",
+        "winston": "^3.8.2",
+        "yamljs": "^0.3.0"
+    },
+    "scripts": {
+        "fmt": "prettier --color --write 'src/*.ts'",
+        "fmt:check": "prettier --color --check 'src/*.ts'",
+        "build": "rm -rf dist && node ./node_modules/.bin/tsc"
+    }
+}

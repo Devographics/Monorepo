@@ -22,6 +22,15 @@ export const refreshSurveysCache = async (args) => {
     shouldUpdateCache: true,
     shouldGetFromCache: false,
   };
+
+  if (target === "development" || target === "staging") {
+    console.log("-> Target: staging cache database");
+    options.redisUrl = process.env.REDIS_UPSTASH_URL_STAGING;
+    options.redisToken = process.env.REDIS_TOKEN_STAGING;
+  } else {
+    console.log("-> Target: production cache database");
+  }
+
   const { data: allSurveys, cacheKey } = await fetchSurveysMetadata(options);
   refreshedCacheKeys.push(cacheKey!);
 
@@ -44,7 +53,7 @@ export const refreshSurveysCache = async (args) => {
 export const getCommonContexts = () => ["common", "surveys", "accounts"];
 
 export const refreshLocalesCache = async (args) => {
-  const { target } = args;
+  const { localeIds, target } = args;
   const { data: allSurveys } = await fetchSurveysMetadata();
 
   const refreshedCacheKeys: string[] = [];
@@ -55,10 +64,23 @@ export const refreshLocalesCache = async (args) => {
     shouldUpdateCache: true,
     shouldGetFromCache: false,
   };
+
+  if (target === "development" || target === "staging") {
+    console.log("-> Target: staging cache database");
+    options.redisUrl = process.env.REDIS_UPSTASH_URL_STAGING;
+    options.redisToken = process.env.REDIS_UPSTASH_TOKEN_STAGING;
+  } else {
+    console.log("-> Target: production cache database");
+  }
+
   const { data: allLocales, cacheKey } = await fetchAllLocalesMetadata(options);
   refreshedCacheKeys.push(cacheKey!);
 
-  for (const locale of allLocales) {
+  const locales = localeIds
+    ? allLocales.filter((l) => localeIds.includes(l.id))
+    : allLocales;
+
+  for (const locale of locales) {
     // common contexts
     console.log(
       `// Refreshing ${locale.id} metadata cache… (${getCommonContexts().join(

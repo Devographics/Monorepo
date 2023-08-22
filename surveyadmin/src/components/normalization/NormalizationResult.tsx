@@ -17,11 +17,11 @@ type NormalizationResultProps = NormalizeInBulkResult & {
 };
 export const NormalizationResult = (props: NormalizationResultProps) => {
   const {
-    normalizedDocuments,
-    unmatchedDocuments,
-    unnormalizableDocuments,
-    errorDocuments,
-    emptyDocuments,
+    normalizedDocuments = [],
+    unmatchedDocuments = [],
+    unnormalizableDocuments = [],
+    errorDocuments = [],
+    emptyDocuments = [],
     showQuestionId = true,
     showSummary = true,
   } = props;
@@ -73,8 +73,10 @@ export const NormalizationResult = (props: NormalizationResultProps) => {
 };
 
 export const NormalizationSummary = ({
-  normalizedDocuments,
-  emptyDocuments,
+  normalizedDocuments = [],
+  unmatchedDocuments = [],
+  unnormalizableDocuments = [],
+  emptyDocuments = [],
   duration,
   isSimulation,
   errorCount,
@@ -96,13 +98,21 @@ export const NormalizationSummary = ({
               Done in <strong>{duration}s</strong>
             </th>
             <th>
+              <strong>
+                {normalizedDocuments.length +
+                  unmatchedDocuments.length +
+                  unnormalizableDocuments.length}
+              </strong>{" "}
+              valid documents
+            </th>
+            <th>
               <strong>{normalizedDocuments.length}</strong> normalized documents
             </th>
             <th>
               <strong>
                 {sumBy(
                   normalizedDocuments,
-                  (doc) => doc?.normalizedFieldsCount || 0
+                  (doc) => doc?.normalizedFields?.length || 0
                 )}
               </strong>{" "}
               total normalized fields

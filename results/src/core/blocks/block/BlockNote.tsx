@@ -10,20 +10,24 @@ import { BlockDefinition } from 'core/types'
 const BlockNote = ({ block }: { block: BlockDefinition }) => {
     const pageContext = usePageContext()
     const { translate } = useI18n()
+    if (block.noteId === null) {
+        // hacky way to override default block notes
+        return null
+    }
     const key = getBlockNoteKey({ block })
     const blockNote = translate(key, {}, null)
     if (blockNote) {
         return (
-            <Note className="Block__Note">
+            <Note_ className="Block__Note">
                 <T k={key} md={true} />
-            </Note>
+            </Note_>
         )
     } else {
         return null
     }
 }
 
-const Note = styled.div`
+export const Note_ = styled.div`
     .rawchartmode & {
         display: none;
     }

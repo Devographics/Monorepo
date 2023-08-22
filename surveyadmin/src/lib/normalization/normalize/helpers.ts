@@ -278,82 +278,82 @@ Handle source normalization separately since its value can come from
 three different fields (source field, referrer field, 'how did you hear' field)
 
 */
-export const normalizeSource = async ({
-  normResp,
-  entityRules,
-  survey,
-  edition,
-  verbose,
-}) => {
-  const tags = [
-    "sources",
-    `sources_${survey.id}`,
-    "surveys",
-    "sites",
-    "podcasts",
-    "youtube",
-    "socialmedia",
-    "newsletters",
-    "people",
-    "courses",
-  ];
+// export const normalizeSource = async ({
+//   normResp,
+//   entityRules,
+//   survey,
+//   edition,
+//   verbose,
+// }) => {
+//   const tags = [
+//     "sources",
+//     `sources_${survey.id}`,
+//     "surveys",
+//     "sites",
+//     "podcasts",
+//     "youtube",
+//     "socialmedia",
+//     "newsletters",
+//     "people",
+//     "courses",
+//   ];
 
-  const rawSource = get(normResp, "user_info.sourcetag");
-  const rawFindOut = get(
-    normResp,
-    "user_info.how_did_user_find_out_about_the_survey"
-  );
+//   const rawSource = get(normResp, "user_info.sourcetag");
+//   const rawFindOut = get(
+//     normResp,
+//     "user_info.how_did_user_find_out_about_the_survey"
+//   );
 
-  const rawRef = get(normResp, "user_info.referrer");
+//   const rawRef = get(normResp, "user_info.referrer");
 
-  try {
-    const normSource =
-      rawSource &&
-      (await normalizeSingle({
-        value: rawSource,
-        allRules: entityRules,
-        tags,
-        edition,
-        question: { id: "source" },
-        verbose,
-      }));
-    const normFindOut =
-      rawFindOut &&
-      (await normalizeSingle({
-        value: rawFindOut,
-        allRules: entityRules,
-        tags,
-        edition,
-        question: { id: "how_did_user_find_out_about_the_survey" },
-        verbose,
-      }));
-    const normReferrer =
-      rawRef &&
-      (await normalizeSingle({
-        value: rawRef,
-        allRules: entityRules,
-        tags,
-        edition,
-        question: { id: "referrer" },
-        verbose,
-      }));
+//   try {
+//     const normSource =
+//       rawSource &&
+//       (await normalizeSingle({
+//         value: rawSource,
+//         allRules: entityRules,
+//         tags,
+//         edition,
+//         question: { id: "source" },
+//         verbose,
+//       }));
+//     const normFindOut =
+//       rawFindOut &&
+//       (await normalizeSingle({
+//         value: rawFindOut,
+//         allRules: entityRules,
+//         tags,
+//         edition,
+//         question: { id: "how_did_user_find_out_about_the_survey" },
+//         verbose,
+//       }));
+//     const normReferrer =
+//       rawRef &&
+//       (await normalizeSingle({
+//         value: rawRef,
+//         allRules: entityRules,
+//         tags,
+//         edition,
+//         question: { id: "referrer" },
+//         verbose,
+//       }));
 
-    if (normSource) {
-      return { ...normSource, raw: rawSource };
-    } else if (normFindOut) {
-      return { ...normFindOut, raw: rawFindOut };
-    } else if (normReferrer) {
-      return { ...normReferrer, raw: rawRef };
-    } else {
-      return { raw: compact([rawSource, rawFindOut, rawRef]).join(", ") };
-    }
-  } catch (error) {
-    console.log(
-      `// normaliseSource error for response ${normResp.responseId} with values ${rawSource}, ${rawFindOut}, ${rawRef}`
-    );
-    throw new Error(error);
-  }
-};
+//     if (normSource) {
+//       return { ...normSource, raw: rawSource };
+//     } else if (normFindOut) {
+//       return { ...normFindOut, raw: rawFindOut };
+//     } else if (normReferrer) {
+//       return { ...normReferrer, raw: rawRef };
+//     } else {
+//       return { raw: compact([rawSource, rawFindOut, rawRef]).join(", ") };
+//     }
+//   } catch (error) {
+//     console.log(
+//       `// normaliseSource error for response ${normResp.responseId} with values ${rawSource}, ${rawFindOut}, ${rawRef}`
+//     );
+//     throw new Error(error);
+//   }
+// };
 
 /*
 

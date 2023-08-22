@@ -12,6 +12,7 @@ import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
 import EditInline from 'core/components/EditInline'
 import BlockLinks from 'core/blocks/block/BlockLinks'
 import { BlockDefinition } from 'core/types'
+import { Entity } from '@devographics/types'
 
 const BlockChart = props => {
     const {
@@ -20,6 +21,7 @@ const BlockChart = props => {
         error,
         data,
         block = {},
+        entity,
         legends,
         legendProps,
         modeProps,
@@ -29,8 +31,7 @@ const BlockChart = props => {
         legendPosition = 'top',
         switcherPosition = 'bottom',
         showNote = true,
-        customChart,
-        entity
+        customChart
     } = block
     const { translate } = useI18n()
     const context = usePageContext()
@@ -48,7 +49,7 @@ const BlockChart = props => {
 
     return (
         <div>
-            <BlockDescriptionContents block={block} />
+            <BlockDescriptionContents block={block} entity={entity} />
             <BlockQuestionContents block={block} />
             {entity && !isCapturing && <BlockLinks entity={entity} />}
             {legends && legendPosition === 'top' && <BlockLegends {...legendProps_} />}
@@ -84,7 +85,13 @@ const BlockChart = props => {
     )
 }
 
-const BlockDescriptionContents = ({ block }: { block: BlockDefinition }) => {
+const BlockDescriptionContents = ({
+    block,
+    entity
+}: {
+    block: BlockDefinition
+    entity: Entity
+}) => {
     const blockTitle = useBlockTitle({ block })
     const blockDescription = useBlockDescription({ block, values: { name: blockTitle } })
     if (blockDescription) {

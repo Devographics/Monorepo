@@ -21,6 +21,7 @@ export const getUnnormalizedData = async ({
   const { data: edition } = await fetchEditionMetadataAdmin({
     surveyId,
     editionId,
+    shouldGetFromCache: false,
   });
   if (!edition) {
     throw new Error(`Could not find edition with id ${editionId}`);

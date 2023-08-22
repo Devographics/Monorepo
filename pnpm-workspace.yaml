@@ -1,13 +1,15 @@
 packages:
     # Packages
     - 'shared/*'
+    # CLI tools
+    - 'capture'
     # API
     - 'api'
-    - 'ogcharts'
     # Webapps
     - 'surveyform'
     - 'surveyadmin'
     - 'results'
+    - 'charts' # WIP will replace results
     - 'jobs'
     - 'homepage'
     - 'graphiql'

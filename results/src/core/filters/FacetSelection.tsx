@@ -45,7 +45,7 @@ const FacetSelection = ({ block, allFilters, stateStuff }: FacetSelectionProps) 
                             defaultValue=""
                         >
                             <ItemSelectOptions
-                                currentQuestionId={block.id}
+                                currentQuestionId={block.fieldId || block.id}
                                 allFilters={enabledFacets}
                             />
                         </select>

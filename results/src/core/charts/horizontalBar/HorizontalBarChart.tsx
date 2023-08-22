@@ -18,8 +18,8 @@ import {
     HORIZONTAL
 } from 'core/charts/hooks'
 import { useEntities } from 'core/helpers/entities'
-import { StandardQuestionData, BucketUnits, Bucket } from '@devographics/types'
-import { FacetItem, DataSeries, ChartModes } from 'core/filters/types'
+import { StandardQuestionData, BucketUnits, Bucket, Entity } from '@devographics/types'
+import { FacetItem, DataSeries, ChartModes, CustomizationFiltersSeries } from 'core/filters/types'
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 
@@ -113,11 +113,13 @@ export interface HorizontalBarChartProps extends ChartComponentProps {
     total: number
     size?: keyof typeof barSizes
     barColor?: BarColor
-    facet?: FacetItem
     series: DataSeries<StandardQuestionData>[]
     gridIndex?: number
     chartDisplayMode?: ChartModes
     showDefaultSeries?: boolean
+    facet?: FacetItem
+    filters?: CustomizationFiltersSeries[]
+    filterLegends?: any
 }
 
 // if we're only showing a single key, sort by that
@@ -136,7 +138,7 @@ const HorizontalBarChart = ({
     series,
     total,
     i18nNamespace,
-    translateData = false,
+    shouldTranslate = true,
     mode,
     units,
     chartProps,
@@ -144,6 +146,8 @@ const HorizontalBarChart = ({
     barColor: barColor_,
     gridIndex,
     facet,
+    filters,
+    filterLegends,
     chartDisplayMode = ChartModes.CHART_MODE_DEFAULT,
     showDefaultSeries
 }: HorizontalBarChartProps) => {
@@ -166,7 +170,7 @@ const HorizontalBarChart = ({
     const { translate } = useI18n()
 
     const bucketEntities = buckets.map(b => b.entity).filter(b => !!b)
-    const entities = bucketEntities.length > 0 ? bucketEntities : useEntities()
+    const entities: Entity[] = bucketEntities.length > 0 ? bucketEntities : useEntities()
 
     const keys = useChartKeys({ units, facet, showDefaultSeries })
 
@@ -184,7 +188,7 @@ const HorizontalBarChart = ({
         buckets,
         total,
         i18nNamespace,
-        shouldTranslate: translateData,
+        shouldTranslate,
         mode,
         units
     })
@@ -198,7 +202,7 @@ const HorizontalBarChart = ({
 
     const left = getLeftMargin({
         buckets: sortedBuckets,
-        shouldTranslate: translateData,
+        shouldTranslate,
         i18nNamespace
     })
 
@@ -206,7 +210,7 @@ const HorizontalBarChart = ({
 
     const labelFormatter = useChartLabelFormatter({ units, facet })
 
-    const labelsLayer = useMemo(() => getLabelsLayer(labelFormatter), [units, facet])
+    const labelsLayer = useMemo(() => getLabelsLayer(d => labelFormatter(d.value)), [units, facet])
 
     return (
         <div style={{ height: buckets.length * baseSize + 80 }}>
@@ -242,8 +246,11 @@ const HorizontalBarChart = ({
                         return (
                             <TickItem
                                 i18nNamespace={i18nNamespace}
-                                shouldTranslate={translateData}
-                                entity={entities.find(e => e?.id === tick.value)}
+                                shouldTranslate={shouldTranslate}
+                                entity={
+                                    buckets.find(b => b.id === tick.value)?.entity ||
+                                    entities.find(e => e?.id === tick.value)
+                                }
                                 label={buckets.find(b => b.id === tick.value)?.label}
                                 itemCount={buckets.length}
                                 {...tick}
@@ -256,8 +263,15 @@ const HorizontalBarChart = ({
                         units={units}
                         legends={legends}
                         i18nNamespace={i18nNamespace}
-                        shouldTranslate={translateData}
+                        shouldTranslate={shouldTranslate}
                         facet={facet}
+                        filters={filters}
+                        filterLegends={filterLegends}
+                        entity={
+                            buckets.find(b => b.id === barProps.data.id)?.entity ||
+                            entities.find(e => e?.id === barProps.data.id)
+                        }
+                        labelFormatter={labelFormatter}
                         {...barProps}
                     />
                 )}

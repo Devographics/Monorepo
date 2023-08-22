@@ -1,5 +1,8 @@
 import { getEditionSelector, getSelector } from "../helpers/getSelectors";
-import { getRawResponsesCollection } from "@devographics/mongo";
+import {
+  getNormResponsesCollection,
+  getRawResponsesCollection,
+} from "@devographics/mongo";
 import { fetchSurveysMetadata } from "@devographics/fetch";
 import { normalizeInBulk, defaultLimit } from "../normalize/normalizeInBulk";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
@@ -10,6 +13,7 @@ export type NormalizeEditionArgs = {
   startFrom?: number;
   limit?: number;
   onlyUnnormalized?: boolean;
+  isFirstNormalization?: boolean;
 };
 
 /*
@@ -36,6 +40,7 @@ export const normalizeEdition = async (args: NormalizeEditionArgs) => {
   const { data: edition } = await fetchEditionMetadataAdmin({
     surveyId,
     editionId,
+    shouldGetFromCache: false,
   });
   if (!edition) {
     throw new Error(`Could not find edition for editionId ${editionId}`);
@@ -61,6 +66,14 @@ export const normalizeEdition = async (args: NormalizeEditionArgs) => {
   console.log(
     `⛰️ Renormalizing all questions for edition ${editionId}… Found ${responses.length} responses to renormalize (startFrom: ${startFrom}, limit: ${limit}). (${startAt})`
   );
+
+  if (startFrom === 0) {
+    // delete any previous normalized responses just to be safe and avoid
+    // any inconsistencies
+    console.log("⛰️ Deleting all previous normalized responses… (first batch)");
+    const normalizedResponses = await getNormResponsesCollection();
+    await normalizedResponses.deleteMany({ editionId: edition.id });
+  }
 
   const mutationResult = await normalizeInBulk({
     survey,

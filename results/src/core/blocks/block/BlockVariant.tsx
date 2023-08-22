@@ -13,7 +13,7 @@ import { ChartIcon, DataIcon, ShareIcon } from 'core/icons'
 import { ErrorBoundary } from 'core/blocks/block/BlockError'
 import { BlockDefinition } from 'core/types/index'
 import { usePageContext } from 'core/helpers/pageContext'
-import CustomInputTrigger from 'core/blocks/block/CustomInputTrigger'
+// import CustomInputTrigger from 'core/blocks/block/CustomInputTrigger'
 import CommentsTrigger from 'core/blocks/block/CommentsTrigger'
 import FiltersTrigger from 'core/filters/FiltersTrigger'
 import { BucketUnits } from '@devographics/types'
@@ -74,11 +74,11 @@ const BlockVariant = (props: PropsWithChildren<BlockVariantProps>) => {
                                     <TabItem value="share">
                                         <ShareIcon enableTooltip={true} labelId="tabs.share" />
                                     </TabItem>
-                                    {block.enableCustomization && (
+                                    {/* {block.enableCustomization && (
                                         <TabItem>
                                             <CustomInputTrigger {...props} />
                                         </TabItem>
-                                    )}
+                                    )} */}
                                     {block.hasComments && (
                                         <TabItem>
                                             <CommentsTrigger {...props} />
