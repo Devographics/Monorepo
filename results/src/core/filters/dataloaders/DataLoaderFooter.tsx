@@ -8,7 +8,6 @@ import styled from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
 
 export const DataLoaderFooter = props => {
-    const { block, data } = props
     return (
         <Footer_>
             <ModalTrigger
@@ -20,13 +19,13 @@ export const DataLoaderFooter = props => {
             >
                 <FiltersPanel {...props} />
             </ModalTrigger>
-            {data && <JSONTrigger block={block} data={data} buttonProps={{ variant: 'link' }} />}
         </Footer_>
     )
 }
 
 const Footer_ = styled.section`
-    margin-top: ${spacing(2)};
+    margin-top: ${spacing(1)};
+    margin-bottom: ${spacing(2)};
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -9,12 +9,13 @@ import T from 'core/i18n/T'
 import { useI18n } from 'core/i18n/i18nContext'
 import { getTableData } from 'core/helpers/datatables'
 import { MODE_GRID } from 'core/filters/constants'
-import { MetricId, ALL_METRICS } from 'core/helpers/units'
+import { MetricId } from 'core/helpers/units'
 import DynamicDataLoader from 'core/filters/dataloaders/DynamicDataLoader'
 import { useChartFilters } from 'core/filters/helpers'
-import { ToolRatiosQuestionData, Entity } from '@devographics/types'
+import { ToolRatiosQuestionData, Entity, RatiosUnits } from '@devographics/types'
 import { useEntities, getEntityName } from 'core/helpers/entities'
-import { BlockDefinition } from 'core/types'
+import { BlockDefinition, StringTranslator } from 'core/types'
+import { getItemLabel } from 'core/helpers/labels'
 
 export interface MetricBucket {
     year: number
@@ -40,14 +41,22 @@ export interface ToolsExperienceRankingBlockProps {
 
 const processBlockData = (
     data: ToolRatiosQuestionData,
-    options: { controlledMetric: any; entities: Entity[] }
+    options: {
+        controlledMetric: any
+        entities: Entity[]
+        getString: StringTranslator
+        i18nNamespace: string
+    }
 ) => {
-    const { controlledMetric, entities } = options
-    return data?.items?.map(tool => {
+    const { controlledMetric, entities, getString, i18nNamespace } = options
+    return data?.items?.map(item => {
+        const entity = entities.find(e => e.id === item.id)
+        const { label } = getItemLabel({ id: item.id, entity, getString, i18nNamespace })
+
         return {
-            id: tool.id,
-            name: getEntityName(entities.find(e => e.id === tool.id)),
-            data: tool[controlledMetric]
+            id: item.id,
+            name: label,
+            data: item[controlledMetric]
                 ?.filter(bucket => bucket.rank && bucket.percentageQuestion)
                 .map(bucket => {
                     return {
@@ -65,22 +74,44 @@ export const ToolsExperienceRankingBlock = ({
     data,
     triggerId
 }: ToolsExperienceRankingBlockProps) => {
-    const [metric, setMetric] = useState<MetricId>('satisfaction')
+    const {
+        defaultUnits = 'satisfaction',
+        availableUnits: availableUnits_,
+        i18nNamespace = 'tools'
+    } = block
+
+    const [metric, setMetric] = useState<MetricId>(defaultUnits)
     const { getString } = useI18n()
-    const entities = useEntities()
+    const allEntities = useEntities()
     const controlledMetric = triggerId || metric
 
-    const { years, items } = data
-    const chartData: RankingChartSerie[] = processBlockData(data, { controlledMetric, entities })
+    const availableUnits = availableUnits_ || Object.values(RatiosUnits)
 
-    const tableData = items.map(tool => {
-        const cellData = { label: tool?.entity?.name }
-        ALL_METRICS.forEach(metric => {
-            cellData[`${metric}_percentage`] = tool[metric]?.map(y => ({
+    const { years: yearsDoesNotWork, items } = data
+    // Note: we can't actually get years from data.years because it wouldn't reflect
+    // when we only select a subset of years
+    const years = items[0][availableUnits[0]].map(dataPoint => dataPoint.year)
+
+    const processBlockDataOptions = {
+        controlledMetric,
+        entities: allEntities,
+        getString,
+        i18nNamespace
+    }
+    const chartData: RankingChartSerie[] = processBlockData(data, processBlockDataOptions)
+
+    const tableData = items.map(item => {
+        const { id } = item
+        const entity = allEntities.find(e => e.id === id)
+        const { label } = getItemLabel({ id, entity, i18nNamespace, getString })
+        const cellData = { label }
+
+        availableUnits.forEach(metric => {
+            cellData[`${metric}_percentage`] = item[metric]?.map(y => ({
                 year: y.year,
                 value: y.percentageQuestion
             }))
-            cellData[`${metric}_rank`] = tool[metric]?.map(y => ({
+            cellData[`${metric}_rank`] = item[metric]?.map(y => ({
                 year: y.year,
                 value: y.rank
             }))
@@ -100,14 +131,14 @@ export const ToolsExperienceRankingBlock = ({
             data={data}
             modeProps={{
                 units: controlledMetric,
-                options: ALL_METRICS,
+                options: availableUnits,
                 onChange: setMetric,
                 i18nNamespace: 'options.experience_ranking'
             }}
             tables={[
                 getTableData({
                     data: tableData,
-                    valueKeys: ALL_METRICS.map(m => `${m}_rank`),
+                    valueKeys: availableUnits.map(m => `${m}_rank`),
                     years
                 })
             ]}
@@ -124,7 +155,7 @@ export const ToolsExperienceRankingBlock = ({
                     <RankingChart
                         buckets={data}
                         processBlockData={processBlockData}
-                        processBlockDataOptions={{ controlledMetric, entities }}
+                        processBlockDataOptions={processBlockDataOptions}
                     />
                 </ChartContainer>
             </DynamicDataLoader>

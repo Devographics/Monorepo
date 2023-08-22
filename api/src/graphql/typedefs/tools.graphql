@@ -14,21 +14,42 @@ for awareness/interest and stisfaction.
 type ToolRatiosItemData {
     id: String
     entity: Entity
-    awareness: [ToolRatiosItemResponseEditionData]
-    usage: [ToolRatiosItemResponseEditionData]
-    interest: [ToolRatiosItemResponseEditionData]
-    satisfaction: [ToolRatiosItemResponseEditionData]
+    awareness: [RatioItemResponseEditionData]
+    usage: [RatioItemResponseEditionData]
+    interest: [RatioItemResponseEditionData]
+    satisfaction: [RatioItemResponseEditionData]
 }
 
-type ToolRatiosItemResponseEditionData {
+"""
+Used to represent the ranking of a feature compared to others
+for awareness/interest and stisfaction.
+"""
+type FeatureRatiosItemData {
+    id: String
+    entity: Entity
+    awareness: [RatioItemResponseEditionData]
+    usage: [RatioItemResponseEditionData]
+    # interest: [RatioItemResponseEditionData]
+    # satisfaction: [RatioItemResponseEditionData]
+}
+
+type RatioItemResponseEditionData {
     year: Int
     editionId: String
     rank: Int
     percentageQuestion: Float
 }
 
+input FeaturesRatiosParameters {
+    enableCache: Boolean
+    years: [Int]
+    rankCutoff: Int
+}
+
 input ToolRatiosParameters {
     enableCache: Boolean
+    years: [Int]
+    rankCutoff: Int
 }
 
 input ToolFilters {

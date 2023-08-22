@@ -8,7 +8,7 @@ export const getItemLabel = (options: {
     // section: SectionMetadata
     // question: QuestionMetadata
     // option: OptionMetadata
-    entity: Entity
+    entity?: Entity
     getString: StringTranslator
     i18nNamespace?: string
     extraLabel?: string

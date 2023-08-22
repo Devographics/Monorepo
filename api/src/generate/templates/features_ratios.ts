@@ -1,13 +1,23 @@
-import { ApiTemplateFunction, ResolverMap, SectionApiObject } from '../../types/surveys'
+import {
+    ApiTemplateFunction,
+    EditionApiObject,
+    ResolverMap,
+    SectionApiObject
+} from '../../types/surveys'
 import { graphqlize } from '../helpers'
 import { computeKey, useCache } from '../../helpers/caching'
-import { applyRankCutoff, computeExperienceRatios } from '../../compute/experience'
+import { applyRankCutoff, computeExperienceRatios, metrics } from '../../compute/experience'
 import { getToolsEnumTypeName } from '../../graphql/templates/tools_enum'
+import { getFeaturesEnumTypeName } from '../../graphql/templates/features_enum'
 
-const getSectionToolsIds = (section: SectionApiObject) => {
-    const sectionTools = section.questions.filter(q => q.template === 'tool')
-    const tools = sectionTools.map(q => q.id)
-    return tools
+const getSectionFeaturesIds = (section: SectionApiObject) => {
+    const sectionFeatures = section.questions.filter(q => q.template === 'feature')
+    const features = sectionFeatures.map(q => q.id)
+    return features
+}
+
+const getEditionFeaturesIds = (edition: EditionApiObject) => {
+    return edition.sections.map(s => getSectionFeaturesIds(s)).flat()
 }
 
 const getResolverMap = (): ResolverMap => ({
@@ -16,8 +26,8 @@ const getResolverMap = (): ResolverMap => ({
         const { itemIds: itemIds_, filters, parameters = {} } = args
         const { enableCache, years, rankCutoff } = parameters
 
-        const itemIds = itemIds_ || getSectionToolsIds(section)
-        const type = 'tool'
+        const itemIds = itemIds_ || getEditionFeaturesIds(edition)
+        const type = 'feature'
         const funcOptions = { survey, itemIds, type, years, filters, context }
 
         const key = computeKey(computeExperienceRatios, {
@@ -40,32 +50,43 @@ const getResolverMap = (): ResolverMap => ({
         // cutoff points, since we have to calculate data for all items anyway no matter the cutoff
         return applyRankCutoff(results, rankCutoff)
     },
-    ids: ({ section }, { itemIds }) => {
-        return itemIds || getSectionToolsIds(section)
+    ids: ({ section, edition }, { itemIds }) => {
+        return itemIds || getEditionFeaturesIds(edition)
     },
     years: ({ survey }) => {
         return survey.editions.map(e => e.year)
     }
 })
 
-export const section_tools_ratios: ApiTemplateFunction = ({
-    survey,
-    edition,
-    section,
-    question
-}) => {
-    const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(section.id)}ToolsRatios`
-    const toolsEnumTypeName = getToolsEnumTypeName(survey)
+/*
+
+TODO
+
+This should instead follow the same structure as the other fields, e.g.
+
+features
+  features_ratios
+    items <parameters go here>
+      years
+      ids  
+      all_editions
+
+So that `years` and `ids` can also know about the parameters
+
+*/
+export const features_ratios: ApiTemplateFunction = ({ survey, edition, section, question }) => {
+    const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(edition.id)}FeaturesRatios`
+    const featuresEnumTypeName = getFeaturesEnumTypeName(survey)
     return {
         ...question,
-        id: `${section.id}_ratios`,
+        id: `features_ratios`,
         fieldTypeName,
         typeDef: `type ${fieldTypeName} {
             ids: [String]
             years: [Int]
-            items(itemIds: [${toolsEnumTypeName}], parameters: ToolRatiosParameters, filters: ${graphqlize(
+            items(itemIds: [${featuresEnumTypeName}], parameters: FeaturesRatiosParameters, filters: ${graphqlize(
             survey.id
-        )}Filters): [ToolRatiosItemData]
+        )}Filters): [FeatureRatiosItemData]
         }`,
         resolverMap: getResolverMap()
     }

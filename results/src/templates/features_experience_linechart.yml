@@ -1,11 +1,13 @@
-id: '${sectionId}_experience_linechart'
+id: 'features_experience_linechart'
 blockType: ToolsRatiosLineChartBlock
-titleId: blocks.tools_experience_linechart
-descriptionId: blocks.tools_experience_linechart.description
-noteId: blocks.tools_experience_linechart.note
+titleId: blocks.features_experience_linechart
+descriptionId: blocks.features_experience_linechart.description
+noteId: blocks.features_experience_linechart.note
 # dataPath: 'dataAPI.survey.${sectionId}_experience_linechart'
 hasSponsor: true
-i18nNamespace: tools
+defaultUnits: usage
+availableUnits: [awareness, usage]
+i18nNamespace: features
 query: >
     surveys {
         ${surveyId} {
@@ -21,16 +23,6 @@ query: >
                                 percentageQuestion
                             }
                             awareness {
-                                year
-                                rank
-                                percentageQuestion
-                            }
-                            interest {
-                                year
-                                rank
-                                percentageQuestion
-                            }
-                            satisfaction {
                                 year
                                 rank
                                 percentageQuestion

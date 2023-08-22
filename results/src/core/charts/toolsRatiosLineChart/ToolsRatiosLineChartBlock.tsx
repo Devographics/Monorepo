@@ -12,6 +12,8 @@ import { MetricId } from 'core/helpers/units'
 import { ToolRatiosQuestionData, RatiosUnits, Entity } from '@devographics/types'
 import { useEntities } from 'core/helpers/entities'
 import { BlockDefinition } from 'core/types/block'
+import { getItemLabel } from 'core/helpers/labels'
+import { useI18n } from 'core/i18n/i18nContext'
 
 export interface MetricBucket {
     year: number
@@ -26,42 +28,53 @@ export interface ToolsExperienceRankingBlockProps {
     titleProps: any
 }
 
-export const getLabel = (id: string, allEntities: Entity[]) => {
-    const entity = allEntities.find(e => e.id === id)
-    const label = entity?.nameClean || entity?.name || id
-    return label
-}
-
 export const ToolsExperienceLineChartBlock = ({
     block,
     data,
     triggerId
 }: ToolsExperienceRankingBlockProps) => {
+    const {
+        defaultUnits = 'satisfaction',
+        availableUnits: availableUnits_,
+        i18nNamespace = 'tools'
+    } = block
     const [current, setCurrent] = useState()
-    const [metric, setMetric] = useState<MetricId>('satisfaction')
+    const [metric, setMetric] = useState<MetricId>(defaultUnits)
     const theme = useTheme()
     const allEntities = useEntities()
+    const { getString } = useI18n()
 
+    const availableUnits = availableUnits_ || Object.values(RatiosUnits)
     const controlledMetric = triggerId || metric
 
-    const { years, items } = data
+    const { years: yearsDoesNotWork, items } = data
+    // Note: we can't actually get years from data.years because it wouldn't reflect
+    // when we only select a subset of years
+    const years = items[0][availableUnits[0]].map(dataPoint => dataPoint.year)
+
     // const chartData: RankingChartSerie[] = processBlockData(data, { getLabel, controlledMetric })
 
     const legends = items.map((item, i) => {
-        const label = getLabel(item.id, allEntities)
+        const { id } = item
+        const entity = allEntities.find(e => e.id === id)
+
+        const { label } = getItemLabel({ id, entity, i18nNamespace, getString })
         return { id: item.id, label, shortLabel: label, color: theme.colors.distinct[i] }
     })
 
     const currentColor = current && legends?.find(l => l.id === current)?.color
 
-    const tableData = items.map(tool => {
-        const cellData = { label: getLabel(tool.id, allEntities) }
-        Object.values(RatiosUnits).forEach(metric => {
-            cellData[`${metric}_percentage`] = tool[metric]?.map(y => ({
+    const tableData = items.map(item => {
+        const { id } = item
+        const entity = allEntities.find(e => e.id === id)
+        const { label } = getItemLabel({ id, entity, i18nNamespace, getString })
+        const cellData = { label }
+        availableUnits.forEach(metric => {
+            cellData[`${metric}_percentage`] = item[metric]?.map(y => ({
                 year: y.year,
                 value: y.percentageQuestion
             }))
-            cellData[`${metric}_rank`] = tool[metric]?.map(y => ({
+            cellData[`${metric}_rank`] = item[metric]?.map(y => ({
                 year: y.year,
                 value: y.rank
             }))
@@ -81,7 +94,7 @@ export const ToolsExperienceLineChartBlock = ({
             data={data}
             modeProps={{
                 units: controlledMetric,
-                options: Object.values(RatiosUnits),
+                options: availableUnits,
                 onChange: setMetric,
                 i18nNamespace: 'options.experience_ranking'
             }}
@@ -100,7 +113,7 @@ export const ToolsExperienceLineChartBlock = ({
             tables={[
                 getTableData({
                     data: tableData,
-                    valueKeys: Object.values(RatiosUnits).map(m => `${m}_percentage`),
+                    valueKeys: availableUnits.map(m => `${m}_percentage`),
                     years
                 })
             ]}
@@ -115,7 +128,11 @@ export const ToolsExperienceLineChartBlock = ({
             >
                 <ChartContainer height={items.length * 30 + 80}>
                     <LineChartWrapper current={current} currentColor={currentColor}>
-                        <LineChart data={data} units={controlledMetric} />
+                        <LineChart
+                            data={data}
+                            units={controlledMetric}
+                            i18nNamespace={i18nNamespace}
+                        />
                     </LineChartWrapper>
                 </ChartContainer>
             </DynamicDataLoader>

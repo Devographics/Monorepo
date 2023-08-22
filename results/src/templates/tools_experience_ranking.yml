@@ -5,3 +5,4 @@ descriptionId: blocks.tools_experience_ranking.description
 noteId: blocks.tools_experience_ranking.note
 dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.${sectionId}.${sectionId}_experience_linechart'
 hasSponsor: true
+i18nNamespace: tools

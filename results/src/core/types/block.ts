@@ -42,6 +42,7 @@ export interface BlockDefinition {
     noteId?: string
 
     defaultUnits?: BucketUnits
+    availableUnits?: Array<BucketUnits>
 
     // data
     query?: string

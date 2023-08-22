@@ -1,0 +1,3209 @@
+{
+    "data": {
+        "surveys": {
+            "state_of_css": {
+                "css2023": {
+                    "features": {
+                        "features_experience_linechart": {
+                            "years": [2019, 2020, 2021, 2022, 2023],
+                            "items": [
+                                {
+                                    "id": "subgrid",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 18,
+                                            "percentageQuestion": 6.1
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 23,
+                                            "percentageQuestion": 12.7
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 38,
+                                            "percentageQuestion": 10.2
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 35,
+                                            "percentageQuestion": 19.6
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 12,
+                                            "percentageQuestion": 49.4
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 7,
+                                            "percentageQuestion": 70
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 14,
+                                            "percentageQuestion": 66.1
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 12,
+                                            "percentageQuestion": 75.5
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "writing_modes",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": 7,
+                                            "percentageQuestion": 7.4
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 17,
+                                            "percentageQuestion": 10.8
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 22,
+                                            "percentageQuestion": 15.4
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 33,
+                                            "percentageQuestion": 13.1
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 37,
+                                            "percentageQuestion": 14.9
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": 7,
+                                            "percentageQuestion": 26.9
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 18,
+                                            "percentageQuestion": 32.6
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 22,
+                                            "percentageQuestion": 42.8
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 25,
+                                            "percentageQuestion": 55.2
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 30,
+                                            "percentageQuestion": 60.2
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "logical_properties",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 16,
+                                            "percentageQuestion": 11.6
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 19,
+                                            "percentageQuestion": 17.6
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 21,
+                                            "percentageQuestion": 27.9
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 21,
+                                            "percentageQuestion": 35.5
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 14,
+                                            "percentageQuestion": 43.6
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 18,
+                                            "percentageQuestion": 53.7
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 23,
+                                            "percentageQuestion": 55.6
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 27,
+                                            "percentageQuestion": 63
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "aspect_ratio",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 9,
+                                            "percentageQuestion": 22.4
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 9,
+                                            "percentageQuestion": 37.1
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 7,
+                                            "percentageQuestion": 55
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 7,
+                                            "percentageQuestion": 65.6
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 5,
+                                            "percentageQuestion": 70.7
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 4,
+                                            "percentageQuestion": 83.2
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 5,
+                                            "percentageQuestion": 84.8
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 6,
+                                            "percentageQuestion": 87.7
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "content_visibility",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 8,
+                                            "percentageQuestion": 23.4
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 16,
+                                            "percentageQuestion": 24.3
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 23,
+                                            "percentageQuestion": 23.1
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 41,
+                                            "percentageQuestion": 11.8
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 7,
+                                            "percentageQuestion": 59.3
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 16,
+                                            "percentageQuestion": 57.3
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 30,
+                                            "percentageQuestion": 49.5
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 51,
+                                            "percentageQuestion": 32.3
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "flexbox_gap",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 4,
+                                            "percentageQuestion": 55
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 2,
+                                            "percentageQuestion": 80.4
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 2,
+                                            "percentageQuestion": 90.3
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 5,
+                                            "percentageQuestion": 79.3
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 3,
+                                            "percentageQuestion": 91.7
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 2,
+                                            "percentageQuestion": 97.1
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "at_container",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 27,
+                                            "percentageQuestion": 5.4
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 35,
+                                            "percentageQuestion": 12.6
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 25,
+                                            "percentageQuestion": 26.7
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 15,
+                                            "percentageQuestion": 59.6
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 10,
+                                            "percentageQuestion": 70.7
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 8,
+                                            "percentageQuestion": 85.3
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "object_view_box",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 48,
+                                            "percentageQuestion": 2.8
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 53,
+                                            "percentageQuestion": 4
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 49,
+                                            "percentageQuestion": 14.9
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 53,
+                                            "percentageQuestion": 17.9
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "viewport_percentage_length_units",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 36,
+                                            "percentageQuestion": 11.8
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 28,
+                                            "percentageQuestion": 24.8
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 34,
+                                            "percentageQuestion": 41.4
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 25,
+                                            "percentageQuestion": 65.9
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "media_queries_range_contexts",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 31,
+                                            "percentageQuestion": 14.6
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 32,
+                                            "percentageQuestion": 21.2
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 22,
+                                            "percentageQuestion": 57.3
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 18,
+                                            "percentageQuestion": 72.2
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "anchor_positioning",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 55,
+                                            "percentageQuestion": 2
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 55,
+                                            "percentageQuestion": 13.9
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "blend_modes",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": 4,
+                                            "percentageQuestion": 34
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 6,
+                                            "percentageQuestion": 34
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 7,
+                                            "percentageQuestion": 39
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 13,
+                                            "percentageQuestion": 38.2
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 15,
+                                            "percentageQuestion": 40.7
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": 4,
+                                            "percentageQuestion": 69.6
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 6,
+                                            "percentageQuestion": 61.5
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 8,
+                                            "percentageQuestion": 68.3
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 17,
+                                            "percentageQuestion": 64.4
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 21,
+                                            "percentageQuestion": 69.6
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "filter_effects",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": 2,
+                                            "percentageQuestion": 59
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 2,
+                                            "percentageQuestion": 62.2
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 2,
+                                            "percentageQuestion": 65.9
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 3,
+                                            "percentageQuestion": 72.4
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 3,
+                                            "percentageQuestion": 74.5
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": 2,
+                                            "percentageQuestion": 87
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 2,
+                                            "percentageQuestion": 84.7
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 2,
+                                            "percentageQuestion": 87.6
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 2,
+                                            "percentageQuestion": 91.7
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 3,
+                                            "percentageQuestion": 93
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "backdrop_filter",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 7,
+                                            "percentageQuestion": 26.5
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 10,
+                                            "percentageQuestion": 36
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 8,
+                                            "percentageQuestion": 48.6
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 8,
+                                            "percentageQuestion": 55.4
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 11,
+                                            "percentageQuestion": 50.1
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 14,
+                                            "percentageQuestion": 59.7
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 13,
+                                            "percentageQuestion": 68.4
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 14,
+                                            "percentageQuestion": 74.5
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "linear_easing_function",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 24,
+                                            "percentageQuestion": 26.7
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 29,
+                                            "percentageQuestion": 60.4
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "intrinsic_sizing",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 5,
+                                            "percentageQuestion": 47.7
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 6,
+                                            "percentageQuestion": 60.7
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 6,
+                                            "percentageQuestion": 66
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 9,
+                                            "percentageQuestion": 67.9
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 8,
+                                            "percentageQuestion": 79.9
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 10,
+                                            "percentageQuestion": 83.8
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "conic_gradient",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 24,
+                                            "percentageQuestion": 9.5
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 29,
+                                            "percentageQuestion": 15.9
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 34,
+                                            "percentageQuestion": 20.7
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 23,
+                                            "percentageQuestion": 40.1
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 27,
+                                            "percentageQuestion": 53
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 28,
+                                            "percentageQuestion": 60.8
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "view_transitions",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 52,
+                                            "percentageQuestion": 4.2
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 49,
+                                            "percentageQuestion": 34.6
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "color_function",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 21,
+                                            "percentageQuestion": 15.4
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 39,
+                                            "percentageQuestion": 8
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 42,
+                                            "percentageQuestion": 9.9
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 24,
+                                            "percentageQuestion": 39.2
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 42,
+                                            "percentageQuestion": 32.9
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 42,
+                                            "percentageQuestion": 43.8
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "accent_color",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 26,
+                                            "percentageQuestion": 7.2
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 27,
+                                            "percentageQuestion": 17.7
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 30,
+                                            "percentageQuestion": 24.3
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 25,
+                                            "percentageQuestion": 38.3
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 31,
+                                            "percentageQuestion": 44.9
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 35,
+                                            "percentageQuestion": 52.8
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "currentcolor",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 9,
+                                            "percentageQuestion": 47.3
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 9,
+                                            "percentageQuestion": 54.6
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 18,
+                                            "percentageQuestion": 64.1
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 19,
+                                            "percentageQuestion": 70.9
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "color_mix",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 47,
+                                            "percentageQuestion": 3
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 49,
+                                            "percentageQuestion": 6.9
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 47,
+                                            "percentageQuestion": 25.2
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 40,
+                                            "percentageQuestion": 45.1
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "wide_gamut_colors",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 49,
+                                            "percentageQuestion": 2.6
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 51,
+                                            "percentageQuestion": 5.7
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 45,
+                                            "percentageQuestion": 29.1
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 44,
+                                            "percentageQuestion": 43.5
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "relative_colors",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 41,
+                                            "percentageQuestion": 7.4
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 47,
+                                            "percentageQuestion": 7.8
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 44,
+                                            "percentageQuestion": 31.4
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 46,
+                                            "percentageQuestion": 40.2
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "gradient_color_spaces",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 24,
+                                            "percentageQuestion": 18.9
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 45,
+                                            "percentageQuestion": 7.9
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 38,
+                                            "percentageQuestion": 39.1
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 50,
+                                            "percentageQuestion": 33.6
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "scroll_snap",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": 6,
+                                            "percentageQuestion": 11.7
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 10,
+                                            "percentageQuestion": 21.1
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 12,
+                                            "percentageQuestion": 30
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 17,
+                                            "percentageQuestion": 33.8
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 18,
+                                            "percentageQuestion": 38.5
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": 5,
+                                            "percentageQuestion": 52.2
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 9,
+                                            "percentageQuestion": 54.2
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 10,
+                                            "percentageQuestion": 64.6
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 16,
+                                            "percentageQuestion": 64.6
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 23,
+                                            "percentageQuestion": 67
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "overscroll_behavior",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": 5,
+                                            "percentageQuestion": 20
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 12,
+                                            "percentageQuestion": 19.7
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 17,
+                                            "percentageQuestion": 23.9
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 22,
+                                            "percentageQuestion": 23.5
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 26,
+                                            "percentageQuestion": 26.4
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": 6,
+                                            "percentageQuestion": 41.9
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 16,
+                                            "percentageQuestion": 40.6
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 21,
+                                            "percentageQuestion": 46.9
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 32,
+                                            "percentageQuestion": 44.6
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 38,
+                                            "percentageQuestion": 47.2
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "touch_action",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 14,
+                                            "percentageQuestion": 16.2
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 20,
+                                            "percentageQuestion": 16.9
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 26,
+                                            "percentageQuestion": 17.7
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 31,
+                                            "percentageQuestion": 22.4
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 17,
+                                            "percentageQuestion": 37.7
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 26,
+                                            "percentageQuestion": 37.4
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 39,
+                                            "percentageQuestion": 37.1
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 43,
+                                            "percentageQuestion": 43.7
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "scroll_behavior",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 5,
+                                            "percentageQuestion": 60.9
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 4,
+                                            "percentageQuestion": 67
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 7,
+                                            "percentageQuestion": 80.1
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 9,
+                                            "percentageQuestion": 84.2
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "scrollbar_gutter",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 37,
+                                            "percentageQuestion": 10.3
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 38,
+                                            "percentageQuestion": 14.4
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 46,
+                                            "percentageQuestion": 27.9
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 48,
+                                            "percentageQuestion": 34.9
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "font_display",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 5,
+                                            "percentageQuestion": 37.5
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 8,
+                                            "percentageQuestion": 38.9
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 14,
+                                            "percentageQuestion": 38
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 14,
+                                            "percentageQuestion": 41.6
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 8,
+                                            "percentageQuestion": 54.2
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 17,
+                                            "percentageQuestion": 55.8
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 24,
+                                            "percentageQuestion": 55.2
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 32,
+                                            "percentageQuestion": 57.9
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "line_clamp",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 11,
+                                            "percentageQuestion": 20.3
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 13,
+                                            "percentageQuestion": 29.5
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 18,
+                                            "percentageQuestion": 31.6
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 16,
+                                            "percentageQuestion": 39.7
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 15,
+                                            "percentageQuestion": 41.2
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 20,
+                                            "percentageQuestion": 50.5
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 29,
+                                            "percentageQuestion": 50.1
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 33,
+                                            "percentageQuestion": 56.5
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "variable_fonts",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 18,
+                                            "percentageQuestion": 20.9
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 20,
+                                            "percentageQuestion": 29.2
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 22,
+                                            "percentageQuestion": 28.7
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 13,
+                                            "percentageQuestion": 59.7
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 15,
+                                            "percentageQuestion": 65.6
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 26,
+                                            "percentageQuestion": 63.6
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "font_palette",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 51,
+                                            "percentageQuestion": 1.2
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 56,
+                                            "percentageQuestion": 1.5
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 51,
+                                            "percentageQuestion": 8.8
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 56,
+                                            "percentageQuestion": 10.2
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "text_wrap_balance",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 39,
+                                            "percentageQuestion": 13.6
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 34,
+                                            "percentageQuestion": 54.4
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "prefers_reduced_motion",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 15,
+                                            "percentageQuestion": 15.8
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 15,
+                                            "percentageQuestion": 26.7
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 15,
+                                            "percentageQuestion": 35.1
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 19,
+                                            "percentageQuestion": 37.8
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 13,
+                                            "percentageQuestion": 48.9
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 12,
+                                            "percentageQuestion": 62.2
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 11,
+                                            "percentageQuestion": 69.5
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 17,
+                                            "percentageQuestion": 72.4
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "prefers_color_scheme",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 13,
+                                            "percentageQuestion": 18.8
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 14,
+                                            "percentageQuestion": 28.6
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 11,
+                                            "percentageQuestion": 39.5
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 12,
+                                            "percentageQuestion": 45.9
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 10,
+                                            "percentageQuestion": 53.1
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 11,
+                                            "percentageQuestion": 63.9
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 9,
+                                            "percentageQuestion": 72.9
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 11,
+                                            "percentageQuestion": 80.3
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "prefers_reduced_data",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 29,
+                                            "percentageQuestion": 3.9
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 43,
+                                            "percentageQuestion": 5.8
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 48,
+                                            "percentageQuestion": 7.1
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 27,
+                                            "percentageQuestion": 35.9
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 36,
+                                            "percentageQuestion": 39.8
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 41,
+                                            "percentageQuestion": 43.8
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "color_scheme",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 25,
+                                            "percentageQuestion": 7.4
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 32,
+                                            "percentageQuestion": 14.4
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 29,
+                                            "percentageQuestion": 24.5
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 28,
+                                            "percentageQuestion": 29.5
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 37,
+                                            "percentageQuestion": 39.3
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 31,
+                                            "percentageQuestion": 58.5
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "prefers_contrast",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 46,
+                                            "percentageQuestion": 4.6
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 50,
+                                            "percentageQuestion": 6.7
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 41,
+                                            "percentageQuestion": 33.2
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 37,
+                                            "percentageQuestion": 47.4
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "forced_colors",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 50,
+                                            "percentageQuestion": 1.7
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 54,
+                                            "percentageQuestion": 2.6
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 50,
+                                            "percentageQuestion": 8.9
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 54,
+                                            "percentageQuestion": 15.5
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "focus_visible",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 10,
+                                            "percentageQuestion": 40
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 11,
+                                            "percentageQuestion": 48.1
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 19,
+                                            "percentageQuestion": 63.1
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 20,
+                                            "percentageQuestion": 70
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "variables",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": 1,
+                                            "percentageQuestion": 59.6
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 1,
+                                            "percentageQuestion": 74.7
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 1,
+                                            "percentageQuestion": 84.4
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 1,
+                                            "percentageQuestion": 88.7
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 1,
+                                            "percentageQuestion": 93
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": 1,
+                                            "percentageQuestion": 94.8
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 1,
+                                            "percentageQuestion": 95.2
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 1,
+                                            "percentageQuestion": 97.3
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 1,
+                                            "percentageQuestion": 97.4
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 1,
+                                            "percentageQuestion": 98.7
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "feature_support_queries",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": 3,
+                                            "percentageQuestion": 36.9
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 4,
+                                            "percentageQuestion": 40.6
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 6,
+                                            "percentageQuestion": 45.9
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 12,
+                                            "percentageQuestion": 38.2
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 13,
+                                            "percentageQuestion": 44
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": 3,
+                                            "percentageQuestion": 73.1
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 4,
+                                            "percentageQuestion": 70.8
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 6,
+                                            "percentageQuestion": 75.6
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 12,
+                                            "percentageQuestion": 68.5
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 16,
+                                            "percentageQuestion": 72.8
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "comparison_functions",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 3,
+                                            "percentageQuestion": 47
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 3,
+                                            "percentageQuestion": 62.5
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 4,
+                                            "percentageQuestion": 62
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 5,
+                                            "percentageQuestion": 66.7
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": 3,
+                                            "percentageQuestion": 81.2
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 3,
+                                            "percentageQuestion": 86.7
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 6,
+                                            "percentageQuestion": 83.4
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 7,
+                                            "percentageQuestion": 86.7
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "at_property",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 28,
+                                            "percentageQuestion": 4.1
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 42,
+                                            "percentageQuestion": 7.2
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 44,
+                                            "percentageQuestion": 8
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 29,
+                                            "percentageQuestion": 27.2
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 40,
+                                            "percentageQuestion": 35.7
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 47,
+                                            "percentageQuestion": 37.8
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "marker",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 11,
+                                            "percentageQuestion": 33.1
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 19,
+                                            "percentageQuestion": 31
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 17,
+                                            "percentageQuestion": 39.3
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": 19,
+                                            "percentageQuestion": 53.3
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 28,
+                                            "percentageQuestion": 52.1
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 24,
+                                            "percentageQuestion": 65.9
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "has_selector",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 16,
+                                            "percentageQuestion": 34.8
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 10,
+                                            "percentageQuestion": 51.2
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 4,
+                                            "percentageQuestion": 89.3
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 4,
+                                            "percentageQuestion": 91.3
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "where_selector",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 25,
+                                            "percentageQuestion": 17.9
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 23,
+                                            "percentageQuestion": 28.6
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 21,
+                                            "percentageQuestion": 60.7
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 22,
+                                            "percentageQuestion": 69
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "cascade_layers",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 44,
+                                            "percentageQuestion": 5.7
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 43,
+                                            "percentageQuestion": 9.8
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 35,
+                                            "percentageQuestion": 40.2
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 39,
+                                            "percentageQuestion": 46.6
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "shadow_dom_css",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 40,
+                                            "percentageQuestion": 7.9
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 40,
+                                            "percentageQuestion": 12.6
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 48,
+                                            "percentageQuestion": 24.2
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 52,
+                                            "percentageQuestion": 30.8
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "trigonometric_functions",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 45,
+                                            "percentageQuestion": 5.3
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 46,
+                                            "percentageQuestion": 7.8
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 26,
+                                            "percentageQuestion": 53.6
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 15,
+                                            "percentageQuestion": 74
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "css_nesting",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 30,
+                                            "percentageQuestion": 14.7
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 27,
+                                            "percentageQuestion": 26.3
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 20,
+                                            "percentageQuestion": 62.6
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 5,
+                                            "percentageQuestion": 88.2
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "image_set",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 34,
+                                            "percentageQuestion": 12.7
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 36,
+                                            "percentageQuestion": 17.2
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 33,
+                                            "percentageQuestion": 41.7
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 36,
+                                            "percentageQuestion": 52.3
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "image_function",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 28,
+                                            "percentageQuestion": 15.9
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 33,
+                                            "percentageQuestion": 21
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": 43,
+                                            "percentageQuestion": 32.1
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 45,
+                                            "percentageQuestion": 42.5
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "individual_transform_properties",
+                                    "usage": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 20,
+                                            "percentageQuestion": 37.4
+                                        }
+                                    ],
+                                    "awareness": [
+                                        {
+                                            "year": 2019,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2020,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2021,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2022,
+                                            "rank": null,
+                                            "percentageQuestion": null
+                                        },
+                                        {
+                                            "year": 2023,
+                                            "rank": 13,
+                                            "percentageQuestion": 74.7
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

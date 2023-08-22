@@ -82,7 +82,7 @@ const VerticalBarBlock = ({ block, data, series, pageContext }: VerticalBarBlock
         units,
         setUnits,
         completion,
-        data: getChartData(data),
+        data: series || getChartData(data),
         block,
         unitsOptions,
         chartFilters,

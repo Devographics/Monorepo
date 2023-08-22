@@ -389,6 +389,15 @@
       - id: features_overview
         template: features_overview
 
+      - template: features_experience_linechart
+        tabId: blocks.tools_experience_ranking.percentages
+        parameters:
+            years: [2020, 2021, 2022, 2023]
+            rankCutoff: 10
+        variants:
+            - template: features_experience_ranking
+              tabId: blocks.tools_experience_ranking.rankings
+
       - id: knowledge_score
         template: demographics
 
@@ -1031,11 +1040,9 @@
 
       - template: happiness
         id: state_of_the_web_happiness
-        titleId: happiness.state_of_the_web
 
       - template: happiness
         id: state_of_css_happiness
-        titleId: happiness.state_of_css
 
 - id: resources
   intlId: resources_css
