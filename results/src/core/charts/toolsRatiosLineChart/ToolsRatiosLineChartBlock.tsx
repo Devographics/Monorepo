@@ -33,16 +33,25 @@ export const ToolsExperienceLineChartBlock = ({
     data,
     triggerId
 }: ToolsExperienceRankingBlockProps) => {
-    const { defaultUnits = 'satisfaction', availableUnits, i18nNamespace = 'tools' } = block
+    const {
+        defaultUnits = 'satisfaction',
+        availableUnits: availableUnits_,
+        i18nNamespace = 'tools'
+    } = block
     const [current, setCurrent] = useState()
     const [metric, setMetric] = useState<MetricId>(defaultUnits)
     const theme = useTheme()
     const allEntities = useEntities()
     const { getString } = useI18n()
 
+    const availableUnits = availableUnits_ || Object.values(RatiosUnits)
     const controlledMetric = triggerId || metric
 
-    const { years, items } = data
+    const { years: yearsDoesNotWork, items } = data
+    // Note: we can't actually get years from data.years because it wouldn't reflect
+    // when we only select a subset of years
+    const years = items[0][availableUnits[0]].map(dataPoint => dataPoint.year)
+
     // const chartData: RankingChartSerie[] = processBlockData(data, { getLabel, controlledMetric })
 
     const legends = items.map((item, i) => {
@@ -53,16 +62,14 @@ export const ToolsExperienceLineChartBlock = ({
         return { id: item.id, label, shortLabel: label, color: theme.colors.distinct[i] }
     })
 
-    console.log(legends)
-
     const currentColor = current && legends?.find(l => l.id === current)?.color
 
     const tableData = items.map(item => {
         const { id } = item
         const entity = allEntities.find(e => e.id === id)
-
-        const cellData = { label: getItemLabel({ id, entity, i18nNamespace, getString }) }
-        Object.values(RatiosUnits).forEach(metric => {
+        const { label } = getItemLabel({ id, entity, i18nNamespace, getString })
+        const cellData = { label }
+        availableUnits.forEach(metric => {
             cellData[`${metric}_percentage`] = item[metric]?.map(y => ({
                 year: y.year,
                 value: y.percentageQuestion
@@ -87,7 +94,7 @@ export const ToolsExperienceLineChartBlock = ({
             data={data}
             modeProps={{
                 units: controlledMetric,
-                options: availableUnits || Object.values(RatiosUnits),
+                options: availableUnits,
                 onChange: setMetric,
                 i18nNamespace: 'options.experience_ranking'
             }}
@@ -106,7 +113,7 @@ export const ToolsExperienceLineChartBlock = ({
             tables={[
                 getTableData({
                     data: tableData,
-                    valueKeys: Object.values(RatiosUnits).map(m => `${m}_percentage`),
+                    valueKeys: availableUnits.map(m => `${m}_percentage`),
                     years
                 })
             ]}

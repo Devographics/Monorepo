@@ -58,6 +58,22 @@ const getResolverMap = (): ResolverMap => ({
     }
 })
 
+/*
+
+TODO
+
+This should instead follow the same structure as the other fields, e.g.
+
+features
+  features_ratios
+    items <parameters go here>
+      years
+      ids  
+      all_editions
+
+So that `years` and `ids` can also know about the parameters
+
+*/
 export const features_ratios: ApiTemplateFunction = ({ survey, edition, section, question }) => {
     const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(edition.id)}FeaturesRatios`
     const featuresEnumTypeName = getFeaturesEnumTypeName(survey)

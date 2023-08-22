@@ -74,30 +74,44 @@ export const ToolsExperienceRankingBlock = ({
     data,
     triggerId
 }: ToolsExperienceRankingBlockProps) => {
-    const { defaultUnits = 'satisfaction', availableUnits, i18nNamespace = 'tools' } = block
+    const {
+        defaultUnits = 'satisfaction',
+        availableUnits: availableUnits_,
+        i18nNamespace = 'tools'
+    } = block
 
     const [metric, setMetric] = useState<MetricId>(defaultUnits)
     const { getString } = useI18n()
-    const entities = useEntities()
+    const allEntities = useEntities()
     const controlledMetric = triggerId || metric
 
-    const { years, items } = data
+    const availableUnits = availableUnits_ || Object.values(RatiosUnits)
+
+    const { years: yearsDoesNotWork, items } = data
+    // Note: we can't actually get years from data.years because it wouldn't reflect
+    // when we only select a subset of years
+    const years = items[0][availableUnits[0]].map(dataPoint => dataPoint.year)
+
     const processBlockDataOptions = {
         controlledMetric,
-        entities,
+        entities: allEntities,
         getString,
         i18nNamespace
     }
     const chartData: RankingChartSerie[] = processBlockData(data, processBlockDataOptions)
 
-    const tableData = items.map(tool => {
-        const cellData = { label: tool?.entity?.name }
-        Object.values(RatiosUnits).forEach(metric => {
-            cellData[`${metric}_percentage`] = tool[metric]?.map(y => ({
+    const tableData = items.map(item => {
+        const { id } = item
+        const entity = allEntities.find(e => e.id === id)
+        const { label } = getItemLabel({ id, entity, i18nNamespace, getString })
+        const cellData = { label }
+
+        availableUnits.forEach(metric => {
+            cellData[`${metric}_percentage`] = item[metric]?.map(y => ({
                 year: y.year,
                 value: y.percentageQuestion
             }))
-            cellData[`${metric}_rank`] = tool[metric]?.map(y => ({
+            cellData[`${metric}_rank`] = item[metric]?.map(y => ({
                 year: y.year,
                 value: y.rank
             }))
@@ -117,14 +131,14 @@ export const ToolsExperienceRankingBlock = ({
             data={data}
             modeProps={{
                 units: controlledMetric,
-                options: availableUnits || Object.values(RatiosUnits),
+                options: availableUnits,
                 onChange: setMetric,
                 i18nNamespace: 'options.experience_ranking'
             }}
             tables={[
                 getTableData({
                     data: tableData,
-                    valueKeys: Object.values(RatiosUnits).map(m => `${m}_rank`),
+                    valueKeys: availableUnits.map(m => `${m}_rank`),
                     years
                 })
             ]}
