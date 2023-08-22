@@ -14,7 +14,8 @@ import DynamicDataLoader from 'core/filters/dataloaders/DynamicDataLoader'
 import { useChartFilters } from 'core/filters/helpers'
 import { ToolRatiosQuestionData, Entity, RatiosUnits } from '@devographics/types'
 import { useEntities, getEntityName } from 'core/helpers/entities'
-import { BlockDefinition } from 'core/types'
+import { BlockDefinition, StringTranslator } from 'core/types'
+import { getItemLabel } from 'core/helpers/labels'
 
 export interface MetricBucket {
     year: number
@@ -40,14 +41,22 @@ export interface ToolsExperienceRankingBlockProps {
 
 const processBlockData = (
     data: ToolRatiosQuestionData,
-    options: { controlledMetric: any; entities: Entity[] }
+    options: {
+        controlledMetric: any
+        entities: Entity[]
+        getString: StringTranslator
+        i18nNamespace: string
+    }
 ) => {
-    const { controlledMetric, entities } = options
-    return data?.items?.map(tool => {
+    const { controlledMetric, entities, getString, i18nNamespace } = options
+    return data?.items?.map(item => {
+        const entity = entities.find(e => e.id === item.id)
+        const { label } = getItemLabel({ id: item.id, entity, getString, i18nNamespace })
+
         return {
-            id: tool.id,
-            name: getEntityName(entities.find(e => e.id === tool.id)),
-            data: tool[controlledMetric]
+            id: item.id,
+            name: label,
+            data: item[controlledMetric]
                 ?.filter(bucket => bucket.rank && bucket.percentageQuestion)
                 .map(bucket => {
                     return {
@@ -65,7 +74,7 @@ export const ToolsExperienceRankingBlock = ({
     data,
     triggerId
 }: ToolsExperienceRankingBlockProps) => {
-    const { defaultUnits = 'satisfaction', availableUnits } = block
+    const { defaultUnits = 'satisfaction', availableUnits, i18nNamespace = 'tools' } = block
 
     const [metric, setMetric] = useState<MetricId>(defaultUnits)
     const { getString } = useI18n()
@@ -73,7 +82,13 @@ export const ToolsExperienceRankingBlock = ({
     const controlledMetric = triggerId || metric
 
     const { years, items } = data
-    const chartData: RankingChartSerie[] = processBlockData(data, { controlledMetric, entities })
+    const processBlockDataOptions = {
+        controlledMetric,
+        entities,
+        getString,
+        i18nNamespace
+    }
+    const chartData: RankingChartSerie[] = processBlockData(data, processBlockDataOptions)
 
     const tableData = items.map(tool => {
         const cellData = { label: tool?.entity?.name }
@@ -126,7 +141,7 @@ export const ToolsExperienceRankingBlock = ({
                     <RankingChart
                         buckets={data}
                         processBlockData={processBlockData}
-                        processBlockDataOptions={{ controlledMetric, entities }}
+                        processBlockDataOptions={processBlockDataOptions}
                     />
                 </ChartContainer>
             </DynamicDataLoader>

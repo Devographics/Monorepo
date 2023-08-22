@@ -7,6 +7,7 @@ noteId: blocks.features_experience_linechart.note
 hasSponsor: true
 defaultUnits: usage
 availableUnits: [awareness, usage]
+i18nNamespace: features
 query: >
     surveys {
         ${surveyId} {

@@ -5,20 +5,29 @@ import { ResponsiveBump } from '@nivo/bump'
 import { BasicTooltip } from '@nivo/tooltip'
 import { ResponsiveLine } from '@nivo/line'
 import { RatiosUnits, BucketUnits, ToolRatiosQuestionData } from '@devographics/types'
-import { getLabel } from 'core/charts/toolsRatiosLineChart/ToolsRatiosLineChartBlock'
 import { Entity } from '@devographics/types'
 import { useEntities } from 'core/helpers/entities'
+import { getItemLabel } from 'core/helpers/labels'
+import { StringTranslator } from 'core/types'
+import { useI18n } from 'core/i18n/i18nContext'
 
 export const getChartData = (
     data: ToolRatiosQuestionData,
-    options: { allEntities: Entity[]; units: RatiosUnits }
+    options: {
+        allEntities: Entity[]
+        units: RatiosUnits
+        i18nNamespace?: string
+        getString: StringTranslator
+    }
 ) => {
-    const { units, allEntities } = options
-    const buckets = data.items.map(tool => {
+    const { units, allEntities, getString, i18nNamespace } = options
+    const buckets = data.items.map(item => {
+        const entity = allEntities.find(e => e.id === item.id)
+        const { label } = getItemLabel({ id: item.id, entity, getString, i18nNamespace })
         return {
-            id: tool.id,
-            name: getLabel(tool.id, allEntities),
-            data: tool[units]?.map((bucket, index) => {
+            id: item.id,
+            name: label,
+            data: item[units]?.map((bucket, index) => {
                 const datapoint = {
                     x: bucket.year,
                     y: bucket.percentageQuestion,
@@ -26,7 +35,7 @@ export const getChartData = (
                 }
                 // add all metrics to datapoint for ease of debugging
                 Object.values(RatiosUnits).forEach(metric => {
-                    const percentageQuestion = tool?.[metric]?.[index]?.percentageQuestion
+                    const percentageQuestion = item?.[metric]?.[index]?.percentageQuestion
                     if (percentageQuestion) {
                         datapoint[`${metric}_percentage`] = percentageQuestion
                     }
@@ -120,6 +129,7 @@ const CustomTooltip = (props: CustomTooltipProps) => {
 
 interface RankingChartProps {
     data: ToolRatiosQuestionData
+    i18nNamespace?: string
 }
 
 /*
@@ -129,9 +139,10 @@ we need to call processBlockData() again whenever the metric changes,
 which will not happen unless we call it from within the chart
 
 */
-export const LineChart = ({ units, data: unprocessedData }: RankingChartProps) => {
+export const LineChart = ({ units, data: unprocessedData, i18nNamespace }: RankingChartProps) => {
     const allEntities = useEntities()
-    const buckets = getChartData(unprocessedData, { allEntities, units })
+    const { getString } = useI18n()
+    const buckets = getChartData(unprocessedData, { allEntities, units, i18nNamespace, getString })
 
     const theme = useTheme()
     // const { getString } = useI18n()

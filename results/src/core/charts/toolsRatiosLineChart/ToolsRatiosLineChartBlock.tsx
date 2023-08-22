@@ -12,6 +12,8 @@ import { MetricId } from 'core/helpers/units'
 import { ToolRatiosQuestionData, RatiosUnits, Entity } from '@devographics/types'
 import { useEntities } from 'core/helpers/entities'
 import { BlockDefinition } from 'core/types/block'
+import { getItemLabel } from 'core/helpers/labels'
+import { useI18n } from 'core/i18n/i18nContext'
 
 export interface MetricBucket {
     year: number
@@ -26,22 +28,17 @@ export interface ToolsExperienceRankingBlockProps {
     titleProps: any
 }
 
-export const getLabel = (id: string, allEntities: Entity[]) => {
-    const entity = allEntities.find(e => e.id === id)
-    const label = entity?.nameClean || entity?.name || id
-    return label
-}
-
 export const ToolsExperienceLineChartBlock = ({
     block,
     data,
     triggerId
 }: ToolsExperienceRankingBlockProps) => {
-    const { defaultUnits = 'satisfaction', availableUnits } = block
+    const { defaultUnits = 'satisfaction', availableUnits, i18nNamespace = 'tools' } = block
     const [current, setCurrent] = useState()
     const [metric, setMetric] = useState<MetricId>(defaultUnits)
     const theme = useTheme()
     const allEntities = useEntities()
+    const { getString } = useI18n()
 
     const controlledMetric = triggerId || metric
 
@@ -49,20 +46,28 @@ export const ToolsExperienceLineChartBlock = ({
     // const chartData: RankingChartSerie[] = processBlockData(data, { getLabel, controlledMetric })
 
     const legends = items.map((item, i) => {
-        const label = getLabel(item.id, allEntities)
+        const { id } = item
+        const entity = allEntities.find(e => e.id === id)
+
+        const { label } = getItemLabel({ id, entity, i18nNamespace, getString })
         return { id: item.id, label, shortLabel: label, color: theme.colors.distinct[i] }
     })
 
+    console.log(legends)
+
     const currentColor = current && legends?.find(l => l.id === current)?.color
 
-    const tableData = items.map(tool => {
-        const cellData = { label: getLabel(tool.id, allEntities) }
+    const tableData = items.map(item => {
+        const { id } = item
+        const entity = allEntities.find(e => e.id === id)
+
+        const cellData = { label: getItemLabel({ id, entity, i18nNamespace, getString }) }
         Object.values(RatiosUnits).forEach(metric => {
-            cellData[`${metric}_percentage`] = tool[metric]?.map(y => ({
+            cellData[`${metric}_percentage`] = item[metric]?.map(y => ({
                 year: y.year,
                 value: y.percentageQuestion
             }))
-            cellData[`${metric}_rank`] = tool[metric]?.map(y => ({
+            cellData[`${metric}_rank`] = item[metric]?.map(y => ({
                 year: y.year,
                 value: y.rank
             }))
@@ -116,7 +121,11 @@ export const ToolsExperienceLineChartBlock = ({
             >
                 <ChartContainer height={items.length * 30 + 80}>
                     <LineChartWrapper current={current} currentColor={currentColor}>
-                        <LineChart data={data} units={controlledMetric} />
+                        <LineChart
+                            data={data}
+                            units={controlledMetric}
+                            i18nNamespace={i18nNamespace}
+                        />
                     </LineChartWrapper>
                 </ChartContainer>
             </DynamicDataLoader>

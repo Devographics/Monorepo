@@ -7,3 +7,4 @@ dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.${sectionId}.features_experi
 hasSponsor: true
 defaultUnits: usage
 availableUnits: [awareness, usage]
+i18nNamespace: features

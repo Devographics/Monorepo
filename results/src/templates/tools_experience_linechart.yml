@@ -5,6 +5,7 @@ descriptionId: blocks.tools_experience_linechart.description
 noteId: blocks.tools_experience_linechart.note
 # dataPath: 'dataAPI.survey.${sectionId}_experience_linechart'
 hasSponsor: true
+i18nNamespace: tools
 query: >
     surveys {
         ${surveyId} {
