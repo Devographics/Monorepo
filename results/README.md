@@ -2,6 +2,16 @@
 
 The repo for the survey results sites, such as the [2022 State of JS survey](https://2022.stateofjs.com/) site. Powered by [Gatsby](https://www.gatsbyjs.org/).
 
+## Running the app locally
+
+/!\ Currently (08/2023) loading the homepage locally will crash in dev and build mode
+
+Instead load the app with a locale:
+http://localhost:8001/en-US
+
+
+
+
 ## Setup
 
 Create an `.env` file at the root of the `/results` directory.

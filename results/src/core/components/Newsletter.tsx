@@ -3,30 +3,29 @@ import { useI18n } from 'core/i18n/i18nContext'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 
-const getEOConfig = listId => ({
+const getEOConfig = (listId: string) => ({
     emailOctopusUrl: `https://emailoctopus.com/lists/${listId}/members/embedded/1.3/add`,
     emailOctopusSiteKey: '6LdYsmsUAAAAAPXVTt-ovRsPIJ_IVhvYBBhGvRV6',
     emailOctopusCode: 'hpc4b27b6e-eb38-11e9-be00-06b4694bee2a'
 })
 
-export default function Newsletter({ locale }) {
+export default function Newsletter({ locale }: { locale: any }) {
     const { currentSurvey } = usePageContext()
     const listId = currentSurvey?.emailOctopus?.listId
 
     const [email, setEmail] = useState('')
-    const [submitted, setSubmitted] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(null)
-    const [success, setSuccess] = useState(null)
+    const [error, setError] = useState<{ message: string } | null>(null)
+    const [success, setSuccess] = useState<{ message: string } | null>(null)
 
     const eoConfig = getEOConfig(listId)
 
-    const handleChange = e => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const email = e.target.value
         setEmail(email)
     }
 
-    const handleSubmit = async e => {
+    const handleSubmit = async (e: SubmitEvent) => {
         setLoading(true)
 
         console.log('SUBMITTING')
@@ -71,7 +70,6 @@ export default function Newsletter({ locale }) {
                     loading={loading}
                     handleSubmit={handleSubmit}
                     handleChange={handleChange}
-                    locale={locale}
                     {...eoConfig}
                 />
             )}
@@ -86,8 +84,16 @@ const NewsletterForm = ({
     handleChange,
     emailOctopusUrl,
     emailOctopusSiteKey,
-    emailOctopusCode,
-    locale
+    emailOctopusCode
+}: //locale
+{
+    email: string
+    loading?: boolean
+    handleSubmit?: any
+    handleChange?: any
+    emailOctopusUrl: string
+    emailOctopusSiteKey: string
+    emailOctopusCode: string
 }) => {
     const { getString } = useI18n()
 

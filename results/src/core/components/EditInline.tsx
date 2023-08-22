@@ -5,8 +5,11 @@ import T from 'core/i18n/T'
 import { EditIcon } from 'core/icons'
 import Button from 'core/components/Button'
 
-const EditInline = ({ defaultValue }) => {
+const EditInline = ({ defaultValue }: { defaultValue: string }) => {
     const [isTextfield, setIsTextfield] = useState(false)
+    // Tracking the state with a controlled input allows for an optimistic behaviour,
+    // we don't need "defaultValue" to update
+    // TODO: it should probably be called "initialValue" or "currentValue" instead
     const [contents, setContents] = useState(defaultValue)
     return (
         <div>
@@ -14,7 +17,7 @@ const EditInline = ({ defaultValue }) => {
                 <Wrapper>
                     <Input
                         value={contents}
-                        onChange={e => {
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             setContents(e.target.value)
                         }}
                     />

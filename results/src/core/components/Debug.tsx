@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Debug = ({ title, data }) => (
+const Debug = ({ title, data }: { title: string | React.ReactNode; data: any }) => (
     <div style={{ marginBottom: 20 }}>
         <div>[debug] {title}</div>
         <div style={{ fontSize: '12px' }}>
-            {Object.keys(data).map((key) => {
+            {Object.keys(data).map(key => {
                 let value = data[key]
                 if (value !== undefined && value !== null && value.indexOf('http') === 0) {
                     value = <a href={value}>{value}</a>
@@ -22,7 +22,7 @@ const Debug = ({ title, data }) => (
 
 Debug.propTypes = {
     title: PropTypes.string.isRequired,
-    data: PropTypes.object.isRequired,
+    data: PropTypes.object.isRequired
 }
 
 export default Debug
