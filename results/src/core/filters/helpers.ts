@@ -540,9 +540,7 @@ export const getFieldLabel = ({
         return entityName
     } else {
         let key
-        if (template === 'happiness') {
-            key = 'blocks.happiness'
-        } else if (sectionId === 'other_tools') {
+        if (sectionId === 'other_tools') {
             key = `tools_others.${id}`
         } else if (template === 'feature') {
             key = `features.${id}`
@@ -552,7 +550,7 @@ export const getFieldLabel = ({
             key = `${sectionId}.${id}`
         }
         const s = getString(key)
-        return s?.tClean || s?.t
+        return s?.tClean || s?.t || id
     }
 }
 

@@ -5,7 +5,7 @@ import { ResponsiveBump } from '@nivo/bump'
 import { BasicTooltip } from '@nivo/tooltip'
 import { ResponsiveLine } from '@nivo/line'
 import { RatiosUnits, BucketUnits, ToolRatiosQuestionData } from '@devographics/types'
-import { getLabel } from 'core/charts/toolsRatiosLineChart/ToolsExperienceLineChartBlock'
+import { getLabel } from 'core/charts/toolsRatiosLineChart/ToolsRatiosLineChartBlock'
 import { Entity } from '@devographics/types'
 import { useEntities } from 'core/helpers/entities'
 
@@ -26,7 +26,10 @@ export const getChartData = (
                 }
                 // add all metrics to datapoint for ease of debugging
                 Object.values(RatiosUnits).forEach(metric => {
-                    datapoint[`${metric}_percentage`] = tool[metric][index].percentageQuestion
+                    const percentageQuestion = tool?.[metric]?.[index]?.percentageQuestion
+                    if (percentageQuestion) {
+                        datapoint[`${metric}_percentage`] = percentageQuestion
+                    }
                 })
                 return datapoint
             })

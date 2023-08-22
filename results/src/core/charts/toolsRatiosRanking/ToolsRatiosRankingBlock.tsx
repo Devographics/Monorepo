@@ -9,10 +9,10 @@ import T from 'core/i18n/T'
 import { useI18n } from 'core/i18n/i18nContext'
 import { getTableData } from 'core/helpers/datatables'
 import { MODE_GRID } from 'core/filters/constants'
-import { MetricId, ALL_METRICS } from 'core/helpers/units'
+import { MetricId } from 'core/helpers/units'
 import DynamicDataLoader from 'core/filters/dataloaders/DynamicDataLoader'
 import { useChartFilters } from 'core/filters/helpers'
-import { ToolRatiosQuestionData, Entity } from '@devographics/types'
+import { ToolRatiosQuestionData, Entity, RatiosUnits } from '@devographics/types'
 import { useEntities, getEntityName } from 'core/helpers/entities'
 import { BlockDefinition } from 'core/types'
 
@@ -65,7 +65,9 @@ export const ToolsExperienceRankingBlock = ({
     data,
     triggerId
 }: ToolsExperienceRankingBlockProps) => {
-    const [metric, setMetric] = useState<MetricId>('satisfaction')
+    const { defaultUnits = 'satisfaction', availableUnits } = block
+
+    const [metric, setMetric] = useState<MetricId>(defaultUnits)
     const { getString } = useI18n()
     const entities = useEntities()
     const controlledMetric = triggerId || metric
@@ -75,7 +77,7 @@ export const ToolsExperienceRankingBlock = ({
 
     const tableData = items.map(tool => {
         const cellData = { label: tool?.entity?.name }
-        ALL_METRICS.forEach(metric => {
+        Object.values(RatiosUnits).forEach(metric => {
             cellData[`${metric}_percentage`] = tool[metric]?.map(y => ({
                 year: y.year,
                 value: y.percentageQuestion
@@ -100,14 +102,14 @@ export const ToolsExperienceRankingBlock = ({
             data={data}
             modeProps={{
                 units: controlledMetric,
-                options: ALL_METRICS,
+                options: availableUnits || Object.values(RatiosUnits),
                 onChange: setMetric,
                 i18nNamespace: 'options.experience_ranking'
             }}
             tables={[
                 getTableData({
                     data: tableData,
-                    valueKeys: ALL_METRICS.map(m => `${m}_rank`),
+                    valueKeys: Object.values(RatiosUnits).map(m => `${m}_rank`),
                     years
                 })
             ]}

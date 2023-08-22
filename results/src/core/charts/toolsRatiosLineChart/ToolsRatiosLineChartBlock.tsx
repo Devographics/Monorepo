@@ -37,8 +37,9 @@ export const ToolsExperienceLineChartBlock = ({
     data,
     triggerId
 }: ToolsExperienceRankingBlockProps) => {
+    const { defaultUnits = 'satisfaction', availableUnits } = block
     const [current, setCurrent] = useState()
-    const [metric, setMetric] = useState<MetricId>('satisfaction')
+    const [metric, setMetric] = useState<MetricId>(defaultUnits)
     const theme = useTheme()
     const allEntities = useEntities()
 
@@ -81,7 +82,7 @@ export const ToolsExperienceLineChartBlock = ({
             data={data}
             modeProps={{
                 units: controlledMetric,
-                options: Object.values(RatiosUnits),
+                options: availableUnits || Object.values(RatiosUnits),
                 onChange: setMetric,
                 i18nNamespace: 'options.experience_ranking'
             }}

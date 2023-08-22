@@ -1,0 +1,34 @@
+id: 'features_experience_linechart'
+blockType: ToolsRatiosLineChartBlock
+titleId: blocks.features_experience_linechart
+descriptionId: blocks.features_experience_linechart.description
+noteId: blocks.features_experience_linechart.note
+# dataPath: 'dataAPI.survey.${sectionId}_experience_linechart'
+hasSponsor: true
+defaultUnits: usage
+availableUnits: [awareness, usage]
+query: >
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                ${sectionId} {
+                    ${sectionId}_experience_linechart: ${sectionId}_ratios {
+                        years
+                        items<ARGUMENTS_PLACEHOLDER> {
+                            id
+                            usage {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                            awareness {
+                                year
+                                rank
+                                percentageQuestion
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

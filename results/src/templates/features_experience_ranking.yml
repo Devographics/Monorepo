@@ -1,0 +1,9 @@
+id: 'features_experience_ranking'
+blockType: ToolsRatiosRankingBlock
+titleId: blocks.features_experience_ranking
+descriptionId: blocks.features_experience_ranking.description
+noteId: blocks.features_experience_ranking.note
+dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.${sectionId}.features_experience_linechart'
+hasSponsor: true
+defaultUnits: usage
+availableUnits: [awareness, usage]

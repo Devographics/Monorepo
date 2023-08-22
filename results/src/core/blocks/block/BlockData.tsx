@@ -13,19 +13,26 @@ import { parse } from 'graphql'
 import { print } from 'graphql-print'
 
 const BlockData = props => {
-    const { block } = props
+    const { block, chartFilters, tables } = props
     const { parameters } = block
     const pageContext = usePageContext()
 
-    const query = getBlockQuery({
-        block,
-        pageContext,
-        queryOptions: {
-            addArgumentsPlaceholder: false,
-            addBucketFacetsPlaceholder: false
-        },
-        queryArgs: parameters ? { parameters } : {}
-    })
+    const query = chartFilters
+        ? getFiltersQuery({
+              block,
+              pageContext,
+              chartFilters,
+              currentYear: pageContext.currentEdition.year
+          })?.query
+        : getBlockQuery({
+              block,
+              pageContext,
+              queryOptions: {
+                  addArgumentsPlaceholder: false,
+                  addBucketFacetsPlaceholder: false
+              },
+              queryArgs: parameters ? { parameters } : {}
+          })
 
     return (
         <>
@@ -33,7 +40,13 @@ const BlockData = props => {
                 <JSONTrigger {...props} />
                 <GraphQLTrigger query={query} />
             </ExportWrapper>
-            <Table {...props} />
+            {tables ? (
+                <Table {...props} />
+            ) : (
+                <p>
+                    <T k="table.not_available" />
+                </p>
+            )}
         </>
     )
 }
@@ -68,6 +81,7 @@ export const GraphQLTrigger = props => {
 }
 
 export function removeNull(obj: any): any {
+    if (!obj) return
     const clean = Object.fromEntries(
         Object.entries(obj)
             .map(([k, v]) => [k, v === Object(v) ? removeNull(v) : v])
@@ -118,7 +132,7 @@ export const GraphQLExport = ({ query }: { query: string }) => {
 }
 
 const ExportWrapper = styled.div`
-    margin-bottom: ${spacing(0.5)};
+    margin-bottom: ${spacing()};
     display: flex;
     flex-wrap: wrap;
     gap: ${spacing(0.5)};
