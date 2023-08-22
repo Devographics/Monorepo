@@ -11,6 +11,8 @@ import { computeCompletionByYear } from './completion'
 // import { computeYearlyTransitions, YearlyTransitionsResult } from './yearly_transitions'
 import { inspect } from 'util'
 import { getCollection } from '../helpers/db'
+import { Entity, RatiosUnits } from '@devographics/types'
+import { computeKey, useCache } from '../helpers/caching'
 
 interface ExperienceBucket {
     id: string
@@ -18,6 +20,15 @@ interface ExperienceBucket {
 }
 
 const computeAwareness = (buckets: ExperienceBucket[], total: number) => {
+    const neverHeard = buckets.find(bucket => bucket.id === 'never_heard')
+    if (neverHeard === undefined) {
+        return 0
+    }
+
+    return ratioToPercentage((total - neverHeard.count) / total)
+}
+
+const computeFeatureAwareness = (buckets: ExperienceBucket[], total: number) => {
     const neverHeard = buckets.find(bucket => bucket.id === 'never_heard')
     if (neverHeard === undefined) {
         return 0
@@ -35,6 +46,16 @@ const computeUsage = (buckets: ExperienceBucket[]) => {
 
     const usageCount = wouldUseCount + wouldNotUseCount
     const total = usageCount + interestedCount + notInterestedCount + neverHeardCount
+
+    return ratioToPercentage(usageCount / total)
+}
+
+const computeFeatureUsage = (buckets: ExperienceBucket[]) => {
+    const neverHeardCount = buckets.find(bucket => bucket.id === 'never_heard')?.count ?? 0
+    const knowAboutCount = buckets.find(bucket => bucket.id === 'heard')?.count ?? 0
+    const usageCount = buckets.find(bucket => bucket.id === 'used')?.count ?? 0
+
+    const total = usageCount + neverHeardCount + knowAboutCount
 
     return ratioToPercentage(usageCount / total)
 }
@@ -62,23 +83,33 @@ const computeSatisfaction = (buckets: ExperienceBucket[]) => {
 export async function computeExperienceOverYears({
     context,
     survey,
-    tool,
+    itemId,
+    type,
+    years,
     filters
 }: {
     context: RequestContext
     survey: Survey
-    tool: string
+    itemId: string
+    type: 'tool' | 'feature'
+    years?: number[]
     filters?: Filters
 }) {
+    const sectionId = type === 'tool' ? 'tools' : 'features'
+
     const { db, isDebug } = context
     const collection = getCollection(db, survey)
 
-    const path = `tools.${tool}.experience`
+    const path = `${sectionId}.${itemId}.experience`
 
     const match = {
         surveyId: survey.id,
         [path]: { $nin: [null, ''] },
         ...generateFiltersQuery({ filters })
+    }
+
+    if (years) {
+        match.year = { $in: years }
     }
 
     const pipeline = [
@@ -107,8 +138,8 @@ export async function computeExperienceOverYears({
     const results = await collection.aggregate(pipeline).toArray()
 
     if (isDebug) {
-        console.log('// tool')
-        console.log(tool)
+        console.log('// item')
+        console.log(itemId)
         console.log('// filters')
         console.log(filters)
         console.log(
@@ -135,8 +166,8 @@ export async function computeExperienceOverYears({
                 awarenessUsageInterestSatisfaction: {
                     awareness: number
                     usage: number
-                    interest: number
-                    satisfaction: number
+                    interest?: number
+                    satisfaction?: number
                 }
                 buckets: Array<{
                     id: string
@@ -193,12 +224,18 @@ export async function computeExperienceOverYears({
 
     // compute awareness/interest/satisfaction
     experienceByYear.forEach(bucket => {
-        bucket.awarenessUsageInterestSatisfaction = {
-            awareness: computeAwareness(bucket.buckets, bucket.total),
-            usage: computeUsage(bucket.buckets),
-            interest: computeInterest(bucket.buckets),
-            satisfaction: computeSatisfaction(bucket.buckets)
-        }
+        bucket.awarenessUsageInterestSatisfaction =
+            type === 'tool'
+                ? {
+                      awareness: computeAwareness(bucket.buckets, bucket.total),
+                      usage: computeUsage(bucket.buckets),
+                      interest: computeInterest(bucket.buckets),
+                      satisfaction: computeSatisfaction(bucket.buckets)
+                  }
+                : {
+                      awareness: computeFeatureAwareness(bucket.buckets, bucket.total),
+                      usage: computeFeatureUsage(bucket.buckets)
+                  }
     })
 
     // compute deltas
@@ -222,36 +259,84 @@ export async function computeExperienceOverYears({
     return appendCompletionToYearlyResults(context, survey, experienceByYear)
 }
 
-const metrics = ['awareness', 'usage', 'interest', 'satisfaction']
+export const metrics = ['awareness', 'usage', 'interest', 'satisfaction']
 
-export async function computeToolsExperienceRatios({
+export type ExperienceRatioItemData = {
+    [key in RatiosUnits]: Array<ExperienceRatioYearItem>
+}
+
+export interface ExperienceRatioItem extends ExperienceRatioItemData {
+    id: string
+    entity?: Entity
+}
+
+export interface ExperienceRatioYearItem {
+    year: number
+    rank: number
+    percentageQuestion: number
+}
+
+export async function computeExperienceRatios({
     context,
     survey,
-    tools,
-    filters
+    itemIds,
+    filters,
+    rankCutoff,
+    enableCache,
+    years,
+    type
 }: {
     context: RequestContext
     survey: Survey
-    tools: string[]
+    itemIds: string[]
     filters?: Filters
+    rankCutoff?: number
+    enableCache?: boolean
+    years?: number[]
+    type: 'feature' | 'tool'
 }) {
     let availableYears: any[] = []
     const metricByYear: { [key: string]: any } = {}
 
-    for (const tool of tools) {
-        const toolAllYearsExperience = await computeExperienceOverYears({
+    for (const itemId of itemIds) {
+        // v1: use when the entire computeExperienceRatios function is cached
+        const itemAllYearsExperience = await computeExperienceOverYears({
             context,
             survey,
-            tool,
+            itemId,
+            type,
+            years,
             filters
         })
-        const toolAwarenessUsageInterestSatisfactionOverYears: any[] = []
 
-        toolAllYearsExperience.forEach((toolYear: any) => {
-            availableYears.push(toolYear.year)
+        // v2: use to cache each computeExperienceOverYears call separately
+        // const key = computeKey(computeExperienceOverYears, {
+        //     itemId,
+        //     type,
+        //     filters
+        // })
+        // const funcOptions = {
+        //         context,
+        //         survey,
+        //         itemId,
+        //         type,
+        //         filters
+        //     }
+        // const itemAllYearsExperience = await useCache({
+        //     key,
+        //     func: computeExperienceOverYears,
+        //     context,
+        //     funcOptions,
+        //     enableCache
+        // })
 
-            if (metricByYear[toolYear.year] === undefined) {
-                metricByYear[toolYear.year] = {
+        const awarenessUsageInterestSatisfactionOverYears: any[] = []
+
+        itemAllYearsExperience.forEach((itemYear: any) => {
+            availableYears.push(itemYear.year)
+
+            if (metricByYear[itemYear.year] === undefined) {
+                metricByYear[itemYear.year] = {
                     awareness: [],
                     usage: [],
                     interest: [],
@@ -260,15 +345,15 @@ export async function computeToolsExperienceRatios({
             }
 
             metrics.forEach(metric => {
-                metricByYear[toolYear.year][metric].push({
-                    tool,
-                    percentageQuestion: toolYear.awarenessUsageInterestSatisfaction[metric]
+                metricByYear[itemYear.year][metric].push({
+                    itemId,
+                    percentageQuestion: itemYear.awarenessUsageInterestSatisfaction[metric]
                 })
             })
 
-            toolAwarenessUsageInterestSatisfactionOverYears.push({
-                year: toolYear.year,
-                ...toolYear.awarenessUsageInterestSatisfaction
+            awarenessUsageInterestSatisfactionOverYears.push({
+                year: itemYear.year,
+                ...itemYear.awarenessUsageInterestSatisfaction
             })
         })
     }
@@ -285,32 +370,61 @@ export async function computeToolsExperienceRatios({
 
     availableYears = uniq(availableYears).sort()
 
-    const byTool: any[] = []
-    for (const tool of tools) {
-        const entity = await getEntity({ id: tool })
-        byTool.push({
-            id: tool,
+    const byItem: Array<ExperienceRatioItem> = []
+    for (const itemId of itemIds) {
+        const entity = await getEntity({ id: itemId })
+        const item = {
+            id: itemId,
             entity,
             ...metrics.reduce((acc, metric) => {
                 return {
                     ...acc,
                     [metric]: availableYears.map(year => {
-                        const toolYearMetric = metricByYear[year][metric].find(
-                            (d: any) => d.tool === tool
+                        const itemYearMetric = metricByYear[year][metric].find(
+                            (d: any) => d.itemId === itemId
                         )
                         let rank = null
                         let percentageQuestion = null
-                        if (toolYearMetric !== undefined) {
-                            rank = toolYearMetric.rank
-                            percentageQuestion = toolYearMetric.percentageQuestion
+                        if (itemYearMetric !== undefined) {
+                            rank = itemYearMetric.rank
+                            percentageQuestion = itemYearMetric.percentageQuestion
                         }
 
                         return { year, rank, percentageQuestion }
                     })
                 }
             }, {})
-        })
+        } as ExperienceRatioItem
+        byItem.push(item)
     }
 
-    return byTool
+    return byItem
+}
+
+/*
+
+If a rank cutoff is specified, we want to look at the last year of data,
+and remove any item which doesn't have any datapoints above that cutoff (i.e. a lower rank)
+across all metrics for that year.
+
+*/
+export const applyRankCutoff = (data: Array<ExperienceRatioItem>, rankCutoff: number) => {
+    if (rankCutoff) {
+        data = data.filter(item => {
+            let hasOneOrMoreDatapointsAboveCutoff = false
+            Object.values(RatiosUnits).forEach(metric => {
+                const lastYearData = item[metric].at(-1)
+                // don't take into account metrics that don't have a percentageQuestion field
+                const yearHasDataAboveCutoff =
+                    lastYearData &&
+                    typeof lastYearData.percentageQuestion !== 'undefined' &&
+                    lastYearData.rank <= rankCutoff
+                if (yearHasDataAboveCutoff) {
+                    hasOneOrMoreDatapointsAboveCutoff = true
+                }
+            })
+            return hasOneOrMoreDatapointsAboveCutoff
+        })
+    }
+    return data
 }

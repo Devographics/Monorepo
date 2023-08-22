@@ -4,6 +4,7 @@ import { AppSettings } from './settings'
 import NodeCache from 'node-cache'
 import { appSettings } from './settings'
 const nodeCache = new NodeCache()
+import compact from 'lodash/compact.js'
 
 type DynamicComputeCall = (...args: any[]) => Promise<any>
 
@@ -25,12 +26,12 @@ export const computeKey = (funcOrFuncName: Function | string, funcOptions?: any)
     const validOptions = { ...otherKeys, parameters: validParameters }
 
     const serializedOptions = validOptions
-        ? Object.keys(funcOptions)
-              .map((key: string) => {
+        ? compact(
+              Object.keys(funcOptions).map((key: string) => {
                   const argument = funcOptions[key]
                   return typeof argument === 'function' ? argument.name : JSON.stringify(argument)
               })
-              .join(', ')
+          ).join(', ')
         : ''
 
     const name = typeof funcOrFuncName === 'function' ? funcOrFuncName.name : funcOrFuncName
