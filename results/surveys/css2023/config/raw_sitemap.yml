@@ -353,29 +353,29 @@
                   facet:
                       sectionId: user_info
                       id: gender
-            - id: source_by_race_ethnicity
-              descriptionId: user_info.source_by_race_ethnicity.description.css2023
-              fieldId: source
-              tabId: tabs.by_race_ethnicity
-              i18nNamespace: source
-              template: demographics
-              blockType: HorizontalBarBlock
-              defaultUnits: percentageBucket
-              parameters: { limit: 20 }
-              filtersState:
-                  options:
-                      showDefaultSeries: true
-                      enableYearSelect: false
-                      mode: facet
-                      queryOnLoad: false
-                      supportedModes:
-                          - grid
-                          - facet
-                      preventQuery: false
-                  filters: []
-                  facet:
-                      sectionId: user_info
-                      id: race_ethnicity
+            # - id: source_by_race_ethnicity
+            #   descriptionId: user_info.source_by_race_ethnicity.description.css2023
+            #   fieldId: source
+            #   tabId: tabs.by_race_ethnicity
+            #   i18nNamespace: source
+            #   template: demographics
+            #   blockType: HorizontalBarBlock
+            #   defaultUnits: percentageBucket
+            #   parameters: { limit: 20 }
+            #   filtersState:
+            #       options:
+            #           showDefaultSeries: true
+            #           enableYearSelect: false
+            #           mode: facet
+            #           queryOnLoad: false
+            #           supportedModes:
+            #               - grid
+            #               - facet
+            #           preventQuery: false
+            #       filters: []
+            #       facet:
+            #           sectionId: user_info
+            #           id: race_ethnicity
 
       - id: user_info_resources
         items: [fm-homepage]
@@ -438,10 +438,10 @@
               template: feature_experience
               year: 2021
 
-            - id: david_east
+            - id: adam_argyle
               template: picks
               variables:
-                  url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Subgrid
+                  url: https://zagjs.com/
 
             - id: object_view_box
               template: feature_experience
@@ -538,10 +538,10 @@
             - id: overscroll_behavior
               template: feature_experience
 
-            - id: bramus_van_damme
+            - id: kilian_valkhof
               template: picks
               variables:
-                  url: https://developer.mozilla.org/en-US/docs/Web/CSS/:has
+                  url: https://devtoolstips.org/
 
             - id: units_switcher_hint
               template: hint
@@ -570,10 +570,10 @@
             - id: line_clamp
               template: feature_experience
 
-            - id: kevin_j_powell
+            - id: josh_comeau
               template: picks
               variables:
-                  url: https://jhey.dev/
+                  url: https://thecsspodcast.libsyn.com/
 
             - id: variable_fonts
               template: feature_experience
@@ -599,10 +599,10 @@
             - id: prefers_color_scheme
               template: feature_experience
 
-            - id: samuel_kraft
+            - id: sara_soueidan
               template: picks
               variables:
-                  url: https://webkit.org/blog/13096/css-has-pseudo-class/
+                  url: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color-contrast
 
             - id: prefers_reduced_data
               template: feature_experience
@@ -662,10 +662,10 @@
             - id: variables
               template: feature_experience
 
-            - id: adam_argyle
+            - id: ahmad_awais
               template: picks
               variables:
-                  url: https://developer.chrome.com/blog/has-m105/
+                  url: https://developer.chrome.com/blog/css-text-wrap-balance/
 
             - id: feature_support_queries
               template: feature_experience
@@ -684,10 +684,10 @@
               template: feature_experience
               year: 2021
 
-            - id: josh_comeau
-              template: picks
-              variables:
-                  url: https://moderncss.dev/
+            # - id: josh_comeau
+            #   template: picks
+            #   variables:
+            #       url: https://moderncss.dev/
 
             - id: has_selector
               template: feature_experience
@@ -761,10 +761,10 @@
 
       - template: tools_experience_marimekko
 
-      - id: eric_w_bailey
+      - id: ahmad_shadeed
         template: picks
         variables:
-            url: https://benmyers.dev/blog/semantic-selectors/
+            url: https://developer.chrome.com/articles/scroll-driven-animations/
 
       - template: section_other_tools
         parameters: { limit: 10 }
@@ -818,10 +818,10 @@
 
       # - template: toolsUsageVariationsTemplate
 
-      - id: michelle_barker
-        template: picks
-        variables:
-            url: https://wpt.fyi/interop-2022
+      # - id: michelle_barker
+      #   template: picks
+      #   variables:
+      #       url: https://wpt.fyi/interop-2022
 
       - template: section_other_tools
         parameters: { limit: 10 }
@@ -875,10 +875,10 @@
               defaultUnits: count
               parameters: { cutoff: 5 }
 
-      - id: kilian_valkhof
-        template: picks
-        variables:
-            url: https://wpt.fyi/interop-2022
+      # - id: kilian_valkhof
+      #   template: picks
+      #   variables:
+      #       url: https://wpt.fyi/interop-2022
 
       - id: utilities
         defaultUnits: count
@@ -892,10 +892,10 @@
               defaultUnits: count
               parameters: { cutoff: 5 }
 
-      - id: gift_egwuenu
-        template: picks
-        variables:
-            url: https://web.dev/learn/css/
+      # - id: gift_egwuenu
+      #   template: picks
+      #   variables:
+      #       url: https://web.dev/learn/css/
 
       - id: browsers
         defaultUnits: count
@@ -951,10 +951,10 @@
               template: multiple_options_freeform
               parameters: { limit: 5 }
 
-      - id: sara_soueidan
-        template: picks
-        variables:
-            url: https://webkit.org/blog/13096/css-has-pseudo-class/
+      # - id: sara_soueidan
+      #   template: picks
+      #   variables:
+      #       url: https://webkit.org/blog/13096/css-has-pseudo-class/
 
       - id: industry_sector
         tabId: tabs.main_answers
@@ -1033,10 +1033,10 @@
               template: multiple_options_freeform
               parameters: { limit: 10 }
 
-      - id: adam_wathan
-        template: picks
-        variables:
-            url: https://adamwathan.me/composing-the-uncomposable-with-css-variables/
+      # - id: adam_wathan
+      #   template: picks
+      #   variables:
+      #       url: https://adamwathan.me/composing-the-uncomposable-with-css-variables/
 
       - template: happiness
         id: state_of_the_web_happiness
@@ -1096,10 +1096,10 @@
               template: multiple_options_freeform
               parameters: { limit: 10 }
 
-      - id: jen_simmons
-        template: picks
-        variables:
-            url: https://webkit.org/blog/13096/css-has-pseudo-class/
+      # - id: jen_simmons
+      #   template: picks
+      #   variables:
+      #       url: https://webkit.org/blog/13096/css-has-pseudo-class/
 
       - id: podcasts
         defaultUnits: count
@@ -1131,10 +1131,10 @@
               template: multiple_options_freeform
               parameters: { limit: 10 }
 
-      - id: ahmad_shadeed
-        template: picks
-        variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries
+      # - id: ahmad_shadeed
+      #   template: picks
+      #   variables:
+      #       url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries
 
       - id: other_surveys
         defaultUnits: count

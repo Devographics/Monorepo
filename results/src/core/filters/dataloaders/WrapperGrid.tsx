@@ -8,6 +8,7 @@ import { CHART_MODE_GRID } from '../constants'
 import T from 'core/i18n/T'
 import { DataSeries } from 'core/filters/types'
 import { AllQuestionData } from '@devographics/types'
+import { mq } from 'core/theme'
 
 type WrapperGridProps = {
     layout: any
@@ -69,9 +70,11 @@ const GridWrapper_ = styled.div`
     ${({ layout }) =>
         layout === 'grid'
             ? css`
-                  display: grid;
-                  grid-template-columns: repeat(auto-fit, minmax(${columnMinWidth}px, 1fr));
-                  gap: ${spacing(2)};
+                  @media ${mq.mediumLarge} {
+                      display: grid;
+                      grid-template-columns: repeat(auto-fit, minmax(${columnMinWidth}px, 1fr));
+                      gap: ${spacing(2)};
+                  }
               `
             : css`
                   display: flex;

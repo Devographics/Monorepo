@@ -156,7 +156,7 @@ const Label = styled.td`
     width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
-    white-space: nowrap;
+    /* white-space: nowrap; */
 `
 
 const Value = styled.td`

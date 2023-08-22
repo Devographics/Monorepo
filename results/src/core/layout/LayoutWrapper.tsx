@@ -98,7 +98,7 @@ export default class Layout extends PureComponent<
         const { showPagination, location, pageContext, children } = this.props
         const { showSidebar } = this.state
         const context = mergePageContext(pageContext, location, this.state)
-        console.log({ props: this.props, context, pageContext, location }, this.state)
+        // console.log({ props: this.props, context, pageContext, location }, this.state)
         return (
             <KeydownContextProvider>
                 <PageContextProvider value={context}>
