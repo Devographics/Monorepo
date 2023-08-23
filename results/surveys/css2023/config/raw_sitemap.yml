@@ -81,6 +81,7 @@
 
 - id: user_info
   titleId: sections.demographics.title
+  descriptionId: sections.user_info.description.css2023
   path: /demographics
   blocks:
       - template: page_introduction
@@ -383,6 +384,7 @@
 
 - id: features
   path: /features
+  descriptionId: sections.features.description.css2023
   blocks:
       - template: page_introduction
 
@@ -745,6 +747,7 @@
 
 - id: css_frameworks
   path: /css-frameworks
+  descriptionId: sections.css_frameworks.description.css2023
   blocks:
       - template: page_introduction
 
@@ -803,6 +806,7 @@
         template: tool_experience
 
 - id: css_in_js
+  descriptionId: sections.css_in_js.description.css2023
   path: /css-in-js
   blocks:
       - template: page_introduction
@@ -859,6 +863,7 @@
 
 - id: other_tools
   path: /other-tools
+  descriptionId: sections.other_tools.description.css2023
   blocks:
       - id: tools_others_intro
         template: page_introduction
@@ -914,6 +919,7 @@
         template: recommended_resources
 
 - id: usage
+  descriptionId: sections.usage.description.css2023
   intlId: usage_css
   path: /usage
   blocks:
@@ -1046,6 +1052,7 @@
 
 - id: resources
   intlId: resources_css
+  descriptionId: sections.resources.description.css2023
   path: /resources
   blocks:
       - template: page_introduction
@@ -1120,6 +1127,7 @@
         defaultUnits: count
         tabId: tabs.main_answers
         template: multiple_options
+        blockType: PeopleBlock
         variables:
             fieldId: resources
         variants:
