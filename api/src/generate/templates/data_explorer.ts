@@ -44,8 +44,8 @@ const getResolverMap = ({ survey }: { survey: Survey }): ResolverMap => ({
             funcOptions,
             enableCache
         })
-        console.log('// result')
-        console.log(result)
+        // console.log('// result')
+        // console.log(result)
         return result
     }
 })

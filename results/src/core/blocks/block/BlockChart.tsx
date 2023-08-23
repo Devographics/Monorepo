@@ -49,7 +49,7 @@ const BlockChart = props => {
 
     return (
         <div>
-            <BlockDescriptionContents block={block} entity={entity} />
+            <BlockDescriptionContents block={block} />
             <BlockQuestionContents block={block} />
             {entity && !isCapturing && <BlockLinks entity={entity} />}
             {legends && legendPosition === 'top' && <BlockLegends {...legendProps_} />}
@@ -85,13 +85,7 @@ const BlockChart = props => {
     )
 }
 
-const BlockDescriptionContents = ({
-    block,
-    entity
-}: {
-    block: BlockDefinition
-    entity: Entity
-}) => {
+export const BlockDescriptionContents = ({ block }: { block: BlockDefinition }) => {
     const blockTitle = useBlockTitle({ block })
     const blockDescription = useBlockDescription({ block, values: { name: blockTitle } })
     if (blockDescription) {

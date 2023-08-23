@@ -130,7 +130,7 @@ export const getCellData = (options: {
     const yAxisTotal = yTotals?.at(yIndex) as Total
 
     // number of respondents in this cell (= in this facetBucket)
-    const cellCount = facetBucket.count
+    const cellCount = facetBucket?.count
 
     // what percentage of question respondents are represented by this facet
     // const facetPercentageQuestion = facetBucket.percentageQuestion

@@ -28,6 +28,7 @@ import { getBlockQuery } from 'core/helpers/queries'
 import { getFieldLabel } from 'core/filters/helpers'
 import { useAllFilters } from 'core/charts/hooks'
 import { FilterItem } from 'core/filters/types'
+import { BlockDescriptionContents } from 'core/blocks/block/BlockChart'
 
 const DataExplorerBlock = ({
     block,
@@ -220,7 +221,7 @@ const DataExplorerBlock = ({
 
             const data = result.surveys[surveyId][editionId][sectionId].data_explorer
 
-            // console.log(data)
+            console.log(data)
 
             setData(data)
             setIsLoading(false)
@@ -233,7 +234,10 @@ const DataExplorerBlock = ({
 
     return (
         <Wrapper_>
-            <HintBlock block={{ id: 'data_explorer', variables: { issueLink: ISSUES_URL } }} />
+            {/* <HintBlock block={{ id: 'data_explorer', variables: { issueLink: ISSUES_URL } }} /> */}
+            <Description_>
+                <BlockDescriptionContents block={block} />
+            </Description_>
             <DataExplorer query={query} data={data} stateStuff={stateStuff} entities={entities} />
             <Details_>
                 <T k="explorer.extra_missing_respondents" html={true} md={true} />
@@ -244,6 +248,10 @@ const DataExplorerBlock = ({
 }
 
 const Wrapper_ = styled.div``
+
+const Description_ = styled.div`
+    margin-top: ${spacing()};
+`
 
 const Details_ = styled.div`
     margin-top: ${spacing(2)};

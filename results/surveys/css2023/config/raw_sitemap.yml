@@ -63,21 +63,21 @@
         wrapBlock: false
         disableExport: true
 
-- id: data_explorer
-  titleId: sections.data_explorer.title
-  path: /explorer
-  blocks:
-      - template: page_introduction
+# - id: data_explorer
+#   titleId: sections.data_explorer.title
+#   path: /explorer
+#   blocks:
+#       - template: page_introduction
 
-      - id: data_explorer
-        showTitle: false
-        chartOnly: true
-        wrapBlock: false
-        template: data_explorer
-        parameters: { showNoAnswer: true }
-        variables:
-            xAxis: user_info__yearly_salary
-            yAxis: user_info__years_of_experience
+#       - id: data_explorer
+#         showTitle: false
+#         chartOnly: true
+#         wrapBlock: false
+#         template: data_explorer
+#         parameters: { showNoAnswer: true }
+#         variables:
+#             xAxis: user_info__yearly_salary
+#             yAxis: user_info__years_of_experience
 
 - id: user_info
   titleId: sections.demographics.title
@@ -377,6 +377,18 @@
             #       facet:
             #           sectionId: user_info
             #           id: race_ethnicity
+
+      - id: data_explorer
+        titleId: sections.data_explorer.title
+        descriptionId: sections.data_explorer.description
+        showTitle: true
+        chartOnly: true
+        wrapBlock: true
+        template: data_explorer
+        parameters: { showNoAnswer: true }
+        variables:
+            xAxis: user_info__yearly_salary
+            yAxis: user_info__years_of_experience
 
       - id: user_info_resources
         items: [fm-homepage]

@@ -39,6 +39,11 @@ const Cell = (props: CellProps) => {
         stateStuff
     } = props
     const { respondentsPerDot, percentsPerDot, dotsPerLine, unit } = stateStuff
+
+    if (!facetBucket) {
+        return <EmptyCell />
+    }
+
     const cellData = getCellData({
         facetBucket,
         xIndex,
@@ -69,6 +74,10 @@ const Cell = (props: CellProps) => {
 
 export interface InnerCellProps extends CellProps {
     cellData: CellData
+}
+
+const EmptyCell = () => {
+    return <Cell_></Cell_>
 }
 
 const InnerCell = (props: InnerCellProps) => {
