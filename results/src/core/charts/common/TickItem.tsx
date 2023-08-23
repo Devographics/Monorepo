@@ -148,8 +148,8 @@ export const TickItem = (tick: TickItemProps) => {
     })
 
     if (entity) {
-        const { homepage, github, mdn } = entity
-        link = homepage?.url || github?.url || mdn?.url
+        const { homepage, github, mdn, resources } = entity
+        link = homepage?.url || github?.url || mdn?.url || resources?.[0].url
     }
     if (shouldTranslate) {
         const descriptionString = getString(`options.${i18nNamespace}.${value}.description`)

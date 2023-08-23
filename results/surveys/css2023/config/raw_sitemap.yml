@@ -1027,8 +1027,8 @@
         template: multiple_options
         isFreeform: true
         variants:
-            - id: css_interoperability_features_freeform
-              fieldId: css_interoperability_features
+            - id: css_missing_features_freeform
+              fieldId: css_missing_features
               i18nNamespace: features
               defaultUnits: count
               tabId: tabs.other_answers
@@ -1115,10 +1115,10 @@
               template: multiple_options_freeform
               parameters: { limit: 10 }
 
-      # - id: jen_simmons
-      #   template: picks
-      #   variables:
-      #       url: https://webkit.org/blog/13096/css-has-pseudo-class/
+      - id: jhey_tompkins
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/:has
 
       - id: podcasts
         defaultUnits: count
