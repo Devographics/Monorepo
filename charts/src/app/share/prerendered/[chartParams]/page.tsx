@@ -135,12 +135,21 @@ export default async function StaticChartRedirectionPage({
                 <p>Open the devtools to verify the page metadata headers</p>
                 <img src={imgUrl} />
                 <a href={blockMeta.link}>See this chart in context</a>
+                <head>
+                    <meta httpEquiv="refresh" content={`5; URL="${blockMeta.link}"`}></meta>
+                </head>
             </div>
         )
     }
-    // https://nextjs.org/docs/app/api-reference/functions/generate-metadata#unsupported-metadata
+    // A server redirect isn't appropriate here, we wan't the browser to trigger the redirect:
+    // @see https://github.com/vercel/next.js/issues/54437
+    // redirect(blockMeta.link)
+    return (
+        <head>
+            <meta httpEquiv="refresh" content={`0; URL="${blockMeta.link}"`}></meta>
+        </head>
+    )
     // equivalent to <meta http-equiv="refresh" content="5; URL=...">
     // TODO: we could go further and render the whole chart
     // here directly, with a button to manually access the results?
-    redirect(blockMeta.link)
 }
