@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
-import { PageContextValue } from '@types/context'
 import { BucketUnits, ResponsesParameters, ResultsSubFieldEnum } from '@devographics/types'
 import { CustomizationDefinition } from 'core/filters/types'
+import { PageContextValue } from './context'
 
 export type BlockUnits =
     | 'count'

@@ -5,7 +5,7 @@ import { getLocaleQuery } from '../queries'
 import { FetcherFunctionOptions } from '../types'
 
 /**
- * Fetch metadata and strings for a specific locales
+ * Fetch metadata and strings for a specific locale
  * @returns
  */
 export const fetchLocale = async (

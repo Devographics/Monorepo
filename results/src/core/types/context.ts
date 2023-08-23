@@ -2,22 +2,10 @@ import { EditionMetadata, SurveyMetadata } from '@devographics/types'
 import React from 'react'
 import { Locale } from './i18n'
 
-export interface PageDef {
-    path: string,
-
-}
-export interface PageContextValue {
+interface GatsbyPageContext {
     id: string
-    locale?: Locale
-    width?: number
-    isCapturing?: boolean
-    chartSponsors?: any
-    config?: any
-    currentSurvey: SurveyMetadata
-    currentEdition: EditionMetadata
-    pageData: any,
-    //
     currentPath: string,
+    width?: number
     path: string,
     basePath: string,
     host: string,
@@ -25,10 +13,18 @@ export interface PageContextValue {
     intlId: string,
     previous?: PageContextValue,
     next?: PageContextValue,
-    //
-    block: any
-    // 
-    locales?: Array<any>
     // TODO: actually could be an array too
     children?: React.ReactNode
+    pageData: any,
 }
+interface SurveyPageContext {
+    isCapturing?: boolean
+    chartSponsors?: any
+    config?: any
+    currentSurvey: SurveyMetadata
+    currentEdition: EditionMetadata
+    locale?: Locale
+    block: any
+    locales?: Array<any>
+}
+export type PageContextValue = SurveyPageContext & GatsbyPageContext

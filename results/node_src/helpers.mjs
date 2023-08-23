@@ -37,11 +37,17 @@ export const getCleanLocales = locales =>
 
 /*
 
-Get a page's context
-= the information that are passed down from Gatsby to the page
 
 */
-export const getPageContext = page => {
+
+/**
+ * 
+* Get a page's context
+ *= the information that are passed down from Gatsby to the page
+ * @param {import("../src/core/types").PageDef} page 
+ * @returns {import("../src/core/types").PageContextValue}
+ */
+export const getPageContext = (page) => {
     const context = omit(page, ['path', 'children'])
     context.basePath = page.path
 

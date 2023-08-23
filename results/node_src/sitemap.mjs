@@ -7,7 +7,6 @@ import { getQuestionId, loadTemplate } from './helpers.mjs'
 import merge from 'lodash/merge.js'
 
 /**
- * @typedef {{parent: PageDef, children: Array<PageDef> | any}} PageDef
  * @typedef {{editionId: string, surveyId: string}} EditionVariables
  */
 
@@ -178,7 +177,7 @@ let computedSitemap = null
 
 /**
  *
- * @param {any} rawSitemap
+ * @param {import('../src/core/types').RawSitemap} rawSitemap
  * @param {EditionVariables} editionVariables
  * @returns {Promise<{flat: Array<PageDef>}>}
  */
@@ -187,6 +186,9 @@ export const computeSitemap = async (rawSitemap, editionVariables) => {
         return computedSitemap
     }
 
+    /**
+     * @type {{flat: import('../src/core/types'.Sitemap)}}
+     */
     const stack = {
         flat: []
     }

@@ -1,11 +1,19 @@
+// TODO: appears unused
 import React from 'react'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 import * as Popover from '@radix-ui/react-popover'
 import { CloseIcon } from 'core/icons'
 
-const PopoverComponent = ({ trigger, children }) => {
+const PopoverComponent = ({
+    trigger,
+    children
+}: {
+    trigger: React.ReactNode
+    children: React.ReactNode
+}) => {
     return (
         <Popover.Root>
+            {/** @ts-expect-error TODO: Radix-ui seems to indicate that this is actually valid, not sure why it raises an error */}
             <Popover.Trigger asChild>{trigger}</Popover.Trigger>
             <Popover.Portal>
                 <PopoverContent_ className="PopoverContent" sideOffset={5}>

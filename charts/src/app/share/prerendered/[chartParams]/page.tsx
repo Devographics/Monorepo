@@ -9,6 +9,7 @@ import { getBlockMetaFromParams } from '@/app/share/metadata'
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { ChartParams } from '@/app/share/typings'
+import { getAppConfig } from '@/config/server'
 
 export async function generateStaticParams(): Promise<Array<{ chartParams: string }>> {
     const prerendered: Array<ChartParams> = [
@@ -120,7 +121,9 @@ export default async function StaticChartRedirectionPage({
     const chartParams = await decodeChartParams(params.chartParams)
     console.log('PARAMS', chartParams, params.chartParams)
     const blockMeta = await getBlockMetaFromParams(chartParams)
-    if (process.env.NODE_ENV === 'development') {
+    console.log('Redirecting to:', blockMeta.link)
+    const config = getAppConfig()
+    if (config.isDev || config.isDebug) {
         const imgUrl = devographicsUrl({
             editionId: chartParams.edition,
             lang: chartParams.lang,
@@ -139,6 +142,5 @@ export default async function StaticChartRedirectionPage({
     // equivalent to <meta http-equiv="refresh" content="5; URL=...">
     // TODO: we could go further and render the whole chart
     // here directly, with a button to manually access the results?
-    console.log('Redirecting to:', blockMeta.link)
     redirect(blockMeta.link)
 }

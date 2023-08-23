@@ -114,6 +114,7 @@ const getBlockLink = ({
      */
     blockId: string,
     /**
+     * Must be an absolute URL
      * https://2021.stateofcss.com/
      */
     editionResultUrl: string,
@@ -121,11 +122,12 @@ const getBlockLink = ({
     useRedirect?: boolean
 }) => {
     // TODO: we are always in "redirect" context here?
-    let link = useRedirect
-        ? `${editionResultUrl}/${lang}/${section}/${blockId}`
-        : `${editionResultUrl}/${lang}/#${blockId}`
-
-    link = link.replaceAll('//', '/')
+    let pathname = useRedirect
+        ? `/${lang}/${section}/${blockId}`
+        : `/${lang}/#${blockId}`
+    pathname = pathname.replaceAll('//', '/') // beware not to alter the protocol! don't apply this to editionResultsUrl!
+    const url = new URL(pathname, editionResultUrl)
+    const link = url.toString()
     console.log("Block link:", link, "(editionResultUrl:", editionResultUrl, ")")
     return link
 }

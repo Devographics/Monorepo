@@ -94,6 +94,8 @@ export const createPagesSingleLoop = async ({
 • 📖 load method = ${getLoadMethod()}`
     )
 
+    // loading i18n data
+
     // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster
     const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []
 
@@ -115,6 +117,8 @@ export const createPagesSingleLoop = async ({
             editionId
         })
     })
+
+    // loading edition specific data 
 
     const editionVariables = {
         surveyId,
@@ -159,7 +163,10 @@ export const createPagesSingleLoop = async ({
         chartSponsors = await getSendOwlData({ flat, surveyId, editionId, siteUrl })
     }
 
+    // Building page context for each page of the sitemap
+
     for (const page of flat) {
+        console.log("// Building page " + page.path)
         let pageData = {}
         const context = getPageContext(page)
 
@@ -210,6 +217,7 @@ export const createPagesSingleLoop = async ({
         }
 
         // also redirect "naked" paths (whithout a locale) to en-US
+        // TODO: this doesn't seem to work during development
         createRedirect({
             fromPath: getLocalizedPath(page.path, null),
             toPath: getLocalizedPath(page.path, { id: 'en-US' }),

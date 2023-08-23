@@ -21,5 +21,7 @@ export function getAppConfig() {
          * @example https://share.devographics.com/
          */
         appUrl: process.env.APP_URL || "http://localhost:" + port,
+        isDev: process.env.NODE_ENV === "development",
+        isDebug: !!process.env.DEBUG
     }
 }
