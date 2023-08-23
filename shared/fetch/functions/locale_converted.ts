@@ -5,7 +5,8 @@ import { getLocaleQuery } from '../queries'
 import { FetcherFunctionOptions } from '../types'
 
 /**
- * Fetch metadata and strings for a specific locales
+ * Fetch metadata and strings for a specific locale
+ * with strings in a format expected by surveyform and other apps
  * @returns
  */
 export const fetchLocaleConverted = async (
