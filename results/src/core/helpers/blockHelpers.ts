@@ -32,8 +32,8 @@ export const getBlockTabKey = ({
     block.tabId
         ? block.tabId
         : variantIndex === 0
-            ? 'tabs.all_respondents'
-            : getBlockTitleKey({ block, pageContext })
+        ? 'tabs.all_respondents'
+        : getBlockTitleKey({ block, pageContext })
 
 export const getBlockNoteKey = ({ block }: { block: BlockDefinition }) =>
     block.noteId || `${getBlockKey({ block })}.note`
@@ -158,17 +158,19 @@ export const getBlockLink = ({
     params?: any
     useRedirect?: boolean
 }) => {
-    const { id } = block
+    // const { id } = block
+    const { id: sectionId, currentEdition, currentSurvey } = pageContext
     const paramsString = new URLSearchParams(params).toString()
 
-    let path = useRedirect
-        ? `${pageContext.currentPath}/${id}?${paramsString}`
-        : `${pageContext.currentPath}/?${paramsString}#${id}`
+    // let path = useRedirect
+    //     ? `${pageContext.currentPath}/${id}?${paramsString}`
+    //     : `${pageContext.currentPath}/?${paramsString}#${id}`
 
+    const url = `https://share.${currentSurvey.domain}/share/prerendered?survey=${currentSurvey.id}&edition=${currentEdition.id}&section=${sectionId}&question=${block.id}&params=${paramsString}`
     // remove any double slashes
-    path = path.replaceAll('//', '/')
-    const link = `${pageContext.host}${path}`
-    return link
+    // path = path.replaceAll('//', '/')
+    // const link = `${pageContext.host}${path}`
+    return url
 }
 
 export const getBlockMeta = ({
