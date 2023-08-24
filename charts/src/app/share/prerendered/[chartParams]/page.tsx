@@ -16,9 +16,9 @@ export async function generateStaticParams(): Promise<Array<{ chartParams: strin
         {
             localeId: 'en-US',
             surveyId: 'state_of_css',
-            editionId: 'css2022',
-            sectionId: 'environment',
-            blockId: 'browser'
+            editionId: 'css2023',
+            sectionId: 'user_info',
+            blockId: 'country'
         }
         // Prerender wharever combination you want
         // other combinations will be rendered on demand

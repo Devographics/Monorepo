@@ -40,10 +40,16 @@ export async function getBlockMetaFromParams(chartParams: ChartParams) {
     })
 
     const { sitemap } = edition
-    if (error)
+
+    if (!sitemap) {
+        throw new Error(`getBlockMetaFromParams: no sitemap found for edition ${editionId}`)
+    }
+
+    if (error) {
         throw new Error(
             `Error while fetching edition metadata (survey: ${surveyId}, edition: ${editionId}): ${error.toString()}`
         )
+    }
     // i18n
     // TODO: might need to be reused elsewhere
     // see survey form for a RSC version of this call (here we don't need request-level caching)
