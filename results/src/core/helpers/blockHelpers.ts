@@ -147,6 +147,15 @@ export const getBlockImage = ({
     return `${capturesUrl}${get(pageContext, 'locale.path')}/${block.id}.png`
 }
 
+interface UrlParams {
+    surveyId: string
+    editionId: string
+    blockId: string
+    sectionId: string
+    subSectionId: string
+    params: string
+}
+
 export const getBlockLink = ({
     block,
     pageContext,
@@ -158,15 +167,31 @@ export const getBlockLink = ({
     params?: any
     useRedirect?: boolean
 }) => {
-    // const { id } = block
-    const { id: sectionId, currentEdition, currentSurvey } = pageContext
-    const paramsString = new URLSearchParams(params).toString()
+    const { id: sectionId, parent, currentEdition, currentSurvey, localeId } = pageContext
+    const blockParamsString = new URLSearchParams(params).toString()
 
     // let path = useRedirect
     //     ? `${pageContext.currentPath}/${id}?${paramsString}`
     //     : `${pageContext.currentPath}/?${paramsString}#${id}`
 
-    const url = `https://share.${currentSurvey.domain}/share/prerendered?survey=${currentSurvey.id}&edition=${currentEdition.id}&section=${sectionId}&question=${block.id}&params=${paramsString}`
+    const urlParams: { [key in string]: string } = {
+        localeId,
+        surveyId: currentSurvey.id,
+        editionId: currentEdition.id,
+        blockId: block.id,
+        params: blockParamsString
+    }
+
+    if (parent) {
+        urlParams.sectionId = parent.id
+        urlParams.subSectionId = sectionId
+    } else {
+        urlParams.sectionId = sectionId
+    }
+
+    const urlParamsString = new URLSearchParams(urlParams).toString()
+
+    const url = `https://share.${currentSurvey.domain}/share/prerendered?${urlParamsString}`
     // remove any double slashes
     // path = path.replaceAll('//', '/')
     // const link = `${pageContext.host}${path}`
