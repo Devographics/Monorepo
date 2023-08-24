@@ -1,23 +1,29 @@
 /**
  * Adapted from results/node_src/helpers.mjs runQuery function
  */
-import { BlockDefinition } from "../typings"
+import { BlockDefinition } from '../typings'
 // import path from "path"
-import { buildBlockQuery } from "./queries"
+import { buildBlockQuery } from './queries'
 
 function logToFile(...args: any) {
-    console.log("LOG TO FILE:", ...args)
+    console.log('LOG TO FILE:', ...args)
 }
 
 /**
- * 
- * @param param0 
+ *
+ * @param param0
  * @returns The block query with parameters already injected in it
  */
-export async function getBlockQuery({ block, surveyId, editionId }: {
-    block: BlockDefinition,
-    surveyId: string,
-    editionId: string,
+export async function getBlockQuery({
+    block,
+    surveyId,
+    editionId,
+    sectionId
+}: {
+    block: BlockDefinition
+    surveyId: string
+    editionId: string
+    sectionId: string
 }) {
     if (!block.query) return
     /*
@@ -50,7 +56,7 @@ export async function getBlockQuery({ block, surveyId, editionId }: {
     const queryOptions = {
         surveyId,
         editionId,
-        sectionId: block.sectionId,
+        sectionId,
         //sectionId: page.id,
         questionId,
         fieldId: block.fieldId,
@@ -62,7 +68,7 @@ export async function getBlockQuery({ block, surveyId, editionId }: {
     const queryArgs = {
         facet: block.facet,
         filters: block.filters,
-        parameters: { ...block.parameters },//, enableCache: useCache },
+        parameters: { ...block.parameters }, //, enableCache: useCache },
         xAxis: block?.variables?.xAxis,
         yAxis: block?.variables?.yAxis
     }

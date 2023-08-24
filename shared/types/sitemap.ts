@@ -1,4 +1,4 @@
-import { Entity } from 'entities'
+import { Entity } from './entities'
 
 export interface SitemapSectionFields {
     id: string

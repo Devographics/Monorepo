@@ -45,7 +45,7 @@ export async function generateStaticParams(): Promise<Array<{ chartParams: strin
  */
 function githubUrl({
     editionId,
-    lang = 'en-US',
+    localeId = 'en-US',
     chart
 }: {
     editionId: string
@@ -53,12 +53,12 @@ function githubUrl({
      * Country-region format
      * @example fr-FR
      */
-    lang?: string
+    localeId?: string
     chart: ChartParams
 }) {
     const org = 'Devographics'
     const repo = 'images'
-    return `https://raw.githubusercontent.com/${org}/${repo}/main/captures/${editionId}/${lang}/${chart.question}.png`
+    return `https://raw.githubusercontent.com/${org}/${repo}/main/captures/${editionId}/${localeId}/${chart.blockId}.png`
 }
 
 function devographicsUrl({

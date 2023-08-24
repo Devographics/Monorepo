@@ -5,7 +5,7 @@ about a survey edition and its contents
 
 */
 
-import { SitemapSection } from 'sitemap'
+import { SitemapSection } from './sitemap'
 import { Entity } from './entities'
 import { Survey, Edition, Section, Option, QuestionTemplateOutput } from './outlines'
 
