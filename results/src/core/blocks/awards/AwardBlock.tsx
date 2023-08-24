@@ -8,6 +8,7 @@ import { useI18n } from 'core/i18n/i18nContext'
 import { mq, spacing, fontSize } from 'core/theme'
 import AwardIcon from './AwardIcon'
 import T from 'core/i18n/T'
+import { getItemLabel } from 'core/helpers/labels'
 
 const AwardBlock = ({ block, entities }) => {
     const { id, awards } = block
@@ -60,7 +61,7 @@ const AwardBlock = ({ block, entities }) => {
                             number={`#1` || '?'}
                         /> */}
                         <Winner>
-                            <EntityItem entity={winner.entity} />
+                            <EntityItem {...winner} />
                         </Winner>
                     </BackSide>
                 </Element>
@@ -79,7 +80,7 @@ const AwardBlock = ({ block, entities }) => {
                 </RunnerUpsHeading>
                 {runnerUps.map((runnerUp, i) => (
                     <RunnerUpsItem key={runnerUp.id} className="Awards__RunnerUps__Item">
-                        {i + 2}. <EntityItem entity={runnerUp.entity} />
+                        {i + 2}. <EntityItem {...runnerUp} />
                         {runnerUp.value ? `: ${runnerUp.value}` : ''}
                     </RunnerUpsItem>
                 ))}
@@ -88,13 +89,15 @@ const AwardBlock = ({ block, entities }) => {
     )
 }
 
-const EntityItem = ({ entity }) => {
+const EntityItem = ({ id, entity }) => {
+    const { getString } = useI18n()
     if (!entity) {
         return <span>missing entity</span>
     }
-    const { name, nameClean, homepage, mdn } = entity
-    const url = homepage?.url || mdn?.url
-    return url ? <a href={url}>{nameClean || name}</a> : <span>{nameClean || name}</span>
+    const { label } = getItemLabel({ id, entity, getString, i18nNamespace: 'features' })
+    const { homepage, mdn, resources = [] } = entity
+    const url = homepage?.url || mdn?.url || resources[0]?.url
+    return url ? <a href={url}>{label}</a> : <span>{label}</span>
 }
 
 AwardBlock.propTypes = {

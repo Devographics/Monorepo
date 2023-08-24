@@ -25,7 +25,11 @@ query: >
                                         nameClean
                                         nameHtml
                                         mdn {
-                                          url
+                                            url
+                                        }
+                                        resources {
+                                            url
+                                            title
                                         }
                                     }
                                 }

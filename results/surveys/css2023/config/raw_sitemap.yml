@@ -390,9 +390,15 @@
             xAxis: user_info__yearly_salary
             yAxis: user_info__years_of_experience
 
-      - id: user_info_resources
-        items: [fm-homepage]
+      # - id: user_info_resources
+      #   items: [fm-homepage]
+      #   template: recommended_resources
+
+      - items: [renderatl]
         template: recommended_resources
+        titleId: blocks.recommended_events
+        variables:
+            isEvent: true
 
 - id: features
   path: /features
@@ -472,7 +478,7 @@
               year: 2023
 
             - id: layout_resources
-              items: [fm-gridsflexbox]
+              items: [fm-gridsflexbox, fm-practicallayouts]
               template: recommended_resources
 
       - id: shapes_graphics
@@ -540,6 +546,10 @@
             - id: gradient_color_spaces
               template: feature_experience
               year: 2022
+
+            - id: colors_resources
+              items: [fm-design-developers]
+              template: recommended_resources
 
       - id: interactions
         path: /interactions
@@ -846,7 +856,7 @@
         variables:
             fieldId: css_in_js
 
-      - items: [fm-reactv3]
+      - items: [fm-reactv5]
         template: recommended_resources
 
       - id: styled_components
@@ -926,9 +936,9 @@
               defaultUnits: count
               parameters: { limit: 10 }
 
-      - id: tools_others_resources
-        items: [fm-storybook]
-        template: recommended_resources
+      # - id: tools_others_resources
+      #   items: [fm-storybook]
+      #   template: recommended_resources
 
 - id: usage
   descriptionId: sections.usage.description.css2023
@@ -1051,16 +1061,20 @@
               template: multiple_options_freeform
               parameters: { limit: 10 }
 
-      # - id: adam_wathan
-      #   template: picks
-      #   variables:
-      #       url: https://adamwathan.me/composing-the-uncomposable-with-css-variables/
+      - id: adam_wathan
+        template: picks
+        variables:
+            url: https://lightningcss.dev/
 
       - template: happiness
         id: state_of_the_web_happiness
 
       - template: happiness
         id: state_of_css_happiness
+
+      - id: features_resources
+        items: [fm-learncss]
+        template: recommended_resources
 
 - id: resources
   intlId: resources_css
@@ -1151,10 +1165,10 @@
               template: multiple_options_freeform
               parameters: { limit: 10 }
 
-      # - id: ahmad_shadeed
-      #   template: picks
-      #   variables:
-      #       url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries
+      - id: kevin_j_powell
+        template: picks
+        variables:
+            url: https://ishadeed.com/
 
       - id: other_surveys
         defaultUnits: count
@@ -1171,11 +1185,9 @@
               template: multiple_options_freeform
               parameters: { limit: 10 }
 
-      - items: [renderatl]
+      - id: features_resources
+        items: [fm-learncss]
         template: recommended_resources
-        titleId: blocks.recommended_events
-        variables:
-            isEvent: true
 
 - id: awards
   path: /awards
@@ -1185,7 +1197,7 @@
       - id: awards
         template: awards
         variables:
-            entities: '"flexbox_gap","aspect_ratio","intrinsic_sizing","subgrid","nesting","at_container","css_modules","tailwind_css","vanilla_extract","arc","uno_css","open_props"'
+            entities: '"has_selector","at_container","viewport_percentage_length_units","subgrid","at_container","css_nesting","open_props","css_modules","uno_css","panda_css","material_ui","yandex"'
         awards:
             - id: feature_adoption_delta_award
               template: award
@@ -1240,7 +1252,7 @@
             - id: most_write_ins_award
               template: award
               awards:
-                  - id: panda
+                  - id: panda_css
                     value: 52
                   - id: material_ui
                     value: 38
