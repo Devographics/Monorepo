@@ -230,19 +230,39 @@ export const loadLocally = async () => {
                             const editionQuestionsYaml: any = yaml.load(editionQuestionsContents)
                             edition.sections = editionQuestionsYaml
                         } catch (error) {
-                            console.log(`YAML parsing error for edition ${editionDirName}`)
+                            console.log(
+                                `YAML parsing error for questions.yml edition ${editionDirName}`
+                            )
                             console.log(error)
                         }
                     }
 
-                    try {
-                        const editionApiContents = await readFile(
-                            editionDirPath + '/api.yml',
-                            'utf8'
-                        )
-                        const editionApiYaml: any = yaml.load(editionApiContents)
-                        edition.apiSections = makeAPIOnly(editionApiYaml)
-                    } catch (error) {}
+                    const apiPath = editionDirPath + '/api.yml'
+                    if (existsSync(apiPath)) {
+                        try {
+                            const editionApiContents = await readFile(apiPath, 'utf8')
+                            const editionApiYaml: any = yaml.load(editionApiContents)
+                            edition.apiSections = makeAPIOnly(editionApiYaml)
+                        } catch (error) {
+                            console.log(`YAML parsing error for api.yml edition ${editionDirName}`)
+                            console.log(error)
+                        }
+                    }
+
+                    const sitemapPath = editionDirPath + '/sitemap.yml'
+                    if (existsSync(sitemapPath)) {
+                        try {
+                            const editionSitemapContents = await readFile(sitemapPath, 'utf8')
+                            const editionSitemapYaml: any = yaml.load(editionSitemapContents)
+                            edition.sitemap = editionSitemapYaml
+                        } catch (error) {
+                            console.log(
+                                `YAML parsing error for sitemap.yml edition ${editionDirName}`
+                            )
+                            console.log(error)
+                        }
+                    }
+
                     editions.push(edition)
                 }
             }
