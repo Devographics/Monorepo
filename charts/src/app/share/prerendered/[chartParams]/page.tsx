@@ -132,21 +132,33 @@ export default async function StaticChartRedirectionPage({
         return (
             <div>
                 <h1>DEV MODE</h1>
-                <h3>Block Definition</h3>
-                <pre>
-                    <code>{JSON.stringify(blockDefinition, null, 2)}</code>
-                </pre>
-                <h3>Block Meta</h3>
-                <pre>
-                    <code>{JSON.stringify(blockMeta, null, 2)}</code>
-                </pre>
-                <h3>Image</h3>
-                <img src={imgUrl} />
-                <pre>
-                    <code>{imgUrl}</code>
-                </pre>
-                <h3>Link</h3>
-                <a href={blockMeta.link}>{blockMeta.link}</a>
+                <div className="grid">
+                    <div>
+                        <h3>Block Definition</h3>
+                        <pre>
+                            <code>{JSON.stringify(blockDefinition, null, 2)}</code>
+                        </pre>
+                    </div>
+                    <div>
+                        <h3>Block Meta</h3>
+                        <pre>
+                            <code>{JSON.stringify(blockMeta, null, 2)}</code>
+                        </pre>
+                    </div>
+                </div>
+                <div className="grid">
+                    <div>
+                        <h3>Image</h3>
+                        <img src={imgUrl} />
+                        <pre>
+                            <code>{imgUrl}</code>
+                        </pre>
+                    </div>
+                    <div>
+                        <h3>Link</h3>
+                        <a href={blockMeta.link}>{blockMeta.link}</a>
+                    </div>
+                </div>
                 <head>
                     {/* <meta httpEquiv="refresh" content={`5; URL="${blockMeta.link}"`}></meta> */}
                 </head>
