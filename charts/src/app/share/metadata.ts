@@ -67,14 +67,14 @@ export async function getBlockMetaFromParams(chartParams: ChartParams) {
     }
     const { data: locale, error: localeError } = await fetchLocale({
         localeId,
-        // TODO: what are the relevant contexts here?
-        contexts: []
+        // TODO: define contexts as part of edition config?
+        contexts: ['common', 'results', 'countries', surveyId, `${surveyId}_${edition.year}`]
     })
     if (localeError) {
         throw new Error(`Could not get locales strings (${JSON.stringify(chartParams)})`)
     }
     const { strings, ...localeWithoutStrings } = locale
-    console.log('Got locale with string for block metadata', locale)
+    console.log('Got locale with string for block metadata', localeWithoutStrings)
 
     const getString = getStringTranslator(locale)
 
