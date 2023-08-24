@@ -1,5 +1,11 @@
 import React from 'react'
-import { BucketUnits, ResponsesParameters, ResultsSubFieldEnum } from '@devographics/types'
+import {
+    BucketUnits,
+    EditionMetadata,
+    ResponsesParameters,
+    ResultsSubFieldEnum,
+    SurveyMetadata
+} from '@devographics/types'
 
 type BlockUnits =
     | 'count'
@@ -32,17 +38,14 @@ export interface BlockDefinition {
      * @example browsers
      */
     id: string
+    params?: any
     /**
-     * @example environments
-     */
-    sectionId: string
-    /** 
      * Note sure of their role?
-    * @example user_info__gender
-    */
-    facet?: any,
+     * @example user_info__gender
+     */
+    facet?: any
     // ?
-    fieldId?: string,
+    fieldId?: string
     template?: string
     blockType?: string
     tabId?: string
@@ -59,7 +62,7 @@ export interface BlockDefinition {
      * - a complete query (not just the name)
      * The query field seems to be computed when we flatten the sitemap in the reulst app
      */
-    query?: "currentEditionData" | "allEditionsData" | string
+    query?: 'currentEditionData' | 'allEditionsData' | string
     variables?: any
     parameters: ResponsesParameters
     filters?: FilterType[]
@@ -87,4 +90,12 @@ interface BlockLegend {
     shortLabel?: string
     color?: string
     gradientColors: string[]
+}
+
+export interface PageContextValue {
+    survey: SurveyMetadata
+    edition: EditionMetadata
+    sectionId: string
+    subSectionId?: string
+    localeId: string
 }
