@@ -11,6 +11,13 @@ export const editionMetadataCacheKey = (
     }
 ) => `${getAppName(options)}__${options.surveyId}__${options.editionId}__metadata`
 
+export const editionSitemapCacheKey = (
+    options: CacheKeyOptions & {
+        surveyId: string
+        editionId: string
+    }
+) => `${getAppName(options)}__${options.surveyId}__${options.editionId}__sitemap`
+
 export const surveysMetadataCacheKey = (options?: CacheKeyOptions) =>
     `${getAppName(options)}__allSurveys__metadata`
 

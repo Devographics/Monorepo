@@ -5,6 +5,7 @@ about a survey edition and its contents
 
 */
 
+import { SitemapSection } from 'sitemap'
 import { Entity } from './entities'
 import { Survey, Edition, Section, Option, QuestionTemplateOutput } from './outlines'
 
@@ -14,6 +15,7 @@ export interface SurveyMetadata extends Omit<Survey, 'editions'> {
 
 export interface EditionMetadata extends Omit<Edition, 'sections'> {
     sections: SectionMetadata[]
+    sitemap: SitemapSection[]
     /** demo_survey */
     surveyId: string
     survey: SurveyMetadata
