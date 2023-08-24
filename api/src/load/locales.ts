@@ -60,7 +60,7 @@ const loadAllFromGitHubSameRepo = async ({
     dir: string
 }) => {
     const url = `repos/${org}/${repo}/contents/${dir}`
-    console.log(`// loadAllFromGitHubSameRepo (${url}`)
+    console.log(`🌐 loadAllFromGitHubSameRepo (${url}`)
 
     const octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
     let locales: RawLocale[] = []
@@ -98,7 +98,7 @@ const loadAllFromGitHubSameRepo = async ({
 */
 const loadAllFromGitHubMultiRepo = async ({ org }: { org: string }) => {
     const url = `/orgs/${org}/repos`
-    console.log(`// loadAllFromGitHubMultiRepo (${url}`)
+    console.log(`🌐 loadAllFromGitHubMultiRepo (${url}`)
 
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
     let locales: RawLocale[] = []
@@ -258,11 +258,11 @@ Load locales contents through GitHub API or locally
 */
 export const loadLocales = async (localeIds?: string[]): Promise<RawLocale[]> => {
     const mode = getEnvVar(EnvVar.LOCALES_PATH) ? 'local' : 'github'
-    console.log(`// loading locales… (mode: ${mode})`)
+    console.log(`🌐 loading locales… (mode: ${mode})`)
     const locales =
         mode === 'local'
             ? await loadAllLocally({ localeIds })
             : await loadAllFromGitHub({ localeIds })
-    console.log('// done loading locales')
+    console.log('🌐 done loading locales')
     return locales
 }
