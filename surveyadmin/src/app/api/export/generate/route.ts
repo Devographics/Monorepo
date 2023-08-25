@@ -33,8 +33,8 @@ export const GET = async (req: NextRequest): Promise<NextResponse> => {
     }
 
     try {
-        const { jsonFilePath, csvFilePath } = await generateExports(edition)
-        return NextResponse.json({ jsonFilePath, csvFilePath })
+        const { jsonFilePath, csvFilePath, timestamp } = await generateExports(edition)
+        return NextResponse.json({ jsonFilePath, csvFilePath, timestamp })
     } catch (err) {
         return NextResponse.json({
             error:

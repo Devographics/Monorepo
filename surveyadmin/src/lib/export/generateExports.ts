@@ -218,10 +218,12 @@ async function generateMongoExport({
  * @returns Files + a timestamp that can be passed to the frontend to later retrieve the files
  */
 export async function generateExports(edition: EditionMetadata): Promise<{
-  /** Internal to the server */
+  // All those values can be exposed to the frontend
   csvFilePath: string,
   jsonFilePath: string,
-  /** Can be exposed to the frontend (helps to retrieve the filenames, like a unique id for the export) */
+  /**
+   * Acs as a unique id to retrieve an export
+   */
   timestamp: string,
 }> {
   const timestamp = makeTimestamp()
