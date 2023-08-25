@@ -25,6 +25,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
           socialImageUrl
           faq
           enableReadingList
+          enableChartSponsorships
           colors {
             primary
             secondary

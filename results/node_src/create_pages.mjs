@@ -118,7 +118,7 @@ export const createPagesSingleLoop = async ({
         })
     })
 
-    // loading edition specific data 
+    // loading edition specific data
 
     const editionVariables = {
         surveyId,
@@ -159,14 +159,14 @@ export const createPagesSingleLoop = async ({
     const siteUrl = currentEdition.resultsUrl
 
     let chartSponsors = []
-    if (!USE_FAST_BUILD) {
+    if (!USE_FAST_BUILD && currentEdition.enableChartSponsorships) {
         chartSponsors = await getSendOwlData({ flat, surveyId, editionId, siteUrl })
     }
 
     // Building page context for each page of the sitemap
 
     for (const page of flat) {
-        console.log("// Building page " + page.path)
+        console.log('// Building page ' + page.path)
         let pageData = {}
         const context = getPageContext(page)
 

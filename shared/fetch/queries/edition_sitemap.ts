@@ -19,6 +19,7 @@ export const getEditionSitemapQuery = ({ editionId }: { editionId: string }) => 
           socialImageUrl
           faq
           enableReadingList
+          enableChartSponsorships
           colors {
             primary
             secondary
