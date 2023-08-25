@@ -191,6 +191,7 @@ query {
                         faviconUrl
                         socialImageUrl
                         hashtag
+                        enableChartSponsorships
                         tshirt {
                             images
                             url

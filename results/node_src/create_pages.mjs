@@ -7,14 +7,14 @@ import {
     runPageQueries,
     getLoadMethod,
     removeNull,
-    getCachingMethods
+    getCachingMethods,
+    getMetadata
 } from './helpers.mjs'
 import { getSendOwlData } from './sendowl.mjs'
 import yaml from 'js-yaml'
 import fs from 'fs'
 import path from 'path'
 import { logToFile } from './log_to_file.mjs'
-import { getMetadataQuery } from './queries.mjs'
 import { getLocales } from './locales.mjs'
 import { fileURLToPath } from 'url'
 import { initRedis } from './redis.mjs'
@@ -87,17 +87,26 @@ export const createPagesSingleLoop = async ({
         .map(cm => (cachingMethods[cm] ? cm : strikeThrough(cm)))
         .join(', ')
 
-    console.log(
-        `Building ${surveyId}/${editionId}… 
-• 📁 caching methods = ${cachingMethodsString}
-• ⏱️ fast build = ${USE_FAST_BUILD}
-• 📖 load method = ${getLoadMethod()}`
-    )
-
-    // loading i18n data
+    // load metadata
+    const { currentSurvey, currentEdition } = await getMetadata({ surveyId, editionId, graphql })
+    const { enableChartSponsorships, resultsUrl } = currentEdition
+    const metadata = []
 
     // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster
     const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []
+
+    console.log(
+        `Building ${surveyId}/${editionId}… 
+---------------------------------------------------------------
+• 📁 caching methods = ${cachingMethodsString}
+• ⏱️ fast build = ${USE_FAST_BUILD}
+• 📖 load method = ${getLoadMethod()}
+• 💰 chart sponsorships = ${enableChartSponsorships ? 'enabled' : 'disabled'}
+• 🌐 locales = ${localeIds.length > 0 ? localeIds.join(', ') : 'all'}
+----------------------------------------------------------------`
+    )
+
+    // loading i18n data
 
     const locales = await getLocales({
         localeIds,
@@ -133,33 +142,10 @@ export const createPagesSingleLoop = async ({
         editionId
     })
 
-    const metadataQuery = getMetadataQuery({ surveyId, editionId })
-
-    logToFile('metadataQuery.graphql', metadataQuery, {
-        mode: 'overwrite',
-        editionId
-    })
-
-    const metadataResults = removeNull(
-        await graphql(
-            `
-                ${metadataQuery}
-            `
-        )
-    )
-    const metadataData = metadataResults?.data?.dataAPI
-    logToFile('metadataData.json', metadataData, {
-        mode: 'overwrite',
-        editionId
-    })
-    const metadata = []
-    const currentSurvey = metadataData.surveys[surveyId]._metadata
-    const currentEdition = metadataData.surveys[surveyId][editionId]._metadata
-
-    const siteUrl = currentEdition.resultsUrl
+    const siteUrl = resultsUrl
 
     let chartSponsors = []
-    if (!USE_FAST_BUILD && currentEdition.enableChartSponsorships) {
+    if (!USE_FAST_BUILD && enableChartSponsorships) {
         chartSponsors = await getSendOwlData({ flat, surveyId, editionId, siteUrl })
     }
 
