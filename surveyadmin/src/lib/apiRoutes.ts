@@ -30,8 +30,12 @@ export const apiRoutes = {
       href: (params) => `/api/normalization/normalizeEdition`,
     },
   },
-  dataExport: {
-    // TODO: recreate this API route
-    href: ({ editionId, surveyId }: { editionId: string, surveyId: string }) => `/api/data-export?surveyId=${surveyId}&editionId=${editionId}`
+  export: {
+    generate: {
+      href: ({ editionId, surveyId }: { editionId: string, surveyId: string }) => `/api/export/generate?surveyId=${surveyId}&editionId=${editionId}`
+    },
+    download: {
+      href: ({ editionId, surveyId, timestamp }: { editionId: string, surveyId: string, timestamp: string }) => `/api/export/download?surveyId=${surveyId}&editionId=${editionId}&timestamp=${timestamp}`
+    }
   }
 };

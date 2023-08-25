@@ -1,37 +1,26 @@
+
 import { NextRequest, NextResponse } from "next/server";
 const fsPromises = fs.promises;
 import path from "path";
-import { generateExportsZip } from "~/lib/export/generateExports";
-import { ExportOptions } from "~/lib/export/typings";
+import { getFilePath, zipExports } from "~/lib/export/generateExports";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import fs from "fs"
 import { streamFile } from "~/lib/export/fileStreaming";
 
 
-
 export const GET = async (req: NextRequest): Promise<NextResponse> => {
+    // TODO: factor search params reading with generation
     // We log exports so they never go unnoticed
-    console.log(`Started an export`);
+    console.log(`Download an export`);
     // parse options
     const surveyId = req.nextUrl.searchParams.get("surveyId");
     const editionId = req.nextUrl.searchParams.get("editionId");
-
     if (!(editionId && surveyId) || typeof editionId !== "string" || typeof surveyId !== "string") {
         return NextResponse.json({
             error:
                 `Expected string surveyId and editionId, got surveyId=${surveyId} editionId=${editionId}`
         }, { status: 400 })
     }
-
-    // TODO: options not yet used
-    const options: ExportOptions = {
-        editionId,
-        surveyId,
-        format: {
-            json: true,
-        },
-    };
-
     // find the survey
     const editionRes = await fetchEditionMetadataAdmin({ editionId, surveyId })
     if (editionRes.error) {
@@ -41,17 +30,26 @@ export const GET = async (req: NextRequest): Promise<NextResponse> => {
         }, { status: 500 })
     }
     const edition = editionRes.data
-
     if (!edition) {
         return NextResponse.json({
             error:
-                `Survey with surveyId ${surveyId} and editionId ${editionId} not found, cannot export.`
+                `Survey with surveyId ${surveyId} and editionId ${editionId} not found, cannot download.`
         }, { status: 400 })
     }
 
-    // TODO: allow CSV https://www.mongodb.com/docs/database-tools/mongoexport/#export-in-csv-format
+    // The timestamp acts as a unique id to retrieve an export
+    const timestamp = req.nextUrl.searchParams.get("timestamp")
+    if (!timestamp) {
+        return NextResponse.json({ error: "A timestamp is needed to uniquely identify an export." })
+    }
+
     try {
-        const zipFilePath = await generateExportsZip(edition);
+        // zip the file
+        const filePaths = [
+            getFilePath(editionId, "json", timestamp),
+            getFilePath(editionId, "csv", timestamp),
+        ]
+        const zipFilePath = await zipExports(edition, filePaths, timestamp);
         // Now stream the file
         const stats = await fsPromises.stat(zipFilePath);
         console.log("File size: ", stats.size)

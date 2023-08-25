@@ -21,7 +21,7 @@ export const convertSurveyToMarkdown = ({
   options,
 }: {
   formatMessage?: any;
-  entities: any;
+  entities: Array<any>;
   edition: EditionMetadata,
   options?: MarkdownOptions;
 }) => {
@@ -46,7 +46,7 @@ const convertSection = ({
   options,
 }: {
   formatMessage?: any;
-  entities?: any;
+  entities?: Array<any>;
   section: SectionMetadata;
   options?: MarkdownOptions;
 }) => {
@@ -107,14 +107,14 @@ const convertQuestion = ({
   options: markdownOptions,
 }: {
   formatMessage: any;
-  entities: any;
+  entities?: Array<any>;
   question: QuestionMetadata;
   section: SectionMetadata;
   options?: MarkdownOptions;
 }) => {
   let questionString = "";
   const { id, options } = question;
-  const entity = entities && entities.find((e) => e.id === id);
+  const entity = entities?.find((e) => e.id === id);
 
   const fullQuestionId = `${section.slug}.${id}`;
 
