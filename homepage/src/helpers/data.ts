@@ -20,22 +20,23 @@ export const getData = async (): Promise<HomepageData> => {
     const surveyId = import.meta.env.SURVEYID
     const fastBuild = import.meta.env.FAST_BUILD === 'true'
     const locales = []
-    const { data: allSurveysData } = await fetchSurveysMetadata({
-        shouldGetFromCache: false
-    })
+    const options = {
+        shouldGetFromCache: false,
+        redisUrl: import.meta.env.REDIS_UPSTASH_URL,
+        redisToken: import.meta.env.REDIS_TOKEN
+    }
+    const { data: allSurveysData } = await fetchSurveysMetadata(options)
 
-    const { data: allLocalesMetadata } = await fetchAllLocalesMetadata({
-        shouldGetFromCache: false
-    })
+    const { data: allLocalesMetadata } = await fetchAllLocalesMetadata(options)
 
     const localesToUse = fastBuild
         ? allLocalesMetadata.filter(l => ['en-US', 'ru-RU'].includes(l.id))
         : allLocalesMetadata
     for (const locale of localesToUse) {
         const { data: localeWithStrings } = await fetchLocale({
+            ...options,
             localeId: locale.id,
-            contexts: ['homepage', surveyId],
-            shouldGetFromCache: false
+            contexts: ['homepage', surveyId]
         })
 
         locales.push(localeWithStrings)
