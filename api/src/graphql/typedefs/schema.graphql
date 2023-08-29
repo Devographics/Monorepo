@@ -38,6 +38,7 @@ type EditionMetadata {
 
     year: Int
     status: Int
+    resultsStatus: Int
     hashtag: String
 
     startedAt: String

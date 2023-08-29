@@ -26,6 +26,7 @@ query SurveysMetadataQuery {
         endedAt
         year
         status
+        resultsStatus
         imageUrl
         faq
         sections {

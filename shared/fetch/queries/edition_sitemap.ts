@@ -9,6 +9,7 @@ export const getEditionSitemapQuery = ({ editionId }: { editionId: string }) => 
           surveyId
           year
           status
+          resultsStatus
           hashtag
           startedAt
           endedAt
