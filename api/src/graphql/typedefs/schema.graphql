@@ -155,9 +155,9 @@ type RawDbPaths {
     response: String
     other: String
     comment: String
-    followup_predefined: String
-    followup_freeform: String
     prenormalized: String
+    followup_predefined: JSON
+    followup_freeform: JSON
 }
 
 type NormDbPaths {
