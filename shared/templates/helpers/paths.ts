@@ -9,7 +9,8 @@ import {
     DbSuffixes,
     QuestionTemplateOutput,
     DbPathsEnum,
-    DbPathsStrings
+    DbPathsStrings,
+    OptionsDbPaths
 } from '@devographics/types'
 
 export const prefixWithEditionId = (s: string, editionId: string) => {
@@ -154,12 +155,13 @@ TODO: In the future, get rid of this prefix, and replace formPaths with rawPaths
 
 */
 
-const prefixPathsObjectWithEditionId = (paths: any, editionId: string) => {
+const prefixPathsObjectWithEditionId = (paths: OptionsDbPaths, editionId: string) => {
+    const prefixedPaths = {} as OptionsDbPaths
     for (const key in paths) {
         const path = paths[key]
-        paths[key] = prefixWithEditionId(path, editionId)
+        prefixedPaths[key] = prefixWithEditionId(path, editionId)
     }
-    return paths
+    return prefixedPaths
 }
 
 export const getFormPaths = ({
@@ -171,7 +173,11 @@ export const getFormPaths = ({
 }): DbPaths => {
     const paths = {} as DbPaths
     if (question.rawPaths) {
-        ;(Object.keys(question.rawPaths) as Array<keyof DbPathsStrings>).forEach(key => {
+        ;(
+            Object.keys(question.rawPaths).filter(
+                k => ![DbPathsEnum.FOLLOWUP_FREEFORM, DbPathsEnum.FOLLOWUP_PREDEFINED].includes(k)
+            ) as Array<keyof DbPathsStrings>
+        ).forEach(key => {
             const path = question?.rawPaths?.[key]
             if (path) {
                 paths[key] = prefixWithEditionId(path, edition.id)

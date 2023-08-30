@@ -63,9 +63,17 @@ export const FollowUps = (
               // ref={refFunction}
               onChange={(event) => {
                 const isChecked = event.target.checked;
-                const newValue = isChecked
-                  ? [...predefinedFollowupValue!, followupOption.id]
-                  : without(predefinedFollowupValue, followupOption.id);
+
+                // check "main" parent answer
+                updateCurrentValues({ [path]: option.id });
+
+                // checkbox version
+                // const newValue = isChecked
+                //   ? [...predefinedFollowupValue!, followupOption.id]
+                //   : without(predefinedFollowupValue, followupOption.id);
+
+                // radio button version
+                const newValue = isChecked ? [followupOption.id] : [];
                 updateCurrentValues({
                   [predefinedFollowupPath]: newValue,
                 });

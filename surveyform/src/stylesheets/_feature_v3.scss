@@ -8,6 +8,7 @@
   display: inline-flex;
   gap: 0.6em;
   //   margin-left: 0.8em;
+  display: none;
 }
 
 @keyframes arrow {
@@ -135,46 +136,53 @@
   }
 }
 
-.form-experience-option .form-check {
-  align-items: center;
-  justify-content: flex-start;
-  gap: $spacing;
-  .form-check-label {
-    flex: inherit;
-  }
-  /* Option container */
-  .form-option-label {
-    display: flex;
-    position: relative;
-
-    > label {
-      gap: 0.4em;
-      flex: none;
-
-      /* Expand clickable area to whole row */
-      &::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-      }
+.form-experience-option {
+  &:hover,
+  &.hasValue {
+    .sentiments {
+      display: flex;
     }
-
-    .comment-trigger-wrapper {
+  }
+  .form-check {
+    align-items: center;
+    justify-content: flex-start;
+    gap: $spacing;
+    .form-check-label {
+      flex: inherit;
+    }
+    /* Option container */
+    .form-option-label {
+      display: flex;
       position: relative;
-      flex: 1;
-      z-index: 1;
-      pointer-events: none;
 
-      & > * {
-        pointer-events: auto;
+      > label {
+        gap: 0.4em;
+        flex: none;
+
+        /* Expand clickable area to whole row */
+        &::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+        }
       }
 
-      .comment-trigger {
-        margin-left: auto;
-        padding: 0;
-      }
+      .comment-trigger-wrapper {
+        position: relative;
+        flex: 1;
+        z-index: 1;
+        pointer-events: none;
 
-      &:not(
+        & > * {
+          pointer-events: auto;
+        }
+
+        .comment-trigger {
+          margin-left: auto;
+          padding: 0;
+        }
+
+        &:not(
 				/* Selected sentiments should always show */
 				:has(.sentiment > :checked),
 
@@ -184,7 +192,8 @@
 				/* Sentiments of selected row are always visible */
 				.form-check.selected *
 			) {
-        opacity: 0;
+          opacity: 0;
+        }
       }
     }
   }
