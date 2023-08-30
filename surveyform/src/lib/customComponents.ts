@@ -6,6 +6,7 @@ import Bracket from "~/components/inputs/Bracket";
 import Text from "~/components/inputs/Default";
 import Number from "~/components/inputs/Number";
 import Feature from "~/components/inputs/experience/Feature";
+import Featurev3 from "~/components/inputs/experience/Featurev3";
 import Tool from "~/components/inputs/experience/Tool";
 import Slider from "~/components/inputs/Slider";
 import Select from "~/components/inputs/Select";
@@ -22,6 +23,7 @@ const customComponents = {
   race_ethnicity: RaceEthnicity,
   bracket: Bracket,
   feature: Feature,
+  featurev3: Featurev3,
   tool: Tool,
   slider: Slider,
   dropdown: Select,

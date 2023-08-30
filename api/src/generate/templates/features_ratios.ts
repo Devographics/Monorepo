@@ -7,7 +7,6 @@ import {
 import { graphqlize } from '../helpers'
 import { computeKey, useCache } from '../../helpers/caching'
 import { applyRankCutoff, computeExperienceRatios, metrics } from '../../compute/experience'
-import { getToolsEnumTypeName } from '../../graphql/templates/tools_enum'
 import { getFeaturesEnumTypeName } from '../../graphql/templates/features_enum'
 
 const getSectionFeaturesIds = (section: SectionApiObject) => {

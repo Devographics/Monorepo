@@ -34,8 +34,20 @@ export enum DbPathsEnum {
     ERROR = 'error'
 }
 
-export type DbPaths = {
-    [key in DbPathsEnum]?: string
+export type DbPathsStrings = {
+    [key in Exclude<
+        DbPathsEnum,
+        DbPathsEnum.FOLLOWUP_PREDEFINED | DbPathsEnum.FOLLOWUP_FREEFORM
+    >]?: string
+}
+
+export interface DbPaths extends DbPathsStrings {
+    [DbPathsEnum.FOLLOWUP_PREDEFINED]: OptionsDbPaths
+    [DbPathsEnum.FOLLOWUP_FREEFORM]: OptionsDbPaths
+}
+
+export type OptionsDbPaths = {
+    [key in string]: string
 }
 
 export type ResponseArguments = {

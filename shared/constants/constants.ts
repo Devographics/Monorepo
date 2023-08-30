@@ -8,6 +8,14 @@ export const TOOLS_OPTIONS = [
 
 export const FEATURES_OPTIONS = ['never_heard', 'heard', 'used']
 
+export const FEATURES_OPTIONS2 = [
+    'never_heard',
+    'interested',
+    'not_interested',
+    'used_positive',
+    'used_negative'
+]
+
 export const NO_ANSWER = 'no_answer'
 
 export const NOT_APPLICABLE = 'na'

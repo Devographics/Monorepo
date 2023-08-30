@@ -1,0 +1,238 @@
+/* Question container */
+.form-input {
+  container-name: question;
+  container-type: inline-size;
+}
+
+.sentiments {
+  display: inline-flex;
+  gap: 0.6em;
+  //   margin-left: 0.8em;
+}
+
+@keyframes arrow {
+  from,
+  40% {
+    transform: translateY(var(--animation-offset));
+  }
+
+  20%,
+  60%,
+  to {
+    transform: none;
+  }
+}
+
+.sentiment {
+  display: flex;
+  align-items: center;
+  --_color: var(--color, var(--bs-blue));
+  border: 1px solid hsl(0 0% 100% / 0.3);
+  padding: 0.1em 0.8em 0.05em;
+  border-radius: 999px;
+  background: color-mix(
+      in lab,
+      var(--_color),
+      transparent calc((1 - var(--a, 0.2)) * 100%)
+    )
+    linear-gradient(hsl(0 0% 100% / 0.1), transparent) border-box;
+  color: white;
+  font-size: 70%;
+  transition: 0.1s;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+
+  &::before {
+    margin-right: 0.3em;
+    scale: 1.15;
+  }
+
+  &.positive {
+    --color: var(--bs-success);
+
+    &::before {
+      content: "↑";
+      --animation-offset: -0.1em;
+    }
+  }
+
+  &.negative {
+    --color: var(--bs-danger);
+
+    &::before {
+      content: "↓";
+      --animation-offset: 0.1em;
+    }
+  }
+
+  &:hover,
+  &:focus-within {
+    --a: 0.6;
+    color: white;
+
+    &::before {
+      animation: arrow 0.7s 3 alternate;
+    }
+  }
+
+  &:active {
+    background-image: none;
+    transform: scale(0.97) translateY(0.1em);
+  }
+
+  &:focus-within {
+    box-shadow: 0 0 0.3em 0.1em var(--_color);
+  }
+
+  .sentiment-label {
+    transition-duration: 0.4s;
+    transition-property: letter-spacing, opacity;
+  }
+
+  /* Selected sentiment */
+  &:has(> :checked) {
+    position: relative;
+    --a: 1;
+    border-color: hsl(0 0% 100% / 0.9);
+
+    &::after {
+      content: "✓";
+      position: absolute;
+      top: -0.4em;
+      right: -0.6em;
+      padding: 0.2em;
+      border-radius: 50%;
+      background: white;
+      color: var(--_color);
+      font-weight: bold;
+      width: 1em;
+      box-sizing: content-box;
+      font-size: 80%;
+      line-height: 1;
+    }
+  }
+
+  &:not(:has(> :checked)) {
+    /* Explicitly not selected, i.e. the opposite sentiment is */
+    &:where(.sentiments:has(:checked) *) {
+      opacity: 0.6;
+    }
+
+    @container question (width <= 500px) {
+      /* mobile */
+      /* Not selected */
+
+      &::before {
+        margin-right: 0;
+      }
+
+      .sentiment-label {
+        letter-spacing: -1ch;
+        opacity: 0;
+      }
+    }
+  }
+}
+
+.form-experience-option .form-check {
+  align-items: center;
+  justify-content: flex-start;
+  gap: $spacing;
+  .form-check-label {
+    flex: inherit;
+  }
+  /* Option container */
+  .form-option-label {
+    display: flex;
+    position: relative;
+
+    > label {
+      gap: 0.4em;
+      flex: none;
+
+      /* Expand clickable area to whole row */
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+      }
+    }
+
+    .comment-trigger-wrapper {
+      position: relative;
+      flex: 1;
+      z-index: 1;
+      pointer-events: none;
+
+      & > * {
+        pointer-events: auto;
+      }
+
+      .comment-trigger {
+        margin-left: auto;
+        padding: 0;
+      }
+
+      &:not(
+				/* Selected sentiments should always show */
+				:has(.sentiment > :checked),
+
+				/* Interacting with the row should reveal sentiments */
+				.form-check:is(:hover, :active) *,
+
+				/* Sentiments of selected row are always visible */
+				.form-check.selected *
+			) {
+        opacity: 0;
+      }
+    }
+  }
+}
+
+@keyframes comments-open {
+  from {
+    transform: scale(0);
+    opacity: 0;
+    max-height: 0;
+    padding-block: 0;
+  }
+
+  to {
+    max-height: 8em;
+  }
+}
+
+@keyframes comments-open-textarea {
+  from {
+    max-height: calc(100% - 2.3em);
+    min-height: 0;
+  }
+}
+
+.comment-input {
+  z-index: 1;
+  position: relative;
+  --background-color: color-mix(in lab, var(--bg-color), white 25%);
+  background: var(--background-color);
+  margin: 0.4em 0;
+  border-radius: 0.2em;
+  transform-origin: calc(100% - 21px) -12px;
+  overflow: clip;
+  overflow-clip-margin: 12px;
+
+  &,
+  & textarea {
+    animation: 0.3s comments-open both ease-in;
+  }
+
+  & textarea {
+    animation-name: comments-open-textarea;
+  }
+
+  &::after {
+    right: 10px;
+    left: auto;
+    border-bottom-color: var(--background-color);
+  }
+}

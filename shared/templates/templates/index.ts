@@ -17,6 +17,8 @@ export * from './quiz'
 
 export * from './feature'
 export * from './feature_with_followups'
+export * from './feature_v2'
+export * from './feature_v3'
 export * from './tool'
 
 export * from './locale'

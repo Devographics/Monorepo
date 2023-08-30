@@ -35,74 +35,86 @@ export const FollowUps = (
   const { followups = [] } = question;
   const optionFollowUps = followups.find((f) => f.id === option.id)?.options;
 
-  const {
-    predefinedFollowupValue,
-    predefinedFollowupPath,
-    freeformFollowupValue,
-    freeformFollowupPath,
-  } = followupData;
+  const { predefinedFollowupValue, predefinedFollowupPath } = followupData;
 
-  if (!predefinedFollowupPath || !freeformFollowupPath) {
+  if (!predefinedFollowupPath) {
     throw new Error(
-      `Could not find predefinedFollowupPath or freeformFollowupPath for question ${question.id}`
+      `Could not find predefinedFollowupPath for question ${question.id}`
+    );
+  }
+
+  // const followUpPath
+  return optionFollowUps ? (
+    <div className="followups-v2 sentiments">
+      {optionFollowUps.map((followupOption, index) => {
+        const isChecked = predefinedFollowupValue?.includes(followupOption.id);
+        const sentimentClasses = ["positive", "negative"];
+        return (
+          <label
+            key={followupOption.id}
+            className={`followups-predefined-label2 sentiment ${sentimentClasses[index]}`}
+          >
+            <Form.Check.Input
+              className="visually-hidden"
+              type="checkbox"
+              checked={isChecked}
+              disabled={readOnly}
+              id={`${path}.followup.${index}`}
+              // ref={refFunction}
+              onChange={(event) => {
+                const isChecked = event.target.checked;
+                const newValue = isChecked
+                  ? [...predefinedFollowupValue!, followupOption.id]
+                  : without(predefinedFollowupValue, followupOption.id);
+                updateCurrentValues({
+                  [predefinedFollowupPath]: newValue,
+                });
+              }}
+            />
+            <span>
+              <FormattedMessage id={`followups.${followupOption.id}`} />
+            </span>
+          </label>
+        );
+      })}
+    </div>
+  ) : null;
+};
+
+export const FollowUpComment = (
+  props: ExperienceProps & {
+    option: OptionMetadata;
+    followupData: FollowupData;
+  }
+) => {
+  const {
+    updateCurrentValues,
+    option,
+    question,
+    readOnly,
+    path,
+    followupData,
+  } = props;
+
+  const { freeformFollowupValue, freeformFollowupPath } = followupData;
+
+  if (!freeformFollowupPath) {
+    throw new Error(
+      `Could not find freeformFollowupPath for question ${question.id}`
     );
   }
 
   const intl = useIntlContext();
-
   const placeholder = intl.formatMessage({ id: `followups.placeholder` });
 
   return (
-    <div className="followups">
-      <h5>
-        <FormattedMessage id="followups.description" />
-      </h5>
-      {optionFollowUps && (
-        <div className="followups-predefined">
-          {optionFollowUps.map((followupOption, index) => {
-            const isChecked = predefinedFollowupValue?.includes(
-              followupOption.id
-            );
-            return (
-              <Button
-                key={followupOption.id}
-                className="followups-predefined-item"
-                size="sm"
-              >
-                <label className="followups-predefined-label">
-                  <Form.Check.Input
-                    type="checkbox"
-                    checked={isChecked}
-                    disabled={readOnly}
-                    id={`${path}.followup.${index}`}
-                    // ref={refFunction}
-                    onChange={(event) => {
-                      const isChecked = event.target.checked;
-                      const newValue = isChecked
-                        ? [...predefinedFollowupValue!, followupOption.id]
-                        : without(predefinedFollowupValue, followupOption.id);
-                      updateCurrentValues({
-                        [predefinedFollowupPath]: newValue,
-                      });
-                    }}
-                  />
-                  <span>
-                    <FormattedMessage id={`followups.${followupOption.id}`} />
-                  </span>
-                </label>
-              </Button>
-            );
-          })}
-        </div>
-      )}
-      <div className="form-input-followups-freeform">
-        <CommentTextarea
-          readOnly={!!readOnly}
-          value={freeformFollowupValue!}
-          path={freeformFollowupPath}
-          placeholder={placeholder}
-        />
-      </div>
+    <div className="form-input-followups-freeform">
+      <CommentTextarea
+        readOnly={!!readOnly}
+        value={freeformFollowupValue!}
+        path={freeformFollowupPath}
+        placeholder={placeholder}
+      />
     </div>
   );
 };
