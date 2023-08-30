@@ -111,7 +111,7 @@ export const loadFromGitHub = async () => {
         return `/repos/${owner}/${repo}/contents/${path}`
     }
 
-    console.log(`-> loading surveys repo (${getUrl()})`)
+    console.log(`📖 loading surveys repo (${getUrl()})`)
 
     const repoDirContents = await listGitHubFiles({ owner, repo, path: surveysDirPath })
 
@@ -121,7 +121,7 @@ export const loadFromGitHub = async () => {
             if (skipItem(file.name)) {
                 continue
             }
-            console.log(`// Loading survey ${file.name}… (${getUrl(file.path)})`)
+            console.log(`📖 Loading survey ${file.name}… (${getUrl(file.path)})`)
             const editions: any[] = []
             let surveyConfigYaml: any = { id: 'default' }
             const surveyDirContents = await listGitHubFiles({
@@ -165,6 +165,15 @@ export const loadFromGitHub = async () => {
                             if (Array.isArray(editionApiYaml) && editionApiYaml.length > 0) {
                                 edition = { ...edition, apiSections: makeAPIOnly(editionApiYaml) }
                             }
+                        } else if (file3.name === 'sitemap.yml') {
+                            // found sitemap.yml for edition
+                            const editionSitemapYaml = await getGitHubYamlFile(file3.download_url)
+                            if (
+                                Array.isArray(editionSitemapYaml) &&
+                                editionSitemapYaml.length > 0
+                            ) {
+                                edition = { ...edition, sitemap: editionSitemapYaml }
+                            }
                         }
                     }
                     editions.push(edition)
@@ -186,7 +195,7 @@ export const loadLocally = async () => {
     const surveysPath = getEnvVar(EnvVar.SURVEYS_PATH)
     const surveysDirPath = path.resolve(surveysPath)
 
-    console.log(`-> loading surveys locally (${surveysDirPath})`)
+    console.log(`📖 loading surveys locally (${surveysDirPath})`)
 
     const surveysDirs = await readdir(surveysDirPath)
 
@@ -199,7 +208,7 @@ export const loadLocally = async () => {
         const surveyDirPath = surveysDirPath + '/' + surveyDirName
         const stat = await lstat(surveyDirPath)
         if (!excludeDirs.includes(surveyDirName) && stat.isDirectory()) {
-            console.log(`// Loading survey ${surveyDirName}…`)
+            console.log(`📖 Loading survey ${surveyDirName}…`)
 
             const surveyConfigContents = await readFile(surveyDirPath + '/config.yml', 'utf8')
             const surveyConfigYaml: any = yaml.load(surveyConfigContents)
@@ -230,19 +239,39 @@ export const loadLocally = async () => {
                             const editionQuestionsYaml: any = yaml.load(editionQuestionsContents)
                             edition.sections = editionQuestionsYaml
                         } catch (error) {
-                            console.log(`YAML parsing error for edition ${editionDirName}`)
+                            console.log(
+                                `YAML parsing error for questions.yml edition ${editionDirName}`
+                            )
                             console.log(error)
                         }
                     }
 
-                    try {
-                        const editionApiContents = await readFile(
-                            editionDirPath + '/api.yml',
-                            'utf8'
-                        )
-                        const editionApiYaml: any = yaml.load(editionApiContents)
-                        edition.apiSections = makeAPIOnly(editionApiYaml)
-                    } catch (error) {}
+                    const apiPath = editionDirPath + '/api.yml'
+                    if (existsSync(apiPath)) {
+                        try {
+                            const editionApiContents = await readFile(apiPath, 'utf8')
+                            const editionApiYaml: any = yaml.load(editionApiContents)
+                            edition.apiSections = makeAPIOnly(editionApiYaml)
+                        } catch (error) {
+                            console.log(`YAML parsing error for api.yml edition ${editionDirName}`)
+                            console.log(error)
+                        }
+                    }
+
+                    const sitemapPath = editionDirPath + '/sitemap.yml'
+                    if (existsSync(sitemapPath)) {
+                        try {
+                            const editionSitemapContents = await readFile(sitemapPath, 'utf8')
+                            const editionSitemapYaml: any = yaml.load(editionSitemapContents)
+                            edition.sitemap = editionSitemapYaml
+                        } catch (error) {
+                            console.log(
+                                `YAML parsing error for sitemap.yml edition ${editionDirName}`
+                            )
+                            console.log(error)
+                        }
+                    }
+
                     editions.push(edition)
                 }
             }

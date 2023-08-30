@@ -24,14 +24,12 @@ export const transformFunction: TransformFunction = (
     context
 ) => {
     data.forEach(editionData => {
-        editionData.buckets = range(0, 100 / groupBy).map(n => {
+        console.log('// editionData.buckets')
+        console.log(editionData.buckets)
+        const groupedBuckets = range(0, 100 / groupBy).map(n => {
             const [lowerBound, upperBound] = getBounds(n)
-            // note: when building the first bucket (n = 0) we also
-            // include the "id: 0" bucket in the source data
             const selectedBuckets = editionData.buckets.filter(
-                b =>
-                    (n === 0 && Number(b.id) === 0) ||
-                    (Number(b.id) > lowerBound && Number(b.id) <= upperBound)
+                b => Number(b.id) >= lowerBound && Number(b.id) <= upperBound
             )
             const bucket = {
                 id: getId(n),
@@ -45,6 +43,7 @@ export const transformFunction: TransformFunction = (
 
             return bucket
         })
+        editionData.buckets = groupedBuckets
     })
     return data
 }

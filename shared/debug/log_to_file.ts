@@ -1,5 +1,7 @@
 import fs from 'fs'
 import yaml from 'js-yaml'
+import { parse } from 'graphql'
+import { print } from 'graphql-print'
 
 export type LogOptions = {
     mode?: 'append' | 'overwrite'
@@ -33,7 +35,17 @@ export const logToFile = async (fileName_: string, object: any, options: LogOpti
         const fullPath = `${logsDirPath}/${fileName}`
         let contents
         if (typeof object === 'string') {
-            contents = object
+            if (fileName.includes('.gql') || fileName.includes('.graphql')) {
+                try {
+                    const ast = parse(object)
+                    contents = print(ast, { preserveComments: true })
+                } catch (error) {
+                    console.warn(error)
+                    console.warn(object)
+                }
+            } else {
+                contents = object
+            }
         } else {
             if (fileName.includes('.yml') || fileName.includes('.yaml')) {
                 contents = yaml.dump(object, { noRefs: true, skipInvalid: true })

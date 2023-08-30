@@ -1,5 +1,6 @@
 export * from './all_locales_metadata'
 export * from './edition_metadata'
+export * from './edition_sitemap'
 export * from './locale'
 export * from './all_surveys_metadata'
 export * from './all_entities'

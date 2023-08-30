@@ -51,6 +51,7 @@ export type Edition = {
     tshirt: Tshirt
     colors: Colors
     enableReadingList: boolean
+    enableChartSponsorships: boolean
     /**
      * Where the user found out about the survey
      * Should be a valid multiselect option

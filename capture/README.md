@@ -3,8 +3,8 @@
 This project generate screenshots of the survey result apps
 which can then be used for social sharing for example.
 
-It's gonna generate screenshots for every locale and every 
-exportable block. 
+It's gonna generate screenshots for every locale and every
+exportable block.
 
 It also provides an extra utility to generate a mosaic of all
 screenshots for every available locale.
@@ -15,8 +15,8 @@ screenshots for every available locale.
 
 ### Tooling
 
-- `node.js` v15
-- `yarn`
+-   `node.js` v15
+-   `yarn`
 
 ### Results project
 
@@ -29,29 +29,27 @@ file available in the project's directory.
 > prior to trying to capture.
 > You also need to **make sure the application is running** :)
 
-
 ## Install
 
-`yarn`
+`pnpm i`
 
 ## Usage
 
 First you need to compile TypeScript:
 
-`yarn build`
+`pnpm run build`
 
 ### Generate the screenshots
 
 You can use the following command to run the captures:
 
 ```sh
-./capture ../monorepo/results/surveys/css2022/config/config.yml ../images/captures/css2022
+./capture ../monorepo/results/surveys/css2023/config/config.yml ../images/captures/css2023
 # or if you want to monitor how long it takes
-time ./capture ../StateOfCSS-2020 ../screenshots/css_2020 
+time ./capture ../StateOfCSS-2020 ../screenshots/css_2020
 # restart from a specific locale
 ./capture ../stateof-monorepo/results/surveys/graphql2022/config/config.yml ../stateof-images/captures/graphql2022 de-DE+
 ```
-
 
 where `../monorepo/results/surveys/css2022/` is the relative path to the survey results app,
 and `../images/captures/css2022` the relative path to the directory used
@@ -61,19 +59,20 @@ Some logs are gonna be generated in `capture.log`.
 
 ### Use local config and sitemap
 
-If the path computed automatically or config from the result app are not correct, 
+If the path computed automatically or config from the result app are not correct,
 you can put a config and sitemap directly in the "./config" folder:
 
 ```sh
 ./capture ./config/config.yml ../images/captures/css2022
 ```
+
 The file `config/config.yml` should have the following structure:
 
 ```yaml
 # the base URL to use, can be either local or remote,
 baseUrl: http://localhost:9000
 # optionnaly if you want to use a local sitemap
-sitemap: "./sitemap.yml"
+sitemap: './sitemap.yml'
 # configuration for mosaic generation
 mosaic:
     thumb_width: 500
@@ -85,7 +84,7 @@ mosaic:
 ```
 
 Regarding the structure of the `sitemap.yml` file, please have
-a look at the `Sitemap` type in `src/types.ts`. 
+a look at the `Sitemap` type in `src/types.ts`.
 
 ### Generating a mosaic of all screenshots
 
@@ -107,6 +106,3 @@ in order to format your code, please run:
 You can also check that the code was properly formatted using:
 
 `yarn fmt:check`
-
-
-

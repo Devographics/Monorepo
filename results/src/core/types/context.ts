@@ -4,18 +4,18 @@ import { Locale } from './i18n'
 
 interface GatsbyPageContext {
     id: string
-    currentPath: string,
+    currentPath: string
     width?: number
-    path: string,
-    basePath: string,
-    host: string,
-    titleId: string,
-    intlId: string,
-    previous?: PageContextValue,
-    next?: PageContextValue,
+    path: string
+    basePath: string
+    host: string
+    titleId: string
+    intlId: string
+    previous?: PageContextValue
+    next?: PageContextValue
     // TODO: actually could be an array too
     children?: React.ReactNode
-    pageData: any,
+    pageData: any
 }
 interface SurveyPageContext {
     isCapturing?: boolean
@@ -26,5 +26,7 @@ interface SurveyPageContext {
     locale?: Locale
     block: any
     locales?: Array<any>
+    localeId: string
+    parent?: any
 }
 export type PageContextValue = SurveyPageContext & GatsbyPageContext

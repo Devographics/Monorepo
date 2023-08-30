@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
-import { spacing } from 'core/theme'
+import { mq, spacing } from 'core/theme'
 
 export default class LegendsItem extends Component {
     static propTypes = {
@@ -156,7 +156,9 @@ const Label = styled.td`
     width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
-    white-space: nowrap;
+    @media ${mq.large} {
+        white-space: nowrap;
+    }
 `
 
 const Value = styled.td`

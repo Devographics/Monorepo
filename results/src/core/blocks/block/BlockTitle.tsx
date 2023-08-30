@@ -36,8 +36,9 @@ const BlockTitle = ({
         data && (Array.isArray(data) ? last(data) && last(data).completion : data.completion)
     const [showOptions, setShowOptions] = useState(false)
     const pageContext = usePageContext()
-    const { isCapturing } = pageContext
+    const { isCapturing, currentEdition } = pageContext
 
+    const { enableChartSponsorships } = currentEdition
     const { getString } = useI18n()
 
     const entities = useEntities()
@@ -71,7 +72,7 @@ const BlockTitle = ({
                         {completion && !pageContext.isCapturing && (
                             <BlockCompletionIndicator completion={completion} />
                         )}
-                        {!isCapturing && <BlockSponsor block={block} />}
+                        {!isCapturing && enableChartSponsorships && <BlockSponsor block={block} />}
                     </BlockTitleText>
                     {/* <Popover trigger={<More />}>
                         <PopoverContents>

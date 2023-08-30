@@ -126,7 +126,7 @@ const HorizontalBarBlock = ({ block, data, series }: HorizontalBarBlockProps) =>
                 defaultSeries={defaultSeries}
                 providedSeries={series}
             >
-                <ChartContainer fit={false}>
+                <ChartContainer fit={true}>
                     <HorizontalBarChart {...chartProps} />
                 </ChartContainer>
             </DynamicDataLoader>

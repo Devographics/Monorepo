@@ -9,6 +9,7 @@ import { logToFile } from './log_to_file.mjs'
 import { argumentsPlaceholder, getFiltersQuery, getQuery } from './queries.mjs'
 import { fileURLToPath } from 'url'
 import without from 'lodash/without.js'
+import { getMetadataQuery } from './queries.mjs'
 
 import { parse } from 'graphql'
 import { print } from 'graphql-print'
@@ -41,13 +42,13 @@ export const getCleanLocales = locales =>
 */
 
 /**
- * 
-* Get a page's context
+ *
+ * Get a page's context
  *= the information that are passed down from Gatsby to the page
- * @param {import("../src/core/types").PageDef} page 
+ * @param {import("../src/core/types").PageDef} page
  * @returns {import("../src/core/types").PageContextValue}
  */
-export const getPageContext = (page) => {
+export const getPageContext = page => {
     const context = omit(page, ['path', 'children'])
     context.basePath = page.path
 
@@ -252,13 +253,13 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                         }
 
                         let prettyQueryLog = queryLog.replace(argumentsPlaceholder, '')
-                        try {
-                            const ast = parse(queryLog)
-                            prettyQueryLog = print(ast, { preserveComments: true })
-                        } catch (error) {
-                            console.log(`error parsing query for ${block.id}`)
-                            console.log(queryLog)
-                        }
+                        // try {
+                        //     const ast = parse(queryLog)
+                        //     prettyQueryLog = print(ast, { preserveComments: true })
+                        // } catch (error) {
+                        //     console.log(`error parsing query for ${block.id}`)
+                        //     console.log(queryLog)
+                        // }
                         logToFile(queryFileName, prettyQueryLog, {
                             mode: 'overwrite',
                             dirPath: queryDirPath,
@@ -347,4 +348,29 @@ export const getCachingMethods = () => {
         }
     }
     return cacheLevel
+}
+
+export const getMetadata = async ({ surveyId, editionId, graphql }) => {
+    const metadataQuery = getMetadataQuery({ surveyId, editionId })
+
+    logToFile('metadataQuery.graphql', metadataQuery, {
+        mode: 'overwrite',
+        editionId
+    })
+
+    const metadataResults = removeNull(
+        await graphql(
+            `
+                ${metadataQuery}
+            `
+        )
+    )
+    const metadataData = metadataResults?.data?.dataAPI
+    logToFile('metadataData.json', metadataData, {
+        mode: 'overwrite',
+        editionId
+    })
+    const currentSurvey = metadataData.surveys[surveyId]._metadata
+    const currentEdition = metadataData.surveys[surveyId][editionId]._metadata
+    return { currentSurvey, currentEdition }
 }

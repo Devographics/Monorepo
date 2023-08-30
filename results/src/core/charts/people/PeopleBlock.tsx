@@ -24,6 +24,8 @@ import DynamicDataLoader from 'core/filters/dataloaders/DynamicDataLoader'
 import { useChartFilters } from 'core/filters/helpers'
 import { MODE_GRID } from 'core/filters/constants'
 import { useEntities } from 'core/helpers/entities'
+import { NOT_APPLICABLE, NO_ANSWER } from '@devographics/constants'
+import maxBy from 'lodash/maxBy.js'
 
 export interface PeopleBlockProps extends BlockComponentProps {
     data: QuestionData
@@ -139,34 +141,38 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
     )
 }
 
-const PeopleChart = ({ buckets, units, entities }) => (
-    <Chart_>
-        <Heading_>
-            <HName_>
-                <T k="blocks.people.name" />
-            </HName_>
-            {/* <HLinks_>
+const PeopleChart = ({ buckets, units, entities }) => {
+    const maxBucket = maxBy(buckets, b => b.count)
+    const maxCount = maxBucket.count
+    return (
+        <Chart_>
+            <Heading_>
+                <HName_>
+                    <T k="blocks.people.name" />
+                </HName_>
+                {/* <HLinks_>
 <T k="blocks.people.social_links" />
 </HLinks_> */}
-            <HResponses_>
-                <T k="blocks.people.responses" />
-            </HResponses_>
-        </Heading_>
-        <List_>
-            {buckets.map((b, index) => (
-                <PeopleItem
-                    key={b.id}
-                    {...b}
-                    index={index}
-                    maxCount={buckets[0].count}
-                    units={units}
-                    services={services}
-                    entity={entities.find(e => e.id === b.id)}
-                />
-            ))}
-        </List_>
-    </Chart_>
-)
+                <HResponses_>
+                    <T k="blocks.people.responses" />
+                </HResponses_>
+            </Heading_>
+            <List_>
+                {buckets.map((b, index) => (
+                    <PeopleItem
+                        key={b.id}
+                        {...b}
+                        index={index}
+                        maxCount={maxCount}
+                        units={units}
+                        services={services}
+                        entity={entities.find(e => e.id === b.id)}
+                    />
+                ))}
+            </List_>
+        </Chart_>
+    )
+}
 
 const PeopleItem = ({
     index,
@@ -179,10 +185,8 @@ const PeopleItem = ({
     units,
     services
 }) => {
-    if (!entity) {
-        return <div>no entity found for id {id}</div>
-    }
     const isTop10 = index < 10
+
     const avatarSize = 40
 
     const getNumber = () => {
@@ -197,6 +201,47 @@ const PeopleItem = ({
             default:
                 return count
         }
+    }
+
+    if (id === NO_ANSWER) {
+        return (
+            <Item_ className={isTop10 ? 'top10' : ''}>
+                <Bar_>
+                    <BarInner_ style={{ width: `${Math.round((count * 100) / maxCount)}%` }} />
+                </Bar_>
+                <Index_>
+                    <span>#{index + 1}</span>
+                </Index_>
+                <LabelContents_>
+                    <Label_>
+                        <T k="charts.no_answer" />
+                    </Label_>
+
+                    <Count_>{getNumber()}</Count_>
+                </LabelContents_>
+            </Item_>
+        )
+    }
+    if (id === NOT_APPLICABLE) {
+        return (
+            <Item_ className={isTop10 ? 'top10' : ''}>
+                <Bar_>
+                    <BarInner_ style={{ width: `${Math.round((count * 100) / maxCount)}%` }} />
+                </Bar_>
+                <Index_>
+                    <span>#{index + 1}</span>
+                </Index_>
+                <LabelContents_>
+                    <Label_>
+                        <T k="options.people.na" />
+                    </Label_>
+                    <Count_>{getNumber()}</Count_>
+                </LabelContents_>
+            </Item_>
+        )
+    }
+    if (!entity) {
+        return <div>no entity found for id {id}</div>
     }
 
     return (
@@ -221,6 +266,30 @@ const PeopleItem = ({
         </Item_>
     )
 }
+
+// const PeopleBar = ({ children}) => {
+//     return (
+//         <Item_ className={isTop10 ? 'top10' : ''}>
+//             <Bar_>
+//                 <BarInner_ style={{ width: `${Math.round((count * 100) / maxCount)}%` }} />
+//             </Bar_>
+//             <Index_>
+//                 <span>#{index + 1}</span>
+//             </Index_>
+
+//             <Contents_>
+//                 <Avatar entity={entity} size={avatarSize} />
+//                 <Person_>
+//                     <Name_>{entity.name}</Name_>
+//                     <Links_>
+//                         <SocialLinks entity={entity} services={services} />
+//                     </Links_>
+//                 </Person_>
+//                 <Count_>{getNumber()}</Count_>
+//             </Contents_>
+//         </Item_>
+//     )
+// }
 
 const Chart_ = styled.div``
 
@@ -256,7 +325,7 @@ const Index_ = styled.div`
 `
 
 const Bar_ = styled.div`
-    background: rgba(255, 255, 255, 0.05);
+    /* background: rgba(255, 255, 255, 0.05); */
     background: ${({ theme }) => theme.colors.backgroundAlt};
     position: absolute;
     z-index: 1;
@@ -267,7 +336,7 @@ const Bar_ = styled.div`
 `
 
 const BarInner_ = styled.div`
-    background: rgba(255, 255, 255, 0.05);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
     /* background: ${({ theme }) => theme.colors.backgroundAlt}; */
     height: 100%;
 `
@@ -302,8 +371,13 @@ const Contents_ = styled.div`
         grid-template-columns: min-content 1fr min-content;
     }
     @media ${mq.mediumLarge} {
-        grid-template-columns: min-content 1fr 50px;
+        grid-template-columns: min-content 1fr min-content;
     }
+`
+
+const LabelContents_ = styled(Contents_)`
+    display: flex;
+    justify-content: space-between;
 `
 
 const Person_ = styled.div`
@@ -318,6 +392,10 @@ const Person_ = styled.div`
         grid-template-columns: 1fr 1fr;
         align-items: center;
     }
+`
+
+const Label_ = styled.div`
+    padding-left: ${spacing(0.25)};
 `
 
 const Name_ = styled.div`

@@ -4,9 +4,6 @@
     "main": "capture.js",
     "license": "MIT",
     "engineStrict": true,
-    "engines": {
-        "node": ">=15.0.0"
-    },
     "dependencies": {
         "@types/puppeteer": "^7.0.4",
         "@types/yamljs": "^0.2.31",
@@ -17,9 +14,17 @@
         "winston": "^3.8.2",
         "yamljs": "^0.3.0"
     },
+    "devDependencies": {
+        "tsup": "^7.2.0"
+    },
     "scripts": {
         "fmt": "prettier --color --write 'src/*.ts'",
         "fmt:check": "prettier --color --check 'src/*.ts'",
-        "build": "rm -rf dist && node ./node_modules/.bin/tsc"
+        "build": "rm -rf dist && node ./node_modules/.bin/tsc",
+        "build2": "NODE_ENV=production tsup && cp -R public/ dist/",
+        "dev": "NODE_ENV=development tsup --watch ./src --onSuccess='cp -R public/ dist/ && node ./dist/server.mjs'"
+    },
+    "engines": {
+        "node": "^18.10.0"
     }
 }

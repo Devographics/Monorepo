@@ -1,5 +1,4 @@
 id: '${sectionId}_happiness'
-titleId: 'happiness.${sectionId}'
 blockType: VerticalBarBlock
 showDescription: false
 i18nNamespace: happiness

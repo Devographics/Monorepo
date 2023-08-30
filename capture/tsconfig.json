@@ -1,17 +1,17 @@
 {
-  "include": ["./src/**/*"],
-  "exclude": ["node_modules"],
-  "compilerOptions": {
-    "target": "es2020",
-    "module": "commonjs",
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "strict": true,
-    "outDir": "dist"
-  }
+    "compilerOptions": {
+        "target": "es2021",
+        "moduleResolution": "Node",
+        "module": "ES2020",
+        "lib": ["es7", "es2019", "es2021"],
+        "outDir": "dist",
+        "rootDir": "src",
+        "removeComments": true,
+        "strict": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "noImplicitAny": true
+    },
+    "exclude": ["/node_modules/"],
+    "include": ["src/**/*"]
 }

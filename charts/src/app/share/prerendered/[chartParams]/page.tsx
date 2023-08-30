@@ -14,11 +14,11 @@ import { getAppConfig } from '@/config/server'
 export async function generateStaticParams(): Promise<Array<{ chartParams: string }>> {
     const prerendered: Array<ChartParams> = [
         {
-            lang: 'en-US',
-            survey: 'state_of_css',
-            edition: 'css2022',
-            section: 'environment',
-            question: 'browser'
+            localeId: 'en-US',
+            surveyId: 'state_of_css',
+            editionId: 'css2023',
+            sectionId: 'user_info',
+            blockId: 'country'
         }
         // Prerender wharever combination you want
         // other combinations will be rendered on demand
@@ -45,7 +45,7 @@ export async function generateStaticParams(): Promise<Array<{ chartParams: strin
  */
 function githubUrl({
     editionId,
-    lang = 'en-US',
+    localeId = 'en-US',
     chart
 }: {
     editionId: string
@@ -53,17 +53,17 @@ function githubUrl({
      * Country-region format
      * @example fr-FR
      */
-    lang?: string
+    localeId?: string
     chart: ChartParams
 }) {
     const org = 'Devographics'
     const repo = 'images'
-    return `https://raw.githubusercontent.com/${org}/${repo}/main/captures/${editionId}/${lang}/${chart.question}.png`
+    return `https://raw.githubusercontent.com/${org}/${repo}/main/captures/${editionId}/${localeId}/${chart.blockId}.png`
 }
 
 function devographicsUrl({
     editionId,
-    lang,
+    localeId,
     blockId
 }: {
     /**
@@ -73,27 +73,27 @@ function devographicsUrl({
     /**
      * fr-FR
      */
-    lang: string
+    localeId: string
     /**
      * Unique block id = question
      */
     blockId: string
 }) {
     const capturesUrl = `https://assets.devographics.com/captures/${editionId}`
-    return `${capturesUrl}/${lang}/${blockId}.png`
+    return `${capturesUrl}/${localeId}/${blockId}.png`
 }
 
 export async function generateMetadata({
     params
 }: NextPageParams<{ chartParams: string }>): Promise<Metadata> {
     const chartParams = await decodeChartParams(params.chartParams)
-    const blockMeta = await getBlockMetaFromParams(chartParams)
-    const { title, subtitle, link } = blockMeta
+    const { blockDefinition, blockMeta } = await getBlockMetaFromParams(chartParams)
+    const { title, description, link } = blockMeta
 
     const imgUrl = devographicsUrl({
-        editionId: chartParams.edition,
-        lang: chartParams.lang,
-        blockId: chartParams.question
+        editionId: chartParams.editionId,
+        localeId: chartParams.localeId,
+        blockId: chartParams.blockId
     })
 
     return {
@@ -101,10 +101,10 @@ export async function generateMetadata({
         // depending on the current survey etc.
         // Those are the chart specific values:
         title,
-        description: subtitle,
+        description,
         openGraph: {
             title,
-            description: subtitle,
+            description,
             images: [imgUrl],
             url: link
         },
@@ -120,23 +120,47 @@ export default async function StaticChartRedirectionPage({
 }: NextPageParams<{ chartParams: string }>) {
     const chartParams = await decodeChartParams(params.chartParams)
     console.log('PARAMS', chartParams, params.chartParams)
-    const blockMeta = await getBlockMetaFromParams(chartParams)
+    const { blockDefinition, blockMeta } = await getBlockMetaFromParams(chartParams)
     console.log('Redirecting to:', blockMeta.link)
     const config = getAppConfig()
     if (config.isDev || config.isDebug) {
         const imgUrl = devographicsUrl({
-            editionId: chartParams.edition,
-            lang: chartParams.lang,
-            blockId: chartParams.question
+            editionId: chartParams.editionId,
+            localeId: chartParams.localeId,
+            blockId: chartParams.blockId
         })
         return (
             <div>
                 <h1>DEV MODE</h1>
-                <p>Open the devtools to verify the page metadata headers</p>
-                <img src={imgUrl} />
-                <a href={blockMeta.link}>See this chart in context</a>
+                <div className="grid">
+                    <div>
+                        <h3>Block Definition</h3>
+                        <pre>
+                            <code>{JSON.stringify(blockDefinition, null, 2)}</code>
+                        </pre>
+                    </div>
+                    <div>
+                        <h3>Block Meta</h3>
+                        <pre>
+                            <code>{JSON.stringify(blockMeta, null, 2)}</code>
+                        </pre>
+                    </div>
+                </div>
+                <div className="grid">
+                    <div>
+                        <h3>Image</h3>
+                        <img src={imgUrl} />
+                        <pre>
+                            <code>{imgUrl}</code>
+                        </pre>
+                    </div>
+                    <div>
+                        <h3>Link</h3>
+                        <a href={blockMeta.link}>{blockMeta.link}</a>
+                    </div>
+                </div>
                 <head>
-                    <meta httpEquiv="refresh" content={`5; URL="${blockMeta.link}"`}></meta>
+                    {/* <meta httpEquiv="refresh" content={`5; URL="${blockMeta.link}"`}></meta> */}
                 </head>
             </div>
         )

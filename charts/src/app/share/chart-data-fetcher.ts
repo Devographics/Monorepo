@@ -2,9 +2,9 @@
  * Getting charts data
  * TODO: this is based on legacy results app
  */
-import { ChartFilter, ChartParams } from "./typings"
-import { BlockDefinition } from "@/block/typings"
-import { getAppConfig } from "@/config/server"
+import { ChartFilter, ChartParams } from './typings'
+import { BlockDefinition } from '@/block/typings'
+import { getAppConfig } from '@/config/server'
 
 export interface ChartData {
     // TODO
@@ -13,32 +13,39 @@ export interface ChartData {
 /**
  * Previously done by parsing the yaml file for a block
  * but we might want to opt for a TypeScript approach
- * @param params 
- * @returns 
+ * @param params
+ * @returns
  */
-async function getBlockQuery(params: { block: BlockDefinition, editionId: string, surveyId: string }) {
-    return "TODO: return the graphql query for a block"
+async function getBlockQuery(params: {
+    block: BlockDefinition
+    editionId: string
+    surveyId: string
+}) {
+    return 'TODO: return the graphql query for a block'
 }
 
 /**
  * Demo code from the Gatsby result app
  */
-async function queryForChart(chart: ChartParams): Promise<string | undefined> {
+async function queryForChart(chartParams: ChartParams): Promise<string | undefined> {
     // 1. informations about a specific chart are located in the raw_sitemap
     // for instance"results/surveys/css2021/config/raw_sitemap.yml"
     // results/node_src/create_pages.mjs can turn it into a flatter sitemap,
     // we should assess what format is best suited here + add typings
     const block: BlockDefinition = {
-        id: chart.question,
-        sectionId: chart.section,
+        id: chartParams.blockId,
         parameters: {},
         // TODO: get all fields based on the yml sitemap/flattened sitemap
-        query: "currentEditionData"
+        query: 'currentEditionData'
     }
 
     // 2. from there we get the block type and can deduce a query
     // This is done in "results/node_src/helpers.mjs" within the "runPageQuery" function
-    const query = await getBlockQuery({ block, surveyId: chart.survey, editionId: chart.edition })
+    const query = await getBlockQuery({
+        block,
+        surveyId: chartParams.surveyId,
+        editionId: chartParams.editionId
+    })
     console.log({ query })
     // TODO:
     return query
@@ -137,8 +144,8 @@ query css2022cssFrameworksExperienceLinechartQuery {
 /**
  * https://github.com/Devographics/Monorepo/blob/main/results/src/core/helpers/blockHelpers.ts#L174
  * https://github.com/Devographics/Monorepo/blob/main/results/src/core/share/ShareBlockTemplate.tsx
- * 
- * @returns 
+ *
+ * @returns
  */
 export async function fetchChartData(chart: ChartParams, filter?: ChartFilter): Promise<ChartData> {
     // TODO: validate filter structure with zod
@@ -148,22 +155,24 @@ export async function fetchChartData(chart: ChartParams, filter?: ChartFilter): 
     try {
         console.log(`Fetching data ${chartDataApi}`)
         const res = await fetch(chartDataApi, {
-            method: "POST",
+            method: 'POST',
             // Print + gql is a trick to get formatting
             // TODO: how to get this query based on the chart parameters ?
             // @ts-ignore
             body: JSON.stringify({
-                query,
+                query
                 // Params are already injected in the query, no need to add them separately
             }),
             headers: {
-                "content-type": "application/json"
+                'content-type': 'application/json'
             }
         })
         const data = await res.json()
-        if (data.errors?.length) throw new Error(`API returned some errors: ${data.errors.join("")}`)
-        const chartData = data.data["surveys"][chart.survey][chart.edition][chart.section][chart.question]
-        console.log("chartData:", chartData)
+        if (data.errors?.length)
+            throw new Error(`API returned some errors: ${data.errors.join('')}`)
+        const chartData =
+            data.data['surveys'][chart.surveyId][chart.editionId][chart.sectionId][chart.blockId]
+        console.log('chartData:', chartData)
         return chartData
     } catch (err) {
         console.error(err)

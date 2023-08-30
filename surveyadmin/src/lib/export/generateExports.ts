@@ -144,21 +144,30 @@ function mongoExportCmd({
   }
 }
 
-const makeFilePath = (
-  surveySlug: string,
-  extension: string,
-  addTimestamp?: boolean
-) => {
+function getFileName(editionId: string, extension: string, timestamp: string,) {
+  return `${editionId}${"_" + timestamp}.${extension}`;
+}
+
+function makeTimestamp() {
   const now = new Date();
   const year = now.getFullYear();
   const month = (now.getMonth() + 1).toString().padStart(2, "0");
   const day = now.getDate().toString().padStart(2, "0");
   const timestamp = `${year}-${month}-${day}`;
+  return timestamp
+}
 
-  const filename = `${surveySlug}${addTimestamp ? "_" + timestamp : ""
-    }.${extension}`;
-  return path.resolve("/tmp", filename);
-};
+/**
+ * @returns The full path, and a timestamp to be able to compute the path again
+ */
+export function getFilePath(
+  editionId: string,
+  extension: string,
+  timestamp: string,
+) {
+  const fileName = getFileName(editionId, extension, timestamp)
+  return path.resolve("/tmp", fileName)
+}
 
 /**
  * @returns The generate file path on disk
@@ -166,9 +175,11 @@ const makeFilePath = (
 async function generateMongoExport({
   format,
   edition,
+  timestamp
 }: {
   format: SupportedFormat;
   edition: EditionMetadata;
+  timestamp: string
 }): Promise<string> {
   const editionId = edition.id!;
   // run the export
@@ -176,11 +187,11 @@ async function generateMongoExport({
   let filePath;
   switch (format) {
     case "json": {
-      filePath = makeFilePath(editionId, "json");
+      filePath = getFilePath(editionId, "json", timestamp);
       break;
     }
     case "csv": {
-      filePath = makeFilePath(editionId, "csv");
+      filePath = getFilePath(editionId, "csv", timestamp);
       break;
     }
     default: {
@@ -203,21 +214,42 @@ async function generateMongoExport({
   return filePath;
 }
 
-export async function generateExportsZip(edition: EditionMetadata) {
-  const editionId = edition.id!;
-  let filePaths: Array<string> = [];
+/**
+ * @returns Files + a timestamp that can be passed to the frontend to later retrieve the files
+ */
+export async function generateExports(edition: EditionMetadata): Promise<{
+  // All those values can be exposed to the frontend
+  csvFilePath: string,
+  jsonFilePath: string,
+  /**
+   * Acs as a unique id to retrieve an export
+   */
+  timestamp: string,
+}> {
+  const timestamp = makeTimestamp()
   const jsonFilePath = await generateMongoExport({
     format: "json",
     edition,
+    timestamp
   });
-  filePaths.push(jsonFilePath);
   const csvFilePath = await generateMongoExport({
     format: "csv",
     edition,
+    timestamp
   });
-  filePaths.push(csvFilePath);
+  return { jsonFilePath, csvFilePath, timestamp }
+}
 
-  const zipFilePath = makeFilePath(editionId, "zip", true);
+
+/**
+ * 
+ * @param edition 
+ * @param filePaths 
+ * @param timestamp 
+ * @returns 
+ */
+export async function zipExports(edition: EditionMetadata, filePaths: Array<string>, timestamp: string) {
+  const zipFilePath = getFilePath(edition.id, "zip", timestamp);
   const zipCmd = `zip ${zipFilePath} ${filePaths.join(" ")}`;
   await execAsPromise(zipCmd);
   // Now zipFilePath should exist

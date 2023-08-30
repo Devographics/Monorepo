@@ -4,7 +4,7 @@ query: >
     surveys {
         ${surveyId} {
             ${editionId} {
-                ${sectionId} {
+                user_info: data_explorer {
                     data_explorer {
                         items<ARGUMENTS_PLACEHOLDER> {
                             editionId

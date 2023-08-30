@@ -64,6 +64,9 @@ type EditionMetadata {
     colors: Colors
 
     enableReadingList: Boolean
+    enableChartSponsorships: Boolean
+
+    sitemap: [SitemapSection]
 }
 
 enum IncludeEnum {
@@ -413,4 +416,70 @@ enum ToolOptionID {
     interested
     not_interested
     never_heard
+}
+
+type SitemapSection {
+    id: String
+    titleId: String
+    descriptionId: String
+    path: String
+    blocks: [SitemapBlock]
+    children: [SitemapSubSection]
+}
+
+type SitemapSubSection {
+    id: String
+    titleId: String
+    descriptionId: String
+    path: String
+    blocks: [SitemapBlock]
+}
+
+type SitemapBlock {
+    id: String
+    fieldId: String
+    tabId: String
+    titleId: String
+    descriptionId: String
+    i18nNamespace: String
+    template: String
+    blockType: String
+    parameters: SitemapBlockParameters
+    filtersState: JSON
+    year: Int
+    items: [String]
+    defaultUnits: String
+    queryOptions: SitemapBlockQueryOptions
+    variants: [SitemapBlockVariant]
+    entity: Entity
+}
+
+type SitemapBlockVariant {
+    id: String
+    fieldId: String
+    tabId: String
+    titleId: String
+    descriptionId: String
+    i18nNamespace: String
+    template: String
+    blockType: String
+    parameters: SitemapBlockParameters
+    filtersState: JSON
+    year: Int
+    items: [String]
+    defaultUnits: String
+    queryOptions: SitemapBlockQueryOptions
+    entity: Entity
+}
+
+type SitemapBlockParameters {
+    years: [Int]
+    rankCutoff: Int
+    limit: Int
+    cutoff: Int
+    showNoAnswer: Boolean
+}
+
+type SitemapBlockQueryOptions {
+    addBucketsEntities: Boolean
 }

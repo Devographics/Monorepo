@@ -26,6 +26,35 @@ const triggerDownload = (url: string, filename?: string) => {
   document.body.appendChild(a);
   a.click();
   a.remove();
+  /*
+         Alternative code with fetch
+         This is better to handle error messages, however it rely on
+         loading the file client-side as a BLOB, which can cost a lot of RAM
+
+         const response = await fetch(apiRoutes.admin.dataExport.href, {
+           method: "GET",
+           body: JSON.stringify(body),
+           headers: {
+             "Content-type": "application/json",
+           },
+         });
+
+         if (!response.ok) {
+           const body = await response.text();
+           console.error(body);
+           dispatch({
+             type: "error",
+             payload: new Error(body.slice(0, 500)),
+           });
+         } else {
+           dispatch({ type: "done" });
+           try {
+             await downloadFromResponse(response, "export.json");
+             dispatch({ type: "downloadStarted" });
+           } catch (error) {
+             dispatch({ type: "error", payload: error });
+           }
+         }*/
 };
 
 /**
@@ -62,6 +91,9 @@ const reducer = (state, action) => {
   }
 };
 
+/**
+ * Store survey and editionId into search params
+ */
 const useMutateSurveyId = ({ surveyId, editionId }) => {
   function setSurveyId(surveyId: string) {
     const params: any = { surveyId };
@@ -76,98 +108,51 @@ const useMutateSurveyId = ({ surveyId, editionId }) => {
   return { setSurveyId, setEditionId };
 };
 
-export const AdminExportPage = ({
-  surveys,
-  edition,
+/**
+ * Select edition, using the searchParams as state
+ */
+const EditionSelector = ({
+  surveyIds,
+  editionIds = [],
   surveyId,
   editionId,
 }: {
-  surveys: Array<SurveyMetadata>;
-  edition?: EditionMetadata;
+  editionIds?: Array<string>;
+  surveyIds: Array<string>;
   surveyId?: string | null;
   editionId?: string | null;
 }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
   const { setSurveyId, setEditionId } = useMutateSurveyId({
     surveyId,
     editionId,
   });
-
-  const survey = surveyId ? surveys.find((s) => s.id === surveyId) : null;
-  const surveyIds = surveys.map((s) => s.id);
-  const editionIds = survey ? survey.editions.map((e) => e.id) : [];
-
-  async function triggerExport(evt: React.FormEvent<HTMLFormElement>) {
-    try {
-      evt.preventDefault();
-      dispatch({ type: "start" });
-      const editionId = evt.target["editionId"].value;
-      const surveyId = evt.target["editionId"].value;
-      const url = apiRoutes.dataExport.href({ surveyId, editionId });
-
-      triggerDownload(url);
-      dispatch("downloadStarted");
-      /*
-         Alternative code with fetch
-         This is better to handle error messages, however it rely on
-         loading the file client-side as a BLOB, which can cost a lot of RAM
-
-         const response = await fetch(apiRoutes.admin.dataExport.href, {
-           method: "GET",
-           body: JSON.stringify(body),
-           headers: {
-             "Content-type": "application/json",
-           },
-         });
-
-         if (!response.ok) {
-           const body = await response.text();
-           console.error(body);
-           dispatch({
-             type: "error",
-             payload: new Error(body.slice(0, 500)),
-           });
-         } else {
-           dispatch({ type: "done" });
-           try {
-             await downloadFromResponse(response, "export.json");
-             dispatch({ type: "downloadStarted" });
-           } catch (error) {
-             dispatch({ type: "error", payload: error });
-           }
-         }*/
-    } catch (error) {
-      console.error(error);
-      dispatch({ type: "error", payload: error });
-    }
-  }
   return (
-    <div>
-      <h1>Export</h1>
-      <form onSubmit={triggerExport}>
-        <label htmlFor="editionId">Edition ID</label>
-        <select
-          id="surveyId"
-          required
-          // not needed for the form, but allow to display the markdown outline
-          onChange={(evt) => {
-            setSurveyId(evt.target.value);
-          }}
-          value={surveyId || ""}
-        >
-          <option disabled value="">
-            {" "}
-            -- select an option --{" "}
-          </option>
-          {surveyIds.map((id) => {
-            return (
-              <option key={id} value={id}>
-                {id}
-              </option>
-            );
-          })}
-        </select>
-        {surveyId && (
+    <form>
+      <label htmlFor="surveyId">Survey ID</label>
+      <select
+        id="surveyId"
+        required
+        // not needed for the form, but allow to display the markdown outline
+        onChange={(evt) => {
+          setSurveyId(evt.target.value);
+        }}
+        value={surveyId || ""}
+      >
+        <option disabled value="">
+          {" "}
+          -- select an option --{" "}
+        </option>
+        {surveyIds.map((id) => {
+          return (
+            <option key={id} value={id}>
+              {id}
+            </option>
+          );
+        })}
+      </select>
+      {surveyId && (
+        <>
+          <label htmlFor="editionId">Edition ID</label>
           <select
             id="editionId"
             required
@@ -189,21 +174,201 @@ export const AdminExportPage = ({
               );
             })}
           </select>
-        )}
-        <button
-          type="submit"
-          aria-busy={state.loading}
-          disabled={state.loading}
-        >
-          {!state.loading ? "Download exports zip" : "Loading..."}
-        </button>
-      </form>
+        </>
+      )}
+    </form>
+  );
+};
+
+/**
+ * Let the user generate a CSV dump of the database
+ * and do whatever further processing they need
+ * @returns
+ */
+export const AdminExportPage = ({
+  surveys,
+  edition,
+  surveyId,
+  editionId,
+}: {
+  surveys: Array<SurveyMetadata>;
+  edition?: EditionMetadata;
+  surveyId?: string | null;
+  editionId?: string | null;
+}) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const survey = surveyId ? surveys.find((s) => s.id === surveyId) : null;
+  const surveyIds = surveys.map((s) => s.id);
+  const editionIds = survey ? survey.editions.map((e) => e.id) : [];
+
+  // timestamp = the unique id for the latest export
+  // we can pass it back to the server to download or further process the generated file
+  const [timestamp, setTimestamp] = useState<null | string>(null);
+
+  /**
+   * Trigger the generation of an export server-side,
+   * that will be stored in a tmp folder
+   */
+  async function generateExport({
+    surveyId,
+    editionId,
+  }: {
+    surveyId: string;
+    editionId: string;
+  }) {
+    try {
+      dispatch({ type: "start" });
+      const url = apiRoutes.export.generate.href({ surveyId, editionId });
+      // TODO: error handling
+      const { timestamp } = await (await fetch(url)).json();
+      setTimestamp(timestamp as string);
+      dispatch("downloadStarted");
+    } catch (error) {
+      console.error(error);
+      dispatch({ type: "error", payload: error });
+    }
+  }
+  /**
+   * Download previously gnerated export
+   * @param param0
+   * @returns
+   */
+  async function downloadExport({
+    surveyId,
+    editionId,
+    timestamp,
+  }: {
+    surveyId: string;
+    editionId: string;
+    timestamp: string;
+  }) {
+    try {
+      if (!timestamp) {
+        return dispatch({
+          type: "error",
+          payload:
+            "No timestamp provided, please first generate an export for this survey",
+        });
+      }
+      dispatch({ type: "start" });
+      const url = apiRoutes.export.download.href({
+        surveyId,
+        editionId,
+        timestamp,
+      });
+
+      triggerDownload(url);
+      dispatch("downloadStarted");
+    } catch (error) {
+      console.error(error);
+      dispatch({ type: "error", payload: error });
+    }
+  }
+
+  return (
+    <div>
+      <h1>Export</h1>
+      <h2>Step 1: select an edition</h2>
+      <EditionSelector
+        editionId={editionId}
+        surveyId={surveyId}
+        surveyIds={surveyIds}
+        editionIds={editionIds}
+      />
+      {!!(surveyId && editionId) && (
+        <>
+          <h2>Step 2: generate a CSV export for the survey</h2>
+          <p>This will create a file in your tmp folder</p>
+          <button
+            aria-busy={state.loading}
+            disabled={state.loading}
+            onClick={() => {
+              if (!(surveyId && editionId)) {
+                dispatch({
+                  type: "error",
+                  payload: new Error(
+                    "Can't trigger download without selecting surveyId && editionId"
+                  ),
+                });
+              }
+              generateExport({ surveyId, editionId });
+            }}
+          >
+            {!state.loading
+              ? timestamp
+                ? "Generate exports"
+                : "Regenerate exports"
+              : "Busy..."}
+            {state.error && <p>Error: {state.error.message}</p>}
+            {state.done && <p>Export done</p>}
+          </button>
+          <div>
+            <p>
+              Manually input a timestamp if you have already generated some
+              exports, or copy this value to later retrieve your export:
+            </p>
+            <input
+              type="text"
+              value={timestamp || ""}
+              onChange={(e) => {
+                setTimestamp(e.target.value);
+              }}
+            />
+          </div>
+          {timestamp && (
+            <>
+              <h2>Step 3: download the CSV if you need too</h2>
+              <button
+                aria-busy={state.loading}
+                disabled={state.loading}
+                onClick={() => {
+                  if (!(surveyId && editionId)) {
+                    return dispatch({
+                      type: "error",
+                      payload: new Error(
+                        "Can't trigger download without selecting surveyId && editionId"
+                      ),
+                    });
+                  }
+                  if (!timestamp) {
+                    return dispatch({
+                      type: "error",
+                      payload: new Error(
+                        "First generate an export before downloading it"
+                      ),
+                    });
+                  }
+                  downloadExport({ surveyId, editionId, timestamp });
+                }}
+              >
+                {!state.loading ? "Download exports zip" : "Busy..."}
+                {state.error && <p>Error: {state.error.message}</p>}
+                {state.done && <p>Download will start shortly...</p>}
+              </button>
+              <p>
+                NOTE: if the downloaded file is a ".json" instead of ".zip"
+                there has been an error server-side.
+              </p>
+            </>
+          )}
+        </>
+      )}
+      <h2>Step 4: automatically flatten the CSV file</h2>
+      <p>WORK IN PROGRESS</p>
       <p>
-        NOTE: if the downloaded file is a ".json" instead of ".zip" there has
-        been an error server-side.
+        Note: another possible implementation would be to use a Mongo useQuery
+        instead of the CSV generated by <code>mongoexport</code>.
       </p>
-      {state.error && <p>Error: {state.error.message}</p>}
-      {state.done && <p>Download will start shortly...</p>}
+      <p>
+        However working on the raw CSV data is easier than writing a complex
+        Mongo query that would have to rely on the survey outline structure
+      </p>
+      <h2>
+        Step 5: process the flat CSV file to compute advanced values
+        (clustering)
+      </h2>
+      <p>WORK IN PROGRESS</p>
       <h2>Outline</h2>
       <p>You can share this markdown content to better describe the survey</p>
       {edition ? (
@@ -249,7 +414,7 @@ export const SurveyMarkdownOutline = ({
         value={convertSurveyToMarkdown({
           formatMessage: (key) => key, // intl.formatMessage,
           edition,
-          entities: {},
+          entities: [],
           options: {
             showFieldName,
           },
