@@ -1,5 +1,5 @@
 import { LocaleDefWithStrings } from '@devographics/types'
-import { localeCacheKey } from '../cache_keys'
+import { localeConvertedCacheKey } from '../cache_keys'
 import { fetchGraphQLApi, getFromCache } from '../fetch'
 import { getLocaleQuery } from '../queries'
 import { FetcherFunctionOptions } from '../types'
@@ -18,11 +18,13 @@ export const fetchLocaleConverted = async (
     const { localeId } = options
     const getQuery = options.getQuery || getLocaleQuery
     const query = getQuery(options)
-    const key = localeCacheKey(options)
+    const key = localeConvertedCacheKey(options)
     const result = await getFromCache<LocaleDefWithStrings>({
         key,
         fetchFunction: async () => {
-            const result = await fetchGraphQLApi<{ locale: { strings: Array<{ key: string, t: string, tHtml: string }> } }>({
+            const result = await fetchGraphQLApi<{
+                locale: { strings: Array<{ key: string; t: string; tHtml: string }> }
+            }>({
                 query,
                 key
             })

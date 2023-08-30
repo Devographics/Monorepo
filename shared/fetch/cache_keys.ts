@@ -40,5 +40,12 @@ export const localeCacheKey = (
     }
 ) => `${getAppName(options)}__${options.localeId}__${options.contexts.join('_')}`
 
+export const localeConvertedCacheKey = (
+    options: CacheKeyOptions & {
+        localeId: string
+        contexts: string[]
+    }
+) => `${getAppName(options)}__${options.localeId}__${options.contexts.join('_')}__converted`
+
 export const allEntitiesCacheKey = (options?: CacheKeyOptions) =>
     `${getAppName(options)}__allEntities`
