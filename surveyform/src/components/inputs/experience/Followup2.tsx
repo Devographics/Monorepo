@@ -79,7 +79,7 @@ export const FollowUps = (
                 });
               }}
             />
-            <span>
+            <span className="sentiment-label">
               <FormattedMessage id={`followups.${followupOption.id}`} />
             </span>
           </label>
