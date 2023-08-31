@@ -41,7 +41,7 @@ const CURRENT_SURVEY_URL = `/${testSurvey.prettySlug}/${testSurvey.year}`;
 // TODO: not the best regexp in the world... we match the href part of the html link, with the last "
 const magicLinkRegex = `(http|https)://(?<domain>.+)/account/magic-login\\?token=.*"`;
 
-test.only("Access state of 2022, magic auth new user", () => {
+test("Access state of 2022, magic auth new user", () => {
   cy.visit("/");
   cy.findByRole("link", { name: CURRENT_SURVEY_REGEX }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   const surveyRootUrl = routes.survey.root.href + CURRENT_SURVEY_URL;
@@ -72,7 +72,6 @@ test.only("Access state of 2022, magic auth new user", () => {
       // remove the last "
       .slice(0, -1);
     const magicLinkUrl = new URL(magicLink);
-
     // token = resetLink.groups.token
 
     // Verify the token
@@ -86,15 +85,7 @@ test.only("Access state of 2022, magic auth new user", () => {
     cy.get("@verifyToken").its("response.body").should("exist"); // wait for the response to be there
 
     // User is redirected quickly so no need to check for this text
-    //cy.findByText(/successfully verified/i).should("exist");
-
-    const token = magicLinkUrl.searchParams.get("token") as string; // equivalent to getting the 2nd item
-    // when logging in from a survey, we use the surveyId/editionId to redirect and
-    // not a redirectTo
-    const surveyId = magicLinkUrl.searchParams.get("surveyId")
-    const editionId = magicLinkUrl.searchParams.get("editionId")
-    cy.should("equal", surveyId, "demo_survey")
-    cy.should("equal", editionId, "demo2022")
+    cy.findByText(/Welcome to the survey/i).should("exist");
     cy.url().should("match", new RegExp(surveyRootUrl + "/.+"));
   });
 });
