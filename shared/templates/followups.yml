@@ -1,15 +1,24 @@
 feature:
-    - id: never_heard
-      options:
-          - id: want_to_learn_more
-          - id: not_interested
     - id: heard
       options:
           - id: insufficient_browser_support
           - id: not_needed
-          - id: hard_to_use
     - id: used
       options:
           - id: positive_experience
           - id: hard_to_use
           - id: not_powerful
+
+featurev3:
+    - id: never_heard
+      options:
+          - id: interested
+          - id: not_interested
+    - id: heard
+      options:
+          - id: interested
+          - id: not_interested
+    - id: used
+      options:
+          - id: positive_experience
+          - id: negative_experience

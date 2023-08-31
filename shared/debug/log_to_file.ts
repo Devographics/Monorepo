@@ -53,6 +53,9 @@ export const logToFile = async (fileName_: string, object: any, options: LogOpti
                 contents = JSON.stringify(object, null, 2)
             }
         }
+        if (!contents) {
+            return
+        }
         const now = new Date()
         const text = timestamp ? now.toString() + '\n---\n' + contents : contents
         if (mode === 'append') {

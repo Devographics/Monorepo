@@ -2,6 +2,7 @@ import {
   SurveyMetadata,
   EditionMetadata,
   DbPathsEnum,
+  DbSubPaths,
 } from "@devographics/types";
 import { Schema, extendSchema } from "~/lib/schemas";
 import { nanoid } from "nanoid";
@@ -209,6 +210,24 @@ export const responseBaseSchema: Schema = {
   },
 };
 
+export const createFieldType = ({
+  isNumeric = false,
+  isArray = false,
+}: {
+  isNumeric?: boolean;
+  isArray?: boolean;
+}) => {
+  // responses can sometimes be numeric, everything else is string
+  const type = isNumeric ? Number : String;
+  const typeObject = {
+    type,
+    required: false,
+    clientMutable: true,
+    isArray,
+  };
+  return typeObject;
+};
+
 export const getResponseSchema = ({
   survey,
   edition,
@@ -221,19 +240,38 @@ export const getResponseSchema = ({
     for (const question of section.questions) {
       const formPaths = getFormPaths({ edition, question });
       for (const formPath in formPaths) {
-        // responses can sometimes be numeric, everything else is string
-        const type =
-          question.optionsAreNumeric && formPath === DbPathsEnum.RESPONSE
-            ? Number
-            : String;
-        editionSchema[formPaths[formPath]] = {
-          type,
-          required: false,
-          clientMutable: true,
-          isArray:
-            formPath === DbPathsEnum.FOLLOWUP_PREDEFINED ||
-            (formPath === DbPathsEnum.RESPONSE && question.allowMultiple),
-        };
+        const formPathContents = formPaths[formPath];
+        /*
+
+        formPathContents can either be a string:
+
+        html2023__user_info__how_did_user_find_out_about_the_survey
+
+        Or an object:
+
+        {
+          never_heard: 'html2023__features__window_controls_overlay__never_heard__followup_predefined',
+          heard: 'html2023__features__window_controls_overlay__heard__followup_predefined',
+          used: 'html2023__features__window_controls_overlay__used__followup_predefined'
+        }
+
+        */
+        if (typeof formPathContents === "object") {
+          const subPaths = formPathContents as DbSubPaths;
+          for (const subPath of Object.values(subPaths)) {
+            editionSchema[subPath] = createFieldType({ isArray: true });
+          }
+        } else {
+          const fieldPath = formPaths[formPath];
+          editionSchema[fieldPath] = createFieldType({
+            isNumeric: !!(
+              question.optionsAreNumeric && formPath === DbPathsEnum.RESPONSE
+            ),
+            isArray: !!(
+              formPath === DbPathsEnum.RESPONSE && question.allowMultiple
+            ),
+          });
+        }
       }
     }
   }

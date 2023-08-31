@@ -15,6 +15,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
           surveyId
           year
           status
+          resultsStatus
           hashtag
           startedAt
           endedAt

@@ -12,39 +12,18 @@ import { DbPathsEnum, OptionMetadata } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 
 import get from "lodash/get.js";
-import { FollowupData, FollowUps } from "./Followup2";
+import { FollowupData, FollowUpComment, FollowUps } from "./Followup2";
+import { CommentTrigger } from "~/components/form/FormComment";
 
 export interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
 }
 
-export const Experience = (props: ExperienceProps) => {
-  const { value, edition, question, response } = props;
+export const Experience2 = (props: ExperienceProps) => {
+  const { question, edition } = props;
 
   const { options, entity } = question;
 
-  const formPaths = getFormPaths({ edition, question });
-  // get the paths of the predefined and freeform followup answers
-  // inside the overall response document
-  const predefinedFollowupPath = formPaths[DbPathsEnum.FOLLOWUP_PREDEFINED];
-  const freeformFollowupPath = formPaths[DbPathsEnum.FOLLOWUP_FREEFORM];
-
-  const predefinedFollowupValue =
-    (predefinedFollowupPath && get(response, predefinedFollowupPath)) || [];
-  const freeformFollowupValue =
-    (freeformFollowupPath && get(response, freeformFollowupPath)) || "";
-
-  const hasFollowupData =
-    !isEmpty(predefinedFollowupValue) || !isEmpty(freeformFollowupValue);
-
-  const followupData: FollowupData = {
-    predefinedFollowupPath,
-    freeformFollowupPath,
-    predefinedFollowupValue,
-    freeformFollowupValue,
-  };
-
-  const currentOption = options?.find((o) => o.id === value);
   return (
     <FormItem {...props}>
       {entity?.example && <CodeExample {...entity.example} />}
@@ -55,14 +34,6 @@ export const Experience = (props: ExperienceProps) => {
           ))}
         </div>
       </div>
-
-      {currentOption && (
-        <FollowUps
-          option={currentOption}
-          {...props}
-          followupData={followupData}
-        />
-      )}
     </FormItem>
   );
 };
@@ -97,6 +68,32 @@ const ExperienceOption = (
   const hasValue = !isEmpty(value);
   const { followups } = question;
 
+  const formPaths = getFormPaths({ edition, question });
+
+  // get the paths of the predefined and freeform followup answers
+  // inside the overall response document for this specific option
+  const allPredefinedFollowupPaths = formPaths[DbPathsEnum.FOLLOWUP_PREDEFINED];
+  const predefinedFollowupPath = allPredefinedFollowupPaths?.[option.id];
+  const freeformFollowupPath =
+    formPaths[DbPathsEnum.FOLLOWUP_FREEFORM]?.[option.id];
+
+  const predefinedFollowupValue =
+    (predefinedFollowupPath && get(response, predefinedFollowupPath)) || [];
+  const freeformFollowupValue =
+    (freeformFollowupPath && get(response, freeformFollowupPath)) || "";
+
+  const hasFollowupData =
+    !isEmpty(predefinedFollowupValue) || !isEmpty(freeformFollowupValue);
+  const [showFollowupComment, setShowFollowupComment] =
+    useState(hasFollowupData);
+
+  const followupData: FollowupData = {
+    predefinedFollowupPath,
+    freeformFollowupPath,
+    predefinedFollowupValue,
+    freeformFollowupValue,
+  };
+
   const isChecked = value === option.id;
   const checkClass = hasValue
     ? isChecked
@@ -104,34 +101,52 @@ const ExperienceOption = (
       : "form-check-unchecked"
     : "";
 
+  const hasValueClass =
+    isChecked || (isChecked && hasFollowupData) ? "hasValue" : "";
+
   return (
-    <div className="form-experience-option">
-      <Form.Check
-        key={i}
-        // layout="elementOnly"
-        type="radio"
-      >
-        <Form.Check.Label htmlFor={`${path}.${i}`}>
-          <div className="form-input-wrapper">
-            <Form.Check.Input
-              onChange={(e) => {
-                updateCurrentValues({ [path]: e.target.value });
-              }}
-              type="radio"
-              value={option.id}
-              name={path}
-              id={`${path}.${i}`}
-              // ref={refFunction}
-              checked={isChecked}
-              className={checkClass}
-              disabled={readOnly}
-            />
-          </div>
-          <FormOption {...props} option={option} />
-        </Form.Check.Label>
-      </Form.Check>
+    <div className={`form-experience-option ${hasValueClass}`}>
+      <div className="form-experience-option-inner">
+        <Form.Check
+          key={i}
+          // layout="elementOnly"
+          type="radio"
+        >
+          <Form.Check.Label htmlFor={`${path}.${i}`}>
+            <div className="form-input-wrapper">
+              <Form.Check.Input
+                onChange={(e) => {
+                  updateCurrentValues({ [path]: e.target.value });
+                  if (allPredefinedFollowupPaths) {
+                    // when main value changes, also clear all predefined follow-ups
+                    for (const followUpPath of Object.values(
+                      allPredefinedFollowupPaths
+                    )) {
+                      updateCurrentValues({ [followUpPath]: null });
+                    }
+                  }
+                }}
+                type="radio"
+                value={option.id}
+                name={path}
+                id={`${path}.${i}`}
+                // ref={refFunction}
+                checked={isChecked}
+                className={checkClass}
+                disabled={readOnly}
+              />
+            </div>
+            <FormOption {...props} option={option} />
+          </Form.Check.Label>
+          {followups && <FollowUps {...props} followupData={followupData} />}
+        </Form.Check>
+        {/* <CommentTrigger /> */}
+      </div>
+      {/* {showFollowupComment && isChecked && (
+        <FollowUpComment {...props} followupData={followupData} />
+      )} */}
     </div>
   );
 };
 
-export default Experience;
+export default Experience2;

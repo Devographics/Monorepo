@@ -411,7 +411,7 @@ const Links_ = styled.div`
     display: flex;
     justify-content: flex-start;
     @media ${mq.small} {
-        overflow-x: auto;
+        overflow-x: visible;
         width: 100%;
     }
 `

@@ -68,10 +68,13 @@ const ExperienceOption = (
   const { followups } = question;
 
   const formPaths = getFormPaths({ edition, question });
+
   // get the paths of the predefined and freeform followup answers
-  // inside the overall response document
-  const predefinedFollowupPath = formPaths[DbPathsEnum.FOLLOWUP_PREDEFINED];
-  const freeformFollowupPath = formPaths[DbPathsEnum.FOLLOWUP_FREEFORM];
+  // inside the overall response document for this specific option
+  const predefinedFollowupPath =
+    formPaths[DbPathsEnum.FOLLOWUP_PREDEFINED]?.[option.id];
+  const freeformFollowupPath =
+    formPaths[DbPathsEnum.FOLLOWUP_FREEFORM]?.[option.id];
 
   const predefinedFollowupValue =
     (predefinedFollowupPath && get(response, predefinedFollowupPath)) || [];

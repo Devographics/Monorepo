@@ -1,6 +1,8 @@
 import { ApiTemplateFunction, QuestionApiTemplateOutput } from '../../types/surveys'
 import {
     feature as featureTemplateFunction,
+    featurev2 as featureTemplateFunctionv2,
+    featurev3 as featureTemplateFunctionv3,
     featureWithFollowups as featureWithFollowupsTemplateFunction
 } from '@devographics/templates'
 // import {
@@ -40,6 +42,36 @@ export const feature: ApiTemplateFunction = options => {
     const fieldTypeName = `${graphqlize(survey.id)}Feature`
     const output: QuestionApiTemplateOutput = {
         ...featureTemplateFunction(options),
+        fieldTypeName,
+        filterTypeName: 'FeatureFilters',
+        autogenerateFilterType: false,
+        autogenerateOptionType: false,
+        autogenerateEnumType: false,
+        typeDef: getTypeDef({ fieldTypeName, survey, addFollowups: false })
+    }
+    return output
+}
+
+export const featurev2: ApiTemplateFunction = options => {
+    const { survey, question } = options
+    const fieldTypeName = `${graphqlize(survey.id)}Feature`
+    const output: QuestionApiTemplateOutput = {
+        ...featureTemplateFunctionv2(options),
+        fieldTypeName,
+        filterTypeName: 'FeatureFilters',
+        autogenerateFilterType: false,
+        autogenerateOptionType: false,
+        autogenerateEnumType: false,
+        typeDef: getTypeDef({ fieldTypeName, survey, addFollowups: false })
+    }
+    return output
+}
+
+export const featurev3: ApiTemplateFunction = options => {
+    const { survey, question } = options
+    const fieldTypeName = `${graphqlize(survey.id)}Feature`
+    const output: QuestionApiTemplateOutput = {
+        ...featureTemplateFunctionv3(options),
         fieldTypeName,
         filterTypeName: 'FeatureFilters',
         autogenerateFilterType: false,

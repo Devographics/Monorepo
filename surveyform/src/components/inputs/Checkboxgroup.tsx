@@ -161,6 +161,8 @@ const Checkbox = ({
             checked={isChecked}
             disabled={disabled}
             id={`${path}.${index}`}
+            name={path}
+            value={option.id}
             // ref={refFunction}
             onChange={(event) => {
               const isChecked = event.target.checked;

@@ -3,12 +3,12 @@ import followups from '../followups.yml'
 import { TemplateFunction, QuestionTemplateOutput, DbSuffixes } from '@devographics/types'
 import { getPaths } from '../helpers'
 
-export const featureWithFollowups: TemplateFunction = options => {
+export const featurev3: TemplateFunction = options => {
     let output: QuestionTemplateOutput = {
         ...feature(options),
         allowComment: false,
-        inputComponent: 'feature',
-        followups: followups.feature
+        inputComponent: 'featurev3',
+        followups: followups.featurev3
     }
 
     if (options.question.followups) {

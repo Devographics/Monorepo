@@ -7,7 +7,10 @@ import {
     QuestionMetadata,
     DbPaths,
     DbSuffixes,
-    QuestionTemplateOutput
+    QuestionTemplateOutput,
+    DbPathsEnum,
+    DbPathsStrings,
+    DbSubPaths
 } from '@devographics/types'
 
 export const prefixWithEditionId = (s: string, editionId: string) => {
@@ -31,32 +34,42 @@ export const getRawPaths = (
     const pathSegments = [sectionPathSegment, question.id]
     const separator = '__'
 
-    const getPath = (suffix?: string) =>
-        suffix ? [...pathSegments, suffix].join(separator) : [...pathSegments].join(separator)
+    const getPath = (extraSegments: Array<string | number> = []) =>
+        suffix
+            ? [...pathSegments, ...extraSegments].join(separator)
+            : [...pathSegments].join(separator)
 
     const paths = {
-        response: getPath(suffix)
+        response: getPath(suffix ? [suffix] : [])
     } as DbPaths
 
     if (question.allowOther) {
-        paths.other = getPath(DbSuffixes.OTHERS)
+        paths.other = getPath([DbSuffixes.OTHERS])
     }
     if (question.allowPrenormalized) {
-        paths.other = getPath(DbSuffixes.PRENORMALIZED)
+        paths.other = getPath([DbSuffixes.PRENORMALIZED])
     }
     if (question.allowComment) {
-        paths[DbSuffixes.COMMENT] = getPath(DbSuffixes.COMMENT)
+        paths[DbSuffixes.COMMENT] = getPath([DbSuffixes.COMMENT])
     }
-    if (question.followups) {
-        paths[DbSuffixes.FOLLOWUP_PREDEFINED] = getPath(DbSuffixes.FOLLOWUP_PREDEFINED)
-        paths[DbSuffixes.FOLLOWUP_FREEFORM] = getPath(DbSuffixes.FOLLOWUP_FREEFORM)
+
+    // note: for now we only support follow-ups with questions that have options
+    if (question.options && question.followups) {
+        const options = question.options
+
+        const getOptionsPaths = (suffix: string) =>
+            Object.fromEntries(
+                options.map(option => {
+                    const optionPath = getPath([option?.id, suffix])
+                    return [option.id, optionPath]
+                })
+            )
+
+        paths[DbSuffixes.FOLLOWUP_PREDEFINED] = getOptionsPaths(DbSuffixes.FOLLOWUP_PREDEFINED)
+        paths[DbSuffixes.FOLLOWUP_FREEFORM] = getOptionsPaths(DbSuffixes.FOLLOWUP_FREEFORM)
     }
     return paths
 }
-
-const separator = '.'
-
-const getPath = (pathSegments: string[]) => pathSegments.join(separator)
 
 export const getNormPaths = (
     {
@@ -75,6 +88,10 @@ export const getNormPaths = (
     const sectionSegment = section.slug || section.id
     const questionSegment = question.id as string
     const basePathSegments = [sectionSegment, questionSegment]
+
+    const separator = '.'
+
+    const getPath = (pathSegments: Array<string | number>) => pathSegments.join(separator)
 
     let paths = {
         base: getPath(basePathSegments),
@@ -95,15 +112,19 @@ export const getNormPaths = (
         paths.comment = getPath([...basePathSegments, DbSuffixes.COMMENT])
     }
 
-    if (question.followups) {
-        paths[DbSuffixes.FOLLOWUP_PREDEFINED] = getPath([
-            ...basePathSegments,
-            DbSuffixes.FOLLOWUP_PREDEFINED
-        ])
-        paths[DbSuffixes.FOLLOWUP_FREEFORM] = getPath([
-            ...basePathSegments,
-            DbSuffixes.FOLLOWUP_FREEFORM
-        ])
+    if (question.options && question.followups) {
+        const options = question.options
+
+        const getOptionsPaths = (suffix: string) =>
+            Object.fromEntries(
+                options.map(option => {
+                    const optionPath = getPath([...basePathSegments, option?.id, suffix])
+                    return [option.id, optionPath]
+                })
+            )
+
+        paths[DbSuffixes.FOLLOWUP_PREDEFINED] = getOptionsPaths(DbSuffixes.FOLLOWUP_PREDEFINED)
+        paths[DbSuffixes.FOLLOWUP_FREEFORM] = getOptionsPaths(DbSuffixes.FOLLOWUP_FREEFORM)
     }
     return paths
 }
@@ -128,6 +149,16 @@ Note: we currently need to prefix all paths with the edition id
 TODO: In the future, get rid of this prefix, and replace formPaths with rawPaths?
 
 */
+
+const prefixPathsObjectWithEditionId = (paths: DbSubPaths, editionId: string) => {
+    const prefixedPaths = {} as DbSubPaths
+    for (const key in paths) {
+        const path = paths[key]
+        prefixedPaths[key] = prefixWithEditionId(path, editionId)
+    }
+    return prefixedPaths
+}
+
 export const getFormPaths = ({
     edition,
     question
@@ -135,14 +166,31 @@ export const getFormPaths = ({
     edition: EditionMetadata
     question: QuestionMetadata | QuestionTemplateOutput
 }): DbPaths => {
-    const paths: { [key in keyof DbPaths]: string } = {}
+    const paths = {} as DbPaths
     if (question.rawPaths) {
-        ;(Object.keys(question.rawPaths) as Array<keyof DbPaths>).forEach(key => {
+        const allPathKeys = Object.keys(question.rawPaths) as DbPathsEnum[]
+        const stringPathsKeys = allPathKeys.filter(
+            k => ![DbPathsEnum.FOLLOWUP_FREEFORM, DbPathsEnum.FOLLOWUP_PREDEFINED].includes(k)
+        ) as Array<keyof DbPathsStrings>
+        stringPathsKeys.forEach(key => {
             const path = question?.rawPaths?.[key]
             if (path) {
                 paths[key] = prefixWithEditionId(path, edition.id)
             }
         })
+        // handle follow-up paths separately
+        if (question.rawPaths[DbPathsEnum.FOLLOWUP_FREEFORM]) {
+            paths[DbPathsEnum.FOLLOWUP_FREEFORM] = prefixPathsObjectWithEditionId(
+                question.rawPaths[DbPathsEnum.FOLLOWUP_FREEFORM],
+                edition.id
+            )
+        }
+        if (question.rawPaths[DbPathsEnum.FOLLOWUP_PREDEFINED]) {
+            paths[DbPathsEnum.FOLLOWUP_PREDEFINED] = prefixPathsObjectWithEditionId(
+                question.rawPaths[DbPathsEnum.FOLLOWUP_PREDEFINED],
+                edition.id
+            )
+        }
     }
     return paths
 }
