@@ -15,6 +15,7 @@ import Checkboxgroup from "~/components/inputs/Checkboxgroup";
 import Radiogroup from "~/components/inputs/Radiogroup";
 import Projects from "~/components/inputs/Projects";
 import { QuestionMetadata, QuestionTemplateOutput } from "@devographics/types";
+import { TextList } from "~/components/inputs/TextList";
 
 const customComponents = {
   help: Help,
@@ -38,6 +39,7 @@ const customComponents = {
   projects: Projects,
   opinion: Radiogroup,
   number: Number,
+  textlist: TextList
 };
 
 export const getQuestionComponent = (

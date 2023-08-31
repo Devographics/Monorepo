@@ -2,21 +2,21 @@ import type { ResponseDocument } from "@devographics/types";
 import {
   SurveyMetadata,
   EditionMetadata,
-  OptionMetadata,
-  DbPaths,
+  // OptionMetadata,
+  // DbPaths,
   SectionMetadata,
   QuestionMetadata,
 } from "@devographics/types";
-import { Message } from "./FormMessages";
+// import { Message } from "./FormMessages";
 
-export type FormInputProps = {
+export type FormInputProps<TValue = string | number | string[] | number[]> = {
   /**
    * NOTE: in read-only mode there might be no response
    * All form inputs have to be robust to this scenario
    */
   response?: ResponseDocument;
   path: string;
-  value: string | number | string[] | number[];
+  value: TValue; // TODO: value might be undefined?
   survey: SurveyMetadata;
   edition: EditionMetadata;
   section: SectionMetadata;
