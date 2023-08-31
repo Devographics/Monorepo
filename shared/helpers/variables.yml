@@ -164,6 +164,9 @@
 
 - id: SMTP_SECURE
   example: 1
+  # (boolean variables must be optional
+  # as they can be unset or set to an empty string)
+  optional: true
   usedBy:
       - surveyform
 

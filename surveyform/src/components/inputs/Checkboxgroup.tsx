@@ -17,7 +17,14 @@ const defaultCutoff = 10;
 // how many items to allow past the cutoff limit before actually cutting off the list
 const cutoffMargin = 2;
 
-// note: treat checkbox group the same as a nested component, using `path`
+/**
+ * Multiple checkbox
+ * + optionnaly an "others" field
+ *
+ * NOTE: treat checkbox group the same as a nested component, using `path`
+ * @param props
+ * @returns
+ */
 export const FormComponentCheckboxGroup = (props: FormInputProps) => {
   const { value: value_ = [], edition, question, response } = props;
   const value = value_ as Array<string | number>;

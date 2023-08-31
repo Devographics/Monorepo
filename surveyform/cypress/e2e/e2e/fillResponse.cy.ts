@@ -70,6 +70,15 @@ test("Access demo survey 2022, signup, start filling form", () => {
       cy.findByRole("checkbox", { name: /Private|private_apis/i }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
     });
 
+  // TODO: multipleWithOther
+  /*
+  getQuestionBlock("client_type").within(() => {
+    cy.findByRole("input", { name: "other" })
+    // TODO: filling text should create multiple "others"?
+    // @see https://github.com/Devographics/surveys/discussions/185
+  })
+  */
+
   // Click a "slider"
   getQuestionBlock(/demo_balance_slider/i).within(() => {
     cy.findByRole("radio", { name: /2/i }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow

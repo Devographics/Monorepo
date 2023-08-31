@@ -143,7 +143,12 @@ export type Question = {
 
     // how many options can be selected
     limit?: number
-    // how many options to show before "show more…" button (set to 99 to always show all)
+    /**
+     * How many options to show before "show more…" button (set to 99 to always show all)
+     * 
+     * Used in "multiple" / "multipleWithOther" questions
+     * Corresponding to CheckboxGroup component
+     */
     cutoff?: number
 
     // typically the question id is used as the question "namespace", this can override it
