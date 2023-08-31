@@ -168,11 +168,11 @@ export const getFormPaths = ({
 }): DbPaths => {
     const paths = {} as DbPaths
     if (question.rawPaths) {
-        ;(
-            Object.keys(question.rawPaths).filter(
-                k => ![DbPathsEnum.FOLLOWUP_FREEFORM, DbPathsEnum.FOLLOWUP_PREDEFINED].includes(k)
-            ) as Array<keyof DbPathsStrings>
-        ).forEach(key => {
+        const allPathKeys = Object.keys(question.rawPaths) as DbPathsEnum[]
+        const stringPathsKeys = allPathKeys.filter(
+            k => ![DbPathsEnum.FOLLOWUP_FREEFORM, DbPathsEnum.FOLLOWUP_PREDEFINED].includes(k)
+        ) as Array<keyof DbPathsStrings>
+        stringPathsKeys.forEach(key => {
             const path = question?.rawPaths?.[key]
             if (path) {
                 paths[key] = prefixWithEditionId(path, edition.id)

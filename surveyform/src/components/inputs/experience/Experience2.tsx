@@ -72,8 +72,8 @@ const ExperienceOption = (
 
   // get the paths of the predefined and freeform followup answers
   // inside the overall response document for this specific option
-  const predefinedFollowupPath =
-    formPaths[DbPathsEnum.FOLLOWUP_PREDEFINED]?.[option.id];
+  const allPredefinedFollowupPaths = formPaths[DbPathsEnum.FOLLOWUP_PREDEFINED];
+  const predefinedFollowupPath = allPredefinedFollowupPaths?.[option.id];
   const freeformFollowupPath =
     formPaths[DbPathsEnum.FOLLOWUP_FREEFORM]?.[option.id];
 
@@ -117,11 +117,13 @@ const ExperienceOption = (
               <Form.Check.Input
                 onChange={(e) => {
                   updateCurrentValues({ [path]: e.target.value });
-                  // when main value changes, also clear all predefined follow-ups
-                  for (const followUpPath of Object.values(
-                    formPaths[DbPathsEnum.FOLLOWUP_PREDEFINED]
-                  )) {
-                    updateCurrentValues({ [followUpPath]: null });
+                  if (allPredefinedFollowupPaths) {
+                    // when main value changes, also clear all predefined follow-ups
+                    for (const followUpPath of Object.values(
+                      allPredefinedFollowupPaths
+                    )) {
+                      updateCurrentValues({ [followUpPath]: null });
+                    }
                   }
                 }}
                 type="radio"
