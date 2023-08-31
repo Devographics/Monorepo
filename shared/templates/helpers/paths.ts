@@ -10,7 +10,7 @@ import {
     QuestionTemplateOutput,
     DbPathsEnum,
     DbPathsStrings,
-    OptionsDbPaths
+    DbSubPaths
 } from '@devographics/types'
 
 export const prefixWithEditionId = (s: string, editionId: string) => {
@@ -67,11 +67,6 @@ export const getRawPaths = (
 
         paths[DbSuffixes.FOLLOWUP_PREDEFINED] = getOptionsPaths(DbSuffixes.FOLLOWUP_PREDEFINED)
         paths[DbSuffixes.FOLLOWUP_FREEFORM] = getOptionsPaths(DbSuffixes.FOLLOWUP_FREEFORM)
-    }
-    if (survey.id === 'state_of_html') {
-        console.log(question.id)
-        console.log(question.followups)
-        console.log(paths)
     }
     return paths
 }
@@ -155,8 +150,8 @@ TODO: In the future, get rid of this prefix, and replace formPaths with rawPaths
 
 */
 
-const prefixPathsObjectWithEditionId = (paths: OptionsDbPaths, editionId: string) => {
-    const prefixedPaths = {} as OptionsDbPaths
+const prefixPathsObjectWithEditionId = (paths: DbSubPaths, editionId: string) => {
+    const prefixedPaths = {} as DbSubPaths
     for (const key in paths) {
         const path = paths[key]
         prefixedPaths[key] = prefixWithEditionId(path, editionId)

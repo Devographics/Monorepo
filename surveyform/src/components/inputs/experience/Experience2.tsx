@@ -13,6 +13,7 @@ import { getFormPaths } from "@devographics/templates";
 
 import get from "lodash/get.js";
 import { FollowupData, FollowUpComment, FollowUps } from "./Followup2";
+import { CommentTrigger } from "~/components/form/FormComment";
 
 export interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
@@ -105,34 +106,43 @@ const ExperienceOption = (
 
   return (
     <div className={`form-experience-option ${hasValueClass}`}>
-      <Form.Check
-        key={i}
-        // layout="elementOnly"
-        type="radio"
-      >
-        <Form.Check.Label htmlFor={`${path}.${i}`}>
-          <div className="form-input-wrapper">
-            <Form.Check.Input
-              onChange={(e) => {
-                updateCurrentValues({ [path]: e.target.value });
-              }}
-              type="radio"
-              value={option.id}
-              name={path}
-              id={`${path}.${i}`}
-              // ref={refFunction}
-              checked={isChecked}
-              className={checkClass}
-              disabled={readOnly}
-            />
-          </div>
-          <FormOption {...props} option={option} />
-        </Form.Check.Label>
-        {followups && <FollowUps {...props} followupData={followupData} />}
-      </Form.Check>
-      {showFollowupComment && isChecked && (
+      <div className="form-experience-option-inner">
+        <Form.Check
+          key={i}
+          // layout="elementOnly"
+          type="radio"
+        >
+          <Form.Check.Label htmlFor={`${path}.${i}`}>
+            <div className="form-input-wrapper">
+              <Form.Check.Input
+                onChange={(e) => {
+                  updateCurrentValues({ [path]: e.target.value });
+                  // when main value changes, also clear all predefined follow-ups
+                  for (const followUpPath of Object.values(
+                    formPaths[DbPathsEnum.FOLLOWUP_PREDEFINED]
+                  )) {
+                    updateCurrentValues({ [followUpPath]: null });
+                  }
+                }}
+                type="radio"
+                value={option.id}
+                name={path}
+                id={`${path}.${i}`}
+                // ref={refFunction}
+                checked={isChecked}
+                className={checkClass}
+                disabled={readOnly}
+              />
+            </div>
+            <FormOption {...props} option={option} />
+          </Form.Check.Label>
+          {followups && <FollowUps {...props} followupData={followupData} />}
+        </Form.Check>
+        {/* <CommentTrigger /> */}
+      </div>
+      {/* {showFollowupComment && isChecked && (
         <FollowUpComment {...props} followupData={followupData} />
-      )}
+      )} */}
     </div>
   );
 };

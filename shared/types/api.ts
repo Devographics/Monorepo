@@ -42,11 +42,11 @@ export type DbPathsStrings = {
 }
 
 export interface DbPaths extends DbPathsStrings {
-    [DbPathsEnum.FOLLOWUP_PREDEFINED]: OptionsDbPaths
-    [DbPathsEnum.FOLLOWUP_FREEFORM]: OptionsDbPaths
+    [DbPathsEnum.FOLLOWUP_PREDEFINED]: DbSubPaths
+    [DbPathsEnum.FOLLOWUP_FREEFORM]: DbSubPaths
 }
 
-export type OptionsDbPaths = {
+export type DbSubPaths = {
     [key in string]: string
 }
 
