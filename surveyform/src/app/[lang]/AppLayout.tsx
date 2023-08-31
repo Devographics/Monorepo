@@ -13,7 +13,6 @@ import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 import { ErrorBoundary } from "~/components/error";
 import Layout from "~/components/common/Layout";
 import type { LocaleDef, LocaleDefWithStrings } from "~/i18n/typings";
-import SSRProvider from "react-bootstrap/SSRProvider";
 import { SWRConfig } from "swr";
 import { useSearchParams } from "next/navigation";
 import { KeydownContextProvider } from "~/components/common/KeydownContext";
@@ -63,39 +62,37 @@ export function AppLayout(props: AppLayoutProps) {
     */}
       <head />
       <body>
-        <SSRProvider>
-          {/** @ts-ignore */}
-          <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
-            {/** TODO: this error boundary to display anything useful since it doesn't have i18n */}
-            {
-              <SWRConfig
-                value={{
-                  // basic global fetcher
-                  fetcher: (resource, init) =>
-                    fetch(resource, init).then((res) => res.json()),
-                }}
+        {/** @ts-ignore */}
+        <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
+          {/** TODO: this error boundary to display anything useful since it doesn't have i18n */}
+          {
+            <SWRConfig
+              value={{
+                // basic global fetcher
+                fetcher: (resource, init) =>
+                  fetch(resource, init).then((res) => res.json()),
+              }}
+            >
+              <LocaleContextProvider
+                locales={locales}
+                localeId={localeId}
+                localeStrings={localeStrings}
               >
-                <LocaleContextProvider
-                  locales={locales}
-                  localeId={localeId}
-                  localeStrings={localeStrings}
+                {/** @ts-ignore */}
+                <ErrorBoundary
+                  proposeReload={true}
+                  proposeHomeRedirection={true}
                 >
-                  {/** @ts-ignore */}
-                  <ErrorBoundary
-                    proposeReload={true}
-                    proposeHomeRedirection={true}
-                  >
-                    <KeydownContextProvider>
-                      <UserMessagesProvider>
-                        {addWrapper ? <Layout>{children}</Layout> : children}
-                      </UserMessagesProvider>
-                    </KeydownContextProvider>
-                  </ErrorBoundary>
-                </LocaleContextProvider>
-              </SWRConfig>
-            }
-          </ErrorBoundary>
-        </SSRProvider>
+                  <KeydownContextProvider>
+                    <UserMessagesProvider>
+                      {addWrapper ? <Layout>{children}</Layout> : children}
+                    </UserMessagesProvider>
+                  </KeydownContextProvider>
+                </ErrorBoundary>
+              </LocaleContextProvider>
+            </SWRConfig>
+          }
+        </ErrorBoundary>
         <Analytics />
       </body>
     </html>

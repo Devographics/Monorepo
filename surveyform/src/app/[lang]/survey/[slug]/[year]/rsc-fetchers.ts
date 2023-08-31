@@ -9,11 +9,11 @@ import { AppName } from "@devographics/types";
 /**
  * Use in metadata
  * Prefer "mustGetSurvey" in pages
- * @param params
- * @returns
  */
 export async function rscGetSurveyEditionFromUrl(params: {
+  /** state-of-css */
   slug: string;
+  /** 2022 */
   year: string;
 }) {
   try {

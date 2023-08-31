@@ -124,7 +124,11 @@ export type ApiQuestion = {
 }
 
 export type Question = {
-    template: string
+    /**
+     * See questions.yml and 
+     * surveyform/src/lib/customComponents.ts
+     */
+    template: "single" | "multiple" | "others" | string // TODO: try to type all possible templates explicitely
     // override the template
     inputComponent?: string
 

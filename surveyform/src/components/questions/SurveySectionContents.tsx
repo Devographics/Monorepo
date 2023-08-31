@@ -14,7 +14,6 @@ const SurveySectionContents = ({
   readOnly?: boolean;
 }) => {
   const { edition } = useEdition();
-
   const sectionNumber = useSection();
   const sections = edition.sections;
   const sectionIndex = sectionNumber - 1;
