@@ -39,6 +39,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     updateCurrentValues,
     readOnly,
   } = props;
+  // TODO: path is undefined, perhaps because "textlist" is not yet supported by the API?
 
   const values = value_ || [];
 
@@ -56,7 +57,8 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
 
   const handleChange = (items: Array<Item>) => {
     setItems(items);
-    updateCurrentValuesDebounced({ [path]: toStrings(items) });
+    // TODO: currently path is undefined so it won't work, reenable when the API is ok
+    // updateCurrentValuesDebounced({ [path]: toStrings(items) });
   };
 
   const addItem = (item: Item) => {
@@ -95,6 +97,10 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
       {itemsWithLast.map((item, idx) => {
         return (
           <FormControl
+            style={{
+              marginTop: "4px",
+              marginBottom: "4px",
+            }}
             // TODO: this may mess up rendering, in Vulcan we had specific logic to handle a "visible index"
             // need to check what happens when removing an intermediate input, it may mess up the values
             key={item.key}
