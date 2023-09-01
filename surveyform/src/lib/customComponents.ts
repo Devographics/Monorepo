@@ -30,6 +30,9 @@ const customComponents = {
   dropdown: Select,
   country: Select,
   multiple: Checkboxgroup,
+  /**
+   * Just a shortcut for multiple + allowOther=true
+   */
   multipleWithOther: Checkboxgroup,
   longtext: Textarea,
   text: Text,
@@ -39,7 +42,10 @@ const customComponents = {
   projects: Projects,
   opinion: Radiogroup,
   number: Number,
-  // rename when done
+  /**
+   * A list of multiple text inputs (or textarea if long=true)
+   * Rename when done
+   * */
   experimental_textlist: TextList
 };
 

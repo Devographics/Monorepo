@@ -165,6 +165,10 @@ export type Question = {
     // a question that has a data field but does not show up in the form
     hidden?: boolean
     allowMultiple?: boolean
+    /**
+     * For single and multiple question
+     * "multipleWithOther" is a shortcut to "multiple" + allowOther=true
+     */
     allowOther?: boolean
     allowPrenormalized?: boolean
     allowComment?: boolean
@@ -177,6 +181,11 @@ export type Question = {
     hasApiEndpoint?: boolean
 
     followups?: Followups[]
+
+    /**
+     * To use a textarea in TextList
+     */
+    long?: boolean;
 }
 
 export type Option = {

@@ -104,7 +104,10 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
             // TODO: this may mess up rendering, in Vulcan we had specific logic to handle a "visible index"
             // need to check what happens when removing an intermediate input, it may mess up the values
             key={item.key}
-            type="text"
+            // TODO: somehow question.long is not set (but we see it in the API),
+            // double check what happens after adding API support
+            // code: question.long ? "textarea" : "input"
+            as={"textarea"}
             defaultValue={item.value}
             //value={localValue}
             //onChange={(evt) => handleChangeDebounced(idx, evt)}
@@ -130,6 +133,8 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
             onKeyUp={(evt) => {
               if (evt.key === "Enter") {
                 // TODO: focus on the next input (unless we are in the last one)
+                // but only if "long" is false (in textarea we want enter to add a new line instead
+                // double check the mockups for the interactions)
                 // TODO: we may need to check if current input is still empty or not,
                 // as the focus loss and change event may happen AFTER the keyup
                 // Perhaps we should use "oninput" instead of onchange
