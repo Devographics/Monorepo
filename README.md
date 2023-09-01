@@ -48,11 +48,10 @@ I suggest using the following file structure:
 
 Whenever you need to run a project in the `monorepo` directory (such as `results`, `surveyform`, etc.), you will need to first run `pnpm install` from within its subdirectory.
 
-For example, for the `surveyform` app:
-
 -   `cd monorepo`
--   `cd surveyform`
 -   `pnpm install`
+
+This will install dependencies for all applications of the monorepository.
 
 ### 4. Running a Project
 
