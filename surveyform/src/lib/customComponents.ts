@@ -39,7 +39,8 @@ const customComponents = {
   projects: Projects,
   opinion: Radiogroup,
   number: Number,
-  textlist: TextList
+  // rename when done
+  experimental_textlist: TextList
 };
 
 export const getQuestionComponent = (
