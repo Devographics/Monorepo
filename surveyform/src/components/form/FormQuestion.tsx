@@ -37,8 +37,14 @@ export const FormQuestion = (props) => {
 
   //console.log("rendering FormQuestion", { response, value });
 
+  const classNames = [
+    "form-input",
+    `question-id-${question.id}`,
+    `question-template-${question.template}`,
+    `question-section-${section.id}`,
+  ];
   return (
-    <div className="form-input">
+    <div className={classNames.join(" ")}>
       <Component {...componentProperties} />
       {/* <pre>
         <code>{JSON.stringify(question, null, 2)}</code>
