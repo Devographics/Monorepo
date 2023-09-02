@@ -603,3 +603,48 @@
     }
   }
 }
+
+.option-chip {
+  --_color: var(--color, var(--bs-blue));
+  border: 1px solid hsl(0 0% 100% / 0.3);
+  padding: 0.1em 0.8em 0.05em;
+  border-radius: 999px;
+  background: color-mix(
+      in lab,
+      var(--_color),
+      transparent calc((1 - var(--a, 0.2)) * 100%)
+    )
+    linear-gradient(hsl(0 0% 100% / 0.1), transparent) border-box;
+  color: white;
+  // white-space: nowrap;
+}
+
+.option-main {
+  &-never_heard {
+    --color: rgba(255, 255, 255, 0.1);
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  &-heard {
+    --color: rgba(255, 255, 255, 0.6);
+  }
+  &-used {
+    --color: rgba(255, 255, 255, 0.6);
+  }
+}
+
+.option-separator {
+  &::after {
+    content: " > ";
+    display: inline-block;
+  }
+}
+
+.option-positive {
+  --color: var(--bs-success);
+}
+
+.option-negative {
+  --color: var(--bs-danger);
+}
