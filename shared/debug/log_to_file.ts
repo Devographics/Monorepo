@@ -35,16 +35,15 @@ export const logToFile = async (fileName_: string, object: any, options: LogOpti
         const fullPath = `${logsDirPath}/${fileName}`
         let contents
         if (typeof object === 'string') {
+            contents = object
             if (fileName.includes('.gql') || fileName.includes('.graphql')) {
                 try {
                     const ast = parse(object)
                     contents = print(ast, { preserveComments: true })
                 } catch (error) {
+                    console.warn('logToFile: error when parsing GraphQL content.')
                     console.warn(error)
-                    console.warn(object)
                 }
-            } else {
-                contents = object
             }
         } else {
             if (fileName.includes('.yml') || fileName.includes('.yaml')) {

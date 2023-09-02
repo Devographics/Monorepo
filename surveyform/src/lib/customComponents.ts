@@ -38,6 +38,7 @@ const customComponents = {
   text: Text,
   others: Text,
   single: Radiogroup,
+  singleWithOther: Radiogroup,
   happiness: Radiogroup,
   projects: Projects,
   opinion: Radiogroup,
@@ -46,7 +47,7 @@ const customComponents = {
    * A list of multiple text inputs (or textarea if long=true)
    * Rename when done
    * */
-  experimental_textlist: TextList
+  experimental_textlist: TextList,
 };
 
 export const getQuestionComponent = (

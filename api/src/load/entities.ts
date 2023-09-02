@@ -18,11 +18,13 @@ import html from 'highlight.js/lib/languages/xml'
 import http from 'highlight.js/lib/languages/http'
 import css from 'highlight.js/lib/languages/css'
 import graphql from 'highlight.js/lib/languages/graphql'
+import json from 'highlight.js/lib/languages/json'
 hljs.registerLanguage('javascript', javascript)
 hljs.registerLanguage('html', html)
 hljs.registerLanguage('http', http)
 hljs.registerLanguage('css', css)
 hljs.registerLanguage('graphql', graphql)
+hljs.registerLanguage('json', json)
 
 import { appSettings } from '../helpers/settings'
 import sanitizeHtml from 'sanitize-html'

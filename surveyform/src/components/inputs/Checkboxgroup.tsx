@@ -153,7 +153,7 @@ const Checkbox = ({
     }
   };
   return (
-    <Form.Check className={checkClass}>
+    <Form.Check className={[checkClass, `form-option-${option.id}`].join(" ")}>
       <Form.Check.Label htmlFor={`${path}.${index}`}>
         <div className="form-input-wrapper">
           <Form.Check.Input

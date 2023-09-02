@@ -36,9 +36,11 @@ export const useQuestionTitle = ({
     cleanLabel = i18nNameCleanBase;
   }
 
+  const key = i18n.question;
   return {
-    html: entityNameHtml || htmlLabel || id,
-    clean: entityNameClean || cleanLabel || id,
+    key,
+    html: entityNameHtml || htmlLabel || key,
+    clean: entityNameClean || cleanLabel || key,
     isEntity: !!(entityNameHtml || entityNameClean),
   };
 };
