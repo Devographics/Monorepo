@@ -65,7 +65,7 @@ export const FormSection = (props: {
   const [errorResponse, setErrorResponse] = useState();
   const [messages, setMessages] = useState<Message[]>([]);
   const [itemPositions, setItemPositions] = useState([]);
-  const [reactToChanges, setReactToChanges] = useState(true);
+  const [reactToChanges, setReactToChanges] = useState(false);
 
   const { addMessage } = useMessagesContext();
 

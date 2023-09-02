@@ -74,27 +74,50 @@ export const FormItem = (props: FormItemProps) => {
   //   children
   // );
   const myRef = useRef<HTMLDivElement>(null);
+  const firstRenderRef1 = useRef(true);
+  const firstRenderRef2 = useRef(true);
 
+  const updateItemPositions = () => {
+    const top = myRef?.current?.getBoundingClientRect()?.top || 0;
+    const scrollTop = document.documentElement.scrollTop;
+    // console.log("// calculating itemPositions");
+    setItemPositions((itemPositions) => ({
+      ...itemPositions,
+      [question.id]: top + scrollTop,
+    }));
+  };
+
+  // only run once
   useEffect(() => {
+    console.log("init updateItemPositions");
+    updateItemPositions();
+  }, []);
+
+  // run whenever something that could affect component height changes
+  // but not on first render
+  useEffect(() => {
+    if (firstRenderRef1.current) {
+      firstRenderRef1.current = false;
+      return;
+    }
+    console.log("reactToChanges true");
     setReactToChanges(true);
   }, [showCommentInput, showMore, showOther]);
 
+  // run whenever reactToChange changes, but not on first render
   useEffect(() => {
-    const current = myRef?.current;
-    if (current && reactToChanges) {
-      const pos = current.getBoundingClientRect();
-      const { top } = pos;
-      const scrollTop = document.documentElement.scrollTop;
-      // console.log("// calculating itemPositions");
-      setItemPositions((itemPositions) => ({
-        ...itemPositions,
-        [question.id]: top + scrollTop,
-      }));
+    if (firstRenderRef2.current) {
+      firstRenderRef2.current = false;
+      return;
+    }
+    console.log("updateItemPositions");
+    if (myRef?.current && reactToChanges) {
+      updateItemPositions();
       if (isLastItem) {
         setReactToChanges(false);
       }
     }
-  }, [itemPositions, reactToChanges]);
+  }, [reactToChanges]);
 
   return (
     <div ref={myRef}>
