@@ -89,7 +89,6 @@ export const FormItem = (props: FormItemProps) => {
 
   // only run once
   useEffect(() => {
-    console.log("init updateItemPositions");
     updateItemPositions();
   }, []);
 
@@ -100,7 +99,6 @@ export const FormItem = (props: FormItemProps) => {
       firstRenderRef1.current = false;
       return;
     }
-    console.log("reactToChanges true");
     setReactToChanges(true);
   }, [showCommentInput, showMore, showOther]);
 
@@ -110,7 +108,6 @@ export const FormItem = (props: FormItemProps) => {
       firstRenderRef2.current = false;
       return;
     }
-    console.log("updateItemPositions");
     if (myRef?.current && reactToChanges) {
       updateItemPositions();
       if (isLastItem) {
