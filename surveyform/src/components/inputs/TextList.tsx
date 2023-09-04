@@ -4,6 +4,7 @@ import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
+import { useIntlContext } from "@devographics/react-i18n";
 
 /**
  * In an array of input with auto-deletion of empty inputs,
@@ -57,8 +58,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
 
   const handleChange = (items: Array<Item>) => {
     setItems(items);
-    // TODO: currently path is undefined so it won't work, reenable when the API is ok
-    // updateCurrentValuesDebounced({ [path]: toStrings(items) });
+    updateCurrentValuesDebounced({ [path]: toStrings(items) });
   };
 
   const addItem = (item: Item) => {
@@ -92,62 +92,86 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     }
   };
 
+  const itemProps = {
+    items,
+    readOnly,
+    handleBlurDebounced,
+    addItem,
+  };
+
   return (
     <FormItem {...props}>
-      {itemsWithLast.map((item, idx) => {
-        return (
-          <FormControl
-            style={{
-              marginTop: "4px",
-              marginBottom: "4px",
-            }}
-            // TODO: this may mess up rendering, in Vulcan we had specific logic to handle a "visible index"
-            // need to check what happens when removing an intermediate input, it may mess up the values
-            key={item.key}
-            // TODO: somehow question.long is not set (but we see it in the API),
-            // double check what happens after adding API support
-            // code: question.long ? "textarea" : "input"
-            as={"textarea"}
-            defaultValue={item.value}
-            //value={localValue}
-            //onChange={(evt) => handleChangeDebounced(idx, evt)}
-            onBlur={(evt) => handleBlurDebounced(idx, evt)}
-            onChange={(evt) => {
-              // The last item is displayed but not yet saved in the items list
-              const isLastItem = idx >= items.length;
-              // if we start filling the last item,
-              // actually add it to the items array
-              // /!\ key must stay the same to avoid visual focus jumps
-              const value = evt.target.value;
-              if (isLastItem) {
-                if (value) {
-                  addItem({ value, key: item.key });
-                }
-              }
-              if (!value && idx > 0) {
-                // TODO: focus on last item
-                // (in the prototype this is done via backspace key event,
-                // check if onChange is ok or if we need "onInput" for this case)
-              }
-            }}
-            onKeyUp={(evt) => {
-              if (evt.key === "Enter") {
-                // TODO: focus on the next input (unless we are in the last one)
-                // but only if "long" is false (in textarea we want enter to add a new line instead
-                // double check the mockups for the interactions)
-                // TODO: we may need to check if current input is still empty or not,
-                // as the focus loss and change event may happen AFTER the keyup
-                // Perhaps we should use "oninput" instead of onchange
-              } else if (evt.key === "ArrowUp") {
-                // TODO: focus on input just above
-              } else if (evt.key === "ArrowDown") {
-                // TODO: focus on input just below
-              }
-            }}
-            disabled={readOnly}
-          />
-        );
-      })}
+      {itemsWithLast.map((item, index) => (
+        <TextListItem key={index} index={index} item={item} {...itemProps} />
+      ))}
     </FormItem>
+  );
+};
+
+const TextListItem = ({
+  items,
+  item,
+  index,
+  readOnly,
+  handleBlurDebounced,
+  addItem,
+}) => {
+  const { formatMessage } = useIntlContext();
+
+  return (
+    <FormControl
+      style={{
+        marginTop: "4px",
+        marginBottom: "4px",
+      }}
+      // TODO: this may mess up rendering, in Vulcan we had specific logic to handle a "visible index"
+      // need to check what happens when removing an intermediate input, it may mess up the values
+      key={item.key}
+      // TODO: somehow question.long is not set (but we see it in the API),
+      // double check what happens after adding API support
+      // code: question.long ? "textarea" : "input"
+      as={"textarea"}
+      placeholder={formatMessage({
+        id: "textlist.placeholder",
+        values: { index: index + 1 },
+      })}
+      defaultValue={item.value}
+      //value={localValue}
+      //onChange={(evt) => handleChangeDebounced(idx, evt)}
+      onBlur={(evt) => handleBlurDebounced(index, evt)}
+      onChange={(evt) => {
+        // The last item is displayed but not yet saved in the items list
+        const isLastItem = index >= items.length;
+        // if we start filling the last item,
+        // actually add it to the items array
+        // /!\ key must stay the same to avoid visual focus jumps
+        const value = evt.target.value;
+        if (isLastItem) {
+          if (value) {
+            addItem({ value, key: item.key });
+          }
+        }
+        if (!value && index > 0) {
+          // TODO: focus on last item
+          // (in the prototype this is done via backspace key event,
+          // check if onChange is ok or if we need "onInput" for this case)
+        }
+      }}
+      onKeyUp={(evt) => {
+        if (evt.key === "Enter") {
+          // TODO: focus on the next input (unless we are in the last one)
+          // but only if "long" is false (in textarea we want enter to add a new line instead
+          // double check the mockups for the interactions)
+          // TODO: we may need to check if current input is still empty or not,
+          // as the focus loss and change event may happen AFTER the keyup
+          // Perhaps we should use "oninput" instead of onchange
+        } else if (evt.key === "ArrowUp") {
+          // TODO: focus on input just above
+        } else if (evt.key === "ArrowDown") {
+          // TODO: focus on input just below
+        }
+      }}
+      disabled={readOnly}
+    />
   );
 };
