@@ -5,7 +5,7 @@ import {
     QuestionTemplateOutput,
     TemplateFunction
 } from '@devographics/types'
-import { getPaths, checkHasId } from '../helpers'
+import { checkHasId } from '../helpers'
 
 export const text: TemplateFunction = options => {
     const { edition, section } = options

@@ -4,7 +4,14 @@ Layout for a single form item
 
 */
 "use client";
-import { ReactNode, useState, useRef, useEffect } from "react";
+import {
+  ReactNode,
+  useState,
+  useRef,
+  useEffect,
+  forwardRef,
+  RefObject,
+} from "react";
 import get from "lodash/get.js";
 
 import { useIntlContext } from "@devographics/react-i18n";
@@ -24,127 +31,134 @@ export interface FormItemProps extends FormInputProps {
   showOther?: boolean;
 }
 
-export const FormItem = (props: FormItemProps) => {
-  // const {
-  //   path,
-  //   children,
-  //   beforeInput,
-  //   afterInput,
-  //   description: intlDescription,
-  //   loading,
-  //   intlKeys = [],
-  //   questionId,
-  //   showDescription = true,
-  //   noteIntlId: noteIntlId_,
-  // } = props;
+export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
+  function FormItem(props: FormItemProps, parentRef) {
+    // const {
+    //   path,
+    //   children,
+    //   beforeInput,
+    //   afterInput,
+    //   description: intlDescription,
+    //   loading,
+    //   intlKeys = [],
+    //   questionId,
+    //   showDescription = true,
+    //   noteIntlId: noteIntlId_,
+    // } = props;
 
-  const {
-    children,
-    response,
-    path,
-    edition,
-    section,
-    question,
-    readOnly,
-    stateStuff,
-    showMore,
-    showOther,
-    questionNumber,
-  } = props;
+    const {
+      children,
+      response,
+      path,
+      edition,
+      section,
+      question,
+      readOnly,
+      stateStuff,
+      showMore,
+      showOther,
+      questionNumber,
+    } = props;
 
-  const isLastItem = questionNumber === section.questions.length;
+    const isLastItem = questionNumber === section.questions.length;
 
-  const { itemPositions, setItemPositions, reactToChanges, setReactToChanges } =
-    stateStuff;
+    const {
+      itemPositions,
+      setItemPositions,
+      reactToChanges,
+      setReactToChanges,
+    } = stateStuff;
 
-  const { allowComment } = question;
+    const { allowComment } = question;
 
-  const formPaths = getFormPaths({ edition, question });
-  const commentPath = formPaths.comment;
-  const commentValue = commentPath && get(response, commentPath);
+    const formPaths = getFormPaths({ edition, question });
+    const commentPath = formPaths.comment;
+    const commentValue = commentPath && get(response, commentPath);
 
-  // open the comment widget if there is already a comment or this is the first question
-  const [showCommentInput, setShowCommentInput] = useState(
-    (!readOnly && question.showCommentInput) || !!commentValue
-  );
+    // open the comment widget if there is already a comment or this is the first question
+    const [showCommentInput, setShowCommentInput] = useState(
+      (!readOnly && question.showCommentInput) || !!commentValue
+    );
 
-  // const innerComponent = loading ? (
-  //   <FormInputLoading loading={loading}>{children}</FormInputLoading>
-  // ) : (
-  //   children
-  // );
-  const myRef = useRef<HTMLDivElement>(null);
-  const firstRenderRef1 = useRef(true);
-  const firstRenderRef2 = useRef(true);
+    // const innerComponent = loading ? (
+    //   <FormInputLoading loading={loading}>{children}</FormInputLoading>
+    // ) : (
+    //   children
+    // );
+    const childRef = useRef<HTMLDivElement>(null);
+    const myRef = (parentRef as RefObject<HTMLDivElement>) || childRef;
+    const firstRenderRef1 = useRef(true);
+    const firstRenderRef2 = useRef(true);
 
-  const updateItemPositions = () => {
-    const top = myRef?.current?.getBoundingClientRect()?.top || 0;
-    const scrollTop = document.documentElement.scrollTop;
-    // console.log("// calculating itemPositions");
-    setItemPositions((itemPositions) => ({
-      ...itemPositions,
-      [question.id]: top + scrollTop,
-    }));
-  };
+    const updateItemPositions = () => {
+      const top = myRef?.current?.getBoundingClientRect()?.top || 0;
+      const scrollTop = document.documentElement.scrollTop;
+      // console.log("// calculating itemPositions");
+      setItemPositions((itemPositions) => ({
+        ...itemPositions,
+        [question.id]: top + scrollTop,
+      }));
+    };
 
-  // only run once
-  useEffect(() => {
-    updateItemPositions();
-  }, []);
-
-  // run whenever something that could affect component height changes
-  // but not on first render
-  useEffect(() => {
-    if (firstRenderRef1.current) {
-      firstRenderRef1.current = false;
-      return;
-    }
-    setReactToChanges(true);
-  }, [showCommentInput, showMore, showOther]);
-
-  // run whenever reactToChange changes, but not on first render
-  useEffect(() => {
-    if (firstRenderRef2.current) {
-      firstRenderRef2.current = false;
-      return;
-    }
-    if (myRef?.current && reactToChanges) {
+    // only run once
+    useEffect(() => {
       updateItemPositions();
-      if (isLastItem) {
-        setReactToChanges(false);
+    }, []);
+
+    // run whenever something that could affect component height changes
+    // but not on first render
+    useEffect(() => {
+      if (firstRenderRef1.current) {
+        firstRenderRef1.current = false;
+        return;
       }
-    }
-  }, [reactToChanges]);
+      setReactToChanges(true);
+    }, [showCommentInput, showMore, showOther]);
 
-  return (
-    <div ref={myRef}>
-      <Form.Group controlId={path}>
-        <FormItemTitle {...props} />
-        <div className="form-item-contents">
-          <FormItemDescription {...props} />
-          <FormItemLimit {...props} />
-          <div className="form-item-input">{children}</div>
-          <FormItemNote {...props} />
+    // run whenever reactToChange changes, but not on first render
+    useEffect(() => {
+      if (firstRenderRef2.current) {
+        firstRenderRef2.current = false;
+        return;
+      }
+      if (myRef?.current && reactToChanges) {
+        updateItemPositions();
+        if (isLastItem) {
+          setReactToChanges(false);
+        }
+      }
+    }, [reactToChanges]);
 
-          {allowComment && (
-            <CommentTrigger
-              value={commentValue}
-              showCommentInput={showCommentInput}
-              setShowCommentInput={setShowCommentInput}
-            />
-          )}
-          {allowComment && showCommentInput && commentPath && (
-            <CommentInput
-              {...props}
-              commentPath={commentPath}
-              commentValue={commentValue}
-            />
-          )}
-        </div>
-      </Form.Group>
-    </div>
-  );
-};
+    return (
+      <div ref={myRef}>
+        <Form.Group controlId={path}>
+          <FormItemTitle {...props} />
+          <div className="form-item-contents">
+            <FormItemDescription {...props} />
+            <FormItemLimit {...props} />
+            <div className="form-item-input">{children}</div>
+            <FormItemNote {...props} />
+
+            {allowComment && (
+              <CommentTrigger
+                value={commentValue}
+                showCommentInput={showCommentInput}
+                setShowCommentInput={setShowCommentInput}
+              />
+            )}
+            {allowComment && showCommentInput && commentPath && (
+              <CommentInput
+                {...props}
+                commentPath={commentPath}
+                commentValue={commentValue}
+              />
+            )}
+          </div>
+        </Form.Group>
+      </div>
+    );
+  }
+);
 
 export const FormItemTitle = (props: FormItemProps) => {
   const { section, question, enableReadingList } = props;

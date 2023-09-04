@@ -163,7 +163,7 @@
       - surveyform
 
 - id: SMTP_SECURE
-  example: 1
+  example: "'1' or '' for an emtpy value"
   # (boolean variables must be optional
   # as they can be unset or set to an empty string)
   optional: true

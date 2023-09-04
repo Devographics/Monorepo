@@ -117,6 +117,7 @@ type SectionMetadata {
     template: String
 }
 
+# Keep in sync with the corresponding queries in shared/helpers/queries.ts
 type QuestionMetadata {
     id: String
     yearAdded: Int
@@ -148,6 +149,8 @@ type QuestionMetadata {
     apiOnly: Boolean
     # whether a question should be hidden in the survey form
     hidden: Boolean
+    # textarea vs input for freeform questions
+    longText: Boolean
 }
 
 type RawDbPaths {

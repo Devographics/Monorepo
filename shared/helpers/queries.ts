@@ -82,9 +82,8 @@ query SurveysMetadataQuery {
           background
           backgroundSecondary
         }
-        ${
-            includeQuestions
-                ? `sections {
+        ${includeQuestions
+    ? `sections {
           id
           intlId
           slug
@@ -96,6 +95,7 @@ query SurveysMetadataQuery {
             template
             extends
             allowOther
+            longText
             allowComment
             matchTags
             options {
@@ -106,8 +106,8 @@ query SurveysMetadataQuery {
             }
           }
         }`
-                : ''
-        }
+    : ''
+  }
       }
     }
   }
@@ -225,6 +225,7 @@ query ${editionId}MetadataQuery {
             extends
             contentType
             allowOther
+            longText
             allowComment
             matchTags
             optionsAreNumeric
@@ -276,7 +277,7 @@ query ${editionId}MetadataQuery {
 }
 `
 
-export const getEditionQuerySurveyForm = ({ surveyId, editionId }) => `
+export const getEditionQuerySurveyForm = ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `
 query ${editionId}MetadataQuery {
   _metadata(editionId: ${editionId}) {
     surveys {
@@ -336,6 +337,7 @@ query ${editionId}MetadataQuery {
             extends
             # contentType
             allowOther
+            longText
             allowComment
             optionsAreNumeric
             # optionsAreRange

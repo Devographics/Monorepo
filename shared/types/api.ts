@@ -34,13 +34,31 @@ export enum DbPathsEnum {
     ERROR = 'error'
 }
 
+type DbPathsFirstLevel = Exclude<
+    DbPathsEnum,
+    // followup questions nest another question within the current one
+    DbPathsEnum.FOLLOWUP_PREDEFINED | DbPathsEnum.FOLLOWUP_FREEFORM
+>
+
+/**
+ * Standardized fields that will directly contain a string
+ * @example 
+ * ```
+ * {
+ *      response: "foobar",
+ *      comment: "I am a comment"
+ * }
+ * ```
+ */
 export type DbPathsStrings = {
-    [key in Exclude<
-        DbPathsEnum,
-        DbPathsEnum.FOLLOWUP_PREDEFINED | DbPathsEnum.FOLLOWUP_FREEFORM
-    >]?: string
+    [key in DbPathsFirstLevel]?: string
 }
 
+/**
+ * Standardized field path for responses,
+ * including first level paths
+ * and nesting for followup
+ */
 export interface DbPaths extends DbPathsStrings {
     [DbPathsEnum.FOLLOWUP_PREDEFINED]?: DbSubPaths
     [DbPathsEnum.FOLLOWUP_FREEFORM]?: DbSubPaths

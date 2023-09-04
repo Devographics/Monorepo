@@ -103,14 +103,22 @@ export type Credit = {
     entity?: Entity
 }
 
+/**
+ * See for actual usagequestions.yml 
+ * and surveyform/src/lib/customComponents.ts for correspondance with form inputs
+ */
+export type TemplateKind = "single" | "multiple" | "feature" | "others" | "tool" | "tools_others" | "textlist" | string // TODO: try to type all possible templates explicitely
+
 export type Section = {
     id: string
     messageId?: string
     intlId?: string
     slug: string // TODO: maybe get rid of this?
     questions: Question[]
-    // define a default template for all questions in this section
-    template?: string
+    /** 
+     * Define a default template for all questions in this section
+     **/
+    template?: TemplateKind
 }
 
 export type ApiSection = {
@@ -123,12 +131,13 @@ export type ApiQuestion = {
     template?: string
 }
 
+/**
+ * Keep in sync with QuestionMetadata in
+ * api/src/graphql/typedefs/schema.graphql
+ * 
+ */
 export type Question = {
-    /**
-     * See questions.yml and 
-     * surveyform/src/lib/customComponents.ts
-     */
-    template: "single" | "multiple" | "others" | string // TODO: try to type all possible templates explicitely
+    template: TemplateKind
     // override the template
     inputComponent?: string
 
@@ -185,7 +194,7 @@ export type Question = {
     /**
      * To use a textarea in TextList
      */
-    long?: boolean;
+    longText?: boolean;
 }
 
 export type Option = {

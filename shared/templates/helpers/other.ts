@@ -1,6 +1,6 @@
-import { QuestionWithId, TemplateArguments } from '@devographics/types'
+import { Question, QuestionWithId, TemplateArguments } from '@devographics/types'
 
-export const checkHasId = (options: TemplateArguments) => {
+export const checkHasId = (options: TemplateArguments): QuestionWithId => {
     const { edition, question } = options
     if (!question.id) {
         throw new Error(

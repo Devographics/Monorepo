@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState /*, { useState }*/ } from "react";
+import React, { useEffect, useRef, useState /*, { useState }*/ } from "react";
 import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
@@ -23,7 +23,11 @@ function makeItem(value: string): Item {
   return { value, key: Math.random() + "" };
 }
 
+const itemId = (item: Item) => `textlist-item-${item.key}`;
+
 /**
+ * A list of multiple text inputs (or textarea if long=true)
+ *
  * Create additional items as user add values
  * TODO: check mockup https://github.com/LeaVerou/stateof/tree/main/mocks/custom-options
  * TODO: see arrays from Vulcan: https://github.com/VulcanJS/vulcan-npm/tree/main/packages/react-ui-lite/components/form/nested
@@ -41,12 +45,16 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     readOnly,
   } = props;
   // TODO: path is undefined, perhaps because "textlist" is not yet supported by the API?
+  // console.log("TEXTLIST", { path, question });
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   const values = value_ || [];
 
   // TODO: check that the key is correctly set based on "value"
   // @see https://react.dev/learn/you-might-not-need-an-effect#resetting-all-state-when-a-prop-changes
   const [items, setItems] = useState<Array<Item>>(values.map(makeItem));
+  // TODO: optionnaly allow to see 2 items directly
+  // this would need properly handling empty inputs
   const [itemsWithLast, setItemsWithLast] = useState(items);
   useEffect(() => {
     setItemsWithLast(items.length ? [...items, makeItem("")] : [makeItem("")]);
@@ -93,6 +101,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   };
 
   const itemProps = {
+    question,
     items,
     readOnly,
     handleBlurDebounced,
@@ -100,7 +109,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   };
 
   return (
-    <FormItem {...props}>
+    <FormItem {...props} ref={wrapperRef}>
       {itemsWithLast.map((item, index) => (
         <TextListItem key={index} index={index} item={item} {...itemProps} />
       ))}
@@ -109,6 +118,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
 };
 
 const TextListItem = ({
+  question,
   items,
   item,
   index,
@@ -120,6 +130,7 @@ const TextListItem = ({
 
   return (
     <FormControl
+      id={itemId(item)}
       style={{
         marginTop: "4px",
         marginBottom: "4px",
@@ -130,7 +141,7 @@ const TextListItem = ({
       // TODO: somehow question.long is not set (but we see it in the API),
       // double check what happens after adding API support
       // code: question.long ? "textarea" : "input"
-      as={"textarea"}
+      as={question.longText ? "textarea" : "input"}
       placeholder={formatMessage({
         id: "textlist.placeholder",
         values: { index: index + 1 },
