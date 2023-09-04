@@ -2,6 +2,7 @@ import {
   fetchAllLocalesMetadata,
   fetchEditionMetadata,
   fetchLocale,
+  fetchLocaleConverted,
   fetchSurveysMetadata,
 } from "@devographics/fetch";
 import { FetcherFunctionOptions } from "@devographics/fetch/types";
@@ -94,6 +95,15 @@ export const refreshLocalesCache = async (args) => {
     });
     refreshedCacheKeys.push(cacheKey!);
 
+    // note: get rid of this once surveyform uses normal locale format
+    const { cacheKey: cacheKeyConverted } = await fetchLocaleConverted({
+      ...options,
+      localeId: locale.id,
+      contexts: getCommonContexts(),
+    });
+    refreshedCacheKeys.push(cacheKeyConverted!);
+    // end
+
     // survey-specific context
     for (const survey of allSurveys) {
       console.log(`// Refreshing ${locale.id} metadata cache… (${survey.id})`);
@@ -103,6 +113,15 @@ export const refreshLocalesCache = async (args) => {
         contexts: [survey.id],
       });
       refreshedCacheKeys.push(cacheKey!);
+
+      // note: get rid of this once surveyform uses normal locale format
+      const { cacheKey: cacheKeyConverted } = await fetchLocaleConverted({
+        ...options,
+        localeId: locale.id,
+        contexts: [survey.id],
+      });
+      refreshedCacheKeys.push(cacheKeyConverted!);
+      // end
     }
   }
 

@@ -107,7 +107,7 @@ export type Credit = {
  * See for actual usagequestions.yml 
  * and surveyform/src/lib/customComponents.ts for correspondance with form inputs
  */
-export type TemplateKind = "single" | "multiple" | "feature" | "others" | "tool" | "tools_others" | "textlist" | string // TODO: try to type all possible templates explicitely
+export type TemplateKind = "single" | "multiple" | "feature" | "others" | "tool" | "tools_others" | "textList" | string // TODO: try to type all possible templates explicitely
 
 export type Section = {
     id: string
@@ -173,6 +173,10 @@ export type Question = {
 
     // a question that has a data field but does not show up in the form
     hidden?: boolean
+    /**
+     * Must be true for questions that allow multiple answers
+     * For instance "textList"
+     */
     allowMultiple?: boolean
     /**
      * For single and multiple question

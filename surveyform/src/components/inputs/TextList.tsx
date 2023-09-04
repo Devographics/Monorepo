@@ -1,9 +1,10 @@
 "use client";
-import React, { useRef, useState /*, { useState }*/ } from "react";
+import React, { useRef, useState, RefObject /*, { useState }*/ } from "react";
 import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
+import { useIntlContext } from "@devographics/react-i18n";
 
 /**
  * In an array of input with auto-deletion of empty inputs,
@@ -26,6 +27,7 @@ const itemId = (item: Item) => `textlist-item-${item.key}`;
 const itemSelector = (item: Item) => `[data-id="${itemId(item)}"]`;
 const selectItem = (wrapper: Element | undefined | null, item: Item) => {
   const maybeItem = wrapper?.querySelector(itemSelector(item));
+  if (!maybeItem) console.warn(`Item ${item} not found`);
   if (maybeItem instanceof HTMLElement) {
     return maybeItem;
   }
@@ -104,60 +106,107 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     }
   };
 
+  const itemProps = {
+    question,
+    items,
+    readOnly,
+    handleBlur: handleBlurDebounced,
+    addItem,
+    wrapperRef,
+    lastItem,
+  };
+
   return (
     <FormItem {...props} ref={wrapperRef}>
-      {[...items, lastItem].map((item, idx) => {
-        return (
-          <FormControl
-            // boostrap ain't happy with id, we just need a way to select the input imperatively to handle focus
-            data-id={itemId(item)}
-            style={{
-              marginTop: "4px",
-              marginBottom: "4px",
-            }}
-            key={item.key}
-            as={question.longText ? "textarea" : "input"}
-            defaultValue={item.value}
-            onBlur={(evt) => handleBlurDebounced(idx, evt)}
-            onChange={(evt) => {
-              // The last item is displayed but not yet saved in the items list
-              const isLastItem = idx >= items.length;
-              // if we start filling the last item,
-              // actually add it to the items array
-              // /!\ key must stay the same to avoid visual focus jumps
-              const value = evt.target.value;
-              if (isLastItem) {
-                if (value) {
-                  addItem({ value, key: item.key });
-                }
-              }
-              if (!value && idx > 0) {
-                console.log("IDX", idx, items[idx - 1]);
-                selectItem(wrapperRef.current, items[idx - 1])?.focus();
-              } else if (!value && idx === 0 && items.length === 1) {
-                // Deleted all content of the first input, while there is a second one
-                // => focus on next item
-                selectItem(wrapperRef.current, lastItem)?.focus();
-              }
-            }}
-            onKeyUp={(evt) => {
-              if (evt.key === "Enter") {
-                // TODO: focus on the next input (unless we are in the last one)
-                // but only if "long" is false (in textarea we want enter to add a new line instead
-                // double check the mockups for the interactions)
-                // TODO: we may need to check if current input is still empty or not,
-                // as the focus loss and change event may happen AFTER the keyup
-                // Perhaps we should use "oninput" instead of onchange
-              } else if (evt.key === "ArrowUp") {
-                // TODO: focus on input just above
-              } else if (evt.key === "ArrowDown") {
-                // TODO: focus on input just below
-              }
-            }}
-            disabled={readOnly}
-          />
-        );
-      })}
+      {[...items, lastItem].map((item, index) => (
+        <TextListItem key={item.key} index={index} item={item} {...itemProps} />
+      ))}
     </FormItem>
+  );
+};
+
+const TextListItem = ({
+  question,
+  items,
+  lastItem,
+  item,
+  index,
+  readOnly,
+  handleBlur,
+  addItem,
+  wrapperRef,
+}: {
+  question: any;
+  items: Array<Item>;
+  item: Item;
+  index: number;
+  readOnly?: boolean;
+  handleBlur: any;
+  addItem: any;
+  // additional input that is not yet saved
+  lastItem: Item;
+  wrapperRef: RefObject<HTMLDivElement>;
+}) => {
+  const { formatMessage } = useIntlContext();
+
+  return (
+    <FormControl
+      // id={itemId(item)}
+      // boostrap ain't happy with id, we just need a way to select the input imperatively to handle focus
+      data-id={itemId(item)}
+      style={{
+        marginTop: "4px",
+        marginBottom: "4px",
+      }}
+      // TODO: use different templates to simplify?
+      as={question.longText ? "textarea" : "input"}
+      placeholder={formatMessage({
+        id: "textlist.placeholder",
+        values: { index: index + 1 },
+      })}
+      defaultValue={item.value}
+      //value={localValue}
+      //onChange={(evt) => handleChangeDebounced(idx, evt)}
+      onBlur={(evt) => handleBlur(index, evt)}
+      onChange={(evt) => {
+        // The last item is displayed but not yet saved in the items list
+        const isLastItem = index >= items.length;
+        // if we start filling the last item,
+        // actually add it to the items array
+        // /!\ key must stay the same to avoid visual focus jumps
+        const value = evt.target.value;
+        if (isLastItem) {
+          if (value) {
+            addItem({ value, key: item.key });
+          }
+        }
+        if (!value && index > 0) {
+          // TODO: focus on last item
+          // (in the prototype this is done via backspace key event,
+          // check if onChange is ok or if we need "onInput" for this case)
+          console.log("IDX", index, items[index - 1]);
+          selectItem(wrapperRef.current, items[index - 1])?.focus();
+        } else if (!value && index === 0 && items.length === 1) {
+          // Deleted all content of the first input, while there is a second one
+          // => focus on next item
+          selectItem(wrapperRef.current, lastItem)?.focus();
+        }
+      }}
+      onKeyUp={(evt) => {
+        if (evt.key === "Enter") {
+          // TODO: focus on the next input (unless we are in the last one)
+          // but only if "long" is false (in textarea we want enter to add a new line instead
+          // double check the mockups for the interactions)
+          // TODO: we may need to check if current input is still empty or not,
+          // as the focus loss and change event may happen AFTER the keyup
+          // Perhaps we should use "oninput" instead of onchange
+        } else if (evt.key === "ArrowUp") {
+          // TODO: focus on input just above
+        } else if (evt.key === "ArrowDown") {
+          // TODO: focus on input just below
+        }
+      }}
+      disabled={readOnly}
+    />
   );
 };
