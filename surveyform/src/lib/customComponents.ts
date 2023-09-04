@@ -37,6 +37,7 @@ const customComponents = {
   multipleWithOther: Checkboxgroup,
   multipleWithOtherSentiment: CheckboxgroupSentiment,
   longtext: Textarea,
+  // TODO: enable TextList component textlist: TextList,
   textlist: Textarea,
   text: Text,
   others: Text,
@@ -46,11 +47,6 @@ const customComponents = {
   projects: Projects,
   opinion: Radiogroup,
   number: Number,
-  /**
-   * A list of multiple text inputs (or textarea if long=true)
-   * Rename when done
-   * */
-  experimental_textlist: TextList,
 };
 
 export const getQuestionComponent = (

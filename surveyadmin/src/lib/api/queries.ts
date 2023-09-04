@@ -116,6 +116,7 @@ query ${editionId}MetadataQuery {
             inputComponent
             # contentType
             allowOther
+            longText
             allowComment
             showCommentInput
             allowMultiple
