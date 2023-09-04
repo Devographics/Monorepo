@@ -226,8 +226,10 @@ const Checkbox = (
               const newValue = getNewValue(isChecked);
               updateCurrentValues({ [path]: newValue });
               if (!isChecked) {
+                const predefinedFollowupPathString =
+                  predefinedFollowupPath as string;
                 // if we're unchecking a checkbox, also uncheck its followups
-                updateCurrentValues({ [predefinedFollowupPath]: null });
+                updateCurrentValues({ [predefinedFollowupPathString]: null });
               }
             }}
           />
