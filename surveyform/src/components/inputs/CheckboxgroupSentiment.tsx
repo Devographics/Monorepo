@@ -143,13 +143,44 @@ const Checkbox = (
   const {
     index,
     value = [],
+    response,
     option,
     hasValue,
     hasReachedLimit,
+    edition,
+    question,
     path,
     updateCurrentValues,
     readOnly,
   } = props;
+
+  //   const { followups } = question;
+
+  const formPaths = getFormPaths({ edition, question });
+
+  // get the paths of the predefined and freeform followup answers
+  // inside the overall response document for this specific option
+  const allPredefinedFollowupPaths = formPaths[DbPathsEnum.FOLLOWUP_PREDEFINED];
+  const predefinedFollowupPath = allPredefinedFollowupPaths?.[option.id];
+  const freeformFollowupPath =
+    formPaths[DbPathsEnum.FOLLOWUP_FREEFORM]?.[option.id];
+
+  const predefinedFollowupValue =
+    (predefinedFollowupPath && get(response, predefinedFollowupPath)) || [];
+  const freeformFollowupValue =
+    (freeformFollowupPath && get(response, freeformFollowupPath)) || "";
+
+  const hasFollowupData =
+    !isEmpty(predefinedFollowupValue) || !isEmpty(freeformFollowupValue);
+  const [showFollowupComment, setShowFollowupComment] =
+    useState(hasFollowupData);
+
+  const followupData: FollowupData = {
+    predefinedFollowupPath,
+    freeformFollowupPath,
+    predefinedFollowupValue,
+    freeformFollowupValue,
+  };
 
   const isChecked = value?.includes(option.id);
   const checkClass = hasValue
@@ -171,8 +202,15 @@ const Checkbox = (
       return isChecked ? [...value, option.id] : without(value, option.id);
     }
   };
+
   return (
-    <Form.Check className={[checkClass, `form-option-${option.id}`].join(" ")}>
+    <Form.Check
+      className={[
+        checkClass,
+        `form-option-${option.id}`,
+        "form-checkbox-option",
+      ].join(" ")}
+    >
       <Form.Check.Label htmlFor={`${path}.${index}`}>
         <div className="form-input-wrapper">
           <Form.Check.Input
@@ -187,10 +225,20 @@ const Checkbox = (
               const isChecked = event.target.checked;
               const newValue = getNewValue(isChecked);
               updateCurrentValues({ [path]: newValue });
+              if (!isChecked) {
+                // if we're unchecking a checkbox, also uncheck its followups
+                updateCurrentValues({ [predefinedFollowupPath]: null });
+              }
             }}
           />
         </div>
-        <FormOption {...props} option={option} />
+        <FormOption
+          {...props}
+          option={option}
+          followupData={followupData}
+          isNA={isNA}
+          value={value}
+        />
       </Form.Check.Label>
     </Form.Check>
   );

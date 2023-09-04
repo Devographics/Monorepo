@@ -481,6 +481,9 @@
 .form-option-label {
   display: block;
   font-size: $medium-font;
+  display: flex;
+  align-items: center;
+  gap: $spacing/2;
 }
 
 .form-option-description {

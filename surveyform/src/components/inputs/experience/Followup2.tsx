@@ -10,6 +10,7 @@ import { Button } from "~/components/ui/Button";
 import { CommentTextarea } from "~/components/form/FormComment";
 import { useIntlContext } from "@devographics/react-i18n";
 import { ExperienceProps } from "./Experience";
+import { FormInputProps } from "~/components/form/typings";
 
 export interface FollowupData {
   predefinedFollowupPath?: string;
@@ -19,7 +20,7 @@ export interface FollowupData {
 }
 
 export const FollowUps = (
-  props: ExperienceProps & {
+  props: FormInputProps & {
     option: OptionMetadata;
     followupData: FollowupData;
   }
@@ -31,9 +32,12 @@ export const FollowUps = (
     readOnly,
     path,
     followupData,
+    value,
   } = props;
   const { followups = [] } = question;
-  const optionFollowUps = followups.find((f) => f.id === option.id)?.options;
+  const optionFollowUps = followups.find(
+    (f) => f.id === option.id || f.id === "default"
+  )?.options;
 
   const { predefinedFollowupValue, predefinedFollowupPath } = followupData;
 
@@ -42,6 +46,9 @@ export const FollowUps = (
       `Could not find predefinedFollowupPath for question ${question.id}`
     );
   }
+
+  const parentMode =
+    question.template === "multipleWithOtherSentiment" ? "checkbox" : "radio";
 
   // const followUpPath
   return optionFollowUps ? (
@@ -64,8 +71,14 @@ export const FollowUps = (
               onChange={(event) => {
                 const isChecked = event.target.checked;
 
-                // check "main" parent answer
-                updateCurrentValues({ [path]: option.id });
+                if (parentMode === "radio") {
+                  // check "main" parent answer
+                  updateCurrentValues({ [path]: option.id });
+                } else {
+                  // add value to "main" parent answer
+                  const parentValue = value as Array<number | string>;
+                  updateCurrentValues({ [path]: [...parentValue, option.id] });
+                }
 
                 // checkbox version
                 // const newValue = isChecked

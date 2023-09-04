@@ -12,6 +12,7 @@ import Slider from "~/components/inputs/Slider";
 import Select from "~/components/inputs/Select";
 import Textarea from "~/components/inputs/Textarea";
 import Checkboxgroup from "~/components/inputs/Checkboxgroup";
+import CheckboxgroupSentiment from "~/components/inputs/CheckboxgroupSentiment";
 import Radiogroup from "~/components/inputs/Radiogroup";
 import Projects from "~/components/inputs/Projects";
 import { QuestionMetadata, QuestionTemplateOutput } from "@devographics/types";
@@ -34,6 +35,7 @@ const customComponents = {
    * Just a shortcut for multiple + allowOther=true
    */
   multipleWithOther: Checkboxgroup,
+  multipleWithOtherSentiment: CheckboxgroupSentiment,
   longtext: Textarea,
   text: Text,
   others: Text,

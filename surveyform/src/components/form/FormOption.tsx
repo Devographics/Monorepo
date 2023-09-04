@@ -6,12 +6,15 @@ import { getOptioni18nIds } from "@devographics/i18n";
 import { useOptionTitle } from "~/lib/surveys/helpers/useOptionTitle";
 import AddToList from "~/components/reading_list/AddToList";
 import OptionLabel from "./OptionLabel";
+import { FollowUps } from "../inputs/experience/Followup2";
 
 interface FormOptionProps extends FormInputProps {
   option: OptionMetadata;
+  isNA?: boolean;
+  followupData?: any;
 }
 export const FormOption = (props: FormOptionProps) => {
-  const { option, question } = props;
+  const { option, question, followupData, isNA } = props;
   const { entity } = option;
 
   const intl = useIntlContext();
@@ -28,6 +31,9 @@ export const FormOption = (props: FormOptionProps) => {
       <div className="form-option-item">
         <span className="form-option-label">
           <OptionLabel question={question} option={option} />
+          {!isNA && followupData && (
+            <FollowUps {...props} followupData={followupData} />
+          )}
         </span>
         {optionDescription && (
           <FormattedMessage

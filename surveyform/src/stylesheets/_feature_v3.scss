@@ -136,9 +136,11 @@
   }
 }
 
-.form-experience-option {
+.form-experience-option,
+.form-checkbox-option {
   &:hover,
-  &.hasValue {
+  &.hasValue,
+  &.form-check-checked {
     .sentiments {
       display: flex;
     }
