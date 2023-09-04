@@ -12,13 +12,19 @@ feature:
 featurev3:
     - id: never_heard
       options:
-          - id: interested
-          - id: not_interested
+          - id: sentiment_interested
+          - id: sentiment_not_interested
     - id: heard
       options:
-          - id: interested
-          - id: not_interested
+          - id: sentiment_interested
+          - id: sentiment_not_interested
     - id: used
       options:
-          - id: positive_experience
-          - id: negative_experience
+          - id: sentiment_positive_experience
+          - id: sentiment_negative_experience
+
+multipleWithOtherSentiment:
+    - id: default
+      options:
+          - id: sentiment_positive_experience
+          - id: sentiment_negative_experience

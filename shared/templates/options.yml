@@ -161,7 +161,7 @@ race_ethnicity:
         - id: south_asian
         - id: white_european
         - id: south_east_asian
-        - id: not_listed
+        # - id: not_listed
 
 disability_status:
     defaultSort: options
@@ -171,7 +171,7 @@ disability_status:
         - id: hearing_impairments
         - id: mobility_impairments
         - id: cognitive_impairments
-        - id: not_listed
+        # - id: not_listed
 
 higher_education_degree:
     defaultSort: options
