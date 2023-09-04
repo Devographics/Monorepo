@@ -180,6 +180,7 @@ const TextListItem = ({
             addItem({ value, key: item.key });
           }
         }
+        // Focus logic
         if (!value && index > 0) {
           // TODO: focus on last item
           // (in the prototype this is done via backspace key event,
@@ -204,6 +205,10 @@ const TextListItem = ({
           // TODO: focus on input just above
         } else if (evt.key === "ArrowDown") {
           // TODO: focus on input just below
+        } else if (evt.key === "Backspace") {
+          // TODO: if item is empty when we press backspace, focus to previous item
+          // this is needed for the edge case where user navigate to an empty input,
+          // and immediately press backspace => change event is not fired
         }
       }}
       disabled={readOnly}
