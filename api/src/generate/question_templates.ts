@@ -1,5 +1,5 @@
-import * as allTemplates from './templates/index'
-const { defaultTemplateFunction } = allTemplates
+import { defaultTemplateFunction, templateFunctions } from '@devographics/templates'
+import * as apiTemplateFunctions from './templates/index'
 import { TemplatesDictionnary } from '../types/surveys'
 
 const doNotInclude = () => ({
@@ -7,9 +7,10 @@ const doNotInclude = () => ({
 })
 
 export const templates: TemplatesDictionnary = {
-    ...allTemplates,
+    ...templateFunctions,
+    ...apiTemplateFunctions,
 
-    top_n: allTemplates.multiple,
+    top_n: templateFunctions.multiple,
 
     bracket: defaultTemplateFunction,
 
