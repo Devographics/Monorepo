@@ -69,6 +69,13 @@ const Radio = ({ index, value, option, hasValue, formProps, setShowOther }) => {
             // ref={refFunction}
             checked={isChecked}
             className={checkClass}
+            onClick={(e) => {
+              const target = e.target as HTMLInputElement;
+              const clickedValue = target.value;
+              if (clickedValue === value) {
+                updateCurrentValues({ [path]: null });
+              }
+            }}
             onChange={(e) => {
               const v = e.target.value;
               const newValue = question.optionsAreNumeric ? Number(v) : v;

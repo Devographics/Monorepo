@@ -37,6 +37,7 @@ const customComponents = {
   multipleWithOther: Checkboxgroup,
   multipleWithOtherSentiment: CheckboxgroupSentiment,
   longtext: Textarea,
+  textlist: Textarea,
   text: Text,
   others: Text,
   single: Radiogroup,

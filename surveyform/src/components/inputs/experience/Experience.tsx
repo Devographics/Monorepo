@@ -109,6 +109,13 @@ const ExperienceOption = (
         <Form.Check.Label htmlFor={`${path}.${i}`}>
           <div className="form-input-wrapper">
             <Form.Check.Input
+              onClick={(e) => {
+                const target = e.target as HTMLInputElement;
+                const clickedValue = target.value;
+                if (clickedValue === value) {
+                  updateCurrentValues({ [path]: null });
+                }
+              }}
               onChange={(e) => {
                 updateCurrentValues({ [path]: e.target.value });
               }}
