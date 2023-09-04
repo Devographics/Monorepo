@@ -8,7 +8,7 @@
   display: inline-flex;
   gap: 0.6em;
   //   margin-left: 0.8em;
-  display: none;
+  opacity: 0;
 }
 
 @keyframes arrow {
@@ -142,7 +142,7 @@
   &.hasValue,
   &.form-check-checked {
     .sentiments {
-      display: flex;
+      opacity: 1;
     }
   }
   .form-check {
