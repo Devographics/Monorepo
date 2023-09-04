@@ -38,7 +38,7 @@ const customComponents = {
   multipleWithOtherSentiment: CheckboxgroupSentiment,
   longtext: Textarea,
   // TODO: enable TextList component textlist: TextList,
-  textlist: Textarea,
+  textlist: TextList,
   text: Text,
   others: Text,
   single: Radiogroup,

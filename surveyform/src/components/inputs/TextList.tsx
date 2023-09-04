@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState /*, { useState }*/ } from "react";
+import React, { useRef, useState /*, { useState }*/ } from "react";
 import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
@@ -23,6 +23,13 @@ function makeItem(value: string): Item {
 }
 
 const itemId = (item: Item) => `textlist-item-${item.key}`;
+const itemSelector = (item: Item) => `[data-id="${itemId(item)}"]`;
+const selectItem = (wrapper: Element | undefined | null, item: Item) => {
+  const maybeItem = wrapper?.querySelector(itemSelector(item));
+  if (maybeItem instanceof HTMLElement) {
+    return maybeItem;
+  }
+};
 
 /**
  * A list of multiple text inputs (or textarea if long=true)
@@ -52,12 +59,8 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   // TODO: check that the key is correctly set based on "value"
   // @see https://react.dev/learn/you-might-not-need-an-effect#resetting-all-state-when-a-prop-changes
   const [items, setItems] = useState<Array<Item>>(values.map(makeItem));
-  // TODO: optionnaly allow to see 2 items directly
-  // this would need properly handling empty inputs
-  const [itemsWithLast, setItemsWithLast] = useState(items);
-  useEffect(() => {
-    setItemsWithLast(items.length ? [...items, makeItem("")] : [makeItem("")]);
-  }, [items.length]);
+
+  const [lastItem, setLastItem] = useState(makeItem(""));
 
   // TODO: assess if debouncing is really needed here, onchange is fired only on focus loss
   // (contrary to "oninput" which actually needs debouncing)
@@ -65,12 +68,13 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
 
   const handleChange = (items: Array<Item>) => {
     setItems(items);
-    // TODO: currently path is undefined so it won't work, reenable when the API is ok
-    // updateCurrentValuesDebounced({ [path]: toStrings(items) });
+    updateCurrentValuesDebounced({ [path]: toStrings(items) });
   };
 
   const addItem = (item: Item) => {
     handleChange([...items, item]);
+    // we need a new last item
+    setLastItem(makeItem(""));
   };
   const removeItem = (idx: number) => {
     handleChange([...items.slice(0, idx), ...items.slice(idx + 1)]);
@@ -102,23 +106,18 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
 
   return (
     <FormItem {...props} ref={wrapperRef}>
-      {itemsWithLast.map((item, idx) => {
+      {[...items, lastItem].map((item, idx) => {
         return (
           <FormControl
-            id={itemId(item)}
+            // boostrap ain't happy with id, we just need a way to select the input imperatively to handle focus
+            data-id={itemId(item)}
             style={{
               marginTop: "4px",
               marginBottom: "4px",
             }}
-            // TODO: this may mess up rendering, in Vulcan we had specific logic to handle a "visible index"
-            // need to check what happens when removing an intermediate input, it may mess up the values
             key={item.key}
-            // TODO: somehow question.long is not set (but we see it in the API),
-            // double check what happens after adding API support
             as={question.longText ? "textarea" : "input"}
             defaultValue={item.value}
-            //value={localValue}
-            //onChange={(evt) => handleChangeDebounced(idx, evt)}
             onBlur={(evt) => handleBlurDebounced(idx, evt)}
             onChange={(evt) => {
               // The last item is displayed but not yet saved in the items list
@@ -133,9 +132,12 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
                 }
               }
               if (!value && idx > 0) {
-                // TODO: focus on last item
-                // (in the prototype this is done via backspace key event,
-                // check if onChange is ok or if we need "onInput" for this case)
+                console.log("IDX", idx, items[idx - 1]);
+                selectItem(wrapperRef.current, items[idx - 1])?.focus();
+              } else if (!value && idx === 0 && items.length === 1) {
+                // Deleted all content of the first input, while there is a second one
+                // => focus on next item
+                selectItem(wrapperRef.current, lastItem)?.focus();
               }
             }}
             onKeyUp={(evt) => {
