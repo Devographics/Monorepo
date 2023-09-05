@@ -65,10 +65,8 @@ const DEFAULT_LIMIT = 10;
  * "limit" options sets a limit (default is 10 responses)
  * "longText" option uses textarea instead of inputs
  *
- * TODO: we have a logic that maintains an additional "lastItem"
- * We could instead accept empty inputs in between values, this is what is preferred in the mockup
- * For instance Enter would create new input and focus on it, unless there is already an empty input below,
- * or current input is itself empty?
+ * TODO: tie the onBlur event to the whole form to cleanup empty inputs, otherwise it jumps a lot
+ * TODO: create the last item when focusing the input?
  *
  * TODO: check mockup https://github.com/LeaVerou/stateof/tree/main/mocks/custom-options
  * TODO: see arrays from Vulcan: https://github.com/VulcanJS/vulcan-npm/tree/main/packages/react-ui-lite/components/form/nested
@@ -131,6 +129,10 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     // TODO: should we remove the value if the array becomes totally empty?
     // by setting it to "null"?
   };
+  const removeEmptyItems = () => {
+    const filtered = items.filter((i) => !i.value);
+    if (filtered.length !== items.length) updateAllItems(filtered);
+  };
   const updateItem = (idx: number, value: string) => {
     updateAllItems([
       ...items.slice(0, idx),
@@ -151,6 +153,11 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     return selectItem(wrapperRef.current, items[index + 1]);
   };
 
+  // TODO: FormItem doesn't accept an onBlur event yet
+  const onFormBlur = () => {
+    // remove empty items
+    removeEmptyItems();
+  };
   const onItemBlur = (
     index: number,
     event:
@@ -158,6 +165,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
       | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement> // onBlur
   ) => {
     const value = event.target.value;
+    // TODO: this jumps too much, instead use "removeEmptyItems" on the form
     if (!value) {
       if (index <= items.length - 1) removeItem(index);
     } else if (value !== items[index].value) {
