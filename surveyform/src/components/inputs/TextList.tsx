@@ -56,7 +56,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   // console.log("TEXTLIST", { path, question });
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const values = value_ || [];
+  const values = value_ || question.initialCustomCount > 1 ? Array(question.initialCustomCount - 1).fill("") : [];
 
   // TODO: check that the key is correctly set based on "value"
   // @see https://react.dev/learn/you-might-not-need-an-effect#resetting-all-state-when-a-prop-changes

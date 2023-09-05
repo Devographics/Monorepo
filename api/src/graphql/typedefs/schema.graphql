@@ -152,6 +152,8 @@ type QuestionMetadata {
     hidden: Boolean
     # textarea vs input for freeform questions
     longText: Boolean
+    # initial number of custom options
+    initialCustomOptions: Int
 }
 
 type RawDbPaths {

@@ -199,6 +199,11 @@ export type Question = {
      * To use a textarea in TextList
      */
     longText?: boolean;
+
+    /**
+     * Initial number of custom inputs in TextList
+     */
+    initialCustomCount?: number;
 }
 
 export type Option = {

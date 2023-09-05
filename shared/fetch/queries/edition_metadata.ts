@@ -88,6 +88,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
               # contentType
               allowOther
               longText
+              initialCustomCount
               allowComment
               showCommentInput
               allowMultiple
