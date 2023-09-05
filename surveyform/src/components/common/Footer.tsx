@@ -43,7 +43,7 @@ export const Footer = () => {
         >
           Debug
         </a>{" "}
-        |{" "}
+        | <Link href={routes.survey.demo.href}>Demo survey</Link> |{" "}
         {!currentUser && (
           <>
             <Link href={routes.account.login.href}>
@@ -55,7 +55,7 @@ export const Footer = () => {
           <>
             <LogoutButton asLink={true} />
           </>
-        )}{" "}
+        )}
       </div>
       <div className="footer-bottom">
         {/* <a

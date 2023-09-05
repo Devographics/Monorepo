@@ -43,6 +43,7 @@ export const routes = {
     /** Access the response (may be in read-only mode, depending if the survey is closed) */
     response: { href: ({ slug, year, section, responseId }: { slug: string, year: string, responseId: string, section?: number }) => `/survey/${slug}/${year}/${responseId}/${section ?? 1}` },
     /** Displays only the questions, without any response */
-    outline: { href: ({ slug, year, section }: { slug: string, year: string, section?: number }) => `/survey/${slug}/${year}/outline/${section ?? 1}` }
+    outline: { href: ({ slug, year, section }: { slug: string, year: string, section?: number }) => `/survey/${slug}/${year}/outline/${section ?? 1}` },
+    demo: { href: "/survey/demo-survey/2022" }
   },
 };

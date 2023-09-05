@@ -17,8 +17,10 @@ import Radiogroup from "~/components/inputs/Radiogroup";
 import Projects from "~/components/inputs/Projects";
 import { QuestionMetadata, QuestionTemplateOutput } from "@devographics/types";
 import { TextList } from "~/components/inputs/TextList";
+import { ComponentType } from "react";
+import { FormInputProps } from "~/components/form/typings";
 
-const customComponents = {
+const customComponents: { [key: string]: ComponentType<FormInputProps> } = {
   help: Help,
   receive_notifications: Email2,
   hidden: Hidden,

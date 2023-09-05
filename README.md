@@ -231,7 +231,6 @@ we also setup an HTTP proxy.
 See "docker-compose.yml" and "Justfile" for our local setup.
 
 To reset the local Redis instance, the best approach is to remove the Redis container.
-This might be needed if you don't see the "demo_survey" in surveyform during local dev or testing.
 
 ---
 
@@ -298,7 +297,7 @@ Emojis to distinguish commits within the monorepo:
 - 📡 `:satellite:`for the api
 - 📊 `:bar_chart:`for the results
 - 🏠 `:house:`for the homepage
-- ✍ ️`:writhing_hand:` for the surveyform
+- ✍ ️`:writing_hand:` for the surveyform
 - 🔒 `:lock:` for the surveyadmin
 - 🌐 `:globe_with_meridians:` for the locales
 - 📖 `:book:` for the surveys

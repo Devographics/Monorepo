@@ -33,18 +33,19 @@ const makeAPIOnly = (sections: Section[]) =>
 
 interface LoadOrGetSurveysOptions {
     forceReload?: boolean
-    /** Set to true to keep the demo survey during dev */
-    includeDemo?: boolean
 }
-// load surveys if not yet loaded
+/**
+ * Load surveys if not yet loaded on startup
+ * 
+ * This will include hidden surveys
+ */
 export const loadOrGetSurveys = async (options: LoadOrGetSurveysOptions = {}) => {
-    const { forceReload, includeDemo } = options
+    const { forceReload } = options
 
     if (forceReload || allSurveys.length === 0) {
         allSurveys = await loadSurveys()
     }
-    if (includeDemo) return allSurveys
-    return allSurveys.filter(s => s.id !== 'demo_survey')
+    return allSurveys
 }
 
 export const loadOrGetParsedSurveys = async (options: LoadOrGetSurveysOptions = {}) => {
@@ -231,7 +232,7 @@ export const loadLocally = async () => {
                         )
                         const editionConfigYaml: any = yaml.load(editionConfigContents)
                         edition = editionConfigYaml
-                    } catch (error) {}
+                    } catch (error) { }
                     const questionsPath = editionDirPath + '/questions.yml'
                     if (existsSync(questionsPath)) {
                         try {
@@ -295,10 +296,7 @@ export const loadSurveys = async () => {
 
 export const initSurveys = async () => {
     console.log('// initializing surveys')
-    const isDevOrTest = !!(
-        process.env.NODE_ENV && ['test', 'development'].includes(process.env.NODE_ENV)
-    )
-    const surveys = await loadOrGetSurveys({ forceReload: true, includeDemo: isDevOrTest })
+    const surveys = await loadOrGetSurveys({ forceReload: true })
     logToFile('surveys.json', surveys, { mode: 'overwrite' })
     allSurveys = surveys
     return surveys
