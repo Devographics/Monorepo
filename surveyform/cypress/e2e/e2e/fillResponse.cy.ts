@@ -35,7 +35,7 @@ const test = it;
 const CURRENT_SURVEY_REGEX = new RegExp(`${testSurvey.name}`, "i");
 const CURRENT_SURVEY_URL = `/${testSurvey.prettySlug}/${testSurvey.year}`;
 test("Access demo survey 2022, signup, start filling form", () => {
-  const surveyRootUrl = routes.survey.root.href + CURRENT_SURVEY_URL;
+  const surveyRootUrl = routes.survey.demo.href
   cy.visit(surveyRootUrl);
 
   getContinueAsGuestButton().click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
@@ -44,9 +44,10 @@ test("Access demo survey 2022, signup, start filling form", () => {
   // @see https://github.com/cypress-io/cypress/issues/7890
   cy.url().should("match", new RegExp(surveyRootUrl + "/.+"));
 
-  // Click a radio button
+  // Features
+  getLinkToSection(/feature/i).click({ force: true })
   getQuestionBlock(
-    /Custom Directives|demo_survey__features__custom_directives__experience/i
+    /demo_feature/i
   ).within(() => {
     // "Used" radio
     // TODO: doesn't work with regex it seems
@@ -57,17 +58,17 @@ test("Access demo survey 2022, signup, start filling form", () => {
     ).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   });
 
-  // Go to usage section
-  getLinkToSection(/Usage|sections\.usage\.title/i).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
+  // Tools/multiple
+  getLinkToSection(/multiple/i).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   // Click a checkboxgroup
   cy.findByRole("heading", {
-    name: /API Types|demo_survey__usage__api_type__choices/i,
+    name: /demo_multiple/i,
   })
     .parent()
     .within(() => {
       // "Used" radio
-      cy.findByRole("checkbox", { name: /Public|public_apis/i }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
-      cy.findByRole("checkbox", { name: /Private|private_apis/i }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
+      cy.findByRole("checkbox", { name: /multiple\.one/i }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
+      cy.findByRole("checkbox", { name: /multiple\.two/i }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
     });
 
   // TODO: multipleWithOther
@@ -79,11 +80,11 @@ test("Access demo survey 2022, signup, start filling form", () => {
   })
   */
 
-  // Click a "slider"
+  // Various inputs (slider etc.)
+  getLinkToSection(/various_fields/i).click({ force: true })
   getQuestionBlock(/demo_balance_slider/i).within(() => {
     cy.findByRole("radio", { name: /2/i }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   })
-
   // Click a bracket
   // Be careful not to match "Others GraphQL strong points", that's why we need a ^ and a $
   getQuestionBlock(
@@ -116,11 +117,19 @@ test("Access demo survey 2022, signup, start filling form", () => {
   // Provide personal info
   // Fill autocomplete
 
-  // Select a combobox
+  // Demographics
   getLinkToSection(/About|user_info/i).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   getQuestionBlock(/Country|user_info__country/i).within(() => {
     cy.findByRole("combobox").select("France");
   });
+
+  // Experimental inputs
+  getLinkToSection(/experimental/i).click({ force: true })
+  getQuestionBlock(/textlist/i).within(() => {
+    // TODO
+    //cy.findByRole("")
+  })
+
 
   // skip to last section
   // finish

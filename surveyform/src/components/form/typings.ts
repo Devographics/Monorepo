@@ -15,6 +15,11 @@ export type FormInputProps<TValue = string | number | string[] | number[]> = {
    * All form inputs have to be robust to this scenario
    */
   response?: ResponseDocument;
+  /**
+   * 
+   * NOTE: "path" may be undefined if the component template name (for instance "textList")
+   * doesn't match an existing template in the API/shared code
+   */
   path: string;
   value: TValue; // TODO: value might be undefined?
   survey: SurveyMetadata;

@@ -91,6 +91,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
               allowComment
               showCommentInput
               allowMultiple
+              cutoff
               randomize
               optionsAreNumeric
               # optionsAreRange

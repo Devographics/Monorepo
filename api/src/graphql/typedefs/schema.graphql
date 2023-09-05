@@ -137,6 +137,7 @@ type QuestionMetadata {
     showCommentInput: Boolean
     allowMultiple: Boolean
     randomize: Boolean
+    cutoff: Int
     matchTags: [String]
     limit: Int
     # options/values for the question are numeric

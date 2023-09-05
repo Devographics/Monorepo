@@ -24,6 +24,7 @@ import { useQuestionTitle } from "~/lib/surveys/helpers/useQuestionTitle";
 import { getFormPaths } from "@devographics/templates";
 import AddToList from "~/components/reading_list/AddToList";
 import QuestionLabel from "./QuestionLabel";
+import { getItemIdInViewport } from "../questions/SurveySectionHeading";
 
 export interface FormItemProps extends FormInputProps {
   children: ReactNode;
@@ -90,13 +91,17 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
     const firstRenderRef1 = useRef(true);
     const firstRenderRef2 = useRef(true);
 
-    const updateItemPositions = () => {
+    const getItemPosition = () => {
       const top = myRef?.current?.getBoundingClientRect()?.top || 0;
       const scrollTop = document.documentElement.scrollTop;
+      return top + scrollTop;
+    };
+
+    const updateItemPositions = () => {
       // console.log("// calculating itemPositions");
       setItemPositions((itemPositions) => ({
         ...itemPositions,
-        [question.id]: top + scrollTop,
+        [question.id]: getItemPosition(),
       }));
     };
 
@@ -128,6 +133,42 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
         }
       }
     }, [reactToChanges]);
+
+    // /*
+
+    // Track when an item comes into view
+
+    // */
+    // const [isInView, setIsInView] = useState(false);
+    // const firstRenderRef3 = useRef(true);
+
+    // const handleScroll = () => {
+    //   const position = window.scrollY;
+    //   const itemId = getItemIdInViewport(position, itemPositions);
+    //   const isInView = itemId === question.id;
+    //   setIsInView(isInView);
+    // };
+
+    // // run on scroll
+    // useEffect(() => {
+    //   window.addEventListener("scroll", handleScroll, { passive: true });
+    //   return () => {
+    //     window.removeEventListener("scroll", handleScroll);
+    //   };
+    // }, []);
+
+    // // run whenever an item comes into view for the first time
+    // // but not on first render
+    // useEffect(() => {
+    //   if (firstRenderRef3.current) {
+    //     firstRenderRef3.current = false;
+    //     return;
+    //   }
+    //   if (isInView) {
+    //     // TODO: updateCurrentValues with timestamp of item first coming into view
+    //     // TODO: updateCurrentValues with timestamp every time question value is modified
+    //   }
+    // }, [isInView]);
 
     return (
       <div ref={myRef}>
@@ -182,7 +223,7 @@ export const FormItemTitle = (props: FormItemProps) => {
         )}
       </Form.Label>
 
-      {enableReadingList && (
+      {enableReadingList && question.entity && (
         <AddToList {...props} label={label} id={question.id} />
       )}
 
