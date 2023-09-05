@@ -13,6 +13,8 @@ import { useIntlContext } from "@devographics/react-i18n";
 interface Item {
   value: string;
   key: string;
+  // focus when the input is insereted
+  autofocus?: boolean;
 }
 
 function toStrings(items: Array<Item>): Array<string> {
@@ -86,15 +88,20 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const getUniqueKey = useUniqueSeq();
-  function makeItem(value: string): Item {
-    return { value, key: getUniqueKey() + "" };
+  // guarantee a unique key
+  function makeItem(value: string, autofocus?: boolean): Item {
+    return { value, key: getUniqueKey() + "", autofocus };
   }
 
   // TODO: check that the key is correctly set based on "value"
   // @see https://react.dev/learn/you-might-not-need-an-effect#resetting-all-state-when-a-prop-changes
   const values = value_ || [];
 
-  const [items, setItems] = useState<Array<Item>>(values.map(makeItem));
+  // NOTE: current code doesn't accept concurrent updates of this value,
+  // either use a reducer or "functional" setState
+  const [items, setItems] = useState<Array<Item>>(
+    values.map((val) => makeItem(val))
+  );
 
   const [lastItem, setLastItem] = useState(makeItem(""));
 
@@ -108,10 +115,16 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     updateCurrentValuesDebounced({ [path]: toStrings(items) });
   };
   const limit = Math.max(DEFAULT_LIMIT, question.limit || 0);
-  const addItem = (item: Item) => {
+  /**
+   * If no index is provided, add a last item
+   */
+  const addLastItem = (item: Item) => {
     updateAllItems([...items, item]);
     // we need a new last item
     setLastItem(makeItem(""));
+  };
+  const addItem = (item: Item, index: number) => {
+    updateAllItems([...items.slice(0, index), item, ...items.slice(index)]);
   };
   const removeItem = (idx: number) => {
     updateAllItems([...items.slice(0, idx), ...items.slice(idx + 1)]);
@@ -132,7 +145,6 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     selectItem(wrapperRef.current, items[index - 1]);
   const selectLastItem = () => selectItem(wrapperRef.current, lastItem);
   const selectNextItem = (index: number) => {
-    console.log("selecting next item", index, items.length);
     if (index === items.length - 1) {
       return selectLastItem();
     }
@@ -147,9 +159,9 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   ) => {
     const value = event.target.value;
     if (!value) {
-      // TODO: is it enough to handle it via backspace?
-      // removeItem(index);
-    } else {
+      if (index <= items.length - 1) removeItem(index);
+    } else if (value !== items[index].value) {
+      // only update if the item actually changed otherwise we have competing updates
       updateItem(index, value);
     }
   };
@@ -163,7 +175,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     // and create a new last item
     if (isLastItem) {
       if (value && items.length <= limit) {
-        addItem({ value, key });
+        addLastItem({ value, key });
       }
     }
   };
@@ -179,16 +191,36 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
       // Pressing enter when focusing on an empty last item => submit the form as usual
       // (last item is always empty, sinc starting to type in it will create a new empty last item)
       if (index === items.length) return;
-      // Otherwise, we instead focus on next item
+      // prevent form submission
       evt.stopPropagation();
       evt.preventDefault();
-      focusInputEnd(selectNextItem(index));
+      // Create an empty item next OR focus on existing one
+      const nextItem = selectNextItem(index);
+      if (!nextItem) return; // should not happen but pleases TS
+      if (!value) {
+        // no current value => focus on next item
+        // the blur event will take care of removing the current input
+        nextItem.focus();
+      } else if (!nextItem.value) {
+        // next item is already empty, just focus on it
+        nextItem.focus();
+      } else if (items.length >= limit) {
+        // already too many items
+        nextItem.focus();
+      } else {
+        // create a new empty item at next index
+        // it will use autofocus
+        const newItem = makeItem("", true);
+        addItem(newItem, index + 1);
+      }
     } else if (evt.key === "ArrowUp") {
       if (index > 0) {
+        evt.preventDefault();
         focusInputEnd(selectPreviousItem(index));
       }
     } else if (evt.key === "ArrowDown") {
       if (index < items.length) {
+        evt.preventDefault();
         focusInputEnd(selectNextItem(index));
       }
     } else if (evt.key === "Backspace" || evt.key === "Delete") {
@@ -287,6 +319,7 @@ const TextListItem = ({
       onChange={onChange}
       onKeyDown={onKeyDown}
       disabled={readOnly}
+      autoFocus={item.autofocus}
     />
   );
 };
