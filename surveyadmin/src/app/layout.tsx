@@ -1,5 +1,6 @@
 import "~/stylesheets/main.scss";
 import { Metadata } from "next";
+import Link from "next/link";
 
 export default function RootLayout({
   children,
@@ -9,7 +10,12 @@ export default function RootLayout({
   return (
     <html>
       <head />
-      <body>{children}</body>
+      <body>
+        <div>
+          <Link href="/">Back to home</Link>
+        </div>
+        {children}
+      </body>
     </html>
   );
 }

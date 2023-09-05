@@ -1,16 +1,25 @@
 import React, { memo, useState, useCallback } from 'react'
-import PropTypes from 'prop-types'
 import styled, { useTheme, keyframes } from 'styled-components'
 import Confetti from 'react-confetti'
 import tinycolor from 'tinycolor2'
-import ShareBlock from 'core/share/ShareBlock'
 import { useI18n } from 'core/i18n/i18nContext'
 import { mq, spacing, fontSize } from 'core/theme'
 import AwardIcon from './AwardIcon'
 import T from 'core/i18n/T'
 import { getItemLabel } from 'core/helpers/labels'
+import { Entity } from '@devographics/types'
+import { Award } from 'core/types'
 
-const AwardBlock = ({ block, entities }) => {
+/**
+ * Awards for one category (= winner and runner ups for this category)
+ */
+const AwardBlock = ({
+    block,
+    entities
+}: {
+    block: { id: string; awards: Array<Award> }
+    entities: Array<Entity>
+}) => {
     const { id, awards } = block
     const type = id
     const { translate } = useI18n()
@@ -43,8 +52,8 @@ const AwardBlock = ({ block, entities }) => {
                         {isRevealed && (
                             <ConfettiContainer>
                                 <Confetti
-                                    width="500px"
-                                    height="300px"
+                                    width={500}
+                                    height={300}
                                     recycle={false}
                                     numberOfPieces={80}
                                     initialVelocityX={5}
@@ -61,7 +70,11 @@ const AwardBlock = ({ block, entities }) => {
                             number={`#1` || '?'}
                         /> */}
                         <Winner>
-                            <EntityItem {...winner} />
+                            {winner.entity ? (
+                                <EntityItem id={winner.id} entity={winner.entity} />
+                            ) : (
+                                'Error: no entity found'
+                            )}
                         </Winner>
                     </BackSide>
                 </Element>
@@ -80,7 +93,12 @@ const AwardBlock = ({ block, entities }) => {
                 </RunnerUpsHeading>
                 {runnerUps.map((runnerUp, i) => (
                     <RunnerUpsItem key={runnerUp.id} className="Awards__RunnerUps__Item">
-                        {i + 2}. <EntityItem {...runnerUp} />
+                        {i + 2}.{' '}
+                        {runnerUp.entity ? (
+                            <EntityItem id={runnerUp.id} entity={runnerUp.entity} />
+                        ) : (
+                            'Error: no entity found'
+                        )}
                         {runnerUp.value ? `: ${runnerUp.value}` : ''}
                     </RunnerUpsItem>
                 ))}
@@ -89,7 +107,7 @@ const AwardBlock = ({ block, entities }) => {
     )
 }
 
-const EntityItem = ({ id, entity }) => {
+const EntityItem = ({ id, entity }: { id: string; entity: Entity }) => {
     const { getString } = useI18n()
     if (!entity) {
         return <span>missing entity</span>
@@ -100,18 +118,13 @@ const EntityItem = ({ id, entity }) => {
     return url ? <a href={url}>{label}</a> : <span>{label}</span>
 }
 
+/*
 AwardBlock.propTypes = {
     block: PropTypes.shape({
         id: PropTypes.string.isRequired,
-        awards: PropTypes.arrayOf(
-            PropTypes.shape({
-                id: PropTypes.string.isRequired,
-                name: PropTypes.string.isRequired,
-                value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).number
-            })
-        ).isRequired
     }).isRequired
 }
+*/
 
 const Container = styled.div`
     text-align: center;
@@ -146,9 +159,9 @@ const ElementContainer = styled.div`
     margin-bottom: ${spacing()};
 `
 
-const getGlowColor = (color, alpha) => tinycolor(color).setAlpha(alpha).toRgbString()
+const getGlowColor = (color: any, alpha: number) => tinycolor(color).setAlpha(alpha).toRgbString()
 
-const glowSoft = theme => keyframes`
+const glowSoft = (theme: any) => keyframes`
     from {
         box-shadow: 0px 1px 1px 1px ${getGlowColor(theme.colors.link, 0.1)};
     }
@@ -160,7 +173,7 @@ const glowSoft = theme => keyframes`
     }
 `
 
-const glow = theme => keyframes`
+const glow = (theme: any) => keyframes`
     from {
         box-shadow: 0px 1px 2px 1px ${getGlowColor(theme.colors.link, 0.5)};
     }
@@ -172,7 +185,7 @@ const glow = theme => keyframes`
     }
 `
 
-const burst = theme => keyframes`
+const burst = (theme: any) => keyframes`
     from {
         box-shadow: 0px 0px 0px 0px ${getGlowColor(theme.colors.link, 0)};
     }

@@ -68,6 +68,24 @@ export interface BlockDefinition {
     hasComments?: boolean
 }
 
+export interface BlockWithAwards {
+    /**
+     * Award categories
+     * (usually we have 4 of them)
+     */
+    awards: Array<{
+        id: string,
+        /**
+         * Awards for this category
+         */
+        awards: Array<Award>
+    }>
+}
+
+export interface Award {
+    id: string, name: string, value: string | number
+}
+
 type FilterType = 'filters' | 'facets'
 
 export interface BlockLegend {
