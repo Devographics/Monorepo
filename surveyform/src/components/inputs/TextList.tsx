@@ -192,14 +192,8 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
         focusInputEnd(selectNextItem(index));
       }
     } else if (evt.key === "Backspace" || evt.key === "Delete") {
-      // NOTE: the logic is triggered wherever the cursor is located so:
-      // When pressing "Backspace" while focusing before the char: "|a" we still do delete the value
-      // Respectively with "Delete" (Suppr in fr keyboard): "a|" will still delete the value
-      // It could be avoided by using an "onInput" event and compare values to assess a deletion
-      // but that's not a big deal
-
-      // let the input handle deletion if there are more than 1 char
-      if (value.length > 1) return;
+      // let the input handle deletion if there are chars to delete
+      if (value.length > 0) return;
       // if there is only one last char before deletion, remove the item and focus on next one
       evt.preventDefault();
       if (index === items.length) {
