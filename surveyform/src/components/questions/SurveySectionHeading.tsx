@@ -20,7 +20,7 @@ const SurveySectionHeading = ({
   const [scrollPosition, setScrollPosition] = useState(0);
 
   const handleScroll = () => {
-    const position = window.pageYOffset;
+    const position = window.scrollY;
     setScrollPosition(position);
   };
 
@@ -88,7 +88,7 @@ Get the item currently in viewport
 
 */
 const offset = 200;
-const getItemIdInViewport = (
+export const getItemIdInViewport = (
   scrollPosition: number,
   itemPositions: { [key: string]: number }
 ) => {
