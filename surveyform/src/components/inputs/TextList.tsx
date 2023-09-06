@@ -65,11 +65,14 @@ const DEFAULT_LIMIT = 10;
  * "limit" options sets a limit (default is 10 responses)
  * "longText" option uses textarea instead of inputs
  *
- * TODO: tie the onBlur event to the whole form to cleanup empty inputs, otherwise it jumps a lot
- * TODO: create the last item when focusing the input?
+ * In current implementation, the underlying intpus are not controlled
+ * This facilitates handling events
+ * But we must be cautious to get current up to date values from the DOM
+ * and not from the state
  *
- * TODO: check mockup https://github.com/LeaVerou/stateof/tree/main/mocks/custom-options
- * TODO: see arrays from Vulcan: https://github.com/VulcanJS/vulcan-npm/tree/main/packages/react-ui-lite/components/form/nested
+ *
+ * @see mockup https://github.com/LeaVerou/stateof/tree/main/mocks/custom-options
+ * @see arrays from Vulcan: https://github.com/VulcanJS/vulcan-npm/tree/main/packages/react-ui-lite/components/form/nested
  *
  * Components are defined here: surveyform/src/lib/customComponents.ts
  * @param props
@@ -334,8 +337,6 @@ const TextListItem = ({
         values: { index: index + 1 },
       })}
       defaultValue={item.value}
-      //value={localValue}
-      //onChange={(evt) => handleChangeDebounced(idx, evt)}
       onBlur={onBlur}
       onChange={onChange}
       onKeyDown={onKeyDown}
