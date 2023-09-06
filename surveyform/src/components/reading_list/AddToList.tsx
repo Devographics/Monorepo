@@ -13,32 +13,41 @@ export const AddToList = (
   const { addMessage } = useMessagesContext();
 
   const isInList = readingList.includes(id);
-  const Icon = isInList ? Check : Plus;
+
+  // TODO: fix issue where swapping icon checks checkbox
+  // const Icon = isInList ? Check : Plus;
+  const Icon = Plus;
+
+  const handleClick = () => {
+    console.log("click!");
+    if (isInList) {
+      updateCurrentValues({ readingList: without(readingList, id) });
+    } else {
+      updateCurrentValues({ readingList: [...readingList, id] });
+      addMessage({
+        type: "success",
+        bodyId: "readinglist.added_to_list",
+        bodyValues: { label },
+      });
+    }
+  };
+
+  const iconProps = {
+    labelId: isInList
+      ? "readinglist.remove_from_list"
+      : "readinglist.add_to_list",
+    enableTooltip: true,
+    isButton: true,
+    onClick: handleClick,
+  };
+
   return (
     <div
       className={`add-to-list ${
         isInList ? "add-to-list-inList" : "add-to-list-notInlLst"
       }`}
     >
-      <Icon
-        labelId={
-          isInList ? "readinglist.remove_from_list" : "readinglist.add_to_list"
-        }
-        enableTooltip={true}
-        isButton={true}
-        onClick={() => {
-          if (isInList) {
-            updateCurrentValues({ readingList: without(readingList, id) });
-          } else {
-            updateCurrentValues({ readingList: [...readingList, id] });
-            addMessage({
-              type: "success",
-              bodyId: "readinglist.added_to_list",
-              bodyValues: { label },
-            });
-          }
-        }}
-      />
+      <Icon {...iconProps} />
     </div>
   );
 };
