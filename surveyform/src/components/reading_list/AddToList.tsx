@@ -14,12 +14,10 @@ export const AddToList = (
 
   const isInList = readingList.includes(id);
 
-  // TODO: fix issue where swapping icon checks checkbox
-  // const Icon = isInList ? Check : Plus;
-  const Icon = Plus;
+  const Icon = isInList ? Check : Plus;
 
-  const handleClick = () => {
-    console.log("click!");
+  const handleClick = (e) => {
+    e.preventDefault();
     if (isInList) {
       updateCurrentValues({ readingList: without(readingList, id) });
     } else {
