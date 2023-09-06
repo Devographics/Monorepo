@@ -4,3 +4,4 @@ export * from "./CommentDots";
 export * from "./Share";
 export * from "./Trash";
 export * from "./Cross";
+export * from "./Check";

@@ -494,7 +494,7 @@
 .form-option-add {
   .add-to-list {
     opacity: 0.2;
-    position: static;
+    position: relative;
     .form-option:hover & {
       opacity: 1;
     }
