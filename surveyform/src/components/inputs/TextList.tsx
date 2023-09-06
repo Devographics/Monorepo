@@ -112,6 +112,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     setItems(items);
     updateCurrentValuesDebounced({ [path]: toStrings(items) });
   };
+  // (limit is not supposed to be 0)
   const limit = question.limit || DEFAULT_LIMIT;
   /**
    * If no index is provided, add a last item
@@ -130,7 +131,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     // by setting it to "null"?
   };
   const removeEmptyItems = () => {
-    const filtered = items.filter((i) => !i.value);
+    const filtered = items.filter((i) => i.value);
     if (filtered.length !== items.length) updateAllItems(filtered);
   };
   const updateItem = (idx: number, value: string) => {
@@ -153,10 +154,13 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     return selectItem(wrapperRef.current, items[index + 1]);
   };
 
-  // TODO: FormItem doesn't accept an onBlur event yet
-  const onFormBlur = () => {
-    // remove empty items
-    removeEmptyItems();
+  const onFormBlur = (evt: React.FocusEvent<HTMLDivElement>) => {
+    // When pressing enter in an input, we lose focus for the input
+    // but we are not leaving so we should not remove empty items (otherwise new items are immediately deleted)
+    const focusedInForm = evt.currentTarget?.contains(evt.relatedTarget);
+    if (!focusedInForm) {
+      removeEmptyItems();
+    }
   };
   const onItemBlur = (
     index: number,
@@ -165,10 +169,12 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
       | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement> // onBlur
   ) => {
     const value = event.target.value;
+    const previousValue =
+      index < items.length ? items[index].value : lastItem.value;
     // TODO: this jumps too much, instead use "removeEmptyItems" on the form
-    if (!value) {
+    /*if (!value) {
       if (index <= items.length - 1) removeItem(index);
-    } else if (value !== items[index].value) {
+    } else*/ if (value !== previousValue) {
       // only update if the item actually changed otherwise we have competing updates
       updateItem(index, value);
     }
@@ -264,7 +270,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   const allItems = items.length < limit ? [...items, lastItem] : items;
 
   return (
-    <FormItem {...props} ref={wrapperRef}>
+    <FormItem {...props} ref={wrapperRef} onBlur={onFormBlur}>
       {allItems.map((item, index) => (
         <TextListItem
           key={item.key}

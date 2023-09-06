@@ -4,7 +4,7 @@ Layout for a single form item
 
 */
 "use client";
-import {
+import React, {
   ReactNode,
   useState,
   useRef,
@@ -24,29 +24,16 @@ import { useQuestionTitle } from "~/lib/surveys/helpers/useQuestionTitle";
 import { getFormPaths } from "@devographics/templates";
 import AddToList from "~/components/reading_list/AddToList";
 import QuestionLabel from "./QuestionLabel";
-import { getItemIdInViewport } from "../questions/SurveySectionHeading";
 
 export interface FormItemProps extends FormInputProps {
   children: ReactNode;
   showMore?: boolean;
   showOther?: boolean;
+  onBlur?: React.FocusEventHandler<HTMLDivElement>;
 }
 
 export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
   function FormItem(props: FormItemProps, parentRef) {
-    // const {
-    //   path,
-    //   children,
-    //   beforeInput,
-    //   afterInput,
-    //   description: intlDescription,
-    //   loading,
-    //   intlKeys = [],
-    //   questionId,
-    //   showDescription = true,
-    //   noteIntlId: noteIntlId_,
-    // } = props;
-
     const {
       children,
       response,
@@ -59,6 +46,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
       showMore,
       showOther,
       questionNumber,
+      onBlur,
     } = props;
 
     const isLastItem = questionNumber === section.questions.length;
@@ -81,11 +69,6 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
       (!readOnly && question.showCommentInput) || !!commentValue
     );
 
-    // const innerComponent = loading ? (
-    //   <FormInputLoading loading={loading}>{children}</FormInputLoading>
-    // ) : (
-    //   children
-    // );
     const childRef = useRef<HTMLDivElement>(null);
     const myRef = (parentRef as RefObject<HTMLDivElement>) || childRef;
     const firstRenderRef1 = useRef(true);
@@ -171,7 +154,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
     // }, [isInView]);
 
     return (
-      <div ref={myRef}>
+      <div ref={myRef} onBlur={onBlur}>
         <Form.Group controlId={path}>
           <FormItemTitle {...props} />
           <div className="form-item-contents">

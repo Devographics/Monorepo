@@ -126,8 +126,35 @@ test("Access demo survey 2022, signup, start filling form", () => {
   // Experimental inputs
   getLinkToSection(/experimental/i).click({ force: true })
   getQuestionBlock(/textlist/i).within(() => {
-    // TODO
-    //cy.findByRole("")
+    // Initial state: 1 empty input
+    // There are no items, only a "last item"
+    // Blurring should work ok (do nothing)
+    cy.findByRole("textbox").focus().blur()
+    // Fill => it creates a new input afterwards
+    cy.findByRole("textbox").focus().type("1").blur()
+    cy.findAllByRole("textbox").should("have.length", 2)
+    cy.findAllByRole("textbox").last().focus().type("2").blur()
+    // Current state: ["1", "2", additionaly empty input]
+    // pressing enter in an "intermediate" input should create a new one
+    // (only for "inputs", not textarea)
+    cy.findAllByRole("textbox").first().focus().type("{enter}")
+    cy.findAllByRole("textbox").eq(1).should("be.empty")
+    cy.findAllByRole("textbox").eq(1).focus().type("1.1").blur()
+    // Curent state: ["1", "1.1", "2.2", empty last input]
+    // deleting will go back to the last item (we must delete all text + press backspace again)
+    cy.findAllByRole("textbox").eq(1).type("{backspace}{backspace}{backspace}{backspace}")
+    cy.findAllByRole("textbox").eq(1).should("have.value", "2")
+    // TODO: how to check that previous item is focused?
+    // deleting the first item will focus on the next item (instead of the previous one)
+    // Current state: ["1", "2", empty input]
+    cy.findAllByRole("textbox").first().focus().type("{backspace}{backspace}")
+    // TODO: check that next item is indeed focused
+    cy.findAllByRole("textbox").first().should("have.value", "2")
+    // Current state: ["2", empty input]
+
+    // TODO: test that blurring the whole div remove empty elements
+    // TODO: test defualt limit
+    // TODO: test mroe edge cases
   })
 
 
