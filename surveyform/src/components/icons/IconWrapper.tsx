@@ -14,6 +14,7 @@ export interface IconProps {
   isButton?: boolean;
   values?: any;
   onClick?: any;
+  className?: string;
 }
 
 export interface IconWrapperProps extends IconProps {
@@ -31,13 +32,14 @@ export const IconWrapper = (props: IconWrapperProps & any) => {
     children,
     values,
     onClick,
+    className = "",
   } = props;
 
   const label_ =
     label || (labelId && intl.formatMessage({ id: labelId, values }));
 
   const icon = (
-    <span className="icon-wrapper">
+    <span className={`icon-wrapper ${className}`}>
       {isButton ? <Button onClick={onClick}>{children}</Button> : children}
       <span className="sr-only">{label_}</span>
     </span>

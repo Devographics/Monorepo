@@ -1,7 +1,8 @@
 "use client";
 import { useMessagesContext } from "../common/UserMessagesContext";
 import { FormInputProps } from "../form/typings";
-import { PlusIcon } from "~/components/icons";
+import { Plus, Check } from "~/components/icons";
+import without from "lodash/without";
 
 export const AddToList = (
   props: FormInputProps & { label: string; id: string | number }
@@ -11,14 +12,24 @@ export const AddToList = (
 
   const { addMessage } = useMessagesContext();
 
+  const isInList = readingList.includes(id);
+  const Icon = isInList ? Check : Plus;
   return (
-    <div className="add-to-list">
-      <PlusIcon
-        labelId="readinglist.add_to_list"
+    <div
+      className={`add-to-list ${
+        isInList ? "add-to-list-inList" : "add-to-list-notInlLst"
+      }`}
+    >
+      <Icon
+        labelId={
+          isInList ? "readinglist.remove_from_list" : "readinglist.add_to_list"
+        }
         enableTooltip={true}
         isButton={true}
         onClick={() => {
-          if (!readingList.includes(id)) {
+          if (isInList) {
+            updateCurrentValues({ readingList: without(readingList, id) });
+          } else {
             updateCurrentValues({ readingList: [...readingList, id] });
             addMessage({
               type: "success",

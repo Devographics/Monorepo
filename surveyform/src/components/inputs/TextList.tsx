@@ -112,7 +112,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     setItems(items);
     updateCurrentValuesDebounced({ [path]: toStrings(items) });
   };
-  const limit = Math.max(DEFAULT_LIMIT, question.limit || 0);
+  const limit = question.limit || DEFAULT_LIMIT;
   /**
    * If no index is provided, add a last item
    */

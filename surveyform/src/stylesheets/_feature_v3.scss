@@ -221,29 +221,31 @@
   }
 }
 
-.comment-input {
-  z-index: 1;
-  position: relative;
-  --background-color: color-mix(in lab, var(--bg-color), white 25%);
-  background: var(--background-color);
-  margin: 0.4em 0;
-  border-radius: 0.2em;
-  transform-origin: calc(100% - 21px) -12px;
-  overflow: clip;
-  overflow-clip-margin: 12px;
+// commented out because follow-up comments are not currently enabled
 
-  &,
-  & textarea {
-    animation: 0.3s comments-open both ease-in;
-  }
+// .comment-input {
+//   z-index: 1;
+//   position: relative;
+//   --background-color: color-mix(in lab, var(--bg-color), white 25%);
+//   background: var(--background-color);
+//   margin: 0.4em 0;
+//   border-radius: 0.2em;
+//   transform-origin: calc(100% - 21px) -12px;
+//   overflow: clip;
+//   overflow-clip-margin: 12px;
 
-  & textarea {
-    animation-name: comments-open-textarea;
-  }
+//   &,
+//   & textarea {
+//     animation: 0.3s comments-open both ease-in;
+//   }
 
-  &::after {
-    right: 10px;
-    left: auto;
-    border-bottom-color: var(--background-color);
-  }
-}
+//   & textarea {
+//     animation-name: comments-open-textarea;
+//   }
+
+//   &::after {
+//     right: 10px;
+//     left: auto;
+//     border-bottom-color: var(--background-color);
+//   }
+// }
