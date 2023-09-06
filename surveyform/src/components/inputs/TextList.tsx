@@ -131,7 +131,14 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     // by setting it to "null"?
   };
   const removeEmptyItems = () => {
-    const filtered = items.filter((i) => i.value);
+    let filtered: Array<Item> = [];
+    // items state is not yet updated when we blur the whole form
+    // const filtered = items.filter((i) => i.value);
+    // so we instead look at the DOM
+    wrapperRef.current?.querySelectorAll("input").forEach((i, idx) => {
+      if (idx >= items.length) return; // lastItem, we ignore it
+      if (i.value) filtered.push(items[idx]);
+    });
     if (filtered.length !== items.length) updateAllItems(filtered);
   };
   const updateItem = (idx: number, value: string) => {
