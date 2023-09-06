@@ -315,9 +315,6 @@ const TextListItem = ({
 
   const placeholder = questionPlaceholder || defaultPlaceholder;
 
-  console.log(i18n.base);
-  console.log(questionPlaceholder);
-  console.log(defaultPlaceholder);
   return (
     <FormControl
       // id={itemId(item)}
