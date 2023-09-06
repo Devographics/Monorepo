@@ -34,12 +34,14 @@ export const FormLayout = (props: FormLayoutProps) => {
 
   return (
     <div className="survey-layout">
-      {section.messageId && <FormSectionMessage section={section} />}
       <FormNav {...props} />
 
       <div className="survey-section">
         <SurveySectionHeading {...props} />
+
         <div className="section-contents">
+          {section.messageId && <FormSectionMessage section={section} />}
+
           <div className="section-questions" id="section-questions">
             <FormElement {...props}>
               {children}
