@@ -4,6 +4,8 @@ import round from 'lodash/round'
 import { useTheme as useNivoTheme } from '@nivo/core'
 import { useI18n } from 'core/i18n/i18nContext'
 import { spacing, fontWeight } from 'core/theme'
+import { getItemLabel } from 'core/helpers/labels'
+import { Entity } from '@devographics/types'
 
 const Chip = ({ color, color2 }: { color: string; color2?: string }) => (
     <span className={`Chip Tooltip__Chip ${color2 && 'Chip--split'}`}>
@@ -12,16 +14,23 @@ const Chip = ({ color, color2 }: { color: string; color2?: string }) => (
     </span>
 )
 
-export const FeaturesCirclePackingChartTooltip = ({
-    node: { name, sectionId, awareness, usage }
-}: {
-    node: {
-        name: string
-        sectionId: string
-        awareness: number
-        usage: number
-    }
-}) => {
+type TooltipProps = {
+    node: TooltipPropsNode
+}
+type TooltipPropsNode = {
+    name: string
+    sectionId: string
+    awareness: number
+    usage: number
+    id: string
+    entity: Entity
+}
+export const FeaturesCirclePackingChartTooltip = (props: TooltipProps) => {
+    const { node } = props
+    const { getString } = useI18n()
+
+    const { sectionId, awareness, usage, id, entity } = node
+    const { label } = getItemLabel({ id, entity, getString, i18nNamespace: 'features' })
     const { translate } = useI18n()
     const nivoTheme = useNivoTheme()
     const theme = useTheme()
@@ -32,7 +41,7 @@ export const FeaturesCirclePackingChartTooltip = ({
     return (
         <div style={nivoTheme.tooltip.container}>
             <div>
-                <Heading dangerouslySetInnerHTML={{ __html: name }} />
+                <Heading dangerouslySetInnerHTML={{ __html: label }} />
                 <Grid>
                     <Chip color={`${color}50`} />
                     {translate!('options.features_simplified.know_it')}

@@ -494,7 +494,7 @@
 .form-option-add {
   .add-to-list {
     opacity: 0.2;
-    position: static;
+    position: relative;
     .form-option:hover & {
       opacity: 1;
     }
@@ -609,9 +609,9 @@
 
 .option-chip {
   --_color: var(--color, var(--bs-blue));
-  border: 1px solid hsl(0 0% 100% / 0.3);
-  padding: 0.1em 0.8em 0.05em;
-  border-radius: 999px;
+  // border: 1px solid hsl(0 0% 100% / 0.3);
+  padding: 0.1em 0.6em 0.05em 0.6em;
+  border-radius: 3px;
   background: color-mix(
       in lab,
       var(--_color),
