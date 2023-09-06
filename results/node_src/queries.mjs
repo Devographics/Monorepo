@@ -167,6 +167,9 @@ query {
                     domain
                     id
                     name
+                    emailOctopus {
+                        listId
+                    }
                     partners {
                         name
                         url
