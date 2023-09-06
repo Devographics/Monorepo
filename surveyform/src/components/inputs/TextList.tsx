@@ -306,16 +306,14 @@ const TextListItem = ({
     id: "textlist.placeholder",
     values: { index: index + 1 },
   });
-  // const i18n = getQuestioni18nIds({ section, question });
+  const i18n = getQuestioni18nIds({ section, question });
 
-  // const questionPlaceholder = formatMessage({
-  //   id: `${i18n.base}.placeholder`,
-  //   values: { index: index + 1 },
-  // });
+  const questionPlaceholder = formatMessage({
+    id: `${i18n.base}.placeholder`,
+    values: { index: index + 1 },
+  });
 
-  // const placeholder = questionPlaceholder || defaultPlaceholder;
-
-  const placeholder = defaultPlaceholder;
+  const placeholder = questionPlaceholder || defaultPlaceholder;
 
   return (
     <FormControl
