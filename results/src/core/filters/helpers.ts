@@ -348,13 +348,19 @@ const getBucketWithoutData = (bucket: Bucket): Bucket => {
 
 // prefix a bucket's data properties with a __1, __2, etc. suffix
 // (count__1, percentageQuestion__1, etc.)
-const getBucketDataWithSuffix = (bucket: Bucket, index: number) => {
+const getBucketDataWithSuffix = (bucket: Bucket, index: number, showDefaultSeries = true) => {
     const newBucket: CombinedBucketData = {}
     Object.keys(bucket).forEach(key => {
         const unit = key as BucketUnits
         if (Object.values(BucketUnits).includes(unit)) {
             const value = bucket[unit] as number
-            newBucket[`${unit}__${index}`] = value
+            let key
+            if (showDefaultSeries) {
+                key = index === 0 ? unit : `${unit}__${index}`
+            } else {
+                key = `${unit}__${index + 1}`
+            }
+            newBucket[key] = value
         }
     })
     return newBucket
@@ -362,10 +368,9 @@ const getBucketDataWithSuffix = (bucket: Bucket, index: number) => {
 
 export const combineBuckets = ({ allSeriesBuckets, showDefaultSeries }: CombineBucketsOptions) => {
     const mergedBuckets = allSeriesBuckets[0].map(bucket => getBucketWithoutData(bucket))
-
     allSeriesBuckets.forEach((seriesBuckets, i) => {
         seriesBuckets.forEach((bucket, j) => {
-            const bucketDataWithSuffix = getBucketDataWithSuffix(bucket, i + 1)
+            const bucketDataWithSuffix = getBucketDataWithSuffix(bucket, i, showDefaultSeries)
             mergedBuckets[j] = { ...mergedBuckets[j], ...bucketDataWithSuffix }
         })
     })

@@ -17,6 +17,7 @@ import { usePageContext } from 'core/helpers/pageContext'
 import CommentsTrigger from 'core/blocks/block/CommentsTrigger'
 import FiltersTrigger from 'core/filters/FiltersTrigger'
 import { BucketUnits } from '@devographics/types'
+import { TableData } from 'core/helpers/datatables'
 
 export interface BlockVariantProps {
     id?: string
@@ -25,6 +26,7 @@ export interface BlockVariantProps {
     setUnits?: Dispatch<SetStateAction<BucketUnits>>
     unitsOptions?: BucketUnits[] | string[]
     block: BlockDefinition
+    tables?: TableData[]
 }
 
 const BlockVariant = (props: PropsWithChildren<BlockVariantProps>) => {

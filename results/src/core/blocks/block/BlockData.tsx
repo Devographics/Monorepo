@@ -11,28 +11,38 @@ import { getBlockQuery } from 'core/helpers/queries'
 
 import { parse } from 'graphql'
 import { print } from 'graphql-print'
+import { CustomizationDefinition } from 'core/filters/types'
+import { TableData } from 'core/helpers/datatables'
+import { BlockDefinition } from 'core/types'
 
-const BlockData = props => {
+type BlockData = {
+    block: BlockDefinition
+    chartFilters: CustomizationDefinition
+    tables: TableData[]
+}
+const BlockData = (props: BlockData) => {
     const { block, chartFilters, tables } = props
-    const { parameters } = block
+    const { parameters, fieldId } = block
     const pageContext = usePageContext()
 
-    const query = chartFilters
-        ? getFiltersQuery({
-              block,
-              pageContext,
-              chartFilters,
-              currentYear: pageContext.currentEdition.year
-          })?.query
-        : getBlockQuery({
-              block,
-              pageContext,
-              queryOptions: {
-                  addArgumentsPlaceholder: false,
-                  addBucketFacetsPlaceholder: false
-              },
-              queryArgs: parameters ? { parameters } : {}
-          })
+    const query =
+        chartFilters?.filters?.length > 0 || chartFilters?.facet
+            ? getFiltersQuery({
+                  block,
+                  pageContext,
+                  chartFilters,
+                  currentYear: pageContext.currentEdition.year
+              })?.query
+            : getBlockQuery({
+                  block,
+                  pageContext,
+                  queryOptions: {
+                      addArgumentsPlaceholder: false,
+                      addBucketFacetsPlaceholder: false,
+                      fieldId
+                  },
+                  queryArgs: parameters ? { parameters } : {}
+              })
 
     return (
         <>

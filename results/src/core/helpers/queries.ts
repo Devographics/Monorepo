@@ -165,6 +165,7 @@ export interface ProvidedQueryOptions {
     addRootNode?: boolean
     addQuestionEntity?: boolean
     addQuestionComments?: boolean
+    fieldId?: string
 }
 
 interface QueryOptions extends ProvidedQueryOptions {
@@ -172,7 +173,6 @@ interface QueryOptions extends ProvidedQueryOptions {
     editionId: string
     sectionId: string
     questionId: string
-    fieldId?: string
     subField?: string
 }
 

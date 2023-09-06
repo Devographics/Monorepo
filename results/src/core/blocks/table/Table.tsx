@@ -3,8 +3,9 @@ import T from 'core/i18n/T'
 import React from 'react'
 import { useTheme } from 'styled-components'
 import { fontSize, spacing } from 'core/theme'
+import { TableData } from 'core/helpers/datatables'
 
-const Tables = ({ tables = [] }) => {
+const Tables = ({ tables = [] }: { tables: TableData[] }) => {
     return (
         <TablesWrapper>
             {tables.map((table, i) => (
@@ -14,40 +15,43 @@ const Tables = ({ tables = [] }) => {
     )
 }
 
-const Table = ({ title, headings, rows, years }) => (
-    <TableWrapper>
-        {title && <Title>{title}</Title>}
-        <DataTable>
-            <thead>
-                <tr>
-                    {headings.map((heading, i) => (
-                        <TableHeading
-                            key={i}
-                            {...heading}
-                            years={years}
-                            colSpan={i > 0 && years && years.length > 0 ? years.length : 1}
-                        />
-                    ))}
-                </tr>
-                {years && (
+const Table = (table: TableData) => {
+    const { title, headings, rows, years } = table
+    return (
+        <TableWrapper>
+            {title && <Title>{title}</Title>}
+            <DataTable>
+                <thead>
                     <tr>
-                        <TH_>
-                            <T k="table.year" />
-                        </TH_>
-                        {[...Array(headings.length - 1)].map((heading, i) =>
-                            years.map(year => <TH_ key={year}>{year}</TH_>)
-                        )}
+                        {headings.map((heading, i) => (
+                            <TableHeading
+                                key={i}
+                                {...heading}
+                                years={years}
+                                colSpan={i > 0 && years && years.length > 0 ? years.length : 1}
+                            />
+                        ))}
                     </tr>
-                )}
-            </thead>
-            <tbody>
-                {rows.map((row, i) => (
-                    <TableRow row={row} key={i} />
-                ))}
-            </tbody>
-        </DataTable>
-    </TableWrapper>
-)
+                    {years && (
+                        <tr>
+                            <TH_>
+                                <T k="table.year" />
+                            </TH_>
+                            {[...Array(headings.length - 1)].map((heading, i) =>
+                                years.map(year => <TH_ key={year}>{year}</TH_>)
+                            )}
+                        </tr>
+                    )}
+                </thead>
+                <tbody>
+                    {rows.map((row, i) => (
+                        <TableRow row={row} key={i} />
+                    ))}
+                </tbody>
+            </DataTable>
+        </TableWrapper>
+    )
+}
 
 const TableHeading = ({ id, colSpan, labelId }) => (
     <TH_ scope="col" id={id} colSpan={colSpan}>
