@@ -30,7 +30,7 @@ export async function populateUserResponses({
         completion: 1,
       },
     }
-  ).toArray()) as unknown as ResponseDocument[];
+  ).toArray()) as Array<ResponseDocument> // bypass Mongo _id inference
 
   return { ...user, responses };
 }

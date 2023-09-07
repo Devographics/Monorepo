@@ -2,7 +2,6 @@ import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
 // import { EmailHashMongooseModel } from "~/account/email_hashes/model.server";
 import { getEmailHashesCollection, newMongoId } from "@devographics/mongo";
-import { ObjectId } from "mongodb";
 /**
  *
  * Creating Hash from Emails, not reversible
@@ -19,13 +18,16 @@ export const createEmailHash = (email: string, providedHashSalt?: string) => {
   return hash.digest("hex");
 };
 
+interface EmailHashDocument {
+  _id: string, hash: string, userId: string, uuid: string
+}
 /**
  * Either get the random UUID associated with an email hash, or store one
  * if it doesn't exist yet
  * @param emailHash String
  */
 export async function getUUID(emailHash: string, userId: string) {
-  const EmailHashes = await getEmailHashesCollection();
+  const EmailHashes = await getEmailHashesCollection<EmailHashDocument>();
   const hashDoc = await EmailHashes.findOne({ hash: emailHash });
   let emailUuid;
   if (hashDoc) {
@@ -34,7 +36,7 @@ export async function getUUID(emailHash: string, userId: string) {
     emailUuid = uuidv4();
     await EmailHashes.insertOne({
       // TODO: find cleaner way to deal with string _id type
-      _id: newMongoId() as unknown as ObjectId,
+      _id: newMongoId(),
       userId: userId,
       hash: emailHash,
       uuid: emailUuid,

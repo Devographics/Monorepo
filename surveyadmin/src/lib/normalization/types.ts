@@ -12,11 +12,23 @@ export interface UpdateBulkOperation {
   updateMany: any;
 }
 
+/**
+ * @deprecated Replacement do not let us set a string _id in upsert mode
+ * deleting then inserting gives us more control
+ */
 export interface ReplaceBulkOperation {
   replaceOne: any;
 }
 
-export type BulkOperation = UpdateBulkOperation | ReplaceBulkOperation;
+export interface DeleteBulkOperation {
+  deleteOne: any
+}
+export interface InsertBulkOperation {
+  insertOne: any
+}
+
+/** Actual type is ReplaceOneModel" | "UpdateOneModel" from "mongodb" but we want to avoid dependency to mongo typings that tends to be buggy */
+export type BulkOperation = UpdateBulkOperation | ReplaceBulkOperation | DeleteBulkOperation | InsertBulkOperation;
 
 export interface NormalizationToken {
   id: string;
@@ -131,8 +143,8 @@ export interface NormalizedField extends RegularField {
   normTokens: Array<NormalizationToken>;
   raw: string;
 }
-export interface CommentField extends RegularField {}
-export interface PrenormalizedField extends RegularField {}
+export interface CommentField extends RegularField { }
+export interface PrenormalizedField extends RegularField { }
 
 export interface NormalizationError {
   type: string;

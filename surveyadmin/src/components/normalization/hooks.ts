@@ -26,6 +26,9 @@ export interface SegmentDone extends Segment {
   data: NormalizeInBulkResult;
 }
 
+/**
+ * Split the responses into chunks for processing
+ */
 export const getSegments = ({ responsesCount, segmentSize }): Segment[] => {
   const segments = [...Array(Math.ceil(responsesCount / segmentSize))].map(
     (x, i) => ({

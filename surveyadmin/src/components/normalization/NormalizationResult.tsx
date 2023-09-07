@@ -27,49 +27,47 @@ export const NormalizationResult = (props: NormalizationResultProps) => {
   } = props;
   const [showResult, setShowResult] = useState(true);
 
-  return (
-    showResult && (
-      <div>
-        {showSummary && <NormalizationSummary {...props} />}
+  return showResult ? (
+    <div>
+      {showSummary && <NormalizationSummary {...props} />}
 
-        <DocumentGroup
-          documents={errorDocuments}
-          label="Error Documents"
-          description="Documents that triggered one or more errors."
-          defaultShow={true}
-          isError={true}
-        />
-        <DocumentGroup
-          documents={normalizedDocuments}
-          label="Normalized Documents"
-          description="Documents where a matching token was found for every normalizable question parsed."
-          showQuestionId={showQuestionId}
-          defaultShow={false}
-        />
-        <DocumentGroup
-          documents={unmatchedDocuments}
-          label="Documents With Unmatched Freeform Fields"
-          description="Documents that contained unmatched questions."
-          showQuestionId={showQuestionId}
-          defaultShow={false}
-        />
-        <DocumentGroup
-          documents={unnormalizableDocuments}
-          label="Documents With No Freeform Fields"
-          description="Documents that did not contain any fields requiring normalization."
-          onlyId={true}
-          defaultShow={false}
-        />
-        <DocumentGroup
-          documents={emptyDocuments}
-          label="Empty Documents"
-          description="Documents were discarded for being empty."
-          onlyId={true}
-          defaultShow={false}
-        />
-      </div>
-    )
-  );
+      <DocumentGroup
+        documents={errorDocuments}
+        label="Error Documents"
+        description="Documents that triggered one or more errors."
+        defaultShow={true}
+        isError={true}
+      />
+      <DocumentGroup
+        documents={normalizedDocuments}
+        label="Normalized Documents"
+        description="Documents where a matching token was found for every normalizable question parsed."
+        showQuestionId={showQuestionId}
+        defaultShow={false}
+      />
+      <DocumentGroup
+        documents={unmatchedDocuments}
+        label="Documents With Unmatched Freeform Fields"
+        description="Documents that contained unmatched questions."
+        showQuestionId={showQuestionId}
+        defaultShow={false}
+      />
+      <DocumentGroup
+        documents={unnormalizableDocuments}
+        label="Documents With No Freeform Fields"
+        description="Documents that did not contain any fields requiring normalization."
+        onlyId={true}
+        defaultShow={false}
+      />
+      <DocumentGroup
+        documents={emptyDocuments}
+        label="Empty Documents"
+        description="Documents were discarded for being empty."
+        onlyId={true}
+        defaultShow={false}
+      />
+    </div>
+  ) : null;
 };
 
 export const NormalizationSummary = ({

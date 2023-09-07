@@ -1,12 +1,8 @@
 // TODO: should be imported dynamically
 import countries from "./countries";
-import { normalizeSource } from "./helpers";
+// import { normalizeSource } from "./helpers";
 import set from "lodash/set.js";
 import { getUUID } from "~/lib/email";
-import type {
-  QuestionTemplateOutput,
-  SectionMetadata,
-} from "@devographics/types";
 import { NormalizationParams, StepFunction } from "../types";
 import clone from "lodash/clone";
 

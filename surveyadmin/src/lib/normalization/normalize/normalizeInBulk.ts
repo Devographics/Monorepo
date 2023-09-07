@@ -1,5 +1,5 @@
 import { normalizeDocument } from "./normalize";
-import { generateEntityRules, getBulkOperation } from "./helpers";
+import { generateEntityRules, getBulkOperations } from "./helpers";
 import { getNormResponsesCollection } from "@devographics/mongo";
 import { fetchEntities } from "@devographics/fetch";
 import {
@@ -33,7 +33,6 @@ interface NormalizeInBulkOption {
   limit?: number;
   questionId?: string;
   isRenormalization?: boolean;
-  isFirstNormalization?: boolean;
   verbose?: boolean;
 }
 
@@ -54,7 +53,6 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
     limit,
     questionId,
     isRenormalization = false,
-    isFirstNormalization = false,
     verbose = false,
   } = options;
   const startAt = new Date();
@@ -155,13 +153,12 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
       } else {
         // add to bulk operations array
         const { selector, modifier } = normalizationResult;
-        const operation = getBulkOperation({
+        const operations = getBulkOperations({
           selector,
           modifier,
           isReplace,
-          isFirstNormalization,
         });
-        bulkOperations.push(operation);
+        bulkOperations.push(...operations);
       }
     }
   }
@@ -257,10 +254,9 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
   );
 
   console.log(
-    `👍 Normalized ${progress - mutationResult.discardedCount} responses ${
-      mutationResult.discardedCount > 0
-        ? `(${mutationResult.discardedCount} responses discarded)`
-        : ""
+    `👍 Normalized ${progress - mutationResult.discardedCount} responses ${mutationResult.discardedCount > 0
+      ? `(${mutationResult.discardedCount} responses discarded)`
+      : ""
     }. (${endAt}) - ${duration}s`
   );
 

@@ -8,7 +8,7 @@
  * Each app can pass their own typings
  * (because they might want to know only a subset of each collection type)
  */
-import { Survey } from '@devographics/types'
+import { ResponseDocument, Survey } from '@devographics/types'
 import { MongoClient, Db, Document } from 'mongodb'
 import { nanoid } from 'nanoid'
 import { getEnvVar, EnvVar } from '@devographics/helpers'
@@ -72,9 +72,8 @@ export const getPublicDbReadOnly = async () =>
  * To be used when calling "insertOne"
  * This avoids having ObjectId leaking everywhere in relations
  * /!\ We don't guarantee that it's a valid ObjectId, we currently use nanoid instead
- * @returns
  */
-export const newMongoId = (): string => nanoid() //(new ObjectId()).toString()
+export const newMongoId = (): string => nanoid()
 
 /**
  * Used to get the full MongoClient, eg to disconnect
@@ -109,7 +108,7 @@ export const getCollectionByName = async <T extends Document>(name: string) => {
 /**
  * Handle the connection automatically when called the first time
  */
-export const getRawResponsesCollection = async <T extends Document>(survey?: Survey) => {
+export const getRawResponsesCollection = async <T extends Document = ResponseDocument>(survey?: Survey) => {
     const db = await getAppDb()
     return db.collection<T>('responses')
 }
@@ -117,9 +116,9 @@ export const getRawResponsesCollection = async <T extends Document>(survey?: Sur
 /**
  * Handle the connection automatically when called the first time
  */
-export const getNormResponsesCollection = async (survey?: Survey) => {
+export const getNormResponsesCollection = async <T extends Document>(survey?: Survey) => {
     const db = await getPublicDb()
-    return db.collection(survey?.dbCollectionName || 'normalized_responses')
+    return db.collection<T>(survey?.dbCollectionName || 'normalized_responses')
 }
 
 /**
@@ -138,17 +137,17 @@ export const getSavesCollection = async <T extends Document>() => {
 /**
  * Handle the connection automatically when called the first time
  */
-export const getProjectsCollection = async () => {
+export const getProjectsCollection = async <T extends Document>() => {
     const db = await getAppDb()
-    return db.collection('projects')
+    return db.collection<T>('projects')
 }
 
 /**
  * Handle the connection automatically when called the first time
  */
-export const getEmailHashesCollection = async () => {
+export const getEmailHashesCollection = async <T extends Document>() => {
     const db = await getAppDb()
-    return db.collection('email_hashes')
+    return db.collection<T>('email_hashes')
 }
 
 export const isLocalMongoUri = () => {

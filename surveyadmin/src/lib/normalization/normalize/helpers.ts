@@ -26,7 +26,7 @@ import {
   ignoreValues,
 } from "../helpers/getSelectors";
 import { getSelector } from "../helpers/getSelectors";
-import { QuestionWithSection } from "../types";
+import { BulkOperation, QuestionWithSection } from "../types";
 
 // export const getFieldPaths = (field: Field) => {
 //   const { suffix } = field as ParsedQuestion;
@@ -572,36 +572,55 @@ export const getUnnormalizedResponses = async ({
   return { responses, rawFieldPath, normalizedFieldPath };
 };
 
-export const getBulkOperation = ({
+/**
+ * Replace/update one element, with a declarative bulk configuration so we can run many operations
+ * We may need multiple operations for one element (replacement = deletion then insertion)
+ */
+export const getBulkOperations = ({
   selector,
   modifier,
   isReplace,
-  isFirstNormalization,
 }: {
   selector: any;
   modifier: any;
   isReplace: boolean;
-  isFirstNormalization: boolean;
-}) => {
-  // if this is the first time we are normalizing this, generate string _id
-  // (will trigger an error if done when norm. document already exists!)
-  if (isFirstNormalization) {
-    modifier._id = newMongoId();
-  }
-
+}): Array<BulkOperation> => {
   return isReplace
-    ? {
+    ? [
+      /*
+      - "replaceOne" doesn't allow for update operators
+      https://www.mongodb.com/docs/v7.0/reference/method/db.collection.replaceOne/
+      This means it does not let use use "$setOnInsert" to guarantee a string id when the "upsert" is an insert
+
+      - updateOne is not suited either, as it would keep unmodified fields around but we want to delete them)
+
+      - a deletion followed by an insertion is more reliable. 
+      **The only difference with replaceOne, is that it will change the document _id everytime we replace the normalized response**
+      Computing a value that is not random (eg based on responseId) can create bugs if we create more than 1 normalized response
+      {
         replaceOne: {
           filter: selector,
           replacement: modifier,
           upsert: true,
         },
-      }
-    : {
-        updateMany: {
-          filter: selector,
-          update: modifier,
-          upsert: false,
+      }*/
+      {
+        deleteOne: {
+          filter: selector
         },
-      };
+      },
+      {
+        insertOne: {
+          document: { _id: newMongoId(), ...modifier }
+        }
+      }
+
+    ]
+    : [{
+      updateMany: {
+        filter: selector,
+        update: modifier,
+        upsert: false,
+      },
+    }];
 };

@@ -6,6 +6,8 @@ import {
 import { fetchSurveysMetadata } from "@devographics/fetch";
 import { normalizeInBulk, defaultLimit } from "../normalize/normalizeInBulk";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
+import { ResponseDocument } from "@devographics/types";
+import { NormalizedResponseDocument } from "../types";
 
 export type NormalizeEditionArgs = {
   surveyId: string;
@@ -16,7 +18,7 @@ export type NormalizeEditionArgs = {
   isFirstNormalization?: boolean;
 };
 
-/*
+/**
 
 Normalize all questions for a specific edition
 
@@ -46,7 +48,7 @@ export const normalizeEdition = async (args: NormalizeEditionArgs) => {
     throw new Error(`Could not find edition for editionId ${editionId}`);
   }
 
-  const rawResponsesCollection = await getRawResponsesCollection(survey);
+  const rawResponsesCollection = await getRawResponsesCollection<ResponseDocument>(survey);
 
   const selector = await getEditionSelector({
     survey,
@@ -71,7 +73,7 @@ export const normalizeEdition = async (args: NormalizeEditionArgs) => {
     // delete any previous normalized responses just to be safe and avoid
     // any inconsistencies
     console.log("⛰️ Deleting all previous normalized responses… (first batch)");
-    const normalizedResponses = await getNormResponsesCollection();
+    const normalizedResponses = await getNormResponsesCollection<NormalizedResponseDocument>();
     await normalizedResponses.deleteMany({ editionId: edition.id });
   }
 
