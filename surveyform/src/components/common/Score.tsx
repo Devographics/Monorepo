@@ -70,7 +70,7 @@ const Score = ({
   const intl = useIntlContext();
   const containerRef = useRef<HTMLInputElement | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
-  const { known, total, score, unknownFields, rank } = getKnowledgeScore({
+  const { known, total, score, rank } = getKnowledgeScore({
     response,
     edition,
   });
