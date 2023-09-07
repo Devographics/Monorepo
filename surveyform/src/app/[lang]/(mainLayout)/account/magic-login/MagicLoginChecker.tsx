@@ -42,8 +42,7 @@ const useMagicLoginCheck = ({
    * We must pass their id
    */
 
-  const clientData =
-    editionId && surveyId ? useClientData({ editionId, surveyId }) : undefined;
+  const clientData = useClientData({ editionId, surveyId });
 
   useEffect(() => {
     const verifyToken = async () => {
