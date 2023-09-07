@@ -42,7 +42,7 @@ const CodeExample = ({ language, code, codeHighlighted }) => {
   return (
     <div className="code-example">
       <h5 className="code-example-heading">
-        <FormattedMessage id="general.code_example" />
+        {language || <FormattedMessage id="general.code_example" />}{" "}
       </h5>
       <pre>
         <code dangerouslySetInnerHTML={{ __html: codeHighlighted }}></code>

@@ -74,8 +74,8 @@ export interface BrowserData {
 }
 
 export interface PrefilledData extends BrowserData {
-  surveyId: string;
-  editionId: string;
+  surveyId?: string;
+  editionId?: string;
   locale: string;
 }
 
@@ -83,8 +83,8 @@ export const useClientData = ({
   editionId,
   surveyId,
 }: {
-  editionId: string;
-  surveyId: string;
+  editionId?: string;
+  surveyId?: string;
 }) => {
   const { source, referrer } = useSurveyActionParams();
   const { locale } = useLocaleContext();
@@ -107,4 +107,9 @@ export const useClientData = ({
       browserData?.common__user_info__referrer,
   };
   return data;
+};
+
+export const clearLocalStorageData = () => {
+  localStorage.removeItem("source");
+  localStorage.removeItem("referrer");
 };

@@ -5,6 +5,7 @@ import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
 import { useIntlContext } from "@devographics/react-i18n";
+import { getQuestioni18nIds } from "@devographics/i18n";
 
 /**
  * In an array of input with auto-deletion of empty inputs,
@@ -79,6 +80,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   const {
     path,
     value: value_,
+    section,
     question,
     updateCurrentValues,
     readOnly,
@@ -254,6 +256,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   };
 
   const itemProps = {
+    section,
     question,
     items,
     readOnly,
@@ -281,6 +284,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
 };
 
 const TextListItem = ({
+  section,
   question,
   item,
   index,
@@ -289,6 +293,7 @@ const TextListItem = ({
   onChange,
   onKeyDown,
 }: {
+  section: FormInputProps["section"];
   question: FormInputProps["question"];
   item: Item;
   index: number;
@@ -305,6 +310,19 @@ const TextListItem = ({
 }) => {
   const { formatMessage } = useIntlContext();
 
+  const defaultPlaceholder = formatMessage({
+    id: "textlist.placeholder",
+    values: { index: index + 1 },
+  });
+  const i18n = getQuestioni18nIds({ section, question });
+
+  const questionPlaceholder = formatMessage({
+    id: `${i18n.base}.placeholder`,
+    values: { index: index + 1 },
+  });
+
+  const placeholder = questionPlaceholder || defaultPlaceholder;
+
   return (
     <FormControl
       // id={itemId(item)}
@@ -316,10 +334,7 @@ const TextListItem = ({
       }}
       // TODO: use different templates to simplify?
       as={question.longText ? "textarea" : "input"}
-      placeholder={formatMessage({
-        id: "textlist.placeholder",
-        values: { index: index + 1 },
-      })}
+      placeholder={placeholder}
       defaultValue={item.value}
       //value={localValue}
       //onChange={(evt) => handleChangeDebounced(idx, evt)}

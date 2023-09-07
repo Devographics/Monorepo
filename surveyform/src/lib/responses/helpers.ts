@@ -7,6 +7,7 @@ import {
   FeaturesOptions,
 } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
+import { getEditionQuestions } from "../surveys/helpers/getEditionQuestions";
 
 export const getCompletionPercentage = ({
   response,
@@ -57,31 +58,30 @@ export const getKnowledgeScore = ({
   response: ResponseDocument;
   edition: EditionMetadata;
 }) => {
-  const featureSections = edition.sections.filter(
-    (section) => section.slug === "features"
+  const scoredQuestions = getEditionQuestions(edition).filter(
+    (q) => q.countsTowardScore
   );
-  const featureQuestions = featureSections
-    .map((s) => s.questions)
-    // NOTE: the cast is mandatory here because typing of flat
-    // is not ideal
-    .flat() as Array<QuestionMetadata>;
 
-  const getValue = (question) => {
+  let known = 0;
+  for (const question of scoredQuestions) {
     const formPaths = getFormPaths({ edition, question });
-    return formPaths.response && response[formPaths.response];
-  };
-  const knownFields = featureQuestions.filter((question) => {
-    const value = getValue(question);
-    return value === FeaturesOptions.HEARD || value === FeaturesOptions.USED;
-  });
-  const unknownFields = featureQuestions.filter((question) => {
-    const value = getValue(question);
-    return value === FeaturesOptions.NEVER_HEARD;
-  });
+    const value = formPaths.response && response[formPaths.response];
+    if (value) {
+      if (Array.isArray(value)) {
+        // assume this is a question where each array item is a feature that
+        // counts towards the score
+        known += value.length;
+      } else {
+        // assume this is a normal feature question
+        if ([FeaturesOptions.HEARD, FeaturesOptions.USED].includes(value)) {
+          known++;
+        }
+      }
+    }
+  }
 
-  const unknown = unknownFields.length;
-  const known = knownFields.length;
-  const total = featureQuestions.length;
+  const total = scoredQuestions.length;
+  const unknown = total - known;
   const score = Math.round((known * 100) / total);
   const rank = getRank(score);
 
@@ -91,8 +91,8 @@ export const getKnowledgeScore = ({
     known,
     score,
     rank,
-    knownFields,
-    unknownFields,
+    // knownFields,
+    // unknownFields,
   };
   return result;
 };

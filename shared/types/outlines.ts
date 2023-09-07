@@ -104,10 +104,18 @@ export type Credit = {
 }
 
 /**
- * See for actual usagequestions.yml 
+ * See for actual usagequestions.yml
  * and surveyform/src/lib/customComponents.ts for correspondance with form inputs
  */
-export type TemplateKind = "single" | "multiple" | "feature" | "others" | "tool" | "tools_others" | "textList" | string // TODO: try to type all possible templates explicitely
+export type TemplateKind =
+    | 'single'
+    | 'multiple'
+    | 'feature'
+    | 'others'
+    | 'tool'
+    | 'tools_others'
+    | 'textList'
+    | string // TODO: try to type all possible templates explicitely
 
 export type Section = {
     id: string
@@ -115,7 +123,7 @@ export type Section = {
     intlId?: string
     slug: string // TODO: maybe get rid of this?
     questions: Question[]
-    /** 
+    /**
      * Define a default template for all questions in this section
      **/
     template?: TemplateKind
@@ -134,7 +142,7 @@ export type ApiQuestion = {
 /**
  * Keep in sync with QuestionMetadata in
  * api/src/graphql/typedefs/schema.graphql
- * 
+ *
  */
 export type Question = {
     template: TemplateKind
@@ -158,7 +166,7 @@ export type Question = {
     limit?: number
     /**
      * How many options to show before "show more…" button (set to 99 to always show all)
-     * 
+     *
      * Used in "multiple" / "multipleWithOther" questions
      * Corresponding to CheckboxGroup component
      */
@@ -187,6 +195,7 @@ export type Question = {
     allowComment?: boolean
     showCommentInput?: boolean
     randomize?: boolean
+    countsTowardScore?: boolean
 
     matchTags?: string[]
 
@@ -198,7 +207,7 @@ export type Question = {
     /**
      * To use a textarea in TextList
      */
-    longText?: boolean;
+    longText?: boolean
 }
 
 export type Option = {

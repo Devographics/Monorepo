@@ -70,7 +70,7 @@ const Score = ({
   const intl = useIntlContext();
   const containerRef = useRef<HTMLInputElement | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
-  const { known, total, score, unknownFields, rank } = getKnowledgeScore({
+  const { known, total, score, rank } = getKnowledgeScore({
     response,
     edition,
   });
@@ -91,18 +91,18 @@ const Score = ({
   // if (error) return <span>Could not load entities</span>;
 
   // TODO
-  const entities: Array<any> = [];
+  // const entities: Array<any> = [];
   // only keep features which have an associated entity which itself has a URL
-  const unknownFeatures = unknownFields
-    .map((field) => {
-      const entity = entities?.find((e) => e.id === field.id);
-      return {
-        field,
-        entity,
-        url: entity?.mdn?.url,
-      };
-    })
-    .filter((feature) => !!feature.url);
+  // const unknownFeatures = unknownFields
+  //   .map((field) => {
+  //     const entity = entities?.find((e) => e.id === field.id);
+  //     return {
+  //       field,
+  //       entity,
+  //       url: entity?.mdn?.url,
+  //     };
+  //   })
+  //   .filter((feature) => !!feature.url);
 
   return (
     <div className="score">
@@ -162,9 +162,9 @@ const Score = ({
             <FormattedMessage id="thanks.share_on_twitter" />
           </Button>
         </div>
-        {unknownFeatures.length > 0 && (
+        {/* {unknownFeatures.length > 0 && (
           <Features features={unknownFeatures} limit={10} />
-        )}
+        )} */}
       </div>
     </div>
   );

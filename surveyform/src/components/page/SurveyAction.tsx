@@ -23,7 +23,7 @@ import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { ResponseError } from "~/components/error/ResponseError";
 import { ResponseDetails } from "../surveys/ResponseDetails";
-import { useClientData } from "./hooks";
+import { clearLocalStorageData, useClientData } from "./hooks";
 
 /**
  * - Logged in and survey open : create new response
@@ -113,6 +113,8 @@ const SurveyStart = ({
           setErrors(result.error);
           setLoading(false);
         } else {
+          // we don't need this data to be stored locally anymore, so clear it
+          clearLocalStorageData();
           // no need to stop spinner because it'll disappear when we change page
           // setLoading(false);
           console.log("start survey result", result);
