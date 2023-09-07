@@ -9,6 +9,7 @@ export const feature: TemplateFunction = options => {
     checkHasId(options)
 
     const question = {
+        countsTowardScore: true,
         allowComment: true,
         options: FEATURES_OPTIONS.map(id => ({
             id,

@@ -6,6 +6,7 @@ import { FEATURES_OPTIONS } from '@devographics/constants'
 
 export const featureWithFollowups: TemplateFunction = options => {
     const question = {
+        countsTowardScore: true,
         allowComment: false,
         options: FEATURES_OPTIONS.map(id => ({
             id,

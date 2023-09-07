@@ -136,6 +136,7 @@ type QuestionMetadata {
     allowComment: Boolean
     showCommentInput: Boolean
     allowMultiple: Boolean
+    countsTowardScore: Boolean
     randomize: Boolean
     cutoff: Int
     matchTags: [String]
