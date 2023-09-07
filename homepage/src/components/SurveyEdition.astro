@@ -24,15 +24,14 @@ if (isOpen) {
 
 <div class:list={['survey-edition', { 'survey-edition-last': isLast }]}>
     <div class="survey-edition-card" style={`background: ${background};`}>
+       
         {
-            marker && (
-                <h4 class="survey-edition-status">
+            marker ? (
+                    <h2 class="survey-edition-title"><span class="survey-edition-status">
                     <T locale={locale} k={marker} />
-                </h4>
-            )
+                </span><span class="survey-edition-year">{year}</span></h2>
+            ) : <h3 class="survey-edition-year">{year}</h3>
         }
-
-        <h4 class="survey-edition-year">{year}</h4>
 
         <a class="image-wrapper" href={mainLink}
             ><span class="image-inner" style={`background-image: url(${imageUrl})`}></span>
@@ -81,7 +80,9 @@ if (isOpen) {
         overflow: hidden;
         margin-bottom: var(--quarterspacing);
     }
-
+    .survey-edition-title {
+        font-size: var(--medium-font);
+    }
     .survey-edition-status,
     .survey-edition-year {
         position: absolute;
@@ -100,6 +101,7 @@ if (isOpen) {
 
     .survey-edition-year {
         right: 0;
+        font-size: var(--medium-font);
     }
 
     .image-wrapper {

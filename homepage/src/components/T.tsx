@@ -68,7 +68,7 @@ export default function T({
     props.className = classNames.join(' ')
 
     return md ? (
-        <div {...props} dangerouslySetInnerHTML={{ __html: translation }} />
+        <p {...props} dangerouslySetInnerHTML={{ __html: translation }} />
     ) : html ? (
         <span {...props} dangerouslySetInnerHTML={{ __html: translation }} />
     ) : (
