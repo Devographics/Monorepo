@@ -7,6 +7,7 @@ const reload = async (path, args) => {
     target === "production"
       ? process.env.API_URL_PRODUCTION
       : process.env.API_URL;
+  if (!apiUrl) throw new Error("API_URL or API_URL_PRODUCTION is not defined")
   const url = getUrl(path, apiUrl);
   console.log("// reload");
   console.log(path);
