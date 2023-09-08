@@ -87,39 +87,49 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
   }
 
   // state, virtual and additional values
-  const [items, setItems] = useState<Array<Item>>(
-    values.map((val) => makeItem(val))
-  );
-  function expectedNbVirtual() {
+  const [{ items, virtualItems }, setRealVirtualItems] = useState<{
+    items: Array<Item>;
+    virtualItems: Array<Item>;
+  }>({
+    items: values.map((val) => makeItem(val)),
+    virtualItems: Array(expectedNbVirtual(values.length))
+      .fill(null)
+      .map(() => makeItem("")),
+  });
+  const setItems = (cb: (items: Array<Item>) => Array<Item>) => {
+    setRealVirtualItems(({ items, virtualItems }) => ({
+      items: cb(items),
+      virtualItems,
+    }));
+  };
+  const setVirtualItems = (cb: (items: Array<Item>) => Array<Item>) => {
+    setRealVirtualItems(({ items, virtualItems }) => ({
+      items,
+      virtualItems: cb(virtualItems),
+    }));
+  };
+  function expectedNbVirtual(nbItems: number) {
     // Virtual fields incitate user to answer
     // We need only one virtual field if the user has started filling the textList
-    if (items.length >= (limit || DEFAULT_LIMIT)) return 0;
-    if (items.length) return 1;
+    if (nbItems >= (limit || DEFAULT_LIMIT)) return 0;
+    if (nbItems) return 1;
     return INITIAL_VIRTUAL_ITEMS;
   }
-  const [virtualItems, setVirtualItems] = useState<Array<Item>>(
-    Array(expectedNbVirtual())
-      .fill(null)
-      .map(() => makeItem(""))
-  );
 
   // Manage virtual items
-  function removeVirtualItem(item: Item) {
-    setVirtualItems((virtualItems) =>
-      virtualItems.filter((vi) => vi.key !== item.key)
-    );
-  }
   function refillVirtualItems() {
-    setVirtualItems((virtualItems) => {
-      const need = expectedNbVirtual() - virtualItems.length;
-      console.log("need", need);
-      if (need <= 0) return virtualItems; // nothing to do
-      return [
-        ...virtualItems,
-        ...Array(need)
-          .fill(null)
-          .map(() => makeItem("")),
-      ];
+    setRealVirtualItems(({ items, virtualItems }) => {
+      const need = expectedNbVirtual(items.length) - virtualItems.length;
+      if (need <= 0) return { items, virtualItems }; // nothing to do
+      return {
+        items,
+        virtualItems: [
+          ...virtualItems,
+          ...Array(need)
+            .fill(null)
+            .map(() => makeItem("")),
+        ],
+      };
     });
   }
   /**
@@ -127,9 +137,16 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
    * remove it from virtual, and add more virtual fields if needed
    * @param item
    */
-  function reifyVirtualItem(item: Item) {
-    setItems((items) => [...items, item]);
-    removeVirtualItem(item);
+  function reifyVirtualItem(index: number, value: string) {
+    setRealVirtualItems(({ items, virtualItems }) => {
+      // We actually reify all virtual items BEFORE the reified one
+      const reifiedItems = virtualItems.slice(0, index - items.length + 1);
+      reifiedItems[index - items.length].value = value;
+      return {
+        items: [...items, ...reifiedItems],
+        virtualItems: virtualItems.slice(index - items.length + 1), // refill is handled by a separate method,
+      };
+    });
     refillVirtualItems();
   }
 
@@ -169,7 +186,7 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
   }
 
   function setAllItems(items: Array<Item>) {
-    setItems(items);
+    setItems(() => items);
     refillVirtualItems();
   }
 
@@ -237,7 +254,6 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
 
   // TODO: an effect is not usually the best approach
   useEffect(() => {
-    console.log("items changed");
     updateValue(items);
   }, [items]);
 
@@ -302,17 +318,13 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   };
 
   const onItemChange = (index: number, key: string, evt) => {
-    // TODO: this should be abstracted by the hook,
-    // The last item is displayed but not yet saved in the items list
+    // We only update values on blur,
+    // but on change, if the input is virtual,
+    // we want to reify it + add new virtual inputs if needed
     const isVirtualItem = index >= items.length;
     const value = evt.target.value;
-    // if we start filling the last item,
-    // add this item to the actual items,
-    // and create a new last item
     if (isVirtualItem) {
-      if (value && items.length <= limit) {
-        reifyVirtualItem({ value, key });
-      }
+      reifyVirtualItem(index, value);
     }
   };
   const onItemKeyDown = (
