@@ -234,22 +234,11 @@
 }
 
 @keyframes glowing {
-  0% {
-    box-shadow: 0 0 0px 0px rgba(99, 248, 248, 0.8);
+  from, to {
+    box-shadow: 0 0 0px hsl(180 90% 68% / .8);
   }
-  25% {
-    box-shadow: 0 0 15px 0px rgba(99, 248, 248, 0.8);
-  }
-  45% {
-    box-shadow: 0 0 20px 0px rgba(99, 248, 248, 0.8);
-  }
-  55% {
-    box-shadow: 0 0 20px 0px rgba(99, 248, 248, 0.8);
-  }
-  75% {
-    box-shadow: 0 0 15px 0px rgba(99, 248, 248, 0.8);
-  }
-  100% {
-    box-shadow: 0 0 0px 0px rgba(99, 248, 248, 0.8);
+
+  45%, 55% {
+    box-shadow: 0 0 20px hsl(180 90% 68% / .8);
   }
 }
