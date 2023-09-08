@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useReducer, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
@@ -7,8 +7,7 @@ import debounce from "lodash/debounce.js";
 import { useIntlContext } from "@devographics/react-i18n";
 import { getQuestioni18nIds } from "@devographics/i18n";
 
-type Actions = { type: "init" } | { type: "makeVirtualReal" };
-function reducer(state, actions) {}
+// Items management
 
 /**
  * In an array of input with auto-deletion of empty inputs,
@@ -24,7 +23,6 @@ interface Item {
 function toStrings(items: Array<Item>): Array<string> {
   return items.map(({ value }) => value);
 }
-
 const itemId = (item: Item) => `textlist-item-${item.key}`;
 const itemSelector = (item: Item) => `[data-id="${itemId(item)}"]`;
 const selectItem = (
@@ -37,6 +35,8 @@ const selectItem = (
     return maybeItem;
   }
 };
+
+// Utilities
 
 /**
  * When focusing an input the focus is at the beggining of the text
@@ -66,30 +66,39 @@ const useUniqueSeq = () => {
   };
 };
 
+// Config
+
 const DEFAULT_LIMIT = 10;
 // how many virtual items we want to incitate users to answer
 // when there is at least one input filled, we show only 1 virtual item in any case
 const INITIAL_VIRTUAL_ITEMS = 2;
 
+// Managing an array of real and virtual values
+
 /**
  * Manage a set of real and virtual values
  * TODO: useReducer instead of using state
  */
-const useRealVirtualItems = (
-  values: Array<string>
-): [{ items: Array<Item>; virtualItems: Array<Item> }, any] => {
+const useRealVirtualItems = (values: Array<string>, limit?: number) => {
   const getUniqueKey = useUniqueSeq();
   // guarantee a unique key
   function makeItem(value: string, autofocus?: boolean): Item {
     return { value, key: getUniqueKey() + "", autofocus };
   }
-  // NOTE: current code doesn't accept concurrent updates of this value,
-  // either use a reducer or "functional" setState
+
+  // state, virtual and additional values
   const [items, setItems] = useState<Array<Item>>(
     values.map((val) => makeItem(val))
   );
+  function expectedNbVirtual() {
+    // Virtual fields incitate user to answer
+    // We need only one virtual field if the user has started filling the textList
+    if (items.length >= (limit || DEFAULT_LIMIT)) return 0;
+    if (items.length) return 1;
+    return INITIAL_VIRTUAL_ITEMS;
+  }
   const [virtualItems, setVirtualItems] = useState<Array<Item>>(
-    Array(items.length ? 1 : INITIAL_VIRTUAL_ITEMS)
+    Array(expectedNbVirtual())
       .fill(null)
       .map(() => makeItem(""))
   );
@@ -101,20 +110,30 @@ const useRealVirtualItems = (
     );
   }
   function refillVirtualItems() {
-    const expected = items.length ? 1 : INITIAL_VIRTUAL_ITEMS;
-    const need = virtualItems.length - expected;
-    if (need > 0) {
-      setVirtualItems((virtualItems) => [
+    setVirtualItems((virtualItems) => {
+      const need = expectedNbVirtual() - virtualItems.length;
+      console.log("need", need);
+      if (need <= 0) return virtualItems; // nothing to do
+      return [
         ...virtualItems,
         ...Array(need)
           .fill(null)
           .map(() => makeItem("")),
-      ]);
-    }
+      ];
+    });
+  }
+  /**
+   * Make the virtual item = add it to items,
+   * remove it from virtual, and add more virtual fields if needed
+   * @param item
+   */
+  function reifyVirtualItem(item: Item) {
+    setItems((items) => [...items, item]);
+    removeVirtualItem(item);
+    refillVirtualItems();
   }
 
   // Manage real items
-
   const createItemAt = (index: number, autofocus?: true) => {
     const item = makeItem("", autofocus);
     setItems((items) => [
@@ -125,6 +144,7 @@ const useRealVirtualItems = (
   };
   const removeItemAt = (idx: number) => {
     setItems((items) => [...items.slice(0, idx), ...items.slice(idx + 1)]);
+    refillVirtualItems();
   };
   const updateItem = (idx: number, value: string) => {
     setItems((items) => [
@@ -148,19 +168,9 @@ const useRealVirtualItems = (
     }
   }
 
-  /**
-   * Make the virtual item = add it to items,
-   * remove it from virtual, and add more virtual fields if needed
-   * @param item
-   */
-  function reifyVirtualItem(item: Item) {
-    setItems([...items, item]);
-    removeVirtualItem(item);
-    refillVirtualItems();
-  }
-
   function setAllItems(items: Array<Item>) {
     setItems(items);
+    refillVirtualItems();
   }
 
   return [
@@ -172,8 +182,8 @@ const useRealVirtualItems = (
       setAllItems,
       createItemAt,
       removeItemAt,
-    } as const,
-  ];
+    },
+  ] as const;
 };
 
 /**
@@ -223,10 +233,11 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
       createItemAt,
       removeItemAt,
     },
-  ] = useRealVirtualItems(values);
+  ] = useRealVirtualItems(values, question.limit);
 
   // TODO: an effect is not usually the best approach
   useEffect(() => {
+    console.log("items changed");
     updateValue(items);
   }, [items]);
 
