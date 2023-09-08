@@ -32,5 +32,5 @@ export const getCreateAccountButton = () => {
 };
 
 export const openNavigationMenu = () => {
-  cy.findByRole("button", { name: /table_of_content|table of contents/i }).click()
+  cy.findByRole("button", { name: /table_of_content|table of contents/i }).click({ force: true })
 }

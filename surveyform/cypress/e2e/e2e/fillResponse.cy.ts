@@ -47,7 +47,7 @@ test("Access demo survey 2022, signup, start filling form", () => {
   // Features
   getLinkToSection(/feature/i).click({ force: true })
   getQuestionBlock(
-    /demo_feature/i
+    /demo_feature\./i
   ).within(() => {
     // "Used" radio
     // TODO: doesn't work with regex it seems
@@ -62,7 +62,7 @@ test("Access demo survey 2022, signup, start filling form", () => {
   getLinkToSection(/multiple/i).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   // Click a checkboxgroup
   cy.findByRole("heading", {
-    name: /demo_multiple/i,
+    name: /demo_multiple\./i,
   })
     .parent()
     .within(() => {
@@ -82,7 +82,7 @@ test("Access demo survey 2022, signup, start filling form", () => {
 
   // Various inputs (slider etc.)
   getLinkToSection(/various_fields/i).click({ force: true })
-  getQuestionBlock(/demo_balance_slider/i).within(() => {
+  getQuestionBlock(/slider/i).within(() => {
     cy.findByRole("radio", { name: /2/i }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   })
   // Click a bracket
