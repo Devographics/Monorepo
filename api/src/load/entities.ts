@@ -90,8 +90,15 @@ export const highlightEntitiesExampleCode = async (entities: Entity[]) => {
         const { example } = entity
         if (example) {
             const { code, language } = example
-            // make sure to trim any extra /n at the end
-            example.codeHighlighted = hljs.highlight(code.trim(), { language }).value
+            example.codeHighlighted = code
+            if (language) {
+                try {
+                    // make sure to trim any extra /n at the end
+                    example.codeHighlighted = hljs.highlight(code.trim(), { language }).value
+                } catch (error) {
+                    // ignore any highlighting errors
+                }
+            }
         }
     }
     return entities

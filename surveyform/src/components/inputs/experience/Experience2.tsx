@@ -7,13 +7,16 @@ import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
 
 import isEmpty from "lodash/isEmpty.js";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { DbPathsEnum, OptionMetadata } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 
 import get from "lodash/get.js";
 import { FollowupData, FollowUpComment, FollowUps } from "./Followup2";
 import { CommentTrigger } from "~/components/form/FormComment";
+import { useIntlContext } from "@devographics/react-i18n";
+
+import Alert from "react-bootstrap/Alert";
 
 export interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
@@ -22,15 +25,28 @@ export interface ExperienceProps extends FormInputProps {
 export const Experience2 = (props: ExperienceProps) => {
   const { question, edition } = props;
 
+  const [highlightReadingList, setHighlightReadingList] = useState(false);
+
   const { options, entity } = question;
 
+  const className = highlightReadingList
+    ? "form-item-reading-list-highlighted"
+    : "";
+
   return (
-    <FormItem {...props}>
+    <FormItem {...props} className={className}>
       {entity?.example && <CodeExample {...entity.example} />}
       <div className="experience-contents">
         <div className="experience-options">
           {options?.map((option, i) => (
-            <ExperienceOption key={i} option={option} i={i} {...props} />
+            <ExperienceOption
+              key={i}
+              option={option}
+              i={i}
+              {...props}
+              highlightReadingList={highlightReadingList}
+              setHighlightReadingList={setHighlightReadingList}
+            />
           ))}
         </div>
       </div>
@@ -51,9 +67,14 @@ const CodeExample = ({ language, code, codeHighlighted }) => {
   );
 };
 
-const ExperienceOption = (
-  props: ExperienceProps & { option: OptionMetadata; i: number }
-) => {
+type ExperienceOptionProps = ExperienceProps & {
+  option: OptionMetadata;
+  i: number;
+  highlightReadingList: boolean;
+  setHighlightReadingList: Dispatch<SetStateAction<boolean>>;
+};
+
+const ExperienceOption = (props: ExperienceOptionProps) => {
   const {
     i,
     edition,
@@ -64,9 +85,13 @@ const ExperienceOption = (
     value,
     updateCurrentValues,
     readOnly,
+    highlightReadingList,
+    setHighlightReadingList,
   } = props;
   const hasValue = !isEmpty(value);
   const { followups } = question;
+
+  const [showReadingListPrompt, setShowReadingListPrompt] = useState(false);
 
   const formPaths = getFormPaths({ edition, question });
 
@@ -145,10 +170,22 @@ const ExperienceOption = (
             </div>
             <FormOption {...props} option={option} />
           </Form.Check.Label>
-          {followups && <FollowUps {...props} followupData={followupData} />}
+          {followups && (
+            <FollowUps
+              {...props}
+              followupData={followupData}
+              highlightReadingList={highlightReadingList}
+              setHighlightReadingList={setHighlightReadingList}
+              showReadingListPrompt={showReadingListPrompt}
+              setShowReadingListPrompt={setShowReadingListPrompt}
+            />
+          )}
         </Form.Check>
         {/* <CommentTrigger /> */}
       </div>
+      {showReadingListPrompt && (
+        <ReadingListPrompt setHighlightReadingList={setHighlightReadingList} />
+      )}
       {/* {showFollowupComment && isChecked && (
         <FollowUpComment {...props} followupData={followupData} />
       )} */}
@@ -156,4 +193,26 @@ const ExperienceOption = (
   );
 };
 
+export const ReadingListPrompt = ({ setHighlightReadingList }) => {
+  const intl = useIntlContext();
+  const optionLabel = intl.formatMessage({
+    id: "followups.sentiment_interested",
+  });
+  return (
+    <Alert
+      variant="warning"
+      dismissible
+      onClose={() => {
+        setHighlightReadingList(false);
+      }}
+    >
+      <div className="reading-list-prompt">
+        <FormattedMessage
+          id="readinglist.prompt"
+          values={{ option: optionLabel }}
+        />
+      </div>
+    </Alert>
+  );
+};
 export default Experience2;

@@ -30,6 +30,7 @@ export interface FormItemProps extends FormInputProps {
   children: ReactNode;
   showMore?: boolean;
   showOther?: boolean;
+  className?: string;
 }
 
 export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
@@ -59,6 +60,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
       showMore,
       showOther,
       questionNumber,
+      className = "",
     } = props;
 
     const isLastItem = questionNumber === section.questions.length;
@@ -171,7 +173,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
     // }, [isInView]);
 
     return (
-      <div ref={myRef}>
+      <div className={`form-item ${className}`} ref={myRef}>
         <Form.Group controlId={path}>
           <FormItemTitle {...props} />
           <div className="form-item-contents">

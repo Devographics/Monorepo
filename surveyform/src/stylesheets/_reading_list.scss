@@ -89,6 +89,16 @@
       padding-top: $spacing;
       margin-top: $spacing;
       border-top: $border;
+
+      &-resources-item {
+        &-domain {
+          font-size: $small-font;
+          display: inline-block;
+          margin-left: $spacing/4;
+          color: var(--text-color-dark);
+        }
+      }
+
       &-title {
         display: flex;
         align-items: center;
@@ -217,5 +227,30 @@
     height: 20px;
     width: 20px;
     display: block;
+  }
+
+  .form-option-add & {
+    opacity: 0.2;
+    position: relative;
+    .form-option:hover & {
+      opacity: 1;
+    }
+  }
+
+  .form-item-reading-list-highlighted & {
+    animation: glowing 2000ms infinite;
+    border: 2px solid var(--link-color);
+  }
+}
+
+@keyframes glowing {
+  from,
+  to {
+    box-shadow: 0 0 0px hsl(180 90% 68% / 0.8);
+  }
+
+  45%,
+  55% {
+    box-shadow: 0 0 20px hsl(180 90% 68% / 0.8);
   }
 }

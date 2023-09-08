@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 
-import { OptionMetadata } from "@devographics/types";
+import { OptionMetadata, SentimentOptions } from "@devographics/types";
 import without from "lodash/without.js";
 
 import { Button } from "~/components/ui/Button";
@@ -11,6 +11,7 @@ import { CommentTextarea } from "~/components/form/FormComment";
 import { useIntlContext } from "@devographics/react-i18n";
 import { ExperienceProps } from "./Experience";
 import { FormInputProps } from "~/components/form/typings";
+import { Dispatch, SetStateAction } from "react";
 
 export interface FollowupData {
   predefinedFollowupPath?: string;
@@ -23,6 +24,10 @@ export const FollowUps = (
   props: FormInputProps & {
     option: OptionMetadata;
     followupData: FollowupData;
+    highlightReadingList?: boolean;
+    setHighlightReadingList?: Dispatch<SetStateAction<boolean>>;
+    showReadingListPrompt?: boolean;
+    setShowReadingListPrompt?: Dispatch<SetStateAction<boolean>>;
   }
 ) => {
   const {
@@ -33,6 +38,8 @@ export const FollowUps = (
     path,
     followupData,
     value,
+    setHighlightReadingList,
+    setShowReadingListPrompt,
   } = props;
   const { followups = [] } = question;
   const optionFollowUps = followups.find(
@@ -90,6 +97,24 @@ export const FollowUps = (
                 updateCurrentValues({
                   [predefinedFollowupPath]: newValue,
                 });
+
+                // show reading list prompt if needed
+                const hasSeenPromptString = localStorage.getItem(
+                  "hasSeenReadingListPrompt"
+                );
+                const hasSeenPrompt =
+                  hasSeenPromptString && JSON.parse(hasSeenPromptString);
+                if (
+                  setHighlightReadingList &&
+                  setShowReadingListPrompt &&
+                  isChecked &&
+                  followupOption.id === SentimentOptions.INTERESTED &&
+                  !hasSeenPrompt
+                ) {
+                  setHighlightReadingList(true);
+                  setShowReadingListPrompt(true);
+                  localStorage.setItem("hasSeenReadingListPrompt", "true");
+                }
               }}
             />
             <span className="sentiment-label">
