@@ -24,10 +24,10 @@ export const FollowUps = (
   props: FormInputProps & {
     option: OptionMetadata;
     followupData: FollowupData;
-    highlightReadingList: boolean;
-    setHighlightReadingList: Dispatch<SetStateAction<boolean>>;
-    showReadingListPrompt: boolean;
-    setShowReadingListPrompt: Dispatch<SetStateAction<boolean>>;
+    highlightReadingList?: boolean;
+    setHighlightReadingList?: Dispatch<SetStateAction<boolean>>;
+    showReadingListPrompt?: boolean;
+    setShowReadingListPrompt?: Dispatch<SetStateAction<boolean>>;
   }
 ) => {
   const {
@@ -105,6 +105,8 @@ export const FollowUps = (
                 const hasSeenPrompt =
                   hasSeenPromptString && JSON.parse(hasSeenPromptString);
                 if (
+                  setHighlightReadingList &&
+                  setShowReadingListPrompt &&
                   isChecked &&
                   followupOption.id === SentimentOptions.INTERESTED &&
                   !hasSeenPrompt
