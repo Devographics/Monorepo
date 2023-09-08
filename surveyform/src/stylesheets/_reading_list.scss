@@ -218,4 +218,38 @@
     width: 20px;
     display: block;
   }
+
+  .form-option-add & {
+    opacity: 0.2;
+    position: relative;
+    .form-option:hover & {
+      opacity: 1;
+    }
+  }
+
+  .form-item-reading-list-highlighted & {
+    animation: glowing 2000ms infinite;
+    border: 2px solid var(--link-color);
+  }
+}
+
+@keyframes glowing {
+  0% {
+    box-shadow: 0 0 0px 0px rgba(99, 248, 248, 0.8);
+  }
+  25% {
+    box-shadow: 0 0 15px 0px rgba(99, 248, 248, 0.8);
+  }
+  45% {
+    box-shadow: 0 0 20px 0px rgba(99, 248, 248, 0.8);
+  }
+  55% {
+    box-shadow: 0 0 20px 0px rgba(99, 248, 248, 0.8);
+  }
+  75% {
+    box-shadow: 0 0 15px 0px rgba(99, 248, 248, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 0px 0px rgba(99, 248, 248, 0.8);
+  }
 }
