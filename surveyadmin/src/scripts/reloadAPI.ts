@@ -1,13 +1,18 @@
+/**
+ * Remove the graphql part of the API_URL variable,
+ * we need to call non-graphql endpoints meant to force reloads
+ */
 const getUrl = (path, apiUrl) =>
   `${apiUrl?.replace("/graphql", "")}/${path}?key=${process.env.SECRET_KEY}`;
 
-const reload = async (path, args) => {
+type Target = "production" | "staging" | "local"
+const reload = async (path, args: { target?: Target }) => {
   const { target } = args;
   const apiUrl =
     target === "production"
       ? process.env.API_URL_PRODUCTION
       : process.env.API_URL;
-  if (!apiUrl) throw new Error("API_URL or API_URL_PRODUCTION is not defined")
+  if (!apiUrl) throw new Error(`API_URL or API_URL_PRODUCTION is not defined, target is: ${target}`)
   const url = getUrl(path, apiUrl);
   console.log("// reload");
   console.log(path);

@@ -21,6 +21,11 @@ export const actions = [
 export const APIDashboard = () => (
   <div>
     <h2>API</h2>
+    <p>
+      Those actions will tell the API to reload the GitHub repositories
+      containing the corresponding data
+    </p>
+    <p>TODO: what's the impact on the Redis cache?</p>
 
     <div className="api-dashboard">
       <section>

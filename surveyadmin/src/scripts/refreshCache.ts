@@ -6,7 +6,7 @@ import {
   fetchSurveysMetadata,
 } from "@devographics/fetch";
 import { FetcherFunctionOptions } from "@devographics/fetch/types";
-import { AppName, EditionMetadata } from "@devographics/types";
+import { AppName } from "@devographics/types";
 
 export const refreshCache = async (args) => {
   const { key } = args;

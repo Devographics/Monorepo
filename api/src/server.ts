@@ -85,15 +85,18 @@ const start = async () => {
     const redisClient = await initRedis()
     // redisClient.on('error', err => console.log('Redis Client Error', err))
 
-    const db = await getPublicDb()
+    // TODO: there might be mismatch between shared mongodb version
+    // and API mongodb version
+    // so the types such as "Db" are not exactly the same depending on the situation
+    const db = await getPublicDb() as any
 
     // const entities = await loadOrGetEntities({})
-    const context = { db, redisClient }
+    const context: RequestContext = { db, redisClient }
 
     const isDevOrTest = !!(
         process.env.NODE_ENV && ['test', 'development'].includes(process.env.NODE_ENV)
     )
-    const surveys = await loadOrGetSurveys({ includeDemo: isDevOrTest })
+    const surveys = await loadOrGetSurveys()
     const questionObjects = getQuestionObjects({ surveys })
 
     const parsedSurveys = parseSurveys({ surveys })
