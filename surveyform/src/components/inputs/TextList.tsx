@@ -1,11 +1,14 @@
 "use client";
-import React, { useRef, useState, RefObject /*, { useState }*/ } from "react";
+import React, { useRef, useState, useReducer, useEffect } from "react";
 import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
 import { useIntlContext } from "@devographics/react-i18n";
 import { getQuestioni18nIds } from "@devographics/i18n";
+
+type Actions = { type: "init" } | { type: "makeVirtualReal" };
+function reducer(state, actions) {}
 
 /**
  * In an array of input with auto-deletion of empty inputs,
@@ -35,6 +38,10 @@ const selectItem = (
   }
 };
 
+/**
+ * When focusing an input the focus is at the beggining of the text
+ * This function will focus at the end instead to add more content
+ */
 const focusInputEnd = (maybeInput: HTMLInputElement | null | undefined) => {
   if (!maybeInput) return;
   maybeInput.focus();
@@ -49,6 +56,7 @@ const focusInputEnd = (maybeInput: HTMLInputElement | null | undefined) => {
 /**
  * Return a unique value on each call of the next function
  * (Math.Random is not suited as it can create SSR discrepencies)
+ * Needed to generate item keys
  */
 const useUniqueSeq = () => {
   const seqRef = useRef(0);
@@ -59,6 +67,114 @@ const useUniqueSeq = () => {
 };
 
 const DEFAULT_LIMIT = 10;
+// how many virtual items we want to incitate users to answer
+// when there is at least one input filled, we show only 1 virtual item in any case
+const INITIAL_VIRTUAL_ITEMS = 2;
+
+/**
+ * Manage a set of real and virtual values
+ * TODO: useReducer instead of using state
+ */
+const useRealVirtualItems = (
+  values: Array<string>
+): [{ items: Array<Item>; virtualItems: Array<Item> }, any] => {
+  const getUniqueKey = useUniqueSeq();
+  // guarantee a unique key
+  function makeItem(value: string, autofocus?: boolean): Item {
+    return { value, key: getUniqueKey() + "", autofocus };
+  }
+  // NOTE: current code doesn't accept concurrent updates of this value,
+  // either use a reducer or "functional" setState
+  const [items, setItems] = useState<Array<Item>>(
+    values.map((val) => makeItem(val))
+  );
+  const [virtualItems, setVirtualItems] = useState<Array<Item>>(
+    Array(items.length ? 1 : INITIAL_VIRTUAL_ITEMS)
+      .fill(null)
+      .map(() => makeItem(""))
+  );
+
+  // Manage virtual items
+  function removeVirtualItem(item: Item) {
+    setVirtualItems((virtualItems) =>
+      virtualItems.filter((vi) => vi.key !== item.key)
+    );
+  }
+  function refillVirtualItems() {
+    const expected = items.length ? 1 : INITIAL_VIRTUAL_ITEMS;
+    const need = virtualItems.length - expected;
+    if (need > 0) {
+      setVirtualItems((virtualItems) => [
+        ...virtualItems,
+        ...Array(need)
+          .fill(null)
+          .map(() => makeItem("")),
+      ]);
+    }
+  }
+
+  // Manage real items
+
+  const createItemAt = (index: number, autofocus?: true) => {
+    const item = makeItem("", autofocus);
+    setItems((items) => [
+      ...items.slice(0, index),
+      item,
+      ...items.slice(index),
+    ]);
+  };
+  const removeItemAt = (idx: number) => {
+    setItems((items) => [...items.slice(0, idx), ...items.slice(idx + 1)]);
+  };
+  const updateItem = (idx: number, value: string) => {
+    setItems((items) => [
+      ...items.slice(0, idx),
+      { value, key: items[idx].key },
+      ...items.slice(idx + 1),
+    ]);
+  };
+
+  // Getters
+  /**
+   * Get either virtual or real input at given index
+   * @param index
+   * @returns
+   */
+  function getItemAtIdx(index: number) {
+    if (index < items.length) {
+      return items[index];
+    } else {
+      return virtualItems[index - items.length];
+    }
+  }
+
+  /**
+   * Make the virtual item = add it to items,
+   * remove it from virtual, and add more virtual fields if needed
+   * @param item
+   */
+  function reifyVirtualItem(item: Item) {
+    setItems([...items, item]);
+    removeVirtualItem(item);
+    refillVirtualItems();
+  }
+
+  function setAllItems(items: Array<Item>) {
+    setItems(items);
+  }
+
+  return [
+    { items, virtualItems },
+    {
+      getItemAtIdx,
+      reifyVirtualItem,
+      updateItem,
+      setAllItems,
+      createItemAt,
+      removeItemAt,
+    } as const,
+  ];
+};
 
 /**
  * A list of multiple text inputs (or textarea if long=true)
@@ -90,78 +206,61 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   } = props;
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const getUniqueKey = useUniqueSeq();
-  // guarantee a unique key
-  function makeItem(value: string, autofocus?: boolean): Item {
-    return { value, key: getUniqueKey() + "", autofocus };
-  }
-
   // TODO: check that the key is correctly set based on "value"
   // @see https://react.dev/learn/you-might-not-need-an-effect#resetting-all-state-when-a-prop-changes
   const values = value_ || [];
-
-  // NOTE: current code doesn't accept concurrent updates of this value,
-  // either use a reducer or "functional" setState
-  const [items, setItems] = useState<Array<Item>>(
-    values.map((val) => makeItem(val))
-  );
-
-  const [lastItem, setLastItem] = useState(makeItem(""));
-
-  // Values update
-  // TODO: assess if debouncing is really needed here, onchange is fired only on focus loss
-  // (contrary to "oninput" which actually needs debouncing)
-  // it seems that React Bootstrap treats onChange as onInput
-  const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
-  const updateAllItems = (items: Array<Item>) => {
-    setItems(items);
+  const updateValue = (items: Array<Item>) => {
     updateCurrentValuesDebounced({ [path]: toStrings(items) });
   };
-  // (limit is not supposed to be 0)
-  const limit = question.limit || DEFAULT_LIMIT;
-  /**
-   * If no index is provided, add a last item
-   */
-  const addLastItem = (item: Item) => {
-    updateAllItems([...items, item]);
-    // we need a new last item
-    setLastItem(makeItem(""));
-  };
-  const addItem = (item: Item, index: number) => {
-    updateAllItems([...items.slice(0, index), item, ...items.slice(index)]);
-  };
-  const removeItem = (idx: number) => {
-    updateAllItems([...items.slice(0, idx), ...items.slice(idx + 1)]);
-    // TODO: should we remove the value if the array becomes totally empty?
-    // by setting it to "null"?
-  };
+
+  const [
+    { items, virtualItems },
+    {
+      getItemAtIdx,
+      updateItem,
+      setAllItems,
+      reifyVirtualItem,
+      createItemAt,
+      removeItemAt,
+    },
+  ] = useRealVirtualItems(values);
+
+  // TODO: an effect is not usually the best approach
+  useEffect(() => {
+    updateValue(items);
+  }, [items]);
+
   const removeEmptyItems = () => {
     let filtered: Array<Item> = [];
     // items state is not yet updated when we blur the whole form
     // const filtered = items.filter((i) => i.value);
     // so we instead look at the DOM
     wrapperRef.current?.querySelectorAll("input").forEach((i, idx) => {
-      if (idx >= items.length) return; // lastItem, we ignore it
+      if (idx >= items.length) return; // virtualItem, we ignore it
       if (i.value) filtered.push(items[idx]);
     });
-    if (filtered.length !== items.length) updateAllItems(filtered);
+    if (filtered.length !== items.length) {
+      setAllItems(filtered);
+    }
   };
-  const updateItem = (idx: number, value: string) => {
-    updateAllItems([
-      ...items.slice(0, idx),
-      { value, key: items[idx].key },
-      ...items.slice(idx + 1),
-    ]);
-  };
+
+  // Values update
+  // TODO: assess if debouncing is really needed here, onchange is fired only on focus loss
+  // (contrary to "oninput" which actually needs debouncing)
+  // it seems that React Bootstrap treats onChange as onInput
+  const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
+  // (limit is not supposed to be 0)
+  const limit = question.limit || DEFAULT_LIMIT;
 
   // Focus management
   const selectPreviousItem = (index: number) =>
     //previous item is necessarily an existing item
     selectItem(wrapperRef.current, items[index - 1]);
-  const selectLastItem = () => selectItem(wrapperRef.current, lastItem);
+  const selectFirstVirtualItem = () =>
+    selectItem(wrapperRef.current, virtualItems[0]);
   const selectNextItem = (index: number) => {
     if (index === items.length - 1) {
-      return selectLastItem();
+      return selectFirstVirtualItem();
     }
     return selectItem(wrapperRef.current, items[index + 1]);
   };
@@ -181,8 +280,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
       | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement> // onBlur
   ) => {
     const value = event.target.value;
-    const previousValue =
-      index < items.length ? items[index].value : lastItem.value;
+    const previousValue = getItemAtIdx(index).value;
     // TODO: this jumps too much, instead use "removeEmptyItems" on the form
     /*if (!value) {
       if (index <= items.length - 1) removeItem(index);
@@ -193,15 +291,16 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   };
 
   const onItemChange = (index: number, key: string, evt) => {
+    // TODO: this should be abstracted by the hook,
     // The last item is displayed but not yet saved in the items list
-    const isLastItem = index >= items.length;
+    const isVirtualItem = index >= items.length;
     const value = evt.target.value;
     // if we start filling the last item,
     // add this item to the actual items,
     // and create a new last item
-    if (isLastItem) {
+    if (isVirtualItem) {
       if (value && items.length <= limit) {
-        addLastItem({ value, key });
+        reifyVirtualItem({ value, key });
       }
     }
   };
@@ -239,8 +338,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
       } else {
         // create a new empty item at next index
         // it will use autofocus
-        const newItem = makeItem("", true);
-        addItem(newItem, index + 1);
+        createItemAt(index + 1, true);
       }
     } else if (evt.key === "ArrowUp") {
       if (index > 0) {
@@ -265,11 +363,11 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
       } else if (index > 0) {
         // we are in the middle (not last item, but there is a previous item)
         focusInputEnd(selectPreviousItem(index));
-        removeItem(index);
+        removeItemAt(index);
       } else if (items.length > 0) {
         // there are no previous item, but there is a next one
         focusInputEnd(selectNextItem(0));
-        removeItem(index);
+        removeItemAt(index);
       }
     }
   };
@@ -280,10 +378,9 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     items,
     readOnly,
     wrapperRef,
-    lastItem,
   };
 
-  const allItems = items.length < limit ? [...items, lastItem] : items;
+  const allItems = items.length < limit ? [...items, ...virtualItems] : items;
 
   return (
     <FormItem {...props} ref={wrapperRef} onBlur={onFormBlur}>
