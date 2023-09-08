@@ -17,6 +17,7 @@ import { LoadingButton } from "../ui/LoadingButton";
 import { Entity, QuestionMetadata } from "@devographics/types";
 import QuestionLabel from "../form/QuestionLabel";
 import ItemLabel from "./ItemLabel";
+import truncate from "lodash/truncate";
 
 const cutoff = 3;
 
@@ -136,11 +137,17 @@ const ListItem = ({
       )}
       {resources && (
         <ul className="reading-list-item-resources">
-          {resources.map(({ title, url }) => (
-            <li key={url}>
-              <a href={url}>{title}</a>
-            </li>
-          ))}
+          {resources.map(({ title, url }) => {
+            const domain = new URL(url).hostname.replace("www.", "");
+            return (
+              <li key={url} className="reading-list-item-resources-item">
+                <a href={url}>{title || truncate(url, { length: 50 })}</a>
+                <span className="reading-list-item-resources-item-domain">
+                  {domain}
+                </span>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

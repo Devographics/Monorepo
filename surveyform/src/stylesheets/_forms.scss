@@ -491,15 +491,7 @@
   font-size: $smallish-font;
   color: var(--text-color-dark);
 }
-.form-option-add {
-  .add-to-list {
-    opacity: 0.2;
-    position: relative;
-    .form-option:hover & {
-      opacity: 1;
-    }
-  }
-}
+
 .form-show-more {
   margin-top: $spacing;
   @include small {

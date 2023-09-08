@@ -219,6 +219,13 @@ export enum FeaturesOptions {
     USED = 'used'
 }
 
+export enum SentimentOptions {
+    INTERESTED = 'sentiment_interested',
+    NOT_INTERESTED = 'sentiment_not_interested',
+    POSITIVE_EXPERIENCE = 'sentiment_positive_experience',
+    NEGATIVE_EXPERIENCE = 'sentiment_negative_experience'
+}
+
 /*
 
 Explorer

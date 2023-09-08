@@ -6,8 +6,11 @@ import { fetchEditionMetadata } from "@devographics/fetch";
 import { localMailTransport } from "~/lib/server/mail/transports";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import {
+  Edition,
   EditionMetadata,
+  Entity,
   ResponseDocument,
+  SurveyMetadata,
 } from "@devographics/types";
 import { getEditionQuestions } from "~/lib/surveys/helpers/getEditionQuestions";
 
@@ -109,7 +112,7 @@ const getReadingListEmail = ({
   const props = { survey, edition };
 
   const getEntity = (itemId) =>
-    allQuestions.find((q) => q.id === itemId)?.entity;
+    allQuestions.find((q) => q.id === itemId)?.entity!;
 
   const text = `
 ${textHeader(props)}
@@ -139,44 +142,69 @@ ${htmlFooter(props)}
 const textHeader = ({ survey, edition }) =>
   `Your ${survey.name} ${edition.year} Reading List`;
 
-const textItem = ({ survey, edition, entity }) => `
+const textItem = ({
+  survey,
+  edition,
+  entity,
+}: {
+  survey: SurveyMetadata;
+  edition: Edition;
+  entity: Entity;
+}) => {
+  const description = entity.descriptionHtml || entity.descriptionClean;
+
+  return `
 ${entity.nameClean}
+
+${description || ""}
 
 ${entity?.mdn?.summary || ""}
 
 ${[entity?.mdn?.url, entity?.github?.url, entity?.homepage?.url]
-    .filter((l) => !!l)
-    .map((l) => `- ${l}`)
-    .join("\n")}
+      .filter((l) => !!l)
+      .map((l) => `- ${l}`)
+      .join("\n")}
 
 ${entity?.resources ? entity.resources.map((l) => `- ${l.url}`).join("\n") : ""}
 
 ------------------------
 `;
+};
 const textFooter = ({ survey, edition }) =>
   `You are receiving this email because you completed the ${survey.name} ${edition.year} survey (${edition.questionsUrl}) and asked to receive a copy of your reading list. `;
 
 // HTML version
 const htmlHeader = (props) => `<h1>${textHeader(props)}</h1>`;
 
-const htmlItem = ({ survey, edition, entity }) => `
+const htmlItem = ({ survey, edition, entity }) => {
+  const description = entity.descriptionHtml || entity.descriptionClean;
+
+  return `
 <div>
     <h2>${entity?.nameClean}</h2>
+
+    ${description ? `<p>${description}</p>` : ""}
     ${entity?.mdn?.summary ? `<p>${entity?.mdn?.summary}</p>` : ""}
     <div>
     <ul>
     ${[entity?.mdn?.url, entity?.github?.url, entity?.homepage?.url]
-    .filter((l) => !!l)
-    .map((l) => `<li>${l}</li>`)
-    .join("\n")}
+      .filter((l) => !!l)
+      .map((l) => `<li>${l}</li>`)
+      .join("\n")}
 
     ${entity?.resources
-    ? entity.resources.map((l) => `<li>${l.url}</li>`).join("\n")
-    : ""
-  }
+      ? entity.resources
+        .map((l) => {
+          const domain = new URL(l.url).hostname.replace("www.", "");
+          return `<li><a href="${l.url}">${l.title}</a> (<code>${domain}</code>)</li>`;
+        })
+        .join("\n")
+      : ""
+    }
     </ul>
-</div>
-<br/>
-`;
+  </div>
+  <br/>
+  `;
+};
 
-const htmlFooter = (props) => `<hr/><p>${textFooter(props)}</p>`;
+const htmlFooter = (props) => `<hr/> <p>${textFooter(props)} </p>`;
