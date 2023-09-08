@@ -190,12 +190,15 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     if (evt.key === "Enter") {
       // Leave textarea behaviour alone
       if (question.longText) return;
-      // Pressing enter when focusing on an empty last item => submit the form as usual
-      // (last item is always empty, sinc starting to type in it will create a new empty last item)
-      if (index === items.length) return;
+
       // prevent form submission
       evt.stopPropagation();
       evt.preventDefault();
+
+      // Pressing enter when focusing on an empty last item => submit the form as usual
+      // (last item is always empty, sinc starting to type in it will create a new empty last item)
+      if (index === items.length) return;
+
       // Create an empty item next OR focus on existing one
       const nextItem = selectNextItem(index);
       if (!nextItem) return; // should not happen but pleases TS
