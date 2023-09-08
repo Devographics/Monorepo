@@ -17,6 +17,7 @@ import { LoadingButton } from "../ui/LoadingButton";
 import { Entity, QuestionMetadata } from "@devographics/types";
 import QuestionLabel from "../form/QuestionLabel";
 import ItemLabel from "./ItemLabel";
+import truncate from "lodash/truncate";
 
 const cutoff = 3;
 
@@ -138,7 +139,7 @@ const ListItem = ({
         <ul className="reading-list-item-resources">
           {resources.map(({ title, url }) => (
             <li key={url}>
-              <a href={url}>{title}</a>
+              <a href={url}>{title || truncate(url, { length: 50 })}</a>
             </li>
           ))}
         </ul>
