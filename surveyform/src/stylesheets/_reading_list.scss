@@ -89,6 +89,16 @@
       padding-top: $spacing;
       margin-top: $spacing;
       border-top: $border;
+
+      &-resources-item {
+        &-domain {
+          font-size: $small-font;
+          display: inline-block;
+          margin-left: $spacing/4;
+          color: var(--text-color-dark);
+        }
+      }
+
       &-title {
         display: flex;
         align-items: center;
@@ -234,11 +244,13 @@
 }
 
 @keyframes glowing {
-  from, to {
-    box-shadow: 0 0 0px hsl(180 90% 68% / .8);
+  from,
+  to {
+    box-shadow: 0 0 0px hsl(180 90% 68% / 0.8);
   }
 
-  45%, 55% {
-    box-shadow: 0 0 20px hsl(180 90% 68% / .8);
+  45%,
+  55% {
+    box-shadow: 0 0 20px hsl(180 90% 68% / 0.8);
   }
 }
