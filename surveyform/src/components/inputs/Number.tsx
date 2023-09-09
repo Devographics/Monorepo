@@ -23,8 +23,6 @@ export const FormComponentNumber = (props: FormInputProps) => {
   const getValue = (event) => {
     const rawValue = event.target.value;
     const value = rawValue === "" ? null : Number(rawValue);
-    console.log(rawValue);
-    console.log(value);
     return value;
   };
 

@@ -5,6 +5,7 @@ import {
   QuestionMetadata,
   ResponseDocument,
   FeaturesOptions,
+  OPTION_NA,
 } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 import { getEditionQuestions } from "../surveys/helpers/getEditionQuestions";
@@ -51,6 +52,8 @@ const getRank = (score) => {
   }
 };
 
+export const getEditionScoredQuestions = (edition) => {};
+
 export const getKnowledgeScore = ({
   response,
   edition,
@@ -62,25 +65,44 @@ export const getKnowledgeScore = ({
     (q) => q.countsTowardScore
   );
 
-  let known = 0;
+  let knownItems: string[] = [];
+  let unknownItems: string[] = [];
+  let allItems: string[] = [];
+
   for (const question of scoredQuestions) {
     const formPaths = getFormPaths({ edition, question });
-    const value = formPaths.response && response[formPaths.response];
-    if (value) {
-      if (Array.isArray(value)) {
-        // assume this is a question where each array item is a feature that
-        // counts towards the score
-        known += value.length;
+    const value_ = formPaths.response && response[formPaths.response];
+
+    if (question.allowMultiple && question.options) {
+      // assume this is a question where each array item is a scored item that
+      // counts towards the score
+      const optionsIds = question.options
+        .map((o) => String(o.id))
+        .filter((item) => item !== OPTION_NA);
+      const value = value_ as string[];
+      allItems = [...allItems, ...optionsIds];
+      knownItems = [
+        ...knownItems,
+        ...optionsIds.filter((id) => value.includes(id)),
+      ];
+      unknownItems = [
+        ...unknownItems,
+        ...optionsIds.filter((id) => !value.includes(id)),
+      ];
+    } else {
+      // assume this is a normal feature question
+      const value = value_ as FeaturesOptions;
+      if ([FeaturesOptions.HEARD, FeaturesOptions.USED].includes(value)) {
+        knownItems.push(question.id);
       } else {
-        // assume this is a normal feature question
-        if ([FeaturesOptions.HEARD, FeaturesOptions.USED].includes(value)) {
-          known++;
-        }
+        unknownItems.push(question.id);
       }
+      allItems.push(question.id);
     }
   }
 
-  const total = scoredQuestions.length;
+  const total = allItems.length;
+  const known = knownItems.length;
   const unknown = total - known;
   const score = Math.round((known * 100) / total);
   const rank = getRank(score);
