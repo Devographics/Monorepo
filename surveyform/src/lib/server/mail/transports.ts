@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { serverConfig } from "~/config/server";
 
 /**
  * Default transport is the console, for debugging purpose
@@ -10,7 +11,7 @@ let transport: any = {
   buffer: true,
   debug: true,
 };
-if (process.env.SMTP_HOST) {
+if (!serverConfig().isDev) {
   transport = {
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
@@ -23,11 +24,6 @@ if (process.env.SMTP_HOST) {
   };
 } else {
   console.warn("SMTP_HOST not set, will use debug transport")
-}
-if (process.env.NEXT_PUBLIC_NODE_ENV === "test" && !process.env.SMTP_HOST) {
-  console.warn(
-    "Running in test mode, but SMTP_HOST not set. Is SMTP_HOST correctly set in .env.test?"
-  );
 }
 
 export const localMailTransport = nodemailer.createTransport(transport);
