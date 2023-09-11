@@ -17,8 +17,8 @@ import isEmpty from "lodash/isEmpty.js";
 
 import {
   FollowupData,
-  FollowUpComment,
-  FollowUps,
+  // FollowUpComment,
+  // FollowUps,
 } from "./experience/Followup2";
 
 const defaultCutoff = 10;
@@ -170,10 +170,10 @@ const Checkbox = (
   const freeformFollowupValue =
     (freeformFollowupPath && get(response, freeformFollowupPath)) || "";
 
-  const hasFollowupData =
-    !isEmpty(predefinedFollowupValue) || !isEmpty(freeformFollowupValue);
-  const [showFollowupComment, setShowFollowupComment] =
-    useState(hasFollowupData);
+  //const hasFollowupData =
+  //  !isEmpty(predefinedFollowupValue) || !isEmpty(freeformFollowupValue);
+  // const [showFollowupComment, setShowFollowupComment] =
+  //   useState(hasFollowupData);
 
   const followupData: FollowupData = {
     predefinedFollowupPath,
@@ -197,6 +197,7 @@ const Checkbox = (
   const getNewValue = (isChecked) => {
     if (isNA) {
       // when checking the "n/a" option, clear everything else
+      // NOTE: this WON'T clear followup
       return isChecked ? [OPTION_NA] : [];
     } else {
       return isChecked ? [...value, option.id] : without(value, option.id);
@@ -226,9 +227,10 @@ const Checkbox = (
               const newValue = getNewValue(isChecked);
               updateCurrentValues({ [path]: newValue });
               if (!isChecked) {
+                // if we're unchecking a checkbox, also uncheck its followups
+                // NOTE: this is true for NA too, eventhough it's not currently tied with any sentiment or followup
                 const predefinedFollowupPathString =
                   predefinedFollowupPath as string;
-                // if we're unchecking a checkbox, also uncheck its followups
                 updateCurrentValues({ [predefinedFollowupPathString]: null });
               }
             }}

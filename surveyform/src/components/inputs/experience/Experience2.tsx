@@ -12,8 +12,8 @@ import { DbPathsEnum, OptionMetadata } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 
 import get from "lodash/get.js";
-import { FollowupData, FollowUpComment, FollowUps } from "./Followup2";
-import { CommentTrigger } from "~/components/form/FormComment";
+import { FollowupData, /*FollowUpComment,*/ FollowUps } from "./Followup2";
+// import { CommentTrigger } from "~/components/form/FormComment";
 import { useIntlContext } from "@devographics/react-i18n";
 
 import Alert from "react-bootstrap/Alert";
@@ -109,8 +109,8 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
 
   const hasFollowupData =
     !isEmpty(predefinedFollowupValue) || !isEmpty(freeformFollowupValue);
-  const [showFollowupComment, setShowFollowupComment] =
-    useState(hasFollowupData);
+  // const [showFollowupComment, setShowFollowupComment] =
+  // useState(hasFollowupData);
 
   const followupData: FollowupData = {
     predefinedFollowupPath,
