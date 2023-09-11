@@ -102,12 +102,12 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
       virtualItems,
     }));
   };
-  const setVirtualItems = (cb: (items: Array<Item>) => Array<Item>) => {
+  /*const setVirtualItems = (cb: (items: Array<Item>) => Array<Item>) => {
     setRealVirtualItems(({ items, virtualItems }) => ({
       items,
       virtualItems: cb(virtualItems),
     }));
-  };
+  };*/
   function expectedNbVirtual(nbItems: number) {
     // Virtual fields incitate user to answer
     // We need only one virtual field if the user has started filling the textList
@@ -237,7 +237,9 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   // @see https://react.dev/learn/you-might-not-need-an-effect#resetting-all-state-when-a-prop-changes
   const values = value_ || [];
   const updateValue = (items: Array<Item>) => {
-    updateCurrentValuesDebounced({ [path]: toStrings(items) });
+    updateCurrentValuesDebounced({
+      [path]: items.length ? toStrings(items) : null,
+    });
   };
 
   const [
