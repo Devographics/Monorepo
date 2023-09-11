@@ -1,3 +1,5 @@
+import { curry } from "cypress/types/lodash";
+
 /**
  * Get section div based on inner h3
  * @param titleName
@@ -32,5 +34,10 @@ export const getCreateAccountButton = () => {
 };
 
 export const openNavigationMenu = () => {
-  cy.findByRole("button", { name: /table_of_content|table of contents/i }).click({ force: true })
+  cy.findByRole("button", { name: /table_of_content|table of contents/i }).as("tocBtn")
+    .then($btn => {
+      if ($btn.attr("aria-expanded") !== "true") {
+        return cy.get("@tocBtn").click()
+      }
+    })
 }

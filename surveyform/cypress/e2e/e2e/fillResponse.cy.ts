@@ -24,10 +24,8 @@ function accessDemoSurvey() {
 function finishSurvey() {
   // skip to last section
   // finish
-  cy.findByRole("button", {
-    name: /Finish survey|general\.finish_survey/i,
-  }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
-  cy.url().should("match", new RegExp("thanks"));
+  getLinkToSection(/Finish survey|general\.finish_survey/i).click(); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
+  cy.url().should("match", new RegExp("finish"));
 }
 
 beforeEach(() => {
@@ -60,7 +58,6 @@ const CURRENT_SURVEY_URL = `/${testSurvey.prettySlug}/${testSurvey.year}`;
 
 
 test("features", () => {
-  accessDemoSurvey()
   // Features
   getLinkToSection(/feature/i).click({ force: true })
   getQuestionBlock(

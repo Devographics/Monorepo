@@ -88,6 +88,7 @@ const SurveyNav = (props: FormLayoutProps) => {
           onClick={(e) => {
             setShown(!shown);
           }}
+          aria-expanded={shown}
         >
           <span className="section-nav-head-left">
             <h3 className="section-nav-toc">
