@@ -12,6 +12,24 @@ import {
   getQuestionBlock,
 } from "../../helpers/getters";
 
+function accessDemoSurvey() {
+  const surveyRootUrl = routes.survey.demo.href
+  cy.visit(surveyRootUrl);
+  getContinueAsGuestButton().click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
+  // TODO: replace by the english label when i18n is there
+  // FIXME: this is not language resistant...
+  // @see https://github.com/cypress-io/cypress/issues/7890
+  cy.url().should("match", new RegExp(surveyRootUrl + "/.+"));
+}
+function finishSurvey() {
+  // skip to last section
+  // finish
+  cy.findByRole("button", {
+    name: /Finish survey|general\.finish_survey/i,
+  }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
+  cy.url().should("match", new RegExp("thanks"));
+}
+
 beforeEach(() => {
   // NOTE: those operations are expensive! When testing less-critical part of your UI,
   // prefer mocking API calls! We do this only because auth is very critical
@@ -23,7 +41,12 @@ beforeEach(() => {
   // NOTE: this would be better in  "cypress/support/before.ts" but importing i18n lib won't work
   // @see https://github.com/scottohara/loot/issues/185
   cy.setCookie(LOCALE_COOKIE_NAME, "en-US");
+
+  accessDemoSurvey()
 });
+afterEach(() => {
+  finishSurvey()
+})
 after(() => {
   // clean the db when done
   cy.exec("pnpm run db:test:reset");
@@ -34,16 +57,10 @@ const test = it;
 
 const CURRENT_SURVEY_REGEX = new RegExp(`${testSurvey.name}`, "i");
 const CURRENT_SURVEY_URL = `/${testSurvey.prettySlug}/${testSurvey.year}`;
-test("Access demo survey 2022, signup, start filling form", () => {
-  const surveyRootUrl = routes.survey.demo.href
-  cy.visit(surveyRootUrl);
 
-  getContinueAsGuestButton().click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
-  // TODO: replace by the english label when i18n is there
-  // FIXME: this is not language resistant...
-  // @see https://github.com/cypress-io/cypress/issues/7890
-  cy.url().should("match", new RegExp(surveyRootUrl + "/.+"));
 
+test("features", () => {
+  accessDemoSurvey()
   // Features
   getLinkToSection(/feature/i).click({ force: true })
   getQuestionBlock(
@@ -57,7 +74,9 @@ test("Access demo survey 2022, signup, start filling form", () => {
       { exact: false }
     ).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   });
+})
 
+test("multiple checkboxes", () => {
   // Tools/multiple
   getLinkToSection(/multiple/i).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   // Click a checkboxgroup
@@ -79,7 +98,9 @@ test("Access demo survey 2022, signup, start filling form", () => {
     // @see https://github.com/Devographics/surveys/discussions/185
   })
   */
+})
 
+test("various fields", () => {
   // Various inputs (slider etc.)
   getLinkToSection(/various_fields/i).click({ force: true })
   getQuestionBlock(/slider/i).within(() => {
@@ -99,12 +120,14 @@ test("Access demo survey 2022, signup, start filling form", () => {
       }).click({force:true}); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
     */
   });
+})
 
+test("text", () => {
   // Fill a text area
   // TODO: better style
   /*
   getQuestionBlock(/Other Strong Points|Graphql_demo__usage__strong_points__others/i).within(() => {
-
+  
   })*/
 
   // Fill a text input
@@ -116,13 +139,17 @@ test("Access demo survey 2022, signup, start filling form", () => {
   */
   // Provide personal info
   // Fill autocomplete
-
+})
+test("demographics", () => {
   // Demographics
   getLinkToSection(/About|user_info/i).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   getQuestionBlock(/Country|user_info__country/i).within(() => {
     cy.findByRole("combobox").select("France");
   });
 
+})
+
+test("experimental", () => {
   // Experimental inputs
   getLinkToSection(/experimental/i).click({ force: true })
   getQuestionBlock(/textlist/i).within(() => {
@@ -156,12 +183,5 @@ test("Access demo survey 2022, signup, start filling form", () => {
     // TODO: test defualt limit
     // TODO: test mroe edge cases
   })
+})
 
-
-  // skip to last section
-  // finish
-  cy.findByRole("button", {
-    name: /Finish survey|general\.finish_survey/i,
-  }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
-  cy.url().should("match", new RegExp("thanks"));
-});

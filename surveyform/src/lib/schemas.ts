@@ -1,3 +1,7 @@
+/**
+ * Homemade generic schema system,
+ * that can be later converted to a specific format like Zod validation
+ */
 import type { ResponseDocument } from "@devographics/types";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { Actions } from "./validation";
@@ -21,25 +25,29 @@ export type OnUpdate<T> = (prop: OnUpdateProps) => T | undefined;
 export interface SchemaObject<T> {
   type: T;
   requiredDuring?: Actions;
+  /**
+   * Whether this field can be set client-side
+   * Other fields are meant to be set by the server (various metadata for instance)
+   */
   clientMutable?: boolean;
   isArray?: boolean;
   onCreate?: OnCreate<
     T extends StringConstructor
-      ? string
-      : T extends NumberConstructor
-      ? number
-      : T extends BooleanConstructor
-      ? boolean
-      : Date
+    ? string
+    : T extends NumberConstructor
+    ? number
+    : T extends BooleanConstructor
+    ? boolean
+    : Date
   >;
   onUpdate?: OnUpdate<
     T extends StringConstructor
-      ? string
-      : T extends NumberConstructor
-      ? number
-      : T extends BooleanConstructor
-      ? boolean
-      : Date
+    ? string
+    : T extends NumberConstructor
+    ? number
+    : T extends BooleanConstructor
+    ? boolean
+    : Date
   >;
 }
 
@@ -70,7 +78,7 @@ export const extendSchema = (schema: any) => {
   return schema;
 };
 
-/*
+/**
 
 Convert any date received from the client from a string back into an actual Date object
 

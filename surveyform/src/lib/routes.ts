@@ -1,5 +1,3 @@
-import { string } from "zod";
-
 export const outlineSegment = "outline"
 /**
  * Route manifest

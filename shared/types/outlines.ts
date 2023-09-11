@@ -195,6 +195,9 @@ export type Question = {
     allowComment?: boolean
     showCommentInput?: boolean
     randomize?: boolean
+    /**
+     * Question is used to compute the knowledge score
+     */
     countsTowardScore?: boolean
 
     matchTags?: string[]

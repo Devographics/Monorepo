@@ -41,6 +41,7 @@ export function serverConfig() {
     isTest:
       process.env.NODE_ENV === "test" ||
       process.env.NEXT_PUBLIC_NODE_ENV === "test",
+    debugMail: !!process.env.DEBUG_MAIL
   };
 }
 

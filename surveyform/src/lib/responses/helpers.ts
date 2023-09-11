@@ -52,7 +52,7 @@ const getRank = (score) => {
   }
 };
 
-export const getEditionScoredQuestions = (edition) => {};
+export const getEditionScoredQuestions = (edition) => { };
 
 export const getKnowledgeScore = ({
   response,
@@ -71,7 +71,7 @@ export const getKnowledgeScore = ({
 
   for (const question of scoredQuestions) {
     const formPaths = getFormPaths({ edition, question });
-    const value_ = formPaths.response && response[formPaths.response];
+    const value_: string | number | Array<string> | Array<number> | undefined | null = formPaths.response && response[formPaths.response];
 
     if (question.allowMultiple && question.options) {
       // assume this is a question where each array item is a scored item that
@@ -79,7 +79,7 @@ export const getKnowledgeScore = ({
       const optionsIds = question.options
         .map((o) => String(o.id))
         .filter((item) => item !== OPTION_NA);
-      const value = value_ as string[];
+      const value = (value_ || []) as Array<string>
       allItems = [...allItems, ...optionsIds];
       knownItems = [
         ...knownItems,

@@ -11,7 +11,7 @@ let transport: any = {
   buffer: true,
   debug: true,
 };
-if (!serverConfig().isDev) {
+if (!(serverConfig().isDev || serverConfig().debugMail)) {
   transport = {
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
