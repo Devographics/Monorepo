@@ -83,7 +83,7 @@ export const logToFile = async (fileName_: string, object: any, options: LogOpti
                         if (error) throw error
 
                         // eslint-disable-next-line no-console
-                        console.log(`Log saved to ${fullPath}`)
+                        // console.log(`Log saved to ${fullPath}`)
                     })
                 }
             })

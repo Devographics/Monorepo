@@ -8,7 +8,8 @@ export interface SurveyConfig {
     domain: string
     hashtag: string
 
-    dbCollectionName: string
+    responsesCollectionName?: string
+    normalizedCollectionName?: string
 
     emailOctopus: EmailOctopusData
 

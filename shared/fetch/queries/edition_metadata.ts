@@ -38,7 +38,8 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
             domain
             id
             name
-            dbCollectionName
+            responsesCollectionName
+            normalizedCollectionName
             hashtag
             emailOctopus {
               listId

@@ -32,7 +32,8 @@ export const getEditionSitemapQuery = ({ editionId }: { editionId: string }) => 
             domain
             id
             name
-            dbCollectionName
+            responsesCollectionName
+            normalizedCollectionName
             hashtag
             emailOctopus {
               listId

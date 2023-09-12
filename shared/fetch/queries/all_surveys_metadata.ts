@@ -10,7 +10,8 @@ query SurveysMetadataQuery {
     surveys {
       id
       name
-      dbCollectionName
+      responsesCollectionName
+      normalizedCollectionName
       domain
       hashtag
       imageUrl
