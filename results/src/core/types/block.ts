@@ -50,6 +50,7 @@ export interface BlockDefinition {
     parameters: ResponsesParameters
     filters?: FilterType[]
     queryOptions?: BlockQueryOptions
+    hideCutoff?: number
 
     // predefined filters state
     filtersState?: CustomizationDefinition
@@ -74,7 +75,7 @@ export interface BlockWithAwards {
      * (usually we have 4 of them)
      */
     awards: Array<{
-        id: string,
+        id: string
         /**
          * Awards for this category
          */
@@ -83,7 +84,9 @@ export interface BlockWithAwards {
 }
 
 export interface Award {
-    id: string, name: string, value: string | number
+    id: string
+    name: string
+    value: string | number
 }
 
 type FilterType = 'filters' | 'facets'

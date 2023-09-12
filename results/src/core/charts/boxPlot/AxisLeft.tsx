@@ -6,12 +6,19 @@ type AxisLeftProps = {
     yScale: ScaleLinear<number, number>
     pixelsPerTick: number
     stroke: string
+    labelFormatter: (any) => string
 }
 
 // tick length
 const TICK_LENGTH = 6
 
-export const AxisLeft = ({ width, yScale, pixelsPerTick, stroke }: AxisLeftProps) => {
+export const AxisLeft = ({
+    width,
+    yScale,
+    pixelsPerTick,
+    stroke,
+    labelFormatter
+}: AxisLeftProps) => {
     const range = yScale.range()
 
     const ticks = useMemo(() => {
@@ -55,7 +62,7 @@ export const AxisLeft = ({ width, yScale, pixelsPerTick, stroke }: AxisLeftProps
                             alignmentBaseline: 'middle'
                         }}
                     >
-                        {value}
+                        {labelFormatter(value)}
                     </text>
                 </g>
             ))}

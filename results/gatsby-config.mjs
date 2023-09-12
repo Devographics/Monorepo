@@ -6,7 +6,8 @@ const __filename = fileURLToPath(import.meta.url)
 
 const __dirname = path.dirname(__filename)
 
-dotenv.config()
+const envPath = process.env.ENV_FILE ? process.env.ENV_FILE : '.env'
+dotenv.config({ path: envPath })
 
 function checkEnv() {
     const errors = []

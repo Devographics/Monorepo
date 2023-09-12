@@ -34,24 +34,31 @@ export const AxisBottom = ({ xScale, legends, stroke }: AxisBottomProps) => {
             /> */}
 
             {/* Ticks and labels */}
-            {ticks.map(({ value, xOffset }) => (
-                <g key={value} transform={`translate(${xOffset}, 0)`}>
-                    <line y2={TICK_LENGTH} stroke="#dddddd" strokeWidth="1" strokeOpacity="0.4" />
-                    <text
-                        key={value}
-                        style={{
-                            fill: stroke,
-                            fontSize: '12px',
-                            textAnchor: 'middle',
-                            transform: 'translateY(20px)'
-                        }}
-                    >
-                        {value === NO_ANSWER
-                            ? getString('charts.no_answer')?.t
-                            : legends.find(l => l.id === value)?.shortLabel}
-                    </text>
-                </g>
-            ))}
+            {ticks.map(({ value, xOffset }) => {
+                const legendItem = legends.find(l => l.id === value)
+                const label = legendItem?.shortLabel || legendItem?.label
+                return (
+                    <g key={value} transform={`translate(${xOffset}, 0)`}>
+                        <line
+                            y2={TICK_LENGTH}
+                            stroke="#dddddd"
+                            strokeWidth="1"
+                            strokeOpacity="0.4"
+                        />
+                        <text
+                            key={value}
+                            style={{
+                                fill: stroke,
+                                fontSize: '12px',
+                                textAnchor: 'middle',
+                                transform: 'translateY(20px)'
+                            }}
+                        >
+                            {value === NO_ANSWER ? getString('charts.no_answer')?.t : label}
+                        </text>
+                    </g>
+                )
+            })}
         </>
     )
 }

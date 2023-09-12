@@ -35,21 +35,44 @@
         blockType: SurveyIntroBlock
         disableExport: true
         wrapBlock: false
-      - id: survey_credits
-        template: credits
+      # - id: survey_credits
+      #   template: credits
       - id: survey_newsletter
         blockType: NewsletterBlock
         disableExport: true
         wrapBlock: false
-      - id: survey_sponsors
-        template: sponsors
-      - id: survey_partners
-        template: sponsors
-        blockType: PartnersBlock
-      - id: survey_translators
-        blockType: TranslatorsBlock
+      # - id: survey_sponsors
+      #   template: sponsors
+      # - id: survey_partners
+      #   template: sponsors
+      #   blockType: PartnersBlock
+      # - id: survey_translators
+      #   blockType: TranslatorsBlock
+      #   disableExport: true
+      #   wrapBlock: false
+
+- id: takeaways
+  path: /takeaways
+  # showTitle: false
+  blocks:
+      # - id: survey_livestream
+      #   blockType: LivestreamBlock
+      #   disableExport: true
+      #   wrapBlock: false
+      - id: takeaways
+        blockType: TakeawaysBlock
         disableExport: true
         wrapBlock: false
+        items:
+            - median_salary_2022
+            - unemployed_respondents_2022
+            - programming_languages_2022
+            - international_subsidiary_2022
+            - remote_work_2022
+            - javascript_frameworks_2022
+            - women_vs_men_2022
+            - overtime_2022
+            - programming_salaries_2022
 
 # - id: data_explorer
 #   titleId: sections.data_explorer.title
@@ -73,8 +96,33 @@
   blocks:
       - template: page_introduction
 
+      - id: nationality
+        template: multiple_options
+        parameters: { limit: 20 }
+
+      - id: nationality_vs_salary
+        fieldId: nationality
+        template: multiple_options
+        parameters: { cutoff: 20 }
+        defaultUnits: averageByFacet
+        filtersState:
+            options:
+                showDefaultSeries: true
+                enableYearSelect: false
+                mode: facet
+                queryOnLoad: false
+                supportedModes:
+                    - grid
+                    - facet
+                preventQuery: false
+            filters: []
+            facet:
+                sectionId: job_info
+                id: current_total_annual_compensation
+
       - id: japan_province
         template: multiple_options
+        hideCutoff: 10
 
       - id: residency_status
         template: multiple_options
@@ -82,11 +130,31 @@
       # - id: residency_status_other
       #   template: multiple_options_other
 
-      - id: nationality
-        template: multiple_options
-
       - id: gender
         template: multiple_options
+        blockType: VerticalBarBlock
+        defaultUnits: percentageSurvey
+
+      - id: gender_vs_salary
+        fieldId: gender
+        template: multiple_options
+        blockType: VerticalBarBlock
+        defaultUnits: percentilesByFacet
+        parameters: { cutoff: 20 }
+        filtersState:
+            options:
+                showDefaultSeries: true
+                enableYearSelect: false
+                mode: facet
+                queryOnLoad: false
+                supportedModes:
+                    - combined
+                    - facet
+                preventQuery: false
+            filters: []
+            facet:
+                sectionId: job_info
+                id: current_total_annual_compensation
 
       # - id: gender_other
       #   template: multiple_options_other

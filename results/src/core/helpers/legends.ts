@@ -35,7 +35,7 @@ export const useLegends = ({
     namespace?: string
     addNoAnswer?: boolean
 }): BlockLegend[] => {
-    const keys = legendIds || useOptions(block.id)
+    const keys = legendIds || useOptions(block.fieldId || block.id)
 
     if (!keys || keys.length === 0) {
         return []
@@ -43,7 +43,7 @@ export const useLegends = ({
     const theme = useTheme()
     const { translate, getString } = useI18n()
 
-    const namespace = providedNamespace ?? block.i18nNamespace ?? block.id
+    const namespace = providedNamespace ?? block.i18nNamespace ?? block.fieldId ?? block.id
     const colorRange = theme.colors.ranges[namespace]
     const legends = keys.map(id => {
         const labelKey = `options.${namespace}.${id}`
