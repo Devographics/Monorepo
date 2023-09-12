@@ -35,12 +35,7 @@ export const FormOption = (props: FormOptionProps) => {
             <FollowUps {...props} followupData={followupData} />
           )}
         </span>
-        {optionDescription && (
-          <FormattedMessage
-            className="form-option-description"
-            id={i18n.description}
-          />
-        )}
+        <OptionDescription {...props} />
       </div>
       {entity && (
         <div className="form-option-add">
@@ -49,6 +44,33 @@ export const FormOption = (props: FormOptionProps) => {
       )}
     </div>
   );
+};
+
+const OptionDescription = (props: FormOptionProps) => {
+  const { option } = props;
+  const intl = useIntlContext();
+  const i18n = getOptioni18nIds(props);
+
+  const i18nDescription = intl.formatMessage({
+    id: i18n.description,
+  });
+
+  const entity = option?.entity;
+  const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
+
+  return i18nDescription ? (
+    <FormattedMessage
+      className="form-option-description"
+      id={i18n.description}
+    />
+  ) : entityDescription ? (
+    <span
+      className="form-option-description"
+      dangerouslySetInnerHTML={{
+        __html: entityDescription,
+      }}
+    />
+  ) : null;
 };
 
 export default FormOption;
