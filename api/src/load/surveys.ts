@@ -12,6 +12,7 @@ import path from 'path'
 import { setCache } from '../helpers/caching'
 import { appSettings } from '../helpers/settings'
 import { parseSurveys } from '../generate/generate'
+import { EditionMetadata } from '@devographics/types'
 
 let allSurveys: Survey[] = []
 
@@ -36,7 +37,7 @@ interface LoadOrGetSurveysOptions {
 }
 /**
  * Load surveys if not yet loaded on startup
- * 
+ *
  * This will include hidden surveys
  */
 export const loadOrGetSurveys = async (options: LoadOrGetSurveysOptions = {}) => {
@@ -232,7 +233,7 @@ export const loadLocally = async () => {
                         )
                         const editionConfigYaml: any = yaml.load(editionConfigContents)
                         edition = editionConfigYaml
-                    } catch (error) { }
+                    } catch (error) {}
                     const questionsPath = editionDirPath + '/questions.yml'
                     if (existsSync(questionsPath)) {
                         try {
@@ -252,7 +253,9 @@ export const loadLocally = async () => {
                         try {
                             const editionApiContents = await readFile(apiPath, 'utf8')
                             const editionApiYaml: any = yaml.load(editionApiContents)
-                            edition.apiSections = makeAPIOnly(editionApiYaml)
+                            if (Array.isArray(editionApiYaml) && editionApiYaml.length > 0) {
+                                edition.apiSections = makeAPIOnly(editionApiYaml)
+                            }
                         } catch (error) {
                             console.log(`YAML parsing error for api.yml edition ${editionDirName}`)
                             console.log(error)

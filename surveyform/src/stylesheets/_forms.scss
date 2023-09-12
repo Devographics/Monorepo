@@ -276,7 +276,7 @@
 .code-example {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
-  padding: $spacing $spacing;
+  padding: $spacing * 1.5 $spacing;
   // margin-top: $spacing;
   margin-bottom: $spacing;
   position: relative;
@@ -291,7 +291,8 @@
     }
     @include medium-large {
       position: absolute;
-      right: 15px;
+      right: 12px;
+      top: 8px;
       margin: 0 0 math.div($spacing, 3) 0;
     }
     opacity: 0.7;
