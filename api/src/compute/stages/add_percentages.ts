@@ -21,9 +21,11 @@ const computeBucketsWithPercentages = <T extends Bucket | FacetBucket>(
                 ? 0
                 : ratioToPercentage(bucket.count / editionData.completion.count)
         if (parentBucket) {
+            // unless this is the "no answer" bucket,
             // we take out the count of respondents who didn't answer
             // because we don't show them in the facet charts either
-            const totalRespondentsInParentBucket = parentBucket.count - noAnswerCount
+            const totalRespondentsInParentBucket =
+                bucket.id === NO_ANSWER ? parentBucket.count : parentBucket.count - noAnswerCount
             bucketWithPercentages.percentageBucket = ratioToPercentage(
                 bucketWithPercentages.count / totalRespondentsInParentBucket
             )

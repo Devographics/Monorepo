@@ -32,7 +32,8 @@ import {
     addLabels,
     addAveragesByFacet,
     removeEmptyEditions,
-    addPercentiles
+    addPercentiles,
+    groupBuckets
 } from './stages/index'
 import {
     ResponsesTypes,
@@ -243,17 +244,19 @@ export async function genericComputeFunction({
     let results = (await collection.aggregate(pipeline).toArray()) as ResponseEditionData[]
 
     if (isDebug) {
-        console.log(`// Using collection ${survey.dbCollectionName}`)
+        console.log(
+            `// Using collection ${survey.normalizedCollectionName} on db ${process.env.MONGO_PUBLIC_DB}`
+        )
         console.log(
             inspect(
                 {
                     match,
-                    pipeline,
-                    results
+                    pipeline
                 },
                 { colors: true, depth: null }
             )
         )
+        console.log('// raw results')
         console.log(JSON.stringify(results, null, 2))
     }
 
@@ -285,7 +288,16 @@ export async function genericComputeFunction({
         if (responsesType === ResponsesTypes.RESPONSES) {
             await addMissingItems(results, axis2, axis1)
         }
+        await groupBuckets(results, axis2, axis1)
+        // for all following steps, use groups as options
+        if (axis1.question.groups) {
+            axis1.options = axis1.question.groups
+        }
+        if (axis2.question.groups) {
+            axis2.options = axis2.question.groups
+        }
         await addAveragesByFacet(results, axis2, axis1)
+
         await addPercentiles(results, axis2, axis1)
         await sortData(results, axis2, axis1)
         await limitData(results, axis2, axis1)
@@ -295,6 +307,12 @@ export async function genericComputeFunction({
         if (responsesType === ResponsesTypes.RESPONSES) {
             await addMissingItems(results, axis1)
         }
+        await groupBuckets(results, axis1)
+        // for all following steps, use groups as options
+        if (axis1.question.groups) {
+            axis1.options = axis1.question.groups
+        }
+
         await sortData(results, axis1)
         await limitData(results, axis1)
         await cutoffData(results, axis1)

@@ -9,7 +9,9 @@ import {
     QuestionTemplateOutput,
     SectionApiObject,
     EditionApiObject,
-    SurveyApiObject
+    SurveyApiObject,
+    ResponseEditionData,
+    Bucket
 } from '../types/surveys'
 import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'
