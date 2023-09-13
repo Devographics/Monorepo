@@ -33,9 +33,9 @@ export const Text = ({
     label,
     description,
     tickRotation,
-    index,
-    i18nNamespace
-}: {
+    index
+}: //i18nNamespace
+{
     key: string
     hasLink: boolean
     label: string
@@ -133,7 +133,8 @@ export const TickItem = (tick: TickItemProps) => {
         tickRotation,
         label,
         itemCount,
-        tickIndex
+        tickIndex,
+        role
     } = tick
 
     let link,
@@ -163,8 +164,8 @@ export const TickItem = (tick: TickItemProps) => {
     const textProps = {
         id: tick.value,
         key,
-        label: tickLabel,
-        description,
+        label: typeof tickLabel === 'undefined' ? '' : tickLabel + '',
+        description: description || '',
         tickRotation,
         index
     }
@@ -172,7 +173,7 @@ export const TickItem = (tick: TickItemProps) => {
     const showLinks = entity && getSocialLinks(entity).length > 0
 
     return (
-        <g transform={`translate(${x},${y})`}>
+        <g transform={`translate(${x},${y})`} role={role}>
             {link ? (
                 <a href={link}>
                     <Text hasLink={true} {...textProps} />

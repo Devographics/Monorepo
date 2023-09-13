@@ -1,6 +1,5 @@
-import { BucketUnits } from '@devographics/types'
+import { BucketUnits, Entity } from '@devographics/types'
 import { BlockMode, BlockUnits, BlockLegend } from './block'
-import { Entity } from './data'
 
 export interface ChartComponentProps {
     data?: any
@@ -28,6 +27,8 @@ export interface TickItemProps {
     tickRotation?: number
     description?: string
     label?: string
-    itemCount?: number
-    tickIndex?: number
+    itemCount: number
+    tickIndex: number
+    /** Pass a specific aria role to the group, eg columnheader or rowheader */
+    role?: string
 }
