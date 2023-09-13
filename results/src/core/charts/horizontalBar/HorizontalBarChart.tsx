@@ -296,12 +296,11 @@ const HorizontalBarChart = ({
                             entities.find(e => e?.id === barProps.data.id)
                         }
                         labelFormatter={labelFormatter}
-                        role="row"
                         {...barProps}
                     />
                 )}
                 layers={[
-                    layerProps => <HorizontalBarStripes role="cell" {...layerProps} />,
+                    layerProps => <HorizontalBarStripes {...layerProps} />,
                     'grid',
                     'axes',
                     'bars',
