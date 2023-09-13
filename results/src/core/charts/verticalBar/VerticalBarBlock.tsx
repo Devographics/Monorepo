@@ -127,7 +127,7 @@ const VerticalBarBlock = ({ block, data, series, pageContext }: VerticalBarBlock
             >
                 <ChartContainer fit={true}>
                     {units === BucketUnits.PERCENTILES ? (
-                        <BoxPlotChart {...chartProps} />
+                        <BoxPlotChart {...chartProps} variant="vertical" />
                     ) : (
                         <VerticalBarChart {...chartProps} />
                     )}

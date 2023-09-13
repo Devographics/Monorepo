@@ -6,14 +6,15 @@ import { useI18n } from 'core/i18n/i18nContext'
 
 type AxisBottomProps = {
     xScale: ScaleBand<string>
-    legends: BlockLegend[]
+    legends?: BlockLegend[]
     stroke: string
+    variant: 'horizontal' | 'vertical'
 }
 
 // tick length
 const TICK_LENGTH = 6
 
-export const AxisBottom = ({ xScale, legends, stroke }: AxisBottomProps) => {
+export const AxisBottom = ({ xScale, legends, stroke, variant = 'vertical' }: AxisBottomProps) => {
     const { getString } = useI18n()
     const [min, max] = xScale.range()
 
@@ -35,7 +36,7 @@ export const AxisBottom = ({ xScale, legends, stroke }: AxisBottomProps) => {
 
             {/* Ticks and labels */}
             {ticks.map(({ value, xOffset }) => {
-                const legendItem = legends.find(l => l.id === value)
+                const legendItem = legends?.find(l => l.id === value)
                 const label = legendItem?.shortLabel || legendItem?.label
                 return (
                     <g key={value} transform={`translate(${xOffset}, 0)`}>

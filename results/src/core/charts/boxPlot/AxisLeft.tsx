@@ -1,12 +1,16 @@
 import React, { useMemo } from 'react'
 import { ScaleLinear } from 'd3'
 import { MARGIN } from './BoxPlotChart'
+import { BlockLegend } from 'core/types'
 
 type AxisLeftProps = {
+    width: number
     yScale: ScaleLinear<number, number>
     pixelsPerTick: number
     stroke: string
     labelFormatter: (any) => string
+    legends?: BlockLegend[]
+    variant: 'horizontal' | 'vertical'
 }
 
 // tick length
@@ -17,13 +21,16 @@ export const AxisLeft = ({
     yScale,
     pixelsPerTick,
     stroke,
-    labelFormatter
+    labelFormatter,
+    legends,
+    variant = 'vertical'
 }: AxisLeftProps) => {
     const range = yScale.range()
 
     const ticks = useMemo(() => {
         const height = range[0] - range[1]
-        const numberOfTicksTarget = Math.floor(height / pixelsPerTick)
+        const numberOfTicksTarget =
+            variant === 'vertical' ? Math.floor(height / pixelsPerTick) : legends?.length
 
         return yScale.ticks(numberOfTicksTarget).map(value => ({
             value,
@@ -31,6 +38,7 @@ export const AxisLeft = ({
         }))
     }, [yScale])
 
+    console.log(ticks)
     return (
         <>
             {/* Main vertical line */}
@@ -41,31 +49,45 @@ export const AxisLeft = ({
             /> */}
 
             {/* Ticks and labels */}
-            {ticks.map(({ value, yOffset }) => (
-                <g key={value} transform={`translate(0, ${yOffset})`}>
-                    <line x2={-TICK_LENGTH} stroke="#dddddd" strokeWidth="1" strokeOpacity="0.4" />
-                    <line
-                        x2={width - MARGIN.right}
-                        stroke="#dddddd"
-                        strokeWidth="1"
-                        strokeDasharray="1 2"
-                        strokeOpacity="0.4"
-                    />
+            {ticks.map(({ value, yOffset }) => {
+                let label
+                if (variant === 'vertical') {
+                    label = labelFormatter(value)
+                } else {
+                    const legendItem = legends?.[value]
+                    label = legendItem?.shortLabel || legendItem?.label
+                }
+                return (
+                    <g key={value} transform={`translate(0, ${yOffset})`}>
+                        <line
+                            x2={-TICK_LENGTH}
+                            stroke="#dddddd"
+                            strokeWidth="1"
+                            strokeOpacity="0.4"
+                        />
+                        <line
+                            x2={width - MARGIN.right}
+                            stroke="#dddddd"
+                            strokeWidth="1"
+                            strokeDasharray="1 2"
+                            strokeOpacity="0.4"
+                        />
 
-                    <text
-                        key={value}
-                        style={{
-                            fill: stroke,
-                            fontSize: '12px',
-                            textAnchor: 'middle',
-                            transform: 'translateX(-20px)',
-                            alignmentBaseline: 'middle'
-                        }}
-                    >
-                        {labelFormatter(value)}
-                    </text>
-                </g>
-            ))}
+                        <text
+                            key={value}
+                            style={{
+                                fill: stroke,
+                                fontSize: '12px',
+                                textAnchor: 'end',
+                                transform: 'translateX(-20px)',
+                                alignmentBaseline: 'middle'
+                            }}
+                        >
+                            {label}
+                        </text>
+                    </g>
+                )
+            })}
         </>
     )
 }
