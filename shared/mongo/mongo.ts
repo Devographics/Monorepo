@@ -108,9 +108,11 @@ export const getCollectionByName = async <T extends Document>(name: string) => {
 /**
  * Handle the connection automatically when called the first time
  */
-export const getRawResponsesCollection = async <T extends Document = ResponseDocument>(survey?: Survey) => {
+export const getRawResponsesCollection = async <T extends Document = ResponseDocument>(
+    survey?: Survey
+) => {
     const db = await getAppDb()
-    return db.collection<T>('responses')
+    return db.collection<T>(survey?.responsesCollectionName || 'responses')
 }
 
 /**
@@ -118,7 +120,7 @@ export const getRawResponsesCollection = async <T extends Document = ResponseDoc
  */
 export const getNormResponsesCollection = async <T extends Document>(survey?: Survey) => {
     const db = await getPublicDb()
-    return db.collection<T>(survey?.dbCollectionName || 'normalized_responses')
+    return db.collection<T>(survey?.normalizedCollectionName || 'normalized_responses')
 }
 
 /**

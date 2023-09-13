@@ -18,7 +18,8 @@ type SurveyMetadata {
     hashtag: String
 
     imageUrl: String
-    dbCollectionName: String
+    responsesCollectionName: String
+    normalizedCollectionName: String
 
     emailOctopus: EmailOctopusData
 

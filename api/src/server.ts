@@ -34,6 +34,9 @@ import { watchFiles } from './helpers/watch'
 import { initRedis } from '@devographics/redis'
 import { getPublicDb, getPublicDbReadOnly } from '@devographics/mongo'
 
+const envPath = process.env.ENV_FILE ? process.env.ENV_FILE : '.env'
+dotenv.config({ path: envPath })
+
 const app = express()
 
 const environment = process.env.ENVIRONMENT || process.env.NODE_ENV
@@ -88,7 +91,7 @@ const start = async () => {
     // TODO: there might be mismatch between shared mongodb version
     // and API mongodb version
     // so the types such as "Db" are not exactly the same depending on the situation
-    const db = await getPublicDb() as any
+    const db = (await getPublicDb()) as any
 
     // const entities = await loadOrGetEntities({})
     const context: RequestContext = { db, redisClient }
@@ -137,7 +140,9 @@ const start = async () => {
         },
         context: (expressContext): RequestContext => {
             // TODO: do this better with a custom header
-            const isDebug = expressContext?.req?.rawHeaders?.includes('http://localhost:4030')
+            const isDebug =
+                expressContext?.req?.rawHeaders?.includes('http://localhost:4030') ||
+                expressContext?.req?.rawHeaders?.includes('http://localhost:5030')
             return {
                 ...context,
                 isDebug
@@ -225,7 +230,8 @@ const start = async () => {
 
     app.listen({ port: port }, () =>
         console.log(
-            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${finishedAt.getTime() - startedAt.getTime()
+            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${
+                finishedAt.getTime() - startedAt.getTime()
             }ms)`
         )
     )

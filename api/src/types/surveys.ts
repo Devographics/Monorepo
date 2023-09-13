@@ -14,7 +14,8 @@ import {
     SectionMetadata,
     EditionMetadata,
     SurveyMetadata,
-    ResultsSubFieldEnum
+    ResultsSubFieldEnum,
+    OptionGroup
 } from '@devographics/types'
 
 export type TypeObject = {
@@ -87,7 +88,7 @@ export type TransformFunction = (
 //     questions: QuestionApiObject[]
 // }
 
-export interface QuestionApiTemplateOutput extends QuestionTemplateOutput {
+export interface QuestionApiTemplateOutput extends Omit<QuestionTemplateOutput, 'template'> {
     resolverMap?: ResolverMap
     transformFunction?: TransformFunction
 
@@ -143,6 +144,8 @@ export interface QuestionApiObject extends QuestionApiTemplateOutput {
     edition?: Edition
     // a question that's in the API but not the outline
     apiOnly?: boolean
+
+    groups?: OptionGroup[]
 }
 
 export enum IncludeEnum {

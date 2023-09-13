@@ -13,6 +13,7 @@ import { MODE_GRID, MODE_FACET } from 'core/filters/constants'
 import { useChartFilters } from 'core/filters/helpers'
 import { useAllFilters } from 'core/charts/hooks'
 import { useLegends } from 'core/helpers/legends'
+import { BoxPlotChart } from '../boxPlot/BoxPlotChart'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
     data: StandardQuestionData
@@ -54,6 +55,7 @@ const HorizontalBarBlock = ({ block, data, series }: HorizontalBarBlockProps) =>
         // if this facet is in the form of numerical ranges, add the average of each range as unit too
         if (facetQuestion?.optionsAreRange) {
             unitsOptions.push(BucketUnits.AVERAGE)
+            unitsOptions.push(BucketUnits.PERCENTILES)
         }
     }
 
@@ -127,7 +129,11 @@ const HorizontalBarBlock = ({ block, data, series }: HorizontalBarBlockProps) =>
                 providedSeries={series}
             >
                 <ChartContainer fit={true}>
-                    <HorizontalBarChart {...chartProps} />
+                    {units === BucketUnits.PERCENTILES ? (
+                        <BoxPlotChart {...chartProps} variant="horizontal" />
+                    ) : (
+                        <HorizontalBarChart {...chartProps} />
+                    )}
                 </ChartContainer>
             </DynamicDataLoader>
         </BlockVariant>

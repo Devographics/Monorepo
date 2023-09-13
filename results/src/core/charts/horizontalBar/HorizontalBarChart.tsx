@@ -22,12 +22,27 @@ import { StandardQuestionData, BucketUnits, Bucket, Entity } from '@devographics
 import { FacetItem, DataSeries, ChartModes, CustomizationFiltersSeries } from 'core/filters/types'
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
+import sumBy from 'lodash/sumBy'
+import { OTHER_ANSWERS } from '@devographics/constants'
 
 export const getChartDataPath = (block: BlockDefinition) =>
     `${block?.queryOptions?.subField || 'responses'}.currentEdition.buckets`
 
 export const getChartData = (data: StandardQuestionData, block: BlockDefinition) =>
     get(data, getChartDataPath(block))
+
+export const applyGroupCutoff = (chartData: Bucket[], hideCutoff: number) => {
+    const mainBuckets = chartData.filter(b => b.count && b.count >= hideCutoff)
+    const hiddenBuckets = chartData.filter(b => b.count && b.count < hideCutoff)
+    const hiddenBucket: Bucket = {
+        count: sumBy(hiddenBuckets, b => b.count || 0),
+        id: OTHER_ANSWERS,
+        percentageQuestion: sumBy(hiddenBuckets, b => b.percentageQuestion || 0),
+        percentageSurvey: sumBy(hiddenBuckets, b => b.percentageSurvey || 0),
+        facetBuckets: []
+    }
+    return [hiddenBucket, ...mainBuckets]
+}
 
 export const margin = {
     top: 40,
@@ -184,16 +199,19 @@ const HorizontalBarChart = ({
         showDefaultSeries
     })
 
+    let sortedBuckets = sortBy(buckets, getSortKey(keys))
+    if (block.hideCutoff) {
+        sortedBuckets = applyGroupCutoff(sortedBuckets, block.hideCutoff)
+    }
+
     const { formatTick, formatValue, maxValue } = useBarChart({
-        buckets,
+        buckets: sortedBuckets,
         total,
         i18nNamespace,
         shouldTranslate,
         mode,
         units
     })
-
-    const sortedBuckets = sortBy(buckets, getSortKey(keys))
 
     const defaultBarColor = theme.colors.barColors[0]
     const barColor = barColor_ || defaultBarColor
@@ -213,7 +231,7 @@ const HorizontalBarChart = ({
     const labelsLayer = useMemo(() => getLabelsLayer(d => labelFormatter(d.value)), [units, facet])
 
     return (
-        <div style={{ height: buckets.length * baseSize + 80 }}>
+        <div style={{ height: sortedBuckets.length * baseSize + 80 }}>
             <ResponsiveBar
                 layout="horizontal"
                 margin={{ ...margin, left }}
@@ -248,11 +266,11 @@ const HorizontalBarChart = ({
                                 i18nNamespace={i18nNamespace}
                                 shouldTranslate={shouldTranslate}
                                 entity={
-                                    buckets.find(b => b.id === tick.value)?.entity ||
+                                    sortedBuckets.find(b => b.id === tick.value)?.entity ||
                                     entities.find(e => e?.id === tick.value)
                                 }
-                                label={buckets.find(b => b.id === tick.value)?.label}
-                                itemCount={buckets.length}
+                                label={sortedBuckets.find(b => b.id === tick.value)?.label}
+                                itemCount={sortedBuckets.length}
                                 {...tick}
                             />
                         )

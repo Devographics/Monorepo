@@ -36,6 +36,7 @@ const VerticalBarBlock = ({ block, data, series, pageContext }: VerticalBarBlock
 
     const chartLegends = useLegends({ block, addNoAnswer })
 
+    console.log(chartLegends)
     const completion = data?.responses?.currentEdition?.completion
     const total = completion?.total
 
@@ -59,7 +60,7 @@ const VerticalBarBlock = ({ block, data, series, pageContext }: VerticalBarBlock
         // if this facet can be quantified numerically and has averages, add that as unit too
         if (facetQuestion?.optionsAreRange) {
             unitsOptions.push(BucketUnits.AVERAGE)
-            // unitsOptions.push(BucketUnits.PERCENTILES)
+            unitsOptions.push(BucketUnits.PERCENTILES)
         }
     }
 
@@ -126,7 +127,7 @@ const VerticalBarBlock = ({ block, data, series, pageContext }: VerticalBarBlock
             >
                 <ChartContainer fit={true}>
                     {units === BucketUnits.PERCENTILES ? (
-                        <BoxPlotChart {...chartProps} />
+                        <BoxPlotChart {...chartProps} variant="vertical" />
                     ) : (
                         <VerticalBarChart {...chartProps} />
                     )}

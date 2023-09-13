@@ -87,22 +87,29 @@ export const createPagesSingleLoop = async ({
         .map(cm => (cachingMethods[cm] ? cm : strikeThrough(cm)))
         .join(', ')
 
+    // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster
+    const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []
+
+    const appConfig = process.env.CONFIG ? process.env.CONFIG : 'default'
+
+    console.log(
+        `---------------------------------------------------------------
+• 📄 config = ${appConfig}
+• 📊 edition = ${surveyId}/${editionId}
+• 📡 apiUrl = ${process.env.GATSBY_API_URL}
+• 📁 caching methods = ${cachingMethodsString}
+• ⏱️ fast build = ${USE_FAST_BUILD}
+• 📖 load method = ${getLoadMethod()}
+• 🌐 locales = ${localeIds.length > 0 ? localeIds.join(', ') : 'all'}`
+    )
+
     // load metadata
     const { currentSurvey, currentEdition } = await getMetadata({ surveyId, editionId, graphql })
     const { enableChartSponsorships, resultsUrl } = currentEdition
     const metadata = []
 
-    // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster
-    const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []
-
     console.log(
-        `Building ${surveyId}/${editionId}… 
----------------------------------------------------------------
-• 📁 caching methods = ${cachingMethodsString}
-• ⏱️ fast build = ${USE_FAST_BUILD}
-• 📖 load method = ${getLoadMethod()}
-• 💰 chart sponsorships = ${enableChartSponsorships ? 'enabled' : 'disabled'}
-• 🌐 locales = ${localeIds.length > 0 ? localeIds.join(', ') : 'all'}
+        `• 💰 chart sponsorships = ${enableChartSponsorships ? 'enabled' : 'disabled'}
 ----------------------------------------------------------------`
     )
 

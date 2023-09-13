@@ -69,6 +69,7 @@ import AwardsBlock from 'core/blocks/awards/AwardsBlock'
 import ConclusionBlock from 'core/blocks/other/ConclusionBlock'
 import NotFoundBlock from 'core/blocks/other/NotFoundBlock'
 import CreditsBlock from 'core/blocks/other/CreditsBlock'
+import TakeawaysBlock from 'core/blocks/other/TakeawaysBlock'
 
 import HintBlock from 'core/blocks/other/HintBlock'
 import AboutBlock from 'core/blocks/other/AboutBlock'
@@ -96,6 +97,7 @@ const otherBlocks = {
     HowToHelpBlock,
     SponsorFinishBlock,
     LivestreamBlock,
+    TakeawaysBlock,
 
     DataExplorerBlock
 }

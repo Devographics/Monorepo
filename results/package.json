@@ -143,6 +143,8 @@
         "serve": "gatsby serve",
         "deploy": "yarn run build && gh-pages -d public",
         "dev": "gatsby develop --port 8001",
+        "tokyodev": "ENV_FILE=.env.tokyodev.local gatsby develop --port 9001",
+        "clean": "rm -rf .cache",
         "dev:clean": "rm -rf .cache && DISABLE_CACHE=true pnpm run dev --port 8001",
         "fmt": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\" \"node_src/**/*.js\" \"config/**/*.{yaml,yml}\"",
         "lint": "eslint src",

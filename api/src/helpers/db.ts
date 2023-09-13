@@ -3,9 +3,9 @@ import { Db } from 'mongodb'
 import { SurveyApiObject } from '../types'
 
 export const getCollection = (db: Db, survey: Survey | SurveyApiObject) => {
-    if (!survey.dbCollectionName) {
-        throw new Error(`Missing dbCollectionName for survey ${survey.id}`)
+    if (!survey.normalizedCollectionName) {
+        throw new Error(`Missing normalizedCollectionName for survey ${survey.id}`)
     }
-    const collection = db.collection(survey.dbCollectionName)
+    const collection = db.collection(survey.normalizedCollectionName)
     return collection
 }

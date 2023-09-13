@@ -49,7 +49,8 @@ query SurveysMetadataQuery {
     surveys {
       id
       name
-      dbCollectionName
+      responsesCollectionName
+      normalizedCollectionName
       domain
       hashtag
       editions {
@@ -82,8 +83,9 @@ query SurveysMetadataQuery {
           background
           backgroundSecondary
         }
-        ${includeQuestions
-    ? `sections {
+        ${
+            includeQuestions
+                ? `sections {
           id
           intlId
           slug
@@ -106,8 +108,8 @@ query SurveysMetadataQuery {
             }
           }
         }`
-    : ''
-  }
+                : ''
+        }
       }
     }
   }
@@ -120,7 +122,8 @@ query SurveyMetadataQuery {
       _metadata {
         id
         name
-        dbCollectionName
+        responsesCollectionName
+        normalizedCollectionName
         domain
         hashtag
         editions {
@@ -277,7 +280,13 @@ query ${editionId}MetadataQuery {
 }
 `
 
-export const getEditionQuerySurveyForm = ({ surveyId, editionId }: { surveyId: string, editionId: string }) => `
+export const getEditionQuerySurveyForm = ({
+    surveyId,
+    editionId
+}: {
+    surveyId: string
+    editionId: string
+}) => `
 query ${editionId}MetadataQuery {
   _metadata(editionId: ${editionId}) {
     surveys {

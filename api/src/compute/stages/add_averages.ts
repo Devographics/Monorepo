@@ -10,7 +10,9 @@ export const getFacetBucketAverage = (facetBucket: FacetBucket, axis: ComputeAxi
         // here for backwards compatibility's sake
         return 0
     }
-    const average = axis?.options?.find(o => o.id === facetBucket.id)?.average
+    const average =
+        axis?.options?.find(o => o.id === facetBucket.id)?.average ||
+        axis?.question?.groups?.find(o => o.id === facetBucket.id)?.average
     if (!average) {
         throw new Error(
             `getFacetBucketAverage: could not find option average for facet bucket "${facetBucket.id}" with axis "${axis.question.id}"`
@@ -62,7 +64,9 @@ export async function addAveragesByFacet(
         for (let editionData of resultsByEdition) {
             if (axis2) {
                 for (let bucket of editionData.buckets) {
-                    bucket[BucketUnits.AVERAGE] = calculateAverage({ bucket, axis: axis2 })
+                    if (bucket.id !== NO_ANSWER && bucket.id !== NOT_APPLICABLE) {
+                        bucket[BucketUnits.AVERAGE] = calculateAverage({ bucket, axis: axis2 })
+                    }
                 }
             }
         }

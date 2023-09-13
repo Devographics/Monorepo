@@ -429,13 +429,21 @@ export const useChartKeys = ({
 How to format chart labels
 
 */
-const formatter = new Intl.NumberFormat('en-US', {
+const usdFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     maximumFractionDigits: 0
 })
 
+const yenFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'JPY',
+    maximumFractionDigits: 0
+})
+
 const isDollar = (facetId: string) => ['yearly_salary'].includes(facetId)
+
+const isYen = (facetId: string) => ['current_total_annual_compensation'].includes(facetId)
 
 export const useChartLabelFormatter = ({
     units,
@@ -446,9 +454,12 @@ export const useChartLabelFormatter = ({
 }) => {
     if (isPercentage(units)) {
         return (value: number) => `${round(value, 1)}%`
-    } else if (facet && units === BucketUnits.AVERAGE && isDollar(facet.id)) {
-        return (value: number) => formatter.format(value)
-    } else {
-        return (value: number) => value
+    } else if (facet && [BucketUnits.AVERAGE, BucketUnits.PERCENTILES].includes(units)) {
+        if (isDollar(facet.id)) {
+            return (value: number) => usdFormatter.format(value)
+        } else if (isYen(facet.id)) {
+            return (value: number) => yenFormatter.format(value)
+        }
     }
+    return (value: number) => value
 }
