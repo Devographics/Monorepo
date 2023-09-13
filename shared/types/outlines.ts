@@ -163,6 +163,8 @@ export type Question = {
     optionsAreSequential?: boolean
     defaultSort?: string
 
+    groups?: OptionGroup[]
+
     // how many options can be selected
     limit?: number
     /**
@@ -223,6 +225,15 @@ export type Option = {
 }
 
 export type OptionId = string | number
+
+// used to regroup multiple datapoints under a single datapoint
+export interface OptionGroup {
+    id: string
+    average?: number
+    upperBound?: number
+    lowerBound?: number
+    items?: string[]
+}
 
 export interface Country {
     name: string
