@@ -1,5 +1,4 @@
 import { TemplateFunction, QuestionTemplateOutput } from '@devographics/types'
-import { getOptions } from './knowledge_score'
 
 export const reading_list: TemplateFunction = options => {
     const { question } = options
