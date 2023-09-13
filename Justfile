@@ -14,8 +14,9 @@ install:
 dbs:
     cd {{justfile_directory()}} && docker-compose up
 
-# Kill the containers
-drop-bs:
+# Dropping the Mongo data might be necessary after a version upgrade
+drop-dbs:
+    sudo rm -Rf .mongo
 
 
 # (nx experiment) Create local build
