@@ -186,6 +186,26 @@
       - id: years_of_experience
         template: multiple_options
 
+      - id: salary_by_experience
+        fieldId: experience_grouped
+        blockType: VerticalBarBlock
+        template: multiple_options
+        defaultUnits: percentilesByFacet
+        filtersState:
+            options:
+                showDefaultSeries: true
+                enableYearSelect: false
+                mode: facet
+                queryOnLoad: false
+                supportedModes:
+                    - combined
+                    - facet
+                preventQuery: false
+            filters: []
+            facet:
+                sectionId: job_info
+                id: current_total_annual_compensation
+
       - id: years_in_japan
         template: multiple_options
 

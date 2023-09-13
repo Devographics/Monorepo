@@ -14,5 +14,6 @@ export * from './section_tools_ratios'
 export * from './completion_stats'
 export * from './knowledge_score'
 export * from './age_grouped'
+export * from './experience_grouped'
 
 export * from './data_explorer'
