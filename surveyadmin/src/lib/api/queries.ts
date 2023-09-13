@@ -67,7 +67,6 @@ query ${editionId}MetadataQuery {
           domain
           id
           name
-          dbCollectionName
           hashtag
           emailOctopus {
             listId
