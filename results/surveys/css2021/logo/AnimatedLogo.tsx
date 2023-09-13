@@ -26,7 +26,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                         className="soc-logo__shadow"
                         points="84.683 374.081 376.624 693.354 668.565 374.081 84.683 374.081"
                         fill="black"
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         style={{ '--g': '1' } as React.CSSProperties}
                     />
                 </mask>

@@ -1,7 +1,7 @@
 import React from 'react'
-import IconWrapper from './IconWrapper'
+import IconWrapper, { IconWrapperProps } from './IconWrapper'
 
-export const NpmIcon = ({ props }) => (
+export const NpmIcon = (props: IconWrapperProps) => (
     <IconWrapper {...props}>
         <svg
             xmlns="http://www.w3.org/2000/svg"

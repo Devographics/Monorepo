@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Block from 'core/blocks/block/BlockVariant'
-import HorizontalBarChart from 'core/charts/horizontalBar/HorizontalBarChart'
+// import HorizontalBarChart from 'core/charts/horizontalBar/HorizontalBarChart'
 import { getTableData } from 'core/helpers/datatables'
 import { BlockComponentProps } from '@types/index'
 import { QuestionData } from '@devographics/types'
