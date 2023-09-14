@@ -19,37 +19,53 @@ async function execAsPromise(cmd: string) {
 }
 
 const baseFields = [
+  // "responseId" = the _id of the underlying response is very important
+  // we will use this field to reconcile normalizedResponse and imported data
+  // rather than the normalizedResponse _id which is more volatile
+  "responseId",
+  // normalizedResponse _id is less useful than responseId 
+  // but is guaranteed to be unique
   "_id",
   "createdAt",
   "updatedAt",
-  "completion",
   "isFinished",
   "survey",
   "year",
   "surveySlug",
   "generatedAt",
+  // now in user_info (2023/09)
+  "completion",
 ];
+// TODO: are they up to date? can we get them from the outline?
 const userNestedFields = [
+  // if field change, add the new fields 
+  //rather than changing the existing ones
+  // to keep retro-compatibility
+  // NOTE: we handle user info manually to avoid risk of leaking email etc.
   "user_info.age",
   "user_info.years_of_experience",
   "user_info.company_size",
   "user_info.yearly_salary",
   "user_info.higher_education_degree",
   "user_info.country",
+  // in new surveys (2023/09) JPN instead of japan
+  "user_info.country_alpha3",
   "user_info.gender",
   "user_info.race_ethnicity",
   "user_info.disability_status",
+  "user_info.completion",
 ];
 /**
  *
  * @param edition
- * @param flat Set to true to unwind the fields (useful for table format exports, like CSV).
+ * @param flat Set to true to unwind the fields 
+ * (useful for table format exports, like CSV).
  * Keep to false for JSON export.
  * @returns
  */
 function extractSurveyFields(edition: EditionMetadata, flat?: boolean) {
   const userInfoFields = !flat ? ["user_info"] : userNestedFields;
-  let surveyOutlineFields;
+  let surveyOutlineFields: Array<string>;
   // Currently, a field path is "outlineId.questionId" (or slug). Sections are
   // not taken into account
   if (!flat) {
