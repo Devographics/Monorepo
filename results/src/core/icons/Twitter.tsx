@@ -1,7 +1,7 @@
 import React from 'react'
-import IconWrapper from './IconWrapper'
+import IconWrapper, { IconWrapperProps } from './IconWrapper'
 
-export const TwitterIcon = props => (
+export const TwitterIcon = (props: IconWrapperProps) => (
     <IconWrapper {...props}>
         <svg
             version="1.1"

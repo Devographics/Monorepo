@@ -1,7 +1,7 @@
 import React from 'react'
-import IconWrapper from './IconWrapper'
+import IconWrapper, { IconWrapperProps } from './IconWrapper'
 
-export const YouTubeIcon = props => (
+export const YouTubeIcon = (props: IconWrapperProps) => (
     <IconWrapper {...props}>
         <svg
             xmlns="http://www.w3.org/2000/svg"

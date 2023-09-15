@@ -1,7 +1,7 @@
 import React from 'react'
-import IconWrapper from './IconWrapper'
+import IconWrapper, { IconWrapperProps } from './IconWrapper'
 
-export const GitHubIcon = props => (
+export const GitHubIcon = (props: IconWrapperProps) => (
     <IconWrapper {...props}>
         <svg
             version="1.1"

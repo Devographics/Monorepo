@@ -1,7 +1,7 @@
 import React from 'react'
-import IconWrapper from './IconWrapper'
+import IconWrapper, { IconWrapperProps } from './IconWrapper'
 
-export const RSSIcon = props => (
+export const RSSIcon = (props: IconWrapperProps) => (
     <IconWrapper {...props}>
         <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
             <path d="M3.667 22a3.667 3.667 0 100-7.333 3.667 3.667 0 000 7.333z"></path>

@@ -28,7 +28,7 @@ import { OTHER_ANSWERS } from '@devographics/constants'
 export const getChartDataPath = (block: BlockDefinition) =>
     `${block?.queryOptions?.subField || 'responses'}.currentEdition.buckets`
 
-export const getChartData = (data: StandardQuestionData, block: BlockDefinition) =>
+export const getChartData = (data: StandardQuestionData, block: BlockDefinition): Array<Bucket> =>
     get(data, getChartDataPath(block))
 
 export const applyGroupCutoff = (chartData: Bucket[], hideCutoff: number) => {
@@ -135,6 +135,7 @@ export interface HorizontalBarChartProps extends ChartComponentProps {
     facet?: FacetItem
     filters?: CustomizationFiltersSeries[]
     filterLegends?: any
+    shouldTranslate?: boolean
 }
 
 // if we're only showing a single key, sort by that
@@ -184,7 +185,7 @@ const HorizontalBarChart = ({
     const theme = useTheme()
     const { translate } = useI18n()
 
-    const bucketEntities = buckets.map(b => b.entity).filter(b => !!b)
+    const bucketEntities = buckets.map(b => b.entity).filter(e => !!e) as Array<Entity> // the filter guarantee that we eliminate null values
     const entities: Entity[] = bucketEntities.length > 0 ? bucketEntities : useEntities()
 
     const keys = useChartKeys({ units, facet, showDefaultSeries })
@@ -233,6 +234,10 @@ const HorizontalBarChart = ({
     return (
         <div style={{ height: sortedBuckets.length * baseSize + 80 }}>
             <ResponsiveBar
+                // the default "img" role does not allow nesting of interactive elements
+                // so it's important to make it a table instead
+                // @see https://github.com/Devographics/Monorepo/issues/266
+                role="table"
                 layout="horizontal"
                 margin={{ ...margin, left }}
                 keys={keys}
@@ -271,6 +276,7 @@ const HorizontalBarChart = ({
                                 }
                                 label={sortedBuckets.find(b => b.id === tick.value)?.label}
                                 itemCount={sortedBuckets.length}
+                                role="rowheader"
                                 {...tick}
                             />
                         )

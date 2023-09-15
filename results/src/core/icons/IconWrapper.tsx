@@ -3,7 +3,11 @@ import styled from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import Tooltip from 'core/components/Tooltip'
 
-const getIconSize = ({ size = 'medium' }) => {
+const getIconSize = ({
+    size = 'medium'
+}: {
+    size: 'small' | 'petite' | 'medium' | 'large' | string
+}) => {
     switch (size) {
         case 'small':
             return '16px'
@@ -13,6 +17,9 @@ const getIconSize = ({ size = 'medium' }) => {
             return '24px'
         case 'large':
             return '30px'
+        default:
+            console.warn(`Icon size ${size} is unknown, will use medium size`)
+            return '24px'
     }
 }
 
@@ -47,6 +54,16 @@ const IconWithHover = styled(Icon)`
     }
 `
 
+export interface IconWrapperProps {
+    enableHover?: boolean
+    enableTooltip?: boolean
+    labelId?: string
+    label?: string
+    children: React.ReactElement
+    values?: any
+    inSVG?: boolean
+    size?: number
+}
 const IconWrapper = ({
     enableHover = true,
     enableTooltip = true,
@@ -56,9 +73,9 @@ const IconWrapper = ({
     values,
     inSVG = false,
     size
-}) => {
+}: IconWrapperProps) => {
     const { getString } = useI18n()
-    const label_ = label || getString(labelId, { values })?.t
+    const label_ = label || (labelId && getString(labelId, { values })?.t) || ''
 
     const IconComponent = enableHover ? IconWithHover : Icon
     const icon = inSVG ? (

@@ -13,9 +13,10 @@ export const MARGIN = { top: 30, right: 30, bottom: 50, left: 100 }
 
 interface BoxplotProps extends VerticalBarChartProps {
     variant: 'horizontal' | 'vertical'
-    width: number
-    height: number
-    data: { name: string; value: number }[]
+    //width?: number
+    containerWidth?: number
+    height?: number
+    //data: { name: string; value: number }[]
 }
 
 export const getChartData = (data: StandardQuestionData) => data?.responses?.currentEdition.buckets
@@ -74,6 +75,8 @@ export const BoxPlotChart = ({
             }
             const { p0, p25, p50, p75, p100 } = bucket.percentilesByFacet
 
+            // TODO: p1/p99 is less sensitive to outliers than p100 (=max) and p0 (=min)
+            // and could be oprefered for a box chart
             const boxData =
                 variant === 'vertical'
                     ? {

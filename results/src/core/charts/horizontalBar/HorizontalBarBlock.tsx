@@ -5,7 +5,7 @@ import HorizontalBarChart, {
     getChartData,
     getChartDataPath
 } from 'core/charts/horizontalBar/HorizontalBarChart'
-import { getTableData } from 'core/helpers/datatables'
+import { getTableData, TableData } from 'core/helpers/datatables'
 import { BlockComponentProps } from 'core/types/index'
 import { StandardQuestionData, BucketUnits } from '@devographics/types'
 import DynamicDataLoader from 'core/filters/dataloaders/DynamicDataLoader'
@@ -14,9 +14,11 @@ import { useChartFilters } from 'core/filters/helpers'
 import { useAllFilters } from 'core/charts/hooks'
 import { useLegends } from 'core/helpers/legends'
 import { BoxPlotChart } from '../boxPlot/BoxPlotChart'
+import { DataSeries } from 'core/filters/types'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
     data: StandardQuestionData
+    series: DataSeries<StandardQuestionData>[]
 }
 
 const HorizontalBarBlock = ({ block, data, series }: HorizontalBarBlockProps) => {
@@ -63,7 +65,7 @@ const HorizontalBarBlock = ({ block, data, series }: HorizontalBarBlockProps) =>
 
     const chartData = getChartData(data, block)
 
-    const blockVariantProps = {
+    const blockVariantProps: any & { tables: Array<TableData> } = {
         units,
         setUnits,
         unitsOptions,
@@ -111,7 +113,7 @@ const HorizontalBarBlock = ({ block, data, series }: HorizontalBarBlockProps) =>
         translateData,
         mode,
         units,
-        colorVariant: 'primary',
+        colorVariant: 'primary' as const,
         facet: chartFilters.facet,
         legends: chartLegends
     }
