@@ -7,6 +7,8 @@ import {
     SurveyMetadata
 } from '@devographics/types'
 
+/*
+@see @devographics/types/data.ts
 type BlockUnits =
     | 'count'
     | 'percentageSurvey'
@@ -19,6 +21,7 @@ type BlockRatioUnits =
     | 'interest_percentage'
     | 'awareness_percentage'
     | 'usage_percentage'
+    */
 type BlockSetUnits = React.Dispatch<React.SetStateAction<string>>
 type BlockMode = 'absolute' | 'relative'
 

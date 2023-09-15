@@ -39,7 +39,7 @@ export const BoxPlotChart = ({
 
     const theme = useTheme()
 
-    const height = variant === 'vertical' ? height_ : legends.length * 50
+    const height = variant === 'vertical' ? height_ : (legends?.length || 0) * 50
 
     // The bounds (= area inside the axis) is calculated by substracting the margins from total width / height
     const boundsWidth = width - MARGIN.right - MARGIN.left

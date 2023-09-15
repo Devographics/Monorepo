@@ -450,7 +450,7 @@ export const useChartLabelFormatter = ({
     facet
 }: {
     units: BucketUnits
-    facet: FacetItem
+    facet?: FacetItem
 }) => {
     if (isPercentage(units)) {
         return (value: number) => `${round(value, 1)}%`
