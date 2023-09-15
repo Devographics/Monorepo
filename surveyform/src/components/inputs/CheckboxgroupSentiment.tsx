@@ -58,7 +58,9 @@ export const FormComponentCheckboxGroup = (
   let options = options_;
 
   // remove "n/a" option and handle it separately
-  const naOption = options.find((option) => option.id === OPTION_NA);
+  const naOptionIndex = options.findIndex((option) => option.id === OPTION_NA);
+  const naPosition = naOptionIndex === 0 ? "top" : "bottom";
+  const naOption = options[naOptionIndex];
   options = options.filter((option) => option.id !== OPTION_NA);
 
   // either randomize or sort by alphabetical order
@@ -84,7 +86,7 @@ export const FormComponentCheckboxGroup = (
   return (
     <FormItem {...props} showMore={showMore} showOther={showOther}>
       <div className="form-item-options">
-        {naOption && (
+        {naOption && naPosition === "top" && (
           <Checkbox
             {...props}
             index={999}
@@ -124,6 +126,16 @@ export const FormComponentCheckboxGroup = (
             type="checkbox"
             showOther={showOther}
             setShowOther={setShowOther}
+          />
+        )}
+        {naOption && naPosition === "bottom" && (
+          <Checkbox
+            {...props}
+            index={999}
+            option={naOption}
+            hasValue={hasValue}
+            hasReachedLimit={hasReachedLimit}
+            value={value}
           />
         )}
       </div>

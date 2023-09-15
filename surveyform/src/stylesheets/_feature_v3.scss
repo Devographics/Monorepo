@@ -92,7 +92,8 @@
   }
 
   /* Selected sentiment */
-  &:has(> :checked) {
+  // &:has(> :checked),
+  &.is-selected {
     position: relative;
     --a: 1;
     border-color: hsl(0 0% 100% / 0.9);
@@ -114,9 +115,11 @@
     }
   }
 
-  &:not(:has(> :checked)) {
+  // &:not(:has(> :checked)),
+  &.is-not-selected {
     /* Explicitly not selected, i.e. the opposite sentiment is */
-    &:where(.sentiments:has(:checked) *) {
+    // &:where(.sentiments:has(:checked) *) {
+    .sentiments.has-selected & {
       opacity: 0.6;
     }
 
@@ -188,6 +191,8 @@
 				/* Selected sentiments should always show */
 				:has(.sentiment > :checked),
 
+        .is-selected,
+        
 				/* Interacting with the row should reveal sentiments */
 				.form-check:is(:hover, :active) *,
 

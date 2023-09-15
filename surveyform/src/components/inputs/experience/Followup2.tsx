@@ -12,6 +12,7 @@ import { useIntlContext } from "@devographics/react-i18n";
 import { ExperienceProps } from "./Experience";
 import { FormInputProps } from "~/components/form/typings";
 import { Dispatch, SetStateAction } from "react";
+import isEmpty from "lodash/isEmpty";
 
 export interface FollowupData {
   predefinedFollowupPath?: string;
@@ -57,16 +58,20 @@ export const FollowUps = (
   const parentMode =
     question.template === "multipleWithOtherSentiment" ? "checkbox" : "radio";
 
-  // const followUpPath
+  const hasValueClass = !isEmpty(predefinedFollowupValue)
+    ? "has-selected"
+    : "none-selected";
+
   return optionFollowUps ? (
-    <div className="followups-v2 sentiments">
+    <div className={`followups-v2 sentiments ${hasValueClass}`}>
       {optionFollowUps.map((followupOption, index) => {
         const isChecked = predefinedFollowupValue?.includes(followupOption.id);
         const sentimentClasses = ["positive", "negative"];
+        const isCheckedClass = isChecked ? "is-selected" : "is-not-selected";
         return (
           <label
             key={followupOption.id}
-            className={`followups-predefined-label2 sentiment ${sentimentClasses[index]}`}
+            className={`followups-predefined-label2 sentiment ${sentimentClasses[index]} ${isCheckedClass}`}
           >
             <Form.Check.Input
               className="visually-hidden"
