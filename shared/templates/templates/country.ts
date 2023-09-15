@@ -1,6 +1,6 @@
 import { TemplateFunction, QuestionTemplateOutput, Country } from '@devographics/types'
 
-const countries: Country[] = [
+export const countries: Country[] = [
     {
         name: 'Afghanistan',
         'alpha-3': 'AFG',

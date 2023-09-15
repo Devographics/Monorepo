@@ -68,7 +68,10 @@ export const getBlockDataPath = ({
     suffix?: string
 }) => {
     const { currentSurvey: survey, currentEdition: edition } = pageContext
-    const section = { id: pageContext.id } as SectionMetadata
+    // if a different sectionId is specified in the query options, use that as
+    // part of the data path
+    const sectionId = block?.queryOptions?.sectionId || pageContext.id
+    const section = { id: sectionId } as SectionMetadata
     const question = block as QuestionMetadata
     const dataPath =
         block.dataPath ||

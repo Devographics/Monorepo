@@ -96,9 +96,13 @@
   blocks:
       - template: page_introduction
 
-      - id: nationality
+      - id: nationality_grouped
         template: multiple_options
         parameters: { limit: 20 }
+        variants:
+            - id: nationality
+              template: multiple_options
+              parameters: { limit: 20 }
 
       - id: nationality_vs_salary
         fieldId: nationality
@@ -156,6 +160,64 @@
                 sectionId: job_info
                 id: current_total_annual_compensation
 
+      - id: gender_vs_overall_satisfaction
+        fieldId: overall_satisfaction
+        tabId: tabs.overall
+        template: multiple_options
+        blockType: VerticalBarBlock
+        defaultUnits: percentageQuestion
+        # parameters: { cutoff: 20 }
+        queryOptions:
+            sectionId: satisfaction
+        filtersState:
+            options:
+                showDefaultSeries: false
+                enableYearSelect: false
+                mode: combined
+                queryOnLoad: false
+                preventQuery: false
+            filters:
+                - conditions:
+                      - fieldId: gender
+                        sectionId: user_info
+                        operator: eq
+                        value: man
+                - conditions:
+                      - fieldId: gender
+                        sectionId: user_info
+                        operator: eq
+                        value: woman
+        variants:
+            - id: gender_vs_compensation_satisfaction
+              fieldId: compensation_satisfaction
+              tabId: tabs.compensation
+              template: multiple_options
+              blockType: VerticalBarBlock
+              defaultUnits: percentageQuestion
+              # parameters: { cutoff: 20 }
+              queryOptions:
+                  sectionId: satisfaction
+              filtersState:
+                  options:
+                      showDefaultSeries: false
+                      enableYearSelect: false
+                      mode: combined
+                      queryOnLoad: false
+                      supportedModes:
+                          - combined
+                          - facet
+                      preventQuery: false
+                  filters:
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: man
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: woman
       # - id: gender_other
       #   template: multiple_options_other
 
@@ -183,8 +245,9 @@
                 sectionId: job_info
                 id: current_total_annual_compensation
 
-      - id: years_of_experience
+      - id: experience_grouped
         template: multiple_options
+        blockType: VerticalBarBlock
 
       - id: salary_by_experience
         fieldId: experience_grouped
@@ -214,9 +277,11 @@
 
       - id: language_proficiency_english
         template: multiple_options
+        blockType: VerticalBarBlock
 
       - id: language_proficiency_japanese
         template: multiple_options
+        blockType: VerticalBarBlock
 
       - id: searching_for_job
         template: multiple_options
