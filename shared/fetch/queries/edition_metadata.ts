@@ -95,6 +95,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
               countsTowardScore
               cutoff
               randomize
+              order
               optionsAreNumeric
               # optionsAreRange
               entity {
