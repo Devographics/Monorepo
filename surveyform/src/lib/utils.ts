@@ -1,3 +1,6 @@
+import { OptionMetadata } from "@devographics/types";
+import sortBy from "lodash/sortBy";
+
 /**
  * Example:
  * APOLLO_SERVER_CORS_WHITELIST=http://localhost:5000,https://www.my-client.org
@@ -54,6 +57,12 @@ export function seededShuffle(array: Array<any>, seed: string) {
 
   return newArray;
 }
+
+export const randomSort = (options: OptionMetadata[], responseId?: string) =>
+  seededShuffle(options, responseId || "outline");
+
+export const alphaSort = (options: OptionMetadata[]) =>
+  sortBy(options, (option) => option.id);
 
 export function encodeParams(params) {
   const searchParams = new URLSearchParams(params);
