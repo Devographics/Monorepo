@@ -26,6 +26,7 @@ import {
 import { rscAllLocalesMetadata, rscLocale } from "~/lib/api/rsc-fetchers";
 import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
+import { rscCurrentUserWithResponses } from "~/account/user/rsc-fetchers/rscCurrentUser";
 interface SurveyPageServerProps {
   lang: string;
   slug: string;
@@ -106,6 +107,8 @@ If this error still happens in a few months (2023) open an issue with repro at N
   if (error) {
     return <div>{JSON.stringify(error, null, 2)}</div>;
   }
+
+  const currentUser = await rscCurrentUserWithResponses();
   return (
     <ClientLayout
       params={params}
@@ -113,6 +116,7 @@ If this error still happens in a few months (2023) open an issue with repro at N
       localeId={localeId}
       localeStrings={localeAllContexts}
       addWrapper={false}
+      currentUser={currentUser}
     >
       <DebugRSC
         {...{ ___rscLocale_CommonContexts, ___rscLocale_EditionContexts }}

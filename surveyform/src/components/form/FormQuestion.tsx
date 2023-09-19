@@ -24,7 +24,10 @@ export const FormQuestion = (props) => {
   });
   const Component = getQuestionComponent(questionObject);
   const path = formPaths.response;
-  if (!path && !["receive_notifications"].includes(questionObject.template)) {
+  if (
+    !path &&
+    !["receive_notifications", "help"].includes(questionObject.template)
+  ) {
     // there are a few legitimate cases where we have no path, but otherwise it means the template is not known by the API
     console.warn(
       `path not defined for a question with template ${questionObject.template}. Is there a matching template implementation?`

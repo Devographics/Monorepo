@@ -1,6 +1,7 @@
 "use client";
 /**
  * Component that sets client-specific contexts
+ * and initialize them with server fetched data when possible
  *
  * Some of those contexts could be rendered in a RSC instead,
  * but only when they take serializable values as params
@@ -24,6 +25,8 @@ import { UserMessagesProvider } from "~/components/common/UserMessagesContext";
 
 import { Analytics } from "@vercel/analytics/react";
 import { Referrer } from "~/components/common/ReferrerStorage";
+import { apiRoutes } from "~/lib/apiRoutes";
+import { UserWithResponses } from "~/lib/responses/typings";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
@@ -34,6 +37,7 @@ export interface AppLayoutProps {
   children: React.ReactNode;
   params: { lang: string };
   addWrapper?: boolean;
+  currentUser?: UserWithResponses | null;
 }
 
 export function ClientLayout(props: AppLayoutProps) {
@@ -44,6 +48,7 @@ export function ClientLayout(props: AppLayoutProps) {
     localeStrings,
     params,
     addWrapper = true,
+    currentUser,
   } = props;
 
   return (
@@ -62,6 +67,10 @@ export function ClientLayout(props: AppLayoutProps) {
               // basic global fetcher
               fetcher: (resource, init) =>
                 fetch(resource, init).then((res) => res.json()),
+              // @see https://swr.vercel.app/docs/with-nextjs#pre-rendering-with-default-data
+              fallback: {
+                [apiRoutes.account.currentUser.href()]: { data: currentUser }, // use same format as returned from the API here
+              },
             }}
           >
             <LocaleContextProvider
