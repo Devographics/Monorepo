@@ -79,6 +79,7 @@ const OtherOption = (
           </div>
           <FormOption
             {...props}
+            isChecked={showOther}
             option={{ id: "other", intlId: "options.other" }}
           />
         </Form.Check.Label>

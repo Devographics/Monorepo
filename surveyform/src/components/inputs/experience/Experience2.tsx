@@ -168,16 +168,19 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
                 disabled={readOnly}
               />
             </div>
-            <FormOption {...props} option={option} />
+            <FormOption {...props} isChecked={isChecked} option={option} />
           </Form.Check.Label>
           {followups && (
             <FollowUps
               {...props}
+              parentHasValue={hasValue}
+              optionIsChecked={isChecked}
               followupData={followupData}
               highlightReadingList={highlightReadingList}
               setHighlightReadingList={setHighlightReadingList}
               showReadingListPrompt={showReadingListPrompt}
               setShowReadingListPrompt={setShowReadingListPrompt}
+              formPaths={formPaths}
             />
           )}
         </Form.Check>

@@ -202,7 +202,7 @@ const Checkbox = (
             }}
           />
         </div>
-        <FormOption {...props} option={option} />
+        <FormOption {...props} isChecked={isChecked} option={option} />
       </Form.Check.Label>
     </Form.Check>
   );

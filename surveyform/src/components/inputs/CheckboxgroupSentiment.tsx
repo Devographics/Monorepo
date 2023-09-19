@@ -254,6 +254,7 @@ const Checkbox = (
           followupData={followupData}
           isNA={isNA}
           value={value}
+          isChecked={isChecked}
         />
       </Form.Check.Label>
     </Form.Check>

@@ -3,7 +3,12 @@ import Form from "react-bootstrap/Form";
 
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 
-import { OptionMetadata, SentimentOptions } from "@devographics/types";
+import {
+  DbPaths,
+  DbPathsEnum,
+  OptionMetadata,
+  SentimentOptions,
+} from "@devographics/types";
 import without from "lodash/without.js";
 
 import { Button } from "~/components/ui/Button";
@@ -23,12 +28,16 @@ export interface FollowupData {
 
 export const FollowUps = (
   props: FormInputProps & {
+    parentHasValue?: boolean;
+    optionIsChecked: boolean;
     option: OptionMetadata;
     followupData: FollowupData;
     highlightReadingList?: boolean;
     setHighlightReadingList?: Dispatch<SetStateAction<boolean>>;
     showReadingListPrompt?: boolean;
     setShowReadingListPrompt?: Dispatch<SetStateAction<boolean>>;
+    followupMode?: "radio" | "checkbox";
+    formPaths?: DbPaths;
   }
 ) => {
   const {
@@ -41,7 +50,11 @@ export const FollowUps = (
     value,
     setHighlightReadingList,
     setShowReadingListPrompt,
+    optionIsChecked,
+    followupMode = "radio",
+    formPaths,
   } = props;
+
   const { followups = [] } = question;
   const optionFollowUps = followups.find(
     (f) => f.id === option.id || f.id === "default"
@@ -62,6 +75,13 @@ export const FollowUps = (
     ? "has-selected"
     : "none-selected";
 
+  const roleProp = optionIsChecked
+    ? { role: followupMode }
+    : { role: "presentation" };
+
+  const allPredefinedFollowupPaths =
+    formPaths?.[DbPathsEnum.FOLLOWUP_PREDEFINED];
+
   return optionFollowUps ? (
     <div className={`followups-v2 sentiments ${hasValueClass}`}>
       {optionFollowUps.map((followupOption, index) => {
@@ -72,10 +92,11 @@ export const FollowUps = (
           <label
             key={followupOption.id}
             className={`followups-predefined-label2 sentiment ${sentimentClasses[index]} ${isCheckedClass}`}
+            {...roleProp}
           >
             <Form.Check.Input
               className="visually-hidden"
-              type="checkbox"
+              type={followupMode}
               checked={isChecked}
               disabled={readOnly}
               id={`${path}.followup.${index}`}
@@ -86,22 +107,32 @@ export const FollowUps = (
                 if (parentMode === "radio") {
                   // check "main" parent answer
                   updateCurrentValues({ [path]: option.id });
+                  if (allPredefinedFollowupPaths) {
+                    // when a follow-up is clicked, also clear all other predefined follow-ups
+                    for (const followUpPath of Object.values(
+                      allPredefinedFollowupPaths
+                    )) {
+                      updateCurrentValues({ [followUpPath]: null });
+                    }
+                  }
                 } else {
                   // add value to "main" parent answer
                   const parentValue = value as Array<number | string>;
                   updateCurrentValues({ [path]: [...parentValue, option.id] });
                 }
 
-                // checkbox version
-                // const newValue = isChecked
-                //   ? [...predefinedFollowupValue!, followupOption.id]
-                //   : without(predefinedFollowupValue, followupOption.id);
-
-                // radio button version
-                const newValue = isChecked ? [followupOption.id] : [];
-                updateCurrentValues({
-                  [predefinedFollowupPath]: newValue,
-                });
+                if (followupMode === "checkbox") {
+                  // checkbox version
+                  const newValue = isChecked
+                    ? [...predefinedFollowupValue!, followupOption.id]
+                    : without(predefinedFollowupValue, followupOption.id);
+                } else {
+                  // radio button version
+                  const newValue = isChecked ? [followupOption.id] : [];
+                  updateCurrentValues({
+                    [predefinedFollowupPath]: newValue,
+                  });
+                }
 
                 // show reading list prompt if needed
                 const hasSeenPromptString = localStorage.getItem(

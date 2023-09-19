@@ -50,7 +50,13 @@ export const Slider = (props: FormInputProps) => {
                       disabled={readOnly}
                     />
                   </div>
-                  {optionLabel && <FormOption {...props} option={option} />}
+                  {optionLabel && (
+                    <FormOption
+                      {...props}
+                      isChecked={isChecked}
+                      option={option}
+                    />
+                  )}
                 </Form.Check.Label>
               </Form.Check>
             );
