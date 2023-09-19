@@ -140,6 +140,12 @@ export type ApiQuestion = {
     template?: string
 }
 
+export enum OptionsOrder {
+    SPECIFIED = "specified",
+    RANDOM = "random",
+    ALPHA = "alpha"
+}
+
 /**
  * Keep in sync with QuestionMetadata in
  * api/src/graphql/typedefs/schema.graphql
@@ -198,6 +204,7 @@ export type Question = {
     allowComment?: boolean
     showCommentInput?: boolean
     randomize?: boolean
+    order?: OptionsOrder
     /**
      * Question is used to compute the knowledge score
      */
