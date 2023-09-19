@@ -145,7 +145,7 @@
 
 .form-experience-option,
 .form-checkbox-option {
-  @include medium-large {
+  @media (hover: hover) {
     &:hover {
       .sentiments {
         opacity: 1;
