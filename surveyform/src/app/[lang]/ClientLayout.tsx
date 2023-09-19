@@ -1,5 +1,14 @@
 "use client";
-import React, { useEffect } from "react";
+/**
+ * Component that sets client-specific contexts
+ *
+ * Some of those contexts could be rendered in a RSC instead,
+ * but only when they take serializable values as params
+ *
+ * For instance SWRConfig expects a "fetcher" which is a client-side function,
+ * so it has to be rendered by a client component
+ */
+import React from "react";
 
 // @see https://nextjs.org/docs/advanced-features/measuring-performance
 /*
@@ -14,11 +23,11 @@ import { ErrorBoundary } from "~/components/error";
 import Layout from "~/components/common/Layout";
 import type { LocaleDef, LocaleDefWithStrings } from "~/i18n/typings";
 import { SWRConfig } from "swr";
-import { useSearchParams } from "next/navigation";
 import { KeydownContextProvider } from "~/components/common/KeydownContext";
 import { UserMessagesProvider } from "~/components/common/UserMessagesContext";
 
 import { Analytics } from "@vercel/analytics/react";
+import { Referrer } from "~/components/common/ReferrerStorage";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
@@ -31,7 +40,7 @@ export interface AppLayoutProps {
   addWrapper?: boolean;
 }
 
-export function AppLayout(props: AppLayoutProps) {
+export function ClientLayout(props: AppLayoutProps) {
   const {
     children,
     localeId,
@@ -40,19 +49,6 @@ export function AppLayout(props: AppLayoutProps) {
     params,
     addWrapper = true,
   } = props;
-
-  const query = useSearchParams()!;
-  const source = query.get("source");
-  const referrer = query.get("referrer");
-
-  useEffect(() => {
-    if (source) {
-      localStorage.setItem("source", source.toString());
-    }
-    if (referrer) {
-      localStorage.setItem("referrer", referrer.toString());
-    }
-  }, []);
 
   return (
     <html lang={params.lang}>
@@ -65,38 +61,34 @@ export function AppLayout(props: AppLayoutProps) {
         {/** @ts-ignore */}
         <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
           {/** TODO: this error boundary to display anything useful since it doesn't have i18n */}
-          {
-            <SWRConfig
-              value={{
-                // basic global fetcher
-                fetcher: (resource, init) =>
-                  fetch(resource, init).then((res) => res.json()),
-              }}
+          <SWRConfig
+            value={{
+              // basic global fetcher
+              fetcher: (resource, init) =>
+                fetch(resource, init).then((res) => res.json()),
+            }}
+          >
+            <LocaleContextProvider
+              locales={locales}
+              localeId={localeId}
+              localeStrings={localeStrings}
             >
-              <LocaleContextProvider
-                locales={locales}
-                localeId={localeId}
-                localeStrings={localeStrings}
-              >
-                {/** @ts-ignore */}
-                <ErrorBoundary
-                  proposeReload={true}
-                  proposeHomeRedirection={true}
-                >
-                  <KeydownContextProvider>
-                    <UserMessagesProvider>
-                      {addWrapper ? <Layout>{children}</Layout> : children}
-                    </UserMessagesProvider>
-                  </KeydownContextProvider>
-                </ErrorBoundary>
-              </LocaleContextProvider>
-            </SWRConfig>
-          }
+              {/** @ts-ignore */}
+              <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
+                <KeydownContextProvider>
+                  <UserMessagesProvider>
+                    {addWrapper ? <Layout>{children}</Layout> : children}
+                  </UserMessagesProvider>
+                </KeydownContextProvider>
+              </ErrorBoundary>
+            </LocaleContextProvider>
+          </SWRConfig>
         </ErrorBoundary>
+        <Referrer />
         <Analytics />
       </body>
     </html>
   );
 }
 
-export default AppLayout;
+export default ClientLayout;

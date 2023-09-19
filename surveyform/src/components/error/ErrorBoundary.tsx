@@ -1,4 +1,5 @@
-import React, { ReactNode } from "react";
+"use client";
+import React from "react";
 
 import { Extras } from "@sentry/types";
 

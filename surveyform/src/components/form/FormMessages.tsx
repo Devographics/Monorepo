@@ -1,4 +1,4 @@
-// Note: these messages are now displayed from the AppLayout level
+// Note: these messages are now displayed from the ClientLayout level
 
 "use client";
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
