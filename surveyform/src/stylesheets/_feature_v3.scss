@@ -72,6 +72,7 @@
     --a: 0.6;
     color: white;
 
+    outline: 2px solid var(--link-color);
     &::before {
       animation: arrow 0.7s 3 alternate;
     }
@@ -254,3 +255,8 @@
 //     border-bottom-color: var(--background-color);
 //   }
 // }
+
+// good idea? not sure…
+*:focus-visible {
+  outline: 2px solid var(--link-color) !important;
+}

@@ -79,6 +79,8 @@ export const FollowUps = (
     ? { role: followupMode }
     : { role: "presentation" };
 
+  const tabIndexProp = optionIsChecked ? {} : { tabindex: "-1" };
+
   const allPredefinedFollowupPaths =
     formPaths?.[DbPathsEnum.FOLLOWUP_PREDEFINED];
 
@@ -101,6 +103,7 @@ export const FollowUps = (
               disabled={readOnly}
               id={`${path}.followup.${index}`}
               // ref={refFunction}
+              {...tabIndexProp}
               onChange={(event) => {
                 const isChecked = event.target.checked;
 
