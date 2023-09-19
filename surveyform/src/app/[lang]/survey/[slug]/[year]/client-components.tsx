@@ -34,6 +34,7 @@ export const EditionMain = ({ edition }: { edition: EditionMetadata }) => {
           surveyId={edition.surveyId}
           hideGuest={edition.status === SurveyStatusEnum.CLOSED}
           user={currentUser}
+          // TODO: make that a server action in the future
           successRedirectionFunction={(res) => {
             const { response } = res;
             const path = getEditionSectionPath({

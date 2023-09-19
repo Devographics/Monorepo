@@ -44,7 +44,7 @@ export const LoginDialog = ({
             editionId={editionId}
             label={<FormattedMessage id="accounts.create_account.action" />}
             redirectTo={successRedirectionPath}
-            loginOptions={loginOptions}
+            // loginOptions={loginOptions}
           />
         </div>
         <div className="survey-login-option-note">

@@ -56,7 +56,7 @@ export default async function SurveyPage({
 }: {
   params: SurveyPageServerProps;
 }) {
-  const { slug, year, lang } = params;
+  const { slug, year } = params;
   const { data: edition, ___metadata: ___rscMustGetSurveyEditionFromUrl } =
     await rscMustGetSurveyEditionFromUrl({
       slug,
