@@ -64,8 +64,8 @@ const useMagicLoginCheck = ({
         } else {
           path = routes.home.href;
         }
-        // TODO: having that query param triggers hydration mismatch errors?
         // We do a full page reload to avoid any caching issue and not just a SPA router.push
+        // TODO: having that query param triggers hydration mismatch errors?
         // window.location.replace(path + "?from-magic-login=1");
         window.location.replace(path);
       }
