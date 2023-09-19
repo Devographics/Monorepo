@@ -44,15 +44,6 @@
   cursor: pointer;
   user-select: none;
 
-  .sentiment-icon {
-    margin-right: 0.3em;
-    scale: 1.15;
-
-    &::before {
-      content: var(--icon);
-    }
-  }
-
   &.positive {
     --color: var(--bs-success);
     --icon: "↑";
@@ -77,6 +68,7 @@
 
   &:focus-within {
     outline: 2px solid var(--link-color);
+    box-shadow: 0 0 0.3em 0.1em var(--_color);
   }
 
   &:active {
@@ -84,11 +76,16 @@
     transform: scale(0.97) translateY(0.1em);
   }
 
-  &:focus-within {
-    box-shadow: 0 0 0.3em 0.1em var(--_color);
+  .sentiment-icon {
+    scale: 1.15;
+
+    &::before {
+      content: var(--icon);
+    }
   }
 
   .sentiment-label {
+    margin-inline-start: 0.3em;
     transition-duration: 0.4s;
     transition-property: letter-spacing, opacity;
   }
@@ -136,6 +133,7 @@
       .sentiment-label {
         letter-spacing: -1ch;
         opacity: 0;
+        margin-inline-start: 0;
       }
     }
   }
