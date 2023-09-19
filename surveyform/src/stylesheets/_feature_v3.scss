@@ -1,9 +1,3 @@
-/* Question container */
-.form-input {
-  container-name: question;
-  container-type: inline-size;
-}
-
 .sentiments {
   display: inline-flex;
   gap: 0.6em;
@@ -87,7 +81,7 @@
   .sentiment-label {
     margin-inline-start: 0.3em;
     transition-duration: 0.4s;
-    transition-property: letter-spacing, opacity;
+    transition-property: letter-spacing, opacity, margin;
   }
 
   /* Selected sentiment */
@@ -122,13 +116,9 @@
       opacity: 0.6;
     }
 
-    @container question (width <= 500px) {
+    @include small {
       /* mobile */
       /* Not selected */
-
-      &::before {
-        margin-right: 0;
-      }
 
       .sentiment-label {
         letter-spacing: -1ch;
