@@ -15,7 +15,7 @@ export interface IconProps {
   values?: any;
   onClick?: any;
   className?: string;
-  svgProps: SVGProps;
+  svgProps?: SVGProps;
 }
 
 export interface SVGProps {
