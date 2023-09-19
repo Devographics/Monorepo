@@ -7,16 +7,12 @@
  *
  * For instance SWRConfig expects a "fetcher" which is a client-side function,
  * so it has to be rendered by a client component
+ *
+ * Note: useReportWebVitals is not needed anymore in Next when using Vercel
+ * https://nextjs.org/docs/app/api-reference/functions/use-report-web-vitals#usage-on-vercel
  */
 import React from "react";
 
-// @see https://nextjs.org/docs/advanced-features/measuring-performance
-/*
-TODO: planned in v13 but not yet available 2022/11
-export function reportWebVitals(metric) {
-  debugPerf(metric); // The metric object ({ id, name, startTime, value, label }) is logged to the console
-}
-*/
 import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 
 import { ErrorBoundary } from "~/components/error";
