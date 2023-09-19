@@ -44,27 +44,25 @@
   cursor: pointer;
   user-select: none;
 
-  .sentiment-icon::before {
+  .sentiment-icon {
     margin-right: 0.3em;
     scale: 1.15;
+
+    &::before {
+      content: var(--icon);
+    }
   }
 
   &.positive {
     --color: var(--bs-success);
-
-    .sentiment-icon::before {
-      content: "↑";
-      --animation-offset: -0.1em;
-    }
+    --icon: "↑";
+    --animation-offset: -0.1em;
   }
 
   &.negative {
     --color: var(--bs-danger);
-
-    .sentiment-icon::before {
-      content: "↓";
-      --animation-offset: 0.1em;
-    }
+    --icon: "↓";
+    --animation-offset: 0.1em;
   }
 
   &:hover,
@@ -72,7 +70,7 @@
     --a: 0.6;
     color: white;
 
-    .sentiment-icon::before {
+    .sentiment-icon {
       animation: arrow 0.7s 3 alternate;
     }
   }
@@ -204,7 +202,7 @@
 				:has(.sentiment > :checked),
 
         .is-selected,
-        
+
 				/* Interacting with the row should reveal sentiments */
 				.form-check:is(:hover, :active) *,
 
