@@ -44,7 +44,7 @@
   cursor: pointer;
   user-select: none;
 
-  &::before {
+  .sentiment-icon::before {
     margin-right: 0.3em;
     scale: 1.15;
   }
@@ -52,7 +52,7 @@
   &.positive {
     --color: var(--bs-success);
 
-    &::before {
+    .sentiment-icon::before {
       content: "↑";
       --animation-offset: -0.1em;
     }
@@ -61,7 +61,7 @@
   &.negative {
     --color: var(--bs-danger);
 
-    &::before {
+    .sentiment-icon::before {
       content: "↓";
       --animation-offset: 0.1em;
     }
@@ -72,10 +72,13 @@
     --a: 0.6;
     color: white;
 
-    outline: 2px solid var(--link-color);
-    &::before {
+    .sentiment-icon::before {
       animation: arrow 0.7s 3 alternate;
     }
+  }
+
+  &:focus-within {
+    outline: 2px solid var(--link-color);
   }
 
   &:active {

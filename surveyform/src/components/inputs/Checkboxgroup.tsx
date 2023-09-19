@@ -218,6 +218,7 @@ const Checkbox = (
             value={option.id}
             // ref={refFunction}
             onChange={(event) => {
+              // event.preventDefault();
               const isChecked = event.target.checked;
               const newValue = getNewValue(isChecked);
               updateCurrentValues({ [path]: newValue });

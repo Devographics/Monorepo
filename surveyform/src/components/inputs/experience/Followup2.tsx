@@ -85,7 +85,10 @@ export const FollowUps = (
     formPaths?.[DbPathsEnum.FOLLOWUP_PREDEFINED];
 
   return optionFollowUps ? (
-    <div className={`followups-v2 sentiments ${hasValueClass}`}>
+    <fieldset className={`followups-v2 sentiments ${hasValueClass}`}>
+      <legend className="sr-only">
+        <FormattedMessage id="followups.description.short" />
+      </legend>
       {optionFollowUps.map((followupOption, index) => {
         const isChecked = predefinedFollowupValue?.includes(followupOption.id);
         const sentimentClasses = ["positive", "negative"];
@@ -157,12 +160,13 @@ export const FollowUps = (
               }}
             />
             <span className="sentiment-label">
+              <span className="sentiment-icon" aria-hidden={true} />
               <FormattedMessage id={`followups.${followupOption.id}`} />
             </span>
           </label>
         );
       })}
-    </div>
+    </fieldset>
   ) : null;
 };
 
