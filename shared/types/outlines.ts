@@ -141,9 +141,9 @@ export type ApiQuestion = {
 }
 
 export enum OptionsOrder {
-    SPECIFIED = "specified",
-    RANDOM = "random",
-    ALPHA = "alpha"
+    SPECIFIED = 'specified',
+    RANDOM = 'random',
+    ALPHA = 'alphabetical'
 }
 
 /**

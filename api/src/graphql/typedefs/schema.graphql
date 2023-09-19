@@ -240,7 +240,7 @@ enum SortOrder {
 enum OptionsOrder {
     specified
     random
-    alpha
+    alphabetical
 }
 
 type ResponseEditionData {
