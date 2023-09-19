@@ -12,6 +12,7 @@ export const Check = (props: IconProps) => (
       strokeWidth="3"
       strokeLinecap="round"
       strokeLinejoin="round"
+      {...props.svgProps}
     >
       <polyline points="20 6 9 17 4 12"></polyline>
     </svg>

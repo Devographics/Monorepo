@@ -4,7 +4,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { useIntlContext } from "@devographics/react-i18n";
-import { ReactNode } from "react";
+import { ReactNode, cloneElement } from "react";
 import { Button } from "~/components/ui/Button";
 
 export interface IconProps {
@@ -15,6 +15,11 @@ export interface IconProps {
   values?: any;
   onClick?: any;
   className?: string;
+  svgProps: SVGProps;
+}
+
+export interface SVGProps {
+  role: string;
 }
 
 export interface IconWrapperProps extends IconProps {
@@ -38,10 +43,20 @@ export const IconWrapper = (props: IconWrapperProps & any) => {
   const label_ =
     label || (labelId && intl.formatMessage({ id: labelId, values }));
 
+  const iconElement = cloneElement(children, {
+    role: "img",
+  });
+
   const icon = (
     <span className={`icon-wrapper ${className}`}>
-      {isButton ? <Button onClick={onClick}>{children}</Button> : children}
-      <span className="sr-only">{label_}</span>
+      {isButton ? (
+        <Button onClick={onClick}>
+          {iconElement}
+          <span className="sr-only">{label_}</span>
+        </Button>
+      ) : (
+        iconElement
+      )}
     </span>
   );
 

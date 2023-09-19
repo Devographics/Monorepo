@@ -12,9 +12,10 @@ interface FormOptionProps extends FormInputProps {
   option: OptionMetadata;
   isNA?: boolean;
   followupData?: any;
+  isChecked: boolean;
 }
 export const FormOption = (props: FormOptionProps) => {
-  const { option, question, followupData, isNA } = props;
+  const { option, question, followupData, isNA, isChecked } = props;
   const { entity } = option;
 
   const intl = useIntlContext();
@@ -32,7 +33,11 @@ export const FormOption = (props: FormOptionProps) => {
         <span className="form-option-label">
           <OptionLabel question={question} option={option} />
           {!isNA && followupData && (
-            <FollowUps {...props} followupData={followupData} />
+            <FollowUps
+              {...props}
+              optionIsChecked={isChecked}
+              followupData={followupData}
+            />
           )}
         </span>
         <OptionDescription {...props} />

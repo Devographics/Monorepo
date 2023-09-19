@@ -7,8 +7,13 @@ import { Button } from "~/components/ui/Button";
 import { FormItem } from "~/components/form/FormItem";
 import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
-import { seededShuffle } from "~/lib/utils";
-import { DbPathsEnum, OPTION_NA, OptionMetadata } from "@devographics/types";
+import { randomSort, alphaSort } from "~/lib/utils";
+import {
+  DbPathsEnum,
+  OPTION_NA,
+  OptionMetadata,
+  OptionsOrder,
+} from "@devographics/types";
 import OtherOption from "./OtherOption";
 import sortBy from "lodash/sortBy";
 import { getFormPaths } from "@devographics/templates";
@@ -47,7 +52,16 @@ export const FormComponentCheckboxGroup = (
   // keep track of whether "other" field is shown or not
   const [showOther, setShowOther] = useState(!!otherValue);
 
-  const { options: options_, allowOther, limit, randomize } = question;
+  const {
+    options: options_,
+    allowOther,
+    limit,
+    randomize,
+    order: order_ = OptionsOrder.ALPHA,
+  } = question;
+
+  // backwards compatibility with deprecated "randomize" option
+  const order = randomize ? OptionsOrder.RANDOM : order_;
 
   if (!options_) {
     throw new Error(
@@ -63,10 +77,18 @@ export const FormComponentCheckboxGroup = (
   const naOption = options[naOptionIndex];
   options = options.filter((option) => option.id !== OPTION_NA);
 
-  // either randomize or sort by alphabetical order
-  options = randomize
-    ? seededShuffle(options, response?._id || "outline")
-    : sortBy(options, (option) => option.id);
+  switch (order) {
+    case OptionsOrder.SPECIFIED:
+      // do nothing, use specified options order
+      break;
+    case OptionsOrder.RANDOM:
+      options = randomSort(options, response?._id);
+      break;
+    default:
+      // default to alphabetical sort
+      options = alphaSort(options);
+      break;
+  }
 
   const cutoff = question.cutoff || defaultCutoff;
 
@@ -254,6 +276,7 @@ const Checkbox = (
           followupData={followupData}
           isNA={isNA}
           value={value}
+          isChecked={isChecked}
         />
       </Form.Check.Label>
     </Form.Check>

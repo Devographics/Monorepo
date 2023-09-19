@@ -66,7 +66,11 @@ export const Email2 = (props: FormInputProps) => {
             />
           </div>
           <div className="form-option">
-            <FormOption {...props} option={{ id: "yes" }} />
+            <FormOption
+              {...props}
+              isChecked={receiveNotifications}
+              option={{ id: "yes" }}
+            />
           </div>
         </Form.Check.Label>
       </Form.Check>

@@ -139,6 +139,7 @@ type QuestionMetadata {
     allowMultiple: Boolean
     countsTowardScore: Boolean
     randomize: Boolean
+    order: OptionsOrder
     cutoff: Int
     matchTags: [String]
     limit: Int
@@ -234,6 +235,12 @@ enum SortProperty {
 enum SortOrder {
     asc
     desc
+}
+
+enum OptionsOrder {
+    specified
+    random
+    alpha
 }
 
 type ResponseEditionData {

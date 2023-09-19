@@ -29,7 +29,7 @@ export interface FormItemProps extends FormInputProps {
   children: ReactNode;
   showMore?: boolean;
   showOther?: boolean;
-  onBlur?: React.FocusEventHandler<HTMLDivElement>;
+  onBlur?: React.FocusEventHandler<HTMLFieldSetElement>;
   className?: string;
 }
 
@@ -72,7 +72,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
     );
 
     const childRef = useRef<HTMLDivElement>(null);
-    const myRef = (parentRef as RefObject<HTMLDivElement>) || childRef;
+    const myRef = (parentRef as RefObject<HTMLFieldSetElement>) || childRef;
     const firstRenderRef1 = useRef(true);
     const firstRenderRef2 = useRef(true);
 
@@ -156,7 +156,11 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
     // }, [isInView]);
 
     return (
-      <div className={`form-item ${className}`} ref={myRef} onBlur={onBlur}>
+      <fieldset
+        className={`form-item ${className}`}
+        ref={myRef}
+        onBlur={onBlur}
+      >
         <Form.Group controlId={path}>
           <FormItemTitle {...props} />
           <div className="form-item-contents">
@@ -181,7 +185,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
             )}
           </div>
         </Form.Group>
-      </div>
+      </fieldset>
     );
   }
 );
@@ -194,28 +198,30 @@ export const FormItemTitle = (props: FormItemProps) => {
   const { clean: label } = useQuestionTitle({ section, question });
 
   return (
-    <h3 className="form-label-heading" id={question.id}>
-      <Form.Label>
-        <QuestionLabel section={section} question={question} />
+    <legend>
+      <h3 className="form-label-heading" id={question.id}>
+        <Form.Label>
+          <QuestionLabel section={section} question={question} />
 
-        {yearAdded === 2023 && (
-          <span
-            className="question-label-new"
-            title={intl.formatMessage({ id: "general.newly_added" })}
-          >
-            {yearAdded}
-          </span>
+          {yearAdded === 2023 && (
+            <span
+              className="question-label-new"
+              title={intl.formatMessage({ id: "general.newly_added" })}
+            >
+              {yearAdded}
+            </span>
+          )}
+        </Form.Label>
+
+        {enableReadingList && question.entity && (
+          <AddToList {...props} label={label} id={question.id} />
         )}
-      </Form.Label>
 
-      {enableReadingList && question.entity && (
-        <AddToList {...props} label={label} id={question.id} />
-      )}
-
-      {/* <span className="form-label-number">
+        {/* <span className="form-label-number">
         {sectionNumber}.{questionNumber}
       </span> */}
-    </h3>
+      </h3>
+    </legend>
   );
 };
 

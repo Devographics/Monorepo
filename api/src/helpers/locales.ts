@@ -58,6 +58,9 @@ export const parseMarkdown = (stringFile: StringFile) => {
             s.tHtml = sanitizeHtml(tHtml, {
                 allowedClasses: {
                     '*': ['*']
+                },
+                allowedAttributes: {
+                    '*': ['aria-hidden']
                 }
             })
             s.tClean = decode(
