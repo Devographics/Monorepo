@@ -294,7 +294,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     return selectItem(wrapperRef.current, items[index + 1]);
   };
 
-  const onFormBlur = (evt: React.FocusEvent<HTMLFieldSetElement>) => {
+  const onFormBlur = (evt: React.FocusEvent<HTMLDivElement>) => {
     // When pressing enter in an input, we lose focus for the input
     // but we are not leaving so we should not remove empty items (otherwise new items are immediately deleted)
     const focusedInForm = evt.currentTarget?.contains(evt.relatedTarget);
