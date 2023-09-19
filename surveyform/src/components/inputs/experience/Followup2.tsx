@@ -159,10 +159,8 @@ export const FollowUps = (
                 }
               }}
             />
-            <span className="sentiment-label">
-              <span className="sentiment-icon" aria-hidden={true} />
-              <FormattedMessage id={`followups.${followupOption.id}`} />
-            </span>
+            <span className="sentiment-icon" aria-hidden={true} />
+            <FormattedMessage id={`followups.${followupOption.id}`} className="sentiment-label" />
           </label>
         );
       })}
