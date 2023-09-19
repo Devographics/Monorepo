@@ -1,7 +1,10 @@
 import React from "react";
-import { IconProps } from "./IconWrapper";
 
-function Comment(props: IconProps) {
+function Comment({
+  svgProps = {},
+}: {
+  svgProps?: React.HTMLAttributes<SVGElement>;
+}) {
   return (
     <svg
       className="icon-comment"
@@ -12,7 +15,7 @@ function Comment(props: IconProps) {
       strokeWidth="1.5"
       color="white"
       viewBox="0 0 24 24"
-      {...props.svgProps}
+      {...svgProps}
     >
       <path
         stroke="currentColor"

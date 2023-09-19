@@ -1,7 +1,6 @@
 "use client";
 
 import Tooltip from "react-bootstrap/Tooltip";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { useIntlContext } from "@devographics/react-i18n";
 import { ReactNode, cloneElement } from "react";
@@ -15,7 +14,7 @@ export interface IconProps {
   values?: any;
   onClick?: any;
   className?: string;
-  svgProps: SVGProps;
+  svgProps?: SVGProps;
 }
 
 export interface SVGProps {

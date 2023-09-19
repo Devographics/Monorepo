@@ -1,7 +1,10 @@
 import React from "react";
-import { IconProps } from "./IconWrapper";
 
-function CommentDots(props: IconProps) {
+function CommentDots({
+  svgProps,
+}: {
+  svgProps?: React.HTMLAttributes<SVGElement>;
+}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,7 +14,7 @@ function CommentDots(props: IconProps) {
       strokeWidth="1.5"
       color="white"
       viewBox="0 0 24 24"
-      {...props.svgProps}
+      {...svgProps}
     >
       <path
         fill="currentColor"
