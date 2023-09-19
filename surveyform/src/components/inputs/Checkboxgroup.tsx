@@ -52,16 +52,7 @@ export const FormComponentCheckboxGroup = (
   // keep track of whether "other" field is shown or not
   const [showOther, setShowOther] = useState(!!otherValue);
 
-  const {
-    options: options_,
-    allowOther,
-    limit,
-    randomize,
-    order: order_,
-  } = question;
-
-  // backwards compatibility with deprecated "randomize" option
-  const order = randomize ? OptionsOrder.RANDOM : order_;
+  const { options: options_, allowOther, limit, order } = question;
 
   if (!options_) {
     throw new Error(
@@ -84,9 +75,11 @@ export const FormComponentCheckboxGroup = (
     case OptionsOrder.RANDOM:
       options = randomSort(options, response?._id);
       break;
-    default:
-      // default to alphabetical sort
+    case OptionsOrder.ALPHA:
       options = alphaSort(options);
+      break;
+    default:
+      // default to doing nothing
       break;
   }
 
