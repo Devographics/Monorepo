@@ -142,13 +142,21 @@
 
 .form-experience-option,
 .form-checkbox-option {
-  &:hover,
+  @include medium-large {
+    &:hover {
+      .sentiments {
+        opacity: 1;
+      }
+    }
+  }
+
   &.hasValue,
   &.form-check-checked {
     .sentiments {
       opacity: 1;
     }
   }
+
   .form-check {
     align-items: center;
     justify-content: flex-start;
