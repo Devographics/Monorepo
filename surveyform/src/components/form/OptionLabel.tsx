@@ -6,7 +6,7 @@ import {
   OptionMetadata,
   QuestionMetadata,
 } from "@devographics/types";
-import { getOptioni18nIds } from "@devographics/i18n";
+import { getOptioni18nIds } from "~/i18n/survey";
 import { useIntlContext } from "@devographics/react-i18n";
 
 const OptionLabel = ({

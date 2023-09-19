@@ -3,7 +3,7 @@ import Header from "~/components/common/Header";
 import Footer from "~/components/common/Footer";
 import { ReactNode } from "react";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import DevographicsBanner from "./DevographicsBanner";
+// import DevographicsBanner from "./DevographicsBanner";
 
 const EditionLayout = ({
   edition,

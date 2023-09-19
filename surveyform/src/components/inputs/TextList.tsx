@@ -5,7 +5,7 @@ import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
 import { useIntlContext } from "@devographics/react-i18n";
-import { getQuestioni18nIds } from "@devographics/i18n";
+import { getQuestioni18nIds } from "~/i18n/survey";
 
 // Items management
 

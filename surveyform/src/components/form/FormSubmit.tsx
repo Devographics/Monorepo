@@ -11,7 +11,7 @@ import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { useState } from "react";
 import { FormInputProps } from "./typings";
 import Button from "react-bootstrap/esm/Button";
-import { getSectioni18nIds } from "@devographics/i18n";
+import { getSectioni18nIds } from "~/i18n/survey";
 import { FormLayoutProps } from "./FormLayout";
 
 interface FormSubmitProps extends FormLayoutProps {

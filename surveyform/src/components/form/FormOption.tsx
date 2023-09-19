@@ -2,7 +2,7 @@ import { FormInputProps } from "~/components/form/typings";
 import { OptionMetadata } from "@devographics/types";
 import { useIntlContext } from "@devographics/react-i18n";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { getOptioni18nIds } from "@devographics/i18n";
+import { getOptioni18nIds } from "~/i18n/survey";
 import { useOptionTitle } from "~/lib/surveys/helpers/useOptionTitle";
 import AddToList from "~/components/reading_list/AddToList";
 import OptionLabel from "./OptionLabel";

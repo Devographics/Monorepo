@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "./Footer";
 import Header from "./Header";
-import DevographicsBanner from "./DevographicsBanner";
+// import DevographicsBanner from "./DevographicsBanner";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 
 export const Layout = ({ children }: { children: any }) => {

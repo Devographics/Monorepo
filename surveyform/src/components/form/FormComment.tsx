@@ -12,7 +12,7 @@ import debounce from "lodash/debounce.js";
 import IconComment from "~/components/icons/Comment";
 import IconCommentDots from "~/components/icons/CommentDots";
 import { FormInputProps } from "./typings";
-import { getOptioni18nIds } from "@devographics/i18n";
+import { getOptioni18nIds } from "~/i18n/survey";
 import { read } from "fs";
 
 export const CommentTrigger = ({

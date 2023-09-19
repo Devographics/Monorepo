@@ -1,7 +1,7 @@
 import type { OptionMetadata } from "@devographics/types";
 import { QuestionMetadata } from "@devographics/types";
 import { useIntlContext } from "@devographics/react-i18n";
-import { getOptioni18nIds } from "@devographics/i18n";
+import { getOptioni18nIds } from "~/i18n/survey";
 
 export const useOptionTitle = ({
   question,
