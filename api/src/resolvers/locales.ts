@@ -106,5 +106,6 @@ export const getTranslation = async ({
     if (!locale) {
         throw new Error(`getTranslation error: could not find locale with id ${localeId}`)
     }
-    return locale.strings?.reverse().find((s: any) => s.key === key)
+    const t = locale.strings?.reverse().find((s: any) => s.key === key)
+    return t
 }
