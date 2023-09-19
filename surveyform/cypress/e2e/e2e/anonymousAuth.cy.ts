@@ -3,7 +3,7 @@ import { routes } from "~/lib/routes";
 // Set to english (NOTE: this won't work in before.ts)
 import { LOCALE_COOKIE_NAME } from "~/i18n/cookie";
 import { startSurveyButtonName } from "../../helpers/selectors";
-import { getContinueAsGuestButton, openNavigationMenu } from "../..//helpers/getters";
+import { getContinueAsGuestButton, getLinkToSection, openNavigationMenu } from "../..//helpers/getters";
 
 before(() => {
   // NOTE: those operations are expensive! When testing less-critical part of your UI,
@@ -37,15 +37,9 @@ test("Access state of 2022, anonymous auth", () => {
   getContinueAsGuestButton().click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   cy.url().should("match", new RegExp(surveyRootUrl + "/.+"));
   // skip to last section
-  openNavigationMenu()
-  cy.findByRole("link", {
-    name: /About You|sections\.user_info\.title/i,
-  }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
+  getLinkToSection(/About You|sections\.user_info\.title/i).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   cy.url().should("match", new RegExp(surveyRootUrl + "/.+" + "/\\d+"));
-  // finish
-  cy.findByRole("button", {
-    name: /Finish survey|general\.finish_survey/i,
-  }).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
+  getLinkToSection(/Finish survey|general\.finish_survey/i).click({ force: true }); // FIXME: normally Cypress auto scroll to the element but it stopped working somehow
   cy.url().should("match", new RegExp("finish"));
 });
 
