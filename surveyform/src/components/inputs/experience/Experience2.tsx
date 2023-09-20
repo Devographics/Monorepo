@@ -54,11 +54,11 @@ export const Experience2 = (props: ExperienceProps) => {
   );
 };
 
-const CodeExample = ({ language, code, codeHighlighted }) => {
+const CodeExample = ({ language, label, code, codeHighlighted }) => {
   return (
     <div className="code-example">
       <h5 className="code-example-heading">
-        {language || <FormattedMessage id="general.code_example" />}{" "}
+        {label || language || <FormattedMessage id="general.code_example" />}{" "}
       </h5>
       <pre>
         <code dangerouslySetInnerHTML={{ __html: codeHighlighted }}></code>

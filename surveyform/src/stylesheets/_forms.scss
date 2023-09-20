@@ -489,6 +489,11 @@
   display: block;
   font-size: $smallish-font;
   color: var(--text-color-dark);
+
+  code {
+    padding: .05em .3em .1em;
+    background: transparentize($bg-color-light, .6);
+  }
 }
 
 .form-show-more {

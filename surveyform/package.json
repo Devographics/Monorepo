@@ -76,7 +76,7 @@
     "lodash": "^4.17.21",
     "nanoid": "3.3.6",
     "new-github-issue-url": "^1.0.0",
-    "next": "13.4.19",
+    "next": "13.5.1",
     "next-connect": "^0.9.1",
     "next-sitemap": "^4.1.8",
     "node-cache": "^5.1.2",
@@ -157,5 +157,8 @@
     "react-test-renderer": ">=16.9.0",
     "require-from-string": "^2.0.2"
   },
-  "packageManager": "pnpm@7.3.0"
+  "packageManager": "pnpm@7.3.0",
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }

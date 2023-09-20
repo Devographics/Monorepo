@@ -7,72 +7,83 @@ import { LogoutButton } from "~/account/user/components/LogoutButton";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { DebugZone } from "./DebugZone";
 
+const links = [
+  {
+    component: (
+      <span>
+        &copy; 2023 <a href="https://devographics.com/">Devographics</a>
+      </span>
+    ),
+  },
+  {
+    showIf: ({ currentUser }) => !!currentUser,
+    id: "nav.account",
+    href: routes.account.profile.href,
+  },
+  {
+    showIf: ({ currentUser }) => !currentUser,
+    id: "accounts.sign_in",
+    href: routes.account.login.href,
+  },
+  {
+    id: "general.privacy_policy",
+    href: "/privacy-policy",
+  },
+  {
+    id: "general.leave_issue2",
+    href: "https://github.com/Devographics/Monorepo/issues",
+  },
+  {
+    showIf: ({ currentUser }) => !!currentUser,
+    component: <LogoutButton asLink={true} />,
+  },
+  {
+    id: "general.help_us_translate",
+    href: "https://github.com/Devographics/locale-en-US",
+  },
+];
+
 export const Footer = () => {
   const [showDebug, setShowDebug] = useState(false);
-  const { currentUser } = useCurrentUser();
 
   return (
     <footer className="footer">
       <div className="footer-top">
-        &copy; 2023 <a href="https://devographics.com/">Devographics</a> |{" "}
-        {currentUser && (
-          <>
-            <Link href={routes.account.profile.href} passHref>
-              <FormattedMessage id="nav.account" />
-            </Link>{" "}
-            |
-          </>
-        )}{" "}
-        <Link href="/privacy-policy" passHref>
-          <FormattedMessage id="general.privacy_policy" />
-        </Link>{" "}
-        {/* | <FormattedMessage id="general.emoji_icons" /> |{" "} */}
-        <FormattedMessage
-          id="general.leave_issue"
-          values={{
-            link: "https://github.com/Devographics/Monorepo/issues",
-          }}
-        />{" "}
-        |{" "}
-        <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            setShowDebug(!showDebug);
-          }}
-        >
-          Debug
-        </a>{" "}
-        | <Link href={routes.survey.demo.href}>Demo survey</Link> |{" "}
-        {!currentUser && (
-          <>
-            <Link href={routes.account.login.href}>
-              <FormattedMessage id="accounts.sign_in" />
-            </Link>
-          </>
-        )}
-        {currentUser && (
-          <>
-            <LogoutButton asLink={true} />
-          </>
-        )}
-      </div>
-      <div className="footer-bottom">
-        {/* <a
-          className="stellate-badge"
-          href="https://stellate.co/?source=devographics"
-        >
-          <img
-            src="/stellate-badge.svg"
-            width={136}
-            height={60}
-            alt="Powered by Stellate"
-          />
-        </a> */}
+        {links.map((link, index) => (
+          <LinkItem key={index} {...link} />
+        ))}
       </div>
       {showDebug && <DebugZone />}
     </footer>
   );
 };
 
+const LinkWrapper = ({ children }) => (
+  <span className="footer-link-item">{children}</span>
+);
+
+const LinkItem = ({ id, href, showIf, component }) => {
+  const { currentUser } = useCurrentUser();
+  if (showIf && !showIf({ currentUser })) {
+    return null;
+  }
+  if (component) {
+    return <LinkWrapper>{component}</LinkWrapper>;
+  }
+  const isOutboundLink = href?.includes("http");
+
+  return (
+    <LinkWrapper>
+      {isOutboundLink ? (
+        <a href={href}>
+          <FormattedMessage id={id} />
+        </a>
+      ) : (
+        <Link href={href}>
+          <FormattedMessage id={id} />
+        </Link>
+      )}
+    </LinkWrapper>
+  );
+};
 export default Footer;

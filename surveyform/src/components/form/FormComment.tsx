@@ -14,51 +14,47 @@ import IconCommentDots from "~/components/icons/CommentDots";
 import { FormInputProps } from "./typings";
 import { getOptioni18nIds } from "~/i18n/survey";
 import { read } from "fs";
+import isEmpty from "lodash/isEmpty";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 export const CommentTrigger = ({
   value,
   showCommentInput = false,
   setShowCommentInput,
 }) => {
-  const [show, setShow] = useState(showCommentInput);
-
   const isActive = showCommentInput || !!value;
   const intl = useIntlContext();
   const target = useRef(null);
 
   return (
     <div className="comment-trigger-wrapper">
-      <button
-        ref={target}
-        className={`comment-trigger comment-trigger-${
-          isActive ? "active" : "inactive"
-        }`}
-        type="button"
-        aria-describedby="popover-basic"
-        aria-label={intl.formatMessage({ id: "experience.leave_comment" })}
-        title={intl.formatMessage({ id: "experience.leave_comment" })}
-        onClick={() => {
-          setShowCommentInput(!showCommentInput);
-        }}
-        onMouseOver={() => {
-          setShow(true);
-        }}
-        onMouseOut={() => {
-          setShow(false);
-        }}
-      >
-        {value ? <IconCommentDots /> : <IconComment />}
-        <span className="visually-hidden">
-          <FormattedMessage id="experience.leave_comment" />
-        </span>
-      </button>
-      <Overlay target={target.current} show={show} placement={"right"}>
-        {(props) => (
-          <Tooltip id="leave_comment" {...props}>
+      <OverlayTrigger
+        placement="top"
+        overlay={
+          <Tooltip id="">
             <FormattedMessage id="experience.leave_comment_short" />
           </Tooltip>
-        )}
-      </Overlay>
+        }
+      >
+        <button
+          ref={target}
+          className={`comment-trigger comment-trigger-${
+            isActive ? "active" : "inactive"
+          }`}
+          type="button"
+          aria-describedby="popover-basic"
+          aria-label={intl.formatMessage({ id: "experience.leave_comment" })}
+          title={intl.formatMessage({ id: "experience.leave_comment" })}
+          onClick={() => {
+            setShowCommentInput(!showCommentInput);
+          }}
+        >
+          {value ? <IconCommentDots /> : <IconComment />}
+          <span className="visually-hidden">
+            <FormattedMessage id="experience.leave_comment" />
+          </span>
+        </button>
+      </OverlayTrigger>
     </div>
   );
 };
@@ -69,7 +65,6 @@ interface CommentInputProps extends FormInputProps {
 }
 
 export const CommentInput = (props: CommentInputProps) => {
-  let response;
   const intl = useIntlContext();
   const {
     commentPath,
@@ -79,10 +74,12 @@ export const CommentInput = (props: CommentInputProps) => {
     readOnly,
   } = props;
 
-  const option = question.options?.find((o) => o.id === questionValue);
+  const hasQuestionValue = !isEmpty(questionValue);
 
+  let translatedAnswer;
+  const option = question.options?.find((o) => o.id === questionValue);
   const i18n = option && getOptioni18nIds({ ...props, option });
-  response = i18n && intl.formatMessage({ id: i18n.base });
+  translatedAnswer = i18n && intl.formatMessage({ id: i18n.base });
 
   return (
     <div className="comment-input">
@@ -90,11 +87,15 @@ export const CommentInput = (props: CommentInputProps) => {
         <FormattedMessage id="experience.leave_comment" />
       </h5>
       <p className="comment-input-subheading">
-        {response ? (
-          <FormattedMessage
-            id="experience.tell_us_more"
-            values={{ response }}
-          />
+        {hasQuestionValue ? (
+          translatedAnswer ? (
+            <FormattedMessage
+              id="experience.tell_us_more"
+              values={{ response: translatedAnswer }}
+            />
+          ) : (
+            <FormattedMessage id="experience.tell_us_more_generic" />
+          )
         ) : (
           <FormattedMessage id="experience.tell_us_more_no_value" />
         )}

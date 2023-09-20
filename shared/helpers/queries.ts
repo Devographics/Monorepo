@@ -18,7 +18,7 @@ export const getEntityFragment = () => `entity {
     rss {
       url
     }
-    blog { 
+    blog {
         url
     }
     mastodon {
@@ -238,6 +238,7 @@ query ${editionId}MetadataQuery {
               name
               nameHtml
               example {
+                label
                 language
                 code
                 codeHighlighted
@@ -266,6 +267,7 @@ query ${editionId}MetadataQuery {
                 name
                 nameHtml
                 example {
+                  label
                   language
                   code
                   codeHighlighted
@@ -354,6 +356,7 @@ query ${editionId}MetadataQuery {
               nameClean
               nameHtml
               example {
+                label
                 language
                 code
                 codeHighlighted

@@ -23,7 +23,6 @@ const moduleExports = (phase, { defaultConfig }) => {
     // NOTE: the doc is unclear about whether we should merge this default config or not
     ...defaultConfig,
     experimental: {
-      appDir: true,
       instrumentationHook: true,
     },
     transpilePackages: [

@@ -462,7 +462,13 @@ const TextListItem = ({
     values: { index: index + 1 },
   });
 
-  const placeholder = questionPlaceholder || defaultPlaceholder;
+  const indexPlaceholder = formatMessage({
+    id: `${i18n.base}.placeholder.${index + 1}`,
+    values: { index: index + 1 },
+  });
+
+  const placeholder =
+    indexPlaceholder || questionPlaceholder || defaultPlaceholder;
 
   return (
     <FormControl

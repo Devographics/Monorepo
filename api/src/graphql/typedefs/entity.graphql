@@ -126,6 +126,7 @@ type RSS {
 Example Info
 """
 type Example {
+    label: String
     language: String
     code: String
     codeHighlighted: String

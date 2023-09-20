@@ -79,7 +79,7 @@ export const FollowUps = (
     ? { role: followupMode }
     : { role: "presentation" };
 
-  const tabIndexProp = optionIsChecked ? {} : { tabindex: "-1" };
+  const tabIndexProp = optionIsChecked ? {} : { tabIndex: -1 };
 
   const allPredefinedFollowupPaths =
     formPaths?.[DbPathsEnum.FOLLOWUP_PREDEFINED];
@@ -159,10 +159,11 @@ export const FollowUps = (
                 }
               }}
             />
-            <span className="sentiment-label">
-              <span className="sentiment-icon" aria-hidden={true} />
-              <FormattedMessage id={`followups.${followupOption.id}`} />
-            </span>
+            <span className="sentiment-icon" aria-hidden={true} />
+            <FormattedMessage
+              id={`followups.${followupOption.id}`}
+              className="sentiment-label"
+            />
           </label>
         );
       })}

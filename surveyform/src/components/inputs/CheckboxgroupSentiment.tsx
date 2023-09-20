@@ -26,7 +26,7 @@ import {
   // FollowUps,
 } from "./experience/Followup2";
 
-const defaultCutoff = 10;
+const defaultCutoff = 99;
 // how many items to allow past the cutoff limit before actually cutting off the list
 const cutoffMargin = 2;
 
@@ -57,11 +57,8 @@ export const FormComponentCheckboxGroup = (
     allowOther,
     limit,
     randomize,
-    order: order_ = OptionsOrder.ALPHA,
+    order = OptionsOrder.SPECIFIED,
   } = question;
-
-  // backwards compatibility with deprecated "randomize" option
-  const order = randomize ? OptionsOrder.RANDOM : order_;
 
   if (!options_) {
     throw new Error(
@@ -84,9 +81,11 @@ export const FormComponentCheckboxGroup = (
     case OptionsOrder.RANDOM:
       options = randomSort(options, response?._id);
       break;
-    default:
-      // default to alphabetical sort
+    case OptionsOrder.ALPHA:
       options = alphaSort(options);
+      break;
+    default:
+      // default to doing nothing
       break;
   }
 

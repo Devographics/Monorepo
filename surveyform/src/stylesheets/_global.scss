@@ -204,6 +204,13 @@ Page-specific styles
   font-size: $smallish-font;
   padding: $spacing;
 }
+.footer-top {
+  display: flex;
+  gap: $spacing;
+  justify-content: center;
+}
+.footer-link-item {
+}
 .footer-bottom {
   margin-top: $spacing;
 }
