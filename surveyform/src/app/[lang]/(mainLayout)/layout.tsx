@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { rscCurrentUserWithResponses } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import ClientLayout from "~/app/[lang]/ClientLayout";
 import { DebugRSC } from "~/components/debug/DebugRSC";
 import { getCommonContexts, getLocaleIdFromParams } from "~/i18n/config";
@@ -47,14 +46,12 @@ export default async function RootLayout({
   if (error) {
     return <div>{JSON.stringify(error, null, 2)}</div>;
   }
-  const currentUser = await rscCurrentUserWithResponses();
   return (
     <ClientLayout
       params={params}
       locales={locales}
       localeId={localeId}
       localeStrings={locale}
-      currentUser={currentUser}
     >
       <DebugRSC
         {...{ ___rscLocale_CommonContexts, ___rscAllLocalesMetadata }}

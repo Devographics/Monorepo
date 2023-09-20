@@ -9,6 +9,23 @@ import EditionMessage from "~/components/surveys/SurveyMessage";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { EditionMetadata } from "@devographics/types";
 import { EditionMain } from "./client-components";
+import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
+
+/**
+ * NOTE: ideally we would load surveys in the layout directly
+ * but this is not possible to mix static and dynamic pages in the same parent layout (yet)
+ * @see https://github.com/vercel/next.js/issues/44712
+ */
+export async function generateStaticParams() {
+  const surveys = (await rscFetchSurveysMetadata())?.data || [];
+  const editions = surveys.map((s) => s.editions).flat();
+  return (
+    editions.map((e) => ({
+      slug: e.surveyId.replaceAll("_", "-"),
+      year: String(e.year),
+    })) || []
+  );
+}
 
 interface SurveyPageServerProps {
   slug: string;

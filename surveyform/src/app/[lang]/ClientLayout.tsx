@@ -25,7 +25,7 @@ import { UserMessagesProvider } from "~/components/common/UserMessagesContext";
 
 import { Analytics } from "@vercel/analytics/react";
 import { Referrer } from "~/components/common/ReferrerStorage";
-import { apiRoutes } from "~/lib/apiRoutes";
+import { ApiData, apiRoutes } from "~/lib/apiRoutes";
 import { UserWithResponses } from "~/lib/responses/typings";
 
 export interface AppLayoutProps {
@@ -37,6 +37,11 @@ export interface AppLayoutProps {
   children: React.ReactNode;
   params: { lang: string };
   addWrapper?: boolean;
+  /**
+   * Initialize SWR data from server
+   * NOTE: using this prop will make all the pages nested within this layout "dynamic" pages
+   * You may want to pass this value directly to the useCurrentUser hook in specific pages that need the currentUser
+   */
   currentUser?: UserWithResponses | null;
 }
 
@@ -50,6 +55,14 @@ export function ClientLayout(props: AppLayoutProps) {
     addWrapper = true,
     currentUser,
   } = props;
+
+  let fallback: { [key: string]: ApiData<any> } = {};
+  if (currentUser) {
+    fallback[apiRoutes.account.currentUser.href()] = {
+      data: currentUser,
+      error: null,
+    };
+  }
 
   return (
     <html lang={params.lang}>
@@ -67,10 +80,8 @@ export function ClientLayout(props: AppLayoutProps) {
               // basic global fetcher
               fetcher: (resource, init) =>
                 fetch(resource, init).then((res) => res.json()),
-              // @see https://swr.vercel.app/docs/with-nextjs#pre-rendering-with-default-data
-              fallback: {
-                [apiRoutes.account.currentUser.href()]: { data: currentUser }, // use same format as returned from the API here
-              },
+              // @see https://swr.vercel.app/docs/with-nextjs#pre-rendering-with-default-data,
+              fallback,
             }}
           >
             <LocaleContextProvider
