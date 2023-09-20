@@ -26,7 +26,7 @@ import {
   // FollowUps,
 } from "./experience/Followup2";
 
-const defaultCutoff = 10;
+const defaultCutoff = 99;
 // how many items to allow past the cutoff limit before actually cutting off the list
 const cutoffMargin = 2;
 
