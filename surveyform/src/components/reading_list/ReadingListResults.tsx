@@ -137,14 +137,21 @@ const ListItem = ({
       )}
       {resources && (
         <ul className="reading-list-item-resources">
-          {resources.map(({ title, url }) => {
-            const domain = new URL(url).hostname.replace("www.", "");
+          {resources.map(({ title, url }, index) => {
+            let domain;
+            try {
+              domain = new URL(url).hostname.replace("www.", "");
+            } catch (error) {
+              console.log(`Invalid URL: ${url}`);
+            }
             return (
-              <li key={url} className="reading-list-item-resources-item">
+              <li key={index} className="reading-list-item-resources-item">
                 <a href={url}>{title || truncate(url, { length: 50 })}</a>
-                <span className="reading-list-item-resources-item-domain">
-                  {domain}
-                </span>
+                {domain && (
+                  <span className="reading-list-item-resources-item-domain">
+                    {domain}
+                  </span>
+                )}
               </li>
             );
           })}
