@@ -597,7 +597,7 @@ importers:
       '@devographics/helpers': workspace:^1.0.0
       '@devographics/types': workspace:*
       '@types/node': ^18.11.18
-      '@upstash/redis': ^1.21.0
+      '@upstash/redis': ^1.22.0
       ioredis: ^5.2.4
     dependencies:
       '@devographics/debug': link:../debug
