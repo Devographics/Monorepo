@@ -6,9 +6,6 @@ import { rscMustGetSurveyEditionFromUrl } from "./rsc-fetchers";
 import ClientLayout from "~/app/[lang]/ClientLayout";
 import EditionLayout from "~/components/common/EditionLayout";
 
-// uncomment to tell why this page is not statically rendered
-// export const dynamic = "error";
-
 import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import {
   getCommonContexts,
@@ -18,7 +15,6 @@ import {
 import { rscAllLocalesMetadata, rscLocale } from "~/lib/api/rsc-fetchers";
 import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
-import { rscCurrentUserWithResponses } from "~/account/user/rsc-fetchers/rscCurrentUser";
 interface SurveyPageServerProps {
   lang: string;
   slug: string;
@@ -100,7 +96,6 @@ If this error still happens in a few months (2023) open an issue with repro at N
     return <div>{JSON.stringify(error, null, 2)}</div>;
   }
 
-  const currentUser = await rscCurrentUserWithResponses();
   return (
     <ClientLayout
       params={params}

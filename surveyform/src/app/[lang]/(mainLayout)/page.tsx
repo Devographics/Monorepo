@@ -1,16 +1,14 @@
 import Surveys from "~/app/[lang]/(mainLayout)/Surveys";
 import { RSCFetch } from "~/components/common/RSCFetch";
-import { DebugRSC } from "~/components/debug/DebugRSC";
+// import { DebugRSC } from "~/components/debug/DebugRSC";
 
 import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
-// uncomment to enable static builds
-/*
+
 import { rscAllLocalesIds } from "~/lib/api/rsc-fetchers";
 export async function generateStaticParams() {
   const localeIds = await rscAllLocalesIds();
-  return localeIds.map((localeId) => ({ lang: localeId}));
+  return localeIds?.data.map((localeId) => ({ lang: localeId })) || [];
 }
-*/
 
 const IndexPage = async ({ params }) => {
   return (

@@ -1,6 +1,10 @@
 import Support from "~/components/common/Support";
 import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
-import { rscMustGetSurveyEditionFromUrl } from "./rsc-fetchers";
+import {
+  getEditionParams,
+  rscGetEditionsMetadata,
+  rscMustGetSurveyEditionFromUrl,
+} from "./rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
 import Faq from "~/components/common/Faq";
 import Translators from "~/components/common/Translators";
@@ -9,7 +13,6 @@ import EditionMessage from "~/components/surveys/SurveyMessage";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { EditionMetadata } from "@devographics/types";
 import { EditionMain } from "./client-components";
-import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
 
 /**
  * NOTE: ideally we would load surveys in the layout directly
@@ -17,14 +20,11 @@ import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
  * @see https://github.com/vercel/next.js/issues/44712
  */
 export async function generateStaticParams() {
-  const surveys = (await rscFetchSurveysMetadata())?.data || [];
-  const editions = surveys.map((s) => s.editions).flat();
-  return (
-    editions.map((e) => ({
-      slug: e.surveyId.replaceAll("_", "-"),
-      year: String(e.year),
-    })) || []
-  );
+  const editionParams = (
+    await rscGetEditionsMetadata({ removeHidden: true })
+  ).map((e) => getEditionParams(e));
+  // lang should be added too, for the moment we only statically render en-US but more could be added
+  return editionParams.map((p) => ({ ...p, lang: "en-US" }));
 }
 
 interface SurveyPageServerProps {
