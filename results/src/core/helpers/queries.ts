@@ -35,7 +35,7 @@ export const getEntityFragment = () => `entity {
     rss {
       url
     }
-    blog { 
+    blog {
         url
     }
     mastodon {
@@ -282,7 +282,7 @@ Get query by either
 
 A) generating a default query based on presets
 
-or 
+or
 
 B) using query defined in block template definition
 

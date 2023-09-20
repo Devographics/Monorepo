@@ -114,7 +114,7 @@ const getEntityFragment = () => `entity {
     rss {
       url
     }
-    blog { 
+    blog {
         url
     }
     mastodon {
@@ -431,7 +431,7 @@ export const getQuery = ({ query: query_, queryOptions, queryArgs }) => {
 
 /*
 
-Note: the following is a duplicated non-Typescript version of the code in 
+Note: the following is a duplicated non-Typescript version of the code in
 core/filters/helpers
 
 */
@@ -487,8 +487,8 @@ const conditionsToFilters = conditions => {
 
 Generate query used for filtering
 
-TODO: currently lots of search-and-replace for strings going on which 
-could be avoided by making template query definitions JS/TS objects that 
+TODO: currently lots of search-and-replace for strings going on which
+could be avoided by making template query definitions JS/TS objects that
 define how to accept filters and series themselves.
 
 */
@@ -565,11 +565,11 @@ export const getFiltersQuery = ({ block, chartFilters, currentYear, queryOptions
 
         // DIFFERENCE WITH CLIENT (TS) VERSION
         // const seriesName = `${block.fieldId || block.id}_by_${facet.id}`
-        /* 
-        
+        /*
+
         Note: in the client version, we customize a basic chart so we
         need to build a new ID. Here, we can just use the ID defined in raw_sitemap
-        
+
         */
 
         const seriesName = block.id

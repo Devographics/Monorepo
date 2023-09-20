@@ -18,7 +18,7 @@ export const getEntityFragment = () => `entity {
     rss {
       url
     }
-    blog { 
+    blog {
         url
     }
     mastodon {
