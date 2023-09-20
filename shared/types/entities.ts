@@ -56,6 +56,7 @@ export interface Resource {
 }
 
 export interface Example {
+  label: string;
   language: string;
   code: string;
   codeHighlighted: string;

@@ -95,6 +95,7 @@ const getEntityFragment = () => `entity {
     nameClean
     id
     example {
+      label
       language
       code
       codeHighlighted

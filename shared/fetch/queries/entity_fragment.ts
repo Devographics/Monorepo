@@ -9,6 +9,7 @@ id
 nameClean
 nameHtml
 example {
+  label
   language
   code
   codeHighlighted
