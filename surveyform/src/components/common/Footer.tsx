@@ -71,7 +71,7 @@ const LinkItem = ({
   id?: string;
   href?: string;
   component?: React.ReactNode;
-  showIf?: ({ currentUser: any }) => boolean;
+  showIf?: ({ currentUser }: { currentUser: any }) => boolean;
 }) => {
   const { currentUser } = useCurrentUser();
   if (showIf && !showIf({ currentUser })) {
