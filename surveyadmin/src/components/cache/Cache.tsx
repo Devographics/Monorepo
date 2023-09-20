@@ -22,6 +22,7 @@ export const actions = [
 export const CacheDashboard = () => (
   <div>
     <h2>Cache</h2>
+    <div>TODO: I don't think it empties "surveyform" Redis cache, only API</div>
 
     <div className="cache-dashboard">
       <section>
