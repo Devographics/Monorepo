@@ -62,13 +62,28 @@ const LinkWrapper = ({ children }) => (
   <span className="footer-link-item">{children}</span>
 );
 
-const LinkItem = ({ id, href, showIf, component }) => {
+const LinkItem = ({
+  id,
+  href,
+  showIf,
+  component,
+}: {
+  id?: string;
+  href?: string;
+  component?: React.ReactNode;
+  showIf?: ({ currentUser: any }) => boolean;
+}) => {
   const { currentUser } = useCurrentUser();
   if (showIf && !showIf({ currentUser })) {
     return null;
   }
   if (component) {
     return <LinkWrapper>{component}</LinkWrapper>;
+  }
+  if (!(id && href)) {
+    throw new Error(
+      "id and href are mandatory in LinkItem if 'component' is not set"
+    );
   }
   const isOutboundLink = href?.includes("http");
 
