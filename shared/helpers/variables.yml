@@ -33,7 +33,7 @@
 
 - id: API_URL_PRODUCTION
   optional: true
-  description: URL of the API
+  description: URL of the production API (so the admin area can handle it when running locally)
   example: https://api.devographics.com
   usedBy:
       - surveyadmin
@@ -223,7 +223,7 @@
 - id: FAST_BUILD
   optional: true
   description: Enable "fast build" mode, which skips most locales and block subpages
-  example: true
+  example: "'true' if activated, any other value or empty if disabled"
   usedBy:
       - results
       - homepage
