@@ -253,6 +253,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
       removeItemAt,
     },
   ] = useRealVirtualItems(values, question.limit);
+  const debouncedUpdateItem = debounce(updateItem, 50);
 
   // TODO: an effect is not usually the best approach
   useEffect(() => {
@@ -310,10 +311,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   ) => {
     const value = event.target.value;
     const previousValue = getItemAtIdx(index).value;
-    // TODO: this jumps too much, instead use "removeEmptyItems" on the form
-    /*if (!value) {
-      if (index <= items.length - 1) removeItem(index);
-    } else*/ if (value !== previousValue) {
+    if (value !== previousValue) {
       // only update if the item actually changed otherwise we have competing updates
       updateItem(index, value);
     }
@@ -327,6 +325,8 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     const value = evt.target.value;
     if (isVirtualItem) {
       reifyVirtualItem(index, value);
+    } else {
+      debouncedUpdateItem(index, value);
     }
   };
   const onItemKeyDown = (

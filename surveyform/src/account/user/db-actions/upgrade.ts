@@ -45,6 +45,8 @@ export const upgradeUser = async ({
     if (mustVerify) {
       updatedUser.isVerified = true;
     }
+    // NOTE: we don't currently reconciliate the anonymous response and the existing user
+    // we just keep the anonymousId so we can later do this reconciliatiation
     if (mustAddAnonymousId) {
       updatedUser.anonymousIds = [
         ...(foundUser.anonymousIds || []),
