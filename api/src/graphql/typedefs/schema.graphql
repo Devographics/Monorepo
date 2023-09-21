@@ -121,6 +121,7 @@ type SectionMetadata {
 # Keep in sync with the corresponding queries in shared/helpers/queries.ts
 type QuestionMetadata {
     id: String
+    sectionId: String
     yearAdded: Int
     label: String
     intlId: String

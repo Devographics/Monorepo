@@ -158,6 +158,8 @@ export type Question = {
 
     id?: string
     intlId?: string
+    // override the sectionId (e.g. to save data to another section)
+    sectionId?: string
     label?: string
     yearAdded?: number
     options?: Option[]

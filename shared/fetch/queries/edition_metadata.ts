@@ -80,6 +80,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
             questions {
               id
               intlId
+              sectionId
               i18nNamespace
               yearAdded
               limit
