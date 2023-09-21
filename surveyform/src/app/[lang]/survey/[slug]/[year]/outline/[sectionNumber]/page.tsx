@@ -1,7 +1,10 @@
 import { notFound } from "next/navigation";
+import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
 import { SurveySectionOutline } from "~/components/questions/SurveySectionOutline";
 import { rscGetEditionsMetadata } from "../../rsc-fetchers";
 
+// revalidating is important so we get fresh values from the cache every now and then without having to redeploy
+export const revalidate = DEFAULT_REVALIDATE_S;
 /**
  * NOTE: ideally we would load surveys in the layout directly
  * but this is not possible to mix static and dynamic pages in the same parent layout (yet)

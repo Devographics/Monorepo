@@ -76,6 +76,38 @@ const INITIAL_VIRTUAL_ITEMS = 2;
 // Managing an array of real and virtual values
 
 /**
+ * Allow to have a delay between removing content,
+ * and switching to previous item
+ * => if user keeps "backspace" pressed or press it rapidly to remove content,
+ * we wait a small courtesy delay before jumping to the previous input,
+ * so the user do not accidentally delete the previous input too
+ * @param delay
+ * @returns
+ */
+const useDeletionDelay = (delay: number = 300) => {
+  const deletedContentRef = useRef<{
+    /** Unique id for the content */
+    id: string | number;
+    timeoutHandle: any;
+  } | null>(null);
+  return {
+    deletedContent: (id: string | number) => {
+      const timeoutHandle = setTimeout(() => {
+        deletedContentRef.current = null;
+      }, delay);
+      deletedContentRef.current = { id, timeoutHandle };
+    },
+    resetDeletionDelay: () => {
+      if (deletedContentRef.current?.timeoutHandle) {
+        clearTimeout(deletedContentRef.current?.timeoutHandle);
+      }
+    },
+    hasDeletedContent: (id: string | number) =>
+      deletedContentRef.current?.id === id,
+  } as const;
+};
+
+/**
  * Manage a set of real and virtual values
  * TODO: useReducer instead of using state
  */
@@ -253,6 +285,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
       removeItemAt,
     },
   ] = useRealVirtualItems(values, question.limit);
+  const deletionDelay = useDeletionDelay();
   const debouncedUpdateItem = debounce(updateItem, 50);
 
   // TODO: an effect is not usually the best approach
@@ -376,8 +409,17 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
         focusInputEnd(selectNextItem(index));
       }
     } else if (evt.key === "Backspace" || evt.key === "Delete") {
+      deletionDelay.resetDeletionDelay();
       // let the input handle deletion if there are chars to delete
-      if (value.length > 0) return;
+      if (value.length > 0) {
+        deletionDelay.deletedContent(index);
+        return;
+      }
+      if (deletionDelay.hasDeletedContent(index)) {
+        // user just deleted a char, and pressed again backspace
+        // we wait a few ms before actually deleting the content
+        return;
+      }
       // if there is only one last char before deletion, remove the item and focus on next one
       evt.preventDefault();
       if (index === items.length) {
