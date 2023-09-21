@@ -7,6 +7,7 @@ $greyLight: #e0e4e4;
 $grey: #e1e1e1;
 $greyMedium: #cecdcc;
 $greyMediumish: #bdb9b7;
+$greyMediumish2: #a8a3a1;
 $greyMediumer: #616868;
 $greyDark: rgba(125, 125, 125);
 $greyDarkish: rgba(56, 56, 56);
@@ -81,6 +82,7 @@ $dark-border-color: $greyDark;
 
 $text-color: $grey;
 $text-color-dark: $greyMediumish;
+$text-color-darker: $greyMediumish2;
 $text-color-inverted: $greyDarker;
 
 $link-color: $active-color;
@@ -92,6 +94,7 @@ $hover-color: $contrast-color;
   --bg-color-lighter: #{$bg-color-lighter};
   --text-color: #{$text-color};
   --text-color-dark: #{$text-color-dark};
+  --text-color-darker: #{$text-color-darker};
   --text-color-inverted: #{$text-color-inverted};
   --link-color: #{$link-color};
   --hover-color: #{$contrast-color};

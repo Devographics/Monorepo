@@ -208,6 +208,7 @@ Page-specific styles
   display: flex;
   gap: $spacing;
   justify-content: center;
+  flex-wrap: wrap;
 }
 .footer-link-item {
 }
