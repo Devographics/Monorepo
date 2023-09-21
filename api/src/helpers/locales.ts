@@ -3,6 +3,8 @@ import marked from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import { decode } from 'html-entities'
 import { logToFile } from '@devographics/debug'
+import { findDuplicates } from './utilities'
+import sortBy from 'lodash/sortBy.js'
 
 export const filterContexts = ({ locale, contexts }: { locale: Locale; contexts: string[] }) => {
     return { ...locale, strings: locale.strings.filter(s => contexts.includes(s.context)) }
@@ -90,18 +92,15 @@ export const addFallbacks = (
                 t => t.key === enTranslation.key && !t.isFallback
             )
             const localeString = localeStrings[localeTranslationIndex]
-            if (
-                localeTranslationIndex === -1 ||
-                localeString.t === enTranslation.t ||
-                (localeString.t && localeString.t.trim() === 'TODO')
-            ) {
-                // en-US key doesn't exist in current locale file
-                // OR current locale file's translation is same as en-US (untranslated)
-                // OR is "TODO"
+            if (localeTranslationIndex === -1) {
+                // en-US key doesn't exist at all in current locale file, add it
                 localeStrings.push({
                     ...enTranslation,
                     isFallback: true
                 })
+            } else if (localeString.t === enTranslation.t) {
+                // current locale file's translation is same as en-US (untranslated)
+                localeStrings[localeTranslationIndex].isFallback = true
             } else {
                 localeString.isFallback = false
             }
@@ -165,6 +164,18 @@ export const computeUntranslatedKeys = (
     return untranslatedKeys
 }
 
+export const checkForDuplicates = (
+    locale: RawLocale,
+    strings: TranslationStringObject[],
+    context: string
+) => {
+    const allKeys = strings.filter(s => !s.aliasFor).map(s => s.key)
+    const duplicateKeys = findDuplicates(allKeys)
+    for (const duplicateKey of duplicateKeys) {
+        console.warn(`[⚠️ ${context}]: duplicate key ${duplicateKey}`)
+    }
+}
+
 /*
 
 Take a single string file (e.g. the contents of common.yml) and process it
@@ -189,6 +200,9 @@ export const processStringFile = ({
         ...s,
         context: stringFile.context
     }))
+
+    checkForDuplicates(locale, processedStringFile.strings, stringFile.context)
+
     return processedStringFile
 }
 
@@ -272,5 +286,6 @@ export const processLocales = (allLocalesRawData: Array<RawLocale>): Array<Local
         console.log(`\n🌐 Processing locale [${locale.id}] (${i}/${allLocalesRawData.length})`)
         allLocales.push(processLocale(locale, enParsedStringFiles))
     }
+
     return allLocales
 }
