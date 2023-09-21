@@ -130,6 +130,7 @@ export const ignoredFieldTypes = [
   "others",
   "project",
   "quiz",
+  "textList",
 ];
 
 /**

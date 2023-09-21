@@ -19,7 +19,7 @@ import { processLocales } from '../helpers/locales'
 let Locales: Locale[] = []
 
 export const allContexts: string[] = []
-const excludedFiles = ['config.yml', 'crowdin.yml']
+const excludedFiles = ['config.yml', 'crowdin.yml', 'legacy.yml']
 
 export const addToAllContexts = (context: string) => {
     if (!allContexts.includes(context)) {

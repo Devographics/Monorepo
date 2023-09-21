@@ -8,7 +8,11 @@ import { FormOption } from "~/components/form/FormOption";
 
 import isEmpty from "lodash/isEmpty.js";
 import { Dispatch, SetStateAction, useState } from "react";
-import { DbPathsEnum, OptionMetadata } from "@devographics/types";
+import {
+  DbPathsEnum,
+  FeaturesOptions,
+  OptionMetadata,
+} from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 
 import get from "lodash/get.js";
@@ -21,6 +25,17 @@ import Alert from "react-bootstrap/Alert";
 export interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
 }
+
+const unimplementedFeatures = [
+  "selectlist_element",
+  "accordion_element",
+  "focusgroup_attribute",
+  "dom_parts",
+  "model_element",
+  "html_modules",
+  "scoped_element_registries",
+  "isolated_webapps",
+];
 
 export const Experience2 = (props: ExperienceProps) => {
   const { question, edition } = props;
@@ -129,8 +144,18 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
   const hasValueClass =
     isChecked || (isChecked && hasFollowupData) ? "hasValue" : "";
 
+  const unimplemented =
+    option.id === FeaturesOptions.USED &&
+    unimplementedFeatures.includes(question.id);
+
+  const unimplementedClass = unimplemented
+    ? "form-experience-option-unimplemented"
+    : "";
+
   return (
-    <div className={`form-experience-option ${hasValueClass}`}>
+    <div
+      className={`form-experience-option ${hasValueClass} ${unimplementedClass}`}
+    >
       <div className="form-experience-option-inner">
         <Form.Check
           key={i}
@@ -165,11 +190,16 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
                 // ref={refFunction}
                 checked={isChecked}
                 className={checkClass}
-                disabled={readOnly}
+                disabled={readOnly || unimplemented}
               />
             </div>
             <FormOption {...props} isChecked={isChecked} option={option} />
           </Form.Check.Label>
+          {unimplemented && (
+            <span className="feature-unimplemented">
+              <FormattedMessage id="feature.unimplemented" />
+            </span>
+          )}
           {followups && (
             <FollowUps
               {...props}

@@ -107,6 +107,16 @@ export const FollowUps = (
               id={`${path}.followup.${index}`}
               // ref={refFunction}
               {...tabIndexProp}
+              onClick={(event) => {
+                // if follow up option is already part of the selected options,
+                // remove it on click (radio mode only)
+                if (
+                  followupMode === "radio" &&
+                  predefinedFollowupValue?.includes(followupOption.id)
+                ) {
+                  updateCurrentValues({ [predefinedFollowupPath]: null });
+                }
+              }}
               onChange={(event) => {
                 const isChecked = event.target.checked;
 

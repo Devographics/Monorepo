@@ -257,3 +257,39 @@
 *:focus-visible {
   outline: 2px solid var(--link-color) !important;
 }
+
+.form-experience-option-unimplemented {
+  .sentiments {
+    display: none;
+  }
+  .form-check:hover {
+    background: none;
+  }
+  .form-option {
+    color: var(--text-color-darker);
+  }
+}
+
+.feature-unimplemented {
+  background: var(--bg-color-light);
+  display: block;
+  font-size: $smallish-font;
+  padding: 4px 8px;
+  // text-transform: uppercase;
+
+  position: relative;
+  &::after {
+    right: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(136, 183, 213, 0);
+    border-right-color: var(--bg-color-light);
+    border-width: 8px;
+    margin-top: -8px;
+  }
+}
