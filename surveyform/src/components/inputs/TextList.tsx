@@ -84,7 +84,7 @@ const INITIAL_VIRTUAL_ITEMS = 2;
  * @param delay
  * @returns
  */
-const useDeletionDelay = (delay: number = 300) => {
+const useDeletionDelay = (delay: number = 200) => {
   const deletedContentRef = useRef<{
     /** Unique id for the content */
     id: string | number;
@@ -102,8 +102,9 @@ const useDeletionDelay = (delay: number = 300) => {
         clearTimeout(deletedContentRef.current?.timeoutHandle);
       }
     },
-    hasDeletedContent: (id: string | number) =>
-      deletedContentRef.current?.id === id,
+    hasDeletedContent: (id: string | number) => {
+      return deletedContentRef.current?.id === id;
+    },
   } as const;
 };
 
@@ -316,9 +317,12 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   const limit = question.limit || DEFAULT_LIMIT;
 
   // Focus management
-  const selectPreviousItem = (index: number) =>
-    //previous item is necessarily an existing item
-    selectItem(wrapperRef.current, items[index - 1]);
+  const selectPreviousItem = (index: number) => {
+    if (index > items.length) {
+      return selectItem(wrapperRef.current, virtualItems[index - 1]);
+    }
+    return selectItem(wrapperRef.current, items[index - 1]);
+  };
   const selectFirstVirtualItem = () =>
     selectItem(wrapperRef.current, virtualItems[0]);
   const selectNextItem = (index: number) => {
@@ -409,9 +413,9 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
         focusInputEnd(selectNextItem(index));
       }
     } else if (evt.key === "Backspace" || evt.key === "Delete") {
-      deletionDelay.resetDeletionDelay();
       // let the input handle deletion if there are chars to delete
       if (value.length > 0) {
+        deletionDelay.resetDeletionDelay();
         deletionDelay.deletedContent(index);
         return;
       }
@@ -422,7 +426,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
       }
       // if there is only one last char before deletion, remove the item and focus on next one
       evt.preventDefault();
-      if (index === items.length) {
+      if (index >= items.length) {
         // we are in the last item, if possible focus on previous one
         if (index > 0) {
           focusInputEnd(selectPreviousItem(index));
