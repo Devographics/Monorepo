@@ -70,11 +70,22 @@ const SurveyNav = (props: FormLayoutProps) => {
     };
   }, [currentFocusIndex]);
 
+  const completionPercentage =
+    response &&
+    getCompletionPercentage({
+      response,
+      edition,
+    });
+  const style = {
+    "--completion-percentage": completionPercentage,
+  } as React.CSSProperties;
+
   return (
     <nav
       className={`section-nav ${
         shown ? "section-nav-shown" : "section-nav-hidden"
       }`}
+      style={style}
       aria-label={`${edition.survey.name} ${edition.year}`}
     >
       <div className="section-nav-inner">
