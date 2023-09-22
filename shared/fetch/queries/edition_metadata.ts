@@ -20,6 +20,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
           startedAt
           endedAt
           questionsUrl
+          feedbackUrl
           resultsUrl
           imageUrl
           faviconUrl

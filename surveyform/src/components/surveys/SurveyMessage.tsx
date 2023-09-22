@@ -3,13 +3,21 @@ import { EditionMetadata } from "@devographics/types";
 import { SurveyStatusEnum } from "@devographics/types";
 
 const EditionMessage = ({ edition }: { edition: EditionMetadata }) => {
-  const { status, endedAt } = edition;
+  const { status, endedAt, feedbackUrl } = edition;
   switch (status) {
     case SurveyStatusEnum.PREVIEW:
     case SurveyStatusEnum.HIDDEN:
       return (
         <div className="survey-message survey-preview">
           <FormattedMessage id="general.survey_preview" />
+          {feedbackUrl && (
+            <>
+              {" "}
+              <a href={feedbackUrl} target="_blank">
+                <FormattedMessage id="general.survey_feedback" />
+              </a>
+            </>
+          )}
         </div>
       );
     case SurveyStatusEnum.CLOSED:

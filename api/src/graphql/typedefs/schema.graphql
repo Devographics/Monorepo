@@ -47,6 +47,7 @@ type EditionMetadata {
 
     questionsUrl: String
     resultsUrl: String
+    feedbackUrl: String
     imageUrl: String
     faviconUrl: String
     socialImageUrl: String

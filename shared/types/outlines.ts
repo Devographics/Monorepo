@@ -45,6 +45,7 @@ export type Edition = {
     resultsUrl: string
     resultsStatus: ResultsStatus
     questionsUrl: string
+    feedbackUrl: string
     imageUrl: string
     socialImageUrl: string
     faviconUrl: string
