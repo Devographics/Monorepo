@@ -190,7 +190,7 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
                 // ref={refFunction}
                 checked={isChecked}
                 className={checkClass}
-                disabled={readOnly || unimplemented}
+                disabled={readOnly}
               />
             </div>
             <FormOption {...props} isChecked={isChecked} option={option} />
