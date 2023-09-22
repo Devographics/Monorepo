@@ -44,7 +44,6 @@ export const CommentTrigger = ({
           type="button"
           aria-describedby="popover-basic"
           aria-label={intl.formatMessage({ id: "experience.leave_comment" })}
-          title={intl.formatMessage({ id: "experience.leave_comment" })}
           onClick={() => {
             setShowCommentInput(!showCommentInput);
           }}
