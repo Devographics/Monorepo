@@ -262,10 +262,10 @@ export const getResponseSchema = ({
             editionSchema[subPath] = createFieldType({ isArray: true });
           }
         } else {
-          const fieldPath = formPaths[formPath];
+          const fieldPath = formPathContents;
           editionSchema[fieldPath] = createFieldType({
             isNumeric: !!(
-              question.optionsAreNumeric && formPath === DbPathsEnum.RESPONSE
+              formPath === DbPathsEnum.RESPONSE && question.optionsAreNumeric
             ),
             isArray: !!(
               formPath === DbPathsEnum.RESPONSE && question.allowMultiple

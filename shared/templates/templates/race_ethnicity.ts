@@ -7,7 +7,8 @@ export const race_ethnicity: TemplateFunction = options => {
     const id = 'race_ethnicity'
     const output: QuestionTemplateOutput = {
         ...multipleWithOther(addQuestionId(options, id)),
-        ...questionOptions[id]
+        ...questionOptions[id],
+        inputComponent: 'race_ethnicity'
     }
     return output
 }

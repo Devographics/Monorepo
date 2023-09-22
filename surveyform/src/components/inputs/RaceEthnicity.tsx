@@ -1,18 +1,20 @@
 import React from "react";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import FormComponentCheckboxGroup from "./Checkboxgroup";
+import { FormInputProps } from "../form/typings";
 
-const disallowedCountries = ["FR", "GF", "TF", "PF"];
+const disallowedCountries = ["FRA", "GUF", "ATF", "PYF"];
 
-export const RaceEthnicity = (props) => {
-  const { document, path } = props;
+export const RaceEthnicity = (props: FormInputProps<string[]>) => {
+  const { response, path } = props;
+  let checkboxProps = props;
   const countryFieldPath = path.replace("race_ethnicity__choices", "country");
   const isDisabled =
-    document &&
-    document[countryFieldPath] &&
-    disallowedCountries.includes(document[countryFieldPath]);
+    response &&
+    response[countryFieldPath] &&
+    disallowedCountries.includes(response[countryFieldPath]);
   if (isDisabled) {
-    props.inputProperties.disabled = true;
+    checkboxProps = { ...checkboxProps, readOnly: true };
   }
   return (
     <div className="form-race-ethnicity">
@@ -21,7 +23,7 @@ export const RaceEthnicity = (props) => {
           <FormattedMessage id="user_info.race_ethnicity.not_allowed" />
         </div>
       )}
-      <FormComponentCheckboxGroup {...props} />
+      <FormComponentCheckboxGroup {...checkboxProps} />
     </div>
   );
 };

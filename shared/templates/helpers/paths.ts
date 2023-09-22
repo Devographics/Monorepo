@@ -30,7 +30,7 @@ export const getRawPaths = (
     },
     suffix?: string
 ) => {
-    const sectionPathSegment = section.slug || section.id
+    const sectionPathSegment = question.sectionId || section.slug || section.id
     const pathSegments = [sectionPathSegment, question.id]
     const separator = '__'
 
@@ -85,7 +85,7 @@ export const getNormPaths = (
     },
     suffix?: string
 ) => {
-    const sectionSegment = section.slug || section.id
+    const sectionSegment = question.sectionId || section.slug || section.id
     const questionSegment = question.id as string
     const basePathSegments = [sectionSegment, questionSegment]
 

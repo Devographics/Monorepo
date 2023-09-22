@@ -4,10 +4,11 @@ import followups from '../followups.yml'
 
 export const multipleWithOtherSentiment: TemplateFunction = options => {
     const question = {
-        ...options.question,
         inputComponent: 'multipleWithOtherSentiment',
         allowOther: true,
-        followups: followups.multipleWithOtherSentiment
+        allowComment: true,
+        followups: followups.multipleWithOtherSentiment,
+        ...options.question
     }
     const output: QuestionTemplateOutput = multiple({ ...options, question })
     return output

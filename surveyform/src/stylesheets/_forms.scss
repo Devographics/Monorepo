@@ -36,6 +36,9 @@
       margin: 0;
     }
   }
+  .form-label-legend {
+    margin: 0;
+  }
   .form-label-heading {
     margin-bottom: math.div($spacing, 2);
     display: flex;
@@ -43,6 +46,7 @@
     align-items: center;
   }
   .form-label {
+    margin: 0;
     @include small-medium {
       font-size: $large-font;
     }
@@ -491,8 +495,8 @@
   color: var(--text-color-dark);
 
   code {
-    padding: .05em .3em .1em;
-    background: transparentize($bg-color-light, .6);
+    padding: 0.05em 0.3em 0.1em;
+    background: transparentize($bg-color-light, 0.6);
   }
 }
 

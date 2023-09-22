@@ -20,6 +20,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
           startedAt
           endedAt
           questionsUrl
+          feedbackUrl
           resultsUrl
           imageUrl
           faviconUrl
@@ -80,6 +81,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
             questions {
               id
               intlId
+              sectionId
               i18nNamespace
               yearAdded
               limit

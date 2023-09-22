@@ -45,6 +45,7 @@ export type Edition = {
     resultsUrl: string
     resultsStatus: ResultsStatus
     questionsUrl: string
+    feedbackUrl: string
     imageUrl: string
     socialImageUrl: string
     faviconUrl: string
@@ -158,6 +159,8 @@ export type Question = {
 
     id?: string
     intlId?: string
+    // override the sectionId (e.g. to save data to another section)
+    sectionId?: string
     label?: string
     yearAdded?: number
     options?: Option[]
