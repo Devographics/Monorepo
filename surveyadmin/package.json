@@ -129,5 +129,5 @@
     "react-test-renderer": ">=16.9.0",
     "require-from-string": "^2.0.2"
   },
-  "packageManager": "pnpm@7.3.0"
+  "packageManager": "pnpm@8"
 }
