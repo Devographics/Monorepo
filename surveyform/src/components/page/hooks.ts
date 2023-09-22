@@ -3,25 +3,16 @@ import { useEffect, useState } from "react";
 // for some reason this throws error?
 // TODO: do we need a dynamic require?
 import bowser from "bowser";
-// const bowser = require("bowser"); // CommonJS
-// import { isAdmin as checkIsAdmin } from "@vulcanjs/permissions";
-import { useSearchParams } from "next/navigation";
-import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
+import { useReferrer } from "../common/ReferrerStorage";
 
 export const useSurveyActionParams = (): {
   source?: string;
   referrer?: string;
 } => {
-  const query = useSearchParams()!;
-  // note: source and referrer are set by AppLayout on first page load
-  const source =
-    query.get("source") ||
-    (typeof localStorage !== "undefined" && localStorage.getItem("source"));
-  const referrer =
-    query.get("referrer") ||
-    (typeof localStorage !== "undefined" && localStorage.getItem("referrer"));
+  // note: source and referrer are set by ClientLayout on first page load
   const params: any = {};
+  const { source, referrer } = useReferrer()
   if (source) {
     params.source = source as string;
   }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, createContext, useContext } from 'react'
 
-const keydownContext = createContext({})
+const keydownContext = createContext<{ modKeyDown?: boolean }>({})
 
 const targetKey = 'Alt'
 

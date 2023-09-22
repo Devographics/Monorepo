@@ -38,13 +38,12 @@ export const LoginDialog = ({
           <FormattedMessage id="accounts.create_account.description" />
         </div>
         <div className="survey-login-action">
-          {/* TODO: use successRedirectionPath and put it in the magic link for proper redirects */}
           <StandaloneMagicLoginForm
             surveyId={surveyId}
             editionId={editionId}
             label={<FormattedMessage id="accounts.create_account.action" />}
             redirectTo={successRedirectionPath}
-            loginOptions={loginOptions}
+            // loginOptions={loginOptions}
           />
         </div>
         <div className="survey-login-option-note">

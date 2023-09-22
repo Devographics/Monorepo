@@ -1,5 +1,5 @@
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { getQuestioni18nIds } from "@devographics/i18n";
+import { getQuestioni18nIds } from "~/i18n/survey";
 import { QuestionMetadata, SectionMetadata } from "@devographics/types";
 import { useQuestionTitle } from "~/lib/surveys/helpers/useQuestionTitle";
 

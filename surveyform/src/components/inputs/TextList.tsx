@@ -5,7 +5,9 @@ import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
 import { useIntlContext } from "@devographics/react-i18n";
-import { getQuestioni18nIds } from "@devographics/i18n";
+import { getQuestioni18nIds } from "~/i18n/survey";
+
+type KeyEvent = React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 // Items management
 
@@ -74,6 +76,54 @@ const DEFAULT_LIMIT = 10;
 const INITIAL_VIRTUAL_ITEMS = 2;
 
 // Managing an array of real and virtual values
+
+/**
+ * Allow to have a delay between removing content,
+ * and switching to previous item
+ *
+ * - if user keeps "backspace" pressed,
+ * wait for a keyUp to actually switch to prev input
+ * - if user press "backspace" rapidly
+ * wait a courtesy delay in addition to the keyUp event
+ */
+const useDeletionDelay = (delay: number = 200) => {
+  const deletedContentRef = useRef<{
+    /** Unique id for the content */
+    id: string | number;
+    timeoutHandle: any;
+  } | null>(null);
+  const hasNotUppedRef = useRef<boolean>(false);
+  const resetTimeout = () => {
+    if (deletedContentRef.current?.timeoutHandle) {
+      clearTimeout(deletedContentRef.current?.timeoutHandle);
+    }
+  };
+  return {
+    /**
+     * Indicate that user has deleted some content
+     * This should disable other "backspace" related actions
+     * until user press keyup + a short delay has passed
+     */
+    deletedContent: (id: string | number) => {
+      resetTimeout();
+      const timeoutHandle = setTimeout(() => {
+        deletedContentRef.current = null;
+      }, delay);
+      deletedContentRef.current = { id, timeoutHandle };
+      hasNotUppedRef.current = true;
+    },
+    resetDeletionDelay: () => {
+      resetTimeout();
+      deletedContentRef.current = null;
+    },
+    hasJustDeletedContent: (id: string | number) => {
+      return deletedContentRef.current?.id === id || hasNotUppedRef.current;
+    },
+    hasUpped: () => {
+      hasNotUppedRef.current = false;
+    },
+  } as const;
+};
 
 /**
  * Manage a set of real and virtual values
@@ -253,6 +303,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
       removeItemAt,
     },
   ] = useRealVirtualItems(values, question.limit);
+  const deletionDelay = useDeletionDelay();
   const debouncedUpdateItem = debounce(updateItem, 50);
 
   // TODO: an effect is not usually the best approach
@@ -283,9 +334,12 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   const limit = question.limit || DEFAULT_LIMIT;
 
   // Focus management
-  const selectPreviousItem = (index: number) =>
-    //previous item is necessarily an existing item
-    selectItem(wrapperRef.current, items[index - 1]);
+  const selectPreviousItem = (index: number) => {
+    if (index > items.length) {
+      return selectItem(wrapperRef.current, virtualItems[index - 1]);
+    }
+    return selectItem(wrapperRef.current, items[index - 1]);
+  };
   const selectFirstVirtualItem = () =>
     selectItem(wrapperRef.current, virtualItems[0]);
   const selectNextItem = (index: number) => {
@@ -329,10 +383,52 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
       debouncedUpdateItem(index, value);
     }
   };
-  const onItemKeyDown = (
-    index: number,
-    evt: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+  /**
+   * if pressing backspace in an empty input,
+   * may remove the item and switch to previous
+   */
+  const onBackspaceDeleteKeyDown = (
+    evt: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+    index: number
   ) => {
+    // @ts-ignore TODO: not sure why we don't have a value despite using an HTMLInputElement
+    const value: string = evt.target.value;
+    // let the input handle deletion if there are chars to delete
+    if (value.length > 0) {
+      deletionDelay.deletedContent(index);
+      return;
+    }
+    if (deletionDelay.hasJustDeletedContent(index)) {
+      // if user has deleted content, we wait a small delay + a keyup
+      // before enabling any other interaction
+      return;
+    }
+    // we can now run the additional UX linked to the backspace press
+    // = swithcing to  previous input/removing item
+    evt.preventDefault();
+    // immediately reset deletion event ref
+    deletionDelay.resetDeletionDelay();
+    if (index >= items.length) {
+      // we are in the last item, if possible focus on previous one
+      if (index > 0) {
+        focusInputEnd(selectPreviousItem(index));
+      }
+    } else if (index > 0) {
+      // we are in the middle (not last item, but there is a previous item)
+      focusInputEnd(selectPreviousItem(index));
+      removeItemAt(index);
+    } else if (items.length > 0) {
+      // there are no previous item, but there is a next one
+      focusInputEnd(selectNextItem(0));
+      removeItemAt(index);
+    }
+  };
+  const onItemKeyUp = (evt: KeyEvent) => {
+    if (evt.key === "Backspace") {
+      deletionDelay.hasUpped();
+    }
+  };
+  const onItemKeyDown = (index: number, evt: KeyEvent) => {
     // @ts-ignore TODO: not sure why we don't have a value despite using an HTMLInputElement
     const value: string = evt.target.value;
     if (evt.key === "Enter") {
@@ -376,24 +472,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
         focusInputEnd(selectNextItem(index));
       }
     } else if (evt.key === "Backspace" || evt.key === "Delete") {
-      // let the input handle deletion if there are chars to delete
-      if (value.length > 0) return;
-      // if there is only one last char before deletion, remove the item and focus on next one
-      evt.preventDefault();
-      if (index === items.length) {
-        // we are in the last item, if possible focus on previous one
-        if (index > 0) {
-          focusInputEnd(selectPreviousItem(index));
-        }
-      } else if (index > 0) {
-        // we are in the middle (not last item, but there is a previous item)
-        focusInputEnd(selectPreviousItem(index));
-        removeItemAt(index);
-      } else if (items.length > 0) {
-        // there are no previous item, but there is a next one
-        focusInputEnd(selectNextItem(0));
-        removeItemAt(index);
-      }
+      onBackspaceDeleteKeyDown(evt, index);
     }
   };
 
@@ -418,6 +497,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
           onBlur={(evt) => onItemBlur(index, evt)}
           onChange={(evt) => onItemChange(index, item.key, evt)}
           onKeyDown={(evt) => onItemKeyDown(index, evt)}
+          onKeyUp={(evt) => onItemKeyUp(evt)}
         />
       ))}
     </FormItem>
@@ -433,6 +513,7 @@ const TextListItem = ({
   onBlur,
   onChange,
   onKeyDown,
+  onKeyUp,
 }: {
   section: FormInputProps["section"];
   question: FormInputProps["question"];
@@ -445,9 +526,8 @@ const TextListItem = ({
   onChange: React.EventHandler<
     React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   >;
-  onKeyDown: React.EventHandler<
-    React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
-  >;
+  onKeyDown: React.EventHandler<KeyEvent>;
+  onKeyUp: React.EventHandler<KeyEvent>;
 }) => {
   const { formatMessage } = useIntlContext();
 
@@ -486,6 +566,7 @@ const TextListItem = ({
       onBlur={onBlur}
       onChange={onChange}
       onKeyDown={onKeyDown}
+      onKeyUp={onKeyUp}
       disabled={readOnly}
       autoFocus={item.autofocus}
     />

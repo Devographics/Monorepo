@@ -4,7 +4,8 @@
 import { notFound } from "next/navigation";
 import { fetchEditionMetadata } from "@devographics/fetch";
 import { surveyParamsLookup } from "~/lib/surveys/data";
-import { AppName } from "@devographics/types";
+import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
+import { EditionMetadata, SurveyStatusEnum } from "@devographics/types";
 
 /**
  * Use in metadata
@@ -50,3 +51,22 @@ export async function rscMustGetSurveyEditionFromUrl(params: {
   }
   return edition;
 }
+
+export async function rscGetEditionsMetadata({ removeHidden }: {
+  /** Remove hidden and preview survey 
+   * (so they are not statically rendered, they may not be valid yet) */
+  removeHidden?: boolean
+} = {}) {
+  const surveys = (await rscFetchSurveysMetadata())?.data || [];
+  const editions = surveys.map((s) => s.editions).flat();
+  if (removeHidden) {
+    return editions.filter(e => [SurveyStatusEnum.CLOSED, SurveyStatusEnum.OPEN].includes(e.status))
+  }
+  return editions
+}
+
+// TODO: can't find the existing helper that does that?
+export const getEditionParams = (e: EditionMetadata) => ({
+  slug: e.surveyId.replaceAll("_", "-"),
+  year: String(e.year),
+})

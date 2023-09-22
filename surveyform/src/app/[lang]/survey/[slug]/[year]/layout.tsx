@@ -3,19 +3,8 @@ import { notFound } from "next/navigation";
 import { EditionProvider } from "~/components/SurveyContext/Provider";
 
 import { rscMustGetSurveyEditionFromUrl } from "./rsc-fetchers";
-import AppLayout from "~/app/[lang]/AppLayout";
+import ClientLayout from "~/app/[lang]/ClientLayout";
 import EditionLayout from "~/components/common/EditionLayout";
-
-// TODO: not yet compatible with having dynamic pages down the tree
-// we may have to call generateStaticParams in each static page instead
-// @see https://github.com/vercel/next.js/issues/44712
-/*
-export async function generateStaticParams() {
-  return surveys.map((s) => ({
-    slug: s.surveyId.replaceAll("_", "-"),
-    year: String(s.year),
-  }));
-}*/
 
 import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import {
@@ -106,8 +95,9 @@ If this error still happens in a few months (2023) open an issue with repro at N
   if (error) {
     return <div>{JSON.stringify(error, null, 2)}</div>;
   }
+
   return (
-    <AppLayout
+    <ClientLayout
       params={params}
       locales={locales}
       localeId={localeId}
@@ -129,6 +119,6 @@ If this error still happens in a few months (2023) open an issue with repro at N
       >
         <EditionLayout edition={edition}>{children}</EditionLayout>
       </EditionProvider>
-    </AppLayout>
+    </ClientLayout>
   );
 }

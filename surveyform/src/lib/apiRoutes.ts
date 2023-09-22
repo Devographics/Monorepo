@@ -1,5 +1,9 @@
-import { PrefilledData } from "~/components/page/hooks";
 import { encodeParams } from "./utils";
+
+export interface ApiData<T = any> {
+  data: T;
+  error: any;
+}
 
 /**
  * NOTE: this is SHARED code not API only, we use this in the frontend as well

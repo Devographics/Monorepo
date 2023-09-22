@@ -7,7 +7,7 @@ import { getCommonContexts, getEditionContexts } from "~/i18n/config";
 import { rscIntlContext } from "~/i18n/rsc-fetchers";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
-import { getSectioni18nIds } from "@devographics/i18n";
+import { getSectioni18nIds } from "~/i18n/survey";
 import { FetcherFunctionOptions } from "@devographics/fetch/types";
 import { serverConfig } from "~/config/server";
 

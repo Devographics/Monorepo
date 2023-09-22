@@ -5,8 +5,6 @@ import { sendMagicLoginEmail } from "~/account/magicLogin/client-actions/sendMag
 import { useCurrentUser } from "~/lib/users/hooks";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
-import { Button } from "~/components/ui/Button";
-import { Loading } from "~/components/ui/Loading";
 import { LoadingButton } from "~/components/ui/LoadingButton";
 
 export interface StandaloneMagicLoginFormProps {
@@ -18,7 +16,6 @@ export interface StandaloneMagicLoginFormProps {
   surveyId?: string;
   editionId?: string;
   redirectTo?: string;
-  loginOptions?: { data?: any; createResponse?: boolean };
 }
 /**
  * With passwordless approach, there is no signup step,
@@ -31,7 +28,6 @@ export const StandaloneMagicLoginForm = ({
   surveyId,
   editionId,
   redirectTo,
-  loginOptions,
 }: StandaloneMagicLoginFormProps) => {
   const intl = useIntlContext();
   const placeholder = intl.formatMessage({ id: `accounts.your_email` });

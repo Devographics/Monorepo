@@ -9,6 +9,7 @@ import { cache } from "react";
 import { type ResponseDocument } from "@devographics/types";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
+import { StandaloneMagicLoginForm } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
 
 const getResponses = cache(
   async ({ currentUser }: { currentUser: UserDocument }) => {
@@ -40,7 +41,17 @@ const Profile = async ({ params }) => {
     <div className="contents-narrow account">
       <p>
         {currentUser.authMode === "anonymous" && (
-          <FormattedMessage id="accounts.logged_in_as_guest" />
+          <div className="mb-5">
+            <strong>
+              <FormattedMessage id="accounts.logged_in_as_guest" />
+            </strong>
+            <p>
+              <FormattedMessage id="accounts.upgrade_account.description" />
+            </p>
+            <StandaloneMagicLoginForm
+              label={<FormattedMessage id="accounts.upgrade_account.action" />}
+            />
+          </div>
         )}
       </p>
       {responses?.length > 0 && currentUser.authMode !== "anonymous" && (

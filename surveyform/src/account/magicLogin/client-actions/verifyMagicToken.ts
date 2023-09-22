@@ -7,30 +7,25 @@ import { apiRoutes } from "~/lib/apiRoutes";
  */
 export async function verifyMagicToken({
   token,
-  redirectTo,
   clientData,
 }: {
   token: string;
-  redirectTo?: string;
+  /**
+   * If it contains a surveyId and editionId, 
+   * we will try to create a response for the user
+   * unless user already has a response for this survey
+   */
   clientData?: PrefilledData;
 }) {
-  // NOTE: URL needs an absolute URL so it's not good here
-  //const verifyUrl = new URL(
-  //  `${window.location.origin}${apiRoutes.account.magicLogin.verifyToken.href}`
-  //);
-  //verifyUrl.searchParams.set("token", token);
-  //if (anonymousId) {
-  //  verifyUrl.searchParams.set("anonymousId", anonymousId);
-  //}
-  // @see https://github.com/mxstbr/passport-magic-login/pull/19
-  const url = clientData
+  const createResponse = clientData?.surveyId && clientData?.editionId
+  const url = createResponse
     ? apiRoutes.account.magicLogin.verifyTokenAndFindCreateResponse.href({
-        token,
-        ...clientData,
-      })
+      token,
+      ...clientData,
+    })
     : apiRoutes.account.magicLogin.verifyToken.href({
-        token,
-      });
+      token,
+    });
 
   // TODO: would be nice to use POST instead of GET here but passport
   // does not seem to accept POST?

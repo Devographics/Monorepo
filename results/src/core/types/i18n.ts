@@ -1,3 +1,4 @@
+// TODO: move those types to "shared" and have surveyform to use them
 export interface Translation {
     key: string
     t: string

@@ -1,4 +1,4 @@
-import { getSectioni18nIds } from "@devographics/i18n";
+import { getSectioni18nIds } from "~/i18n/survey";
 import type { Metadata } from "next";
 import { publicConfig } from "~/config/public";
 import { rscIntlContext } from "~/i18n/rsc-fetchers";

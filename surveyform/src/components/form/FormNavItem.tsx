@@ -8,7 +8,7 @@ import { SectionMetadata } from "@devographics/types";
 import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormInputProps } from "./typings";
-import { getSectioni18nIds } from "@devographics/i18n";
+import { getSectioni18nIds } from "~/i18n/survey";
 import { FormLayoutProps } from "./FormLayout";
 
 interface SurveyNavItemProps extends Omit<FormLayoutProps, "section"> {

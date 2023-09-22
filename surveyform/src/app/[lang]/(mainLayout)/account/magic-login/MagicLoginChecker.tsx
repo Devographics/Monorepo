@@ -22,6 +22,13 @@ import { useClientData } from "~/components/page/hooks";
 import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
+interface ResponseCreationData {
+  /** editionId and surveyId are mandatory when createResponse is true */
+  createResponse?: boolean;
+  editionId?: string;
+  surveyId?: string;
+}
+
 const useMagicLoginCheck = ({
   token,
   redirectTo,
@@ -30,9 +37,7 @@ const useMagicLoginCheck = ({
 }: {
   token: string;
   redirectTo?: string;
-  editionId?: string;
-  surveyId?: string;
-}) => {
+} & ResponseCreationData) => {
   const { locale } = useLocaleContext();
 
   const [loading, setLoading] = useState(true);
@@ -48,7 +53,10 @@ const useMagicLoginCheck = ({
     const verifyToken = async () => {
       setLoading(true);
       if (token) {
-        const res = await verifyMagicToken({ token, redirectTo, clientData });
+        const res = await verifyMagicToken({
+          token,
+          clientData,
+        });
         const result = await res.json();
         const { response, editionId, surveyId } = result;
         let path;
@@ -64,8 +72,8 @@ const useMagicLoginCheck = ({
         } else {
           path = routes.home.href;
         }
-        // TODO: having that query param triggers hydration mismatch errors?
         // We do a full page reload to avoid any caching issue and not just a SPA router.push
+        // TODO: having that query param triggers hydration mismatch errors?
         // window.location.replace(path + "?from-magic-login=1");
         window.location.replace(path);
       }
@@ -89,9 +97,7 @@ export const MagicLoginChecker = ({
 }: {
   token: string;
   redirectTo?: string;
-  editionId?: string;
-  surveyId?: string;
-}) => {
+} & ResponseCreationData) => {
   const { loading, error } = useMagicLoginCheck({
     token,
     redirectTo,

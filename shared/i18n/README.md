@@ -1,1 +1,1 @@
-Vulcan i18n package. 
+I18n package

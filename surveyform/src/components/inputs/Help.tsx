@@ -1,6 +1,6 @@
 import React from "react";
 import { FormattedMessage } from "../common/FormattedMessage";
-import { getQuestioni18nIds } from "@devographics/i18n";
+import { getQuestioni18nIds } from "~/i18n/survey";
 
 export const Help = (props) => {
   const i18n = getQuestioni18nIds(props);

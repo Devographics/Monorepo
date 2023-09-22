@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import QuestionLabel from "../form/QuestionLabel";
 import { FormInputProps } from "../form/typings";
-import { getSectioni18nIds } from "@devographics/i18n";
+import { getSectioni18nIds } from "~/i18n/survey";
 import { questionIsCompleted } from "~/lib/responses/helpers";
 import { useIntlContext } from "@devographics/react-i18n";
 import { FormLayoutProps } from "../form/FormLayout";

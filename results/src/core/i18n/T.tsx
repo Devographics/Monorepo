@@ -4,7 +4,7 @@ import { useI18n } from 'core/i18n/i18nContext'
 // import rehypeRaw from 'rehype-raw'
 import { useKeydownContext } from 'core/helpers/keydownContext'
 
-const getGitHubSearchUrl = (k, localeId) =>
+const getGitHubSearchUrl = (k: string, localeId: string) =>
     `https://github.com/search?q=${k}+repo%3AStateOfJS%2Fstate-of-js-graphql-results-api+path%3A%2Fsrc%2Fi18n%2F${localeId}%2F+path%3A%2Fsrc%2Fi18n%2Fen-US%2F&type=Code&ref=advsearch&l=&l=`
 
 interface TProps {

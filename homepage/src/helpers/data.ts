@@ -1,5 +1,6 @@
 import { fetchAllLocalesMetadata, fetchSurveysMetadata, fetchLocale } from '@devographics/fetch'
 import { getConfig } from '@devographics/helpers'
+import { SurveyStatusEnum } from '@devographics/types'
 
 type HomepageData = {
     allSurveys?: any[]
@@ -41,7 +42,9 @@ export const getData = async (): Promise<HomepageData> => {
 
         locales.push(localeWithStrings)
     }
-    const allSurveys = allSurveysData || []
+    const allSurveys = (allSurveysData || [])
+        // remove surveys with no open/closed edition (new preview surveys, hidden surveys)
+        .filter(s => s.editions.some(e => [SurveyStatusEnum.OPEN, SurveyStatusEnum.CLOSED].includes(e.status)))
     const data = { allSurveys, locales }
     return data
 }
