@@ -23,13 +23,15 @@ export const dynamicParams = true;
  * but this is not possible to mix static and dynamic pages in the same parent layout (yet)
  * @see https://github.com/vercel/next.js/issues/44712
  */
+/*
+FIXME weird bug it gives 404 on unknown languages...
 export async function generateStaticParams() {
   const editionParams = (
     await rscGetEditionsMetadata({ removeHidden: true })
   ).map((e) => getEditionParams(e));
   // lang should be added too, for the moment we only statically render en-US but more could be added
   return editionParams.map((p) => ({ ...p, lang: "en-US" }));
-}
+}*/
 
 interface SurveyPageServerProps {
   slug: string;
