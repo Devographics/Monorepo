@@ -40,7 +40,7 @@ const Profile = async ({ params }) => {
   return (
     <div className="contents-narrow account">
       <p>
-        {currentUser.authMode === "anonymous" && (
+        {currentUser.authMode === "anonymous" ? (
           <div className="mb-5">
             <strong>
               <FormattedMessage id="accounts.logged_in_as_guest" />
@@ -51,6 +51,18 @@ const Profile = async ({ params }) => {
             <StandaloneMagicLoginForm
               label={<FormattedMessage id="accounts.upgrade_account.action" />}
             />
+          </div>
+        ) : (
+          <div className="mb-5">
+            <strong>
+              <FormattedMessage
+                id="accounts.logged_in_as"
+                // TODO: older translations expect an "email" parameter
+                // but we one-way encrypt email so we don't know them anymore
+                // only en-US translation is up to date (09/2023)
+                values={{ email: "Email user" }}
+              />
+            </strong>
           </div>
         )}
       </p>
