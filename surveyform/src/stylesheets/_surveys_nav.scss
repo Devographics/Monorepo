@@ -122,6 +122,12 @@
   }
 }
 
+.section-nav-hidden {
+  > .section-nav-inner > button {
+    background-image: linear-gradient(to right, hsl(0 0% 100% / .2) calc(1% * var(--completion-percentage)), transparent 0)
+  }
+}
+
 @include xlarge {
   .section-nav-head {
     display: none !important;

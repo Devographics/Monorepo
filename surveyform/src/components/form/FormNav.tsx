@@ -103,7 +103,7 @@ const SurveyNav = (props: FormLayoutProps) => {
         >
           <span className="section-nav-head-left">
             <h3 className="section-nav-toc">
-              <FormattedMessage id="general.table_of_contents" />
+              <FormattedMessage id="general.table_of_contents" values={{ sectionCount: edition.sections.length, completion: completionPercentage }} />
             </h3>
             {/* {overallCompletion && (
               <span className="section-nav-completion">
