@@ -259,37 +259,28 @@
 }
 
 .form-experience-option-unimplemented {
-  .sentiments {
+  &:not(:focus-within, :hover, .hasValue) {
+    opacity: .7;
+  }
+
+  // Only show sentiment chips when "used it" is actually selected
+  // to reduce clutter, since for most people this won't get selected
+  &:not(.hasValue) .sentiments {
     display: none;
-  }
-  .form-check:hover {
-    background: none;
-  }
-  .form-option {
-    color: var(--text-color-darker);
   }
 }
 
 .feature-unimplemented {
   background: var(--bg-color-light);
-  display: block;
+  border-radius: .2em;
   font-size: $smallish-font;
-  padding: 4px 8px;
-  // text-transform: uppercase;
+  padding: .35em .8em .2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: help;
 
-  position: relative;
-  &::after {
-    right: 100%;
-    top: 50%;
-    border: solid transparent;
-    content: "";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-color: rgba(136, 183, 213, 0);
-    border-right-color: var(--bg-color-light);
-    border-width: 8px;
-    margin-top: -8px;
+  &::before {
+    content: "⚠️ ";
+    font-family: emoji;
   }
 }

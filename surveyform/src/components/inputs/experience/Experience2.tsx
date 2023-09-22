@@ -1,6 +1,8 @@
 "use client";
 import { FormItem } from "~/components/form/FormItem";
 import Form from "react-bootstrap/Form";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { FormInputProps } from "~/components/form/typings";
@@ -196,9 +198,17 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
             <FormOption {...props} isChecked={isChecked} option={option} />
           </Form.Check.Label>
           {unimplemented && (
-            <span className="feature-unimplemented">
+             <OverlayTrigger placement="top"
+             overlay={
+               <Tooltip id={ `${question.id}_unimplemented_tooltip` }>
+                 <FormattedMessage id="feature.unimplemented.description" />
+               </Tooltip>
+             }
+           >
+            <span className="feature-unimplemented" aria-describedby={ `${question.id}_unimplemented_tooltip` }>
               <FormattedMessage id="feature.unimplemented" />
             </span>
+            </OverlayTrigger>
           )}
           {followups && (
             <FollowUps
