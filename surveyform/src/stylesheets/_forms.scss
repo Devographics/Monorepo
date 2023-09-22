@@ -3,7 +3,7 @@
   // .form-control {
   //   background: $bg-color-lightest;
   // }
-  .form-input {
+  .form-item {
     position: relative;
 
     margin-bottom: $spacing;
@@ -16,11 +16,15 @@
     }
     @include medium {
       @include border;
-      padding: math.div($spacing, 2);
+      padding: math.div($spacing, 2) math.div($spacing, 2) $spacing
+        math.div($spacing, 2);
     }
     @include large {
       @include border;
-      padding: $spacing;
+      padding: $spacing $spacing $spacing * 2.5 $spacing;
+      &.form-item-skipped {
+        padding: $spacing;
+      }
     }
   }
   .form-input:has(.form-help) {
@@ -650,4 +654,33 @@
 
 .option-negative {
   --color: var(--bs-danger);
+}
+
+.skip-question {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  .btn {
+    border-radius: 3px 0 0 0;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    background: var(--bg-color) !important;
+  }
+  .icon-wrapper svg {
+    height: 18px;
+    width: 18px;
+  }
+}
+
+.form-item-skipped {
+  .form-label-heading {
+    text-decoration: line-through;
+    color: var(--text-color-darker);
+    margin: 0;
+  }
+  .form-item-contents {
+    display: none !important;
+  }
 }

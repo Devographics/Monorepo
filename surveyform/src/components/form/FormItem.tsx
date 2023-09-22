@@ -24,6 +24,12 @@ import { useQuestionTitle } from "~/lib/surveys/helpers/useQuestionTitle";
 import { getFormPaths } from "@devographics/templates";
 import AddToList from "~/components/reading_list/AddToList";
 import QuestionLabel from "./QuestionLabel";
+import { Button } from "../ui/Button";
+import { Skip } from "../icons";
+import { Unskip } from "../icons/Unskip";
+
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 export interface FormItemProps extends FormInputProps {
   children: ReactNode;
@@ -50,6 +56,10 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
       onBlur,
       className = "",
     } = props;
+
+    const allowSkip = true;
+    const [skipped, setSkipped] = useState(false);
+    const skippedClass = skipped ? "form-item-skipped" : "";
 
     const isLastItem = questionNumber === section.questions.length;
 
@@ -156,7 +166,11 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
     // }, [isInView]);
 
     return (
-      <div className={`form-item ${className}`} ref={myRef} onBlur={onBlur}>
+      <div
+        className={`form-item ${className} ${skippedClass}`}
+        ref={myRef}
+        onBlur={onBlur}
+      >
         <fieldset>
           <Form.Group controlId={path}>
             <FormItemTitle {...props} />
@@ -183,10 +197,45 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
             </div>
           </Form.Group>
         </fieldset>
+
+        {allowSkip && <SkipButton skipped={skipped} setSkipped={setSkipped} />}
       </div>
     );
   }
 );
+
+export const SkipButton = ({ skipped, setSkipped }) => {
+  return (
+    <OverlayTrigger
+      placement="top"
+      overlay={
+        <Tooltip id="general.skip_question.description">
+          <FormattedMessage
+            id={
+              skipped
+                ? "general.unskip_question.description"
+                : "general.skip_question.description"
+            }
+          />
+        </Tooltip>
+      }
+    >
+      <span className="skip-question">
+        <Button
+          size="sm"
+          onClick={(e) => {
+            setSkipped(!skipped);
+          }}
+        >
+          <FormattedMessage
+            id={skipped ? "general.unskip_question" : "general.skip_question"}
+          />
+          {skipped ? <Unskip /> : <Skip />}
+        </Button>
+      </span>
+    </OverlayTrigger>
+  );
+};
 
 export const FormItemTitle = (props: FormItemProps) => {
   const { section, question, enableReadingList } = props;
