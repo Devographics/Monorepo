@@ -9,6 +9,7 @@ import {
 } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 import { getEditionQuestions } from "../surveys/helpers/getEditionQuestions";
+import { type } from "os";
 
 export const getCompletionPercentage = ({
   response,
@@ -54,6 +55,37 @@ const getRank = (score) => {
 
 export const getEditionScoredQuestions = (edition) => { };
 
+class ScoredFeatures {
+  items:string[] = [];
+  scoredItems:string[] = [];
+
+  get total () {
+    return this.items.length;
+  }
+
+  get count () {
+    return this.scoredItems.length;
+  }
+
+  get scoreRaw () {
+    if (this.count === 0) {
+      return 0;
+    }
+
+    return 100 * this.count / this.total;
+  }
+
+  get score () {
+    let digits = 0;
+    let factor = 10 ** digits;
+    return Math.round(factor * this.scoreRaw) / factor;
+  }
+
+  toString () {
+    return `${ this.score }% (${this.count}/${this.total})`;
+  }
+}
+
 export const getKnowledgeScore = ({
   response,
   edition,
@@ -65,9 +97,9 @@ export const getKnowledgeScore = ({
     (q) => q.countsTowardScore
   );
 
-  let knownItems: string[] = [];
-  let unknownItems: string[] = [];
-  let allItems: string[] = [];
+  const overall = new ScoredFeatures();
+  const awareness = new ScoredFeatures();
+  const usage = new ScoredFeatures();
 
   for (const question of scoredQuestions) {
     const formPaths = getFormPaths({ edition, question });
@@ -81,37 +113,39 @@ export const getKnowledgeScore = ({
         .filter((item) => item !== OPTION_NA);
       const value = (value_ || []) as Array<string>
 
-      allItems.push(...optionsIds);
-      knownItems.push(...optionsIds.filter((id) => value.includes(id)));
-      unknownItems.push(...optionsIds.filter((id) => !value.includes(id)));
+      // We assume all mini-features currently measure only usage
+      // If in the future we have awareness mini-features, we need to change this logic
+      overall.items.push(...optionsIds);
+      usage.items.push(...optionsIds);
+      let usedIds = optionsIds.filter((id) => value.includes(id));
+      overall.scoredItems.push(...usedIds);
+      usage.scoredItems.push(...usedIds);
     } else {
       // assume this is a normal feature question
+      overall.items.push(question.id);
+      awareness.items.push(question.id);
+      usage.items.push(question.id);
+
       const value = value_ as FeaturesOptions;
-      if ([FeaturesOptions.HEARD, FeaturesOptions.USED].includes(value)) {
-        knownItems.push(question.id);
-      } else {
-        unknownItems.push(question.id);
+      if (value === FeaturesOptions.HEARD) {
+        overall.scoredItems.push(question.id);
+        awareness.scoredItems.push(question.id);
       }
-      allItems.push(question.id);
+      else if (value === FeaturesOptions.USED) {
+        overall.scoredItems.push(question.id);
+        // awareness.scoredItems.push(question.id);
+        usage.scoredItems.push(question.id);
+      }
     }
   }
 
-  const total = allItems.length;
-  const known = knownItems.length;
-  const unknown = total - known;
-  const score = Math.round((known * 100) / total);
-  const rank = getRank(score);
-
-  const result = {
-    total,
-    unknown,
-    known,
-    score,
-    rank,
-    // knownFields,
-    // unknownFields,
+  return {
+    total: overall.total,
+    known: overall.count,
+    score: Math.round(usage.scoreRaw + awareness.scoreRaw),
+    usage,
+    awareness,
   };
-  return result;
 };
 
 /**

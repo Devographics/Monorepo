@@ -70,7 +70,7 @@ const Score = ({
   const intl = useIntlContext();
   const containerRef = useRef<HTMLInputElement | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
-  const { known, total, score, rank } = getKnowledgeScore({
+  const { known, total, score, usage, awareness } = getKnowledgeScore({
     response,
     edition,
   });
@@ -146,7 +146,14 @@ const Score = ({
         <div className="score-ratio">
           <FormattedMessage
             id="thanks.score_explanation_no_ranking"
-            values={{ known, total }}
+            values={{ known, total,
+              usage_total: usage.total,
+              usage_count: usage.count,
+              usage_score: usage.score,
+              awareness_total: awareness.total,
+              awareness_count: awareness.count,
+              awareness_score: awareness.score,
+            }}
           />
         </div>
         {/* <div className="score-rank">
