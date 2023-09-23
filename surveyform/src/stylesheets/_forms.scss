@@ -285,10 +285,13 @@
   margin-bottom: $spacing;
   position: relative;
   // background: $bg-color-light;
+
   pre {
     background: none;
     margin-bottom: 0;
+    tab-size: 2;
   }
+
   &-heading {
     background: rgba(255, 255, 255, 0.15);
     border-radius: 0px 10px 0px 3px;
