@@ -80,15 +80,10 @@ export const getKnowledgeScore = ({
         .map((o) => String(o.id))
         .filter((item) => item !== OPTION_NA);
       const value = (value_ || []) as Array<string>
-      allItems = [...allItems, ...optionsIds];
-      knownItems = [
-        ...knownItems,
-        ...optionsIds.filter((id) => value.includes(id)),
-      ];
-      unknownItems = [
-        ...unknownItems,
-        ...optionsIds.filter((id) => !value.includes(id)),
-      ];
+
+      allItems.push(...optionsIds);
+      knownItems.push(...optionsIds.filter((id) => value.includes(id)));
+      unknownItems.push(...optionsIds.filter((id) => !value.includes(id)));
     } else {
       // assume this is a normal feature question
       const value = value_ as FeaturesOptions;
