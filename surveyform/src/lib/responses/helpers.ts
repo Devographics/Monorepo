@@ -116,6 +116,7 @@ export const getKnowledgeScore = ({
       // If in the future we have awareness mini-features, we need to change this logic
       overall.items.push(...optionsIds);
       usage.items.push(...optionsIds);
+
       let usedIds = optionsIds.filter((id) => value.includes(id));
       overall.counted.push(...usedIds);
       usage.counted.push(...usedIds);
@@ -126,14 +127,9 @@ export const getKnowledgeScore = ({
       usage.items.push(question.id);
 
       const value = value_ as FeaturesOptions;
-      if (value === FeaturesOptions.HEARD) {
+      if ([FeaturesOptions.HEARD, FeaturesOptions.USED].includes(value)) {
         overall.counted.push(question.id);
-        awareness.counted.push(question.id);
-      }
-      else if (value === FeaturesOptions.USED) {
-        overall.counted.push(question.id);
-        // awareness.scoredItems.push(question.id);
-        usage.counted.push(question.id);
+        (value === FeaturesOptions.HEARD ? awareness : usage).counted.push(question.id);
       }
     }
   }

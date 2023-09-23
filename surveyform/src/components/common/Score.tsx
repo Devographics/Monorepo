@@ -105,7 +105,11 @@ const Score = ({
   //   .filter((feature) => !!feature.url);
 
   return (
-    <div className="score">
+    <div className="score" style={{'--usage-ratio': usage.count / (usage.count + awareness.count)}}>
+      <div className="score-breakdown">
+        <FormattedMessage className="used" id="options.features.used.label.xshort" />
+        <FormattedMessage className="heard" id="options.features.heard.label.xshort" />
+      </div>
       <div className="score-calculation">
         <div className="score-calcuation-heading">
           <FormattedMessage id="thanks.features_score" />
@@ -146,13 +150,14 @@ const Score = ({
         <div className="score-ratio">
           <FormattedMessage
             id="thanks.score_explanation_no_ranking"
-            values={{ known, total,
-              usage_total: usage.total,
-              usage_count: usage.count,
-              usage_score: usage.score,
+            values={{ known,
+              total: `<span class="score-number score-number-total">${total}</span>`,
+              usage_total: `<span class="score-number score-number-total">${usage.total}</span>` ,
+              usage_count: `<span class="score-number score-number-counted used">${usage.count}</span>`,
+              usage_score: `<span class="score-percentage used">${usage.score}%</span>`,
               awareness_total: awareness.total,
-              awareness_count: awareness.count,
-              awareness_score: awareness.score,
+              awareness_count: `<span class="score-number score-number-counted heard">${awareness.count}</span>`,
+              awareness_score: `<span class="score-percentage heard" title="${ intl.formatMessage({id: 'thanks.score_awareness_explanation', values: {awareness_total: awareness.total}}) }">${awareness.score}%</span>`,
             }}
           />
         </div>
