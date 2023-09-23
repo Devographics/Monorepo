@@ -259,9 +259,9 @@
 }
 
 .form-experience-option-unimplemented {
-  &:not(:focus-within, :hover, .hasValue) {
-    opacity: .7;
-  }
+  // &:not(:focus-within, :hover, .hasValue) {
+  //   opacity: .7;
+  // }
 
   // Only show sentiment chips when "used it" is actually selected
   // to reduce clutter, since for most people this won't get selected
@@ -272,9 +272,9 @@
 
 .feature-unimplemented {
   background: var(--bg-color-light);
-  border-radius: .2em;
+  border-radius: 0.2em;
   font-size: $smallish-font;
-  padding: .35em .8em .2em;
+  padding: 0.35em 0.8em 0.2em;
   text-transform: uppercase;
   font-weight: 600;
   cursor: help;
