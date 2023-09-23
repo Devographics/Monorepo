@@ -75,9 +75,7 @@ export const FollowUps = (
     ? "has-selected"
     : "none-selected";
 
-  const roleProp = optionIsChecked
-    ? { role: followupMode }
-    : { role: "presentation" };
+  const roleProp = optionIsChecked ? {} : { role: "presentation" };
 
   const tabIndexProp = optionIsChecked ? {} : { tabIndex: -1 };
 
