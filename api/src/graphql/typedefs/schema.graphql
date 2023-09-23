@@ -253,6 +253,7 @@ type ResponseEditionData {
 }
 
 type RawData {
+    responseId: String
     content: String
 }
 

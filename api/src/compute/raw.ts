@@ -35,10 +35,12 @@ export const getRawData = async ({
     if (normPaths?.raw) {
         const raw = normPaths.raw as string
 
-        const results = await collection
-            .find({ [raw]: { $exists: true } }, { projection: { [raw]: 1 } })
-            .toArray()
+        const selector = { editionId: edition.id, [raw]: { $exists: true, $ne: '' } }
+        const projection = { _id: 1, [raw]: 1 }
+
+        const results = await collection.find(selector, { projection }).toArray()
         const data = results.map(response => ({
+            responseId: response._id,
             content: get(response, raw)
         }))
 
