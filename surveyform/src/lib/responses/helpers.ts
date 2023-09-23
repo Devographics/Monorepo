@@ -56,14 +56,14 @@ export const getEditionScoredQuestions = (edition) => { };
 
 class ScoredFeatures {
   items:string[] = [];
-  scoredItems:string[] = [];
+  counted:string[] = [];
 
   get total () {
     return this.items.length;
   }
 
   get count () {
-    return this.scoredItems.length;
+    return this.counted.length;
   }
 
   get scoreRaw () {
@@ -117,8 +117,8 @@ export const getKnowledgeScore = ({
       overall.items.push(...optionsIds);
       usage.items.push(...optionsIds);
       let usedIds = optionsIds.filter((id) => value.includes(id));
-      overall.scoredItems.push(...usedIds);
-      usage.scoredItems.push(...usedIds);
+      overall.counted.push(...usedIds);
+      usage.counted.push(...usedIds);
     } else {
       // assume this is a normal feature question
       overall.items.push(question.id);
@@ -127,13 +127,13 @@ export const getKnowledgeScore = ({
 
       const value = value_ as FeaturesOptions;
       if (value === FeaturesOptions.HEARD) {
-        overall.scoredItems.push(question.id);
-        awareness.scoredItems.push(question.id);
+        overall.counted.push(question.id);
+        awareness.counted.push(question.id);
       }
       else if (value === FeaturesOptions.USED) {
-        overall.scoredItems.push(question.id);
+        overall.counted.push(question.id);
         // awareness.scoredItems.push(question.id);
-        usage.scoredItems.push(question.id);
+        usage.counted.push(question.id);
       }
     }
   }
