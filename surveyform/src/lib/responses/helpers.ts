@@ -9,7 +9,6 @@ import {
 } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 import { getEditionQuestions } from "../surveys/helpers/getEditionQuestions";
-import { type } from "os";
 
 export const getCompletionPercentage = ({
   response,
