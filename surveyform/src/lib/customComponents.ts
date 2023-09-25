@@ -5,6 +5,7 @@ import { Help } from "~/components/inputs/Help";
 import Bracket from "~/components/inputs/Bracket";
 import Text from "~/components/inputs/Default";
 import Number from "~/components/inputs/Number";
+import Years from "~/components/inputs/Years";
 import Feature from "~/components/inputs/experience/Feature";
 import Featurev3 from "~/components/inputs/experience/Featurev3";
 import Tool from "~/components/inputs/experience/Tool";
@@ -48,6 +49,7 @@ const customComponents: { [key: string]: ComponentType<FormInputProps> } = {
   projects: Projects,
   opinion: Radiogroup,
   number: Number,
+  years: Years,
 };
 
 export const getQuestionComponent = (

@@ -654,3 +654,12 @@
 .option-negative {
   --color: var(--bs-danger);
 }
+
+.form-input-years {
+  .form-check-label {
+    gap: $spacing/2;
+  }
+  input[type="number"] {
+    width: 100px;
+  }
+}
