@@ -32,9 +32,16 @@
 }
 
 .score-percent {
+  // Note: Do NOT apply position to this element, it breaks the confetti
   font-size: 6rem;
   line-height: 1;
   margin-bottom: $spacing;
+
+  .score-suffix {
+    font-size: 1rem;
+    position: absolute;
+    transform: translateY(4.1rem);
+  }
 }
 
 .score-ratio {

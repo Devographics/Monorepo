@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useRef } from "react";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 import { getKnowledgeScore } from "~/lib/responses/helpers";
 import get from "lodash/get.js";
 import CountUp from "react-countup";
@@ -9,6 +11,9 @@ import { useIntlContext } from "@devographics/react-i18n";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { Button } from "~/components/ui/Button";
 import { EditionMetadata } from "@devographics/types";
+
+const USED_PTS = 10;
+const HEARD_PTS = 5;
 
 const Features = ({
   features,
@@ -73,6 +78,7 @@ const Score = ({
   const { known, total, score, usage, awareness } = getKnowledgeScore({
     response,
     edition,
+    weights: {used: USED_PTS, heard: HEARD_PTS}
   });
   const { survey, questionsUrl } = edition;
   const { name, hashtag } = survey;
@@ -114,6 +120,14 @@ const Score = ({
         <div className="score-calcuation-heading">
           <FormattedMessage id="thanks.features_score" />
         </div>
+        <OverlayTrigger
+          placement="bottom"
+          overlay={
+            <Tooltip>
+              {usage.count}&times;{USED_PTS} <FormattedMessage id="thanks.points" className="score-suffix" defaultMessage="pts." /> +&nbsp;
+              {awareness.count}&times;{HEARD_PTS} <FormattedMessage id="thanks.point" className="score-suffix" defaultMessage="pt." /></Tooltip>
+          }
+        >
         <div className="score-percent">
           <CountUp
             start={0}
@@ -127,7 +141,7 @@ const Score = ({
               }, 1200);
             }}
           />
-          %
+
           <div className="score-confetti" ref={containerRef}>
             {showConfetti && containerRef.current && (
               <Confetti
@@ -146,10 +160,12 @@ const Score = ({
               />
             )}
           </div>
+          <FormattedMessage id="thanks.points" className="score-suffix" defaultMessage="pts." />
         </div>
+        </OverlayTrigger>
         <div className="score-ratio">
           <FormattedMessage
-            id="thanks.score_explanation_no_ranking"
+            id="thanks.score_statistics"
             values={{ known,
               total: `<span class="score-number score-number-total">${total}</span>`,
               usage_total: `<span class="score-number score-number-total">${usage.total}</span>` ,
