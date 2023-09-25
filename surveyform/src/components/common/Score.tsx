@@ -11,9 +11,7 @@ import { useIntlContext } from "@devographics/react-i18n";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { Button } from "~/components/ui/Button";
 import { EditionMetadata } from "@devographics/types";
-
-const USED_PTS = 10;
-const HEARD_PTS = 5;
+import { USED_PTS, HEARD_PTS } from "~/lib/responses/helpers";
 
 const Features = ({
   features,
@@ -78,7 +76,6 @@ const Score = ({
   const { known, total, score, usage, awareness } = getKnowledgeScore({
     response,
     edition,
-    weights: {used: USED_PTS, heard: HEARD_PTS}
   });
   const { survey, questionsUrl } = edition;
   const { name, hashtag } = survey;

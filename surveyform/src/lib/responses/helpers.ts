@@ -85,14 +85,16 @@ class ScoredFeatures {
   }
 }
 
+export const USED_PTS = 10;
+export const HEARD_PTS = 5;
+export const scoreWeights = { used: USED_PTS, heard: HEARD_PTS };
+
 export const getKnowledgeScore = ({
   response,
   edition,
-  weights
 }: {
   response: ResponseDocument;
   edition: EditionMetadata;
-  weights: {used:number, heard:number}
 }) => {
   const scoredQuestions = getEditionQuestions(edition).filter(
     (q) => q.countsTowardScore
@@ -139,7 +141,8 @@ export const getKnowledgeScore = ({
   return {
     total: overall.total,
     known: overall.count,
-    score: weights.used * usage.count + weights.heard * awareness.count,
+    score:
+      scoreWeights.used * usage.count + scoreWeights.heard * awareness.count,
     usage,
     awareness,
   };
