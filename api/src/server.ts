@@ -33,6 +33,7 @@ import { watchFiles } from './helpers/watch'
 
 import { initRedis } from '@devographics/redis'
 import { getPublicDb, getPublicDbReadOnly } from '@devographics/mongo'
+import { verifyGhWebhookMiddleware } from './external_apis'
 
 const envPath = process.env.ENV_FILE ? process.env.ENV_FILE : '.env'
 dotenv.config({ path: envPath })
@@ -59,6 +60,13 @@ Sentry.init({
 
 const isDev = process.env.NODE_ENV === 'development'
 
+/**
+ * Check a secret API key that allows triggering API reload
+ * for instance to reload locales on change
+ * @param req 
+ * @param res 
+ * @param func 
+ */
 const checkSecretKey = async (req: Request, res: Response, func: () => Promise<void>) => {
     if (req?.query?.key !== process.env.SECRET_KEY) {
         // throw new Error('Authorization error')
@@ -186,6 +194,11 @@ const start = async () => {
         })
     })
 
+    /**
+     * This URL can be used in a GitHub webhook
+     * and surveyadmin app
+     * @see https://docs.github.com/fr/webhooks
+     */
     app.get('/reinitialize-entities', async function (req, res) {
         await checkSecretKey(req, res, async () => {
             // when entities change, also update surveys metadata
@@ -194,12 +207,31 @@ const start = async () => {
         })
     })
 
+    /**
+     * Key must be passed as query param
+     */
     app.get('/reinitialize-locales', async function (req, res) {
         await checkSecretKey(req, res, async () => {
             await reinitialize({ context, initList: ['locales'] })
-            res.status(200).send('Cache cleared')
+            res.status(200).send('Locales reloaded')
         })
     })
+    /**
+     * GitHub webhook URL 
+     * @see https://docs.github.com/fr/webhooks
+     * @see https://docs.github.com/en/webhooks/using-webhooks/securing-your-webhooks#typescript-example
+     */
+    app.post("/reinitialize-locales",
+        verifyGhWebhookMiddleware, // important
+        async function (req, res) {
+            console.log("webhook body", req.body)
+            // @see https://docs.github.com/en/webhooks/webhook-events-and-payloads#push
+            const { action, ref/*, repository, sender */ } = req.body
+            if (!(action === "push" && ref === "refs/head/main")) return res.status(200).send(`Nothing to do fot action ${action} on ref ${ref}`)
+            await reinitialize({ context, initList: ['locales'] })
+            // TODO: check if the push in on main branch
+            return res.status(200).send("Locales reloaded")
+        })
 
     // app.get('/cache-avatars', async function (req, res) {
     //     checkSecretKey(req)
@@ -230,8 +262,7 @@ const start = async () => {
 
     app.listen({ port: port }, () =>
         console.log(
-            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${
-                finishedAt.getTime() - startedAt.getTime()
+            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${finishedAt.getTime() - startedAt.getTime()
             }ms)`
         )
     )
