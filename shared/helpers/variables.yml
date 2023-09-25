@@ -185,10 +185,20 @@
   usedBy:
       - surveyform
 - id: SECRET_KEY
-  description: Secret key used to verify external webhook requests
+  description: >
+      Secret key used to verify external webhook requests
+      Surveyform and API should have a different key
+      Surveyadmin should know both keys to be able to send request
+      New keys can be generated via "openssl -base64 32
   usedBy:
       - surveyform
       - api
+- id: API_SECRET_KEY
+  usedBy:
+      - surveyadmin
+- id: SURVEYFORM_SECRET_KEY
+  usedBy:
+      - surveyadmin
 
 - id: ASSETS_URL
   aliases:

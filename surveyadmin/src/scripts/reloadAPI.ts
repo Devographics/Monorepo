@@ -3,7 +3,7 @@
  * we need to call non-graphql endpoints meant to force reloads
  */
 const getUrl = (path, apiUrl) =>
-  `${apiUrl?.replace("/graphql", "")}/${path}?key=${process.env.SECRET_KEY}`;
+  `${apiUrl?.replace("/graphql", "")}/${path}?key=${process.env.API_SECRET_KEY}`;
 
 type Target = "production" | "staging" | "local"
 const reload = async (path, args: { target?: Target }) => {
