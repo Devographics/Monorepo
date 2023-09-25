@@ -2,7 +2,7 @@
   display: inline-flex;
   gap: 0.6em;
   //   margin-left: 0.8em;
-  opacity: 0;
+  visibility: hidden;
 }
 
 @keyframes arrow {
@@ -134,7 +134,7 @@
   @media (hover: hover) {
     &:hover {
       .sentiments {
-        opacity: 1;
+        visibility: visible;
       }
     }
   }
@@ -142,7 +142,7 @@
   &.hasValue,
   &.form-check-checked {
     .sentiments {
-      opacity: 1;
+      visibility: visible;
     }
   }
 
