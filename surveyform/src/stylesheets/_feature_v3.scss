@@ -2,7 +2,7 @@
   display: inline-flex;
   gap: 0.6em;
   //   margin-left: 0.8em;
-  opacity: 0;
+  visibility: hidden;
 }
 
 @keyframes arrow {
@@ -134,7 +134,7 @@
   @media (hover: hover) {
     &:hover {
       .sentiments {
-        opacity: 1;
+        visibility: visible;
       }
     }
   }
@@ -142,7 +142,7 @@
   &.hasValue,
   &.form-check-checked {
     .sentiments {
-      opacity: 1;
+      visibility: visible;
     }
   }
 
@@ -183,21 +183,6 @@
         .comment-trigger {
           margin-left: auto;
           padding: 0;
-        }
-
-        &:not(
-				/* Selected sentiments should always show */
-				:has(.sentiment > :checked),
-
-        .is-selected,
-
-				/* Interacting with the row should reveal sentiments */
-				.form-check:is(:hover, :active) *,
-
-				/* Sentiments of selected row are always visible */
-				.form-check.selected *
-			) {
-          opacity: 0;
         }
       }
     }
