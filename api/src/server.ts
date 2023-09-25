@@ -7,7 +7,7 @@ import dotenv from 'dotenv'
 
 import defaultTypeDefs from './graphql/typedefs/schema.graphql'
 import { RequestContext } from './types'
-import express, { Request, Response } from 'express'
+import express, { Request, Response, json } from 'express'
 import { reinitialize } from './init'
 import path from 'path'
 import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
@@ -218,16 +218,18 @@ const start = async () => {
     })
     /**
      * GitHub webhook URL 
+     * 
      * @see https://docs.github.com/fr/webhooks
      * @see https://docs.github.com/en/webhooks/using-webhooks/securing-your-webhooks#typescript-example
      */
     app.post("/reinitialize-locales",
+        json(),
         verifyGhWebhookMiddleware, // important
         async function (req, res) {
-            console.log("webhook body", req.body)
             // @see https://docs.github.com/en/webhooks/webhook-events-and-payloads#push
             const { action, ref/*, repository, sender */ } = req.body
             if (!(action === "push" && ref === "refs/head/main")) return res.status(200).send(`Nothing to do fot action ${action} on ref ${ref}`)
+            console.log("Triggering local reinitialization from GitHub we hook")
             await reinitialize({ context, initList: ['locales'] })
             // TODO: check if the push in on main branch
             return res.status(200).send("Locales reloaded")
