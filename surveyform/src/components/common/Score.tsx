@@ -87,6 +87,8 @@ const Score = ({
       name,
       shareUrl: `${questionsUrl}?source=post_survey_share`,
       hashtag,
+      usage_count: usage.count,
+      awareness_count: awareness.count,
     },
   });
 
