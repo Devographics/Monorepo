@@ -222,12 +222,13 @@ const start = async () => {
      * @see https://docs.github.com/fr/webhooks
      * @see https://docs.github.com/en/webhooks/using-webhooks/securing-your-webhooks#typescript-example
      */
-    app.post("/reinitialize-locales",
+    app.post("/gh/reinitialize-locales",
         json(),
         verifyGhWebhookMiddleware, // important
         async function (req, res) {
             // @see https://docs.github.com/en/webhooks/webhook-events-and-payloads#push
-            const { action, ref/*, repository, sender */ } = req.body
+            const action = req.headers?.["x-github-event"]
+            const { ref/*, repository, sender */ } = req.body
             if (!(action === "push" && ref === "refs/head/main")) return res.status(200).send(`Nothing to do fot action ${action} on ref ${ref}`)
             console.log("Triggering local reinitialization from GitHub we hook")
             await reinitialize({ context, initList: ['locales'] })
