@@ -68,6 +68,12 @@ const checkSecretKey = async (req: Request, res: Response, func: () => Promise<v
     }
 }
 
+// if SURVEYS_URL is defined, then use that to load surveys;
+// if not, look in local filesystem
+// TODO
+// export const getLoadMethod = () => (process.env.SURVEYS_URL ? 'remote' : 'local')
+export const getLoadMethod = () => 'todo'
+
 const start = async () => {
     const config: dotenv.DotenvConfigOptions = {}
     if (process.env.ENV_PATH) {
@@ -77,8 +83,17 @@ const start = async () => {
     const appName = AppName.API
     setAppName(appName)
     const startedAt = new Date()
+
+    // const cachingMethods = getCachingMethods()
+    // const cachingMethodsString = Object.keys(cachingMethods)
+    //     .map(cm => (cachingMethods[cm] ? cm : strikeThrough(cm)))
+    //     .join(', ')
+
     console.log(
-        `// Starting server… (app: ${appName}, env: ${process.env.NODE_ENV}, config: ${process.env.CONFIG})`
+        `---------------------------------------------------------------
+• 📄 env file = ${envPath}
+• 📄 config = ${process.env.CONFIG}
+• 📖 load method = ${getLoadMethod()}`
     )
 
     const isDev = process.env.NODE_ENV === 'development'
