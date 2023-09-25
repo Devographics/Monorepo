@@ -108,7 +108,10 @@ const Score = ({
   //   .filter((feature) => !!feature.url);
 
   return (
-    <div className="score" style={{'--usage-ratio': usage.count / (usage.count + awareness.count)}}>
+    <div
+      className="score"
+      style={{ "--usage-ratio": usage.count / (usage.count + awareness.count) }}
+    >
       <div className="score-calculation">
         <div className="score-calcuation-heading">
           <FormattedMessage id="thanks.features_score" />
@@ -117,56 +120,78 @@ const Score = ({
           placement="bottom"
           overlay={
             <Tooltip>
-              {usage.count}&times;{USED_PTS} <FormattedMessage id="thanks.points" className="score-suffix" defaultMessage="pts." /> +&nbsp;
-              {awareness.count}&times;{HEARD_PTS} <FormattedMessage id="thanks.point" className="score-suffix" defaultMessage="pt." /></Tooltip>
+              {usage.count}&times;{USED_PTS}{" "}
+              <FormattedMessage
+                id="thanks.points"
+                className="score-suffix"
+                defaultMessage="pts."
+              />{" "}
+              +&nbsp;
+              {awareness.count}&times;{HEARD_PTS}{" "}
+              <FormattedMessage
+                id="thanks.point"
+                className="score-suffix"
+                defaultMessage="pt."
+              />
+            </Tooltip>
           }
         >
-        <div className="score-percent">
-          <CountUp
-            start={0}
-            delay={0.3}
-            // @ts-ignore
-            duration={2}
-            end={score}
-            onStart={() => {
-              setTimeout(() => {
-                setShowConfetti(true);
-              }, 1200);
-            }}
-          />
+          <div className="score-percent">
+            <CountUp
+              start={0}
+              delay={0.3}
+              // @ts-ignore
+              duration={2}
+              end={score}
+              onStart={() => {
+                setTimeout(() => {
+                  setShowConfetti(true);
+                }, 1200);
+              }}
+            />
 
-          <div className="score-confetti" ref={containerRef}>
-            {showConfetti && containerRef.current && (
-              <Confetti
-                width={containerRef.current.offsetWidth}
-                height={containerRef.current.offsetHeight}
-                recycle={false}
-                numberOfPieces={80}
-                initialVelocityX={5}
-                initialVelocityY={20}
-                confettiSource={{
-                  x: containerRef.current.offsetWidth / 2 - 50,
-                  y: 100,
-                  w: 100,
-                  h: 100,
-                }}
-              />
-            )}
+            <div className="score-confetti" ref={containerRef}>
+              {showConfetti && containerRef.current && (
+                <Confetti
+                  width={containerRef.current.offsetWidth}
+                  height={containerRef.current.offsetHeight}
+                  recycle={false}
+                  numberOfPieces={80}
+                  initialVelocityX={5}
+                  initialVelocityY={20}
+                  confettiSource={{
+                    x: containerRef.current.offsetWidth / 2 - 50,
+                    y: 100,
+                    w: 100,
+                    h: 100,
+                  }}
+                />
+              )}
+            </div>
+            <FormattedMessage
+              id="thanks.points"
+              className="score-suffix"
+              defaultMessage="pts."
+            />
           </div>
-          <FormattedMessage id="thanks.points" className="score-suffix" defaultMessage="pts." />
-        </div>
         </OverlayTrigger>
         <div className="score-ratio">
           <FormattedMessage
             id="thanks.score_statistics"
-            values={{ known,
+            values={{
+              known,
               total: `<span class="score-number score-number-total">${total}</span>`,
-              usage_total: `<span class="score-number score-number-total">${usage.total}</span>` ,
+              usage_total: `<span class="score-number score-number-total">${usage.total}</span>`,
               usage_count: `<span class="score-number score-number-counted used">${usage.count}</span>`,
               usage_score: `<span class="score-percentage used">${usage.score}%</span>`,
               awareness_total: awareness.total,
               awareness_count: `<span class="score-number score-number-counted heard">${awareness.count}</span>`,
-              awareness_score: `<span class="score-percentage heard" title="${ intl.formatMessage({id: 'thanks.score_awareness_explanation', values: {awareness_total: awareness.total}}) }">${awareness.score}%</span>`,
+              awareness_score: `<span class="score-percentage heard" title="${intl.formatMessage(
+                {
+                  id: "thanks.score_awareness_explanation",
+                  values: { awareness_total: awareness.total },
+                }
+              )}">${awareness.score}%</span>`,
             }}
           />
         </div>
