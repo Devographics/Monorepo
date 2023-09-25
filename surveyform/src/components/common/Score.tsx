@@ -112,10 +112,6 @@ const Score = ({
 
   return (
     <div className="score" style={{'--usage-ratio': usage.count / (usage.count + awareness.count)}}>
-      <div className="score-breakdown">
-        <FormattedMessage className="used" id="options.features.used.label.xshort" />
-        <FormattedMessage className="heard" id="options.features.heard.label.xshort" />
-      </div>
       <div className="score-calculation">
         <div className="score-calcuation-heading">
           <FormattedMessage id="thanks.features_score" />
