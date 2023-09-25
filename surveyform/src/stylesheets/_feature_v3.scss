@@ -184,21 +184,6 @@
           margin-left: auto;
           padding: 0;
         }
-
-        &:not(
-				/* Selected sentiments should always show */
-				:has(.sentiment > :checked),
-
-        .is-selected,
-
-				/* Interacting with the row should reveal sentiments */
-				.form-check:is(:hover, :active) *,
-
-				/* Sentiments of selected row are always visible */
-				.form-check.selected *
-			) {
-          opacity: 0;
-        }
       }
     }
   }
