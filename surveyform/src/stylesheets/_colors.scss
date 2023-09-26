@@ -102,4 +102,6 @@ $hover-color: $contrast-color;
   --dark-border-color: #{$dark-border-color};
   --active-color: #{$active-color};
   --contrast-color: #{$contrast-color};
+  --accent-color: #{$contrast-color};
+  --accent-color-2: #{$active-color-dark};
 }

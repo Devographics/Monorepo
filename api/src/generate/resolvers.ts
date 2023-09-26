@@ -32,6 +32,7 @@ import { ResultsSubFieldEnum } from '@devographics/types'
 import { loadOrGetParsedSurveys } from '../load/surveys'
 import isEmpty from 'lodash/isEmpty.js'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
+import { getRawData } from '../compute/raw'
 
 export const generateResolvers = async ({
     surveys,
@@ -344,9 +345,16 @@ export const currentEditionResolver: ResolverType = async (parent, args, context
     return result[0]
 }
 
+export const rawDataResolver: ResolverType = async (parent, args, context, info) => {
+    console.log('// rawDataResolver')
+    const { survey, edition, section, question } = parent
+    return await getRawData({ survey, edition, section, question, context })
+}
+
 export const responsesResolverMap: ResolverMap = {
     allEditions: allEditionsResolver,
-    currentEdition: currentEditionResolver
+    currentEdition: currentEditionResolver,
+    rawData: rawDataResolver
 }
 /*
 

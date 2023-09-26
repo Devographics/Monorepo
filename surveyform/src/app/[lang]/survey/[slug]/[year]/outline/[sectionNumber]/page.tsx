@@ -5,6 +5,7 @@ import { rscGetEditionsMetadata } from "../../rsc-fetchers";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
 export const revalidate = DEFAULT_REVALIDATE_S;
+export const dynamicParams = true;
 /**
  * NOTE: ideally we would load surveys in the layout directly
  * but this is not possible to mix static and dynamic pages in the same parent layout (yet)

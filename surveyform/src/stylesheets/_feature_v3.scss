@@ -2,7 +2,7 @@
   display: inline-flex;
   gap: 0.6em;
   //   margin-left: 0.8em;
-  opacity: 0;
+  visibility: hidden;
 }
 
 @keyframes arrow {
@@ -134,7 +134,7 @@
   @media (hover: hover) {
     &:hover {
       .sentiments {
-        opacity: 1;
+        visibility: visible;
       }
     }
   }
@@ -142,7 +142,7 @@
   &.hasValue,
   &.form-check-checked {
     .sentiments {
-      opacity: 1;
+      visibility: visible;
     }
   }
 
@@ -183,21 +183,6 @@
         .comment-trigger {
           margin-left: auto;
           padding: 0;
-        }
-
-        &:not(
-				/* Selected sentiments should always show */
-				:has(.sentiment > :checked),
-
-        .is-selected,
-
-				/* Interacting with the row should reveal sentiments */
-				.form-check:is(:hover, :active) *,
-
-				/* Sentiments of selected row are always visible */
-				.form-check.selected *
-			) {
-          opacity: 0;
         }
       }
     }
@@ -259,37 +244,28 @@
 }
 
 .form-experience-option-unimplemented {
-  .sentiments {
+  // &:not(:focus-within, :hover, .hasValue) {
+  //   opacity: .7;
+  // }
+
+  // Only show sentiment chips when "used it" is actually selected
+  // to reduce clutter, since for most people this won't get selected
+  &:not(.hasValue) .sentiments {
     display: none;
-  }
-  .form-check:hover {
-    background: none;
-  }
-  .form-option {
-    color: var(--text-color-darker);
   }
 }
 
 .feature-unimplemented {
   background: var(--bg-color-light);
-  display: block;
+  border-radius: 0.2em;
   font-size: $smallish-font;
-  padding: 4px 8px;
-  // text-transform: uppercase;
+  padding: 0.35em 0.8em 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: help;
 
-  position: relative;
-  &::after {
-    right: 100%;
-    top: 50%;
-    border: solid transparent;
-    content: "";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-color: rgba(136, 183, 213, 0);
-    border-right-color: var(--bg-color-light);
-    border-width: 8px;
-    margin-top: -8px;
+  &::before {
+    content: "⚠️ ";
+    font-family: emoji;
   }
 }

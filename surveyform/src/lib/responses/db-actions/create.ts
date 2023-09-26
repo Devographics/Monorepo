@@ -92,7 +92,7 @@ export async function createResponse({
   validateResponse({ ...props, serverData });
 
   // insert
-  const insertRes = await RawResponse.insertOne(serverData as ResponseDocument);
+  const insertRes = await RawResponse.insertOne(serverData);
 
   return serverData;
 }

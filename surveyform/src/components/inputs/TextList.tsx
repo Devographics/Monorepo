@@ -115,6 +115,7 @@ const useDeletionDelay = (delay: number = 200) => {
     resetDeletionDelay: () => {
       resetTimeout();
       deletedContentRef.current = null;
+      hasNotUppedRef.current = false;
     },
     hasJustDeletedContent: (id: string | number) => {
       return deletedContentRef.current?.id === id || hasNotUppedRef.current;
@@ -214,11 +215,19 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
     refillVirtualItems();
   };
   const updateItem = (idx: number, value: string) => {
-    setItems((items) => [
-      ...items.slice(0, idx),
-      { value, key: items[idx].key },
-      ...items.slice(idx + 1),
-    ]);
+    setItems((items) => {
+      if (idx >= items.length || !items[idx]) {
+        console.warn(
+          `Trying to update item ${idx} with value ${value} but it has been deleted`
+        );
+        return items;
+      }
+      return [
+        ...items.slice(0, idx),
+        { value, key: items[idx].key },
+        ...items.slice(idx + 1),
+      ];
+    });
   };
 
   // Getters

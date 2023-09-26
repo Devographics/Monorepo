@@ -252,6 +252,11 @@ type ResponseEditionData {
     buckets: [Bucket]
 }
 
+type RawData {
+    responseId: String
+    content: String
+}
+
 """
 A data bucket
 """

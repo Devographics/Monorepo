@@ -52,7 +52,42 @@ const getRank = (score) => {
   }
 };
 
-export const getEditionScoredQuestions = (edition) => { };
+export const getEditionScoredQuestions = (edition) => {};
+
+class ScoredFeatures {
+  items: string[] = [];
+  counted: string[] = [];
+
+  get total() {
+    return this.items.length;
+  }
+
+  get count() {
+    return this.counted.length;
+  }
+
+  get scoreRaw() {
+    if (this.count === 0) {
+      return 0;
+    }
+
+    return (100 * this.count) / this.total;
+  }
+
+  get score() {
+    let digits = 0;
+    let factor = 10 ** digits;
+    return Math.round(factor * this.scoreRaw) / factor;
+  }
+
+  toString() {
+    return `${this.score}% (${this.count}/${this.total})`;
+  }
+}
+
+export const USED_PTS = 10;
+export const HEARD_PTS = 5;
+export const scoreWeights = { used: USED_PTS, heard: HEARD_PTS };
 
 export const getKnowledgeScore = ({
   response,
@@ -65,13 +100,19 @@ export const getKnowledgeScore = ({
     (q) => q.countsTowardScore
   );
 
-  let knownItems: string[] = [];
-  let unknownItems: string[] = [];
-  let allItems: string[] = [];
+  const overall = new ScoredFeatures();
+  const awareness = new ScoredFeatures();
+  const usage = new ScoredFeatures();
 
   for (const question of scoredQuestions) {
     const formPaths = getFormPaths({ edition, question });
-    const value_: string | number | Array<string> | Array<number> | undefined | null = formPaths.response && response[formPaths.response];
+    const value_:
+      | string
+      | number
+      | Array<string>
+      | Array<number>
+      | undefined
+      | null = formPaths.response && response[formPaths.response];
 
     if (question.allowMultiple && question.options) {
       // assume this is a question where each array item is a scored item that
@@ -79,44 +120,40 @@ export const getKnowledgeScore = ({
       const optionsIds = question.options
         .map((o) => String(o.id))
         .filter((item) => item !== OPTION_NA);
-      const value = (value_ || []) as Array<string>
-      allItems = [...allItems, ...optionsIds];
-      knownItems = [
-        ...knownItems,
-        ...optionsIds.filter((id) => value.includes(id)),
-      ];
-      unknownItems = [
-        ...unknownItems,
-        ...optionsIds.filter((id) => !value.includes(id)),
-      ];
+      const value = (value_ || []) as Array<string>;
+
+      // We assume all mini-features currently measure only usage
+      // If in the future we have awareness mini-features, we need to change this logic
+      overall.items.push(...optionsIds);
+      usage.items.push(...optionsIds);
+
+      let usedIds = optionsIds.filter((id) => value.includes(id));
+      overall.counted.push(...usedIds);
+      usage.counted.push(...usedIds);
     } else {
       // assume this is a normal feature question
+      overall.items.push(question.id);
+      awareness.items.push(question.id);
+      usage.items.push(question.id);
+
       const value = value_ as FeaturesOptions;
       if ([FeaturesOptions.HEARD, FeaturesOptions.USED].includes(value)) {
-        knownItems.push(question.id);
-      } else {
-        unknownItems.push(question.id);
+        overall.counted.push(question.id);
+        (value === FeaturesOptions.HEARD ? awareness : usage).counted.push(
+          question.id
+        );
       }
-      allItems.push(question.id);
     }
   }
 
-  const total = allItems.length;
-  const known = knownItems.length;
-  const unknown = total - known;
-  const score = Math.round((known * 100) / total);
-  const rank = getRank(score);
-
-  const result = {
-    total,
-    unknown,
-    known,
-    score,
-    rank,
-    // knownFields,
-    // unknownFields,
+  return {
+    total: overall.total,
+    known: overall.count,
+    score:
+      scoreWeights.used * usage.count + scoreWeights.heard * awareness.count,
+    usage,
+    awareness,
   };
-  return result;
 };
 
 /**

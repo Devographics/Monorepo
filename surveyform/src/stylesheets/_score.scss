@@ -1,25 +1,62 @@
 .score {
   margin-bottom: $spacing * 2;
   text-align: center;
-  @include border;
-  padding: $spacing * 2;
+  border: 1px solid transparent;
+
   @include border-radius;
   position: relative;
+  --used-color: var(--accent-color);
+  --heard-color: var(--accent-color-2);
+  background-image: linear-gradient(to right, var(--used-color) calc(var(--usage-ratio) * 100%), var(--heard-color) 0);
+  background-origin: border-box;
+
+  .used {
+    --color: var(--used-color);
+  }
+
+  .heard {
+    --color: var(--heard-color);
+  }
+
+
 }
+
+.score-calculation {
+  padding: $spacing * 2;
+  background: var(--bg-color);
+}
+
 .score-calcuation-heading {
   font-size: $largest-font;
   // text-transform: uppercase;
 }
+
 .score-percent {
-  font-size: 4rem;
+  // Note: Do NOT apply position to this element, it breaks the confetti
+  font-size: 6rem;
+  line-height: 1;
+  margin-bottom: $spacing;
+
+  .score-suffix {
+    font-size: 1rem;
+    position: absolute;
+    transform: translateY(4.1rem);
+  }
 }
+
 .score-ratio {
   font-size: $large-font;
 }
+
 .score-number {
   @include font-bold;
-  color: var(--hover-color);
+  color: var(--color);
 }
+
+.score-percentage[title] {
+  cursor: help;
+}
+
 .score-confetti {
   position: absolute;
   top: 0;
@@ -30,7 +67,7 @@
   overflow: hidden;
 }
 .score-share {
-  @include flex-center;  
+  @include flex-center;
   margin-top: $spacing * 2;
 }
 

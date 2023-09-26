@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import FormControl from "react-bootstrap/FormControl";
-import Overlay from "react-bootstrap/Overlay";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
 import { FormattedMessage } from "~/components/common/FormattedMessage";
@@ -15,7 +15,6 @@ import { FormInputProps } from "./typings";
 import { getOptioni18nIds } from "~/i18n/survey";
 import { read } from "fs";
 import isEmpty from "lodash/isEmpty";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 export const CommentTrigger = ({
   value,
@@ -44,7 +43,6 @@ export const CommentTrigger = ({
           type="button"
           aria-describedby="popover-basic"
           aria-label={intl.formatMessage({ id: "experience.leave_comment" })}
-          title={intl.formatMessage({ id: "experience.leave_comment" })}
           onClick={() => {
             setShowCommentInput(!showCommentInput);
           }}

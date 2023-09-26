@@ -166,38 +166,31 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
     // }, [isInView]);
 
     return (
-      <div
-        className={`form-item ${className} ${skippedClass}`}
-        ref={myRef}
-        onBlur={onBlur}
-      >
-        <fieldset>
-          <Form.Group controlId={path}>
-            <FormItemTitle {...props} />
-            <div className="form-item-contents">
-              <FormItemDescription {...props} />
-              <FormItemLimit {...props} />
-              <div className="form-item-input">{children}</div>
-              <FormItemNote {...props} />
+      <div className={`form-item ${className}`} ref={myRef} onBlur={onBlur}>
+        <Form.Group as="fieldset" controlId={path}>
+          <FormItemTitle {...props} />
+          <div className="form-item-contents">
+            <FormItemDescription {...props} />
+            <FormItemLimit {...props} />
+            <div className="form-item-input">{children}</div>
+            <FormItemNote {...props} />
 
-              {allowComment && (
-                <CommentTrigger
-                  value={commentValue}
-                  showCommentInput={showCommentInput}
-                  setShowCommentInput={setShowCommentInput}
-                />
-              )}
-              {allowComment && showCommentInput && commentPath && (
-                <CommentInput
-                  {...props}
-                  commentPath={commentPath}
-                  commentValue={commentValue}
-                />
-              )}
-            </div>
-          </Form.Group>
-        </fieldset>
-
+            {allowComment && (
+              <CommentTrigger
+                value={commentValue}
+                showCommentInput={showCommentInput}
+                setShowCommentInput={setShowCommentInput}
+              />
+            )}
+            {allowComment && showCommentInput && commentPath && (
+              <CommentInput
+                {...props}
+                commentPath={commentPath}
+                commentValue={commentValue}
+              />
+            )}
+          </div>
+        </Form.Group>
         {allowSkip && <SkipButton skipped={skipped} setSkipped={setSkipped} />}
       </div>
     );
