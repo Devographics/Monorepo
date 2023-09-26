@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Component, ComponentType } from "react";
 
 import { Extras } from "@sentry/types";
 
@@ -10,9 +10,10 @@ import {
   DefaultErrorProps,
 } from "~/components/error/DefaultError";
 
-export type ErrorBoundaryFallbackComponent = React.ComponentType<{
+export type ErrorBoundaryFallbackComponent = ComponentType<{
   error?: Error;
   statusCode?: number;
+  children?: React.ReactNode;
 }>;
 interface ErrorBoundaryProps
   extends Pick<
@@ -34,7 +35,7 @@ const initialState: ErrorBoundaryState = { error: null };
 /**
  * Generic error boundary for page or components
  */
-export class ErrorBoundary extends React.Component<
+export class ErrorBoundary extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
@@ -60,7 +61,7 @@ export class ErrorBoundary extends React.Component<
     const { fallbackComponent: FallbackComponent } = this.props;
     if (error !== null) {
       return FallbackComponent ? (
-        // @ts-ignore
+        // @ts-ignore ??
         <FallbackComponent error={error} />
       ) : (
         <DefaultErrorDisplay

@@ -30,6 +30,8 @@ import { Unskip } from "../icons/Unskip";
 
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import { useFormStateContext } from "./FormStateContext";
+import { useFormPropsContext } from "./FormPropsContext";
 
 export interface FormItemProps extends FormInputProps {
   children: ReactNode;
@@ -41,15 +43,12 @@ export interface FormItemProps extends FormInputProps {
 
 export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
   function FormItem(props: FormItemProps, parentRef) {
+    const { stateStuff, response } = useFormStateContext();
+    const { section, edition, readOnly } = useFormPropsContext();
     const {
       children,
-      response,
       path,
-      edition,
-      section,
       question,
-      readOnly,
-      stateStuff,
       showMore,
       showOther,
       questionNumber,
@@ -235,7 +234,8 @@ export const SkipButton = ({ skipped, setSkipped }) => {
 };
 
 export const FormItemTitle = (props: FormItemProps) => {
-  const { section, question, enableReadingList } = props;
+  const { section } = useFormPropsContext();
+  const { question, enableReadingList } = props;
   const intl = useIntlContext();
   const { yearAdded } = question;
 
@@ -270,10 +270,11 @@ export const FormItemTitle = (props: FormItemProps) => {
 };
 
 export const FormItemDescription = (props: FormItemProps) => {
+  const { section } = useFormPropsContext();
   const { question } = props;
   const { entity } = question;
   const intl = useIntlContext();
-  const intlIds = getQuestioni18nIds(props);
+  const intlIds = getQuestioni18nIds({ ...props, section });
   const i18nDescription = intl.formatMessage({ id: intlIds.description });
   const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
   return i18nDescription ? (
@@ -301,8 +302,9 @@ export const FormItemLimit = ({ question }: FormItemProps) => {
 };
 
 export const FormItemNote = (props: FormItemProps) => {
+  const { section } = useFormPropsContext();
   const intl = useIntlContext();
-  const intlIds = getQuestioni18nIds(props);
+  const intlIds = getQuestioni18nIds({ ...props, section });
   const note = intl.formatMessage({ id: intlIds.note });
   return note ? (
     <FormattedMessage className="form-note" id={intlIds.note} />

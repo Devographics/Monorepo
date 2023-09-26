@@ -20,7 +20,7 @@ const OptionLabel = ({
   const { entity, label } = option;
 
   if (label) {
-    return label;
+    return <>{label}</>;
   }
 
   const i18n = getOptioni18nIds({ option, question });

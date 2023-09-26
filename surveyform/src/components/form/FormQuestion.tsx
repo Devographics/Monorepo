@@ -2,18 +2,19 @@
 import { getQuestionComponent } from "~/lib/customComponents";
 import { getFormPaths } from "@devographics/templates";
 import { getQuestionObject } from "~/lib/surveys/helpers/getQuestionObject";
+import { useFormStateContext } from "./FormStateContext";
+import { useFormPropsContext } from "./FormPropsContext";
+import { QuestionMetadata } from "@devographics/types";
 
-export const FormQuestion = (props) => {
-  const {
-    survey,
-    edition,
-    section,
-    response,
-    question,
-    index,
-    sectionNumber,
-    questionNumber,
-  } = props;
+export const FormQuestion = (props: {
+  question: QuestionMetadata;
+  /** Starts at 1 */
+  questionNumber: number;
+}) => {
+  const { question, questionNumber } = props;
+  const { response, updateCurrentValues } = useFormStateContext();
+  const formProps = useFormPropsContext();
+  const { edition, survey, section } = formProps;
 
   const formPaths = getFormPaths({ edition, question });
   const questionObject = getQuestionObject({
@@ -40,8 +41,12 @@ export const FormQuestion = (props) => {
     question,
     path,
     value,
-    sectionNumber,
     questionNumber,
+    // pass context values so we don't have to refactor all components
+    ...formProps,
+    updateCurrentValues,
+    // TODO: not all inputs will use the response, it should not be passed systematicall
+    response,
   };
 
   const classNames = [
@@ -52,6 +57,7 @@ export const FormQuestion = (props) => {
   ];
   return (
     <div className={classNames.join(" ")}>
+      {/**  @ts-ignore https://github.com/vercel/next.js/issues/37421 */}
       <Component {...componentProperties} />
     </div>
   );

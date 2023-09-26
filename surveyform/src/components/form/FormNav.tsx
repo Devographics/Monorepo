@@ -15,6 +15,8 @@ import { Loading } from "~/components/ui/Loading";
 import { useEdition } from "../SurveyContext/Provider";
 import { FormInputProps } from "~/components/form/typings";
 import { FormLayoutProps } from "./FormLayout";
+import { useFormPropsContext } from "./FormPropsContext";
+import { useFormStateContext } from "./FormStateContext";
 
 // TODO
 // const getOverallCompletionPercentage = (response) => {
@@ -23,7 +25,8 @@ import { FormLayoutProps } from "./FormLayout";
 
 const SurveyNav = (props: FormLayoutProps) => {
   const { section: currentSection, ...propsWithoutSection } = props;
-  const { readOnly, response, stateStuff } = propsWithoutSection;
+  const { readOnly } = useFormPropsContext();
+  const { response, stateStuff } = useFormStateContext();
   const {
     currentFocusIndex,
     currentTabindex,
@@ -103,7 +106,13 @@ const SurveyNav = (props: FormLayoutProps) => {
         >
           <span className="section-nav-head-left">
             <h3 className="section-nav-toc">
-              <FormattedMessage id="general.table_of_contents" values={{ sectionCount: edition.sections.length, completion: completionPercentage }} />
+              <FormattedMessage
+                id="general.table_of_contents"
+                values={{
+                  sectionCount: edition.sections.length,
+                  completion: completionPercentage,
+                }}
+              />
             </h3>
             {/* {overallCompletion && (
               <span className="section-nav-completion">

@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import QuestionLabel from "../form/QuestionLabel";
-import { FormInputProps } from "../form/typings";
 import { getSectioni18nIds } from "~/i18n/survey";
 import { questionIsCompleted } from "~/lib/responses/helpers";
 import { useIntlContext } from "@devographics/react-i18n";
 import { FormLayoutProps } from "../form/FormLayout";
+import { useFormStateContext } from "../form/FormStateContext";
+import { useFormPropsContext } from "../form/FormPropsContext";
 
-const SurveySectionHeading = ({
-  section,
-  sectionNumber,
-  edition,
-  stateStuff,
-  response,
-}: FormLayoutProps) => {
+const SurveySectionHeading = ({ section }: FormLayoutProps) => {
+  const { stateStuff, response } = useFormStateContext();
+  const { sectionNumber, edition } = useFormPropsContext();
+
   const { id, intlId } = section;
   const { itemPositions } = stateStuff;
   const intl = useIntlContext();

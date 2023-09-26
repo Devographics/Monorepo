@@ -23,7 +23,7 @@ const ItemLabel = ({ entity }: { entity: EntityWithQuestion }) => {
     return <OptionItem question={question} option={option} />;
   } else {
     // 3. else, default to entity's own name
-    <EntityLabel entity={entity} />;
+    return <EntityLabel entity={entity} />;
   }
 };
 
