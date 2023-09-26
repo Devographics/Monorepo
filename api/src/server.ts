@@ -7,7 +7,7 @@ import dotenv from 'dotenv'
 
 import defaultTypeDefs from './graphql/typedefs/schema.graphql'
 import { RequestContext } from './types'
-import express, { Request, Response } from 'express'
+import express, { Request, Response, json } from 'express'
 import { reinitialize } from './init'
 import path from 'path'
 import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
@@ -33,6 +33,7 @@ import { watchFiles } from './helpers/watch'
 
 import { initRedis } from '@devographics/redis'
 import { getPublicDb, getPublicDbReadOnly } from '@devographics/mongo'
+import { verifyGhWebhookMiddleware } from './external_apis'
 
 const envPath = process.env.ENV_FILE ? process.env.ENV_FILE : '.env'
 dotenv.config({ path: envPath })
@@ -59,6 +60,13 @@ Sentry.init({
 
 const isDev = process.env.NODE_ENV === 'development'
 
+/**
+ * Check a secret API key that allows triggering API reload
+ * for instance to reload locales on change
+ * @param req 
+ * @param res 
+ * @param func 
+ */
 const checkSecretKey = async (req: Request, res: Response, func: () => Promise<void>) => {
     if (req?.query?.key !== process.env.SECRET_KEY) {
         // throw new Error('Authorization error')
@@ -67,6 +75,12 @@ const checkSecretKey = async (req: Request, res: Response, func: () => Promise<v
         await func()
     }
 }
+
+// if SURVEYS_URL is defined, then use that to load surveys;
+// if not, look in local filesystem
+// TODO
+// export const getLoadMethod = () => (process.env.SURVEYS_URL ? 'remote' : 'local')
+export const getLoadMethod = () => 'todo'
 
 const start = async () => {
     const config: dotenv.DotenvConfigOptions = {}
@@ -77,8 +91,17 @@ const start = async () => {
     const appName = AppName.API
     setAppName(appName)
     const startedAt = new Date()
+
+    // const cachingMethods = getCachingMethods()
+    // const cachingMethodsString = Object.keys(cachingMethods)
+    //     .map(cm => (cachingMethods[cm] ? cm : strikeThrough(cm)))
+    //     .join(', ')
+
     console.log(
-        `// Starting server… (app: ${appName}, env: ${process.env.NODE_ENV}, config: ${process.env.CONFIG})`
+        `---------------------------------------------------------------
+• 📄 env file = ${envPath}
+• 📄 config = ${process.env.CONFIG}
+• 📖 load method = ${getLoadMethod()}`
     )
 
     const isDev = process.env.NODE_ENV === 'development'
@@ -186,6 +209,11 @@ const start = async () => {
         })
     })
 
+    /**
+     * This URL can be used in a GitHub webhook
+     * and surveyadmin app
+     * @see https://docs.github.com/fr/webhooks
+     */
     app.get('/reinitialize-entities', async function (req, res) {
         await checkSecretKey(req, res, async () => {
             // when entities change, also update surveys metadata
@@ -194,12 +222,34 @@ const start = async () => {
         })
     })
 
+    /**
+     * Key must be passed as query param
+     */
     app.get('/reinitialize-locales', async function (req, res) {
         await checkSecretKey(req, res, async () => {
             await reinitialize({ context, initList: ['locales'] })
-            res.status(200).send('Cache cleared')
+            res.status(200).send('Locales reloaded')
         })
     })
+    /**
+     * GitHub webhook URL 
+     * 
+     * @see https://docs.github.com/fr/webhooks
+     * @see https://docs.github.com/en/webhooks/using-webhooks/securing-your-webhooks#typescript-example
+     */
+    app.post("/gh/reinitialize-locales",
+        json(),
+        verifyGhWebhookMiddleware, // important
+        async function (req, res) {
+            // @see https://docs.github.com/en/webhooks/webhook-events-and-payloads#push
+            const action = req.headers?.["x-github-event"]
+            const { ref/*, repository, sender */ } = req.body
+            if (!(action === "push" && ref === "refs/heads/main")) return res.status(200).send(`Nothing to do for action ${action} on ref ${ref}`)
+            console.log("Triggering local reinitialization from GitHub we hook")
+            await reinitialize({ context, initList: ['locales'] })
+            // TODO: check if the push in on main branch
+            return res.status(200).send("Locales reloaded")
+        })
 
     // app.get('/cache-avatars', async function (req, res) {
     //     checkSecretKey(req)
@@ -230,8 +280,7 @@ const start = async () => {
 
     app.listen({ port: port }, () =>
         console.log(
-            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${
-                finishedAt.getTime() - startedAt.getTime()
+            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${finishedAt.getTime() - startedAt.getTime()
             }ms)`
         )
     )

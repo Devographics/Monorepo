@@ -110,7 +110,11 @@ const Score = ({
   return (
     <div
       className="score"
-      style={{ "--usage-ratio": usage.count / (usage.count + awareness.count) }}
+      style={
+        {
+          "--usage-ratio": usage.count / (usage.count + awareness.count),
+        } as React.CSSProperties
+      }
     >
       <div className="score-calculation">
         <div className="score-calcuation-heading">
