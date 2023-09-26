@@ -59,6 +59,7 @@ export const GET = async (req: NextRequest) => {
             currentPercentage += proportion
         }
         // TODO: store result in database to serve it later
+
         return NextResponse.json({ data: percentiles })
         //return NextResponse.json({ error: "Not yet implemented" }, { status: 500 })
     } catch (err) {
