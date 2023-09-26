@@ -167,6 +167,7 @@ type RawDbPaths {
     prenormalized: String
     followup_predefined: JSON
     followup_freeform: JSON
+    subPaths: JSON
 }
 
 type NormDbPaths {
