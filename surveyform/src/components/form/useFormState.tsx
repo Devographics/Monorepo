@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { captureException } from "@sentry/nextjs";
 import { saveResponse } from "~/components/page/services";
 import { useRouter } from "next/navigation";
@@ -74,15 +74,19 @@ export const useFormState = ({
 
   const router = useRouter();
 
-  const updateCurrentValues = (newValues) => {
-    setFormState((currentFormState) => {
-      const { currentValues } = currentFormState;
-      return {
-        ...currentFormState,
-        currentValues: { ...currentValues, ...newValues },
-      };
-    });
-  };
+  // TODO: might need memoization so this doesn't provoke a rerender of everything all the time
+  const updateCurrentValues = useCallback(
+    (newValues: any) => {
+      setFormState((currentFormState) => {
+        const { currentValues } = currentFormState;
+        return {
+          ...currentFormState,
+          currentValues: { ...currentValues, ...newValues },
+        };
+      });
+    },
+    [setFormState]
+  );
 
   /**
    * Called when we navigate from a page to another, saves the current response

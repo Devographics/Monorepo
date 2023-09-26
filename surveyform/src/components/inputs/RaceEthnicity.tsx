@@ -2,11 +2,13 @@ import React from "react";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import FormComponentCheckboxGroup from "./Checkboxgroup";
 import { FormInputProps } from "../form/typings";
+import { useFormStateContext } from "../form/FormStateContext";
 
 const disallowedCountries = ["FRA", "GUF", "ATF", "PYF"];
 
 export const RaceEthnicity = (props: FormInputProps<string[]>) => {
-  const { response, path } = props;
+  const { path } = props;
+  const { response } = useFormStateContext();
   let checkboxProps = props;
   const countryFieldPath = path.replace("race_ethnicity__choices", "country");
   const isDisabled =

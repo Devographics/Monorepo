@@ -3,11 +3,13 @@ import { useMessagesContext } from "../common/UserMessagesContext";
 import { FormInputProps } from "../form/typings";
 import { Plus, Check } from "~/components/icons";
 import without from "lodash/without";
+import { useFormStateContext } from "../form/FormStateContext";
 
 export const AddToList = (
   props: FormInputProps & { label: string; id: string | number }
 ) => {
-  const { updateCurrentValues, label, id, response } = props;
+  const { updateCurrentValues, label, id } = props;
+  const { response } = useFormStateContext();
   const readingList = response?.readingList || [];
 
   const { addMessage } = useMessagesContext();

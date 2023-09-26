@@ -25,6 +25,7 @@ import {
   FollowUpComment,
   FollowUps,
 } from "./experience/Followup2";
+import { useFormStateContext } from "../form/FormStateContext";
 
 const defaultCutoff = 99;
 // how many items to allow past the cutoff limit before actually cutting off the list
@@ -41,7 +42,8 @@ const cutoffMargin = 2;
 export const FormComponentCheckboxGroup = (
   props: FormInputProps<string[] | number[]>
 ) => {
-  const { value, edition, question, response } = props;
+  const { value, edition, question } = props;
+  const { response } = useFormStateContext();
   const hasValue = value?.length > 0;
   const intl = useIntlContext();
 

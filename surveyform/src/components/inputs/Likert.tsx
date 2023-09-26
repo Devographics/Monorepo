@@ -5,6 +5,7 @@ import { FormOption } from "~/components/form/FormOption";
 import { FormItem } from "~/components/form/FormItem";
 import { getFormPaths } from "@devographics/templates";
 import { DbPathsEnum, Option } from "@devographics/types";
+import { useFormStateContext } from "../form/FormStateContext";
 
 export const FormComponentLikertScale = (props: FormInputProps) => {
   const { value, edition, question } = props;
@@ -58,17 +59,8 @@ const Row = (props: RowProps) => {
 };
 
 const Radio = (props: RowProps & { radioIndex: number }) => {
-  const {
-    radioIndex,
-    option,
-    path,
-    updateCurrentValues,
-    edition,
-    question,
-    readOnly,
-    formPath,
-    response,
-  } = props;
+  const { radioIndex, path, updateCurrentValues, readOnly, formPath } = props;
+  const { response } = useFormStateContext();
 
   const value = response?.[formPath];
   const hasValue = value !== "";

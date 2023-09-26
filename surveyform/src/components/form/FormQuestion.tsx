@@ -45,8 +45,6 @@ export const FormQuestion = (props: {
     // pass context values so we don't have to refactor all components
     ...formProps,
     updateCurrentValues,
-    // TODO: not all inputs will use the response, it should not be passed systematicall
-    response,
   };
 
   const classNames = [

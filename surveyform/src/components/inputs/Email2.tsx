@@ -5,15 +5,16 @@ import { FormInputProps } from "~/components/form/typings";
 
 import FormControl from "react-bootstrap/FormControl";
 
-import isEmpty from "lodash/isEmpty.js";
 import Form from "react-bootstrap/Form";
 
 import FormOption from "~/components/form/FormOption";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
+import { useFormStateContext } from "../form/FormStateContext";
 
 export const Email2 = (props: FormInputProps) => {
-  const { response, question, updateCurrentValues, readOnly } = props;
+  const { question, updateCurrentValues, readOnly } = props;
+  const { response } = useFormStateContext();
 
   const disabled = !!readOnly;
 

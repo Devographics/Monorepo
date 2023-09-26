@@ -5,7 +5,7 @@ import { FormOption } from "~/components/form/FormOption";
 import { FormItem } from "~/components/form/FormItem";
 import OtherOption from "./OtherOption";
 import { getFormPaths } from "@devographics/templates";
-import { useState } from "react";
+import { memo, useState } from "react";
 
 export const FormComponentRadioGroup = (props: FormInputProps) => {
   const { value, question } = props;
@@ -92,4 +92,4 @@ const Radio = ({ index, value, option, hasValue, formProps, setShowOther }) => {
     </Form.Check>
   );
 };
-export default FormComponentRadioGroup;
+export default memo(FormComponentRadioGroup);

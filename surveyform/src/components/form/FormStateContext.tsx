@@ -9,24 +9,16 @@
  * contrary to a normal component
  * Only children that actually need the state will rerender
  */
-import { EditionMetadata, ResponseDocument } from "@devographics/types";
+import { ResponseDocument } from "@devographics/types";
 import { createContext, useContext } from "react";
 import { useFormPropsContext } from "./FormPropsContext";
+import { FormUpdateContext } from "./FormUpdateContext";
 import { FormState, useFormState } from "./useFormState";
 
-interface FormProps {
-  /**
-   * NOTE: in read-only mode there might be no response
-   * All form inputs have to be robust to this scenario
-   */
-  response?: ResponseDocument;
-  readOnly?: boolean;
-  edition: EditionMetadata;
-  sectionNumber: number;
-}
-
-// TODO: type this
-export const FormStateContext = createContext<FormState | undefined>(undefined);
+export const FormStateContext = createContext<
+  // updateCurrentValues is in a separate handler, so we can update those values without rerendering systematicall
+  FormState | undefined
+>(undefined);
 
 export const FormStateContextProvider = (props: {
   response?: ResponseDocument;
@@ -49,11 +41,20 @@ export const FormStateContextProvider = (props: {
   });
   return (
     <FormStateContext.Provider value={formState}>
-      {children}
+      <FormUpdateContext.Provider
+        value={{ updateCurrentValues: formState.updateCurrentValues }}
+      >
+        {children}
+      </FormUpdateContext.Provider>
     </FormStateContext.Provider>
   );
 };
 
+/**
+ * /!\ using this context will make the component/input
+ * rerender on every global state change
+ * @returns
+ */
 export const useFormStateContext = () => {
   const formContext = useContext(FormStateContext);
   if (!formContext)

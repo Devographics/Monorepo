@@ -19,8 +19,6 @@ export type FormInputProps<TValue = string | number | string[] | number[]> = {
   questionNumber: number;
   enableReadingList: boolean;
   updateCurrentValues: any
-  /** @deprecated Get from context instead */
-  response?: ResponseDocument
 }
   // courtesy to avoid rewriting all input components
   & FormProps;

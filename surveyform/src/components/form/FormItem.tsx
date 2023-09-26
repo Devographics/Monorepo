@@ -12,7 +12,6 @@ import React, {
   forwardRef,
   RefObject,
 } from "react";
-import get from "lodash/get.js";
 
 import { useIntlContext } from "@devographics/react-i18n";
 import Form from "react-bootstrap/Form";
@@ -32,6 +31,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { useFormStateContext } from "./FormStateContext";
 import { useFormPropsContext } from "./FormPropsContext";
+import { SectionMetadata } from "@devographics/types";
 
 export interface FormItemProps extends FormInputProps {
   children: ReactNode;
@@ -43,6 +43,8 @@ export interface FormItemProps extends FormInputProps {
 
 export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
   function FormItem(props: FormItemProps, parentRef) {
+    // TODO: using response here makes the component rerender for nothing
+    // TODO: depending on stateStuff forces component to rerender systematically
     const { stateStuff, response } = useFormStateContext();
     const { section, edition, readOnly } = useFormPropsContext();
     const {
@@ -73,7 +75,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
 
     const formPaths = getFormPaths({ edition, question });
     const commentPath = formPaths.comment;
-    const commentValue = commentPath && get(response, commentPath);
+    const commentValue = commentPath && response?.[commentPath];
 
     // open the comment widget if there is already a comment or this is the first question
     const [showCommentInput, setShowCommentInput] = useState(
@@ -171,7 +173,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
         onBlur={onBlur}
       >
         <Form.Group as="fieldset" controlId={path}>
-          <FormItemTitle {...props} />
+          <FormItemTitle {...props} section={section} />
           <div className="form-item-contents">
             <FormItemDescription {...props} />
             <FormItemLimit {...props} />
@@ -233,9 +235,10 @@ export const SkipButton = ({ skipped, setSkipped }) => {
   );
 };
 
-export const FormItemTitle = (props: FormItemProps) => {
-  const { section } = useFormPropsContext();
-  const { question, enableReadingList } = props;
+export const FormItemTitle = (
+  props: FormItemProps & { section: SectionMetadata }
+) => {
+  const { question, enableReadingList, section } = props;
   const intl = useIntlContext();
   const { yearAdded } = question;
 
@@ -269,12 +272,13 @@ export const FormItemTitle = (props: FormItemProps) => {
   );
 };
 
-export const FormItemDescription = (props: FormItemProps) => {
-  const { section } = useFormPropsContext();
+export const FormItemDescription = (
+  props: FormItemProps & { section: SectionMetadata }
+) => {
   const { question } = props;
   const { entity } = question;
   const intl = useIntlContext();
-  const intlIds = getQuestioni18nIds({ ...props, section });
+  const intlIds = getQuestioni18nIds({ ...props });
   const i18nDescription = intl.formatMessage({ id: intlIds.description });
   const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
   return i18nDescription ? (
@@ -301,10 +305,11 @@ export const FormItemLimit = ({ question }: FormItemProps) => {
   ) : null;
 };
 
-export const FormItemNote = (props: FormItemProps) => {
-  const { section } = useFormPropsContext();
+export const FormItemNote = (
+  props: FormItemProps & { section: SectionMetadata }
+) => {
   const intl = useIntlContext();
-  const intlIds = getQuestioni18nIds({ ...props, section });
+  const intlIds = getQuestioni18nIds({ ...props });
   const note = intl.formatMessage({ id: intlIds.note });
   return note ? (
     <FormattedMessage className="form-note" id={intlIds.note} />
