@@ -7,6 +7,9 @@ import { DetailedErrorObject } from "./validation";
 import { captureException } from "@sentry/nextjs";
 
 
+interface HandlerErrorObjectParams extends DetailedErrorObject {
+  status?: number;
+}
 export interface HandlerErrorObject extends DetailedErrorObject {
   status: number;
 }
@@ -36,12 +39,12 @@ export class HandlerError extends Error {
   status: number;
   properties?: string;
   error?: any;
-  constructor(props: HandlerErrorObject) {
+  constructor(props: HandlerErrorObjectParams) {
     super(props.message);
     console.error("// HandlerError");
     console.error(props);
     this.id = props.id;
-    this.status = props.status;
+    this.status = props.status || 500;
     this.properties = props.properties;
     this.error = props.error;
   }
