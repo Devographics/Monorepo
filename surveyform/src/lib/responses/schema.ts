@@ -256,9 +256,21 @@ export const getResponseSchema = ({
         }
 
         */
-        if (typeof formPathContents === "object") {
+        if (formPath === DbPathsEnum.SUBPATHS) {
+          // for now assume that any subPath value (used for e.g. Likert scales)
+          // is an individual value
           const subPaths = formPathContents as DbSubPaths;
           for (const subPath of Object.values(subPaths)) {
+            // accept either an array or an individual value
+            editionSchema[subPath] = createFieldType({
+              isArray: false,
+              isNumeric: question.optionsAreNumeric,
+            });
+          }
+        } else if (typeof formPathContents === "object") {
+          const subPaths = formPathContents as DbSubPaths;
+          for (const subPath of Object.values(subPaths)) {
+            // accept either an array or an individual value
             editionSchema[subPath] = createFieldType({ isArray: true });
           }
         } else {

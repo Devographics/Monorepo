@@ -20,6 +20,7 @@ import { QuestionMetadata, QuestionTemplateOutput } from "@devographics/types";
 import { TextList } from "~/components/inputs/TextList";
 import { ComponentType } from "react";
 import { FormInputProps } from "~/components/form/typings";
+import Likert from "~/components/inputs/Likert";
 
 const customComponents: { [key: string]: ComponentType<FormInputProps> } = {
   help: Help,
@@ -50,6 +51,7 @@ const customComponents: { [key: string]: ComponentType<FormInputProps> } = {
   opinion: Radiogroup,
   number: Number,
   years: Years,
+  likert: Likert,
 };
 
 export const getQuestionComponent = (

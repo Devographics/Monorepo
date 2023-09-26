@@ -697,3 +697,33 @@
     width: 100px;
   }
 }
+
+.likert {
+  .form-item-input {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing/2;
+  }
+  .form-check {
+    &:hover,
+    &:nth-child(2n) {
+      background: none;
+    }
+  }
+}
+
+.likert-row {
+  // display: grid;
+  // grid-template-columns: 1fr 1fr;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing/2;
+  gap: $spacing;
+  &:nth-child(2n) {
+    background: rgba(255, 255, 255, 0.04);
+  }
+}
+.likert-options {
+  display: flex;
+}
