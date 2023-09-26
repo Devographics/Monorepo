@@ -66,9 +66,22 @@
   pointer-events: none;
   overflow: hidden;
 }
+
 .score-share {
-  @include flex-center;
+  display: flex;
+  flex-flow: column;
+  gap: .5em;
   margin-top: $spacing * 2;
+
+  .score-share-buttons {
+    @include flex-center;
+    flex-wrap: wrap;
+    gap: .3em;
+
+    > * {
+      flex: 1;
+    }
+  }
 }
 
 // features

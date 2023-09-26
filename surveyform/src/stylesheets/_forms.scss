@@ -1,4 +1,15 @@
 @use "sass:math";
+
+.form-control {
+  &.discreet:not(:focus) {
+    background: hsl(0 0% 100% / 0.1);
+    color: inherit;
+    border-color: var(--bs-gray-600);
+    scrollbar-width: none;
+    transition: .3s;
+  }
+}
+
 .survey-section {
   // .form-control {
   //   background: $bg-color-lightest;

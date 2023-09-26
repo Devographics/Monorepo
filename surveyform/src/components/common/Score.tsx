@@ -73,6 +73,7 @@ const Score = ({
   const intl = useIntlContext();
   const containerRef = useRef<HTMLInputElement | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
+
   const { known, total, score, usage, awareness } = getKnowledgeScore({
     response,
     edition,
@@ -89,6 +90,7 @@ const Score = ({
       hashtag,
     },
   });
+  const [shareText, setShareText] = useState(text);
 
   // if (loading) return <Components.Loading />;
   // if (error) return <span>Could not load entities</span>;
@@ -203,14 +205,27 @@ const Score = ({
           <FormattedMessage id={`knowledge_rank.${rank}`} />
         </div> */}
         <div className="score-share">
-          <Button
-            target="_blank"
-            href={`https://twitter.com/intent/tweet/?text=${encodeURIComponent(
-              text
-            )}`}
-          >
-            <FormattedMessage id="thanks.share_on_twitter" />
-          </Button>
+          <textarea className="form-control discreet" id="share_text" value={shareText} onInput={event => setShareText(event.target.value)} />
+          <div className="score-share-buttons">
+            {navigator?.clipboard?.writeText &&
+              <Button onClick={event => navigator.clipboard.writeText(shareText)}>Copy</Button>
+            }
+            {navigator?.share &&
+              <Button onClick={() => {
+                navigator.share({ text: shareText, })
+              }}>Share</Button>
+            }
+            <Button
+              target="_blank"
+              href={`https://twitter.com/intent/tweet/?text=${encodeURIComponent(
+                shareText
+              )}`}
+            >
+              <FormattedMessage id="thanks.share_on_twitter" />
+            </Button>
+            {/* <script defer type="module" src="https://cdn.jsdelivr.net/npm/@micahilbery/share-on-mastodon@1.0.5/share-on-mastodon.js"></script>
+            <share-on-mastodon share_description="{shareText}"></share-on-mastodon> */}
+          </div>
         </div>
         {/* {unknownFeatures.length > 0 && (
           <Features features={unknownFeatures} limit={10} />
