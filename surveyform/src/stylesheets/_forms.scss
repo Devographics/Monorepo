@@ -678,6 +678,7 @@
 }
 
 .form-item-skipped {
+  border-color: var(--darker-border-color) !important;
   .form-label-heading {
     text-decoration: line-through;
     color: var(--text-color-darker);

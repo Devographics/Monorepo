@@ -166,7 +166,11 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
     // }, [isInView]);
 
     return (
-      <div className={`form-item ${className}`} ref={myRef} onBlur={onBlur}>
+      <div
+        className={`form-item ${className} ${skippedClass}`}
+        ref={myRef}
+        onBlur={onBlur}
+      >
         <Form.Group as="fieldset" controlId={path}>
           <FormItemTitle {...props} />
           <div className="form-item-contents">

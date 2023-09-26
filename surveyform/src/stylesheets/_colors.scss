@@ -79,6 +79,7 @@ $bg-color-inverted: $greyLight;
 
 $border-color: $greyMedium;
 $dark-border-color: $greyDark;
+$darker-border-color: rgba(125, 125, 125, 0.4);
 
 $text-color: $grey;
 $text-color-dark: $greyMediumish;
@@ -100,6 +101,7 @@ $hover-color: $contrast-color;
   --hover-color: #{$contrast-color};
   --border-color: #{$border-color};
   --dark-border-color: #{$dark-border-color};
+  --darker-border-color: #{$darker-border-color};
   --active-color: #{$active-color};
   --contrast-color: #{$contrast-color};
   --accent-color: #{$contrast-color};
