@@ -31,7 +31,9 @@ export const GET = async (req: NextRequest) => {
             $match: {
                 editionId,
                 // important: remove null/undefined knowledgescore
-                knowledgeScore: { $exists: true }
+                knowledgeScore: { $exists: true },
+                // before we were computing knowledgeScore as percents
+                createdAt: { $gte: new Date("2023-09-26T00:00:00Z") }
             }
         }, {
             $group: {
