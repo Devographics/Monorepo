@@ -83,10 +83,15 @@ const Score = ({
   const text = intl.formatMessage({
     id: "thanks.share_score_message",
     values: {
+      // TODO: at the time of writing (09/2023) translations include an additional %
+      // need to check if we keep the % around
       score,
       name,
       shareUrl: `${questionsUrl}?source=post_survey_share`,
       hashtag,
+      // not used by all translations
+      awareness_count: awareness,
+      usage_count: usage,
     },
   });
 
