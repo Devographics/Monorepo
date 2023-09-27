@@ -2,7 +2,7 @@ import Link from "next/link";
 import { SurveyStatusEnum } from "@devographics/types";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
-import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
+import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import sortBy from "lodash/sortBy";
@@ -18,7 +18,7 @@ const EditionItem = async ({
 }) => {
   const { survey, year, status } = edition;
   const { name } = survey;
-  const imageUrl = getSurveyImageUrl(edition);
+  const imageUrl = getEditionImageUrl(edition);
 
   const currentUser = await rscCurrentUserWithResponses();
   const response = currentUser?.responses?.find(

@@ -6,7 +6,7 @@ import { rscMustGetSurveyEditionFromUrl } from "~/app/[lang]/survey/[slug]/[year
 import { getCommonContexts, getEditionContexts } from "~/i18n/config";
 import { rscIntlContext } from "~/i18n/rsc-fetchers";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
-import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
+import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import { getSectioni18nIds } from "~/i18n/survey";
 import { FetcherFunctionOptions } from "@devographics/fetch/types";
 import { serverConfig } from "~/config/server";
@@ -46,7 +46,7 @@ export const rscGetMetadata = async ({
   const { socialImageUrl, year } = edition;
   const { name = "" } = edition.survey;
 
-  const imageUrl = getSurveyImageUrl(edition);
+  const imageUrl = getEditionImageUrl(edition);
   let imageAbsoluteUrl = socialImageUrl || imageUrl;
   const url = publicConfig.appUrl;
   const description = intlContext.formatMessage({
