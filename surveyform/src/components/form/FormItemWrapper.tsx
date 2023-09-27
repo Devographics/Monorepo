@@ -3,7 +3,7 @@ import { getQuestionComponent } from "~/lib/customComponents";
 import { getFormPaths } from "@devographics/templates";
 import { getQuestionObject } from "~/lib/surveys/helpers/getQuestionObject";
 
-export const FormQuestion = (props) => {
+export const FormItemWrapper = (props) => {
   const {
     survey,
     edition,
@@ -45,7 +45,7 @@ export const FormQuestion = (props) => {
   };
 
   const classNames = [
-    "form-input",
+    "form-item-wrapper",
     `question-id-${question.id}`,
     `question-template-${question.template}`,
     `question-section-${section.id}`,
@@ -57,4 +57,4 @@ export const FormQuestion = (props) => {
   );
 };
 
-export default FormQuestion;
+export default FormItemWrapper;
