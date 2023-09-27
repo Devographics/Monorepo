@@ -68,6 +68,7 @@ type EditionMetadata {
 
     enableReadingList: Boolean
     enableChartSponsorships: Boolean
+    enableSkip: Boolean
 
     sitemap: [SitemapSection]
 }
