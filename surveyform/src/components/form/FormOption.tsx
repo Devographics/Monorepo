@@ -12,10 +12,10 @@ interface FormOptionProps extends FormInputProps {
   option: OptionMetadata;
   isNA?: boolean;
   followupData?: any;
-  isChecked: boolean;
+  isChecked?: boolean;
 }
 export const FormOption = (props: FormOptionProps) => {
-  const { option, question, followupData, isNA, isChecked } = props;
+  const { option, question, followupData, isNA, isChecked = false } = props;
   const { entity } = option;
 
   const intl = useIntlContext();
