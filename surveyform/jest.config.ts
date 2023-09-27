@@ -1,7 +1,6 @@
-// No need to use ts-jest https://github.com/vercel/next.js/discussions/13528#discussioncomment-22933
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-// configuration that must be set for each project but does not change
-const commonConfig = {
+import type { Config } from 'jest';
+
+const commonConfig: Config = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   // A map from regular expressions to paths to transformers
@@ -92,7 +91,7 @@ const commonConfig = {
   // dependencyExtractor: undefined,
 
   // A path to a module which exports an async function that is triggered once before all test suites
-  globalSetup: "./.vn/tests/globalSetup",
+  globalSetup: "./.vn/tests/globalSetup.ts",
 
   // An array of file extensions your modules use
   moduleFileExtensions: ["js", "json", "jsx", "ts", "tsx", "node"],
@@ -179,7 +178,7 @@ const commonConfig = {
   // watchman: true,
 };
 
-module.exports = {
+const config: Config = {
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom: [
     "src/**/*.{js,jsx,ts,tsx}",
@@ -200,7 +199,7 @@ module.exports = {
   projects: [
     {
       ...commonConfig,
-      name: "client",
+      //name: "client",
       displayName: "client",
       // TODO: needed to pass the skipped exampleClient test, but throwing
       // "    SecurityError: localStorage is not available for opaque origins
@@ -223,7 +222,7 @@ module.exports = {
     },
     {
       ...commonConfig,
-      name: "server",
+      //name: "server",
       displayName: "server",
       testEnvironment: "node",
       // The glob patterns Jest uses to detect test files
@@ -236,3 +235,5 @@ module.exports = {
     },
   ],
 };
+
+export default config

@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server"
 import sortBy from "lodash/sortBy.js"
 import { checkSecretKey } from "../../../secretKey"
 import { HandlerError } from "~/lib/handler-error"
+import { computeGlobalScore, ScoreBucket } from "~/lib/responses/scoreQuantiles"
 
 /**
  * 
@@ -42,28 +43,16 @@ export const GET = async (req: NextRequest) => {
                 }
             }
 
+        }, {
+            $project: {
+                score: "$_id",
+                _id: false
+            }
         }]
         )
-        // _id = the knowledgeScore
-        const countsSorted = sortBy(await countsAgg.toArray(), "_id") as Array<{ _id: number, count: number }>
-        const totalCount = countsSorted.reduce((sum, { count }) => sum + count, 0)
-        const maxScore = countsSorted.reduce((s, { _id: knowledgeScore }) => knowledgeScore > s ? knowledgeScore : s, 0)
-        // now compute each percentile
-        const percentiles = Array(101).fill(maxScore)
-        let currentPercentage = 0
-        for (let { count, _id: knowledgeScore } of countsSorted) {
-            // weight of this group in the total
-            // use round so the sum of rounded proportions will be roughly a hundred
-            const proportion = Math.round((100. * count) / totalCount)
-            console.log({ count, knowledgeScore, proportion })
-            for (let i = currentPercentage; i <= currentPercentage + proportion && i < 100; i++) {
-                percentiles[i] = knowledgeScore
-            }
-            currentPercentage += proportion
-        }
-        // TODO: store result in database to serve it later
-
-        return NextResponse.json({ data: { percentiles, maxScore, totalCount } })
+        const counts = await countsAgg.toArray()
+        const globalScore = computeGlobalScore(counts as Array<ScoreBucket>)
+        return NextResponse.json({ data: globalScore })
         //return NextResponse.json({ error: "Not yet implemented" }, { status: 500 })
     } catch (err) {
         if (err instanceof HandlerError) return err.toNextResponse(req)

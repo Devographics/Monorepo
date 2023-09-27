@@ -150,7 +150,8 @@
     "serve": "^11.3.2",
     "shelljs": "^0.8.5",
     "smtp-tester": "^2.0.1",
-    "start-server-and-test": "^1.14.0"
+    "start-server-and-test": "^1.14.0",
+    "ts-node": "^10.9.1"
   },
   "peerDependencies": {
     "@babel/preset-env": "^7.0.0",
