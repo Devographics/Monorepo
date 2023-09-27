@@ -30,12 +30,12 @@ const OtherOption = (
   } = props;
   const formPaths = getFormPaths({ edition, question });
   const path = formPaths.other!;
-  const value = response?.[path];
+  const otherValue = response?.[path];
 
   const { formatMessage } = useIntlContext();
 
   // keep track of "other" field value locally
-  const [localValue, setLocalValue] = useState(value);
+  const [localValue, setLocalValue] = useState(otherValue);
 
   const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
 

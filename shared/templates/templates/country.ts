@@ -1,4 +1,4 @@
-import { TemplateFunction, QuestionTemplateOutput, Country } from '@devographics/types'
+import { TemplateFunction, QuestionTemplateOutput, Country, DbPathsEnum } from '@devographics/types'
 
 export const countries: Country[] = [
     {
@@ -1254,10 +1254,12 @@ export const country: TemplateFunction = options => {
         id: 'country',
         options: countries.map(country => ({ id: country['alpha-3'], label: country.name })),
         rawPaths: {
-            response: 'user_info__country'
+            response: 'user_info__country',
+            skip: `user_info__country__${DbPathsEnum.SKIP}`
         },
         normPaths: {
-            response: 'user_info.country_alpha3'
+            response: 'user_info.country_alpha3',
+            skip: `user_info.country.${DbPathsEnum.SKIP}`
         },
         ...question
     }

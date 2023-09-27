@@ -31,18 +31,20 @@ export enum DbPathsEnum {
     FOLLOWUP_FREEFORM = 'followup_freeform',
     RAW = 'raw',
     PATTERNS = 'patterns',
-    ERROR = 'error'
+    ERROR = 'error',
+    SUBPATHS = 'subPaths',
+    SKIP = 'skip'
 }
 
 type DbPathsFirstLevel = Exclude<
     DbPathsEnum,
     // followup questions nest another question within the current one
-    DbPathsEnum.FOLLOWUP_PREDEFINED | DbPathsEnum.FOLLOWUP_FREEFORM
+    DbPathsEnum.FOLLOWUP_PREDEFINED | DbPathsEnum.FOLLOWUP_FREEFORM | DbPathsEnum.SUBPATHS
 >
 
 /**
  * Standardized fields that will directly contain a string
- * @example 
+ * @example
  * ```
  * {
  *      response: "foobar",
@@ -62,6 +64,7 @@ export type DbPathsStrings = {
 export interface DbPaths extends DbPathsStrings {
     [DbPathsEnum.FOLLOWUP_PREDEFINED]?: DbSubPaths
     [DbPathsEnum.FOLLOWUP_FREEFORM]?: DbSubPaths
+    [DbPathsEnum.SUBPATHS]?: DbSubPaths
 }
 
 export type DbSubPaths = {

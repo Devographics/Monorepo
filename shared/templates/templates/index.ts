@@ -15,6 +15,7 @@ export * from './others'
 export * from './projects'
 export * from './happiness'
 export * from './opinion'
+export * from './likert'
 
 export * from './quiz'
 

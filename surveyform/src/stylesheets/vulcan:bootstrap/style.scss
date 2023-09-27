@@ -3,7 +3,7 @@ $medium-grey: #bbb;
 $vmargin: 15px;
 $light-border: $light-grey;
 
-select.form-control{
+select.form-control {
   height: 38px;
 }
 
@@ -18,7 +18,7 @@ div.ReactTags__tagInput {
   border-radius: 2px;
   display: inline-block;
 }
-div.ReactTags__tagInput input, 
+div.ReactTags__tagInput input,
 div.ReactTags__tagInput input:focus {
   // height: 31px;
   // margin: 0;
@@ -28,14 +28,14 @@ div.ReactTags__tagInput input:focus {
 
   display: block;
   width: 100%;
-  padding: .375rem .75rem;
+  padding: 0.375rem 0.75rem;
   font-size: 1rem;
   line-height: 1.5;
   color: #55595c;
   background-color: #fff;
   background-image: none;
   border: 1px solid #ccc;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
 }
 
 /* Styles for selected tags */
@@ -68,7 +68,7 @@ div.ReactTags__suggestions {
 }
 div.ReactTags__suggestions ul {
   list-style-type: none;
-  box-shadow: .05em .01em .5em rgba(0,0,0,.2);
+  box-shadow: 0.05em 0.01em 0.5em rgba(0, 0, 0, 0.2);
   background: white;
   width: 200px;
   padding: 0;
@@ -88,12 +88,12 @@ div.ReactTags__suggestions ul li.active {
   cursor: pointer;
 }
 
-div.ReactTags__suggestions mark{
+div.ReactTags__suggestions mark {
   padding: 0;
 }
 
-.form-section{
-  .form-section-heading{
+.form-section {
+  .form-section-heading {
     border-bottom: 1px solid $light-border;
     padding-bottom: $vmargin;
     margin-bottom: $vmargin;
@@ -101,15 +101,15 @@ div.ReactTags__suggestions mark{
     font-weight: bold;
   }
 }
-.control-label{
-  strong{
+.control-label {
+  strong {
     font-weight: normal;
   }
 }
 
-.search-form{
+.search-form {
   position: relative;
-  .search-form-reset{
+  .search-form-reset {
     position: absolute;
     top: 6px;
     right: 5px;
@@ -117,14 +117,14 @@ div.ReactTags__suggestions mark{
   }
 }
 
-.form-input{
+.form-item-wrapper {
   position: relative;
   margin-bottom: 1rem;
 }
-.form-group{
+.form-group {
   margin-bottom: 0;
 }
-.form-control-limit{
+.form-control-limit {
   position: absolute;
   background: white;
   padding: 5px;
@@ -132,12 +132,12 @@ div.ReactTags__suggestions mark{
   right: 5px;
   color: $light-grey;
   font-size: 80%;
-  &.danger{
-    color: #EF1642;
+  &.danger {
+    color: #ef1642;
   }
 }
 
-.form-section-heading{
+.form-section-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -147,12 +147,12 @@ div.ReactTags__suggestions mark{
   border-bottom: 1px solid $light-grey;
 }
 
-.form-section-heading-title{
+.form-section-heading-title {
   margin: 0;
   font-size: 1.25rem;
 }
 
-.form-section-collapsed{
+.form-section-collapsed {
   display: none;
 }
 
@@ -160,41 +160,48 @@ div.ReactTags__suggestions mark{
   display: none;
 }
 
-.form-errors{
-  .alert{
-    ul{
+.form-errors {
+  .alert {
+    ul {
       padding: 0 0 0 20px;
       margin: 0;
     }
   }
 }
 
-.input-error{
-  color: #EF1642;
-  input, textarea, select{
-    border-color: #EF1642;
+.input-error {
+  color: #ef1642;
+  input,
+  textarea,
+  select {
+    border-color: #ef1642;
   }
 }
 
-.form-input-errors{
-  color: #EF1642;
+.form-input-errors {
+  color: #ef1642;
   text-align: right;
   list-style-type: none;
   padding: 0;
   margin: 5px 0 0 0;
   font-size: 0.8rem;
-  li{
+  li {
     margin: 0;
   }
 }
 
-.form-component-select, .form-component-date,  .form-component-date2,  .form-component-datetime, .form-component-time, .form-component-date {
-  .col-sm-9{
+.form-component-select,
+.form-component-date,
+.form-component-date2,
+.form-component-datetime,
+.form-component-time,
+.form-component-date {
+  .col-sm-9 {
     padding-right: 40px;
   }
 }
 
-.form-component-clear{
+.form-component-clear {
   cursor: pointer;
   position: absolute;
   top: 11px;
@@ -208,19 +215,19 @@ div.ReactTags__suggestions mark{
   display: flex;
   justify-content: center;
   align-items: center;
-  span{
+  span {
     font-size: 8px;
     display: block;
     line-height: 1;
   }
-  &:hover{
+  &:hover {
     text-decoration: none;
     background: $medium-grey;
     color: #fff;
   }
 }
 
-.form-nested-item{
+.form-nested-item {
   border: 1px solid $light-grey;
   padding: 10px;
   border-radius: 3px;
@@ -228,7 +235,7 @@ div.ReactTags__suggestions mark{
   display: flex;
   align-items: center;
   position: relative;
-  .form-nested-item-deleted-overlay{
+  .form-nested-item-deleted-overlay {
     position: absolute;
     display: none;
     opacity: 0.3;
@@ -243,28 +250,28 @@ div.ReactTags__suggestions mark{
   }
 }
 
-.form-nested-item-inner{
+.form-nested-item-inner {
   flex: 1;
 }
-.form-nested-item-remove{
+.form-nested-item-remove {
   margin-left: 10px;
 }
-.form-nested-button{
+.form-nested-button {
   display: flex;
   justify-content: center;
   align-items: center;
-  svg{
-    display:block;
-    path{
-      fill: rgba(255,255,255,0.7);
-      stroke: rgba(255,255,255,0.7);
+  svg {
+    display: block;
+    path {
+      fill: rgba(255, 255, 255, 0.7);
+      stroke: rgba(255, 255, 255, 0.7);
     }
   }
 }
 
-.form-component-radiogroup{
-  .col-sm-9{
-    padding-top: calc(.375rem + 1px);
+.form-component-radiogroup {
+  .col-sm-9 {
+    padding-top: calc(0.375rem + 1px);
   }
 }
 
@@ -276,65 +283,65 @@ div.ReactTags__suggestions mark{
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background-color: #EEE;
-  
+  background-color: #eee;
+
   width: 48px;
   height: 48px;
-  
+
   &.size-xsmall {
     width: 32px;
     height: 32px;
   }
-  
+
   &.size-small {
     width: 40px;
     height: 40px;
   }
-  
+
   &.size-large {
     width: 56px;
     height: 56px;
   }
-  
+
   &.size-profile {
     width: 120px;
     height: 120px;
   }
-  
+
   &.gutter-bottom {
     margin-bottom: 8px;
   }
-  
+
   &.gutter-left {
     margin-left: 8px;
   }
-  
+
   &.gutter-right {
     margin-right: 8px;
   }
-  
+
   &.gutter-sides {
     margin-right: 8px;
     margin-left: 8px;
   }
-  
+
   &.gutter-all {
     margin: 8px;
   }
-  
+
   & img {
     width: 100%;
   }
 }
 
-.form-input-loading{
+.form-input-loading {
   position: relative;
 }
-.form-input-loading-isLoading{
+.form-input-loading-isLoading {
   pointer-events: none;
 }
-.form-input-loading-loader{
-  background: rgba(0,0,0,.05);
+.form-input-loading-loader {
+  background: rgba(0, 0, 0, 0.05);
   position: absolute;
   top: 0;
   left: 0;
@@ -345,8 +352,8 @@ div.ReactTags__suggestions mark{
   justify-content: center;
 }
 
-.form-component-checkbox{
-  .col-sm-9{
-    padding-top: calc(.375rem + 1px);
+.form-component-checkbox {
+  .col-sm-9 {
+    padding-top: calc(0.375rem + 1px);
   }
 }

@@ -68,6 +68,7 @@ type EditionMetadata {
 
     enableReadingList: Boolean
     enableChartSponsorships: Boolean
+    enableSkip: Boolean
 
     sitemap: [SitemapSection]
 }
@@ -167,6 +168,8 @@ type RawDbPaths {
     prenormalized: String
     followup_predefined: JSON
     followup_freeform: JSON
+    subPaths: JSON
+    skip: String
 }
 
 type NormDbPaths {

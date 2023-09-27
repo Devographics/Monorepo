@@ -28,7 +28,8 @@ export const getRawPaths = (
         section: Section
         question: Question
     },
-    suffix?: string
+    suffix?: string,
+    subPaths?: string[]
 ) => {
     const sectionPathSegment = question.sectionId || section.slug || section.id
     const pathSegments = [sectionPathSegment, question.id]
@@ -40,7 +41,8 @@ export const getRawPaths = (
             : [...pathSegments].join(separator)
 
     const paths = {
-        response: getPath(suffix ? [suffix] : [])
+        response: getPath(suffix ? [suffix] : []),
+        skip: getPath([DbPathsEnum.SKIP])
     } as DbPaths
 
     if (question.allowOther) {
@@ -68,6 +70,14 @@ export const getRawPaths = (
         paths[DbSuffixes.FOLLOWUP_PREDEFINED] = getOptionsPaths(DbSuffixes.FOLLOWUP_PREDEFINED)
         paths[DbSuffixes.FOLLOWUP_FREEFORM] = getOptionsPaths(DbSuffixes.FOLLOWUP_FREEFORM)
     }
+
+    if (subPaths) {
+        paths[DbPathsEnum.SUBPATHS] = {}
+        subPaths.forEach(subPath => {
+            const s = paths[DbPathsEnum.SUBPATHS] as DbSubPaths
+            s[subPath] = getPath([subPath])
+        })
+    }
     return paths
 }
 
@@ -83,7 +93,8 @@ export const getNormPaths = (
         section: Section
         question: Question
     },
-    suffix?: string
+    suffix?: string,
+    subPaths?: string[]
 ) => {
     const sectionSegment = question.sectionId || section.slug || section.id
     const questionSegment = question.id as string
@@ -95,7 +106,8 @@ export const getNormPaths = (
 
     let paths = {
         base: getPath(basePathSegments),
-        response: getPath(suffix ? [...basePathSegments, suffix] : basePathSegments)
+        response: getPath(suffix ? [...basePathSegments, suffix] : basePathSegments),
+        skip: getPath([...basePathSegments, DbPathsEnum.SKIP])
     } as DbPaths
 
     if (question.allowOther || question.allowPrenormalized) {
@@ -136,10 +148,11 @@ export const getPaths = (
         section: Section
         question: Question
     },
-    suffix?: string
+    suffix?: string,
+    subPaths?: string[]
 ) => ({
-    rawPaths: getRawPaths(options, suffix),
-    normPaths: getNormPaths(options, suffix)
+    rawPaths: getRawPaths(options, suffix, subPaths),
+    normPaths: getNormPaths(options, suffix, subPaths)
 })
 
 /*
@@ -170,7 +183,12 @@ export const getFormPaths = ({
     if (question.rawPaths) {
         const allPathKeys = Object.keys(question.rawPaths) as DbPathsEnum[]
         const stringPathsKeys = allPathKeys.filter(
-            k => ![DbPathsEnum.FOLLOWUP_FREEFORM, DbPathsEnum.FOLLOWUP_PREDEFINED].includes(k)
+            k =>
+                ![
+                    DbPathsEnum.FOLLOWUP_FREEFORM,
+                    DbPathsEnum.FOLLOWUP_PREDEFINED,
+                    DbPathsEnum.SUBPATHS
+                ].includes(k)
         ) as Array<keyof DbPathsStrings>
         stringPathsKeys.forEach(key => {
             const path = question?.rawPaths?.[key]
@@ -178,7 +196,7 @@ export const getFormPaths = ({
                 paths[key] = prefixWithEditionId(path, edition.id)
             }
         })
-        // handle follow-up paths separately
+        // handle follow-up paths and subPaths separately
         if (question.rawPaths[DbPathsEnum.FOLLOWUP_FREEFORM]) {
             paths[DbPathsEnum.FOLLOWUP_FREEFORM] = prefixPathsObjectWithEditionId(
                 question.rawPaths[DbPathsEnum.FOLLOWUP_FREEFORM],
@@ -188,6 +206,12 @@ export const getFormPaths = ({
         if (question.rawPaths[DbPathsEnum.FOLLOWUP_PREDEFINED]) {
             paths[DbPathsEnum.FOLLOWUP_PREDEFINED] = prefixPathsObjectWithEditionId(
                 question.rawPaths[DbPathsEnum.FOLLOWUP_PREDEFINED],
+                edition.id
+            )
+        }
+        if (question.rawPaths[DbPathsEnum.SUBPATHS]) {
+            paths[DbPathsEnum.SUBPATHS] = prefixPathsObjectWithEditionId(
+                question.rawPaths[DbPathsEnum.SUBPATHS],
                 edition.id
             )
         }

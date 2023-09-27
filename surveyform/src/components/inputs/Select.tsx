@@ -30,12 +30,12 @@ export const FormComponentSelect = (props: FormInputProps) => {
     <FormItem {...props}>
       <Form.Select
         // ref={refFunction}
-        defaultValue={emptyValue}
+        // defaultValue={emptyValue}
         onChange={(e) => {
           updateCurrentValues({ [path]: e.target.value });
         }}
         disabled={readOnly}
-        value={value?.toString()}
+        value={value ? value.toString() : emptyValue}
       >
         {allOptions.map((option) => {
           const { id, label } = option;

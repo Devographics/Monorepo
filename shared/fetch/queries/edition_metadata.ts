@@ -28,6 +28,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
           faq
           enableReadingList
           enableChartSponsorships
+          enableSkip
           colors {
             primary
             secondary
@@ -116,6 +117,8 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
                 other
                 prenormalized
                 response
+                subPaths
+                skip
               }
               options {
                 id

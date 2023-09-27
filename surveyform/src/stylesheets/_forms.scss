@@ -3,7 +3,7 @@
   // .form-control {
   //   background: $bg-color-lightest;
   // }
-  .form-input {
+  .form-item {
     position: relative;
 
     margin-bottom: $spacing;
@@ -16,14 +16,18 @@
     }
     @include medium {
       @include border;
-      padding: math.div($spacing, 2);
+      padding: math.div($spacing, 2) math.div($spacing, 2) $spacing
+        math.div($spacing, 2);
     }
     @include large {
       @include border;
-      padding: $spacing;
+      padding: $spacing $spacing $spacing * 2.5 $spacing;
+      &.form-item-skipped {
+        padding: $spacing;
+      }
     }
   }
-  .form-input:has(.form-help) {
+  .form-item:has(.form-help) {
     background: var(--bg-color-light);
     border: 0;
     @include small-medium {
@@ -123,10 +127,10 @@
     flex: 1;
     padding: math.div($spacing, 2) 0;
   }
-  .form-item-contents {
-    display: flex;
-    flex-direction: column;
-  }
+  // .form-item-contents {
+  //   display: flex;
+  //   flex-direction: column;
+  // }
   .form-item-input {
     textarea,
     input[type="text"],
@@ -469,7 +473,7 @@
   }
 }
 
-.form-input:empty {
+.form-item:empty {
   display: none;
 }
 
@@ -655,11 +659,105 @@
   --color: var(--bs-danger);
 }
 
+.skip-question {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  .btn {
+    border-radius: 3px 0 0 0;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    background: var(--bg-color) !important;
+  }
+  .icon-wrapper svg {
+    height: 18px;
+    width: 18px;
+  }
+}
+
+.form-item-contents {
+  display: grid;
+  transition: grid-template-rows 0.3s ease-out;
+  grid-template-rows: 1fr;
+}
+.form-item-contents-inner {
+  overflow: hidden;
+}
+.form-item-skipped {
+  border-color: var(--darker-border-color) !important;
+  .form-label-heading {
+    text-decoration: line-through;
+    color: var(--text-color-darker);
+    margin: 0;
+  }
+  .form-item-contents {
+    // height: 0px !important;
+    // overflow: hidden;
+    grid-template-rows: 0fr;
+  }
+}
+
 .form-input-years {
   .form-check-label {
     gap: $spacing/2;
   }
   input[type="number"] {
     width: 100px;
+  }
+}
+
+.likert {
+  .form-item-input {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing/2;
+    padding-top: $spacing * 4;
+  }
+  .form-check {
+    &:hover,
+    &:nth-child(2n) {
+      background: none;
+    }
+  }
+}
+
+.likert-row {
+  // display: grid;
+  // grid-template-columns: 1fr 1fr;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing/2;
+  gap: $spacing;
+  &:nth-child(2n) {
+    background: rgba(255, 255, 255, 0.04);
+  }
+}
+.likert-options,
+.likert-legends {
+  display: flex;
+  gap: $spacing/2;
+  margin-right: $spacing * 2;
+}
+
+.likert-option {
+}
+
+.likert-legends {
+  justify-content: flex-end;
+}
+.likert-legend-label {
+  position: relative;
+  width: 50px;
+  span {
+    rotate: -45deg;
+    transform-origin: bottom left;
+    white-space: nowrap;
+    top: -15px;
+    left: calc(50% - 10px);
+    position: absolute;
+    font-size: 0.9rem;
   }
 }

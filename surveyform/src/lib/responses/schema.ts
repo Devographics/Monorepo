@@ -213,12 +213,14 @@ export const responseBaseSchema: Schema = {
 export const createFieldType = ({
   isNumeric = false,
   isArray = false,
+  isBoolean = false,
 }: {
   isNumeric?: boolean;
   isArray?: boolean;
+  isBoolean?: boolean;
 }) => {
   // responses can sometimes be numeric, everything else is string
-  const type = isNumeric ? Number : String;
+  const type = isBoolean ? Boolean : isNumeric ? Number : String;
   const typeObject = {
     type,
     required: false,
@@ -256,9 +258,26 @@ export const getResponseSchema = ({
         }
 
         */
-        if (typeof formPathContents === "object") {
+        if (formPath === DbPathsEnum.SKIP) {
+          const fieldPath = formPathContents;
+          editionSchema[fieldPath] = createFieldType({
+            isBoolean: true,
+          });
+        } else if (formPath === DbPathsEnum.SUBPATHS) {
+          // for now assume that any subPath value (used for e.g. Likert scales)
+          // is an individual value
           const subPaths = formPathContents as DbSubPaths;
           for (const subPath of Object.values(subPaths)) {
+            // accept either an array or an individual value
+            editionSchema[subPath] = createFieldType({
+              isArray: false,
+              isNumeric: question.optionsAreNumeric,
+            });
+          }
+        } else if (typeof formPathContents === "object") {
+          const subPaths = formPathContents as DbSubPaths;
+          for (const subPath of Object.values(subPaths)) {
+            // accept either an array or an individual value
             editionSchema[subPath] = createFieldType({ isArray: true });
           }
         } else {

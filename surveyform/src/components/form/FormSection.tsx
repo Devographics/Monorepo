@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import FormLayout from "./FormLayout";
-import FormQuestion from "./FormQuestion";
+import FormItemWrapper from "./FormItemWrapper";
 import { captureException } from "@sentry/nextjs";
 import { saveResponse } from "~/components/page/services";
 import { useRouter } from "next/navigation";
@@ -230,7 +230,7 @@ export const FormSection = (props: {
                   </p>
                 )}
               >
-                <FormQuestion
+                <FormItemWrapper
                   {...formProps}
                   key={question.id}
                   question={question}
