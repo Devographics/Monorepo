@@ -28,6 +28,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
           faq
           enableReadingList
           enableChartSponsorships
+          enableSkip
           colors {
             primary
             secondary
