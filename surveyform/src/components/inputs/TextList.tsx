@@ -52,6 +52,18 @@ const getItemValues = (
     .filter((itemElem) => !!itemElem);
   return itemElems.map((ie) => ie?.value || "");
 };
+const getEmptyKeys = (
+  wrapper: Element | undefined | null,
+  items: Array<Item>
+) => {
+  return items
+    .map(({ key }) => ({
+      key,
+      value: selectItem(wrapper, key)?.value,
+    }))
+    .filter(({ value }) => !value)
+    .map(({ key }) => key);
+};
 
 // Utilities
 
@@ -158,6 +170,7 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
     virtualItems: Array<Item>;
   }>({
     items: values.map((val) => makeItem(val)),
+    /** We need virtual items in state in order to keep consistent keys */
     virtualItems: Array(expectedNbVirtual(values.length))
       .fill(null)
       .map(() => makeItem("")),
@@ -171,12 +184,6 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
     },
     [setRealVirtualItems]
   );
-  /*const setVirtualItems = (cb: (items: Array<Item>) => Array<Item>) => {
-    setRealVirtualItems(({ items, virtualItems }) => ({
-      items,
-      virtualItems: cb(virtualItems),
-    }));
-  };*/
   function expectedNbVirtual(nbItems: number) {
     // Virtual fields incitate user to answer
     // We need only one virtual field if the user has started filling the textList
@@ -242,21 +249,21 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
     [setItems, refillVirtualItems]
   );
 
-  const setAllItems = useCallback(
-    (items: Array<Item>) => {
-      setItems(() => items);
+  const removeKeys = useCallback(
+    (keys: Array<string>) => {
+      setItems((items) => items.filter(({ key }) => !keys.includes(key)));
       refillVirtualItems();
     },
-    [setItems, refillVirtualItems]
+    [setItems]
   );
 
   return [
     { items, virtualItems },
     {
       reifyVirtualItem,
-      setAllItems,
       createItemAt,
       removeItemAt,
+      removeKeys,
     },
   ] as const;
 };
@@ -303,7 +310,7 @@ const TextList = (props: FormInputProps<Array<string>>) => {
 
   const [
     { items, virtualItems },
-    { setAllItems, reifyVirtualItem, createItemAt, removeItemAt },
+    { reifyVirtualItem, createItemAt, removeItemAt, removeKeys },
   ] = useRealVirtualItems(values, question.limit);
   const deletionDelay = useDeletionDelay();
 
@@ -312,18 +319,11 @@ const TextList = (props: FormInputProps<Array<string>>) => {
   }, [items]);
 
   const removeEmptyItems = useCallback(() => {
-    let filtered: Array<Item> = [];
-    // items state is not yet updated when we blur the whole form
-    // const filtered = items.filter((i) => i.value);
-    // so we instead look at the DOM
-    wrapperRef.current?.querySelectorAll("input").forEach((i, idx) => {
-      if (idx >= items.length) return; // virtualItem, we ignore it
-      if (i.value) filtered.push(items[idx]);
-    });
-    if (filtered.length !== items.length) {
-      setAllItems(filtered);
+    const emptyKeys = getEmptyKeys(wrapperRef.current, items);
+    if (emptyKeys.length) {
+      removeKeys(emptyKeys);
     }
-  }, [setAllItems]);
+  }, [keysMemo(items)]);
 
   // (limit is not supposed to be 0)
   const limit = question.limit || DEFAULT_LIMIT;
