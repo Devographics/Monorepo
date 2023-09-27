@@ -7,6 +7,8 @@ import debounce from "lodash/debounce.js";
 import { useIntlContext } from "@devographics/react-i18n";
 import { getQuestioni18nIds } from "~/i18n/survey";
 
+const MemoFormControl = memo(FormControl);
+
 type KeyEvent = React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 // Items management
@@ -14,28 +16,41 @@ type KeyEvent = React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>;
 /**
  * In an array of input with auto-deletion of empty inputs,
  * each input must be associated with a key to become an entity
+ *
+ * Items are uncontrolled, so initialValue doesn't change after 1st mount
  */
 interface Item {
-  value: string;
   key: string;
   // focus when the input is insereted
   autofocus?: boolean;
+  initialValue: string;
 }
 
-function toStrings(items: Array<Item>): Array<string> {
-  return items.map(({ value }) => value);
-}
-const itemId = (item: Item) => `textlist-item-${item.key}`;
-const itemSelector = (item: Item) => `[data-id="${itemId(item)}"]`;
+const itemId = (key: string) => `textlist-item-${key}`;
+const itemSelector = (key: string) => `[data-id="${itemId(key)}"]`;
+const keysMemo = (items: Array<Item>): string =>
+  items.map((i) => i.key).join("-");
 const selectItem = (
   wrapper: Element | undefined | null,
-  item: Item
+  key: string
 ): HTMLInputElement | null | undefined => {
-  const maybeItem = wrapper?.querySelector(itemSelector(item));
-  if (!maybeItem) console.warn(`Item ${item.key}:${item.value} not found`);
+  const maybeItem = wrapper?.querySelector(itemSelector(key));
+  if (!maybeItem) console.warn(`Item key ${key} not found`);
   if (maybeItem instanceof HTMLInputElement) {
     return maybeItem;
   }
+};
+/**
+ * Inputs are all uncontrolled
+ */
+const getItemValues = (
+  wrapper: Element | undefined | null,
+  items: Array<Item>
+) => {
+  const itemElems = items
+    .map((item) => selectItem(wrapper, item.key))
+    .filter((itemElem) => !!itemElem);
+  return itemElems.map((ie) => ie?.value || "");
 };
 
 // Utilities
@@ -134,7 +149,7 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
   const getUniqueKey = useUniqueSeq();
   // guarantee a unique key
   function makeItem(value: string, autofocus?: boolean): Item {
-    return { value, key: getUniqueKey() + "", autofocus };
+    return { initialValue: value, key: getUniqueKey() + "", autofocus };
   }
 
   // state, virtual and additional values
@@ -147,12 +162,15 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
       .fill(null)
       .map(() => makeItem("")),
   });
-  const setItems = (cb: (items: Array<Item>) => Array<Item>) => {
-    setRealVirtualItems(({ items, virtualItems }) => ({
-      items: cb(items),
-      virtualItems,
-    }));
-  };
+  const setItems = useCallback(
+    (cb: (items: Array<Item>) => Array<Item>) => {
+      setRealVirtualItems(({ items, virtualItems }) => ({
+        items: cb(items),
+        virtualItems,
+      }));
+    },
+    [setRealVirtualItems]
+  );
   /*const setVirtualItems = (cb: (items: Array<Item>) => Array<Item>) => {
     setRealVirtualItems(({ items, virtualItems }) => ({
       items,
@@ -168,7 +186,7 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
   }
 
   // Manage virtual items
-  function refillVirtualItems() {
+  const refillVirtualItems = useCallback(() => {
     setRealVirtualItems(({ items, virtualItems }) => {
       const need = expectedNbVirtual(items.length) - virtualItems.length;
       if (need <= 0) return { items, virtualItems }; // nothing to do
@@ -182,81 +200,60 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
         ],
       };
     });
-  }
+  }, [setRealVirtualItems]);
   /**
    * Make the virtual item = add it to items,
    * remove it from virtual, and add more virtual fields if needed
    * @param item
    */
-  function reifyVirtualItem(index: number, value: string) {
-    setRealVirtualItems(({ items, virtualItems }) => {
-      // We actually reify all virtual items BEFORE the reified one
-      const reifiedItems = virtualItems.slice(0, index - items.length + 1);
-      reifiedItems[index - items.length].value = value;
-      return {
-        items: [...items, ...reifiedItems],
-        virtualItems: virtualItems.slice(index - items.length + 1), // refill is handled by a separate method,
-      };
-    });
-    refillVirtualItems();
-  }
+  const reifyVirtualItem = useCallback(
+    (index: number, value: string) => {
+      setRealVirtualItems(({ items, virtualItems }) => {
+        // We actually reify all virtual items BEFORE the reified one
+        const reifiedItems = virtualItems.slice(0, index - items.length + 1);
+        reifiedItems[index - items.length].initialValue = value;
+        return {
+          items: [...items, ...reifiedItems],
+          virtualItems: virtualItems.slice(index - items.length + 1), // refill is handled by a separate method,
+        };
+      });
+      refillVirtualItems();
+    },
+    [setRealVirtualItems, refillVirtualItems]
+  );
 
   // Manage real items
-  const createItemAt = (index: number, autofocus?: true) => {
-    const item = makeItem("", autofocus);
-    setItems((items) => [
-      ...items.slice(0, index),
-      item,
-      ...items.slice(index),
-    ]);
-  };
-  const removeItemAt = (idx: number) => {
-    setItems((items) => [...items.slice(0, idx), ...items.slice(idx + 1)]);
-    refillVirtualItems();
-  };
-  const updateItem = (idx: number, value: string) => {
-    setItems((items) => {
-      if (idx >= items.length || !items[idx]) {
-        console.warn(
-          `Trying to update item ${idx} with value ${value} but it has been deleted`
-        );
-        return items;
-      }
-      // nothing to do
-      if (items[idx].value === value) return items;
-      return [
-        ...items.slice(0, idx),
-        { value, key: items[idx].key },
-        ...items.slice(idx + 1),
-      ];
-    });
-  };
+  const createItemAt = useCallback(
+    (index: number, autofocus?: true) => {
+      const item = makeItem("", autofocus);
+      setItems((items) => [
+        ...items.slice(0, index),
+        item,
+        ...items.slice(index),
+      ]);
+    },
+    [setItems]
+  );
+  const removeItemAt = useCallback(
+    (idx: number) => {
+      setItems((items) => [...items.slice(0, idx), ...items.slice(idx + 1)]);
+      refillVirtualItems();
+    },
+    [setItems, refillVirtualItems]
+  );
 
-  // Getters
-  /**
-   * Get either virtual or real input at given index
-   * @param index
-   * @returns
-   */
-  function getItemAtIdx(index: number) {
-    if (index < items.length) {
-      return items[index];
-    } else {
-      return virtualItems[index - items.length];
-    }
-  }
-
-  function setAllItems(items: Array<Item>) {
-    setItems(() => items);
-    refillVirtualItems();
-  }
+  const setAllItems = useCallback(
+    (items: Array<Item>) => {
+      setItems(() => items);
+      refillVirtualItems();
+    },
+    [setItems, refillVirtualItems]
+  );
 
   return [
     { items, virtualItems },
     {
-      getItemAtIdx,
       reifyVirtualItem,
-      updateItem,
       setAllItems,
       createItemAt,
       removeItemAt,
@@ -298,31 +295,23 @@ const TextList = (props: FormInputProps<Array<string>>) => {
   // @see https://react.dev/learn/you-might-not-need-an-effect#resetting-all-state-when-a-prop-changes
   const values = value_ || [];
   const updateValue = (items: Array<Item>) => {
-    updateCurrentValuesDebounced({
-      [path]: items.length ? toStrings(items) : null,
+    const values = updateCurrentValues({
+      [path]: items.length ? getItemValues(wrapperRef.current, items) : null,
     });
   };
+  const updateValueDebounced = debounce(updateValue, 300);
 
   const [
     { items, virtualItems },
-    {
-      getItemAtIdx,
-      updateItem,
-      setAllItems,
-      reifyVirtualItem,
-      createItemAt,
-      removeItemAt,
-    },
+    { setAllItems, reifyVirtualItem, createItemAt, removeItemAt },
   ] = useRealVirtualItems(values, question.limit);
   const deletionDelay = useDeletionDelay();
-  const debouncedUpdateItem = debounce(updateItem, 150);
 
-  // TODO: an effect is not usually the best approach
   useEffect(() => {
     updateValue(items);
   }, [items]);
 
-  const removeEmptyItems = () => {
+  const removeEmptyItems = useCallback(() => {
     let filtered: Array<Item> = [];
     // items state is not yet updated when we blur the whole form
     // const filtered = items.filter((i) => i.value);
@@ -334,31 +323,34 @@ const TextList = (props: FormInputProps<Array<string>>) => {
     if (filtered.length !== items.length) {
       setAllItems(filtered);
     }
-  };
+  }, [setAllItems]);
 
-  // Values update
-  // TODO: assess if debouncing is really needed here, onchange is fired only on focus loss
-  // (contrary to "oninput" which actually needs debouncing)
-  // it seems that React Bootstrap treats onChange as onInput
-  const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
   // (limit is not supposed to be 0)
   const limit = question.limit || DEFAULT_LIMIT;
 
   // Focus management
-  const selectPreviousItem = (index: number) => {
-    if (index > items.length) {
-      return selectItem(wrapperRef.current, virtualItems[index - 1]);
-    }
-    return selectItem(wrapperRef.current, items[index - 1]);
-  };
-  const selectFirstVirtualItem = () =>
-    selectItem(wrapperRef.current, virtualItems[0]);
-  const selectNextItem = (index: number) => {
-    if (index === items.length - 1) {
-      return selectFirstVirtualItem();
-    }
-    return selectItem(wrapperRef.current, items[index + 1]);
-  };
+  const selectPreviousItem = useCallback(
+    (index: number) => {
+      if (index > items.length) {
+        return selectItem(wrapperRef.current, virtualItems[index - 1].key);
+      }
+      return selectItem(wrapperRef.current, items[index - 1].key);
+    },
+    [keysMemo(items), keysMemo(virtualItems)]
+  );
+  const selectFirstVirtualItem = useCallback(
+    () => selectItem(wrapperRef.current, virtualItems[0].key),
+    [virtualItems[0].key]
+  );
+  const selectNextItem = useCallback(
+    (index: number) => {
+      if (index === items.length - 1) {
+        return selectFirstVirtualItem();
+      }
+      return selectItem(wrapperRef.current, items[index + 1].key);
+    },
+    [keysMemo(items), keysMemo(virtualItems)]
+  );
 
   const onFormBlur = useCallback(
     (evt: React.FocusEvent<HTMLDivElement>) => {
@@ -369,7 +361,7 @@ const TextList = (props: FormInputProps<Array<string>>) => {
         removeEmptyItems();
       }
     },
-    [items]
+    [removeEmptyItems]
   );
   const onItemBlur = useCallback(
     (
@@ -378,10 +370,9 @@ const TextList = (props: FormInputProps<Array<string>>) => {
         | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
         | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement> // onBlur
     ) => {
-      const value = event.target.value;
-      updateItem(index, value);
+      updateValue(items);
     },
-    [items, virtualItems]
+    [items]
   );
 
   const onItemChange = useCallback(
@@ -397,52 +388,54 @@ const TextList = (props: FormInputProps<Array<string>>) => {
       const value = evt.target.value;
       if (isVirtualItem) {
         reifyVirtualItem(index, value);
-      } else {
-        debouncedUpdateItem(index, value);
       }
+      updateValueDebounced(items);
     },
-    [items, virtualItems]
+    [reifyVirtualItem, keysMemo(items)]
   );
   /**
    * if pressing backspace in an empty input,
    * may remove the item and switch to previous
    */
-  const onBackspaceDeleteKeyDown = (
-    evt: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
-    index: number
-  ) => {
-    // @ts-ignore TODO: not sure why we don't have a value despite using an HTMLInputElement
-    const value: string = evt.target.value;
-    // let the input handle deletion if there are chars to delete
-    if (value.length > 0) {
-      deletionDelay.deletedContent(index);
-      return;
-    }
-    if (deletionDelay.hasJustDeletedContent(index)) {
-      // if user has deleted content, we wait a small delay + a keyup
-      // before enabling any other interaction
-      return;
-    }
-    // we can now run the additional UX linked to the backspace press
-    // = swithcing to  previous input/removing item
-    evt.preventDefault();
-    // immediately reset deletion event ref
-    deletionDelay.resetDeletionDelay();
-    if (index >= items.length) {
-      // we are in the last item, if possible focus on previous one
-      if (index > 0) {
-        focusInputEnd(selectPreviousItem(index));
+  const onBackspaceDeleteKeyDown = useCallback(
+    (
+      evt: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+      index: number
+    ) => {
+      // @ts-ignore TODO: not sure why we don't have a value despite using an HTMLInputElement
+      const value: string = evt.target.value;
+      // let the input handle deletion if there are chars to delete
+      if (value.length > 0) {
+        deletionDelay.deletedContent(index);
+        return;
       }
-    } else if (index > 0) {
-      // we are in the middle (not last item, but there is a previous item)
-      focusInputEnd(selectPreviousItem(index));
-      removeItemAt(index);
-    } else if (items.length > 0) {
-      // there are no previous item, but there is a next one
-      focusInputEnd(selectNextItem(0));
-      removeItemAt(index);
-    }
-  };
+      if (deletionDelay.hasJustDeletedContent(index)) {
+        // if user has deleted content, we wait a small delay + a keyup
+        // before enabling any other interaction
+        return;
+      }
+      // we can now run the additional UX linked to the backspace press
+      // = swithcing to  previous input/removing item
+      evt.preventDefault();
+      // immediately reset deletion event ref
+      deletionDelay.resetDeletionDelay();
+      if (index >= items.length) {
+        // we are in the last item, if possible focus on previous one
+        if (index > 0) {
+          focusInputEnd(selectPreviousItem(index));
+        }
+      } else if (index > 0) {
+        // we are in the middle (not last item, but there is a previous item)
+        focusInputEnd(selectPreviousItem(index));
+        removeItemAt(index);
+      } else if (items.length > 0) {
+        // there are no previous item, but there is a next one
+        focusInputEnd(selectNextItem(0));
+        removeItemAt(index);
+      }
+    },
+    [removeItemAt, selectNextItem, selectPreviousItem]
+  );
   const onItemKeyUp = useCallback((evt: KeyEvent) => {
     if (evt.key === "Backspace" || evt.key === "Delete") {
       deletionDelay.hasUpped();
@@ -496,7 +489,7 @@ const TextList = (props: FormInputProps<Array<string>>) => {
         onBackspaceDeleteKeyDown(evt, index);
       }
     },
-    [items, virtualItems]
+    [items.length, selectNextItem]
   );
 
   const itemProps = {
@@ -519,6 +512,12 @@ const TextList = (props: FormInputProps<Array<string>>) => {
       ))}
     </FormItem>
   );
+};
+
+// having a global object avoids unexpected rerenders of the memoized component
+const formControlStyle: React.CSSProperties = {
+  marginTop: "4px",
+  marginBottom: "4px",
 };
 
 const TextListItem = memo(function TextListItem({
@@ -574,18 +573,15 @@ const TextListItem = memo(function TextListItem({
   );
   const onKeyUp = useCallback((evt) => onItemKeyUp(evt), [onItemKeyUp]);
   return (
-    <FormControl
+    <MemoFormControl
       // id={itemId(item)}
       // boostrap ain't happy with id, we just need a way to select the input imperatively to handle focus
-      data-id={itemId(item)}
-      style={{
-        marginTop: "4px",
-        marginBottom: "4px",
-      }}
+      data-id={itemId(item.key)}
+      style={formControlStyle}
       // TODO: use different templates to simplify?
       as={question.longText ? "textarea" : "input"}
       placeholder={placeholder}
-      defaultValue={item.value}
+      defaultValue={item.initialValue}
       onBlur={onBlur}
       onChange={onChange}
       onKeyDown={onKeyDown}
