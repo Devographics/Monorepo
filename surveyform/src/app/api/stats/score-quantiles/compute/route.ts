@@ -1,7 +1,6 @@
 import { getRawResponsesCollection } from "@devographics/mongo"
 import { ResponseDocument } from "@devographics/types"
 import { NextRequest, NextResponse } from "next/server"
-import sortBy from "lodash/sortBy.js"
 import { checkSecretKey } from "../../../secretKey"
 import { HandlerError } from "~/lib/handler-error"
 import { computeGlobalScore, ScoreBucket } from "~/lib/responses/scoreQuantiles"
@@ -11,7 +10,7 @@ import { computeGlobalScore, ScoreBucket } from "~/lib/responses/scoreQuantiles"
  * NOTE: similar code exists in API to compute more advanced facetted quantiles
  * This endpoint is protected by a secret key
  *  
- * /api/stats/knowledge-score-quantiles/compute?editionId=html2023&key=XXX
+ * /api/stats/score-quantiles/compute?editionId=html2023&key=XXX
  * (key = SECRET_KEY env variable)
  * 
  * @returns A table where percentiles[i] = the score for percentile i
@@ -32,7 +31,7 @@ export const GET = async (req: NextRequest) => {
             $match: {
                 editionId,
                 // important: remove null/undefined knowledgescore
-                knowledgeScore: { $isNumber: true }
+                knowledgeScore: { $exists: true }
             }
         }, {
             $group: {
@@ -46,6 +45,7 @@ export const GET = async (req: NextRequest) => {
         }, {
             $project: {
                 score: "$_id",
+                count: true,
                 _id: false
             }
         }]

@@ -9,14 +9,19 @@ test("compute global scores from mongo results", () => {
     expect(gs.totalCount).toEqual(156)
     expect(gs.maxScore).toEqual(3)
     expect(gs.ranks.map(({ rank }) => rank)).toEqual([
+        100,
         100 - 13,
         100 - 21 - 13,
         100 - 21 - 13 - 1,
-        1
     ])
-    expect(computeUserRank(4, gs)).toEqual(1)
+    // below min should give 100%
     expect(computeUserRank(-1, gs)).toEqual(100)
-    expect(computeUserRank(1, gs)).toEqual(100 - 13 - 21)
+    // min value should give 100%
+    expect(computeUserRank(0, gs)).toEqual(100)
+    // existing value = 100 - proportion until this value
+    expect(computeUserRank(1, gs)).toEqual(100 - 13)
+    // above max should give 1%
+    expect(computeUserRank(4, gs)).toEqual(1)
 
     /*
 

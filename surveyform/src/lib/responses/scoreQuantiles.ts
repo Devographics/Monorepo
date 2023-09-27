@@ -10,7 +10,11 @@ export interface GlobalScores {
     /** Sorted by score */
     buckets: Array<ScoreBucket>
     /** Sorted by score */
-    ranks: Array<{ score: number, rank: number }>
+    ranks: Array<{
+        score: number,
+        /** = proportion or users with score greater or equal */
+        rank: number
+    }>
 }
 
 /**
@@ -28,11 +32,10 @@ export function computeGlobalScore(rawBuckets: Array<ScoreBucket>): GlobalScores
     let currentPercentage = 0.
     const ranks = buckets.map(({ count, score }) => {
         const proportion = (count / totalCount) * 100.
-        console.log({ score, currentPercentage, proportion })
         const scoreRank = {
             score,
             // rank cannot be zero so the best are in the "top 1%"
-            rank: Math.max(100 - Math.floor((proportion + currentPercentage)), 1)
+            rank: 100 - Math.floor(currentPercentage)
         }
         currentPercentage += proportion
         return scoreRank
@@ -42,12 +45,15 @@ export function computeGlobalScore(rawBuckets: Array<ScoreBucket>): GlobalScores
 }
 /**
  * User is in the top X% (as a whole number)
+ * = how many users you managed to beat with this score, in proportion of the total
  */
 export function computeUserRank(userScore: number, globalScores: GlobalScores) {
+    if (userScore > globalScores.maxScore) return 1 // we avoid "top 0%"
     // @ts-expect-error https://github.com/microsoft/TypeScript/issues/48829
-    const rankBelow = globalScores.ranks.findLast(({ score }) => score <= userScore)
-    if (!rankBelow) return 100 // user is in the top 100%
-    return rankBelow.rank
+    const proportionBelow = globalScores.ranks.findLast(({ score }) => score <= userScore)
+    if (!proportionBelow) return 100 // user is in the top 100%
+    if (proportionBelow.rank === 0) return 1 // we avoid "top 0%"
+    return proportionBelow.rank
 }
 
 /**
