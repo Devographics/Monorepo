@@ -34,11 +34,7 @@ const moduleExports = (phase, { defaultConfig }) => {
       // your project has ESLint errors.
       ignoreDuringBuilds: true,
     },
-    env: {
-      NEXT_PUBLIC_IS_USING_LOCAL_DATABASE: !!(
-        process.env.MONGO_PUBLIC_URI || ""
-      ).match(/localhost/),
-    },
+    env: {},
     webpack: function (configArg, otherArgs) {
       // run previously configured function!
       /** @type {import("webpack").Configuration} */
