@@ -85,7 +85,8 @@ export default async function SurveyPage({
       slug,
       year,
     });
-  const imageUrl = getSurveyImageUrl(edition);
+
+  const imageUrl = getEditionImageUrl(edition);
   return (
     <div>
       <DebugRSC {...{ ___rscMustGetSurveyEditionFromUrl }} />
