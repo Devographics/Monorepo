@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, memo, useCallback } from "react";
 import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
@@ -222,6 +222,8 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
         );
         return items;
       }
+      // nothing to do
+      if (items[idx].value === value) return items;
       return [
         ...items.slice(0, idx),
         { value, key: items[idx].key },
@@ -281,7 +283,7 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
  * @param props
  * @returns
  */
-export const TextList = (props: FormInputProps<Array<string>>) => {
+const TextList = (props: FormInputProps<Array<string>>) => {
   const {
     path,
     value: value_,
@@ -313,7 +315,7 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     },
   ] = useRealVirtualItems(values, question.limit);
   const deletionDelay = useDeletionDelay();
-  const debouncedUpdateItem = debounce(updateItem, 50);
+  const debouncedUpdateItem = debounce(updateItem, 150);
 
   // TODO: an effect is not usually the best approach
   useEffect(() => {
@@ -358,40 +360,49 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
     return selectItem(wrapperRef.current, items[index + 1]);
   };
 
-  const onFormBlur = (evt: React.FocusEvent<HTMLDivElement>) => {
-    // When pressing enter in an input, we lose focus for the input
-    // but we are not leaving so we should not remove empty items (otherwise new items are immediately deleted)
-    const focusedInForm = evt.currentTarget?.contains(evt.relatedTarget);
-    if (!focusedInForm) {
-      removeEmptyItems();
-    }
-  };
-  const onItemBlur = (
-    index: number,
-    event:
-      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement> // onBlur
-  ) => {
-    const value = event.target.value;
-    const previousValue = getItemAtIdx(index).value;
-    if (value !== previousValue) {
-      // only update if the item actually changed otherwise we have competing updates
+  const onFormBlur = useCallback(
+    (evt: React.FocusEvent<HTMLDivElement>) => {
+      // When pressing enter in an input, we lose focus for the input
+      // but we are not leaving so we should not remove empty items (otherwise new items are immediately deleted)
+      const focusedInForm = evt.currentTarget?.contains(evt.relatedTarget);
+      if (!focusedInForm) {
+        removeEmptyItems();
+      }
+    },
+    [items]
+  );
+  const onItemBlur = useCallback(
+    (
+      index: number,
+      event:
+        | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement> // onBlur
+    ) => {
+      const value = event.target.value;
       updateItem(index, value);
-    }
-  };
+    },
+    [items, virtualItems]
+  );
 
-  const onItemChange = (index: number, key: string, evt) => {
-    // We only update values on blur,
-    // but on change, if the input is virtual,
-    // we want to reify it + add new virtual inputs if needed
-    const isVirtualItem = index >= items.length;
-    const value = evt.target.value;
-    if (isVirtualItem) {
-      reifyVirtualItem(index, value);
-    } else {
-      debouncedUpdateItem(index, value);
-    }
-  };
+  const onItemChange = useCallback(
+    (
+      index: number,
+      key: string,
+      evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+      // We only update values on blur,
+      // but on change, if the input is virtual,
+      // we want to reify it + add new virtual inputs if needed
+      const isVirtualItem = index >= items.length;
+      const value = evt.target.value;
+      if (isVirtualItem) {
+        reifyVirtualItem(index, value);
+      } else {
+        debouncedUpdateItem(index, value);
+      }
+    },
+    [items, virtualItems]
+  );
   /**
    * if pressing backspace in an empty input,
    * may remove the item and switch to previous
@@ -432,65 +443,71 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
       removeItemAt(index);
     }
   };
-  const onItemKeyUp = (evt: KeyEvent) => {
-    if (evt.key === "Backspace") {
+  const onItemKeyUp = useCallback((evt: KeyEvent) => {
+    if (evt.key === "Backspace" || evt.key === "Delete") {
       deletionDelay.hasUpped();
     }
-  };
-  const onItemKeyDown = (index: number, evt: KeyEvent) => {
-    // @ts-ignore TODO: not sure why we don't have a value despite using an HTMLInputElement
-    const value: string = evt.target.value;
-    if (evt.key === "Enter") {
-      // Leave textarea behaviour alone
-      if (question.longText) return;
+  }, []);
+  const onItemKeyDown = useCallback(
+    (index: number, evt: KeyEvent) => {
+      // @ts-ignore TODO: not sure why we don't have a value despite using an HTMLInputElement
+      const value: string = evt.target.value;
+      if (evt.key === "Enter") {
+        // Leave textarea behaviour alone
+        if (question.longText) return;
 
-      // prevent form submission
-      evt.stopPropagation();
-      evt.preventDefault();
-
-      // Pressing enter when focusing on an empty last item => submit the form as usual
-      // (last item is always empty, sinc starting to type in it will create a new empty last item)
-      if (index === items.length) return;
-
-      // Create an empty item next OR focus on existing one
-      const nextItem = selectNextItem(index);
-      if (!nextItem) return; // should not happen but pleases TS
-      if (!value) {
-        // no current value => focus on next item
-        // the blur event will take care of removing the current input
-        nextItem.focus();
-      } else if (!nextItem.value) {
-        // next item is already empty, just focus on it
-        nextItem.focus();
-      } else if (items.length >= limit) {
-        // already too many items
-        nextItem.focus();
-      } else {
-        // create a new empty item at next index
-        // it will use autofocus
-        createItemAt(index + 1, true);
-      }
-    } else if (evt.key === "ArrowUp") {
-      if (index > 0) {
+        // prevent form submission
+        evt.stopPropagation();
         evt.preventDefault();
-        focusInputEnd(selectPreviousItem(index));
+
+        // Pressing enter when focusing on an empty last item => submit the form as usual
+        // (last item is always empty, sinc starting to type in it will create a new empty last item)
+        if (index === items.length) return;
+
+        // Create an empty item next OR focus on existing one
+        const nextItem = selectNextItem(index);
+        if (!nextItem) return; // should not happen but pleases TS
+        if (!value) {
+          // no current value => focus on next item
+          // the blur event will take care of removing the current input
+          nextItem.focus();
+        } else if (!nextItem.value) {
+          // next item is already empty, just focus on it
+          nextItem.focus();
+        } else if (items.length >= limit) {
+          // already too many items
+          nextItem.focus();
+        } else {
+          // create a new empty item at next index
+          // it will use autofocus
+          createItemAt(index + 1, true);
+        }
+      } else if (evt.key === "ArrowUp") {
+        if (index > 0) {
+          evt.preventDefault();
+          focusInputEnd(selectPreviousItem(index));
+        }
+      } else if (evt.key === "ArrowDown") {
+        if (index < items.length) {
+          evt.preventDefault();
+          focusInputEnd(selectNextItem(index));
+        }
+      } else if (evt.key === "Backspace" || evt.key === "Delete") {
+        onBackspaceDeleteKeyDown(evt, index);
       }
-    } else if (evt.key === "ArrowDown") {
-      if (index < items.length) {
-        evt.preventDefault();
-        focusInputEnd(selectNextItem(index));
-      }
-    } else if (evt.key === "Backspace" || evt.key === "Delete") {
-      onBackspaceDeleteKeyDown(evt, index);
-    }
-  };
+    },
+    [items, virtualItems]
+  );
 
   const itemProps = {
     section,
     question,
-    items,
     readOnly,
     wrapperRef,
+    onItemBlur,
+    onItemChange,
+    onItemKeyDown,
+    onItemKeyUp,
   };
 
   const allItems = items.length < limit ? [...items, ...virtualItems] : items;
@@ -498,46 +515,33 @@ export const TextList = (props: FormInputProps<Array<string>>) => {
   return (
     <FormItem {...props} ref={wrapperRef} onBlur={onFormBlur}>
       {allItems.map((item, index) => (
-        <TextListItem
-          key={item.key}
-          {...itemProps}
-          index={index}
-          item={item}
-          onBlur={(evt) => onItemBlur(index, evt)}
-          onChange={(evt) => onItemChange(index, item.key, evt)}
-          onKeyDown={(evt) => onItemKeyDown(index, evt)}
-          onKeyUp={(evt) => onItemKeyUp(evt)}
-        />
+        <TextListItem key={item.key} {...itemProps} index={index} item={item} />
       ))}
     </FormItem>
   );
 };
 
-const TextListItem = ({
+const TextListItem = memo(function TextListItem({
   section,
   question,
   item,
   index,
   readOnly,
-  onBlur,
-  onChange,
-  onKeyDown,
-  onKeyUp,
+  onItemBlur,
+  onItemChange,
+  onItemKeyDown,
+  onItemKeyUp,
 }: {
   section: FormInputProps["section"];
   question: FormInputProps["question"];
   item: Item;
   index: number;
   readOnly?: boolean;
-  onBlur: React.EventHandler<
-    React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  >;
-  onChange: React.EventHandler<
-    React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  >;
-  onKeyDown: React.EventHandler<KeyEvent>;
-  onKeyUp: React.EventHandler<KeyEvent>;
-}) => {
+  onItemBlur: any;
+  onItemChange: any;
+  onItemKeyDown: any;
+  onItemKeyUp: any;
+}) {
   const { formatMessage } = useIntlContext();
 
   const defaultPlaceholder = formatMessage({
@@ -559,6 +563,16 @@ const TextListItem = ({
   const placeholder =
     indexPlaceholder || questionPlaceholder || defaultPlaceholder;
 
+  const onBlur = useCallback((evt) => onItemBlur(index, evt), [onItemBlur]);
+  const onChange = useCallback(
+    (evt) => onItemChange(index, item.key, evt),
+    [onItemChange]
+  );
+  const onKeyDown = useCallback(
+    (evt) => onItemKeyDown(index, evt),
+    [onItemKeyDown]
+  );
+  const onKeyUp = useCallback((evt) => onItemKeyUp(evt), [onItemKeyUp]);
   return (
     <FormControl
       // id={itemId(item)}
@@ -580,4 +594,6 @@ const TextListItem = ({
       autoFocus={item.autofocus}
     />
   );
-};
+});
+
+export default memo(TextList);
