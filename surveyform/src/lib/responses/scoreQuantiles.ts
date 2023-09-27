@@ -1,4 +1,7 @@
 import sortBy from "lodash/sortBy.js"
+import SCORE_DISTRIBUTION_RAW from "./score-counts.json";
+
+export const SCORE_DISTRIBUTION = SCORE_DISTRIBUTION_RAW.data;
 
 export interface ScoreBucket {
     score: number, count: number
@@ -47,13 +50,17 @@ export function computeGlobalScore(rawBuckets: Array<ScoreBucket>): GlobalScores
  * User is in the top X% (as a whole number)
  * = how many users you managed to beat with this score, in proportion of the total
  */
-export function computeUserRank(userScore: number, globalScores: GlobalScores) {
-    if (userScore > globalScores.maxScore) return 1 // we avoid "top 0%"
+export function computeUserRank(score: number, globalScores: GlobalScores = SCORE_DISTRIBUTION) {
+    if (score >= globalScores.maxScore) {
+        return .1; // we avoid "top 0%"
+    }
+    else if (score === 0) {
+        return 100;
+    }
+
     // @ts-expect-error https://github.com/microsoft/TypeScript/issues/48829
-    const proportionBelow = globalScores.ranks.findLast(({ score }) => score <= userScore)
-    if (!proportionBelow) return 100 // user is in the top 100%
-    if (proportionBelow.rank === 0) return 1 // we avoid "top 0%"
-    return proportionBelow.rank
+    const rank = globalScores.ranks.findLast((stats) => stats.score <= score)?.rank ?? 100;
+    return Math.max(1, rank);
 }
 
 /**
