@@ -6,9 +6,11 @@ import {
   ResponseDocument,
   FeaturesOptions,
   OPTION_NA,
+  DbPathsEnum,
 } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 import { getEditionQuestions } from "../surveys/helpers/getEditionQuestions";
+import isNil from "lodash/isNil";
 
 export const getCompletionPercentage = ({
   response,
@@ -232,9 +234,22 @@ export const questionIsCompleted = ({
 }) => {
   const formPaths = getFormPaths({ edition, question });
   const responsePath = formPaths.response;
+  const subPaths = formPaths[DbPathsEnum.SUBPATHS];
   const otherPath = formPaths.other;
+  const skipPath = formPaths[DbPathsEnum.SKIP];
   const answer = responsePath && response[responsePath];
   const otherAnswer = otherPath && response[otherPath];
-  const isCompleted = answerIsNotEmpty(answer) || answerIsNotEmpty(otherAnswer);
+  const skipValue = skipPath && response[skipPath];
+  // mark question as completed if at least one of its subPaths has a value
+  const hasSubPathsValue =
+    subPaths &&
+    Object.keys(subPaths)
+      .map((subPath) => response[subPaths[subPath]])
+      .every((v) => !isNil(v));
+  const isCompleted =
+    !!skipValue ||
+    hasSubPathsValue ||
+    answerIsNotEmpty(answer) ||
+    answerIsNotEmpty(otherAnswer);
   return isCompleted;
 };

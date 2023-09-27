@@ -1,5 +1,5 @@
 import Support from "~/components/common/Support";
-import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
+import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import {
   getEditionParams,
   rscGetEditionsMetadata,
@@ -85,7 +85,8 @@ export default async function SurveyPage({
       slug,
       year,
     });
-  const imageUrl = getSurveyImageUrl(edition);
+
+  const imageUrl = getEditionImageUrl(edition);
   return (
     <div>
       <DebugRSC {...{ ___rscMustGetSurveyEditionFromUrl }} />

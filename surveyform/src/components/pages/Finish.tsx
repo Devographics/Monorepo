@@ -1,7 +1,7 @@
 import ShareSite from "../share/ShareSite";
 import Score from "../common/Score";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
+import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import ReadingListResults from "~/components/reading_list/ReadingListResults";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
@@ -16,7 +16,7 @@ export const Finish = ({
   edition: EditionMetadata;
   response: ResponseDocument;
 }) => {
-  const imageUrl = getSurveyImageUrl(edition);
+  const imageUrl = getEditionImageUrl(edition);
   const { survey, year } = edition;
   const { name } = survey;
   const featureSections = edition.sections.filter(

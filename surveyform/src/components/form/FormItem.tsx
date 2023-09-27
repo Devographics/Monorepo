@@ -32,6 +32,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { useFormStateContext } from "./FormStateContext";
 import { useFormPropsContext } from "./FormPropsContext";
 import { SectionMetadata } from "@devographics/types";
+import { DbPathsEnum } from "@devographics/types";
 
 export interface FormItemProps extends FormInputProps {
   children: ReactNode;
@@ -56,11 +57,10 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
       questionNumber,
       onBlur,
       className = "",
+      updateCurrentValues,
     } = props;
 
-    const allowSkip = true;
-    const [skipped, setSkipped] = useState(false);
-    const skippedClass = skipped ? "form-item-skipped" : "";
+    const enableSkip = edition.enableSkip;
 
     const isLastItem = questionNumber === section.questions.length;
 
@@ -76,6 +76,10 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
     const formPaths = getFormPaths({ edition, question });
     const commentPath = formPaths.comment;
     const commentValue = commentPath && response?.[commentPath];
+
+    const skipPath = formPaths[DbPathsEnum.SKIP]!;
+    const isSkipped = response?.[skipPath];
+    const skippedClass = isSkipped ? "form-item-skipped" : "";
 
     // open the comment widget if there is already a comment or this is the first question
     const [showCommentInput, setShowCommentInput] = useState(
@@ -175,34 +179,54 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
         <Form.Group as="fieldset" controlId={path}>
           <FormItemTitle {...props} section={section} />
           <div className="form-item-contents">
-            <FormItemDescription {...props} />
-            <FormItemLimit {...props} />
-            <div className="form-item-input">{children}</div>
-            <FormItemNote {...props} />
+            <div className="form-item-contents-inner">
+              <FormItemDescription {...props} />
+              <FormItemLimit {...props} />
+              <div className="form-item-input">{children}</div>
+              <FormItemNote {...props} />
 
-            {allowComment && (
-              <CommentTrigger
-                value={commentValue}
-                showCommentInput={showCommentInput}
-                setShowCommentInput={setShowCommentInput}
-              />
-            )}
-            {allowComment && showCommentInput && commentPath && (
-              <CommentInput
-                {...props}
-                commentPath={commentPath}
-                commentValue={commentValue}
-              />
-            )}
+              {allowComment && (
+                <CommentTrigger
+                  value={commentValue}
+                  showCommentInput={showCommentInput}
+                  setShowCommentInput={setShowCommentInput}
+                />
+              )}
+              {allowComment && showCommentInput && commentPath && (
+                <CommentInput
+                  {...props}
+                  commentPath={commentPath}
+                  commentValue={commentValue}
+                />
+              )}
+            </div>
           </div>
         </Form.Group>
-        {allowSkip && <SkipButton skipped={skipped} setSkipped={setSkipped} />}
+        {enableSkip && (
+          <SkipButton
+            skipPath={skipPath}
+            isSkipped={isSkipped}
+            updateCurrentValues={updateCurrentValues}
+          />
+        )}
       </div>
     );
   }
 );
 
-export const SkipButton = ({ skipped, setSkipped }) => {
+export const SkipButton = ({
+  isSkipped,
+  skipPath,
+  updateCurrentValues,
+}: {
+  isSkipped: boolean;
+  skipPath: string;
+  updateCurrentValues: any;
+}) => {
+  const toggleSkipped = () => {
+    updateCurrentValues({ [skipPath]: !isSkipped });
+  };
+
   return (
     <OverlayTrigger
       placement="top"
@@ -210,7 +234,7 @@ export const SkipButton = ({ skipped, setSkipped }) => {
         <Tooltip id="general.skip_question.description">
           <FormattedMessage
             id={
-              skipped
+              isSkipped
                 ? "general.unskip_question.description"
                 : "general.skip_question.description"
             }
@@ -222,13 +246,13 @@ export const SkipButton = ({ skipped, setSkipped }) => {
         <Button
           size="sm"
           onClick={(e) => {
-            setSkipped(!skipped);
+            toggleSkipped();
           }}
         >
           <FormattedMessage
-            id={skipped ? "general.unskip_question" : "general.skip_question"}
+            id={isSkipped ? "general.unskip_question" : "general.skip_question"}
           />
-          {skipped ? <Unskip /> : <Skip />}
+          {isSkipped ? <Unskip /> : <Skip />}
         </Button>
       </span>
     </OverlayTrigger>

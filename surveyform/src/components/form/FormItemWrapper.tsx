@@ -6,7 +6,7 @@ import { useFormStateContext } from "./FormStateContext";
 import { useFormPropsContext } from "./FormPropsContext";
 import { QuestionMetadata } from "@devographics/types";
 
-export const FormQuestion = (props: {
+export const FormItemWrapper = (props: {
   question: QuestionMetadata;
   /** Starts at 1 */
   questionNumber: number;
@@ -48,7 +48,7 @@ export const FormQuestion = (props: {
   };
 
   const classNames = [
-    "form-input",
+    "form-item-wrapper",
     `question-id-${question.id}`,
     `question-template-${question.template}`,
     `question-section-${section.id}`,
@@ -61,4 +61,4 @@ export const FormQuestion = (props: {
   );
 };
 
-export default FormQuestion;
+export default FormItemWrapper;

@@ -1,4 +1,10 @@
-import { DbSuffixes, QuestionTemplateOutput, DbPaths, TemplateFunction } from '@devographics/types'
+import {
+    DbSuffixes,
+    QuestionTemplateOutput,
+    DbPaths,
+    TemplateFunction,
+    DbPathsEnum
+} from '@devographics/types'
 import { checkHasId } from '../helpers'
 
 export const others: TemplateFunction = options => {
@@ -11,7 +17,8 @@ export const others: TemplateFunction = options => {
     const basePath = `${sectionSegment}.${questionSegment}.${DbSuffixes.OTHERS}`
 
     const rawPaths: DbPaths = {
-        other: `${sectionSegment}__${questionSegment}__${DbSuffixes.OTHERS}`
+        other: `${sectionSegment}__${questionSegment}__${DbSuffixes.OTHERS}`,
+        skip: `${sectionSegment}__${questionSegment}__${DbPathsEnum.SKIP}`
     }
 
     const normPaths: DbPaths = {
@@ -19,7 +26,8 @@ export const others: TemplateFunction = options => {
         raw: `${basePath}.${DbSuffixes.RAW}`,
         patterns: `${basePath}.${DbSuffixes.PATTERNS}`,
         error: `${basePath}.${DbSuffixes.ERROR}`,
-        other: `${basePath}.${DbSuffixes.NORMALIZED}`
+        other: `${basePath}.${DbSuffixes.NORMALIZED}`,
+        skip: `${basePath}.${DbPathsEnum.SKIP}`
     }
 
     const output: QuestionTemplateOutput = {

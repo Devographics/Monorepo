@@ -8,13 +8,15 @@ export const variants = {
   square: "png",
 };
 
-export const getSurveyImageUrl = (
+export const getEditionImageUrl = (
   edition: EditionMetadata,
   variant?: "og" | "sidebar" | "square"
 ) => {
   const variantSuffix = variant ? `-${variant}` : "";
   const extension = variant ? variants[variant] : "png";
-  const imageUrl = `${publicConfig.assetUrl}/surveys/${edition.id}${variantSuffix}.${extension}`;
+  const imageUrl =
+    edition.imageUrl ||
+    `${publicConfig.assetUrl}/surveys/${edition.id}${variantSuffix}.${extension}`;
   if (!imageUrl) return;
   let finalImageUrl = isAbsoluteUrl(imageUrl)
     ? imageUrl

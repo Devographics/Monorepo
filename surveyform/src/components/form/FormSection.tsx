@@ -1,6 +1,6 @@
 "use client";
 import FormLayout from "./FormLayout";
-import FormQuestion from "./FormQuestion";
+import FormItemWrapper from "./FormItemWrapper";
 import { ErrorBoundary } from "~/components/error";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
 import { FormStateContextProvider } from "./FormStateContext";
@@ -60,7 +60,7 @@ export const FormSection = (props: {
                     </p>
                   )}
                 >
-                  <FormQuestion
+                  <FormItemWrapper
                     key={question.id}
                     question={question}
                     questionNumber={index + 1}

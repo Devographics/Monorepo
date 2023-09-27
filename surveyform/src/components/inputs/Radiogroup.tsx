@@ -6,13 +6,21 @@ import { FormItem } from "~/components/form/FormItem";
 import OtherOption from "./OtherOption";
 import { getFormPaths } from "@devographics/templates";
 import { memo, useState } from "react";
+import isNil from "lodash/isNil";
+import { useFormStateContext } from "../form/FormStateContext";
 
 export const FormComponentRadioGroup = (props: FormInputProps) => {
-  const { value, question } = props;
+  const { response } = useFormStateContext();
+
+  const { value, edition, question } = props;
   const { options, allowOther } = question;
 
+  const formPaths = getFormPaths({ edition, question });
+  const otherPath = formPaths.other!;
+  const otherValue = response?.[otherPath];
+  const hasOtherValue = !isNil(otherValue);
   // keep track of whether "other" field is shown or not
-  const [showOther, setShowOther] = useState<boolean>(!!value);
+  const [showOther, setShowOther] = useState<boolean>(hasOtherValue);
 
   const hasValue = value !== "";
   return (

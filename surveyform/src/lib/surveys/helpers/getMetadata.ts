@@ -5,7 +5,7 @@ import { rscIntlContext } from "~/i18n/rsc-fetchers";
 import { rscMustGetSurveyEditionFromUrl } from "~/app/[lang]/survey/[slug]/[year]/rsc-fetchers";
 import { getCommonContexts, getEditionContexts } from "~/i18n/config";
 import { getEditionTitle } from "./getEditionTitle";
-import { getSurveyImageUrl } from "~/lib/surveys/helpers/getSurveyImageUrl";
+import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 
 export const getMetadata = async ({ params }: { params: any }) => {
   const { lang, sectionNumber } = params;
@@ -17,7 +17,7 @@ export const getMetadata = async ({ params }: { params: any }) => {
   const { socialImageUrl, year } = edition;
   const { name = "" } = edition.survey;
 
-  const imageUrl = getSurveyImageUrl(edition);
+  const imageUrl = getEditionImageUrl(edition);
   let imageAbsoluteUrl = socialImageUrl || imageUrl;
   const url = publicConfig.appUrl;
   const description = intlContext.formatMessage({
