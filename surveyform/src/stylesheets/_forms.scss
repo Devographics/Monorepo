@@ -703,6 +703,7 @@
     display: flex;
     flex-direction: column;
     gap: $spacing/2;
+    padding-top: $spacing * 4;
   }
   .form-check {
     &:hover,
@@ -724,6 +725,29 @@
     background: rgba(255, 255, 255, 0.04);
   }
 }
-.likert-options {
+.likert-options,
+.likert-legends {
   display: flex;
+  gap: $spacing/2;
+  margin-right: $spacing * 2;
+}
+
+.likert-option {
+}
+
+.likert-legends {
+  justify-content: flex-end;
+}
+.likert-legend-label {
+  position: relative;
+  width: 50px;
+  span {
+    rotate: -45deg;
+    transform-origin: bottom left;
+    white-space: nowrap;
+    top: -15px;
+    left: calc(50% - 10px);
+    position: absolute;
+    font-size: 0.9rem;
+  }
 }

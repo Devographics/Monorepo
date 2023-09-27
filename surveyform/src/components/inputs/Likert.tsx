@@ -5,6 +5,9 @@ import { FormOption } from "~/components/form/FormOption";
 import { FormItem } from "~/components/form/FormItem";
 import { getFormPaths } from "@devographics/templates";
 import { DbPathsEnum, Option } from "@devographics/types";
+import { FormattedMessage } from "../common/FormattedMessage";
+
+const columns = [0, 1, 2, 3, 4];
 
 export const FormComponentLikertScale = (props: FormInputProps) => {
   const { value, edition, question } = props;
@@ -14,6 +17,13 @@ export const FormComponentLikertScale = (props: FormInputProps) => {
 
   return (
     <FormItem {...props} className="likert">
+      <div className="likert-legends">
+        {columns?.map((column, i) => (
+          <span className="likert-legend-label">
+            <FormattedMessage id={`likert.option.${i}`} />
+          </span>
+        ))}
+      </div>
       {options?.map((option, i) => {
         const formPath = formPaths?.[DbPathsEnum.SUBPATHS]?.[option.id];
         return formPath ? (
@@ -34,8 +44,6 @@ export const FormComponentLikertScale = (props: FormInputProps) => {
   );
 };
 
-const rows = [0, 1, 2, 3, 4];
-
 type RowProps = FormInputProps & {
   formPath: string;
   rowIndex: number;
@@ -49,7 +57,7 @@ const Row = (props: RowProps) => {
         <FormOption {...props} option={props.option} />
       </div>
       <div className="likert-options">
-        {rows.map((row, i) => (
+        {columns.map((column, i) => (
           <Radio key={i} radioIndex={i} {...props} />
         ))}
       </div>
@@ -83,8 +91,8 @@ const Radio = (props: RowProps & { radioIndex: number }) => {
   const disabled = readOnly;
 
   return (
-    <Form.Check type="radio">
-      <Form.Check.Label htmlFor={`${path}.${radioIndex}`}>
+    <Form.Check type="radio" className="likert-option">
+      <Form.Check.Label htmlFor={`${formPath}.${radioIndex}`}>
         <div className="form-input-wrapper">
           <Form.Check.Input
             type="radio"
@@ -104,6 +112,9 @@ const Radio = (props: RowProps & { radioIndex: number }) => {
             disabled={disabled}
           />
         </div>
+        <span className="sr-only">
+          <FormattedMessage id={`likert.option.${radioIndex}`} />
+        </span>
       </Form.Check.Label>
     </Form.Check>
   );

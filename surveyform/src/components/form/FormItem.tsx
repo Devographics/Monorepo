@@ -57,7 +57,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
       className = "",
     } = props;
 
-    const allowSkip = true;
+    const enableSkip = edition.enableSkip;
     const [skipped, setSkipped] = useState(false);
     const skippedClass = skipped ? "form-item-skipped" : "";
 
@@ -195,7 +195,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
             )}
           </div>
         </Form.Group>
-        {allowSkip && <SkipButton skipped={skipped} setSkipped={setSkipped} />}
+        {enableSkip && <SkipButton skipped={skipped} setSkipped={setSkipped} />}
       </div>
     );
   }
