@@ -18,7 +18,8 @@ export const text: TemplateFunction = options => {
     // but surveyadmin looks in "other", "prenormalize", etc. for different fields
     const rawPaths: DbPaths = {
         [DbPathsEnum.RESPONSE]: `${sectionSegment}__${questionSegment}`,
-        [DbPathsEnum.OTHER]: `${sectionSegment}__${questionSegment}`
+        [DbPathsEnum.OTHER]: `${sectionSegment}__${questionSegment}`,
+        [DbPathsEnum.SKIP]: `${sectionSegment}__${questionSegment}__${DbPathsEnum.SKIP}`
     }
 
     const basePath = `${sectionSegment}.${questionSegment}`
@@ -27,7 +28,8 @@ export const text: TemplateFunction = options => {
         [DbPathsEnum.RAW]: `${basePath}.${DbSuffixes.RAW}`,
         [DbPathsEnum.PATTERNS]: `${basePath}.${DbSuffixes.PATTERNS}`,
         [DbPathsEnum.ERROR]: `${basePath}.${DbSuffixes.ERROR}`,
-        [DbPathsEnum.OTHER]: `${basePath}.${DbSuffixes.NORMALIZED}`
+        [DbPathsEnum.OTHER]: `${basePath}.${DbSuffixes.NORMALIZED}`,
+        [DbPathsEnum.SKIP]: `${basePath}.${DbPathsEnum.SKIP}`
     }
 
     const output: QuestionTemplateOutput = {

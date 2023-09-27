@@ -118,6 +118,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
                 prenormalized
                 response
                 subPaths
+                skip
               }
               options {
                 id

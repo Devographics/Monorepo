@@ -41,7 +41,8 @@ export const getRawPaths = (
             : [...pathSegments].join(separator)
 
     const paths = {
-        response: getPath(suffix ? [suffix] : [])
+        response: getPath(suffix ? [suffix] : []),
+        skip: getPath([DbPathsEnum.SKIP])
     } as DbPaths
 
     if (question.allowOther) {
@@ -105,7 +106,8 @@ export const getNormPaths = (
 
     let paths = {
         base: getPath(basePathSegments),
-        response: getPath(suffix ? [...basePathSegments, suffix] : basePathSegments)
+        response: getPath(suffix ? [...basePathSegments, suffix] : basePathSegments),
+        skip: getPath([...basePathSegments, DbPathsEnum.SKIP])
     } as DbPaths
 
     if (question.allowOther || question.allowPrenormalized) {

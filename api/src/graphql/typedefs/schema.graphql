@@ -169,6 +169,7 @@ type RawDbPaths {
     followup_predefined: JSON
     followup_freeform: JSON
     subPaths: JSON
+    skip: String
 }
 
 type NormDbPaths {

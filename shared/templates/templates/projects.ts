@@ -18,7 +18,8 @@ export const projects: TemplateFunction = options => {
 
     const rawPaths: DbPaths = {
         [DbPathsEnum.RESPONSE]: `${sectionSegment}__${questionSegment}__${DbSuffixes.PRENORMALIZED}`,
-        [DbPathsEnum.PRENORMALIZED]: `${sectionSegment}__${questionSegment}__${DbSuffixes.PRENORMALIZED}`
+        [DbPathsEnum.PRENORMALIZED]: `${sectionSegment}__${questionSegment}__${DbSuffixes.PRENORMALIZED}`,
+        [DbPathsEnum.SKIP]: `${sectionSegment}__${questionSegment}__${DbPathsEnum.SKIP}`
     }
 
     const normPaths: DbPaths = {
@@ -26,7 +27,8 @@ export const projects: TemplateFunction = options => {
         [DbPathsEnum.RAW]: `${basePath}.${DbSuffixes.RAW}`,
         [DbPathsEnum.PATTERNS]: `${basePath}.${DbSuffixes.PATTERNS}`,
         [DbPathsEnum.ERROR]: `${basePath}.${DbSuffixes.ERROR}`,
-        [DbPathsEnum.PRENORMALIZED]: `${basePath}.${DbSuffixes.NORMALIZED}`
+        [DbPathsEnum.PRENORMALIZED]: `${basePath}.${DbSuffixes.NORMALIZED}`,
+        [DbPathsEnum.SKIP]: `${basePath}.${DbPathsEnum.SKIP}`
     }
 
     const output: QuestionTemplateOutput = {

@@ -32,7 +32,8 @@ export enum DbPathsEnum {
     RAW = 'raw',
     PATTERNS = 'patterns',
     ERROR = 'error',
-    SUBPATHS = 'subPaths'
+    SUBPATHS = 'subPaths',
+    SKIP = 'skip'
 }
 
 type DbPathsFirstLevel = Exclude<
