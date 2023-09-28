@@ -1,0 +1,12 @@
+/*
+
+These styles will only be active for specific surveys and/or editions
+
+*/
+.survey-tokyodev {
+  .footer-top {
+    .footer-link-item:last-of-type {
+      display: none;
+    }
+  }
+}
