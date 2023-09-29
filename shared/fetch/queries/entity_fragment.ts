@@ -4,7 +4,13 @@ Unless specified, these queries are designed to be used by surveyform
 
 */
 
-export const getEntityFragment = () => `
+type EntityFragmentOptions = {
+    isFull?: boolean
+}
+
+export const getEntityFragment = (options: EntityFragmentOptions = {}) => {
+    const { isFull = false } = options
+    return `
 id
 nameClean
 nameHtml
@@ -37,4 +43,12 @@ resources {
   title
   url
 }
+${
+    isFull
+        ? `
+tags
+patterns`
+        : ''
+}
 `
+}
