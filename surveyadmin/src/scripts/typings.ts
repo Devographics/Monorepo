@@ -6,6 +6,7 @@ export interface UserDocument {
     _id: string,
     userId: string
     olderUserId: string,
+    email: string,
     emailHash1: string
     emailHash2: string
     emailHash: string
