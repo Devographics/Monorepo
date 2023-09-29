@@ -4,7 +4,7 @@ Unless specified, these queries are designed to be used by surveyform
 
 */
 
-import { entityFragment } from './entity_fragment'
+import { getEntityFragment } from './entity_fragment'
 
 export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) => `
   query ${editionId}MetadataQuery {
@@ -102,7 +102,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
               optionsAreNumeric
               # optionsAreRange
               entity {
-                ${entityFragment}
+                ${getEntityFragment()}
               }
               rawPaths {
                 base
@@ -125,7 +125,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
                 intlId
                 label
                 entity {
-                  ${entityFragment}
+                  ${getEntityFragment()}
                 }
               }
               followups {

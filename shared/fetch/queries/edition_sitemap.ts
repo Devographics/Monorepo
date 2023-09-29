@@ -1,4 +1,4 @@
-import { entityFragment } from './entity_fragment'
+import { getEntityFragment } from './entity_fragment'
 
 export const getEditionSitemapQuery = ({ editionId }: { editionId: string }) => `
   query ${editionId}SitemapQuery {
@@ -81,7 +81,7 @@ export const getEditionSitemapQuery = ({ editionId }: { editionId: string }) => 
               blocks {
                 id
                 entity {
-                    ${entityFragment}
+                    ${getEntityFragment()}
                 }
                 fieldId
                 tabId
@@ -107,7 +107,7 @@ export const getEditionSitemapQuery = ({ editionId }: { editionId: string }) => 
                 variants {
                   id
                   entity {
-                      ${entityFragment}
+                      ${getEntityFragment()}
                   }
                   fieldId
                   tabId
@@ -136,7 +136,7 @@ export const getEditionSitemapQuery = ({ editionId }: { editionId: string }) => 
             blocks {
               id
               entity {
-                  ${entityFragment}
+                  ${getEntityFragment()}
               }
               fieldId
               tabId
@@ -162,7 +162,7 @@ export const getEditionSitemapQuery = ({ editionId }: { editionId: string }) => 
               variants {
                 id
                 entity {
-                    ${entityFragment}
+                    ${getEntityFragment()}
                 }
                 fieldId
                 tabId
