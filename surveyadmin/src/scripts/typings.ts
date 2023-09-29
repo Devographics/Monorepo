@@ -15,11 +15,9 @@ export interface UserDocument {
 }
 
 export interface EmailHash {
-    createdAt: any,
+    createdAt?: any,
     _id: string,
     userId: string,
     hash: string,
     uuid: string,
-
-
 }
