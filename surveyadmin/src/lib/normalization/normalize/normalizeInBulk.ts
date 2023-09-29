@@ -254,9 +254,10 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
   );
 
   console.log(
-    `👍 Normalized ${progress - mutationResult.discardedCount} responses ${mutationResult.discardedCount > 0
-      ? `(${mutationResult.discardedCount} responses discarded)`
-      : ""
+    `👍 Normalized ${progress - mutationResult.discardedCount} responses ${
+      mutationResult.discardedCount > 0
+        ? `(${mutationResult.discardedCount} responses discarded)`
+        : ""
     }. (${endAt}) - ${duration}s`
   );
 

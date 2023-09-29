@@ -1,4 +1,4 @@
-import { cleanupValue, normalize } from "./helpers";
+import { EntityRule, cleanupValue, normalize } from "./helpers";
 import set from "lodash/set.js";
 import {
   CommentField,
@@ -57,12 +57,7 @@ export const normalizeField = async ({
   // only set modified to `true` if at least one sub-step actually modifies the normalized response
   let modified = false;
 
-  const {
-    template,
-    rawPaths,
-    normPaths,
-    matchTags: matchTags_ = [],
-  } = questionObject;
+  const { template, rawPaths, normPaths } = questionObject;
 
   if (!rawPaths || !normPaths) {
     console.log(questionObject);
@@ -70,9 +65,6 @@ export const normalizeField = async ({
       `⛰️ normalizeField error: could not find rawPaths or normPaths for question ${questionObject.id}`
     );
   }
-
-  // automatically add question's own id as a potential match tag
-  const matchTags = [...(matchTags_ || []), questionObject.id];
 
   const processResponseField = async () => {
     // start by copying over the "main" response value
@@ -157,10 +149,9 @@ export const normalizeField = async ({
           try {
             const normTokens = await normalize({
               values: valuesArrayClean,
-              allRules: entityRules,
-              tags: matchTags,
+              entityRules,
               edition,
-              question: questionObject,
+              questionObject,
               verbose,
             });
 
@@ -183,7 +174,7 @@ export const normalizeField = async ({
             modified = true;
             if (verbose) {
               console.log(`⛰️ ${fieldPath}/other: “${otherValue}”`);
-              console.log(`⛰️ -> Tags: ${matchTags.toString()}`);
+              // console.log(`⛰️ -> Tags: ${matchTags.toString()}`);
               console.log(
                 `⛰️ -> Normalized values: ${JSON.stringify(normTokens)}`
               );

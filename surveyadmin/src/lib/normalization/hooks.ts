@@ -31,6 +31,5 @@ export const useUnnormalizedData = (params: {
     apiRoutes.normalization.loadUnnormalizedData.href(params),
     basicFetcher
   );
-  console.log("data", data, error);
   return { data: data?.data, loading: isLoading, error: data?.error };
 };

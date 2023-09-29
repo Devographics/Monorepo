@@ -11,6 +11,7 @@ import {
   QuestionMetadata,
   EditionMetadata,
   SurveyMetadata,
+  QuestionTemplateOutput,
 } from "@devographics/types";
 import {
   getNormResponsesCollection,
@@ -230,6 +231,33 @@ const extractTokens = async ({
   return sortedTokens;
 };
 
+export const getQuestionRules = ({
+  entityRules,
+  questionObject,
+  verbose,
+}: {
+  entityRules: any[];
+  questionObject: QuestionTemplateOutput;
+  verbose?: boolean;
+}) => {
+  // automatically add question's own id as a potential match tag
+  const matchTags = [...(questionObject.matchTags || []), questionObject.id];
+
+  const rules = matchTags
+    ? entityRules.filter((r) => intersection(matchTags, r.tags).length > 0)
+    : entityRules;
+
+  if (rules.length === 0) {
+    console.warn(
+      `‼️ normalize: found no rules for question [${
+        questionObject.id
+      }] with matchTags [${matchTags?.join(", ")}]`
+    );
+  } else if (verbose) {
+    console.log(`// Found ${rules.length} rules to match against`);
+  }
+  return rules;
+};
 /*
 
 Normalize a string value
@@ -239,33 +267,25 @@ Normalize a string value
 */
 export const normalize = async ({
   values,
-  allRules,
-  tags,
+  questionObject,
+  entityRules,
   edition,
-  question,
   verbose,
 }: {
   values: any[];
-  allRules: Array<any>;
-  tags?: Array<string>;
+  entityRules: EntityRule[];
   edition: EditionMetadata;
-  question: QuestionMetadata;
+  questionObject: QuestionTemplateOutput;
   verbose?: boolean;
 }) => {
-  const rules = tags
-    ? allRules.filter((r) => intersection(tags, r.tags).length > 0)
-    : allRules;
-
-  if (verbose) {
-    console.log(`// Found ${rules.length} rules to match against`);
-  }
+  const rules = getQuestionRules({ questionObject, entityRules, verbose });
   let allTokens: NormToken[] = [];
   for (const value of values) {
     const tokens = await extractTokens({
       value,
       rules,
       edition,
-      question,
+      question: questionObject,
       verbose,
     });
     allTokens = [...allTokens, ...tokens];
@@ -278,7 +298,13 @@ export const normalize = async ({
 Normalize a string value and only keep the first result
 
 */
-export const normalizeSingle = async (options) => {
+export const normalizeSingle = async (options: {
+  values: any[];
+  entityRules: EntityRule[];
+  edition: EditionMetadata;
+  questionObject: QuestionTemplateOutput;
+  verbose: boolean;
+}) => {
   const tokens = await normalize(options);
   // put longer tokens first as a proxy for relevancy
   const sortedTokens = sortBy(tokens, (v) => v.id && v.id.length).reverse();
