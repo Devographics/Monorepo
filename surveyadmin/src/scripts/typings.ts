@@ -11,7 +11,7 @@ export interface UserDocument {
     emailHash1: string
     emailHash2: string
     emailHash: string
-    newUserId: string
+    newerUserId?: string
 }
 
 export interface EmailHash {
