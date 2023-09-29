@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import { generateExports } from "~/lib/export/generateExports";
 
+export const dynamic = "force-dynamic"
+
 export const GET = async (req: NextRequest): Promise<NextResponse> => {
     // We log exports so they never go unnoticed
     console.log(`Started an export`);

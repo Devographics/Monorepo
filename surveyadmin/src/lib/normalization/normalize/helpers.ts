@@ -26,7 +26,7 @@ import {
   ignoreValues,
 } from "../helpers/getSelectors";
 import { getSelector } from "../helpers/getSelectors";
-import { BulkOperation, QuestionWithSection } from "../types";
+import { BulkOperation, NormalizedResponseDocument, QuestionWithSection } from "../types";
 
 // export const getFieldPaths = (field: Field) => {
 //   const { suffix } = field as ParsedQuestion;
@@ -568,11 +568,13 @@ export const getUnnormalizedResponses = async ({
     questionObject,
   });
 
-  const NormResponses = await getNormResponsesCollection();
+  const NormResponses = await getNormResponsesCollection<NormalizedResponseDocument>();
   let responses = await NormResponses.find(selector, {
-    _id: 1,
-    responseId: 1,
-    [rawFieldPath]: 1,
+    projection: {
+      _id: 1,
+      responseId: 1,
+      [rawFieldPath]: 1,
+    },
     sort: { [rawFieldPath]: 1 },
     //lean: true
   }).toArray();
@@ -600,41 +602,41 @@ export const getBulkOperations = ({
 }): Array<BulkOperation> => {
   return isReplace
     ? [
-        /*
-      - "replaceOne" doesn't allow for update operators
-      https://www.mongodb.com/docs/v7.0/reference/method/db.collection.replaceOne/
-      This means it does not let use use "$setOnInsert" to guarantee a string id when the "upsert" is an insert
+      /*
+    - "replaceOne" doesn't allow for update operators
+    https://www.mongodb.com/docs/v7.0/reference/method/db.collection.replaceOne/
+    This means it does not let use use "$setOnInsert" to guarantee a string id when the "upsert" is an insert
 
-      - updateOne is not suited either, as it would keep unmodified fields around but we want to delete them)
+    - updateOne is not suited either, as it would keep unmodified fields around but we want to delete them)
 
-      - a deletion followed by an insertion is more reliable. 
-      **The only difference with replaceOne, is that it will change the document _id everytime we replace the normalized response**
-      Computing a value that is not random (eg based on responseId) can create bugs if we create more than 1 normalized response
+    - a deletion followed by an insertion is more reliable. 
+    **The only difference with replaceOne, is that it will change the document _id everytime we replace the normalized response**
+    Computing a value that is not random (eg based on responseId) can create bugs if we create more than 1 normalized response
+    {
+      replaceOne: {
+        filter: selector,
+        replacement: modifier,
+        upsert: true,
+      },
+    }*/
       {
-        replaceOne: {
+        deleteOne: {
           filter: selector,
-          replacement: modifier,
-          upsert: true,
         },
-      }*/
-        {
-          deleteOne: {
-            filter: selector,
-          },
+      },
+      {
+        insertOne: {
+          document: { _id: newMongoId(), ...modifier },
         },
-        {
-          insertOne: {
-            document: { _id: newMongoId(), ...modifier },
-          },
-        },
-      ]
+      },
+    ]
     : [
-        {
-          updateMany: {
-            filter: selector,
-            update: modifier,
-            upsert: false,
-          },
+      {
+        updateMany: {
+          filter: selector,
+          update: modifier,
+          upsert: false,
         },
-      ];
+      },
+    ];
 };

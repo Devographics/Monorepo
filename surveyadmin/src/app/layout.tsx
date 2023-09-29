@@ -1,12 +1,18 @@
 import "~/stylesheets/main.scss";
 import { Metadata } from "next";
 import Link from "next/link";
+import { getConfig, setAppName } from "@devographics/helpers";
+import { AppName } from "@devographics/types";
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  setAppName(AppName.SURVEYADMIN);
+  const isDev = process.env.NODE_ENV === "development";
+  // call getConfig the first time and show warnings if this is local dev env
+  getConfig({ appName: AppName.SURVEYADMIN, showWarnings: isDev });
   return (
     <html>
       <head />
