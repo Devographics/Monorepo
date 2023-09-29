@@ -77,3 +77,16 @@
   grid-template-columns: 1fr 1fr 1fr;
   gap: $spacing;
 }
+
+.manualinput-presets {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.manualinput-form {
+  display: flex;
+  gap: 10px;
+  button {
+    flex-basis: 100px;
+  }
+}

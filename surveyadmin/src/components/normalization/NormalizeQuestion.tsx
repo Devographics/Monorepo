@@ -14,6 +14,7 @@ import {
 } from "@devographics/types";
 import { useSegments } from "./hooks";
 import type { QuestionWithSection } from "~/lib/normalization/types";
+import QuestionData from "./QuestionData";
 
 export const NormalizeQuestion = (props: {
   survey: SurveyMetadata;
@@ -46,7 +47,9 @@ export const Normalization = ({
   question: QuestionWithSection;
   data: UnnormalizedData;
 }) => {
-  const { responsesCount, unnormalizedResponses } = data;
+  const { responsesCount, unnormalizedResponses, questionResult } = data;
+
+  const questionData = questionResult.data;
 
   const {
     initializeSegments,
@@ -69,12 +72,14 @@ export const Normalization = ({
     enabled,
     setEnabled,
     segments,
+    questionData,
   };
 
   return (
     <div className="admin-normalization admin-content">
       <Actions {...props} />
       {segments.length > 0 && <Progress {...props} />}
+      <QuestionData questionData={questionData} />
       <Fields {...props} />
     </div>
   );

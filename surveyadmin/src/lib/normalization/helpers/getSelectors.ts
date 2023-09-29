@@ -59,7 +59,27 @@ export const ignoreValues = [
   "undefined",
 ];
 
-export const existsSelector = { $exists: true, $nin: ignoreValues };
+/*
+
+Note: `$elemMatch: { $ne: "" }` matches all arrays that include at least
+one item that is not equal to "" (i.e. not an empty strings)
+
+*/
+type SelectorOptions = {
+  isArray?: boolean;
+};
+export const getExistsSelector = (options: SelectorOptions = {}) => {
+  const { isArray = false } = options;
+  const selector = {
+    $exists: true,
+  };
+  if (isArray) {
+    selector["$elemMatch"] = { $nin: ignoreValues };
+  } else {
+    selector["$nin"] = ignoreValues;
+  }
+  return selector;
+};
 
 export const getUnnormalizedResponsesSelector = ({
   edition,
@@ -70,10 +90,13 @@ export const getUnnormalizedResponsesSelector = ({
 }) => {
   const rawFieldPath = questionObject?.normPaths?.raw;
   const normalizedFieldPath = questionObject?.normPaths?.other;
+  const existsSelector = getExistsSelector({
+    isArray: questionObject.allowMultiple,
+  });
   if (rawFieldPath && normalizedFieldPath) {
     const selector = {
       editionId: edition.id,
-      [rawFieldPath]: { $exists: true },
+      [rawFieldPath]: existsSelector,
       $or: [
         { [normalizedFieldPath]: [] },
         { [normalizedFieldPath]: { $exists: false } },
@@ -112,10 +135,11 @@ export const getResponsesSelector = ({
   const formPaths = getFormPaths({ edition, question: questionObject });
   console.log(questionObject.rawPaths);
   console.log(formPaths);
+  const isArray = questionObject.allowMultiple;
   if (formPaths.other) {
     const selector = {
       editionId: edition.id,
-      [formPaths.other]: existsSelector,
+      [formPaths.other]: getExistsSelector({ isArray }),
     };
     return selector;
   } else {
@@ -161,12 +185,12 @@ export const getSelector = async ({
         if (question.id === "source") {
           // source field should be treated differently
           selector["$or"] = getSourceFields(edition.id).map((f) => ({
-            [f]: existsSelector,
+            [f]: getExistsSelector(),
           }));
         } else {
           const formPaths = getFormPaths({ edition, question: questionObject });
           if (formPaths.other) {
-            selector[formPaths.other] = existsSelector;
+            selector[formPaths.other] = getExistsSelector();
           }
         }
       }

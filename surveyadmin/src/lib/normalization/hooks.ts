@@ -1,3 +1,5 @@
+import { FetchPayloadSuccessOrError } from "@devographics/fetch";
+import { ResponseData } from "@devographics/types";
 import useSWR from "swr";
 import { apiRoutes } from "~/lib/apiRoutes";
 
@@ -17,6 +19,7 @@ export interface UnnormalizedResponses {
 export type UnnormalizedData = {
   unnormalizedResponses: Array<UnnormalizedResponses>;
   responsesCount: number;
+  questionResult: FetchPayloadSuccessOrError<ResponseData>;
 };
 
 export const useUnnormalizedData = (params: {

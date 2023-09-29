@@ -98,6 +98,15 @@ Extract matching tokens from a string
 const enableLimit = false;
 const stringLimit = enableLimit ? 170 : 1000; // max length of string to try and find tokens in
 const rulesLimit = 1500; // max number of rules to try and match for any given string
+
+export type NormToken = {
+  id: string;
+  pattern: string;
+  match: any;
+  length: number;
+  rules: number;
+  range: [number, number];
+};
 const extractTokens = async ({
   value,
   rules,
@@ -125,14 +134,7 @@ const extractTokens = async ({
     );
   }
 
-  const tokens: Array<{
-    id: string;
-    pattern: string;
-    match: any;
-    length: number;
-    rules: number;
-    range: [number, number];
-  }> = [];
+  const tokens: Array<NormToken> = [];
   let count = 0;
   // extract tokens for each rule, storing
   // the start/end index for each match
@@ -236,14 +238,14 @@ Normalize a string value
 
 */
 export const normalize = async ({
-  value,
+  values,
   allRules,
   tags,
   edition,
   question,
   verbose,
 }: {
-  value: any;
+  values: any[];
   allRules: Array<any>;
   tags?: Array<string>;
   edition: EditionMetadata;
@@ -257,7 +259,18 @@ export const normalize = async ({
   if (verbose) {
     console.log(`// Found ${rules.length} rules to match against`);
   }
-  return await extractTokens({ value, rules, edition, question, verbose });
+  let allTokens: NormToken[] = [];
+  for (const value of values) {
+    const tokens = await extractTokens({
+      value,
+      rules,
+      edition,
+      question,
+      verbose,
+    });
+    allTokens = [...allTokens, ...tokens];
+  }
+  return allTokens;
 };
 
 /*
@@ -587,7 +600,7 @@ export const getBulkOperations = ({
 }): Array<BulkOperation> => {
   return isReplace
     ? [
-      /*
+        /*
       - "replaceOne" doesn't allow for update operators
       https://www.mongodb.com/docs/v7.0/reference/method/db.collection.replaceOne/
       This means it does not let use use "$setOnInsert" to guarantee a string id when the "upsert" is an insert
@@ -604,23 +617,24 @@ export const getBulkOperations = ({
           upsert: true,
         },
       }*/
-      {
-        deleteOne: {
-          filter: selector
+        {
+          deleteOne: {
+            filter: selector,
+          },
         },
-      },
-      {
-        insertOne: {
-          document: { _id: newMongoId(), ...modifier }
-        }
-      }
-
-    ]
-    : [{
-      updateMany: {
-        filter: selector,
-        update: modifier,
-        upsert: false,
-      },
-    }];
+        {
+          insertOne: {
+            document: { _id: newMongoId(), ...modifier },
+          },
+        },
+      ]
+    : [
+        {
+          updateMany: {
+            filter: selector,
+            update: modifier,
+            upsert: false,
+          },
+        },
+      ];
 };

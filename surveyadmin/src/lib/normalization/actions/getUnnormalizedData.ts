@@ -1,4 +1,4 @@
-import { fetchSurveysMetadata } from "@devographics/fetch";
+import { fetchSurveysMetadata, fetchQuestionData } from "@devographics/fetch";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import {
   getEditionQuestionById,
@@ -7,6 +7,7 @@ import {
 } from "../normalize/helpers";
 import { getEditionQuestions } from "../helpers/getEditionQuestions";
 import get from "lodash/get";
+import { ResultsSubFieldEnum } from "@devographics/types";
 
 export const getUnnormalizedData = async ({
   surveyId,
@@ -51,5 +52,14 @@ export const getUnnormalizedData = async ({
     edition,
     question,
   });
-  return { responsesCount, unnormalizedResponses };
+
+  const questionResult = await fetchQuestionData({
+    surveyId,
+    editionId,
+    sectionId: question.section.id,
+    questionId,
+    subField: ResultsSubFieldEnum.FREEFORM,
+  });
+
+  return { responsesCount, unnormalizedResponses, questionResult };
 };
