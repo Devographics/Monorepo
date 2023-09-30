@@ -37,6 +37,7 @@ const unimplementedFeatures = [
   "html_modules",
   "scoped_element_registries",
   "isolated_webapps",
+  "blocking_render",
 ];
 
 export const Experience2 = (props: ExperienceProps) => {
@@ -198,16 +199,20 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
             <FormOption {...props} isChecked={isChecked} option={option} />
           </Form.Check.Label>
           {unimplemented && (
-             <OverlayTrigger placement="top"
-             overlay={
-               <Tooltip id={ `${question.id}_unimplemented_tooltip` }>
-                 <FormattedMessage id="feature.unimplemented.description" />
-               </Tooltip>
-             }
-           >
-            <span className="feature-unimplemented" aria-describedby={ `${question.id}_unimplemented_tooltip` }>
-              <FormattedMessage id="feature.unimplemented" />
-            </span>
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id={`${question.id}_unimplemented_tooltip`}>
+                  <FormattedMessage id="feature.unimplemented.description" />
+                </Tooltip>
+              }
+            >
+              <span
+                className="feature-unimplemented"
+                aria-describedby={`${question.id}_unimplemented_tooltip`}
+              >
+                <FormattedMessage id="feature.unimplemented" />
+              </span>
             </OverlayTrigger>
           )}
           {followups && (
