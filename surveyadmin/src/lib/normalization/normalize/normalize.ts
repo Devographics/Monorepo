@@ -1,8 +1,4 @@
-import {
-  generateEntityRules,
-  getEditionQuestionById,
-  getQuestionRules,
-} from "./helpers";
+import { generateEntityRules, getEditionQuestionById } from "./helpers";
 import { getQuestionObject } from "../helpers/getQuestionObject";
 import * as steps from "./steps";
 import get from "lodash/get.js";

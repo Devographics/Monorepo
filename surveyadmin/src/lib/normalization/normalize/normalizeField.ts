@@ -138,9 +138,12 @@ export const normalizeField = async ({
       const fieldPath = prefixWithEditionId(rawPaths?.other, edition.id);
       const freeformValue = response[fieldPath];
       if (freeformValue) {
-        const valuesArray = questionObject.allowMultiple
-          ? freeformValue
-          : convertToArray(freeformValue);
+        // currently the textList template is the only one that supports multiple
+        // freeform values
+        const valuesArray =
+          questionObject.template === "textList"
+            ? freeformValue
+            : convertToArray({ questionObject, value: freeformValue });
         const valuesArrayClean = compact(valuesArray.map(cleanupValue));
         const otherValue = cleanupValue(response[fieldPath]);
         if (valuesArrayClean.length > 0) {

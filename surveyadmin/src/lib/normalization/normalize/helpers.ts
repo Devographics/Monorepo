@@ -247,14 +247,16 @@ export const getQuestionRules = ({
     ? entityRules.filter((r) => intersection(matchTags, r.tags).length > 0)
     : entityRules;
 
-  if (rules.length === 0) {
-    console.warn(
-      `‼️ normalize: found no rules for question [${
-        questionObject.id
-      }] with matchTags [${matchTags?.join(", ")}]`
-    );
-  } else if (verbose) {
-    console.log(`// Found ${rules.length} rules to match against`);
+  if (verbose) {
+    if (rules.length === 0) {
+      console.warn(
+        `‼️ normalize: found no rules for question [${
+          questionObject.id
+        }] with matchTags [${matchTags?.join(", ")}]`
+      );
+    } else {
+      console.log(`// Found ${rules.length} rules to match against`);
+    }
   }
   return rules;
 };
