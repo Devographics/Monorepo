@@ -9,7 +9,11 @@ import {
   RegularField,
 } from "../types";
 import clone from "lodash/clone";
-import { QuestionTemplateOutput, SectionMetadata } from "@devographics/types";
+import {
+  QuestionTemplateOutput,
+  SectionMetadata,
+  DbPathsEnum,
+} from "@devographics/types";
 import { getFieldsToCopy } from "./steps";
 import { prefixWithEditionId } from "@devographics/templates";
 import compact from "lodash/compact";
@@ -190,16 +194,59 @@ export const normalizeField = async ({
     }
   };
 
+  const processPredefinedFollowupField = async () => {
+    const rawPredefinedFollowupPaths =
+      rawPaths[DbPathsEnum.FOLLOWUP_PREDEFINED];
+    const normPredefinedFollowupPaths =
+      normPaths[DbPathsEnum.FOLLOWUP_PREDEFINED];
+    if (rawPredefinedFollowupPaths && normPredefinedFollowupPaths) {
+      // if field has both a source raw path and a target norm. path defined, proceed
+      const subPathKeys = Object.keys(rawPredefinedFollowupPaths);
+      for (const subPathKey of subPathKeys) {
+        // go through each follow-up subPath and see if it contains a value
+        const rawFieldPath = prefixWithEditionId(
+          rawPredefinedFollowupPaths[subPathKey],
+          edition.id
+        );
+        const normFieldPath = normPredefinedFollowupPaths[subPathKey];
+        const predefinedFollowupValue = cleanupValue(response[rawFieldPath]);
+
+        if (predefinedFollowupValue) {
+          // if value exists copy it over to norm. response document
+          set(normResp, normFieldPath, predefinedFollowupValue);
+          regularFields.push({
+            questionId: questionObject.id,
+            fieldPath: rawFieldPath,
+            value: predefinedFollowupValue,
+          });
+          modified = true;
+          if (verbose) {
+            console.log(
+              `⛰️ ${rawFieldPath}/${DbPathsEnum.FOLLOWUP_PREDEFINED}: “${predefinedFollowupValue}”`
+            );
+          }
+        }
+      }
+    }
+  };
+
+  const processFreeformFollowupField = async () => {
+    // not implemented yet
+  };
+
   if (isRenormalization) {
     // when renormalizing an already-normalized response, we only need to worry about the
     // "other" sub-field, since the other ones have already been copied over
     await processFreeformField();
+    await processFreeformFollowupField();
   } else {
     // else, when normalizing from scratch we process all sub-fields
     await processResponseField();
     await processCommentField();
     await processPrenormalizedField();
     await processFreeformField();
+    await processPredefinedFollowupField();
+    await processFreeformFollowupField();
   }
 
   const result = {

@@ -177,8 +177,8 @@ type NormDbPaths {
     other: String
     prenormalized: String
     comment: String
-    followup_predefined: String
-    followup_freeform: String
+    followup_predefined: JSON
+    followup_freeform: JSON
     raw: String
     patterns: String
     error: String
