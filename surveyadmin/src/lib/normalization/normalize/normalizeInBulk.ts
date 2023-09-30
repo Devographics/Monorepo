@@ -1,4 +1,4 @@
-import { normalizeDocument } from "./normalize";
+import { normalizeDocument } from "./normalizeDocument";
 import { generateEntityRules, getBulkOperations } from "./helpers";
 import { getNormResponsesCollection } from "@devographics/mongo";
 import { fetchEntities } from "@devographics/fetch";

@@ -15,7 +15,7 @@ import yaml from "js-yaml";
 import fs, { promises as fsPromises } from "fs";
 
 import { logToFile } from "@devographics/debug";
-import { normalizeDocument } from "~/lib/normalization/normalize/normalize";
+import { normalizeDocument } from "~/lib/normalization/normalize/normalizeDocument";
 import { getEditionQuestions } from "~/lib/normalization/helpers/getEditionQuestions";
 import {
   templateFunctions,
