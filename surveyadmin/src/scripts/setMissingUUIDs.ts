@@ -3,12 +3,13 @@ import {
   getNormResponsesCollection,
   getUsersCollection,
 } from "@devographics/mongo";
+import { UserDocument } from "./typings";
 
 const isSimulation = false;
 
 export const setMissingUUIDs = async ({ limit = 20 }) => {
   limit = Number(limit);
-  const Users = await getUsersCollection();
+  const Users = await getUsersCollection<UserDocument>();
 
   let i = 0;
   const result = { duplicateAccountsCount: 0, duplicateUsers: [] };
@@ -28,6 +29,7 @@ export const setMissingUUIDs = async ({ limit = 20 }) => {
     const { _id, userId } = normResponse;
 
     const user = await Users.findOne({ _id: userId });
+    if (!user) throw new Error(`Can't find user with _id ${userId}`)
 
     const { emailHash } = user;
     const uuid = await getUUID(emailHash, userId);

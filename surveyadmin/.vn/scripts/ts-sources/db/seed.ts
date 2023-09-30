@@ -1,10 +1,10 @@
 import { getAppClient } from "@devographics/mongo";
 import env from "@next/env";
 const { loadEnvConfig } = env;
-import { seedTestUser } from "~/account/user/tests/seedTestUser"
+// import { seedTestUser } from "~/account/user/tests/seedTestUser"
 
 async function runSeed() {
-  await seedTestUser()
+  //await seedTestUser()
 }
 
 // No top-level async for Node 14

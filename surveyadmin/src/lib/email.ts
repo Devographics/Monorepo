@@ -1,6 +1,7 @@
 import { getEmailHashesCollection, newMongoId } from "@devographics/mongo";
 import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
+import { EmailHash } from "~/scripts/typings";
 
 /**
  *
@@ -25,7 +26,7 @@ export const createEmailHash = (email: string, providedHashSalt?: string) => {
  * @param emailHash String
  */
 export async function getUUID(emailHash, userId) {
-  const EmailHashes = await getEmailHashesCollection();
+  const EmailHashes = await getEmailHashesCollection<EmailHash>();
   const hashDoc = await EmailHashes.findOne({ hash: emailHash });
   let emailUuid;
   if (hashDoc) {

@@ -1,9 +1,10 @@
 import { getNormResponsesCollection, getRawResponsesCollection, getUsersCollection } from "@devographics/mongo";
+import { UserDocument } from "./typings";
 
 export const findDuplicateAccounts = async ({ limit = 10000, skip = 0 }) => {
   limit = Number(limit);
   skip = Number(skip);
-  const Users = await getUsersCollection()
+  const Users = await getUsersCollection<UserDocument>()
   let i = 0;
   const result = { duplicateAccountsCount: 0, duplicateUsers: [] };
 

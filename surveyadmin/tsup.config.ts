@@ -20,7 +20,7 @@ const commonConfig = {
   outDir: "scripts/dist",
   name: "",
   platform: "node" as const,
-  target: "node14",
+  target: "node14" as const,
   // TODO: remove "~" from noExternal, remove external,
   // and use "tsup-node" instead of "tsup" when this
   // PR lands in:
@@ -33,12 +33,12 @@ const commonConfig = {
 export default defineConfig([
   // We need 3 configs instead of 3 entries
   // so that all scripts are stored at the root of "/dist" folder
-  {
+  /*{
     // Register your TS scripts here (custom scripts)
     entry: ["./scripts/onServerStart.ts"],
     format: ["esm"],
     ...commonConfig,
-  },
+  },*/
   {
     entry: ["./.vn/scripts/ts-sources/db/seed.ts"],
     format: ["esm"],
