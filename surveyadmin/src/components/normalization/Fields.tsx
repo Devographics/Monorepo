@@ -199,7 +199,11 @@ const Field = ({
         <tr>
           <td colSpan={999}>
             <article>
-              <ManualInput question={question} questionData={questionData} />
+              <ManualInput
+                question={question}
+                edition={edition}
+                questionData={questionData}
+              />
             </article>
           </td>
         </tr>
