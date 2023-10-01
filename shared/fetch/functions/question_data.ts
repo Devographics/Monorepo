@@ -1,6 +1,6 @@
-import { EditionMetadata, ResponseData, ResultsSubFieldEnum } from '@devographics/types'
+import { ResponseData, ResultsSubFieldEnum } from '@devographics/types'
 import { getFromCache, fetchGraphQLApi } from '../fetch'
-import { editionMetadataCacheKey, questionDataCacheKey } from '../cache_keys'
+import { questionDataCacheKey } from '../cache_keys'
 import { FetcherFunctionOptions } from '../types'
 import { getQuestionDataQuery } from '../queries/question_data'
 
