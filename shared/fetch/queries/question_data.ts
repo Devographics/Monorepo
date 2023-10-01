@@ -5,7 +5,7 @@ import {
     ResponsesParameters,
     ResultsSubFieldEnum
 } from '@devographics/types'
-import isEmpty from 'lodash/isEmpty'
+import isEmpty from 'lodash/isEmpty.js'
 
 export type FacetItem = Pick<QuestionMetadata, 'id' | 'sectionId' | 'optionsAreSequential'>
 
