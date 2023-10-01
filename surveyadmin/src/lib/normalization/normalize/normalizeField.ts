@@ -162,10 +162,23 @@ export const normalizeField = async ({
               verbose,
             });
 
-            const normIds = normTokens.map((token) => token.id);
-            const normPatterns = normTokens.map((token) =>
+            let normIds = normTokens.map((token) => token.id);
+            let normPatterns = normTokens.map((token) =>
               token.pattern.toString()
             );
+
+            // if custom norm. tokens have been defined, also add their id
+            if (response.normalizationTokens) {
+              const relevantTokens = response.normalizationTokens.find(
+                (token) => token.rawPath === fieldPath
+              );
+              normIds = [...normIds, ...relevantTokens.tokens];
+              normPatterns = [
+                ...normPatterns,
+                relevantTokens.map((t) => "custom_normalization"),
+              ];
+            }
+
             set(normResp, normPaths.other!, normIds);
             set(normResp, normPaths.patterns!, normPatterns);
 
