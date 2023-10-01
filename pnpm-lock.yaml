@@ -1418,6 +1418,12 @@ importers:
       '@babel/core':
         specifier: ^7.20.2
         version: 7.22.20
+      '@next/swc-linux-x64-gnu':
+        specifier: ^13.5.3
+        version: 13.5.3
+      '@next/swc-linux-x64-musl':
+        specifier: ^13.5.3
+        version: 13.5.3
       '@sentry/cli':
         specifier: ^2.20.6
         version: 2.21.0
@@ -7102,6 +7108,13 @@ packages:
     dev: false
     optional: true
 
+  /@next/swc-linux-x64-gnu@13.5.3:
+    resolution: {integrity: sha512-FubPuw/Boz8tKkk+5eOuDHOpk36F80rbgxlx4+xty/U71e3wZZxVYHfZXmf0IRToBn1Crb8WvLM9OYj/Ur815g==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    dev: true
+
   /@next/swc-linux-x64-musl@13.4.16:
     resolution: {integrity: sha512-2RbMZNxYnJmW8EPHVBsGZPq5zqWAyBOc/YFxq/jIQ/Yn3RMFZ1dZVCjtIcsiaKmgh7mjA/W0ApbumutHNxRqqQ==}
     engines: {node: '>= 10'}
@@ -7119,6 +7132,13 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
+
+  /@next/swc-linux-x64-musl@13.5.3:
+    resolution: {integrity: sha512-DPw8nFuM1uEpbX47tM3wiXIR0Qa+atSzs9Q3peY1urkhofx44o7E1svnq+a5Q0r8lAcssLrwiM+OyJJgV/oj7g==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    dev: true
 
   /@next/swc-win32-arm64-msvc@13.4.16:
     resolution: {integrity: sha512-thDcGonELN7edUKzjzlHrdoKkm7y8IAdItQpRvvMxNUXa4d9r0ElofhTZj5emR7AiXft17hpen+QAkcWpqG7Jg==}
