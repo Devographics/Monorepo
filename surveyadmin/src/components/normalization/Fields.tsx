@@ -200,9 +200,12 @@ const Field = ({
           <td colSpan={999}>
             <article>
               <ManualInput
-                question={question}
+                survey={survey}
                 edition={edition}
+                question={question}
                 questionData={questionData}
+                responseId={responseId}
+                normRespId={_id}
               />
             </article>
           </td>

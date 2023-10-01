@@ -133,8 +133,6 @@ export const getResponsesSelector = ({
   questionObject: QuestionTemplateOutput;
 }) => {
   const formPaths = getFormPaths({ edition, question: questionObject });
-  console.log(questionObject.rawPaths);
-  console.log(formPaths);
   const isArray = questionObject.allowMultiple;
   if (formPaths.other) {
     const selector = {

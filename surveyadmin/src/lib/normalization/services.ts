@@ -1,5 +1,7 @@
 import { apiRoutes } from "~/lib/apiRoutes";
 import {
+  AddManualNormalizationArgs,
+  AddManualNormalizationResult,
   NormalizeEditionArgs,
   NormalizeQuestionArgs,
   NormalizeQuestionResponsesArgs,
@@ -88,6 +90,24 @@ export async function normalizeEdition(params: NormalizeEditionArgs) {
     }
   );
   const result: { data?: NormalizeInBulkResult; error: any } =
+    await fetchRes.json();
+  return result;
+}
+
+export async function addManualNormalizations(
+  params: AddManualNormalizationArgs
+) {
+  const fetchRes = await fetch(
+    apiRoutes.normalization.addManualNormalizations.href(params),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    }
+  );
+  const result: { data?: AddManualNormalizationResult; error: any } =
     await fetchRes.json();
   return result;
 }

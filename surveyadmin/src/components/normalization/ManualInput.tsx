@@ -1,4 +1,5 @@
 import {
+  SurveyMetadata,
   QuestionMetadata,
   ResponseData,
   EditionMetadata,
@@ -7,25 +8,38 @@ import { useState } from "react";
 import trim from "lodash/trim";
 import without from "lodash/without";
 import { useLocalStorage } from "../hooks";
+import { addManualNormalizations } from "~/lib/normalization/services";
+import { AddManualNormalizationResult } from "~/lib/normalization/actions";
 
 const getCacheKey = (edition, question) =>
   `normalization_presets__${edition.id}__${question.id}`;
 
 const ManualInput = ({
+  survey,
   edition,
   question,
   questionData,
+  responseId,
+  normRespId,
 }: {
+  survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionMetadata;
   questionData: ResponseData;
+  responseId: string;
+  normRespId: string;
 }) => {
   const cacheKey = getCacheKey(edition, question);
   const [value, setValue] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<AddManualNormalizationResult | null>(
+    null
+  );
   const [localPresets, setLocalPresets] = useLocalStorage(cacheKey, []);
   const entityIds = questionData.currentEdition.buckets.map((b) => b.id);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     const tokens = value.split(",").map((s) => trim(s));
     tokens.forEach((token) => {
@@ -33,6 +47,20 @@ const ManualInput = ({
         setLocalPresets([...localPresets, token]);
       }
     });
+
+    const params = {
+      surveyId: survey.id,
+      editionId: edition.id,
+      questionId: question.id,
+      tokens,
+      responseId,
+      normRespId,
+    };
+    console.log(params);
+    const result = await addManualNormalizations(params);
+
+    setLoading(false);
+    setResult(result);
   };
 
   const handleDeletePreset = (preset) => {
@@ -70,8 +98,18 @@ const ManualInput = ({
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
-        <button onClick={handleSubmit}>Submit</button>
+        <button aria-busy={loading} onClick={handleSubmit}>
+          Renormalize
+        </button>
       </form>
+      {result && (
+        <div>
+          <p>Field has been renormalized with new custom values.</p>
+          <pre>
+            <code>{JSON.stringify(result, null, 2)}</code>
+          </pre>
+        </div>
+      )}
     </div>
   );
 };

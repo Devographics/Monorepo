@@ -29,13 +29,31 @@ export const apiRoutes = {
     normalizeEdition: {
       href: (params) => `/api/normalization/normalizeEdition`,
     },
+    addManualNormalizations: {
+      href: (params) => `/api/normalization/addManualNormalizations`,
+    },
   },
   export: {
     generate: {
-      href: ({ editionId, surveyId }: { editionId: string, surveyId: string }) => `/api/export/generate?surveyId=${surveyId}&editionId=${editionId}`
+      href: ({
+        editionId,
+        surveyId,
+      }: {
+        editionId: string;
+        surveyId: string;
+      }) => `/api/export/generate?surveyId=${surveyId}&editionId=${editionId}`,
     },
     download: {
-      href: ({ editionId, surveyId, timestamp }: { editionId: string, surveyId: string, timestamp: string }) => `/api/export/download?surveyId=${surveyId}&editionId=${editionId}&timestamp=${timestamp}`
-    }
-  }
+      href: ({
+        editionId,
+        surveyId,
+        timestamp,
+      }: {
+        editionId: string;
+        surveyId: string;
+        timestamp: string;
+      }) =>
+        `/api/export/download?surveyId=${surveyId}&editionId=${editionId}&timestamp=${timestamp}`,
+    },
+  },
 };
