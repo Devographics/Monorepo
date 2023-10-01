@@ -266,6 +266,7 @@ export enum DbSuffixes {
     NORMALIZED = 'normalized',
     PRENORMALIZED = 'prenormalized',
     COMMENT = 'comment',
+    FOLLOWUPS = 'followups',
     FOLLOWUP_PREDEFINED = 'followup_predefined',
     FOLLOWUP_FREEFORM = 'followup_freeform',
     ERROR = 'error',

@@ -130,7 +130,12 @@ export const getNormPaths = (
         const getOptionsPaths = (suffix: string) =>
             Object.fromEntries(
                 options.map(option => {
-                    const optionPath = getPath([...basePathSegments, option?.id, suffix])
+                    const optionPath = getPath([
+                        ...basePathSegments,
+                        DbSuffixes.FOLLOWUPS,
+                        option?.id,
+                        suffix
+                    ])
                     return [option.id, optionPath]
                 })
             )

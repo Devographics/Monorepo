@@ -37,7 +37,6 @@ const unimplementedFeatures = [
   "html_modules",
   "scoped_element_registries",
   "isolated_webapps",
-  "blocking_render",
 ];
 
 export const Experience2 = (props: ExperienceProps) => {
