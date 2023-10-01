@@ -94,6 +94,7 @@ const Score = ({
       // not used by all translations
       awareness_count: awareness.count,
       usage_count: usage.count,
+      rank,
     },
   });
 
