@@ -21,6 +21,8 @@ const ManualInput = ({
   questionData,
   responseId,
   normRespId,
+  rawValue,
+  rawPath,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
@@ -28,6 +30,8 @@ const ManualInput = ({
   questionData: ResponseData;
   responseId: string;
   normRespId: string;
+  rawValue: string;
+  rawPath: string;
 }) => {
   const cacheKey = getCacheKey(edition, question);
   const [value, setValue] = useState("");
@@ -40,6 +44,7 @@ const ManualInput = ({
 
   const handleSubmit = async (e) => {
     setLoading(true);
+    setResult(null);
     e.preventDefault();
     const tokens = value.split(",").map((s) => trim(s));
     tokens.forEach((token) => {
@@ -55,8 +60,9 @@ const ManualInput = ({
       tokens,
       responseId,
       normRespId,
+      rawValue,
+      rawPath,
     };
-    console.log(params);
     const result = await addManualNormalizations(params);
 
     setLoading(false);
@@ -105,9 +111,9 @@ const ManualInput = ({
       {result && (
         <div>
           <p>Field has been renormalized with new custom values.</p>
-          <pre>
+          {/* <pre>
             <code>{JSON.stringify(result, null, 2)}</code>
-          </pre>
+          </pre> */}
         </div>
       )}
     </div>

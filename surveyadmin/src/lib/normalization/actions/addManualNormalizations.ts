@@ -14,7 +14,15 @@ export type AddManualNormalizationArgs = {
   normRespId: string;
   surveyId: string;
   editionId: string;
-  questionId?: string;
+  questionId: string;
+  tokens: string[];
+  rawValue: string;
+  rawPath: string;
+};
+
+export type CustomNormalizationToken = {
+  rawPath: string;
+  rawValue: string;
   tokens: string[];
 };
 
@@ -27,8 +35,16 @@ Normalize all questions for a specific edition
 export const addManualNormalizations = async (
   args: AddManualNormalizationArgs
 ) => {
-  const { surveyId, editionId, questionId, tokens, responseId, normRespId } =
-    args;
+  const {
+    surveyId,
+    editionId,
+    questionId,
+    tokens,
+    responseId,
+    rawValue,
+    rawPath,
+    normRespId,
+  } = args;
   const startAt = new Date();
 
   const { data: surveys } = await fetchSurveysMetadata();
@@ -53,5 +69,15 @@ export const addManualNormalizations = async (
       ", "
     )}`
   );
-  console.log(args);
+
+  const normalizationToken: CustomNormalizationToken = {
+    rawPath,
+    rawValue,
+    tokens,
+  };
+  const selector = { _id: responseId };
+  const operation = { $push: { normalizationTokens: normalizationToken } };
+  const result = await rawResponsesCollection.updateOne(selector, operation);
+
+  return result;
 };

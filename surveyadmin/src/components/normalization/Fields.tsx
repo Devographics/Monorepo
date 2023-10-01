@@ -62,6 +62,7 @@ const Fields = ({
     survey,
     edition,
     questionData,
+    rawPath: formPaths?.other,
   };
 
   return (
@@ -147,6 +148,7 @@ const Field = ({
   survey,
   edition,
   questionData,
+  rawPath,
 }) => {
   const [result, setResult] = useState<NormalizeInBulkResult>();
   const [showManualInput, setShowManualInput] = useState<boolean>(false);
@@ -206,6 +208,8 @@ const Field = ({
                 questionData={questionData}
                 responseId={responseId}
                 normRespId={_id}
+                rawValue={value}
+                rawPath={rawPath}
               />
             </article>
           </td>
