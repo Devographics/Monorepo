@@ -5,7 +5,12 @@ import {
     ResponsesParameters,
     ResultsSubFieldEnum
 } from '@devographics/types'
-import isEmpty from 'lodash/isEmpty.js'
+// does not work in edge middlewares or whatever?? really??
+// import isEmpty from 'lodash/isEmpty.js'
+
+function isEmpty(o) {
+    return typeof o === 'undefined' || o === null || Object.keys(o).length === 0
+}
 
 export type FacetItem = Pick<QuestionMetadata, 'id' | 'sectionId' | 'optionsAreSequential'>
 
