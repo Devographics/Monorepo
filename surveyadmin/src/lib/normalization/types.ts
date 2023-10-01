@@ -34,9 +34,13 @@ export type BulkOperation =
   | DeleteBulkOperation
   | InsertBulkOperation;
 
-export interface NormalizationToken {
+export interface CustomNormalizationToken {
   id: string;
   pattern: string;
+  match?: string;
+}
+
+export interface NormalizationToken extends CustomNormalizationToken {
   match: string;
   length: number;
   rules: number;
@@ -144,7 +148,7 @@ export interface RegularField {
   value: any;
 }
 export interface NormalizedField extends RegularField {
-  normTokens: Array<NormalizationToken>;
+  normTokens: Array<NormalizationToken | CustomNormalizationToken>;
   raw: string;
 }
 export interface CommentField extends RegularField {}

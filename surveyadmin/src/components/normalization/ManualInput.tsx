@@ -9,7 +9,8 @@ import trim from "lodash/trim";
 import without from "lodash/without";
 import { useLocalStorage } from "../hooks";
 import { addManualNormalizations } from "~/lib/normalization/services";
-import { AddManualNormalizationResult } from "~/lib/normalization/actions";
+import { NormalizeInBulkResult } from "~/lib/normalization/types";
+import { NormalizationResult } from "./NormalizationResult";
 
 const getCacheKey = (edition, question) =>
   `normalization_presets__${edition.id}__${question.id}`;
@@ -36,11 +37,9 @@ const ManualInput = ({
   const cacheKey = getCacheKey(edition, question);
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<AddManualNormalizationResult | null>(
-    null
-  );
+  const [result, setResult] = useState<NormalizeInBulkResult | null>(null);
   const [localPresets, setLocalPresets] = useLocalStorage(cacheKey, []);
-  const entityIds = questionData.currentEdition.buckets.map((b) => b.id);
+  const entityIds = questionData.currentEdition.buckets.map((b) => b.id).sort();
 
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -66,7 +65,9 @@ const ManualInput = ({
     const result = await addManualNormalizations(params);
 
     setLoading(false);
-    setResult(result);
+    if (result.data) {
+      setResult(result.data);
+    }
   };
 
   const handleDeletePreset = (preset) => {
@@ -111,6 +112,7 @@ const ManualInput = ({
       {result && (
         <div>
           <p>Field has been renormalized with new custom values.</p>
+          <NormalizationResult {...result} />
           {/* <pre>
             <code>{JSON.stringify(result, null, 2)}</code>
           </pre> */}

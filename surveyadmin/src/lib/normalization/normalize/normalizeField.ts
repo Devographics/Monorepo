@@ -2,7 +2,9 @@ import { EntityRule, cleanupValue, normalize } from "./helpers";
 import set from "lodash/set.js";
 import {
   CommentField,
+  CustomNormalizationToken,
   NormalizationParams,
+  NormalizationToken,
   NormalizeFieldResult,
   NormalizedField,
   PrenormalizedField,
@@ -162,22 +164,40 @@ export const normalizeField = async ({
               verbose,
             });
 
-            let normIds = normTokens.map((token) => token.id);
-            let normPatterns = normTokens.map((token) =>
-              token.pattern.toString()
-            );
+            let allTokens: Array<
+              CustomNormalizationToken | NormalizationToken
+            > = normTokens;
 
             // if custom norm. tokens have been defined, also add their id
-            if (response.normalizationTokens) {
-              const relevantTokens = response.normalizationTokens.find(
+            if (response.customNormalizations) {
+              const customNormalization = response.customNormalizations.find(
                 (token) => token.rawPath === fieldPath
               );
-              normIds = [...normIds, ...relevantTokens.tokens];
-              normPatterns = [
-                ...normPatterns,
-                relevantTokens.map((t) => "custom_normalization"),
-              ];
+
+              if (customNormalization) {
+                // only keep custom token that are not already included in regular norm. tokens
+                const customTokens = customNormalization.tokens.filter(
+                  (tokenId) => !normTokens.map((t) => t.id).includes(tokenId)
+                );
+                if (verbose) {
+                  console.log(
+                    `⛰️ Found custom norm. tokens: [${customTokens.join()}]`
+                  );
+                }
+                allTokens = [
+                  ...allTokens,
+                  ...customTokens.map((token) => ({
+                    id: token,
+                    pattern: "custom_normalization",
+                  })),
+                ];
+              }
             }
+
+            let normIds = allTokens.map((token) => token.id);
+            let normPatterns = allTokens.map((token) =>
+              token.pattern.toString()
+            );
 
             set(normResp, normPaths.other!, normIds);
             set(normResp, normPaths.patterns!, normPatterns);
@@ -188,7 +208,7 @@ export const normalizeField = async ({
               fieldPath,
               value: normIds,
               raw: otherValue,
-              normTokens,
+              normTokens: allTokens,
             });
 
             modified = true;
@@ -196,7 +216,7 @@ export const normalizeField = async ({
               console.log(`⛰️ ${fieldPath}/other: “${otherValue}”`);
               // console.log(`⛰️ -> Tags: ${matchTags.toString()}`);
               console.log(
-                `⛰️ -> Normalized values: ${JSON.stringify(normTokens)}`
+                `⛰️ -> Normalized values: ${JSON.stringify(allTokens)}`
               );
             }
           } catch (error) {

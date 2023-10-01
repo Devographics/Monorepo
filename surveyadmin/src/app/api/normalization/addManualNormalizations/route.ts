@@ -16,8 +16,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
       //     status: 400,
       //   });
     }
-    const result = await addManualNormalizations(body);
-    return NextResponse.json({ result });
+    const data = await addManualNormalizations(body);
+    return NextResponse.json({ data });
   } catch (error) {
     console.error(error);
     captureException(error);
