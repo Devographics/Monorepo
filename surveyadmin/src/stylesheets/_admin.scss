@@ -90,3 +90,9 @@
     flex-basis: 200px;
   }
 }
+
+code {
+  .highlighted {
+    background: var(--mark-background-color);
+  }
+}

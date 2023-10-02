@@ -243,6 +243,30 @@ const NormDocument = ({
   );
 };
 
+// Function to highlight matches in the text
+// see https://stackoverflow.com/a/39154413/649299
+function highlightMatches(text, regexArray) {
+  let highlightedText = text;
+  console.log(text);
+  console.log(highlightedText);
+  console.log(regexArray);
+  regexArray.forEach((regexString, index) => {
+    const parts = /\/(.*)\/(.*)/.exec(regexString);
+    const regex = parts && new RegExp(parts[1], parts[2]);
+
+    // const regex = new RegExp(regexString)
+    console.log(regex);
+    console.log(typeof regex);
+    highlightedText = highlightedText.replace(
+      regex,
+      `<span class="highlighted highlighted-${index}">$&</span>`
+    );
+    console.log(highlightedText);
+  });
+
+  return highlightedText;
+}
+
 const NormField = ({
   fieldPath,
   raw,
@@ -251,6 +275,7 @@ const NormField = ({
   normTokens,
   showQuestionId,
 }: NormalizedField & { showQuestionId: boolean }) => {
+  const rawValuesArray = Array.isArray(raw) ? raw : [raw];
   return (
     <div>
       {normTokens && normTokens.length > 0 ? (
@@ -259,7 +284,19 @@ const NormField = ({
             <tr>
               <th colSpan={99}>
                 {showQuestionId && <strong>{questionId}: </strong>}{" "}
-                <code id="Raw response">{raw}</code>
+                {rawValuesArray.map((rawValue, i) => (
+                  <pre key={i}>
+                    <code
+                      id="Raw response"
+                      dangerouslySetInnerHTML={{
+                        __html: highlightMatches(
+                          rawValue,
+                          normTokens.map((t) => t.pattern)
+                        ),
+                      }}
+                    ></code>
+                  </pre>
+                ))}
               </th>
             </tr>
             <tr>

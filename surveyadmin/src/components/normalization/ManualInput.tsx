@@ -76,6 +76,9 @@ const ManualInput = ({
 
   return (
     <div className="manualinput">
+      <pre>
+        <code>{rawValue}</code>
+      </pre>
       <h5>Presets</h5>
       <p>
         <small>
