@@ -687,7 +687,10 @@
   grid-template-rows: 1fr;
 }
 .form-item-contents-inner {
+  // needed to prevent grid blowout
+  // see https://stackoverflow.com/a/43312314/649299
   // overflow: hidden;
+  min-width: 0;
 }
 .form-item-skipped {
   border-color: var(--darker-border-color) !important;
