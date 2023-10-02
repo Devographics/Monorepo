@@ -70,7 +70,10 @@ export const sendMagicLinkEmail = async ({
       `No survey domain found for id ${surveyId}, cannot set 'from'`
     );
   }
-  const from = survey.domain && `${survey.name} <login@mail.${survey.domain}>`;
+
+  const defaultEmail =
+    survey.domain && `${survey.name} <login@mail.${survey.domain}>`;
+  const from = process.env.DEFAULT_MAIL_FROM || defaultEmail;
 
   /**
    * NOTE: when testing be careful that email will be displayed with addition "=" on line ends!!!

@@ -29,7 +29,6 @@ export const validateResponse = ({
   edition: EditionMetadata;
   action: Actions;
 }) => {
-  console.log("/----==-----/ validateResponse");
   // TODO: instead of simply filtering out null fields,
   // also check that they are client-mutable
   // since null means they should be deleted
@@ -77,8 +76,6 @@ export const validateResponse = ({
   });
 
   // parse client data
-  console.log(clientData);
-  console.log(clientSchema);
   try {
     clientSchema.parse(clientData);
   } catch (error) {
