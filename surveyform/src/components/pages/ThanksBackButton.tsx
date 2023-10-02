@@ -17,7 +17,7 @@ export const ThanksBackButton = ({
   const { locale } = useLocaleContext();
   return (
     <div className="form-submit form-section-nav form-section-nav-bottom">
-      <div className="form-submit-actions">
+      <div className="form-submit-actions form-submit-back">
         <Link
           className="form-btn-prev"
           href={getEditionSectionPath({
@@ -29,7 +29,7 @@ export const ThanksBackButton = ({
             locale,
           })}
         >
-          « <FormattedMessage id="general.back" />
+          « <FormattedMessage id="general.back_to_survey" />
         </Link>
       </div>
     </div>
