@@ -92,8 +92,9 @@ const Score = ({
       shareUrl: `${questionsUrl}?source=post_survey_share`,
       hashtag,
       // not used by all translations
-      awareness_count: awareness,
-      usage_count: usage,
+      awareness_count: awareness.count,
+      usage_count: usage.count,
+      rank,
     },
   });
 
