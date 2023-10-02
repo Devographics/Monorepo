@@ -37,7 +37,8 @@ const getZodType = (type: ConstructorType): ZodObjectContents => {
     case Date:
       return z.date();
     case Number:
-      return z.number();
+      // TODO: double-check if we sometimes need to accept negative numerical values?
+      return z.number().gte(0);
   }
 };
 
@@ -78,6 +79,9 @@ const getZodObject = <T>({
   if (zType === z.string()) {
     zType = zType.max(GLOBAL_TEXTFIELD_LIMIT);
   }
+
+  console.log(type);
+  console.log(zType);
 
   // @ts-ignore
   zType = isArray ? zType.array() : zType;

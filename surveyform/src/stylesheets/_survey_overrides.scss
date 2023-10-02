@@ -9,4 +9,14 @@ These styles will only be active for specific surveys and/or editions
       display: none;
     }
   }
+  .question-id-age {
+    .form-input-lessThanOneYear {
+      display: none;
+    }
+    .form-input-moreThanOneYear {
+      .form-input-wrapper {
+        display: none;
+      }
+    }
+  }
 }

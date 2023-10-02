@@ -1,13 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
 import Form from "react-bootstrap/Form";
-import { FormOption } from "~/components/form/FormOption";
-import OtherOption from "./OtherOption";
-import { getFormPaths } from "@devographics/templates";
 import { FormattedMessage } from "../common/FormattedMessage";
 
 const lessThanOneYear = "lessThanOneYear";
@@ -27,6 +24,9 @@ const getcheckClass = (optionId: string, radioValue: string | null) =>
       : "form-check-unchecked"
     : "";
 
+const checkIsValid = (rawValue) =>
+  !isNaN(Number(rawValue)) && Number(rawValue) >= 0;
+
 export const FormComponentYears = (props: FormInputProps) => {
   const {
     value: value_,
@@ -42,31 +42,28 @@ export const FormComponentYears = (props: FormInputProps) => {
   const disabled = readOnly;
 
   const [radioValue, setRadioValue] = useState(getRadioValue(value));
-
-  //   useEffect(() => {
-  //     setRadioValue(getRadioValue(value));
-  //   }, [value]);
-
-  //   const radioValue = getRadioValue(value);
   const [localValue, setLocalValue] = useState(getLocalValue(value));
 
   const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
 
-  const getValue = (event) => {
-    const rawValue = event.target.value;
-    const value = rawValue === "" ? null : Number(rawValue);
-    return value;
-  };
-
   const handleChange = (event) => {
-    setLocalValue(event.target.value);
-    updateCurrentValues({ [path]: getValue(event) });
+    const rawValue = event.target.value;
+    setLocalValue(rawValue);
+    if (checkIsValid(rawValue)) {
+      updateCurrentValues({
+        [path]: rawValue === "" ? null : Number(rawValue),
+      });
+    }
   };
 
   const handleChangeDebounced = (event) => {
-    setLocalValue(event.target.value);
-    setRadioValue(moreThanOneYear);
-    updateCurrentValuesDebounced({ [path]: getValue(event) });
+    const rawValue = event.target.value;
+    setLocalValue(rawValue);
+    if (checkIsValid(rawValue)) {
+      updateCurrentValuesDebounced({
+        [path]: rawValue === "" ? null : Number(rawValue),
+      });
+    }
   };
 
   const radioProps = {
@@ -80,8 +77,8 @@ export const FormComponentYears = (props: FormInputProps) => {
   };
 
   return (
-    <FormItem {...props}>
-      <Form.Check type="radio">
+    <FormItem {...props} isInvalid={!checkIsValid(localValue)}>
+      <Form.Check type="radio" className="form-input-lessThanOneYear">
         <Form.Check.Label htmlFor={`${path}.0`}>
           <LessThanOneYearRadio
             {...radioProps}
@@ -90,7 +87,7 @@ export const FormComponentYears = (props: FormInputProps) => {
           <Label labelId="years.less_than_one_year" />
         </Form.Check.Label>
       </Form.Check>
-      <Form.Check type="radio" className="form-input-years">
+      <Form.Check type="radio" className="form-input-moreThanOneYear">
         <Form.Check.Label htmlFor={`${path}.1`}>
           <MoreThanOneYearRadio
             {...radioProps}
@@ -98,16 +95,25 @@ export const FormComponentYears = (props: FormInputProps) => {
           />
 
           <FormControl
-            type="number"
+            // type="number"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             value={localValue}
             onChange={handleChangeDebounced}
             onBlur={handleChange}
             disabled={readOnly}
+            className="form-input-number"
+            isInvalid={!checkIsValid(localValue)}
           />
 
           <Label labelId="years.years" />
         </Form.Check.Label>
       </Form.Check>
+
+      <FormControl.Feedback type="invalid">
+        <FormattedMessage id="general.numeric_input.invalid_input" />
+      </FormControl.Feedback>
     </FormItem>
   );
 };

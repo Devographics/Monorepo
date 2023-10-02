@@ -25,10 +25,10 @@ export async function saveResponse({
   connectToRedis();
 
   // Check for existing response
-  const RawResponse = await getRawResponsesCollection<ResponseDocument>();
-  const existingResponse = (await RawResponse.findOne({
+  const RawResponses = await getRawResponsesCollection<ResponseDocument>();
+  const existingResponse = (await RawResponses.findOne({
     _id: responseId,
-  })) as ResponseDocument // bypass _id inference;
+  })) as ResponseDocument; // bypass _id inference;
   if (!existingResponse) {
     throw new HandlerError({
       id: "response_doesnt_exists",
@@ -122,6 +122,6 @@ export async function saveResponse({
   };
 
   // update
-  const updateRes = await RawResponse.updateOne(selector, modifier);
+  const updateRes = await RawResponses.updateOne(selector, modifier);
   return serverData;
 }

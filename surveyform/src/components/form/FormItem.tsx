@@ -38,6 +38,7 @@ export interface FormItemProps extends FormInputProps {
   showOther?: boolean;
   onBlur?: React.FocusEventHandler<HTMLDivElement>;
   className?: string;
+  isInvalid?: boolean;
 }
 
 export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
@@ -57,6 +58,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
       onBlur,
       className = "",
       updateCurrentValues,
+      isInvalid,
     } = props;
 
     const enableSkip = edition.enableSkip;
@@ -169,9 +171,11 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
     //   }
     // }, [isInView]);
 
+    const isInvalidClass = isInvalid ? "form-item-invalid" : "";
+
     return (
       <div
-        className={`form-item ${className} ${skippedClass}`}
+        className={`form-item ${className} ${skippedClass} ${isInvalidClass}`}
         ref={myRef}
         onBlur={onBlur}
       >

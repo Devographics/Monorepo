@@ -699,7 +699,7 @@
   }
 }
 
-.form-input-years {
+.form-input-moreThanOneYear {
   .form-check-label {
     gap: $spacing/2;
   }
@@ -759,5 +759,16 @@
     left: calc(50% - 10px);
     position: absolute;
     font-size: 0.9rem;
+  }
+}
+
+.form-input-number {
+  max-width: 100px;
+}
+
+.invalid-feedback {
+  color: var(--text-color-error);
+  .form-item-invalid & {
+    display: block;
   }
 }

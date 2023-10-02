@@ -4,6 +4,10 @@ import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
+import { FormattedMessage } from "../common/FormattedMessage";
+
+const checkIsValid = (rawValue) =>
+  !isNaN(Number(rawValue)) && Number(rawValue) >= 0;
 
 export const FormComponentNumber = (props: FormInputProps) => {
   const {
@@ -20,31 +24,41 @@ export const FormComponentNumber = (props: FormInputProps) => {
 
   const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
 
-  const getValue = (event) => {
-    const rawValue = event.target.value;
-    const value = rawValue === "" ? null : Number(rawValue);
-    return value;
-  };
-
   const handleChange = (event) => {
-    setLocalValue(event.target.value);
-    updateCurrentValues({ [path]: getValue(event) });
+    const rawValue = event.target.value;
+    setLocalValue(rawValue);
+    if (checkIsValid(rawValue)) {
+      updateCurrentValues({
+        [path]: rawValue === "" ? null : Number(rawValue),
+      });
+    }
   };
 
   const handleChangeDebounced = (event) => {
-    setLocalValue(event.target.value);
-    updateCurrentValuesDebounced({ [path]: getValue(event) });
+    const rawValue = event.target.value;
+    setLocalValue(rawValue);
+    if (checkIsValid(rawValue)) {
+      updateCurrentValuesDebounced({
+        [path]: rawValue === "" ? null : Number(rawValue),
+      });
+    }
   };
 
   return (
-    <FormItem {...props}>
+    <FormItem {...props} isInvalid={!checkIsValid(localValue)}>
       <FormControl
         type="number"
         value={localValue}
         onChange={handleChangeDebounced}
         onBlur={handleChange}
         disabled={readOnly}
+        className="form-input-number"
       />
+      {!checkIsValid(localValue) && (
+        <FormControl.Feedback type="invalid">
+          <FormattedMessage id="general.numeric_input.invalid_input" />
+        </FormControl.Feedback>
+      )}
     </FormItem>
   );
 };
