@@ -197,6 +197,10 @@
   }
 }
 
+.form-submit-back {
+  margin-bottom: $spacing;
+}
+
 .input-css2020__user_info__skin_tone {
   .form-check {
     margin-bottom: 5px;
@@ -683,7 +687,7 @@
   grid-template-rows: 1fr;
 }
 .form-item-contents-inner {
-  overflow: hidden;
+  // overflow: hidden;
 }
 .form-item-skipped {
   border-color: var(--darker-border-color) !important;
@@ -713,7 +717,9 @@
     display: flex;
     flex-direction: column;
     gap: $spacing/2;
-    padding-top: $spacing * 4;
+    @include small {
+      position: relative;
+    }
   }
   .form-check {
     &:hover,
@@ -727,36 +733,74 @@
   // display: grid;
   // grid-template-columns: 1fr 1fr;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: $spacing/2;
-  gap: $spacing;
   &:nth-child(2n) {
     background: rgba(255, 255, 255, 0.04);
+  }
+  @include small {
+    flex-direction: column;
+  }
+  @include medium-large {
+    justify-content: space-between;
+    align-items: center;
+    gap: $spacing;
   }
 }
 .likert-options,
 .likert-legends {
   display: flex;
   gap: $spacing/2;
-  margin-right: $spacing * 2;
+  @include small {
+    justify-content: space-between;
+    padding: 0 $spacing * 2;
+  }
+  @include medium-large {
+    margin-right: $spacing * 2;
+  }
 }
 
 .likert-option {
+  display: grid;
+  place-items: center;
+  .form-check-label {
+    padding: $spacing/3;
+    display: block;
+  }
+  .form-input-wrapper {
+    margin: 0;
+    display: block;
+    line-height: 0;
+  }
 }
 
 .likert-legends {
-  justify-content: flex-end;
+  height: 100%;
+  @include medium-large {
+    justify-content: flex-end;
+  }
 }
+.likert-legends-wrapper {
+  height: 110px;
+  padding: 0 $spacing/2;
+  @include small {
+    padding-bottom: 5px;
+    position: sticky;
+    top: 0px;
+    width: 100%;
+    background: var(--bg-color-light);
+    z-index: 1;
+  }
+}
+
 .likert-legend-label {
   position: relative;
-  width: 50px;
+  width: 48px;
   span {
     rotate: -45deg;
     transform-origin: bottom left;
     white-space: nowrap;
-    top: -15px;
-    left: calc(50% - 10px);
+    bottom: 0px;
+    left: calc(50% + 5px);
     position: absolute;
     font-size: 0.9rem;
   }

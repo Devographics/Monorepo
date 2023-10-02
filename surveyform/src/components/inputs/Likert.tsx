@@ -17,12 +17,14 @@ export const FormComponentLikertScale = (props: FormInputProps) => {
 
   return (
     <FormItem {...props} className="likert">
-      <div className="likert-legends">
-        {columns?.map((column, i) => (
-          <span className="likert-legend-label">
-            <FormattedMessage id={`likert.option.${i}`} />
-          </span>
-        ))}
+      <div className="likert-legends-wrapper">
+        <div className="likert-legends">
+          {columns?.map((column, i) => (
+            <span className="likert-legend-label">
+              <FormattedMessage id={`likert.option.${i}`} />
+            </span>
+          ))}
+        </div>
       </div>
       {options?.map((option, i) => {
         const formPath = formPaths?.[DbPathsEnum.SUBPATHS]?.[option.id];
