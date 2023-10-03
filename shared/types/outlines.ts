@@ -194,6 +194,7 @@ export type Question = {
 
     // a question that has a data field but does not show up in the form
     hidden?: boolean
+    isRequired?: boolean
     /**
      * Must be true for questions that allow multiple answers
      * For instance "textList"
