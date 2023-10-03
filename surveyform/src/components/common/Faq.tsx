@@ -13,8 +13,8 @@ const defaultItems = [
   "learn_more",
 ];
 
-const Faq = ({ survey }) => {
-  const items = survey.faq;
+const Faq = ({ edition }) => {
+  const items = edition.faq;
   return items ? (
     <div className="faq survey-page-block">
       <h3 className="faq-heading survey-page-block-heading">

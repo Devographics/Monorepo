@@ -214,16 +214,18 @@ export const createFieldType = ({
   isNumeric = false,
   isArray = false,
   isBoolean = false,
+  isRequired = false,
 }: {
   isNumeric?: boolean;
   isArray?: boolean;
   isBoolean?: boolean;
+  isRequired?: boolean;
 }) => {
   // responses can sometimes be numeric, everything else is string
   const type = isBoolean ? Boolean : isNumeric ? Number : String;
   const typeObject = {
     type,
-    required: false,
+    required: isRequired,
     clientMutable: true,
     isArray,
   };
@@ -282,13 +284,19 @@ export const getResponseSchema = ({
           }
         } else {
           const fieldPath = formPathContents;
+          const isNumeric = !!(
+            formPath === DbPathsEnum.RESPONSE && question.optionsAreNumeric
+          );
+          const isArray = !!(
+            formPath === DbPathsEnum.RESPONSE && question.allowMultiple
+          );
+          const isRequired = !!(
+            formPath === DbPathsEnum.RESPONSE && question.isRequired
+          );
           editionSchema[fieldPath] = createFieldType({
-            isNumeric: !!(
-              formPath === DbPathsEnum.RESPONSE && question.optionsAreNumeric
-            ),
-            isArray: !!(
-              formPath === DbPathsEnum.RESPONSE && question.allowMultiple
-            ),
+            isNumeric,
+            isArray,
+            isRequired,
           });
         }
       }

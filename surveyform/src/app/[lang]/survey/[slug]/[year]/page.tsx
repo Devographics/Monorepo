@@ -67,7 +67,7 @@ const EditionPageComponent = ({
         <FormattedMessage id={`general.${edition.id}.survey_intro`} />
         <EditionMain edition={edition} />
       </div>
-      <Faq survey={edition} />
+      <Faq edition={edition} />
       {edition.credits && <SurveyCredits edition={edition} />}
       <Translators />
     </div>

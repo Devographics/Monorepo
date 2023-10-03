@@ -61,8 +61,6 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
       isInvalid,
     } = props;
 
-    const enableSkip = edition.enableSkip;
-
     const isLastItem = questionNumber === section.questions.length;
 
     const {
@@ -81,6 +79,8 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
     const skipPath = formPaths[DbPathsEnum.SKIP]!;
     const isSkipped = response?.[skipPath];
     const skippedClass = isSkipped ? "form-item-skipped" : "";
+
+    const enableSkip = skipPath && edition.enableSkip && !question.isRequired;
 
     // open the comment widget if there is already a comment or this is the first question
     const [showCommentInput, setShowCommentInput] = useState(
@@ -305,17 +305,17 @@ export const FormItemDescription = (props: FormItemProps) => {
   const i18nDescription = intl.formatMessage({ id: intlIds.description });
   const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
   return i18nDescription ? (
-    <FormattedMessage
-      className="form-item-description"
-      id={intlIds.description}
-    />
+    <p className="form-item-description">
+      <FormattedMessage id={intlIds.description} />
+    </p>
   ) : entityDescription ? (
-    <span
-      className="form-item-description"
-      dangerouslySetInnerHTML={{
-        __html: entityDescription,
-      }}
-    />
+    <p className="form-item-description">
+      <span
+        dangerouslySetInnerHTML={{
+          __html: entityDescription,
+        }}
+      />
+    </p>
   ) : null;
 };
 

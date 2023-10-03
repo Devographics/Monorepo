@@ -9,6 +9,8 @@ import { FormattedMessage } from "../common/FormattedMessage";
 const checkIsValid = (rawValue) =>
   !isNaN(Number(rawValue)) && Number(rawValue) >= 0;
 
+const getLocalValue = (value: number) => value ?? "";
+
 export const FormComponentNumber = (props: FormInputProps) => {
   const {
     path,
@@ -18,9 +20,9 @@ export const FormComponentNumber = (props: FormInputProps) => {
     readOnly,
   } = props;
 
-  const value = value_ as string | number;
+  const value = value_ as number;
 
-  const [localValue, setLocalValue] = useState(value);
+  const [localValue, setLocalValue] = useState(getLocalValue(value));
 
   const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
 
@@ -47,7 +49,10 @@ export const FormComponentNumber = (props: FormInputProps) => {
   return (
     <FormItem {...props} isInvalid={!checkIsValid(localValue)}>
       <FormControl
-        type="number"
+        // type="number"
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
         value={localValue}
         onChange={handleChangeDebounced}
         onBlur={handleChange}

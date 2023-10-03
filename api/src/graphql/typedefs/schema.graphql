@@ -136,6 +136,7 @@ type QuestionMetadata {
     options: [OptionsMetadata]
     followups: [FollowupsMetadata]
     entity: Entity
+    isRequired: Boolean
     allowOther: Boolean
     allowComment: Boolean
     showCommentInput: Boolean

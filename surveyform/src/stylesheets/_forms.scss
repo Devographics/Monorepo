@@ -48,6 +48,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    .question-label {
+      strong {
+        text-decoration: underline;
+      }
+    }
   }
   .form-label {
     margin: 0;
