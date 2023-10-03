@@ -25,8 +25,10 @@ export default function RootLayout({
 }
 
 export const metadata: Metadata = {
-  title: "Devographics Surveys",
-  description: "State of JavaScript, CSS, GraphQL and friends",
+  title: process.env.DEFAULT_TITLE || "Devographics Surveys",
+  description:
+    process.env.DEFAULT_DESCRIPTION ||
+    "The State of JavaScript, State of CSS, State of HTML, and other developer surveys.",
   viewport: {
     width: "device-width",
     initialScale: 1,
