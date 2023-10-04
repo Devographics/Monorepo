@@ -39,7 +39,6 @@ export const getRedisClient = () => {
 // All methods will return null if data are not in the cache
 // => use either a local or a github load when it happen
 
-
 export async function storeRedis<T>(key: string, val: T): Promise<boolean> {
     const redisClient = getRedisClient()
     // EX = Expiration time in seconds
@@ -66,7 +65,7 @@ export async function fetchJson<T = any>(key: string): Promise<T | null> {
         if (!maybeStr) return null
         // note: depending on Redis client, str might already be a valid object
         const json = typeof maybeStr === 'object' ? maybeStr : JSON.parse(maybeStr)
-        await logToFile(`fetchJson(${key}).json`, json, { mode: 'overwrite' })
+        // await logToFile(`fetchJson(${key}).json`, json, { mode: 'overwrite' })
         return json
     } catch (error) {
         console.error(`// error while getting redis key ${key}`)
