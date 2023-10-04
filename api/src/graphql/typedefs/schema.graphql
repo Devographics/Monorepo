@@ -258,7 +258,7 @@ type ResponseEditionData {
 
 type RawData {
     responseId: String
-    content: String
+    content: JSON # could be String or [String]
 }
 
 """
