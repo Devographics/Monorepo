@@ -1,0 +1,1 @@
+String.prototype.replaceAll || (String.prototype.replaceAll = function (e, t) { return "[object regexp]" === Object.prototype.toString.call(e).toLowerCase() ? this.replace(e, t) : this.replace(RegExp(e, "g"), t) });
