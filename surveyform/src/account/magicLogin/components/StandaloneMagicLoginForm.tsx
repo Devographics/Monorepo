@@ -102,7 +102,12 @@ export const StandaloneMagicLoginForm = ({
         <div className="success magic-success">
           <FormattedMessage id="accounts.magic_link.success" />
           {surveyId && successEmail.match("gmail.com") && (
-            <GmailMessage domain={surveyId.replaceAll("_", "").toLowerCase()} />
+            <>
+              {" "}
+              <GmailMessage
+                domain={surveyId.replaceAll("_", "").toLowerCase()}
+              />
+            </>
           )}
         </div>
       )}
