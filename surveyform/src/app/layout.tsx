@@ -16,10 +16,14 @@ export default function RootLayout({
   const isDev = process.env.NODE_ENV === "development";
   getConfig({ showWarnings: isDev });
 
+  const configClass = process.env.NEXT_PUBLIC_CONFIG
+    ? `config-${process.env.NEXT_PUBLIC_CONFIG}`
+    : "";
+
   return (
     <html>
       <head />
-      <body>{children}</body>
+      <body className={configClass}>{children}</body>
     </html>
   );
 }

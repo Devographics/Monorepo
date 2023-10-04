@@ -14,6 +14,7 @@ import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { EditionMetadata } from "@devographics/types";
 import { EditionMain } from "./client-components";
 import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
+import TokyoDev from "~/components/common/TokyoDev";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
 export const revalidate = DEFAULT_REVALIDATE_S;
@@ -69,6 +70,8 @@ const EditionPageComponent = ({
       </div>
       <Faq edition={edition} />
       {edition.credits && <SurveyCredits edition={edition} />}
+
+      <TokyoDev />
       <Translators />
     </div>
   );
