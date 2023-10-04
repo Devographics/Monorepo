@@ -66,6 +66,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
               id
               name
               twitterName
+              homepageUrl
               company {
                 name
                 homepage {
