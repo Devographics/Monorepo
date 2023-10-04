@@ -53,37 +53,37 @@ const useMagicLoginCheck = ({
     const verifyToken = async () => {
       setLoading(true);
       if (token) {
-        const res = await verifyMagicToken({
-          token,
-          clientData,
-        });
-        const result = await res.json();
-        const { response, editionId, surveyId } = result;
-        let path;
-        if (response) {
-          path = getEditionSectionPath({
-            edition: { id: editionId },
-            survey: { id: surveyId },
-            locale,
-            response,
+        try {
+          const res = await verifyMagicToken({
+            token,
+            clientData,
           });
-        } else if (redirectTo) {
-          path = redirectTo;
-        } else {
-          path = routes.home.href;
+          const result = await res.json();
+          const { response, editionId, surveyId } = result;
+          let path;
+          if (response) {
+            path = getEditionSectionPath({
+              edition: { id: editionId },
+              survey: { id: surveyId },
+              locale,
+              response,
+            });
+          } else if (redirectTo) {
+            path = redirectTo;
+          } else {
+            path = routes.home.href;
+          }
+          // We do a full page reload to avoid any caching issue and not just a SPA router.push
+          // TODO: having that query param triggers hydration mismatch errors?
+          // window.location.replace(path + "?from-magic-login=1");
+          window.location.replace(path);
+        } catch (err) {
+          setError(err);
         }
-        // We do a full page reload to avoid any caching issue and not just a SPA router.push
-        // TODO: having that query param triggers hydration mismatch errors?
-        // window.location.replace(path + "?from-magic-login=1");
-        window.location.replace(path);
       }
       setLoading(false);
     };
-    try {
-      verifyToken();
-    } catch (err) {
-      setError(err);
-    }
+    verifyToken();
   }, [!!token]);
 
   return {
