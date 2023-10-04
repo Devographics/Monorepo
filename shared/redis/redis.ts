@@ -3,7 +3,8 @@ import { logToFile } from '@devographics/debug'
 import { EnvVar, getEnvVar } from '@devographics/helpers'
 import { Redis } from '@upstash/redis'
 
-const TTL_SECONDS = 60 * 30
+// 30 mn (but only 3 in dev)
+const TTL_SECONDS = process.env.NODE_ENV === "development" ? 60 * 3 : 60 * 30
 
 let redis: Redis
 

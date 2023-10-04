@@ -6,6 +6,22 @@ import { useCurrentUser } from "~/lib/users/hooks";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
 import { LoadingButton } from "~/components/ui/LoadingButton";
+import { FormattedMessage } from "~/components/common/FormattedMessage";
+
+const GmailMessage = ({
+  domain,
+}: {
+  /** NOTE: it must match the domain used for emails, otherwise the search will fail! */
+  domain: string;
+}) => {
+  // will look in spams too
+  const link = `https://mail.google.com/mail/u/0/#search/${encodeURIComponent(
+    `from:${domain}+OR+from:stateofjs+OR+from:devographics+in:anywhere`
+  )}`;
+  return (
+    <FormattedMessage id="accounts.magic_link.browser" values={{ link }} />
+  );
+};
 
 export interface StandaloneMagicLoginFormProps {
   /** Button label */
@@ -32,11 +48,11 @@ export const StandaloneMagicLoginForm = ({
   const intl = useIntlContext();
   const placeholder = intl.formatMessage({ id: `accounts.your_email` });
   const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
+  const [successEmail, setSuccessEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const resetMessages = () => {
     if (errorMsg) setErrorMsg("");
-    if (successMsg) setErrorMsg("");
+    if (successEmail) setErrorMsg("");
   };
   const { currentUser } = useCurrentUser();
   const { locale } = useLocaleContext();
@@ -62,10 +78,7 @@ export const StandaloneMagicLoginForm = ({
     try {
       const res = await sendMagicLoginEmail({ body });
       if (res.status === 200) {
-        setSuccessMsg(
-          intl.formatMessage({ id: `accounts.magic_link.success` }) ||
-            "Sent a magic link, check your mail inbox!"
-        );
+        setSuccessEmail(email);
       } else {
         throw new Error(await res.text());
       }
@@ -85,7 +98,14 @@ export const StandaloneMagicLoginForm = ({
         </LoadingButton>
       </div>
       {errorMsg && <div className="error magic-error">{errorMsg}</div>}
-      {successMsg && <div className="success magic-success">{successMsg}</div>}
+      {successEmail && (
+        <div className="success magic-success">
+          <FormattedMessage id="general.join_discord" />
+          {surveyId && successEmail.match("gmail.com") && (
+            <GmailMessage domain={surveyId.replace("_", "-").toLowerCase()} />
+          )}
+        </div>
+      )}
     </form>
   );
 };
