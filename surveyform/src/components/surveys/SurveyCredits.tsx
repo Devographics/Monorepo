@@ -14,7 +14,7 @@ const SurveyCredits = ({ edition }: { edition: EditionMetadata }) => {
       </p>
       <div className="survey-credits-items">
         {edition.credits
-          .filter((c) => c.role === "survey_design")
+          .filter((c) => ["survey_design", "survey_review"].includes(c.role))
           .map((c) => (
             <SurveyCredit key={c.id} {...c} />
           ))}
@@ -27,13 +27,15 @@ const SurveyCredit = ({ id, role, entity }: Credit) => {
   if (!entity) {
     return <div>No entity found for {id}</div>;
   }
-  const { name, company, twitterName } = entity;
+  const { name, company, twitterName, homepageUrl } = entity;
+  const link = homepageUrl
+    ? homepageUrl
+    : twitterName
+    ? `https://twitter.com/${twitterName}`
+    : "#";
   return (
     <div className="survey-credits-item">
-      <a
-        href={`https://twitter.com/${twitterName}`}
-        className="survey-credits-item-avatar"
-      >
+      <a href={link} className="survey-credits-item-avatar">
         {/* <img src={twitter?.avatarUrl} alt="twitter avatar" /> */}
         <img
           src={`${publicConfig.assetUrl}/avatars/${id}.jpg`}
@@ -42,7 +44,7 @@ const SurveyCredit = ({ id, role, entity }: Credit) => {
       </a>
       <div className="survey-credits-item-details">
         <h4 className="survey-credits-item-name">
-          <a href={`https://twitter.com/${twitterName}`}>{name}</a>
+          <a href={link}>{name}</a>
         </h4>
         {company && (
           <p className="survey-credits-item-company">
