@@ -102,7 +102,7 @@ export const StandaloneMagicLoginForm = ({
         <div className="success magic-success">
           <FormattedMessage id="general.join_discord" />
           {surveyId && successEmail.match("gmail.com") && (
-            <GmailMessage domain={surveyId.replace("_", "-").toLowerCase()} />
+            <GmailMessage domain={surveyId.replace("_", "").toLowerCase()} />
           )}
         </div>
       )}
