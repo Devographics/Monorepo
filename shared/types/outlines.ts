@@ -194,6 +194,7 @@ export type Question = {
 
     // a question that has a data field but does not show up in the form
     hidden?: boolean
+    isRequired?: boolean
     /**
      * Must be true for questions that allow multiple answers
      * For instance "textList"
@@ -266,6 +267,7 @@ export enum DbSuffixes {
     NORMALIZED = 'normalized',
     PRENORMALIZED = 'prenormalized',
     COMMENT = 'comment',
+    FOLLOWUPS = 'followups',
     FOLLOWUP_PREDEFINED = 'followup_predefined',
     FOLLOWUP_FREEFORM = 'followup_freeform',
     ERROR = 'error',

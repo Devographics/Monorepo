@@ -4,7 +4,10 @@ import { useEffect } from "react";
 
 const useStoreReferrer = () => {
   const query = useSearchParams()!;
-  const source = query.get("source");
+  const sourceParam = query.get("source");
+  const utmSourceParam = query.get("utm_source");
+  const refParam = query.get("ref");
+  const source = sourceParam || refParam || utmSourceParam;
   const referrer = query.get("referrer");
   useEffect(() => {
     if (source) {

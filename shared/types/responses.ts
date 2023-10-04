@@ -9,5 +9,12 @@ export interface ResponseDocument extends Omit<Document, "_id"> {
   updatedAt: Date;
   createdAt: Date;
   completion: number;
+  customNormalizations?: CustomNormalizationDefinition[];
   [key: string]: any;
 }
+
+export type CustomNormalizationDefinition = {
+  rawPath: string;
+  rawValue: string;
+  tokens: string[];
+};

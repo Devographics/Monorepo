@@ -65,6 +65,10 @@ export const normalizeDocument = async (
     const { response, questionId } = options;
     const { survey, edition, entityRules } = await fetchDataIfNeeded(options);
 
+    if (entityRules.length === 0) {
+      throw new Error(`normalizeDocument: entityRules empty.`);
+    }
+
     const errors: NormalizationError[] = [];
     let normResp = {} as NormalizedResponseDocument;
 

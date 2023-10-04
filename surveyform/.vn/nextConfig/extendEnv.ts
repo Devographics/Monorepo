@@ -1,3 +1,5 @@
+import { NextConfig } from "next";
+
 const { extendNextConfig } = require("../../packages/@vulcanjs/next-config");
 const flowRight = require("lodash/flowRight");
 const debug = require("debug")("vns:next");
@@ -28,15 +30,11 @@ const withPkgInfo = (nextConfig) => {
 };
 
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
-module.exports = ({ defaultConfig }) => {
-  let extendedConfig;
+export default ({ defaultConfig }) => {
+  let extendedConfig: NextConfig;
   extendedConfig = extendNextConfig(defaultConfig);
 
-  extendedConfig.env = {
-    NEXT_PUBLIC_IS_USING_LOCAL_DATABASE: !!(process.env.MONGO_PRIVATE_URI || "").match(
-      /localhost/
-    ),
-  };
+  extendedConfig.env = {};
 
   // Enable Webpack analyzer
   if (process.env.ANALYZE && process.env.ANALYZE !== "false") {

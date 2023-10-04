@@ -2,7 +2,9 @@ import { Metadata } from "next";
 import ClientLayout from "~/app/[lang]/ClientLayout";
 import { DebugRSC } from "~/components/debug/DebugRSC";
 import { getCommonContexts, getLocaleIdFromParams } from "~/i18n/config";
+import { rscIntlContext } from "~/i18n/rsc-fetchers";
 import { rscAllLocalesMetadata, rscLocale } from "~/lib/api/rsc-fetchers";
+import { metadata as defaultMetadata } from "../../layout";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -11,16 +13,22 @@ import { rscAllLocalesMetadata, rscLocale } from "~/lib/api/rsc-fetchers";
 //   return locales.map((l) => ({ lang: l }));
 // }
 
-export const metadata: Metadata = {
-  title: "Devographics Surveys",
-  description: "State of JavaScript, CSS, GraphQL and friends",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-  },
-  // /app/favicon.ico is automatically used as icon
-};
+interface PageServerProps {
+  lang: string;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: PageServerProps;
+}): Promise<Metadata | undefined> {
+  const contexts = getCommonContexts();
+  const intlContext = await rscIntlContext({ localeId: params.lang, contexts });
+  const title = intlContext.formatMessage({ id: "general.title" });
+  const description = intlContext.formatMessage({ id: "general.description" });
+  const metadata = { ...defaultMetadata, title, description };
+  return metadata;
+}
 
 export default async function RootLayout({
   children,

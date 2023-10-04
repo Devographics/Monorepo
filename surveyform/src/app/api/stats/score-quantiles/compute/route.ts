@@ -1,16 +1,16 @@
 import { getRawResponsesCollection } from "@devographics/mongo"
 import { ResponseDocument } from "@devographics/types"
 import { NextRequest, NextResponse } from "next/server"
-import sortBy from "lodash/sortBy.js"
 import { checkSecretKey } from "../../../secretKey"
 import { HandlerError } from "~/lib/handler-error"
+import { computeGlobalScore, ScoreBucket } from "~/lib/responses/scoreQuantiles"
 
 /**
  * 
  * NOTE: similar code exists in API to compute more advanced facetted quantiles
  * This endpoint is protected by a secret key
  *  
- * /api/stats/knowledge-score-quantiles/compute?editionId=html2023&key=XXX
+ * /api/stats/score-quantiles/compute?editionId=html2023&key=XXX
  * (key = SECRET_KEY env variable)
  * 
  * @returns A table where percentiles[i] = the score for percentile i
@@ -29,7 +29,12 @@ export const GET = async (req: NextRequest) => {
         const Responses = await getRawResponsesCollection<ResponseDocument>()
         const countsAgg = Responses.aggregate([{
             $match: {
-                editionId
+                editionId,
+                // important: remove null/undefined knowledgescore
+                // also don't keep zeros
+                knowledgeScore: { $exists: true, $gt: 0 },
+                // before we were computing knowledgeScore as percents
+                createdAt: { $gte: new Date("2023-09-26T00:00:00Z") }
             }
         }, {
             $group: {
@@ -40,27 +45,17 @@ export const GET = async (req: NextRequest) => {
                 }
             }
 
+        }, {
+            $project: {
+                score: "$_id",
+                count: true,
+                _id: false
+            }
         }]
         )
-        // _id = the knowledgeScore
-        const countsSorted = sortBy(await countsAgg.toArray(), "_id") as Array<{ _id: number, count: number }>
-        const total = countsSorted.reduce((sum, { count }) => sum + count, 0)
-        const maxScore = countsSorted.reduce((s, { _id: knowledgeScore }) => knowledgeScore > s ? knowledgeScore : s, 0)
-        // now compute each percentile
-        const percentiles = Array(101).fill(maxScore)
-        let currentPercentage = 0
-        for (let { count, _id: knowledgeScore } of countsSorted) {
-            // weight of this group in the total
-            const proportion = Math.ceil((100. * count) / total)
-            console.log({ count, knowledgeScore, proportion })
-            for (let i = currentPercentage; i <= currentPercentage + proportion; i++) {
-                percentiles[i] = knowledgeScore
-            }
-            currentPercentage += proportion
-        }
-        // TODO: store result in database to serve it later
-
-        return NextResponse.json({ data: percentiles })
+        const counts = await countsAgg.toArray()
+        const globalScore = computeGlobalScore(counts as Array<ScoreBucket>)
+        return NextResponse.json({ data: globalScore })
         //return NextResponse.json({ error: "Not yet implemented" }, { status: 500 })
     } catch (err) {
         if (err instanceof HandlerError) return err.toNextResponse(req)

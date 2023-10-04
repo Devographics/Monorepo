@@ -62,7 +62,7 @@
     "@devographics/templates": "workspace:^1.0.0",
     "@devographics/types": "workspace:^1.0.0",
     "@hapi/iron": "6.0.0",
-    "@next/env": "^13.4.13",
+    "@next/env": "^13.5.3",
     "@sentry/nextjs": "^6.19.7",
     "@sentry/node": "^7.19.0",
     "@sentry/react": "^7.19.0",
@@ -76,7 +76,7 @@
     "lodash": "^4.17.21",
     "nanoid": "3.3.6",
     "new-github-issue-url": "^1.0.0",
-    "next": "13.5.1",
+    "next": "13.5.3",
     "next-connect": "^0.9.1",
     "next-sitemap": "^4.1.8",
     "node-cache": "^5.1.2",
@@ -102,6 +102,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.2",
+    "@next/swc-linux-x64-gnu": "^13.5.3",
+    "@next/swc-linux-x64-musl": "^13.5.3",
     "@sentry/cli": "^2.20.6",
     "@sentry/types": "^7.19.0",
     "@types/express": "^4.17.17",
@@ -135,7 +137,7 @@
   "optionalDependencies": {
     "@cypress/code-coverage": "^3.10.0",
     "@cypress/webpack-preprocessor": "^5.15.5",
-    "@next/bundle-analyzer": "^13.4.13",
+    "@next/bundle-analyzer": "^13.5.3",
     "@testing-library/cypress": "^8.0.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^10.4.9",
@@ -144,13 +146,14 @@
     "auto-changelog": "^2.4.0",
     "cypress": "12.13.0",
     "dotenv-cli": "^4.1.1",
-    "eslint-config-next": "^13.4.13",
+    "eslint-config-next": "^13.5.3",
     "eslint-plugin-cypress": "2.11.1",
     "jest": "^29.5.0",
     "serve": "^11.3.2",
     "shelljs": "^0.8.5",
     "smtp-tester": "^2.0.1",
-    "start-server-and-test": "^1.14.0"
+    "start-server-and-test": "^1.14.0",
+    "ts-node": "^10.9.1"
   },
   "peerDependencies": {
     "@babel/preset-env": "^7.0.0",

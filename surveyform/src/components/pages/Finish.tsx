@@ -27,6 +27,11 @@ export const Finish = ({
 
   return (
     <div className="contents-narrow thanks">
+      <ThanksBackButton
+        readOnly={readOnly}
+        edition={edition}
+        response={response}
+      />
       <div className="survey-message survey-finished">
         <FormattedMessage id="general.thanks1" />
       </div>
@@ -50,11 +55,6 @@ export const Finish = ({
         <FormattedMessage id="general.thanks2" />
       </div>
       <ShareSite edition={edition} />
-      <ThanksBackButton
-        readOnly={readOnly}
-        edition={edition}
-        response={response}
-      />
     </div>
   );
 };

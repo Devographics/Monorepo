@@ -85,6 +85,7 @@ $text-color: $grey;
 $text-color-dark: $greyMediumish;
 $text-color-darker: $greyMediumish2;
 $text-color-inverted: $greyDarker;
+$text-color-error: $redLight;
 
 $link-color: $active-color;
 $hover-color: $contrast-color;
@@ -97,6 +98,7 @@ $hover-color: $contrast-color;
   --text-color-dark: #{$text-color-dark};
   --text-color-darker: #{$text-color-darker};
   --text-color-inverted: #{$text-color-inverted};
+  --text-color-error: #{$text-color-error};
   --link-color: #{$link-color};
   --hover-color: #{$contrast-color};
   --border-color: #{$border-color};

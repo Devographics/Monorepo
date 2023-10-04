@@ -21,18 +21,26 @@ export interface ReplaceBulkOperation {
 }
 
 export interface DeleteBulkOperation {
-  deleteOne: any
+  deleteOne: any;
 }
 export interface InsertBulkOperation {
-  insertOne: any
+  insertOne: any;
 }
 
 /** Actual type is ReplaceOneModel" | "UpdateOneModel" from "mongodb" but we want to avoid dependency to mongo typings that tends to be buggy */
-export type BulkOperation = UpdateBulkOperation | ReplaceBulkOperation | DeleteBulkOperation | InsertBulkOperation;
+export type BulkOperation =
+  | UpdateBulkOperation
+  | ReplaceBulkOperation
+  | DeleteBulkOperation
+  | InsertBulkOperation;
 
-export interface NormalizationToken {
+export interface CustomNormalizationToken {
   id: string;
   pattern: string;
+  match?: string;
+}
+
+export interface NormalizationToken extends CustomNormalizationToken {
   match: string;
   length: number;
   rules: number;
@@ -140,11 +148,11 @@ export interface RegularField {
   value: any;
 }
 export interface NormalizedField extends RegularField {
-  normTokens: Array<NormalizationToken>;
+  normTokens: Array<NormalizationToken | CustomNormalizationToken>;
   raw: string;
 }
-export interface CommentField extends RegularField { }
-export interface PrenormalizedField extends RegularField { }
+export interface CommentField extends RegularField {}
+export interface PrenormalizedField extends RegularField {}
 
 export interface NormalizationError {
   type: string;

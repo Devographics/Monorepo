@@ -62,7 +62,7 @@ export const parseMarkdown = (stringFile: StringFile) => {
                     '*': ['*']
                 },
                 allowedAttributes: {
-                    '*': ['aria-hidden']
+                    '*': ['aria-hidden', 'href', 'name', 'target']
                 }
             })
             s.tClean = decode(

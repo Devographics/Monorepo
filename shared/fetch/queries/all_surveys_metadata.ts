@@ -41,6 +41,7 @@ query SurveysMetadataQuery {
             id
             name
             twitterName
+            homepageUrl
             company {
               name
               homepage {

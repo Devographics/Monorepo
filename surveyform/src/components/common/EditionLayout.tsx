@@ -12,20 +12,19 @@ const EditionLayout = ({
   edition: EditionMetadata;
   children: ReactNode;
 }) => {
+  const editionLayoutClass = `wrapper survey-${edition.survey.id} edition-${edition.id}`;
   return (
-    <>
-      <div className="wrapper" id="wrapper">
-        <a href="#section-questions" className="skip">
-          <FormattedMessage id="general.skip_to_content" />
-        </a>
-        {/* <DevographicsBanner /> */}
-        <Header edition={edition} />
-        <main className="main-contents" id="main-contents">
-          {children}
-        </main>
-        <Footer />
-      </div>
-    </>
+    <div className={editionLayoutClass} id="wrapper">
+      <a href="#section-questions" className="skip">
+        <FormattedMessage id="general.skip_to_content" />
+      </a>
+      {/* <DevographicsBanner /> */}
+      <Header edition={edition} />
+      <main className="main-contents" id="main-contents">
+        {children}
+      </main>
+      <Footer />
+    </div>
   );
 };
 

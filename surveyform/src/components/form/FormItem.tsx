@@ -40,6 +40,7 @@ export interface FormItemProps extends FormInputProps {
   showOther?: boolean;
   onBlur?: React.FocusEventHandler<HTMLDivElement>;
   className?: string;
+  isInvalid?: boolean;
 }
 
 export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
@@ -58,9 +59,8 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
       onBlur,
       className = "",
       updateCurrentValues,
+      isInvalid,
     } = props;
-
-    const enableSkip = edition.enableSkip;
 
     const isLastItem = questionNumber === section.questions.length;
 
@@ -80,6 +80,8 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
     const skipPath = formPaths[DbPathsEnum.SKIP]!;
     const isSkipped = response?.[skipPath];
     const skippedClass = isSkipped ? "form-item-skipped" : "";
+
+    const enableSkip = skipPath && edition.enableSkip && !question.isRequired;
 
     // open the comment widget if there is already a comment or this is the first question
     const [showCommentInput, setShowCommentInput] = useState(
@@ -170,9 +172,11 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
     //   }
     // }, [isInView]);
 
+    const isInvalidClass = isInvalid ? "form-item-invalid" : "";
+
     return (
       <div
-        className={`form-item ${className} ${skippedClass}`}
+        className={`form-item ${className} ${skippedClass} ${isInvalidClass}`}
         ref={myRef}
         onBlur={onBlur}
       >
@@ -311,12 +315,13 @@ export const FormItemDescription = (
       id={intlIds.description}
     />
   ) : entityDescription ? (
-    <span
-      className="form-item-description"
-      dangerouslySetInnerHTML={{
-        __html: entityDescription,
-      }}
-    />
+    <p className="form-item-description">
+      <span
+        dangerouslySetInnerHTML={{
+          __html: entityDescription,
+        }}
+      />
+    </p>
   ) : null;
 };
 

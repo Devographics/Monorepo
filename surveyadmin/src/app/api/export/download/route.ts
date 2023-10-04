@@ -7,6 +7,7 @@ import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import fs from "fs"
 import { streamFile } from "~/lib/export/fileStreaming";
 
+export const dynamic = "force-dynamic"
 
 export const GET = async (req: NextRequest): Promise<NextResponse> => {
     // TODO: factor search params reading with generation

@@ -1,44 +1,9 @@
-const entityFragment = `
-id
-nameClean
-nameHtml
-example {
-  label
-  language
-  code
-  codeHighlighted
-}
-descriptionClean
-descriptionHtml
-homepage {
-  url
-}
-github {
-  url
-}
-mdn {
-  url
-  summary
-}
-w3c {
-  url
-}
-caniuse {
-  name
-  url
-}
-resources {
-  title
-  url
-}
-tags
-patterns
-`
+import { getEntityFragment } from './entity_fragment'
 
 export const getEntitiesQuery = () => `
 query EntitiesQuery {
   entities(includeNormalizationEntities: true, includeAPIOnlyEntities: false) {
-    ${entityFragment}
+    ${getEntityFragment({ isFull: true })}
   }
 }
 `

@@ -17,7 +17,7 @@ import CheckboxgroupSentiment from "~/components/inputs/CheckboxgroupSentiment";
 import Radiogroup from "~/components/inputs/Radiogroup";
 import Projects from "~/components/inputs/Projects";
 import { QuestionMetadata, QuestionTemplateOutput } from "@devographics/types";
-import { TextList } from "~/components/inputs/TextList";
+import TextList from "~/components/inputs/TextList";
 import { ComponentType } from "react";
 import { FormInputProps } from "~/components/form/typings";
 import Likert from "~/components/inputs/Likert";

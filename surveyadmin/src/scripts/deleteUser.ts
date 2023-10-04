@@ -4,6 +4,7 @@ import {
   getNormResponsesCollection,
   getRawResponsesCollection,
 } from "@devographics/mongo";
+import { UserDocument } from "./typings";
 
 export const deleteUser = async ({ email, reallyDelete = 0 }) => {
   const [name, host] = email.split("@");
@@ -16,7 +17,7 @@ export const deleteUser = async ({ email, reallyDelete = 0 }) => {
     legacyResponses = [] as any[],
     newResponses = [] as any[];
 
-  const users = await getUsersCollection();
+  const users = await getUsersCollection<UserDocument>();
   const responses = await getRawResponsesCollection();
   const normResponses = await getNormResponsesCollection();
 
@@ -43,6 +44,8 @@ export const deleteUser = async ({ email, reallyDelete = 0 }) => {
     email: { $exists: false },
     $or: [{ olderUserId: legacyUser?._id }, { emailHash1 }, { emailHash2 }],
   });
+
+  if (!newUser) throw new Error(`User ${legacyUser?._id} not found`)
 
   // track which field(s) were actually matched
   const matches = [

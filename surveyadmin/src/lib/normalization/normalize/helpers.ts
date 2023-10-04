@@ -11,6 +11,7 @@ import {
   QuestionMetadata,
   EditionMetadata,
   SurveyMetadata,
+  QuestionTemplateOutput,
 } from "@devographics/types";
 import {
   getNormResponsesCollection,
@@ -26,7 +27,12 @@ import {
   ignoreValues,
 } from "../helpers/getSelectors";
 import { getSelector } from "../helpers/getSelectors";
-import { BulkOperation, QuestionWithSection } from "../types";
+import {
+  BulkOperation,
+  NormalizationToken,
+  NormalizedResponseDocument,
+  QuestionWithSection,
+} from "../types";
 
 // export const getFieldPaths = (field: Field) => {
 //   const { suffix } = field as ParsedQuestion;
@@ -98,6 +104,7 @@ Extract matching tokens from a string
 const enableLimit = false;
 const stringLimit = enableLimit ? 170 : 1000; // max length of string to try and find tokens in
 const rulesLimit = 1500; // max number of rules to try and match for any given string
+
 const extractTokens = async ({
   value,
   rules,
@@ -125,14 +132,7 @@ const extractTokens = async ({
     );
   }
 
-  const tokens: Array<{
-    id: string;
-    pattern: string;
-    match: any;
-    length: number;
-    rules: number;
-    range: [number, number];
-  }> = [];
+  const tokens: Array<NormalizationToken> = [];
   let count = 0;
   // extract tokens for each rule, storing
   // the start/end index for each match
@@ -228,6 +228,35 @@ const extractTokens = async ({
   return sortedTokens;
 };
 
+export const getQuestionRules = ({
+  entityRules,
+  questionObject,
+  verbose,
+}: {
+  entityRules: any[];
+  questionObject: QuestionTemplateOutput;
+  verbose?: boolean;
+}) => {
+  // automatically add question's own id as a potential match tag
+  const matchTags = [...(questionObject.matchTags || []), questionObject.id];
+
+  const rules = matchTags
+    ? entityRules.filter((r) => intersection(matchTags, r.tags).length > 0)
+    : entityRules;
+
+  if (verbose) {
+    if (rules.length === 0) {
+      console.warn(
+        `‼️ normalize: found no rules for question [${
+          questionObject.id
+        }] with matchTags [${matchTags?.join(", ")}]`
+      );
+    } else {
+      console.log(`// Found ${rules.length} rules to match against`);
+    }
+  }
+  return rules;
+};
 /*
 
 Normalize a string value
@@ -236,28 +265,31 @@ Normalize a string value
 
 */
 export const normalize = async ({
-  value,
-  allRules,
-  tags,
+  values,
+  questionObject,
+  entityRules,
   edition,
-  question,
   verbose,
 }: {
-  value: any;
-  allRules: Array<any>;
-  tags?: Array<string>;
+  values: any[];
+  entityRules: EntityRule[];
   edition: EditionMetadata;
-  question: QuestionMetadata;
+  questionObject: QuestionTemplateOutput;
   verbose?: boolean;
 }) => {
-  const rules = tags
-    ? allRules.filter((r) => intersection(tags, r.tags).length > 0)
-    : allRules;
-
-  if (verbose) {
-    console.log(`// Found ${rules.length} rules to match against`);
+  const rules = getQuestionRules({ questionObject, entityRules, verbose });
+  let allTokens: NormalizationToken[] = [];
+  for (const value of values) {
+    const tokens = await extractTokens({
+      value,
+      rules,
+      edition,
+      question: questionObject,
+      verbose,
+    });
+    allTokens = [...allTokens, ...tokens];
   }
-  return await extractTokens({ value, rules, edition, question, verbose });
+  return allTokens;
 };
 
 /*
@@ -265,7 +297,13 @@ export const normalize = async ({
 Normalize a string value and only keep the first result
 
 */
-export const normalizeSingle = async (options) => {
+export const normalizeSingle = async (options: {
+  values: any[];
+  entityRules: EntityRule[];
+  edition: EditionMetadata;
+  questionObject: QuestionTemplateOutput;
+  verbose: boolean;
+}) => {
   const tokens = await normalize(options);
   // put longer tokens first as a proxy for relevancy
   const sortedTokens = sortBy(tokens, (v) => v.id && v.id.length).reverse();
@@ -555,11 +593,14 @@ export const getUnnormalizedResponses = async ({
     questionObject,
   });
 
-  const NormResponses = await getNormResponsesCollection();
+  const NormResponses =
+    await getNormResponsesCollection<NormalizedResponseDocument>();
   let responses = await NormResponses.find(selector, {
-    _id: 1,
-    responseId: 1,
-    [rawFieldPath]: 1,
+    projection: {
+      _id: 1,
+      responseId: 1,
+      [rawFieldPath]: 1,
+    },
     sort: { [rawFieldPath]: 1 },
     //lean: true
   }).toArray();
@@ -587,40 +628,41 @@ export const getBulkOperations = ({
 }): Array<BulkOperation> => {
   return isReplace
     ? [
-      /*
-      - "replaceOne" doesn't allow for update operators
-      https://www.mongodb.com/docs/v7.0/reference/method/db.collection.replaceOne/
-      This means it does not let use use "$setOnInsert" to guarantee a string id when the "upsert" is an insert
+        /*
+    - "replaceOne" doesn't allow for update operators
+    https://www.mongodb.com/docs/v7.0/reference/method/db.collection.replaceOne/
+    This means it does not let use use "$setOnInsert" to guarantee a string id when the "upsert" is an insert
 
-      - updateOne is not suited either, as it would keep unmodified fields around but we want to delete them)
+    - updateOne is not suited either, as it would keep unmodified fields around but we want to delete them)
 
-      - a deletion followed by an insertion is more reliable. 
-      **The only difference with replaceOne, is that it will change the document _id everytime we replace the normalized response**
-      Computing a value that is not random (eg based on responseId) can create bugs if we create more than 1 normalized response
-      {
-        replaceOne: {
-          filter: selector,
-          replacement: modifier,
-          upsert: true,
-        },
-      }*/
-      {
-        deleteOne: {
-          filter: selector
-        },
-      },
-      {
-        insertOne: {
-          document: { _id: newMongoId(), ...modifier }
-        }
-      }
-
-    ]
-    : [{
-      updateMany: {
+    - a deletion followed by an insertion is more reliable. 
+    **The only difference with replaceOne, is that it will change the document _id everytime we replace the normalized response**
+    Computing a value that is not random (eg based on responseId) can create bugs if we create more than 1 normalized response
+    {
+      replaceOne: {
         filter: selector,
-        update: modifier,
-        upsert: false,
+        replacement: modifier,
+        upsert: true,
       },
-    }];
+    }*/
+        {
+          deleteOne: {
+            filter: selector,
+          },
+        },
+        {
+          insertOne: {
+            document: { _id: newMongoId(), ...modifier },
+          },
+        },
+      ]
+    : [
+        {
+          updateMany: {
+            filter: selector,
+            update: modifier,
+            upsert: false,
+          },
+        },
+      ];
 };

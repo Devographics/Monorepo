@@ -1,5 +1,7 @@
+import Form from "react-bootstrap/Form";
+
 export const FormElement = ({ children }) => {
-  return <form>{children}</form>;
+  return <Form noValidate>{children}</Form>;
 };
 
 export default FormElement;

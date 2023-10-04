@@ -1,9 +1,10 @@
 import set from "lodash/set.js";
 import get from "lodash/get.js";
 import compact from "lodash/compact.js";
-import { normalizeSingle } from "../normalize/helpers";
+import { getQuestionRules, normalizeSingle } from "../normalize/helpers";
 import { copyFields } from "../normalize/steps";
 import { NormalizationParams } from "../types";
+import { QuestionTemplateOutput } from "@devographics/types";
 
 export const source = async (normalizationParams: NormalizationParams) => {
   await copyFields(normalizationParams);
@@ -36,7 +37,7 @@ three different fields (source field, referrer field, 'how did you hear' field)
 */
 export const normalizeSource = async (
   normResp,
-  allRules,
+  entityRules,
   survey,
   edition,
   verbose
@@ -54,6 +55,17 @@ export const normalizeSource = async (
     "courses",
   ];
 
+  const questionObject = {
+    id: "source",
+    matchTags: tags,
+  } as QuestionTemplateOutput;
+
+  const rules = getQuestionRules({
+    questionObject,
+    entityRules,
+    verbose,
+  });
+
   const rawSource = get(normResp, "user_info.sourcetag");
   const rawFindOut = get(
     normResp,
@@ -66,31 +78,30 @@ export const normalizeSource = async (
     const normSource =
       rawSource &&
       (await normalizeSingle({
-        value: rawSource,
-        allRules,
-        tags,
+        values: [rawSource],
+        entityRules,
         edition,
-        question: { id: "source" },
+        questionObject: { id: "source" } as QuestionTemplateOutput,
         verbose,
       }));
     const normFindOut =
       rawFindOut &&
       (await normalizeSingle({
-        value: rawFindOut,
-        allRules: allRules,
-        tags,
+        values: [rawFindOut],
+        entityRules,
         edition,
-        question: { id: "how_did_user_find_out_about_the_survey" },
+        questionObject: {
+          id: "how_did_user_find_out_about_the_survey",
+        } as QuestionTemplateOutput,
         verbose,
       }));
     const normReferrer =
       rawRef &&
       (await normalizeSingle({
-        value: rawRef,
-        allRules: allRules,
-        tags,
+        values: [rawRef],
+        entityRules,
         edition,
-        question: { id: "referrer" },
+        questionObject: { id: "referrer" } as QuestionTemplateOutput,
         verbose,
       }));
 

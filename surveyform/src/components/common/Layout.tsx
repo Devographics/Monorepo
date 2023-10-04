@@ -3,6 +3,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 // import DevographicsBanner from "./DevographicsBanner";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
+import TokyoDev from "~/components/common/TokyoDev";
 
 export const Layout = ({ children }: { children: any }) => {
   return (
@@ -14,6 +15,7 @@ export const Layout = ({ children }: { children: any }) => {
       <Header />
       <main className="main-contents" id="main-contents">
         {children}
+        <TokyoDev />
       </main>
       <Footer />
     </div>

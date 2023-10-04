@@ -144,6 +144,7 @@
 
 - id: DEFAULT_MAIL_FROM
   example: surveys@devographics.com
+  optional: true
   usedBy:
       - surveyform
 

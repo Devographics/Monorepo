@@ -12,6 +12,7 @@ import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { Button } from "~/components/ui/Button";
 import { EditionMetadata } from "@devographics/types";
 import { USED_PTS, HEARD_PTS } from "~/lib/responses/helpers";
+import { computeUserRank } from "~/lib/responses/scoreQuantiles";
 
 const Features = ({
   features,
@@ -77,16 +78,23 @@ const Score = ({
     response,
     edition,
   });
+  const rank = computeUserRank(score);
   const { survey, questionsUrl } = edition;
   const { name, hashtag } = survey;
 
   const text = intl.formatMessage({
     id: "thanks.share_score_message",
     values: {
+      // TODO: at the time of writing (09/2023) translations include an additional %
+      // need to check if we keep the % around
       score,
       name,
       shareUrl: `${questionsUrl}?source=post_survey_share`,
       hashtag,
+      // not used by all translations
+      awareness_count: awareness.count,
+      usage_count: usage.count,
+      rank,
     },
   });
 
@@ -196,12 +204,10 @@ const Score = ({
                   values: { awareness_total: awareness.total },
                 }
               )}">${awareness.score}%</span>`,
+              knowledgeRankingFromTop: `<span class="score-number score-rank">${rank}%</span>`
             }}
           />
         </div>
-        {/* <div className="score-rank">
-          <FormattedMessage id={`knowledge_rank.${rank}`} />
-        </div> */}
         <div className="score-share">
           <Button
             target="_blank"

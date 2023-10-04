@@ -49,3 +49,16 @@ export const localeConvertedCacheKey = (
 
 export const allEntitiesCacheKey = (options?: CacheKeyOptions) =>
     `${getAppName(options)}__allEntities`
+
+// TODO: harmonize that with cache keys used by API
+export const questionDataCacheKey = (
+    options: CacheKeyOptions & {
+        surveyId: string
+        editionId: string
+        sectionId: string
+        questionId: string
+    }
+) =>
+    `${getAppName(options)}__${options.surveyId}__${options.editionId}__${options.sectionId}__${
+        options.questionId
+    }__questionData`

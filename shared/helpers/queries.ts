@@ -68,6 +68,7 @@ query SurveysMetadataQuery {
           entity {
             name
             twitterName
+            homepageUrl
             company {
               name
               homepage {
@@ -135,6 +136,7 @@ query SurveyMetadataQuery {
             entity {
               name
               twitterName
+              homepageUrl
               company {
                 name
                 homepage {
@@ -194,6 +196,7 @@ query ${editionId}MetadataQuery {
           entity {
             name
             twitterName
+            homepageUrl
             company {
               name
               homepage {

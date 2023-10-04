@@ -1,0 +1,97 @@
+/*
+
+These styles will only be active for specific surveys and/or editions
+
+*/
+.config-tokyodev {
+  --tw-gradient-from-position: ;
+  --tw-gradient-via-position: ;
+  --tw-gradient-to-position: ;
+  --tw-gradient-to: #f97316 var(--tw-gradient-to-position);
+  --tw-gradient-from: #6366f1 var(--tw-gradient-from-position);
+  // --tw-gradient-to: #6366f100 var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  --bg-color-dark: rgb(3, 13, 31);
+  // --bg-color: #fff;
+  --bg-color: rgb(3, 13, 31);
+  --link-color: rgb(129 140 248);
+
+  font-family: Inter var, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans,
+    sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
+    Noto Color Emoji;
+
+  // font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+  //   Liberation Mono, Courier New, monospace;
+
+  .footer-top {
+    .footer-link-item:last-of-type {
+      display: none;
+    }
+  }
+  .question-id-age {
+    .form-input-lessThanOneYear {
+      display: none;
+    }
+    .form-input-moreThanOneYear {
+      .form-input-wrapper {
+        display: none;
+      }
+    }
+  }
+  .header {
+    background-image: linear-gradient(to right, var(--tw-gradient-stops));
+    padding: $spacing/1.5;
+  }
+  .nav-wrapper {
+    background: var(--bg-color-dark);
+    border-radius: 0.375rem;
+    border: 0;
+    padding: $spacing $spacing;
+    margin-bottom: -$spacing;
+  }
+  // h1,
+  // h2,
+  // h3,
+  // h4,
+  // h5,
+  // h6 {
+  //   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+  //     Liberation Mono, Courier New, monospace;
+  // }
+}
+
+.tokyodev-info {
+  max-width: 800px;
+  margin: 0 auto;
+  // background-image: repeating-radial-gradient(
+  //     circle at 0px 0px,
+  //     transparent 0px,
+  //     rgb(3, 13, 31) 10px
+  //   ),
+  //   repeating-linear-gradient(rgba(8, 34, 54, 0.333), rgb(8, 34, 54));
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+  padding: $spacing/2;
+  .tokyodev-info-inner {
+    background: rgb(3, 13, 31);
+    padding: $spacing;
+    @include medium-large {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      column-gap: $spacing * 2;
+    }
+  }
+  .tokyodev-info-founder {
+    img {
+      display: block;
+      width: 100%;
+      border-radius: 100%;
+    }
+    h5 {
+      font-size: $smallish-font;
+      margin-top: $spacing/2;
+      text-align: center;
+      line-height: 1.5;
+    }
+  }
+}

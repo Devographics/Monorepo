@@ -18,9 +18,11 @@ export default function Icon() {
     (
       // ImageResponse JSX element
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="220 0 100 100">
+        {/*
+        TODO: Next currently do not support text nodes
         <text y=".9em" font-size="90">
           🔒
-        </text>
+    </text>*/}
       </svg>
     ),
     // ImageResponse options

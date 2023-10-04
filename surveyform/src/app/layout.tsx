@@ -16,17 +16,23 @@ export default function RootLayout({
   const isDev = process.env.NODE_ENV === "development";
   getConfig({ showWarnings: isDev });
 
+  const configClass = process.env.NEXT_PUBLIC_CONFIG
+    ? `config-${process.env.NEXT_PUBLIC_CONFIG}`
+    : "";
+
   return (
     <html>
       <head />
-      <body>{children}</body>
+      <body className={configClass}>{children}</body>
     </html>
   );
 }
 
 export const metadata: Metadata = {
-  title: "Devographics Surveys",
-  description: "State of JavaScript, CSS, GraphQL and friends",
+  title: process.env.DEFAULT_TITLE || "Devographics Surveys",
+  description:
+    process.env.DEFAULT_DESCRIPTION ||
+    "The State of JavaScript, State of CSS, State of HTML, and other developer surveys.",
   viewport: {
     width: "device-width",
     initialScale: 1,

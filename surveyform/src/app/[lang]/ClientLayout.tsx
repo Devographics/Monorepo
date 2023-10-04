@@ -64,6 +64,10 @@ export function ClientLayout(props: AppLayoutProps) {
     };
   }
 
+  const configClass = process.env.NEXT_PUBLIC_CONFIG
+    ? `config-${process.env.NEXT_PUBLIC_CONFIG}`
+    : "";
+
   return (
     <html lang={params.lang}>
       {/*
@@ -71,7 +75,7 @@ export function ClientLayout(props: AppLayoutProps) {
       head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
     */}
       <head />
-      <body>
+      <body className={configClass}>
         {/** @ts-ignore */}
         <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
           {/** TODO: this error boundary to display anything useful since it doesn't have i18n */}

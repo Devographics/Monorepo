@@ -79,6 +79,8 @@ export const validateResponse = ({
   try {
     clientSchema.parse(clientData);
   } catch (error) {
+    console.log("// client data validation error");
+    console.log(error);
     throw new HandlerError({
       id: "client_data_validation_error",
       message: `Encountered an error while validating client data during ${action}`,

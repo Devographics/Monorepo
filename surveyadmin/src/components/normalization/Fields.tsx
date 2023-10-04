@@ -7,6 +7,7 @@ import { NormalizationResult } from "./NormalizationResult";
 import {
   EditionMetadata,
   QuestionMetadata,
+  ResponseData,
   SurveyMetadata,
 } from "@devographics/types";
 import { UnnormalizedResponses } from "~/lib/normalization/hooks";
@@ -17,6 +18,7 @@ import {
   getResponsesSelector,
   getUnnormalizedResponsesSelector,
 } from "~/lib/normalization/helpers/getSelectors";
+import ManualInput from "./ManualInput";
 
 const Fields = ({
   survey,
@@ -24,12 +26,14 @@ const Fields = ({
   question,
   responsesCount,
   unnormalizedResponses,
+  questionData,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionWithSection;
   responsesCount: number;
   unnormalizedResponses: UnnormalizedResponses[];
+  questionData: ResponseData;
 }) => {
   const [showIds, setShowIds] = useState(true);
 
@@ -51,6 +55,15 @@ const Fields = ({
     edition,
     questionObject,
   });
+
+  const fieldProps = {
+    showIds,
+    question,
+    survey,
+    edition,
+    questionData,
+    rawPath: formPaths?.other,
+  };
 
   return (
     <div>
@@ -115,12 +128,9 @@ const Fields = ({
             <Field
               key={_id}
               _id={_id}
-              showIds={showIds}
               value={value}
-              questionId={question.id}
               responseId={responseId}
-              surveyId={survey.id}
-              editionId={edition.id}
+              {...fieldProps}
             />
           ))}
         </tbody>
@@ -134,15 +144,24 @@ const Field = ({
   value,
   showIds,
   responseId,
-  questionId,
-  surveyId,
-  editionId,
+  question,
+  survey,
+  edition,
+  questionData,
+  rawPath,
 }) => {
   const [result, setResult] = useState<NormalizeInBulkResult>();
+  const [showManualInput, setShowManualInput] = useState<boolean>(false);
+  const surveyId = survey.id;
+  const editionId = edition.id;
+  const questionId = question.id;
+
   return (
     <>
       <tr>
-        <td>{value}</td>
+        <td>
+          <FieldValue value={value} />
+        </td>
         {showIds && (
           <>
             <td>
@@ -153,6 +172,15 @@ const Field = ({
             </td>
           </>
         )}
+        <td>
+          <button
+            onClick={() => {
+              setShowManualInput(!showManualInput);
+            }}
+          >
+            Input&nbsp;ID(s)
+          </button>
+        </td>
         <td>
           <LoadingButton
             action={async () => {
@@ -165,10 +193,28 @@ const Field = ({
               setResult(result.data);
               console.log(result);
             }}
-            label="Normalize"
+            label="Autonormalize"
           />
         </td>
       </tr>
+      {showManualInput && (
+        <tr>
+          <td colSpan={999}>
+            <article>
+              <ManualInput
+                survey={survey}
+                edition={edition}
+                question={question}
+                questionData={questionData}
+                responseId={responseId}
+                normRespId={_id}
+                rawValue={value}
+                rawPath={rawPath}
+              />
+            </article>
+          </td>
+        </tr>
+      )}
       {result && (
         <tr>
           <td colSpan={999}>
@@ -181,4 +227,19 @@ const Field = ({
     </>
   );
 };
+
+const FieldValue = ({ value }) => {
+  if (Array.isArray(value)) {
+    return (
+      <ul>
+        {value.map((v, i) => (
+          <li key={i}>{v}</li>
+        ))}
+      </ul>
+    );
+  } else {
+    return <span>{value}</span>;
+  }
+};
+
 export default Fields;

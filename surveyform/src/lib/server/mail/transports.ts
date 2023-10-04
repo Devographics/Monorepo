@@ -15,15 +15,15 @@ if (!(serverConfig().isDev || serverConfig().debugMail)) {
   transport = {
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
-    secure: !!process.env.SMTP_SECURE, // true for 465, false for other ports
+    secure: Number(process.env.SMTP_PORT) === 465, // true for 465, false for other ports
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
-    debug: true
+    debug: true,
   };
 } else {
-  console.warn("SMTP_HOST not set, will use debug transport")
+  console.warn("SMTP_HOST not set, will use debug transport");
 }
 
 export const localMailTransport = nodemailer.createTransport(transport);
