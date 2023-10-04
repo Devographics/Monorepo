@@ -379,3 +379,7 @@ EMAIL_OCTOPUS_APIKEY
 -   If `SURVEYS_DIR` is defined, surveys data will be loaded locally instead of from GitHub.
 -   If `LOCALES_DIR` is defined, locales data will be loaded locally instead of from GitHub.
 -   If `ENTITIES_DIR` is defined, entities data will be loaded locally instead of from GitHub.
+
+## Other 3rd party services
+
+- Plausible for analytics

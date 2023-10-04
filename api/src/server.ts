@@ -28,12 +28,11 @@ import { loadOrGetSurveys } from './load/surveys'
 import { generateTypeObjects, getQuestionObjects, parseSurveys } from './generate/generate'
 import { generateResolvers } from './generate/resolvers'
 
-import { loadOrGetEntities } from './load/entities'
 import { watchFiles } from './helpers/watch'
 
 import { initRedis } from '@devographics/redis'
-import { getPublicDb, getPublicDbReadOnly } from '@devographics/mongo'
-import { verifyGhWebhookMiddleware } from './external_apis'
+import { getPublicDb } from '@devographics/mongo'
+import { ghWebhooks } from './webhooks'
 
 const envPath = process.env.ENV_FILE ? process.env.ENV_FILE : '.env'
 dotenv.config({ path: envPath })
@@ -75,6 +74,7 @@ const checkSecretKey = async (req: Request, res: Response, func: () => Promise<v
         await func()
     }
 }
+
 
 // if SURVEYS_URL is defined, then use that to load surveys;
 // if not, look in local filesystem
@@ -231,25 +231,8 @@ const start = async () => {
             res.status(200).send('Locales reloaded')
         })
     })
-    /**
-     * GitHub webhook URL 
-     * 
-     * @see https://docs.github.com/fr/webhooks
-     * @see https://docs.github.com/en/webhooks/using-webhooks/securing-your-webhooks#typescript-example
-     */
-    app.post("/gh/reinitialize-locales",
-        json(),
-        verifyGhWebhookMiddleware, // important
-        async function (req, res) {
-            // @see https://docs.github.com/en/webhooks/webhook-events-and-payloads#push
-            const action = req.headers?.["x-github-event"]
-            const { ref/*, repository, sender */ } = req.body
-            if (!(action === "push" && ref === "refs/heads/main")) return res.status(200).send(`Nothing to do for action ${action} on ref ${ref}`)
-            console.log("Triggering local reinitialization from GitHub we hook")
-            await reinitialize({ context, initList: ['locales'] })
-            // TODO: check if the push in on main branch
-            return res.status(200).send("Locales reloaded")
-        })
+
+    app.use("/gh", ghWebhooks(context))
 
     // app.get('/cache-avatars', async function (req, res) {
     //     checkSecretKey(req)

@@ -56,3 +56,15 @@ export const verifyGhWebhookMiddleware = (req: Request, res: Response, next: Nex
     }
     next()
 }
+
+
+export async function checkMainPushAction(req: Request, res: Response, next: NextFunction) {
+    // @see https://docs.github.com/en/webhooks/webhook-events-and-payloads#push
+    const action = req.headers?.["x-github-event"]
+    const { ref/*, repository, sender */ } = req.body
+    if (!(action === "push" && ref === "refs/heads/main")) {
+        return res.status(200).send(`Nothing to do for action ${action} on ref ${ref}`)
+    }
+    next()
+}
+
