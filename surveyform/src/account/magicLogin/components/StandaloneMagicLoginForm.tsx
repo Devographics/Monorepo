@@ -100,9 +100,9 @@ export const StandaloneMagicLoginForm = ({
       {errorMsg && <div className="error magic-error">{errorMsg}</div>}
       {successEmail && (
         <div className="success magic-success">
-          <FormattedMessage id="general.join_discord" />
+          <FormattedMessage id="general.magic_link.success" />
           {surveyId && successEmail.match("gmail.com") && (
-            <GmailMessage domain={surveyId.replace("_", "").toLowerCase()} />
+            <GmailMessage domain={surveyId.replaceAll("_", "").toLowerCase()} />
           )}
         </div>
       )}
