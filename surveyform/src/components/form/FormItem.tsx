@@ -305,9 +305,10 @@ export const FormItemDescription = (props: FormItemProps) => {
   const i18nDescription = intl.formatMessage({ id: intlIds.description });
   const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
   return i18nDescription ? (
-    <p className="form-item-description">
-      <FormattedMessage id={intlIds.description} />
-    </p>
+    <FormattedMessage
+      className="form-item-description"
+      id={intlIds.description}
+    />
   ) : entityDescription ? (
     <p className="form-item-description">
       <span
