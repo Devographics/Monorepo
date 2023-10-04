@@ -92,7 +92,7 @@ const getValue = (variable: EnvVariable) => {
  */
 export const getConfig = (options: GetConfigOptions = {}) => {
     const { appName: appName_, showWarnings = false } = options
-    const appName = appName_ || appNameGlobal || getValue({ id: EnvVar.APP_NAME })?.value
+    const appName = appName_ || appNameGlobal || (getValue({ id: EnvVar.APP_NAME })?.value as AppName)
     if (!appName) {
         throw new Error(
             'getConfig: please pass variable, set env variable, or call setAppName() to specify appName'
