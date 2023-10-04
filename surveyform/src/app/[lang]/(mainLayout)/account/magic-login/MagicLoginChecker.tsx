@@ -79,9 +79,11 @@ const useMagicLoginCheck = ({
       }
       setLoading(false);
     };
-    verifyToken().catch((err) => {
+    try {
+      verifyToken();
+    } catch (err) {
       setError(err);
-    });
+    }
   }, [!!token]);
 
   return {
