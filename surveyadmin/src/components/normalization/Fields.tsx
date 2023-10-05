@@ -3,21 +3,20 @@ import { useState } from "react";
 import { normalizeQuestionResponses } from "~/lib/normalization/services";
 import { LoadingButton } from "./NormalizeQuestionActions";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
-import { NormalizationResult } from "./NormalizationResult";
+import {
+  NormField,
+  NormalizationResult,
+  highlightMatches,
+} from "./NormalizationResult";
 import {
   EditionMetadata,
-  QuestionMetadata,
   ResponseData,
   SurveyMetadata,
 } from "@devographics/types";
-import { UnnormalizedResponses } from "~/lib/normalization/hooks";
+import { NormalizationResponse } from "~/lib/normalization/hooks";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
 import type { QuestionWithSection } from "~/lib/normalization/types";
 import { getFormPaths } from "@devographics/templates";
-import {
-  getResponsesSelector,
-  getUnnormalizedResponsesSelector,
-} from "~/lib/normalization/helpers/getSelectors";
 import ManualInput from "./ManualInput";
 
 const Fields = ({
@@ -25,20 +24,22 @@ const Fields = ({
   edition,
   question,
   responsesCount,
-  unnormalizedResponses,
+  responses,
   questionData,
+  variant,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionWithSection;
   responsesCount: number;
-  unnormalizedResponses: UnnormalizedResponses[];
+  responses: NormalizationResponse[];
   questionData: ResponseData;
+  variant: "normalized" | "unnormalized";
 }) => {
-  const [showIds, setShowIds] = useState(true);
-  const [showDbInfo, setShowDbInfo] = useState(false);
+  const [showResponses, setShowResponses] = useState(true);
+  const [showIds, setShowIds] = useState(false);
 
-  if (!unnormalizedResponses) return <p>Nothing to normalize</p>;
+  if (!responses) return <p>Nothing to normalize</p>;
 
   const questionObject = getQuestionObject({
     survey,
@@ -48,15 +49,6 @@ const Fields = ({
   })!;
   const formPaths = getFormPaths({ edition, question: questionObject });
 
-  const rawSelector = getResponsesSelector({
-    edition,
-    questionObject,
-  });
-  const normSelector = getUnnormalizedResponsesSelector({
-    edition,
-    questionObject,
-  });
-
   const fieldProps = {
     showIds,
     question,
@@ -64,95 +56,54 @@ const Fields = ({
     edition,
     questionData,
     rawPath: formPaths?.other,
+    variant,
   };
 
   return (
     <div>
-      <p>
-        <strong>{unnormalizedResponses.length}</strong> missing normalizations
-        out of <strong>{responsesCount}</strong> total responses for{" "}
-        <code>
-          {edition.id}/{question.id}
-        </code>
-        .
-      </p>
-      <p>
+      <h3>
+        {variant} Responses ({responses.length}){" "}
         <a
-          role="button"
           href="#"
+          role="button"
           onClick={(e) => {
             e.preventDefault();
-            setShowDbInfo(!showDbInfo);
+            setShowResponses(!showResponses);
           }}
         >
-          {showDbInfo ? "Hide" : "Show"} DB Info
+          {showResponses ? "Hide" : "Show"}
         </a>
-        {showDbInfo && (
-          <article>
-            <p>
-              <ul>
-                <li>
-                  Raw Path: <code>{formPaths?.other}</code>
-                </li>
-                <li>
-                  Selector: <textarea>{JSON.stringify(rawSelector)}</textarea>
-                </li>
-                <li>
-                  Normalized Path:{" "}
-                  <code>{questionObject?.normPaths?.other}</code>
-                </li>
-                <li>
-                  Selector: <textarea>{JSON.stringify(normSelector)}</textarea>
-                </li>
-              </ul>
-            </p>
-          </article>
-        )}
-      </p>
-      <p>
-        Match Tags:{" "}
-        <span>
-          <code>{question.id} [id]</code>{" "}
-        </span>
-        {question.matchTags?.map((tag) => (
-          <span key={tag}>
-            <code>{tag}</code>{" "}
-          </span>
-        ))}
-      </p>
-      <p>
-        <input
-          type="checkbox"
-          checked={showIds}
-          onClick={() => {
-            setShowIds(!showIds);
-          }}
-        />{" "}
-        Show IDs
-      </p>
-      <table>
-        <thead>
-          <th>Answer</th>
-          {showIds && (
-            <>
-              <th>Raw ID</th>
-              <th>Norm. ID</th>
-            </>
-          )}
-          <th colSpan={2}>Normalize</th>
-        </thead>
-        <tbody>
-          {unnormalizedResponses.map(({ _id, responseId, value }) => (
-            <Field
-              key={_id}
-              _id={_id}
-              value={value}
-              responseId={responseId}
-              {...fieldProps}
-            />
-          ))}
-        </tbody>
-      </table>
+      </h3>
+      {showResponses && (
+        <table>
+          <thead>
+            <th>Answer</th>
+            {variant === "normalized" && <th>Normalized Values</th>}
+            {showIds && (
+              <>
+                <th>Raw ID</th>
+                <th>Norm. ID</th>
+              </>
+            )}
+            <th colSpan={2}>Normalize</th>
+          </thead>
+          <tbody>
+            {responses.map(
+              ({ _id, responseId, value, normalizedValue, patterns }) => (
+                <Field
+                  key={_id}
+                  _id={_id}
+                  value={value}
+                  normalizedValue={normalizedValue}
+                  patterns={patterns}
+                  responseId={responseId}
+                  {...fieldProps}
+                />
+              )
+            )}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
@@ -160,6 +111,8 @@ const Fields = ({
 const Field = ({
   _id,
   value,
+  normalizedValue,
+  patterns,
   showIds,
   responseId,
   question,
@@ -167,6 +120,7 @@ const Field = ({
   edition,
   questionData,
   rawPath,
+  variant,
 }) => {
   const [result, setResult] = useState<NormalizeInBulkResult>();
   const [showManualInput, setShowManualInput] = useState<boolean>(false);
@@ -178,7 +132,7 @@ const Field = ({
     <>
       <tr>
         <td>
-          <FieldValue value={value} />
+          <FieldValue value={value} patterns={patterns} />
         </td>
         {showIds && (
           <>
@@ -189,6 +143,24 @@ const Field = ({
               <code>{_id}</code>
             </td>
           </>
+        )}
+        {variant === "normalized" && (
+          <td>
+            {normalizedValue.map((value) => (
+              <span>
+                <code>{value}</code>{" "}
+              </span>
+            ))}
+            {/* <p>
+              <code>{patterns}</code>
+            </p> */}
+            {/* <NormField
+              raw={}
+              questionId={}
+              normTokens={}
+              showQuestionId={false}
+            /> */}
+          </td>
         )}
         <td>
           <button
@@ -246,12 +218,26 @@ const Field = ({
   );
 };
 
-const FieldValue = ({ value }) => {
+const FieldValue = ({ value, patterns }) => {
+  // const sanitizer = new Sanitizer();
+
+  const getValue = (value: string) => {
+    // const sanitized = sanitizer(value);
+    return patterns ? highlightMatches(value, patterns) : value;
+  };
+
   if (Array.isArray(value)) {
     return (
       <ul>
         {value.map((v, i) => (
-          <li key={i}>{v}</li>
+          <li
+            key={i}
+            // dangerouslySetInnerHTML={{
+            //   __html: getValue(v),
+            // }}
+          >
+            {v}
+          </li>
         ))}
       </ul>
     );

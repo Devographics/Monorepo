@@ -246,7 +246,7 @@ const NormDocument = ({
 
 // Function to highlight matches in the text
 // see https://stackoverflow.com/a/39154413/649299
-function highlightMatches(text, regexArray) {
+export function highlightMatches(text, regexArray) {
   let highlightedText = text;
   console.log(text);
   console.log(highlightedText);
@@ -268,7 +268,7 @@ function highlightMatches(text, regexArray) {
   return highlightedText;
 }
 
-const NormField = ({
+export const NormField = ({
   fieldPath,
   raw,
   questionId,

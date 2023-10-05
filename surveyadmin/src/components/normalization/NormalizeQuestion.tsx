@@ -3,8 +3,11 @@
 import Actions from "~/components/normalization/NormalizeQuestionActions";
 import Progress from "~/components/normalization/Progress";
 import Fields from "~/components/normalization/Fields";
+import Metadata from "~/components/normalization/Metadata";
+
 import {
-  UnnormalizedData,
+  ResponsesData,
+  useQuestionResponses,
   useUnnormalizedData,
 } from "~/lib/normalization/hooks";
 import {
@@ -15,6 +18,7 @@ import {
 import { useSegments } from "./hooks";
 import type { QuestionWithSection } from "~/lib/normalization/types";
 import QuestionData from "./QuestionData";
+import isEmpty from "lodash/isEmpty";
 
 export const NormalizeQuestion = (props: {
   survey: SurveyMetadata;
@@ -22,7 +26,7 @@ export const NormalizeQuestion = (props: {
   question: QuestionWithSection;
 }) => {
   const { survey, edition, question } = props;
-  const { data, loading, error } = useUnnormalizedData({
+  const { data, loading, error } = useQuestionResponses({
     surveyId: survey.id,
     editionId: edition.id,
     questionId: question.id,
@@ -45,9 +49,9 @@ export const Normalization = ({
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionWithSection;
-  data: UnnormalizedData;
+  data: ResponsesData;
 }) => {
-  const { responsesCount, unnormalizedResponses, questionResult } = data;
+  const { responsesCount, responses, questionResult } = data;
 
   const questionData = questionResult.data;
 
@@ -65,7 +69,7 @@ export const Normalization = ({
     survey,
     edition,
     question,
-    unnormalizedResponses,
+    responses,
     initializeSegments,
     updateSegments,
     doneCount,
@@ -80,7 +84,17 @@ export const Normalization = ({
       <Actions {...props} />
       {segments.length > 0 && <Progress {...props} />}
       <QuestionData questionData={questionData} />
-      <Fields {...props} />
+      <Metadata {...props} />
+      <Fields
+        {...props}
+        variant="unnormalized"
+        responses={responses.filter((r) => isEmpty(r.normalizedValue))}
+      />
+      <Fields
+        {...props}
+        variant="normalized"
+        responses={responses.filter((r) => !isEmpty(r.normalizedValue))}
+      />
     </div>
   );
 };

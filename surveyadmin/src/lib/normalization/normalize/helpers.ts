@@ -24,6 +24,7 @@ import { newMongoId } from "@devographics/mongo";
 import {
   getEditionSelector,
   getUnnormalizedResponsesSelector,
+  getAllResponsesSelector,
   ignoreValues,
 } from "../helpers/getSelectors";
 import { getSelector } from "../helpers/getSelectors";
@@ -611,6 +612,52 @@ export const getUnnormalizedResponses = async ({
   ]);
 
   return { responses, rawFieldPath, normalizedFieldPath };
+};
+
+export const getAllResponses = async ({
+  survey,
+  edition,
+  question,
+}: {
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  question: QuestionWithSection;
+}) => {
+  const questionObject = getQuestionObject({
+    survey,
+    edition,
+    section: question.section,
+    question,
+  })!;
+  const rawFieldPath = questionObject?.normPaths?.raw!;
+  const normalizedFieldPath = questionObject?.normPaths?.other!;
+  const patternsFieldPath = questionObject?.normPaths?.patterns!;
+
+  const selector = getAllResponsesSelector({
+    edition,
+    questionObject,
+  });
+
+  const NormResponses =
+    await getNormResponsesCollection<NormalizedResponseDocument>();
+  let responses = await NormResponses.find(selector, {
+    projection: {
+      _id: 1,
+      responseId: 1,
+      [rawFieldPath]: 1,
+      [normalizedFieldPath]: 1,
+      [patternsFieldPath]: 1,
+    },
+    sort: { [rawFieldPath]: 1 },
+    //lean: true
+  }).toArray();
+
+  // use case-insensitive sort
+  responses = sortBy(responses, [
+    (response) => String(get(response, rawFieldPath)).toLowerCase(),
+  ]);
+
+  return { responses, rawFieldPath, normalizedFieldPath, patternsFieldPath };
 };
 
 /**

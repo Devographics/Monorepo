@@ -12,7 +12,7 @@ import {
   QuestionMetadata,
   SurveyMetadata,
 } from "@devographics/types";
-import { UnnormalizedResponses } from "~/lib/normalization/hooks";
+import { NormalizationResponse } from "~/lib/normalization/hooks";
 import { InitializeSegmentsOptions, defaultSegmentSize } from "./hooks";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
@@ -23,7 +23,7 @@ interface ActionProps {
   edition: EditionMetadata;
   question: QuestionMetadata;
   initializeSegments: (options: InitializeSegmentsOptions) => void;
-  unnormalizedResponses: UnnormalizedResponses[];
+  responses: NormalizationResponse[];
   responsesCount: number;
 }
 
@@ -33,7 +33,7 @@ const Actions = (props: ActionProps) => {
     edition,
     question,
     initializeSegments,
-    unnormalizedResponses,
+    responses,
     responsesCount,
   } = props;
   // const router = useRouter();
@@ -89,7 +89,7 @@ const Actions = (props: ActionProps) => {
                 surveyId: survey.id,
                 editionId: edition.id,
                 questionId: question.id,
-                responsesIds: unnormalizedResponses.map((r) => r.responseId),
+                responsesIds: responses.map((r) => r.responseId),
               });
               setNormalizeMissingResult(result.data);
               console.log(result);

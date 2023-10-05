@@ -113,6 +113,34 @@ export const getUnnormalizedResponsesSelector = ({
   }
 };
 
+export const getAllResponsesSelector = ({
+  edition,
+  questionObject,
+}: {
+  edition: EditionMetadata;
+  questionObject: QuestionTemplateOutput;
+}) => {
+  const rawFieldPath = questionObject?.normPaths?.raw;
+  const normalizedFieldPath = questionObject?.normPaths?.other;
+  // TODO: do this better
+  // currently the textList template is the only one that supports multiple
+  // freeform values
+  const existsSelector = getExistsSelector({
+    isArray: questionObject.template === "textList",
+  });
+  if (rawFieldPath && normalizedFieldPath) {
+    const selector = {
+      editionId: edition.id,
+      [rawFieldPath]: existsSelector,
+    };
+    return selector;
+  } else {
+    throw new Error(
+      `getAllResponsesSelector: Missing rawFieldPath or normalizedFieldPath for question ${questionObject.id}`
+    );
+  }
+};
+
 // get mongo selector
 export const getEditionSelector = async ({
   survey,
