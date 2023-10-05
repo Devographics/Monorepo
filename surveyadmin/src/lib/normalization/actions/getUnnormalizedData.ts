@@ -54,6 +54,7 @@ export const getUnnormalizedData = async ({
   });
 
   const questionResult = await fetchQuestionData({
+    shouldGetFromCache: false,
     surveyId,
     editionId,
     sectionId: question.section.id,

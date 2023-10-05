@@ -144,6 +144,7 @@ export const normalizeField = async ({
       const fieldPath = prefixWithEditionId(rawPaths?.other, edition.id);
       const freeformValue = response[fieldPath];
       if (freeformValue) {
+        // TODO: do this better
         // currently the textList template is the only one that supports multiple
         // freeform values
         const valuesArray =

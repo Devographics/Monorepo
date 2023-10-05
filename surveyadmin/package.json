@@ -28,6 +28,7 @@
     "test:docker": "docker run --env-file .env.development -it vns-test:latest",
     "test:unit": "jest --testPathIgnorePatterns=tests/vn",
     "test": "npm run test:unit && npm run test:e2e",
+    "tokyodev": "dotenv -e .env.tokyodev.local next",
     "typecheck-watch": "tsc --noEmit --p src/tsconfig.json -w",
     "typecheck": "tsc --noEmit --p src/tsconfig.json"
   },

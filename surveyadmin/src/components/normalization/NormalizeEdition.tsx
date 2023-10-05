@@ -50,7 +50,7 @@ export const NormalizeEdition = ({
           });
         }}
       >
-        Normalize {edition.id}
+        Normalize {edition.id} ({responsesCount} responses)
       </button>
       {segments.length > 0 && <Progress {...props} />}
     </div>

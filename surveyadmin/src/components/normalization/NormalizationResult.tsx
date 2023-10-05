@@ -78,9 +78,10 @@ export const NormalizationSummary = ({
   duration,
   isSimulation,
   errorCount,
+  totalDocumentCount,
 }: NormalizationResultProps) => {
   const discardRate = Math.round(
-    (emptyDocuments.length * 100) / defaultSegmentSize
+    (emptyDocuments.length * 100) / totalDocumentCount
   );
   return (
     <div>
