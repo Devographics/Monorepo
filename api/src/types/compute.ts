@@ -23,7 +23,7 @@ export interface GenericComputeParameters {
     facetCutoffPercent?: number
     enableCache?: boolean
     showNoAnswer?: boolean
-    responsesType?: ResponseTypes
+    responsesType?: ResponsesTypes
 }
 
 export interface ComputeAxisParameters {
