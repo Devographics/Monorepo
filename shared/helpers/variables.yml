@@ -38,6 +38,14 @@
   usedBy:
       - surveyadmin
 
+- id: APP_URL
+  aliases:
+      - NEXT_PUBLIC_APP_URL
+  description: Full URL the app is running on
+  example: https://survey.devographics.com
+  usedBy:
+      - surveyform
+
   # Mongo
 
 - id: MONGO_PRIVATE_URI
