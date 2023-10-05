@@ -36,6 +36,7 @@ const Fields = ({
   questionData: ResponseData;
 }) => {
   const [showIds, setShowIds] = useState(true);
+  const [showDbInfo, setShowDbInfo] = useState(false);
 
   if (!unnormalizedResponses) return <p>Nothing to normalize</p>;
 
@@ -76,20 +77,37 @@ const Fields = ({
         .
       </p>
       <p>
-        <ul>
-          <li>
-            Raw Path: <code>{formPaths?.other}</code>
-          </li>
-          <li>
-            Selector: <textarea>{JSON.stringify(rawSelector)}</textarea>
-          </li>
-          <li>
-            Normalized Path: <code>{questionObject?.normPaths?.other}</code>
-          </li>
-          <li>
-            Selector: <textarea>{JSON.stringify(normSelector)}</textarea>
-          </li>
-        </ul>
+        <a
+          role="button"
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            setShowDbInfo(!showDbInfo);
+          }}
+        >
+          {showDbInfo ? "Hide" : "Show"} DB Info
+        </a>
+        {showDbInfo && (
+          <article>
+            <p>
+              <ul>
+                <li>
+                  Raw Path: <code>{formPaths?.other}</code>
+                </li>
+                <li>
+                  Selector: <textarea>{JSON.stringify(rawSelector)}</textarea>
+                </li>
+                <li>
+                  Normalized Path:{" "}
+                  <code>{questionObject?.normPaths?.other}</code>
+                </li>
+                <li>
+                  Selector: <textarea>{JSON.stringify(normSelector)}</textarea>
+                </li>
+              </ul>
+            </p>
+          </article>
+        )}
       </p>
       <p>
         Match Tags:{" "}
@@ -121,7 +139,7 @@ const Fields = ({
               <th>Norm. ID</th>
             </>
           )}
-          <th>Normalize</th>
+          <th colSpan={2}>Normalize</th>
         </thead>
         <tbody>
           {unnormalizedResponses.map(({ _id, responseId, value }) => (
