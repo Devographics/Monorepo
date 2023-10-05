@@ -78,7 +78,11 @@ export interface FetchPayloadSuccessOrError<T> {
     cacheKey?: string
 }
 
-export function processFetchData<T>(data: any, source: SourceType, key: string): FetchPayloadSuccessOrError<T> {
+export function processFetchData<T>(
+    data: any,
+    source: SourceType,
+    key: string
+): FetchPayloadSuccessOrError<T> {
     const timestamp = new Date().toISOString()
     const ___metadata: Metadata = { key, source, timestamp }
     const result = { data, ___metadata, cacheKey: key }
@@ -170,9 +174,11 @@ export async function getFromCache<T = any>({
                 resultPromise = fetchAndProcess<T>(SourceType.API)
                 if (shouldUpdateCache) {
                     const result = await resultPromise
-                    result.___metadata.source = SourceType.REDIS
                     // store in Redis
-                    await storeRedis<FetchPayloadSuccessOrError<T>>(key, result)
+                    await storeRedis<FetchPayloadSuccessOrError<T>>(key, {
+                        ...result,
+                        ___metadata: { ...result.___metadata, source: SourceType.REDIS }
+                    })
                 }
             }
             memoryCache.set(key, resultPromise)
