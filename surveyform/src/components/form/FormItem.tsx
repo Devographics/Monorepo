@@ -245,7 +245,7 @@ export const SkipButton = ({
         </Tooltip>
       }
     >
-      <span className="skip-question">
+      <div className="skip-question">
         <Button
           size="sm"
           onClick={(e) => {
@@ -257,7 +257,7 @@ export const SkipButton = ({
           />
           {isSkipped ? <Unskip /> : <Skip />}
         </Button>
-      </span>
+      </div>
     </OverlayTrigger>
   );
 };
