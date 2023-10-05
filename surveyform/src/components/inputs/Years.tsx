@@ -7,12 +7,19 @@ import debounce from "lodash/debounce.js";
 import Form from "react-bootstrap/Form";
 import { FormattedMessage } from "../common/FormattedMessage";
 
-const lessThanOneYear = "lessThanOneYear";
-const moreThanOneYear = "moreThanOneYear";
 const lessThanOneYearValue = 0.5;
 
+enum RadioValues {
+  LESS_THAN_ONE_YEAR = "lessThanOneYear",
+  MORE_THAN_ONE_YEAR = "moreThanOneYear",
+}
+
 const getRadioValue = (value: number) =>
-  value ? (Number(value) < 1 ? lessThanOneYear : moreThanOneYear) : null;
+  value
+    ? Number(value) < 1
+      ? RadioValues.LESS_THAN_ONE_YEAR
+      : RadioValues.MORE_THAN_ONE_YEAR
+    : null;
 
 const getLocalValue = (value: number) =>
   !value || Number(value) < 1 ? "" : value;
@@ -41,13 +48,16 @@ export const FormComponentYears = (props: FormInputProps) => {
 
   const disabled = readOnly;
 
-  const [radioValue, setRadioValue] = useState(getRadioValue(value));
+  const [radioValue, setRadioValue] = useState<RadioValues | null>(
+    getRadioValue(value)
+  );
   const [localValue, setLocalValue] = useState(getLocalValue(value));
 
   const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
 
   const handleChange = (event) => {
     const rawValue = event.target.value;
+    setRadioValue(RadioValues.MORE_THAN_ONE_YEAR);
     setLocalValue(rawValue);
     if (checkIsValid(rawValue)) {
       updateCurrentValues({
@@ -58,6 +68,7 @@ export const FormComponentYears = (props: FormInputProps) => {
 
   const handleChangeDebounced = (event) => {
     const rawValue = event.target.value;
+    setRadioValue(RadioValues.MORE_THAN_ONE_YEAR);
     setLocalValue(rawValue);
     if (checkIsValid(rawValue)) {
       updateCurrentValuesDebounced({
@@ -82,7 +93,7 @@ export const FormComponentYears = (props: FormInputProps) => {
         <Form.Check.Label htmlFor={`${path}.0`}>
           <LessThanOneYearRadio
             {...radioProps}
-            isChecked={radioValue === lessThanOneYear}
+            isChecked={radioValue === RadioValues.LESS_THAN_ONE_YEAR}
           />
           <Label labelId="years.less_than_one_year" />
         </Form.Check.Label>
@@ -91,7 +102,7 @@ export const FormComponentYears = (props: FormInputProps) => {
         <Form.Check.Label htmlFor={`${path}.1`}>
           <MoreThanOneYearRadio
             {...radioProps}
-            isChecked={radioValue === moreThanOneYear}
+            isChecked={radioValue === RadioValues.MORE_THAN_ONE_YEAR}
           />
 
           <FormControl
@@ -131,12 +142,12 @@ const LessThanOneYearRadio = ({
   <div className="form-input-wrapper">
     <Form.Check.Input
       type="radio"
-      value={lessThanOneYear}
+      value={RadioValues.LESS_THAN_ONE_YEAR}
       name={path}
       id={`${path}.0`}
       // ref={refFunction}
       checked={isChecked}
-      className={getcheckClass(lessThanOneYear, radioValue)}
+      className={getcheckClass(RadioValues.LESS_THAN_ONE_YEAR, radioValue)}
       onClick={(e) => {
         if (isChecked) {
           // if this is checked, uncheck it and set question value to null
@@ -145,7 +156,7 @@ const LessThanOneYearRadio = ({
         }
       }}
       onChange={(e) => {
-        setRadioValue(lessThanOneYear);
+        setRadioValue(RadioValues.LESS_THAN_ONE_YEAR);
         setLocalValue("");
         updateCurrentValues({ [path]: lessThanOneYearValue });
       }}
@@ -167,12 +178,12 @@ const MoreThanOneYearRadio = ({
   <div className="form-input-wrapper">
     <Form.Check.Input
       type="radio"
-      value={moreThanOneYear}
+      value={RadioValues.MORE_THAN_ONE_YEAR}
       name={path}
       id={`${path}.1`}
       // ref={refFunction}
       checked={isChecked}
-      className={getcheckClass(moreThanOneYear, radioValue)}
+      className={getcheckClass(RadioValues.MORE_THAN_ONE_YEAR, radioValue)}
       onClick={(e) => {
         if (isChecked) {
           // if this is checked, uncheck it and set question value to null
@@ -182,7 +193,7 @@ const MoreThanOneYearRadio = ({
         }
       }}
       onChange={(e) => {
-        setRadioValue(moreThanOneYear);
+        setRadioValue(RadioValues.MORE_THAN_ONE_YEAR);
         if (value === lessThanOneYearValue) {
           updateCurrentValues({ [path]: null });
         }
