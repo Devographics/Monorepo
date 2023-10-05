@@ -27,6 +27,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { Referrer } from "~/components/common/ReferrerStorage";
 import { ApiData, apiRoutes } from "~/lib/apiRoutes";
 import { UserWithResponses } from "~/lib/responses/typings";
+import PlausibleProvider from "next-plausible";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
@@ -74,6 +75,12 @@ export function ClientLayout(props: AppLayoutProps) {
       <head /> will contain the components returned by the nearest parent
       head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
     */}
+      {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
+        <PlausibleProvider
+          trackLocalhost={true}
+          domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
+        />
+      )}
       <head />
       <body className={configClass}>
         {/** @ts-ignore */}

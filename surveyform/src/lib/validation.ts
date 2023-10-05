@@ -80,9 +80,6 @@ const getZodObject = <T>({
     zType = zType.max(GLOBAL_TEXTFIELD_LIMIT);
   }
 
-  console.log(type);
-  console.log(zType);
-
   // @ts-ignore
   zType = isArray ? zType.array() : zType;
   // @ts-ignore
