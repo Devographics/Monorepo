@@ -34,9 +34,6 @@ import isEmpty from 'lodash/isEmpty.js'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
 
-export const dataAccessDisabled =
-    process.env.DISABLE_DATA_ACCESS && process.env.DISABLE_DATA_ACCESS !== 'false'
-
 export const generateResolvers = async ({
     surveys,
     questionObjects,
@@ -296,7 +293,7 @@ Responses
 */
 export const allEditionsResolver: ResolverType = async (parent, args, context, info) => {
     console.log('// allEditionsResolver')
-    if (dataAccessDisabled) {
+    if (process.env.DISABLE_DATA_ACCESS && process.env.DISABLE_DATA_ACCESS !== 'false') {
         throw new Error(`Data access currently disabled. Set DISABLE_DATA_ACCESS=false to enable`)
     }
     const subField: ResultsSubFieldEnum = info?.path?.prev?.key
