@@ -1,8 +1,15 @@
 import { Entity } from "@devographics/types";
 import { useState } from "react";
 import newGithubIssueUrl from "new-github-issue-url";
+import FieldValue from "./FieldValue";
 
-const EntityInput = ({ entities }: { entities: Entity[] }) => {
+const EntityInput = ({
+  value,
+  entities,
+}: {
+  value: string[] | string;
+  entities: Entity[];
+}) => {
   const [selectedId, setSelectedId] = useState("");
   if (!entities || entities.length === 0) {
     return <p>No entities loaded. </p>;
@@ -12,7 +19,12 @@ const EntityInput = ({ entities }: { entities: Entity[] }) => {
 
   return (
     <div className="entityinput">
-      <label htmlFor="entities">Pick Entity</label>
+      <p>
+        <FieldValue value={value} />
+      </p>
+      <p>
+        <label htmlFor="entities">Pick Entity</label>
+      </p>
       <input
         list="entities-list"
         id="entities"
@@ -54,7 +66,7 @@ const EntityInput = ({ entities }: { entities: Entity[] }) => {
                 role="button"
                 target="_blank"
               >
-                Add New Entity
+                Suggest New Entity
               </a>
             </p>
           </div>
@@ -109,7 +121,7 @@ ${patterns.map((pattern) => `    - ${pattern}`).join("\n")}
           role="button"
           target="_blank"
         >
-          Edit Entity
+          Suggest Edit
         </a>
       </p>
     </div>

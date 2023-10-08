@@ -206,7 +206,7 @@ const Field = ({
               setShowModal={setShowEntities}
               header={<span>Add/Edit Entities</span>}
             >
-              <EntityInput entities={entities} />
+              <EntityInput value={value} entities={entities} />
             </Dialog>
           )}
         </td>
