@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { normalizeQuestionResponses } from "~/lib/normalization/services";
-import { LoadingButton } from "./NormalizeQuestionActions";
+import { LoadingButton } from "../LoadingButton";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormField, NormalizationResult } from "./NormalizationResult";
 import {
@@ -16,20 +16,15 @@ import { getFormPaths } from "@devographics/templates";
 import ManualInput from "./ManualInput";
 import NormToken from "./NormToken";
 import { useCopy, highlightMatches, highlightPatterns } from "../hooks";
+import Dialog from "./Dialog";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const Fields = ({
-  survey,
-  edition,
-  question,
-  responsesCount,
-  responses,
-  questionData,
-  variant,
-}: {
+const getPercent = (a, b) => Math.round((a / b) * 100);
+
+const Fields = (props: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionWithSection;
@@ -40,6 +35,18 @@ const Fields = ({
 }) => {
   const [showResponses, setShowResponses] = useState(false);
   const [showIds, setShowIds] = useState(false);
+
+  const {
+    survey,
+    edition,
+    question,
+    responsesCount,
+    responses: allResponses,
+    questionData,
+    variant,
+  } = props;
+
+  const responses = props[`${variant}Responses`];
 
   if (!responses) return <p>Nothing to normalize</p>;
 
@@ -65,7 +72,9 @@ const Fields = ({
   return (
     <div>
       <h3>
-        {capitalizeFirstLetter(variant)} Responses ({responses.length}){" "}
+        {capitalizeFirstLetter(variant)} Responses (
+        {getPercent(responses.length, allResponses.length)}% –{" "}
+        {responses.length}/{allResponses.length}){" "}
         <a
           href="#"
           role="button"
@@ -78,36 +87,50 @@ const Fields = ({
         </a>
       </h3>
       {showResponses && (
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Answer</th>
-              {variant === "normalized" && <th>Normalized Values</th>}
-              <th>Response ID</th>
-              <th colSpan={2}>Normalize</th>
-            </tr>
-          </thead>
-          <tbody>
-            {responses.map(
-              (
-                { _id, responseId, value, normalizedValue, patterns },
-                index
-              ) => (
-                <Field
-                  key={_id}
-                  _id={_id}
-                  value={value}
-                  normalizedValue={normalizedValue}
-                  patterns={patterns}
-                  responseId={responseId}
-                  index={index}
-                  {...fieldProps}
-                />
-              )
-            )}
-          </tbody>
-        </table>
+        <>
+          {variant === "normalized" ? (
+            <p>
+              This table shows responses that have already received at least one
+              match during the normalization process.
+            </p>
+          ) : (
+            <p>
+              This table shows responses that have not received any match yet
+              during the normalization process.
+            </p>
+          )}
+
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Answer</th>
+                {variant === "normalized" && <th>Normalized Values</th>}
+                <th>Response ID</th>
+                <th colSpan={2}>Normalize</th>
+              </tr>
+            </thead>
+            <tbody>
+              {responses.map(
+                (
+                  { _id, responseId, value, normalizedValue, patterns },
+                  index
+                ) => (
+                  <Field
+                    key={_id}
+                    _id={_id}
+                    value={value}
+                    normalizedValue={normalizedValue}
+                    patterns={patterns}
+                    responseId={responseId}
+                    index={index}
+                    {...fieldProps}
+                  />
+                )
+              )}
+            </tbody>
+          </table>
+        </>
       )}
     </div>
   );
@@ -165,8 +188,9 @@ const Field = ({
             onClick={() => {
               setShowManualInput(!showManualInput);
             }}
+            data-tooltip="Manually enter normalization tokens"
           >
-            Input&nbsp;ID(s)
+            Manual&nbsp;Input
           </button>
         </td>
         <td>
@@ -181,27 +205,28 @@ const Field = ({
               setResult(result.data);
               console.log(result);
             }}
-            label="Autonormalize"
+            label="Renormalize"
+            tooltip="Renormalize this answer"
           />
         </td>
       </tr>
       {showManualInput && (
-        <tr>
-          <td colSpan={999}>
-            <article>
-              <ManualInput
-                survey={survey}
-                edition={edition}
-                question={question}
-                questionData={questionData}
-                responseId={responseId}
-                normRespId={_id}
-                rawValue={value}
-                rawPath={rawPath}
-              />
-            </article>
-          </td>
-        </tr>
+        <Dialog
+          showModal={showManualInput}
+          setShowModal={setShowManualInput}
+          header={<span>Manual Input</span>}
+        >
+          <ManualInput
+            survey={survey}
+            edition={edition}
+            question={question}
+            questionData={questionData}
+            responseId={responseId}
+            normRespId={_id}
+            rawValue={value}
+            rawPath={rawPath}
+          />
+        </Dialog>
       )}
       {result && (
         <tr>
@@ -237,16 +262,16 @@ export const FieldValue = ({
 
   if (Array.isArray(value)) {
     return (
-      <ul className="field-value-items">
+      <div className="field-value-items">
         {value.map((v, i) => (
-          <li
+          <blockquote
             key={i}
             dangerouslySetInnerHTML={{
               __html: getValue(v),
             }}
           />
         ))}
-      </ul>
+      </div>
     );
   } else {
     return <span>{value}</span>;

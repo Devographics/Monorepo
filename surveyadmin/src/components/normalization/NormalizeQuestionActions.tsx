@@ -14,6 +14,7 @@ import {
 } from "@devographics/types";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
 import { InitializeSegmentsOptions, defaultSegmentSize } from "./hooks";
+import LoadingButton from "../LoadingButton";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
@@ -95,6 +96,7 @@ const Actions = (props: ActionProps) => {
               console.log(result);
             }}
             label="Normalize Only Missing Values"
+            tooltip="Only run normalization on unnormalized answers"
           />
 
           <button
@@ -104,6 +106,7 @@ const Actions = (props: ActionProps) => {
                 segmentSize: defaultSegmentSize,
               });
             }}
+            data-tooltip="Re-run normalization on all answers"
           >
             Normalize All
           </button>
@@ -135,22 +138,6 @@ const Actions = (props: ActionProps) => {
         </article>
       )}
     </>
-  );
-};
-
-export const LoadingButton = ({ action, label }) => {
-  const [loading, setLoading] = useState(false);
-  return (
-    <button
-      aria-busy={loading}
-      onClick={async () => {
-        setLoading(true);
-        await action();
-        setLoading(false);
-      }}
-    >
-      {label}
-    </button>
   );
 };
 

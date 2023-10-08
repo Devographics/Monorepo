@@ -94,16 +94,8 @@ export const Normalization = ({
       {segments.length > 0 && <Progress {...props} />}
       <Metadata {...props} />
       <QuestionData questionData={questionData} responses={responses} />
-      <Fields
-        {...props}
-        variant="unnormalized"
-        responses={normalizedResponses}
-      />
-      <Fields
-        {...props}
-        variant="normalized"
-        responses={unnormalizedResponses}
-      />
+      <Fields {...props} variant="normalized" />
+      <Fields {...props} variant="unnormalized" />
     </div>
   );
 };

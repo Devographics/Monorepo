@@ -115,8 +115,15 @@
 }
 
 .field-value-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin: 0;
   li:last-child {
     margin: 0;
+  }
+  blockquote {
+    margin: 0;
+    padding: 0 0 0 5px;
   }
 }

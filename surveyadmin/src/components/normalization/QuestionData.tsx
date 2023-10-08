@@ -28,24 +28,30 @@ const QuestionData = ({
       </h3>
       {questionData ? (
         showData && (
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Count</th>
-              </tr>
-            </thead>
-            <tbody>
-              {questionData.currentEdition.buckets.map(({ id, count }) => (
-                <tr key={id}>
-                  <td>
-                    <NormToken id={id} responses={responses} />
-                  </td>
-                  <td>{count}</td>
+          <>
+            <p>
+              This table shows aggregated counts for the subset of the data that
+              has already been processed.
+            </p>
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Count</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {questionData.currentEdition.buckets.map(({ id, count }) => (
+                  <tr key={id}>
+                    <td>
+                      <NormToken id={id} responses={responses} />
+                    </td>
+                    <td>{count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
         )
       ) : (
         <div>No question data found.</div>

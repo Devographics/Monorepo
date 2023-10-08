@@ -11,6 +11,7 @@ import { useLocalStorage } from "../hooks";
 import { addManualNormalizations } from "~/lib/normalization/services";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
+import { FieldValue } from "./Fields";
 
 const getCacheKey = (edition, question) =>
   `normalization_presets__${edition.id}__${question.id}`;
@@ -76,9 +77,9 @@ const ManualInput = ({
 
   return (
     <div className="manualinput">
-      <pre>
-        <code>{rawValue}</code>
-      </pre>
+      <p>
+        <FieldValue value={rawValue} />
+      </p>
       <h5>Presets</h5>
       <p>
         <small>
