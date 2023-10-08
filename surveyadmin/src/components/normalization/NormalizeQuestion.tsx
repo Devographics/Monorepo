@@ -65,11 +65,11 @@ export const Normalization = ({
     segments,
   } = useSegments();
 
-  const normalizedResponses = responses.filter((r) =>
-    isEmpty(r.normalizedValue)
-  );
-  const unnormalizedResponses = responses.filter(
+  const normalizedResponses = responses.filter(
     (r) => !isEmpty(r.normalizedValue)
+  );
+  const unnormalizedResponses = responses.filter((r) =>
+    isEmpty(r.normalizedValue)
   );
   const props = {
     responsesCount,
