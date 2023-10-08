@@ -20,6 +20,8 @@ const Metadata = ({
   question,
   responsesCount,
   responses,
+  normalizedResponses,
+  unnormalizedResponses,
   questionData,
 }: {
   survey: SurveyMetadata;
@@ -27,9 +29,10 @@ const Metadata = ({
   question: QuestionWithSection;
   responsesCount: number;
   responses: NormalizationResponse[];
+  normalizedResponses: NormalizationResponse[];
+  unnormalizedResponses: NormalizationResponse[];
   questionData: ResponseData;
 }) => {
-  const [showIds, setShowIds] = useState(true);
   const [showDbInfo, setShowDbInfo] = useState(false);
 
   if (!responses) return <p>Nothing to normalize</p>;
@@ -54,14 +57,6 @@ const Metadata = ({
   return (
     <div>
       <p>
-        <strong>{responses.length}</strong> missing normalizations out of{" "}
-        <strong>{responsesCount}</strong> total responses for{" "}
-        <code>
-          {edition.id}/{question.id}
-        </code>
-        .
-      </p>
-      <p>
         <a
           role="button"
           href="#"
@@ -70,10 +65,19 @@ const Metadata = ({
             setShowDbInfo(!showDbInfo);
           }}
         >
-          {showDbInfo ? "Hide" : "Show"} DB Info
+          {showDbInfo ? "Hide" : "Show"} Metadata
         </a>
         {showDbInfo && (
           <article>
+            <p>
+              <strong>{unnormalizedResponses.length}</strong> missing
+              normalizations out of <strong>{responses.length}</strong> total
+              responses for{" "}
+              <code>
+                {edition.id}/{question.id}
+              </code>
+              .
+            </p>
             <p>
               <ul>
                 <li>
@@ -89,31 +93,21 @@ const Metadata = ({
                 <li>
                   Selector: <textarea>{JSON.stringify(normSelector)}</textarea>
                 </li>
+                <li>
+                  Match Tags:{" "}
+                  <span>
+                    <code>{question.id} [id]</code>{" "}
+                  </span>
+                  {question.matchTags?.map((tag) => (
+                    <span key={tag}>
+                      <code>{tag}</code>{" "}
+                    </span>
+                  ))}
+                </li>
               </ul>
             </p>
           </article>
         )}
-      </p>
-      <p>
-        Match Tags:{" "}
-        <span>
-          <code>{question.id} [id]</code>{" "}
-        </span>
-        {question.matchTags?.map((tag) => (
-          <span key={tag}>
-            <code>{tag}</code>{" "}
-          </span>
-        ))}
-      </p>
-      <p>
-        <input
-          type="checkbox"
-          checked={showIds}
-          onClick={() => {
-            setShowIds(!showIds);
-          }}
-        />{" "}
-        Show IDs
       </p>
     </div>
   );

@@ -3,11 +3,7 @@ import { useState } from "react";
 import { normalizeQuestionResponses } from "~/lib/normalization/services";
 import { LoadingButton } from "./NormalizeQuestionActions";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
-import {
-  NormField,
-  NormalizationResult,
-  highlightMatches,
-} from "./NormalizationResult";
+import { NormField, NormalizationResult } from "./NormalizationResult";
 import {
   EditionMetadata,
   ResponseData,
@@ -18,6 +14,12 @@ import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject
 import type { QuestionWithSection } from "~/lib/normalization/types";
 import { getFormPaths } from "@devographics/templates";
 import ManualInput from "./ManualInput";
+import NormToken from "./NormToken";
+import { useCopy, highlightMatches, highlightPatterns } from "../hooks";
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 const Fields = ({
   survey,
@@ -36,7 +38,7 @@ const Fields = ({
   questionData: ResponseData;
   variant: "normalized" | "unnormalized";
 }) => {
-  const [showResponses, setShowResponses] = useState(true);
+  const [showResponses, setShowResponses] = useState(false);
   const [showIds, setShowIds] = useState(false);
 
   if (!responses) return <p>Nothing to normalize</p>;
@@ -50,6 +52,7 @@ const Fields = ({
   const formPaths = getFormPaths({ edition, question: questionObject });
 
   const fieldProps = {
+    responses,
     showIds,
     question,
     survey,
@@ -62,7 +65,7 @@ const Fields = ({
   return (
     <div>
       <h3>
-        {variant} Responses ({responses.length}){" "}
+        {capitalizeFirstLetter(variant)} Responses ({responses.length}){" "}
         <a
           href="#"
           role="button"
@@ -77,19 +80,20 @@ const Fields = ({
       {showResponses && (
         <table>
           <thead>
-            <th>Answer</th>
-            {variant === "normalized" && <th>Normalized Values</th>}
-            {showIds && (
-              <>
-                <th>Raw ID</th>
-                <th>Norm. ID</th>
-              </>
-            )}
-            <th colSpan={2}>Normalize</th>
+            <tr>
+              <th></th>
+              <th>Answer</th>
+              {variant === "normalized" && <th>Normalized Values</th>}
+              <th>Response ID</th>
+              <th colSpan={2}>Normalize</th>
+            </tr>
           </thead>
           <tbody>
             {responses.map(
-              ({ _id, responseId, value, normalizedValue, patterns }) => (
+              (
+                { _id, responseId, value, normalizedValue, patterns },
+                index
+              ) => (
                 <Field
                   key={_id}
                   _id={_id}
@@ -97,6 +101,7 @@ const Fields = ({
                   normalizedValue={normalizedValue}
                   patterns={patterns}
                   responseId={responseId}
+                  index={index}
                   {...fieldProps}
                 />
               )
@@ -114,6 +119,7 @@ const Field = ({
   normalizedValue,
   patterns,
   showIds,
+  responses,
   responseId,
   question,
   survey,
@@ -121,6 +127,7 @@ const Field = ({
   questionData,
   rawPath,
   variant,
+  index,
 }) => {
   const [result, setResult] = useState<NormalizeInBulkResult>();
   const [showManualInput, setShowManualInput] = useState<boolean>(false);
@@ -131,37 +138,28 @@ const Field = ({
   return (
     <>
       <tr>
+        <td>{index + 1}. </td>
         <td>
-          <FieldValue value={value} patterns={patterns} />
+          <FieldValue
+            value={value}
+            normalizedValue={normalizedValue}
+            patterns={patterns}
+          />
         </td>
-        {showIds && (
-          <>
-            <td>
-              <code>{responseId}</code>
-            </td>
-            <td>
-              <code>{_id}</code>
-            </td>
-          </>
-        )}
         {variant === "normalized" && (
           <td>
-            {normalizedValue.map((value) => (
-              <span>
-                <code>{value}</code>{" "}
-              </span>
-            ))}
-            {/* <p>
-              <code>{patterns}</code>
-            </p> */}
-            {/* <NormField
-              raw={}
-              questionId={}
-              normTokens={}
-              showQuestionId={false}
-            /> */}
+            <div className="normalization-tokens">
+              {normalizedValue.map((value) => (
+                <span>
+                  <NormToken id={value} responses={responses} />{" "}
+                </span>
+              ))}
+            </div>
           </td>
         )}
+        <td>
+          <ResponseId id={responseId} />
+        </td>
         <td>
           <button
             onClick={() => {
@@ -218,26 +216,35 @@ const Field = ({
   );
 };
 
-const FieldValue = ({ value, patterns }) => {
+export const FieldValue = ({
+  value,
+  normalizedValue,
+  patterns,
+  currentTokenId,
+}: {
+  value: string | string[];
+  normalizedValue?: string[];
+  patterns?: string[];
+  currentTokenId?: string;
+}) => {
   // const sanitizer = new Sanitizer();
 
   const getValue = (value: string) => {
-    // const sanitized = sanitizer(value);
-    return patterns ? highlightMatches(value, patterns) : value;
+    return patterns && normalizedValue
+      ? highlightPatterns({ value, patterns, normalizedValue, currentTokenId })
+      : value;
   };
 
   if (Array.isArray(value)) {
     return (
-      <ul>
+      <ul className="field-value-items">
         {value.map((v, i) => (
           <li
             key={i}
-            // dangerouslySetInnerHTML={{
-            //   __html: getValue(v),
-            // }}
-          >
-            {v}
-          </li>
+            dangerouslySetInnerHTML={{
+              __html: getValue(v),
+            }}
+          />
         ))}
       </ul>
     );
@@ -246,4 +253,14 @@ const FieldValue = ({ value, patterns }) => {
   }
 };
 
+export const ResponseId = ({ id }: { id: string }) => {
+  const [copied, copy, setCopied] = useCopy(id);
+
+  const truncated = id.slice(0, 6) + "…";
+  return (
+    <code data-tooltip="Click to copy" onClick={copy}>
+      {truncated}
+    </code>
+  );
+};
 export default Fields;

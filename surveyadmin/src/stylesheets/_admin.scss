@@ -10,6 +10,9 @@
     align-items: center;
     gap: $spacing;
   }
+  button {
+    margin: 0;
+  }
 }
 
 .normalize-responses {
@@ -91,8 +94,29 @@
   }
 }
 
-code {
-  .highlighted {
-    background: var(--mark-background-color);
+.highlighted {
+  background: var(--mark-background-color);
+  &-secondary {
+    background: var(--code-background-color);
+  }
+}
+
+.normalization-tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.normalization-token,
+.normalization-token[role="button"] {
+  background: none;
+  border: 2px solid var(--primary);
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.field-value-items {
+  margin: 0;
+  li:last-child {
+    margin: 0;
   }
 }

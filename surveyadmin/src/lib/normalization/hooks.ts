@@ -14,7 +14,7 @@ export interface NormalizationResponse {
   _id: string;
   responseId: string;
   value: string;
-  normalizedValue?: string;
+  normalizedValue?: string[];
   patterns?: string[];
 }
 

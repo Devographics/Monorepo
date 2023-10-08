@@ -31,6 +31,7 @@ export const NormalizeQuestion = (props: {
     editionId: edition.id,
     questionId: question.id,
   });
+
   return loading ? (
     <div aria-busy={true} />
   ) : data ? (
@@ -64,12 +65,20 @@ export const Normalization = ({
     segments,
   } = useSegments();
 
+  const normalizedResponses = responses.filter((r) =>
+    isEmpty(r.normalizedValue)
+  );
+  const unnormalizedResponses = responses.filter(
+    (r) => !isEmpty(r.normalizedValue)
+  );
   const props = {
     responsesCount,
     survey,
     edition,
     question,
     responses,
+    normalizedResponses,
+    unnormalizedResponses,
     initializeSegments,
     updateSegments,
     doneCount,
@@ -83,17 +92,17 @@ export const Normalization = ({
     <div className="admin-normalization admin-content">
       <Actions {...props} />
       {segments.length > 0 && <Progress {...props} />}
-      <QuestionData questionData={questionData} />
       <Metadata {...props} />
+      <QuestionData questionData={questionData} responses={responses} />
       <Fields
         {...props}
         variant="unnormalized"
-        responses={responses.filter((r) => isEmpty(r.normalizedValue))}
+        responses={normalizedResponses}
       />
       <Fields
         {...props}
         variant="normalized"
-        responses={responses.filter((r) => !isEmpty(r.normalizedValue))}
+        responses={unnormalizedResponses}
       />
     </div>
   );

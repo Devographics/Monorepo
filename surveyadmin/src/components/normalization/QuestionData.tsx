@@ -1,13 +1,20 @@
 import { ResponseData } from "@devographics/types";
 import { useState } from "react";
+import NormToken from "./NormToken";
+import { NormalizationResponse } from "~/lib/normalization/hooks";
 
-const QuestionData = ({ questionData }: { questionData: ResponseData }) => {
+const QuestionData = ({
+  questionData,
+  responses,
+}: {
+  questionData: ResponseData;
+  responses: NormalizationResponse[];
+}) => {
   const [showData, setShowData] = useState(false);
   return (
     <div>
-      <h5>
-        Current Normalized Results (
-        {questionData?.currentEdition?.completion?.count} Responses){" "}
+      <h3>
+        Current Normalized Results{" "}
         <a
           role="button"
           href="#"
@@ -18,7 +25,7 @@ const QuestionData = ({ questionData }: { questionData: ResponseData }) => {
         >
           {showData ? "Hide" : "Show"}
         </a>
-      </h5>
+      </h3>
       {questionData ? (
         showData && (
           <table>
@@ -32,7 +39,7 @@ const QuestionData = ({ questionData }: { questionData: ResponseData }) => {
               {questionData.currentEdition.buckets.map(({ id, count }) => (
                 <tr key={id}>
                   <td>
-                    <code>{id}</code>
+                    <NormToken id={id} responses={responses} />
                   </td>
                   <td>{count}</td>
                 </tr>

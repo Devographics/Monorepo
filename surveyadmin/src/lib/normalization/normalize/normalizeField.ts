@@ -72,6 +72,17 @@ export const normalizeField = async ({
     );
   }
 
+  const processSkipField = () => {
+    if (rawPaths.skip) {
+      const fieldPath = prefixWithEditionId(rawPaths?.skip, edition.id);
+      const skipValue = !!response[fieldPath];
+      if (skipValue) {
+        const skippedQuestions = normResp.skipped || [];
+        normResp.skipped = [...skippedQuestions, questionObject.id];
+      }
+    }
+  };
+
   const processResponseField = async () => {
     // start by copying over the "main" response value
     if (rawPaths.response && normPaths.response) {
@@ -139,7 +150,6 @@ export const normalizeField = async ({
 
   const processFreeformField = async () => {
     // if a field has a "freeform/other" path defined, we normalize its contents
-
     if (rawPaths.other) {
       const fieldPath = prefixWithEditionId(rawPaths?.other, edition.id);
       const freeformValue = response[fieldPath];
@@ -281,6 +291,7 @@ export const normalizeField = async ({
     await processFreeformField();
     await processPredefinedFollowupField();
     await processFreeformFollowupField();
+    await processSkipField();
   }
 
   const result = {
