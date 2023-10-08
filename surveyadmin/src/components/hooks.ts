@@ -45,7 +45,7 @@ export function useCopy(
 }
 
 // see https://stackoverflow.com/a/22706073/649299
-function escapeHTML(str) {
+export function escapeHTML(str) {
   return new Option(str).innerHTML;
 }
 

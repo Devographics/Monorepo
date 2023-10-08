@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Options from "./Options";
 import { normalizeResponses } from "~/lib/normalization/services";
-import { LoadingButton } from "./NormalizeQuestionActions";
+import { LoadingButton } from "../LoadingButton";
 import { NormalizationResult } from "./NormalizationResult";
 // import Dropdown from "~/core/components/ui/Dropdown";
 

@@ -11,7 +11,7 @@ import { useLocalStorage } from "../hooks";
 import { addManualNormalizations } from "~/lib/normalization/services";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
-import { FieldValue } from "./Fields";
+import { FieldValue } from "./FieldValue";
 
 const getCacheKey = (edition, question) =>
   `normalization_presets__${edition.id}__${question.id}`;

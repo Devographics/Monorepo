@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
-import { FieldValue, ResponseId } from "./Fields";
+import { ResponseId } from "./Fields";
 import Dialog from "./Dialog";
+import { FieldValue } from "./FieldValue";
 
 const NormToken = ({
   id,

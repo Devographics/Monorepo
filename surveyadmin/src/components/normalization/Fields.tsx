@@ -17,6 +17,7 @@ import ManualInput from "./ManualInput";
 import NormToken from "./NormToken";
 import { useCopy, highlightMatches, highlightPatterns } from "../hooks";
 import Dialog from "./Dialog";
+import { FieldValue } from "./FieldValue";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -239,43 +240,6 @@ const Field = ({
       )}
     </>
   );
-};
-
-export const FieldValue = ({
-  value,
-  normalizedValue,
-  patterns,
-  currentTokenId,
-}: {
-  value: string | string[];
-  normalizedValue?: string[];
-  patterns?: string[];
-  currentTokenId?: string;
-}) => {
-  // const sanitizer = new Sanitizer();
-
-  const getValue = (value: string) => {
-    return patterns && normalizedValue
-      ? highlightPatterns({ value, patterns, normalizedValue, currentTokenId })
-      : value;
-  };
-
-  if (Array.isArray(value)) {
-    return (
-      <div className="field-value-items">
-        {value.map((v, i) => (
-          <blockquote
-            key={i}
-            dangerouslySetInnerHTML={{
-              __html: getValue(v),
-            }}
-          />
-        ))}
-      </div>
-    );
-  } else {
-    return <span>{value}</span>;
-  }
 };
 
 export const ResponseId = ({ id }: { id: string }) => {
