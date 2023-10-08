@@ -17,22 +17,22 @@ export const FieldValue = ({
       : escapeHTML(value);
   };
 
-  if (Array.isArray(value)) {
-    return (
-      <div className="field-value-items">
-        {value.map((v, i) => (
+  return (
+    <div className="field-value-items">
+      {Array.isArray(value) ? (
+        value.map((v, i) => (
           <blockquote
             key={i}
             dangerouslySetInnerHTML={{
               __html: getValue(v),
             }}
           />
-        ))}
-      </div>
-    );
-  } else {
-    return <span>{value}</span>;
-  }
+        ))
+      ) : (
+        <blockquote>{value}</blockquote>
+      )}
+    </div>
+  );
 };
 
 export default FieldValue;

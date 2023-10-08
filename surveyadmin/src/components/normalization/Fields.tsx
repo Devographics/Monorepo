@@ -14,10 +14,12 @@ import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject
 import type { QuestionWithSection } from "~/lib/normalization/types";
 import { getFormPaths } from "@devographics/templates";
 import ManualInput from "./ManualInput";
+import EntityInput from "./EntityInput";
 import NormToken from "./NormToken";
 import { useCopy, highlightMatches, highlightPatterns } from "../hooks";
 import Dialog from "./Dialog";
 import { FieldValue } from "./FieldValue";
+import { Entity } from "@devographics/types";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -33,6 +35,7 @@ const Fields = (props: {
   responses: NormalizationResponse[];
   questionData: ResponseData;
   variant: "normalized" | "unnormalized";
+  entities: Entity[];
 }) => {
   const [showResponses, setShowResponses] = useState(false);
   const [showIds, setShowIds] = useState(false);
@@ -45,6 +48,7 @@ const Fields = (props: {
     responses: allResponses,
     questionData,
     variant,
+    entities,
   } = props;
 
   const responses = props[`${variant}Responses`];
@@ -68,6 +72,7 @@ const Fields = (props: {
     questionData,
     rawPath: formPaths?.other,
     variant,
+    entities,
   };
 
   return (
@@ -108,7 +113,7 @@ const Fields = (props: {
                 <th>Answer</th>
                 {variant === "normalized" && <th>Normalized Values</th>}
                 <th>Response&nbsp;ID</th>
-                <th colSpan={2}>Normalize</th>
+                <th colSpan={99}>Normalize</th>
               </tr>
             </thead>
             <tbody>
@@ -151,10 +156,12 @@ const Field = ({
   questionData,
   rawPath,
   variant,
+  entities,
   index,
 }) => {
   const [result, setResult] = useState<NormalizeInBulkResult>();
   const [showManualInput, setShowManualInput] = useState<boolean>(false);
+  const [showEntities, setShowEntities] = useState<boolean>(false);
   const surveyId = survey.id;
   const editionId = edition.id;
   const questionId = question.id;
@@ -187,12 +194,50 @@ const Field = ({
         <td>
           <button
             onClick={() => {
+              setShowEntities(!showEntities);
+            }}
+            data-tooltip="Add or edit entities"
+          >
+            Edit&nbsp;Entities
+          </button>
+          {showEntities && (
+            <Dialog
+              showModal={showEntities}
+              setShowModal={setShowEntities}
+              header={<span>Add/Edit Entities</span>}
+            >
+              <EntityInput entities={entities} />
+            </Dialog>
+          )}
+        </td>
+
+        <td>
+          <button
+            onClick={() => {
               setShowManualInput(!showManualInput);
             }}
             data-tooltip="Manually enter normalization tokens"
           >
             Manual&nbsp;Input
           </button>
+          {showManualInput && (
+            <Dialog
+              showModal={showManualInput}
+              setShowModal={setShowManualInput}
+              header={<span>Manual Input</span>}
+            >
+              <ManualInput
+                survey={survey}
+                edition={edition}
+                question={question}
+                questionData={questionData}
+                responseId={responseId}
+                normRespId={_id}
+                rawValue={value}
+                rawPath={rawPath}
+              />
+            </Dialog>
+          )}
         </td>
         <td>
           <LoadingButton
@@ -211,24 +256,6 @@ const Field = ({
           />
         </td>
       </tr>
-      {showManualInput && (
-        <Dialog
-          showModal={showManualInput}
-          setShowModal={setShowManualInput}
-          header={<span>Manual Input</span>}
-        >
-          <ManualInput
-            survey={survey}
-            edition={edition}
-            question={question}
-            questionData={questionData}
-            responseId={responseId}
-            normRespId={_id}
-            rawValue={value}
-            rawPath={rawPath}
-          />
-        </Dialog>
-      )}
       {result && (
         <tr>
           <td colSpan={999}>

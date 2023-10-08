@@ -1,4 +1,8 @@
-import { fetchSurveysMetadata, fetchQuestionData } from "@devographics/fetch";
+import {
+  fetchSurveysMetadata,
+  fetchQuestionData,
+  fetchEntities,
+} from "@devographics/fetch";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import {
   getEditionQuestionById,
@@ -9,6 +13,7 @@ import {
 import { getEditionQuestions } from "../helpers/getEditionQuestions";
 import get from "lodash/get";
 import { ResultsSubFieldEnum } from "@devographics/types";
+import pick from "lodash/pick";
 
 export const getQuestionResponses = async ({
   surveyId,
@@ -68,10 +73,16 @@ export const getQuestionResponses = async ({
     queryArgs: { parameters: { enableCache: false } },
   });
 
+  const allEntities = await fetchEntities();
+  const entities = allEntities.data.map((e) =>
+    pick(e, ["id", "patterns", "tags"])
+  );
+
   return {
     responsesCount,
     responses: allResponses,
     responsesSelector: selector,
     questionResult,
+    entities,
   };
 };
