@@ -85,6 +85,12 @@
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  // columns: 2;
+  list-style-type: none;
+  padding: 0;
+  li {
+    list-style: none;
+  }
 }
 .manualinput-form {
   display: flex;

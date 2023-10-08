@@ -52,7 +52,7 @@ export const Normalization = ({
   question: QuestionWithSection;
   data: ResponsesData;
 }) => {
-  const { responsesCount, responses, questionResult } = data;
+  const { responsesCount, responsesSelector, responses, questionResult } = data;
 
   const questionData = questionResult.data;
 

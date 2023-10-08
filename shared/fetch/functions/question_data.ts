@@ -2,7 +2,7 @@ import { ResponseData, ResultsSubFieldEnum } from '@devographics/types'
 import { getFromCache, fetchGraphQLApi } from '../fetch'
 import { questionDataCacheKey } from '../cache_keys'
 import { FetcherFunctionOptions } from '../types'
-import { getQuestionDataQuery } from '../queries/question_data'
+import { QueryArgs, getQuestionDataQuery } from '../queries/question_data'
 
 /**
  * Load a question's data
@@ -15,9 +15,19 @@ export async function fetchQuestionData(
         sectionId: string
         questionId: string
         subField: ResultsSubFieldEnum
+        queryArgs: QueryArgs
     }
 ) {
-    const { appName, surveyId, editionId, sectionId, questionId, subField, calledFrom } = options
+    const {
+        appName,
+        surveyId,
+        editionId,
+        sectionId,
+        questionId,
+        subField,
+        calledFrom,
+        queryArgs = {}
+    } = options
     const getQuery = options.getQuery || getQuestionDataQuery
     const queryOptions = {
         surveyId,
@@ -26,7 +36,6 @@ export async function fetchQuestionData(
         questionId,
         subField
     }
-    const queryArgs = {}
     const query = getQuery({ queryOptions, queryArgs })
 
     if (!surveyId) {

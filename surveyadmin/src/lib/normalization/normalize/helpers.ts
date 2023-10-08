@@ -657,7 +657,13 @@ export const getAllResponses = async ({
     (response) => String(get(response, rawFieldPath)).toLowerCase(),
   ]);
 
-  return { responses, rawFieldPath, normalizedFieldPath, patternsFieldPath };
+  return {
+    responses,
+    rawFieldPath,
+    normalizedFieldPath,
+    patternsFieldPath,
+    selector,
+  };
 };
 
 /**

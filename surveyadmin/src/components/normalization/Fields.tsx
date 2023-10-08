@@ -107,7 +107,7 @@ const Fields = (props: {
                 <th></th>
                 <th>Answer</th>
                 {variant === "normalized" && <th>Normalized Values</th>}
-                <th>Response ID</th>
+                <th>Response&nbsp;ID</th>
                 <th colSpan={2}>Normalize</th>
               </tr>
             </thead>

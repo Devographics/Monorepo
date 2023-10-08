@@ -40,7 +40,9 @@ const ManualInput = ({
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<NormalizeInBulkResult | null>(null);
   const [localPresets, setLocalPresets] = useLocalStorage(cacheKey, []);
-  const entityIds = questionData.currentEdition.buckets.map((b) => b.id).sort();
+  const entityIds = questionData.currentEdition.buckets
+    .map((b) => b.id)
+    .slice(0, 20);
 
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -87,20 +89,22 @@ const ManualInput = ({
           locally-stored values.
         </small>
       </p>
-      <p className="manualinput-presets">
-        {entityIds.map((id) => (
-          <Preset key={id} id={id} value={value} setValue={setValue} />
-        ))}
-        {localPresets.map((id) => (
-          <Preset
-            key={id}
-            id={id}
-            value={value}
-            setValue={setValue}
-            isLocal={true}
-            handleDeletePreset={handleDeletePreset}
-          />
-        ))}
+      <p>
+        <ul className="manualinput-presets">
+          {entityIds.map((id) => (
+            <Preset key={id} id={id} value={value} setValue={setValue} />
+          ))}
+          {localPresets.map((id) => (
+            <Preset
+              key={id}
+              id={id}
+              value={value}
+              setValue={setValue}
+              isLocal={true}
+              handleDeletePreset={handleDeletePreset}
+            />
+          ))}
+        </ul>
       </p>
       <h5>Manual IDs</h5>
       <form className="manualinput-form">
@@ -148,31 +152,33 @@ const Preset = ({
     style.background = "#E7FFCF";
   }
   return (
-    <a
-      href="#"
-      onClick={(e) => {
-        e.preventDefault();
-      }}
-    >
-      <code
-        style={style}
+    <li>
+      <a
+        href="#"
         onClick={(e) => {
-          const separator = !!value ? ", " : "";
-          setValue(value + separator + id);
+          e.preventDefault();
         }}
       >
-        {id}
-      </code>
-      {isLocal && (
-        <span
-          onClick={() => {
-            handleDeletePreset(id);
+        <code
+          style={style}
+          onClick={(e) => {
+            const separator = !!value ? ", " : "";
+            setValue(value + separator + id);
           }}
         >
-          X
-        </span>
-      )}
-    </a>
+          {id}
+        </code>
+        {isLocal && (
+          <span
+            onClick={() => {
+              handleDeletePreset(id);
+            }}
+          >
+            X
+          </span>
+        )}
+      </a>
+    </li>
   );
 };
 export default ManualInput;

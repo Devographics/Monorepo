@@ -34,12 +34,17 @@ export const getQuestionResponses = async ({
   }
 
   // console.log(`// unnormalizedFields ${editionId} ${questionId}`);
-  const { responses, rawFieldPath, normalizedFieldPath, patternsFieldPath } =
-    await getAllResponses({
-      survey,
-      edition,
-      question,
-    });
+  const {
+    responses,
+    rawFieldPath,
+    normalizedFieldPath,
+    patternsFieldPath,
+    selector,
+  } = await getAllResponses({
+    survey,
+    edition,
+    question,
+  });
 
   const allResponses = responses.map((r) => {
     return {
@@ -60,7 +65,13 @@ export const getQuestionResponses = async ({
     sectionId: question.section.id,
     questionId,
     subField: ResultsSubFieldEnum.FREEFORM,
+    queryArgs: { parameters: { enableCache: false } },
   });
 
-  return { responsesCount, responses: allResponses, questionResult };
+  return {
+    responsesCount,
+    responses: allResponses,
+    responsesSelector: selector,
+    questionResult,
+  };
 };

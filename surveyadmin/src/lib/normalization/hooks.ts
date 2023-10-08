@@ -21,6 +21,7 @@ export interface NormalizationResponse {
 export type ResponsesData = {
   responses: Array<NormalizationResponse>;
   responsesCount: number;
+  responsesSelector: any;
   questionResult: FetchPayloadSuccessOrError<ResponseData>;
 };
 
