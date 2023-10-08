@@ -15,7 +15,7 @@ export async function fetchQuestionData(
         sectionId: string
         questionId: string
         subField: ResultsSubFieldEnum
-        queryArgs: QueryArgs
+        queryArgs?: QueryArgs
     }
 ) {
     const {
