@@ -12,8 +12,9 @@ import {
   QuestionMetadata,
   SurveyMetadata,
 } from "@devographics/types";
-import { UnnormalizedResponses } from "~/lib/normalization/hooks";
+import { NormalizationResponse } from "~/lib/normalization/hooks";
 import { InitializeSegmentsOptions, defaultSegmentSize } from "./hooks";
+import LoadingButton from "../LoadingButton";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
@@ -23,7 +24,7 @@ interface ActionProps {
   edition: EditionMetadata;
   question: QuestionMetadata;
   initializeSegments: (options: InitializeSegmentsOptions) => void;
-  unnormalizedResponses: UnnormalizedResponses[];
+  responses: NormalizationResponse[];
   responsesCount: number;
 }
 
@@ -33,7 +34,7 @@ const Actions = (props: ActionProps) => {
     edition,
     question,
     initializeSegments,
-    unnormalizedResponses,
+    responses,
     responsesCount,
   } = props;
   // const router = useRouter();
@@ -82,31 +83,34 @@ const Actions = (props: ActionProps) => {
         </select>{" "}
         &gt;{" "} */}
           {/* <Options {...props} /> */}
+          <div data-tooltip="Only run normalization on unnormalized answers">
+            <LoadingButton
+              action={async () => {
+                const result = await normalizeQuestionResponses({
+                  surveyId: survey.id,
+                  editionId: edition.id,
+                  questionId: question.id,
+                  responsesIds: responses.map((r) => r.responseId),
+                });
+                setNormalizeMissingResult(result.data);
+                console.log(result);
+              }}
+              label="Normalize Only Missing Values"
+            />
+          </div>
 
-          <LoadingButton
-            action={async () => {
-              const result = await normalizeQuestionResponses({
-                surveyId: survey.id,
-                editionId: edition.id,
-                questionId: question.id,
-                responsesIds: unnormalizedResponses.map((r) => r.responseId),
-              });
-              setNormalizeMissingResult(result.data);
-              console.log(result);
-            }}
-            label="Normalize Only Missing Values"
-          />
-
-          <button
-            onClick={() => {
-              initializeSegments({
-                responsesCount,
-                segmentSize: defaultSegmentSize,
-              });
-            }}
-          >
-            Normalize All
-          </button>
+          <div data-tooltip="Re-run normalization on all answers">
+            <button
+              onClick={() => {
+                initializeSegments({
+                  responsesCount,
+                  segmentSize: defaultSegmentSize,
+                });
+              }}
+            >
+              Normalize All
+            </button>
+          </div>
         </div>
         {/* <div className="secondary">
         <button
@@ -135,22 +139,6 @@ const Actions = (props: ActionProps) => {
         </article>
       )}
     </>
-  );
-};
-
-export const LoadingButton = ({ action, label }) => {
-  const [loading, setLoading] = useState(false);
-  return (
-    <button
-      aria-busy={loading}
-      onClick={async () => {
-        setLoading(true);
-        await action();
-        setLoading(false);
-      }}
-    >
-      {label}
-    </button>
   );
 };
 

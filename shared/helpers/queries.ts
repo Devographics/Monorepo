@@ -92,6 +92,7 @@ query SurveysMetadataQuery {
           slug
           questions {
             id
+            sectionId
             intlId
             label
             contentType
@@ -100,6 +101,7 @@ query SurveysMetadataQuery {
             allowOther
             longText
             allowComment
+            matchType
             matchTags
             options {
               average
@@ -224,6 +226,7 @@ query ${editionId}MetadataQuery {
           intlId
           questions {
             id
+            sectionId
             label
             intlId
             i18nNamespace
@@ -233,6 +236,7 @@ query ${editionId}MetadataQuery {
             allowOther
             longText
             allowComment
+            matchType
             matchTags
             optionsAreNumeric
             optionsAreRange
@@ -343,6 +347,7 @@ query ${editionId}MetadataQuery {
           intlId
           questions {
             id
+            sectionId
             intlId
             i18nNamespace
             yearAdded

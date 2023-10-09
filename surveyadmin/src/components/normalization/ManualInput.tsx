@@ -3,6 +3,7 @@ import {
   QuestionMetadata,
   ResponseData,
   EditionMetadata,
+  Entity,
 } from "@devographics/types";
 import { useState } from "react";
 import trim from "lodash/trim";
@@ -11,6 +12,8 @@ import { useLocalStorage } from "../hooks";
 import { addManualNormalizations } from "~/lib/normalization/services";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
+import { FieldValue } from "./FieldValue";
+import { EntityList } from "./EntityInput";
 
 const getCacheKey = (edition, question) =>
   `normalization_presets__${edition.id}__${question.id}`;
@@ -24,6 +27,7 @@ const ManualInput = ({
   normRespId,
   rawValue,
   rawPath,
+  entities,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
@@ -33,13 +37,16 @@ const ManualInput = ({
   normRespId: string;
   rawValue: string;
   rawPath: string;
+  entities: Entity[];
 }) => {
   const cacheKey = getCacheKey(edition, question);
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<NormalizeInBulkResult | null>(null);
   const [localPresets, setLocalPresets] = useLocalStorage(cacheKey, []);
-  const entityIds = questionData.currentEdition.buckets.map((b) => b.id).sort();
+  const entityIds = questionData.currentEdition.buckets
+    .map((b) => b.id)
+    .slice(0, 20);
 
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -76,9 +83,9 @@ const ManualInput = ({
 
   return (
     <div className="manualinput">
-      <pre>
-        <code>{rawValue}</code>
-      </pre>
+      <p>
+        <FieldValue value={rawValue} />
+      </p>
       <h5>Presets</h5>
       <p>
         <small>
@@ -86,27 +93,35 @@ const ManualInput = ({
           locally-stored values.
         </small>
       </p>
-      <p className="manualinput-presets">
-        {entityIds.map((id) => (
-          <Preset key={id} id={id} value={value} setValue={setValue} />
-        ))}
-        {localPresets.map((id) => (
-          <Preset
-            key={id}
-            id={id}
-            value={value}
-            setValue={setValue}
-            isLocal={true}
-            handleDeletePreset={handleDeletePreset}
-          />
-        ))}
+      <p>
+        <ul className="manualinput-presets">
+          {entityIds.map((id) => (
+            <Preset key={id} id={id} value={value} setValue={setValue} />
+          ))}
+          {localPresets.map((id) => (
+            <Preset
+              key={id}
+              id={id}
+              value={value}
+              setValue={setValue}
+              isLocal={true}
+              handleDeletePreset={handleDeletePreset}
+            />
+          ))}
+        </ul>
       </p>
       <h5>Manual IDs</h5>
       <form className="manualinput-form">
-        <input
+        {/* <input
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
+        /> */}
+
+        <EntityList
+          entities={entities}
+          selectedId={value}
+          setSelectedId={setValue}
         />
         <button aria-busy={loading} onClick={handleSubmit}>
           Renormalize
@@ -147,31 +162,33 @@ const Preset = ({
     style.background = "#E7FFCF";
   }
   return (
-    <a
-      href="#"
-      onClick={(e) => {
-        e.preventDefault();
-      }}
-    >
-      <code
-        style={style}
+    <li>
+      <a
+        href="#"
         onClick={(e) => {
-          const separator = !!value ? ", " : "";
-          setValue(value + separator + id);
+          e.preventDefault();
         }}
       >
-        {id}
-      </code>
-      {isLocal && (
-        <span
-          onClick={() => {
-            handleDeletePreset(id);
+        <code
+          style={style}
+          onClick={(e) => {
+            const separator = !!value ? ", " : "";
+            setValue(value + separator + id);
           }}
         >
-          X
-        </span>
-      )}
-    </a>
+          {id}
+        </code>
+        {isLocal && (
+          <span
+            onClick={() => {
+              handleDeletePreset(id);
+            }}
+          >
+            X
+          </span>
+        )}
+      </a>
+    </li>
   );
 };
 export default ManualInput;

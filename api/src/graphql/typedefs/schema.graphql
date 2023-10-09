@@ -145,6 +145,7 @@ type QuestionMetadata {
     randomize: Boolean
     order: OptionsOrder
     cutoff: Int
+    matchType: String
     matchTags: [String]
     limit: Int
     # options/values for the question are numeric
@@ -200,12 +201,14 @@ type OptionsMetadata {
     entity: Entity
 }
 
+# no need for default values here because we already specify default values
+# inside genericComputeFunction
 input Parameters {
-    limit: Int = 50
+    limit: Int
     cutoff: Int
     sort: SortSpecifier
     facetSort: SortSpecifier
-    facetLimit: Int = 50
+    facetLimit: Int
     facetCutoff: Int
     facetCutoffPercent: Float
     enableCache: Boolean
@@ -213,8 +216,8 @@ input Parameters {
 }
 
 input CommentParameters {
-    limit: Int = 50
-    skip: Int = 0
+    limit: Int
+    skip: Int
     enableCache: Boolean
 }
 
@@ -258,7 +261,7 @@ type ResponseEditionData {
 
 type RawData {
     responseId: String
-    content: String
+    content: JSON # could be String or [String]
 }
 
 """

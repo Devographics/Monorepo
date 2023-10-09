@@ -10,11 +10,16 @@ import { publicConfig } from "~/config/public";
 
 const links = [
   {
-    component: (
-      <span>
-        &copy; 2023 <a href="https://devographics.com/">Devographics</a>
-      </span>
-    ),
+    component:
+      process.env.NEXT_PUBLIC_CONFIG === "tokyodev" ? (
+        <span>
+          &copy; 2023 <a href="https://tokyodev.com/">TokyoDev</a>
+        </span>
+      ) : (
+        <span>
+          &copy; 2023 <a href="https://devographics.com/">Devographics</a>
+        </span>
+      ),
   },
   {
     showIf: ({ currentUser }) => !!currentUser,

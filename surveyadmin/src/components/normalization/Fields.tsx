@@ -1,43 +1,60 @@
 "use client";
 import { useState } from "react";
 import { normalizeQuestionResponses } from "~/lib/normalization/services";
-import { LoadingButton } from "./NormalizeQuestionActions";
+import { LoadingButton } from "../LoadingButton";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
-import { NormalizationResult } from "./NormalizationResult";
+import { NormField, NormalizationResult } from "./NormalizationResult";
 import {
   EditionMetadata,
-  QuestionMetadata,
   ResponseData,
   SurveyMetadata,
 } from "@devographics/types";
-import { UnnormalizedResponses } from "~/lib/normalization/hooks";
+import { NormalizationResponse } from "~/lib/normalization/hooks";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
 import type { QuestionWithSection } from "~/lib/normalization/types";
 import { getFormPaths } from "@devographics/templates";
-import {
-  getResponsesSelector,
-  getUnnormalizedResponsesSelector,
-} from "~/lib/normalization/helpers/getSelectors";
 import ManualInput from "./ManualInput";
+import EntityInput from "./EntityInput";
+import NormToken from "./NormToken";
+import { useCopy, highlightMatches, highlightPatterns } from "../hooks";
+import Dialog from "./Dialog";
+import { FieldValue } from "./FieldValue";
+import { Entity } from "@devographics/types";
 
-const Fields = ({
-  survey,
-  edition,
-  question,
-  responsesCount,
-  unnormalizedResponses,
-  questionData,
-}: {
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+const getPercent = (a, b) => Math.round((a / b) * 100);
+
+const Fields = (props: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionWithSection;
   responsesCount: number;
-  unnormalizedResponses: UnnormalizedResponses[];
+  responses: NormalizationResponse[];
   questionData: ResponseData;
+  variant: "normalized" | "unnormalized";
+  entities: Entity[];
 }) => {
-  const [showIds, setShowIds] = useState(true);
+  const [showResponses, setShowResponses] = useState(false);
+  const [showIds, setShowIds] = useState(false);
+  const [filterQuery, setFilterQuery] = useState("");
 
-  if (!unnormalizedResponses) return <p>Nothing to normalize</p>;
+  const {
+    survey,
+    edition,
+    question,
+    responsesCount,
+    responses: allResponses,
+    questionData,
+    variant,
+    entities,
+  } = props;
+
+  const responses = props[`${variant}Responses`] as NormalizationResponse[];
+
+  if (!responses) return <p>Nothing to normalize</p>;
 
   const questionObject = getQuestionObject({
     survey,
@@ -47,94 +64,100 @@ const Fields = ({
   })!;
   const formPaths = getFormPaths({ edition, question: questionObject });
 
-  const rawSelector = getResponsesSelector({
-    edition,
-    questionObject,
-  });
-  const normSelector = getUnnormalizedResponsesSelector({
-    edition,
-    questionObject,
-  });
-
   const fieldProps = {
+    responses,
     showIds,
     question,
     survey,
     edition,
     questionData,
     rawPath: formPaths?.other,
+    variant,
+    entities,
+    filterQuery,
   };
+
+  const filteredResponses = filterQuery
+    ? responses.filter((r) => {
+        const combinedValue = Array.isArray(r.value) ? r.value.join() : r.value;
+        return combinedValue.includes(filterQuery);
+      })
+    : responses;
 
   return (
     <div>
-      <p>
-        <strong>{unnormalizedResponses.length}</strong> missing normalizations
-        out of <strong>{responsesCount}</strong> total responses for{" "}
-        <code>
-          {edition.id}/{question.id}
-        </code>
-        .
-      </p>
-      <p>
-        <ul>
-          <li>
-            Raw Path: <code>{formPaths?.other}</code>
-          </li>
-          <li>
-            Selector: <textarea>{JSON.stringify(rawSelector)}</textarea>
-          </li>
-          <li>
-            Normalized Path: <code>{questionObject?.normPaths?.other}</code>
-          </li>
-          <li>
-            Selector: <textarea>{JSON.stringify(normSelector)}</textarea>
-          </li>
-        </ul>
-      </p>
-      <p>
-        Match Tags:{" "}
-        <span>
-          <code>{question.id} [id]</code>{" "}
-        </span>
-        {question.matchTags?.map((tag) => (
-          <span key={tag}>
-            <code>{tag}</code>{" "}
-          </span>
-        ))}
-      </p>
-      <p>
-        <input
-          type="checkbox"
-          checked={showIds}
-          onClick={() => {
-            setShowIds(!showIds);
+      <h3>
+        {capitalizeFirstLetter(variant)} Responses (
+        {getPercent(responses.length, allResponses.length)}% –{" "}
+        {responses.length}/{allResponses.length}){" "}
+        <a
+          href="#"
+          role="button"
+          onClick={(e) => {
+            e.preventDefault();
+            setShowResponses(!showResponses);
           }}
-        />{" "}
-        Show IDs
-      </p>
-      <table>
-        <thead>
-          <th>Answer</th>
-          {showIds && (
-            <>
-              <th>Raw ID</th>
-              <th>Norm. ID</th>
-            </>
+        >
+          {showResponses ? "Hide" : "Show"}
+        </a>
+      </h3>
+      {showResponses && (
+        <>
+          {variant === "normalized" ? (
+            <p>
+              This table shows responses that have already received at least one
+              match during the normalization process.
+            </p>
+          ) : (
+            <p>
+              This table shows responses that have not received any match yet
+              during the normalization process.
+            </p>
           )}
-          <th>Normalize</th>
-        </thead>
-        <tbody>
-          {unnormalizedResponses.map(({ _id, responseId, value }) => (
-            <Field
-              key={_id}
-              _id={_id}
-              value={value}
-              responseId={responseId}
-              {...fieldProps}
+
+          <p>
+            <label htmlFor="search">
+              Filter: ({filteredResponses.length} results)
+            </label>
+            <input
+              type="search"
+              id="search"
+              value={filterQuery}
+              onChange={(e) => setFilterQuery(e.target.value)}
             />
-          ))}
-        </tbody>
-      </table>
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Answer</th>
+                {variant === "normalized" && <th>Normalized Values</th>}
+                <th>Response&nbsp;ID</th>
+                <th colSpan={99}>Normalize</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredResponses.map(
+                (
+                  { _id, responseId, value, normalizedValue, patterns },
+                  index
+                ) => (
+                  <Field
+                    key={_id}
+                    _id={_id}
+                    value={value}
+                    normalizedValue={normalizedValue}
+                    patterns={patterns}
+                    responseId={responseId}
+                    index={index}
+                    {...fieldProps}
+                  />
+                )
+              )}
+            </tbody>
+          </table>
+        </>
+      )}
     </div>
   );
 };
@@ -142,16 +165,24 @@ const Fields = ({
 const Field = ({
   _id,
   value,
+  normalizedValue,
+  patterns,
   showIds,
+  responses,
   responseId,
   question,
   survey,
   edition,
   questionData,
   rawPath,
+  variant,
+  entities,
+  filterQuery,
+  index,
 }) => {
   const [result, setResult] = useState<NormalizeInBulkResult>();
   const [showManualInput, setShowManualInput] = useState<boolean>(false);
+  const [showEntities, setShowEntities] = useState<boolean>(false);
   const surveyId = survey.id;
   const editionId = edition.id;
   const questionId = question.id;
@@ -159,27 +190,77 @@ const Field = ({
   return (
     <>
       <tr>
+        <td>{index + 1}. </td>
         <td>
-          <FieldValue value={value} />
+          <FieldValue
+            value={value}
+            normalizedValue={normalizedValue}
+            patterns={patterns}
+            filterQuery={filterQuery}
+          />
         </td>
-        {showIds && (
-          <>
-            <td>
-              <code>{responseId}</code>
-            </td>
-            <td>
-              <code>{_id}</code>
-            </td>
-          </>
+        {variant === "normalized" && (
+          <td>
+            <div className="normalization-tokens">
+              {normalizedValue.map((value) => (
+                <span>
+                  <NormToken id={value} responses={responses} />{" "}
+                </span>
+              ))}
+            </div>
+          </td>
         )}
+        <td>
+          <ResponseId id={responseId} />
+        </td>
+        <td>
+          <button
+            onClick={() => {
+              setShowEntities(!showEntities);
+            }}
+            data-tooltip="Add or edit entities"
+          >
+            Edit&nbsp;Entities
+          </button>
+          {showEntities && (
+            <Dialog
+              showModal={showEntities}
+              setShowModal={setShowEntities}
+              header={<span>Add/Edit Entities</span>}
+            >
+              <EntityInput value={value} entities={entities} />
+            </Dialog>
+          )}
+        </td>
+
         <td>
           <button
             onClick={() => {
               setShowManualInput(!showManualInput);
             }}
+            data-tooltip="Manually enter normalization tokens"
           >
-            Input&nbsp;ID(s)
+            Manual&nbsp;Input
           </button>
+          {showManualInput && (
+            <Dialog
+              showModal={showManualInput}
+              setShowModal={setShowManualInput}
+              header={<span>Manual Input</span>}
+            >
+              <ManualInput
+                survey={survey}
+                edition={edition}
+                question={question}
+                questionData={questionData}
+                responseId={responseId}
+                normRespId={_id}
+                rawValue={value}
+                rawPath={rawPath}
+                entities={entities}
+              />
+            </Dialog>
+          )}
         </td>
         <td>
           <LoadingButton
@@ -193,28 +274,11 @@ const Field = ({
               setResult(result.data);
               console.log(result);
             }}
-            label="Autonormalize"
+            label="Renormalize"
+            tooltip="Renormalize this answer"
           />
         </td>
       </tr>
-      {showManualInput && (
-        <tr>
-          <td colSpan={999}>
-            <article>
-              <ManualInput
-                survey={survey}
-                edition={edition}
-                question={question}
-                questionData={questionData}
-                responseId={responseId}
-                normRespId={_id}
-                rawValue={value}
-                rawPath={rawPath}
-              />
-            </article>
-          </td>
-        </tr>
-      )}
       {result && (
         <tr>
           <td colSpan={999}>
@@ -228,18 +292,14 @@ const Field = ({
   );
 };
 
-const FieldValue = ({ value }) => {
-  if (Array.isArray(value)) {
-    return (
-      <ul>
-        {value.map((v, i) => (
-          <li key={i}>{v}</li>
-        ))}
-      </ul>
-    );
-  } else {
-    return <span>{value}</span>;
-  }
-};
+export const ResponseId = ({ id }: { id: string }) => {
+  const [copied, copy, setCopied] = useCopy(id);
 
+  const truncated = id.slice(0, 6) + "…";
+  return (
+    <code data-tooltip="Click to copy" onClick={copy}>
+      {truncated}
+    </code>
+  );
+};
 export default Fields;

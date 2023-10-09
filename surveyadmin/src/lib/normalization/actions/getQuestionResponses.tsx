@@ -1,15 +1,21 @@
-import { fetchSurveysMetadata, fetchQuestionData } from "@devographics/fetch";
+import {
+  fetchSurveysMetadata,
+  fetchQuestionData,
+  fetchEntities,
+} from "@devographics/fetch";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import {
   getEditionQuestionById,
   getQuestionResponsesCount,
   getUnnormalizedResponses,
+  getAllResponses,
 } from "../normalize/helpers";
 import { getEditionQuestions } from "../helpers/getEditionQuestions";
 import get from "lodash/get";
 import { ResultsSubFieldEnum } from "@devographics/types";
+import pick from "lodash/pick";
 
-export const getUnnormalizedData = async ({
+export const getQuestionResponses = async ({
   surveyId,
   editionId,
   questionId,
@@ -33,25 +39,29 @@ export const getUnnormalizedData = async ({
   }
 
   // console.log(`// unnormalizedFields ${editionId} ${questionId}`);
-  const { responses, rawFieldPath } = await getUnnormalizedResponses({
+  const {
+    responses,
+    rawFieldPath,
+    normalizedFieldPath,
+    patternsFieldPath,
+    selector,
+  } = await getAllResponses({
     survey,
     edition,
     question,
   });
 
-  const unnormalizedResponses = responses.map((r) => {
+  const allResponses = responses.map((r) => {
     return {
       _id: r._id,
       responseId: r.responseId,
       value: get(r, rawFieldPath),
+      normalizedValue: get(r, normalizedFieldPath),
+      patterns: get(r, patternsFieldPath),
     };
   });
 
-  const responsesCount = await getQuestionResponsesCount({
-    survey,
-    edition,
-    question,
-  });
+  const responsesCount = allResponses.length;
 
   const questionResult = await fetchQuestionData({
     shouldGetFromCache: false,
@@ -60,7 +70,19 @@ export const getUnnormalizedData = async ({
     sectionId: question.section.id,
     questionId,
     subField: ResultsSubFieldEnum.FREEFORM,
+    queryArgs: { parameters: { enableCache: false } },
   });
 
-  return { responsesCount, unnormalizedResponses, questionResult };
+  const allEntities = await fetchEntities();
+  const entities = allEntities.data.map((e) =>
+    pick(e, ["id", "patterns", "tags"])
+  );
+
+  return {
+    responsesCount,
+    responses: allResponses,
+    responsesSelector: selector,
+    questionResult,
+    entities,
+  };
 };

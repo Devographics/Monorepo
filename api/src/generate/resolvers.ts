@@ -293,6 +293,9 @@ Responses
 */
 export const allEditionsResolver: ResolverType = async (parent, args, context, info) => {
     console.log('// allEditionsResolver')
+    if (process.env.DISABLE_DATA_ACCESS && process.env.DISABLE_DATA_ACCESS !== 'false') {
+        throw new Error(`Data access currently disabled. Set DISABLE_DATA_ACCESS=false to enable`)
+    }
     const subField: ResultsSubFieldEnum = info?.path?.prev?.key
 
     const { survey, edition, section, question, responseArguments, questionObjects } = parent

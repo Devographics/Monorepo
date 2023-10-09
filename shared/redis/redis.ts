@@ -3,7 +3,8 @@ import { logToFile } from '@devographics/debug'
 import { EnvVar, getEnvVar } from '@devographics/helpers'
 import { Redis } from '@upstash/redis'
 
-const TTL_SECONDS = 60 * 30
+// 30 mn (but only 3 in dev)
+const TTL_SECONDS = process.env.NODE_ENV === "development" ? 60 * 3 : 60 * 30
 
 let redis: Redis
 
@@ -39,7 +40,6 @@ export const getRedisClient = () => {
 // All methods will return null if data are not in the cache
 // => use either a local or a github load when it happen
 
-
 export async function storeRedis<T>(key: string, val: T): Promise<boolean> {
     const redisClient = getRedisClient()
     // EX = Expiration time in seconds
@@ -66,7 +66,7 @@ export async function fetchJson<T = any>(key: string): Promise<T | null> {
         if (!maybeStr) return null
         // note: depending on Redis client, str might already be a valid object
         const json = typeof maybeStr === 'object' ? maybeStr : JSON.parse(maybeStr)
-        await logToFile(`fetchJson(${key}).json`, json, { mode: 'overwrite' })
+        // await logToFile(`fetchJson(${key}).json`, json, { mode: 'overwrite' })
         return json
     } catch (error) {
         console.error(`// error while getting redis key ${key}`)

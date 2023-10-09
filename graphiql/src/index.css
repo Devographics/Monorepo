@@ -1,8 +1,11 @@
 body {
-  padding: 0;
-  margin: 0;
-  min-height: 100vh;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
 }
 #root {
-  height: 100vh;
+    height: 100vh;
+}
+.doc-explorer-contents {
+    overflow-y: scroll !important;
 }

@@ -11,21 +11,23 @@ import { getSectioni18nIds } from "~/i18n/survey";
 import { FetcherFunctionOptions } from "@devographics/fetch/types";
 import { serverConfig } from "~/config/server";
 
-export const rscFetchSurveysMetadata = cache(async (options?: FetcherFunctionOptions) => {
-  const result = await fetchSurveysMetadata({
-    ...options,
-    calledFrom: __filename,
-    getServerConfig: serverConfig
-  });
-  // remove survey editions with no questions
-  result.data = result.data?.map((survey) => ({
-    ...survey,
-    editions: survey?.editions?.filter(
-      (edition) => edition?.sections?.length > 0
-    ),
-  }));
-  return result;
-});
+export const rscFetchSurveysMetadata = cache(
+  async (options?: FetcherFunctionOptions) => {
+    const result = await fetchSurveysMetadata({
+      ...options,
+      calledFrom: __filename,
+      getServerConfig: serverConfig,
+    });
+    // remove survey editions with no questions
+    result.data = result.data?.map((survey) => ({
+      ...survey,
+      editions: survey?.editions?.filter(
+        (edition) => edition?.sections?.length > 0
+      ),
+    }));
+    return result;
+  }
+);
 
 /**
  * TODO: this is actually used by "generateMetadata" functions
@@ -46,7 +48,7 @@ export const rscGetMetadata = async ({
   const { socialImageUrl, year } = edition;
   const { name = "" } = edition.survey;
 
-  const imageUrl = getEditionImageUrl(edition);
+  const imageUrl = getEditionImageUrl(edition, "og");
   let imageAbsoluteUrl = socialImageUrl || imageUrl;
   const url = publicConfig.appUrl;
   const description = intlContext.formatMessage({
@@ -70,6 +72,9 @@ export const rscGetMetadata = async ({
     description,
     // NOTE: merge between route segments is shallow, you may need to repeat field from layout
     openGraph: {
+      title,
+      description,
+      siteName: title,
       // @ts-ignore
       type: "article" as const,
       url,

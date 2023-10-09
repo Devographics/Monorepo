@@ -24,6 +24,7 @@ import { newMongoId } from "@devographics/mongo";
 import {
   getEditionSelector,
   getUnnormalizedResponsesSelector,
+  getAllResponsesSelector,
   ignoreValues,
 } from "../helpers/getSelectors";
 import { getSelector } from "../helpers/getSelectors";
@@ -113,7 +114,7 @@ const extractTokens = async ({
   verbose,
 }: {
   value: any;
-  rules: Array<any>;
+  rules: Array<EntityRule>;
   edition: EditionMetadata;
   question: QuestionMetadata;
   verbose?: boolean;
@@ -233,16 +234,27 @@ export const getQuestionRules = ({
   questionObject,
   verbose,
 }: {
-  entityRules: any[];
+  entityRules: EntityRule[];
   questionObject: QuestionTemplateOutput;
   verbose?: boolean;
 }) => {
   // automatically add question's own id as a potential match tag
-  const matchTags = [...(questionObject.matchTags || []), questionObject.id];
+  const matchTags = [questionObject.id, ...(questionObject.matchTags || [])];
 
-  const rules = matchTags
-    ? entityRules.filter((r) => intersection(matchTags, r.tags).length > 0)
-    : entityRules;
+  if (!matchTags || matchTags.length === 0) {
+    throw new Error(
+      `getQuestionRules: no matchTags defined for question ${questionObject.id}`
+    );
+  }
+
+  let rules: EntityRule[] = [];
+  matchTags.forEach((matchTag) => {
+    // for each match tag, add all corresponding rules
+    // make sure to preserve matchTag order, as it's used for match priority
+    const tagRules = entityRules.filter((r) => r.tags.includes(matchTag));
+    rules = [...rules, ...tagRules];
+  });
+  // const rules = entityRules.filter((r) => intersection(matchTags, r.tags).length > 0)
 
   if (verbose) {
     if (rules.length === 0) {
@@ -289,7 +301,8 @@ export const normalize = async ({
     });
     allTokens = [...allTokens, ...tokens];
   }
-  return allTokens;
+  // if we only one token, return first one, else return all of them
+  return questionObject.matchType === "single" ? [allTokens[0]] : allTokens;
 };
 
 /*
@@ -611,6 +624,58 @@ export const getUnnormalizedResponses = async ({
   ]);
 
   return { responses, rawFieldPath, normalizedFieldPath };
+};
+
+export const getAllResponses = async ({
+  survey,
+  edition,
+  question,
+}: {
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  question: QuestionWithSection;
+}) => {
+  const questionObject = getQuestionObject({
+    survey,
+    edition,
+    section: question.section,
+    question,
+  })!;
+  const rawFieldPath = questionObject?.normPaths?.raw!;
+  const normalizedFieldPath = questionObject?.normPaths?.other!;
+  const patternsFieldPath = questionObject?.normPaths?.patterns!;
+
+  const selector = getAllResponsesSelector({
+    edition,
+    questionObject,
+  });
+
+  const NormResponses =
+    await getNormResponsesCollection<NormalizedResponseDocument>();
+  let responses = await NormResponses.find(selector, {
+    projection: {
+      _id: 1,
+      responseId: 1,
+      [rawFieldPath]: 1,
+      [normalizedFieldPath]: 1,
+      [patternsFieldPath]: 1,
+    },
+    sort: { [rawFieldPath]: 1 },
+    //lean: true
+  }).toArray();
+
+  // use case-insensitive sort
+  responses = sortBy(responses, [
+    (response) => String(get(response, rawFieldPath)).toLowerCase(),
+  ]);
+
+  return {
+    responses,
+    rawFieldPath,
+    normalizedFieldPath,
+    patternsFieldPath,
+    selector,
+  };
 };
 
 /**

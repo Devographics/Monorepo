@@ -8,12 +8,27 @@ import { getFormPaths } from "@devographics/templates";
 import { memo, useState } from "react";
 import isNil from "lodash/isNil";
 import { useFormStateContext } from "../form/FormStateContext";
+import { OPTION_NA } from "@devographics/types";
 
 export const FormComponentRadioGroup = (props: FormInputProps) => {
   const { response } = useFormStateContext();
 
   const { value, edition, question } = props;
-  const { options, allowOther } = question;
+  const { options: options_, allowOther } = question;
+
+  if (!options_) {
+    throw new Error(
+      `Question ${question.id} does not have any options defined.`
+    );
+  }
+
+  let options = options_;
+
+  // remove "n/a" option and handle it separately
+  const naOptionIndex = options.findIndex((option) => option.id === OPTION_NA);
+  const naPosition = naOptionIndex === 0 ? "top" : "bottom";
+  const naOption = options[naOptionIndex];
+  options = options.filter((option) => option.id !== OPTION_NA);
 
   const formPaths = getFormPaths({ edition, question });
   const otherPath = formPaths.other!;
@@ -25,6 +40,17 @@ export const FormComponentRadioGroup = (props: FormInputProps) => {
   const hasValue = value !== "";
   return (
     <FormItem {...props}>
+      {" "}
+      {naOption && naPosition === "top" && (
+        <Radio
+          index={999}
+          option={naOption}
+          hasValue={hasValue}
+          value={value}
+          formProps={props}
+          setShowOther={setShowOther}
+        />
+      )}
       {options?.map((option, i) => {
         return (
           <Radio
@@ -44,6 +70,16 @@ export const FormComponentRadioGroup = (props: FormInputProps) => {
           mainValue={value}
           type="radio"
           showOther={showOther}
+          setShowOther={setShowOther}
+        />
+      )}
+      {naOption && naPosition === "bottom" && (
+        <Radio
+          index={999}
+          option={naOption}
+          hasValue={hasValue}
+          value={value}
+          formProps={props}
           setShowOther={setShowOther}
         />
       )}

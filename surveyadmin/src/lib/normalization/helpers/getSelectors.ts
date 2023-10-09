@@ -90,8 +90,11 @@ export const getUnnormalizedResponsesSelector = ({
 }) => {
   const rawFieldPath = questionObject?.normPaths?.raw;
   const normalizedFieldPath = questionObject?.normPaths?.other;
+  // TODO: do this better
+  // currently the textList template is the only one that supports multiple
+  // freeform values
   const existsSelector = getExistsSelector({
-    isArray: questionObject.allowMultiple,
+    isArray: questionObject.template === "textList",
   });
   if (rawFieldPath && normalizedFieldPath) {
     const selector = {
@@ -106,6 +109,34 @@ export const getUnnormalizedResponsesSelector = ({
   } else {
     throw new Error(
       `getUnnormalizedResponsesSelector: Missing rawFieldPath or normalizedFieldPath for question ${questionObject.id}`
+    );
+  }
+};
+
+export const getAllResponsesSelector = ({
+  edition,
+  questionObject,
+}: {
+  edition: EditionMetadata;
+  questionObject: QuestionTemplateOutput;
+}) => {
+  const rawFieldPath = questionObject?.normPaths?.raw;
+  const normalizedFieldPath = questionObject?.normPaths?.other;
+  // TODO: do this better
+  // currently the textList template is the only one that supports multiple
+  // freeform values
+  const existsSelector = getExistsSelector({
+    isArray: questionObject.template === "textList",
+  });
+  if (rawFieldPath && normalizedFieldPath) {
+    const selector = {
+      editionId: edition.id,
+      [rawFieldPath]: existsSelector,
+    };
+    return selector;
+  } else {
+    throw new Error(
+      `getAllResponsesSelector: Missing rawFieldPath or normalizedFieldPath for question ${questionObject.id}`
     );
   }
 };
@@ -133,7 +164,10 @@ export const getResponsesSelector = ({
   questionObject: QuestionTemplateOutput;
 }) => {
   const formPaths = getFormPaths({ edition, question: questionObject });
-  const isArray = questionObject.allowMultiple;
+  // TODO: do this better
+  // currently the textList template is the only one that supports multiple
+  // freeform values
+  const isArray = questionObject.template === "textList";
   if (formPaths.other) {
     const selector = {
       editionId: edition.id,

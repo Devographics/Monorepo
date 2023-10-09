@@ -3,6 +3,8 @@ import { Metadata } from "next";
 import { setAppName } from "@devographics/helpers";
 import { AppName } from "@devographics/types";
 import { getConfig } from "@devographics/helpers";
+import Script from "next/script";
+import PlausibleProvider from "next-plausible";
 
 export default function RootLayout({
   children,
@@ -22,7 +24,21 @@ export default function RootLayout({
 
   return (
     <html>
-      <head />
+      <head>
+        {/**
+         * Source: https://vanillajstoolkit.com/polyfills/stringreplaceall/
+         * needed for older versions of iOS Safari
+         * At time of writing replaceAll has less than 95% support
+         * @see https://caniuse.com/?search=replaceAll
+         */}
+        <Script src="/polyfills/replaceAll.js" strategy="beforeInteractive" />
+        {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
+          <PlausibleProvider
+            trackLocalhost={true}
+            domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
+          />
+        )}
+      </head>
       <body className={configClass}>{children}</body>
     </html>
   );

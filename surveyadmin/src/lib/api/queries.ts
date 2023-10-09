@@ -69,36 +69,6 @@ query ${editionId}MetadataQuery {
           id
           name
           hashtag
-          emailOctopus {
-            listId
-          }
-          partners {
-            id
-            name
-            url
-            imageUrl
-          }
-        }
-        sponsors {
-          id
-          imageUrl
-          name
-          url
-        }
-        credits {
-          id
-          role
-          entity {
-            id
-            name
-            twitterName
-            company {
-              name
-              homepage {
-                url
-              }
-            }
-          }
         }
         sections(include: outlineOnly) {
           id
@@ -108,6 +78,7 @@ query ${editionId}MetadataQuery {
           template
           questions {
             id
+            sectionId
             intlId
             i18nNamespace
             yearAdded
@@ -123,17 +94,12 @@ query ${editionId}MetadataQuery {
             randomize
             optionsAreNumeric
             # optionsAreRange
+            matchType
             matchTags
-            entity {
-              ${entityFragment}
-            }
             options {
               id
               intlId
               label
-              entity {
-                ${entityFragment}
-              }
             }
           }
         }

@@ -8,6 +8,7 @@ import {
   NormalizeInBulkResult,
 } from "~/lib/normalization/types";
 import { defaultSegmentSize } from "./hooks";
+import { highlightMatches } from "../hooks";
 
 const errorColor = "#cf2710";
 
@@ -78,9 +79,10 @@ export const NormalizationSummary = ({
   duration,
   isSimulation,
   errorCount,
+  totalDocumentCount,
 }: NormalizationResultProps) => {
   const discardRate = Math.round(
-    (emptyDocuments.length * 100) / defaultSegmentSize
+    (emptyDocuments.length * 100) / totalDocumentCount
   );
   return (
     <div>
@@ -243,31 +245,7 @@ const NormDocument = ({
   );
 };
 
-// Function to highlight matches in the text
-// see https://stackoverflow.com/a/39154413/649299
-function highlightMatches(text, regexArray) {
-  let highlightedText = text;
-  console.log(text);
-  console.log(highlightedText);
-  console.log(regexArray);
-  regexArray.forEach((regexString, index) => {
-    const parts = /\/(.*)\/(.*)/.exec(regexString);
-    const regex = parts && new RegExp(parts[1], parts[2]);
-
-    // const regex = new RegExp(regexString)
-    console.log(regex);
-    console.log(typeof regex);
-    highlightedText = highlightedText.replace(
-      regex,
-      `<span class="highlighted highlighted-${index}">$&</span>`
-    );
-    console.log(highlightedText);
-  });
-
-  return highlightedText;
-}
-
-const NormField = ({
+export const NormField = ({
   fieldPath,
   raw,
   questionId,

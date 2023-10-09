@@ -98,7 +98,9 @@ export const getGenericCacheKey = ({
     }
     if (!isEmpty(parameters)) {
         const { enableCache, ...cacheKeyParameters } = parameters
-        cacheKeyOptions.parameters = { parameters: cacheKeyParameters }
+        if (!isEmpty(cacheKeyParameters)) {
+            cacheKeyOptions.parameters = { parameters: cacheKeyParameters }
+        }
     }
     if (!isEmpty(filters)) {
         cacheKeyOptions.filters = { filters }

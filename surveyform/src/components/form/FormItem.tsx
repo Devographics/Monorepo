@@ -246,7 +246,7 @@ export const SkipButton = ({
         </Tooltip>
       }
     >
-      <span className="skip-question">
+      <div className="skip-question">
         <Button
           size="sm"
           onClick={(e) => {
@@ -258,7 +258,7 @@ export const SkipButton = ({
           />
           {isSkipped ? <Unskip /> : <Skip />}
         </Button>
-      </span>
+      </div>
     </OverlayTrigger>
   );
 };
@@ -310,10 +310,9 @@ export const FormItemDescription = (
   const i18nDescription = intl.formatMessage({ id: intlIds.description });
   const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
   return i18nDescription ? (
-    <FormattedMessage
-      className="form-item-description"
-      id={intlIds.description}
-    />
+    <div className="form-item-description">
+      <FormattedMessage id={intlIds.description} />
+    </div>
   ) : entityDescription ? (
     <p className="form-item-description">
       <span

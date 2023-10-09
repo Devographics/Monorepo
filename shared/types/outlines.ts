@@ -215,6 +215,8 @@ export type Question = {
      */
     countsTowardScore?: boolean
 
+    // whether to match a single value, or multiple. Defaults to multiple
+    matchType?: 'single' | 'multiple'
     matchTags?: string[]
 
     // a question that's in the outline but not in the API
