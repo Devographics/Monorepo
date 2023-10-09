@@ -164,7 +164,7 @@ export const highlightPatterns = ({
   currentTokenId?: string;
   filterQueryPattern?: string;
 }) => {
-  if (currentTokenId) {
+  if (currentTokenId && normalizedValue) {
     // if a token is specified, distinguish between patterns that match that specific token
     // and other patterns
 

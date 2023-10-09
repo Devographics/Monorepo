@@ -18,7 +18,7 @@ export const FieldValue = ({
   const patterns = filterQuery ? [...patterns_, filterQueryPattern] : patterns_;
 
   const getValue = (value: string) => {
-    return patterns.length > 0 && normalizedValue.length > 0
+    return patterns.length > 0
       ? highlightPatterns({
           value,
           patterns,
