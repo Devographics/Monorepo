@@ -33,6 +33,7 @@ import { watchFiles } from './helpers/watch'
 import { initRedis } from '@devographics/redis'
 import { getPublicDb } from '@devographics/mongo'
 import { ghWebhooks } from './webhooks'
+import { getRepoSHA } from './external_apis'
 
 const envPath = process.env.ENV_FILE ? process.env.ENV_FILE : '.env'
 dotenv.config({ path: envPath })
@@ -108,7 +109,7 @@ const start = async () => {
     // call getConfig the first time and show warnings if this is local dev env
     getConfig({ showWarnings: isDev })
 
-    const redisClient = await initRedis()
+    const redisClient = initRedis()
     // redisClient.on('error', err => console.log('Redis Client Error', err))
 
     // TODO: there might be mismatch between shared mongodb version
@@ -119,10 +120,8 @@ const start = async () => {
     // const entities = await loadOrGetEntities({})
     const context: RequestContext = { db, redisClient }
 
-    const isDevOrTest = !!(
-        process.env.NODE_ENV && ['test', 'development'].includes(process.env.NODE_ENV)
-    )
-    const surveys = await loadOrGetSurveys()
+    const { surveys } = await loadOrGetSurveys()
+
     const questionObjects = getQuestionObjects({ surveys })
 
     const parsedSurveys = parseSurveys({ surveys })
