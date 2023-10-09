@@ -3,14 +3,20 @@ import { escapeHTML, highlightPatterns } from "../hooks";
 export const FieldValue = ({
   value,
   normalizedValue = [],
-  patterns = [],
+  patterns: patterns_ = [],
   currentTokenId,
+  filterQuery,
 }: {
   value: string | string[];
   normalizedValue?: string[];
   patterns?: string[];
   currentTokenId?: string;
+  filterQuery?: string;
 }) => {
+  const filterQueryPattern = filterQuery && `/${filterQuery}/i`;
+
+  const patterns = filterQuery ? [...patterns_, filterQueryPattern] : patterns_;
+
   const getValue = (value: string) => {
     return patterns.length > 0 && normalizedValue.length > 0
       ? highlightPatterns({
@@ -18,6 +24,7 @@ export const FieldValue = ({
           patterns,
           normalizedValue,
           currentTokenId,
+          filterQueryPattern,
         })
       : escapeHTML(value);
   };

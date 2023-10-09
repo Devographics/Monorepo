@@ -39,7 +39,7 @@ const Fields = (props: {
 }) => {
   const [showResponses, setShowResponses] = useState(false);
   const [showIds, setShowIds] = useState(false);
-  const [filter, setFilter] = useState("");
+  const [filterQuery, setFilterQuery] = useState("");
 
   const {
     survey,
@@ -74,11 +74,16 @@ const Fields = (props: {
     rawPath: formPaths?.other,
     variant,
     entities,
+    filterQuery,
   };
 
-  const filteredResponses = filter
-    ? responses.filter((r) => r.value.includes(filter))
+  const filteredResponses = filterQuery
+    ? responses.filter((r) => {
+        const combinedValue = Array.isArray(r.value) ? r.value.join() : r.value;
+        return combinedValue.includes(filterQuery);
+      })
     : responses;
+
   return (
     <div>
       <h3>
@@ -117,8 +122,8 @@ const Fields = (props: {
             <input
               type="search"
               id="search"
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
+              value={filterQuery}
+              onChange={(e) => setFilterQuery(e.target.value)}
             />
           </p>
           <table>
@@ -172,6 +177,7 @@ const Field = ({
   rawPath,
   variant,
   entities,
+  filterQuery,
   index,
 }) => {
   const [result, setResult] = useState<NormalizeInBulkResult>();
@@ -190,6 +196,7 @@ const Field = ({
             value={value}
             normalizedValue={normalizedValue}
             patterns={patterns}
+            filterQuery={filterQuery}
           />
         </td>
         {variant === "normalized" && (

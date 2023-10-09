@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import sortBy from "lodash/sortBy";
+import { isNumber } from "lodash";
 
 export const useLocalStorage = (storageKey, fallbackState) => {
   let initState = fallbackState;
@@ -58,11 +60,11 @@ const cleanPattern = (pattern) => pattern.slice(1).slice(0, -2);
 const getHighlightStartMarker = () => "%##";
 const getHighlightEndMarker = () => "##%";
 
-const getHighlightStartTag = (index, isPrimary, pattern) =>
+const getHighlightStartTag = ({ index, isPrimary, isFilterQuery, pattern }) =>
   `<span class="highlighted highlighted-${index} highlighted-${
-    isPrimary ? "primary" : "secondary"
+    isPrimary || isFilterQuery ? "primary" : "secondary"
   }" data-tooltip="${cleanPattern(pattern)}">`;
-const getHighlightEndTag = (index) => `</span>`;
+const getHighlightEndTag = (options) => `</span>`;
 
 const replaceWithTag = (text, marker, tag, matches: Match[]) => {
   let hlStartRegex = new RegExp(marker(), "g");
@@ -73,24 +75,30 @@ const replaceWithTag = (text, marker, tag, matches: Match[]) => {
     if (!matchObject) {
       console.log(matches);
       console.log(i);
-
       return "";
     }
-    const { isPrimary, pattern, index } = matchObject;
-    return tag(index, isPrimary, pattern);
+    const { isPrimary, isFilterQuery, pattern, index } = matchObject;
+    return tag({ index, isPrimary, pattern, isFilterQuery });
   });
 };
 
 type Match = {
   pattern: string;
   isPrimary: boolean;
+  isFilterQuery: boolean;
   index: number;
+  offset: number;
 };
 export function highlightMatches(
   text: string,
   regexArray: string[],
-  primaryPattern?: string
+  primaryPattern?: string,
+  filterQueryPattern?: string
 ) {
+  // const regexArray = filterQueryPattern
+  //   ? [filterQueryPattern, ...patterns]
+  //   : patterns;
+
   let matches: Match[] = [];
   let highlightedText = text;
   if (!regexArray || regexArray.length === 0) {
@@ -100,11 +108,29 @@ export function highlightMatches(
     const parts = /\/(.*)\/(.*)/.exec(regexString);
     const regex = parts && new RegExp(parts[1], parts[2]);
     const isPrimary = !!(primaryPattern && regexString === primaryPattern);
-    highlightedText = highlightedText.replace(regex!, (match) => {
-      matches.push({ pattern: regexString, isPrimary, index });
-      return `${getHighlightStartMarker()}${match}${getHighlightEndMarker()}`;
-    });
+    const isFilterQuery = !!(
+      filterQueryPattern && regexString === filterQueryPattern
+    );
+    highlightedText = highlightedText.replace(
+      regex!,
+      (match, offset1, offset2) => {
+        // for whatever reason, offset is sometimes the 2nd element
+        // and sometimes the 3rd
+        const offset = isNumber(offset1) ? offset1 : offset2;
+        matches.push({
+          pattern: regexString,
+          isPrimary,
+          isFilterQuery,
+          index,
+          offset,
+        });
+        return `${getHighlightStartMarker()}${match}${getHighlightEndMarker()}`;
+      }
+    );
   });
+
+  // sort matches by the order that they appear in the string
+  const sortedMatches = sortBy(matches, "offset");
 
   highlightedText = escapeHTML(highlightedText);
 
@@ -112,14 +138,14 @@ export function highlightMatches(
     highlightedText,
     getHighlightStartMarker,
     getHighlightStartTag,
-    matches
+    sortedMatches
   );
 
   highlightedText = replaceWithTag(
     highlightedText,
     getHighlightEndMarker,
     getHighlightEndTag,
-    matches
+    sortedMatches
   );
 
   return highlightedText;
@@ -130,11 +156,13 @@ export const highlightPatterns = ({
   patterns,
   normalizedValue,
   currentTokenId,
+  filterQueryPattern,
 }: {
   value: string;
   patterns: any[];
   normalizedValue: string[];
   currentTokenId?: string;
+  filterQueryPattern?: string;
 }) => {
   if (currentTokenId) {
     // if a token is specified, distinguish between patterns that match that specific token
@@ -143,9 +171,14 @@ export const highlightPatterns = ({
     const normalizedValueIndex = normalizedValue.indexOf(currentTokenId);
     const currentTokenPattern = patterns[normalizedValueIndex];
 
-    return highlightMatches(value, patterns, currentTokenPattern);
+    return highlightMatches(
+      value,
+      patterns,
+      currentTokenPattern,
+      filterQueryPattern
+    );
   } else {
     // else just match all patterns
-    return highlightMatches(value, patterns);
+    return highlightMatches(value, patterns, undefined, filterQueryPattern);
   }
 };
