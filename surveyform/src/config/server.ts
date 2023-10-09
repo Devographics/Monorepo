@@ -48,7 +48,7 @@ export function serverConfig() {
      * @see https://vercel.com/docs/projects/environment-variables/system-environment-variables
      * @see https://render.com/docs/environment-variables
      */
-    monorepoCommit: process.env.VERCEL_GIT_COMMIT_SHA || process.env.RENDER_GIT_COMMIT
+    deploymentCommit: process.env.VERCEL_GIT_COMMIT_SHA || process.env.RENDER_GIT_COMMIT
 
   };
 }

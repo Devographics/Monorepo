@@ -212,20 +212,17 @@ export const responseBaseSchema: Schema = {
     type: String,
     clientMutable: true,
   },
-
   /**
    * Versionning the response
-   * TODO: track "entities" and "surveys" repos too? ideally the versions should be fetched alongside the data
-   * and provided directly by API
    */
-  monorepoCommit: {
+  deploymentCommit: {
     type: String,
     clientMutable: false,
     onCreate() {
-      return serverConfig().monorepoCommit
+      return serverConfig().deploymentCommit
     },
     onUpdate({ existingResponse }) {
-      return serverConfig().monorepoCommit || existingResponse?.monorepoCommit
+      return serverConfig().deploymentCommit || existingResponse?.deploymentCommit
     }
   }
 };
