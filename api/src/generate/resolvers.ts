@@ -178,7 +178,7 @@ const getGlobalMetadataResolver = (): ResolverType => async (parent, args) => {
     const isDevOrTest = !!(
         process.env.NODE_ENV && ['test', 'development'].includes(process.env.NODE_ENV)
     )
-    const surveys = await loadOrGetParsedSurveys({ includeDemo: isDevOrTest })
+    const surveys = await loadOrGetParsedSurveys()
     let filteredSurveys = surveys
     if (editionId) {
         filteredSurveys = filteredSurveys
@@ -195,10 +195,10 @@ const getGlobalMetadataResolver = (): ResolverType => async (parent, args) => {
 
 const getSurveyResolver =
     ({ survey }: { survey: SurveyApiObject }): ResolverType =>
-    (parent, args, context, info) => {
-        console.log('// survey resolver')
-        return survey
-    }
+        (parent, args, context, info) => {
+            console.log('// survey resolver')
+            return survey
+        }
 
 /*
 
@@ -210,19 +210,19 @@ copy of the survey metadata from memory
 */
 const getSurveyMetadataResolver =
     ({ survey }: { survey: SurveyApiObject }): ResolverType =>
-    async (parent, args, context, info) => {
-        console.log('// survey metadata resolver')
-        const parsedSurveys = await loadOrGetParsedSurveys()
-        const freshSurvey = parsedSurveys.find(s => s.id === survey.id)
-        return freshSurvey
-    }
+        async (parent, args, context, info) => {
+            console.log('// survey metadata resolver')
+            const parsedSurveys = await loadOrGetParsedSurveys()
+            const freshSurvey = parsedSurveys.find(s => s.id === survey.id)
+            return freshSurvey
+        }
 
 const getEditionResolver =
     ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
-    (parent, args, context, info) => {
-        console.log('// edition resolver')
-        return edition
-    }
+        (parent, args, context, info) => {
+            console.log('// edition resolver')
+            return edition
+        }
 
 /*
 
@@ -231,17 +231,17 @@ See getSurveyMetadataResolver() note above
 */
 const getEditionMetadataResolver =
     ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
-    async (parent, args, context, info) => {
-        console.log('// edition metadata resolver')
-        const freshEdition = await getEditionById(edition.id)
-        const sections = freshEdition.sections.map(section => ({
-            ...section,
-            questions: section.questions
-                .filter(question => question?.editions?.includes(edition.id))
-                .map(q => ({ ...q, editionId: edition.id }))
-        }))
-        return { ...freshEdition, surveyId: survey.id, survey, sections }
-    }
+        async (parent, args, context, info) => {
+            console.log('// edition metadata resolver')
+            const freshEdition = await getEditionById(edition.id)
+            const sections = freshEdition.sections.map(section => ({
+                ...section,
+                questions: section.questions
+                    .filter(question => question?.editions?.includes(edition.id))
+                    .map(q => ({ ...q, editionId: edition.id }))
+            }))
+            return { ...freshEdition, surveyId: survey.id, survey, sections }
+        }
 
 const getSectionResolver =
     ({
@@ -253,10 +253,10 @@ const getSectionResolver =
         edition: EditionApiObject
         section: SectionApiObject
     }): ResolverType =>
-    (parent, args, context, info) => {
-        console.log('// section resolver')
-        return section
-    }
+        (parent, args, context, info) => {
+            console.log('// section resolver')
+            return section
+        }
 
 const getQuestionResolverMap = async ({
     questionObject
@@ -281,10 +281,10 @@ const getQuestionResolverMap = async ({
 
 const getQuestionResolver =
     (data: ResolverParent): ResolverType =>
-    async () => {
-        console.log('// question resolver')
-        return data
-    }
+        async () => {
+            console.log('// question resolver')
+            return data
+        }
 
 /*
 
@@ -385,7 +385,7 @@ Credit
 
 */
 export const creditResolverMap = {
-    entity: async ({ id }: { id: string }, {}, context: RequestContext) =>
+    entity: async ({ id }: { id: string }, { }, context: RequestContext) =>
         await getEntity({ id, context })
 }
 
@@ -456,12 +456,12 @@ export const questionMetadataResolverMap = {
     //     return [sectionSegment, questionSegment].join('.')
     // },
 
-    entity: async (parent: QuestionApiObject, {}, context: RequestContext) => {
+    entity: async (parent: QuestionApiObject, { }, context: RequestContext) => {
         const { id } = parent
         return await getEntity({ id, context })
     },
 
-    options: async (parent: QuestionApiObject, {}, context: RequestContext) => {
+    options: async (parent: QuestionApiObject, { }, context: RequestContext) => {
         const { template, options, editionId } = parent
 
         const optionEntities = await getEntities({
