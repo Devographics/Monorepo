@@ -4,13 +4,7 @@ import {
   fetchEntities,
 } from "@devographics/fetch";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
-import {
-  getEditionQuestionById,
-  getQuestionResponsesCount,
-  getUnnormalizedResponses,
-  getAllResponses,
-} from "../normalize/helpers";
-import { getEditionQuestions } from "../helpers/getEditionQuestions";
+import { getEditionQuestionById, getAllResponses } from "../normalize/helpers";
 import get from "lodash/get";
 import { ResultsSubFieldEnum } from "@devographics/types";
 import pick from "lodash/pick";

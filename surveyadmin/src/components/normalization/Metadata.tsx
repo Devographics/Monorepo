@@ -10,6 +10,7 @@ import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject
 import type { QuestionWithSection } from "~/lib/normalization/types";
 import { getFormPaths } from "@devographics/templates";
 import {
+  getAllResponsesSelector,
   getResponsesSelector,
   getUnnormalizedResponsesSelector,
 } from "~/lib/normalization/helpers/getSelectors";
@@ -49,7 +50,7 @@ const Metadata = ({
     edition,
     questionObject,
   });
-  const normSelector = getUnnormalizedResponsesSelector({
+  const normSelector = getAllResponsesSelector({
     edition,
     questionObject,
   });

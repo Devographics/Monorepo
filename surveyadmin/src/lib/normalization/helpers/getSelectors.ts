@@ -67,16 +67,19 @@ one item that is not equal to "" (i.e. not an empty strings)
 */
 type SelectorOptions = {
   isArray?: boolean;
+  removeEmpty?: boolean;
 };
 export const getExistsSelector = (options: SelectorOptions = {}) => {
-  const { isArray = false } = options;
+  const { isArray = false, removeEmpty = true } = options;
   const selector = {
     $exists: true,
   };
-  if (isArray) {
-    selector["$elemMatch"] = { $nin: ignoreValues };
-  } else {
-    selector["$nin"] = ignoreValues;
+  if (removeEmpty) {
+    if (isArray) {
+      selector["$elemMatch"] = { $nin: ignoreValues };
+    } else {
+      selector["$nin"] = ignoreValues;
+    }
   }
   return selector;
 };
@@ -99,7 +102,7 @@ export const getUnnormalizedResponsesSelector = ({
   if (rawFieldPath && normalizedFieldPath) {
     const selector = {
       editionId: edition.id,
-      [rawFieldPath]: existsSelector,
+      // [rawFieldPath]: existsSelector,
       $or: [
         { [normalizedFieldPath]: [] },
         { [normalizedFieldPath]: { $exists: false } },
@@ -127,6 +130,7 @@ export const getAllResponsesSelector = ({
   // freeform values
   const existsSelector = getExistsSelector({
     isArray: questionObject.template === "textList",
+    removeEmpty: false, // empty values should already be removed
   });
   if (rawFieldPath && normalizedFieldPath) {
     const selector = {
