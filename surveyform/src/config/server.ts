@@ -41,7 +41,15 @@ export function serverConfig() {
     isTest:
       process.env.NODE_ENV === "test" ||
       process.env.NEXT_PUBLIC_NODE_ENV === "test",
-    debugMail: !!process.env.DEBUG_MAIL
+    debugMail: !!process.env.DEBUG_MAIL,
+
+    /** 
+     * This is host specific
+     * @see https://vercel.com/docs/projects/environment-variables/system-environment-variables
+     * @see https://render.com/docs/environment-variables
+     */
+    monorepoCommit: process.env.VERCEL_GIT_COMMIT_SHA || process.env.RENDER_GIT_COMMIT
+
   };
 }
 

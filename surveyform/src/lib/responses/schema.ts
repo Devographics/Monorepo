@@ -1,3 +1,4 @@
+"use server"
 import {
   SurveyMetadata,
   EditionMetadata,
@@ -9,6 +10,7 @@ import { nanoid } from "nanoid";
 import { getCompletionPercentage, getKnowledgeScore } from "./helpers";
 import { getFormPaths } from "@devographics/templates";
 import { captureException } from "@sentry/nextjs";
+import { serverConfig } from "~/config/server";
 
 export enum Actions {
   CREATE = "create",
@@ -130,12 +132,14 @@ export const responseBaseSchema: Schema = {
     type: Boolean,
     clientMutable: true, // ?
   },
+  /** state_of_js */
   surveyId: {
     type: String,
     requiredDuring: Actions.CREATE,
     onCreate: ({ survey }) => survey.id,
     clientMutable: true,
   },
+  /** js2023 */
   editionId: {
     type: String,
     requiredDuring: Actions.CREATE,
@@ -208,6 +212,22 @@ export const responseBaseSchema: Schema = {
     type: String,
     clientMutable: true,
   },
+
+  /**
+   * Versionning the response
+   * TODO: track "entities" and "surveys" repos too? ideally the versions should be fetched alongside the data
+   * and provided directly by API
+   */
+  monorepoCommit: {
+    type: String,
+    clientMutable: false,
+    onCreate() {
+      return serverConfig().monorepoCommit
+    },
+    onUpdate({ existingResponse }) {
+      return serverConfig().monorepoCommit || existingResponse?.monorepoCommit
+    }
+  }
 };
 
 export const createFieldType = ({

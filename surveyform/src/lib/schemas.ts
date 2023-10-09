@@ -31,6 +31,7 @@ export interface SchemaObject<T> {
    */
   clientMutable?: boolean;
   isArray?: boolean;
+  /** @returns the value to set on creation */
   onCreate?: OnCreate<
     T extends StringConstructor
     ? string
@@ -40,6 +41,7 @@ export interface SchemaObject<T> {
     ? boolean
     : Date
   >;
+  /** @returns the value to set on updates */
   onUpdate?: OnUpdate<
     T extends StringConstructor
     ? string

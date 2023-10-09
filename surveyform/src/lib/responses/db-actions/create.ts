@@ -2,13 +2,12 @@ import { connectToRedis } from "~/lib/server/redis";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { Actions } from "~/lib/validation";
 import { fetchEditionMetadata } from "@devographics/fetch";
-import { AppName, EditionMetadata } from "@devographics/types";
+import { EditionMetadata } from "@devographics/types";
 import { getResponseSchema } from "~/lib/responses/schema";
 import { restoreTypes, runFieldCallbacks, OnCreateProps } from "~/lib/schemas";
 import type { ResponseDocument } from "@devographics/types";
 import { HandlerError } from "~/lib/handler-error";
 import { validateResponse } from "./validate";
-import { Document } from "mongodb";
 
 export const duplicateResponseErrorId = "duplicate_response";
 
