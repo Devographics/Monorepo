@@ -78,6 +78,7 @@ query ${editionId}MetadataQuery {
           template
           questions {
             id
+            sectionId
             intlId
             i18nNamespace
             yearAdded
@@ -93,6 +94,7 @@ query ${editionId}MetadataQuery {
             randomize
             optionsAreNumeric
             # optionsAreRange
+            matchType
             matchTags
             options {
               id

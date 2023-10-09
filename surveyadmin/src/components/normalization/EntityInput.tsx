@@ -25,21 +25,11 @@ const EntityInput = ({
       <p>
         <label htmlFor="entities">Pick Entity</label>
       </p>
-      <input
-        list="entities-list"
-        id="entities"
-        name="entities"
-        value={selectedId}
-        onChange={(e) => {
-          const value = e.target.value;
-          setSelectedId(value);
-        }}
+      <EntityList
+        entities={entities}
+        selectedId={selectedId}
+        setSelectedId={setSelectedId}
       />
-      <datalist id="entities-list">
-        {entities.map((entity) => (
-          <option key={entity.id} value={entity.id}></option>
-        ))}
-      </datalist>
       {selectedId ? (
         entity ? (
           <EntityItem entity={entity} />
@@ -73,6 +63,28 @@ const EntityInput = ({
         )
       ) : null}
     </div>
+  );
+};
+
+export const EntityList = ({ entities, selectedId, setSelectedId }) => {
+  return (
+    <>
+      <input
+        list="entities-list"
+        id="entities"
+        name="entities"
+        value={selectedId}
+        onChange={(e) => {
+          const value = e.target.value;
+          setSelectedId(value);
+        }}
+      />
+      <datalist id="entities-list">
+        {entities.map((entity) => (
+          <option key={entity.id} value={entity.id}></option>
+        ))}
+      </datalist>
+    </>
   );
 };
 

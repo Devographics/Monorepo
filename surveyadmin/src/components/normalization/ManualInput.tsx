@@ -3,6 +3,7 @@ import {
   QuestionMetadata,
   ResponseData,
   EditionMetadata,
+  Entity,
 } from "@devographics/types";
 import { useState } from "react";
 import trim from "lodash/trim";
@@ -12,6 +13,7 @@ import { addManualNormalizations } from "~/lib/normalization/services";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
 import { FieldValue } from "./FieldValue";
+import { EntityList } from "./EntityInput";
 
 const getCacheKey = (edition, question) =>
   `normalization_presets__${edition.id}__${question.id}`;
@@ -25,6 +27,7 @@ const ManualInput = ({
   normRespId,
   rawValue,
   rawPath,
+  entities,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
@@ -34,6 +37,7 @@ const ManualInput = ({
   normRespId: string;
   rawValue: string;
   rawPath: string;
+  entities: Entity[];
 }) => {
   const cacheKey = getCacheKey(edition, question);
   const [value, setValue] = useState("");
@@ -108,10 +112,16 @@ const ManualInput = ({
       </p>
       <h5>Manual IDs</h5>
       <form className="manualinput-form">
-        <input
+        {/* <input
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
+        /> */}
+
+        <EntityList
+          entities={entities}
+          selectedId={value}
+          setSelectedId={setValue}
         />
         <button aria-busy={loading} onClick={handleSubmit}>
           Renormalize

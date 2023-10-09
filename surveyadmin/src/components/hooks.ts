@@ -142,9 +142,7 @@ export const highlightPatterns = ({
 
     const normalizedValueIndex = normalizedValue.indexOf(currentTokenId);
     const currentTokenPattern = patterns[normalizedValueIndex];
-    const otherTokensPatterns = patterns.filter(
-      (value, index) => index !== normalizedValueIndex
-    );
+
     return highlightMatches(value, patterns, currentTokenPattern);
   } else {
     // else just match all patterns

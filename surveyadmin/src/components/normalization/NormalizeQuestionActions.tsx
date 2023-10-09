@@ -83,33 +83,34 @@ const Actions = (props: ActionProps) => {
         </select>{" "}
         &gt;{" "} */}
           {/* <Options {...props} /> */}
+          <div data-tooltip="Only run normalization on unnormalized answers">
+            <LoadingButton
+              action={async () => {
+                const result = await normalizeQuestionResponses({
+                  surveyId: survey.id,
+                  editionId: edition.id,
+                  questionId: question.id,
+                  responsesIds: responses.map((r) => r.responseId),
+                });
+                setNormalizeMissingResult(result.data);
+                console.log(result);
+              }}
+              label="Normalize Only Missing Values"
+            />
+          </div>
 
-          <LoadingButton
-            action={async () => {
-              const result = await normalizeQuestionResponses({
-                surveyId: survey.id,
-                editionId: edition.id,
-                questionId: question.id,
-                responsesIds: responses.map((r) => r.responseId),
-              });
-              setNormalizeMissingResult(result.data);
-              console.log(result);
-            }}
-            label="Normalize Only Missing Values"
-            tooltip="Only run normalization on unnormalized answers"
-          />
-
-          <button
-            onClick={() => {
-              initializeSegments({
-                responsesCount,
-                segmentSize: defaultSegmentSize,
-              });
-            }}
-            data-tooltip="Re-run normalization on all answers"
-          >
-            Normalize All
-          </button>
+          <div data-tooltip="Re-run normalization on all answers">
+            <button
+              onClick={() => {
+                initializeSegments({
+                  responsesCount,
+                  segmentSize: defaultSegmentSize,
+                });
+              }}
+            >
+              Normalize All
+            </button>
+          </div>
         </div>
         {/* <div className="secondary">
         <button

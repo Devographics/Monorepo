@@ -131,5 +131,8 @@
   blockquote {
     margin: 0;
     padding: 0 0 0 5px;
+    width: 100%;
+    overflow-x: scroll;
+    max-width: 500px;
   }
 }

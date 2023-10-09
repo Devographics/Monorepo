@@ -39,6 +39,7 @@ const Fields = (props: {
 }) => {
   const [showResponses, setShowResponses] = useState(false);
   const [showIds, setShowIds] = useState(false);
+  const [filter, setFilter] = useState("");
 
   const {
     survey,
@@ -51,7 +52,7 @@ const Fields = (props: {
     entities,
   } = props;
 
-  const responses = props[`${variant}Responses`];
+  const responses = props[`${variant}Responses`] as NormalizationResponse[];
 
   if (!responses) return <p>Nothing to normalize</p>;
 
@@ -75,6 +76,9 @@ const Fields = (props: {
     entities,
   };
 
+  const filteredResponses = filter
+    ? responses.filter((r) => r.value.includes(filter))
+    : responses;
   return (
     <div>
       <h3>
@@ -106,6 +110,17 @@ const Fields = (props: {
             </p>
           )}
 
+          <p>
+            <label htmlFor="search">
+              Filter: ({filteredResponses.length} results)
+            </label>
+            <input
+              type="search"
+              id="search"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+          </p>
           <table>
             <thead>
               <tr>
@@ -117,7 +132,7 @@ const Fields = (props: {
               </tr>
             </thead>
             <tbody>
-              {responses.map(
+              {filteredResponses.map(
                 (
                   { _id, responseId, value, normalizedValue, patterns },
                   index
@@ -235,6 +250,7 @@ const Field = ({
                 normRespId={_id}
                 rawValue={value}
                 rawPath={rawPath}
+                entities={entities}
               />
             </Dialog>
           )}

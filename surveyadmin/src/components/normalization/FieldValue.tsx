@@ -13,7 +13,12 @@ export const FieldValue = ({
 }) => {
   const getValue = (value: string) => {
     return patterns.length > 0 && normalizedValue.length > 0
-      ? highlightPatterns({ value, patterns, normalizedValue, currentTokenId })
+      ? highlightPatterns({
+          value,
+          patterns,
+          normalizedValue,
+          currentTokenId,
+        })
       : escapeHTML(value);
   };
 
@@ -29,7 +34,7 @@ export const FieldValue = ({
           />
         ))
       ) : (
-        <blockquote>{value}</blockquote>
+        <blockquote dangerouslySetInnerHTML={{ __html: getValue(value) }} />
       )}
     </div>
   );

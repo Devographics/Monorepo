@@ -94,15 +94,35 @@ const Metadata = ({
                   Selector: <textarea>{JSON.stringify(normSelector)}</textarea>
                 </li>
                 <li>
-                  Match Tags:{" "}
-                  <span>
-                    <code>{question.id} [id]</code>{" "}
-                  </span>
-                  {question.matchTags?.map((tag) => (
-                    <span key={tag}>
-                      <code>{tag}</code>{" "}
+                  Match Type:{" "}
+                  {questionObject.matchType === "multiple" ? (
+                    <span>
+                      <strong>Multiple tokens</strong> per answer can be
+                      matched.
                     </span>
-                  ))}
+                  ) : (
+                    <span>
+                      Only a <strong>single token</strong> per answer can be
+                      matched.{" "}
+                    </span>
+                  )}
+                </li>
+                <li>
+                  <p>
+                    Match Tags:{" "}
+                    <span>
+                      <code>{question.id} [id]</code>{" "}
+                    </span>
+                    {question.matchTags?.map((tag) => (
+                      <span key={tag}>
+                        <code>{tag}</code>{" "}
+                      </span>
+                    ))}
+                  </p>
+                  <p>
+                    Note: match tags that are higher up in the list are given
+                    higher priority.
+                  </p>
                 </li>
               </ul>
             </p>
