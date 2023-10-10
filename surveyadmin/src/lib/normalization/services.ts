@@ -6,7 +6,7 @@ import {
   NormalizeQuestionResponsesArgs,
   NormalizeResponsesArgs,
   LoadNormalizationPercentagesArgs,
-  NormalizationPercentages,
+  NormalizationProgressStats,
 } from "./actions";
 import { NormalizeInBulkResult } from "./types";
 
@@ -126,7 +126,7 @@ export async function loadNormalizationPercentages(
       // body: JSON.stringify(params),
     }
   );
-  const result: { data?: NormalizationPercentages; error: any } =
+  const result: { data?: NormalizationProgressStats; error: any } =
     await fetchRes.json();
   return result;
 }

@@ -11,7 +11,15 @@ import { getNormalizableQuestions } from "~/lib/normalization/helpers/getNormali
 import { routes } from "~/lib/routes";
 import NormalizeResponses from "~/components/normalization/NormalizeResponses";
 import { loadNormalizationPercentages } from "~/lib/normalization/services";
-import { getNormalizationPercentages } from "~/lib/normalization/actions";
+import {
+  NormalizationProgressStats,
+  getNormalizationPercentages,
+} from "~/lib/normalization/actions";
+import {
+  EditionMetadata,
+  QuestionMetadata,
+  SurveyMetadata,
+} from "@devographics/types";
 
 export default async function Page({ params }) {
   const { surveyId, editionId } = params;
@@ -100,8 +108,18 @@ export default async function Page({ params }) {
 //   );
 // };
 
-const Question = ({ survey, edition, question, normalizationPercentages }) => {
-  const percentage = normalizationPercentages[question.id];
+const Question = ({
+  survey,
+  edition,
+  question,
+  normalizationPercentages,
+}: {
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  question: QuestionMetadata;
+  normalizationPercentages: NormalizationProgressStats;
+}) => {
+  const stats = normalizationPercentages[question.id];
   return (
     <tr>
       <th>
@@ -116,10 +134,12 @@ const Question = ({ survey, edition, question, normalizationPercentages }) => {
         </Link>
       </th>
       <th>
-        {percentage && (
+        {stats && (
           <div className="normalization-percentage">
-            <progress value={percentage} max="100"></progress>{" "}
-            <span>{percentage}%</span>
+            <progress value={stats.percentage} max="100"></progress>{" "}
+            <span>
+              {stats.percentage}% ({stats.normalizedCount}/{stats.totalCount})
+            </span>
           </div>
         )}
       </th>

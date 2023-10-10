@@ -4,6 +4,7 @@ import {
   EditionMetadata,
   ResponseData,
   SurveyMetadata,
+  Entity,
 } from "@devographics/types";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
@@ -24,6 +25,7 @@ const Metadata = ({
   normalizedResponses,
   unnormalizedResponses,
   questionData,
+  entities,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
@@ -33,6 +35,7 @@ const Metadata = ({
   normalizedResponses: NormalizationResponse[];
   unnormalizedResponses: NormalizationResponse[];
   questionData: ResponseData;
+  entities: Entity[];
 }) => {
   const [showDbInfo, setShowDbInfo] = useState(false);
 
@@ -116,7 +119,11 @@ const Metadata = ({
                     </span>
                     {question.matchTags?.map((tag) => (
                       <span key={tag}>
-                        <code>{tag}</code>{" "}
+                        <code>
+                          {tag} (
+                          {entities.filter((e) => e.tags?.includes(tag)).length}
+                          )
+                        </code>{" "}
                       </span>
                     ))}
                   </p>

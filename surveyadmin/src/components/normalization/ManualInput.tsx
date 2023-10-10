@@ -32,7 +32,7 @@ const ManualInput = ({
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionMetadata;
-  questionData: ResponseData;
+  questionData?: ResponseData;
   responseId: string;
   normRespId: string;
   rawValue: string;
@@ -44,9 +44,9 @@ const ManualInput = ({
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<NormalizeInBulkResult | null>(null);
   const [localPresets, setLocalPresets] = useLocalStorage(cacheKey, []);
-  const entityIds = questionData.currentEdition.buckets
-    .map((b) => b.id)
-    .slice(0, 20);
+  const entityIds = questionData
+    ? questionData.currentEdition.buckets.map((b) => b.id).slice(0, 20)
+    : [];
 
   const handleSubmit = async (e) => {
     setLoading(true);

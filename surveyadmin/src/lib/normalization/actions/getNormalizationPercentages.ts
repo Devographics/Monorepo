@@ -15,8 +15,15 @@ export type LoadNormalizationPercentagesArgs = {
   editionId: string;
 };
 
-export type NormalizationPercentages = {
-  [key in string]: number;
+export type NormalizationProgressStats = {
+  [key in string]: NormalizationProgressStat;
+};
+
+export type NormalizationProgressStat = {
+  totalCount: number;
+  normalizedCount: number;
+  unnormalizedCount: number;
+  percentage: number;
 };
 
 export const getNormalizationPercentages = async (
@@ -43,10 +50,10 @@ export const getNormalizationPercentages = async (
     throw new Error(`Could not find edition with id ${editionId}`);
   }
 
-  return await getFromCache<NormalizationPercentages>({
+  return await getFromCache<NormalizationProgressStats>({
     key: getNormalizationPercentagesCacheKey({ survey, edition }),
     fetchFunction: async () => {
-      const percentages = {};
+      const stats = {};
       const questions = getNormalizableQuestions({ survey, edition });
       for (const question of questions) {
         const { data, duration: getAllResponsesDuration } =
@@ -54,20 +61,27 @@ export const getNormalizationPercentages = async (
             survey,
             edition,
             question,
-
             shouldGetFromCache,
           });
 
         const { normalizationResponses } = data;
-        const { normalizedResponses, unnormalizedResponses } = splitResponses(
-          normalizationResponses
-        );
 
-        percentages[question.id] = Math.round(
-          (normalizedResponses.length * 100) / normalizationResponses.length
-        );
+        if (normalizationResponses) {
+          const { normalizedResponses, unnormalizedResponses } = splitResponses(
+            normalizationResponses
+          );
+
+          stats[question.id] = {
+            totalCount: normalizationResponses.length,
+            normalizedCount: normalizedResponses.length,
+            unnormalizedCount: unnormalizedResponses.length,
+            percentage: Math.round(
+              (normalizedResponses.length * 100) / normalizationResponses.length
+            ),
+          };
+        }
       }
-      return percentages;
+      return stats;
     },
 
     shouldGetFromCache,
