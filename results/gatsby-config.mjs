@@ -50,15 +50,15 @@ export default {
         'gatsby-plugin-bundle-stats',
         // `gatsby-plugin-perf-budgets`,
         // `gatsby-plugin-webpack-bundle-analyser-v2`,
-        {
-            resolve: 'gatsby-plugin-fathom',
-            options: {
-                // Your custom domain, defaults to `cdn.usefathom.com`
-                trackingUrl: 'cdn.usefathom.com',
-                // Unique site id
-                siteId: process.env.FATHOM_ID
-            }
-        },
+        // {
+        //     resolve: 'gatsby-plugin-fathom',
+        //     options: {
+        //         // Your custom domain, defaults to `cdn.usefathom.com`
+        //         trackingUrl: 'cdn.usefathom.com',
+        //         // Unique site id
+        //         siteId: process.env.FATHOM_ID
+        //     }
+        // },
         {
             resolve: `gatsby-plugin-plausible`,
             options: {
