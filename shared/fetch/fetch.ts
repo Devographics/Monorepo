@@ -6,7 +6,8 @@
 import NodeCache from 'node-cache'
 import { initRedis, fetchJson as fetchRedis, storeRedis } from '@devographics/redis'
 import { logToFile } from '@devographics/debug'
-import { GetFromCacheOptions } from './types'
+import { CacheType, GetFromCacheOptions, SourceType } from './types'
+import { compressJSON, decompressJSON } from './compress'
 
 export const memoryCache = new NodeCache({
     // This TTL must stay short, because we manually invalidate this cache
@@ -36,15 +37,18 @@ function removeNull(obj: any): any {
     return Array.isArray(obj) ? Object.values(clean) : clean
 }
 
-export enum SourceType {
-    REDIS = 'redis',
-    MEMORY = 'memory',
-    API = 'api'
-}
 interface Metadata {
     key: string
     timestamp: string
     source: SourceType
+    isCompressed?: boolean
+}
+
+export const cacheFunctions = {
+    [CacheType.REDIS]: {
+        fetch: fetchRedis,
+        store: storeRedis
+    }
 }
 
 export enum FetchPayloadResultType {
@@ -71,9 +75,12 @@ TODO: figure out why type inference didn't work and then replace
 //     data: T
 // }
 
-export interface FetchPayloadSuccessOrError<T> {
+export interface FetchPayload<T> {
     ___metadata: Metadata
-    data: T
+    data: T | string
+}
+
+export interface FetchPayloadSuccessOrError<T> extends FetchPayload<T> {
     error?: any
     cacheKey?: string
     duration: number
@@ -96,18 +103,22 @@ const setResultSource = (result: any, source: SourceType) => {
         ___metadata: { ...result.___metadata, source }
     }
 }
-async function getFromRedisOrSource<T = any>({
+async function getFromCacheOrSource<T = any>({
     key,
     fetchFromSource,
     calledFromLog,
-    shouldUpdateCache = true
+    shouldUpdateCache = true,
+    shouldCompress = false,
+    cacheType = CacheType.REDIS
 }: {
     key: string
     fetchFromSource: () => Promise<T>
     calledFromLog: any
     shouldUpdateCache?: boolean
+    shouldCompress?: boolean
+    cacheType?: CacheType.REDIS
 }) {
-    const redisData = await fetchRedis<FetchPayloadSuccessOrError<T>>(key)
+    const redisData = await fetchPayload<T>(key, { cacheType })
     if (redisData) {
         console.debug(`🔵 [${key}] in-memory cache miss, redis hit ${calledFromLog}`)
         return redisData
@@ -117,10 +128,10 @@ async function getFromRedisOrSource<T = any>({
     const processedResult = processFetchData<T>(result, SourceType.API, key)
     if (shouldUpdateCache) {
         // store in Redis
-        await storeRedis<FetchPayloadSuccessOrError<T>>(
-            key,
-            setResultSource(processedResult, SourceType.REDIS)
-        )
+        await storePayload<T>(key, setResultSource(processedResult, SourceType.REDIS), {
+            shouldCompress,
+            cacheType
+        })
     }
     return processedResult
 }
@@ -137,7 +148,9 @@ export async function getFromCache<T = any>({
     redisToken,
     shouldGetFromCache: shouldGetFromCacheOptions,
     shouldUpdateCache = true,
-    shouldThrow = true
+    shouldThrow = true,
+    shouldCompress = false,
+    cacheType = CacheType.REDIS
 }: GetFromCacheOptions<T>) {
     const startAt = new Date()
     let inMemory = false
@@ -152,22 +165,23 @@ export async function getFromCache<T = any>({
         return processFetchData<T>(data, source, key)
     }
 
-    let resultPromise: Promise<FetchPayloadSuccessOrError<T>>
+    let resultPromise: Promise<FetchPayload<T>>
 
     try {
         // 1. we have the a promise that resolve to the data in memory => return that
         if (shouldGetFromCache && memoryCache.has(key)) {
             console.debug(`🟢 [${key}] in-memory cache hit ${calledFromLog}`)
             inMemory = true
-            resultPromise = memoryCache.get<Promise<FetchPayloadSuccessOrError<T>>>(key)!
+            resultPromise = memoryCache.get<Promise<FetchPayload<T>>>(key)!
         } else {
             // 2. store a promise that will first look in Redis, then in the main db
             if (shouldGetFromCache) {
-                resultPromise = getFromRedisOrSource<T>({
+                resultPromise = getFromCacheOrSource<T>({
                     key,
                     fetchFromSource,
                     calledFromLog,
-                    shouldUpdateCache
+                    shouldUpdateCache,
+                    shouldCompress
                 })
             } else {
                 console.debug(
@@ -176,16 +190,20 @@ export async function getFromCache<T = any>({
                 resultPromise = fetchAndProcess<T>(SourceType.API)
                 if (shouldUpdateCache) {
                     const result = await resultPromise
-                    // store in Redis
-                    await storeRedis<FetchPayloadSuccessOrError<T>>(key, {
-                        ...result,
-                        ___metadata: { ...result.___metadata, source: SourceType.REDIS }
-                    })
+                    // store in Redis or other
+                    await storePayload<T>(
+                        key,
+                        {
+                            ...result,
+                            ___metadata: { ...result.___metadata, source: SourceType.REDIS }
+                        },
+                        { shouldCompress, cacheType }
+                    )
                 }
             }
             memoryCache.set(key, resultPromise)
         }
-        let result = await resultPromise
+        let result = (await resultPromise) as FetchPayloadSuccessOrError<T>
         if (inMemory) {
             result = setResultSource(result, SourceType.MEMORY)
         } else {
@@ -268,4 +286,55 @@ export const fetchGraphQLApi = async <T = any>({
     }
 
     return json.data || {}
+}
+
+type StorePayloadOptions = {
+    shouldCompress: boolean
+    cacheType: CacheType
+}
+
+// store payload in cache, compressing it if needed
+export async function storePayload<T>(
+    key: string,
+    payload: FetchPayload<T>,
+    options: StorePayloadOptions = { shouldCompress: false, cacheType: CacheType.REDIS }
+): Promise<boolean> {
+    const { shouldCompress, cacheType } = options
+    const storeFunction = cacheFunctions[cacheType]['store']
+
+    if (shouldCompress) {
+        const compressedData = await compressJSON(payload.data)
+        const compressedPayload = {
+            ...payload,
+            ___metadata: { ...payload.___metadata, isCompressed: true },
+            data: compressedData
+        }
+        return await storeFunction(key, compressedPayload)
+    } else {
+        return await storeFunction(key, payload)
+    }
+}
+
+type FetchPayloadOptions = {
+    cacheType: CacheType
+}
+
+// store payload in cache, compressing it if needed
+export async function fetchPayload<T>(
+    key: string,
+    options: FetchPayloadOptions = { cacheType: CacheType.REDIS }
+): Promise<FetchPayload<T>> {
+    const { cacheType } = options
+    const fetchFunction = cacheFunctions[cacheType]['fetch']
+
+    const payload = await fetchFunction(key)
+    if (payload?.___metadata?.isCompressed) {
+        const uncompressedData = await decompressJSON(payload.data)
+        return {
+            ...payload,
+            data: uncompressedData
+        }
+    } else {
+        return payload
+    }
 }
