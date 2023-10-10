@@ -10,6 +10,8 @@ import {
 import { getNormalizableQuestions } from "~/lib/normalization/helpers/getNormalizableQuestions";
 import { routes } from "~/lib/routes";
 import NormalizeResponses from "~/components/normalization/NormalizeResponses";
+import { loadNormalizationPercentages } from "~/lib/normalization/services";
+import { getNormalizationPercentages } from "~/lib/normalization/actions";
 
 export default async function Page({ params }) {
   const { surveyId, editionId } = params;
@@ -28,6 +30,11 @@ export default async function Page({ params }) {
     survey,
     edition,
   });
+
+  const { data: normalizationPercentages } = await getNormalizationPercentages(
+    params
+  );
+
   return (
     <div>
       <Breadcrumbs surveys={surveys} survey={survey} edition={edition} />
@@ -47,14 +54,25 @@ export default async function Page({ params }) {
       />
 
       <h4>Normalizeable Questions</h4>
-      {questions.map((question) => (
-        <Question
-          key={question.id}
-          survey={survey}
-          edition={edition}
-          question={question}
-        />
-      ))}
+      <table className="questions-list">
+        <thead>
+          <tr>
+            <th>Question</th>
+            <th>Normalization Percentage</th>
+          </tr>
+        </thead>
+        <tbody>
+          {questions.map((question) => (
+            <Question
+              key={question.id}
+              survey={survey}
+              edition={edition}
+              question={question}
+              normalizationPercentages={normalizationPercentages}
+            />
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -82,18 +100,29 @@ export default async function Page({ params }) {
 //   );
 // };
 
-const Question = ({ survey, edition, question }) => {
+const Question = ({ survey, edition, question, normalizationPercentages }) => {
+  const percentage = normalizationPercentages[question.id];
   return (
-    <li>
-      <Link
-        href={routes.admin.normalization.href({
-          surveyId: survey.id,
-          editionId: edition.id,
-          questionId: question.id,
-        })}
-      >
-        {question.id}
-      </Link>
-    </li>
+    <tr>
+      <th>
+        <Link
+          href={routes.admin.normalization.href({
+            surveyId: survey.id,
+            editionId: edition.id,
+            questionId: question.id,
+          })}
+        >
+          {question.id}
+        </Link>
+      </th>
+      <th>
+        {percentage && (
+          <div className="normalization-percentage">
+            <progress value={percentage} max="100"></progress>{" "}
+            <span>{percentage}%</span>
+          </div>
+        )}
+      </th>
+    </tr>
   );
 };

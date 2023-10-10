@@ -3,8 +3,8 @@ import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import {
   getEditionQuestionById,
   getQuestionResponsesCount,
-  getUnnormalizedResponses,
 } from "../normalize/helpers";
+import { getUnnormalizedResponses } from "../helpers/getUnnormalizedResponses";
 import { getEditionQuestions } from "../helpers/getEditionQuestions";
 import get from "lodash/get";
 import { ResultsSubFieldEnum } from "@devographics/types";

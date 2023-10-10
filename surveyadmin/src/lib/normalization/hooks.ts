@@ -23,6 +23,7 @@ export type ResponsesData = {
   responsesCount: number;
   entities: Entity[];
   questionResult: FetchPayloadSuccessOrError<ResponseData>;
+  durations: any;
 };
 
 export const useUnnormalizedData = (params: {
