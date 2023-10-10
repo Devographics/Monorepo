@@ -31,7 +31,11 @@ function removeNull(obj: any): any {
     let clean = Object.fromEntries(
         Object.entries(obj)
             .map(([k, v]) => [k, v === Object(v) ? removeNull(v) : v])
-            .filter(([_, v]) => v != null && (v !== Object(v) || Object.keys(v).length))
+            .filter(([_, v]) => v != null && (v !== Object(v)))
+        // we keep empty objects around 
+        // otherwise "data" type  (empty objects are objects)
+        // or boolean casts (empty objects are truthy)
+        // might become inconsistent
     )
     return Array.isArray(obj) ? Object.values(clean) : clean
 }

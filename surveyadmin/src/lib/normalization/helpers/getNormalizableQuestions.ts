@@ -2,6 +2,9 @@ import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { getEditionQuestions } from "./getEditionQuestions";
 import { getQuestionObject } from "./getQuestionObject";
 
+/**
+ * Normalizable = question has a free text "other" path
+ */
 export const getNormalizableQuestions = ({
   survey,
   edition,
