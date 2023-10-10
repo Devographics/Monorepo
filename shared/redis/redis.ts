@@ -4,7 +4,7 @@ import { EnvVar, getEnvVar } from '@devographics/helpers'
 import { Redis } from '@upstash/redis'
 
 // 30 mn (but only 3 in dev)
-const TTL_SECONDS = process.env.NODE_ENV === "development" ? 60 * 3 : 60 * 30
+const TTL_SECONDS = process.env.NODE_ENV === 'development' ? 60 * 3 : 60 * 30
 
 let redis: Redis
 
@@ -41,21 +41,26 @@ export const getRedisClient = () => {
 // => use either a local or a github load when it happen
 
 export async function storeRedis<T>(key: string, val: T): Promise<boolean> {
-    const redisClient = getRedisClient()
-    // EX = Expiration time in seconds
-    // io-redis version
-    // const res = await redisClient.set(key, JSON.stringify(val), 'EX', TTL_SECONDS)
-    // upstash-redis version
+    try {
+        const redisClient = getRedisClient()
+        // EX = Expiration time in seconds
+        // io-redis version
+        // const res = await redisClient.set(key, JSON.stringify(val), 'EX', TTL_SECONDS)
+        // upstash-redis version
 
-    const res = await redisClient.set(key, JSON.stringify(val), { ex: TTL_SECONDS })
+        const res = await redisClient.set(key, JSON.stringify(val), { ex: TTL_SECONDS })
 
-    if (res !== 'OK') {
-        console.error("Can't store JSON into Redis, error:" + res)
+        if (res !== 'OK') {
+            console.error("Can't store JSON into Redis, error:" + res)
+            return false
+        } else {
+            console.debug(`🟡 [${key}] Redis cache updated`)
+        }
+        return true
+    } catch (error) {
+        console.log(`🟠 [${key}] Warning: Redis cache update failed with: ${error.message}`)
         return false
-    } else {
-        console.debug(`🟡 [${key}] Redis cache updated`)
     }
-    return true
 }
 
 export async function fetchJson<T = any>(key: string): Promise<T | null> {

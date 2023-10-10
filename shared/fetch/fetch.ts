@@ -76,6 +76,7 @@ export interface FetchPayloadSuccessOrError<T> {
     data: T
     error?: any
     cacheKey?: string
+    duration: number
 }
 
 export function processFetchData<T>(
@@ -138,6 +139,7 @@ export async function getFromCache<T = any>({
     shouldUpdateCache = true,
     shouldThrow = true
 }: GetFromCacheOptions<T>) {
+    const startAt = new Date()
     let inMemory = false
     initRedis(redisUrl, redisToken)
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
@@ -169,7 +171,7 @@ export async function getFromCache<T = any>({
                 })
             } else {
                 console.debug(
-                    `🟠 [${key}] Redis cache disabled, fetching from API ${calledFromLog}`
+                    `🟡 [${key}] Redis cache disabled, fetching from source ${calledFromLog}`
                 )
                 resultPromise = fetchAndProcess<T>(SourceType.API)
                 if (shouldUpdateCache) {
@@ -192,6 +194,9 @@ export async function getFromCache<T = any>({
                 subDir: 'fetch'
             })
         }
+
+        const endAt = new Date()
+        result.duration = endAt.getTime() - startAt.getTime()
         return result
     } catch (error: any) {
         console.error('// getFromCache error')
