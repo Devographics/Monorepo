@@ -479,9 +479,6 @@ importers:
       gatsby-cli:
         specifier: ^5.11.0
         version: 5.12.1
-      gatsby-plugin-fathom:
-        specifier: ^2.1.1
-        version: 2.1.1(gatsby@5.12.4)(react@18.0.0)
       gatsby-plugin-mdx:
         specifier: ^5.11.0
         version: 5.12.0(@mdx-js/react@2.3.0)(gatsby-source-filesystem@5.12.0)(gatsby@5.12.4)(graphql@16.7.1)(react-dom@18.0.0)(react@18.0.0)
@@ -3781,13 +3778,6 @@ packages:
       regenerator-runtime: 0.14.0
     dev: false
     optional: true
-
-  /@babel/runtime@7.14.5:
-    resolution: {integrity: sha512-121rumjddw9c3NCQ55KGkyE1h/nzWhU/owjhw0l4mQrkzz4x9SGS1X8gFLraHwX7td3Yo4QTL+qj0NcIzN87BA==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      regenerator-runtime: 0.13.11
-    dev: false
 
   /@babel/runtime@7.22.15:
     resolution: {integrity: sha512-T0O+aa+4w0u06iNmapipJXMV4HoUir03hpx3/YqXXhu9xim3w+dVphjFWl1OH8NbZHw5Lbm9k45drDkgq2VNNA==}
@@ -19929,17 +19919,6 @@ packages:
     transitivePeerDependencies:
       - webpack
     dev: true
-
-  /gatsby-plugin-fathom@2.1.1(gatsby@5.12.4)(react@18.0.0):
-    resolution: {integrity: sha512-t5xtF+Mo7x8GPhBO0gX3DF2slAfSXmut7u+IKkZ03sIvzlJ9VKaGMI1tetKxhe8/3Vylq7edn6lgZoiIjKDU3Q==}
-    peerDependencies:
-      gatsby: '>=2.0.0'
-      react: '>=16.0.0'
-    dependencies:
-      '@babel/runtime': 7.14.5
-      gatsby: 5.12.4(babel-eslint@10.1.0)(react-dom@18.0.0)(react@18.0.0)(typescript@4.9.5)
-      react: 18.0.0
-    dev: false
 
   /gatsby-plugin-mdx@5.12.0(@mdx-js/react@2.3.0)(gatsby-source-filesystem@5.12.0)(gatsby@5.12.4)(graphql@16.7.1)(react-dom@18.0.0)(react@18.0.0):
     resolution: {integrity: sha512-ILjKk7NR+WdXGaFYdVRxjY04BChhZzY960HslTySjipgm0AzVPEjW1UQDXEeHKHdo7aLhrOlhifVYCXoq/FaOw==}

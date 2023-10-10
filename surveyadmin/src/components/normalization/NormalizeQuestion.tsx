@@ -5,20 +5,12 @@ import Progress from "~/components/normalization/Progress";
 import Fields from "~/components/normalization/Fields";
 import Metadata from "~/components/normalization/Metadata";
 
-import {
-  ResponsesData,
-  useQuestionResponses,
-  useUnnormalizedData,
-} from "~/lib/normalization/hooks";
-import {
-  EditionMetadata,
-  QuestionMetadata,
-  SurveyMetadata,
-} from "@devographics/types";
+import { ResponsesData, useQuestionResponses } from "~/lib/normalization/hooks";
+import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { useSegments } from "./hooks";
 import type { QuestionWithSection } from "~/lib/normalization/types";
 import QuestionData from "./QuestionData";
-import isEmpty from "lodash/isEmpty";
+import { splitResponses } from "~/lib/normalization/helpers/splitResponses";
 
 export const NormalizeQuestion = (props: {
   survey: SurveyMetadata;
@@ -52,7 +44,10 @@ export const Normalization = ({
   question: QuestionWithSection;
   data: ResponsesData;
 }) => {
-  const { responsesCount, entities, responses, questionResult } = data;
+  const { responsesCount, entities, responses, questionResult, durations } =
+    data;
+
+  console.log(durations);
 
   const questionData = questionResult.data;
 
@@ -65,12 +60,9 @@ export const Normalization = ({
     segments,
   } = useSegments();
 
-  const normalizedResponses = responses.filter(
-    (r) => !isEmpty(r.normalizedValue)
-  );
-  const unnormalizedResponses = responses.filter((r) =>
-    isEmpty(r.normalizedValue)
-  );
+  const { normalizedResponses, unnormalizedResponses } =
+    splitResponses(responses);
+
   const props = {
     responsesCount,
     survey,

@@ -4,12 +4,14 @@ import {
   EditionMetadata,
   ResponseData,
   SurveyMetadata,
+  Entity,
 } from "@devographics/types";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
 import type { QuestionWithSection } from "~/lib/normalization/types";
 import { getFormPaths } from "@devographics/templates";
 import {
+  getAllResponsesSelector,
   getResponsesSelector,
   getUnnormalizedResponsesSelector,
 } from "~/lib/normalization/helpers/getSelectors";
@@ -23,6 +25,7 @@ const Metadata = ({
   normalizedResponses,
   unnormalizedResponses,
   questionData,
+  entities,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
@@ -32,6 +35,7 @@ const Metadata = ({
   normalizedResponses: NormalizationResponse[];
   unnormalizedResponses: NormalizationResponse[];
   questionData: ResponseData;
+  entities: Entity[];
 }) => {
   const [showDbInfo, setShowDbInfo] = useState(false);
 
@@ -49,7 +53,7 @@ const Metadata = ({
     edition,
     questionObject,
   });
-  const normSelector = getUnnormalizedResponsesSelector({
+  const normSelector = getAllResponsesSelector({
     edition,
     questionObject,
   });
@@ -115,7 +119,11 @@ const Metadata = ({
                     </span>
                     {question.matchTags?.map((tag) => (
                       <span key={tag}>
-                        <code>{tag}</code>{" "}
+                        <code>
+                          {tag} (
+                          {entities.filter((e) => e.tags?.includes(tag)).length}
+                          )
+                        </code>{" "}
                       </span>
                     ))}
                   </p>

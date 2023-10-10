@@ -5,6 +5,8 @@ import {
   NormalizeQuestionArgs,
   NormalizeQuestionResponsesArgs,
   NormalizeResponsesArgs,
+  LoadNormalizationPercentagesArgs,
+  NormalizationProgressStats,
 } from "./actions";
 import { NormalizeInBulkResult } from "./types";
 
@@ -107,6 +109,24 @@ export async function addManualNormalizations(
     }
   );
   const result: { data?: NormalizeInBulkResult; error: any } =
+    await fetchRes.json();
+  return result;
+}
+
+export async function loadNormalizationPercentages(
+  params: LoadNormalizationPercentagesArgs
+) {
+  const fetchRes = await fetch(
+    apiRoutes.normalization.loadNormalizationPercentages.href(params),
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // body: JSON.stringify(params),
+    }
+  );
+  const result: { data?: NormalizationProgressStats; error: any } =
     await fetchRes.json();
   return result;
 }

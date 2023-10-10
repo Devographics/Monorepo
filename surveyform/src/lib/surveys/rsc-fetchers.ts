@@ -50,7 +50,7 @@ export const rscGetMetadata = async ({
 
   const imageUrl = getEditionImageUrl(edition, "og");
   let imageAbsoluteUrl = socialImageUrl || imageUrl;
-  const url = publicConfig.appUrl;
+  const url = edition.questionsUrl || publicConfig.appUrl;
   const description = intlContext.formatMessage({
     id: "general.take_survey",
     values: { name, year: year + "" },

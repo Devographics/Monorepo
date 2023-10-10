@@ -56,10 +56,8 @@ export const logToFile = async (fileName_, object, options = {}) => {
         } else if (typeof object === 'undefined') {
             // necessary because JSON.stringify of an undefined object is undefined, not a string
             // NOTE: this mean we output invalid JSON in this case
-            console.warn(
-                `Logging undefined object at ${fullPath}, this will produce an invalid .json file containing 'undefined'.`
-            )
-            contents = 'undefined'
+            console.warn(`Warning: ${fileName} was an empty object`)
+            return
         } else {
             contents = JSON.stringify(object, null, 2)
         }

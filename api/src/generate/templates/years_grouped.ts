@@ -50,11 +50,18 @@ const groups = [
     }
 ]
 
-export const experience_grouped: ApiTemplateFunction = options => ({
-    id: 'experience_grouped',
+/*
+
+Note: normPath should be defined by question in api.yml. For example:
+
     normPaths: {
         response: 'user_info.years_of_experience.choices'
     },
+
+*/
+
+export const years_grouped: ApiTemplateFunction = options => ({
+    id: 'placeholder',
     groups,
     defaultSort: 'options',
     options: groups,

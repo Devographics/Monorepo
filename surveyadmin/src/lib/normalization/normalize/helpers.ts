@@ -1,5 +1,4 @@
 // import { getSetting, runGraphQL, logToFile } from 'meteor/vulcan:core';
-import get from "lodash/get.js";
 import intersection from "lodash/intersection.js";
 import uniqBy from "lodash/uniqBy.js";
 import sortBy from "lodash/sortBy.js";
@@ -18,15 +17,9 @@ import {
   getRawResponsesCollection,
 } from "@devographics/mongo";
 import { fetchEntities } from "@devographics/fetch";
-import { getQuestionObject } from "../helpers/getQuestionObject";
 import { getEditionQuestions } from "../helpers/getEditionQuestions";
 import { newMongoId } from "@devographics/mongo";
-import {
-  getEditionSelector,
-  getUnnormalizedResponsesSelector,
-  getAllResponsesSelector,
-  ignoreValues,
-} from "../helpers/getSelectors";
+import { getEditionSelector, ignoreValues } from "../helpers/getSelectors";
 import { getSelector } from "../helpers/getSelectors";
 import {
   BulkOperation,
@@ -34,6 +27,8 @@ import {
   NormalizedResponseDocument,
   QuestionWithSection,
 } from "../types";
+import { WithId } from "mongodb";
+import { NormalizationResponse } from "../hooks";
 
 // export const getFieldPaths = (field: Field) => {
 //   const { suffix } = field as ParsedQuestion;
@@ -583,99 +578,15 @@ export const getQuestionResponsesCount = async ({
   return responsesCount;
 };
 
-export const getUnnormalizedResponses = async ({
-  survey,
-  edition,
-  question,
-}: {
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-  question: QuestionWithSection;
-}) => {
-  const questionObject = getQuestionObject({
-    survey,
-    edition,
-    section: question.section,
-    question,
-  })!;
-  const rawFieldPath = questionObject?.normPaths?.raw!;
-  const normalizedFieldPath = questionObject?.normPaths?.other!;
-
-  const selector = getUnnormalizedResponsesSelector({
-    edition,
-    questionObject,
-  });
-
-  const NormResponses =
-    await getNormResponsesCollection<NormalizedResponseDocument>();
-  let responses = await NormResponses.find(selector, {
-    projection: {
-      _id: 1,
-      responseId: 1,
-      [rawFieldPath]: 1,
-    },
-    sort: { [rawFieldPath]: 1 },
-    //lean: true
-  }).toArray();
-
-  // use case-insensitive sort
-  responses = sortBy(responses, [
-    (response) => String(get(response, rawFieldPath)).toLowerCase(),
-  ]);
-
-  return { responses, rawFieldPath, normalizedFieldPath };
-};
-
-export const getAllResponses = async ({
-  survey,
-  edition,
-  question,
-}: {
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-  question: QuestionWithSection;
-}) => {
-  const questionObject = getQuestionObject({
-    survey,
-    edition,
-    section: question.section,
-    question,
-  })!;
-  const rawFieldPath = questionObject?.normPaths?.raw!;
-  const normalizedFieldPath = questionObject?.normPaths?.other!;
-  const patternsFieldPath = questionObject?.normPaths?.patterns!;
-
-  const selector = getAllResponsesSelector({
-    edition,
-    questionObject,
-  });
-
-  const NormResponses =
-    await getNormResponsesCollection<NormalizedResponseDocument>();
-  let responses = await NormResponses.find(selector, {
-    projection: {
-      _id: 1,
-      responseId: 1,
-      [rawFieldPath]: 1,
-      [normalizedFieldPath]: 1,
-      [patternsFieldPath]: 1,
-    },
-    sort: { [rawFieldPath]: 1 },
-    //lean: true
-  }).toArray();
-
-  // use case-insensitive sort
-  responses = sortBy(responses, [
-    (response) => String(get(response, rawFieldPath)).toLowerCase(),
-  ]);
-
-  return {
-    responses,
-    rawFieldPath,
-    normalizedFieldPath,
-    patternsFieldPath,
-    selector,
-  };
+export type ResponsesResult = {
+  // note: do not include raw responses in this because it then becomes too large to
+  // store in Redis
+  // responses: WithId<NormalizedResponseDocument>[];
+  normalizationResponses: NormalizationResponse[];
+  rawFieldPath: string;
+  normalizedFieldPath: string;
+  patternsFieldPath: string;
+  selector: any;
 };
 
 /**
