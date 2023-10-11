@@ -12,6 +12,7 @@ const defaultItems = [
   "team",
   "learn_more",
 ];
+const foo = 123;
 
 const Faq = ({ edition }) => {
   const items = edition.faq;
