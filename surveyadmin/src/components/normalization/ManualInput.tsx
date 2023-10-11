@@ -273,15 +273,16 @@ const Preset = ({
         >
           {id}
         </code>
-        {isLocal && (
+        {/* {isLocal && (
           <span
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               handleDeletePreset(id);
             }}
           >
             X
           </span>
-        )}
+        )} */}
       </a>
     </li>
   );
