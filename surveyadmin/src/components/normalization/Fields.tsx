@@ -20,6 +20,7 @@ import { useCopy, highlightMatches, highlightPatterns } from "../hooks";
 import Dialog from "./Dialog";
 import { FieldValue } from "./FieldValue";
 import { Entity } from "@devographics/types";
+import { CustomNormalization, CustomNormalizations } from "./NormalizeQuestion";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -39,6 +40,8 @@ const Fields = (props: {
   questionData: ResponseData;
   variant: "normalized" | "unnormalized";
   entities: Entity[];
+  customNormalizations: CustomNormalizations;
+  addCustomNormalization: (CustomNormalization) => void;
 }) => {
   const [showResponses, setShowResponses] = useState(false);
   const [showIds, setShowIds] = useState(false);
@@ -53,6 +56,8 @@ const Fields = (props: {
     questionData,
     variant,
     entities,
+    customNormalizations,
+    addCustomNormalization,
   } = props;
 
   const responses = props[`${variant}Responses`] as NormalizationResponse[];
@@ -78,6 +83,8 @@ const Fields = (props: {
     variant,
     entities,
     filterQuery,
+    customNormalizations,
+    addCustomNormalization,
   };
 
   const filteredResponses = filterQuery
@@ -135,7 +142,11 @@ const Fields = (props: {
               <tr>
                 <th></th>
                 <th>Answer</th>
-                {variant === "normalized" && <th>Normalized Values</th>}
+                {variant === "normalized" ? (
+                  <th>Normalized Values</th>
+                ) : (
+                  <th>Manual Normalizations</th>
+                )}
                 <th>Response&nbsp;ID</th>
                 <th colSpan={99}>Normalize</th>
               </tr>
@@ -193,6 +204,8 @@ const Field = ({
   filterQuery,
   index,
   showLetterHeading = false,
+  customNormalizations,
+  addCustomNormalization,
 }) => {
   const [result, setResult] = useState<NormalizeInBulkResult>();
   const [showManualInput, setShowManualInput] = useState<boolean>(false);
@@ -222,17 +235,21 @@ const Field = ({
             filterQuery={filterQuery}
           />
         </td>
-        {variant === "normalized" && (
-          <td>
-            <div className="normalization-tokens">
-              {normalizedValue.map((value) => (
-                <span key={value}>
-                  <NormToken id={value} responses={responses} />{" "}
-                </span>
-              ))}
-            </div>
-          </td>
-        )}
+        <td>
+          <div className="normalization-tokens">
+            {normalizedValue?.map((value) => (
+              <NormToken key={value} id={value} responses={responses} />
+            ))}
+            {customNormalizations[responseId]?.map((value) => (
+              <NormToken
+                key={value}
+                id={value}
+                responses={responses}
+                variant="custom"
+              />
+            ))}
+          </div>
+        </td>
         <td>
           <ResponseId id={responseId} />
         </td>
@@ -282,6 +299,7 @@ const Field = ({
                 rawValue={value}
                 rawPath={rawPath}
                 entities={entities}
+                addCustomNormalization={addCustomNormalization}
               />
             </Dialog>
           )}

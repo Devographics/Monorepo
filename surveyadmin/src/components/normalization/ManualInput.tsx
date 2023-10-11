@@ -14,6 +14,7 @@ import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
 import { FieldValue } from "./FieldValue";
 import { EntityList, getAddEntityUrl, getEditEntityUrl } from "./EntityInput";
+import type { CustomNormalization } from "./NormalizeQuestion";
 
 const getCacheKey = (edition, question) =>
   `normalization_presets__${edition.id}__${question.id}`;
@@ -28,6 +29,7 @@ const ManualInput = ({
   rawValue,
   rawPath,
   entities,
+  addCustomNormalization,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
@@ -38,13 +40,17 @@ const ManualInput = ({
   rawValue: string;
   rawPath: string;
   entities: Entity[];
+  addCustomNormalization: (CustomNormalization) => void;
 }) => {
   const cacheKey = getCacheKey(edition, question);
   const [selectedId, setSelectedId] = useState("");
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<NormalizeInBulkResult | null>(null);
-  const [localPresets, setLocalPresets] = useLocalStorage(cacheKey, []);
+  const [localPresets, setLocalPresets] = useLocalStorage<string[]>(
+    cacheKey,
+    []
+  );
   const entityIds = questionData
     ? questionData.currentEdition.buckets.map((b) => b.id).slice(0, 20)
     : [];
@@ -71,6 +77,9 @@ const ManualInput = ({
       rawPath,
     };
     const result = await addManualNormalizations(params);
+
+    // store this locally at the question level
+    addCustomNormalization({ responseId, tokens });
 
     setLoading(false);
     if (result.data) {
@@ -169,11 +178,12 @@ const ManualInput = ({
                   value={value}
                   onChange={(e) => setValue(e.target.value)}
                 />
-
                 <button aria-busy={loading} onClick={handleSubmit}>
                   Submit
                 </button>
               </form>
+              <small>Comma-separated values</small>
+
               {result && (
                 <div>
                   <p>Custom normalization has been added.</p>
@@ -263,15 +273,16 @@ const Preset = ({
         >
           {id}
         </code>
-        {isLocal && (
+        {/* {isLocal && (
           <span
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               handleDeletePreset(id);
             }}
           >
             X
           </span>
-        )}
+        )} */}
       </a>
     </li>
   );

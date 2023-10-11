@@ -44,7 +44,7 @@ const Actions = (props: ActionProps) => {
 
   return (
     <>
-      <article className="normalization-actions">
+      <div className="normalization-actions">
         <div className="primary">
           {/* <select
           onChange={() => {
@@ -83,7 +83,7 @@ const Actions = (props: ActionProps) => {
         </select>{" "}
         &gt;{" "} */}
           {/* <Options {...props} /> */}
-          <div data-tooltip="Only run normalization on unnormalized answers">
+          {/* <div data-tooltip="Only run normalization on unnormalized answers">
             <LoadingButton
               action={async () => {
                 const result = await normalizeQuestionResponses({
@@ -97,7 +97,7 @@ const Actions = (props: ActionProps) => {
               }}
               label="Normalize Only Missing Values"
             />
-          </div>
+          </div> */}
 
           <div data-tooltip="Re-run normalization on all answers">
             <button
@@ -128,7 +128,7 @@ const Actions = (props: ActionProps) => {
           Renormalize Responses
         </button>
       </div> */}
-      </article>
+      </div>
 
       {normalizeMissingResult && (
         <article>
