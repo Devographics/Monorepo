@@ -103,8 +103,13 @@
 .manualinput-form {
   display: flex;
   gap: 10px;
+  margin-bottom: 5px;
   button {
     flex-basis: 200px;
+  }
+  input,
+  button {
+    margin-bottom: 0 !important;
   }
 }
 
@@ -126,6 +131,14 @@
   border: 2px solid var(--primary);
   padding: 0;
   font-size: 0.9rem;
+}
+.normalization-token-custom {
+  &,
+  &[role="button"] {
+    code {
+      background-color: rgb(231, 255, 207);
+    }
+  }
 }
 
 .field-value-items {

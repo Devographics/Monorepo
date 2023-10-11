@@ -7,9 +7,11 @@ import { FieldValue } from "./FieldValue";
 const NormToken = ({
   id,
   responses,
+  variant = "normal",
 }: {
   id: string;
   responses: NormalizationResponse[];
+  variant?: "normal" | "custom";
 }) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -21,7 +23,7 @@ const NormToken = ({
       <a
         role="button"
         href="#"
-        className="normalization-token"
+        className={`normalization-token normalization-token-${variant}`}
         onClick={(e) => {
           e.preventDefault();
           setShowModal(true);

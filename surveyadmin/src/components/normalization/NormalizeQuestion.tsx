@@ -11,6 +11,7 @@ import { useSegments } from "./hooks";
 import type { QuestionWithSection } from "~/lib/normalization/types";
 import QuestionData from "./QuestionData";
 import { splitResponses } from "~/lib/normalization/helpers/splitResponses";
+import { useLocalStorage } from "../hooks";
 
 export const NormalizeQuestion = (props: {
   survey: SurveyMetadata;
@@ -33,6 +34,15 @@ export const NormalizeQuestion = (props: {
   );
 };
 
+export type CustomNormalizations = {
+  [key in string]: string[];
+};
+
+export type CustomNormalization = {
+  responseId: string;
+  tokens: string[];
+};
+
 export const Normalization = ({
   survey,
   edition,
@@ -47,7 +57,11 @@ export const Normalization = ({
   const { responsesCount, entities, responses, questionResult, durations } =
     data;
 
-  console.log(durations);
+  // console.log(durations);
+
+  const cacheKey = `custom_normalizations__${edition.id}__${question.id}`;
+  const [customNormalizations, setCustomNormalizations] =
+    useLocalStorage<CustomNormalizations>(cacheKey, {});
 
   const questionData = questionResult.data;
 
@@ -59,6 +73,17 @@ export const Normalization = ({
     setEnabled,
     segments,
   } = useSegments();
+
+  const addCustomNormalization = ({
+    responseId,
+    tokens,
+  }: CustomNormalization) => {
+    const newTokens = [...(customNormalizations[responseId] || []), ...tokens];
+    setCustomNormalizations({
+      ...customNormalizations,
+      [responseId]: newTokens,
+    });
+  };
 
   const { normalizedResponses, unnormalizedResponses } =
     splitResponses(responses);
@@ -79,6 +104,8 @@ export const Normalization = ({
     segments,
     questionData,
     entities,
+    customNormalizations,
+    addCustomNormalization,
   };
 
   return (
