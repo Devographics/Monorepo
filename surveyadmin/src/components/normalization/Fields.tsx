@@ -206,7 +206,7 @@ const Field = ({
       {showLetterHeading && (
         <tr className="letter-heading">
           <th colSpan={99}>
-            <h1>{combineValue(value)[0].toUpperCase()}</h1>
+            <h3>{combineValue(value)[0].toUpperCase()}</h3>
           </th>
         </tr>
       )}
