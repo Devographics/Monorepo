@@ -3,6 +3,40 @@ import { useState } from "react";
 import newGithubIssueUrl from "new-github-issue-url";
 import FieldValue from "./FieldValue";
 
+export const getAddEntityUrl = (id: string, questionId?: string) =>
+  newGithubIssueUrl({
+    user: "devographics",
+    repo: "entities",
+    title: `Add Entity: ${id}`,
+    labels: ["add entity"],
+    body: `
+~~~
+- id: ${id}
+tags:
+- ${questionId || "bar"}
+- foo
+patterns:
+- bar
+~~~
+`,
+  });
+
+export const getEditEntityUrl = (id, patterns) =>
+  newGithubIssueUrl({
+    user: "devographics",
+    repo: "entities",
+    title: `Edit Entity: ${id}`,
+    labels: ["edit entity"],
+    body: `
+~~~            
+- id: ${id}
+tags:
+- foo
+patterns:
+${patterns.map((pattern) => `    - ${pattern}`).join("\n")}
+~~~`,
+  });
+
 const EntityInput = ({
   value,
   entities,
@@ -38,21 +72,8 @@ const EntityInput = ({
             <p>No matching entity found…</p>
             <p>
               <a
-                href={newGithubIssueUrl({
-                  user: "devographics",
-                  repo: "entities",
-                  title: `Add Entity: ${selectedId}`,
-                  labels: ["add entity"],
-                  body: `
-~~~
-- id: ${selectedId}
-  tags:
-    - foo
-  patterns:
-    - bar
-~~~
-`,
-                })}
+                rel="noopener noreferrer"
+                href={getAddEntityUrl(selectedId)}
                 role="button"
                 target="_blank"
               >
@@ -80,8 +101,8 @@ export const EntityList = ({ entities, selectedId, setSelectedId }) => {
         }}
       />
       <datalist id="entities-list">
-        {entities.map((entity) => (
-          <option key={entity.id} value={entity.id}></option>
+        {entities.map((entity, i) => (
+          <option key={i} value={entity.id}></option>
         ))}
       </datalist>
     </>
@@ -116,20 +137,8 @@ const EntityItem = ({ entity }: { entity: Entity }) => {
       )}
       <p>
         <a
-          href={newGithubIssueUrl({
-            user: "devographics",
-            repo: "entities",
-            title: `Edit Entity: ${id}`,
-            labels: ["edit entity"],
-            body: `
-~~~            
-- id: ${id}
-  tags:
-    - foo
-  patterns:
-${patterns.map((pattern) => `    - ${pattern}`).join("\n")}
-~~~`,
-          })}
+          rel="noopener noreferrer"
+          href={getEditEntityUrl(id, patterns)}
           role="button"
           target="_blank"
         >

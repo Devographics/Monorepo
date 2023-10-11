@@ -24,13 +24,13 @@ import {
 export default async function Page({ params }) {
   const { surveyId, editionId } = params;
   const { data: surveys } = await fetchSurveysMetadata({
-    shouldGetFromCache: false,
+    shouldGetFromCache: true,
   });
   const survey = surveys.find((s) => s.id === surveyId)!;
   const { data: edition } = await fetchEditionMetadataAdmin({
     surveyId,
     editionId,
-    shouldGetFromCache: false,
+    shouldGetFromCache: true,
   });
   const questions = getNormalizableQuestions({ survey, edition });
   const responsesCount = await getEditionResponsesCount({ survey, edition });

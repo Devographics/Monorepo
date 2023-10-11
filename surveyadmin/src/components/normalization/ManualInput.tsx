@@ -13,7 +13,7 @@ import { addManualNormalizations } from "~/lib/normalization/services";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
 import { FieldValue } from "./FieldValue";
-import { EntityList } from "./EntityInput";
+import { EntityList, getAddEntityUrl } from "./EntityInput";
 
 const getCacheKey = (edition, question) =>
   `normalization_presets__${edition.id}__${question.id}`;
@@ -40,6 +40,7 @@ const ManualInput = ({
   entities: Entity[];
 }) => {
   const cacheKey = getCacheKey(edition, question);
+  const [selectedId, setSelectedId] = useState("");
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<NormalizeInBulkResult | null>(null);
@@ -81,22 +82,43 @@ const ManualInput = ({
     setLocalPresets(without(localPresets, preset));
   };
 
+  const addEntityId = (id) => {
+    if (!value.includes(id)) {
+      const separator = !!value ? ", " : "";
+      setValue(value + separator + id);
+    }
+  };
+
+  const allEntitiesIds = entities.map((e) => e.id);
+
+  const valueIds = value ? value.split(",").map((v) => trim(v)) : [];
+  const unknownEntitiesIds = valueIds.filter(
+    (v) => !!v && !allEntitiesIds.includes(v)
+  );
+
   return (
     <div className="manualinput">
+      <h5>Answer</h5>
       <p>
         <FieldValue value={rawValue} />
       </p>
-      <h5>Presets</h5>
+      <h5>Suggested Entities</h5>
       <p>
         <small>
-          Presets are populated from the top responses to the question; and
-          locally-stored values.
+          Suggested entities are populated from the top responses to the
+          question; and locally-stored values.
         </small>
       </p>
       <p>
         <ul className="manualinput-presets">
           {entityIds.map((id) => (
-            <Preset key={id} id={id} value={value} setValue={setValue} />
+            <Preset
+              key={id}
+              id={id}
+              value={value}
+              setValue={setValue}
+              addEntityId={addEntityId}
+            />
           ))}
           {localPresets.map((id) => (
             <Preset
@@ -105,24 +127,32 @@ const ManualInput = ({
               value={value}
               setValue={setValue}
               isLocal={true}
+              addEntityId={addEntityId}
               handleDeletePreset={handleDeletePreset}
             />
           ))}
         </ul>
       </p>
-      <h5>Manual IDs</h5>
+      <h5>Search All Entities</h5>
+
+      <EntityList
+        entities={entities}
+        selectedId={selectedId}
+        setSelectedId={(value) => {
+          setSelectedId(value);
+          if (allEntitiesIds.includes(value)) {
+            addEntityId(value);
+          }
+        }}
+      />
+      <h5>Input Normalization IDs</h5>
       <form className="manualinput-form">
-        {/* <input
+        <input
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-        /> */}
-
-        <EntityList
-          entities={entities}
-          selectedId={value}
-          setSelectedId={setValue}
         />
+
         <button aria-busy={loading} onClick={handleSubmit}>
           Submit
         </button>
@@ -130,11 +160,29 @@ const ManualInput = ({
       {result && (
         <div>
           <p>Field has been renormalized with new custom values.</p>
-          <NormalizationResult {...result} />
+          {/* <NormalizationResult {...result} /> */}
           {/* <pre>
             <code>{JSON.stringify(result, null, 2)}</code>
           </pre> */}
         </div>
+      )}
+      {unknownEntitiesIds.length > 0 && (
+        <p>
+          <ul>
+            {unknownEntitiesIds.map((id) => (
+              <li key={id}>
+                Entity <code>{id}</code> does not exist yet.{" "}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={getAddEntityUrl(id, question.id)}
+                >
+                  Create it?
+                </a>
+              </li>
+            ))}
+          </ul>
+        </p>
       )}
     </div>
   );
@@ -145,12 +193,14 @@ const Preset = ({
   value,
   setValue,
   isLocal,
+  addEntityId,
   handleDeletePreset,
 }: {
   id: string;
   value: string;
   setValue: any;
   isLocal?: boolean;
+  addEntityId?: any;
   handleDeletePreset?: any;
 }) => {
   const isIncluded = value.includes(id);
@@ -172,8 +222,7 @@ const Preset = ({
         <code
           style={style}
           onClick={(e) => {
-            const separator = !!value ? ", " : "";
-            setValue(value + separator + id);
+            addEntityId(id);
           }}
         >
           {id}

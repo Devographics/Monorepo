@@ -203,7 +203,7 @@ const Field = ({
           <td>
             <div className="normalization-tokens">
               {normalizedValue.map((value) => (
-                <span>
+                <span key={value}>
                   <NormToken id={value} responses={responses} />{" "}
                 </span>
               ))}
