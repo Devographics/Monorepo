@@ -20,7 +20,7 @@ export const getAddEntityUrl = (id: string, questionId?: string) =>
 `,
   });
 
-export const getEditEntityUrl = (id, patterns) =>
+export const getEditEntityUrl = (id: string, patterns: string[] = []) =>
   newGithubIssueUrl({
     user: "devographics",
     repo: "entities",
