@@ -137,11 +137,17 @@
 }
 
 .questions-list {
-  max-width: 800px;
+  max-width: 1000px;
 }
 
 .normalization-percentage {
   display: flex;
   align-items: center;
   gap: 10px;
+  progress {
+    min-width: 200px;
+  }
+  p {
+    white-space: nowrap;
+  }
 }

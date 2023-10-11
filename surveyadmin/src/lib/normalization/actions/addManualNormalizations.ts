@@ -108,16 +108,17 @@ export const addManualNormalizations = async (
     operation
   );
 
-  const responses = [{ ...response, customNormalizations }];
+  return updateResult;
+  // const responses = [{ ...response, customNormalizations }];
 
-  const mutationResult = await normalizeInBulk({
-    survey,
-    edition,
-    responses,
-    questionId,
-    isRenormalization: true,
-    verbose: true,
-  });
+  // const mutationResult = await normalizeInBulk({
+  //   survey,
+  //   edition,
+  //   responses,
+  //   questionId,
+  //   isRenormalization: true,
+  //   verbose: true,
+  // });
 
-  return mutationResult;
+  // return mutationResult;
 };

@@ -76,6 +76,7 @@ export const getAllResponses = async (
         selector,
       };
     },
+    shouldCompress: true,
     ...rest,
   });
 };

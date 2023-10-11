@@ -66,7 +66,7 @@ export default async function Page({ params }) {
         <thead>
           <tr>
             <th>Question</th>
-            <th>Normalization Percentage</th>
+            <th colSpan={99}>Normalization Progress</th>
           </tr>
         </thead>
         <tbody>
@@ -133,16 +133,21 @@ const Question = ({
           {question.id}
         </Link>
       </th>
-      <th>
+      <td>
         {stats && (
           <div className="normalization-percentage">
             <progress value={stats.percentage} max="100"></progress>{" "}
-            <span>
-              {stats.percentage}% ({stats.normalizedCount}/{stats.totalCount})
-            </span>
           </div>
         )}
-      </th>
+      </td>
+      <td>
+        {stats && (
+          <p>
+            {stats.percentage}% ({stats.normalizedCount}/
+            <strong>{stats.totalCount}</strong>)
+          </p>
+        )}
+      </td>
     </tr>
   );
 };

@@ -32,7 +32,7 @@ export const getNormalizationPercentages = async (
     editionId: string;
   }
 ) => {
-  const { surveyId, editionId, shouldGetFromCache, ...rest } = options;
+  const { surveyId, editionId, shouldGetFromCache = true, ...rest } = options;
 
   const { data: surveys, duration: fetchSurveysMetadataDuration } =
     await fetchSurveysMetadata({ shouldGetFromCache });

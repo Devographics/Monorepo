@@ -124,7 +124,7 @@ const ManualInput = ({
           setSelectedId={setValue}
         />
         <button aria-busy={loading} onClick={handleSubmit}>
-          Renormalize
+          Submit
         </button>
       </form>
       {result && (

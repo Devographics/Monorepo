@@ -213,7 +213,8 @@ const Field = ({
         <td>
           <ResponseId id={responseId} />
         </td>
-        <td>
+
+        {/* <td>
           <button
             onClick={() => {
               setShowEntities(!showEntities);
@@ -231,7 +232,7 @@ const Field = ({
               <EntityInput value={value} entities={entities} />
             </Dialog>
           )}
-        </td>
+        </td> */}
 
         <td>
           <button
