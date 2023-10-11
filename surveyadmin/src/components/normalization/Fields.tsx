@@ -201,6 +201,8 @@ const Field = ({
   const editionId = edition.id;
   const questionId = question.id;
 
+  const foo = 123;
+
   return (
     <>
       {showLetterHeading && (
