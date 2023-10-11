@@ -9,7 +9,7 @@ export const Dialog = ({
   children;
   showModal: boolean;
   setShowModal: React.Dispatch<boolean>;
-  header;
+  header?;
 }) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const articleRef = useRef<HTMLElement>(null);
@@ -31,18 +31,20 @@ export const Dialog = ({
   return (
     <dialog open ref={dialogRef}>
       <article ref={articleRef}>
-        <header>
-          <a
-            href="#close"
-            aria-label="Close"
-            className="close"
-            onClick={(e) => {
-              e.preventDefault();
-              setShowModal(false);
-            }}
-          ></a>
-          {header}
-        </header>
+        {header && (
+          <header>
+            <a
+              href="#close"
+              aria-label="Close"
+              className="close"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowModal(false);
+              }}
+            ></a>
+            {header}
+          </header>
+        )}
         <div>{children}</div>
       </article>
     </dialog>

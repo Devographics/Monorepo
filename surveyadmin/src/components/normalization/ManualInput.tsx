@@ -13,7 +13,7 @@ import { addManualNormalizations } from "~/lib/normalization/services";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
 import { FieldValue } from "./FieldValue";
-import { EntityList } from "./EntityInput";
+import { EntityList, getAddEntityUrl, getEditEntityUrl } from "./EntityInput";
 
 const getCacheKey = (edition, question) =>
   `normalization_presets__${edition.id}__${question.id}`;
@@ -40,6 +40,7 @@ const ManualInput = ({
   entities: Entity[];
 }) => {
   const cacheKey = getCacheKey(edition, question);
+  const [selectedId, setSelectedId] = useState("");
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<NormalizeInBulkResult | null>(null);
@@ -81,60 +82,143 @@ const ManualInput = ({
     setLocalPresets(without(localPresets, preset));
   };
 
+  const addEntityId = (id) => {
+    if (!value.includes(id)) {
+      const separator = !!value ? ", " : "";
+      setValue(value + separator + id);
+    }
+  };
+
+  const allEntitiesIds = entities.map((e) => e.id);
+
+  const valueIds = value ? value.split(",").map((v) => trim(v)) : [];
+  const unknownEntitiesIds = valueIds.filter(
+    (v) => !!v && !allEntitiesIds.includes(v)
+  );
+  const knownEntitiesIds = valueIds.filter(
+    (v) => !!v && allEntitiesIds.includes(v)
+  );
+
   return (
     <div className="manualinput">
-      <p>
-        <FieldValue value={rawValue} />
-      </p>
-      <h5>Presets</h5>
-      <p>
-        <small>
-          Presets are populated from the top responses to the question; and
-          locally-stored values.
-        </small>
-      </p>
-      <p>
-        <ul className="manualinput-presets">
-          {entityIds.map((id) => (
-            <Preset key={id} id={id} value={value} setValue={setValue} />
-          ))}
-          {localPresets.map((id) => (
-            <Preset
-              key={id}
-              id={id}
-              value={value}
-              setValue={setValue}
-              isLocal={true}
-              handleDeletePreset={handleDeletePreset}
-            />
-          ))}
-        </ul>
-      </p>
-      <h5>Manual IDs</h5>
-      <form className="manualinput-form">
-        {/* <input
-          type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        /> */}
+      <table>
+        <tbody>
+          <tr>
+            <th>Answer</th>
+            <td>
+              <FieldValue value={rawValue} />
+            </td>
+          </tr>
+          <tr>
+            <th>Suggested Entities</th>
+            <td>
+              <div>
+                <ul className="manualinput-presets">
+                  {entityIds.map((id) => (
+                    <Preset
+                      key={id}
+                      id={id}
+                      value={value}
+                      setValue={setValue}
+                      addEntityId={addEntityId}
+                    />
+                  ))}
+                  {localPresets.map((id) => (
+                    <Preset
+                      key={id}
+                      id={id}
+                      value={value}
+                      setValue={setValue}
+                      isLocal={true}
+                      addEntityId={addEntityId}
+                      handleDeletePreset={handleDeletePreset}
+                    />
+                  ))}
+                </ul>
+              </div>
+              <p>
+                <small>
+                  Suggested entities are populated from the top responses to the
+                  question and locally-stored values.
+                </small>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <th>Search All Entities</th>
+            <td>
+              <EntityList
+                entities={entities}
+                selectedId={selectedId}
+                setSelectedId={(value) => {
+                  setSelectedId(value);
+                  if (allEntitiesIds.includes(value)) {
+                    addEntityId(value);
+                    setSelectedId("");
+                  }
+                }}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>Normalization IDs</th>
+            <td>
+              <form className="manualinput-form">
+                <input
+                  type="text"
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                />
 
-        <EntityList
-          entities={entities}
-          selectedId={value}
-          setSelectedId={setValue}
-        />
-        <button aria-busy={loading} onClick={handleSubmit}>
-          Renormalize
-        </button>
-      </form>
-      {result && (
-        <div>
-          <p>Field has been renormalized with new custom values.</p>
-          <NormalizationResult {...result} />
-          {/* <pre>
+                <button aria-busy={loading} onClick={handleSubmit}>
+                  Submit
+                </button>
+              </form>
+              {result && (
+                <div>
+                  <p>Custom normalization has been added.</p>
+                  {/* <NormalizationResult {...result} /> */}
+                  {/* <pre>
             <code>{JSON.stringify(result, null, 2)}</code>
           </pre> */}
-        </div>
+                </div>
+              )}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      {[...unknownEntitiesIds, ...knownEntitiesIds].length > 0 && (
+        <p>
+          <ul>
+            {unknownEntitiesIds.map((id) => (
+              <li key={id}>
+                Entity <code>{id}</code> does not exist yet.{" "}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={getAddEntityUrl(id, question.id)}
+                >
+                  Create it?
+                </a>
+              </li>
+            ))}
+            {knownEntitiesIds.map((id) => (
+              <li key={id}>
+                Add missing matching patterns to entity <code>{id}</code>?{" "}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={getEditEntityUrl(
+                    id,
+                    entities.find((e) => e.id === id)?.patterns
+                  )}
+                >
+                  Suggest edit
+                </a>
+              </li>
+            ))}
+          </ul>
+        </p>
       )}
     </div>
   );
@@ -145,12 +229,14 @@ const Preset = ({
   value,
   setValue,
   isLocal,
+  addEntityId,
   handleDeletePreset,
 }: {
   id: string;
   value: string;
   setValue: any;
   isLocal?: boolean;
+  addEntityId?: any;
   handleDeletePreset?: any;
 }) => {
   const isIncluded = value.includes(id);
@@ -172,8 +258,7 @@ const Preset = ({
         <code
           style={style}
           onClick={(e) => {
-            const separator = !!value ? ", " : "";
-            setValue(value + separator + id);
+            addEntityId(id);
           }}
         >
           {id}

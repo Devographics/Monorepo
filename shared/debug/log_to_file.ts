@@ -2,6 +2,8 @@ import fs from 'fs'
 import yaml from 'js-yaml'
 import { parse } from 'graphql'
 import { print } from 'graphql-print'
+// @ts-ignore
+import fsp from 'fs/promises'
 
 export type LogOptions = {
     mode?: 'append' | 'overwrite'
@@ -10,10 +12,22 @@ export type LogOptions = {
     subDir?: string
 }
 
+async function exists(path: string) {
+    try {
+        await fsp.access(path)
+        return true
+    } catch {
+        return false
+    }
+}
+
+const getExtension = (fileName: string) => fileName.split('.').at(-1) || 'none'
+
 export const logToFile = async (fileName_: string, object: any, options: LogOptions = {}) => {
     if (process.env.NODE_ENV === 'development') {
         let fileName = fileName_,
             subDir = options?.subDir
+        const extension = getExtension(fileName)
         const { mode = 'overwrite', timestamp = false, dirPath } = options
         const envLogsDirPath = process.env.LOGS_PATH
 
@@ -29,24 +43,27 @@ export const logToFile = async (fileName_: string, object: any, options: LogOpti
 
         const logsDirPath = dirPath ?? (subDir ? `${envLogsDirPath}/${subDir}` : envLogsDirPath)
 
-        if (!fs.existsSync(logsDirPath)) {
+        if (!(await fs.existsSync(logsDirPath))) {
             fs.mkdirSync(logsDirPath, { recursive: true })
         }
         const fullPath = `${logsDirPath}/${fileName}`
         let contents
         if (typeof object === 'string') {
             contents = object
-            if (fileName.includes('.gql') || fileName.includes('.graphql')) {
+            if (['gql', 'graphql'].includes(extension)) {
                 try {
                     const ast = parse(object)
                     contents = print(ast, { preserveComments: true })
-                } catch (error) {
-                    console.warn('logToFile: error when parsing GraphQL content.')
-                    console.warn(error)
+                } catch (error: any) {
+                    console.warn(
+                        `‼️  logToFile ${fileName}: error when parsing GraphQL content (${JSON.stringify(
+                            error.locations
+                        )}).`
+                    )
                 }
             }
         } else {
-            if (fileName.includes('.yml') || fileName.includes('.yaml')) {
+            if (['yml', 'yaml'].includes(extension)) {
                 contents = yaml.dump(object, { noRefs: true, skipInvalid: true })
             } else {
                 contents = JSON.stringify(object, null, 2)
@@ -62,31 +79,7 @@ export const logToFile = async (fileName_: string, object: any, options: LogOpti
             stream.write(text + '\n')
             stream.end()
         } else {
-            fs.readFile(fullPath, (error, data) => {
-                let shouldWrite = false
-                if (error && error.code === 'ENOENT') {
-                    // the file just does not exist, ok to write
-                    shouldWrite = true
-                } else if (error) {
-                    // maybe EACCESS or something wrong with the disk
-                    throw error
-                } else {
-                    const fileContent = data.toString()
-                    if (fileContent !== text) {
-                        shouldWrite = true
-                    }
-                }
-
-                if (shouldWrite) {
-                    fs.writeFile(fullPath, text, error => {
-                        // throws an error, you could also catch it here
-                        if (error) throw error
-
-                        // eslint-disable-next-line no-console
-                        // console.log(`Log saved to ${fullPath}`)
-                    })
-                }
-            })
+            await fsp.writeFile(fullPath, text)
         }
     }
 }

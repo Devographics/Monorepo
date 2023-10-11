@@ -40,7 +40,7 @@ export const getRedisClient = () => {
 // All methods will return null if data are not in the cache
 // => use either a local or a github load when it happen
 
-export async function storeRedis<T>(key: string, val: T): Promise<boolean> {
+export async function storeRedis(key: string, val: any): Promise<boolean> {
     try {
         const redisClient = getRedisClient()
         // EX = Expiration time in seconds
@@ -48,13 +48,16 @@ export async function storeRedis<T>(key: string, val: T): Promise<boolean> {
         // const res = await redisClient.set(key, JSON.stringify(val), 'EX', TTL_SECONDS)
         // upstash-redis version
 
-        const res = await redisClient.set(key, JSON.stringify(val), { ex: TTL_SECONDS })
+        // we don't actually want the cache to expire since we manage it manually
+        // const options = { ex: TTL_SECONDS }
+        const options = {}
+        const res = await redisClient.set(key, JSON.stringify(val), options)
 
         if (res !== 'OK') {
             console.error("Can't store JSON into Redis, error:" + res)
             return false
         } else {
-            console.debug(`🟡 [${key}] Redis cache updated`)
+            console.debug(`⚪ [${key}] Redis cache updated`)
         }
         return true
     } catch (error) {

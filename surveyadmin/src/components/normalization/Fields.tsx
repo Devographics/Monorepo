@@ -25,6 +25,9 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+const combineValue = (value: string | string[]) =>
+  Array.isArray(value) ? value.join() : value;
+
 const getPercent = (a, b) => Math.round((a / b) * 100);
 
 const Fields = (props: {
@@ -79,8 +82,8 @@ const Fields = (props: {
 
   const filteredResponses = filterQuery
     ? responses.filter((r) => {
-        const combinedValue = Array.isArray(r.value) ? r.value.join() : r.value;
-        return combinedValue.includes(filterQuery);
+        const combinedValue = combineValue(r.value);
+        return combinedValue.toLowerCase().includes(filterQuery.toLowerCase());
       })
     : responses;
 
@@ -102,7 +105,7 @@ const Fields = (props: {
         </a>
       </h3>
       {showResponses && (
-        <>
+        <div className="normalization-fields">
           {variant === "normalized" ? (
             <p>
               This table shows responses that have already received at least one
@@ -115,9 +118,10 @@ const Fields = (props: {
             </p>
           )}
 
-          <p>
+          <div className="normalization-filter">
             <label htmlFor="search">
-              Filter: ({filteredResponses.length} results)
+              Filter {capitalizeFirstLetter(variant)} Responses: (
+              {filteredResponses.length} results)
             </label>
             <input
               type="search"
@@ -125,7 +129,7 @@ const Fields = (props: {
               value={filterQuery}
               onChange={(e) => setFilterQuery(e.target.value)}
             />
-          </p>
+          </div>
           <table>
             <thead>
               <tr>
@@ -141,22 +145,31 @@ const Fields = (props: {
                 (
                   { _id, responseId, value, normalizedValue, patterns },
                   index
-                ) => (
-                  <Field
-                    key={_id}
-                    _id={_id}
-                    value={value}
-                    normalizedValue={normalizedValue}
-                    patterns={patterns}
-                    responseId={responseId}
-                    index={index}
-                    {...fieldProps}
-                  />
-                )
+                ) => {
+                  const previousValue = filteredResponses[index - 1]?.value;
+                  // show letter heading if this value's first letter is different from previous one
+                  const showLetterHeading = previousValue
+                    ? combineValue(value)[0].toUpperCase() !==
+                      combineValue(previousValue)[0].toUpperCase()
+                    : true;
+                  return (
+                    <Field
+                      key={_id}
+                      _id={_id}
+                      value={value}
+                      normalizedValue={normalizedValue}
+                      patterns={patterns}
+                      responseId={responseId}
+                      index={index}
+                      showLetterHeading={showLetterHeading}
+                      {...fieldProps}
+                    />
+                  );
+                }
               )}
             </tbody>
           </table>
-        </>
+        </div>
       )}
     </div>
   );
@@ -179,6 +192,7 @@ const Field = ({
   entities,
   filterQuery,
   index,
+  showLetterHeading = false,
 }) => {
   const [result, setResult] = useState<NormalizeInBulkResult>();
   const [showManualInput, setShowManualInput] = useState<boolean>(false);
@@ -189,6 +203,13 @@ const Field = ({
 
   return (
     <>
+      {showLetterHeading && (
+        <tr className="letter-heading">
+          <th colSpan={99}>
+            <h3>{combineValue(value)[0].toUpperCase()}</h3>
+          </th>
+        </tr>
+      )}
       <tr>
         <td>{index + 1}. </td>
         <td>
@@ -203,7 +224,7 @@ const Field = ({
           <td>
             <div className="normalization-tokens">
               {normalizedValue.map((value) => (
-                <span>
+                <span key={value}>
                   <NormToken id={value} responses={responses} />{" "}
                 </span>
               ))}
@@ -213,7 +234,8 @@ const Field = ({
         <td>
           <ResponseId id={responseId} />
         </td>
-        <td>
+
+        {/* <td>
           <button
             onClick={() => {
               setShowEntities(!showEntities);
@@ -231,7 +253,7 @@ const Field = ({
               <EntityInput value={value} entities={entities} />
             </Dialog>
           )}
-        </td>
+        </td> */}
 
         <td>
           <button

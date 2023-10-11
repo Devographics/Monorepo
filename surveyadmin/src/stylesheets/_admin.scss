@@ -81,6 +81,13 @@
   gap: $spacing;
 }
 
+.manualinput {
+  table {
+    th {
+      font-weight: bold;
+    }
+  }
+}
 .manualinput-presets {
   display: flex;
   gap: 10px;
@@ -88,6 +95,7 @@
   // columns: 2;
   list-style-type: none;
   padding: 0;
+  margin-bottom: 10px;
   li {
     list-style: none;
   }
@@ -137,11 +145,44 @@
 }
 
 .questions-list {
-  max-width: 800px;
+  max-width: 1000px;
 }
 
 .normalization-percentage {
   display: flex;
   align-items: center;
   gap: 10px;
+  progress {
+    min-width: 200px;
+  }
+  p {
+    white-space: nowrap;
+  }
+}
+
+.normalization-fields {
+  position: relative;
+}
+.normalization-filter {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+  padding: 10px 20px;
+  // border-bottom: 6px solid var(--code-background-color);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+  margin: 0 -20px 0 -20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  input[type="search"] {
+    margin: 0;
+  }
+}
+
+.letter-heading {
+  background: var(--code-background-color);
+  * {
+    margin: 0;
+  }
 }
