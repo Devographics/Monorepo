@@ -7,7 +7,7 @@ import NodeCache from 'node-cache'
 import { initRedis, fetchJson as fetchRedis, storeRedis } from '@devographics/redis'
 import { logToFile } from '@devographics/debug'
 import { CacheType, GetFromCacheOptions, SourceType } from './types'
-import { compressJSON, decompressJSON } from './compress'
+// import { compressJSON, decompressJSON } from './compress'
 
 export const memoryCache = new NodeCache({
     // This TTL must stay short, because we manually invalidate this cache
@@ -23,6 +23,8 @@ export const getCacheStats = () => {
 export const flushCache = () => {
     memoryCache.flushAll()
 }
+
+const isNodeRuntime = !process.env.NEXT_RUNTIME || process.env.NEXT_RUNTIME === 'nodejs'
 
 /**
  * GraphQL objects have explicit "foo: null" fields, we can remove them to save space
@@ -312,7 +314,9 @@ export async function storePayload<T>(
     const { shouldCompress, cacheType } = options
     const storeFunction = cacheFunctions[cacheType]['store'] as GenericStoreFunction
 
-    if (shouldCompress) {
+    if (shouldCompress && isNodeRuntime) {
+        const { compressJSON } = await import('./compress')
+
         const compressedData = await compressJSON(payload.data)
         const compressedPayload = {
             ...payload,
@@ -340,7 +344,8 @@ export async function fetchPayload<T>(
     const fetchFunction = cacheFunctions[cacheType]['fetch'] as GenericFetchFunction<T>
 
     const payload = await fetchFunction(key)
-    if (payload?.___metadata?.isCompressed) {
+    if (payload?.___metadata?.isCompressed && isNodeRuntime) {
+        const { decompressJSON } = await import('./compress')
         const uncompressedData = (await decompressJSON(payload.data)) as T
         return {
             ...payload,
