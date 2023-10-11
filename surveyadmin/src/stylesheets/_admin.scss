@@ -81,6 +81,13 @@
   gap: $spacing;
 }
 
+.manualinput {
+  table {
+    th {
+      font-weight: bold;
+    }
+  }
+}
 .manualinput-presets {
   display: flex;
   gap: 10px;
@@ -88,6 +95,7 @@
   // columns: 2;
   list-style-type: none;
   padding: 0;
+  margin-bottom: 10px;
   li {
     list-style: none;
   }

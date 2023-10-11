@@ -12,11 +12,10 @@ export const getAddEntityUrl = (id: string, questionId?: string) =>
     body: `
 ~~~
 - id: ${id}
-tags:
-- ${questionId || "bar"}
-- foo
-patterns:
-- bar
+  tags:
+    - ${questionId || "*example_tag*"}
+  patterns:
+    - *matching pattern*
 ~~~
 `,
   });
@@ -30,10 +29,9 @@ export const getEditEntityUrl = (id, patterns) =>
     body: `
 ~~~            
 - id: ${id}
-tags:
-- foo
-patterns:
+  patterns:
 ${patterns.map((pattern) => `    - ${pattern}`).join("\n")}
+    - *new pattern here*
 ~~~`,
   });
 
