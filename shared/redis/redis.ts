@@ -48,7 +48,10 @@ export async function storeRedis(key: string, val: any): Promise<boolean> {
         // const res = await redisClient.set(key, JSON.stringify(val), 'EX', TTL_SECONDS)
         // upstash-redis version
 
-        const res = await redisClient.set(key, JSON.stringify(val), { ex: TTL_SECONDS })
+        // we don't actually want the cache to expire since we manage it manually
+        // const options = { ex: TTL_SECONDS }
+        const options = {}
+        const res = await redisClient.set(key, JSON.stringify(val), options)
 
         if (res !== 'OK') {
             console.error("Can't store JSON into Redis, error:" + res)
