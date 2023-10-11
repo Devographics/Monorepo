@@ -110,6 +110,11 @@ export const Normalization = ({
 
   return (
     <div className="admin-normalization admin-content">
+      <p>
+        <a role="button" href="https://www.youtube.com/watch?v=3XIKKMyMfjs">
+          Watch Tutorial
+        </a>
+      </p>
       <Actions {...props} />
       {segments.length > 0 && <Progress {...props} />}
       <Metadata {...props} />
