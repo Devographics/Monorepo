@@ -33,7 +33,8 @@ import {
     addAveragesByFacet,
     removeEmptyEditions,
     addPercentiles,
-    groupBuckets
+    groupBuckets,
+    applyDatasetCutoff
 } from './stages/index'
 import {
     ResponsesTypes,
@@ -267,6 +268,8 @@ export async function genericComputeFunction({
         // if no facet is specified, move default buckets down one level
         await moveFacetBucketsToDefaultBuckets(results)
     }
+
+    results = await applyDatasetCutoff(results)
 
     await discardEmptyIds(results)
 
