@@ -77,7 +77,12 @@ TODO: figure out why type inference didn't work and then replace
 
 export interface FetchPayload<T> {
     ___metadata: Metadata
-    data: T | string
+    data: T
+}
+
+export interface FetchPayloadCompressed {
+    ___metadata: Metadata
+    data: string
 }
 
 export interface FetchPayloadSuccessOrError<T> extends FetchPayload<T> {
@@ -118,12 +123,12 @@ async function getFromCacheOrSource<T = any>({
     shouldCompress?: boolean
     cacheType?: CacheType.REDIS
 }) {
-    const redisData = await fetchPayload<T>(key, { cacheType })
-    if (redisData) {
-        console.debug(`🔵 [${key}] in-memory cache miss, redis hit ${calledFromLog}`)
-        return redisData
+    const cachedData = await fetchPayload<T>(key, { cacheType })
+    if (cachedData) {
+        console.debug(`🔵 [${key}] in-memory cache miss, remote cache hit ${calledFromLog}`)
+        return cachedData
     }
-    console.debug(`🟣 [${key}] in-memory & redis cache miss, fetching from API ${calledFromLog}`)
+    console.debug(`🟣 [${key}] in-memory & remote cache miss, fetching from API ${calledFromLog}`)
     const result = await fetchFromSource()
     const processedResult = processFetchData<T>(result, SourceType.API, key)
     if (shouldUpdateCache) {
@@ -293,14 +298,19 @@ type StorePayloadOptions = {
     cacheType: CacheType
 }
 
+type GenericStoreFunction = (key: string, val: any) => Promise<boolean>
+
 // store payload in cache, compressing it if needed
 export async function storePayload<T>(
     key: string,
     payload: FetchPayload<T>,
-    options: StorePayloadOptions = { shouldCompress: false, cacheType: CacheType.REDIS }
+    options: StorePayloadOptions = {
+        shouldCompress: false,
+        cacheType: CacheType.REDIS
+    }
 ): Promise<boolean> {
     const { shouldCompress, cacheType } = options
-    const storeFunction = cacheFunctions[cacheType]['store']
+    const storeFunction = cacheFunctions[cacheType]['store'] as GenericStoreFunction
 
     if (shouldCompress) {
         const compressedData = await compressJSON(payload.data)
@@ -319,17 +329,19 @@ type FetchPayloadOptions = {
     cacheType: CacheType
 }
 
+type GenericFetchFunction<T> = (key: string) => Promise<FetchPayload<T> | null>
+
 // store payload in cache, compressing it if needed
 export async function fetchPayload<T>(
     key: string,
     options: FetchPayloadOptions = { cacheType: CacheType.REDIS }
-): Promise<FetchPayload<T>> {
+): Promise<FetchPayload<T> | null> {
     const { cacheType } = options
-    const fetchFunction = cacheFunctions[cacheType]['fetch']
+    const fetchFunction = cacheFunctions[cacheType]['fetch'] as GenericFetchFunction<T>
 
     const payload = await fetchFunction(key)
     if (payload?.___metadata?.isCompressed) {
-        const uncompressedData = await decompressJSON(payload.data)
+        const uncompressedData = (await decompressJSON(payload.data)) as T
         return {
             ...payload,
             data: uncompressedData

@@ -10,7 +10,7 @@ export async function compressJSON(data) {
         const jsonString = JSON.stringify(data)
 
         // Compress JSON string
-        const compressedBuffer = await gzip(jsonString)
+        const compressedBuffer = (await gzip(jsonString)) as Buffer
 
         // Convert the compressed buffer to base64 string (optional)
         const base64String = compressedBuffer.toString('base64')
@@ -31,7 +31,7 @@ export async function decompressJSON(compressedString) {
         const compressedBuffer = Buffer.from(compressedString, 'base64')
 
         // Decompress the buffer
-        const decompressedBuffer = await gunzip(compressedBuffer)
+        const decompressedBuffer = (await gunzip(compressedBuffer)) as Buffer
 
         // Convert the buffer to a JSON string
         const jsonString = decompressedBuffer.toString()
