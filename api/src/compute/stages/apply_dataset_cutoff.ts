@@ -5,7 +5,9 @@ import sumBy from 'lodash/sumBy.js'
 const DEFAULT_DATASET_CUTOFF = 10
 
 export const applyDatasetCutoff = (resultsByEdition: ResponseEditionData[]) => {
-    const cutoff = Number(process.env.DATASET_CUTOFF) ?? DEFAULT_DATASET_CUTOFF
+    const cutoff = process.env.DATASET_CUTOFF
+        ? Number(process.env.DATASET_CUTOFF)
+        : DEFAULT_DATASET_CUTOFF
     for (let editionData of resultsByEdition) {
         // calculate the sum of all buckets in current dataset
         const datasetSize = sumBy(editionData.buckets, 'count')
