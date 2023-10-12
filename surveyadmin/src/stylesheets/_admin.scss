@@ -210,3 +210,24 @@ td {
     margin-bottom: 0;
   }
 }
+
+dialog article p:last-of-type {
+  margin-bottom: var(--typography-spacing-vertical);
+}
+
+dialog article p:last-child {
+  margin-bottom: 0;
+}
+
+.tag-item {
+  margin-bottom: 20px;
+}
+.tag-item-heading {
+  margin-bottom: 5px;
+}
+
+.match-patterns,
+.match-tags {
+  max-width: 200px;
+  overflow-x: scroll;
+}

@@ -15,6 +15,8 @@ import {
 import { NormalizationResponse } from "~/lib/normalization/hooks";
 import { InitializeSegmentsOptions, defaultSegmentSize } from "./hooks";
 import LoadingButton from "../LoadingButton";
+import Metadata from "./Metadata";
+import Tokens from "./Tokens";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
@@ -28,7 +30,7 @@ interface ActionProps {
   responsesCount: number;
 }
 
-const Actions = (props: ActionProps) => {
+const Actions = (props) => {
   const {
     survey,
     edition,
@@ -44,7 +46,7 @@ const Actions = (props: ActionProps) => {
 
   return (
     <>
-      <div className="normalization-actions">
+      <article className="normalization-actions">
         <div className="primary">
           {/* <select
           onChange={() => {
@@ -99,6 +101,17 @@ const Actions = (props: ActionProps) => {
             />
           </div> */}
 
+          <a
+            role="button"
+            href="https://www.youtube.com/watch?v=3XIKKMyMfjs"
+            target="_blank"
+            rel="noreferrer nofollow"
+          >
+            Watch Tutorial
+          </a>
+          <Metadata {...props} />
+          <Tokens {...props} />
+
           <div data-tooltip="Re-run normalization on all answers">
             <button
               onClick={() => {
@@ -128,7 +141,7 @@ const Actions = (props: ActionProps) => {
           Renormalize Responses
         </button>
       </div> */}
-      </div>
+      </article>
 
       {normalizeMissingResult && (
         <article>

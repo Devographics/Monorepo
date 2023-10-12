@@ -15,6 +15,7 @@ import {
   getResponsesSelector,
   getUnnormalizedResponsesSelector,
 } from "~/lib/normalization/helpers/getSelectors";
+import Dialog from "./Dialog";
 
 const Metadata = ({
   survey,
@@ -60,83 +61,44 @@ const Metadata = ({
 
   return (
     <div>
-      <p>
-        <a
-          role="button"
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            setShowDbInfo(!showDbInfo);
-          }}
-        >
-          {showDbInfo ? "Hide" : "Show"} Metadata
-        </a>
-        {showDbInfo && (
-          <article>
-            <p>
-              <strong>{unnormalizedResponses.length}</strong> missing
-              normalizations out of <strong>{responses.length}</strong> total
-              responses for{" "}
-              <code>
-                {edition.id}/{question.id}
-              </code>
-              .
-            </p>
-            <p>
-              <ul>
-                <li>
-                  Raw Path: <code>{formPaths?.other}</code>
-                </li>
-                <li>
-                  Selector: <textarea>{JSON.stringify(rawSelector)}</textarea>
-                </li>
-                <li>
-                  Normalized Path:{" "}
-                  <code>{questionObject?.normPaths?.other}</code>
-                </li>
-                <li>
-                  Selector: <textarea>{JSON.stringify(normSelector)}</textarea>
-                </li>
-                <li>
-                  Match Type:{" "}
-                  {questionObject.matchType === "multiple" ? (
-                    <span>
-                      <strong>Multiple tokens</strong> per answer can be
-                      matched.
-                    </span>
-                  ) : (
-                    <span>
-                      Only a <strong>single token</strong> per answer can be
-                      matched.{" "}
-                    </span>
-                  )}
-                </li>
-                <li>
-                  <p>
-                    Match Tags:{" "}
-                    <span>
-                      <code>{question.id} [id]</code>{" "}
-                    </span>
-                    {question.matchTags?.map((tag) => (
-                      <span key={tag}>
-                        <code>
-                          {tag} (
-                          {entities.filter((e) => e.tags?.includes(tag)).length}
-                          )
-                        </code>{" "}
-                      </span>
-                    ))}
-                  </p>
-                  <p>
-                    Note: match tags that are higher up in the list are given
-                    higher priority.
-                  </p>
-                </li>
-              </ul>
-            </p>
-          </article>
-        )}
-      </p>
+      <a
+        role="button"
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          setShowDbInfo(!showDbInfo);
+        }}
+      >
+        Metadata
+      </a>
+      <Dialog
+        showModal={showDbInfo}
+        setShowModal={setShowDbInfo}
+        header={
+          <span>
+            DB info for <code>{question.id}</code>
+          </span>
+        }
+      >
+        <div>
+          <p>
+            <ul>
+              <li>
+                Raw Path: <code>{formPaths?.other}</code>
+              </li>
+              <li>
+                Selector: <textarea>{JSON.stringify(rawSelector)}</textarea>
+              </li>
+              <li>
+                Normalized Path: <code>{questionObject?.normPaths?.other}</code>
+              </li>
+              <li>
+                Selector: <textarea>{JSON.stringify(normSelector)}</textarea>
+              </li>
+            </ul>
+          </p>
+        </div>
+      </Dialog>
     </div>
   );
 };

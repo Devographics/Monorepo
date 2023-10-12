@@ -4,6 +4,7 @@ import Actions from "~/components/normalization/NormalizeQuestionActions";
 import Progress from "~/components/normalization/Progress";
 import Fields from "~/components/normalization/Fields";
 import Metadata from "~/components/normalization/Metadata";
+import Tokens from "~/components/normalization/Tokens";
 
 import { ResponsesData, useQuestionResponses } from "~/lib/normalization/hooks";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
@@ -110,14 +111,10 @@ export const Normalization = ({
 
   return (
     <div className="admin-normalization admin-content">
-      <p>
-        <a role="button" href="https://www.youtube.com/watch?v=3XIKKMyMfjs">
-          Watch Tutorial
-        </a>
-      </p>
+      <p></p>
       <Actions {...props} />
       {segments.length > 0 && <Progress {...props} />}
-      <Metadata {...props} />
+
       <QuestionData questionData={questionData} responses={responses} />
       <Fields {...props} variant="normalized" />
       <Fields {...props} variant="unnormalized" />
