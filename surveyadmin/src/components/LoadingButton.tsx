@@ -11,17 +11,21 @@ export const LoadingButton = ({
 }) => {
   const [loading, setLoading] = useState(false);
   return (
-    <button
-      aria-busy={loading}
-      onClick={async () => {
-        setLoading(true);
-        await action();
-        setLoading(false);
-      }}
+    <div
+      className="loading-button"
       {...(tooltip ? { "data-tooltip": tooltip } : {})}
     >
-      {label}
-    </button>
+      <button
+        aria-busy={loading}
+        onClick={async () => {
+          setLoading(true);
+          await action();
+          setLoading(false);
+        }}
+      >
+        {label}
+      </button>
+    </div>
   );
 };
 

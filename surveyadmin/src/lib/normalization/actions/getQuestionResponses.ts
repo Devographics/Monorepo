@@ -41,6 +41,7 @@ export const getQuestionResponses = async ({
     survey,
     edition,
     question,
+    shouldGetFromCache,
   });
 
   const {

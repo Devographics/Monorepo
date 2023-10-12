@@ -199,3 +199,14 @@
     margin: 0;
   }
 }
+
+.loading-button {
+  button {
+  }
+}
+
+td {
+  & button:last-child {
+    margin-bottom: 0;
+  }
+}

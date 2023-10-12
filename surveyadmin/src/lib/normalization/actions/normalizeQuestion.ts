@@ -4,6 +4,7 @@ import { getRawResponsesCollection } from "@devographics/mongo";
 import { fetchSurveyMetadata } from "@devographics/fetch";
 import { normalizeInBulk, defaultLimit } from "../normalize/normalizeInBulk";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
+import { getQuestionResponses } from "./getQuestionResponses";
 
 export type NormalizeQuestionArgs = {
   surveyId: string;
@@ -67,5 +68,14 @@ export const normalizeQuestion = async (args: NormalizeQuestionArgs) => {
     isRenormalization: true,
   });
 
-  return mutationResult;
+  console.log(`⛰️ Refreshing responses cache for question ${questionId}…`);
+
+  const questionResponseData = await getQuestionResponses({
+    surveyId,
+    editionId,
+    questionId,
+    shouldGetFromCache: false,
+  });
+
+  return { ...mutationResult, questionResponseData };
 };
