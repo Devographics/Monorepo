@@ -56,22 +56,12 @@
         hideCutoff: 10
 
       - id: reason_for_relocation
-        template: single_option
-
-      - id: reason_for_relocation_freeform
-        fieldId: reason_for_relocation
-        template: single_option_freeform
-
-      - id: reason_for_relocation_freeform
-        fieldId: reason_for_relocation
-        template: single_option_freeform
+        template: single_option_combined
+        blockType: HorizontalBarBlock
 
       - id: residency_status
-        template: single_option
-
-      - id: residency_status_freeform
-        fieldId: residency_status
-        template: single_option_freeform
+        template: single_option_combined
+        blockType: HorizontalBarBlock
 
       - id: country
         template: multiple_options
@@ -175,18 +165,10 @@
         template: multiple_options
 
       - id: educational_attainment
-        template: multiple_options
-
-      - id: educational_attainment_freeform
-        fieldId: educational_attainment
-        template: single_option_freeform
+        template: multiple_options_combined
 
       - id: professional_qualifications
-        template: multiple_options
-
-      - id: professional_qualifications_freeform
-        fieldId: professional_qualifications
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: language_proficiency_english
         template: multiple_options
@@ -200,21 +182,13 @@
   path: /job-info
   blocks:
       - id: employment_status
-        template: multiple_options
-
-      - id: employment_status_freeform
-        fieldId: employment_status
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: searching_for_job
         template: single_option
 
       - id: current_job_description
-        template: multiple_options
-
-      - id: current_job_description_freeform
-        fieldId: current_job_description
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: coworker_nationalities_engineers
         template: single_option
@@ -235,28 +209,16 @@
         template: multiple_options
 
       - id: how_did_you_find_your_current_job
-        template: single_option
-
-      - id: how_did_you_find_your_current_job_freeform
-        fieldId: how_did_you_find_your_current_job
-        template: single_option_freeform
+        template: single_option_combined
 
 - id: employer_info
   path: /employer-info
   blocks:
       - id: current_employer
-        template: single_option
-
-      - id: current_employer_freeform
-        fieldId: current_employer
-        template: single_option_freeform
+        template: single_option_combined
 
       - id: industry_sector
-        template: multiple_options
-
-      - id: industry_sector_freeform
-        fieldId: industry_sector
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: remote_work_policy
         template: single_option
@@ -286,53 +248,25 @@
   path: /technology
   blocks:
       - id: programming_languages
-        template: multiple_options
-
-      - id: programming_languages_freeform
-        fieldId: programming_languages
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: databases
-        template: multiple_options
-
-      - id: databases_freeform
-        fieldId: databases
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: web_frameworks
-        template: multiple_options
-
-      - id: web_frameworks_freeform_freeform
-        fieldId: web_frameworks
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: other_frameworks_libraries
-        template: multiple_options
-
-      - id: other_frameworks_libraries_freeform
-        fieldId: other_frameworks_libraries
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: developer_tools
-        template: multiple_options
-
-      - id: developer_tools_freeform
-        fieldId: developer_tools
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: developer_environments
-        template: multiple_options
-
-      - id: developer_environments_freeform
-        fieldId: developer_environments
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: cloud_platforms
-        template: multiple_options
-
-      - id: cloud_platforms_freeform
-        fieldId: cloud_platforms
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
 - id: other
   path: /other
@@ -340,18 +274,10 @@
       # - id: life_in_japan
 
       - id: communities
-        template: multiple_options
-
-      - id: communities_freeform
-        fieldId: communities
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: keyboard_layout
-        template: multiple_options
-
-      - id: keyboard_layout_freeform
-        fieldId: keyboard_layout
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
 - id: notfound
   titleId: notfound.title

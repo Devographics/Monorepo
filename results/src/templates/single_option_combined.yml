@@ -1,0 +1,6 @@
+blockType: HorizontalBarBlock
+hasSponsor: true
+query: currentEditionData
+queryOptions:
+    addBucketsEntities: true
+    subField: combined
