@@ -15,6 +15,7 @@ const errorColor = "#cf2710";
 type NormalizationResultProps = NormalizeInBulkResult & {
   showQuestionId?: boolean;
   showSummary?: boolean;
+  setShowResult?: any;
 };
 export const NormalizationResult = (props: NormalizationResultProps) => {
   const {
@@ -25,11 +26,23 @@ export const NormalizationResult = (props: NormalizationResultProps) => {
     emptyDocuments = [],
     showQuestionId = true,
     showSummary = true,
+    setShowResult,
   } = props;
-  const [showResult, setShowResult] = useState(true);
 
-  return showResult ? (
+  return (
     <div>
+      <p>
+        <a
+          role="button"
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            setShowResult(false);
+          }}
+        >
+          Close
+        </a>
+      </p>
       {showSummary && <NormalizationSummary {...props} />}
 
       <DocumentGroup
@@ -68,7 +81,7 @@ export const NormalizationResult = (props: NormalizationResultProps) => {
         defaultShow={false}
       />
     </div>
-  ) : null;
+  );
 };
 
 export const NormalizationSummary = ({

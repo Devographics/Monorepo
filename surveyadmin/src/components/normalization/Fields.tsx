@@ -210,9 +210,18 @@ const Field = ({
   const [result, setResult] = useState<NormalizeInBulkResult>();
   const [showManualInput, setShowManualInput] = useState<boolean>(false);
   const [showEntities, setShowEntities] = useState<boolean>(false);
+  const [showResult, setShowResult] = useState(true);
   const surveyId = survey.id;
   const editionId = edition.id;
   const questionId = question.id;
+
+  let customNormalizedValue = customNormalizations[responseId];
+  if (customNormalizedValue) {
+    // if there a custom tokens, remove any that was already included
+    customNormalizedValue = customNormalizedValue.filter(
+      (v) => !normalizedValue?.includes(v)
+    );
+  }
 
   return (
     <>
@@ -235,10 +244,15 @@ const Field = ({
         </td>
         <td>
           <div className="normalization-tokens">
-            {normalizedValue?.map((value) => (
-              <NormToken key={value} id={value} responses={responses} />
+            {normalizedValue?.map((value, i) => (
+              <NormToken
+                key={value}
+                id={value}
+                pattern={patterns[i]}
+                responses={responses}
+              />
             ))}
-            {customNormalizations[responseId]?.map((value) => (
+            {customNormalizedValue?.map((value) => (
               <NormToken
                 key={value}
                 id={value}
@@ -319,11 +333,15 @@ const Field = ({
           />
         </td>
       </tr>
-      {result && (
+      {result && showResult && (
         <tr>
           <td colSpan={999}>
             <article>
-              <NormalizationResult showQuestionId={false} {...result} />
+              <NormalizationResult
+                setShowResult={setShowResult}
+                showQuestionId={false}
+                {...result}
+              />
             </article>
           </td>
         </tr>

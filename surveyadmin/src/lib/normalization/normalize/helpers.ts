@@ -158,6 +158,7 @@ const extractTokens = async ({
       const match = stringToScan.match(pattern);
       if (match !== null) {
         const includesToken = !!tokens.find((t) => t.id === id);
+        console.log("match!!!", match);
         if (!includesToken) {
           // make sure we don't add an already-matched token more than one time
           // for example if someone wrote "React, React, React"
@@ -213,7 +214,6 @@ const extractTokens = async ({
   );
 
   const uniqueTokens = uniqBy(filteredTokens, (token) => token.id);
-  const sortedTokens = sortBy(uniqueTokens, (token) => token.id);
 
   // ensure ids are uniques
   // const uniqueIds = [...new Set(filteredTokens.map((token) => token.id))];
@@ -221,7 +221,7 @@ const extractTokens = async ({
   // alphabetical sort for consistency
   // uniqueIds.sort();
 
-  return sortedTokens;
+  return uniqueTokens;
 };
 
 export const getQuestionRules = ({
@@ -296,8 +296,7 @@ export const normalize = async ({
     });
     allTokens = [...allTokens, ...tokens];
   }
-  // if we only one token, return first one, else return all of them
-  return questionObject.matchType === "single" ? [allTokens[0]] : allTokens;
+  return allTokens;
 };
 
 /*
@@ -313,6 +312,7 @@ export const normalizeSingle = async (options: {
   verbose: boolean;
 }) => {
   const tokens = await normalize(options);
+
   // put longer tokens first as a proxy for relevancy
   const sortedTokens = sortBy(tokens, (v) => v.id && v.id.length).reverse();
   return sortedTokens[0];

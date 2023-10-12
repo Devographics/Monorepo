@@ -196,13 +196,18 @@ export const normalizeField = async ({
                   );
                 }
                 allTokens = [
-                  ...allTokens,
                   ...customTokens.map((token) => ({
                     id: token,
                     pattern: "custom_normalization",
                   })),
+                  ...allTokens,
                 ];
               }
+            }
+
+            // if we only need one token, only keep the first one
+            if (questionObject.matchType === "single") {
+              allTokens = [allTokens[0]];
             }
 
             let normIds = allTokens.map((token) => token.id);
