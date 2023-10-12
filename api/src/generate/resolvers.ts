@@ -33,6 +33,7 @@ import { loadOrGetParsedSurveys } from '../load/surveys'
 import isEmpty from 'lodash/isEmpty.js'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
+import { combineResults } from '../compute/helpers'
 
 export const generateResolvers = async ({
     surveys,
@@ -303,8 +304,13 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
     const { enableCache } = parameters
 
     const { selectedEditionId } = args
-    const computeArguments = { responsesType, parameters, filters, facet, selectedEditionId }
-
+    const computeArguments = {
+        responsesType,
+        parameters,
+        filters,
+        facet,
+        selectedEditionId
+    }
     const funcOptions = {
         survey,
         edition,
@@ -314,17 +320,18 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
         questionObjects,
         computeArguments
     }
+    const cacheKeyOptions = {
+        edition,
+        question,
+        subField,
+        selectedEditionId,
+        parameters,
+        filters,
+        facet
+    }
 
     let result = await useCache({
-        key: getGenericCacheKey({
-            edition,
-            question,
-            subField,
-            selectedEditionId,
-            parameters,
-            filters,
-            facet
-        }),
+        key: getGenericCacheKey(cacheKeyOptions),
         func: genericComputeFunction,
         context,
         funcOptions,

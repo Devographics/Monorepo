@@ -56,6 +56,12 @@ export const subFields: Array<SubField> = [
         resolverFunction: responsesResolverFunction
     },
     {
+        id: ResultsSubFieldEnum.COMBINED,
+        def: question => getResponsesTypeDef(question, ResultsSubFieldEnum.COMBINED),
+        addIf: ({ normPaths }) => !!normPaths?.other,
+        resolverFunction: responsesResolverFunction
+    },
+    {
         id: ResultsSubFieldEnum.FREEFORM,
         def: question => getResponsesTypeDef(question, ResultsSubFieldEnum.FREEFORM),
         addIf: ({ normPaths }) => !!normPaths?.other,

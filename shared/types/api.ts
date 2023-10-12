@@ -13,6 +13,7 @@ export enum ResultsSubFieldEnum {
     COMMENTS = 'comments',
     FOLLOWUPS = 'followups',
     FREEFORM = 'freeform',
+    COMBINED = 'combined',
     PRENORMALIZED = 'prenormalized',
     MEDIANS = 'medians',
     OPTIONS = 'options',

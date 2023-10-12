@@ -296,9 +296,13 @@ type Bucket {
     """
     averageByFacet: Float
     """
-    percentiles by facet
+    Percentiles by facet
     """
     percentilesByFacet: Percentiles
+    """
+    For combined results, indicates if this is issued from freeform data
+    """
+    isFreeformData: Boolean
 }
 
 type Percentiles {

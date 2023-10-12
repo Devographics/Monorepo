@@ -34,7 +34,8 @@ import {
     removeEmptyEditions,
     addPercentiles,
     groupBuckets,
-    applyDatasetCutoff
+    applyDatasetCutoff,
+    combineWithFreeform
 } from './stages/index'
 import {
     ResponsesTypes,
@@ -67,6 +68,8 @@ export const getDbPath = (
 ) => {
     const { normPaths } = question
     if (responsesType === ResponsesTypes.RESPONSES) {
+        return normPaths?.response
+    } else if (responsesType === ResponsesTypes.COMBINED) {
         return normPaths?.response
     } else if (responsesType === ResponsesTypes.PRENORMALIZED) {
         return normPaths?.prenormalized
@@ -112,15 +115,7 @@ export const getGenericCacheKey = ({
     return computeKey('generic', cacheKeyOptions)
 }
 
-export async function genericComputeFunction({
-    context,
-    survey,
-    edition,
-    section,
-    question,
-    questionObjects,
-    computeArguments
-}: {
+export type GenericComputeOptions = {
     context: RequestContext
     survey: SurveyMetadata
     edition: EditionMetadata
@@ -128,7 +123,11 @@ export async function genericComputeFunction({
     question: QuestionApiObject
     questionObjects: QuestionApiObject[]
     computeArguments: GenericComputeArguments
-}) {
+}
+export async function genericComputeFunction(options: GenericComputeOptions) {
+    const { context, survey, edition, section, question, questionObjects, computeArguments } =
+        options
+
     let axis1: ComputeAxisParameters,
         axis2: ComputeAxisParameters | null = null
     const { db, isDebug } = context
@@ -269,7 +268,11 @@ export async function genericComputeFunction({
         await moveFacetBucketsToDefaultBuckets(results)
     }
 
-    results = await applyDatasetCutoff(results)
+    if (responsesType === ResponsesTypes.COMBINED) {
+        results = await combineWithFreeform(results, options)
+    }
+
+    results = await applyDatasetCutoff(results, computeArguments)
 
     await discardEmptyIds(results)
 

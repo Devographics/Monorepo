@@ -27,7 +27,11 @@ export function sortByOptions<T extends Bucket | FacetBucket>(buckets: T[], opti
     return [...buckets].sort((a, b) => {
         // make sure everything is a string to avoid type mismatches
         const stringValues = options.map(o => o.id.toString())
-        return stringValues.indexOf(a.id.toString()) - stringValues.indexOf(b.id.toString())
+        const indexA = stringValues.indexOf(a.id.toString())
+        const indexB = stringValues.indexOf(b.id.toString())
+        // if an item doesn't have a corresponding option, make sure it's sorted last
+        // (will happen for combined results)
+        return indexA === -1 ? 99999 : indexA - indexB
     })
 }
 

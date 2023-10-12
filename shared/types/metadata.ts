@@ -40,6 +40,7 @@ export interface OptionMetadata extends Option {
 // note: could be merged with ResultsSubFieldEnum ?
 export enum ResponsesTypes {
     RESPONSES = 'responses',
+    COMBINED = 'combined',
     // PREDEFINED = 'Predefined',
     PRENORMALIZED = 'prenormalized',
     FREEFORM = 'freeform'
