@@ -47,6 +47,7 @@ ${
     isFull
         ? `
 tags
+exactMatch
 patterns`
         : ''
 }

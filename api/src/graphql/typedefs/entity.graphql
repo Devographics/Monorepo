@@ -24,6 +24,7 @@ type Entity {
     type: String
     tags: [String]
     patterns: [String]
+    exactMatch: Boolean
 
     apiOnly: Boolean
 
