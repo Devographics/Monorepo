@@ -1,4 +1,5 @@
-import { EntityRule, cleanupValue, normalize } from "./helpers";
+import { EntityRule, cleanupValue } from "./helpers";
+import { normalize } from "./normalize";
 import set from "lodash/set.js";
 import {
   CommentField,

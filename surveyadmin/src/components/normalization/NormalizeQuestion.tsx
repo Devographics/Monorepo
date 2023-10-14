@@ -28,10 +28,8 @@ export const NormalizeQuestion = (props: {
 
   return loading ? (
     <div aria-busy={true} />
-  ) : data ? (
-    <Normalization {...props} data={data} />
   ) : (
-    <div>no data found.</div>
+    <Normalization {...props} data={data} />
   );
 };
 
@@ -48,12 +46,12 @@ export const Normalization = ({
   survey,
   edition,
   question,
-  data,
+  data = {} as ResponsesData,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionWithSection;
-  data: ResponsesData;
+  data?: ResponsesData;
 }) => {
   const { responsesCount, entities, responses, questionResult, durations } =
     data;
@@ -64,7 +62,7 @@ export const Normalization = ({
   const [customNormalizations, setCustomNormalizations] =
     useLocalStorage<CustomNormalizations>(cacheKey, {});
 
-  const questionData = questionResult.data;
+  const questionData = questionResult?.data;
 
   const {
     initializeSegments,
@@ -86,17 +84,12 @@ export const Normalization = ({
     });
   };
 
-  const { normalizedResponses, unnormalizedResponses } =
-    splitResponses(responses);
-
   const props = {
     responsesCount,
     survey,
     edition,
     question,
     responses,
-    normalizedResponses,
-    unnormalizedResponses,
     initializeSegments,
     updateSegments,
     doneCount,
@@ -111,15 +104,28 @@ export const Normalization = ({
 
   return (
     <div className="admin-normalization admin-content">
-      <p></p>
       <Actions {...props} />
       {segments.length > 0 && <Progress {...props} />}
-
       <QuestionData questionData={questionData} responses={responses} />
-      <Fields {...props} variant="normalized" />
-      <Fields {...props} variant="unnormalized" />
+      {responses ? (
+        <AllFields {...props} />
+      ) : (
+        <div>No responses data found.</div>
+      )}
     </div>
   );
 };
 
+const AllFields = (props) => {
+  const { normalizedResponses, unnormalizedResponses } = splitResponses(
+    props.responses
+  );
+  const fieldsProps = { ...props, normalizedResponses, unnormalizedResponses };
+  return (
+    <>
+      <Fields {...fieldsProps} variant="normalized" />
+      <Fields {...fieldsProps} variant="unnormalized" />
+    </>
+  );
+};
 export default NormalizeQuestion;

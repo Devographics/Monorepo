@@ -40,8 +40,6 @@ const Tokens = ({
 }) => {
   const [showTokens, setShowTokens] = useState(false);
 
-  if (!responses) return <p>Nothing to normalize</p>;
-
   const questionObject = getQuestionObject({
     survey,
     edition,

@@ -13,6 +13,7 @@ export const getNormalizationPercentagesCacheKey = ({ survey, edition }) =>
 export type LoadNormalizationPercentagesArgs = {
   surveyId: string;
   editionId: string;
+  forceRefresh?: boolean;
 };
 
 export type NormalizationProgressStats = {

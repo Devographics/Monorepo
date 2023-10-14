@@ -40,8 +40,6 @@ const Metadata = ({
 }) => {
   const [showDbInfo, setShowDbInfo] = useState(false);
 
-  if (!responses) return <p>Nothing to normalize</p>;
-
   const questionObject = getQuestionObject({
     survey,
     edition,

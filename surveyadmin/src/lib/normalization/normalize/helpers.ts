@@ -1,13 +1,10 @@
 // import { getSetting, runGraphQL, logToFile } from 'meteor/vulcan:core';
 import intersection from "lodash/intersection.js";
-import uniqBy from "lodash/uniqBy.js";
 import sortBy from "lodash/sortBy.js";
 import compact from "lodash/compact.js";
 import isEmpty from "lodash/isEmpty.js";
 import { logToFile } from "@devographics/debug";
 import {
-  Entity,
-  QuestionMetadata,
   EditionMetadata,
   SurveyMetadata,
   QuestionTemplateOutput,
@@ -23,12 +20,13 @@ import { getEditionSelector, ignoreValues } from "../helpers/getSelectors";
 import { getSelector } from "../helpers/getSelectors";
 import {
   BulkOperation,
-  NormalizationToken,
   NormalizedResponseDocument,
   QuestionWithSection,
 } from "../types";
 import { WithId } from "mongodb";
 import { NormalizationResponse } from "../hooks";
+import { generateEntityRules } from "./generateEntityRules";
+import { normalize } from "./normalize";
 
 // export const getFieldPaths = (field: Field) => {
 //   const { suffix } = field as ParsedQuestion;
@@ -98,206 +96,8 @@ Extract matching tokens from a string
 
 */
 const enableLimit = false;
-const stringLimit = enableLimit ? 170 : 1000; // max length of string to try and find tokens in
-const rulesLimit = 1500; // max number of rules to try and match for any given string
-
-const extractTokens = async ({
-  value,
-  rules,
-  edition,
-  question,
-  verbose,
-}: {
-  value: any;
-  rules: Array<EntityRule>;
-  edition: EditionMetadata;
-  question: QuestionMetadata;
-  verbose?: boolean;
-}) => {
-  const rawString = value;
-
-  // RegExp.prototype.toJSON = RegExp.prototype.toString;
-
-  if (rawString.length > stringLimit) {
-    await logToFile(
-      "normalization_errors.txt",
-      "Length Error!  " + rawString + "\n---\n"
-    );
-    throw new Error(
-      `Over string limit (${rules.length} rules, ${rawString.length} characters)`
-    );
-  }
-
-  const tokens: Array<NormalizationToken> = [];
-  let count = 0;
-  // extract tokens for each rule, storing
-  // the start/end index for each match
-  // to be used later to detect overlap.
-  for (const { pattern, context, fieldId, id } of rules) {
-    let scanCompleted = false;
-    let scanStartIndex = 0;
-
-    // add count to prevent infinite looping
-    while (scanCompleted !== true && count < rulesLimit) {
-      count++;
-      if (count === rulesLimit) {
-        console.warn(
-          `// Reached rules limit of ${rulesLimit} while normalizing [${rawString}]`
-        );
-      }
-      if (
-        context &&
-        fieldId &&
-        (context !== edition.id || fieldId !== question.id)
-      ) {
-        // if a context and fieldId are defined for the current rule,
-        // abort unless they match the current context and fieldId
-        break;
-      }
-      const stringToScan = rawString.slice(scanStartIndex);
-      const match = stringToScan.match(pattern);
-      if (match !== null) {
-        const includesToken = !!tokens.find((t) => t.id === id);
-        console.log("match!!!", match);
-        if (!includesToken) {
-          // make sure we don't add an already-matched token more than one time
-          // for example if someone wrote "React, React, React"
-          tokens.push({
-            id,
-            pattern: pattern.toString(),
-            match: match[0],
-            length: match[0].length,
-            rules: rules.length,
-            range: [
-              scanStartIndex + match.index,
-              scanStartIndex + match.index + match[0].length,
-            ],
-          });
-        }
-        scanStartIndex += match.index + match[0].length;
-      } else {
-        scanCompleted = true;
-      }
-    }
-  }
-
-  // sort by length, longer tokens first
-  tokens.sort((a, b) => b.length - a.length);
-
-  // for each token look for smaller tokens contained
-  // in its range and exclude them.
-  const tokensToExclude: Array<number> = [];
-  tokens.forEach((token, tokenIndex) => {
-    // skip already excluded tokens
-    if (tokensToExclude.includes(tokenIndex)) return;
-
-    tokens.forEach((nestedToken, nestedTokenIndex) => {
-      // ignore itself & already ignored tokens
-      if (
-        nestedTokenIndex === tokenIndex ||
-        tokensToExclude.includes(nestedTokenIndex)
-      )
-        return;
-
-      // is the nested token contained in the current token range
-      if (
-        nestedToken.range[0] >= token.range[0] &&
-        nestedToken.range[1] <= token.range[1]
-      ) {
-        tokensToExclude.push(nestedTokenIndex);
-      }
-    });
-  });
-
-  const filteredTokens = tokens.filter(
-    (token, index) => !tokensToExclude.includes(index)
-  );
-
-  const uniqueTokens = uniqBy(filteredTokens, (token) => token.id);
-
-  // ensure ids are uniques
-  // const uniqueIds = [...new Set(filteredTokens.map((token) => token.id))];
-
-  // alphabetical sort for consistency
-  // uniqueIds.sort();
-
-  return uniqueTokens;
-};
-
-export const getQuestionRules = ({
-  entityRules,
-  questionObject,
-  verbose,
-}: {
-  entityRules: EntityRule[];
-  questionObject: QuestionTemplateOutput;
-  verbose?: boolean;
-}) => {
-  // automatically add question's own id as a potential match tag
-  const matchTags = [questionObject.id, ...(questionObject.matchTags || [])];
-
-  if (!matchTags || matchTags.length === 0) {
-    throw new Error(
-      `getQuestionRules: no matchTags defined for question ${questionObject.id}`
-    );
-  }
-
-  let rules: EntityRule[] = [];
-  matchTags.forEach((matchTag) => {
-    // for each match tag, add all corresponding rules
-    // make sure to preserve matchTag order, as it's used for match priority
-    const tagRules = entityRules.filter((r) => r.tags.includes(matchTag));
-    rules = [...rules, ...tagRules];
-  });
-  // const rules = entityRules.filter((r) => intersection(matchTags, r.tags).length > 0)
-
-  if (verbose) {
-    if (rules.length === 0) {
-      console.warn(
-        `‼️ normalize: found no rules for question [${
-          questionObject.id
-        }] with matchTags [${matchTags?.join(", ")}]`
-      );
-    } else {
-      console.log(`// Found ${rules.length} rules to match against`);
-    }
-  }
-  return rules;
-};
-/*
-
-Normalize a string value
-
-(Can be limited by tags)
-
-*/
-export const normalize = async ({
-  values,
-  questionObject,
-  entityRules,
-  edition,
-  verbose,
-}: {
-  values: any[];
-  entityRules: EntityRule[];
-  edition: EditionMetadata;
-  questionObject: QuestionTemplateOutput;
-  verbose?: boolean;
-}) => {
-  const rules = getQuestionRules({ questionObject, entityRules, verbose });
-  let allTokens: NormalizationToken[] = [];
-  for (const value of values) {
-    const tokens = await extractTokens({
-      value,
-      rules,
-      edition,
-      question: questionObject,
-      verbose,
-    });
-    allTokens = [...allTokens, ...tokens];
-  }
-  return allTokens;
-};
+export const stringLimit = enableLimit ? 170 : 1000; // max length of string to try and find tokens in
+export const rulesLimit = 1500; // max number of rules to try and match for any given string
 
 /*
 
@@ -413,81 +213,6 @@ export interface EntityRule {
   fieldId?: string;
   tags: Array<string>;
 }
-
-export const generateEntityRules = (entities: Array<Entity>) => {
-  const rules: Array<EntityRule> = [];
-  entities
-    .filter((e) => !e.apiOnly)
-    .forEach((entity) => {
-      const { id, patterns, tags, twitterName } = entity;
-
-      if (id) {
-        // we match the separator group 0 to 2 times to account for double spaces,
-        // double hyphens, etc.
-        const separator = "( |-|_|.){0,2}";
-
-        // 1. replace "_" by separator
-        const idPatternString = id.replaceAll("_", separator);
-        const idPattern = new RegExp(idPatternString, "i");
-        rules.push({
-          id,
-          pattern: idPattern,
-          tags: tags || [],
-        });
-
-        // note: the following should not be needed because all entities
-        // should already follow the foo_js/foo_css forma
-        // 2. replace "js" at the end by separator+js
-        //if (id.substr(-2) === "js") {
-        //  const patternString = id.substr(0, id.length - 2) + separator + "js";
-        //  const pattern = new RegExp(patternString, "i");
-        //  rules.push({ id, pattern, tags });
-        //}
-        //
-        //    // 3. replace "css" at the end by separator+css
-        //    if (id.substr(-3) === "css") {
-        //      const patternString = id.substr(0, id.length - 3) + separator + "css";
-        //      const pattern = new RegExp(patternString, "i");
-        //      rules.push({ id, pattern, tags });
-        //    }
-
-        // 4. add custom patterns
-        patterns &&
-          patterns.forEach((patternString) => {
-            /*
-          Some patterns are of the form context||question||pattern
-          to only match a specific question in a specific context.
-          
-          For example, for entity "graphql_org":
-
-          state_of_graphql||sites_courses||official documentation
-        */
-
-            const patternSegments = patternString.split("||");
-            if (patternSegments.length === 3) {
-              const pattern = new RegExp(patternSegments[2], "i");
-              rules.push({
-                id,
-                pattern,
-                context: patternSegments[0],
-                fieldId: patternSegments[1],
-                tags: tags || [],
-              });
-            } else {
-              const pattern = new RegExp(patternSegments[0], "i");
-              rules.push({ id, pattern, tags: tags || [] });
-            }
-          });
-
-        // 5. also add twitter username if available (useful for people entities)
-        if (twitterName) {
-          const pattern = new RegExp(twitterName, "i");
-          rules.push({ id, pattern, tags: tags || [] });
-        }
-      }
-    });
-  return rules;
-};
 
 export const logAllRules = async () => {
   const { data: allEntities } = await fetchEntities();

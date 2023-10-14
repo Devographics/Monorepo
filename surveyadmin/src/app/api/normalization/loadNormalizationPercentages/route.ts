@@ -5,9 +5,13 @@ import { getNormalizationPercentages } from "~/lib/normalization/actions/getNorm
 export async function GET(req: NextRequest, res: NextResponse) {
   const surveyId = req.nextUrl.searchParams.get("surveyId")!;
   const editionId = req.nextUrl.searchParams.get("editionId")!;
-
+  const forceRefresh = !!req.nextUrl.searchParams.get("forceRefresh")!;
   try {
-    const data = await getNormalizationPercentages({ surveyId, editionId });
+    const data = await getNormalizationPercentages({
+      surveyId,
+      editionId,
+      shouldGetFromCache: !forceRefresh,
+    });
     return NextResponse.json({ data });
   } catch (error) {
     console.error(error);

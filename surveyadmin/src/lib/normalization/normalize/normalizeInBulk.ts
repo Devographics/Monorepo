@@ -1,5 +1,6 @@
 import { normalizeDocument } from "./normalizeDocument";
-import { generateEntityRules, getBulkOperations } from "./helpers";
+import { getBulkOperations } from "./helpers";
+import { generateEntityRules } from "./generateEntityRules";
 import { getNormResponsesCollection } from "@devographics/mongo";
 import { fetchEntities } from "@devographics/fetch";
 import {
