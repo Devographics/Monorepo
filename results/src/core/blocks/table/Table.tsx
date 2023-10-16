@@ -91,8 +91,8 @@ const TableRow = ({ row }) => (
 
 const TableCell = ({ value, isPercentage }) => (
     <td>
-        {value}
-        {value && isPercentage && '%'}
+        {value.toString()}
+        {value.toString() && isPercentage && '%'}
     </td>
 )
 

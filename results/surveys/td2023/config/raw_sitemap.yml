@@ -65,12 +65,12 @@
 
       - id: country
         template: multiple_options
-        parameters: { limit: 20 }
+        parameters: { limit: 20, showNoAnswer: true }
 
       - id: country_vs_salary
         fieldId: country
         template: multiple_options
-        parameters: { cutoff: 20 }
+        parameters: { cutoff: 20, showNoAnswer: true }
         defaultUnits: averageByFacet
         filtersState:
             options:
@@ -89,7 +89,6 @@
 
       - id: gender
         template: multiple_options
-        blockType: VerticalBarBlock
         defaultUnits: percentageSurvey
 
       - id: gender_vs_salary
@@ -138,6 +137,9 @@
                 id: current_total_annual_compensation
 
       - id: years_of_experience_grouped
+        titleId: user_info.years_of_experience
+        questionKey: user_info.years_of_experience.question
+        i18nNamespace: years_grouped
         template: multiple_options
         blockType: VerticalBarBlock
 
@@ -163,6 +165,10 @@
 
       - id: years_in_japan_grouped
         template: multiple_options
+        blockType: VerticalBarBlock
+        i18nNamespace: years_grouped
+        titleId: user_info.years_in_japan
+        questionKey: user_info.years_in_japan.question
 
       - id: educational_attainment
         template: multiple_options_combined
@@ -183,6 +189,7 @@
   blocks:
       - id: employment_status
         template: multiple_options_combined
+        parameters: { showNoAnswer: true, sort: { property: count } }
 
       - id: searching_for_job
         template: single_option
@@ -204,12 +211,16 @@
 
       - id: years_employed_grouped
         template: multiple_options
+        titleId: job_info.years_employed
+        questionKey: job_info.years_employed.question
+        i18nNamespace: years_grouped
 
       - id: hours_per_day
         template: multiple_options
 
       - id: how_did_you_find_your_current_job
         template: single_option_combined
+        parameters: { showNoAnswer: true, sort: { property: count } }
 
 - id: employer_info
   path: /employer-info
@@ -219,12 +230,14 @@
 
       - id: industry_sector
         template: multiple_options_combined
+        parameters: { showNoAnswer: true, cutoff: 10 }
 
       - id: remote_work_policy
         template: single_option
 
       - id: company_size
         template: single_option
+        blockType: HorizontalBarBlock
 
 - id: compensation
   path: /compensation
@@ -249,24 +262,31 @@
   blocks:
       - id: programming_languages
         template: multiple_options_combined
+        parameters: { cutoff: 10 }
 
       - id: databases
         template: multiple_options_combined
+        parameters: { cutoff: 10 }
 
       - id: web_frameworks
         template: multiple_options_combined
+        parameters: { cutoff: 10 }
 
       - id: other_frameworks_libraries
         template: multiple_options_combined
+        parameters: { cutoff: 10 }
 
       - id: developer_tools
         template: multiple_options_combined
+        parameters: { cutoff: 10 }
 
       - id: developer_environments
         template: multiple_options_combined
+        parameters: { cutoff: 10 }
 
       - id: cloud_platforms
         template: multiple_options_combined
+        parameters: { cutoff: 10 }
 
 - id: other
   path: /other

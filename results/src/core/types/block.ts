@@ -38,6 +38,7 @@ export interface BlockDefinition {
     blockType?: string
     tabId?: string
     titleId?: string
+    questionKey?: string
     descriptionId?: string
     noteId?: string
 

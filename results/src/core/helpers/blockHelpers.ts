@@ -127,8 +127,11 @@ export const getBlockQuestion = ({
     block: BlockDefinition
     getString: StringTranslator
 }) => {
+    const blockQuestion = block.questionKey && getString(block.questionKey)?.t
     const questionKey = `${getBlockKey({ block })}.question`
-    return getString(questionKey)?.t
+
+    const translation = getString(questionKey)
+    return blockQuestion || translation?.tClean || translation?.t
 }
 
 export const useBlockQuestion = ({ block }: { block: BlockDefinition }) => {

@@ -212,6 +212,16 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }
 
+    const freeformAnswersGradient = {
+        id: `Gradient${orientation}Freeform`,
+        type: 'linearGradient',
+        colors: [
+            { offset: 0, color: `${colors.barColorDefault.gradient[1]}70` },
+            { offset: 100, color: `${colors.barColorDefault.gradient[0]}70` }
+        ],
+        ...(orientation === HORIZONTAL ? horizontalDefs : {})
+    }
+
     const defaultGradient = {
         id: `Gradient${orientation}Default`,
         type: 'linearGradient',
@@ -222,7 +232,14 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }
 
-    return [...barColors, ...velocity, defaultGradient, noAnswerGradient, naGradient]
+    return [
+        ...barColors,
+        ...velocity,
+        defaultGradient,
+        freeformAnswersGradient,
+        noAnswerGradient,
+        naGradient
+    ]
 }
 
 type UseColorFillsOptions = {
@@ -267,6 +284,11 @@ export const useColorFills = (options: UseColorFillsOptions) => {
         id: `Gradient${orientation}NoAnswer`
     }
 
+    const freeformFill = {
+        match: d => d.data.data.isFreeformData === true,
+        id: `Gradient${orientation}Freeform`
+    }
+
     switch (chartDisplayMode) {
         case CHART_MODE_GRID: {
             /* 
@@ -279,7 +301,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
             const id = isDefault
                 ? `Gradient${orientation}Default`
                 : `Gradient${orientation}${gridIndex + gridIndexOffset}`
-            return [noAnswerFill, naFill, { match: '*', id }]
+            return [noAnswerFill, freeformFill, naFill, { match: '*', id }]
         }
         case CHART_MODE_STACKED: {
             /*
@@ -309,7 +331,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
                 id: `${prefix}${orientation}${i + 2}`
             }))
 
-            return [noAnswerFill, naFill, averageFill, ...facetFills]
+            return [noAnswerFill, freeformFill, naFill, averageFill, ...facetFills]
         }
         case CHART_MODE_GROUPED: {
             /*
@@ -323,7 +345,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
                 },
                 id: `Gradient${orientation}${i + 1}`
             }))
-            return [noAnswerFill, naFill, ...numberedSeriesFills]
+            return [noAnswerFill, freeformFill, naFill, ...numberedSeriesFills]
         }
         default: {
             /*
@@ -332,7 +354,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
 
             */
             const defaultFill = { match: '*', id: `Gradient${orientation}Default` }
-            return [noAnswerFill, naFill, defaultFill]
+            return [noAnswerFill, freeformFill, naFill, defaultFill]
         }
     }
 }

@@ -69,12 +69,6 @@ const ByFacetBlock = ({ block, data }: ByFacetBlockProps) => {
     const allFacets = [globalFacet, ...facetFacets]
     let sortedFacets = sortBy(allFacets, f => f[property])
 
-    console.log(block)
-    console.log(data)
-    console.log(globalFacet)
-    console.log(facetFacets)
-    console.log(allFacets)
-
     if (order === 'desc') {
         sortedFacets.reverse()
     }

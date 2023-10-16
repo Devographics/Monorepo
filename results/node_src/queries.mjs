@@ -331,6 +331,7 @@ surveys {
                 id
                 percentageQuestion
                 percentageSurvey
+                isFreeformData
                 ${addBucketsEntities ? getEntityFragment() : ''}
                 ${queryArgs.facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
                 ${queryArgs.facet || addBucketFacetsPlaceholder ? getPercentilesFragment() : ''}

@@ -38,7 +38,6 @@ export const AxisLeft = ({
         }))
     }, [yScale])
 
-    console.log(ticks)
     return (
         <>
             {/* Main vertical line */}

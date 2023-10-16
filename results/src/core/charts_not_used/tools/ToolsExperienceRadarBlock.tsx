@@ -71,12 +71,8 @@ export const ToolsExperienceRadarBlock = ({
     const [metric, setMetric] = useState<MetricId>('satisfaction')
     const { getString } = useI18n()
 
-    console.log(data)
-
     const { ids, years, experience } = data
     const chartData: RadarChartSerie[] = getChartData({ data: experience })
-
-    console.log(chartData)
 
     // const tableData = experience.map(tool => {
     //     const cellData = { label: tool?.entity?.name }

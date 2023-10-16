@@ -200,7 +200,8 @@ const HorizontalBarChart = ({
         showDefaultSeries
     })
 
-    let sortedBuckets = sortBy(buckets, getSortKey(keys))
+    // let sortedBuckets = sortBy(buckets, getSortKey(keys))
+    let sortedBuckets = [...buckets].reverse()
     if (block.hideCutoff) {
         sortedBuckets = applyGroupCutoff(sortedBuckets, block.hideCutoff)
     }
