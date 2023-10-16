@@ -1,6 +1,7 @@
 import { BucketData, BucketUnits, FacetBucket, Option, OptionId } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import sumBy from 'lodash/sumBy.js'
+import { NO_ANSWER } from '@devographics/constants'
 
 /*
 
@@ -78,6 +79,7 @@ export async function groupBuckets(
 ) {
     for (let editionData of resultsByEdition) {
         if (axis1.question.groups) {
+            const noAnswerBucket = editionData.buckets.find(b => b.id === NO_ANSWER)
             const groupedBuckets = axis1.question.groups.map(group => {
                 const { id, upperBound, lowerBound, items } = group
                 let selectedBuckets
@@ -107,7 +109,7 @@ export async function groupBuckets(
 
                 return bucket
             })
-            editionData.buckets = groupedBuckets
+            editionData.buckets = [...groupedBuckets, noAnswerBucket]
         }
     }
 }
