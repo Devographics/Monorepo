@@ -236,3 +236,16 @@ dialog article p:last-child {
   margin-left: 5px;
   display: inline-block;
 }
+
+.breadcrumb-segment {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  summary {
+    // border: 0 !important;
+    padding: 1px 4px !important;
+    &::after {
+      margin: 0 !important;
+    }
+  }
+}
