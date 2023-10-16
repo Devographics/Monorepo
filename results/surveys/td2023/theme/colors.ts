@@ -154,12 +154,12 @@ const distinct = [
 ]
 
 const stateOfJSThemeColors: DefaultTheme['colors'] = {
-    background: '#272325',
+    background: '#030d1f',
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',
-    backgroundAlt3: '#27242E',
-    backgroundBackground: colors.lilacDarkest4,
+    backgroundAlt3: '#182a4a',
+    backgroundBackground: '#182a4a',
     backgroundForeground: colors.navyLighter,
-    backgroundAlt: colors.lilacDarkest4,
+    backgroundAlt: '#182a4a',
     backgroundAltTrans: 'rgba(49, 68, 72, 0.4)',
     backgroundAlt2: colors.lilacDarkest2,
     backgroundInverted: '#FFF6E6',
@@ -168,13 +168,13 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     textAlt: 'rgba(255, 246, 229, 0.5)',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
-    link: colors.blueGreen,
-    linkActive: '#5C63E0',
-    contrast: '#0bdf67',
+    link: '#818cf8',
+    linkActive: '#4E46DD',
+    contrast: '#4E46DD',
     border: '#FFF6E6',
     borderAlt: 'rgba(255, 246, 229, 0.35)',
     heatmap: colors.pinkLight,
-    lineChartDefaultColor: '#59DF7F',
+    lineChartDefaultColor: 'rgb(65, 181, 231)',
     no_answer: [colors.greyLight, colors.greyLightest],
     velocityBarColors: velocity.slice(0, Math.round(velocity.length / 2 - 1)).map((color, i) => ({
         id: `velocityColor${i}`,
@@ -241,8 +241,8 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     ],
     barColorDefault: {
         id: 'barColorDefault',
-        color: colors.blueGreenDark,
-        gradient: [colors.blueGreenDark, colors.blueGreenDark]
+        color: '#818cf8',
+        gradient: ['#818cf8', '#4039BD']
     },
     barColorNoAnswer: {
         id: 'barColorNoAnswer',
