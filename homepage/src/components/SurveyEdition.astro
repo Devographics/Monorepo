@@ -2,7 +2,7 @@
 import T from '@components/T'
 import { statuses } from '@helpers/constants'
 import TakeSurvey from '@components/TakeSurvey'
-import { getLocaleSubset } from '@helpers/translator'
+import { getLocaleSubset, getStringTranslator } from '@helpers/translator'
 import { ResultsStatusEnum } from '@devographics/types'
 
 const { survey, edition, locale, isLast } = Astro.props
@@ -11,6 +11,7 @@ const { background } = colors
 const isOpen = status === statuses.open
 const isPreview = status === statuses.preview
 const mainLink = isOpen || isPreview ? questionsUrl : resultsUrl
+const getString = getStringTranslator(locale)
 
 let marker
 if (isOpen) {
@@ -20,6 +21,7 @@ if (isOpen) {
 } else if (isLast) {
     marker = 'homepage.most_recent_survey'
 }
+
 ---
 
 <div class:list={['survey-edition', { 'survey-edition-last': isLast }]}>
@@ -34,7 +36,7 @@ if (isOpen) {
 
         <h4 class="survey-edition-year">{year}</h4>
 
-        <a class="image-wrapper" href={mainLink}
+       <a class="image-wrapper" href={mainLink} aria-hidden="true"
             ><span class="image-inner" style={`background-image: url(${imageUrl})`}></span>
         </a>
     </div>
@@ -50,7 +52,7 @@ if (isOpen) {
         ) : (
             <div class="survey-edition-actions survey-closed button-group">
                 {questionsUrl && (
-                    <a href={questionsUrl} class="button">
+                    <a href={questionsUrl} class="button" aria-label={`${getString('homepage.preview_questions').t} ${survey.name} ${year}`}>
                         <T
                             locale={locale}
                             k={isPreview ? 'homepage.preview_questions' : 'homepage.view_questions'}
@@ -58,7 +60,7 @@ if (isOpen) {
                     </a>
                 )}
                 {resultsUrl && edition.resultsStatus === ResultsStatusEnum.PUBLISHED ? (
-                    <a href={resultsUrl} class="button">
+                    <a href={resultsUrl} class="button" aria-label={`${getString('homepage.view_results').t} ${survey.name} ${year}`}>
                         <T locale={locale} k="homepage.view_results" />
                     </a>
                 ) : (
@@ -68,6 +70,7 @@ if (isOpen) {
                 )}
             </div>
         )
+      
     }
 </div>
 
