@@ -20,7 +20,7 @@ export const FormComponentLikertScale = (props: FormInputProps) => {
       <div className="likert-legends-wrapper">
         <div className="likert-legends">
           {columns?.map((column, i) => (
-            <span className="likert-legend-label">
+            <span key={i} className="likert-legend-label">
               <FormattedMessage id={`likert.option.${i}`} />
             </span>
           ))}

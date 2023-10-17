@@ -54,14 +54,17 @@
       - id: japan_province
         template: multiple_options
         hideCutoff: 10
+        parameters: { showNoAnswer: true, sort: { property: count } }
 
       - id: reason_for_relocation
         template: single_option_combined
         blockType: HorizontalBarBlock
+        parameters: { showNoAnswer: true, sort: { property: count } }
 
       - id: residency_status
         template: single_option_combined
         blockType: HorizontalBarBlock
+        parameters: { showNoAnswer: true, sort: { property: count } }
 
       - id: country
         template: multiple_options
@@ -179,10 +182,12 @@
       - id: language_proficiency_english
         template: multiple_options
         blockType: VerticalBarBlock
+        parameters: { showNoAnswer: true, sort: { property: options } }
 
       - id: language_proficiency_japanese
         template: multiple_options
         blockType: VerticalBarBlock
+        parameters: { showNoAnswer: true, sort: { property: options } }
 
 - id: job_info
   path: /job-info
@@ -242,8 +247,10 @@
 - id: compensation
   path: /compensation
   blocks:
-      - id: current_total_annual_compensation
+      - id: current_total_annual_compensation_grouped
         template: single_option
+        titleId: compensation.current_total_annual_compensation
+        questionKey: compensation.current_total_annual_compensation.question
 
       - id: previous_compensation
         template: single_option
@@ -254,7 +261,9 @@
       - id: negotiated_compensation
         template: single_option
 
-      - id: annual_paid_leave
+      - id: annual_paid_leave_grouped
+        intlId: compensation.annual_paid_leave
+        questionKey: compensation.annual_paid_leave.question
         template: single_option
 
 - id: technology
@@ -292,6 +301,38 @@
   path: /other
   blocks:
       # - id: life_in_japan
+
+      - id: life_in_japan__visa_situation
+        i18nNamespace: satisfaction
+        template: single_option
+
+      - id: life_in_japan__professional_life
+        i18nNamespace: satisfaction
+        template: single_option
+
+      - id: life_in_japan__family_life
+        i18nNamespace: satisfaction
+        template: single_option
+
+      - id: life_in_japan__social_life
+        i18nNamespace: satisfaction
+        template: single_option
+
+      - id: life_in_japan__cultural_adjustment
+        i18nNamespace: satisfaction
+        template: single_option
+
+      - id: life_in_japan__quality_of_life
+        i18nNamespace: satisfaction
+        template: single_option
+
+      - id: life_in_japan__housing
+        i18nNamespace: satisfaction
+        template: single_option
+
+      - id: life_in_japan__financial_situation
+        i18nNamespace: satisfaction
+        template: single_option
 
       - id: communities
         template: multiple_options_combined
