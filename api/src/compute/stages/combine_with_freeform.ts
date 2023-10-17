@@ -16,11 +16,30 @@ export const combineEditionData = (
         // if there is no freeform data just return regular response data
         return responseEditionData
     } else {
+        let regularBuckets = responseEditionData.buckets
+        const regularBucketsIds = regularBuckets.map(b => b.id)
         // get rid of freeform data's "no answer" bucket
-        const freeformBuckets = freeformEditionData.buckets
+        let freeformBuckets = freeformEditionData.buckets
             .filter(b => b.id !== NO_ANSWER)
             .map(b => ({ ...b, isFreeformData: true }))
-        const combinedBuckets = [...responseEditionData.buckets, ...freeformBuckets]
+
+        // in some cases, there can be buckets in common between regular and freeform data
+        // if so add the freeform counts to the regular bucket
+        regularBuckets = regularBuckets.map(bucket => {
+            // look for a freeform bucket with the same id as the regular bucket
+            const freeformBucket = freeformBuckets.find(b => b.id === bucket.id)!
+            if (freeformBucket) {
+                const combinedCount = bucket.count! + freeformBucket.count!
+                return { ...bucket, count: combinedCount }
+            } else {
+                return bucket
+            }
+        })
+
+        // remove any freeform bucket that is already included in regular buckets
+        freeformBuckets = freeformBuckets.filter(b => !regularBucketsIds.includes(b.id))
+
+        const combinedBuckets = [...regularBuckets, ...freeformBuckets]
         const combinedEditionData = { ...responseEditionData, buckets: combinedBuckets }
         return combinedEditionData
     }

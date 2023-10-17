@@ -11,7 +11,10 @@ interface SubField {
     resolverFunction?: ResolverType
 }
 
-const getResponsesTypeDef = ({ surveyId }: QuestionApiObject, subField: ResultsSubFieldEnum) =>
+export const getResponsesTypeDef = (
+    { surveyId }: QuestionApiObject,
+    subField: ResultsSubFieldEnum | string
+) =>
     `${subField}(filters: ${getFiltersTypeName(
         surveyId
     )}, parameters: Parameters, facet: ${getFacetsTypeName(surveyId)}): ${graphqlize(

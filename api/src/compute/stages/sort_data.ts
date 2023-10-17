@@ -24,14 +24,26 @@ export function sortBuckets<T extends Bucket | FacetBucket>(
 }
 
 export function sortByOptions<T extends Bucket | FacetBucket>(buckets: T[], options: Option[]) {
+    console.log('// sorting by option…')
     return [...buckets].sort((a, b) => {
         // make sure everything is a string to avoid type mismatches
         const stringValues = options.map(o => o.id.toString())
         const indexA = stringValues.indexOf(a.id.toString())
         const indexB = stringValues.indexOf(b.id.toString())
         // if an item doesn't have a corresponding option, make sure it's sorted last
-        // (will happen for combined results)
-        return indexA === -1 ? 99999 : indexA - indexB
+        // (will happen for combined results or no_answer bucket)
+        let sortIndicator
+        if (indexA === -1) {
+            // a value is not in options, assume that a > b
+            sortIndicator = 1
+        } else if (indexB === -1) {
+            // b value is not in options, assume that a < b
+            sortIndicator = -1
+        } else {
+            sortIndicator = indexA - indexB
+        }
+        // console.log(sortIndicator > 0 ? `${a.id} > ${b.id}` : `${a.id} < ${b.id}`)
+        return sortIndicator
     })
 }
 
