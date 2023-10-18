@@ -19,6 +19,7 @@ import {
 } from "@devographics/types";
 import { getFieldsToCopy } from "./steps";
 import { prefixWithEditionId } from "@devographics/templates";
+import { NO_MATCH } from "@devographics/constants";
 import compact from "lodash/compact";
 
 interface NormalizeFieldOptions extends NormalizationParams {
@@ -88,8 +89,8 @@ export const normalizeField = async ({
     // start by copying over the "main" response value
     if (rawPaths.response && normPaths.response) {
       const fieldPath = prefixWithEditionId(rawPaths.response, edition.id);
-      const responseValue = cleanupValue(response[fieldPath]);
-      if (responseValue) {
+      const responseValue = response[fieldPath];
+      if (typeof responseValue !== "undefined") {
         set(normResp, normPaths.response!, responseValue);
         regularFields.push({
           questionId: questionObject.id,
@@ -216,9 +217,12 @@ export const normalizeField = async ({
               token.pattern.toString()
             );
 
-            set(normResp, normPaths.other!, normIds);
-            set(normResp, normPaths.patterns!, normPatterns);
-
+            if (normIds.length > 0) {
+              set(normResp, normPaths.other!, normIds);
+              set(normResp, normPaths.patterns!, normPatterns);
+            } else {
+              set(normResp, normPaths.other!, [NO_MATCH]);
+            }
             // keep trace of fields that were normalized
             normalizedFields.push({
               questionId: questionObject.id,

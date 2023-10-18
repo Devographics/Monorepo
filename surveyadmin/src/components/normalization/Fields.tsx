@@ -21,6 +21,7 @@ import Dialog from "./Dialog";
 import { FieldValue } from "./FieldValue";
 import { Entity } from "@devographics/types";
 import { CustomNormalization, CustomNormalizations } from "./NormalizeQuestion";
+import { NO_MATCH } from "@devographics/constants";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -244,14 +245,16 @@ const Field = ({
         </td>
         <td>
           <div className="normalization-tokens">
-            {normalizedValue?.map((value, i) => (
-              <NormToken
-                key={value}
-                id={value}
-                pattern={patterns[i]}
-                responses={responses}
-              />
-            ))}
+            {normalizedValue
+              ?.filter((v) => v !== NO_MATCH)
+              .map((value, i) => (
+                <NormToken
+                  key={value}
+                  id={value}
+                  pattern={patterns?.[i]}
+                  responses={responses}
+                />
+              ))}
             {customNormalizedValue?.map((value) => (
               <NormToken
                 key={value}
