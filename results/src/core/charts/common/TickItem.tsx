@@ -12,7 +12,7 @@ import TooltipComponent from 'core/components/Tooltip'
 import { CloseIcon, DotsIcon } from 'core/icons'
 import TickItemLinks, { getSocialLinks } from 'core/charts/common/TickItemLinks'
 import Popover from 'core/components/Popover2'
-import { NO_ANSWER } from '@devographics/constants'
+import { NO_ANSWER, NO_MATCH } from '@devographics/constants'
 import { getItemLabel } from 'core/helpers/labels'
 
 const labelMaxLength = 20
@@ -99,6 +99,9 @@ export const getBucketLabel = args => {
     if (id === NO_ANSWER) {
         key = 'charts.no_answer'
         label = getString('charts.no_answer').t
+    } else if (id === NO_MATCH) {
+        key = 'charts.no_match'
+        label = getString('charts.no_match').t
     } else {
         key = i18nNamespace === 'features' ? `features.${id}` : `options.${i18nNamespace}.${id}`
         const s = getString(key)
