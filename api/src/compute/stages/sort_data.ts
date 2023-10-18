@@ -2,8 +2,7 @@ import { ComputeAxisParameters, SortProperty, SortOrderNumeric } from '../../typ
 import { ResponseEditionData, Bucket, FacetBucket, Option } from '@devographics/types'
 import sortBy from 'lodash/sortBy.js'
 import isEmpty from 'lodash/isEmpty.js'
-// import { NO_ANSWER } from '@devographics/constants'
-const NO_ANSWER = 'no_answer'
+import { NO_ANSWER, NO_MATCH } from '@devographics/constants'
 
 export function sortBuckets<T extends Bucket | FacetBucket>(
     buckets: T[],
@@ -19,6 +18,7 @@ export function sortBuckets<T extends Bucket | FacetBucket>(
     } else {
         sortedBuckets = sortByProperty(sortedBuckets, sort, order)
     }
+    sortedBuckets = putNoMatchBucketLast<T>(sortedBuckets)
     sortedBuckets = putNoAnswerBucketLast<T>(sortedBuckets)
     return sortedBuckets
 }
@@ -68,12 +68,23 @@ export function sortByProperty<T extends Bucket | FacetBucket>(
     return sortedBuckets
 }
 
-// put on answer bucket last (if it exists)
+// put no answer bucket last (if it exists)
 export function putNoAnswerBucketLast<T extends Bucket | FacetBucket>(buckets: T[]) {
     const noAnswerBucket = buckets.find(b => b.id === NO_ANSWER) as T
     if (noAnswerBucket) {
         const regularBuckets = buckets.filter(b => b.id !== NO_ANSWER) as T[]
         return [...regularBuckets, noAnswerBucket]
+    } else {
+        return buckets
+    }
+}
+
+// put no match bucket last (if it exists)
+export function putNoMatchBucketLast<T extends Bucket | FacetBucket>(buckets: T[]) {
+    const noMatchBucket = buckets.find(b => b.id === NO_MATCH) as T
+    if (noMatchBucket) {
+        const regularBuckets = buckets.filter(b => b.id !== NO_MATCH) as T[]
+        return [...regularBuckets, noMatchBucket]
     } else {
         return buckets
     }

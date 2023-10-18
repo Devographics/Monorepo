@@ -1,7 +1,6 @@
 import { generateFiltersQuery } from '../filters'
 import { ComputeAxisParameters } from '../types'
 import { NO_ANSWER } from '@devographics/constants'
-// const NO_ANSWER = 'no_answer'
 import { getDbPath } from './generic'
 import { EditionMetadata, ResponsesTypes, SurveyMetadata } from '@devographics/types'
 import { getPastEditions } from '../helpers/surveys'

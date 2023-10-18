@@ -8,8 +8,7 @@ import {
 import isEmpty from 'lodash/isEmpty.js'
 import sumBy from 'lodash/sumBy.js'
 import difference from 'lodash/difference.js'
-// import { NO_ANSWER } from '@devographics/constants'
-const NO_ANSWER = 'no_answer'
+import { NO_ANSWER } from '@devographics/constants'
 
 /*
 

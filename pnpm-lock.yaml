@@ -931,6 +931,9 @@ importers:
       '@babel/preset-env':
         specifier: ^7.0.0
         version: 7.22.20(@babel/core@7.22.20)
+      '@devographics/constants':
+        specifier: workspace:^
+        version: link:../shared/constants
       '@devographics/debug':
         specifier: workspace:^1.0.0
         version: link:../shared/debug

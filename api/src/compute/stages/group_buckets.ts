@@ -55,11 +55,11 @@ const combineFacetBuckets = (
 
 const isInBounds = (n: number, lowerBound?: number, upperBound?: number) => {
     if (lowerBound && upperBound) {
-        return n >= lowerBound && n <= upperBound
+        return n >= lowerBound && n < upperBound
     } else if (lowerBound) {
         return n >= lowerBound
     } else if (upperBound) {
-        return n <= upperBound
+        return n < upperBound
     } else {
         throw new Error(`isInBounds: no bounds specified`)
     }
@@ -96,10 +96,10 @@ export async function groupBuckets(
                 }
 
                 const facetBuckets = combineFacetBuckets(selectedBuckets, axis2)
-
+                const aggregatedCount = sumBy(selectedBuckets, 'count')
                 const bucket = {
                     id,
-                    count: sumBy(selectedBuckets, 'count'),
+                    count: aggregatedCount,
                     percentageSurvey:
                         Math.round(100 * sumBy(selectedBuckets, 'percentageSurvey')) / 100,
                     percentageQuestion:
@@ -109,7 +109,9 @@ export async function groupBuckets(
 
                 return bucket
             })
-            editionData.buckets = [...groupedBuckets, noAnswerBucket]
+            editionData.buckets = noAnswerBucket
+                ? [...groupedBuckets, noAnswerBucket]
+                : groupedBuckets
         }
     }
 }

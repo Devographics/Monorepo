@@ -1,7 +1,6 @@
 import { ResponseEditionData, Bucket, FacetBucket, ComputeAxisParameters } from '../../types'
 import { ratioToPercentage } from '../common'
-// import { NO_ANSWER } from '@devographics/constants'
-const NO_ANSWER = 'no_answer'
+import { NO_ANSWER } from '@devographics/constants'
 
 const computeBucketsWithPercentages = <T extends Bucket | FacetBucket>(
     buckets: T[],
