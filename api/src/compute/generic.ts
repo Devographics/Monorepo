@@ -146,7 +146,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         facetLimit = 50,
         facetCutoff = 1,
         facetCutoffPercent,
-        showNoAnswer
+        showNoAnswer,
+        groupUnderCutoff = true
     } = parameters
 
     /*
@@ -159,6 +160,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         sort: sort?.property ?? (question.defaultSort as SortProperty) ?? 'count',
         order: convertOrder(sort?.order ?? 'desc'),
         cutoff,
+        groupUnderCutoff,
         limit
     }
     if (question.options) {
@@ -182,6 +184,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
                 sort: facetSort?.property ?? (facetQuestion.defaultSort as SortProperty) ?? 'count',
                 order: convertOrder(facetSort?.order ?? 'desc'),
                 cutoff: facetCutoff,
+                groupUnderCutoff,
                 cutoffPercent: facetCutoffPercent,
                 limit: facetLimit
             }
@@ -307,9 +310,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await addAveragesByFacet(results, axis2, axis1)
 
         await addPercentiles(results, axis2, axis1)
+        await cutoffData(results, axis2, axis1)
         await sortData(results, axis2, axis1)
         await limitData(results, axis2, axis1)
-        await cutoffData(results, axis2, axis1)
         await addLabels(results, axis2, axis1)
     } else {
         if (responsesType === ResponsesTypes.RESPONSES) {
@@ -320,10 +323,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         if (axis1.question.groups) {
             axis1.options = axis1.question.groups
         }
-
+        await cutoffData(results, axis1)
         await sortData(results, axis1)
         await limitData(results, axis1)
-        await cutoffData(results, axis1)
         await addLabels(results, axis1)
     }
 

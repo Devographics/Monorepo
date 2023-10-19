@@ -23,6 +23,8 @@ export interface GenericComputeParameters {
     facetCutoffPercent?: number
     enableCache?: boolean
     showNoAnswer?: boolean
+    showNoMatch?: boolean
+    groupUnderCutoff?: boolean
     responsesType?: ResponsesTypes
 }
 
@@ -31,6 +33,7 @@ export interface ComputeAxisParameters {
     sort: SortProperty
     order: SortOrderNumeric
     cutoff: number
+    groupUnderCutoff?: boolean
     limit: number
     cutoffPercent?: number
     options?: Option[]

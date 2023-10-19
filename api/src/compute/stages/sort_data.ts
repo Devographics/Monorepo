@@ -2,7 +2,7 @@ import { ComputeAxisParameters, SortProperty, SortOrderNumeric } from '../../typ
 import { ResponseEditionData, Bucket, FacetBucket, Option } from '@devographics/types'
 import sortBy from 'lodash/sortBy.js'
 import isEmpty from 'lodash/isEmpty.js'
-import { NO_ANSWER, NO_MATCH } from '@devographics/constants'
+import { CUTOFF_ANSWERS, NO_ANSWER, NO_MATCH } from '@devographics/constants'
 
 export function sortBuckets<T extends Bucket | FacetBucket>(
     buckets: T[],
@@ -18,8 +18,9 @@ export function sortBuckets<T extends Bucket | FacetBucket>(
     } else {
         sortedBuckets = sortByProperty(sortedBuckets, sort, order)
     }
-    sortedBuckets = putNoMatchBucketLast<T>(sortedBuckets)
-    sortedBuckets = putNoAnswerBucketLast<T>(sortedBuckets)
+    sortedBuckets = putBucketLast<T>(sortedBuckets, CUTOFF_ANSWERS)
+    sortedBuckets = putBucketLast<T>(sortedBuckets, NO_MATCH)
+    sortedBuckets = putBucketLast<T>(sortedBuckets, NO_ANSWER)
     return sortedBuckets
 }
 
@@ -68,23 +69,12 @@ export function sortByProperty<T extends Bucket | FacetBucket>(
     return sortedBuckets
 }
 
-// put no answer bucket last (if it exists)
-export function putNoAnswerBucketLast<T extends Bucket | FacetBucket>(buckets: T[]) {
-    const noAnswerBucket = buckets.find(b => b.id === NO_ANSWER) as T
-    if (noAnswerBucket) {
-        const regularBuckets = buckets.filter(b => b.id !== NO_ANSWER) as T[]
-        return [...regularBuckets, noAnswerBucket]
-    } else {
-        return buckets
-    }
-}
-
-// put no match bucket last (if it exists)
-export function putNoMatchBucketLast<T extends Bucket | FacetBucket>(buckets: T[]) {
-    const noMatchBucket = buckets.find(b => b.id === NO_MATCH) as T
-    if (noMatchBucket) {
-        const regularBuckets = buckets.filter(b => b.id !== NO_MATCH) as T[]
-        return [...regularBuckets, noMatchBucket]
+// move a bucket to the bottom
+export function putBucketLast<T extends Bucket | FacetBucket>(buckets: T[], bucketId: string) {
+    const lastBucket = buckets.find(b => b.id === bucketId) as T
+    if (lastBucket) {
+        const regularBuckets = buckets.filter(b => b.id !== bucketId) as T[]
+        return [...regularBuckets, lastBucket]
     } else {
         return buckets
     }

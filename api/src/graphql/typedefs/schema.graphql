@@ -213,6 +213,8 @@ input Parameters {
     facetCutoffPercent: Float
     enableCache: Boolean
     showNoAnswer: Boolean
+    showNoMatch: Boolean
+    groupUnderCutoff: Boolean
 }
 
 input CommentParameters {
