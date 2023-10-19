@@ -35,7 +35,7 @@ export const extractTokens = async ({
   // extract tokens for each rule, storing
   // the start/end index for each match
   // to be used later to detect overlap.
-  for (const { pattern, context, fieldId, id } of rules) {
+  for (const { pattern, id } of rules) {
     let scanCompleted = false;
     let scanStartIndex = 0;
     // add count to prevent infinite looping
@@ -45,15 +45,6 @@ export const extractTokens = async ({
         console.warn(
           `// Reached rules limit of ${rulesLimit} while normalizing [${rawString}]`
         );
-      }
-      if (
-        context &&
-        fieldId &&
-        (context !== edition.id || fieldId !== question.id)
-      ) {
-        // if a context and fieldId are defined for the current rule,
-        // abort unless they match the current context and fieldId
-        break;
       }
       const stringToScan = rawString.slice(scanStartIndex);
       const match = stringToScan.match(pattern);

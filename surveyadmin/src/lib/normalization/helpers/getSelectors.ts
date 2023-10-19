@@ -18,6 +18,7 @@ export const getSourceFields = (surveyId) => [
 Clean up values to remove 'none', 'n/a', etc.
 
 */
+export const emptyValues = ["", null, undefined, "undefined", {}];
 export const ignoreValues = [
   "",
   " ",

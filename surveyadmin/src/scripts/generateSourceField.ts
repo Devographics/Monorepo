@@ -1,7 +1,9 @@
 import { getNormResponsesCollection } from "@devographics/mongo";
 import { getFormPaths } from "@devographics/templates";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
+import { getEditionQuestions } from "~/lib/normalization/helpers/getEditionQuestions";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
+import { emptyValues } from "~/lib/normalization/helpers/getSelectors";
 
 export const generateSourceField = async (args) => {
   const normalizedResponses = await getNormResponsesCollection();
@@ -14,7 +16,7 @@ export const generateSourceField = async (args) => {
     editionId,
   });
 
-  const section = edition.sections.find((s) => s.id === "user_info")!;
+  const editionQuestions = getEditionQuestions(edition);
 
   // potential places to look for source field value
   // note: ordered from lowest to highest priority
@@ -26,23 +28,40 @@ export const generateSourceField = async (args) => {
 
   const sourceFieldPath = `user_info.source`;
 
+  // for each source field, copy contents to source
+  // (later iterations will overwrite previous ones)
   for (const sourceField of sourceFields) {
     // get questionObject
-    const question = section?.questions.find((q) => q.id === sourceField)!;
+    const question = editionQuestions.find((q) => q.id === sourceField)!;
+    if (!question) {
+      throw new Error(
+        `generateSourceField: could not find question ${editionId}/${sourceField}`
+      );
+    }
     const questionObject = getQuestionObject({
       survey: edition.survey,
       edition,
-      section,
+      section: question.section,
       question,
     })!;
     const { normPaths } = questionObject;
 
-    const selector = { editionId: edition.id };
+    if (!normPaths?.base) {
+      throw new Error(
+        `generateSourceField: could not find base normPath for question ${editionId}/${sourceField}`
+      );
+    }
+
+    const selector = {
+      editionId: edition.id,
+      [normPaths.base]: { $exists: true, $nin: emptyValues },
+    };
+
     // MongoDB 4.2+ can use an aggregation pipeline for updates
     const operation = [
       {
         $set: {
-          [sourceFieldPath]: `$${normPaths?.base}`,
+          [sourceFieldPath]: `$${normPaths.base}`,
         },
       },
     ];

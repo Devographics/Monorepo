@@ -209,8 +209,6 @@ Generate normalization rules from entities
 export interface EntityRule {
   id: string;
   pattern: RegExp | string;
-  context?: string;
-  fieldId?: string;
   tags: Array<string>;
 }
 

@@ -182,23 +182,27 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
   const normResponsesCollection = await getNormResponsesCollection(survey);
   try {
     if (!isSimulation) {
-      console.log(`-> Now starting bulk write…`);
+      if (bulkOperations.length > 0) {
+        console.log(`-> Now starting bulk write…`);
 
-      await logToFile(
-        `normalizeInBulk/${timestamp}_bulkOperations.json`,
-        bulkOperations
-      );
+        await logToFile(
+          `normalizeInBulk/${timestamp}_bulkOperations.json`,
+          bulkOperations
+        );
 
-      const operationResult = await normResponsesCollection.bulkWrite(
-        bulkOperations
-      );
-      console.log("// operationResult");
-      console.log(operationResult);
+        const operationResult = await normResponsesCollection.bulkWrite(
+          bulkOperations
+        );
+        console.log("// operationResult");
+        console.log(operationResult);
 
-      if (operationResult.insertedCount > 1) {
-        // if we inserted more than one document, make sure we
-        // delete any duplicates we might've introduced
-        await deleteDuplicates({ survey, edition });
+        if (operationResult.insertedCount > 1) {
+          // if we inserted more than one document, make sure we
+          // delete any duplicates we might've introduced
+          await deleteDuplicates({ survey, edition });
+        }
+      } else {
+        console.log("// Bulk operation array empty");
       }
     }
   } catch (error) {

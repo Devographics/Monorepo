@@ -99,7 +99,9 @@ export const normalizeField = async ({
         });
         modified = true;
         if (verbose) {
-          console.log(`⛰️ ${fieldPath}/response: “${responseValue}”`);
+          console.log(
+            `⛰️ processResponseField: ${fieldPath}/response: “${responseValue}”`
+          );
         }
       }
     }
@@ -119,7 +121,9 @@ export const normalizeField = async ({
         });
         modified = true;
         if (verbose) {
-          console.log(`⛰️ ${fieldPath}/comment: “${responseCommentValue}”`);
+          console.log(
+            `⛰️ processCommentField: ${fieldPath}/comment: “${responseCommentValue}”`
+          );
         }
       }
     }
@@ -209,7 +213,7 @@ export const normalizeField = async ({
 
             // if we only need one token, only keep the first one
             if (questionObject.matchType === "single") {
-              allTokens = [allTokens[0]];
+              allTokens = allTokens.slice(0, 1);
             }
 
             let normIds = allTokens.map((token) => token.id);
@@ -234,13 +238,16 @@ export const normalizeField = async ({
 
             modified = true;
             if (verbose) {
-              console.log(`⛰️ ${fieldPath}/other: “${otherValue}”`);
+              console.log(
+                `⛰️ processFreeformField: ${fieldPath}/other: “${otherValue}”`
+              );
               // console.log(`⛰️ -> Tags: ${matchTags.toString()}`);
               console.log(
                 `⛰️ -> Normalized values: ${JSON.stringify(allTokens)}`
               );
             }
           } catch (error) {
+            // console.warn(error);
             set(normResp, normPaths.error!, error.message);
           }
         }
@@ -276,7 +283,7 @@ export const normalizeField = async ({
           modified = true;
           if (verbose) {
             console.log(
-              `⛰️ ${rawFieldPath}/${DbPathsEnum.FOLLOWUP_PREDEFINED}: “${predefinedFollowupValue}”`
+              `⛰️ processPredefinedFollowupField: ${rawFieldPath}/${DbPathsEnum.FOLLOWUP_PREDEFINED}: “${predefinedFollowupValue}”`
             );
           }
         }
