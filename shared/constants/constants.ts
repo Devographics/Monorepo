@@ -22,6 +22,8 @@ export const NO_MATCH = 'no_match'
 
 export const OTHER_ANSWERS = 'other_answers'
 
+export const CUTOFF_ANSWERS = 'cutoff_answers'
+
 export const NOT_APPLICABLE = 'na'
 
 export const PERCENTAGE_SURVEY = 'percentageSurvey'
