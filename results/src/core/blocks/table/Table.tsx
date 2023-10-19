@@ -4,6 +4,7 @@ import React from 'react'
 import { useTheme } from 'styled-components'
 import { fontSize, spacing } from 'core/theme'
 import { TableData } from 'core/helpers/datatables'
+import round from 'lodash/round.js'
 
 const Tables = ({ tables = [] }: { tables: TableData[] }) => {
     return (
@@ -91,8 +92,8 @@ const TableRow = ({ row }) => (
 
 const TableCell = ({ value, isPercentage }) => (
     <td>
-        {value.toString()}
-        {value.toString() && isPercentage && '%'}
+        {round(value, 1).toString()}
+        {typeof value !== 'undefined' && isPercentage && '%'}
     </td>
 )
 

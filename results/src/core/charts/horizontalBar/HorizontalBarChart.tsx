@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
 import { useTheme } from 'styled-components'
-import sortBy from 'lodash/sortBy'
 import { ResponsiveBar } from '@nivo/bar'
 import { useI18n } from 'core/i18n/i18nContext'
 import BarTooltip from 'core/charts/common/BarTooltip'
@@ -22,26 +21,39 @@ import { StandardQuestionData, BucketUnits, Bucket, Entity } from '@devographics
 import { FacetItem, DataSeries, ChartModes, CustomizationFiltersSeries } from 'core/filters/types'
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
-import sumBy from 'lodash/sumBy'
-import { OTHER_ANSWERS } from '@devographics/constants'
+import { OTHER_ANSWERS, NO_MATCH, CUTOFF_ANSWERS } from '@devographics/constants'
+import { handleNoAnswerBucket } from 'core/helpers/data'
 
 export const getChartDataPath = (block: BlockDefinition) =>
     `${block?.queryOptions?.subField || 'responses'}.currentEdition.buckets`
 
-export const getChartData = (data: StandardQuestionData, block: BlockDefinition): Array<Bucket> =>
-    get(data, getChartDataPath(block))
+export const getChartData = (data: StandardQuestionData, block: BlockDefinition): Array<Bucket> => {
+    let buckets = get(data, getChartDataPath(block))
+    buckets = groupOtherAnswers(buckets)
+    buckets = handleNoAnswerBucket({ buckets, moveTo: 'end' })
+    return buckets
+}
 
-export const applyGroupCutoff = (chartData: Bucket[], hideCutoff: number) => {
-    const mainBuckets = chartData.filter(b => b.count && b.count >= hideCutoff)
-    const hiddenBuckets = chartData.filter(b => b.count && b.count < hideCutoff)
-    const hiddenBucket: Bucket = {
-        count: sumBy(hiddenBuckets, b => b.count || 0),
-        id: OTHER_ANSWERS,
-        percentageQuestion: sumBy(hiddenBuckets, b => b.percentageQuestion || 0),
-        percentageSurvey: sumBy(hiddenBuckets, b => b.percentageSurvey || 0),
-        facetBuckets: []
+// group together cutoff answers and unmatched answers
+export const groupOtherAnswers = (buckets: Bucket[]) => {
+    const mainBuckets = buckets.filter(b => ![CUTOFF_ANSWERS, NO_MATCH].includes(b.id))
+    const cutoffBucket = buckets.find(b => b.id === CUTOFF_ANSWERS)
+    const unmatchedBucket = buckets.find(b => b.id === NO_MATCH)
+    if (cutoffBucket || unmatchedBucket) {
+        const combinedOtherBucket: Bucket = {
+            count: (cutoffBucket?.count ?? 0) + (unmatchedBucket?.count ?? 0),
+            id: OTHER_ANSWERS,
+            percentageQuestion:
+                (cutoffBucket?.percentageQuestion ?? 0) +
+                (unmatchedBucket?.percentageQuestion ?? 0),
+            percentageSurvey:
+                (cutoffBucket?.percentageSurvey ?? 0) + (unmatchedBucket?.percentageSurvey ?? 0),
+            facetBuckets: []
+        }
+        return [...mainBuckets, combinedOtherBucket]
+    } else {
+        return mainBuckets
     }
-    return [hiddenBucket, ...mainBuckets]
 }
 
 export const margin = {
@@ -202,9 +214,6 @@ const HorizontalBarChart = ({
 
     // let sortedBuckets = sortBy(buckets, getSortKey(keys))
     let sortedBuckets = [...buckets].reverse()
-    if (block.hideCutoff) {
-        sortedBuckets = applyGroupCutoff(sortedBuckets, block.hideCutoff)
-    }
 
     const { formatTick, formatValue, maxValue } = useBarChart({
         buckets: sortedBuckets,

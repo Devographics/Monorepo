@@ -161,7 +161,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
     const startedAt = new Date()
     const useFilesystemCache = getCachingMethods().filesystem
     const useApiCache = getCachingMethods().api
-    console.log(`// 🔍 Running GraphQL queries for page ${page.id}…`)
+    console.log(`// Running GraphQL queries for page ${page.id}…`)
 
     const paths = getDataLocations(surveyId, editionId)
 
@@ -194,6 +194,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                     )
                     data = existingData
                 } else {
+                    console.log(`// 🔍 Running query for file ${dataFileName}…`)
                     const questionId = block.id
                     const queryOptions = {
                         surveyId,
