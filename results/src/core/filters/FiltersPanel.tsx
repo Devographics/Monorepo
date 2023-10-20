@@ -44,6 +44,7 @@ type TabConfigItem = {
 
 const FiltersPanel = ({
     block,
+    data,
     chartFilters,
     setChartFilters,
     closeModal
@@ -159,9 +160,22 @@ const FiltersPanel = ({
 
             <FiltersBottom_>
                 <FooterLeft_>
-                    <GraphQLTrigger block={block} query={query} buttonProps={{ variant: 'link' }} />
-                    <CopyLink link={filtersLink} />
-                    <CopyFilters filtersState={filtersState} />
+                    <li>
+                        <GraphQLTrigger
+                            block={block}
+                            query={query}
+                            buttonProps={{ variant: 'link' }}
+                        />
+                    </li>
+                    <li>
+                        <JSONTrigger data={data} buttonProps={{ variant: 'link' }} />
+                    </li>
+                    <li>
+                        <CopyLink link={filtersLink} />
+                    </li>
+                    <li>
+                        <CopyFilters filtersState={filtersState} />
+                    </li>
                 </FooterLeft_>
                 <Button onClick={handleSubmit}>
                     <T k="filters.submit" />
@@ -270,10 +284,16 @@ const FiltersBottom_ = styled.div`
     justify-content: space-between;
 `
 
-const FooterLeft_ = styled.div`
+const FooterLeft_ = styled.ul`
     display: flex;
     gap: ${spacing()};
     align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    li {
+        text-align: center;
+    }
 `
 
 const CopyLink_ = styled.a`

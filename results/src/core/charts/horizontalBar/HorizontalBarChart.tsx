@@ -21,39 +21,15 @@ import { StandardQuestionData, BucketUnits, Bucket, Entity } from '@devographics
 import { FacetItem, DataSeries, ChartModes, CustomizationFiltersSeries } from 'core/filters/types'
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
-import { OTHER_ANSWERS, NO_MATCH, CUTOFF_ANSWERS } from '@devographics/constants'
-import { handleNoAnswerBucket } from 'core/helpers/data'
+import sortBy from 'lodash/sortBy'
+import InsufficientData from './InsufficientData'
 
 export const getChartDataPath = (block: BlockDefinition) =>
     `${block?.queryOptions?.subField || 'responses'}.currentEdition.buckets`
 
 export const getChartData = (data: StandardQuestionData, block: BlockDefinition): Array<Bucket> => {
-    let buckets = get(data, getChartDataPath(block))
-    buckets = groupOtherAnswers(buckets)
-    buckets = handleNoAnswerBucket({ buckets, moveTo: 'end' })
+    const buckets = get(data, getChartDataPath(block))
     return buckets
-}
-
-// group together cutoff answers and unmatched answers
-export const groupOtherAnswers = (buckets: Bucket[]) => {
-    const mainBuckets = buckets.filter(b => ![CUTOFF_ANSWERS, NO_MATCH].includes(b.id))
-    const cutoffBucket = buckets.find(b => b.id === CUTOFF_ANSWERS)
-    const unmatchedBucket = buckets.find(b => b.id === NO_MATCH)
-    if (cutoffBucket || unmatchedBucket) {
-        const combinedOtherBucket: Bucket = {
-            count: (cutoffBucket?.count ?? 0) + (unmatchedBucket?.count ?? 0),
-            id: OTHER_ANSWERS,
-            percentageQuestion:
-                (cutoffBucket?.percentageQuestion ?? 0) +
-                (unmatchedBucket?.percentageQuestion ?? 0),
-            percentageSurvey:
-                (cutoffBucket?.percentageSurvey ?? 0) + (unmatchedBucket?.percentageSurvey ?? 0),
-            facetBuckets: []
-        }
-        return [...mainBuckets, combinedOtherBucket]
-    } else {
-        return mainBuckets
-    }
 }
 
 export const margin = {
@@ -215,6 +191,9 @@ const HorizontalBarChart = ({
     // let sortedBuckets = sortBy(buckets, getSortKey(keys))
     let sortedBuckets = [...buckets].reverse()
 
+    if (units === BucketUnits.AVERAGE) {
+        sortedBuckets = sortBy(sortedBuckets, BucketUnits.AVERAGE)
+    }
     const { formatTick, formatValue, maxValue } = useBarChart({
         buckets: sortedBuckets,
         total,
@@ -314,7 +293,8 @@ const HorizontalBarChart = ({
                     'grid',
                     'axes',
                     'bars',
-                    labelsLayer
+                    labelsLayer,
+                    layerProps => <InsufficientData {...layerProps} />
                 ]}
                 defs={colorDefs}
                 fill={colorFills}

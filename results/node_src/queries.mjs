@@ -146,6 +146,7 @@ const getFacetFragment = addBucketsEntities => `
         percentageQuestion
         percentageSurvey
         percentageBucket
+        hasInsufficientData
         ${addBucketsEntities ? getEntityFragment() : ''}
     }
 `
@@ -332,6 +333,7 @@ surveys {
                 percentageQuestion
                 percentageSurvey
                 isFreeformData
+                hasInsufficientData
                 ${addBucketsEntities ? getEntityFragment() : ''}
                 ${queryArgs.facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
                 ${queryArgs.facet || addBucketFacetsPlaceholder ? getPercentilesFragment() : ''}
