@@ -306,6 +306,14 @@ type Bucket {
     For combined results, indicates if this is issued from freeform data
     """
     isFreeformData: Boolean
+    """
+    Indicates if bucket was removed because of insufficient data
+    """
+    hasInsufficientData: Boolean
+    """
+    If bucket was created by grouping other buckets, ids of these grouped buckets
+    """
+    groupedBucketIds: [String]
 }
 
 type Percentiles {
@@ -354,6 +362,10 @@ type FacetBucket {
     Entity associated with the current bucket
     """
     entity: Entity
+    """
+    Indicates if bucket was removed because of insufficient data
+    """
+    hasInsufficientData: Boolean
 }
 
 type Query {

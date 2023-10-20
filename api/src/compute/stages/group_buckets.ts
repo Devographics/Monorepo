@@ -70,10 +70,16 @@ const getMergedBucket = (buckets: Bucket[], id: string, axis?: ComputeAxisParame
         id,
         count: sumBy(buckets, 'count'),
         percentageSurvey: Math.round(100 * sumBy(buckets, 'percentageSurvey')) / 100,
-        percentageQuestion: Math.round(100 * sumBy(buckets, 'percentageQuestion')) / 100
+        percentageQuestion: Math.round(100 * sumBy(buckets, 'percentageQuestion')) / 100,
+        groupedBucketIds: buckets.map(b => b.id)
     } as Bucket
     if (axis) {
         bucket.facetBuckets = combineFacetBuckets(buckets, axis)
+    }
+    if (buckets.every(b => !!b.hasInsufficientData)) {
+        // if every bucket we merge has insufficient data, consider
+        // that the merged bucket also has insufficient data
+        bucket.hasInsufficientData = true
     }
     return bucket
 }

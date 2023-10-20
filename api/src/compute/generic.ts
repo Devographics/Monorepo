@@ -278,8 +278,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         results = await combineWithFreeform(results, options)
     }
 
-    results = await applyDatasetCutoff(results, computeArguments)
-
     await discardEmptyIds(results)
 
     results = await discardEmptyEditions(results)
@@ -289,6 +287,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     if (axis2) {
         await addDefaultBucketCounts(results)
     }
+
+    results = await applyDatasetCutoff(results, computeArguments)
 
     await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 

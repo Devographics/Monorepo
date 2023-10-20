@@ -1,5 +1,11 @@
 import { ApiTemplateFunction, TransformFunction } from '../../types/surveys'
 
+/*
+
+Note: upper bounds are non-inclusive, so upper bound for group "range_20_24" is
+"everything under 25, but not 25" e.g. 24, 24.5, 24.9999, etc. 
+
+*/
 const groups = [
     {
         id: 'range_under_20',

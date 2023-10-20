@@ -86,16 +86,33 @@ const zeroBucketItem = {
     percentageBucket: 0,
     percentageSurvey: 0
 }
-const getZeroBucketItem = (id: string, facetAxis?: ComputeAxisParameters) => ({
-    ...zeroBucketItem,
+const getZeroBucketItem = <T extends Bucket | FacetBucket>({
     id,
-    facetBuckets: (facetAxis
-        ? facetAxis.question.options?.map(o => ({
-              ...zeroBucketItem,
-              id: o.id
-          }))
-        : []) as FacetBucket[]
-})
+    hasInsufficientData,
+    axis
+}: {
+    id: string
+    hasInsufficientData?: boolean
+    axis?: ComputeAxisParameters
+}) => {
+    let zeroBucket = { ...zeroBucketItem, id } as T
+    if (axis) {
+        zeroBucket = {
+            ...zeroBucket,
+            facetBuckets: axis.question.options?.map(o => ({
+                ...zeroBucketItem,
+                id: o.id
+            }))
+        }
+    }
+    if (hasInsufficientData) {
+        zeroBucket = {
+            ...zeroBucket,
+            hasInsufficientData
+        }
+    }
+    return zeroBucket
+}
 
 export async function addMissingItems(
     resultsByEdition: ResponseEditionData[],
@@ -112,6 +129,8 @@ export async function addMissingItems(
                     bucket => String(bucket.id) === String(option1.id)
                 )
                 if (existingBucketItem) {
+                    const hasInsufficientData = existingBucketItem.hasInsufficientData
+
                     if (axis2?.question?.options) {
                         const options2 = axis2?.question?.options.filter(o =>
                             o.editions?.includes(editionId)
@@ -122,12 +141,17 @@ export async function addMissingItems(
                                 bucket => bucket.id === option2.id
                             )
                             if (!existingFacetBucketItem) {
-                                existingBucketItem.facetBuckets?.push(getZeroBucketItem(option2.id))
+                                existingBucketItem.facetBuckets?.push(
+                                    getZeroBucketItem<FacetBucket>({
+                                        id: String(option2.id),
+                                        hasInsufficientData
+                                    })
+                                )
                             }
                         }
                     }
                 } else {
-                    buckets.push(getZeroBucketItem(option1.id, axis2))
+                    buckets.push(getZeroBucketItem<Bucket>({ id: String(option1.id), axis: axis2 }))
                 }
             }
         }
