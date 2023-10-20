@@ -1,7 +1,19 @@
-import { BucketUnits, FacetBucket } from '@devographics/types'
+import { BucketUnits, FacetBucket, OptionGroup } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import sumBy from 'lodash/sumBy.js'
 import { NO_ANSWER, NOT_APPLICABLE } from '@devographics/constants'
+import { getgid } from 'process'
+
+const getGroupAverage = (group: OptionGroup) => {
+    const { id, average, lowerBound, upperBound } = group
+    if (average) {
+        return average
+    } else if (lowerBound && upperBound) {
+        return lowerBound + (upperBound - lowerBound) / 2
+    } else {
+        throw new Error(`getGroupAverage: could not get average value for group ${id}`)
+    }
+}
 
 // Given a facet bucket, find the corresponding average corresponding to its range
 export const getFacetBucketAverage = (facetBucket: FacetBucket, axis: ComputeAxisParameters) => {
@@ -10,9 +22,9 @@ export const getFacetBucketAverage = (facetBucket: FacetBucket, axis: ComputeAxi
         // here for backwards compatibility's sake
         return 0
     }
-    const average =
-        axis?.options?.find(o => o.id === facetBucket.id)?.average ||
-        axis?.question?.groups?.find(o => o.id === facetBucket.id)?.average
+    const option = axis?.options?.find(o => o.id === facetBucket.id)
+    const group = axis?.question?.groups?.find(o => o.id === facetBucket.id)
+    const average = option?.average ?? (group && getGroupAverage(group))
     if (!average) {
         throw new Error(
             `getFacetBucketAverage: could not find option average for facet bucket "${facetBucket.id}" with axis "${axis.question.id}"`

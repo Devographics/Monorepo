@@ -215,6 +215,7 @@ input Parameters {
     showNoAnswer: Boolean
     showNoMatch: Boolean
     groupUnderCutoff: Boolean
+    mergeOtherBuckets: Boolean
 }
 
 input CommentParameters {

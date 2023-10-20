@@ -8,7 +8,7 @@ const groups = [
         upperBound: 5
     },
     {
-        id: 'range_6_10',
+        id: 'range_5_9',
         lowerBound: 20,
         average: 22,
         upperBound: 24

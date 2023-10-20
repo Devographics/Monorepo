@@ -2,7 +2,13 @@ import { ComputeAxisParameters, SortProperty, SortOrderNumeric } from '../../typ
 import { ResponseEditionData, Bucket, FacetBucket, Option } from '@devographics/types'
 import sortBy from 'lodash/sortBy.js'
 import isEmpty from 'lodash/isEmpty.js'
-import { CUTOFF_ANSWERS, NO_ANSWER, NO_MATCH } from '@devographics/constants'
+import {
+    CUTOFF_ANSWERS,
+    NOT_APPLICABLE,
+    NO_ANSWER,
+    NO_MATCH,
+    OTHER_ANSWERS
+} from '@devographics/constants'
 
 export function sortBuckets<T extends Bucket | FacetBucket>(
     buckets: T[],
@@ -20,12 +26,13 @@ export function sortBuckets<T extends Bucket | FacetBucket>(
     }
     sortedBuckets = putBucketLast<T>(sortedBuckets, CUTOFF_ANSWERS)
     sortedBuckets = putBucketLast<T>(sortedBuckets, NO_MATCH)
+    sortedBuckets = putBucketLast<T>(sortedBuckets, OTHER_ANSWERS)
+    sortedBuckets = putBucketLast<T>(sortedBuckets, NOT_APPLICABLE)
     sortedBuckets = putBucketLast<T>(sortedBuckets, NO_ANSWER)
     return sortedBuckets
 }
 
 export function sortByOptions<T extends Bucket | FacetBucket>(buckets: T[], options: Option[]) {
-    console.log('// sorting by option…')
     return [...buckets].sort((a, b) => {
         // make sure everything is a string to avoid type mismatches
         const stringValues = options.map(o => o.id.toString())

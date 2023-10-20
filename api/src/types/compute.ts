@@ -25,6 +25,7 @@ export interface GenericComputeParameters {
     showNoAnswer?: boolean
     showNoMatch?: boolean
     groupUnderCutoff?: boolean
+    mergeOtherBuckets?: boolean
     responsesType?: ResponsesTypes
 }
 
@@ -34,6 +35,7 @@ export interface ComputeAxisParameters {
     order: SortOrderNumeric
     cutoff: number
     groupUnderCutoff?: boolean
+    mergeOtherBuckets?: boolean
     limit: number
     cutoffPercent?: number
     options?: Option[]

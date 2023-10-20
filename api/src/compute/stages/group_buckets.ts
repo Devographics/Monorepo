@@ -1,7 +1,7 @@
 import { BucketData, BucketUnits, FacetBucket, Option, OptionId } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import sumBy from 'lodash/sumBy.js'
-import { NO_ANSWER } from '@devographics/constants'
+import { CUTOFF_ANSWERS, NO_ANSWER, NO_MATCH, OTHER_ANSWERS } from '@devographics/constants'
 
 /*
 
@@ -33,7 +33,7 @@ const getCombinedFacetBucket = (selectedBuckets: Bucket[], facetBucketId: Option
 Take a range of selected buckets and a list of options, 
 
 */
-const combineFacetBuckets = (
+export const combineFacetBuckets = (
     selectedBuckets: Bucket[],
     axis?: ComputeAxisParameters
 ): FacetBucket[] => {
@@ -63,6 +63,19 @@ const isInBounds = (n: number, lowerBound?: number, upperBound?: number) => {
     } else {
         throw new Error(`isInBounds: no bounds specified`)
     }
+}
+
+const getMergedBucket = (buckets: Bucket[], id: string, axis?: ComputeAxisParameters) => {
+    const bucket = {
+        id,
+        count: sumBy(buckets, 'count'),
+        percentageSurvey: Math.round(100 * sumBy(buckets, 'percentageSurvey')) / 100,
+        percentageQuestion: Math.round(100 * sumBy(buckets, 'percentageQuestion')) / 100
+    } as Bucket
+    if (axis) {
+        bucket.facetBuckets = combineFacetBuckets(buckets, axis)
+    }
+    return bucket
 }
 
 /*
@@ -95,23 +108,34 @@ export async function groupBuckets(
                     )
                 }
 
-                const facetBuckets = combineFacetBuckets(selectedBuckets, axis2)
-                const aggregatedCount = sumBy(selectedBuckets, 'count')
-                const bucket = {
-                    id,
-                    count: aggregatedCount,
-                    percentageSurvey:
-                        Math.round(100 * sumBy(selectedBuckets, 'percentageSurvey')) / 100,
-                    percentageQuestion:
-                        Math.round(100 * sumBy(selectedBuckets, 'percentageQuestion')) / 100,
-                    facetBuckets
-                }
-
+                const bucket = getMergedBucket(selectedBuckets, id, axis2)
                 return bucket
             })
             editionData.buckets = noAnswerBucket
                 ? [...groupedBuckets, noAnswerBucket]
                 : groupedBuckets
+        }
+        if (axis1.mergeOtherBuckets) {
+            // if mergeOtherBuckets is enabled, merge cutoff answers
+            // and unmatched answers into a single "other answers" bucket
+            const mainBuckets = editionData.buckets.filter(
+                b => ![CUTOFF_ANSWERS, NO_MATCH].includes(b.id)
+            )
+            const cutoffBucket = editionData.buckets.find(b => b.id === CUTOFF_ANSWERS)
+            const unmatchedBucket = editionData.buckets.find(b => b.id === NO_MATCH)
+            if (cutoffBucket && unmatchedBucket) {
+                // if both buckets exist, combine them into one
+                const combinedOtherBucket = getMergedBucket(
+                    [cutoffBucket, unmatchedBucket],
+                    OTHER_ANSWERS,
+                    axis2
+                )
+                editionData.buckets = [...mainBuckets, combinedOtherBucket]
+            } else if (cutoffBucket) {
+                editionData.buckets = [...mainBuckets, { ...cutoffBucket, id: OTHER_ANSWERS }]
+            } else if (unmatchedBucket) {
+                editionData.buckets = [...mainBuckets, { ...unmatchedBucket, id: OTHER_ANSWERS }]
+            }
         }
     }
 }

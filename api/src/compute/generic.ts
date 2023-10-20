@@ -147,7 +147,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         facetCutoff = 1,
         facetCutoffPercent,
         showNoAnswer,
-        groupUnderCutoff = true
+        groupUnderCutoff = true,
+        mergeOtherBuckets = true
     } = parameters
 
     /*
@@ -161,6 +162,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         order: convertOrder(sort?.order ?? 'desc'),
         cutoff,
         groupUnderCutoff,
+        mergeOtherBuckets,
         limit
     }
     if (question.options) {
@@ -185,6 +187,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
                 order: convertOrder(facetSort?.order ?? 'desc'),
                 cutoff: facetCutoff,
                 groupUnderCutoff,
+                mergeOtherBuckets,
                 cutoffPercent: facetCutoffPercent,
                 limit: facetLimit
             }
@@ -299,6 +302,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         if (responsesType === ResponsesTypes.RESPONSES) {
             await addMissingItems(results, axis2, axis1)
         }
+        await cutoffData(results, axis2, axis1)
         await groupBuckets(results, axis2, axis1)
         // for all following steps, use groups as options
         if (axis1.question.groups) {
@@ -308,9 +312,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             axis2.options = axis2.question.groups
         }
         await addAveragesByFacet(results, axis2, axis1)
-
         await addPercentiles(results, axis2, axis1)
-        await cutoffData(results, axis2, axis1)
         await sortData(results, axis2, axis1)
         await limitData(results, axis2, axis1)
         await addLabels(results, axis2, axis1)
@@ -318,12 +320,12 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         if (responsesType === ResponsesTypes.RESPONSES) {
             await addMissingItems(results, axis1)
         }
+        await cutoffData(results, axis1)
         await groupBuckets(results, axis1)
         // for all following steps, use groups as options
         if (axis1.question.groups) {
             axis1.options = axis1.question.groups
         }
-        await cutoffData(results, axis1)
         await sortData(results, axis1)
         await limitData(results, axis1)
         await addLabels(results, axis1)
