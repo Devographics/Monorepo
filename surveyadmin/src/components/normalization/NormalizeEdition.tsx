@@ -15,7 +15,6 @@ export const NormalizeEdition = ({
   responsesCount: number;
   normResponsesCount: number;
 }) => {
-  const isFirstNormalization = normResponsesCount === 0;
   const {
     initializeSegments,
     updateSegments,
@@ -35,7 +34,6 @@ export const NormalizeEdition = ({
     enabled,
     setEnabled,
     segments,
-    isFirstNormalization,
   };
 
   return (

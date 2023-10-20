@@ -17,7 +17,8 @@ import {
   NormalizationResultSuccessEx,
   NormalizationResultTypes,
 } from "../types";
-import { getEditionSelector } from "../helpers/getSelectors";
+import { deleteDuplicates } from "../helpers/deleteDuplicates";
+import { runPostNormalizationOperations } from "../post-normalization";
 
 /*
 
@@ -36,6 +37,8 @@ interface NormalizeInBulkOption {
   questionId?: string;
   isRenormalization?: boolean;
   verbose?: boolean;
+  currentSegmentIndex?: number;
+  totalSegments?: number;
 }
 
 /*
@@ -56,9 +59,17 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
     questionId,
     isRenormalization = false,
     verbose = false,
+    currentSegmentIndex,
+    totalSegments,
   } = options;
   const startAt = new Date();
   const timestamp = startAt.toISOString();
+
+  const isFirstSegment = Number(currentSegmentIndex) === 1;
+  const isLastSegment =
+    currentSegmentIndex &&
+    totalSegments &&
+    Number(currentSegmentIndex) === Number(totalSegments);
 
   await logToFile(`normalizeInBulk/${timestamp}_options.json`, options);
 
@@ -193,13 +204,11 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
         const operationResult = await normResponsesCollection.bulkWrite(
           bulkOperations
         );
-        console.log("// operationResult");
-        console.log(operationResult);
+        // console.log("// operationResult");
+        // console.log(operationResult);
 
-        if (operationResult.insertedCount > 1) {
-          // if we inserted more than one document, make sure we
-          // delete any duplicates we might've introduced
-          await deleteDuplicates({ survey, edition });
+        if (isLastSegment) {
+          await runPostNormalizationOperations({ survey, edition });
         }
       } else {
         console.log("// Bulk operation array empty");
@@ -274,70 +283,4 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
   );
 
   return mutationResult;
-};
-
-/*
-
-Remove any duplicates, etc.
-
-*/
-export const deleteDuplicates = async ({
-  survey,
-  edition,
-}: {
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-}) => {
-  console.log("⛰️ Cleaning up duplicates…");
-  const normResponsesCollection = await getNormResponsesCollection(survey);
-
-  const selector = await getEditionSelector({ survey, edition });
-  /*
-
-  Sample pipeline output item:
-
-  {
-    _id: "TCsOhSt6uz1tJXRoecz7s", // responseId field
-    count: 2, // only keep responseId which have 2+ matching _ids
-    ids: ["gByqCv6-HU0C2nTFP4MRg", "11UkYx4L7-EKnkD73U5fu"] // matching _ids
-  }
-
-  */
-  const pipeline = [
-    {
-      $match: { ...selector, responseId: { $ne: null } },
-    },
-    {
-      $group: {
-        _id: "$responseId",
-        // Group by responseId field
-        count: {
-          $sum: 1,
-        },
-        // Count the number of documents with the same responseId
-        ids: {
-          $push: "$_id",
-        }, // Store the IDs of documents with the same responseId
-      },
-    },
-    {
-      $match: {
-        count: {
-          $gt: 1,
-        }, // Filter groups with count greater than 1 (duplicates)
-      },
-    },
-  ];
-
-  const duplicates = await normResponsesCollection
-    .aggregate(pipeline)
-    .toArray();
-
-  // extract the second _id for each responseId (the _id of the duplicate)
-  const duplicateIds = duplicates.map((d) => d.ids[1]);
-  const operation = await normResponsesCollection.deleteMany({
-    _id: { $in: duplicateIds },
-  });
-  console.log(`⛰️ Deleted ${operation.deletedCount} duplicate responses.`);
-  return operation.deletedCount;
 };
