@@ -288,22 +288,24 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await addDefaultBucketCounts(results)
     }
 
-    results = await applyDatasetCutoff(results, computeArguments)
-
-    await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
-
-    await addPercentages(results)
-
-    // await addDeltas(results)
-
-    await addEditionYears(results, survey)
-
     if (axis2) {
         if (responsesType === ResponsesTypes.RESPONSES) {
             await addMissingItems(results, axis2, axis1)
         }
+
+        await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
+
+        await addPercentages(results)
+
+        // await addDeltas(results)
+
+        await addEditionYears(results, survey)
+
         await cutoffData(results, axis2, axis1)
         await groupBuckets(results, axis2, axis1)
+
+        results = await applyDatasetCutoff(results, computeArguments)
+
         // for all following steps, use groups as options
         if (axis1.question.groups) {
             axis1.options = axis1.question.groups
@@ -318,10 +320,22 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await addLabels(results, axis2, axis1)
     } else {
         if (responsesType === ResponsesTypes.RESPONSES) {
-            await addMissingItems(results, axis1)
+            results = await addMissingItems(results, axis1)
         }
+
+        await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
+
+        await addPercentages(results)
+
+        // await addDeltas(results)
+
+        await addEditionYears(results, survey)
+
         await cutoffData(results, axis1)
         await groupBuckets(results, axis1)
+
+        results = await applyDatasetCutoff(results, computeArguments)
+
         // for all following steps, use groups as options
         if (axis1.question.groups) {
             axis1.options = axis1.question.groups

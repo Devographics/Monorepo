@@ -86,13 +86,12 @@ const zeroBucketItem = {
     percentageBucket: 0,
     percentageSurvey: 0
 }
+
 const getZeroBucketItem = <T extends Bucket | FacetBucket>({
     id,
-    hasInsufficientData,
     axis
 }: {
     id: string
-    hasInsufficientData?: boolean
     axis?: ComputeAxisParameters
 }) => {
     let zeroBucket = { ...zeroBucketItem, id } as T
@@ -103,12 +102,6 @@ const getZeroBucketItem = <T extends Bucket | FacetBucket>({
                 ...zeroBucketItem,
                 id: o.id
             }))
-        }
-    }
-    if (hasInsufficientData) {
-        zeroBucket = {
-            ...zeroBucket,
-            hasInsufficientData
         }
     }
     return zeroBucket
@@ -129,8 +122,6 @@ export async function addMissingItems(
                     bucket => String(bucket.id) === String(option1.id)
                 )
                 if (existingBucketItem) {
-                    const hasInsufficientData = existingBucketItem.hasInsufficientData
-
                     if (axis2?.question?.options) {
                         const options2 = axis2?.question?.options.filter(o =>
                             o.editions?.includes(editionId)
@@ -143,19 +134,23 @@ export async function addMissingItems(
                             if (!existingFacetBucketItem) {
                                 existingBucketItem.facetBuckets?.push(
                                     getZeroBucketItem<FacetBucket>({
-                                        id: String(option2.id),
-                                        hasInsufficientData
+                                        id: String(option2.id)
                                     })
                                 )
                             }
                         }
                     }
                 } else {
-                    buckets.push(getZeroBucketItem<Bucket>({ id: String(option1.id), axis: axis2 }))
+                    const zeroBucket = getZeroBucketItem<Bucket>({
+                        id: String(option1.id),
+                        axis: axis2
+                    })
+                    editionData.buckets.push(zeroBucket)
                 }
             }
         }
     }
+    return resultsByEdition
 }
 
 export async function addEditionYears(resultsByEdition: ResponseEditionData[], survey: Survey) {

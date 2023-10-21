@@ -138,9 +138,15 @@ export async function groupBuckets(
                 )
                 editionData.buckets = [...mainBuckets, combinedOtherBucket]
             } else if (cutoffBucket) {
-                editionData.buckets = [...mainBuckets, { ...cutoffBucket, id: OTHER_ANSWERS }]
+                editionData.buckets = [
+                    ...mainBuckets,
+                    { ...cutoffBucket, groupedBucketIds: [CUTOFF_ANSWERS], id: OTHER_ANSWERS }
+                ]
             } else if (unmatchedBucket) {
-                editionData.buckets = [...mainBuckets, { ...unmatchedBucket, id: OTHER_ANSWERS }]
+                editionData.buckets = [
+                    ...mainBuckets,
+                    { ...unmatchedBucket, groupedBucketIds: [NO_MATCH], id: OTHER_ANSWERS }
+                ]
             }
         }
     }

@@ -15,9 +15,10 @@ const zeroBucket = {
 
 const getInsufficientDataBucket = (bucket: Bucket) => {
     return {
-        ...bucket,
+        id: bucket.id,
+        ...zeroBucket,
         hasInsufficientData: true,
-        facetBuckets: bucket.facetBuckets.map(b => ({
+        facetBuckets: (bucket.facetBuckets ?? []).map(b => ({
             ...zeroBucket,
             id: b.id,
             hasInsufficientData: true
@@ -25,32 +26,23 @@ const getInsufficientDataBucket = (bucket: Bucket) => {
     }
 }
 
+export const getDatasetCutoff = () => {
+    return process.env.DATASET_CUTOFF ? Number(process.env.DATASET_CUTOFF) : DEFAULT_DATASET_CUTOFF
+}
+
 export const applyDatasetCutoff = (
     resultsByEdition: ResponseEditionData[],
     computeArguments: GenericComputeArguments
 ) => {
     if (computeArguments.filters || computeArguments.facet) {
-        const cutoff = process.env.DATASET_CUTOFF
-            ? Number(process.env.DATASET_CUTOFF)
-            : DEFAULT_DATASET_CUTOFF
+        const cutoff = getDatasetCutoff()
         for (let editionData of resultsByEdition) {
-            if (computeArguments.facet) {
-                // "censor" out data for any bucket that comes under cutoff
-                editionData.buckets = editionData.buckets.map(bucket =>
-                    bucket.count && bucket.count < cutoff
-                        ? getInsufficientDataBucket(bucket)
-                        : bucket
-                )
-            } else {
-                // calculate the sum of all buckets in current dataset
-                const datasetSize = sumBy(editionData.buckets, 'count')
-                if (datasetSize < cutoff) {
-                    // if sum is lower than cutoff limit, remove this edition's results
-                    resultsByEdition = resultsByEdition.filter(
-                        e => e.editionId !== editionData.editionId
-                    )
-                }
-            }
+            // "censor" out data for any bucket that comes under cutoff
+            editionData.buckets = editionData.buckets.map(bucket =>
+                typeof bucket.count !== 'undefined' && bucket.count < cutoff
+                    ? getInsufficientDataBucket(bucket)
+                    : bucket
+            )
         }
     }
     return resultsByEdition
