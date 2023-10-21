@@ -121,6 +121,15 @@ export async function groupBuckets(
                 ? [...groupedBuckets, noAnswerBucket]
                 : groupedBuckets
         }
+    }
+}
+
+export async function groupOtherBuckets(
+    resultsByEdition: ResponseEditionData[],
+    axis1: ComputeAxisParameters,
+    axis2?: ComputeAxisParameters
+) {
+    for (let editionData of resultsByEdition) {
         if (axis1.mergeOtherBuckets) {
             // if mergeOtherBuckets is enabled, merge cutoff answers
             // and unmatched answers into a single "other answers" bucket
@@ -138,10 +147,7 @@ export async function groupBuckets(
                 )
                 editionData.buckets = [...mainBuckets, combinedOtherBucket]
             } else if (cutoffBucket) {
-                editionData.buckets = [
-                    ...mainBuckets,
-                    { ...cutoffBucket, groupedBucketIds: [CUTOFF_ANSWERS], id: OTHER_ANSWERS }
-                ]
+                editionData.buckets = [...mainBuckets, { ...cutoffBucket, id: OTHER_ANSWERS }]
             } else if (unmatchedBucket) {
                 editionData.buckets = [
                     ...mainBuckets,

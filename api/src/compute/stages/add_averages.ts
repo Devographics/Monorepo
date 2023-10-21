@@ -1,7 +1,7 @@
 import { BucketUnits, FacetBucket, OptionGroup } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import sumBy from 'lodash/sumBy.js'
-import { NO_ANSWER, NOT_APPLICABLE } from '@devographics/constants'
+import { CUTOFF_ANSWERS, NO_ANSWER, NOT_APPLICABLE } from '@devographics/constants'
 import isNil from 'lodash/isNil.js'
 import isNaN from 'lodash/isNaN.js'
 
@@ -77,7 +77,7 @@ export async function addAveragesByFacet(
         for (let editionData of resultsByEdition) {
             if (axis2) {
                 for (let bucket of editionData.buckets) {
-                    if (bucket.id !== NO_ANSWER && bucket.id !== NOT_APPLICABLE) {
+                    if (bucket.id !== NOT_APPLICABLE) {
                         const average = calculateAverage({ bucket, axis: axis2 })
                         if (!isNil(average) && !isNaN(average)) {
                             bucket[BucketUnits.AVERAGE] = average

@@ -35,7 +35,8 @@ import {
     addPercentiles,
     groupBuckets,
     applyDatasetCutoff,
-    combineWithFreeform
+    combineWithFreeform,
+    groupOtherBuckets
 } from './stages/index'
 import {
     ResponsesTypes,
@@ -301,11 +302,16 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         await addEditionYears(results, survey)
 
+        await addAveragesByFacet(results, axis2, axis1)
+        await addPercentiles(results, axis2, axis1)
+
         await cutoffData(results, axis2, axis1)
+
         await groupBuckets(results, axis2, axis1)
 
         results = await applyDatasetCutoff(results, computeArguments)
 
+        // await groupOtherBuckets(results, axis2, axis1)
         // for all following steps, use groups as options
         if (axis1.question.groups) {
             axis1.options = axis1.question.groups
@@ -313,8 +319,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         if (axis2.question.groups) {
             axis2.options = axis2.question.groups
         }
-        await addAveragesByFacet(results, axis2, axis1)
-        await addPercentiles(results, axis2, axis1)
         await sortData(results, axis2, axis1)
         await limitData(results, axis2, axis1)
         await addLabels(results, axis2, axis1)
@@ -335,6 +339,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await groupBuckets(results, axis1)
 
         results = await applyDatasetCutoff(results, computeArguments)
+
+        await groupOtherBuckets(results, axis1)
 
         // for all following steps, use groups as options
         if (axis1.question.groups) {
