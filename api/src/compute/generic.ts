@@ -350,6 +350,13 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 
+        // bucket grouping must be one of the first stages
+        await groupBuckets(results, axis2, axis1)
+
+        // we group cutoff buckets together so it must also come early
+        await cutoffData(results, axis2, axis1)
+
+        // once buckets don't move anymore we can calculate percentages
         await addPercentages(results)
 
         // await addDeltas(results)
@@ -359,13 +366,13 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await addAveragesByFacet(results, axis2, axis1)
         await addPercentiles(results, axis2, axis1)
 
-        await cutoffData(results, axis2, axis1)
-
-        await groupBuckets(results, axis2, axis1)
-
         results = await applyDatasetCutoff(results, computeArguments)
 
-        // await groupOtherBuckets(results, axis2, axis1)
+        if (responsesType === ResponsesTypes.COMBINED) {
+            // TODO: probably doesn't work well when a facet is active
+            await groupOtherBuckets(results, axis2, axis1)
+        }
+
         // for all following steps, use groups as options
         if (axis1.enableBucketGroups && axis1.question.groups) {
             axis1.options = axis1.question.groups
@@ -383,18 +390,21 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 
+        await groupBuckets(results, axis1)
+
+        await cutoffData(results, axis1)
+
         await addPercentages(results)
 
         // await addDeltas(results)
 
         await addEditionYears(results, survey)
 
-        await cutoffData(results, axis1)
-        await groupBuckets(results, axis1)
-
         results = await applyDatasetCutoff(results, computeArguments)
 
-        await groupOtherBuckets(results, axis1)
+        if (responsesType === ResponsesTypes.COMBINED) {
+            await groupOtherBuckets(results, axis1)
+        }
 
         // for all following steps, use groups as options
         if (axis1.enableBucketGroups && axis1.question.groups) {

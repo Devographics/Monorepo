@@ -32,9 +32,10 @@ const getZeroBucket = <T extends Bucket | FacetBucket>(
         }
     } as T
     const fieldsToKeep: Array<keyof T> = clearBasicInfo
-        ? ['id']
+        ? ['id', 'groupedBucketIds']
         : [
               'id',
+              'groupedBucketIds',
               BucketUnits.COUNT,
               BucketUnits.PERCENTAGE_QUESTION,
               BucketUnits.PERCENTAGE_QUESTION

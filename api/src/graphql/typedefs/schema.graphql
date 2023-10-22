@@ -377,6 +377,10 @@ type FacetBucket {
     Indicates if bucket was removed because of insufficient data
     """
     hasInsufficientData: Boolean
+    """
+    If bucket was created by grouping other buckets, ids of these grouped buckets
+    """
+    groupedBucketIds: [String]
 }
 
 type Query {

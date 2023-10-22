@@ -1,39 +1,8 @@
-import {
-    BucketData,
-    BucketUnits,
-    FacetBucket,
-    Option,
-    OptionGroup,
-    OptionId
-} from '@devographics/types'
+import { FacetBucket, OptionGroup } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import sumBy from 'lodash/sumBy.js'
 import { CUTOFF_ANSWERS, NO_ANSWER, NO_MATCH, OTHER_ANSWERS } from '@devographics/constants'
-
-/*
-
-Take a selected range of buckets and a specific facet id, 
-and generate a new facet bucket where each value is the sum of all 
-corresponding facet buckets in the selected range of buckets
-
-*/
-const getCombinedFacetBucket = (selectedBuckets: Bucket[], facetBucketId: OptionId) => {
-    const facetBucket = {} as BucketData
-    const units = [
-        BucketUnits.COUNT,
-        BucketUnits.PERCENTAGE_BUCKET,
-        BucketUnits.PERCENTAGE_QUESTION,
-        BucketUnits.PERCENTAGE_SURVEY
-    ]
-    units.forEach(unit_ => {
-        const unit = unit_ as keyof BucketData
-        facetBucket[unit] = sumBy(selectedBuckets, b => {
-            const facetBuckets = b?.facetBuckets?.find(fb => fb.id === facetBucketId)
-            return facetBuckets?.[unit] || 0
-        })
-    })
-    return facetBucket
-}
+import round from 'lodash/round.js'
 
 /*
 
@@ -49,14 +18,21 @@ export const combineFacetBuckets = (
     if (!optionsOrGroups) {
         return []
     }
-    const combinedFacetBuckets = optionsOrGroups.map(option => {
+    const noAnswerOption = { id: NO_ANSWER, label: NO_ANSWER }
+
+    let combinedFacetBuckets = [...optionsOrGroups, noAnswerOption].map(option => {
         const { id, label } = option
-        const combinedData = getCombinedFacetBucket(selectedBuckets, option.id)
         return {
             // Note: might create issues when option ID is not the same as facet bucket ID
             id: String(id),
             label,
-            ...combinedData
+            count: round(
+                sumBy(
+                    selectedBuckets,
+                    b => b?.facetBuckets?.find(fb => fb.id === option.id)?.count ?? 0
+                ),
+                2
+            )
         }
     })
     return combinedFacetBuckets
@@ -82,9 +58,6 @@ const getMergedBucket = <T extends Bucket | FacetBucket>(
     const bucket = {
         id,
         count: sumBy(buckets, 'count'),
-        percentageSurvey: Math.round(100 * sumBy(buckets, 'percentageSurvey')) / 100,
-        percentageQuestion: Math.round(100 * sumBy(buckets, 'percentageQuestion')) / 100,
-        percentageBucket: Math.round(100 * sumBy(buckets, 'percentageBucket')) / 100,
         groupedBucketIds: buckets.map(b => b.id)
     } as T
     if (axis) {

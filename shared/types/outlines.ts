@@ -249,6 +249,7 @@ export interface OptionGroup {
     upperBound?: number
     lowerBound?: number
     items?: string[]
+    label?: string
 }
 
 export interface Country {

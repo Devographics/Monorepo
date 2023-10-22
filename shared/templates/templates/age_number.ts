@@ -16,59 +16,29 @@ const groups = [
         upperBound: 20
     },
     {
-        id: 'range_20_24',
+        id: 'range_20_29',
         lowerBound: 20,
-        upperBound: 25
-    },
-    {
-        id: 'range_25_29',
-        lowerBound: 25,
         upperBound: 30
     },
     {
-        id: 'range_30_34',
+        id: 'range_30_39',
         lowerBound: 30,
-        upperBound: 35
-    },
-    {
-        id: 'range_35_39',
-        lowerBound: 35,
         upperBound: 40
     },
     {
-        id: 'range_40_44',
+        id: 'range_40_49',
         lowerBound: 40,
-        upperBound: 45
-    },
-    {
-        id: 'range_45_49',
-        lowerBound: 45,
         upperBound: 50
     },
     {
-        id: 'range_50_54',
+        id: 'range_50_59',
         lowerBound: 50,
-        upperBound: 55
-    },
-    {
-        id: 'range_55_59',
-        lowerBound: 55,
         upperBound: 60
     },
     {
-        id: 'range_60_64',
+        id: 'range_over_60',
         lowerBound: 60,
-        upperBound: 65
-    },
-    {
-        id: 'range_65_69',
-        lowerBound: 65,
-        upperBound: 70
-    },
-    {
-        id: 'range_over_70',
-        lowerBound: 70,
-        average: 75
+        average: 65
     }
 ]
 
