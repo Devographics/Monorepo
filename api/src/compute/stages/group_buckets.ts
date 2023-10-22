@@ -44,10 +44,12 @@ export const combineFacetBuckets = (
     selectedBuckets: Bucket[],
     axis?: ComputeAxisParameters
 ): FacetBucket[] => {
-    if (!axis?.options) {
+    const optionsOrGroups =
+        axis?.enableBucketGroups && axis?.question.groups ? axis.question.groups : axis?.options
+    if (!optionsOrGroups) {
         return []
     }
-    const combinedFacetBuckets = axis.options.map(option => {
+    const combinedFacetBuckets = optionsOrGroups.map(option => {
         const { id, label } = option
         const combinedData = getCombinedFacetBucket(selectedBuckets, option.id)
         return {
