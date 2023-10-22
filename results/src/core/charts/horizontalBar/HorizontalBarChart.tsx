@@ -161,6 +161,9 @@ const HorizontalBarChart = ({
 
     if (facet) {
         buckets = buckets.map(bucket => {
+            baseUnits.forEach(unit => {
+                bucket[unit] = bucket[unit] ?? 0
+            })
             bucket?.facetBuckets?.forEach(facetBucket => {
                 baseUnits.forEach(unit => {
                     bucket[`${unit}__${facetBucket.id}`] = facetBucket[unit]

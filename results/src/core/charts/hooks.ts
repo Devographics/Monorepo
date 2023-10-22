@@ -280,7 +280,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
     }
 
     const noAnswerFill = {
-        match: d => d.data.indexValue === 'no_answer',
+        match: d => d.data.indexValue === 'no_answer' || d.data.id.includes('no_answer'),
         id: `Gradient${orientation}NoAnswer`
     }
 
@@ -311,7 +311,10 @@ export const useColorFills = (options: UseColorFillsOptions) => {
             */
             const facetField = allFilters.find(f => f.id === facet?.id) as FilterItem
 
-            const prefix = facetField.optionsAreSequential ? 'Velocity' : 'Gradient'
+            const prefix =
+                facetField.optionsAreSequential || facetField.optionsAreRange
+                    ? 'Velocity'
+                    : 'Gradient'
 
             const averageFill = {
                 match: d => {
@@ -370,8 +373,13 @@ export const useAllChartsOptions = (): FilterItem[] => {
     const keys = []
     for (const section of currentEdition.sections) {
         for (const question of section.questions) {
-            if (question.options) {
-                keys.push({ sectionId: section.id, ...question })
+            if (question.options || question.groups) {
+                // if question has groups, use them to override the options
+                // TODO: do this in a cleaner way
+                const question_ = question.groups
+                    ? { ...question, options: question.groups }
+                    : question
+                keys.push({ sectionId: section.id, ...question_ })
             }
         }
     }
@@ -432,7 +440,8 @@ export const useChartKeys = ({
         if (units === BucketUnits.AVERAGE) {
             return [BucketUnits.AVERAGE]
         } else {
-            const options = allChartKeys.find(q => q.id === facet.id)?.options!
+            const question = allChartKeys.find(q => q.id === facet.id)
+            const options = question?.groups ?? question?.options ?? []
             return [...options, { id: NO_ANSWER }].map(option => `${units}__${option.id}`)
         }
     } else if (seriesCount) {

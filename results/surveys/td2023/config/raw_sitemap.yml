@@ -54,6 +54,11 @@
       - id: japan_province
         template: multiple_options
         parameters: { cutoff: 10, showNoAnswer: true, sort: { property: count } }
+        variants:
+            - id: japan_province_vs_salary
+              fieldId: japan_province
+              i18nNamespace: japan_province
+              template: vs_salary_tokyodev
 
       - id: reason_for_relocation
         template: single_option_combined
@@ -68,48 +73,101 @@
       - id: country
         template: multiple_options
         parameters: { limit: 20, showNoAnswer: true }
+        variants:
+            - id: country_vs_salary
+              fieldId: country
+              i18nNamespace: country
+              template: vs_salary_tokyodev
 
       - id: gender
         template: multiple_options
         defaultUnits: percentageSurvey
+        variants:
+            - id: gender_vs_salary
+              fieldId: gender
+              i18nNamespace: gender
+              template: vs_salary_tokyodev
+              parameters:
+                  showNoAnswer: true
+                  cutoff: 0
 
-      - id: age_grouped
+      - id: age
         blockType: VerticalBarBlock
         template: multiple_options
+        variants:
+            - id: age_vs_salary
+              fieldId: age
+              i18nNamespace: age
+              template: vs_salary_tokyodev
 
-      - id: years_of_experience_grouped
+      - id: years_of_experience
         titleId: user_info.years_of_experience
         questionKey: user_info.years_of_experience.question
         i18nNamespace: years_grouped
         template: multiple_options
         blockType: VerticalBarBlock
+        variants:
+            - id: years_of_experience_vs_salary
+              fieldId: years_of_experience
+              i18nNamespace: years_of_experience
+              template: vs_salary_tokyodev
 
-      - id: years_in_japan_grouped
+      - id: years_in_japan
         template: multiple_options
         blockType: VerticalBarBlock
         i18nNamespace: years_grouped
         titleId: user_info.years_in_japan
         questionKey: user_info.years_in_japan.question
+        variants:
+            - id: years_in_japan_vs_salary
+              fieldId: years_in_japan
+              i18nNamespace: years_in_japan
+              template: vs_salary_tokyodev
 
       - id: educational_attainment
         template: multiple_options_combined
+        variants:
+            - id: educational_attainment_vs_salary
+              fieldId: educational_attainment
+              i18nNamespace: educational_attainment
+              template: vs_salary_tokyodev
 
       - id: professional_qualifications
         template: multiple_options_combined
+        variants:
+            - id: professional_qualifications_vs_salary
+              fieldId: professional_qualifications
+              i18nNamespace: professional_qualifications
+              template: vs_salary_tokyodev
 
       - id: language_proficiency_english
         template: multiple_options
         blockType: VerticalBarBlock
         parameters: { showNoAnswer: true, sort: { property: options } }
+        variants:
+            - id: language_proficiency_english_vs_salary
+              fieldId: language_proficiency_english
+              i18nNamespace: language_proficiency_english
+              template: vs_salary_tokyodev
 
       - id: language_proficiency_japanese
         template: multiple_options
         blockType: VerticalBarBlock
         parameters: { showNoAnswer: true, sort: { property: options } }
+        variants:
+            - id: language_proficiency_japanese_vs_salary
+              fieldId: language_proficiency_japanese
+              i18nNamespace: language_proficiency_japanese
+              template: vs_salary_tokyodev
 
       - id: source
         template: multiple_options
         parameters: { cutoff: 10 }
+        variants:
+            - id: source_vs_salary
+              fieldId: source
+              i18nNamespace: source
+              template: vs_salary_tokyodev
 
 - id: job_info
   path: /job-info
@@ -136,7 +194,7 @@
       - id: languages_used_colleagues_english
         template: single_option
 
-      - id: years_employed_grouped
+      - id: years_employed
         template: multiple_options
         titleId: job_info.years_employed
         questionKey: job_info.years_employed.question
@@ -170,7 +228,7 @@
 - id: compensation
   path: /compensation
   blocks:
-      - id: current_total_annual_compensation_grouped
+      - id: current_total_annual_compensation
         template: single_option
         titleId: compensation.current_total_annual_compensation
         questionKey: compensation.current_total_annual_compensation.question
@@ -185,96 +243,95 @@
         template: single_option
 
       - id: annual_paid_leave
-        # id: annual_paid_leave_grouped
         i18nNamespace: annual_paid_leave
         titleId: compensation.annual_paid_leave
         questionKey: compensation.annual_paid_leave.question
         template: single_option
 
-      - id: country_vs_salary
-        fieldId: country
-        template: multiple_options
-        parameters: { cutoff: 20, showNoAnswer: true }
-        defaultUnits: averageByFacet
-        queryOptions: { sectionId: user_info }
-        filtersState:
-            options:
-                showDefaultSeries: true
-                enableYearSelect: false
-                mode: facet
-                queryOnLoad: false
-                supportedModes:
-                    - grid
-                    - facet
-                preventQuery: false
-            filters: []
-            facet:
-                sectionId: compensation
-                id: current_total_annual_compensation
+      # - id: country_vs_salary
+      #   fieldId: country
+      #   template: multiple_options
+      #   parameters: { cutoff: 20, showNoAnswer: true }
+      #   defaultUnits: averageByFacet
+      #   queryOptions: { sectionId: user_info }
+      #   filtersState:
+      #       options:
+      #           showDefaultSeries: true
+      #           enableYearSelect: false
+      #           mode: facet
+      #           queryOnLoad: false
+      #           supportedModes:
+      #               - grid
+      #               - facet
+      #           preventQuery: false
+      #       filters: []
+      #       facet:
+      #           sectionId: compensation
+      #           id: current_total_annual_compensation
 
-      - id: gender_vs_salary
-        fieldId: gender
-        template: multiple_options
-        blockType: VerticalBarBlock
-        defaultUnits: percentilesByFacet
-        parameters: { cutoff: 20 }
-        queryOptions: { sectionId: user_info }
-        filtersState:
-            options:
-                showDefaultSeries: true
-                enableYearSelect: false
-                mode: facet
-                queryOnLoad: false
-                supportedModes:
-                    - combined
-                    - facet
-                preventQuery: false
-            filters: []
-            facet:
-                sectionId: compensation
-                id: current_total_annual_compensation
+      # - id: gender_vs_salary
+      #   fieldId: gender
+      #   template: multiple_options
+      #   blockType: VerticalBarBlock
+      #   defaultUnits: percentilesByFacet
+      #   parameters: { cutoff: 20 }
+      #   queryOptions: { sectionId: user_info }
+      #   filtersState:
+      #       options:
+      #           showDefaultSeries: true
+      #           enableYearSelect: false
+      #           mode: facet
+      #           queryOnLoad: false
+      #           supportedModes:
+      #               - combined
+      #               - facet
+      #           preventQuery: false
+      #       filters: []
+      #       facet:
+      #           sectionId: compensation
+      #           id: current_total_annual_compensation
 
-      - id: salary_by_age
-        fieldId: age_grouped
-        blockType: VerticalBarBlock
-        template: multiple_options
-        defaultUnits: percentilesByFacet
-        queryOptions: { sectionId: user_info }
-        filtersState:
-            options:
-                showDefaultSeries: true
-                enableYearSelect: false
-                mode: facet
-                queryOnLoad: false
-                supportedModes:
-                    - combined
-                    - facet
-                preventQuery: false
-            filters: []
-            facet:
-                sectionId: compensation
-                id: current_total_annual_compensation
+      # - id: salary_by_age
+      #   fieldId: age_grouped
+      #   blockType: VerticalBarBlock
+      #   template: multiple_options
+      #   defaultUnits: percentilesByFacet
+      #   queryOptions: { sectionId: user_info }
+      #   filtersState:
+      #       options:
+      #           showDefaultSeries: true
+      #           enableYearSelect: false
+      #           mode: facet
+      #           queryOnLoad: false
+      #           supportedModes:
+      #               - combined
+      #               - facet
+      #           preventQuery: false
+      #       filters: []
+      #       facet:
+      #           sectionId: compensation
+      #           id: current_total_annual_compensation
 
-      - id: salary_by_experience
-        fieldId: years_of_experience_grouped
-        blockType: VerticalBarBlock
-        template: multiple_options
-        defaultUnits: percentilesByFacet
-        queryOptions: { sectionId: user_info }
-        filtersState:
-            options:
-                showDefaultSeries: true
-                enableYearSelect: false
-                mode: facet
-                queryOnLoad: false
-                supportedModes:
-                    - combined
-                    - facet
-                preventQuery: false
-            filters: []
-            facet:
-                sectionId: compensation
-                id: current_total_annual_compensation
+      # - id: salary_by_experience
+      #   fieldId: years_of_experience_grouped
+      #   blockType: VerticalBarBlock
+      #   template: multiple_options
+      #   defaultUnits: percentilesByFacet
+      #   queryOptions: { sectionId: user_info }
+      #   filtersState:
+      #       options:
+      #           showDefaultSeries: true
+      #           enableYearSelect: false
+      #           mode: facet
+      #           queryOnLoad: false
+      #           supportedModes:
+      #               - combined
+      #               - facet
+      #           preventQuery: false
+      #       filters: []
+      #       facet:
+      #           sectionId: compensation
+      #           id: current_total_annual_compensation
 
 - id: technology
   path: /technology

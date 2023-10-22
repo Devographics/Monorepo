@@ -1,0 +1,20 @@
+tabId: tabs.vs_salary
+defaultUnits: averageByFacet
+blockType: HorizontalBarBlock
+query: currentEditionData
+parameters:
+    showNoAnswer: true
+    cutoff: 12
+filtersState:
+    options:
+        showDefaultSeries: false
+        enableYearSelect: false
+        mode: facet
+        queryOnLoad: false
+        supportedModes:
+            - grid
+            - facet
+        preventQuery: false
+    facet:
+        sectionId: compensation
+        id: current_total_annual_compensation
