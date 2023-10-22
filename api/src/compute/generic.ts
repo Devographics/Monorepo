@@ -13,8 +13,10 @@ import {
     QuestionApiObject,
     ResponseEditionData,
     ComputeAxisParameters,
-    SortProperty,
-    EditionApiObject
+    EditionApiObject,
+    SortSpecifier,
+    SortOrder,
+    SortOrderNumeric
 } from '../types'
 import {
     discardEmptyIds,
@@ -45,14 +47,15 @@ import {
     EditionMetadata,
     ResponsesParameters,
     Filters,
-    ResultsSubFieldEnum
+    ResultsSubFieldEnum,
+    SortProperty
 } from '@devographics/types'
 import { getCollection } from '../helpers/db'
 import { getPastEditions } from '../helpers/surveys'
 import { computeKey } from '../helpers/caching'
 import isEmpty from 'lodash/isEmpty.js'
 
-const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
+const convertOrder = (order: 'asc' | 'desc'): SortOrderNumeric => (order === 'asc' ? 1 : -1)
 
 /*
 
@@ -77,6 +80,52 @@ export const getDbPath = (
     } else {
         return normPaths?.other
     }
+}
+
+const getQuestionSort = ({
+    specifier: specifier_,
+    question,
+    enableBucketGroups
+}: {
+    specifier?: SortSpecifier
+    question: QuestionApiObject
+    enableBucketGroups?: boolean
+}) => {
+    let defaultSort: SortProperty,
+        defaultOrder: SortOrder = 'desc'
+    if (enableBucketGroups && question.groups) {
+        // if we're grouping, use group order
+        defaultSort = 'options'
+    } else if (question.defaultSort) {
+        // if question has a default sort, use it
+        defaultSort = question.defaultSort
+    } else if (question.optionsAreNumeric) {
+        if (question.options) {
+            defaultSort = 'options'
+        } else {
+            // values are numeric but no options are specified, in this case
+            // sort by id to get a nice curve of successive number
+            defaultSort = 'id'
+            defaultOrder = 'asc'
+        }
+    } else {
+        // default to sorting by bucket count
+        defaultSort = 'count'
+    }
+    const specifier = {
+        sort: defaultSort,
+        order: defaultOrder
+    }
+    // if sort/order have been explicitly passed, use that instead
+    if (specifier_?.property) {
+        specifier.sort = specifier_?.property
+    }
+    if (specifier_?.order) {
+        specifier.order = specifier_?.order
+    }
+    console.log('=====')
+    console.log({ ...specifier, order: convertOrder(specifier.order) })
+    return { ...specifier, order: convertOrder(specifier.order) }
 }
 
 export const getGenericCacheKey = ({
@@ -149,7 +198,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         facetCutoffPercent,
         showNoAnswer,
         groupUnderCutoff = true,
-        mergeOtherBuckets = true
+        mergeOtherBuckets = true,
+        enableBucketGroups = true
     } = parameters
 
     /*
@@ -159,11 +209,11 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     */
     axis1 = {
         question,
-        sort: sort?.property ?? (question.defaultSort as SortProperty) ?? 'count',
-        order: convertOrder(sort?.order ?? 'desc'),
+        ...getQuestionSort({ specifier: sort, question, enableBucketGroups }),
         cutoff,
         groupUnderCutoff,
         mergeOtherBuckets,
+        enableBucketGroups,
         limit
     }
     if (question.options) {
@@ -184,11 +234,15 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         if (facetQuestion) {
             axis2 = {
                 question: facetQuestion,
-                sort: facetSort?.property ?? (facetQuestion.defaultSort as SortProperty) ?? 'count',
-                order: convertOrder(facetSort?.order ?? 'desc'),
+                ...getQuestionSort({
+                    specifier: facetSort,
+                    question: facetQuestion,
+                    enableBucketGroups
+                }),
                 cutoff: facetCutoff,
                 groupUnderCutoff,
                 mergeOtherBuckets,
+                enableBucketGroups,
                 cutoffPercent: facetCutoffPercent,
                 limit: facetLimit
             }
@@ -313,10 +367,10 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         // await groupOtherBuckets(results, axis2, axis1)
         // for all following steps, use groups as options
-        if (axis1.question.groups) {
+        if (axis1.enableBucketGroups && axis1.question.groups) {
             axis1.options = axis1.question.groups
         }
-        if (axis2.question.groups) {
+        if (axis2.enableBucketGroups && axis2.question.groups) {
             axis2.options = axis2.question.groups
         }
         await sortData(results, axis2, axis1)
@@ -343,7 +397,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await groupOtherBuckets(results, axis1)
 
         // for all following steps, use groups as options
-        if (axis1.question.groups) {
+        if (axis1.enableBucketGroups && axis1.question.groups) {
             axis1.options = axis1.question.groups
         }
         await sortData(results, axis1)

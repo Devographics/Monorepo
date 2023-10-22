@@ -101,7 +101,7 @@ export interface FacetCompletion extends YearCompletion {
 
 export enum BucketUnits {
     COUNT = 'count',
-    PERCENTAGE_FACET = 'percentageFacet',
+    // PERCENTAGE_FACET = 'percentageFacet',
     PERCENTAGE_QUESTION = 'percentageQuestion',
     PERCENTAGE_SURVEY = 'percentageSurvey',
     PERCENTAGE_BUCKET = 'percentageBucket',

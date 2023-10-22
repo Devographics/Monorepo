@@ -1,4 +1,11 @@
-import { BucketData, BucketUnits, FacetBucket, Option, OptionId } from '@devographics/types'
+import {
+    BucketData,
+    BucketUnits,
+    FacetBucket,
+    Option,
+    OptionGroup,
+    OptionId
+} from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import sumBy from 'lodash/sumBy.js'
 import { CUTOFF_ANSWERS, NO_ANSWER, NO_MATCH, OTHER_ANSWERS } from '@devographics/constants'
@@ -65,16 +72,21 @@ const isInBounds = (n: number, lowerBound?: number, upperBound?: number) => {
     }
 }
 
-const getMergedBucket = (buckets: Bucket[], id: string, axis?: ComputeAxisParameters) => {
+const getMergedBucket = <T extends Bucket | FacetBucket>(
+    buckets: T[],
+    id: string,
+    axis?: ComputeAxisParameters
+) => {
     const bucket = {
         id,
         count: sumBy(buckets, 'count'),
         percentageSurvey: Math.round(100 * sumBy(buckets, 'percentageSurvey')) / 100,
         percentageQuestion: Math.round(100 * sumBy(buckets, 'percentageQuestion')) / 100,
+        percentageBucket: Math.round(100 * sumBy(buckets, 'percentageBucket')) / 100,
         groupedBucketIds: buckets.map(b => b.id)
-    } as Bucket
+    } as T
     if (axis) {
-        bucket.facetBuckets = combineFacetBuckets(buckets, axis)
+        ;(bucket as Bucket).facetBuckets = combineFacetBuckets(buckets as Bucket[], axis)
     }
     if (buckets.every(b => !!b.hasInsufficientData)) {
         // if every bucket we merge has insufficient data, consider
@@ -84,6 +96,35 @@ const getMergedBucket = (buckets: Bucket[], id: string, axis?: ComputeAxisParame
     return bucket
 }
 
+function getGroupedBuckets<T extends Bucket | FacetBucket>({
+    groups,
+    buckets,
+    axis
+}: {
+    groups: OptionGroup[]
+    buckets: T[]
+    axis?: ComputeAxisParameters
+}) {
+    const noAnswerBucket = buckets.find(b => b.id === NO_ANSWER)
+    let groupedBuckets = groups.map(group => {
+        const { id, upperBound, lowerBound, items } = group
+        let selectedBuckets
+        if (lowerBound || upperBound) {
+            selectedBuckets = buckets.filter(b => isInBounds(Number(b.id), lowerBound, upperBound))
+        } else if (items) {
+            selectedBuckets = buckets.filter(b => items.includes(b.id))
+        } else {
+            throw new Error(
+                `groupBuckets: please specify lowerBound/upperBound or items array for group ${id}`
+            )
+        }
+        const bucket = getMergedBucket<T>(selectedBuckets, id, axis)
+        return bucket
+    })
+
+    groupedBuckets = noAnswerBucket ? [...groupedBuckets, noAnswerBucket] : groupedBuckets
+    return groupedBuckets
+}
 /*
 
 Take a list of groups and group the buckets in each edition dataset
@@ -97,29 +138,22 @@ export async function groupBuckets(
     axis2?: ComputeAxisParameters
 ) {
     for (let editionData of resultsByEdition) {
-        if (axis1.question.groups) {
-            const noAnswerBucket = editionData.buckets.find(b => b.id === NO_ANSWER)
-            const groupedBuckets = axis1.question.groups.map(group => {
-                const { id, upperBound, lowerBound, items } = group
-                let selectedBuckets
-                if (lowerBound || upperBound) {
-                    selectedBuckets = editionData.buckets.filter(b =>
-                        isInBounds(Number(b.id), lowerBound, upperBound)
-                    )
-                } else if (items) {
-                    selectedBuckets = editionData.buckets.filter(b => items.includes(b.id))
-                } else {
-                    throw new Error(
-                        `groupBuckets: please specify lowerBound/upperBound or items array for group ${id}`
-                    )
-                }
-
-                const bucket = getMergedBucket(selectedBuckets, id, axis2)
-                return bucket
+        if (axis2 && axis2.enableBucketGroups && axis2.question.groups) {
+            // first, group facetBuckets if needed
+            for (let bucket of editionData.buckets) {
+                bucket.facetBuckets = getGroupedBuckets<FacetBucket>({
+                    groups: axis2.question.groups,
+                    buckets: bucket.facetBuckets
+                })
+            }
+        }
+        if (axis1.enableBucketGroups && axis1.question.groups) {
+            const groupedBuckets = getGroupedBuckets<Bucket>({
+                groups: axis1.question.groups,
+                buckets: editionData.buckets,
+                axis: axis2
             })
-            editionData.buckets = noAnswerBucket
-                ? [...groupedBuckets, noAnswerBucket]
-                : groupedBuckets
+            editionData.buckets = groupedBuckets
         }
     }
 }

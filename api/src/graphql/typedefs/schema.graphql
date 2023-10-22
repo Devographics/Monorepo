@@ -134,6 +134,7 @@ type QuestionMetadata {
     normPaths: NormDbPaths
     contentType: ContentType
     options: [OptionsMetadata]
+    groups: [GroupsMetadata]
     followups: [FollowupsMetadata]
     entity: Entity
     isRequired: Boolean
@@ -201,6 +202,15 @@ type OptionsMetadata {
     entity: Entity
 }
 
+type GroupsMetadata {
+    id: String
+    intlId: String
+    label: String
+    average: Float
+    lowerBound: Float
+    upperBound: Float
+}
+
 # no need for default values here because we already specify default values
 # inside genericComputeFunction
 input Parameters {
@@ -215,6 +225,7 @@ input Parameters {
     showNoAnswer: Boolean
     showNoMatch: Boolean
     groupUnderCutoff: Boolean
+    enableBucketGroups: Boolean
     mergeOtherBuckets: Boolean
 }
 

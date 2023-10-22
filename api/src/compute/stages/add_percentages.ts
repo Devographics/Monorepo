@@ -1,3 +1,4 @@
+import { BucketUnits } from '@devographics/types'
 import { ResponseEditionData, Bucket, FacetBucket, ComputeAxisParameters } from '../../types'
 import { ratioToPercentage } from '../common'
 import { NO_ANSWER } from '@devographics/constants'
@@ -13,18 +14,18 @@ const computeBucketsWithPercentages = <T extends Bucket | FacetBucket>(
     const bucketsWithPercentages = buckets.map(bucket => {
         const bucketCount = bucket.count ?? 0
         const bucketWithPercentages = { ...bucket }
-        bucketWithPercentages.percentageSurvey = ratioToPercentage(
+        bucketWithPercentages[BucketUnits.PERCENTAGE_SURVEY] = ratioToPercentage(
             bucketCount / editionData.completion.total
         )
-        bucketWithPercentages.percentageQuestion =
+        bucketWithPercentages[BucketUnits.PERCENTAGE_QUESTION] =
             bucket.id === NO_ANSWER
                 ? 0
                 : ratioToPercentage(bucketCount / editionData.completion.count)
+
         if (parentBucket) {
             const parentBucketCount = parentBucket?.count ?? 0
-            bucketWithPercentages.percentageBucket = ratioToPercentage(
-                bucketCount / parentBucketCount
-            )
+            const percentageBucket = ratioToPercentage(bucketCount / parentBucketCount)
+            bucketWithPercentages[BucketUnits.PERCENTAGE_BUCKET] = percentageBucket
         }
         return bucketWithPercentages
     })

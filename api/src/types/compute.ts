@@ -1,6 +1,6 @@
 import { QuestionApiObject } from './surveys'
 import { Filters } from './filters'
-import { Option, OptionId, ResponsesTypes } from '@devographics/types'
+import { Option, OptionId, ResponsesTypes, SortProperty } from '@devographics/types'
 
 export interface GenericComputeArguments {
     responsesType?: ResponsesTypes
@@ -26,6 +26,7 @@ export interface GenericComputeParameters {
     showNoMatch?: boolean
     groupUnderCutoff?: boolean
     mergeOtherBuckets?: boolean
+    enableBucketGroups?: boolean
     responsesType?: ResponsesTypes
 }
 
@@ -36,6 +37,7 @@ export interface ComputeAxisParameters {
     cutoff: number
     groupUnderCutoff?: boolean
     mergeOtherBuckets?: boolean
+    enableBucketGroups?: boolean
     limit: number
     cutoffPercent?: number
     options?: Option[]
@@ -45,8 +47,6 @@ export interface SortSpecifier {
     property: SortProperty
     order: SortOrder
 }
-
-export type SortProperty = 'options' | 'count' | 'percent' | 'id'
 
 export type SortOrder = 'asc' | 'desc'
 export type SortOrderNumeric = 1 | -1

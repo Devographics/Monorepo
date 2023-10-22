@@ -1,5 +1,5 @@
-import { ComputeAxisParameters, SortProperty, SortOrderNumeric } from '../../types'
-import { ResponseEditionData, Bucket, FacetBucket, Option } from '@devographics/types'
+import { ComputeAxisParameters, SortOrderNumeric } from '../../types'
+import { ResponseEditionData, Bucket, FacetBucket, Option, SortProperty } from '@devographics/types'
 import sortBy from 'lodash/sortBy.js'
 import isEmpty from 'lodash/isEmpty.js'
 import {

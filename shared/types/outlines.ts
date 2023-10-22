@@ -148,6 +148,8 @@ export enum OptionsOrder {
     ALPHA = 'alphabetical'
 }
 
+export type SortProperty = 'options' | 'count' | 'percent' | 'id'
+
 /**
  * Keep in sync with QuestionMetadata in
  * api/src/graphql/typedefs/schema.graphql
@@ -171,7 +173,7 @@ export type Question = {
     optionsAreRange?: boolean
     // options follow each other sequentially
     optionsAreSequential?: boolean
-    defaultSort?: string
+    defaultSort?: SortProperty
 
     groups?: OptionGroup[]
 
