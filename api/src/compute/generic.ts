@@ -368,7 +368,10 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         results = await applyDatasetCutoff(results, computeArguments)
 
-        if (responsesType === ResponsesTypes.COMBINED) {
+        if (
+            responsesType === ResponsesTypes.COMBINED ||
+            responsesType === ResponsesTypes.FREEFORM
+        ) {
             // TODO: probably doesn't work well when a facet is active
             await groupOtherBuckets(results, axis2, axis1)
         }
@@ -402,7 +405,10 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         results = await applyDatasetCutoff(results, computeArguments)
 
-        if (responsesType === ResponsesTypes.COMBINED) {
+        if (
+            responsesType === ResponsesTypes.COMBINED ||
+            responsesType === ResponsesTypes.FREEFORM
+        ) {
             await groupOtherBuckets(results, axis1)
         }
 

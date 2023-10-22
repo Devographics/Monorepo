@@ -30,7 +30,17 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         edition
     } = pipelineProps
 
-    const axis1DbPath = getDbPath(axis1.question, responsesType)
+    /*
+
+    TODO: currently we can't specify the subfield for a facet. In other words we can only facet
+    by main responses values, not by freeform values.
+
+    For that reason, if two axes are specified, hardcode axis 1's subfield to be "responses"
+    (axis 1 is actually the second axis, they're inverted for whatever reason)
+
+    */
+    const responseType1 = axis2 ? ResponsesTypes.RESPONSES : responsesType
+    const axis1DbPath = getDbPath(axis1.question, responseType1)
     const axis2DbPath = axis2 && getDbPath(axis2.question, responsesType)
 
     if (!axis1DbPath) {
