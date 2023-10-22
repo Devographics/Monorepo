@@ -59,6 +59,9 @@
               fieldId: japan_province
               i18nNamespace: japan_province
               template: vs_salary_tokyodev
+              parameters:
+                  showNoAnswer: true
+                  cutoff: 10
 
       - id: reason_for_relocation
         template: single_option_combined
@@ -78,6 +81,9 @@
               fieldId: country
               i18nNamespace: country
               template: vs_salary_tokyodev
+              parameters:
+                  showNoAnswer: true
+                  cutoff: 10
 
       - id: gender
         template: multiple_options
@@ -87,9 +93,6 @@
               fieldId: gender
               i18nNamespace: gender
               template: vs_salary_tokyodev
-              parameters:
-                  showNoAnswer: true
-                  cutoff: 0
 
       - id: age
         blockType: VerticalBarBlock
@@ -103,7 +106,7 @@
       - id: years_of_experience
         titleId: user_info.years_of_experience
         questionKey: user_info.years_of_experience.question
-        i18nNamespace: years_grouped
+        i18nNamespace: years
         template: multiple_options
         blockType: VerticalBarBlock
         variants:
@@ -115,7 +118,7 @@
       - id: years_in_japan
         template: multiple_options
         blockType: VerticalBarBlock
-        i18nNamespace: years_grouped
+        i18nNamespace: years
         titleId: user_info.years_in_japan
         questionKey: user_info.years_in_japan.question
         variants:
@@ -168,6 +171,7 @@
               fieldId: source
               i18nNamespace: source
               template: vs_salary_tokyodev
+              parameters: { showNowAnswer: true, cutoff: 10 }
 
 - id: job_info
   path: /job-info
@@ -198,7 +202,7 @@
         template: multiple_options
         titleId: job_info.years_employed
         questionKey: job_info.years_employed.question
-        i18nNamespace: years_grouped
+        i18nNamespace: years
 
       - id: hours_per_day
         template: multiple_options

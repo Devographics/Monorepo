@@ -4,7 +4,6 @@ blockType: HorizontalBarBlock
 query: currentEditionData
 parameters:
     showNoAnswer: true
-    cutoff: 12
 filtersState:
     options:
         showDefaultSeries: false
