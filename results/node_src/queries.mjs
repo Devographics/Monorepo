@@ -232,6 +232,10 @@ query {
                                     id
                                     average
                                 }
+                                groups {
+                                    id
+                                    average
+                                }
                             }
                         }
                     }
@@ -449,7 +453,7 @@ export const getBlockQuery = ({
     block,
     pageContext,
     queryOptions: providedQueryOptions = {},
-    queryArgs = {}
+    enableCache
 }) => {
     let stringQuery
     const { query, queryOptions: blockQueryOptions } = block
@@ -466,7 +470,7 @@ export const getBlockQuery = ({
     if (!query) {
         stringQuery = ''
     } else {
-        stringQuery = getQuery({ query, queryOptions, queryArgs })
+        stringQuery = getQuery({ query, queryOptions, queryArgs: { enableCache } })
     }
     return stringQuery
 }
@@ -496,7 +500,13 @@ could be avoided by making template query definitions JS/TS objects that
 define how to accept filters and series themselves.
 
 */
-export const getFiltersQuery = ({ block, chartFilters, currentYear, queryOptions }) => {
+export const getFiltersQuery = ({
+    block,
+    chartFilters,
+    currentYear,
+    queryOptions,
+    enableCache
+}) => {
     const { options = {}, filters, facet } = chartFilters
     const { enableYearSelect, mode } = options
     const query = getBlockQuery({
@@ -505,7 +515,8 @@ export const getFiltersQuery = ({ block, chartFilters, currentYear, queryOptions
             ...queryOptions,
             addArgumentsPlaceholder: true,
             addBucketFacetsPlaceholder: true
-        }
+        },
+        enableCache
     })
     // fragment starts after fourth "{"
     const fragmentStartIndex = getNthPosition(query, '{', 5) + 1
@@ -547,7 +558,7 @@ export const getFiltersQuery = ({ block, chartFilters, currentYear, queryOptions
 
                 const queryArgs = getQueryArgsString({
                     filters: conditionsToFilters(singleSeries.conditions),
-                    parameters: block.parameters
+                    parameters: { enableCache, ...block.parameters }
                 })
 
                 seriesFragment = seriesFragment.replace(argumentsPlaceholder, queryArgs || '')
@@ -564,7 +575,7 @@ export const getFiltersQuery = ({ block, chartFilters, currentYear, queryOptions
     } else if (facet && mode === MODE_FACET) {
         const queryArgs = getQueryArgsString({
             facet,
-            parameters: block.parameters
+            parameters: { enableCache, ...block.parameters }
         })
 
         // DIFFERENCE WITH CLIENT (TS) VERSION

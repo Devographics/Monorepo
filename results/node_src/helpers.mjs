@@ -222,7 +222,8 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                             block,
                             queryOptions,
                             chartFilters: block.filtersState,
-                            currentYear: currentEdition.year
+                            currentYear: currentEdition.year,
+                            enableCache: useApiCache
                         })
                         query = filtersQueryResult.query
                     } else {
@@ -242,7 +243,8 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                                 block,
                                 queryOptions: { ...queryOptions, isLog: true, addRootNode: false },
                                 chartFilters: block.filtersState,
-                                currentYear: currentEdition.year
+                                currentYear: currentEdition.year,
+                                enableCache: useApiCache
                             })
                             queryLog = filtersQueryResult.query
                         } else {
