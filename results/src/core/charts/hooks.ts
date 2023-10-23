@@ -9,7 +9,7 @@ import round from 'lodash/round'
 import { CHART_MODE_GRID, CHART_MODE_STACKED, CHART_MODE_GROUPED } from 'core/filters/constants'
 import { ChartModes, FacetItem, FilterItem } from 'core/filters/types'
 import { Bucket, BucketUnits } from '@devographics/types'
-import { NO_ANSWER } from '@devographics/constants'
+import { NO_ANSWER, OVERALL } from '@devographics/constants'
 import pickBy from 'lodash/pickBy'
 
 /*
@@ -212,6 +212,16 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }
 
+    const overallGradient = {
+        id: `Gradient${orientation}Overall`,
+        type: 'linearGradient',
+        colors: [
+            { offset: 0, color: colors.barColorDefault.gradient[1] },
+            { offset: 100, color: colors.barColorDefault.gradient[0] }
+        ],
+        ...(orientation === HORIZONTAL ? horizontalDefs : {})
+    }
+
     const freeformAnswersGradient = {
         id: `Gradient${orientation}Freeform`,
         type: 'linearGradient',
@@ -238,6 +248,7 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         defaultGradient,
         freeformAnswersGradient,
         noAnswerGradient,
+        overallGradient,
         naGradient
     ]
 }
@@ -280,8 +291,13 @@ export const useColorFills = (options: UseColorFillsOptions) => {
     }
 
     const noAnswerFill = {
-        match: d => d.data.indexValue === 'no_answer' || d.data.id.includes('no_answer'),
+        match: d => d.data.indexValue === NO_ANSWER || d.data.id.includes('no_answer'),
         id: `Gradient${orientation}NoAnswer`
+    }
+
+    const overallFill = {
+        match: d => d.key === 'averageByFacet.overall',
+        id: `Gradient${orientation}Overall`
     }
 
     const freeformFill = {
@@ -301,7 +317,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
             const id = isDefault
                 ? `Gradient${orientation}Default`
                 : `Gradient${orientation}${gridIndex + gridIndexOffset}`
-            return [noAnswerFill, freeformFill, naFill, { match: '*', id }]
+            return [noAnswerFill, overallFill, freeformFill, naFill, { match: '*', id }]
         }
         case CHART_MODE_STACKED: {
             /*
@@ -334,7 +350,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
                 id: `${prefix}${orientation}${i + 2}`
             }))
 
-            return [noAnswerFill, freeformFill, naFill, averageFill, ...facetFills]
+            return [noAnswerFill, overallFill, freeformFill, naFill, averageFill, ...facetFills]
         }
         case CHART_MODE_GROUPED: {
             /*
@@ -348,7 +364,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
                 },
                 id: `Gradient${orientation}${i + 1}`
             }))
-            return [noAnswerFill, freeformFill, naFill, ...numberedSeriesFills]
+            return [noAnswerFill, overallFill, freeformFill, naFill, ...numberedSeriesFills]
         }
         default: {
             /*
@@ -357,7 +373,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
 
             */
             const defaultFill = { match: '*', id: `Gradient${orientation}Default` }
-            return [noAnswerFill, freeformFill, naFill, defaultFill]
+            return [noAnswerFill, overallFill, freeformFill, naFill, defaultFill]
         }
     }
 }

@@ -90,10 +90,11 @@ const getLabelsLayer = (labelTransformer: any) => (props: any) => {
     //     fontSize = 11
     //     rotation = -90
     // }
-
+    console.log(props)
     return props.bars.map((bar: any) => {
         const label = labelTransformer(bar.data)
-        return (
+        const hasInsufficientData = bar.data.data.hasInsufficientData
+        return hasInsufficientData ? null : (
             <ChartLabel
                 key={bar.key}
                 label={label}
@@ -138,6 +139,7 @@ const getSortKey = (keys: string[]) => {
 
 const HorizontalBarChart = ({
     block,
+    question,
     legends,
     series,
     total,
@@ -194,7 +196,7 @@ const HorizontalBarChart = ({
     // let sortedBuckets = sortBy(buckets, getSortKey(keys))
     let sortedBuckets = [...buckets].reverse()
 
-    if (units === BucketUnits.AVERAGE) {
+    if (!question?.optionsAreSequential && units === BucketUnits.AVERAGE) {
         sortedBuckets = sortBy(sortedBuckets, BucketUnits.AVERAGE)
     }
     const { formatTick, formatValue, maxValue } = useBarChart({
@@ -258,15 +260,16 @@ const HorizontalBarChart = ({
                     tickSize: 0,
                     tickPadding: 10,
                     renderTick: tick => {
+                        const tickBucket = sortedBuckets.find(b => b.id === tick.value)
                         return (
                             <TickItem
                                 i18nNamespace={i18nNamespace}
                                 shouldTranslate={shouldTranslate}
                                 entity={
-                                    sortedBuckets.find(b => b.id === tick.value)?.entity ||
-                                    entities.find(e => e?.id === tick.value)
+                                    tickBucket?.entity || entities.find(e => e?.id === tick.value)
                                 }
-                                label={sortedBuckets.find(b => b.id === tick.value)?.label}
+                                bucket={tickBucket}
+                                label={tickBucket?.label}
                                 itemCount={sortedBuckets.length}
                                 role="rowheader"
                                 {...tick}

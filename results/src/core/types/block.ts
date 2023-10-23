@@ -1,5 +1,10 @@
 import React, { FC } from 'react'
-import { BucketUnits, ResponsesParameters, ResultsSubFieldEnum } from '@devographics/types'
+import {
+    BucketUnits,
+    QuestionMetadata,
+    ResponsesParameters,
+    ResultsSubFieldEnum
+} from '@devographics/types'
 import { CustomizationDefinition } from 'core/filters/types'
 import { PageContextValue } from './context'
 
@@ -21,6 +26,7 @@ export type BlockMode = 'absolute' | 'relative'
 export interface BlockComponentProps {
     block: BlockDefinition
     pageContext: PageContextValue
+    question: QuestionMetadata
 }
 
 export interface BlockQueryOptions {

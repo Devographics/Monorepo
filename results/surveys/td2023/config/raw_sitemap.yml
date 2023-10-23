@@ -67,11 +67,21 @@
         template: single_option_combined
         blockType: HorizontalBarBlock
         parameters: { showNoAnswer: true, sort: { property: count } }
+        variants:
+            - id: reason_for_relocation_vs_salary
+              fieldId: reason_for_relocation
+              i18nNamespace: reason_for_relocation
+              template: vs_salary_tokyodev
 
       - id: residency_status
         template: single_option_combined
         blockType: HorizontalBarBlock
         parameters: { showNoAnswer: true, sort: { property: count } }
+        variants:
+            - id: residency_status_vs_salary
+              fieldId: residency_status
+              i18nNamespace: residency_status
+              template: vs_salary_tokyodev
 
       - id: country
         template: multiple_options
@@ -112,7 +122,7 @@
         variants:
             - id: years_of_experience_vs_salary
               fieldId: years_of_experience
-              i18nNamespace: years_of_experience
+              i18nNamespace: years
               template: vs_salary_tokyodev
 
       - id: years_in_japan
@@ -124,7 +134,7 @@
         variants:
             - id: years_in_japan_vs_salary
               fieldId: years_in_japan
-              i18nNamespace: years_in_japan
+              i18nNamespace: years
               template: vs_salary_tokyodev
 
       - id: educational_attainment

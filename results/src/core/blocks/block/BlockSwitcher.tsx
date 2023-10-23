@@ -8,6 +8,7 @@ import { BlockError } from 'core/blocks/block/BlockError'
 import { getBlockData, getBlockSeriesData } from 'core/helpers/data'
 import { BlockDefinition } from 'core/types'
 import { CustomizationDefinition } from 'core/filters/types'
+import { getAllQuestions } from 'core/helpers/options'
 
 interface BlockSwitcherProps {
     block: BlockDefinition
@@ -28,8 +29,13 @@ const BlockSwitcher = ({ pageData, block, index, ...props }: BlockSwitcherProps)
 
     const { filtersState } = block
 
+    const question = getAllQuestions(pageContext.currentEdition).find(
+        q => q.id === (block.fieldId ?? block.id)
+    )
+
     const blockProps = {
         block,
+        question,
         pageData,
         index,
         pageContext,

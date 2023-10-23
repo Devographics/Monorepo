@@ -3,7 +3,8 @@ import {
     NO_MATCH,
     NO_ANSWER,
     OTHER_ANSWERS,
-    CUTOFF_ANSWERS
+    CUTOFF_ANSWERS,
+    OVERALL
 } from '@devographics/constants'
 import { Entity, OptionMetadata, QuestionMetadata, SectionMetadata } from '@devographics/types'
 import { StringTranslator } from 'core/types'
@@ -36,6 +37,9 @@ export const getItemLabel = (options: {
     let key, label
     if (id === NO_ANSWER) {
         key = 'charts.no_answer'
+        label = getString(key).t
+    } else if (id === OVERALL) {
+        key = 'charts.overall'
         label = getString(key).t
     } else if (id === NO_MATCH) {
         key = 'charts.no_match'
