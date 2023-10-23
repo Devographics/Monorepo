@@ -13,40 +13,11 @@ messing up the charts because of missing datapoints.
 
 */
 
-const getZeroBucket = <T extends Bucket | FacetBucket>(
-    bucket: T,
-    clearBasicInfo: boolean = false
-) => {
-    const zeroBucket = {
-        count: 0,
-        percentageQuestion: 0,
-        percentageBucket: 0,
-        percentageSurvey: 0,
-        averageByFacet: 0,
-        percentilesByFacet: {
-            p0: 0,
-            p25: 0,
-            p50: 0,
-            p75: 0,
-            p100: 0
-        }
-    } as T
-    const fieldsToKeep: Array<keyof T> = clearBasicInfo
-        ? ['id', 'groupedBucketIds']
-        : [
-              'id',
-              'groupedBucketIds',
-              BucketUnits.COUNT,
-              BucketUnits.PERCENTAGE_QUESTION,
-              BucketUnits.PERCENTAGE_QUESTION
-          ]
-    const newBucket = {} as T
-    for (const key_ of Object.keys(bucket)) {
-        // build new bucket by either keeping value, or using "zero" value
-        const key = key_ as keyof T
-        newBucket[key] = fieldsToKeep.includes(key) ? bucket[key] : zeroBucket[key]
-    }
-    return { ...newBucket, hasInsufficientData: true }
+const getZeroBucket = <T extends Bucket | FacetBucket>(bucket: T, clearCount: boolean = false) => {
+    const zeroBucket = clearCount
+        ? { ...bucket, count: 0, hasInsufficientData: true }
+        : { ...bucket, hasInsufficientData: true }
+    return zeroBucket
 }
 
 /*

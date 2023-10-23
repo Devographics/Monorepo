@@ -174,7 +174,7 @@
               template: vs_salary_tokyodev
 
       - id: source
-        template: multiple_options
+        template: multiple_options_freeform
         parameters: { cutoff: 10 }
         variants:
             - id: source_vs_salary
@@ -182,6 +182,9 @@
               i18nNamespace: source
               template: vs_salary_tokyodev
               parameters: { showNoAnswer: true, cutoff: 10 }
+              queryOptions:
+                  addBucketsEntities: true
+                  subField: freeform
 
 - id: job_info
   path: /job-info

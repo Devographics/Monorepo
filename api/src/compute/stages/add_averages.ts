@@ -78,9 +78,13 @@ export async function addAveragesByFacet(
             if (axis2) {
                 for (let bucket of editionData.buckets) {
                     if (bucket.id !== NOT_APPLICABLE) {
-                        const average = calculateAverage({ bucket, axis: axis2 })
-                        if (!isNil(average) && !isNaN(average)) {
-                            bucket[BucketUnits.AVERAGE] = average
+                        if (bucket.hasInsufficientData) {
+                            bucket[BucketUnits.AVERAGE] = 0
+                        } else {
+                            const average = calculateAverage({ bucket, axis: axis2 })
+                            if (!isNil(average) && !isNaN(average)) {
+                                bucket[BucketUnits.AVERAGE] = average
+                            }
                         }
                     }
                 }

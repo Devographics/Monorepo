@@ -34,7 +34,7 @@ import {
     addLabels,
     addAveragesByFacet,
     removeEmptyEditions,
-    addPercentiles,
+    addPercentilesByFacet,
     groupBuckets,
     applyDatasetCutoff,
     combineWithFreeform,
@@ -362,16 +362,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             await addOverallBucket(results, axis1, options)
         }
 
-        // once buckets don't move anymore we can calculate percentages
-        await addPercentages(results)
-
-        // await addDeltas(results)
-
-        await addEditionYears(results, survey)
-
-        await addAveragesByFacet(results, axis2, axis1)
-        await addPercentiles(results, axis2, axis1)
-
         results = await applyDatasetCutoff(results, computeArguments)
 
         if (
@@ -381,6 +371,16 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             // TODO: probably doesn't work well when a facet is active
             await groupOtherBuckets(results, axis2, axis1)
         }
+
+        // once buckets don't move anymore we can calculate percentages
+        await addPercentages(results)
+
+        // await addDeltas(results)
+
+        await addEditionYears(results, survey)
+
+        await addAveragesByFacet(results, axis2, axis1)
+        await addPercentilesByFacet(results, axis2, axis1)
 
         // for all following steps, use groups as options
         if (axis1.enableBucketGroups && axis1.question.groups) {
@@ -403,12 +403,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         await cutoffData(results, axis1)
 
-        await addPercentages(results)
-
-        // await addDeltas(results)
-
-        await addEditionYears(results, survey)
-
         results = await applyDatasetCutoff(results, computeArguments)
 
         if (
@@ -417,6 +411,12 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         ) {
             await groupOtherBuckets(results, axis1)
         }
+
+        await addPercentages(results)
+
+        // await addDeltas(results)
+
+        await addEditionYears(results, survey)
 
         // for all following steps, use groups as options
         if (axis1.enableBucketGroups && axis1.question.groups) {
