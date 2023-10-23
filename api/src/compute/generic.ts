@@ -265,7 +265,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     const dbPath = getDbPath(question, responsesType)
 
     if (!dbPath) {
-        throw new Error(`No dbPath found for question id ${question.id}`)
+        throw new Error(
+            `No dbPath found for question id ${question.id} with subfield ${responsesType}`
+        )
     }
 
     let match: any = {

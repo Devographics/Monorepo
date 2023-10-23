@@ -1,11 +1,12 @@
-import { ResponseEditionData } from '@devographics/types'
+import { ResponseEditionData, ResponsesTypes } from '@devographics/types'
 import { GenericComputeOptions, convertOrderReverse, genericComputeFunction } from '../generic'
 import { ComputeAxisParameters } from '../../types'
+import { OVERALL } from '@devographics/constants'
 
 // create "overall" bucket using overall data as facets
 export const getOverallBucket = (overallEditionData: ResponseEditionData) => {
     const overallBucket = {
-        id: 'overall',
+        id: OVERALL,
         count: overallEditionData.completion.count,
         facetBuckets: overallEditionData.buckets
     }
@@ -23,6 +24,7 @@ export const addOverallBucket = async (
         question: axis.question,
         computeArguments: {
             ...options.computeArguments,
+            responsesType: ResponsesTypes.RESPONSES,
             facet: undefined,
             parameters: {
                 ...options.computeArguments.parameters,
