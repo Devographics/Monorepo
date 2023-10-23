@@ -417,6 +417,7 @@
 
       - id: communities
         template: multiple_options_combined
+        parameters: { cutoff: 10 }
 
       - id: keyboard_layout
         template: multiple_options_combined
