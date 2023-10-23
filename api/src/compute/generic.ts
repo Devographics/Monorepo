@@ -38,7 +38,8 @@ import {
     groupBuckets,
     applyDatasetCutoff,
     combineWithFreeform,
-    groupOtherBuckets
+    groupOtherBuckets,
+    addOverallBucket
 } from './stages/index'
 import {
     ResponsesTypes,
@@ -55,7 +56,10 @@ import { getPastEditions } from '../helpers/surveys'
 import { computeKey } from '../helpers/caching'
 import isEmpty from 'lodash/isEmpty.js'
 
-const convertOrder = (order: 'asc' | 'desc'): SortOrderNumeric => (order === 'asc' ? 1 : -1)
+export const convertOrder = (order: SortOrder): SortOrderNumeric => (order === 'asc' ? 1 : -1)
+
+export const convertOrderReverse = (order: SortOrderNumeric): SortOrder =>
+    order === 1 ? 'asc' : 'desc'
 
 /*
 
@@ -169,37 +173,33 @@ export type GenericComputeOptions = {
     context: RequestContext
     survey: SurveyMetadata
     edition: EditionMetadata
-    section: Section
+    section: Section // not used
     question: QuestionApiObject
     questionObjects: QuestionApiObject[]
     computeArguments: GenericComputeArguments
 }
 export async function genericComputeFunction(options: GenericComputeOptions) {
-    const { context, survey, edition, section, question, questionObjects, computeArguments } =
-        options
+    const { context, survey, edition, question, questionObjects, computeArguments } = options
 
     let axis1: ComputeAxisParameters,
         axis2: ComputeAxisParameters | null = null
     const { db, isDebug } = context
     const collection = getCollection(db, survey)
 
-    const { normPaths } = question
-
     // TODO "responsesType" is now called "subField" elsewhere, change it here as well at some point
     const { responsesType, filters, parameters = {}, facet, selectedEditionId } = computeArguments
     const {
         cutoff = 1,
-        cutoffPercent,
         sort,
         limit = 50,
         facetSort,
         facetLimit = 50,
         facetCutoff = 1,
-        facetCutoffPercent,
         showNoAnswer,
         groupUnderCutoff = true,
         mergeOtherBuckets = true,
-        enableBucketGroups = true
+        enableBucketGroups = true,
+        enableAddOverallBucket = true
     } = parameters
 
     /*
@@ -243,7 +243,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
                 groupUnderCutoff,
                 mergeOtherBuckets,
                 enableBucketGroups,
-                cutoffPercent: facetCutoffPercent,
                 limit: facetLimit
             }
             if (facetQuestion?.options) {
@@ -355,6 +354,11 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         // we group cutoff buckets together so it must also come early
         await cutoffData(results, axis2, axis1)
+
+        // optionally add overall, non-facetted bucket as a point of comparison
+        if (enableAddOverallBucket) {
+            await addOverallBucket(results, axis1, options)
+        }
 
         // once buckets don't move anymore we can calculate percentages
         await addPercentages(results)

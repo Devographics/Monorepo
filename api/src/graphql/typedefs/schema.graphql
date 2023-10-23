@@ -220,13 +220,13 @@ input Parameters {
     facetSort: SortSpecifier
     facetLimit: Int
     facetCutoff: Int
-    facetCutoffPercent: Float
     enableCache: Boolean
     showNoAnswer: Boolean
     showNoMatch: Boolean
     groupUnderCutoff: Boolean
     enableBucketGroups: Boolean
     mergeOtherBuckets: Boolean
+    enableAddOverallBucket: Boolean
 }
 
 input CommentParameters {

@@ -64,8 +64,11 @@ export const combineWithFreeform = async (
     responseResults: ResponseEditionData[],
     options: GenericComputeOptions
 ) => {
-    options.computeArguments.responsesType = ResponsesTypes.FREEFORM
-    const freeformResults = await genericComputeFunction(options)
+    const newOptions = {
+        ...options,
+        computeArguments: { ...options.computeArguments, responsesType: ResponsesTypes.FREEFORM }
+    }
+    const freeformResults = await genericComputeFunction(newOptions)
     if (freeformResults) {
         return combineResults(responseResults, freeformResults)
     } else {

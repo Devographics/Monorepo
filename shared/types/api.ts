@@ -100,12 +100,10 @@ export interface Filter<T> {
 
 export interface ResponsesParameters {
     cutoff?: number
-    cutoffPercent?: number
     limit?: number
     sort?: SortSpecifier
 
     facetCutoff?: number
-    facetCutoffPercent?: number
     facetLimit?: number
     facetSort?: SortSpecifier
 
