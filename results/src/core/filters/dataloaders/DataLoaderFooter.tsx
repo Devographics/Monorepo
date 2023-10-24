@@ -9,7 +9,7 @@ import { mq, spacing, fontSize } from 'core/theme'
 
 export const DataLoaderFooter = props => {
     return (
-        <Footer_>
+        <Footer_ className="dataloader-footer">
             <ModalTrigger
                 trigger={
                     <Button>

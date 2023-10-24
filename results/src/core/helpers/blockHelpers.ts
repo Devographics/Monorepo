@@ -16,7 +16,7 @@ export const getBlockKey = ({ block }: { block: BlockDefinition }) => {
     if (block.template === 'tool_experience') {
         namespace = 'tools'
     }
-    const blockId = replaceOthers(block?.id)
+    const blockId = block.fieldId ?? replaceOthers(block?.id)
     return `${namespace}.${blockId}`
 }
 

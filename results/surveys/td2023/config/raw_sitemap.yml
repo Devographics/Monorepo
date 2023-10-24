@@ -55,10 +55,7 @@
         template: multiple_options
         parameters: { cutoff: 10, showNoAnswer: true, sort: { property: count } }
         variants:
-            - id: japan_province_vs_salary
-              fieldId: japan_province
-              i18nNamespace: japan_province
-              template: vs_salary_tokyodev
+            - template: vs_salary_tokyodev
               parameters:
                   showNoAnswer: true
                   cutoff: 10
@@ -68,29 +65,20 @@
         blockType: HorizontalBarBlock
         parameters: { showNoAnswer: true, sort: { property: count } }
         variants:
-            - id: reason_for_relocation_vs_salary
-              fieldId: reason_for_relocation
-              i18nNamespace: reason_for_relocation
-              template: vs_salary_tokyodev
+            - template: vs_salary_tokyodev
 
       - id: residency_status
         template: single_option_combined
         blockType: HorizontalBarBlock
         parameters: { showNoAnswer: true, sort: { property: count } }
         variants:
-            - id: residency_status_vs_salary
-              fieldId: residency_status
-              i18nNamespace: residency_status
-              template: vs_salary_tokyodev
+            - template: vs_salary_tokyodev
 
       - id: country
         template: multiple_options
         parameters: { limit: 20, showNoAnswer: true }
         variants:
-            - id: country_vs_salary
-              fieldId: country
-              i18nNamespace: country
-              template: vs_salary_tokyodev
+            - template: vs_salary_tokyodev
               parameters:
                   showNoAnswer: true
                   cutoff: 10
@@ -99,19 +87,13 @@
         template: multiple_options
         defaultUnits: percentageSurvey
         variants:
-            - id: gender_vs_salary
-              fieldId: gender
-              i18nNamespace: gender
-              template: vs_salary_tokyodev
+            - template: vs_salary_tokyodev
 
       - id: age
         blockType: VerticalBarBlock
         template: multiple_options
         variants:
-            - id: age_vs_salary
-              fieldId: age
-              i18nNamespace: age
-              template: vs_salary_tokyodev
+            - template: vs_salary_tokyodev
 
       - id: years_of_experience
         titleId: user_info.years_of_experience
@@ -120,10 +102,8 @@
         template: multiple_options
         blockType: VerticalBarBlock
         variants:
-            - id: years_of_experience_vs_salary
-              fieldId: years_of_experience
+            - template: vs_salary_tokyodev
               i18nNamespace: years
-              template: vs_salary_tokyodev
 
       - id: years_in_japan
         template: multiple_options
@@ -132,55 +112,38 @@
         titleId: user_info.years_in_japan
         questionKey: user_info.years_in_japan.question
         variants:
-            - id: years_in_japan_vs_salary
-              fieldId: years_in_japan
+            - template: vs_salary_tokyodev
               i18nNamespace: years
-              template: vs_salary_tokyodev
 
       - id: educational_attainment
         template: multiple_options_combined
         variants:
-            - id: educational_attainment_vs_salary
-              fieldId: educational_attainment
-              i18nNamespace: educational_attainment
-              template: vs_salary_tokyodev
+            - template: vs_salary_tokyodev
 
       - id: professional_qualifications
         template: multiple_options_combined
         variants:
-            - id: professional_qualifications_vs_salary
-              fieldId: professional_qualifications
-              i18nNamespace: professional_qualifications
-              template: vs_salary_tokyodev
+            - template: vs_salary_tokyodev
 
       - id: language_proficiency_english
         template: multiple_options
         blockType: VerticalBarBlock
         parameters: { showNoAnswer: true, sort: { property: options } }
         variants:
-            - id: language_proficiency_english_vs_salary
-              fieldId: language_proficiency_english
-              i18nNamespace: language_proficiency_english
-              template: vs_salary_tokyodev
+            - template: vs_salary_tokyodev
 
       - id: language_proficiency_japanese
         template: multiple_options
         blockType: VerticalBarBlock
         parameters: { showNoAnswer: true, sort: { property: options } }
         variants:
-            - id: language_proficiency_japanese_vs_salary
-              fieldId: language_proficiency_japanese
-              i18nNamespace: language_proficiency_japanese
-              template: vs_salary_tokyodev
+            - template: vs_salary_tokyodev
 
       - id: source
         template: multiple_options_freeform
         parameters: { cutoff: 10 }
         variants:
-            - id: source_vs_salary
-              fieldId: source
-              i18nNamespace: source
-              template: vs_salary_tokyodev
+            - template: vs_salary_tokyodev
               parameters: { showNoAnswer: true, cutoff: 10 }
               queryOptions:
                   addBucketsEntities: true
@@ -192,55 +155,84 @@
       - id: employment_status
         template: multiple_options_combined
         parameters: { showNoAnswer: true, sort: { property: count } }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: searching_for_job
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: current_job_description
         template: multiple_options_combined
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: coworker_nationalities_engineers
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: coworker_nationalities_non_engineers
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: languages_used_colleagues_japanese
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: languages_used_colleagues_english
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: years_employed
         template: multiple_options
         titleId: job_info.years_employed
         questionKey: job_info.years_employed.question
         i18nNamespace: years
+        variants:
+            - template: vs_salary_tokyodev
+              i18nNamespace: years
 
       - id: hours_per_day
         template: multiple_options
         parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: how_did_you_find_your_current_job
         template: single_option_combined
         parameters: { showNoAnswer: true, sort: { property: count } }
+        variants:
+            - template: vs_salary_tokyodev
 
 - id: employer_info
   path: /employer-info
   blocks:
       - id: current_employer
         template: single_option_combined
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: industry_sector
         template: multiple_options_combined
         parameters: { showNoAnswer: true, cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: remote_work_policy
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: company_size
         template: single_option
         blockType: HorizontalBarBlock
+        variants:
+            - template: vs_salary_tokyodev
 
 - id: compensation
   path: /compensation
@@ -252,18 +244,26 @@
 
       - id: previous_compensation
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: desired_compensation
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: negotiated_compensation
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: annual_paid_leave
         i18nNamespace: annual_paid_leave
         titleId: compensation.annual_paid_leave
         questionKey: compensation.annual_paid_leave.question
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       # - id: country_vs_salary
       #   fieldId: country
@@ -356,30 +356,44 @@
       - id: programming_languages
         template: multiple_options_combined
         parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: databases
         template: multiple_options_combined
         parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: web_frameworks
         template: multiple_options_combined
         parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: other_frameworks_libraries
         template: multiple_options_combined
         parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: developer_tools
         template: multiple_options_combined
         parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: developer_environments
         template: multiple_options_combined
         parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: cloud_platforms
         template: multiple_options_combined
         parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
 - id: other
   path: /other
@@ -421,9 +435,13 @@
       - id: communities
         template: multiple_options_combined
         parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: keyboard_layout
         template: multiple_options_combined
+        variants:
+            - template: vs_salary_tokyodev
 
 - id: notfound
   titleId: notfound.title

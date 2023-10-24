@@ -90,7 +90,6 @@ const getLabelsLayer = (labelTransformer: any) => (props: any) => {
     //     fontSize = 11
     //     rotation = -90
     // }
-    console.log(props)
     return props.bars.map((bar: any) => {
         const label = labelTransformer(bar.data)
         const hasInsufficientData = bar.data.data.hasInsufficientData

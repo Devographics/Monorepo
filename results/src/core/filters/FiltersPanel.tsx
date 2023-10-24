@@ -57,7 +57,11 @@ const FiltersPanel = ({
 
     const chartName = getBlockTitle({ block, pageContext, getString, entities })
 
-    const initState = isEmpty(chartFilters) ? getInitFilters() : chartFilters
+    let initState = getInitFilters()
+    if (!isEmpty(chartFilters)) {
+        // if chart filters have been passed, use them to extend the default init filters
+        initState = { ...initState, ...chartFilters }
+    }
     const [filtersState, setFiltersState] = useState(initState)
 
     const [customPresets, setCustomPresets] = useStickyState([], 'filters_panel_presets')

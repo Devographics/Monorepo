@@ -1,3 +1,6 @@
+id: ${mainBlockId}_vs_salary
+fieldId: ${mainBlockId}
+i18nNamespace: ${mainBlockId}
 tabId: tabs.vs_salary
 defaultUnits: averageByFacet
 blockType: HorizontalBarBlock

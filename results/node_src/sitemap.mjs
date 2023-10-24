@@ -45,14 +45,22 @@ const injectVariables = (yamlObject, variables, templateName) => {
     }
 }
 
-const applyTemplate = ({ block, templateObject, blockVariables = {}, contextVariables = {} }) => {
+const applyTemplate = ({
+    block,
+    mainBlock = {},
+    templateObject,
+    blockVariables = {},
+    contextVariables = {}
+}) => {
     // defines all available variables to be injected
     // at build time in the GraphQL queries
     const variables = {
         ...blockVariables,
-        ...contextVariables
+        ...contextVariables,
+        mainBlockId: mainBlock.id
     }
 
+    console.log(variables)
     const populatedTemplate = injectVariables(templateObject, variables, templateObject.name)
 
     return merge({}, populatedTemplate, block)
@@ -136,6 +144,7 @@ export const pageFromConfig = async (page, pageIndex, editionVariables) => {
 
                         blockVariant = applyTemplate({
                             block: blockVariant,
+                            mainBlock: mainBlockConfig,
                             templateObject,
                             blockVariables: blockVariant.variables,
                             contextVariables

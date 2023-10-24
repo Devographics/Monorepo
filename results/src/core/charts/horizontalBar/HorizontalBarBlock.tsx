@@ -35,7 +35,8 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
     const addNoAnswer = units === BucketUnits.PERCENTAGE_SURVEY
     const chartLegends = useLegends({ block, addNoAnswer })
 
-    const completion = data?.responses?.currentEdition?.completion
+    const completion =
+        data?.combined?.currentEdition?.completion || data?.responses?.currentEdition?.completion
     const total = completion?.total
 
     const { chartFilters, setChartFilters, filterLegends } = useChartFilters({
