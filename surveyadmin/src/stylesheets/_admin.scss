@@ -103,8 +103,13 @@
 .manualinput-form {
   display: flex;
   gap: 10px;
+  margin-bottom: 5px;
   button {
     flex-basis: 200px;
+  }
+  input,
+  button {
+    margin-bottom: 0 !important;
   }
 }
 
@@ -126,6 +131,14 @@
   border: 2px solid var(--primary);
   padding: 0;
   font-size: 0.9rem;
+}
+.normalization-token-custom {
+  &,
+  &[role="button"] {
+    code {
+      background-color: rgb(231, 255, 207);
+    }
+  }
 }
 
 .field-value-items {
@@ -184,5 +197,55 @@
   background: var(--code-background-color);
   * {
     margin: 0;
+  }
+}
+
+.loading-button {
+  button {
+  }
+}
+
+td {
+  & button:last-child {
+    margin-bottom: 0;
+  }
+}
+
+dialog article p:last-of-type {
+  margin-bottom: var(--typography-spacing-vertical);
+}
+
+dialog article p:last-child {
+  margin-bottom: 0;
+}
+
+.tag-item {
+  margin-bottom: 20px;
+}
+.tag-item-heading {
+  margin-bottom: 5px;
+}
+
+.match-patterns,
+.match-tags {
+  max-width: 200px;
+  overflow-x: scroll;
+}
+
+.custom-normalization-badge {
+  margin-left: 5px;
+  display: inline-block;
+}
+
+.breadcrumb-segment {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  summary {
+    // border: 0 !important;
+    padding: 1px 4px !important;
+    &::after {
+      margin: 0 !important;
+    }
   }
 }

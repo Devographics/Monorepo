@@ -11,7 +11,7 @@ import { computeCompletionByYear } from './completion'
 // import { computeYearlyTransitions, YearlyTransitionsResult } from './yearly_transitions'
 import { inspect } from 'util'
 import { getCollection } from '../helpers/db'
-import { Entity, RatiosUnits } from '@devographics/types'
+import { BucketUnits, Entity, RatiosUnits } from '@devographics/types'
 import { computeKey, useCache } from '../helpers/caching'
 
 interface ExperienceBucket {
@@ -201,10 +201,10 @@ export async function computeExperienceOverYears({
 
             yearBucket.buckets.push({
                 id: result.experience,
-                count: result.total,
-                percentageSurvey: 0,
-                percentageQuestion: 0,
-                percentageBucket: 0
+                [BucketUnits.COUNT]: result.total,
+                [BucketUnits.PERCENTAGE_SURVEY]: 0,
+                [BucketUnits.PERCENTAGE_QUESTION]: 0,
+                [BucketUnits.PERCENTAGE_BUCKET]: 0
             })
 
             return acc
@@ -216,9 +216,11 @@ export async function computeExperienceOverYears({
     experienceByYear.forEach(bucket => {
         bucket.total = sumBy(bucket.buckets, 'count')
         bucket.buckets.forEach(subBucket => {
-            subBucket['percentageSurvey'] = 0 // TODO
-            subBucket['percentageQuestion'] = ratioToPercentage(subBucket.count / bucket.total)
-            subBucket['percentageBucket'] = 0 // TODO
+            subBucket[BucketUnits.PERCENTAGE_SURVEY] = 0 // TODO
+            subBucket[BucketUnits.PERCENTAGE_QUESTION] = ratioToPercentage(
+                subBucket.count / bucket.total
+            )
+            subBucket[BucketUnits.PERCENTAGE_BUCKET] = 0 // TODO
         })
     })
 
@@ -248,7 +250,9 @@ export async function computeExperienceOverYears({
                     bucket.countDelta = bucket.count - previousYearBucket.count
                     bucket.percentageDelta =
                         Math.round(
-                            100 * (bucket.percentageBucket - previousYearBucket.percentageBucket)
+                            100 *
+                                (bucket[BucketUnits.PERCENTAGE_BUCKET] -
+                                    previousYearBucket[BucketUnits.PERCENTAGE_BUCKET])
                         ) / 100
                 }
             })

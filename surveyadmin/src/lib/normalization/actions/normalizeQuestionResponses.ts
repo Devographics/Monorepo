@@ -48,6 +48,7 @@ export const normalizeQuestionResponses = async (
     responses,
     questionId,
     isRenormalization: true,
+    verbose: true,
   });
 
   return mutationResult;

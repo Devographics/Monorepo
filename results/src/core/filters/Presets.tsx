@@ -188,9 +188,10 @@ const Presets = ({ stateStuff }: PresetsProps) => {
             <Label_>
                 <T k="filters.presets.title" />
             </Label_>
-            {getPresetsArray(filtersState.options).map(preset => (
-                <Preset key={preset.name} preset={preset} setFiltersState={setFiltersState} />
-            ))}
+            {!process.env.GATSBY_DISABLE_PRESETS &&
+                getPresetsArray(filtersState.options).map(preset => (
+                    <Preset key={preset.name} preset={preset} setFiltersState={setFiltersState} />
+                ))}
             {customPresets.map(preset => (
                 <Preset
                     key={preset.name}
@@ -200,20 +201,22 @@ const Presets = ({ stateStuff }: PresetsProps) => {
                     setCustomPresets={setCustomPresets}
                 />
             ))}
-            <SavePreset_
-                variant="link"
-                size="small"
-                onClick={() => {
-                    const name = window.prompt(getString('filters.presets.enter_name')?.t)
-                    if (name) {
-                        setCustomPresets(presets => {
-                            return [...presets, { ...filtersState, name }]
-                        })
-                    }
-                }}
-            >
-                <T k="filters.presets.save" />
-            </SavePreset_>
+            {filtersState.filters.length > 0 && (
+                <SavePreset_
+                    variant="link"
+                    size="small"
+                    onClick={() => {
+                        const name = window.prompt(getString('filters.presets.enter_name')?.t)
+                        if (name) {
+                            setCustomPresets(presets => {
+                                return [...presets, { ...filtersState, name }]
+                            })
+                        }
+                    }}
+                >
+                    <T k="filters.presets.save" />
+                </SavePreset_>
+            )}
         </Presets_>
     )
 }

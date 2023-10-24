@@ -7,28 +7,39 @@ import { FieldValue } from "./FieldValue";
 const NormToken = ({
   id,
   responses,
+  pattern,
+  variant = "normal",
 }: {
   id: string;
   responses: NormalizationResponse[];
+  pattern?: string;
+  variant?: "normal" | "custom";
 }) => {
   const [showModal, setShowModal] = useState(false);
 
   const tokenResponses = responses.filter((r) =>
     r?.normalizedValue?.includes(id)
   );
+
+  if (pattern === "custom_normalization") {
+    variant = "custom";
+  }
+
   return (
     <>
-      <a
-        role="button"
-        href="#"
-        className="normalization-token"
-        onClick={(e) => {
-          e.preventDefault();
-          setShowModal(true);
-        }}
-      >
-        <code>{id}</code>
-      </a>
+      <span data-tooltip={pattern}>
+        <a
+          role="button"
+          href="#"
+          className={`normalization-token normalization-token-${variant}`}
+          onClick={(e) => {
+            e.preventDefault();
+            setShowModal(true);
+          }}
+        >
+          <code>{id}</code>
+        </a>
+      </span>
 
       {showModal && (
         <Dialog

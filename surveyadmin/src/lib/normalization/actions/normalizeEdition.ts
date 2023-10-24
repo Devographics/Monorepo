@@ -15,7 +15,8 @@ export type NormalizeEditionArgs = {
   startFrom?: number;
   limit?: number;
   onlyUnnormalized?: boolean;
-  isFirstNormalization?: boolean;
+  currentSegmentIndex: number;
+  totalSegments: number;
 };
 
 /**
@@ -30,6 +31,8 @@ export const normalizeEdition = async (args: NormalizeEditionArgs) => {
     startFrom = 0,
     limit = defaultLimit,
     onlyUnnormalized,
+    currentSegmentIndex,
+    totalSegments,
   } = args;
   const startAt = new Date();
 
@@ -48,7 +51,8 @@ export const normalizeEdition = async (args: NormalizeEditionArgs) => {
     throw new Error(`Could not find edition for editionId ${editionId}`);
   }
 
-  const rawResponsesCollection = await getRawResponsesCollection<ResponseDocument>(survey);
+  const rawResponsesCollection =
+    await getRawResponsesCollection<ResponseDocument>(survey);
 
   const selector = await getEditionSelector({
     survey,
@@ -66,14 +70,15 @@ export const normalizeEdition = async (args: NormalizeEditionArgs) => {
     .toArray();
 
   console.log(
-    `⛰️ Renormalizing all questions for edition ${editionId}… Found ${responses.length} responses to renormalize (startFrom: ${startFrom}, limit: ${limit}). (${startAt})`
+    `⛰️ Renormalizing all questions for edition ${editionId}… Found ${responses.length} responses to renormalize (startFrom: ${startFrom}, limit: ${limit}, segment ${currentSegmentIndex}/${totalSegments}). (${startAt})`
   );
 
   if (startFrom === 0) {
     // delete any previous normalized responses just to be safe and avoid
     // any inconsistencies
     console.log("⛰️ Deleting all previous normalized responses… (first batch)");
-    const normalizedResponses = await getNormResponsesCollection<NormalizedResponseDocument>();
+    const normalizedResponses =
+      await getNormResponsesCollection<NormalizedResponseDocument>();
     await normalizedResponses.deleteMany({ editionId: edition.id });
   }
 
@@ -83,6 +88,8 @@ export const normalizeEdition = async (args: NormalizeEditionArgs) => {
     responses,
     limit,
     isRenormalization: false,
+    currentSegmentIndex,
+    totalSegments,
   });
   return mutationResult;
 };

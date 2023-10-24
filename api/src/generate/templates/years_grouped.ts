@@ -10,37 +10,31 @@ const groups = [
     {
         id: 'range_1_3',
         lowerBound: 1,
-        average: 2,
-        upperBound: 3
+        upperBound: 4
     },
     {
         id: 'range_4_6',
         lowerBound: 4,
-        average: 5,
-        upperBound: 6
+        upperBound: 7
     },
     {
         id: 'range_7_9',
         lowerBound: 7,
-        average: 8,
-        upperBound: 9
+        upperBound: 10
     },
     {
         id: 'range_10_12',
         lowerBound: 10,
-        average: 11,
-        upperBound: 12
+        upperBound: 13
     },
     {
         id: 'range_13_15',
         lowerBound: 13,
-        average: 14,
-        upperBound: 15
+        upperBound: 16
     },
     {
         id: 'range_16_20',
         lowerBound: 16,
-        average: 18,
         upperBound: 20
     },
     {

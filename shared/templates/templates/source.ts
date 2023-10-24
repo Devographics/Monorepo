@@ -18,7 +18,7 @@ export const source: TemplateFunction = ({ survey, edition, question, section })
         id: 'source',
         options,
         normPaths: {
-            response: `user_info.source.${DbSuffixes.NORMALIZED}`
+            other: `user_info.source.${DbSuffixes.NORMALIZED}`
         },
         ...question
     }

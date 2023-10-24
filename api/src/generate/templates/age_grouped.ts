@@ -1,76 +1,72 @@
 import { ApiTemplateFunction, TransformFunction } from '../../types/surveys'
 
+/*
+
+Note: upper bounds are non-inclusive, so upper bound for group "range_20_24" is
+"everything under 25, but not 25" e.g. 24, 24.5, 24.9999, etc. 
+
+*/
 const groups = [
     {
         id: 'range_under_20',
         lowerBound: 0,
-        average: 17,
-        upperBound: 19
+        average: 17.5,
+        upperBound: 20
     },
     {
         id: 'range_20_24',
         lowerBound: 20,
-        average: 22,
-        upperBound: 24
+        upperBound: 25
     },
     {
         id: 'range_25_29',
         lowerBound: 25,
-        average: 27,
-        upperBound: 29
+        upperBound: 30
     },
     {
         id: 'range_30_34',
         lowerBound: 30,
-        average: 32,
-        upperBound: 34
+        upperBound: 35
     },
     {
         id: 'range_35_39',
         lowerBound: 35,
-        average: 37,
-        upperBound: 39
+        upperBound: 40
     },
     {
         id: 'range_40_44',
         lowerBound: 40,
-        average: 42,
-        upperBound: 44
+        upperBound: 45
     },
     {
         id: 'range_45_49',
         lowerBound: 45,
-        average: 47,
-        upperBound: 49
+        upperBound: 50
     },
     {
         id: 'range_50_54',
         lowerBound: 50,
-        average: 52,
-        upperBound: 54
+        upperBound: 55
     },
     {
         id: 'range_55_59',
         lowerBound: 55,
-        average: 57,
-        upperBound: 59
+        upperBound: 60
     },
     {
         id: 'range_60_64',
         lowerBound: 60,
-        average: 62,
-        upperBound: 64
+        upperBound: 65
     },
     {
         id: 'range_65_69',
-        lowerBound: 64,
-        average: 67,
-        upperBound: 69
+        lowerBound: 65,
+        upperBound: 70
     },
     {
         id: 'range_over_70',
         lowerBound: 70,
-        average: 72
+        average: 75
     }
 ]
 

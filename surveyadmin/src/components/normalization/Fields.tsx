@@ -20,6 +20,8 @@ import { useCopy, highlightMatches, highlightPatterns } from "../hooks";
 import Dialog from "./Dialog";
 import { FieldValue } from "./FieldValue";
 import { Entity } from "@devographics/types";
+import { CustomNormalization, CustomNormalizations } from "./NormalizeQuestion";
+import { NO_MATCH } from "@devographics/constants";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -39,6 +41,8 @@ const Fields = (props: {
   questionData: ResponseData;
   variant: "normalized" | "unnormalized";
   entities: Entity[];
+  customNormalizations: CustomNormalizations;
+  addCustomNormalization: (CustomNormalization) => void;
 }) => {
   const [showResponses, setShowResponses] = useState(false);
   const [showIds, setShowIds] = useState(false);
@@ -53,6 +57,8 @@ const Fields = (props: {
     questionData,
     variant,
     entities,
+    customNormalizations,
+    addCustomNormalization,
   } = props;
 
   const responses = props[`${variant}Responses`] as NormalizationResponse[];
@@ -78,6 +84,8 @@ const Fields = (props: {
     variant,
     entities,
     filterQuery,
+    customNormalizations,
+    addCustomNormalization,
   };
 
   const filteredResponses = filterQuery
@@ -135,7 +143,11 @@ const Fields = (props: {
               <tr>
                 <th></th>
                 <th>Answer</th>
-                {variant === "normalized" && <th>Normalized Values</th>}
+                {variant === "normalized" ? (
+                  <th>Normalized Values</th>
+                ) : (
+                  <th>Manual Normalizations</th>
+                )}
                 <th>Response&nbsp;ID</th>
                 <th colSpan={99}>Normalize</th>
               </tr>
@@ -193,13 +205,24 @@ const Field = ({
   filterQuery,
   index,
   showLetterHeading = false,
+  customNormalizations,
+  addCustomNormalization,
 }) => {
   const [result, setResult] = useState<NormalizeInBulkResult>();
   const [showManualInput, setShowManualInput] = useState<boolean>(false);
   const [showEntities, setShowEntities] = useState<boolean>(false);
+  const [showResult, setShowResult] = useState(true);
   const surveyId = survey.id;
   const editionId = edition.id;
   const questionId = question.id;
+
+  let customNormalizedValue = customNormalizations[responseId];
+  if (customNormalizedValue) {
+    // if there a custom tokens, remove any that was already included
+    customNormalizedValue = customNormalizedValue.filter(
+      (v) => !normalizedValue?.includes(v)
+    );
+  }
 
   return (
     <>
@@ -220,17 +243,28 @@ const Field = ({
             filterQuery={filterQuery}
           />
         </td>
-        {variant === "normalized" && (
-          <td>
-            <div className="normalization-tokens">
-              {normalizedValue.map((value) => (
-                <span key={value}>
-                  <NormToken id={value} responses={responses} />{" "}
-                </span>
+        <td>
+          <div className="normalization-tokens">
+            {normalizedValue
+              ?.filter((v) => v !== NO_MATCH)
+              .map((value, i) => (
+                <NormToken
+                  key={value}
+                  id={value}
+                  pattern={patterns?.[i]}
+                  responses={responses}
+                />
               ))}
-            </div>
-          </td>
-        )}
+            {customNormalizedValue?.map((value) => (
+              <NormToken
+                key={value}
+                id={value}
+                responses={responses}
+                variant="custom"
+              />
+            ))}
+          </div>
+        </td>
         <td>
           <ResponseId id={responseId} />
         </td>
@@ -280,6 +314,7 @@ const Field = ({
                 rawValue={value}
                 rawPath={rawPath}
                 entities={entities}
+                addCustomNormalization={addCustomNormalization}
               />
             </Dialog>
           )}
@@ -301,11 +336,15 @@ const Field = ({
           />
         </td>
       </tr>
-      {result && (
+      {result && showResult && (
         <tr>
           <td colSpan={999}>
             <article>
-              <NormalizationResult showQuestionId={false} {...result} />
+              <NormalizationResult
+                setShowResult={setShowResult}
+                showQuestionId={false}
+                {...result}
+              />
             </article>
           </td>
         </tr>

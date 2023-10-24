@@ -13,8 +13,10 @@ import {
     QuestionApiObject,
     ResponseEditionData,
     ComputeAxisParameters,
-    SortProperty,
-    EditionApiObject
+    EditionApiObject,
+    SortSpecifier,
+    SortOrder,
+    SortOrderNumeric
 } from '../types'
 import {
     discardEmptyIds,
@@ -32,8 +34,12 @@ import {
     addLabels,
     addAveragesByFacet,
     removeEmptyEditions,
-    addPercentiles,
-    groupBuckets
+    addPercentilesByFacet,
+    groupBuckets,
+    applyDatasetCutoff,
+    combineWithFreeform,
+    groupOtherBuckets,
+    addOverallBucket
 } from './stages/index'
 import {
     ResponsesTypes,
@@ -42,14 +48,18 @@ import {
     EditionMetadata,
     ResponsesParameters,
     Filters,
-    ResultsSubFieldEnum
+    ResultsSubFieldEnum,
+    SortProperty
 } from '@devographics/types'
 import { getCollection } from '../helpers/db'
 import { getPastEditions } from '../helpers/surveys'
 import { computeKey } from '../helpers/caching'
 import isEmpty from 'lodash/isEmpty.js'
 
-const convertOrder = (order: 'asc' | 'desc') => (order === 'asc' ? 1 : -1)
+export const convertOrder = (order: SortOrder): SortOrderNumeric => (order === 'asc' ? 1 : -1)
+
+export const convertOrderReverse = (order: SortOrderNumeric): SortOrder =>
+    order === 1 ? 'asc' : 'desc'
 
 /*
 
@@ -67,11 +77,59 @@ export const getDbPath = (
     const { normPaths } = question
     if (responsesType === ResponsesTypes.RESPONSES) {
         return normPaths?.response
+    } else if (responsesType === ResponsesTypes.COMBINED) {
+        return normPaths?.response
     } else if (responsesType === ResponsesTypes.PRENORMALIZED) {
         return normPaths?.prenormalized
     } else {
         return normPaths?.other
     }
+}
+
+const getQuestionSort = ({
+    specifier: specifier_,
+    question,
+    enableBucketGroups
+}: {
+    specifier?: SortSpecifier
+    question: QuestionApiObject
+    enableBucketGroups?: boolean
+}) => {
+    let defaultSort: SortProperty,
+        defaultOrder: SortOrder = 'desc'
+    if (enableBucketGroups && question.groups) {
+        // if we're grouping, use group order
+        defaultSort = 'options'
+    } else if (question.defaultSort) {
+        // if question has a default sort, use it
+        defaultSort = question.defaultSort
+    } else if (question.optionsAreNumeric) {
+        if (question.options) {
+            defaultSort = 'options'
+        } else {
+            // values are numeric but no options are specified, in this case
+            // sort by id to get a nice curve of successive number
+            defaultSort = 'id'
+            defaultOrder = 'asc'
+        }
+    } else {
+        // default to sorting by bucket count
+        defaultSort = 'count'
+    }
+    const specifier = {
+        sort: defaultSort,
+        order: defaultOrder
+    }
+    // if sort/order have been explicitly passed, use that instead
+    if (specifier_?.property) {
+        specifier.sort = specifier_?.property
+    }
+    if (specifier_?.order) {
+        specifier.order = specifier_?.order
+    }
+    console.log('=====')
+    console.log({ ...specifier, order: convertOrder(specifier.order) })
+    return { ...specifier, order: convertOrder(specifier.order) }
 }
 
 export const getGenericCacheKey = ({
@@ -111,42 +169,37 @@ export const getGenericCacheKey = ({
     return computeKey('generic', cacheKeyOptions)
 }
 
-export async function genericComputeFunction({
-    context,
-    survey,
-    edition,
-    section,
-    question,
-    questionObjects,
-    computeArguments
-}: {
+export type GenericComputeOptions = {
     context: RequestContext
     survey: SurveyMetadata
     edition: EditionMetadata
-    section: Section
+    section: Section // not used
     question: QuestionApiObject
     questionObjects: QuestionApiObject[]
     computeArguments: GenericComputeArguments
-}) {
+}
+export async function genericComputeFunction(options: GenericComputeOptions) {
+    const { context, survey, edition, question, questionObjects, computeArguments } = options
+
     let axis1: ComputeAxisParameters,
         axis2: ComputeAxisParameters | null = null
     const { db, isDebug } = context
     const collection = getCollection(db, survey)
 
-    const { normPaths } = question
-
     // TODO "responsesType" is now called "subField" elsewhere, change it here as well at some point
     const { responsesType, filters, parameters = {}, facet, selectedEditionId } = computeArguments
     const {
         cutoff = 1,
-        cutoffPercent,
         sort,
         limit = 50,
         facetSort,
         facetLimit = 50,
         facetCutoff = 1,
-        facetCutoffPercent,
-        showNoAnswer
+        showNoAnswer,
+        groupUnderCutoff = true,
+        mergeOtherBuckets = true,
+        enableBucketGroups = true,
+        enableAddOverallBucket = true
     } = parameters
 
     /*
@@ -156,9 +209,11 @@ export async function genericComputeFunction({
     */
     axis1 = {
         question,
-        sort: sort?.property ?? (question.defaultSort as SortProperty) ?? 'count',
-        order: convertOrder(sort?.order ?? 'desc'),
+        ...getQuestionSort({ specifier: sort, question, enableBucketGroups }),
         cutoff,
+        groupUnderCutoff,
+        mergeOtherBuckets,
+        enableBucketGroups,
         limit
     }
     if (question.options) {
@@ -179,10 +234,15 @@ export async function genericComputeFunction({
         if (facetQuestion) {
             axis2 = {
                 question: facetQuestion,
-                sort: facetSort?.property ?? (facetQuestion.defaultSort as SortProperty) ?? 'count',
-                order: convertOrder(facetSort?.order ?? 'desc'),
+                ...getQuestionSort({
+                    specifier: facetSort,
+                    question: facetQuestion,
+                    enableBucketGroups
+                }),
                 cutoff: facetCutoff,
-                cutoffPercent: facetCutoffPercent,
+                groupUnderCutoff,
+                mergeOtherBuckets,
+                enableBucketGroups,
                 limit: facetLimit
             }
             if (facetQuestion?.options) {
@@ -205,7 +265,9 @@ export async function genericComputeFunction({
     const dbPath = getDbPath(question, responsesType)
 
     if (!dbPath) {
-        throw new Error(`No dbPath found for question id ${question.id}`)
+        throw new Error(
+            `No dbPath found for question id ${question.id} with subfield ${responsesType}`
+        )
     }
 
     let match: any = {
@@ -268,6 +330,10 @@ export async function genericComputeFunction({
         await moveFacetBucketsToDefaultBuckets(results)
     }
 
+    if (responsesType === ResponsesTypes.COMBINED) {
+        results = await combineWithFreeform(results, options)
+    }
+
     await discardEmptyIds(results)
 
     results = await discardEmptyEditions(results)
@@ -278,46 +344,86 @@ export async function genericComputeFunction({
         await addDefaultBucketCounts(results)
     }
 
-    await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
-
-    await addPercentages(results)
-
-    // await addDeltas(results)
-
-    await addEditionYears(results, survey)
-
     if (axis2) {
         if (responsesType === ResponsesTypes.RESPONSES) {
             await addMissingItems(results, axis2, axis1)
         }
+
+        await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
+
+        // bucket grouping must be one of the first stages
         await groupBuckets(results, axis2, axis1)
+
+        // we group cutoff buckets together so it must also come early
+        await cutoffData(results, axis2, axis1)
+
+        // optionally add overall, non-facetted bucket as a point of comparison
+        if (enableAddOverallBucket) {
+            await addOverallBucket(results, axis1, options)
+        }
+
+        results = await applyDatasetCutoff(results, computeArguments)
+
+        if (
+            responsesType === ResponsesTypes.COMBINED ||
+            responsesType === ResponsesTypes.FREEFORM
+        ) {
+            // TODO: probably doesn't work well when a facet is active
+            await groupOtherBuckets(results, axis2, axis1)
+        }
+
+        // once buckets don't move anymore we can calculate percentages
+        await addPercentages(results)
+
+        // await addDeltas(results)
+
+        await addEditionYears(results, survey)
+
+        await addAveragesByFacet(results, axis2, axis1)
+        await addPercentilesByFacet(results, axis2, axis1)
+
         // for all following steps, use groups as options
-        if (axis1.question.groups) {
+        if (axis1.enableBucketGroups && axis1.question.groups) {
             axis1.options = axis1.question.groups
         }
-        if (axis2.question.groups) {
+        if (axis2.enableBucketGroups && axis2.question.groups) {
             axis2.options = axis2.question.groups
         }
-        await addAveragesByFacet(results, axis2, axis1)
-
-        await addPercentiles(results, axis2, axis1)
         await sortData(results, axis2, axis1)
         await limitData(results, axis2, axis1)
-        await cutoffData(results, axis2, axis1)
         await addLabels(results, axis2, axis1)
     } else {
         if (responsesType === ResponsesTypes.RESPONSES) {
-            await addMissingItems(results, axis1)
-        }
-        await groupBuckets(results, axis1)
-        // for all following steps, use groups as options
-        if (axis1.question.groups) {
-            axis1.options = axis1.question.groups
+            results = await addMissingItems(results, axis1)
         }
 
+        await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
+
+        await groupBuckets(results, axis1)
+
+        await cutoffData(results, axis1)
+
+        results = await applyDatasetCutoff(results, computeArguments)
+
+        if (
+            responsesType === ResponsesTypes.COMBINED ||
+            responsesType === ResponsesTypes.FREEFORM
+        ) {
+            await groupOtherBuckets(results, axis1)
+        }
+
+        await addPercentages(results)
+
+        // await addDeltas(results)
+
+        await addEditionYears(results, survey)
+
+        // for all following steps, use groups as options
+        if (axis1.enableBucketGroups && axis1.question.groups) {
+            axis1.options = axis1.question.groups
+        }
         await sortData(results, axis1)
         await limitData(results, axis1)
-        await cutoffData(results, axis1)
         await addLabels(results, axis1)
     }
 

@@ -11,7 +11,10 @@ interface SubField {
     resolverFunction?: ResolverType
 }
 
-const getResponsesTypeDef = ({ surveyId }: QuestionApiObject, subField: ResultsSubFieldEnum) =>
+export const getResponsesTypeDef = (
+    { surveyId }: QuestionApiObject,
+    subField: ResultsSubFieldEnum | string
+) =>
     `${subField}(filters: ${getFiltersTypeName(
         surveyId
     )}, parameters: Parameters, facet: ${getFacetsTypeName(surveyId)}): ${graphqlize(
@@ -53,6 +56,12 @@ export const subFields: Array<SubField> = [
         id: ResultsSubFieldEnum.PRENORMALIZED,
         def: question => getResponsesTypeDef(question, ResultsSubFieldEnum.PRENORMALIZED),
         addIf: ({ normPaths }) => !!normPaths?.prenormalized,
+        resolverFunction: responsesResolverFunction
+    },
+    {
+        id: ResultsSubFieldEnum.COMBINED,
+        def: question => getResponsesTypeDef(question, ResultsSubFieldEnum.COMBINED),
+        addIf: ({ normPaths }) => !!normPaths?.other && !!normPaths?.response,
         resolverFunction: responsesResolverFunction
     },
     {

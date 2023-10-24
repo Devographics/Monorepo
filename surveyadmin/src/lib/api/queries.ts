@@ -33,6 +33,7 @@ resources {
 }
 tags
 patterns
+exactMatch
 `;
 
 export const getEditionMetadataQuery = ({

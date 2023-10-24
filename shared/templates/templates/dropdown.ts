@@ -7,7 +7,6 @@ export const dropdown: TemplateFunction = options => {
 
     const question = {
         allowMultiple: false,
-        defaultSort: 'options',
         ...options.question
     } as QuestionTemplateOutput
 

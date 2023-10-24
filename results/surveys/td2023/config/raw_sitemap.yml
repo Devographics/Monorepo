@@ -53,305 +53,395 @@
 
       - id: japan_province
         template: multiple_options
-        hideCutoff: 10
+        parameters: { cutoff: 10, showNoAnswer: true, sort: { property: count } }
+        variants:
+            - template: vs_salary_tokyodev
+              parameters:
+                  showNoAnswer: true
+                  cutoff: 10
 
       - id: reason_for_relocation
-        template: single_option
-
-      - id: reason_for_relocation_freeform
-        fieldId: reason_for_relocation
-        template: single_option_freeform
-
-      - id: reason_for_relocation_freeform
-        fieldId: reason_for_relocation
-        template: single_option_freeform
+        template: single_option_combined
+        blockType: HorizontalBarBlock
+        parameters: { showNoAnswer: true, sort: { property: count } }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: residency_status
-        template: single_option
-
-      - id: residency_status_freeform
-        fieldId: residency_status
-        template: single_option_freeform
+        template: single_option_combined
+        blockType: HorizontalBarBlock
+        parameters: { showNoAnswer: true, sort: { property: count } }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: country
         template: multiple_options
-        parameters: { limit: 20 }
-
-      - id: country_vs_salary
-        fieldId: country
-        template: multiple_options
-        parameters: { cutoff: 20 }
-        defaultUnits: averageByFacet
-        filtersState:
-            options:
-                showDefaultSeries: true
-                enableYearSelect: false
-                mode: facet
-                queryOnLoad: false
-                supportedModes:
-                    - grid
-                    - facet
-                preventQuery: false
-            filters: []
-            facet:
-                sectionId: compensation
-                id: current_total_annual_compensation
+        parameters: { limit: 20, showNoAnswer: true }
+        variants:
+            - template: vs_salary_tokyodev
+              parameters:
+                  showNoAnswer: true
+                  cutoff: 10
 
       - id: gender
         template: multiple_options
-        blockType: VerticalBarBlock
         defaultUnits: percentageSurvey
+        variants:
+            - template: vs_salary_tokyodev
 
-      - id: gender_vs_salary
-        fieldId: gender
-        template: multiple_options
-        blockType: VerticalBarBlock
-        defaultUnits: percentilesByFacet
-        parameters: { cutoff: 20 }
-        filtersState:
-            options:
-                showDefaultSeries: true
-                enableYearSelect: false
-                mode: facet
-                queryOnLoad: false
-                supportedModes:
-                    - combined
-                    - facet
-                preventQuery: false
-            filters: []
-            facet:
-                sectionId: compensation
-                id: current_total_annual_compensation
-
-      - id: age_grouped
+      - id: age
         blockType: VerticalBarBlock
         template: multiple_options
+        variants:
+            - template: vs_salary_tokyodev
 
-      - id: salary_by_age
-        fieldId: age_grouped
-        blockType: VerticalBarBlock
-        template: multiple_options
-        defaultUnits: percentilesByFacet
-        filtersState:
-            options:
-                showDefaultSeries: true
-                enableYearSelect: false
-                mode: facet
-                queryOnLoad: false
-                supportedModes:
-                    - combined
-                    - facet
-                preventQuery: false
-            filters: []
-            facet:
-                sectionId: compensation
-                id: current_total_annual_compensation
-
-      - id: years_of_experience_grouped
+      - id: years_of_experience
+        titleId: user_info.years_of_experience
+        questionKey: user_info.years_of_experience.question
+        i18nNamespace: years
         template: multiple_options
         blockType: VerticalBarBlock
+        variants:
+            - template: vs_salary_tokyodev
+              i18nNamespace: years
 
-      - id: salary_by_experience
-        fieldId: years_of_experience_grouped
+      - id: years_in_japan
+        template: multiple_options
         blockType: VerticalBarBlock
-        template: multiple_options
-        defaultUnits: percentilesByFacet
-        filtersState:
-            options:
-                showDefaultSeries: true
-                enableYearSelect: false
-                mode: facet
-                queryOnLoad: false
-                supportedModes:
-                    - combined
-                    - facet
-                preventQuery: false
-            filters: []
-            facet:
-                sectionId: compensation
-                id: current_total_annual_compensation
-
-      - id: years_in_japan_grouped
-        template: multiple_options
+        i18nNamespace: years
+        titleId: user_info.years_in_japan
+        questionKey: user_info.years_in_japan.question
+        variants:
+            - template: vs_salary_tokyodev
+              i18nNamespace: years
 
       - id: educational_attainment
-        template: multiple_options
-
-      - id: educational_attainment_freeform
-        fieldId: educational_attainment
-        template: single_option_freeform
+        template: multiple_options_combined
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: professional_qualifications
-        template: multiple_options
-
-      - id: professional_qualifications_freeform
-        fieldId: professional_qualifications
-        template: multiple_options_freeform
+        template: multiple_options_combined
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: language_proficiency_english
         template: multiple_options
         blockType: VerticalBarBlock
+        parameters: { showNoAnswer: true, sort: { property: options } }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: language_proficiency_japanese
         template: multiple_options
         blockType: VerticalBarBlock
+        parameters: { showNoAnswer: true, sort: { property: options } }
+        variants:
+            - template: vs_salary_tokyodev
+
+      - id: source
+        template: multiple_options_freeform
+        parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
+              parameters: { showNoAnswer: true, cutoff: 10 }
+              queryOptions:
+                  addBucketsEntities: true
+                  subField: freeform
 
 - id: job_info
   path: /job-info
   blocks:
       - id: employment_status
-        template: multiple_options
-
-      - id: employment_status_freeform
-        fieldId: employment_status
-        template: multiple_options_freeform
+        template: multiple_options_combined
+        parameters: { showNoAnswer: true, sort: { property: count } }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: searching_for_job
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: current_job_description
-        template: multiple_options
-
-      - id: current_job_description_freeform
-        fieldId: current_job_description
-        template: multiple_options_freeform
+        template: multiple_options_combined
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: coworker_nationalities_engineers
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: coworker_nationalities_non_engineers
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: languages_used_colleagues_japanese
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: languages_used_colleagues_english
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
-      - id: years_employed_grouped
+      - id: years_employed
         template: multiple_options
+        titleId: job_info.years_employed
+        questionKey: job_info.years_employed.question
+        i18nNamespace: years
+        variants:
+            - template: vs_salary_tokyodev
+              i18nNamespace: years
 
       - id: hours_per_day
         template: multiple_options
+        parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: how_did_you_find_your_current_job
-        template: single_option
-
-      - id: how_did_you_find_your_current_job_freeform
-        fieldId: how_did_you_find_your_current_job
-        template: single_option_freeform
+        template: single_option_combined
+        parameters: { showNoAnswer: true, sort: { property: count } }
+        variants:
+            - template: vs_salary_tokyodev
 
 - id: employer_info
   path: /employer-info
   blocks:
       - id: current_employer
-        template: single_option
-
-      - id: current_employer_freeform
-        fieldId: current_employer
-        template: single_option_freeform
+        template: single_option_combined
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: industry_sector
-        template: multiple_options
-
-      - id: industry_sector_freeform
-        fieldId: industry_sector
-        template: multiple_options_freeform
+        template: multiple_options_combined
+        parameters: { showNoAnswer: true, cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: remote_work_policy
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: company_size
         template: single_option
+        blockType: HorizontalBarBlock
+        variants:
+            - template: vs_salary_tokyodev
 
 - id: compensation
   path: /compensation
   blocks:
       - id: current_total_annual_compensation
         template: single_option
+        titleId: compensation.current_total_annual_compensation
+        questionKey: compensation.current_total_annual_compensation.question
 
       - id: previous_compensation
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: desired_compensation
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: negotiated_compensation
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: annual_paid_leave
+        i18nNamespace: annual_paid_leave
+        titleId: compensation.annual_paid_leave
+        questionKey: compensation.annual_paid_leave.question
         template: single_option
+        variants:
+            - template: vs_salary_tokyodev
+
+      # - id: country_vs_salary
+      #   fieldId: country
+      #   template: multiple_options
+      #   parameters: { cutoff: 20, showNoAnswer: true }
+      #   defaultUnits: averageByFacet
+      #   queryOptions: { sectionId: user_info }
+      #   filtersState:
+      #       options:
+      #           showDefaultSeries: true
+      #           enableYearSelect: false
+      #           mode: facet
+      #           queryOnLoad: false
+      #           supportedModes:
+      #               - grid
+      #               - facet
+      #           preventQuery: false
+      #       filters: []
+      #       facet:
+      #           sectionId: compensation
+      #           id: current_total_annual_compensation
+
+      # - id: gender_vs_salary
+      #   fieldId: gender
+      #   template: multiple_options
+      #   blockType: VerticalBarBlock
+      #   defaultUnits: percentilesByFacet
+      #   parameters: { cutoff: 20 }
+      #   queryOptions: { sectionId: user_info }
+      #   filtersState:
+      #       options:
+      #           showDefaultSeries: true
+      #           enableYearSelect: false
+      #           mode: facet
+      #           queryOnLoad: false
+      #           supportedModes:
+      #               - combined
+      #               - facet
+      #           preventQuery: false
+      #       filters: []
+      #       facet:
+      #           sectionId: compensation
+      #           id: current_total_annual_compensation
+
+      # - id: salary_by_age
+      #   fieldId: age_grouped
+      #   blockType: VerticalBarBlock
+      #   template: multiple_options
+      #   defaultUnits: percentilesByFacet
+      #   queryOptions: { sectionId: user_info }
+      #   filtersState:
+      #       options:
+      #           showDefaultSeries: true
+      #           enableYearSelect: false
+      #           mode: facet
+      #           queryOnLoad: false
+      #           supportedModes:
+      #               - combined
+      #               - facet
+      #           preventQuery: false
+      #       filters: []
+      #       facet:
+      #           sectionId: compensation
+      #           id: current_total_annual_compensation
+
+      # - id: salary_by_experience
+      #   fieldId: years_of_experience_grouped
+      #   blockType: VerticalBarBlock
+      #   template: multiple_options
+      #   defaultUnits: percentilesByFacet
+      #   queryOptions: { sectionId: user_info }
+      #   filtersState:
+      #       options:
+      #           showDefaultSeries: true
+      #           enableYearSelect: false
+      #           mode: facet
+      #           queryOnLoad: false
+      #           supportedModes:
+      #               - combined
+      #               - facet
+      #           preventQuery: false
+      #       filters: []
+      #       facet:
+      #           sectionId: compensation
+      #           id: current_total_annual_compensation
 
 - id: technology
   path: /technology
   blocks:
       - id: programming_languages
-        template: multiple_options
-
-      - id: programming_languages_freeform
-        fieldId: programming_languages
-        template: multiple_options_freeform
+        template: multiple_options_combined
+        parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: databases
-        template: multiple_options
-
-      - id: databases_freeform
-        fieldId: databases
-        template: multiple_options_freeform
+        template: multiple_options_combined
+        parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: web_frameworks
-        template: multiple_options
-
-      - id: web_frameworks_freeform_freeform
-        fieldId: web_frameworks
-        template: multiple_options_freeform
+        template: multiple_options_combined
+        parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: other_frameworks_libraries
-        template: multiple_options
-
-      - id: other_frameworks_libraries_freeform
-        fieldId: other_frameworks_libraries
-        template: multiple_options_freeform
+        template: multiple_options_combined
+        parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: developer_tools
-        template: multiple_options
-
-      - id: developer_tools_freeform
-        fieldId: developer_tools
-        template: multiple_options_freeform
+        template: multiple_options_combined
+        parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: developer_environments
-        template: multiple_options
-
-      - id: developer_environments_freeform
-        fieldId: developer_environments
-        template: multiple_options_freeform
+        template: multiple_options_combined
+        parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: cloud_platforms
-        template: multiple_options
-
-      - id: cloud_platforms_freeform
-        fieldId: cloud_platforms
-        template: multiple_options_freeform
+        template: multiple_options_combined
+        parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
 - id: other
   path: /other
   blocks:
       # - id: life_in_japan
 
-      - id: communities
-        template: multiple_options
+      - id: life_in_japan__visa_situation
+        i18nNamespace: satisfaction
+        template: single_option
 
-      - id: communities_freeform
-        fieldId: communities
-        template: multiple_options_freeform
+      - id: life_in_japan__professional_life
+        i18nNamespace: satisfaction
+        template: single_option
+
+      - id: life_in_japan__family_life
+        i18nNamespace: satisfaction
+        template: single_option
+
+      - id: life_in_japan__social_life
+        i18nNamespace: satisfaction
+        template: single_option
+
+      - id: life_in_japan__cultural_adjustment
+        i18nNamespace: satisfaction
+        template: single_option
+
+      - id: life_in_japan__quality_of_life
+        i18nNamespace: satisfaction
+        template: single_option
+
+      - id: life_in_japan__housing
+        i18nNamespace: satisfaction
+        template: single_option
+
+      - id: life_in_japan__financial_situation
+        i18nNamespace: satisfaction
+        template: single_option
+
+      - id: communities
+        template: multiple_options_combined
+        parameters: { cutoff: 10 }
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: keyboard_layout
-        template: multiple_options
-
-      - id: keyboard_layout_freeform
-        fieldId: keyboard_layout
-        template: multiple_options_freeform
+        template: multiple_options_combined
+        variants:
+            - template: vs_salary_tokyodev
 
 - id: notfound
   titleId: notfound.title

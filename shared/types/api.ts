@@ -13,6 +13,7 @@ export enum ResultsSubFieldEnum {
     COMMENTS = 'comments',
     FOLLOWUPS = 'followups',
     FREEFORM = 'freeform',
+    COMBINED = 'combined',
     PRENORMALIZED = 'prenormalized',
     MEDIANS = 'medians',
     OPTIONS = 'options',
@@ -99,12 +100,10 @@ export interface Filter<T> {
 
 export interface ResponsesParameters {
     cutoff?: number
-    cutoffPercent?: number
     limit?: number
     sort?: SortSpecifier
 
     facetCutoff?: number
-    facetCutoffPercent?: number
     facetLimit?: number
     facetSort?: SortSpecifier
 

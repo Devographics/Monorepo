@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useRef } from "react";
 
 export const Dialog = ({
@@ -28,7 +29,7 @@ export const Dialog = ({
     };
   }, [showModal]);
 
-  return (
+  return showModal ? (
     <dialog open ref={dialogRef}>
       <article ref={articleRef}>
         {header && (
@@ -48,7 +49,7 @@ export const Dialog = ({
         <div>{children}</div>
       </article>
     </dialog>
-  );
+  ) : null;
 };
 
 export default Dialog;

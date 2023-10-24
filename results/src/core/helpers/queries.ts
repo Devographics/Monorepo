@@ -67,6 +67,7 @@ export const getFacetFragment = (addBucketsEntities?: boolean) => `
         percentageQuestion
         percentageSurvey
         percentageBucket
+        hasInsufficientData
         ${addBucketsEntities ? getEntityFragment() : ''}
     }
 `
@@ -226,6 +227,7 @@ surveys {
                 id
                 percentageQuestion
                 percentageSurvey
+                hasInsufficientData
                 ${addBucketsEntities ? getEntityFragment() : ''}
                 ${queryArgs.facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
                 ${queryArgs.facet || addBucketFacetsPlaceholder ? getPercentilesFragment() : ''}

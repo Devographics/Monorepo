@@ -5,6 +5,7 @@ import set from "lodash/set.js";
 import { getUUID } from "~/lib/email";
 import { NormalizationParams, StepFunction } from "../types";
 import clone from "lodash/clone";
+import { emptyValues } from "../helpers/getSelectors";
 
 // const replaceAll = function (target, search, replacement) {
 //   return target.replace(new RegExp(search, "g"), replacement);
@@ -57,8 +58,6 @@ export const getFieldsToCopy = (editionId) => [
     "user_info.how_did_user_find_out_about_the_survey",
   ],
 ];
-
-const emptyValues = ["undefined", ""];
 
 export const copyFields: StepFunction = async ({
   normResp: normResp_,

@@ -9,6 +9,7 @@ export const likert: TemplateFunction = options => {
         allowMultiple: true,
         optionsAreNumeric: true,
         inputComponent: 'likert',
+        hasApiEndpoint: false,
         ...options.question
     } as QuestionTemplateOutput
 

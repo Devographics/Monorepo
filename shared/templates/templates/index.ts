@@ -16,6 +16,7 @@ export * from './projects'
 export * from './happiness'
 export * from './opinion'
 export * from './likert'
+export * from './likert_option'
 
 export * from './quiz'
 

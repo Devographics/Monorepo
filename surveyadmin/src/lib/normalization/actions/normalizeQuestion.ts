@@ -4,6 +4,7 @@ import { getRawResponsesCollection } from "@devographics/mongo";
 import { fetchSurveyMetadata } from "@devographics/fetch";
 import { normalizeInBulk, defaultLimit } from "../normalize/normalizeInBulk";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
+import { getQuestionResponses } from "./getQuestionResponses";
 
 export type NormalizeQuestionArgs = {
   surveyId: string;
@@ -12,6 +13,8 @@ export type NormalizeQuestionArgs = {
   startFrom?: number;
   limit?: number;
   onlyUnnormalized?: boolean;
+  currentSegmentIndex: number;
+  totalSegments: number;
 };
 
 /*
@@ -29,6 +32,8 @@ export const normalizeQuestion = async (args: NormalizeQuestionArgs) => {
     startFrom = 0,
     limit = defaultLimit,
     onlyUnnormalized,
+    currentSegmentIndex,
+    totalSegments,
   } = args;
   const startAt = new Date();
 
@@ -55,7 +60,7 @@ export const normalizeQuestion = async (args: NormalizeQuestionArgs) => {
     .toArray();
 
   console.log(
-    `⛰️ Renormalizing question ${editionId}/${questionId}… Found ${responses.length} responses to renormalize (startFrom: ${startFrom}, limit: ${limit}). (${startAt})`
+    `⛰️ Renormalizing question ${editionId}/${questionId}… Found ${responses.length} responses to renormalize (startFrom: ${startFrom}, limit: ${limit}, segment ${currentSegmentIndex}/${totalSegments}). (${startAt})`
   );
 
   const mutationResult = await normalizeInBulk({
@@ -65,7 +70,18 @@ export const normalizeQuestion = async (args: NormalizeQuestionArgs) => {
     limit,
     questionId,
     isRenormalization: true,
+    currentSegmentIndex,
+    totalSegments,
   });
 
-  return mutationResult;
+  console.log(`⛰️ Refreshing responses cache for question ${questionId}…`);
+
+  const questionResponseData = await getQuestionResponses({
+    surveyId,
+    editionId,
+    questionId,
+    shouldGetFromCache: false,
+  });
+
+  return { ...mutationResult, questionResponseData };
 };

@@ -8,8 +8,8 @@ import {
 import isEmpty from 'lodash/isEmpty.js'
 import sumBy from 'lodash/sumBy.js'
 import difference from 'lodash/difference.js'
-// import { NO_ANSWER } from '@devographics/constants'
-const NO_ANSWER = 'no_answer'
+import { NO_ANSWER } from '@devographics/constants'
+import { BucketUnits } from '@devographics/types'
 
 /*
 
@@ -82,21 +82,31 @@ so that all buckets have the same shape
 
 */
 const zeroBucketItem = {
-    count: 0,
-    percentageQuestion: 0,
-    percentageBucket: 0,
-    percentageSurvey: 0
+    [BucketUnits.COUNT]: 0,
+    [BucketUnits.PERCENTAGE_QUESTION]: 0,
+    [BucketUnits.PERCENTAGE_BUCKET]: 0,
+    [BucketUnits.PERCENTAGE_SURVEY]: 0
 }
-const getZeroBucketItem = (id: string, facetAxis?: ComputeAxisParameters) => ({
-    ...zeroBucketItem,
+
+const getZeroBucketItem = <T extends Bucket | FacetBucket>({
     id,
-    facetBuckets: (facetAxis
-        ? facetAxis.question.options?.map(o => ({
-              ...zeroBucketItem,
-              id: o.id
-          }))
-        : []) as FacetBucket[]
-})
+    axis
+}: {
+    id: string
+    axis?: ComputeAxisParameters
+}) => {
+    let zeroBucket = { ...zeroBucketItem, id } as T
+    if (axis) {
+        zeroBucket = {
+            ...zeroBucket,
+            facetBuckets: axis.question.options?.map(o => ({
+                ...zeroBucketItem,
+                id: o.id
+            }))
+        }
+    }
+    return zeroBucket
+}
 
 export async function addMissingItems(
     resultsByEdition: ResponseEditionData[],
@@ -123,16 +133,25 @@ export async function addMissingItems(
                                 bucket => bucket.id === option2.id
                             )
                             if (!existingFacetBucketItem) {
-                                existingBucketItem.facetBuckets?.push(getZeroBucketItem(option2.id))
+                                existingBucketItem.facetBuckets?.push(
+                                    getZeroBucketItem<FacetBucket>({
+                                        id: String(option2.id)
+                                    })
+                                )
                             }
                         }
                     }
                 } else {
-                    buckets.push(getZeroBucketItem(option1.id, axis2))
+                    const zeroBucket = getZeroBucketItem<Bucket>({
+                        id: String(option1.id),
+                        axis: axis2
+                    })
+                    editionData.buckets.push(zeroBucket)
                 }
             }
         }
     }
+    return resultsByEdition
 }
 
 export async function addEditionYears(resultsByEdition: ResponseEditionData[], survey: Survey) {

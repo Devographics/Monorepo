@@ -41,7 +41,17 @@ export const FieldValue = ({
           />
         ))
       ) : (
-        <blockquote dangerouslySetInnerHTML={{ __html: getValue(value) }} />
+        <blockquote>
+          <span dangerouslySetInnerHTML={{ __html: getValue(value) }} />
+          {patterns.includes("custom_normalization") && (
+            <span
+              className="custom-normalization-badge"
+              data-tooltip="Custom Normalization"
+            >
+              🟢
+            </span>
+          )}
+        </blockquote>
       )}
     </div>
   );

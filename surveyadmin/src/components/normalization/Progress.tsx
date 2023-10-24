@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Segment, SegmentDone, defaultSegmentSize, statuses } from "./hooks";
 import {
   normalizeEdition,
@@ -14,6 +20,7 @@ import {
   NormalizationResult,
   NormalizationSummary,
 } from "./NormalizationResult";
+import { useDidMountEffect } from "../hooks";
 
 const Loading = () => <span aria-busy={true} />;
 
@@ -28,7 +35,6 @@ interface ProgressProps {
   question?: QuestionMetadata;
   onlyUnnormalized?: boolean;
   updateSegments: any;
-  isFirstNormalization?: boolean;
 }
 
 const Progress = (props: ProgressProps) => {
@@ -47,11 +53,13 @@ const Progress = (props: ProgressProps) => {
   //   }
   // }, [doneCount, responsesCount]);
 
+  const isDone = doneCount >= responsesCount;
+
   return (
     <div className="normalization-progress">
       {responsesCount > 0 && (
         <div>
-          <h3>Found {responsesCount} responses to normalize… </h3>
+          <h5>Found {responsesCount} responses to normalize… </h5>
           {segmentsDone.map((s, i) => (
             <SegmentDoneItem
               {...props}
@@ -69,24 +77,30 @@ const Progress = (props: ProgressProps) => {
               startFrom={segmentInProgress?.startFrom}
             />
           )}
-          {doneCount >= responsesCount && <div>Done</div>}
-          {enabled ? (
-            <button
-              onClick={() => {
-                setEnabled(false);
-              }}
-            >
-              Stop
-            </button>
-          ) : (
-            <button
-              onClick={() => {
-                setEnabled(true);
-              }}
-            >
-              Restart
-            </button>
+          {isDone && (
+            <div>
+              <p>Done</p>
+              <hr />
+            </div>
           )}
+          {!isDone &&
+            (enabled ? (
+              <button
+                onClick={() => {
+                  setEnabled(false);
+                }}
+              >
+                Stop
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setEnabled(true);
+                }}
+              >
+                Restart
+              </button>
+            ))}
         </div>
       )}
     </div>
@@ -143,13 +157,15 @@ const SegmentInProgressItem = ({
   onlyUnnormalized,
   updateSegments,
   segments,
-  isFirstNormalization = false,
 }: Segment &
   ProgressProps & {
     segmentIndex: number;
     responsesCount: number;
   }) => {
-  useEffect(() => {
+  useDidMountEffect(() => {
+    console.log("// useEffect!!");
+    console.log(segmentIndex);
+    console.log(enabled);
     if (enabled) {
       /*
 
@@ -164,7 +180,8 @@ const SegmentInProgressItem = ({
           startFrom: onlyUnnormalized ? 0 : startFrom,
           limit: defaultSegmentSize,
           onlyUnnormalized,
-          isFirstNormalization,
+          currentSegmentIndex: segmentIndex + 1,
+          totalSegments: segments.length,
         };
         // either run normalization for a single question, or for all questions in edition
         const result = question

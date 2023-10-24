@@ -41,6 +41,7 @@ export const getQuestionResponses = async ({
     survey,
     edition,
     question,
+    shouldGetFromCache,
   });
 
   const {
@@ -53,7 +54,7 @@ export const getQuestionResponses = async ({
 
   const allResponses = normalizationResponses;
 
-  const responsesCount = allResponses.length;
+  const responsesCount = allResponses?.length;
 
   const questionResult = await fetchQuestionData({
     shouldGetFromCache,

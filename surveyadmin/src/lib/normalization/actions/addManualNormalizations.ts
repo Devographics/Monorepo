@@ -72,7 +72,7 @@ export const addManualNormalizations = async (
 
   if (!response) {
     throw new Error(
-      `addManualNormalizations: no response document foudn for _id ${responseId}`
+      `addManualNormalizations: no response document found for _id ${responseId}`
     );
   }
 

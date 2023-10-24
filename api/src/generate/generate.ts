@@ -1,3 +1,4 @@
+import { OptionGroup } from '@devographics/types'
 import {
     Survey,
     Edition,
@@ -239,7 +240,7 @@ export const getQuestionObject = ({
 
     questionObject.contentType = getContentType(questionObject)
 
-    if (questionObject.options) {
+    if (questionObject.options || questionObject.groups) {
         if (!questionObject.optionTypeName) {
             questionObject.optionTypeName = fieldTypeName + 'Option'
         }
@@ -254,6 +255,14 @@ export const getQuestionObject = ({
     // add editions field to options
     if (questionObject.options) {
         questionObject.options = questionObject.options.map((o: Option) => ({
+            ...o,
+            editions: [edition.id]
+        }))
+    }
+
+    // add editions field to options
+    if (questionObject.groups) {
+        questionObject.groups = questionObject.groups.map((o: OptionGroup) => ({
             ...o,
             editions: [edition.id]
         }))

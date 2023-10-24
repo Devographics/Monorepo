@@ -25,17 +25,23 @@ const MainLayout = ({
     children?: React.ReactNode
 }) => {
     const { translate } = useI18n()
+    const { currentEdition, currentSurvey } = context
     return (
         <>
             <Skip href="#page-main">{translate('general.skip_to_content')}</Skip>
             {/* <SurveyBanner /> */}
             <Page
                 showSidebar={showSidebar}
-                className={classNames(`Page--${context.id}`, {
-                    capture: context.isCapturing,
-                    rawchartmode: context.isRawChartMode,
-                    nocapture: !context.isCapturing
-                })}
+                className={classNames(
+                    `Page--${context.id}`,
+                    `edition-${currentEdition.id}`,
+                    `survey-${currentSurvey.id}`,
+                    {
+                        capture: context.isCapturing,
+                        rawchartmode: context.isRawChartMode,
+                        nocapture: !context.isCapturing
+                    }
+                )}
             >
                 <header>
                     <MenuToggle

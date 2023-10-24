@@ -8,6 +8,7 @@ import { BlockLegend, StringTranslator } from 'core/types'
 import { NO_ANSWER } from '@devographics/constants'
 import { getItemLabel } from 'core/helpers/labels'
 import { CustomizationFiltersSeries, FacetItem } from 'core/filters/types'
+import T from 'core/i18n/T'
 
 const getExtraLabel = ({
     id,
@@ -104,10 +105,17 @@ const BarTooltip = props => {
 
     const nivoTheme = useTheme()
 
+    const { isFreeformData } = data
     const units_ = id
     return (
         <div style={{ ...nivoTheme.tooltip.container, maxWidth: 300 }}>
             <span dangerouslySetInnerHTML={{ __html: label }} />
+            {isFreeformData && (
+                <span>
+                    {' '}
+                    <T k="charts.freeform_data" />
+                </span>
+            )}
             :&nbsp;
             <strong>{labelFormatter(data[units_])}</strong>
         </div>

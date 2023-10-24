@@ -21,7 +21,7 @@ export interface HorizontalBarBlockProps extends BlockComponentProps {
     series: DataSeries<StandardQuestionData>[]
 }
 
-const HorizontalBarBlock = ({ block, data, series }: HorizontalBarBlockProps) => {
+const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBlockProps) => {
     const {
         mode = 'relative',
         defaultUnits = BucketUnits.COUNT,
@@ -35,7 +35,8 @@ const HorizontalBarBlock = ({ block, data, series }: HorizontalBarBlockProps) =>
     const addNoAnswer = units === BucketUnits.PERCENTAGE_SURVEY
     const chartLegends = useLegends({ block, addNoAnswer })
 
-    const completion = data?.responses?.currentEdition?.completion
+    const completion =
+        data?.combined?.currentEdition?.completion || data?.responses?.currentEdition?.completion
     const total = completion?.total
 
     const { chartFilters, setChartFilters, filterLegends } = useChartFilters({
@@ -57,6 +58,7 @@ const HorizontalBarBlock = ({ block, data, series }: HorizontalBarBlockProps) =>
         // if this facet is in the form of numerical ranges, add the average of each range as unit too
         if (facetQuestion?.optionsAreRange) {
             unitsOptions.push(BucketUnits.AVERAGE)
+            unitsOptions.push(BucketUnits.MEDIAN)
             unitsOptions.push(BucketUnits.PERCENTILES)
         }
     }
@@ -107,6 +109,7 @@ const HorizontalBarBlock = ({ block, data, series }: HorizontalBarBlockProps) =>
 
     const chartProps = {
         block,
+        question,
         total,
         series: series || [{ name: 'default', data }],
         i18nNamespace,

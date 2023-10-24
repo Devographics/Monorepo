@@ -9,7 +9,7 @@ import round from 'lodash/round'
 import { CHART_MODE_GRID, CHART_MODE_STACKED, CHART_MODE_GROUPED } from 'core/filters/constants'
 import { ChartModes, FacetItem, FilterItem } from 'core/filters/types'
 import { Bucket, BucketUnits } from '@devographics/types'
-import { NO_ANSWER } from '@devographics/constants'
+import { NO_ANSWER, OVERALL } from '@devographics/constants'
 import pickBy from 'lodash/pickBy'
 
 /*
@@ -49,6 +49,8 @@ Get chart's max value
 const getMaxValue = (units: BucketUnits, mode: Mode, buckets: Bucket[], total: number) => {
     if (units === BucketUnits.AVERAGE) {
         return Math.max(...buckets.map(b => b[BucketUnits.AVERAGE]))
+    } else if (units === BucketUnits.MEDIAN) {
+        return Math.max(...buckets.map(b => b[BucketUnits.MEDIAN]))
     } else if (isPercentage(units)) {
         if (units === BucketUnits.PERCENTAGE_BUCKET) {
             return 100
@@ -212,6 +214,26 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }
 
+    const overallGradient = {
+        id: `Gradient${orientation}Overall`,
+        type: 'linearGradient',
+        colors: [
+            { offset: 0, color: colors.barColorDefault.gradient[1] },
+            { offset: 100, color: colors.barColorDefault.gradient[0] }
+        ],
+        ...(orientation === HORIZONTAL ? horizontalDefs : {})
+    }
+
+    const freeformAnswersGradient = {
+        id: `Gradient${orientation}Freeform`,
+        type: 'linearGradient',
+        colors: [
+            { offset: 0, color: `${colors.barColorDefault.gradient[1]}70` },
+            { offset: 100, color: `${colors.barColorDefault.gradient[0]}70` }
+        ],
+        ...(orientation === HORIZONTAL ? horizontalDefs : {})
+    }
+
     const defaultGradient = {
         id: `Gradient${orientation}Default`,
         type: 'linearGradient',
@@ -222,7 +244,15 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }
 
-    return [...barColors, ...velocity, defaultGradient, noAnswerGradient, naGradient]
+    return [
+        ...barColors,
+        ...velocity,
+        defaultGradient,
+        freeformAnswersGradient,
+        noAnswerGradient,
+        overallGradient,
+        naGradient
+    ]
 }
 
 type UseColorFillsOptions = {
@@ -263,8 +293,18 @@ export const useColorFills = (options: UseColorFillsOptions) => {
     }
 
     const noAnswerFill = {
-        match: d => d.data.indexValue === 'no_answer',
+        match: d => d.data.indexValue === NO_ANSWER || d.data.id.includes('no_answer'),
         id: `Gradient${orientation}NoAnswer`
+    }
+
+    const overallFill = {
+        match: d => d.key === 'averageByFacet.overall',
+        id: `Gradient${orientation}Overall`
+    }
+
+    const freeformFill = {
+        match: d => d.data.data.isFreeformData === true,
+        id: `Gradient${orientation}Freeform`
     }
 
     switch (chartDisplayMode) {
@@ -279,7 +319,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
             const id = isDefault
                 ? `Gradient${orientation}Default`
                 : `Gradient${orientation}${gridIndex + gridIndexOffset}`
-            return [noAnswerFill, naFill, { match: '*', id }]
+            return [noAnswerFill, overallFill, freeformFill, naFill, { match: '*', id }]
         }
         case CHART_MODE_STACKED: {
             /*
@@ -289,7 +329,10 @@ export const useColorFills = (options: UseColorFillsOptions) => {
             */
             const facetField = allFilters.find(f => f.id === facet?.id) as FilterItem
 
-            const prefix = facetField.optionsAreSequential ? 'Velocity' : 'Gradient'
+            const prefix =
+                facetField.optionsAreSequential || facetField.optionsAreRange
+                    ? 'Velocity'
+                    : 'Gradient'
 
             const averageFill = {
                 match: d => {
@@ -309,7 +352,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
                 id: `${prefix}${orientation}${i + 2}`
             }))
 
-            return [noAnswerFill, naFill, averageFill, ...facetFills]
+            return [noAnswerFill, overallFill, freeformFill, naFill, averageFill, ...facetFills]
         }
         case CHART_MODE_GROUPED: {
             /*
@@ -323,7 +366,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
                 },
                 id: `Gradient${orientation}${i + 1}`
             }))
-            return [noAnswerFill, naFill, ...numberedSeriesFills]
+            return [noAnswerFill, overallFill, freeformFill, naFill, ...numberedSeriesFills]
         }
         default: {
             /*
@@ -332,7 +375,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
 
             */
             const defaultFill = { match: '*', id: `Gradient${orientation}Default` }
-            return [noAnswerFill, naFill, defaultFill]
+            return [noAnswerFill, overallFill, freeformFill, naFill, defaultFill]
         }
     }
 }
@@ -348,8 +391,13 @@ export const useAllChartsOptions = (): FilterItem[] => {
     const keys = []
     for (const section of currentEdition.sections) {
         for (const question of section.questions) {
-            if (question.options) {
-                keys.push({ sectionId: section.id, ...question })
+            if (question.options || question.groups) {
+                // if question has groups, use them to override the options
+                // TODO: do this in a cleaner way
+                const question_ = question.groups
+                    ? { ...question, options: question.groups }
+                    : question
+                keys.push({ sectionId: section.id, ...question_ })
             }
         }
     }
@@ -409,8 +457,11 @@ export const useChartKeys = ({
     if (facet) {
         if (units === BucketUnits.AVERAGE) {
             return [BucketUnits.AVERAGE]
+        } else if (units === BucketUnits.MEDIAN) {
+            return [BucketUnits.MEDIAN]
         } else {
-            const options = allChartKeys.find(q => q.id === facet.id)?.options!
+            const question = allChartKeys.find(q => q.id === facet.id)
+            const options = question?.groups ?? question?.options ?? []
             return [...options, { id: NO_ANSWER }].map(option => `${units}__${option.id}`)
         }
     } else if (seriesCount) {
@@ -454,7 +505,10 @@ export const useChartLabelFormatter = ({
 }) => {
     if (isPercentage(units)) {
         return (value: number) => `${round(value, 1)}%`
-    } else if (facet && [BucketUnits.AVERAGE, BucketUnits.PERCENTILES].includes(units)) {
+    } else if (
+        facet &&
+        [BucketUnits.AVERAGE, BucketUnits.MEDIAN, BucketUnits.PERCENTILES].includes(units)
+    ) {
         if (isDollar(facet.id)) {
             return (value: number) => usdFormatter.format(value)
         } else if (isYen(facet.id)) {

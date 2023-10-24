@@ -11,7 +11,7 @@ const QuestionData = ({
   responses: NormalizationResponse[];
 }) => {
   const [showData, setShowData] = useState(false);
-  return (
+  return questionData ? (
     <div>
       <h3>
         Current Normalized Results{" "}
@@ -28,41 +28,39 @@ const QuestionData = ({
       </h3>
       {showData && (
         <div>
-          {questionData ? (
-            <div>
-              <p>
-                This table shows aggregated counts for the subset of the data
-                that has already been processed.
-              </p>
-              <table>
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>ID</th>
-                    <th>Count</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {questionData.currentEdition.buckets.map(
-                    ({ id, count }, index) => (
-                      <tr key={id}>
-                        <td>{index + 1}.</td>
-                        <td>
-                          <NormToken id={id} responses={responses} />
-                        </td>
-                        <td>{count}</td>
-                      </tr>
-                    )
-                  )}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <p>No question data found.</p>
-          )}
+          <div>
+            <p>
+              This table shows aggregated counts for the subset of the data that
+              has already been processed.
+            </p>
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>ID</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                {questionData.currentEdition.buckets.map(
+                  ({ id, count }, index) => (
+                    <tr key={id}>
+                      <td>{index + 1}.</td>
+                      <td>
+                        <NormToken id={id} responses={responses} />
+                      </td>
+                      <td>{count}</td>
+                    </tr>
+                  )
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
+  ) : (
+    <p>No question data found.</p>
   );
 };
 

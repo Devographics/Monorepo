@@ -1,18 +1,10 @@
-import React, { memo, useMemo } from 'react'
-import {
-    ChartComponentProps,
-    BlockUnits,
-    BucketItem,
-    BlockLegend,
-    TickItemProps
-} from '@types/index'
+import React from 'react'
+import { TickItemProps } from '@types/index'
 import styled, { useTheme } from 'styled-components'
 import { useI18n } from 'core/i18n/i18nContext'
 import TooltipComponent from 'core/components/Tooltip'
-import { CloseIcon, DotsIcon } from 'core/icons'
-import TickItemLinks, { getSocialLinks } from 'core/charts/common/TickItemLinks'
-import Popover from 'core/components/Popover2'
-import { NO_ANSWER } from '@devographics/constants'
+import { getSocialLinks } from 'core/charts/common/TickItemLinks'
+import { NO_ANSWER, NO_MATCH, CUTOFF_ANSWERS, OVERALL } from '@devographics/constants'
 import { getItemLabel } from 'core/helpers/labels'
 
 const labelMaxLength = 20
@@ -98,7 +90,16 @@ export const getBucketLabel = args => {
     } = args
     if (id === NO_ANSWER) {
         key = 'charts.no_answer'
-        label = getString('charts.no_answer').t
+        label = getString(key).t
+    } else if (id === OVERALL) {
+        key = 'charts.overall'
+        label = getString(key).t
+    } else if (id === CUTOFF_ANSWERS) {
+        key = 'charts.cutoff_answers'
+        label = getString(key).t
+    } else if (id === NO_MATCH) {
+        key = 'charts.no_match'
+        label = getString(key).t
     } else {
         key = i18nNamespace === 'features' ? `features.${id}` : `options.${i18nNamespace}.${id}`
         const s = getString(key)

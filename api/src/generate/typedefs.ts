@@ -104,6 +104,7 @@ export const generateQuestionsTypeObjects = async ({
     for (const question of questionObjects) {
         const {
             options,
+            groups,
             fieldTypeName,
             optionTypeName,
             autogenerateOptionType = true,
@@ -125,7 +126,7 @@ export const generateQuestionsTypeObjects = async ({
             }
         }
 
-        if (options) {
+        if (options || groups) {
             if (autogenerateFilterType && !typeObjects.find(t => t.typeName === filterTypeName)) {
                 const filterType = generateFilterType({ question })
                 filterType && typeObjects.push(filterType)

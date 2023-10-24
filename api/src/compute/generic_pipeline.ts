@@ -1,19 +1,16 @@
 import { generateFiltersQuery } from '../filters'
-import { ComputeAxisParameters } from '../types'
+import { ComputeAxisParameters, GenericComputeParameters } from '../types'
 import { NO_ANSWER } from '@devographics/constants'
-// const NO_ANSWER = 'no_answer'
 import { getDbPath } from './generic'
 import { EditionMetadata, ResponsesTypes, SurveyMetadata } from '@devographics/types'
 import { getPastEditions } from '../helpers/surveys'
 
-export type PipelineProps = {
+export interface PipelineProps extends GenericComputeParameters {
     surveyId: string
     selectedEditionId?: string
     filters?: any
     axis1: ComputeAxisParameters
     axis2?: ComputeAxisParameters | null
-    showNoAnswer?: boolean
-    responsesType?: ResponsesTypes
     survey: SurveyMetadata
     edition: EditionMetadata
 }
@@ -33,7 +30,17 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         edition
     } = pipelineProps
 
-    const axis1DbPath = getDbPath(axis1.question, responsesType)
+    /*
+
+    TODO: currently we can't specify the subfield for a facet. In other words we can only facet
+    by main responses values, not by freeform values.
+
+    For that reason, if two axes are specified, hardcode axis 1's subfield to be "responses"
+    (axis 1 is actually the second axis, they're inverted for whatever reason)
+
+    */
+    const responseType1 = axis2 ? ResponsesTypes.RESPONSES : responsesType
+    const axis1DbPath = getDbPath(axis1.question, responseType1)
     const axis2DbPath = axis2 && getDbPath(axis2.question, responsesType)
 
     if (!axis1DbPath) {

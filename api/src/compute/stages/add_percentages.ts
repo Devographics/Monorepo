@@ -1,7 +1,7 @@
+import { BucketUnits } from '@devographics/types'
 import { ResponseEditionData, Bucket, FacetBucket, ComputeAxisParameters } from '../../types'
 import { ratioToPercentage } from '../common'
-// import { NO_ANSWER } from '@devographics/constants'
-const NO_ANSWER = 'no_answer'
+import { NO_ANSWER } from '@devographics/constants'
 
 const computeBucketsWithPercentages = <T extends Bucket | FacetBucket>(
     buckets: T[],
@@ -12,23 +12,21 @@ const computeBucketsWithPercentages = <T extends Bucket | FacetBucket>(
     const noAnswerCount = noAnswerBucket?.count || 0
 
     const bucketsWithPercentages = buckets.map(bucket => {
+        const bucketCount = bucket.count ?? 0
         const bucketWithPercentages = { ...bucket }
-        bucketWithPercentages.percentageSurvey = ratioToPercentage(
-            bucket.count / editionData.completion.total
+        bucketWithPercentages[BucketUnits.PERCENTAGE_SURVEY] = ratioToPercentage(
+            bucketCount / editionData.completion.total
         )
-        bucketWithPercentages.percentageQuestion =
+        bucketWithPercentages[BucketUnits.PERCENTAGE_QUESTION] =
             bucket.id === NO_ANSWER
                 ? 0
-                : ratioToPercentage(bucket.count / editionData.completion.count)
+                : ratioToPercentage(bucketCount / editionData.completion.count)
+
         if (parentBucket) {
-            // unless this is the "no answer" bucket,
-            // we take out the count of respondents who didn't answer
-            // because we don't show them in the facet charts either
-            const totalRespondentsInParentBucket =
-                bucket.id === NO_ANSWER ? parentBucket.count : parentBucket.count - noAnswerCount
-            bucketWithPercentages.percentageBucket = ratioToPercentage(
-                bucketWithPercentages.count / totalRespondentsInParentBucket
-            )
+            const parentBucketCount = parentBucket?.count ?? 0
+            const percentageBucket =
+                parentBucketCount === 0 ? 0 : ratioToPercentage(bucketCount / parentBucketCount)
+            bucketWithPercentages[BucketUnits.PERCENTAGE_BUCKET] = percentageBucket
         }
         return bucketWithPercentages
     })

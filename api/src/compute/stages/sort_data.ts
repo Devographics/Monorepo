@@ -1,9 +1,14 @@
-import { ComputeAxisParameters, SortProperty, SortOrderNumeric } from '../../types'
-import { ResponseEditionData, Bucket, FacetBucket, Option } from '@devographics/types'
+import { ComputeAxisParameters, SortOrderNumeric } from '../../types'
+import { ResponseEditionData, Bucket, FacetBucket, Option, SortProperty } from '@devographics/types'
 import sortBy from 'lodash/sortBy.js'
 import isEmpty from 'lodash/isEmpty.js'
-// import { NO_ANSWER } from '@devographics/constants'
-const NO_ANSWER = 'no_answer'
+import {
+    CUTOFF_ANSWERS,
+    NOT_APPLICABLE,
+    NO_ANSWER,
+    NO_MATCH,
+    OTHER_ANSWERS
+} from '@devographics/constants'
 
 export function sortBuckets<T extends Bucket | FacetBucket>(
     buckets: T[],
@@ -19,7 +24,11 @@ export function sortBuckets<T extends Bucket | FacetBucket>(
     } else {
         sortedBuckets = sortByProperty(sortedBuckets, sort, order)
     }
-    sortedBuckets = putNoAnswerBucketLast<T>(sortedBuckets)
+    sortedBuckets = putBucketLast<T>(sortedBuckets, CUTOFF_ANSWERS)
+    sortedBuckets = putBucketLast<T>(sortedBuckets, NO_MATCH)
+    sortedBuckets = putBucketLast<T>(sortedBuckets, OTHER_ANSWERS)
+    sortedBuckets = putBucketLast<T>(sortedBuckets, NOT_APPLICABLE)
+    sortedBuckets = putBucketLast<T>(sortedBuckets, NO_ANSWER)
     return sortedBuckets
 }
 
@@ -27,7 +36,22 @@ export function sortByOptions<T extends Bucket | FacetBucket>(buckets: T[], opti
     return [...buckets].sort((a, b) => {
         // make sure everything is a string to avoid type mismatches
         const stringValues = options.map(o => o.id.toString())
-        return stringValues.indexOf(a.id.toString()) - stringValues.indexOf(b.id.toString())
+        const indexA = stringValues.indexOf(a.id.toString())
+        const indexB = stringValues.indexOf(b.id.toString())
+        // if an item doesn't have a corresponding option, make sure it's sorted last
+        // (will happen for combined results or no_answer bucket)
+        let sortIndicator
+        if (indexA === -1) {
+            // a value is not in options, assume that a > b
+            sortIndicator = 1
+        } else if (indexB === -1) {
+            // b value is not in options, assume that a < b
+            sortIndicator = -1
+        } else {
+            sortIndicator = indexA - indexB
+        }
+        // console.log(sortIndicator > 0 ? `${a.id} > ${b.id}` : `${a.id} < ${b.id}`)
+        return sortIndicator
     })
 }
 
@@ -52,12 +76,12 @@ export function sortByProperty<T extends Bucket | FacetBucket>(
     return sortedBuckets
 }
 
-// put on answer bucket last (if it exists)
-export function putNoAnswerBucketLast<T extends Bucket | FacetBucket>(buckets: T[]) {
-    const noAnswerBucket = buckets.find(b => b.id === NO_ANSWER) as T
-    if (noAnswerBucket) {
-        const regularBuckets = buckets.filter(b => b.id !== NO_ANSWER) as T[]
-        return [...regularBuckets, noAnswerBucket]
+// move a bucket to the bottom
+export function putBucketLast<T extends Bucket | FacetBucket>(buckets: T[], bucketId: string) {
+    const lastBucket = buckets.find(b => b.id === bucketId) as T
+    if (lastBucket) {
+        const regularBuckets = buckets.filter(b => b.id !== bucketId) as T[]
+        return [...regularBuckets, lastBucket]
     } else {
         return buckets
     }

@@ -33,6 +33,7 @@
     "typecheck": "tsc --noEmit --p src/tsconfig.json"
   },
   "dependencies": {
+    "@devographics/constants": "workspace:^",
     "@devographics/debug": "workspace:^1.0.0",
     "@devographics/fetch": "workspace:^1.0.0",
     "@devographics/helpers": "workspace:^1.0.0",

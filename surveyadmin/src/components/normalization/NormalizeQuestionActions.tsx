@@ -15,6 +15,8 @@ import {
 import { NormalizationResponse } from "~/lib/normalization/hooks";
 import { InitializeSegmentsOptions, defaultSegmentSize } from "./hooks";
 import LoadingButton from "../LoadingButton";
+import Metadata from "./Metadata";
+import Tokens from "./Tokens";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
@@ -28,7 +30,7 @@ interface ActionProps {
   responsesCount: number;
 }
 
-const Actions = (props: ActionProps) => {
+const Actions = (props) => {
   const {
     survey,
     edition,
@@ -83,7 +85,7 @@ const Actions = (props: ActionProps) => {
         </select>{" "}
         &gt;{" "} */}
           {/* <Options {...props} /> */}
-          <div data-tooltip="Only run normalization on unnormalized answers">
+          {/* <div data-tooltip="Only run normalization on unnormalized answers">
             <LoadingButton
               action={async () => {
                 const result = await normalizeQuestionResponses({
@@ -97,7 +99,18 @@ const Actions = (props: ActionProps) => {
               }}
               label="Normalize Only Missing Values"
             />
-          </div>
+          </div> */}
+
+          <a
+            role="button"
+            href="https://www.youtube.com/watch?v=3XIKKMyMfjs"
+            target="_blank"
+            rel="noreferrer nofollow"
+          >
+            Watch Tutorial
+          </a>
+          <Metadata {...props} />
+          <Tokens {...props} />
 
           <div data-tooltip="Re-run normalization on all answers">
             <button

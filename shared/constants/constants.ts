@@ -16,9 +16,15 @@ export const FEATURES_OPTIONS2 = [
     'used_negative'
 ]
 
+export const OVERALL = 'overall'
+
 export const NO_ANSWER = 'no_answer'
 
+export const NO_MATCH = 'no_match'
+
 export const OTHER_ANSWERS = 'other_answers'
+
+export const CUTOFF_ANSWERS = 'cutoff_answers'
 
 export const NOT_APPLICABLE = 'na'
 

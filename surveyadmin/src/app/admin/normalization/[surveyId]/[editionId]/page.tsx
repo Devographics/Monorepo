@@ -10,7 +10,6 @@ import {
 import { getNormalizableQuestions } from "~/lib/normalization/helpers/getNormalizableQuestions";
 import { routes } from "~/lib/routes";
 import NormalizeResponses from "~/components/normalization/NormalizeResponses";
-import { loadNormalizationPercentages } from "~/lib/normalization/services";
 import {
   NormalizationProgressStats,
   getNormalizationPercentages,
@@ -20,6 +19,7 @@ import {
   QuestionMetadata,
   SurveyMetadata,
 } from "@devographics/types";
+import RecalculateProgress from "~/components/normalization/RecalculateProgress";
 
 export default async function Page({ params }) {
   const { surveyId, editionId } = params;
@@ -61,7 +61,10 @@ export default async function Page({ params }) {
         edition={edition}
       />
 
-      <h4>Normalizeable Questions</h4>
+      <h4>
+        Normalizeable Questions{" "}
+        <RecalculateProgress survey={survey} edition={edition} />
+      </h4>
       <table className="questions-list">
         <thead>
           <tr>

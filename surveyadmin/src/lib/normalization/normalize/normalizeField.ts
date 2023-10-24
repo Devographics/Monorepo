@@ -1,4 +1,5 @@
-import { EntityRule, cleanupValue, normalize } from "./helpers";
+import { EntityRule, cleanupValue } from "./helpers";
+import { normalize } from "./normalize";
 import set from "lodash/set.js";
 import {
   CommentField,
@@ -18,6 +19,7 @@ import {
 } from "@devographics/types";
 import { getFieldsToCopy } from "./steps";
 import { prefixWithEditionId } from "@devographics/templates";
+import { NO_MATCH } from "@devographics/constants";
 import compact from "lodash/compact";
 
 interface NormalizeFieldOptions extends NormalizationParams {
@@ -87,8 +89,8 @@ export const normalizeField = async ({
     // start by copying over the "main" response value
     if (rawPaths.response && normPaths.response) {
       const fieldPath = prefixWithEditionId(rawPaths.response, edition.id);
-      const responseValue = cleanupValue(response[fieldPath]);
-      if (responseValue) {
+      const responseValue = response[fieldPath];
+      if (typeof responseValue !== "undefined") {
         set(normResp, normPaths.response!, responseValue);
         regularFields.push({
           questionId: questionObject.id,
@@ -97,7 +99,9 @@ export const normalizeField = async ({
         });
         modified = true;
         if (verbose) {
-          console.log(`⛰️ ${fieldPath}/response: “${responseValue}”`);
+          console.log(
+            `⛰️ processResponseField: ${fieldPath}/response: “${responseValue}”`
+          );
         }
       }
     }
@@ -117,7 +121,9 @@ export const normalizeField = async ({
         });
         modified = true;
         if (verbose) {
-          console.log(`⛰️ ${fieldPath}/comment: “${responseCommentValue}”`);
+          console.log(
+            `⛰️ processCommentField: ${fieldPath}/comment: “${responseCommentValue}”`
+          );
         }
       }
     }
@@ -196,13 +202,18 @@ export const normalizeField = async ({
                   );
                 }
                 allTokens = [
-                  ...allTokens,
                   ...customTokens.map((token) => ({
                     id: token,
                     pattern: "custom_normalization",
                   })),
+                  ...allTokens,
                 ];
               }
+            }
+
+            // if we only need one token, only keep the first one
+            if (questionObject.matchType === "single") {
+              allTokens = allTokens.slice(0, 1);
             }
 
             let normIds = allTokens.map((token) => token.id);
@@ -210,9 +221,12 @@ export const normalizeField = async ({
               token.pattern.toString()
             );
 
-            set(normResp, normPaths.other!, normIds);
-            set(normResp, normPaths.patterns!, normPatterns);
-
+            if (normIds.length > 0) {
+              set(normResp, normPaths.other!, normIds);
+              set(normResp, normPaths.patterns!, normPatterns);
+            } else {
+              set(normResp, normPaths.other!, [NO_MATCH]);
+            }
             // keep trace of fields that were normalized
             normalizedFields.push({
               questionId: questionObject.id,
@@ -224,13 +238,16 @@ export const normalizeField = async ({
 
             modified = true;
             if (verbose) {
-              console.log(`⛰️ ${fieldPath}/other: “${otherValue}”`);
+              console.log(
+                `⛰️ processFreeformField: ${fieldPath}/other: “${otherValue}”`
+              );
               // console.log(`⛰️ -> Tags: ${matchTags.toString()}`);
               console.log(
                 `⛰️ -> Normalized values: ${JSON.stringify(allTokens)}`
               );
             }
           } catch (error) {
+            // console.warn(error);
             set(normResp, normPaths.error!, error.message);
           }
         }
@@ -266,7 +283,7 @@ export const normalizeField = async ({
           modified = true;
           if (verbose) {
             console.log(
-              `⛰️ ${rawFieldPath}/${DbPathsEnum.FOLLOWUP_PREDEFINED}: “${predefinedFollowupValue}”`
+              `⛰️ processPredefinedFollowupField: ${rawFieldPath}/${DbPathsEnum.FOLLOWUP_PREDEFINED}: “${predefinedFollowupValue}”`
             );
           }
         }

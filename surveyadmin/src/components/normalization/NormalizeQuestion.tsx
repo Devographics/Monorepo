@@ -4,6 +4,7 @@ import Actions from "~/components/normalization/NormalizeQuestionActions";
 import Progress from "~/components/normalization/Progress";
 import Fields from "~/components/normalization/Fields";
 import Metadata from "~/components/normalization/Metadata";
+import Tokens from "~/components/normalization/Tokens";
 
 import { ResponsesData, useQuestionResponses } from "~/lib/normalization/hooks";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
@@ -11,6 +12,7 @@ import { useSegments } from "./hooks";
 import type { QuestionWithSection } from "~/lib/normalization/types";
 import QuestionData from "./QuestionData";
 import { splitResponses } from "~/lib/normalization/helpers/splitResponses";
+import { useLocalStorage } from "../hooks";
 
 export const NormalizeQuestion = (props: {
   survey: SurveyMetadata;
@@ -26,30 +28,41 @@ export const NormalizeQuestion = (props: {
 
   return loading ? (
     <div aria-busy={true} />
-  ) : data ? (
-    <Normalization {...props} data={data} />
   ) : (
-    <div>no data found.</div>
+    <Normalization {...props} data={data} />
   );
+};
+
+export type CustomNormalizations = {
+  [key in string]: string[];
+};
+
+export type CustomNormalization = {
+  responseId: string;
+  tokens: string[];
 };
 
 export const Normalization = ({
   survey,
   edition,
   question,
-  data,
+  data = {} as ResponsesData,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionWithSection;
-  data: ResponsesData;
+  data?: ResponsesData;
 }) => {
   const { responsesCount, entities, responses, questionResult, durations } =
     data;
 
-  console.log(durations);
+  // console.log(durations);
 
-  const questionData = questionResult.data;
+  const cacheKey = `custom_normalizations__${edition.id}__${question.id}`;
+  const [customNormalizations, setCustomNormalizations] =
+    useLocalStorage<CustomNormalizations>(cacheKey, {});
+
+  const questionData = questionResult?.data;
 
   const {
     initializeSegments,
@@ -60,8 +73,16 @@ export const Normalization = ({
     segments,
   } = useSegments();
 
-  const { normalizedResponses, unnormalizedResponses } =
-    splitResponses(responses);
+  const addCustomNormalization = ({
+    responseId,
+    tokens,
+  }: CustomNormalization) => {
+    const newTokens = [...(customNormalizations[responseId] || []), ...tokens];
+    setCustomNormalizations({
+      ...customNormalizations,
+      [responseId]: newTokens,
+    });
+  };
 
   const props = {
     responsesCount,
@@ -69,8 +90,6 @@ export const Normalization = ({
     edition,
     question,
     responses,
-    normalizedResponses,
-    unnormalizedResponses,
     initializeSegments,
     updateSegments,
     doneCount,
@@ -79,18 +98,34 @@ export const Normalization = ({
     segments,
     questionData,
     entities,
+    customNormalizations,
+    addCustomNormalization,
   };
 
   return (
     <div className="admin-normalization admin-content">
       <Actions {...props} />
       {segments.length > 0 && <Progress {...props} />}
-      <Metadata {...props} />
       <QuestionData questionData={questionData} responses={responses} />
-      <Fields {...props} variant="normalized" />
-      <Fields {...props} variant="unnormalized" />
+      {responses ? (
+        <AllFields {...props} />
+      ) : (
+        <div>No responses data found.</div>
+      )}
     </div>
   );
 };
 
+const AllFields = (props) => {
+  const { normalizedResponses, unnormalizedResponses } = splitResponses(
+    props.responses
+  );
+  const fieldsProps = { ...props, normalizedResponses, unnormalizedResponses };
+  return (
+    <>
+      <Fields {...fieldsProps} variant="normalized" />
+      <Fields {...fieldsProps} variant="unnormalized" />
+    </>
+  );
+};
 export default NormalizeQuestion;

@@ -16,7 +16,7 @@ export const getBlockKey = ({ block }: { block: BlockDefinition }) => {
     if (block.template === 'tool_experience') {
         namespace = 'tools'
     }
-    const blockId = replaceOthers(block?.id)
+    const blockId = block.fieldId ?? replaceOthers(block?.id)
     return `${namespace}.${blockId}`
 }
 
@@ -127,8 +127,11 @@ export const getBlockQuestion = ({
     block: BlockDefinition
     getString: StringTranslator
 }) => {
+    const blockQuestion = block.questionKey && getString(block.questionKey)?.t
     const questionKey = `${getBlockKey({ block })}.question`
-    return getString(questionKey)?.t
+
+    const translation = getString(questionKey)
+    return blockQuestion || translation?.tClean || translation?.t
 }
 
 export const useBlockQuestion = ({ block }: { block: BlockDefinition }) => {

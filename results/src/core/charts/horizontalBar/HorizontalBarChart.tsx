@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
 import { useTheme } from 'styled-components'
-import sortBy from 'lodash/sortBy'
 import { ResponsiveBar } from '@nivo/bar'
 import { useI18n } from 'core/i18n/i18nContext'
 import BarTooltip from 'core/charts/common/BarTooltip'
@@ -22,26 +21,15 @@ import { StandardQuestionData, BucketUnits, Bucket, Entity } from '@devographics
 import { FacetItem, DataSeries, ChartModes, CustomizationFiltersSeries } from 'core/filters/types'
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
-import sumBy from 'lodash/sumBy'
-import { OTHER_ANSWERS } from '@devographics/constants'
+import sortBy from 'lodash/sortBy'
+import InsufficientData from './InsufficientData'
 
 export const getChartDataPath = (block: BlockDefinition) =>
     `${block?.queryOptions?.subField || 'responses'}.currentEdition.buckets`
 
-export const getChartData = (data: StandardQuestionData, block: BlockDefinition): Array<Bucket> =>
-    get(data, getChartDataPath(block))
-
-export const applyGroupCutoff = (chartData: Bucket[], hideCutoff: number) => {
-    const mainBuckets = chartData.filter(b => b.count && b.count >= hideCutoff)
-    const hiddenBuckets = chartData.filter(b => b.count && b.count < hideCutoff)
-    const hiddenBucket: Bucket = {
-        count: sumBy(hiddenBuckets, b => b.count || 0),
-        id: OTHER_ANSWERS,
-        percentageQuestion: sumBy(hiddenBuckets, b => b.percentageQuestion || 0),
-        percentageSurvey: sumBy(hiddenBuckets, b => b.percentageSurvey || 0),
-        facetBuckets: []
-    }
-    return [hiddenBucket, ...mainBuckets]
+export const getChartData = (data: StandardQuestionData, block: BlockDefinition): Array<Bucket> => {
+    const buckets = get(data, getChartDataPath(block))
+    return buckets
 }
 
 export const margin = {
@@ -102,10 +90,10 @@ const getLabelsLayer = (labelTransformer: any) => (props: any) => {
     //     fontSize = 11
     //     rotation = -90
     // }
-
     return props.bars.map((bar: any) => {
         const label = labelTransformer(bar.data)
-        return (
+        const hasInsufficientData = bar.data.data.hasInsufficientData
+        return hasInsufficientData ? null : (
             <ChartLabel
                 key={bar.key}
                 label={label}
@@ -150,6 +138,7 @@ const getSortKey = (keys: string[]) => {
 
 const HorizontalBarChart = ({
     block,
+    question,
     legends,
     series,
     total,
@@ -173,8 +162,15 @@ const HorizontalBarChart = ({
 
     if (facet) {
         buckets = buckets.map(bucket => {
+            baseUnits.forEach(unit => {
+                if (unit === BucketUnits.MEDIAN) {
+                    bucket[unit] = bucket[BucketUnits.PERCENTILES]?.p50 ?? 0
+                } else {
+                    bucket[unit] = bucket[unit] ?? 0
+                }
+            })
             bucket?.facetBuckets?.forEach(facetBucket => {
-                baseUnits.forEach(unit => {
+                ;[BucketUnits.COUNT, BucketUnits.PERCENTAGE_BUCKET].forEach(unit => {
                     bucket[`${unit}__${facetBucket.id}`] = facetBucket[unit]
                 })
             })
@@ -200,11 +196,16 @@ const HorizontalBarChart = ({
         showDefaultSeries
     })
 
-    let sortedBuckets = sortBy(buckets, getSortKey(keys))
-    if (block.hideCutoff) {
-        sortedBuckets = applyGroupCutoff(sortedBuckets, block.hideCutoff)
-    }
+    // let sortedBuckets = sortBy(buckets, getSortKey(keys))
+    let sortedBuckets = [...buckets].reverse()
 
+    if (!question?.optionsAreSequential) {
+        if (units === BucketUnits.AVERAGE) {
+            sortedBuckets = sortBy(sortedBuckets, BucketUnits.AVERAGE)
+        } else if (units === BucketUnits.MEDIAN) {
+            sortedBuckets = sortBy(sortedBuckets, BucketUnits.MEDIAN)
+        }
+    }
     const { formatTick, formatValue, maxValue } = useBarChart({
         buckets: sortedBuckets,
         total,
@@ -266,15 +267,16 @@ const HorizontalBarChart = ({
                     tickSize: 0,
                     tickPadding: 10,
                     renderTick: tick => {
+                        const tickBucket = sortedBuckets.find(b => b.id === tick.value)
                         return (
                             <TickItem
                                 i18nNamespace={i18nNamespace}
                                 shouldTranslate={shouldTranslate}
                                 entity={
-                                    sortedBuckets.find(b => b.id === tick.value)?.entity ||
-                                    entities.find(e => e?.id === tick.value)
+                                    tickBucket?.entity || entities.find(e => e?.id === tick.value)
                                 }
-                                label={sortedBuckets.find(b => b.id === tick.value)?.label}
+                                bucket={tickBucket}
+                                label={tickBucket?.label}
                                 itemCount={sortedBuckets.length}
                                 role="rowheader"
                                 {...tick}
@@ -304,7 +306,8 @@ const HorizontalBarChart = ({
                     'grid',
                     'axes',
                     'bars',
-                    labelsLayer
+                    labelsLayer,
+                    layerProps => <InsufficientData {...layerProps} />
                 ]}
                 defs={colorDefs}
                 fill={colorFills}

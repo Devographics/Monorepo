@@ -27,12 +27,7 @@ const BlockChart = props => {
         modeProps,
         chartFilters
     } = props
-    const {
-        legendPosition = 'top',
-        switcherPosition = 'bottom',
-        showNote = true,
-        customChart
-    } = block
+    const { legendPosition = 'top', switcherPosition = 'top', showNote = true, customChart } = block
     const { translate } = useI18n()
     const context = usePageContext()
     const { isCapturing } = context
@@ -52,12 +47,15 @@ const BlockChart = props => {
             <BlockDescriptionContents block={block} />
             <BlockQuestionContents block={block} />
             {entity && !isCapturing && <BlockLinks entity={entity} />}
+            <BlockFooter {...props} />
+
             {legends && legendPosition === 'top' && <BlockLegends {...legendProps_} />}
             {modeProps && switcherPosition === 'top' && (
                 <SwitcherWrapper>
                     <BlockUnitsSelector {...modeProps} />
                 </SwitcherWrapper>
             )}
+
             <div className="Block__Contents">
                 {error ? <div className="error">{error}</div> : children}
             </div>
@@ -79,7 +77,6 @@ const BlockChart = props => {
                     <BlockUnitsSelector {...modeProps} />
                 </SwitcherWrapper>
             )}
-            <BlockFooter {...props} />
             {showNote && <BlockNote block={block} />}
         </div>
     )

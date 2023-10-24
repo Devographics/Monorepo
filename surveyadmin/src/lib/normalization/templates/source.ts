@@ -1,7 +1,8 @@
 import set from "lodash/set.js";
 import get from "lodash/get.js";
 import compact from "lodash/compact.js";
-import { getQuestionRules, normalizeSingle } from "../normalize/helpers";
+import { normalizeSingle } from "../normalize/helpers";
+import { getQuestionRules } from "../normalize/getQuestionRules";
 import { copyFields } from "../normalize/steps";
 import { NormalizationParams } from "../types";
 import { QuestionTemplateOutput } from "@devographics/types";

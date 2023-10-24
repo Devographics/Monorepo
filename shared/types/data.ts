@@ -33,7 +33,7 @@ export type StandardQuestionData = QuestionData & {
     [key in ResultsSubFieldEnum]: ResponseData
 }
 
-export interface OpinionQuestionData extends StandardQuestionData { }
+export interface OpinionQuestionData extends StandardQuestionData {}
 
 export interface OptionsQuestionData extends QuestionData {
     options: OptionData[]
@@ -51,7 +51,7 @@ export interface ToolQuestionData extends QuestionData {
     responses: ResponseData
 }
 
-export interface FeatureQuestionData extends ToolQuestionData { }
+export interface FeatureQuestionData extends ToolQuestionData {}
 
 export interface ItemComments {
     allEditions: EditionComments[]
@@ -101,11 +101,12 @@ export interface FacetCompletion extends YearCompletion {
 
 export enum BucketUnits {
     COUNT = 'count',
-    PERCENTAGE_FACET = 'percentageFacet',
+    // PERCENTAGE_FACET = 'percentageFacet',
     PERCENTAGE_QUESTION = 'percentageQuestion',
     PERCENTAGE_SURVEY = 'percentageSurvey',
     PERCENTAGE_BUCKET = 'percentageBucket',
     AVERAGE = 'averageByFacet',
+    MEDIAN = 'medianByFacet',
     /**
      * Will favour a box plot instead of bars
      */
@@ -142,21 +143,26 @@ export interface Bucket extends BucketData {
     facetBuckets: FacetBucket[]
     percentilesByFacet?: PercentileData
     label?: string
+    hasInsufficientData?: boolean
+    groupedBuckets?: Bucket[]
+    groupedBucketIds?: string[]
 }
 
 export type CombinedBucketData = {
     [key in BucketUnits as `${key}__${number}`]: number
 }
 
-export interface CombinedBucket extends Bucket, CombinedBucketData { }
+export interface CombinedBucket extends Bucket, CombinedBucketData {}
 
-export interface FacetBucket extends Omit<Bucket, 'facetBuckets'> { }
+export interface FacetBucket extends Omit<Bucket, 'facetBuckets' | 'groupedBuckets'> {
+    groupedBuckets?: FacetBucket[]
+}
 
 export interface FacetBucketWithAverage extends FacetBucket {
     average: number
 }
 
-export interface BucketCompletion extends FacetCompletion { }
+export interface BucketCompletion extends FacetCompletion {}
 
 /*
 
@@ -202,9 +208,9 @@ export interface AllToolsData {
     ids: string[]
     years: number[]
 }
-export interface SectionAllToolsData extends AllToolsData { }
-export interface AllFeaturesData extends AllToolsData { }
-export interface SectionAllFeaturesData extends AllFeaturesData { }
+export interface SectionAllToolsData extends AllToolsData {}
+export interface AllFeaturesData extends AllToolsData {}
+export interface SectionAllFeaturesData extends AllFeaturesData {}
 
 export const OPTION_NA = 'na'
 

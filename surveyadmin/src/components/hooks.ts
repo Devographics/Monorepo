@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import sortBy from "lodash/sortBy";
 import { isNumber } from "lodash";
 
-export const useLocalStorage = (storageKey, fallbackState) => {
+export function useLocalStorage<T>(storageKey, fallbackState) {
   let initState = fallbackState;
   try {
     const localStorageState = localStorage.getItem(storageKey);
@@ -16,8 +16,8 @@ export const useLocalStorage = (storageKey, fallbackState) => {
     localStorage.setItem(storageKey, JSON.stringify(value));
   }, [value, storageKey]);
 
-  return [value, setValue];
-};
+  return [value, setValue] as [T, any];
+}
 
 // see https://blog.logrocket.com/implementing-copy-clipboard-react-clipboard-api/
 async function copyToClipboard(text) {
@@ -181,4 +181,13 @@ export const highlightPatterns = ({
     // else just match all patterns
     return highlightMatches(value, patterns, undefined, filterQueryPattern);
   }
+};
+
+export const useDidMountEffect = (func, deps) => {
+  const didMount = useRef(false);
+
+  useEffect(() => {
+    if (didMount.current) func();
+    else didMount.current = true;
+  }, deps);
 };

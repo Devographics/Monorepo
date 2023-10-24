@@ -1,8 +1,9 @@
-import { BucketUnits, Entity } from '@devographics/types'
+import { BucketUnits, Entity, QuestionMetadata } from '@devographics/types'
 import { BlockMode, BlockUnits, BlockLegend } from './block'
 
 export interface ChartComponentProps {
     data?: any
+    question?: QuestionMetadata
     viewportWidth?: number
     className?: string
     legends?: BlockLegend[]

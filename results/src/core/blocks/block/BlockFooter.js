@@ -10,7 +10,7 @@ const Footer = styled.div`
     .rawchartmode & {
         display: none;
     }
-    margin-top: ${spacing()};
+    margin-bottom: ${spacing()};
 `
 
 const Respondents = styled.div`

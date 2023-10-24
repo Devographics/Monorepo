@@ -36,7 +36,6 @@ const VerticalBarBlock = ({ block, data, series, pageContext }: VerticalBarBlock
 
     const chartLegends = useLegends({ block, addNoAnswer })
 
-    console.log(chartLegends)
     const completion = data?.responses?.currentEdition?.completion
     const total = completion?.total
 
