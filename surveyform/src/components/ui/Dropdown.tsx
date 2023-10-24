@@ -122,6 +122,7 @@ export const Dropdown = ({
       // else default to DropdownButton
       return (
         <DropdownButton
+          menuVariant="dark"
           {...buttonProps}
           title={labelId ? <FormattedMessage id={labelId} /> : label}
           {...dropdownProps}
