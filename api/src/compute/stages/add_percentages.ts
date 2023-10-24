@@ -24,7 +24,8 @@ const computeBucketsWithPercentages = <T extends Bucket | FacetBucket>(
 
         if (parentBucket) {
             const parentBucketCount = parentBucket?.count ?? 0
-            const percentageBucket = ratioToPercentage(bucketCount / parentBucketCount)
+            const percentageBucket =
+                parentBucketCount === 0 ? 0 : ratioToPercentage(bucketCount / parentBucketCount)
             bucketWithPercentages[BucketUnits.PERCENTAGE_BUCKET] = percentageBucket
         }
         return bucketWithPercentages
