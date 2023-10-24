@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { debugAccessMiddleware } from "~/lib/server/edge/debugMiddleware";
-import { cronMiddleware } from "~/lib/server/edge/cronMiddleware";
 
 import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
 import { LOCALE_COOKIE_NAME } from "./i18n/cookie";
@@ -109,19 +107,11 @@ async function localize(request: NextRequest): Promise<NextResponse> {
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-
-  if (pathname.startsWith("/debug")) {
-    // TODO: can we run Sentry in an edge middleware?
-    console.log("Accessing debug area");
-    return debugAccessMiddleware(request);
-  }
-
-  if (pathname.startsWith("/api/crons")) {
-    console.log("Accessing crons");
-    return cronMiddleware(request);
-  }
-
+  // NOTE: _next/static files are already bypassed by the matcher
+  // but next/public files could be matched
   const file = isFile(pathname);
+  // NOTE: current matcher bypasses API calls anyway
+  // it should be reenabled if we implement bot protections etc.
   const api = isApi(pathname);
   const shouldLocalize = !api && !file;
   if (shouldLocalize) {
@@ -131,9 +121,15 @@ export async function middleware(request: NextRequest) {
   NextResponse.next();
 }
 
-// middleware will run only on those paths
 export const config = {
-  // matcher: ["/", "/debug/:path*", "/api/crons/:path*"],
-  // we can't use variables here
-  //...debugAreaMatcher, ...cronMatcher],
-};
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - API routes
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
+}
