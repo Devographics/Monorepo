@@ -9,6 +9,7 @@ import isEmpty from 'lodash/isEmpty.js'
 import sumBy from 'lodash/sumBy.js'
 import difference from 'lodash/difference.js'
 import { NO_ANSWER } from '@devographics/constants'
+import { BucketUnits } from '@devographics/types'
 
 /*
 
@@ -81,10 +82,10 @@ so that all buckets have the same shape
 
 */
 const zeroBucketItem = {
-    count: 0,
-    percentageQuestion: 0,
-    percentageBucket: 0,
-    percentageSurvey: 0
+    [BucketUnits.COUNT]: 0,
+    [BucketUnits.PERCENTAGE_QUESTION]: 0,
+    [BucketUnits.PERCENTAGE_BUCKET]: 0,
+    [BucketUnits.PERCENTAGE_SURVEY]: 0
 }
 
 const getZeroBucketItem = <T extends Bucket | FacetBucket>({
