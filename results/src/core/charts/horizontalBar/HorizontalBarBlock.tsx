@@ -58,6 +58,7 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
         // if this facet is in the form of numerical ranges, add the average of each range as unit too
         if (facetQuestion?.optionsAreRange) {
             unitsOptions.push(BucketUnits.AVERAGE)
+            unitsOptions.push(BucketUnits.MEDIAN)
             unitsOptions.push(BucketUnits.PERCENTILES)
         }
     }

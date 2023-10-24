@@ -49,6 +49,8 @@ Get chart's max value
 const getMaxValue = (units: BucketUnits, mode: Mode, buckets: Bucket[], total: number) => {
     if (units === BucketUnits.AVERAGE) {
         return Math.max(...buckets.map(b => b[BucketUnits.AVERAGE]))
+    } else if (units === BucketUnits.MEDIAN) {
+        return Math.max(...buckets.map(b => b[BucketUnits.MEDIAN]))
     } else if (isPercentage(units)) {
         if (units === BucketUnits.PERCENTAGE_BUCKET) {
             return 100
@@ -455,6 +457,8 @@ export const useChartKeys = ({
     if (facet) {
         if (units === BucketUnits.AVERAGE) {
             return [BucketUnits.AVERAGE]
+        } else if (units === BucketUnits.MEDIAN) {
+            return [BucketUnits.MEDIAN]
         } else {
             const question = allChartKeys.find(q => q.id === facet.id)
             const options = question?.groups ?? question?.options ?? []
@@ -501,7 +505,10 @@ export const useChartLabelFormatter = ({
 }) => {
     if (isPercentage(units)) {
         return (value: number) => `${round(value, 1)}%`
-    } else if (facet && [BucketUnits.AVERAGE, BucketUnits.PERCENTILES].includes(units)) {
+    } else if (
+        facet &&
+        [BucketUnits.AVERAGE, BucketUnits.MEDIAN, BucketUnits.PERCENTILES].includes(units)
+    ) {
         if (isDollar(facet.id)) {
             return (value: number) => usdFormatter.format(value)
         } else if (isYen(facet.id)) {

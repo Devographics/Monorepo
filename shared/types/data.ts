@@ -106,6 +106,7 @@ export enum BucketUnits {
     PERCENTAGE_SURVEY = 'percentageSurvey',
     PERCENTAGE_BUCKET = 'percentageBucket',
     AVERAGE = 'averageByFacet',
+    MEDIAN = 'medianByFacet',
     /**
      * Will favour a box plot instead of bars
      */

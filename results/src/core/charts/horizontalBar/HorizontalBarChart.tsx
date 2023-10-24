@@ -163,10 +163,14 @@ const HorizontalBarChart = ({
     if (facet) {
         buckets = buckets.map(bucket => {
             baseUnits.forEach(unit => {
-                bucket[unit] = bucket[unit] ?? 0
+                if (unit === BucketUnits.MEDIAN) {
+                    bucket[unit] = bucket[BucketUnits.PERCENTILES]?.p50 ?? 0
+                } else {
+                    bucket[unit] = bucket[unit] ?? 0
+                }
             })
             bucket?.facetBuckets?.forEach(facetBucket => {
-                baseUnits.forEach(unit => {
+                ;[BucketUnits.COUNT, BucketUnits.PERCENTAGE_BUCKET].forEach(unit => {
                     bucket[`${unit}__${facetBucket.id}`] = facetBucket[unit]
                 })
             })
@@ -195,8 +199,12 @@ const HorizontalBarChart = ({
     // let sortedBuckets = sortBy(buckets, getSortKey(keys))
     let sortedBuckets = [...buckets].reverse()
 
-    if (!question?.optionsAreSequential && units === BucketUnits.AVERAGE) {
-        sortedBuckets = sortBy(sortedBuckets, BucketUnits.AVERAGE)
+    if (!question?.optionsAreSequential) {
+        if (units === BucketUnits.AVERAGE) {
+            sortedBuckets = sortBy(sortedBuckets, BucketUnits.AVERAGE)
+        } else if (units === BucketUnits.MEDIAN) {
+            sortedBuckets = sortBy(sortedBuckets, BucketUnits.MEDIAN)
+        }
     }
     const { formatTick, formatValue, maxValue } = useBarChart({
         buckets: sortedBuckets,
