@@ -1,3 +1,4 @@
+import { OptionGroup } from '@devographics/types'
 import { loadOrGetParsedSurveys } from '../load/surveys'
 import {
     Survey,
@@ -183,7 +184,7 @@ export const getEditionItems = (edition: EditionApiObject, type: 'tools' | 'feat
     return items
 }
 
-export const formatNumericOptions = (options: Option[]) =>
+export const formatNumericOptions = <T extends Option | OptionGroup>(options: T[]) =>
     options.map(option => ({ ...option, id: `value_${option.id}` }))
 
 // convert an option back into a number

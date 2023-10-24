@@ -1,3 +1,4 @@
+import { Option, OptionGroup } from '@devographics/types'
 import { formatNumericOptions } from '../../generate/helpers'
 import { QuestionApiObject, TypeDefTemplateOutput, TypeTypeEnum } from '../../types'
 
@@ -20,9 +21,17 @@ export const generateEnumType = ({
 }: {
     question: QuestionApiObject
 }): TypeDefTemplateOutput | undefined => {
-    const { enumTypeName, options, optionsAreNumeric } = question
-    if (!enumTypeName || !options) return
-    const formattedOptions = optionsAreNumeric ? formatNumericOptions(options) : options
+    const { enumTypeName, options, groups, optionsAreNumeric } = question
+    let formattedOptions
+    if (!enumTypeName) {
+        return
+    } else if (groups) {
+        formattedOptions = optionsAreNumeric ? formatNumericOptions<OptionGroup>(groups) : groups
+    } else if (options) {
+        formattedOptions = optionsAreNumeric ? formatNumericOptions<Option>(options) : options
+    } else {
+        return
+    }
     return {
         generatedBy: 'enum',
         typeName: enumTypeName,
