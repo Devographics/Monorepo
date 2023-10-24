@@ -4,7 +4,14 @@ import sumBy from 'lodash/sumBy.js'
 import { CUTOFF_ANSWERS, NO_ANSWER, NOT_APPLICABLE } from '@devographics/constants'
 import isNil from 'lodash/isNil.js'
 import isNaN from 'lodash/isNaN.js'
+import isEmpty from 'lodash/isEmpty.js'
 
+/*
+
+Note: we shouldn't have to use this, instead we drill down and get the average
+of the items *within* the group
+
+*/
 const getGroupAverage = (group: OptionGroup) => {
     const { id, average, lowerBound, upperBound } = group
     if (average) {
@@ -17,21 +24,40 @@ const getGroupAverage = (group: OptionGroup) => {
 }
 
 // Given a facet bucket, find the corresponding average corresponding to its range
-export const getFacetBucketAverage = (facetBucket: FacetBucket, axis: ComputeAxisParameters) => {
+export const getFacetBucketAverage = (
+    facetBucket: FacetBucket,
+    axis: ComputeAxisParameters
+): number => {
     if (facetBucket.id === 'range_work_for_free') {
         // note: yearly_salary's "range_work_for_free" is not in options anymore, so hardcode it
         // here for backwards compatibility's sake
         return 0
     }
-    const option = axis?.options?.find(o => o.id === facetBucket.id)
-    const group = axis?.question?.groups?.find(o => o.id === facetBucket.id)
-    const average = option?.average ?? (group && getGroupAverage(group))
-    if (!average) {
-        throw new Error(
-            `getFacetBucketAverage: could not find option average for facet bucket "${facetBucket.id}" with axis "${axis.question.id}"`
-        )
+    const groupedBuckets = facetBucket.groupedBuckets
+    if (groupedBuckets) {
+        // if facet is a group of other facet buckets we need to get the average of all the
+        // grouped buckets
+        const average =
+            groupedBuckets.length === 0
+                ? 0
+                : sumBy(groupedBuckets, bucket => getFacetBucketAverage(bucket, axis)) /
+                  groupedBuckets.length
+        return average
+    } else {
+        // facet is not a group, we just get the average from the corresponding option;
+        // or the bucket id itself if the question is numeric
+        const average = axis?.question?.optionsAreNumeric
+            ? Number(facetBucket.id)
+            : axis?.options?.find(o => o.id === facetBucket.id)?.average
+        if (typeof average === 'undefined') {
+            console.log({ facetBucket })
+            console.log({ axis })
+            throw new Error(
+                `getFacetBucketAverage: could not find option average for facet bucket "${facetBucket.id}" with axis "${axis.question.id}"`
+            )
+        }
+        return average
     }
-    return average
 }
 
 export const calculateAverage = ({

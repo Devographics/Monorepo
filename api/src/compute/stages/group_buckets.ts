@@ -3,6 +3,7 @@ import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import sumBy from 'lodash/sumBy.js'
 import { CUTOFF_ANSWERS, NO_ANSWER, NO_MATCH, OTHER_ANSWERS } from '@devographics/constants'
 import round from 'lodash/round.js'
+import uniq from 'lodash/uniq.js'
 
 /*
 
@@ -22,18 +23,22 @@ export const combineFacetBuckets = (
 
     let combinedFacetBuckets = [...optionsOrGroups, noAnswerOption].map(option => {
         const { id, label } = option
-        return {
+        // for each facet, find the equivalent facetBuckets in all the main buckets
+        const sameFacetBuckets = selectedBuckets.map(
+            b => b?.facetBuckets?.find(fb => fb.id === option.id)!
+        )
+        const combinedFacetBucket = {
             // Note: might create issues when option ID is not the same as facet bucket ID
             id: String(id),
             label,
+            groupedBuckets: uniq(sameFacetBuckets.map(b => b?.groupedBuckets).flat()),
+            groupedBucketIds: uniq(sameFacetBuckets.map(b => b?.groupedBucketIds).flat()),
             count: round(
-                sumBy(
-                    selectedBuckets,
-                    b => b?.facetBuckets?.find(fb => fb.id === option.id)?.count ?? 0
-                ),
+                sumBy(sameFacetBuckets, b => b?.count ?? 0),
                 2
             )
         }
+        return combinedFacetBucket
     })
     return combinedFacetBuckets
 }
@@ -58,6 +63,7 @@ const getMergedBucket = <T extends Bucket | FacetBucket>(
     const bucket = {
         id,
         count: sumBy(buckets, 'count'),
+        groupedBuckets: buckets as unknown,
         groupedBucketIds: buckets.map(b => b.id)
     } as T
     if (axis) {
