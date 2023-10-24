@@ -60,7 +60,6 @@ const applyTemplate = ({
         mainBlockId: mainBlock.id
     }
 
-    console.log(variables)
     const populatedTemplate = injectVariables(templateObject, variables, templateObject.name)
 
     return merge({}, populatedTemplate, block)

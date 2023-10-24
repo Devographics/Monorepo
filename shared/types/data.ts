@@ -144,6 +144,7 @@ export interface Bucket extends BucketData {
     percentilesByFacet?: PercentileData
     label?: string
     hasInsufficientData?: boolean
+    groupedBuckets?: Bucket[]
     groupedBucketIds?: string[]
 }
 
@@ -153,7 +154,9 @@ export type CombinedBucketData = {
 
 export interface CombinedBucket extends Bucket, CombinedBucketData {}
 
-export interface FacetBucket extends Omit<Bucket, 'facetBuckets'> {}
+export interface FacetBucket extends Omit<Bucket, 'facetBuckets' | 'groupedBuckets'> {
+    groupedBuckets?: FacetBucket[]
+}
 
 export interface FacetBucketWithAverage extends FacetBucket {
     average: number
