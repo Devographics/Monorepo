@@ -12,7 +12,8 @@ import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { Button } from "~/components/ui/Button";
 import { EditionMetadata } from "@devographics/types";
 import { USED_PTS, HEARD_PTS } from "~/lib/responses/helpers";
-import { computeUserRank } from "~/lib/responses/scoreQuantiles";
+import useSWR from "swr";
+import { apiRoutes } from "~/lib/apiRoutes";
 
 const Features = ({
   features,
@@ -64,6 +65,10 @@ const FeatureItem = ({ feature, showComma }) => {
     </div>
   );
 };
+
+const useRank = (score: number, editionId: string) => {
+  return useSWR(apiRoutes.stats.rank.href({ score, editionId }));
+};
 const Score = ({
   response,
   edition,
@@ -78,7 +83,13 @@ const Score = ({
     response,
     edition,
   });
-  const rank = computeUserRank(score);
+  const {
+    data: dataRank,
+    isLoading: rankLoading,
+    error: rankError,
+  } = useRank(score, edition.id);
+  const rank = rankLoading ? "..." : rankError ? 100 : dataRank;
+
   const { survey, questionsUrl } = edition;
   const { name, hashtag } = survey;
 
@@ -204,7 +215,7 @@ const Score = ({
                   values: { awareness_total: awareness.total },
                 }
               )}">${awareness.score}%</span>`,
-              knowledgeRankingFromTop: `<span class="score-number score-rank">${rank}%</span>`
+              knowledgeRankingFromTop: `<span class="score-number score-rank">${rank}%</span>`,
             }}
           />
         </div>

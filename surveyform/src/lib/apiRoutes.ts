@@ -65,4 +65,9 @@ export const apiRoutes = {
         `/api/projects/search?query=${query}`,
     },
   },
+  stats: {
+    rank: {
+      href: ({ score, editionId }) => `/api/stats/?score=${score}&editionId=${editionId}`
+    }
+  }
 };
