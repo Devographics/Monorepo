@@ -2,6 +2,7 @@ import { Question } from '../../types/surveys'
 import { graphqlize, getSectionItems } from '../helpers'
 import { getEditionToolsFeaturesResolverMap } from '../resolvers'
 import { ApiTemplateFunction } from '../../types/surveys'
+import { getToolFieldTypeName } from './tool'
 
 export const all_tools: ApiTemplateFunction = ({ survey, edition, section, question }) => {
     const fieldTypeName = `${graphqlize(survey.id)}AllTools`
@@ -12,7 +13,7 @@ export const all_tools: ApiTemplateFunction = ({ survey, edition, section, quest
         typeDef: `type ${fieldTypeName} {
     ids: [String]
     years: [Int]
-    items: [${graphqlize(survey.id)}Tool]
+    items: [${getToolFieldTypeName({ survey })}]
 }`,
         resolverMap: getEditionToolsFeaturesResolverMap('tools')
     }
