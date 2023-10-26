@@ -21,7 +21,7 @@ import { FormLayoutProps } from "./FormLayout";
 
 // }
 
-const SurveyNav = (props: FormLayoutProps) => {
+const FormNav = (props: FormLayoutProps) => {
   const { section: currentSection, ...propsWithoutSection } = props;
   const { readOnly, response, stateStuff } = propsWithoutSection;
   const {
@@ -103,7 +103,13 @@ const SurveyNav = (props: FormLayoutProps) => {
         >
           <span className="section-nav-head-left">
             <h3 className="section-nav-toc">
-              <FormattedMessage id="general.table_of_contents" values={{ sectionCount: edition.sections.length, completion: completionPercentage }} />
+              <FormattedMessage
+                id="general.table_of_contents"
+                values={{
+                  sectionCount: edition.sections.length,
+                  completion: completionPercentage,
+                }}
+              />
             </h3>
             {/* {overallCompletion && (
               <span className="section-nav-completion">
@@ -126,7 +132,7 @@ const SurveyNav = (props: FormLayoutProps) => {
                 setNavLoading={setNavLoading}
               />
             ))}
-            {!!response && (
+            {/* {!!response && (
               // finish step is not available in "outline" mode (read-only + no response)
               <FormNavItem
                 {...propsWithoutSection}
@@ -136,7 +142,7 @@ const SurveyNav = (props: FormLayoutProps) => {
                 number={sections.length}
                 setNavLoading={setNavLoading}
               />
-            )}
+            )} */}
             {/* {response && <li>Overall: {getOverallCompletionPercentage(response)}%</li>} */}
           </ul>
           {/* <p className="completion-message">
@@ -153,4 +159,4 @@ const SurveyNav = (props: FormLayoutProps) => {
   );
 };
 
-export default SurveyNav;
+export default FormNav;

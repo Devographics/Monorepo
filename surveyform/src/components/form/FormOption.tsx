@@ -68,7 +68,8 @@ const OptionDescription = (props: FormOptionProps) => {
   });
 
   const entity = option?.entity;
-  const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
+  // const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
+  const entityDescription = null;
 
   return i18nDescription ? (
     <FormattedMessage

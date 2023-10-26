@@ -1,12 +1,14 @@
 @use "sass:math";
 .survey-section {
+  .form-item-wrapper {
+    margin-bottom: $spacing;
+  }
   // .form-control {
   //   background: $bg-color-lightest;
   // }
   .form-item {
     position: relative;
 
-    margin-bottom: $spacing;
     &:focus-within {
       border-color: var(--link-color);
       // background: $greyDarkish;
@@ -846,5 +848,29 @@
   color: var(--text-color-error);
   .form-item-invalid & {
     display: block;
+  }
+}
+
+.form-item-heading {
+  // text-align: center;
+  // background: var(--bg-color-light);
+  // padding: $spacing;
+  h4 {
+    position: relative;
+    margin: 0;
+    background: var(--bg-color);
+    z-index: 1;
+    display: inline-block;
+    padding: 0 $spacing 0 0;
+    // color: var(--text-color-darker);
+  }
+  &::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    height: 1px;
+    background: var(--dark-border-color);
+    width: 100%;
+    top: 50%;
   }
 }

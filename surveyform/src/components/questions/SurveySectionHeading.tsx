@@ -63,7 +63,7 @@ const SurveySectionHeading = ({
         <div className="section-toc">
           <ol>
             {section.questions
-              .filter((q) => !q.hidden)
+              .filter((q) => !q.hidden && !["subheading"].includes(q.template))
               .map((question) => (
                 <QuestionItem
                   key={question.id}

@@ -37,10 +37,12 @@ export const useQuestionTitle = ({
   }
 
   const key = i18n.question;
-  return {
+  const title = {
     key,
     html: entityNameHtml || htmlLabel || key,
     clean: entityNameClean || cleanLabel || key,
     isEntity: !!(entityNameHtml || entityNameClean),
   };
+
+  return title;
 };
