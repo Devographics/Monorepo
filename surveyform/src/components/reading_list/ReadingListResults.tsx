@@ -57,7 +57,7 @@ export const ReadingList = (
         <div className="reading-list-items">
           {cutoffReadingList.map((itemId) => {
             const entity = allEntities.find((e) => e.id === itemId);
-            return entity ? (
+            return entity && entity.question ? (
               <ListItem key={itemId} itemId={itemId} entity={entity} />
             ) : null;
           })}
@@ -66,7 +66,6 @@ export const ReadingList = (
               <Button
                 className="form-show-more"
                 onClick={() => {
-                  console.log(showMore);
                   setShowMore((showMore) => !showMore);
                 }}
               >
@@ -102,11 +101,17 @@ const ListItem = ({
     question,
   } = entity;
 
-  if (!question) {
-    return null;
-  }
+  const intl = useIntlContext();
 
-  const description = descriptionHtml || descriptionClean;
+  const featureDescription = intl.formatMessage({
+    id: `features.${itemId}.description`,
+  });
+  const toolDescription = intl.formatMessage({
+    id: `tools.${itemId}.description`,
+  });
+  const entityDescription = descriptionHtml || descriptionClean;
+  const description =
+    featureDescription || toolDescription || entityDescription;
 
   return (
     <div className="reading-list-item">
