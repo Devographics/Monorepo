@@ -2,6 +2,7 @@
 import { logToFile } from '@devographics/debug'
 import { EnvVar, getEnvVar } from '@devographics/helpers'
 import { Redis } from '@upstash/redis'
+import { SetCommandOptions } from '@upstash/redis/types/pkg/commands/set'
 
 // 30 mn (but only 3 in dev)
 const TTL_SECONDS = process.env.NODE_ENV === 'development' ? 60 * 3 : 60 * 30
@@ -40,7 +41,7 @@ export const getRedisClient = () => {
 // All methods will return null if data are not in the cache
 // => use either a local or a github load when it happen
 
-export async function storeRedis(key: string, val: any): Promise<boolean> {
+export async function storeRedis(key: string, val: any, ttlSec?: number): Promise<boolean> {
     try {
         const redisClient = getRedisClient()
         // EX = Expiration time in seconds
@@ -49,8 +50,10 @@ export async function storeRedis(key: string, val: any): Promise<boolean> {
         // upstash-redis version
 
         // we don't actually want the cache to expire since we manage it manually
-        // const options = { ex: TTL_SECONDS }
-        const options = {}
+        const options: SetCommandOptions = {}
+        if (ttlSec) {
+            options.ex === ttlSec
+        }
         const res = await redisClient.set(key, JSON.stringify(val), options)
 
         if (res !== 'OK') {

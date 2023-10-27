@@ -120,14 +120,16 @@ async function getFromCacheOrSource<T = any>({
     calledFromLog,
     shouldUpdateCache = true,
     shouldCompress = false,
-    cacheType = CacheType.REDIS
+    cacheType = CacheType.REDIS,
+    ttlSec
 }: {
     key: string
     fetchFromSource: () => Promise<T>
     calledFromLog: any
     shouldUpdateCache?: boolean
     shouldCompress?: boolean
-    cacheType?: CacheType.REDIS
+    cacheType?: CacheType.REDIS,
+    ttlSec?: number
 }) {
     const cachedData = await fetchPayload<T>(key, { cacheType })
     if (cachedData) {
@@ -141,7 +143,8 @@ async function getFromCacheOrSource<T = any>({
         // store in Redis
         await storePayload<T>(key, setResultSource(processedResult, SourceType.REDIS), {
             shouldCompress,
-            cacheType
+            cacheType,
+            ttlSec
         })
     }
     return processedResult
@@ -161,7 +164,8 @@ export async function getFromCache<T = any>({
     shouldUpdateCache = true,
     shouldThrow = true,
     shouldCompress = false,
-    cacheType = CacheType.REDIS
+    cacheType = CacheType.REDIS,
+    ttlSec
 }: GetFromCacheOptions<T>) {
     const startAt = new Date()
     let inMemory = false
@@ -192,7 +196,8 @@ export async function getFromCache<T = any>({
                     fetchFromSource,
                     calledFromLog,
                     shouldUpdateCache,
-                    shouldCompress
+                    shouldCompress,
+                    ttlSec
                 })
             } else {
                 console.debug(
@@ -301,10 +306,11 @@ export const fetchGraphQLApi = async <T = any>({
 
 type StorePayloadOptions = {
     shouldCompress: boolean
-    cacheType: CacheType
+    cacheType: CacheType,
+    ttlSec?: number
 }
 
-type GenericStoreFunction = (key: string, val: any) => Promise<boolean>
+type GenericStoreFunction = (key: string, val: any, ttlSec?: number) => Promise<boolean>
 
 // store payload in cache, compressing it if needed
 export async function storePayload<T>(
@@ -312,7 +318,7 @@ export async function storePayload<T>(
     payload: FetchPayload<T>,
     options: StorePayloadOptions = {
         shouldCompress: false,
-        cacheType: CacheType.REDIS
+        cacheType: CacheType.REDIS,
     }
 ): Promise<boolean> {
     const { shouldCompress, cacheType } = options

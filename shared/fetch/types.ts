@@ -21,7 +21,8 @@ export interface CommonOptions {
     shouldUpdateCache?: boolean
     shouldThrow?: boolean
     shouldCompress?: boolean
-    cacheType?: CacheType
+    cacheType?: CacheType,
+    ttlSec?: number
 }
 
 export interface GetFromCacheOptions<T> extends CommonOptions {
@@ -33,5 +34,5 @@ export interface FetcherFunctionOptions extends CommonOptions {
     appName?: AppName
     getQuery?: (options?: any) => string
     redisUrl?: string
-    redisToken?: string
+    redisToken?: string,
 }

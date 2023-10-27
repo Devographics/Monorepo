@@ -209,9 +209,7 @@ const start = async () => {
     })
 
     /**
-     * This URL can be used in a GitHub webhook
-     * and surveyadmin app
-     * @see https://docs.github.com/fr/webhooks
+     * This URL can be used in surveyadmin app
      */
     app.get('/reinitialize-entities', async function (req, res) {
         await checkSecretKey(req, res, async () => {
