@@ -715,7 +715,14 @@
   // overflow: clip;
   // actually, overflow:clip doesn't work with animate-to-auto hack
   // (see above)
-  overflow: hidden;
+  .form-item-skipped & {
+    overflow: hidden;
+  }
+  // if anything inside the form item is focused, we should turn off overflow:hidden to
+  // avoid cutting off e.g. autocomplete suggestion dropdowns
+  &:has(:focus-within) {
+    overflow: visible;
+  }
   // needed to prevent grid blowout
   // see https://stackoverflow.com/a/43312314/649299
   min-width: 0;
