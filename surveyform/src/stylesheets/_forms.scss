@@ -702,6 +702,7 @@
   }
 }
 
+// see https://keithjgrant.com/posts/2023/04/transitioning-to-height-auto/
 .form-item-contents {
   display: grid;
   transition: grid-template-rows 0.3s ease-out;
@@ -711,7 +712,10 @@
   // use overflow: clip instead of overflow: hidden because
   // it doesn't interfere with position: sticky
   // https://stackoverflow.com/a/74462258
-  overflow: clip;
+  // overflow: clip;
+  // actually, overflow:clip doesn't work with animate-to-auto hack
+  // (see above)
+  overflow: hidden;
   // needed to prevent grid blowout
   // see https://stackoverflow.com/a/43312314/649299
   min-width: 0;

@@ -2,6 +2,7 @@
 import { getQuestionComponent } from "~/lib/customComponents";
 import { getFormPaths } from "@devographics/templates";
 import { getQuestionObject } from "~/lib/surveys/helpers/getQuestionObject";
+import { DbPathsEnum } from "@devographics/types";
 
 export const FormItemWrapper = (props) => {
   const {
@@ -35,6 +36,10 @@ export const FormItemWrapper = (props) => {
   }
   const value = path && response?.[path];
 
+  const skipPath = formPaths[DbPathsEnum.SKIP]!;
+  const isSkipped = response?.[skipPath];
+  const readOnly = !!isSkipped ? true : props.readOnly;
+
   const componentProperties = {
     ...props,
     question,
@@ -42,6 +47,7 @@ export const FormItemWrapper = (props) => {
     value,
     sectionNumber,
     questionNumber,
+    readOnly,
   };
 
   const classNames = [
