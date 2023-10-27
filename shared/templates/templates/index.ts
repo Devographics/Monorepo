@@ -25,6 +25,7 @@ export * from './feature_with_followups'
 export * from './feature_v2'
 export * from './feature_v3'
 export * from './tool'
+export * from './tool_v3'
 
 export * from './locale'
 // export * from './completion_stats'

@@ -122,7 +122,7 @@ const Question = ({
   question: QuestionMetadata;
   normalizationPercentages: NormalizationProgressStats;
 }) => {
-  const stats = normalizationPercentages[question.id];
+  const stats = normalizationPercentages?.[question.id];
   return (
     <tr>
       <th>

@@ -23,6 +23,7 @@ import { FormInputProps } from "~/components/form/typings";
 import { Loading } from "~/components/ui/Loading";
 import { useLocalStorage } from "~/lib/hooks";
 import uniqBy from "lodash/uniqBy";
+import "react-bootstrap-typeahead/css/Typeahead.css";
 
 export interface AutocompleteMultipleProps extends FormInputProps {
   // note: we pass this as prop to make it easy to switch

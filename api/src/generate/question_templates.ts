@@ -15,5 +15,6 @@ export const templates: TemplatesDictionnary = {
     bracket: defaultTemplateFunction,
 
     receive_notifications: doNotInclude,
+    subheading: doNotInclude,
     help: doNotInclude
 }

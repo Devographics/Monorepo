@@ -163,9 +163,6 @@ const SegmentInProgressItem = ({
     responsesCount: number;
   }) => {
   useDidMountEffect(() => {
-    console.log("// useEffect!!");
-    console.log(segmentIndex);
-    console.log(enabled);
     if (enabled) {
       /*
 

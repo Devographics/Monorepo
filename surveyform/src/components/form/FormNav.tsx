@@ -23,7 +23,7 @@ import { useFormStateContext } from "./FormStateContext";
 
 // }
 
-const SurveyNav = (props: FormLayoutProps) => {
+const FormNav = (props: FormLayoutProps) => {
   const { section: currentSection, ...propsWithoutSection } = props;
   const { readOnly } = useFormPropsContext();
   const { response, stateStuff } = useFormStateContext();
@@ -135,7 +135,7 @@ const SurveyNav = (props: FormLayoutProps) => {
                 setNavLoading={setNavLoading}
               />
             ))}
-            {!!response && (
+            {/* {!!response && (
               // finish step is not available in "outline" mode (read-only + no response)
               <FormNavItem
                 {...propsWithoutSection}
@@ -145,7 +145,7 @@ const SurveyNav = (props: FormLayoutProps) => {
                 number={sections.length}
                 setNavLoading={setNavLoading}
               />
-            )}
+            )} */}
             {/* {response && <li>Overall: {getOverallCompletionPercentage(response)}%</li>} */}
           </ul>
           {/* <p className="completion-message">
@@ -162,4 +162,4 @@ const SurveyNav = (props: FormLayoutProps) => {
   );
 };
 
-export default SurveyNav;
+export default FormNav;

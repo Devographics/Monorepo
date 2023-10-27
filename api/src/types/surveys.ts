@@ -88,7 +88,7 @@ export type TransformFunction = (
 //     questions: QuestionApiObject[]
 // }
 
-export interface QuestionApiTemplateOutput extends Omit<QuestionTemplateOutput, 'template'> {
+export interface QuestionApiTemplateOutput extends QuestionTemplateOutput {
     resolverMap?: ResolverMap
     transformFunction?: TransformFunction
 

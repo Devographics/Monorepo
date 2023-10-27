@@ -1,7 +1,8 @@
 import RaceEthnicity from "~/components/inputs/RaceEthnicity";
 import Email2 from "~/components/inputs/Email2";
 import Hidden from "~/components/inputs/Hidden";
-import { Help } from "~/components/inputs/Help";
+import Help from "~/components/inputs/Help";
+import Subheading from "~/components/inputs/Subheading";
 import Bracket from "~/components/inputs/Bracket";
 import Text from "~/components/inputs/Default";
 import Number from "~/components/inputs/Number";
@@ -25,6 +26,7 @@ import Likert from "~/components/inputs/Likert";
 const customComponents: { [key: string]: ComponentType<FormInputProps> } = {
   help: Help,
   receive_notifications: Email2,
+  subheading: Subheading,
   hidden: Hidden,
   race_ethnicity: RaceEthnicity,
   bracket: Bracket,

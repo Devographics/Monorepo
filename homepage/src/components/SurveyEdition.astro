@@ -1,12 +1,21 @@
 ---
+
 import T from '@components/T'
 import { statuses } from '@helpers/constants'
 import TakeSurvey from '@components/TakeSurvey'
 import { getLocaleSubset } from '@helpers/translator'
-import { ResultsStatusEnum } from '@devographics/types'
+import { EditionMetadata, ResultsStatusEnum, SurveyMetadata } from '@devographics/types'
+import { getEditionImageUrl } from '@helpers/getEditionImageUrl'
+
+interface Props {
+    survey: SurveyMetadata
+    edition: EditionMetadata
+    locale: any
+    isLast: boolean
+}
 
 const { survey, edition, locale, isLast } = Astro.props
-const { year, questionsUrl, resultsUrl, imageUrl, status, colors = {} } = edition
+const { year, questionsUrl, resultsUrl, imageUrl, status, colors } = edition
 const { background } = colors
 const isOpen = status === statuses.open
 const isPreview = status === statuses.preview
@@ -20,6 +29,8 @@ if (isOpen) {
 } else if (isLast) {
     marker = 'homepage.most_recent_survey'
 }
+
+const editionImageUrl = getEditionImageUrl(edition)
 ---
 
 <div class:list={['survey-edition', { 'survey-edition-last': isLast }]}>
@@ -35,7 +46,7 @@ if (isOpen) {
         <h4 class="survey-edition-year">{year}</h4>
 
         <a class="image-wrapper" href={mainLink}
-            ><span class="image-inner" style={`background-image: url(${imageUrl})`}></span>
+            ><span class="image-inner" style={`background-image: url(${editionImageUrl})`}></span>
         </a>
     </div>
     {

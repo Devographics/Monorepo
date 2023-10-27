@@ -1,14 +1,14 @@
 // Import styles from vulcan:bootstrap (Meteor version, copied locally)
 // TODO: if we recreate bootstrap in vulcan npm, we can expose those styles
-@import "./vulcan:bootstrap/bootstrap.min.css";
-@import "./vulcan:bootstrap/datetime.scss";
-@import "./vulcan:bootstrap/likert.scss";
-@import "./vulcan:bootstrap/style.scss";
-@import "./vulcan:bootstrap/typeahead-bs5.scss";
-@import "./vulcan:bootstrap/typeahead.scss";
+// @import "./vulcan:bootstrap/bootstrap.min.css";
+// @import "./vulcan:bootstrap/datetime.scss";
+// @import "./vulcan:bootstrap/likert.scss";
+// @import "./vulcan:bootstrap/style.scss";
+// @import "./vulcan:bootstrap/typeahead-bs5.scss";
+// @import "./vulcan:bootstrap/typeahead.scss";
 
 // Import State of js styles
-// @import "_bootstrap.scss";
+@import "_bootstrap.scss";
 
 @import "_colors.scss";
 @import "_variables.scss";

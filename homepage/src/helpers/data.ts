@@ -11,6 +11,7 @@ export const getData = async (): Promise<HomepageData> => {
     process.env.APP_NAME = import.meta.env.APP_NAME
     process.env.API_URL = import.meta.env.API_URL
     process.env.SURVEYID = import.meta.env.SURVEYID
+    process.env.ASSETS_URL = import.meta.env.ASSETS_URL
     process.env.FAST_BUILD = import.meta.env.FAST_BUILD
     process.env.REDIS_UPSTASH_URL = import.meta.env.REDIS_UPSTASH_URL
     process.env.REDIS_TOKEN = import.meta.env.REDIS_TOKEN
@@ -19,7 +20,7 @@ export const getData = async (): Promise<HomepageData> => {
     const config = getConfig({ showWarnings: true })
 
     const surveyId = import.meta.env.SURVEYID
-    const fastBuild = import.meta.env.FAST_BUILD === 'true'
+    const fastBuild = !!import.meta.env.FAST_BUILD
     const locales = []
     const options = {
         shouldGetFromCache: false,
@@ -44,7 +45,11 @@ export const getData = async (): Promise<HomepageData> => {
     }
     const allSurveys = (allSurveysData || [])
         // remove surveys with no open/closed edition (new preview surveys, hidden surveys)
-        .filter(s => s.editions.some(e => [SurveyStatusEnum.OPEN, SurveyStatusEnum.CLOSED].includes(e.status)))
+        .filter(s =>
+            s.editions.some(e =>
+                [SurveyStatusEnum.OPEN, SurveyStatusEnum.CLOSED].includes(e.status)
+            )
+        )
     const data = { allSurveys, locales }
     return data
 }

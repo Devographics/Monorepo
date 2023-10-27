@@ -5,6 +5,7 @@ import { getQuestionObject } from "~/lib/surveys/helpers/getQuestionObject";
 import { useFormStateContext } from "./FormStateContext";
 import { useFormPropsContext } from "./FormPropsContext";
 import { QuestionMetadata } from "@devographics/types";
+import { DbPathsEnum } from "@devographics/types";
 
 export const FormItemWrapper = (props: {
   question: QuestionMetadata;
@@ -36,6 +37,10 @@ export const FormItemWrapper = (props: {
   }
   const value = path && response?.[path];
 
+  const skipPath = formPaths[DbPathsEnum.SKIP]!;
+  const isSkipped = response?.[skipPath];
+  const readOnly = !!isSkipped ? true : formProps.readOnly;
+
   const componentProperties = {
     ...props,
     question,
@@ -44,6 +49,7 @@ export const FormItemWrapper = (props: {
     questionNumber,
     // pass context values so we don't have to refactor all components
     ...formProps,
+    readOnly,
     updateCurrentValues,
   };
 

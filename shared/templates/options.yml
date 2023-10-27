@@ -61,7 +61,6 @@ company_size:
     defaultSort: options
     optionsAreRange: true
     options:
-        - id: na
         - id: range_1
           average: 1
         - id: range_1_5
@@ -78,6 +77,7 @@ company_size:
           average: 550
         - id: range_more_than_1000
           average: 1000
+        - id: na
 
 # company_size_v2:
 #     defaultSort: options
@@ -101,7 +101,6 @@ yearly_salary:
     defaultSort: options
     optionsAreRange: true
     options:
-        - id: na
         # - id: range_work_for_free
         #   average: 0
         - id: range_0_10
@@ -116,12 +115,12 @@ yearly_salary:
           average: 150000
         - id: range_more_than_200
           average: 200000
+        - id: na
 
 yearly_salary_v2:
     defaultSort: options
     optionsAreRange: true
     options:
-        - id: na
         # - id: range_work_for_free
         #   average: 0
         - id: range_0_20
@@ -140,6 +139,7 @@ yearly_salary_v2:
           average: 150000
         - id: range_more_than_200
           average: 200000
+        - id: na
 
 gender:
     defaultSort: options
@@ -166,12 +166,12 @@ race_ethnicity:
 disability_status:
     defaultSort: options
     options:
-        - id: na
         - id: visual_impairments
         - id: hearing_impairments
         - id: mobility_impairments
         - id: cognitive_impairments
         # - id: not_listed
+        - id: na
 
 higher_education_degree:
     defaultSort: options
