@@ -6,9 +6,9 @@ const { pathname } = canonicalUrl
 ---
 
 <div class="language-switcher">
-    <h3 class="language-switcher-heading">
+    <p class="language-switcher-heading">
         <T locale={locale} k="languages.available_languages" />
-    </h3>
+    </p>
     <ul>
         {
             locales.map(({ id, label }) => (
@@ -18,11 +18,11 @@ const { pathname } = canonicalUrl
             ))
         }
     </ul>
-    <h4>
+    <p>
         <a href="https://github.com/StateOfJS/locale-en-US">
             <T locale={locale} k="languages.help_us_translate" />
         </a>
-    </h4>
+    </p>
 </div>
 
 <style lang="scss">

@@ -3,11 +3,7 @@ import { useI18n } from '../helpers/i18nContext'
 import '../stylesheets/_newsletter.scss'
 import T from './T'
 
-import {
-    getStringTranslator,
-    Locale,
-} from '../helpers/translator'
-
+import { getStringTranslator, Locale } from '../helpers/translator'
 
 const getEOConfig = listId => ({
     emailOctopusUrl: `https://emailoctopus.com/lists/${listId}/members/embedded/1.3/add`,
@@ -59,9 +55,9 @@ export default function Newsletter({ listId, locale }) {
 
     return (
         <div className="newsletter">
-            <h3 className="newsletter-heading">
+            <h2 className="newsletter-heading">
                 <T locale={locale} k="newsletter.stay_tuned" />
-            </h3>
+            </h2>
             <p className="newsletter-details">
                 <T locale={locale} k="newsletter.leave_your_email" />
             </p>{' '}
