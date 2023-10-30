@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { refreshSurveysCache, refreshLocalesCache } from "@devographics/fetch";
+import { refreshSurveysCache, refreshLocalesCache, flushCache } from "@devographics/fetch";
 
 /**
  * @see https://vercel.com/docs/functions/serverless-functions/runtimes#maxduration
@@ -25,6 +25,8 @@ export async function GET(req: NextRequest) {
       // Cleanup other locales (may take a few seconds)
       await refreshLocalesCache({ target: "production" }) //
     }
+    // Also empty the in-memory cache for immediate results
+    flushCache()
     return NextResponse.json({ data: { result: "ok" } });
   }
 }
