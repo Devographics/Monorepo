@@ -88,7 +88,11 @@ const Score = ({
     isLoading: rankLoading,
     error: rankError,
   } = useRank(score, edition.id);
-  const rank = rankLoading ? "..." : rankError ? 100 : dataRank;
+  const rank = rankLoading
+    ? "..."
+    : rankError || !dataRank?.data
+    ? 100
+    : dataRank.data;
 
   const { survey, questionsUrl } = edition;
   const { name, hashtag } = survey;
