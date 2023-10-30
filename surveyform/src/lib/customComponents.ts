@@ -23,6 +23,8 @@ import { ComponentType } from "react";
 import { FormInputProps } from "~/components/form/typings";
 import Likert from "~/components/inputs/Likert";
 
+//
+
 const customComponents: { [key: string]: ComponentType<FormInputProps> } = {
   help: Help,
   receive_notifications: Email2,
