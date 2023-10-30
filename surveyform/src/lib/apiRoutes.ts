@@ -67,7 +67,7 @@ export const apiRoutes = {
   },
   stats: {
     rank: {
-      href: ({ score, editionId }) => `/api/stats/?score=${score}&editionId=${editionId}`
+      href: ({ score, editionId }) => `/api/stats/rank?score=${score}&editionId=${editionId}`
     }
   }
 };
