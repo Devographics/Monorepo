@@ -6,6 +6,10 @@ import { HandlerError } from "~/lib/handler-error"
 import { computeGlobalScore, ScoreBucket } from "~/lib/responses/scoreQuantiles"
 import { getSurveyformStatsCollection } from "~/lib/stats/model"
 
+// NOTE: extending the serverless function duration only works works with Vercel pro account
+// It's not needed when self-hosting
+export const maxDuration = 300
+
 /**
  * 
  * NOTE: similar code exists in API to compute more advanced facetted quantiles
