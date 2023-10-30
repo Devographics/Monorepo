@@ -10,6 +10,9 @@ type InitFunctionsType = {
     [k in WatchedItem]?: any
 }
 
+/**
+ * Those functions have side effects
+ */
 const initFunctions: InitFunctionsType = {
     locales: initLocales,
     entities: initEntities,
@@ -23,6 +26,11 @@ interface InitProps {
 
 const defaultInitList: WatchedItem[] = ['entities', 'surveys']
 
+/**
+ * Returns the cached data
+ * NOTE: this function doesn't cache per-se,
+ * it delegates the actual caching to each "initFunction"
+ */
 export const initMemoryCache = async ({ context, initList = defaultInitList }: InitProps) => {
     console.log(`// Initializing in-memory cache for ${initList.join(', ')}…`)
     const data: any = {}

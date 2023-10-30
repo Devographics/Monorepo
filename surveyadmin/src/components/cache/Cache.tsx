@@ -21,9 +21,10 @@ export const actions = [
 
 export const CacheDashboard = () => (
   <div>
-    <h2>Cache</h2>
-    <div>TODO: I don't think it empties "surveyform" Redis cache, only API</div>
-
+    <h2>Redis Cache</h2>
+    <p>This will empty the Surveyform Redis cache</p>
+    <p>/!\ When running on Vercel, this might be too slow</p>
+    <p>This can also be triggered via the Surveyform debug routes</p>
     <div className="cache-dashboard">
       <section>
         <h3>Development</h3>
