@@ -1305,9 +1305,6 @@ importers:
       next-plausible:
         specifier: ^3.11.1
         version: 3.11.1(next@13.5.3)(react-dom@18.2.0)(react@18.2.0)
-      next-sitemap:
-        specifier: ^4.1.8
-        version: 4.2.3(next@13.5.3)
       node-cache:
         specifier: ^5.1.2
         version: 5.1.2
@@ -3947,10 +3944,6 @@ packages:
 
   /@corex/deepmerge@2.6.148:
     resolution: {integrity: sha512-6QMz0/2h5C3ua51iAnXMPWFbb1QOU1UvSM4bKBw5mzdT+WtLgjbETBBIQZ+Sh9WvEcGwlAt/DEdRpIC3XlDBMA==}
-    dev: false
-
-  /@corex/deepmerge@4.0.43:
-    resolution: {integrity: sha512-N8uEMrMPL0cu/bdboEWpQYb/0i2K5Qn8eCsxzOmxSggJbbQte7ljMRoXm917AbntqTGOzdTu+vP3KOOzoC70HQ==}
     dev: false
 
   /@cspotcode/source-map-support@0.8.1:
@@ -26085,20 +26078,6 @@ packages:
       '@corex/deepmerge': 2.6.148
       minimist: 1.2.8
       next: 13.5.1(@babel/core@7.22.20)(react-dom@18.2.0)(react@18.2.0)(sass@1.68.0)
-    dev: false
-
-  /next-sitemap@4.2.3(next@13.5.3):
-    resolution: {integrity: sha512-vjdCxeDuWDzldhCnyFCQipw5bfpl4HmZA7uoo3GAaYGjGgfL4Cxb1CiztPuWGmS+auYs7/8OekRS8C2cjdAsjQ==}
-    engines: {node: '>=14.18'}
-    hasBin: true
-    peerDependencies:
-      next: '*'
-    dependencies:
-      '@corex/deepmerge': 4.0.43
-      '@next/env': 13.5.3
-      fast-glob: 3.3.1
-      minimist: 1.2.8
-      next: 13.5.3(@babel/core@7.22.20)(react-dom@18.2.0)(react@18.2.0)(sass@1.68.0)
     dev: false
 
   /next-tick@1.1.0:
