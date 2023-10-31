@@ -15,6 +15,8 @@ import { Loading } from "~/components/ui/Loading";
 import { useEdition } from "../SurveyContext/Provider";
 import { FormInputProps } from "~/components/form/typings";
 import { FormLayoutProps } from "./FormLayout";
+import { useFormPropsContext } from "./FormPropsContext";
+import { useFormStateContext } from "./FormStateContext";
 
 // TODO
 // const getOverallCompletionPercentage = (response) => {
@@ -23,7 +25,8 @@ import { FormLayoutProps } from "./FormLayout";
 
 const FormNav = (props: FormLayoutProps) => {
   const { section: currentSection, ...propsWithoutSection } = props;
-  const { readOnly, response, stateStuff } = propsWithoutSection;
+  const { readOnly } = useFormPropsContext();
+  const { response, stateStuff } = useFormStateContext();
   const {
     currentFocusIndex,
     currentTabindex,

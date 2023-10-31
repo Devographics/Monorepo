@@ -17,7 +17,14 @@ export interface CommonOptions {
     getServerConfig?: () => { isProd?: boolean; isTest?: boolean; isDev?: boolean }
     redisUrl?: string
     redisToken?: string
+    /**
+     * Set to false to get value from the source directly
+     */
     shouldGetFromCache?: boolean
+    /**
+     * Should be true as a default
+     * Set to false to prevent updating the Redis cache
+     */
     shouldUpdateCache?: boolean
     shouldThrow?: boolean
     shouldCompress?: boolean

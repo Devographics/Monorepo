@@ -8,6 +8,7 @@ import FormControl from "react-bootstrap/FormControl";
 import { OPTION_NA } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 import { useIntlContext } from "@devographics/react-i18n";
+import { useFormStateContext } from "../form/FormStateContext";
 
 const OtherOption = (
   props: FormInputProps & {
@@ -21,13 +22,13 @@ const OtherOption = (
     edition,
     question,
     updateCurrentValues,
-    response,
     readOnly,
     mainValue,
     type = "checkbox",
     showOther,
     setShowOther,
   } = props;
+  const { response } = useFormStateContext();
   const formPaths = getFormPaths({ edition, question });
   const path = formPaths.other!;
   const otherValue = response?.[path];

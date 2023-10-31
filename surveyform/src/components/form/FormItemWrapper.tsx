@@ -2,19 +2,20 @@
 import { getQuestionComponent } from "~/lib/customComponents";
 import { getFormPaths } from "@devographics/templates";
 import { getQuestionObject } from "~/lib/surveys/helpers/getQuestionObject";
+import { useFormStateContext } from "./FormStateContext";
+import { useFormPropsContext } from "./FormPropsContext";
+import { QuestionMetadata } from "@devographics/types";
 import { DbPathsEnum } from "@devographics/types";
 
-export const FormItemWrapper = (props) => {
-  const {
-    survey,
-    edition,
-    section,
-    response,
-    question,
-    index,
-    sectionNumber,
-    questionNumber,
-  } = props;
+export const FormItemWrapper = (props: {
+  question: QuestionMetadata;
+  /** Starts at 1 */
+  questionNumber: number;
+}) => {
+  const { question, questionNumber } = props;
+  const { response, updateCurrentValues } = useFormStateContext();
+  const formProps = useFormPropsContext();
+  const { edition, survey, section } = formProps;
 
   const formPaths = getFormPaths({ edition, question });
   const questionObject = getQuestionObject({
@@ -38,16 +39,18 @@ export const FormItemWrapper = (props) => {
 
   const skipPath = formPaths[DbPathsEnum.SKIP]!;
   const isSkipped = response?.[skipPath];
-  const readOnly = !!isSkipped ? true : props.readOnly;
+  const readOnly = !!isSkipped ? true : formProps.readOnly;
 
   const componentProperties = {
     ...props,
     question,
     path,
     value,
-    sectionNumber,
     questionNumber,
+    // pass context values so we don't have to refactor all components
+    ...formProps,
     readOnly,
+    updateCurrentValues,
   };
 
   const classNames = [
@@ -58,6 +61,7 @@ export const FormItemWrapper = (props) => {
   ];
   return (
     <div className={classNames.join(" ")}>
+      {/**  @ts-ignore https://github.com/vercel/next.js/issues/37421 */}
       <Component {...componentProperties} />
     </div>
   );

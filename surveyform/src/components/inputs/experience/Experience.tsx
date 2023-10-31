@@ -13,6 +13,8 @@ import { getFormPaths } from "@devographics/templates";
 
 import get from "lodash/get.js";
 import { FollowupData, FollowUpsTrigger, FollowUps } from "./Followup";
+import { useFormStateContext } from "~/components/form/FormStateContext";
+import { useFormPropsContext } from "~/components/form/FormPropsContext";
 
 export interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
@@ -53,17 +55,9 @@ const CodeExample = ({ language, label, code, codeHighlighted }) => {
 const ExperienceOption = (
   props: ExperienceProps & { option: OptionMetadata; i: number }
 ) => {
-  const {
-    i,
-    edition,
-    response,
-    question,
-    option,
-    path,
-    value,
-    updateCurrentValues,
-    readOnly,
-  } = props;
+  const { i, question, option, path, value } = props;
+  const { response, updateCurrentValues } = useFormStateContext();
+  const { edition, readOnly } = useFormPropsContext();
   const hasValue = !isEmpty(value);
   const { followups } = question;
 

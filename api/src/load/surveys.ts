@@ -1,6 +1,5 @@
 import { Survey, Edition } from '../types/surveys'
 import { RequestContext, Section } from '../types'
-import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { existsSync } from 'fs'
@@ -10,20 +9,16 @@ import { logToFile } from '@devographics/debug'
 
 import path from 'path'
 import { setCache } from '../helpers/caching'
-import { appSettings } from '../helpers/settings'
 import { parseSurveys } from '../generate/generate'
-import { EditionMetadata } from '@devographics/types'
+import { getRepoSHA, listGitHubFiles } from '../external_apis'
+import { exec } from 'child_process'
+import { promisify } from 'util'
+const execPromise = promisify(exec)
 
 let allSurveys: Survey[] = []
+let surveysHash: string
 
-let octokit: Octokit
 
-const getOctokit = () => {
-    if (!octokit) {
-        octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
-    }
-    return octokit
-}
 
 // add `apiOnly` flags to questins
 const makeAPIOnly = (sections: Section[]) =>
@@ -44,33 +39,18 @@ export const loadOrGetSurveys = async (options: LoadOrGetSurveysOptions = {}) =>
     const { forceReload } = options
 
     if (forceReload || allSurveys.length === 0) {
-        allSurveys = await loadSurveys()
+        const { surveys, sha } = await loadSurveys()
+        allSurveys = surveys
+        surveysHash = sha
     }
-    return allSurveys
+    return { surveys: allSurveys, sha: surveysHash }
 }
 
 export const loadOrGetParsedSurveys = async (options: LoadOrGetSurveysOptions = {}) => {
-    const surveys = await loadOrGetSurveys(options)
+    const { surveys } = await loadOrGetSurveys(options)
     return parseSurveys({ surveys })
 }
 
-const listGitHubFiles = async ({
-    owner,
-    repo,
-    path
-}: {
-    owner: string
-    repo: string
-    path: string
-}) => {
-    const octokit = getOctokit()
-    const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
-        owner,
-        repo,
-        path
-    })
-    return contents.data as any[]
-}
 
 const getGitHubYamlFile = async (url: string) => {
     const response = await fetch(url)
@@ -185,7 +165,8 @@ export const loadFromGitHub = async () => {
             surveys.push(survey)
         }
     }
-    return surveys
+    const sha = await getRepoSHA({ owner: "devographics", repo: "surveys" })
+    return { surveys, sha }
 }
 
 const excludeDirs = ['.git', '.DS_Store']
@@ -233,7 +214,7 @@ export const loadLocally = async () => {
                         )
                         const editionConfigYaml: any = yaml.load(editionConfigContents)
                         edition = editionConfigYaml
-                    } catch (error) {}
+                    } catch (error) { }
                     const questionsPath = editionDirPath + '/questions.yml'
                     if (existsSync(questionsPath)) {
                         try {
@@ -284,22 +265,30 @@ export const loadLocally = async () => {
             surveys.push(survey)
         }
     }
-    return surveys
+    try {
+        const shaExec = await execPromise("git rev-parse --verify HEAD", { cwd: surveysDirPath })
+        const sha = shaExec.stdout
+        return { surveys, sha }
+    } catch (err) {
+        console.warn(`Couldn't compute local repository SHA at path ${surveysDirPath}, error:`, err)
+    }
+    // TODO: when loading locally, we can get the SHA using git commands
+    return { surveys, sha: "<local repository>" }
 }
 
 // load locales contents through GitHub API or locally
 export const loadSurveys = async () => {
     const mode = getEnvVar(EnvVar.SURVEYS_PATH) ? 'local' : 'github'
     console.log(`// loading surveys (mode: ${mode})`)
-    const surveys: Survey[] = mode === 'local' ? await loadLocally() : await loadFromGitHub()
-    console.log(`// done loading ${surveys.length} surveys`)
+    const { surveys, sha } = mode === 'local' ? await loadLocally() : await loadFromGitHub()
+    console.log(`// done loading ${surveys.length} surveys; commit SHA: ${sha}`)
 
-    return surveys
+    return { surveys, sha }
 }
 
 export const initSurveys = async () => {
     console.log('// initializing surveys')
-    const surveys = await loadOrGetSurveys({ forceReload: true })
+    const { surveys } = await loadOrGetSurveys({ forceReload: true })
     logToFile('surveys.json', surveys, { mode: 'overwrite' })
     allSurveys = surveys
     return surveys

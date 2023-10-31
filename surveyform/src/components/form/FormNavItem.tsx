@@ -7,14 +7,14 @@ import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPa
 import { SectionMetadata } from "@devographics/types";
 import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
-import { FormInputProps } from "./typings";
 import { getSectioni18nIds } from "~/i18n/survey";
 import { FormLayoutProps } from "./FormLayout";
+import { useFormStateContext } from "./FormStateContext";
+import { useFormPropsContext } from "./FormPropsContext";
 
 interface SurveyNavItemProps extends Omit<FormLayoutProps, "section"> {
   setShown: any;
   number: number;
-  sectionNumber: number;
   setNavLoading: any;
   page?: "finish";
   section?: SectionMetadata;
@@ -22,18 +22,15 @@ interface SurveyNavItemProps extends Omit<FormLayoutProps, "section"> {
 }
 
 const SurveyNavItem = ({
-  submitForm,
-  response,
   currentSection,
   section,
   number,
-  sectionNumber,
   setShown,
-  stateStuff,
-  readOnly,
   setNavLoading,
   page,
 }: SurveyNavItemProps) => {
+  const { stateStuff, response, submitForm } = useFormStateContext();
+  const { readOnly, sectionNumber } = useFormPropsContext();
   const { currentTabindex, setCurrentFocusIndex } = stateStuff;
   const { locale } = useLocaleContext();
   const textInput = useRef<any>(null);

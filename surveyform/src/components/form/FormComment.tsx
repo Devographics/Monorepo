@@ -5,7 +5,6 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
 import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { useFormContext } from "~/components/form/FormContext";
 
 import { useIntlContext } from "@devographics/react-i18n";
 import debounce from "lodash/debounce.js";
@@ -13,8 +12,8 @@ import IconComment from "~/components/icons/Comment";
 import IconCommentDots from "~/components/icons/CommentDots";
 import { FormInputProps } from "./typings";
 import { getOptioni18nIds } from "~/i18n/survey";
-import { read } from "fs";
 import isEmpty from "lodash/isEmpty";
+import { useFormStateContext } from "./FormStateContext";
 
 export const CommentTrigger = ({
   value,
@@ -120,7 +119,7 @@ export const CommentTextarea = ({
 }) => {
   const [localValue, setLocalValue] = useState(value);
 
-  const { updateCurrentValues } = useFormContext();
+  const { updateCurrentValues } = useFormStateContext();
 
   const updateCurrentValuesDebounced = debounce(updateCurrentValues, 500);
 

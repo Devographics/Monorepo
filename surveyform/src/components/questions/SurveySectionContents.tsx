@@ -1,5 +1,4 @@
 "use client";
-import { SurveyStatusEnum } from "@devographics/types";
 import { FormSection } from "../form/FormSection";
 import EditionMessage from "../surveys/SurveyMessage";
 import type { ResponseDocument } from "@devographics/types";
@@ -15,24 +14,15 @@ const SurveySectionContents = ({
 }) => {
   const { edition } = useEdition();
   const sectionNumber = useSection();
-  const sections = edition.sections;
-  const sectionIndex = sectionNumber - 1;
-  const section = sections[sectionIndex];
-  const previousSection = sections[sectionIndex - 1];
-  const nextSection = sections[sectionIndex + 1];
-  const isLastSection = !nextSection;
-
-  const formProps = {
-    sectionNumber,
-    response,
-    section,
-    edition,
-    readOnly,
-  };
   return (
     <div className="survey-section-wrapper">
       <EditionMessage edition={edition} />
-      <FormSection {...formProps} />
+      <FormSection
+        sectionNumber={sectionNumber}
+        response={response}
+        edition={edition}
+        readOnly={readOnly}
+      />
     </div>
   );
 };

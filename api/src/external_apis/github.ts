@@ -1,8 +1,11 @@
-import { ClientRequest, ServerResponse } from "http"
 import { EnvVar, getEnvVar } from '@devographics/helpers'
 import fetch from 'node-fetch'
 import * as crypto from "crypto";
 import { NextFunction, Request, Response } from "express";
+import { Octokit } from '@octokit/core'
+
+
+// generic utilties
 
 export const normalizeGithubResource = (res: any) => {
     return {
@@ -17,6 +20,8 @@ export const normalizeGithubResource = (res: any) => {
     }
 }
 
+/*
+Unused at the moment
 export const fetchGithubResource = async (ownerAndRepo: string) => {
     try {
         const res = await fetch(`https://api.github.com/repos/${ownerAndRepo}`, {
@@ -30,7 +35,46 @@ export const fetchGithubResource = async (ownerAndRepo: string) => {
         throw error
     }
 }
+*/
 
+// files
+
+let octokit: Octokit
+const getOctokit = () => {
+    if (!octokit) {
+        octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
+    }
+    return octokit
+}
+export const listGitHubFiles = async ({
+    owner,
+    repo,
+    path
+}: {
+    owner: string
+    repo: string
+    path: string
+}) => {
+    const octokit = getOctokit()
+    const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
+        owner,
+        repo,
+        path
+    })
+    return contents.data as any[]
+}
+
+export const getRepoSHA = async ({ owner, repo }: { owner: string, repo: string }) => {
+    const octokit = getOctokit()
+    const commits = await octokit.request('GET /repos/{owner}/{repo}/commits?per_page=1&page=1', {
+        owner,
+        repo,
+    })
+    return commits.data?.[0]?.sha
+
+}
+
+// Web hooks
 
 const verifyGhWebhookSignature = (secret: string, body: any, xHubSignature256: string) => {
     const signature = crypto
@@ -56,3 +100,16 @@ export const verifyGhWebhookMiddleware = (req: Request, res: Response, next: Nex
     }
     next()
 }
+
+
+export async function checkMainPushAction(req: Request, res: Response, next: NextFunction) {
+    // @see https://docs.github.com/en/webhooks/webhook-events-and-payloads#push
+    const action = req.headers?.["x-github-event"]
+    const { ref/*, repository, sender */ } = req.body
+    if (!(action === "push" && ref === "refs/heads/main")) {
+        return res.status(200).send(`Nothing to do for action ${action} on ref ${ref}`)
+    }
+    next()
+}
+
+

@@ -15,6 +15,8 @@ import {
 } from "@devographics/types";
 import ItemLabel from "./ItemLabel";
 import { FormLayoutProps } from "../form/FormLayout";
+import { useFormPropsContext } from "../form/FormPropsContext";
+import { useFormStateContext } from "../form/FormStateContext";
 
 const cutoff = 5;
 const animationDurationInMs = 700;
@@ -33,7 +35,8 @@ const usePrevious = (value) => {
 };
 
 export const ReadingList = (props: FormLayoutProps) => {
-  const { edition, response, updateCurrentValues } = props;
+  const { edition } = useFormPropsContext();
+  const { response, updateCurrentValues } = useFormStateContext();
   const allQuestions = getEditionQuestions(edition);
   const allEntities = getEditionEntities(edition);
   const [showMore, setShowMore] = useState(false);

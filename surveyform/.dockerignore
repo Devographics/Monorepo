@@ -40,11 +40,6 @@ reports/
 # mongo
 .mongo
 
-# next-sitemap
-/public/sitemap.xml
-/public/robots.txt
-
-
 # Yalc
 .yalc
 yalc.lock

@@ -23,6 +23,8 @@ import { FollowupData, /*FollowUpComment,*/ FollowUps } from "./Followup2";
 import { useIntlContext } from "@devographics/react-i18n";
 
 import Alert from "react-bootstrap/Alert";
+import { useFormPropsContext } from "~/components/form/FormPropsContext";
+import { useFormStateContext } from "~/components/form/FormStateContext";
 
 export interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
@@ -40,7 +42,8 @@ const unimplementedFeatures = [
 ];
 
 export const Experience2 = (props: ExperienceProps) => {
-  const { question, edition } = props;
+  const { edition } = useFormPropsContext();
+  const { question } = props;
 
   const [highlightReadingList, setHighlightReadingList] = useState(false);
 
@@ -94,17 +97,15 @@ type ExperienceOptionProps = ExperienceProps & {
 const ExperienceOption = (props: ExperienceOptionProps) => {
   const {
     i,
-    edition,
-    response,
     question,
     option,
     path,
     value,
-    updateCurrentValues,
-    readOnly,
     highlightReadingList,
     setHighlightReadingList,
   } = props;
+  const { edition, readOnly } = useFormPropsContext();
+  const { response, updateCurrentValues } = useFormStateContext();
   const hasValue = !isEmpty(value);
   const { followups } = question;
 

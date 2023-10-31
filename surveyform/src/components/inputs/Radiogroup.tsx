@@ -5,12 +5,15 @@ import { FormOption } from "~/components/form/FormOption";
 import { FormItem } from "~/components/form/FormItem";
 import OtherOption from "./OtherOption";
 import { getFormPaths } from "@devographics/templates";
-import { useState } from "react";
+import { memo, useState } from "react";
 import isNil from "lodash/isNil";
+import { useFormStateContext } from "../form/FormStateContext";
 import { OPTION_NA } from "@devographics/types";
 
 export const FormComponentRadioGroup = (props: FormInputProps) => {
-  const { value, edition, response, question } = props;
+  const { response } = useFormStateContext();
+
+  const { value, edition, question } = props;
   const { options: options_, allowOther } = question;
 
   if (!options_) {
@@ -133,4 +136,4 @@ const Radio = ({ index, value, option, hasValue, formProps, setShowOther }) => {
     </Form.Check>
   );
 };
-export default FormComponentRadioGroup;
+export default memo(FormComponentRadioGroup);

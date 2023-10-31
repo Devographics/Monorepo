@@ -6,6 +6,7 @@ import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components/LogoutButton";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { DebugZone } from "./DebugZone";
+import { publicConfig } from "~/config/public";
 
 const links = [
   {
@@ -45,6 +46,11 @@ const links = [
   {
     id: "general.help_us_translate",
     href: "https://github.com/Devographics/locale-en-US",
+  },
+  {
+    showIf: () => publicConfig.isDev === true,
+    id: "Demo survey",
+    href: routes.survey.demo.href,
   },
 ];
 

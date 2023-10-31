@@ -9,21 +9,22 @@ import { useEdition } from "~/components/SurveyContext/Provider";
 import Link from "next/link";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { useState } from "react";
-import { FormInputProps } from "./typings";
 import Button from "react-bootstrap/esm/Button";
 import { getSectioni18nIds } from "~/i18n/survey";
 import { FormLayoutProps } from "./FormLayout";
+import { useFormPropsContext } from "./FormPropsContext";
+import { useFormStateContext } from "./FormStateContext";
 
 interface FormSubmitProps extends FormLayoutProps {
   path: string;
-  sectionNumber: number;
   nextSection: SectionMetadata;
   previousSection: SectionMetadata;
 }
 
 export const FormSubmit = (props: FormLayoutProps) => {
-  const { response, sectionNumber, nextSection, previousSection, readOnly } =
-    props;
+  const { readOnly, sectionNumber } = useFormPropsContext();
+  const { response } = useFormStateContext();
+  const { nextSection, previousSection } = props;
 
   const { locale } = useLocaleContext();
   const { edition } = useEdition();
@@ -100,10 +101,11 @@ interface SubmitButtonProps extends FormSubmitProps {
 }
 
 const SubmitButton = (props: SubmitButtonProps) => {
+  const { edition, readOnly, sectionNumber } = useFormPropsContext();
+  const { submitForm } = useFormStateContext();
   const [buttonLoading, setButtonLoading] = useState(false);
 
-  const { edition, sectionNumber, intlId, path, type, readOnly, submitForm } =
-    props;
+  const { intlId, path, type } = props;
 
   const isFinished =
     sectionNumber === edition.sections.length && type === "next";

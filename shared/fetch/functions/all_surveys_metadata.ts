@@ -22,5 +22,13 @@ export const fetchSurveysMetadata = async (options?: FetcherFunctionOptions) => 
         },
         ...options
     })
+    // edition should have a circular reference back to their survey
+    if (result.data) {
+        result.data = result.data.map(survey => ({
+            ...survey,
+            editions: survey.editions?.map(edition => ({ ...edition, survey }))
+
+        }))
+    }
     return result
 }

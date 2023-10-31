@@ -56,12 +56,19 @@
         "typescript": "^4.3.5"
     },
     "optionalDependencies": {
-        "dotenv-cli": "^4.1.1"
+        "@types/jest": "^29.5.6",
+        "@types/supertest": "^2.0.15",
+        "dotenv-cli": "^4.1.1",
+        "jest": "^29.5.0",
+        "supertest": "^6.3.1",
+        "ts-jest": "^29.0.5"
     },
     "scripts": {
         "clean": "rm -Rf ./dist",
         "build": "NODE_ENV=production tsup && cp -R public/ dist/",
         "dev": "ENV_FILE=.env.devographics.local NODE_ENV=development tsup --watch ./src --onSuccess='cp -R public/ dist/ && node ./dist/server.mjs'",
+        "test": "jest",
+        "test-e2e": "playwright test",
         "tokyodev": "ENV_FILE=.env.tokyodev.local tsup --watch ./src --onSuccess='cp -R public/ dist/ && node ./dist/server.mjs'",
         "copy:public": "cp -R public/ dist/",
         "fmt": "prettier --write \"src/**/*.{ts,js,mjs,yml,graphql}\"",

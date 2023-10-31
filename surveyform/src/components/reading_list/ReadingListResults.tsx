@@ -3,9 +3,7 @@ import { useState } from "react";
 import { FormattedMessage } from "../common/FormattedMessage";
 import { FormInputProps } from "../form/typings";
 import { EntityWithQuestion } from "~/lib/surveys/types";
-import { getEditionQuestions } from "~/lib/surveys/helpers/getEditionQuestions";
 import { getEditionEntities } from "~/lib/surveys/helpers/getEditionEntities";
-import EntityLabel from "~/components/common/EntityLabel";
 import { Button } from "~/components/ui/Button";
 import { Share } from "~/components/icons";
 import { useIntlContext } from "@devographics/react-i18n";
@@ -14,17 +12,19 @@ import { captureException } from "@sentry/nextjs";
 import FormControl from "react-bootstrap/FormControl";
 import { sendReadingList } from "../page/services";
 import { LoadingButton } from "../ui/LoadingButton";
-import { Entity, QuestionMetadata } from "@devographics/types";
-import QuestionLabel from "../form/QuestionLabel";
+import { EditionMetadata, ResponseDocument } from "@devographics/types";
 import ItemLabel from "./ItemLabel";
 import truncate from "lodash/truncate";
 
 const cutoff = 3;
 
-export const ReadingList = (
-  props: Pick<FormInputProps, "edition" | "response">
-) => {
-  const { edition, response } = props;
+export const ReadingList = ({
+  edition,
+  response,
+}: {
+  edition: EditionMetadata;
+  response: ResponseDocument;
+}) => {
   const allEntities = getEditionEntities(edition);
 
   const readingList = response?.readingList;
@@ -178,7 +178,10 @@ const LinkItem = ({ url, label }) => (
 export const SendByEmail = ({
   response,
   edition,
-}: Pick<FormInputProps, "edition" | "response">) => {
+}: {
+  response: ResponseDocument;
+  edition: EditionMetadata;
+}) => {
   const localStorageEmail =
     (typeof localStorage !== "undefined" && localStorage.getItem("email")) ||
     "";

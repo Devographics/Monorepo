@@ -10,6 +10,8 @@ export interface ResponseDocument extends Omit<Document, "_id"> {
   createdAt: Date;
   completion: number;
   customNormalizations?: CustomNormalizationDefinition[];
+  /** Commit SHA during response creation */
+  deploymentCommit?: string
   [key: string]: any;
 }
 

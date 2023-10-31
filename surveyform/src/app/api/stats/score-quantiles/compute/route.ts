@@ -4,6 +4,11 @@ import { NextRequest, NextResponse } from "next/server"
 import { checkSecretKey } from "../../../secretKey"
 import { HandlerError } from "~/lib/handler-error"
 import { computeGlobalScore, ScoreBucket } from "~/lib/responses/scoreQuantiles"
+import { getSurveyformStatsCollection } from "~/lib/stats/model"
+
+// NOTE: extending the serverless function duration only works works with Vercel pro account
+// It's not needed when self-hosting
+export const maxDuration = 300
 
 /**
  * 
@@ -55,8 +60,13 @@ export const GET = async (req: NextRequest) => {
         )
         const counts = await countsAgg.toArray()
         const globalScore = computeGlobalScore(counts as Array<ScoreBucket>)
+
+        const SurveyStats = await getSurveyformStatsCollection()
+        // Store in database
+
+
+        await SurveyStats.findOneAndUpdate({ editionId, kind: "quantiles-global-score" }, { $set: { globalScore } }, { upsert: true })
         return NextResponse.json({ data: globalScore })
-        //return NextResponse.json({ error: "Not yet implemented" }, { status: 500 })
     } catch (err) {
         if (err instanceof HandlerError) return err.toNextResponse(req)
         throw err
