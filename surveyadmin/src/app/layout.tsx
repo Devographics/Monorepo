@@ -18,7 +18,22 @@ export default function RootLayout({
       <head />
       <body>
         <div>
-          <Link href="/">Back to home</Link>
+          <nav>
+            <ul>
+              <li>
+                <Link href="/admin/cache">Cache</Link>
+              </li>
+              <li>
+                <Link href="/admin/export">Export</Link>
+              </li>
+              <li>
+                <Link href="/admin/normalization">Normalization</Link>
+              </li>
+              <li>
+                <Link href="/admin/scripts">Scripts</Link>
+              </li>
+            </ul>
+          </nav>
         </div>
         {children}
       </body>

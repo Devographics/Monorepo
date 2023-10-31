@@ -21,13 +21,13 @@ export const actions = [
 
 export const CacheDashboard = () => (
   <div>
-    <h2>Redis Cache</h2>
-    <p>This will empty the Surveyform Redis cache</p>
+    <h3>Redis Cache</h3>
+    {/* <p>This will empty the Surveyform Redis cache</p>
     <p>/!\ When running on Vercel, this might be too slow</p>
-    <p>This can also be triggered via the Surveyform debug routes</p>
+    <p>This can also be triggered via the Surveyform debug routes</p> */}
     <div className="cache-dashboard">
       <section>
-        <h3>Development</h3>
+        <h4>Development</h4>
         <ul>
           {actions.map((action) => (
             <li key={action.label}>
@@ -37,7 +37,7 @@ export const CacheDashboard = () => (
         </ul>
       </section>
       <section>
-        <h3>Staging</h3>
+        <h4>Staging</h4>
         <ul>
           {actions.map((action) => (
             <li key={action.label}>
@@ -47,7 +47,7 @@ export const CacheDashboard = () => (
         </ul>
       </section>
       <section>
-        <h3>Production</h3>
+        <h4>Production</h4>
         <ul>
           {actions.map((action) => (
             <li key={action.label}>

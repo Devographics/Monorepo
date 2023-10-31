@@ -8,8 +8,7 @@ import { runScript } from "~/lib/scripts/services";
 const AdminScripts = ({ scripts }) => {
   return (
     <div className="admin-scripts admin-content">
-      <Link href={routes.home.href()}>Home</Link>
-      <h3>Scripts</h3>
+      <h2>Scripts</h2>
       <table className="admin-scripts-table">
         <thead>
           <tr>

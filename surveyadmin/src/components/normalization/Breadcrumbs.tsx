@@ -21,54 +21,52 @@ const Breadcrumbs = ({
   question?: QuestionMetadata;
 }) => {
   return (
-    <nav>
-      <ul>
-        <li>
-          <Link href={routes.home.href()}>Home</Link>
-        </li>
-        <li>
-          <span>»</span>
-        </li>
-        <li>
-          <Link href={routes.admin.normalization.href({})}>Surveys</Link>
-        </li>
-        {survey && (
-          <BreadcrumbSegment
-            level="survey"
-            currentItem={survey}
-            items={surveys}
-            getParams={(itemId) => ({ surveyId: itemId })}
-          />
-        )}
-        {survey && edition && (
-          <>
+    <div>
+      <h2>Normalization</h2>
+
+      <nav>
+        <ul>
+          <li>
+            <Link href={routes.admin.normalization.href({})}>All Surveys</Link>
+          </li>
+          {survey && (
             <BreadcrumbSegment
-              level="edition"
-              currentItem={edition}
-              items={survey.editions}
-              getParams={(itemId) => ({
-                surveyId: survey.id,
-                editionId: itemId,
-              })}
+              level="survey"
+              currentItem={survey}
+              items={surveys}
+              getParams={(itemId) => ({ surveyId: itemId })}
             />
-          </>
-        )}
-        {survey && edition && question && (
-          <>
-            <BreadcrumbSegment
-              level="question"
-              currentItem={question}
-              items={getNormalizableQuestions({ survey, edition })}
-              getParams={(itemId) => ({
-                surveyId: survey.id,
-                editionId: edition.id,
-                questionId: itemId,
-              })}
-            />
-          </>
-        )}
-      </ul>
-    </nav>
+          )}
+          {survey && edition && (
+            <>
+              <BreadcrumbSegment
+                level="edition"
+                currentItem={edition}
+                items={survey.editions}
+                getParams={(itemId) => ({
+                  surveyId: survey.id,
+                  editionId: itemId,
+                })}
+              />
+            </>
+          )}
+          {survey && edition && question && (
+            <>
+              <BreadcrumbSegment
+                level="question"
+                currentItem={question}
+                items={getNormalizableQuestions({ survey, edition })}
+                getParams={(itemId) => ({
+                  surveyId: survey.id,
+                  editionId: edition.id,
+                  questionId: itemId,
+                })}
+              />
+            </>
+          )}
+        </ul>
+      </nav>
+    </div>
   );
 };
 

@@ -20,16 +20,16 @@ export const actions = [
 
 export const APIDashboard = () => (
   <div>
-    <h2>API</h2>
-    <p>
+    <h3>API</h3>
+    {/* <p>
       Those actions will tell the API to reload the GitHub repositories
       containing the corresponding data
     </p>
-    <p>This does NOT empty the Surveyform Redis cache</p>
+    <p>This does NOT empty the Surveyform Redis cache</p> */}
 
     <div className="api-dashboard">
       <section>
-        <h3>Development</h3>
+        <h4>Development</h4>
         <ul>
           {actions.map((action) => (
             <li key={action.label}>
@@ -40,7 +40,7 @@ export const APIDashboard = () => (
       </section>
 
       <section>
-        <h3>Staging</h3>
+        <h4>Staging</h4>
         <ul>
           {actions.map((action) => (
             <li key={action.label}>
@@ -51,7 +51,7 @@ export const APIDashboard = () => (
       </section>
 
       <section>
-        <h3>Production</h3>
+        <h4>Production</h4>
         <ul>
           {actions.map((action) => (
             <li key={action.label}>

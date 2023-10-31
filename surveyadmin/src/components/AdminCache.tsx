@@ -5,6 +5,7 @@ import { CacheDashboard } from "./cache/Cache";
 
 export const AdminCache = () => (
   <div className="admin-cache">
+    <h1>Cache</h1>
     <APIDashboard />
     <CacheDashboard />
   </div>
