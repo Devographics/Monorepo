@@ -46,6 +46,7 @@ export const FormSection = (props: {
             section={section}
             previousSection={previousSection}
             nextSection={nextSection}
+            enableReadingList={enableReadingList}
           >
             {section.questions
               .filter((q) => !q.hidden)
