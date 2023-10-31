@@ -61,7 +61,7 @@
     "scripts": {
         "clean": "rm -Rf ./dist",
         "build": "NODE_ENV=production tsup && cp -R public/ dist/",
-        "dev": "NODE_ENV=development tsup --watch ./src --onSuccess='cp -R public/ dist/ && node ./dist/server.mjs'",
+        "dev": "ENV_FILE=.env.devographics.local NODE_ENV=development tsup --watch ./src --onSuccess='cp -R public/ dist/ && node ./dist/server.mjs'",
         "tokyodev": "ENV_FILE=.env.tokyodev.local tsup --watch ./src --onSuccess='cp -R public/ dist/ && node ./dist/server.mjs'",
         "copy:public": "cp -R public/ dist/",
         "fmt": "prettier --write \"src/**/*.{ts,js,mjs,yml,graphql}\"",
