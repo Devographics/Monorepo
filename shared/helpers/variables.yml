@@ -217,6 +217,12 @@
   usedBy:
       - surveyadmin
 
+- id: SURVEYFORM_URL
+  description: >
+      Used to call surveyform webhooks,
+      namely to indicate a change in the loaded values (surveys, entities...)
+  usedBy: api
+
 - id: ASSETS_URL
   aliases:
       - NEXT_PUBLIC_ASSETS_URL

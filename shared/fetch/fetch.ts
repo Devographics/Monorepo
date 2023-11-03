@@ -20,7 +20,7 @@ export const getCacheStats = () => {
     return memoryCache.getStats()
 }
 
-export const flushCache = () => {
+export const flushInMemoryCache = () => {
     memoryCache.flushAll()
 }
 
