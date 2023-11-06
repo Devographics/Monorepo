@@ -1,5 +1,6 @@
 import fetch from 'node-fetch'
 import { RequestContext } from '../types'
+import { getProjectsCollection } from '@devographics/mongo'
 
 const formatId = (id: string) => id?.replaceAll('-', '_')
 
@@ -7,7 +8,7 @@ const idFieldName = 'slug'
 
 export const initProjects = async ({ context }: { context: RequestContext }) => {
     const { db } = context
-    const projectsCollection = db.collection('projects')
+    const projectsCollection = await getProjectsCollection()
 
     console.log('// Adding Best of JS projects to DB…')
     await projectsCollection.deleteMany({})

@@ -34,6 +34,7 @@ import { initRedis } from '@devographics/redis'
 import { getPublicDb } from '@devographics/mongo'
 import { ghWebhooks } from './webhooks'
 import { getRepoSHA } from './external_apis'
+import { initProjects } from './load/projects'
 
 const envPath = process.env.ENV_FILE ? process.env.ENV_FILE : '.env'
 dotenv.config({ path: envPath })
@@ -63,9 +64,9 @@ const isDev = process.env.NODE_ENV === 'development'
 /**
  * Check a secret API key that allows triggering API reload
  * for instance to reload locales on change
- * @param req 
- * @param res 
- * @param func 
+ * @param req
+ * @param res
+ * @param func
  */
 const checkSecretKey = async (req: Request, res: Response, func: () => Promise<void>) => {
     if (req?.query?.key !== process.env.SECRET_KEY) {
@@ -75,7 +76,6 @@ const checkSecretKey = async (req: Request, res: Response, func: () => Promise<v
         await func()
     }
 }
-
 
 // if SURVEYS_URL is defined, then use that to load surveys;
 // if not, look in local filesystem
@@ -231,7 +231,17 @@ const start = async () => {
         })
     })
 
-    app.use("/gh", ghWebhooks(context))
+    /**
+     * Key must be passed as query param
+     */
+    app.get('/reinitialize-projects', async function (req, res) {
+        await checkSecretKey(req, res, async () => {
+            await initProjects({ context })
+            res.status(200).send('Projects reinitialized')
+        })
+    })
+
+    app.use('/gh', ghWebhooks(context))
 
     // app.get('/cache-avatars', async function (req, res) {
     //     checkSecretKey(req)
@@ -262,7 +272,8 @@ const start = async () => {
 
     app.listen({ port: port }, () =>
         console.log(
-            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${finishedAt.getTime() - startedAt.getTime()
+            `🚀 Server ready at http://localhost:${port}${server.graphqlPath} (in ${
+                finishedAt.getTime() - startedAt.getTime()
             }ms)`
         )
     )
