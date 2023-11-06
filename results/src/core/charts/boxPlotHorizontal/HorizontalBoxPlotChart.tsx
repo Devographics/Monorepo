@@ -19,6 +19,7 @@ export const getChartData = (data: StandardQuestionData) =>
     sortBy(data?.responses?.currentEdition.buckets, b => b.percentilesByFacet?.p50).reverse()
 
 const ROW_HEIGHT = 80
+const PIXEL_PER_TICKS = 130
 
 export const HorizontalBoxPlotChart = ({
     legends,
@@ -114,7 +115,7 @@ export const HorizontalBoxPlotChart = ({
                     <g transform={`translate(0, ${contentHeight})`}>
                         <AxisBottom
                             xScale={xScale}
-                            pixelsPerTick={130}
+                            pixelsPerTick={PIXEL_PER_TICKS}
                             labelFormatter={labelFormatter}
                             legends={legends}
                             stroke={theme.colors.text}

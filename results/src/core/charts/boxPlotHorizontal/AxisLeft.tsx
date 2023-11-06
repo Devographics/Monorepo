@@ -5,6 +5,8 @@ import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from 'core/i18n/i18nContext'
 import { Bucket, Entity } from '@devographics/types'
 import { UserIcon } from 'core/icons'
+import { MARGIN } from './HorizontalBoxPlotChart'
+import { TooltipItem } from './TooltipItem'
 
 type AxisLeftProps = {
     contentWidth: number
@@ -34,6 +36,8 @@ export const AxisLeft = ({
     i18nNamespace
 }: AxisLeftProps) => {
     const { getString } = useI18n()
+
+    const tickRef = React.createRef<SVGGElement>()
 
     const range = yScale.range()
 
@@ -69,6 +73,11 @@ export const AxisLeft = ({
                     label
                 })
 
+                const tickLabelString = String(tickLabel)
+
+                const shortenedTickLabel =
+                    tickLabelString?.length > 12 ? tickLabelString?.slice(0, 12) + '…' : tickLabel
+
                 return (
                     <g key={value} transform={`translate(0, ${yOffset})`}>
                         <line
@@ -93,17 +102,19 @@ export const AxisLeft = ({
                         />
 
                         <text
+                            ref={tickRef}
                             key={value}
                             style={{
                                 fill: stroke,
-                                fontSize: '14px',
-                                textAnchor: 'end',
-                                transform: 'translate(-20px, 4px)',
+                                fontSize: '13px',
+                                textAnchor: 'start',
+                                transform: `translate(-${MARGIN.left}px, 4px)`,
                                 alignmentBaseline: 'middle'
                             }}
                         >
-                            {tickLabel}
+                            {shortenedTickLabel}
                         </text>
+                        <TooltipItem triggerRef={tickRef} label={tickLabelString} />
 
                         <g
                             style={{ transform: `translate(${contentWidth + 20}px, 4px)` }}
@@ -113,7 +124,7 @@ export const AxisLeft = ({
                                 key={value}
                                 style={{
                                     fill: 'currentColor',
-                                    fontSize: '14px',
+                                    fontSize: '13px',
                                     textAnchor: 'start',
                                     transform: `translate(20px, 0px)`,
                                     alignmentBaseline: 'middle'
