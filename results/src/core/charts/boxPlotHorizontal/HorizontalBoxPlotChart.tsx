@@ -3,14 +3,13 @@ import * as d3 from 'd3'
 import { StandardQuestionData } from '@devographics/types'
 import { useTheme } from 'styled-components'
 import { useChartLabelFormatter } from '../hooks'
-import { VerticalBarChartProps } from '../verticalBar/VerticalBarChart'
 import { HorizontalBox, HorizontalBoxProps } from './HorizontalBox'
 import AxisLeft from './AxisLeft'
 import AxisBottom from './AxisBottom'
 import sortBy from 'lodash/sortBy'
 import { HorizontalBarChartProps } from '../horizontalBar/HorizontalBarChart'
 
-export const MARGIN = { top: 100, right: 30, bottom: 200, left: 100 }
+export const MARGIN = { top: 0, right: 120, bottom: 200, left: 120 }
 
 interface BoxplotProps extends HorizontalBarChartProps {
     containerWidth?: number
@@ -19,7 +18,8 @@ interface BoxplotProps extends HorizontalBarChartProps {
 export const getChartData = (data: StandardQuestionData) =>
     sortBy(data?.responses?.currentEdition.buckets, b => b.percentilesByFacet?.p50).reverse()
 
-const rowHeight = 50
+const ROW_HEIGHT = 80
+
 export const HorizontalBoxPlotChart = ({
     legends,
     series,
@@ -36,7 +36,7 @@ export const HorizontalBoxPlotChart = ({
 
     const theme = useTheme()
 
-    const contentHeight = (buckets?.length || 0) * rowHeight
+    const contentHeight = (buckets?.length || 0) * ROW_HEIGHT
     const chartHeight = contentHeight + MARGIN.top + MARGIN.bottom
 
     const contentWidth = containerWidth - MARGIN.left - MARGIN.right
@@ -81,7 +81,7 @@ export const HorizontalBoxPlotChart = ({
                 percentilesData: bucket.percentilesByFacet,
                 stroke: theme.colors.text,
                 labelFormatter,
-                height: 30
+                rowHeight: ROW_HEIGHT
             }
 
             return (
@@ -100,14 +100,15 @@ export const HorizontalBoxPlotChart = ({
                     transform={`translate(${[MARGIN.left, MARGIN.top].join(',')})`}
                 >
                     <AxisLeft
-                        width={contentWidth}
+                        contentWidth={contentWidth}
                         yScale={yScale}
                         pixelsPerTick={30}
                         labelFormatter={labelFormatter}
                         legends={legends}
                         stroke={theme.colors.text}
-                        rowHeight={rowHeight}
+                        rowHeight={ROW_HEIGHT}
                         i18nNamespace={i18nNamespace}
+                        buckets={buckets}
                     />
                     {/* X axis uses an additional translation to appear at the bottom */}
                     <g transform={`translate(0, ${contentHeight})`}>

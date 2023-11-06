@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react'
-import { ScaleBand, ScaleLinear } from 'd3'
-import { MARGIN } from '../boxPlotHorizontal/HorizontalBoxPlotChart'
+import { ScaleBand } from 'd3'
 import { BlockLegend } from 'core/types'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from 'core/i18n/i18nContext'
-import { Entity } from '@devographics/types'
+import { Bucket, Entity } from '@devographics/types'
+import { UserIcon } from 'core/icons'
 
 type AxisLeftProps = {
-    width: number
+    contentWidth: number
     yScale: ScaleBand<string>
     pixelsPerTick: number
     stroke: string
@@ -15,13 +15,14 @@ type AxisLeftProps = {
     legends?: BlockLegend[]
     i18nNamespace?: string
     entity?: Entity
+    buckets?: Bucket[]
 }
 
 // tick length
 const TICK_LENGTH = 6
 
 export const AxisLeft = ({
-    width,
+    contentWidth,
     yScale,
     pixelsPerTick,
     stroke,
@@ -29,6 +30,7 @@ export const AxisLeft = ({
     rowHeight,
     legends,
     entity,
+    buckets,
     i18nNamespace
 }: AxisLeftProps) => {
     const { getString } = useI18n()
@@ -48,24 +50,17 @@ export const AxisLeft = ({
     const ticks = useMemo(() => {
         return yScale.domain().map(value => ({
             value,
-            yOffset: yScale(value)! + rowHeight / 2 - 10
+            yOffset: yScale(value)! + rowHeight / 2
         }))
     }, [yScale])
 
     return (
         <>
-            {/* Main vertical line */}
-            {/* <path
-                d={['M', 0, range[0], 'L', 0, range[1]].join(' ')}
-                fill="none"
-                stroke="currentColor"
-            /> */}
-
             {/* Ticks and labels */}
             {ticks.map(({ value, yOffset }) => {
                 const legendItem = legends?.find(item => item.id === String(value))
                 const label = legendItem?.shortLabel || legendItem?.label
-
+                const bucket = buckets?.find(b => b.id === value)
                 const { key, label: tickLabel } = getItemLabel({
                     i18nNamespace,
                     entity,
@@ -83,7 +78,14 @@ export const AxisLeft = ({
                             strokeOpacity="0.4"
                         />
                         <line
-                            x2={width}
+                            x1={contentWidth}
+                            x2={contentWidth + TICK_LENGTH}
+                            stroke="#dddddd"
+                            strokeWidth="1"
+                            strokeOpacity="0.4"
+                        />
+                        <line
+                            x2={contentWidth}
                             stroke="#dddddd"
                             strokeWidth="1"
                             strokeDasharray="1 2"
@@ -94,14 +96,35 @@ export const AxisLeft = ({
                             key={value}
                             style={{
                                 fill: stroke,
-                                fontSize: '12px',
+                                fontSize: '14px',
                                 textAnchor: 'end',
-                                transform: 'translateX(-20px)',
+                                transform: 'translate(-20px, 4px)',
                                 alignmentBaseline: 'middle'
                             }}
                         >
                             {tickLabel}
                         </text>
+
+                        <g
+                            style={{ transform: `translate(${contentWidth + 20}px, 4px)` }}
+                            color={`${stroke}66`}
+                        >
+                            <text
+                                key={value}
+                                style={{
+                                    fill: 'currentColor',
+                                    fontSize: '14px',
+                                    textAnchor: 'start',
+                                    transform: `translate(20px, 0px)`,
+                                    alignmentBaseline: 'middle'
+                                }}
+                            >
+                                {bucket?.count}
+                            </text>
+                            <g style={{ transform: `translate(0px, -13px)` }}>
+                                <UserIcon inSVG={true} size={16} />
+                            </g>
+                        </g>
                     </g>
                 )
             })}

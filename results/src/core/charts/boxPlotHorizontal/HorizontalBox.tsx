@@ -12,14 +12,16 @@ import BarTooltip from '../common/BarTooltip'
 import { fontSize, spacing } from 'core/theme'
 import { useI18n } from 'core/i18n/i18nContext'
 
+const BOX_HEIGHT = 30
+
 export type HorizontalBoxProps = BoxProps & { height: number }
 export const HorizontalBox = ({
     i18nNamespace,
     boxData,
     percentilesData,
-    height,
     stroke,
     fill,
+    rowHeight,
     labelFormatter
 }: HorizontalBoxProps) => {
     const { getString } = useI18n()
@@ -41,7 +43,7 @@ export const HorizontalBox = ({
         percentilesData,
         stroke,
         strokeWidth: STROKE_WIDTH,
-        height,
+        rowHeight,
         labelFormatter
     }
 
@@ -51,8 +53,8 @@ export const HorizontalBox = ({
             <line
                 x1={p10}
                 x2={p90}
-                y1={height / 2}
-                y2={height / 2}
+                y1={rowHeight / 2}
+                y2={rowHeight / 2}
                 stroke={stroke}
                 strokeWidth={STROKE_WIDTH}
             />
@@ -71,9 +73,9 @@ export const HorizontalBox = ({
             {/* box */}
             <rect
                 x={p25}
-                y={0}
+                y={rowHeight / 2 - BOX_HEIGHT / 2}
                 width={p75 - p25}
-                height={height}
+                height={BOX_HEIGHT}
                 stroke={stroke}
                 // fill={fill}
                 fill="url(#VelocityVertical2)"
@@ -83,12 +85,12 @@ export const HorizontalBox = ({
             <line
                 x1={p50}
                 x2={p50}
-                y1={0}
-                y2={height}
+                y1={rowHeight / 2 - BOX_HEIGHT / 2}
+                y2={rowHeight / 2 + BOX_HEIGHT / 2}
                 stroke={stroke}
                 strokeWidth={STROKE_WIDTH * 3}
             />
-            <g transform={`translate(${p50}, ${height / 2})`} ref={p50Ref}>
+            <g transform={`translate(${p50}, ${rowHeight / 2})`} ref={p50Ref}>
                 <Background_
                     height={valueLabelHeight}
                     width={valueLabelWidth}
@@ -122,7 +124,7 @@ const PercentileDot = ({
     percentilesData,
     stroke,
     strokeWidth,
-    height,
+    rowHeight,
     labelFormatter
 }) => {
     const { getString } = useI18n()
@@ -137,19 +139,21 @@ const PercentileDot = ({
         values: { percentile: p, value: valueLabel }
     })?.t
     return (
-        <g transform={`translate(${x}, ${height / 2})`}>
-            <circle cx={0} cy={0} r={DOT_RADIUS + 5} fill="transparent" ref={pRef} />
-            <circle
-                cx={0}
-                cy={0}
-                r={DOT_RADIUS}
-                stroke={stroke}
-                strokeWidth={strokeWidth}
-                fill="none"
-            />
-            <circle cx={0} cy={0} r={DOT_RADIUS / 3} fill={stroke} />
+        <>
+            <g transform={`translate(${x}, ${rowHeight / 2})`} ref={pRef}>
+                <circle
+                    cx={0}
+                    cy={0}
+                    r={DOT_RADIUS}
+                    stroke={`${stroke}66`}
+                    strokeWidth={strokeWidth}
+                    fill="none"
+                />
+                <circle cx={0} cy={0} r={DOT_RADIUS / 3} fill={`${stroke}bb`} />
+                <circle cx={0} cy={0} r={DOT_RADIUS + 5} fill="transparent" />
+            </g>
             <TooltipItem triggerRef={pRef} label={label} direction={p <= 50 ? 'right' : 'left'} />
-        </g>
+        </>
     )
 }
 

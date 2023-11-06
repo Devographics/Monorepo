@@ -7,6 +7,7 @@ const STROKE_WIDTH = 1
 // Note: numbers here are px, not the real values in the dataset.
 
 export type BoxProps = {
+    rowHeight: number
     i18nNamespace?: string
     boxData: PercentileData
     percentilesData: PercentileData
