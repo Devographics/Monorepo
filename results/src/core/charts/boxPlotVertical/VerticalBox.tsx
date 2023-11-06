@@ -1,68 +1,71 @@
+import { PercentileData } from '@devographics/types'
 import React from 'react'
 import styled from 'styled-components'
-import { BoxProps } from './VerticalBox'
 const STROKE_WIDTH = 1
 
 // A reusable component that builds a vertical box shape using svg
 // Note: numbers here are px, not the real values in the dataset.
 
-export const HorizontalBox = ({
-    p0,
-    p25,
-    p50,
-    p75,
-    p100,
-    height,
-    stroke,
-    fill,
-    label
-}: BoxProps & { height: number }) => {
+export type BoxProps = {
+    i18nNamespace?: string
+    boxData: PercentileData
+    percentilesData: PercentileData
+    stroke: string
+    fill?: string
+    labelFormatter: (v: number) => string
+    label: string
+}
+
+export type VerticalBoxProps = BoxProps & { width: number }
+
+export const VerticalBox = ({ boxData, width, stroke, fill, label }: VerticalBoxProps) => {
+    const { p0, p10, p25, p50, p75, p90, p100 } = boxData
     const labelWidth = label.length * 9
     const labelHeight = 24
     return (
         <>
             <line
-                x1={p0}
-                x2={p100}
-                y1={height / 2}
-                y2={height / 2}
+                x1={width / 2}
+                x2={width / 2}
+                y1={p0}
+                y2={p100}
                 stroke={stroke}
                 strokeWidth={STROKE_WIDTH}
             />
-            {/* <rect
-                x={p75}
-                y={0}
-                width={p25 - p75}
-                height={height}
+            <rect
+                x={0}
+                y={p75}
+                width={width}
+                height={p25 - p75}
                 stroke={stroke}
                 // fill={fill}
                 fill="url(#VelocityVertical2)"
             />
             <line
-                x1={p0}
-                x2={p0}
-                y1={height / 3}
-                y2={(2 * height) / 3}
+                x1={width / 3}
+                x2={(2 * width) / 3}
+                y1={p0}
+                y2={p0}
                 stroke={stroke}
                 strokeWidth={STROKE_WIDTH}
             />
             <line
-                x1={p100}
-                x2={p100}
-                y1={height / 3}
-                y2={(2 * height) / 3}
+                x1={width / 3}
+                x2={(2 * width) / 3}
+                y1={p100}
+                y2={p100}
                 stroke={stroke}
                 strokeWidth={STROKE_WIDTH}
             />
             <line
-                x1={p50}
-                x2={p50}
-                y1={0}
-                y2={height}
+                x1={0}
+                x2={width}
+                y1={p50}
+                y2={p50}
                 stroke={stroke}
                 strokeWidth={STROKE_WIDTH * 3}
             />
-            <g transform={`translate(${p50}, ${height / 2})`}>
+            <g transform={`translate(${width / 2}, ${p50})`}>
                 <Background_
                     height={labelHeight}
                     width={labelWidth}
@@ -71,7 +74,7 @@ export const HorizontalBox = ({
                     stroke={stroke}
                     rx={labelHeight / 2}
                     ry={labelHeight / 2}
-                    fill="url(#VelocityVertical2)"
+                    // fill="url(#VelocityVertical2)"
                     fill="#333"
                 />
                 <Text_
@@ -83,7 +86,7 @@ export const HorizontalBox = ({
                 >
                     {label}
                 </Text_>
-            </g> */}
+            </g>
         </>
     )
 }

@@ -599,6 +599,9 @@ importers:
       react-modal:
         specifier: ^3.16.1
         version: 3.16.1(react-dom@18.0.0)(react@18.0.0)
+      react-svg-tooltip:
+        specifier: ^0.0.11
+        version: 0.0.11(react-dom@18.0.0)(react@18.0.0)
       react-tabs:
         specifier: ^3.2.3
         version: 3.2.3(react@18.0.0)
@@ -29277,6 +29280,17 @@ packages:
       invariant: 2.2.4
       react: 18.2.0
       tslib: 2.6.2
+    dev: false
+
+  /react-svg-tooltip@0.0.11(react-dom@18.0.0)(react@18.0.0):
+    resolution: {integrity: sha512-iK7C7Ay5UCQL0Ert9xo1fQVjl+QplaA7VoR+pi+J7Uz25HqkyR3ksY+puHE2O7KVmuIxxre0e2hLWEr+jAv7XQ==}
+    engines: {node: '>=6.0.0'}
+    peerDependencies:
+      react: ^16.3.0
+      react-dom: ^16.3.0
+    dependencies:
+      react: 18.0.0
+      react-dom: 18.0.0(react@18.0.0)
     dev: false
 
   /react-tabs@3.2.3(react@18.0.0):

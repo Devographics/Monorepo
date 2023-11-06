@@ -63,3 +63,5 @@ export const AxisBottom = ({ xScale, legends, stroke, variant = 'vertical' }: Ax
         </>
     )
 }
+
+export default AxisBottom

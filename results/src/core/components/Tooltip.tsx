@@ -4,7 +4,7 @@ import { fontSize, spacing } from 'core/theme'
 
 import * as Tooltip from '@radix-ui/react-tooltip'
 
-const Content = styled(Tooltip.Content)`
+export const getTooltipContent = element => styled(element)`
     background: ${props => props.theme.colors.backgroundBackground};
     font-size: ${fontSize('small')};
     padding: ${spacing(0.3)} ${spacing(0.6)};
@@ -15,9 +15,11 @@ const Content = styled(Tooltip.Content)`
     }
     // see https://www.joshwcomeau.com/css/designing-shadows/
     /* filter: drop-shadow(1px 2px 8px hsl(220deg 60% 50% / 0.3))
-        drop-shadow(2px 4px 16px hsl(220deg 60% 50% / 0.3))
-        drop-shadow(4px 8px 32px hsl(220deg 60% 50% / 0.3)); */
+    drop-shadow(2px 4px 16px hsl(220deg 60% 50% / 0.3))
+    drop-shadow(4px 8px 32px hsl(220deg 60% 50% / 0.3)); */
 `
+
+export const TooltipContent_ = getTooltipContent(Tooltip.Content)
 
 const Trigger = styled(Tooltip.Trigger)`
     background: none;
@@ -47,10 +49,10 @@ const Tip = ({ trigger, contents, asChild = true, clickable = false }) => (
                 {trigger}
             </Trigger>
             <Tooltip.Portal>
-                <Content side="top">
+                <TooltipContent_ side="top">
                     {contents}
                     {/* <Arrow /> */}
-                </Content>
+                </TooltipContent_>
             </Tooltip.Portal>
         </Tooltip.Root>
     </Tooltip.Provider>

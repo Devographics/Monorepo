@@ -1,16 +1,20 @@
 import React, { useMemo } from 'react'
-import { ScaleLinear } from 'd3'
-import { MARGIN } from './BoxPlotChart'
+import { ScaleBand, ScaleLinear } from 'd3'
+import { MARGIN } from '../boxPlotHorizontal/HorizontalBoxPlotChart'
 import { BlockLegend } from 'core/types'
+import { getItemLabel } from 'core/helpers/labels'
+import { useI18n } from 'core/i18n/i18nContext'
+import { Entity } from '@devographics/types'
 
 type AxisLeftProps = {
     width: number
-    yScale: ScaleLinear<number, number>
+    yScale: ScaleBand<string>
     pixelsPerTick: number
     stroke: string
     labelFormatter: (any) => string
     legends?: BlockLegend[]
-    variant: 'horizontal' | 'vertical'
+    i18nNamespace?: string
+    entity?: Entity
 }
 
 // tick length
@@ -22,19 +26,29 @@ export const AxisLeft = ({
     pixelsPerTick,
     stroke,
     labelFormatter,
+    rowHeight,
     legends,
-    variant = 'vertical'
+    entity,
+    i18nNamespace
 }: AxisLeftProps) => {
+    const { getString } = useI18n()
+
     const range = yScale.range()
 
-    const ticks = useMemo(() => {
-        const height = range[0] - range[1]
-        const numberOfTicksTarget =
-            variant === 'vertical' ? Math.floor(height / pixelsPerTick) : legends?.length
+    // const ticks = useMemo(() => {
+    //     const height = range[0] - range[1]
+    //     const numberOfTicksTarget = legends?.length
 
-        return yScale.ticks(numberOfTicksTarget).map(value => ({
+    //     return yScale.ticks(numberOfTicksTarget).map(value => ({
+    //         value,
+    //         yOffset: yScale(value)
+    //     }))
+    // }, [yScale])
+
+    const ticks = useMemo(() => {
+        return yScale.domain().map(value => ({
             value,
-            yOffset: yScale(value)
+            yOffset: yScale(value)! + rowHeight / 2 - 10
         }))
     }, [yScale])
 
@@ -49,13 +63,17 @@ export const AxisLeft = ({
 
             {/* Ticks and labels */}
             {ticks.map(({ value, yOffset }) => {
-                let label
-                if (variant === 'vertical') {
-                    label = labelFormatter(value)
-                } else {
-                    const legendItem = legends?.[value]
-                    label = legendItem?.shortLabel || legendItem?.label
-                }
+                const legendItem = legends?.find(item => item.id === String(value))
+                const label = legendItem?.shortLabel || legendItem?.label
+
+                const { key, label: tickLabel } = getItemLabel({
+                    i18nNamespace,
+                    entity,
+                    id: value,
+                    getString,
+                    label
+                })
+
                 return (
                     <g key={value} transform={`translate(0, ${yOffset})`}>
                         <line
@@ -65,7 +83,7 @@ export const AxisLeft = ({
                             strokeOpacity="0.4"
                         />
                         <line
-                            x2={width - MARGIN.right}
+                            x2={width}
                             stroke="#dddddd"
                             strokeWidth="1"
                             strokeDasharray="1 2"
@@ -82,7 +100,7 @@ export const AxisLeft = ({
                                 alignmentBaseline: 'middle'
                             }}
                         >
-                            {label}
+                            {tickLabel}
                         </text>
                     </g>
                 )
@@ -90,3 +108,5 @@ export const AxisLeft = ({
         </>
     )
 }
+
+export default AxisLeft

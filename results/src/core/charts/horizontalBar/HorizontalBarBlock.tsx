@@ -13,7 +13,7 @@ import { MODE_GRID, MODE_FACET } from 'core/filters/constants'
 import { useChartFilters } from 'core/filters/helpers'
 import { useAllFilters } from 'core/charts/hooks'
 import { useLegends } from 'core/helpers/legends'
-import { BoxPlotChart } from '../boxPlot/BoxPlotChart'
+import HorizontalBoxPlotChart from '../boxPlotHorizontal/HorizontalBoxPlotChart'
 import { DataSeries } from 'core/filters/types'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
@@ -135,7 +135,7 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
             >
                 <ChartContainer fit={true}>
                     {units === BucketUnits.PERCENTILES ? (
-                        <BoxPlotChart {...chartProps} variant="horizontal" />
+                        <HorizontalBoxPlotChart {...chartProps} />
                     ) : (
                         <HorizontalBarChart {...chartProps} />
                     )}
