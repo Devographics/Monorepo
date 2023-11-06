@@ -16,7 +16,8 @@ const decorateWithAverages = (
 ): FacetBucketWithAverage[] =>
     facetBuckets.map(fb => ({ ...fb, average: getFacetBucketAverage(fb, axis) }))
 
-function calculatePercentiles({
+// v1: using aggregator
+function calculatePercentiles1({
     bucket,
     axis
 }: {
@@ -74,12 +75,6 @@ function calculatePercentiles({
     // Find percentiles
     for (let i = 0; i < sortedFacetBuckets.length; i++) {
         accumulatedCount += sortedFacetBuckets[i].count!
-        // console.log('// Find percentiles')
-        // console.log(accumulatedCount)
-        // console.log(sortedFacetBuckets[i])
-        // console.log(p25)
-        // console.log(p50)
-        // console.log(p75)
 
         if (p10 === null && accumulatedCount >= index10) {
             p10 = sortedFacetBuckets[i].average
@@ -113,6 +108,78 @@ function calculatePercentiles({
     return percentiles
 }
 
+/*
+
+This function calculates the index of the desired percentile 
+using the formula (percentile / 100) * (arr.length - 1). 
+If the index is an integer, the function returns the value at that index. 
+If the index is not an integer, the function calculates the value at the 
+desired percentile using linear interpolation between the two nearest integer indices.
+
+*/
+function calculatePercentile(datapoints: number[], percentile: number): number {
+    const index = (percentile / 100) * (datapoints.length - 1)
+
+    if (index % 1 === 0) {
+        return datapoints[index]
+    } else {
+        const lower = Math.floor(index)
+        const upper = Math.ceil(index)
+        return datapoints[lower] + (datapoints[upper] - datapoints[lower]) * (index - lower)
+    }
+}
+
+// v2: expanding buckets into individual datapoints
+function calculatePercentiles2({
+    bucket,
+    axis
+}: {
+    bucket: Bucket
+    axis: ComputeAxisParameters
+}): PercentileData {
+    const allFacetBuckets = compact(
+        bucket.facetBuckets
+            .map(fb => {
+                if (fb.groupedBuckets) {
+                    // if facet bucket is made of grouped facet buckets, use those
+                    return fb.groupedBuckets
+                } else {
+                    return [fb]
+                }
+            })
+            .flat()
+    )
+
+    const filteredFacetBuckets = allFacetBuckets.filter(
+        fb => fb?.id !== NO_ANSWER && fb?.id !== NOT_APPLICABLE && fb?.id !== CUTOFF_ANSWERS
+    )
+    // decorate facet buckets with average corresponding to range
+    const facetBucketsWithAverage = decorateWithAverages(cloneDeep(filteredFacetBuckets), axis)
+
+    // Sort salaries
+    const sortedFacetBuckets = [...facetBucketsWithAverage].sort(
+        (fb1, fb2) => fb1.average - fb2.average
+    )
+
+    const nonEmptyFacetBuckets = sortedFacetBuckets.filter(fb => fb.count! > 0)
+
+    // expand buckets into individual datapoints
+    const allDatapoints = nonEmptyFacetBuckets
+        .map(bucket => Array(bucket.count).fill(bucket.average))
+        .flat()
+
+    const percentiles = {
+        p0: calculatePercentile(allDatapoints, 0),
+        p10: calculatePercentile(allDatapoints, 10),
+        p25: calculatePercentile(allDatapoints, 25),
+        p50: calculatePercentile(allDatapoints, 50),
+        p75: calculatePercentile(allDatapoints, 75),
+        p90: calculatePercentile(allDatapoints, 90),
+        p100: calculatePercentile(allDatapoints, 100)
+    }
+
+    return percentiles
+}
 const zeroPercentiles = {
     p0: 0,
     p10: 0,
@@ -122,6 +189,8 @@ const zeroPercentiles = {
     p90: 0,
     p100: 0
 }
+
+const calculatePercentiles = calculatePercentiles2
 
 export async function addPercentilesByFacet(
     resultsByEdition: ResponseEditionData[],
