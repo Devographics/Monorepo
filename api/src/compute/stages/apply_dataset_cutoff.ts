@@ -20,6 +20,10 @@ const getZeroBucket = <T extends Bucket | FacetBucket>(bucket: T, clearCount: bo
     return zeroBucket
 }
 
+export const getDatasetCutoff = () => {
+    return process.env.DATASET_CUTOFF ? Number(process.env.DATASET_CUTOFF) : DEFAULT_DATASET_CUTOFF
+}
+
 /*
 
 If a filter is enabled, we want to zero out the parent bucket to "censor" any data
@@ -30,7 +34,7 @@ Note: if a facet is enabled but a filter is *not* enabled
 we don't need to censor the parent bucket
 
 */
-const getInsufficientDataBucket = ({
+export const applyBucketCutoff = ({
     bucket,
     hasFilter,
     hasFacet
@@ -39,15 +43,22 @@ const getInsufficientDataBucket = ({
     hasFilter: boolean
     hasFacet: boolean
 }) => {
-    const parentBucket = getZeroBucket(bucket, hasFilter)
-    return {
-        ...parentBucket,
-        facetBuckets: (bucket.facetBuckets ?? []).map(b => getZeroBucket(b, true))
-    }
-}
+    const cutoff = getDatasetCutoff()
 
-export const getDatasetCutoff = () => {
-    return process.env.DATASET_CUTOFF ? Number(process.env.DATASET_CUTOFF) : DEFAULT_DATASET_CUTOFF
+    const bucketWithCutoff =
+        bucket.count !== undefined && bucket.count < cutoff
+            ? getZeroBucket(bucket, hasFilter)
+            : bucket
+
+    const facetBucketsWithCutoff = hasFacet
+        ? bucket.facetBuckets.map(facetBucket => {
+              return facetBucket.count !== undefined && facetBucket.count < cutoff
+                  ? getZeroBucket(facetBucket, true)
+                  : facetBucket
+          })
+        : []
+
+    return { ...bucketWithCutoff, facetBuckets: facetBucketsWithCutoff }
 }
 
 export const applyDatasetCutoff = (
@@ -57,13 +68,10 @@ export const applyDatasetCutoff = (
     const hasFilter = !!computeArguments.filters
     const hasFacet = !!computeArguments.facet
     if (hasFilter || hasFacet) {
-        const cutoff = getDatasetCutoff()
         for (let editionData of resultsByEdition) {
             // "censor" out data for any bucket that comes under cutoff
             editionData.buckets = editionData.buckets.map(bucket =>
-                typeof bucket.count !== 'undefined' && bucket.count < cutoff
-                    ? getInsufficientDataBucket({ bucket, hasFilter, hasFacet })
-                    : bucket
+                applyBucketCutoff({ bucket, hasFilter, hasFacet })
             )
         }
     }
