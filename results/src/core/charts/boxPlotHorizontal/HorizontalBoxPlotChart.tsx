@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import * as d3 from 'd3'
-import { StandardQuestionData } from '@devographics/types'
+import { Bucket, QuestionMetadata, StandardQuestionData } from '@devographics/types'
 import { useTheme } from 'styled-components'
 import { useChartLabelFormatter } from '../hooks'
 import { HorizontalBox, HorizontalBoxProps } from './HorizontalBox'
@@ -16,7 +16,12 @@ interface BoxplotProps extends HorizontalBarChartProps {
 }
 
 export const getChartData = (data: StandardQuestionData) =>
-    sortBy(data?.responses?.currentEdition.buckets, b => b.percentilesByFacet?.p50).reverse()
+    data?.responses?.currentEdition.buckets || data?.combined?.currentEdition.buckets
+
+const sortChartData = (buckets: Bucket[], question?: QuestionMetadata) =>
+    question?.optionsAreSequential
+        ? buckets
+        : [...sortBy(buckets, b => b.percentilesByFacet?.p50)].reverse()
 
 const ROW_HEIGHT = 80
 const PIXEL_PER_TICKS = 130
@@ -27,12 +32,13 @@ export const HorizontalBoxPlotChart = ({
     containerWidth = 500,
     units,
     facet,
-    i18nNamespace
+    i18nNamespace,
+    question
 }: BoxplotProps) => {
     // by default this chart only receive one data series, but if it receives more
     // it can combine them into a single chart
-    const buckets = getChartData(series[0].data)
-
+    let buckets = getChartData(series[0].data)
+    buckets = sortChartData(buckets, question)
     const labelFormatter = useChartLabelFormatter({ units, facet })
 
     const theme = useTheme()
@@ -79,9 +85,11 @@ export const HorizontalBoxPlotChart = ({
             const props: HorizontalBoxProps = {
                 i18nNamespace,
                 boxData,
+                contentWidth,
                 percentilesData: bucket.percentilesByFacet,
                 stroke: theme.colors.text,
                 labelFormatter,
+                bucket,
                 rowHeight: ROW_HEIGHT
             }
 

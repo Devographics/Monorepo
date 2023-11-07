@@ -54,15 +54,18 @@ const IconWithHover = styled(Icon)`
     }
 `
 
-export interface IconWrapperProps {
+export interface IconProps {
     enableHover?: boolean
     enableTooltip?: boolean
     labelId?: string
     label?: string
-    children: React.ReactElement
     values?: any
     inSVG?: boolean
     size?: number
+}
+
+export interface IconWrapperProps extends IconProps {
+    children: React.ReactElement
 }
 const IconWrapper = ({
     enableHover = true,

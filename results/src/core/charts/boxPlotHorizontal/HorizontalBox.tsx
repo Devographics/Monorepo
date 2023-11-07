@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BoxProps } from '../boxPlotVertical/VerticalBox'
-const STROKE_WIDTH = 1
 import { useI18n } from 'core/i18n/i18nContext'
 import { TooltipItem } from './TooltipItem'
+import { fontSize, fontWeight } from 'core/theme'
+const STROKE_WIDTH = 1
 
 const BOX_HEIGHT = 30
 
@@ -13,7 +14,9 @@ export const HorizontalBox = ({
     boxData,
     percentilesData,
     stroke,
+    contentWidth,
     fill,
+    bucket,
     rowHeight,
     labelFormatter
 }: HorizontalBoxProps) => {
@@ -22,7 +25,7 @@ export const HorizontalBox = ({
     const { p0, p10, p25, p50, p75, p90, p100 } = boxData
 
     const p50ValueLabel = labelFormatter(percentilesData.p50)
-    const valueLabelWidth = p50ValueLabel.length * 9
+    const valueLabelWidth = Math.max(50, String(p50ValueLabel).length * 9)
     const valueLabelHeight = 24
 
     const label = getString('charts.nth_percentile_value', {
@@ -40,7 +43,19 @@ export const HorizontalBox = ({
         labelFormatter
     }
 
-    return (
+    return bucket.count < 10 ? (
+        <g>
+            <InsufficientData_
+                className="insufficient-data"
+                width={`${contentWidth}px`}
+                textAnchor="start"
+                alignmentBaseline="middle"
+                y={rowHeight / 2 + 3}
+            >
+                {getString('charts.insufficient_data')?.t}
+            </InsufficientData_>
+        </g>
+    ) : (
         <>
             {/* horizontal line */}
             <line
@@ -152,6 +167,15 @@ const PercentileDot = ({
 
 const Text_ = styled.text`
     cursor: default;
+`
+
+const InsufficientData_ = styled.text`
+    fill: ${({ theme }) => theme.colors.text};
+    opacity: 0.7;
+    text-transform: uppercase;
+    font-weight: ${fontWeight('bold')};
+    font-size: ${fontSize('smaller')};
+    text-align: center;
 `
 
 const Background_ = styled.rect``

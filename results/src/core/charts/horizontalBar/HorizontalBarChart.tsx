@@ -51,7 +51,7 @@ type BarColor = {
     gradient: string[]
 }
 
-const marginCoeff = 9
+const marginCoeff = 10
 
 export const getLeftMargin = ({
     buckets,
