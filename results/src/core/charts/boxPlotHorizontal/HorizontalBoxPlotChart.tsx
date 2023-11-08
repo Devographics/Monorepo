@@ -16,14 +16,16 @@ interface BoxplotProps extends HorizontalBarChartProps {
 }
 
 export const getChartData = (data: StandardQuestionData) =>
-    data?.responses?.currentEdition.buckets || data?.combined?.currentEdition.buckets
+    data?.responses?.currentEdition.buckets ||
+    data?.combined?.currentEdition.buckets ||
+    data?.freeform?.currentEdition.buckets
 
 const sortChartData = (buckets: Bucket[], question?: QuestionMetadata) =>
     question?.optionsAreSequential
         ? buckets
         : [...sortBy(buckets, b => b.percentilesByFacet?.p50)].reverse()
 
-const ROW_HEIGHT = 80
+const ROW_HEIGHT = 60
 const PIXEL_PER_TICKS = 130
 
 export const HorizontalBoxPlotChart = ({

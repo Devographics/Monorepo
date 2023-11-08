@@ -9,8 +9,6 @@ const NewsletterBlock = () => {
 
     return (
         <Container>
-            <Heading>{translate('blocks.newsletter.title')}</Heading>
-            <Description>{translate('blocks.newsletter.description')}</Description>
             <Newsletter />
         </Container>
     )

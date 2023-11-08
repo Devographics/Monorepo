@@ -31,7 +31,6 @@ export const AxisLeft = ({
     labelFormatter,
     rowHeight,
     legends,
-    entity,
     buckets,
     i18nNamespace
 }: AxisLeftProps) => {
@@ -39,22 +38,10 @@ export const AxisLeft = ({
 
     const tickRef = React.createRef<SVGGElement>()
 
-    const range = yScale.range()
-
-    // const ticks = useMemo(() => {
-    //     const height = range[0] - range[1]
-    //     const numberOfTicksTarget = legends?.length
-
-    //     return yScale.ticks(numberOfTicksTarget).map(value => ({
-    //         value,
-    //         yOffset: yScale(value)
-    //     }))
-    // }, [yScale])
-
     const ticks = useMemo(() => {
         return yScale.domain().map(value => ({
             value,
-            yOffset: yScale(value)! + rowHeight / 2
+            yOffset: (yScale(value) ?? 0) + rowHeight / 2
         }))
     }, [yScale])
 
@@ -62,17 +49,15 @@ export const AxisLeft = ({
         <>
             {/* Ticks and labels */}
             {ticks.map(({ value, yOffset }) => {
-                const legendItem = legends?.find(item => item.id === String(value))
-                const label = legendItem?.shortLabel || legendItem?.label
+                // const legendItem = legends?.find(item => item.id === String(value))
+                // const label = legendItem?.shortLabel || legendItem?.label
                 const bucket = buckets?.find(b => b.id === value)
                 const { key, label: tickLabel } = getItemLabel({
                     i18nNamespace,
-                    entity,
+                    entity: bucket?.entity,
                     id: value,
-                    getString,
-                    label
+                    getString
                 })
-
                 const tickLabelString = String(tickLabel)
 
                 const shortenedTickLabel =

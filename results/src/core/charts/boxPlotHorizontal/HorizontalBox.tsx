@@ -4,6 +4,8 @@ import { BoxProps } from '../boxPlotVertical/VerticalBox'
 import { useI18n } from 'core/i18n/i18nContext'
 import { TooltipItem } from './TooltipItem'
 import { fontSize, fontWeight } from 'core/theme'
+import { HORIZONTAL, useColorDefs, useColorFills } from '../hooks'
+import { NO_ANSWER, OVERALL } from '@devographics/constants'
 const STROKE_WIDTH = 1
 
 const BOX_HEIGHT = 30
@@ -21,6 +23,21 @@ export const HorizontalBox = ({
     labelFormatter
 }: HorizontalBoxProps) => {
     const { getString } = useI18n()
+
+    const orientation = HORIZONTAL
+    const colorDefs = useColorDefs({ orientation })
+
+    let gradient = colorDefs.find(c => c.id === `Gradient${orientation}Default`)
+
+    switch (bucket.id) {
+        case NO_ANSWER:
+            gradient = colorDefs.find(c => c.id === `Gradient${orientation}NoAnswer`)
+            break
+
+        case OVERALL:
+            gradient = colorDefs.find(c => c.id === `Gradient${orientation}Overall`)
+            break
+    }
 
     const { p0, p10, p25, p50, p75, p90, p100 } = boxData
 
@@ -57,6 +74,13 @@ export const HorizontalBox = ({
         </g>
     ) : (
         <>
+            <defs>
+                <linearGradient id={gradient?.id}>
+                    <stop offset="0%" stopColor={gradient?.colors[0].color} />
+                    <stop offset="100%" stopColor={gradient?.colors[1].color} />
+                </linearGradient>
+            </defs>
+
             {/* horizontal line */}
             <line
                 x1={p10}
@@ -86,7 +110,7 @@ export const HorizontalBox = ({
                 height={BOX_HEIGHT}
                 stroke={stroke}
                 // fill={fill}
-                fill="url(#VelocityVertical2)"
+                fill={`url(#${gradient?.id})`}
             />
 
             {/* 50th percentile */}
@@ -107,7 +131,7 @@ export const HorizontalBox = ({
                     stroke={stroke}
                     rx={valueLabelHeight / 2}
                     ry={valueLabelHeight / 2}
-                    fill="url(#VelocityVertical2)"
+                    // fill={`url(#${gradient?.id})`}
                     fill="#333"
                 />
                 <Text_

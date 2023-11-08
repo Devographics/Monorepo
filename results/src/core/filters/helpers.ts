@@ -56,6 +56,7 @@ import { QueryData, AllQuestionData } from '@devographics/types'
 import { NO_ANSWER } from '@devographics/constants'
 import clone from 'lodash/clone'
 import pick from 'lodash/pick'
+import { getItemLabel } from 'core/helpers/labels'
 
 export const getNewCondition = ({
     filter,
@@ -649,7 +650,8 @@ export const useFilterLegends = ({
     block: BlockDefinition
 }) => {
     const context = usePageContext()
-    const { currentEdition } = context
+
+    const { currentEdition, i18nNamespaces } = context
     const { year: currentYear } = currentEdition
 
     const entities = useEntities()
@@ -701,15 +703,15 @@ export const useFilterLegends = ({
                             const operatorLabel = getOperatorLabel({ getString, operator })
                             const valueArray = Array.isArray(value) ? value : [value]
                             const valueLabel = valueArray
-                                .map(valueString =>
-                                    getValueLabel({
+                                .map(valueString => {
+                                    const { key, label } = getItemLabel({
+                                        id: valueString,
                                         getString,
-                                        field,
-                                        value: valueString,
-                                        allFilters,
-                                        entity: entities.find(e => e.id === valueString)
+                                        entity: entities.find(e => e.id === valueString),
+                                        i18nNamespace: i18nNamespaces[field.id] || field.id
                                     })
-                                )
+                                    return label
+                                })
                                 .join(', ')
                             return `<strong>${fieldLabel}</strong> ${operatorLabel} <strong>${valueLabel}</strong>`
                         })
@@ -735,11 +737,11 @@ export const useFilterLegends = ({
     } else if (chartFilters.options.mode === MODE_FACET && chartFilters.facet) {
         const facetField = allFilters.find(f => f.id === chartFilters?.facet?.id) as FilterItem
         results = facetField?.options?.map(({ id }, index) => {
-            const label = getValueLabel({
+            const { key, label } = getItemLabel({
+                id,
                 getString,
-                field: facetField,
-                value: id,
-                allFilters
+                entity: entities.find(e => e.id === id),
+                i18nNamespace: i18nNamespaces[facetField.id] || facetField.id
             })
             const barColorItem = getVariantBarColorItem(theme, index + 1, facetField)
             return {

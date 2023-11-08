@@ -13,6 +13,7 @@ import { JSONTrigger } from 'core/blocks/block/BlockData'
 import { BucketUnits } from '@devographics/types'
 import T from 'core/i18n/T'
 import { Note_ } from 'core/blocks/block/BlockNote'
+import { useAllFilters } from 'core/charts/hooks'
 
 interface FacetDataLoaderProps extends DynamicDataLoaderProps {
     defaultSeries: DataSeries<AllQuestionData>
@@ -29,11 +30,16 @@ const FacetDataLoader = ({
     providedSeries
 }: FacetDataLoaderProps) => {
     const pageContext = usePageContext()
+    const allFilters = useAllFilters(block.id)
+
     const year = pageContext.currentEdition.year
     const showDefaultSeries = chartFilters.options.showDefaultSeries
 
     const [isLoading, setIsLoading] = useState(false)
     const [series, setSeries] = useState(providedSeries || [defaultSeries])
+
+    allFilters.find(o => o.id === chartFilters?.facet?.id)
+    const facetQuestion = allFilters.find(o => o.id === chartFilters?.facet?.id)
 
     useEffect(() => {
         const getData = async () => {
@@ -48,7 +54,11 @@ const FacetDataLoader = ({
 
             setSeries(seriesData)
             setIsLoading(false)
-            setUnits(BucketUnits.PERCENTAGE_BUCKET)
+            setUnits(
+                facetQuestion?.optionsAreRange
+                    ? BucketUnits.PERCENTILES
+                    : BucketUnits.PERCENTAGE_BUCKET
+            )
         }
 
         if (!chartFilters.options.preventQuery && !isEmpty(chartFilters.facet)) {

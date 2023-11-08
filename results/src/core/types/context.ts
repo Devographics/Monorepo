@@ -28,5 +28,6 @@ interface SurveyPageContext {
     locales?: Array<any>
     localeId: string
     parent?: any
+    i18nNamespaces?: any
 }
 export type PageContextValue = SurveyPageContext & GatsbyPageContext

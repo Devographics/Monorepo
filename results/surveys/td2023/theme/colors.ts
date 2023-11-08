@@ -244,6 +244,11 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         color: '#818cf8',
         gradient: ['#818cf8', '#4039BD']
     },
+    barColorOverall: {
+        id: 'barColorOverall',
+        color: '#F99C61',
+        gradient: ['#F99C61', '#D76B26']
+    },
     barColorNoAnswer: {
         id: 'barColorNoAnswer',
         color: colors.greyLight,

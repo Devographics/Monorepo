@@ -121,6 +121,9 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
         legends: chartLegends
     }
 
+    // console.log(chartLegends)
+    // console.log(filterLegends)
+
     return (
         <BlockVariant {...blockVariantProps}>
             <DynamicDataLoader

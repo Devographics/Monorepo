@@ -158,6 +158,15 @@ export const createPagesSingleLoop = async ({
 
     // Building page context for each page of the sitemap
 
+    const allBlocks = flat.map(page => page.blocks).flat()
+    const allVariants = allBlocks.map(block => block.variants).flat()
+    let i18nNamespaces = {}
+    for (const variant of allVariants) {
+        if (variant.i18nNamespace) {
+            i18nNamespaces[variant.id] = variant.i18nNamespace
+        }
+    }
+
     for (const page of flat) {
         console.log('// Building page ' + page.path)
         let pageData = {}
@@ -198,7 +207,8 @@ export const createPagesSingleLoop = async ({
                     ...fullContext,
                     pageData,
                     locale,
-                    localeId: locale.id
+                    localeId: locale.id,
+                    i18nNamespaces
                 }
             }
 
