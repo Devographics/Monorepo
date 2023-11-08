@@ -2,7 +2,7 @@ id: ${mainBlockId}_vs_salary
 fieldId: ${mainBlockId}
 i18nNamespace: ${mainBlockId}
 tabId: tabs.vs_salary
-defaultUnits: averageByFacet
+defaultUnits: percentilesByFacet
 blockType: HorizontalBarBlock
 query: currentEditionData
 parameters:

@@ -1,7 +1,7 @@
 import React from 'react'
 import IconWrapper, { IconProps } from './IconWrapper'
 
-export const UserIcon = (props: IconProps) => {
+export const QuestionIcon = (props: IconProps) => {
     const { size = 32 } = props
     return (
         <IconWrapper {...props}>
@@ -13,11 +13,12 @@ export const UserIcon = (props: IconProps) => {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
-                strokeLinecap="butt"
+                strokeLinecap="round"
                 strokeLinejoin="round"
             >
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
             </svg>
         </IconWrapper>
     )

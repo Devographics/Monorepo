@@ -333,6 +333,10 @@ type Percentiles {
     """
     p0: Float
     """
+    10th percentile based on range average of all facet buckets
+    """
+    p10: Float
+    """
     25th percentile based on range average of all facet buckets
     """
     p25: Float
@@ -344,6 +348,10 @@ type Percentiles {
     75th percentile based on range average of all facet buckets
     """
     p75: Float
+    """
+    90th percentile based on range average of all facet buckets
+    """
+    p90: Float
     """
     100th percentile (maximum) based on range average of all facet buckets
     """

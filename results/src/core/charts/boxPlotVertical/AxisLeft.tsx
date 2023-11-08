@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { ScaleLinear } from 'd3'
-import { MARGIN } from './BoxPlotChart'
+import { MARGIN } from '../boxPlotHorizontal/HorizontalBoxPlotChart'
 import { BlockLegend } from 'core/types'
 
 type AxisLeftProps = {
@@ -8,9 +8,8 @@ type AxisLeftProps = {
     yScale: ScaleLinear<number, number>
     pixelsPerTick: number
     stroke: string
-    labelFormatter: (any) => string
+    labelFormatter: (v: number) => string
     legends?: BlockLegend[]
-    variant: 'horizontal' | 'vertical'
 }
 
 // tick length
@@ -22,15 +21,13 @@ export const AxisLeft = ({
     pixelsPerTick,
     stroke,
     labelFormatter,
-    legends,
-    variant = 'vertical'
+    legends
 }: AxisLeftProps) => {
     const range = yScale.range()
 
     const ticks = useMemo(() => {
         const height = range[0] - range[1]
-        const numberOfTicksTarget =
-            variant === 'vertical' ? Math.floor(height / pixelsPerTick) : legends?.length
+        const numberOfTicksTarget = Math.floor(height / pixelsPerTick)
 
         return yScale.ticks(numberOfTicksTarget).map(value => ({
             value,
@@ -49,13 +46,8 @@ export const AxisLeft = ({
 
             {/* Ticks and labels */}
             {ticks.map(({ value, yOffset }) => {
-                let label
-                if (variant === 'vertical') {
-                    label = labelFormatter(value)
-                } else {
-                    const legendItem = legends?.[value]
-                    label = legendItem?.shortLabel || legendItem?.label
-                }
+                const label = labelFormatter(value)
+
                 return (
                     <g key={value} transform={`translate(0, ${yOffset})`}>
                         <line
@@ -90,3 +82,5 @@ export const AxisLeft = ({
         </>
     )
 }
+
+export default AxisLeft

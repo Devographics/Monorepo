@@ -107,6 +107,7 @@ const BarTooltip = props => {
 
     const { isFreeformData } = data
     const units_ = id
+
     return (
         <div style={{ ...nivoTheme.tooltip.container, maxWidth: 300 }}>
             <span dangerouslySetInnerHTML={{ __html: label }} />

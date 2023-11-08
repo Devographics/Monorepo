@@ -13,7 +13,7 @@ import { MODE_GRID, MODE_FACET } from 'core/filters/constants'
 import { useChartFilters } from 'core/filters/helpers'
 import { useAllFilters } from 'core/charts/hooks'
 import { useLegends } from 'core/helpers/legends'
-import { BoxPlotChart } from '../boxPlot/BoxPlotChart'
+import HorizontalBoxPlotChart from '../boxPlotHorizontal/HorizontalBoxPlotChart'
 import { DataSeries } from 'core/filters/types'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {
@@ -57,9 +57,9 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
         const facetQuestion = allFilters.find(o => o.id === chartFilters?.facet?.id)
         // if this facet is in the form of numerical ranges, add the average of each range as unit too
         if (facetQuestion?.optionsAreRange) {
-            unitsOptions.push(BucketUnits.AVERAGE)
-            unitsOptions.push(BucketUnits.MEDIAN)
-            unitsOptions.push(BucketUnits.PERCENTILES)
+            // unitsOptions.push(BucketUnits.AVERAGE)
+            // unitsOptions.push(BucketUnits.MEDIAN)
+            unitsOptions = [BucketUnits.PERCENTILES, ...unitsOptions]
         }
     }
 
@@ -121,6 +121,9 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
         legends: chartLegends
     }
 
+    // console.log(chartLegends)
+    // console.log(filterLegends)
+
     return (
         <BlockVariant {...blockVariantProps}>
             <DynamicDataLoader
@@ -135,7 +138,7 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
             >
                 <ChartContainer fit={true}>
                     {units === BucketUnits.PERCENTILES ? (
-                        <BoxPlotChart {...chartProps} variant="horizontal" />
+                        <HorizontalBoxPlotChart {...chartProps} />
                     ) : (
                         <HorizontalBarChart {...chartProps} />
                     )}

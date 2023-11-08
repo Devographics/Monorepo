@@ -115,9 +115,11 @@ export enum BucketUnits {
 
 export enum Percentiles {
     P0 = 'p0',
+    P10 = 'p10',
     p25 = 'p25',
     p50 = 'p50',
     p75 = 'p75',
+    p90 = 'p90',
     p100 = 'p100'
 }
 

@@ -170,7 +170,20 @@ type UseColorDefsOptions = {
 Generate list of all possible bar fills
 
 */
-export const useColorDefs = (options: UseColorDefsOptions = {}) => {
+export type GradientColor = {
+    offset: number
+    color: string
+}
+export type GradientDefinition = {
+    id: string
+    type: 'linearGradient'
+    colors: GradientColor[]
+    x1?: number
+    y1?: number
+    x2?: number
+    y2?: number
+}
+export const useColorDefs = (options: UseColorDefsOptions = {}): GradientDefinition[] => {
     const { orientation = VERTICAL } = options
     const theme = useTheme()
     const { colors } = theme
@@ -218,8 +231,8 @@ export const useColorDefs = (options: UseColorDefsOptions = {}) => {
         id: `Gradient${orientation}Overall`,
         type: 'linearGradient',
         colors: [
-            { offset: 0, color: colors.barColorDefault.gradient[1] },
-            { offset: 100, color: colors.barColorDefault.gradient[0] }
+            { offset: 0, color: colors.barColorOverall?.gradient[1] },
+            { offset: 100, color: colors.barColorOverall?.gradient[0] }
         ],
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }

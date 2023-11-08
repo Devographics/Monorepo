@@ -2,110 +2,91 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import { mq, spacing } from 'core/theme'
+import { getItemLabel } from 'core/helpers/labels'
 
-export default class LegendsItem extends Component {
-    static propTypes = {
-        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-        label: PropTypes.string.isRequired,
-        shortLabel: PropTypes.string,
-        color: PropTypes.string,
-        style: PropTypes.object.isRequired,
-        chipSize: PropTypes.number.isRequired,
-        chipStyle: PropTypes.object.isRequired,
-        onMouseEnter: PropTypes.func,
-        onMouseLeave: PropTypes.func,
-        onClick: PropTypes.func,
-        isCurrent: PropTypes.bool
-    }
+const BlockLegendsItem = props => {
+    const {
+        id,
+        color,
+        label,
+        shortLabel,
+        chipSize,
+        style,
+        chipStyle,
+        data,
+        units,
+        onMouseEnter,
+        onMouseLeave,
+        onClick,
+        useShortLabels,
+        layout,
+        current = null
+    } = props
 
-    static defaultProps = {
-        style: {},
-        chipStyle: {}
-    }
-
-    handleMouseEnter = () => {
-        const { onMouseEnter, id, label, color } = this.props
+    const handleMouseEnter = () => {
         if (onMouseEnter === undefined) return
         onMouseEnter({ id, label, color })
     }
 
-    handleMouseLeave = () => {
-        const { onMouseLeave, id, label, color } = this.props
+    const handleMouseLeave = () => {
         if (onMouseLeave === undefined) return
         onMouseLeave({ id, label, color })
     }
 
-    handleClick = () => {
-        const { onClick, id, label, color } = this.props
+    const handleClick = () => {
         if (onClick === undefined) return
         onClick({ id, label, color })
     }
 
-    render() {
-        const {
-            id,
-            color,
-            label,
-            shortLabel,
-            chipSize,
-            style,
-            chipStyle,
-            data,
-            units,
-            onMouseEnter,
-            useShortLabels,
-            layout,
-            current = null
-        } = this.props
+    const isInteractive = typeof onMouseEnter !== 'undefined'
 
-        const isInteractive = typeof onMouseEnter !== 'undefined'
+    const state = current === null ? 'default' : current === id ? 'active' : 'inactive'
 
-        const state = current === null ? 'default' : current === id ? 'active' : 'inactive'
+    const label_ = useShortLabels ? shortLabel ?? label : label
 
-        const label_ = useShortLabels ? shortLabel ?? label : label
+    // const label_ = getItemLabel({ id, entity, getString, i18Namespace })
 
-        return (
-            <Container
-                className={`Legends__Item ${shortLabel ? 'Legends__Item--withKeyLabel' : ''}`}
-                style={style}
-                isInteractive={isInteractive}
-                onMouseEnter={this.handleMouseEnter}
-                onMouseLeave={this.handleMouseLeave}
-                onClick={this.handleClick}
-                state={state}
-            >
-                {color && (
-                    <ChipWrapper layout={layout}>
-                        <Chip
-                            style={{
-                                width: chipSize,
-                                height: chipSize,
-                                background: color,
-                                ...chipStyle
-                            }}
-                        />
-                    </ChipWrapper>
-                )}
-                {!color && shortLabel && (
-                    <KeyLabel layout={layout} className="Legends__Item__KeyLabel">
-                        {shortLabel}{' '}
-                    </KeyLabel>
-                )}
-                <Label
-                    layout={layout}
-                    className="Legends__Item__Label"
-                    dangerouslySetInnerHTML={{
-                        __html: label_
-                    }}
-                />
-                {data && (
-                    <Value layout={layout} className="Legends__Item__Value">
-                        {units === 'percentage' ? `${data[units]}%` : data[units]}
-                    </Value>
-                )}
-            </Container>
-        )
-    }
+    return (
+        <Container
+            className={`Legends__Item ${shortLabel ? 'Legends__Item--withKeyLabel' : ''}`}
+            style={style}
+            isInteractive={isInteractive}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onClick={handleClick}
+            state={state}
+        >
+            {color && (
+                <ChipWrapper layout={layout}>
+                    <Chip
+                        style={{
+                            width: chipSize,
+                            height: chipSize,
+                            background: color,
+                            ...chipStyle
+                        }}
+                    />
+                </ChipWrapper>
+            )}
+            {!color && shortLabel && (
+                <KeyLabel layout={layout} className="Legends__Item__KeyLabel">
+                    {shortLabel}{' '}
+                </KeyLabel>
+            )}
+            <Label
+                layout={layout}
+                className="Legends__Item__Label"
+                dangerouslySetInnerHTML={{
+                    __html: label_
+                }}
+            />
+            {data && (
+                <Value layout={layout} className="Legends__Item__Value">
+                    {units === 'percentage' ? `${data[units]}%` : data[units]}
+                </Value>
+            )}
+        </Container>
+    )
 }
 
 const Container = styled.tr`
@@ -164,3 +145,4 @@ const Label = styled.td`
 const Value = styled.td`
     padding: ${spacing(0.25)} ${spacing(0.5)} ${spacing(0.25)} 0;
 `
+export default BlockLegendsItem

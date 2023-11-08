@@ -36,7 +36,7 @@ export const generateFiltersQuery = async ({
     filters?: Filters
     dbPath?: string
 }): Promise<FiltersQuery> => {
-    const surveys = await loadOrGetSurveys()
+    const { surveys } = await loadOrGetSurveys()
     const questionObjects = getQuestionObjects({ surveys })
 
     const match: FiltersQuery = {}

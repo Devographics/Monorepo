@@ -5,7 +5,7 @@ import BlockNote from 'core/blocks/block/BlockNote'
 import BlockLegends from 'core/blocks/block/BlockLegends'
 import { useI18n } from 'core/i18n/i18nContext'
 import { usePageContext } from 'core/helpers/pageContext'
-import { useBlockDescription, useBlockTitle, useBlockQuestion } from 'core/helpers/blockHelpers'
+import { useBlockDescription, useBlockTitle } from 'core/helpers/blockHelpers'
 import T from 'core/i18n/T'
 import BlockFooter from 'core/blocks/block/BlockFooter'
 import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
@@ -13,6 +13,7 @@ import EditInline from 'core/components/EditInline'
 import BlockLinks from 'core/blocks/block/BlockLinks'
 import { BlockDefinition } from 'core/types'
 import { Entity } from '@devographics/types'
+import BlockQuestion from './BlockQuestion'
 
 const BlockChart = props => {
     const {
@@ -45,7 +46,6 @@ const BlockChart = props => {
     return (
         <div>
             <BlockDescriptionContents block={block} />
-            <BlockQuestionContents block={block} />
             {entity && !isCapturing && <BlockLinks entity={entity} />}
             <BlockFooter {...props} />
 
@@ -78,6 +78,7 @@ const BlockChart = props => {
                 </SwitcherWrapper>
             )}
             {showNote && <BlockNote block={block} />}
+            <BlockQuestion block={block} />
         </div>
     )
 }
@@ -91,14 +92,6 @@ export const BlockDescriptionContents = ({ block }: { block: BlockDefinition }) 
                 {blockDescription} {block.isFreeform && <T k="blocks.freeform" />}
             </Description>
         )
-    }
-    return null
-}
-
-const BlockQuestionContents = ({ block }: { block: BlockDefinition }) => {
-    const blockQuestion = useBlockQuestion({ block })
-    if (blockQuestion) {
-        return <Description className="Block__Question">(?) {blockQuestion}</Description>
     }
     return null
 }

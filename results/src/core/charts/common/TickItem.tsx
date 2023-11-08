@@ -6,12 +6,13 @@ import TooltipComponent from 'core/components/Tooltip'
 import { getSocialLinks } from 'core/charts/common/TickItemLinks'
 import { NO_ANSWER, NO_MATCH, CUTOFF_ANSWERS, OVERALL } from '@devographics/constants'
 import { getItemLabel } from 'core/helpers/labels'
+import trimEnd from 'lodash/trimEnd'
 
 const labelMaxLength = 20
 
 const shorten = (label: string) => {
     if (label?.length > labelMaxLength + 1) {
-        return label?.substring(0, labelMaxLength) + '…'
+        return trimEnd(label?.substring(0, labelMaxLength)) + '…'
     } else {
         return label
     }
@@ -65,7 +66,7 @@ export const Text = ({
         </text>
     )
 
-    const textContents = `#${index}: ${description ?? label}`
+    const textContents = `#${index}: ${description || label}`
 
     return (
         <TooltipComponent
