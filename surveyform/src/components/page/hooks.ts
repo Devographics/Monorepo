@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import type { BrowserData } from "@devographics/types"
 
 // for some reason this throws error?
 // TODO: do we need a dynamic require?
@@ -38,6 +39,7 @@ export const useBrowserData = (): BrowserData => {
     // TODO: should it need an update?
     // @ts-expect-error
     const info = browser.parse().parsedResult;
+
     const data: BrowserData = {
       common__user_info__device: info.platform.type,
       common__user_info__browser: info.browser.name,
@@ -55,14 +57,6 @@ export const useBrowserData = (): BrowserData => {
   return browserData;
 };
 
-export interface BrowserData {
-  common__user_info__source?: string;
-  common__user_info__referrer?: string;
-  common__user_info__device?: string;
-  common__user_info__browser?: string;
-  common__user_info__version?: string;
-  common__user_info__os?: string;
-}
 
 export interface PrefilledData extends BrowserData {
   surveyId?: string;

@@ -6,6 +6,7 @@ import { getUUID } from "~/lib/email";
 import { NormalizationParams, StepFunction } from "../types";
 import clone from "lodash/clone";
 import { emptyValues } from "../helpers/getSelectors";
+import type { GenericResponseDocument } from "@devographics/types"
 
 // const replaceAll = function (target, search, replacement) {
 //   return target.replace(new RegExp(search, "g"), replacement);
@@ -31,8 +32,15 @@ import { emptyValues } from "../helpers/getSelectors";
 //   );
 // };
 
-// fields to copy, along with the path at which to copy them (if different)
-export const getFieldsToCopy = (editionId) => [
+/**
+ * 
+ *  Fields to copy, along with the path at which to copy them (if different)
+ *  It also acts as the source of truth to identify empty responses in "responseIsEmpty"
+ *  @see surveyadmin/src/lib/normalization/normalize/normalizeDocument.ts
+ * @param editionId 
+ * @returns 
+ */
+export const getFieldsToCopy = (editionId: String): Array<[keyof GenericResponseDocument] | [keyof GenericResponseDocument, string]> => [
   ["year"],
   ["surveyId"],
   ["editionId"],
@@ -43,7 +51,6 @@ export const getFieldsToCopy = (editionId) => [
   ["readingList", "reading_list"],
   ["duration", "user_info.duration"],
   ["userId"],
-  ["isFake"],
   ["isFinished"],
   ["knowledgeScore", "user_info.knowledge_score"],
   ["common__user_info__device", "user_info.device"],
@@ -52,11 +59,15 @@ export const getFieldsToCopy = (editionId) => [
   ["common__user_info__os", "user_info.os"],
   ["common__user_info__referrer", "user_info.referrer_raw"],
   ["common__user_info__source", "user_info.sourcetag_raw"],
-  ["common__user_info__authmode", "user_info.authmode"],
   [
+    // @ts-ignore This question is part of the survey but present on most surveys so it's ok to have it here
     `${editionId}__user_info__how_did_user_find_out_about_the_survey`,
     "user_info.how_did_user_find_out_about_the_survey",
   ],
+  // @ts-ignore Legacy
+  ["isFake"],
+  // @ts-ignore Legacy
+  ["common__user_info__authmode", "user_info.authmode"],
 ];
 
 export const copyFields: StepFunction = async ({

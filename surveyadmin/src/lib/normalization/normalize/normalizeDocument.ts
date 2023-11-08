@@ -53,6 +53,10 @@ const fetchDataIfNeeded = async (options: NormalizationOptions) => {
   };
 };
 
+/**
+ *
+ * Marks the document with "empty", "errors" etc. depending on the situation
+ */
 export const normalizeDocument = async (
   options: NormalizationOptions
 ): Promise<
@@ -89,32 +93,32 @@ export const normalizeDocument = async (
         type: NormalizationResultTypes.EMPTY,
       } as NormalizationResultEmpty;
       return normalizationResult;
-    } else {
-      if (questionId) {
-        // 1. we only need to renormalize a single field
-        normalizationResult = await normalizeQuestion({
-          ...normalizationParams,
-          questionId,
-        });
-      } else {
-        // 2. we are normalizing the entire document
-        normalizationResult = await normalizeResponse(normalizationParams);
-      }
-
-      const normalizationResultExtended = {
-        ...normalizationResult,
-        response,
-        responseId: response._id,
-        selector: { responseId: response._id },
-        counts: {
-          normalized: normalizationResult.normalizedFields.length,
-          regular: normalizationResult.regularFields.length,
-          comment: normalizationResult.commentFields.length,
-          prenormalized: normalizationResult.prenormalizedFields.length,
-        },
-      };
-      return normalizationResultExtended;
     }
+
+    if (questionId) {
+      // 1. we only need to renormalize a single field
+      normalizationResult = await normalizeQuestion({
+        ...normalizationParams,
+        questionId,
+      });
+    } else {
+      // 2. we are normalizing the entire document
+      normalizationResult = await normalizeResponse(normalizationParams);
+    }
+
+    const normalizationResultExtended = {
+      ...normalizationResult,
+      response,
+      responseId: response._id,
+      selector: { responseId: response._id },
+      counts: {
+        normalized: normalizationResult.normalizedFields.length,
+        regular: normalizationResult.regularFields.length,
+        comment: normalizationResult.commentFields.length,
+        prenormalized: normalizationResult.prenormalizedFields.length,
+      },
+    };
+    return normalizationResultExtended;
   } catch (error) {
     console.log(error);
     // response encountered error, pass on error and discard operation
@@ -293,13 +297,15 @@ const normalizeResponse = async (
   };
 };
 
-/*
+/**
 
 Check if a response is empty (automatically filled "base" fields 
 such as _id, common__user_info__referrer etc. don't count)
 
+Relies on the "steps" definition to identify non-relevant fields
+
 */
-const responseIsEmpty = ({
+const responseIsEmptyLegacy = ({
   response,
   edition,
 }: {
@@ -308,10 +314,12 @@ const responseIsEmpty = ({
 }) => {
   const baseFields = [
     ...steps.getFieldsToCopy(edition.id).map(([f1, f2]) => f1),
+    // keep in sync with "ResponseDocument"
     "_id",
     "isNormalized",
     "duration",
     "locale",
+    "lastSavedAt"
   ];
   const responseFields = Object.keys(response);
   // find any response fields that are *not* base fields
@@ -319,3 +327,15 @@ const responseIsEmpty = ({
   // response is considered empty if it only contains base fields
   return contentFields.length === 0;
 };
+
+function responseIsEmpty(
+  {
+    response,
+    edition,
+  }: {
+    response: ResponseDocument;
+    edition: EditionMetadata;
+  }) {
+  const contentFields = Object.keys(response).filter(k => k.startsWith(edition.id))
+  return !!contentFields.length
+}

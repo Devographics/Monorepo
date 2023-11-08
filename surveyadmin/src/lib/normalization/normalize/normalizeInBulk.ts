@@ -229,6 +229,8 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
 
   Sort documents in different "buckets" to help with logging
 
+  This is where we compute "emptyDocuments", "errorDocument" etc.
+
   */
   allDocuments = allDocuments.map((doc) => {
     let group;
@@ -275,10 +277,9 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
   );
 
   console.log(
-    `👍 Normalized ${progress - mutationResult.discardedCount} responses ${
-      mutationResult.discardedCount > 0
-        ? `(${mutationResult.discardedCount} responses discarded)`
-        : ""
+    `👍 Normalized ${progress - mutationResult.discardedCount} responses ${mutationResult.discardedCount > 0
+      ? `(${mutationResult.discardedCount} responses discarded)`
+      : ""
     }. (${endAt}) - ${duration}s`
   );
 
