@@ -36,7 +36,6 @@ yarn-error.log*
 **/cypress/screenshots
 **/cypress/videos
 **/coverage-e2e/
-.nyc_output/
 **/coverage-unit
 **/reports/
 

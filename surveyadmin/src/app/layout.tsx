@@ -44,10 +44,12 @@ export default function RootLayout({
 export const metadata: Metadata = {
   title: "Devographics Admin",
   description: "Admin app for the Devographics surveys",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-  },
   // /app/favicon.ico is automatically used as icon
+};
+
+// Since Next 14 viewport is separate from metadata
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };

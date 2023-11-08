@@ -24,8 +24,9 @@ export const APIDashboard = () => (
     {/* <p>
       Those actions will tell the API to reload the GitHub repositories
       containing the corresponding data
-    </p>
-    <p>This does NOT empty the Surveyform Redis cache</p> */}
+</p>
+The API will in turn call Surveyform so it empties its cache
+*/}
 
     <div className="api-dashboard">
       <section>

@@ -52,30 +52,6 @@ const moduleExports = (phase, { defaultConfig }) => {
         use: "node-loader",
       });
 
-      // Support differentiated import for the same folder
-      if (!config.resolve.mainFiles) {
-        config.resolve.mainFiles = [
-          "index.js",
-          "index.ts",
-          "index.jsx",
-          "index.tsx",
-        ];
-      }
-      if (otherArgs.isServer) {
-        config.resolve.mainFiles.push(
-          "index.server.ts",
-          "index.server.tsx",
-          "index.server.js",
-          "index.server.jsx"
-        );
-      } else {
-        config.resolve.mainFiles.push(
-          "index.client.ts",
-          "index.client.tsx",
-          "index.client.js",
-          "index.client.jsx"
-        );
-      }
       if (!config.resolve) config.resolve = {};
       // This is still needed for Storybook or 3rd party Webpack baseds tools
       // However Next is able to resolve based just on the tsconfig.json
