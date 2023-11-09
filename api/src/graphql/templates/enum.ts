@@ -26,7 +26,7 @@ export const generateEnumType = ({
     if (!enumTypeName) {
         return
     } else if (groups) {
-        formattedOptions = optionsAreNumeric ? formatNumericOptions<OptionGroup>(groups) : groups
+        formattedOptions = groups
     } else if (options) {
         formattedOptions = optionsAreNumeric ? formatNumericOptions<Option>(options) : options
     } else {

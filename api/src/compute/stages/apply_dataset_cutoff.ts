@@ -45,11 +45,6 @@ export const applyBucketCutoff = ({
 }) => {
     const cutoff = getDatasetCutoff()
 
-    const bucketWithCutoff =
-        bucket.count !== undefined && bucket.count < cutoff
-            ? getZeroBucket(bucket, hasFilter)
-            : bucket
-
     const facetBucketsWithCutoff = hasFacet
         ? bucket.facetBuckets.map(facetBucket => {
               return facetBucket.count !== undefined && facetBucket.count < cutoff
@@ -57,6 +52,16 @@ export const applyBucketCutoff = ({
                   : facetBucket
           })
         : []
+
+    // In some cases, the main bucket has a total count over the cutoff,
+    // but every individual facet bucket comes in *under* the cutoff.
+    // We also zero out these buckets.
+    const allFacetsUnderCutoff = facetBucketsWithCutoff.every(fb => fb.hasInsufficientData)
+
+    const bucketWithCutoff =
+        bucket.count !== undefined && (bucket.count < cutoff || allFacetsUnderCutoff)
+            ? getZeroBucket(bucket, hasFilter)
+            : bucket
 
     return { ...bucketWithCutoff, facetBuckets: facetBucketsWithCutoff }
 }
