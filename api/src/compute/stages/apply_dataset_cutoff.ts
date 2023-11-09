@@ -13,7 +13,13 @@ messing up the charts because of missing datapoints.
 
 */
 
-const getZeroBucket = <T extends Bucket | FacetBucket>(bucket: T, clearCount: boolean = false) => {
+const getZeroBucket = <T extends Bucket | FacetBucket>({
+    bucket,
+    clearCount = false
+}: {
+    bucket: T
+    clearCount: boolean
+}) => {
     const zeroBucket = clearCount
         ? { ...bucket, count: 0, hasInsufficientData: true }
         : { ...bucket, hasInsufficientData: true }
@@ -48,20 +54,26 @@ export const applyBucketCutoff = ({
     const facetBucketsWithCutoff = hasFacet
         ? bucket.facetBuckets.map(facetBucket => {
               return facetBucket.count !== undefined && facetBucket.count < cutoff
-                  ? getZeroBucket(facetBucket, true)
+                  ? getZeroBucket({ bucket: facetBucket, clearCount: true })
                   : facetBucket
           })
         : []
 
-    // In some cases, the main bucket has a total count over the cutoff,
-    // but every individual facet bucket comes in *under* the cutoff.
-    // We also zero out these buckets.
-    const allFacetsUnderCutoff = facetBucketsWithCutoff.every(fb => fb.hasInsufficientData)
+    /* 
+    
+    In some cases, the main bucket has a total count over the cutoff,
+    but every individual facet bucket comes in *under* the cutoff.
+    We also mark these buckets as having insufficient data
 
-    const bucketWithCutoff =
-        bucket.count !== undefined && (bucket.count < cutoff || allFacetsUnderCutoff)
-            ? getZeroBucket(bucket, hasFilter)
-            : bucket
+    */
+    const allFacetsUnderCutoff = facetBucketsWithCutoff.every(fb => fb.hasInsufficientData)
+    const mainBucketIsInsufficient =
+        (bucket.count !== undefined && bucket.count < cutoff) || (hasFacet && allFacetsUnderCutoff)
+    // We only need to clear the main bucket's count when a filter is applied to segment the data
+    const clearCount = hasFilter
+    const bucketWithCutoff = mainBucketIsInsufficient
+        ? getZeroBucket({ bucket, clearCount })
+        : bucket
 
     return { ...bucketWithCutoff, facetBuckets: facetBucketsWithCutoff }
 }

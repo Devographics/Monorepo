@@ -256,13 +256,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         }
     }
 
-    console.log('// computeArguments')
-    console.log(computeArguments)
-    console.log('// axis1')
-    console.log(axis1)
-    console.log('// axis2')
-    console.log(axis2)
-
     const dbPath = getDbPath(question, responsesType)
 
     if (!dbPath) {
@@ -312,17 +305,24 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         console.log(
             `// Using collection ${survey.normalizedCollectionName} on db ${process.env.MONGO_PUBLIC_DB}`
         )
-        console.log(
-            inspect(
-                {
-                    match,
-                    pipeline
-                },
-                { colors: true, depth: null }
-            )
-        )
-        console.log('// raw results')
-        console.log(JSON.stringify(results, null, 2))
+        // console.log(
+        //     inspect(
+        //         {
+        //             match,
+        //             pipeline
+        //         },
+        //         { colors: true, depth: null }
+        //     )
+        // )
+        // console.log('// raw results')
+        // console.log(JSON.stringify(results, null, 2))
+
+        await logToFile('last_query/computeArguments.json', computeArguments)
+        await logToFile('last_query/axis1.json', axis1)
+        await logToFile('last_query/axis2.json', axis2)
+        await logToFile('last_query/match.json', match)
+        await logToFile('last_query/pipeline.json', pipeline)
+        await logToFile('last_query/rawResults.yml', results)
     }
 
     if (!axis2) {
@@ -343,9 +343,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
     if (axis2) {
         await addDefaultBucketCounts(results)
-    }
 
-    if (axis2) {
         if (responsesType === ResponsesTypes.RESPONSES) {
             await addMissingItems(results, axis2, axis1)
         }
@@ -429,10 +427,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     }
 
     if (isDebug) {
-        console.log('// results final')
-        console.log(JSON.stringify(results, undefined, 2))
-
-        await logToFile('lastResults.yml', results)
+        // console.log('// results final')
+        // console.log(JSON.stringify(results, undefined, 2))
+        await logToFile('last_query/results.yml', results)
     }
 
     return results

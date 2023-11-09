@@ -10,5 +10,5 @@ export interface FilterQuery<T> {
 }
 
 export interface FiltersQuery {
-    [key: string]: FilterQuery<string>
+    [key: string]: FilterQuery<string | number>
 }

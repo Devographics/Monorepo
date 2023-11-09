@@ -3,6 +3,7 @@ import { getQuestionObjects } from './generate/generate'
 import { Filter, Filters, FilterQuery, FiltersQuery, ComputeAxisParameters } from './types'
 import { OptionGroup } from '@devographics/types'
 import range from 'lodash/range.js'
+import { getMainSubfieldPath } from './helpers/surveys'
 
 /**
  * Map natural operators (exposed by the API), to MongoDB operators.
@@ -89,14 +90,18 @@ export const generateFiltersQuery = async ({
         for (const filterKey of Object.keys(filters)) {
             const [sectionId, filterId] = filterKey.split('__')
             const filterField = questionObjects.find(q => q.id === filterId)
+            if (!filterField) {
+                throw new Error(`generateFiltersQuery: could not find question with id ${filterId}`)
+            }
             const filter = filters[filterKey]
-            if (filterField?.normPaths?.response) {
+            const subFieldPath = getMainSubfieldPath(filterField)
+            if (subFieldPath) {
                 if (filterField.groups) {
-                    match[filterField.normPaths.response] = mapFilter<string>(
+                    match[subFieldPath] = mapFilter<string | number>(
                         expandFilter(filter, filterField.groups)
                     )
                 } else {
-                    match[filterField.normPaths.response] = mapFilter<string>(filter)
+                    match[subFieldPath] = mapFilter<string | number>(filter)
                 }
             }
         }
