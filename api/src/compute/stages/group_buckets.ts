@@ -4,6 +4,7 @@ import sumBy from 'lodash/sumBy.js'
 import { CUTOFF_ANSWERS, NO_ANSWER, NO_MATCH, OTHER_ANSWERS } from '@devographics/constants'
 import round from 'lodash/round.js'
 import uniq from 'lodash/uniq.js'
+import compact from 'lodash/compact.js'
 
 /*
 
@@ -24,20 +25,31 @@ export const combineFacetBuckets = (
     let combinedFacetBuckets = [...optionsOrGroups, noAnswerOption].map(option => {
         const { id, label } = option
         // for each facet, find the equivalent facetBuckets in all the main buckets
-        const sameFacetBuckets = selectedBuckets.map(
-            b => b?.facetBuckets?.find(fb => fb.id === option.id)!
+        // make sure to compact to remove undefined facetBuckets (when the equivalent
+        // facetBucket doesn't exist in another main bucket)
+        const sameFacetBuckets = compact(
+            selectedBuckets.map(b => b?.facetBuckets?.find(fb => fb.id === option.id)!)
         )
-        const combinedFacetBucket = {
+        let combinedFacetBucket: FacetBucket = {
             // Note: might create issues when option ID is not the same as facet bucket ID
             id: String(id),
             label,
-            groupedBuckets: uniq(sameFacetBuckets.map(b => b?.groupedBuckets).flat()),
-            groupedBucketIds: uniq(sameFacetBuckets.map(b => b?.groupedBucketIds).flat()),
             count: round(
                 sumBy(sameFacetBuckets, b => b?.count ?? 0),
                 2
             )
         }
+        // if the facets we're grouping all have groups, also combine the groups
+        if (sameFacetBuckets.every(b => b.groupedBuckets)) {
+            const groupedBuckets = uniq(sameFacetBuckets.map(b => b.groupedBuckets!).flat())
+            const groupedBucketIds = groupedBuckets.map(b => b.id)
+            combinedFacetBucket = {
+                ...combinedFacetBucket,
+                groupedBuckets,
+                groupedBucketIds
+            }
+        }
+
         return combinedFacetBucket
     })
     return combinedFacetBuckets

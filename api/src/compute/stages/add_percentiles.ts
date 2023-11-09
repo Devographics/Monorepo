@@ -118,6 +118,12 @@ desired percentile using linear interpolation between the two nearest integer in
 
 */
 function calculatePercentile(datapoints: number[], percentile: number): number {
+    // Note: there are situations where there are no datapoints at all
+    // For example if every facet was zero'd out because its count was
+    // lower than the privacy data cutoff
+    if (datapoints.length === 0) {
+        return 0
+    }
     const index = (percentile / 100) * (datapoints.length - 1)
 
     if (index % 1 === 0) {
@@ -161,11 +167,9 @@ function calculatePercentiles2({
         (fb1, fb2) => fb1.average - fb2.average
     )
 
-    const nonEmptyFacetBuckets = sortedFacetBuckets.filter(fb => fb.count! > 0)
-
     // expand buckets into individual datapoints
-    const allDatapoints = nonEmptyFacetBuckets
-        .map(bucket => Array(bucket.count).fill(bucket.average))
+    const allDatapoints = sortedFacetBuckets
+        .map(bucket => (bucket.count === 0 ? [] : Array(bucket.count).fill(bucket.average)))
         .flat()
 
     const percentiles = {

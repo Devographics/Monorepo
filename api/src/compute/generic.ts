@@ -55,6 +55,7 @@ import { getCollection } from '../helpers/db'
 import { getPastEditions } from '../helpers/surveys'
 import { computeKey } from '../helpers/caching'
 import isEmpty from 'lodash/isEmpty.js'
+import { logToFile } from '@devographics/debug'
 
 export const convertOrder = (order: SortOrder): SortOrderNumeric => (order === 'asc' ? 1 : -1)
 
@@ -427,8 +428,12 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await addLabels(results, axis1)
     }
 
-    console.log('// results final')
-    console.log(JSON.stringify(results, undefined, 2))
+    if (isDebug) {
+        console.log('// results final')
+        console.log(JSON.stringify(results, undefined, 2))
+
+        await logToFile('lastResults.yml', results)
+    }
 
     return results
 }
