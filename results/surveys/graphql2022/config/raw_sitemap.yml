@@ -70,7 +70,7 @@
 
       - id: country
         template: demographics
-        blockType: ParticipationByCountryBlock
+        blockType: HorizontalBarBlock
 
       - id: locale
         template: demographics
@@ -81,7 +81,6 @@
 
       - id: completion_stats
         template: demographics
-        blockType: KnowledgeScoreBlock
         translateData: true
 
       - id: hint_hint
@@ -206,7 +205,6 @@
       - id: knowledge_score
         template: demographics
         blockNamespace: features
-        blockType: KnowledgeScoreBlock
 
       # - id: features_resources
       #   items: [fm-javascript]
