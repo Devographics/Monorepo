@@ -51,6 +51,8 @@ type EditionMetadata {
     imageUrl: String
     faviconUrl: String
     socialImageUrl: String
+    issuesUrl: String
+    discordUrl: String
 
     sections(include: IncludeEnum): [SectionMetadata]
 

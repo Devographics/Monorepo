@@ -187,6 +187,8 @@ query ${editionId}MetadataQuery {
         startedAt
         endedAt
         questionsUrl
+        issuesUrl
+        discordUrl
         resultsUrl
         imageUrl
         faviconUrl
@@ -308,6 +310,8 @@ query ${editionId}MetadataQuery {
         startedAt
         endedAt
         questionsUrl
+        issuesUrl
+        discordUrl
         resultsUrl
         imageUrl
         faviconUrl

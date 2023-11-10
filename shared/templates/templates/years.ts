@@ -46,6 +46,34 @@ const groups = [
     }
 ]
 
+// const groups = [
+//     {
+//         id: 'range_under_1',
+//         lowerBound: 0,
+//         average: 1,
+//         upperBound: 1
+//     },
+//     {
+//         id: 'range_1_4',
+//         lowerBound: 1,
+//         upperBound: 5
+//     },
+//     {
+//         id: 'range_5_9',
+//         lowerBound: 5,
+//         upperBound: 10
+//     },
+//     {
+//         id: 'range_10_14',
+//         lowerBound: 10,
+//         upperBound: 15
+//     },
+//     {
+//         id: 'range_over_15',
+//         lowerBound: 15,
+//         average: 15
+//     }
+// ]
 export const years: TemplateFunction = options => {
     checkHasId(options)
 

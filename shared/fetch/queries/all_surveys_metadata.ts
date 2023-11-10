@@ -21,6 +21,8 @@ query SurveysMetadataQuery {
       editions {
         id
         questionsUrl
+        issuesUrl
+        discordUrl
         feedbackUrl
         resultsUrl
         surveyId

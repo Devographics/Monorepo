@@ -14,6 +14,8 @@ export const getEditionSitemapQuery = ({ editionId }: { editionId: string }) => 
           startedAt
           endedAt
           questionsUrl
+          issuesUrl
+          discordUrl
           feedbackUrl
           resultsUrl
           imageUrl
