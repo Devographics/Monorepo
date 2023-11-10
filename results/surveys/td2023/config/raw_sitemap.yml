@@ -202,6 +202,9 @@
         parameters: { cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
+              parameters:
+                  showNoAnswer: true
+                  cutoff: 10
 
       - id: how_did_you_find_your_current_job
         template: single_option_combined

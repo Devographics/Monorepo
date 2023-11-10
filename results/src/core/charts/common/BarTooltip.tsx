@@ -5,7 +5,7 @@ import { useI18n } from 'core/i18n/i18nContext'
 import { isPercentage } from 'core/helpers/units'
 import { BucketUnits } from '@devographics/types'
 import { BlockLegend, StringTranslator } from 'core/types'
-import { NO_ANSWER } from '@devographics/constants'
+import { INSUFFICIENT_DATA, NO_ANSWER } from '@devographics/constants'
 import { getItemLabel } from 'core/helpers/labels'
 import { CustomizationFiltersSeries, FacetItem } from 'core/filters/types'
 import T from 'core/i18n/T'
@@ -85,16 +85,20 @@ const BarTooltip = props => {
         labelFormatter
     } = props
     const { getString } = useI18n()
-    const extraLabel = getExtraLabel({
-        id,
-        legends,
-        filterLegends,
-        units,
-        indexValue,
-        facet,
-        filters,
-        getString
-    })
+
+    const extraLabel = id.includes(INSUFFICIENT_DATA)
+        ? getString('charts.insufficient_data')?.t
+        : getExtraLabel({
+              id,
+              legends,
+              filterLegends,
+              units,
+              indexValue,
+              facet,
+              filters,
+              getString
+          })
+
     const { key, label } = getItemLabel({
         getString,
         i18nNamespace,

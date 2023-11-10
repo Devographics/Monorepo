@@ -42,7 +42,7 @@ export const getBlockTitleKey = ({
     block
 }: {
     block: BlockDefinition
-    pageContext: PageContextValue
+    pageContext?: PageContextValue
 }) => block.titleId || `${getBlockKey({ block })}`
 
 export const getBlockTitle = ({

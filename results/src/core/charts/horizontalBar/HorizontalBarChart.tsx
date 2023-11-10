@@ -23,6 +23,8 @@ import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 import sortBy from 'lodash/sortBy'
 import InsufficientData from './InsufficientData'
+import { INSUFFICIENT_DATA } from '@devographics/constants'
+import sumBy from 'lodash/sumBy'
 
 export const getChartDataPath = (block: BlockDefinition) =>
     `${block?.queryOptions?.subField || 'responses'}.currentEdition.buckets`
@@ -91,9 +93,12 @@ const getLabelsLayer = (labelTransformer: any) => (props: any) => {
     //     rotation = -90
     // }
     return props.bars.map((bar: any) => {
-        const label = labelTransformer(bar.data)
-        const hasInsufficientData = bar.data.data.hasInsufficientData
-        return hasInsufficientData ? null : (
+        // entire bar has insufficient data
+        const barHasInsufficientData = bar.data.data.hasInsufficientData
+        // current segment is insufficient data segment
+        const isInsufficientDataSegment = bar.data.id.includes(INSUFFICIENT_DATA)
+        const label = isInsufficientDataSegment ? '?' : labelTransformer(bar.data)
+        return barHasInsufficientData ? null : (
             <ChartLabel
                 key={bar.key}
                 label={label}
@@ -156,6 +161,8 @@ const HorizontalBarChart = ({
     chartDisplayMode = ChartModes.CHART_MODE_DEFAULT,
     showDefaultSeries
 }: HorizontalBarChartProps) => {
+    let showInsufficientDataSegment = false
+
     // TODO: currently this chart only receive one data series, but if it receives more
     // in the future it will be able to combine them into a single chart
     let buckets = cloneDeep(getChartData(series[0].data, block))
@@ -174,6 +181,13 @@ const HorizontalBarChart = ({
                     bucket[`${unit}__${facetBucket.id}`] = facetBucket[unit]
                 })
             })
+            if (bucket?.facetBuckets.some(fb => fb.hasInsufficientData)) {
+                // if there are one or more buckets with insufficient data, add insufficient
+                // data percentage bar segment to fill up remaining space
+                bucket[`${BucketUnits.PERCENTAGE_BUCKET}__${INSUFFICIENT_DATA}`] =
+                    100 - sumBy(bucket?.facetBuckets, b => b.percentageBucket)
+                showInsufficientDataSegment = true
+            }
             return bucket
         })
     }
@@ -184,7 +198,7 @@ const HorizontalBarChart = ({
     const bucketEntities = buckets.map(b => b.entity).filter(e => !!e) as Array<Entity> // the filter guarantee that we eliminate null values
     const entities: Entity[] = bucketEntities.length > 0 ? bucketEntities : useEntities()
 
-    const keys = useChartKeys({ units, facet, showDefaultSeries })
+    const keys = useChartKeys({ units, facet, showDefaultSeries, showInsufficientDataSegment })
 
     const colorDefs = useColorDefs({ orientation: HORIZONTAL })
     const colorFills = useColorFills({
