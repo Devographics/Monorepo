@@ -1,15 +1,10 @@
-// note: not currently exposed
-
 import { ApiTemplateFunction } from '../../types/surveys'
-
-import { graphqlize, getSectionItems } from '../helpers'
+import { graphqlize } from '../helpers'
 import { getSectionToolsFeaturesResolverMap } from '../resolvers'
+import { getFeatureFieldTypeName } from './feature'
 
 export const section_features: ApiTemplateFunction = ({ question, survey, edition, section }) => {
-    const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(edition.id)}${graphqlize(
-        section.id
-    )}SectionFeatures`
-
+    const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(section.id)}SectionFeatures`
     return {
         ...question,
         id: `${section.id}_features`,
@@ -17,7 +12,7 @@ export const section_features: ApiTemplateFunction = ({ question, survey, editio
         typeDef: `type ${fieldTypeName} {
     ids: [String]
     years: [Int]
-    items: [${graphqlize(survey.id)}Feature]
+    items: [${getFeatureFieldTypeName({ survey })}]
 }`,
         resolverMap: getSectionToolsFeaturesResolverMap('features')
     }
