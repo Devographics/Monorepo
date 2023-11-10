@@ -193,6 +193,8 @@ query {
                         startedAt
                         endedAt
                         questionsUrl
+                        issuesUrl
+                        discordUrl
                         resultsUrl
                         imageUrl
                         faviconUrl
