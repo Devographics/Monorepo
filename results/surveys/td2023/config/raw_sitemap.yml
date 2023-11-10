@@ -215,7 +215,7 @@
             - template: vs_salary_tokyodev
 
       - id: searching_for_job
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
@@ -225,22 +225,22 @@
             - template: vs_salary_tokyodev
 
       - id: coworker_nationalities_engineers
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
       - id: coworker_nationalities_non_engineers
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
       - id: languages_used_colleagues_japanese
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
       - id: languages_used_colleagues_english
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
@@ -283,12 +283,12 @@
             - template: vs_salary_tokyodev
 
       - id: remote_work_policy
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
       - id: company_size
-        template: single_option
+        template: single_option_horizontal
         blockType: HorizontalBarBlock
         variants:
             - template: vs_salary_tokyodev
@@ -297,22 +297,22 @@
   path: /compensation
   blocks:
       - id: current_total_annual_compensation
-        template: single_option
+        template: single_option_horizontal
         titleId: compensation.current_total_annual_compensation
         questionKey: compensation.current_total_annual_compensation.question
 
       - id: previous_compensation
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
       - id: desired_compensation
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
       - id: negotiated_compensation
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
@@ -320,7 +320,7 @@
         i18nNamespace: annual_paid_leave
         titleId: compensation.annual_paid_leave
         questionKey: compensation.annual_paid_leave.question
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
@@ -461,35 +461,35 @@
 
       - id: life_in_japan__visa_situation
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: life_in_japan__professional_life
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: life_in_japan__family_life
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: life_in_japan__social_life
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: life_in_japan__cultural_adjustment
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: life_in_japan__quality_of_life
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: life_in_japan__housing
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: life_in_japan__financial_situation
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: communities
         template: multiple_options_combined
