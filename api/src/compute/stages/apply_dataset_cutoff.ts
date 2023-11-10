@@ -1,6 +1,7 @@
 import { Bucket, BucketUnits, FacetBucket, ResponseEditionData } from '@devographics/types'
 import sumBy from 'lodash/sumBy.js'
 import { GenericComputeArguments } from '../../types'
+import sortBy from 'lodash/sortBy.js'
 
 // when a filter is applied, never publish any dataset with fewer than 10 *total* items;
 // when a facet is applied, require every *individual facet* to have more than 10 items
@@ -59,6 +60,27 @@ export const applyBucketCutoff = ({
           })
         : []
 
+    /*
+
+    If we have a single facet under the cutoff, then that facet's data
+    can easily be deduced by subtracting all the other facets from the total. 
+
+    To avoid this, also zero our the next smallest facet in those cases
+
+    */
+    const singleFacetUnderCutoff =
+        facetBucketsWithCutoff.filter(fb => fb.hasInsufficientData).length === 1
+    if (singleFacetUnderCutoff) {
+        const sortedFacetBuckets = sortBy(facetBucketsWithCutoff, fb => fb.count)
+        const secondSmallestFacetBucket = sortedFacetBuckets[1]
+        const secondSmallestFacetBucketIndex = facetBucketsWithCutoff.findIndex(
+            fb => fb.id === secondSmallestFacetBucket.id
+        )
+        facetBucketsWithCutoff[secondSmallestFacetBucketIndex] = getZeroBucket({
+            bucket: secondSmallestFacetBucket,
+            clearCount: true
+        })
+    }
     /* 
     
     In some cases, the main bucket has a total count over the cutoff,
