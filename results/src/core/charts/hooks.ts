@@ -9,7 +9,7 @@ import round from 'lodash/round'
 import { CHART_MODE_GRID, CHART_MODE_STACKED, CHART_MODE_GROUPED } from 'core/filters/constants'
 import { ChartModes, FacetItem, FilterItem } from 'core/filters/types'
 import { Bucket, BucketUnits } from '@devographics/types'
-import { NO_ANSWER, OVERALL } from '@devographics/constants'
+import { NO_ANSWER, OVERALL, INSUFFICIENT_DATA } from '@devographics/constants'
 import pickBy from 'lodash/pickBy'
 
 /*
@@ -217,6 +217,16 @@ export const useColorDefs = (options: UseColorDefsOptions = {}): GradientDefinit
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }
 
+    const insufficientDataGradient = {
+        id: `Gradient${orientation}InsufficientData`,
+        type: 'linearGradient',
+        colors: [
+            { offset: 0, color: 'rgba(255,255,255,0.3)' },
+            { offset: 100, color: 'rgba(255,255,255,0.05)' }
+        ],
+        ...(orientation === HORIZONTAL ? horizontalDefs : {})
+    }
+
     const noAnswerGradient = {
         id: `Gradient${orientation}NoAnswer`,
         type: 'linearGradient',
@@ -263,6 +273,7 @@ export const useColorDefs = (options: UseColorDefsOptions = {}): GradientDefinit
         defaultGradient,
         freeformAnswersGradient,
         noAnswerGradient,
+        insufficientDataGradient,
         overallGradient,
         naGradient
     ]
@@ -308,6 +319,12 @@ export const useColorFills = (options: UseColorFillsOptions) => {
     const noAnswerFill = {
         match: d => d.data.indexValue === NO_ANSWER || d.data.id.includes('no_answer'),
         id: `Gradient${orientation}NoAnswer`
+    }
+
+    const insufficientDataFill = {
+        match: d =>
+            d.data.indexValue === INSUFFICIENT_DATA || d.data.id.includes(INSUFFICIENT_DATA),
+        id: `Gradient${orientation}InsufficientData`
     }
 
     const overallFill = {
@@ -365,7 +382,15 @@ export const useColorFills = (options: UseColorFillsOptions) => {
                 id: `${prefix}${orientation}${i + 2}`
             }))
 
-            return [noAnswerFill, overallFill, freeformFill, naFill, averageFill, ...facetFills]
+            return [
+                noAnswerFill,
+                insufficientDataFill,
+                overallFill,
+                freeformFill,
+                naFill,
+                averageFill,
+                ...facetFills
+            ]
         }
         case CHART_MODE_GROUPED: {
             /*
@@ -379,7 +404,14 @@ export const useColorFills = (options: UseColorFillsOptions) => {
                 },
                 id: `Gradient${orientation}${i + 1}`
             }))
-            return [noAnswerFill, overallFill, freeformFill, naFill, ...numberedSeriesFills]
+            return [
+                noAnswerFill,
+                insufficientDataFill,
+                overallFill,
+                freeformFill,
+                naFill,
+                ...numberedSeriesFills
+            ]
         }
         default: {
             /*
@@ -388,7 +420,14 @@ export const useColorFills = (options: UseColorFillsOptions) => {
 
             */
             const defaultFill = { match: '*', id: `Gradient${orientation}Default` }
-            return [noAnswerFill, overallFill, freeformFill, naFill, defaultFill]
+            return [
+                noAnswerFill,
+                insufficientDataFill,
+                overallFill,
+                freeformFill,
+                naFill,
+                defaultFill
+            ]
         }
     }
 }
@@ -459,12 +498,14 @@ export const useChartKeys = ({
     units,
     facet,
     seriesCount,
-    showDefaultSeries = true
+    showDefaultSeries = true,
+    showInsufficientDataSegment = false
 }: {
     units: BlockUnits
     facet?: FacetItem
     seriesCount?: number
     showDefaultSeries?: boolean
+    showInsufficientDataSegment?: boolean
 }) => {
     const allChartKeys = useAllChartsOptions()
     if (facet) {
@@ -475,7 +516,12 @@ export const useChartKeys = ({
         } else {
             const question = allChartKeys.find(q => q.id === facet.id)
             const options = question?.groups ?? question?.options ?? []
-            return [...options, { id: NO_ANSWER }].map(option => `${units}__${option.id}`)
+            const keys = [...options].map(option => `${units}__${option.id}`)
+            if (showInsufficientDataSegment) {
+                keys.push(`${BucketUnits.PERCENTAGE_BUCKET}__${INSUFFICIENT_DATA}`)
+            }
+            keys.push(`${units}__${NO_ANSWER}`)
+            return keys
         }
     } else if (seriesCount) {
         if (showDefaultSeries) {

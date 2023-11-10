@@ -1,6 +1,7 @@
 import { Bucket, BucketUnits, FacetBucket, ResponseEditionData } from '@devographics/types'
 import sumBy from 'lodash/sumBy.js'
 import { GenericComputeArguments } from '../../types'
+import sortBy from 'lodash/sortBy.js'
 
 // when a filter is applied, never publish any dataset with fewer than 10 *total* items;
 // when a facet is applied, require every *individual facet* to have more than 10 items
@@ -13,7 +14,13 @@ messing up the charts because of missing datapoints.
 
 */
 
-const getZeroBucket = <T extends Bucket | FacetBucket>(bucket: T, clearCount: boolean = false) => {
+const getZeroBucket = <T extends Bucket | FacetBucket>({
+    bucket,
+    clearCount = false
+}: {
+    bucket: T
+    clearCount: boolean
+}) => {
     const zeroBucket = clearCount
         ? { ...bucket, count: 0, hasInsufficientData: true }
         : { ...bucket, hasInsufficientData: true }
@@ -45,18 +52,50 @@ export const applyBucketCutoff = ({
 }) => {
     const cutoff = getDatasetCutoff()
 
-    const bucketWithCutoff =
-        bucket.count !== undefined && bucket.count < cutoff
-            ? getZeroBucket(bucket, hasFilter)
-            : bucket
-
     const facetBucketsWithCutoff = hasFacet
         ? bucket.facetBuckets.map(facetBucket => {
               return facetBucket.count !== undefined && facetBucket.count < cutoff
-                  ? getZeroBucket(facetBucket, true)
+                  ? getZeroBucket({ bucket: facetBucket, clearCount: true })
                   : facetBucket
           })
         : []
+
+    /*
+
+    If we have a single facet under the cutoff, then that facet's data
+    can easily be deduced by subtracting all the other facets from the total. 
+
+    To avoid this, also zero our the next smallest facet in those cases
+
+    */
+    const singleFacetUnderCutoff =
+        facetBucketsWithCutoff.filter(fb => fb.hasInsufficientData).length === 1
+    if (singleFacetUnderCutoff) {
+        const sortedFacetBuckets = sortBy(facetBucketsWithCutoff, fb => fb.count)
+        const secondSmallestFacetBucket = sortedFacetBuckets[1]
+        const secondSmallestFacetBucketIndex = facetBucketsWithCutoff.findIndex(
+            fb => fb.id === secondSmallestFacetBucket.id
+        )
+        facetBucketsWithCutoff[secondSmallestFacetBucketIndex] = getZeroBucket({
+            bucket: secondSmallestFacetBucket,
+            clearCount: true
+        })
+    }
+    /* 
+    
+    In some cases, the main bucket has a total count over the cutoff,
+    but every individual facet bucket comes in *under* the cutoff.
+    We also mark these buckets as having insufficient data
+
+    */
+    const allFacetsUnderCutoff = facetBucketsWithCutoff.every(fb => fb.hasInsufficientData)
+    const mainBucketIsInsufficient =
+        (bucket.count !== undefined && bucket.count < cutoff) || (hasFacet && allFacetsUnderCutoff)
+    // We only need to clear the main bucket's count when a filter is applied to segment the data
+    const clearCount = hasFilter
+    const bucketWithCutoff = mainBucketIsInsufficient
+        ? getZeroBucket({ bucket, clearCount })
+        : bucket
 
     return { ...bucketWithCutoff, facetBuckets: facetBucketsWithCutoff }
 }

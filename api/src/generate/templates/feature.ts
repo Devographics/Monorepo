@@ -16,6 +16,9 @@ import { graphqlize } from '../helpers'
 import { getResponseTypeName } from '../../graphql/templates/responses'
 import { Survey } from '@devographics/types'
 
+export const getFeatureFieldTypeName = ({ survey }: { survey: Survey }) =>
+    `${graphqlize(survey.id)}Feature`
+
 const getTypeDef = ({
     fieldTypeName,
     survey,

@@ -83,15 +83,14 @@
                   showNoAnswer: true
                   cutoff: 10
 
-      - id: gender
+      - id: age
         template: multiple_options
-        defaultUnits: percentageSurvey
         variants:
             - template: vs_salary_tokyodev
 
-      - id: age
-        blockType: VerticalBarBlock
+      - id: gender
         template: multiple_options
+        defaultUnits: percentageSurvey
         variants:
             - template: vs_salary_tokyodev
 
@@ -100,14 +99,73 @@
         questionKey: user_info.years_of_experience.question
         i18nNamespace: years
         template: multiple_options
-        blockType: VerticalBarBlock
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: years
 
+      - id: experience_by_gender_men
+        fieldId: years_of_experience
+        titleId: user_info.experience_by_gender
+        tabId: tabs.experience_by_gender_men
+        i18nNamespace: years
+        blockType: HorizontalBarBlock
+        query: currentEditionData
+        parameters:
+            showNoAnswer: true
+        defaultUnits: percentilesByFacet
+        filtersState:
+            options:
+                showDefaultSeries: false
+                enableYearSelect: false
+                mode: facet
+                queryOnLoad: false
+                supportedModes:
+                    - grid
+                    - facet
+                preventQuery: false
+            filters:
+                - year: 2023
+                  conditions:
+                      - fieldId: gender
+                        sectionId: user_info
+                        operator: eq
+                        value: man
+            facet:
+                sectionId: compensation
+                id: current_total_annual_compensation
+        variants:
+            - id: experience_by_gender_women
+              fieldId: years_of_experience
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentilesByFacet
+              tabId: tabs.experience_by_gender_women
+              i18nNamespace: years
+              filtersState:
+                  options:
+                      showDefaultSeries: false
+                      enableYearSelect: false
+                      mode: facet
+                      queryOnLoad: false
+                      supportedModes:
+                          - grid
+                          - facet
+                      preventQuery: false
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: woman
+                  facet:
+                      sectionId: compensation
+                      id: current_total_annual_compensation
+
       - id: years_in_japan
         template: multiple_options
-        blockType: VerticalBarBlock
         i18nNamespace: years
         titleId: user_info.years_in_japan
         questionKey: user_info.years_in_japan.question
@@ -127,14 +185,12 @@
 
       - id: language_proficiency_english
         template: multiple_options
-        blockType: VerticalBarBlock
         parameters: { showNoAnswer: true, sort: { property: options } }
         variants:
             - template: vs_salary_tokyodev
 
       - id: language_proficiency_japanese
         template: multiple_options
-        blockType: VerticalBarBlock
         parameters: { showNoAnswer: true, sort: { property: options } }
         variants:
             - template: vs_salary_tokyodev
@@ -159,7 +215,7 @@
             - template: vs_salary_tokyodev
 
       - id: searching_for_job
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
@@ -169,22 +225,22 @@
             - template: vs_salary_tokyodev
 
       - id: coworker_nationalities_engineers
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
       - id: coworker_nationalities_non_engineers
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
       - id: languages_used_colleagues_japanese
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
       - id: languages_used_colleagues_english
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
@@ -202,6 +258,9 @@
         parameters: { cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
+              parameters:
+                  showNoAnswer: true
+                  cutoff: 10
 
       - id: how_did_you_find_your_current_job
         template: single_option_combined
@@ -224,12 +283,12 @@
             - template: vs_salary_tokyodev
 
       - id: remote_work_policy
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
       - id: company_size
-        template: single_option
+        template: single_option_horizontal
         blockType: HorizontalBarBlock
         variants:
             - template: vs_salary_tokyodev
@@ -238,22 +297,22 @@
   path: /compensation
   blocks:
       - id: current_total_annual_compensation
-        template: single_option
+        template: single_option_horizontal
         titleId: compensation.current_total_annual_compensation
         questionKey: compensation.current_total_annual_compensation.question
 
       - id: previous_compensation
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
       - id: desired_compensation
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
       - id: negotiated_compensation
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
@@ -261,7 +320,7 @@
         i18nNamespace: annual_paid_leave
         titleId: compensation.annual_paid_leave
         questionKey: compensation.annual_paid_leave.question
-        template: single_option
+        template: single_option_horizontal
         variants:
             - template: vs_salary_tokyodev
 
@@ -289,7 +348,7 @@
       # - id: gender_vs_salary
       #   fieldId: gender
       #   template: multiple_options
-      #   blockType: VerticalBarBlock
+      #   blockType: HorizontalBarBlock
       #   defaultUnits: percentilesByFacet
       #   parameters: { cutoff: 20 }
       #   queryOptions: { sectionId: user_info }
@@ -310,7 +369,7 @@
 
       # - id: salary_by_age
       #   fieldId: age_grouped
-      #   blockType: VerticalBarBlock
+      #   blockType: HorizontalBarBlock
       #   template: multiple_options
       #   defaultUnits: percentilesByFacet
       #   queryOptions: { sectionId: user_info }
@@ -331,7 +390,7 @@
 
       # - id: salary_by_experience
       #   fieldId: years_of_experience_grouped
-      #   blockType: VerticalBarBlock
+      #   blockType: HorizontalBarBlock
       #   template: multiple_options
       #   defaultUnits: percentilesByFacet
       #   queryOptions: { sectionId: user_info }
@@ -402,35 +461,35 @@
 
       - id: life_in_japan__visa_situation
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: life_in_japan__professional_life
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: life_in_japan__family_life
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: life_in_japan__social_life
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: life_in_japan__cultural_adjustment
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: life_in_japan__quality_of_life
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: life_in_japan__housing
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: life_in_japan__financial_situation
         i18nNamespace: satisfaction
-        template: single_option
+        template: single_option_horizontal
 
       - id: communities
         template: multiple_options_combined

@@ -54,8 +54,8 @@ import ToolsTierListBlock from 'core/blocks/tools/ToolsTierListBlock'
 // import { ToolsUsageVariationsBlock } from 'core/blocks/tools/ToolsUsageVariationsBlock'
 
 // brackets
-import BracketMatchupsBlock from 'core/blocks/brackets/BracketMatchupsBlock'
-import BracketWinsBlock from 'core/blocks/brackets/BracketWinsBlock'
+import BracketMatchupsBlock from 'core/charts/brackets/BracketMatchupsBlock'
+import BracketWinsBlock from 'core/charts/brackets/BracketWinsBlock'
 
 // happiness
 import { HappinessHistoryBlock } from 'core/blocks/happiness/HappinessHistoryBlock'
@@ -93,7 +93,7 @@ const blockRegistry = {
     SponsorFinishBlock,
     LivestreamBlock,
     // ReportBlock,
-    
+
     // demographics
     ParticipationByCountryBlock,
     GenderBlock,
@@ -131,7 +131,7 @@ const blockRegistry = {
     HappinessHistoryBlock,
 
     // opinions
-    OpinionBlock,
+    OpinionBlock
 }
 
 export default blockRegistry

@@ -65,7 +65,7 @@ const velocity = [
     colors.pink,
     colors.pinkDark,
     colors.pinkDarker,
-    colors.pinkDarkest,
+    colors.pinkDarkest
 ]
 
 const arrowsVelocity = [
@@ -79,7 +79,7 @@ const arrowsVelocity = [
     colors.teal,
     colors.tealDark,
     colors.tealDarker,
-    colors.tealDarkest,
+    colors.tealDarkest
 ]
 
 const distinct = [
@@ -121,6 +121,80 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     lineChartDefaultColor: '#59DF7F',
     lowVelocity: colors.purpleLighter,
     highVelocity: colors.teal,
+    no_answer: [colors.greyLight, colors.greyLightest],
+    velocityBarColors: velocity.map((color, i) => ({
+        id: `velocityColor${i}`,
+        color: velocity[i * 2],
+        gradient: [velocity[i * 2 + 1], velocity[i * 2]]
+    })),
+    // bar colors for variants when using filters and (especially) facets
+    barColors: [
+        {
+            id: 'barColor1',
+            color: colors.purple,
+            gradient: [colors.purple, colors.purpleLighter]
+        },
+        {
+            id: 'barColor2',
+            color: colors.pink,
+            gradient: [colors.pinkDark, colors.pink]
+        },
+        {
+            id: 'barColor3',
+            color: colors.yellow,
+            gradient: [colors.yellowDark, colors.yellow]
+        },
+        {
+            id: 'barColor4',
+            color: colors.greyTeal,
+            gradient: [colors.greyTeal, colors.greyTealLight]
+        },
+        {
+            id: 'barColor5',
+            color: colors.olive,
+            gradient: [colors.oliveDark, colors.olive]
+        },
+        {
+            id: 'barColor6',
+            color: colors.orange,
+            gradient: [colors.orangeDarker, colors.orangeLight]
+        },
+        {
+            id: 'barColor7',
+            color: colors.aqua,
+            gradient: [colors.aquaDark, colors.aqua]
+        },
+        {
+            id: 'barColor8',
+            color: colors.red,
+            gradient: [colors.redDark, colors.red]
+        },
+        {
+            id: 'barColor9',
+            color: colors.skyblue,
+            gradient: [colors.skyblueDark, colors.skyblue]
+        },
+        {
+            id: 'barColor10',
+            color: colors.kaki,
+            gradient: [colors.kakiDark, colors.kaki]
+        },
+        {
+            id: 'barColor11',
+            color: colors.green,
+            gradient: [colors.greenDark, colors.green]
+        }
+    ],
+    barColorDefault: {
+        id: 'barColorDefault',
+        color: colors.electricBlue,
+        gradient: [colors.electricBlueDarkerer, colors.electricBlueDark]
+    },
+    barColorNoAnswer: {
+        id: 'barColorNoAnswer',
+        color: colors.greyLight,
+        gradient: [colors.greyLight, colors.greyLightest]
+    },
     barChart: {
         primary: colors.pink,
         primaryGradient: [colors.pink, colors.pinkLight],
@@ -129,7 +203,6 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         secondary: colors.purple,
         secondaryGradient: [colors.purple, colors.purpleLighter]
     },
-    no_answer: [colors.greyLight, colors.greyLightest],
     ranges: {
         tools: {
             would_use: [colors.teal, colors.tealLight],
@@ -142,7 +215,7 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
             graphql_servers: colors.pinkLight,
             graphql_clients: colors.purple,
             api_generators: colors.orange,
-            schema_builders: colors.teal,
+            schema_builders: colors.teal
         },
         features: {
             used: [colors.pink, colors.pinkLight],

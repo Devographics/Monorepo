@@ -1,15 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useMatch } from '@reach/router'
 import get from 'lodash/get'
 import styled, { css } from 'styled-components'
 import sitemap from 'Config/raw_sitemap.yml'
-import { mq, fancyLinkMixin, spacing } from 'core/theme'
+import { mq, fancyLinkMixin, spacing, fontSize } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
 import PageLink from 'core/pages/PageLink'
 import LanguageSwitcher from 'core/i18n/LanguageSwitcher'
 import { getPageLabelKey } from 'core/helpers/pageHelpers'
 import T from 'core/i18n/T'
 import { PageContextValue } from 'core/types'
+import { getBlockTitle, getBlockTitleKey } from 'core/helpers/blockHelpers'
+import { useI18n } from 'core/i18n/i18nContext'
+import { useEntities } from 'core/helpers/entities'
 
 interface PageConfig {
     is_hidden?: boolean
@@ -18,7 +21,7 @@ interface PageConfig {
 const filteredNav =
     (sitemap as Array<PageConfig> | undefined)?.filter(page => !page.is_hidden) ?? []
 
-const StyledPageLink = styled(PageLink)`
+const getStyledLink = component => styled(component)`
     display: flex;
     white-space: nowrap;
     margin: 0 0 ${spacing(0.33)} 0;
@@ -76,6 +79,23 @@ const StyledPageLink = styled(PageLink)`
         })}
 `
 
+const StyledPageLink = getStyledLink(PageLink)
+const StyledInternalLink = getStyledLink('a')
+
+const excludedTemplatesAndIds = [
+    'survey_intro',
+    'sponsors',
+    'credits',
+    'survey_newsletter',
+    'survey_translators',
+    'page_introduction',
+    'hint',
+    'recommended_resources',
+    'picks',
+    'conclusion',
+    'conclusion_newsletter'
+]
+
 const NavItem = ({
     page,
     parentPage,
@@ -91,15 +111,26 @@ const NavItem = ({
     isHidden?: boolean
     depth?: number
 }) => {
+    const pageContext = usePageContext()
+
     const isActive = currentPath.indexOf(page.path) !== -1
-    // @ts-ignore
     const hasChildren = page.children && page.children.length > 0
-    // @ts-ignore
     const displayChildren = hasChildren > 0 && isActive
 
     const match = useMatch(
         `${get(usePageContext(), 'locale.path')}${parentPage?.path ?? ''}${page.path}`
     )
+
+    const currentPageBlocks = pageContext.blocks
+        .map(b => b.variants[0])
+        .filter(
+            b =>
+                !(
+                    excludedTemplatesAndIds.includes(b.id) ||
+                    excludedTemplatesAndIds.includes(b.template) ||
+                    b.hidden
+                )
+        )
 
     return (
         <>
@@ -113,6 +144,18 @@ const NavItem = ({
             >
                 <T k={getPageLabelKey({ pageContext: page })} />
             </StyledPageLink>
+            {match && currentPageBlocks.length > 1 && (
+                <InternalLinks_>
+                    {currentPageBlocks.map(block => (
+                        <BlockItem
+                            key={block.id}
+                            block={block}
+                            page={page}
+                            closeSidebar={closeSidebar}
+                        />
+                    ))}
+                </InternalLinks_>
+            )}
             {hasChildren && (
                 <>
                     {page.children.map(childPage => (
@@ -131,6 +174,42 @@ const NavItem = ({
         </>
     )
 }
+
+const BlockItem = ({ block, closeSidebar, page }) => {
+    const pageContext = usePageContext()
+    const { getString } = useI18n()
+    const entities = useEntities()
+    return (
+        <InternalLinkWrapper_>
+            <InternalLink_ href={`#${block.id}`} onClick={closeSidebar} page={page}>
+                {getBlockTitle({ block, pageContext, getString, entities })}
+                {/* <T k={getBlockTitleKey({ block: { ...block, sectionId: page.id } })} /> */}
+            </InternalLink_>
+        </InternalLinkWrapper_>
+    )
+}
+
+const InternalLinks_ = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: ${spacing(0.5)};
+    margin-bottom: ${spacing(0.5)};
+`
+
+const InternalLinkWrapper_ = styled.div`
+    margin-left: ${spacing()};
+`
+const InternalLink_ = styled.a`
+    &,
+    &:link,
+    &:visited {
+        color: ${({ theme }) => theme.colors.textAlt};
+    }
+    &:hover {
+        color: ${({ theme }) => theme.colors.text};
+    }
+    font-size: ${fontSize('smallish')};
+`
 
 export const Nav = ({ closeSidebar }: { closeSidebar: () => void }) => {
     const context = usePageContext()

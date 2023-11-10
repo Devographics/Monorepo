@@ -12,6 +12,7 @@ export const completion_stats: ApiTemplateFunction = options => {
         options: groups,
         optionsAreSequential: true,
         optionsAreRange: true,
+        optionsAreNumeric: true,
         ...options.question
     }
     return output

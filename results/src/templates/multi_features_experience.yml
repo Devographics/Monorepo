@@ -4,54 +4,63 @@ dataPath: 'dataAPI.survey.${questionId}'
 keysPath: 'dataAPI.survey.${questionId}.0.experience.keys'
 i18nNamespace: features
 hasSponsor: true
-# query: >
-#     dataAPI {
-#         survey(survey: ${surveyId}) {
-#             ${questionId}: features(ids: [${featuresCategories[categoryId]}]) {
-#                 id
-#                 entity {
-#                     name
-#                     nameClean
-#                     nameHtml
-#                     homepage {
-#                         url
-#                     }
-#                     caniuse {
-#                         name
-#                         url
-#                     }
-#                     mdn {
-#                         locale
-#                         url
-#                         title
-#                         summary
-#                     }
-#                     example {
-#                         language
-#                         code
-#                     }
-#                 }
-#                 experience{
-#                     keys
-#                     year(year: ${currentYear}) {
-#                         year
-#                         completion {
-#                             total
-#                             count
-#                             percentageSurvey
-#                         }
-#                         facets{
-#                             type
-#                             id
-#                             buckets {
-#                                 id
-#                                 count
-#                                 percentageQuestion
-#                                 percentageSurvey
-#                             }
-#                         }
-#                     }
-#                 }
-#             }
-#         }
-#     }
+query: >
+    dataAPI {
+      surveys {
+        ${surveyId} {
+          ${editionId} {
+            ${graphql_language} {
+              ${graphql_language}_features {
+                items {
+                  id
+                  responses {
+                    currentEdition {
+                      buckets {
+                        id
+                        count
+                        percentageSurvey
+                        percentageQuestion
+                      }
+                      completion {
+                        count
+                        percentageSurvey
+                        total
+                      }
+                      year
+                      editionId
+                    }
+                  }
+                  options {
+                    id
+                  }
+                  entity {
+                    name
+                    nameClean
+                    nameHtml
+                    homepage {
+                      url
+                    }
+                    caniuse {
+                      name
+                      url
+                    }
+                    mdn {
+                      locale
+                      url
+                      title
+                      summary
+                    }
+                    example {
+                      label
+                      language
+                      code
+                      codeHighlighted
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }

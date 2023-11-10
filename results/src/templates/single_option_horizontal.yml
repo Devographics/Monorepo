@@ -1,0 +1,4 @@
+blockType: HorizontalBarBlock
+hasSponsor: true
+query: currentEditionData
+parameters: { showNoAnswer: true }

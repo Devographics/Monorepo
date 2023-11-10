@@ -60,7 +60,7 @@ export const HorizontalBox = ({
         labelFormatter
     }
 
-    return bucket.count < 10 ? (
+    return bucket.hasInsufficientData ? (
         <g>
             <InsufficientData_
                 className="insufficient-data"

@@ -19,7 +19,7 @@ import T from 'core/i18n/T'
 const parseMDNLinks = content =>
     content.replace(new RegExp(`href="/`, 'g'), `href="https://developer.mozilla.org/`)
 
-const MultiFeaturesExperienceBlock = ({
+export const MultiFeaturesExperienceBlock = ({
     block,
     keys,
     data,
@@ -42,7 +42,9 @@ const MultiFeaturesExperienceBlock = ({
     // const description = locale.id === 'en-US' && mdn && parseMDNLinks(mdn.summary)
 
     // const isLastYear = year => allYears.findIndex(y => y.year === year.year) === allYears.length - 1
-
+    if (!data) {
+        return <div>no data</div>
+    }
     return (
         <Block
             tables={data.map(feature =>
@@ -134,42 +136,5 @@ const RowChart = styled.dd`
         ); /* total width - page padding - year width - gap */
     }
 `
-
-MultiFeaturesExperienceBlock.propTypes = {
-    block: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        path: PropTypes.string.isRequired
-    }).isRequired,
-    data: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        experience: PropTypes.shape({
-            all_years: PropTypes.arrayOf(
-                PropTypes.shape({
-                    year: PropTypes.number.isRequired,
-                    completion: PropTypes.shape({
-                        count: PropTypes.number.isRequired,
-                        percentage: PropTypes.number.isRequired
-                    }).isRequired,
-                    buckets: PropTypes.arrayOf(
-                        PropTypes.shape({
-                            id: PropTypes.string.isRequired,
-                            usage: PropTypes.shape({
-                                total: PropTypes.number.isRequired,
-                                buckets: PropTypes.arrayOf(
-                                    PropTypes.shape({
-                                        id: PropTypes.string.isRequired,
-                                        count: PropTypes.number.isRequired,
-                                        percentage: PropTypes.number.isRequired
-                                    })
-                                ).isRequired
-                            })
-                        })
-                    ).isRequired
-                })
-            ).isRequired
-        }).isRequired
-    }).isRequired
-}
 
 export default MultiFeaturesExperienceBlock

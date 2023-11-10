@@ -8,11 +8,13 @@ import Button from 'core/components/Button'
 import PageLabel from './PageLabel'
 import T from 'core/i18n/T'
 
-const discordUrl = 'https://discord.gg/zRDb35jfrt'
-const issuesUrl = 'https://github.com/Devographics/Monorepo/issues'
-
 const PageFooter = () => {
     const context = usePageContext()
+    const { currentEdition } = context
+    const {
+        issuesUrl = 'https://github.com/Devographics/Monorepo/issues',
+        discordUrl = 'https://discord.gg/zRDb35jfrt'
+    } = currentEdition
 
     return (
         <Container>
@@ -44,13 +46,6 @@ const PageFooter = () => {
                 )}
             </Nav>
             <Notes>
-                <T k="general.charts_nivo" values={{ link: 'https://nivo.rocks/' }} html={true} />{' '}
-                <T
-                    k="general.netlify_link"
-                    values={{ link: 'https://www.netlify.com' }}
-                    html={true}
-                />
-                <br />
                 <T k="general.leave_issue" values={{ link: issuesUrl }} html={true} />{' '}
                 <T k="general.join_discord" values={{ link: discordUrl }} html={true} />
                 {context.locale.id !== 'en-US' && (
