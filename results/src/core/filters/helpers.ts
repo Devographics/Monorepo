@@ -35,7 +35,8 @@ import {
     argumentsPlaceholder,
     bucketFacetsPlaceholder,
     getFacetFragment,
-    ProvidedQueryOptions
+    ProvidedQueryOptions,
+    QueryArgs
 } from 'core/helpers/queries'
 import { PageContextValue } from 'core/types/context'
 import {
@@ -287,10 +288,17 @@ export const getFiltersQuery = ({
             })
             .join('')
     } else if (facet && mode === MODE_FACET) {
-        const queryArgs = getQueryArgsString({
+        const queryArgsOptions: QueryArgs = {
             facet,
             parameters: block.parameters
-        })
+        }
+        // if we've specified conditions, use the first one to filter facet
+        // TODO: support multiple conditions (small multiples) + facets at the same time
+        if (filters?.[0]?.conditions) {
+            queryArgsOptions.filters = conditionsToFilters(filters[0].conditions)
+        }
+
+        const queryArgs = getQueryArgsString(queryArgsOptions)
 
         const seriesName = `${block.fieldId || block.id}_by_${facet.id}`
         seriesNames.push(seriesName)

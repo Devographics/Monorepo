@@ -181,7 +181,7 @@ const HorizontalBarChart = ({
                     bucket[`${unit}__${facetBucket.id}`] = facetBucket[unit]
                 })
             })
-            if (bucket?.facetBuckets.some(fb => fb.hasInsufficientData)) {
+            if (bucket?.facetBuckets?.some(fb => fb.hasInsufficientData)) {
                 // if there are one or more buckets with insufficient data, add insufficient
                 // data percentage bar segment to fill up remaining space
                 bucket[`${BucketUnits.PERCENTAGE_BUCKET}__${INSUFFICIENT_DATA}`] =

@@ -83,15 +83,14 @@
                   showNoAnswer: true
                   cutoff: 10
 
-      - id: gender
+      - id: age
         template: multiple_options
-        defaultUnits: percentageSurvey
         variants:
             - template: vs_salary_tokyodev
 
-      - id: age
-        blockType: VerticalBarBlock
+      - id: gender
         template: multiple_options
+        defaultUnits: percentageSurvey
         variants:
             - template: vs_salary_tokyodev
 
@@ -100,14 +99,73 @@
         questionKey: user_info.years_of_experience.question
         i18nNamespace: years
         template: multiple_options
-        blockType: VerticalBarBlock
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: years
 
+      - id: experience_by_gender_men
+        fieldId: years_of_experience
+        titleId: user_info.experience_by_gender
+        tabId: tabs.experience_by_gender_men
+        i18nNamespace: years
+        blockType: HorizontalBarBlock
+        query: currentEditionData
+        parameters:
+            showNoAnswer: true
+        defaultUnits: percentilesByFacet
+        filtersState:
+            options:
+                showDefaultSeries: false
+                enableYearSelect: false
+                mode: facet
+                queryOnLoad: false
+                supportedModes:
+                    - grid
+                    - facet
+                preventQuery: false
+            filters:
+                - year: 2023
+                  conditions:
+                      - fieldId: gender
+                        sectionId: user_info
+                        operator: eq
+                        value: man
+            facet:
+                sectionId: compensation
+                id: current_total_annual_compensation
+        variants:
+            - id: experience_by_gender_women
+              fieldId: years_of_experience
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentilesByFacet
+              tabId: tabs.experience_by_gender_women
+              i18nNamespace: years
+              filtersState:
+                  options:
+                      showDefaultSeries: false
+                      enableYearSelect: false
+                      mode: facet
+                      queryOnLoad: false
+                      supportedModes:
+                          - grid
+                          - facet
+                      preventQuery: false
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: woman
+                  facet:
+                      sectionId: compensation
+                      id: current_total_annual_compensation
+
       - id: years_in_japan
         template: multiple_options
-        blockType: VerticalBarBlock
         i18nNamespace: years
         titleId: user_info.years_in_japan
         questionKey: user_info.years_in_japan.question
@@ -127,14 +185,12 @@
 
       - id: language_proficiency_english
         template: multiple_options
-        blockType: VerticalBarBlock
         parameters: { showNoAnswer: true, sort: { property: options } }
         variants:
             - template: vs_salary_tokyodev
 
       - id: language_proficiency_japanese
         template: multiple_options
-        blockType: VerticalBarBlock
         parameters: { showNoAnswer: true, sort: { property: options } }
         variants:
             - template: vs_salary_tokyodev
@@ -292,7 +348,7 @@
       # - id: gender_vs_salary
       #   fieldId: gender
       #   template: multiple_options
-      #   blockType: VerticalBarBlock
+      #   blockType: HorizontalBarBlock
       #   defaultUnits: percentilesByFacet
       #   parameters: { cutoff: 20 }
       #   queryOptions: { sectionId: user_info }
@@ -313,7 +369,7 @@
 
       # - id: salary_by_age
       #   fieldId: age_grouped
-      #   blockType: VerticalBarBlock
+      #   blockType: HorizontalBarBlock
       #   template: multiple_options
       #   defaultUnits: percentilesByFacet
       #   queryOptions: { sectionId: user_info }
@@ -334,7 +390,7 @@
 
       # - id: salary_by_experience
       #   fieldId: years_of_experience_grouped
-      #   blockType: VerticalBarBlock
+      #   blockType: HorizontalBarBlock
       #   template: multiple_options
       #   defaultUnits: percentilesByFacet
       #   queryOptions: { sectionId: user_info }

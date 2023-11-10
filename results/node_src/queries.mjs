@@ -575,10 +575,16 @@ export const getFiltersQuery = ({
             })
             .join('')
     } else if (facet && mode === MODE_FACET) {
-        const queryArgs = getQueryArgsString({
+        const queryArgsOptions = {
             facet,
             parameters: { enableCache, ...block.parameters }
-        })
+        }
+        // if we've specified conditions, use the first one to filter facet
+        // TODO: support multiple conditions (small multiples) + facets at the same time
+        if (filters?.[0]?.conditions) {
+            queryArgsOptions.filters = conditionsToFilters(filters[0].conditions)
+        }
+        const queryArgs = getQueryArgsString(queryArgsOptions)
 
         // DIFFERENCE WITH CLIENT (TS) VERSION
         // const seriesName = `${block.fieldId || block.id}_by_${facet.id}`

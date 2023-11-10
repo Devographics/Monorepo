@@ -122,7 +122,7 @@ interface ResponseArgumentsStrings {
 
 const facetItemToFacet = ({ sectionId, id }: FacetItem) => `${sectionId}__${id}`
 
-interface QueryArgs {
+export interface QueryArgs {
     facet?: FacetItem
     filters?: Filters
     parameters?: ResponsesParameters

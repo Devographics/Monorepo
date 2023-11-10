@@ -23,6 +23,7 @@ const Question_ = styled.div`
     }
     margin-top: ${spacing(1)};
     display: flex;
+    align-items: center;
     gap: ${spacing(0.5)};
     background: ${({ theme }) => theme.colors.backgroundAlt};
     border-radius: 100px;

@@ -12,6 +12,7 @@ import { MODE_COMBINED, MODE_FACET } from 'core/filters/constants'
 import { useAllChartsOptions } from 'core/charts/hooks'
 import { MAIN_UNITS } from '@devographics/constants'
 import VerticalBoxPlotChart from 'core/charts/boxPlotVertical/VerticalBoxPlotChart'
+import HorizontalBoxPlotChart from '../boxPlotHorizontal/HorizontalBoxPlotChart'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
     // legacy
@@ -126,7 +127,7 @@ const VerticalBarBlock = ({ block, data, series, pageContext }: VerticalBarBlock
             >
                 <ChartContainer fit={true}>
                     {units === BucketUnits.PERCENTILES ? (
-                        <VerticalBoxPlotChart {...chartProps} variant="vertical" />
+                        <HorizontalBoxPlotChart {...chartProps} />
                     ) : (
                         <VerticalBarChart {...chartProps} />
                     )}
