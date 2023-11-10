@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useMatch } from '@reach/router'
 import get from 'lodash/get'
 import styled, { css } from 'styled-components'
@@ -10,7 +10,9 @@ import LanguageSwitcher from 'core/i18n/LanguageSwitcher'
 import { getPageLabelKey } from 'core/helpers/pageHelpers'
 import T from 'core/i18n/T'
 import { PageContextValue } from 'core/types'
-import { getBlockTitleKey } from 'core/helpers/blockHelpers'
+import { getBlockTitle, getBlockTitleKey } from 'core/helpers/blockHelpers'
+import { useI18n } from 'core/i18n/i18nContext'
+import { useEntities } from 'core/helpers/entities'
 
 interface PageConfig {
     is_hidden?: boolean
@@ -80,6 +82,20 @@ const getStyledLink = component => styled(component)`
 const StyledPageLink = getStyledLink(PageLink)
 const StyledInternalLink = getStyledLink('a')
 
+const excludedTemplatesAndIds = [
+    'survey_intro',
+    'sponsors',
+    'credits',
+    'survey_newsletter',
+    'survey_translators',
+    'page_introduction',
+    'hint',
+    'recommended_resources',
+    'picks',
+    'conclusion',
+    'conclusion_newsletter'
+]
+
 const NavItem = ({
     page,
     parentPage,
@@ -95,6 +111,8 @@ const NavItem = ({
     isHidden?: boolean
     depth?: number
 }) => {
+    const pageContext = usePageContext()
+
     const isActive = currentPath.indexOf(page.path) !== -1
     const hasChildren = page.children && page.children.length > 0
     const displayChildren = hasChildren > 0 && isActive
@@ -103,7 +121,16 @@ const NavItem = ({
         `${get(usePageContext(), 'locale.path')}${parentPage?.path ?? ''}${page.path}`
     )
 
-    const pageBlocks = page.blocks.filter(b => b.template !== 'page_introduction')
+    const currentPageBlocks = pageContext.blocks
+        .map(b => b.variants[0])
+        .filter(
+            b =>
+                !(
+                    excludedTemplatesAndIds.includes(b.id) ||
+                    excludedTemplatesAndIds.includes(b.template) ||
+                    b.hidden
+                )
+        )
 
     return (
         <>
@@ -117,9 +144,9 @@ const NavItem = ({
             >
                 <T k={getPageLabelKey({ pageContext: page })} />
             </StyledPageLink>
-            {match && pageBlocks.length > 1 && (
+            {match && currentPageBlocks.length > 1 && (
                 <InternalLinks_>
-                    {pageBlocks.map(block => (
+                    {currentPageBlocks.map(block => (
                         <BlockItem
                             key={block.id}
                             block={block}
@@ -148,13 +175,19 @@ const NavItem = ({
     )
 }
 
-const BlockItem = ({ block, closeSidebar, page }) => (
-    <InternalLinkWrapper_>
-        <InternalLink_ href={`#${block.id}`} onClick={closeSidebar} page={page}>
-            <T k={getBlockTitleKey({ block: { ...block, sectionId: page.id } })} />
-        </InternalLink_>
-    </InternalLinkWrapper_>
-)
+const BlockItem = ({ block, closeSidebar, page }) => {
+    const pageContext = usePageContext()
+    const { getString } = useI18n()
+    const entities = useEntities()
+    return (
+        <InternalLinkWrapper_>
+            <InternalLink_ href={`#${block.id}`} onClick={closeSidebar} page={page}>
+                {getBlockTitle({ block, pageContext, getString, entities })}
+                {/* <T k={getBlockTitleKey({ block: { ...block, sectionId: page.id } })} /> */}
+            </InternalLink_>
+        </InternalLinkWrapper_>
+    )
+}
 
 const InternalLinks_ = styled.div`
     display: flex;
