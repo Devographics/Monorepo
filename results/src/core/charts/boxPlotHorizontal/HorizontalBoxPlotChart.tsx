@@ -27,11 +27,12 @@ const sortChartData = (buckets: Bucket[], question?: QuestionMetadata) =>
 
 const ROW_HEIGHT = 60
 const PIXEL_PER_TICKS = 130
+const MIN_CHART_WIDTH = 600
 
 export const HorizontalBoxPlotChart = ({
     legends,
     series,
-    containerWidth = 500,
+    containerWidth = 0,
     units,
     facet,
     i18nNamespace,
@@ -48,8 +49,8 @@ export const HorizontalBoxPlotChart = ({
     const contentHeight = (buckets?.length || 0) * ROW_HEIGHT
     const chartHeight = contentHeight + MARGIN.top + MARGIN.bottom
 
-    const contentWidth = containerWidth - MARGIN.left - MARGIN.right
-    const chartWidth = containerWidth
+    const chartWidth = Math.max(containerWidth, MIN_CHART_WIDTH)
+    const contentWidth = chartWidth - MARGIN.left - MARGIN.right
 
     // Compute everything derived from the dataset:
     const { chartMin, chartMax, groups } = useMemo(() => {
@@ -104,9 +105,9 @@ export const HorizontalBoxPlotChart = ({
 
     return (
         <div>
-            <svg width="100%" height={chartHeight}>
+            <svg width={chartWidth} height={chartHeight}>
                 <g
-                    width={contentWidth}
+                    width={chartWidth}
                     height={contentHeight}
                     transform={`translate(${[MARGIN.left, MARGIN.top].join(',')})`}
                 >

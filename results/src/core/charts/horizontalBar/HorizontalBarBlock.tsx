@@ -136,13 +136,15 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
                 defaultSeries={defaultSeries}
                 providedSeries={series}
             >
-                <ChartContainer fit={true}>
-                    {units === BucketUnits.PERCENTILES ? (
+                {units === BucketUnits.PERCENTILES ? (
+                    <ChartContainer>
                         <HorizontalBoxPlotChart {...chartProps} />
-                    ) : (
+                    </ChartContainer>
+                ) : (
+                    <ChartContainer fit={true}>
                         <HorizontalBarChart {...chartProps} />
-                    )}
-                </ChartContainer>
+                    </ChartContainer>
+                )}
             </DynamicDataLoader>
         </BlockVariant>
     )
