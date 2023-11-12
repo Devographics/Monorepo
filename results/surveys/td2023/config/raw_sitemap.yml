@@ -103,66 +103,66 @@
             - template: vs_salary_tokyodev
               i18nNamespace: years
 
-      - id: experience_by_gender_men
-        fieldId: years_of_experience
-        titleId: user_info.experience_by_gender
-        tabId: tabs.experience_by_gender_men
-        i18nNamespace: years
-        blockType: HorizontalBarBlock
-        query: currentEditionData
-        parameters:
-            showNoAnswer: true
-        defaultUnits: percentilesByFacet
-        filtersState:
-            options:
-                showDefaultSeries: false
-                enableYearSelect: false
-                mode: facet
-                queryOnLoad: false
-                supportedModes:
-                    - grid
-                    - facet
-                preventQuery: false
-            filters:
-                - year: 2023
-                  conditions:
-                      - fieldId: gender
-                        sectionId: user_info
-                        operator: eq
-                        value: man
-            facet:
-                sectionId: compensation
-                id: current_total_annual_compensation
-        variants:
-            - id: experience_by_gender_women
-              fieldId: years_of_experience
-              blockType: HorizontalBarBlock
-              query: currentEditionData
-              parameters:
-                  showNoAnswer: true
-              defaultUnits: percentilesByFacet
-              tabId: tabs.experience_by_gender_women
-              i18nNamespace: years
-              filtersState:
-                  options:
-                      showDefaultSeries: false
-                      enableYearSelect: false
-                      mode: facet
-                      queryOnLoad: false
-                      supportedModes:
-                          - grid
-                          - facet
-                      preventQuery: false
-                  filters:
-                      - year: 2023
-                        conditions:
-                            - fieldId: gender
-                              sectionId: user_info
-                              operator: eq
-                              value: woman
-                  facet:
-                      sectionId: compensation
-                      id: current_total_annual_compensation
+      # - id: experience_by_gender_men
+      #   fieldId: years_of_experience
+      #   titleId: user_info.experience_by_gender
+      #   tabId: tabs.experience_by_gender_men
+      #   i18nNamespace: years
+      #   blockType: HorizontalBarBlock
+      #   query: currentEditionData
+      #   parameters:
+      #       showNoAnswer: true
+      #   defaultUnits: percentilesByFacet
+      #   filtersState:
+      #       options:
+      #           showDefaultSeries: false
+      #           enableYearSelect: false
+      #           mode: facet
+      #           queryOnLoad: false
+      #           supportedModes:
+      #               - grid
+      #               - facet
+      #           preventQuery: false
+      #       filters:
+      #           - year: 2023
+      #             conditions:
+      #                 - fieldId: gender
+      #                   sectionId: user_info
+      #                   operator: eq
+      #                   value: man
+      #       facet:
+      #           sectionId: compensation
+      #           id: current_total_annual_compensation
+      #   variants:
+      #       - id: experience_by_gender_women
+      #         fieldId: years_of_experience
+      #         blockType: HorizontalBarBlock
+      #         query: currentEditionData
+      #         parameters:
+      #             showNoAnswer: true
+      #         defaultUnits: percentilesByFacet
+      #         tabId: tabs.experience_by_gender_women
+      #         i18nNamespace: years
+      #         filtersState:
+      #             options:
+      #                 showDefaultSeries: false
+      #                 enableYearSelect: false
+      #                 mode: facet
+      #                 queryOnLoad: false
+      #                 supportedModes:
+      #                     - grid
+      #                     - facet
+      #                 preventQuery: false
+      #             filters:
+      #                 - year: 2023
+      #                   conditions:
+      #                       - fieldId: gender
+      #                         sectionId: user_info
+      #                         operator: eq
+      #                         value: woman
+      #             facet:
+      #                 sectionId: compensation
+      #                 id: current_total_annual_compensation
 
       - id: years_in_japan
         template: multiple_options
