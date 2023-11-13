@@ -30,5 +30,6 @@ export const publicConfig = {
   appUrl,
   repoUrl: "https://github.com/Devographics/Monorepo",
   isDev: process.env.NEXT_PUBLIC_NODE_ENV === "development",
+  isTest: process.env.NEXT_PUBLIC_NODE_ENV === "test",
   assetUrl: process.env.NEXT_PUBLIC_ASSETS_URL
 };

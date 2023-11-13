@@ -48,7 +48,7 @@ const links = [
     href: "https://github.com/Devographics/locale-en-US",
   },
   {
-    showIf: () => publicConfig.isDev === true,
+    showIf: () => publicConfig.isDev === true || publicConfig.isTest === true,
     id: "Demo survey",
     href: routes.survey.demo.href,
   },
