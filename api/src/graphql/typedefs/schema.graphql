@@ -229,6 +229,7 @@ input Parameters {
     enableBucketGroups: Boolean
     mergeOtherBuckets: Boolean
     enableAddOverallBucket: Boolean
+    enableAddMissingBuckets: Boolean
 }
 
 input CommentParameters {

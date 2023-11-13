@@ -108,7 +108,7 @@ const getZeroBucketItem = <T extends Bucket | FacetBucket>({
     return zeroBucket
 }
 
-export async function addMissingItems(
+export async function addMissingBuckets(
     resultsByEdition: ResponseEditionData[],
     axis1: ComputeAxisParameters,
     axis2?: ComputeAxisParameters

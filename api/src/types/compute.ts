@@ -26,6 +26,7 @@ export interface GenericComputeParameters {
     mergeOtherBuckets?: boolean
     enableBucketGroups?: boolean
     enableAddOverallBucket?: boolean
+    enableAddMissingBuckets?: boolean
     responsesType?: ResponsesTypes
 }
 
@@ -37,6 +38,7 @@ export interface ComputeAxisParameters {
     groupUnderCutoff?: boolean
     mergeOtherBuckets?: boolean
     enableBucketGroups?: boolean
+    enableAddMissingBuckets?: boolean
     limit: number
     options?: Option[]
 }

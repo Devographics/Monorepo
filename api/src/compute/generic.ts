@@ -22,7 +22,7 @@ import {
     discardEmptyIds,
     addDefaultBucketCounts,
     moveFacetBucketsToDefaultBuckets,
-    addMissingItems,
+    addMissingBuckets,
     addEntities,
     addCompletionCounts,
     addPercentages,
@@ -179,6 +179,9 @@ export type GenericComputeOptions = {
     questionObjects: QuestionApiObject[]
     computeArguments: GenericComputeArguments
 }
+
+const DEFAULT_LIMIT = 50
+
 export async function genericComputeFunction(options: GenericComputeOptions) {
     const { context, survey, edition, question, questionObjects, computeArguments } = options
 
@@ -192,15 +195,16 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     const {
         cutoff = 1,
         sort,
-        limit = 50,
+        limit = DEFAULT_LIMIT,
         facetSort,
-        facetLimit = 50,
+        facetLimit = DEFAULT_LIMIT,
         facetCutoff = 1,
         showNoAnswer,
         groupUnderCutoff = true,
         mergeOtherBuckets = true,
         enableBucketGroups = true,
-        enableAddOverallBucket = true
+        enableAddOverallBucket = true,
+        enableAddMissingBuckets = true
     } = parameters
 
     /*
@@ -215,6 +219,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         groupUnderCutoff,
         mergeOtherBuckets,
         enableBucketGroups,
+        enableAddMissingBuckets,
         limit
     }
     if (question.options) {
@@ -244,6 +249,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
                 groupUnderCutoff,
                 mergeOtherBuckets,
                 enableBucketGroups,
+                enableAddMissingBuckets,
                 limit: facetLimit
             }
             if (facetQuestion?.options) {
@@ -344,8 +350,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     if (axis2) {
         await addDefaultBucketCounts(results)
 
-        if (responsesType === ResponsesTypes.RESPONSES) {
-            await addMissingItems(results, axis2, axis1)
+        if (responsesType === ResponsesTypes.RESPONSES && enableAddMissingBuckets) {
+            await addMissingBuckets(results, axis2, axis1)
         }
 
         await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
@@ -392,8 +398,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await limitData(results, axis2, axis1)
         await addLabels(results, axis2, axis1)
     } else {
-        if (responsesType === ResponsesTypes.RESPONSES) {
-            results = await addMissingItems(results, axis1)
+        if (responsesType === ResponsesTypes.RESPONSES && enableAddMissingBuckets) {
+            results = await addMissingBuckets(results, axis1)
         }
 
         await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
