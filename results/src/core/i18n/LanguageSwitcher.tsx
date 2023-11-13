@@ -16,7 +16,8 @@ const translationLink = 'https://github.com/Devographics/locale-en-US'
 
 const LanguageSwitcher = (/*{ position = 'bottom', positionOpen = 'top' }*/) => {
     const context = usePageContext()
-    return (
+    const locales = context?.locales || []
+    return locales.length > 1 ? (
         <Popover label={context?.locale?.label}>
             <Locales />
             <LanguageSwitcherHelp className="LanguageSwitcherHelp">
@@ -25,7 +26,7 @@ const LanguageSwitcher = (/*{ position = 'bottom', positionOpen = 'top' }*/) => 
                 </a>
             </LanguageSwitcherHelp>
         </Popover>
-    )
+    ) : null
 }
 
 // const LanguageSwitcher = ({ position = 'bottom', positionOpen = 'top' }) => {

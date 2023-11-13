@@ -7,6 +7,7 @@ import { Bucket, Entity } from '@devographics/types'
 import { UserIcon } from 'core/icons'
 import { MARGIN } from './HorizontalBoxPlotChart'
 import { TooltipItem } from './TooltipItem'
+import sumBy from 'lodash/sumBy'
 
 type AxisLeftProps = {
     contentWidth: number
@@ -63,6 +64,10 @@ export const AxisLeft = ({
                 const shortenedTickLabel =
                     tickLabelString?.length > 12 ? tickLabelString?.slice(0, 12) + '…' : tickLabel
 
+                // note: we sum all the facetBuckets to get the intersection count of respondents who
+                // have answered both questions
+                const respondentsCount = sumBy(bucket?.facetBuckets, fb => fb?.count || 0)
+
                 return (
                     <g key={value} transform={`translate(0, ${yOffset})`}>
                         <line
@@ -101,26 +106,28 @@ export const AxisLeft = ({
                         </text>
                         <TooltipItem triggerRef={tickRef} label={tickLabelString} />
 
-                        <g
-                            style={{ transform: `translate(${contentWidth + 20}px, 4px)` }}
-                            color={`${stroke}66`}
-                        >
-                            <text
-                                key={value}
-                                style={{
-                                    fill: 'currentColor',
-                                    fontSize: '13px',
-                                    textAnchor: 'start',
-                                    transform: `translate(20px, 0px)`,
-                                    alignmentBaseline: 'middle'
-                                }}
+                        {respondentsCount > 0 && (
+                            <g
+                                style={{ transform: `translate(${contentWidth + 20}px, 4px)` }}
+                                color={`${stroke}66`}
                             >
-                                {bucket?.count}
-                            </text>
-                            <g style={{ transform: `translate(0px, -13px)` }}>
-                                <UserIcon inSVG={true} size={16} />
+                                <text
+                                    key={value}
+                                    style={{
+                                        fill: 'currentColor',
+                                        fontSize: '13px',
+                                        textAnchor: 'start',
+                                        transform: `translate(20px, 0px)`,
+                                        alignmentBaseline: 'middle'
+                                    }}
+                                >
+                                    {respondentsCount}
+                                </text>
+                                <g style={{ transform: `translate(0px, -13px)` }}>
+                                    <UserIcon inSVG={true} size={16} />
+                                </g>
                             </g>
-                        </g>
+                        )}
                     </g>
                 )
             })}
