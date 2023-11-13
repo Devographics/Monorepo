@@ -79,13 +79,6 @@ const FacetDataLoader = ({
         <Wrapper_>
             <Contents_>{React.cloneElement(children, props)}</Contents_>
             {isLoading && <Loading />}
-
-            <DataLoaderFooter
-                data={series}
-                block={block}
-                chartFilters={chartFilters}
-                setChartFilters={setChartFilters}
-            />
             {units === BucketUnits.PERCENTAGE_BUCKET && (
                 <Note_>
                     <T k="charts.facets_clarification" />

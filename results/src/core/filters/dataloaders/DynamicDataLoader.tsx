@@ -6,6 +6,7 @@ import { BucketUnits, AllQuestionData } from '@devographics/types'
 import GridDataLoader from './GridDataLoader'
 import CombinedDataLoader from './CombinedDataLoader'
 import FacetDataLoader from './FacetDataLoader'
+import { DataLoaderFooter } from './DataLoaderFooter'
 
 export interface DynamicDataLoaderProps {
     defaultSeries: DataSeries<AllQuestionData>
@@ -41,4 +42,13 @@ const DynamicDataLoader = (props: DynamicDataLoaderProps) => {
     }
 }
 
-export default DynamicDataLoader
+const DataLoaderWrapper = (props: DynamicDataLoaderProps) => {
+    return (
+        <>
+            <DynamicDataLoader {...props} />
+            <DataLoaderFooter {...props} />
+        </>
+    )
+}
+
+export default DataLoaderWrapper

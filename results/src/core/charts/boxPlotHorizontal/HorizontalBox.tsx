@@ -6,6 +6,7 @@ import { TooltipItem } from './TooltipItem'
 import { fontSize, fontWeight } from 'core/theme'
 import { HORIZONTAL, useColorDefs, useColorFills } from '../hooks'
 import { NO_ANSWER, OVERALL } from '@devographics/constants'
+import Tip from 'core/components/Tooltip'
 const STROKE_WIDTH = 1
 
 const BOX_HEIGHT = 30
@@ -122,29 +123,35 @@ export const HorizontalBox = ({
                 stroke={stroke}
                 strokeWidth={STROKE_WIDTH * 3}
             />
-            <g transform={`translate(${p50}, ${rowHeight / 2})`} ref={p50Ref}>
-                <Background_
-                    height={valueLabelHeight}
-                    width={valueLabelWidth}
-                    x={-valueLabelWidth / 2}
-                    y={-valueLabelHeight / 2}
-                    stroke={stroke}
-                    rx={valueLabelHeight / 2}
-                    ry={valueLabelHeight / 2}
-                    // fill={`url(#${gradient?.id})`}
-                    fill="#333"
-                />
-                <Text_
-                    className="boxplot-chart-label"
-                    stroke={stroke}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fontSize="11"
-                >
-                    {p50ValueLabel}
-                </Text_>
-            </g>
-            <TooltipItem triggerRef={p50Ref} label={label} />
+            <Tip
+                trigger={
+                    <g transform={`translate(${p50}, ${rowHeight / 2})`} ref={p50Ref}>
+                        <Background_
+                            height={valueLabelHeight}
+                            width={valueLabelWidth}
+                            x={-valueLabelWidth / 2}
+                            y={-valueLabelHeight / 2}
+                            stroke={stroke}
+                            rx={valueLabelHeight / 2}
+                            ry={valueLabelHeight / 2}
+                            // fill={`url(#${gradient?.id})`}
+                            fill="#333"
+                        />
+                        <Text_
+                            className="boxplot-chart-label"
+                            stroke={stroke}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                            fontSize="11"
+                        >
+                            {p50ValueLabel}
+                        </Text_>
+                    </g>
+                }
+                contents={label}
+                asChild={true}
+            />
+            {/* <TooltipItem triggerRef={p50Ref} label={label} /> */}
         </>
     )
 }
@@ -172,19 +179,26 @@ const PercentileDot = ({
     })?.t
     return (
         <>
-            <g transform={`translate(${x}, ${rowHeight / 2})`} ref={pRef}>
-                <circle
-                    cx={0}
-                    cy={0}
-                    r={DOT_RADIUS}
-                    stroke={`${stroke}66`}
-                    strokeWidth={strokeWidth}
-                    fill="none"
-                />
-                <circle cx={0} cy={0} r={DOT_RADIUS / 3} fill={`${stroke}bb`} />
-                <circle cx={0} cy={0} r={DOT_RADIUS + 5} fill="transparent" />
-            </g>
-            <TooltipItem triggerRef={pRef} label={label} direction={p <= 50 ? 'right' : 'left'} />
+            <Tip
+                trigger={
+                    <g transform={`translate(${x}, ${rowHeight / 2})`} ref={pRef}>
+                        <circle
+                            cx={0}
+                            cy={0}
+                            r={DOT_RADIUS}
+                            stroke={`${stroke}66`}
+                            strokeWidth={strokeWidth}
+                            fill="none"
+                        />
+                        <circle cx={0} cy={0} r={DOT_RADIUS / 3} fill={`${stroke}bb`} />
+                        <circle cx={0} cy={0} r={DOT_RADIUS + 5} fill="transparent" />
+                    </g>
+                }
+                contents={label}
+                asChild={true}
+            />
+
+            {/* <TooltipItem triggerRef={pRef} label={label} direction={p <= 50 ? 'right' : 'left'} /> */}
         </>
     )
 }

@@ -61,23 +61,15 @@ const GridDataLoader = ({
     }, [chartFilters])
 
     return (
-        <>
-            <WrapperGrid
-                layout={layout}
-                series={series}
-                legends={legends}
-                isLoading={isLoading}
-                showDefaultSeries={showDefaultSeries}
-            >
-                {children}
-            </WrapperGrid>
-            <DataLoaderFooter
-                data={series}
-                block={block}
-                chartFilters={chartFilters}
-                setChartFilters={setChartFilters}
-            />
-        </>
+        <WrapperGrid
+            layout={layout}
+            series={series}
+            legends={legends}
+            isLoading={isLoading}
+            showDefaultSeries={showDefaultSeries}
+        >
+            {children}
+        </WrapperGrid>
     )
 }
 

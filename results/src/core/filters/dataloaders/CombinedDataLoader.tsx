@@ -72,12 +72,6 @@ const CombinedDataLoader = ({
         <Wrapper_>
             <Contents_>{React.cloneElement(children, props)}</Contents_>
             {isLoading && <Loading />}
-            <DataLoaderFooter
-                data={series}
-                block={block}
-                chartFilters={chartFilters}
-                setChartFilters={setChartFilters}
-            />
         </Wrapper_>
     )
 }

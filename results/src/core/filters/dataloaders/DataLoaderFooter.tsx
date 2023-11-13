@@ -6,8 +6,9 @@ import Button from 'core/components/Button'
 import { JSONTrigger } from 'core/blocks/block/BlockData'
 import styled from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
+import { DynamicDataLoaderProps } from './DynamicDataLoader'
 
-export const DataLoaderFooter = props => {
+export const DataLoaderFooter = (props: DynamicDataLoaderProps) => {
     return (
         <Footer_ className="dataloader-footer">
             <ModalTrigger

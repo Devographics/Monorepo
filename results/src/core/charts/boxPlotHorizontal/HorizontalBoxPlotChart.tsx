@@ -9,7 +9,7 @@ import AxisBottom from './AxisBottom'
 import sortBy from 'lodash/sortBy'
 import { HorizontalBarChartProps } from '../horizontalBar/HorizontalBarChart'
 
-export const MARGIN = { top: 0, right: 120, bottom: 200, left: 120 }
+export const MARGIN = { top: 0, right: 120, bottom: 50, left: 120 }
 
 interface BoxplotProps extends HorizontalBarChartProps {
     containerWidth?: number
