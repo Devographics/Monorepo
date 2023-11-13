@@ -13,6 +13,7 @@ type SizeKeys =
     | 'larger'
     | 'largest'
     | 'huge'
+    | "largerest"
 
 type WeightKeys = 'light' | 'medium' | 'bold'
 

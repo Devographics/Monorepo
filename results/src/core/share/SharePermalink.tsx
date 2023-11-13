@@ -1,14 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
 import mq from 'core/theme/mq'
-import track from './tracking'
 import { useI18n } from 'core/i18n/i18nContext'
 import { getBlockMeta } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
+import { BlockDefinition } from 'core/types'
 
 const Link = styled.a`
     float: left;
-    opacity: 0;
+    opacity: 0.5;
+    &:focus,
+    &:hover {
+        opacity: 1;
+    }
     line-height: 1;
     width: 22px;
     margin-left: -30px;
@@ -29,7 +33,7 @@ const Link = styled.a`
     }
 `
 
-const SharePermalink = ({ block }) => {
+const SharePermalink = ({ block }: { block: BlockDefinition }) => {
     const { getString } = useI18n()
     const pageContext = usePageContext()
     const blockMeta = getBlockMeta({ block, pageContext, getString })
@@ -44,8 +48,8 @@ const SharePermalink = ({ block }) => {
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="22"
+                height="22"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
             >
