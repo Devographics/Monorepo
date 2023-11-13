@@ -1,10 +1,11 @@
 import React from 'react'
-import { spacing, mq, fontSize } from 'core/theme'
+import { spacing, fontSize } from 'core/theme'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 import Avatar from 'core/components/Avatar'
+import { Credit, Entity } from '@devographics/types'
 
-const CreditItem = ({ entity, role, labelId }) => {
+const CreditItem = ({ entity, role, labelId }: Credit & { labelId?: string }) => {
     if (!entity) {
         return null
     }
@@ -18,9 +19,13 @@ const CreditItem = ({ entity, role, labelId }) => {
                 <Name>
                     <a href={twitter.url}>{name}</a>
                 </Name>
-                {company && (
+                {!!company && (
                     <Company>
-                        <a href={company.homepage.url}>{company.name}</a>
+                        {company.homepage?.url ? (
+                            <a href={company.homepage?.url}>{company.name}</a>
+                        ) : (
+                            company.name
+                        )}
                     </Company>
                 )}
                 {/* <Twitter>

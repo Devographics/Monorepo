@@ -4,11 +4,13 @@ import styled from 'styled-components'
 import T from 'core/i18n/T'
 import CreditItem from 'core/blocks/other/CreditItem'
 import { usePageContext } from 'core/helpers/pageContext'
+import { EditionMetadata } from '@devographics/types'
 
 const CreditsBlock = () => {
     const context = usePageContext()
     const { currentEdition } = context
-    const edition = currentEdition._metadata
+    //@ts-expect-error Why do we use _metadata here?
+    const edition = currentEdition._metadata as EditionMetadata
     const credits = edition?.credits
     return credits && credits.length > 0 ? (
         <Credits>

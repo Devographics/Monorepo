@@ -106,6 +106,7 @@ export type Credit = {
     id: string
     role: string
     entity?: Entity
+    company?: Entity
 }
 
 /**
