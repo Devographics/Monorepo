@@ -98,16 +98,17 @@ export const DataLoaderError = ({
     return (
         <Error_ className="dataloader-footer">
             <Contents_>
-                <Heading_>Oh no! The API request failed with the following message:</Heading_>
+                <Heading_>
+                    <T k="dataloader.failed_request" />
+                </Heading_>
                 <pre>
                     <code>{apiError.message}</code>
                 </pre>
                 <p>
-                    Submit a bug report to let us know about this issue, and we'll do our best to
-                    fix it:
+                    <T k="dataloader.submit_report_prompt" />
                 </p>
                 <Button as="a" target="_blank" href={getIssueReportUrl(debugInfo)}>
-                    Submit Issue
+                    <T k="dataloader.submit_issue" />
                 </Button>
             </Contents_>
         </Error_>

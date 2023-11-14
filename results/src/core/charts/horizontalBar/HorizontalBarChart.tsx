@@ -167,6 +167,9 @@ const HorizontalBarChart = ({
     // in the future it will be able to combine them into a single chart
     let buckets = cloneDeep(getChartData(series[0].data, block))
 
+    if (!buckets) {
+        return <div>No data found.</div>
+    }
     if (facet) {
         buckets = buckets.map(bucket => {
             baseUnits.forEach(unit => {

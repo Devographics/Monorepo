@@ -49,8 +49,7 @@ export const runQuery = async <T>(
                 json
             )}kb) | ${url}`
         )
-        // console.log(json.data)
-        return json.data
+        return { result: json.data }
     } catch (error) {
         return { error }
         // console.log(`// runQuery error (GATSBY_API_URL: ${url})`)
