@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { spacing } from 'core/theme'
 import T from 'core/i18n/T'
 import DataExplorer from './DataExplorer'
-import { ExplorerData } from '@devographics/types'
+import { AllQuestionData, ExplorerData } from '@devographics/types'
 // import Selector from './Selector'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getAxisString, getAxisSegments, runQuery } from './data'
@@ -211,7 +211,7 @@ const DataExplorerBlock = ({
             if (!url) {
                 throw new Error('GATSBY_API_URL env variable is not set')
             }
-            const result = await runQuery(url, query, 'ExplorerQuery')
+            const { result, error } = await runQuery<AllQuestionData>(url, query, 'ExplorerQuery')
             // console.log('// result')
             // console.log(result)
 

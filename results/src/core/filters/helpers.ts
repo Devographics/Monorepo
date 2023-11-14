@@ -861,12 +861,19 @@ export type FetchSeriesDataOptions = {
     year: number
 }
 
+export type FetchSeriesDataPayload = {
+    result?: Array<DataSeries<AllQuestionData>>
+    error?: any
+    query: string
+    seriesNames: string[]
+}
+
 export async function fetchSeriesData({
     block,
     pageContext,
     chartFilters,
     year
-}: FetchSeriesDataOptions): Promise<Array<DataSeries<AllQuestionData>>> {
+}: FetchSeriesDataOptions): Promise<FetchSeriesDataPayload> {
     const { query, seriesNames } = getFiltersQuery({
         block,
         pageContext,
@@ -878,21 +885,25 @@ export async function fetchSeriesData({
     if (!url) {
         throw new Error('GATSBY_API_URL env variable is not set')
     }
-    const result: QueryData<AllQuestionData> = await runQuery(url, query, `${block.id}FiltersQuery`)
+    const { result, error } = await runQuery<AllQuestionData>(url, query, `${block.id}FiltersQuery`)
     // console.log('// result')
     // console.log(result)
 
-    const dataPath = getBlockDataPath({ block, pageContext, addRootNode: false })
+    if (error) {
+        return { error, query, seriesNames }
+    } else {
+        const dataPath = getBlockDataPath({ block, pageContext, addRootNode: false })
 
-    // apply dataPath to get block data for each series
-    const seriesData = seriesNames.map((seriesName, seriesIndex) => {
-        const data = get(result, dataPath.replace(block.id, seriesName)) as AllQuestionData
-        return {
-            data,
-            name: seriesName,
-            filters: chartFilters.filters[seriesIndex],
-            facet: chartFilters.facet
-        }
-    })
-    return seriesData
+        // apply dataPath to get block data for each series
+        const seriesData = seriesNames.map((seriesName, seriesIndex) => {
+            const data = get(result, dataPath.replace(block.id, seriesName)) as AllQuestionData
+            return {
+                data,
+                name: seriesName,
+                filters: chartFilters.filters[seriesIndex],
+                facet: chartFilters.facet
+            }
+        })
+        return { result: seriesData, query, seriesNames }
+    }
 }

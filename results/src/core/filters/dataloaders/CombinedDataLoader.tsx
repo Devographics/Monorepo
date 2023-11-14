@@ -23,34 +23,48 @@ const CombinedDataLoader = ({
     setUnits,
     chartFilters,
     setChartFilters,
-    children
+    setApiError,
+    children,
+    isLoading,
+    setIsLoading,
+    setQuery
 }: CombinedDataLoaderProps) => {
     const pageContext = usePageContext()
     const year = pageContext.currentEdition.year
 
     const showDefaultSeries = chartFilters.options.showDefaultSeries
 
-    const [isLoading, setIsLoading] = useState(false)
     const [series, setSeries] = useState(providedSeries || [defaultSeries])
 
     useEffect(() => {
         const getData = async () => {
             setIsLoading(true)
 
-            const seriesData = await fetchSeriesData({
+            const {
+                result: seriesData,
+                error,
+                query
+            } = await fetchSeriesData({
                 block,
                 pageContext,
                 chartFilters,
                 year
             })
+            setQuery(query)
 
-            // percentageQuestion is the only unit that lets us
-            // meaningfully compare values across series
-            if (setUnits) {
-                setUnits(BucketUnits.PERCENTAGE_QUESTION)
+            if (error) {
+                setApiError(error)
+            } else if (seriesData) {
+                // percentageQuestion is the only unit that lets us
+                // meaningfully compare values across series
+                if (setUnits) {
+                    setUnits(BucketUnits.PERCENTAGE_QUESTION)
+                }
+                const combinedSeries = showDefaultSeries
+                    ? [defaultSeries, ...seriesData]
+                    : seriesData
+                setSeries(combinedSeries)
             }
-            const combinedSeries = showDefaultSeries ? [defaultSeries, ...seriesData] : seriesData
-            setSeries(combinedSeries)
             setIsLoading(false)
         }
 
@@ -71,14 +85,11 @@ const CombinedDataLoader = ({
     return (
         <Wrapper_>
             <Contents_>{React.cloneElement(children, props)}</Contents_>
-            {isLoading && <Loading />}
         </Wrapper_>
     )
 }
 
-const Wrapper_ = styled.div`
-    position: relative;
-`
+const Wrapper_ = styled.div``
 
 const Contents_ = styled.div`
     flex: 1;

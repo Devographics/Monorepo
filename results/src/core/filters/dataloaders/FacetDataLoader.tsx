@@ -10,7 +10,7 @@ import Loading from 'core/explorer/Loading'
 import styled from 'styled-components'
 import { DataSeries } from '../types'
 import { JSONTrigger } from 'core/blocks/block/BlockData'
-import { BucketUnits } from '@devographics/types'
+import { AllQuestionData, BucketUnits } from '@devographics/types'
 import T from 'core/i18n/T'
 import { Note_ } from 'core/blocks/block/BlockNote'
 import { useAllFilters } from 'core/charts/hooks'
@@ -27,7 +27,11 @@ const FacetDataLoader = ({
     setChartFilters,
     units,
     setUnits,
-    providedSeries
+    providedSeries,
+    setApiError,
+    setQuery,
+    isLoading,
+    setIsLoading
 }: FacetDataLoaderProps) => {
     const pageContext = usePageContext()
     const allFilters = useAllFilters(block.id)
@@ -35,7 +39,7 @@ const FacetDataLoader = ({
     const year = pageContext.currentEdition.year
     const showDefaultSeries = chartFilters.options.showDefaultSeries
 
-    const [isLoading, setIsLoading] = useState(false)
+    // const [isLoading, setIsLoading] = useState(false)
     const [series, setSeries] = useState(providedSeries || [defaultSeries])
 
     allFilters.find(o => o.id === chartFilters?.facet?.id)
@@ -45,20 +49,29 @@ const FacetDataLoader = ({
         const getData = async () => {
             setIsLoading(true)
 
-            const seriesData = await fetchSeriesData({
+            const {
+                result: seriesData,
+                error,
+                query
+            } = await fetchSeriesData({
                 block,
                 pageContext,
                 chartFilters,
                 year
             })
+            setQuery(query)
 
-            setSeries(seriesData)
+            if (error) {
+                setApiError(error)
+            } else if (seriesData) {
+                setSeries(seriesData)
+                setUnits(
+                    facetQuestion?.optionsAreRange
+                        ? BucketUnits.PERCENTILES
+                        : BucketUnits.PERCENTAGE_BUCKET
+                )
+            }
             setIsLoading(false)
-            setUnits(
-                facetQuestion?.optionsAreRange
-                    ? BucketUnits.PERCENTILES
-                    : BucketUnits.PERCENTAGE_BUCKET
-            )
         }
 
         if (!chartFilters.options.preventQuery && !isEmpty(chartFilters.facet)) {
@@ -78,7 +91,6 @@ const FacetDataLoader = ({
     return (
         <Wrapper_>
             <Contents_>{React.cloneElement(children, props)}</Contents_>
-            {isLoading && <Loading />}
             {units === BucketUnits.PERCENTAGE_BUCKET && (
                 <Note_>
                     <T k="charts.facets_clarification" />
@@ -93,9 +105,7 @@ const FacetDataLoader = ({
     )
 }
 
-const Wrapper_ = styled.div`
-    position: relative;
-`
+const Wrapper_ = styled.div``
 
 const Contents_ = styled.div`
     flex: 1;

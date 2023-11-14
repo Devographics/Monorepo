@@ -57,7 +57,7 @@ const WrapperGrid = ({
                             })
                         )}
                     </Contents_>
-                    {isLoading && <Loading />}
+                    {/* {isLoading && <Loading />} */}
                 </GridItem_>
             )
         })}

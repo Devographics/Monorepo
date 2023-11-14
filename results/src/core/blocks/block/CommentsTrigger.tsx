@@ -8,6 +8,7 @@ import { runQuery } from 'core/explorer/data'
 import newGithubIssueUrl from 'new-github-issue-url'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useBlockTitle } from 'core/helpers/blockHelpers'
+import { AllQuestionData } from '@devographics/types'
 
 type GetQueryNameProps = {
     editionId: string
@@ -65,7 +66,11 @@ const CommentsWrapper = ({ block, name }) => {
             if (!url) {
                 throw new Error('GATSBY_API_URL env variable is not set')
             }
-            const result = await runQuery(url, query, getQueryName(queryOptions))
+            const { result, error } = await runQuery<AllQuestionData>(
+                url,
+                query,
+                getQueryName(queryOptions)
+            )
             const comments =
                 result?.surveys[surveyId][editionId][sectionId][questionId].comments.currentEdition
                     .commentsRaw
