@@ -19,15 +19,17 @@
         disableExport: true
         wrapBlock: false
         items:
-            - median_salary_2022
-            - unemployed_respondents_2022
-            - programming_languages_2022
-            - international_subsidiary_2022
-            - remote_work_2022
-            - javascript_frameworks_2022
-            - women_vs_men_2022
-            - overtime_2022
-            - programming_salaries_2022
+            - median_salary_2023
+            - previous_compensation_2023
+            - negotiated_compensation_2023
+            - unemployed_respondents_2023
+            - job_search_status_2023
+            - international_subsidiary_2023
+            - remote_work_2023
+            - women_vs_men_experience_2023
+            - women_vs_men_professional_qualifications_2023
+            - overtime_2023
+            - programming_languages_2023
 
 # - id: data_explorer
 #   titleId: sections.data_explorer.title

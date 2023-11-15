@@ -98,9 +98,12 @@ export const getBlockDescription = ({
 }) => {
     const descriptionKey = `${getBlockKey({ block })}.description`
     const { currentEdition } = pageContext
-    const blockDescription = block.descriptionId && getString(block.descriptionId, { values })?.t
-    const editionDescription = getString(`${descriptionKey}.${currentEdition.id}`, { values })?.t
-    const genericDescription = getString(descriptionKey, { values })?.t
+    const blockDescription =
+        block.descriptionId && getString(block.descriptionId, { values })?.tHtml
+    const editionDescription = getString(`${descriptionKey}.${currentEdition.id}`, {
+        values
+    })?.tHtml
+    const genericDescription = getString(descriptionKey, { values })?.tHtml
     return blockDescription || editionDescription || genericDescription
 }
 

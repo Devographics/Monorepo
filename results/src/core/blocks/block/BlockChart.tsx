@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { spacing } from 'core/theme'
+import { fontSize, fontWeight, spacing } from 'core/theme'
 import BlockNote from 'core/blocks/block/BlockNote'
 import BlockLegends from 'core/blocks/block/BlockLegends'
 import { useI18n } from 'core/i18n/i18nContext'
@@ -89,7 +89,8 @@ export const BlockDescriptionContents = ({ block }: { block: BlockDefinition }) 
     if (blockDescription) {
         return (
             <Description className="Block__Description">
-                {blockDescription} {block.isFreeform && <T k="blocks.freeform" />}
+                <div dangerouslySetInnerHTML={{ __html: blockDescription }} />{' '}
+                {block.isFreeform && <T k="blocks.freeform" />}
             </Description>
         )
     }
@@ -108,11 +109,26 @@ const Description = styled.div`
         display: none;
     }
     margin-bottom: ${spacing(1)};
-
+    font-size: ${fontSize('medium')};
     p {
         &:last-child {
             margin: 0;
         }
+    }
+    mark {
+        font-style: normal;
+        margin: 0 -0.4em;
+        padding: 0.1em 0.4em;
+        border-radius: 0.8em 0.3em;
+        background: transparent;
+        background-image: linear-gradient(
+            to right,
+            rgba(255, 225, 225, 0.1),
+            rgba(255, 225, 225, 0.4) 4%,
+            rgba(255, 225, 225, 0.2)
+        );
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
     }
 `
 
