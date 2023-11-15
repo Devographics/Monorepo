@@ -66,29 +66,6 @@
               parameters:
                   showNoAnswer: true
                   cutoff: 10
-            - id: japan_province_by_remote_work
-              fieldId: japan_province
-              blockType: HorizontalBarBlock
-              query: currentEditionData
-              parameters:
-                  showNoAnswer: true
-                  cutoff: 10
-                  enableAddMissingBuckets: false
-              defaultUnits: percentageBucket
-              tabId: tabs.by_remote_work
-              filtersState:
-                  options:
-                      showDefaultSeries: false
-                      enableYearSelect: false
-                      mode: facet
-                      queryOnLoad: false
-                      supportedModes:
-                          - grid
-                          - facet
-                      preventQuery: false
-                  facet:
-                      sectionId: employer_info
-                      id: remote_work_policy
 
       - id: reason_for_relocation
         template: single_option_combined
@@ -157,51 +134,13 @@
               parameters:
                   showNoAnswer: true
                   cutoff: 10
-            - id: country_by_japanese_province
-              fieldId: country
-              blockType: HorizontalBarBlock
-              query: currentEditionData
-              parameters:
-                  showNoAnswer: true
-                  cutoff: 10
-              defaultUnits: percentageBucket
-              tabId: tabs.by_japanese_province
-              filtersState:
-                  options:
-                      mode: facet
-                  facet:
-                      sectionId: user_info
-                      id: japan_province
 
       - id: age
         template: multiple_options
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
-            - id: age_by_gender
-              fieldId: age
-              blockType: HorizontalBarBlock
-              query: currentEditionData
-              parameters:
-                  showNoAnswer: true
-              defaultUnits: percentageQuestion
-              tabId: tabs.by_gender
-              filtersState:
-                  options:
-                      mode: grid
-                  filters:
-                      - year: 2023
-                        conditions:
-                            - fieldId: gender
-                              sectionId: user_info
-                              operator: eq
-                              value: man
-                      - year: 2023
-                        conditions:
-                            - fieldId: gender
-                              sectionId: user_info
-                              operator: eq
-                              value: woman
+            - template: vs_man_woman_tokyodev
 
       - id: gender
         template: multiple_options
@@ -313,6 +252,8 @@
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: years
+            - template: vs_man_woman_tokyodev
+              i18nNamespace: years
 
       - id: educational_attainment
         template: multiple_options_combined
@@ -339,20 +280,7 @@
                   facet:
                       sectionId: user_info
                       id: years_of_experience
-            - id: professional_qualifications_by_gender
-              fieldId: professional_qualifications
-              blockType: HorizontalBarBlock
-              query: currentEditionData
-              parameters:
-                  showNoAnswer: true
-              defaultUnits: percentageBucket
-              tabId: tabs.by_gender
-              filtersState:
-                  options:
-                      mode: facet
-                  facet:
-                      sectionId: user_info
-                      id: gender
+            - template: vs_man_woman_tokyodev
 
       - id: language_proficiency_english
         template: multiple_options
@@ -545,10 +473,21 @@
               tabId: tabs.by_current_employer
               filtersState:
                   options:
-                      mode: facet
-                  facet:
-                      sectionId: employer_info
-                      id: current_employer
+                      mode: grid
+                      preventQuery: false
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: current_employer
+                              sectionId: employer_info
+                              operator: eq
+                              value: japanese_company
+                      - year: 2023
+                        conditions:
+                            - fieldId: current_employer
+                              sectionId: employer_info
+                              operator: eq
+                              value: japanese_subsidiary
 
 - id: employer_info
   path: /employer-info

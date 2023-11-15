@@ -1,0 +1,25 @@
+id: ${mainBlockId}_vs_man_woman
+fieldId: ${mainBlockId}
+i18nNamespace: ${mainBlockId}
+tabId: tabs.by_gender
+defaultUnits: questionPercentage
+blockType: HorizontalBarBlock
+query: currentEditionData
+parameters:
+    showNoAnswer: true
+filtersState:
+    options:
+        mode: grid
+    filters:
+        - year: 2023
+          conditions:
+              - fieldId: gender
+                sectionId: user_info
+                operator: eq
+                value: man
+        - year: 2023
+          conditions:
+              - fieldId: gender
+                sectionId: user_info
+                operator: eq
+                value: woman
