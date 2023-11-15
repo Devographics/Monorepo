@@ -108,7 +108,15 @@ function DataLoaderWrapper<T>(props: DynamicDataLoaderWrapperProps<T>) {
         layout: 'vertical'
     }
 
-    const showLegends = [MODE_FACET, MODE_COMBINED].includes(providedFiltersState.options.mode)
+    const showLegends =
+        filterLegends.length > 0 &&
+        [MODE_FACET, MODE_COMBINED].includes(String(providedFiltersState.options.mode)) &&
+        [
+            BucketUnits.COUNT,
+            BucketUnits.PERCENTAGE_SURVEY,
+            BucketUnits.PERCENTAGE_QUESTION,
+            BucketUnits.PERCENTAGE_BUCKET
+        ].includes(units)
 
     return (
         <Wrapper_>

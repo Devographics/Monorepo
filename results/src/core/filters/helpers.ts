@@ -755,7 +755,8 @@ export const useFilterLegends = ({
     } else if (chartFilters.options.mode === MODE_FACET && chartFilters.facet) {
         const facetField = allFilters.find(f => f.id === chartFilters?.facet?.id) as FilterItem
 
-        let validOptions = facetField?.options || []
+        // clone array to avoid modifying original one when adding elements to validOptions
+        let validOptions = facetField?.options ? [...facetField.options] : []
 
         const findValidIds = (buckets: Bucket[] | FacetBucket[]) =>
             buckets.filter(b => b.count && b.count > 0).map(b => b.id)
@@ -773,10 +774,10 @@ export const useFilterLegends = ({
         }
 
         if (buckets?.some(b => b.facetBuckets?.some(fb => fb.hasInsufficientData))) {
-            validOptions.push({ id: INSUFFICIENT_DATA })
+            validOptions = [...validOptions, { id: INSUFFICIENT_DATA }]
         }
         if (allFacetBucketIds.includes(NO_ANSWER)) {
-            validOptions.push({ id: NO_ANSWER })
+            validOptions = [...validOptions, { id: NO_ANSWER }]
         }
 
         results = validOptions.map(({ id }, index) => {

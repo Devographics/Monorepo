@@ -39,7 +39,7 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
         data?.combined?.currentEdition?.completion || data?.responses?.currentEdition?.completion
     const total = completion?.total
 
-    const chartData = getChartData(data, block)
+    const chartData = series ? getChartData(series[0].data, block) : getChartData(data, block)
 
     const { chartFilters, setChartFilters, filterLegends } = useChartFilters({
         block,
@@ -96,17 +96,20 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
         ]
     }
 
-    if (
-        filterLegends.length > 0 &&
-        [
-            BucketUnits.COUNT,
-            BucketUnits.PERCENTAGE_SURVEY,
-            BucketUnits.PERCENTAGE_QUESTION,
-            BucketUnits.PERCENTAGE_BUCKET
-        ].includes(units)
-    ) {
-        blockVariantProps.legends = filterLegends
-    }
+    // filter legends are not part of the BlockVariant anymore, they're part of
+    // the DataLoader wrapper
+
+    // if (
+    //     filterLegends.length > 0 &&
+    //     [
+    //         BucketUnits.COUNT,
+    //         BucketUnits.PERCENTAGE_SURVEY,
+    //         BucketUnits.PERCENTAGE_QUESTION,
+    //         BucketUnits.PERCENTAGE_BUCKET
+    //     ].includes(units)
+    // ) {
+    //     blockVariantProps.legends = filterLegends
+    // }
 
     const chartProps = {
         block,
