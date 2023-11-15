@@ -2,7 +2,7 @@ id: ${mainBlockId}_vs_man_woman
 fieldId: ${mainBlockId}
 i18nNamespace: ${mainBlockId}
 tabId: tabs.by_gender
-defaultUnits: questionPercentage
+defaultUnits: percentageQuestion
 blockType: HorizontalBarBlock
 query: currentEditionData
 parameters:
