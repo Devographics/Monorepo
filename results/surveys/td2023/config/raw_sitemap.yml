@@ -878,6 +878,20 @@
         variants:
             - template: vs_salary_tokyodev
 
+- id: conclusion
+  path: /conclusion
+  blocks:
+      - id: conclusion
+        template: conclusion
+        variables:
+            author: paul_mcmahon
+            entities: '"paul_mcmahon"'
+
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+        wrapBlock: false
+        disableExport: true
+
 - id: notfound
   titleId: notfound.title
   path: /404

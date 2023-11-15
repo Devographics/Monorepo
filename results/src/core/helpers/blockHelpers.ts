@@ -81,6 +81,47 @@ In order of priority, use:
 3. a generic description key (e.g. user_info.age.description.js2022)
 
 */
+export const getBlockTakeaway = ({
+    block,
+    pageContext,
+    getString,
+    values,
+    options
+}: {
+    block: BlockDefinition
+    pageContext: PageContextValue
+    getString: StringTranslator
+    values?: any
+    options?: {
+        isHtml?: boolean
+    }
+}) => {
+    const takeawayKey = `${getBlockKey({ block })}.takeaway`
+    const { currentEdition } = pageContext
+    const blockTakeaway = block.descriptionId && getString(block.descriptionId, { values })?.tHtml
+    const editionTakeaway = getString(`${takeawayKey}.${currentEdition.id}`, {
+        values
+    })?.tHtml
+    const genericTakeaway = getString(takeawayKey, { values })?.tHtml
+    return blockTakeaway || editionTakeaway || genericTakeaway
+}
+
+export const useBlockTakeaway = ({ block }: { block: BlockDefinition }) => {
+    const { getString } = useI18n()
+    const entities = useEntities()
+    const pageContext = usePageContext()
+    return getBlockTakeaway({ block, pageContext, getString, entities })
+}
+
+/*
+
+In order of priority, use:
+
+1. an id explicitly defined as the block's definitionId
+2. a description for the specific edition (e.g. user_info.age.description.js2022)
+3. a generic description key (e.g. user_info.age.description.js2022)
+
+*/
 export const getBlockDescription = ({
     block,
     pageContext,

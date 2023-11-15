@@ -16,7 +16,7 @@ const CreditItem = ({ entity, role, labelId }) => {
             </CreditAvatar_>
             <Details>
                 <Name>
-                    <a href={twitter.url}>{name}</a>
+                    <a href={twitter?.url}>{name}</a>
                 </Name>
                 {company && (
                     <Company>
