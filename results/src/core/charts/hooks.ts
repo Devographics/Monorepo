@@ -177,12 +177,81 @@ export type GradientColor = {
 export type GradientDefinition = {
     id: string
     type: 'linearGradient'
+    mainColor?: string
     colors: GradientColor[]
     x1?: number
     y1?: number
     x2?: number
     y2?: number
 }
+
+export type GradientFunction = (
+    colors: DefaultTheme['colors'],
+    orientation: 'Horizontal' | 'Vertical'
+) => GradientDefinition
+
+export const naGradient: GradientFunction = (colors, orientation) => ({
+    id: `Gradient${orientation}Na`,
+    type: 'linearGradient',
+    colors: [
+        { offset: 0, color: 'rgba(255,255,255,0.6)' },
+        { offset: 100, color: 'rgba(255,255,255,0.2)' }
+    ],
+    ...(orientation === HORIZONTAL ? horizontalDefs : {})
+})
+
+export const insufficientDataGradient: GradientFunction = (colors, orientation) => ({
+    id: `Gradient${orientation}InsufficientData`,
+    type: 'linearGradient',
+    mainColor: 'rgba(255,255,255,0.3)',
+    colors: [
+        { offset: 0, color: 'rgba(255,255,255,0.3)' },
+        { offset: 100, color: 'rgba(255,255,255,0.05)' }
+    ],
+    ...(orientation === HORIZONTAL ? horizontalDefs : {})
+})
+
+export const noAnswerGradient: GradientFunction = (colors, orientation) => ({
+    id: `Gradient${orientation}NoAnswer`,
+    type: 'linearGradient',
+    mainColor: 'rgba(255,255,255,0.3)',
+    colors: [
+        { offset: 0, color: 'rgba(255,255,255,0.3)' },
+        { offset: 100, color: 'rgba(255,255,255,0.05)' }
+    ],
+    ...(orientation === HORIZONTAL ? horizontalDefs : {})
+})
+
+export const overallGradient: GradientFunction = (colors, orientation) => ({
+    id: `Gradient${orientation}Overall`,
+    type: 'linearGradient',
+    colors: [
+        { offset: 0, color: colors.barColorOverall?.gradient[1] },
+        { offset: 100, color: colors.barColorOverall?.gradient[0] }
+    ],
+    ...(orientation === HORIZONTAL ? horizontalDefs : {})
+})
+
+export const freeformAnswersGradient: GradientFunction = (colors, orientation) => ({
+    id: `Gradient${orientation}Freeform`,
+    type: 'linearGradient',
+    colors: [
+        { offset: 0, color: `${colors.barColorDefault.gradient[1]}70` },
+        { offset: 100, color: `${colors.barColorDefault.gradient[0]}70` }
+    ],
+    ...(orientation === HORIZONTAL ? horizontalDefs : {})
+})
+
+export const defaultGradient: GradientFunction = (colors, orientation) => ({
+    id: `Gradient${orientation}Default`,
+    type: 'linearGradient',
+    colors: [
+        { offset: 0, color: colors.barColorDefault.gradient[1] },
+        { offset: 100, color: colors.barColorDefault.gradient[0] }
+    ],
+    ...(orientation === HORIZONTAL ? horizontalDefs : {})
+})
+
 export const useColorDefs = (options: UseColorDefsOptions = {}): GradientDefinition[] => {
     const { orientation = VERTICAL } = options
     const theme = useTheme()
@@ -207,75 +276,15 @@ export const useColorDefs = (options: UseColorDefsOptions = {}): GradientDefinit
         ...(orientation === HORIZONTAL ? horizontalDefs : {})
     }))
 
-    const naGradient = {
-        id: `Gradient${orientation}Na`,
-        type: 'linearGradient',
-        colors: [
-            { offset: 0, color: 'rgba(255,255,255,0.6)' },
-            { offset: 100, color: 'rgba(255,255,255,0.2)' }
-        ],
-        ...(orientation === HORIZONTAL ? horizontalDefs : {})
-    }
-
-    const insufficientDataGradient = {
-        id: `Gradient${orientation}InsufficientData`,
-        type: 'linearGradient',
-        colors: [
-            { offset: 0, color: 'rgba(255,255,255,0.3)' },
-            { offset: 100, color: 'rgba(255,255,255,0.05)' }
-        ],
-        ...(orientation === HORIZONTAL ? horizontalDefs : {})
-    }
-
-    const noAnswerGradient = {
-        id: `Gradient${orientation}NoAnswer`,
-        type: 'linearGradient',
-        colors: [
-            { offset: 0, color: 'rgba(255,255,255,0.3)' },
-            { offset: 100, color: 'rgba(255,255,255,0.05)' }
-        ],
-        ...(orientation === HORIZONTAL ? horizontalDefs : {})
-    }
-
-    const overallGradient = {
-        id: `Gradient${orientation}Overall`,
-        type: 'linearGradient',
-        colors: [
-            { offset: 0, color: colors.barColorOverall?.gradient[1] },
-            { offset: 100, color: colors.barColorOverall?.gradient[0] }
-        ],
-        ...(orientation === HORIZONTAL ? horizontalDefs : {})
-    }
-
-    const freeformAnswersGradient = {
-        id: `Gradient${orientation}Freeform`,
-        type: 'linearGradient',
-        colors: [
-            { offset: 0, color: `${colors.barColorDefault.gradient[1]}70` },
-            { offset: 100, color: `${colors.barColorDefault.gradient[0]}70` }
-        ],
-        ...(orientation === HORIZONTAL ? horizontalDefs : {})
-    }
-
-    const defaultGradient = {
-        id: `Gradient${orientation}Default`,
-        type: 'linearGradient',
-        colors: [
-            { offset: 0, color: colors.barColorDefault.gradient[1] },
-            { offset: 100, color: colors.barColorDefault.gradient[0] }
-        ],
-        ...(orientation === HORIZONTAL ? horizontalDefs : {})
-    }
-
     return [
         ...barColors,
         ...velocity,
-        defaultGradient,
-        freeformAnswersGradient,
-        noAnswerGradient,
-        insufficientDataGradient,
-        overallGradient,
-        naGradient
+        defaultGradient(colors, orientation),
+        freeformAnswersGradient(colors, orientation),
+        noAnswerGradient(colors, orientation),
+        insufficientDataGradient(colors, orientation),
+        overallGradient(colors, orientation),
+        naGradient(colors, orientation)
     ]
 }
 
