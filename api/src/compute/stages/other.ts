@@ -123,7 +123,12 @@ export async function addMissingBuckets(
                     bucket => String(bucket.id) === String(option1.id)
                 )
                 if (existingBucketItem) {
-                    if (axis2?.question?.options) {
+                    // if enableAddMissingBuckets is true; or if it's undefined but options are sequential,
+                    // add missing facet buckets
+                    if (
+                        axis2?.question?.options &&
+                        (axis2?.enableAddMissingBuckets ?? axis2?.question.optionsAreSequential)
+                    ) {
                         const options2 = axis2?.question?.options.filter(o =>
                             o.editions?.includes(editionId)
                         )
@@ -142,11 +147,15 @@ export async function addMissingBuckets(
                         }
                     }
                 } else {
-                    const zeroBucket = getZeroBucketItem<Bucket>({
-                        id: String(option1.id),
-                        axis: axis2
-                    })
-                    editionData.buckets.push(zeroBucket)
+                    // if enableAddMissingBuckets is true; or if it's undefined but options are sequential,
+                    // add missing main buckets
+                    if (axis1.enableAddMissingBuckets ?? axis1.question.optionsAreSequential) {
+                        const zeroBucket = getZeroBucketItem<Bucket>({
+                            id: String(option1.id),
+                            axis: axis2
+                        })
+                        editionData.buckets.push(zeroBucket)
+                    }
                 }
             }
         }

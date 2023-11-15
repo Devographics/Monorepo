@@ -204,7 +204,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         mergeOtherBuckets = true,
         enableBucketGroups = true,
         enableAddOverallBucket = true,
-        enableAddMissingBuckets = true
+        enableAddMissingBuckets
     } = parameters
 
     /*
@@ -350,7 +350,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     if (axis2) {
         await addDefaultBucketCounts(results)
 
-        if (responsesType === ResponsesTypes.RESPONSES && enableAddMissingBuckets) {
+        if (responsesType === ResponsesTypes.RESPONSES) {
             await addMissingBuckets(results, axis2, axis1)
         }
 
@@ -398,7 +398,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await limitData(results, axis2, axis1)
         await addLabels(results, axis2, axis1)
     } else {
-        if (responsesType === ResponsesTypes.RESPONSES && enableAddMissingBuckets) {
+        if (responsesType === ResponsesTypes.RESPONSES) {
             results = await addMissingBuckets(results, axis1)
         }
 
