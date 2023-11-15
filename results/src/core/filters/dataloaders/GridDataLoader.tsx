@@ -8,8 +8,8 @@ import { fetchSeriesData } from '../helpers'
 import { DataSeries } from 'core/filters/types'
 import { JSONTrigger } from 'core/blocks/block/BlockData'
 
-interface GridDataLoaderProps extends DynamicDataLoaderProps {
-    defaultSeries: DataSeries<AllQuestionData>
+interface GridDataLoaderProps<T> extends DynamicDataLoaderProps<T> {
+    defaultSeries: DataSeries<T>
 }
 
 /*
@@ -17,7 +17,7 @@ interface GridDataLoaderProps extends DynamicDataLoaderProps {
 Display multiple series as multiple side-by-side "small multiples" charts
 
 */
-const GridDataLoader = ({
+function GridDataLoader<T>({
     block,
     defaultSeries,
     children,
@@ -28,8 +28,10 @@ const GridDataLoader = ({
     setApiError,
     isLoading,
     setIsLoading,
-    setQuery
-}: GridDataLoaderProps) => {
+    setQuery,
+    series,
+    setSeries
+}: GridDataLoaderProps<T>) {
     const pageContext = usePageContext()
     const year = pageContext.currentEdition.year
     const showDefaultSeries = chartFilters.options.showDefaultSeries
@@ -38,8 +40,6 @@ const GridDataLoader = ({
         chartFilters,
         block
     })
-
-    const [series, setSeries] = useState(providedSeries || [defaultSeries])
 
     useEffect(() => {
         const getData = async () => {

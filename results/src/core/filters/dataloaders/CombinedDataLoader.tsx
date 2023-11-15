@@ -12,11 +12,11 @@ import { JSONTrigger } from 'core/blocks/block/BlockData'
 import FiltersTrigger from '../FiltersTrigger'
 // import { spacing, mq, fontSize } from 'core/theme'
 
-interface CombinedDataLoaderProps extends DynamicDataLoaderProps {
-    defaultSeries: DataSeries<AllQuestionData>
+interface CombinedDataLoaderProps<T> extends DynamicDataLoaderProps<T> {
+    defaultSeries: DataSeries<T>
 }
 
-const CombinedDataLoader = ({
+function CombinedDataLoader<T>({
     block,
     providedSeries,
     defaultSeries,
@@ -27,14 +27,15 @@ const CombinedDataLoader = ({
     children,
     isLoading,
     setIsLoading,
-    setQuery
-}: CombinedDataLoaderProps) => {
+    setQuery,
+    series,
+    setSeries,
+    filterLegends
+}: CombinedDataLoaderProps<T>) {
     const pageContext = usePageContext()
     const year = pageContext.currentEdition.year
 
     const showDefaultSeries = chartFilters.options.showDefaultSeries
-
-    const [series, setSeries] = useState(providedSeries || [defaultSeries])
 
     useEffect(() => {
         const getData = async () => {
@@ -79,7 +80,8 @@ const CombinedDataLoader = ({
               series,
               chartDisplayMode: CHART_MODE_GROUPED,
               filters: chartFilters.filters,
-              showDefaultSeries
+              showDefaultSeries,
+              filterLegends
           }
 
     return (

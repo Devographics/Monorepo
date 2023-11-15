@@ -311,6 +311,8 @@ export const useColorFills = (options: UseColorFillsOptions) => {
         showDefaultSeries
     } = options
 
+    const numberOfVariantColors = theme.colors.barColors.length
+
     const naFill = {
         match: d => d.data.indexValue === 'na',
         id: `Gradient${orientation}Na`
@@ -379,7 +381,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
                     const [facetKey, bucketKey] = d.key.split('.')
                     return facetKey === keyName
                 },
-                id: `${prefix}${orientation}${i + 2}`
+                id: `${prefix}${orientation}${(i % numberOfVariantColors) + 2}`
             }))
 
             return [

@@ -25,7 +25,8 @@ import { useI18n } from 'core/i18n/i18nContext'
 import { useTheme } from 'styled-components'
 import round from 'lodash/round'
 import { useAllFilters, getVariantBarColorItem } from 'core/charts/hooks'
-import sumBy from 'lodash/sumBy'
+import compact from 'lodash/compact'
+import uniq from 'lodash/uniq'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getBlockLink } from 'core/helpers/blockHelpers'
 import { getEntityName, useEntities } from 'core/helpers/entities'
@@ -47,7 +48,8 @@ import {
     Bucket,
     CombinedBucket,
     OptionMetadata,
-    CombinedBucketData
+    CombinedBucketData,
+    FacetBucket
 } from '@devographics/types'
 import { runQuery } from 'core/explorer/data'
 // import { spacing, mq, fontSize } from 'core/theme'
@@ -643,7 +645,7 @@ export const getValueLabel = ({
 Generate the legends used when filtering is enabled
 
 */
-type FilterLegend = {
+export type FilterLegend = {
     color: string
     gradientColors: string[]
     id: string
@@ -652,10 +654,12 @@ type FilterLegend = {
 }
 export const useFilterLegends = ({
     chartFilters,
-    block
+    block,
+    buckets
 }: {
     chartFilters: CustomizationDefinition
     block: BlockDefinition
+    buckets: Bucket[]
 }) => {
     const context = usePageContext()
 
@@ -744,7 +748,24 @@ export const useFilterLegends = ({
         }
     } else if (chartFilters.options.mode === MODE_FACET && chartFilters.facet) {
         const facetField = allFilters.find(f => f.id === chartFilters?.facet?.id) as FilterItem
-        results = facetField?.options?.map(({ id }, index) => {
+
+        let validOptions = facetField?.options || []
+
+        // unless options are sequential and all of them need to be included,
+        // filter out options that don't appear in the data either as buckets or facetBuckets,
+        // or whose count is 0
+        if (!facetField.optionsAreSequential) {
+            const findValidIds = (buckets: Bucket[] | FacetBucket[]) =>
+                buckets.filter(b => b.count && b.count > 0).map(b => b.id)
+            const allBucketsIds = findValidIds(buckets)
+            const allFacetBucketIds = buckets
+                .map(b => b.facetBuckets && findValidIds(b.facetBuckets))
+                .flat()
+            const allIds = compact(uniq([...allBucketsIds, ...allFacetBucketIds]))
+            validOptions = validOptions.filter(option => allIds.includes(option.id.toString()))
+        }
+
+        results = validOptions.map(({ id }, index) => {
             const { key, label } = getItemLabel({
                 id,
                 getString,
@@ -790,11 +811,13 @@ Hook to initialize chart filters
 export const useChartFilters = ({
     block,
     options,
-    providedFiltersState
+    providedFiltersState,
+    buckets
 }: {
     block: BlockDefinition
     options: CustomizationOptions
     providedFiltersState?: CustomizationDefinition
+    buckets: Bucket[]
 }) => {
     let loadFiltersFromUrl = false,
         urlFilters = {} as CustomizationDefinition
@@ -815,8 +838,9 @@ export const useChartFilters = ({
     const [chartFilters, setChartFilters] = useState(initFiltersState)
 
     const filterLegends = useFilterLegends({
-        chartFilters,
-        block
+        chartFilters: initFiltersState,
+        block,
+        buckets
     })
     return { chartFilters, setChartFilters, filterLegends }
 }

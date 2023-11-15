@@ -39,9 +39,12 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
         data?.combined?.currentEdition?.completion || data?.responses?.currentEdition?.completion
     const total = completion?.total
 
+    const chartData = getChartData(data, block)
+
     const { chartFilters, setChartFilters, filterLegends } = useChartFilters({
         block,
         options: { supportedModes: [MODE_GRID, MODE_FACET] },
+        buckets: chartData,
         providedFiltersState: filtersState
     })
 
@@ -64,8 +67,6 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
     }
 
     const defaultSeries = { name: 'default', data }
-
-    const chartData = getChartData(data, block)
 
     const blockVariantProps: any & { tables: Array<TableData> } = {
         units,
@@ -121,12 +122,9 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
         legends: chartLegends
     }
 
-    // console.log(chartLegends)
-    // console.log(filterLegends)
-
     return (
         <BlockVariant {...blockVariantProps}>
-            <DynamicDataLoader
+            <DynamicDataLoader<StandardQuestionData>
                 block={block}
                 chartFilters={chartFilters}
                 setChartFilters={setChartFilters}
@@ -135,6 +133,7 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
                 layout="grid"
                 defaultSeries={defaultSeries}
                 providedSeries={series}
+                getChartData={getChartData}
             >
                 {units === BucketUnits.PERCENTILES ? (
                     <ChartContainer>

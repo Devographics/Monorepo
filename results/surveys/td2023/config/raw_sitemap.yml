@@ -603,6 +603,30 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+            - id: negotiated_compensation_by_current_employer
+              fieldId: negotiated_compensation
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentageQuestion
+              tabId: tabs.by_current_employer
+              filtersState:
+                  options:
+                      mode: grid
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: current_employer
+                              sectionId: employer_info
+                              operator: eq
+                              value: japanese_company
+                      - year: 2023
+                        conditions:
+                            - fieldId: current_employer
+                              sectionId: employer_info
+                              operator: eq
+                              value: japanese_subsidiary
 
       - id: annual_paid_leave
         i18nNamespace: annual_paid_leave
@@ -707,6 +731,20 @@
         parameters: { cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
+            - id: programming_languages_by_company_size
+              fieldId: programming_languages
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentilesByFacet
+              tabId: tabs.by_company_size
+              filtersState:
+                  options:
+                      mode: facet
+                  facet:
+                      sectionId: employer_info
+                      id: company_size
 
       - id: databases
         template: multiple_options_combined
@@ -721,6 +759,31 @@
         parameters: { cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
+            - id: web_frameworks_by_current_job_description
+              fieldId: web_frameworks
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentageQuestion
+              tabId: tabs.frontend_vs_backend
+              filtersState:
+                  options:
+                      mode: grid
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: current_job_description
+                              sectionId: job_info
+                              operator: in
+                              value:
+                                  - developer_front_end
+                      - year: 2023
+                        conditions:
+                            - fieldId: current_job_description
+                              sectionId: job_info
+                              operator: eq
+                              value: developer_back_end
 
       - id: other_frameworks_libraries
         template: multiple_options_combined
@@ -728,6 +791,24 @@
         parameters: { cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
+            - id: other_frameworks_libraries_by_data_scientist_or_machine_learning
+              fieldId: other_frameworks_libraries
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentageQuestion
+              tabId: tabs.data_science
+              filtersState:
+                  options:
+                      mode: grid
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: current_job_description
+                              sectionId: job_info
+                              operator: eq
+                              value: data_scientist_or_machine_learning
 
       - id: developer_tools
         template: multiple_options_combined
@@ -735,6 +816,24 @@
         parameters: { cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
+            - id: other_frameworks_libraries_by_devops_specialist
+              fieldId: developer_tools
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentageQuestion
+              tabId: tabs.devops
+              filtersState:
+                  options:
+                      mode: grid
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: current_job_description
+                              sectionId: job_info
+                              operator: eq
+                              value: devops_specialist
 
       - id: developer_environments
         template: multiple_options_combined
@@ -759,41 +858,57 @@
         i18nNamespace: satisfaction
         template: single_option_horizontal
         defaultUnits: percentageQuestion
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: life_in_japan__professional_life
         i18nNamespace: satisfaction
         template: single_option_horizontal
         defaultUnits: percentageQuestion
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: life_in_japan__family_life
         i18nNamespace: satisfaction
         template: single_option_horizontal
         defaultUnits: percentageQuestion
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: life_in_japan__social_life
         i18nNamespace: satisfaction
         template: single_option_horizontal
         defaultUnits: percentageQuestion
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: life_in_japan__cultural_adjustment
         i18nNamespace: satisfaction
         template: single_option_horizontal
         defaultUnits: percentageQuestion
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: life_in_japan__quality_of_life
         i18nNamespace: satisfaction
         template: single_option_horizontal
         defaultUnits: percentageQuestion
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: life_in_japan__housing
         i18nNamespace: satisfaction
         template: single_option_horizontal
         defaultUnits: percentageQuestion
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: life_in_japan__financial_situation
         i18nNamespace: satisfaction
         template: single_option_horizontal
         defaultUnits: percentageQuestion
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: communities
         template: multiple_options_combined
@@ -801,6 +916,20 @@
         parameters: { cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
+            - id: communities_by_gender
+              fieldId: communities
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentageBucket
+              tabId: tabs.by_gender
+              filtersState:
+                  options:
+                      mode: facet
+                  facet:
+                      sectionId: user_info
+                      id: gender
 
       - id: keyboard_layout
         template: multiple_options_combined

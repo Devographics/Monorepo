@@ -15,11 +15,11 @@ import T from 'core/i18n/T'
 import { Note_ } from 'core/blocks/block/BlockNote'
 import { useAllFilters } from 'core/charts/hooks'
 
-interface FacetDataLoaderProps extends DynamicDataLoaderProps {
-    defaultSeries: DataSeries<AllQuestionData>
+interface FacetDataLoaderProps<T> extends DynamicDataLoaderProps<T> {
+    defaultSeries: DataSeries<T>
 }
 
-const FacetDataLoader = ({
+function FacetDataLoader<T>({
     defaultSeries,
     block,
     children,
@@ -31,8 +31,11 @@ const FacetDataLoader = ({
     setApiError,
     setQuery,
     isLoading,
-    setIsLoading
-}: FacetDataLoaderProps) => {
+    setIsLoading,
+    series,
+    setSeries,
+    filterLegends
+}: FacetDataLoaderProps<T>) {
     const pageContext = usePageContext()
     const allFilters = useAllFilters(block.id)
 
@@ -40,7 +43,6 @@ const FacetDataLoader = ({
     const showDefaultSeries = chartFilters.options.showDefaultSeries
 
     // const [isLoading, setIsLoading] = useState(false)
-    const [series, setSeries] = useState(providedSeries || [defaultSeries])
 
     allFilters.find(o => o.id === chartFilters?.facet?.id)
     const facetQuestion = allFilters.find(o => o.id === chartFilters?.facet?.id)
@@ -85,7 +87,8 @@ const FacetDataLoader = ({
               series,
               chartDisplayMode: CHART_MODE_STACKED,
               facet: chartFilters.facet,
-              showDefaultSeries
+              showDefaultSeries,
+              filterLegends
           }
 
     return (
