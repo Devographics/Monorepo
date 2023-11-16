@@ -17,7 +17,7 @@ const getExtraLabel = (options: {
     filterLegends?: any
     units: BucketUnits
     indexValue: number
-    i18nNamespace: string
+    i18nNamespaces: any
     facet?: FacetItem
     filters?: CustomizationFiltersSeries[]
     getString: StringTranslator
@@ -25,7 +25,7 @@ const getExtraLabel = (options: {
     const {
         id,
         legends,
-        i18nNamespace,
+        i18nNamespaces,
         filterLegends,
         units,
         indexValue,
@@ -52,6 +52,7 @@ const getExtraLabel = (options: {
             }
             extraLabel = getString('chart_units.average', { values })?.t
         } else {
+            const i18nNamespace = i18nNamespaces[facet.id] || facet.id
             const [units, facetBucketId] = id.split('__')
             const labelKey =
                 facetBucketId === NO_ANSWER
@@ -99,7 +100,7 @@ const BarTooltip = props => {
               id,
               legends,
               filterLegends,
-              i18nNamespace: i18nNamespaces[facet.id] || facet.id,
+              i18nNamespaces,
               units,
               indexValue,
               facet,
@@ -119,7 +120,7 @@ const BarTooltip = props => {
 
     const { isFreeformData } = data
     const units_ = id
-    const countUnits = units_.replace(BucketUnits.PERCENTAGE_BUCKET, BucketUnits.COUNT)
+    const countUnits = units_.replace(units, BucketUnits.COUNT)
     const count = data[countUnits]
     const showCount = units !== BucketUnits.COUNT
 

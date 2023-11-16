@@ -210,10 +210,23 @@ const HorizontalBarChart = ({
     const entities: Entity[] = bucketEntities.length > 0 ? bucketEntities : useEntities()
 
     // legacy: chartKeys are calculated using useChartKeys
-    const chartKeys = useChartKeys({ units, facet, showDefaultSeries, showInsufficientDataSegment })
+    const chartKeys = useChartKeys({
+        units,
+        facet,
+        showDefaultSeries,
+        showInsufficientDataSegment
+    })
     // better: legendKeys are calculated by dataloader and passed down as props
     const legendKeys = filterLegends?.map(legend => legend.id.replace('series_', `${units}__`))
-    const keys = legendKeys || chartKeys
+
+    let keys
+    if (units === BucketUnits.AVERAGE) {
+        keys = [BucketUnits.AVERAGE]
+    } else if (units === BucketUnits.MEDIAN) {
+        keys = [BucketUnits.MEDIAN]
+    } else {
+        keys = legendKeys || chartKeys
+    }
 
     const colorDefs = useColorDefs({ orientation: HORIZONTAL })
     const colorFills = useColorFills({
@@ -261,6 +274,12 @@ const HorizontalBarChart = ({
     const labelFormatter = useChartLabelFormatter({ units, facet })
 
     const labelsLayer = useMemo(() => getLabelsLayer(d => labelFormatter(d.value)), [units, facet])
+
+    // console.log(block.id)
+    // console.log({ chartKeys })
+    // console.log({ legendKeys })
+    // console.log({ keys })
+    // console.log({ sortedBuckets })
 
     return (
         <div style={{ height: sortedBuckets.length * baseSize + 80 }}>

@@ -49,6 +49,7 @@ export const runQuery = async <T>(
                 json
             )}kb) | ${url}`
         )
+        console.log(json)
         return { result: json.data }
     } catch (error) {
         return { error }
