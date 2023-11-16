@@ -128,8 +128,8 @@ const getQuestionSort = ({
     if (specifier_?.order) {
         specifier.order = specifier_?.order
     }
-    console.log('=====')
-    console.log({ ...specifier, order: convertOrder(specifier.order) })
+    // console.log('=====')
+    // console.log({ ...specifier, order: convertOrder(specifier.order) })
     return { ...specifier, order: convertOrder(specifier.order) }
 }
 
@@ -233,7 +233,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     
     */
     if (facet) {
-        let [sectionId, facetId] = facet?.split('__')
+        let [sectionId, mainFieldId, subPathId] = facet?.split('__')
+        const facetId = subPathId ? `${mainFieldId}__${subPathId}` : mainFieldId
         const facetQuestion = questionObjects.find(
             q => q.id === facetId && q.surveyId === survey.id
         )
@@ -350,9 +351,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     if (axis2) {
         await addDefaultBucketCounts(results)
 
-        if (responsesType === ResponsesTypes.RESPONSES) {
-            await addMissingBuckets(results, axis2, axis1)
-        }
+        await addMissingBuckets(results, axis2, axis1)
 
         await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 
@@ -398,9 +397,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await limitData(results, axis2, axis1)
         await addLabels(results, axis2, axis1)
     } else {
-        if (responsesType === ResponsesTypes.RESPONSES) {
-            results = await addMissingBuckets(results, axis1)
-        }
+        results = await addMissingBuckets(results, axis1)
 
         await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 

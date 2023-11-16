@@ -201,11 +201,11 @@ export async function addPercentilesByFacet(
     axis1: ComputeAxisParameters,
     axis2: ComputeAxisParameters
 ) {
-    if (axis2.question.optionsAreRange) {
+    if (axis2.question.optionsAreRange || axis2.question.optionsAreNumeric) {
         for (let editionData of resultsByEdition) {
             if (axis2) {
                 for (let bucket of editionData.buckets) {
-                    bucket.percentilesByFacet = bucket.hasInsufficientData
+                    bucket[BucketUnits.PERCENTILES] = bucket.hasInsufficientData
                         ? zeroPercentiles
                         : calculatePercentiles({ bucket, axis: axis2 })
                 }

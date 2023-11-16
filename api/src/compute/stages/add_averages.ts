@@ -4,7 +4,7 @@ import sumBy from 'lodash/sumBy.js'
 import { CUTOFF_ANSWERS, NO_ANSWER, NOT_APPLICABLE } from '@devographics/constants'
 import isNil from 'lodash/isNil.js'
 import isNaN from 'lodash/isNaN.js'
-import isEmpty from 'lodash/isEmpty.js'
+import round from 'lodash/round.js'
 
 /*
 
@@ -91,7 +91,7 @@ export const calculateAverage = ({
                 return 0
             }
         }) / facetTotal
-    return Math.round(averageValue)
+    return round(averageValue, 1)
 }
 
 export async function addAveragesByFacet(
@@ -99,7 +99,7 @@ export async function addAveragesByFacet(
     axis1: ComputeAxisParameters,
     axis2: ComputeAxisParameters
 ) {
-    if (axis2.question.optionsAreRange) {
+    if (axis2.question.optionsAreRange || axis2.question.optionsAreNumeric) {
         for (let editionData of resultsByEdition) {
             if (axis2) {
                 for (let bucket of editionData.buckets) {
