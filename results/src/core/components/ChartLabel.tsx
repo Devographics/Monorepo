@@ -12,8 +12,10 @@ const ChartLabel = ({
     fontSize = 13,
     outlineColor: _outlineColor,
     textColor: _textColor,
+    value,
     ...rest
 }: {
+    value: number
     label: string
     fontSize: number
     outlineColor?: string

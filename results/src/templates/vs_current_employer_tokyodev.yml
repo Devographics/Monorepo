@@ -1,8 +1,8 @@
-id: ${mainBlockId}_vs_salary
+id: ${mainBlockId}_vs_current_employer
 fieldId: ${mainBlockId}
 i18nNamespace: ${mainBlockId}
-tabId: tabs.by_salary
-defaultUnits: percentilesByFacet
+tabId: tabs.by_current_employer
+defaultUnits: percentageBucket
 blockType: HorizontalBarBlock
 query: currentEditionData
 parameters:
@@ -11,5 +11,5 @@ filtersState:
     options:
         mode: facet
     facet:
-        sectionId: compensation
-        id: current_total_annual_compensation
+        sectionId: employer_info
+        id: current_employer

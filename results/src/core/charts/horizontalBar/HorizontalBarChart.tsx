@@ -96,22 +96,29 @@ const getLabelsLayer = (labelTransformer: any) => (props: any) => {
     return props.bars.map((bar: any) => {
         // entire bar has insufficient data
         const barHasInsufficientData = bar.data.data.hasInsufficientData
-        // current segment is insufficient data segment
-        const isInsufficientDataSegment = bar.data.id.includes(INSUFFICIENT_DATA)
-        const label = isInsufficientDataSegment ? '?' : labelTransformer(bar.data)
-        return barHasInsufficientData ? null : (
-            <ChartLabel
-                key={bar.key}
-                label={label}
-                transform={`translate(${bar.x + bar.width / 2},${
-                    bar.y + bar.height / 2
-                }) rotate(${rotation})`}
-                fontSize={fontSize}
-                style={{
-                    pointerEvents: 'none'
-                }}
-            />
-        )
+        // value is 0
+        const valueIs0 = !bar.data.value
+        if (barHasInsufficientData || valueIs0) {
+            return null
+        } else {
+            // current segment is insufficient data segment
+            const isInsufficientDataSegment = bar.data.id.includes(INSUFFICIENT_DATA)
+            const label = isInsufficientDataSegment ? '?' : labelTransformer(bar.data)
+            return (
+                <ChartLabel
+                    key={bar.key}
+                    label={label}
+                    value={bar.data.value}
+                    transform={`translate(${bar.x + bar.width / 2},${
+                        bar.y + bar.height / 2
+                    }) rotate(${rotation})`}
+                    fontSize={fontSize}
+                    style={{
+                        pointerEvents: 'none'
+                    }}
+                />
+            )
+        }
     })
 }
 
@@ -222,11 +229,7 @@ const HorizontalBarChart = ({
     let sortedBuckets = [...buckets].reverse()
 
     if (!question?.optionsAreSequential) {
-        if (units === BucketUnits.AVERAGE) {
-            sortedBuckets = sortBy(sortedBuckets, BucketUnits.AVERAGE)
-        } else if (units === BucketUnits.MEDIAN) {
-            sortedBuckets = sortBy(sortedBuckets, BucketUnits.MEDIAN)
-        }
+        sortedBuckets = sortBy(sortedBuckets, units)
     }
 
     if (units === BucketUnits.PERCENTAGE_QUESTION) {

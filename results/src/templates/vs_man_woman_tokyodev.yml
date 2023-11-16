@@ -10,6 +10,7 @@ parameters:
 filtersState:
     options:
         mode: grid
+        showDefaultSeries: false
     filters:
         - year: 2023
           conditions:

@@ -66,6 +66,7 @@ import { INSUFFICIENT_DATA, NO_ANSWER } from '@devographics/constants'
 import clone from 'lodash/clone'
 import pick from 'lodash/pick'
 import { getItemLabel } from 'core/helpers/labels'
+import merge from 'lodash/merge'
 
 export const getNewCondition = ({
     filter,
@@ -731,7 +732,7 @@ export const useFilterLegends = ({
                                     return label
                                 })
                                 .join(', ')
-                            return `<strong>${fieldLabel}</strong> ${operatorLabel} <strong>${valueLabel}</strong>`
+                            return `<strong>${fieldLabel}</strong> <span class="operator">${operatorLabel}</span> <strong>${valueLabel}</strong>`
                         })
                     ]
                 }
@@ -855,11 +856,10 @@ export const useChartFilters = ({
         loadFiltersFromUrl = urlFilters && block.id === queryParams.blockId
     }
 
-    const initFiltersState =
-        providedFiltersState ||
-        (loadFiltersFromUrl
-            ? { ...urlFilters, options: { queryOnLoad: true } }
-            : getInitFilters(options))
+    const initFilters = getInitFilters(options)
+    const initFiltersState = loadFiltersFromUrl
+        ? merge({}, initFilters, urlFilters, { options: { queryOnLoad: true } })
+        : merge({}, initFilters, providedFiltersState)
 
     // contains the filters that define the series
     const [chartFilters, setChartFilters] = useState(initFiltersState)

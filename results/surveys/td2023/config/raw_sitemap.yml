@@ -74,27 +74,7 @@
         parameters: { showNoAnswer: true, sort: { property: count } }
         variants:
             - template: vs_salary_tokyodev
-            - id: reason_for_relocation_by_current_employer
-              fieldId: reason_for_relocation
-              blockType: HorizontalBarBlock
-              query: currentEditionData
-              parameters:
-                  showNoAnswer: true
-              defaultUnits: percentageBucket
-              tabId: tabs.by_current_employer
-              filtersState:
-                  options:
-                      showDefaultSeries: false
-                      enableYearSelect: false
-                      mode: facet
-                      queryOnLoad: false
-                      supportedModes:
-                          - grid
-                          - facet
-                      preventQuery: false
-                  facet:
-                      sectionId: employer_info
-                      id: current_employer
+            - template: vs_current_employer_tokyodev
 
       - id: residency_status
         template: single_option_combined
@@ -103,27 +83,7 @@
         parameters: { showNoAnswer: true, sort: { property: count } }
         variants:
             - template: vs_salary_tokyodev
-            - id: residency_status_by_current_employer
-              fieldId: residency_status
-              blockType: HorizontalBarBlock
-              query: currentEditionData
-              parameters:
-                  showNoAnswer: true
-              defaultUnits: percentageBucket
-              tabId: tabs.by_current_employer
-              filtersState:
-                  options:
-                      showDefaultSeries: false
-                      enableYearSelect: false
-                      mode: facet
-                      queryOnLoad: false
-                      supportedModes:
-                          - grid
-                          - facet
-                      preventQuery: false
-                  facet:
-                      sectionId: employer_info
-                      id: current_employer
+            - template: vs_current_employer_tokyodev
 
       - id: country
         template: multiple_options
@@ -368,7 +328,7 @@
               query: currentEditionData
               parameters:
                   showNoAnswer: true
-              defaultUnits: percentageBucket
+              defaultUnits: percentilesByFacet
               tabId: tabs.by_years_in_japan
               filtersState:
                   options:
@@ -402,40 +362,14 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
-            - id: languages_used_colleagues_japanese_by_current_employer
-              fieldId: coworker_nationalities_non_engineers
-              blockType: HorizontalBarBlock
-              query: currentEditionData
-              parameters:
-                  showNoAnswer: true
-              defaultUnits: percentageBucket
-              tabId: tabs.by_current_employer
-              filtersState:
-                  options:
-                      mode: facet
-                  facet:
-                      sectionId: employer_info
-                      id: current_employer
+            - template: vs_current_employer_tokyodev
 
       - id: languages_used_colleagues_english
         template: single_option_horizontal
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
-            - id: languages_used_colleagues_english_by_current_employer
-              fieldId: coworker_nationalities_non_engineers
-              blockType: HorizontalBarBlock
-              query: currentEditionData
-              parameters:
-                  showNoAnswer: true
-              defaultUnits: percentageBucket
-              tabId: tabs.by_current_employer
-              filtersState:
-                  options:
-                      mode: facet
-                  facet:
-                      sectionId: employer_info
-                      id: current_employer
+            - template: vs_current_employer_tokyodev
 
       - id: years_employed
         template: multiple_options
@@ -469,7 +403,7 @@
               query: currentEditionData
               parameters:
                   showNoAnswer: true
-              defaultUnits: percentageBucket
+              defaultUnits: percentageQuestion
               tabId: tabs.by_current_employer
               filtersState:
                   options:
@@ -497,6 +431,20 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+            - id: current_employer_by_residency_status
+              fieldId: current_employer
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentageBucket
+              tabId: tabs.by_residency_status
+              filtersState:
+                  options:
+                      mode: facet
+                  facet:
+                      sectionId: user_info
+                      id: residency_status
 
       - id: industry_sector
         template: multiple_options_combined
@@ -504,12 +452,27 @@
         parameters: { showNoAnswer: true, cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
+            - template: vs_current_employer_tokyodev
 
       - id: remote_work_policy
         template: single_option_horizontal
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+            - id: remote_work_policy_by_years_of_experience
+              fieldId: remote_work_policy
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentilesByFacet
+              tabId: tabs.by_years_of_experience
+              filtersState:
+                  options:
+                      mode: facet
+                  facet:
+                      sectionId: user_info
+                      id: years_of_experience
 
       - id: company_size
         template: single_option_horizontal
@@ -517,6 +480,7 @@
         blockType: HorizontalBarBlock
         variants:
             - template: vs_salary_tokyodev
+            - template: vs_current_employer_tokyodev
 
 - id: compensation
   path: /compensation
@@ -532,12 +496,40 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+            - id: previous_compensation_by_negotiated_compensation
+              fieldId: previous_compensation
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentageBucket
+              tabId: tabs.by_negotiated_compensation
+              filtersState:
+                  options:
+                      mode: facet
+                  facet:
+                      sectionId: compensation
+                      id: negotiated_compensation
 
       - id: desired_compensation
         template: single_option_horizontal
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+            - id: desired_compensation_by_negotiated_compensation
+              fieldId: desired_compensation
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentageBucket
+              tabId: tabs.by_negotiated_compensation
+              filtersState:
+                  options:
+                      mode: facet
+                  facet:
+                      sectionId: compensation
+                      id: negotiated_compensation
 
       - id: negotiated_compensation
         template: single_option_horizontal
@@ -678,7 +670,7 @@
               query: currentEditionData
               parameters:
                   showNoAnswer: true
-              defaultUnits: percentilesByFacet
+              defaultUnits: percentageBucket
               tabId: tabs.by_company_size
               filtersState:
                   options:

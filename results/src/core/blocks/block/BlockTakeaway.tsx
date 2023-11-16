@@ -16,6 +16,11 @@ const BlockTakeaway = ({ block }: { block: BlockDefinition }) => {
     return takeaway ? <Takeaway_ dangerouslySetInnerHTML={{ __html: takeaway }} /> : null
 }
 
-const Takeaway_ = styled.span``
+const Takeaway_ = styled.div`
+    margin-bottom: ${spacing()};
+    p:last-child {
+        margin: 0;
+    }
+`
 
 export default memo(BlockTakeaway)
