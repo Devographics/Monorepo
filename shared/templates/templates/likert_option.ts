@@ -10,6 +10,7 @@ export const likert_option: TemplateFunction = options => {
         hidden: true,
         options: [0, 1, 2, 3, 4].map(i => ({ id: i })),
         optionsAreNumeric: true,
+        optionsAreSequential: true,
         ...options.question
     } as QuestionTemplateOutput
 
