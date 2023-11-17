@@ -14,7 +14,7 @@ const commonConfig = {
 export default defineConfig([
     {
         // esbuildPlugins: [yamlPlugin({})],
-        entry: ['./src/server.ts'],
+        entry: ['./src/capture.ts'],
         ...commonConfig,
         format: ['esm'],
         outDir: 'dist',
