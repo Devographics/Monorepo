@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { useI18n } from 'core/i18n/i18nContext'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
+import Button from './Button'
+import styled from 'styled-components'
+import { spacing } from 'core/theme'
 
 const getEOConfig = (listId: string) => ({
     emailOctopusUrl: `https://emailoctopus.com/lists/${listId}/members/embedded/1.3/add`,
@@ -99,13 +102,13 @@ const NewsletterForm = ({
 
     return (
         <div className="newsletter-form">
-            <form
+            <Form_
                 method="post"
                 action={emailOctopusUrl}
                 data-sitekey={emailOctopusSiteKey}
                 onSubmit={handleSubmit}
             >
-                <input
+                <Input_
                     className="newsletter-email"
                     id="field_0"
                     name="field_0"
@@ -122,10 +125,20 @@ const NewsletterForm = ({
                     autoComplete="nope"
                     style={{ display: 'none' }}
                 />
-                <button type="submit" name="subscribe" className="newsletter-button button">
+                <Button type="submit" name="subscribe" className="newsletter-button button">
                     <T k="newsletter.submit" />
-                </button>
-            </form>
+                </Button>
+            </Form_>
         </div>
     )
 }
+
+const Input_ = styled.input`
+    padding: 10px 20px;
+`
+
+const Form_ = styled.form`
+    align-items: center;
+    display: flex;
+    gap: ${spacing(0.5)};
+`

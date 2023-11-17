@@ -771,6 +771,31 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+            - id: life_in_japan__visa_situation_by_residency_status
+              fieldId: life_in_japan__visa_situation
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentageQuestion
+              tabId: tabs.by_residency_status
+              filtersState:
+                  options:
+                      mode: grid
+                      showDefaultSeries: false
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: residency_status
+                              sectionId: user_info
+                              operator: eq
+                              value: engineer
+                      - year: 2023
+                        conditions:
+                            - fieldId: residency_status
+                              sectionId: user_info
+                              operator: eq
+                              value: permanent_resident
 
       - id: life_in_japan__professional_life
         i18nNamespace: satisfaction
@@ -785,6 +810,31 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+            - id: life_in_japan__family_life_by_age
+              fieldId: life_in_japan__family_life
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentageQuestion
+              tabId: tabs.by_age
+              filtersState:
+                  options:
+                      mode: grid
+                      showDefaultSeries: false
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: age
+                              sectionId: user_info
+                              operator: eq
+                              value: range_20_29
+                      - year: 2023
+                        conditions:
+                            - fieldId: age
+                              sectionId: user_info
+                              operator: eq
+                              value: range_30_39
 
       - id: life_in_japan__social_life
         i18nNamespace: satisfaction
@@ -792,6 +842,35 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+            - id: life_in_japan__social_life_by_language_proficiency_japanese
+              fieldId: life_in_japan__social_life
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentageQuestion
+              tabId: tabs.by_japanese_proficiency
+              filtersState:
+                  options:
+                      mode: grid
+                      showDefaultSeries: false
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: language_proficiency_japanese
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - none
+                                  - basic
+                      - year: 2023
+                        conditions:
+                            - fieldId: language_proficiency_japanese
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - fluent
+                                  - native_bilingual
 
       - id: life_in_japan__cultural_adjustment
         i18nNamespace: satisfaction

@@ -29,7 +29,7 @@ const stateOfCSSThemeTypography: DefaultTheme['typography'] = {
     weight: {
         light: 300,
         medium: 400,
-        bold: 800
+        bold: 700
     }
 }
 
