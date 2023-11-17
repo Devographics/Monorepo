@@ -44,7 +44,7 @@ const PicksBlock = ({ block, data: entity }) => {
                                 <a
                                     href={twitter?.url}
                                     style={{
-                                        backgroundImage: `url(https://assets.devographics.com/avatars/${entity.id}.jpg)`
+                                        backgroundImage: `url(${process.env.GATSBY_ASSETS_URL}/avatars/${entity.id}.jpg)`
                                     }}
                                     title={fullName}
                                 >

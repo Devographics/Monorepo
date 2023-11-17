@@ -181,7 +181,12 @@ const BlockItem = ({ block, closeSidebar, page }) => {
     const entities = useEntities()
     return (
         <InternalLinkWrapper_>
-            <InternalLink_ href={`#${block.id}`} onClick={closeSidebar} page={page}>
+            <InternalLink_
+                className="InternalLink"
+                href={`#${block.id}`}
+                onClick={closeSidebar}
+                page={page}
+            >
                 {getBlockTitle({ block, pageContext, getString, entities })}
                 {/* <T k={getBlockTitleKey({ block: { ...block, sectionId: page.id } })} /> */}
             </InternalLink_>

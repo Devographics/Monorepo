@@ -15,7 +15,7 @@ const PageHeader = () => {
     )
 }
 
-const PageTitle = styled.h2`
+const PageTitle = styled.h2.attrs({ className: 'PageTitle' })`
     ${secondaryFontMixin}
     @media ${mq.small} {
         font-size: ${fontSize('larger')};

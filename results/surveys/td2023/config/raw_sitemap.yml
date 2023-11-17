@@ -117,30 +117,8 @@
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: years
-            - id: years_of_experience_by_gender
-              fieldId: years_of_experience
-              blockType: HorizontalBarBlock
-              query: currentEditionData
-              parameters:
-                  showNoAnswer: true
-              defaultUnits: percentageQuestion
-              tabId: tabs.by_gender
-              filtersState:
-                  options:
-                      mode: grid
-                  filters:
-                      - year: 2023
-                        conditions:
-                            - fieldId: gender
-                              sectionId: user_info
-                              operator: eq
-                              value: man
-                      - year: 2023
-                        conditions:
-                            - fieldId: gender
-                              sectionId: user_info
-                              operator: eq
-                              value: woman
+            - template: vs_man_woman_tokyodev
+              i18nNamespace: years
 
       # - id: experience_by_gender_men
       #   fieldId: years_of_experience

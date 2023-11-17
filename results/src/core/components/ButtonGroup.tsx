@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 import { mq } from 'core/theme'
 
-const ButtonGroup = styled.div`
+const ButtonGroup = styled.div.attrs({
+    className: 'ButtonGroup'
+})`
     @media ${mq.small} {
         display: flex;
         flex-direction: row;

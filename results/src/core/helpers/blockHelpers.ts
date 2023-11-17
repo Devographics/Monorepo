@@ -98,12 +98,12 @@ export const getBlockTakeaway = ({
 }) => {
     const takeawayKey = `${getBlockKey({ block })}.takeaway`
     const { currentEdition } = pageContext
-    const blockTakeaway = block.descriptionId && getString(block.descriptionId, { values })?.tHtml
+    const blockTakeaway = block.takeawayKey && getString(block.takeawayKey, { values })?.tHtml
     const editionTakeaway = getString(`${takeawayKey}.${currentEdition.id}`, {
         values
     })?.tHtml
     const genericTakeaway = getString(takeawayKey, { values })?.tHtml
-    return blockTakeaway || editionTakeaway || genericTakeaway
+    return blockTakeaway ?? editionTakeaway ?? genericTakeaway
 }
 
 export const useBlockTakeaway = ({ block }: { block: BlockDefinition }) => {
@@ -190,7 +190,7 @@ export const getBlockImage = ({
     block: BlockDefinition
     pageContext: PageContextValue
 }) => {
-    const capturesUrl = `https://assets.devographics.com/captures/${pageContext.currentEdition.id}`
+    const capturesUrl = `${process.env.GATSBY_ASSETS_URL}/captures/${pageContext.currentEdition.id}`
     return `${capturesUrl}${get(pageContext, 'locale.path')}/${block.id}.png`
 }
 
@@ -203,17 +203,40 @@ interface UrlParams {
     params: string
 }
 
-export const getBlockLink = ({
-    block,
-    pageContext,
-    params,
-    useRedirect = true
-}: {
+interface GetBlockLinkProps {
     block: BlockDefinition
     pageContext: PageContextValue
     params?: any
     useRedirect?: boolean
-}) => {
+}
+
+// get "local" block link to a pre-generated static block page
+export const getBlockLinkLocal = ({
+    block,
+    pageContext,
+    params,
+    useRedirect = true
+}: GetBlockLinkProps) => {
+    const { id } = block
+    const paramsString = new URLSearchParams(params).toString()
+
+    let path = useRedirect
+        ? `${pageContext.currentPath}/${id}?${paramsString}`
+        : `${pageContext.currentPath}/?${paramsString}#${id}`
+
+    // remove any double slashes
+    path = path.replaceAll('//', '/')
+    const link = `${pageContext.host}${path}`
+    return link
+}
+
+// get "remote" block link to the separate Charts Next.js app
+export const getBlockLinkRemote = ({
+    block,
+    pageContext,
+    params,
+    useRedirect = true
+}: GetBlockLinkProps) => {
     const { id: sectionId, parent, currentEdition, currentSurvey, localeId } = pageContext
     const blockParamsString = new URLSearchParams(params).toString()
 
@@ -243,6 +266,13 @@ export const getBlockLink = ({
     // path = path.replaceAll('//', '/')
     // const link = `${pageContext.host}${path}`
     return url
+}
+export const getBlockLink = (props: GetBlockLinkProps) => {
+    if (process.env.GATSBY_GENERATE_BLOCKS) {
+        return getBlockLinkLocal(props)
+    } else {
+        return getBlockLinkRemote(props)
+    }
 }
 
 export const getBlockMeta = ({

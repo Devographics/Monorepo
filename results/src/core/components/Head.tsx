@@ -5,9 +5,12 @@ import { getPageSocialMeta, getPageMeta } from 'core/helpers/pageHelpers'
 import { useI18n } from 'core/i18n/i18nContext'
 // import { useTools } from 'core/helpers/toolsContext'
 import colors from 'core/theme/colors'
+import classNames from 'classnames'
 
 const Head = () => {
     const pageContext = usePageContext()
+    const { currentEdition, currentSurvey, isCapturing, isRawChartMode } = pageContext
+
     const { getString } = useI18n()
     // const { getToolName } = useTools()
 
@@ -37,9 +40,25 @@ const Head = () => {
         { name: 'custom-meta-end' }
     ]
 
+    const bodyClassNames = classNames(
+        `Page--${pageContext.id}`,
+        `edition-${currentEdition.id}`,
+        `survey-${currentSurvey.id}`,
+        {
+            capture: isCapturing,
+            rawchartmode: isRawChartMode,
+            nocapture: !isCapturing
+        }
+    )
+
     return (
         <>
-            <Helmet defaultTitle={meta.fullTitle}>
+            <Helmet
+                defaultTitle={meta.fullTitle}
+                bodyAttributes={{
+                    class: bodyClassNames
+                }}
+            >
                 <html lang="en" />
                 <title>{meta.title}</title>
                 <link rel="shortcut icon" href={pageContext?.currentEdition?.faviconUrl} />

@@ -55,14 +55,13 @@ export const getStringTranslator =
             }
         }
 
+        const injectValues = (s: string) =>
+            values ? applyTemplate({ t: s, values, locale, key }) : s
+
         if (result.t) {
-            result.t = values ? applyTemplate({ t: result.t, values, locale, key }) : result.t
-            result.tClean = values
-                ? applyTemplate({ t: result.tClean, values, locale, key })
-                : result.tClean
-            result.tHtml = values
-                ? applyTemplate({ t: result.tHtml, values, locale, key })
-                : result.tHtml
+            result.t = injectValues(result.t)
+            result.tClean = injectValues(result.tClean ?? result.t)
+            result.tHtml = injectValues(result.tHtml ?? result.t)
         }
 
         return result

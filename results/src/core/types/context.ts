@@ -19,6 +19,7 @@ interface GatsbyPageContext {
 }
 interface SurveyPageContext {
     isCapturing?: boolean
+    isDebugEnabled?: boolean
     chartSponsors?: any
     config?: any
     currentSurvey: SurveyMetadata

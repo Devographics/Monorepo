@@ -215,7 +215,7 @@ const CopyLink = ({ link }: { link: string }) => {
     }
 
     return (
-        <CopyLink_ href={link} onClick={handleCopyClick}>
+        <CopyLink_ variant="link" href={link} onClick={handleCopyClick}>
             <T k="filters.copy_link" />
             {isCopied && <CheckIcon />}
         </CopyLink_>
@@ -300,7 +300,7 @@ const FooterLeft_ = styled.ul`
     }
 `
 
-const CopyLink_ = styled.a`
+const CopyLink_ = styled(Button)`
     display: flex;
     gap: ${spacing(0.25)};
     align-items: center;

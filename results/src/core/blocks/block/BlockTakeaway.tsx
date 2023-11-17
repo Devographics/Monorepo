@@ -1,14 +1,7 @@
-import React, { memo, useState } from 'react'
-import styled, { css } from 'styled-components'
-import last from 'lodash/last'
-import { mq, spacing, fontSize, secondaryFontMixin } from 'core/theme'
-import { useI18n } from 'core/i18n/i18nContext'
-import { usePageContext } from 'core/helpers/pageContext'
-import SharePermalink from 'core/share/SharePermalink'
-import BlockCompletionIndicator from 'core/blocks/block/BlockCompletionIndicator'
-import { getBlockTakeaway, useBlockTitle, useBlockTakeaway } from 'core/helpers/blockHelpers'
-import BlockSponsor from 'core/blocks/block/sponsor_chart/BlockSponsor'
-import { useEntities } from 'core/helpers/entities'
+import React, { memo } from 'react'
+import styled from 'styled-components'
+import { spacing } from 'core/theme'
+import { useBlockTakeaway } from 'core/helpers/blockHelpers'
 import { BlockDefinition } from 'core/types'
 
 const BlockTakeaway = ({ block }: { block: BlockDefinition }) => {

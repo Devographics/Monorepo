@@ -149,7 +149,7 @@ const TierItem = ({
     currentCategory
 }: TierItemProps) => {
     const imageSrc = customImages[id]
-        ? `https://assets.devographics.com/projects/${id}.${customImages[id]}`
+        ? `${process.env.GATSBY_ASSETS_URL}/projects/${id}.${customImages[id]}`
         : `https://bestofjs.org/logos/${id}.svg`
 
     const isHighlighted = currentCategory ? currentCategory === sectionId : true
