@@ -218,16 +218,15 @@ export const getBlockLinkLocal = ({
     useRedirect = true
 }: GetBlockLinkProps) => {
     const { id } = block
-    const paramsString = new URLSearchParams(params).toString()
-
+    const paramsString = params ? `?${new URLSearchParams(params).toString()}` : ''
+    const { currentPath } = pageContext
     let path = useRedirect
-        ? `${pageContext.currentPath}/${id}?${paramsString}`
-        : `${pageContext.currentPath}/?${paramsString}#${id}`
+        ? `${currentPath}/${id}${paramsString}`
+        : `${currentPath}/${paramsString}#${id}`
 
     // remove any double slashes
     path = path.replaceAll('//', '/')
-    const link = `${pageContext.host}${path}`
-    return link
+    return path
 }
 
 // get "remote" block link to the separate Charts Next.js app
