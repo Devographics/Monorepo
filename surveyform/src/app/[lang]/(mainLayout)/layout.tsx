@@ -4,7 +4,6 @@ import { DebugRSC } from "~/components/debug/DebugRSC";
 import { getCommonContexts, getLocaleIdFromParams } from "~/i18n/config";
 import { rscIntlContext } from "~/i18n/rsc-fetchers";
 import { rscAllLocalesMetadata, rscLocale } from "~/lib/api/rsc-fetchers";
-import { metadata as defaultMetadata } from "../../layout";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -21,12 +20,15 @@ export async function generateMetadata({
   params,
 }: {
   params: PageServerProps;
-}): Promise<Metadata | undefined> {
+}): // parent: ResolvingMetadata
+Promise<Metadata | undefined> {
   const contexts = getCommonContexts();
   const intlContext = await rscIntlContext({ localeId: params.lang, contexts });
   const title = intlContext.formatMessage({ id: "general.title" });
   const description = intlContext.formatMessage({ id: "general.description" });
-  const metadata = { ...defaultMetadata, title, description };
+  // const defaultMetadata = await parent;
+  // There is no need to explicitely merge with parent, unless we override nested objects like openGraph
+  const metadata = { title, description };
   return metadata;
 }
 
