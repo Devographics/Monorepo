@@ -6,7 +6,7 @@ const getUrl = entity => entity?.homepage?.url || entity?.twitter?.url
 
 const Avatar = ({ entity, size = 60 }) => (
     <Avatar_ href={getUrl(entity)} size={size}>
-        <img src={`${process.env.GATSBY_ASSETS_URL}/${entity.id}.jpg`} alt={entity.name} />
+        <img src={`${process.env.GATSBY_ASSETS_URL}/avatars/${entity.id}.jpg`} alt={entity.name} />
     </Avatar_>
 )
 

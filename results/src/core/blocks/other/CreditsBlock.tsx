@@ -8,8 +8,7 @@ import { usePageContext } from 'core/helpers/pageContext'
 const CreditsBlock = () => {
     const context = usePageContext()
     const { currentEdition } = context
-    const edition = currentEdition._metadata
-    const credits = edition?.credits
+    const { credits } = currentEdition
     return credits && credits.length > 0 ? (
         <Credits>
             <Heading>

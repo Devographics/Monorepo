@@ -216,6 +216,7 @@ query {
                         credits {
                             id
                             role
+                            ${getEntityFragment()}
                         }
                         sections {
                             id

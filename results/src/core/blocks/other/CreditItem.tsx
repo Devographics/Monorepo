@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import T from 'core/i18n/T'
 import Avatar from 'core/components/Avatar'
 
-const CreditItem = ({ entity, role, labelId }) => {
+const CreditItem = ({ id, entity, role, labelId }) => {
     if (!entity) {
         return null
     }
