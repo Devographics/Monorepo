@@ -83,7 +83,6 @@
         parameters: { showNoAnswer: true, sort: { property: count } }
         variants:
             - template: vs_salary_tokyodev
-            - template: vs_current_employer_tokyodev
 
       - id: country
         template: multiple_options
@@ -912,6 +911,36 @@
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: satisfaction
+            - id: life_in_japan__cultural_adjustment_by_language_proficiency_japanese
+              i18nNamespace: satisfaction
+              fieldId: life_in_japan__cultural_adjustment
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentageQuestion
+              tabId: tabs.by_japanese_proficiency
+              filtersState:
+                  options:
+                      mode: grid
+                      showDefaultSeries: false
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: language_proficiency_japanese
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - none
+                                  - basic
+                      - year: 2023
+                        conditions:
+                            - fieldId: language_proficiency_japanese
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - fluent
+                                  - native_bilingual
 
       - id: life_in_japan__quality_of_life
         i18nNamespace: satisfaction
@@ -919,6 +948,8 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              i18nNamespace: satisfaction
+            - template: vs_man_woman_tokyodev
               i18nNamespace: satisfaction
 
       - id: life_in_japan__housing

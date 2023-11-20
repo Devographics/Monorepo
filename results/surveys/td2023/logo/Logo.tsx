@@ -12,7 +12,7 @@ interface LogoProps {
 export const Logo = ({ className, animated = true, showText = true, size = 'l' }: LogoProps) => (
     <Wrapper>
         <img
-            src="https://assets.surveys.tokyodev.com/images/surveys/td2023.png"
+            src="https://assets.surveys.tokyodev.com/images/surveys/td2023-wide.png"
             alt="TokyoDev Developer Survey 2023"
         />
     </Wrapper>
@@ -21,7 +21,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
 const Wrapper = styled.div`
     margin: 0 auto;
     margin-bottom: ${spacing(3)};
-    max-width: 400px;
+    max-width: 600px;
     width: 100%;
     img {
         display: block;
