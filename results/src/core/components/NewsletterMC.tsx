@@ -4,7 +4,7 @@ import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 import Button from './Button'
 import styled from 'styled-components'
-import { spacing } from 'core/theme'
+import { fontWeight, spacing } from 'core/theme'
 import jsonp from 'jsonp'
 
 export default function NewsletterMC({ locale }: { locale?: any }) {
@@ -26,41 +26,23 @@ export default function NewsletterMC({ locale }: { locale?: any }) {
         console.log('SUBMITTING')
 
         e.preventDefault()
-        // const response = await fetch(`${postUrl}&EMAIL=${encodeURIComponent(email)}`, {
-        //     method: 'GET',
-        //     mode: 'no-cors',
-        //     headers: {
-        //         Accept: '*/*'
-        //     }
-        // })
-        jsonp(`${postUrl}&EMAIL=${email}`, { param: 'c' }, (_, data = {}) => {
-            const { msg, result, error } = data
+        jsonp(`${postUrl}&EMAIL=${email}`, { param: 'c' }, (err, data = {}) => {
+            const { msg: message, result } = data
 
             setLoading(false)
 
-            console.log(_)
+            const error = result === 'error' ? { message } : err
+            console.log(error)
             console.log(data)
+
             if (error) {
                 setError(error)
                 setSuccess(null)
             } else {
                 setError(null)
-                setSuccess({ message: msg })
+                setSuccess({ message })
             }
         })
-
-        // const result = await response.json()
-        // const { error, message } = result
-
-        // setLoading(false)
-
-        // if (error) {
-        //     setError(error)
-        //     setSuccess(null)
-        // } else {
-        //     setError(null)
-        //     setSuccess({ message })
-        // }
     }
 
     return (
@@ -71,7 +53,6 @@ export default function NewsletterMC({ locale }: { locale?: any }) {
             <p className="newsletter-details">
                 <T k="newsletter.leave_your_email" />
             </p>{' '}
-            {error && <div className="newsletter-message newsletter-error">{error.message}</div>}
             {success ? (
                 <div className="newsletter-message newsletter-success">{success.message}</div>
             ) : (
@@ -81,6 +62,9 @@ export default function NewsletterMC({ locale }: { locale?: any }) {
                     handleSubmit={handleSubmit}
                     handleChange={handleChange}
                 />
+            )}
+            {error && (
+                <Error_ className="newsletter-message newsletter-error">{error.message}</Error_>
             )}
         </div>
     )
@@ -129,4 +113,10 @@ const Form_ = styled.form`
     align-items: center;
     display: flex;
     gap: ${spacing(0.5)};
+`
+
+const Error_ = styled.div`
+    color: #fe6a6a;
+    margin-top: ${spacing()};
+    font-weight: ${fontWeight('bold')};
 `
