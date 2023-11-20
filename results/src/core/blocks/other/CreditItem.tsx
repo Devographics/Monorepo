@@ -8,7 +8,7 @@ const CreditItem = ({ id, entity, role, labelId }) => {
     if (!entity) {
         return null
     }
-    const { name, twitter, company } = entity
+    const { name, homepage, twitter, company } = entity
     return (
         <CreditItemDiv>
             <CreditAvatar_>
@@ -16,7 +16,7 @@ const CreditItem = ({ id, entity, role, labelId }) => {
             </CreditAvatar_>
             <Details>
                 <Name>
-                    <a href={twitter?.url}>{name}</a>
+                    <a href={homepage?.url || twitter?.url}>{name}</a>
                 </Name>
                 {company && (
                     <Company>
