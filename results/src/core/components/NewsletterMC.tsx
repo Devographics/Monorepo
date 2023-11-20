@@ -5,23 +5,15 @@ import { usePageContext } from 'core/helpers/pageContext'
 import Button from './Button'
 import styled from 'styled-components'
 import { spacing } from 'core/theme'
+import jsonp from 'jsonp'
 
-const getEOConfig = (listId: string) => ({
-    emailOctopusUrl: `https://emailoctopus.com/lists/${listId}/members/embedded/1.3/add`,
-    emailOctopusSiteKey: '6LdYsmsUAAAAAPXVTt-ovRsPIJ_IVhvYBBhGvRV6',
-    emailOctopusCode: 'hpc4b27b6e-eb38-11e9-be00-06b4694bee2a'
-})
-
-export default function Newsletter({ locale }: { locale?: any }) {
-    const { currentSurvey } = usePageContext()
-    const listId = currentSurvey?.emailOctopus?.listId
-
+export default function NewsletterMC({ locale }: { locale?: any }) {
     const [email, setEmail] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<{ message: string } | null>(null)
     const [success, setSuccess] = useState<{ message: string } | null>(null)
 
-    const config = getEOConfig(listId)
+    const postUrl = process.env.GATSBY_MAILCHIMP_URL || ''
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const email = e.target.value
@@ -34,26 +26,41 @@ export default function Newsletter({ locale }: { locale?: any }) {
         console.log('SUBMITTING')
 
         e.preventDefault()
-        const response = await fetch(config.emailOctopusUrl, {
-            method: 'POST',
-            body: `field_0=${encodeURIComponent(email)}`,
-            headers: {
-                Accept: '*/*',
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        // const response = await fetch(`${postUrl}&EMAIL=${encodeURIComponent(email)}`, {
+        //     method: 'GET',
+        //     mode: 'no-cors',
+        //     headers: {
+        //         Accept: '*/*'
+        //     }
+        // })
+        jsonp(`${postUrl}&EMAIL=${email}`, { param: 'c' }, (_, data = {}) => {
+            const { msg, result, error } = data
+
+            setLoading(false)
+
+            console.log(_)
+            console.log(data)
+            if (error) {
+                setError(error)
+                setSuccess(null)
+            } else {
+                setError(null)
+                setSuccess({ message: msg })
             }
         })
-        const result = await response.json()
-        const { error, message } = result
 
-        setLoading(false)
+        // const result = await response.json()
+        // const { error, message } = result
 
-        if (error) {
-            setError(error)
-            setSuccess(null)
-        } else {
-            setError(null)
-            setSuccess({ message })
-        }
+        // setLoading(false)
+
+        // if (error) {
+        //     setError(error)
+        //     setSuccess(null)
+        // } else {
+        //     setError(null)
+        //     setSuccess({ message })
+        // }
     }
 
     return (
@@ -73,7 +80,6 @@ export default function Newsletter({ locale }: { locale?: any }) {
                     loading={loading}
                     handleSubmit={handleSubmit}
                     handleChange={handleChange}
-                    {...config}
                 />
             )}
         </div>
@@ -84,46 +90,28 @@ const NewsletterForm = ({
     email,
     loading,
     handleSubmit,
-    handleChange,
-    emailOctopusUrl,
-    emailOctopusSiteKey,
-    emailOctopusCode
+    handleChange
 }: //locale
 {
     email: string
     loading?: boolean
     handleSubmit?: any
     handleChange?: any
-    emailOctopusUrl: string
-    emailOctopusSiteKey: string
-    emailOctopusCode: string
 }) => {
     const { getString } = useI18n()
 
     return (
         <div className="newsletter-form">
-            <Form_
-                method="post"
-                action={emailOctopusUrl}
-                data-sitekey={emailOctopusSiteKey}
-                onSubmit={handleSubmit}
-            >
+            <Form_ method="get" action={process.env.GATSBY_MAILCHIMP_URL} onSubmit={handleSubmit}>
                 <Input_
                     className="newsletter-email"
-                    id="field_0"
-                    name="field_0"
+                    id="EMAIL"
+                    name="EMAIL"
                     type="email"
                     placeholder={getString('newsletter.email')?.t}
                     onChange={handleChange}
                     value={email}
                     disabled={loading}
-                />
-                <input
-                    type="text"
-                    name={emailOctopusCode}
-                    tabIndex={-1}
-                    autoComplete="nope"
-                    style={{ display: 'none' }}
                 />
                 <Button type="submit" name="subscribe" className="newsletter-button button">
                     <T k="newsletter.submit" />

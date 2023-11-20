@@ -3,13 +3,14 @@ import styled from 'styled-components'
 import Newsletter from 'core/components/Newsletter'
 import { useI18n } from 'core/i18n/i18nContext'
 import { spacing } from 'core/theme'
+import NewsletterMC from 'core/components/NewsletterMC'
 
 const NewsletterBlock = () => {
     const { translate } = useI18n()
 
     return (
         <Container>
-            <Newsletter />
+            {process.env.GATSBY_MAILCHIMP_URL ? <NewsletterMC /> : <Newsletter />}
         </Container>
     )
 }

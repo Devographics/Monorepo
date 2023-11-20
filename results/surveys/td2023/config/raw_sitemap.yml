@@ -772,6 +772,7 @@
         variants:
             - template: vs_salary_tokyodev
             - id: life_in_japan__visa_situation_by_residency_status
+              i18nNamespace: satisfaction
               fieldId: life_in_japan__visa_situation
               blockType: HorizontalBarBlock
               query: currentEditionData
@@ -803,6 +804,36 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+            - id: life_in_japan__professional_life_by_remote_work_policy
+              i18nNamespace: satisfaction
+              fieldId: life_in_japan__professional_life
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentageQuestion
+              tabId: tabs.by_remote_work
+              filtersState:
+                  options:
+                      mode: grid
+                      showDefaultSeries: false
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: remote_work_policy
+                              sectionId: employer_info
+                              operator: in
+                              value:
+                                  - no_remote_work
+                                  - hybrid
+                      - year: 2023
+                        conditions:
+                            - fieldId: remote_work_policy
+                              sectionId: employer_info
+                              operator: in
+                              value:
+                                  - up_to_employee
+                                  - fully_remote
 
       - id: life_in_japan__family_life
         i18nNamespace: satisfaction
@@ -811,6 +842,7 @@
         variants:
             - template: vs_salary_tokyodev
             - id: life_in_japan__family_life_by_age
+              i18nNamespace: satisfaction
               fieldId: life_in_japan__family_life
               blockType: HorizontalBarBlock
               query: currentEditionData
@@ -843,6 +875,7 @@
         variants:
             - template: vs_salary_tokyodev
             - id: life_in_japan__social_life_by_language_proficiency_japanese
+              i18nNamespace: satisfaction
               fieldId: life_in_japan__social_life
               blockType: HorizontalBarBlock
               query: currentEditionData
@@ -878,6 +911,7 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              i18nNamespace: satisfaction
 
       - id: life_in_japan__quality_of_life
         i18nNamespace: satisfaction
@@ -885,6 +919,7 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              i18nNamespace: satisfaction
 
       - id: life_in_japan__housing
         i18nNamespace: satisfaction
@@ -892,6 +927,41 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              i18nNamespace: satisfaction
+            - id: life_in_japan__housing_by_japanese_province
+              i18nNamespace: satisfaction
+              fieldId: life_in_japan__housing
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentageQuestion
+              tabId: tabs.by_japanese_province
+              filtersState:
+                  options:
+                      mode: grid
+                      showDefaultSeries: false
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: japan_province
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - tokyo
+                                  - chiba
+                                  - saitama
+                                  - kanagawa
+                      - year: 2023
+                        conditions:
+                            - fieldId: japan_province
+                              sectionId: user_info
+                              operator: nin
+                              value:
+                                  - tokyo
+                                  - chiba
+                                  - saitama
+                                  - kanagawa
 
       - id: life_in_japan__financial_situation
         i18nNamespace: satisfaction
@@ -899,6 +969,7 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              i18nNamespace: satisfaction
 
       - id: communities
         template: multiple_options_combined
@@ -926,6 +997,33 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+            - id: keyboard_layout_by_japanese_proficiency
+              fieldId: keyboard_layout
+              blockType: HorizontalBarBlock
+              query: currentEditionData
+              parameters:
+                  showNoAnswer: true
+              defaultUnits: percentageQuestion
+              tabId: tabs.by_japanese_proficiency
+              filtersState:
+                  options:
+                      mode: grid
+                      showDefaultSeries: false
+                  filters:
+                      - year: 2023
+                        conditions:
+                            - fieldId: language_proficiency_japanese
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - none
+                                  - basic
+                      - year: 2023
+                        conditions:
+                            - fieldId: language_proficiency_japanese
+                              sectionId: user_info
+                              operator: eq
+                              value: native_bilingual
 
 - id: conclusion
   path: /conclusion

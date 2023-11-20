@@ -4,6 +4,7 @@ import { fontSize, fontWeight, mq, spacing } from 'core/theme'
 import { Entity } from '@devographics/types'
 import { BlockDefinition } from 'core/types'
 import T from 'core/i18n/T'
+import { useI18n } from 'core/i18n/i18nContext'
 
 /**
  * All awards categories
@@ -27,11 +28,15 @@ const TakeawaysBlock = ({
 )
 
 const Takeaway = ({ id }) => {
+    const { getString } = useI18n()
+    const heading = getString(`takeaways.${id}.heading`)?.t
     return (
         <Takeaway_>
-            <Heading_>
-                <T k={`takeaways.${id}.heading`} md={true} html={true} />
-            </Heading_>
+            {heading && (
+                <Heading_>
+                    <T k={`takeaways.${id}.heading`} md={true} html={true} />
+                </Heading_>
+            )}
             <Content_>
                 <T k={`takeaways.${id}`} md={true} html={true} />
             </Content_>

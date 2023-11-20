@@ -545,6 +545,9 @@ importers:
       json2csv:
         specifier: ^5.0.7
         version: 5.0.7
+      jsonp:
+        specifier: ^0.2.1
+        version: 0.2.1
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -660,6 +663,9 @@ importers:
       '@types/d3-delaunay':
         specifier: ^6.0.1
         version: 6.0.1
+      '@types/jsonp':
+        specifier: ^0.2.3
+        version: 0.2.3
       '@types/lodash':
         specifier: ^4.14.191
         version: 4.14.198
@@ -11734,6 +11740,10 @@ packages:
 
   /@types/json5@0.0.30:
     resolution: {integrity: sha512-sqm9g7mHlPY/43fcSNrCYfOeX9zkTTK+euO5E6+CVijSMm5tTjkVdwdqRkY3ljjIAf8679vps5jKUoJBCLsMDA==}
+    dev: true
+
+  /@types/jsonp@0.2.3:
+    resolution: {integrity: sha512-+bbowFC2n6TkpbQ369/tqL8pRPF4JRfRNf7Z6cpnAlLlEdy6YxG4HYZE7Qkeg2otcDbwNPIuSMux+P3pE4viFA==}
     dev: true
 
   /@types/keygrip@1.0.3:
@@ -23853,6 +23863,14 @@ packages:
       universalify: 2.0.0
     optionalDependencies:
       graceful-fs: 4.2.11
+
+  /jsonp@0.2.1:
+    resolution: {integrity: sha512-pfog5gdDxPdV4eP7Kg87M8/bHgshlZ5pybl+yKxAnCZ5O7lCIn7Ixydj03wOlnDQesky2BPyA91SQ+5Y/mNwzw==}
+    dependencies:
+      debug: 2.6.9
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /jsonparse@1.3.1:
     resolution: {integrity: sha512-POQXvpdL69+CluYsillJ7SUhKvytYjW9vG/GKpnf+xP8UWgYEM/RaMzHHofbALDiKbbP1W8UEYmgGl39WkPZsg==}

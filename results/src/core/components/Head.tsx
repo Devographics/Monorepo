@@ -50,6 +50,9 @@ const Head = () => {
             nocapture: !isCapturing
         }
     )
+    const faviconUrl =
+        pageContext?.currentEdition?.faviconUrl ??
+        `${process.env.GATSBY_ASSETS_URL}/surveys/${currentEdition.id}-favicon.png`
 
     return (
         <>
@@ -61,7 +64,7 @@ const Head = () => {
             >
                 <html lang="en" />
                 <title>{meta.title}</title>
-                <link rel="shortcut icon" href={pageContext?.currentEdition?.faviconUrl} />
+                <link rel="shortcut icon" href={faviconUrl} />
                 <meta name="theme-color" content={colors.link} />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin />

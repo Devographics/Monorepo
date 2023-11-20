@@ -240,15 +240,4 @@ const SideArea = styled.div`
     }
 `
 
-BlockVariant.propTypes = {
-    block: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        title: PropTypes.node,
-        description: PropTypes.node
-    }).isRequired,
-    isShareable: PropTypes.bool,
-    className: PropTypes.string,
-    values: PropTypes.object
-}
-
 export default memo(BlockVariant)
