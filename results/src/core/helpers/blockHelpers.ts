@@ -16,7 +16,7 @@ export const getBlockKey = ({ block }: { block: BlockDefinition }) => {
     if (block.template === 'tool_experience') {
         namespace = 'tools'
     }
-    const blockId = block.fieldId ?? replaceOthers(block?.id)
+    const blockId = replaceOthers(block?.id)
     return `${namespace}.${blockId}`
 }
 
@@ -43,7 +43,7 @@ export const getBlockTitleKey = ({
 }: {
     block: BlockDefinition
     pageContext?: PageContextValue
-}) => block.titleId || `${getBlockKey({ block })}`
+}) => block.titleId || getBlockKey({ block })
 
 export const getBlockTitle = ({
     block,
@@ -58,11 +58,15 @@ export const getBlockTitle = ({
 }) => {
     const entity = entities?.find(e => e.id === block.id)
     const entityName = entity?.nameClean || entity?.name
-    const blockTitle = block.titleId && getString(block.titleId)?.t
+    const specifiedTitle = block.titleId && getString(block.titleId)?.tClean
     const key = getBlockTitleKey({ block, pageContext })
-
-    const translation = getString(key)
-    return blockTitle || translation?.tClean || translation?.t || entityName || key
+    const defaultTitle = getString(getBlockKey({ block }))?.tClean
+    const fieldTitle =
+        block.fieldId && getString(getBlockKey({ block: { ...block, id: block.fieldId } }))?.tClean
+    const tabTitle = block.tabId && `${fieldTitle} ${getString(block.tabId)?.tClean}`
+    const values = [specifiedTitle, defaultTitle, tabTitle, fieldTitle, entityName, key]
+    // console.table(values)
+    return values.find(v => v !== undefined)
 }
 
 export const useBlockTitle = ({ block }: { block: BlockDefinition }) => {

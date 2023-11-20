@@ -44,6 +44,11 @@ const Takeaway = ({ id }) => {
     )
 }
 const Wrapper = styled.div`
+    @media ${mq.small} {
+        display: flex;
+        flex-direction: column;
+        gap: ${spacing()};
+    }
     @media ${mq.mediumLarge} {
         display: grid;
         grid-template-columns: 1fr 1fr;

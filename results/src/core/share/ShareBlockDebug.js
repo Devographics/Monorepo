@@ -12,7 +12,6 @@ const ShareBlockDebug = ({ block }) => {
     if (!pageContext.isDebugEnabled) return null
 
     const meta = getBlockMeta({ block, pageContext, getString })
-
     return <Debug title="Block sharing" data={meta} />
 }
 

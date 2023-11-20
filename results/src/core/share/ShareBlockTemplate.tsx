@@ -27,9 +27,7 @@ const ShareBlockTemplate = () => {
     })
 
     let title = `${getSiteTitle({ pageContext })}: ${blockTitle}`
-    if (block.tabId) {
-        title += `, ${getString(block.tabId)?.t}`
-    }
+
     const overrides = {
         title
     }

@@ -59,7 +59,6 @@ export const AxisLeft = ({
                     id: value,
                     getString
                 })
-                console.log(i18nNamespace, key, tickLabel)
                 const tickLabelString = String(tickLabel)
 
                 const shortenedTickLabel =
