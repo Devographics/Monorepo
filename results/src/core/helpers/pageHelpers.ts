@@ -52,7 +52,9 @@ export const getPageImageUrl = ({ pageContext }: { pageContext: PageContextValue
     if (block !== undefined) {
         imageUrl = getBlockImage({ block, pageContext })
     } else {
-        imageUrl = currentEdition?.socialImageUrl
+        imageUrl =
+            currentEdition?.socialImageUrl ||
+            `${process.env.GATSBY_ASSETS_URL}/surveys/${currentEdition.id}-og.png`
     }
 
     return imageUrl
