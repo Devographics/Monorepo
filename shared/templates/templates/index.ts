@@ -43,6 +43,7 @@ export * from './gender'
 export * from './higher_education_degree'
 export * from './race_ethnicity'
 export * from './yearly_salary'
+export * from './yearly_salary_v2'
 export * from './years_of_experience'
 export * from './years_of_experience_number'
 
