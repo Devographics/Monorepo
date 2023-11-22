@@ -15,6 +15,7 @@ import get from "lodash/get.js";
 import { FollowupData, FollowUpsTrigger, FollowUps } from "./Followup";
 import { useFormStateContext } from "~/components/form/FormStateContext";
 import { useFormPropsContext } from "~/components/form/FormPropsContext";
+import { CodeExample } from "./Experience2";
 
 export interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
@@ -36,19 +37,6 @@ export const Experience = (props: ExperienceProps) => {
         </div>
       </div>
     </FormItem>
-  );
-};
-
-const CodeExample = ({ language, label, code, codeHighlighted }) => {
-  return (
-    <div className="code-example">
-      <h5 className="code-example-heading">
-        {label || language || <FormattedMessage id="general.code_example" />}
-      </h5>
-      <pre>
-        <code dangerouslySetInnerHTML={{ __html: codeHighlighted }}></code>
-      </pre>
-    </div>
   );
 };
 

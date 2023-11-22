@@ -111,9 +111,12 @@ export const responseBaseSchema: Schema = {
       const up =
         updatedResponse &&
         getKnowledgeScore({ response: updatedResponse, edition }).score;
-      if (isValidNumber(up)) return up;
-      if (isValidNumber(existingResponse.knowledgeScore))
-        return existingResponse.knowledgeScore;
+      if (isValidNumber(up)) {
+        return up;
+      }
+      if (isValidNumber(existingResponse.knowledgeScore)) {
+        return Number(existingResponse.knowledgeScore);
+      }
       return 0;
     },
   },
@@ -219,12 +222,14 @@ export const responseBaseSchema: Schema = {
     type: String,
     clientMutable: false,
     onCreate() {
-      return serverConfig().deploymentCommit
+      return serverConfig().deploymentCommit;
     },
     onUpdate({ existingResponse }) {
-      return serverConfig().deploymentCommit || existingResponse?.deploymentCommit
-    }
-  }
+      return (
+        serverConfig().deploymentCommit || existingResponse?.deploymentCommit
+      );
+    },
+  },
 };
 
 export const createFieldType = ({
