@@ -501,6 +501,9 @@
   justify-content: center;
 }
 .form-option-label {
+  @include small {
+    font-size: $smallish-font;
+  }
   display: block;
   font-size: $medium-font;
   display: flex;

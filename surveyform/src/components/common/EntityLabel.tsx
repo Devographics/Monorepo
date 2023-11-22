@@ -1,6 +1,7 @@
 import { Entity } from "@devographics/types";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getEntityName } from "~/lib/surveys/helpers/getEntityName";
+import { EntityPopoverTrigger } from "./EntityPopover";
 
 /**
  * When using a string as label
@@ -19,7 +20,22 @@ interface EntityLabelDefinition {
 }
 export interface EntityLabelProps extends EntityLabelDefinition, StringLabel {}
 
-export const EntityLabel = ({
+export const EntityLabel = (props: EntityLabelProps) => {
+  const { entity } = props;
+  return (
+    <span className="entity-label-wrapper">
+      <EntityLabelContents {...props} />
+      {entity && entity?.example && (
+        <EntityPopoverTrigger
+          label={<EntityLabelContents {...props} />}
+          entity={entity}
+        />
+      )}
+    </span>
+  );
+};
+
+export const EntityLabelContents = ({
   //id,
   entity,
   intlId,
