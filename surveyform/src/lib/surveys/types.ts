@@ -1,7 +1,7 @@
 import { Entity, QuestionMetadata, SectionMetadata } from "@devographics/types";
 
 export interface QuestionWithSection extends QuestionMetadata {
-  section: SectionMetadata;
+  section: Omit<SectionMetadata, "questions">;
 }
 
 export interface EntityWithQuestion extends Entity {

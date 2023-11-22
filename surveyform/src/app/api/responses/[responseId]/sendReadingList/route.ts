@@ -12,7 +12,11 @@ import {
   ResponseDocument,
   SurveyMetadata,
 } from "@devographics/types";
-import { getEditionQuestions } from "~/lib/surveys/helpers/getEditionQuestions";
+import {
+  getEditionEntities,
+  getEditionQuestions,
+} from "~/lib/surveys/helpers/getEditionQuestions";
+import { logToFile } from "@devographics/debug";
 
 export async function POST(
   req: NextRequest,
@@ -56,13 +60,14 @@ export async function POST(
     // TODO: handle string _id better
     const RawResponse = await getRawResponsesCollection<ResponseDocument>();
     const response = (await RawResponse.findOne({
-      _id: responseId
+      _id: responseId,
     })) as ResponseDocument;
 
-    const { subject, text, html } = getReadingListEmail({
-      response,
-      edition,
-    });
+    const { subject, text, html, readingList, entities } =
+      await getReadingListEmail({
+        response,
+        edition,
+      });
 
     const from =
       survey.domain && `${survey.name} <hello@mail.${survey.domain}>`;
@@ -73,6 +78,8 @@ export async function POST(
       subject,
       text,
       html,
+      readingList,
+      entities,
     };
 
     // console.log("---------------------------------------------");
@@ -97,7 +104,7 @@ export async function POST(
   }
 }
 
-const getReadingListEmail = ({
+const getReadingListEmail = async ({
   response,
   edition,
 }: {
@@ -106,21 +113,18 @@ const getReadingListEmail = ({
 }) => {
   const { readingList } = response;
   const { survey } = edition;
-  const allQuestions = getEditionQuestions(edition);
   const subject = `Your personalized ${survey.name} ${edition.year} reading list`;
 
   const props = { survey, edition };
 
-  const getEntity = (itemId) =>
-    allQuestions.find((q) => q.id === itemId)?.entity!;
+  const entities = getEditionEntities(edition).filter((entity) =>
+    readingList.includes(entity.id)
+  );
 
   const text = `
 ${textHeader(props)}
 
-${readingList
-      .filter((itemId) => !!getEntity(itemId))
-      .map((itemId) => textItem({ ...props, entity: getEntity(itemId) }))
-      .join("")}
+${entities.map((entity) => textItem({ ...props, entity })).join("")}
 
 ${textFooter(props)}
 `;
@@ -128,14 +132,11 @@ ${textFooter(props)}
   const html = `
 ${htmlHeader(props)}
 
-${readingList
-      .filter((itemId) => !!getEntity(itemId))
-      .map((itemId) => htmlItem({ ...props, entity: getEntity(itemId) }))
-      .join("")}
+${entities.map((entity) => htmlItem({ ...props, entity })).join("")}
 
 ${htmlFooter(props)}
 `;
-  return { subject, text, html };
+  return { subject, text, html, readingList, entities };
 };
 
 // Plain text version
@@ -161,9 +162,9 @@ ${description || ""}
 ${entity?.mdn?.summary || ""}
 
 ${[entity?.mdn?.url, entity?.github?.url, entity?.homepage?.url]
-      .filter((l) => !!l)
-      .map((l) => `- ${l}`)
-      .join("\n")}
+  .filter((l) => !!l)
+  .map((l) => `- ${l}`)
+  .join("\n")}
 
 ${entity?.resources ? entity.resources.map((l) => `- ${l.url}`).join("\n") : ""}
 
@@ -192,14 +193,15 @@ const htmlItem = ({ survey, edition, entity }) => {
       .map((l) => `<li>${l}</li>`)
       .join("\n")}
 
-    ${entity?.resources
-      ? entity.resources
-        .map((l) => {
-          const domain = new URL(l.url).hostname.replace("www.", "");
-          return `<li><a href="${l.url}">${l.title}</a> (<code>${domain}</code>)</li>`;
-        })
-        .join("\n")
-      : ""
+    ${
+      entity?.resources
+        ? entity.resources
+            .map((l) => {
+              const domain = new URL(l.url).hostname.replace("www.", "");
+              return `<li><a href="${l.url}">${l.title}</a> (<code>${domain}</code>)</li>`;
+            })
+            .join("\n")
+        : ""
     }
     </ul>
   </div>
