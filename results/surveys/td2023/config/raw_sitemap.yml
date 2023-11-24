@@ -385,7 +385,7 @@
               filtersState:
                   options:
                       mode: grid
-                      preventQuery: false
+                      showDefaultSeries: false
                   filters:
                       - year: 2023
                         conditions:
@@ -524,6 +524,7 @@
               filtersState:
                   options:
                       mode: grid
+                      showDefaultSeries: false
                   filters:
                       - year: 2023
                         conditions:
@@ -680,6 +681,7 @@
               filtersState:
                   options:
                       mode: grid
+                      showDefaultSeries: false
                   filters:
                       - year: 2023
                         conditions:
@@ -712,6 +714,7 @@
               filtersState:
                   options:
                       mode: grid
+                      showDefaultSeries: false
                   filters:
                       - year: 2023
                         conditions:
@@ -737,6 +740,7 @@
               filtersState:
                   options:
                       mode: grid
+                      showDefaultSeries: false
                   filters:
                       - year: 2023
                         conditions:

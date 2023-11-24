@@ -6,6 +6,7 @@ import { useI18n } from 'core/i18n/i18nContext'
 // import { useTools } from 'core/helpers/toolsContext'
 import colors from 'core/theme/colors'
 import classNames from 'classnames'
+import Fonts from 'Fonts/Fonts'
 
 const Head = () => {
     const pageContext = usePageContext()
@@ -66,16 +67,7 @@ const Head = () => {
                 <title>{meta.title}</title>
                 <link rel="shortcut icon" href={faviconUrl} />
                 <meta name="theme-color" content={colors.link} />
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin />
-                <link
-                    href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:300,300i,500,600"
-                    rel="stylesheet"
-                />
-                <link
-                    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
-                    rel="stylesheet"
-                />
+                <Fonts />
                 {mergedMeta.map((meta, i) => (
                     <meta {...meta} key={i} />
                 ))}
