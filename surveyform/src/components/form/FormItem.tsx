@@ -174,6 +174,10 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
 
     const isInvalidClass = isInvalid ? "form-item-invalid" : "";
 
+    if (allowComment && !commentPath)
+      console.warn(
+        `Allowed comments for component of template ${question.template}, but it doesn't have a commentPath`
+      );
     return (
       <div
         className={`form-item ${className} ${skippedClass} ${isInvalidClass}`}
@@ -189,7 +193,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
               <div className="form-item-input">{children}</div>
               <FormItemNote {...props} />
 
-              {allowComment && (
+              {allowComment && commentPath && (
                 <CommentTrigger
                   value={commentValue}
                   showCommentInput={showCommentInput}
