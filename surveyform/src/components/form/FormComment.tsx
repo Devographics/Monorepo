@@ -71,9 +71,10 @@ export const CommentInput = (props: CommentInputProps) => {
     readOnly,
   } = props;
 
-  const hasQuestionValue = !isEmpty(questionValue);
+  const hasQuestionValue =
+    typeof questionValue === "number" || !isEmpty(questionValue);
 
-  let translatedAnswer;
+  let translatedAnswer: string | undefined;
   const option = question.options?.find((o) => o.id === questionValue);
   const i18n = option && getOptioni18nIds({ ...props, option });
   translatedAnswer = i18n && intl.formatMessage({ id: i18n.base });

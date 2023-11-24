@@ -28,6 +28,7 @@
     "**/page-data.json": true,
     "results/.cache": true,
     "results/public": true,
+    "surveyform/logs": true
   },
   "svn.ignoreMissingSvnWarning": true
 }
