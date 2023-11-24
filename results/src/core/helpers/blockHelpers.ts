@@ -5,6 +5,7 @@ import { getSiteTitle } from './pageHelpers'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useEntities } from 'core/helpers/entities'
 import { usePageContext } from 'core/helpers/pageContext'
+import { removeDoubleSlashes } from './utils'
 
 export const replaceOthers = s => s?.replace('_others', '.others')
 
@@ -229,7 +230,7 @@ export const getBlockLinkLocal = ({
         : `${currentPath}/${paramsString}#${id}`
 
     // remove any double slashes
-    path = path.replaceAll('//', '/')
+    path = removeDoubleSlashes(path)
     return path
 }
 

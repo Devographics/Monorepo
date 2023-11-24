@@ -28,6 +28,7 @@ import { CustomizationDefinition, SupportedMode } from './types'
 import { useAllFilters } from 'core/charts/hooks'
 import { useEntities } from 'core/helpers/entities'
 import ModalTrigger from 'core/components/ModalTrigger'
+import { copyTextToClipboard } from 'core/helpers/utils'
 
 type FiltersPanelPropsType = {
     block: BlockDefinition
@@ -194,14 +195,6 @@ const FiltersPanel = ({
 
 const CopyLink = ({ link }: { link: string }) => {
     const [isCopied, setIsCopied] = useState(false)
-
-    async function copyTextToClipboard(text: string) {
-        if ('clipboard' in navigator) {
-            return await navigator.clipboard.writeText(text)
-        } else {
-            return document.execCommand('copy', true, text)
-        }
-    }
 
     // onClick handler function for the copy button
     const handleCopyClick = async (e: React.ChangeEvent<HTMLInputElement>) => {
