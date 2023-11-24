@@ -6,18 +6,18 @@ import { getPageSocialMeta } from '../helpers/pageHelpers'
 // import { useTools } from 'core/helpers/toolsContext'
 
 const PageMetaDebug = ({ overrides = {} }) => {
-    const context = usePageContext()
-    const { translate } = useI18n()
+    const pageContext = usePageContext()
+    const { getString } = useI18n()
     // const { getToolName } = useTools()
 
-    if (!context.isDebugEnabled) return null
+    if (!pageContext.isDebugEnabled) return null
 
     // const toolName = getToolName(context)
     // if (toolName) {
     //     overrides.title = `${websiteTitle}: ${toolName}`
     // }
 
-    const meta = getPageSocialMeta(context, translate, overrides)
+    const meta = getPageSocialMeta({ pageContext, getString, overrides })
     const metaObject = meta.reduce((acc, meta) => {
         const key = meta.property || meta.name
 

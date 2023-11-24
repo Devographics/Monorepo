@@ -12,45 +12,60 @@ import { JSONTrigger } from 'core/blocks/block/BlockData'
 import FiltersTrigger from '../FiltersTrigger'
 // import { spacing, mq, fontSize } from 'core/theme'
 
-interface CombinedDataLoaderProps extends DynamicDataLoaderProps {
-    defaultSeries: DataSeries<AllQuestionData>
+interface CombinedDataLoaderProps<T> extends DynamicDataLoaderProps<T> {
+    defaultSeries: DataSeries<T>
 }
 
-const CombinedDataLoader = ({
+function CombinedDataLoader<T>({
     block,
     providedSeries,
     defaultSeries,
     setUnits,
     chartFilters,
     setChartFilters,
-    children
-}: CombinedDataLoaderProps) => {
+    setApiError,
+    children,
+    isLoading,
+    setIsLoading,
+    setQuery,
+    series,
+    setSeries,
+    filterLegends
+}: CombinedDataLoaderProps<T>) {
     const pageContext = usePageContext()
     const year = pageContext.currentEdition.year
 
     const showDefaultSeries = chartFilters.options.showDefaultSeries
 
-    const [isLoading, setIsLoading] = useState(false)
-    const [series, setSeries] = useState(providedSeries || [defaultSeries])
-
     useEffect(() => {
         const getData = async () => {
             setIsLoading(true)
 
-            const seriesData = await fetchSeriesData({
+            const {
+                result: seriesData,
+                error,
+                query
+            } = await fetchSeriesData({
                 block,
                 pageContext,
                 chartFilters,
                 year
             })
+            setQuery(query)
 
-            // percentageQuestion is the only unit that lets us
-            // meaningfully compare values across series
-            if (setUnits) {
-                setUnits(BucketUnits.PERCENTAGE_QUESTION)
+            if (error) {
+                setApiError(error)
+            } else if (seriesData) {
+                // percentageQuestion is the only unit that lets us
+                // meaningfully compare values across series
+                if (setUnits) {
+                    setUnits(BucketUnits.PERCENTAGE_QUESTION)
+                }
+                const combinedSeries = showDefaultSeries
+                    ? [defaultSeries, ...seriesData]
+                    : seriesData
+                setSeries(combinedSeries)
             }
-            const combinedSeries = showDefaultSeries ? [defaultSeries, ...seriesData] : seriesData
-            setSeries(combinedSeries)
             setIsLoading(false)
         }
 
@@ -65,20 +80,18 @@ const CombinedDataLoader = ({
               series,
               chartDisplayMode: CHART_MODE_GROUPED,
               filters: chartFilters.filters,
-              showDefaultSeries
+              showDefaultSeries,
+              filterLegends
           }
 
     return (
         <Wrapper_>
             <Contents_>{React.cloneElement(children, props)}</Contents_>
-            {isLoading && <Loading />}
         </Wrapper_>
     )
 }
 
-const Wrapper_ = styled.div`
-    position: relative;
-`
+const Wrapper_ = styled.div``
 
 const Contents_ = styled.div`
     flex: 1;

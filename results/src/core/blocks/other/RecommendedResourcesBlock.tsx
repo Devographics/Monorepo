@@ -1,6 +1,5 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import ReactGA from 'react-ga'
 import Link from 'core/components/LocaleLink'
 import resources from 'Config/recommended_resources.yml'
 import { mq, spacing, fontSize, fontWeight } from 'core/theme'
@@ -8,11 +7,7 @@ import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 
 const trackClick = (id, resource, label) => {
-    ReactGA.event({
-        category: 'Sponsor Clicks',
-        action: `${id}: ${resource.name}`,
-        label
-    })
+    // TODO: add plausible event tracking
 }
 
 const RecommendedResourcesBlock = ({ block, data }) => {

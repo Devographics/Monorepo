@@ -8,8 +8,8 @@ import { fetchSeriesData } from '../helpers'
 import { DataSeries } from 'core/filters/types'
 import { JSONTrigger } from 'core/blocks/block/BlockData'
 
-interface GridDataLoaderProps extends DynamicDataLoaderProps {
-    defaultSeries: DataSeries<AllQuestionData>
+interface GridDataLoaderProps<T> extends DynamicDataLoaderProps<T> {
+    defaultSeries: DataSeries<T>
 }
 
 /*
@@ -17,15 +17,21 @@ interface GridDataLoaderProps extends DynamicDataLoaderProps {
 Display multiple series as multiple side-by-side "small multiples" charts
 
 */
-const GridDataLoader = ({
+function GridDataLoader<T>({
     block,
     defaultSeries,
     children,
     chartFilters,
     setChartFilters,
     layout = 'column',
-    providedSeries
-}: GridDataLoaderProps) => {
+    providedSeries,
+    setApiError,
+    isLoading,
+    setIsLoading,
+    setQuery,
+    series,
+    setSeries
+}: GridDataLoaderProps<T>) {
     const pageContext = usePageContext()
     const year = pageContext.currentEdition.year
     const showDefaultSeries = chartFilters.options.showDefaultSeries
@@ -35,23 +41,29 @@ const GridDataLoader = ({
         block
     })
 
-    const [isLoading, setIsLoading] = useState(false)
-    const [series, setSeries] = useState(providedSeries || [defaultSeries])
-
     useEffect(() => {
         const getData = async () => {
             setIsLoading(true)
 
-            const seriesData = await fetchSeriesData({
+            const {
+                result: seriesData,
+                error,
+                query
+            } = await fetchSeriesData({
                 block,
                 pageContext,
                 chartFilters,
                 year
             })
+            setQuery(query)
 
-            const allSeries = showDefaultSeries ? [defaultSeries, ...seriesData] : seriesData
+            if (error) {
+                setApiError(error)
+            } else if (seriesData) {
+                const allSeries = showDefaultSeries ? [defaultSeries, ...seriesData] : seriesData
 
-            setSeries(allSeries)
+                setSeries(allSeries)
+            }
             setIsLoading(false)
         }
 

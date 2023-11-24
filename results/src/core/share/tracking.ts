@@ -1,10 +1,5 @@
-import ReactGA from 'react-ga'
-
-const trackShare = (platform: string, trackingId: string) => () => {
-    ReactGA.event({
-        category: platform,
-        action: trackingId ? `${trackingId} share` : `site share`,
-    })
+const trackShare = (platform: any, trackingId: string) => () => {
+    // todo: add plausible event tracking
 }
 
 export default trackShare

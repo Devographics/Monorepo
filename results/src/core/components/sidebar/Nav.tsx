@@ -3,7 +3,7 @@ import { useMatch } from '@reach/router'
 import get from 'lodash/get'
 import styled, { css } from 'styled-components'
 import sitemap from 'Config/raw_sitemap.yml'
-import { mq, fancyLinkMixin, spacing, fontSize } from 'core/theme'
+import { mq, fancyLinkMixin, spacing, fontSize, fontWeight } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
 import PageLink from 'core/pages/PageLink'
 import LanguageSwitcher from 'core/i18n/LanguageSwitcher'
@@ -29,7 +29,7 @@ const getStyledLink = component => styled(component)`
         props.depth > 0
             ? props.theme.typography.size.smallish
             : props.theme.typography.size.medium};
-    font-weight: ${props => (props.depth === 0 ? 800 : 400)};
+    font-weight: ${props => (props.depth === 0 ? fontWeight('bold') : fontWeight('medium'))};
 
     /* & > span {
 
@@ -181,7 +181,12 @@ const BlockItem = ({ block, closeSidebar, page }) => {
     const entities = useEntities()
     return (
         <InternalLinkWrapper_>
-            <InternalLink_ href={`#${block.id}`} onClick={closeSidebar} page={page}>
+            <InternalLink_
+                className="InternalLink"
+                href={`#${block.id}`}
+                onClick={closeSidebar}
+                page={page}
+            >
                 {getBlockTitle({ block, pageContext, getString, entities })}
                 {/* <T k={getBlockTitleKey({ block: { ...block, sectionId: page.id } })} /> */}
             </InternalLink_>

@@ -26,7 +26,8 @@ export const onCreateWebpackConfig = ({ stage, actions, plugins }) => {
                 Config: path.resolve(__dirname, `surveys/${process.env.EDITIONID}/config`),
                 Theme: path.resolve(__dirname, `surveys/${process.env.EDITIONID}/theme`),
                 Logo: path.resolve(__dirname, `surveys/${process.env.EDITIONID}/logo`),
-                Images: path.resolve(__dirname, `surveys/${process.env.EDITIONID}/images`)
+                Images: path.resolve(__dirname, `surveys/${process.env.EDITIONID}/images`),
+                Fonts: path.resolve(__dirname, `surveys/${process.env.EDITIONID}/fonts`)
             },
             modules: [path.resolve(__dirname, 'src'), 'node_modules'],
             fallback: {

@@ -6,3 +6,5 @@ export * from "./Trash";
 export * from "./Cross";
 export * from "./Check";
 export * from "./Skip";
+export * from "./Question";
+export * from "./Code";

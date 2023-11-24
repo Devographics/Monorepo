@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import BlockSwitcher from 'core/blocks/block/BlockSwitcher'
 import * as Tabs from '@radix-ui/react-tabs'
 import BlockTitle from 'core/blocks/block/BlockTitle'
@@ -9,6 +9,7 @@ import { getBlockTabKey } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import get from 'lodash/get'
 import { useEntities } from 'core/helpers/entities'
+import BlockTakeaway from './BlockTakeaway'
 
 const BlockHeader = styled.div`
     display: flex;
@@ -69,8 +70,9 @@ export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) 
     return (
         <Wrapper className="tabs-wrapper" withMargin={withMargin}>
             <Tabs.Root defaultValue="tab0" orientation="horizontal">
-                <BlockHeader>
+                <BlockHeader className="block-header">
                     <BlockTitle block={firstBlock} />
+                    <BlockTakeaway block={firstBlock} />
                     {block.variants.length > 1 && (
                         <TabsList aria-label="tabs example">
                             {block.variants.map((block, variantIndex) => (

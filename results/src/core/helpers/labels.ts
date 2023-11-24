@@ -4,7 +4,8 @@ import {
     NO_ANSWER,
     OTHER_ANSWERS,
     CUTOFF_ANSWERS,
-    OVERALL
+    OVERALL,
+    INSUFFICIENT_DATA
 } from '@devographics/constants'
 import { Entity, OptionMetadata, QuestionMetadata, SectionMetadata } from '@devographics/types'
 import { StringTranslator } from 'core/types'
@@ -37,6 +38,9 @@ export const getItemLabel = (options: {
     let key, label
     if (id === NO_ANSWER) {
         key = 'charts.no_answer'
+        label = getString(key).t
+    } else if (id === INSUFFICIENT_DATA) {
+        key = 'charts.insufficient_data'
         label = getString(key).t
     } else if (id === OVERALL) {
         key = 'charts.overall'

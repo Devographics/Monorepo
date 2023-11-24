@@ -31,7 +31,8 @@ export const generateFacetsType = ({
     // TODO: add support for likert scale questions
     const questionObjectsWithFilters = questionObjects
         .filter(q => typeof q.filterTypeName !== 'undefined' && q.surveyId === survey.id)
-        .filter(q => q.template !== 'likert_option')
+        .filter(q => q.template !== 'likert')
+
     return {
         generatedBy: 'facets',
         typeName,

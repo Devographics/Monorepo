@@ -57,7 +57,7 @@ const WrapperGrid = ({
                             })
                         )}
                     </Contents_>
-                    {isLoading && <Loading />}
+                    {/* {isLoading && <Loading />} */}
                 </GridItem_>
             )
         })}
@@ -100,6 +100,10 @@ const Legend_ = styled.h4`
     width: 100%;
     font-size: ${fontSize('small')};
     margin: 0;
+    font-weight: normal;
+    .operator {
+        font-style: italic;
+    }
 `
 
 const EmptySeries = () => (

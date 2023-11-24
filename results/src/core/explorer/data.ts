@@ -1,3 +1,4 @@
+import { QueryData } from '@devographics/types'
 import template from 'lodash/template'
 
 export const getAxisString = (section: string, field: string) => `${section}__${field}`
@@ -21,12 +22,12 @@ interface QueryVariables {
     currentYear: number
 }
 
-export const runQuery = async (
+export const runQuery = async <T>(
     url: string,
     query: string,
     queryName: string,
     variables: any = {}
-): Promise<any> => {
+): Promise<QueryData<T>> => {
     const startAt = new Date()
     const response = await fetch(url, {
         method: 'POST',
@@ -41,18 +42,19 @@ export const runQuery = async (
     try {
         const json = JSON.parse(text) // Try to parse it as JSON
         if (json.errors) {
-            throw new Error(json.errors[0].message)
+            return { error: json.errors[0] }
         }
         console.log(
             `🕚 Ran query ${queryName} in ${endAt.getTime() - startAt.getTime()}ms (${getSizeInKB(
                 json
             )}kb) | ${url}`
         )
-        // console.log(json.data)
-        return json.data
+        console.log(json)
+        return { result: json.data }
     } catch (error) {
-        console.log(`// runQuery error (GATSBY_API_URL: ${url})`)
-        console.log(text)
-        throw new Error(error)
+        return { error }
+        // console.log(`// runQuery error (GATSBY_API_URL: ${url})`)
+        // console.log(text)
+        // throw new Error(error)
     }
 }

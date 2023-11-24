@@ -1,0 +1,37 @@
+.entity-label-wrapper {
+  display: flex;
+  align-items: center;
+  gap: $spacing/3;
+}
+.entity-popover-trigger {
+  cursor: pointer;
+  opacity: 0.3;
+  transition: opacity 300ms ease-in;
+  &:hover {
+    opacity: 1;
+  }
+}
+.entity-popover {
+  .code-example {
+    margin: 0;
+  }
+  .code-example-heading {
+    background: var(--bg-color-lighter);
+  }
+  .popover-header {
+    display: none;
+  }
+  .popover-body {
+    padding: 0;
+  }
+  .code-example {
+    border-radius: 0;
+    background: none;
+  }
+}
+.popover {
+  --bs-popover-header-bg: var(--bg-color-lighter);
+  --bs-popover-bg: var(--bg-color-light);
+  --bs-popover-max-width: 95vw;
+  box-shadow: 0px 5px 5px 0px #00000066;
+}

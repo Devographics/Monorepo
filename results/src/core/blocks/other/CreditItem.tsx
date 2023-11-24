@@ -3,13 +3,13 @@ import { spacing, fontSize } from 'core/theme'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 import Avatar from 'core/components/Avatar'
-import { Credit, Entity } from '@devographics/types'
+import { Credit } from '@devographics/types'
 
 const CreditItem = ({ entity, role, labelId }: Credit & { labelId?: string }) => {
     if (!entity) {
         return null
     }
-    const { name, twitter, company } = entity
+    const { name, homepage, twitter, company } = entity
     return (
         <CreditItemDiv>
             <CreditAvatar_>
@@ -17,7 +17,7 @@ const CreditItem = ({ entity, role, labelId }: Credit & { labelId?: string }) =>
             </CreditAvatar_>
             <Details>
                 <Name>
-                    <a href={twitter.url}>{name}</a>
+                    <a href={homepage?.url || twitter?.url}>{name}</a>
                 </Name>
                 {!!company && (
                     <Company>

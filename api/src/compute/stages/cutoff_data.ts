@@ -6,7 +6,7 @@ import sumBy from 'lodash/sumBy.js'
 import compact from 'lodash/compact.js'
 import round from 'lodash/round.js'
 import { combineFacetBuckets } from './group_buckets'
-import { PercentileData, Percentiles } from '@devographics/types'
+import { BucketUnits, PercentileData, Percentiles } from '@devographics/types'
 
 function mergePercentiles(buckets: Bucket[] | FacetBucket[]) {
     const percentileKeys = ['p0', 'p25', 'p50', 'p75', 'p100'] as Percentiles[]
@@ -32,20 +32,20 @@ export function groupUnderCutoff<T extends Bucket | FacetBucket>(
     const cutoffGroupBucket = {
         count: sumBy(cutoffBuckets, b => b.count || 0),
         id: CUTOFF_ANSWERS,
-        percentageQuestion: round(
-            sumBy(cutoffBuckets, b => b.percentageQuestion || 0),
+        [BucketUnits.PERCENTAGE_QUESTION]: round(
+            sumBy(cutoffBuckets, b => b[BucketUnits.PERCENTAGE_QUESTION] || 0),
             2
         ),
-        percentageSurvey: round(
-            sumBy(cutoffBuckets, b => b.percentageSurvey || 0),
+        [BucketUnits.PERCENTAGE_SURVEY]: round(
+            sumBy(cutoffBuckets, b => b[BucketUnits.PERCENTAGE_SURVEY] || 0),
             2
         ),
         groupedBucketIds: cutoffBuckets.map(b => b.id),
-        averageByFacet: round(
-            sumBy(cutoffBuckets, b => b.averageByFacet || 0) / cutoffBuckets.length,
+        [BucketUnits.AVERAGE]: round(
+            sumBy(cutoffBuckets, b => b[BucketUnits.AVERAGE] || 0) / cutoffBuckets.length,
             2
         ),
-        percentilesByFacet: mergePercentiles(cutoffBuckets)
+        [BucketUnits.PERCENTILES]: mergePercentiles(cutoffBuckets)
     } as T
     if (axis) {
         // if axis is provided, we know it's a top-level Bucket and not a FacetBucket

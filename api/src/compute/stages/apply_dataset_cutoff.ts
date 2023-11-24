@@ -63,14 +63,15 @@ export const applyBucketCutoff = ({
     /*
 
     If we have a single facet under the cutoff, then that facet's data
-    can easily be deduced by subtracting all the other facets from the total. 
+    can easily be deduced by subtracting all the other facets from the total, if 
+    there are other facets. 
 
     To avoid this, also zero our the next smallest facet in those cases
 
     */
     const singleFacetUnderCutoff =
         facetBucketsWithCutoff.filter(fb => fb.hasInsufficientData).length === 1
-    if (singleFacetUnderCutoff) {
+    if (singleFacetUnderCutoff && facetBucketsWithCutoff.length > 1) {
         const sortedFacetBuckets = sortBy(facetBucketsWithCutoff, fb => fb.count)
         const secondSmallestFacetBucket = sortedFacetBuckets[1]
         const secondSmallestFacetBucketIndex = facetBucketsWithCutoff.findIndex(

@@ -1,7 +1,7 @@
 id: ${mainBlockId}_vs_salary
 fieldId: ${mainBlockId}
 i18nNamespace: ${mainBlockId}
-tabId: tabs.vs_salary
+tabId: tabs.by_salary
 defaultUnits: percentilesByFacet
 blockType: HorizontalBarBlock
 query: currentEditionData
@@ -9,14 +9,7 @@ parameters:
     showNoAnswer: true
 filtersState:
     options:
-        showDefaultSeries: false
-        enableYearSelect: false
         mode: facet
-        queryOnLoad: false
-        supportedModes:
-            - grid
-            - facet
-        preventQuery: false
     facet:
         sectionId: compensation
         id: current_total_annual_compensation

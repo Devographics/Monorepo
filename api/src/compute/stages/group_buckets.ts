@@ -22,36 +22,43 @@ export const combineFacetBuckets = (
     }
     const noAnswerOption = { id: NO_ANSWER, label: NO_ANSWER }
 
-    let combinedFacetBuckets = [...optionsOrGroups, noAnswerOption].map(option => {
-        const { id, label } = option
-        // for each facet, find the equivalent facetBuckets in all the main buckets
-        // make sure to compact to remove undefined facetBuckets (when the equivalent
-        // facetBucket doesn't exist in another main bucket)
-        const sameFacetBuckets = compact(
-            selectedBuckets.map(b => b?.facetBuckets?.find(fb => fb.id === option.id)!)
-        )
-        let combinedFacetBucket: FacetBucket = {
-            // Note: might create issues when option ID is not the same as facet bucket ID
-            id: String(id),
-            label,
-            count: round(
-                sumBy(sameFacetBuckets, b => b?.count ?? 0),
-                2
+    let combinedFacetBuckets = compact(
+        [...optionsOrGroups, noAnswerOption].map(option => {
+            const { id, label } = option
+            // for each facet, find the equivalent facetBuckets in all the main buckets
+            // make sure to compact to remove undefined facetBuckets (when the equivalent
+            // facetBucket doesn't exist in another main bucket)
+            const sameFacetBuckets = compact(
+                selectedBuckets.map(b => b?.facetBuckets?.find(fb => fb.id === option.id)!)
             )
-        }
-        // if the facets we're grouping all have groups, also combine the groups
-        if (sameFacetBuckets.every(b => b.groupedBuckets)) {
-            const groupedBuckets = uniq(sameFacetBuckets.map(b => b.groupedBuckets!).flat())
-            const groupedBucketIds = groupedBuckets.map(b => b.id)
-            combinedFacetBucket = {
-                ...combinedFacetBucket,
-                groupedBuckets,
-                groupedBucketIds
+            // if the current/option we're considering doen't have any matching facet buckets
+            // across all buckets, return undefined to get rid of it
+            if (sameFacetBuckets.length === 0) {
+                return
             }
-        }
+            let combinedFacetBucket: FacetBucket = {
+                // Note: might create issues when option ID is not the same as facet bucket ID
+                id: String(id),
+                label,
+                count: round(
+                    sumBy(sameFacetBuckets, b => b?.count ?? 0),
+                    2
+                )
+            }
+            // if the facets we're grouping all have groups, also combine the groups
+            if (sameFacetBuckets.every(b => b.groupedBuckets)) {
+                const groupedBuckets = uniq(sameFacetBuckets.map(b => b.groupedBuckets!).flat())
+                const groupedBucketIds = groupedBuckets.map(b => b.id)
+                combinedFacetBucket = {
+                    ...combinedFacetBucket,
+                    groupedBuckets,
+                    groupedBucketIds
+                }
+            }
 
-        return combinedFacetBucket
-    })
+            return combinedFacetBucket
+        })
+    )
     return combinedFacetBuckets
 }
 

@@ -25,10 +25,11 @@ const ShareBlockTemplate = () => {
             isHtml: false
         }
     })
+
+    let title = `${getSiteTitle({ pageContext })}: ${blockTitle}`
+
     const overrides = {
-        title: `${getSiteTitle({ pageContext })}: ${blockTitle} ${
-            pageContext.currentEdition.hashtag
-        }`
+        title
     }
     if (blockDescription) {
         overrides.description = blockDescription

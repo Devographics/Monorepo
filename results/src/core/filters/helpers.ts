@@ -24,8 +24,15 @@ import {
 import { useI18n } from 'core/i18n/i18nContext'
 import { useTheme } from 'styled-components'
 import round from 'lodash/round'
-import { useAllFilters, getVariantBarColorItem } from 'core/charts/hooks'
-import sumBy from 'lodash/sumBy'
+import {
+    useAllFilters,
+    getVariantBarColorItem,
+    HORIZONTAL,
+    insufficientDataGradient,
+    noAnswerGradient
+} from 'core/charts/hooks'
+import compact from 'lodash/compact'
+import uniq from 'lodash/uniq'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getBlockLink } from 'core/helpers/blockHelpers'
 import { getEntityName, useEntities } from 'core/helpers/entities'
@@ -47,17 +54,19 @@ import {
     Bucket,
     CombinedBucket,
     OptionMetadata,
-    CombinedBucketData
+    CombinedBucketData,
+    FacetBucket
 } from '@devographics/types'
 import { runQuery } from 'core/explorer/data'
 // import { spacing, mq, fontSize } from 'core/theme'
 import get from 'lodash/get'
 import { getBlockDataPath } from 'core/helpers/data'
 import { QueryData, AllQuestionData } from '@devographics/types'
-import { NO_ANSWER } from '@devographics/constants'
+import { INSUFFICIENT_DATA, NO_ANSWER } from '@devographics/constants'
 import clone from 'lodash/clone'
 import pick from 'lodash/pick'
 import { getItemLabel } from 'core/helpers/labels'
+import merge from 'lodash/merge'
 
 export const getNewCondition = ({
     filter,
@@ -643,7 +652,7 @@ export const getValueLabel = ({
 Generate the legends used when filtering is enabled
 
 */
-type FilterLegend = {
+export type FilterLegend = {
     color: string
     gradientColors: string[]
     id: string
@@ -652,10 +661,12 @@ type FilterLegend = {
 }
 export const useFilterLegends = ({
     chartFilters,
-    block
+    block,
+    buckets
 }: {
     chartFilters: CustomizationDefinition
     block: BlockDefinition
+    buckets: Bucket[]
 }) => {
     const context = usePageContext()
 
@@ -721,7 +732,7 @@ export const useFilterLegends = ({
                                     return label
                                 })
                                 .join(', ')
-                            return `<strong>${fieldLabel}</strong> ${operatorLabel} <strong>${valueLabel}</strong>`
+                            return `<strong>${fieldLabel}</strong> <span class="operator">${operatorLabel}</span> <strong>${valueLabel}</strong>`
                         })
                     ]
                 }
@@ -744,14 +755,52 @@ export const useFilterLegends = ({
         }
     } else if (chartFilters.options.mode === MODE_FACET && chartFilters.facet) {
         const facetField = allFilters.find(f => f.id === chartFilters?.facet?.id) as FilterItem
-        results = facetField?.options?.map(({ id }, index) => {
+
+        // clone array to avoid modifying original one when adding elements to validOptions
+        let validOptions = facetField?.options ? [...facetField.options] : []
+
+        const findValidIds = (buckets: Bucket[] | FacetBucket[]) =>
+            buckets.filter(b => b.count && b.count > 0).map(b => b.id)
+        const allFacetBucketIds = compact(
+            uniq(buckets.map(b => b.facetBuckets && findValidIds(b.facetBuckets)).flat())
+        )
+
+        // unless options are sequential and all of them need to be included,
+        // filter out options that don't appear in the data either as buckets or facetBuckets,
+        // or whose count is 0
+        if (!facetField.optionsAreSequential) {
+            validOptions = validOptions.filter(option =>
+                allFacetBucketIds.includes(option.id.toString())
+            )
+        }
+
+        if (buckets?.some(b => b.facetBuckets?.some(fb => fb.hasInsufficientData))) {
+            validOptions = [...validOptions, { id: INSUFFICIENT_DATA }]
+        }
+        if (allFacetBucketIds.includes(NO_ANSWER)) {
+            validOptions = [...validOptions, { id: NO_ANSWER }]
+        }
+
+        results = validOptions.map(({ id }, index) => {
             const { key, label } = getItemLabel({
                 id,
                 getString,
                 entity: entities.find(e => e.id === id),
                 i18nNamespace: i18nNamespaces[facetField.id] || facetField.id
             })
-            const barColorItem = getVariantBarColorItem(theme, index + 1, facetField)
+            let barColorItem
+            if (id === NO_ANSWER) {
+                const { mainColor, colors: gradientColors } = noAnswerGradient(colors, HORIZONTAL)
+                barColorItem = { gradientColors, color: mainColor }
+            } else if (id === INSUFFICIENT_DATA) {
+                const { mainColor, colors: gradientColors } = insufficientDataGradient(
+                    colors,
+                    HORIZONTAL
+                )
+                barColorItem = { gradientColors, color: mainColor }
+            } else {
+                barColorItem = getVariantBarColorItem(theme, index + 1, facetField)
+            }
             return {
                 color: barColorItem.color,
                 gradientColors: barColorItem.gradient,
@@ -790,11 +839,13 @@ Hook to initialize chart filters
 export const useChartFilters = ({
     block,
     options,
-    providedFiltersState
+    providedFiltersState,
+    buckets
 }: {
     block: BlockDefinition
     options: CustomizationOptions
     providedFiltersState?: CustomizationDefinition
+    buckets: Bucket[]
 }) => {
     let loadFiltersFromUrl = false,
         urlFilters = {} as CustomizationDefinition
@@ -805,18 +856,18 @@ export const useChartFilters = ({
         loadFiltersFromUrl = urlFilters && block.id === queryParams.blockId
     }
 
-    const initFiltersState =
-        providedFiltersState ||
-        (loadFiltersFromUrl
-            ? { ...urlFilters, options: { queryOnLoad: true } }
-            : getInitFilters(options))
+    const initFilters = getInitFilters(options)
+    const initFiltersState = loadFiltersFromUrl
+        ? merge({}, initFilters, urlFilters, { options: { queryOnLoad: true } })
+        : merge({}, initFilters, providedFiltersState)
 
     // contains the filters that define the series
     const [chartFilters, setChartFilters] = useState(initFiltersState)
 
     const filterLegends = useFilterLegends({
-        chartFilters,
-        block
+        chartFilters: initFiltersState,
+        block,
+        buckets
     })
     return { chartFilters, setChartFilters, filterLegends }
 }
@@ -861,12 +912,19 @@ export type FetchSeriesDataOptions = {
     year: number
 }
 
+export type FetchSeriesDataPayload = {
+    result?: Array<DataSeries<AllQuestionData>>
+    error?: any
+    query: string
+    seriesNames: string[]
+}
+
 export async function fetchSeriesData({
     block,
     pageContext,
     chartFilters,
     year
-}: FetchSeriesDataOptions): Promise<Array<DataSeries<AllQuestionData>>> {
+}: FetchSeriesDataOptions): Promise<FetchSeriesDataPayload> {
     const { query, seriesNames } = getFiltersQuery({
         block,
         pageContext,
@@ -878,21 +936,25 @@ export async function fetchSeriesData({
     if (!url) {
         throw new Error('GATSBY_API_URL env variable is not set')
     }
-    const result: QueryData<AllQuestionData> = await runQuery(url, query, `${block.id}FiltersQuery`)
+    const { result, error } = await runQuery<AllQuestionData>(url, query, `${block.id}FiltersQuery`)
     // console.log('// result')
     // console.log(result)
 
-    const dataPath = getBlockDataPath({ block, pageContext, addRootNode: false })
+    if (error) {
+        return { error, query, seriesNames }
+    } else {
+        const dataPath = getBlockDataPath({ block, pageContext, addRootNode: false })
 
-    // apply dataPath to get block data for each series
-    const seriesData = seriesNames.map((seriesName, seriesIndex) => {
-        const data = get(result, dataPath.replace(block.id, seriesName)) as AllQuestionData
-        return {
-            data,
-            name: seriesName,
-            filters: chartFilters.filters[seriesIndex],
-            facet: chartFilters.facet
-        }
-    })
-    return seriesData
+        // apply dataPath to get block data for each series
+        const seriesData = seriesNames.map((seriesName, seriesIndex) => {
+            const data = get(result, dataPath.replace(block.id, seriesName)) as AllQuestionData
+            return {
+                data,
+                name: seriesName,
+                filters: chartFilters.filters[seriesIndex],
+                facet: chartFilters.facet
+            }
+        })
+        return { result: seriesData, query, seriesNames }
+    }
 }

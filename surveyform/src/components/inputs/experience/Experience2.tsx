@@ -12,6 +12,7 @@ import isEmpty from "lodash/isEmpty.js";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
   DbPathsEnum,
+  Example,
   FeaturesOptions,
   OptionMetadata,
 } from "@devographics/types";
@@ -74,7 +75,12 @@ export const Experience2 = (props: ExperienceProps) => {
   );
 };
 
-const CodeExample = ({ language, label, code, codeHighlighted }) => {
+export const CodeExample = ({
+  language,
+  label,
+  code,
+  codeHighlighted,
+}: Example) => {
   return (
     <div className="code-example">
       <h5 className="code-example-heading">

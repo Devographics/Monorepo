@@ -1,6 +1,7 @@
 age:
     defaultSort: options
     optionsAreRange: true
+    optionsAreSequential: true
     options:
         - id: range_less_than_10
           average: 10
@@ -22,6 +23,7 @@ age:
 years_of_experience:
     defaultSort: options
     optionsAreRange: true
+    optionsAreSequential: true
     options:
         - id: range_less_than_1
           average: 1
@@ -60,6 +62,7 @@ years_of_experience:
 company_size:
     defaultSort: options
     optionsAreRange: true
+    optionsAreSequential: true
     options:
         - id: range_1
           average: 1
@@ -100,6 +103,7 @@ company_size:
 yearly_salary:
     defaultSort: options
     optionsAreRange: true
+    optionsAreSequential: true
     options:
         # - id: range_work_for_free
         #   average: 0
@@ -120,6 +124,7 @@ yearly_salary:
 yearly_salary_v2:
     defaultSort: options
     optionsAreRange: true
+    optionsAreSequential: true
     options:
         # - id: range_work_for_free
         #   average: 0

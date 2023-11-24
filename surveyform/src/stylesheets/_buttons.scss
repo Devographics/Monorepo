@@ -134,3 +134,10 @@
     }
   }
 }
+
+.btn-invisible {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--text-color);
+}

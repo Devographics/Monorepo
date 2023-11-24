@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-const { mosaic } = require('./dist/mosaic')
-
+// const { mosaic } = require('./dist/mosaic')
+import { mosaic } from './dist/mosaic'
 mosaic()

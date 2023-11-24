@@ -39,6 +39,7 @@ function checkConfig() {
 checkConfig()
 
 const USE_FAST_BUILD = process.env.FAST_BUILD === 'true'
+const GENERATE_BLOCKS = process.env.GATSBY_GENERATE_BLOCKS === 'true'
 
 const rawSitemap = yaml.load(
     fs.readFileSync(path.join(editionFolder, 'config/raw_sitemap.yml'), 'utf8')
@@ -227,9 +228,9 @@ export const createPagesSingleLoop = async ({
             isPermanent: true
         })
 
-        if (!USE_FAST_BUILD) {
+        if (GENERATE_BLOCKS) {
             // skip this is fast_build option is enabled
-            // createBlockPages(page, fullContext, createPage, locales, buildInfo)
+            createBlockPages(page, fullContext, createPage, locales, buildInfo)
         }
     }
     logToFile('build.yml', yaml.dump(buildInfo, { noRefs: true }), {

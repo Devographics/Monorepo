@@ -46,6 +46,7 @@ export interface BlockDefinition {
     titleId?: string
     questionKey?: string
     descriptionId?: string
+    takeawayKey?: string
     noteId?: string
 
     defaultUnits?: BucketUnits

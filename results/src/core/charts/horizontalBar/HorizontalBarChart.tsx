@@ -23,8 +23,9 @@ import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 import sortBy from 'lodash/sortBy'
 import InsufficientData from './InsufficientData'
-import { INSUFFICIENT_DATA } from '@devographics/constants'
+import { INSUFFICIENT_DATA, NO_ANSWER } from '@devographics/constants'
 import sumBy from 'lodash/sumBy'
+import { FilterLegend } from 'core/filters/helpers'
 
 export const getChartDataPath = (block: BlockDefinition) =>
     `${block?.queryOptions?.subField || 'responses'}.currentEdition.buckets`
@@ -95,22 +96,29 @@ const getLabelsLayer = (labelTransformer: any) => (props: any) => {
     return props.bars.map((bar: any) => {
         // entire bar has insufficient data
         const barHasInsufficientData = bar.data.data.hasInsufficientData
-        // current segment is insufficient data segment
-        const isInsufficientDataSegment = bar.data.id.includes(INSUFFICIENT_DATA)
-        const label = isInsufficientDataSegment ? '?' : labelTransformer(bar.data)
-        return barHasInsufficientData ? null : (
-            <ChartLabel
-                key={bar.key}
-                label={label}
-                transform={`translate(${bar.x + bar.width / 2},${
-                    bar.y + bar.height / 2
-                }) rotate(${rotation})`}
-                fontSize={fontSize}
-                style={{
-                    pointerEvents: 'none'
-                }}
-            />
-        )
+        // value is 0
+        const valueIs0 = !bar.data.value
+        if (barHasInsufficientData || valueIs0) {
+            return null
+        } else {
+            // current segment is insufficient data segment
+            const isInsufficientDataSegment = bar.data.id.includes(INSUFFICIENT_DATA)
+            const label = isInsufficientDataSegment ? '?' : labelTransformer(bar.data)
+            return (
+                <ChartLabel
+                    key={bar.key}
+                    label={label}
+                    value={bar.data.value}
+                    transform={`translate(${bar.x + bar.width / 2},${
+                        bar.y + bar.height / 2
+                    }) rotate(${rotation})`}
+                    fontSize={fontSize}
+                    style={{
+                        pointerEvents: 'none'
+                    }}
+                />
+            )
+        }
     })
 }
 
@@ -127,7 +135,7 @@ export interface HorizontalBarChartProps extends ChartComponentProps {
     showDefaultSeries?: boolean
     facet?: FacetItem
     filters?: CustomizationFiltersSeries[]
-    filterLegends?: any
+    filterLegends?: FilterLegend[]
     shouldTranslate?: boolean
 }
 
@@ -167,6 +175,9 @@ const HorizontalBarChart = ({
     // in the future it will be able to combine them into a single chart
     let buckets = cloneDeep(getChartData(series[0].data, block))
 
+    if (!buckets) {
+        return <div>No data found.</div>
+    }
     if (facet) {
         buckets = buckets.map(bucket => {
             baseUnits.forEach(unit => {
@@ -198,7 +209,24 @@ const HorizontalBarChart = ({
     const bucketEntities = buckets.map(b => b.entity).filter(e => !!e) as Array<Entity> // the filter guarantee that we eliminate null values
     const entities: Entity[] = bucketEntities.length > 0 ? bucketEntities : useEntities()
 
-    const keys = useChartKeys({ units, facet, showDefaultSeries, showInsufficientDataSegment })
+    // legacy: chartKeys are calculated using useChartKeys
+    const chartKeys = useChartKeys({
+        units,
+        facet,
+        showDefaultSeries,
+        showInsufficientDataSegment
+    })
+    // better: legendKeys are calculated by dataloader and passed down as props
+    const legendKeys = filterLegends?.map(legend => legend.id.replace('series_', `${units}__`))
+
+    let keys
+    if (units === BucketUnits.AVERAGE) {
+        keys = [BucketUnits.AVERAGE]
+    } else if (units === BucketUnits.MEDIAN) {
+        keys = [BucketUnits.MEDIAN]
+    } else {
+        keys = legendKeys || chartKeys
+    }
 
     const colorDefs = useColorDefs({ orientation: HORIZONTAL })
     const colorFills = useColorFills({
@@ -214,12 +242,13 @@ const HorizontalBarChart = ({
     let sortedBuckets = [...buckets].reverse()
 
     if (!question?.optionsAreSequential) {
-        if (units === BucketUnits.AVERAGE) {
-            sortedBuckets = sortBy(sortedBuckets, BucketUnits.AVERAGE)
-        } else if (units === BucketUnits.MEDIAN) {
-            sortedBuckets = sortBy(sortedBuckets, BucketUnits.MEDIAN)
-        }
+        sortedBuckets = sortBy(sortedBuckets, units)
     }
+
+    if (units === BucketUnits.PERCENTAGE_QUESTION) {
+        sortedBuckets = sortedBuckets.filter(b => b.id !== NO_ANSWER)
+    }
+
     const { formatTick, formatValue, maxValue } = useBarChart({
         buckets: sortedBuckets,
         total,
@@ -245,6 +274,12 @@ const HorizontalBarChart = ({
     const labelFormatter = useChartLabelFormatter({ units, facet })
 
     const labelsLayer = useMemo(() => getLabelsLayer(d => labelFormatter(d.value)), [units, facet])
+
+    // console.log(block.id)
+    // console.log({ chartKeys })
+    // console.log({ legendKeys })
+    // console.log({ keys })
+    // console.log({ sortedBuckets })
 
     return (
         <div style={{ height: sortedBuckets.length * baseSize + 80 }}>

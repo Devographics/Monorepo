@@ -1,0 +1,15 @@
+id: ${mainBlockId}_vs_current_employer
+fieldId: ${mainBlockId}
+i18nNamespace: ${mainBlockId}
+tabId: tabs.by_current_employer
+defaultUnits: percentageBucket
+blockType: HorizontalBarBlock
+query: currentEditionData
+parameters:
+    showNoAnswer: true
+filtersState:
+    options:
+        mode: facet
+    facet:
+        sectionId: employer_info
+        id: current_employer

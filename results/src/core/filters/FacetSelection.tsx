@@ -7,8 +7,13 @@ import { FilterItem, PanelState } from './types'
 import { ItemSelectOptions } from './condition/FieldSegment'
 import { BlockDefinition } from 'core/types'
 
+// NOTE: we shouldn't need to disable any facet if we limit legend to facets that actually
+// have data and use proper default cutoff
+
 // disable facets with too many segments
-const disabledFacets = ['source', 'country', 'industry_sector']
+// const disabledFacets = ['source', 'country', 'industry_sector']
+
+const disabledFacets = []
 
 interface FacetSelectionProps {
     block: BlockDefinition

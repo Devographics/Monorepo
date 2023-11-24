@@ -9,26 +9,31 @@ import { INSUFFICIENT_DATA, NO_ANSWER } from '@devographics/constants'
 import { getItemLabel } from 'core/helpers/labels'
 import { CustomizationFiltersSeries, FacetItem } from 'core/filters/types'
 import T from 'core/i18n/T'
+import { usePageContext } from 'core/helpers/pageContext'
 
-const getExtraLabel = ({
-    id,
-    legends,
-    filterLegends,
-    units,
-    indexValue,
-    facet,
-    filters,
-    getString
-}: {
+const getExtraLabel = (options: {
     id: string
     legends?: BlockLegend[]
     filterLegends?: any
     units: BucketUnits
     indexValue: number
+    i18nNamespaces: any
     facet?: FacetItem
     filters?: CustomizationFiltersSeries[]
     getString: StringTranslator
 }) => {
+    const {
+        id,
+        legends,
+        i18nNamespaces,
+        filterLegends,
+        units,
+        indexValue,
+        facet,
+        filters,
+        getString
+    } = options
+
     // const bucketKey =
     //     indexValue === NO_ANSWER
     //         ? { id: NO_ANSWER, label: getString('charts.no_answer').t }
@@ -47,12 +52,13 @@ const getExtraLabel = ({
             }
             extraLabel = getString('chart_units.average', { values })?.t
         } else {
+            const i18nNamespace = i18nNamespaces[facet.id] || facet.id
             const [units, facetBucketId] = id.split('__')
             const labelKey =
                 facetBucketId === NO_ANSWER
                     ? 'charts.no_answer'
-                    : `options.${facet.id}.${facetBucketId}`
-            const s2 = getString(labelKey, {}, `${facet.id}: ${facetBucketId}`)
+                    : `options.${i18nNamespace}.${facetBucketId}`
+            const s2 = getString(labelKey, {}, `${i18nNamespace}: ${facetBucketId}`)
 
             extraLabel = s2.t
         }
@@ -85,6 +91,8 @@ const BarTooltip = props => {
         labelFormatter
     } = props
     const { getString } = useI18n()
+    const context = usePageContext()
+    const { i18nNamespaces } = context
 
     const extraLabel = id.includes(INSUFFICIENT_DATA)
         ? getString('charts.insufficient_data')?.t
@@ -92,6 +100,7 @@ const BarTooltip = props => {
               id,
               legends,
               filterLegends,
+              i18nNamespaces,
               units,
               indexValue,
               facet,
@@ -111,6 +120,9 @@ const BarTooltip = props => {
 
     const { isFreeformData } = data
     const units_ = id
+    const countUnits = units_.replace(units, BucketUnits.COUNT)
+    const count = data[countUnits]
+    const showCount = units !== BucketUnits.COUNT
 
     return (
         <div style={{ ...nivoTheme.tooltip.container, maxWidth: 300 }}>
@@ -123,6 +135,12 @@ const BarTooltip = props => {
             )}
             :&nbsp;
             <strong>{labelFormatter(data[units_])}</strong>
+            {showCount && (
+                <>
+                    {' '}
+                    <T k="charts.facet_respondents" values={{ count }} />
+                </>
+            )}
         </div>
     )
 }

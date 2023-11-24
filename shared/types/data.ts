@@ -3,8 +3,14 @@ import { Entity } from './entities'
 import { Option } from './outlines'
 
 export type QueryData<T> = {
-    surveys: SurveysData<T>
+    result?: QueryResults<T>
+    error?: any
 }
+
+export type QueryResults<T> = {
+    surveys?: SurveysData<T>
+}
+
 export type SurveysData<T> = {
     [key: string]: EditionData<T>
 }

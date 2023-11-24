@@ -5,6 +5,7 @@ import { getSiteTitle } from './pageHelpers'
 import { useI18n } from 'core/i18n/i18nContext'
 import { useEntities } from 'core/helpers/entities'
 import { usePageContext } from 'core/helpers/pageContext'
+import { removeDoubleSlashes } from './utils'
 
 export const replaceOthers = s => s?.replace('_others', '.others')
 
@@ -16,7 +17,7 @@ export const getBlockKey = ({ block }: { block: BlockDefinition }) => {
     if (block.template === 'tool_experience') {
         namespace = 'tools'
     }
-    const blockId = block.fieldId ?? replaceOthers(block?.id)
+    const blockId = replaceOthers(block?.id)
     return `${namespace}.${blockId}`
 }
 
@@ -43,7 +44,7 @@ export const getBlockTitleKey = ({
 }: {
     block: BlockDefinition
     pageContext?: PageContextValue
-}) => block.titleId || `${getBlockKey({ block })}`
+}) => block.titleId || getBlockKey({ block })
 
 export const getBlockTitle = ({
     block,
@@ -58,11 +59,15 @@ export const getBlockTitle = ({
 }) => {
     const entity = entities?.find(e => e.id === block.id)
     const entityName = entity?.nameClean || entity?.name
-    const blockTitle = block.titleId && getString(block.titleId)?.t
+    const specifiedTitle = block.titleId && getString(block.titleId)?.tClean
     const key = getBlockTitleKey({ block, pageContext })
-
-    const translation = getString(key)
-    return blockTitle || translation?.tClean || translation?.t || entityName || key
+    const defaultTitle = getString(getBlockKey({ block }))?.tClean
+    const fieldTitle =
+        block.fieldId && getString(getBlockKey({ block: { ...block, id: block.fieldId } }))?.tClean
+    const tabTitle = block.tabId && `${fieldTitle} ${getString(block.tabId)?.tClean}`
+    const values = [specifiedTitle, defaultTitle, tabTitle, fieldTitle, entityName, key]
+    // console.table(values)
+    return values.find(v => v !== undefined)
 }
 
 export const useBlockTitle = ({ block }: { block: BlockDefinition }) => {
@@ -70,6 +75,47 @@ export const useBlockTitle = ({ block }: { block: BlockDefinition }) => {
     const entities = useEntities()
     const pageContext = usePageContext()
     return getBlockTitle({ block, pageContext, getString, entities })
+}
+
+/*
+
+In order of priority, use:
+
+1. an id explicitly defined as the block's definitionId
+2. a description for the specific edition (e.g. user_info.age.description.js2022)
+3. a generic description key (e.g. user_info.age.description.js2022)
+
+*/
+export const getBlockTakeaway = ({
+    block,
+    pageContext,
+    getString,
+    values,
+    options
+}: {
+    block: BlockDefinition
+    pageContext: PageContextValue
+    getString: StringTranslator
+    values?: any
+    options?: {
+        isHtml?: boolean
+    }
+}) => {
+    const takeawayKey = `${getBlockKey({ block })}.takeaway`
+    const { currentEdition } = pageContext
+    const blockTakeaway = block.takeawayKey && getString(block.takeawayKey, { values })?.tHtml
+    const editionTakeaway = getString(`${takeawayKey}.${currentEdition.id}`, {
+        values
+    })?.tHtml
+    const genericTakeaway = getString(takeawayKey, { values })?.tHtml
+    return blockTakeaway ?? editionTakeaway ?? genericTakeaway
+}
+
+export const useBlockTakeaway = ({ block }: { block: BlockDefinition }) => {
+    const { getString } = useI18n()
+    const entities = useEntities()
+    const pageContext = usePageContext()
+    return getBlockTakeaway({ block, pageContext, getString, entities })
 }
 
 /*
@@ -98,9 +144,12 @@ export const getBlockDescription = ({
 }) => {
     const descriptionKey = `${getBlockKey({ block })}.description`
     const { currentEdition } = pageContext
-    const blockDescription = block.descriptionId && getString(block.descriptionId, { values })?.t
-    const editionDescription = getString(`${descriptionKey}.${currentEdition.id}`, { values })?.t
-    const genericDescription = getString(descriptionKey, { values })?.t
+    const blockDescription =
+        block.descriptionId && getString(block.descriptionId, { values })?.tHtml
+    const editionDescription = getString(`${descriptionKey}.${currentEdition.id}`, {
+        values
+    })?.tHtml
+    const genericDescription = getString(descriptionKey, { values })?.tHtml
     return blockDescription || editionDescription || genericDescription
 }
 
@@ -146,7 +195,7 @@ export const getBlockImage = ({
     block: BlockDefinition
     pageContext: PageContextValue
 }) => {
-    const capturesUrl = `https://assets.devographics.com/captures/${pageContext.currentEdition.id}`
+    const capturesUrl = `${process.env.GATSBY_ASSETS_URL}/captures/${pageContext.currentEdition.id}`
     return `${capturesUrl}${get(pageContext, 'locale.path')}/${block.id}.png`
 }
 
@@ -159,17 +208,39 @@ interface UrlParams {
     params: string
 }
 
-export const getBlockLink = ({
-    block,
-    pageContext,
-    params,
-    useRedirect = true
-}: {
+interface GetBlockLinkProps {
     block: BlockDefinition
     pageContext: PageContextValue
     params?: any
     useRedirect?: boolean
-}) => {
+}
+
+// get "local" block link to a pre-generated static block page
+export const getBlockLinkLocal = ({
+    block,
+    pageContext,
+    params,
+    useRedirect = true
+}: GetBlockLinkProps) => {
+    const { id } = block
+    const paramsString = params ? `?${new URLSearchParams(params).toString()}` : ''
+    const { currentPath } = pageContext
+    let path = useRedirect
+        ? `${currentPath}/${id}${paramsString}`
+        : `${currentPath}/${paramsString}#${id}`
+
+    // remove any double slashes
+    path = removeDoubleSlashes(path)
+    return path
+}
+
+// get "remote" block link to the separate Charts Next.js app
+export const getBlockLinkRemote = ({
+    block,
+    pageContext,
+    params,
+    useRedirect = true
+}: GetBlockLinkProps) => {
     const { id: sectionId, parent, currentEdition, currentSurvey, localeId } = pageContext
     const blockParamsString = new URLSearchParams(params).toString()
 
@@ -199,6 +270,13 @@ export const getBlockLink = ({
     // path = path.replaceAll('//', '/')
     // const link = `${pageContext.host}${path}`
     return url
+}
+export const getBlockLink = (props: GetBlockLinkProps) => {
+    if (process.env.GATSBY_GENERATE_BLOCKS) {
+        return getBlockLinkLocal(props)
+    } else {
+        return getBlockLinkRemote(props)
+    }
 }
 
 export const getBlockMeta = ({

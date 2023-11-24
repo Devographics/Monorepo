@@ -13,9 +13,9 @@ export const DataLoaderFooter = (props: DynamicDataLoaderProps) => {
         <Footer_ className="dataloader-footer">
             <ModalTrigger
                 trigger={
-                    <Button>
+                    <Button_>
                         <T k="filters.customize_chart" />
-                    </Button>
+                    </Button_>
                 }
             >
                 <FiltersPanel {...props} />
@@ -32,4 +32,10 @@ const Footer_ = styled.section`
     align-items: center;
     justify-content: center;
     gap: ${spacing()};
+`
+
+const Button_ = styled(Button)`
+    .capture & {
+        display: none;
+    }
 `

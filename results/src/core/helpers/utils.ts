@@ -33,3 +33,16 @@ export function indentString(s: string, count = 1, options = {}) {
 }
 
 export const stripHtml = s => s && s.replace(/<([^>]+?)([^>]*?)>(.*?)<\/\1>/gi, '$3')
+
+export async function copyTextToClipboard(text: string) {
+    if ('clipboard' in navigator) {
+        return await navigator.clipboard.writeText(text)
+    } else {
+        return document.execCommand('copy', true, text)
+    }
+}
+
+// remote double slashes but add back the one after https:
+export function removeDoubleSlashes(url: string) {
+    return url.replaceAll('//', '/').replace('https:/', 'https://')
+}

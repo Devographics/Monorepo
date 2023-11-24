@@ -5,7 +5,7 @@ import ButtonGroup from './ButtonGroup'
 const Button = styled.button.attrs(
     ({ className, size = 'medium', variant = 'default', ...props }) => {
         return {
-            className: `Button${className ? ` ${className}` : ''}`
+            className: `Button${className ? ` ${className}` : ''} Button-${variant}`
         }
     }
 )`
@@ -13,13 +13,13 @@ const Button = styled.button.attrs(
     ${({ variant }) => {
         if (variant === 'link') {
             return css`
-                color: ${({ theme }) => theme.colors.link};
-                padding: 0;
-                display: inline-block;
-                font-weight: ${fontWeight('bold')};
-                border: none;
-                background: none;
-                cursor: pointer;
+                color: ${({ theme }) => theme.colors.link} !important;
+                padding: 0 !important;
+                display: inline-block !important;
+                font-weight: ${fontWeight('bold')} !important;
+                border: none !important;
+                background: none !important;
+                cursor: pointer !important;
             `
         } else {
             // default

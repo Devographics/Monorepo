@@ -1,4 +1,5 @@
 id: '${sectionId}_happiness'
+titleId: tools.happiness
 blockType: VerticalBarBlock
 showDescription: false
 i18nNamespace: happiness

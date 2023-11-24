@@ -39,9 +39,12 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
         data?.combined?.currentEdition?.completion || data?.responses?.currentEdition?.completion
     const total = completion?.total
 
+    const chartData = series ? getChartData(series[0].data, block) : getChartData(data, block)
+
     const { chartFilters, setChartFilters, filterLegends } = useChartFilters({
         block,
         options: { supportedModes: [MODE_GRID, MODE_FACET] },
+        buckets: chartData,
         providedFiltersState: filtersState
     })
 
@@ -56,16 +59,14 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
         unitsOptions = [BucketUnits.PERCENTAGE_BUCKET, BucketUnits.COUNT]
         const facetQuestion = allFilters.find(o => o.id === chartFilters?.facet?.id)
         // if this facet is in the form of numerical ranges, add the average of each range as unit too
-        if (facetQuestion?.optionsAreRange) {
-            // unitsOptions.push(BucketUnits.AVERAGE)
+        if (facetQuestion?.optionsAreRange || facetQuestion?.optionsAreNumeric) {
+            unitsOptions.push(BucketUnits.AVERAGE)
             // unitsOptions.push(BucketUnits.MEDIAN)
             unitsOptions = [BucketUnits.PERCENTILES, ...unitsOptions]
         }
     }
 
     const defaultSeries = { name: 'default', data }
-
-    const chartData = getChartData(data, block)
 
     const blockVariantProps: any & { tables: Array<TableData> } = {
         units,
@@ -95,17 +96,20 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
         ]
     }
 
-    if (
-        filterLegends.length > 0 &&
-        [
-            BucketUnits.COUNT,
-            BucketUnits.PERCENTAGE_SURVEY,
-            BucketUnits.PERCENTAGE_QUESTION,
-            BucketUnits.PERCENTAGE_BUCKET
-        ].includes(units)
-    ) {
-        blockVariantProps.legends = filterLegends
-    }
+    // filter legends are not part of the BlockVariant anymore, they're part of
+    // the DataLoader wrapper
+
+    // if (
+    //     filterLegends.length > 0 &&
+    //     [
+    //         BucketUnits.COUNT,
+    //         BucketUnits.PERCENTAGE_SURVEY,
+    //         BucketUnits.PERCENTAGE_QUESTION,
+    //         BucketUnits.PERCENTAGE_BUCKET
+    //     ].includes(units)
+    // ) {
+    //     blockVariantProps.legends = filterLegends
+    // }
 
     const chartProps = {
         block,
@@ -121,12 +125,9 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
         legends: chartLegends
     }
 
-    // console.log(chartLegends)
-    // console.log(filterLegends)
-
     return (
         <BlockVariant {...blockVariantProps}>
-            <DynamicDataLoader
+            <DynamicDataLoader<StandardQuestionData>
                 block={block}
                 chartFilters={chartFilters}
                 setChartFilters={setChartFilters}
@@ -135,6 +136,7 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
                 layout="grid"
                 defaultSeries={defaultSeries}
                 providedSeries={series}
+                getChartData={getChartData}
             >
                 {units === BucketUnits.PERCENTILES ? (
                     <ChartContainer>
