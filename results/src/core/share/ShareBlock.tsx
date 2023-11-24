@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import classNames from 'classnames'
-import ReactGA from 'react-ga'
 import { useI18n } from 'core/i18n/i18nContext'
 import { getBlockMeta } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
@@ -49,10 +48,6 @@ const ShareBlock = ({ block, section, className, toggleClass, title }) => {
         // toggle parent component's class
         toggleClass && toggleClass()
         setShowOptions(!showOptions)
-        ReactGA.event({
-            category: 'Clicks',
-            action: `${section} chart toggle`
-        })
     }
 
     const meta = getBlockMeta({ block, pageContext, getString, title })
