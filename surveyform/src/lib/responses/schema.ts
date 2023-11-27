@@ -19,7 +19,7 @@ export enum Actions {
 
 export const emailPlaceholder = "*****@*****";
 
-const isValidNumber = (n) => typeof n === "number" && !isNaN(n);
+const isValidNumber = (n): n is number => typeof n === "number" && !isNaN(n);
 export const responseBaseSchema: Schema = {
   _id: {
     type: String,
