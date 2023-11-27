@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { mq, spacing, fontSize, fontWeight } from 'core/theme'
 import T from 'core/i18n/T'
 import { useI18n } from 'core/i18n/i18nContext'
+import TooltipComponent from 'core/components/Tooltip'
 
 const InsufficientData = (props: {
     bars: Array<any>
@@ -32,16 +33,25 @@ const InsufficientData = (props: {
                         width={innerWidth}
                         height={step * 0.8}
                     />
-                    <Text_
-                        role={role}
-                        className="insufficient-data"
-                        x={innerWidth / 2}
-                        y={bar.y + step / 2 - 2}
-                        width={innerWidth}
-                        textAnchor="middle"
-                    >
-                        {getString('charts.insufficient_data')?.t}
-                    </Text_>
+
+                    <TooltipComponent
+                        trigger={
+                            <Text_
+                                role={role}
+                                className="insufficient-data"
+                                x={innerWidth / 2}
+                                y={bar.y + step / 2 - 2}
+                                width={innerWidth}
+                                textAnchor="middle"
+                            >
+                                {getString('charts.insufficient_data')?.t}
+                            </Text_>
+                        }
+                        contents={
+                            <T k="charts.insufficient_data.description" values={{ value: 10 }} />
+                        }
+                        asChild={true}
+                    />
                 </g>
             )
         } else {
@@ -62,6 +72,7 @@ const Text_ = styled.text`
     font-weight: ${fontWeight('bold')};
     font-size: ${fontSize('smaller')};
     text-align: center;
+    cursor: default;
 `
 
 export default memo(InsufficientData)
