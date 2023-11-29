@@ -43,6 +43,11 @@ resources {
   title
   url
 }
+twitterName
+twitter {
+  url
+  name
+}
 ${
     isFull
         ? `
