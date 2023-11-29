@@ -1,27 +1,20 @@
 "use client";
 import { useState } from "react";
-import { normalizeQuestionResponses } from "~/lib/normalization/services";
-import { LoadingButton } from "../LoadingButton";
-import { NormalizeInBulkResult } from "~/lib/normalization/types";
-import { NormField, NormalizationResult } from "./NormalizationResult";
 import {
   EditionMetadata,
   ResponseData,
   SurveyMetadata,
 } from "@devographics/types";
-import { NormalizationResponse } from "~/lib/normalization/hooks";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
 import type { QuestionWithSection } from "~/lib/normalization/types";
 import { getFormPaths } from "@devographics/templates";
-import ManualInput from "./ManualInput";
-import EntityInput from "./EntityInput";
-import NormToken from "./NormToken";
-import { useCopy, highlightMatches, highlightPatterns } from "../hooks";
-import Dialog from "./Dialog";
-import { FieldValue } from "./FieldValue";
+import { useCopy } from "../hooks";
 import { Entity } from "@devographics/types";
-import { CustomNormalization, CustomNormalizations } from "./NormalizeQuestion";
-import { NO_MATCH } from "@devographics/constants";
+import { CustomNormalizations } from "./NormalizeQuestion";
+import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
+import sortBy from "lodash/sortBy";
+import { Field } from "./Field";
+import { NormalizationResponse } from "~/lib/normalization/hooks";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -38,6 +31,7 @@ const Fields = (props: {
   question: QuestionWithSection;
   responsesCount: number;
   responses: NormalizationResponse[];
+  allAnswers: IndividualAnswer[];
   questionData: ResponseData;
   variant: "normalized" | "unnormalized";
   entities: Entity[];
@@ -52,8 +46,9 @@ const Fields = (props: {
     survey,
     edition,
     question,
+    responses,
     responsesCount,
-    responses: allResponses,
+    allAnswers,
     questionData,
     variant,
     entities,
@@ -61,9 +56,12 @@ const Fields = (props: {
     addCustomNormalization,
   } = props;
 
-  const responses = props[`${variant}Responses`] as NormalizationResponse[];
+  const answers = sortBy(
+    props[`${variant}Answers`],
+    (a) => a.raw
+  ) as IndividualAnswer[];
 
-  if (!responses) return <p>Nothing to normalize</p>;
+  if (!answers) return <p>Nothing to normalize</p>;
 
   const questionObject = getQuestionObject({
     survey,
@@ -74,7 +72,7 @@ const Fields = (props: {
   const formPaths = getFormPaths({ edition, question: questionObject });
 
   const fieldProps = {
-    responses,
+    answers,
     showIds,
     question,
     survey,
@@ -86,21 +84,25 @@ const Fields = (props: {
     filterQuery,
     customNormalizations,
     addCustomNormalization,
+    responses,
   };
 
-  const filteredResponses = filterQuery
-    ? responses.filter((r) => {
-        const combinedValue = combineValue(r.value);
-        return combinedValue.toLowerCase().includes(filterQuery.toLowerCase());
-      })
-    : responses;
+  const filteredAnswers = filterQuery
+    ? answers.filter((a) =>
+        a.raw.toLowerCase().includes(filterQuery.toLowerCase())
+      )
+    : answers;
+
+  console.log(answers);
+  console.log(filterQuery);
+  console.log(filteredAnswers);
 
   return (
     <div>
       <h3>
         {capitalizeFirstLetter(variant)} Responses (
-        {getPercent(responses.length, allResponses.length)}% –{" "}
-        {responses.length}/{allResponses.length}){" "}
+        {getPercent(answers.length, allAnswers.length)}% – {answers.length}/
+        {allAnswers.length}){" "}
         <a
           href="#"
           role="button"
@@ -129,7 +131,7 @@ const Fields = (props: {
           <div className="normalization-filter">
             <label htmlFor="search">
               Filter {capitalizeFirstLetter(variant)} Responses: (
-              {filteredResponses.length} results)
+              {filteredAnswers.length} results)
             </label>
             <input
               type="search"
@@ -144,212 +146,40 @@ const Fields = (props: {
                 <th></th>
                 <th>Answer</th>
                 {variant === "normalized" ? (
-                  <th>Normalized Values</th>
+                  <th>Normalized Tokens</th>
                 ) : (
-                  <th>Manual Normalizations</th>
+                  <th>Add Token</th>
                 )}
-                <th>Response&nbsp;ID</th>
                 <th colSpan={99}>Normalize</th>
               </tr>
             </thead>
             <tbody>
-              {filteredResponses.map(
-                (
-                  { _id, responseId, value, normalizedValue, patterns },
-                  index
-                ) => {
-                  const previousValue = filteredResponses[index - 1]?.value;
-                  // show letter heading if this value's first letter is different from previous one
-                  const showLetterHeading = previousValue
-                    ? combineValue(value)[0].toUpperCase() !==
-                      combineValue(previousValue)[0].toUpperCase()
-                    : true;
-                  return (
-                    <Field
-                      key={_id}
-                      _id={_id}
-                      value={value}
-                      normalizedValue={normalizedValue}
-                      patterns={patterns}
-                      responseId={responseId}
-                      index={index}
-                      showLetterHeading={showLetterHeading}
-                      {...fieldProps}
-                    />
-                  );
-                }
-              )}
+              {filteredAnswers.map((individualAnswer, index) => {
+                const { _id, responseId, raw, tokens } = individualAnswer;
+                const previousRawValue = filteredAnswers[index - 1]?.raw;
+                // show letter heading if this value's first letter is different from previous one
+                const showLetterHeading = previousRawValue
+                  ? raw?.[0].toUpperCase() !==
+                    previousRawValue?.[0].toUpperCase()
+                  : true;
+                return (
+                  <Field
+                    key={raw + index}
+                    _id={_id}
+                    raw={raw}
+                    tokens={tokens}
+                    responseId={responseId}
+                    index={index}
+                    letterHeading={showLetterHeading && raw?.[0].toUpperCase()}
+                    {...fieldProps}
+                  />
+                );
+              })}
             </tbody>
           </table>
         </div>
       )}
     </div>
-  );
-};
-
-const Field = ({
-  _id,
-  value,
-  normalizedValue,
-  patterns,
-  showIds,
-  responses,
-  responseId,
-  question,
-  survey,
-  edition,
-  questionData,
-  rawPath,
-  variant,
-  entities,
-  filterQuery,
-  index,
-  showLetterHeading = false,
-  customNormalizations,
-  addCustomNormalization,
-}) => {
-  const [result, setResult] = useState<NormalizeInBulkResult>();
-  const [showManualInput, setShowManualInput] = useState<boolean>(false);
-  const [showEntities, setShowEntities] = useState<boolean>(false);
-  const [showResult, setShowResult] = useState(true);
-  const surveyId = survey.id;
-  const editionId = edition.id;
-  const questionId = question.id;
-
-  let customNormalizedValue = customNormalizations[responseId];
-  if (customNormalizedValue) {
-    // if there a custom tokens, remove any that was already included
-    customNormalizedValue = customNormalizedValue.filter(
-      (v) => !normalizedValue?.includes(v)
-    );
-  }
-
-  return (
-    <>
-      {showLetterHeading && (
-        <tr className="letter-heading">
-          <th colSpan={99}>
-            <h3>{combineValue(value)[0].toUpperCase()}</h3>
-          </th>
-        </tr>
-      )}
-      <tr>
-        <td>{index + 1}. </td>
-        <td>
-          <FieldValue
-            value={value}
-            normalizedValue={normalizedValue}
-            patterns={patterns}
-            filterQuery={filterQuery}
-          />
-        </td>
-        <td>
-          <div className="normalization-tokens">
-            {normalizedValue
-              ?.filter((v) => v !== NO_MATCH)
-              .map((value, i) => (
-                <NormToken
-                  key={value}
-                  id={value}
-                  pattern={patterns?.[i]}
-                  responses={responses}
-                />
-              ))}
-            {customNormalizedValue?.map((value) => (
-              <NormToken
-                key={value}
-                id={value}
-                responses={responses}
-                variant="custom"
-              />
-            ))}
-          </div>
-        </td>
-        <td>
-          <ResponseId id={responseId} />
-        </td>
-
-        {/* <td>
-          <button
-            onClick={() => {
-              setShowEntities(!showEntities);
-            }}
-            data-tooltip="Add or edit entities"
-          >
-            Edit&nbsp;Entities
-          </button>
-          {showEntities && (
-            <Dialog
-              showModal={showEntities}
-              setShowModal={setShowEntities}
-              header={<span>Add/Edit Entities</span>}
-            >
-              <EntityInput value={value} entities={entities} />
-            </Dialog>
-          )}
-        </td> */}
-
-        <td>
-          <button
-            onClick={() => {
-              setShowManualInput(!showManualInput);
-            }}
-            data-tooltip="Manually enter normalization tokens"
-          >
-            Manual&nbsp;Input
-          </button>
-          {showManualInput && (
-            <Dialog
-              showModal={showManualInput}
-              setShowModal={setShowManualInput}
-              header={<span>Manual Input</span>}
-            >
-              <ManualInput
-                survey={survey}
-                edition={edition}
-                question={question}
-                questionData={questionData}
-                responseId={responseId}
-                normRespId={_id}
-                rawValue={value}
-                rawPath={rawPath}
-                entities={entities}
-                addCustomNormalization={addCustomNormalization}
-              />
-            </Dialog>
-          )}
-        </td>
-        <td>
-          <LoadingButton
-            action={async () => {
-              const result = await normalizeQuestionResponses({
-                questionId,
-                surveyId,
-                editionId,
-                responsesIds: [responseId],
-              });
-              setResult(result.data);
-              console.log(result);
-            }}
-            label="Renormalize"
-            tooltip="Renormalize this answer"
-          />
-        </td>
-      </tr>
-      {result && showResult && (
-        <tr>
-          <td colSpan={999}>
-            <article>
-              <NormalizationResult
-                setShowResult={setShowResult}
-                showQuestionId={false}
-                {...result}
-              />
-            </article>
-          </td>
-        </tr>
-      )}
-    </>
   );
 };
 

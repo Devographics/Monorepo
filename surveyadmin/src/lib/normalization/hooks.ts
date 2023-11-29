@@ -2,6 +2,7 @@ import { FetchPayloadSuccessOrError } from "@devographics/fetch";
 import { ResponseData, Entity } from "@devographics/types";
 import useSWR from "swr";
 import { apiRoutes } from "~/lib/apiRoutes";
+import { NormalizationMetadata } from "./types";
 
 const basicFetcher = (url: string): any => fetch(url).then((r) => r.json());
 
@@ -13,9 +14,8 @@ interface ApiData<T = any> {
 export interface NormalizationResponse {
   _id: string;
   responseId: string;
-  value: string;
   normalizedValue?: string[];
-  patterns?: string[];
+  metadata?: NormalizationMetadata[];
 }
 
 export type ResponsesData = {

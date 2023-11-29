@@ -3,6 +3,7 @@ import { NormalizationResponse } from "~/lib/normalization/hooks";
 import { ResponseId } from "./Fields";
 import Dialog from "./Dialog";
 import { FieldValue } from "./FieldValue";
+import { splitResponses } from "~/lib/normalization/helpers/splitResponses";
 
 const NormToken = ({
   id,
@@ -17,8 +18,10 @@ const NormToken = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
 
-  const tokenResponses = responses.filter((r) =>
-    r?.normalizedValue?.includes(id)
+  const { normalizedAnswers } = splitResponses(responses);
+
+  const tokenAnswers = normalizedAnswers?.filter((a) =>
+    a?.tokens.map((t) => t.id)?.includes(id)
   );
 
   if (pattern === "custom_normalization") {
@@ -47,7 +50,7 @@ const NormToken = ({
           setShowModal={setShowModal}
           header={
             <span>
-              Answers matching <code>{id}</code> ({tokenResponses.length})
+              Answers matching <code>{id}</code> ({tokenAnswers.length})
             </span>
           }
         >
@@ -60,18 +63,16 @@ const NormToken = ({
               </tr>
             </thead>
             <tbody>
-              {tokenResponses?.map((response, i) => {
-                const { value, normalizedValue, patterns, responseId } =
-                  response;
+              {tokenAnswers?.map((response, i) => {
+                const { raw, tokens, responseId } = response;
                 return (
                   <tr key={i}>
                     <td>{i + 1}.</td>
                     <td>
                       <FieldValue
                         currentTokenId={id}
-                        value={value}
-                        normalizedValue={normalizedValue}
-                        patterns={patterns}
+                        raw={raw}
+                        tokens={tokens}
                       />
                     </td>
                     <td>

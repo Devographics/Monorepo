@@ -10,7 +10,10 @@ import trim from "lodash/trim";
 import without from "lodash/without";
 import { useLocalStorage } from "../hooks";
 import { addManualNormalizations } from "~/lib/normalization/services";
-import { NormalizeInBulkResult } from "~/lib/normalization/types";
+import {
+  NormalizationToken,
+  NormalizeInBulkResult,
+} from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
 import { FieldValue } from "./FieldValue";
 import { EntityList, getAddEntityUrl, getEditEntityUrl } from "./EntityInput";
@@ -30,6 +33,7 @@ const ManualInput = ({
   rawPath,
   entities,
   addCustomNormalization,
+  tokens,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
@@ -40,6 +44,7 @@ const ManualInput = ({
   rawValue: string;
   rawPath: string;
   entities: Entity[];
+  tokens: NormalizationToken[];
   addCustomNormalization: (CustomNormalization) => void;
 }) => {
   const cacheKey = getCacheKey(edition, question);
@@ -115,7 +120,7 @@ const ManualInput = ({
           <tr>
             <th>Answer</th>
             <td>
-              <FieldValue value={rawValue} />
+              <FieldValue raw={rawValue} tokens={tokens} />
             </td>
           </tr>
           <tr>

@@ -31,7 +31,7 @@ export const getAllResponses = async (
       })!;
       const rawFieldPath = questionObject?.normPaths?.raw!;
       const normalizedFieldPath = questionObject?.normPaths?.other!;
-      const patternsFieldPath = questionObject?.normPaths?.patterns!;
+      const metadataFieldPath = questionObject?.normPaths?.metadata!;
 
       const selector = getAllResponsesSelector({
         edition,
@@ -46,7 +46,7 @@ export const getAllResponses = async (
           responseId: 1,
           [rawFieldPath]: 1,
           [normalizedFieldPath]: 1,
-          [patternsFieldPath]: 1,
+          [metadataFieldPath]: 1,
         },
         sort: { [rawFieldPath]: 1 },
         //lean: true
@@ -64,7 +64,7 @@ export const getAllResponses = async (
           responseId: r.responseId,
           value: get(r, rawFieldPath),
           normalizedValue: get(r, normalizedFieldPath),
-          patterns: get(r, patternsFieldPath),
+          metadata: get(r, metadataFieldPath),
         };
       });
 
@@ -72,7 +72,7 @@ export const getAllResponses = async (
         normalizationResponses,
         rawFieldPath,
         normalizedFieldPath,
-        patternsFieldPath,
+        metadataFieldPath,
         selector,
       };
     },

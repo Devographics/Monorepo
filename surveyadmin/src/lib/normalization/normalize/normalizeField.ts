@@ -5,11 +5,13 @@ import {
   CommentField,
   CustomNormalizationToken,
   NormalizationParams,
-  NormalizationToken,
+  FullNormalizationToken,
   NormalizeFieldResult,
   NormalizedField,
   PrenormalizedField,
   RegularField,
+  NormalizationMetadata,
+  NormalizationToken,
 } from "../types";
 import clone from "lodash/clone";
 import {
@@ -21,6 +23,8 @@ import { getFieldsToCopy } from "./steps";
 import { prefixWithEditionId } from "@devographics/templates";
 import { NO_MATCH } from "@devographics/constants";
 import compact from "lodash/compact";
+import pick from "lodash/pick";
+import uniq from "lodash/uniq";
 
 interface NormalizeFieldOptions extends NormalizationParams {
   questionObject: QuestionTemplateOutput;
@@ -138,9 +142,7 @@ export const normalizeField = async ({
       );
       const prenormalizedValue = response[fieldPath];
       if (prenormalizedValue) {
-        set(normResp, normPaths.raw!, prenormalizedValue);
         set(normResp, normPaths.prenormalized!, prenormalizedValue);
-        set(normResp, normPaths.patterns!, ["prenormalized"]);
         prenormalizedFields.push({
           questionId: questionObject.id,
           fieldPath,
@@ -154,102 +156,120 @@ export const normalizeField = async ({
     }
   };
 
+  // TODO: do this better
+  // currently the textList template is the only one that supports multiple
+  // freeform values
+  const freeformArrayTemplates = ["textList"];
+
   const processFreeformField = async () => {
     // if a field has a "freeform/other" path defined, we normalize its contents
     if (rawPaths.other) {
       const fieldPath = prefixWithEditionId(rawPaths?.other, edition.id);
       const freeformValue = response[fieldPath];
       if (freeformValue) {
-        // TODO: do this better
-        // currently the textList template is the only one that supports multiple
-        // freeform values
-        const valuesArray =
-          questionObject.template === "textList"
+        try {
+          const valuesArray = freeformArrayTemplates.includes(
+            questionObject.template
+          )
             ? freeformValue
-            : convertToArray({ questionObject, value: freeformValue });
-        const valuesArrayClean = compact(valuesArray.map(cleanupValue));
-        const otherValue = cleanupValue(response[fieldPath]);
-        if (valuesArrayClean.length > 0) {
-          set(normResp, normPaths.raw!, freeformValue);
+            : (convertToArray({
+                questionObject,
+                value: freeformValue,
+              }) as string[]);
 
-          try {
-            const normTokens = await normalize({
-              values: valuesArrayClean,
-              entityRules,
-              edition,
-              questionObject,
-              verbose,
-            });
+          const valuesArrayClean = compact(
+            valuesArray.map(cleanupValue)
+          ) as string[];
+          if (valuesArrayClean.length > 0) {
+            // set(normResp, normPaths.raw!, freeformValue);
 
-            let allTokens: Array<
-              CustomNormalizationToken | NormalizationToken
-            > = normTokens;
+            let normalizedIds = [] as string[];
+            let metadata = [] as NormalizationMetadata[];
+            let i = 0;
+            for (const raw of valuesArrayClean) {
+              let tokens = (await normalize({
+                values: [raw],
+                entityRules,
+                edition,
+                questionObject,
+                verbose,
+              })) as NormalizationToken[];
 
-            // if custom norm. tokens have been defined, also add their id
-            if (response.customNormalizations) {
-              const customNormalization = response.customNormalizations.find(
-                (token) => token.rawPath === fieldPath
-              );
-
-              if (customNormalization) {
-                // only keep custom token that are not already included in regular norm. tokens
-                const customTokens = customNormalization.tokens.filter(
-                  (tokenId) => !normTokens.map((t) => t.id).includes(tokenId)
+              // if custom norm. tokens have been defined, also add their id
+              if (response.customNormalizations) {
+                const customNormalization = response.customNormalizations.find(
+                  (token) => token.rawValue === raw
                 );
-                if (verbose) {
-                  console.log(
-                    `⛰️ Found custom norm. tokens: [${customTokens.join()}]`
-                  );
+
+                if (customNormalization) {
+                  // only keep custom token that are not already included in regular norm. tokens
+                  const customTokens = customNormalization.tokens
+                    .filter(
+                      (tokenId) => !tokens.map((t) => t.id).includes(tokenId)
+                    )
+                    .map((token) => ({
+                      id: token,
+                      pattern: "custom_normalization",
+                    }));
+                  if (verbose) {
+                    console.log(
+                      `⛰️ Found custom normalization tokens: [${customTokens
+                        .map((t) => t.id)
+                        .join()}]`
+                    );
+                  }
+                  tokens = [...customTokens, ...tokens];
                 }
-                allTokens = [
-                  ...customTokens.map((token) => ({
-                    id: token,
-                    pattern: "custom_normalization",
-                  })),
-                  ...allTokens,
-                ];
               }
+
+              if (verbose) {
+                console.log(
+                  `⛰️ processFreeformField: ${fieldPath}/other/${i}: “${raw}” -> [${
+                    tokens.length > 0 ? tokens.map((t) => t.id).join() : "🚫"
+                  }]`
+                );
+              }
+
+              const item = { raw } as NormalizationMetadata;
+              if (tokens.length > 0) {
+                item.tokens = tokens.map((t) => pick(t, ["id", "pattern"]));
+
+                // only add token ids that are not already in the normalizedIds array
+                const normalizedIdsToAdd = tokens
+                  .map((t) => t.id)
+                  .filter((id) => !normalizedIds.includes(id));
+
+                normalizedIds = [...normalizedIds, ...normalizedIdsToAdd];
+              } else {
+                normalizedIds.push(NO_MATCH);
+              }
+              metadata.push(item);
+
+              i++;
             }
 
             // if we only need one token, only keep the first one
             if (questionObject.matchType === "single") {
-              allTokens = allTokens.slice(0, 1);
+              normalizedIds = normalizedIds.slice(0, 1);
             }
 
-            let normIds = allTokens.map((token) => token.id);
-            let normPatterns = allTokens.map((token) =>
-              token.pattern.toString()
-            );
+            // modify normalized response object
+            set(normResp, normPaths.metadata!, metadata);
+            set(normResp, normPaths.other!, normalizedIds);
 
-            if (normIds.length > 0) {
-              set(normResp, normPaths.other!, normIds);
-              set(normResp, normPaths.patterns!, normPatterns);
-            } else {
-              set(normResp, normPaths.other!, [NO_MATCH]);
-            }
             // keep trace of fields that were normalized
             normalizedFields.push({
               questionId: questionObject.id,
               fieldPath,
-              value: normIds,
-              raw: otherValue,
-              normTokens: allTokens,
+              value: normalizedIds,
+              metadata,
             });
 
             modified = true;
-            if (verbose) {
-              console.log(
-                `⛰️ processFreeformField: ${fieldPath}/other: “${otherValue}”`
-              );
-              // console.log(`⛰️ -> Tags: ${matchTags.toString()}`);
-              console.log(
-                `⛰️ -> Normalized values: ${JSON.stringify(allTokens)}`
-              );
-            }
-          } catch (error) {
-            // console.warn(error);
-            set(normResp, normPaths.error!, error.message);
           }
+        } catch (error) {
+          console.warn(error);
+          set(normResp, normPaths.error!, error.message);
         }
       }
     }

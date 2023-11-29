@@ -100,13 +100,24 @@ const Tokens = ({
 };
 
 const TagItem = ({ tag, entities }) => {
+  const [showTokens, setShowTokens] = useState(false);
   const tagEntities = entities.filter((e) => e?.tags?.includes(tag));
   return (
     <div className="tag-item">
       <h5 className="tag-item-heading">
-        <code>{tag}</code> ({tagEntities.length})
+        <a
+          href="#"
+          role="button"
+          onClick={(e) => {
+            e.preventDefault();
+            setShowTokens(!showTokens);
+          }}
+        >
+          {tag}
+        </a>{" "}
+        ({tagEntities.length})
       </h5>
-      {tagEntities.length > 0 && (
+      {showTokens && tagEntities.length > 0 && (
         <table>
           <thead>
             <tr>

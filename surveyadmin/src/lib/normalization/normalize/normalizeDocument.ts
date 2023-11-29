@@ -319,7 +319,7 @@ const responseIsEmptyLegacy = ({
     "isNormalized",
     "duration",
     "locale",
-    "lastSavedAt"
+    "lastSavedAt",
   ];
   const responseFields = Object.keys(response);
   // find any response fields that are *not* base fields
@@ -328,14 +328,15 @@ const responseIsEmptyLegacy = ({
   return contentFields.length === 0;
 };
 
-function responseIsEmpty(
-  {
-    response,
-    edition,
-  }: {
-    response: ResponseDocument;
-    edition: EditionMetadata;
-  }) {
-  const contentFields = Object.keys(response).filter(k => k.startsWith(edition.id))
-  return !!contentFields.length
+function responseIsEmpty({
+  response,
+  edition,
+}: {
+  response: ResponseDocument;
+  edition: EditionMetadata;
+}) {
+  const contentFields = Object.keys(response).filter((k) =>
+    k.startsWith(edition.id)
+  );
+  return contentFields.length === 0;
 }

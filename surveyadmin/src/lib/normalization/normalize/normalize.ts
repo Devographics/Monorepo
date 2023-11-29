@@ -1,5 +1,5 @@
 import { EditionMetadata, QuestionTemplateOutput } from "@devographics/types";
-import { NormalizationToken } from "../types";
+import { FullNormalizationToken } from "../types";
 import { extractTokens } from "./extractTokens";
 import { getQuestionRules } from "./getQuestionRules";
 import { EntityRule } from "./helpers";
@@ -25,7 +25,7 @@ export const normalize = async ({
   verbose?: boolean;
 }) => {
   const rules = getQuestionRules({ questionObject, entityRules, verbose });
-  let allTokens: NormalizationToken[] = [];
+  let allTokens: FullNormalizationToken[] = [];
   for (const value of values) {
     const tokens = await extractTokens({
       value,

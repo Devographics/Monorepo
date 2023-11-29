@@ -93,6 +93,10 @@ const Metadata = ({
               <li>
                 Selector: <textarea>{JSON.stringify(normSelector)}</textarea>
               </li>
+              <li>
+                Metadata Path:{" "}
+                <code>{questionObject?.normPaths?.metadata}</code>
+              </li>
             </ul>
           </p>
         </div>

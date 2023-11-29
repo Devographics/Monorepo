@@ -6,7 +6,11 @@ import Fields from "~/components/normalization/Fields";
 import Metadata from "~/components/normalization/Metadata";
 import Tokens from "~/components/normalization/Tokens";
 
-import { ResponsesData, useQuestionResponses } from "~/lib/normalization/hooks";
+import {
+  NormalizationResponse,
+  ResponsesData,
+  useQuestionResponses,
+} from "~/lib/normalization/hooks";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { useSegments } from "./hooks";
 import type { QuestionWithSection } from "~/lib/normalization/types";
@@ -116,11 +120,16 @@ export const Normalization = ({
   );
 };
 
-const AllFields = (props) => {
-  const { normalizedResponses, unnormalizedResponses } = splitResponses(
+const AllFields = (props: { responses: NormalizationResponse[] }) => {
+  const { allAnswers, normalizedAnswers, unnormalizedAnswers } = splitResponses(
     props.responses
   );
-  const fieldsProps = { ...props, normalizedResponses, unnormalizedResponses };
+  const fieldsProps = {
+    ...props,
+    allAnswers,
+    normalizedAnswers,
+    unnormalizedAnswers,
+  };
   return (
     <>
       <Fields {...fieldsProps} variant="normalized" />
