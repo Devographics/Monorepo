@@ -21,13 +21,11 @@ async function exists(path: string) {
     }
 }
 
-const getExtension = (fileName: string) => fileName.split('.').at(-1) || 'none'
+const getExtension = (filePath: string) => filePath.split('.').at(-1) || 'none'
 
-export const logToFile = async (fileName_: string, object: any, options: LogOptions = {}) => {
+export const logToFile = async (filePath: string, object: any, options: LogOptions = {}) => {
     if (process.env.NODE_ENV === 'development') {
-        let fileName = fileName_,
-            subDir = options?.subDir
-        const extension = getExtension(fileName)
+        const extension = getExtension(filePath)
         const { mode = 'overwrite', timestamp = false, dirPath } = options
         const envLogsDirPath = process.env.LOGS_PATH
 
@@ -36,17 +34,17 @@ export const logToFile = async (fileName_: string, object: any, options: LogOpti
             return
         }
 
-        if (fileName.includes('/')) {
-            subDir = fileName.split('/')[0]
-            fileName = fileName.split('/')[1]
-        }
+        const relativeDirPathSegments = filePath.split('/').slice(0, -1)
+        const relativeDirPath = relativeDirPathSegments.join('/')
+        const fileName = filePath.split('/').at(-1)
 
-        const logsDirPath = dirPath ?? (subDir ? `${envLogsDirPath}/${subDir}` : envLogsDirPath)
+        const logsDirPath = envLogsDirPath + '/' + relativeDirPath
 
         if (!(await fs.existsSync(logsDirPath))) {
             fs.mkdirSync(logsDirPath, { recursive: true })
         }
         const fullPath = `${logsDirPath}/${fileName}`
+
         let contents
         if (typeof object === 'string') {
             contents = object
