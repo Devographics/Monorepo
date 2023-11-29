@@ -26,7 +26,7 @@ export const text: TemplateFunction = options => {
     const normPaths: DbPaths = {
         [DbPathsEnum.BASE]: basePath,
         [DbPathsEnum.RAW]: `${basePath}.${DbSuffixes.RAW}`,
-        [DbPathsEnum.PATTERNS]: `${basePath}.${DbSuffixes.PATTERNS}`,
+        [DbPathsEnum.METADATA]: `${basePath}.${DbSuffixes.METADATA}`,
         [DbPathsEnum.ERROR]: `${basePath}.${DbSuffixes.ERROR}`,
         [DbPathsEnum.OTHER]: `${basePath}.${DbSuffixes.NORMALIZED}`,
         [DbPathsEnum.SKIP]: `${basePath}.${DbPathsEnum.SKIP}`

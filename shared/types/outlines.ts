@@ -279,8 +279,9 @@ export enum DbSuffixes {
     FOLLOWUP_PREDEFINED = 'followup_predefined',
     FOLLOWUP_FREEFORM = 'followup_freeform',
     ERROR = 'error',
-    PATTERNS = 'patterns',
-    RAW = 'raw'
+    // PATTERNS = 'patterns',
+    RAW = 'raw',
+    METADATA = 'metadata'
 }
 
 // once a question has gone through a template it should always have an id
