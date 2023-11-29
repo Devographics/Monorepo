@@ -93,10 +93,6 @@ const Fields = (props: {
       )
     : answers;
 
-  console.log(answers);
-  console.log(filterQuery);
-  console.log(filteredAnswers);
-
   return (
     <div>
       <h3>
@@ -150,7 +146,7 @@ const Fields = (props: {
                 ) : (
                   <th>Add Token</th>
                 )}
-                <th colSpan={99}>Normalize</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>

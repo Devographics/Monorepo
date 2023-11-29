@@ -250,7 +250,8 @@ dialog article p:last-child {
   }
 }
 
-.field-row-id {
+.field-row-id,
+.field-row-actions {
   display: flex;
   align-items: center;
   gap: 5px;

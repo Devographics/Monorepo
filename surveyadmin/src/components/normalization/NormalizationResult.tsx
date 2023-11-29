@@ -31,7 +31,7 @@ export const NormalizationResult = (props: NormalizationResultProps) => {
 
   return (
     <div>
-      <p>
+      {/* <p>
         <a
           role="button"
           href="#"
@@ -42,7 +42,7 @@ export const NormalizationResult = (props: NormalizationResultProps) => {
         >
           Close
         </a>
-      </p>
+      </p> */}
       {showSummary && <NormalizationSummary {...props} />}
 
       <DocumentGroup

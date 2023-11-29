@@ -337,23 +337,24 @@ export const getBulkOperations = ({
     - a deletion followed by an insertion is more reliable. 
     **The only difference with replaceOne, is that it will change the document _id everytime we replace the normalized response**
     Computing a value that is not random (eg based on responseId) can create bugs if we create more than 1 normalized response
-    {
-      replaceOne: {
-        filter: selector,
-        replacement: modifier,
-        upsert: true,
-      },
-    }*/
+    */
         {
-          deleteOne: {
+          replaceOne: {
             filter: selector,
+            replacement: { ...modifier, _id: modifier.responseId },
+            upsert: true,
           },
         },
-        {
-          insertOne: {
-            document: { _id: newMongoId(), ...modifier },
-          },
-        },
+        // {
+        //   deleteOne: {
+        //     filter: selector,
+        //   },
+        // },
+        // {
+        //   insertOne: {
+        //     document: { _id: newMongoId(), ...modifier },
+        //   },
+        // },
       ]
     : [
         {
@@ -365,3 +366,6 @@ export const getBulkOperations = ({
         },
       ];
 };
+
+export const getDuration = (startAt, endAt) =>
+  Math.ceil((endAt.valueOf() - startAt.valueOf()) / 1000);

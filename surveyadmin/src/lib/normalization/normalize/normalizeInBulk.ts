@@ -1,5 +1,5 @@
 import { normalizeDocument } from "./normalizeDocument";
-import { getBulkOperations } from "./helpers";
+import { getBulkOperations, getDuration } from "./helpers";
 import { generateEntityRules } from "./generateEntityRules";
 import { getNormResponsesCollection } from "@devographics/mongo";
 import { fetchEntities } from "@devographics/fetch";
@@ -17,8 +17,8 @@ import {
   NormalizationResultSuccessEx,
   NormalizationResultTypes,
 } from "../types";
-import { deleteDuplicates } from "../helpers/deleteDuplicates";
 import { runPostNormalizationOperations } from "../post-normalization";
+import { NO_MATCH } from "@devographics/constants";
 
 /*
 
@@ -71,7 +71,7 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
     totalSegments &&
     Number(currentSegmentIndex) === Number(totalSegments);
 
-  await logToFile(`normalizeInBulk/${timestamp}_options.json`, options);
+  await logToFile(`normalizeInBulk/${timestamp}/options.json`, options);
 
   let progress = 0;
   const count = responses.length;
@@ -194,16 +194,32 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
   try {
     if (!isSimulation) {
       if (bulkOperations.length > 0) {
-        console.log(`-> Now starting bulk write…`);
+        await logToFile(
+          `normalizeInBulk/${timestamp}/bulkOperations.json`,
+          bulkOperations
+        );
+
+        console.log(`⛰️ Now starting bulk write…`);
+
+        const bulkStartAt = new Date();
+        const operationResult = await normResponsesCollection.bulkWrite(
+          bulkOperations,
+          { ordered: false }
+        );
+        const bulkEndAt = new Date();
 
         await logToFile(
-          `normalizeInBulk/${timestamp}_bulkOperations.json`,
-          bulkOperations
+          `normalizeInBulk/${timestamp}/operationResult.json`,
+          operationResult
         );
 
-        const operationResult = await normResponsesCollection.bulkWrite(
-          bulkOperations
+        console.log(
+          `⛰️ Bulk write finished in ${getDuration(
+            bulkStartAt,
+            bulkEndAt
+          )} seconds (${bulkOperations.length} operations)`
         );
+
         // console.log("// operationResult");
         // console.log(operationResult);
 
@@ -221,8 +237,8 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
   }
 
   const endAt = new Date();
-  const duration = Math.ceil((endAt.valueOf() - startAt.valueOf()) / 1000);
   // duration in seconds
+  const duration = getDuration(startAt, endAt);
   mutationResult.duration = duration;
 
   /*
@@ -239,10 +255,12 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
     } else if (doc.errors && doc.errors.length > 0) {
       group = DocumentGroups.ERROR;
     } else {
-      if (doc.normalizedFields?.some((field) => field.raw)) {
+      if (doc.normalizedFields?.some((field) => field.metadata)) {
         // doc has normalizable fields that contain an answer
         if (
-          doc.normalizedFields?.every((field) => field.normTokens.length > 0)
+          doc.normalizedFields?.every(
+            (field) => field.value.length > 0 && !field.value.includes(NO_MATCH)
+          )
         ) {
           // every question has had a match
           group = DocumentGroups.NORMALIZED;
@@ -268,18 +286,19 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
   mutationResult.totalDocumentCount = allDocuments.length;
 
   await logToFile(
-    `normalizeInBulk/${timestamp}_allDocuments.json`,
+    `normalizeInBulk/${timestamp}/allDocuments.json`,
     allDocuments
   );
   await logToFile(
-    `normalizeInBulk/${timestamp}_mutationResult.json`,
+    `normalizeInBulk/${timestamp}/mutationResult.json`,
     mutationResult
   );
 
   console.log(
-    `👍 Normalized ${progress - mutationResult.discardedCount} responses ${mutationResult.discardedCount > 0
-      ? `(${mutationResult.discardedCount} responses discarded)`
-      : ""
+    `👍 Normalized ${progress - mutationResult.discardedCount} responses ${
+      mutationResult.discardedCount > 0
+        ? `(${mutationResult.discardedCount} responses discarded)`
+        : ""
     }. (${endAt}) - ${duration}s`
   );
 

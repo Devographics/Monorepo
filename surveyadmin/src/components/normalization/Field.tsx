@@ -102,51 +102,53 @@ export const Field = ({
             </td> */}
 
         <td>
-          <button
-            onClick={() => {
-              setShowManualInput(!showManualInput);
-            }}
-            data-tooltip="Manually enter normalization tokens"
-          >
-            ✏️
-          </button>
-          {showManualInput && (
-            <Dialog
-              showModal={showManualInput}
-              setShowModal={setShowManualInput}
-              header={<span>Manual Input</span>}
-            >
-              <ManualInput
-                survey={survey}
-                edition={edition}
-                question={question}
-                questionData={questionData}
-                responseId={responseId}
-                normRespId={_id}
-                rawValue={raw}
-                rawPath={rawPath}
-                tokens={tokens}
-                entities={entities}
-                addCustomNormalization={addCustomNormalization}
-              />
-            </Dialog>
-          )}
-        </td>
-        <td>
-          <LoadingButton
-            action={async () => {
-              const result = await normalizeQuestionResponses({
-                questionId,
-                surveyId,
-                editionId,
-                responsesIds: [responseId],
-              });
-              setResult(result.data);
-              console.log(result);
-            }}
-            label="🔄"
-            tooltip="Renormalize this answer"
-          />
+          <div className="field-row-actions">
+            <div>
+              <button
+                onClick={() => {
+                  setShowManualInput(!showManualInput);
+                }}
+                data-tooltip="Manually enter normalization tokens"
+              >
+                ✏️
+              </button>
+              {showManualInput && (
+                <Dialog
+                  showModal={showManualInput}
+                  setShowModal={setShowManualInput}
+                  header={<span>Manual Input</span>}
+                >
+                  <ManualInput
+                    survey={survey}
+                    edition={edition}
+                    question={question}
+                    questionData={questionData}
+                    responseId={responseId}
+                    normRespId={_id}
+                    rawValue={raw}
+                    rawPath={rawPath}
+                    tokens={tokens}
+                    entities={entities}
+                    addCustomNormalization={addCustomNormalization}
+                  />
+                </Dialog>
+              )}
+            </div>
+            <LoadingButton
+              action={async () => {
+                const result = await normalizeQuestionResponses({
+                  questionId,
+                  surveyId,
+                  editionId,
+                  responsesIds: [responseId],
+                });
+                setResult(result.data);
+                console.log(result);
+              }}
+              label="🔄"
+              tooltip="Renormalize this answer"
+            />
+          </div>
         </td>
       </tr>
       {result && showResult && (
