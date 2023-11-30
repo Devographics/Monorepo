@@ -24,7 +24,7 @@ export const others: TemplateFunction = options => {
     const normPaths: DbPaths = {
         base: basePath,
         raw: `${basePath}.${DbSuffixes.RAW}`,
-        patterns: `${basePath}.${DbSuffixes.PATTERNS}`,
+        metadata: `${basePath}.${DbSuffixes.METADATA}`,
         error: `${basePath}.${DbSuffixes.ERROR}`,
         other: `${basePath}.${DbSuffixes.NORMALIZED}`,
         skip: `${basePath}.${DbPathsEnum.SKIP}`

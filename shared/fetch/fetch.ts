@@ -35,7 +35,7 @@ function removeNull(obj: any): any {
         Object.entries(obj)
             .map(([k, v]) => [k, v === Object(v) ? removeNull(v) : v])
             .filter(([_, v]) => v != null)
-        // we keep empty objects around 
+        // we keep empty objects around
         // otherwise "data" type  (empty objects are objects)
         // or boolean casts (empty objects are truthy)
         // might become inconsistent
@@ -218,9 +218,8 @@ export async function getFromCache<T = any>({
         if (inMemory) {
             result = setResultSource(result, SourceType.MEMORY)
         } else {
-            await logToFile(`${key}.json`, result, {
-                mode: 'overwrite',
-                subDir: 'fetch'
+            await logToFile(`fetch/${key}.json`, result, {
+                mode: 'overwrite'
             })
         }
 

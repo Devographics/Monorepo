@@ -9,7 +9,6 @@ export type LogOptions = {
     mode?: 'append' | 'overwrite'
     timestamp?: boolean
     dirPath?: string
-    subDir?: string
 }
 
 async function exists(path: string) {
