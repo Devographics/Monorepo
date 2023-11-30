@@ -1,43 +1,11 @@
 "use client";
 import { useState } from "react";
-import {
-  EditionMetadata,
-  ResponseData,
-  SurveyMetadata,
-  Entity,
-} from "@devographics/types";
-import { NormalizationResponse } from "~/lib/normalization/hooks";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
-import type { QuestionWithSection } from "~/lib/normalization/types";
-import { getFormPaths } from "@devographics/templates";
-import {
-  getAllResponsesSelector,
-  getResponsesSelector,
-  getUnnormalizedResponsesSelector,
-} from "~/lib/normalization/helpers/getSelectors";
 import Dialog from "./Dialog";
+import { ActionProps } from "./NormalizeQuestionActions";
 
-const Tokens = ({
-  survey,
-  edition,
-  question,
-  responsesCount,
-  responses,
-  normalizedResponses,
-  unnormalizedResponses,
-  questionData,
-  entities,
-}: {
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-  question: QuestionWithSection;
-  responsesCount: number;
-  responses: NormalizationResponse[];
-  normalizedResponses: NormalizationResponse[];
-  unnormalizedResponses: NormalizationResponse[];
-  questionData: ResponseData;
-  entities: Entity[];
-}) => {
+type TokensProps = ActionProps;
+const Tokens = ({ survey, edition, question, entities }: TokensProps) => {
   const [showTokens, setShowTokens] = useState(false);
 
   const questionObject = getQuestionObject({

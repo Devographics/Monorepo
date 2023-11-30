@@ -7,16 +7,22 @@ import { NormalizationResult } from "./NormalizationResult";
 import NormToken from "./NormToken";
 import { Entity } from "@devographics/types";
 import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
-import { ResponseId } from "./Fields";
+import { AnswersProps, ResponseId } from "./Answers";
 import FieldValue from "./FieldValue";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
 import Presets from "./Presets";
 
-export const Field = ({
-  _id,
-  responseId,
-  raw,
-  tokens,
+export interface AnswerProps extends AnswersProps {
+  rawPath: string;
+  answer: IndividualAnswer;
+  index: number;
+  letterHeading?: string;
+  entities: Entity[];
+  responses: NormalizationResponse[];
+}
+
+export const Answer = ({
+  answer,
   question,
   survey,
   edition,
@@ -26,11 +32,8 @@ export const Field = ({
   index,
   letterHeading,
   responses,
-}: IndividualAnswer & {
-  letterHeading: string;
-  entities: Entity[];
-  responses: NormalizationResponse[];
-}) => {
+}: AnswerProps) => {
+  const { _id, responseId, raw, tokens } = answer;
   const [result, setResult] = useState<NormalizeInBulkResult>();
   const [showResult, setShowResult] = useState(true);
   const surveyId = survey.id;
@@ -70,15 +73,12 @@ export const Field = ({
           <FieldValue raw={raw} tokens={tokens} />
         </td>
         <td>
-          {!tokens ? (
-            <Presets {...presetsProps} />
-          ) : (
-            <div>
-              {tokens.map((token) => (
-                <NormToken key={token.id} id={token.id} responses={responses} />
-              ))}
-            </div>
-          )}
+          {tokens?.map((token) => (
+            <NormToken key={token.id} id={token.id} responses={responses} />
+          ))}
+        </td>
+        <td>
+          <Presets {...presetsProps} />
         </td>
 
         <td>

@@ -1,41 +1,19 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useState } from "react";
 import { Segment, SegmentDone, defaultSegmentSize, statuses } from "./hooks";
 import {
   normalizeEdition,
   normalizeQuestion,
 } from "~/lib/normalization/services";
-import { NormalizeInBulkResult } from "~/lib/normalization/types";
-import {
-  EditionMetadata,
-  QuestionMetadata,
-  SurveyMetadata,
-} from "@devographics/types";
 import {
   NormalizationResult,
   NormalizationSummary,
 } from "./NormalizationResult";
 import { useDidMountEffect } from "../hooks";
+import { CommonProps, SegmentProps } from "./NormalizeQuestion";
 
 const Loading = () => <span aria-busy={true} />;
 
-interface ProgressProps {
-  responsesCount: number;
-  doneCount: number;
-  enabled: boolean;
-  setEnabled: Dispatch<SetStateAction<boolean>>;
-  segments: Segment[];
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-  question?: QuestionMetadata;
-  onlyUnnormalized?: boolean;
-  updateSegments: any;
-}
+type ProgressProps = CommonProps & SegmentProps;
 
 const Progress = (props: ProgressProps) => {
   const { responsesCount, doneCount, enabled, setEnabled, segments } = props;
@@ -159,6 +137,7 @@ const SegmentInProgressItem = ({
   segments,
 }: Segment &
   ProgressProps & {
+    onlyUnnormalized?: boolean;
     segmentIndex: number;
     responsesCount: number;
   }) => {
@@ -189,7 +168,7 @@ const SegmentInProgressItem = ({
         updateSegments({
           doneCount,
           doneSegmentIndex: segmentIndex,
-          doneSegmentData: result?.data,
+          doneSegmentData: result?.data!,
           segmentSize: defaultSegmentSize,
         });
       };

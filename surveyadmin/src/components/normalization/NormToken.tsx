@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
-import { ResponseId } from "./Fields";
+import { ResponseId } from "./Answers";
 import Dialog from "./Dialog";
 import { FieldValue } from "./FieldValue";
 import { splitResponses } from "~/lib/normalization/helpers/splitResponses";

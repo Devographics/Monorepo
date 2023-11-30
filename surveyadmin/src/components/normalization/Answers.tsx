@@ -1,43 +1,26 @@
 "use client";
 import { useState } from "react";
-import {
-  EditionMetadata,
-  ResponseData,
-  SurveyMetadata,
-} from "@devographics/types";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
-import type { QuestionWithSection } from "~/lib/normalization/types";
 import { getFormPaths } from "@devographics/templates";
 import { useCopy } from "../hooks";
-import { Entity } from "@devographics/types";
-import { CustomNormalizations } from "./NormalizeQuestion";
+import { CommonProps } from "./NormalizeQuestion";
 import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
 import sortBy from "lodash/sortBy";
-import { Field } from "./Field";
-import { NormalizationResponse } from "~/lib/normalization/hooks";
+import { Answer } from "./Answer";
 import trim from "lodash/trim";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const combineValue = (value: string | string[]) =>
-  Array.isArray(value) ? value.join() : value;
-
 const getPercent = (a, b) => Math.round((a / b) * 100);
 
-const Fields = (props: {
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-  question: QuestionWithSection;
-  responsesCount: number;
-  responses: NormalizationResponse[];
+export interface AnswersProps extends CommonProps {
   allAnswers: IndividualAnswer[];
-  questionData: ResponseData;
   variant: "normalized" | "unnormalized";
-  entities: Entity[];
-  customNormalizations: CustomNormalizations;
-}) => {
+}
+
+const Answers = (props: AnswersProps) => {
   const [showResponses, setShowResponses] = useState(false);
   const [showIds, setShowIds] = useState(false);
   const [filterQuery, setFilterQuery] = useState("");
@@ -54,11 +37,11 @@ const Fields = (props: {
     entities,
   } = props;
 
-  const answers = sortBy(props[`${variant}Answers`], (a) =>
+  const sortedAnswers = sortBy(props[`${variant}Answers`], (a) =>
     trim(a.raw.toLowerCase().replaceAll('"', ""))
   ) as IndividualAnswer[];
 
-  if (!answers) return <p>Nothing to normalize</p>;
+  if (!sortedAnswers) return <p>Nothing to normalize</p>;
 
   const questionObject = getQuestionObject({
     survey,
@@ -67,33 +50,31 @@ const Fields = (props: {
     question,
   })!;
   const formPaths = getFormPaths({ edition, question: questionObject });
+  const rawPath = formPaths?.other;
+  if (!rawPath)
+    return (
+      <p>
+        Missing <code>rawPath</code>
+      </p>
+    );
 
-  const fieldProps = {
-    answers,
-    showIds,
-    question,
-    survey,
-    edition,
-    questionData,
-    rawPath: formPaths?.other,
-    variant,
-    entities,
-    filterQuery,
-    responses,
+  const answerProps = {
+    ...props,
+    rawPath,
   };
 
   const filteredAnswers = filterQuery
-    ? answers.filter((a) =>
+    ? sortedAnswers.filter((a) =>
         a.raw.toLowerCase().includes(filterQuery.toLowerCase())
       )
-    : answers;
+    : sortedAnswers;
 
   return (
     <div>
       <h3>
         {capitalizeFirstLetter(variant)} Responses (
-        {getPercent(answers.length, allAnswers.length)}% – {answers.length}/
-        {allAnswers.length}){" "}
+        {getPercent(sortedAnswers.length, allAnswers.length)}% –{" "}
+        {sortedAnswers.length}/{allAnswers.length}){" "}
         <a
           href="#"
           role="button"
@@ -136,33 +117,30 @@ const Fields = (props: {
               <tr>
                 <th></th>
                 <th>Answer</th>
-                {variant === "normalized" ? (
-                  <th>Normalized Tokens</th>
-                ) : (
-                  <th>Add Token</th>
-                )}
+                <th>Current Tokens</th>
+                <th>Add Tokens</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filteredAnswers.map((individualAnswer, index) => {
-                const { _id, responseId, raw, tokens } = individualAnswer;
+              {filteredAnswers.map((answer, index) => {
+                const { _id, responseId, raw, tokens } = answer;
                 const previousRawValue = filteredAnswers[index - 1]?.raw;
                 // show letter heading if this value's first letter is different from previous one
                 const showLetterHeading = previousRawValue
                   ? raw?.[0].toUpperCase() !==
                     previousRawValue?.[0].toUpperCase()
                   : true;
+
                 return (
-                  <Field
+                  <Answer
                     key={raw + index}
-                    _id={_id}
-                    raw={raw}
-                    tokens={tokens}
-                    responseId={responseId}
+                    answer={answer}
                     index={index}
-                    letterHeading={showLetterHeading && raw?.[0].toUpperCase()}
-                    {...fieldProps}
+                    {...(showLetterHeading
+                      ? { letterHeading: raw?.[0].toUpperCase() }
+                      : {})}
+                    {...answerProps}
                   />
                 );
               })}
@@ -184,4 +162,4 @@ export const ResponseId = ({ id }: { id: string }) => {
     </code>
   );
 };
-export default Fields;
+export default Answers;

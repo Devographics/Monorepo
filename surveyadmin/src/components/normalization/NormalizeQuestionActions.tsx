@@ -17,20 +17,14 @@ import { InitializeSegmentsOptions, defaultSegmentSize } from "./hooks";
 import LoadingButton from "../LoadingButton";
 import Metadata from "./Metadata";
 import Tokens from "./Tokens";
+import { CommonProps, SegmentProps } from "./NormalizeQuestion";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
 
-interface ActionProps {
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-  question: QuestionMetadata;
-  initializeSegments: (options: InitializeSegmentsOptions) => void;
-  responses: NormalizationResponse[];
-  responsesCount: number;
-}
+export type ActionProps = CommonProps & SegmentProps;
 
-const Actions = (props) => {
+const Actions = (props: ActionProps) => {
   const {
     survey,
     edition,
