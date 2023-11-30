@@ -69,7 +69,15 @@ export const getQuestionResponses = async ({
 
   const { data: allEntities, duration: fetchEntitiesDuration } =
     await fetchEntities({ shouldGetFromCache });
-  const entities = allEntities.map((e) => pick(e, ["id", "patterns", "tags"]));
+
+  // limit entities to the ones that are included in the question's matchTags
+  const entities = allEntities
+    .filter((e) =>
+      e.tags?.some((tag) =>
+        [question.id, ...(question?.matchTags || [])]?.includes(tag)
+      )
+    )
+    .map((e) => pick(e, ["id", "patterns", "tags", "descriptionClean"]));
 
   return {
     responsesCount,

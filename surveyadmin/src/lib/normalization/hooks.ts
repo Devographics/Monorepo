@@ -49,3 +49,15 @@ export const useQuestionResponses = (params: {
   );
   return { data: data?.data, loading: isLoading, error: data?.error };
 };
+
+export const useQuestionData = (params: {
+  surveyId: string;
+  editionId: string;
+  questionId: string;
+}) => {
+  const { data, error, isLoading } = useSWR<ApiData<ResponsesData>>(
+    apiRoutes.normalization.loadQuestionData.href(params),
+    basicFetcher
+  );
+  return { data: data?.data, loading: isLoading, error: data?.error };
+};

@@ -9,6 +9,7 @@ import {
   NormalizationProgressStats,
 } from "./actions";
 import { NormalizeInBulkResult } from "./types";
+import { GetQuestionDataArgs } from "./actions/getQuestionData";
 
 // export async function loadFields({ surveyId, editionId, questionId }) {
 //   const fetchRes = await fetch(
@@ -118,6 +119,22 @@ export async function loadNormalizationPercentages(
 ) {
   const fetchRes = await fetch(
     apiRoutes.normalization.loadNormalizationPercentages.href(params),
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // body: JSON.stringify(params),
+    }
+  );
+  const result: { data?: NormalizationProgressStats; error: any } =
+    await fetchRes.json();
+  return result;
+}
+
+export async function loadQuestionData(params: GetQuestionDataArgs) {
+  const fetchRes = await fetch(
+    apiRoutes.normalization.loadQuestionData.href(params),
     {
       method: "GET",
       headers: {

@@ -15,6 +15,7 @@ import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
 import sortBy from "lodash/sortBy";
 import { Field } from "./Field";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
+import trim from "lodash/trim";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -36,7 +37,6 @@ const Fields = (props: {
   variant: "normalized" | "unnormalized";
   entities: Entity[];
   customNormalizations: CustomNormalizations;
-  addCustomNormalization: (CustomNormalization) => void;
 }) => {
   const [showResponses, setShowResponses] = useState(false);
   const [showIds, setShowIds] = useState(false);
@@ -52,13 +52,10 @@ const Fields = (props: {
     questionData,
     variant,
     entities,
-    customNormalizations,
-    addCustomNormalization,
   } = props;
 
-  const answers = sortBy(
-    props[`${variant}Answers`],
-    (a) => a.raw
+  const answers = sortBy(props[`${variant}Answers`], (a) =>
+    trim(a.raw.toLowerCase().replaceAll('"', ""))
   ) as IndividualAnswer[];
 
   if (!answers) return <p>Nothing to normalize</p>;
@@ -82,8 +79,6 @@ const Fields = (props: {
     variant,
     entities,
     filterQuery,
-    customNormalizations,
-    addCustomNormalization,
     responses,
   };
 

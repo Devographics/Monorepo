@@ -128,7 +128,7 @@ const ManualInput = ({
             <td>
               <div>
                 <ul className="manualinput-presets">
-                  {entityIds.map((id) => (
+                  {entityIds.sort().map((id) => (
                     <Preset
                       key={id}
                       id={id}
@@ -137,17 +137,20 @@ const ManualInput = ({
                       addEntityId={addEntityId}
                     />
                   ))}
-                  {localPresets.map((id) => (
-                    <Preset
-                      key={id}
-                      id={id}
-                      value={value}
-                      setValue={setValue}
-                      isLocal={true}
-                      addEntityId={addEntityId}
-                      handleDeletePreset={handleDeletePreset}
-                    />
-                  ))}
+                  {localPresets
+                    .sort()
+                    .filter((id) => !entityIds.includes(id))
+                    .map((id) => (
+                      <Preset
+                        key={id}
+                        id={id}
+                        value={value}
+                        setValue={setValue}
+                        isLocal={true}
+                        addEntityId={addEntityId}
+                        handleDeletePreset={handleDeletePreset}
+                      />
+                    ))}
                 </ul>
               </div>
               <p>
@@ -239,7 +242,7 @@ const ManualInput = ({
   );
 };
 
-const Preset = ({
+export const Preset = ({
   id,
   value,
   setValue,

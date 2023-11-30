@@ -21,6 +21,10 @@ export const apiRoutes = {
       href: (params) =>
         `/api/normalization/loadQuestionResponses?${encodeParams(params)}`,
     },
+    loadQuestionData: {
+      href: (params) =>
+        `/api/normalization/loadQuestionData?${encodeParams(params)}`,
+    },
     normalizeQuestion: {
       href: (params) => `/api/normalization/normalizeQuestion`,
     },

@@ -68,17 +68,18 @@ export const getNormalizationPercentages = async (
         const { normalizationResponses } = data;
 
         if (normalizationResponses) {
-          const { normalizedResponses, unnormalizedResponses } = splitResponses(
-            normalizationResponses
-          );
+          const { allAnswers, normalizedAnswers, unnormalizedAnswers } =
+            splitResponses(normalizationResponses);
+
+          const totalCount = allAnswers.length;
+          const normalizedCount = normalizedAnswers.length;
+          const unnormalizedCount = unnormalizedAnswers.length;
 
           stats[question.id] = {
-            totalCount: normalizationResponses.length,
-            normalizedCount: normalizedResponses.length,
-            unnormalizedCount: unnormalizedResponses.length,
-            percentage: Math.round(
-              (normalizedResponses.length * 100) / normalizationResponses.length
-            ),
+            totalCount,
+            normalizedCount,
+            unnormalizedCount,
+            percentage: Math.round((normalizedCount * 100) / totalCount),
           };
         }
       }

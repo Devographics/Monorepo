@@ -4,14 +4,13 @@ import { normalizeQuestionResponses } from "~/lib/normalization/services";
 import { LoadingButton } from "../LoadingButton";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
-import ManualInput from "./ManualInput";
 import NormToken from "./NormToken";
-import Dialog from "./Dialog";
 import { Entity } from "@devographics/types";
 import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
 import { ResponseId } from "./Fields";
 import FieldValue from "./FieldValue";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
+import Presets from "./Presets";
 
 export const Field = ({
   _id,
@@ -25,8 +24,6 @@ export const Field = ({
   rawPath,
   entities,
   index,
-  customNormalizations,
-  addCustomNormalization,
   letterHeading,
   responses,
 }: IndividualAnswer & {
@@ -35,20 +32,23 @@ export const Field = ({
   responses: NormalizationResponse[];
 }) => {
   const [result, setResult] = useState<NormalizeInBulkResult>();
-  const [showManualInput, setShowManualInput] = useState<boolean>(false);
-  const [showEntities, setShowEntities] = useState<boolean>(false);
   const [showResult, setShowResult] = useState(true);
   const surveyId = survey.id;
   const editionId = edition.id;
   const questionId = question.id;
 
-  let customNormalizedValue = customNormalizations[responseId];
-  if (customNormalizedValue) {
-    // if there a custom tokens, remove any that was already included
-    customNormalizedValue = customNormalizedValue.filter(
-      (v) => !tokens?.map((t) => t.id)?.includes(v)
-    );
-  }
+  const presetsProps = {
+    survey,
+    edition,
+    question,
+    questionData,
+    responseId,
+    normRespId: _id,
+    rawValue: raw,
+    rawPath,
+    tokens,
+    entities,
+  };
 
   return (
     <>
@@ -71,7 +71,7 @@ export const Field = ({
         </td>
         <td>
           {!tokens ? (
-            <span>*manual norm input*</span>
+            <Presets {...presetsProps} />
           ) : (
             <div>
               {tokens.map((token) => (
@@ -81,59 +81,8 @@ export const Field = ({
           )}
         </td>
 
-        {/* <td>
-              <button
-                onClick={() => {
-                  setShowEntities(!showEntities);
-                }}
-                data-tooltip="Add or edit entities"
-              >
-                Edit&nbsp;Entities
-              </button>
-              {showEntities && (
-                <Dialog
-                  showModal={showEntities}
-                  setShowModal={setShowEntities}
-                  header={<span>Add/Edit Entities</span>}
-                >
-                  <EntityInput value={value} entities={entities} />
-                </Dialog>
-              )}
-            </td> */}
-
         <td>
           <div className="field-row-actions">
-            <div>
-              <button
-                onClick={() => {
-                  setShowManualInput(!showManualInput);
-                }}
-                data-tooltip="Manually enter normalization tokens"
-              >
-                ✏️
-              </button>
-              {showManualInput && (
-                <Dialog
-                  showModal={showManualInput}
-                  setShowModal={setShowManualInput}
-                  header={<span>Manual Input</span>}
-                >
-                  <ManualInput
-                    survey={survey}
-                    edition={edition}
-                    question={question}
-                    questionData={questionData}
-                    responseId={responseId}
-                    normRespId={_id}
-                    rawValue={raw}
-                    rawPath={rawPath}
-                    tokens={tokens}
-                    entities={entities}
-                    addCustomNormalization={addCustomNormalization}
-                  />
-                </Dialog>
-              )}
-            </div>
             <LoadingButton
               action={async () => {
                 const result = await normalizeQuestionResponses({

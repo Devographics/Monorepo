@@ -63,8 +63,6 @@ export const Normalization = ({
   // console.log(durations);
 
   const cacheKey = `custom_normalizations__${edition.id}__${question.id}`;
-  const [customNormalizations, setCustomNormalizations] =
-    useLocalStorage<CustomNormalizations>(cacheKey, {});
 
   const questionData = questionResult?.data;
 
@@ -76,17 +74,6 @@ export const Normalization = ({
     setEnabled,
     segments,
   } = useSegments();
-
-  const addCustomNormalization = ({
-    responseId,
-    tokens,
-  }: CustomNormalization) => {
-    const newTokens = [...(customNormalizations[responseId] || []), ...tokens];
-    setCustomNormalizations({
-      ...customNormalizations,
-      [responseId]: newTokens,
-    });
-  };
 
   const props = {
     responsesCount,
@@ -102,15 +89,13 @@ export const Normalization = ({
     segments,
     questionData,
     entities,
-    customNormalizations,
-    addCustomNormalization,
   };
 
   return (
     <div className="admin-normalization admin-content">
       <Actions {...props} />
       {segments.length > 0 && <Progress {...props} />}
-      <QuestionData questionData={questionData} responses={responses} />
+      <QuestionData {...props} />
       {responses ? (
         <AllFields {...props} />
       ) : (

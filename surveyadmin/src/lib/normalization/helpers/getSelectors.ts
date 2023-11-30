@@ -140,7 +140,7 @@ export const getAllResponsesSelector = ({
     return selector;
   } else {
     throw new Error(
-      `getAllResponsesSelector: Missing rawFieldPath or normalizedFieldPath for question ${questionObject.id}`
+      `getAllResponsesSelector: Missing metadataFieldPath or normalizedFieldPath for question ${questionObject.id}`
     );
   }
 };
