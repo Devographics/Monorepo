@@ -197,16 +197,18 @@
     margin: 0;
   }
 }
-thead {
-  position: sticky;
-  top: 0;
-  th {
-    background: white;
-    margin-bottom: 0;
-    border: 0;
+.normalization-table {
+  thead {
+    position: sticky;
+    top: 0;
+    th {
+      background: white;
+      margin-bottom: 0;
+      border: 0;
+    }
+    z-index: 1;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
   }
-  z-index: 1;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
 }
 .letter-heading {
   background: var(--code-background-color);
@@ -270,4 +272,8 @@ dialog article p:last-child {
   display: flex;
   align-items: center;
   gap: 5px;
+}
+
+h6 {
+  margin-bottom: 5px !important;
 }

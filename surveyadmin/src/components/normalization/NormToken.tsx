@@ -4,6 +4,7 @@ import { ResponseId } from "./Answers";
 import Dialog from "./Dialog";
 import { FieldValue } from "./FieldValue";
 import { splitResponses } from "~/lib/normalization/helpers/splitResponses";
+import { Entity } from "@devographics/types";
 
 interface NormTokenProps {
   id: string;
@@ -14,6 +15,7 @@ interface NormTokenProps {
   removeToken?: (string) => void;
   isCustom?: boolean;
   isIncluded?: boolean;
+  entities: Entity[];
 }
 
 const NormToken = ({
@@ -24,8 +26,10 @@ const NormToken = ({
   addToken,
   removeToken,
   isCustom = false,
-  isIncluded = false,
+  entities,
 }: NormTokenProps) => {
+  const entity = entities.find((e) => e.id === id);
+
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -35,8 +39,10 @@ const NormToken = ({
     a?.tokens.map((t) => t.id)?.includes(id)
   );
 
-  let actionComponent = <Default setShowModal={setShowModal} id={id} />;
-  if (isCustom && addToken && removeToken && !isIncluded) {
+  let actionComponent = (
+    <Default setShowModal={setShowModal} id={id} entity={entity} />
+  );
+  if (isCustom && addToken && removeToken) {
     const actionProps = {
       loading,
       setLoading,
@@ -44,6 +50,7 @@ const NormToken = ({
       id,
       addToken,
       removeToken,
+      entity,
     };
     if (action === "add") {
       actionComponent = <AddToken {...actionProps} />;
@@ -55,7 +62,7 @@ const NormToken = ({
   return (
     <>
       <span
-        style={{ opacity: isIncluded ? 0.5 : 1 }}
+        style={{ opacity: action === "add" ? 0.5 : 1 }}
         className={isCustom ? `normalization-token-custom` : ""}
       >
         {actionComponent}
@@ -109,9 +116,11 @@ const NormToken = ({
 const Default = ({
   setShowModal,
   id,
+  entity,
 }: {
   setShowModal: Dispatch<SetStateAction<boolean>>;
   id: string;
+  entity?: Entity;
 }) => {
   return (
     <code
@@ -119,7 +128,7 @@ const Default = ({
         e.preventDefault();
         setShowModal(true);
       }}
-      data-tooltip="View Matching Answers…"
+      data-tooltip={entity?.descriptionClean}
     >
       {id}
     </code>
@@ -133,6 +142,7 @@ interface ActionProps {
   setLoading: Dispatch<SetStateAction<boolean>>;
   addToken: (string) => void;
   removeToken: (string) => void;
+  entity?: Entity;
 }
 
 const AddToken = ({
@@ -141,6 +151,7 @@ const AddToken = ({
   setShowModal,
   addToken,
   id,
+  entity,
 }: ActionProps) => {
   return (
     <code
@@ -152,7 +163,7 @@ const AddToken = ({
           e.preventDefault();
           setShowModal(true);
         }}
-        data-tooltip="View Matching Answers…"
+        data-tooltip={entity?.descriptionClean}
       >
         {id}
       </span>
@@ -178,6 +189,7 @@ const RemoveToken = ({
   setShowModal,
   removeToken,
   id,
+  entity,
 }: ActionProps) => {
   return (
     <code
@@ -189,7 +201,7 @@ const RemoveToken = ({
           e.preventDefault();
           setShowModal(true);
         }}
-        data-tooltip="View Matching Answers…"
+        data-tooltip={entity?.descriptionClean}
       >
         {id}
       </span>

@@ -62,20 +62,28 @@ export const removeManualNormalizations = async (
 
   const customNormalizations: CustomNormalizationDefinition[] =
     response.customNormalizations || [];
-  const existingNormalizationDefinition = customNormalizations.find(
+  const existingNormDefIndex = customNormalizations.findIndex(
     (n) => n.rawPath === rawPath
   );
-  if (existingNormalizationDefinition) {
+  const existingNormDef = customNormalizations[existingNormDefIndex];
+
+  if (existingNormDef) {
     // if a custom norm. definition already exists for this field, remove tokens from it
-    existingNormalizationDefinition.tokens = without(
-      existingNormalizationDefinition.tokens,
-      ...tokens
-    );
+    existingNormDef.tokens = without(existingNormDef.tokens, ...tokens);
+
+    // if there are no more tokens, remove the entire normalization definition
+    if (existingNormDef.tokens.length === 0) {
+      customNormalizations.splice(existingNormDefIndex, 1);
+    }
 
     const selector = { _id: responseId };
-    const operation = {
-      $set: { customNormalizations },
-    };
+    // if there are no more customNormalizations, unset the whole field
+    const operation =
+      customNormalizations.length === 0
+        ? { $unset: { customNormalizations: 1 } }
+        : {
+            $set: { customNormalizations },
+          };
     const updateResult = await rawResponsesCollection.updateOne(
       selector,
       operation

@@ -9,7 +9,7 @@ import sortBy from "lodash/sortBy";
 import { Answer } from "./Answer";
 import trim from "lodash/trim";
 import Dialog from "./Dialog";
-import { AllPresets } from "./AllPresets";
+import { PresetsShortlist } from "./PresetsShortlist";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -19,17 +19,17 @@ const getPercent = (a, b) => Math.round((a / b) * 100);
 
 export interface AnswersProps extends CommonProps {
   allAnswers: IndividualAnswer[];
-  variant: "normalized" | "unnormalized";
+  variant: "normalized" | "unnormalized" | "discarded";
 }
 
 const Answers = (props: AnswersProps) => {
   const [showResponses, setShowResponses] = useState(false);
   const [showIds, setShowIds] = useState(false);
   const [filterQuery, setFilterQuery] = useState("");
-  const [showAllPresets, setShowAllPresets] = useState(false);
+  const [showShortlist, setShowShortlist] = useState(false);
 
-  const showAllPresetsModal = () => {
-    setShowAllPresets(true);
+  const showPresetsShortlistModal = () => {
+    setShowShortlist(true);
   };
 
   const {
@@ -67,7 +67,7 @@ const Answers = (props: AnswersProps) => {
 
   const answerProps = {
     ...props,
-    showAllPresetsModal,
+    showPresetsShortlistModal,
     rawPath,
   };
 
@@ -108,14 +108,17 @@ const Answers = (props: AnswersProps) => {
             </p>
           )}
 
-          <table>
+          <table className="normalization-table">
             <thead>
               <tr>
                 <th colSpan={99}>
                   <div className="normalization-filter">
                     <label htmlFor="search">
-                      Filter {capitalizeFirstLetter(variant)} Responses: (
-                      {filteredAnswers.length} results)
+                      Filter{" "}
+                      <strong>
+                        {capitalizeFirstLetter(variant)} Responses
+                      </strong>
+                      : ({filteredAnswers.length} results)
                     </label>
                     <input
                       type="search"
@@ -127,33 +130,33 @@ const Answers = (props: AnswersProps) => {
                 </th>
               </tr>
               <tr>
-                <th></th>
+                <th>Response ID</th>
                 <th>Answer</th>
                 <th>
-                  <span>Add Tokens</span>
+                  <span>Tokens</span>
                   &nbsp;
                   <a
                     href="#"
                     style={{ whiteSpace: "nowrap" }}
                     onClick={(e) => {
                       e.preventDefault();
-                      setShowAllPresets(!showAllPresets);
+                      setShowShortlist(!showShortlist);
                     }}
                     data-tooltip="Edit presets…"
                   >
                     Edit Shortlist…
                   </a>
-                  {showAllPresets && (
+                  {showShortlist && (
                     <Dialog
-                      showModal={showAllPresets}
-                      setShowModal={setShowAllPresets}
+                      showModal={showShortlist}
+                      setShowModal={setShowShortlist}
                       header={<span>Token Presets</span>}
                     >
-                      <AllPresets {...props} />
+                      <PresetsShortlist {...props} />
                     </Dialog>
                   )}
                 </th>
-                <th>Current Tokens</th>
+                {/* <th>Current Tokens</th> */}
 
                 <th>Actions</th>
               </tr>

@@ -118,19 +118,24 @@ export interface CommonProps extends NormalizationProps {
 }
 
 const AllAnswers = (props: CommonProps) => {
-  const { allAnswers, normalizedAnswers, unnormalizedAnswers } = splitResponses(
-    props.responses
-  );
+  const {
+    allAnswers,
+    normalizedAnswers,
+    unnormalizedAnswers,
+    discardedAnswers,
+  } = splitResponses(props.responses);
   const fieldsProps = {
     ...props,
     allAnswers,
     normalizedAnswers,
     unnormalizedAnswers,
+    discardedAnswers,
   };
   return (
     <>
       <Answers {...fieldsProps} variant="normalized" />
       <Answers {...fieldsProps} variant="unnormalized" />
+      <Answers {...fieldsProps} variant="discarded" />
     </>
   );
 };

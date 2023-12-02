@@ -21,7 +21,7 @@ import {
 } from "@devographics/types";
 import { getFieldsToCopy } from "./steps";
 import { prefixWithEditionId } from "@devographics/templates";
-import { NO_MATCH } from "@devographics/constants";
+import { NO_MATCH, DISCARDED_ANSWER } from "@devographics/constants";
 import compact from "lodash/compact";
 import pick from "lodash/pick";
 import uniq from "lodash/uniq";
@@ -235,8 +235,10 @@ export const normalizeField = async ({
                 item.tokens = tokens.map((t) => pick(t, ["id", "pattern"]));
 
                 // only add token ids that are not already in the normalizedIds array
+                // and also exclude "DISCARDED_ANSWER" special tokens
                 const normalizedIdsToAdd = tokens
                   .map((t) => t.id)
+                  .filter((id) => id !== DISCARDED_ANSWER)
                   .filter((id) => !normalizedIds.includes(id));
 
                 normalizedIds = [...normalizedIds, ...normalizedIdsToAdd];

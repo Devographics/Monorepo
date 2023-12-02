@@ -1,6 +1,6 @@
 import isEmpty from "lodash/isEmpty.js";
 import { NormalizationResponse } from "../hooks";
-import { NO_MATCH } from "@devographics/constants";
+import { DISCARDED_ANSWER } from "@devographics/constants";
 import { NormalizationMetadata } from "../types";
 
 /*
@@ -15,6 +15,8 @@ export interface IndividualAnswer extends NormalizationMetadata {
 }
 
 const answerHasMatch = (a: NormalizationMetadata) => a.tokens?.length > 0;
+const answerIsDiscarded = (a: NormalizationMetadata) =>
+  a.tokens.some((t) => t.id === DISCARDED_ANSWER);
 
 export function splitResponses(responses: NormalizationResponse[]) {
   const allAnswers: Array<IndividualAnswer> = responses
@@ -28,8 +30,18 @@ export function splitResponses(responses: NormalizationResponse[]) {
     )
     .flat();
 
-  const normalizedAnswers = allAnswers.filter((a) => answerHasMatch(a));
   const unnormalizedAnswers = allAnswers.filter((a) => !answerHasMatch(a));
-
-  return { allAnswers, normalizedAnswers, unnormalizedAnswers };
+  const answersWithNormalization = allAnswers.filter((a) => answerHasMatch(a));
+  const normalizedAnswers = answersWithNormalization.filter(
+    (a) => !answerIsDiscarded(a)
+  );
+  const discardedAnswers = answersWithNormalization.filter((a) =>
+    answerIsDiscarded(a)
+  );
+  return {
+    allAnswers,
+    normalizedAnswers,
+    unnormalizedAnswers,
+    discardedAnswers,
+  };
 }

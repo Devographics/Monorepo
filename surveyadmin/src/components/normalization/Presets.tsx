@@ -23,11 +23,11 @@ export interface PresetsProps {
   tokens: NormalizationToken[];
   localTokens: NormalizationToken[];
   addLocalToken: (token: NormalizationToken) => void;
-  showAllPresetsModal: () => void;
+  showPresetsShortlistModal: () => void;
 }
 
 const Presets = (props: PresetsProps) => {
-  const { edition, question, showAllPresetsModal } = props;
+  const { edition, question, showPresetsShortlistModal } = props;
 
   const { enabledPresets } = usePresets({ edition, question });
 
@@ -42,7 +42,7 @@ const Presets = (props: PresetsProps) => {
       ) : (
         <a
           onClick={() => {
-            showAllPresetsModal();
+            showPresetsShortlistModal();
           }}
           data-tooltip="Add normalization token presets to shortlist"
         >

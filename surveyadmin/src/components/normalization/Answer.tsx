@@ -21,6 +21,9 @@ import Presets from "./Presets";
 import { useLocalStorage } from "../hooks";
 import without from "lodash/without";
 import { usePresets } from "./hooks";
+import AllPresets from "./AllPresets";
+import Dialog from "./Dialog";
+import { DISCARDED_ANSWER } from "@devographics/constants";
 
 export interface AnswerProps extends AnswersProps {
   rawPath: string;
@@ -29,7 +32,7 @@ export interface AnswerProps extends AnswersProps {
   letterHeading?: string;
   entities: Entity[];
   responses: NormalizationResponse[];
-  showAllPresetsModal: () => void;
+  showPresetsShortlistModal: () => void;
 }
 
 const getCacheKey = (edition, question, responseId) =>
@@ -46,7 +49,7 @@ export const Answer = ({
   index,
   letterHeading,
   responses,
-  showAllPresetsModal,
+  showPresetsShortlistModal,
 }: AnswerProps) => {
   const { _id, responseId, raw, tokens = [] } = answer;
   const [result, setResult] = useState<NormalizeInBulkResult>();
@@ -55,6 +58,7 @@ export const Answer = ({
     []
   );
   const [showResult, setShowResult] = useState(true);
+  const [showAllPresets, setShowAllPresets] = useState(false);
   const { enabledPresets } = usePresets({ edition, question });
 
   const surveyId = survey.id;
@@ -109,7 +113,7 @@ export const Answer = ({
     entities,
     localTokens,
     addLocalToken,
-    showAllPresetsModal,
+    showPresetsShortlistModal,
   };
 
   const regularTokens = tokens.filter(
@@ -119,6 +123,9 @@ export const Answer = ({
     (t) => t.pattern === "custom_normalization"
   );
   const allTokens = [...tokens, ...localTokens];
+  const presets = enabledPresets.filter(
+    (id) => !allTokens.map((t) => t.id).includes(id)
+  );
 
   return (
     <>
@@ -139,40 +146,18 @@ export const Answer = ({
         <td>
           <FieldValue raw={raw} tokens={tokens} />
         </td>
-        <td>
-          {/* <Presets {...presetsProps} /> */}
-          {enabledPresets.length > 0 ? (
-            <div className="tokens-list">
-              {enabledPresets.map((id) => (
-                <NormToken
-                  key={id}
-                  id={id}
-                  responses={responses}
-                  isCustom={true}
-                  action="add"
-                  addToken={addToken}
-                  removeToken={removeToken}
-                  isIncluded={allTokens.some((t) => t.id === id)}
-                />
-              ))}
-            </div>
-          ) : (
-            <a
-              onClick={() => {
-                showAllPresetsModal();
-              }}
-              data-tooltip="Add normalization token presets to shortlist"
-            >
-              Add tokens…
-            </a>
-          )}
-        </td>
 
         <td>
           <div className="tokens-list">
             {regularTokens.map((token) => (
-              <NormToken key={token.id} id={token.id} responses={responses} />
+              <NormToken
+                key={token.id}
+                id={token.id}
+                responses={responses}
+                entities={entities}
+              />
             ))}
+
             {customTokens.map((token) => (
               <NormToken
                 key={token.id}
@@ -182,6 +167,7 @@ export const Answer = ({
                 action="remove"
                 addToken={addToken}
                 removeToken={removeToken}
+                entities={entities}
               />
             ))}
             {localTokens.map((token) => (
@@ -193,12 +179,54 @@ export const Answer = ({
                 action="remove"
                 addToken={addToken}
                 removeToken={removeToken}
+                entities={entities}
+              />
+            ))}
+            {presets.map((id) => (
+              <NormToken
+                key={id}
+                id={id}
+                responses={responses}
+                isCustom={true}
+                action="add"
+                addToken={addToken}
+                removeToken={removeToken}
+                isIncluded={allTokens.some((t) => t.id === id)}
+                entities={entities}
               />
             ))}
           </div>
         </td>
         <td>
           <div className="field-row-actions">
+            <div>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowAllPresets(true);
+                }}
+                data-tooltip="Add Tokens…"
+              >
+                ➕
+              </button>
+
+              {showAllPresets && (
+                <Dialog
+                  showModal={showAllPresets}
+                  setShowModal={setShowAllPresets}
+                  header={<span>All Tokens</span>}
+                >
+                  <AllPresets {...presetsProps} />
+                </Dialog>
+              )}
+            </div>
+            <LoadingButton
+              action={async () => {
+                await addToken(DISCARDED_ANSWER);
+              }}
+              label="🗑️"
+              tooltip="Discard this answer"
+            />
             <LoadingButton
               action={async () => {
                 const result = await normalizeQuestionResponses({

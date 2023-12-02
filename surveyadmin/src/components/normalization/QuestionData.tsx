@@ -2,6 +2,7 @@ import {
   SurveyMetadata,
   EditionMetadata,
   ResponseData,
+  Entity,
 } from "@devographics/types";
 import { useState } from "react";
 import NormToken from "./NormToken";
@@ -16,12 +17,14 @@ const QuestionData = ({
   survey,
   edition,
   question,
+  entities,
 }: {
   questionData: ResponseData;
   responses: NormalizationResponse[];
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionWithSection;
+  entities: Entity[];
 }) => {
   const [showData, setShowData] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -80,7 +83,11 @@ const QuestionData = ({
                     <tr key={id}>
                       <td>{index + 1}.</td>
                       <td>
-                        <NormToken id={id} responses={responses} />
+                        <NormToken
+                          id={id}
+                          responses={responses}
+                          entities={entities}
+                        />
                       </td>
                       <td>{count}</td>
                     </tr>

@@ -5,73 +5,152 @@ import {
   EditionMetadata,
   Entity,
 } from "@devographics/types";
-import { Dispatch, SetStateAction, useState } from "react";
-// import { useLocalStorage } from "../hooks";
-import { NormalizationToken } from "~/lib/normalization/types";
-import { EntityList } from "./EntityInput";
+import { useState } from "react";
+import trim from "lodash/trim";
 import without from "lodash/without";
-import { usePresets } from "./hooks";
+import { useLocalStorage } from "../hooks";
+import { addManualNormalizations } from "~/lib/normalization/services";
+import {
+  NormalizationToken,
+  NormalizeInBulkResult,
+} from "~/lib/normalization/types";
+import { NormalizationResult } from "./NormalizationResult";
+import { FieldValue } from "./FieldValue";
+import { EntityList, getAddEntityUrl, getEditEntityUrl } from "./EntityInput";
+import type { CustomNormalization } from "./NormalizeQuestion";
 
-export const AllPresets = (props: {
+const getCacheKey = (edition, question) =>
+  `normalization_presets__${edition.id}__${question.id}`;
+
+const AllPresets = ({
+  survey,
+  edition,
+  question,
+  questionData,
+  responseId,
+  normRespId,
+  rawValue,
+  rawPath,
+  entities,
+  addCustomNormalization,
+  tokens,
+}: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionMetadata;
   questionData?: ResponseData;
+  responseId: string;
+  normRespId: string;
+  rawValue: string;
+  rawPath: string;
   entities: Entity[];
+  tokens: NormalizationToken[];
+  addCustomNormalization: (CustomNormalization) => void;
 }) => {
-  const { survey, edition, question, questionData, entities } = props;
-
-  const allEntitiesIds = entities.map((e) => e.id);
-
+  const cacheKey = getCacheKey(edition, question);
   const [selectedId, setSelectedId] = useState("");
-
-  const { enabledPresets, setEnabledPresets, customPresets, setCustomPresets } =
-    usePresets({ edition, question });
-
-  const defaultPresets = questionData
+  const [tokensToAdd, setTokensToAdd] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<NormalizeInBulkResult | null>(null);
+  const [localPresets, setLocalPresets] = useLocalStorage<string[]>(
+    cacheKey,
+    []
+  );
+  const entityIds = questionData
     ? questionData.currentEdition.buckets.map((b) => b.id).slice(0, 20)
     : [];
 
-  const enablePreset = (id) => {
-    setEnabledPresets([...enabledPresets, id]);
-  };
-  const disablePreset = (id) => {
-    setEnabledPresets(without(enabledPresets, id));
+  const handleSubmit = async (e) => {
+    setLoading(true);
+    setResult(null);
+    e.preventDefault();
+    tokensToAdd.forEach((token) => {
+      if (![...entityIds, ...localPresets].includes(token)) {
+        setLocalPresets([...localPresets, token]);
+      }
+    });
+
+    const params = {
+      surveyId: survey.id,
+      editionId: edition.id,
+      questionId: question.id,
+      tokens,
+      responseId,
+      normRespId,
+      rawValue,
+      rawPath,
+    };
+    const result = await addManualNormalizations(params);
+
+    // store this locally at the question level
+    addCustomNormalization({ responseId, tokens });
+
+    setLoading(false);
+    if (result.data) {
+      setResult(result.data);
+    }
   };
 
-  const addCustomPreset = (id) => {
-    setCustomPresets([...customPresets, id]);
-    enablePreset(id);
+  const handleDeletePreset = (preset) => {
+    setLocalPresets(without(localPresets, preset));
   };
 
-  const presetProps = {
-    enabledPresets,
-    enablePreset,
-    disablePreset,
-    ...props,
+  const addTokenId = (id: string) => {
+    if (!tokensToAdd.includes(id)) {
+      setTokensToAdd([...tokensToAdd, id]);
+    }
   };
+
+  const allEntitiesIds = entities.map((e) => e.id);
+
   return (
     <div className="manualinput">
-      <p>Pick which tokens should appear in the token shortlist.</p>
-
-      <ul className="manualinput-presets">
-        {defaultPresets
-          .filter((p) => p !== "other_answers")
-          .sort()
-          .map((id) => (
-            <Preset key={id} id={id} {...presetProps} />
-          ))}
-        {customPresets
-          .filter((p) => !defaultPresets.includes(p))
-          .sort()
-          .map((id) => (
-            <Preset key={id} id={id} isCustom={true} {...presetProps} />
-          ))}
-      </ul>
       <table>
         <tbody>
           <tr>
-            <th>Add More Tokens…</th>
+            <th>Answer</th>
+            <td>
+              <FieldValue raw={rawValue} tokens={tokens} />
+            </td>
+          </tr>
+          <tr>
+            <th>Suggested Tokens</th>
+            <td>
+              <div>
+                <ul className="tokens-list">
+                  {entityIds.sort().map((id) => (
+                    <Preset
+                      key={id}
+                      id={id}
+                      tokensToAdd={tokensToAdd}
+                      addTokenId={addTokenId}
+                    />
+                  ))}
+                  {localPresets
+                    .sort()
+                    .filter((id) => !entityIds.includes(id))
+                    .map((id) => (
+                      <Preset
+                        key={id}
+                        id={id}
+                        tokensToAdd={tokensToAdd}
+                        addTokenId={addTokenId}
+                        isLocal={true}
+                        handleDeletePreset={handleDeletePreset}
+                      />
+                    ))}
+                </ul>
+              </div>
+              <p>
+                <small>
+                  Suggested entities are populated from the top responses to the
+                  question and locally-stored values.
+                </small>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <th>All Tokens</th>
             <td>
               <EntityList
                 entities={entities}
@@ -79,11 +158,34 @@ export const AllPresets = (props: {
                 setSelectedId={(value) => {
                   setSelectedId(value);
                   if (allEntitiesIds.includes(value)) {
-                    addCustomPreset(value);
+                    addTokenId(value);
                     setSelectedId("");
                   }
                 }}
               />
+            </td>
+          </tr>
+          <tr>
+            <th>Tokens to add:</th>
+            <td>
+              <form className="manualinput-form">
+                {tokensToAdd.map((t) => (
+                  <code key={t}>{t}</code>
+                ))}
+                <button aria-busy={loading} onClick={handleSubmit}>
+                  Add Tokens
+                </button>
+              </form>
+
+              {result && (
+                <div>
+                  <p>Custom normalization has been added.</p>
+                  {/* <NormalizationResult {...result} /> */}
+                  {/* <pre>
+              <code>{JSON.stringify(result, null, 2)}</code>
+            </pre> */}
+                </div>
+              )}
             </td>
           </tr>
         </tbody>
@@ -94,49 +196,36 @@ export const AllPresets = (props: {
 
 export const Preset = ({
   id,
-  enabledPresets,
-  enablePreset,
-  disablePreset,
-  isCustom,
-  entities,
+  tokensToAdd,
+  addTokenId,
 }: {
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-  question: QuestionMetadata;
-  questionData?: ResponseData;
-  entities: Entity[];
   id: string;
-  enabledPresets: string[];
-  enablePreset: (string) => void;
-  disablePreset: (string) => void;
-  isCustom?: boolean;
+  tokensToAdd: string[];
+  addTokenId: (id: string) => void;
 }) => {
-  const entity = entities.find((e) => e.id === id);
-
-  const isEnabled = enabledPresets.includes(id);
+  const isIncluded = tokensToAdd.includes(id);
   const style = {} as any;
-  if (!isEnabled) {
-    style.opacity = 0.7;
-  }
-  if (isCustom) {
-    style.background = "#E7FFCF";
+  if (isIncluded) {
+    style.opacity = 0.4;
   }
   return (
     <li>
-      <code
-        style={style}
-        data-tooltip={entity?.descriptionClean}
+      <a
+        href="#"
         onClick={(e) => {
-          if (isEnabled) {
-            disablePreset(id);
-          } else {
-            enablePreset(id);
-          }
+          e.preventDefault();
         }}
       >
-        <input type="checkbox" checked={isEnabled} readOnly />
-        {id}
-      </code>
+        <code
+          style={style}
+          onClick={(e) => {
+            addTokenId(id);
+          }}
+        >
+          {id}
+        </code>
+      </a>
     </li>
   );
 };
+export default AllPresets;
