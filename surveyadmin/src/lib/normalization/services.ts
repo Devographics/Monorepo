@@ -114,6 +114,24 @@ export async function addManualNormalizations(
   return result;
 }
 
+export async function removeManualNormalizations(
+  params: AddManualNormalizationArgs
+) {
+  const fetchRes = await fetch(
+    apiRoutes.normalization.removeManualNormalizations.href(params),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    }
+  );
+  const result: { data?: NormalizeInBulkResult; error: any } =
+    await fetchRes.json();
+  return result;
+}
+
 export async function loadNormalizationPercentages(
   params: LoadNormalizationPercentagesArgs
 ) {

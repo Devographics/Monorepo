@@ -10,60 +10,19 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { NormalizationToken } from "~/lib/normalization/types";
 import { EntityList } from "./EntityInput";
 import without from "lodash/without";
-import { useLocalStorage } from "@uidotdev/usehooks";
-import { PresetsProps } from "./Presets";
-
-const getCacheKey = (edition, question) =>
-  `normalization_presets__${edition.id}__${question.id}`;
-
-export const usePresets = ({
-  edition,
-  question,
-}: {
-  edition: EditionMetadata;
-  question: QuestionMetadata;
-}) => {
-  const cacheKey = getCacheKey(edition, question);
-
-  const [customPresets, setCustomPresets] = useLocalStorage<string[]>(
-    cacheKey + "__custom",
-    []
-  );
-  const [enabledPresets, setEnabledPresets] = useLocalStorage<string[]>(
-    cacheKey + "__enabled",
-    []
-  );
-  return { enabledPresets, setEnabledPresets, customPresets, setCustomPresets };
-};
+import { usePresets } from "./hooks";
 
 export const AllPresets = (props: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionMetadata;
   questionData?: ResponseData;
-  responseId: string;
-  normRespId: string;
-  rawValue: string;
-  rawPath: string;
   entities: Entity[];
-  tokens: NormalizationToken[];
 }) => {
-  const {
-    survey,
-    edition,
-    question,
-    questionData,
-    responseId,
-    normRespId,
-    rawValue,
-    rawPath,
-    entities,
-    tokens,
-  } = props;
+  const { survey, edition, question, questionData, entities } = props;
 
   const allEntitiesIds = entities.map((e) => e.id);
 
-  const cacheKey = getCacheKey(edition, question);
   const [selectedId, setSelectedId] = useState("");
 
   const { enabledPresets, setEnabledPresets, customPresets, setCustomPresets } =
@@ -96,12 +55,18 @@ export const AllPresets = (props: {
       <p>Pick which tokens should appear in the token shortlist.</p>
 
       <ul className="manualinput-presets">
-        {defaultPresets.sort().map((id) => (
-          <Preset key={id} id={id} {...presetProps} />
-        ))}
-        {customPresets.sort().map((id) => (
-          <Preset key={id} id={id} isCustom={true} {...presetProps} />
-        ))}
+        {defaultPresets
+          .filter((p) => p !== "other_answers")
+          .sort()
+          .map((id) => (
+            <Preset key={id} id={id} {...presetProps} />
+          ))}
+        {customPresets
+          .filter((p) => !defaultPresets.includes(p))
+          .sort()
+          .map((id) => (
+            <Preset key={id} id={id} isCustom={true} {...presetProps} />
+          ))}
       </ul>
       <table>
         <tbody>
@@ -134,7 +99,12 @@ export const Preset = ({
   disablePreset,
   isCustom,
   entities,
-}: PresetsProps & {
+}: {
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  question: QuestionMetadata;
+  questionData?: ResponseData;
+  entities: Entity[];
   id: string;
   enabledPresets: string[];
   enablePreset: (string) => void;

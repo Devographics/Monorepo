@@ -1,5 +1,7 @@
+import { EditionMetadata, QuestionMetadata } from "@devographics/types";
 import { useState } from "react";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
+import { useLocalStorage } from "@uidotdev/usehooks";
 
 export const defaultSegmentSize = 1000;
 
@@ -86,5 +88,34 @@ export const useSegments = () => {
     enabled,
     setEnabled,
     segments,
+  };
+};
+
+const getCacheKey = (edition, question) =>
+  `normalization_presets__${edition.id}__${question.id}`;
+
+export const usePresets = ({
+  edition,
+  question,
+}: {
+  edition: EditionMetadata;
+  question: QuestionMetadata;
+}) => {
+  const cacheKey = getCacheKey(edition, question);
+
+  const [customPresets, setCustomPresets] = useLocalStorage<string[]>(
+    cacheKey + "__custom",
+    []
+  );
+  const [enabledPresets, setEnabledPresets] = useLocalStorage<string[]>(
+    cacheKey + "__enabled",
+    []
+  );
+
+  return {
+    enabledPresets,
+    setEnabledPresets,
+    customPresets,
+    setCustomPresets,
   };
 };

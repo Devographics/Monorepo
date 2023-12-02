@@ -5,25 +5,15 @@ import {
   ResponseDocument,
   CustomNormalizationDefinition,
 } from "@devographics/types";
-import uniq from "lodash/uniq";
-
-export type AddManualNormalizationArgs = {
-  responseId: string;
-  normRespId: string;
-  surveyId: string;
-  editionId: string;
-  questionId: string;
-  tokens: string[];
-  rawValue: string;
-  rawPath: string;
-};
+import without from "lodash/without";
+import { AddManualNormalizationArgs } from "./addManualNormalizations";
 
 /**
 
 Normalize all questions for a specific edition
 
 */
-export const addManualNormalizations = async (
+export const removeManualNormalizations = async (
   args: AddManualNormalizationArgs
 ) => {
   const {
@@ -53,7 +43,7 @@ export const addManualNormalizations = async (
     throw new Error(`Could not find edition for editionId ${editionId}`);
   }
   console.log(
-    `⛰️ Adding manual normalizations for ${editionId}/${questionId}/${responseId}: ${tokens.join(
+    `⛰️ Removing manual normalizations for ${editionId}/${questionId}/${responseId}: ${tokens.join(
       ", "
     )}`
   );
@@ -66,15 +56,9 @@ export const addManualNormalizations = async (
 
   if (!response) {
     throw new Error(
-      `addManualNormalizations: no response document found for _id ${responseId}`
+      `removeManualNormalizations: no response document found for _id ${responseId}`
     );
   }
-
-  const normalizationDefinition: CustomNormalizationDefinition = {
-    rawPath,
-    rawValue,
-    tokens,
-  };
 
   const customNormalizations: CustomNormalizationDefinition[] =
     response.customNormalizations || [];
@@ -82,37 +66,24 @@ export const addManualNormalizations = async (
     (n) => n.rawPath === rawPath
   );
   if (existingNormalizationDefinition) {
-    // if a custom norm. definition already exists for this field, add new tokens to it
-    // (removing duplicates in the process)
-    existingNormalizationDefinition.tokens = uniq([
-      ...existingNormalizationDefinition.tokens,
-      ...tokens,
-    ]);
+    // if a custom norm. definition already exists for this field, remove tokens from it
+    existingNormalizationDefinition.tokens = without(
+      existingNormalizationDefinition.tokens,
+      ...tokens
+    );
+
+    const selector = { _id: responseId };
+    const operation = {
+      $set: { customNormalizations },
+    };
+    const updateResult = await rawResponsesCollection.updateOne(
+      selector,
+      operation
+    );
+
+    return updateResult;
   } else {
-    // else, add new norm. definition to customNormalizations array
-    customNormalizations.push(normalizationDefinition);
+    // else, do nothing
+    return;
   }
-
-  const selector = { _id: responseId };
-  const operation = {
-    $set: { customNormalizations },
-  };
-  const updateResult = await rawResponsesCollection.updateOne(
-    selector,
-    operation
-  );
-
-  return updateResult;
-  // const responses = [{ ...response, customNormalizations }];
-
-  // const mutationResult = await normalizeInBulk({
-  //   survey,
-  //   edition,
-  //   responses,
-  //   questionId,
-  //   isRenormalization: true,
-  //   verbose: true,
-  // });
-
-  // return mutationResult;
 };

@@ -38,14 +38,6 @@ export const FieldValue = ({
     <div className="field-value-items">
       <blockquote>
         <span dangerouslySetInnerHTML={{ __html: getValue(raw) }} />
-        {patterns.includes("custom_normalization") && (
-          <span
-            className="custom-normalization-badge"
-            data-tooltip="Custom Normalization"
-          >
-            🟢
-          </span>
-        )}
       </blockquote>
     </div>
   );

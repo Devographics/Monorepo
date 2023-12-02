@@ -1,21 +1,32 @@
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
 import { ResponseId } from "./Answers";
 import Dialog from "./Dialog";
 import { FieldValue } from "./FieldValue";
 import { splitResponses } from "~/lib/normalization/helpers/splitResponses";
 
+interface NormTokenProps {
+  id: string;
+  responses: NormalizationResponse[];
+  pattern?: string;
+  action?: "default" | "add" | "remove";
+  addToken?: (string) => void;
+  removeToken?: (string) => void;
+  isCustom?: boolean;
+  isIncluded?: boolean;
+}
+
 const NormToken = ({
   id,
   responses,
   pattern,
-  variant = "normal",
-}: {
-  id: string;
-  responses: NormalizationResponse[];
-  pattern?: string;
-  variant?: "normal" | "custom";
-}) => {
+  action = "default",
+  addToken,
+  removeToken,
+  isCustom = false,
+  isIncluded = false,
+}: NormTokenProps) => {
+  const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const { normalizedAnswers } = splitResponses(responses);
@@ -24,24 +35,30 @@ const NormToken = ({
     a?.tokens.map((t) => t.id)?.includes(id)
   );
 
-  if (pattern === "custom_normalization") {
-    variant = "custom";
+  let actionComponent = <Default setShowModal={setShowModal} id={id} />;
+  if (isCustom && addToken && removeToken && !isIncluded) {
+    const actionProps = {
+      loading,
+      setLoading,
+      setShowModal,
+      id,
+      addToken,
+      removeToken,
+    };
+    if (action === "add") {
+      actionComponent = <AddToken {...actionProps} />;
+    } else if (action === "remove") {
+      actionComponent = <RemoveToken {...actionProps} />;
+    }
   }
 
   return (
     <>
-      <span data-tooltip={pattern}>
-        <a
-          role="button"
-          href="#"
-          className={`normalization-token normalization-token-${variant}`}
-          onClick={(e) => {
-            e.preventDefault();
-            setShowModal(true);
-          }}
-        >
-          <code>{id}</code>
-        </a>
+      <span
+        style={{ opacity: isIncluded ? 0.5 : 1 }}
+        className={isCustom ? `normalization-token-custom` : ""}
+      >
+        {actionComponent}
       </span>
 
       {showModal && (
@@ -86,6 +103,109 @@ const NormToken = ({
         </Dialog>
       )}
     </>
+  );
+};
+
+const Default = ({
+  setShowModal,
+  id,
+}: {
+  setShowModal: Dispatch<SetStateAction<boolean>>;
+  id: string;
+}) => {
+  return (
+    <code
+      onClick={(e) => {
+        e.preventDefault();
+        setShowModal(true);
+      }}
+      data-tooltip="View Matching Answers…"
+    >
+      {id}
+    </code>
+  );
+};
+
+interface ActionProps {
+  setShowModal: Dispatch<SetStateAction<boolean>>;
+  id: string;
+  loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  addToken: (string) => void;
+  removeToken: (string) => void;
+}
+
+const AddToken = ({
+  loading,
+  setLoading,
+  setShowModal,
+  addToken,
+  id,
+}: ActionProps) => {
+  return (
+    <code
+      className={`normalization-token normalization-token-custom`}
+      aria-busy={loading}
+    >
+      <span
+        onClick={(e) => {
+          e.preventDefault();
+          setShowModal(true);
+        }}
+        data-tooltip="View Matching Answers…"
+      >
+        {id}
+      </span>
+      <span
+        className="token-action"
+        data-tooltip="Add Token"
+        onClick={async (e) => {
+          e.preventDefault();
+          setLoading(true);
+          await addToken(id);
+          setLoading(false);
+        }}
+      >
+        ➕
+      </span>
+    </code>
+  );
+};
+
+const RemoveToken = ({
+  loading,
+  setLoading,
+  setShowModal,
+  removeToken,
+  id,
+}: ActionProps) => {
+  return (
+    <code
+      className={`normalization-token normalization-token-custom`}
+      aria-busy={loading}
+    >
+      <span
+        onClick={(e) => {
+          e.preventDefault();
+          setShowModal(true);
+        }}
+        data-tooltip="View Matching Answers…"
+      >
+        {id}
+      </span>
+      <span
+        className="token-action"
+        data-tooltip="Remove Token"
+        onClick={async (e) => {
+          e.preventDefault();
+          setLoading(true);
+          await removeToken(id);
+          setLoading(false);
+        }}
+      >
+        ➖
+      </span>
+    </code>
   );
 };
 

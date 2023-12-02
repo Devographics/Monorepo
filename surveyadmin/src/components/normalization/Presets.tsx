@@ -5,10 +5,9 @@ import {
   EditionMetadata,
   Entity,
 } from "@devographics/types";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { NormalizationToken } from "~/lib/normalization/types";
-import Dialog from "./Dialog";
-import { AllPresets, usePresets } from "./AllPresets";
+import { usePresets } from "./hooks";
 import { addManualNormalizations } from "~/lib/normalization/services";
 
 export interface PresetsProps {
@@ -22,51 +21,33 @@ export interface PresetsProps {
   rawPath: string;
   entities: Entity[];
   tokens: NormalizationToken[];
+  localTokens: NormalizationToken[];
+  addLocalToken: (token: NormalizationToken) => void;
+  showAllPresetsModal: () => void;
 }
 
 const Presets = (props: PresetsProps) => {
-  const { edition, question } = props;
-  const [showAllPresets, setShowAllPresets] = useState(false);
+  const { edition, question, showAllPresetsModal } = props;
 
   const { enabledPresets } = usePresets({ edition, question });
 
   return (
     <div className="manualinput">
       {enabledPresets.length > 0 ? (
-        <>
-          <ul className="manualinput-presets">
-            {enabledPresets.map((id) => (
-              <Preset key={id} id={id} {...props} />
-            ))}
-          </ul>
-          <a
-            onClick={() => {
-              setShowAllPresets(!showAllPresets);
-            }}
-            data-tooltip="Manually enter normalization tokens"
-          >
-            ✏️
-          </a>
-        </>
+        <div className="manualinput-presets">
+          {enabledPresets.map((id) => (
+            <Preset key={id} id={id} {...props} />
+          ))}
+        </div>
       ) : (
         <a
           onClick={() => {
-            setShowAllPresets(!showAllPresets);
+            showAllPresetsModal();
           }}
-          data-tooltip="Manually enter normalization tokens"
+          data-tooltip="Add normalization token presets to shortlist"
         >
           Add tokens…
         </a>
-      )}
-
-      {showAllPresets && (
-        <Dialog
-          showModal={showAllPresets}
-          setShowModal={setShowAllPresets}
-          header={<span>Token Presets</span>}
-        >
-          <AllPresets {...props} />
-        </Dialog>
       )}
     </div>
   );
@@ -83,13 +64,24 @@ export const Preset = (props: PresetsProps & { id: string }) => {
     rawValue,
     rawPath,
     entities,
+    tokens,
+    localTokens,
+    addLocalToken,
   } = props;
+
+  const isAlreadyIncluded = [...tokens, ...localTokens].some(
+    (t) => t.id === id
+  );
+
   const [loading, setLoading] = useState(false);
 
   const entity = entities.find((e) => e.id === id);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isAlreadyIncluded) {
+      return;
+    }
     setLoading(true);
     const tokens = [id];
     const params = {
@@ -103,19 +95,31 @@ export const Preset = (props: PresetsProps & { id: string }) => {
       rawPath,
     };
     const result = await addManualNormalizations(params);
+    addLocalToken({ id } as NormalizationToken);
     setLoading(false);
   };
 
+  const style = isAlreadyIncluded
+    ? {
+        cursor: "not-allowed",
+        opacity: 0.4,
+      }
+    : {
+        cursor: "pointer",
+      };
+
   return (
-    <li data-tooltip="Add to custom normalization tokens">
-      <code
-        style={{ cursor: "pointer" }}
-        onClick={handleSubmit}
-        aria-busy={loading}
-      >
+    <div
+      data-tooltip={
+        isAlreadyIncluded
+          ? "Already adeed"
+          : "Add to custom normalization tokens"
+      }
+    >
+      <code style={style} onClick={handleSubmit} aria-busy={loading}>
         {id}
       </code>
-    </li>
+    </div>
   );
 };
 

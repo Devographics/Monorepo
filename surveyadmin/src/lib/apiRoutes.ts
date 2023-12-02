@@ -40,6 +40,9 @@ export const apiRoutes = {
     addManualNormalizations: {
       href: (params) => `/api/normalization/addManualNormalizations`,
     },
+    removeManualNormalizations: {
+      href: (params) => `/api/normalization/removeManualNormalizations`,
+    },
     loadNormalizationPercentages: {
       href: (params) =>
         `/api/normalization/loadNormalizationPercentages?${encodeParams(

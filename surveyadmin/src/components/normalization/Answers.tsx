@@ -8,6 +8,8 @@ import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
 import sortBy from "lodash/sortBy";
 import { Answer } from "./Answer";
 import trim from "lodash/trim";
+import Dialog from "./Dialog";
+import { AllPresets } from "./AllPresets";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -24,6 +26,11 @@ const Answers = (props: AnswersProps) => {
   const [showResponses, setShowResponses] = useState(false);
   const [showIds, setShowIds] = useState(false);
   const [filterQuery, setFilterQuery] = useState("");
+  const [showAllPresets, setShowAllPresets] = useState(false);
+
+  const showAllPresetsModal = () => {
+    setShowAllPresets(true);
+  };
 
   const {
     survey,
@@ -60,6 +67,7 @@ const Answers = (props: AnswersProps) => {
 
   const answerProps = {
     ...props,
+    showAllPresetsModal,
     rawPath,
   };
 
@@ -100,25 +108,53 @@ const Answers = (props: AnswersProps) => {
             </p>
           )}
 
-          <div className="normalization-filter">
-            <label htmlFor="search">
-              Filter {capitalizeFirstLetter(variant)} Responses: (
-              {filteredAnswers.length} results)
-            </label>
-            <input
-              type="search"
-              id="search"
-              value={filterQuery}
-              onChange={(e) => setFilterQuery(e.target.value)}
-            />
-          </div>
           <table>
             <thead>
               <tr>
+                <th colSpan={99}>
+                  <div className="normalization-filter">
+                    <label htmlFor="search">
+                      Filter {capitalizeFirstLetter(variant)} Responses: (
+                      {filteredAnswers.length} results)
+                    </label>
+                    <input
+                      type="search"
+                      id="search"
+                      value={filterQuery}
+                      onChange={(e) => setFilterQuery(e.target.value)}
+                    />
+                  </div>
+                </th>
+              </tr>
+              <tr>
                 <th></th>
                 <th>Answer</th>
+                <th>
+                  <span>Add Tokens</span>
+                  &nbsp;
+                  <a
+                    href="#"
+                    style={{ whiteSpace: "nowrap" }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowAllPresets(!showAllPresets);
+                    }}
+                    data-tooltip="Edit presets…"
+                  >
+                    Edit Shortlist…
+                  </a>
+                  {showAllPresets && (
+                    <Dialog
+                      showModal={showAllPresets}
+                      setShowModal={setShowAllPresets}
+                      header={<span>Token Presets</span>}
+                    >
+                      <AllPresets {...props} />
+                    </Dialog>
+                  )}
+                </th>
                 <th>Current Tokens</th>
-                <th>Add Tokens</th>
+
                 <th>Actions</th>
               </tr>
             </thead>
