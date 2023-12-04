@@ -22,7 +22,7 @@ export interface PresetsProps {
   entities: Entity[];
   tokens: NormalizationToken[];
   localTokens: NormalizationToken[];
-  addLocalToken: (token: NormalizationToken) => void;
+  addLocalTokens: (tokens: NormalizationToken[]) => void;
   showPresetsShortlistModal: () => void;
 }
 
@@ -66,7 +66,7 @@ export const Preset = (props: PresetsProps & { id: string }) => {
     entities,
     tokens,
     localTokens,
-    addLocalToken,
+    addLocalTokens,
   } = props;
 
   const isAlreadyIncluded = [...tokens, ...localTokens].some(
@@ -95,7 +95,7 @@ export const Preset = (props: PresetsProps & { id: string }) => {
       rawPath,
     };
     const result = await addManualNormalizations(params);
-    addLocalToken({ id } as NormalizationToken);
+    addLocalTokens([{ id }] as NormalizationToken[]);
     setLoading(false);
   };
 

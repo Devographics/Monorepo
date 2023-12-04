@@ -154,12 +154,9 @@ export interface RegularField {
   questionId: string;
   fieldPath: string;
   value: any;
+  metadata?: NormalizationMetadata[];
 }
-export interface NormalizedField extends RegularField {
-  metadata: NormalizationMetadata[];
-  // normTokens: Array<FullNormalizationToken | CustomNormalizationToken>;
-  // raw: string;
-}
+export interface NormalizedField extends RegularField {}
 export interface CommentField extends RegularField {}
 export interface PrenormalizedField extends RegularField {}
 

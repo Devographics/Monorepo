@@ -23,7 +23,10 @@ import without from "lodash/without";
 import { usePresets } from "./hooks";
 import AllPresets from "./AllPresets";
 import Dialog from "./Dialog";
-import { DISCARDED_ANSWER } from "@devographics/constants";
+import {
+  DISCARDED_ANSWER,
+  CUSTOM_NORMALIZATION,
+} from "@devographics/constants";
 
 export interface AnswerProps extends AnswersProps {
   rawPath: string;
@@ -65,12 +68,12 @@ export const Answer = ({
   const editionId = edition.id;
   const questionId = question.id;
 
-  const addLocalToken = (id) => {
-    setLocalTokens([...localTokens, id]);
+  const addLocalTokens = (tokens: NormalizationToken[]) => {
+    setLocalTokens([...localTokens, ...tokens]);
   };
 
-  const removeLocalToken = (id) => {
-    setLocalTokens(without(localTokens, id));
+  const removeLocalTokens = (tokens: NormalizationToken[]) => {
+    setLocalTokens(without(localTokens, ...tokens));
   };
 
   const addRemoveTokenParams = {
@@ -89,7 +92,7 @@ export const Answer = ({
       ...addRemoveTokenParams,
       tokens: [id],
     });
-    addLocalToken({ id } as NormalizationToken);
+    addLocalTokens([{ id }] as NormalizationToken[]);
   };
 
   const removeToken = async (id: string) => {
@@ -97,7 +100,7 @@ export const Answer = ({
       ...addRemoveTokenParams,
       tokens: [id],
     });
-    removeLocalToken({ id } as NormalizationToken);
+    removeLocalTokens([{ id }] as NormalizationToken[]);
   };
 
   const presetsProps = {
@@ -112,16 +115,14 @@ export const Answer = ({
     tokens,
     entities,
     localTokens,
-    addLocalToken,
+    addLocalTokens,
     showPresetsShortlistModal,
   };
 
   const regularTokens = tokens.filter(
-    (t) => t.pattern !== "custom_normalization"
+    (t) => t.pattern !== CUSTOM_NORMALIZATION
   );
-  const customTokens = tokens.filter(
-    (t) => t.pattern === "custom_normalization"
-  );
+  const customTokens = tokens.filter((t) => t.pattern === CUSTOM_NORMALIZATION);
   const allTokens = [...tokens, ...localTokens];
   const presets = enabledPresets.filter(
     (id) => !allTokens.map((t) => t.id).includes(id)

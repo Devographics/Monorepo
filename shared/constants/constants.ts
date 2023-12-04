@@ -30,6 +30,8 @@ export const NOT_APPLICABLE = 'na'
 
 export const DISCARDED_ANSWER = 'discarded_answer'
 
+export const CUSTOM_NORMALIZATION = 'custom_normalization'
+
 export const INSUFFICIENT_DATA = 'insufficient_data'
 
 export const PERCENTAGE_SURVEY = 'percentageSurvey'

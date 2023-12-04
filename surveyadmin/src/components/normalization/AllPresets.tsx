@@ -32,7 +32,7 @@ const AllPresets = ({
   rawValue,
   rawPath,
   entities,
-  addCustomNormalization,
+  addLocalTokens,
   tokens,
 }: {
   survey: SurveyMetadata;
@@ -45,7 +45,7 @@ const AllPresets = ({
   rawPath: string;
   entities: Entity[];
   tokens: NormalizationToken[];
-  addCustomNormalization: (CustomNormalization) => void;
+  addLocalTokens: (tokens: NormalizationToken[]) => void;
 }) => {
   const cacheKey = getCacheKey(edition, question);
   const [selectedId, setSelectedId] = useState("");
@@ -74,7 +74,7 @@ const AllPresets = ({
       surveyId: survey.id,
       editionId: edition.id,
       questionId: question.id,
-      tokens,
+      tokens: tokens.map((t) => t.id),
       responseId,
       normRespId,
       rawValue,
@@ -83,7 +83,7 @@ const AllPresets = ({
     const result = await addManualNormalizations(params);
 
     // store this locally at the question level
-    addCustomNormalization({ responseId, tokens });
+    addLocalTokens(tokens);
 
     setLoading(false);
     if (result.data) {
@@ -135,8 +135,6 @@ const AllPresets = ({
                         id={id}
                         tokensToAdd={tokensToAdd}
                         addTokenId={addTokenId}
-                        isLocal={true}
-                        handleDeletePreset={handleDeletePreset}
                       />
                     ))}
                 </ul>

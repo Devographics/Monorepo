@@ -10,6 +10,8 @@ import { Answer } from "./Answer";
 import trim from "lodash/trim";
 import Dialog from "./Dialog";
 import { PresetsShortlist } from "./PresetsShortlist";
+import { CUSTOM_NORMALIZATION } from "@devographics/constants";
+import AnswersFilters from "./AnswersFilters";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -27,6 +29,7 @@ const Answers = (props: AnswersProps) => {
   const [showIds, setShowIds] = useState(false);
   const [filterQuery, setFilterQuery] = useState("");
   const [showShortlist, setShowShortlist] = useState(false);
+  const [showCustomOnly, setShowCustomOnly] = useState(false);
 
   const showPresetsShortlistModal = () => {
     setShowShortlist(true);
@@ -71,11 +74,17 @@ const Answers = (props: AnswersProps) => {
     rawPath,
   };
 
-  const filteredAnswers = filterQuery
+  let filteredAnswers = filterQuery
     ? sortedAnswers.filter((a) =>
         a.raw.toLowerCase().includes(filterQuery.toLowerCase())
       )
     : sortedAnswers;
+
+  if (showCustomOnly) {
+    filteredAnswers = filteredAnswers.filter((a) =>
+      a?.tokens?.some((t) => t.pattern === CUSTOM_NORMALIZATION)
+    );
+  }
 
   return (
     <div>
@@ -112,21 +121,16 @@ const Answers = (props: AnswersProps) => {
             <thead>
               <tr>
                 <th colSpan={99}>
-                  <div className="normalization-filter">
-                    <label htmlFor="search">
-                      Filter{" "}
-                      <strong>
-                        {capitalizeFirstLetter(variant)} Responses
-                      </strong>
-                      : ({filteredAnswers.length} results)
-                    </label>
-                    <input
-                      type="search"
-                      id="search"
-                      value={filterQuery}
-                      onChange={(e) => setFilterQuery(e.target.value)}
-                    />
-                  </div>
+                  <AnswersFilters
+                    {...{
+                      variant,
+                      filteredAnswers,
+                      filterQuery,
+                      setFilterQuery,
+                      showCustomOnly,
+                      setShowCustomOnly,
+                    }}
+                  />
                 </th>
               </tr>
               <tr>
