@@ -38,9 +38,6 @@ export interface AnswerProps extends AnswersProps {
   showPresetsShortlistModal: () => void;
 }
 
-const getCacheKey = (edition, question, responseId) =>
-  `added_tokens__${edition.id}__${question.id}__${responseId}`;
-
 export const Answer = ({
   answer,
   question,
@@ -56,10 +53,7 @@ export const Answer = ({
 }: AnswerProps) => {
   const { _id, responseId, raw, tokens = [] } = answer;
   const [result, setResult] = useState<NormalizeInBulkResult>();
-  const [localTokens, setLocalTokens] = useLocalStorage<NormalizationToken[]>(
-    getCacheKey(edition, question, responseId),
-    []
-  );
+
   const [showResult, setShowResult] = useState(true);
   const [showAllPresets, setShowAllPresets] = useState(false);
   const { enabledPresets } = usePresets({ edition, question });
@@ -67,14 +61,6 @@ export const Answer = ({
   const surveyId = survey.id;
   const editionId = edition.id;
   const questionId = question.id;
-
-  const addLocalTokens = (tokens: NormalizationToken[]) => {
-    setLocalTokens([...localTokens, ...tokens]);
-  };
-
-  const removeLocalTokens = (tokens: NormalizationToken[]) => {
-    setLocalTokens(without(localTokens, ...tokens));
-  };
 
   const addRemoveTokenParams = {
     surveyId: survey.id,
@@ -92,7 +78,6 @@ export const Answer = ({
       ...addRemoveTokenParams,
       tokens: [id],
     });
-    addLocalTokens([{ id }] as NormalizationToken[]);
   };
 
   const removeToken = async (id: string) => {
@@ -100,7 +85,6 @@ export const Answer = ({
       ...addRemoveTokenParams,
       tokens: [id],
     });
-    removeLocalTokens([{ id }] as NormalizationToken[]);
   };
 
   const presetsProps = {
@@ -114,8 +98,6 @@ export const Answer = ({
     rawPath,
     tokens,
     entities,
-    localTokens,
-    addLocalTokens,
     showPresetsShortlistModal,
   };
 
@@ -123,7 +105,7 @@ export const Answer = ({
     (t) => t.pattern !== CUSTOM_NORMALIZATION
   );
   const customTokens = tokens.filter((t) => t.pattern === CUSTOM_NORMALIZATION);
-  const allTokens = [...tokens, ...localTokens];
+  const allTokens = tokens;
   const presets = enabledPresets.filter(
     (id) => !allTokens.map((t) => t.id).includes(id)
   );
@@ -160,18 +142,6 @@ export const Answer = ({
             ))}
 
             {customTokens.map((token) => (
-              <NormToken
-                key={token.id}
-                id={token.id}
-                responses={responses}
-                isCustom={true}
-                action="remove"
-                addToken={addToken}
-                removeToken={removeToken}
-                entities={entities}
-              />
-            ))}
-            {localTokens.map((token) => (
               <NormToken
                 key={token.id}
                 id={token.id}

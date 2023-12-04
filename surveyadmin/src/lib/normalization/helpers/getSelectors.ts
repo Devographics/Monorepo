@@ -2,10 +2,10 @@ import {
   SurveyMetadata,
   EditionMetadata,
   QuestionTemplateOutput,
+  QuestionWithSection,
 } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 import { getQuestionObject } from "./getQuestionObject";
-import type { QuestionWithSection } from "~/lib/normalization/types";
 
 export const getSourceFields = (surveyId) => [
   "common__user_info__referrer",

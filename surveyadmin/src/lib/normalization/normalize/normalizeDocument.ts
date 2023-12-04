@@ -1,4 +1,4 @@
-import { getEditionQuestionById } from "./helpers";
+import { getEditionQuestionById } from "../helpers/getEditionQuestionById";
 import { generateEntityRules } from "./generateEntityRules";
 import { getQuestionObject } from "../helpers/getQuestionObject";
 import * as steps from "./steps";

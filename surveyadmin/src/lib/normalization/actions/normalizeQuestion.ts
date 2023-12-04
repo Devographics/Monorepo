@@ -1,10 +1,11 @@
-import { getEditionQuestionById } from "../normalize/helpers";
+import { getEditionQuestionById } from "../helpers/getEditionQuestionById";
 import { getSelector } from "../helpers/getSelectors";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { fetchSurveyMetadata } from "@devographics/fetch";
 import { normalizeInBulk, defaultLimit } from "../normalize/normalizeInBulk";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import { getQuestionResponses } from "./getQuestionResponses";
+import { getSurveyEditionSectionQuestion } from "../helpers/getSurveyEditionQuestion";
 
 export type NormalizeQuestionArgs = {
   surveyId: string;
@@ -37,13 +38,8 @@ export const normalizeQuestion = async (args: NormalizeQuestionArgs) => {
   } = args;
   const startAt = new Date();
 
-  const survey = await fetchSurveyMetadata({ surveyId });
-  const { data: edition } = await fetchEditionMetadataAdmin({
-    surveyId,
-    editionId,
-    shouldGetFromCache: false,
-  });
-  const question = getEditionQuestionById({ edition, questionId });
+  const { survey, edition, section, question, durations } =
+    await getSurveyEditionSectionQuestion({ surveyId, editionId, questionId });
 
   const rawResponsesCollection = await getRawResponsesCollection(survey);
 

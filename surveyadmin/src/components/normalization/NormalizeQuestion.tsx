@@ -13,9 +13,9 @@ import {
   SurveyMetadata,
   ResponseData,
   Entity,
+  QuestionWithSection,
 } from "@devographics/types";
 import { useSegments } from "./hooks";
-import type { QuestionWithSection } from "~/lib/normalization/types";
 import QuestionData from "./QuestionData";
 import { splitResponses } from "~/lib/normalization/helpers/splitResponses";
 

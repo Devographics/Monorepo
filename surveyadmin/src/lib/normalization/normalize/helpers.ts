@@ -1,73 +1,24 @@
 // import { getSetting, runGraphQL, logToFile } from 'meteor/vulcan:core';
-import intersection from "lodash/intersection.js";
 import sortBy from "lodash/sortBy.js";
-import compact from "lodash/compact.js";
 import isEmpty from "lodash/isEmpty.js";
 import { logToFile } from "@devographics/debug";
 import {
   EditionMetadata,
   SurveyMetadata,
   QuestionTemplateOutput,
+  QuestionWithSection,
 } from "@devographics/types";
 import {
   getNormResponsesCollection,
   getRawResponsesCollection,
 } from "@devographics/mongo";
 import { fetchEntities } from "@devographics/fetch";
-import { getEditionQuestions } from "../helpers/getEditionQuestions";
-import { newMongoId } from "@devographics/mongo";
 import { getEditionSelector, ignoreValues } from "../helpers/getSelectors";
 import { getSelector } from "../helpers/getSelectors";
-import {
-  BulkOperation,
-  NormalizedResponseDocument,
-  QuestionWithSection,
-} from "../types";
-import { WithId } from "mongodb";
+import { BulkOperation } from "../types";
 import { NormalizationResponse } from "../hooks";
 import { generateEntityRules } from "./generateEntityRules";
 import { normalize } from "./normalize";
-
-// export const getFieldPaths = (field: Field) => {
-//   const { suffix } = field as ParsedQuestion;
-//   const { sectionSegment, fieldSegment } = getFieldSegments(field);
-
-//   const basePath = `${sectionSegment}.${fieldSegment}`;
-//   const fullPath = suffix ? `${basePath}.${suffix}` : basePath;
-//   const errorPath = `${basePath}.error`;
-//   const commentPath = `${basePath}.comment`;
-
-//   const rawFieldPath = `${fullPath}.raw`;
-//   const normalizedFieldPath = `${fullPath}.normalized`;
-//   const patternsFieldPath = `${fullPath}.patterns`;
-
-//   return {
-//     basePath,
-//     commentPath,
-//     fullPath,
-//     errorPath,
-//     rawFieldPath,
-//     normalizedFieldPath,
-//     patternsFieldPath,
-//   };
-// };
-
-export const getEditionQuestionById = ({
-  edition,
-  questionId,
-}: {
-  edition: EditionMetadata;
-  questionId: string;
-}) => {
-  const allQuestions = getEditionQuestions(edition);
-  // make sure to narrow it down to the freeform "others" field since the main "choices"
-  // field can have the same id
-  const question = allQuestions.find((q) => q.id === questionId);
-  if (!question) {
-    throw new Error(`Could not find field for questionId "${questionId}"`);
-  }
-  return question;
-};
 
 export const cleanupValue = (value) =>
   typeof value === "undefined" || ignoreValues.includes(value) ? null : value;

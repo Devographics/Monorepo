@@ -3,13 +3,13 @@ import {
   EditionMetadata,
   ResponseData,
   Entity,
+  QuestionWithSection,
 } from "@devographics/types";
 import { useState } from "react";
 import NormToken from "./NormToken";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
 import isEmpty from "lodash/isEmpty";
 import { loadQuestionData } from "~/lib/normalization/services";
-import { QuestionWithSection } from "~/lib/normalization/types";
 
 const QuestionData = ({
   questionData,

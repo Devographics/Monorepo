@@ -1,11 +1,17 @@
 import get from "lodash/get.js";
 import sortBy from "lodash/sortBy.js";
-import { EditionMetadata, SurveyMetadata } from "@devographics/types";
+import {
+  EditionMetadata,
+  SurveyMetadata,
+  QuestionTemplateOutput,
+  SectionMetadata,
+  QuestionWithSection,
+} from "@devographics/types";
 import { getNormResponsesCollection } from "@devographics/mongo";
 import { getFromCache } from "@devographics/fetch";
 import { getQuestionObject } from "./getQuestionObject";
 import { getAllResponsesSelector } from "./getSelectors";
-import { NormalizedResponseDocument, QuestionWithSection } from "../types";
+import { NormalizedResponseDocument } from "../types";
 import { CommonOptions } from "@devographics/fetch/types";
 import { ResponsesResult } from "../normalize/helpers";
 
@@ -16,17 +22,18 @@ export const getAllResponses = async (
   options: CommonOptions & {
     survey: SurveyMetadata;
     edition: EditionMetadata;
-    question: QuestionWithSection;
+    section: SectionMetadata;
+    question: QuestionTemplateOutput;
   }
 ) => {
-  const { survey, edition, question, ...rest } = options;
+  const { survey, edition, section, question, ...rest } = options;
   return await getFromCache<ResponsesResult>({
     key: getAllResponsesCacheKey({ survey, edition, question }),
     fetchFunction: async () => {
       const questionObject = getQuestionObject({
         survey,
         edition,
-        section: question.section,
+        section,
         question,
       })!;
       const rawFieldPath = questionObject?.normPaths?.raw!;

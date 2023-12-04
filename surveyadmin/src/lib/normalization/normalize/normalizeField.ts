@@ -40,7 +40,6 @@ export interface SubfieldProcessProps {
   response: ResponseDocument;
   normResp: NormalizedResponseDocument;
   questionObject: QuestionTemplateOutput;
-  modified: boolean;
   verbose: boolean;
   entityRules: EntityRule[];
 }
@@ -114,6 +113,9 @@ export const normalizeField = async ({
     const result = await subfieldFunction(subfieldProcessProps);
     if (result) {
       const { normResp: newNormResp, modifiedFields, isError } = result;
+
+      // note: each subfield step will MUTATE the normResp object
+      // so this is not strictly necessary currently
       normResp = newNormResp;
 
       if (!isError) {

@@ -1,10 +1,8 @@
-import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { fetchSurveysMetadata, getFromCache } from "@devographics/fetch";
 import { CommonOptions } from "@devographics/fetch/types";
 import { splitResponses } from "../helpers/splitResponses";
 import { getNormalizableQuestions } from "../helpers/getNormalizableQuestions";
 import { getAllResponses } from "../helpers/getAllResponses";
-import { NormalizationResponse } from "../hooks";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 
 export const getNormalizationPercentagesCacheKey = ({ survey, edition }) =>
@@ -61,6 +59,7 @@ export const getNormalizationPercentages = async (
           await getAllResponses({
             survey,
             edition,
+            section: question.section,
             question,
             shouldGetFromCache,
           });

@@ -32,7 +32,6 @@ const AllPresets = ({
   rawValue,
   rawPath,
   entities,
-  addLocalTokens,
   tokens,
 }: {
   survey: SurveyMetadata;
@@ -45,7 +44,6 @@ const AllPresets = ({
   rawPath: string;
   entities: Entity[];
   tokens: NormalizationToken[];
-  addLocalTokens: (tokens: NormalizationToken[]) => void;
 }) => {
   const cacheKey = getCacheKey(edition, question);
   const [selectedId, setSelectedId] = useState("");
@@ -81,9 +79,6 @@ const AllPresets = ({
       rawPath,
     };
     const result = await addManualNormalizations(params);
-
-    // store this locally at the question level
-    addLocalTokens(tokens);
 
     setLoading(false);
     if (result.data) {

@@ -5,6 +5,7 @@ import {
   ResponseDocument,
   SectionMetadata,
   SurveyMetadata,
+  NormalizedResponseDocument,
 } from "@devographics/types";
 import { EntityRule } from "./normalize/helpers";
 
@@ -192,13 +193,6 @@ export interface NormalizationParams extends NormalizationOptions {
   modifier?: any;
 }
 
-export interface NormalizedResponseDocument extends ResponseDocument {
-  responseId: ResponseDocument["_id"];
-  generatedAt: Date;
-  surveyId: SurveyMetadata["id"];
-  editionId: EditionMetadata["id"];
-}
-
 export interface NormalizeFieldResult {
   normalizedResponse: NormalizedResponseDocument;
   modified: boolean;
@@ -211,7 +205,3 @@ export interface NormalizeFieldResult {
 export type StepFunction = (
   NormalizationParams
 ) => Promise<NormalizedResponseDocument>;
-
-export interface QuestionWithSection extends QuestionMetadata {
-  section: SectionMetadata;
-}

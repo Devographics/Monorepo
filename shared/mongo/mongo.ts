@@ -8,7 +8,7 @@
  * Each app can pass their own typings
  * (because they might want to know only a subset of each collection type)
  */
-import { ResponseDocument, Survey } from '@devographics/types'
+import { ResponseDocument, NormalizedResponseDocument, Survey } from '@devographics/types'
 import { MongoClient, Db, Document } from 'mongodb'
 import { nanoid } from 'nanoid'
 import { getEnvVar, EnvVar } from '@devographics/helpers'
@@ -112,7 +112,7 @@ export const getRawResponsesCollection = async <T extends Document = ResponseDoc
     survey?: Survey
 ) => {
     const db = await getAppDb()
-    return db.collection<T>(survey?.responsesCollectionName || 'responses')
+    return db.collection<ResponseDocument>(survey?.responsesCollectionName || 'responses')
 }
 
 /**
@@ -120,7 +120,9 @@ export const getRawResponsesCollection = async <T extends Document = ResponseDoc
  */
 export const getNormResponsesCollection = async <T extends Document>(survey?: Survey) => {
     const db = await getPublicDb()
-    return db.collection<T>(survey?.normalizedCollectionName || 'normalized_responses')
+    return db.collection<NormalizedResponseDocument>(
+        survey?.normalizedCollectionName || 'normalized_responses'
+    )
 }
 
 /**

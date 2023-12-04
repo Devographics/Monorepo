@@ -1,10 +1,14 @@
 import get from "lodash/get.js";
 import sortBy from "lodash/sortBy.js";
-import { EditionMetadata, SurveyMetadata } from "@devographics/types";
+import {
+  EditionMetadata,
+  SurveyMetadata,
+  QuestionWithSection,
+} from "@devographics/types";
 import { getNormResponsesCollection } from "@devographics/mongo";
 import { getQuestionObject } from "./getQuestionObject";
 import { getUnnormalizedResponsesSelector } from "./getSelectors";
-import { NormalizedResponseDocument, QuestionWithSection } from "../types";
+import { NormalizedResponseDocument } from "../types";
 
 export const getUnnormalizedResponses = async ({
   survey,

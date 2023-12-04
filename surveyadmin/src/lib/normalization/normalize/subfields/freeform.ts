@@ -77,7 +77,9 @@ export const freeform: SubfieldProcessFunction = async ({
           let metadata = [] as NormalizationMetadata[];
           let i = 0;
           for (const raw of valuesArrayClean) {
-            let tokens = (await normalize({
+            let tokens;
+
+            tokens = (await normalize({
               values: [raw],
               entityRules,
               edition,

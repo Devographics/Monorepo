@@ -7,6 +7,7 @@ import {
 } from "@devographics/types";
 import without from "lodash/without";
 import { AddManualNormalizationArgs } from "./addManualNormalizations";
+import { getSurveyEditionSectionQuestion } from "../helpers/getSurveyEditionQuestion";
 
 /**
 
@@ -28,17 +29,9 @@ export const removeManualNormalizations = async (
   } = args;
   const startAt = new Date();
 
-  const { data: surveys } = await fetchSurveysMetadata();
-  const survey = surveys.find((s) => s.id === surveyId);
-  if (!survey) {
-    throw new Error(`Could not find survey for surveyId ${surveyId}`);
-  }
+  const { survey, edition, section, question, durations } =
+    await getSurveyEditionSectionQuestion({ surveyId, editionId, questionId });
 
-  const { data: edition } = await fetchEditionMetadataAdmin({
-    surveyId,
-    editionId,
-    shouldGetFromCache: false,
-  });
   if (!edition) {
     throw new Error(`Could not find edition for editionId ${editionId}`);
   }
@@ -48,8 +41,7 @@ export const removeManualNormalizations = async (
     )}`
   );
 
-  const rawResponsesCollection =
-    await getRawResponsesCollection<ResponseDocument>(survey);
+  const rawResponsesCollection = await getRawResponsesCollection(survey);
 
   // first, get the response we're going to operate on
   const response = await rawResponsesCollection.findOne({ _id: responseId });

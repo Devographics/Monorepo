@@ -1,11 +1,16 @@
-import { getRawResponsesCollection } from "@devographics/mongo";
-import { fetchSurveysMetadata } from "@devographics/fetch";
-import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
+import {
+  getNormResponsesCollection,
+  getRawResponsesCollection,
+} from "@devographics/mongo";
+import { fetchEntities } from "@devographics/fetch";
 import {
   ResponseDocument,
   CustomNormalizationDefinition,
 } from "@devographics/types";
 import uniq from "lodash/uniq";
+import { freeform } from "../normalize/subfields";
+import { getSurveyEditionSectionQuestion } from "../helpers/getSurveyEditionQuestion";
+import { generateEntityRules } from "../normalize/generateEntityRules";
 
 export type AddManualNormalizationArgs = {
   responseId: string;
@@ -18,58 +23,23 @@ export type AddManualNormalizationArgs = {
   rawPath: string;
 };
 
-/**
+/*
 
-Normalize all questions for a specific edition
+Get new value of customNormalizations field with added tokens, or initialize it
+if it doesn't exist
 
 */
-export const addManualNormalizations = async (
-  args: AddManualNormalizationArgs
-) => {
-  const {
-    surveyId,
-    editionId,
-    questionId,
-    tokens,
-    responseId,
-    rawValue,
-    rawPath,
-    normRespId,
-  } = args;
-  const startAt = new Date();
-
-  const { data: surveys } = await fetchSurveysMetadata();
-  const survey = surveys.find((s) => s.id === surveyId);
-  if (!survey) {
-    throw new Error(`Could not find survey for surveyId ${surveyId}`);
-  }
-
-  const { data: edition } = await fetchEditionMetadataAdmin({
-    surveyId,
-    editionId,
-    shouldGetFromCache: false,
-  });
-  if (!edition) {
-    throw new Error(`Could not find edition for editionId ${editionId}`);
-  }
-  console.log(
-    `⛰️ Adding manual normalizations for ${editionId}/${questionId}/${responseId}: ${tokens.join(
-      ", "
-    )}`
-  );
-
-  const rawResponsesCollection =
-    await getRawResponsesCollection<ResponseDocument>(survey);
-
-  // first, get the response we're going to operate on
-  const response = await rawResponsesCollection.findOne({ _id: responseId });
-
-  if (!response) {
-    throw new Error(
-      `addManualNormalizations: no response document found for _id ${responseId}`
-    );
-  }
-
+const addCustomNormalization = ({
+  rawPath,
+  rawValue,
+  tokens,
+  response,
+}: {
+  rawPath: string;
+  rawValue: string;
+  tokens: string[];
+  response: ResponseDocument;
+}) => {
   const normalizationDefinition: CustomNormalizationDefinition = {
     rawPath,
     rawValue,
@@ -92,27 +62,112 @@ export const addManualNormalizations = async (
     // else, add new norm. definition to customNormalizations array
     customNormalizations.push(normalizationDefinition);
   }
+  return customNormalizations;
+};
 
-  const selector = { _id: responseId };
-  const operation = {
-    $set: { customNormalizations },
-  };
-  const updateResult = await rawResponsesCollection.updateOne(
-    selector,
-    operation
+/**
+
+Add a manual normalization to a question
+
+*/
+export const addManualNormalizations = async (
+  args: AddManualNormalizationArgs
+) => {
+  const {
+    surveyId,
+    editionId,
+    questionId,
+    tokens,
+    responseId,
+    rawValue,
+    rawPath,
+  } = args;
+
+  const startAt = new Date();
+
+  console.log(
+    `⛰️ Adding manual normalizations for ${editionId}/${questionId}/${responseId}: ${tokens.join(
+      ", "
+    )}`
   );
 
-  return updateResult;
-  // const responses = [{ ...response, customNormalizations }];
+  const { survey, edition, section, question, durations } =
+    await getSurveyEditionSectionQuestion({ surveyId, editionId, questionId });
 
-  // const mutationResult = await normalizeInBulk({
-  //   survey,
-  //   edition,
-  //   responses,
-  //   questionId,
-  //   isRenormalization: true,
-  //   verbose: true,
-  // });
+  /*
 
-  // return mutationResult;
+  1. Raw Response
+
+  */
+  const rawResponsesCollection = await getRawResponsesCollection(survey);
+  const response = await rawResponsesCollection.findOne({ _id: responseId });
+
+  if (!response) {
+    throw new Error(
+      `addManualNormalizations: no response document found for _id ${responseId}`
+    );
+  }
+
+  const customNormalizations = addCustomNormalization({
+    rawPath,
+    rawValue,
+    tokens,
+    response,
+  });
+
+  const updatedResponse = { ...response, customNormalizations };
+
+  const rawUpdateResult = await rawResponsesCollection.updateOne(
+    { _id: responseId },
+    {
+      $set: { customNormalizations },
+    }
+  );
+
+  /*
+
+  1. Normalized Response
+
+  */
+  const normRespCollection = await getNormResponsesCollection(survey);
+
+  // first, get the response we're going to operate on
+  const normResp = await normRespCollection.findOne({ _id: responseId });
+
+  if (!normResp) {
+    throw new Error(
+      `addManualNormalizations: no normalized response document found for _id ${responseId}`
+    );
+  }
+
+  const entities = (await fetchEntities()).data;
+  const entityRules = generateEntityRules(entities);
+
+  const normResult = await freeform({
+    edition,
+    response: updatedResponse,
+    normResp,
+    questionObject: question,
+    verbose: true,
+    entityRules,
+  });
+
+  if (normResult) {
+    const { normResp: updatedNormalizedResp } = normResult;
+
+    const selector = { _id: responseId };
+    const operation = {
+      $set: updatedNormalizedResp,
+    };
+    const normUpdateResult = await normRespCollection.updateOne(
+      selector,
+      operation
+    );
+    return {
+      rawUpdateResult,
+      normUpdateResult,
+      updatedResponse,
+      updatedNormalizedResp,
+    };
+  }
 };

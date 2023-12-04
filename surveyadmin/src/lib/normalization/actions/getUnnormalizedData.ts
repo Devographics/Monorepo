@@ -1,36 +1,20 @@
 import { fetchSurveysMetadata, fetchQuestionData } from "@devographics/fetch";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
-import {
-  getEditionQuestionById,
-  getQuestionResponsesCount,
-} from "../normalize/helpers";
+import { getQuestionResponsesCount } from "../normalize/helpers";
+import { getEditionQuestionById } from "../helpers/getEditionQuestionById";
 import { getUnnormalizedResponses } from "../helpers/getUnnormalizedResponses";
 import { getEditionQuestions } from "../helpers/getEditionQuestions";
 import get from "lodash/get";
 import { ResultsSubFieldEnum } from "@devographics/types";
+import { getSurveyEditionSectionQuestion } from "../helpers/getSurveyEditionQuestion";
 
 export const getUnnormalizedData = async ({
   surveyId,
   editionId,
   questionId,
 }) => {
-  const { data: surveys } = await fetchSurveysMetadata();
-  const survey = surveys.find((s) => s.id === surveyId);
-  if (!survey) {
-    throw new Error(`Could not find survey with id ${surveyId}`);
-  }
-  const { data: edition } = await fetchEditionMetadataAdmin({
-    surveyId,
-    editionId,
-    shouldGetFromCache: false,
-  });
-  if (!edition) {
-    throw new Error(`Could not find edition with id ${editionId}`);
-  }
-  const question = getEditionQuestionById({ edition, questionId });
-  if (!question) {
-    throw new Error(`Could not find question with id ${questionId}`);
-  }
+  const { survey, edition, section, question, durations } =
+    await getSurveyEditionSectionQuestion({ surveyId, editionId, questionId });
 
   // console.log(`// unnormalizedFields ${editionId} ${questionId}`);
   const { responses, rawFieldPath } = await getUnnormalizedResponses({

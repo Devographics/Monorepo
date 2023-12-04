@@ -4,11 +4,12 @@ import {
   fetchEntities,
 } from "@devographics/fetch";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
-import { getEditionQuestionById } from "../normalize/helpers";
+import { getEditionQuestionById } from "../helpers/getEditionQuestionById";
 import { getAllResponses } from "../helpers/getAllResponses";
 import get from "lodash/get";
 import { ResultsSubFieldEnum } from "@devographics/types";
 import pick from "lodash/pick";
+import { getSurveyEditionSectionQuestion } from "../helpers/getSurveyEditionQuestion";
 
 export const getQuestionResponses = async ({
   surveyId,
@@ -16,30 +17,14 @@ export const getQuestionResponses = async ({
   questionId,
   shouldGetFromCache = true,
 }) => {
-  const { data: surveys, duration: fetchSurveysMetadataDuration } =
-    await fetchSurveysMetadata({ shouldGetFromCache });
-  const survey = surveys.find((s) => s.id === surveyId);
-  if (!survey) {
-    throw new Error(`Could not find survey with id ${surveyId}`);
-  }
-  const { data: edition, duration: fetchEditionMetadataAdminDuration } =
-    await fetchEditionMetadataAdmin({
-      surveyId,
-      editionId,
-      shouldGetFromCache,
-    });
-  if (!edition) {
-    throw new Error(`Could not find edition with id ${editionId}`);
-  }
-  const question = getEditionQuestionById({ edition, questionId });
-  if (!question) {
-    throw new Error(`Could not find question with id ${questionId}`);
-  }
+  const { survey, edition, section, question, durations } =
+    await getSurveyEditionSectionQuestion({ surveyId, editionId, questionId });
 
   // console.log(`// unnormalizedFields ${editionId} ${questionId}`);
   const { data, duration: getAllResponsesDuration } = await getAllResponses({
     survey,
     edition,
+    section,
     question,
     shouldGetFromCache,
   });
@@ -86,8 +71,7 @@ export const getQuestionResponses = async ({
     questionResult,
     entities,
     durations: {
-      fetchSurveysMetadataDuration,
-      fetchEditionMetadataAdminDuration,
+      ...durations,
       fetchQuestionDataDuration,
       getAllResponsesDuration,
       fetchEntitiesDuration,

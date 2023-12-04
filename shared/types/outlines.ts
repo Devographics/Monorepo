@@ -1,5 +1,6 @@
 import { DbPaths } from './api'
 import { Entity } from './entities'
+import { SectionMetadata } from './metadata'
 
 export interface SurveyConfig {
     /** state-of-js */
@@ -290,7 +291,11 @@ export interface QuestionWithId extends Omit<Question, 'id'> {
     id: string
 }
 
-export interface QuestionTemplateOutput extends QuestionWithId {
+export interface QuestionWithSection extends QuestionWithId {
+    section: SectionMetadata
+}
+
+export interface QuestionTemplateOutput extends QuestionWithSection {
     rawPaths?: DbPaths
     normPaths?: DbPaths
     options?: Option[]

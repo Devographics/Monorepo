@@ -1,4 +1,8 @@
-import { TemplateArguments, TemplateFunction } from "@devographics/types";
+import {
+  TemplateArguments,
+  TemplateFunction,
+  QuestionWithSection,
+} from "@devographics/types";
 import { templateFunctions } from "@devographics/templates";
 
 export const getQuestionObject = ({
@@ -16,7 +20,7 @@ export const getQuestionObject = ({
     question.template
   ] as TemplateFunction;
   if (!templateFunction) {
-    return;
+    return { ...question, section } as QuestionWithSection;
   }
   const questionObject = templateFunction({
     survey,
