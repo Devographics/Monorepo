@@ -1,5 +1,6 @@
 import { getCustomNormalizationsCollection } from "@devographics/mongo";
 import { CustomNormalizationDocument } from "@devographics/types";
+import { cleanUpIfNeeded } from "./removeCustomTokens";
 
 export type EnableRegularTokensProps = { tokens: string[]; responseId: string };
 
@@ -17,16 +18,17 @@ export const enableRegularTokens = async ({
     { responseId },
     {
       $pull: {
-        disabledTokens: { $in: tokens },
+        disabledTokens: tokens[0],
       },
     },
     { returnNewDocument: true }
   );
-  // const updatedDocument = updateResult.value
-  console.log(updateResult);
-  // if (updatedDocument.tokens)
-  // // delete all normalization definitions with no tokens, just in case
-  // // we just removed the last token
-  // const deleteResult = customNormCollection.deleteMany({ tokens: { $eq: [] } });
-  // return { updateResult, deleteResult };
+  const document = updateResult.value;
+  const deleteResult = await cleanUpIfNeeded(document);
+  return {
+    action: "enableRegularTokens",
+    updateResult,
+    deleteResult,
+    document,
+  };
 };

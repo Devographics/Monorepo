@@ -6,7 +6,7 @@ import {
   QuestionWithSection,
 } from "@devographics/types";
 import { useState } from "react";
-import NormToken from "./NormToken";
+import { NormToken } from "./NormToken";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
 import isEmpty from "lodash/isEmpty";
 import { loadQuestionData } from "~/lib/normalization/services";

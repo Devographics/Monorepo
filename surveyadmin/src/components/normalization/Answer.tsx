@@ -4,7 +4,7 @@ import { normalizeQuestionResponses } from "~/lib/normalization/services";
 import { LoadingButton } from "../LoadingButton";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
-import NormToken from "./NormToken";
+import { NormTokenAction } from "./NormTokenAction";
 import { Entity, CustomNormalizationDocument } from "@devographics/types";
 import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
 import { AnswersProps, ResponseId } from "./Answers";
@@ -123,7 +123,7 @@ export const Answer = ({
         <td>
           <div className="tokens-list">
             {enabledTokens.map((token) => (
-              <NormToken
+              <NormTokenAction
                 key={token.id}
                 id={token.id}
                 isRegular={true}
@@ -133,7 +133,7 @@ export const Answer = ({
             ))}
 
             {disabledTokens.map((token) => (
-              <NormToken
+              <NormTokenAction
                 key={token.id}
                 id={token.id}
                 isRegular={true}
@@ -143,7 +143,7 @@ export const Answer = ({
             ))}
 
             {customTokens.map((token) => (
-              <NormToken
+              <NormTokenAction
                 key={token.id}
                 id={token.id}
                 isCustom={true}
@@ -152,7 +152,7 @@ export const Answer = ({
             ))}
 
             {customNormalization?.customTokens?.map((tokenId) => (
-              <NormToken
+              <NormTokenAction
                 key={tokenId}
                 id={tokenId}
                 isCustom={true}
@@ -162,7 +162,7 @@ export const Answer = ({
             {presets
               .filter((id) => !allTokenIds.includes(id))
               .map((id) => (
-                <NormToken
+                <NormTokenAction
                   key={id}
                   id={id}
                   isPreset={true}

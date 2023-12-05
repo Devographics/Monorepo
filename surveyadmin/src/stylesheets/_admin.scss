@@ -152,6 +152,10 @@
 .normalization-token-preset {
   border-style: dashed;
   background: none;
+  opacity: 0.7;
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .field-value-items {

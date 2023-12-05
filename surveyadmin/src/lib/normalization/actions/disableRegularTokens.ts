@@ -3,7 +3,7 @@ import { CustomNormalizationDocument } from "@devographics/types";
 
 export type DisableRegularTokensProps = Omit<
   CustomNormalizationDocument,
-  "addedTokens" | "removedTokens"
+  "customTokens" | "disabledTokens"
 > & { tokens: string[] };
 
 /*
@@ -12,19 +12,22 @@ Specify one or more regex tokens to be disabled
 
 */
 export const disableRegularTokens = async (
-  document: DisableRegularTokensProps
+  props: DisableRegularTokensProps
 ) => {
-  const { responseId, tokens, ...rest } = document;
+  const { responseId, tokens, ...rest } = props;
   const customNormCollection = await getCustomNormalizationsCollection();
-  const result = customNormCollection.updateOne(
+  const updateResult = customNormCollection.updateOne(
     { responseId },
     {
       $set: { _id: responseId, responseId, ...rest },
       $addToSet: {
-        disabledTokens: { $each: tokens },
+        disabledTokens: { $each: tokens, returnNewDocument: true },
       },
     },
     { upsert: true }
   );
-  return result;
+  const document = await customNormCollection.findOne({
+    _id: responseId,
+  });
+  return { action: "disableRegularTokens", updateResult, document };
 };
