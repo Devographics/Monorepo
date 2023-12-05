@@ -10,13 +10,22 @@ import get from "lodash/get";
 import { ResultsSubFieldEnum } from "@devographics/types";
 import pick from "lodash/pick";
 import { getSurveyEditionSectionQuestion } from "../helpers/getSurveyEditionQuestion";
+import { getCustomTokens } from "./getCustomTokens";
+import { getFormPaths } from "@devographics/templates";
+
+export interface GetQuestionResponsesParams {
+  surveyId: string;
+  editionId: string;
+  questionId: string;
+  shouldGetFromCache?: boolean;
+}
 
 export const getQuestionResponses = async ({
   surveyId,
   editionId,
   questionId,
   shouldGetFromCache = true,
-}) => {
+}: GetQuestionResponsesParams) => {
   const { survey, edition, section, question, durations } =
     await getSurveyEditionSectionQuestion({ surveyId, editionId, questionId });
 
@@ -64,12 +73,18 @@ export const getQuestionResponses = async ({
     )
     .map((e) => pick(e, ["id", "patterns", "tags", "descriptionClean"]));
 
+  const paths = getFormPaths({ edition, question });
+  const customNormalizations = await getCustomTokens({
+    rawPath: paths.other!,
+  });
+
   return {
     responsesCount,
     responses: allResponses,
     responsesSelector: selector,
     questionResult,
     entities,
+    customNormalizations,
     durations: {
       ...durations,
       fetchQuestionDataDuration,

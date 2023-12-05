@@ -9,7 +9,7 @@ import { useState } from "react";
 import trim from "lodash/trim";
 import without from "lodash/without";
 import { useLocalStorage } from "../hooks";
-import { addManualNormalizations } from "~/lib/normalization/services";
+import { addCustomTokens } from "~/lib/normalization/services";
 import {
   NormalizationToken,
   NormalizeInBulkResult,
@@ -50,10 +50,7 @@ const AllPresets = ({
   const [tokensToAdd, setTokensToAdd] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<NormalizeInBulkResult | null>(null);
-  const [localPresets, setLocalPresets] = useLocalStorage<string[]>(
-    cacheKey,
-    []
-  );
+
   const entityIds = questionData
     ? questionData.currentEdition.buckets.map((b) => b.id).slice(0, 20)
     : [];
@@ -62,11 +59,6 @@ const AllPresets = ({
     setLoading(true);
     setResult(null);
     e.preventDefault();
-    tokensToAdd.forEach((token) => {
-      if (![...entityIds, ...localPresets].includes(token)) {
-        setLocalPresets([...localPresets, token]);
-      }
-    });
 
     const params = {
       surveyId: survey.id,
@@ -78,16 +70,12 @@ const AllPresets = ({
       rawValue,
       rawPath,
     };
-    const result = await addManualNormalizations(params);
+    const result = await addCustomTokens(params);
 
     setLoading(false);
     if (result.data) {
       setResult(result.data);
     }
-  };
-
-  const handleDeletePreset = (preset) => {
-    setLocalPresets(without(localPresets, preset));
   };
 
   const addTokenId = (id: string) => {

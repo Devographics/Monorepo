@@ -37,11 +37,17 @@ export const apiRoutes = {
     normalizeEdition: {
       href: (params) => `/api/normalization/normalizeEdition`,
     },
-    addManualNormalizations: {
-      href: (params) => `/api/normalization/addManualNormalizations`,
+    addCustomTokens: {
+      href: (params) => `/api/normalization/addCustomTokens`,
     },
-    removeManualNormalizations: {
-      href: (params) => `/api/normalization/removeManualNormalizations`,
+    removeCustomTokens: {
+      href: (params) => `/api/normalization/removeCustomTokens`,
+    },
+    enableRegularTokens: {
+      href: (params) => `/api/normalization/enableRegularTokens`,
+    },
+    disableRegularTokens: {
+      href: (params) => `/api/normalization/disableRegularTokens`,
     },
     loadNormalizationPercentages: {
       href: (params) =>

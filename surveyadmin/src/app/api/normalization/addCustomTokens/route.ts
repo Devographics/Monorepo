@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { captureException } from "@sentry/nextjs";
-import { removeManualNormalizations } from "~/lib/normalization/actions";
+import { addCustomTokens } from "~/lib/normalization/actions";
 
 export async function POST(req: NextRequest, res: NextResponse) {
+  console.log("// addCustomTokens");
   try {
     // Get body data as JSON
     let body: any;
@@ -10,13 +11,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
       body = await req.json();
     } catch (err) {
       throw err;
-      //   throw new HandlerError({
-      //     id: "invalid_data",
-      //     message: "Found invalid data when parsing response data",
-      //     status: 400,
-      //   });
     }
-    const data = await removeManualNormalizations(body);
+    const data = await addCustomTokens(body);
     return NextResponse.json({ data });
   } catch (error) {
     console.error(error);

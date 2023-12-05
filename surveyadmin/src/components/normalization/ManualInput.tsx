@@ -9,7 +9,7 @@ import { useState } from "react";
 import trim from "lodash/trim";
 import without from "lodash/without";
 import { useLocalStorage } from "../hooks";
-import { addManualNormalizations } from "~/lib/normalization/services";
+import { addCustomTokens } from "~/lib/normalization/services";
 import {
   NormalizationToken,
   NormalizeInBulkResult,
@@ -32,7 +32,7 @@ const ManualInput = ({
   rawValue,
   rawPath,
   entities,
-  addCustomNormalization,
+  addCustomTokens,
   tokens,
 }: {
   survey: SurveyMetadata;
@@ -45,7 +45,7 @@ const ManualInput = ({
   rawPath: string;
   entities: Entity[];
   tokens: NormalizationToken[];
-  addCustomNormalization: (CustomNormalization) => void;
+  addCustomTokens: (CustomNormalization) => void;
 }) => {
   const cacheKey = getCacheKey(edition, question);
   const [selectedId, setSelectedId] = useState("");
@@ -81,10 +81,10 @@ const ManualInput = ({
       rawValue,
       rawPath,
     };
-    const result = await addManualNormalizations(params);
+    const result = await addCustomTokens(params);
 
     // store this locally at the question level
-    addCustomNormalization({ responseId, tokens });
+    addCustomTokens({ responseId, tokens });
 
     setLoading(false);
     if (result.data) {

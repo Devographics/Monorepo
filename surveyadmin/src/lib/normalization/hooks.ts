@@ -1,5 +1,9 @@
 import { FetchPayloadSuccessOrError } from "@devographics/fetch";
-import { ResponseData, Entity } from "@devographics/types";
+import {
+  ResponseData,
+  Entity,
+  CustomNormalizationDocument,
+} from "@devographics/types";
 import useSWR from "swr";
 import { apiRoutes } from "~/lib/apiRoutes";
 import { NormalizationMetadata } from "./types";
@@ -23,6 +27,7 @@ export type ResponsesData = {
   responsesCount: number;
   entities: Entity[];
   questionResult: FetchPayloadSuccessOrError<ResponseData>;
+  customNormalizations: CustomNormalizationDocument[];
   durations: any;
 };
 

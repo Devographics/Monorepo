@@ -14,27 +14,102 @@ import {
   ResponseData,
   Entity,
   QuestionWithSection,
+  CustomNormalizationDocument,
 } from "@devographics/types";
 import { useSegments } from "./hooks";
 import QuestionData from "./QuestionData";
 import { splitResponses } from "~/lib/normalization/helpers/splitResponses";
 
-export const NormalizeQuestion = (props: {
+const queryClient = new QueryClient();
+
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import { apiRoutes } from "~/lib/apiRoutes";
+import { GetQuestionResponsesParams } from "~/lib/normalization/actions/getQuestionResponses";
+
+interface NormalizeQuestionProps {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionWithSection;
-}) => {
+}
+export const NormalizeQuestionWithProvider = (
+  props: NormalizeQuestionProps
+) => (
+  <QueryClientProvider client={queryClient}>
+    <NormalizeQuestion {...props} />
+  </QueryClientProvider>
+);
+
+export const getDataCacheKey = ({
+  surveyId,
+  editionId,
+  questionId,
+}: GetQuestionResponsesParams) => `${surveyId}.${editionId}.${questionId}.data`;
+
+interface ApiData<T = any> {
+  data: T;
+  error: any;
+}
+
+const dataKeys = (params: GetQuestionResponsesParams) => {
+  const all = getDataCacheKey(params);
+  const lists = () => [all, "list"] as const;
+  const list = (filters: string) => [...lists(), { filters }] as const;
+  const details = () => [all, "detail"] as const;
+  const detail = (id: number) => [...details(), id] as const;
+  const customNormalization = (responseId) => [
+    all,
+    "customNormalization",
+    { responseId },
+  ];
+  return {
+    all,
+    lists,
+    list,
+    details,
+    detail,
+    customNormalization,
+  };
+};
+
+const getData = async (params: GetQuestionResponsesParams) => {
+  const url = apiRoutes.normalization.loadQuestionResponses.href(params);
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  } else {
+    const result: ApiData<ResponsesData> = await response.json();
+    if (result.error) {
+      throw result.error;
+    }
+    return result.data;
+  }
+};
+
+export const NormalizeQuestion = (props: NormalizeQuestionProps) => {
   const { survey, edition, question } = props;
-  const { data, loading, error } = useQuestionResponses({
+  const params = {
     surveyId: survey.id,
     editionId: edition.id,
     questionId: question.id,
+  };
+
+  const query = useQuery({
+    queryKey: [getDataCacheKey(params)],
+    queryFn: () => getData(params),
   });
 
+  console.log(query.data);
+  const loading = query.isPending;
   return loading ? (
     <div aria-busy={true} />
   ) : (
-    <Normalization {...props} responsesData={data} />
+    <Normalization {...props} responsesData={query.data} />
   );
 };
 
@@ -60,8 +135,14 @@ export const Normalization = (props: NormalizationProps) => {
     question,
     responsesData = {} as ResponsesData,
   } = props;
-  const { responsesCount, entities, responses, questionResult, durations } =
-    responsesData;
+  const {
+    responsesCount,
+    entities,
+    responses,
+    questionResult,
+    customNormalizations,
+    durations,
+  } = responsesData;
 
   const questionData = questionResult?.data;
 
@@ -83,6 +164,7 @@ export const Normalization = (props: NormalizationProps) => {
     responses,
     questionData,
     entities,
+    customNormalizations,
   };
 
   const segmentProps = {
@@ -115,6 +197,7 @@ export interface CommonProps extends NormalizationProps {
   responses: NormalizationResponse[];
   questionData: ResponseData;
   entities: Entity[];
+  customNormalizations: CustomNormalizationDocument[];
 }
 
 const AllAnswers = (props: CommonProps) => {

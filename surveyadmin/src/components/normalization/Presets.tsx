@@ -8,7 +8,7 @@ import {
 import { Dispatch, SetStateAction, useState } from "react";
 import { NormalizationToken } from "~/lib/normalization/types";
 import { usePresets } from "./hooks";
-import { addManualNormalizations } from "~/lib/normalization/services";
+import { addCustomTokens } from "~/lib/normalization/services";
 
 export interface PresetsProps {
   survey: SurveyMetadata;
@@ -19,6 +19,7 @@ export interface PresetsProps {
   normRespId: string;
   rawValue: string;
   rawPath: string;
+  normPath: string;
   entities: Entity[];
   tokens: NormalizationToken[];
   showPresetsShortlistModal: () => void;
@@ -60,6 +61,7 @@ export const Preset = (props: PresetsProps & { id: string }) => {
     responseId,
     normRespId,
     rawValue,
+    normPath,
     rawPath,
     entities,
     tokens,
@@ -79,16 +81,13 @@ export const Preset = (props: PresetsProps & { id: string }) => {
     setLoading(true);
     const tokens = [id];
     const params = {
-      surveyId: survey.id,
-      editionId: edition.id,
-      questionId: question.id,
       tokens,
       responseId,
-      normRespId,
       rawValue,
+      normPath,
       rawPath,
     };
-    const result = await addManualNormalizations(params);
+    const result = await addCustomTokens(params);
     setLoading(false);
   };
 

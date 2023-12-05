@@ -142,13 +142,16 @@
 // .normalization-token[role="button"] {
 //   border: 2px solid var(--primary);
 // }
+
+// .normalization-token {
+//   border: 2px solid rgb(192, 192, 192);
+// }
 // .normalization-token-custom {
-//   &,
-//   &[role="button"] {
-//     code {
-//       background-color: rgb(231, 255, 207);
-//     }
-//   }
+//   border-color: rgb(181, 235, 128);
+// }
+// .normalization-token-preset {
+//   border-style: dashed;
+//   background: none;
 // }
 
 .field-value-items {

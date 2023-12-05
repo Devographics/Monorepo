@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { captureException } from "@sentry/nextjs";
-import { addManualNormalizations } from "~/lib/normalization/actions";
+import { removeCustomTokens } from "~/lib/normalization/actions";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       //     status: 400,
       //   });
     }
-    const data = await addManualNormalizations(body);
+    const data = await removeCustomTokens(body);
     return NextResponse.json({ data });
   } catch (error) {
     console.error(error);

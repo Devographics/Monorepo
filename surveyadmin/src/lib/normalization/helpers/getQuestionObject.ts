@@ -2,6 +2,7 @@ import {
   TemplateArguments,
   TemplateFunction,
   QuestionWithSection,
+  QuestionTemplateOutput,
 } from "@devographics/types";
 import { templateFunctions } from "@devographics/templates";
 
@@ -20,7 +21,7 @@ export const getQuestionObject = ({
     question.template
   ] as TemplateFunction;
   if (!templateFunction) {
-    return { ...question, section } as QuestionWithSection;
+    return { ...question, section } as QuestionTemplateOutput;
   }
   const questionObject = templateFunction({
     survey,

@@ -4,9 +4,10 @@ import { getScripts } from "~/lib/scripts/actions";
 import { getQuestionResponses } from "~/lib/normalization/actions/getQuestionResponses";
 
 export async function GET(req: NextRequest, res: NextResponse) {
-  const surveyId = req.nextUrl.searchParams.get("surveyId");
-  const editionId = req.nextUrl.searchParams.get("editionId");
-  const questionId = req.nextUrl.searchParams.get("questionId");
+  const surveyId = req.nextUrl.searchParams.get("surveyId")!;
+  const editionId = req.nextUrl.searchParams.get("editionId")!;
+  const questionId = req.nextUrl.searchParams.get("questionId")!;
+
   try {
     const data = await getQuestionResponses({
       surveyId,

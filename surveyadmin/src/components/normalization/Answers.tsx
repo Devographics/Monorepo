@@ -45,6 +45,7 @@ const Answers = (props: AnswersProps) => {
     questionData,
     variant,
     entities,
+    customNormalizations,
   } = props;
 
   const sortedAnswers = sortBy(props[`${variant}Answers`], (a) =>
@@ -61,6 +62,8 @@ const Answers = (props: AnswersProps) => {
   })!;
   const formPaths = getFormPaths({ edition, question: questionObject });
   const rawPath = formPaths?.other;
+  const normPath = questionObject.normPaths?.other;
+
   if (!rawPath)
     return (
       <p>
@@ -72,6 +75,7 @@ const Answers = (props: AnswersProps) => {
     ...props,
     showPresetsShortlistModal,
     rawPath,
+    normPath,
   };
 
   let filteredAnswers = filterQuery
@@ -175,11 +179,15 @@ const Answers = (props: AnswersProps) => {
                     previousRawValue?.[0].toUpperCase()
                   : true;
 
+                const customNormalization = customNormalizations.find(
+                  (c) => c.responseId === responseId
+                );
                 return (
                   <Answer
                     key={raw + index}
                     answer={answer}
                     index={index}
+                    customNormalization={customNormalization}
                     {...(showLetterHeading
                       ? { letterHeading: raw?.[0].toUpperCase() }
                       : {})}

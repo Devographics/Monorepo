@@ -1,25 +1,15 @@
 "use client";
 import { useState } from "react";
-import {
-  addManualNormalizations,
-  normalizeQuestionResponses,
-  removeManualNormalizations,
-} from "~/lib/normalization/services";
+import { normalizeQuestionResponses } from "~/lib/normalization/services";
 import { LoadingButton } from "../LoadingButton";
-import {
-  NormalizationToken,
-  NormalizeInBulkResult,
-} from "~/lib/normalization/types";
+import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
 import NormToken from "./NormToken";
-import { Entity } from "@devographics/types";
+import { Entity, CustomNormalizationDocument } from "@devographics/types";
 import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
 import { AnswersProps, ResponseId } from "./Answers";
 import FieldValue from "./FieldValue";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
-import Presets from "./Presets";
-import { useLocalStorage } from "../hooks";
-import without from "lodash/without";
 import { usePresets } from "./hooks";
 import AllPresets from "./AllPresets";
 import Dialog from "./Dialog";
@@ -27,15 +17,16 @@ import {
   DISCARDED_ANSWER,
   CUSTOM_NORMALIZATION,
 } from "@devographics/constants";
-
 export interface AnswerProps extends AnswersProps {
   rawPath: string;
+  normPath: string;
   answer: IndividualAnswer;
   index: number;
   letterHeading?: string;
   entities: Entity[];
   responses: NormalizationResponse[];
   showPresetsShortlistModal: () => void;
+  customNormalization: CustomNormalizationDocument;
 }
 
 export const Answer = ({
@@ -45,11 +36,13 @@ export const Answer = ({
   edition,
   questionData,
   rawPath,
+  normPath,
   entities,
   index,
   letterHeading,
   responses,
   showPresetsShortlistModal,
+  customNormalization,
 }: AnswerProps) => {
   const { _id, responseId, raw, tokens = [] } = answer;
   const [result, setResult] = useState<NormalizeInBulkResult>();
@@ -57,35 +50,6 @@ export const Answer = ({
   const [showResult, setShowResult] = useState(true);
   const [showAllPresets, setShowAllPresets] = useState(false);
   const { enabledPresets } = usePresets({ edition, question });
-
-  const surveyId = survey.id;
-  const editionId = edition.id;
-  const questionId = question.id;
-
-  const addRemoveTokenParams = {
-    surveyId: survey.id,
-    editionId: edition.id,
-    questionId: question.id,
-    tokens,
-    responseId,
-    normRespId: _id,
-    rawValue: raw,
-    rawPath,
-  };
-
-  const addToken = async (id: string) => {
-    const result = await addManualNormalizations({
-      ...addRemoveTokenParams,
-      tokens: [id],
-    });
-  };
-
-  const removeToken = async (id: string) => {
-    const result = await removeManualNormalizations({
-      ...addRemoveTokenParams,
-      tokens: [id],
-    });
-  };
 
   const presetsProps = {
     survey,
@@ -95,10 +59,23 @@ export const Answer = ({
     responseId,
     normRespId: _id,
     rawValue: raw,
+    normPath,
     rawPath,
     tokens,
     entities,
     showPresetsShortlistModal,
+  };
+
+  const normTokenProps = {
+    survey,
+    edition,
+    question,
+    responseId,
+    rawPath,
+    normPath,
+    rawValue: raw,
+    responses,
+    entities,
   };
 
   const regularTokens = tokens.filter(
@@ -136,35 +113,21 @@ export const Answer = ({
               <NormToken
                 key={token.id}
                 id={token.id}
-                responses={responses}
-                entities={entities}
+                isRegular={true}
+                {...normTokenProps}
               />
             ))}
 
-            {customTokens.map((token) => (
+            {customNormalization?.addedTokens?.map((tokenId) => (
               <NormToken
-                key={token.id}
-                id={token.id}
-                responses={responses}
+                key={tokenId}
+                id={tokenId}
                 isCustom={true}
-                action="remove"
-                addToken={addToken}
-                removeToken={removeToken}
-                entities={entities}
+                {...normTokenProps}
               />
             ))}
             {presets.map((id) => (
-              <NormToken
-                key={id}
-                id={id}
-                responses={responses}
-                isCustom={true}
-                action="add"
-                addToken={addToken}
-                removeToken={removeToken}
-                isIncluded={allTokens.some((t) => t.id === id)}
-                entities={entities}
-              />
+              <NormToken key={id} id={id} isPreset={true} {...normTokenProps} />
             ))}
           </div>
         </td>
@@ -193,7 +156,7 @@ export const Answer = ({
             </div>
             <LoadingButton
               action={async () => {
-                await addToken(DISCARDED_ANSWER);
+                // await addToken(DISCARDED_ANSWER);
               }}
               label="🗑️"
               tooltip="Discard this answer"
@@ -201,9 +164,9 @@ export const Answer = ({
             <LoadingButton
               action={async () => {
                 const result = await normalizeQuestionResponses({
-                  questionId,
-                  surveyId,
-                  editionId,
+                  questionId: question.id,
+                  surveyId: survey.id,
+                  editionId: edition.id,
                   responsesIds: [responseId],
                 });
                 setResult(result.data);

@@ -1,5 +1,8 @@
 import Breadcrumbs from "~/components/normalization/Breadcrumbs";
-import { NormalizeQuestion } from "~/components/normalization/NormalizeQuestion";
+import {
+  NormalizeQuestion,
+  NormalizeQuestionWithProvider,
+} from "~/components/normalization/NormalizeQuestion";
 import { fetchSurveysMetadata } from "@devographics/fetch";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import { getEditionQuestions } from "~/lib/normalization/helpers/getEditionQuestions";
@@ -44,7 +47,7 @@ export default async function Page({ params }) {
         edition={edition}
         question={question}
       />
-      <NormalizeQuestion
+      <NormalizeQuestionWithProvider
         survey={survey}
         edition={edition}
         question={question}

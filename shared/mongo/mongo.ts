@@ -8,7 +8,12 @@
  * Each app can pass their own typings
  * (because they might want to know only a subset of each collection type)
  */
-import { ResponseDocument, NormalizedResponseDocument, Survey } from '@devographics/types'
+import {
+    ResponseDocument,
+    NormalizedResponseDocument,
+    Survey,
+    CustomNormalizationDocument
+} from '@devographics/types'
 import { MongoClient, Db, Document } from 'mongodb'
 import { nanoid } from 'nanoid'
 import { getEnvVar, EnvVar } from '@devographics/helpers'
@@ -97,37 +102,23 @@ export const getAppDb = () => {
     return getMongoDb({ dbUri: process.env.MONGO_PRIVATE_URI, dbName })
 }
 
-/**
- * Handle the connection automatically when called the first time
- */
 export const getCollectionByName = async <T extends Document>(name: string) => {
     const db = await getAppDb()
     return db.collection<T>(name)
 }
 
-/**
- * Handle the connection automatically when called the first time
- */
-export const getRawResponsesCollection = async <T extends Document = ResponseDocument>(
-    survey?: Survey
-) => {
+export const getRawResponsesCollection = async (survey?: Survey) => {
     const db = await getAppDb()
     return db.collection<ResponseDocument>(survey?.responsesCollectionName || 'responses')
 }
 
-/**
- * Handle the connection automatically when called the first time
- */
-export const getNormResponsesCollection = async <T extends Document>(survey?: Survey) => {
+export const getNormResponsesCollection = async (survey?: Survey) => {
     const db = await getPublicDb()
     return db.collection<NormalizedResponseDocument>(
         survey?.normalizedCollectionName || 'normalized_responses'
     )
 }
 
-/**
- * Handle the connection automatically when called the first time
- */
 export const getUsersCollection = async <T extends Document>() => {
     const db = await getAppDb()
     return db.collection<T>('users')
@@ -136,6 +127,11 @@ export const getUsersCollection = async <T extends Document>() => {
 export const getSavesCollection = async <T extends Document>() => {
     const db = await getAppDb()
     return db.collection<T>('saves')
+}
+
+export const getCustomNormalizationsCollection = async () => {
+    const db = await getAppDb()
+    return db.collection<CustomNormalizationDocument>('custom_normalizations')
 }
 
 /**

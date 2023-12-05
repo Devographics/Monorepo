@@ -1,15 +1,19 @@
 import { apiRoutes } from "~/lib/apiRoutes";
 import {
-  AddManualNormalizationArgs,
   NormalizeEditionArgs,
   NormalizeQuestionArgs,
   NormalizeQuestionResponsesArgs,
   NormalizeResponsesArgs,
   LoadNormalizationPercentagesArgs,
   NormalizationProgressStats,
+  AddCustomTokensProps,
+  RemoveCustomTokensProps,
+  EnableRegularTokensProps,
+  DisableRegularTokensProps,
 } from "./actions";
 import { NormalizeInBulkResult } from "./types";
 import { GetQuestionDataArgs } from "./actions/getQuestionData";
+import { CustomNormalizationDocument } from "@devographics/types";
 
 // export async function loadFields({ surveyId, editionId, questionId }) {
 //   const fetchRes = await fetch(
@@ -96,11 +100,9 @@ export async function normalizeEdition(params: NormalizeEditionArgs) {
   return result;
 }
 
-export async function addManualNormalizations(
-  params: AddManualNormalizationArgs
-) {
+export async function addCustomTokens(params: AddCustomTokensProps) {
   const fetchRes = await fetch(
-    apiRoutes.normalization.addManualNormalizations.href(params),
+    apiRoutes.normalization.addCustomTokens.href(params),
     {
       method: "POST",
       headers: {
@@ -114,11 +116,40 @@ export async function addManualNormalizations(
   return result;
 }
 
-export async function removeManualNormalizations(
-  params: AddManualNormalizationArgs
-) {
+export async function removeCustomTokens(params: RemoveCustomTokensProps) {
   const fetchRes = await fetch(
-    apiRoutes.normalization.removeManualNormalizations.href(params),
+    apiRoutes.normalization.removeCustomTokens.href(params),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    }
+  );
+  const result: { data?: NormalizeInBulkResult; error: any } =
+    await fetchRes.json();
+  return result;
+}
+export async function enableRegularTokens(params: EnableRegularTokensProps) {
+  const fetchRes = await fetch(
+    apiRoutes.normalization.enableRegularTokens.href(params),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    }
+  );
+  const result: { data?: NormalizeInBulkResult; error: any } =
+    await fetchRes.json();
+  return result;
+}
+
+export async function disableRegularTokens(params: DisableRegularTokensProps) {
+  const fetchRes = await fetch(
+    apiRoutes.normalization.disableRegularTokens.href(params),
     {
       method: "POST",
       headers: {
