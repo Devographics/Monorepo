@@ -81,10 +81,23 @@ export const Answer = ({
   const regularTokens = tokens.filter(
     (t) => t.pattern !== CUSTOM_NORMALIZATION
   );
-  const customTokens = tokens.filter((t) => t.pattern === CUSTOM_NORMALIZATION);
-  const allTokens = tokens;
+  const allTokenIds = [
+    ...tokens.map((t) => t.id),
+    ...(customNormalization?.customTokens || []),
+  ];
   const presets = enabledPresets.filter(
-    (id) => !allTokens.map((t) => t.id).includes(id)
+    (id) => !tokens.map((t) => t.id).includes(id)
+  );
+
+  const customTokens = regularTokens.filter(
+    (t) => t.pattern === CUSTOM_NORMALIZATION
+  );
+
+  const enabledTokens = regularTokens.filter(
+    (t) => !customNormalization?.disabledTokens?.includes(t.id)
+  );
+  const disabledTokens = regularTokens.filter((t) =>
+    customNormalization?.disabledTokens?.includes(t.id)
   );
 
   return (
@@ -109,16 +122,36 @@ export const Answer = ({
 
         <td>
           <div className="tokens-list">
-            {regularTokens.map((token) => (
+            {enabledTokens.map((token) => (
               <NormToken
                 key={token.id}
                 id={token.id}
                 isRegular={true}
+                isDisabled={false}
                 {...normTokenProps}
               />
             ))}
 
-            {customNormalization?.addedTokens?.map((tokenId) => (
+            {disabledTokens.map((token) => (
+              <NormToken
+                key={token.id}
+                id={token.id}
+                isRegular={true}
+                isDisabled={true}
+                {...normTokenProps}
+              />
+            ))}
+
+            {customTokens.map((token) => (
+              <NormToken
+                key={token.id}
+                id={token.id}
+                isCustom={true}
+                {...normTokenProps}
+              />
+            ))}
+
+            {customNormalization?.customTokens?.map((tokenId) => (
               <NormToken
                 key={tokenId}
                 id={tokenId}
@@ -126,9 +159,16 @@ export const Answer = ({
                 {...normTokenProps}
               />
             ))}
-            {presets.map((id) => (
-              <NormToken key={id} id={id} isPreset={true} {...normTokenProps} />
-            ))}
+            {presets
+              .filter((id) => !allTokenIds.includes(id))
+              .map((id) => (
+                <NormToken
+                  key={id}
+                  id={id}
+                  isPreset={true}
+                  {...normTokenProps}
+                />
+              ))}
           </div>
         </td>
         <td>

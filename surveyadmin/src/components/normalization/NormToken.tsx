@@ -51,7 +51,7 @@ const getAction = ({
       return {
         mutationFunction: disableRegularTokens,
         description: "Disable regular (regex) token",
-        icon: "🚫",
+        icon: "➖",
         className: "normalization-token-regular normalization-token-enabled",
       };
     }
@@ -88,12 +88,25 @@ const updateCustomNormalization = (previous, data) => {
   console.log(data);
   const newCustomNormalization = data.data.document;
   console.log(newCustomNormalization);
-  // update the correct document with the one we just received from the server
-  const newCustomNormalizations = previous.customNormalizations.map((c) =>
-    c.responseId === newCustomNormalization.responseId
-      ? newCustomNormalization
-      : c
-  );
+  let newCustomNormalizations;
+  if (
+    previous.customNormalizations.find(
+      (c) => c.responseId === newCustomNormalization.responseId
+    )
+  ) {
+    // update the correct document with the one we just received from the server
+    newCustomNormalizations = previous.customNormalizations.map((c) =>
+      c.responseId === newCustomNormalization.responseId
+        ? newCustomNormalization
+        : c
+    );
+  } else {
+    // add new normalization to the array
+    newCustomNormalizations = [
+      ...previous.customNormalizations,
+      newCustomNormalization,
+    ];
+  }
   const newData = {
     ...previous,
     customNormalizations: newCustomNormalizations,

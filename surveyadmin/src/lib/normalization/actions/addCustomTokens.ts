@@ -25,5 +25,11 @@ export const addCustomTokens = async (document: AddCustomTokensProps) => {
     },
     { upsert: true, returnNewDocument: true }
   );
-  return { updateResult, document: updateResult.value };
+  // let newDocument = updateResult.value;
+  // if (updateResult?.lastErrorObject?.upserted) {
+  const newDocument = await customNormCollection.findOne({
+    _id: responseId,
+  });
+  // }
+  return { updateResult, document: newDocument };
 };
