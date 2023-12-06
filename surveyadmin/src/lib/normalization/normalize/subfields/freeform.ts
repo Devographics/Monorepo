@@ -17,6 +17,7 @@ import {
   getQuestionPaths,
 } from "../normalizeField";
 import { QuestionTemplateOutput } from "@devographics/types";
+import { getCustomNormalizationsCollection } from "@devographics/mongo";
 
 // TODO: do this better
 // currently the textList template is the only one that supports multiple
@@ -49,7 +50,18 @@ export const freeform: SubfieldProcessFunction = async ({
   entityRules,
   verbose,
 }: SubfieldProcessProps) => {
+  const logIfVerbose = (s) => {
+    if (verbose) {
+      console.log(s);
+    }
+  };
+
   const modifiedFields: FieldLogItem[] = [];
+
+  const customNormCollection = await getCustomNormalizationsCollection();
+  const customNormalization = await customNormCollection.findOne({
+    _id: response._.id,
+  });
 
   const { rawPaths, normPaths } = getQuestionPaths(questionObject);
   // if a field has a "freeform/other" path defined, we normalize its contents
@@ -88,39 +100,36 @@ export const freeform: SubfieldProcessFunction = async ({
             })) as NormalizationToken[];
 
             // if custom norm. tokens have been defined, also add their id
-            if (response.customNormalizations) {
-              const customNormalization = response.customNormalizations.find(
-                (token) => token.rawValue === raw
-              );
-
-              if (customNormalization) {
+            if (customNormalization) {
+              const {
+                customTokens: customTokensIds,
+                disabledTokens: disabledTokensIds,
+              } = customNormalization;
+              if (customTokensIds) {
+                logIfVerbose(`⛰️ Custom tokens: [${customTokensIds.join()}]`);
                 // only keep custom token that are not already included in regular norm. tokens
-                const customTokens = customNormalization.tokens
-                  .filter(
-                    (tokenId) => !tokens.map((t) => t.id).includes(tokenId)
-                  )
-                  .map((token) => ({
-                    id: token,
+                const customTokens = customTokensIds
+                  .filter((id) => !tokens.map((t) => t.id).includes(id))
+                  .map((id) => ({
+                    id,
                     pattern: CUSTOM_NORMALIZATION,
                   }));
-                if (verbose) {
-                  console.log(
-                    `⛰️ Found custom normalization tokens: [${customTokens
-                      .map((t) => t.id)
-                      .join()}]`
-                  );
-                }
-                tokens = [...customTokens, ...tokens];
+                tokens = [...tokens, ...customTokens];
+              }
+              if (disabledTokensIds) {
+                logIfVerbose(`⛰️ Disabled tokens: [${customTokensIds.join()}]`);
+                // if some tokens are disabled, remove them
+                tokens = tokens.filter(
+                  (t) => !disabledTokensIds.includes(t.id)
+                );
               }
             }
 
-            if (verbose) {
-              console.log(
-                `⛰️ processFreeformField: ${fieldPath}/other/${i}: “${raw}” -> [${
-                  tokens.length > 0 ? tokens.map((t) => t.id).join() : "🚫"
-                }]`
-              );
-            }
+            logIfVerbose(
+              `⛰️ processFreeformField: ${fieldPath}/other/${i}: “${raw}” -> [${
+                tokens.length > 0 ? tokens.map((t) => t.id).join() : "🚫"
+              }]`
+            );
 
             const item = { raw } as NormalizationMetadata;
             if (tokens.length > 0) {

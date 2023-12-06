@@ -98,10 +98,7 @@ Helper function to take result of mutation and update cache with it
 */
 const updateCustomNormalization = (previous, data, variables, action) => {
   console.log(`[${action.description}] ${variables.tokens.join()}`);
-  console.log(previous);
-  console.log(data);
   const newCustomNormalization = data.data.document;
-  console.log(newCustomNormalization);
   let newCustomNormalizations;
   if (
     previous.customNormalizations.find(
@@ -125,7 +122,6 @@ const updateCustomNormalization = (previous, data, variables, action) => {
     ...previous,
     customNormalizations: newCustomNormalizations,
   };
-  console.log(newData);
   return newData;
 };
 

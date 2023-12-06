@@ -1,17 +1,8 @@
-import {
-  fetchSurveysMetadata,
-  fetchQuestionData,
-  fetchEntities,
-} from "@devographics/fetch";
-import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
-import { getEditionQuestionById } from "../helpers/getEditionQuestionById";
+import { fetchQuestionData, fetchEntities } from "@devographics/fetch";
 import { getAllResponses } from "../helpers/getAllResponses";
-import get from "lodash/get";
 import { ResultsSubFieldEnum } from "@devographics/types";
 import pick from "lodash/pick";
 import { getSurveyEditionSectionQuestion } from "../helpers/getSurveyEditionQuestion";
-import { getCustomTokens } from "./getCustomTokens";
-import { getFormPaths } from "@devographics/templates";
 
 export interface GetQuestionResponsesParams {
   surveyId: string;
@@ -38,13 +29,7 @@ export const getQuestionResponses = async ({
     shouldGetFromCache,
   });
 
-  const {
-    normalizationResponses,
-    rawFieldPath,
-    normalizedFieldPath,
-    patternsFieldPath,
-    selector,
-  } = data;
+  const { normalizationResponses, selector } = data;
 
   const allResponses = normalizationResponses;
 
@@ -73,18 +58,12 @@ export const getQuestionResponses = async ({
     )
     .map((e) => pick(e, ["id", "patterns", "tags", "descriptionClean"]));
 
-  const paths = getFormPaths({ edition, question });
-  const customNormalizations = await getCustomTokens({
-    rawPath: paths.other!,
-  });
-
   return {
     responsesCount,
     responses: allResponses,
     responsesSelector: selector,
     questionResult,
     entities,
-    customNormalizations,
     durations: {
       ...durations,
       fetchQuestionDataDuration,

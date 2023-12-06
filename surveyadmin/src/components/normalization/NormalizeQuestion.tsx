@@ -45,11 +45,10 @@ export const NormalizeQuestionWithProvider = (
   </QueryClientProvider>
 );
 
-export const getDataCacheKey = ({
-  surveyId,
-  editionId,
-  questionId,
-}: GetQuestionResponsesParams) => `${surveyId}.${editionId}.${questionId}.data`;
+export const getDataCacheKey = (
+  { surveyId, editionId, questionId }: GetQuestionResponsesParams,
+  suffix: string
+) => `${surveyId}.${editionId}.${questionId}.${suffix}`;
 
 interface ApiData<T = any> {
   data: T;
@@ -77,8 +76,7 @@ const dataKeys = (params: GetQuestionResponsesParams) => {
   };
 };
 
-const getData = async (params: GetQuestionResponsesParams) => {
-  const url = apiRoutes.normalization.loadQuestionResponses.href(params);
+const getData = async (url: string) => {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -99,17 +97,30 @@ export const NormalizeQuestion = (props: NormalizeQuestionProps) => {
     questionId: question.id,
   };
 
-  const query = useQuery({
-    queryKey: [getDataCacheKey(params)],
-    queryFn: () => getData(params),
+  const responsesQuery = useQuery({
+    queryKey: [getDataCacheKey(params, "data")],
+    queryFn: () =>
+      getData(apiRoutes.normalization.loadQuestionResponses.href(params)),
+  });
+  const customNormalizationsQuery = useQuery({
+    queryKey: [getDataCacheKey(params, "customNormalization")],
+    queryFn: () =>
+      getData(apiRoutes.normalization.loadCustomNormalizations.href(params)),
+    refetchInterval: 5000,
   });
 
-  console.log(query.data);
-  const loading = query.isPending;
+  const loading =
+    responsesQuery.isPending || customNormalizationsQuery.isPending;
   return loading ? (
     <div aria-busy={true} />
   ) : (
-    <Normalization {...props} responsesData={query.data} />
+    <Normalization
+      {...props}
+      responsesData={{
+        ...responsesQuery.data,
+        customNormalizations: customNormalizationsQuery.data,
+      }}
+    />
   );
 };
 
