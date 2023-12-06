@@ -15,7 +15,7 @@ export interface ActionDefinition {
 export const enableRegularTokensAction: ActionDefinition = {
   mutationFunction: enableRegularTokens,
   description: "Re-enable regular (regex) token",
-  icon: "✅",
+  icon: "🔄",
   className: "normalization-token-regular normalization-token-disabled",
 };
 

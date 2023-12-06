@@ -21,13 +21,14 @@ export const disableRegularTokens = async (
     {
       $set: { _id: responseId, responseId, ...rest },
       $addToSet: {
-        disabledTokens: { $each: tokens, returnNewDocument: true },
+        disabledTokens: { $each: tokens },
       },
     },
-    { upsert: true }
+    { upsert: true, returnNewDocument: true }
   );
   const document = await customNormCollection.findOne({
     _id: responseId,
   });
+  console.log(document);
   return { action: "disableRegularTokens", updateResult, document };
 };

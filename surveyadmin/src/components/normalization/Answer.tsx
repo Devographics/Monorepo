@@ -30,7 +30,7 @@ export interface AnswerProps extends AnswersProps {
   entities: Entity[];
   responses: NormalizationResponse[];
   showPresetsShortlistModal: () => void;
-  customNormalization: CustomNormalizationDocument;
+  customNormalization?: CustomNormalizationDocument;
 }
 
 export const Answer = ({
@@ -182,6 +182,7 @@ export const Answer = ({
           <div className="field-row-actions">
             <div>
               <button
+                className="button-ghost"
                 onClick={(e) => {
                   e.preventDefault();
                   setShowAllPresets(true);
@@ -217,6 +218,7 @@ export const Answer = ({
               )}
             </div>
             <LoadingButton
+              className="button-ghost"
               action={async () => {
                 await addTokenMutation.mutate(addDiscardTokenParams);
               }}
@@ -224,6 +226,7 @@ export const Answer = ({
               tooltip="Discard this answer"
             />
             <LoadingButton
+              className="button-ghost"
               action={async () => {
                 const result = await normalizeQuestionResponses({
                   questionId: question.id,

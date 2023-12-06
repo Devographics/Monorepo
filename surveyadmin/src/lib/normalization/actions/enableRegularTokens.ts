@@ -21,7 +21,7 @@ export const enableRegularTokens = async ({
         disabledTokens: tokens[0],
       },
     },
-    { returnNewDocument: true }
+    { returnNewDocument: true, returnDocument: "after" }
   );
   const document = updateResult.value;
   const deleteResult = await cleanUpIfNeeded(document);

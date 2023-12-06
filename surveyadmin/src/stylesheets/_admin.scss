@@ -144,7 +144,7 @@
 // }
 
 .normalization-token {
-  border: 2px solid rgb(192, 192, 192);
+  border: 1px solid rgb(146, 146, 146);
 }
 .normalization-token-custom {
   border-color: rgb(181, 235, 128);
@@ -157,7 +157,10 @@
     opacity: 1;
   }
 }
-
+.normalization-token-disabled {
+  text-decoration: line-through;
+  background: rgb(255, 221, 221);
+}
 .field-value-items {
   display: flex;
   flex-direction: column;
@@ -283,4 +286,11 @@ dialog article p:last-child {
 
 h6 {
   margin-bottom: 5px !important;
+}
+
+button.button-ghost,
+.button-ghost button {
+  border: 1px solid var(--primary);
+  background: none;
+  padding: 6px 8px;
 }

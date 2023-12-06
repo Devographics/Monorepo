@@ -179,7 +179,7 @@ const Answers = (props: AnswersProps) => {
                     previousRawValue?.[0].toUpperCase()
                   : true;
 
-                const customNormalization = customNormalizations.find(
+                const customNormalization = customNormalizations?.find(
                   (c) => c.responseId === responseId
                 );
                 return (
