@@ -5,7 +5,6 @@ import {
   NormalizeFieldResult,
   NormalizedField,
   RegularField,
-  NormalizedResponseDocument,
 } from "../types";
 import clone from "lodash/clone";
 import {
@@ -13,6 +12,8 @@ import {
   SectionMetadata,
   ResponseDocument,
   EditionMetadata,
+  NormalizedResponseDocument,
+  CustomNormalizationDocument,
 } from "@devographics/types";
 import { prefixWithEditionId } from "@devographics/templates";
 import {
@@ -42,6 +43,7 @@ export interface SubfieldProcessProps {
   questionObject: QuestionTemplateOutput;
   verbose: boolean;
   entityRules: EntityRule[];
+  customNormalizations: CustomNormalizationDocument[];
 }
 
 export type FieldLogItem = RegularField | NormalizedField | CommentField;
@@ -71,6 +73,7 @@ export const normalizeField = async ({
   edition,
   entityRules,
   isRenormalization,
+  customNormalizations,
 }: NormalizeFieldOptions): Promise<NormalizeFieldResult> => {
   let normResp = clone(normResp_);
 
@@ -89,6 +92,7 @@ export const normalizeField = async ({
     modified,
     verbose,
     entityRules,
+    customNormalizations,
   };
 
   let subfields;
@@ -129,7 +133,9 @@ export const normalizeField = async ({
 
         if (verbose) {
           const { rawPaths } = getQuestionPaths(questionObject);
-          const fieldPath = prefixWithEditionId(rawPaths.response!, edition.id);
+          const fieldPath =
+            rawPaths.response &&
+            prefixWithEditionId(rawPaths.response, edition.id);
           console.log(
             `⛰️ ${fieldPath}/${subfieldFunction.name}: “${modifiedFields
               .map((f) => f.value)

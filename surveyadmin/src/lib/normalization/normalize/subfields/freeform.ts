@@ -49,6 +49,7 @@ export const freeform: SubfieldProcessFunction = async ({
   questionObject,
   entityRules,
   verbose,
+  customNormalizations,
 }: SubfieldProcessProps) => {
   const logIfVerbose = (s) => {
     if (verbose) {
@@ -58,10 +59,9 @@ export const freeform: SubfieldProcessFunction = async ({
 
   const modifiedFields: FieldLogItem[] = [];
 
-  const customNormCollection = await getCustomNormalizationsCollection();
-  const customNormalization = await customNormCollection.findOne({
-    _id: response._.id,
-  });
+  const customNormalization = customNormalizations.find(
+    (c) => c.responseId === response.responseId
+  );
 
   const { rawPaths, normPaths } = getQuestionPaths(questionObject);
   // if a field has a "freeform/other" path defined, we normalize its contents

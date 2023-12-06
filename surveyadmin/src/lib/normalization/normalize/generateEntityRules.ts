@@ -6,7 +6,7 @@ export const generateEntityRules = (entities: Array<Entity>) => {
   entities
     .filter((e) => !e.apiOnly)
     .forEach((entity) => {
-      const { id, patterns, tags, twitterName, twitter, exactMatch } = entity;
+      const { id, patterns, tags, twitterName, exactMatch } = entity;
 
       if (id) {
         if (exactMatch) {
@@ -37,9 +37,8 @@ export const generateEntityRules = (entities: Array<Entity>) => {
             });
 
           // 5. also add twitter username if available (useful for people entities)
-          const twitterName_ = twitterName || twitter?.name;
-          if (twitterName_) {
-            const pattern = new RegExp(twitterName_, "i");
+          if (twitterName) {
+            const pattern = new RegExp(twitterName, "i");
             rules.push({ id, pattern, tags: tags || [] });
           }
         }

@@ -19,6 +19,10 @@ import { BulkOperation } from "../types";
 import { NormalizationResponse } from "../hooks";
 import { generateEntityRules } from "./generateEntityRules";
 import { normalize } from "./normalize";
+import {
+  fetchEntitiesNormalization,
+  getEntitiesNormalizationQuery,
+} from "./getEntitiesNormalizationQuery";
 
 export const cleanupValue = (value) =>
   typeof value === "undefined" || ignoreValues.includes(value) ? null : value;
@@ -164,7 +168,7 @@ export interface EntityRule {
 }
 
 export const logAllRules = async () => {
-  const { data: allEntities } = await fetchEntities();
+  const { data: allEntities } = await fetchEntitiesNormalization();
   if (allEntities) {
     let rules = generateEntityRules(allEntities);
     rules = rules.map(({ id, pattern, tags }) => ({

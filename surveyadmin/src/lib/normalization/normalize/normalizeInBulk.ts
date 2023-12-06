@@ -1,7 +1,10 @@
 import { normalizeDocument } from "./normalizeDocument";
 import { getBulkOperations, getDuration } from "./helpers";
 import { generateEntityRules } from "./generateEntityRules";
-import { getNormResponsesCollection } from "@devographics/mongo";
+import {
+  getCustomNormalizationsCollection,
+  getNormResponsesCollection,
+} from "@devographics/mongo";
 import { fetchEntities } from "@devographics/fetch";
 import {
   EditionMetadata,
@@ -19,6 +22,7 @@ import {
 } from "../types";
 import { runPostNormalizationOperations } from "../post-normalization";
 import { NO_MATCH } from "@devographics/constants";
+import { fetchEntitiesNormalization } from "./getEntitiesNormalizationQuery";
 
 /*
 
@@ -26,8 +30,8 @@ Normalization
 
 */
 export const defaultLimit = 999;
-const isSimulation = false;
-const verbose = false;
+export const isSimulation = false;
+export const defaultVerbose = false;
 
 interface NormalizeInBulkOption {
   survey: SurveyMetadata;
@@ -51,6 +55,7 @@ C) *all* questions on *all* documents (if neither is passed)
 
 */
 export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
+  console.log(`⛰️ starting normalizeInBulk…`);
   const {
     survey,
     edition,
@@ -58,7 +63,7 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
     limit,
     questionId,
     isRenormalization = false,
-    verbose = false,
+    verbose = defaultVerbose,
     currentSegmentIndex,
     totalSegments,
   } = options;
@@ -98,10 +103,18 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
 
   const bulkOperations: BulkOperation[] = [];
 
-  const { data: entities } = await fetchEntities();
+  const { data: entities } = await fetchEntitiesNormalization();
   const entityRules = generateEntityRules(entities);
 
   // console.log(JSON.stringify(selector, null, 2))
+
+  const customNormCollection = await getCustomNormalizationsCollection();
+  const customNormalizations = await customNormCollection
+    .find({
+      editionId: edition.id,
+      ...(questionId ? { questionId } : {}),
+    })
+    .toArray();
 
   // iterate over responses to populate bulkOperations array
   for (const response of responses) {
@@ -116,6 +129,7 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
       questionId,
       isBulk: true,
       isRenormalization,
+      customNormalizations,
     });
 
     progress++;

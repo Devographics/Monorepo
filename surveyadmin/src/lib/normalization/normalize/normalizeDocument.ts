@@ -22,9 +22,10 @@ import {
   NormalizationResultTypes,
 } from "../types";
 import clone from "lodash/clone";
-import { normalizeField } from "./normalizeField";
+import { getQuestionPaths, normalizeField } from "./normalizeField";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
 import difference from "lodash/difference";
+import { fetchEntitiesNormalization } from "./getEntitiesNormalizationQuery";
 
 /*
 
@@ -43,7 +44,8 @@ const fetchDataIfNeeded = async (options: NormalizationOptions) => {
   const edition =
     options.edition ||
     (await fetchEditionMetadataAdmin({ surveyId, editionId })).data;
-  const entities = options.entities || (await fetchEntities()).data;
+  const entities =
+    options.entities || (await fetchEntitiesNormalization()).data;
   const entityRules = options.entityRules || generateEntityRules(entities);
   return {
     survey,
@@ -65,6 +67,9 @@ export const normalizeDocument = async (
   | NormalizationResultError
 > => {
   let normalizationResult;
+  // console.log(
+  //   `⛰️ starting normalizeDocument for document ${options.response._id}`
+  // );
 
   try {
     const { response, questionId } = options;
@@ -263,10 +268,8 @@ const normalizeResponse = async (
         question,
       });
 
-      if (!questionObject) {
-        // some questions (such as intro text, notes, etc.
-        // do not have an associated questionObject; just skip them
-      } else {
+      const { rawPaths, normPaths } = questionObject;
+      if (rawPaths && normPaths) {
         const result = await normalizeField({
           ...normalizationParams,
           questionObject,
@@ -280,6 +283,9 @@ const normalizeResponse = async (
         }
         // keep track of whether this normalizeField has actually modified the response
         modifiedArray.push(result.modified);
+      } else {
+        // some questions (such as intro text, notes, etc.
+        // do not have db data associated with them; just skip them
       }
     }
   }

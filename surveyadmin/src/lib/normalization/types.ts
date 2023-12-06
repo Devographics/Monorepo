@@ -6,6 +6,7 @@ import {
   SectionMetadata,
   SurveyMetadata,
   NormalizedResponseDocument,
+  CustomNormalizationDocument,
 } from "@devographics/types";
 import { EntityRule } from "./normalize/helpers";
 
@@ -179,6 +180,7 @@ export interface NormalizationOptions {
   entities?: Entity[];
   entityRules?: EntityRule[];
   isRenormalization?: boolean;
+  customNormalizations: CustomNormalizationDocument[];
 }
 
 export interface NormalizationParams extends NormalizationOptions {
