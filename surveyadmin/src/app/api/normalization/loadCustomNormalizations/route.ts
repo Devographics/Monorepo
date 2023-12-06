@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { captureException } from "@sentry/nextjs";
-import { getScripts } from "~/lib/scripts/actions";
-import { getQuestionResponses } from "~/lib/normalization/actions/getQuestionResponses";
 import { getCustomTokens } from "~/lib/normalization/actions/getCustomTokens";
 import { getSurveyEditionSectionQuestion } from "~/lib/normalization/helpers/getSurveyEditionQuestion";
 import { getFormPaths } from "@devographics/templates";

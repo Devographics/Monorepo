@@ -5,7 +5,7 @@ import {
   EditionMetadata,
   Entity,
 } from "@devographics/types";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import trim from "lodash/trim";
 import without from "lodash/without";
 import { useLocalStorage } from "../hooks";
@@ -18,6 +18,9 @@ import { NormalizationResult } from "./NormalizationResult";
 import { FieldValue } from "./FieldValue";
 import { EntityList, getAddEntityUrl, getEditEntityUrl } from "./EntityInput";
 import type { CustomNormalization } from "./NormalizeQuestion";
+import { usePresets } from "./hooks";
+import { useCustomNormalizationMutation } from "./NormTokenAction";
+import { addCustomTokensAction } from "./tokenActions";
 
 const getCacheKey = (edition, question) =>
   `normalization_presets__${edition.id}__${question.id}`;
@@ -31,8 +34,10 @@ const AllPresets = ({
   normRespId,
   rawValue,
   rawPath,
+  normPath,
   entities,
   tokens,
+  setShowAllPresets,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
@@ -42,14 +47,28 @@ const AllPresets = ({
   normRespId: string;
   rawValue: string;
   rawPath: string;
+  normPath: string;
   entities: Entity[];
   tokens: NormalizationToken[];
+  setShowAllPresets: Dispatch<SetStateAction<boolean>>;
 }) => {
   const cacheKey = getCacheKey(edition, question);
   const [selectedId, setSelectedId] = useState("");
   const [tokensToAdd, setTokensToAdd] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<NormalizeInBulkResult | null>(null);
+
+  const { enabledPresets } = usePresets({ edition, question });
+
+  const cacheKeyParams = {
+    surveyId: survey.id,
+    editionId: edition.id,
+    questionId: question.id,
+  };
+  const addTokenMutation = useCustomNormalizationMutation(
+    addCustomTokensAction,
+    cacheKeyParams
+  );
 
   const entityIds = questionData
     ? questionData.currentEdition.buckets.map((b) => b.id).slice(0, 20)
@@ -61,21 +80,20 @@ const AllPresets = ({
     e.preventDefault();
 
     const params = {
-      surveyId: survey.id,
-      editionId: edition.id,
-      questionId: question.id,
-      tokens: tokens.map((t) => t.id),
+      ...cacheKeyParams,
       responseId,
-      normRespId,
       rawValue,
       rawPath,
+      normPath,
+      tokens: tokensToAdd,
     };
-    const result = await addCustomTokens(params);
-
+    const result = await addTokenMutation.mutateAsync(params);
+    // console.log(result);
     setLoading(false);
-    if (result.data) {
-      setResult(result.data);
-    }
+    // if (result?.data) {
+    //   setResult(result?.data);
+    // }
+    setShowAllPresets(false);
   };
 
   const addTokenId = (id: string) => {
@@ -109,7 +127,7 @@ const AllPresets = ({
                       addTokenId={addTokenId}
                     />
                   ))}
-                  {localPresets
+                  {enabledPresets
                     .sort()
                     .filter((id) => !entityIds.includes(id))
                     .map((id) => (
@@ -153,7 +171,10 @@ const AllPresets = ({
                 {tokensToAdd.map((t) => (
                   <code key={t}>{t}</code>
                 ))}
-                <button aria-busy={loading} onClick={handleSubmit}>
+                <button
+                  aria-busy={addTokenMutation.isPending}
+                  onClick={handleSubmit}
+                >
                   Add Tokens
                 </button>
               </form>

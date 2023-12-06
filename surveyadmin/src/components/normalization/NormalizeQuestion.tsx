@@ -45,36 +45,23 @@ export const NormalizeQuestionWithProvider = (
   </QueryClientProvider>
 );
 
-export const getDataCacheKey = (
-  { surveyId, editionId, questionId }: GetQuestionResponsesParams,
-  suffix: string
-) => `${surveyId}.${editionId}.${questionId}.${suffix}`;
+export const getDataCacheKey = ({
+  surveyId,
+  editionId,
+  questionId,
+}: GetQuestionResponsesParams) => `${surveyId}.${editionId}.${questionId}.data`;
+
+export const getCustomNormalizationsCacheKey = ({
+  surveyId,
+  editionId,
+  questionId,
+}: GetQuestionResponsesParams) =>
+  `${surveyId}.${editionId}.${questionId}.customNormalizations`;
 
 interface ApiData<T = any> {
   data: T;
   error: any;
 }
-
-const dataKeys = (params: GetQuestionResponsesParams) => {
-  const all = getDataCacheKey(params);
-  const lists = () => [all, "list"] as const;
-  const list = (filters: string) => [...lists(), { filters }] as const;
-  const details = () => [all, "detail"] as const;
-  const detail = (id: number) => [...details(), id] as const;
-  const customNormalization = (responseId) => [
-    all,
-    "customNormalization",
-    { responseId },
-  ];
-  return {
-    all,
-    lists,
-    list,
-    details,
-    detail,
-    customNormalization,
-  };
-};
 
 const getData = async (url: string) => {
   const response = await fetch(url);
@@ -98,16 +85,21 @@ export const NormalizeQuestion = (props: NormalizeQuestionProps) => {
   };
 
   const responsesQuery = useQuery({
-    queryKey: [getDataCacheKey(params, "data")],
+    queryKey: [getDataCacheKey(params)],
     queryFn: () =>
       getData(apiRoutes.normalization.loadQuestionResponses.href(params)),
   });
   const customNormalizationsQuery = useQuery({
-    queryKey: [getDataCacheKey(params, "customNormalization")],
+    queryKey: [getCustomNormalizationsCacheKey(params)],
     queryFn: () =>
       getData(apiRoutes.normalization.loadCustomNormalizations.href(params)),
     refetchInterval: 5000,
   });
+
+  // console.log("responsesQuery data:");
+  // console.log(responsesQuery.data);
+  // console.log("customNormalizationsQuery.data");
+  // console.log(customNormalizationsQuery.data);
 
   const loading =
     responsesQuery.isPending || customNormalizationsQuery.isPending;
@@ -116,10 +108,8 @@ export const NormalizeQuestion = (props: NormalizeQuestionProps) => {
   ) : (
     <Normalization
       {...props}
-      responsesData={{
-        ...responsesQuery.data,
-        customNormalizations: customNormalizationsQuery.data,
-      }}
+      responsesData={responsesQuery.data}
+      customNormalizations={customNormalizationsQuery.data}
     />
   );
 };
@@ -138,6 +128,7 @@ interface NormalizationProps {
   edition: EditionMetadata;
   question: QuestionWithSection;
   responsesData?: ResponsesData;
+  customNormalizations?: CustomNormalizationDocument[];
 }
 export const Normalization = (props: NormalizationProps) => {
   const {
@@ -145,15 +136,10 @@ export const Normalization = (props: NormalizationProps) => {
     edition,
     question,
     responsesData = {} as ResponsesData,
+    customNormalizations = [],
   } = props;
-  const {
-    responsesCount,
-    entities,
-    responses,
-    questionResult,
-    customNormalizations,
-    durations,
-  } = responsesData;
+  const { responsesCount, entities, responses, questionResult, durations } =
+    responsesData;
 
   const questionData = questionResult?.data;
 

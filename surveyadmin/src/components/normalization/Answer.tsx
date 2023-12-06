@@ -4,7 +4,10 @@ import { normalizeQuestionResponses } from "~/lib/normalization/services";
 import { LoadingButton } from "../LoadingButton";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
-import { NormTokenAction } from "./NormTokenAction";
+import {
+  NormTokenAction,
+  useCustomNormalizationMutation,
+} from "./NormTokenAction";
 import { Entity, CustomNormalizationDocument } from "@devographics/types";
 import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
 import { AnswersProps, ResponseId } from "./Answers";
@@ -17,6 +20,7 @@ import {
   DISCARDED_ANSWER,
   CUSTOM_NORMALIZATION,
 } from "@devographics/constants";
+import { addCustomTokensAction } from "./tokenActions";
 export interface AnswerProps extends AnswersProps {
   rawPath: string;
   normPath: string;
@@ -44,27 +48,12 @@ export const Answer = ({
   showPresetsShortlistModal,
   customNormalization,
 }: AnswerProps) => {
-  const { _id, responseId, raw, tokens = [] } = answer;
+  const { _id, responseId, raw: rawValue, tokens = [] } = answer;
   const [result, setResult] = useState<NormalizeInBulkResult>();
 
   const [showResult, setShowResult] = useState(true);
   const [showAllPresets, setShowAllPresets] = useState(false);
   const { enabledPresets } = usePresets({ edition, question });
-
-  const presetsProps = {
-    survey,
-    edition,
-    question,
-    questionData,
-    responseId,
-    normRespId: _id,
-    rawValue: raw,
-    normPath,
-    rawPath,
-    tokens,
-    entities,
-    showPresetsShortlistModal,
-  };
 
   const normTokenProps = {
     survey,
@@ -73,7 +62,7 @@ export const Answer = ({
     responseId,
     rawPath,
     normPath,
-    rawValue: raw,
+    rawValue,
     responses,
     entities,
   };
@@ -100,6 +89,24 @@ export const Answer = ({
     customNormalization?.disabledTokens?.includes(t.id)
   );
 
+  const cacheKeyParams = {
+    surveyId: survey.id,
+    editionId: edition.id,
+    questionId: question.id,
+  };
+  const addDiscardTokenParams = {
+    ...cacheKeyParams,
+    responseId,
+    rawValue,
+    rawPath,
+    normPath,
+    tokens: [DISCARDED_ANSWER],
+  };
+  const addTokenMutation = useCustomNormalizationMutation(
+    addCustomTokensAction,
+    cacheKeyParams
+  );
+
   return (
     <>
       {letterHeading && (
@@ -117,7 +124,7 @@ export const Answer = ({
           </div>
         </td>
         <td>
-          <FieldValue raw={raw} tokens={tokens} />
+          <FieldValue raw={rawValue} tokens={tokens} />
         </td>
 
         <td>
@@ -190,13 +197,28 @@ export const Answer = ({
                   setShowModal={setShowAllPresets}
                   header={<span>All Tokens</span>}
                 >
-                  <AllPresets {...presetsProps} />
+                  <AllPresets
+                    {...{
+                      survey,
+                      edition,
+                      question,
+                      questionData,
+                      responseId,
+                      normRespId: _id,
+                      rawValue,
+                      normPath,
+                      rawPath,
+                      tokens,
+                      entities,
+                      setShowAllPresets,
+                    }}
+                  />
                 </Dialog>
               )}
             </div>
             <LoadingButton
               action={async () => {
-                // await addToken(DISCARDED_ANSWER);
+                await addTokenMutation.mutate(addDiscardTokenParams);
               }}
               label="🗑️"
               tooltip="Discard this answer"

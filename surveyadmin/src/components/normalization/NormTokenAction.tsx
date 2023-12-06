@@ -1,24 +1,18 @@
 import { useNormTokenStuff, Modal, NormTokenProps } from "./NormToken";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getDataCacheKey } from "./NormalizeQuestion";
+import {
+  getCustomNormalizationsCacheKey,
+  getDataCacheKey,
+} from "./NormalizeQuestion";
 import {
   SurveyMetadata,
   EditionMetadata,
   QuestionMetadata,
+  Entity,
 } from "@devographics/types";
-import {
-  addCustomTokens,
-  disableRegularTokens,
-  enableRegularTokens,
-  removeCustomTokens,
-} from "~/lib/normalization/services";
-
-interface ActionDefinition {
-  mutationFunction: any;
-  description: string;
-  icon: string;
-  className: string;
-}
+import { AddCustomTokensProps } from "~/lib/normalization/actions";
+import { Dispatch, SetStateAction } from "react";
+import { ActionDefinition, tokenActions } from "./tokenActions";
 
 /*
 
@@ -35,45 +29,25 @@ export const getAction = ({
   isDisabled?: boolean;
   isCustom?: boolean;
   isPreset?: boolean;
-}): ActionDefinition | null => {
+}) => {
   if (isRegular) {
     if (isDisabled) {
       // enable regular token
-      return {
-        mutationFunction: enableRegularTokens,
-        description: "Re-enable regular (regex) token",
-        icon: "✅",
-        className: "normalization-token-regular normalization-token-disabled",
-      };
+      return tokenActions.enableRegularTokens;
     } else {
       // disable regular token
-      return {
-        mutationFunction: disableRegularTokens,
-        description: "Disable regular (regex) token",
-        icon: "➖",
-        className: "normalization-token-regular normalization-token-enabled",
-      };
+      return tokenActions.disableRegularTokens;
     }
   } else {
     if (isPreset) {
       // add custom tokens
-      return {
-        mutationFunction: addCustomTokens,
-        description: "Add custom token",
-        icon: "➕",
-        className: "normalization-token-preset",
-      };
+      return tokenActions.addCustomTokens;
     } else if (isCustom) {
       // remove custom tokens
-      return {
-        mutationFunction: removeCustomTokens,
-        description: "Remove custom token",
-        icon: "➖",
-        className: "normalization-token-custom",
-      };
+      return tokenActions.removeCustomTokens;
     }
   }
-  return null;
+  throw Error("getAction: could not find action");
 };
 
 export interface NormTokenActionProps extends NormTokenProps {
@@ -96,33 +70,92 @@ export interface NormTokenActionProps extends NormTokenProps {
 Helper function to take result of mutation and update cache with it
 
 */
-const updateCustomNormalization = (previous, data, variables, action) => {
-  console.log(`[${action.description}] ${variables.tokens.join()}`);
-  const newCustomNormalization = data.data.document;
+export const updateCustomNormalization = (
+  customNormalizations,
+  data,
+  variables,
+  action
+) => {
+  console.log(
+    `[${action.description}] ${variables.rawValue} | ${variables.tokens.join()}`
+  );
+  const newDocument = data.data.document;
   let newCustomNormalizations;
   if (
-    previous.customNormalizations.find(
-      (c) => c.responseId === newCustomNormalization.responseId
-    )
+    customNormalizations.find((c) => c.responseId === newDocument.responseId)
   ) {
     // update the correct document with the one we just received from the server
-    newCustomNormalizations = previous.customNormalizations.map((c) =>
-      c.responseId === newCustomNormalization.responseId
-        ? newCustomNormalization
-        : c
+    newCustomNormalizations = customNormalizations.map((c) =>
+      c.responseId === newDocument.responseId ? newDocument : c
     );
   } else {
     // add new normalization to the array
-    newCustomNormalizations = [
-      ...previous.customNormalizations,
-      newCustomNormalization,
-    ];
+    newCustomNormalizations = [...customNormalizations, newDocument];
   }
-  const newData = {
-    ...previous,
-    customNormalizations: newCustomNormalizations,
+  return newCustomNormalizations;
+};
+
+/*
+
+Norm token with action button
+
+*/
+export const NormTokenAction = (props: NormTokenActionProps) => {
+  const {
+    id,
+    responseId,
+    rawValue,
+    rawPath,
+    normPath,
+    survey,
+    edition,
+    question,
+  } = props;
+
+  const { entity, showModal, setShowModal, tokenAnswers } =
+    useNormTokenStuff(props);
+  const action = getAction(props);
+
+  const params: AddCustomTokensProps = {
+    surveyId: survey.id,
+    editionId: edition.id,
+    questionId: question.id,
+    responseId,
+    rawValue,
+    rawPath,
+    normPath,
+    tokens: [id],
   };
-  return newData;
+
+  return (
+    <>
+      <Action {...{ action, params, setShowModal, entity, id }} />
+      {showModal && (
+        <Modal {...{ showModal, setShowModal, id, tokenAnswers }} />
+      )}
+    </>
+  );
+};
+
+/*
+
+Hook to build mutation with correct action
+
+*/
+export const useCustomNormalizationMutation = (action, cacheKeyParams) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (params: AddCustomTokensProps) =>
+      await action.mutationFunction(params),
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(
+        [getCustomNormalizationsCacheKey(cacheKeyParams)],
+        (previous) =>
+          updateCustomNormalization(previous, data, variables, action)
+      );
+    },
+  });
 };
 
 /*
@@ -130,19 +163,23 @@ const updateCustomNormalization = (previous, data, variables, action) => {
 Action button component
 
 */
-export const Action = ({ action, params, setShowModal, entity, id }) => {
-  const { mutationFunction, description, className, icon } = action;
 
-  const queryClient = useQueryClient();
+export const Action = ({
+  action,
+  params,
+  setShowModal,
+  entity,
+  id,
+}: {
+  action: ActionDefinition;
+  params: AddCustomTokensProps;
+  setShowModal: Dispatch<SetStateAction<boolean>>;
+  entity?: Entity;
+  id: string;
+}) => {
+  const { description, className, icon } = action;
 
-  const mutation = useMutation({
-    mutationFn: async (params) => await mutationFunction(params),
-    onSuccess: (data, variables) => {
-      queryClient.setQueriesData([getDataCacheKey(params)], (previous) =>
-        updateCustomNormalization(previous, data, variables, action)
-      );
-    },
-  });
+  const mutation = useCustomNormalizationMutation(action, params);
 
   return (
     <code
@@ -169,47 +206,5 @@ export const Action = ({ action, params, setShowModal, entity, id }) => {
         {icon}
       </span>
     </code>
-  );
-};
-
-/*
-
-Norm token with action button
-
-*/
-export const NormTokenAction = (props: NormTokenActionProps) => {
-  const {
-    id,
-    responseId,
-    rawValue,
-    rawPath,
-    normPath,
-    survey,
-    edition,
-    question,
-  } = props;
-
-  const { entity, showModal, setShowModal, tokenAnswers } =
-    useNormTokenStuff(props);
-  const action = getAction(props);
-
-  const params = {
-    surveyId: survey.id,
-    editionId: edition.id,
-    questionId: question.id,
-    responseId,
-    rawValue,
-    rawPath,
-    normPath,
-    tokens: [id],
-  };
-
-  return (
-    <>
-      <Action {...{ action, params, setShowModal, entity, id }} />
-      {showModal && (
-        <Modal {...{ showModal, setShowModal, id, tokenAnswers }} />
-      )}
-    </>
   );
 };
