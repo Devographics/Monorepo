@@ -2,6 +2,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { AnswersProps } from "./Answers";
 import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
+import { QuestionMetadata } from "@devographics/types";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -14,6 +15,7 @@ interface AnswersFiltersProps {
   setFilterQuery: Dispatch<SetStateAction<string>>;
   showCustomOnly: boolean;
   setShowCustomOnly: Dispatch<SetStateAction<boolean>>;
+  question: QuestionMetadata;
 }
 
 const AnswersFilters = ({
@@ -23,11 +25,13 @@ const AnswersFilters = ({
   setFilterQuery,
   showCustomOnly,
   setShowCustomOnly,
+  question,
 }: AnswersFiltersProps) => {
   return (
     <div className="normalization-filter">
       <label htmlFor="search">
-        Filter <strong>{capitalizeFirstLetter(variant)} Responses</strong>: (
+        Filter <code>{question.id}</code>
+        <strong>{capitalizeFirstLetter(variant)} Responses</strong>: (
         {filteredAnswers.length} results)
       </label>
       <input

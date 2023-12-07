@@ -48,6 +48,7 @@ export const extractTokens = async ({
       }
       const stringToScan = rawString.slice(scanStartIndex);
       const match = stringToScan.match(pattern);
+
       if (match !== null) {
         const includesToken = !!tokens.find((t) => t.id === id);
         if (!includesToken) {

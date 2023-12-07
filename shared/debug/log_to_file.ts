@@ -19,6 +19,10 @@ async function exists(path: string) {
         return false
     }
 }
+function replacer(key: any, value: any) {
+    if (value instanceof RegExp) return value.toString()
+    else return value
+}
 
 const getExtension = (filePath: string) => filePath.split('.').at(-1) || 'none'
 
@@ -63,7 +67,7 @@ export const logToFile = async (filePath: string, object: any, options: LogOptio
             if (['yml', 'yaml'].includes(extension)) {
                 contents = yaml.dump(object, { noRefs: true, skipInvalid: true })
             } else {
-                contents = JSON.stringify(object, null, 2)
+                contents = JSON.stringify(object, replacer, 2)
             }
         }
         if (!contents) {

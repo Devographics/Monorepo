@@ -50,6 +50,7 @@ export const freeform: SubfieldProcessFunction = async ({
   entityRules,
   verbose,
   customNormalizations,
+  timestamp,
 }: SubfieldProcessProps) => {
   const logIfVerbose = (s) => {
     if (verbose) {
@@ -97,6 +98,7 @@ export const freeform: SubfieldProcessFunction = async ({
               edition,
               questionObject,
               verbose,
+              timestamp,
             })) as NormalizationToken[];
 
             // if custom norm. tokens have been defined, also add their id

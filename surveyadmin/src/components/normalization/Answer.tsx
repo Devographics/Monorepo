@@ -220,7 +220,7 @@ export const Answer = ({
             <LoadingButton
               className="button-ghost"
               action={async () => {
-                await addTokenMutation.mutate(addDiscardTokenParams);
+                await addTokenMutation.mutateAsync(addDiscardTokenParams);
               }}
               label="🗑️"
               tooltip="Discard this answer"

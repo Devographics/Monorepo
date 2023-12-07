@@ -3,6 +3,7 @@ import { FullNormalizationToken } from "../types";
 import { extractTokens } from "./extractTokens";
 import { getQuestionRules } from "./getQuestionRules";
 import { EntityRule } from "./helpers";
+import { logToFile } from "@devographics/debug";
 
 /*
 
@@ -17,12 +18,14 @@ export const normalize = async ({
   entityRules,
   edition,
   verbose,
+  timestamp,
 }: {
   values: any[];
   entityRules: EntityRule[];
   edition: EditionMetadata;
   questionObject: QuestionTemplateOutput;
   verbose?: boolean;
+  timestamp: string;
 }) => {
   const rules = getQuestionRules({ questionObject, entityRules, verbose });
   let allTokens: FullNormalizationToken[] = [];

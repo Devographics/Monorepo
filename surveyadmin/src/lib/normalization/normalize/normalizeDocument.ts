@@ -9,7 +9,6 @@ import {
   NormalizationOptions,
   NormalizationResultSuccessEx,
   NormalizationError,
-  NormalizedResponseDocument,
   NormalizedField,
   RegularField,
   NormalizationParams,
@@ -23,7 +22,11 @@ import {
 } from "../types";
 import clone from "lodash/clone";
 import { getQuestionPaths, normalizeField } from "./normalizeField";
-import { EditionMetadata, ResponseDocument } from "@devographics/types";
+import {
+  EditionMetadata,
+  ResponseDocument,
+  NormalizedResponseDocument,
+} from "@devographics/types";
 import difference from "lodash/difference";
 import { fetchEntitiesNormalization } from "./getEntitiesNormalizationQuery";
 

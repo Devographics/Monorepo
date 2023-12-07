@@ -44,6 +44,7 @@ export interface SubfieldProcessProps {
   verbose: boolean;
   entityRules: EntityRule[];
   customNormalizations: CustomNormalizationDocument[];
+  timestamp: string;
 }
 
 export type FieldLogItem = RegularField | NormalizedField | CommentField;
@@ -74,6 +75,7 @@ export const normalizeField = async ({
   entityRules,
   isRenormalization,
   customNormalizations,
+  timestamp,
 }: NormalizeFieldOptions): Promise<NormalizeFieldResult> => {
   let normResp = clone(normResp_);
 
@@ -93,6 +95,7 @@ export const normalizeField = async ({
     verbose,
     entityRules,
     customNormalizations,
+    timestamp,
   };
 
   let subfields;

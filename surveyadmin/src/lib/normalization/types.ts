@@ -181,6 +181,7 @@ export interface NormalizationOptions {
   entityRules?: EntityRule[];
   isRenormalization?: boolean;
   customNormalizations: CustomNormalizationDocument[];
+  timestamp: string;
 }
 
 export interface NormalizationParams extends NormalizationOptions {
@@ -193,6 +194,7 @@ export interface NormalizationParams extends NormalizationOptions {
   discard?: boolean;
   empty?: boolean;
   modifier?: any;
+  timestamp: string;
 }
 
 export interface NormalizeFieldResult {

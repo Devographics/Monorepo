@@ -8,10 +8,8 @@ import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
 import sortBy from "lodash/sortBy";
 import { Answer } from "./Answer";
 import trim from "lodash/trim";
-import Dialog from "./Dialog";
-import { PresetsShortlist } from "./PresetsShortlist";
 import { CUSTOM_NORMALIZATION } from "@devographics/constants";
-import AnswersFilters from "./AnswersFilters";
+import { AnswersTableHeading } from "./AnswersTableHeading";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -64,10 +62,10 @@ const Answers = (props: AnswersProps) => {
   const rawPath = formPaths?.other;
   const normPath = questionObject.normPaths?.other;
 
-  if (!rawPath)
+  if (!rawPath || !normPath)
     return (
       <p>
-        Missing <code>rawPath</code>
+        Missing <code>rawPath</code> or <code>normPath</code>
       </p>
     );
 
@@ -122,53 +120,23 @@ const Answers = (props: AnswersProps) => {
           )}
 
           <table className="normalization-table">
-            <thead>
-              <tr>
-                <th colSpan={99}>
-                  <AnswersFilters
-                    {...{
-                      variant,
-                      filteredAnswers,
-                      filterQuery,
-                      setFilterQuery,
-                      showCustomOnly,
-                      setShowCustomOnly,
-                    }}
-                  />
-                </th>
-              </tr>
-              <tr>
-                <th>Response ID</th>
-                <th>Answer</th>
-                <th>
-                  <span>Tokens</span>
-                  &nbsp;
-                  <a
-                    href="#"
-                    style={{ whiteSpace: "nowrap" }}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShowShortlist(!showShortlist);
-                    }}
-                    data-tooltip="Edit presets…"
-                  >
-                    Edit Shortlist…
-                  </a>
-                  {showShortlist && (
-                    <Dialog
-                      showModal={showShortlist}
-                      setShowModal={setShowShortlist}
-                      header={<span>Token Presets</span>}
-                    >
-                      <PresetsShortlist {...props} />
-                    </Dialog>
-                  )}
-                </th>
-                {/* <th>Current Tokens</th> */}
-
-                <th>Actions</th>
-              </tr>
-            </thead>
+            <AnswersTableHeading
+              {...{
+                survey,
+                edition,
+                question,
+                entities,
+                variant,
+                filteredAnswers,
+                filterQuery,
+                setFilterQuery,
+                showCustomOnly,
+                setShowCustomOnly,
+                setShowShortlist,
+                showShortlist,
+                questionData,
+              }}
+            />
             <tbody>
               {filteredAnswers.map((answer, index) => {
                 const { _id, responseId, raw, tokens } = answer;

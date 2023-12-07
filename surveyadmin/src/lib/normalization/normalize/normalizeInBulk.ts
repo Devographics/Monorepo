@@ -106,6 +106,8 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
   const { data: entities } = await fetchEntitiesNormalization();
   const entityRules = generateEntityRules(entities);
 
+  await logToFile(`normalizeInBulk/${timestamp}/entityRules.json`, entityRules);
+
   // console.log(JSON.stringify(selector, null, 2))
 
   const customNormCollection = await getCustomNormalizationsCollection();
@@ -130,6 +132,7 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
       isBulk: true,
       isRenormalization,
       customNormalizations,
+      timestamp,
     });
 
     progress++;

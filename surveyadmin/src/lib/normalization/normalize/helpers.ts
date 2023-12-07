@@ -167,25 +167,6 @@ export interface EntityRule {
   tags: Array<string>;
 }
 
-export const logAllRules = async () => {
-  const { data: allEntities } = await fetchEntitiesNormalization();
-  if (allEntities) {
-    let rules = generateEntityRules(allEntities);
-    rules = rules.map(({ id, pattern, tags }) => ({
-      id,
-      pattern: pattern.toString(),
-      tags,
-    }));
-    const json = JSON.stringify(rules, null, 2);
-
-    await logToFile("rules.js", "export default " + json, {
-      mode: "overwrite",
-    });
-  } else {
-    console.log("// Could not get entities");
-  }
-};
-
 /*
 
 Get responses count for an entire edition

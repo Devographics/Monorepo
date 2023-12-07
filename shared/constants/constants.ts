@@ -39,3 +39,5 @@ export const PERCENTAGE_QUESTION = 'percentageQuestion'
 export const COUNT = 'count'
 
 export const MAIN_UNITS = [PERCENTAGE_SURVEY, PERCENTAGE_QUESTION, COUNT]
+
+export const PARTIAL_MATCHING_INDICATOR = '[!b]'
