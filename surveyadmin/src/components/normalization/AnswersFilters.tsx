@@ -35,7 +35,7 @@ const AnswersFilters = ({
   setPageNumber,
   totalPages,
 }: AnswersFiltersProps) => {
-  const [localFilterQuery, setLocalFilterQuery] = useState(String(pageNumber));
+  const [localFilterQuery, setLocalFilterQuery] = useState("");
   const [localPageNumber, setLocalPageNumber] = useState(String(pageNumber));
   const [topOfTable, setTopOfTable] = useState(0);
   useEffect(() => {
