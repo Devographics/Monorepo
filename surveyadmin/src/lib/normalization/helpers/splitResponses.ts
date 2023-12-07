@@ -12,6 +12,7 @@ and split the answers into normalized/unnormalized batches
 export interface IndividualAnswer extends NormalizationMetadata {
   _id: string;
   responseId: string;
+  index: number;
 }
 
 const answerHasMatch = (a: NormalizationMetadata) => a.tokens?.length > 0;

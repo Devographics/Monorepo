@@ -20,6 +20,7 @@ interface AnswersTableHeadingProps {
   entities: Entity[];
   variant: AnswersProps["variant"];
   filteredAnswers: IndividualAnswer[];
+  sortedAnswers: IndividualAnswer[];
   filterQuery: string;
   setFilterQuery: Dispatch<SetStateAction<string>>;
   showCustomOnly: boolean;
@@ -27,35 +28,18 @@ interface AnswersTableHeadingProps {
   setShowShortlist: Dispatch<SetStateAction<boolean>>;
   showShortlist: boolean;
   questionData?: ResponseData;
+  pageNumber: number;
+  setPageNumber: Dispatch<SetStateAction<number>>;
+  totalPages: number;
 }
 
 export const AnswersTableHeading = (props: AnswersTableHeadingProps) => {
-  const {
-    variant,
-    filteredAnswers,
-    filterQuery,
-    setFilterQuery,
-    showCustomOnly,
-    setShowCustomOnly,
-    setShowShortlist,
-    showShortlist,
-    question,
-  } = props;
+  const { setShowShortlist, showShortlist } = props;
   return (
     <thead>
       <tr>
         <th colSpan={99}>
-          <AnswersFilters
-            {...{
-              question,
-              variant,
-              filteredAnswers,
-              filterQuery,
-              setFilterQuery,
-              showCustomOnly,
-              setShowCustomOnly,
-            }}
-          />
+          <AnswersFilters {...props} />
         </th>
       </tr>
       <tr>

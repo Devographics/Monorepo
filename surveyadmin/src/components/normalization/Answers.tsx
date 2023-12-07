@@ -11,6 +11,8 @@ import trim from "lodash/trim";
 import { CUSTOM_NORMALIZATION } from "@devographics/constants";
 import { AnswersTableHeading } from "./AnswersTableHeading";
 
+const ITEMS_PER_PAGE = 200;
+
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -28,6 +30,7 @@ const Answers = (props: AnswersProps) => {
   const [filterQuery, setFilterQuery] = useState("");
   const [showShortlist, setShowShortlist] = useState(false);
   const [showCustomOnly, setShowCustomOnly] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
 
   const showPresetsShortlistModal = () => {
     setShowShortlist(true);
@@ -46,11 +49,18 @@ const Answers = (props: AnswersProps) => {
     customNormalizations,
   } = props;
 
-  const sortedAnswers = sortBy(props[`${variant}Answers`], (a) =>
-    trim(a.raw.toLowerCase().replaceAll('"', ""))
-  ) as IndividualAnswer[];
+  const variantAnswers = props[`${variant}Answers`];
 
-  if (!sortedAnswers) return <p>Nothing to normalize</p>;
+  if (!variantAnswers) return <p>Nothing to normalize</p>;
+
+  const sortedAnswers = sortBy(variantAnswers, (a) =>
+    trim(a.raw.toLowerCase().replaceAll('"', ""))
+  ).map((a, index) => ({
+    ...a,
+    index,
+  })) as IndividualAnswer[];
+
+  const totalPages = Math.ceil(sortedAnswers.length / ITEMS_PER_PAGE);
 
   const questionObject = getQuestionObject({
     survey,
@@ -76,15 +86,23 @@ const Answers = (props: AnswersProps) => {
     normPath,
   };
 
-  let filteredAnswers = filterQuery
-    ? sortedAnswers.filter((a) =>
-        a.raw.toLowerCase().includes(filterQuery.toLowerCase())
-      )
-    : sortedAnswers;
+  let filteredAnswers = sortedAnswers;
 
-  if (showCustomOnly) {
-    filteredAnswers = filteredAnswers.filter((a) =>
-      a?.tokens?.some((t) => t.pattern === CUSTOM_NORMALIZATION)
+  if (filterQuery || showCustomOnly) {
+    if (filterQuery) {
+      filteredAnswers = filteredAnswers.filter((a) =>
+        a.raw.toLowerCase().includes(filterQuery.toLowerCase())
+      );
+    }
+    if (showCustomOnly) {
+      filteredAnswers = filteredAnswers.filter((a) =>
+        a?.tokens?.some((t) => t.pattern === CUSTOM_NORMALIZATION)
+      );
+    }
+  } else {
+    filteredAnswers = filteredAnswers.slice(
+      (pageNumber - 1) * ITEMS_PER_PAGE,
+      pageNumber * ITEMS_PER_PAGE
     );
   }
 
@@ -128,6 +146,7 @@ const Answers = (props: AnswersProps) => {
                 entities,
                 variant,
                 filteredAnswers,
+                sortedAnswers,
                 filterQuery,
                 setFilterQuery,
                 showCustomOnly,
@@ -135,24 +154,28 @@ const Answers = (props: AnswersProps) => {
                 setShowShortlist,
                 showShortlist,
                 questionData,
+                pageNumber,
+                setPageNumber,
+                totalPages,
               }}
             />
             <tbody>
-              {filteredAnswers.map((answer, index) => {
-                const { _id, responseId, raw, tokens } = answer;
-                const previousRawValue = filteredAnswers[index - 1]?.raw;
+              {filteredAnswers.map((answer, pageIndex) => {
+                const { _id, responseId, raw, tokens, index } = answer;
+                const previousRawValue = sortedAnswers[index - 1]?.raw;
                 // show letter heading if this value's first letter is different from previous one
-                const showLetterHeading = previousRawValue
-                  ? raw?.[0].toUpperCase() !==
-                    previousRawValue?.[0].toUpperCase()
-                  : true;
+                const letterIsDifferent =
+                  previousRawValue &&
+                  trim(raw)?.[0]?.toUpperCase() !==
+                    trim(previousRawValue)?.[0]?.toUpperCase();
+                const showLetterHeading = pageIndex === 0 || letterIsDifferent;
 
                 const customNormalization = customNormalizations?.find(
                   (c) => c.responseId === responseId
                 );
                 return (
                   <Answer
-                    key={raw + index}
+                    key={index}
                     answer={answer}
                     index={index}
                     customNormalization={customNormalization}

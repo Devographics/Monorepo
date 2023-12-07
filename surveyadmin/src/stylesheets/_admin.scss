@@ -293,4 +293,27 @@ button.button-ghost,
   border: 1px solid var(--primary);
   background: rgb(232, 232, 232);
   padding: 6px 8px;
+  color: var(--primary);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  button {
+    margin: 0;
+  }
+  .pagination-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    input {
+      width: 40px;
+      padding: 6px 8px;
+      height: 38px;
+      margin: 0;
+    }
+  }
 }
