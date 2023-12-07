@@ -1,6 +1,9 @@
 import { Entity } from "@devographics/types";
 import { EntityRule } from "./helpers";
-import { PARTIAL_MATCHING_INDICATOR } from "@devographics/constants";
+import {
+  PARTIAL_MATCHING_INDICATOR,
+  ENTIRE_MATCHING_INDICATOR,
+} from "@devographics/constants";
 import trim from "lodash/trim";
 
 export const generateEntityRules = (entities: Array<Entity>) => {
@@ -39,10 +42,17 @@ export const generateEntityRules = (entities: Array<Entity>) => {
               const onlyMatchWholeWords = !patternString_.includes(
                 PARTIAL_MATCHING_INDICATOR
               );
-              const patternString = trim(
-                patternString_.replace(PARTIAL_MATCHING_INDICATOR, "")
+              const matchEntireAnswer = patternString_.includes(
+                ENTIRE_MATCHING_INDICATOR
               );
-              const pattern = onlyMatchWholeWords
+              const patternString = trim(
+                patternString_
+                  .replace(PARTIAL_MATCHING_INDICATOR, "")
+                  .replace(ENTIRE_MATCHING_INDICATOR, "")
+              );
+              const pattern = matchEntireAnswer
+                ? new RegExp(`^${patternString}$`, "i")
+                : onlyMatchWholeWords
                 ? new RegExp(`\\b${patternString}\\b`, "i")
                 : new RegExp(patternString, "i");
 

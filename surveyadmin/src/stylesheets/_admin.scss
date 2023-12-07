@@ -100,6 +100,15 @@
   li {
     list-style: none;
   }
+  .entities-list {
+    width: 100px;
+    // padding: 4px 8px;
+    margin: 0;
+    font-size: 13px;
+    --form-element-spacing-vertical: 4px;
+    --form-element-spacing-horizontal: 4px;
+    // height: calc(1rem * var(--line-height) + 4px * 2 + var(--border-width) * 2);
+  }
 }
 .manualinput-form {
   display: flex;
@@ -218,6 +227,10 @@
     }
     z-index: 1;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  td,
+  th {
+    padding: 6px 10px;
   }
 }
 .letter-heading {

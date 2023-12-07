@@ -22,6 +22,7 @@ import {
   CUSTOM_NORMALIZATION,
 } from "@devographics/constants";
 import { addCustomTokensAction } from "./tokenActions";
+import { EntityList } from "./EntityInput";
 export interface AnswerProps extends AnswersProps {
   rawPath: string;
   normPath: string;
@@ -54,6 +55,9 @@ export const Answer = ({
 
   const [showResult, setShowResult] = useState(true);
   const [showAllPresets, setShowAllPresets] = useState(false);
+  const [autocompleteToken, setAutocompleteToken] = useState<string>();
+  const [autocompleteIsLoading, setAutocompleteIsLoading] = useState(false);
+
   const { enabledPresets } = usePresets({ edition, question });
 
   const normTokenProps = {
@@ -95,17 +99,12 @@ export const Answer = ({
     editionId: edition.id,
     questionId: question.id,
   };
-  const addDiscardTokenParams = {
+  const addTokenParams = {
     ...cacheKeyParams,
     responseId,
     rawValue,
     rawPath,
     normPath,
-    tokens: [DISCARDED_ANSWER],
-  };
-  const addUnsupportedLanguageTokenParams = {
-    ...addDiscardTokenParams,
-    tokens: [UNSUPPORTED_LANGUAGE],
   };
   const addTokenMutation = useCustomNormalizationMutation(
     addCustomTokensAction,
@@ -134,6 +133,26 @@ export const Answer = ({
 
         <td>
           <div className="tokens-list">
+            <div aria-busy={autocompleteIsLoading}>
+              <EntityList
+                entities={entities}
+                selectedId={autocompleteToken}
+                setSelectedId={async (value) => {
+                  setAutocompleteIsLoading(true);
+                  setAutocompleteToken(value);
+                  console.log(1, value);
+                  if (entities.map((e) => e.id).includes(value)) {
+                    console.log(2, value);
+                    await addTokenMutation.mutateAsync({
+                      ...addTokenParams,
+                      tokens: [value],
+                    });
+                    setAutocompleteToken("");
+                  }
+                  setAutocompleteIsLoading(false);
+                }}
+              />
+            </div>
             {enabledTokens.map((token) => (
               <NormTokenAction
                 key={token.id}
@@ -225,7 +244,10 @@ export const Answer = ({
             <LoadingButton
               className="button-ghost"
               action={async () => {
-                await addTokenMutation.mutateAsync(addDiscardTokenParams);
+                await addTokenMutation.mutateAsync({
+                  ...addTokenParams,
+                  tokens: [DISCARDED_ANSWER],
+                });
               }}
               label="🗑️"
               tooltip="Discard this answer"
@@ -233,9 +255,10 @@ export const Answer = ({
             <LoadingButton
               className="button-ghost"
               action={async () => {
-                await addTokenMutation.mutateAsync(
-                  addUnsupportedLanguageTokenParams
-                );
+                await addTokenMutation.mutateAsync({
+                  ...addTokenParams,
+                  tokens: [UNSUPPORTED_LANGUAGE],
+                });
               }}
               label="🌐"
               tooltip="Mark as non-English"

@@ -200,7 +200,7 @@ const Answers = (props: AnswersProps) => {
 export const ResponseId = ({ id }: { id: string }) => {
   const [copied, copy, setCopied] = useCopy(id);
 
-  const truncated = id.slice(0, 6) + "…";
+  const truncated = id.slice(0, 3) + "…";
   return (
     <code data-tooltip="Click to copy" onClick={copy}>
       {truncated}

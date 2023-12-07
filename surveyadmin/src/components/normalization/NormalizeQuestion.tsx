@@ -19,6 +19,7 @@ import {
 import { useSegments } from "./hooks";
 import QuestionData from "./QuestionData";
 import { splitResponses } from "~/lib/normalization/helpers/splitResponses";
+import sortBy from "lodash/sortBy";
 
 const queryClient = new QueryClient();
 
@@ -214,6 +215,11 @@ const AllAnswers = (props: CommonProps) => {
   };
   return (
     <>
+      <datalist id="entities-list">
+        {sortBy(props.entities, (e) => e.id).map((entity, i) => (
+          <option key={i} value={entity.id}></option>
+        ))}
+      </datalist>
       <Answers {...fieldsProps} variant="normalized" />
       <Answers {...fieldsProps} variant="unnormalized" />
       <Answers {...fieldsProps} variant="discarded" />

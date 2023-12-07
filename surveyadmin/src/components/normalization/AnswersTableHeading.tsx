@@ -43,7 +43,7 @@ export const AnswersTableHeading = (props: AnswersTableHeadingProps) => {
         </th>
       </tr>
       <tr>
-        <th>Response ID</th>
+        <th>ID</th>
         <th>Answer</th>
         <th>
           <span>Tokens</span>
