@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { AnswersProps } from "./Answers";
 import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
 import { QuestionMetadata } from "@devographics/types";
@@ -36,16 +36,28 @@ const AnswersFilters = ({
   totalPages,
 }: AnswersFiltersProps) => {
   const [localValue, setLocalValue] = useState(String(pageNumber));
+  const [topOfTable, setTopOfTable] = useState(0);
+  useEffect(() => {
+    setLocalValue(String(pageNumber));
+  }, [pageNumber]);
+  const myRef = useRef(null);
+
+  useEffect(() => {
+    const top = myRef?.current?.getBoundingClientRect().y;
+    setTopOfTable(top + document.documentElement.scrollTop);
+  }, []);
+
   return (
-    <div className="normalization-filter">
+    <div className="normalization-filter" ref={myRef}>
       <label htmlFor="search">
-        Filter <code>{question.id}</code>
+        <code>{question.id}</code>
         <strong>{capitalizeFirstLetter(variant)} Responses</strong>:{" "}
         {sortedAnswers.length} results
       </label>
       <input
         type="search"
         id="search"
+        placeholder="Filter by keyword…"
         value={filterQuery}
         onChange={(e) => setFilterQuery(e.target.value)}
       />
@@ -67,6 +79,7 @@ const AnswersFilters = ({
             e.preventDefault();
             if (pageNumber > 1) {
               setPageNumber(pageNumber - 1);
+              window.scrollTo(0, topOfTable);
             }
           }}
         >
@@ -103,6 +116,7 @@ const AnswersFilters = ({
             e.preventDefault();
             if (pageNumber < totalPages) {
               setPageNumber(pageNumber + 1);
+              window.scrollTo(0, topOfTable);
             }
           }}
         >
