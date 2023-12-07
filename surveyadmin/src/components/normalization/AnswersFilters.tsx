@@ -35,10 +35,11 @@ const AnswersFilters = ({
   setPageNumber,
   totalPages,
 }: AnswersFiltersProps) => {
-  const [localValue, setLocalValue] = useState(String(pageNumber));
+  const [localFilterQuery, setLocalFilterQuery] = useState(String(pageNumber));
+  const [localPageNumber, setLocalPageNumber] = useState(String(pageNumber));
   const [topOfTable, setTopOfTable] = useState(0);
   useEffect(() => {
-    setLocalValue(String(pageNumber));
+    setLocalPageNumber(String(pageNumber));
   }, [pageNumber]);
   const myRef = useRef<HTMLDivElement>(null);
 
@@ -46,6 +47,16 @@ const AnswersFilters = ({
     const top = myRef?.current?.getBoundingClientRect().y || 0;
     setTopOfTable(top + document.documentElement.scrollTop);
   }, []);
+
+  // wait until user has stopped typing to filter
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      console.log(localFilterQuery);
+      setFilterQuery(localFilterQuery);
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [localFilterQuery]);
 
   return (
     <div className="normalization-filter" ref={myRef}>
@@ -58,8 +69,12 @@ const AnswersFilters = ({
         type="search"
         id="search"
         placeholder="Filter by keyword…"
-        value={filterQuery}
-        onChange={(e) => setFilterQuery(e.target.value)}
+        value={localFilterQuery}
+        onChange={(e) => {
+          const value = e.target.value;
+          setLocalFilterQuery(value);
+          // setFilterQueryDebounced(value);
+        }}
       />
       <label>
         <input
@@ -89,11 +104,11 @@ const AnswersFilters = ({
           <span>
             <input
               type="text"
-              value={localValue}
+              value={localPageNumber}
               onChange={(e) => {
                 e.preventDefault;
                 const value = e.target.value;
-                setLocalValue(value);
+                setLocalPageNumber(value);
                 if (value) {
                   const limitedValue = Math.min(Number(value), totalPages);
                   setPageNumber(limitedValue);
@@ -101,8 +116,8 @@ const AnswersFilters = ({
               }}
               onBlur={(e) => {
                 e.preventDefault;
-                if (!localValue) {
-                  setLocalValue(String(pageNumber));
+                if (!localPageNumber) {
+                  setLocalPageNumber(String(pageNumber));
                 }
               }}
             />
