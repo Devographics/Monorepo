@@ -8,7 +8,6 @@ import {
 import { getNormResponsesCollection } from "@devographics/mongo";
 import { getQuestionObject } from "./getQuestionObject";
 import { getUnnormalizedResponsesSelector } from "./getSelectors";
-import { NormalizedResponseDocument } from "../types";
 
 export const getUnnormalizedResponses = async ({
   survey,
@@ -33,8 +32,7 @@ export const getUnnormalizedResponses = async ({
     questionObject,
   });
 
-  const NormResponses =
-    await getNormResponsesCollection<NormalizedResponseDocument>();
+  const NormResponses = await getNormResponsesCollection();
   let responses = await NormResponses.find(selector, {
     projection: {
       _id: 1,

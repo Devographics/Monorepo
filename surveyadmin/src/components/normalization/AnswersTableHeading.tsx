@@ -2,7 +2,7 @@
 import Dialog from "./Dialog";
 import { PresetsShortlist } from "./PresetsShortlist";
 import AnswersFilters from "./AnswersFilters";
-import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
+import { IndividualAnswerWithIndex } from "~/lib/normalization/helpers/splitResponses";
 import { Dispatch, SetStateAction } from "react";
 import { AnswersProps } from "./Answers";
 import {
@@ -19,8 +19,8 @@ interface AnswersTableHeadingProps {
   question: QuestionMetadata;
   entities: Entity[];
   variant: AnswersProps["variant"];
-  filteredAnswers: IndividualAnswer[];
-  sortedAnswers: IndividualAnswer[];
+  filteredAnswers: IndividualAnswerWithIndex[];
+  sortedAnswers: IndividualAnswerWithIndex[];
   filterQuery: string;
   setFilterQuery: Dispatch<SetStateAction<string>>;
   showCustomOnly: boolean;

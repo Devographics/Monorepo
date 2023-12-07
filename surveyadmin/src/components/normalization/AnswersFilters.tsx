@@ -1,7 +1,7 @@
 "use client";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { AnswersProps } from "./Answers";
-import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
+import { IndividualAnswerWithIndex } from "~/lib/normalization/helpers/splitResponses";
 import { QuestionMetadata } from "@devographics/types";
 
 function capitalizeFirstLetter(string) {
@@ -10,8 +10,8 @@ function capitalizeFirstLetter(string) {
 
 interface AnswersFiltersProps {
   variant: AnswersProps["variant"];
-  filteredAnswers: IndividualAnswer[];
-  sortedAnswers: IndividualAnswer[];
+  filteredAnswers: IndividualAnswerWithIndex[];
+  sortedAnswers: IndividualAnswerWithIndex[];
   filterQuery: string;
   setFilterQuery: Dispatch<SetStateAction<string>>;
   showCustomOnly: boolean;
@@ -40,10 +40,10 @@ const AnswersFilters = ({
   useEffect(() => {
     setLocalValue(String(pageNumber));
   }, [pageNumber]);
-  const myRef = useRef(null);
+  const myRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const top = myRef?.current?.getBoundingClientRect().y;
+    const top = myRef?.current?.getBoundingClientRect().y || 0;
     setTopOfTable(top + document.documentElement.scrollTop);
   }, []);
 

@@ -352,6 +352,8 @@ export const loadTokyoDevCSV = async () => {
         response: document,
         entities,
         verbose: true,
+        customNormalizations: [],
+        timestamp: new Date().toISOString(),
       });
 
       logToFile(`tokyodev_${editionId}/${_id}.yml`, normalizedDocument);

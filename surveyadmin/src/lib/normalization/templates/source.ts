@@ -9,14 +9,15 @@ import { QuestionTemplateOutput } from "@devographics/types";
 
 export const source = async (normalizationParams: NormalizationParams) => {
   await copyFields(normalizationParams);
-  const { normResp, entityRules, survey, edition, verbose } =
+  const { normResp, entityRules, survey, edition, verbose, timestamp } =
     normalizationParams;
   const normSource = await normalizeSource(
     normResp,
     entityRules,
     survey,
     edition,
-    verbose
+    verbose,
+    timestamp
   );
   if (normSource.raw) {
     set(normResp, "user_info.source.raw", normSource.raw);
@@ -41,7 +42,8 @@ export const normalizeSource = async (
   entityRules,
   survey,
   edition,
-  verbose
+  verbose,
+  timestamp
 ) => {
   const tags = [
     "sources",
@@ -84,6 +86,7 @@ export const normalizeSource = async (
         edition,
         questionObject: { id: "source" } as QuestionTemplateOutput,
         verbose,
+        timestamp,
       }));
     const normFindOut =
       rawFindOut &&
@@ -95,6 +98,7 @@ export const normalizeSource = async (
           id: "how_did_user_find_out_about_the_survey",
         } as QuestionTemplateOutput,
         verbose,
+        timestamp,
       }));
     const normReferrer =
       rawRef &&
@@ -104,6 +108,7 @@ export const normalizeSource = async (
         edition,
         questionObject: { id: "referrer" } as QuestionTemplateOutput,
         verbose,
+        timestamp,
       }));
 
     if (normSource) {

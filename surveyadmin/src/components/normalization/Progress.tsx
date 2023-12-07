@@ -9,11 +9,21 @@ import {
   NormalizationSummary,
 } from "./NormalizationResult";
 import { useDidMountEffect } from "../hooks";
-import { CommonProps, SegmentProps } from "./NormalizeQuestion";
+import { SegmentProps } from "./NormalizeQuestion";
+import {
+  EditionMetadata,
+  SurveyMetadata,
+  QuestionWithSection,
+} from "@devographics/types";
 
 const Loading = () => <span aria-busy={true} />;
 
-type ProgressProps = CommonProps & SegmentProps;
+interface ProgressProps extends SegmentProps {
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  question?: QuestionWithSection;
+  responsesCount: number;
+}
 
 const Progress = (props: ProgressProps) => {
   const { responsesCount, doneCount, enabled, setEnabled, segments } = props;

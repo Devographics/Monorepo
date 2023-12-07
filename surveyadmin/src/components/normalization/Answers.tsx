@@ -4,7 +4,10 @@ import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject
 import { getFormPaths } from "@devographics/templates";
 import { useCopy } from "../hooks";
 import { CommonProps } from "./NormalizeQuestion";
-import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
+import {
+  IndividualAnswer,
+  IndividualAnswerWithIndex,
+} from "~/lib/normalization/helpers/splitResponses";
 import sortBy from "lodash/sortBy";
 import { Answer } from "./Answer";
 import trim from "lodash/trim";
@@ -58,7 +61,7 @@ const Answers = (props: AnswersProps) => {
   ).map((a, index) => ({
     ...a,
     index,
-  })) as IndividualAnswer[];
+  })) as IndividualAnswerWithIndex[];
 
   const totalPages = Math.ceil(sortedAnswers.length / ITEMS_PER_PAGE);
 

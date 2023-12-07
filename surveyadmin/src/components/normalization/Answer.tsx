@@ -9,7 +9,7 @@ import {
   useCustomNormalizationMutation,
 } from "./NormTokenAction";
 import { Entity, CustomNormalizationDocument } from "@devographics/types";
-import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
+import { IndividualAnswerWithIndex } from "~/lib/normalization/helpers/splitResponses";
 import { AnswersProps, ResponseId } from "./Answers";
 import FieldValue from "./FieldValue";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
@@ -18,13 +18,14 @@ import AllPresets from "./AllPresets";
 import Dialog from "./Dialog";
 import {
   DISCARDED_ANSWER,
+  UNSUPPORTED_LANGUAGE,
   CUSTOM_NORMALIZATION,
 } from "@devographics/constants";
 import { addCustomTokensAction } from "./tokenActions";
 export interface AnswerProps extends AnswersProps {
   rawPath: string;
   normPath: string;
-  answer: IndividualAnswer;
+  answer: IndividualAnswerWithIndex;
   index: number;
   letterHeading?: string;
   entities: Entity[];
@@ -101,6 +102,10 @@ export const Answer = ({
     rawPath,
     normPath,
     tokens: [DISCARDED_ANSWER],
+  };
+  const addUnsupportedLanguageTokenParams = {
+    ...addDiscardTokenParams,
+    tokens: [UNSUPPORTED_LANGUAGE],
   };
   const addTokenMutation = useCustomNormalizationMutation(
     addCustomTokensAction,
@@ -225,6 +230,17 @@ export const Answer = ({
               label="🗑️"
               tooltip="Discard this answer"
             />
+            <LoadingButton
+              className="button-ghost"
+              action={async () => {
+                await addTokenMutation.mutateAsync(
+                  addUnsupportedLanguageTokenParams
+                );
+              }}
+              label="🌐"
+              tooltip="Mark as non-English"
+            />
+
             <LoadingButton
               className="button-ghost"
               action={async () => {

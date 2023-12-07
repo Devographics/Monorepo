@@ -81,6 +81,9 @@ export const Preset = (props: PresetsProps & { id: string }) => {
     setLoading(true);
     const tokens = [id];
     const params = {
+      surveyId: survey.id,
+      editionId: edition.id,
+      questionId: question.id,
       tokens,
       responseId,
       rawValue,

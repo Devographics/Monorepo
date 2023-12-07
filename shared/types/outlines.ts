@@ -295,11 +295,15 @@ export interface QuestionWithSection extends QuestionWithId {
     section: SectionMetadata
 }
 
-export interface QuestionTemplateOutput extends QuestionWithSection {
+export interface QuestionTemplateOutput extends QuestionWithId {
     rawPaths?: DbPaths
     normPaths?: DbPaths
     options?: Option[]
     extends?: string
+}
+
+export interface QuestionTemplateOutputWithSection extends QuestionTemplateOutput {
+    section: SectionMetadata
 }
 
 export type Followups = {

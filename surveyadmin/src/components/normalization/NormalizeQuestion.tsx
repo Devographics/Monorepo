@@ -26,6 +26,7 @@ import {
   useQuery,
   useMutation,
   useQueryClient,
+  // @ts-ignore
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";

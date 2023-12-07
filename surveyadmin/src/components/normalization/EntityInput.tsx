@@ -51,9 +51,7 @@ const EntityInput = ({
 
   return (
     <div className="entityinput">
-      <p>
-        <FieldValue value={value} />
-      </p>
+      <p>{/* <FieldValue value={value} /> */}</p>
       <p>
         <label htmlFor="entities">Pick Entity</label>
       </p>

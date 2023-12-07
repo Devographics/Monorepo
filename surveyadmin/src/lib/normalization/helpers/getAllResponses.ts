@@ -6,12 +6,12 @@ import {
   QuestionTemplateOutput,
   SectionMetadata,
   QuestionWithSection,
+  NormalizedResponseDocument,
 } from "@devographics/types";
 import { getNormResponsesCollection } from "@devographics/mongo";
 import { getFromCache } from "@devographics/fetch";
 import { getQuestionObject } from "./getQuestionObject";
 import { getAllResponsesSelector } from "./getSelectors";
-import { NormalizedResponseDocument } from "../types";
 import { CommonOptions } from "@devographics/fetch/types";
 import { ResponsesResult } from "../normalize/helpers";
 
@@ -45,8 +45,7 @@ export const getAllResponses = async (
         questionObject,
       });
 
-      const NormResponses =
-        await getNormResponsesCollection<NormalizedResponseDocument>();
+      const NormResponses = await getNormResponsesCollection();
       let responses = await NormResponses.find(selector, {
         projection: {
           _id: 1,

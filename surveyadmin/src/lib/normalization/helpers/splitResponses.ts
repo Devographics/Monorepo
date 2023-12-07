@@ -1,4 +1,3 @@
-import isEmpty from "lodash/isEmpty.js";
 import { NormalizationResponse } from "../hooks";
 import { DISCARDED_ANSWER } from "@devographics/constants";
 import { NormalizationMetadata } from "../types";
@@ -12,6 +11,8 @@ and split the answers into normalized/unnormalized batches
 export interface IndividualAnswer extends NormalizationMetadata {
   _id: string;
   responseId: string;
+}
+export interface IndividualAnswerWithIndex extends IndividualAnswer {
   index: number;
 }
 

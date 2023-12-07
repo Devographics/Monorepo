@@ -65,6 +65,7 @@ export const normalizeSingle = async (options: {
   edition: EditionMetadata;
   questionObject: QuestionTemplateOutput;
   verbose: boolean;
+  timestamp: string;
 }) => {
   const tokens = await normalize(options);
 
@@ -244,7 +245,6 @@ export type ResponsesResult = {
   normalizationResponses: NormalizationResponse[];
   rawFieldPath: string;
   normalizedFieldPath: string;
-  patternsFieldPath: string;
   selector: any;
 };
 

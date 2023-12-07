@@ -87,9 +87,9 @@ const ManualInput = ({
     addCustomTokens({ responseId, tokens });
 
     setLoading(false);
-    if (result.data) {
-      setResult(result.data);
-    }
+    // if (result.data) {
+    //   setResult(result.data);
+    // }
   };
 
   const handleDeletePreset = (preset) => {
