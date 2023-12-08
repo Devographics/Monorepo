@@ -2,10 +2,25 @@
 import { useState } from "react";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
 import Dialog from "./Dialog";
-import { ActionProps } from "./NormalizeQuestionActions";
+import {
+  EditionMetadata,
+  SurveyMetadata,
+  Entity,
+  QuestionWithSection,
+} from "@devographics/types";
+import sortBy from "lodash/sortBy";
 
-type TokensProps = ActionProps;
-const Tokens = ({ survey, edition, question, entities }: TokensProps) => {
+const Tokens = ({
+  survey,
+  edition,
+  question,
+  entities,
+}: {
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  question: QuestionWithSection;
+  entities: Entity[];
+}) => {
   const [showTokens, setShowTokens] = useState(false);
 
   const questionObject = getQuestionObject({
@@ -20,14 +35,14 @@ const Tokens = ({ survey, edition, question, entities }: TokensProps) => {
   return (
     <div>
       <a
-        role="button"
+        className="view-tokens"
         href="#"
         onClick={(e) => {
           e.preventDefault();
           setShowTokens(!showTokens);
         }}
       >
-        Tokens
+        View Tokens…
       </a>
       <Dialog
         showModal={showTokens}
@@ -95,7 +110,7 @@ const TagItem = ({ tag, entities }) => {
             </tr>
           </thead>
           <tbody>
-            {tagEntities.map((entity) => (
+            {sortBy(tagEntities, (e) => e.id).map((entity) => (
               <EntityItem key={entity.id} entity={entity} mainTag={tag} />
             ))}
           </tbody>

@@ -140,9 +140,7 @@ export const Answer = ({
                 setSelectedId={async (value) => {
                   setAutocompleteIsLoading(true);
                   setAutocompleteToken(value);
-                  console.log(1, value);
                   if (entities.map((e) => e.id).includes(value)) {
-                    console.log(2, value);
                     await addTokenMutation.mutateAsync({
                       ...addTokenParams,
                       tokens: [value],
@@ -204,7 +202,7 @@ export const Answer = ({
         </td>
         <td>
           <div className="field-row-actions">
-            <div>
+            {/* <div>
               <button
                 className="button-ghost"
                 onClick={(e) => {
@@ -240,7 +238,8 @@ export const Answer = ({
                   />
                 </Dialog>
               )}
-            </div>
+            </div> */}
+
             <LoadingButton
               className="button-ghost"
               action={async () => {

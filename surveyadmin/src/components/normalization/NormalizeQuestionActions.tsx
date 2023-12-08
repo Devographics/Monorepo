@@ -95,16 +95,16 @@ const Actions = (props: ActionProps) => {
             />
           </div> */}
 
-          <a
+          {/* <a
             role="button"
             href="https://www.youtube.com/watch?v=3XIKKMyMfjs"
             target="_blank"
             rel="noreferrer nofollow"
           >
             Watch Tutorial
-          </a>
+          </a> */}
           <Metadata {...props} />
-          <Tokens {...props} />
+          {/* <Tokens {...props} /> */}
 
           <div data-tooltip="Re-run normalization on all answers">
             <button

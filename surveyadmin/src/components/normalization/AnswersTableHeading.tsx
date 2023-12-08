@@ -8,7 +8,7 @@ import { AnswersProps } from "./Answers";
 import {
   SurveyMetadata,
   EditionMetadata,
-  QuestionMetadata,
+  QuestionWithSection,
   Entity,
   ResponseData,
 } from "@devographics/types";
@@ -16,7 +16,7 @@ import {
 interface AnswersTableHeadingProps {
   survey: SurveyMetadata;
   edition: EditionMetadata;
-  question: QuestionMetadata;
+  question: QuestionWithSection;
   entities: Entity[];
   variant: AnswersProps["variant"];
   filteredAnswers: IndividualAnswerWithIndex[];

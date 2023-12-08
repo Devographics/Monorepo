@@ -2,13 +2,22 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { AnswersProps } from "./Answers";
 import { IndividualAnswerWithIndex } from "~/lib/normalization/helpers/splitResponses";
-import { QuestionMetadata } from "@devographics/types";
+import {
+  EditionMetadata,
+  SurveyMetadata,
+  Entity,
+  QuestionWithSection,
+} from "@devographics/types";
+import Tokens from "./Tokens";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 interface AnswersFiltersProps {
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  entities: Entity[];
   variant: AnswersProps["variant"];
   filteredAnswers: IndividualAnswerWithIndex[];
   sortedAnswers: IndividualAnswerWithIndex[];
@@ -16,13 +25,17 @@ interface AnswersFiltersProps {
   setFilterQuery: Dispatch<SetStateAction<string>>;
   showCustomOnly: boolean;
   setShowCustomOnly: Dispatch<SetStateAction<boolean>>;
-  question: QuestionMetadata;
+  question: QuestionWithSection;
   pageNumber: number;
   setPageNumber: Dispatch<SetStateAction<number>>;
   totalPages: number;
 }
 
 const AnswersFilters = ({
+  survey,
+  edition,
+  question,
+  entities,
   variant,
   sortedAnswers,
   filteredAnswers,
@@ -30,7 +43,6 @@ const AnswersFilters = ({
   setFilterQuery,
   showCustomOnly,
   setShowCustomOnly,
-  question,
   pageNumber,
   setPageNumber,
   totalPages,
@@ -60,11 +72,12 @@ const AnswersFilters = ({
 
   return (
     <div className="normalization-filter" ref={myRef}>
-      <label htmlFor="search">
+      <div>
+        <strong>{capitalizeFirstLetter(variant)} Responses</strong>
         <code>{question.id}</code>
-        <strong>{capitalizeFirstLetter(variant)} Responses</strong>:{" "}
-        {sortedAnswers.length} results
-      </label>
+      </div>
+      <Tokens {...{ survey, edition, question, entities }} />
+
       <input
         type="search"
         id="search"
@@ -76,7 +89,11 @@ const AnswersFilters = ({
           // setFilterQueryDebounced(value);
         }}
       />
-      <label>
+
+      <label className="results-count" htmlFor="search">
+        {sortedAnswers.length} results
+      </label>
+      {/* <label>
         <input
           type="checkbox"
           checked={showCustomOnly}
@@ -86,7 +103,7 @@ const AnswersFilters = ({
           }}
         />
         Show custom tokens only
-      </label>
+      </label> */}
       <div className="pagination">
         <button
           className="button-ghost"
