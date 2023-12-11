@@ -27,6 +27,18 @@ export interface AnswersProps extends CommonProps {
   variant: "normalized" | "unnormalized" | "discarded";
 }
 
+const getSimplifiedString = (s: string) => {
+  if (s) {
+    return trim(
+      s
+        .toLowerCase()
+        .replaceAll(" ", "")
+        .replaceAll("-", "")
+        .replaceAll("@", "")
+    );
+  }
+};
+
 const Answers = (props: AnswersProps) => {
   const [showResponses, setShowResponses] = useState(false);
   const [showIds, setShowIds] = useState(false);
@@ -57,7 +69,7 @@ const Answers = (props: AnswersProps) => {
   if (!variantAnswers) return <p>Nothing to normalize</p>;
 
   const sortedAnswers = sortBy(variantAnswers, (a) =>
-    trim(a.raw.toLowerCase().replaceAll('"', ""))
+    trim(a.raw.toLowerCase().replaceAll('"', "").replaceAll("@", ""))
   ).map((a, index) => ({
     ...a,
     index,
@@ -164,17 +176,28 @@ const Answers = (props: AnswersProps) => {
             />
             <tbody>
               {filteredAnswers.map((answer, pageIndex) => {
-                const { _id, responseId, raw, tokens, index } = answer;
-                const previousRawValue = sortedAnswers[index - 1]?.raw;
+                const { _id, responseId, raw, tokens, index, answerIndex } =
+                  answer;
+                const currentRawValue = getSimplifiedString(raw);
+                const previousRawValue = getSimplifiedString(
+                  sortedAnswers[index - 1]?.raw
+                );
+                const nextRawValue = getSimplifiedString(
+                  sortedAnswers[index + 1]?.raw
+                );
                 // show letter heading if this value's first letter is different from previous one
                 const letterIsDifferent =
                   previousRawValue &&
-                  trim(raw)?.[0]?.toUpperCase() !==
-                    trim(previousRawValue)?.[0]?.toUpperCase();
+                  currentRawValue?.[0] !== previousRawValue?.[0];
                 const showLetterHeading = pageIndex === 0 || letterIsDifferent;
 
+                const isRepeating =
+                  previousRawValue === currentRawValue ||
+                  nextRawValue === currentRawValue;
+
                 const customNormalization = customNormalizations?.find(
-                  (c) => c.responseId === responseId
+                  (c) =>
+                    c.responseId === responseId && c.answerIndex === answerIndex
                 );
                 return (
                   <Answer
@@ -182,6 +205,8 @@ const Answers = (props: AnswersProps) => {
                     answer={answer}
                     index={index}
                     customNormalization={customNormalization}
+                    answerIndex={answerIndex}
+                    isRepeating={isRepeating}
                     {...(showLetterHeading
                       ? { letterHeading: raw?.[0].toUpperCase() }
                       : {})}

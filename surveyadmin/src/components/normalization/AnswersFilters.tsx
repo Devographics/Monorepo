@@ -76,7 +76,6 @@ const AnswersFilters = ({
         <strong>{capitalizeFirstLetter(variant)} Responses</strong>
         <code>{question.id}</code>
       </div>
-      <Tokens {...{ survey, edition, question, entities }} />
 
       <input
         type="search"

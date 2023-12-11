@@ -12,6 +12,7 @@ import {
   Entity,
   ResponseData,
 } from "@devographics/types";
+import Tokens from "./Tokens";
 
 interface AnswersTableHeadingProps {
   survey: SurveyMetadata;
@@ -46,28 +47,30 @@ export const AnswersTableHeading = (props: AnswersTableHeadingProps) => {
         <th>ID</th>
         <th>Answer</th>
         <th>
-          <span>Tokens</span>
-          &nbsp;
-          <a
-            href="#"
-            style={{ whiteSpace: "nowrap" }}
-            onClick={(e) => {
-              e.preventDefault();
-              setShowShortlist(!showShortlist);
-            }}
-            data-tooltip="Edit presets…"
-          >
-            Edit Shortlist…
-          </a>
-          {showShortlist && (
-            <Dialog
-              showModal={showShortlist}
-              setShowModal={setShowShortlist}
-              header={<span>Token Presets</span>}
+          <div className="token-actions">
+            <span>Tokens</span>
+            <a
+              href="#"
+              style={{ whiteSpace: "nowrap" }}
+              onClick={(e) => {
+                e.preventDefault();
+                setShowShortlist(!showShortlist);
+              }}
+              data-tooltip="Edit presets…"
             >
-              <PresetsShortlist {...props} />
-            </Dialog>
-          )}
+              Edit Shortlist…
+            </a>
+            {showShortlist && (
+              <Dialog
+                showModal={showShortlist}
+                setShowModal={setShowShortlist}
+                header={<span>Token Presets</span>}
+              >
+                <PresetsShortlist {...props} />
+              </Dialog>
+            )}
+            <Tokens {...props} isButton={false} />
+          </div>
         </th>
         {/* <th>Current Tokens</th> */}
 

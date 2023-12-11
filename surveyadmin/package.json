@@ -54,6 +54,7 @@
     "bowser": "^2.11.0",
     "cookie": "^0.5.0",
     "cross-env": "7.0.2",
+    "csv-parse": "^5.5.3",
     "csv-parser": "^3.0.0",
     "debug": "4.3.4",
     "express": "4.17.1",

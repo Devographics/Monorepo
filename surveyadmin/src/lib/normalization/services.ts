@@ -10,6 +10,7 @@ import {
   RemoveCustomTokensProps,
   EnableRegularTokensProps,
   DisableRegularTokensProps,
+  ImportNormalizationArgs,
 } from "./actions";
 import { NormalizeInBulkResult } from "./types";
 import { GetQuestionDataArgs } from "./actions/getQuestionData";
@@ -193,6 +194,22 @@ export async function loadQuestionData(params: GetQuestionDataArgs) {
     }
   );
   const result: { data?: NormalizationProgressStats; error: any } =
+    await fetchRes.json();
+  return result;
+}
+
+export async function importNormalizations(params: ImportNormalizationArgs) {
+  const fetchRes = await fetch(
+    apiRoutes.normalization.importNormalizations.href(params),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    }
+  );
+  const result: { data?: NormalizeInBulkResult; error: any } =
     await fetchRes.json();
   return result;
 }

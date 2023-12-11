@@ -11,6 +11,7 @@ and split the answers into normalized/unnormalized batches
 export interface IndividualAnswer extends NormalizationMetadata {
   _id: string;
   responseId: string;
+  answerIndex: number;
 }
 export interface IndividualAnswerWithIndex extends IndividualAnswer {
   index: number;
@@ -24,10 +25,11 @@ export function splitResponses(responses: NormalizationResponse[]) {
   const allAnswers: Array<IndividualAnswer> = responses
     .filter((r) => r.metadata)
     .map((r) =>
-      r.metadata!.map((item) => ({
+      r.metadata!.map((item, answerIndex) => ({
         ...item,
         _id: r._id,
         responseId: r.responseId,
+        answerIndex,
       }))
     )
     .flat();

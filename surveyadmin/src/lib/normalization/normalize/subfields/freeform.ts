@@ -61,7 +61,7 @@ export const freeform: SubfieldProcessFunction = async ({
   const modifiedFields: FieldLogItem[] = [];
 
   const customNormalization = customNormalizations.find(
-    (c) => c.responseId === response.responseId
+    (c) => c.responseId === response._id
   );
 
   const { rawPaths, normPaths } = getQuestionPaths(questionObject);

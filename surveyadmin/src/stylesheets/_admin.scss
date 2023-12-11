@@ -337,3 +337,15 @@ button.button-ghost,
 .results-count {
   white-space: nowrap;
 }
+
+.token-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.answer-row-same {
+  td {
+    background: rgb(215, 255, 215);
+  }
+}

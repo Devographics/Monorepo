@@ -9,7 +9,12 @@ export const getCustomTokens = async ({ rawPath }: { rawPath: string }) => {
   const customNormCollection = await getCustomNormalizationsCollection();
   const result = customNormCollection
     .find({ rawPath })
-    .project({ responseId: 1, customTokens: 1, disabledTokens: 1 })
+    .project({
+      responseId: 1,
+      customTokens: 1,
+      disabledTokens: 1,
+      answerIndex: 1,
+    })
     .toArray();
   return result;
 };

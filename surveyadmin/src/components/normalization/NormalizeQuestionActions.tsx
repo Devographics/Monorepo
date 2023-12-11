@@ -18,6 +18,7 @@ import LoadingButton from "../LoadingButton";
 import Metadata from "./Metadata";
 import Tokens from "./Tokens";
 import { CommonProps, SegmentProps } from "./NormalizeQuestion";
+import { Import } from "./Import";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
@@ -104,7 +105,8 @@ const Actions = (props: ActionProps) => {
             Watch Tutorial
           </a> */}
           <Metadata {...props} />
-          {/* <Tokens {...props} /> */}
+          <Tokens {...props} />
+          <Import {...props} />
 
           <div data-tooltip="Re-run normalization on all answers">
             <button

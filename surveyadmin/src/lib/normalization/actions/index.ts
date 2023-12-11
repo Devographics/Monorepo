@@ -9,3 +9,4 @@ export * from "./removeCustomTokens";
 export * from "./getNormalizationPercentages";
 export * from "./enableRegularTokens";
 export * from "./disableRegularTokens";
+export * from "./importNormalizations";

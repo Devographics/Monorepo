@@ -13,12 +13,17 @@ it doesn't exist yet
 
 */
 export const addCustomTokens = async (props: AddCustomTokensProps) => {
-  const { responseId, tokens, ...rest } = props;
+  const { responseId, tokens, rawValue, answerIndex, ...rest } = props;
   const customNormCollection = await getCustomNormalizationsCollection();
   const updateResult = await customNormCollection.findOneAndUpdate(
-    { responseId },
+    { responseId, answerIndex },
     {
-      $set: { _id: responseId, responseId, ...rest },
+      $set: {
+        _id: `${responseId}__${answerIndex}`,
+        responseId,
+        answerIndex,
+        ...rest,
+      },
       $addToSet: {
         customTokens: { $each: tokens },
       },

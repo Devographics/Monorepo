@@ -59,6 +59,9 @@ export const apiRoutes = {
           params
         )}`,
     },
+    importNormalizations: {
+      href: (params) => `/api/normalization/importNormalizations`,
+    },
   },
   export: {
     generate: {

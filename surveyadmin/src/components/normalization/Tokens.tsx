@@ -15,11 +15,13 @@ const Tokens = ({
   edition,
   question,
   entities,
+  isButton = true,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionWithSection;
   entities: Entity[];
+  isButton?: boolean;
 }) => {
   const [showTokens, setShowTokens] = useState(false);
 
@@ -35,6 +37,7 @@ const Tokens = ({
   return (
     <div>
       <a
+        role={isButton ? "button" : "link"}
         className="view-tokens"
         href="#"
         onClick={(e) => {

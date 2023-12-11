@@ -14,8 +14,6 @@ import { AnswersProps, ResponseId } from "./Answers";
 import FieldValue from "./FieldValue";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
 import { usePresets } from "./hooks";
-import AllPresets from "./AllPresets";
-import Dialog from "./Dialog";
 import {
   DISCARDED_ANSWER,
   UNSUPPORTED_LANGUAGE,
@@ -33,6 +31,8 @@ export interface AnswerProps extends AnswersProps {
   responses: NormalizationResponse[];
   showPresetsShortlistModal: () => void;
   customNormalization?: CustomNormalizationDocument;
+  isRepeating: boolean;
+  answerIndex: number;
 }
 
 export const Answer = ({
@@ -45,10 +45,12 @@ export const Answer = ({
   normPath,
   entities,
   index,
+  answerIndex,
   letterHeading,
   responses,
   showPresetsShortlistModal,
   customNormalization,
+  isRepeating = false,
 }: AnswerProps) => {
   const { _id, responseId, raw: rawValue, tokens = [] } = answer;
   const [result, setResult] = useState<NormalizeInBulkResult>();
@@ -105,11 +107,14 @@ export const Answer = ({
     rawValue,
     rawPath,
     normPath,
+    answerIndex,
   };
   const addTokenMutation = useCustomNormalizationMutation(
     addCustomTokensAction,
     cacheKeyParams
   );
+
+  const className = `answer-row ${isRepeating ? "answer-row-same" : ""}`;
 
   return (
     <>
@@ -120,10 +125,12 @@ export const Answer = ({
           </th>
         </tr>
       )}
-      <tr>
+      <tr className={className}>
         <td>
           <div className="field-row-id">
-            <span>{index + 1}.</span>
+            <span>
+              {index + 1}. ({answerIndex})
+            </span>
             <ResponseId id={responseId} />
           </div>
         </td>
