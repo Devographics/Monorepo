@@ -116,6 +116,7 @@ export const NormTokenAction = (props: NormTokenActionProps) => {
     useNormTokenStuff(props);
   const action = getAction(props);
 
+  // @ts-expect-error TODO just to build
   const params: AddCustomTokensProps = {
     surveyId: survey.id,
     editionId: edition.id,

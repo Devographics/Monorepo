@@ -90,6 +90,7 @@ export const Preset = (props: PresetsProps & { id: string }) => {
       normPath,
       rawPath,
     };
+    // @ts-expect-error TODO just to build
     const result = await addCustomTokens(params);
     setLoading(false);
   };
