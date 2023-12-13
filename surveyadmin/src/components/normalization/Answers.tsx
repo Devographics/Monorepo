@@ -20,7 +20,7 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const getPercent = (a, b) => Math.round((a / b) * 100);
+const getPercent = (a: number, b: number) => Math.round((a / b) * 100);
 
 export interface AnswersProps extends CommonProps {
   allAnswers: IndividualAnswer[];
@@ -125,8 +125,10 @@ const Answers = (props: AnswersProps) => {
     <div>
       <h3>
         {capitalizeFirstLetter(variant)} Responses (
-        {getPercent(sortedAnswers.length, allAnswers.length)}% –{" "}
-        {sortedAnswers.length}/{allAnswers.length}){" "}
+        {allAnswers.length
+          ? getPercent(sortedAnswers.length, allAnswers.length)
+          : 0}
+        % – {sortedAnswers.length}/{allAnswers.length}){" "}
         <a
           href="#"
           role="button"
@@ -195,10 +197,18 @@ const Answers = (props: AnswersProps) => {
                   previousRawValue === currentRawValue ||
                   nextRawValue === currentRawValue;
 
-                const customNormalization = customNormalizations?.find(
-                  (c) =>
+                const customNormalization = customNormalizations?.find((c) => {
+                  if (!c) {
+                    console.warn(
+                      "Found undefined custom normalization",
+                      customNormalizations
+                    );
+                    return false;
+                  }
+                  return (
                     c.responseId === responseId && c.answerIndex === answerIndex
-                );
+                  );
+                });
                 return (
                   <Answer
                     key={index}
