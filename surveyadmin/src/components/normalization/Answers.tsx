@@ -3,7 +3,7 @@ import { useState } from "react";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
 import { getFormPaths } from "@devographics/templates";
 import { useCopy } from "../hooks";
-import { CommonProps } from "./NormalizeQuestion";
+import { CommonNormalizationProps } from "./NormalizeQuestion";
 import {
   IndividualAnswer,
   IndividualAnswerWithIndex,
@@ -22,7 +22,7 @@ function capitalizeFirstLetter(string) {
 
 const getPercent = (a: number, b: number) => Math.round((a / b) * 100);
 
-export interface AnswersProps extends CommonProps {
+export interface AnswersProps extends CommonNormalizationProps {
   allAnswers: IndividualAnswer[];
   variant: "normalized" | "unnormalized" | "discarded";
 }
