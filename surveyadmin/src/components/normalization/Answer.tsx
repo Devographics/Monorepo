@@ -72,6 +72,7 @@ export const Answer = ({
     rawValue,
     responses,
     entities,
+    answerIndex,
   };
 
   const regularTokens = tokens.filter(
@@ -266,7 +267,7 @@ export const Answer = ({
                   tokens: [UNSUPPORTED_LANGUAGE],
                 });
               }}
-              label="🌐"
+              label="🌍"
               tooltip="Mark as non-English"
             />
 

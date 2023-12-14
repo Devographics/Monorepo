@@ -15,11 +15,12 @@ it doesn't exist yet
 export const addCustomTokens = async (props: AddCustomTokensProps) => {
   const { responseId, tokens, rawValue, answerIndex, ...rest } = props;
   const customNormCollection = await getCustomNormalizationsCollection();
+  const _id = `${responseId}__${answerIndex}`;
   const updateResult = await customNormCollection.findOneAndUpdate(
     { responseId, answerIndex },
     {
       $set: {
-        _id: `${responseId}__${answerIndex}`,
+        _id,
         responseId,
         answerIndex,
         ...rest,
@@ -35,7 +36,7 @@ export const addCustomTokens = async (props: AddCustomTokensProps) => {
   // let newDocument = updateResult.value;
   // if (updateResult?.lastErrorObject?.upserted) {
   const document = await customNormCollection.findOne({
-    _id: responseId,
+    _id,
   });
   // }
   return { action: "addCustomTokens", updateResult, document };

@@ -26,23 +26,23 @@ const Breadcrumbs = ({
 
       <nav>
         <ul>
-          <li>
+          {/* <li>
             <Link href={routes.admin.normalization.href({})}>All Surveys</Link>
-          </li>
-          {survey && (
+          </li> */}
+          {/* {survey && (
             <BreadcrumbSegment
               level="survey"
               currentItem={survey}
               items={surveys}
               getParams={(itemId) => ({ surveyId: itemId })}
             />
-          )}
+          )} */}
           {survey && edition && (
             <>
               <BreadcrumbSegment
                 level="edition"
                 currentItem={edition}
-                items={survey.editions}
+                items={surveys?.map((s) => s.editions).flat()}
                 getParams={(itemId) => ({
                   surveyId: survey.id,
                   editionId: itemId,
@@ -52,6 +52,9 @@ const Breadcrumbs = ({
           )}
           {survey && edition && question && (
             <>
+              <li>
+                <span>»</span>
+              </li>
               <BreadcrumbSegment
                 level="question"
                 currentItem={question}
@@ -72,42 +75,33 @@ const Breadcrumbs = ({
 
 const BreadcrumbSegment = ({ currentItem, items, getParams, level }) => {
   return (
-    <>
-      <li>
-        <span>»</span>
-      </li>
-      <li className="breadcrumb-segment">
-        {/* <select value={edition.id} onBlur={handleNav} onChange={handleNav}>
+    <li className="breadcrumb-segment">
+      {/* <select value={edition.id} onBlur={handleNav} onChange={handleNav}>
         {survey?.editions?.map((e) => (
           <option key={e.id}>{e.id}</option>
         ))}
       </select> */}
 
-        {level === "question" ? (
-          <span> {currentItem.id}</span>
-        ) : (
-          <Link
-            href={routes.admin.normalization.href(getParams(currentItem.id))}
-          >
-            {currentItem.id}
-          </Link>
-        )}
-        <details role="list">
-          <summary aria-haspopup="listbox"></summary>
-          <ul role="listbox">
-            {items.map((item) => (
-              <li key={item.id}>
-                <Link
-                  href={routes.admin.normalization.href(getParams(item.id))}
-                >
-                  {item.id}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </details>
-      </li>
-    </>
+      {level === "question" ? (
+        <span> {currentItem.id}</span>
+      ) : (
+        <Link href={routes.admin.normalization.href(getParams(currentItem.id))}>
+          {currentItem.id}
+        </Link>
+      )}
+      <details role="list">
+        <summary aria-haspopup="listbox"></summary>
+        <ul role="listbox">
+          {items.map((item) => (
+            <li key={item.id}>
+              <Link href={routes.admin.normalization.href(getParams(item.id))}>
+                {item.id}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </details>
+    </li>
   );
 };
 export default Breadcrumbs;

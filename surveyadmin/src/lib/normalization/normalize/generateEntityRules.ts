@@ -11,14 +11,14 @@ export const generateEntityRules = (entities: Array<Entity>) => {
   entities
     .filter((e) => !e.apiOnly)
     .forEach((entity) => {
-      const { id, patterns, tags, twitterName, exactMatch } = entity;
+      const { id, patterns, tags = [], twitterName, exactMatch } = entity;
 
       if (id) {
         if (exactMatch) {
           rules.push({
             id,
             pattern: new RegExp(`\b${id}\b`, "i"),
-            tags: tags || [],
+            tags,
           });
         } else {
           // we match the separator group 0 to 2 times to account for double spaces,
@@ -31,8 +31,27 @@ export const generateEntityRules = (entities: Array<Entity>) => {
           rules.push({
             id,
             pattern: idPattern,
-            tags: tags || [],
+            tags,
           });
+
+          // generate special matching rule for HTML elements
+          if (id.includes("_element")) {
+            const [elementName] = id.split("_element");
+            const elementPattern = new RegExp(
+              `\<${elementName}( )?(\/)?\>`,
+              "i"
+            );
+            rules.push({
+              id,
+              pattern: elementPattern,
+              tags,
+            });
+            rules.push({
+              id,
+              pattern: idPattern,
+              tags,
+            });
+          }
 
           // 4. add custom patterns
           patterns &&
@@ -53,16 +72,16 @@ export const generateEntityRules = (entities: Array<Entity>) => {
               const pattern = matchEntireAnswer
                 ? new RegExp(`^${patternString}$`, "i")
                 : onlyMatchWholeWords
-                ? new RegExp(`\\b${patternString}\\b`, "i")
-                : new RegExp(patternString, "i");
+                ? new RegExp(`\\b${patternString}(s)?\\b`, "i")
+                : new RegExp(`${patternString}(s)?`, "i");
 
-              rules.push({ id, pattern, tags: tags || [] });
+              rules.push({ id, pattern, tags });
             });
 
           // 5. also add twitter username if available (useful for people entities)
           if (twitterName) {
             const pattern = new RegExp(twitterName, "i");
-            rules.push({ id, pattern, tags: tags || [] });
+            rules.push({ id, pattern, tags });
           }
         }
       }

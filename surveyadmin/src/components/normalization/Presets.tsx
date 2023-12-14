@@ -23,6 +23,7 @@ export interface PresetsProps {
   entities: Entity[];
   tokens: NormalizationToken[];
   showPresetsShortlistModal: () => void;
+  answerIndex: number;
 }
 
 const Presets = (props: PresetsProps) => {
@@ -65,6 +66,7 @@ export const Preset = (props: PresetsProps & { id: string }) => {
     rawPath,
     entities,
     tokens,
+    answerIndex,
   } = props;
 
   const isAlreadyIncluded = tokens.some((t) => t.id === id);
@@ -89,6 +91,7 @@ export const Preset = (props: PresetsProps & { id: string }) => {
       rawValue,
       normPath,
       rawPath,
+      answerIndex,
     };
     const result = await addCustomTokens(params);
     setLoading(false);

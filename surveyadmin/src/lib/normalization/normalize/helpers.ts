@@ -23,9 +23,12 @@ import {
   fetchEntitiesNormalization,
   getEntitiesNormalizationQuery,
 } from "./getEntitiesNormalizationQuery";
+import trim from "lodash/trim";
 
 export const cleanupValue = (value) =>
-  typeof value === "undefined" || ignoreValues.includes(value) ? null : value;
+  typeof value === "undefined" || ignoreValues.includes(value)
+    ? null
+    : trim(value);
 
 // Global variable that stores the entities
 export let entitiesData: { entities?: any; rules?: any } = {};

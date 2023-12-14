@@ -58,6 +58,7 @@ export interface NormTokenActionProps extends NormTokenProps {
   rawValue: string;
   rawPath: string;
   normPath: string;
+  answerIndex: number;
 
   isRegular?: boolean;
   isDisabled?: boolean;
@@ -110,6 +111,7 @@ export const NormTokenAction = (props: NormTokenActionProps) => {
     survey,
     edition,
     question,
+    answerIndex,
   } = props;
 
   const { entity, showModal, setShowModal, tokenAnswers } =
@@ -125,6 +127,7 @@ export const NormTokenAction = (props: NormTokenActionProps) => {
     rawPath,
     normPath,
     tokens: [id],
+    answerIndex,
   };
 
   return (
