@@ -3,7 +3,7 @@ import { useState } from "react";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
 import { getFormPaths } from "@devographics/templates";
 import { useCopy } from "../hooks";
-import { CommonProps } from "./NormalizeQuestion";
+import { CommonNormalizationProps } from "./NormalizeQuestion";
 import {
   IndividualAnswer,
   IndividualAnswerWithIndex,
@@ -22,9 +22,10 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const getPercent = (a, b) => Math.round((a / b) * 100);
+const getPercent = (a: number, b: number) =>
+  b ? Math.round((a / b) * 100) : 0;
 
-export interface AnswersProps extends CommonProps {
+export interface AnswersProps extends CommonNormalizationProps {
   allAnswers: IndividualAnswer[];
   variant: "normalized" | "unnormalized" | "discarded";
 }
@@ -210,10 +211,18 @@ const Answers = (props: AnswersProps) => {
                   previousRawValue === currentRawValue ||
                   nextRawValue === currentRawValue;
 
-                const customNormalization = customNormalizations?.find(
-                  (c) =>
+                const customNormalization = customNormalizations?.find((c) => {
+                  if (!c) {
+                    console.warn(
+                      "Found undefined custom normalization",
+                      customNormalizations
+                    );
+                    return false;
+                  }
+                  return (
                     c.responseId === responseId && c.answerIndex === answerIndex
-                );
+                  );
+                });
                 return (
                   <Answer
                     key={index}

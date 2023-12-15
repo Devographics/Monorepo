@@ -191,7 +191,7 @@ export const Normalization = (props: NormalizationProps) => {
 
 export type SegmentProps = ReturnType<typeof useSegments>;
 
-export interface CommonProps extends NormalizationProps {
+export interface CommonNormalizationProps extends NormalizationProps {
   responsesCount: number;
   responses: NormalizationResponse[];
   questionData: ResponseData;
@@ -199,7 +199,7 @@ export interface CommonProps extends NormalizationProps {
   customNormalizations: CustomNormalizationDocument[];
 }
 
-const AllAnswers = (props: CommonProps) => {
+const AllAnswers = (props: CommonNormalizationProps) => {
   const {
     allAnswers,
     normalizedAnswers,
