@@ -7,6 +7,9 @@ import { fetchSurveysMetadata } from "@devographics/fetch";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import { getEditionQuestions } from "~/lib/normalization/helpers/getEditionQuestions";
 
+// We don't want static rendering in survey admin
+export const dynamic = "force-dynamic";
+
 export default async function Page({ params }) {
   const { surveyId, editionId, questionId } = params;
   const { data: surveys } = await fetchSurveysMetadata({
