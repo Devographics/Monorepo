@@ -12,7 +12,10 @@ import { Entity, CustomNormalizationDocument } from "@devographics/types";
 import { IndividualAnswerWithIndex } from "~/lib/normalization/helpers/splitResponses";
 import { AnswersProps, ResponseId } from "./Answers";
 import FieldValue from "./FieldValue";
-import { NormalizationResponse } from "~/lib/normalization/hooks";
+import {
+  NormalizationResponse,
+  ResponsesData,
+} from "~/lib/normalization/hooks";
 import { usePresets } from "./hooks";
 import {
   DISCARDED_ANSWER,
@@ -21,6 +24,11 @@ import {
 } from "@devographics/constants";
 import { addCustomTokensAction } from "./tokenActions";
 import { EntityList } from "./EntityInput";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  getCustomNormalizationsCacheKey,
+  getDataCacheKey,
+} from "./NormalizeQuestion";
 export interface AnswerProps extends AnswersProps {
   rawPath: string;
   normPath: string;
@@ -33,6 +41,7 @@ export interface AnswerProps extends AnswersProps {
   customNormalization?: CustomNormalizationDocument;
   isRepeating: boolean;
   answerIndex: number;
+  filterQuery?: string;
 }
 
 export const Answer = ({
@@ -51,7 +60,10 @@ export const Answer = ({
   showPresetsShortlistModal,
   customNormalization,
   isRepeating = false,
+  filterQuery,
 }: AnswerProps) => {
+  const queryClient = useQueryClient();
+
   const { _id, responseId, raw: rawValue, tokens = [] } = answer;
   const [result, setResult] = useState<NormalizeInBulkResult>();
 
@@ -129,14 +141,16 @@ export const Answer = ({
       <tr className={className}>
         <td>
           <div className="field-row-id">
-            <span>
-              {index + 1}. ({answerIndex})
-            </span>
+            <span>{index + 1}.</span>
             <ResponseId id={responseId} />
           </div>
         </td>
         <td>
-          <FieldValue raw={rawValue} tokens={tokens} />
+          <FieldValue
+            raw={rawValue}
+            tokens={tokens}
+            filterQuery={filterQuery}
+          />
         </td>
 
         <td>
@@ -274,14 +288,41 @@ export const Answer = ({
             <LoadingButton
               className="button-ghost"
               action={async () => {
-                const result = await normalizeQuestionResponses({
-                  questionId: question.id,
+                const commonParams = {
                   surveyId: survey.id,
                   editionId: edition.id,
+                  questionId: question.id,
+                };
+                const result = await normalizeQuestionResponses({
+                  ...commonParams,
                   responsesIds: [responseId],
                 });
                 setResult(result.data);
-                console.log(result);
+                if (result.data) {
+                  const { normalizedDocuments } = result.data;
+                  const normalizedDocument = normalizedDocuments[0];
+                  const { normalizedFields, responseId } = normalizedDocument;
+                  if (normalizedFields) {
+                    const normalizedField = normalizedFields[0];
+                    queryClient.setQueryData(
+                      [getDataCacheKey(commonParams)],
+                      (previous: ResponsesData) => {
+                        const { responses } = previous;
+                        return {
+                          ...previous,
+                          responses: responses.map((r) =>
+                            responseId === r.responseId
+                              ? {
+                                  ...r,
+                                  metadata: normalizedField.metadata,
+                                }
+                              : r
+                          ),
+                        };
+                      }
+                    );
+                  }
+                }
               }}
               label="🔄"
               tooltip="Renormalize this answer"
@@ -289,7 +330,7 @@ export const Answer = ({
           </div>
         </td>
       </tr>
-      {result && showResult && (
+      {/* {result && showResult && (
         <tr>
           <td colSpan={999}>
             <article>
@@ -301,7 +342,7 @@ export const Answer = ({
             </article>
           </td>
         </tr>
-      )}
+      )} */}
     </>
   );
 };

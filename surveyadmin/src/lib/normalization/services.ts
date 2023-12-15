@@ -6,15 +6,11 @@ import {
   NormalizeResponsesArgs,
   LoadNormalizationPercentagesArgs,
   NormalizationProgressStats,
-  AddCustomTokensProps,
-  RemoveCustomTokensProps,
-  EnableRegularTokensProps,
-  DisableRegularTokensProps,
   ImportNormalizationArgs,
 } from "./actions";
 import { NormalizeInBulkResult } from "./types";
 import { GetQuestionDataArgs } from "./actions/getQuestionData";
-import { CustomNormalizationDocument } from "@devographics/types";
+import { CustomNormalizationParams } from "@devographics/types";
 
 // export async function loadFields({ surveyId, editionId, questionId }) {
 //   const fetchRes = await fetch(
@@ -101,7 +97,7 @@ export async function normalizeEdition(params: NormalizeEditionArgs) {
   return result;
 }
 
-export async function addCustomTokens(params: AddCustomTokensProps) {
+export async function addCustomTokens(params: CustomNormalizationParams) {
   const fetchRes = await fetch(
     apiRoutes.normalization.addCustomTokens.href(params),
     {
@@ -117,7 +113,7 @@ export async function addCustomTokens(params: AddCustomTokensProps) {
   return result;
 }
 
-export async function removeCustomTokens(params: RemoveCustomTokensProps) {
+export async function removeCustomTokens(params: CustomNormalizationParams) {
   const fetchRes = await fetch(
     apiRoutes.normalization.removeCustomTokens.href(params),
     {
@@ -132,7 +128,7 @@ export async function removeCustomTokens(params: RemoveCustomTokensProps) {
     await fetchRes.json();
   return result;
 }
-export async function enableRegularTokens(params: EnableRegularTokensProps) {
+export async function enableRegularTokens(params: CustomNormalizationParams) {
   const fetchRes = await fetch(
     apiRoutes.normalization.enableRegularTokens.href(params),
     {
@@ -148,7 +144,7 @@ export async function enableRegularTokens(params: EnableRegularTokensProps) {
   return result;
 }
 
-export async function disableRegularTokens(params: DisableRegularTokensProps) {
+export async function disableRegularTokens(params: CustomNormalizationParams) {
   const fetchRes = await fetch(
     apiRoutes.normalization.disableRegularTokens.href(params),
     {

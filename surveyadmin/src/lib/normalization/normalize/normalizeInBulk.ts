@@ -166,7 +166,7 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
       const resultDocument = {
         // errors,
         responseId,
-        normalizedResponseId: normalizedResponse._id,
+        normalizedResponseId: responseId,
         normalizedFields,
         counts,
       };

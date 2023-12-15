@@ -7,7 +7,6 @@ import {
 import Link from "next/link";
 import { getNormalizableQuestions } from "~/lib/normalization/helpers/getNormalizableQuestions";
 import { routes } from "~/lib/routes";
-import { useRouter } from "next/navigation";
 
 const Breadcrumbs = ({
   surveys,
@@ -26,27 +25,27 @@ const Breadcrumbs = ({
 
       <nav>
         <ul>
-          {/* <li>
-            <Link href={routes.admin.normalization.href({})}>All Surveys</Link>
-          </li> */}
-          {/* {survey && (
-            <BreadcrumbSegment
-              level="survey"
-              currentItem={survey}
-              items={surveys}
-              getParams={(itemId) => ({ surveyId: itemId })}
-            />
-          )} */}
-          {survey && edition && (
+          {surveys && survey && edition && (
             <>
               <BreadcrumbSegment
-                level="edition"
-                currentItem={edition}
-                items={surveys?.map((s) => s.editions).flat()}
-                getParams={(itemId) => ({
-                  surveyId: survey.id,
-                  editionId: itemId,
-                })}
+                currentItem={{
+                  id: edition.id,
+                  path: routes.admin.normalization.href({
+                    surveyId: survey.id,
+                    editionId: edition.id,
+                  }),
+                }}
+                items={surveys
+                  .map((survey) =>
+                    survey.editions.map((e) => ({
+                      id: e.id,
+                      path: routes.admin.normalization.href({
+                        surveyId: survey.id,
+                        editionId: e.id,
+                      }),
+                    }))
+                  )
+                  .flat()}
               />
             </>
           )}
@@ -56,14 +55,18 @@ const Breadcrumbs = ({
                 <span>»</span>
               </li>
               <BreadcrumbSegment
-                level="question"
-                currentItem={question}
-                items={getNormalizableQuestions({ survey, edition })}
-                getParams={(itemId) => ({
-                  surveyId: survey.id,
-                  editionId: edition.id,
-                  questionId: itemId,
-                })}
+                currentItem={{ id: question.id }}
+                items={getNormalizableQuestions({
+                  survey,
+                  edition,
+                }).map((question) => ({
+                  id: question.id,
+                  path: routes.admin.normalization.href({
+                    surveyId: survey.id,
+                    editionId: edition.id,
+                    questionId: question.id,
+                  }),
+                }))}
               />
             </>
           )}
@@ -73,30 +76,32 @@ const Breadcrumbs = ({
   );
 };
 
-const BreadcrumbSegment = ({ currentItem, items, getParams, level }) => {
+type NavItem = {
+  id: string;
+  path?: string;
+};
+
+const BreadcrumbSegment = ({
+  currentItem,
+  items,
+}: {
+  currentItem: NavItem;
+  items: NavItem[];
+}) => {
   return (
     <li className="breadcrumb-segment">
-      {/* <select value={edition.id} onBlur={handleNav} onChange={handleNav}>
-        {survey?.editions?.map((e) => (
-          <option key={e.id}>{e.id}</option>
-        ))}
-      </select> */}
-
-      {level === "question" ? (
-        <span> {currentItem.id}</span>
+      {currentItem.path ? (
+        <Link href={currentItem.path}>{currentItem.id}</Link>
       ) : (
-        <Link href={routes.admin.normalization.href(getParams(currentItem.id))}>
-          {currentItem.id}
-        </Link>
+        <span> {currentItem.id}</span>
       )}
+
       <details role="list">
         <summary aria-haspopup="listbox"></summary>
         <ul role="listbox">
-          {items.map((item) => (
-            <li key={item.id}>
-              <Link href={routes.admin.normalization.href(getParams(item.id))}>
-                {item.id}
-              </Link>
+          {items.map(({ id, path }) => (
+            <li key={id}>
+              <Link href={path!}>{id}</Link>
             </li>
           ))}
         </ul>

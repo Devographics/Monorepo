@@ -1,6 +1,6 @@
 import { getCustomNormalizationsCollection } from "@devographics/mongo";
-
-export type RemoveCustomTokensProps = { tokens: string[]; responseId: string };
+import { getNormalizationId } from "./addCustomTokens";
+import { CustomNormalizationParams } from "@devographics/types";
 
 export const cleanUpIfNeeded = async (document) => {
   const customNormCollection = await getCustomNormalizationsCollection();
@@ -18,13 +18,12 @@ export const cleanUpIfNeeded = async (document) => {
 Remove one or more tokens from a custom normalization entry
 
 */
-export const removeCustomTokens = async ({
-  tokens,
-  responseId,
-}: RemoveCustomTokensProps) => {
+export const removeCustomTokens = async (params: CustomNormalizationParams) => {
+  const { tokens } = params;
+  const normalizationId = getNormalizationId(params);
   const customNormCollection = await getCustomNormalizationsCollection();
   const updateResult = await customNormCollection.findOneAndUpdate(
-    { responseId },
+    { normalizationId },
     {
       $pull: {
         // does not work for some reason

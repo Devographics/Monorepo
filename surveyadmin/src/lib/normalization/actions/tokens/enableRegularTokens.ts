@@ -1,21 +1,21 @@
 import { getCustomNormalizationsCollection } from "@devographics/mongo";
-import { CustomNormalizationDocument } from "@devographics/types";
 import { cleanUpIfNeeded } from "./removeCustomTokens";
-
-export type EnableRegularTokensProps = { tokens: string[]; responseId: string };
+import { getNormalizationId } from "./addCustomTokens";
+import { CustomNormalizationParams } from "@devographics/types";
 
 /*
 
 Re-enable one or more regex tokens by removing them from disabled tokens list
 
 */
-export const enableRegularTokens = async ({
-  tokens,
-  responseId,
-}: EnableRegularTokensProps) => {
+export const enableRegularTokens = async (
+  params: CustomNormalizationParams
+) => {
+  const { tokens } = params;
+  const normalizationId = getNormalizationId(params);
   const customNormCollection = await getCustomNormalizationsCollection();
   const updateResult = await customNormCollection.findOneAndUpdate(
-    { responseId },
+    { normalizationId },
     {
       $pull: {
         disabledTokens: tokens[0],

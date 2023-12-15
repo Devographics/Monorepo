@@ -10,10 +10,13 @@ export async function GET(req: NextRequest, res: NextResponse) {
   const questionId = req.nextUrl.searchParams.get("questionId")!;
 
   try {
+    // since this runs every few seconds,
+    // always get from cache even if it's disabled otherwise
     const { edition, question } = await getSurveyEditionSectionQuestion({
       surveyId,
       editionId,
       questionId,
+      shouldGetFromCache: true,
     });
     const paths = getFormPaths({ edition, question });
     const customNormalizations = await getCustomTokens({

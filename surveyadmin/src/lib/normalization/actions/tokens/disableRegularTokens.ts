@@ -1,10 +1,6 @@
 import { getCustomNormalizationsCollection } from "@devographics/mongo";
-import { CustomNormalizationDocument } from "@devographics/types";
-
-export type DisableRegularTokensProps = Omit<
-  CustomNormalizationDocument,
-  "customTokens" | "disabledTokens"
-> & { tokens: string[] };
+import { CustomNormalizationParams } from "@devographics/types";
+import { getNormalizationId } from "./addCustomTokens";
 
 /*
 
@@ -12,23 +8,21 @@ Specify one or more regex tokens to be disabled
 
 */
 export const disableRegularTokens = async (
-  props: DisableRegularTokensProps
+  params: CustomNormalizationParams
 ) => {
-  const { responseId, tokens, ...rest } = props;
+  const { tokens, ...rest } = params;
+  const normalizationId = getNormalizationId(params);
   const customNormCollection = await getCustomNormalizationsCollection();
   const updateResult = customNormCollection.updateOne(
-    { responseId },
+    { normalizationId },
     {
-      $set: { _id: responseId, responseId, ...rest },
+      $set: { normalizationId, ...rest },
       $addToSet: {
         disabledTokens: { $each: tokens },
       },
     },
     { upsert: true, returnNewDocument: true }
   );
-  const document = await customNormCollection.findOne({
-    _id: responseId,
-  });
-  console.log(document);
+  const document = await customNormCollection.findOne({ normalizationId });
   return { action: "disableRegularTokens", updateResult, document };
 };

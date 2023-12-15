@@ -7,13 +7,15 @@ export const getSurveyEditionSectionQuestion = async ({
   surveyId,
   editionId,
   questionId,
+  shouldGetFromCache,
 }: {
   surveyId: string;
   editionId: string;
   questionId: string;
+  shouldGetFromCache?: boolean;
 }) => {
   const { data: surveys, duration: fetchSurveysMetadataDuration } =
-    await fetchSurveysMetadata();
+    await fetchSurveysMetadata({ shouldGetFromCache });
   const survey = surveys.find((s) => s.id === surveyId);
   if (!survey) {
     throw new Error(`Could not find survey for surveyId ${surveyId}`);
@@ -23,7 +25,7 @@ export const getSurveyEditionSectionQuestion = async ({
     await fetchEditionMetadataAdmin({
       surveyId,
       editionId,
-      shouldGetFromCache: false,
+      shouldGetFromCache,
     });
   if (!edition) {
     throw new Error(`Could not find edition for editionId ${editionId}`);

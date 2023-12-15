@@ -3,6 +3,7 @@ import { fetchSurveyMetadata } from "@devographics/fetch";
 import { normalizeInBulk } from "../normalize/normalizeInBulk";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import { getSurveyEditionSectionQuestion } from "../helpers/getSurveyEditionQuestion";
+import { getQuestionResponses } from "./getQuestionResponses";
 
 export type NormalizeQuestionResponsesArgs = {
   // note: we need a surveyId to figure out which database to use
@@ -49,5 +50,14 @@ export const normalizeQuestionResponses = async (
     verbose: true,
   });
 
-  return mutationResult;
+  console.log(`⛰️ Refreshing responses cache for question ${questionId}…`);
+
+  const questionResponseData = await getQuestionResponses({
+    surveyId,
+    editionId,
+    questionId,
+    shouldGetFromCache: false,
+  });
+
+  return { ...mutationResult, questionResponseData };
 };

@@ -1,10 +1,15 @@
 import { getCustomNormalizationsCollection } from "@devographics/mongo";
-import { CustomNormalizationDocument } from "@devographics/types";
+import { CustomNormalizationParams } from "@devographics/types";
 
-export type AddCustomTokensProps = Omit<
-  CustomNormalizationDocument,
-  "customTokens" | "disabledTokens"
-> & { tokens: string[] };
+export const getNormalizationId = ({
+  responseId,
+  questionId,
+  answerIndex,
+}: {
+  responseId: string;
+  questionId: string;
+  answerIndex: number;
+}) => `${responseId}__${questionId}__${answerIndex}`;
 
 /*
 
@@ -12,17 +17,15 @@ Add one or more tokens to a custom normalization entry, or create it if
 it doesn't exist yet
 
 */
-export const addCustomTokens = async (props: AddCustomTokensProps) => {
-  const { responseId, tokens, rawValue, answerIndex, ...rest } = props;
+export const addCustomTokens = async (params: CustomNormalizationParams) => {
+  const { tokens, ...rest } = params;
+  const normalizationId = getNormalizationId(params);
   const customNormCollection = await getCustomNormalizationsCollection();
-  const _id = `${responseId}__${answerIndex}`;
   const updateResult = await customNormCollection.findOneAndUpdate(
-    { responseId, answerIndex },
+    { normalizationId },
     {
       $set: {
-        _id,
-        responseId,
-        answerIndex,
+        normalizationId,
         ...rest,
       },
       $addToSet: {
@@ -35,9 +38,7 @@ export const addCustomTokens = async (props: AddCustomTokensProps) => {
   // but somehow findOneAndUpdate doesn't return a document when upserting. bug?
   // let newDocument = updateResult.value;
   // if (updateResult?.lastErrorObject?.upserted) {
-  const document = await customNormCollection.findOne({
-    _id,
-  });
+  const document = await customNormCollection.findOne({ normalizationId });
   // }
   return { action: "addCustomTokens", updateResult, document };
 };

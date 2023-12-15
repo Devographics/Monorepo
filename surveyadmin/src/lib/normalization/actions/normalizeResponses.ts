@@ -8,6 +8,7 @@ export type NormalizeResponsesArgs = {
   surveyId: string;
   editionId: string;
   responsesIds: string[];
+  isVerbose?: boolean;
 };
 
 /*
@@ -16,7 +17,7 @@ Normalize all questions for a specific set of responses
 
 */
 export const normalizeResponses = async (args: NormalizeResponsesArgs) => {
-  const { surveyId, editionId, responsesIds } = args;
+  const { surveyId, editionId, responsesIds, isVerbose = true } = args;
 
   const survey = await fetchSurveyMetadata({ surveyId });
   const { data: edition } = await fetchEditionMetadataAdmin({
@@ -41,7 +42,7 @@ export const normalizeResponses = async (args: NormalizeResponsesArgs) => {
     survey,
     edition,
     responses,
-    verbose: true,
+    verbose: isVerbose,
   });
 
   return mutationResult;

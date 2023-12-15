@@ -130,8 +130,8 @@ export const normalizeField = async ({
       }
 
       if (modifiedFields && modifiedFields.length > 0) {
-        allModifiedFields[`${modifiedFields}Fields`] = (
-          allModifiedFields[`${modifiedFields}Fields`] || []
+        allModifiedFields[`${subfieldFunction_.name}Fields`] = (
+          allModifiedFields[`${subfieldFunction_.name}Fields`] || []
         ).concat(modifiedFields);
 
         if (verbose) {

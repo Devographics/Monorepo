@@ -5,7 +5,7 @@ import {
 import { parse } from "csv-parse/sync";
 import { getSurveyEditionSectionQuestion } from "../helpers/getSurveyEditionQuestion";
 import { getFormPaths } from "@devographics/templates";
-import { addCustomTokens } from "./addCustomTokens";
+import { addCustomTokens } from "./tokens/addCustomTokens";
 import get from "lodash/get";
 import { NormalizationMetadata } from "../types";
 

@@ -13,6 +13,8 @@ import { Answer } from "./Answer";
 import trim from "lodash/trim";
 import { CUSTOM_NORMALIZATION } from "@devographics/constants";
 import { AnswersTableHeading } from "./AnswersTableHeading";
+import LoadingButton from "../LoadingButton";
+import { normalizeResponses } from "~/lib/normalization/services";
 
 const ITEMS_PER_PAGE = 200;
 
@@ -127,6 +129,19 @@ const Answers = (props: AnswersProps) => {
         {capitalizeFirstLetter(variant)} Responses (
         {getPercent(sortedAnswers.length, allAnswers.length)}% –{" "}
         {sortedAnswers.length}/{allAnswers.length}){" "}
+        <LoadingButton
+          as="a"
+          action={async () => {
+            const result = await normalizeResponses({
+              surveyId: survey.id,
+              editionId: edition.id,
+              responsesIds: sortedAnswers.map((a) => a.responseId),
+              isVerbose: false,
+            });
+          }}
+          label="Renormalize"
+          tooltip="Renormalize Answers"
+        />{" "}
         <a
           href="#"
           role="button"
@@ -207,6 +222,7 @@ const Answers = (props: AnswersProps) => {
                     customNormalization={customNormalization}
                     answerIndex={answerIndex}
                     isRepeating={isRepeating}
+                    filterQuery={filterQuery}
                     {...(showLetterHeading
                       ? { letterHeading: raw?.[0].toUpperCase() }
                       : {})}

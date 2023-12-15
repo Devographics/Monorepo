@@ -90,7 +90,7 @@ const AnswersFilters = ({
       />
 
       <label className="results-count" htmlFor="search">
-        {sortedAnswers.length} results
+        {filterQuery ? filteredAnswers.length : sortedAnswers.length} results
       </label>
       {/* <label>
         <input

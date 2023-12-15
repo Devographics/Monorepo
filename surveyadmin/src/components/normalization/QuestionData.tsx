@@ -28,8 +28,8 @@ const QuestionData = ({
 }) => {
   const [showData, setShowData] = useState(false);
   const [loading, setLoading] = useState(false);
-  return !isEmpty(questionData) ? (
-    <div>
+  return (
+    <section>
       <h3>
         Current Normalized Results{" "}
         <a
@@ -43,64 +43,73 @@ const QuestionData = ({
           {showData ? "Hide" : "Show"}
         </a>
       </h3>
-      {showData && (
-        <div>
+
+      <div>
+        {isEmpty(questionData) ? (
+          <p>No question data found.</p>
+        ) : (
           <div>
-            <p>
-              This table shows aggregated counts for the subset of the data that
-              has already been processed.
-              <a
-                role="button"
-                href="#"
-                aria-busy={loading}
-                onClick={async (e) => {
-                  setLoading(true);
-                  e.preventDefault();
-                  await loadQuestionData({
-                    surveyId: survey.id,
-                    editionId: edition.id,
-                    sectionId: question.section.id,
-                    questionId: question.id,
-                    shouldGetFromCache: false,
-                  });
-                  setLoading(false);
-                }}
-              >
-                Refresh
-              </a>
-            </p>
-            <table>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>ID</th>
-                  <th>Count</th>
-                </tr>
-              </thead>
-              <tbody>
-                {questionData?.currentEdition?.buckets?.map(
-                  ({ id, count }, index) => (
-                    <tr key={id}>
-                      <td>{index + 1}.</td>
-                      <td>
-                        <NormToken
-                          id={id}
-                          responses={responses}
-                          entities={entities}
-                        />
-                      </td>
-                      <td>{count}</td>
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
+            {showData && (
+              <div>
+                <p>
+                  <p>
+                    This table shows aggregated counts for the subset of the
+                    data that has already been processed.
+                  </p>
+                  <a
+                    role="button"
+                    href="#"
+                    aria-busy={loading}
+                    onClick={async (e) => {
+                      setLoading(true);
+                      e.preventDefault();
+                      await loadQuestionData({
+                        surveyId: survey.id,
+                        editionId: edition.id,
+                        sectionId: question.section.id,
+                        questionId: question.id,
+                        shouldGetFromCache: false,
+                      });
+                      setLoading(false);
+                    }}
+                  >
+                    Refresh
+                  </a>
+                </p>
+                <div>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>ID</th>
+                        <th>Count</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {questionData?.currentEdition?.buckets?.map(
+                        ({ id, count }, index) => (
+                          <tr key={id}>
+                            <td>{index + 1}.</td>
+                            <td>
+                              <NormToken
+                                id={id}
+                                responses={responses}
+                                entities={entities}
+                              />
+                            </td>
+                            <td>{count}</td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-      )}
-    </div>
-  ) : (
-    <p>No question data found.</p>
+        )}
+      </div>
+    </section>
   );
 };
 
