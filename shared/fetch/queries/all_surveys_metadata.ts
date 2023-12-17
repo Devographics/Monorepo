@@ -18,6 +18,12 @@ query SurveysMetadataQuery {
       emailOctopus {
         listId
       }
+      partners {
+        id
+        imageUrl
+        name
+        url
+      }
       editions {
         id
         questionsUrl

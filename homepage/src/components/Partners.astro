@@ -31,29 +31,25 @@ const { partners } = survey
     section {
         text-align: center;
         margin-bottom: var(--doublespacing);
+        border: var(--border);
+        padding: var(--doublespacing);
+
     }
+
+    // .partner-list {
+    //     @include large {
+    //         display: grid;
+    //         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    //         column-gap: var(--spacing);
+    //         max-width: 600px;
+    //         margin: 0 auto;
+    //     }
+    // }
 
     .partner-list {
-        @include large {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            column-gap: var(--spacing);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-    }
-
-    .partner {
-        @include small-medium {
-            margin-bottom: var(--spacing);
-            &:last-child {
-                margin: 0;
-            }
-        }
-        @include large {
             display: grid;
             place-items: center;
-        }
+            row-gap: var(--doublespacing);
     }
 
     .partner-logo {
@@ -68,7 +64,7 @@ const { partners } = survey
         img {
             display: block;
             width: 100%;
-            max-width: 240px;
+            max-width: 280px;
         }
     }
 </style>
