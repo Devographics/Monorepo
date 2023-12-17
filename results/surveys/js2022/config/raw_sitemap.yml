@@ -86,14 +86,14 @@
 
       - id: country
         defaultUnits: count
-        template: demographics
+        template: multiple_options
         blockType: HorizontalBarBlock
         translateData: true
         # blockType: ParticipationByCountryBlock
         parameters: { limit: 20 }
 
       - id: locale
-        template: demographics
+        template: multiple_options
         blockType: HorizontalBarBlock
         translateData: true
         parameters: { cutoff: 20 }
@@ -102,100 +102,100 @@
         template: hint
 
       - id: completion_stats
-        template: demographics
+        template: multiple_options
         translateData: true
 
       - id: age
-        template: demographics
+        template: multiple_options
         parameters: { showNoAnswer: true }
 
       - id: years_of_experience
-        template: demographics
+        template: multiple_options
         parameters: { showNoAnswer: true }
         # variants:
         #     - id: years_of_experience
         #       facet: user_info__yearly_salary
         #       tabId: tabs.by_salary
-        #       template: demographics # facet
+        #       template: multiple_options # facet
         #       parameters: { facetSort: { order: asc, property: mean }, facetCutoff: 100 }
 
       - id: company_size
-        template: demographics
+        template: multiple_options
         parameters: { showNoAnswer: true }
 
       - id: variants_hint
         template: hint
 
       - id: higher_education_degree
-        template: demographics
+        template: multiple_options
         parameters: { showNoAnswer: true }
         # variants:
         #     - id: higher_education_degree
         #       facet: user_info__gender
         #       tabId: tabs.by_gender
-        #       template: demographics # facet
+        #       template: multiple_options # facet
         #       parameters: { facetSort: { order: asc, property: mean }, facetCutoff: 100 }
 
       - id: yearly_salary
-        template: demographics
+        template: multiple_options
         parameters: { showNoAnswer: true }
         # variants:
         #     - id: yearly_salary
         #       facet: user_info__gender
         #       tabId: tabs.by_gender
-        #       template: demographics # facet
+        #       template: multiple_options # facet
         #       parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
         #     - id: yearly_salary
         #       facet: user_info__country
         #       tabId: tabs.by_country
-        #       template: demographics # facet
+        #       template: multiple_options # facet
         #       parameters: { facetSort: { order: desc, property: mean }, facetCutoff: 100 }
         # - id: yearly_salary_by_degree
         #   tabId: tabs.by_degree
-        #   template: demographics
+        #   template: multiple_options
         #   variables:
         #     fieldId: yearly_salary
         #     facet: higher_education_degree
         #     parameters: {facetSort: {order: desc, property: mean}, facetCutoff: 100}
         # - id: yearly_salary_by_experience
         #   tabId: tabs.by_experience
-        #   template: demographics
+        #   template: multiple_options
         #   variables:
         #     fieldId: yearly_salary
         #     facet: years_of_experience
         #     parameters: {facetSort: {order: desc, property: mean}, facetCutoff: 100}
 
       - id: source
-        template: demographics
+        template: multiple_options_freeform
         blockType: HorizontalBarBlock
         parameters: { limit: 20 }
 
       - id: gender
-        template: demographics
+        template: multiple_options
         parameters: { showNoAnswer: true }
         # variants:
         #     - id: gender
         #       facet: user_info__country
         #       tabId: tabs.by_country
-        #       template: demographics # facet
+        #       template: multiple_options # facet
         #       parameters:
         #           { facetSort: { order: desc, property: mean }, limit: 11, facetCutoff: 100 }
 
       - id: race_ethnicity
         defaultUnits: count
-        template: demographics
+        template: multiple_options
         blockType: HorizontalBarBlock
         translateData: true
         # variants:
         #     - id: race_ethnicity
         #       facet: user_info__years_of_experience
         #       tabId: tabs.by_experience
-        #       template: demographics # facet
+        #       template: multiple_options # facet
         #       parameters: { facetSort: { order: asc, property: mean }, limit: 11, facetCutoff: 100 }
 
       - id: disability_status
         defaultUnits: count
-        template: demographics
+        template: multiple_options_combined
         blockType: HorizontalBarBlock
         translateData: true
         variants:
@@ -220,7 +220,7 @@
         template: features_overview
 
       - id: knowledge_score
-        template: demographics
+        template: multiple_options
 
       - id: features_resources
         items: [fm-javascript]
@@ -841,7 +841,7 @@
 
       - id: runtimes
         tabId: tabs.main_answers
-        template: multiple_options
+        template: multiple_options_combined
         variants:
             - id: runtimes_others
               template: multiple_options_freeform
@@ -850,7 +850,7 @@
 
       - id: edge_runtimes
         tabId: tabs.main_answers
-        template: multiple_options
+        template: multiple_options_combined
         variants:
             - id: edge_runtimes_others
               template: multiple_options_freeform
@@ -859,7 +859,7 @@
 
       - id: javascript_flavors
         tabId: tabs.main_answers
-        template: multiple_options
+        template: multiple_options_combined
         variants:
             - id: javascript_flavors_others
               template: multiple_options_freeform
@@ -873,7 +873,7 @@
 
       - id: non_js_languages
         tabId: tabs.main_answers
-        template: multiple_options
+        template: multiple_options_combined
         variants:
             - id: non_js_languages_others
               template: multiple_options_freeform
@@ -901,7 +901,7 @@
       - id: what_do_you_use_js_for
         tabId: tabs.main_answers
         translateData: true
-        template: multiple_options
+        template: multiple_options_combined
         variants:
             - id: what_do_you_use_js_for_others
               defaultUnits: count
@@ -913,7 +913,7 @@
 
       - id: industry_sector
         tabId: tabs.main_answers
-        template: multiple_options
+        template: multiple_options_combined
         translateData: true
         variants:
             - id: industry_sector_others
@@ -926,7 +926,7 @@
 
       - id: js_app_patterns
         tabId: tabs.main_answers
-        template: multiple_options
+        template: multiple_options_combined
         translateData: true
         variants:
             - id: js_app_patterns_others
@@ -947,7 +947,7 @@
 
       - id: first_steps
         tabId: tabs.main_answers
-        template: multiple_options
+        template: multiple_options_combined
         translateData: true
         variants:
             - id: first_steps_others
@@ -965,7 +965,7 @@
 
       - id: blogs_news_magazines
         tabId: tabs.main_answers
-        template: multiple_options
+        template: multiple_options_combined
         variants:
             - id: blogs_news_magazines_others
               defaultUnits: count
@@ -976,7 +976,7 @@
 
       - id: sites_courses
         tabId: tabs.main_answers
-        template: multiple_options
+        template: multiple_options_combined
         variants:
             - id: sites_courses_others
               defaultUnits: count
@@ -992,7 +992,7 @@
 
       - id: podcasts
         tabId: tabs.main_answers
-        template: multiple_options
+        template: multiple_options_combined
         variants:
             - id: podcasts_others
               defaultUnits: count
@@ -1004,7 +1004,7 @@
       - id: video_creators
         blockType: PeopleBlock
         tabId: tabs.main_answers
-        template: multiple_options
+        template: multiple_options_combined
         variants:
             - id: video_creators_others
               blockType: PeopleBlock
@@ -1024,7 +1024,7 @@
       - id: other_surveys
         defaultUnits: count
         tabId: tabs.main_answers
-        template: multiple_options
+        template: multiple_options_combined
         variants:
             - id: other_surveys_others
               defaultUnits: count
@@ -1062,7 +1062,7 @@
         translateData: true
         defaultUnits: count
         tabId: tabs.main_answers
-        template: multiple_options
+        template: multiple_options_combined
         variants:
             - id: top_js_pain_points_others
               translateData: true
@@ -1075,7 +1075,7 @@
         translateData: true
         defaultUnits: count
         tabId: tabs.main_answers
-        template: multiple_options
+        template: multiple_options_combined
         variants:
             - id: top_currently_missing_from_js_others
               translateData: true
