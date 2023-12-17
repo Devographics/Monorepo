@@ -93,7 +93,6 @@ export const Preset = (props: PresetsProps & { id: string }) => {
       rawPath,
       answerIndex,
     };
-    // @ts-expect-error TODO just to build
     const result = await addCustomTokens(params);
     setLoading(false);
   };

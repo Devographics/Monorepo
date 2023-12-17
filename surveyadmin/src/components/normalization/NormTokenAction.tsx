@@ -10,7 +10,9 @@ import {
   QuestionMetadata,
   Entity,
 } from "@devographics/types";
-import { AddCustomTokensProps } from "~/lib/normalization/actions";
+// import { AddCustomTokensProps } from "~/lib/normalization/actions";
+// TODO
+type AddCustomTokensProps = any;
 import { Dispatch, SetStateAction } from "react";
 import { ActionDefinition, tokenActions } from "./tokenActions";
 
@@ -118,7 +120,6 @@ export const NormTokenAction = (props: NormTokenActionProps) => {
     useNormTokenStuff(props);
   const action = getAction(props);
 
-  // @ts-expect-error TODO just to build
   const params: AddCustomTokensProps = {
     surveyId: survey.id,
     editionId: edition.id,
