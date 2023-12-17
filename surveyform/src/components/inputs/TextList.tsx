@@ -339,8 +339,18 @@ const TextList = (props: FormInputProps<Array<string>>) => {
     [keysMemo(items), keysMemo(virtualItems)]
   );
   const selectFirstVirtualItem = useCallback(
-    () => selectItem(wrapperRef.current, virtualItems[0].key),
-    [virtualItems[0].key]
+    // We may have no virtualItems when reaching the limit and the last virtual item is turned into a real one
+    () => selectItem(wrapperRef.current, virtualItems[0]?.key),
+    [virtualItems[0]?.key]
+  );
+
+  const hasNextItem = useCallback(
+    (index: number) => {
+      const nextIdx = index + 1;
+      if (nextIdx > limit - 1) return false;
+      return true;
+    },
+    [keysMemo(items), keysMemo(virtualItems)]
   );
   const selectNextItem = useCallback(
     (index: number) => {
@@ -349,7 +359,7 @@ const TextList = (props: FormInputProps<Array<string>>) => {
       }
       return selectItem(wrapperRef.current, items[index + 1].key);
     },
-    [keysMemo(items), keysMemo(virtualItems)]
+    [keysMemo(items), keysMemo(virtualItems), hasNextItem]
   );
 
   const onFormBlur = useCallback(
@@ -459,7 +469,7 @@ const TextList = (props: FormInputProps<Array<string>>) => {
 
         // Create an empty item next OR focus on existing one
         const nextItem = selectNextItem(index);
-        if (!nextItem) return; // should not happen but pleases TS
+        if (!nextItem) return; // may happen if we are reaching the limit
         if (!value) {
           // no current value => focus on next item
           // the blur event will take care of removing the current input
