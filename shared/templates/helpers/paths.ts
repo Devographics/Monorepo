@@ -115,7 +115,7 @@ export const getNormPaths = (
             ...paths,
             other: getPath([...basePathSegments, DbSuffixes.OTHERS, DbSuffixes.NORMALIZED]),
             raw: getPath([...basePathSegments, DbSuffixes.OTHERS, DbSuffixes.RAW]),
-            patterns: getPath([...basePathSegments, DbSuffixes.OTHERS, DbSuffixes.PATTERNS]),
+            metadata: getPath([...basePathSegments, DbSuffixes.OTHERS, DbSuffixes.METADATA]),
             error: getPath([...basePathSegments, DbSuffixes.OTHERS, DbSuffixes.ERROR])
         }
     }

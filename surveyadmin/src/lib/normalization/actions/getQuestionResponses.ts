@@ -1,56 +1,35 @@
-import {
-  fetchSurveysMetadata,
-  fetchQuestionData,
-  fetchEntities,
-} from "@devographics/fetch";
-import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
-import { getEditionQuestionById } from "../normalize/helpers";
+import { fetchQuestionData, fetchEntities } from "@devographics/fetch";
 import { getAllResponses } from "../helpers/getAllResponses";
-import get from "lodash/get";
 import { ResultsSubFieldEnum } from "@devographics/types";
 import pick from "lodash/pick";
+import { getSurveyEditionSectionQuestion } from "../helpers/getSurveyEditionQuestion";
+
+export interface GetQuestionResponsesParams {
+  surveyId: string;
+  editionId: string;
+  questionId: string;
+  shouldGetFromCache?: boolean;
+}
 
 export const getQuestionResponses = async ({
   surveyId,
   editionId,
   questionId,
   shouldGetFromCache = true,
-}) => {
-  const { data: surveys, duration: fetchSurveysMetadataDuration } =
-    await fetchSurveysMetadata({ shouldGetFromCache });
-  const survey = surveys.find((s) => s.id === surveyId);
-  if (!survey) {
-    throw new Error(`Could not find survey with id ${surveyId}`);
-  }
-  const { data: edition, duration: fetchEditionMetadataAdminDuration } =
-    await fetchEditionMetadataAdmin({
-      surveyId,
-      editionId,
-      shouldGetFromCache,
-    });
-  if (!edition) {
-    throw new Error(`Could not find edition with id ${editionId}`);
-  }
-  const question = getEditionQuestionById({ edition, questionId });
-  if (!question) {
-    throw new Error(`Could not find question with id ${questionId}`);
-  }
+}: GetQuestionResponsesParams) => {
+  const { survey, edition, section, question, durations } =
+    await getSurveyEditionSectionQuestion({ surveyId, editionId, questionId });
 
   // console.log(`// unnormalizedFields ${editionId} ${questionId}`);
   const { data, duration: getAllResponsesDuration } = await getAllResponses({
     survey,
     edition,
+    section,
     question,
     shouldGetFromCache,
   });
 
-  const {
-    normalizationResponses,
-    rawFieldPath,
-    normalizedFieldPath,
-    patternsFieldPath,
-    selector,
-  } = data;
+  const { normalizationResponses, selector } = data;
 
   const allResponses = normalizationResponses;
 
@@ -69,7 +48,15 @@ export const getQuestionResponses = async ({
 
   const { data: allEntities, duration: fetchEntitiesDuration } =
     await fetchEntities({ shouldGetFromCache });
-  const entities = allEntities.map((e) => pick(e, ["id", "patterns", "tags"]));
+
+  // limit entities to the ones that are included in the question's matchTags
+  const entities = allEntities
+    .filter((e) =>
+      e.tags?.some((tag) =>
+        [question.id, ...(question?.matchTags || [])]?.includes(tag)
+      )
+    )
+    .map((e) => pick(e, ["id", "patterns", "tags", "descriptionClean"]));
 
   return {
     responsesCount,
@@ -78,8 +65,7 @@ export const getQuestionResponses = async ({
     questionResult,
     entities,
     durations: {
-      fetchSurveysMetadataDuration,
-      fetchEditionMetadataAdminDuration,
+      ...durations,
       fetchQuestionDataDuration,
       getAllResponsesDuration,
       fetchEntitiesDuration,

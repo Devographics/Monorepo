@@ -17,20 +17,15 @@ import { InitializeSegmentsOptions, defaultSegmentSize } from "./hooks";
 import LoadingButton from "../LoadingButton";
 import Metadata from "./Metadata";
 import Tokens from "./Tokens";
+import { CommonNormalizationProps, SegmentProps } from "./NormalizeQuestion";
+import { Import } from "./Import";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
 
-interface ActionProps {
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-  question: QuestionMetadata;
-  initializeSegments: (options: InitializeSegmentsOptions) => void;
-  responses: NormalizationResponse[];
-  responsesCount: number;
-}
+export type ActionProps = CommonNormalizationProps & SegmentProps;
 
-const Actions = (props) => {
+const Actions = (props: ActionProps) => {
   const {
     survey,
     edition,
@@ -101,16 +96,17 @@ const Actions = (props) => {
             />
           </div> */}
 
-          <a
+          {/* <a
             role="button"
             href="https://www.youtube.com/watch?v=3XIKKMyMfjs"
             target="_blank"
             rel="noreferrer nofollow"
           >
             Watch Tutorial
-          </a>
+          </a> */}
           <Metadata {...props} />
           <Tokens {...props} />
+          <Import {...props} />
 
           <div data-tooltip="Re-run normalization on all answers">
             <button

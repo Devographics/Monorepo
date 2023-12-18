@@ -9,8 +9,11 @@ import { useState } from "react";
 import trim from "lodash/trim";
 import without from "lodash/without";
 import { useLocalStorage } from "../hooks";
-import { addManualNormalizations } from "~/lib/normalization/services";
-import { NormalizeInBulkResult } from "~/lib/normalization/types";
+import { addCustomTokens } from "~/lib/normalization/services";
+import {
+  NormalizationToken,
+  NormalizeInBulkResult,
+} from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
 import { FieldValue } from "./FieldValue";
 import { EntityList, getAddEntityUrl, getEditEntityUrl } from "./EntityInput";
@@ -29,7 +32,8 @@ const ManualInput = ({
   rawValue,
   rawPath,
   entities,
-  addCustomNormalization,
+  addCustomTokens,
+  tokens,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
@@ -40,7 +44,8 @@ const ManualInput = ({
   rawValue: string;
   rawPath: string;
   entities: Entity[];
-  addCustomNormalization: (CustomNormalization) => void;
+  tokens: NormalizationToken[];
+  addCustomTokens: (CustomNormalization) => void;
 }) => {
   const cacheKey = getCacheKey(edition, question);
   const [selectedId, setSelectedId] = useState("");
@@ -76,15 +81,15 @@ const ManualInput = ({
       rawValue,
       rawPath,
     };
-    const result = await addManualNormalizations(params);
+    const result = await addCustomTokens(params);
 
     // store this locally at the question level
-    addCustomNormalization({ responseId, tokens });
+    addCustomTokens({ responseId, tokens });
 
     setLoading(false);
-    if (result.data) {
-      setResult(result.data);
-    }
+    // if (result.data) {
+    //   setResult(result.data);
+    // }
   };
 
   const handleDeletePreset = (preset) => {
@@ -115,7 +120,7 @@ const ManualInput = ({
           <tr>
             <th>Answer</th>
             <td>
-              <FieldValue value={rawValue} />
+              <FieldValue raw={rawValue} tokens={tokens} />
             </td>
           </tr>
           <tr>
@@ -123,7 +128,7 @@ const ManualInput = ({
             <td>
               <div>
                 <ul className="manualinput-presets">
-                  {entityIds.map((id) => (
+                  {entityIds.sort().map((id) => (
                     <Preset
                       key={id}
                       id={id}
@@ -132,17 +137,20 @@ const ManualInput = ({
                       addEntityId={addEntityId}
                     />
                   ))}
-                  {localPresets.map((id) => (
-                    <Preset
-                      key={id}
-                      id={id}
-                      value={value}
-                      setValue={setValue}
-                      isLocal={true}
-                      addEntityId={addEntityId}
-                      handleDeletePreset={handleDeletePreset}
-                    />
-                  ))}
+                  {localPresets
+                    .sort()
+                    .filter((id) => !entityIds.includes(id))
+                    .map((id) => (
+                      <Preset
+                        key={id}
+                        id={id}
+                        value={value}
+                        setValue={setValue}
+                        isLocal={true}
+                        addEntityId={addEntityId}
+                        handleDeletePreset={handleDeletePreset}
+                      />
+                    ))}
                 </ul>
               </div>
               <p>
@@ -234,7 +242,7 @@ const ManualInput = ({
   );
 };
 
-const Preset = ({
+export const Preset = ({
   id,
   value,
   setValue,

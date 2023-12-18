@@ -2,10 +2,10 @@ import {
   SurveyMetadata,
   EditionMetadata,
   QuestionTemplateOutput,
+  QuestionWithSection,
 } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 import { getQuestionObject } from "./getQuestionObject";
-import type { QuestionWithSection } from "~/lib/normalization/types";
 
 export const getSourceFields = (surveyId) => [
   "common__user_info__referrer",
@@ -92,7 +92,6 @@ export const getUnnormalizedResponsesSelector = ({
   edition: EditionMetadata;
   questionObject: QuestionTemplateOutput;
 }) => {
-  const rawFieldPath = questionObject?.normPaths?.raw;
   const normalizedFieldPath = questionObject?.normPaths?.other;
   // TODO: do this better
   // currently the textList template is the only one that supports multiple
@@ -100,7 +99,7 @@ export const getUnnormalizedResponsesSelector = ({
   const existsSelector = getExistsSelector({
     isArray: questionObject.template === "textList",
   });
-  if (rawFieldPath && normalizedFieldPath) {
+  if (normalizedFieldPath) {
     const selector = {
       editionId: edition.id,
       // [rawFieldPath]: existsSelector,
@@ -112,7 +111,7 @@ export const getUnnormalizedResponsesSelector = ({
     return selector;
   } else {
     throw new Error(
-      `getUnnormalizedResponsesSelector: Missing rawFieldPath or normalizedFieldPath for question ${questionObject.id}`
+      `getUnnormalizedResponsesSelector: Missing normalizedFieldPath for question ${questionObject.id}`
     );
   }
 };
@@ -124,7 +123,7 @@ export const getAllResponsesSelector = ({
   edition: EditionMetadata;
   questionObject: QuestionTemplateOutput;
 }) => {
-  const rawFieldPath = questionObject?.normPaths?.raw;
+  const metadataFieldPath = questionObject?.normPaths?.metadata;
   const normalizedFieldPath = questionObject?.normPaths?.other;
   // TODO: do this better
   // currently the textList template is the only one that supports multiple
@@ -133,15 +132,15 @@ export const getAllResponsesSelector = ({
     isArray: questionObject.template === "textList",
     removeEmpty: false, // empty values should already be removed
   });
-  if (rawFieldPath && normalizedFieldPath) {
+  if (metadataFieldPath && normalizedFieldPath) {
     const selector = {
       editionId: edition.id,
-      [rawFieldPath]: existsSelector,
+      [metadataFieldPath]: existsSelector,
     };
     return selector;
   } else {
     throw new Error(
-      `getAllResponsesSelector: Missing rawFieldPath or normalizedFieldPath for question ${questionObject.id}`
+      `getAllResponsesSelector: Missing metadataFieldPath or normalizedFieldPath for question ${questionObject.id}`
     );
   }
 };

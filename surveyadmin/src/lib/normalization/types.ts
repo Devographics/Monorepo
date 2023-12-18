@@ -5,6 +5,8 @@ import {
   ResponseDocument,
   SectionMetadata,
   SurveyMetadata,
+  NormalizedResponseDocument,
+  CustomNormalizationDocument,
 } from "@devographics/types";
 import { EntityRule } from "./normalize/helpers";
 
@@ -34,13 +36,21 @@ export type BulkOperation =
   | DeleteBulkOperation
   | InsertBulkOperation;
 
-export interface CustomNormalizationToken {
+export interface NormalizationMetadata {
+  raw: string;
+  tokens: NormalizationToken[];
+}
+
+export interface NormalizationToken {
   id: string;
   pattern: string;
+}
+
+export interface CustomNormalizationToken extends NormalizationToken {
   match?: string;
 }
 
-export interface NormalizationToken extends CustomNormalizationToken {
+export interface FullNormalizationToken extends CustomNormalizationToken {
   match: string;
   length: number;
   rules: number;
@@ -146,11 +156,9 @@ export interface RegularField {
   questionId: string;
   fieldPath: string;
   value: any;
+  metadata?: NormalizationMetadata[];
 }
-export interface NormalizedField extends RegularField {
-  normTokens: Array<NormalizationToken | CustomNormalizationToken>;
-  raw: string;
-}
+export interface NormalizedField extends RegularField {}
 export interface CommentField extends RegularField {}
 export interface PrenormalizedField extends RegularField {}
 
@@ -172,6 +180,8 @@ export interface NormalizationOptions {
   entities?: Entity[];
   entityRules?: EntityRule[];
   isRenormalization?: boolean;
+  customNormalizations: CustomNormalizationDocument[];
+  timestamp: string;
 }
 
 export interface NormalizationParams extends NormalizationOptions {
@@ -184,13 +194,7 @@ export interface NormalizationParams extends NormalizationOptions {
   discard?: boolean;
   empty?: boolean;
   modifier?: any;
-}
-
-export interface NormalizedResponseDocument extends ResponseDocument {
-  responseId: ResponseDocument["_id"];
-  generatedAt: Date;
-  surveyId: SurveyMetadata["id"];
-  editionId: EditionMetadata["id"];
+  timestamp: string;
 }
 
 export interface NormalizeFieldResult {
@@ -205,7 +209,3 @@ export interface NormalizeFieldResult {
 export type StepFunction = (
   NormalizationParams
 ) => Promise<NormalizedResponseDocument>;
-
-export interface QuestionWithSection extends QuestionMetadata {
-  section: SectionMetadata;
-}

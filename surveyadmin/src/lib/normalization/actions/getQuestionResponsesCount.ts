@@ -4,8 +4,8 @@ import {
   EditionMetadata,
   QuestionMetadata,
   SurveyMetadata,
+  QuestionWithSection,
 } from "@devographics/types";
-import type { QuestionWithSection } from "~/lib/normalization/types";
 
 type GetQuestionResponsesCountArgs = {
   survey: SurveyMetadata;

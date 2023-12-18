@@ -21,6 +21,14 @@ export const apiRoutes = {
       href: (params) =>
         `/api/normalization/loadQuestionResponses?${encodeParams(params)}`,
     },
+    loadQuestionData: {
+      href: (params) =>
+        `/api/normalization/loadQuestionData?${encodeParams(params)}`,
+    },
+    loadCustomNormalizations: {
+      href: (params) =>
+        `/api/normalization/loadCustomNormalizations?${encodeParams(params)}`,
+    },
     normalizeQuestion: {
       href: (params) => `/api/normalization/normalizeQuestion`,
     },
@@ -33,14 +41,26 @@ export const apiRoutes = {
     normalizeEdition: {
       href: (params) => `/api/normalization/normalizeEdition`,
     },
-    addManualNormalizations: {
-      href: (params) => `/api/normalization/addManualNormalizations`,
+    addCustomTokens: {
+      href: (params) => `/api/normalization/addCustomTokens`,
+    },
+    removeCustomTokens: {
+      href: (params) => `/api/normalization/removeCustomTokens`,
+    },
+    enableRegularTokens: {
+      href: (params) => `/api/normalization/enableRegularTokens`,
+    },
+    disableRegularTokens: {
+      href: (params) => `/api/normalization/disableRegularTokens`,
     },
     loadNormalizationPercentages: {
       href: (params) =>
         `/api/normalization/loadNormalizationPercentages?${encodeParams(
           params
         )}`,
+    },
+    importNormalizations: {
+      href: (params) => `/api/normalization/importNormalizations`,
     },
   },
   export: {

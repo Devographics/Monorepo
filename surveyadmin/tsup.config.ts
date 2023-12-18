@@ -20,7 +20,7 @@ const commonConfig = {
   outDir: "scripts/dist",
   name: "",
   platform: "node" as const,
-  target: "node14" as const,
+  target: "node18" as const,
   // TODO: remove "~" from noExternal, remove external,
   // and use "tsup-node" instead of "tsup" when this
   // PR lands in:

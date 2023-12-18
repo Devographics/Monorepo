@@ -6,11 +6,13 @@ export const LoadingButton = ({
   action,
   label,
   tooltip,
+  className = "",
 }: {
   as?: "a" | "button";
   action: any;
   label: string;
   tooltip?: string;
+  className?: string;
 }) => {
   const [loading, setLoading] = useState(false);
   const Element = as;
@@ -18,7 +20,7 @@ export const LoadingButton = ({
   const extraProps = as === "a" ? { role: "button", href: "#" } : {};
   return (
     <WrapperElement
-      className="loading-button"
+      className={`loading-button ${className}`}
       {...(tooltip ? { "data-tooltip": tooltip } : {})}
     >
       <Element

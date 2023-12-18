@@ -4,5 +4,6 @@ export * from "./normalizeResponses";
 export * from "./normalizeQuestionResponses";
 export * from "./normalizeQuestion";
 export * from "./normalizeEdition";
-export * from "./addManualNormalizations";
 export * from "./getNormalizationPercentages";
+export * from "./importNormalizations";
+export * from "./tokens";

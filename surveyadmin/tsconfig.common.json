@@ -11,7 +11,10 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "lib": ["dom", "es2022"],
+    "lib": [
+      "dom",
+      "es2022"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
@@ -19,15 +22,22 @@
     "noUnusedLocals": false, // won't fail on unused variables
     "noUnusedParameters": false,
     "paths": {
-      "@vulcanjs/*": ["packages/@vulcanjs/*", "node_modules/@vulcanjs/*"],
-      "~/*": ["src/*"]
+      "@vulcanjs/*": [
+        "packages/@vulcanjs/*",
+        "node_modules/@vulcanjs/*"
+      ],
+      "~/*": [
+        "src/*"
+      ]
     },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     //"strict": true,
     "strictNullChecks": true,
     "sourceMap": true,
-    "target": "ES2022"
+    "target": "esnext"
   },
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

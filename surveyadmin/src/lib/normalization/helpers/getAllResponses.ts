@@ -1,11 +1,17 @@
 import get from "lodash/get.js";
 import sortBy from "lodash/sortBy.js";
-import { EditionMetadata, SurveyMetadata } from "@devographics/types";
+import {
+  EditionMetadata,
+  SurveyMetadata,
+  QuestionTemplateOutput,
+  SectionMetadata,
+  QuestionWithSection,
+  NormalizedResponseDocument,
+} from "@devographics/types";
 import { getNormResponsesCollection } from "@devographics/mongo";
 import { getFromCache } from "@devographics/fetch";
 import { getQuestionObject } from "./getQuestionObject";
 import { getAllResponsesSelector } from "./getSelectors";
-import { NormalizedResponseDocument, QuestionWithSection } from "../types";
 import { CommonOptions } from "@devographics/fetch/types";
 import { ResponsesResult } from "../normalize/helpers";
 
@@ -16,37 +22,37 @@ export const getAllResponses = async (
   options: CommonOptions & {
     survey: SurveyMetadata;
     edition: EditionMetadata;
-    question: QuestionWithSection;
+    section: SectionMetadata;
+    question: QuestionTemplateOutput;
   }
 ) => {
-  const { survey, edition, question, ...rest } = options;
+  const { survey, edition, section, question, ...rest } = options;
   return await getFromCache<ResponsesResult>({
     key: getAllResponsesCacheKey({ survey, edition, question }),
     fetchFunction: async () => {
       const questionObject = getQuestionObject({
         survey,
         edition,
-        section: question.section,
+        section,
         question,
       })!;
       const rawFieldPath = questionObject?.normPaths?.raw!;
       const normalizedFieldPath = questionObject?.normPaths?.other!;
-      const patternsFieldPath = questionObject?.normPaths?.patterns!;
+      const metadataFieldPath = questionObject?.normPaths?.metadata!;
 
       const selector = getAllResponsesSelector({
         edition,
         questionObject,
       });
 
-      const NormResponses =
-        await getNormResponsesCollection<NormalizedResponseDocument>();
+      const NormResponses = await getNormResponsesCollection();
       let responses = await NormResponses.find(selector, {
         projection: {
           _id: 1,
           responseId: 1,
           [rawFieldPath]: 1,
           [normalizedFieldPath]: 1,
-          [patternsFieldPath]: 1,
+          [metadataFieldPath]: 1,
         },
         sort: { [rawFieldPath]: 1 },
         //lean: true
@@ -64,7 +70,7 @@ export const getAllResponses = async (
           responseId: r.responseId,
           value: get(r, rawFieldPath),
           normalizedValue: get(r, normalizedFieldPath),
-          patterns: get(r, patternsFieldPath),
+          metadata: get(r, metadataFieldPath),
         };
       });
 
@@ -72,7 +78,7 @@ export const getAllResponses = async (
         normalizationResponses,
         rawFieldPath,
         normalizedFieldPath,
-        patternsFieldPath,
+        metadataFieldPath,
         selector,
       };
     },

@@ -51,9 +51,7 @@ const EntityInput = ({
 
   return (
     <div className="entityinput">
-      <p>
-        <FieldValue value={value} />
-      </p>
+      <p>{/* <FieldValue value={value} /> */}</p>
       <p>
         <label htmlFor="entities">Pick Entity</label>
       </p>
@@ -89,6 +87,7 @@ export const EntityList = ({ entities, selectedId, setSelectedId }) => {
   return (
     <>
       <input
+        className="entities-list"
         list="entities-list"
         id="entities"
         name="entities"
@@ -98,11 +97,6 @@ export const EntityList = ({ entities, selectedId, setSelectedId }) => {
           setSelectedId(value);
         }}
       />
-      <datalist id="entities-list">
-        {entities.map((entity, i) => (
-          <option key={i} value={entity.id}></option>
-        ))}
-      </datalist>
     </>
   );
 };

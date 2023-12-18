@@ -17,7 +17,6 @@ const moduleExports = (phase, { defaultConfig }) => {
     // NOTE: the doc is unclear about whether we should merge this default config or not
     ...defaultConfig,
     experimental: {
-      appDir: true,
       instrumentationHook: true,
     },
     transpilePackages: [
@@ -105,9 +104,7 @@ const moduleExports = (phase, { defaultConfig }) => {
   }
 
   // Finally add relevant webpack configs/utils
-  extendedConfig = flowRight([
-    withPkgInfo,
-  ])(extendedConfig);
+  extendedConfig = flowRight([withPkgInfo])(extendedConfig);
 
   debug("Extended next config FINAL " + JSON.stringify(extendedConfig));
 

@@ -1,76 +1,34 @@
 // import { getSetting, runGraphQL, logToFile } from 'meteor/vulcan:core';
-import intersection from "lodash/intersection.js";
 import sortBy from "lodash/sortBy.js";
-import compact from "lodash/compact.js";
 import isEmpty from "lodash/isEmpty.js";
 import { logToFile } from "@devographics/debug";
 import {
   EditionMetadata,
   SurveyMetadata,
   QuestionTemplateOutput,
+  QuestionWithSection,
 } from "@devographics/types";
 import {
   getNormResponsesCollection,
   getRawResponsesCollection,
 } from "@devographics/mongo";
 import { fetchEntities } from "@devographics/fetch";
-import { getEditionQuestions } from "../helpers/getEditionQuestions";
-import { newMongoId } from "@devographics/mongo";
 import { getEditionSelector, ignoreValues } from "../helpers/getSelectors";
 import { getSelector } from "../helpers/getSelectors";
-import {
-  BulkOperation,
-  NormalizedResponseDocument,
-  QuestionWithSection,
-} from "../types";
-import { WithId } from "mongodb";
+import { BulkOperation } from "../types";
 import { NormalizationResponse } from "../hooks";
 import { generateEntityRules } from "./generateEntityRules";
 import { normalize } from "./normalize";
-
-// export const getFieldPaths = (field: Field) => {
-//   const { suffix } = field as ParsedQuestion;
-//   const { sectionSegment, fieldSegment } = getFieldSegments(field);
-
-//   const basePath = `${sectionSegment}.${fieldSegment}`;
-//   const fullPath = suffix ? `${basePath}.${suffix}` : basePath;
-//   const errorPath = `${basePath}.error`;
-//   const commentPath = `${basePath}.comment`;
-
-//   const rawFieldPath = `${fullPath}.raw`;
-//   const normalizedFieldPath = `${fullPath}.normalized`;
-//   const patternsFieldPath = `${fullPath}.patterns`;
-
-//   return {
-//     basePath,
-//     commentPath,
-//     fullPath,
-//     errorPath,
-//     rawFieldPath,
-//     normalizedFieldPath,
-//     patternsFieldPath,
-//   };
-// };
-
-export const getEditionQuestionById = ({
-  edition,
-  questionId,
-}: {
-  edition: EditionMetadata;
-  questionId: string;
-}) => {
-  const allQuestions = getEditionQuestions(edition);
-  // make sure to narrow it down to the freeform "others" field since the main "choices"
-  // field can have the same id
-  const question = allQuestions.find((q) => q.id === questionId);
-  if (!question) {
-    throw new Error(`Could not find field for questionId "${questionId}"`);
-  }
-  return question;
-};
+import {
+  fetchEntitiesNormalization,
+  getEntitiesNormalizationQuery,
+} from "./getEntitiesNormalizationQuery";
+import trim from "lodash/trim";
 
 export const cleanupValue = (value) =>
-  typeof value === "undefined" || ignoreValues.includes(value) ? null : value;
+  typeof value === "undefined" || ignoreValues.includes(value)
+    ? null
+    : trim(value);
 
 // Global variable that stores the entities
 export let entitiesData: { entities?: any; rules?: any } = {};
@@ -97,7 +55,7 @@ Extract matching tokens from a string
 */
 const enableLimit = false;
 export const stringLimit = enableLimit ? 170 : 1000; // max length of string to try and find tokens in
-export const rulesLimit = 1500; // max number of rules to try and match for any given string
+export const rulesLimit = 2500; // max number of rules to try and match for any given string
 
 /*
 
@@ -110,6 +68,7 @@ export const normalizeSingle = async (options: {
   edition: EditionMetadata;
   questionObject: QuestionTemplateOutput;
   verbose: boolean;
+  timestamp: string;
 }) => {
   const tokens = await normalize(options);
 
@@ -212,25 +171,6 @@ export interface EntityRule {
   tags: Array<string>;
 }
 
-export const logAllRules = async () => {
-  const { data: allEntities } = await fetchEntities();
-  if (allEntities) {
-    let rules = generateEntityRules(allEntities);
-    rules = rules.map(({ id, pattern, tags }) => ({
-      id,
-      pattern: pattern.toString(),
-      tags,
-    }));
-    const json = JSON.stringify(rules, null, 2);
-
-    await logToFile("rules.js", "export default " + json, {
-      mode: "overwrite",
-    });
-  } else {
-    console.log("// Could not get entities");
-  }
-};
-
 /*
 
 Get responses count for an entire edition
@@ -308,7 +248,6 @@ export type ResponsesResult = {
   normalizationResponses: NormalizationResponse[];
   rawFieldPath: string;
   normalizedFieldPath: string;
-  patternsFieldPath: string;
   selector: any;
 };
 
@@ -337,23 +276,24 @@ export const getBulkOperations = ({
     - a deletion followed by an insertion is more reliable. 
     **The only difference with replaceOne, is that it will change the document _id everytime we replace the normalized response**
     Computing a value that is not random (eg based on responseId) can create bugs if we create more than 1 normalized response
-    {
-      replaceOne: {
-        filter: selector,
-        replacement: modifier,
-        upsert: true,
-      },
-    }*/
+    */
         {
-          deleteOne: {
+          replaceOne: {
             filter: selector,
+            replacement: { ...modifier, _id: modifier.responseId },
+            upsert: true,
           },
         },
-        {
-          insertOne: {
-            document: { _id: newMongoId(), ...modifier },
-          },
-        },
+        // {
+        //   deleteOne: {
+        //     filter: selector,
+        //   },
+        // },
+        // {
+        //   insertOne: {
+        //     document: { _id: newMongoId(), ...modifier },
+        //   },
+        // },
       ]
     : [
         {
@@ -365,3 +305,6 @@ export const getBulkOperations = ({
         },
       ];
 };
+
+export const getDuration = (startAt, endAt) =>
+  Math.ceil((endAt.valueOf() - startAt.valueOf()) / 1000);

@@ -9,7 +9,6 @@ export type LogOptions = {
     mode?: 'append' | 'overwrite'
     timestamp?: boolean
     dirPath?: string
-    subDir?: string
 }
 
 async function exists(path: string) {
@@ -20,14 +19,16 @@ async function exists(path: string) {
         return false
     }
 }
+function replacer(key: any, value: any) {
+    if (value instanceof RegExp) return value.toString()
+    else return value
+}
 
-const getExtension = (fileName: string) => fileName.split('.').at(-1) || 'none'
+const getExtension = (filePath: string) => filePath.split('.').at(-1) || 'none'
 
-export const logToFile = async (fileName_: string, object: any, options: LogOptions = {}) => {
+export const logToFile = async (filePath: string, object: any, options: LogOptions = {}) => {
     if (process.env.NODE_ENV === 'development') {
-        let fileName = fileName_,
-            subDir = options?.subDir
-        const extension = getExtension(fileName)
+        const extension = getExtension(filePath)
         const { mode = 'overwrite', timestamp = false, dirPath } = options
         const envLogsDirPath = process.env.LOGS_PATH
 
@@ -36,17 +37,17 @@ export const logToFile = async (fileName_: string, object: any, options: LogOpti
             return
         }
 
-        if (fileName.includes('/')) {
-            subDir = fileName.split('/')[0]
-            fileName = fileName.split('/')[1]
-        }
+        const relativeDirPathSegments = filePath.split('/').slice(0, -1)
+        const relativeDirPath = relativeDirPathSegments.join('/')
+        const fileName = filePath.split('/').at(-1)
 
-        const logsDirPath = dirPath ?? (subDir ? `${envLogsDirPath}/${subDir}` : envLogsDirPath)
+        const logsDirPath = envLogsDirPath + '/' + relativeDirPath
 
         if (!(await fs.existsSync(logsDirPath))) {
             fs.mkdirSync(logsDirPath, { recursive: true })
         }
         const fullPath = `${logsDirPath}/${fileName}`
+
         let contents
         if (typeof object === 'string') {
             contents = object
@@ -66,7 +67,7 @@ export const logToFile = async (fileName_: string, object: any, options: LogOpti
             if (['yml', 'yaml'].includes(extension)) {
                 contents = yaml.dump(object, { noRefs: true, skipInvalid: true })
             } else {
-                contents = JSON.stringify(object, null, 2)
+                contents = JSON.stringify(object, replacer, 2)
             }
         }
         if (!contents) {

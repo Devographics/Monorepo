@@ -20,6 +20,7 @@ import {
   SurveyMetadata,
 } from "@devographics/types";
 import RecalculateProgress from "~/components/normalization/RecalculateProgress";
+import sumBy from "lodash/sumBy";
 
 export default async function Page({ params }) {
   const { surveyId, editionId } = params;
@@ -65,6 +66,13 @@ export default async function Page({ params }) {
         Normalizeable Questions{" "}
         <RecalculateProgress survey={survey} edition={edition} />
       </h4>
+      <p>
+        {sumBy(
+          Object.keys(normalizationPercentages),
+          (key) => normalizationPercentages[key].totalCount
+        )}{" "}
+        total answers
+      </p>
       <table className="questions-list">
         <thead>
           <tr>

@@ -1,5 +1,6 @@
 import { DbPaths } from './api'
 import { Entity } from './entities'
+import { SectionMetadata } from './metadata'
 
 export interface SurveyConfig {
     /** state-of-js */
@@ -279,8 +280,9 @@ export enum DbSuffixes {
     FOLLOWUP_PREDEFINED = 'followup_predefined',
     FOLLOWUP_FREEFORM = 'followup_freeform',
     ERROR = 'error',
-    PATTERNS = 'patterns',
-    RAW = 'raw'
+    // PATTERNS = 'patterns',
+    RAW = 'raw',
+    METADATA = 'metadata'
 }
 
 // once a question has gone through a template it should always have an id
@@ -289,11 +291,19 @@ export interface QuestionWithId extends Omit<Question, 'id'> {
     id: string
 }
 
+export interface QuestionWithSection extends QuestionWithId {
+    section: SectionMetadata
+}
+
 export interface QuestionTemplateOutput extends QuestionWithId {
     rawPaths?: DbPaths
     normPaths?: DbPaths
     options?: Option[]
     extends?: string
+}
+
+export interface QuestionTemplateOutputWithSection extends QuestionTemplateOutput {
+    section: SectionMetadata
 }
 
 export type Followups = {

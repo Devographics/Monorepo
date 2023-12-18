@@ -1,42 +1,27 @@
 "use client";
 import { useState } from "react";
+import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
+import Dialog from "./Dialog";
 import {
   EditionMetadata,
-  ResponseData,
   SurveyMetadata,
   Entity,
+  QuestionWithSection,
 } from "@devographics/types";
-import { NormalizationResponse } from "~/lib/normalization/hooks";
-import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
-import type { QuestionWithSection } from "~/lib/normalization/types";
-import { getFormPaths } from "@devographics/templates";
-import {
-  getAllResponsesSelector,
-  getResponsesSelector,
-  getUnnormalizedResponsesSelector,
-} from "~/lib/normalization/helpers/getSelectors";
-import Dialog from "./Dialog";
+import sortBy from "lodash/sortBy";
 
 const Tokens = ({
   survey,
   edition,
   question,
-  responsesCount,
-  responses,
-  normalizedResponses,
-  unnormalizedResponses,
-  questionData,
   entities,
+  isButton = true,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionWithSection;
-  responsesCount: number;
-  responses: NormalizationResponse[];
-  normalizedResponses: NormalizationResponse[];
-  unnormalizedResponses: NormalizationResponse[];
-  questionData: ResponseData;
   entities: Entity[];
+  isButton?: boolean;
 }) => {
   const [showTokens, setShowTokens] = useState(false);
 
@@ -52,14 +37,15 @@ const Tokens = ({
   return (
     <div>
       <a
-        role="button"
+        role={isButton ? "button" : "link"}
+        className="view-tokens"
         href="#"
         onClick={(e) => {
           e.preventDefault();
           setShowTokens(!showTokens);
         }}
       >
-        Tokens
+        View Tokens…
       </a>
       <Dialog
         showModal={showTokens}
@@ -100,13 +86,24 @@ const Tokens = ({
 };
 
 const TagItem = ({ tag, entities }) => {
+  const [showTokens, setShowTokens] = useState(false);
   const tagEntities = entities.filter((e) => e?.tags?.includes(tag));
   return (
     <div className="tag-item">
       <h5 className="tag-item-heading">
-        <code>{tag}</code> ({tagEntities.length})
+        <a
+          href="#"
+          role="button"
+          onClick={(e) => {
+            e.preventDefault();
+            setShowTokens(!showTokens);
+          }}
+        >
+          {tag}
+        </a>{" "}
+        ({tagEntities.length})
       </h5>
-      {tagEntities.length > 0 && (
+      {showTokens && tagEntities.length > 0 && (
         <table>
           <thead>
             <tr>
@@ -116,7 +113,7 @@ const TagItem = ({ tag, entities }) => {
             </tr>
           </thead>
           <tbody>
-            {tagEntities.map((entity) => (
+            {sortBy(tagEntities, (e) => e.id).map((entity) => (
               <EntityItem key={entity.id} entity={entity} mainTag={tag} />
             ))}
           </tbody>

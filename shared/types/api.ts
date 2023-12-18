@@ -31,7 +31,8 @@ export enum DbPathsEnum {
     FOLLOWUP_PREDEFINED = 'followup_predefined',
     FOLLOWUP_FREEFORM = 'followup_freeform',
     RAW = 'raw',
-    PATTERNS = 'patterns',
+    // PATTERNS = 'patterns',
+    METADATA = 'metadata',
     ERROR = 'error',
     SUBPATHS = 'subPaths',
     SKIP = 'skip'

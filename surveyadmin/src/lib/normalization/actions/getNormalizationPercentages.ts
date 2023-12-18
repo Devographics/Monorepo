@@ -1,10 +1,8 @@
-import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { fetchSurveysMetadata, getFromCache } from "@devographics/fetch";
 import { CommonOptions } from "@devographics/fetch/types";
 import { splitResponses } from "../helpers/splitResponses";
 import { getNormalizableQuestions } from "../helpers/getNormalizableQuestions";
 import { getAllResponses } from "../helpers/getAllResponses";
-import { NormalizationResponse } from "../hooks";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 
 export const getNormalizationPercentagesCacheKey = ({ survey, edition }) =>
@@ -61,6 +59,7 @@ export const getNormalizationPercentages = async (
           await getAllResponses({
             survey,
             edition,
+            section: question.section,
             question,
             shouldGetFromCache,
           });
@@ -68,17 +67,18 @@ export const getNormalizationPercentages = async (
         const { normalizationResponses } = data;
 
         if (normalizationResponses) {
-          const { normalizedResponses, unnormalizedResponses } = splitResponses(
-            normalizationResponses
-          );
+          const { allAnswers, normalizedAnswers, unnormalizedAnswers } =
+            splitResponses(normalizationResponses);
+
+          const totalCount = allAnswers.length;
+          const normalizedCount = normalizedAnswers.length;
+          const unnormalizedCount = unnormalizedAnswers.length;
 
           stats[question.id] = {
-            totalCount: normalizationResponses.length,
-            normalizedCount: normalizedResponses.length,
-            unnormalizedCount: unnormalizedResponses.length,
-            percentage: Math.round(
-              (normalizedResponses.length * 100) / normalizationResponses.length
-            ),
+            totalCount,
+            normalizedCount,
+            unnormalizedCount,
+            percentage: Math.round((normalizedCount * 100) / totalCount),
           };
         }
       }

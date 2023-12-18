@@ -1,7 +1,7 @@
 import uniqBy from "lodash/uniqBy.js";
 import { logToFile } from "@devographics/debug";
 import { QuestionMetadata, EditionMetadata } from "@devographics/types";
-import { NormalizationToken } from "../types";
+import { FullNormalizationToken } from "../types";
 import { EntityRule, stringLimit, rulesLimit } from "./helpers";
 
 export const extractTokens = async ({
@@ -30,7 +30,7 @@ export const extractTokens = async ({
     );
   }
 
-  const tokens: Array<NormalizationToken> = [];
+  const tokens: Array<FullNormalizationToken> = [];
   let count = 0;
   // extract tokens for each rule, storing
   // the start/end index for each match
@@ -48,6 +48,7 @@ export const extractTokens = async ({
       }
       const stringToScan = rawString.slice(scanStartIndex);
       const match = stringToScan.match(pattern);
+
       if (match !== null) {
         const includesToken = !!tokens.find((t) => t.id === id);
         if (!includesToken) {

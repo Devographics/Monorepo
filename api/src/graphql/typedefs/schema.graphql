@@ -186,6 +186,7 @@ type NormDbPaths {
     followup_freeform: JSON
     raw: String
     patterns: String
+    metadata: String
     error: String
 }
 

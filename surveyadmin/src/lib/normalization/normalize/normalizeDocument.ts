@@ -1,4 +1,4 @@
-import { getEditionQuestionById } from "./helpers";
+import { getEditionQuestionById } from "../helpers/getEditionQuestionById";
 import { generateEntityRules } from "./generateEntityRules";
 import { getQuestionObject } from "../helpers/getQuestionObject";
 import * as steps from "./steps";
@@ -9,7 +9,6 @@ import {
   NormalizationOptions,
   NormalizationResultSuccessEx,
   NormalizationError,
-  NormalizedResponseDocument,
   NormalizedField,
   RegularField,
   NormalizationParams,
@@ -22,9 +21,14 @@ import {
   NormalizationResultTypes,
 } from "../types";
 import clone from "lodash/clone";
-import { normalizeField } from "./normalizeField";
-import { EditionMetadata, ResponseDocument } from "@devographics/types";
+import { getQuestionPaths, normalizeField } from "./normalizeField";
+import {
+  EditionMetadata,
+  ResponseDocument,
+  NormalizedResponseDocument,
+} from "@devographics/types";
 import difference from "lodash/difference";
+import { fetchEntitiesNormalization } from "./getEntitiesNormalizationQuery";
 
 /*
 
@@ -43,7 +47,8 @@ const fetchDataIfNeeded = async (options: NormalizationOptions) => {
   const edition =
     options.edition ||
     (await fetchEditionMetadataAdmin({ surveyId, editionId })).data;
-  const entities = options.entities || (await fetchEntities()).data;
+  const entities =
+    options.entities || (await fetchEntitiesNormalization()).data;
   const entityRules = options.entityRules || generateEntityRules(entities);
   return {
     survey,
@@ -65,6 +70,9 @@ export const normalizeDocument = async (
   | NormalizationResultError
 > => {
   let normalizationResult;
+  // console.log(
+  //   `⛰️ starting normalizeDocument for document ${options.response._id}`
+  // );
 
   try {
     const { response, questionId } = options;
@@ -263,10 +271,8 @@ const normalizeResponse = async (
         question,
       });
 
-      if (!questionObject) {
-        // some questions (such as intro text, notes, etc.
-        // do not have an associated questionObject; just skip them
-      } else {
+      const { rawPaths, normPaths } = questionObject;
+      if (rawPaths && normPaths) {
         const result = await normalizeField({
           ...normalizationParams,
           questionObject,
@@ -280,6 +286,9 @@ const normalizeResponse = async (
         }
         // keep track of whether this normalizeField has actually modified the response
         modifiedArray.push(result.modified);
+      } else {
+        // some questions (such as intro text, notes, etc.
+        // do not have db data associated with them; just skip them
       }
     }
   }
@@ -319,7 +328,7 @@ const responseIsEmptyLegacy = ({
     "isNormalized",
     "duration",
     "locale",
-    "lastSavedAt"
+    "lastSavedAt",
   ];
   const responseFields = Object.keys(response);
   // find any response fields that are *not* base fields
@@ -328,14 +337,15 @@ const responseIsEmptyLegacy = ({
   return contentFields.length === 0;
 };
 
-function responseIsEmpty(
-  {
-    response,
-    edition,
-  }: {
-    response: ResponseDocument;
-    edition: EditionMetadata;
-  }) {
-  const contentFields = Object.keys(response).filter(k => k.startsWith(edition.id))
-  return !!contentFields.length
+function responseIsEmpty({
+  response,
+  edition,
+}: {
+  response: ResponseDocument;
+  edition: EditionMetadata;
+}) {
+  const contentFields = Object.keys(response).filter((k) =>
+    k.startsWith(edition.id)
+  );
+  return contentFields.length === 0;
 }

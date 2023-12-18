@@ -31,7 +31,7 @@ export const NormalizationResult = (props: NormalizationResultProps) => {
 
   return (
     <div>
-      <p>
+      {/* <p>
         <a
           role="button"
           href="#"
@@ -42,7 +42,7 @@ export const NormalizationResult = (props: NormalizationResultProps) => {
         >
           Close
         </a>
-      </p>
+      </p> */}
       {showSummary && <NormalizationSummary {...props} />}
 
       <DocumentGroup
@@ -260,66 +260,72 @@ const NormDocument = ({
 
 export const NormField = ({
   fieldPath,
-  raw,
-  questionId,
   value,
-  normTokens,
+  questionId,
+  metadata,
   showQuestionId,
 }: NormalizedField & { showQuestionId: boolean }) => {
-  const rawValuesArray = Array.isArray(raw) ? raw : [raw];
+  const rawValuesArray = Array.isArray(value) ? value : [value];
   return (
-    <div>
-      {normTokens && normTokens.length > 0 ? (
-        <table>
-          <thead>
-            <tr>
-              <th colSpan={99}>
-                {showQuestionId && <strong>{questionId}: </strong>}{" "}
-                {rawValuesArray.map((rawValue, i) => (
-                  <pre key={i}>
-                    <code
-                      id="Raw response"
-                      dangerouslySetInnerHTML={{
-                        __html: highlightMatches(
-                          rawValue,
-                          normTokens.map((t) => t.pattern)
-                        ),
-                      }}
-                    ></code>
-                  </pre>
-                ))}
-              </th>
-            </tr>
-            <tr>
-              <th>Matched Token</th>
-              <th>Matched Text</th>
-              <th>Pattern</th>
-            </tr>
-          </thead>
-          <tbody>
-            {normTokens.map(({ id, pattern, match }, i) => (
-              <tr key={i}>
-                <td>
-                  <mark>{id}</mark>
-                </td>
-                <td>{match}</td>
-                <td>{pattern}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <table style={{ background: "rgba(0,0,0,0.05)" }}>
-          <thead>
-            <tr>
-              <th>
-                {showQuestionId && <strong>{questionId}:</strong>}
-                <em title="No matching normalization tokens found.">{raw}</em>
-              </th>
-            </tr>
-          </thead>
-        </table>
-      )}
-    </div>
+    <>
+      {metadata &&
+        metadata.map((metadataItem) => (
+          <div>
+            {metadataItem && metadataItem?.tokens?.length > 0 ? (
+              <table>
+                <thead>
+                  <tr>
+                    <th colSpan={99}>
+                      {showQuestionId && <strong>{questionId}: </strong>}{" "}
+                      {rawValuesArray.map((rawValue, i) => (
+                        <pre key={i}>
+                          <code
+                            id="Raw response"
+                            dangerouslySetInnerHTML={{
+                              __html: highlightMatches(
+                                rawValue,
+                                metadataItem.tokens.map((t) => t.pattern)
+                              ),
+                            }}
+                          ></code>
+                        </pre>
+                      ))}
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>Matched Token</th>
+                    <th>Matched Text</th>
+                    <th>Pattern</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {metadataItem.tokens.map(({ id, pattern }, i) => (
+                    <tr key={i}>
+                      <td>
+                        <mark>{id}</mark>
+                      </td>
+                      <td>???</td>
+                      <td>{pattern}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <table style={{ background: "rgba(0,0,0,0.05)" }}>
+                <thead>
+                  <tr>
+                    <th>
+                      {showQuestionId && <strong>{questionId}:</strong>}
+                      <em title="No matching normalization tokens found.">
+                        {value}
+                      </em>
+                    </th>
+                  </tr>
+                </thead>
+              </table>
+            )}
+          </div>
+        ))}
+    </>
   );
 };

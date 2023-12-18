@@ -22,6 +22,7 @@ import {
   prefixWithEditionId,
 } from "@devographics/templates";
 import { fetchEntities, fetchSurveysMetadata } from "@devographics/fetch";
+import { fetchEntitiesNormalization } from "~/lib/normalization/normalize/getEntitiesNormalizationQuery";
 
 const readFile = fsPromises.readFile;
 
@@ -219,7 +220,7 @@ export const loadTokyoDevCSV = async () => {
     appName: AppName.SURVEYADMIN,
     shouldGetFromCache: false,
   });
-  const { data: entities } = await fetchEntities({
+  const { data: entities } = await fetchEntitiesNormalization({
     appName: AppName.SURVEYADMIN,
   });
   const survey = allSurveysMetadata.find((s) => s.id === "tokyodev") as Survey;
@@ -351,6 +352,8 @@ export const loadTokyoDevCSV = async () => {
         response: document,
         entities,
         verbose: true,
+        customNormalizations: [],
+        timestamp: new Date().toISOString(),
       });
 
       logToFile(`tokyodev_${editionId}/${_id}.yml`, normalizedDocument);

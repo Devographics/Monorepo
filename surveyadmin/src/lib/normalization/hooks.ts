@@ -1,7 +1,12 @@
 import { FetchPayloadSuccessOrError } from "@devographics/fetch";
-import { ResponseData, Entity } from "@devographics/types";
+import {
+  ResponseData,
+  Entity,
+  CustomNormalizationDocument,
+} from "@devographics/types";
 import useSWR from "swr";
 import { apiRoutes } from "~/lib/apiRoutes";
+import { NormalizationMetadata } from "./types";
 
 const basicFetcher = (url: string): any => fetch(url).then((r) => r.json());
 
@@ -13,9 +18,8 @@ interface ApiData<T = any> {
 export interface NormalizationResponse {
   _id: string;
   responseId: string;
-  value: string;
   normalizedValue?: string[];
-  patterns?: string[];
+  metadata?: NormalizationMetadata[];
 }
 
 export type ResponsesData = {
@@ -23,6 +27,7 @@ export type ResponsesData = {
   responsesCount: number;
   entities: Entity[];
   questionResult: FetchPayloadSuccessOrError<ResponseData>;
+  customNormalizations: CustomNormalizationDocument[];
   durations: any;
 };
 
@@ -45,6 +50,18 @@ export const useQuestionResponses = (params: {
 }) => {
   const { data, error, isLoading } = useSWR<ApiData<ResponsesData>>(
     apiRoutes.normalization.loadQuestionResponses.href(params),
+    basicFetcher
+  );
+  return { data: data?.data, loading: isLoading, error: data?.error };
+};
+
+export const useQuestionData = (params: {
+  surveyId: string;
+  editionId: string;
+  questionId: string;
+}) => {
+  const { data, error, isLoading } = useSWR<ApiData<ResponsesData>>(
+    apiRoutes.normalization.loadQuestionData.href(params),
     basicFetcher
   );
   return { data: data?.data, loading: isLoading, error: data?.error };
