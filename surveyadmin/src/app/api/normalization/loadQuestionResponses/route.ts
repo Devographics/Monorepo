@@ -3,6 +3,9 @@ import { captureException } from "@sentry/nextjs";
 import { getScripts } from "~/lib/scripts/actions";
 import { getQuestionResponses } from "~/lib/normalization/actions/getQuestionResponses";
 
+// Avoid statically rendering route handlers
+export const dynamic = "force-dynamic"
+
 export async function GET(req: NextRequest, res: NextResponse) {
   const surveyId = req.nextUrl.searchParams.get("surveyId")!;
   const editionId = req.nextUrl.searchParams.get("editionId")!;

@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { captureException } from "@sentry/nextjs";
 import { getQuestionData } from "~/lib/normalization/actions/getQuestionData";
 
+// Avoid statically rendering route handlers
+export const dynamic = "force-dynamic"
+
 export async function GET(req: NextRequest, res: NextResponse) {
   const surveyId = req.nextUrl.searchParams.get("surveyId")!;
   const editionId = req.nextUrl.searchParams.get("editionId")!;

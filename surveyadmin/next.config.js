@@ -1,13 +1,6 @@
-//const util = require("util");
-const { extendNextConfig } = require("./packages/@vulcanjs/next-config");
 // Use @next/mdx for a basic MDX support.
 // See the how Vulcan Next docs are setup with next-mdx-remote
 // which is more advanced (loading remote MD, supporting styling correctly etc.)
-const withPkgInfo = require("./.vn/nextConfig/withPkgInfo");
-
-const flowRight = require("lodash/flowRight");
-const debug = require("debug")("devographics:next");
-
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
 const moduleExports = (phase, { defaultConfig }) => {
   /**
@@ -33,18 +26,6 @@ const moduleExports = (phase, { defaultConfig }) => {
       // your project has ESLint errors.
       ignoreDuringBuilds: true,
     },
-    /*
-    i18n: {
-      locales: uniqueLocales,
-      // It won't be prefixed
-      defaultLocale: "en-US", //-US",
-
-    },*/
-    env: {
-      NEXT_PUBLIC_IS_USING_LOCAL_DATABASE: !!(
-        process.env.MONGO_URI || ""
-      ).match(/localhost/),
-    },
     webpack: function (configArg, ...otherArgs) {
       //console.log(util.inspect(configArg.module.rules, false, null, true));
       //*** */ Yaml support
@@ -66,32 +47,9 @@ const moduleExports = (phase, { defaultConfig }) => {
       config.experiments.topLevelAwait = true;
       return config;
     },
-
-    /*
-    Don't seem to be needed
-    sassOptions: {
-      includePaths: [path.join(__dirname, "src/stylesheets")],
-    },
-    */
-
-    images: {
-      remotePatterns: [
-        {
-          protocol: "https",
-          hostname: "devographics.github.io",
-        },
-        {
-          protocol: "https",
-          hostname: "static.devographics.com",
-        },
-      ],
-    },
-
-    // uncomment to support markdown
-    // pageExtensions:["js", "jsx", "md", "mdx", "ts", "tsx"];
   };
 
-  let extendedConfig = extendNextConfig(nextConfig);
+  let extendedConfig = nextConfig;
 
   //*** */ Enable Webpack analyzer
   if (process.env.ANALYZE) {
@@ -103,10 +61,6 @@ const moduleExports = (phase, { defaultConfig }) => {
     extendedConfig = withBundleAnalyzer(extendedConfig);
   }
 
-  // Finally add relevant webpack configs/utils
-  extendedConfig = flowRight([withPkgInfo])(extendedConfig);
-
-  debug("Extended next config FINAL " + JSON.stringify(extendedConfig));
 
   if (process.env.MAINTENANCE_MODE) {
     extendedConfig.redirects = async () => {

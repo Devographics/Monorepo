@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { captureException } from "@sentry/nextjs";
 import { enableRegularTokens } from "~/lib/normalization/actions";
 
+
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
     let body: any;

@@ -3,11 +3,6 @@ import { captureException } from "@sentry/nextjs";
 
 import { runScript } from "~/lib/scripts/actions";
 
-/**
- * @see https://vercel.com/docs/functions/serverless-functions/runtimes#maxduration
- * On PRO offer we are allowed for 300s execution max (default is 10s so too short for scripts)
- */
-export const maxDuration = 300
 
 export async function POST(req: NextRequest, { params }: any) {
   let args = await req.json();

@@ -2,8 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "ignoreCommand": "git diff HEAD^ HEAD --quiet ../shared ../surveyadmin/",
   "functions": {
-    "src/pages/api/**/*": {
-      "memory": 768
+    "src/app/**/*": {
+      "maxDuration": 300
     }
   },
   "github": {
