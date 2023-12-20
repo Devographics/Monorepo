@@ -219,6 +219,7 @@ const AllAnswers = (props: CommonNormalizationProps) => {
           <option key={i} value={entity.id}></option>
         ))}
       </datalist>
+      <h3>Answers ({allAnswers.length})</h3>
       <Answers {...fieldsProps} />
       {/* <Answers {...fieldsProps} variant="unnormalized" /> */}
       {/* <Answers {...fieldsProps} variant="discarded" /> */}

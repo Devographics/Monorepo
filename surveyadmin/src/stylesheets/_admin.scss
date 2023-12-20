@@ -2,8 +2,14 @@
 
 .main-nav {
   background: rgb(240, 240, 240);
+  background-color: rgb(109, 109, 109);
   margin: -20px -20px 0 -20px;
   padding: 0 $spacing;
+  color: white;
+  a {
+    color: white;
+    font-size: 0.9rem;
+  }
 }
 
 .normalization-actions {
@@ -12,6 +18,10 @@
   // justify-content: space-between;
   // padding: $spacing;
   margin-top: 0;
+  margin: 0 -1 * $spacing;
+  padding: $spacing;
+  border-bottom: 1px solid var(--border-color);
+  background-color: rgb(236, 236, 236);
   margin-bottom: $spacing;
   display: flex;
   align-items: center;
@@ -388,7 +398,10 @@ button.button-ghost,
 
 .breadcrumbs {
   border-bottom: 1px solid var(--border-color);
-  margin-bottom: $spacing;
+  background-color: rgb(236, 236, 236);
+  margin: 0px -1 * $spacing;
+  // margin-bottom: $spacing;
+  padding: $spacing;
   h2,
   h3,
   h4 {
