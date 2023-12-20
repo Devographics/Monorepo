@@ -18,7 +18,7 @@ export default function RootLayout({
       <head />
       <body>
         <div>
-          <nav>
+          <nav className="main-nav">
             <ul>
               <li>
                 <Link href="/admin/cache">Cache</Link>

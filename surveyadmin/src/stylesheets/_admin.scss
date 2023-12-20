@@ -1,10 +1,16 @@
 @use "sass:math";
 
+.main-nav {
+  background: rgb(240, 240, 240);
+  margin: -20px -20px 0 -20px;
+  padding: 0 $spacing;
+}
+
 .normalization-actions {
-  background-color: rgb(238, 244, 239);
+  // background-color: rgb(255, 253, 224);
   // display: flex;
   // justify-content: space-between;
-  padding: $spacing;
+  // padding: $spacing;
   margin-top: 0;
   margin-bottom: $spacing;
   display: flex;
@@ -381,6 +387,7 @@ button.button-ghost,
 }
 
 .breadcrumbs {
+  border-bottom: 1px solid var(--border-color);
   margin-bottom: $spacing;
   h2,
   h3,
