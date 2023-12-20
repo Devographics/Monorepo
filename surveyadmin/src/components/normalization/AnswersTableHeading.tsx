@@ -2,9 +2,12 @@
 import Dialog from "../ui/Dialog";
 import { PresetsShortlist } from "./PresetsShortlist";
 import AnswersFilters from "./AnswersFilters";
-import { IndividualAnswerWithIndex } from "~/lib/normalization/helpers/splitResponses";
+import {
+  IndividualAnswer,
+  IndividualAnswerWithIndex,
+} from "~/lib/normalization/helpers/splitResponses";
 import { Dispatch, SetStateAction } from "react";
-import { AnswersProps } from "./Answers";
+import { AnswerVariant, AnswersProps } from "./Answers";
 import {
   SurveyMetadata,
   EditionMetadata,
@@ -19,7 +22,7 @@ interface AnswersTableHeadingProps {
   edition: EditionMetadata;
   question: QuestionWithSection;
   entities: Entity[];
-  variant: AnswersProps["variant"];
+  variant: AnswerVariant;
   filteredAnswers: IndividualAnswerWithIndex[];
   sortedAnswers: IndividualAnswerWithIndex[];
   filterQuery: string;
@@ -32,6 +35,8 @@ interface AnswersTableHeadingProps {
   pageNumber: number;
   setPageNumber: Dispatch<SetStateAction<number>>;
   totalPages: number;
+  setVariant: Dispatch<SetStateAction<AnswerVariant>>;
+  allAnswers: IndividualAnswer[];
 }
 
 export const AnswersTableHeading = (props: AnswersTableHeadingProps) => {

@@ -1,7 +1,15 @@
 "use client";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { AnswersProps, getPercent, getSortedAnswers } from "./Answers";
-import { IndividualAnswerWithIndex } from "~/lib/normalization/helpers/splitResponses";
+import {
+  AnswerVariant,
+  AnswersProps,
+  getPercent,
+  getSortedAnswers,
+} from "./Answers";
+import {
+  IndividualAnswer,
+  IndividualAnswerWithIndex,
+} from "~/lib/normalization/helpers/splitResponses";
 import {
   EditionMetadata,
   SurveyMetadata,
@@ -10,6 +18,8 @@ import {
 } from "@devographics/types";
 import Tokens from "./Tokens";
 import LoadingButton from "../LoadingButton";
+import { AnswerProps } from "./Answer";
+import { normalizeResponses } from "~/lib/normalization/services";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -37,7 +47,9 @@ interface AnswersFiltersProps {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   entities: Entity[];
-  variant: AnswersProps["variant"];
+  variant: AnswerVariant;
+  setVariant: Dispatch<SetStateAction<AnswerVariant>>;
+  allAnswers: IndividualAnswer[];
   filteredAnswers: IndividualAnswerWithIndex[];
   sortedAnswers: IndividualAnswerWithIndex[];
   filterQuery: string;
@@ -73,7 +85,6 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
     totalPages,
     variant,
     setVariant,
-    stats,
     allAnswers,
   } = props;
   const [localFilterQuery, setLocalFilterQuery] = useState("");
@@ -126,7 +137,7 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
       >
         <select
           onChange={(e) => {
-            setVariant(e.target.value);
+            setVariant(e.target.value as AnswerVariant);
           }}
         >
           {answerVariants.map(({ id, label }) => {

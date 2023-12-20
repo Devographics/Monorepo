@@ -27,8 +27,12 @@ export const getPercent = (a: number, b: number) =>
 
 export interface AnswersProps extends CommonNormalizationProps {
   allAnswers: IndividualAnswer[];
-  variant: "normalized" | "unnormalized" | "discarded";
+  unnormalizedAnswers: IndividualAnswer[];
+  normalizedAnswers: IndividualAnswer[];
+  discardedAnswers: IndividualAnswer[];
 }
+
+export type AnswerVariant = "normalized" | "unnormalized" | "discarded";
 
 const getSimplifiedString = (s: string) => {
   if (s) {
@@ -52,7 +56,7 @@ export const getSortedAnswers = (variantAnswers) => {
 };
 
 const Answers = (props: AnswersProps) => {
-  const [variant, setVariant] = useState("unnormalized");
+  const [variant, setVariant] = useState<AnswerVariant>("unnormalized");
   const [showResponses, setShowResponses] = useState(true);
   const [showIds, setShowIds] = useState(false);
   const [filterQuery, setFilterQuery] = useState("");
@@ -156,7 +160,6 @@ const Answers = (props: AnswersProps) => {
                 pageNumber,
                 setPageNumber,
                 totalPages,
-                variant,
                 setVariant,
                 allAnswers,
                 unnormalizedAnswers,
