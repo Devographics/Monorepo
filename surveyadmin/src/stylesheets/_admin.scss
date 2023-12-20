@@ -1,14 +1,26 @@
 @use "sass:math";
 
 .normalization-actions {
+  background-color: rgb(238, 244, 239);
   // display: flex;
   // justify-content: space-between;
+  padding: $spacing;
+  margin-top: 0;
   margin-bottom: $spacing;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   .primary,
   .secondary {
     display: flex;
     align-items: center;
-    gap: $spacing;
+    gap: $spacing * 2;
+  }
+  .primary {
+    justify-content: flex-start;
+  }
+  .secondary {
+    justify-content: flex-end;
   }
   button {
     margin: 0;
@@ -205,16 +217,30 @@
 .normalization-fields {
   position: relative;
 }
-.normalization-filter {
+.normalization-controls {
   // padding: 10px 20px;
   // border-bottom: 6px solid var(--code-background-color);
   // margin: 0 -20px 0 -20px;
   display: flex;
   gap: 10px;
   align-items: center;
-  input[type="search"] {
+  justify-content: space-between;
+  padding: 5px;
+}
+.control {
+}
+.control * {
+  margin-bottom: 0 !important;
+}
+
+.control-variant {
+  border-bottom: none !important;
+  select {
     margin: 0;
   }
+}
+.control-search {
+  flex: 1;
 }
 .normalization-table {
   thead {
@@ -347,5 +373,18 @@ button.button-ghost,
 .answer-row-same {
   td {
     background: rgb(215, 255, 215);
+  }
+}
+
+.loading-button[data-tooltip] {
+  border-bottom: none;
+}
+
+.breadcrumbs {
+  margin-bottom: $spacing;
+  h2,
+  h3,
+  h4 {
+    margin: 0;
   }
 }

@@ -179,7 +179,6 @@ export const Normalization = (props: NormalizationProps) => {
     <div className="admin-normalization admin-content">
       <Actions {...commonProps} {...segmentProps} />
       {segments.length > 0 && <Progress {...commonProps} {...segmentProps} />}
-      <QuestionData {...commonProps} />
       {responses ? (
         <AllAnswers {...commonProps} />
       ) : (
@@ -220,9 +219,9 @@ const AllAnswers = (props: CommonNormalizationProps) => {
           <option key={i} value={entity.id}></option>
         ))}
       </datalist>
-      <Answers {...fieldsProps} variant="normalized" />
-      <Answers {...fieldsProps} variant="unnormalized" />
-      <Answers {...fieldsProps} variant="discarded" />
+      <Answers {...fieldsProps} />
+      {/* <Answers {...fieldsProps} variant="unnormalized" /> */}
+      {/* <Answers {...fieldsProps} variant="discarded" /> */}
     </>
   );
 };

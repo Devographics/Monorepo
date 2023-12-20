@@ -22,7 +22,7 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const getPercent = (a: number, b: number) =>
+export const getPercent = (a: number, b: number) =>
   b ? Math.round((a / b) * 100) : 0;
 
 export interface AnswersProps extends CommonNormalizationProps {
@@ -42,8 +42,18 @@ const getSimplifiedString = (s: string) => {
   }
 };
 
+export const getSortedAnswers = (variantAnswers) => {
+  return sortBy(variantAnswers, (a) =>
+    trim(a.raw.toLowerCase().replaceAll('"', "").replaceAll("@", ""))
+  ).map((a, index) => ({
+    ...a,
+    index,
+  })) as IndividualAnswerWithIndex[];
+};
+
 const Answers = (props: AnswersProps) => {
-  const [showResponses, setShowResponses] = useState(false);
+  const [variant, setVariant] = useState("unnormalized");
+  const [showResponses, setShowResponses] = useState(true);
   const [showIds, setShowIds] = useState(false);
   const [filterQuery, setFilterQuery] = useState("");
   const [showShortlist, setShowShortlist] = useState(false);
@@ -62,21 +72,19 @@ const Answers = (props: AnswersProps) => {
     responsesCount,
     allAnswers,
     questionData,
-    variant,
+    // variant,
     entities,
     customNormalizations,
+    unnormalizedAnswers,
+    normalizedAnswers,
+    discardedAnswers,
   } = props;
 
   const variantAnswers = props[`${variant}Answers`];
 
   if (!variantAnswers) return <p>Nothing to normalize</p>;
 
-  const sortedAnswers = sortBy(variantAnswers, (a) =>
-    trim(a.raw.toLowerCase().replaceAll('"', "").replaceAll("@", ""))
-  ).map((a, index) => ({
-    ...a,
-    index,
-  })) as IndividualAnswerWithIndex[];
+  const sortedAnswers = getSortedAnswers(variantAnswers);
 
   const totalPages = Math.ceil(sortedAnswers.length / ITEMS_PER_PAGE);
 
@@ -126,48 +134,8 @@ const Answers = (props: AnswersProps) => {
 
   return (
     <div>
-      <h3>
-        {capitalizeFirstLetter(variant)} Responses (
-        {getPercent(sortedAnswers.length, allAnswers.length)}% –{" "}
-        {sortedAnswers.length}/{allAnswers.length}){" "}
-        <LoadingButton
-          as="a"
-          action={async () => {
-            const result = await normalizeResponses({
-              surveyId: survey.id,
-              editionId: edition.id,
-              responsesIds: sortedAnswers.map((a) => a.responseId),
-              isVerbose: false,
-            });
-          }}
-          label="Renormalize"
-          tooltip="Renormalize Answers"
-        />{" "}
-        <a
-          href="#"
-          role="button"
-          onClick={(e) => {
-            e.preventDefault();
-            setShowResponses(!showResponses);
-          }}
-        >
-          {showResponses ? "Hide" : "Show"}
-        </a>
-      </h3>
       {showResponses && (
         <div className="normalization-fields">
-          {variant === "normalized" ? (
-            <p>
-              This table shows responses that have already received at least one
-              match during the normalization process.
-            </p>
-          ) : (
-            <p>
-              This table shows responses that have not received any match yet
-              during the normalization process.
-            </p>
-          )}
-
           <table className="normalization-table">
             <AnswersTableHeading
               {...{
@@ -188,6 +156,12 @@ const Answers = (props: AnswersProps) => {
                 pageNumber,
                 setPageNumber,
                 totalPages,
+                variant,
+                setVariant,
+                allAnswers,
+                unnormalizedAnswers,
+                normalizedAnswers,
+                discardedAnswers,
               }}
             />
             <tbody>

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
-import Dialog from "./Dialog";
+import Dialog from "../ui/Dialog";
 import {
   EditionMetadata,
   SurveyMetadata,
@@ -13,6 +13,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ImportNormalizationArgs } from "~/lib/normalization/actions";
 import { importNormalizations } from "~/lib/normalization/services";
 import { getCustomNormalizationsCacheKey } from "./NormalizeQuestion";
+import ModalTrigger from "../ui/ModalTrigger";
 
 export const Import = ({
   survey,
@@ -27,7 +28,6 @@ export const Import = ({
   entities: Entity[];
   isButton?: boolean;
 }) => {
-  const [showImport, setShowImport] = useState(false);
   const [value, setValue] = useState("");
   const queryClient = useQueryClient();
 
@@ -52,26 +52,20 @@ export const Import = ({
 
   return (
     <div>
-      <a
-        role={isButton ? "button" : "link"}
-        className="view-import"
-        href="#"
-        onClick={(e) => {
-          e.preventDefault();
-          setShowImport(!showImport);
-        }}
-      >
-        Import…
-      </a>
-      <Dialog
-        showModal={showImport}
-        setShowModal={setShowImport}
+      <ModalTrigger
+        isButton={false}
+        label="📥 Import…"
+        tooltip="Import CSV normalizations"
         header={
           <span>
             Import normalizations for <code>{question.id}</code>
           </span>
         }
       >
+        <p>
+          Format: CSV with two columns, <code>rawValue</code> and{" "}
+          <code>entityId</code>
+        </p>
         <textarea
           onChange={(e) => {
             setValue(e.target.value);
@@ -89,7 +83,7 @@ export const Import = ({
           label="Submit"
           tooltip="Import Normalizations"
         />
-      </Dialog>
+      </ModalTrigger>
     </div>
   );
 };

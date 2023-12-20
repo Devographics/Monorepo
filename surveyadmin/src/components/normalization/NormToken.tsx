@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
 import { ResponseId } from "./Answers";
-import Dialog from "./Dialog";
+import Dialog from "../ui/Dialog";
 import { FieldValue } from "./FieldValue";
 import { splitResponses } from "~/lib/normalization/helpers/splitResponses";
 import { Entity } from "@devographics/types";

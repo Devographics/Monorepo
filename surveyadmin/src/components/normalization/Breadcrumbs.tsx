@@ -20,11 +20,16 @@ const Breadcrumbs = ({
   question?: QuestionMetadata;
 }) => {
   return (
-    <div>
-      <h2>Normalization</h2>
-
+    <div className="breadcrumbs">
       <nav>
         <ul>
+          <li>
+            <h3>Normalization</h3>
+          </li>
+
+          <li>
+            <span>»</span>
+          </li>
           {surveys && survey && edition && (
             <>
               <BreadcrumbSegment

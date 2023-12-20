@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
-import Dialog from "./Dialog";
 import {
   EditionMetadata,
   SurveyMetadata,
@@ -9,6 +8,8 @@ import {
   QuestionWithSection,
 } from "@devographics/types";
 import sortBy from "lodash/sortBy";
+import ModalTrigger from "../ui/ModalTrigger";
+import uniq from "lodash/uniq";
 
 const Tokens = ({
   survey,
@@ -23,8 +24,6 @@ const Tokens = ({
   entities: Entity[];
   isButton?: boolean;
 }) => {
-  const [showTokens, setShowTokens] = useState(false);
-
   const questionObject = getQuestionObject({
     survey,
     edition,
@@ -34,29 +33,42 @@ const Tokens = ({
 
   const allTags = [question.id, ...(question?.matchTags || [])];
 
+  const allTokens = uniq(
+    allTags
+      .map((tag) =>
+        entities.filter((e) => e?.tags?.includes(tag)).map((e) => e.id)
+      )
+      .flat()
+  );
+
   return (
-    <div>
-      <a
-        role={isButton ? "button" : "link"}
-        className="view-tokens"
-        href="#"
-        onClick={(e) => {
-          e.preventDefault();
-          setShowTokens(!showTokens);
-        }}
-      >
-        View Tokens…
-      </a>
-      <Dialog
-        showModal={showTokens}
-        setShowModal={setShowTokens}
-        header={
-          <span>
-            Tokens for <code>{question.id}</code>
-          </span>
-        }
-      >
+    <ModalTrigger
+      isButton={false}
+      label="🏷️ Tags & Tokens…"
+      tooltip="View entity tokens for current question"
+      header={
+        <span>
+          Tokens for <code>{question.id}</code>
+        </span>
+      }
+    >
+      <div>
+        <h3>Question Match Tags</h3>
         <ul>
+          <li>
+            A question's match tags are defined in the survey outline under the
+            <code>matchTags</code> property.
+          </li>
+          <li>
+            A question's own <code>id</code> is automatically added as a match
+            tag.
+          </li>
+          <li>
+            A question with the match tag <code>foo</code> will consider all
+            entities that contain <code>foo</code>
+            under their <code>tags</code> property; or are defined in the{" "}
+            <code>foo.yml</code> file.
+          </li>
           <li>
             {questionObject.matchType === "multiple" ? (
               <span>
@@ -72,16 +84,21 @@ const Tokens = ({
             Match tags that are higher up in the list are given higher priority.
           </li>
           <li>
-            All entities match their own ID by default (with underscores
-            matching spaces or dashes).{" "}
+            Entity ids are automatically added as patterns (with underscores
+            matching spaces or dashes).
           </li>
         </ul>
 
         {allTags?.map((tag) => (
           <TagItem key={tag} entities={entities} tag={tag} />
         ))}
-      </Dialog>
-    </div>
+
+        <p>
+          <h3>All Entity Tokens ({allTokens.length})</h3>
+          <textarea value={allTokens.join(", ")} readOnly />
+        </p>
+      </div>
+    </ModalTrigger>
   );
 };
 
@@ -130,11 +147,16 @@ const EntityItem = ({ entity, mainTag }) => {
       <td>{id}</td>
       <td>
         <div className="match-patterns">
-          {patterns?.map((pattern) => (
-            <span key={pattern}>
-              <code>{pattern}</code>{" "}
-            </span>
-          ))}
+          <ul>
+            <li>
+              <code>{id}</code>
+            </li>
+            {patterns?.map((pattern) => (
+              <li key={pattern}>
+                <code>{pattern}</code>{" "}
+              </li>
+            ))}
+          </ul>
         </div>
       </td>
       <td>
