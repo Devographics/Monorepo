@@ -21,7 +21,7 @@ import { rootDir } from './rootDir'
 import { AppName } from '@devographics/types'
 import { EnvVar, getConfig, getEnvVar, setAppName } from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
-import { loadOrGetSurveys } from './load/surveys'
+import { getSurveysLoadMethod, loadOrGetSurveys } from './load/surveys'
 
 //import Tracing from '@sentry/tracing'
 
@@ -35,6 +35,8 @@ import { getPublicDb } from '@devographics/mongo'
 import { ghWebhooks } from './webhooks'
 import { getRepoSHA } from './external_apis'
 import { initProjects } from './load/projects'
+import { getEntitiesLoadMethod } from './load/entities'
+import { getLocalesLoadMethod } from './load/locales'
 
 const envPath = process.env.ENV_FILE ? process.env.ENV_FILE : '.env'
 dotenv.config({ path: envPath })
@@ -102,7 +104,10 @@ const start = async () => {
         `---------------------------------------------------------------
 • 📄 env file = ${envPath}
 • 📄 config = ${process.env.CONFIG}
-• 📖 load method = ${getLoadMethod()}`
+• 📖 surveys = ${getSurveysLoadMethod()}
+• 🌐 locales = ${getLocalesLoadMethod()}
+• 🙎 entities = ${getEntitiesLoadMethod()}
+---------------------------------------------------------------`
     )
 
     const isDev = process.env.NODE_ENV === 'development'

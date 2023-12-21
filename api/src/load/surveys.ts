@@ -18,8 +18,6 @@ const execPromise = promisify(exec)
 let allSurveys: Survey[] = []
 let surveysHash: string
 
-
-
 // add `apiOnly` flags to questins
 const makeAPIOnly = (sections: Section[]) =>
     sections.map(s => ({
@@ -50,7 +48,6 @@ export const loadOrGetParsedSurveys = async (options: LoadOrGetSurveysOptions = 
     const { surveys } = await loadOrGetSurveys(options)
     return parseSurveys({ surveys })
 }
-
 
 const getGitHubYamlFile = async (url: string) => {
     const response = await fetch(url)
@@ -165,7 +162,7 @@ export const loadFromGitHub = async () => {
             surveys.push(survey)
         }
     }
-    const sha = await getRepoSHA({ owner: "devographics", repo: "surveys" })
+    const sha = await getRepoSHA({ owner: 'devographics', repo: 'surveys' })
     return { surveys, sha }
 }
 
@@ -214,7 +211,7 @@ export const loadLocally = async () => {
                         )
                         const editionConfigYaml: any = yaml.load(editionConfigContents)
                         edition = editionConfigYaml
-                    } catch (error) { }
+                    } catch (error) {}
                     const questionsPath = editionDirPath + '/questions.yml'
                     if (existsSync(questionsPath)) {
                         try {
@@ -266,19 +263,21 @@ export const loadLocally = async () => {
         }
     }
     try {
-        const shaExec = await execPromise("git rev-parse --verify HEAD", { cwd: surveysDirPath })
+        const shaExec = await execPromise('git rev-parse --verify HEAD', { cwd: surveysDirPath })
         const sha = shaExec.stdout
         return { surveys, sha }
     } catch (err) {
         console.warn(`Couldn't compute local repository SHA at path ${surveysDirPath}, error:`, err)
     }
     // TODO: when loading locally, we can get the SHA using git commands
-    return { surveys, sha: "<local repository>" }
+    return { surveys, sha: '<local repository>' }
 }
+
+export const getSurveysLoadMethod = () => (getEnvVar(EnvVar.SURVEYS_PATH) ? 'local' : 'github')
 
 // load locales contents through GitHub API or locally
 export const loadSurveys = async () => {
-    const mode = getEnvVar(EnvVar.SURVEYS_PATH) ? 'local' : 'github'
+    const mode = getSurveysLoadMethod()
     console.log(`// loading surveys (mode: ${mode})`)
     const { surveys, sha } = mode === 'local' ? await loadLocally() : await loadFromGitHub()
     console.log(`// done loading ${surveys.length} surveys; commit SHA: ${sha}`)

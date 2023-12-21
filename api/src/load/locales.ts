@@ -159,9 +159,8 @@ const processGitHubLocale = async (contents: any, localeRepo: any) => {
             }
         }
     }
-    logToFile(`github_${localeConfig.id}.yml`, localeRawData, {
-        mode: 'overwrite',
-        subDir: 'locales_raw'
+    logToFile(`locales_raw/github_${localeConfig.id}.yml`, localeRawData, {
+        mode: 'overwrite'
     })
     return localeRawData
 }
@@ -251,13 +250,14 @@ export const initLocales = async () => {
     Locales = locales
 }
 
+export const getLocalesLoadMethod = () => (getEnvVar(EnvVar.LOCALES_PATH) ? 'local' : 'github')
 /*
 
 Load locales contents through GitHub API or locally
 
 */
 export const loadLocales = async (localeIds?: string[]): Promise<RawLocale[]> => {
-    const mode = getEnvVar(EnvVar.LOCALES_PATH) ? 'local' : 'github'
+    const mode = getLocalesLoadMethod()
     console.log(`🌐 loading locales… (mode: ${mode})`)
     const locales =
         mode === 'local'

@@ -3,7 +3,7 @@ import { Entity } from '@devographics/types'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
-import { readdir, readFile } from 'fs/promises'
+import { readdir, readFile, stat } from 'fs/promises'
 import last from 'lodash/last.js'
 import { EnvVar, getConfig, getEnvVar } from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
@@ -106,7 +106,6 @@ export const highlightEntitiesExampleCode = async (entities: Entity[]) => {
 
 export const loadFromGitHub = async () => {
     const octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
-    const entities: Entity[] = []
     const [owner, repo, path = ''] = getEnvVar(EnvVar.GITHUB_PATH_ENTITIES)?.split('/') || []
 
     if (!owner) {
@@ -120,8 +119,21 @@ export const loadFromGitHub = async () => {
         )
     }
 
+    return await getGitHubDirEntities({ octokit, owner, repo }, path)
+}
+
+const getGitHubDirEntities = async (
+    options: { octokit: any; owner: string; repo: string },
+    path: string
+) => {
+    let entities = [] as Entity[]
+    const { octokit, owner, repo } = options
+
+    const getExtension = (file: any): string => file?.name.split('.').at(-1) || ''
+
+    const isYaml = (file: any) => ['yml', 'yaml'].includes(getExtension(file))
+
     const url = `repos/${owner}/${repo}/contents/${path}`
-    console.log(`-> loading entities from GitHub (${url})`)
 
     const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}/', {
         owner,
@@ -129,11 +141,23 @@ export const loadFromGitHub = async () => {
         path
     })
     const files = contents.data as any[]
+    const yamlFiles = files.filter(isYaml)
+    if (yamlFiles.length > 0) {
+        console.log(`-> loading entities from GitHub (found ${yamlFiles.length} files in ${url})`)
+    }
 
     // loop over repo contents and fetch raw yaml files
     for (const file of files) {
-        const extension: string = last(file?.name.split('.')) || ''
-        if (['yml', 'yaml'].includes(extension)) {
+        const extension = getExtension(file)
+        if (file.type === 'dir' && file.name[0] !== '.') {
+            entities = [
+                ...entities,
+                ...(await getGitHubDirEntities(
+                    options,
+                    `${path}${path === '' ? '' : '/'}${file.name}`
+                ))
+            ]
+        } else if (isYaml(file)) {
             const response = await fetch(file.download_url)
             const contents = await response.text()
             try {
@@ -158,37 +182,51 @@ export const loadFromGitHub = async () => {
 
 // when developing locally, load from local files
 export const loadLocally = async () => {
-    const entities: Entity[] = []
-
     const entitiesDirPath = path.resolve(getEnvVar(EnvVar.ENTITIES_PATH))
 
-    console.log(`-> loading entities locally (${entitiesDirPath})`)
+    return await getDirEntities(entitiesDirPath)
+}
 
+export const getDirEntities = async (entitiesDirPath: string) => {
+    let entities = [] as Entity[]
     const files = await readdir(entitiesDirPath)
-    const yamlFiles = files.filter((f: String) => f.includes('.yml'))
+    const yamlFiles = files.filter(fileName => fileName.includes('.yml'))
 
-    // loop over dir contents and fetch raw yaml files
-    for (const fileName of yamlFiles) {
-        const filePath = entitiesDirPath + '/' + fileName
-        const contents = await readFile(filePath, 'utf8')
-        const yamlContents: any = yaml.load(contents)
-        const category = fileName.replace('./', '').replace('.yml', '')
-        yamlContents.forEach((entity: Entity) => {
-            const tags = entity.tags ? [...entity.tags, category] : [category]
-            entities.push({
-                ...entity,
-                category,
-                tags
-            })
-        })
+    if (yamlFiles.length > 0) {
+        console.log(
+            `-> loading entities locally (found ${yamlFiles.length} files in ${entitiesDirPath})`
+        )
     }
 
+    // loop over dir contents and fetch raw yaml files
+    for (const fileName of files) {
+        const filePath = entitiesDirPath + '/' + fileName
+        const fileStats = await stat(filePath)
+        if (fileStats.isDirectory() && fileName[0] !== '.') {
+            // make sure to exclude directories starting with "." such as ".git"
+            entities = [...entities, ...(await getDirEntities(filePath))]
+        } else if (fileName.includes('.yml')) {
+            const contents = await readFile(filePath, 'utf8')
+            const yamlContents: any = yaml.load(contents)
+            const category = fileName.replace('./', '').replace('.yml', '')
+            yamlContents.forEach((entity: Entity) => {
+                const tags = entity.tags ? [...entity.tags, category] : [category]
+                entities.push({
+                    ...entity,
+                    category,
+                    tags
+                })
+            })
+        }
+    }
     return entities
 }
 
+export const getEntitiesLoadMethod = () => (getEnvVar(EnvVar.ENTITIES_PATH) ? 'local' : 'github')
+
 // load locales contents through GitHub API or locally
 export const loadEntities = async () => {
-    const mode = getEnvVar(EnvVar.ENTITIES_PATH) ? 'local' : 'github'
+    const mode = getEntitiesLoadMethod()
     console.log(`// loading entities (mode: ${mode})`)
     const entities: Entity[] = mode === 'local' ? await loadLocally() : await loadFromGitHub()
     console.log('// done loading entities')
