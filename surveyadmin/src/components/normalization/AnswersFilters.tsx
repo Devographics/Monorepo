@@ -19,7 +19,10 @@ import {
 import Tokens from "./Tokens";
 import LoadingButton from "../LoadingButton";
 import { AnswerProps } from "./Answer";
-import { normalizeResponses } from "~/lib/normalization/services";
+import {
+  normalizeQuestionResponses,
+  normalizeResponses,
+} from "~/lib/normalization/services";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -198,9 +201,10 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
       <div className="control control-renormalize">
         <LoadingButton
           action={async () => {
-            const result = await normalizeResponses({
+            const result = await normalizeQuestionResponses({
               surveyId: survey.id,
               editionId: edition.id,
+              questionId: question.id,
               responsesIds: sortedAnswers.map((a) => a.responseId),
               isVerbose: false,
             });

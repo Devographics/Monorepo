@@ -18,7 +18,10 @@ import {
 } from "@devographics/types";
 import { useSegments } from "./hooks";
 import QuestionData from "./QuestionData";
-import { splitResponses } from "~/lib/normalization/helpers/splitResponses";
+import {
+  IndividualAnswer,
+  splitResponses,
+} from "~/lib/normalization/helpers/splitResponses";
 import sortBy from "lodash/sortBy";
 
 const queryClient = new QueryClient();
@@ -154,6 +157,13 @@ export const Normalization = (props: NormalizationProps) => {
     segments,
   } = useSegments();
 
+  const {
+    allAnswers,
+    normalizedAnswers,
+    unnormalizedAnswers,
+    discardedAnswers,
+  } = splitResponses(responses);
+
   const commonProps = {
     survey,
     edition,
@@ -164,6 +174,11 @@ export const Normalization = (props: NormalizationProps) => {
     questionData,
     entities,
     customNormalizations,
+
+    allAnswers,
+    normalizedAnswers,
+    unnormalizedAnswers,
+    discardedAnswers,
   };
 
   const segmentProps = {
@@ -196,22 +211,13 @@ export interface CommonNormalizationProps extends NormalizationProps {
   questionData: ResponseData;
   entities: Entity[];
   customNormalizations: CustomNormalizationDocument[];
+  allAnswers: IndividualAnswer[];
+  unnormalizedAnswers: IndividualAnswer[];
+  normalizedAnswers: IndividualAnswer[];
+  discardedAnswers: IndividualAnswer[];
 }
 
 const AllAnswers = (props: CommonNormalizationProps) => {
-  const {
-    allAnswers,
-    normalizedAnswers,
-    unnormalizedAnswers,
-    discardedAnswers,
-  } = splitResponses(props.responses);
-  const fieldsProps = {
-    ...props,
-    allAnswers,
-    normalizedAnswers,
-    unnormalizedAnswers,
-    discardedAnswers,
-  };
   return (
     <>
       <datalist id="entities-list">
@@ -219,8 +225,8 @@ const AllAnswers = (props: CommonNormalizationProps) => {
           <option key={i} value={entity.id}></option>
         ))}
       </datalist>
-      <h3>Answers ({allAnswers.length})</h3>
-      <Answers {...fieldsProps} />
+      <h3>Answers ({props.allAnswers.length})</h3>
+      <Answers {...props} />
       {/* <Answers {...fieldsProps} variant="unnormalized" /> */}
       {/* <Answers {...fieldsProps} variant="discarded" /> */}
     </>

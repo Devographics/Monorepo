@@ -296,31 +296,37 @@ export const Answer = ({
                 const result = await normalizeQuestionResponses({
                   ...commonParams,
                   responsesIds: [responseId],
+                  isVerbose: true,
                 });
                 setResult(result.data);
                 if (result.data) {
                   const { normalizedDocuments } = result.data;
                   const normalizedDocument = normalizedDocuments[0];
-                  const { normalizedFields, responseId } = normalizedDocument;
-                  if (normalizedFields) {
-                    const normalizedField = normalizedFields[0];
-                    queryClient.setQueryData(
-                      [getDataCacheKey(commonParams)],
-                      (previous: ResponsesData) => {
-                        const { responses } = previous;
-                        return {
-                          ...previous,
-                          responses: responses.map((r) =>
-                            responseId === r.responseId
-                              ? {
-                                  ...r,
-                                  metadata: normalizedField.metadata,
-                                }
-                              : r
-                          ),
-                        };
-                      }
-                    );
+                  if (normalizedDocument) {
+                    const { normalizedFields, responseId } = normalizedDocument;
+                    if (normalizedFields) {
+                      const normalizedField = normalizedFields[0];
+                      queryClient.setQueryData(
+                        [getDataCacheKey(commonParams)],
+                        (previous: ResponsesData) => {
+                          const { responses } = previous;
+                          return {
+                            ...previous,
+                            responses: responses.map((r) =>
+                              responseId === r.responseId
+                                ? {
+                                    ...r,
+                                    metadata: normalizedField.metadata,
+                                  }
+                                : r
+                            ),
+                          };
+                        }
+                      );
+                    }
+                  } else {
+                    console.log("No normalizedDocument returned");
+                    console.log(result);
                   }
                 }
               }}

@@ -9,6 +9,8 @@ export const ModalTrigger = ({
   header,
   children,
   tooltip,
+  onOpen,
+  onClose,
 }: {
   isButton?: boolean;
   className?: string;
@@ -16,6 +18,8 @@ export const ModalTrigger = ({
   header?: React.ReactNode;
   children: React.ReactNode;
   tooltip?: string;
+  onOpen?: () => void;
+  onClose?: () => void;
 }) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -33,11 +37,22 @@ export const ModalTrigger = ({
         onClick={(e) => {
           e.preventDefault();
           setShowModal(!showModal);
+          if (showModal) {
+            onClose && onClose();
+          } else {
+            onOpen && onOpen();
+          }
         }}
       >
         {label}
       </a>
-      <Dialog showModal={showModal} setShowModal={setShowModal} header={header}>
+      <Dialog
+        showModal={showModal}
+        setShowModal={setShowModal}
+        header={header}
+        onOpen={onOpen}
+        onClose={onClose}
+      >
         {children}
       </Dialog>
     </div>

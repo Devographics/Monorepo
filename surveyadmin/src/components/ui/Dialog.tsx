@@ -6,11 +6,15 @@ export const Dialog = ({
   showModal,
   setShowModal,
   header,
+  onOpen,
+  onClose,
 }: {
   children;
   showModal: boolean;
   setShowModal: React.Dispatch<boolean>;
   header?;
+  onOpen?: () => void;
+  onClose?: () => void;
 }) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const articleRef = useRef<HTMLElement>(null);
@@ -19,6 +23,7 @@ export const Dialog = ({
     const checkIfClickedOutside = (e) => {
       if (articleRef.current && !articleRef.current.contains(e.target)) {
         setShowModal(false);
+        onClose && onClose();
       }
     };
     if (showModal) {
@@ -41,6 +46,7 @@ export const Dialog = ({
               onClick={(e) => {
                 e.preventDefault();
                 setShowModal(false);
+                onClose && onClose();
               }}
             ></a>
             {header}

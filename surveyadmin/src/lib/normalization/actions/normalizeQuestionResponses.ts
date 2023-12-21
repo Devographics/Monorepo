@@ -11,6 +11,7 @@ export type NormalizeQuestionResponsesArgs = {
   editionId: string;
   questionId: string;
   responsesIds: string[];
+  isVerbose?: boolean;
 };
 
 /*
@@ -21,7 +22,13 @@ Normalize a specific question on a specific response
 export const normalizeQuestionResponses = async (
   args: NormalizeQuestionResponsesArgs
 ) => {
-  const { surveyId, editionId, questionId, responsesIds } = args;
+  const {
+    surveyId,
+    editionId,
+    questionId,
+    responsesIds,
+    isVerbose = false,
+  } = args;
 
   const { survey, edition, section, question, durations } =
     await getSurveyEditionSectionQuestion({ surveyId, editionId, questionId });
@@ -47,7 +54,7 @@ export const normalizeQuestionResponses = async (
     responses,
     questionId,
     isRenormalization: true,
-    verbose: true,
+    verbose: isVerbose,
   });
 
   console.log(`⛰️ Refreshing responses cache for question ${questionId}…`);
