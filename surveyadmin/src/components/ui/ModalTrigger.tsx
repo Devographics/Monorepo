@@ -23,14 +23,17 @@ export const ModalTrigger = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
 
-  const divProps = {};
+  const triggerProps = {};
   if (tooltip) {
-    divProps["data-tooltip"] = tooltip;
+    triggerProps["data-tooltip"] = tooltip;
   }
 
+  const TriggerElement = isButton ? "button" : "a";
+
   return (
-    <div {...divProps}>
-      <a
+    <>
+      <TriggerElement
+        {...triggerProps}
         role={isButton ? "button" : "link"}
         className={className}
         href="#"
@@ -45,7 +48,7 @@ export const ModalTrigger = ({
         }}
       >
         {label}
-      </a>
+      </TriggerElement>
       <Dialog
         showModal={showModal}
         setShowModal={setShowModal}
@@ -55,7 +58,7 @@ export const ModalTrigger = ({
       >
         {children}
       </Dialog>
-    </div>
+    </>
   );
 };
 

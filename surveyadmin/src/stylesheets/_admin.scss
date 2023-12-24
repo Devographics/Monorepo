@@ -243,12 +243,14 @@
   justify-content: space-between;
   padding: 5px;
 }
-.control {
+.control-tokens {
+  & [data="data-tooltip"] {
+    border: 0;
+  }
+  button {
+    margin: 0;
+  }
 }
-.control * {
-  margin-bottom: 0 !important;
-}
-
 .control-variant {
   border-bottom: none !important;
   select {
@@ -257,6 +259,14 @@
 }
 .control-search {
   flex: 1;
+  input {
+    margin: 0 !important;
+  }
+}
+.control-renormalize {
+  button {
+    margin: 0;
+  }
 }
 .normalization-table {
   thead {
@@ -280,6 +290,13 @@
   * {
     margin: 0;
   }
+  position: sticky;
+  top: 30px;
+  &-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
 .loading-button {
@@ -290,6 +307,17 @@
 td {
   & button:last-child {
     margin-bottom: 0;
+  }
+}
+
+@media (min-width: 1000px) {
+  dialog article {
+    max-width: 900px !important;
+  }
+}
+@media (min-width: 1200px) {
+  dialog article {
+    max-width: 1100px !important;
   }
 }
 
@@ -345,9 +373,10 @@ h6 {
 
 button.button-ghost,
 .button-ghost button {
-  border: 1px solid var(--primary);
+  // border: 1px solid var(--primary);
+  border-color: rgb(185, 185, 185);
   background: rgb(232, 232, 232);
-  padding: 6px 8px;
+  // padding: 6px 8px;
   color: var(--primary);
 }
 
@@ -406,5 +435,19 @@ button.button-ghost,
   h3,
   h4 {
     margin: 0;
+  }
+}
+
+.patterns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  span {
+  }
+}
+
+.token-filter-active {
+  td {
+    background-color: rgb(215, 255, 242);
   }
 }

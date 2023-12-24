@@ -44,7 +44,7 @@ export const Random = (props: {
           <textarea
             style={{ height: 150 }}
             value="
-            You are a highly experienced web developer. I will paste in 100
+            You are a highly experienced web developer. I will paste in
             answers obtained through a web development survey. Please provide a
             list of the top 10 broad topics or challenges that web developers
             commonly face based on that data. As I paste in more data, please

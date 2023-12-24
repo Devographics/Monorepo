@@ -82,6 +82,7 @@ const Answers = (props: AnswersProps) => {
     unnormalizedAnswers,
     normalizedAnswers,
     discardedAnswers,
+    tokenFilter,
   } = props;
 
   const variantAnswers = props[`${variant}Answers`];
@@ -89,8 +90,6 @@ const Answers = (props: AnswersProps) => {
   if (!variantAnswers) return <p>Nothing to normalize</p>;
 
   const sortedAnswers = getSortedAnswers(variantAnswers);
-
-  const totalPages = Math.ceil(sortedAnswers.length / ITEMS_PER_PAGE);
 
   const questionObject = getQuestionObject({
     survey,
@@ -118,7 +117,7 @@ const Answers = (props: AnswersProps) => {
 
   let filteredAnswers = sortedAnswers;
 
-  if (filterQuery || showCustomOnly) {
+  if (filterQuery || showCustomOnly || tokenFilter) {
     if (filterQuery) {
       filteredAnswers = filteredAnswers.filter((a) =>
         a.raw.toLowerCase().includes(filterQuery.toLowerCase())
@@ -129,12 +128,19 @@ const Answers = (props: AnswersProps) => {
         a?.tokens?.some((t) => t.pattern === CUSTOM_NORMALIZATION)
       );
     }
-  } else {
-    filteredAnswers = filteredAnswers.slice(
-      (pageNumber - 1) * ITEMS_PER_PAGE,
-      pageNumber * ITEMS_PER_PAGE
-    );
+    if (tokenFilter) {
+      filteredAnswers = filteredAnswers.filter((a) =>
+        a?.tokens?.some((t) => tokenFilter.includes(t.id))
+      );
+    }
   }
+
+  const paginatedAnswers = filteredAnswers.slice(
+    (pageNumber - 1) * ITEMS_PER_PAGE,
+    pageNumber * ITEMS_PER_PAGE
+  );
+
+  const totalPages = Math.ceil(filteredAnswers.length / ITEMS_PER_PAGE);
 
   return (
     <div>
@@ -143,32 +149,25 @@ const Answers = (props: AnswersProps) => {
           <table className="normalization-table">
             <AnswersTableHeading
               {...{
-                survey,
-                edition,
-                question,
-                entities,
+                ...props,
                 variant,
                 filteredAnswers,
                 sortedAnswers,
+                paginatedAnswers,
                 filterQuery,
                 setFilterQuery,
                 showCustomOnly,
                 setShowCustomOnly,
                 setShowShortlist,
                 showShortlist,
-                questionData,
                 pageNumber,
                 setPageNumber,
                 totalPages,
                 setVariant,
-                allAnswers,
-                unnormalizedAnswers,
-                normalizedAnswers,
-                discardedAnswers,
               }}
             />
             <tbody>
-              {filteredAnswers.map((answer, pageIndex) => {
+              {paginatedAnswers.map((answer, pageIndex) => {
                 const { _id, responseId, raw, tokens, index, answerIndex } =
                   answer;
                 const currentRawValue = getSimplifiedString(raw);

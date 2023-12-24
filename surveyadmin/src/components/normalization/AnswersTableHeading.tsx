@@ -2,28 +2,15 @@
 import Dialog from "../ui/Dialog";
 import { PresetsShortlist } from "./PresetsShortlist";
 import AnswersFilters from "./AnswersFilters";
-import {
-  IndividualAnswer,
-  IndividualAnswerWithIndex,
-} from "~/lib/normalization/helpers/splitResponses";
+import { IndividualAnswerWithIndex } from "~/lib/normalization/helpers/splitResponses";
 import { Dispatch, SetStateAction } from "react";
-import { AnswerVariant, AnswersProps } from "./Answers";
-import {
-  SurveyMetadata,
-  EditionMetadata,
-  QuestionWithSection,
-  Entity,
-  ResponseData,
-} from "@devographics/types";
-import Tokens from "./Tokens";
+import { AnswerVariant } from "./Answers";
+import { CommonNormalizationProps } from "./NormalizeQuestion";
 
-interface AnswersTableHeadingProps {
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-  question: QuestionWithSection;
-  entities: Entity[];
+interface AnswersTableHeadingProps extends CommonNormalizationProps {
   variant: AnswerVariant;
   filteredAnswers: IndividualAnswerWithIndex[];
+  paginatedAnswers: IndividualAnswerWithIndex[];
   sortedAnswers: IndividualAnswerWithIndex[];
   filterQuery: string;
   setFilterQuery: Dispatch<SetStateAction<string>>;
@@ -31,18 +18,23 @@ interface AnswersTableHeadingProps {
   setShowCustomOnly: Dispatch<SetStateAction<boolean>>;
   setShowShortlist: Dispatch<SetStateAction<boolean>>;
   showShortlist: boolean;
-  questionData?: ResponseData;
   pageNumber: number;
   setPageNumber: Dispatch<SetStateAction<number>>;
   totalPages: number;
   setVariant: Dispatch<SetStateAction<AnswerVariant>>;
-  allAnswers: IndividualAnswer[];
 }
 
 export const AnswersTableHeading = (props: AnswersTableHeadingProps) => {
   const { setShowShortlist, showShortlist } = props;
   return (
     <thead>
+      {/* <tr>
+        <th colSpan={99}>
+          <div className="control control-info">
+            <code>{props.question.id}</code>
+          </div>
+        </th>
+      </tr> */}
       <tr>
         <th colSpan={99}>
           <AnswersFilters {...props} />
@@ -74,7 +66,7 @@ export const AnswersTableHeading = (props: AnswersTableHeadingProps) => {
                 <PresetsShortlist {...props} />
               </Dialog>
             )}
-            <Tokens {...props} isButton={false} />
+            {/* <Tokens {...props} isButton={false} /> */}
           </div>
         </th>
         {/* <th>Current Tokens</th> */}

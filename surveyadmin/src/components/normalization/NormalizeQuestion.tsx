@@ -36,6 +36,7 @@ import {
 } from "@tanstack/react-query";
 import { apiRoutes } from "~/lib/apiRoutes";
 import { GetQuestionResponsesParams } from "~/lib/normalization/actions/getQuestionResponses";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface NormalizeQuestionProps {
   survey: SurveyMetadata;
@@ -146,6 +147,8 @@ export const Normalization = (props: NormalizationProps) => {
   const { responsesCount, entities, responses, questionResult, durations } =
     responsesData;
 
+  const [tokenFilter, setTokenFilter] = useState<null | string[]>(null);
+
   const questionData = questionResult?.data;
 
   const {
@@ -174,7 +177,8 @@ export const Normalization = (props: NormalizationProps) => {
     questionData,
     entities,
     customNormalizations,
-
+    tokenFilter,
+    setTokenFilter,
     allAnswers,
     normalizedAnswers,
     unnormalizedAnswers,
@@ -215,6 +219,8 @@ export interface CommonNormalizationProps extends NormalizationProps {
   unnormalizedAnswers: IndividualAnswer[];
   normalizedAnswers: IndividualAnswer[];
   discardedAnswers: IndividualAnswer[];
+  tokenFilter: string[] | null;
+  setTokenFilter: Dispatch<SetStateAction<null | string[]>>;
 }
 
 const AllAnswers = (props: CommonNormalizationProps) => {

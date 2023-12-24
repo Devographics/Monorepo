@@ -1,28 +1,11 @@
 "use client";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import {
-  AnswerVariant,
-  AnswersProps,
-  getPercent,
-  getSortedAnswers,
-} from "./Answers";
-import {
-  IndividualAnswer,
-  IndividualAnswerWithIndex,
-} from "~/lib/normalization/helpers/splitResponses";
-import {
-  EditionMetadata,
-  SurveyMetadata,
-  Entity,
-  QuestionWithSection,
-} from "@devographics/types";
+import { AnswerVariant, getPercent, getSortedAnswers } from "./Answers";
+import { IndividualAnswerWithIndex } from "~/lib/normalization/helpers/splitResponses";
 import Tokens from "./Tokens";
 import LoadingButton from "../LoadingButton";
-import { AnswerProps } from "./Answer";
-import {
-  normalizeQuestionResponses,
-  normalizeResponses,
-} from "~/lib/normalization/services";
+import { normalizeQuestionResponses } from "~/lib/normalization/services";
+import { CommonNormalizationProps } from "./NormalizeQuestion";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -31,35 +14,36 @@ function capitalizeFirstLetter(string) {
 const answerVariants = [
   {
     id: "unnormalized",
-    label: "Unnormalized Answers",
+    label: "Unnormalized",
     tooltip: "Answers with no matches or custom normalizations",
   },
   {
     id: "normalized",
-    label: "Normalized Answers",
+    label: "Normalized",
     tooltip: "Answers with at least one match or custom normalization",
   },
   {
+    id: "all",
+    label: "All",
+    tooltip: "All answers",
+  },
+  {
     id: "discarded",
-    label: "Discarded Answers",
+    label: "Discarded",
     tooltip: "Empty answers, random characters, etc.",
   },
 ];
 
-interface AnswersFiltersProps {
-  survey: SurveyMetadata;
-  edition: EditionMetadata;
-  entities: Entity[];
+interface AnswersFiltersProps extends CommonNormalizationProps {
   variant: AnswerVariant;
   setVariant: Dispatch<SetStateAction<AnswerVariant>>;
-  allAnswers: IndividualAnswer[];
   filteredAnswers: IndividualAnswerWithIndex[];
+  paginatedAnswers: IndividualAnswerWithIndex[];
   sortedAnswers: IndividualAnswerWithIndex[];
   filterQuery: string;
   setFilterQuery: Dispatch<SetStateAction<string>>;
   showCustomOnly: boolean;
   setShowCustomOnly: Dispatch<SetStateAction<boolean>>;
-  question: QuestionWithSection;
   pageNumber: number;
   setPageNumber: Dispatch<SetStateAction<number>>;
   totalPages: number;
@@ -115,9 +99,9 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
 
   return (
     <div className="normalization-controls" ref={myRef}>
-      <div className="control control-info">
+      {/* <div className="control control-info">
         <code>{question.id}</code>
-      </div>
+      </div> */}
 
       {/* <details role="list">
         <summary aria-haspopup="listbox">{variant}</summary>
@@ -145,7 +129,6 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
         >
           {answerVariants.map(({ id, label }) => {
             const variantAnswers = props[`${id}Answers`];
-            console.log(variantAnswers);
             const { percentage, count, total } = getStats({
               sortedAnswers: getSortedAnswers(variantAnswers),
               allAnswers,
@@ -157,6 +140,10 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
             );
           })}
         </select>
+      </div>
+
+      <div className="control control-tokens">
+        <Tokens {...props} />
       </div>
 
       <div className="control control-search">
@@ -175,7 +162,7 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
 
       <div className="control control-count">
         <label className="results-count" htmlFor="search">
-          {filterQuery ? filteredAnswers.length : sortedAnswers.length} results
+          {filteredAnswers.length} results
         </label>
       </div>
       {/* <label>
@@ -205,12 +192,12 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
               surveyId: survey.id,
               editionId: edition.id,
               questionId: question.id,
-              responsesIds: sortedAnswers.map((a) => a.responseId),
+              responsesIds: filteredAnswers.map((a) => a.responseId),
               isVerbose: false,
             });
           }}
-          label="Renormalize"
-          tooltip="Renormalize Answers"
+          label="🔄"
+          tooltip="Renormalize Current Answers"
         />
       </div>
     </div>

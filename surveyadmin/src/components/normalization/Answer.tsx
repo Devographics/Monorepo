@@ -134,7 +134,10 @@ export const Answer = ({
       {letterHeading && (
         <tr className="letter-heading">
           <th colSpan={99}>
-            <h3>{letterHeading}</h3>
+            <div className="letter-heading-inner">
+              <h3>{letterHeading}</h3>
+              <code>{question.id}</code>
+            </div>
           </th>
         </tr>
       )}

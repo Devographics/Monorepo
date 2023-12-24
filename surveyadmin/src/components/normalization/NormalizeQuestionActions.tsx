@@ -26,7 +26,7 @@ const Actions = (props: ActionProps) => {
       <div className="primary">
         <ViewQuestionData {...props} />
         <Metadata {...props} />
-        <Tokens {...props} />
+        {/* <Tokens {...props} /> */}
         <Import {...props} />
         <Random {...props} />
       </div>
