@@ -53,6 +53,7 @@ ${
         ? `
 tags
 exactMatch
+parentId
 patterns`
         : ''
 }

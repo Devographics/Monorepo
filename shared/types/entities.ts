@@ -21,6 +21,7 @@ export interface EntityResolvedFields {
 
 export interface Entity extends EntityResolvedFields {
     id: string
+    parentId?: string
     belongsTo?: string
     name: string
     nameClean?: string

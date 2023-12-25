@@ -42,8 +42,10 @@ export const COUNT = 'count'
 
 export const MAIN_UNITS = [PERCENTAGE_SURVEY, PERCENTAGE_QUESTION, COUNT]
 
-export const PARTIAL_WORD_MATCHING_INDICATOR = '[p]'
+export const PARTIAL_WORD_INDICATOR = '[p]'
 
-export const ENTIRE_LINE_MATCHING_INDICATOR = '[e]'
+export const ENTIRE_CONTENTS_INDICATOR = '[e]'
 
-export const WHOLE_WORD_MATCHING_INDICATOR = '[w]'
+export const WHOLE_WORD_INDICATOR = '[w]'
+
+export const LIST_INDICATOR = '[l]'
