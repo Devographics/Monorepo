@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState } from "react";
+import { Dispatch, Fragment, SetStateAction, useState } from "react";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
 import {
   EditionMetadata,
@@ -12,10 +12,15 @@ import ModalTrigger from "../ui/ModalTrigger";
 import uniq from "lodash/uniq";
 import Details from "../ui/Details";
 import { CommonNormalizationProps } from "./NormalizeQuestion";
+import { usePresets } from "./hooks";
+import without from "lodash/without";
 
 const EMPTY_TAG = "EMPTY_TAG";
 
 type Sort = "alphabetical" | "matches";
+
+type Token = Entity & { tag: string; matchCount: number };
+
 const Tokens = ({
   survey,
   edition,
@@ -31,6 +36,7 @@ const Tokens = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [sort, setSort] = useState<Sort>("alphabetical");
+  const [filterQuery, setFilterQuery] = useState("");
 
   const questionObject = getQuestionObject({
     survey,
@@ -68,15 +74,17 @@ const Tokens = ({
           });
       })
       .flat()
-  ) as Array<Entity & { tag: string; matchCount: number }>;
+      .filter((token) => token.id.includes(filterQuery))
+  ) as Array<Token>;
+
+  const { enabledPresets, setEnabledPresets, customPresets, setCustomPresets } =
+    usePresets({ edition, question });
 
   return (
     <ModalTrigger
       isButton={true}
       className="button-ghost"
-      label={`🏷️ Filter by tokens… ${
-        tokenFilter ? `(${tokenFilter.length})` : ""
-      }`}
+      label={`🏷️ Tokens… ${tokenFilter ? `(${tokenFilter.length})` : ""}`}
       tooltip="View entity tokens for current question"
       header={
         <span>
@@ -119,6 +127,20 @@ const Tokens = ({
             >
               Sort by Matches
             </button>
+
+            <div className="control control-search">
+              <input
+                type="search"
+                id="search"
+                placeholder="Filter…"
+                value={filterQuery}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setFilterQuery(value);
+                  // setFilterQueryDebounced(value);
+                }}
+              />
+            </div>
           </div>
           <div className="token-actions-deselect">
             <button
@@ -128,128 +150,203 @@ const Tokens = ({
                 setTokenFilter(null);
               }}
             >
-              Clear All
+              Clear All Filters
+            </button>
+
+            <button
+              className="button-ghost"
+              onClick={(e) => {
+                e.preventDefault();
+                setEnabledPresets([]);
+              }}
+            >
+              Clear Shortlist
             </button>
           </div>
         </p>
-        <table>
+        <table className="tokens-table">
           <thead>
             <tr>
               <th>Token</th>
               <th>Matches</th>
               <th>Patterns</th>
               {/* <th>Other Tags</th> */}
-              <th>Enable</th>
+              <th>Filter By</th>
+              <th>Shortlist</th>
             </tr>
           </thead>
           <tbody>
-            {allTokens.map(
-              ({ id, parentId, tag, tags, patterns, matchCount }, index) => {
-                const previousToken = allTokens[index - 1];
-                const showMatchTag =
-                  index === 0 || (previousToken && previousToken.tag !== tag);
-                const isEmptyTag = id === EMPTY_TAG;
-                const otherTags = tags?.filter((t) => t !== tag);
-                const isActive = tokenFilter?.includes(id);
-                return (
-                  <Fragment key={`${id}_${index}`}>
-                    {showMatchTag && (
-                      <tr className="letter-heading letter-heading-tokens">
-                        <td colSpan={99}>
-                          <div className="letter-heading-inner">
-                            <h5>
-                              🏷️ {tag} (
-                              {
-                                entities.filter((e) => e.tags?.includes(tag))
-                                  .length
-                              }
-                              )
-                            </h5>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                    <tr
-                      className={
-                        isActive
-                          ? "token-filter-active"
-                          : "token-filter-inactive"
-                      }
-                    >
-                      <td>
-                        {parentId && (
-                          <div>
-                            <span className="id id-parent">{parentId}</span>
-                          </div>
-                        )}
-
-                        <div>
-                          {parentId && "↳ "}
-                          <MainId
-                            id={id}
-                            setTokenFilter={setTokenFilter}
-                            setVariant={setVariant}
-                            setShowModal={setShowModal}
-                          />
-                        </div>
-                      </td>
-                      <td>{matchCount > 0 && <span>{matchCount}</span>}</td>
-                      <td>
-                        {!isEmptyTag && (
-                          <div className="patterns">
-                            <span>
-                              <code>{`{id}`}</code>
-                            </span>
-                            {patterns?.map((p, i) => (
-                              <span key={`${p}_${i}`}>
-                                <code>{p}</code>
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </td>
-
-                      {/* <td>
-                      <div className="match-tags">
-                        {otherTags && (
-                          <ul>
-                            {otherTags?.map((tag) => (
-                              <li key={tag}>{tag}</li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    </td> */}
-                      <td>
-                        {!isEmptyTag && (
-                          <input
-                            type="checkbox"
-                            checked={isActive || false}
-                            onChange={(e) => {
-                              if (isActive) {
-                                const newTokens = (tokenFilter || []).filter(
-                                  (t) => t !== id
-                                );
-                                setTokenFilter(
-                                  newTokens.length > 0 ? newTokens : null
-                                );
-                              } else {
-                                setTokenFilter([...(tokenFilter || []), id]);
-                                setVariant("normalized");
-                              }
-                            }}
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  </Fragment>
-                );
-              }
-            )}
+            {allTokens.map((token, index) => (
+              <Row
+                key={`${token.id}_${index}`}
+                {...{
+                  token,
+                  allTokens,
+                  index,
+                  entities,
+                  tokenFilter,
+                  setTokenFilter,
+                  setVariant,
+                  setShowModal,
+                  enabledPresets,
+                  setEnabledPresets,
+                }}
+              />
+            ))}
           </tbody>
         </table>
       </div>
     </ModalTrigger>
+  );
+};
+
+interface RowProps {
+  token: Token;
+  allTokens: Token[];
+  index: number;
+  entities: Entity[];
+  tokenFilter: CommonNormalizationProps["tokenFilter"];
+  setTokenFilter: CommonNormalizationProps["setTokenFilter"];
+  setVariant: Dispatch<SetStateAction<string>>;
+  setShowModal: Dispatch<SetStateAction<boolean>>;
+  enabledPresets: string[];
+  setEnabledPresets: Dispatch<SetStateAction<string[]>>;
+}
+
+const Row = (props: RowProps) => {
+  const {
+    token,
+    allTokens,
+    index,
+    entities,
+    tokenFilter,
+    setTokenFilter,
+    setVariant,
+    setShowModal,
+    enabledPresets,
+    setEnabledPresets,
+  } = props;
+  const { id, parentId, tag, tags, patterns, matchCount } = token;
+
+  const previousToken = allTokens[index - 1];
+  const showMatchTag =
+    index === 0 || (previousToken && previousToken.tag !== tag);
+  const isEmptyTag = id === EMPTY_TAG;
+  const otherTags = tags?.filter((t) => t !== tag);
+  const isActive = tokenFilter?.includes(id);
+  const isInShortList = enabledPresets.includes(id);
+
+  const enableFilter = (id) => {
+    setTokenFilter([...(tokenFilter || []), id]);
+    setVariant("normalized");
+  };
+
+  const disableFilter = (id) => {
+    const newTokens = (tokenFilter || []).filter((t) => t !== id);
+    setTokenFilter(newTokens.length > 0 ? newTokens : null);
+  };
+
+  const enablePreset = (id) => {
+    setEnabledPresets([...enabledPresets, id]);
+  };
+
+  const disablePreset = (id) => {
+    setEnabledPresets(without(enabledPresets, id));
+  };
+
+  return (
+    <Fragment>
+      {showMatchTag && (
+        <tr className="letter-heading letter-heading-tokens">
+          <td colSpan={99}>
+            <div className="letter-heading-inner">
+              <h5>
+                🏷️ {tag} (
+                {allTokens.filter((t) => t.tags?.includes(tag)).length})
+              </h5>
+            </div>
+          </td>
+        </tr>
+      )}
+      <tr
+        className={isActive ? "token-filter-active" : "token-filter-inactive"}
+      >
+        <td>
+          {parentId && (
+            <div>
+              <span className="id id-parent">{parentId}</span>
+            </div>
+          )}
+
+          <div>
+            {parentId && "↳ "}
+            <MainId
+              id={id}
+              setTokenFilter={setTokenFilter}
+              setVariant={setVariant}
+              setShowModal={setShowModal}
+            />
+          </div>
+        </td>
+        <td>{matchCount > 0 && <span>{matchCount}</span>}</td>
+        <td>
+          {!isEmptyTag && (
+            <div className="patterns">
+              <span>
+                <code>{`{id}`}</code>
+              </span>
+              {patterns?.map((p, i) => (
+                <span key={`${p}_${i}`}>
+                  <code>{p}</code>
+                </span>
+              ))}
+            </div>
+          )}
+        </td>
+
+        {/* <td>
+        <div className="match-tags">
+          {otherTags && (
+            <ul>
+              {otherTags?.map((tag) => (
+                <li key={tag}>{tag}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </td> */}
+        <td>
+          {!isEmptyTag && (
+            <input
+              type="checkbox"
+              checked={isActive}
+              onChange={(e) => {
+                if (isActive) {
+                  disableFilter(id);
+                } else {
+                  enableFilter(id);
+                }
+              }}
+            />
+          )}
+        </td>
+        <td>
+          {!isEmptyTag && (
+            <input
+              type="checkbox"
+              checked={isInShortList}
+              onChange={(e) => {
+                if (isInShortList) {
+                  disablePreset(id);
+                } else {
+                  enablePreset(id);
+                }
+              }}
+            />
+          )}
+        </td>
+      </tr>
+    </Fragment>
   );
 };
 

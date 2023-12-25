@@ -37,7 +37,7 @@ export const generateEntityRules = (entities: Array<Entity>) => {
           });
 
           // generate special matching rule for HTML elements
-          if (id.includes("_element")) {
+          if (id.endsWith("_element")) {
             const [elementName] = id.split("_element");
             const elementPattern = new RegExp(
               `\<${elementName}( )?(\/)?\>`,
@@ -46,11 +46,6 @@ export const generateEntityRules = (entities: Array<Entity>) => {
             rules.push({
               id,
               pattern: elementPattern,
-              tags,
-            });
-            rules.push({
-              id,
-              pattern: idPattern,
               tags,
             });
           }
@@ -78,8 +73,8 @@ export const generateEntityRules = (entities: Array<Entity>) => {
               } else if (fps.includes(LIST_INDICATOR)) {
                 // [l] treat pattern as comma-separated list of items that all need to be matched
                 // as partial words
-                const items = patternString.split(",");
-                pattern = new RegExp(`^(?=.*${items.join(")(?=.*")}).*$`);
+                const items = patternString.split(",").map((i) => trim(i));
+                pattern = new RegExp(`^(?=.*${items.join(")(?=.*")}).*$`, "i");
               } else {
                 // [w] by default, only match whole words
                 pattern = new RegExp(`\\b${patternString}(s)?\\b`, "i");

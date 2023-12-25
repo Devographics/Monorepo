@@ -328,6 +328,15 @@ export const Answer = ({
                           };
                         }
                       );
+                      const metadataItem =
+                        normalizedField?.metadata?.at(answerIndex);
+                      alert(
+                        `Normalized string "${
+                          metadataItem?.raw
+                        }" with tokens ${metadataItem?.tokens
+                          .map((t) => t.id)
+                          .join(",")}`
+                      );
                     }
                   } else {
                     console.log("No normalizedDocument returned");

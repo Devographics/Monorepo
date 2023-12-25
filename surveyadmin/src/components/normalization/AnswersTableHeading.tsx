@@ -45,7 +45,7 @@ export const AnswersTableHeading = (props: AnswersTableHeadingProps) => {
         <th>
           <div className="token-actions">
             <span>Tokens</span>
-            <a
+            {/* <a
               href="#"
               style={{ whiteSpace: "nowrap" }}
               onClick={(e) => {
@@ -64,7 +64,7 @@ export const AnswersTableHeading = (props: AnswersTableHeadingProps) => {
               >
                 <PresetsShortlist {...props} />
               </Dialog>
-            )}
+            )} */}
             {/* <Tokens {...props} isButton={false} /> */}
           </div>
         </th>
