@@ -61,6 +61,7 @@ export const Answer = ({
   customNormalization,
   isRepeating = false,
   filterQuery,
+  setTokenFilter,
 }: AnswerProps) => {
   const queryClient = useQueryClient();
 
@@ -85,6 +86,7 @@ export const Answer = ({
     responses,
     entities,
     answerIndex,
+    setTokenFilter,
   };
 
   const regularTokens = tokens.filter(

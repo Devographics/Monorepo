@@ -128,7 +128,7 @@ const Tokens = ({
                 setTokenFilter(null);
               }}
             >
-              Deselect All
+              Clear All
             </button>
           </div>
         </p>

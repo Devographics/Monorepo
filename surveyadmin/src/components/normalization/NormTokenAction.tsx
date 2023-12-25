@@ -1,6 +1,7 @@
 import { useNormTokenStuff, Modal, NormTokenProps } from "./NormToken";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
+  CommonNormalizationProps,
   getCustomNormalizationsCacheKey,
   getDataCacheKey,
 } from "./NormalizeQuestion";
@@ -61,6 +62,7 @@ export interface NormTokenActionProps extends NormTokenProps {
   rawPath: string;
   normPath: string;
   answerIndex: number;
+  setTokenFilter: CommonNormalizationProps["setTokenFilter"];
 
   isRegular?: boolean;
   isDisabled?: boolean;
@@ -114,6 +116,7 @@ export const NormTokenAction = (props: NormTokenActionProps) => {
     edition,
     question,
     answerIndex,
+    setTokenFilter,
   } = props;
 
   const { entity, showModal, setShowModal, tokenAnswers } =
@@ -134,7 +137,9 @@ export const NormTokenAction = (props: NormTokenActionProps) => {
 
   return (
     <>
-      <Action {...{ action, params, setShowModal, entity, id }} />
+      <Action
+        {...{ action, params, setShowModal, entity, id, setTokenFilter }}
+      />
       {showModal && (
         <Modal {...{ showModal, setShowModal, id, tokenAnswers }} />
       )}
@@ -173,12 +178,14 @@ export const Action = ({
   action,
   params,
   setShowModal,
+  setTokenFilter,
   entity,
   id,
 }: {
   action: ActionDefinition;
   params: AddCustomTokensProps;
   setShowModal: Dispatch<SetStateAction<boolean>>;
+  setTokenFilter: CommonNormalizationProps["setTokenFilter"];
   entity?: Entity;
   id: string;
 }) => {
@@ -194,9 +201,10 @@ export const Action = ({
       <span
         onClick={(e) => {
           e.preventDefault();
-          setShowModal(true);
+          // setShowModal(true);
+          setTokenFilter([id]);
         }}
-        data-tooltip={entity?.descriptionClean}
+        data-tooltip={`Filter by ${id}`}
       >
         {id}
       </span>
