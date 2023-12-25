@@ -4,8 +4,7 @@ import { PresetsShortlist } from "./PresetsShortlist";
 import AnswersFilters from "./AnswersFilters";
 import { IndividualAnswerWithIndex } from "~/lib/normalization/helpers/splitResponses";
 import { Dispatch, SetStateAction } from "react";
-import { AnswerVariant } from "./Answers";
-import { CommonNormalizationProps } from "./NormalizeQuestion";
+import { AnswerVariant, CommonNormalizationProps } from "./NormalizeQuestion";
 
 interface AnswersTableHeadingProps extends CommonNormalizationProps {
   variant: AnswerVariant;

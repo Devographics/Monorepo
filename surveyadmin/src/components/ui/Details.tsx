@@ -12,7 +12,7 @@ export const Details = ({
   return (
     <details>
       <summary>{label}</summary>
-      <p>{children}</p>
+      <div>{children}</div>
     </details>
   );
 };

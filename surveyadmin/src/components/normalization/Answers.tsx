@@ -32,8 +32,6 @@ export interface AnswersProps extends CommonNormalizationProps {
   discardedAnswers: IndividualAnswer[];
 }
 
-export type AnswerVariant = "normalized" | "unnormalized" | "discarded";
-
 const getSimplifiedString = (s: string) => {
   if (s) {
     return trim(
@@ -56,7 +54,6 @@ export const getSortedAnswers = (variantAnswers) => {
 };
 
 const Answers = (props: AnswersProps) => {
-  const [variant, setVariant] = useState<AnswerVariant>("unnormalized");
   const [showResponses, setShowResponses] = useState(true);
   const [showIds, setShowIds] = useState(false);
   const [filterQuery, setFilterQuery] = useState("");
@@ -83,6 +80,8 @@ const Answers = (props: AnswersProps) => {
     normalizedAnswers,
     discardedAnswers,
     tokenFilter,
+    variant,
+    setVariant,
   } = props;
 
   const variantAnswers = props[`${variant}Answers`];
@@ -144,6 +143,14 @@ const Answers = (props: AnswersProps) => {
 
   return (
     <div>
+      {/* <p>
+        variant:
+        {variant}
+      </p>
+      <p>
+        tokenFilter:
+        {tokenFilter?.join()}
+      </p> */}
       {showResponses && (
         <div className="normalization-fields">
           <table className="normalization-table">

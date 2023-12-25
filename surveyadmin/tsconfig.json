@@ -25,6 +25,7 @@
       }
     ],
     "strict": false,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "lib": ["ESNext.Array"]
   }
 }

@@ -1,38 +1,19 @@
 "use client";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { AnswerVariant, getPercent, getSortedAnswers } from "./Answers";
+import { getPercent, getSortedAnswers } from "./Answers";
 import { IndividualAnswerWithIndex } from "~/lib/normalization/helpers/splitResponses";
 import Tokens from "./Tokens";
 import LoadingButton from "../LoadingButton";
 import { normalizeQuestionResponses } from "~/lib/normalization/services";
-import { CommonNormalizationProps } from "./NormalizeQuestion";
+import {
+  AnswerVariant,
+  CommonNormalizationProps,
+  answerVariants,
+} from "./NormalizeQuestion";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
-
-const answerVariants = [
-  {
-    id: "unnormalized",
-    label: "Unnormalized",
-    tooltip: "Answers with no matches or custom normalizations",
-  },
-  {
-    id: "normalized",
-    label: "Normalized",
-    tooltip: "Answers with at least one match or custom normalization",
-  },
-  {
-    id: "all",
-    label: "All",
-    tooltip: "All answers",
-  },
-  {
-    id: "discarded",
-    label: "Discarded",
-    tooltip: "Empty answers, random characters, etc.",
-  },
-];
 
 interface AnswersFiltersProps extends CommonNormalizationProps {
   variant: AnswerVariant;
@@ -91,6 +72,7 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       console.log(localFilterQuery);
+      setPageNumber(1);
       setFilterQuery(localFilterQuery);
     }, 500);
 
@@ -126,6 +108,7 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
           onChange={(e) => {
             setVariant(e.target.value as AnswerVariant);
           }}
+          value={variant}
         >
           {answerVariants.map(({ id, label }) => {
             const variantAnswers = props[`${id}Answers`];
@@ -227,7 +210,10 @@ const Pagination = (
           e.preventDefault();
           if (pageNumber > 1) {
             setPageNumber(pageNumber - 1);
-            window.scrollTo(0, topOfTable);
+            const currentScroll = document.documentElement.scrollTop;
+            if (currentScroll > topOfTable) {
+              window.scrollTo(0, topOfTable);
+            }
           }
         }}
       >
@@ -264,7 +250,10 @@ const Pagination = (
           e.preventDefault();
           if (pageNumber < totalPages) {
             setPageNumber(pageNumber + 1);
-            window.scrollTo(0, topOfTable);
+            const currentScroll = document.documentElement.scrollTop;
+            if (currentScroll > topOfTable) {
+              window.scrollTo(0, topOfTable);
+            }
           }
         }}
       >

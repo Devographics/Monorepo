@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import Dialog from "./Dialog";
 
 export const ModalTrigger = ({
@@ -11,6 +11,8 @@ export const ModalTrigger = ({
   tooltip,
   onOpen,
   onClose,
+  showModal: showModalProps,
+  setShowModal: setShowModalProps,
 }: {
   isButton?: boolean;
   className?: string;
@@ -20,8 +22,14 @@ export const ModalTrigger = ({
   tooltip?: string;
   onOpen?: () => void;
   onClose?: () => void;
+  showModal?: boolean;
+  setShowModal?: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [showModal, setShowModal] = useState(false);
+  const [showModalState, setShowModalState] = useState(false);
+
+  // either work as controlled (via props) on uncontroller (via local state) component
+  const showModal = showModalProps || showModalState;
+  const setShowModal = setShowModalProps || setShowModalState;
 
   const triggerProps = {};
   if (tooltip) {

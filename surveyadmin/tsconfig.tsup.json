@@ -1,13 +1,9 @@
 {
   "extends": "./tsconfig.common.json",
   "compilerOptions": {
-    "jsx": "react"
+    "jsx": "react",
+    "lib": ["ESNext.Array"]
   },
-  "include": [
-    "next-env.d.ts",
-    "scripts/**/*.ts"
-  ],
-  "exclude": [
-    "scripts/dist"
-  ]
+  "include": ["next-env.d.ts", "scripts/**/*.ts"],
+  "exclude": ["scripts/dist"]
 }

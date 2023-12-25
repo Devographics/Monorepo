@@ -1,13 +1,11 @@
 {
   "extends": "../../tsconfig.json",
-  "include": [
-    "./**/*.tsx",
-    "./**/*.ts"
-  ],
+  "include": ["./**/*.tsx", "./**/*.ts"],
   "exclude": [],
   "compilerOptions": {
     "jsx": "react",
     "noEmit": false,
     "outDir": "./",
+    "lib": ["ESNext.Array"]
   }
 }

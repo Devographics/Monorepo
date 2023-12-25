@@ -4,6 +4,7 @@ export const getEntitiesNormalizationQuery = () => `
 query EntitiesQuery {
   entities(includeNormalizationEntities: true, includeAPIOnlyEntities: false) {
     id
+    parentId
     nameClean
     nameHtml
     twitterName

@@ -6,7 +6,6 @@ import Answers from "~/components/normalization/Answers";
 import {
   NormalizationResponse,
   ResponsesData,
-  useQuestionResponses,
 } from "~/lib/normalization/hooks";
 import {
   EditionMetadata,
@@ -17,7 +16,6 @@ import {
   CustomNormalizationDocument,
 } from "@devographics/types";
 import { useSegments } from "./hooks";
-import QuestionData from "./QuestionData";
 import {
   IndividualAnswer,
   splitResponses,
@@ -28,8 +26,6 @@ const queryClient = new QueryClient();
 
 import {
   useQuery,
-  useMutation,
-  useQueryClient,
   // @ts-ignore
   QueryClient,
   QueryClientProvider,
@@ -82,6 +78,24 @@ const getData = async (url: string) => {
   }
 };
 
+export type SegmentProps = ReturnType<typeof useSegments>;
+
+export interface CommonNormalizationProps extends NormalizationProps {
+  responsesCount: number;
+  responses: NormalizationResponse[];
+  questionData: ResponseData;
+  entities: Entity[];
+  customNormalizations: CustomNormalizationDocument[];
+  allAnswers: IndividualAnswer[];
+  unnormalizedAnswers: IndividualAnswer[];
+  normalizedAnswers: IndividualAnswer[];
+  discardedAnswers: IndividualAnswer[];
+  tokenFilter: string[] | null;
+  setTokenFilter: Dispatch<SetStateAction<null | string[]>>;
+  variant: AnswerVariant;
+  setVariant: Dispatch<SetStateAction<AnswerVariant>>;
+}
+
 export const NormalizeQuestion = (props: NormalizeQuestionProps) => {
   const { survey, edition, question } = props;
   const params = {
@@ -129,6 +143,31 @@ export type CustomNormalization = {
   tokens: string[];
 };
 
+export type AnswerVariant = "normalized" | "unnormalized" | "discarded";
+
+export const answerVariants = [
+  {
+    id: "unnormalized",
+    label: "Unnormalized",
+    tooltip: "Answers with no matches or custom normalizations",
+  },
+  {
+    id: "normalized",
+    label: "Normalized",
+    tooltip: "Answers with at least one match or custom normalization",
+  },
+  {
+    id: "all",
+    label: "All",
+    tooltip: "All answers",
+  },
+  {
+    id: "discarded",
+    label: "Discarded",
+    tooltip: "Empty answers, random characters, etc.",
+  },
+];
+
 interface NormalizationProps {
   survey: SurveyMetadata;
   edition: EditionMetadata;
@@ -148,6 +187,7 @@ export const Normalization = (props: NormalizationProps) => {
     responsesData;
 
   const [tokenFilter, setTokenFilter] = useState<null | string[]>(null);
+  const [variant, setVariant] = useState<AnswerVariant>("unnormalized");
 
   const questionData = questionResult?.data;
 
@@ -183,6 +223,8 @@ export const Normalization = (props: NormalizationProps) => {
     normalizedAnswers,
     unnormalizedAnswers,
     discardedAnswers,
+    variant,
+    setVariant,
   };
 
   const segmentProps = {
@@ -206,22 +248,6 @@ export const Normalization = (props: NormalizationProps) => {
     </div>
   );
 };
-
-export type SegmentProps = ReturnType<typeof useSegments>;
-
-export interface CommonNormalizationProps extends NormalizationProps {
-  responsesCount: number;
-  responses: NormalizationResponse[];
-  questionData: ResponseData;
-  entities: Entity[];
-  customNormalizations: CustomNormalizationDocument[];
-  allAnswers: IndividualAnswer[];
-  unnormalizedAnswers: IndividualAnswer[];
-  normalizedAnswers: IndividualAnswer[];
-  discardedAnswers: IndividualAnswer[];
-  tokenFilter: string[] | null;
-  setTokenFilter: Dispatch<SetStateAction<null | string[]>>;
-}
 
 const AllAnswers = (props: CommonNormalizationProps) => {
   return (

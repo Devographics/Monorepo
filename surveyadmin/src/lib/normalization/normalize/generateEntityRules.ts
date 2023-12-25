@@ -1,8 +1,10 @@
 import { Entity } from "@devographics/types";
 import { EntityRule } from "./helpers";
 import {
-  PARTIAL_WORD_MATCHING_INDICATOR,
-  ENTIRE_LINE_MATCHING_INDICATOR,
+  PARTIAL_WORD_INDICATOR,
+  ENTIRE_CONTENTS_INDICATOR,
+  LIST_INDICATOR,
+  WHOLE_WORD_INDICATOR,
 } from "@devographics/constants";
 import trim from "lodash/trim";
 
@@ -55,25 +57,33 @@ export const generateEntityRules = (entities: Array<Entity>) => {
 
           // 4. add custom patterns
           patterns &&
-            patterns.forEach((patternString_) => {
-              // by default, only match whole words
-              // unless pattern contains special indicator ("[!b]")
-              const onlyMatchWholeWords = !patternString_.includes(
-                PARTIAL_WORD_MATCHING_INDICATOR
-              );
-              const matchEntireAnswer = patternString_.includes(
-                ENTIRE_LINE_MATCHING_INDICATOR
-              );
+            patterns.forEach((fullPatternString) => {
+              const fps = fullPatternString;
               const patternString = trim(
-                patternString_
-                  .replace(PARTIAL_WORD_MATCHING_INDICATOR, "")
-                  .replace(ENTIRE_LINE_MATCHING_INDICATOR, "")
+                fps
+                  .replace(PARTIAL_WORD_INDICATOR, "")
+                  .replace(ENTIRE_CONTENTS_INDICATOR, "")
+                  .replace(LIST_INDICATOR, "")
+                  .replace(WHOLE_WORD_INDICATOR, "")
               );
-              const pattern = matchEntireAnswer
-                ? new RegExp(`^${patternString}$`, "i")
-                : onlyMatchWholeWords
-                ? new RegExp(`\\b${patternString}(s)?\\b`, "i")
-                : new RegExp(`${patternString}(s)?`, "i");
+
+              let pattern;
+
+              if (fps.includes(ENTIRE_CONTENTS_INDICATOR)) {
+                // [e] only match entire contents
+                pattern = new RegExp(`^${patternString}$`, "i");
+              } else if (fps.includes(PARTIAL_WORD_INDICATOR)) {
+                // [p] match partial words
+                pattern = new RegExp(`${patternString}(s)?`, "i");
+              } else if (fps.includes(LIST_INDICATOR)) {
+                // [l] treat pattern as comma-separated list of items that all need to be matched
+                // as partial words
+                const items = patternString.split(",");
+                pattern = new RegExp(`^(?=.*${items.join(")(?=.*")}).*$`);
+              } else {
+                // [w] by default, only match whole words
+                pattern = new RegExp(`\\b${patternString}(s)?\\b`, "i");
+              }
 
               rules.push({ id, pattern, tags });
             });

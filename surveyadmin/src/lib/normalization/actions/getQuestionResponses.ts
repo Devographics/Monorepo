@@ -56,7 +56,9 @@ export const getQuestionResponses = async ({
         [question.id, ...(question?.matchTags || [])]?.includes(tag)
       )
     )
-    .map((e) => pick(e, ["id", "patterns", "tags", "descriptionClean"]));
+    .map((e) =>
+      pick(e, ["id", "parentId", "patterns", "tags", "descriptionClean"])
+    );
 
   return {
     responsesCount,

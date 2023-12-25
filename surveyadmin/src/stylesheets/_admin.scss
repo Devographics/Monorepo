@@ -451,3 +451,29 @@ button.button-ghost,
     background-color: rgb(215, 255, 242);
   }
 }
+
+.id {
+}
+.id-parent {
+}
+.id-main {
+  font-weight: bold;
+}
+
+.tokens-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing;
+}
+.tokens-actions-sort {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing/2;
+  button {
+    white-space: nowrap;
+  }
+}
+.token-actions-deselect {
+}
