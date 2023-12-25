@@ -4,37 +4,27 @@ import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { readdir, readFile, stat } from 'fs/promises'
-import last from 'lodash/last.js'
-import { EnvVar, getConfig, getEnvVar } from '@devographics/helpers'
+import { EnvVar, getEnvVar } from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
 
 import path from 'path'
 import marked from 'marked'
 
 // import hljs from 'highlight.js/lib/common'
-import hljs from 'highlight.js/lib/core'
-import javascript from 'highlight.js/lib/languages/javascript'
-import html from 'highlight.js/lib/languages/xml'
-import http from 'highlight.js/lib/languages/http'
-import css from 'highlight.js/lib/languages/css'
-import graphql from 'highlight.js/lib/languages/graphql'
-import json from 'highlight.js/lib/languages/json'
-hljs.registerLanguage('javascript', javascript)
-hljs.registerLanguage('html', html)
-hljs.registerLanguage('http', http)
-hljs.registerLanguage('css', css)
-hljs.registerLanguage('graphql', graphql)
-hljs.registerLanguage('json', json)
 
-import { appSettings } from '../helpers/settings'
-import sanitizeHtml from 'sanitize-html'
 import { RequestContext } from '../types'
-import { SurveyApiObject, EditionApiObject, ResolverMap } from '../types/surveys'
+import { SurveyApiObject, EditionApiObject } from '../types/surveys'
 import { setCache } from '../helpers/caching'
 import { EntityResolverMap, entityResolverMap } from '../resolvers/entities'
 import isEmpty from 'lodash/isEmpty.js'
 import { OptionId } from '@devographics/types'
 import clone from 'lodash/clone.js'
+import {
+    getEntitiesFromYaml,
+    getIdFromFileName,
+    highlightEntitiesExampleCode,
+    parseEntitiesMarkdown
+} from './helpers'
 
 let Entities: Entity[] = []
 
@@ -55,54 +45,9 @@ export const loadOrGetEntities = async (
     return Entities
 }
 
-type MarkdownFields = 'name' | 'description'
-
-const markdownFields: MarkdownFields[] = ['name', 'description']
-
-const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
-const htmlEntitiesRegex = new RegExp(/&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-fA-F]{1,6});/gi)
-
-export const parseEntitiesMarkdown = (entities: Entity[]) => {
-    for (const entity of entities) {
-        for (const fieldName of markdownFields) {
-            const field = entity[fieldName]
-            if (field) {
-                const fieldHtml = marked.parseInline(field)
-
-                if (field !== fieldHtml || containsTagRegex.test(field)) {
-                    entity[`${fieldName}Html`] = sanitizeHtml(fieldHtml)
-                    entity[`${fieldName}Clean`] = sanitizeHtml(fieldHtml, {
-                        allowedTags: []
-                    })
-                        .replace(htmlEntitiesRegex, '')
-                        .replace('\n', '')
-                } else {
-                    entity[`${fieldName}Clean`] = field
-                }
-            }
-        }
-    }
-    return entities
-}
-
-export const highlightEntitiesExampleCode = async (entities: Entity[]) => {
-    for (const entity of entities) {
-        const { example } = entity
-        if (example) {
-            const { code, language } = example
-            example.codeHighlighted = code
-            if (language) {
-                try {
-                    // make sure to trim any extra /n at the end
-                    example.codeHighlighted = hljs.highlight(code.trim(), { language }).value
-                } catch (error) {
-                    // ignore any highlighting errors
-                }
-            }
-        }
-    }
-    return entities
-}
+/* --------------------------------------------------------------------------------------- */
+/*                                       Load From GitHub                                  */
+/* --------------------------------------------------------------------------------------- */
 
 export const loadFromGitHub = async () => {
     const octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
@@ -119,12 +64,13 @@ export const loadFromGitHub = async () => {
         )
     }
 
-    return await getGitHubDirEntities({ octokit, owner, repo }, path)
+    return await getGitHubDirEntities({ octokit, owner, repo }, path, [])
 }
 
 const getGitHubDirEntities = async (
     options: { octokit: any; owner: string; repo: string },
-    path: string
+    path: string,
+    parentDirs: string[]
 ) => {
     let entities = [] as Entity[]
     const { octokit, owner, repo } = options
@@ -148,29 +94,24 @@ const getGitHubDirEntities = async (
 
     // loop over repo contents and fetch raw yaml files
     for (const file of files) {
-        const extension = getExtension(file)
         if (file.type === 'dir' && file.name[0] !== '.') {
-            entities = [
-                ...entities,
-                ...(await getGitHubDirEntities(
+            entities = entities.concat(
+                await getGitHubDirEntities(
                     options,
-                    `${path}${path === '' ? '' : '/'}${file.name}`
-                ))
-            ]
+                    `${path}${path === '' ? '' : '/'}${file.name}`,
+                    [...parentDirs, getIdFromFileName(file.name)]
+                )
+            )
         } else if (isYaml(file)) {
             const response = await fetch(file.download_url)
             const contents = await response.text()
             try {
-                const yamlContents: any = yaml.load(contents)
-                const category = file.name.replace('./', '').replace('.yml', '')
-                yamlContents.forEach((entity: Entity) => {
-                    const tags = entity.tags ? [...entity.tags, category] : [category]
-                    entities.push({
-                        ...entity,
-                        category,
-                        tags
+                entities = entities.concat(
+                    getEntitiesFromYaml({
+                        contents,
+                        tagsToAdd: [...parentDirs, getIdFromFileName(file.name)]
                     })
-                })
+                )
             } catch (error) {
                 console.log(`// Error loading file ${file.name}`)
                 console.log(error)
@@ -180,14 +121,18 @@ const getGitHubDirEntities = async (
     return entities
 }
 
+/* --------------------------------------------------------------------------------------- */
+/*                                         Load Locally                                    */
+/* --------------------------------------------------------------------------------------- */
+
 // when developing locally, load from local files
 export const loadLocally = async () => {
     const entitiesDirPath = path.resolve(getEnvVar(EnvVar.ENTITIES_PATH))
 
-    return await getDirEntities(entitiesDirPath)
+    return await getLocalDirEntities(entitiesDirPath, [])
 }
 
-export const getDirEntities = async (entitiesDirPath: string) => {
+export const getLocalDirEntities = async (entitiesDirPath: string, parentDirs: string[]) => {
     let entities = [] as Entity[]
     const files = await readdir(entitiesDirPath)
     const yamlFiles = files.filter(fileName => fileName.includes('.yml'))
@@ -204,23 +149,25 @@ export const getDirEntities = async (entitiesDirPath: string) => {
         const fileStats = await stat(filePath)
         if (fileStats.isDirectory() && fileName[0] !== '.') {
             // make sure to exclude directories starting with "." such as ".git"
-            entities = [...entities, ...(await getDirEntities(filePath))]
+            entities = entities.concat(
+                await getLocalDirEntities(filePath, [...parentDirs, getIdFromFileName(fileName)])
+            )
         } else if (fileName.includes('.yml')) {
             const contents = await readFile(filePath, 'utf8')
-            const yamlContents: any = yaml.load(contents)
-            const category = fileName.replace('./', '').replace('.yml', '')
-            yamlContents.forEach((entity: Entity) => {
-                const tags = entity.tags ? [...entity.tags, category] : [category]
-                entities.push({
-                    ...entity,
-                    category,
-                    tags
+            entities = entities.concat(
+                getEntitiesFromYaml({
+                    contents,
+                    tagsToAdd: [...parentDirs, getIdFromFileName(fileName)]
                 })
-            })
+            )
         }
     }
     return entities
 }
+
+/* --------------------------------------------------------------------------------------- */
+/*                                           Init Load                                     */
+/* --------------------------------------------------------------------------------------- */
 
 export const getEntitiesLoadMethod = () => (getEnvVar(EnvVar.ENTITIES_PATH) ? 'local' : 'github')
 
@@ -230,14 +177,13 @@ export const loadEntities = async () => {
     console.log(`// loading entities (mode: ${mode})`)
     const entities: Entity[] = mode === 'local' ? await loadLocally() : await loadFromGitHub()
     console.log('// done loading entities')
-
+    logToFile('entities.json', entities, { mode: 'overwrite' })
     return entities
 }
 
 export const initEntities = async (context: RequestContext) => {
     console.log('// initializing entities…')
     const entities = await loadOrGetEntities({ forceReload: true }, context)
-    logToFile('entities.json', entities, { mode: 'overwrite' })
     Entities = entities
     return entities
 }
