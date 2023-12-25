@@ -154,9 +154,18 @@ const Tokens = ({
                 return (
                   <Fragment key={`${id}_${index}`}>
                     {showMatchTag && (
-                      <tr className="letter-heading">
+                      <tr className="letter-heading letter-heading-tokens">
                         <td colSpan={99}>
-                          <h5>🏷️ {tag}</h5>
+                          <div className="letter-heading-inner">
+                            <h5>
+                              🏷️ {tag} (
+                              {
+                                entities.filter((e) => e.tags?.includes(tag))
+                                  .length
+                              }
+                              )
+                            </h5>
+                          </div>
                         </td>
                       </tr>
                     )}

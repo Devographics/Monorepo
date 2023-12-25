@@ -287,16 +287,19 @@
 }
 .letter-heading {
   background: var(--code-background-color);
+  position: sticky;
+  top: 30px;
   * {
     margin: 0;
   }
-  position: sticky;
-  top: 30px;
   &-inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
+}
+.letter-heading-tokens {
+  z-index: 1000;
 }
 
 .loading-button {
