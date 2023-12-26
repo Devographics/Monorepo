@@ -96,6 +96,7 @@ const Tokens = ({
     >
       <div>
         <MatchTagsDetails questionObject={questionObject} />
+        <PatternsDetails />
         <ExportDetails allTokens={allTokens} />
         <p className="tokens-actions">
           {/* <button
@@ -403,6 +404,31 @@ const MatchTagsDetails = ({ questionObject }) => (
         matching spaces or dashes).
       </li>
     </ul>
+  </Details>
+);
+
+const PatternsDetails = ({}) => (
+  <Details label="About Pattern Types">
+    <>
+      <ul>
+        <li>
+          <code>[p]</code>: Match partial word fragments.
+        </li>
+        <li>
+          <code>[l]</code>: List of items to match in any order.
+        </li>
+        <li>
+          <code>[e]</code>: Match entire answer exactly.
+        </li>
+        <li>
+          <code>[w]</code>: Match whole words (default).
+        </li>
+      </ul>
+      <p>
+        Note: words also match plurals (<code>foo</code> will also match{" "}
+        <code>foos</code>)
+      </p>
+    </>
   </Details>
 );
 
