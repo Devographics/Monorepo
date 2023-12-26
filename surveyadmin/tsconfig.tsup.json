@@ -2,7 +2,7 @@
   "extends": "./tsconfig.common.json",
   "compilerOptions": {
     "jsx": "react",
-    "lib": ["ESNext.Array"]
+    "lib": ["ESNext.Array", "dom", "es2022"]
   },
   "include": ["next-env.d.ts", "scripts/**/*.ts"],
   "exclude": ["scripts/dist"]

@@ -6,6 +6,6 @@
     "jsx": "react",
     "noEmit": false,
     "outDir": "./",
-    "lib": ["ESNext.Array"]
+    "lib": ["ESNext.Array", "dom", "es2022"]
   }
 }
