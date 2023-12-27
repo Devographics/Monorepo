@@ -4,6 +4,9 @@ import Link from "next/link";
 import { getConfig, setAppName } from "@devographics/helpers";
 import { AppName } from "@devographics/types";
 
+// We don't want static rendering in survey admin
+export const dynamic = "force-dynamic";
+
 export default function RootLayout({
   children,
 }: {

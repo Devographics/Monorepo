@@ -53,12 +53,6 @@ export const apiRoutes = {
     disableRegularTokens: {
       href: (params) => `/api/normalization/disableRegularTokens`,
     },
-    loadNormalizationPercentages: {
-      href: (params) =>
-        `/api/normalization/loadNormalizationPercentages?${encodeParams(
-          params
-        )}`,
-    },
     importNormalizations: {
       href: (params) => `/api/normalization/importNormalizations`,
     },
