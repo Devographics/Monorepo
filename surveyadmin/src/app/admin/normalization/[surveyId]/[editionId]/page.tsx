@@ -1,8 +1,6 @@
 import Link from "next/link";
 import Breadcrumbs from "~/components/normalization/Breadcrumbs";
 import NormalizeEdition from "~/components/normalization/NormalizeEdition";
-import { fetchSurveysMetadata } from "@devographics/fetch";
-import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import {
   getEditionNormalizedResponsesCount,
   getEditionResponsesCount,
@@ -21,18 +19,21 @@ import {
 } from "@devographics/types";
 import RecalculateProgress from "~/components/normalization/RecalculateProgress";
 import sumBy from "lodash/sumBy";
+import {
+  rscEditionMetadataAdmin,
+  rscSurveysMetadata,
+} from "~/fetchers/rscEditionMetadata";
 
 export default async function Page({ params }) {
   const { surveyId, editionId } = params;
-  const { data: surveys } = await fetchSurveysMetadata({
+  const { data: surveys } = await rscSurveysMetadata({
     shouldGetFromCache: true,
   });
-  const survey = surveys.find((s) => s.id === surveyId)!;
-  const { data: edition } = await fetchEditionMetadataAdmin({
+  const { survey, edition } = await rscEditionMetadataAdmin({
     surveyId,
     editionId,
-    shouldGetFromCache: true,
   });
+
   const questions = getNormalizableQuestions({ survey, edition });
   const responsesCount = await getEditionResponsesCount({ survey, edition });
   const normResponsesCount = await getEditionNormalizedResponsesCount({
