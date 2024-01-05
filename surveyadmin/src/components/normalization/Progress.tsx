@@ -25,6 +25,12 @@ interface ProgressProps extends SegmentProps {
   responsesCount: number;
 }
 
+/**
+ * Progress is in charge of firing the requests for each segment
+ * via an effect when displaying the segment item element
+ * @param props
+ * @returns
+ */
 const Progress = (props: ProgressProps) => {
   const { responsesCount, doneCount, enabled, setEnabled, segments } = props;
   const segmentInProgress = segments.find(

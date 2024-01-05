@@ -33,21 +33,16 @@ const SurveyFromResponseIdPage = async ({
   if (!currentUser) {
     return redirect(routes.account.login.from(`/survey/${slug}/${year}`));
   }
-  // const response = await rscMustGetUserResponse({ currentUser, slug, year });
 
   // read-only mode
   if (edition.status === SurveyStatusEnum.CLOSED) {
-    return <SurveySectionReadOnly /*response={response}*/ />;
+    return <SurveySectionReadOnly />;
   }
   // TODO: @see https://github.com/vercel/next.js/issues/49387#issuecomment-1564539515
   return (
     <>
       <DebugRSC {...{ ___rscMustGetSurveyEditionFromUrl }} />
-      <SurveySection
-      /*response={response}*/
-      // edition={edition}
-      // sectionNumber={sn}
-      />
+      <SurveySection />
     </>
   );
 };
