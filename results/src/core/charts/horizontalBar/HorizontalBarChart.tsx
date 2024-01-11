@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { useTheme } from 'styled-components'
 import { ResponsiveBar } from '@nivo/bar'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import BarTooltip from 'core/charts/common/BarTooltip'
 import HorizontalBarStripes from './HorizontalBarStripes'
 import { BlockDefinition, ChartComponentProps } from 'core/types/index'

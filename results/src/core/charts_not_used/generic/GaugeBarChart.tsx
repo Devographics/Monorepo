@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from 'styled-components'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { ResponsiveBar } from '@nivo/bar'
 import { useTheme as useNivoTheme } from '@nivo/core'
 import { Chip } from '@nivo/tooltip'

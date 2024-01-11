@@ -9,7 +9,7 @@ import ChartLabel from 'core/components/ChartLabel'
 // @ts-ignore: no typings yet for this
 import { FeaturesCirclePackingChartTooltip } from './FeaturesCirclePackingChartTooltip'
 import { Entity } from '@devographics/types'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 
 const LABEL_FONT_SIZE = 12
 const GRID_COLUMNS = 8

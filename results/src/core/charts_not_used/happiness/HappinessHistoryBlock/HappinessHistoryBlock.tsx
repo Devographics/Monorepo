@@ -5,7 +5,7 @@ import { BlockContext } from 'core/blocks/types'
 import { HappinessYearMean } from '@types/survey_api/happiness'
 import { HappinessHistoryChart } from './HappinessHistoryChart'
 // @ts-ignore
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 
 interface HappinessHistoryBlockProps {
     block: BlockContext<'happinessHistoryTemplate', 'HappinessHistoryBlock'>

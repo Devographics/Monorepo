@@ -4,7 +4,7 @@ import { useTheme } from 'styled-components'
 import { useMotionConfig, useTheme as useNivoTheme } from '@nivo/core'
 import { useTooltip } from '@nivo/tooltip'
 // @ts-ignore
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { ComputedDatum, ComputedPoint } from './types'
 
 const Tooltip = memo(

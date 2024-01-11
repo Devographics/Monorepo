@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { usePageContext } from 'core/helpers/pageContext'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import Link from 'core/components/LocaleLink'
 import Button from 'core/components/Button'
 import { spacing } from 'core/theme'

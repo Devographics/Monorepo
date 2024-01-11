@@ -2,7 +2,7 @@ import get from 'lodash/get'
 import { BlockDefinition, PageContextValue, StringTranslator } from 'core/types'
 import { Entity } from '@devographics/types'
 import { getSiteTitle } from './pageHelpers'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { useEntities } from 'core/helpers/entities'
 import { usePageContext } from 'core/helpers/pageContext'
 import { removeDoubleSlashes } from './utils'
@@ -33,8 +33,8 @@ export const getBlockTabKey = ({
     block.tabId
         ? block.tabId
         : variantIndex === 0
-        ? 'tabs.all_respondents'
-        : getBlockTitleKey({ block, pageContext })
+            ? 'tabs.all_respondents'
+            : getBlockTitleKey({ block, pageContext })
 
 export const getBlockNoteKey = ({ block }: { block: BlockDefinition }) =>
     block.noteId || `${getBlockKey({ block })}.note`

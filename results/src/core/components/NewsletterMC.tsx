@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 import Button from './Button'

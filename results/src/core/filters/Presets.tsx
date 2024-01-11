@@ -4,7 +4,7 @@ import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
 import { DeleteIcon } from 'core/icons'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import {
     PanelState,
     PresetDefinition,

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import Button from 'core/components/Button'
 
 const Link = styled.a`

@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useTheme } from 'styled-components'
 import compact from 'lodash/compact'
 import round from 'lodash/round'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { ToolExperienceId, ToolsSectionId } from 'core/bucket_keys'
 import { getTableData } from 'core/helpers/datatables'
 import {
@@ -107,11 +107,11 @@ export const useChartData = (
         // filter out categories without data
         return categoryData.length > 0
             ? {
-                  id: toolsSectionId as ToolsSectionId,
-                  name: translate(`page.${toolsSectionId}`),
-                  color,
-                  data: compact(categoryData)
-              }
+                id: toolsSectionId as ToolsSectionId,
+                name: translate(`page.${toolsSectionId}`),
+                color,
+                data: compact(categoryData)
+            }
             : null
     })
 

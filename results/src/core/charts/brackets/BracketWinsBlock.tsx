@@ -8,7 +8,7 @@ import sortBy from 'lodash/sortBy'
 import { useLegends } from 'core/helpers/legends'
 import { useTheme } from 'styled-components'
 import { useTheme as useNivoTheme } from '@nivo/core'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { isPercentage } from 'core/helpers/units'
 
 export interface HorizontalBarBlockProps extends BlockComponentProps {

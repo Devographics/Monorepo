@@ -1,5 +1,5 @@
 import { useTheme } from 'styled-components'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { BlockLegend, BlockDefinition } from 'core/types/block'
 import { stripHtml } from 'core/helpers/utils'
 import { useOptions } from 'core/helpers/options'

@@ -1,14 +1,13 @@
 import React, { memo } from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { color, spacing, fontSize } from 'core/theme'
 
 const BlockCompletionIndicator = ({
     completion,
     variant = 'pink'
 }: {
-    completion: { count: number; percentage: number }
+    completion: { count?: number; percentage: number }
     variant: 'grey' | 'pink' | string
 }) => {
     const { translate } = useI18n()
@@ -41,13 +40,6 @@ const BlockCompletionIndicator = ({
             </Chart>
         </Container>
     )
-}
-
-BlockCompletionIndicator.propTypes = {
-    completion: PropTypes.shape({
-        count: PropTypes.number,
-        percentage: PropTypes.number.isRequired
-    }).isRequired
 }
 
 const Tooltip = styled.div`

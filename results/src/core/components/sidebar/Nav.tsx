@@ -11,7 +11,7 @@ import { getPageLabelKey } from 'core/helpers/pageHelpers'
 import T from 'core/i18n/T'
 import { PageContextValue } from 'core/types'
 import { getBlockTitle, getBlockTitleKey } from 'core/helpers/blockHelpers'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { useEntities } from 'core/helpers/entities'
 
 interface PageConfig {

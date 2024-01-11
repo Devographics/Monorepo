@@ -1,6 +1,6 @@
 import React from 'react'
 // @ts-ignore
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 // @ts-ignore
 import ButtonGroup from 'core/components/ButtonGroup'
 // @ts-ignore

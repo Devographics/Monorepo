@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 
 const PageIntroductionBlock = () => {
     const page = usePageContext()

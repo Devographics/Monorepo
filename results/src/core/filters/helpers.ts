@@ -21,7 +21,7 @@ import {
     // START_MARKER,
     // END_MARKER
 } from './constants'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { useTheme } from 'styled-components'
 import round from 'lodash/round'
 import {

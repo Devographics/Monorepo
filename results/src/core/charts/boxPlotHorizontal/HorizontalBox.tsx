@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { BoxProps } from '../boxPlotVertical/VerticalBox'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { TooltipItem } from './TooltipItem'
 import { fontSize, fontWeight } from 'core/theme'
 import { HORIZONTAL, useColorDefs, useColorFills } from '../hooks'

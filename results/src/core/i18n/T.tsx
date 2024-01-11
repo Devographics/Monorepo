@@ -1,11 +1,14 @@
+// TODO: make reusable?
 import React from 'react'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 // import ReactMarkdown from 'react-markdown'
 // import rehypeRaw from 'rehype-raw'
 import { useKeydownContext } from 'core/helpers/keydownContext'
 
-const getGitHubSearchUrl = (k: string, localeId: string) =>
-    `https://github.com/search?q=${k}+repo%3AStateOfJS%2Fstate-of-js-graphql-results-api+path%3A%2Fsrc%2Fi18n%2F${localeId}%2F+path%3A%2Fsrc%2Fi18n%2Fen-US%2F&type=Code&ref=advsearch&l=&l=`
+const getGitHubSearchUrl = (k: string, localeId = 'en') =>
+    `https://github.com/search?q=${k}+repo%3AStateOfJS%2Fstate-of-js-graphql-results-api+path%3A%2Fsrc%2Fi18n%2F${
+        localeId || 'en'
+    }%2F+path%3A%2Fsrc%2Fi18n%2Fen-US%2F&type=Code&ref=advsearch&l=&l=`
 
 interface TProps {
     t?: string
@@ -18,7 +21,7 @@ interface TProps {
     element?: string
 }
 
-const T = ({
+export const T = ({
     t: override,
     k,
     values,
@@ -34,7 +37,7 @@ const T = ({
     // accept override to just use provided string as translation result
     let translation = override
 
-    const props = {
+    const props: any = {
         'data-key': k
     }
     const classNames = ['t']
@@ -42,12 +45,13 @@ const T = ({
     if (override) {
         classNames.push('t-override')
     } else {
+        // FIXME: expects a fallabck value, not "isFallback boolean"
         const tFullString = getString(k, { values }, isFallback)
         const tShortString = getString(`${k}.short`, { values }, isFallback)
 
         const translationObject = useShort && !tShortString.missing ? tShortString : tFullString
 
-        const handleClick = e => {
+        const handleClick = (e: React.MouseEvent<any>) => {
             // note: `fallback` here denotes whether a string is itself a fallback for a missing string
             if (modKeyDown) {
                 e.preventDefault()
@@ -62,6 +66,7 @@ const T = ({
             props.onClick = handleClick
             props.title = 'Cmd/ctrl-click to add missing translation'
             classNames.push(modKeyDown ? 't-modkeydown' : 't-modkeyup')
+            // FIXME we don't have isFallback anymore
             if (translationObject.isFallback) {
                 // a translation was found, but it's a fallback placeholder
                 translation = md ? translationObject.tHtml : translationObject.t

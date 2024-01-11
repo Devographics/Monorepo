@@ -7,7 +7,7 @@ import { useChartData, useTabularData } from './hooks'
 import ToolsQuadrantsChart from './ToolsScatterplotChart'
 import { AllToolsData, SectionMetadata } from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { useTheme } from 'styled-components'
 
 const ENABLE_METRIC_SWITCH = false

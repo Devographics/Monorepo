@@ -6,7 +6,7 @@ import { mq, spacing, screenReadersOnlyMixin } from 'core/theme'
 import colors from 'core/theme/colors'
 import classNames from 'classnames'
 import Hamburger from 'core/components/Hamburger'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 // import SurveyBanner from 'core/components/SurveyBanner'
 
 const MainLayout = ({

@@ -3,7 +3,7 @@ import { useTheme } from 'styled-components'
 import { Margin } from '@nivo/core'
 import { TickFormatter } from '@nivo/axes'
 // @ts-ignore
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { ResponsiveMultipleDivergingLines } from './multiple-diverging-lines'
 
 interface UsageVariationsChartProps {

@@ -11,7 +11,7 @@ import {
     CELL_VPADDING
 } from './constants'
 import { CommonProps, Key, AxisType, Total } from './types'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import maxBy from 'lodash/maxBy.js'
 import { CellData, getCellData } from './helpers'
 import { UserIcon, PercentIcon } from 'core/icons'

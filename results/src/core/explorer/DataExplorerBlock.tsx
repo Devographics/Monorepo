@@ -21,7 +21,7 @@ import {
 } from './constants'
 import HintBlock from 'core/blocks/other/HintBlock'
 import { useLocation } from '@reach/router'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { useWindowDimensions } from './helpers'
 import { useEntities } from 'core/helpers/entities'
 import { getBlockQuery } from 'core/helpers/queries'

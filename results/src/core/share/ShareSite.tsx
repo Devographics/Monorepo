@@ -4,7 +4,7 @@ import ShareTwitter from './ShareTwitter'
 import ShareEmail from './ShareEmail'
 import ShareFacebook from './ShareFacebook'
 import ShareLinkedIn from './ShareLinkedIn'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { usePageContext } from '../helpers/pageContext'
 import { getSiteTitle } from '../helpers/pageHelpers'
 

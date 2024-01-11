@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { mq, spacing, fontSize, color } from 'core/theme'
 import Button from 'core/components/Button'
 import Modal from 'react-modal'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 
 type ModalTriggerProps = {
     label?: string

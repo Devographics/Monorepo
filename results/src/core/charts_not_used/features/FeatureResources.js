@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 
 const FeatureResources = ({ id, mdnInfo, caniuseInfo }) => {
     const { translate } = useI18n()

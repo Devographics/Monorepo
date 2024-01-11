@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import mq from 'core/theme/mq'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { getBlockMeta } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { BlockDefinition } from 'core/types'

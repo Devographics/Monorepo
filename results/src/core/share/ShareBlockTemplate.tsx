@@ -4,7 +4,7 @@ import { getBlockTitle, getBlockDescription } from 'core/helpers/blockHelpers'
 import { getSiteTitle, mergePageContext } from '../helpers/pageHelpers'
 import PageMeta from '../pages/PageMeta'
 import PageMetaDebug from '../pages/PageMetaDebug'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useEntities } from 'core/helpers/entities'
 

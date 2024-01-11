@@ -1,5 +1,5 @@
 import React from 'react'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import track from './tracking'
 import ShareLink from './ShareLink'
 import { TwitterIcon } from 'core/icons'

@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from '@nivo/core'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { isPercentage } from 'core/helpers/units'
 import { BucketUnits } from '@devographics/types'
 import { BlockLegend, StringTranslator } from 'core/types'

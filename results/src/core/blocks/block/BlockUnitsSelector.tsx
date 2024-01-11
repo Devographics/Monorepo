@@ -3,7 +3,7 @@ import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { BucketUnits } from '@devographics/types'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 
 const UnitButton = ({ units, current, onChange, i18nNamespace = 'chart_units', chartFilters }) => {
     const { getString } = useI18n()

@@ -13,7 +13,7 @@ import { Entity } from '@types/index'
 // @ts-ignore
 import T from 'core/i18n/T'
 // @ts-ignore
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { getTableData } from 'core/helpers/datatables'
 
 type MetricId = 'satisfaction' | 'interest' | 'usage' | 'awareness'

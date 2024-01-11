@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Newsletter from 'core/components/Newsletter'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { spacing } from 'core/theme'
 import NewsletterMC from 'core/components/NewsletterMC'
 

@@ -1,5 +1,5 @@
 import ceil from 'lodash/ceil.js'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { Units, Mode, isPercentage } from 'core/helpers/units'
 import { ChartOptionDefinition } from '@types/data'
 import { BlockMode, BlockUnits } from '@types/index'

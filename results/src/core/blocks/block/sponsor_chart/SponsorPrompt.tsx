@@ -6,7 +6,7 @@ import { usePageContext } from 'core/helpers/pageContext'
 import ModalTrigger from 'core/components/ModalTrigger'
 import { SponsorIcon } from 'core/icons'
 import { getBlockMeta } from 'core/helpers/blockHelpers'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import Button from 'core/components/Button'
 import {
     AccordionRoot,

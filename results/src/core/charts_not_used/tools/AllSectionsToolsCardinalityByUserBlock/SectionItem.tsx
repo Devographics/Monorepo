@@ -7,7 +7,7 @@ import { ToolsCardinalityByUserBucket } from '@types/survey_api/tools'
 // @ts-ignore
 import { fontSize, fontWeight, spacing, mq } from 'core/theme'
 // @ts-ignore
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import range from 'lodash/range'
 import sumBy from 'lodash/sumBy'
 import round from 'lodash/round'

@@ -3,7 +3,7 @@ import { useTheme } from 'styled-components'
 import styled from 'styled-components'
 import { mq, spacing, fontSize, fontWeight } from 'core/theme'
 import T from 'core/i18n/T'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import TooltipComponent from 'core/components/Tooltip'
 
 const InsufficientData = (props: {

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { ScaleBand } from 'd3'
 import { BlockLegend } from 'core/types'
 import { NO_ANSWER } from '@devographics/constants'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 
 type AxisBottomProps = {
     xScale: ScaleBand<string>

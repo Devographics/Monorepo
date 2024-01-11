@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 // import locales from '../../../../config/locales.yml'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { mq, spacing } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
 import get from 'lodash/get'

@@ -3,7 +3,7 @@ import { format } from 'd3-format'
 import get from 'lodash/get'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import Button from 'core/components/Button'
 
 const starsFormatter = format('.2s')

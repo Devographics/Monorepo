@@ -4,7 +4,7 @@ import { fontSize, fontWeight, mq, spacing } from 'core/theme'
 import { Entity } from '@devographics/types'
 import { BlockDefinition } from 'core/types'
 import T from 'core/i18n/T'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 
 /**
  * All awards categories

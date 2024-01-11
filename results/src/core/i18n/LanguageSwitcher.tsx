@@ -1,11 +1,13 @@
+// This code is specific to the result app
+// no need to move it to shared i18n code
 import React from 'react'
 import styled from 'styled-components'
 import { spacing, fontSize } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
 // import { useI18n } from 'core/i18n/i18nContext'
-import Locales from './Locales'
 import Popover from 'core/components/Popover'
-import T from 'core/i18n/T'
+import { T } from './T'
+import { Locales } from './Locales'
 
 // const svgs = {
 //     top: <polygon stroke="#000" points="0,50 100,50 50,0" />,

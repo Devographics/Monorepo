@@ -30,7 +30,7 @@ const Item = styled.span`
 }
 `
 
-const Locales = () => {
+export const Locales = () => {
     const context = usePageContext()
     const locales = context?.locales || []
     const links = locales.map(locale => {
@@ -57,5 +57,3 @@ const Locales = () => {
         </Container>
     )
 }
-
-export default Locales

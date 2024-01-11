@@ -1,5 +1,5 @@
 import React from 'react'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import TextBlock from 'core/blocks/other/TextBlock'
 
 const NotFoundBlock = () => {

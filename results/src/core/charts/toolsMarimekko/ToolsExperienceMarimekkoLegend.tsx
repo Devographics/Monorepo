@@ -2,7 +2,7 @@
 import React, { CSSProperties, Fragment } from 'react'
 import { useTheme } from '@nivo/core'
 // @ts-ignore
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 
 const ITEM_WIDTH = 50
 const ITEM_HEIGHT = 14

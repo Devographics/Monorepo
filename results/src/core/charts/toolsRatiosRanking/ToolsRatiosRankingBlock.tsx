@@ -6,7 +6,7 @@ import { RankingChart, RankingChartSerie } from 'core/charts/toolsRatiosRanking/
 import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { getTableData } from 'core/helpers/datatables'
 import { MODE_GRID } from 'core/filters/constants'
 import { MetricId } from 'core/helpers/units'

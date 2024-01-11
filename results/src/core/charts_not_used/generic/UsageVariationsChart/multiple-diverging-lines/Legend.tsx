@@ -1,6 +1,6 @@
 import React from 'react'
 // @ts-ignore
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { scaleLinear, scalePoint } from 'd3-scale'
 import { line as d3Line, curveBasis } from 'd3-shape'
 import { useTheme } from 'styled-components'

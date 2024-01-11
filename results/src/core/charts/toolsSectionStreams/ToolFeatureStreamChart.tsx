@@ -2,7 +2,7 @@ import React from 'react'
 import { useTheme } from 'styled-components'
 import { ResponsiveStream } from '@nivo/stream'
 import { isPercentage } from 'core/helpers/units'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { BlockLegend } from 'core/types'
 import {
     BucketUnits,

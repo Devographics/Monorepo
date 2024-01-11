@@ -1,7 +1,7 @@
 import React from 'react'
 import { TickItemProps } from '@types/index'
 import styled, { useTheme } from 'styled-components'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import TooltipComponent from 'core/components/Tooltip'
 import { getSocialLinks } from 'core/charts/common/TickItemLinks'
 import { NO_ANSWER, NO_MATCH, CUTOFF_ANSWERS, OVERALL } from '@devographics/constants'

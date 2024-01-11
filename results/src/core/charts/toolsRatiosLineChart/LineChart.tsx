@@ -9,7 +9,7 @@ import { Entity } from '@devographics/types'
 import { useEntities } from 'core/helpers/entities'
 import { getItemLabel } from 'core/helpers/labels'
 import { StringTranslator } from 'core/types'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 
 export const getChartData = (
     data: ToolRatiosQuestionData,

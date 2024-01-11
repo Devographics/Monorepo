@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { useTheme } from 'styled-components'
 import { ResponsiveScatterPlot } from '@nivo/scatterplot'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import { ToolsSectionId } from 'core/bucket_keys'
 import {
     ToolsQuadrantsMetric,

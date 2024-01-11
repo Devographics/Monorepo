@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import Block from 'core/blocks/block/BlockVariant'
 import HeatmapChart from 'core/charts/generic/HeatmapChart'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import ChartContainer from 'core/charts/ChartContainer'
 import { useBucketKeys } from 'core/helpers/legends'
 

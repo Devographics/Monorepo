@@ -6,7 +6,7 @@ import Button from 'core/components/Button'
 import { getFiltersQuery, getInitFilters } from './helpers'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 import isEmpty from 'lodash/isEmpty.js'
 import {
     AutoSelectText,

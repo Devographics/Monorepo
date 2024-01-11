@@ -13,7 +13,7 @@ import { ToolRatiosQuestionData, RatiosUnits, Entity } from '@devographics/types
 import { useEntities } from 'core/helpers/entities'
 import { BlockDefinition } from 'core/types/block'
 import { getItemLabel } from 'core/helpers/labels'
-import { useI18n } from 'core/i18n/i18nContext'
+import { useI18n } from '@devographics/react-i18n'
 
 export interface MetricBucket {
     year: number
