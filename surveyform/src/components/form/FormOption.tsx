@@ -1,6 +1,6 @@
 import { FormInputProps } from "~/components/form/typings";
 import { OptionMetadata } from "@devographics/types";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getOptioni18nIds } from "~/i18n/survey";
 import { useOptionTitle } from "~/lib/surveys/helpers/useOptionTitle";

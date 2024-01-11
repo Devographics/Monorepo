@@ -3,7 +3,7 @@ import { FormattedMessage } from "~/components/common/FormattedMessage";
 import QuestionLabel from "../form/QuestionLabel";
 import { getSectioni18nIds } from "~/i18n/survey";
 import { questionIsCompleted } from "~/lib/responses/helpers";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { FormLayoutProps } from "../form/FormLayout";
 import { useFormStateContext } from "../form/FormStateContext";
 import { useFormPropsContext } from "../form/FormPropsContext";

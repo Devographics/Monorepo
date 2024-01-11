@@ -854,6 +854,15 @@ importers:
         specifier: ^17.0.1
         version: 17.0.2
 
+  shared/react-i18n-legacy:
+    devDependencies:
+      '@types/react':
+        specifier: ^18.0.27
+        version: 18.2.45
+      react:
+        specifier: ^17.0.1
+        version: 17.0.2
+
   shared/redis:
     dependencies:
       '@devographics/debug':
@@ -1257,9 +1266,9 @@ importers:
       '@devographics/mongo':
         specifier: workspace:^1.0.0
         version: link:../shared/mongo
-      '@devographics/react-i18n':
+      '@devographics/react-i18n-legacy':
         specifier: workspace:1.0.0
-        version: link:../shared/react-i18n
+        version: link:../shared/react-i18n-legacy
       '@devographics/redis':
         specifier: workspace:^1.0.0
         version: link:../shared/redis
@@ -8389,6 +8398,7 @@ packages:
 
   /@next/eslint-plugin-next@13.5.6:
     resolution: {integrity: sha512-ng7pU/DDsxPgT6ZPvuprxrkeew3XaRf4LAT4FabaEO/hAbvVx4P7wqnqdbTdDn1kgTvsI4tpIgT4Awn/m0bGbg==}
+    requiresBuild: true
     dependencies:
       glob: 7.1.7
     dev: false
@@ -17257,6 +17267,7 @@ packages:
   /clone@1.0.4:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
+    requiresBuild: true
     dev: false
     optional: true
 
@@ -18733,6 +18744,7 @@ packages:
 
   /defaults@1.0.4:
     resolution: {integrity: sha512-eFuaLoy/Rxalv2kr+lqMlUnrDWV+3j4pljOIJgLIhI058IQfWJ7vXhyEIHu+HtC738klGALYxOKDO0bQP3tg8A==}
+    requiresBuild: true
     dependencies:
       clone: 1.0.4
     dev: false
@@ -35384,6 +35396,7 @@ packages:
   /untildify@4.0.0:
     resolution: {integrity: sha512-KK8xQ1mkzZeg9inewmFVDNkg3l5LUhoq9kN6iWYB/CC9YMG8HA+c1Q8HwDe6dEX7kErrEVNVBO3fWsVq5iDgtw==}
     engines: {node: '>=8'}
+    requiresBuild: true
     dev: false
     optional: true
 
@@ -35839,6 +35852,7 @@ packages:
 
   /wcwidth@1.0.1:
     resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
+    requiresBuild: true
     dependencies:
       defaults: 1.0.4
     dev: false

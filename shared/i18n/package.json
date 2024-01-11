@@ -1,7 +1,7 @@
 {
     "name": "@devographics/i18n",
     "version": "1.0.0",
-    "description": "",
+    "description": "Legacy i18n logic from Vulcan",
     "type": "module",
     "exports": {
         ".": "./index.ts",

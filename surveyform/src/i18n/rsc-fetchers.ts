@@ -1,10 +1,10 @@
-import { Message, StringsRegistry } from "@devographics/react-i18n";
+import { Message, StringsRegistry } from "@devographics/react-i18n-legacy";
 import { rscLocale } from "~/lib/api/rsc-fetchers";
 import { getCommonContexts } from "./config";
 
 /**
  * RSC equivalent to useIntlContext from
- * "@devographics/react-i18n/Provider.tsx"
+ * "@devographics/react-i18n-legacy/Provider.tsx"
  */
 export async function rscIntlContext({
   localeId,

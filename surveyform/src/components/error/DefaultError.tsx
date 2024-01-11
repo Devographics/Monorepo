@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { useRouter } from "next/navigation";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components";

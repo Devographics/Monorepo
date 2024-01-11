@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import without from "lodash/without.js";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { Button } from "~/components/ui/Button";
 import { FormItem } from "~/components/form/FormItem";
 import { FormInputProps } from "~/components/form/typings";

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { FormInputProps } from "~/components/form/typings";
 
 import FormControl from "react-bootstrap/FormControl";

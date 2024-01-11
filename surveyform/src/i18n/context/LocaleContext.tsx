@@ -1,6 +1,9 @@
 "use client";
 import React, { createContext, useContext } from "react";
-import { IntlContextProvider, StringsRegistry } from "@devographics/react-i18n";
+import {
+  IntlContextProvider,
+  StringsRegistry,
+} from "@devographics/react-i18n-legacy";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { LOCALE_COOKIE_NAME } from "../cookie";

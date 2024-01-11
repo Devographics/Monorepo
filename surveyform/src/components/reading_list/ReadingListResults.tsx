@@ -6,7 +6,7 @@ import { EntityWithQuestion } from "~/lib/surveys/types";
 import { getEditionEntities } from "~/lib/surveys/helpers/getEditionEntities";
 import { Button } from "~/components/ui/Button";
 import { Share } from "~/components/icons";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { captureException } from "@sentry/nextjs";
 
 import FormControl from "react-bootstrap/FormControl";

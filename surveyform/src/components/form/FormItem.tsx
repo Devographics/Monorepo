@@ -13,7 +13,7 @@ import React, {
   RefObject,
 } from "react";
 
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import Form from "react-bootstrap/Form";
 import { FormInputProps } from "./typings";
 import { CommentTrigger, CommentInput } from "./FormComment";

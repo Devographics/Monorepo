@@ -6,7 +6,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import debounce from "lodash/debounce.js";
 import IconComment from "~/components/icons/Comment";
 import IconCommentDots from "~/components/icons/CommentDots";

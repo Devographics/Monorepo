@@ -7,7 +7,7 @@ import get from "lodash/get.js";
 import CountUp from "react-countup";
 import Confetti from "react-confetti";
 import take from "lodash/take.js";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { Button } from "~/components/ui/Button";
 import { EditionMetadata } from "@devographics/types";

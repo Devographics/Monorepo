@@ -1,5 +1,5 @@
 "use client";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { TranslatorWrapper, useTranslatorMode } from "./TranslatorWrapper";
 
 export interface FormattedMessageProps {

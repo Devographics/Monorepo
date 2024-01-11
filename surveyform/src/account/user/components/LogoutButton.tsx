@@ -1,6 +1,6 @@
 "use client";
 import { useCurrentUser } from "~/lib/users/hooks";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import React from "react";
 import { Button } from "~/components/ui/Button";
 import { logout } from "../client-fetchers/logout";

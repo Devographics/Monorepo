@@ -1,7 +1,7 @@
 {
-    "name": "@devographics/react-i18n",
+    "name": "@devographics/react-i18n-legacy",
     "version": "1.0.0",
-    "description": "Devographics i18n React components",
+    "description": "Vulcan i18n React components",
     "main": "./index.ts",
     "types": "./index.ts",
     "type": "module",

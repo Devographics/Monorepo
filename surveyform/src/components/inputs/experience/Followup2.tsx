@@ -13,7 +13,7 @@ import without from "lodash/without.js";
 
 import { Button } from "~/components/ui/Button";
 import { CommentTextarea } from "~/components/form/FormComment";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { ExperienceProps } from "./Experience";
 import { FormInputProps } from "~/components/form/typings";
 import { Dispatch, SetStateAction } from "react";

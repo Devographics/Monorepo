@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useKeydownContext } from "./KeydownContext";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 const githubOrg = "Devographics";

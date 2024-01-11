@@ -21,7 +21,7 @@ import { getFormPaths } from "@devographics/templates";
 import get from "lodash/get.js";
 import { FollowupData, /*FollowUpComment,*/ FollowUps } from "./Followup2";
 // import { CommentTrigger } from "~/components/form/FormComment";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 
 import Alert from "react-bootstrap/Alert";
 import { useFormPropsContext } from "~/components/form/FormPropsContext";

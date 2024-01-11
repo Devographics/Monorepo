@@ -2,7 +2,7 @@
 
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { ReactNode, cloneElement } from "react";
 import { Button } from "~/components/ui/Button";
 

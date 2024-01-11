@@ -1,5 +1,5 @@
 import { SectionMetadata, QuestionMetadata } from "@devographics/types";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { getQuestioni18nIds } from "~/i18n/survey";
 
 export const useQuestionTitle = ({

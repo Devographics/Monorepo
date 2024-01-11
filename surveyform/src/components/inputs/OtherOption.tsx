@@ -7,7 +7,7 @@ import debounce from "lodash/debounce.js";
 import FormControl from "react-bootstrap/FormControl";
 import { OPTION_NA } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { useFormStateContext } from "../form/FormStateContext";
 
 const OtherOption = (

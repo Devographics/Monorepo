@@ -1,6 +1,6 @@
 "use client";
 import { useState, ReactNode } from "react";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { sendMagicLoginEmail } from "~/account/magicLogin/client-actions/sendMagicLoginEmail";
 import { useCurrentUser } from "~/lib/users/hooks";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";

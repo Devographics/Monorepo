@@ -1,5 +1,5 @@
 import React from "react";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 
 const ShareLinkedIn = ({
   link,

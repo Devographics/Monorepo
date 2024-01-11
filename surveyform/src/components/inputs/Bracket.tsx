@@ -4,7 +4,7 @@ import sampleSize from "lodash/sampleSize.js";
 import isNil from "lodash/isNil.js";
 import isEmpty from "lodash/isEmpty.js";
 import cloneDeep from "lodash/cloneDeep.js";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { FormItem } from "~/components/form/FormItem";
 import { TooltipTrigger } from "~/components/ui/TooltipTrigger";

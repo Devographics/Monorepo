@@ -3,7 +3,7 @@ import { FormItem } from "~/components/form/FormItem";
 import type { FormInputProps } from "~/components/form/typings";
 import Form from "react-bootstrap/Form";
 import { FormOption } from "~/components/form/FormOption";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { getOptioni18nIds } from "~/i18n/survey";
 
 export const Slider = (props: FormInputProps) => {

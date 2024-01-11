@@ -4,7 +4,7 @@ import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
-import { useIntlContext } from "@devographics/react-i18n";
+import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { getQuestioni18nIds } from "~/i18n/survey";
 
 const MemoFormControl = memo(FormControl);
