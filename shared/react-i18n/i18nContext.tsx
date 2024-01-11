@@ -1,16 +1,20 @@
-import React, { createContext, useContext, useMemo, FC } from 'react'
+import React, { createContext, useContext, useMemo } from 'react'
 import { getTranslator, getStringTranslator } from './translator'
-import { Locale, LegacyTranslator, StringTranslator } from 'core/types'
-import { usePageContext } from '../helpers/pageContext'
+import { Locale, LegacyTranslator, StringTranslator } from './typings'
 
-export const I18nContext = createContext({})
+export const I18nContext = createContext<I18nContextType | null>(null)
 
-const I18nContextProviderInner: FC = ({ children }) => {
-    const context = usePageContext()
-    const { locale = {} } = context
+export const I18nContextProvider = ({
+    children,
+    locale
+}: {
+    children: React.ReactNode
+    locale: Locale
+}) => {
     const translate = getTranslator(locale)
     const getString = getStringTranslator(locale)
 
+    // useMemo because the value is an object
     const value = useMemo(
         () => ({
             locale,
@@ -19,12 +23,7 @@ const I18nContextProviderInner: FC = ({ children }) => {
         }),
         [locale, translate, getString]
     )
-
     return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>
-}
-
-export const I18nContextProvider: FC = ({ children }) => {
-    return <I18nContextProviderInner>{children}</I18nContextProviderInner>
 }
 
 type I18nContextType = {
@@ -33,4 +32,8 @@ type I18nContextType = {
     getString: StringTranslator
 }
 
-export const useI18n = () => useContext(I18nContext) as I18nContextType
+export const useI18n = () => {
+    const ctx = useContext(I18nContext)
+    if (!ctx) throw new Error("Can't call useI18n before I18nContextProvider is set")
+    return ctx
+}

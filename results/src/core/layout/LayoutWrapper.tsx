@@ -6,7 +6,7 @@ import Head from 'core/components/Head'
 import { PageContextProvider } from 'core/helpers/pageContext'
 import { KeydownContextProvider } from 'core/helpers/keydownContext'
 import { mergePageContext } from 'core/helpers/pageHelpers'
-import { I18nContextProvider } from 'core/i18n/i18nContext'
+import { I18nContextProvider } from '@devographics/react-i18n'
 // import PageMetaDebug from './pages/PageMetaDebug'
 import { GlobalStyle } from 'core/theme'
 import MainLayout from 'core/layout/MainLayout'
@@ -97,13 +97,13 @@ export default class Layout extends PureComponent<
     render() {
         const { showPagination, location, pageContext, children } = this.props
         const { showSidebar } = this.state
-        const context = mergePageContext(pageContext, location, this.state)
+        const mergedPageContext = mergePageContext(pageContext, location, this.state)
         return (
             <KeydownContextProvider>
-                <PageContextProvider value={context}>
-                    <I18nContextProvider>
+                <PageContextProvider value={mergedPageContext}>
+                    <I18nContextProvider locale={mergedPageContext.locale}>
                         <ThemedLayout
-                            context={context}
+                            context={mergedPageContext}
                             showPagination={showPagination}
                             showSidebar={showSidebar}
                             toggleSidebar={this.toggleSidebar}

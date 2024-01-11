@@ -1,13 +1,20 @@
-import React, { createContext, useContext, FC } from 'react'
-import { PageContextValue } from '@types/index'
+import { PageContextValue } from 'core/types'
+import React, { createContext, useContext } from 'react'
 
-const pageContext = createContext({})
+const pageContext = createContext<PageContextValue | null>(null)
 
-export const PageContextProvider: FC<{ value: PageContextValue; children: React.ReactNode }> = ({
+export const PageContextProvider = ({
     value,
     children
+}: {
+    value: PageContextValue
+    children: React.ReactNode
 }) => {
     return <pageContext.Provider value={value}>{children}</pageContext.Provider>
 }
 
-export const usePageContext = () => useContext<PageContextValue>(pageContext)
+export const usePageContext = () => {
+    const ctx = useContext(pageContext)
+    if (!ctx) throw new Error('Page context not set')
+    return ctx
+}

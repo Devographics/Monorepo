@@ -4,6 +4,10 @@ export interface Translation {
     t: string
 }
 
+/**
+ * Locale definition, optionally including strings
+ * TODO: having every field optional is probably wrong
+ */
 export interface Locale {
     id?: string
     strings?: Translation[]
