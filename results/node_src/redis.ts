@@ -9,6 +9,7 @@ export function initRedis() {
     if (!redis) {
         // redis = new Redis(redisUrl)
         redis = new Redis({
+            // @ts-expect-error TODO why the TS error? probably  a mismatch with another Redis type from another client
             url,
             token
         })

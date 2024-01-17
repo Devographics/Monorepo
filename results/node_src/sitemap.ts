@@ -3,12 +3,12 @@ import findLastIndex from 'lodash/findLastIndex.js'
 import omit from 'lodash/omit.js'
 import template from 'lodash/template.js'
 import yaml from 'js-yaml'
-import { getQuestionId, loadTemplate } from './helpers.mjs'
+import { getQuestionId, loadTemplate } from './helpers'
 import merge from 'lodash/merge.js'
+import type { RawSitemap, PageDef, BlockDefinition, BlockVariant } from "../src/core/types"
 
-/**
- * @typedef {{editionId: string, surveyId: string}} EditionVariables
- */
+type Stack = { flat: Array<PageDef> }
+type EditionVariables = { editionId: string, surveyId: string }
 
 const stringify = value => {
     const json = JSON.stringify(value)
@@ -23,7 +23,7 @@ const stringify = value => {
 // so they need to be converted to strings
 const keysToStringify = ['options', 'filters']
 
-const injectVariables = (yamlObject, variables, templateName) => {
+const injectVariables = (yamlObject: any, variables: any, templateName?: string) => {
     const stringVariables = {}
     Object.keys(variables).forEach(key => {
         const value = variables[key]
@@ -51,7 +51,7 @@ const applyTemplate = ({
     templateObject,
     blockVariables = {},
     contextVariables = {}
-}) => {
+}: any) => {
     // defines all available variables to be injected
     // at build time in the GraphQL queries
     const variables = {
@@ -111,13 +111,13 @@ export const pageFromConfig = async (page, pageIndex, editionVariables) => {
         }
 
         if (Array.isArray(page.blocks)) {
-            const blocks = []
+            const blocks: Array<BlockDefinition> = []
             for (const block of page.blocks) {
                 // everything that's not in block.variants is part of the main block
                 const { variants: variants_ = [], ...mainBlockConfig } = block
                 const blockVariants = [{ ...mainBlockConfig, isMainBlock: true }, ...variants_]
 
-                const variants = []
+                const variants: Array<BlockVariant> = []
 
                 for (let blockVariant of blockVariants) {
                     // if template has been provided, apply it
@@ -181,15 +181,8 @@ export const pageFromConfig = async (page, pageIndex, editionVariables) => {
     }
 }
 
-let computedSitemap = null
-
-/**
- *
- * @param {import('../src/core/types').RawSitemap} rawSitemap
- * @param {EditionVariables} editionVariables
- * @returns {Promise<{flat: Array<PageDef>}>}
- */
-export const computeSitemap = async (rawSitemap, editionVariables) => {
+const computedSitemap = null
+export const computeSitemap = async (rawSitemap: RawSitemap, editionVariables: EditionVariables): Promise<Stack> => {
     if (computedSitemap !== null) {
         return computedSitemap
     }
@@ -197,7 +190,7 @@ export const computeSitemap = async (rawSitemap, editionVariables) => {
     /**
      * @type {{flat: import('../src/core/types'.Sitemap)}}
      */
-    const stack = {
+    const stack: { flat: Array<PageDef> } = {
         flat: []
     }
 

@@ -1,5 +1,5 @@
 import camelCase from 'lodash/camelCase.js'
-import { indentString } from './indent_string.mjs'
+import { indentString } from './indent_string'
 import isEmpty from 'lodash/isEmpty.js'
 
 const MODE_COMBINED = 'combined'
@@ -21,8 +21,9 @@ export const bucketFacetsPlaceholder = '<BUCKETFACETS_PLACEHOLDER>'
 
 const convertToGraphQLEnum = s => s.replace('-', '_')
 
+// TODO: move to locales specific code
 export const getLocalesQuery = (contexts, loadStrings = true) => {
-    const args = []
+    const args: Array<string> = []
     // if (localeIds.length > 0) {
     //     args.push(`localeIds: [${localeIds.map(convertToGraphQLEnum).join(',')}]`)
     // }
@@ -39,9 +40,8 @@ query {
             completion
             id
             label
-            ${
-                loadStrings
-                    ? `strings {
+            ${loadStrings
+            ? `strings {
                 key
                 t
                 tHtml
@@ -49,8 +49,8 @@ query {
                 context
                 isFallback
             }`
-                    : ''
-            }
+            : ''
+        }
             translators
         }
     }
@@ -141,7 +141,7 @@ const getEntityFragment = () => `entity {
     }
 }`
 
-const getFacetFragment = addBucketsEntities => `
+const getFacetFragment = (addBucketsEntities?: boolean) => `
     facetBuckets {
         id
         count
@@ -260,21 +260,36 @@ const allEditionsFragment = `editionId
 // v2: {"foo": "bar"} => {foo: bar} (for enums)
 const unquote = s => s.replaceAll('"', '')
 
-const wrapArguments = args => {
+/**
+ * Transform JSON into graphql function args
+ * {foo: hello, bar: world} => (foo: hello, bar: world)
+ * @param args 
+ * @returns 
+ */
+const wrapArguments = (args) => {
     const keys = Object.keys(args)
 
     return keys.length > 0
         ? `(${keys
-              .filter(k => !!args[k])
-              .map(k => `${k}: ${args[k]}`)
-              .join(', ')})`
+            .filter(k => !!args[k])
+            .map(k => `${k}: ${args[k]}`)
+            .join(', ')})`
         : ''
 }
 
 const facetItemToFacet = ({ sectionId, id }) => `${sectionId}__${id}`
 
-export const getQueryArgsString = ({ facet, filters, parameters, xAxis, yAxis }) => {
-    const args = {}
+// TODO: what is this exactly?
+interface DataQueryConfig {
+    facet?: any, filters?: any, parameters?: any, xAxis?: any, yAxis?: any
+}
+interface ParsedDataQueryConfig {
+    facet?: any, filters?: any, parameters?: any, axis1?: any, axis2?: any
+}
+
+export const getQueryArgsString = ({ facet, filters, parameters, xAxis, yAxis }: DataQueryConfig) => {
+    // TODO: is this type a kind of "FilterDefinition"?
+    const args: ParsedDataQueryConfig = {}
     if (facet) {
         args.facet = facetItemToFacet(facet)
     }
@@ -298,7 +313,7 @@ export const getQueryArgsString = ({ facet, filters, parameters, xAxis, yAxis })
     }
 }
 
-export const getDefaultQuery = ({ queryOptions, queryArgs = {} }) => {
+export const getDefaultQuery = ({ queryOptions, queryArgs = {} }: { queryOptions: any, queryArgs: DataQueryConfig }) => {
     const {
         surveyId,
         editionId,
@@ -406,8 +421,8 @@ Note: query can be either a query name, or the full query text
 
 */
 export const getQuery = ({ query: query_, queryOptions, queryArgs }) => {
-    let queryContents,
-        query = query_
+    let queryContents
+    const query = query_
 
     if (queryOptions.isLog) {
         // when logging we can leave out enableCache parameter
@@ -434,7 +449,7 @@ export const getQuery = ({ query: query_, queryOptions, queryArgs }) => {
             queryContents = queryContents.replace(argumentsPlaceholder, queryArgsString)
         }
     }
-    let wrappedQuery = wrapQuery({
+    const wrappedQuery = wrapQuery({
         queryName,
         queryContents,
         addRootNode: queryOptions.addRootNode
@@ -514,6 +529,7 @@ export const getFiltersQuery = ({
 }) => {
     const { options = {}, filters, facet } = chartFilters
     const { enableYearSelect, mode } = options
+    // @ts-expect-error TODO fixme
     const query = getBlockQuery({
         block,
         queryOptions: {
@@ -531,7 +547,7 @@ export const getFiltersQuery = ({
     const queryFragment = query.slice(fragmentStartIndex, fragmentEndIndex)
     let queryBody = queryFragment
 
-    const seriesNames = []
+    const seriesNames: Array<string> = []
 
     const queryFooter = query.slice(fragmentEndIndex)
 
@@ -578,7 +594,7 @@ export const getFiltersQuery = ({
             })
             .join('')
     } else if (facet && mode === MODE_FACET) {
-        const queryArgsOptions = {
+        const queryArgsOptions: DataQueryConfig = {
             facet,
             parameters: { enableCache, ...block.parameters }
         }

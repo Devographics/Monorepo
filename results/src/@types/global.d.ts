@@ -13,7 +13,6 @@ declare module 'Theme/*' {
     declare export default any
 }
 
-
 declare module 'Config/*' {
     declare export default any
 }

@@ -12,6 +12,7 @@ export interface RawPageDef {
      * TODO: not sure if this is the  raw yml structure or if it also include parsed fields
      */
     block?: Array<BlockDefinition>
+    blocks?: Array<BlockDefinition>
     // TODO: might be more more fields here
 
     is_hidden?: boolean;
@@ -27,7 +28,7 @@ export type RawSitemap = Array<RawPageDef>
  * Parsed page definition
  */
 export interface PageDef extends RawPageDef {
-    parent: PageDef, children: Array<PageDef> | any
+    parent: PageDef, children?: Array<PageDef> | any, previous?: PageDef, next?: PageDef
 }
 
 

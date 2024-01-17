@@ -9,7 +9,7 @@ export interface Translation {
  * TODO: having every field optional is probably wrong
  */
 export interface Locale {
-    id?: string
+    id: string
     strings?: Translation[]
     /**
      * TODO: this value was not present in the type def here but is expected by Popover

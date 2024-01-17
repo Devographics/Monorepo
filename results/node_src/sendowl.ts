@@ -4,18 +4,18 @@ import {
     getDataLocations,
     getExistingData,
     getCachingMethods
-} from './helpers.mjs'
+} from './helpers'
 import fetch from 'node-fetch'
 import _ from 'lodash'
 import FormData from 'form-data'
-import { logToFile } from './log_to_file.mjs'
+import { logToFile } from './log_to_file'
 
 // `https://opensheet.elk.sh/${process.env.GDOCS_SPREADSHEET}/Public%20Data`
 
 // const sendOwlAPIUrl = `https://${process.env.SENDOWL_API_KEY}:${process.env.SENDOWL_SECRET}@www.sendowl.com/api`
 const sendOwlAPIUrl = `https://www.sendowl.com/api`
 
-const logOptions = { mode: 'overwrite', subDir: 'chart_sponsors' }
+const logOptions = { mode: 'overwrite' as const, subDir: 'chart_sponsors' }
 
 const getSendOwlOptions = () => ({
     method: 'get',
@@ -30,10 +30,10 @@ const getSendOwlOptions = () => ({
     }
 })
 
-const fetchUntilNoMore = async (url, options) => {
+const fetchUntilNoMore = async (url: string, options: any) => {
     let page = 1,
         hasMore = true,
-        allData = [],
+        allData: Array<any> = [],
         data
     while (hasMore) {
         const fetchUrl = `${url}?per_page=50&page=${page}`
@@ -63,7 +63,7 @@ const getProducts = async ({ editionId }) => {
         `${sendOwlAPIUrl}/v1/products/`,
         getSendOwlOptions()
     )
-    logToFile('products.json', productsData, { ...logOptions, editionId })
+    logToFile('products.json', productsData, { ...logOptions/*, editionId*/ })
 
     let productsDataClean = productsData.map(({ product }) => ({
         editionId: product.name.split('___')[0],
@@ -74,15 +74,22 @@ const getProducts = async ({ editionId }) => {
         sales_page_url: product.sales_page_url
     }))
     productsDataClean = productsDataClean.filter(p => p.editionId === editionId)
-    logToFile('product_clean.json', productsDataClean, { ...logOptions, editionId })
+    logToFile('product_clean.json', productsDataClean, { ...logOptions/*, editionId*/ })
 
     return productsDataClean
 }
 
+interface Order {
+    orderId: string,
+    chartId: string,
+    amount?: number,
+    twitterName?: string
+    twitterData?: any
+}
 const getOrders = async ({ products, editionId }) => {
     // get orders
-    const orders = []
-    let ordersData = await fetchUntilNoMore(`${sendOwlAPIUrl}/v1_3/orders/`, getSendOwlOptions())
+    const orders: Array<Order> = []
+    const ordersData = await fetchUntilNoMore(`${sendOwlAPIUrl}/v1_3/orders/`, getSendOwlOptions())
 
     ordersData.forEach(({ order }) => {
         let twitterName = _.get(
@@ -119,16 +126,22 @@ const getOrders = async ({ products, editionId }) => {
             }
         }
     }
-    logToFile('orders.json', ordersData, { ...logOptions, editionId })
-    logToFile('orders_clean.json', orders, { ...logOptions, editionId })
+    logToFile('orders.json', ordersData, { ...logOptions/*, editionId */ })
+    logToFile('orders_clean.json', orders, { ...logOptions/*, editionId */ })
 
     return orders
 }
 
+interface Product {
+    chartId,
+    instant_buy_url: string,
+    add_to_cart_url: string,
+    sales_page_url: string,
+}
 const maxProductsToCreateInOneGo = 100
 const createMissingProducts = async ({ products, chartVariants, editionId, siteUrl }) => {
     console.log(`// Found ${chartVariants.length} chart variants, checking for missing products…`)
-    const newProducts = []
+    const newProducts: Array<Product> = []
     let i = 0
     // create any missing products
     for (const variant of chartVariants) {
@@ -156,7 +169,7 @@ const createMissingProducts = async ({ products, chartVariants, editionId, siteU
             logToFile('created_products.json', createProductData, {
                 mode: 'append',
                 subDir: 'chart_sponsors',
-                editionId
+                //editionId
             })
 
             // add newly created product to list of all products
@@ -186,6 +199,7 @@ export const getSendOwlData = async ({ flat, surveyId, editionId, siteUrl }) => 
     const dataFileName = 'sendowl.json'
     const dataDirName = 'results/chart_sponsorships'
     const dataDirPath = localPath + '/' + dataDirName
+    // @ts-expect-error TODO: this function expects a non-optional section Id
     const existingData = await getExistingData({
         dataFileName,
         dataFilePath: dataDirPath + '/' + dataFileName,
@@ -196,7 +210,7 @@ export const getSendOwlData = async ({ flat, surveyId, editionId, siteUrl }) => 
         return existingData
     } else {
         // get list of all chart variants that should have corresponding products
-        const chartVariants = []
+        const chartVariants: Array<any> = []
         for (const page of flat) {
             for (const block of page.blocks) {
                 for (const variant of block.variants) {

@@ -1,16 +1,17 @@
 import dotenv from 'dotenv'
-import path from 'path'
-import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url)
 
-const __dirname = path.dirname(__filename)
+// For mjs and Node <20, not needed in TS or with Node 20+
+// import path from 'path'
+//import { fileURLToPath } from 'url'
+//const __filename = fileURLToPath(import.meta.url)
+//const __dirname = path.dirname(__filename)
 
 const envPath = process.env.ENV_FILE ? process.env.ENV_FILE : '.env'
 dotenv.config({ path: envPath })
 
 function checkEnv() {
-    const errors = []
+    const errors: Array<string> = []
     if (!process.env.GATSBY_API_URL) {
         errors.push('Missing GATSBY_API_URL')
     }

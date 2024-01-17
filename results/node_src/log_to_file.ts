@@ -14,7 +14,15 @@ import { print } from 'graphql-print'
  * @param {LogOptions} options
  * @returns
  */
-export const logToFile = async (fileName_, object, options = {}) => {
+export const logToFile = async (fileName_: string,
+    /** Object to log */
+    object: any,
+    options: {
+        mode?: "overwrite" | "append",
+        timestamp?: boolean,
+        dirPath?: string
+        subDir?: string
+    } = {}) => {
     if (process.env.NODE_ENV === 'development') {
         let fileName = fileName_,
             subDir = options?.subDir

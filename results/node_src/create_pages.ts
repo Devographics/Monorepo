@@ -1,4 +1,4 @@
-import { computeSitemap } from './sitemap.mjs'
+import { computeSitemap } from './sitemap'
 import {
     getPageContext,
     getLocalizedPath,
@@ -6,27 +6,26 @@ import {
     createBlockPages,
     runPageQueries,
     getLoadMethod,
-    removeNull,
     getCachingMethods,
     getMetadata
-} from './helpers.mjs'
-import { getSendOwlData } from './sendowl.mjs'
+} from './helpers'
+import { getSendOwlData } from './sendowl'
 import yaml from 'js-yaml'
 import fs from 'fs'
 import path from 'path'
-import { logToFile } from './log_to_file.mjs'
-import { getLocales } from './locales.mjs'
-import { fileURLToPath } from 'url'
-import { initRedis } from './redis.mjs'
+import { logToFile } from './log_to_file'
+import { getLocales } from './locales'
+import { initRedis } from './redis'
+import { PageContextValue } from '../src/core/types/context.js'
 
-const __filename = fileURLToPath(import.meta.url)
-
-const __dirname = path.dirname(__filename)
-
+//  Not needed in TS/ recent versions of node
+// import { fileURLToPath } from 'url'
+// const __filename = fileURLToPath(import.meta.url)
+// const __dirname = path.dirname(__filename)
 const editionFolder = path.resolve(__dirname, `../surveys/${process.env.EDITIONID}`)
 
 function checkConfig() {
-    const errors = []
+    const errors: Array<string> = []
     if (!process.env.EDITIONID) errors.push('EDITIONID not defined')
     if (!process.env.SURVEYID) errors.push('SURVEYID not defined')
     if (!fs.existsSync(editionFolder)) {
@@ -54,6 +53,13 @@ function strikeThrough(text) {
         .split('')
         .map(char => char + '\u0336')
         .join('')
+}
+
+interface PageObject {
+    path: string,
+    component: string,
+    context: PageContextValue
+    matchPath: string
 }
 
 /**
@@ -120,18 +126,18 @@ export const createPagesSingleLoop = async ({
         localeIds,
         graphql,
         contexts: config.translationContexts,
-        editionId
+        //editionId
     })
 
     buildInfo.localeCount = locales.length
 
     const cleanLocales = getCleanLocales(locales)
-    logToFile('locales.json', cleanLocales, { mode: 'overwrite', surveyId })
+    logToFile('locales.json', cleanLocales, { mode: 'overwrite'/*,surveyId*/ })
     locales.forEach(locale => {
         logToFile(`${locale.id}.json`, locale, {
             mode: 'overwrite',
             subDir: 'locales',
-            editionId
+            //editionId
         })
     })
 
@@ -147,7 +153,7 @@ export const createPagesSingleLoop = async ({
     const flatSitemap = { locales: cleanLocales, contents: flat }
     logToFile('flat_sitemap.yml', yaml.dump(flatSitemap, { noRefs: true }), {
         mode: 'overwrite',
-        editionId
+        //editionId
     })
 
     const siteUrl = resultsUrl
@@ -159,9 +165,10 @@ export const createPagesSingleLoop = async ({
 
     // Building page context for each page of the sitemap
 
+    // @ts-
     const allBlocks = flat.map(page => page.blocks).flat()
-    const allVariants = allBlocks.map(block => block.variants).flat()
-    let i18nNamespaces = {}
+    const allVariants = allBlocks.map(block => block?.variants).flat()
+    const i18nNamespaces = {}
     for (const variant of allVariants) {
         if (variant.i18nNamespace) {
             i18nNamespaces[variant.id] = variant.i18nNamespace
@@ -199,15 +206,16 @@ export const createPagesSingleLoop = async ({
             buildInfo.pageCount++
 
             const locale = locales[index]
-            locale.path = `/${locale.id}`
+            const localePath = `/${locale.id}`
 
-            const pageObject = {
+            const pageObject: Partial<PageObject> = {
                 path: getLocalizedPath(page.path, locale),
                 component: path.resolve(`./src/core/pages/PageTemplate.js`),
                 context: {
                     ...fullContext,
                     pageData,
                     locale,
+                    localePath,
                     localeId: locale.id,
                     i18nNamespaces
                 }
@@ -235,6 +243,6 @@ export const createPagesSingleLoop = async ({
     }
     logToFile('build.yml', yaml.dump(buildInfo, { noRefs: true }), {
         mode: 'overwrite',
-        editionId
+        //editionId
     })
 }

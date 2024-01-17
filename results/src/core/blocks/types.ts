@@ -3,7 +3,7 @@ export interface BlockContext<
     BlockType,
     PageVariables = unknown,
     BlockVariables = unknown
-> {
+    > {
     // unique identifier of the block, should be unique
     // for the whole survey
     id: string
@@ -25,4 +25,5 @@ export interface BlockContext<
     // Injected variables for the block
     variables: BlockVariables
     enableExport: boolean
+
 }

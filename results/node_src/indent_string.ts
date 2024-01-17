@@ -1,4 +1,4 @@
-export function indentString(string, count = 1, options = {}) {
+export function indentString(string, count = 1, options: { indent?: string, includeEmptyLines?: boolean } = {}) {
     const { indent = ' ', includeEmptyLines = false } = options
 
     if (typeof string !== 'string') {

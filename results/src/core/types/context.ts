@@ -1,6 +1,6 @@
 import { EditionMetadata, SurveyMetadata } from '@devographics/types'
 import React from 'react'
-import { Locale } from './i18n'
+import type { Locale } from "@devographics/react-i18n"
 
 interface GatsbyPageContext {
     id: string
@@ -26,7 +26,8 @@ interface SurveyPageContext {
     currentEdition: EditionMetadata
     locale?: Locale
     block: any
-    locales?: Array<any>
+    locales?: Array<Locale>,
+    localePath: string,
     localeId: string
     parent?: any
     i18nNamespaces?: any

@@ -5,18 +5,12 @@ import fs from 'fs'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { TwitterApi } from 'twitter-api-v2'
-import { logToFile } from './log_to_file.mjs'
-import { argumentsPlaceholder, getFiltersQuery, getQuery } from './queries.mjs'
-import { fileURLToPath } from 'url'
-import without from 'lodash/without.js'
-import { getMetadataQuery } from './queries.mjs'
+import { logToFile } from './log_to_file'
+import { argumentsPlaceholder, getFiltersQuery, getQuery, getMetadataQuery } from './queries'
 
-import { parse } from 'graphql'
-import { print } from 'graphql-print'
-
-const __filename = fileURLToPath(import.meta.url)
-
-const __dirname = path.dirname(__filename)
+// import { fileURLToPath } from 'url'
+// const __filename = fileURLToPath(import.meta.url)
+// const __dirname = path.dirname(__filename)
 
 const fsPromises = fs.promises
 /*
@@ -122,7 +116,9 @@ export const createBlockPages = (page, context, createPage, locales, buildInfo) 
 Get a file from the disk or from GitHub
 
 */
-export const getExistingData = async ({ dataFileName, dataFilePath, sectionId, baseUrl }) => {
+export const getExistingData = async ({ dataFileName, dataFilePath, sectionId, baseUrl }: {
+    dataFileName: string, sectionId: string, dataFilePath: string, baseUrl: string
+}) => {
     let contents, data
     const remoteUrl = `${baseUrl}/data/${sectionId}/${dataFileName}`
     if (getLoadMethod() === 'local') {
@@ -255,7 +251,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                             })
                         }
 
-                        let prettyQueryLog = queryLog.replace(argumentsPlaceholder, '')
+                        const prettyQueryLog = queryLog.replace(argumentsPlaceholder, '')
                         // try {
                         //     const ast = parse(queryLog)
                         //     prettyQueryLog = print(ast, { preserveComments: true })
@@ -266,7 +262,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                         logToFile(queryFileName, prettyQueryLog, {
                             mode: 'overwrite',
                             dirPath: queryDirPath,
-                            editionId
+                            //editionId
                         })
                     }
 
@@ -276,7 +272,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                     logToFile(dataFileName, data, {
                         mode: 'overwrite',
                         dirPath: dataDirPath,
-                        editionId
+                        //editionId
                     })
                 }
                 pageData = merge(pageData, data)
@@ -327,7 +323,7 @@ export const sleep = ms => {
 export const getQuestionId = (id, facet) => (facet ? `${id}_by_${facet}` : id)
 
 export function removeNull(obj) {
-    var clean = Object.fromEntries(
+    const clean = Object.fromEntries(
         Object.entries(obj)
             .map(([k, v]) => [k, v === Object(v) ? removeNull(v) : v])
             .filter(([_, v]) => v != null && (v !== Object(v) || Object.keys(v).length))
@@ -358,7 +354,7 @@ export const getMetadata = async ({ surveyId, editionId, graphql }) => {
 
     logToFile('metadataQuery.graphql', metadataQuery, {
         mode: 'overwrite',
-        editionId
+        //editionId
     })
 
     const metadataResults = removeNull(
@@ -371,7 +367,7 @@ export const getMetadata = async ({ surveyId, editionId, graphql }) => {
     const metadataData = metadataResults?.data?.dataAPI
     logToFile('metadataData.json', metadataData, {
         mode: 'overwrite',
-        editionId
+        // editionId
     })
     const currentSurvey = metadataData.surveys[surveyId]._metadata
     const currentEdition = metadataData.surveys[surveyId][editionId]._metadata

@@ -1,5 +1,5 @@
 import React from 'react'
-import LayoutWrapper from 'core/layout/LayoutWrapper'
+import LayoutWrapper from './src/core/layout/LayoutWrapper'
 
 /**
  *  @typedef {{element: any,

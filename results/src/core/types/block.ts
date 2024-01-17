@@ -39,7 +39,7 @@ export interface BlockQueryOptions {
 export interface BlockDefinition {
     id: string
     fieldId?: string
-    sectionId: string
+    sectionId?: string
     template?: string
     blockType?: string
     tabId?: string
@@ -55,7 +55,7 @@ export interface BlockDefinition {
     // data
     query?: string
     variables?: any
-    parameters: ResponsesParameters
+    parameters?: ResponsesParameters
     filters?: FilterType[]
     queryOptions?: BlockQueryOptions
     hideCutoff?: number
@@ -75,7 +75,12 @@ export interface BlockDefinition {
     translateData?: boolean
     hasSponsor?: boolean
     hasComments?: boolean
+
+    variants?: Array<BlockVariant>
 }
+
+// TODO
+export type BlockVariant = any
 
 export interface BlockWithAwards {
     /**

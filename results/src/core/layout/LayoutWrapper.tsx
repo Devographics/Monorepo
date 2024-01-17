@@ -24,7 +24,9 @@ interface LayoutProps {
 }
 const ThemedLayout = (props: LayoutProps) => {
     return (
+        // @ts-expect-errors legacy
         <ThemeProvider theme={theme}>
+            {/* @ts-expect-errors legacy */}
             <GlobalStyle />
             <Head />
             {props.context.id === 'report' ? (
@@ -93,7 +95,6 @@ export default class Layout extends PureComponent<
             showSidebar: false
         })
     }
-
     render() {
         const { showPagination, location, pageContext, children } = this.props
         const { showSidebar } = this.state
@@ -101,6 +102,7 @@ export default class Layout extends PureComponent<
         return (
             <KeydownContextProvider>
                 <PageContextProvider value={mergedPageContext}>
+                    {/** Locales are being fetched into "create_pages.mjs" and "locales.mjs" */}
                     <I18nContextProvider locale={mergedPageContext.locale}>
                         <ThemedLayout
                             context={mergedPageContext}

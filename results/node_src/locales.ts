@@ -1,7 +1,9 @@
-import { getLocalesQuery, getLocaleContextQuery } from './queries.mjs'
-import { logToFile } from './log_to_file.mjs'
-import { getRedisClient } from './redis.mjs'
-import { getCachingMethods, removeNull } from './helpers.mjs'
+// TODO: share this data fetching logic with surveyform
+import { getLocalesQuery, getLocaleContextQuery } from './queries'
+import { logToFile } from './log_to_file'
+import { getRedisClient } from './redis'
+import { getCachingMethods, removeNull } from './helpers'
+import { Locale, Translation } from '@devographics/react-i18n'
 
 const getAllLocalesCacheKey = () => `${process.env.APP_NAME}__allLocales__metadata`
 const getLocaleContextCacheKey = (localeId, context) =>
@@ -40,8 +42,26 @@ export const getLocaleContextGraphQL = async ({ localeId, context, graphql, key 
     return locale
 }
 
+/**
+ * @typedef {{
+ *      // languages we want to get
+ *      // if empty or undefined
+ *      localeIds?: Array<string>,
+ *      graphql: any,
+ *      // specific i18n contexts we want to get
+ *      contexts: Array<string>
+ * }} Foo
+ */
+/**
+ * 
+ * @param {Object} config
+ * @param {Array<string> | undefined} config.localeIds - the languages to be fetched, if empty will get all languages
+ * @param {(query: string) => Promise<any>} graphql - A fetcher function to get data, based on a graphql query
+ * @param {Array<string>} contexts - the specific translation strings to be fetched
+ * @returns {Promise<Array<Locale>>} Locales with strings
+ */
 export const getLocales = async ({ localeIds, graphql, contexts }) => {
-    let locales
+    let locales: Array<Locale>
     const redisClient = getRedisClient()
     const allLocalesKey = getAllLocalesCacheKey()
     const useRedisCache = getCachingMethods().redis
@@ -65,7 +85,7 @@ export const getLocales = async ({ localeIds, graphql, contexts }) => {
     logToFile('localesMetadataRedis.json', locales)
 
     for (const locale of locales) {
-        let localeStrings = []
+        let localeStrings: Array<Translation> = []
 
         for (const context of contexts) {
             const key = getLocaleContextCacheKey(locale.id, context)

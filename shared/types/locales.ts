@@ -1,5 +1,6 @@
 /**
  * As returned by the translation API
+ * @deprecated Migrate towards @devographics/react-i18n based on "results" and shared with surveyform
  */
 export interface RawLocale {
     id: string
@@ -22,7 +23,13 @@ export interface StringFile {
     url?: string
 }
 
+/**
+ * @deprecated Migrate towards @devographics/react-i18n based on "results" and shared with surveyform
+ */
 export type LocaleDef = Omit<RawLocale, 'strings'>
+/**
+ * @deprecated Migrate towards @devographics/react-i18n based on "results" and shared with surveyform
+ */
 export type LocaleDefWithStrings = Omit<RawLocale, 'strings'> & {
     /**
      * Strings as a map
@@ -34,7 +41,8 @@ export type LocaleDefWithStrings = Omit<RawLocale, 'strings'> & {
 
 Locale metadata stored in locales.yml
 
-*/
+ * @deprecated Migrate towards @devographics/react-i18n based on "results" and shared with surveyform
+ */
 export interface LocaleMetaData {
     id: string
     label: string
@@ -53,11 +61,10 @@ export interface LocaleDynamicMetaData {
     untranslatedKeys: string[]
 }
 
-/*
-
-Full locale data
-
-*/
+/**
+* Full locale data
+    * @deprecated Migrate towards @devographics/react-i18n based on "results" and shared with surveyform
+        */
 export interface Locale {
     id: string
     label?: string
