@@ -2,6 +2,7 @@ import path from 'path'
 import { createPagesSingleLoop } from './node_src/create_pages'
 import CopyPlugin from 'copy-webpack-plugin'
 import dotenv from 'dotenv'
+import { CreateWebpackConfigArgs } from 'gatsby'
 
 // Needed only for mjs
 // import { createRequire } from 'node:module'
@@ -18,8 +19,9 @@ dotenv.config({
 
 export const createPages = createPagesSingleLoop
 
+
 // Allow absolute imports and inject `ENV`
-export const onCreateWebpackConfig = ({ stage, actions, plugins }) => {
+export const onCreateWebpackConfig = ({ stage, actions, plugins }: CreateWebpackConfigArgs) => {
     console.log(
 
         "THEME",
@@ -38,9 +40,10 @@ export const onCreateWebpackConfig = ({ stage, actions, plugins }) => {
             },
             modules: [path.resolve(__dirname, 'src'), 'node_modules'],
             fallback: {
-                path: require.resolve('path-browserify'),
-                assert: require.resolve('assert-polyfill'),
-                util: require.resolve('util/'),
+                // TODO: normally not needed if server code doesn't leak in client
+                // path: require.resolve('path-browserify'),
+                // assert: require.resolve('assert-polyfill'),
+                // util: require.resolve('util/'),
                 buffer: false
             }
         },

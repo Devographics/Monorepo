@@ -1,6 +1,7 @@
 import get from 'lodash/get'
 import { getBlockImage } from './blockHelpers'
-import { PageContextValue, StringTranslator } from 'core/types'
+import { PageContextValue } from 'core/types'
+import { StringTranslator } from '@devographics/react-i18n';
 
 // TODO: doesn't seem to be used
 export const getTranslationValuesFromContext = (
@@ -47,6 +48,8 @@ export const getPageLabel = ({
  */
 export const getPageImageUrl = ({ pageContext }: { pageContext: PageContextValue }) => {
     const { currentEdition, block } = pageContext
+    // TODO: seems to happen in dev?
+    if (!currentEdition) return ""
 
     let imageUrl
     if (block !== undefined) {

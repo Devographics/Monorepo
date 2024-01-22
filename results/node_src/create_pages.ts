@@ -1,3 +1,5 @@
+import type { CreatePagesArgs, Page } from "gatsby"
+import { PageContextValue } from '../src/core/types/context.js'
 import { computeSitemap } from './sitemap'
 import {
     getPageContext,
@@ -16,7 +18,6 @@ import path from 'path'
 import { logToFile } from './log_to_file'
 import { getLocales } from './locales'
 import { initRedis } from './redis'
-import { PageContextValue } from '../src/core/types/context.js'
 
 //  Not needed in TS/ recent versions of node
 // import { fileURLToPath } from 'url'
@@ -55,12 +56,6 @@ function strikeThrough(text) {
         .join('')
 }
 
-interface PageObject {
-    path: string,
-    component: string,
-    context: PageContextValue
-    matchPath: string
-}
 
 /**
  * @see createPages https://www.gatsbyjs.com/docs/how-to/querying-data/using-gatsby-without-graphql/#the-approach-fetch-data-and-use-gatsbys-createpages-api
@@ -71,7 +66,7 @@ export const createPagesSingleLoop = async ({
      * @see https://www.gatsbyjs.com/docs/reference/config-files/actions/#createPage
      */
     actions: { createPage, createRedirect }
-}) => {
+}: CreatePagesArgs) => {
     await initRedis()
 
     const surveyId = process.env.SURVEYID
@@ -208,9 +203,9 @@ export const createPagesSingleLoop = async ({
             const locale = locales[index]
             const localePath = `/${locale.id}`
 
-            const pageObject: Partial<PageObject> = {
+            const pageObject: Page<PageContextValue> = {
                 path: getLocalizedPath(page.path, locale),
-                component: path.resolve(`./src/core/pages/PageTemplate.js`),
+                component: path.resolve(`./src/core/pages/PageTemplate.tsx`),
                 context: {
                     ...fullContext,
                     pageData,

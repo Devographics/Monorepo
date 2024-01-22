@@ -1,9 +1,18 @@
 import React from 'react'
 import BlockSwitcher from 'core/blocks/block/BlockSwitcher'
 import styled, { css } from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
+import { mq, spacing } from 'core/theme'
+import { BlockDefinition } from 'core/types'
 
-export const EmptyWrapper = ({ block, pageData, blockIndex }) => (
+export const EmptyWrapper = ({
+    block,
+    pageData,
+    blockIndex
+}: {
+    block: BlockDefinition
+    pageData?: any
+    blockIndex?: number
+}) => (
     <Wrapper className="empty-wrapper">
         {block.variants.map((block, variantIndex) => (
             <BlockSwitcher

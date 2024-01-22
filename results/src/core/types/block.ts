@@ -77,6 +77,10 @@ export interface BlockDefinition {
     hasComments?: boolean
 
     variants?: Array<BlockVariant>
+
+    wrapBlock?: boolean
+
+    dataPath?: string
 }
 
 // TODO

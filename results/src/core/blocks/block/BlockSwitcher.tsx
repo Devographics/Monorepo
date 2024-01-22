@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 // import globalBlockRegistry from 'core/helpers/blockRegistry'
 import blockRegistry from 'Config/blocks'
 import isEmpty from 'lodash/isEmpty'
-import get from 'lodash/get'
 import { usePageContext } from 'core/helpers/pageContext'
 import { BlockError } from 'core/blocks/block/BlockError'
 import { getBlockData, getBlockSeriesData } from 'core/helpers/data'
@@ -12,11 +11,13 @@ import { getAllQuestions } from 'core/helpers/options'
 
 interface BlockSwitcherProps {
     block: BlockDefinition
+    pageData?: any
+    index?: number
 }
 const BlockSwitcher = ({ pageData, block, index, ...props }: BlockSwitcherProps) => {
     const pageContext = usePageContext()
 
-    const { id, blockType, hidden } = block
+    const { id, blockType } = block
     if (!blockRegistry[blockType]) {
         return (
             <BlockError
@@ -51,7 +52,10 @@ const BlockSwitcher = ({ pageData, block, index, ...props }: BlockSwitcherProps)
 }
 
 const BlockSwitcherWithSeriesData = (
-    props: BlockSwitcherProps & { filtersState: CustomizationDefinition }
+    props: BlockSwitcherProps & {
+        filtersState: CustomizationDefinition
+        blockComponent: React.ComponentType<any>
+    }
 ) => {
     const { block, pageData, BlockComponent, pageContext, filtersState } = props
     const { id, blockType } = block

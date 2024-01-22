@@ -1,3 +1,4 @@
+import path from "path"
 import dotenv from 'dotenv'
 
 
@@ -32,7 +33,7 @@ export default {
             resolve: 'gatsby-source-filesystem',
             options: {
                 name: `data`,
-                path: `${__dirname}/src/data/`
+                path: path.resolve(__dirname, "./src/data/")
             }
         },
         {

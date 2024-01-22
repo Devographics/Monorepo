@@ -1,6 +1,7 @@
 import { EditionMetadata, SurveyMetadata } from '@devographics/types'
 import React from 'react'
 import type { Locale } from "@devographics/react-i18n"
+import { BlockDefinition } from './block'
 
 interface GatsbyPageContext {
     id: string
@@ -26,10 +27,14 @@ interface SurveyPageContext {
     currentEdition: EditionMetadata
     locale?: Locale
     block: any
+    blocks?: Array<BlockDefinition>,
     locales?: Array<Locale>,
     localePath: string,
     localeId: string
     parent?: any
     i18nNamespaces?: any
+    // Block page
+    showTitle?: boolean,
+    is_hidden?: boolean
 }
 export type PageContextValue = SurveyPageContext & GatsbyPageContext

@@ -2,20 +2,18 @@ import React from 'react'
 import styled from 'styled-components'
 import { fontSize } from 'core/theme'
 import Button from 'core/components/Button'
-import { ToolExperienceBlock } from 'core/charts/toolFeatureExperience/ToolFeatureExperienceBlock'
 import { usePageContext } from 'core/helpers/pageContext'
-import get from 'lodash/get'
 import ModalTrigger from 'core/components/ModalTrigger'
 import BlockWrapper from 'core/blocks/block/BlockWrapper'
 import { useEntity } from 'core/helpers/entities'
 
-const ToolLabel = ({ id }) => {
+const ToolLabel = ({ id }: { id: string }) => {
     const entity = useEntity(id)
     if (!entity) {
         return <span title="Missing entity">{id}</span>
     }
 
-    const { name, homepage } = entity
+    const { name } = entity
 
     return (
         <ModalTrigger
@@ -32,8 +30,9 @@ const ToolLabel = ({ id }) => {
     )
 }
 
-const ToolLabelModal = ({ id, closeComponent }) => {
+const ToolLabelModal = ({ id }: { id: string }) => {
     const pageContext = usePageContext()
+    if (!pageContext.blocks) throw new Error('No blocks in page context')
     const block = pageContext.blocks.find(block => block.id === id)
     // unhide variants
     const variants = block.variants.map(b => ({ ...b, hidden: false }))

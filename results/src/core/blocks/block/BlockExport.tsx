@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import camelCase from 'lodash/camelCase'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 import Modal from 'react-modal'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
@@ -9,6 +9,7 @@ import { mq, spacing, fontSize } from 'core/theme'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import ModalTrigger from 'core/components/ModalTrigger'
+import { BlockDefinition } from 'core/types'
 
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement('#___gatsby')
@@ -41,7 +42,15 @@ const ExportIcon = () => (
     </Icon>
 )
 
-const BlockExport = ({ data, block, title }) => {
+const BlockExport = ({
+    data,
+    block,
+    title
+}: {
+    data: any
+    block: BlockDefinition
+    title?: any
+}) => {
     return (
         <>
             <ButtonWrapper className="BlockExport">

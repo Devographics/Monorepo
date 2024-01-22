@@ -1,7 +1,7 @@
 import React from 'react'
 import BlockSwitcher from 'core/blocks/block/BlockSwitcher'
-import styled, { css } from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
+import styled from 'styled-components'
+import { spacing } from 'core/theme'
 import BlockTitle from 'core/blocks/block/BlockTitle'
 import get from 'lodash/get'
 
