@@ -1,10 +1,28 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import styled, { css } from 'styled-components'
 import { mq, spacing } from 'core/theme'
-import { getItemLabel } from 'core/helpers/labels'
+import { BlockLegend } from 'core/types'
 
-const BlockLegendsItem = props => {
+type BlockEventHandler = ({ id, label, color }: Pick<BlockLegend, 'id' | 'label' | 'color'>) => void
+
+export interface BlockLegendSharedProps {
+    layout?: 'horizontal' | 'vertical'
+    useShortLabels?: boolean
+    chartFilters?: any
+    current?: any
+    chipSize: number
+    style?: any
+    itemStyle?: any
+    chipStyle?: any
+    onMouseEnter: BlockEventHandler
+    onMouseLeave: BlockEventHandler
+    onClick: BlockEventHandler
+    units: 'percentage' | string
+    data?: { [units: string]: any }
+}
+type BlockLegendsItemProps = BlockLegendSharedProps & BlockLegend
+
+const BlockLegendsItem = (props: BlockLegendsItemProps) => {
     const {
         id,
         color,

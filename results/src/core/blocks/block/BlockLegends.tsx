@@ -1,19 +1,18 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import { mq, spacing, fontSize, color } from 'core/theme'
-import BlockLegendsItem from './BlockLegendsItem'
+import BlockLegendsItem, { BlockLegendSharedProps } from './BlockLegendsItem'
 import T from 'core/i18n/T'
+import { BlockLegend } from 'core/types'
 
 const BlockLegends = ({
     legends = [],
-    block,
     layout = 'horizontal',
-    withFrame,
-    chipSize,
-    style,
-    itemStyle,
-    chipStyle,
+    withFrame = true,
+    chipSize = 16,
+    style = {},
+    itemStyle = {},
+    chipStyle = {},
     onMouseEnter,
     onMouseLeave,
     onClick,
@@ -23,8 +22,13 @@ const BlockLegends = ({
     useShortLabels = layout === 'horizontal',
     chartFilters = {},
     current
+}: BlockLegendSharedProps & {
+    // Not strictly needed
+    // block: BlockDefinition
+    legends: Array<BlockLegend>
+    withFrame?: boolean
+    position?: 'bottom' | 'top'
 }) => {
-    const { id: blockId, bucketKeysName = blockId } = block
     const { facet } = chartFilters
     const blockLegends = legends
 
@@ -67,27 +71,6 @@ const BlockLegends = ({
             </ContainerInner>
         </Container>
     )
-}
-
-BlockLegends.propTypes = {
-    layout: PropTypes.oneOf(['horizontal', 'vertical']).isRequired,
-    withFrame: PropTypes.bool.isRequired,
-    chipSize: PropTypes.number.isRequired,
-    style: PropTypes.object.isRequired,
-    itemStyle: PropTypes.object.isRequired,
-    chipStyle: PropTypes.object.isRequired,
-    onMouseEnter: PropTypes.func,
-    onMouseLeave: PropTypes.func,
-    onClick: PropTypes.func
-}
-
-BlockLegends.defaultProps = {
-    layout: 'horizontal',
-    withFrame: true,
-    style: {},
-    itemStyle: {},
-    chipStyle: {},
-    chipSize: 16
 }
 
 const LegendHeading = styled.h4`

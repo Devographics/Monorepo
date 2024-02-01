@@ -38,6 +38,7 @@ export interface BlockQueryOptions {
 
 export interface BlockDefinition {
     id: string
+    bucketKeysName?: string
     fieldId?: string
     sectionId?: string
     template?: string
@@ -81,6 +82,12 @@ export interface BlockDefinition {
     wrapBlock?: boolean
 
     dataPath?: string
+    isFreeform?: boolean
+
+    // from BlockChart
+    switcherPosition?: 'top' | 'bottom'
+    showNote?: boolean
+    customChart?: any
 }
 
 // TODO
@@ -113,5 +120,11 @@ export interface BlockLegend {
     label: string
     shortLabel?: string
     color?: string
-    gradientColors: string[]
+    gradientColors?: string[]
+}
+
+
+export interface BlockDataType {
+    units: 'percentage' | string
+    data: { [units: string]: any },
 }
