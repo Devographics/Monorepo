@@ -1,5 +1,6 @@
 import { useI18n } from '@devographics/react-i18n'
 import React from 'react'
+// @ts-ignore
 import Helmet from 'react-helmet'
 import { usePageContext } from '../helpers/pageContext'
 import { getPageSocialMeta } from '../helpers/pageHelpers'

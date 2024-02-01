@@ -15,17 +15,19 @@ import {
     AccordionContent
 } from 'core/components/Accordion'
 import { BlockDefinition } from 'core/types'
+import { SponsorProduct } from 'core/types/sponsors'
 
 const faqItems = ['usage', 'public', 'refund', 'influence', 'feedback']
 
 const baseAmount = 10
 
-const SponsorPrompt = ({ product, block }) => (
+const SponsorPrompt = ({ product, block }: { product: SponsorProduct; block: BlockDefinition }) => (
     <div>
         <ModalTrigger
             trigger={
                 <SponsorIconWrapper>
                     <SponsorIcon
+                        // @ts-ignore
                         size="small"
                         enableTooltip={true}
                         labelId="sponsor.sponsor_button"
@@ -60,7 +62,7 @@ const SponsorIconWrapper = styled(Button)`
     }
 `
 
-const SponsorModal = ({ product, block }: { product: any; block: BlockDefinition }) => {
+const SponsorModal = ({ product, block }: { product: SponsorProduct; block: BlockDefinition }) => {
     const pageContext = usePageContext()
     const { getString } = useI18n()
     const meta = getBlockMeta({ block, pageContext, getString })

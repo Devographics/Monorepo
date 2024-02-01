@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { fontSize, fontWeight, spacing } from 'core/theme'
+import { fontSize, spacing } from 'core/theme'
 import BlockNote from 'core/blocks/block/BlockNote'
 import BlockLegends from 'core/blocks/block/BlockLegends'
 import { useI18n } from '@devographics/react-i18n'
@@ -12,7 +12,6 @@ import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
 import EditInline from 'core/components/EditInline'
 import BlockLinks from 'core/blocks/block/BlockLinks'
 import { BlockDefinition } from 'core/types'
-import { Entity } from '@devographics/types'
 import BlockQuestion from './BlockQuestion'
 
 const BlockChart = props => {

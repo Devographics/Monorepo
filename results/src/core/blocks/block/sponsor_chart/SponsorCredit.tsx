@@ -1,14 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import { mq, spacing, fontSize } from 'core/theme'
+import { spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 import Tooltip from 'core/components/Tooltip'
+import { SponsorOrder } from 'core/types/sponsors'
 
-const SponsorCredit = ({ sponsor }) => {
-    const avatarUrl = sponsor?.twitterData?.profile_image_url
-    const username = sponsor?.twitterData?.username || sponsor?.twitterName
-    const name = sponsor?.twitterData?.name
-    const amount = sponsor?.amount
+const SponsorCredit = ({ sponsor }: { sponsor: SponsorOrder }) => {
+    const avatarUrl = sponsor.twitterData?.profile_image_url
+    const username = sponsor.twitterData?.username || sponsor?.twitterName
+    const name = sponsor.twitterData?.name
+    const amount = sponsor.amount
     const link = `https://twitter.com/${username}`
     return (
         <div>
