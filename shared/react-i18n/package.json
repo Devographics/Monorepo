@@ -13,6 +13,11 @@
     "publishConfig": {
         "access": "public"
     },
+    "dependencies": {
+        "@devographics/debug": "workspace:^1.0.0",
+        "@devographics/fetch": "workspace:^1.0.0",
+        "@devographics/redis": "workspace:^1.0.0"
+    },
     "devDependencies": {
         "@types/react": "^18.0.27",
         "react": "^17.0.1"

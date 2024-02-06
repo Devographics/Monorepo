@@ -3,7 +3,7 @@ import {
     getTwitterUser,
     getDataLocations,
     getExistingData,
-    getCachingMethods
+    allowedCachingMethods
 } from './helpers'
 import fetch from 'node-fetch'
 import _ from 'lodash'
@@ -191,7 +191,7 @@ export const getSendOwlData = async ({ flat, surveyId, editionId, siteUrl }) => 
     if (!process.env.SENDOWL_API_KEY || !process.env.SENDOWL_SECRET) {
         return {}
     }
-    const useCache = getCachingMethods().filesystem
+    const useCache = allowedCachingMethods().filesystem
 
     console.log(`// 🦉 Getting SendOwl data… (useCache=${useCache})`)
 

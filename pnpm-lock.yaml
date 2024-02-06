@@ -365,6 +365,9 @@ importers:
       '@devographics/constants':
         specifier: workspace:^1.0.0
         version: link:../shared/constants
+      '@devographics/fetch':
+        specifier: workspace:^1.0.0
+        version: link:../shared/fetch
       '@devographics/helpers':
         specifier: workspace:^1.0.0
         version: link:../shared/helpers
@@ -849,6 +852,16 @@ importers:
         version: 4.14.198
 
   shared/react-i18n:
+    dependencies:
+      '@devographics/debug':
+        specifier: workspace:^1.0.0
+        version: link:../debug
+      '@devographics/fetch':
+        specifier: workspace:^1.0.0
+        version: link:../fetch
+      '@devographics/redis':
+        specifier: workspace:^1.0.0
+        version: link:../redis
     devDependencies:
       '@types/react':
         specifier: ^18.0.27

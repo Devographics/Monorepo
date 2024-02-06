@@ -7,6 +7,7 @@ import NodeCache from 'node-cache'
 import { initRedis, fetchJson as fetchRedis, storeRedis } from '@devographics/redis'
 import { logToFile } from '@devographics/debug'
 import { CacheType, GetFromCacheOptions, SourceType } from './types'
+import { FetchPipelineStep, runFetchPipeline } from './pipeline'
 // import { compressJSON, decompressJSON } from './compress'
 
 export const memoryCache = new NodeCache({
@@ -148,7 +149,84 @@ async function getFromCacheOrSource<T = any>({
 }
 
 /**
+ * TODO: work in progress, rewrite getFromCache as a pipeline for simplicity
+ * need to be careful to have the same compression logic than the existing method
+ * 
+ * Also, this version doesn't handle concurrency out of the box
+ * We expect the caller to handle it, eg via Next.js unstable_cache/app router
+ * 
+ * NOTE: it's perhaps to build generic pipelines within each app,
+ * to avoid having a too generic function with a ton of config,
+ * so this function might not be needed at all
+ * See "fetch-locales"
+ */
+async function getFromCachePipeline<T = any>({
+    key,
+    disableCache: disableCacheOption,
+    disableMemoryCache,
+    disableRedisCache,
+    redisUrl,
+    redisToken
+}: {
+    key: string,
+    /**
+     * Disable all caches, will use the source of truth directly
+     * 
+     * Previously "shouldGetFromCache", but reversed
+     * Gets priority over env variables
+     * If not set, DISABLE_CACHE env variable allow to disable caches too
+     */
+    disableCache: boolean,
+    disableMemoryCache: boolean
+    disableRedisCache: boolean,
+    redisUrl: string,
+    redisToken: string
+}) {
+    const startAt = new Date()
+    const disableCacheEnv = !!process.env.DISABLE_CACHE
+    const disableCache = disableCacheOption ?? disableCacheEnv
+
+    // Needed even if we disable Redis for now
+    if (!disableCache || disableRedisCache) {
+        initRedis(redisUrl, redisToken)
+    }
+    const pipeline: Array<FetchPipelineStep<T>> = [
+        // TODO: it will trigger cache misses
+        // how to deduplicate?
+        {
+            get: () => {
+                return memoryCache.get<T>(key)
+            },
+            set: (data) => {
+                memoryCache.set<T>(key, data)
+            },
+            disabled: disableCache || disableMemoryCache,
+            name: "In-memory"
+        }, /*{
+            get: () => {
+
+            }
+            disabled: disableCache || disableRedisCache
+        }, {
+
+        }*/
+    ]
+    const data = await runFetchPipeline(pipeline)
+    const endAt = new Date()
+    const duration = endAt.getTime() - startAt.getTime()
+    const result = {
+        data,
+        duration
+    }
+    return result
+}
+
+/**
  * Generic function to fetch something from cache, or store it if cache misses
+ * 
+ * Handls concurrency out of the box
+ * 
+ * TODO: replace by the pipeline version for simplification
  * @returns
  */
 export async function getFromCache<T = any>({

@@ -1,4 +1,3 @@
-// TODO: move those types to "shared" and have surveyform to use them
 export interface Translation {
     key: string
     t: string
@@ -16,6 +15,7 @@ export interface Locale {
      */
     label?: string
 }
+export type LocaleWithStrings = Locale & Required<Pick<Locale, "strings">>
 
 interface InterpolationValues {
     values?: { [key: string]: string | number }

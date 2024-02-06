@@ -8,7 +8,6 @@ import {
     createBlockPages,
     runPageQueries,
     getLoadMethod,
-    getCachingMethods,
     getMetadata
 } from './helpers'
 import { getSendOwlData } from './sendowl'
@@ -16,8 +15,9 @@ import yaml from 'js-yaml'
 import fs from 'fs'
 import path from 'path'
 import { logToFile } from './log_to_file'
-import { getLocales } from './locales'
 import { initRedis } from './redis'
+import { getLocalesWithStrings } from "@devographics/react-i18n"
+import { allowedCachingMethods } from "@devographics/fetch"
 
 //  Not needed in TS/ recent versions of node
 // import { fileURLToPath } from 'url'
@@ -84,7 +84,7 @@ export const createPagesSingleLoop = async ({
         translationContexts: config.translationContexts
     }
 
-    const cachingMethods = getCachingMethods()
+    const cachingMethods = allowedCachingMethods()
     const cachingMethodsString = Object.keys(cachingMethods)
         .map(cm => (cachingMethods[cm] ? cm : strikeThrough(cm)))
         .join(', ')
@@ -117,7 +117,7 @@ export const createPagesSingleLoop = async ({
 
     // loading i18n data
 
-    const locales = await getLocales({
+    const locales = await getLocalesWithStrings({
         localeIds,
         graphql,
         contexts: config.translationContexts,

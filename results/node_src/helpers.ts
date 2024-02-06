@@ -7,6 +7,7 @@ import yaml from 'js-yaml'
 import { TwitterApi } from 'twitter-api-v2'
 import { logToFile } from './log_to_file'
 import { argumentsPlaceholder, getFiltersQuery, getQuery, getMetadataQuery } from './queries'
+import { allowedCachingMethods } from "@devographics/fetch"
 
 // import { fileURLToPath } from 'url'
 // const __filename = fileURLToPath(import.meta.url)
@@ -155,8 +156,8 @@ Try loading data from disk or GitHub, or else run queries for *each block* in a 
 */
 export const runPageQueries = async ({ page, graphql, surveyId, editionId, currentEdition }) => {
     const startedAt = new Date()
-    const useFilesystemCache = getCachingMethods().filesystem
-    const useApiCache = getCachingMethods().api
+    const useFilesystemCache = allowedCachingMethods().filesystem
+    const useApiCache = allowedCachingMethods().api
     console.log(`// Running GraphQL queries for page ${page.id}…`)
 
     const paths = getDataLocations(surveyId, editionId)
@@ -331,23 +332,6 @@ export function removeNull(obj) {
     return Array.isArray(obj) ? Object.values(clean) : clean
 }
 
-export const getCachingMethods = () => {
-    let cacheLevel = { filesystem: true, api: true, redis: true }
-    if (process.env.DISABLE_CACHE === 'true') {
-        cacheLevel = { filesystem: false, api: false, redis: false }
-    } else {
-        if (process.env.DISABLE_FILESYSTEM_CACHE === 'true') {
-            cacheLevel.filesystem = false
-        }
-        if (process.env.DISABLE_API_CACHE === 'true') {
-            cacheLevel.api = false
-        }
-        if (process.env.DISABLE_REDIS_CACHE === 'true') {
-            cacheLevel.redis = false
-        }
-    }
-    return cacheLevel
-}
 
 export const getMetadata = async ({ surveyId, editionId, graphql }) => {
     const metadataQuery = getMetadataQuery({ surveyId, editionId })
