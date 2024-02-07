@@ -16,7 +16,7 @@ import fs from 'fs'
 import path from 'path'
 import { logToFile } from './log_to_file'
 import { initRedis } from './redis'
-import { getLocalesWithStrings } from "@devographics/react-i18n"
+import { getLocalesWithStrings } from "@devographics/react-i18n/server"
 import { allowedCachingMethods } from "@devographics/fetch"
 
 //  Not needed in TS/ recent versions of node

@@ -6,7 +6,7 @@
 import { getLocalesQuery, getLocaleContextQuery } from './graphql'
 import { logToFile } from '@devographics/debug'
 import { initRedis, fetchJson as fetchRedis, storeRedis } from '@devographics/redis'
-import { Locale, LocaleWithStrings, Translation } from "./typings"
+import { Locale, LocaleWithStrings, Translation } from "../typings"
 import { FetchPipelineStep, runFetchPipeline, allowedCachingMethods } from '@devographics/fetch'
 
 export function removeNull(obj) {
