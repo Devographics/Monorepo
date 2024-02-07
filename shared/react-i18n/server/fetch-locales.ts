@@ -9,7 +9,7 @@ import { initRedis, fetchJson as fetchRedis, storeRedis } from '@devographics/re
 import { Locale, LocaleWithStrings, Translation } from "../typings"
 import { FetchPipelineStep, runFetchPipeline, allowedCachingMethods } from '@devographics/fetch'
 
-export function removeNull(obj) {
+export function removeNull(obj: any): any {
     const clean = Object.fromEntries(
         Object.entries(obj)
             .map(([k, v]) => [k, v === Object(v) ? removeNull(v) : v])
@@ -19,7 +19,7 @@ export function removeNull(obj) {
 }
 
 const allLocalesCacheKey = () => `${process.env.APP_NAME}__allLocales__metadata`
-const getLocaleContextCacheKey = (localeId, context) =>
+const getLocaleContextCacheKey = (localeId: string, context: string) =>
     `${process.env.APP_NAME}__locale__${localeId}__${context}__parsed`
 
 /**

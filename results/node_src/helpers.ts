@@ -8,6 +8,7 @@ import { TwitterApi } from 'twitter-api-v2'
 import { logToFile } from './log_to_file'
 import { argumentsPlaceholder, getFiltersQuery, getQuery, getMetadataQuery } from './queries'
 import { allowedCachingMethods } from "@devographics/fetch"
+import { PageContextValue, PageDef } from '../src/core/types'
 
 // import { fileURLToPath } from 'url'
 // const __filename = fileURLToPath(import.meta.url)
@@ -40,11 +41,9 @@ export const getCleanLocales = locales =>
  *
  * Get a page's context
  *= the information that are passed down from Gatsby to the page
- * @param {import("../src/core/types").PageDef} page
- * @returns {import("../src/core/types").PageContextValue}
  */
-export const getPageContext = page => {
-    const context = omit(page, ['path', 'children'])
+export const getPageContext = (page: PageDef): PageContextValue => {
+    const context: any = omit(page, ['path', 'children'])
     context.basePath = page.path
 
     return {

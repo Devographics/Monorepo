@@ -3,12 +3,12 @@ import {
     getTwitterUser,
     getDataLocations,
     getExistingData,
-    allowedCachingMethods
 } from './helpers'
 import fetch from 'node-fetch'
 import _ from 'lodash'
 import FormData from 'form-data'
 import { logToFile } from './log_to_file'
+import { allowedCachingMethods } from '@devographics/fetch'
 
 // `https://opensheet.elk.sh/${process.env.GDOCS_SPREADSHEET}/Public%20Data`
 

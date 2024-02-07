@@ -103,7 +103,7 @@ comments {
   }
 `
 
-export const getMetadataQuery = ({ surveyId, editionId }) => {
+export const getMetadataQuery = ({ surveyId, editionId }: { surveyId: string, editionId: string }) => {
     return `
 query {
     dataAPI {
@@ -205,10 +205,8 @@ const unquote = s => s.replaceAll('"', '')
 /**
  * Transform JSON into graphql function args
  * {foo: hello, bar: world} => (foo: hello, bar: world)
- * @param args 
- * @returns 
  */
-const wrapArguments = (args) => {
+const wrapArguments = (args: any): string => {
     const keys = Object.keys(args)
 
     return keys.length > 0
@@ -219,7 +217,7 @@ const wrapArguments = (args) => {
         : ''
 }
 
-const facetItemToFacet = ({ sectionId, id }) => `${sectionId}__${id}`
+const facetItemToFacet = ({ sectionId, id }: { sectionId: string, id: string }) => `${sectionId}__${id}`
 
 // TODO: what is this exactly?
 interface DataQueryConfig {
@@ -316,7 +314,7 @@ surveys {
 `
 }
 
-export const getQueryName = ({ editionId, questionId }) =>
+export const getQueryName = ({ editionId, questionId }: { editionId: string, questionId: string }) =>
     `${camelCase(editionId)}${camelCase(questionId)}Query`
 
 /*
@@ -343,12 +341,12 @@ export const wrapQuery = ({ queryName, queryContents, addRootNode }) => {
 Remove "dataAPI" part
 
 */
-const removeLast = (str, char) => {
+const removeLast = (str: string, char: string) => {
     const lastIndex = str.lastIndexOf(char)
     return str.substring(0, lastIndex) + str.substring(lastIndex + 1)
 }
 
-export const cleanQuery = query => {
+export const cleanQuery = (query: string) => {
     const cleanQuery = removeLast(query.replace('dataAPI {', ''), '}')
     return cleanQuery
 }
@@ -417,7 +415,7 @@ export const getBlockQuery = ({
     queryOptions: providedQueryOptions = {},
     enableCache
 }) => {
-    let stringQuery
+    let stringQuery: string
     const { query, queryOptions: blockQueryOptions } = block
 
     const defaultQueryOptions = {
@@ -437,14 +435,15 @@ export const getBlockQuery = ({
     return stringQuery
 }
 
-function getNthPosition(s, subString, count, fromEnd = false) {
+function getNthPosition(s: string, subString: string, count: number, fromEnd = false): number {
     const regex = new RegExp(subString, 'g')
     const totalCount = (s.match(regex) || []).length
     const nthIndex = fromEnd ? totalCount - count : count
     return s.split(subString, nthIndex).join(subString).length
 }
 
-const conditionsToFilters = conditions => {
+// I guess this converts to a mongo filter?
+const conditionsToFilters = (conditions: Array<{ sectionId, fieldId: string, operator: any, value: any }>) => {
     const filters = {}
     conditions.forEach(condition => {
         const { sectionId, fieldId, operator, value } = condition
@@ -585,6 +584,7 @@ export const getFiltersQuery = ({
         // }
     }
     queryBody = queryBody.replace(argumentsPlaceholder, '')
+    // @ts-ignore
     queryBody = queryBody?.replaceAll(bucketFacetsPlaceholder, '')
 
     const newQuery = queryHeader + queryBody + queryFooter

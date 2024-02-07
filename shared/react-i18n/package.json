@@ -26,7 +26,9 @@
     "dependencies": {
         "@devographics/debug": "workspace:^1.0.0",
         "@devographics/fetch": "workspace:^1.0.0",
-        "@devographics/redis": "workspace:^1.0.0"
+        "@devographics/redis": "workspace:^1.0.0",
+        "@types/lodash": "^4.14.202",
+        "lodash": "^4.17.21"
     },
     "devDependencies": {
         "@types/react": "^18.0.27",

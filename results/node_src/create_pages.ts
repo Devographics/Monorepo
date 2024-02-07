@@ -1,5 +1,4 @@
 import type { CreatePagesArgs, Page } from "gatsby"
-import { PageContextValue } from '../src/core/types/context.js'
 import { computeSitemap } from './sitemap'
 import {
     getPageContext,
@@ -11,6 +10,7 @@ import {
     getMetadata
 } from './helpers'
 import { getSendOwlData } from './sendowl'
+// @ts-ignore
 import yaml from 'js-yaml'
 import fs from 'fs'
 import path from 'path'
@@ -18,6 +18,8 @@ import { logToFile } from './log_to_file'
 import { initRedis } from './redis'
 import { getLocalesWithStrings } from "@devographics/react-i18n/server"
 import { allowedCachingMethods } from "@devographics/fetch"
+import type { PageContextValue } from '../src/core/types/context'
+import type { SponsorProduct } from "../src/core/types/sponsors"
 
 //  Not needed in TS/ recent versions of node
 // import { fileURLToPath } from 'url'
@@ -153,7 +155,7 @@ export const createPagesSingleLoop = async ({
 
     const siteUrl = resultsUrl
 
-    let chartSponsors = []
+    let chartSponsors: Array<SponsorProduct> = []
     if (!USE_FAST_BUILD && enableChartSponsorships) {
         chartSponsors = await getSendOwlData({ flat, surveyId, editionId, siteUrl })
     }

@@ -9,6 +9,7 @@
   // we should include everything, but given the state
   // of the app, that's not feasible right now.
   "include": [
-    "./src/core/blocks/tools/ToolsQuadrantsBlock/*"
+    "./src/core/blocks/tools/ToolsQuadrantsBlock/*",
+    "./node_src"
   ]
 }

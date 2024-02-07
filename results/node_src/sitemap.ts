@@ -2,6 +2,7 @@ import findIndex from 'lodash/findIndex.js'
 import findLastIndex from 'lodash/findLastIndex.js'
 import omit from 'lodash/omit.js'
 import template from 'lodash/template.js'
+// @ts-ignore
 import yaml from 'js-yaml'
 import { getQuestionId, loadTemplate } from './helpers'
 import merge from 'lodash/merge.js'
@@ -68,12 +69,8 @@ const applyTemplate = ({
 /**
  * Gets list of pages as a flat array given root pages
  * Called recursively
- * @param {{flat: Array<Page>}} stack
- * @param {Array<PageDef>} pages
- * @param {{children: string}} parent
- * @param {number} pageIndex
  */
-const flattenSitemap = (stack, pages, parent, pageIndex) => {
+const flattenSitemap = (stack: { flat: Array<PageDef> }, pages: Array<PageDef>, parent: PageDef, pageIndex: number) => {
     pages.forEach(page => {
         if (parent) {
             page.parent = omit(parent, 'children')
@@ -87,7 +84,7 @@ const flattenSitemap = (stack, pages, parent, pageIndex) => {
     })
 }
 
-export const pageFromConfig = async (page, pageIndex, editionVariables) => {
+export const pageFromConfig = async (page: PageDef, pageIndex: number, editionVariables: any) => {
     try {
         const { parent } = page
 
@@ -194,8 +191,10 @@ export const computeSitemap = async (rawSitemap: RawSitemap, editionVariables: E
         flat: []
     }
 
+    // @ts-expect-error TODO fix me
     flattenSitemap(stack, rawSitemap, undefined, 0)
 
+    // @ts-expect-error TODO fix me
     stack.flat = await Promise.all(
         stack.flat.map((page, pageIndex) => pageFromConfig(page, pageIndex, editionVariables))
     )
