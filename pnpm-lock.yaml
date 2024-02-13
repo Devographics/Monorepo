@@ -365,6 +365,9 @@ importers:
       '@devographics/constants':
         specifier: workspace:^1.0.0
         version: link:../shared/constants
+      '@devographics/debug':
+        specifier: workspace:^1.0.0
+        version: link:../shared/debug
       '@devographics/fetch':
         specifier: workspace:^1.0.0
         version: link:../shared/fetch
@@ -374,6 +377,9 @@ importers:
       '@devographics/react-i18n':
         specifier: workspace:^1.0.0
         version: link:../shared/react-i18n
+      '@devographics/redis':
+        specifier: workspace:^1.0.0
+        version: link:../shared/redis
       '@devographics/types':
         specifier: workspace:^1.0.0
         version: link:../shared/types
