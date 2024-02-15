@@ -10,8 +10,12 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^4.4.0",
     "@astrojs/check": "^0.5.4",
+    "@devographics/helpers": "workspace:^1.0.0",
+    "astro": "^4.4.0",
     "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5"
   }
 }
