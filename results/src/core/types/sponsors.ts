@@ -1,5 +1,7 @@
 
 export interface SponsorProduct {
+    productId: string,
+    editionId: string,
     chartId: string,
     add_to_cart_url?: string
 }

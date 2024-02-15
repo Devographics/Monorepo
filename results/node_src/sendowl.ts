@@ -10,6 +10,7 @@ import FormData from 'form-data'
 import { logToFile } from './log_to_file'
 // import { allowedCachingMethods } from '@devographics/fetch'
 import { allowedCachingMethods } from './helpers'
+import { SponsorProduct } from '../src/core/types/sponsors'
 
 // `https://opensheet.elk.sh/${process.env.GDOCS_SPREADSHEET}/Public%20Data`
 
@@ -58,7 +59,7 @@ const fetchUntilNoMore = async (url: string, options: any) => {
     return allData
 }
 
-const getProducts = async ({ editionId }) => {
+const getProducts = async ({ editionId }: { editionId: string }): Promise<Array<SponsorProduct>> => {
     // get products
     const productsData = await fetchUntilNoMore(
         `${sendOwlAPIUrl}/v1/products/`,
@@ -87,7 +88,7 @@ interface Order {
     twitterName?: string
     twitterData?: any
 }
-const getOrders = async ({ products, editionId }) => {
+const getOrders = async ({ products, editionId }: { products: Array<SponsorProduct>, editionId: string }) => {
     // get orders
     const orders: Array<Order> = []
     const ordersData = await fetchUntilNoMore(`${sendOwlAPIUrl}/v1_3/orders/`, getSendOwlOptions())

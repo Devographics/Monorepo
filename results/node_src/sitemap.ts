@@ -11,7 +11,7 @@ import type { RawSitemap, PageDef, BlockDefinition, BlockVariant } from "../src/
 type Stack = { flat: Array<PageDef> }
 type EditionVariables = { editionId: string, surveyId: string }
 
-const stringify = value => {
+const stringify = (value: any) => {
     const json = JSON.stringify(value)
     let unquoted = json.replace(/"([^"]+)":/g, '$1:')
     // also remove any quotes next to "___" because this indicates a GraphQL enum
@@ -173,8 +173,8 @@ export const pageFromConfig = async (page: PageDef, pageIndex: number, editionVa
         }
         return page
     } catch (error) {
-        console.log('// pageFromConfig Error')
-        console.log(error)
+        console.error('// pageFromConfig Error', error)
+        throw error
     }
 }
 

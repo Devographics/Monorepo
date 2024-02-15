@@ -1,5 +1,5 @@
 import React from 'react'
-import { OptionMetadata, AllQuestionData, QuestionMetadata } from '@devographics/types'
+import { QuestionMetadata } from '@devographics/types'
 
 export interface CustomizationDefinition {
     options: CustomizationOptions
