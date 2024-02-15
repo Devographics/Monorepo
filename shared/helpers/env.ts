@@ -33,7 +33,9 @@ export enum EnvVar {
     LOCALES_PATH = 'LOCALES_PATH',
     ENTITIES_PATH = 'ENTITIES_PATH',
     ENABLE_CACHE = 'ENABLE_CACHE',
-    PORT = 'PORT'
+    PORT = 'PORT',
+    EDITIONID = 'EDITIONID',
+    SURVEYID = 'SURVEYID'
 }
 
 interface EnvVariable {
@@ -63,18 +65,30 @@ export const setAppName = (appName: AppName) => {
     appNameGlobal = appName
 }
 
+let envMapGlobal: Record<string, string> = {}
+/**
+ * Pass "import.meta.env" when using Vite
+ * because this value cannot be obtained from within a different node_module
+ */
+export function setEnvMap(envMap: Record<string, string>) {
+    envMapGlobal = envMap
+}
+
 export const getAppName = (appName: AppName) => {
     return appNameGlobal
 }
 
 const getValue = (variable: EnvVariable) => {
     const { id, aliases } = variable
-    const value = process.env[id]
+    // For Next.js public variables build,
+    // we CAN'T move process.env to a variable like const env = process.env,
+    // because Next rely on build-time injection when detecting process.env[something] explicitely
+    const value = process.env[id] || envMapGlobal[id]
     if (value) {
         return { id, value }
     } else if (aliases) {
         for (const aliasId of aliases) {
-            const aliasValue = process.env[aliasId]
+            const aliasValue = process.env[aliasId] || envMapGlobal[id]
             if (aliasValue) {
                 return { id: aliasId, value: aliasValue }
             }

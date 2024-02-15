@@ -6,7 +6,23 @@
 import type { GetStaticPaths } from "astro";
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
-import {} from "@devographics/helpers";
+import {
+  getEnvVar,
+  EnvVar,
+  setAppName,
+  setEnvMap,
+} from "@devographics/helpers";
+import { AppName } from "@devographics/types";
+
+setEnvMap(import.meta.env);
+setAppName(AppName.RESULTS_ASTRO);
+// Each survey edition has its own domain
+// so we can stick to global env variable to pick the edition we want
+const editionId = getEnvVar(EnvVar.EDITIONID);
+const surveyId = getEnvVar(EnvVar.SURVEYID);
+
+// TODO: fetch survey config namely the sitemap.xml from github
+// in results, we were loading them from local folders
 
 export const getStaticPaths = (() => {
   return [
@@ -14,6 +30,8 @@ export const getStaticPaths = (() => {
     { params: { path: undefined } },
   ];
 }) satisfies GetStaticPaths;
+
+const { path } = Astro.params;
 ---
 
 <Layout title="Welcome to Astro.">
@@ -48,10 +66,9 @@ export const getStaticPaths = (() => {
     </svg>
     <h1>Welcome to <span class="text-gradient">Astro</span></h1>
     <p class="instructions">
-      To get started, open the directory <code>src/pages</code> in your project.<br
-      />
-      <strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message
-      above.
+      You are reading the survey of surveyId "{surveyId}" and editionId "{
+        editionId
+      }", accessing the path "{path}"
     </p>
     <ul role="list" class="link-card-grid">
       <Card

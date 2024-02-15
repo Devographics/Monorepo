@@ -245,6 +245,7 @@
   example: state_of_css
   usedBy:
       - results
+      - results-astro
       - homepage
 
 - id: EDITIONID
@@ -252,6 +253,7 @@
   example: css2023
   usedBy:
       - results
+      - results-astro
 
 - id: FAST_BUILD
   optional: true

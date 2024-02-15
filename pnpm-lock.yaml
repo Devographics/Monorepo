@@ -732,6 +732,9 @@ importers:
       '@devographics/helpers':
         specifier: workspace:^1.0.0
         version: link:../shared/helpers
+      '@devographics/types':
+        specifier: workspace:^1.0.0
+        version: link:../shared/types
       astro:
         specifier: ^4.4.0
         version: 4.4.0(typescript@5.3.3)
@@ -739,6 +742,9 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
     devDependencies:
+      '@rollup/plugin-yaml':
+        specifier: ^4.1.2
+        version: 4.1.2
       prettier:
         specifier: ^3.2.5
         version: 3.2.5
