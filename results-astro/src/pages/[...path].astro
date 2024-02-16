@@ -13,6 +13,24 @@ import {
   setEnvMap,
 } from "@devographics/helpers";
 import { AppName } from "@devographics/types";
+import { fetchEditionSitemap } from "@devographics/fetch";
+
+export const getStaticPaths = (async () => {
+  setEnvMap(import.meta.env);
+  setAppName(AppName.RESULTS_ASTRO);
+  // Each survey edition has its own domain
+  // so we can stick to global env variable to pick the edition we want
+  const editionId = getEnvVar(EnvVar.EDITIONID);
+  const surveyId = getEnvVar(EnvVar.SURVEYID);
+  const surveyWithSitemap = await fetchEditionSitemap({ editionId, surveyId });
+  return [
+    ...(surveyWithSitemap.data.sitemap.map((item) => ({
+      params: { path: item.path },
+    })) || []),
+    // for the home, path is not "/" but undefined (no passed params)
+    { params: { path: undefined } },
+  ];
+}) satisfies GetStaticPaths;
 
 setEnvMap(import.meta.env);
 setAppName(AppName.RESULTS_ASTRO);
@@ -20,16 +38,10 @@ setAppName(AppName.RESULTS_ASTRO);
 // so we can stick to global env variable to pick the edition we want
 const editionId = getEnvVar(EnvVar.EDITIONID);
 const surveyId = getEnvVar(EnvVar.SURVEYID);
+const surveyWithSitemap = await fetchEditionSitemap({ editionId, surveyId });
 
 // TODO: fetch survey config namely the sitemap.xml from github
 // in results, we were loading them from local folders
-
-export const getStaticPaths = (() => {
-  return [
-    // for the home, path is not "/" but undefined (no passed params)
-    { params: { path: undefined } },
-  ];
-}) satisfies GetStaticPaths;
 
 const { path } = Astro.params;
 ---
@@ -70,6 +82,12 @@ const { path } = Astro.params;
         editionId
       }", accessing the path "{path}"
     </p>
+    <nav>
+      <p>Sitemap</p>
+      <pre><code>
+          {JSON.stringify(surveyWithSitemap.data.sitemap, null, 2)}
+        </code></pre>
+    </nav>
     <ul role="list" class="link-card-grid">
       <Card
         href="https://docs.astro.build/"

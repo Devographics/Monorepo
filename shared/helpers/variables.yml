@@ -25,6 +25,7 @@
   example: https://api.devographics.com
   usedBy:
       - results
+      - results-astro
       - graphiql
       - surveyform
       - surveyadmin
@@ -110,6 +111,7 @@
       - surveyform
       - surveyadmin
       - results
+      - results-astro
       - homepage
       - charts
 
@@ -123,6 +125,7 @@
       - surveyform
       - surveyadmin
       - results
+      - results-astro
       - homepage
       - charts
 

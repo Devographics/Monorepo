@@ -729,6 +729,9 @@ importers:
       '@astrojs/check':
         specifier: ^0.5.4
         version: 0.5.4(prettier@3.2.5)(typescript@5.3.3)
+      '@devographics/fetch':
+        specifier: workspace:^1.0.0
+        version: link:../shared/fetch
       '@devographics/helpers':
         specifier: workspace:^1.0.0
         version: link:../shared/helpers

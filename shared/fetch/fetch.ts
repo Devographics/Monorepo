@@ -8,6 +8,7 @@ import { initRedis, fetchJson as fetchRedis, storeRedis } from '@devographics/re
 import { logToFile } from '@devographics/debug'
 import { CacheType, GetFromCacheOptions, SourceType } from './types'
 import { FetchPipelineStep, runFetchPipeline } from './pipeline'
+import { EnvVar, getEnvVar } from "@devographics/helpers"
 // import { compressJSON, decompressJSON } from './compress'
 
 export const memoryCache = new NodeCache({
@@ -319,7 +320,7 @@ export async function getFromCache<T = any>({
 }
 
 export const getApiUrl = () => {
-    const apiUrl = process.env.API_URL
+    const apiUrl = getEnvVar(EnvVar.API_URL) //process.env.API_URL
     if (!apiUrl) {
         throw new Error('process.env.API_URL not defined, it should point the the API')
     }
