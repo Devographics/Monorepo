@@ -12,7 +12,7 @@ export async function loadResponse({
 }) {
   connectToRedis();
 
-  const RawResponses = await getRawResponsesCollection<ResponseDocument>();
+  const RawResponses = await getRawResponsesCollection();
   const response = await RawResponses.findOne({ _id: responseId });
   if (!response) {
     throw new HandlerError({

@@ -27,7 +27,7 @@ export const rscMustGetUserResponse = cache(
       year,
     });
     // TODO: get user response directly here, so we don't need the responseId anymore
-    const Responses = await getRawResponsesCollection<ResponseDocument>();
+    const Responses = await getRawResponsesCollection();
     const selector = {
       userId: currentUser._id,
       editionId: edition.id,
@@ -65,7 +65,7 @@ export const rscMustGetResponse = cache(
     responseId: string;
     currentUser: UserDocument;
   }) => {
-    const Responses = await getRawResponsesCollection<ResponseDocument>();
+    const Responses = await getRawResponsesCollection();
     // get the response by id, than only check if it belong to current user
     // this helps having a clearer error message
     const selector = {
