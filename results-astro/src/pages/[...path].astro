@@ -3,11 +3,16 @@
  * All paths of the app are generated based on
  * the declarative sitemap for the current survey
  */
-import type { GetStaticPaths } from "astro";
+import type {
+  GetStaticPaths,
+  InferGetStaticParamsType,
+  InferGetStaticPropsType,
+} from "astro";
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 import { publicConfig } from "@/lib/publicConfig";
 import { astroSurveyWithSitemap } from "@/fetchers/surveyWithSitemap";
+import PageTemplate from "@/components/PageTemplate.astro";
 
 export const getStaticPaths = (async () => {
   const surveyWithSitemap = await astroSurveyWithSitemap();
@@ -16,20 +21,24 @@ export const getStaticPaths = (async () => {
       params: { path: item.path },
     })) || []),
     // for the home, path is not "/" but undefined (no passed params)
-    { params: { path: undefined } },
+    { params: { path: undefined }, props: { surveyWithSitemap } },
   ];
 }) satisfies GetStaticPaths;
 
 // Each survey edition has its own domain
 // so we can stick to global env variable to pick the edition we want
 const { editionId, surveyId } = publicConfig();
-const surveyWithSitemap = await astroSurveyWithSitemap();
 
 const { path } = Astro.params;
+// TODO: normally this isn't needed, need to check my versions
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { surveyWithSitemap } = Astro.props;
 ---
 
 <Layout title="Welcome to Astro.">
   <main>
+    <PageTemplate />
     <svg
       class="astro-a"
       width="495"
