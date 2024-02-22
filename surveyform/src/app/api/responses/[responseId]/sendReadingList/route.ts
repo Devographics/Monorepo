@@ -58,7 +58,7 @@ export async function POST(
     const survey = edition.survey;
 
     // TODO: handle string _id better
-    const RawResponse = await getRawResponsesCollection<ResponseDocument>();
+    const RawResponse = await getRawResponsesCollection();
     const response = (await RawResponse.findOne({
       _id: responseId,
     })) as ResponseDocument;

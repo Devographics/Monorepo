@@ -25,7 +25,7 @@ export async function saveResponse({
   connectToRedis();
 
   // Check for existing response
-  const RawResponses = await getRawResponsesCollection<ResponseDocument>();
+  const RawResponses = await getRawResponsesCollection();
   const existingResponse = (await RawResponses.findOne({
     _id: responseId,
   })) as ResponseDocument; // bypass _id inference;

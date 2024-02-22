@@ -13,7 +13,7 @@ import { StandaloneMagicLoginForm } from "~/account/magicLogin/components/Standa
 
 const getResponses = cache(
   async ({ currentUser }: { currentUser: UserDocument }) => {
-    const RawResponses = await getRawResponsesCollection<ResponseDocument>();
+    const RawResponses = await getRawResponsesCollection();
     const responsesFromDb = await RawResponses.find(
       {
         userId: currentUser._id,
