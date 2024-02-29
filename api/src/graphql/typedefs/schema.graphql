@@ -335,6 +335,10 @@ type Bucket {
     If bucket was created by grouping other buckets, ids of these grouped buckets
     """
     groupedBucketIds: [String]
+    """
+    If bucket was created by grouping other buckets, contents of these grouped buckets
+    """
+    groupedBuckets: [Bucket]
 }
 
 type Percentiles {
