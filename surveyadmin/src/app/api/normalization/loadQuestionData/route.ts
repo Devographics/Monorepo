@@ -3,7 +3,7 @@ import { captureException } from "@sentry/nextjs";
 import { getQuestionData } from "~/lib/normalization/actions/getQuestionData";
 
 // Avoid statically rendering route handlers
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest, res: NextResponse) {
   const surveyId = req.nextUrl.searchParams.get("surveyId")!;
@@ -11,14 +11,14 @@ export async function GET(req: NextRequest, res: NextResponse) {
   const sectionId = req.nextUrl.searchParams.get("sectionId")!;
   const questionId = req.nextUrl.searchParams.get("questionId")!;
   try {
-    const data = await getQuestionData({
+    const { data, query } = await getQuestionData({
       surveyId,
       editionId,
       sectionId,
       questionId,
       shouldGetFromCache: false,
     });
-    return NextResponse.json({ data });
+    return NextResponse.json({ data, query });
   } catch (error) {
     console.error(error);
     captureException(error);

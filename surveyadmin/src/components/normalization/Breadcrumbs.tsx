@@ -101,7 +101,7 @@ const BreadcrumbSegment = ({
         <span> {currentItem.id}</span>
       )}
 
-      <details role="list">
+      <details role="list" className="dropdown">
         <summary aria-haspopup="listbox"></summary>
         <ul role="listbox">
           {items.map(({ id, path }) => (

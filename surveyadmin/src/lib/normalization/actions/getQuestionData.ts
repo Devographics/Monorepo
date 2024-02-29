@@ -1,4 +1,4 @@
-import { fetchQuestionData } from "@devographics/fetch";
+import { fetchQuestionData, getQuestionDataQuery } from "@devographics/fetch";
 import { ResultsSubFieldEnum } from "@devographics/types";
 
 export interface GetQuestionDataArgs {
@@ -16,14 +16,19 @@ export const getQuestionData = async ({
   questionId,
   shouldGetFromCache = true,
 }: GetQuestionDataArgs) => {
-  const data = await fetchQuestionData({
-    shouldGetFromCache,
+  const queryOptions = {
     surveyId,
     editionId,
     sectionId,
     questionId,
     subField: ResultsSubFieldEnum.FREEFORM,
-    queryArgs: { parameters: { enableCache: shouldGetFromCache } },
+  };
+  const queryArgs = { parameters: { enableCache: shouldGetFromCache } };
+  const data = await fetchQuestionData({
+    shouldGetFromCache,
+    ...queryOptions,
+    queryArgs,
   });
-  return data;
+  const query = getQuestionDataQuery({ queryOptions, queryArgs });
+  return { data, query };
 };

@@ -1,3 +1,9 @@
+// @use "pico";
+
+// @use "pico" with (
+//   $theme-color: "yellow"
+// );
+
 // @import "water.scss";
 @import "colors.scss";
 @import "variables.scss";
@@ -13,10 +19,6 @@ body {
   font-size: $root-size;
 }
 :root {
-  --font-size: $root-size;
-  --primary: #d81b60;
-}
-
-:not(thead, tfoot) > * > td {
-  --font-size: 0.875rem !important;
+  --pico-font-size: $root-size;
+  // --primary: #d81b60;
 }
