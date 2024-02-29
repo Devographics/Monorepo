@@ -150,6 +150,8 @@ type QuestionMetadata {
     cutoff: Int
     matchType: String
     matchTags: [String]
+    # token ids that should never be matched for this question
+    disallowedTokenIds: [String]
     limit: Int
     # options/values for the question are numeric
     optionsAreNumeric: Boolean
@@ -305,6 +307,10 @@ type Bucket {
     """
     entity: Entity
     """
+    Normalization Token associated with the current bucket
+    """
+    token: Token
+    """
     An array of bucket facets, when bucket is faceted
     """
     facetBuckets: [FacetBucket]
@@ -408,6 +414,10 @@ type Query {
     Data about a specific entity (tool, library, framework, features, etc.)
     """
     entity(id: ID!): Entity
+    """
+    Data about a specific normalization token
+    """
+    token(id: ID!): Token
     """
     Get multiple entities (tools, libraries, frameworks, features, etc.)
     """

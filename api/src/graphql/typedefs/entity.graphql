@@ -142,3 +142,14 @@ type Resource {
     url: String
     language: String
 }
+
+"""
+A token is a keyword used for normalization. All entities have a corresponding token,
+but not all tokens are entities
+"""
+type Token {
+    id: String
+    parentId: String
+    tags: [String]
+    patterns: [String]
+}

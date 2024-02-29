@@ -1,22 +1,16 @@
 import {
     SurveyApiObject,
     EditionApiObject,
-    Survey,
-    Edition,
-    Section,
-    Question,
     QuestionApiObject,
-    Option,
     TypeObject,
     ResolverType,
     ResolverMap,
     ResolverParent,
-    QuestionResolverParent,
     IncludeEnum
 } from '../types/surveys'
-import { getPath, formatNumericOptions, getEditionById } from './helpers'
+import { getPath, getEditionById } from './helpers'
 import { genericComputeFunction, getGenericCacheKey } from '../compute'
-import { useCache, computeKey } from '../helpers/caching'
+import { useCache } from '../helpers/caching'
 import { getRawCommentsWithCache } from '../compute/comments'
 import { getEntity, getEntities } from '../load/entities'
 import omit from 'lodash/omit.js'
@@ -30,10 +24,8 @@ import { localesResolvers } from '../resolvers/locales'
 import { subFields } from './subfields'
 import { ResultsSubFieldEnum } from '@devographics/types'
 import { loadOrGetParsedSurveys } from '../load/surveys'
-import isEmpty from 'lodash/isEmpty.js'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
-import { combineResults } from '../compute/helpers'
 
 export const generateResolvers = async ({
     surveys,
@@ -58,7 +50,7 @@ export const generateResolvers = async ({
 
     const resolvers = {
         Query: {
-            _metadata: getGlobalMetadataResolver({ surveys }),
+            _metadata: getGlobalMetadataResolver(),
             surveys: () => surveys,
             ...entitiesResolvers,
             ...localesResolvers
@@ -196,10 +188,10 @@ const getGlobalMetadataResolver = (): ResolverType => async (parent, args) => {
 
 const getSurveyResolver =
     ({ survey }: { survey: SurveyApiObject }): ResolverType =>
-        (parent, args, context, info) => {
-            console.log('// survey resolver')
-            return survey
-        }
+    (parent, args, context, info) => {
+        console.log('// survey resolver')
+        return survey
+    }
 
 /*
 
@@ -211,19 +203,19 @@ copy of the survey metadata from memory
 */
 const getSurveyMetadataResolver =
     ({ survey }: { survey: SurveyApiObject }): ResolverType =>
-        async (parent, args, context, info) => {
-            console.log('// survey metadata resolver')
-            const parsedSurveys = await loadOrGetParsedSurveys()
-            const freshSurvey = parsedSurveys.find(s => s.id === survey.id)
-            return freshSurvey
-        }
+    async (parent, args, context, info) => {
+        console.log('// survey metadata resolver')
+        const parsedSurveys = await loadOrGetParsedSurveys()
+        const freshSurvey = parsedSurveys.find(s => s.id === survey.id)
+        return freshSurvey
+    }
 
 const getEditionResolver =
     ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
-        (parent, args, context, info) => {
-            console.log('// edition resolver')
-            return edition
-        }
+    (parent, args, context, info) => {
+        console.log('// edition resolver')
+        return edition
+    }
 
 /*
 
@@ -232,17 +224,17 @@ See getSurveyMetadataResolver() note above
 */
 const getEditionMetadataResolver =
     ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
-        async (parent, args, context, info) => {
-            console.log('// edition metadata resolver')
-            const freshEdition = await getEditionById(edition.id)
-            const sections = freshEdition.sections.map(section => ({
-                ...section,
-                questions: section.questions
-                    .filter(question => question?.editions?.includes(edition.id))
-                    .map(q => ({ ...q, editionId: edition.id }))
-            }))
-            return { ...freshEdition, surveyId: survey.id, survey, sections }
-        }
+    async (parent, args, context, info) => {
+        console.log('// edition metadata resolver')
+        const freshEdition = await getEditionById(edition.id)
+        const sections = freshEdition.sections.map(section => ({
+            ...section,
+            questions: section.questions
+                .filter(question => question?.editions?.includes(edition.id))
+                .map(q => ({ ...q, editionId: edition.id }))
+        }))
+        return { ...freshEdition, surveyId: survey.id, survey, sections }
+    }
 
 const getSectionResolver =
     ({
@@ -254,10 +246,10 @@ const getSectionResolver =
         edition: EditionApiObject
         section: SectionApiObject
     }): ResolverType =>
-        (parent, args, context, info) => {
-            console.log('// section resolver')
-            return section
-        }
+    (parent, args, context, info) => {
+        console.log('// section resolver')
+        return section
+    }
 
 const getQuestionResolverMap = async ({
     questionObject
@@ -282,10 +274,10 @@ const getQuestionResolverMap = async ({
 
 const getQuestionResolver =
     (data: ResolverParent): ResolverType =>
-        async () => {
-            console.log('// question resolver')
-            return data
-        }
+    async () => {
+        console.log('// question resolver')
+        return data
+    }
 
 /*
 
@@ -395,7 +387,7 @@ Credit
 
 */
 export const creditResolverMap = {
-    entity: async ({ id }: { id: string }, { }, context: RequestContext) =>
+    entity: async ({ id }: { id: string }, {}, context: RequestContext) =>
         await getEntity({ id, context })
 }
 
@@ -466,12 +458,12 @@ export const questionMetadataResolverMap = {
     //     return [sectionSegment, questionSegment].join('.')
     // },
 
-    entity: async (parent: QuestionApiObject, { }, context: RequestContext) => {
+    entity: async (parent: QuestionApiObject, {}, context: RequestContext) => {
         const { id } = parent
         return await getEntity({ id, context })
     },
 
-    options: async (parent: QuestionApiObject, { }, context: RequestContext) => {
+    options: async (parent: QuestionApiObject, {}, context: RequestContext) => {
         const { template, options, editionId } = parent
 
         const optionEntities = await getEntities({

@@ -141,6 +141,11 @@ const getEntityFragment = () => `entity {
     }
 }`
 
+const getTokenFragment = () => `token {
+    id
+    parentId
+}`
+
 const getFacetFragment = addBucketsEntities => `
     facetBuckets {
         id
@@ -150,6 +155,7 @@ const getFacetFragment = addBucketsEntities => `
         percentageBucket
         hasInsufficientData
         ${addBucketsEntities ? getEntityFragment() : ''}
+        ${addBucketsEntities ? getTokenFragment() : ''}
     }
 `
 
@@ -344,6 +350,7 @@ surveys {
                 isFreeformData
                 hasInsufficientData
                 ${addBucketsEntities ? getEntityFragment() : ''}
+                ${addBucketsEntities ? getTokenFragment() : ''}
                 ${queryArgs.facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
                 ${queryArgs.facet || addBucketFacetsPlaceholder ? getPercentilesFragment() : ''}
                 ${queryArgs.facet ? getFacetFragment(addBucketsEntities) : ''}

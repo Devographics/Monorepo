@@ -224,6 +224,7 @@ export type Question = {
     // whether to match a single value, or multiple. Defaults to multiple
     matchType?: 'single' | 'multiple'
     matchTags?: string[]
+    disallowedTokenIds?: string[]
 
     // a question that's in the outline but not in the API
     hasApiEndpoint?: boolean
@@ -255,6 +256,8 @@ export interface OptionGroup {
     items?: string[]
     label?: string
 }
+
+export type ParentIdGroup = Pick<OptionGroup, 'id' | 'items' | 'label'>
 
 export interface Country {
     name: string

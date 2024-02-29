@@ -232,16 +232,18 @@ export const findEntity = (id: string, entities: Entity[]) =>
 
 export const getEntity = async ({
     id,
-    context
+    context,
+    includeNormalizationEntities = true
 }: {
     id: string | number
     context?: RequestContext
+    includeNormalizationEntities?: boolean
 }) => {
     if (!id || typeof id !== 'string') {
         return
     }
 
-    const entities = await getEntities({ context })
+    const entities = await getEntities({ context, includeNormalizationEntities })
 
     const entity = findEntity(id.toLowerCase(), entities)
 
