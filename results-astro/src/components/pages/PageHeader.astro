@@ -1,0 +1,39 @@
+---
+import { } from "@/lib/theme/typography"
+// import styled from 'styled-components'
+/*
+import { usePageContext } from '../helpers/pageContext'
+import { getPageLabelKey } from '../helpers/pageHelpers'
+import { mq, secondaryFontMixin, fontSize } from 'core/theme'
+import T from 'core/i18n/T'
+
+const PageHeader = () => {
+    const pageContext = usePageContext()
+    return (
+        <PageTitle>
+            <T k={getPageLabelKey({ pageContext })} />
+        </PageTitle>
+    )
+}
+
+const PageTitle = styled.h2.attrs({ className: 'PageTitle' })`
+    ${secondaryFontMixin}
+    @media ${mq.small} {
+        font-size: ${fontSize('larger')};
+    }
+    @media ${mq.mediumLarge} {
+        font-size: ${fontSize('huger')};
+    }
+`
+
+
+export default PageHeader
+*/
+---
+<style>
+    h2 {
+        /** TODO: importing the theme from here won't work... we have to use CSS variables */
+
+    }
+</style>
+<h2>PageHeader</h2>

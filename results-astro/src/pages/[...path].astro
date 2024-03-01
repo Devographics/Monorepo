@@ -12,7 +12,8 @@ import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 import { publicConfig } from "@/lib/publicConfig";
 import { astroSurveyWithSitemap } from "@/fetchers/surveyWithSitemap";
-import PageTemplate from "@/components/PageTemplate.astro";
+import PageTemplate from "@/components/pages/PageTemplate.astro";
+import {initTheme} from "@/lib/theme"
 
 export const getStaticPaths = (async () => {
   const surveyWithSitemap = await astroSurveyWithSitemap();
@@ -29,6 +30,9 @@ export const getStaticPaths = (async () => {
 // so we can stick to global env variable to pick the edition we want
 const { editionId, surveyId } = publicConfig();
 
+// Init top level values shared across .astro components
+initTheme()
+
 const { path } = Astro.params;
 // TODO: normally this isn't needed, need to check my versions
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
@@ -38,7 +42,10 @@ const { surveyWithSitemap } = Astro.props;
 
 <Layout title="Welcome to Astro.">
   <main>
-    <PageTemplate />
+    {/* TODO get showTitle from page context */}
+    <PageTemplate 
+    showTitle={true} 
+    />
     <svg
       class="astro-a"
       width="495"
