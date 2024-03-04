@@ -105,6 +105,7 @@ const start = async () => {
 • 📄 env file = ${envPath}
 • 📄 config = ${process.env.CONFIG}
 • 📖 surveys = ${getSurveysLoadMethod()}
+• ⏱️ fast build = ${process.env.FAST_BUILD === 'true'}
 • 🌐 locales = ${getLocalesLoadMethod()}
 • 🙎 entities = ${getEntitiesLoadMethod()}
 ---------------------------------------------------------------`
