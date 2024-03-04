@@ -179,9 +179,7 @@ export const getLocalesWithStrings = async ({ localeIds, graphql, contexts }: {
         for (const context of contexts) {
             const strings = await getLocaleContextStrings({ locale, context, graphql })
             console.log({ strings, localeStrings })
-            localeStrings = [...localeStrings, ...strings
-                // @ts-ignore TODO should not be needed
-                ?.strings]
+            localeStrings = [...localeStrings, ...strings]
         }
         locale.strings = localeStrings
     }
