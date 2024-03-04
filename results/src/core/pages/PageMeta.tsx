@@ -1,7 +1,8 @@
+import { useI18n } from '@devographics/react-i18n'
 import React from 'react'
+// @ts-ignore
 import Helmet from 'react-helmet'
 import { usePageContext } from '../helpers/pageContext'
-import { useI18n } from '../i18n/i18nContext'
 import { getPageSocialMeta } from '../helpers/pageHelpers'
 
 const PageMeta = ({ overrides = {} }) => {

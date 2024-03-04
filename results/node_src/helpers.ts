@@ -7,6 +7,44 @@ import yaml from 'js-yaml'
 import { TwitterApi } from 'twitter-api-v2'
 import { logToFile } from './log_to_file'
 import { argumentsPlaceholder, getFiltersQuery, getQuery, getMetadataQuery } from './queries'
+// import { allowedCachingMethods } from "@devographics/fetch"
+import { PageContextValue, PageDef } from '../src/core/types'
+
+/**
+ * Get caching methods based on current config
+ * It can enable or disable either caching or writing, depending on the cache type
+ */
+export const allowedCachingMethods = (): {
+    /**
+     * .logs folder (only used for writing, for debugging purpose)
+    */
+    filesystem: boolean,
+    /**
+     * GraphQL API
+     * TODO: it's not a cache but the source of truth, why using this?
+     */
+    api: boolean,
+    /**
+     * Redis
+     */
+    redis: boolean,
+} => {
+    let cacheLevel = { filesystem: true, api: true, redis: true }
+    if (process.env.DISABLE_CACHE === 'true') {
+        cacheLevel = { filesystem: false, api: false, redis: false }
+    } else {
+        if (process.env.DISABLE_FILESYSTEM_CACHE === 'true') {
+            cacheLevel.filesystem = false
+        }
+        if (process.env.DISABLE_API_CACHE === 'true') {
+            cacheLevel.api = false
+        }
+        if (process.env.DISABLE_REDIS_CACHE === 'true') {
+            cacheLevel.redis = false
+        }
+    }
+    return cacheLevel
+}
 
 // import { fileURLToPath } from 'url'
 // const __filename = fileURLToPath(import.meta.url)
@@ -39,11 +77,9 @@ export const getCleanLocales = locales =>
  *
  * Get a page's context
  *= the information that are passed down from Gatsby to the page
- * @param {import("../src/core/types").PageDef} page
- * @returns {import("../src/core/types").PageContextValue}
  */
-export const getPageContext = page => {
-    const context = omit(page, ['path', 'children'])
+export const getPageContext = (page: PageDef): PageContextValue => {
+    const context: any = omit(page, ['path', 'children'])
     context.basePath = page.path
 
     return {
@@ -155,8 +191,8 @@ Try loading data from disk or GitHub, or else run queries for *each block* in a 
 */
 export const runPageQueries = async ({ page, graphql, surveyId, editionId, currentEdition }) => {
     const startedAt = new Date()
-    const useFilesystemCache = getCachingMethods().filesystem
-    const useApiCache = getCachingMethods().api
+    const useFilesystemCache = allowedCachingMethods().filesystem
+    const useApiCache = allowedCachingMethods().api
     console.log(`// Running GraphQL queries for page ${page.id}…`)
 
     const paths = getDataLocations(surveyId, editionId)
@@ -331,23 +367,6 @@ export function removeNull(obj) {
     return Array.isArray(obj) ? Object.values(clean) : clean
 }
 
-export const getCachingMethods = () => {
-    let cacheLevel = { filesystem: true, api: true, redis: true }
-    if (process.env.DISABLE_CACHE === 'true') {
-        cacheLevel = { filesystem: false, api: false, redis: false }
-    } else {
-        if (process.env.DISABLE_FILESYSTEM_CACHE === 'true') {
-            cacheLevel.filesystem = false
-        }
-        if (process.env.DISABLE_API_CACHE === 'true') {
-            cacheLevel.api = false
-        }
-        if (process.env.DISABLE_REDIS_CACHE === 'true') {
-            cacheLevel.redis = false
-        }
-    }
-    return cacheLevel
-}
 
 export const getMetadata = async ({ surveyId, editionId, graphql }) => {
     const metadataQuery = getMetadataQuery({ surveyId, editionId })

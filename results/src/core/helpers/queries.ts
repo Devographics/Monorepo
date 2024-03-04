@@ -106,9 +106,9 @@ const wrapArguments = (args: ResponseArgumentsStrings) => {
 
     return keys.length > 0
         ? `(${keys
-              .filter(k => !!args[k as keyof ResponseArgumentsStrings])
-              .map(k => `${k}: ${args[k as keyof ResponseArgumentsStrings]}`)
-              .join(', ')})`
+            .filter(k => !!args[k as keyof ResponseArgumentsStrings])
+            .map(k => `${k}: ${args[k as keyof ResponseArgumentsStrings]}`)
+            .join(', ')})`
         : ''
 }
 
@@ -323,8 +323,11 @@ export const getBlockQuery = ({
         sectionId: pageContext?.id,
         questionId: block.id
     }
+    const maybeQueryOptions = { ...defaultQueryOptions, ...providedQueryOptions, ...blockQueryOptions }
 
-    const queryOptions = { ...defaultQueryOptions, ...providedQueryOptions, ...blockQueryOptions }
+    if (!maybeQueryOptions.surveyId) throw new Error("Missing surveyId in queryOptions")
+    if (!maybeQueryOptions.editionId) throw new Error("Missing editionId in queryOptions")
+    const queryOptions = maybeQueryOptions as QueryOptions
 
     if (!query) {
         stringQuery = ''

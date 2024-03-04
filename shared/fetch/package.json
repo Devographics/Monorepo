@@ -3,22 +3,8 @@
     "version": "1.0.0",
     "description": "",
     "type": "module",
-    "exports": {
-        ".": "./index.ts",
-        "./server": "./index.server.ts",
-        "./client": "./index.client.ts"
-    },
+    "main": "index.ts",
     "types": "./index.ts",
-    "typesVersions": {
-        "*": {
-            "server": [
-                "./index.server.ts"
-            ],
-            "client": [
-                "./index.client.ts"
-            ]
-        }
-    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },

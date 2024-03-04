@@ -1,8 +1,8 @@
 import React from 'react'
-import { BlockDefinition } from '@types/index'
 import { usePageContext } from 'core/helpers/pageContext'
 import SponsorCredit from './SponsorCredit'
 import SponsorPrompt from './SponsorPrompt'
+import { BlockDefinition } from 'core/types'
 
 interface BlockSponsorProps {
     block: BlockDefinition
@@ -20,9 +20,9 @@ const BlockSponsor = ({ block }: BlockSponsorProps) => {
         <div>
             {order ? (
                 <SponsorCredit sponsor={order} />
-            ) : (
+            ) : product ? (
                 <SponsorPrompt product={product} block={block} />
-            )}
+            ) : null}
         </div>
     ) : null
 }

@@ -1,6 +1,6 @@
 import { Redis } from '@upstash/redis'
 
-let redis
+let redis: Redis
 
 export function initRedis() {
     const url = process.env.REDIS_UPSTASH_URL

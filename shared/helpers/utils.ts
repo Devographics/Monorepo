@@ -5,9 +5,9 @@ export const getSizeInKB = (obj: any) => {
     return Math.round(bytes / 1000)
 }
 
-export const measureTime = async (f: any, message: string) => {
+export const measureTime = async (run: any, message: string) => {
     const startAt = new Date()
-    const result = await f()
+    const result = await run()
     const endAt = new Date()
     console.log(
         `🕚 ${message} in ${endAt.getTime() - startAt.getTime()}ms (${getSizeInKB(result)}kb)`

@@ -17,6 +17,9 @@ export interface RawPageDef {
 
     is_hidden?: boolean;
 
+    pageIndex?: number
+    defaultBlockType?: any
+
 }
 /**
  * See recent yaml raw sitemap for the structure definition
@@ -29,6 +32,7 @@ export type RawSitemap = Array<RawPageDef>
  */
 export interface PageDef extends RawPageDef {
     parent: PageDef, children?: Array<PageDef> | any, previous?: PageDef, next?: PageDef
+    data?: any
 }
 
 

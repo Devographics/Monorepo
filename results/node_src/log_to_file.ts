@@ -1,4 +1,5 @@
 import fs from 'fs'
+// @ts-ignore
 import yaml from 'js-yaml'
 import { parse } from 'graphql'
 import { print } from 'graphql-print'

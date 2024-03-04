@@ -1,4 +1,4 @@
-import { Locale, LocaleDefWithStrings } from '@devographics/types'
+import { Locale, } from '@devographics/types'
 import { localeCacheKey } from '../cache_keys'
 import { fetchGraphQLApi, getFromCache } from '../fetch'
 import { getLocaleQuery } from '../queries'
@@ -6,7 +6,7 @@ import { FetcherFunctionOptions } from '../types'
 
 /**
  * Fetch metadata and strings for a specific locale
- * @returns
+ * @deprecated Use react-i18n version
  */
 export const fetchLocale = async (
     options: FetcherFunctionOptions & {

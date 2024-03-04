@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { fontSize, fontWeight, spacing } from 'core/theme'
+import { fontSize, spacing } from 'core/theme'
 import BlockNote from 'core/blocks/block/BlockNote'
 import BlockLegends from 'core/blocks/block/BlockLegends'
 import { useI18n } from '@devographics/react-i18n'
@@ -11,17 +11,29 @@ import BlockFooter from 'core/blocks/block/BlockFooter'
 import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
 import EditInline from 'core/components/EditInline'
 import BlockLinks from 'core/blocks/block/BlockLinks'
-import { BlockDefinition } from 'core/types'
-import { Entity } from '@devographics/types'
+import { BlockDataType, BlockDefinition, BlockLegend } from 'core/types'
 import BlockQuestion from './BlockQuestion'
+import { Entity } from '@devographics/types'
 
-const BlockChart = props => {
+interface BlockChartProps extends BlockDataType {
+    block: BlockDefinition
+    children: React.ReactNode
+    legends: Array<BlockLegend>
+    legendProps?: any
+    // TODO: also used in block legend, might want to name that "BlockData?"
+    chartFilters?: any
+    modeProps?: any
+    entity: Entity
+    error?: any
+}
+
+const BlockChart = (props: BlockChartProps) => {
     const {
         children,
         units,
         error,
         data,
-        block = {},
+        block,
         entity,
         legends,
         legendProps,

@@ -1,6 +1,6 @@
 // import Redis from 'ioredis'
-import { logToFile } from '@devographics/debug'
-import { EnvVar, getEnvVar } from '@devographics/helpers'
+// import { logToFile } from '@devographics/debug'
+// import { EnvVar, getEnvVar } from '@devographics/helpers'
 import { Redis } from '@upstash/redis'
 
 // 30 mn (but only 3 in dev)
@@ -17,8 +17,8 @@ let redis: Redis | undefined = undefined
  * @returns 
  */
 export function initRedis(url_?: string, token_?: string) {
-    const url = url_ || getEnvVar(EnvVar.REDIS_UPSTASH_URL)
-    const token = token_ || getEnvVar(EnvVar.REDIS_TOKEN)
+    const url = url_ || process.env.REDIS_UPSTASH_URL// TODO: doesn't work - getEnvVar(EnvVar.REDIS_UPSTASH_URL)
+    const token = token_ || process.env.REDIS_TOKEN// TODO: doesn't work - getEnvVar(EnvVar.REDIS_TOKEN)
     // console.debug('init redis client', url, token)
     if (!redis) {
         if (!url) {

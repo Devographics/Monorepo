@@ -1,4 +1,7 @@
-import { Facet, FacetCompletion, Entity} from './data'
+// import { Facet, FacetCompletion, Entity} from './data'
+
+import { Entity, FacetCompletion } from "@devographics/types"
+import { Facet } from "./data"
 
 export interface BracketBucketRound {
   count: number
@@ -15,7 +18,7 @@ export interface BracketBucketItem {
   round3: BracketBucketRound
 
   color: string
-  
+
   entity?: Entity
 }
 
@@ -23,6 +26,6 @@ export interface BracketFacetItem {
   type: Facet
   id: number | string
   buckets: BracketBucketItem[]
-  entity?: Entity
+  entity?: Entity// Entity
   completion: FacetCompletion
 }

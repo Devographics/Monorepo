@@ -1,8 +1,8 @@
 import React from 'react'
 import { usePageContext } from '../helpers/pageContext'
-import { useI18n } from '../i18n/i18nContext'
 import Debug from '../components/Debug'
 import { getPageSocialMeta } from '../helpers/pageHelpers'
+import { useI18n } from '@devographics/react-i18n'
 // import { useTools } from 'core/helpers/toolsContext'
 
 const PageMetaDebug = ({ overrides = {} }) => {
@@ -20,7 +20,10 @@ const PageMetaDebug = ({ overrides = {} }) => {
     const meta = getPageSocialMeta({ pageContext, getString, overrides })
     const metaObject = meta.reduce((acc, meta) => {
         const key = meta.property || meta.name
-
+        if (!key) {
+            console.warn('No key for meta.content', meta.content)
+            return acc
+        }
         return {
             ...acc,
             [key]: meta.content

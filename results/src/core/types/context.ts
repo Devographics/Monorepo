@@ -2,6 +2,7 @@ import { EditionMetadata, SurveyMetadata } from '@devographics/types'
 import React from 'react'
 import type { Locale } from "@devographics/react-i18n"
 import { BlockDefinition } from './block'
+import { SponsorOrder, SponsorProduct } from './sponsors'
 
 interface GatsbyPageContext {
     id: string
@@ -18,10 +19,14 @@ interface GatsbyPageContext {
     children?: React.ReactNode
     pageData: any
 }
+
 interface SurveyPageContext {
     isCapturing?: boolean
     isDebugEnabled?: boolean
-    chartSponsors?: any
+    chartSponsors?: {
+        products?: Array<SponsorProduct>,
+        orders?: Array<SponsorOrder>
+    }
     config?: any
     currentSurvey: SurveyMetadata
     currentEdition: EditionMetadata
