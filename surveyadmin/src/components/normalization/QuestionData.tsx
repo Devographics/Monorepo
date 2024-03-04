@@ -5,6 +5,7 @@ import {
   ResponseData,
   Entity,
   QuestionWithSection,
+  ResultsSubFieldEnum,
 } from "@devographics/types";
 import { useState } from "react";
 import { NormToken } from "./NormToken";
@@ -75,7 +76,7 @@ const QuestionData = ({
 };
 
 export const ViewQuestionData = (props) => {
-  const { questionData, responses, survey, edition, question, entities } =
+  const { questionDataQuery, responses, survey, edition, question, entities } =
     props;
   const [loading, setLoading] = useState(false);
   return (
@@ -118,8 +119,8 @@ export const ViewQuestionData = (props) => {
         </div>
       }
     >
+      <textarea>{questionDataQuery}</textarea>
       <QuestionData {...props} />
     </ModalTrigger>
   );
 };
-export default QuestionData;

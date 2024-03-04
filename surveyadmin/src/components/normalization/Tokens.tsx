@@ -80,6 +80,7 @@ const Tokens = ({
   const { enabledPresets, setEnabledPresets, customPresets, setCustomPresets } =
     usePresets({ edition, question });
 
+  const { disallowedTokenIds } = question;
   return (
     <ModalTrigger
       isButton={true}
@@ -95,6 +96,14 @@ const Tokens = ({
       setShowModal={setShowModal}
     >
       <div>
+        {disallowedTokenIds && (
+          <p>
+            ⚠️ Ignored tokens:{" "}
+            {disallowedTokenIds.map((token) => (
+              <code key={token}>{token}</code>
+            ))}
+          </p>
+        )}
         <MatchTagsDetails questionObject={questionObject} />
         <PatternsDetails />
         <ExportDetails allTokens={allTokens} />
@@ -191,6 +200,7 @@ const Tokens = ({
                   setShowModal,
                   enabledPresets,
                   setEnabledPresets,
+                  disallowedTokenIds,
                 }}
               />
             ))}
@@ -212,6 +222,7 @@ interface RowProps {
   setShowModal: Dispatch<SetStateAction<boolean>>;
   enabledPresets: string[];
   setEnabledPresets: Dispatch<SetStateAction<string[]>>;
+  disallowedTokenIds?: string[];
 }
 
 const Row = (props: RowProps) => {
@@ -226,6 +237,7 @@ const Row = (props: RowProps) => {
     setShowModal,
     enabledPresets,
     setEnabledPresets,
+    disallowedTokenIds = [],
   } = props;
   const { id, parentId, tag, tags, patterns, matchCount } = token;
 
@@ -286,6 +298,7 @@ const Row = (props: RowProps) => {
               setTokenFilter={setTokenFilter}
               setVariant={setVariant}
               setShowModal={setShowModal}
+              isDisallowed={disallowedTokenIds.includes(id)}
             />
           </div>
         </td>
@@ -351,11 +364,17 @@ const Row = (props: RowProps) => {
   );
 };
 
-const MainId = ({ id, setTokenFilter, setShowModal, setVariant }) => (
+const MainId = ({
+  id,
+  setTokenFilter,
+  setShowModal,
+  setVariant,
+  isDisallowed,
+}) => (
   <a
     data-tooltip={`Filter by ${id}`}
     href="#"
-    className="id id-main"
+    className={`id id-main`}
     onClick={(e) => {
       e.preventDefault();
       setTokenFilter([id]);
@@ -363,7 +382,13 @@ const MainId = ({ id, setTokenFilter, setShowModal, setVariant }) => (
       setShowModal(false);
     }}
   >
-    {id}
+    {isDisallowed ? (
+      <span>
+        ⚠️ <s>{id}</s>
+      </span>
+    ) : (
+      id
+    )}
   </a>
 );
 
@@ -384,6 +409,11 @@ const MatchTagsDetails = ({ questionObject }) => (
         entities that contain <code>foo</code>
         under their <code>tags</code> property; or are defined in the{" "}
         <code>foo.yml</code> file.
+      </li>
+      <li>
+        Any token <code>id</code>s added to the question's{" "}
+        <code>disallowedTokenIds</code> property will <em>not</em> be considered
+        during normalization.
       </li>
       <li>
         {questionObject.matchType === "multiple" ? (

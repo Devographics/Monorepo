@@ -30,6 +30,9 @@ export const entitiesResolvers = {
     entity: async (root: any, { id }: { id: string }, context: RequestContext) => {
         return await getEntity({ id, context })
     },
+    token: async (root: any, { id }: { id: string }, context: RequestContext) => {
+        return await getEntity({ id, context, includeNormalizationEntities: true })
+    },
     entities: async (
         root: any,
         {

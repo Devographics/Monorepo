@@ -1,5 +1,5 @@
 import { ResultsSubFieldEnum } from './api'
-import { Entity } from './entities'
+import { Entity, Token } from './entities'
 import { Option } from './outlines'
 
 export type QueryData<T> = {
@@ -148,6 +148,7 @@ export interface Bucket extends BucketData {
     id: string
     completion?: BucketCompletion
     entity?: Entity
+    token?: Token
     facetBuckets: FacetBucket[]
     percentilesByFacet?: PercentileData
     label?: string

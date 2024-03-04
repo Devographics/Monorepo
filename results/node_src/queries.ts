@@ -40,8 +40,9 @@ query {
             completion
             id
             label
-            ${loadStrings
-            ? `strings {
+            ${
+                loadStrings
+                    ? `strings {
                 key
                 t
                 tHtml
@@ -49,8 +50,8 @@ query {
                 context
                 isFallback
             }`
-            : ''
-        }
+                    : ''
+            }
             translators
         }
     }
@@ -141,6 +142,11 @@ const getEntityFragment = () => `entity {
     }
 }`
 
+const getTokenFragment = () => `token {
+    id
+    parentId
+}`
+
 const getFacetFragment = (addBucketsEntities?: boolean) => `
     facetBuckets {
         id
@@ -150,6 +156,7 @@ const getFacetFragment = (addBucketsEntities?: boolean) => `
         percentageBucket
         hasInsufficientData
         ${addBucketsEntities ? getEntityFragment() : ''}
+        ${addBucketsEntities ? getTokenFragment() : ''}
     }
 `
 
@@ -263,17 +270,17 @@ const unquote = s => s.replaceAll('"', '')
 /**
  * Transform JSON into graphql function args
  * {foo: hello, bar: world} => (foo: hello, bar: world)
- * @param args 
- * @returns 
+ * @param args
+ * @returns
  */
-const wrapArguments = (args) => {
+const wrapArguments = args => {
     const keys = Object.keys(args)
 
     return keys.length > 0
         ? `(${keys
-            .filter(k => !!args[k])
-            .map(k => `${k}: ${args[k]}`)
-            .join(', ')})`
+              .filter(k => !!args[k])
+              .map(k => `${k}: ${args[k]}`)
+              .join(', ')})`
         : ''
 }
 
@@ -281,13 +288,27 @@ const facetItemToFacet = ({ sectionId, id }) => `${sectionId}__${id}`
 
 // TODO: what is this exactly?
 interface DataQueryConfig {
-    facet?: any, filters?: any, parameters?: any, xAxis?: any, yAxis?: any
+    facet?: any
+    filters?: any
+    parameters?: any
+    xAxis?: any
+    yAxis?: any
 }
 interface ParsedDataQueryConfig {
-    facet?: any, filters?: any, parameters?: any, axis1?: any, axis2?: any
+    facet?: any
+    filters?: any
+    parameters?: any
+    axis1?: any
+    axis2?: any
 }
 
-export const getQueryArgsString = ({ facet, filters, parameters, xAxis, yAxis }: DataQueryConfig) => {
+export const getQueryArgsString = ({
+    facet,
+    filters,
+    parameters,
+    xAxis,
+    yAxis
+}: DataQueryConfig) => {
     // TODO: is this type a kind of "FilterDefinition"?
     const args: ParsedDataQueryConfig = {}
     if (facet) {
@@ -313,7 +334,13 @@ export const getQueryArgsString = ({ facet, filters, parameters, xAxis, yAxis }:
     }
 }
 
-export const getDefaultQuery = ({ queryOptions, queryArgs = {} }: { queryOptions: any, queryArgs: DataQueryConfig }) => {
+export const getDefaultQuery = ({
+    queryOptions,
+    queryArgs = {}
+}: {
+    queryOptions: any
+    queryArgs: DataQueryConfig
+}) => {
     const {
         surveyId,
         editionId,
@@ -359,6 +386,7 @@ surveys {
                 isFreeformData
                 hasInsufficientData
                 ${addBucketsEntities ? getEntityFragment() : ''}
+                ${addBucketsEntities ? getTokenFragment() : ''}
                 ${queryArgs.facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
                 ${queryArgs.facet || addBucketFacetsPlaceholder ? getPercentilesFragment() : ''}
                 ${queryArgs.facet ? getFacetFragment(addBucketsEntities) : ''}

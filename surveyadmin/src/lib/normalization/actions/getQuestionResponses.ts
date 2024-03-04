@@ -1,4 +1,8 @@
-import { fetchQuestionData, fetchEntities } from "@devographics/fetch";
+import {
+  fetchQuestionData,
+  fetchEntities,
+  getQuestionDataQuery,
+} from "@devographics/fetch";
 import { getAllResponses } from "../helpers/getAllResponses";
 import { ResultsSubFieldEnum } from "@devographics/types";
 import pick from "lodash/pick";
@@ -35,16 +39,23 @@ export const getQuestionResponses = async ({
 
   const responsesCount = allResponses?.length;
 
-  const questionResult = await fetchQuestionData({
-    shouldGetFromCache,
+  const queryOptions = {
     surveyId,
     editionId,
     sectionId: question.section.id,
     questionId,
     subField: ResultsSubFieldEnum.FREEFORM,
-    queryArgs: { parameters: { enableCache: shouldGetFromCache } },
+  };
+  const queryArgs = { parameters: { enableCache: shouldGetFromCache } };
+  const questionDataPayload = await fetchQuestionData({
+    shouldGetFromCache,
+    ...queryOptions,
+    queryArgs,
   });
-  const fetchQuestionDataDuration = questionResult.duration;
+
+  const questionDataQuery = getQuestionDataQuery({ queryOptions, queryArgs });
+
+  const fetchQuestionDataDuration = questionDataPayload.duration;
 
   const { data: allEntities, duration: fetchEntitiesDuration } =
     await fetchEntities({ shouldGetFromCache });
@@ -64,7 +75,8 @@ export const getQuestionResponses = async ({
     responsesCount,
     responses: allResponses,
     responsesSelector: selector,
-    questionResult,
+    questionDataPayload,
+    questionDataQuery,
     entities,
     durations: {
       ...durations,

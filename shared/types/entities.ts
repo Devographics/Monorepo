@@ -51,6 +51,13 @@ export interface Entity extends EntityResolvedFields {
     resources?: Resource[]
 }
 
+export interface Token {
+    id: string
+    parentId?: string
+    tags?: string[]
+    patterns?: string[]
+}
+
 export interface Resource {
     name?: string
     title?: string
