@@ -65,12 +65,18 @@ export const combineWithFreeform = async (
     options: GenericComputeOptions
 ) => {
     // make sure we don't add overall bucket here otherwise it'll be added twice
+    // also don't group buckets here because we will do it at a later stage
     const newOptions: GenericComputeOptions = {
         ...options,
         computeArguments: {
             ...options.computeArguments,
             responsesType: ResponsesTypes.FREEFORM,
-            parameters: { ...options.computeArguments, enableAddOverallBucket: false }
+            parameters: {
+                ...options.computeArguments,
+                enableAddOverallBucket: false,
+                mergeOtherBuckets: false,
+                enableBucketGroups: false
+            }
         }
     }
     const freeformResults = await genericComputeFunction(newOptions)
