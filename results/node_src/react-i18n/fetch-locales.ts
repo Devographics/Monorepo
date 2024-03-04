@@ -114,6 +114,7 @@ async function getAllLocaleDefinitions({ graphql, contexts }: {
         },
         // GraphQL API = source of truth
         {
+            name: 'apiFetch',
             get: async () => {
                 return await getLocalesGraphQL({ graphql, contexts, key: allLocalesKey })
             }
@@ -134,6 +135,7 @@ async function getLocaleContextStrings({ locale, context, graphql }: { locale: L
                 disabled: !allowedCaches.redis
             },
             {
+                name: 'apiFetch',
                 get: async () => {
                     const data = await getLocaleContextGraphQL({
                         localeId: locale.id,
@@ -141,7 +143,6 @@ async function getLocaleContextStrings({ locale, context, graphql }: { locale: L
                         graphql,
                         key: contextKey
                     })
-                    console.log("LOCALE", { data })
                     return data?.strings
                 }
             },
@@ -178,7 +179,6 @@ export const getLocalesWithStrings = async ({ localeIds, graphql, contexts }: {
         let localeStrings: Array<Translation> = []
         for (const context of contexts) {
             const strings = await getLocaleContextStrings({ locale, context, graphql })
-            console.log({ strings, localeStrings })
             localeStrings = [...localeStrings, ...strings]
         }
         locale.strings = localeStrings
