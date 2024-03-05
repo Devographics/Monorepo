@@ -84,6 +84,7 @@ export interface CommonNormalizationProps extends NormalizationProps {
   responsesCount: number;
   responses: NormalizationResponse[];
   questionData: ResponseData;
+  questionDataQuery: string;
   entities: Entity[];
   customNormalizations: CustomNormalizationDocument[];
   allAnswers: IndividualAnswer[];
@@ -183,13 +184,18 @@ export const Normalization = (props: NormalizationProps) => {
     responsesData = {} as ResponsesData,
     customNormalizations = [],
   } = props;
-  const { responsesCount, entities, responses, questionResult, durations } =
-    responsesData;
+  console.log(responsesData);
+  const {
+    responsesCount,
+    entities,
+    responses,
+    questionDataPayload,
+    questionDataQuery,
+    durations,
+  } = responsesData;
 
   const [tokenFilter, setTokenFilter] = useState<null | string[]>(null);
   const [variant, setVariant] = useState<AnswerVariant>("unnormalized");
-
-  const questionData = questionResult?.data;
 
   const {
     initializeSegments,
@@ -214,7 +220,8 @@ export const Normalization = (props: NormalizationProps) => {
     responsesData,
     responsesCount,
     responses,
-    questionData,
+    questionData: questionDataPayload?.data,
+    questionDataQuery,
     entities,
     customNormalizations,
     tokenFilter,

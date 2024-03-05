@@ -26,7 +26,8 @@ export type ResponsesData = {
   responses: Array<NormalizationResponse>;
   responsesCount: number;
   entities: Entity[];
-  questionResult: FetchPayloadSuccessOrError<ResponseData>;
+  questionDataPayload: FetchPayloadSuccessOrError<ResponseData>;
+  questionDataQuery: string;
   customNormalizations: CustomNormalizationDocument[];
   durations: any;
 };

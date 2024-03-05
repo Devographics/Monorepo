@@ -59,6 +59,7 @@ query ${editionId}MetadataQuery {
             # optionsAreRange
             matchType
             matchTags
+            disallowedTokenIds
             options {
               id
               intlId

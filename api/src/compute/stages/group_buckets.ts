@@ -1,4 +1,4 @@
-import { FacetBucket, OptionGroup } from '@devographics/types'
+import { FacetBucket, OptionGroup, ParentIdGroup } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import sumBy from 'lodash/sumBy.js'
 import { CUTOFF_ANSWERS, NO_ANSWER, NO_MATCH, OTHER_ANSWERS } from '@devographics/constants'
@@ -106,6 +106,8 @@ function getGroupedBuckets<T extends Bucket | FacetBucket>({
     axis?: ComputeAxisParameters
 }) {
     const noAnswerBucket = buckets.find(b => b.id === NO_ANSWER)
+    // keep track of the ids of all buckets that got matched into a group
+    let groupedBucketIds: string[] = []
     let groupedBuckets = groups.map(group => {
         const { id, upperBound, lowerBound, items } = group
         let selectedBuckets
@@ -118,13 +120,41 @@ function getGroupedBuckets<T extends Bucket | FacetBucket>({
                 `groupBuckets: please specify lowerBound/upperBound or items array for group ${id}`
             )
         }
+        groupedBucketIds = [...groupedBucketIds, ...selectedBuckets.map(b => b.id)]
         const bucket = getMergedBucket<T>(selectedBuckets, id, axis)
         return bucket
     })
 
-    groupedBuckets = noAnswerBucket ? [...groupedBuckets, noAnswerBucket] : groupedBuckets
+    // add any remaning buckets that were not matched into groups as standalone buckets
+    // so that we don't lose any data
+    const remainingUngroupedBuckets = buckets.filter(b => !groupedBucketIds.includes(b.id))
+
+    groupedBuckets = noAnswerBucket
+        ? [...groupedBuckets, ...remainingUngroupedBuckets, noAnswerBucket]
+        : [...groupedBuckets, ...remainingUngroupedBuckets]
     return groupedBuckets
 }
+
+function getParentIdGroups(buckets: Bucket[]): OptionGroup[] | undefined {
+    // get the ids of all the main parent buckets, if there are any defined
+    const parentIds = uniq(compact(buckets.map(b => b.token?.parentId)))
+
+    if (parentIds.length === 0) {
+        return
+    } else {
+        const parentIdGroups = parentIds.map(parentId => {
+            // define a group that contains all the buckets that
+            // have the current parentId as parentId
+            const items = buckets.filter(b => b.token?.parentId === parentId).map(b => b.id)
+            return {
+                id: parentId,
+                items
+            }
+        })
+        return parentIdGroups
+    }
+}
+
 /*
 
 Take a list of groups and group the buckets in each edition dataset
@@ -147,13 +177,16 @@ export async function groupBuckets(
                 })
             }
         }
-        if (axis1.enableBucketGroups && axis1.question.groups) {
-            const groupedBuckets = getGroupedBuckets<Bucket>({
-                groups: axis1.question.groups,
-                buckets: editionData.buckets,
-                axis: axis2
-            })
-            editionData.buckets = groupedBuckets
+        if (axis1.enableBucketGroups) {
+            const groups = axis1.question.groups || getParentIdGroups(editionData.buckets)
+            if (groups) {
+                const groupedBuckets = getGroupedBuckets<Bucket>({
+                    groups,
+                    buckets: editionData.buckets,
+                    axis: axis2
+                })
+                editionData.buckets = groupedBuckets
+            }
         }
     }
 }

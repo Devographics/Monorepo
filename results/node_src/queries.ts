@@ -19,8 +19,6 @@ export const argumentsPlaceholder = '<ARGUMENTS_PLACEHOLDER>'
 
 export const bucketFacetsPlaceholder = '<BUCKETFACETS_PLACEHOLDER>'
 
-
-
 export const getPercentilesFragment = () => `
     percentilesByFacet {
         p0
@@ -83,6 +81,11 @@ const getEntityFragment = () => `entity {
     }
 }`
 
+const getTokenFragment = () => `token {
+    id
+    parentId
+}`
+
 const getFacetFragment = (addBucketsEntities?: boolean) => `
     facetBuckets {
         id
@@ -92,6 +95,7 @@ const getFacetFragment = (addBucketsEntities?: boolean) => `
         percentageBucket
         hasInsufficientData
         ${addBucketsEntities ? getEntityFragment() : ''}
+        ${addBucketsEntities ? getTokenFragment() : ''}
     }
 `
 
@@ -103,7 +107,13 @@ comments {
   }
 `
 
-export const getMetadataQuery = ({ surveyId, editionId }: { surveyId: string, editionId: string }) => {
+export const getMetadataQuery = ({
+    surveyId,
+    editionId
+}: {
+    surveyId: string
+    editionId: string
+}) => {
     return `
 query {
     dataAPI {
@@ -211,23 +221,38 @@ const wrapArguments = (args: any): string => {
 
     return keys.length > 0
         ? `(${keys
-            .filter(k => !!args[k])
-            .map(k => `${k}: ${args[k]}`)
-            .join(', ')})`
+              .filter(k => !!args[k])
+              .map(k => `${k}: ${args[k]}`)
+              .join(', ')})`
         : ''
 }
 
-const facetItemToFacet = ({ sectionId, id }: { sectionId: string, id: string }) => `${sectionId}__${id}`
+const facetItemToFacet = ({ sectionId, id }: { sectionId: string; id: string }) =>
+    `${sectionId}__${id}`
 
 // TODO: what is this exactly?
 interface DataQueryConfig {
-    facet?: any, filters?: any, parameters?: any, xAxis?: any, yAxis?: any
+    facet?: any
+    filters?: any
+    parameters?: any
+    xAxis?: any
+    yAxis?: any
 }
 interface ParsedDataQueryConfig {
-    facet?: any, filters?: any, parameters?: any, axis1?: any, axis2?: any
+    facet?: any
+    filters?: any
+    parameters?: any
+    axis1?: any
+    axis2?: any
 }
 
-export const getQueryArgsString = ({ facet, filters, parameters, xAxis, yAxis }: DataQueryConfig) => {
+export const getQueryArgsString = ({
+    facet,
+    filters,
+    parameters,
+    xAxis,
+    yAxis
+}: DataQueryConfig) => {
     // TODO: is this type a kind of "FilterDefinition"?
     const args: ParsedDataQueryConfig = {}
     if (facet) {
@@ -253,7 +278,13 @@ export const getQueryArgsString = ({ facet, filters, parameters, xAxis, yAxis }:
     }
 }
 
-export const getDefaultQuery = ({ queryOptions, queryArgs = {} }: { queryOptions: any, queryArgs: DataQueryConfig }) => {
+export const getDefaultQuery = ({
+    queryOptions,
+    queryArgs = {}
+}: {
+    queryOptions: any
+    queryArgs: DataQueryConfig
+}) => {
     const {
         surveyId,
         editionId,
@@ -299,6 +330,7 @@ surveys {
                 isFreeformData
                 hasInsufficientData
                 ${addBucketsEntities ? getEntityFragment() : ''}
+                ${addBucketsEntities ? getTokenFragment() : ''}
                 ${queryArgs.facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
                 ${queryArgs.facet || addBucketFacetsPlaceholder ? getPercentilesFragment() : ''}
                 ${queryArgs.facet ? getFacetFragment(addBucketsEntities) : ''}
@@ -314,8 +346,13 @@ surveys {
 `
 }
 
-export const getQueryName = ({ editionId, questionId }: { editionId: string, questionId: string }) =>
-    `${camelCase(editionId)}${camelCase(questionId)}Query`
+export const getQueryName = ({
+    editionId,
+    questionId
+}: {
+    editionId: string
+    questionId: string
+}) => `${camelCase(editionId)}${camelCase(questionId)}Query`
 
 /*
 
@@ -443,7 +480,9 @@ function getNthPosition(s: string, subString: string, count: number, fromEnd = f
 }
 
 // I guess this converts to a mongo filter?
-const conditionsToFilters = (conditions: Array<{ sectionId, fieldId: string, operator: any, value: any }>) => {
+const conditionsToFilters = (
+    conditions: Array<{ sectionId; fieldId: string; operator: any; value: any }>
+) => {
     const filters = {}
     conditions.forEach(condition => {
         const { sectionId, fieldId, operator, value } = condition

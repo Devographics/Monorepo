@@ -168,7 +168,8 @@ interface LoadAllOptions {
     localeIds?: string[]
 }
 // when developing locally, load from local files
-export const loadAllLocally = async (options?: LoadAllOptions): Promise<RawLocale[]> => {
+export const loadAllLocally = async (options: LoadAllOptions = {}): Promise<RawLocale[]> => {
+    const { localeIds } = options
     let i = 0
     let locales: RawLocale[] = []
 
@@ -179,7 +180,12 @@ export const loadAllLocally = async (options?: LoadAllOptions): Promise<RawLocal
     const allLocalesDirPath = path.resolve(localesPath)
 
     const allFiles = await readdir(allLocalesDirPath)
-    const allLocales = allFiles.filter(fileName => fileName.includes('locale-'))
+    let allLocales = allFiles.filter(fileName => fileName.includes('locale-'))
+    if (localeIds && localeIds.length > 0) {
+        allLocales = allLocales.filter(localeName =>
+            localeIds.includes(localeName.replace('locale-', ''))
+        )
+    }
     for (const localeDirName of allLocales) {
         const localeDirPath = `${allLocalesDirPath}/${localeDirName}`
         const localeConfigPath = `${allLocalesDirPath}/${localeDirName}/config.yml`
@@ -235,8 +241,10 @@ export const loadOrGetLocales = async (
 ): Promise<Array<Locale>> => {
     const { forceReload } = options
 
+    const enableFastBuild = process.env.FAST_BUILD === 'true'
+    const localeIds = enableFastBuild ? ['en-US', 'ru-RU'] : []
     if (forceReload || Locales.length === 0) {
-        const rawLocales = await loadLocales()
+        const rawLocales = await loadLocales(localeIds)
         Locales = processLocales(rawLocales)
         if (context) {
             context.locales = Locales
@@ -256,9 +264,13 @@ export const getLocalesLoadMethod = () => (getEnvVar(EnvVar.LOCALES_PATH) ? 'loc
 Load locales contents through GitHub API or locally
 
 */
-export const loadLocales = async (localeIds?: string[]): Promise<RawLocale[]> => {
+export const loadLocales = async (localeIds: string[] = []): Promise<RawLocale[]> => {
     const mode = getLocalesLoadMethod()
-    console.log(`🌐 loading locales… (mode: ${mode})`)
+    console.log(
+        `🌐 loading locales… (mode: ${mode} ${
+            localeIds.length > 0 ? `; localeIds: ${localeIds.join(', ')}` : ''
+        })`
+    )
     const locales =
         mode === 'local'
             ? await loadAllLocally({ localeIds })

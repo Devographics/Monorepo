@@ -39,7 +39,8 @@ import {
     applyDatasetCutoff,
     combineWithFreeform,
     groupOtherBuckets,
-    addOverallBucket
+    addOverallBucket,
+    addTokens
 } from './stages/index'
 import {
     ResponsesTypes,
@@ -310,7 +311,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
     if (isDebug) {
         console.log(
-            `// Using collection ${survey.normalizedCollectionName} on db ${process.env.MONGO_PUBLIC_DB}`
+            `// Using collection ${
+                survey.normalizedCollectionName || 'normalized_responses'
+            } on db ${process.env.MONGO_PUBLIC_DB}`
         )
         // console.log(
         //     inspect(
@@ -347,6 +350,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     results = await discardEmptyEditions(results)
 
     await addEntities(results, context)
+    await addTokens(results, context)
 
     if (axis2) {
         await addDefaultBucketCounts(results)
