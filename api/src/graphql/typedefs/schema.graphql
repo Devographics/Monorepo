@@ -230,6 +230,7 @@ input Parameters {
     showNoMatch: Boolean
     groupUnderCutoff: Boolean
     enableBucketGroups: Boolean
+    # Merge cutoff answers and unmatched answers into a single "other answers" bucket
     mergeOtherBuckets: Boolean
     enableAddOverallBucket: Boolean
     enableAddMissingBuckets: Boolean

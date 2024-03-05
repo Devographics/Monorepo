@@ -293,6 +293,33 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     const totalRespondentsByYear = await computeParticipationByYear({ context, survey })
     const completionByYear = await computeCompletionByYear({ context, match, survey })
 
+    /*
+
+    Hack: when dealing with featurev3 questions that supports sentiment, 
+    override one axis and use sentiment in its place
+
+    */
+    const isSentimentQuestion = question.template === 'featurev3'
+    if (isSentimentQuestion) {
+        const sentimentAxis = {
+            sort: axis1.sort,
+            order: axis1.order,
+            cutoff: axis1.cutoff,
+            limit: axis1.limit,
+            question: {
+                surveyId: axis1.question.surveyId,
+                template: axis1.question.template,
+                id: `${axis1.question.id}__sentiment`,
+                normPaths: {
+                    response: `${axis1.question?.normPaths?.base}.sentiment`
+                }
+            }
+        }
+        // do the switch axes around thing
+        axis2 = axis1
+        axis1 = sentimentAxis
+    }
+
     const pipelineProps = {
         surveyId: survey.id,
         selectedEditionId,
@@ -342,6 +369,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     }
 
     if (responsesType === ResponsesTypes.COMBINED) {
+        if (isDebug) {
+            console.log('// combined mode: getting freeform results…')
+        }
         results = await combineWithFreeform(results, options)
     }
 
@@ -366,7 +396,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await cutoffData(results, axis2, axis1)
 
         // optionally add overall, non-facetted bucket as a point of comparison
-        if (enableAddOverallBucket) {
+        // note: for now, disable this for sentiment questions to avoid infinite loops
+        if (enableAddOverallBucket && !isSentimentQuestion) {
             await addOverallBucket(results, axis1, options)
         }
 
