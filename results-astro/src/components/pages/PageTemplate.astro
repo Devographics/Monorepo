@@ -1,5 +1,5 @@
 ---
-import PageHeader from '@/components/pages/PageHeader.astro'
+import PageHeader from "@/components/pages/PageHeader.astro";
 // import PageFooter from 'core/pages/PageFooter'
 // import { usePageContext } from 'core/helpers/pageContext'
 // import BlockWrapper from 'core/blocks/block/BlockWrapper'
@@ -20,12 +20,11 @@ import PageHeader from '@/components/pages/PageHeader.astro'
 //     )
 // }
 interface Props {
-    showTitle?: boolean;
+  showTitle?: boolean;
 }
-const { showTitle } = Astro.props
+const { showTitle } = Astro.props;
 ---
 
 <main>
-    {showTitle && <PageHeader />}
-    Yo I am a generic block
+  {showTitle && <PageHeader />}
 </main>

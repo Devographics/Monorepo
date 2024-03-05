@@ -1,5 +1,7 @@
 ---
-import { } from "@/lib/theme/typography"
+import { secondaryFontMixin, mq, fontSize } from "@/lib/theme";
+import { getPageDefinition } from "@/lib/sitemap";
+import { getPageLabelKey } from "@/lib/sitemap";
 // import styled from 'styled-components'
 /*
 import { usePageContext } from '../helpers/pageContext'
@@ -15,25 +17,23 @@ const PageHeader = () => {
         </PageTitle>
     )
 }
+`
+*/
 
-const PageTitle = styled.h2.attrs({ className: 'PageTitle' })`
-    ${secondaryFontMixin}
+// TODO: check if Astro.path can be used in the underlying JS file?
+const pageDefinition = getPageDefinition(Astro.params.path!);
+---
+
+<style
+  set:html={`
+    h2 {
+        ${secondaryFontMixin()}
     @media ${mq.small} {
-        font-size: ${fontSize('larger')};
+        font-size: ${fontSize("larger")};
     }
     @media ${mq.mediumLarge} {
-        font-size: ${fontSize('huger')};
+        font-size: ${fontSize("huge")};
     }
-`
-
-
-export default PageHeader
-*/
----
-<style>
-    h2 {
-        /** TODO: importing the theme from here won't work... we have to use CSS variables */
-
-    }
-</style>
-<h2>PageHeader</h2>
+    `}
+></style>
+<h2 class="PageTitle">{getPageLabelKey(pageDefinition)}</h2>

@@ -1,4 +1,4 @@
-import { getTheme } from "./getTheme";
+import { SizeKeys, getTheme } from "./getTheme";
 
 // TODO: we can't actually load that, we need CSS variables instead
 export const secondaryFontMixin = () => `
@@ -6,3 +6,14 @@ export const secondaryFontMixin = () => `
     letter-spacing: 2px;
     /* font-weight: ${getTheme().typography.weight.bold}; */
 `
+
+
+export const fontSize =
+    (size: SizeKeys) => {
+        const themeSize = getTheme().typography.size[size]
+        if (!themeSize) {
+            console.warn("Theme has no typography size", themeSize)
+            return "16px"
+        }
+        return themeSize
+    }

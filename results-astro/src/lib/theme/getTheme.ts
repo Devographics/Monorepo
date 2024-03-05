@@ -1,6 +1,18 @@
+export type SizeKeys =
+    | 'smaller'
+    | 'small'
+    | 'smallish'
+    | 'medium'
+    | 'large'
+    | 'larger'
+    | 'largest'
+    | 'huge'
+    | "largerest"
 export interface Theme {
     typography: {
         fontFamily2: string,
+        /** size[smaller]: "8px" */
+        size: { [key in SizeKeys]?: string }
         weight: {
             bold: "400"
         }
@@ -8,7 +20,8 @@ export interface Theme {
 }
 const defaultTheme: Theme = {
     typography: {
-        fontFamily2: "??",
+        fontFamily2: "Arial",
+        size: {},
         weight: {
             bold: "400"
         }

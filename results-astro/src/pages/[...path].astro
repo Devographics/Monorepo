@@ -13,39 +13,44 @@ import Card from "../components/Card.astro";
 import { publicConfig } from "@/lib/publicConfig";
 import { astroSurveyWithSitemap } from "@/fetchers/surveyWithSitemap";
 import PageTemplate from "@/components/pages/PageTemplate.astro";
-import {initTheme} from "@/lib/theme"
+import { initTheme } from "@/lib/theme";
+import { initSitemap } from "@/lib/sitemap";
 
 export const getStaticPaths = (async () => {
   const surveyWithSitemap = await astroSurveyWithSitemap();
   return [
     ...(surveyWithSitemap.sitemap.map((item) => ({
-      params: { path: item.path },
+      params: {
+        path: item.path,
+      },
+      props: { surveyWithSitemap /*, pageContext: item*/ },
     })) || []),
     // for the home, path is not "/" but undefined (no passed params)
     { params: { path: undefined }, props: { surveyWithSitemap } },
   ];
 }) satisfies GetStaticPaths;
 
+// Get props from getStaticPaths
+const { surveyWithSitemap } = Astro.props;
+
 // Each survey edition has its own domain
 // so we can stick to global env variable to pick the edition we want
 const { editionId, surveyId } = publicConfig();
 
 // Init top level values shared across .astro components
-initTheme()
+initTheme();
+initSitemap(surveyWithSitemap.sitemap);
 
 const { path } = Astro.params;
 // TODO: normally this isn't needed, need to check my versions
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-const { surveyWithSitemap } = Astro.props;
 ---
 
 <Layout title="Welcome to Astro.">
   <main>
     {/* TODO get showTitle from page context */}
-    <PageTemplate 
-    showTitle={true} 
-    />
+    <PageTemplate showTitle={true} />
     <svg
       class="astro-a"
       width="495"
