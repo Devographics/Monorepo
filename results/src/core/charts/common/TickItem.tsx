@@ -166,7 +166,7 @@ export const TickItem = (tick: TickItemProps) => {
     const textProps = {
         id: tick.value,
         key,
-        label: typeof tickLabel === 'undefined' ? '' : tickLabel + '',
+        label: tickLabel || tick.value,
         description: description || '',
         tickRotation,
         index

@@ -1,0 +1,37 @@
+titleId: sections.${sectionId}.title
+blockType: MultiItemsExperienceBlock
+hasSponsor: true
+query: >
+    surveys {
+      ${surveyId} {
+        ${editionId} {
+          ${sectionId} {
+            ${questionId}: _${sectionId}_items {
+              items {
+                id
+                entity {
+                  id
+                }
+                responses(facet: _sentiment) {
+                  currentEdition {
+                    buckets {
+                      count
+                      id
+                      facetBuckets {
+                        count
+                        id
+                        percentageBucket
+                        percentageQuestion
+                        percentageSurvey
+                      }
+                      percentageQuestion
+                      percentageSurvey
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }

@@ -41,6 +41,18 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
 
     const chartData = series ? getChartData(series[0].data, block) : getChartData(data, block)
 
+    if (!chartData) {
+        console.log(block)
+        if (series) {
+            console.log({ series })
+            console.log(getChartData(series[0].data, block))
+        } else {
+            console.log({ data })
+            console.log(getChartData(data, block))
+        }
+        throw new Error(`HorizontalBarBlock: no chart data`)
+    }
+
     const { chartFilters, setChartFilters, filterLegends } = useChartFilters({
         block,
         options: { supportedModes: [MODE_GRID, MODE_FACET] },
@@ -128,15 +140,17 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
     return (
         <BlockVariant {...blockVariantProps}>
             <DynamicDataLoader<StandardQuestionData>
-                block={block}
-                chartFilters={chartFilters}
-                setChartFilters={setChartFilters}
-                units={units}
-                setUnits={setUnits}
-                layout="grid"
-                defaultSeries={defaultSeries}
-                providedSeries={series}
-                getChartData={getChartData}
+                {...{
+                    block,
+                    chartFilters,
+                    setChartFilters,
+                    units,
+                    setUnits,
+                    layout: 'grid',
+                    defaultSeries,
+                    providedSeries: series,
+                    getChartData
+                }}
             >
                 {units === BucketUnits.PERCENTILES ? (
                     <ChartContainer>

@@ -13,12 +13,13 @@ import { useAllChartsOptions } from 'core/charts/hooks'
 import { MAIN_UNITS } from '@devographics/constants'
 import VerticalBoxPlotChart from 'core/charts/boxPlotVertical/VerticalBoxPlotChart'
 import HorizontalBoxPlotChart from '../boxPlotHorizontal/HorizontalBoxPlotChart'
+import { DataSeries } from 'core/filters/types'
 
 export interface VerticalBarBlockProps extends BlockComponentProps {
     // legacy
     data: StandardQuestionData
     // new: charts should always accept an array of series just in case
-    series: StandardQuestionData[]
+    series: DataSeries<StandardQuestionData>[]
 }
 
 const VerticalBarBlock = ({ block, data, series, pageContext }: VerticalBarBlockProps) => {
@@ -116,14 +117,17 @@ const VerticalBarBlock = ({ block, data, series, pageContext }: VerticalBarBlock
 
     return (
         <BlockVariant {...blockVariantProps}>
-            <DynamicDataLoader
-                block={block}
-                chartFilters={chartFilters}
-                setChartFilters={setChartFilters}
-                units={units}
-                setUnits={setUnits}
-                defaultSeries={defaultSeries}
-                providedSeries={series}
+            <DynamicDataLoader<StandardQuestionData>
+                {...{
+                    block,
+                    chartFilters,
+                    setChartFilters,
+                    units,
+                    setUnits,
+                    defaultSeries,
+                    providedSeries: series,
+                    getChartData
+                }}
             >
                 <ChartContainer fit={true}>
                     {units === BucketUnits.PERCENTILES ? (

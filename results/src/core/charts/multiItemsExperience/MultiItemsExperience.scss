@@ -1,0 +1,57 @@
+.multiexp {
+    margin: 20px 0;
+}
+
+.multiexp-controls {
+    display: flex;
+    gap: 10px;
+}
+.multiexp-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.multiexp-row {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 10px;
+}
+.multiexp-row-heading {
+    margin: 0;
+    font-size: 12px;
+}
+.multiexp-items {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.multiexp-item {
+    // border: 1px solid white;
+    flex-basis: calc(var(--percentageQuestion) * 1%);
+    width: calc(var(--percentageQuestion) * 1%);
+    overflow: hidden;
+}
+
+.multiexp-item-box {
+}
+
+.multiexp-item-segment {
+    height: 20px;
+    opacity: 0.3;
+    &-experience {
+        background: var(--experienceColor);
+        .multiexp-groupedBy-experience & {
+            opacity: 1;
+        }
+    }
+    &-sentiment {
+        background: var(--sentimentColor);
+        .multiexp-groupedBy-sentiment & {
+            opacity: 1;
+        }
+    }
+}

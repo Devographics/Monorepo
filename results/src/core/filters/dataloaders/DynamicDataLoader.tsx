@@ -76,6 +76,7 @@ function DataLoaderWrapper<T>(props: DynamicDataLoaderWrapperProps<T>) {
     const [series, setSeries] = useState(providedSeries || [defaultSeries])
     const [query, setQuery] = useState<string | undefined>()
 
+    console.log(props)
     const allBuckets = series.map(serie => getChartData(serie.data, block)).flat()
 
     const { chartFilters, setChartFilters, filterLegends } = useChartFilters({
