@@ -11,3 +11,4 @@ export * from "./reloadAPI";
 export * from "./refreshCache";
 export * from "./testDbConnection";
 export * from "./generateSourceField";
+export * from "./addSentiment";
