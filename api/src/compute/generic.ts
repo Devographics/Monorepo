@@ -57,6 +57,7 @@ import { getPastEditions } from '../helpers/surveys'
 import { computeKey } from '../helpers/caching'
 import isEmpty from 'lodash/isEmpty.js'
 import { logToFile } from '@devographics/debug'
+import { SENTIMENT_FACET } from '@devographics/constants'
 
 export const convertOrder = (order: SortOrder): SortOrderNumeric => (order === 'asc' ? 1 : -1)
 
@@ -234,33 +235,59 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     
     */
     if (facet) {
-        let [sectionId, mainFieldId, subPathId] = facet?.split('__')
-        const facetId = subPathId ? `${mainFieldId}__${subPathId}` : mainFieldId
-        const facetQuestion = questionObjects.find(
-            q => q.id === facetId && q.surveyId === survey.id
-        )
-        if (facetQuestion) {
-            axis2 = {
-                question: facetQuestion,
-                ...getQuestionSort({
-                    specifier: facetSort,
+        if (facet === SENTIMENT_FACET) {
+            /*
+
+            Hack: when dealing with questions that supports sentiment, 
+            override axis2 and use sentiment in its place
+
+            */
+            const sentimentAxis = {
+                sort: axis1.sort,
+                order: axis1.order,
+                cutoff: axis1.cutoff,
+                limit: axis1.limit,
+                question: {
+                    surveyId: axis1.question.surveyId,
+                    template: axis1.question.template,
+                    id: `${axis1.question.id}__sentiment`,
+                    normPaths: {
+                        response: `${axis1.question?.normPaths?.base}.sentiment`
+                    }
+                }
+            }
+            // do the switch axes around thing
+            axis2 = axis1
+            axis1 = sentimentAxis
+        } else {
+            let [sectionId, mainFieldId, subPathId] = facet?.split('__')
+            const facetId = subPathId ? `${mainFieldId}__${subPathId}` : mainFieldId
+            const facetQuestion = questionObjects.find(
+                q => q.id === facetId && q.surveyId === survey.id
+            )
+            if (facetQuestion) {
+                axis2 = {
                     question: facetQuestion,
-                    enableBucketGroups
-                }),
-                cutoff: facetCutoff,
-                groupUnderCutoff,
-                mergeOtherBuckets,
-                enableBucketGroups,
-                enableAddMissingBuckets,
-                limit: facetLimit
+                    ...getQuestionSort({
+                        specifier: facetSort,
+                        question: facetQuestion,
+                        enableBucketGroups
+                    }),
+                    cutoff: facetCutoff,
+                    groupUnderCutoff,
+                    mergeOtherBuckets,
+                    enableBucketGroups,
+                    enableAddMissingBuckets,
+                    limit: facetLimit
+                }
+                if (facetQuestion?.options) {
+                    axis2.options = facetQuestion?.options
+                }
+                // switch both axes in order to get a better result object structure
+                const temp = axis1
+                axis1 = axis2
+                axis2 = temp
             }
-            if (facetQuestion?.options) {
-                axis2.options = facetQuestion?.options
-            }
-            // switch both axes in order to get a better result object structure
-            const temp = axis1
-            axis1 = axis2
-            axis2 = temp
         }
     }
 
@@ -292,33 +319,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     // TODO: merge these counts into the main aggregation pipeline if possible
     const totalRespondentsByYear = await computeParticipationByYear({ context, survey })
     const completionByYear = await computeCompletionByYear({ context, match, survey })
-
-    /*
-
-    Hack: when dealing with featurev3 questions that supports sentiment, 
-    override one axis and use sentiment in its place
-
-    */
-    const isSentimentQuestion = question.template === 'featurev3'
-    if (isSentimentQuestion) {
-        const sentimentAxis = {
-            sort: axis1.sort,
-            order: axis1.order,
-            cutoff: axis1.cutoff,
-            limit: axis1.limit,
-            question: {
-                surveyId: axis1.question.surveyId,
-                template: axis1.question.template,
-                id: `${axis1.question.id}__sentiment`,
-                normPaths: {
-                    response: `${axis1.question?.normPaths?.base}.sentiment`
-                }
-            }
-        }
-        // do the switch axes around thing
-        axis2 = axis1
-        axis1 = sentimentAxis
-    }
 
     const pipelineProps = {
         surveyId: survey.id,
@@ -397,7 +397,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         // optionally add overall, non-facetted bucket as a point of comparison
         // note: for now, disable this for sentiment questions to avoid infinite loops
-        if (enableAddOverallBucket && !isSentimentQuestion) {
+        if (enableAddOverallBucket && facet !== SENTIMENT_FACET) {
             await addOverallBucket(results, axis1, options)
         }
 

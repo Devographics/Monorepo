@@ -244,6 +244,12 @@ export enum SentimentOptions {
     NEGATIVE_EXPERIENCE = 'sentiment_negative_experience'
 }
 
+export enum SimplifiedSentimentOptions {
+    POSITIVE_SENTIMENT = 'positive',
+    NEUTRAL_SENTIMENT = 'neutral',
+    NEGATIVE_SENTIMENT = 'negative'
+}
+
 /*
 
 Explorer

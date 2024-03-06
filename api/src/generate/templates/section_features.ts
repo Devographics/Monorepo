@@ -7,7 +7,7 @@ export const section_features: ApiTemplateFunction = ({ question, survey, editio
     const fieldTypeName = `${graphqlize(survey.id)}${graphqlize(section.id)}SectionFeatures`
     return {
         ...question,
-        id: `${section.id}_features`,
+        id: `_${section.id}_items`,
         fieldTypeName,
         typeDef: `type ${fieldTypeName} {
     ids: [String]

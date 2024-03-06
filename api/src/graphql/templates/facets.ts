@@ -1,5 +1,6 @@
 import { Survey, QuestionApiObject, SurveyApiObject, TypeDefTemplateOutput } from '../../types'
 import { getFacetsTypeName } from '../../generate/helpers'
+import { SENTIMENT_FACET } from '@devographics/constants'
 
 /*
 
@@ -37,6 +38,7 @@ export const generateFacetsType = ({
         generatedBy: 'facets',
         typeName,
         typeDef: `enum ${typeName} {
+    ${SENTIMENT_FACET}
     ${questionObjectsWithFilters
         .sort((q1, q2) => q1?.sectionIds?.at(-1)?.localeCompare(q2?.sectionIds?.at(-1) ?? '') ?? 0)
         .sort((q1, q2) => (q1?.sectionIndex || 0) - (q2?.sectionIndex || 0))
