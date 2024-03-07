@@ -81,3 +81,5 @@ export type CombinedBucket = {
 }
 
 export type Totals = { id: string } & { [key in ColumnId]: number }
+
+export type MaxValue = { id: ColumnId; maxValue: number }

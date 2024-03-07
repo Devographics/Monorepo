@@ -1,5 +1,4 @@
 import React from 'react'
-import './MultiItemsExperience.scss'
 import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
 import { ChartState, CombinedBucket, experienceColors, sentimentColors } from './types'
 

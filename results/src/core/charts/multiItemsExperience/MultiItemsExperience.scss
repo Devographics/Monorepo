@@ -37,15 +37,17 @@
     font-size: 12px;
 }
 .multiexp-items {
-    display: flex;
-    align-items: center;
+    display: grid;
     gap: 3px;
+    // display: flex;
+    // align-items: center;
+    // gap: 3px;
 }
 
 .multiexp-item {
     // border: 1px solid white;
-    flex-basis: calc(var(--percentageValue) * 1%);
-    width: calc(var(--percentageValue) * 1%);
+    // flex-basis: calc(var(--percentageValue) * 1%);
+    // width: calc(var(--percentageValue) * 1%);
     overflow: hidden;
 }
 

@@ -10,15 +10,16 @@ import {
     CombinedItem,
     DEFAULT_VARIABLE,
     GroupingOptions,
+    MaxValue,
     MultiItemsExperienceBlockProps,
     OrderOptions,
     sortOptions
 } from './types'
 import { combineBuckets, getBuckets, getGroupedTotals } from './helpers'
 import { Row } from './MultiItemsExperienceRow'
+import max from 'lodash/max'
 
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
-    console.log(props)
     const { data } = props
     const { items } = data
     const [grouping, setGrouping] = useState<ChartState['grouping']>(GroupingOptions.EXPERIENCE)
@@ -65,8 +66,10 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
         getGroupedTotals({ item, bucketIds: columnIds, variable, grouping })
     )
 
-    console.log(sortedItems)
-    console.log(groupedTotals)
+    const maxValues: MaxValue[] = columnIds.map(columnId => {
+        const columnMax = max(groupedTotals.map(total => total[columnId]))
+        return { id: columnId, maxValue: columnMax || 0 }
+    })
 
     const combinedItems: CombinedItem[] = sortedItems.map(item => ({
         id: item.id,
@@ -83,6 +86,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
                         key={item.id}
                         item={item}
                         groupedTotals={groupedTotals}
+                        maxValues={maxValues}
                         chartState={chartState}
                     />
                 ))}
