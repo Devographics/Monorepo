@@ -5,6 +5,19 @@
 .multiexp-controls {
     display: flex;
     gap: 10px;
+    .radio {
+        input {
+            display: none;
+        }
+        cursor: pointer;
+    }
+    .radio-checked {
+        font-weight: bold;
+        text-decoration: underline;
+    }
+    .radio-unchecked {
+        opacity: 0.8;
+    }
 }
 .multiexp-rows {
     display: flex;
@@ -31,8 +44,8 @@
 
 .multiexp-item {
     // border: 1px solid white;
-    flex-basis: calc(var(--percentageQuestion) * 1%);
-    width: calc(var(--percentageQuestion) * 1%);
+    flex-basis: calc(var(--percentageValue) * 1%);
+    width: calc(var(--percentageValue) * 1%);
     overflow: hidden;
 }
 

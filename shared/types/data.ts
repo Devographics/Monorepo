@@ -36,7 +36,13 @@ export type AllQuestionData =
     | OpinionQuestionData
 
 export type StandardQuestionData = QuestionData & {
-    [key in ResultsSubFieldEnum]: ResponseData
+    id: string
+    entity: Entity
+} & {
+    [key in Exclude<
+        ResultsSubFieldEnum,
+        ResultsSubFieldEnum.ID | ResultsSubFieldEnum.ENTITY
+    >]: ResponseData
 }
 
 export interface OpinionQuestionData extends StandardQuestionData {}
