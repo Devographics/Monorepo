@@ -1,30 +1,21 @@
 import React, { useState } from 'react'
 import './MultiItemsExperience.scss'
-import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
+import { FeaturesOptions } from '@devographics/types'
 import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import compact from 'lodash/compact'
 import { MultiItemsExperienceControls } from './MultiItemsExperienceControls'
 import {
     ChartState,
-    CombinedBucket,
     CombinedItem,
     DEFAULT_VARIABLE,
     GroupingOptions,
     MultiItemsExperienceBlockProps,
     OrderOptions,
-    Totals,
-    experienceColors,
-    sentimentColors,
     sortOptions
 } from './types'
-import {
-    combineBuckets,
-    getBuckets,
-    getGroupedTotals,
-    sortByExperience,
-    sortBySentiment
-} from './helpers'
+import { combineBuckets, getBuckets, getGroupedTotals } from './helpers'
+import { Row } from './MultiItemsExperienceRow'
 
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
     console.log(props)
@@ -96,67 +87,6 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
                     />
                 ))}
             </div>
-        </div>
-    )
-}
-
-const Row = ({
-    item,
-    groupedTotals,
-    chartState
-}: {
-    item: CombinedItem
-    groupedTotals: Totals[]
-    chartState: ChartState
-}) => {
-    const { grouping } = chartState
-    const { combinedBuckets } = item
-    let sortedBuckets: CombinedBucket[]
-    if (grouping === GroupingOptions.EXPERIENCE) {
-        sortedBuckets = sortByExperience(sortBySentiment(combinedBuckets))
-    } else {
-        sortedBuckets = sortBySentiment(sortByExperience(combinedBuckets))
-    }
-
-    return (
-        <div className="multiexp-row">
-            <h3 className="multiexp-row-heading">{item.id}</h3>
-            <div className="multiexp-items">
-                {sortedBuckets.map(combinedBucket => (
-                    <Item
-                        key={combinedBucket.id}
-                        combinedBucket={combinedBucket}
-                        chartState={chartState}
-                    />
-                ))}
-            </div>
-        </div>
-    )
-}
-
-const Item = ({
-    combinedBucket,
-    chartState
-}: {
-    combinedBucket: CombinedBucket
-    chartState: ChartState
-}) => {
-    const { variable } = chartState
-    const { bucket, facetBucket } = combinedBucket
-    const value = facetBucket[variable]
-    const style = {
-        '--percentageValue': value,
-        '--experienceColor': experienceColors[bucket.id as FeaturesOptions],
-        '--sentimentColor': sentimentColors[facetBucket.id as SimplifiedSentimentOptions]
-    }
-    return (
-        <div className="multiexp-item" style={style}>
-            <div className="multiexp-item-box">
-                <div className="multiexp-item-segment multiexp-item-segment-experience"></div>
-                <div className="multiexp-item-segment multiexp-item-segment-sentiment"></div>
-            </div>
-            {/* <div>{combinedBucket.id}</div> */}
-            <div>{value}%</div>
         </div>
     )
 }
