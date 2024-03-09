@@ -1,5 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
-import './MultiItemsExperience.scss'
+import { Dispatch, SetStateAction } from 'react'
 import {
     Bucket,
     Entity,
@@ -8,12 +7,7 @@ import {
     SimplifiedSentimentOptions,
     StandardQuestionData
 } from '@devographics/types'
-import sortBy from 'lodash/sortBy'
-import sumBy from 'lodash/sumBy'
-import compact from 'lodash/compact'
 import { BlockComponentProps } from 'core/types'
-import { MultiItemsExperienceControls } from './MultiItemsExperienceControls'
-import max from 'lodash/max'
 import { PERCENTAGE_QUESTION } from '@devographics/constants'
 
 export const experienceColors = {

@@ -4,10 +4,14 @@ import { ChartState, CombinedBucket, experienceColors, sentimentColors } from '.
 
 export const Item = ({
     combinedBucket,
-    chartState
+    chartState,
+    width,
+    offset
 }: {
     combinedBucket: CombinedBucket
     chartState: ChartState
+    width: number
+    offset: number
 }) => {
     const { variable } = chartState
     const { bucket, facetBucket } = combinedBucket
@@ -15,7 +19,9 @@ export const Item = ({
     const style = {
         '--percentageValue': value,
         '--experienceColor': experienceColors[bucket.id as FeaturesOptions],
-        '--sentimentColor': sentimentColors[facetBucket.id as SimplifiedSentimentOptions]
+        '--sentimentColor': sentimentColors[facetBucket.id as SimplifiedSentimentOptions],
+        '--width': width,
+        '--offset': offset
     }
     return (
         <div className="multiexp-item" style={style}>

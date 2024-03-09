@@ -1,5 +1,4 @@
 import React from 'react'
-import './MultiItemsExperience.scss'
 import { ChartState, GroupingOptions, OrderOptions, sortOptions } from './types'
 
 export const MultiItemsExperienceControls = ({ chartState }: { chartState: ChartState }) => {
@@ -15,7 +14,7 @@ export const MultiItemsExperienceControls = ({ chartState }: { chartState: Chart
                         isChecked={grouping === id}
                         handleChange={() => {
                             setGrouping(id)
-                            setSort(sortOptions[id][0])
+                            // setSort(sortOptions[id][0])
                         }}
                     />
                 ))}

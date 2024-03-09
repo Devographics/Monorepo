@@ -20,35 +20,49 @@
     }
 }
 .multiexp-rows {
-    display: flex;
-    flex-direction: column;
+    // display: flex;
+    // flex-direction: column;
+    // gap: 20px;
+    // width: 100%;
+    // transition: 300ms;
+    display: grid;
     gap: 20px;
-    width: 100%;
+    grid-auto-rows: minmax(0, 1fr);
 }
 
 .multiexp-row {
+    // transition: 300ms;
     display: grid;
     align-items: center;
     grid-template-columns: 250px minmax(0, 1fr);
     gap: 10px;
+    // order: var(--order);
 }
 .multiexp-row-heading {
     margin: 0;
     font-size: 12px;
 }
 .multiexp-items {
-    display: grid;
-    gap: 3px;
-    // display: flex;
-    // align-items: center;
+    // display: grid;
     // gap: 3px;
+    // transition: 300ms;
+
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    position: relative;
+    height: 80px;
 }
 
 .multiexp-item {
     // border: 1px solid white;
     // flex-basis: calc(var(--percentageValue) * 1%);
-    // width: calc(var(--percentageValue) * 1%);
+    width: calc(var(--width) * 1%);
+    position: absolute;
+    left: calc(var(--offset) * 1%);
+
     overflow: hidden;
+    transition: 600ms;
 }
 
 .multiexp-item-box {
@@ -57,6 +71,7 @@
 .multiexp-item-segment {
     height: 20px;
     opacity: 0.3;
+    transition: 600ms;
     &-experience {
         background: var(--experienceColor);
         .multiexp-groupedBy-experience & {

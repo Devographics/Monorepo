@@ -383,6 +383,9 @@ importers:
       '@devographics/types':
         specifier: workspace:^1.0.0
         version: link:../shared/types
+      '@formkit/auto-animate':
+        specifier: ^0.8.1
+        version: 0.8.1
       '@mdx-js/mdx':
         specifier: ^2.1.5
         version: 2.3.0
@@ -6340,6 +6343,10 @@ packages:
 
   /@floating-ui/utils@0.1.4:
     resolution: {integrity: sha512-qprfWkn82Iw821mcKofJ5Pk9wgioHicxcQMxx+5zt5GSKoqdWvgG5AxVmpmUUjzTLPVSH5auBrhI93Deayn/DA==}
+    dev: false
+
+  /@formkit/auto-animate@0.8.1:
+    resolution: {integrity: sha512-0/Z2cuNXWVVIG/l0SpcHAWFhGdvLJ8DRvEfRWvmojtmRWfEy+LWNwgDazbZqY0qQYtkHcoEK3jBLkhiZaB/4Ig==}
     dev: false
 
   /@gatsbyjs/parcel-namer-relative-to-cwd@2.12.0(@parcel/core@2.8.3):

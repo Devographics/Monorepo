@@ -1,4 +1,3 @@
-import './MultiItemsExperience.scss'
 import {
     Bucket,
     FeaturesOptions,

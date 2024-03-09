@@ -18,6 +18,7 @@ import {
 import { combineBuckets, getBuckets, getGroupedTotals } from './helpers'
 import { Row } from './MultiItemsExperienceRow'
 import max from 'lodash/max'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
     const { data } = props
@@ -26,6 +27,8 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     const [sort, setSort] = useState<ChartState['sort']>(FeaturesOptions.USED)
     const [order, setOrder] = useState<ChartState['order']>(OrderOptions.DESC)
     const [variable, setVariable] = useState<ChartState['variable']>(DEFAULT_VARIABLE)
+
+    const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
 
     const chartState = {
         grouping,
@@ -40,6 +43,8 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
 
     const className = `multiexp multiexp-groupedBy-${grouping}`
 
+    // Note: currently, changing the grouping affects the sort
+    // ideally that shouldn't be the case
     let sortedItems = sortBy(items, item => {
         const buckets = item.responses.currentEdition.buckets
         if (grouping === GroupingOptions.EXPERIENCE) {
@@ -80,7 +85,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     return (
         <div className={className}>
             <MultiItemsExperienceControls chartState={chartState} />
-            <div className="multiexp-rows">
+            <div className="multiexp-rows" ref={parent}>
                 {combinedItems.map(item => (
                     <Row
                         key={item.id}
@@ -88,6 +93,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
                         groupedTotals={groupedTotals}
                         maxValues={maxValues}
                         chartState={chartState}
+                        order={sortedItems.findIndex(i => i.id === item.id)}
                     />
                 ))}
             </div>

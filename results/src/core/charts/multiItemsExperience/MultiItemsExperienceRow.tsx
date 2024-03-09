@@ -12,17 +12,25 @@ import {
 import { sortByExperience, sortBySentiment } from './helpers'
 import { Item } from './MultiItemsExperienceItem'
 import sum from 'lodash/sum'
+import take from 'lodash/take'
+
+type BucketDimension = { id: CombinedBucket['id']; width: number; offset: number }
+
+const ITEM_GAP_PERCENT = 1
+const COLUMN_GAP_PERCENT = 5
 
 export const Row = ({
     item,
     groupedTotals,
     maxValues,
-    chartState
+    chartState,
+    order
 }: {
     item: CombinedItem
     groupedTotals: Totals[]
     maxValues: MaxValue[]
     chartState: ChartState
+    order: number
 }) => {
     const { grouping, variable } = chartState
     const { combinedBuckets } = item
@@ -33,44 +41,83 @@ export const Row = ({
         sortedBuckets = sortBySentiment(sortByExperience(combinedBuckets))
     }
 
-    const columnIds = sortOptions[grouping]
+    const getWidth = (combinedBucket: CombinedBucket) =>
+        combinedBucket?.facetBucket?.[variable] || 0
 
-    let accumulator = 0
-    const valuesWithSpacers = sortedBuckets
-        .map((bucket, i) => {
-            const value = bucket.facetBucket[variable] || 0
-            const columnIndex = Math.floor(i / columnIds.length)
-            accumulator += value
-            const addSpacer = (i + 1) % columnIds.length === 0
-            const spacerValue =
-                Math.max(Math.floor(maxValues[columnIndex].maxValue - accumulator), 0) + 10
-            if (addSpacer) {
-                accumulator = 0
-            }
-            return addSpacer ? [value, spacerValue] : [value]
+    const groupIds = sortOptions[grouping]
+
+    const bucketDimensions: BucketDimension[] = []
+    let groupOffset = 0
+
+    const numberOfGroups = groupIds.length
+    const itemsPerGroup = 3
+    groupIds.forEach((groupId, groupIndex) => {
+        const bucketType = grouping === GroupingOptions.EXPERIENCE ? 'bucket' : 'facetBucket'
+        const groupBuckets = sortedBuckets.filter(bucket => bucket[bucketType].id === groupId)
+        // account for gaps in between each item for all previous groups
+        const itemGapSpace = groupIndex * ITEM_GAP_PERCENT * (itemsPerGroup - 1)
+        // to calculate how much to offset this group from the *left axis*,
+        // use the sum of maxValues for all *previous* groups
+        groupOffset =
+            sum(
+                take(
+                    maxValues.map(m => m.maxValue + COLUMN_GAP_PERCENT),
+                    groupIndex
+                )
+            ) + itemGapSpace
+
+        groupBuckets.forEach((combinedBucket, combinedBucketIndex) => {
+            const { id } = combinedBucket
+            const width = getWidth(combinedBucket)
+            // to calculate how much to offset this item from the *start of the group*,
+            // sum the widths of all previous items in the group
+            const itemOffset = sum(
+                take(groupBuckets, combinedBucketIndex).map(b => getWidth(b) + ITEM_GAP_PERCENT)
+            )
+            const offset = groupOffset + itemOffset
+            bucketDimensions.push({ id, width, offset })
         })
-        .flat()
+    })
 
-    const percentValuesWithSpacers = valuesWithSpacers.map(v => (v * 100) / sum(valuesWithSpacers))
+    // with the additional offsets the total of all values will exceed 100%
+    // calculate coefficient to bring it back to 100%
+    const total =
+        sum(maxValues.map(v => v.maxValue)) +
+        COLUMN_GAP_PERCENT * numberOfGroups +
+        ITEM_GAP_PERCENT * (itemsPerGroup - 1)
+    const coefficient = 100 / total
+    const bucketDimensionsRatioed = bucketDimensions.map(({ id, width, offset }) => ({
+        id,
+        width: width * coefficient,
+        offset: offset * coefficient
+    }))
+    // const percentValuesWithSpacers = valuesWithSpacers.map(v => (v * 100) / sum(valuesWithSpacers))
 
-    const style = {
-        gridTemplateColumns: percentValuesWithSpacers.map(value => `${value}%`).join(' ')
-    }
+    console.log(maxValues)
+    console.log(bucketDimensions)
+    console.log(total)
+    console.log(coefficient)
+    console.log(bucketDimensionsRatioed)
 
     return (
         <div className="multiexp-row">
             <h3 className="multiexp-row-heading">{item.id}</h3>
-            <div className="multiexp-items" style={style}>
-                {sortedBuckets.map((combinedBucket, i) => {
-                    const addSpacer = (i + 1) % columnIds.length === 0
+            <div className="multiexp-items">
+                {combinedBuckets.map((combinedBucket, i) => {
+                    const bucketDimension = bucketDimensionsRatioed.find(
+                        b => b.id === combinedBucket.id
+                    )
+                    const { offset, width } = bucketDimension
                     return (
                         <>
                             <Item
-                                key={combinedBucket.id}
+                                key={item.id + combinedBucket.id}
                                 combinedBucket={combinedBucket}
                                 chartState={chartState}
+                                width={width}
+                                offset={offset}
                             />
-                            {addSpacer && <div className="spacer" />}
+                            {/* {addSpacer && <div className="spacer" />} */}
                         </>
                     )
                 })}
