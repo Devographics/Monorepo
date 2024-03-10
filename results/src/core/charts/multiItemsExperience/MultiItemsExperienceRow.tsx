@@ -49,16 +49,13 @@ export const Row = ({
                     const cellDimension = cellDimensions.find(b => b.id === combinedBucket.id)
                     const { offset = 0, width = 0 } = cellDimension || {}
                     return (
-                        <>
-                            <Item
-                                key={item.id + combinedBucket.id}
-                                combinedBucket={combinedBucket}
-                                chartState={chartState}
-                                width={width}
-                                offset={offset}
-                            />
-                            {/* {addSpacer && <div className="spacer" />} */}
-                        </>
+                        <Item
+                            key={item.id + combinedBucket.id + i}
+                            combinedBucket={combinedBucket}
+                            chartState={chartState}
+                            width={width}
+                            offset={offset}
+                        />
                     )
                 })}
             </div>

@@ -39,11 +39,6 @@ export enum ColumnModes {
     SEPARATE = 'separate'
 }
 
-export const sortOptions = {
-    experience: Object.values(FeaturesOptions),
-    sentiment: Object.values(SimplifiedSentimentOptions)
-}
-
 type SectionItemsData = {
     items: StandardQuestionData[]
 }
@@ -82,6 +77,7 @@ export type CombinedItem = {
 
 export type CombinedBucket = {
     id: string
+    ids: string[]
     bucket: Bucket
     facetBucket: FacetBucket
     value: number

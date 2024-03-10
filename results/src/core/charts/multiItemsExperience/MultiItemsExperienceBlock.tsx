@@ -70,7 +70,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
         <div className={className}>
             <MultiItemsExperienceControls chartState={chartState} />
             <div className="multiexp-rows" ref={parent}>
-                {sortedItems.map(item => (
+                {sortedItems.map((item, i) => (
                     <Row key={item.id} item={item} maxValues={maxValues} chartState={chartState} />
                 ))}
             </div>

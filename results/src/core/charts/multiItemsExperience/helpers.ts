@@ -40,7 +40,10 @@ export const combineBuckets = (buckets: Bucket[], variable: Variable): CombinedB
     buckets
         .map(bucket =>
             bucket.facetBuckets.map(facetBucket => ({
+                // combined string id
                 id: `${bucket.id}__${facetBucket.id}`,
+                // also keep track of ids combined to create the bucket
+                ids: [bucket.id, facetBucket.id],
                 bucket,
                 facetBucket,
                 value: facetBucket[variable] || 0
@@ -98,7 +101,7 @@ export const getGroupedTotals = ({
 }) => {
     const totals = { id: item.id } as Totals
     columnIds.forEach(columnId => {
-        const relevantBuckets = item.combinedBuckets.filter(b => b.id.includes(columnId))
+        const relevantBuckets = item.combinedBuckets.filter(b => b.ids.includes(columnId))
         totals[columnId] = sumBy(relevantBuckets, b => b.value || 0)
     })
     return totals
