@@ -34,6 +34,11 @@ export enum OrderOptions {
     DESC = 'desc'
 }
 
+export enum ColumnModes {
+    STACKED = 'stacked',
+    SEPARATE = 'separate'
+}
+
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
     sentiment: Object.values(SimplifiedSentimentOptions)
@@ -60,6 +65,8 @@ export type ChartState = {
     setOrder: Dispatch<SetStateAction<OrderOptions>>
     variable: Variable
     setVariable: Dispatch<SetStateAction<Variable>>
+    columnMode: ColumnModes
+    setColumnMode: Dispatch<SetStateAction<ColumnModes>>
 }
 
 export type CombinedItem = {
@@ -72,8 +79,11 @@ export type CombinedBucket = {
     id: string
     bucket: Bucket
     facetBucket: FacetBucket
+    value: number
 }
 
 export type Totals = { id: string } & { [key in ColumnId]: number }
 
 export type MaxValue = { id: ColumnId; maxValue: number }
+
+export type CellDimension = { id: CombinedBucket['id']; width: number; offset: number }

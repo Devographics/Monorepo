@@ -1,23 +1,18 @@
 import React, { useState } from 'react'
 import './MultiItemsExperience.scss'
 import { FeaturesOptions } from '@devographics/types'
-import sortBy from 'lodash/sortBy'
-import sumBy from 'lodash/sumBy'
-import compact from 'lodash/compact'
 import { MultiItemsExperienceControls } from './MultiItemsExperienceControls'
 import {
     ChartState,
-    CombinedItem,
+    ColumnModes,
     DEFAULT_VARIABLE,
     GroupingOptions,
-    MaxValue,
     MultiItemsExperienceBlockProps,
     OrderOptions,
     sortOptions
 } from './types'
-import { combineBuckets, getBuckets, getGroupedTotals } from './helpers'
+import { combineItems, getItemTotals, getMaxValues, sortItems } from './helpers'
 import { Row } from './MultiItemsExperienceRow'
-import max from 'lodash/max'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
@@ -27,10 +22,13 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     const [sort, setSort] = useState<ChartState['sort']>(FeaturesOptions.USED)
     const [order, setOrder] = useState<ChartState['order']>(OrderOptions.DESC)
     const [variable, setVariable] = useState<ChartState['variable']>(DEFAULT_VARIABLE)
+    const [columnMode, setColumnMode] = useState<ChartState['columnMode']>(ColumnModes.STACKED)
 
     const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
 
-    const chartState = {
+    const columnIds = sortOptions[grouping]
+
+    const chartState: ChartState = {
         grouping,
         setGrouping,
         sort,
@@ -38,63 +36,31 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
         order,
         setOrder,
         variable,
-        setVariable
+        setVariable,
+        columnMode,
+        setColumnMode
     }
 
     const className = `multiexp multiexp-groupedBy-${grouping}`
 
-    // Note: currently, changing the grouping affects the sort
-    // ideally that shouldn't be the case
-    let sortedItems = sortBy(items, item => {
-        const buckets = item.responses.currentEdition.buckets
-        if (grouping === GroupingOptions.EXPERIENCE) {
-            const sortingBucket = buckets.find(bucket => bucket.id === sort)
-            return sortingBucket?.percentageQuestion
-        } else {
-            const activeSentimentBuckets = compact(
-                buckets.map(bucket => bucket.facetBuckets.find(fb => fb.id === sort)).flat()
-            )
-            const sentimentTotalPercentage = sumBy(
-                activeSentimentBuckets,
-                fb => fb.percentageQuestion || 0
-            )
-            return sentimentTotalPercentage
-        }
-    })
+    // combine/flatten each item's buckets
+    const combinedItems = combineItems({ items, variable })
 
-    if (order === OrderOptions.DESC) {
-        sortedItems = sortedItems.toReversed()
-    }
-    const columnIds = sortOptions[grouping]
+    // get column-by-column grouped totals
+    const groupedTotals = getItemTotals({ combinedItems, columnIds })
 
-    const groupedTotals = sortedItems.map(item =>
-        getGroupedTotals({ item, bucketIds: columnIds, variable, grouping })
-    )
+    // get max value among all items for each column
+    const maxValues = getMaxValues({ groupedTotals, columnIds })
 
-    const maxValues: MaxValue[] = columnIds.map(columnId => {
-        const columnMax = max(groupedTotals.map(total => total[columnId]))
-        return { id: columnId, maxValue: columnMax || 0 }
-    })
-
-    const combinedItems: CombinedItem[] = sortedItems.map(item => ({
-        id: item.id,
-        entity: item.entity,
-        combinedBuckets: combineBuckets(getBuckets(item))
-    }))
+    // sort items according to grouped totals
+    const sortedItems = sortItems({ combinedItems, groupedTotals, sort, order })
 
     return (
         <div className={className}>
             <MultiItemsExperienceControls chartState={chartState} />
             <div className="multiexp-rows" ref={parent}>
-                {combinedItems.map(item => (
-                    <Row
-                        key={item.id}
-                        item={item}
-                        groupedTotals={groupedTotals}
-                        maxValues={maxValues}
-                        chartState={chartState}
-                        order={sortedItems.findIndex(i => i.id === item.id)}
-                    />
+                {sortedItems.map(item => (
+                    <Row key={item.id} item={item} maxValues={maxValues} chartState={chartState} />
                 ))}
             </div>
         </div>

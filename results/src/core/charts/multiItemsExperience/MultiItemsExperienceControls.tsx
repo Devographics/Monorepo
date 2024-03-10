@@ -1,8 +1,9 @@
 import React from 'react'
-import { ChartState, GroupingOptions, OrderOptions, sortOptions } from './types'
+import { ChartState, ColumnModes, GroupingOptions, OrderOptions, sortOptions } from './types'
 
 export const MultiItemsExperienceControls = ({ chartState }: { chartState: ChartState }) => {
-    const { grouping, setGrouping, sort, setSort, order, setOrder } = chartState
+    const { grouping, setGrouping, sort, setSort, order, setOrder, columnMode, setColumnMode } =
+        chartState
     return (
         <>
             <div className="multiexp-controls multiexp-controls-grouping">
@@ -40,6 +41,18 @@ export const MultiItemsExperienceControls = ({ chartState }: { chartState: Chart
                         id={option}
                         isChecked={order === option}
                         handleChange={() => setOrder(option)}
+                    />
+                ))}
+            </div>
+
+            <div className="multiexp-controls multiexp-controls-columns">
+                <h4>Column mode: </h4>
+                {Object.values(ColumnModes).map(option => (
+                    <Radio
+                        key={option}
+                        id={option}
+                        isChecked={columnMode === option}
+                        handleChange={() => setColumnMode(option)}
                     />
                 ))}
             </div>
