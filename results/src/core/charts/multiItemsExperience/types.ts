@@ -8,7 +8,7 @@ import {
     StandardQuestionData
 } from '@devographics/types'
 import { BlockComponentProps } from 'core/types'
-import { PERCENTAGE_QUESTION } from '@devographics/constants'
+import { PERCENTAGE_QUESTION, SENTIMENT_FACET } from '@devographics/constants'
 
 export const experienceColors = {
     [FeaturesOptions.NEVER_HEARD]: '#D696F4',
@@ -56,7 +56,12 @@ export interface MultiItemsExperienceBlockProps extends BlockComponentProps {
 export type ColumnId = FeaturesOptions | SimplifiedSentimentOptions
 
 export type Variable = typeof PERCENTAGE_QUESTION
+
+export type FacetId = string
+
 export type ChartState = {
+    facetId: FacetId
+    setFacetId: Dispatch<SetStateAction<FacetId>>
     grouping: GroupingOptions
     setGrouping: Dispatch<SetStateAction<GroupingOptions>>
     sort: ColumnId

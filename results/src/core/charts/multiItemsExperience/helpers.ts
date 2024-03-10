@@ -155,7 +155,7 @@ export const getCellDimensions = ({
     maxValues: MaxValue[]
     variable: Variable
 }): CellDimension[] => {
-    const cellDimensions: CellDimension[] = []
+    let cellDimensions: CellDimension[] = []
     let groupOffset = 0
     const numberOfGroups = columnIds.length
     // TODO: calculate this dynamically
@@ -193,17 +193,25 @@ export const getCellDimensions = ({
         })
     })
 
-    // with the additional offsets the total of all values will exceed 100%
-    // calculate coefficient to bring it back to 100%
-    const total =
-        sum(maxValues.map(v => v.maxValue)) +
-        COLUMN_GAP_PERCENT * numberOfGroups +
-        ITEM_GAP_PERCENT * (itemsPerGroup - 1)
+    // with the additional gaps and offsets the total of all values will exceed 100%,
+    // so calculate coefficient to bring it back to 100%
+
+    // total space occupied by each column
+    const columnsTotal = shouldSeparateColumns ? sum(maxValues.map(v => v.maxValue)) : 100
+
+    // total space occupied by the gaps between each column
+    const columnGapTotal = shouldSeparateColumns ? COLUMN_GAP_PERCENT * numberOfGroups : 0
+
+    // total space occupied by the gaps between each cell
+    const cellGapTotal = ITEM_GAP_PERCENT * itemsPerGroup * numberOfGroups
+
+    const total = columnsTotal + columnGapTotal + cellGapTotal
     const coefficient = 100 / total
-    const cellDimensionsRatioed = cellDimensions.map(({ id, width, offset }) => ({
+    cellDimensions = cellDimensions.map(({ id, width, offset }) => ({
         id,
         width: width * coefficient,
         offset: offset * coefficient
     }))
-    return cellDimensionsRatioed
+
+    return cellDimensions
 }

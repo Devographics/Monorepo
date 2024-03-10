@@ -5,11 +5,11 @@ import {
     CombinedBucket,
     CombinedItem,
     GroupingOptions,
-    MaxValue,
-    sortOptions
+    MaxValue
 } from './types'
 import { getCellDimensions, sortByExperience, sortBySentiment } from './helpers'
 import { Item } from './MultiItemsExperienceItem'
+import { sortOptions } from './MultiItemsExperienceBlock'
 
 export const Row = ({
     item,

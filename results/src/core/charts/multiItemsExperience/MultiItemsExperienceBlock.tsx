@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './MultiItemsExperience.scss'
-import { FeaturesOptions } from '@devographics/types'
+import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
 import { MultiItemsExperienceControls } from './MultiItemsExperienceControls'
 import {
     ChartState,
@@ -8,12 +8,16 @@ import {
     DEFAULT_VARIABLE,
     GroupingOptions,
     MultiItemsExperienceBlockProps,
-    OrderOptions,
-    sortOptions
+    OrderOptions
 } from './types'
 import { combineItems, getItemTotals, getMaxValues, sortItems } from './helpers'
 import { Row } from './MultiItemsExperienceRow'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+
+export const sortOptions = {
+    experience: Object.values(FeaturesOptions),
+    sentiment: Object.values(SimplifiedSentimentOptions)
+}
 
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
     const { data } = props
@@ -23,12 +27,19 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     const [order, setOrder] = useState<ChartState['order']>(OrderOptions.DESC)
     const [variable, setVariable] = useState<ChartState['variable']>(DEFAULT_VARIABLE)
     const [columnMode, setColumnMode] = useState<ChartState['columnMode']>(ColumnModes.STACKED)
+    const [facetId, setFacetId] = useState<ChartState['facetId']>('sentiment')
 
     const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
 
     const columnIds = sortOptions[grouping]
+    const allColumnIds = [
+        ...Object.values(FeaturesOptions),
+        ...Object.values(SimplifiedSentimentOptions)
+    ]
 
     const chartState: ChartState = {
+        facetId,
+        setFacetId,
         grouping,
         setGrouping,
         sort,
@@ -47,7 +58,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     const combinedItems = combineItems({ items, variable })
 
     // get column-by-column grouped totals
-    const groupedTotals = getItemTotals({ combinedItems, columnIds })
+    const groupedTotals = getItemTotals({ combinedItems, columnIds: allColumnIds })
 
     // get max value among all items for each column
     const maxValues = getMaxValues({ groupedTotals, columnIds })
