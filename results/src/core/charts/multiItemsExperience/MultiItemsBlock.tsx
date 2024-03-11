@@ -82,6 +82,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
         <div className={className}>
             <MultiItemsExperienceControls chartState={chartState} />
             <div className={`multiexp-column-headings multiexp-column-headings-${columnMode}`}>
+                <h3 className="multiexp-table-grouping">{grouping}</h3>
                 <div className="multiexp-column-headings-inner">
                     {columnIds.map(columnId => {
                         const columnDimension = columnDimensions.find(d => d.id === columnId)

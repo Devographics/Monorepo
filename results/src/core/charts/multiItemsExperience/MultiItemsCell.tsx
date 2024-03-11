@@ -8,7 +8,6 @@ import {
     experienceColors,
     sentimentColors
 } from './types'
-import { getGroupedTotals } from './helpers'
 
 export const Cell = ({
     combinedBucket,
