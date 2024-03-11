@@ -8,8 +8,8 @@ import {
     MaxValue
 } from './types'
 import { getCellDimensions, getGroupedTotals, sortByExperience, sortBySentiment } from './helpers'
-import { Cell, ColumnTotal } from './MultiItemsExperienceCell'
-import { sortOptions } from './MultiItemsExperienceBlock'
+import { Cell, ColumnTotal } from './MultiItemsCell'
+import { sortOptions } from './MultiItemsBlock'
 
 export const Row = ({
     item,

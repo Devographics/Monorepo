@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartState, ColumnModes, GroupingOptions, OrderOptions } from './types'
-import { sortOptions } from './MultiItemsExperienceBlock'
+import { sortOptions } from './MultiItemsBlock'
 
 export const MultiItemsExperienceControls = ({ chartState }: { chartState: ChartState }) => {
     const { grouping, setGrouping, sort, setSort, order, setOrder, columnMode, setColumnMode } =

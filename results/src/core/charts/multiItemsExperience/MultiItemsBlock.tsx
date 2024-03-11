@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import './MultiItemsExperience.scss'
+import './MultiItems.scss'
 import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
-import { MultiItemsExperienceControls } from './MultiItemsExperienceControls'
+import { MultiItemsExperienceControls } from './MultiItemsControls'
 import {
     ChartState,
     ColumnId,
@@ -18,7 +18,7 @@ import {
     getMaxValues,
     sortItems
 } from './helpers'
-import { Row } from './MultiItemsExperienceRow'
+import { Row } from './MultiItemsRow'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 export const sortOptions = {

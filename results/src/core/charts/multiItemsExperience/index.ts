@@ -1,1 +1,1 @@
-export * from './MultiItemsExperienceBlock'
+export * from './MultiItemsBlock'
