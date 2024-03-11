@@ -7,8 +7,8 @@ import {
     GroupingOptions,
     MaxValue
 } from './types'
-import { getCellDimensions, sortByExperience, sortBySentiment } from './helpers'
-import { Item } from './MultiItemsExperienceItem'
+import { getCellDimensions, getGroupedTotals, sortByExperience, sortBySentiment } from './helpers'
+import { Cell, ColumnTotal } from './MultiItemsExperienceCell'
 import { sortOptions } from './MultiItemsExperienceBlock'
 
 export const Row = ({
@@ -35,29 +35,55 @@ export const Row = ({
     const cellDimensions = getCellDimensions({
         sortedBuckets,
         columnIds,
-        grouping,
         shouldSeparateColumns,
         maxValues,
         variable
     })
 
+    const groupedTotals = getGroupedTotals({ item, columnIds })
+
     return (
         <div className="multiexp-row">
             <h3 className="multiexp-row-heading">{item.id}</h3>
-            <div className="multiexp-items">
-                {combinedBuckets.map((combinedBucket, i) => {
-                    const cellDimension = cellDimensions.find(b => b.id === combinedBucket.id)
-                    const { offset = 0, width = 0 } = cellDimension || {}
-                    return (
-                        <Item
-                            key={item.id + combinedBucket.id + i}
-                            combinedBucket={combinedBucket}
-                            chartState={chartState}
-                            width={width}
-                            offset={offset}
-                        />
-                    )
-                })}
+            <div className="multiexp-row-data">
+                <div className="multiexp-cells">
+                    {combinedBuckets.map((combinedBucket, i) => {
+                        const cellDimension = cellDimensions.find(d => d.id === combinedBucket.id)
+                        const { offset = 0, width = 0 } = cellDimension || {}
+                        return (
+                            <Cell
+                                key={item.id + combinedBucket.id + i}
+                                combinedBucket={combinedBucket}
+                                chartState={chartState}
+                                width={width}
+                                offset={offset}
+                            />
+                        )
+                    })}
+                </div>
+
+                <div className="multiexp-column-totals">
+                    {columnIds.map(columnId => {
+                        const cellsInColumn = cellDimensions.filter(d => d.ids.includes(columnId))
+                        const firstCellInColumn = cellsInColumn.at(0)
+                        const lastCellInColumn = cellsInColumn.at(-1)
+                        const width =
+                            (lastCellInColumn?.offset || 0) +
+                            (lastCellInColumn?.width || 0) -
+                            (firstCellInColumn?.offset || 0)
+                        const offset = firstCellInColumn?.offset || 0
+
+                        return (
+                            <ColumnTotal
+                                key={columnId}
+                                columnId={columnId}
+                                groupedTotals={groupedTotals}
+                                width={width}
+                                offset={offset}
+                            />
+                        )
+                    })}
+                </div>
             </div>
         </div>
     )

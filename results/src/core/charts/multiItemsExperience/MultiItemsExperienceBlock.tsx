@@ -4,13 +4,20 @@ import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types
 import { MultiItemsExperienceControls } from './MultiItemsExperienceControls'
 import {
     ChartState,
+    ColumnId,
     ColumnModes,
     DEFAULT_VARIABLE,
     GroupingOptions,
     MultiItemsExperienceBlockProps,
     OrderOptions
 } from './types'
-import { combineItems, getItemTotals, getMaxValues, sortItems } from './helpers'
+import {
+    combineItems,
+    getColumnDimensions,
+    getItemTotals,
+    getMaxValues,
+    sortItems
+} from './helpers'
 import { Row } from './MultiItemsExperienceRow'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 
@@ -26,10 +33,12 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     const [sort, setSort] = useState<ChartState['sort']>(FeaturesOptions.USED)
     const [order, setOrder] = useState<ChartState['order']>(OrderOptions.DESC)
     const [variable, setVariable] = useState<ChartState['variable']>(DEFAULT_VARIABLE)
-    const [columnMode, setColumnMode] = useState<ChartState['columnMode']>(ColumnModes.STACKED)
+    const [columnMode, setColumnMode] = useState<ChartState['columnMode']>(ColumnModes.SEPARATE)
     const [facetId, setFacetId] = useState<ChartState['facetId']>('sentiment')
 
     const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
+
+    const shouldSeparateColumns = columnMode === ColumnModes.SEPARATE
 
     const columnIds = sortOptions[grouping]
     const allColumnIds = [
@@ -66,14 +75,52 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     // sort items according to grouped totals
     const sortedItems = sortItems({ combinedItems, groupedTotals, sort, order })
 
+    const { columnDimensions } = getColumnDimensions({ maxValues, shouldSeparateColumns })
+
     return (
         <div className={className}>
             <MultiItemsExperienceControls chartState={chartState} />
+            <div className="multiexp-column-headings">
+                <div className="multiexp-column-headings-inner">
+                    {columnIds.map(columnId => {
+                        const columnDimension = columnDimensions.find(d => d.id === columnId)
+                        const { width = 0, offset = 0 } = columnDimension || {}
+                        return (
+                            <ColumnHeading
+                                key={columnId}
+                                columnId={columnId}
+                                width={width}
+                                offset={offset}
+                            />
+                        )
+                    })}
+                </div>
+            </div>
             <div className="multiexp-rows" ref={parent}>
                 {sortedItems.map((item, i) => (
                     <Row key={item.id} item={item} maxValues={maxValues} chartState={chartState} />
                 ))}
             </div>
+        </div>
+    )
+}
+
+const ColumnHeading = ({
+    columnId,
+    width,
+    offset
+}: {
+    columnId: ColumnId
+    width: number
+    offset: number
+}) => {
+    const style = {
+        '--width': width,
+        '--offset': offset
+    }
+    return (
+        <div className="multiexp-column-heading" style={style}>
+            {columnId}
         </div>
     )
 }

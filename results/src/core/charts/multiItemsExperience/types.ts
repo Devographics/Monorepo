@@ -35,8 +35,8 @@ export enum OrderOptions {
 }
 
 export enum ColumnModes {
-    STACKED = 'stacked',
-    SEPARATE = 'separate'
+    SEPARATE = 'separate',
+    STACKED = 'stacked'
 }
 
 type SectionItemsData = {
@@ -87,4 +87,13 @@ export type Totals = { id: string } & { [key in ColumnId]: number }
 
 export type MaxValue = { id: ColumnId; maxValue: number }
 
-export type CellDimension = { id: CombinedBucket['id']; width: number; offset: number }
+export type Dimension = {
+    id: CombinedBucket['id']
+    width: number
+    offset: number
+}
+export type CellDimension = Dimension & {
+    ids: CombinedBucket['ids']
+}
+
+export type ColumnDimension = Dimension

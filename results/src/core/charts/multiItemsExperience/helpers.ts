@@ -7,6 +7,7 @@ import {
 import sumBy from 'lodash/sumBy'
 import {
     CellDimension,
+    ColumnDimension,
     ColumnId,
     CombinedBucket,
     CombinedItem,
@@ -20,6 +21,7 @@ import sortBy from 'lodash/sortBy'
 import max from 'lodash/max'
 import sum from 'lodash/sum'
 import take from 'lodash/take'
+import round from 'lodash/round'
 
 export const getBuckets = (item: StandardQuestionData) => item.responses.currentEdition.buckets
 
@@ -102,7 +104,10 @@ export const getGroupedTotals = ({
     const totals = { id: item.id } as Totals
     columnIds.forEach(columnId => {
         const relevantBuckets = item.combinedBuckets.filter(b => b.ids.includes(columnId))
-        totals[columnId] = sumBy(relevantBuckets, b => b.value || 0)
+        totals[columnId] = round(
+            sumBy(relevantBuckets, b => b.value || 0),
+            1
+        )
     })
     return totals
 }
@@ -138,28 +143,73 @@ export const sortByArray = (
 export const sortByExperience = (sourceArray: CombinedBucket[]) =>
     sortByArray(sourceArray, experienceOrder, b => b.bucket.id)
 
-const ITEM_GAP_PERCENT = 1
-const COLUMN_GAP_PERCENT = 5
+export const ITEM_GAP_PERCENT = 1
+export const COLUMN_GAP_PERCENT = 5
 export const sortBySentiment = (sourceArray: CombinedBucket[]) =>
     sortByArray(sourceArray, sentimentOrder, b => b.facetBucket.id)
+
+export const getColumnDimensions = ({
+    shouldSeparateColumns,
+    maxValues
+}: {
+    shouldSeparateColumns: boolean
+    maxValues: MaxValue[]
+}) => {
+    // TODO: calculate this dynamically
+    const itemsPerGroup = 3
+
+    let columnDimensions: ColumnDimension[] = maxValues.map(({ id, maxValue }, columnIndex) => {
+        if (shouldSeparateColumns) {
+            // account for gaps in between each item for all previous groups
+            const itemGapSpace = columnIndex * ITEM_GAP_PERCENT * itemsPerGroup
+            const offset =
+                sum(
+                    take(
+                        maxValues.map(m => m.maxValue + COLUMN_GAP_PERCENT),
+                        columnIndex
+                    )
+                ) + itemGapSpace
+            const width = maxValue + ITEM_GAP_PERCENT * (itemsPerGroup - 1)
+            return { id, offset, width }
+        } else {
+            const width = 33.3
+            const offset = (33.3 + COLUMN_GAP_PERCENT) * columnIndex
+            return { id, offset, width }
+        }
+    })
+
+    const ratio = getDimensionRatio(columnDimensions)
+
+    columnDimensions = columnDimensions.map(({ width, offset, ...rest }) => ({
+        ...rest,
+        width: round(width * ratio, 1),
+        offset: round(offset * ratio, 1)
+    }))
+
+    return { columnDimensions, ratio }
+}
+
+const getDimensionRatio = (columnDimensions: ColumnDimension[]) => {
+    const total = (columnDimensions.at(-1)?.width || 0) + (columnDimensions.at(-1)?.offset || 0)
+    const ratio = 100 / total
+    return ratio
+}
 
 export const getCellDimensions = ({
     sortedBuckets,
     columnIds,
-    grouping,
     shouldSeparateColumns,
     maxValues,
     variable
 }: {
     sortedBuckets: CombinedBucket[]
     columnIds: ColumnId[]
-    grouping: GroupingOptions
     shouldSeparateColumns: boolean
     maxValues: MaxValue[]
     variable: Variable
-}): CellDimension[] => {
+}) => {
     let cellDimensions: CellDimension[] = []
-    let groupOffset = 0
+    let columnOffset = 0
     const numberOfGroups = columnIds.length
     // TODO: calculate this dynamically
     const itemsPerGroup = 3
@@ -168,13 +218,12 @@ export const getCellDimensions = ({
         combinedBucket?.facetBucket?.[variable] || 0
 
     columnIds.forEach((columnId, columnIndex) => {
-        const bucketType = grouping === GroupingOptions.EXPERIENCE ? 'bucket' : 'facetBucket'
-        const groupBuckets = sortedBuckets.filter(bucket => bucket[bucketType].id === columnId)
+        const columnBuckets = sortedBuckets.filter(bucket => bucket.ids.includes(columnId))
         // account for gaps in between each item for all previous groups
         const itemGapSpace = columnIndex * ITEM_GAP_PERCENT * itemsPerGroup
         // to calculate how much to offset this group from the *left axis*,
         // use the sum of maxValues for all *previous* groups
-        groupOffset = shouldSeparateColumns
+        columnOffset = shouldSeparateColumns
             ? sum(
                   take(
                       maxValues.map(m => m.maxValue + COLUMN_GAP_PERCENT),
@@ -183,37 +232,25 @@ export const getCellDimensions = ({
               ) + itemGapSpace
             : sum(take(sortedBuckets, columnIndex * itemsPerGroup).map(b => b.value)) + itemGapSpace
 
-        groupBuckets.forEach((combinedBucket, combinedBucketIndex) => {
-            const { id } = combinedBucket
+        columnBuckets.forEach((combinedBucket, combinedBucketIndex) => {
+            const { id, ids } = combinedBucket
             const width = getWidth(combinedBucket)
             // to calculate how much to offset this item from the *start of the group*,
             // sum the widths of all previous items in the group
             const itemOffset = sum(
-                take(groupBuckets, combinedBucketIndex).map(b => getWidth(b) + ITEM_GAP_PERCENT)
+                take(columnBuckets, combinedBucketIndex).map(b => getWidth(b) + ITEM_GAP_PERCENT)
             )
-            const offset = groupOffset + itemOffset
-            cellDimensions.push({ id, width, offset })
+            const offset = columnOffset + itemOffset
+            cellDimensions.push({ id, ids, width, offset })
         })
     })
 
-    // with the additional gaps and offsets the total of all values will exceed 100%,
-    // so calculate coefficient to bring it back to 100%
+    const { ratio } = getColumnDimensions({ maxValues, shouldSeparateColumns })
 
-    // total space occupied by each column
-    const columnsTotal = shouldSeparateColumns ? sum(maxValues.map(v => v.maxValue)) : 100
-
-    // total space occupied by the gaps between each column
-    const columnGapTotal = shouldSeparateColumns ? COLUMN_GAP_PERCENT * numberOfGroups : 0
-
-    // total space occupied by the gaps between each cell
-    const cellGapTotal = ITEM_GAP_PERCENT * itemsPerGroup * numberOfGroups
-
-    const total = columnsTotal + columnGapTotal + cellGapTotal
-    const coefficient = 100 / total
-    cellDimensions = cellDimensions.map(({ id, width, offset }) => ({
-        id,
-        width: width * coefficient,
-        offset: offset * coefficient
+    cellDimensions = cellDimensions.map(({ width, offset, ...rest }) => ({
+        ...rest,
+        width: round(width * ratio, 1),
+        offset: round(offset * ratio, 1)
     }))
 
     return cellDimensions
