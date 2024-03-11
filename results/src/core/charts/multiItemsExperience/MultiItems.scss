@@ -1,8 +1,12 @@
 .multiexp {
     margin: 20px 0;
 }
-
 .multiexp-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.multiexp-control {
     display: flex;
     gap: 10px;
     .radio {
@@ -29,15 +33,58 @@
         grid-column-end: 3;
         position: relative;
     }
+
+    &-stacked {
+        .multiexp-column-headings-inner {
+            .multiexp-column-heading {
+                justify-content: center;
+            }
+            :first-child {
+                justify-content: flex-start;
+            }
+
+            :last-child {
+                justify-content: flex-end;
+            }
+        }
+    }
 }
 .multiexp-column-heading {
     width: calc(var(--width) * 1%);
     position: absolute;
     left: calc(var(--offset) * 1%);
-    background: #ffffff44;
-    padding: 5px;
+    // background: #ffffff44;
+    // padding: 5px;
+    display: flex;
+    // justify-content: center;
+    align-items: center;
+    gap: 10px;
+    h3 {
+        margin: 0;
+        font-size: 0.9rem;
+    }
+}
+.column-heading-sort {
+    opacity: 0.3;
+    &-enabled {
+        opacity: 1;
+    }
 }
 
+.order-asc,
+.order-desc {
+    opacity: 0.5;
+}
+.order-asc {
+    .column-heading-order-asc.column-heading-sort-enabled & {
+        opacity: 1;
+    }
+}
+.order-desc {
+    .column-heading-order-desc.column-heading-sort-enabled & {
+        opacity: 1;
+    }
+}
 .multiexp-rows {
     // display: flex;
     // flex-direction: column;

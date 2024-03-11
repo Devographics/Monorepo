@@ -6,8 +6,8 @@ export const MultiItemsExperienceControls = ({ chartState }: { chartState: Chart
     const { grouping, setGrouping, sort, setSort, order, setOrder, columnMode, setColumnMode } =
         chartState
     return (
-        <>
-            <div className="multiexp-controls multiexp-controls-grouping">
+        <div className="multiexp-controls">
+            <div className="multiexp-control multiexp-control-grouping">
                 <h4>Group by:</h4>
                 {Object.values(GroupingOptions).map(id => (
                     <Radio
@@ -22,7 +22,7 @@ export const MultiItemsExperienceControls = ({ chartState }: { chartState: Chart
                 ))}
             </div>
 
-            <div className="multiexp-controls multiexp-controls-sort">
+            {/* <div className="multiexp-controls multiexp-controls-sort">
                 <h4>Sort by:</h4>
                 {sortOptions[grouping].map(option => (
                     <Radio
@@ -32,9 +32,9 @@ export const MultiItemsExperienceControls = ({ chartState }: { chartState: Chart
                         handleChange={() => setSort(option)}
                     />
                 ))}
-            </div>
+            </div> */}
 
-            <div className="multiexp-controls multiexp-controls-order">
+            {/* <div className="multiexp-controls multiexp-controls-order">
                 <h4>Order by:</h4>
                 {Object.values(OrderOptions).map(option => (
                     <Radio
@@ -44,9 +44,9 @@ export const MultiItemsExperienceControls = ({ chartState }: { chartState: Chart
                         handleChange={() => setOrder(option)}
                     />
                 ))}
-            </div>
+            </div> */}
 
-            <div className="multiexp-controls multiexp-controls-columns">
+            <div className="multiexp-control multiexp-control-columns">
                 <h4>Column mode: </h4>
                 {Object.values(ColumnModes).map(option => (
                     <Radio
@@ -57,7 +57,7 @@ export const MultiItemsExperienceControls = ({ chartState }: { chartState: Chart
                     />
                 ))}
             </div>
-        </>
+        </div>
     )
 }
 

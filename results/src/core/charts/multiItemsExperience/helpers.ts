@@ -23,6 +23,10 @@ import sum from 'lodash/sum'
 import take from 'lodash/take'
 import round from 'lodash/round'
 
+export const ITEM_GAP_PERCENT = 1
+export const COLUMN_GAP_PERCENT = 5
+export const MINIMUM_COLUMN_WIDTH_PERCENT = 25
+
 export const getBuckets = (item: StandardQuestionData) => item.responses.currentEdition.buckets
 
 export const combineItems = ({
@@ -143,8 +147,6 @@ export const sortByArray = (
 export const sortByExperience = (sourceArray: CombinedBucket[]) =>
     sortByArray(sourceArray, experienceOrder, b => b.bucket.id)
 
-export const ITEM_GAP_PERCENT = 1
-export const COLUMN_GAP_PERCENT = 5
 export const sortBySentiment = (sourceArray: CombinedBucket[]) =>
     sortByArray(sourceArray, sentimentOrder, b => b.facetBucket.id)
 
@@ -169,7 +171,9 @@ export const getColumnDimensions = ({
                         columnIndex
                     )
                 ) + itemGapSpace
-            const width = maxValue + ITEM_GAP_PERCENT * (itemsPerGroup - 1)
+            const width =
+                Math.max(MINIMUM_COLUMN_WIDTH_PERCENT, maxValue) +
+                ITEM_GAP_PERCENT * (itemsPerGroup - 1)
             return { id, offset, width }
         } else {
             const width = 33.3

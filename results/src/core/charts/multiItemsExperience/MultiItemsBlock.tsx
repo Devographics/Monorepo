@@ -20,6 +20,7 @@ import {
 } from './helpers'
 import { Row } from './MultiItemsRow'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { ColumnHeading } from './MultiItemsColumnHeading'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -80,7 +81,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     return (
         <div className={className}>
             <MultiItemsExperienceControls chartState={chartState} />
-            <div className="multiexp-column-headings">
+            <div className={`multiexp-column-headings multiexp-column-headings-${columnMode}`}>
                 <div className="multiexp-column-headings-inner">
                     {columnIds.map(columnId => {
                         const columnDimension = columnDimensions.find(d => d.id === columnId)
@@ -91,6 +92,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
                                 columnId={columnId}
                                 width={width}
                                 offset={offset}
+                                chartState={chartState}
                             />
                         )
                     })}
@@ -101,26 +103,6 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
                     <Row key={item.id} item={item} maxValues={maxValues} chartState={chartState} />
                 ))}
             </div>
-        </div>
-    )
-}
-
-const ColumnHeading = ({
-    columnId,
-    width,
-    offset
-}: {
-    columnId: ColumnId
-    width: number
-    offset: number
-}) => {
-    const style = {
-        '--width': width,
-        '--offset': offset
-    }
-    return (
-        <div className="multiexp-column-heading" style={style}>
-            {columnId}
         </div>
     )
 }
