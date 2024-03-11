@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import BlockVariant from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
-import { LineChart } from 'core/charts/toolsRatiosLineChart/LineChart'
+import { LineChart, getChartData } from 'core/charts/toolsRatiosLineChart/LineChart'
 import { getTableData } from 'core/helpers/datatables'
 import { useTheme } from 'styled-components'
 import styled, { css } from 'styled-components'
@@ -87,6 +87,8 @@ export const ToolsExperienceLineChartBlock = ({
         options: { supportedModes: [MODE_GRID], enableYearSelect: false }
     })
 
+    const defaultSeries = { name: 'default', data }
+
     return (
         <BlockVariant
             block={block}
@@ -121,14 +123,22 @@ export const ToolsExperienceLineChartBlock = ({
             setChartFilters={setChartFilters}
         >
             <DynamicDataLoader
-                defaultData={data}
+                defaultSeries={defaultSeries}
                 block={block}
                 chartFilters={chartFilters}
                 layout="grid"
+                getChartData={getChartData}
+                getChartDataOptions={{
+                    allEntities,
+                    units: controlledMetric,
+                    i18nNamespace,
+                    getString
+                }}
             >
                 <ChartContainer height={items.length * 30 + 80}>
                     <LineChartWrapper current={current} currentColor={currentColor}>
                         <LineChart
+                            block={block}
                             data={data}
                             units={controlledMetric}
                             i18nNamespace={i18nNamespace}

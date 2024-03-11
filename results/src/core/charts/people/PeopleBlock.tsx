@@ -111,6 +111,8 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
         options: { supportedModes: [MODE_GRID] }
     })
 
+    const defaultSeries = { name: 'default', data }
+
     return (
         <Block
             units={controlledUnits ?? units}
@@ -130,16 +132,19 @@ const PeopleBlock = ({ block, data, controlledUnits, isCustom }: PeopleBlockProp
             setChartFilters={setChartFilters}
         >
             <DynamicDataLoader
-                defaultData={data}
+                defaultSeries={defaultSeries}
                 block={block}
                 chartFilters={chartFilters}
                 layout="grid"
+                getChartData={getChartData}
             >
                 <PeopleChart buckets={buckets} units={units} entities={entities} />
             </DynamicDataLoader>
         </Block>
     )
 }
+
+const getChartData = data => data
 
 const PeopleChart = ({ buckets, units, entities }) => {
     const maxBucket = maxBy(buckets, b => b.count)

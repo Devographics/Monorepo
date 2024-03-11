@@ -10,9 +10,12 @@ import { useEntities } from 'core/helpers/entities'
 import { getItemLabel } from 'core/helpers/labels'
 import { StringTranslator } from 'core/types'
 import { useI18n } from '@devographics/react-i18n'
+import { BlockDefinition } from 'core/types/index'
+import { MetricId } from 'core/helpers/units'
 
 export const getChartData = (
     data: ToolRatiosQuestionData,
+    block: BlockDefinition,
     options: {
         allEntities: Entity[]
         units: RatiosUnits
@@ -128,6 +131,8 @@ const CustomTooltip = (props: CustomTooltipProps) => {
 }
 
 interface RankingChartProps {
+    units: MetricId
+    block: BlockDefinition
     data: ToolRatiosQuestionData
     i18nNamespace?: string
 }
@@ -139,10 +144,20 @@ we need to call processBlockData() again whenever the metric changes,
 which will not happen unless we call it from within the chart
 
 */
-export const LineChart = ({ units, data: unprocessedData, i18nNamespace }: RankingChartProps) => {
+export const LineChart = ({
+    units,
+    block,
+    data: unprocessedData,
+    i18nNamespace
+}: RankingChartProps) => {
     const allEntities = useEntities()
     const { getString } = useI18n()
-    const buckets = getChartData(unprocessedData, { allEntities, units, i18nNamespace, getString })
+    const buckets = getChartData(unprocessedData, block, {
+        allEntities,
+        units,
+        i18nNamespace,
+        getString
+    })
 
     const theme = useTheme()
     // const { getString } = useI18n()

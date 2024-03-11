@@ -10,7 +10,10 @@ import { MODE_GRID } from 'core/filters/constants'
 import { useEntity } from 'core/helpers/entities'
 import { BucketUnits, FeatureQuestionData, ToolQuestionData } from '@devographics/types'
 import { BlockComponentProps } from 'core/types'
-import { ExperienceByYearBarChart } from 'core/charts/toolFeatureExperience/ExperienceByYearBarChart'
+import {
+    ExperienceByYearBarChart,
+    getChartData
+} from 'core/charts/toolFeatureExperience/ExperienceByYearBarChart'
 import { FEATURES_OPTIONS, TOOLS_OPTIONS } from '@devographics/constants'
 
 export const BAR_THICKNESS = 28
@@ -89,6 +92,8 @@ export const ToolFeatureExperienceBlock = ({
                 block={block}
                 chartFilters={chartFilters}
                 layout="grid"
+                getChartData={getChartData}
+                getChartDataOptions={{ legends }}
             >
                 <ChartContainer height={chartHeight} fit>
                     <ExperienceByYearBarChart
@@ -96,6 +101,7 @@ export const ToolFeatureExperienceBlock = ({
                         legends={legends}
                         units={units}
                         spacing={BAR_SPACING}
+                        block={block}
                     />
                 </ChartContainer>
             </DynamicDataLoader>
