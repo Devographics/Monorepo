@@ -30,7 +30,7 @@ export const normalizeMdnResource = (res: MDNJSONRes): TranslatedMDNInfo[] => {
 
 export const fetchMdnResource = async ({ path }: { path: string }) => {
     const pathWithoutAnchor = path.split('#')[0]
-    const url = `https://developer.mozilla.org${pathWithoutAnchor}/index.json`
+    const url = `https://developer.mozilla.org/${pathWithoutAnchor}/index.json`
     try {
         const res = await fetch(url)
         const json = (await res.json()) as MDNJSONRes
