@@ -152,7 +152,7 @@ async function getLocaleContextStrings({
                     graphql,
                     key: contextKey
                 })
-                return data?.strings
+                return data
             }
         }
     ]
@@ -189,8 +189,8 @@ export const getLocalesWithStrings = async ({
     for (const locale of locales) {
         let localeStrings: Array<Translation> = []
         for (const context of contexts) {
-            const strings = await getLocaleContextStrings({ locale, context, graphql })
-            localeStrings = [...localeStrings, ...strings]
+            const data = await getLocaleContextStrings({ locale, context, graphql })
+            localeStrings = [...localeStrings, ...data.strings]
         }
         locale.strings = localeStrings
     }
