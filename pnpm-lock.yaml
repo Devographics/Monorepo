@@ -554,6 +554,9 @@ importers:
       indent-string:
         specifier: ^5.0.0
         version: 5.0.0
+      ioredis:
+        specifier: ^5.2.4
+        version: 5.3.2
       js-yaml:
         specifier: ^4.1.0
         version: 4.1.0
