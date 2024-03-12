@@ -143,13 +143,14 @@ export async function computeExperienceOverYears({
         console.log('// filters')
         console.log(filters)
         console.log(
-            inspect(
+            JSON.stringify(
                 {
                     match,
                     pipeline,
                     results
                 },
-                { colors: true, depth: null }
+                null,
+                2
             )
         )
     }
