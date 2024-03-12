@@ -75,7 +75,7 @@ export const getLeftMargin = ({
                     label: bucket.label,
                     entity: bucket.entity,
                     shortenLabel: true
-                }).label
+                }).label || ''
         )
         const longestLabel = maxBy(labels, l => l.length)
         const longestLabelLength = longestLabel ? longestLabel.length : 100
