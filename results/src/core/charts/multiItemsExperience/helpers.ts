@@ -245,7 +245,7 @@ export const getCellDimensions = ({
                 take(columnBuckets, combinedBucketIndex).map(b => getWidth(b) + ITEM_GAP_PERCENT)
             )
             const offset = columnOffset + itemOffset
-            cellDimensions.push({ id, ids, width, offset })
+            cellDimensions.push({ id, ids, width, offset, columnId })
         })
     })
 

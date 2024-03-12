@@ -22,7 +22,7 @@ export const Row = ({
 }) => {
     const { grouping, variable, columnMode } = chartState
     const { combinedBuckets } = item
-    const shouldSeparateColumns = columnMode === ColumnModes.SEPARATE
+    const shouldSeparateColumns = columnMode === ColumnModes.SPLIT
     let sortedBuckets: CombinedBucket[]
     if (grouping === GroupingOptions.EXPERIENCE) {
         sortedBuckets = sortByExperience(sortBySentiment(combinedBuckets))
@@ -44,12 +44,15 @@ export const Row = ({
 
     return (
         <div className="multiexp-row">
-            <h3 className="multiexp-row-heading">{item.id}</h3>
+            <h3 className="multiexp-row-heading">{item.entity.nameClean}</h3>
             <div className="multiexp-row-data">
                 <div className="multiexp-cells">
                     {combinedBuckets.map((combinedBucket, i) => {
                         const cellDimension = cellDimensions.find(d => d.id === combinedBucket.id)
-                        const { offset = 0, width = 0 } = cellDimension || {}
+                        if (!cellDimension) {
+                            return null
+                        }
+                        const { offset, width, columnId } = cellDimension || {}
                         return (
                             <Cell
                                 key={item.id + combinedBucket.id + i}
@@ -57,6 +60,8 @@ export const Row = ({
                                 chartState={chartState}
                                 width={width}
                                 offset={offset}
+                                groupedTotals={groupedTotals}
+                                columnId={columnId}
                             />
                         )
                     })}

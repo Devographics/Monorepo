@@ -1,19 +1,19 @@
 .multiexp {
     margin: 20px 0;
+    --chartFontColumnHeading: 0.9rem;
+    --chartFontSmall: 0.7rem;
 }
 .multiexp-controls {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
-    background: #ffffff33;
-    padding: 10px;
+    margin-bottom: 40px;
     h4 {
         margin: 0;
     }
 }
 .multiexp-control {
     display: flex;
-    gap: 10px;
+    gap: 15px;
     margin: 0;
     .radio {
         input {
@@ -30,6 +30,7 @@
     }
 }
 .multiexp-table-grouping {
+    font-size: var(--chartFontColumnHeading);
 }
 .multiexp-column-headings {
     display: grid;
@@ -69,11 +70,11 @@
     gap: 10px;
     h3 {
         margin: 0;
-        font-size: 0.9rem;
+        font-size: var(--chartFontColumnHeading);
     }
 }
 .column-heading-sort {
-    opacity: 0.3;
+    opacity: 0.7;
     &-enabled {
         opacity: 1;
     }
@@ -107,14 +108,15 @@
 .multiexp-row {
     // transition: 300ms;
     display: grid;
-    align-items: center;
+    // align-items: center;
     grid-template-columns: 250px minmax(0, 1fr);
     gap: 10px;
     // order: var(--order);
 }
 .multiexp-row-heading {
     margin: 0;
-    font-size: 12px;
+    margin-top: 10px;
+    font-size: var(--chartFontColumnHeading);
 }
 .multiexp-cells {
     // display: grid;
@@ -154,7 +156,7 @@
     }
     &-value {
         margin-top: 3px;
-        font-size: 0.7rem;
+        font-size: var(--chartFontSmall);
         color: #ffffffcc;
     }
 }
@@ -174,5 +176,8 @@
         .multiexp-groupedBy-sentiment & {
             opacity: 1;
         }
+    }
+    .multiexp-cell:hover & {
+        opacity: 1;
     }
 }

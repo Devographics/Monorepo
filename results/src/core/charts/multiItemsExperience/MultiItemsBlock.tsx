@@ -21,6 +21,7 @@ import {
 import { Row } from './MultiItemsRow'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { ColumnHeading } from './MultiItemsColumnHeading'
+import { useI18n } from '@devographics/react-i18n'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -34,12 +35,13 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     const [sort, setSort] = useState<ChartState['sort']>(FeaturesOptions.USED)
     const [order, setOrder] = useState<ChartState['order']>(OrderOptions.DESC)
     const [variable, setVariable] = useState<ChartState['variable']>(DEFAULT_VARIABLE)
-    const [columnMode, setColumnMode] = useState<ChartState['columnMode']>(ColumnModes.SEPARATE)
+    const [columnMode, setColumnMode] = useState<ChartState['columnMode']>(ColumnModes.SPLIT)
     const [facetId, setFacetId] = useState<ChartState['facetId']>('sentiment')
 
     const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
 
-    const shouldSeparateColumns = columnMode === ColumnModes.SEPARATE
+    const { getString } = useI18n()
+    const shouldSeparateColumns = columnMode === ColumnModes.SPLIT
 
     const columnIds = sortOptions[grouping]
     const allColumnIds = [
@@ -82,7 +84,9 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
         <div className={className}>
             <MultiItemsExperienceControls chartState={chartState} />
             <div className={`multiexp-column-headings multiexp-column-headings-${columnMode}`}>
-                <h3 className="multiexp-table-grouping">{grouping}</h3>
+                <h3 className="multiexp-table-grouping">
+                    {getString(`charts.group.${grouping}`)?.t}
+                </h3>
                 <div className="multiexp-column-headings-inner">
                     {columnIds.map(columnId => {
                         const columnDimension = columnDimensions.find(d => d.id === columnId)

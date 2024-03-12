@@ -35,7 +35,7 @@ export enum OrderOptions {
 }
 
 export enum ColumnModes {
-    SEPARATE = 'separate',
+    SPLIT = 'split',
     STACKED = 'stacked'
 }
 
@@ -94,6 +94,7 @@ export type Dimension = {
 }
 export type CellDimension = Dimension & {
     ids: CombinedBucket['ids']
+    columnId: ColumnId
 }
 
 export type ColumnDimension = Dimension

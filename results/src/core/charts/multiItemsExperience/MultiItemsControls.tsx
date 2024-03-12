@@ -1,86 +1,71 @@
 import React from 'react'
-import { ChartState, ColumnModes, GroupingOptions, OrderOptions } from './types'
-import { sortOptions } from './MultiItemsBlock'
+import { ChartState, ColumnModes, GroupingOptions } from './types'
+import { useI18n } from '@devographics/react-i18n'
+import { SplitIcon, StackedIcon } from 'core/icons'
+import ButtonGroup from 'core/components/ButtonGroup'
+import Button from 'core/components/Button'
+import T from 'core/i18n/T'
+
+const icons = {
+    [ColumnModes.SPLIT]: SplitIcon,
+    [ColumnModes.STACKED]: StackedIcon
+}
 
 export const MultiItemsExperienceControls = ({ chartState }: { chartState: ChartState }) => {
+    const { getString } = useI18n()
     const { grouping, setGrouping, sort, setSort, order, setOrder, columnMode, setColumnMode } =
         chartState
     return (
         <div className="multiexp-controls">
+            <div />
             <div className="multiexp-control multiexp-control-grouping">
-                <h4>Group by:</h4>
-                {Object.values(GroupingOptions).map(id => (
-                    <Radio
-                        key={id}
-                        id={id}
-                        isChecked={grouping === id}
-                        handleChange={() => {
-                            setGrouping(id)
-                            // setSort(sortOptions[id][0])
-                        }}
-                    />
-                ))}
+                <h4>{getString('charts.group_by')?.t}</h4>
+                <ButtonGroup>
+                    {Object.values(GroupingOptions).map(id => {
+                        const isChecked = grouping === id
+                        return (
+                            <Button
+                                key={id}
+                                size="small"
+                                className={`Button--${isChecked ? 'selected' : 'unselected'}`}
+                                onClick={() => {
+                                    setGrouping(id)
+                                    // setSort(sortOptions[id][0])
+                                }}
+                                aria-pressed={isChecked}
+                            >
+                                <T k={`charts.group.${id}`} />
+                            </Button>
+                        )
+                    })}
+                </ButtonGroup>
             </div>
-
-            {/* <div className="multiexp-controls multiexp-controls-sort">
-                <h4>Sort by:</h4>
-                {sortOptions[grouping].map(option => (
-                    <Radio
-                        key={option}
-                        id={option}
-                        isChecked={sort === option}
-                        handleChange={() => setSort(option)}
-                    />
-                ))}
-            </div> */}
-
-            {/* <div className="multiexp-controls multiexp-controls-order">
-                <h4>Order by:</h4>
-                {Object.values(OrderOptions).map(option => (
-                    <Radio
-                        key={option}
-                        id={option}
-                        isChecked={order === option}
-                        handleChange={() => setOrder(option)}
-                    />
-                ))}
-            </div> */}
 
             <div className="multiexp-control multiexp-control-columns">
-                <h4>Column mode: </h4>
-                {Object.values(ColumnModes).map(option => (
-                    <Radio
-                        key={option}
-                        id={option}
-                        isChecked={columnMode === option}
-                        handleChange={() => setColumnMode(option)}
-                    />
-                ))}
+                {/* <h4>{getString('charts.display_mode')?.t}</h4> */}
+                {Object.values(ColumnModes).map(option => {
+                    const Icon = icons[option]
+                    const isChecked = columnMode === option
+                    const label = getString(`charts.display_mode.${option}`)?.t
+                    return (
+                        <label
+                            key={option}
+                            htmlFor={option}
+                            className={`radio ${isChecked ? 'radio-checked' : 'radio-unchecked'}`}
+                        >
+                            {Icon && <Icon label={label} />}{' '}
+                            <input
+                                type="radio"
+                                id={option}
+                                name="grouping"
+                                value={option}
+                                checked={isChecked}
+                                onChange={() => setColumnMode(option)}
+                            />
+                        </label>
+                    )
+                })}
             </div>
         </div>
-    )
-}
-
-const Radio = ({
-    id,
-    isChecked,
-    handleChange
-}: {
-    id: string
-    isChecked: boolean
-    handleChange: () => void
-}) => {
-    return (
-        <label htmlFor={id} className={`radio ${isChecked ? 'radio-checked' : 'radio-unchecked'}`}>
-            <input
-                type="radio"
-                id={id}
-                name="grouping"
-                value={id}
-                checked={isChecked}
-                onChange={handleChange}
-            />
-            {id}
-        </label>
     )
 }

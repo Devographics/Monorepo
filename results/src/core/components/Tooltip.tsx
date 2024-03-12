@@ -22,10 +22,10 @@ export const getTooltipContent = element => styled(element)`
 export const TooltipContent_ = getTooltipContent(Tooltip.Content)
 
 const Trigger = styled(Tooltip.Trigger)`
-    background: none;
+    /* background: none;
     border: none;
     padding: 0;
-    display: inline-block;
+    display: inline-block; */
 
     ${props => {
         if (props.$clickable) {

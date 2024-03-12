@@ -10,7 +10,28 @@ query: >
               items {
                 id
                 entity {
-                  id
+                  name
+                  nameClean
+                  nameHtml
+                  homepage {
+                    url
+                  }
+                  caniuse {
+                    name
+                    url
+                  }
+                  mdn {
+                    locale
+                    url
+                    title
+                    summary
+                  }
+                  example {
+                    label
+                    language
+                    code
+                    codeHighlighted
+                  }
                 }
                 responses(facet: _sentiment) {
                   currentEdition {
