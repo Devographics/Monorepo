@@ -9,16 +9,6 @@
         "./client": "./index.client.ts"
     },
     "types": "./index.ts",
-    "typesVersions": {
-        "*": {
-            "server": [
-                "./index.server.ts"
-            ],
-            "client": [
-                "./index.client.ts"
-            ]
-        }
-    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },

@@ -1,6 +1,6 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
 const useStoreReferrer = () => {
   const query = useSearchParams()!;
@@ -36,6 +36,14 @@ export const useReferrer = () => {
  * because we want the source/referrer to persist thanks to the local storage
  */
 export const Referrer = () => {
-  useStoreReferrer();
-  return null;
+  return <Suspense><ReferrerRaw /></Suspense>
 };
+
+/**
+ * useSearchParams must be wrapped with a Suspense
+ * to prevent client-side rendering up to the highest suspense boudary
+ */
+const ReferrerRaw = () => {
+  useStoreReferrer();
+  return null
+}
