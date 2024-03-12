@@ -6,7 +6,7 @@ import { useI18n } from '@devographics/react-i18n'
 // import { useTools } from 'core/helpers/toolsContext'
 import colors from 'core/theme/colors'
 import classNames from 'classnames'
-import Fonts from 'Fonts/Fonts'
+import { fontList } from 'Fonts/Fonts'
 
 const Head = () => {
     const pageContext = usePageContext()
@@ -55,6 +55,7 @@ const Head = () => {
         pageContext?.currentEdition?.faviconUrl ??
         `${process.env.GATSBY_ASSETS_URL}/surveys/${currentEdition.id}-favicon.png`
 
+    const hasFonts = fontList && fontList.length > 0
     return (
         <>
             <Helmet
@@ -67,7 +68,20 @@ const Head = () => {
                 <title>{meta.title}</title>
                 <link rel="shortcut icon" href={faviconUrl} />
                 <meta name="theme-color" content={colors.link} />
-                <Fonts />
+
+                {hasFonts && <link rel="preconnect" href="https://fonts.googleapis.com" />}
+                {hasFonts && (
+                    <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin />
+                )}
+                {hasFonts &&
+                    fontList.map(font => (
+                        <link
+                            key={font}
+                            href={`https://fonts.googleapis.com/css?family=${font}`}
+                            rel="stylesheet"
+                        />
+                    ))}
+
                 {mergedMeta.map((meta, i) => (
                     <meta {...meta} key={i} />
                 ))}

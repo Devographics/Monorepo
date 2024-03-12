@@ -24,10 +24,10 @@ const MainLayout = ({
     closeSidebar: () => void
     children?: React.ReactNode
 }) => {
-    const { translate } = useI18n()
+    const { getString } = useI18n()
     return (
         <>
-            <Skip href="#page-main">{translate('general.skip_to_content')}</Skip>
+            <Skip href="#page-main">{getString('general.skip_to_content')?.t}</Skip>
             {/* <SurveyBanner /> */}
             <Page showSidebar={showSidebar}>
                 <header>
@@ -36,7 +36,7 @@ const MainLayout = ({
                         aria-haspopup="menu"
                         aria-expanded={showSidebar}
                     >
-                        <ScreenReadersHint>{translate('general.open_nav')}</ScreenReadersHint>
+                        <ScreenReadersHint>{getString('general.open_nav')?.t}</ScreenReadersHint>
                         <Hamburger />
                     </MenuToggle>
                     <Sidebar showSidebar={showSidebar} closeSidebar={closeSidebar} />
