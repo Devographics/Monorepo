@@ -741,6 +741,9 @@ importers:
       '@devographics/helpers':
         specifier: workspace:^1.0.0
         version: link:../shared/helpers
+      '@devographics/react-i18n':
+        specifier: workspace:^1.0.0
+        version: link:../shared/react-i18n
       '@devographics/types':
         specifier: workspace:^1.0.0
         version: link:../shared/types

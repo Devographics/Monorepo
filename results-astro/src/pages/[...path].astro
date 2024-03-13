@@ -15,7 +15,16 @@ import { astroSurveyWithRawSitemap } from "@/fetchers/surveyWithSitemap";
 import PageTemplate from "@/components/pages/PageTemplate.astro";
 import { initTheme } from "@/lib/theme";
 import { processRawSitemap } from "@/lib/sitemap";
+// Reason why we use the Bundler moduleResolution: https://stackoverflow.com/questions/58990498/package-json-exports-field-not-working-with-typescript
+import { getLocalesWithStrings } from "@devographics/react-i18n/server";
 
+/**
+ * TODO: there is no ISR in Astro
+ * so we must go HTTP cache + SSR way
+ *
+ * @see https://github.com/withastro/roadmap/discussions/228
+ * @see https://vercel.com/docs/edge-network/caching#how-to-cache-responses
+ */
 export const getStaticPaths = (async () => {
   const surveyWithRawSitemap = await astroSurveyWithRawSitemap();
   const sitemap = processRawSitemap(surveyWithRawSitemap.sitemap);
@@ -38,25 +47,48 @@ export const getStaticPaths = (async () => {
 // Each survey edition has its own domain
 // so we can stick to global env variable to pick the edition we want
 const { editionId, surveyId } = astroEnv();
-// Get shared values again (context is not shared with getStaticPaths, and I don't want store the whole survey on each page context)
-const surveyWithRawSitemap = await astroSurveyWithRawSitemap();
-// As a convenience, we get all contextual values from Astro.locales
-Astro.locals.survey = surveyWithRawSitemap;
-// TODO: not sure if needed
-const sitemap = processRawSitemap(surveyWithRawSitemap.sitemap);
+
+// Set global values
+// As a convenience, we get all contextual values from Astro.locals (~ to React "cache")
+// Which avoid props drilling/module top-level values
+
+// Survey, sitemap
+const survey = await astroSurveyWithRawSitemap();
+Astro.locals.survey = survey;
+const sitemap = processRawSitemap(survey.sitemap);
 Astro.locals.sitemap = sitemap;
-
-// Pass down page props to all components below it, via locals,
-// avoiding props drilling
-// ~ to React 18 request-scoped cache
-const { pageDefinition } = Astro.props;
-Astro.locals.pageDefinition = pageDefinition;
-
-// Init top level values shared across .astro components
+// Theme
 const theme = initTheme();
 Astro.locals.theme = theme;
 
+// I18n
+// TODO: normally provided by Gatsby
+// It's a simple function that fires a graphql request
+// @see https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/#createPages
+// Need to update shared types to reflect that too
+async function graphql(query: string, variables?: any) {
+  console.log("Triggering graphl query with args:", { query, variables });
+  return {};
+}
+// TODO: get the locales also when computing valid paths
+/*
+const locales = await getLocalesWithStrings({
+  localeIds: ["en-US"], // TODO load all ids
+  graphql,
+  // TODO: translationContexts are currently hard-coded in the results app code
+  //  and not visible in the "surveys" repo, we need to move them there, or compute the context from the survey id
+  contexts: ["results", surveyId, surveyId + "_" + survey.year],
+});
+console.log("locales:", locales);
+*/
+
+// Set page specific values
+
+const { pageDefinition } = Astro.props;
+Astro.locals.pageDefinition = pageDefinition;
+
 const { path } = Astro.params;
+
 // TODO: normally this isn't needed, need to check my versions
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;

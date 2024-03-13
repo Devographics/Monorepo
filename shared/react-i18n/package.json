@@ -2,17 +2,9 @@
     "name": "@devographics/react-i18n",
     "version": "1.0.0",
     "description": "Devographics i18n React components",
-    "types": "./index.ts",
     "exports": {
         ".": "./index.ts",
         "./server": "./index.server.ts"
-    },
-    "typesVersions": {
-        "*": {
-            "server": [
-                "./index.server.ts"
-            ]
-        }
     },
     "type": "module",
     "scripts": {

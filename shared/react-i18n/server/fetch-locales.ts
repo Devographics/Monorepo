@@ -9,6 +9,8 @@ import { initRedis, fetchJson as fetchRedis, storeRedis } from '@devographics/re
 import { Locale, LocaleWithStrings, Translation } from "../typings"
 import { FetchPipelineStep, runFetchPipeline, allowedCachingMethods } from '@devographics/fetch'
 
+export type GraphqlFetcher = (query: string, variables?: any) => unknown
+
 export function removeNull(obj: any): any {
     const clean = Object.fromEntries(
         Object.entries(obj)
@@ -27,18 +29,21 @@ const getLocaleContextCacheKey = (localeId: string, context: string) =>
  * @param param0 
  * @returns 
  */
-export const getLocalesGraphQL = async ({ graphql, contexts, key }) => {
+export const getLocalesGraphQL = async ({ graphql, contexts, key }: { graphql: GraphqlFetcher, contexts: Array<string>, key: string }) => {
     const localesQuery = getLocalesQuery(contexts, false)
     // 
     logToFile(`locales/${key}.graphql`, localesQuery)
 
-    const localesResults = removeNull(
-        await graphql(
-            `
+
+
+    const fullResult = await graphql(
+        `
                 ${localesQuery}
             `
-        )
     )
+    if (!fullResult) throw new Error("Graphql fetcher function did not return an object")
+    // TODO: maybe it should be the responsibilit of the graphql fetch to remove null fields?
+    const localesResults = removeNull(fullResult)
     logToFile(`locales/${key}.json`, localesResults)
     const locales = localesResults.data.dataAPI.locales
     return locales
