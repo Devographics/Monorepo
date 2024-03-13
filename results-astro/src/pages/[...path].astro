@@ -10,36 +10,51 @@ import type {
 } from "astro";
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
-import { publicConfig } from "@/lib/publicConfig";
-import { astroSurveyWithSitemap } from "@/fetchers/surveyWithSitemap";
+import { astroEnv } from "@/lib/env";
+import { astroSurveyWithRawSitemap } from "@/fetchers/surveyWithSitemap";
 import PageTemplate from "@/components/pages/PageTemplate.astro";
 import { initTheme } from "@/lib/theme";
-import { initSitemap } from "@/lib/sitemap";
+import { processRawSitemap } from "@/lib/sitemap";
 
 export const getStaticPaths = (async () => {
-  const surveyWithSitemap = await astroSurveyWithSitemap();
-  return [
-    ...(surveyWithSitemap.sitemap.map((item) => ({
+  const surveyWithRawSitemap = await astroSurveyWithRawSitemap();
+  const sitemap = processRawSitemap(surveyWithRawSitemap.sitemap);
+  console.log(
+    "Paths in sitemap:",
+    sitemap.map((s) => s.path),
+  );
+  return sitemap.map((pageDefinition) => {
+    return {
       params: {
-        path: item.path,
+        path: pageDefinition.path === "/" ? undefined : pageDefinition.path,
       },
-      props: { surveyWithSitemap /*, pageContext: item*/ },
-    })) || []),
-    // for the home, path is not "/" but undefined (no passed params)
-    { params: { path: undefined }, props: { surveyWithSitemap } },
-  ];
+      props: {
+        pageDefinition,
+      },
+    };
+  });
 }) satisfies GetStaticPaths;
-
-// Get props from getStaticPaths
-const { surveyWithSitemap } = Astro.props;
 
 // Each survey edition has its own domain
 // so we can stick to global env variable to pick the edition we want
-const { editionId, surveyId } = publicConfig();
+const { editionId, surveyId } = astroEnv();
+// Get shared values again (context is not shared with getStaticPaths, and I don't want store the whole survey on each page context)
+const surveyWithRawSitemap = await astroSurveyWithRawSitemap();
+// As a convenience, we get all contextual values from Astro.locales
+Astro.locals.survey = surveyWithRawSitemap;
+// TODO: not sure if needed
+const sitemap = processRawSitemap(surveyWithRawSitemap.sitemap);
+Astro.locals.sitemap = sitemap;
+
+// Pass down page props to all components below it, via locals,
+// avoiding props drilling
+// ~ to React 18 request-scoped cache
+const { pageDefinition } = Astro.props;
+Astro.locals.pageDefinition = pageDefinition;
 
 // Init top level values shared across .astro components
-initTheme();
-initSitemap(surveyWithSitemap.sitemap);
+const theme = initTheme();
+Astro.locals.theme = theme;
 
 const { path } = Astro.params;
 // TODO: normally this isn't needed, need to check my versions
@@ -85,12 +100,18 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
         editionId
       }", accessing the path "{path}"
     </p>
-    <nav>
+    <div>
+      <p>Raw Sitemap</p>
+      <pre><code>
+          {JSON.stringify(surveyWithRawSitemap.sitemap, null, 2)}
+        </code></pre>
+    </div>
+    <div>
       <p>Sitemap</p>
       <pre><code>
-          {JSON.stringify(surveyWithSitemap.sitemap, null, 2)}
+          {JSON.stringify(sitemap, null, 2)}
         </code></pre>
-    </nav>
+    </div>
     <ul role="list" class="link-card-grid">
       <Card
         href="https://docs.astro.build/"

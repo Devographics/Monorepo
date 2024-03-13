@@ -10,7 +10,7 @@ import { AppName } from "@devographics/types";
 setEnvMap(import.meta.env);
 setAppName(AppName.RESULTS_ASTRO);
 
-export function publicConfig() {
+export function astroEnv() {
     const editionId = getEnvVar(EnvVar.EDITIONID);
     const surveyId = getEnvVar(EnvVar.SURVEYID);
     return { editionId, surveyId }

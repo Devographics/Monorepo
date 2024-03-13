@@ -1,6 +1,5 @@
 ---
 import { secondaryFontMixin, mq, fontSize } from "@/lib/theme";
-import { getPageDefinition } from "@/lib/sitemap";
 import { getPageLabelKey } from "@/lib/sitemap";
 // import styled from 'styled-components'
 /*
@@ -21,7 +20,7 @@ const PageHeader = () => {
 */
 
 // TODO: check if Astro.path can be used in the underlying JS file?
-const pageDefinition = getPageDefinition(Astro.params.path!);
+const { pageDefinition } = Astro.locals;
 ---
 
 <style

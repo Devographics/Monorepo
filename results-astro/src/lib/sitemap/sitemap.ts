@@ -2,6 +2,8 @@
  * Processes the sitemap that defines the site structure
  */
 
+// A raw sitemap section as stored in the yaml file, unprocessed
+import type { SitemapSection } from "@devographics/types";
 import { z } from "zod";
 
 /**
@@ -31,7 +33,15 @@ interface BaseBlockDefinition {
     }
 }
 
-
+/**
+ * A processed sitemap section, to be used in the result app
+ * (@devographis/types only expose the raw sitemap type that can be used by other apps)
+ * 
+ * TODO: work in progress
+ * It's actually the type of a raw sitemap
+ * A sitemap may have more fields,
+ * we'll see what's actually used in the app later on
+ */
 export interface PageDefinition {
     /** introduction */
     id: string,
@@ -83,47 +93,11 @@ export interface PageDefinition {
 
 /**
  * The structure we use to generate the results app
- * 
- * TODO: work in progress
- * It's actually the type of a raw sitemap
- * A sitemap may have more fields,
- * we'll see what's actually used in the app later on
  */
 export type Sitemap = Array<PageDefinition>
 
-function processRawSitemap(rawSitemapYaml: unknown): Sitemap {
+export function processRawSitemap(rawSitemapYaml: Array<SitemapSection>): Sitemap {
     const rawSitemap = rawSitemapYaml // TODO rawSitemapSchema.parse(rawSitemapYaml)
     return rawSitemap as Sitemap
 
-}
-
-
-let sitemap: Sitemap | null = null
-
-export function initSitemap(rawSitemap: unknown): Sitemap {
-    sitemap = processRawSitemap(rawSitemap)
-    return sitemap
-}
-export function getSitemap(): Sitemap {
-    if (!sitemap) {
-        throw new Error("Called getSitemap before it was initialized")
-    }
-    return sitemap
-}
-
-/**
- * In components, we can access Astro.params to get the current route param "path"
- * So this getter gets the right page context for the current page
- * 
- * TODO: this is not efficient at all
- * @param path 
- */
-export function getPageDefinition(path: string) {
-    // param will be "foo/bar" or "undefined" for the home
-    // we want "/foo/bar" or "/" for the home
-    const normPath = path ? "/" + path : "/"
-    console.log(getSitemap())
-    const pageDef = getSitemap().find(p => p.path === normPath)
-    if (!pageDef) throw new Error(`No page found for path ${normPath}`)
-    return pageDef
 }
