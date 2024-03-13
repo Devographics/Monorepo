@@ -5,6 +5,10 @@
     "type": "module",
     "main": "index.ts",
     "types": "./index.ts",
+    "exports": {
+        ".": "./index.ts",
+        "./edge": "./index.edge.ts"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },

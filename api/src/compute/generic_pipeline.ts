@@ -41,10 +41,13 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
     */
     const responseType1 = axis2 ? ResponsesTypes.RESPONSES : responsesType
     const axis1DbPath = getDbPath(axis1.question, responseType1)
+    const axis1Id = axis1.question.id
+
     const axis2DbPath = axis2 && getDbPath(axis2.question, responsesType)
+    const axis2Id = axis2?.question.id
 
     if (!axis1DbPath) {
-        throw new Error(`Could not find dbPath for question ${axis1.question.id}`)
+        throw new Error(`Could not find dbPath for question ${axis1Id}`)
     }
 
     let match: any = {
@@ -54,6 +57,9 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
 
     if (!showNoAnswer) {
         match[axis1DbPath] = { $nin: [null, '', [], {}] }
+        if (axis2DbPath) {
+            match[axis2DbPath] = { $nin: [null, '', [], {}] }
+        }
     }
 
     if (filters) {
@@ -71,9 +77,23 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
     }
 
     const pipeline: any[] = [
+        /*
+        
+        Stage 1
+        
+        Match surveyId and editionId
+
+        */
         {
             $match: match
         },
+        /*
+        
+        Stage 2
+        
+        Use $set to replace field with NO_ANSWER if empty (or leave it untouched if not empty)
+
+        */
         {
             $set: {
                 [`${axis1DbPath}`]: {
@@ -92,12 +112,29 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
                 }
             }
         },
+        /*
+
+        Stage 3
+
+        In case question accepts multiple answers and field is an array, 
+        unwind it to create separate documents for each selected option.
+
+        If not an array, this will not do anything.
+
+        */
         {
             $unwind: {
                 path: `$${axis1DbPath}`
             }
         },
-        ...(axis2
+        /*
+
+        Stage 4 (optional)
+
+        Same as Stage 2, but for axis2
+
+        */
+        ...(axis2DbPath
             ? [
                   {
                       $set: {
@@ -119,7 +156,14 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
                   }
               ]
             : []),
-        ...(axis2
+        /*
+
+        Stage 5 (optional)
+
+        Same as Stage 3, but for axis2. 
+
+        */
+        ...(axis2DbPath
             ? [
                   {
                       $unwind: {
@@ -128,32 +172,54 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
                   }
               ]
             : []),
+        /*
+
+        Stage 6
+
+        Group all items with the same axis1 (and optionally axis2) value and calculate their sum
+        using the `count` field as accumulator
+
+        */
         {
             $group: {
                 _id: {
                     editionId: '$editionId',
-                    ...(axis2 && { [axis2.question.id]: `$${axis2DbPath}` }),
-                    [axis1.question.id]: `$${axis1DbPath}`
+                    [axis1Id]: `$${axis1DbPath}`,
+                    ...(axis2DbPath && axis2Id && { [axis2Id]: `$${axis2DbPath}` })
                 },
                 count: {
                     $sum: 1
                 }
             }
         },
+        /*
+
+        Stage 7
+
+        Group into facetBuckets
+
+        */
         {
             $group: {
                 _id: {
                     editionId: '$_id.editionId',
-                    ...(axis2 && { [axis2.question.id]: `$_id.${axis2.question.id}` })
+                    ...(axis2Id && { [axis2Id]: `$_id.${axis2Id}` })
                 },
                 facetBuckets: {
                     $push: {
-                        id: `$_id.${axis1.question.id}`,
+                        id: `$_id.${axis1Id}`,
                         count: '$count'
                     }
                 }
             }
         },
+        /*
+
+        Stage 8
+
+        Group into buckets
+        
+        */
         {
             $group: {
                 _id: {
@@ -162,13 +228,20 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
                 buckets: {
                     $push: {
                         // type: axis2 ?? 'default',
-                        id: axis2 ? `$_id.${axis2.question.id}` : 'default',
+                        id: axis2Id ? `$_id.${axis2Id}` : 'default',
                         count: '$count',
                         facetBuckets: '$facetBuckets'
                     }
                 }
             }
         },
+        /*
+
+        Stage 9
+
+        Discard _id, keep buckets, and create editionId 
+
+        */
         {
             $project: {
                 _id: 0,
@@ -176,6 +249,13 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
                 buckets: 1
             }
         },
+        /*
+
+        Stage 10
+
+        Sort by editionId to get older editions first
+        
+        */
         { $sort: { editionId: 1 } }
     ]
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import BlockVariant from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
-import { LineChart } from 'core/charts/toolsRatiosLineChart/LineChart'
+import { LineChart, getChartData } from 'core/charts/toolsRatiosLineChart/LineChart'
 import { getTableData } from 'core/helpers/datatables'
 import { useTheme } from 'styled-components'
 import styled, { css } from 'styled-components'
@@ -11,9 +11,10 @@ import { MODE_GRID } from 'core/filters/constants'
 import { MetricId } from 'core/helpers/units'
 import { ToolRatiosQuestionData, RatiosUnits, Entity } from '@devographics/types'
 import { useEntities } from 'core/helpers/entities'
-import { BlockDefinition } from 'core/types/block'
+import { BlockComponentProps, BlockDefinition } from 'core/types/block'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
+import { DataSeries } from 'core/filters/types'
 
 export interface MetricBucket {
     year: number
@@ -21,22 +22,21 @@ export interface MetricBucket {
     percentageQuestion: number
 }
 
-export interface ToolsExperienceRankingBlockProps {
-    block: BlockDefinition
-    triggerId: MetricId
+export interface ToolsExperienceRankingBlockProps extends BlockComponentProps {
     data: ToolRatiosQuestionData
-    titleProps: any
+    series: DataSeries<ToolRatiosQuestionData>[]
 }
 
 export const ToolsExperienceLineChartBlock = ({
     block,
     data,
-    triggerId
+    series
 }: ToolsExperienceRankingBlockProps) => {
     const {
         defaultUnits = 'satisfaction',
         availableUnits: availableUnits_,
-        i18nNamespace = 'tools'
+        i18nNamespace = 'tools',
+        filtersState
     } = block
     const [current, setCurrent] = useState()
     const [metric, setMetric] = useState<MetricId>(defaultUnits)
@@ -45,7 +45,7 @@ export const ToolsExperienceLineChartBlock = ({
     const { getString } = useI18n()
 
     const availableUnits = availableUnits_ || Object.values(RatiosUnits)
-    const controlledMetric = triggerId || metric
+    const controlledMetric = metric
 
     const { years: yearsDoesNotWork, items } = data
     // Note: we can't actually get years from data.years because it wouldn't reflect
@@ -53,6 +53,11 @@ export const ToolsExperienceLineChartBlock = ({
     const years = items[0][availableUnits[0]].map(dataPoint => dataPoint.year)
 
     // const chartData: RankingChartSerie[] = processBlockData(data, { getLabel, controlledMetric })
+
+    const options = { units: metric, allEntities, getString, i18nNamespace }
+    const chartData = series
+        ? getChartData(series[0].data, block, options)
+        : getChartData(data, block, options)
 
     const legends = items.map((item, i) => {
         const { id } = item
@@ -84,8 +89,12 @@ export const ToolsExperienceLineChartBlock = ({
 
     const { chartFilters, setChartFilters } = useChartFilters({
         block,
-        options: { supportedModes: [MODE_GRID], enableYearSelect: false }
+        options: { supportedModes: [MODE_GRID], enableYearSelect: false },
+        buckets: chartData,
+        providedFiltersState: filtersState
     })
+
+    const defaultSeries = { name: 'default', data }
 
     return (
         <BlockVariant
@@ -121,14 +130,23 @@ export const ToolsExperienceLineChartBlock = ({
             setChartFilters={setChartFilters}
         >
             <DynamicDataLoader
-                defaultData={data}
+                defaultSeries={defaultSeries}
                 block={block}
                 chartFilters={chartFilters}
+                setChartFilters={setChartFilters}
                 layout="grid"
+                getChartData={getChartData}
+                getChartDataOptions={{
+                    allEntities,
+                    units: controlledMetric,
+                    i18nNamespace,
+                    getString
+                }}
             >
                 <ChartContainer height={items.length * 30 + 80}>
                     <LineChartWrapper current={current} currentColor={currentColor}>
                         <LineChart
+                            block={block}
                             data={data}
                             units={controlledMetric}
                             i18nNamespace={i18nNamespace}

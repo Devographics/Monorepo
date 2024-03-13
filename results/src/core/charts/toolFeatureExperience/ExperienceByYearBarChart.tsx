@@ -8,9 +8,11 @@ import { isPercentage } from 'core/helpers/units'
 import { BlockLegend, BlockUnits } from 'core/types/index'
 import { FeatureQuestionData, ToolQuestionData } from '@devographics/types'
 import keyBy from 'lodash/keyBy'
+import { BlockDefinition } from 'core/types/block'
 
 interface ExperienceByYearBarChartProps {
     data: FeatureQuestionData | ToolQuestionData
+    block: BlockDefinition
     legends: BlockLegend[]
     units: BlockUnits
     spacing: number
@@ -103,13 +105,12 @@ const ValuesLayer = ({
 // export const getChartData = (data: FeatureQuestionData | ToolQuestionData) =>
 //     data.responses.allEditions
 
-const getChartData = ({
-    data,
-    legends
-}: {
-    data: FeatureQuestionData | ToolQuestionData
-    legends: BlockLegend[]
-}) => {
+export const getChartData = (
+    data: FeatureQuestionData | ToolQuestionData,
+    block: BlockDefinition,
+    options: any
+) => {
+    const { legends } = options
     const allEditions = data.responses.allEditions
     return allEditions.map((editionData, index) => {
         const yearData = legends.map((key: { id: string }) => {
@@ -134,8 +135,8 @@ const getChartData = ({
 }
 export const ExperienceByYearBarChart = (props: ExperienceByYearBarChartProps) => {
     const theme = useTheme()
-    const { data, legends, units, spacing } = props
-    const buckets = getChartData({ data, legends })
+    const { data, block, legends, units, spacing } = props
+    const buckets = getChartData(data, block, { legends })
     const dimensions = legends.map(key => ({
         id: key.label,
         value: `${key.id}.${units}`

@@ -1,7 +1,8 @@
 // import Redis from 'ioredis'
 // import { logToFile } from '@devographics/debug'
 // import { EnvVar, getEnvVar } from '@devographics/helpers'
-import { Redis } from '@upstash/redis'
+// import { Redis } from '@upstash/redis'
+import Redis from 'ioredis'
 
 // 30 mn (but only 3 in dev)
 const TTL_SECONDS = process.env.NODE_ENV === 'development' ? 60 * 3 : 60 * 30
@@ -12,13 +13,13 @@ let redis: Redis | undefined = undefined
  * If url/token not passed,
  * will use REDIS_UPSTASH_URL
  * and REDIS_TOKEN
- * @param url_ 
- * @param token_ 
- * @returns 
+ * @param url_
+ * @param token_
+ * @returns
  */
 export function initRedis(url_?: string, token_?: string) {
-    const url = url_ || process.env.REDIS_UPSTASH_URL// TODO: doesn't work - getEnvVar(EnvVar.REDIS_UPSTASH_URL)
-    const token = token_ || process.env.REDIS_TOKEN// TODO: doesn't work - getEnvVar(EnvVar.REDIS_TOKEN)
+    const url = url_ || process.env.REDIS_URL // TODO: doesn't work - getEnvVar(EnvVar.REDIS_UPSTASH_URL)
+    const token = token_ || process.env.REDIS_TOKEN // TODO: doesn't work - getEnvVar(EnvVar.REDIS_TOKEN)
     // console.debug('init redis client', url, token)
     if (!redis) {
         if (!url) {
@@ -28,10 +29,11 @@ export function initRedis(url_?: string, token_?: string) {
             throw new Error('initRedis: token is not defined')
         }
         // redis = new Redis(redisUrl)
-        redis = new Redis({
-            url,
-            token
-        })
+        // redis = new Redis({
+        //     url,
+        //     token
+        // })
+        redis = new Redis(url)
     }
     return redis
 }
@@ -59,7 +61,7 @@ export async function storeRedis(key: string, val: any): Promise<boolean> {
         // we don't actually want the cache to expire since we manage it manually
         // const options = { ex: TTL_SECONDS }
         const options = {}
-        const res = await redisClient.set(key, JSON.stringify(val), options)
+        const res = await redisClient.set(key, JSON.stringify(val))
 
         if (res !== 'OK') {
             console.error("Can't store JSON into Redis, error:" + res)

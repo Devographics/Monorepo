@@ -60,6 +60,12 @@ query ${editionId}MetadataQuery {
             matchType
             matchTags
             disallowedTokenIds
+            followups {
+              id
+              options {
+                id
+              }
+            }
             options {
               id
               intlId

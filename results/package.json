@@ -16,16 +16,17 @@
     ],
     "engineStrict": true,
     "engines": {
-        "node": "^18.10.0"
+        "node": "^20.11.1"
     },
     "dependencies": {
         "@devographics/constants": "workspace:^1.0.0",
-        "@devographics/helpers": "workspace:^1.0.0",
-        "@devographics/types": "workspace:^1.0.0",
-        "@devographics/react-i18n": "workspace:^1.0.0",
-        "@devographics/fetch": "workspace:^1.0.0",
-        "@devographics/redis": "workspace:^1.0.0",
         "@devographics/debug": "workspace:^1.0.0",
+        "@devographics/fetch": "workspace:^1.0.0",
+        "@devographics/helpers": "workspace:^1.0.0",
+        "@devographics/react-i18n": "workspace:^1.0.0",
+        "@devographics/redis": "workspace:^1.0.0",
+        "@devographics/types": "workspace:^1.0.0",
+        "@formkit/auto-animate": "^0.8.1",
         "@mdx-js/mdx": "^2.1.5",
         "@mdx-js/react": "^2.1.5",
         "@nivo/bar": "0.80.0",
@@ -82,6 +83,7 @@
         "graphql-print": "^1.0.1",
         "html-loader": "^4.2.0",
         "indent-string": "^5.0.0",
+        "ioredis": "^5.2.4",
         "js-yaml": "^4.1.0",
         "json2csv": "^5.0.7",
         "jsonp": "^0.2.1",

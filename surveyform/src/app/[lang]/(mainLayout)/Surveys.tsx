@@ -9,6 +9,8 @@ import sortBy from "lodash/sortBy";
 import { rscCurrentUserWithResponses } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { ResponseDetails } from "~/components/surveys/ResponseDetails";
 
+const a = 1;
+
 const EditionItem = async ({
   edition,
   homePath,

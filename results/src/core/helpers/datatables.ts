@@ -85,6 +85,11 @@ export const getTableData = (params: TableParams): TableData => {
         i18nNamespace,
         years
     } = params
+
+    if (!data) {
+        console.log(params)
+        throw new Error(`getTableData: no data passed`)
+    }
     const headings = [{ id: 'label', labelId: 'table.label' }]
 
     valueKeys.forEach(k => {

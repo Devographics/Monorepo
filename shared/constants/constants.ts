@@ -49,3 +49,9 @@ export const ENTIRE_CONTENTS_INDICATOR = '[e]'
 export const WHOLE_WORD_INDICATOR = '[w]'
 
 export const LIST_INDICATOR = '[l]'
+
+export const NEUTRAL_SENTIMENT = 'neutral'
+export const POSITIVE_SENTIMENT = 'positive'
+export const NEGATIVE_SENTIMENT = 'negative'
+
+export const SENTIMENT_FACET = '_sentiment'

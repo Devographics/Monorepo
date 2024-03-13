@@ -12,6 +12,7 @@ import HorizontalBarBlock from 'core/charts/horizontalBar/index'
 import VerticalBarBlock from 'core/charts/verticalBar'
 import PeopleBlock from 'core/charts/people'
 import ToolFeatureExperienceBlock from 'core/charts/toolFeatureExperience'
+import { MultiItemsExperienceBlock } from 'core/charts/multiItemsExperience'
 
 // features
 import FeaturesOverviewBlock from 'core/charts/featuresOverview'
@@ -36,6 +37,8 @@ const chartBlocks = {
     HorizontalBarBlock,
     VerticalBarBlock,
     PeopleBlock,
+
+    MultiItemsExperienceBlock,
 
     ToolFeatureExperienceBlock,
 

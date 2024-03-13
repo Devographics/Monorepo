@@ -97,31 +97,31 @@
         template: multiple_options
 
       - id: race_ethnicity
-        template: multiple_options
+        template: multiple_options_combined
 
       - id: disability_status
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: other_surveys
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: source
-        template: multiple_options
+        template: multiple_options_freeform
 
       - id: how_can_we_improve
         template: multiple_options_freeform
 
-      - id: data_explorer
-        titleId: sections.data_explorer.title
-        descriptionId: sections.data_explorer.description
-        showTitle: true
-        chartOnly: true
-        wrapBlock: true
-        template: data_explorer
-        parameters: { showNoAnswer: true }
-        variables:
-            xAxis: user_info__yearly_salary
-            yAxis: user_info__years_of_experience
+      # - id: data_explorer
+      #   titleId: sections.data_explorer.title
+      #   descriptionId: sections.data_explorer.description
+      #   showTitle: true
+      #   chartOnly: true
+      #   wrapBlock: true
+      #   template: data_explorer
+      #   parameters: { showNoAnswer: true }
+      #   variables:
+      #       xAxis: user_info__yearly_salary
+      #       yAxis: user_info__years_of_experience
 
       - items: [renderatl]
         template: recommended_resources
@@ -147,8 +147,8 @@
             - template: features_experience_ranking
               tabId: blocks.tools_experience_ranking.rankings
 
-      - id: knowledge_score
-        template: demographics
+      # - id: knowledge_score
+      #   template: single_option
 
       - id: reading_list
         template: reading_list
@@ -165,8 +165,8 @@
             - id: forms
               template: page_introduction
 
-            # - id: subgrid
-            #   template: feature_experience
+            - id: forms_features
+              template: multi_items_experience
 
             - id: adam_argyle
               template: picks
@@ -191,7 +191,7 @@
         template: multiple_options_freeform
 
       - id: html_missing_elements
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: tools_for_other_developers
         template: single_option
@@ -200,10 +200,10 @@
         template: single_option
 
       - id: what_do_you_use_html_for
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: industry_sector
-        template: multiple_options_freeform
+        template: multiple_options_combined
 
       - id: sharing_hint
         template: hint
@@ -334,100 +334,3 @@
   blocks:
       - id: notfound
         blockType: NotFoundBlock
-# - id: report
-#   showTitle: false
-#   path: /report
-#   is_hidden: true
-#   showSidebar: false
-#   blocks:
-#     - id: report_contents
-#       isReport: true
-#       blockType: ReportBlock
-
-#     - id: country
-#       isReport: true
-#       template: demographics
-#       blockType: ParticipationByCountryBlock
-#       hidden: true
-#       pageId: user_info
-
-#     - template: features_overview
-#       isReport: true
-#       hidden: true
-
-#     - template: knowledgeScoreTemplate
-#       isReport: true
-#       hidden: true
-#       pageId: features
-
-#     - template: tools_experience_marimekko
-#       isReport: true
-#       hidden: true
-#       variables:
-#         parentId: css_in_js
-
-#     - template: tools_section_streams
-#       isReport: true
-#       hidden: true
-#       variables:
-#         parentId: css_in_js
-
-#     - template: tools_experience_ranking
-#       isReport: true
-#       hidden: true
-#       variables:
-#         parentId: css_frameworks_abridged
-
-#     - id: scatterplot_overview
-#       isReport: true
-#       template: scatterplot_overview
-#       hidden: true
-
-#     - id: grid
-#       isReport: true
-#       template: feature_experience
-#       hidden: true
-
-#     - id: subgrid
-#       isReport: true
-#       template: feature_experience
-#       hidden: true
-
-#     - id: logical_properties
-#       isReport: true
-#       template: feature_experience
-#       hidden: true
-
-#     - id: prefers_reduced_motion
-#       isReport: true
-#       template: feature_experience
-#       hidden: true
-
-#     - id: prefers_color_scheme
-#       isReport: true
-#       template: feature_experience
-#       hidden: true
-
-#     - id: utility_classes_to_be_avoided
-#       isReport: true
-#       hidden: true
-#       template: opinion
-#       pageId: opinions
-
-#     - id: css_is_programming_language
-#       isReport: true
-#       template: opinion
-#       hidden: true
-#       pageId: opinions
-
-#     - id: state_of_css
-#       template: opinionHappinessTemplate
-#       isReport: true
-#       hidden: true
-#       pageId: opinions
-
-#     - id: currently_missing_from_css
-#       template: opinions_others
-#       isReport: true
-#       hidden: true
-#       pageId: opinions

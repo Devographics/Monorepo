@@ -15,15 +15,17 @@ import { print } from 'graphql-print'
  * @param {LogOptions} options
  * @returns
  */
-export const logToFile = async (fileName_: string,
+export const logToFile = async (
+    fileName_: string,
     /** Object to log */
     object: any,
     options: {
-        mode?: "overwrite" | "append",
-        timestamp?: boolean,
+        mode?: 'overwrite' | 'append'
+        timestamp?: boolean
         dirPath?: string
         subDir?: string
-    } = {}) => {
+    } = {}
+) => {
     if (process.env.NODE_ENV === 'development') {
         let fileName = fileName_,
             subDir = options?.subDir
@@ -65,7 +67,7 @@ export const logToFile = async (fileName_: string,
         } else if (typeof object === 'undefined') {
             // necessary because JSON.stringify of an undefined object is undefined, not a string
             // NOTE: this mean we output invalid JSON in this case
-            console.warn(`Warning: ${fileName} was an empty object`)
+            console.warn(`⚠️ Warning: ${fileName} was an empty object`)
             return
         } else {
             contents = JSON.stringify(object, null, 2)

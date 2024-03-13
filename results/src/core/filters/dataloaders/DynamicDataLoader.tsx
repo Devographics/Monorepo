@@ -26,6 +26,7 @@ export interface DynamicDataLoaderWrapperProps<T> {
     layout?: 'grid' | 'column'
     providedSeries?: DataSeries<T>[]
     getChartData: (data: T, block: BlockDefinition) => Bucket[]
+    getChartDataOptions?: any
 }
 
 export interface DynamicDataLoaderProps<T> extends DynamicDataLoaderWrapperProps<T> {
@@ -69,14 +70,19 @@ function DataLoaderWrapper<T>(props: DynamicDataLoaderWrapperProps<T>) {
         block,
         chartFilters: providedFiltersState,
         units,
-        getChartData
+        getChartData,
+        getChartDataOptions = {}
     } = props
     const [apiError, setApiError] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [series, setSeries] = useState(providedSeries || [defaultSeries])
     const [query, setQuery] = useState<string | undefined>()
 
-    const allBuckets = series.map(serie => getChartData(serie.data, block)).flat()
+    // console.log(props)
+    // console.log(series)
+    const allBuckets = series
+        .map(serie => getChartData(serie.data, block, getChartDataOptions))
+        .flat()
 
     const { chartFilters, setChartFilters, filterLegends } = useChartFilters({
         block,

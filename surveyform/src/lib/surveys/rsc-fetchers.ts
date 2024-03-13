@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { fetchSurveysMetadata } from "@devographics/fetch";
+import { fetchSurveysMetadata, FetcherFunctionOptions } from "@devographics/fetch";
 import type { Metadata } from "next";
 import { publicConfig } from "~/config/public";
 import { rscMustGetSurveyEditionFromUrl } from "~/app/[lang]/survey/[slug]/[year]/rsc-fetchers";
@@ -8,7 +8,6 @@ import { rscIntlContext } from "~/i18n/rsc-fetchers";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import { getSectioni18nIds } from "~/i18n/survey";
-import { FetcherFunctionOptions } from "@devographics/fetch/types";
 import { serverConfig } from "~/config/server";
 
 export const rscFetchSurveysMetadata = cache(

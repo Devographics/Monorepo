@@ -36,7 +36,13 @@ export type AllQuestionData =
     | OpinionQuestionData
 
 export type StandardQuestionData = QuestionData & {
-    [key in ResultsSubFieldEnum]: ResponseData
+    id: string
+    entity: Entity
+} & {
+    [key in Exclude<
+        ResultsSubFieldEnum,
+        ResultsSubFieldEnum.ID | ResultsSubFieldEnum.ENTITY
+    >]: ResponseData
 }
 
 export interface OpinionQuestionData extends StandardQuestionData {}
@@ -242,6 +248,12 @@ export enum SentimentOptions {
     NOT_INTERESTED = 'sentiment_not_interested',
     POSITIVE_EXPERIENCE = 'sentiment_positive_experience',
     NEGATIVE_EXPERIENCE = 'sentiment_negative_experience'
+}
+
+export enum SimplifiedSentimentOptions {
+    POSITIVE_SENTIMENT = 'positive',
+    NEUTRAL_SENTIMENT = 'neutral',
+    NEGATIVE_SENTIMENT = 'negative'
 }
 
 /*

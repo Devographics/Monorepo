@@ -4,8 +4,7 @@ import type { NextRequest } from "next/server";
 import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
 import { LOCALE_COOKIE_NAME } from "./i18n/cookie";
 import { getClosestLocale } from "./i18n/data/locales";
-import { fetchAllLocalesIds } from "@devographics/fetch";
-import { AppName } from "@devographics/types";
+import { fetchAllLocalesIds } from "@devographics/fetch/edge";
 
 function getFirstParam(pathname: string) {
   if (!pathname) {
