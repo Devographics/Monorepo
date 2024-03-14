@@ -334,7 +334,43 @@ function extractQueryName(queryString: string) {
 }
 
 /**
+ * Generic GraphQL fetcher
+ * Allows to override the API URL
+ * and all other fetch options like "cache"
+ * @param param0 
+ * @returns 
+ */
+export async function graphqlFetcher<TData = any, TVar = any>(
+    query: string,
+    variables?: TVar,
+    fetchOptions?: Partial<ResponseInit>,
+    apiUrl_?: string,
+): Promise<{
+    data?: TData,
+    errors?: Array<Error>
+}> {
+    const apiUrl = apiUrl_ || getApiUrl()
+    // console.debug(`// querying ${apiUrl} (${query.slice(0, 15)}...)`)
+    const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+        },
+        body: JSON.stringify({ query, variables: {} }),
+        ...(fetchOptions || {})
+    })
+    const json: any = await response.json()
+    return json
+}
+
+/**
+ * Generic GraphQL fetcher
+ * 
  * Returns null in case of error
+ * 
+ * @deprecated This function handles file logging internally,
+ * it should be handled at app level instead
  */
 export const fetchGraphQLApi = async <T = any>({
     query,

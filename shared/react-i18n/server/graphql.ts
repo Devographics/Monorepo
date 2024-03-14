@@ -14,7 +14,6 @@ export const getLocalesQuery = (contexts, loadStrings = true) => {
 
     return `
 query {
-    dataAPI {
         locales${argumentsString} {
             completion
             id
@@ -32,7 +31,6 @@ query {
         }
             translators
         }
-    }
 }
 `
 }
@@ -40,7 +38,6 @@ query {
 export const getLocaleContextQuery = (localeId, context) => {
     return `
 query {
-    dataAPI {
         locale(localeId: ${convertToGraphQLEnum(localeId)}, contexts: [${context}]) {
             id
             label
@@ -53,7 +50,6 @@ query {
                 isFallback
             }
         }
-    }
 }
 `
 }

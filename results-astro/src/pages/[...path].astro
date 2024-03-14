@@ -20,8 +20,8 @@ import { getLocalesWithStrings } from "@devographics/react-i18n/server";
 
 /**
  * TODO: there is no ISR in Astro
- * so we must go HTTP cache + SSR way
- *
+ * We must either use static rendering for everything
+ * Or SSR + HTTP cache for incremental rendering
  * @see https://github.com/withastro/roadmap/discussions/228
  * @see https://vercel.com/docs/edge-network/caching#how-to-cache-responses
  */
@@ -66,21 +66,14 @@ Astro.locals.theme = theme;
 // It's a simple function that fires a graphql request
 // @see https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/#createPages
 // Need to update shared types to reflect that too
-async function graphql(query: string, variables?: any) {
-  console.log("Triggering graphl query with args:", { query, variables });
-  return {};
-}
 // TODO: get the locales also when computing valid paths
-/*
 const locales = await getLocalesWithStrings({
   localeIds: ["en-US"], // TODO load all ids
-  graphql,
   // TODO: translationContexts are currently hard-coded in the results app code
   //  and not visible in the "surveys" repo, we need to move them there, or compute the context from the survey id
   contexts: ["results", surveyId, surveyId + "_" + survey.year],
 });
 console.log("locales:", locales);
-*/
 
 // Set page specific values
 
@@ -135,7 +128,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
     <div>
       <p>Raw Sitemap</p>
       <pre><code>
-          {JSON.stringify(surveyWithRawSitemap.sitemap, null, 2)}
+          {JSON.stringify(survey.sitemap, null, 2)}
         </code></pre>
     </div>
     <div>
