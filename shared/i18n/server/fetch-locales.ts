@@ -91,7 +91,7 @@ async function getAllLocaleDefinitions({ contexts }: {
     const allowedCaches = allowedCachingMethods()
     const allLocalesKey = allLocalesCacheKey()
 
-    const localeDefinitions = pipeline<Array<Locale>>().steps(
+    const localeDefinitions = await pipeline<Array<Locale>>().steps(
         // log locales in file system for debugging
         {
             name: "logToFile",

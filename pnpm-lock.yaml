@@ -741,6 +741,9 @@ importers:
       '@devographics/helpers':
         specifier: workspace:^1.0.0
         version: link:../shared/helpers
+      '@devographics/i18n':
+        specifier: workspace:^1.0.0
+        version: link:../shared/i18n
       '@devographics/react-i18n':
         specifier: workspace:^1.0.0
         version: link:../shared/react-i18n
@@ -855,6 +858,15 @@ importers:
 
   shared/i18n:
     devDependencies:
+      '@devographics/debug':
+        specifier: workspace:^1.0.0
+        version: link:../debug
+      '@devographics/fetch':
+        specifier: workspace:^1.0.0
+        version: link:../fetch
+      '@devographics/redis':
+        specifier: workspace:^1.0.0
+        version: link:../redis
       '@devographics/types':
         specifier: workspace:^1.0.0
         version: link:../types
@@ -908,6 +920,9 @@ importers:
       '@devographics/fetch':
         specifier: workspace:^1.0.0
         version: link:../fetch
+      '@devographics/i18n':
+        specifier: workspace:^1.0.0
+        version: link:../i18n
       '@devographics/redis':
         specifier: workspace:^1.0.0
         version: link:../redis
@@ -1331,9 +1346,6 @@ importers:
       '@devographics/helpers':
         specifier: workspace:^1.0.0
         version: link:../shared/helpers
-      '@devographics/i18n':
-        specifier: workspace:^1.0.0
-        version: link:../shared/i18n
       '@devographics/mongo':
         specifier: workspace:^1.0.0
         version: link:../shared/mongo

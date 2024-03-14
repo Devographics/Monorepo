@@ -13,6 +13,7 @@
     "@astrojs/check": "^0.5.4",
     "@devographics/fetch": "workspace:^1.0.0",
     "@devographics/react-i18n": "workspace:^1.0.0",
+    "@devographics/i18n": "workspace:^1.0.0",
     "@devographics/helpers": "workspace:^1.0.0",
     "@devographics/types": "workspace:^1.0.0",
     "astro": "^4.4.0",

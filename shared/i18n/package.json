@@ -5,19 +5,7 @@
     "type": "module",
     "exports": {
         ".": "./index.ts",
-        "./server": "./index.server.ts",
-        "./client": "./index.client.ts"
-    },
-    "types": "./index.ts",
-    "typesVersions": {
-        "*": {
-            "server": [
-                "./index.server.ts"
-            ],
-            "client": [
-                "./index.client.ts"
-            ]
-        }
+        "./server": "./index.server.ts"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
@@ -26,6 +14,9 @@
     "license": "ISC",
     "devDependencies": {
         "@devographics/types": "workspace:^1.0.0",
+        "@devographics/debug": "workspace:^1.0.0",
+        "@devographics/fetch": "workspace:^1.0.0",
+        "@devographics/redis": "workspace:^1.0.0",
         "@types/node": "^18.11.18"
     }
 }
