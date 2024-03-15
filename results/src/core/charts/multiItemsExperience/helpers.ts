@@ -7,10 +7,14 @@ import {
 import sumBy from 'lodash/sumBy'
 import {
     CellDimension,
+    ChartState,
+    ChartValues,
     ColumnDimension,
     ColumnId,
+    ColumnModes,
     CombinedBucket,
     CombinedItem,
+    DEFAULT_VARIABLE,
     GroupingOptions,
     MaxValue,
     OrderOptions,
@@ -22,6 +26,8 @@ import max from 'lodash/max'
 import sum from 'lodash/sum'
 import take from 'lodash/take'
 import round from 'lodash/round'
+import charts from 'core/theme/charts'
+import { useState } from 'react'
 
 export const ITEM_GAP_PERCENT = 1
 export const COLUMN_GAP_PERCENT = 5
@@ -258,4 +264,36 @@ export const getCellDimensions = ({
     }))
 
     return cellDimensions
+}
+
+export const useChartState = () => {
+    const [grouping, setGrouping] = useState<ChartState['grouping']>(GroupingOptions.EXPERIENCE)
+    const [sort, setSort] = useState<ChartState['sort']>(FeaturesOptions.USED)
+    const [order, setOrder] = useState<ChartState['order']>(OrderOptions.DESC)
+    const [variable, setVariable] = useState<ChartState['variable']>(DEFAULT_VARIABLE)
+    const [columnMode, setColumnMode] = useState<ChartState['columnMode']>(ColumnModes.SPLIT)
+    const [facetId, setFacetId] = useState<ChartState['facetId']>('sentiment')
+
+    const chartState: ChartState = {
+        facetId,
+        setFacetId,
+        grouping,
+        setGrouping,
+        sort,
+        setSort,
+        order,
+        setOrder,
+        variable,
+        setVariable,
+        columnMode,
+        setColumnMode
+    }
+    return chartState
+}
+
+export const useChartValues = (buckets: Bucket[], chartState: ChartState) => {
+    const { variable } = chartState
+    const maxOverallValue = max(buckets.map(b => b[variable])) || 0
+    const chartValues: ChartValues = { maxOverallValue }
+    return chartValues
 }

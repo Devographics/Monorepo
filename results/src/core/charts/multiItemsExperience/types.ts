@@ -69,6 +69,10 @@ export type ChartState = {
     setColumnMode: Dispatch<SetStateAction<ColumnModes>>
 }
 
+export type ChartValues = {
+    maxOverallValue: number
+}
+
 export type CombinedItem = {
     id: string
     entity: Entity

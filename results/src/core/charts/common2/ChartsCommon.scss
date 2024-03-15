@@ -1,0 +1,30 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
+.chart-rows {
+    display: grid;
+    gap: 20px;
+    grid-auto-rows: minmax(0, 1fr);
+}
+
+.chart-row {
+    @include small {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    @include medium-large {
+        display: grid;
+        grid-template-columns: 250px minmax(0, 1fr) 150px;
+        gap: 10px;
+    }
+    &-grouped {
+        background: #ffffff11;
+    }
+}
+.chart-row-heading {
+    margin: 0;
+    font-size: var(--chartFontColumnHeading);
+    height: var(--cellHeight);
+    display: flex;
+    align-items: center;
+}

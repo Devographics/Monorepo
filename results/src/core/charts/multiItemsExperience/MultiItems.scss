@@ -1,7 +1,12 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
 .multiexp {
     margin: 20px 0;
     --chartFontColumnHeading: 0.9rem;
     --chartFontSmall: 0.7rem;
+    --cellHeight: 40px;
+    --totalsHeight: 30px;
+    --headingsHeight: var(--cellHeight);
 }
 .multiexp-controls {
     display: flex;
@@ -29,14 +34,13 @@
         opacity: 0.8;
     }
 }
-.multiexp-table-grouping {
-    font-size: var(--chartFontColumnHeading);
-}
 .multiexp-column-headings {
-    display: grid;
-    grid-template-columns: 250px minmax(0, 1fr);
-    gap: 10px;
-    height: 50px;
+    @include medium-large {
+        display: grid;
+        grid-template-columns: 250px minmax(0, 1fr);
+        gap: 10px;
+    }
+    height: var(--headingsHeight);
     border-bottom: 1px solid #ffffff66;
     margin-bottom: 25px;
     &-inner {
@@ -58,6 +62,12 @@
         }
     }
 }
+.multiexp-table-grouping {
+    font-size: var(--chartFontColumnHeading);
+    @include small {
+        display: none;
+    }
+}
 .multiexp-column-heading {
     width: calc(var(--width) * 1%);
     position: absolute;
@@ -71,6 +81,9 @@
     h3 {
         margin: 0;
         font-size: var(--chartFontColumnHeading);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
 .column-heading-sort {
@@ -94,39 +107,9 @@
         opacity: 1;
     }
 }
-.multiexp-rows {
-    // display: flex;
-    // flex-direction: column;
-    // gap: 20px;
-    // width: 100%;
-    // transition: 300ms;
-    display: grid;
-    gap: 20px;
-    grid-auto-rows: minmax(0, 1fr);
-}
-
-.multiexp-row {
-    // transition: 300ms;
-    display: grid;
-    // align-items: center;
-    grid-template-columns: 250px minmax(0, 1fr);
-    gap: 10px;
-    // order: var(--order);
-}
-.multiexp-row-heading {
-    margin: 0;
-    margin-top: 10px;
-    font-size: var(--chartFontColumnHeading);
-}
 .multiexp-cells {
-    // display: grid;
-    // gap: 3px;
-    // transition: 300ms;
-
-    display: flex;
-    gap: 3px;
     position: relative;
-    height: 40px;
+    height: var(--cellHeight);
     margin-bottom: 10px;
 }
 
@@ -142,7 +125,7 @@
 }
 .multiexp-column-totals {
     position: relative;
-    height: 30px;
+    height: var(--totalsHeight);
 }
 .multiexp-column-total {
     width: calc(var(--width) * 1%);
@@ -162,7 +145,7 @@
 }
 
 .multiexp-cell-segment {
-    height: 20px;
+    height: calc(var(--cellHeight) / 2);
     opacity: 0.3;
     transition: 600ms;
     &-experience {

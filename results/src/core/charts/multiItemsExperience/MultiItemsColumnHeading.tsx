@@ -23,11 +23,14 @@ export const ColumnHeading = ({
         '--offset': offset
     }
     const isEnabled = sort === columnId
-    const columnLabel = getString(`options.${grouping}.${columnId}.label.short`)?.t
+    const columnLabelId = `options.${grouping}.${columnId}.label.short`
+    const columnLabel = getString(columnLabelId)?.t
     const orderLabel = getString(`charts.order.${order}`)?.t
     return (
         <div className="multiexp-column-heading" style={style}>
-            <h3>{columnLabel}</h3>
+            <h3>
+                <T k={`options.${grouping}.${columnId}.label.short`} />
+            </h3>
             <Tooltip
                 trigger={
                     <button

@@ -10,6 +10,8 @@ import {
 import { getCellDimensions, getGroupedTotals, sortByExperience, sortBySentiment } from './helpers'
 import { Cell, ColumnTotal } from './MultiItemsCell'
 import { sortOptions } from './MultiItemsBlock'
+import { RowWrapper } from '../common2/RowWrapper'
+import { Bucket, BucketMetadata } from '@devographics/types'
 
 export const Row = ({
     item,
@@ -43,53 +45,50 @@ export const Row = ({
     const groupedTotals = getGroupedTotals({ item, columnIds })
 
     return (
-        <div className="multiexp-row">
-            <h3 className="multiexp-row-heading">{item.entity.nameClean}</h3>
-            <div className="multiexp-row-data">
-                <div className="multiexp-cells">
-                    {combinedBuckets.map((combinedBucket, i) => {
-                        const cellDimension = cellDimensions.find(d => d.id === combinedBucket.id)
-                        if (!cellDimension) {
-                            return null
-                        }
-                        const { offset, width, columnId } = cellDimension || {}
-                        return (
-                            <Cell
-                                key={item.id + combinedBucket.id + i}
-                                combinedBucket={combinedBucket}
-                                chartState={chartState}
-                                width={width}
-                                offset={offset}
-                                groupedTotals={groupedTotals}
-                                columnId={columnId}
-                            />
-                        )
-                    })}
-                </div>
-
-                <div className="multiexp-column-totals">
-                    {columnIds.map(columnId => {
-                        const cellsInColumn = cellDimensions.filter(d => d.ids.includes(columnId))
-                        const firstCellInColumn = cellsInColumn.at(0)
-                        const lastCellInColumn = cellsInColumn.at(-1)
-                        const width =
-                            (lastCellInColumn?.offset || 0) +
-                            (lastCellInColumn?.width || 0) -
-                            (firstCellInColumn?.offset || 0)
-                        const offset = firstCellInColumn?.offset || 0
-
-                        return (
-                            <ColumnTotal
-                                key={columnId}
-                                columnId={columnId}
-                                groupedTotals={groupedTotals}
-                                width={width}
-                                offset={offset}
-                            />
-                        )
-                    })}
-                </div>
+        <RowWrapper bucket={item as unknown as Bucket} chartState={chartState}>
+            <div className="multiexp-cells">
+                {combinedBuckets.map((combinedBucket, i) => {
+                    const cellDimension = cellDimensions.find(d => d.id === combinedBucket.id)
+                    if (!cellDimension) {
+                        return null
+                    }
+                    const { offset, width, columnId } = cellDimension || {}
+                    return (
+                        <Cell
+                            key={item.id + combinedBucket.id + i}
+                            combinedBucket={combinedBucket}
+                            chartState={chartState}
+                            width={width}
+                            offset={offset}
+                            groupedTotals={groupedTotals}
+                            columnId={columnId}
+                        />
+                    )
+                })}
             </div>
-        </div>
+
+            <div className="multiexp-column-totals">
+                {columnIds.map(columnId => {
+                    const cellsInColumn = cellDimensions.filter(d => d.ids.includes(columnId))
+                    const firstCellInColumn = cellsInColumn.at(0)
+                    const lastCellInColumn = cellsInColumn.at(-1)
+                    const width =
+                        (lastCellInColumn?.offset || 0) +
+                        (lastCellInColumn?.width || 0) -
+                        (firstCellInColumn?.offset || 0)
+                    const offset = firstCellInColumn?.offset || 0
+
+                    return (
+                        <ColumnTotal
+                            key={columnId}
+                            columnId={columnId}
+                            groupedTotals={groupedTotals}
+                            width={width}
+                            offset={offset}
+                        />
+                    )
+                })}
+            </div>
+        </RowWrapper>
     )
 }

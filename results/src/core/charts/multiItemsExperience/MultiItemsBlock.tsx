@@ -1,27 +1,21 @@
-import React, { useState } from 'react'
+import React from 'react'
+import '../common2/ChartsCommon.scss'
 import './MultiItems.scss'
 import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
 import { MultiItemsExperienceControls } from './MultiItemsControls'
-import {
-    ChartState,
-    ColumnId,
-    ColumnModes,
-    DEFAULT_VARIABLE,
-    GroupingOptions,
-    MultiItemsExperienceBlockProps,
-    OrderOptions
-} from './types'
+import { ColumnModes, MultiItemsExperienceBlockProps } from './types'
 import {
     combineItems,
     getColumnDimensions,
     getItemTotals,
     getMaxValues,
-    sortItems
+    sortItems,
+    useChartState
 } from './helpers'
 import { Row } from './MultiItemsRow'
-import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { ColumnHeading } from './MultiItemsColumnHeading'
 import { useI18n } from '@devographics/react-i18n'
+import Rows from '../common2/Rows'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -31,14 +25,9 @@ export const sortOptions = {
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
     const { data } = props
     const { items } = data
-    const [grouping, setGrouping] = useState<ChartState['grouping']>(GroupingOptions.EXPERIENCE)
-    const [sort, setSort] = useState<ChartState['sort']>(FeaturesOptions.USED)
-    const [order, setOrder] = useState<ChartState['order']>(OrderOptions.DESC)
-    const [variable, setVariable] = useState<ChartState['variable']>(DEFAULT_VARIABLE)
-    const [columnMode, setColumnMode] = useState<ChartState['columnMode']>(ColumnModes.SPLIT)
-    const [facetId, setFacetId] = useState<ChartState['facetId']>('sentiment')
 
-    const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
+    const chartState = useChartState()
+    const { columnMode, grouping, variable, sort, order } = chartState
 
     const { getString } = useI18n()
     const shouldSeparateColumns = columnMode === ColumnModes.SPLIT
@@ -48,21 +37,6 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
         ...Object.values(FeaturesOptions),
         ...Object.values(SimplifiedSentimentOptions)
     ]
-
-    const chartState: ChartState = {
-        facetId,
-        setFacetId,
-        grouping,
-        setGrouping,
-        sort,
-        setSort,
-        order,
-        setOrder,
-        variable,
-        setVariable,
-        columnMode,
-        setColumnMode
-    }
 
     const className = `multiexp multiexp-groupedBy-${grouping}`
 
@@ -103,11 +77,11 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
                     })}
                 </div>
             </div>
-            <div className="multiexp-rows" ref={parent}>
+            <Rows>
                 {sortedItems.map((item, i) => (
                     <Row key={item.id} item={item} maxValues={maxValues} chartState={chartState} />
                 ))}
-            </div>
+            </Rows>
         </div>
     )
 }
