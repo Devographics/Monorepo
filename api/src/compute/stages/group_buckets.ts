@@ -82,6 +82,8 @@ const getMergedBucket = <T extends Bucket | FacetBucket>(
     const bucket = {
         id,
         count: sumBy(buckets, 'count'),
+        percentageQuestion: round(sumBy(buckets, 'percentageQuestion'), 2),
+        percentageSurvey: round(sumBy(buckets, 'percentageSurvey'), 2),
         groupedBuckets: buckets as unknown,
         groupedBucketIds: buckets.map(b => b.id)
     } as T
