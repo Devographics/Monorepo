@@ -368,7 +368,7 @@ export const fetchGraphQLApi = async <T = any>({
     })
     const json: any = await response.json()
     if (json.errors) {
-        console.error(`// fetchGraphQLApi error 1 (${apiUrl})`)
+        console.error(`// fetchGraphQLApi error 1 for query ${key}.gql (${apiUrl})`)
         console.error(JSON.stringify(json.errors, null, 2))
         throw new Error(json.errors[0].message)
     }

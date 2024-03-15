@@ -96,15 +96,15 @@ export async function runFetchPipeline<T>(steps: Array<FetchPipelineStep<T>>): P
             if (!hasCachedData) continue
         }
         const data = await step.get()
-        const nonNullData = data !== null && typeof data !== "undefined"
+        const nonNullData = data !== null && typeof data !== 'undefined'
         if (nonNullData) {
-            console.debug(`🟢 [${step.name}] in-memory cache hit`)
+            console.debug(`🟢 [${step.name}] data hit`)
             // update cache methods above in the pipeline
             // with retrieved data
             await Promise.all(
                 previousSteps
                     .filter(step => !!step.set)
-                    .map(async (previousStep) => {
+                    .map(async previousStep => {
                         // @ts-ignore
                         await previousStep.set(data)
                     })
