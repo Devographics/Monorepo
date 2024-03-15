@@ -162,6 +162,7 @@ export const getExistingData = async ({ dataFileName, dataFilePath, sectionId, b
             contents = fs.readFileSync(dataFilePath, 'utf8')
         }
     } else {
+        console.log(`// fetching ${remoteUrl}…`)
         const response = await fetch(remoteUrl)
         contents = await response.text()
     }
