@@ -83,6 +83,33 @@
 
       - id: company_size
         template: multiple_options
+        blockType: HorizontalBarBlock2
+
+      - id: company_size2
+        fieldId: company_size
+        template: multiple_options
+        blockType: HorizontalBarBlock2
+        parameters:
+            showNoAnswer: true
+        filtersState:
+            options:
+                mode: facet
+            facet:
+                sectionId: user_info
+                id: yearly_salary
+
+      - id: company_size3
+        fieldId: company_size
+        template: multiple_options
+        blockType: HorizontalBarBlock2
+        parameters:
+            showNoAnswer: true
+        filtersState:
+            options:
+                mode: facet
+            facet:
+                sectionId: user_info
+                id: gender
 
       - id: variants_hint
         template: hint

@@ -1,17 +1,20 @@
 import React, { useState } from 'react'
 import { RowWrapper } from '../common2/RowWrapper'
 import { Cell } from './HorizontalBarCell'
-import { RowComponentsProps, RowProps } from '../common2/types'
+import { RowCommonProps, RowExtraProps } from '../common2/types'
 import take from 'lodash/take'
 import sum from 'lodash/sum'
+import { RowDataProps } from './types'
+import { useTheme } from 'styled-components'
+import { getRowComponent, getValue } from './helpers/other'
+import { useColorScale } from './helpers/colors'
 
-export const Row = (props: RowProps) => {
+export const Row = (props: RowDataProps & RowCommonProps) => {
     const [showGroupedBuckets, setShowGroupedBuckets] = useState(false)
-    const { bucket } = props
-    const { facetBuckets, groupedBuckets } = bucket
-    const hasFacetBuckets = facetBuckets && facetBuckets.length > 0
+    const { bucket, chartState } = props
+    const { groupedBuckets } = bucket
     const hasGroupedBuckets = groupedBuckets && groupedBuckets.length > 0
-    const RowComponent = hasFacetBuckets ? FacetRow : SingleBarRow
+    const RowComponent = getRowComponent(bucket, chartState)
     const rowComponentProps = {
         ...props,
         ...(hasGroupedBuckets ? { showGroupedBuckets, setShowGroupedBuckets } : {})
@@ -33,59 +36,61 @@ export const Row = (props: RowProps) => {
     )
 }
 
-export const SingleBarRow = (props: RowComponentsProps) => {
+export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
     const { bucket, chartState, chartValues } = props
-    const { variable } = chartState
-    const width = (100 * (bucket[variable] || 0)) / chartValues.maxOverallValue
+    const value = getValue(bucket, chartState)
+    const width = (100 * value) / chartValues.maxOverallValue
     return (
         <RowWrapper {...props}>
             <div className="chart-bar">
                 <Cell
                     bucket={bucket}
-                    color="#ffffff44"
                     chartState={chartState}
                     width={width}
                     offset={0}
+                    cellIndex={0}
+                    chartValues={chartValues}
                 />
             </div>
         </RowWrapper>
     )
 }
 
-export const FacetRow = (props: RowComponentsProps) => {
+export const FacetRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
     const { bucket, chartState, chartValues } = props
+    const { maxOverallValue } = chartValues
     const { facetBuckets } = bucket
-    const { variable } = chartState
-    const width = (100 * (bucket[variable] || 0)) / chartValues.maxOverallValue
     return (
         <RowWrapper {...props}>
             <div className="chart-faceted-bar">
                 {facetBuckets.map((facetBucket, index) => {
                     const { id } = facetBucket
-                    const value = facetBucket.percentageBucket || 0
-                    const ratio = 100 / chartValues.maxOverallValue
+                    const value = getValue(facetBucket, chartState)
+                    const ratio = 100 / maxOverallValue
                     const width = value * ratio
                     const offset = sum(
                         take(
-                            facetBuckets.map(b => (b.percentageBucket || 0) * ratio),
+                            facetBuckets.map(b => getValue(b, chartState) * ratio),
                             index
                         )
                     )
-                    const color = ['red', 'green', 'blue', 'teal', 'purple', 'yellow', 'pink'][
-                        index
-                    ]
                     return (
                         <Cell
                             key={id}
                             bucket={facetBucket}
-                            color={color}
                             chartState={chartState}
                             width={width}
                             offset={offset}
+                            cellIndex={index}
+                            chartValues={chartValues}
                         />
                     )
                 })}
             </div>
         </RowWrapper>
     )
+}
+
+export const BoxPlotRow = () => {
+    return <div>boxplotrow</div>
 }

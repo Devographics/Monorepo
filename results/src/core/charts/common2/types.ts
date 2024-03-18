@@ -1,15 +1,25 @@
 import { Bucket } from '@devographics/types'
-import { ChartState, ChartValues } from '../multiItemsExperience/types'
 import { Dispatch, ReactNode, SetStateAction } from 'react'
+import { ChartState, ChartValues } from '../multiItemsExperience/types'
+import { BlockDefinition } from 'core/types'
 
-export type RowProps = {
+export type RowCommonProps = {
     bucket: Bucket
-    chartState: ChartState
-    chartValues: ChartValues
+    block: BlockDefinition
 }
 
-export type RowComponentsProps = RowProps & {
+export type RowExtraProps = {
     isGroupedBucket?: boolean
     showGroupedBuckets?: boolean
     setShowGroupedBuckets?: Dispatch<SetStateAction<boolean>>
+}
+
+export enum OrderOptions {
+    ASC = 'asc',
+    DESC = 'desc'
+}
+
+export enum ColumnModes {
+    SPLIT = 'split',
+    STACKED = 'stacked'
 }

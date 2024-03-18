@@ -14,7 +14,7 @@
     }
     @include medium-large {
         display: grid;
-        grid-template-columns: 250px minmax(0, 1fr) 150px;
+        grid-template-columns: 250px minmax(0, 1fr) 100px;
         gap: 10px;
     }
     &-grouped {
@@ -27,4 +27,21 @@
     height: var(--cellHeight);
     display: flex;
     align-items: center;
+}
+
+.chart-control-button {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.chart-row-metadata {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.chart-controls {
+    display: flex;
+    justify-content: center;
 }

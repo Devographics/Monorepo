@@ -1,17 +1,11 @@
 import React from 'react'
-import {
-    ChartState,
-    ColumnModes,
-    CombinedBucket,
-    CombinedItem,
-    GroupingOptions,
-    MaxValue
-} from './types'
+import { ChartState, CombinedBucket, CombinedItem, GroupingOptions, MaxValue } from './types'
 import { getCellDimensions, getGroupedTotals, sortByExperience, sortBySentiment } from './helpers'
 import { Cell, ColumnTotal } from './MultiItemsCell'
 import { sortOptions } from './MultiItemsBlock'
 import { RowWrapper } from '../common2/RowWrapper'
-import { Bucket, BucketMetadata } from '@devographics/types'
+import { Bucket } from '@devographics/types'
+import { ColumnModes } from '../common2/types'
 
 export const Row = ({
     item,

@@ -3,7 +3,7 @@ import '../common2/ChartsCommon.scss'
 import './MultiItems.scss'
 import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
 import { MultiItemsExperienceControls } from './MultiItemsControls'
-import { ColumnModes, MultiItemsExperienceBlockProps } from './types'
+import { MultiItemsExperienceBlockProps } from './types'
 import {
     combineItems,
     getColumnDimensions,
@@ -16,6 +16,7 @@ import { Row } from './MultiItemsRow'
 import { ColumnHeading } from './MultiItemsColumnHeading'
 import { useI18n } from '@devographics/react-i18n'
 import Rows from '../common2/Rows'
+import { ColumnModes } from '../common2/types'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),

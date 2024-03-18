@@ -11,13 +11,11 @@ import {
     ChartValues,
     ColumnDimension,
     ColumnId,
-    ColumnModes,
     CombinedBucket,
     CombinedItem,
     DEFAULT_VARIABLE,
     GroupingOptions,
     MaxValue,
-    OrderOptions,
     Totals,
     Variable
 } from './types'
@@ -26,8 +24,8 @@ import max from 'lodash/max'
 import sum from 'lodash/sum'
 import take from 'lodash/take'
 import round from 'lodash/round'
-import charts from 'core/theme/charts'
 import { useState } from 'react'
+import { ColumnModes, OrderOptions } from '../common2/types'
 
 export const ITEM_GAP_PERCENT = 1
 export const COLUMN_GAP_PERCENT = 5

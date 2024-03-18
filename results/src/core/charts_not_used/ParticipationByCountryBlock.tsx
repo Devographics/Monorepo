@@ -8,7 +8,7 @@ import DynamicDataLoader from 'core/filters/dataloaders/DynamicDataLoader'
 import { MODE_GRID } from 'core/filters/constants'
 import { useChartFilters } from 'core/filters/helpers'
 import { defaultOptions } from 'core/blocks/block/BlockUnitsSelector'
-import { useAllChartsOptions } from 'core/charts/hooks'
+import { useAllQuestionsWithOptions } from 'core/charts/hooks'
 
 const ParticipationByCountryBlock = ({
     block,
@@ -30,7 +30,7 @@ const ParticipationByCountryBlock = ({
         options: { supportedModes: [MODE_GRID] }
     })
 
-    const allChartsOptions = useAllChartsOptions()
+    const allChartsOptions = useAllQuestionsWithOptions()
 
     let unitsOptions = defaultOptions
     if (chartFilters.facet) {

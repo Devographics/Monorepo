@@ -1,26 +1,34 @@
 import React from 'react'
-import { ChartState, ColumnId, CombinedBucket, Totals } from '../multiItemsExperience/types'
+import { ChartValues, ColumnId, CombinedBucket, Totals } from '../multiItemsExperience/types'
 import Tooltip from 'core/components/Tooltip'
 import { useI18n } from '@devographics/react-i18n'
 import { Bucket, FacetBucket } from '@devographics/types'
+import { ChartState } from './types'
+import { getIsPercentage, getValue } from './helpers/other'
+import { useColor } from './helpers/colors'
 
 export const Cell = ({
     bucket,
     chartState,
+    chartValues,
     width,
     offset,
-    color
+    cellIndex
 }: {
     bucket: Bucket | FacetBucket
     chartState: ChartState
+    chartValues: ChartValues
     width: number
     offset: number
-    color?: string
+    cellIndex: number
 }) => {
-    const { getString } = useI18n()
+    const { facetQuestion } = chartValues
 
-    const value = 123
+    const color = useColor({ id: bucket.id, question: facetQuestion })
+    // const { getString } = useI18n()
 
+    const value = getValue(bucket, chartState)
+    const showPercentage = getIsPercentage(chartState)
     const style = {
         '--percentageValue': value,
         '--width': width,
@@ -32,12 +40,14 @@ export const Cell = ({
         <Tooltip
             trigger={
                 <div className="horizontal-chart-cell" style={style}>
-                    {bucket.percentageQuestion}%
+                    {color}
+                    {value}
+                    {showPercentage && '%'}
                 </div>
             }
             contents={
                 <div>
-                    foo
+                    {bucket.id}
                     {/* <T
                         k={`charts.multiexp.cell_tooltip.grouped_by_${grouping}`}
                         values={values}

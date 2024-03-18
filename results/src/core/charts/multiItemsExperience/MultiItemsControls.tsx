@@ -1,10 +1,11 @@
 import React from 'react'
-import { ChartState, ColumnModes, GroupingOptions } from './types'
+import { ChartState, GroupingOptions } from './types'
 import { useI18n } from '@devographics/react-i18n'
 import { SplitIcon, StackedIcon } from 'core/icons'
 import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
+import { ColumnModes } from '../common2/types'
 
 const icons = {
     [ColumnModes.SPLIT]: SplitIcon,

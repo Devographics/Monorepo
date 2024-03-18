@@ -9,7 +9,7 @@ import { getTableData } from 'core/helpers/datatables'
 import DynamicDataLoader from 'core/filters/dataloaders/DynamicDataLoader'
 import { useChartFilters } from 'core/filters/helpers'
 import { MODE_COMBINED, MODE_FACET } from 'core/filters/constants'
-import { useAllChartsOptions } from 'core/charts/hooks'
+import { useAllQuestionsWithOptions } from 'core/charts/hooks'
 import { MAIN_UNITS } from '@devographics/constants'
 import VerticalBoxPlotChart from 'core/charts/boxPlotVertical/VerticalBoxPlotChart'
 import HorizontalBoxPlotChart from '../boxPlotHorizontal/HorizontalBoxPlotChart'
@@ -47,7 +47,7 @@ const VerticalBarBlock = ({ block, data, series, pageContext }: VerticalBarBlock
         providedFiltersState: filtersState
     })
 
-    const allChartsOptions = useAllChartsOptions()
+    const allChartsOptions = useAllQuestionsWithOptions()
 
     let unitsOptions = [
         BucketUnits.PERCENTAGE_SURVEY,
