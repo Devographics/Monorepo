@@ -1,40 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { RowWrapper } from '../common2/RowWrapper'
 import { Cell } from './HorizontalBarCell'
 import { RowCommonProps, RowExtraProps } from '../common2/types'
 import take from 'lodash/take'
 import sum from 'lodash/sum'
 import { RowDataProps } from './types'
-import { useTheme } from 'styled-components'
-import { getRowComponent, getValue } from './helpers/other'
-import { useColorScale } from './helpers/colors'
-
-export const Row = (props: RowDataProps & RowCommonProps) => {
-    const [showGroupedBuckets, setShowGroupedBuckets] = useState(false)
-    const { bucket, chartState } = props
-    const { groupedBuckets } = bucket
-    const hasGroupedBuckets = groupedBuckets && groupedBuckets.length > 0
-    const RowComponent = getRowComponent(bucket, chartState)
-    const rowComponentProps = {
-        ...props,
-        ...(hasGroupedBuckets ? { showGroupedBuckets, setShowGroupedBuckets } : {})
-    }
-    return (
-        <>
-            <RowComponent {...rowComponentProps} />
-            {hasGroupedBuckets &&
-                showGroupedBuckets &&
-                groupedBuckets.map(groupedBucket => (
-                    <RowComponent
-                        key={groupedBucket.id}
-                        {...props}
-                        bucket={groupedBucket}
-                        isGroupedBucket={true}
-                    />
-                ))}
-        </>
-    )
-}
+import { getValue } from './helpers/other'
 
 export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
     const { bucket, chartState, chartValues } = props

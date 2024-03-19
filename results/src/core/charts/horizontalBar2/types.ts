@@ -3,6 +3,8 @@ import { ColumnModes, OrderOptions } from '../common2/types'
 import { ChartValues } from '../multiItemsExperience/types'
 import { FacetItem } from 'core/filters/types'
 import { IconProps } from 'core/icons/IconWrapper'
+import { Bucket } from '@devographics/types'
+import { BlockDefinition } from 'core/types'
 
 export type ChartState = {
     sort: string
@@ -30,7 +32,14 @@ export enum Views {
 export type Control = {
     id: string
     labelId: string
-    isChecked: boolean
+    isChecked?: boolean
     icon: (props: IconProps) => React.JSX.Element
     onClick: (e: SyntheticEvent) => void
+}
+
+export type ViewProps = {
+    chartState: ChartState
+    chartValues: ChartValues
+    buckets: Bucket[]
+    block: BlockDefinition
 }

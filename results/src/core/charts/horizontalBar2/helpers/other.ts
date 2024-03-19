@@ -11,6 +11,12 @@ import { HorizontalBarBlock2Props } from '../HorizontalBarBlock'
 import { BoxPlotRow, FacetRow, SingleBarRow } from '../HorizontalBarRow'
 import { FacetItem } from 'core/filters/types'
 import { usePageContext } from 'core/helpers/pageContext'
+import { Average } from '../views/Average'
+import { Boxplot } from '../views/Boxplot'
+import { Count } from '../views/Count'
+import { PercentageBucket } from '../views/PercentageBucket'
+import { PERCENTAGE_QUESTION } from '@devographics/constants'
+import { PercentageQuestion } from '../views/PercentageQuestion'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -63,9 +69,6 @@ export const getValue = (bucket: Bucket | FacetBucket, chartState: ChartState) =
     }
 }
 
-export const getIsPercentage = (chartState: ChartState) =>
-    [Views.PERCENTAGE_BUCKET, Views.PERCENTAGE_QUESTION].includes(chartState.view)
-
 export const getRowComponent = (bucket: Bucket, chartState: ChartState) => {
     const { view } = chartState
     const { facetBuckets } = bucket
@@ -101,4 +104,17 @@ export const useAllQuestionsMetadata = () => {
         }
     }
     return questions
+}
+
+const viewComponents = {
+    [Views.AVERAGE]: Average,
+    [Views.BOXPLOT]: Boxplot,
+    [Views.COUNT]: Count,
+    [Views.PERCENTAGE_BUCKET]: PercentageBucket,
+    [Views.PERCENTAGE_QUESTION]: PercentageQuestion
+}
+
+export const getViewComponent = ({ chartState }: { chartState: ChartState }) => {
+    const { view } = chartState
+    return viewComponents[view]
 }

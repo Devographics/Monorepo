@@ -35,7 +35,7 @@ export const useColorScale = ({ question }: { question: QuestionMetadata }) => {
 
 export const useColor = ({ question, id }: { question?: QuestionMetadata; id: string }) => {
     if (!question) {
-        return
+        return defaultColor
     } else {
         const colorScale = useColorScale({ question })
         const color = colorScale[id]

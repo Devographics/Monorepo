@@ -1,11 +1,15 @@
 import React from 'react'
-import { ChartValues, ColumnId, CombinedBucket, Totals } from '../multiItemsExperience/types'
+import { ChartValues } from '../multiItemsExperience/types'
 import Tooltip from 'core/components/Tooltip'
-import { useI18n } from '@devographics/react-i18n'
 import { Bucket, FacetBucket } from '@devographics/types'
 import { ChartState } from './types'
-import { getIsPercentage, getValue } from './helpers/other'
+import { getValue } from './helpers/other'
 import { useColor } from './helpers/colors'
+import round from 'lodash/round'
+import T from 'core/i18n/T'
+import { getItemLabel } from 'core/helpers/labels'
+import { useI18n } from '@devographics/react-i18n'
+import { formatValue, isPercentage } from './helpers/labels'
 
 export const Cell = ({
     bucket,
@@ -22,13 +26,13 @@ export const Cell = ({
     offset: number
     cellIndex: number
 }) => {
-    const { facetQuestion } = chartValues
+    const { question, facetQuestion } = chartValues
 
     const color = useColor({ id: bucket.id, question: facetQuestion })
-    // const { getString } = useI18n()
+    const { getString } = useI18n()
 
+    const { id, count, entity } = bucket
     const value = getValue(bucket, chartState)
-    const showPercentage = getIsPercentage(chartState)
     const style = {
         '--percentageValue': value,
         '--width': width,
@@ -36,24 +40,28 @@ export const Cell = ({
         '--color': color
     }
 
+    const { key, label } = getItemLabel({
+        getString,
+        i18nNamespace: facetQuestion?.id || question.id,
+        id,
+        entity
+    })
+
+    const showValue = value > 8
+
+    const v = <span>{formatValue({ value, chartState, question: facetQuestion || question })}</span>
+
     return (
         <Tooltip
             trigger={
                 <div className="horizontal-chart-cell" style={style}>
-                    {color}
-                    {value}
-                    {showPercentage && '%'}
+                    {showValue && v}
                 </div>
             }
             contents={
                 <div>
-                    {bucket.id}
-                    {/* <T
-                        k={`charts.multiexp.cell_tooltip.grouped_by_${grouping}`}
-                        values={values}
-                        html={true}
-                        md={true}
-                    /> */}
+                    {label}: <strong>{v}</strong>{' '}
+                    <T k="charts.facet_respondents" values={{ count }} />
                 </div>
             }
         />

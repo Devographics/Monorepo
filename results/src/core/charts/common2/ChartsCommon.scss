@@ -41,7 +41,30 @@
     align-items: center;
 }
 
-.chart-controls {
+.chart-controls,
+.chart-actions {
     display: flex;
     justify-content: center;
+}
+
+.chart-legend {
+    border: 1px solid white;
+    padding: 10px;
+    margin-bottom: 20px;
+    &-items {
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+    }
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.legend-item-color {
+    background: var(--color);
+    height: 12px;
+    width: 12px;
+    border: 1px solid white;
 }

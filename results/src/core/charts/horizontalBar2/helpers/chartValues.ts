@@ -4,7 +4,8 @@ import { ChartValues } from '../../multiItemsExperience/types'
 import max from 'lodash/max'
 import { BlockDefinition } from 'core/types'
 import { useAllQuestionsWithOptions } from '../../hooks'
-import { getIsPercentage, getValue } from './other'
+import { getValue } from './other'
+import { isPercentage } from './labels'
 
 export const useChartValues = ({
     buckets,
@@ -19,8 +20,9 @@ export const useChartValues = ({
 }) => {
     const allQuestions = useAllQuestionsWithOptions()
     const { facet } = chartState
-    const isPercentage = getIsPercentage(chartState)
-    const maxOverallValue = isPercentage ? 100 : max(buckets.map(b => getValue(b, chartState))) || 0
+    const maxOverallValue = isPercentage(chartState.view)
+        ? 100
+        : max(buckets.map(b => getValue(b, chartState))) || 0
 
     const chartValues: ChartValues = {
         maxOverallValue,
