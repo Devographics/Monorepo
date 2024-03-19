@@ -6,17 +6,12 @@ import {
     ResultsSubFieldEnum,
     SimplifiedSentimentOptions
 } from '@devographics/types'
-import { ChartState, Views } from '../types'
+import { ChartState, Step, Views } from '../types'
 import { HorizontalBarBlock2Props } from '../HorizontalBarBlock'
 import { BoxPlotRow, FacetRow, SingleBarRow } from '../HorizontalBarRow'
 import { FacetItem } from 'core/filters/types'
 import { usePageContext } from 'core/helpers/pageContext'
-import { Average } from '../views/Average'
-import { Boxplot } from '../views/Boxplot'
-import { Count } from '../views/Count'
-import { PercentageBucket } from '../views/PercentageBucket'
-import { PERCENTAGE_QUESTION } from '@devographics/constants'
-import { PercentageQuestion } from '../views/PercentageQuestion'
+import { applySteps } from './steps'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -46,12 +41,14 @@ export const getChartCompletion = ({
 export const getChartBuckets = ({
     data,
     series,
-    block
-}: Pick<HorizontalBarBlock2Props, 'data' | 'series' | 'block'>) => {
+    block,
+    steps = []
+}: Pick<HorizontalBarBlock2Props, 'data' | 'series' | 'block'> & { steps: Step[] }) => {
     const currentEdition = getChartCurrentEdition({ data, series, block })
-    return currentEdition.buckets
+    return applySteps(currentEdition.buckets, steps)
 }
 
+// TODO: put this together with the view component
 export const getValue = (bucket: Bucket | FacetBucket, chartState: ChartState) => {
     const { view } = chartState
     const { count, percentageBucket, percentageQuestion, averageByFacet } = bucket
@@ -65,6 +62,8 @@ export const getValue = (bucket: Bucket | FacetBucket, chartState: ChartState) =
         case Views.PERCENTAGE_QUESTION:
             return percentageQuestion || 0
         case Views.COUNT:
+            return count || 0
+        case Views.FACET_COUNTS:
             return count || 0
     }
 }
@@ -104,17 +103,4 @@ export const useAllQuestionsMetadata = () => {
         }
     }
     return questions
-}
-
-const viewComponents = {
-    [Views.AVERAGE]: Average,
-    [Views.BOXPLOT]: Boxplot,
-    [Views.COUNT]: Count,
-    [Views.PERCENTAGE_BUCKET]: PercentageBucket,
-    [Views.PERCENTAGE_QUESTION]: PercentageQuestion
-}
-
-export const getViewComponent = ({ chartState }: { chartState: ChartState }) => {
-    const { view } = chartState
-    return viewComponents[view]
 }

@@ -20,6 +20,9 @@
     &-grouped {
         background: #ffffff11;
     }
+    &-overall {
+        background: #ffffff22;
+    }
 }
 .chart-row-heading {
     margin: 0;
@@ -67,4 +70,11 @@
     height: 12px;
     width: 12px;
     border: 1px solid white;
+}
+
+.chart-metadata {
+    border-top: 1px solid #ffffff33;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 20px;
 }

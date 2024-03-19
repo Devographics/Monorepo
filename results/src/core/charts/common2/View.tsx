@@ -1,10 +1,10 @@
 import React from 'react'
-import { getViewComponent } from '../horizontalBar2/helpers/other'
 import { CommonProps } from './types'
+import { getViewComponent } from '../horizontalBar2/helpers/views'
 
 export const View = (props: CommonProps) => {
     const { chartState } = props
-    const ViewComponent = getViewComponent({ chartState })
+    const ViewComponent = getViewComponent(chartState.view)
     return (
         <div className="chart-view">
             <ViewComponent {...props} />

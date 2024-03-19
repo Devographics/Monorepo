@@ -25,6 +25,7 @@ export enum Views {
     BOXPLOT = 'percentilesByFacet',
     PERCENTAGE_BUCKET = 'percentageBucket',
     PERCENTAGE_QUESTION = 'percentageQuestion',
+    FACET_COUNTS = 'facetCounts',
     COUNT = 'count',
     AVERAGE = 'average'
 }
@@ -37,9 +38,16 @@ export type Control = {
     onClick: (e: SyntheticEvent) => void
 }
 
+export type ViewDefinition = {
+    steps: Step[]
+    component: (props: ViewProps) => JSX.Element
+}
+
 export type ViewProps = {
     chartState: ChartState
     chartValues: ChartValues
     buckets: Bucket[]
     block: BlockDefinition
 }
+
+export type Step = (buckets: Bucket[]) => Bucket[]

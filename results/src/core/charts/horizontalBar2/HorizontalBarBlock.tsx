@@ -8,7 +8,7 @@ import { DataSeries } from 'core/filters/types'
 import { getChartBuckets, getChartCompletion, useQuestionMetadata } from './helpers/other'
 import { useChartState } from './helpers/chartState'
 import { useChartValues } from './helpers/chartValues'
-import { getControls } from './helpers/controls'
+import { getControls, getViewDefinition } from './helpers/views'
 import Actions from '../common2/Actions'
 import View from '../common2/View'
 
@@ -21,7 +21,6 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     const { block, question } = props
     // console.log(props)
 
-    const buckets = getChartBuckets(props)
     const completion = getChartCompletion(props)
     const facet = block?.filtersState?.facet
 
@@ -30,6 +29,8 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     // const { getString } = useI18n()
     const chartState = useChartState({ facetQuestion })
     const className = `foo`
+    const view = getViewDefinition(chartState.view)
+    const buckets = getChartBuckets({ ...props, steps: view.steps })
 
     const chartValues = useChartValues({ buckets, chartState, block, question })
     const controls = getControls({ chartState, chartValues })
