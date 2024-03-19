@@ -1,7 +1,7 @@
 import React from 'react'
-import IconWrapper from './IconWrapper'
+import IconWrapper, { IconProps } from './IconWrapper'
 
-export const ShareIcon = props => (
+export const Bars = (props: IconProps) => (
     <IconWrapper {...props}>
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -14,9 +14,9 @@ export const ShareIcon = props => (
             strokeLinecap="butt"
             strokeLinejoin="round"
         >
-            <g fill="none" fillRule="evenodd">
-                <path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8" />
-            </g>
+            <path d="M0 5H17V8H0z"></path>
+            <path d="M0 11H24V14H0z"></path>
+            <path d="M0 17H13V20H0z"></path>
         </svg>
     </IconWrapper>
 )

@@ -448,7 +448,7 @@ export const useColorFills = (options: UseColorFillsOptions) => {
 Get options keys ([{ id: 'range_work_for_free' }, { id: 'range_0_10' }, { id: 'range_10_30' }, ...]) for all chart types
 
 */
-export const useAllChartsOptions = (): FilterItem[] => {
+export const useAllQuestionsWithOptions = (): FilterItem[] => {
     const context = usePageContext()
     const { currentEdition } = context
     const keys = []
@@ -473,13 +473,13 @@ Get all available filters, while optionally filtering out the current question's
 
 */
 export const useAllFilters = (excludeFilterId?: string) => {
-    const allFilters = useAllChartsOptions()
+    const allFilters = useAllQuestionsWithOptions()
     return allFilters.filter(q => q.id !== excludeFilterId)
 }
 
 export const useAllChartsOptionsIdsOnly = () => {
     const options = {}
-    const allOptions = useAllChartsOptions()
+    const allOptions = useAllQuestionsWithOptions()
     for (const option in allOptions) {
         options[option] = allOptions[option].map(o => o.id)
     }
@@ -487,7 +487,7 @@ export const useAllChartsOptionsIdsOnly = () => {
 }
 
 export const useChartOptions = (fieldId: string): ChartOptionDefinition[] => {
-    const options = useAllChartsOptions()
+    const options = useAllQuestionsWithOptions()
     return options[fieldId]
 }
 
@@ -518,7 +518,7 @@ export const useChartKeys = ({
     showDefaultSeries?: boolean
     showInsufficientDataSegment?: boolean
 }) => {
-    const allChartKeys = useAllChartsOptions()
+    const allChartKeys = useAllQuestionsWithOptions()
     if (facet) {
         if (units === BucketUnits.AVERAGE) {
             return [BucketUnits.AVERAGE]

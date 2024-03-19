@@ -106,9 +106,9 @@ const wrapArguments = (args: ResponseArgumentsStrings) => {
 
     return keys.length > 0
         ? `(${keys
-            .filter(k => !!args[k as keyof ResponseArgumentsStrings])
-            .map(k => `${k}: ${args[k as keyof ResponseArgumentsStrings]}`)
-            .join(', ')})`
+              .filter(k => !!args[k as keyof ResponseArgumentsStrings])
+              .map(k => `${k}: ${args[k as keyof ResponseArgumentsStrings]}`)
+              .join(', ')})`
         : ''
 }
 
@@ -180,6 +180,36 @@ interface QueryOptions extends ProvidedQueryOptions {
     subField?: string
 }
 
+const getBucketFragment = (options: {
+    addBucketsEntities: boolean
+    addBucketFacetsPlaceholder: boolean
+    queryArgs: QueryArgs
+    addGroupedBuckets: boolean
+}): string => {
+    const { addBucketsEntities, addBucketFacetsPlaceholder, queryArgs, addGroupedBuckets } = options
+    const { facet } = queryArgs
+    return `
+                    count
+                    id
+                    percentageQuestion
+                    percentageSurvey
+                    hasInsufficientData
+                    ${addBucketsEntities ? getEntityFragment() : ''}
+                    ${facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
+                    ${facet || addBucketFacetsPlaceholder ? getPercentilesFragment() : ''}
+                    ${facet ? getFacetFragment(addBucketsEntities) : ''}
+                    ${addBucketFacetsPlaceholder ? bucketFacetsPlaceholder : ''}
+                    ${
+                        addGroupedBuckets
+                            ? `groupedBuckets {
+                        ${getBucketFragment({ ...options, addGroupedBuckets: false })}
+                    }
+                    `
+                            : ''
+                    }
+`
+}
+
 export const getDefaultQuery = ({
     queryOptions,
     queryArgs = {}
@@ -225,16 +255,12 @@ surveys {
                 total
               }
               buckets {
-                count
-                id
-                percentageQuestion
-                percentageSurvey
-                hasInsufficientData
-                ${addBucketsEntities ? getEntityFragment() : ''}
-                ${queryArgs.facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
-                ${queryArgs.facet || addBucketFacetsPlaceholder ? getPercentilesFragment() : ''}
-                ${queryArgs.facet ? getFacetFragment(addBucketsEntities) : ''}
-                ${addBucketFacetsPlaceholder ? bucketFacetsPlaceholder : ''}
+                ${getBucketFragment({
+                    addBucketFacetsPlaceholder,
+                    addBucketsEntities,
+                    addGroupedBuckets: true,
+                    queryArgs
+                })}
               }
             }
           }
@@ -323,10 +349,14 @@ export const getBlockQuery = ({
         sectionId: pageContext?.id,
         questionId: block.id
     }
-    const maybeQueryOptions = { ...defaultQueryOptions, ...providedQueryOptions, ...blockQueryOptions }
+    const maybeQueryOptions = {
+        ...defaultQueryOptions,
+        ...providedQueryOptions,
+        ...blockQueryOptions
+    }
 
-    if (!maybeQueryOptions.surveyId) throw new Error("Missing surveyId in queryOptions")
-    if (!maybeQueryOptions.editionId) throw new Error("Missing editionId in queryOptions")
+    if (!maybeQueryOptions.surveyId) throw new Error('Missing surveyId in queryOptions')
+    if (!maybeQueryOptions.editionId) throw new Error('Missing editionId in queryOptions')
     const queryOptions = maybeQueryOptions as QueryOptions
 
     if (!query) {

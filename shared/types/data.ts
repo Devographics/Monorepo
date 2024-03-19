@@ -150,15 +150,18 @@ export type BucketData = {
     [key in Exclude<BucketUnits, BucketUnits.PERCENTILES>]?: number
 }
 
-export interface Bucket extends BucketData {
+export interface BucketMetadata {
     id: string
-    completion?: BucketCompletion
     entity?: Entity
     token?: Token
-    facetBuckets: FacetBucket[]
-    percentilesByFacet?: PercentileData
     label?: string
     hasInsufficientData?: boolean
+}
+
+export interface Bucket extends BucketData, BucketMetadata {
+    completion?: BucketCompletion
+    facetBuckets: FacetBucket[]
+    percentilesByFacet?: PercentileData
     groupedBuckets?: Bucket[]
     groupedBucketIds?: string[]
 }

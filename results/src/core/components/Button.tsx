@@ -26,7 +26,10 @@ const Button = styled.button.attrs(
             return css`
                 background: none;
                 cursor: pointer;
-                display: block;
+                display: flex;
+                justify-content: center;
+                gap: 5px;
+                align-items: center;
                 text-align: center;
                 font-weight: ${fontWeight('bold')};
                 border: 1px dashed;

@@ -4,11 +4,13 @@ import {
     Entity,
     FacetBucket,
     FeaturesOptions,
+    QuestionMetadata,
     SimplifiedSentimentOptions,
     StandardQuestionData
 } from '@devographics/types'
 import { BlockComponentProps } from 'core/types'
 import { PERCENTAGE_QUESTION, SENTIMENT_FACET } from '@devographics/constants'
+import { ColumnModes, OrderOptions } from '../common2/types'
 
 export const experienceColors = {
     [FeaturesOptions.NEVER_HEARD]: '#D696F4',
@@ -27,16 +29,6 @@ export const DEFAULT_VARIABLE = PERCENTAGE_QUESTION
 export enum GroupingOptions {
     EXPERIENCE = 'experience',
     SENTIMENT = 'sentiment'
-}
-
-export enum OrderOptions {
-    ASC = 'asc',
-    DESC = 'desc'
-}
-
-export enum ColumnModes {
-    SPLIT = 'split',
-    STACKED = 'stacked'
 }
 
 type SectionItemsData = {
@@ -69,6 +61,12 @@ export type ChartState = {
     setColumnMode: Dispatch<SetStateAction<ColumnModes>>
 }
 
+export type ChartValues = {
+    maxOverallValue: number
+    question: QuestionMetadata
+    facetQuestion?: QuestionMetadata
+}
+
 export type CombinedItem = {
     id: string
     entity: Entity
@@ -98,3 +96,9 @@ export type CellDimension = Dimension & {
 }
 
 export type ColumnDimension = Dimension
+
+export type RowDataProps = {
+    bucket: Bucket
+    chartState: ChartState
+    chartValues: ChartValues
+}

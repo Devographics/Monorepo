@@ -339,7 +339,56 @@ type Bucket {
     """
     If bucket was created by grouping other buckets, contents of these grouped buckets
     """
-    groupedBuckets: [Bucket]
+    groupedBuckets: [GroupedBucket]
+}
+
+"""
+Same as above, but without the "groupedBucket" field
+"""
+type GroupedBucket {
+    id: String
+    label: String
+    """
+    Respondent count
+    """
+    count: Int
+    """
+    Percentage relative to question respondents
+    """
+    percentageQuestion: Float
+    """
+    Percentage relative to survey respondents
+    """
+    percentageSurvey: Float
+    """
+    Entity associated with the current bucket
+    """
+    entity: Entity
+    """
+    Normalization Token associated with the current bucket
+    """
+    token: Token
+    """
+    An array of bucket facets, when bucket is faceted
+    """
+    facetBuckets: [FacetBucket]
+    """
+    Average age/years of experience/etc. of the bucket, when bucket is faceted by a range
+    or some other numerical value
+    """
+    averageByFacet: Float
+    """
+    Percentiles by facet
+    """
+    percentilesByFacet: Percentiles
+    """
+    For combined results, indicates if this is issued from freeform data
+    """
+    isFreeformData: Boolean
+    """
+    Indicates if bucket was removed because of insufficient data
+    """
+    hasInsufficientData: Boolean
 }
 
 type Percentiles {

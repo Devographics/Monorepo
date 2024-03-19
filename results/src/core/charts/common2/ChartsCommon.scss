@@ -1,0 +1,70 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
+.chart-rows {
+    display: grid;
+    gap: 20px;
+    grid-auto-rows: minmax(0, 1fr);
+}
+
+.chart-row {
+    @include small {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    @include medium-large {
+        display: grid;
+        grid-template-columns: 250px minmax(0, 1fr) 100px;
+        gap: 10px;
+    }
+    &-grouped {
+        background: #ffffff11;
+    }
+}
+.chart-row-heading {
+    margin: 0;
+    font-size: var(--chartFontColumnHeading);
+    height: var(--cellHeight);
+    display: flex;
+    align-items: center;
+}
+
+.chart-control-button {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.chart-row-metadata {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.chart-controls,
+.chart-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.chart-legend {
+    border: 1px solid white;
+    padding: 10px;
+    margin-bottom: 20px;
+    &-items {
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+    }
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.legend-item-color {
+    background: var(--color);
+    height: 12px;
+    width: 12px;
+    border: 1px solid white;
+}

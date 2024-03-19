@@ -1,11 +1,12 @@
 import { computeParticipationByYear } from './demographics'
 import { YearCompletion, Survey, RequestContext } from '../types'
+import round from 'lodash/round.js'
 
 /**
  * Convert a ratio to percentage, applying a predefined rounding.
  */
 export const ratioToPercentage = (ratio: number) => {
-    return Math.ceil(ratio * 1000) / 10
+    return round(100 * ratio, 2)
 }
 
 /**

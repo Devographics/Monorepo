@@ -83,6 +83,33 @@
 
       - id: company_size
         template: multiple_options
+        blockType: HorizontalBarBlock2
+
+      - id: company_size2
+        fieldId: company_size
+        template: multiple_options
+        blockType: HorizontalBarBlock2
+        parameters:
+            showNoAnswer: true
+        filtersState:
+            options:
+                mode: facet
+            facet:
+                sectionId: user_info
+                id: yearly_salary
+
+      - id: company_size3
+        fieldId: company_size
+        template: multiple_options
+        blockType: HorizontalBarBlock2
+        parameters:
+            showNoAnswer: true
+        filtersState:
+            options:
+                mode: facet
+            facet:
+                sectionId: user_info
+                id: gender
 
       - id: variants_hint
         template: hint
@@ -176,6 +203,70 @@
             - id: forms_resources
               items: [fm-gridsflexbox, fm-practicallayouts]
               template: recommended_resources
+
+      - id: accessibility
+        path: /accessibility
+        blocks:
+            - id: accessibility
+              template: page_introduction
+
+            - id: accessibility_features
+              template: multi_items_experience
+
+            # - id: accessibility_disabilities
+            #   template: ???
+
+            # - id: accessibility_techniques
+            #   template: ???
+
+            # - id: accessibility_screenreaders
+            #   template: ???
+
+            # - id: accessibility_tools
+            #   template: ???
+
+            - id: accessibility_pain_points
+              template: multiple_options_freeform
+              blockType: HorizontalBarBlock2
+              parameters:
+                  showNoAnswer: true
+                  cutoff: 10
+
+            # - id: accessibility_pain_points2
+            #   fieldId: accessibility_pain_points
+            #   template: multiple_options_freeform
+            #   blockType: HorizontalBarBlock2
+            #   parameters:
+            #       showNoAnswer: true
+            #       cutoff: 10
+            #       enableAddOverallBucket: false
+            #   filtersState:
+            #       options:
+            #           mode: facet
+            #       facet:
+            #           sectionId: user_info
+            #           id: years_of_experience
+
+      - id: mobile_web_apps
+        path: /mobile-web-apps
+        blocks:
+            - id: mobile_web_apps
+              template: page_introduction
+
+            - id: mobile_web_apps_features
+              template: multi_items_experience
+
+            # - id: native_apps_tools
+            #   template: ???
+
+            # - id: local_storage_features
+            #   template: ???
+
+            # - id: pwa_features
+            #   template: ???
+
+            # - id: mobile_web_apps_pain_points
+            #   template: ???
 
 - id: usage
   descriptionId: sections.usage.description.html2023

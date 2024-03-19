@@ -1,9 +1,10 @@
 import React from 'react'
 import './MultiItems.scss'
-import { ChartState, ColumnId, OrderOptions } from './types'
 import { useI18n } from '@devographics/react-i18n'
 import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
+import { ChartState, ColumnId } from './types'
+import { OrderOptions } from '../common2/types'
 
 export const ColumnHeading = ({
     columnId,
@@ -23,11 +24,14 @@ export const ColumnHeading = ({
         '--offset': offset
     }
     const isEnabled = sort === columnId
-    const columnLabel = getString(`options.${grouping}.${columnId}.label.short`)?.t
+    const columnLabelId = `options.${grouping}.${columnId}.label.short`
+    const columnLabel = getString(columnLabelId)?.t
     const orderLabel = getString(`charts.order.${order}`)?.t
     return (
         <div className="multiexp-column-heading" style={style}>
-            <h3>{columnLabel}</h3>
+            <h3>
+                <T k={`options.${grouping}.${columnId}.label.short`} />
+            </h3>
             <Tooltip
                 trigger={
                     <button

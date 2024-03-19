@@ -287,13 +287,13 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             know_it: '#ACFFC3',
             used_it: '#59DF7F'
         },
-        gender: {
-            male: [velocity[0], velocity[1]],
-            female: [velocity[3], velocity[4]],
-            non_binary: [velocity[6], velocity[7]],
-            prefer_not_to_say: [velocity[8], velocity[9]],
-            not_listed: [velocity[10], velocity[11]]
-        },
+        // gender: {
+        //     male: [velocity[0], velocity[1]],
+        //     female: [velocity[3], velocity[4]],
+        //     non_binary: [velocity[6], velocity[7]],
+        //     prefer_not_to_say: [velocity[8], velocity[9]],
+        //     not_listed: [velocity[10], velocity[11]]
+        // },
         race_ethnicity: {
             biracial: velocity[0],
             black_african: velocity[1],

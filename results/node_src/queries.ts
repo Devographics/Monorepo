@@ -246,6 +246,8 @@ interface ParsedDataQueryConfig {
     axis2?: any
 }
 
+export type QueryArgs = any
+
 export const getQueryArgsString = ({
     facet,
     filters,
@@ -278,6 +280,36 @@ export const getQueryArgsString = ({
     }
 }
 
+const getBucketFragment = (options: {
+    addBucketsEntities: boolean
+    addBucketFacetsPlaceholder: boolean
+    queryArgs: QueryArgs
+    addGroupedBuckets: boolean
+}): string => {
+    const { addBucketsEntities, addBucketFacetsPlaceholder, queryArgs, addGroupedBuckets } = options
+    const { facet } = queryArgs
+    return `
+                    count
+                    id
+                    percentageQuestion
+                    percentageSurvey
+                    hasInsufficientData
+                    ${addBucketsEntities ? getEntityFragment() : ''}
+                    ${facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
+                    ${facet || addBucketFacetsPlaceholder ? getPercentilesFragment() : ''}
+                    ${facet ? getFacetFragment(addBucketsEntities) : ''}
+                    ${addBucketFacetsPlaceholder ? bucketFacetsPlaceholder : ''}
+                    ${
+                        addGroupedBuckets
+                            ? `groupedBuckets {
+                        ${getBucketFragment({ ...options, addGroupedBuckets: false })}
+                    }
+                    `
+                            : ''
+                    }
+`
+}
+
 export const getDefaultQuery = ({
     queryOptions,
     queryArgs = {}
@@ -299,6 +331,7 @@ export const getDefaultQuery = ({
         addQuestionEntity = false,
         addQuestionComments = false
     } = queryOptions
+
     const queryArgsString = addArgumentsPlaceholder
         ? argumentsPlaceholder
         : getQueryArgsString(queryArgs)
@@ -323,18 +356,12 @@ surveys {
                 total
               }
               buckets {
-                count
-                id
-                percentageQuestion
-                percentageSurvey
-                isFreeformData
-                hasInsufficientData
-                ${addBucketsEntities ? getEntityFragment() : ''}
-                ${addBucketsEntities ? getTokenFragment() : ''}
-                ${queryArgs.facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
-                ${queryArgs.facet || addBucketFacetsPlaceholder ? getPercentilesFragment() : ''}
-                ${queryArgs.facet ? getFacetFragment(addBucketsEntities) : ''}
-                ${addBucketFacetsPlaceholder ? bucketFacetsPlaceholder : ''}
+                ${getBucketFragment({
+                    addBucketFacetsPlaceholder,
+                    addBucketsEntities,
+                    queryArgs,
+                    addGroupedBuckets: true
+                })}
               }
             }
           }
@@ -603,9 +630,11 @@ export const getFiltersQuery = ({
         } else {
             queryBody = queryBody.replace(block.id, `${seriesName}: ${block.fieldId || block.id}`)
         }
-        queryBody = queryBody.replace(argumentsPlaceholder, queryArgs || '')
+        // @ts-ignore
+        queryBody = queryBody.replaceAll(argumentsPlaceholder, queryArgs || '')
 
-        queryBody = queryBody.replace(bucketFacetsPlaceholder, getFacetFragment() || '')
+        // @ts-ignore
+        queryBody = queryBody.replaceAll(bucketFacetsPlaceholder, getFacetFragment() || '')
 
         // if (block?.variables?.fixedIds) {
         //     /*

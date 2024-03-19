@@ -389,12 +389,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 
-        // bucket grouping must be one of the first stages
-        await groupBuckets(results, axis2, axis1)
-
-        // we group cutoff buckets together so it must also come early
-        await cutoffData(results, axis2, axis1)
-
         // optionally add overall, non-facetted bucket as a point of comparison
         // note: for now, disable this for sentiment questions to avoid infinite loops
         if (enableAddOverallBucket && facet !== SENTIMENT_FACET) {
@@ -421,6 +415,12 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await addAveragesByFacet(results, axis2, axis1)
         await addPercentilesByFacet(results, axis2, axis1)
 
+        // bucket grouping must be one of the first stages
+        await groupBuckets(results, axis2, axis1)
+
+        // we group cutoff buckets together so it must also come early
+        await cutoffData(results, axis2, axis1)
+
         // for all following steps, use groups as options
         if (axis1.enableBucketGroups && axis1.question.groups) {
             axis1.options = axis1.question.groups
@@ -436,10 +436,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 
-        await groupBuckets(results, axis1)
-
-        await cutoffData(results, axis1)
-
         results = await applyDatasetCutoff(results, computeArguments)
 
         if (
@@ -454,6 +450,12 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         // await addDeltas(results)
 
         await addEditionYears(results, survey)
+
+        // we only group buckets after we've calculated every other value
+        // while the buckets are "flat"
+        await groupBuckets(results, axis1)
+
+        await cutoffData(results, axis1)
 
         // for all following steps, use groups as options
         if (axis1.enableBucketGroups && axis1.question.groups) {

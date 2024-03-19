@@ -8,7 +8,8 @@
 /* ---------------------------------------------------------------------- */
 
 // generic charts
-import HorizontalBarBlock from 'core/charts/horizontalBar/index'
+import HorizontalBarBlock from 'core/charts/horizontalBar'
+import HorizontalBarBlock2 from 'core/charts/horizontalBar2'
 import VerticalBarBlock from 'core/charts/verticalBar'
 import PeopleBlock from 'core/charts/people'
 import ToolFeatureExperienceBlock from 'core/charts/toolFeatureExperience'
@@ -35,6 +36,7 @@ import BracketWinsBlock from 'core/charts/brackets/BracketWinsBlock.tsx'
 
 const chartBlocks = {
     HorizontalBarBlock,
+    HorizontalBarBlock2,
     VerticalBarBlock,
     PeopleBlock,
 

@@ -144,18 +144,30 @@ query QuestionData {
             ${addQuestionComments ? getCommentsCountFragment() : ''}
             ${subField}${queryArgsString} {
                 ${editionType} {
-                ${allEditions ? allEditionsFragment : ''}
-                completion {
-                    count
-                    percentageSurvey
-                    total
-                }
-                buckets {
-                    count
-                    id
-                    percentageQuestion
-                    percentageSurvey
-                }
+                ${allEditions ? allEditionsFragment : ""}
+                    completion {
+                        count
+                        percentageSurvey
+                        total
+                    }
+                    buckets {
+                        count
+                        id
+                        percentageQuestion
+                        percentageSurvey
+                        groupedBuckets {
+                            count
+                            id
+                            token {
+                                id
+                                parentId
+                            }
+                        }
+                        token {
+                            id
+                            parentId
+                        }
+                    }
                 }
             }
             }

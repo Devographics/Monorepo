@@ -61,7 +61,7 @@ export interface IconProps {
     label?: string
     values?: any
     inSVG?: boolean
-    size?: number
+    size?: 'small' | 'petite' | 'medium' | 'large'
 }
 
 export interface IconWrapperProps extends IconProps {
