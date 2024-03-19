@@ -8,8 +8,8 @@ import type {
   InferGetStaticParamsType,
   InferGetStaticPropsType,
 } from "astro";
-import Layout from "../layouts/Layout.astro";
-import Card from "../components/Card.astro";
+import Layout from "@/layouts/Layout.astro";
+import Card from "@/components/Card.astro";
 import { astroEnv } from "@/lib/env";
 import { astroSurveyWithRawSitemap } from "@/fetchers/surveyWithSitemap";
 import PageTemplate from "@/components/pages/PageTemplate.astro";
@@ -26,6 +26,11 @@ import { getLocalesWithStrings } from "@devographics/i18n/server";
  * @see https://vercel.com/docs/edge-network/caching#how-to-cache-responses
  */
 export const getStaticPaths = (async () => {
+  function removeSlash(str: string) {
+    if (!str) return str;
+    if (str[0] === "/") return str.slice(1);
+    return str;
+  }
   const surveyWithRawSitemap = await astroSurveyWithRawSitemap();
   const sitemap = processRawSitemap(surveyWithRawSitemap.sitemap);
   console.log(
@@ -33,9 +38,17 @@ export const getStaticPaths = (async () => {
     sitemap.map((s) => s.path),
   );
   return sitemap.map((pageDefinition) => {
+    console.log("PATH", removeSlash(pageDefinition.path));
     return {
       params: {
-        path: pageDefinition.path === "/" ? undefined : pageDefinition.path,
+        path:
+          pageDefinition.path === "/"
+            ? undefined
+            : removeSlash(pageDefinition.path),
+        // TODO: generate for each possible locale here
+        // TODO: setup a home page that redirects to "en-US" or the user locale from the client
+        // + an Edgle middleware that does that server-side when hosting on Vercel directly
+        locale: "en-US",
       },
       props: {
         pageDefinition,

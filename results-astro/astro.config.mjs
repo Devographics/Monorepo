@@ -7,4 +7,8 @@ export default defineConfig({
     vite: {
         plugins: [yaml()]
     }
+    // we do NOT setup i18n here
+    // black box i18n redirection are hard to decipher
+    // and show an eratic behaviour during dev
+    // Use Astro.params to access the current locale easily
 });

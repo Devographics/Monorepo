@@ -12,11 +12,11 @@
   "dependencies": {
     "@astrojs/check": "^0.5.4",
     "@devographics/fetch": "workspace:^1.0.0",
-    "@devographics/react-i18n": "workspace:^1.0.0",
-    "@devographics/i18n": "workspace:^1.0.0",
     "@devographics/helpers": "workspace:^1.0.0",
+    "@devographics/i18n": "workspace:^1.0.0",
+    "@devographics/react-i18n": "workspace:^1.0.0",
     "@devographics/types": "workspace:^1.0.0",
-    "astro": "^4.4.0",
+    "astro": "^4.5.6",
     "typescript": "^5.3.3",
     "zod": "^3.21.4"
   },
