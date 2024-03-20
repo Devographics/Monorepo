@@ -2,9 +2,9 @@ import React, { ReactNode, useState } from 'react'
 import { RowCommonProps } from '../common2/types'
 import { RowDataProps } from '../horizontalBar2/types'
 
-export const Row = (props: { rowComponent: ReactNode } & RowDataProps & RowCommonProps) => {
+export const Row = (props: { rowComponent: JSX.Element } & RowDataProps & RowCommonProps) => {
     const [showGroupedBuckets, setShowGroupedBuckets] = useState(false)
-    const { bucket, chartState, rowComponent } = props
+    const { bucket, rowComponent } = props
     const { groupedBuckets } = bucket
     const hasGroupedBuckets = groupedBuckets && groupedBuckets.length > 0
     const RowComponent = rowComponent

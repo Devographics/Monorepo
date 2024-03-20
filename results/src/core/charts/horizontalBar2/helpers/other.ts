@@ -48,26 +48,6 @@ export const getChartBuckets = ({
     return applySteps(currentEdition.buckets, steps)
 }
 
-// TODO: put this together with the view component
-export const getValue = (bucket: Bucket | FacetBucket, chartState: ChartState) => {
-    const { view } = chartState
-    const { count, percentageBucket, percentageQuestion, averageByFacet } = bucket
-    switch (view) {
-        case Views.AVERAGE:
-            return averageByFacet || 0
-        case Views.BOXPLOT:
-            return 999 || 0
-        case Views.PERCENTAGE_BUCKET:
-            return percentageBucket || 1
-        case Views.PERCENTAGE_QUESTION:
-            return percentageQuestion || 0
-        case Views.COUNT:
-            return count || 0
-        case Views.FACET_COUNTS:
-            return count || 0
-    }
-}
-
 export const getRowComponent = (bucket: Bucket, chartState: ChartState) => {
     const { view } = chartState
     const { facetBuckets } = bucket

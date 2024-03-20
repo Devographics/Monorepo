@@ -1,11 +1,10 @@
 import { Bucket, QuestionMetadata } from '@devographics/types'
-import { ChartState } from '../types'
+import { ChartState, Views } from '../types'
 import { ChartValues } from '../../multiItemsExperience/types'
 import max from 'lodash/max'
 import { BlockDefinition } from 'core/types'
 import { useAllQuestionsWithOptions } from '../../hooks'
-import { getValue } from './other'
-import { isPercentage } from './labels'
+import { getViewDefinition } from './views'
 
 export const useChartValues = ({
     buckets,
@@ -18,15 +17,19 @@ export const useChartValues = ({
     block: BlockDefinition
     question: QuestionMetadata
 }) => {
+    const viewDefinition = getViewDefinition(chartState.view)
+    const { getValue } = viewDefinition
     const allQuestions = useAllQuestionsWithOptions()
     const { facet } = chartState
-    const maxOverallValue = isPercentage(chartState.view)
-        ? 100
-        : max(buckets.map(b => getValue(b, chartState))) || 0
-
     const chartValues: ChartValues = {
-        maxOverallValue,
         question
+    }
+    if (getValue) {
+        const maxOverallValue = [Views.PERCENTAGE_BUCKET].includes(chartState.view)
+            ? 100
+            : max(buckets.map(b => getValue(b))) || 0
+
+        chartValues.maxOverallValue = maxOverallValue
     }
     if (facet) {
         chartValues.facetQuestion = allQuestions.find(

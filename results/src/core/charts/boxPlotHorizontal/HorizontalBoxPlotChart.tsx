@@ -25,9 +25,9 @@ const sortChartData = (buckets: Bucket[], question?: QuestionMetadata) =>
         ? buckets
         : [...sortBy(buckets, b => b.percentilesByFacet?.p50)].reverse()
 
-const ROW_HEIGHT = 60
-const PIXEL_PER_TICKS = 130
-const MIN_CHART_WIDTH = 600
+export const ROW_HEIGHT = 60
+export const PIXEL_PER_TICKS = 130
+export const MIN_CHART_WIDTH = 600
 
 export const HorizontalBoxPlotChart = ({
     legends,

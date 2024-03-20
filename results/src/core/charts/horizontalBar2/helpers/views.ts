@@ -33,7 +33,7 @@ export const getControls = ({
         ? facetQuestion.optionsAreSequential
             ? [Views.BOXPLOT, Views.AVERAGE, Views.PERCENTAGE_BUCKET, Views.FACET_COUNTS]
             : [Views.PERCENTAGE_BUCKET, Views.FACET_COUNTS]
-        : [Views.PERCENTAGE_QUESTION, Views.COUNT]
+        : []
     const controls: Control[] = views.map(id => ({
         id,
         labelId: `chart_units.${id}`,

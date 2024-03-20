@@ -3,7 +3,7 @@ import { ColumnModes, OrderOptions } from '../common2/types'
 import { ChartValues } from '../multiItemsExperience/types'
 import { FacetItem } from 'core/filters/types'
 import { IconProps } from 'core/icons/IconWrapper'
-import { Bucket } from '@devographics/types'
+import { Bucket, FacetBucket } from '@devographics/types'
 import { BlockDefinition } from 'core/types'
 
 export type ChartState = {
@@ -39,7 +39,8 @@ export type Control = {
 }
 
 export type ViewDefinition = {
-    steps: Step[]
+    getValue?: (bucket: Bucket | FacetBucket) => number
+    steps?: Step[]
     component: (props: ViewProps) => JSX.Element
 }
 

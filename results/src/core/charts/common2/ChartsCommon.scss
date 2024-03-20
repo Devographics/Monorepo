@@ -6,7 +6,8 @@
     grid-auto-rows: minmax(0, 1fr);
 }
 
-.chart-row {
+.chart-row,
+.chart-axis-bottom {
     @include small {
         display: flex;
         flex-direction: column;
@@ -44,6 +45,9 @@
     align-items: center;
 }
 
+.chart-controls {
+    margin-bottom: 20px;
+}
 .chart-controls,
 .chart-actions {
     display: flex;

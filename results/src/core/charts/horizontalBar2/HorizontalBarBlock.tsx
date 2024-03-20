@@ -47,11 +47,11 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
             <pre>
                 <code>{JSON.stringify(chartState, null, 2)}</code>
             </pre>
-            <Controls controls={controls} {...commonProps} />
+            {controls.length > 0 && <Controls controls={controls} {...commonProps} />}
             <View {...commonProps} />
 
             <Metadata completion={completion} {...commonProps} />
-            <Actions {...commonProps} />
+            {/* <Actions {...commonProps} /> */}
             {/* <pre>
                 <code>{JSON.stringify(buckets, null, 2)}</code>
             </pre> */}
