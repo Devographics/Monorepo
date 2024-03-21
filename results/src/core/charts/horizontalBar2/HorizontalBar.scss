@@ -1,3 +1,10 @@
+.chart-horizontal-bar {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .chart-bar,
 .chart-faceted-bar {
     position: relative;

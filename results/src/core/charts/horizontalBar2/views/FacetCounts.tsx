@@ -9,16 +9,14 @@ import { BucketUnits } from '@devographics/types'
 export const FacetCounts: ViewDefinition = {
     getValue: facetBucket => facetBucket[BucketUnits.COUNT] || 0,
     steps: [removeOverall, removeNotApplicable, removeNoAnswer],
+    showLegend: true,
     component: props => {
         return (
-            <>
-                <Legend {...props} />
-                <Rows>
-                    {props.buckets.map((bucket, i) => (
-                        <Row key={bucket.id} bucket={bucket} {...props} rowComponent={FacetRow} />
-                    ))}
-                </Rows>
-            </>
+            <Rows>
+                {props.buckets.map((bucket, i) => (
+                    <Row key={bucket.id} bucket={bucket} {...props} rowComponent={FacetRow} />
+                ))}
+            </Rows>
         )
     }
 }

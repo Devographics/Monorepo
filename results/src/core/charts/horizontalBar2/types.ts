@@ -42,6 +42,7 @@ export type GetValueType = (bucket: Bucket | FacetBucket) => number
 export type ViewDefinition = {
     getValue?: GetValueType
     steps?: Step[]
+    showLegend?: boolean
     component: (props: ViewProps) => JSX.Element
 }
 

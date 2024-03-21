@@ -1,3 +1,4 @@
+import './Legend.scss'
 import React from 'react'
 import { ChartValues } from '../multiItemsExperience/types'
 import { OptionMetadata, QuestionMetadata } from '@devographics/types'
@@ -9,6 +10,9 @@ import { ChartState } from '../horizontalBar2/types'
 import Tooltip from 'core/components/Tooltip'
 import { OrderOptions } from './types'
 import T from 'core/i18n/T'
+import BlockQuestion from 'core/blocks/block/BlockQuestion'
+import { getBlockKey } from 'core/helpers/blockHelpers'
+import { BlockDefinition } from 'core/types'
 
 export const Legend = ({
     chartState,
@@ -23,23 +27,21 @@ export const Legend = ({
     }
     const options = getQuestionOptions({ question, chartState })
     const colorScale = chartValues?.facetQuestion && useColorScale({ question })
+
     if (!options) {
         return null
     } else {
         return (
             <div className="chart-legend">
-                <h3>{chartValues?.facetQuestion?.id} Options</h3>
-                <div className="chart-legend-items">
-                    {options.map(option => (
-                        <LegendItem
-                            key={option.id}
-                            chartState={chartState}
-                            chartValues={chartValues}
-                            option={option}
-                            color={colorScale[option.id]}
-                        />
-                    ))}
-                </div>
+                {options.map(option => (
+                    <LegendItem
+                        key={option.id}
+                        chartState={chartState}
+                        chartValues={chartValues}
+                        option={option}
+                        color={colorScale[option.id]}
+                    />
+                ))}
             </div>
         )
     }

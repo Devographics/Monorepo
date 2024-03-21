@@ -9,16 +9,14 @@ import { BucketUnits } from '@devographics/types'
 export const PercentageBucket: ViewDefinition = {
     getValue: facetBucket => facetBucket[BucketUnits.PERCENTAGE_BUCKET] || 0,
     steps: [removeNotApplicable, removeNoAnswer],
+    showLegend: true,
     component: props => {
         return (
-            <>
-                <Legend {...props} />
-                <Rows>
-                    {props.buckets.map((bucket, i) => (
-                        <Row key={bucket.id} bucket={bucket} {...props} rowComponent={FacetRow} />
-                    ))}
-                </Rows>
-            </>
+            <Rows>
+                {props.buckets.map((bucket, i) => (
+                    <Row key={bucket.id} bucket={bucket} {...props} rowComponent={FacetRow} />
+                ))}
+            </Rows>
         )
     }
 }

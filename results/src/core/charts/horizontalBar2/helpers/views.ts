@@ -1,5 +1,5 @@
 import { ChartState, Control, ViewDefinition, Views } from '../types'
-import { Bars, FacetBars, Boxplot as BoxplotIcon } from 'core/icons'
+import { Bars, FacetBars, Boxplot as BoxplotIcon, FacetCountsBars } from 'core/icons'
 import { ChartValues } from '../../multiItemsExperience/types'
 import {
     Average,
@@ -13,7 +13,7 @@ import {
 const controlIcons = {
     [Views.BOXPLOT]: BoxplotIcon,
     [Views.AVERAGE]: Bars,
-    [Views.FACET_COUNTS]: FacetBars,
+    [Views.FACET_COUNTS]: FacetCountsBars,
     [Views.COUNT]: Bars,
     [Views.PERCENTAGE_BUCKET]: FacetBars,
     [Views.PERCENTAGE_QUESTION]: Bars
