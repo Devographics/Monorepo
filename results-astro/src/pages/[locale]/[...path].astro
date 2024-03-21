@@ -20,6 +20,11 @@ import { getLocalesWithStrings } from "@devographics/i18n/server";
 
 /**
  * TODO: there is no ISR in Astro
+ * UNLESS we use Vercel ISR: https://docs.astro.build/en/guides/integrations-guide/vercel/#isr
+ * So it means we might want to remove this function altogether,
+ * and instead check if the current path is valid for each new request
+ * To be tested
+ *
  * We must either use static rendering for everything
  * Or SSR + HTTP cache for incremental rendering
  * @see https://github.com/withastro/roadmap/discussions/228
