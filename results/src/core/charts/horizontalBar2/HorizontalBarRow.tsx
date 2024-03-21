@@ -5,11 +5,14 @@ import { RowCommonProps, RowExtraProps } from '../common2/types'
 import take from 'lodash/take'
 import sum from 'lodash/sum'
 import { RowDataProps } from './types'
-import { getValue } from './helpers/other'
+import { getViewDefinition } from './helpers/views'
+import { getRowOffset } from './helpers/other'
 
 export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
     const { bucket, chartState, chartValues } = props
-    const value = getValue(bucket, chartState)
+    const viewDefinition = getViewDefinition(chartState.view)
+    const { getValue } = viewDefinition
+    const value = getValue(bucket)
     const width = (100 * value) / chartValues.maxOverallValue
     return (
         <RowWrapper {...props}>
@@ -28,20 +31,25 @@ export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProp
 }
 
 export const FacetRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
-    const { bucket, chartState, chartValues } = props
+    const { buckets, bucket, chartState, chartValues } = props
+    const viewDefinition = getViewDefinition(chartState.view)
+    const { getValue } = viewDefinition
     const { maxOverallValue } = chartValues
     const { facetBuckets } = bucket
+
+    const rowOffset = getRowOffset({ buckets, bucket, chartState })
+
     return (
         <RowWrapper {...props}>
             <div className="chart-faceted-bar">
                 {facetBuckets.map((facetBucket, index) => {
                     const { id } = facetBucket
-                    const value = getValue(facetBucket, chartState)
+                    const value = getValue(facetBucket)
                     const ratio = 100 / maxOverallValue
                     const width = value * ratio
                     const offset = sum(
                         take(
-                            facetBuckets.map(b => getValue(b, chartState) * ratio),
+                            facetBuckets.map(b => getValue(b) * ratio),
                             index
                         )
                     )
@@ -51,7 +59,7 @@ export const FacetRow = (props: RowDataProps & RowCommonProps & RowExtraProps) =
                             bucket={facetBucket}
                             chartState={chartState}
                             width={width}
-                            offset={offset}
+                            offset={offset - rowOffset}
                             cellIndex={index}
                             chartValues={chartValues}
                         />

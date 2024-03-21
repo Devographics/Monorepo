@@ -28,6 +28,8 @@ export const CUTOFF_ANSWERS = 'cutoff_answers'
 
 export const NOT_APPLICABLE = 'na'
 
+export const DEFAULT = 'default'
+
 export const DISCARDED_ANSWER = 'discarded_answer'
 
 export const UNSUPPORTED_LANGUAGE = 'unsupported_language' // e.g not english

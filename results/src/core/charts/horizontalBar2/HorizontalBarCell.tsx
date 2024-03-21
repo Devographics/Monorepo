@@ -3,13 +3,12 @@ import { ChartValues } from '../multiItemsExperience/types'
 import Tooltip from 'core/components/Tooltip'
 import { Bucket, FacetBucket } from '@devographics/types'
 import { ChartState } from './types'
-import { getValue } from './helpers/other'
 import { useColor } from './helpers/colors'
-import round from 'lodash/round'
 import T from 'core/i18n/T'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
-import { formatValue, isPercentage } from './helpers/labels'
+import { formatValue } from './helpers/labels'
+import { getViewDefinition } from './helpers/views'
 
 export const Cell = ({
     bucket,
@@ -27,12 +26,13 @@ export const Cell = ({
     cellIndex: number
 }) => {
     const { question, facetQuestion } = chartValues
-
+    const viewDefinition = getViewDefinition(chartState.view)
+    const { getValue } = viewDefinition
     const color = useColor({ id: bucket.id, question: facetQuestion })
     const { getString } = useI18n()
 
     const { id, count, entity } = bucket
-    const value = getValue(bucket, chartState)
+    const value = getValue(bucket)
     const style = {
         '--percentageValue': value,
         '--width': width,
@@ -47,6 +47,7 @@ export const Cell = ({
         entity
     })
 
+    // TODO: base this on actual size of element
     const showValue = value > 8
 
     const v = <span>{formatValue({ value, chartState, question: facetQuestion || question })}</span>

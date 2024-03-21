@@ -3,12 +3,12 @@ import { ColumnModes, OrderOptions } from '../common2/types'
 import { ChartValues } from '../multiItemsExperience/types'
 import { FacetItem } from 'core/filters/types'
 import { IconProps } from 'core/icons/IconWrapper'
-import { Bucket } from '@devographics/types'
+import { Bucket, FacetBucket } from '@devographics/types'
 import { BlockDefinition } from 'core/types'
 
 export type ChartState = {
-    sort: string
-    setSort: Dispatch<SetStateAction<string>>
+    sort: string | undefined
+    setSort: Dispatch<SetStateAction<string | undefined>>
     view: Views
     setView: Dispatch<SetStateAction<Views>>
     order: OrderOptions
@@ -25,6 +25,7 @@ export enum Views {
     BOXPLOT = 'percentilesByFacet',
     PERCENTAGE_BUCKET = 'percentageBucket',
     PERCENTAGE_QUESTION = 'percentageQuestion',
+    FACET_COUNTS = 'facetCounts',
     COUNT = 'count',
     AVERAGE = 'average'
 }
@@ -37,9 +38,19 @@ export type Control = {
     onClick: (e: SyntheticEvent) => void
 }
 
+export type GetValueType = (bucket: Bucket | FacetBucket) => number
+export type ViewDefinition = {
+    getValue?: GetValueType
+    steps?: Step[]
+    showLegend?: boolean
+    component: (props: ViewProps) => JSX.Element
+}
+
 export type ViewProps = {
     chartState: ChartState
     chartValues: ChartValues
     buckets: Bucket[]
     block: BlockDefinition
 }
+
+export type Step = (buckets: Bucket[]) => Bucket[]

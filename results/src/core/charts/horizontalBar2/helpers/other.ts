@@ -6,17 +6,17 @@ import {
     ResultsSubFieldEnum,
     SimplifiedSentimentOptions
 } from '@devographics/types'
-import { ChartState, Views } from '../types'
+import { ChartState, GetValueType, Step, Views } from '../types'
 import { HorizontalBarBlock2Props } from '../HorizontalBarBlock'
 import { BoxPlotRow, FacetRow, SingleBarRow } from '../HorizontalBarRow'
 import { FacetItem } from 'core/filters/types'
 import { usePageContext } from 'core/helpers/pageContext'
-import { Average } from '../views/Average'
-import { Boxplot } from '../views/Boxplot'
-import { Count } from '../views/Count'
-import { PercentageBucket } from '../views/PercentageBucket'
-import { PERCENTAGE_QUESTION } from '@devographics/constants'
-import { PercentageQuestion } from '../views/PercentageQuestion'
+import { applySteps } from './steps'
+import { getViewDefinition } from './views'
+import sortBy from 'lodash/sortBy'
+import take from 'lodash/take'
+import sumBy from 'lodash/sumBy'
+import { OrderOptions } from 'core/charts/common2/types'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -46,27 +46,40 @@ export const getChartCompletion = ({
 export const getChartBuckets = ({
     data,
     series,
-    block
-}: Pick<HorizontalBarBlock2Props, 'data' | 'series' | 'block'>) => {
+    block,
+    chartState
+}: Pick<HorizontalBarBlock2Props, 'data' | 'series' | 'block'> & { chartState: ChartState }) => {
+    const { view, sort, facet, order } = chartState
+    const { steps, getValue } = getViewDefinition(view)
     const currentEdition = getChartCurrentEdition({ data, series, block })
-    return currentEdition.buckets
-}
 
-export const getValue = (bucket: Bucket | FacetBucket, chartState: ChartState) => {
-    const { view } = chartState
-    const { count, percentageBucket, percentageQuestion, averageByFacet } = bucket
-    switch (view) {
-        case Views.AVERAGE:
-            return averageByFacet || 0
-        case Views.BOXPLOT:
-            return 999 || 0
-        case Views.PERCENTAGE_BUCKET:
-            return percentageBucket || 1
-        case Views.PERCENTAGE_QUESTION:
-            return percentageQuestion || 0
-        case Views.COUNT:
-            return count || 0
+    let buckets = currentEdition.buckets
+    if (steps) {
+        buckets = applySteps(buckets, steps)
     }
+    if (sort && getValue) {
+        if (facet) {
+            buckets = sortBy(buckets, bucket => {
+                // find the facet bucket targeted by the sort
+                const relevantFacetBucket = bucket.facetBuckets.find(fb => fb.id == sort)
+                if (!relevantFacetBucket) {
+                    return 0
+                } else {
+                    const value = getValue(relevantFacetBucket)
+                    return value
+                }
+            })
+        } else {
+            buckets = sortBy(buckets, bucket => {
+                const value = getValue(bucket)
+                return value
+            })
+        }
+        if (order === OrderOptions.DESC) {
+            buckets = buckets.toReversed()
+        }
+    }
+    return buckets
 }
 
 export const getRowComponent = (bucket: Bucket, chartState: ChartState) => {
@@ -106,15 +119,36 @@ export const useAllQuestionsMetadata = () => {
     return questions
 }
 
-const viewComponents = {
-    [Views.AVERAGE]: Average,
-    [Views.BOXPLOT]: Boxplot,
-    [Views.COUNT]: Count,
-    [Views.PERCENTAGE_BUCKET]: PercentageBucket,
-    [Views.PERCENTAGE_QUESTION]: PercentageQuestion
-}
+/*
 
-export const getViewComponent = ({ chartState }: { chartState: ChartState }) => {
-    const { view } = chartState
-    return viewComponents[view]
+Calculate how much to offset a row by to line up whichever column/cell the chart is sorted by
+
+*/
+export const getRowOffset = ({
+    buckets,
+    bucket,
+    chartState
+}: {
+    buckets: Bucket[]
+    bucket: Bucket
+    chartState: ChartState
+}) => {
+    const { view, sort } = chartState
+    const { getValue } = getViewDefinition(view)
+
+    if (getValue && [Views.PERCENTAGE_BUCKET, Views.FACET_COUNTS].includes(view) && sort) {
+        const getOffset = (bucket: Bucket) => {
+            const { facetBuckets } = bucket
+            const currentFacetBucketIndex = facetBuckets.findIndex(fb => fb.id === sort)
+            const previousFacetBuckets = take(facetBuckets, currentFacetBucketIndex)
+            const valuesSum = sumBy(previousFacetBuckets, fb => getValue(fb))
+            return valuesSum
+        }
+
+        const firstBucketOffset = getOffset(buckets[0])
+        const currentBucketOffset = getOffset(bucket)
+        return currentBucketOffset - firstBucketOffset
+    } else {
+        return 0
+    }
 }

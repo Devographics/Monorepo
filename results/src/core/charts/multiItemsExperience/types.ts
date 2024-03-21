@@ -62,7 +62,7 @@ export type ChartState = {
 }
 
 export type ChartValues = {
-    maxOverallValue: number
+    maxOverallValue?: number
     question: QuestionMetadata
     facetQuestion?: QuestionMetadata
 }

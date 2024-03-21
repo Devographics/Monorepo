@@ -1,41 +1,54 @@
-import { NOT_APPLICABLE, NO_ANSWER } from '@devographics/constants'
+import { DEFAULT, NOT_APPLICABLE, NO_ANSWER, OVERALL } from '@devographics/constants'
 import { QuestionMetadata } from '@devographics/types'
 import { useTheme } from 'styled-components'
 import colors from 'Theme/colors'
 
-export const defaultColor = '#ffffff33'
+export const neutralColor = '#ffffff33'
+
+export type ColorScale = {
+    [key: string]: string[]
+}
+
+export const useDefaultColorScale = () => {
+    const theme = useTheme()
+    return {
+        [DEFAULT]: [theme.colors.velocity[4], theme.colors.velocity[8]],
+        [NOT_APPLICABLE]: [neutralColor, neutralColor],
+        [NO_ANSWER]: [neutralColor, neutralColor],
+        [OVERALL]: [neutralColor, neutralColor]
+    } as ColorScale
+}
 
 export const useColorScale = ({ question }: { question: QuestionMetadata }) => {
     const theme = useTheme()
-    const chartScale = colors?.ranges?.[question.id]
-    const defaultColors = {
-        [NOT_APPLICABLE]: [defaultColor, defaultColor],
-        [NO_ANSWER]: [defaultColor, defaultColor]
-    }
-    if (chartScale) {
-        return { ...chartScale, ...defaultColors }
+    let colorScale = {} as ColorScale
+    const defaultColors = useDefaultColorScale()
+    const questionScale = colors?.ranges?.[question.id]
+
+    if (questionScale) {
+        colorScale = { ...questionScale, ...defaultColors }
     } else {
-        const chartScale = defaultColors as { [key: string]: string[] }
+        colorScale = defaultColors as { [key: string]: string[] }
         if (question.options) {
             if (question.optionsAreSequential) {
                 question.options.forEach((option, index) => {
                     const color = theme.colors.velocity[index]
-                    chartScale[option.id] = [color, color]
+                    colorScale[option.id] = [color, color]
                 })
             } else {
                 question.options.forEach((option, index) => {
                     const color = theme.colors.distinct[index]
-                    chartScale[option.id] = [color, color]
+                    colorScale[option.id] = [color, color]
                 })
             }
         }
-        return chartScale
     }
+    return colorScale
 }
 
 export const useColor = ({ question, id }: { question?: QuestionMetadata; id: string }) => {
     if (!question) {
-        return defaultColor
+        return neutralColor
     } else {
         const colorScale = useColorScale({ question })
         const color = colorScale[id]
@@ -45,7 +58,7 @@ export const useColor = ({ question, id }: { question?: QuestionMetadata; id: st
             console.warn(
                 `Could not find color for cell id ${id} in colorScale ${JSON.stringify(colorScale)}`
             )
-            return defaultColor
+            return neutralColor
         }
     }
 }

@@ -1,17 +1,20 @@
 import React from 'react'
 import { SingleBarRow } from '../HorizontalBarRow'
-import { ViewProps } from '../types'
-import { Row, Rows, SeriesHeading } from 'core/charts/common2'
+import { ViewDefinition } from '../types'
+import { Row, Rows } from 'core/charts/common2'
+import { removeNoAnswer } from '../helpers/steps'
+import { BucketUnits } from '@devographics/types'
 
-export const Count = ({ buckets, ...rest }: ViewProps) => {
-    return (
-        <>
-            <SeriesHeading />
+export const Count: ViewDefinition = {
+    getValue: bucket => bucket[BucketUnits.COUNT] || 0,
+    steps: [removeNoAnswer],
+    component: props => {
+        return (
             <Rows>
-                {buckets.map((bucket, i) => (
-                    <Row key={bucket.id} bucket={bucket} {...rest} rowComponent={SingleBarRow} />
+                {props.buckets.map((bucket, i) => (
+                    <Row key={bucket.id} bucket={bucket} {...props} rowComponent={SingleBarRow} />
                 ))}
             </Rows>
-        </>
-    )
+        )
+    }
 }

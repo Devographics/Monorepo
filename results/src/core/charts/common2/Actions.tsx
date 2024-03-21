@@ -9,10 +9,10 @@ import { ShareIcon, DataIcon, FiltersIcon } from 'core/icons'
 import { CommonProps } from './types'
 
 const actions = [
-    {
-        id: 'customize',
-        icon: FiltersIcon
-    },
+    // {
+    //     id: 'customize',
+    //     icon: FiltersIcon
+    // },
     {
         id: 'data',
         icon: DataIcon

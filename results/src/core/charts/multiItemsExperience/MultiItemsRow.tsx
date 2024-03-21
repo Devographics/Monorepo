@@ -39,50 +39,60 @@ export const Row = ({
     const groupedTotals = getGroupedTotals({ item, columnIds })
 
     return (
-        <RowWrapper bucket={item as unknown as Bucket} chartState={chartState}>
-            <div className="multiexp-cells">
-                {combinedBuckets.map((combinedBucket, i) => {
-                    const cellDimension = cellDimensions.find(d => d.id === combinedBucket.id)
-                    if (!cellDimension) {
-                        return null
-                    }
-                    const { offset, width, columnId } = cellDimension || {}
-                    return (
-                        <Cell
-                            key={item.id + combinedBucket.id + i}
-                            combinedBucket={combinedBucket}
-                            chartState={chartState}
-                            width={width}
-                            offset={offset}
-                            groupedTotals={groupedTotals}
-                            columnId={columnId}
-                        />
-                    )
-                })}
-            </div>
+        <RowWrapper
+            bucket={item as unknown as Bucket}
+            chartState={chartState}
+            component={() => (
+                <>
+                    <div className="multiexp-cells">
+                        {combinedBuckets.map((combinedBucket, i) => {
+                            const cellDimension = cellDimensions.find(
+                                d => d.id === combinedBucket.id
+                            )
+                            if (!cellDimension) {
+                                return null
+                            }
+                            const { offset, width, columnId } = cellDimension || {}
+                            return (
+                                <Cell
+                                    key={item.id + combinedBucket.id + i}
+                                    combinedBucket={combinedBucket}
+                                    chartState={chartState}
+                                    width={width}
+                                    offset={offset}
+                                    groupedTotals={groupedTotals}
+                                    columnId={columnId}
+                                />
+                            )
+                        })}
+                    </div>
 
-            <div className="multiexp-column-totals">
-                {columnIds.map(columnId => {
-                    const cellsInColumn = cellDimensions.filter(d => d.ids.includes(columnId))
-                    const firstCellInColumn = cellsInColumn.at(0)
-                    const lastCellInColumn = cellsInColumn.at(-1)
-                    const width =
-                        (lastCellInColumn?.offset || 0) +
-                        (lastCellInColumn?.width || 0) -
-                        (firstCellInColumn?.offset || 0)
-                    const offset = firstCellInColumn?.offset || 0
+                    <div className="multiexp-column-totals">
+                        {columnIds.map(columnId => {
+                            const cellsInColumn = cellDimensions.filter(d =>
+                                d.ids.includes(columnId)
+                            )
+                            const firstCellInColumn = cellsInColumn.at(0)
+                            const lastCellInColumn = cellsInColumn.at(-1)
+                            const width =
+                                (lastCellInColumn?.offset || 0) +
+                                (lastCellInColumn?.width || 0) -
+                                (firstCellInColumn?.offset || 0)
+                            const offset = firstCellInColumn?.offset || 0
 
-                    return (
-                        <ColumnTotal
-                            key={columnId}
-                            columnId={columnId}
-                            groupedTotals={groupedTotals}
-                            width={width}
-                            offset={offset}
-                        />
-                    )
-                })}
-            </div>
-        </RowWrapper>
+                            return (
+                                <ColumnTotal
+                                    key={columnId}
+                                    columnId={columnId}
+                                    groupedTotals={groupedTotals}
+                                    width={width}
+                                    offset={offset}
+                                />
+                            )
+                        })}
+                    </div>
+                </>
+            )}
+        />
     )
 }
