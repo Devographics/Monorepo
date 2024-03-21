@@ -6,6 +6,7 @@ import take from 'lodash/take'
 import sum from 'lodash/sum'
 import { RowDataProps } from './types'
 import { getViewDefinition } from './helpers/views'
+import { getRowOffset } from './helpers/other'
 
 export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
     const { bucket, chartState, chartValues } = props
@@ -30,11 +31,14 @@ export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProp
 }
 
 export const FacetRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
-    const { bucket, chartState, chartValues } = props
+    const { buckets, bucket, chartState, chartValues } = props
     const viewDefinition = getViewDefinition(chartState.view)
     const { getValue } = viewDefinition
     const { maxOverallValue } = chartValues
     const { facetBuckets } = bucket
+
+    const rowOffset = getRowOffset({ buckets, bucket, chartState })
+
     return (
         <RowWrapper {...props}>
             <div className="chart-faceted-bar">
@@ -55,7 +59,7 @@ export const FacetRow = (props: RowDataProps & RowCommonProps & RowExtraProps) =
                             bucket={facetBucket}
                             chartState={chartState}
                             width={width}
-                            offset={offset}
+                            offset={offset - rowOffset}
                             cellIndex={index}
                             chartValues={chartValues}
                         />

@@ -1,6 +1,8 @@
-import React, { ReactNode, useState } from 'react'
+import React, { useState } from 'react'
 import { RowCommonProps } from '../common2/types'
 import { RowDataProps } from '../horizontalBar2/types'
+
+export const ROW_HEIGHT = 30
 
 export const Row = (props: { rowComponent: JSX.Element } & RowDataProps & RowCommonProps) => {
     const [showGroupedBuckets, setShowGroupedBuckets] = useState(false)

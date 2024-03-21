@@ -86,27 +86,6 @@
         white-space: nowrap;
     }
 }
-.column-heading-sort {
-    opacity: 0.7;
-    &-enabled {
-        opacity: 1;
-    }
-}
-
-.order-asc,
-.order-desc {
-    opacity: 0.5;
-}
-.order-asc {
-    .column-heading-order-asc.column-heading-sort-enabled & {
-        opacity: 1;
-    }
-}
-.order-desc {
-    .column-heading-order-desc.column-heading-sort-enabled & {
-        opacity: 1;
-    }
-}
 .multiexp-cells {
     position: relative;
     height: var(--cellHeight);

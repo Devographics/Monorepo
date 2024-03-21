@@ -7,8 +7,8 @@ import { Bucket, FacetBucket } from '@devographics/types'
 import { BlockDefinition } from 'core/types'
 
 export type ChartState = {
-    sort: string
-    setSort: Dispatch<SetStateAction<string>>
+    sort: string | undefined
+    setSort: Dispatch<SetStateAction<string | undefined>>
     view: Views
     setView: Dispatch<SetStateAction<Views>>
     order: OrderOptions
@@ -38,8 +38,9 @@ export type Control = {
     onClick: (e: SyntheticEvent) => void
 }
 
+export type GetValueType = (bucket: Bucket | FacetBucket) => number
 export type ViewDefinition = {
-    getValue?: (bucket: Bucket | FacetBucket) => number
+    getValue?: GetValueType
     steps?: Step[]
     component: (props: ViewProps) => JSX.Element
 }

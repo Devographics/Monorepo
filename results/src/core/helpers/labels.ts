@@ -1,5 +1,4 @@
 import {
-    NOT_APPLICABLE,
     NO_MATCH,
     NO_ANSWER,
     OTHER_ANSWERS,
@@ -7,8 +6,8 @@ import {
     OVERALL,
     INSUFFICIENT_DATA
 } from '@devographics/constants'
-import { Entity, OptionMetadata, QuestionMetadata, SectionMetadata } from '@devographics/types'
-import { StringTranslator } from 'core/types'
+import { StringTranslator } from '@devographics/react-i18n'
+import { Entity } from '@devographics/types'
 
 export const getItemLabel = (options: {
     id: string | number
@@ -56,6 +55,7 @@ export const getItemLabel = (options: {
         label = getString(key).t
     } else {
         key = i18nNamespace === 'features' ? `features.${id}` : `options.${i18nNamespace}.${id}`
+
         const s = getString(key, values)
 
         if (label_) {
@@ -72,5 +72,7 @@ export const getItemLabel = (options: {
     if (extraLabel) {
         label = `${label}, ${extraLabel}`
     }
-    return { key, label }
+    const shortLabelObject = getString(key + '.short', values, label?.toString())
+    const shortLabel = shortLabelObject.tClean || shortLabelObject.t
+    return { key, label, shortLabel }
 }

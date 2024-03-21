@@ -4,9 +4,9 @@ import { useI18n } from '@devographics/react-i18n'
 import { fontSize, fontWeight } from 'core/theme'
 import Tip from 'core/components/Tooltip'
 import { Bucket, PercentileData, Percentiles } from '@devographics/types'
+import { useDefaultColorScale } from '../../helpers/colors'
+import { DEFAULT } from '@devographics/constants'
 const STROKE_WIDTH = 1
-
-const BOX_HEIGHT = 30
 
 export type BoxProps = {
     rowHeight: number
@@ -19,9 +19,8 @@ export type BoxProps = {
     label: string
     contentWidth: number
     bucket: Bucket
+    height: number
 }
-
-export type HorizontalBoxProps = BoxProps & { height: number }
 
 export const HorizontalBox = ({
     i18nNamespace,
@@ -32,7 +31,7 @@ export const HorizontalBox = ({
     bucket,
     rowHeight,
     labelFormatter
-}: HorizontalBoxProps) => {
+}: BoxProps) => {
     const { getString } = useI18n()
 
     const { p0, p10, p25, p50, p75, p90, p100 } = boxData
@@ -56,7 +55,12 @@ export const HorizontalBox = ({
         labelFormatter
     }
 
-    const gradient = ['red', 'blue']
+    const colorScale = useDefaultColorScale()
+
+    const gradient = colorScale[bucket.id] || colorScale[DEFAULT]
+    const gradientId = `gradient_${bucket.id}`
+
+    console.log(bucket.id, gradient)
     return bucket.hasInsufficientData ? (
         <g>
             <InsufficientData_
@@ -72,7 +76,7 @@ export const HorizontalBox = ({
     ) : (
         <>
             <defs>
-                <linearGradient id="gradient">
+                <linearGradient id={gradientId}>
                     <stop offset="0%" stopColor={gradient[0]} />
                     <stop offset="100%" stopColor={gradient[1]} />
                 </linearGradient>
@@ -102,23 +106,16 @@ export const HorizontalBox = ({
             {/* box */}
             <rect
                 x={p25}
-                y={rowHeight / 2 - BOX_HEIGHT / 2}
+                y={0}
                 width={p75 - p25}
-                height={BOX_HEIGHT}
+                height={rowHeight}
                 stroke={stroke}
                 // fill={fill}
-                fill={`url(#gradient)`}
+                fill={`url(#${gradientId})`}
             />
 
             {/* 50th percentile */}
-            <line
-                x1={p50}
-                x2={p50}
-                y1={rowHeight / 2 - BOX_HEIGHT / 2}
-                y2={rowHeight / 2 + BOX_HEIGHT / 2}
-                stroke={stroke}
-                strokeWidth={STROKE_WIDTH * 3}
-            />
+            <line x1={p50} x2={p50} y1={0} y2={0} stroke={stroke} strokeWidth={STROKE_WIDTH * 3} />
             <Tip
                 trigger={
                     <g transform={`translate(${p50}, ${rowHeight / 2})`} ref={p50Ref}>

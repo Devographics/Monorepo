@@ -1,4 +1,4 @@
-import { ChartState, Control, Views } from '../types'
+import { ChartState, Control, ViewDefinition, Views } from '../types'
 import { Bars, FacetBars, Boxplot as BoxplotIcon } from 'core/icons'
 import { ChartValues } from '../../multiItemsExperience/types'
 import {
@@ -47,7 +47,7 @@ export const getControls = ({
     return controls
 }
 
-const viewComponents = {
+export const viewDefinitions: { [key: string]: ViewDefinition } = {
     // regular views
     [Views.PERCENTAGE_QUESTION]: PercentageQuestion,
     [Views.COUNT]: Count,
@@ -63,5 +63,5 @@ export const getViewComponent = (view: Views) => {
 }
 
 export const getViewDefinition = (view: Views) => {
-    return viewComponents[view]
+    return viewDefinitions[view]
 }

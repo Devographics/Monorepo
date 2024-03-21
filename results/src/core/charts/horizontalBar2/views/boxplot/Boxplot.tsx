@@ -1,7 +1,8 @@
+import './Boxplot.scss'
 import React, { useMemo, useRef } from 'react'
 import { RowDataProps, ViewDefinition, ViewProps } from '../../types'
-import { Row, RowWrapper, Rows } from 'core/charts/common2'
-import { HorizontalBox, HorizontalBoxProps } from './Box'
+import { ROW_HEIGHT, Row, RowWrapper, Rows } from 'core/charts/common2'
+import { BoxProps, HorizontalBox } from './Box'
 import { RowCommonProps, RowExtraProps } from 'core/charts/common2/types'
 import { useTheme } from 'styled-components'
 import * as d3 from 'd3'
@@ -9,16 +10,20 @@ import AxisBottom from './Axis'
 import { BlockLegend } from 'core/types'
 import { useWidth } from 'core/charts/common2/helpers'
 import { useBoxplotData, useScales } from './helpers'
+import { formatValue } from '../../helpers/labels'
 
-export const MARGIN = { top: 0, right: 120, bottom: 50, left: 120 }
-export const ROW_HEIGHT = 60
-export const PIXEL_PER_TICKS = 130
-export const MIN_CHART_WIDTH = 600
+const PIXEL_PER_TICKS = 130
 
 const BoxplotView = (viewProps: ViewProps) => {
+    const { chartState, chartValues } = viewProps
+    const { question, facetQuestion } = chartValues
     const theme = useTheme()
     const { buckets } = viewProps
-    const contentHeight = 50
+    const contentHeight = ROW_HEIGHT
+
+    if (!facetQuestion) {
+        return null
+    }
 
     // note: we need the bottom axis to be able to calculate the content width
     const contentRef = useRef<HTMLDivElement>(null)
@@ -35,7 +40,9 @@ const BoxplotView = (viewProps: ViewProps) => {
         return { chartMin, chartMax, groups }
     }, [buckets])
 
-    const labelFormatter = (s: string) => 'foo'
+    const labelFormatter = (value: number) =>
+        formatValue({ value, chartState, question: facetQuestion })
+
     const legends = [] as BlockLegend[]
 
     const { xScale, yScale } = useScales({ chartMax, contentHeight, contentWidth, groups })
@@ -48,21 +55,20 @@ const BoxplotView = (viewProps: ViewProps) => {
         contentHeight,
         xScale,
         yScale,
-        contentWidth,
-        rowComponent: BoxplotRow
+        contentWidth
     }
 
     return (
-        <>
+        <div className="chart-boxplot-view">
             <Rows>
                 {buckets.map((bucket, i) => (
-                    <Row key={bucket.id} bucket={bucket} {...rowProps} />
+                    <Row key={bucket.id} bucket={bucket} {...rowProps} rowComponent={BoxplotRow} />
                 ))}
             </Rows>
             <div className="chart-axis-bottom">
                 <div></div>
-                <div ref={contentRef}>
-                    <svg width="100%">
+                <div className="chart-row-content" ref={contentRef}>
+                    <svg className="boxplot-svg">
                         <AxisBottom
                             xScale={xScale}
                             pixelsPerTick={PIXEL_PER_TICKS}
@@ -74,7 +80,7 @@ const BoxplotView = (viewProps: ViewProps) => {
                 </div>
                 <div></div>
             </div>
-        </>
+        </div>
     )
 }
 
@@ -84,7 +90,10 @@ type BoxplotRowProps = {
 }
 
 const BoxplotRow = (
-    props: { labelFormatter: (s: string) => string; contentWidth: number } & BoxplotRowProps &
+    props: {
+        labelFormatter: (s: string) => string
+        contentWidth: number
+    } & BoxplotRowProps &
         RowDataProps &
         RowCommonProps &
         RowExtraProps
@@ -99,7 +108,7 @@ const BoxplotRow = (
         return null
     }
 
-    const boxProps: HorizontalBoxProps = {
+    const boxProps: BoxProps = {
         i18nNamespace: 'foo',
         percentilesData: bucket.percentilesByFacet,
         stroke: theme.colors.text,
@@ -112,7 +121,7 @@ const BoxplotRow = (
 
     return (
         <RowWrapper {...props}>
-            <svg width="100%">
+            <svg style={{ height: ROW_HEIGHT }} className="boxplot-svg">
                 <HorizontalBox {...boxProps} />
             </svg>
         </RowWrapper>

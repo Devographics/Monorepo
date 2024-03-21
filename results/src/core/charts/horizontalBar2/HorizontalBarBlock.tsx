@@ -29,8 +29,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     // const { getString } = useI18n()
     const chartState = useChartState({ facetQuestion })
     const className = `foo`
-    const view = getViewDefinition(chartState.view)
-    const buckets = getChartBuckets({ ...props, steps: view.steps })
+    const buckets = getChartBuckets({ ...props, chartState })
 
     const chartValues = useChartValues({ buckets, chartState, block, question })
     const controls = getControls({ chartState, chartValues })
@@ -44,9 +43,9 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 
     return (
         <div className={className}>
-            <pre>
+            {/* <pre>
                 <code>{JSON.stringify(chartState, null, 2)}</code>
-            </pre>
+            </pre> */}
             {controls.length > 0 && <Controls controls={controls} {...commonProps} />}
             <View {...commonProps} />
 
