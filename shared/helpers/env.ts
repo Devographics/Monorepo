@@ -4,6 +4,7 @@ import config_ from './variables.yml'
 export enum EnvVar {
     APP_NAME = 'APP_NAME',
     API_URL = 'API_URL',
+    APP_URL = 'APP_URL',
     MONGO_PRIVATE_URI = 'MONGO_PRIVATE_URI',
     MONGO_PRIVATE_URI_READONLY = 'MONGO_PRIVATE_URI_READONLY',
     MONGO_PRIVATE_DB = 'MONGO_PRIVATE_DB',

@@ -43,7 +43,6 @@ export const getStaticPaths = (async () => {
     sitemap.map((s) => s.path),
   );
   return sitemap.map((pageDefinition) => {
-    console.log("PATH", removeSlash(pageDefinition.path));
     return {
       params: {
         path:
@@ -51,8 +50,6 @@ export const getStaticPaths = (async () => {
             ? undefined
             : removeSlash(pageDefinition.path),
         // TODO: generate for each possible locale here
-        // TODO: setup a home page that redirects to "en-US" or the user locale from the client
-        // + an Edgle middleware that does that server-side when hosting on Vercel directly
         locale: "en-US",
       },
       props: {

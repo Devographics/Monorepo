@@ -131,7 +131,6 @@ export function pipeline<T>() {
             return this
         },
         steps: function (...s: Array<FetchPipelineStep<T>>) {
-            console.log("this", this)
             this.p.push(...s)
             return this
         },
