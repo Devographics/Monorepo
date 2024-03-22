@@ -9,7 +9,8 @@
 
 .chart-row,
 .chart-axis-bottom,
-.chart-facet {
+.chart-heading,
+.chart-legend {
     align-items: center;
     @include small {
         display: flex;
@@ -18,7 +19,7 @@
     }
     @include medium-large {
         display: grid;
-        grid-template-columns: 250px minmax(0, 1fr) 100px;
+        grid-template-columns: 220px minmax(0, 1fr) 100px;
         gap: 10px;
     }
     &-grouped {
@@ -26,6 +27,14 @@
     }
     &-overall {
         background: #ffffff22;
+    }
+}
+.chart-heading {
+    &-question {
+    }
+    &-facet {
+        grid-column-start: 2;
+        grid-column-end: 4;
     }
 }
 .chart-facet {
@@ -46,6 +55,8 @@
     height: var(--rowHeight);
     display: flex;
     align-items: center;
+    font-size: 0.9rem;
+    font-weight: normal;
 }
 .chart-row-content {
     height: calc(var(--rowHeight) * 1px);
@@ -66,6 +77,7 @@
 }
 
 .chart-controls {
+    flex: 1;
     .ButtonGroup {
         width: 100%;
         display: flex;
@@ -78,4 +90,16 @@
 .chart-actions {
     display: flex;
     justify-content: center;
+}
+
+.chart-facet-question {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.chart-heading-facet {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }

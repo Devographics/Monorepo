@@ -8,7 +8,7 @@ import { BucketUnits } from '@devographics/types'
 
 export const FacetCounts: ViewDefinition = {
     getValue: facetBucket => facetBucket[BucketUnits.COUNT] || 0,
-    steps: [removeOverall, removeNotApplicable, removeNoAnswer],
+    steps: [removeOverall, removeNoAnswer],
     showLegend: true,
     component: props => {
         return (

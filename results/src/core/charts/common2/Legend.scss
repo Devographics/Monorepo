@@ -1,13 +1,16 @@
 .chart-legend {
     // border: 1px solid white;
     // padding: 10px;
+    &-inner {
+        // border: 1px solid #ffffff33;
+        // padding: 10px;
 
-    border: 1px solid #ffffff33;
-    padding: 10px;
-
-    display: flex;
-    gap: 10px;
-    justify-content: space-between;
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+        grid-column-start: 2;
+        grid-column-end: 4;
+    }
     &-heading {
         margin: 0;
     }

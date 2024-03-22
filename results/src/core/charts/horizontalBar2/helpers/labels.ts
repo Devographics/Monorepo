@@ -62,10 +62,12 @@ export const formatValue = ({
     const { view } = chartState
     if (isPercentage(view)) {
         return `${round(value, 1)}%`
-    } else if (isDollar(question)) {
-        return usdFormatter.format(value)
-    } else if (isYen(question)) {
-        return `¥${largeNumberFormatter(value)}`
+    } else if ([Views.BOXPLOT, Views.AVERAGE].includes(view)) {
+        if (isDollar(question)) {
+            return usdFormatter.format(value)
+        } else if (isYen(question)) {
+            return `¥${largeNumberFormatter(value)}`
+        }
     }
     return value.toString()
 }
