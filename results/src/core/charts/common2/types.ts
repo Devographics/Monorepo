@@ -4,6 +4,8 @@ import { ChartValues } from '../multiItemsExperience/types'
 import { BlockDefinition } from 'core/types'
 import { ChartState } from '../horizontalBar2/types'
 
+export type RowComponent = (props: any) => JSX.Element | null
+
 export type RowCommonProps = {
     buckets: Bucket[]
     bucket: Bucket

@@ -27,6 +27,7 @@ const ThemedLayout = (props: LayoutProps) => {
     const style = {
         '--backgroundColor': colors.background,
         '--backgroundBackgroundColor': colors.backgroundBackground,
+        '--backgroundAltColor': colors.backgroundAlt,
         '--borderColor': colors.border,
         '--linkColor': colors.link
     }

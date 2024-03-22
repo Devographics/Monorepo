@@ -35,7 +35,7 @@ export const FacetQuestion = ({
                             entities
                         })}
                     </span>
-                    <QuestionIcon />
+                    <QuestionIcon size="petite" />
                 </div>
             }
             contents={translation}

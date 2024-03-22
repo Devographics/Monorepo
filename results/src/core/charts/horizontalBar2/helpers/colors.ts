@@ -46,19 +46,19 @@ export const useColorScale = ({ question }: { question: QuestionMetadata }) => {
     return colorScale
 }
 
-export const useColor = ({ question, id }: { question?: QuestionMetadata; id: string }) => {
+export const useGradient = ({ question, id }: { question?: QuestionMetadata; id: string }) => {
     if (!question) {
-        return neutralColor
+        return [neutralColor, neutralColor]
     } else {
         const colorScale = useColorScale({ question })
         const color = colorScale[id]
         if (color) {
-            return color[0]
+            return color
         } else {
             console.warn(
                 `Could not find color for cell id ${id} in colorScale ${JSON.stringify(colorScale)}`
             )
-            return neutralColor
+            return [neutralColor, neutralColor]
         }
     }
 }

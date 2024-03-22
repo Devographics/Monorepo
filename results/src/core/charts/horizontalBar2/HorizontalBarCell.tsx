@@ -3,7 +3,6 @@ import { ChartValues } from '../multiItemsExperience/types'
 import Tooltip from 'core/components/Tooltip'
 import { Bucket, FacetBucket } from '@devographics/types'
 import { ChartState } from './types'
-import { useColor } from './helpers/colors'
 import T from 'core/i18n/T'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
@@ -16,7 +15,8 @@ export const Cell = ({
     chartValues,
     width,
     offset,
-    cellIndex
+    cellIndex,
+    gradient
 }: {
     bucket: Bucket | FacetBucket
     chartState: ChartState
@@ -24,11 +24,11 @@ export const Cell = ({
     width: number
     offset: number
     cellIndex: number
+    gradient: string[]
 }) => {
     const { question, facetQuestion } = chartValues
     const viewDefinition = getViewDefinition(chartState.view)
     const { getValue } = viewDefinition
-    const color = useColor({ id: bucket.id, question: facetQuestion })
     const { getString } = useI18n()
 
     const { id, count, entity } = bucket
@@ -37,7 +37,8 @@ export const Cell = ({
         '--percentageValue': value,
         '--width': width,
         '--offset': offset,
-        '--color': color
+        '--color1': gradient[0],
+        '--color2': gradient[1]
     }
 
     const { key, label } = getItemLabel({

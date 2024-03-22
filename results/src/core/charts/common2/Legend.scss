@@ -21,14 +21,14 @@
         align-items: center;
         gap: 5px;
         white-space: nowrap;
-        background: var(--color);
+        background: linear-gradient(to left, var(--color1), var(--color2));
         border: 0;
         font-size: 0.8rem;
     }
 }
 .legend-item-color {
     display: none;
-    background: var(--color);
+    background: linear-gradient(to left, var(--color1), var(--color2));
     height: 12px;
     width: 12px;
     border: 1px solid white;

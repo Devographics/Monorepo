@@ -2,7 +2,7 @@ import './Legend.scss'
 import React from 'react'
 import { ChartValues } from '../multiItemsExperience/types'
 import { OptionMetadata } from '@devographics/types'
-import { useColorScale } from '../horizontalBar2/helpers/colors'
+import { neutralColor, useColorScale } from '../horizontalBar2/helpers/colors'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import { getQuestionOptions } from '../horizontalBar2/helpers/options'
@@ -38,7 +38,7 @@ export const Legend = ({
                             chartState={chartState}
                             chartValues={chartValues}
                             option={option}
-                            color={colorScale[option.id]}
+                            gradient={colorScale?.[option.id] || [neutralColor, neutralColor]}
                         />
                     ))}
                 </div>
@@ -50,12 +50,12 @@ export const Legend = ({
 const LegendItem = ({
     chartState,
     option,
-    color,
+    gradient,
     chartValues
 }: {
     chartState: ChartState
     option: OptionMetadata
-    color: string
+    gradient: string[]
     chartValues: ChartValues
 }) => {
     const { getString } = useI18n()
@@ -76,7 +76,8 @@ const LegendItem = ({
     const orderLabel = getString(`charts.order.${order}`)?.t
 
     const style = {
-        '--color': color[0]
+        '--color1': gradient[0],
+        '--color2': gradient[1]
     }
     return (
         <div style={style} className="legend-item">

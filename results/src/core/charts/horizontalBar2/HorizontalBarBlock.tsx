@@ -61,17 +61,17 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                 <div className="chart-heading-question">
                     {/* {getBlockTitle({ block, pageContext, getString, entities })} */}
                 </div>
-                <div className="chart-heading-facet">
-                    {facetQuestion && (
+                {facetQuestion && (
+                    <div className="chart-heading-facet">
                         <FacetQuestion
                             facetQuestion={facetQuestion}
                             pageContext={pageContext}
                             entities={entities}
                         />
-                    )}
 
-                    {controls.length > 0 && <Controls controls={controls} {...commonProps} />}
-                </div>
+                        {controls.length > 0 && <Controls controls={controls} {...commonProps} />}
+                    </div>
+                )}
             </div>
             {viewDefinition.showLegend && <Legend {...commonProps} />}
 
