@@ -13,6 +13,8 @@ export async function rscIntlContext({
   localeId: string;
   contexts?: Array<string>;
 }) {
+  // TODO: this is using a legacy setup, instead rely on @devographics/i18n like we do in Astro
+
   // TODO: if Next.js ever lands a "params()" equivalent to "cookies()" and "headers()",
   // use it here instead of passing the localeId via argument
   // 1. feed the string registry

@@ -15,6 +15,9 @@ declare namespace App {
         survey: import("@devographics/types").EditionMetadata
         sitemap: import("./lib/sitemap").Sitemap
         pageDefinition: import("./lib/sitemap").PageDefinition
-        theme: import("./lib/theme").Theme
+        theme: import("./lib/theme").Theme,
+        i18n: {
+            t: import("@devographics/i18n").StringTranslator
+        }
     }
 }
