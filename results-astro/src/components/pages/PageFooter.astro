@@ -1,0 +1,111 @@
+---
+import { spacing, fontSize, mq } from "@/lib/theme";
+import Button from "@/components/ui/Button.astro";
+const { pageContext, survey, i18n } = Astro.locals;
+const { previous, next } = pageContext;
+const {
+  issuesUrl = "https://github.com/Devographics/Monorepo/issues",
+  discordUrl = "https://discord.gg/zRDb35jfrt",
+} = survey;
+---
+
+<style
+  set:text={`
+div.nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: ${spacing()};
+    align-items: center;
+    justify-content: center;
+}
+footer {
+    @media ${mq.small} {
+        margin-top: ${spacing(4)};
+    }
+    @media ${mq.mediumLarge} {
+        margin-top: ${spacing(6)};
+    }
+}
+div.notes {
+    font-size: ${fontSize("small")};
+    text-align: center;
+
+    @media ${mq.small} {
+        margin-top: ${spacing(4)};
+    }
+    @media ${mq.mediumLarge} {
+        margin-top: ${spacing(6)};
+    }
+}
+button.footer-link {
+    @media ${mq.small} {
+        display: block;
+        text-align: center;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 100%;
+    }
+}
+button.footer-link.previous-link {
+    flex: 1 1 min-content;
+
+    @media ${mq.mediumLarge} {
+        flex: 0 1 max-content;
+    }
+
+}
+button.footer-link.next-link  {
+    flex: 1 1 min-content;
+    @media ${mq.mediumLarge} {
+        flex: 0 1 max-content;
+    }
+}
+span.link-label {
+    @media ${mq.small} {
+        display: none;
+    }
+}
+`}
+></style>
+<footer>
+  <div class="nav">
+    {
+      previous && (
+        <a href={previous.path}>
+          <Button class="footer-link previous-link PageFooter__Link PageFooter__Link--previous">
+            «{" "}
+            <span class="link-label">
+              <T k="page.previous" />
+            </span>{" "}
+            <PageLabel page={previous} />
+          </Button>
+        </a>
+      )
+    }
+    {
+      next && (
+        <a href={next.path}>
+          <Button class="footer-link next-link PageFooter__Link PageFooter__Link--next Button">
+            <span class="link-label">
+              <T k="page.next" />
+            </span>{" "}
+            <PageLabel page={next} /> »
+          </Button>
+        </a>
+      )
+    }
+  </div>
+  <div class="notes">
+    <T k="general.leave_issue" values={{ link: issuesUrl }} html={true} />{" "}
+    <T k="general.join_discord" values={{ link: discordUrl }} html={true} />
+    {
+      i18n.locale.id !== "en-US" && (
+        <>
+          <br />
+          <T k="general.translator_mode" />{" "}
+        </>
+      )
+    }
+  </div>
+</footer>

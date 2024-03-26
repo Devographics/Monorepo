@@ -1,4 +1,4 @@
-import { type SizeKeys, getTheme } from "./getTheme";
+import { type SizeKeys, type WeightKeys, getTheme } from "./getTheme";
 
 // TODO: we can't actually load that, we need CSS variables instead
 export const secondaryFontMixin = () => `
@@ -17,3 +17,7 @@ export const fontSize =
         }
         return themeSize
     }
+
+export const fontWeight =
+    (weight: WeightKeys) =>
+        getTheme().typography.weight[weight]

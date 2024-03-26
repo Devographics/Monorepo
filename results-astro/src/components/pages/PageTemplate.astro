@@ -22,9 +22,12 @@ import PageHeader from "@/components/pages/PageHeader.astro";
 interface Props {
   showTitle?: boolean;
 }
+const { i18n, pageContext } = Astro.locals;
+const { is_hidden } = pageContext;
 const { showTitle } = Astro.props;
 ---
 
 <main>
   {showTitle && <PageHeader />}
+  {!is_hidden && <PageFooter />}
 </main>

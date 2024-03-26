@@ -31,6 +31,7 @@ export interface StringTranslatorResult {
     key?: string
     t: string
     tHtml?: string
+    /** <form foo="bar"> clean version would be 'form foo="bar"', useful eg for tooltips */
     tClean?: string
     fallback?: string
 }

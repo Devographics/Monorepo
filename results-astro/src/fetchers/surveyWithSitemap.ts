@@ -27,5 +27,9 @@ export async function astroSurveyWithRawSitemap() {
     const surveyId = getEnvVar(EnvVar.SURVEYID);
     const surveyWithSitemapRes = await fetchEditionSitemap({ editionId, surveyId });
     surveyWithSitemap = surveyWithSitemapRes.data
+
+    // set default values
+    surveyWithSitemap.issuesUrl = surveyWithSitemap.issuesUrl || 'https://github.com/Devographics/Monorepo/issues'
+    surveyWithSitemap.discordUrl = surveyWithSitemap.discordUrl || 'https://discord.gg/zRDb35jfrt'
     return surveyWithSitemap
 }

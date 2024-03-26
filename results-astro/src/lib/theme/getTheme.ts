@@ -8,14 +8,50 @@ export type SizeKeys =
     | 'largest'
     | 'huge'
     | "largerest"
+
+export type WeightKeys = 'light' | 'medium' | 'bold'
+
+export type ColorKeys =
+    | 'background'
+    | 'backgroundBackground'
+    | 'backgroundForeground'
+    | 'backgroundAlt'
+    | 'backgroundAlt2'
+    | 'backgroundInverted'
+    | 'backgroundInvertedAlt'
+    | 'text'
+    | 'textAlt'
+    | 'textInverted'
+    | 'textHighlight'
+    | 'link'
+    | 'linkActive'
+    | 'linkHover'
+    | 'contrast'
+    | 'border'
+    | 'heatmap'
+    | 'lineChartDefaultColor'
+    | 'barChart'
+    | 'ranges'
+    | 'distinct'
+    | 'velocity'
+    | 'countries'
+    | 'hover'
+    | "backgroundAlt3"
 export interface Theme {
     typography: {
         fontFamily2: string,
         /** size[smaller]: "8px" */
         size: { [key in SizeKeys]?: string }
         weight: {
-            bold: "400"
+            [key in WeightKeys]?: string
         }
+    },
+    dimensions: {
+        /** pixels */
+        spacing: number
+    },
+    colors: {
+        [key in ColorKeys]?: string
     }
 }
 const defaultTheme: Theme = {
@@ -23,8 +59,16 @@ const defaultTheme: Theme = {
         fontFamily2: "Arial",
         size: {},
         weight: {
-            bold: "400"
+            light: "400",
+            medium: "400",
+            bold: "400",
         }
+    },
+    dimensions: {
+        spacing: 4
+    },
+    colors: {
+        link: "#000000"
     }
 }
 export type ThemeConfig = Theme

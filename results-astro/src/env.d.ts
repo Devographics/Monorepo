@@ -14,10 +14,11 @@ declare namespace App {
     interface Locals {
         survey: import("@devographics/types").EditionMetadata
         sitemap: import("./lib/sitemap").Sitemap
-        pageDefinition: import("./lib/sitemap").PageDefinition
+        pageContext: import("./lib/sitemap").PageDefinition
         theme: import("./lib/theme").Theme,
         i18n: {
-            t: import("@devographics/i18n").StringTranslator
+            t: import("@devographics/i18n").StringTranslator,
+            locale: { id: string }
         }
     }
 }

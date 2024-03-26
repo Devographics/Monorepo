@@ -1,4 +1,4 @@
 import type { PageDefinition } from "./sitemap"
 // TODO: get pages from the sitemap
-export const getPageLabelKey = (pageDefinition: PageDefinition): string =>
-    pageDefinition.titleId || `sections.${pageDefinition.intlId || pageDefinition.id}.title`
+export const getPageLabelKey = (pageContext: PageDefinition): string =>
+    pageContext.titleId || `sections.${pageContext.intlId || pageContext.id}.title`

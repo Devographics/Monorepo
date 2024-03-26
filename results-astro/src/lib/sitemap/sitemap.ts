@@ -58,6 +58,7 @@ export interface PageDefinition {
     /** If not translated */
     title?: string,
     descriptionId: string,
+    is_hidden?: boolean;
     blocks: Array<
         BaseBlockDefinition & {
             variants?: Array<
@@ -89,6 +90,15 @@ export interface PageDefinition {
                     }>
                 }>
         }>
+
+    /**
+     *  TODO: previous page in the sitemap
+     */
+    previous?: PageDefinition
+    /**
+     * 
+     */
+    next?: PageDefinition
 }
 
 /**
