@@ -1,0 +1,13 @@
+---
+// TODO: adapt from results/src/core/i18n/T.tsx, which however doesn't seem super clean?
+const { i18n } = Astro.locals;
+const { k, values, html } = Astro.props;
+interface Props {
+  k: string;
+  values?: Record<string, string>;
+  html?: boolean;
+}
+const res = i18n.t(k, values);
+---
+
+<span>{html ? res.tHtml : res.t}</span>

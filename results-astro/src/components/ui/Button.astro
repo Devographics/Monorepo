@@ -162,6 +162,6 @@ const computeStyle = () => {
     }
     `}
 ></style>
-<button class=`Button${className ? ` {className}} : ''} {variant}}
+<button class={`Button${className ? ` ${className}` : ""} Button-${variant}`}
   ><slot /></button
 >
