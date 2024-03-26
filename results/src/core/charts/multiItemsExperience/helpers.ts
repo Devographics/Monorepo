@@ -1,6 +1,8 @@
 import {
     Bucket,
+    FacetBucket,
     FeaturesOptions,
+    SentimentOptions,
     SimplifiedSentimentOptions,
     StandardQuestionData
 } from '@devographics/types'
@@ -47,10 +49,16 @@ export const combineItems = ({
         count: item?.responses?.currentEdition?.completion?.count || 0
     }))
 
+const sortBucketsById = <T extends Bucket | FacetBucket>(buckets: T[], sortingArray: string[]) =>
+    buckets.sort((a, b) => sortingArray.indexOf(a.id) - sortingArray.indexOf(b.id))
+
 export const combineBuckets = (buckets: Bucket[], variable: Variable): CombinedBucket[] =>
-    buckets
+    sortBucketsById<Bucket>(buckets, Object.values(FeaturesOptions))
         .map(bucket =>
-            bucket.facetBuckets.map(facetBucket => ({
+            sortBucketsById<FacetBucket>(
+                bucket.facetBuckets,
+                Object.values(SimplifiedSentimentOptions)
+            ).map(facetBucket => ({
                 // combined string id
                 id: `${bucket.id}__${facetBucket.id}`,
                 // also keep track of ids combined to create the bucket
@@ -155,55 +163,6 @@ export const sortByExperience = (sourceArray: CombinedBucket[]) =>
 export const sortBySentiment = (sourceArray: CombinedBucket[]) =>
     sortByArray(sourceArray, sentimentOrder, b => b.facetBucket.id)
 
-export const getColumnDimensions = ({
-    shouldSeparateColumns,
-    maxValues
-}: {
-    shouldSeparateColumns: boolean
-    maxValues: MaxValue[]
-}) => {
-    // TODO: calculate this dynamically
-    const itemsPerGroup = 3
-
-    let columnDimensions: ColumnDimension[] = maxValues.map(({ id, maxValue }, columnIndex) => {
-        if (shouldSeparateColumns) {
-            // account for gaps in between each item for all previous groups
-            const itemGapSpace = columnIndex * ITEM_GAP_PERCENT * itemsPerGroup
-            const offset =
-                sum(
-                    take(
-                        maxValues.map(m => m.maxValue + COLUMN_GAP_PERCENT),
-                        columnIndex
-                    )
-                ) + itemGapSpace
-            const width =
-                Math.max(MINIMUM_COLUMN_WIDTH_PERCENT, maxValue) +
-                ITEM_GAP_PERCENT * (itemsPerGroup - 1)
-            return { id, offset, width }
-        } else {
-            const width = 33.3
-            const offset = (33.3 + COLUMN_GAP_PERCENT) * columnIndex
-            return { id, offset, width }
-        }
-    })
-
-    const ratio = getDimensionRatio(columnDimensions)
-
-    columnDimensions = columnDimensions.map(({ width, offset, ...rest }) => ({
-        ...rest,
-        width: round(width * ratio, 1),
-        offset: round(offset * ratio, 1)
-    }))
-
-    return { columnDimensions, ratio }
-}
-
-const getDimensionRatio = (columnDimensions: ColumnDimension[]) => {
-    const total = (columnDimensions.at(-1)?.width || 0) + (columnDimensions.at(-1)?.offset || 0)
-    const ratio = 100 / total
-    return ratio
-}
-
 export const getColumnPercentages = ({
     columnIds,
     buckets,
@@ -234,77 +193,81 @@ export const getColumnPercentages = ({
 }
 
 export const getCellDimensions = ({
-    sortedBuckets,
-    columnIds,
-    shouldSeparateColumns,
-    maxValues,
-    variable
+    items,
+    buckets,
+    variable,
+    chartState
 }: {
-    sortedBuckets: CombinedBucket[]
-    columnIds: ColumnId[]
-    shouldSeparateColumns: boolean
-    maxValues: MaxValue[]
+    items: CombinedItem[]
+    buckets: CombinedBucket[]
     variable: Variable
+    chartState: ChartState
 }) => {
     let cellDimensions: CellDimension[] = []
-    let columnOffset = 0
-    const numberOfGroups = columnIds.length
-    // TODO: calculate this dynamically
-    const itemsPerGroup = 3
 
     const getWidth = (combinedBucket: CombinedBucket) =>
         combinedBucket?.facetBucket?.[variable] || 0
 
-    const nonEmptyBuckets = sortedBuckets.filter(bucket => bucket.value !== 0)
+    const nonEmptyBuckets = buckets.filter(bucket => bucket.value !== 0)
 
-    const columnPercentages = getColumnPercentages({
-        columnIds,
-        buckets: nonEmptyBuckets,
-        shouldSeparateColumns,
-        maxValues
+    nonEmptyBuckets.forEach((bucket, bucketIndex) => {
+        const { id, ids } = bucket
+        const width = getWidth(bucket)
+        const offset = sum(
+            take(nonEmptyBuckets, bucketIndex).map(bucket => getWidth(bucket) + ITEM_GAP_PERCENT)
+        )
+        cellDimensions.push({ id, ids, width, offset, columnId: 'xxx' })
     })
 
-    columnIds.forEach((columnId, columnIndex) => {
-        const columnBuckets = nonEmptyBuckets.filter(bucket => bucket.ids.includes(columnId))
+    // total row width will expand above 100 due to item gap spacers or divergent sorts
+    // bring it back to 100 by calculating the appropriate ratio
+    const totalWidth =
+        sum(cellDimensions.map(cd => cd.width)) + ITEM_GAP_PERCENT * (cellDimensions.length - 1)
+    const ratio = 100 / totalWidth
+    cellDimensions = applyRatio(cellDimensions, ratio)
+    return cellDimensions
+}
 
-        // account for gaps in between each item for all previous groups
-        const itemGapSpace = columnIndex * ITEM_GAP_PERCENT * itemsPerGroup
-        // to calculate how much to offset this group from the *left axis*,
-        // use the sum of maxValues for all *previous* groups
-        columnOffset = sum(take(columnPercentages, columnIndex).map(cd => cd.totalWidth))
+/*
 
-        shouldSeparateColumns
-            ? sum(
-                  take(
-                      maxValues.map(m => m.maxValue + COLUMN_GAP_PERCENT),
-                      columnIndex
-                  )
-              ) + itemGapSpace
-            : sum(take(sortedBuckets, columnIndex * itemsPerGroup).map(b => b.value)) + itemGapSpace
+Calculate how much to offset a row by to line up whichever column/cell the chart is sorted by
 
-        columnBuckets.forEach((combinedBucket, combinedBucketIndex) => {
-            const { id, ids } = combinedBucket
-            const width = getWidth(combinedBucket)
-            // to calculate how much to offset this item from the *start of the group*,
-            // sum the widths of all previous items in the group
-            const itemOffset = sum(
-                take(columnBuckets, combinedBucketIndex).map(b => getWidth(b) + ITEM_GAP_PERCENT)
+*/
+const getRowOffset = ({
+    items,
+    buckets,
+    chartState
+}: {
+    items: CombinedItem[]
+    buckets: CombinedBucket[]
+    chartState: ChartState
+}) => {
+    const { sort } = chartState
+
+    if (sort) {
+        const getOffset = (combinedBuckets: CombinedBucket[]) => {
+            const currentCombinedBucketIndex = combinedBuckets.findIndex(cb =>
+                cb.ids.includes(sort)
             )
-            const offset = columnOffset + itemOffset
-            cellDimensions.push({ id, ids, width, offset, columnId })
-        })
-    })
+            const previousCombinedBuckets = take(combinedBuckets, currentCombinedBucketIndex)
+            const valuesSum = sumBy(previousCombinedBuckets, cb => cb.value)
+            return valuesSum
+        }
 
-    const { ratio } = getColumnDimensions({ maxValues, shouldSeparateColumns })
+        const firstRowOffset = getOffset(items[0].combinedBuckets)
+        const currentRowOffset = getOffset(buckets)
+        return currentRowOffset - firstRowOffset
+    } else {
+        return 0
+    }
+}
 
-    cellDimensions = cellDimensions.map(({ width, offset, ...rest }) => ({
+const applyRatio = (cellDimensions: CellDimension[], ratio: number) =>
+    cellDimensions.map(({ width, offset, ...rest }) => ({
         ...rest,
         width: round(width * ratio, 1),
         offset: round(offset * ratio, 1)
     }))
-
-    return cellDimensions
-}
 
 export const useChartState = () => {
     const [grouping, setGrouping] = useState<ChartState['grouping']>(GroupingOptions.EXPERIENCE)
@@ -336,41 +299,4 @@ export const useChartValues = (buckets: Bucket[], chartState: ChartState) => {
     const maxOverallValue = max(buckets.map(b => b[variable])) || 0
     const chartValues: ChartValues = { maxOverallValue }
     return chartValues
-}
-
-/*
-
-Calculate how much to offset a row by to line up whichever column/cell the chart is sorted by
-
-*/
-export const getRowOffset = ({
-    items,
-    item,
-    chartState
-}: {
-    items: CombinedItem[]
-    item: CombinedItem
-    chartState: ChartState
-}) => {
-    const { sort } = chartState
-
-    if (sort) {
-        const getOffset = (item: CombinedItem) => {
-            const { combinedBuckets } = item
-            const currentCombinedBucketIndex = combinedBuckets.findIndex(cb =>
-                cb.ids.includes(sort)
-            )
-            const previousCombinedBuckets = take(combinedBuckets, currentCombinedBucketIndex)
-            const valuesSum = sumBy(previousCombinedBuckets, cb => cb.value)
-            return valuesSum
-        }
-
-        const firstRowOffset = getOffset(items[0])
-        const currentRowOffset = getOffset(item)
-        console.log({ firstRowOffset })
-        console.log({ currentRowOffset })
-        return currentRowOffset - firstRowOffset
-    } else {
-        return 0
-    }
 }

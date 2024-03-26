@@ -102,7 +102,7 @@
     width: calc(var(--width) * 1%);
     position: absolute;
     left: calc(var(--offset) * 1%);
-
+    display: block;
     overflow: hidden;
     transition: 600ms;
 }

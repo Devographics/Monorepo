@@ -55,7 +55,7 @@ export const Cell = ({
     return (
         <Tooltip
             trigger={
-                <div className="multiexp-cell" style={style}>
+                <div className="multiexp-cell chart-cell" style={style}>
                     <div className="multiexp-cell-segment multiexp-cell-segment-experience"></div>
                     <div className="multiexp-cell-segment multiexp-cell-segment-sentiment"></div>
                 </div>
@@ -89,10 +89,11 @@ export const ColumnTotal = ({
         '--width': width,
         '--offset': offset
     }
+    const columnTotal = groupedTotals[columnId]
     return (
         <div className="multiexp-column-total" style={style}>
             <div className="multiexp-column-total-border" />
-            <div className="multiexp-column-total-value">{groupedTotals[columnId]}%</div>
+            {columnTotal > 3 && <div className="multiexp-column-total-value">{columnTotal}%</div>}
         </div>
     )
 }

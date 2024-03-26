@@ -241,9 +241,9 @@ export enum ToolsOptions {
 }
 
 export enum FeaturesOptions {
-    NEVER_HEARD = 'never_heard',
+    USED = 'used',
     HEARD = 'heard',
-    USED = 'used'
+    NEVER_HEARD = 'never_heard'
 }
 
 export enum SentimentOptions {

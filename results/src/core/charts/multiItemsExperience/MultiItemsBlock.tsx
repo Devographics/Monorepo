@@ -4,14 +4,7 @@ import './MultiItems.scss'
 import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
 import { MultiItemsExperienceControls } from './MultiItemsControls'
 import { GroupingOptions, MultiItemsExperienceBlockProps } from './types'
-import {
-    combineItems,
-    getColumnDimensions,
-    getItemTotals,
-    getMaxValues,
-    sortItems,
-    useChartState
-} from './helpers'
+import { combineItems, getItemTotals, getMaxValues, sortItems, useChartState } from './helpers'
 import { Row } from './MultiItemsRow'
 import { ColumnHeading } from './MultiItemsColumnHeading'
 import { useI18n } from '@devographics/react-i18n'
@@ -55,8 +48,6 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
 
     // sort items according to grouped totals
     const sortedItems = sortItems({ combinedItems, groupedTotals, sort, order })
-
-    const { columnDimensions } = getColumnDimensions({ maxValues, shouldSeparateColumns })
 
     const chartValues = {
         question,

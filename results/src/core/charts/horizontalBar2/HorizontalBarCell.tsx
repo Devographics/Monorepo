@@ -56,7 +56,7 @@ export const Cell = ({
     return (
         <Tooltip
             trigger={
-                <div className="horizontal-chart-cell" style={style}>
+                <div className="chart-cell horizontal-chart-cell" style={style}>
                     {showValue && v}
                 </div>
             }

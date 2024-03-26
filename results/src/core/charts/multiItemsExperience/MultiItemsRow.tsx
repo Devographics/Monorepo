@@ -1,6 +1,7 @@
 import React from 'react'
 import { ChartState, CombinedBucket, CombinedItem, GroupingOptions, MaxValue } from './types'
 import {
+    ITEM_GAP_PERCENT,
     getCellDimensions,
     getGroupedTotals,
     getRowOffset,
@@ -12,6 +13,8 @@ import { sortOptions } from './MultiItemsBlock'
 import { RowWrapper } from '../common2/RowWrapper'
 import { Bucket } from '@devographics/types'
 import { ColumnModes } from '../common2/types'
+import round from 'lodash/round'
+import sum from 'lodash/sum'
 
 export const Row = (props: {
     items: CombinedItem[]
@@ -33,21 +36,16 @@ export const Row = (props: {
     const columnIds = sortOptions[grouping]
 
     const cellDimensions = getCellDimensions({
-        sortedBuckets,
-        columnIds,
-        shouldSeparateColumns,
-        maxValues,
-        variable
+        buckets: sortedBuckets,
+        items,
+        variable,
+        chartState
     })
 
     const groupedTotals = getGroupedTotals({ item, columnIds })
 
     const bucket = item as unknown as Bucket
 
-    console.log(groupedTotals)
-
-    const rowOffset = getRowOffset({ items, item, chartState })
-    console.log(rowOffset)
     return (
         <RowWrapper {...props} bucket={bucket} chartState={chartState}>
             <>
@@ -68,7 +66,7 @@ export const Row = (props: {
                                     combinedBucket={combinedBucket}
                                     chartState={chartState}
                                     width={width}
-                                    offset={offset - rowOffset}
+                                    offset={offset}
                                     groupedTotals={groupedTotals}
                                     columnId={columnId}
                                 />
@@ -80,13 +78,10 @@ export const Row = (props: {
                 <div className="multiexp-column-totals">
                     {columnIds.map(columnId => {
                         const cellsInColumn = cellDimensions.filter(d => d.ids.includes(columnId))
-                        const firstCellInColumn = cellsInColumn.at(0)
-                        const lastCellInColumn = cellsInColumn.at(-1)
                         const width =
-                            (lastCellInColumn?.offset || 0) +
-                            (lastCellInColumn?.width || 0) -
-                            (firstCellInColumn?.offset || 0)
-                        const offset = firstCellInColumn?.offset || 0
+                            sum(cellsInColumn.map(cd => cd.width)) +
+                            ITEM_GAP_PERCENT * (cellsInColumn.length - 1)
+                        const offset = cellsInColumn[0]?.offset || 0
 
                         return (
                             <ColumnTotal
@@ -94,7 +89,7 @@ export const Row = (props: {
                                 columnId={columnId}
                                 groupedTotals={groupedTotals}
                                 width={width}
-                                offset={offset - rowOffset}
+                                offset={offset}
                             />
                         )
                     })}

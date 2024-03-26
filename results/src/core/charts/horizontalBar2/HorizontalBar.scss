@@ -8,12 +8,4 @@
     width: calc(var(--width) * 1%);
     left: calc(var(--offset) * 1%);
     height: calc(var(--rowHeight) * 1px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    text-shadow: 1px 1px 0 #000000cc, -1px 1px 0 #000000cc, -1px -1px 0 #000000cc,
-        1px -1px 0 #000000cc;
-    border-radius: 2px;
-    font-size: 0.8rem;
 }
