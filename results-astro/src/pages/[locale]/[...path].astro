@@ -91,6 +91,7 @@ console.log(localeWithStrings);
 Astro.locals.i18n = {
   t: makeTranslatorFunc(localeWithStrings),
   locale: { id: locale },
+  localizePath: (p) => `/${locale}${path}`,
 };
 
 // Set page specific values

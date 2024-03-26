@@ -18,7 +18,8 @@ declare namespace App {
         theme: import("./lib/theme").Theme,
         i18n: {
             t: import("@devographics/i18n").StringTranslator,
-            locale: { id: string }
+            locale: { id: string },
+            localizePath: (path: string) => string
         }
     }
 }

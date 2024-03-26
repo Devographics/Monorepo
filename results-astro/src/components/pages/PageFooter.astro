@@ -74,7 +74,7 @@ span.link-label {
   <div class="nav">
     {
       previous && (
-        <a href={"/" + i18n.locale.id + previous.path}>
+        <a href={i18n.localizePath(previous.path)}>
           <Button class="footer-link previous-link PageFooter__Link PageFooter__Link--previous">
             «{" "}
             <span class="link-label">
@@ -87,7 +87,7 @@ span.link-label {
     }
     {
       next && (
-        <a href={"/" + i18n.locale.id + next.path}>
+        <a href={i18n.localizePath(next.path)}>
           <Button class="footer-link next-link PageFooter__Link PageFooter__Link--next Button">
             <span class="link-label">
               <T k="page.next" />
