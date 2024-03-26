@@ -11,13 +11,13 @@ import type {
 import Layout from "@/layouts/Layout.astro";
 import Card from "@/components/Card.astro";
 import { astroEnv } from "@/lib/env";
-import { astroSurveyWithRawSitemap } from "@/fetchers/surveyWithSitemap";
+import { astroSurveyWithSitemap } from "@/fetchers/surveyWithSitemap";
 import PageTemplate from "@/components/pages/PageTemplate.astro";
 import { initTheme } from "@/lib/theme";
-import { processRawSitemap } from "@/lib/sitemap";
 // Reason why we use the Bundler moduleResolution: https://stackoverflow.com/questions/58990498/package-json-exports-field-not-working-with-typescript
 import { getLocalesWithStrings } from "@devographics/i18n/server";
 import { makeTranslatorFunc } from "@devographics/i18n";
+import type { PageDefinition } from "@/lib/sitemap";
 
 /**
  * TODO: there is no ISR in Astro
@@ -36,8 +36,8 @@ export const getStaticPaths = (async () => {
     if (str[0] === "/") return str.slice(1);
     return str;
   }
-  const surveyWithRawSitemap = await astroSurveyWithRawSitemap();
-  const sitemap = processRawSitemap(surveyWithRawSitemap.sitemap);
+  const surveyWithSitemap = await astroSurveyWithSitemap();
+  const { sitemap } = surveyWithSitemap;
   console.log(
     "Paths in sitemap:",
     sitemap.map((s) => s.path),
@@ -51,7 +51,7 @@ export const getStaticPaths = (async () => {
         locale: "en-US",
       },
       props: {
-        pageContext,
+        pageContext: pageContext as PageDefinition,
       },
     };
   });
@@ -66,9 +66,9 @@ const { editionId, surveyId } = astroEnv();
 // Which avoid props drilling/module top-level values
 
 // Survey, sitemap
-const survey = await astroSurveyWithRawSitemap();
+const survey = await astroSurveyWithSitemap();
+const { sitemap } = survey;
 Astro.locals.survey = survey;
-const sitemap = processRawSitemap(survey.sitemap);
 Astro.locals.sitemap = sitemap;
 // Theme
 const theme = initTheme();
@@ -146,13 +146,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
     <div>
       <p>Raw Sitemap</p>
       <pre><code>
-          {JSON.stringify(survey.sitemap, null, 2)}
-        </code></pre>
-    </div>
-    <div>
-      <p>Sitemap</p>
-      <pre><code>
-          {JSON.stringify(sitemap, null, 2)}
+          {JSON.stringify(survey.rawSitemap, null, 2)}
         </code></pre>
     </div>
     <ul role="list" class="link-card-grid">

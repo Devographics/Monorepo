@@ -3,7 +3,7 @@
  */
 
 // A raw sitemap section as stored in the yaml file, unprocessed
-import type { SitemapSection } from "@devographics/types";
+import type { Edition, EditionMetadata, SitemapSection } from "@devographics/types";
 import { z } from "zod";
 
 /**
@@ -106,8 +106,27 @@ export interface PageDefinition {
  */
 export type Sitemap = Array<PageDefinition>
 
+export type SurveyWithSitemap = EditionMetadata & {
+    // raw one
+    rawSitemap: EditionMetadata["sitemap"]
+    // processed one
+    sitemap: Sitemap
+}
+
 export function processRawSitemap(rawSitemapYaml: Array<SitemapSection>): Sitemap {
-    const rawSitemap = rawSitemapYaml // TODO rawSitemapSchema.parse(rawSitemapYaml)
+    // deep clone, assuming no circular object in the rawSitemap 
+    let rawSitemap = JSON.parse(JSON.stringify(rawSitemapYaml)) as Sitemap // TODO rawSitemapSchema.parse(rawSitemapYaml)
+    rawSitemap = rawSitemap.map((page, idx, pages) => {
+        if (idx > 0) {
+            page.previous = pages[idx - 1]
+        }
+        // TODO: somehow it creates a circular reference in the JSON
+        if (idx < pages.length - 1) {
+            page.next = pages[idx + 1]
+        }
+        return page
+    })
+
     return rawSitemap as Sitemap
 
 }
