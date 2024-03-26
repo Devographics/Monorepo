@@ -29,7 +29,8 @@ const ThemedLayout = (props: LayoutProps) => {
         '--backgroundBackgroundColor': colors.backgroundBackground,
         '--backgroundAltColor': colors.backgroundAlt,
         '--borderColor': colors.border,
-        '--linkColor': colors.link
+        '--linkColor': colors.link,
+        '--spacing': `${theme.dimensions.spacing}px`
     }
     return (
         // @ts-expect-errors legacy

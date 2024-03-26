@@ -13,12 +13,12 @@ import T from 'core/i18n/T'
 
 type LegendProps = {
     chartState: ChartState
-    question: QuestionMetadata
+    i18nNamespace: string
     options: Option[]
     colorScale: ColorScale
 }
 
-export const Legend = ({ chartState, question, options, colorScale }: LegendProps) => {
+export const Legend = ({ chartState, i18nNamespace, options, colorScale }: LegendProps) => {
     return (
         <div className="chart-legend">
             <h4 className="chart-legend-heading">
@@ -28,7 +28,7 @@ export const Legend = ({ chartState, question, options, colorScale }: LegendProp
                 <LegendItem
                     key={option.id}
                     chartState={chartState}
-                    question={question}
+                    i18nNamespace={i18nNamespace}
                     option={option}
                     gradient={colorScale?.[option.id] || [neutralColor, neutralColor]}
                 />
@@ -41,12 +41,12 @@ const LegendItem = ({
     chartState,
     option,
     gradient,
-    question
+    i18nNamespace
 }: {
     chartState: LegendProps['chartState']
     option: OptionMetadata
     gradient: string[]
-    question: LegendProps['question']
+    i18nNamespace: LegendProps['i18nNamespace']
 }) => {
     const { getString } = useI18n()
 
@@ -55,12 +55,12 @@ const LegendItem = ({
         id,
         entity,
         getString,
-        i18nNamespace: question?.id
+        i18nNamespace
     })
 
     const { sort, setSort, order, setOrder } = chartState
     const isEnabled = sort === id
-    const columnLabel = label
+    const columnLabel = shortLabel
     const orderLabel = getString(`charts.order.${order}`)?.t
 
     const style = {
@@ -89,7 +89,7 @@ const LegendItem = ({
                         }}
                     >
                         <div className="legend-item-color" />
-                        {shortLabel}
+                        <span>{shortLabel}</span>
                         <span className="order-asc">↑</span>
                         <span className="order-desc">↓</span>
                     </button>

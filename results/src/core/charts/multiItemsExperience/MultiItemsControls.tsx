@@ -19,7 +19,9 @@ export const MultiItemsExperienceControls = ({ chartState }: { chartState: Chart
     return (
         <div className="multiexp-controls">
             <div className="multiexp-control multiexp-control-grouping">
-                <h4 className="chart-legend-heading">{getString('charts.group_by')?.t}</h4>
+                <h4 className="chart-legend-heading">
+                    <T k="charts.group_by" />
+                </h4>
                 <ButtonGroup>
                     {Object.values(GroupingOptions).map(id => {
                         const isChecked = grouping === id

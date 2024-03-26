@@ -54,7 +54,7 @@ export const getItemLabel = (options: {
         key = 'charts.other_answers'
         label = getString(key).t
     } else {
-        key = i18nNamespace === 'features' ? `features.${id}` : `options.${i18nNamespace}.${id}`
+        key = `options.${i18nNamespace}.${id}`
 
         const s = getString(key, values)
 

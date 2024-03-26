@@ -7,6 +7,13 @@
     --cellHeight: 40px;
     --totalsHeight: 30px;
     --headingsHeight: var(--cellHeight);
+    .chart-row {
+        align-items: normal;
+        .chart-row-heading,
+        .chart-row-metadata {
+            margin-top: 8px;
+        }
+    }
 }
 .multiexp-controls {
     display: flex;

@@ -163,33 +163,12 @@ export const sortByExperience = (sourceArray: CombinedBucket[]) =>
 export const sortBySentiment = (sourceArray: CombinedBucket[]) =>
     sortByArray(sourceArray, sentimentOrder, b => b.facetBucket.id)
 
-export const getColumnPercentages = ({
-    columnIds,
-    buckets,
-    shouldSeparateColumns,
-    maxValues
-}: {
-    columnIds: ColumnId[]
-    buckets: CombinedBucket[]
-    shouldSeparateColumns: boolean
-    maxValues: MaxValue[]
-}) => {
-    const columnDimensions = columnIds.map((columnId, columnIndex) => {
-        const columnBuckets = buckets.filter(bucket => bucket.ids.includes(columnId))
-
-        const bucketValues = columnBuckets.map(bucket => bucket.value)
-        const itemSpaces = columnBuckets.length * ITEM_GAP_PERCENT
-        const contentWidth = sum(bucketValues) + itemSpaces
-        const columnGap = shouldSeparateColumns
-            ? maxValues[columnIndex].maxValue + COLUMN_GAP_PERCENT
-            : 0
-        return {
-            columnId,
-            contentWidth,
-            totalWidth: contentWidth + columnGap
-        }
-    })
-    return columnDimensions
+export const sortBuckets = (combinedBuckets: CombinedBucket[], grouping: GroupingOptions) => {
+    if (grouping === GroupingOptions.EXPERIENCE) {
+        return sortByExperience(sortBySentiment(combinedBuckets))
+    } else {
+        return sortBySentiment(sortByExperience(combinedBuckets))
+    }
 }
 
 export const getCellDimensions = ({
@@ -212,7 +191,7 @@ export const getCellDimensions = ({
         const offset = sum(
             take(nonEmptyBuckets, bucketIndex).map(bucket => getWidth(bucket) + ITEM_GAP_PERCENT)
         )
-        cellDimensions.push({ id, ids, width, offset, columnId: 'xxx' })
+        cellDimensions.push({ id, ids, width, offset })
     })
 
     // total row width will expand above 100 due to item gap spacers or divergent sorts
@@ -295,12 +274,4 @@ export const useChartValues = (buckets: Bucket[], chartState: ChartState) => {
     const maxOverallValue = max(buckets.map(b => b[variable])) || 0
     const chartValues: ChartValues = { maxOverallValue }
     return chartValues
-}
-
-export const sortBuckets = (combinedBuckets: CombinedBucket[], grouping: GroupingOptions) => {
-    if (grouping === GroupingOptions.EXPERIENCE) {
-        return sortByExperience(sortBySentiment(combinedBuckets))
-    } else {
-        return sortBySentiment(sortByExperience(combinedBuckets))
-    }
 }

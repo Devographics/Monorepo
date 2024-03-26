@@ -11,15 +11,13 @@ export const Cell = ({
     chartState,
     width,
     offset,
-    groupedTotals,
-    columnId
+    groupedTotals
 }: {
     combinedBucket: CombinedBucket
     chartState: ChartState
     width: number
     offset: number
     groupedTotals: Totals
-    columnId: ColumnId
 }) => {
     const theme = useTheme()
     const { getString } = useI18n()
@@ -27,11 +25,16 @@ export const Cell = ({
     // the "subgrouping" is whichever GroupingOption is not the currently selected grouping
     const subGrouping = Object.values(GroupingOptions).find(g => g !== grouping)
     const { bucket, facetBucket } = combinedBucket
-    const parentValue = groupedTotals[columnId]
-    const value = facetBucket[variable] || 0
+
     // little bit hacky: we need to look in two different places depending on
     // which grouping is enabled
+    const columnId = (
+        grouping === GroupingOptions.EXPERIENCE ? bucket.id : facetBucket.id
+    ) as ColumnId
     const answerId = grouping === GroupingOptions.EXPERIENCE ? facetBucket.id : bucket.id
+
+    const parentValue = groupedTotals[columnId]
+    const value = facetBucket[variable] || 0
     const values = {
         parentValue,
         parentAnswer: getString(`options.${grouping}.${columnId}.label.short`)?.t || '?',
@@ -62,12 +65,7 @@ export const Cell = ({
             }
             contents={
                 <div>
-                    <T
-                        k={`charts.multiexp.cell_tooltip.grouped_by_${grouping}`}
-                        values={values}
-                        html={true}
-                        md={true}
-                    />
+                    <T k={`charts.multiexp.cell_tooltip`} values={values} html={true} md={true} />
                 </div>
             }
         />

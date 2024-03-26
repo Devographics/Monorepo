@@ -1,7 +1,7 @@
 import React from 'react'
 import '../common2/ChartsCommon.scss'
 import './MultiItems.scss'
-import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
+import { FeaturesOptions, Option, SimplifiedSentimentOptions } from '@devographics/types'
 import { MultiItemsExperienceControls } from './MultiItemsControls'
 import { GroupingOptions, MultiItemsExperienceBlockProps } from './types'
 import {
@@ -17,10 +17,11 @@ import {
 } from './helpers'
 import { Row } from './MultiItemsRow'
 import Rows from '../common2/Rows'
-import { ChartHeading, ChartWrapper, Legend } from '../common2'
+import { ChartHeading, ChartWrapper, Legend, Note } from '../common2'
 import { useTheme } from 'styled-components'
 import min from 'lodash/min'
 import max from 'lodash/max'
+import { NoteContents } from './MultiItemsNote'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -118,38 +119,13 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
             <>
                 <ChartHeading>
                     <div className="multiexp-chart-heading">
-                        <MultiItemsExperienceControls chartState={chartState} />
                         <Legend
                             {...commonProps}
                             options={options}
                             colorScale={colorScale}
-                            question={{ id: 'foo' }}
+                            i18nNamespace={grouping}
                         />
-
-                        {/* <div
-                        className={`multiexp-column-headings multiexp-column-headings-${columnMode}`}
-                    >
-                        <h3 className="multiexp-table-grouping">
-                            {getString(`charts.group.${grouping}`)?.t}
-                        </h3>
-                        <div className="multiexp-column-headings-inner">
-                            {columnIds.map(columnId => {
-                                const columnDimension = columnDimensions.find(
-                                    d => d.id === columnId
-                                )
-                                const { width = 0, offset = 0 } = columnDimension || {}
-                                return (
-                                    <ColumnHeading
-                                        key={columnId}
-                                        columnId={columnId}
-                                        width={width}
-                                        offset={offset}
-                                        chartState={chartState}
-                                    />
-                                )
-                            })}
-                        </div>
-                    </div> */}
+                        <MultiItemsExperienceControls chartState={chartState} />
                     </div>
                 </ChartHeading>
 
@@ -158,6 +134,10 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
                         <Row key={item.id} rowIndex={i} item={item} {...commonProps} />
                     ))}
                 </Rows>
+
+                <Note>
+                    <NoteContents />
+                </Note>
             </>
         </ChartWrapper>
     )

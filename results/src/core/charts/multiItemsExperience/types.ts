@@ -81,7 +81,6 @@ export type Dimension = {
 }
 export type CellDimension = Dimension & {
     ids: CombinedBucket['ids']
-    columnId: ColumnId
 }
 
 export type ColumnDimension = Dimension
