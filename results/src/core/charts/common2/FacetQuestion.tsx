@@ -5,6 +5,7 @@ import { getBlockKey, getBlockTitle } from 'core/helpers/blockHelpers'
 import { useI18n } from '@devographics/react-i18n'
 import Tooltip from 'core/components/Tooltip'
 import { QuestionIcon } from 'core/icons'
+import T from 'core/i18n/T'
 
 export const FacetQuestion = ({
     facetQuestion,
@@ -28,12 +29,17 @@ export const FacetQuestion = ({
             trigger={
                 <div className="chart-facet-question">
                     <span className="chart-facet-title">
-                        {getBlockTitle({
-                            block: facetBlock,
-                            pageContext,
-                            getString,
-                            entities
-                        })}
+                        <T
+                            k="charts.vs_facet"
+                            values={{
+                                facet: getBlockTitle({
+                                    block: facetBlock,
+                                    pageContext,
+                                    getString,
+                                    entities
+                                })
+                            }}
+                        />
                     </span>
                     <QuestionIcon size="petite" />
                 </div>

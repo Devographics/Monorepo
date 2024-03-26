@@ -39,6 +39,8 @@ const BlockFooter = ({ unitsOptions, completion, units, setUnits, chartFilters }
                             count: completion?.count,
                             percentage: completion?.percentageSurvey
                         }}
+                        md={true}
+                        html={true}
                     />
                 </Respondents>
             )}

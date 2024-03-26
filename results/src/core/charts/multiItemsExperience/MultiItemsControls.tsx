@@ -18,9 +18,8 @@ export const MultiItemsExperienceControls = ({ chartState }: { chartState: Chart
         chartState
     return (
         <div className="multiexp-controls">
-            <div />
             <div className="multiexp-control multiexp-control-grouping">
-                <h4>{getString('charts.group_by')?.t}</h4>
+                <h4 className="chart-legend-heading">{getString('charts.group_by')?.t}</h4>
                 <ButtonGroup>
                     {Object.values(GroupingOptions).map(id => {
                         const isChecked = grouping === id
@@ -42,31 +41,35 @@ export const MultiItemsExperienceControls = ({ chartState }: { chartState: Chart
                 </ButtonGroup>
             </div>
 
-            <div className="multiexp-control multiexp-control-columns">
-                {/* <h4>{getString('charts.display_mode')?.t}</h4> */}
-                {Object.values(ColumnModes).map(option => {
-                    const Icon = icons[option]
-                    const isChecked = columnMode === option
-                    const label = getString(`charts.display_mode.${option}`)?.t
-                    return (
-                        <label
-                            key={option}
-                            htmlFor={option}
-                            className={`radio ${isChecked ? 'radio-checked' : 'radio-unchecked'}`}
-                        >
-                            {Icon && <Icon label={label} />}{' '}
-                            <input
-                                type="radio"
-                                id={option}
-                                name="grouping"
-                                value={option}
-                                checked={isChecked}
-                                onChange={() => setColumnMode(option)}
-                            />
-                        </label>
-                    )
-                })}
-            </div>
+            {false && (
+                <div className="multiexp-control multiexp-control-columns">
+                    {/* <h4>{getString('charts.display_mode')?.t}</h4> */}
+                    {Object.values(ColumnModes).map(option => {
+                        const Icon = icons[option]
+                        const isChecked = columnMode === option
+                        const label = getString(`charts.display_mode.${option}`)?.t
+                        return (
+                            <label
+                                key={option}
+                                htmlFor={option}
+                                className={`radio ${
+                                    isChecked ? 'radio-checked' : 'radio-unchecked'
+                                }`}
+                            >
+                                {Icon && <Icon label={label} />}{' '}
+                                <input
+                                    type="radio"
+                                    id={option}
+                                    name="grouping"
+                                    value={option}
+                                    checked={isChecked}
+                                    onChange={() => setColumnMode(option)}
+                                />
+                            </label>
+                        )
+                    })}
+                </div>
+            )}
         </div>
     )
 }

@@ -1,17 +1,10 @@
 import React from 'react'
 import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
-import {
-    ChartState,
-    ColumnId,
-    CombinedBucket,
-    GroupingOptions,
-    Totals,
-    experienceColors,
-    sentimentColors
-} from './types'
+import { ChartState, ColumnId, CombinedBucket, GroupingOptions, Totals } from './types'
 import Tooltip from 'core/components/Tooltip'
 import { useI18n } from '@devographics/react-i18n'
 import T from 'core/i18n/T'
+import { useTheme } from 'styled-components'
 
 export const Cell = ({
     combinedBucket,
@@ -28,6 +21,7 @@ export const Cell = ({
     groupedTotals: Totals
     columnId: ColumnId
 }) => {
+    const theme = useTheme()
     const { getString } = useI18n()
     const { variable, grouping } = chartState
     // the "subgrouping" is whichever GroupingOption is not the currently selected grouping
@@ -45,10 +39,15 @@ export const Cell = ({
         answer: getString(`options.${subGrouping}.${answerId}.label.short`)?.t || '?'
     }
 
+    const experienceColors = theme.colors.ranges.features
+    const sentimentColors = theme.colors.ranges.sentiment
+
     const style = {
         '--percentageValue': value,
-        '--experienceColor': experienceColors[bucket.id as FeaturesOptions],
-        '--sentimentColor': sentimentColors[facetBucket.id as SimplifiedSentimentOptions],
+        '--experienceColor1': experienceColors[bucket.id as FeaturesOptions][0],
+        '--experienceColor2': experienceColors[bucket.id as FeaturesOptions][1],
+        '--sentimentColor1': sentimentColors[facetBucket.id as SimplifiedSentimentOptions][0],
+        '--sentimentColor2': sentimentColors[facetBucket.id as SimplifiedSentimentOptions][1],
         '--width': width,
         '--offset': offset
     }

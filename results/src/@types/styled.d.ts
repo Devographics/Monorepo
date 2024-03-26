@@ -72,6 +72,7 @@ declare module 'styled-components' {
                 secondaryGradient: [string, string]
             }
             ranges: {
+                sentiment: Record<string>
                 tools: Record<string>
                 toolSections: Record<string>
                 features: Record<string>

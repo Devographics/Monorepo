@@ -48,6 +48,11 @@ query: >
                       percentageQuestion
                       percentageSurvey
                     }
+                    completion {
+                      count
+                      percentageSurvey
+                      total
+                    }
                   }
                 }
               }

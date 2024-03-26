@@ -43,7 +43,8 @@ export const combineItems = ({
     items.map(item => ({
         id: item.id,
         entity: item.entity,
-        combinedBuckets: combineBuckets(getBuckets(item), variable)
+        combinedBuckets: combineBuckets(getBuckets(item), variable),
+        count: item?.responses?.currentEdition?.completion?.count || 0
     }))
 
 export const combineBuckets = (buckets: Bucket[], variable: Variable): CombinedBucket[] =>
@@ -203,6 +204,35 @@ const getDimensionRatio = (columnDimensions: ColumnDimension[]) => {
     return ratio
 }
 
+export const getColumnPercentages = ({
+    columnIds,
+    buckets,
+    shouldSeparateColumns,
+    maxValues
+}: {
+    columnIds: ColumnId[]
+    buckets: CombinedBucket[]
+    shouldSeparateColumns: boolean
+    maxValues: MaxValue[]
+}) => {
+    const columnDimensions = columnIds.map((columnId, columnIndex) => {
+        const columnBuckets = buckets.filter(bucket => bucket.ids.includes(columnId))
+
+        const bucketValues = columnBuckets.map(bucket => bucket.value)
+        const itemSpaces = columnBuckets.length * ITEM_GAP_PERCENT
+        const contentWidth = sum(bucketValues) + itemSpaces
+        const columnGap = shouldSeparateColumns
+            ? maxValues[columnIndex].maxValue + COLUMN_GAP_PERCENT
+            : 0
+        return {
+            columnId,
+            contentWidth,
+            totalWidth: contentWidth + columnGap
+        }
+    })
+    return columnDimensions
+}
+
 export const getCellDimensions = ({
     sortedBuckets,
     columnIds,
@@ -225,13 +255,25 @@ export const getCellDimensions = ({
     const getWidth = (combinedBucket: CombinedBucket) =>
         combinedBucket?.facetBucket?.[variable] || 0
 
+    const nonEmptyBuckets = sortedBuckets.filter(bucket => bucket.value !== 0)
+
+    const columnPercentages = getColumnPercentages({
+        columnIds,
+        buckets: nonEmptyBuckets,
+        shouldSeparateColumns,
+        maxValues
+    })
+
     columnIds.forEach((columnId, columnIndex) => {
-        const columnBuckets = sortedBuckets.filter(bucket => bucket.ids.includes(columnId))
+        const columnBuckets = nonEmptyBuckets.filter(bucket => bucket.ids.includes(columnId))
+
         // account for gaps in between each item for all previous groups
         const itemGapSpace = columnIndex * ITEM_GAP_PERCENT * itemsPerGroup
         // to calculate how much to offset this group from the *left axis*,
         // use the sum of maxValues for all *previous* groups
-        columnOffset = shouldSeparateColumns
+        columnOffset = sum(take(columnPercentages, columnIndex).map(cd => cd.totalWidth))
+
+        shouldSeparateColumns
             ? sum(
                   take(
                       maxValues.map(m => m.maxValue + COLUMN_GAP_PERCENT),
@@ -269,7 +311,7 @@ export const useChartState = () => {
     const [sort, setSort] = useState<ChartState['sort']>(FeaturesOptions.USED)
     const [order, setOrder] = useState<ChartState['order']>(OrderOptions.DESC)
     const [variable, setVariable] = useState<ChartState['variable']>(DEFAULT_VARIABLE)
-    const [columnMode, setColumnMode] = useState<ChartState['columnMode']>(ColumnModes.SPLIT)
+    const [columnMode, setColumnMode] = useState<ChartState['columnMode']>(ColumnModes.STACKED)
     const [facetId, setFacetId] = useState<ChartState['facetId']>('sentiment')
 
     const chartState: ChartState = {
@@ -294,4 +336,41 @@ export const useChartValues = (buckets: Bucket[], chartState: ChartState) => {
     const maxOverallValue = max(buckets.map(b => b[variable])) || 0
     const chartValues: ChartValues = { maxOverallValue }
     return chartValues
+}
+
+/*
+
+Calculate how much to offset a row by to line up whichever column/cell the chart is sorted by
+
+*/
+export const getRowOffset = ({
+    items,
+    item,
+    chartState
+}: {
+    items: CombinedItem[]
+    item: CombinedItem
+    chartState: ChartState
+}) => {
+    const { sort } = chartState
+
+    if (sort) {
+        const getOffset = (item: CombinedItem) => {
+            const { combinedBuckets } = item
+            const currentCombinedBucketIndex = combinedBuckets.findIndex(cb =>
+                cb.ids.includes(sort)
+            )
+            const previousCombinedBuckets = take(combinedBuckets, currentCombinedBucketIndex)
+            const valuesSum = sumBy(previousCombinedBuckets, cb => cb.value)
+            return valuesSum
+        }
+
+        const firstRowOffset = getOffset(items[0])
+        const currentRowOffset = getOffset(item)
+        console.log({ firstRowOffset })
+        console.log({ currentRowOffset })
+        return currentRowOffset - firstRowOffset
+    } else {
+        return 0
+    }
 }

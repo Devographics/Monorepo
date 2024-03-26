@@ -55,9 +55,9 @@ export const useGradient = ({ question, id }: { question?: QuestionMetadata; id:
         if (color) {
             return color
         } else {
-            console.warn(
-                `Could not find color for cell id ${id} in colorScale ${JSON.stringify(colorScale)}`
-            )
+            // console.warn(
+            //     `Could not find color for cell id ${id} in colorScale ${JSON.stringify(colorScale)}`
+            // )
             return [neutralColor, neutralColor]
         }
     }

@@ -12,18 +12,6 @@ import { BlockComponentProps } from 'core/types'
 import { PERCENTAGE_QUESTION, SENTIMENT_FACET } from '@devographics/constants'
 import { ColumnModes, OrderOptions } from '../common2/types'
 
-export const experienceColors = {
-    [FeaturesOptions.NEVER_HEARD]: '#D696F4',
-    [FeaturesOptions.HEARD]: '#6A8CE1',
-    [FeaturesOptions.USED]: '#78DFED'
-}
-
-export const sentimentColors = {
-    [SimplifiedSentimentOptions.NEGATIVE_SENTIMENT]: '#FA6868',
-    [SimplifiedSentimentOptions.NEUTRAL_SENTIMENT]: '#C1C1C1',
-    [SimplifiedSentimentOptions.POSITIVE_SENTIMENT]: '#7EE464'
-}
-
 export const DEFAULT_VARIABLE = PERCENTAGE_QUESTION
 
 export enum GroupingOptions {
@@ -71,6 +59,7 @@ export type CombinedItem = {
     id: string
     entity: Entity
     combinedBuckets: CombinedBucket[]
+    count: number
 }
 
 export type CombinedBucket = {

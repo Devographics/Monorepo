@@ -8,7 +8,7 @@ import { BucketUnits } from '@devographics/types'
 
 export const PercentageBucket: ViewDefinition = {
     getValue: facetBucket => facetBucket[BucketUnits.PERCENTAGE_BUCKET] || 0,
-    steps: [removeNotApplicable, removeNoAnswer],
+    steps: [removeNoAnswer],
     showLegend: true,
     component: props => {
         return (

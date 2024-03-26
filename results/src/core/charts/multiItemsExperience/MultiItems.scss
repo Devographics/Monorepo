@@ -11,13 +11,17 @@
 .multiexp-controls {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 40px;
     h4 {
         margin: 0;
     }
 }
+.multiexp-chart-heading {
+    display: flex;
+    justify-content: space-between;
+}
 .multiexp-control {
     display: flex;
+    align-items: center;
     gap: 15px;
     margin: 0;
     .radio {
@@ -128,13 +132,16 @@
     opacity: 0.3;
     transition: 600ms;
     &-experience {
-        background: var(--experienceColor);
+        background: var(--experienceColor1)
+            linear-gradient(to left, var(--experienceColor1), var(--experienceColor2));
         .multiexp-groupedBy-experience & {
             opacity: 1;
         }
     }
     &-sentiment {
-        background: var(--sentimentColor);
+        background: var(--sentimentColor1)
+            linear-gradient(to left, var(--sentimentColor1), var(--sentimentColor2));
+
         .multiexp-groupedBy-sentiment & {
             opacity: 1;
         }

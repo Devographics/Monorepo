@@ -11,10 +11,11 @@ import { useChartValues } from './helpers/chartValues'
 import { getControls, getViewDefinition } from './helpers/views'
 import View from '../common2/View'
 import { useI18n } from '@devographics/react-i18n'
-import { Legend } from '../common2'
-import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { ChartHeading, ChartWrapper, Legend } from '../common2'
 import { useEntities } from 'core/helpers/entities'
 import { FacetQuestion } from '../common2/FacetQuestion'
+import { getQuestionOptions } from './helpers/options'
+import { useColorScale } from './helpers/colors'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -25,7 +26,6 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     const { block, question, pageContext } = props
     const entities = useEntities()
     // console.log(props)
-    const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
 
     const completion = getChartCompletion(props)
     const facet = block?.filtersState?.facet
@@ -51,42 +51,53 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
         block
     }
 
+    const options = getQuestionOptions({ question, chartState })
+    const colorScale = chartValues?.facetQuestion && useColorScale({ question })
+
     return (
-        <div className="chart-horizontal-bar" ref={parent}>
-            {/* <pre>
+        <ChartWrapper className="chart-horizontal-bar">
+            <>
+                {/* <pre>
                 <code>{JSON.stringify(chartState, null, 2)}</code>
             </pre> */}
 
-            <div className="chart-heading">
-                <div className="chart-heading-question">
-                    {/* {getBlockTitle({ block, pageContext, getString, entities })} */}
-                </div>
                 {facetQuestion && (
-                    <div className="chart-heading-facet">
-                        <FacetQuestion
-                            facetQuestion={facetQuestion}
-                            pageContext={pageContext}
-                            entities={entities}
-                        />
+                    <ChartHeading>
+                        <>
+                            <FacetQuestion
+                                facetQuestion={facetQuestion}
+                                pageContext={pageContext}
+                                entities={entities}
+                            />
+                            {controls.length > 0 && (
+                                <Controls controls={controls} {...commonProps} />
+                            )}
 
-                        {controls.length > 0 && <Controls controls={controls} {...commonProps} />}
-                    </div>
+                            {viewDefinition.showLegend && facetQuestion && colorScale && (
+                                <Legend
+                                    {...commonProps}
+                                    options={options}
+                                    colorScale={colorScale}
+                                    question={facetQuestion}
+                                />
+                            )}
+                        </>
+                    </ChartHeading>
                 )}
-            </div>
-            {viewDefinition.showLegend && <Legend {...commonProps} />}
 
-            <View {...commonProps} />
+                <View {...commonProps} />
 
-            <Metadata completion={completion} {...commonProps} />
-            {/* <Actions {...commonProps} /> */}
-            {/* <pre>
+                <Metadata completion={completion} {...commonProps} />
+                {/* <Actions {...commonProps} /> */}
+                {/* <pre>
                 <code>{JSON.stringify(buckets, null, 2)}</code>
             </pre> */}
 
-            {/* <pre>
+                {/* <pre>
                 <code>{JSON.stringify(chartValues, null, 2)}</code>
             </pre> */}
-        </div>
+            </>
+        </ChartWrapper>
     )
 }
 
