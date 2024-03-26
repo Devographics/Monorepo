@@ -4,14 +4,23 @@ import './MultiItems.scss'
 import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
 import { MultiItemsExperienceControls } from './MultiItemsControls'
 import { GroupingOptions, MultiItemsExperienceBlockProps } from './types'
-import { combineItems, getItemTotals, getMaxValues, sortItems, useChartState } from './helpers'
+import {
+    applyRatio,
+    combineItems,
+    getCellDimensions,
+    getItemTotals,
+    getMaxValues,
+    getRowOffset,
+    sortBuckets,
+    sortItems,
+    useChartState
+} from './helpers'
 import { Row } from './MultiItemsRow'
-import { ColumnHeading } from './MultiItemsColumnHeading'
-import { useI18n } from '@devographics/react-i18n'
 import Rows from '../common2/Rows'
-import { ColumnModes } from '../common2/types'
 import { ChartHeading, ChartWrapper, Legend } from '../common2'
 import { useTheme } from 'styled-components'
+import min from 'lodash/min'
+import max from 'lodash/max'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -24,10 +33,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
 
     const theme = useTheme()
     const chartState = useChartState()
-    const { columnMode, grouping, variable, sort, order } = chartState
-
-    const { getString } = useI18n()
-    const shouldSeparateColumns = columnMode === ColumnModes.SPLIT
+    const { grouping, variable, sort, order } = chartState
 
     const columnIds = sortOptions[grouping]
     const allColumnIds = [
@@ -55,12 +61,46 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
             id: '_sentiment'
         }
     }
+
+    let allRowsCellDimensions = sortedItems.map(item =>
+        getCellDimensions({
+            buckets: sortBuckets(item.combinedBuckets, grouping),
+            variable
+        })
+    )
+
+    let allRowOffsets = allRowsCellDimensions.map(cd =>
+        getRowOffset({
+            firstRowCellDimensions: allRowsCellDimensions[0],
+            cellDimensions: cd,
+            chartState
+        })
+    )
+
+    // offseting row will make the entire chart expand past 100%
+    // shrink it down to 100% again
+    // note: offsets can be positive (offset to the left) or negative (offset to the right)
+    const largestNegativeOffset = min(allRowOffsets.filter(o => o < 0)) || 0
+    const largestPositiveOffset = max(allRowOffsets.filter(o => o > 0)) || 0
+
+    const totalWidthWithOffset = Math.abs(largestNegativeOffset) + largestPositiveOffset + 100
+    const rowOffsetShrinkRatio = 100 / totalWidthWithOffset
+    allRowsCellDimensions = allRowsCellDimensions.map(cd => applyRatio(cd, rowOffsetShrinkRatio))
+    // note: up to now we have only calculated offsets relative to the first row
+    // but the first row may itself need to be offseted. In this case
+    // subract additional largestPositiveOffset to all offsets
+    allRowOffsets = allRowOffsets.map(rowOffset => rowOffset - largestPositiveOffset)
+    // finally, apply shrinking ratio
+    allRowOffsets = allRowOffsets.map(rowOffset => rowOffset * rowOffsetShrinkRatio)
+
     const commonProps = {
         items: sortedItems,
         chartState,
         maxValues,
         chartValues,
-        block
+        block,
+        allRowsCellDimensions,
+        allRowOffsets
     }
 
     const options =
@@ -115,7 +155,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
 
                 <Rows>
                     {sortedItems.map((item, i) => (
-                        <Row key={item.id} item={item} {...commonProps} />
+                        <Row key={item.id} rowIndex={i} item={item} {...commonProps} />
                     ))}
                 </Rows>
             </>

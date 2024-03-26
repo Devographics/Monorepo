@@ -193,15 +193,11 @@ export const getColumnPercentages = ({
 }
 
 export const getCellDimensions = ({
-    items,
     buckets,
-    variable,
-    chartState
+    variable
 }: {
-    items: CombinedItem[]
     buckets: CombinedBucket[]
     variable: Variable
-    chartState: ChartState
 }) => {
     let cellDimensions: CellDimension[] = []
 
@@ -233,36 +229,36 @@ export const getCellDimensions = ({
 Calculate how much to offset a row by to line up whichever column/cell the chart is sorted by
 
 */
-const getRowOffset = ({
-    items,
-    buckets,
+export const getRowOffset = ({
+    firstRowCellDimensions,
+    cellDimensions,
     chartState
 }: {
-    items: CombinedItem[]
-    buckets: CombinedBucket[]
+    firstRowCellDimensions: CellDimension[]
+    cellDimensions: CellDimension[]
     chartState: ChartState
 }) => {
     const { sort } = chartState
 
     if (sort) {
-        const getOffset = (combinedBuckets: CombinedBucket[]) => {
-            const currentCombinedBucketIndex = combinedBuckets.findIndex(cb =>
-                cb.ids.includes(sort)
-            )
-            const previousCombinedBuckets = take(combinedBuckets, currentCombinedBucketIndex)
-            const valuesSum = sumBy(previousCombinedBuckets, cb => cb.value)
+        const getOffset = (cellDimensions: CellDimension[]) => {
+            const currentCombinedBucketIndex = cellDimensions.findIndex(cd => cd.ids.includes(sort))
+            const previousCombinedBuckets = take(cellDimensions, currentCombinedBucketIndex)
+            const valuesSum =
+                sumBy(previousCombinedBuckets, cb => cb.width) +
+                ITEM_GAP_PERCENT * (previousCombinedBuckets.length - 1)
             return valuesSum
         }
 
-        const firstRowOffset = getOffset(items[0].combinedBuckets)
-        const currentRowOffset = getOffset(buckets)
+        const firstRowOffset = getOffset(firstRowCellDimensions)
+        const currentRowOffset = getOffset(cellDimensions)
         return currentRowOffset - firstRowOffset
     } else {
         return 0
     }
 }
 
-const applyRatio = (cellDimensions: CellDimension[], ratio: number) =>
+export const applyRatio = (cellDimensions: CellDimension[], ratio: number) =>
     cellDimensions.map(({ width, offset, ...rest }) => ({
         ...rest,
         width: round(width * ratio, 1),
@@ -299,4 +295,12 @@ export const useChartValues = (buckets: Bucket[], chartState: ChartState) => {
     const maxOverallValue = max(buckets.map(b => b[variable])) || 0
     const chartValues: ChartValues = { maxOverallValue }
     return chartValues
+}
+
+export const sortBuckets = (combinedBuckets: CombinedBucket[], grouping: GroupingOptions) => {
+    if (grouping === GroupingOptions.EXPERIENCE) {
+        return sortByExperience(sortBySentiment(combinedBuckets))
+    } else {
+        return sortBySentiment(sortByExperience(combinedBuckets))
+    }
 }
