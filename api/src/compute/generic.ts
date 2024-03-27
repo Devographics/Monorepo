@@ -66,6 +66,8 @@ export const convertOrderReverse = (order: SortOrderNumeric): SortOrder =>
 
 /*
 
+Always use freeform/other field for source field
+
 TODO:
 
 - Actually differentiate between "freeform" and "prenormalized"
@@ -78,14 +80,19 @@ export const getDbPath = (
     responsesType: ResponsesTypes = ResponsesTypes.RESPONSES
 ) => {
     const { normPaths } = question
-    if (responsesType === ResponsesTypes.RESPONSES) {
-        return normPaths?.response
-    } else if (responsesType === ResponsesTypes.COMBINED) {
-        return normPaths?.response
-    } else if (responsesType === ResponsesTypes.PRENORMALIZED) {
-        return normPaths?.prenormalized
-    } else {
+
+    if (question.id === 'source') {
         return normPaths?.other
+    } else {
+        if (responsesType === ResponsesTypes.RESPONSES) {
+            return normPaths?.response
+        } else if (responsesType === ResponsesTypes.COMBINED) {
+            return normPaths?.response
+        } else if (responsesType === ResponsesTypes.PRENORMALIZED) {
+            return normPaths?.prenormalized
+        } else {
+            return normPaths?.other
+        }
     }
 }
 
@@ -203,6 +210,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         facetCutoff = 1,
         showNoAnswer,
         groupUnderCutoff = true,
+        groupOverLimit = true,
         mergeOtherBuckets = true,
         enableBucketGroups = true,
         enableAddOverallBucket = true,
@@ -219,6 +227,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         ...getQuestionSort({ specifier: sort, question, enableBucketGroups }),
         cutoff,
         groupUnderCutoff,
+        groupOverLimit,
         mergeOtherBuckets,
         enableBucketGroups,
         enableAddMissingBuckets,
@@ -275,6 +284,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
                     }),
                     cutoff: facetCutoff,
                     groupUnderCutoff,
+                    groupOverLimit,
                     mergeOtherBuckets,
                     enableBucketGroups,
                     enableAddMissingBuckets,
@@ -415,10 +425,10 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await addAveragesByFacet(results, axis2, axis1)
         await addPercentilesByFacet(results, axis2, axis1)
 
-        // bucket grouping must be one of the first stages
+        // bucket grouping
         await groupBuckets(results, axis2, axis1)
 
-        // we group cutoff buckets together so it must also come early
+        // group cutoff buckets together
         await cutoffData(results, axis2, axis1)
 
         // for all following steps, use groups as options

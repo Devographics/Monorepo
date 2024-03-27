@@ -26,6 +26,8 @@ export const OTHER_ANSWERS = 'other_answers'
 
 export const CUTOFF_ANSWERS = 'cutoff_answers'
 
+export const OVERLIMIT_ANSWERS = 'overlimit_answers'
+
 export const NOT_APPLICABLE = 'na'
 
 export const DEFAULT = 'default'

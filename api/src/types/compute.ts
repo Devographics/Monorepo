@@ -23,6 +23,7 @@ export interface GenericComputeParameters {
     showNoAnswer?: boolean
     showNoMatch?: boolean
     groupUnderCutoff?: boolean
+    groupOverLimit?: boolean
     mergeOtherBuckets?: boolean
     enableBucketGroups?: boolean
     enableAddOverallBucket?: boolean
@@ -36,6 +37,7 @@ export interface ComputeAxisParameters {
     order: SortOrderNumeric
     cutoff: number
     groupUnderCutoff?: boolean
+    groupOverLimit?: boolean
     mergeOtherBuckets?: boolean
     enableBucketGroups?: boolean
     enableAddMissingBuckets?: boolean
