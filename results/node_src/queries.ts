@@ -293,6 +293,7 @@ const getBucketFragment = (options: {
                     id
                     percentageQuestion
                     percentageSurvey
+                    isFreeformData
                     hasInsufficientData
                     ${addBucketsEntities ? getEntityFragment() : ''}
                     ${facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
@@ -329,7 +330,8 @@ export const getDefaultQuery = ({
         addArgumentsPlaceholder = false,
         addBucketFacetsPlaceholder = false,
         addQuestionEntity = false,
-        addQuestionComments = false
+        addQuestionComments = false,
+        addGroupedBuckets = false
     } = queryOptions
 
     const queryArgsString = addArgumentsPlaceholder
@@ -360,7 +362,7 @@ surveys {
                     addBucketFacetsPlaceholder,
                     addBucketsEntities,
                     queryArgs,
-                    addGroupedBuckets: true
+                    addGroupedBuckets
                 })}
               }
             }

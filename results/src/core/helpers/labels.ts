@@ -4,7 +4,8 @@ import {
     OTHER_ANSWERS,
     CUTOFF_ANSWERS,
     OVERALL,
-    INSUFFICIENT_DATA
+    INSUFFICIENT_DATA,
+    OVERLIMIT_ANSWERS
 } from '@devographics/constants'
 import { StringTranslator } from '@devographics/react-i18n'
 import { Entity } from '@devographics/types'
@@ -53,6 +54,9 @@ export const getItemLabel = (options: {
     } else if (id === OTHER_ANSWERS) {
         key = 'charts.other_answers'
         label = getString(key).t
+    } else if (id === OVERLIMIT_ANSWERS) {
+        key = 'charts.overlimit_answers'
+        label = getString(key).t
     } else {
         key = `options.${i18nNamespace}.${id}`
 
@@ -66,7 +70,7 @@ export const getItemLabel = (options: {
         } else if (entity) {
             label = entity.nameClean || entity.name
         } else {
-            label = id
+            label = key
         }
     }
     if (extraLabel) {

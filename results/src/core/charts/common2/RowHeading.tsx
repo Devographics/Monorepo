@@ -10,14 +10,20 @@ export const RowHeading = ({
     showGroupedBuckets,
     setShowGroupedBuckets
 }: RowCommonProps & RowExtraProps) => {
-    const { entity, id, label } = bucket
+    const { entity, id, label: providedLabel } = bucket
     const { getString } = useI18n()
     const { i18nNamespace = block.fieldId || block.id } = block
-    const labelObject = getItemLabel({ id, label, entity, getString, i18nNamespace })
+    const { label, key } = getItemLabel({
+        id,
+        label: providedLabel,
+        entity,
+        getString,
+        i18nNamespace
+    })
     return (
         <h3 className="chart-row-heading">
             {isGroupedBucket && <span>↳&nbsp;</span>}
-            <span>{labelObject.label}</span>
+            <span>{label}</span>
             {setShowGroupedBuckets && (
                 <button onClick={() => setShowGroupedBuckets(!showGroupedBuckets)}>
                     {showGroupedBuckets ? '-' : `+${bucket.groupedBuckets?.length}`}

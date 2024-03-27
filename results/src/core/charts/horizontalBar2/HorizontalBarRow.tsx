@@ -8,19 +8,22 @@ import { RowDataProps } from './types'
 import { getViewDefinition } from './helpers/views'
 import { getRowOffset } from './helpers/other'
 import { useGradient } from './helpers/colors'
+import { useTheme } from 'styled-components'
 
 export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
+    const theme = useTheme()
     const { bucket, chartState, chartValues } = props
     const { question, maxOverallValue = 1 } = chartValues
     const viewDefinition = getViewDefinition(chartState.view)
     const { getValue } = viewDefinition
     const value = getValue(bucket)
     const width = (100 * value) / maxOverallValue
-    const gradient = useGradient({ id: bucket.id, question })
+    const gradient = theme.colors.barChart.primaryGradient
 
     return (
         <RowWrapper {...props}>
             <div className="chart-bar">
+                {bucket.isFreeformData && 'freeform'}
                 <Cell
                     bucket={bucket}
                     chartState={chartState}

@@ -49,7 +49,7 @@ export const Cell = ({
     })
 
     // TODO: base this on actual size of element
-    const showValue = value > 8
+    const showValue = true || value > 8
 
     const v = <span>{formatValue({ value, chartState, question: facetQuestion || question })}</span>
 

@@ -156,6 +156,7 @@ export interface BucketMetadata {
     token?: Token
     label?: string
     hasInsufficientData?: boolean
+    isFreeformData?: boolean
 }
 
 export interface Bucket extends BucketData, BucketMetadata {
