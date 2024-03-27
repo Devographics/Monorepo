@@ -228,7 +228,6 @@ input Parameters {
     enableCache: Boolean
     showNoAnswer: Boolean
     showNoMatch: Boolean
-    groupUnderCutoff: Boolean
     enableBucketGroups: Boolean
     # Merge cutoff answers and unmatched answers into a single "other answers" bucket
     mergeOtherBuckets: Boolean

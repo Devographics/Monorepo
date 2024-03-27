@@ -113,7 +113,7 @@ const getQuestionSort = ({
     } else if (question.defaultSort) {
         // if question has a default sort, use it
         defaultSort = question.defaultSort
-    } else if (question.optionsAreNumeric) {
+    } else if (question.optionsAreSequential) {
         if (question.options) {
             defaultSort = 'options'
         } else {
@@ -209,22 +209,26 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         facetLimit = DEFAULT_LIMIT,
         facetCutoff = 1,
         showNoAnswer,
-        groupUnderCutoff = true,
-        groupOverLimit = true,
         mergeOtherBuckets = true,
         enableBucketGroups = true,
         enableAddOverallBucket = true,
         enableAddMissingBuckets
     } = parameters
 
+    // these are not passed as parameters anymore, but just default to being always true
+    // if the extra groups are not needed they can just be ignored by the user
+    const groupUnderCutoff = true
+    const groupOverLimit = true
+
     /*
 
     Axis 1
 
     */
+    const sortSpecifier = getQuestionSort({ specifier: sort, question, enableBucketGroups })
     axis1 = {
         question,
-        ...getQuestionSort({ specifier: sort, question, enableBucketGroups }),
+        ...sortSpecifier,
         cutoff,
         groupUnderCutoff,
         groupOverLimit,
