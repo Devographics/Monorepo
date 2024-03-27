@@ -119,13 +119,14 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
             <>
                 <ChartHeading>
                     <div className="multiexp-chart-heading">
+                        <MultiItemsExperienceControls chartState={chartState} />
+
                         <Legend
                             {...commonProps}
                             options={options}
                             colorScale={colorScale}
                             i18nNamespace={grouping}
                         />
-                        <MultiItemsExperienceControls chartState={chartState} />
                     </div>
                 </ChartHeading>
 

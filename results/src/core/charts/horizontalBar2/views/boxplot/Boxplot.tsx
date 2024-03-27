@@ -11,6 +11,7 @@ import { BlockLegend } from 'core/types'
 import { useWidth } from 'core/charts/common2/helpers'
 import { useBoxplotData, useScales } from './helpers'
 import { formatValue } from '../../helpers/labels'
+import { removeNoAnswer } from '../../helpers/steps'
 
 const PIXEL_PER_TICKS = 130
 
@@ -128,5 +129,6 @@ const BoxplotRow = (
 }
 
 export const Boxplot: ViewDefinition = {
-    component: BoxplotView
+    component: BoxplotView,
+    steps: [removeNoAnswer]
 }

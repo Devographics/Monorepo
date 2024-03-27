@@ -8,8 +8,7 @@
 }
 
 .chart-row,
-.chart-axis-bottom,
-.chart-heading {
+.chart-axis-bottom {
     align-items: center;
     @include small {
         display: flex;
@@ -28,14 +27,6 @@
     }
     &-overall {
         background: #ffffff22;
-    }
-}
-.chart-heading {
-    &-content {
-        grid-column-start: 2;
-        grid-column-end: 4;
-        border-bottom: 1px solid #ffffff33;
-        padding-bottom: 20px;
     }
 }
 .chart-facet {
@@ -91,12 +82,6 @@
 .chart-actions {
     display: flex;
     justify-content: center;
-}
-
-.chart-facet-question {
-    display: flex;
-    align-items: center;
-    gap: 5px;
 }
 
 .chart-heading-facet {

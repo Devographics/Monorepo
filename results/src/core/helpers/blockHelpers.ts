@@ -36,6 +36,43 @@ export const getBlockTabKey = ({
         ? 'tabs.all_respondents'
         : getBlockTitleKey({ block, pageContext })
 
+export const getBlockTabTitle = ({
+    block,
+    pageContext,
+    variantIndex,
+    getString,
+    entities
+}: {
+    block: BlockDefinition
+    pageContext: PageContextValue
+    variantIndex: number
+    getString: StringTranslator
+    entities: Entity[]
+}) => {
+    if (block.tabId) {
+        return getString(block.tabId)?.t
+    } else if (variantIndex === 0) {
+        return getString('tabs.all_respondents')?.t
+    } else {
+        const facetBlock = {
+            id: block.filtersState?.facet?.id,
+            sectionId: block.filtersState?.facet?.sectionId
+        } as BlockDefinition
+
+        const facetTitle = getBlockTitle({
+            block: facetBlock,
+            pageContext,
+            getString,
+            entities
+        })
+        if (facetTitle) {
+            return getString('charts.vs')?.t + ' ' + facetTitle
+        } else {
+            return getString(getBlockTitleKey({ block, pageContext }))?.t
+        }
+    }
+}
+
 export const getBlockNoteKey = ({ block }: { block: BlockDefinition }) =>
     block.noteId || `${getBlockKey({ block })}.note`
 
