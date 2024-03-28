@@ -20,7 +20,9 @@ import isEmpty from 'lodash/isEmpty.js'
 import { OptionId } from '@devographics/types'
 import clone from 'lodash/clone.js'
 import {
+    getAvatar,
     getEntitiesFromYaml,
+    getEntityType,
     getIdFromFileName,
     highlightEntitiesExampleCode,
     parseEntitiesMarkdown
@@ -250,6 +252,13 @@ export const getEntity = async ({
     if (!entity) {
         return
     }
+
+    const avatar = await getAvatar(entity)
+    if (avatar) {
+        entity.avatar = avatar
+    }
+
+    entity.type = getEntityType(entity)
 
     if (entity.belongsTo) {
         // if entity A belongs to another entity B, extend B with A and return the result

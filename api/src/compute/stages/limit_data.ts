@@ -13,7 +13,7 @@ import { BucketUnits } from '@devographics/types'
 import { mergeBuckets, mergePercentiles } from './cutoff_data'
 
 const specialBucketIds = [NO_ANSWER, CUTOFF_ANSWERS, OTHER_ANSWERS]
-const isSpecialBucket = (b: Bucket | FacetBucket) => specialBucketIds.includes(b.id)
+export const isSpecialBucket = (b: Bucket | FacetBucket) => specialBucketIds.includes(b.id)
 const isNotSpecialBucket = (b: Bucket | FacetBucket) => !isSpecialBucket(b)
 
 /*

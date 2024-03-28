@@ -221,10 +221,12 @@ type GroupsMetadata {
 input Parameters {
     limit: Int
     cutoff: Int
+    cutoffPercent: Int
     sort: SortSpecifier
     facetSort: SortSpecifier
     facetLimit: Int
     facetCutoff: Int
+    facetCutoffPercent: Int
     enableCache: Boolean
     showNoAnswer: Boolean
     showNoMatch: Boolean

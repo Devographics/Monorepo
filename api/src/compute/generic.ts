@@ -203,11 +203,13 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     const { responsesType, filters, parameters = {}, facet, selectedEditionId } = computeArguments
     const {
         cutoff = 1,
+        cutoffPercent,
         sort,
         limit = DEFAULT_LIMIT,
         facetSort,
         facetLimit = DEFAULT_LIMIT,
         facetCutoff = 1,
+        facetCutoffPercent,
         showNoAnswer,
         mergeOtherBuckets = true,
         enableBucketGroups = true,
@@ -230,6 +232,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         question,
         ...sortSpecifier,
         cutoff,
+        cutoffPercent,
         groupUnderCutoff,
         groupOverLimit,
         mergeOtherBuckets,
@@ -287,6 +290,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
                         enableBucketGroups
                     }),
                     cutoff: facetCutoff,
+                    cutoffPercent: facetCutoffPercent,
                     groupUnderCutoff,
                     groupOverLimit,
                     mergeOtherBuckets,
