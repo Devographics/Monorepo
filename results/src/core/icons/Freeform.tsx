@@ -1,12 +1,12 @@
 import React from 'react'
 import IconWrapper, { IconProps } from './IconWrapper'
 
-export const PercentIcon = (props: IconProps) => (
+export const FreeformIcon = (props: IconProps) => (
     <IconWrapper {...props}>
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
+            width={32}
+            height={32}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -14,9 +14,8 @@ export const PercentIcon = (props: IconProps) => (
             strokeLinecap="butt"
             strokeLinejoin="round"
         >
-            <line x1="19" y1="5" x2="5" y2="19"></line>
-            <circle cx="6.5" cy="6.5" r="2.5"></circle>
-            <circle cx="17.5" cy="17.5" r="2.5"></circle>
+            <polygon points="14 2 18 6 7 17 3 17 3 13 14 2"></polygon>
+            <line x1="3" y1="22" x2="21" y2="22"></line>
         </svg>
     </IconWrapper>
 )

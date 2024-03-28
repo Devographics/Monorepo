@@ -10,6 +10,16 @@ import {
 import { StringTranslator } from '@devographics/react-i18n'
 import { Entity } from '@devographics/types'
 
+const predefinedKeys: { [key: string]: string } = {
+    [NO_ANSWER]: 'charts.no_answer',
+    [INSUFFICIENT_DATA]: 'charts.insufficient_data',
+    [OVERALL]: 'charts.overall',
+    [NO_MATCH]: 'charts.no_match',
+    [CUTOFF_ANSWERS]: 'charts.cutoff_answers',
+    [OTHER_ANSWERS]: 'charts.other_answers',
+    [OVERLIMIT_ANSWERS]: 'charts.overlimit_answers'
+}
+
 export const getItemLabel = (options: {
     id: string | number
     label?: string
@@ -19,11 +29,10 @@ export const getItemLabel = (options: {
     entity?: Entity
     getString: StringTranslator
     i18nNamespace?: string
-    extraLabel?: string
     values?: any
 }) => {
     const {
-        label: label_,
+        label: providedLabel,
         // section,
         // question,
         // option,
@@ -31,52 +40,31 @@ export const getItemLabel = (options: {
         id,
         getString,
         i18nNamespace,
-        extraLabel,
         values = {}
     } = options
 
-    let key, label
-    if (id === NO_ANSWER) {
-        key = 'charts.no_answer'
-        label = getString(key).t
-    } else if (id === INSUFFICIENT_DATA) {
-        key = 'charts.insufficient_data'
-        label = getString(key).t
-    } else if (id === OVERALL) {
-        key = 'charts.overall'
-        label = getString(key).t
-    } else if (id === NO_MATCH) {
-        key = 'charts.no_match'
-        label = getString(key).t
-    } else if (id === CUTOFF_ANSWERS) {
-        key = 'charts.cutoff_answers'
-        label = getString(key).t
-    } else if (id === OTHER_ANSWERS) {
-        key = 'charts.other_answers'
-        label = getString(key).t
-    } else if (id === OVERLIMIT_ANSWERS) {
-        key = 'charts.overlimit_answers'
-        label = getString(key).t
+    let key, label, shortLabel
+
+    if (providedLabel) {
+        // if a label is provided, use that
+        label = providedLabel
+        shortLabel = providedLabel
     } else {
-        key = `options.${i18nNamespace}.${id}`
+        // else, try using an i18n key
+        const defaultKey = `options.${i18nNamespace}.${id}`
+        const predefinedKey = predefinedKeys[id]
 
-        const s = getString(key, values)
+        key = predefinedKey || defaultKey
 
-        if (label_) {
-            label = label_
-        } else if (!s.missing) {
-            const translatedLabel = s.tClean || s.t
-            label = translatedLabel
-        } else if (entity) {
-            label = entity.nameClean || entity.name
-        } else {
-            label = key
-        }
+        const i18nLabelObject = getString(key, values)
+        const i18nLabel = i18nLabelObject.tClean || i18nLabelObject.t
+
+        const shortLabelObject = getString(key + '.short', values, i18nLabel)
+        shortLabel = shortLabelObject.tClean || shortLabelObject.t
+
+        const entityName = entity && (entity.nameClean || entity.name)
+
+        label = i18nLabel || entityName || id
     }
-    if (extraLabel) {
-        label = `${label}, ${extraLabel}`
-    }
-    const shortLabelObject = getString(key + '.short', values, label?.toString())
-    const shortLabel = shortLabelObject.tClean || shortLabelObject.t
     return { key, label, shortLabel }
 }

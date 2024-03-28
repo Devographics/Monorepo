@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ChartValues } from '../multiItemsExperience/types'
 import Tooltip from 'core/components/Tooltip'
 import { Bucket, FacetBucket } from '@devographics/types'
@@ -8,6 +8,10 @@ import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import { formatValue } from './helpers/labels'
 import { getViewDefinition } from './helpers/views'
+import { useWidth } from '../common2/helpers'
+
+// hide labels for cells under this size
+const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
 
 export const Cell = ({
     bucket,
@@ -26,6 +30,14 @@ export const Cell = ({
     cellIndex: number
     gradient: string[]
 }) => {
+    const ref = useRef<HTMLDivElement>(null)
+    const cellWidth = useWidth(ref)
+    const [showLabel, setShowLabel] = useState(false)
+
+    useEffect(() => {
+        setShowLabel(!!(cellWidth && cellWidth > MINIMUM_CELL_SIZE_TO_SHOW_LABEL))
+    }, [cellWidth])
+
     const { question, facetQuestion } = chartValues
     const viewDefinition = getViewDefinition(chartState.view)
     const { getValue } = viewDefinition
@@ -48,16 +60,13 @@ export const Cell = ({
         entity
     })
 
-    // TODO: base this on actual size of element
-    const showValue = true || value > 8
-
     const v = <span>{formatValue({ value, chartState, question: facetQuestion || question })}</span>
 
     return (
         <Tooltip
             trigger={
-                <div className="chart-cell horizontal-chart-cell" style={style}>
-                    {showValue && v}
+                <div className="chart-cell horizontal-chart-cell" style={style} ref={ref}>
+                    {showLabel && v}
                 </div>
             }
             contents={

@@ -15,11 +15,15 @@ export const getEntityFragment = () => `entity {
     nameHtml
     nameClean
     id
+    type
     example {
       label
       language
       code
       codeHighlighted
+    }
+    avatar {
+      url
     }
     homepage {
       url

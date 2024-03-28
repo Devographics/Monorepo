@@ -4,4 +4,4 @@ query: currentEditionData
 queryOptions:
     addBucketsEntities: true
     subField: combined
-parameters: { showNoAnswer: true, cutoff: 10 }
+parameters: { showNoAnswer: true, cutoffPercent: 1 }

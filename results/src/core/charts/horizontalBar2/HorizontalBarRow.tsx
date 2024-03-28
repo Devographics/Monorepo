@@ -23,7 +23,6 @@ export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProp
     return (
         <RowWrapper {...props}>
             <div className="chart-bar">
-                {bucket.isFreeformData && 'freeform'}
                 <Cell
                     bucket={bucket}
                     chartState={chartState}

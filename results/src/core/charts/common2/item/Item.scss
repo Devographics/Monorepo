@@ -1,0 +1,29 @@
+.chart-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.chart-item-label {
+    text-align: right;
+}
+button.chart-item {
+    padding: 4px 8px 4px 4px;
+    border-radius: 500px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+.item-modal-name {
+    margin-bottom: 5px;
+}
+.item-modal-links {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.item-modal-links-item {
+}
+.item-modal-links-item-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

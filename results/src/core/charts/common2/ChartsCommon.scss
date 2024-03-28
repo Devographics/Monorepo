@@ -41,16 +41,6 @@
         gap: 10px;
     }
 }
-.chart-row-heading {
-    margin: 0;
-    font-size: var(--chartFontColumnHeading);
-    height: var(--rowHeight);
-    // display: flex;
-    // align-items: center;
-    font-size: 0.9rem;
-    font-weight: normal;
-    text-align: right;
-}
 .chart-row-content {
     height: calc(var(--rowHeight) * 1px);
     position: relative;

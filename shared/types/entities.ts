@@ -49,6 +49,21 @@ export interface Entity extends EntityResolvedFields {
     apiOnly?: boolean
 
     resources?: Resource[]
+
+    avatar?: Avatar
+
+    type: EntityType
+}
+
+export enum EntityType {
+    PEOPLE = 'people',
+    FEATURE = 'feature',
+    LIBRARY = 'library',
+    DEFAULT = 'default'
+}
+
+export interface Avatar {
+    url: string
 }
 
 export interface Token {
