@@ -6,6 +6,7 @@ import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { ColumnModes } from '../common2/types'
+import { sortOptions } from './MultiItemsBlock'
 
 const icons = {
     [ColumnModes.SPLIT]: SplitIcon,
@@ -32,7 +33,7 @@ export const MultiItemsExperienceControls = ({ chartState }: { chartState: Chart
                                 className={`Button--${isChecked ? 'selected' : 'unselected'}`}
                                 onClick={() => {
                                     setGrouping(id)
-                                    // setSort(sortOptions[id][0])
+                                    setSort(sortOptions[id][0])
                                 }}
                                 aria-pressed={isChecked}
                             >

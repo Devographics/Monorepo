@@ -273,10 +273,15 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             neutral: [colors.grey, colors.greyLight],
             negative: [colors.red, colors.redLight]
         },
+        // features: {
+        //     used: [colors.electricBlueLight, colors.electricBlueLighter],
+        //     heard: [colors.electricBlueDarker, colors.electricBlueDark],
+        //     never_heard: [colors.electricBlueDarkest, colors.electricBlueDarkerer]
+        // },
         features: {
-            never_heard: [colors.electricBlueLight, colors.electricBlueLighter],
-            heard: [colors.electricBlueDarker, colors.electricBlueDark],
-            used: [colors.purple, colors.purpleLight]
+            never_heard: [velocity[1], velocity[2]],
+            heard: [velocity[5], velocity[6]],
+            used: [velocity[9], velocity[10]]
         },
         features_categories: {
             layout: colors.indigo,

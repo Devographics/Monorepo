@@ -21,25 +21,17 @@ export const Cell = ({
 }) => {
     const theme = useTheme()
     const { getString } = useI18n()
-    const { variable, grouping } = chartState
-    // the "subgrouping" is whichever GroupingOption is not the currently selected grouping
-    const subGrouping = Object.values(GroupingOptions).find(g => g !== grouping)
+    const { variable } = chartState
     const { bucket, facetBucket } = combinedBucket
 
-    // little bit hacky: we need to look in two different places depending on
-    // which grouping is enabled
-    const columnId = (
-        grouping === GroupingOptions.EXPERIENCE ? bucket.id : facetBucket.id
-    ) as ColumnId
-    const answerId = grouping === GroupingOptions.EXPERIENCE ? facetBucket.id : bucket.id
-
-    const parentValue = groupedTotals[columnId]
     const value = facetBucket[variable] || 0
+    const experienceKey = `options.experience.${bucket.id}.label.short`
+    const sentimentKey = `options.sentiment.${facetBucket.id}.label.short`
+
     const values = {
-        parentValue,
-        parentAnswer: getString(`options.${grouping}.${columnId}.label.short`)?.t || '?',
         value,
-        answer: getString(`options.${subGrouping}.${answerId}.label.short`)?.t || '?'
+        experience: getString(experienceKey)?.t || '?',
+        sentiment: getString(sentimentKey)?.t || '?'
     }
 
     const experienceColors = theme.colors.ranges.features
@@ -55,19 +47,31 @@ export const Cell = ({
         '--offset': offset
     }
 
+    const isNeutral = facetBucket.id === SimplifiedSentimentOptions.NEUTRAL_SENTIMENT
+
     return (
         <Tooltip
             trigger={
                 <div className="multiexp-cell chart-cell" style={style}>
                     <div className="multiexp-cell-segment multiexp-cell-segment-experience"></div>
-                    {facetBucket.id !== SimplifiedSentimentOptions.NEUTRAL_SENTIMENT && (
+
+                    {!isNeutral && (
                         <div className="multiexp-cell-segment multiexp-cell-segment-sentiment"></div>
                     )}
                 </div>
             }
             contents={
                 <div>
-                    <T k={`charts.multiexp.cell_tooltip`} values={values} html={true} md={true} />
+                    <T
+                        k={
+                            isNeutral
+                                ? `charts.multiexp.cell_tooltip_neutral`
+                                : `charts.multiexp.cell_tooltip`
+                        }
+                        values={values}
+                        html={true}
+                        md={true}
+                    />
                 </div>
             }
         />

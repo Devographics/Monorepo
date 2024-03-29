@@ -4,14 +4,19 @@
     margin: 20px 0;
     --chartFontColumnHeading: 0.9rem;
     --chartFontSmall: 0.7rem;
-    --cellHeight: 40px;
+    --cellHeight: 30px;
     --totalsHeight: 30px;
     --headingsHeight: var(--cellHeight);
     .chart-row {
         align-items: normal;
-        .chart-row-heading,
-        .chart-row-metadata {
-            margin-top: 8px;
+        .chart-row-left,
+        .chart-row-right {
+            height: var(--cellHeight);
+            display: flex;
+            align-items: center;
+        }
+        .chart-row-left {
+            justify-content: flex-end;
         }
     }
     .chart-heading {
