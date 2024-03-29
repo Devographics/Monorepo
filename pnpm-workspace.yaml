@@ -10,7 +10,8 @@ packages:
     - 'surveyadmin'
     - 'results'
     - 'results-astro'
-    - 'charts' # WIP will replace results
+    - 'results-remix'
+    - 'charts'
     - 'jobs'
     - 'homepage'
     - 'graphiql'
