@@ -13,6 +13,10 @@ query: >
                   name
                   nameClean
                   nameHtml
+                  type
+                  description
+                  descriptionClean
+                  descriptionHtml
                   homepage {
                     url
                   }

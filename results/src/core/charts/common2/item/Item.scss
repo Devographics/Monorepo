@@ -5,6 +5,7 @@
 }
 .chart-item-label {
     text-align: right;
+    font-size: 0.8rem;
 }
 button.chart-item {
     padding: 4px 8px 4px 4px;
@@ -12,18 +13,31 @@ button.chart-item {
     font-size: 0.9rem;
     white-space: nowrap;
 }
-.item-modal-name {
+.item-name {
     margin-bottom: 5px;
 }
-.item-modal-links {
+.item-description {
+    margin-bottom: var(--spacing);
+    font-size: 0.8rem;
+}
+.item-links {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
-.item-modal-links-item {
+.item-links-item {
 }
-.item-modal-links-item-link {
+.item-links-item-link {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.item-modal {
+    .code-example {
+        // padding: 0;
+        font-size: 0.8rem;
+        background: var(--backgroundColor);
+        margin-bottom: var(--spacing);
+    }
 }

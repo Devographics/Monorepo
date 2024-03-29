@@ -72,7 +72,9 @@ export const Item = ({
                     </Button>
                 }
             >
-                <ModalComponent entity={entity} />
+                <div className="item-modal">
+                    <ModalComponent entity={entity} />
+                </div>
             </Popover>
         )
     }

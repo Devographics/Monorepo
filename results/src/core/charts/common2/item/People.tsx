@@ -1,7 +1,7 @@
 import React from 'react'
 import Avatar from 'core/components/Avatar'
 import { Entity } from '@devographics/types'
-import { UserIcon } from 'core/icons'
+import { MDNIcon, UserIcon } from 'core/icons'
 import { LabelProps, ServiceDefinition } from './types'
 import {
     LinkIcon,
@@ -18,47 +18,55 @@ import T from 'core/i18n/T'
 
 export const services: ServiceDefinition[] = [
     {
-        name: 'twitter',
+        service: 'twitter',
         icon: TwitterIcon
     },
     {
-        name: 'homepage',
+        service: 'homepage',
         icon: LinkIcon
     },
     {
-        name: 'blog',
+        service: 'blog',
         icon: BlogIcon
     },
     {
-        name: 'rss',
+        service: 'rss',
         icon: RSSIcon
     },
     {
-        name: 'github',
+        service: 'github',
         icon: GitHubIcon
     },
     {
-        name: 'npm',
+        service: 'npm',
         icon: NpmIcon
     },
     {
-        name: 'mastodon',
+        service: 'mastodon',
         icon: MastodonIcon
     },
     {
-        name: 'youtube',
+        service: 'youtube',
         icon: YouTubeIcon
     },
     {
-        name: 'twitch',
+        service: 'twitch',
         icon: TwitchIcon
+    },
+    {
+        service: 'mdn',
+        icon: MDNIcon
+    },
+    {
+        service: 'caniuse',
+        icon: UserIcon
     }
 ]
 
 export const getSocialLinks = (entity: Entity) => {
     const links: Array<any> = []
     services.forEach(service => {
-        const serviceData = entity[service.name as keyof Entity]
+        const serviceData = entity[service.service as keyof Entity]
         if (serviceData) {
             links.push({ ...service, ...serviceData })
         }
@@ -80,28 +88,37 @@ export const PeopleIcon = ({ entity }: LabelProps) =>
 
 export const PeopleModal = ({ entity }: LabelProps) => (
     <div>
-        <h3 className="item-modal-name">{entity.name}</h3>
-        <ul className="item-modal-links">
-            {getSocialLinks(entity).map(({ name, url, icon }, index) => (
-                <LinkItem key={name} name={name} url={url} icon={icon} />
-            ))}
+        <h3 className="item-name">{entity.name}</h3>
+        <ul className="item-links">
+            <ItemLinks entity={entity} />
         </ul>
     </div>
 )
 
-const LinkItem = ({
-    name,
+export const ItemLinks = ({ entity }: { entity: Entity }) => {
+    const links = getSocialLinks(entity)
+    return (
+        <ul className="item-links">
+            {links.map(({ service, url, icon }, index) => (
+                <LinkItem key={service} service={service} url={url} icon={icon} />
+            ))}
+        </ul>
+    )
+}
+
+export const LinkItem = ({
+    service,
     url,
     icon: Icon
 }: {
-    name: string
+    service: string
     url: string
     icon: ServiceDefinition['icon']
 }) => (
-    <li className="item-modal-links-item">
-        <a className="item-modal-links-item-link" href={url} target="_blank" rel="noreferrer">
-            {Icon && <Icon size="small" labelId={`blocks.entity.${name}_link`} />}
-            <T k={`blocks.entity.${name}_link`} />
+    <li className="item-links-item">
+        <a className="item-links-item-link" href={url} target="_blank" rel="noreferrer">
+            {Icon && <Icon size="small" labelId={`blocks.entity.${service}_link`} />}
+            <T k={`blocks.entity.${service}_link`} />
         </a>
     </li>
 )

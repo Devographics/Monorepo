@@ -6,6 +6,6 @@ export type LabelProps = {
 }
 
 export type ServiceDefinition = {
-    name: string
+    service: string
     icon: (props: IconProps) => JSX.Element
 }

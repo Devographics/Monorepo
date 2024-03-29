@@ -23,22 +23,13 @@ interface LayoutProps {
     children: React.ReactNode
 }
 const ThemedLayout = (props: LayoutProps) => {
-    const { colors } = theme
-    const style = {
-        '--backgroundColor': colors.background,
-        '--backgroundBackgroundColor': colors.backgroundBackground,
-        '--backgroundAltColor': colors.backgroundAlt,
-        '--borderColor': colors.border,
-        '--linkColor': colors.link,
-        '--spacing': `${theme.dimensions.spacing}px`
-    }
     return (
         // @ts-expect-errors legacy
         <ThemeProvider theme={theme}>
             {/* @ts-expect-errors legacy */}
             <GlobalStyle />
             <Head />
-            <div style={style}>
+            <div>
                 {props.context.id === 'report' ? (
                     <ReportLayout {...props} />
                 ) : (

@@ -180,7 +180,7 @@
     }
 }
 .multiexp-cell-segment-experience {
-    height: calc(var(--cellHeight) * 1);
+    height: var(--cellHeight);
 }
 
 .multiexp-cell-segment-sentiment {

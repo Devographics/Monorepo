@@ -7,6 +7,7 @@ import { useI18n } from '@devographics/react-i18n'
 import colors from 'core/theme/colors'
 import classNames from 'classnames'
 import { fontList } from 'Fonts/Fonts'
+import theme from 'Theme/index.ts'
 
 const Head = () => {
     const pageContext = usePageContext()
@@ -56,12 +57,25 @@ const Head = () => {
         `${process.env.GATSBY_ASSETS_URL}/surveys/${currentEdition.id}-favicon.png`
 
     const hasFonts = fontList && fontList.length > 0
+
+    const { colors } = theme
+    const variables = {
+        '--backgroundColor': colors.background,
+        '--backgroundBackgroundColor': colors.backgroundBackground,
+        '--backgroundAltColor': colors.backgroundAlt,
+        '--borderColor': colors.border,
+        '--linkColor': colors.link,
+        '--spacing': `${theme.dimensions.spacing}px`
+    }
     return (
         <>
             <Helmet
                 defaultTitle={meta.fullTitle}
                 bodyAttributes={{
-                    class: bodyClassNames
+                    class: bodyClassNames,
+                    style: Object.keys(variables)
+                        .map(name => `${name}: ${variables[name]};`)
+                        .join('')
                 }}
             >
                 <html lang="en" />

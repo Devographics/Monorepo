@@ -280,8 +280,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         // },
         features: {
             never_heard: [velocity[1], velocity[2]],
-            heard: [velocity[5], velocity[6]],
-            used: [velocity[9], velocity[10]]
+            heard: [velocity[4], velocity[5]],
+            used: [velocity[8], velocity[9]]
         },
         features_categories: {
             layout: colors.indigo,
