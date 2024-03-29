@@ -10,6 +10,9 @@ import { ChartState } from '../horizontalBar2/types'
 import Tooltip from 'core/components/Tooltip'
 import { OrderOptions } from './types'
 import T from 'core/i18n/T'
+import { CellLabel } from './CellLabel'
+import ButtonGroup from 'core/components/ButtonGroup'
+import Button from 'core/components/Button'
 
 type LegendProps = {
     chartState: ChartState
@@ -24,15 +27,17 @@ export const Legend = ({ chartState, i18nNamespace, options, colorScale }: Legen
             <h4 className="chart-legend-heading">
                 <T k="charts.sort_by" />
             </h4>
-            {options.map(option => (
-                <LegendItem
-                    key={option.id}
-                    chartState={chartState}
-                    i18nNamespace={i18nNamespace}
-                    option={option}
-                    gradient={colorScale?.[option.id] || [neutralColor, neutralColor]}
-                />
-            ))}
+            <ButtonGroup className="chart-legend-items">
+                {options.map(option => (
+                    <LegendItem
+                        key={option.id}
+                        chartState={chartState}
+                        i18nNamespace={i18nNamespace}
+                        option={option}
+                        gradient={colorScale?.[option.id] || [neutralColor, neutralColor]}
+                    />
+                ))}
+            </ButtonGroup>
         </div>
     )
 }
@@ -68,41 +73,42 @@ const LegendItem = ({
         '--color2': gradient[1]
     }
     return (
-        <div style={style} className="legend-item">
-            <Tooltip
-                trigger={
-                    <button
-                        className={`column-heading column-heading-sort column-heading-order-${order} ${
-                            isEnabled ? 'column-heading-sort-enabled' : ''
-                        }`}
-                        onClick={e => {
-                            e.preventDefault()
-                            if (!isEnabled) {
-                                setSort(id as string)
-                                setOrder(OrderOptions.ASC)
-                            } else if (sort && order === OrderOptions.ASC) {
-                                setOrder(OrderOptions.DESC)
-                            } else {
-                                setSort(undefined)
-                                setOrder(OrderOptions.ASC)
-                            }
-                        }}
-                    >
-                        <div className="legend-item-color" />
-                        <span>{shortLabel}</span>
-                        <span className="order-asc">↑</span>
-                        <span className="order-desc">↓</span>
-                    </button>
-                }
-                contents={
-                    <T
-                        k={isEnabled ? 'charts.sorted_by_sort_order' : 'charts.sort_by_sort'}
-                        values={{ sort: columnLabel, order: orderLabel }}
-                        md={true}
-                    />
-                }
-            />
-        </div>
+        <Tooltip
+            trigger={
+                <Button
+                    style={style}
+                    className={`chart-legend-item column-heading column-heading-sort column-heading-order-${order} ${
+                        isEnabled ? 'column-heading-sort-enabled' : ''
+                    }`}
+                    size="small"
+                    onClick={e => {
+                        e.preventDefault()
+                        if (!isEnabled) {
+                            setSort(id as string)
+                            setOrder(OrderOptions.ASC)
+                        } else if (sort && order === OrderOptions.ASC) {
+                            setOrder(OrderOptions.DESC)
+                        } else {
+                            setSort(undefined)
+                            setOrder(OrderOptions.ASC)
+                        }
+                    }}
+                >
+                    <div className="legend-item-color" />
+                    <span>{shortLabel}</span>
+                    {/* <CellLabel label={shortLabel} /> */}
+                    <span className="order-asc">↑</span>
+                    <span className="order-desc">↓</span>
+                </Button>
+            }
+            contents={
+                <T
+                    k={isEnabled ? 'charts.sorted_by_sort_order' : 'charts.sort_by_sort'}
+                    values={{ sort: columnLabel, order: orderLabel }}
+                    md={true}
+                />
+            }
+        />
     )
 }
 

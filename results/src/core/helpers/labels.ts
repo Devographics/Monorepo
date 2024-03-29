@@ -60,11 +60,11 @@ export const getItemLabel = (options: {
         const i18nLabel = i18nLabelObject.tClean || i18nLabelObject.t
 
         const shortLabelObject = getString(key + '.short', values, i18nLabel)
-        shortLabel = shortLabelObject.tClean || shortLabelObject.t
 
         const entityName = entity && (entity.nameClean || entity.name)
 
-        label = i18nLabel || entityName || id
+        label = String(i18nLabel || entityName || id)
+        shortLabel = String(shortLabelObject.tClean || shortLabelObject.t || label)
     }
     return { key, label, shortLabel }
 }

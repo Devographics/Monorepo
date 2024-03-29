@@ -5,12 +5,10 @@ import { ItemLinks } from './People'
 
 export const FeatureModal = ({ entity }: LabelProps) => (
     <div>
-        {entity.nameHtml && (
-            <h3
-                className="item-name"
-                dangerouslySetInnerHTML={{ __html: entity.nameHtml || entity.name }}
-            />
-        )}
+        <h3
+            className="item-name"
+            dangerouslySetInnerHTML={{ __html: entity.nameHtml || entity.nameClean || '' }}
+        />
         {entity.description && (
             <div
                 className="item-description"

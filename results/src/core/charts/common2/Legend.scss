@@ -8,19 +8,22 @@
         margin: 0;
     }
 }
-.legend-item {
+.chart-legend-items {
+}
+.chart-legend-item {
     button {
         display: flex;
         align-items: center;
         gap: 5px;
         white-space: nowrap;
-        background: linear-gradient(to left, var(--color1), var(--color2));
-        border: 0;
-        font-size: 0.8rem;
+        // background: linear-gradient(to left, var(--color1), var(--color2));
+        // background: none;
+        // border: 0;
+        // font-size: 0.8rem;
     }
 }
 .legend-item-color {
-    display: none;
+    // display: none;
     background: linear-gradient(to left, var(--color1), var(--color2));
     height: 12px;
     width: 12px;
@@ -35,7 +38,7 @@
     // opacity: 0.7;
     &-enabled {
         // opacity: 1;
-        border: 2px solid white !important;
+        border: 1px solid white !important;
     }
 }
 

@@ -7,7 +7,7 @@
     background: linear-gradient(to left, var(--color1), var(--color2));
     width: calc(var(--width) * 1%);
     left: calc(var(--offset) * 1%);
-    height: calc(var(--rowHeight) * 1px);
+    height: var(--rowHeight);
 }
 
 .chart-horizontal-bar-controls {

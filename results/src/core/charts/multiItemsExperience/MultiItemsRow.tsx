@@ -81,6 +81,7 @@ export const Row = (props: {
                                 groupedTotals={groupedTotals}
                                 width={width}
                                 offset={offset - rowOffset}
+                                chartState={chartState}
                             />
                         )
                     })}

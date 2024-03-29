@@ -22,6 +22,9 @@
     .chart-heading {
         display: block;
     }
+    .chart-row-content {
+        height: auto;
+    }
 }
 .multiexp-controls {
     display: flex;
@@ -160,6 +163,9 @@
     height: calc(var(--cellHeight) / 2);
     // opacity: 0.3;
     transition: 600ms;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     &-experience {
         background: var(--experienceColor1)
             linear-gradient(to left, var(--experienceColor1), var(--experienceColor2));

@@ -42,7 +42,7 @@
     }
 }
 .chart-row-content {
-    height: calc(var(--rowHeight) * 1px);
+    height: var(--rowHeight);
     position: relative;
     left: calc(var(--rowOffset) * -1px);
 }
@@ -84,9 +84,5 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
-    text-shadow: 1px 1px 0 #000000cc, -1px 1px 0 #000000cc, -1px -1px 0 #000000cc,
-        1px -1px 0 #000000cc;
     border-radius: 2px;
-    font-size: 0.8rem;
 }

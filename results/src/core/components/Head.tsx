@@ -60,6 +60,7 @@ const Head = () => {
 
     const { colors } = theme
     const variables = {
+        '--textColor': colors.text,
         '--backgroundColor': colors.background,
         '--backgroundBackgroundColor': colors.backgroundBackground,
         '--backgroundAltColor': colors.backgroundAlt,

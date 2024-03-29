@@ -38,7 +38,7 @@ button.chart-item {
 
 .item-modal {
     .code-example {
-        // padding: 0;
+        padding: var(--spacing);
         font-size: 0.8rem;
         background: var(--backgroundColor);
         margin-bottom: var(--spacing);

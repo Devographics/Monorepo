@@ -9,9 +9,21 @@ import { useI18n } from '@devographics/react-i18n'
 import { formatValue } from './helpers/labels'
 import { getViewDefinition } from './helpers/views'
 import { useWidth } from '../common2/helpers'
+import { CellLabel } from '../common2'
 
 // hide labels for cells under this size
-const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
+export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
+
+export const useIsWideEnough = () => {
+    const ref = useRef<HTMLDivElement>(null)
+    const cellWidth = useWidth(ref)
+    const [isWideEnough, setIsWideEnough] = useState(false)
+
+    useEffect(() => {
+        setIsWideEnough(!!(cellWidth && cellWidth > MINIMUM_CELL_SIZE_TO_SHOW_LABEL))
+    }, [cellWidth])
+    return { ref, isWideEnough, cellWidth }
+}
 
 export const Cell = ({
     bucket,
@@ -30,13 +42,7 @@ export const Cell = ({
     cellIndex: number
     gradient: string[]
 }) => {
-    const ref = useRef<HTMLDivElement>(null)
-    const cellWidth = useWidth(ref)
-    const [showLabel, setShowLabel] = useState(false)
-
-    useEffect(() => {
-        setShowLabel(!!(cellWidth && cellWidth > MINIMUM_CELL_SIZE_TO_SHOW_LABEL))
-    }, [cellWidth])
+    const { ref, isWideEnough: showLabel } = useIsWideEnough()
 
     const { question, facetQuestion } = chartValues
     const viewDefinition = getViewDefinition(chartState.view)
@@ -60,13 +66,13 @@ export const Cell = ({
         entity
     })
 
-    const v = <span>{formatValue({ value, chartState, question: facetQuestion || question })}</span>
+    const v = formatValue({ value, chartState, question: facetQuestion || question })
 
     return (
         <Tooltip
             trigger={
                 <div className="chart-cell horizontal-chart-cell" style={style} ref={ref}>
-                    {showLabel && v}
+                    {showLabel && <CellLabel label={v} />}
                 </div>
             }
             contents={
