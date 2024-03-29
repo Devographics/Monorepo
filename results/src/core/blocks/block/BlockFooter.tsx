@@ -35,9 +35,12 @@ const BlockFooter = ({ unitsOptions, completion, units, setUnits, chartFilters }
                     <T
                         k="chart_units.respondents"
                         values={{
+                            total: completion.total,
                             count: completion?.count,
                             percentage: completion?.percentageSurvey
                         }}
+                        md={true}
+                        html={true}
                     />
                 </Respondents>
             )}

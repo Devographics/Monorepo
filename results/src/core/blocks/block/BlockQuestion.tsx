@@ -27,7 +27,6 @@ const Question_ = styled.div`
     .rawchartmode & {
         display: none;
     }
-    margin-top: ${spacing(1)};
     display: flex;
     align-items: center;
     gap: ${spacing(0.5)};

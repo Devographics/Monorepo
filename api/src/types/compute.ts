@@ -15,14 +15,17 @@ export interface GenericComputeParameters {
     sort?: SortSpecifier
     limit?: number
     cutoff?: number
+    cutoffPercent?: number
     // facet
     facetSort?: SortSpecifier
     facetLimit?: number
     facetCutoff?: number
+    facetCutoffPercent?: number
     enableCache?: boolean
     showNoAnswer?: boolean
     showNoMatch?: boolean
     groupUnderCutoff?: boolean
+    groupOverLimit?: boolean
     mergeOtherBuckets?: boolean
     enableBucketGroups?: boolean
     enableAddOverallBucket?: boolean
@@ -35,7 +38,9 @@ export interface ComputeAxisParameters {
     sort: SortProperty
     order: SortOrderNumeric
     cutoff: number
+    cutoffPercent?: number
     groupUnderCutoff?: boolean
+    groupOverLimit?: boolean
     mergeOtherBuckets?: boolean
     enableBucketGroups?: boolean
     enableAddMissingBuckets?: boolean

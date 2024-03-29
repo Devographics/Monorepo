@@ -11,6 +11,7 @@ import { BlockLegend } from 'core/types'
 import { useWidth } from 'core/charts/common2/helpers'
 import { useBoxplotData, useScales } from './helpers'
 import { formatValue } from '../../helpers/labels'
+import { removeNoAnswer } from '../../helpers/steps'
 
 const PIXEL_PER_TICKS = 130
 
@@ -27,7 +28,7 @@ const BoxplotView = (viewProps: ViewProps) => {
 
     // note: we need the bottom axis to be able to calculate the content width
     const contentRef = useRef<HTMLDivElement>(null)
-    const contentWidth = useWidth(contentRef)
+    const contentWidth = useWidth(contentRef) || 0
 
     // Compute everything derived from the dataset:
     const { chartMin, chartMax, groups } = useMemo(() => {
@@ -91,7 +92,7 @@ type BoxplotRowProps = {
 
 const BoxplotRow = (
     props: {
-        labelFormatter: (s: string) => string
+        labelFormatter: (v: number) => string
         contentWidth: number
     } & BoxplotRowProps &
         RowDataProps &
@@ -100,11 +101,10 @@ const BoxplotRow = (
 ) => {
     const { bucket, xScale, yScale, labelFormatter, contentWidth } = props
 
-    console.log(props)
     const theme = useTheme()
 
     const boxData = useBoxplotData({ bucket, xScale, yScale })
-    if (!bucket.percentilesByFacet) {
+    if (!bucket.percentilesByFacet || !boxData) {
         return null
     }
 
@@ -129,5 +129,6 @@ const BoxplotRow = (
 }
 
 export const Boxplot: ViewDefinition = {
-    component: BoxplotView
+    component: BoxplotView,
+    steps: [removeNoAnswer]
 }

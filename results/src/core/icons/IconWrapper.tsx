@@ -55,6 +55,7 @@ const IconWithHover = styled(Icon)`
 `
 
 export interface IconProps {
+    className?: string
     enableHover?: boolean
     enableTooltip?: boolean
     labelId?: string
@@ -68,6 +69,7 @@ export interface IconWrapperProps extends IconProps {
     children: React.ReactElement
 }
 const IconWrapper = ({
+    className = '',
     enableHover = true,
     enableTooltip = true,
     labelId,
@@ -87,7 +89,7 @@ const IconWrapper = ({
             {/* <text className="sr-only">{label_}</text> */}
         </g>
     ) : (
-        <IconComponent size={size} className="icon-wrapper">
+        <IconComponent size={size} className={`icon-wrapper ${className}`}>
             {children}
             <span className="sr-only">{label_}</span>
         </IconComponent>

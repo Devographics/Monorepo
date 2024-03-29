@@ -5,11 +5,12 @@ import BlockTitle from 'core/blocks/block/BlockTitle'
 import styled, { css } from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
-import { getBlockTabKey } from 'core/helpers/blockHelpers'
+import { getBlockTabKey, getBlockTabTitle } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import get from 'lodash/get'
 import { useEntities } from 'core/helpers/entities'
 import BlockTakeaway from './BlockTakeaway'
+import { useI18n } from '@devographics/react-i18n'
 
 const BlockHeader = styled.div`
     display: flex;
@@ -56,7 +57,7 @@ export const TabsTrigger = styled(Tabs.Trigger)`
 
 export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) => {
     const pageContext = usePageContext()
-
+    const { getString } = useI18n()
     const entities = useEntities()
     let firstBlock = block.variants[0]
     const blockEntity = entities.find(e => e.id === firstBlock.id)
@@ -77,7 +78,13 @@ export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) 
                         <TabsList aria-label="tabs example">
                             {block.variants.map((block, variantIndex) => (
                                 <TabsTrigger key={block.id} value={`tab${variantIndex}`}>
-                                    <T k={getBlockTabKey({ block, pageContext, variantIndex })} />
+                                    {getBlockTabTitle({
+                                        block,
+                                        pageContext,
+                                        variantIndex,
+                                        getString,
+                                        entities
+                                    })}
                                 </TabsTrigger>
                             ))}
                         </TabsList>

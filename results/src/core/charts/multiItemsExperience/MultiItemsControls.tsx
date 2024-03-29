@@ -6,6 +6,7 @@ import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { ColumnModes } from '../common2/types'
+import { sortOptions } from './MultiItemsBlock'
 
 const icons = {
     [ColumnModes.SPLIT]: SplitIcon,
@@ -18,9 +19,10 @@ export const MultiItemsExperienceControls = ({ chartState }: { chartState: Chart
         chartState
     return (
         <div className="multiexp-controls">
-            <div />
             <div className="multiexp-control multiexp-control-grouping">
-                <h4>{getString('charts.group_by')?.t}</h4>
+                <h4 className="chart-legend-heading">
+                    <T k="charts.group_by" />
+                </h4>
                 <ButtonGroup>
                     {Object.values(GroupingOptions).map(id => {
                         const isChecked = grouping === id
@@ -31,7 +33,7 @@ export const MultiItemsExperienceControls = ({ chartState }: { chartState: Chart
                                 className={`Button--${isChecked ? 'selected' : 'unselected'}`}
                                 onClick={() => {
                                     setGrouping(id)
-                                    // setSort(sortOptions[id][0])
+                                    setSort(sortOptions[id][0])
                                 }}
                                 aria-pressed={isChecked}
                             >
@@ -42,31 +44,35 @@ export const MultiItemsExperienceControls = ({ chartState }: { chartState: Chart
                 </ButtonGroup>
             </div>
 
-            <div className="multiexp-control multiexp-control-columns">
-                {/* <h4>{getString('charts.display_mode')?.t}</h4> */}
-                {Object.values(ColumnModes).map(option => {
-                    const Icon = icons[option]
-                    const isChecked = columnMode === option
-                    const label = getString(`charts.display_mode.${option}`)?.t
-                    return (
-                        <label
-                            key={option}
-                            htmlFor={option}
-                            className={`radio ${isChecked ? 'radio-checked' : 'radio-unchecked'}`}
-                        >
-                            {Icon && <Icon label={label} />}{' '}
-                            <input
-                                type="radio"
-                                id={option}
-                                name="grouping"
-                                value={option}
-                                checked={isChecked}
-                                onChange={() => setColumnMode(option)}
-                            />
-                        </label>
-                    )
-                })}
-            </div>
+            {false && (
+                <div className="multiexp-control multiexp-control-columns">
+                    {/* <h4>{getString('charts.display_mode')?.t}</h4> */}
+                    {Object.values(ColumnModes).map(option => {
+                        const Icon = icons[option]
+                        const isChecked = columnMode === option
+                        const label = getString(`charts.display_mode.${option}`)?.t
+                        return (
+                            <label
+                                key={option}
+                                htmlFor={option}
+                                className={`radio ${
+                                    isChecked ? 'radio-checked' : 'radio-unchecked'
+                                }`}
+                            >
+                                {Icon && <Icon label={label} />}{' '}
+                                <input
+                                    type="radio"
+                                    id={option}
+                                    name="grouping"
+                                    value={option}
+                                    checked={isChecked}
+                                    onChange={() => setColumnMode(option)}
+                                />
+                            </label>
+                        )
+                    })}
+                </div>
+            )}
         </div>
     )
 }

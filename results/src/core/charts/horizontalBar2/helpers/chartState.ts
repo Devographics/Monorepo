@@ -9,7 +9,7 @@ export const useChartState = ({ facetQuestion }: { facetQuestion?: QuestionMetad
     if (facetQuestion) {
         defaultState.facet = { id: facetQuestion.id, sectionId: facetQuestion.sectionId }
         if (facetQuestion.optionsAreSequential) {
-            defaultState.view = Views.PERCENTAGE_BUCKET
+            defaultState.view = Views.BOXPLOT
         } else {
             defaultState.view = Views.PERCENTAGE_BUCKET
         }

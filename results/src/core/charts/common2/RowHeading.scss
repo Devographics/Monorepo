@@ -1,0 +1,23 @@
+.chart-row-heading-label {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+}
+
+.chart-row-heading {
+    margin: 0;
+    font-size: var(--chartFontColumnHeading);
+    height: var(--rowHeight);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 0.9rem;
+    font-weight: normal;
+    gap: 10px;
+    max-width: 100%;
+}
+
+.chart-row-freeform-icon {
+    opacity: 0.3;
+}

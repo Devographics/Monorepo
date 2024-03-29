@@ -15,11 +15,15 @@ export const getEntityFragment = () => `entity {
     nameHtml
     nameClean
     id
+    type
     example {
       label
       language
       code
       codeHighlighted
+    }
+    avatar {
+      url
     }
     homepage {
       url
@@ -67,6 +71,7 @@ export const getFacetFragment = (addBucketsEntities?: boolean) => `
         percentageQuestion
         percentageSurvey
         percentageBucket
+        isFreeformData
         hasInsufficientData
         ${addBucketsEntities ? getEntityFragment() : ''}
     }

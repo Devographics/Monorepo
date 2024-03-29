@@ -63,5 +63,7 @@ export const getViewComponent = (view: Views) => {
 }
 
 export const getViewDefinition = (view: Views) => {
-    return viewDefinitions[view]
+    // define dummy getValue which will be overwritten
+    const getValue = () => 0
+    return { getValue, ...viewDefinitions[view] }
 }

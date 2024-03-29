@@ -50,6 +50,8 @@ function largeNumberFormatter(num: number, digits = 1) {
     return item ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0'
 }
 
+export const formatPercentage = (value: number) => `${round(value, 1)}%`
+
 export const formatValue = ({
     value,
     chartState,
@@ -61,11 +63,13 @@ export const formatValue = ({
 }) => {
     const { view } = chartState
     if (isPercentage(view)) {
-        return `${round(value, 1)}%`
-    } else if (isDollar(question)) {
-        return usdFormatter.format(value)
-    } else if (isYen(question)) {
-        return `¥${largeNumberFormatter(value)}`
+        return formatPercentage(value)
+    } else if ([Views.BOXPLOT, Views.AVERAGE].includes(view)) {
+        if (isDollar(question)) {
+            return usdFormatter.format(value)
+        } else if (isYen(question)) {
+            return `¥${largeNumberFormatter(value)}`
+        }
     }
     return value.toString()
 }

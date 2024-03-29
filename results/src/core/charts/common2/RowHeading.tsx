@@ -1,7 +1,8 @@
+import './RowHeading.scss'
 import React from 'react'
 import { RowCommonProps, RowExtraProps } from './types'
-import { getItemLabel } from 'core/helpers/labels'
-import { useI18n } from '@devographics/react-i18n'
+import { FreeformIcon } from 'core/icons'
+import { Item } from './item'
 
 export const RowHeading = ({
     bucket,
@@ -11,13 +12,26 @@ export const RowHeading = ({
     setShowGroupedBuckets
 }: RowCommonProps & RowExtraProps) => {
     const { entity, id, label } = bucket
-    const { getString } = useI18n()
+    const { isFreeformData } = bucket
     const { i18nNamespace = block.fieldId || block.id } = block
-    const labelObject = getItemLabel({ id, label, entity, getString, i18nNamespace })
+
     return (
         <h3 className="chart-row-heading">
-            {isGroupedBucket && <span>↳&nbsp;</span>}
-            <span>{labelObject.label}</span>
+            {isGroupedBucket && <span className="chart-row-heading-grouped">↳&nbsp;</span>}
+            <Item
+                id={id}
+                entity={entity}
+                bucket={bucket}
+                i18nNamespace={i18nNamespace}
+                label={label}
+            />
+            {isFreeformData && (
+                <FreeformIcon
+                    className="chart-row-freeform-icon"
+                    size="petite"
+                    labelId="charts.freeform_data.description"
+                />
+            )}
             {setShowGroupedBuckets && (
                 <button onClick={() => setShowGroupedBuckets(!showGroupedBuckets)}>
                     {showGroupedBuckets ? '-' : `+${bucket.groupedBuckets?.length}`}

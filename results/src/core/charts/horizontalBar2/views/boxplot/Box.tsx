@@ -16,10 +16,8 @@ export type BoxProps = {
     stroke: string
     fill?: string
     labelFormatter: (v: number) => string
-    label: string
     contentWidth: number
     bucket: Bucket
-    height: number
 }
 
 export const HorizontalBox = ({

@@ -1,26 +1,17 @@
-.chart-horizontal-bar {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
 .chart-bar,
 .chart-faceted-bar {
     position: relative;
 }
 .horizontal-chart-cell {
     position: absolute;
-    background: var(--color);
+    background: linear-gradient(to left, var(--color1), var(--color2));
     width: calc(var(--width) * 1%);
     left: calc(var(--offset) * 1%);
-    height: calc(var(--rowHeight) * 1px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    height: var(--rowHeight);
+}
 
-    text-shadow: 1px 1px 0 #000000cc, -1px 1px 0 #000000cc, -1px -1px 0 #000000cc,
-        1px -1px 0 #000000cc;
-    border-radius: 2px;
-    font-size: 0.8rem;
+.chart-horizontal-bar-controls {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing);
 }

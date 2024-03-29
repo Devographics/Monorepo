@@ -13,6 +13,10 @@ query: >
                   name
                   nameClean
                   nameHtml
+                  type
+                  description
+                  descriptionClean
+                  descriptionHtml
                   homepage {
                     url
                   }
@@ -47,6 +51,11 @@ query: >
                       }
                       percentageQuestion
                       percentageSurvey
+                    }
+                    completion {
+                      count
+                      percentageSurvey
+                      total
                     }
                   }
                 }

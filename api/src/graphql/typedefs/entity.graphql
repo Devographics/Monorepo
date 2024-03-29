@@ -22,10 +22,12 @@ type Entity {
     description: String
     descriptionClean: String
     descriptionHtml: String
-    type: String
     tags: [String]
     patterns: [String]
     exactMatch: Boolean
+
+    # auto-generated field, equal to default/people/feature/library
+    type: String
 
     apiOnly: Boolean
 
@@ -53,6 +55,9 @@ type Entity {
 
     # for features
     example: Example
+
+    # for people
+    avatar: Avatar
 }
 
 """
@@ -152,4 +157,11 @@ type Token {
     parentId: String
     tags: [String]
     patterns: [String]
+}
+
+"""
+Link to an avatar
+"""
+type Avatar {
+    url: String
 }

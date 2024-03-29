@@ -156,6 +156,7 @@ export interface BucketMetadata {
     token?: Token
     label?: string
     hasInsufficientData?: boolean
+    isFreeformData?: boolean
 }
 
 export interface Bucket extends BucketData, BucketMetadata {
@@ -241,9 +242,9 @@ export enum ToolsOptions {
 }
 
 export enum FeaturesOptions {
-    NEVER_HEARD = 'never_heard',
+    USED = 'used',
     HEARD = 'heard',
-    USED = 'used'
+    NEVER_HEARD = 'never_heard'
 }
 
 export enum SentimentOptions {

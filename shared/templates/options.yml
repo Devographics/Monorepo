@@ -1,5 +1,4 @@
 age:
-    defaultSort: options
     optionsAreRange: true
     optionsAreSequential: true
     options:
@@ -21,7 +20,6 @@ age:
           average: 65
 
 years_of_experience:
-    defaultSort: options
     optionsAreRange: true
     optionsAreSequential: true
     options:
@@ -60,7 +58,6 @@ years_of_experience:
 #           average: 20
 
 company_size:
-    defaultSort: options
     optionsAreRange: true
     optionsAreSequential: true
     options:
@@ -101,7 +98,6 @@ company_size:
 #           average: 1000
 
 yearly_salary:
-    defaultSort: options
     optionsAreRange: true
     optionsAreSequential: true
     options:
@@ -122,7 +118,6 @@ yearly_salary:
         - id: na
 
 yearly_salary_v2:
-    defaultSort: options
     optionsAreRange: true
     optionsAreSequential: true
     options:
@@ -147,7 +142,6 @@ yearly_salary_v2:
         - id: na
 
 gender:
-    defaultSort: options
     options:
         - id: male
         - id: female
@@ -155,7 +149,6 @@ gender:
         - id: not_listed
 
 race_ethnicity:
-    defaultSort: options
     options:
         - id: black_african
         - id: east_asian
@@ -169,7 +162,6 @@ race_ethnicity:
         # - id: not_listed
 
 disability_status:
-    defaultSort: options
     options:
         - id: visual_impairments
         - id: hearing_impairments
@@ -179,7 +171,6 @@ disability_status:
         - id: na
 
 higher_education_degree:
-    defaultSort: options
     options:
         - id: no_degree
         - id: yes_related

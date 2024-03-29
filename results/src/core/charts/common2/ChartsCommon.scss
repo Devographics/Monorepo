@@ -8,8 +8,7 @@
 }
 
 .chart-row,
-.chart-axis-bottom,
-.chart-facet {
+.chart-axis-bottom {
     align-items: center;
     @include small {
         display: flex;
@@ -18,9 +17,11 @@
     }
     @include medium-large {
         display: grid;
-        grid-template-columns: 250px minmax(0, 1fr) 100px;
-        gap: 10px;
+        grid-template-columns: 200px minmax(0, 1fr) 100px;
+        gap: 20px;
     }
+}
+.chart-row {
     &-grouped {
         background: #ffffff11;
     }
@@ -40,19 +41,11 @@
         gap: 10px;
     }
 }
-.chart-row-heading {
-    margin: 0;
-    font-size: var(--chartFontColumnHeading);
-    height: var(--rowHeight);
-    display: flex;
-    align-items: center;
-}
 .chart-row-content {
-    height: calc(var(--rowHeight) * 1px);
+    height: var(--rowHeight);
     position: relative;
     left: calc(var(--rowOffset) * -1px);
 }
-
 .chart-control-button {
     display: flex;
     gap: 5px;
@@ -66,6 +59,7 @@
 }
 
 .chart-controls {
+    flex: 1;
     .ButtonGroup {
         width: 100%;
         display: flex;
@@ -78,4 +72,17 @@
 .chart-actions {
     display: flex;
     justify-content: center;
+}
+
+.chart-heading-facet {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.chart-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
 }

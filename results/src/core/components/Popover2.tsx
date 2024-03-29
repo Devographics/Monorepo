@@ -1,4 +1,3 @@
-// TODO: appears unused
 import React from 'react'
 import styled from 'styled-components'
 import * as Popover from '@radix-ui/react-popover'
@@ -31,8 +30,9 @@ const PopoverComponent = ({
 const PopoverContent_ = styled(Popover.Content)`
     border-radius: 4px;
     padding: 20px;
-    width: 260px;
-    background-color: white;
+    min-width: 260px;
+    max-width: min-content;
+    background-color: ${({ theme }) => theme.colors.backgroundAlt};
     box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
     animation-duration: 400ms;
     animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
@@ -45,28 +45,16 @@ const PopoverContent_ = styled(Popover.Content)`
 `
 
 const PopoverArrow_ = styled(Popover.Arrow)`
-    fill: white;
+    fill: ${({ theme }) => theme.colors.backgroundAlt};
 `
 
 const PopoverClose_ = styled(Popover.Close)`
-    font-family: inherit;
-    border-radius: 100%;
-    height: 25px;
-    width: 25px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--violet11);
     position: absolute;
     top: 5px;
     right: 5px;
-
-    &:hover {
-        background-color: var(--violet4);
-    }
-    &:focus {
-        box-shadow: 0 0 0 2px var(--violet7);
-    }
+    background: none;
+    border: none;
+    stroke: ${({ theme }) => theme.colors.text};
 `
 
 export default PopoverComponent

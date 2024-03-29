@@ -66,6 +66,8 @@ export const convertOrderReverse = (order: SortOrderNumeric): SortOrder =>
 
 /*
 
+Always use freeform/other field for source field
+
 TODO:
 
 - Actually differentiate between "freeform" and "prenormalized"
@@ -78,14 +80,19 @@ export const getDbPath = (
     responsesType: ResponsesTypes = ResponsesTypes.RESPONSES
 ) => {
     const { normPaths } = question
-    if (responsesType === ResponsesTypes.RESPONSES) {
-        return normPaths?.response
-    } else if (responsesType === ResponsesTypes.COMBINED) {
-        return normPaths?.response
-    } else if (responsesType === ResponsesTypes.PRENORMALIZED) {
-        return normPaths?.prenormalized
-    } else {
+
+    if (question.id === 'source') {
         return normPaths?.other
+    } else {
+        if (responsesType === ResponsesTypes.RESPONSES) {
+            return normPaths?.response
+        } else if (responsesType === ResponsesTypes.COMBINED) {
+            return normPaths?.response
+        } else if (responsesType === ResponsesTypes.PRENORMALIZED) {
+            return normPaths?.prenormalized
+        } else {
+            return normPaths?.other
+        }
     }
 }
 
@@ -106,7 +113,7 @@ const getQuestionSort = ({
     } else if (question.defaultSort) {
         // if question has a default sort, use it
         defaultSort = question.defaultSort
-    } else if (question.optionsAreNumeric) {
+    } else if (question.optionsAreSequential) {
         if (question.options) {
             defaultSort = 'options'
         } else {
@@ -196,29 +203,38 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     const { responsesType, filters, parameters = {}, facet, selectedEditionId } = computeArguments
     const {
         cutoff = 1,
+        cutoffPercent,
         sort,
         limit = DEFAULT_LIMIT,
         facetSort,
         facetLimit = DEFAULT_LIMIT,
         facetCutoff = 1,
+        facetCutoffPercent,
         showNoAnswer,
-        groupUnderCutoff = true,
         mergeOtherBuckets = true,
         enableBucketGroups = true,
         enableAddOverallBucket = true,
         enableAddMissingBuckets
     } = parameters
 
+    // these are not passed as parameters anymore, but just default to being always true
+    // if the extra groups are not needed they can just be ignored by the user
+    const groupUnderCutoff = true
+    const groupOverLimit = true
+
     /*
 
     Axis 1
 
     */
+    const sortSpecifier = getQuestionSort({ specifier: sort, question, enableBucketGroups })
     axis1 = {
         question,
-        ...getQuestionSort({ specifier: sort, question, enableBucketGroups }),
+        ...sortSpecifier,
         cutoff,
+        cutoffPercent,
         groupUnderCutoff,
+        groupOverLimit,
         mergeOtherBuckets,
         enableBucketGroups,
         enableAddMissingBuckets,
@@ -274,7 +290,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
                         enableBucketGroups
                     }),
                     cutoff: facetCutoff,
+                    cutoffPercent: facetCutoffPercent,
                     groupUnderCutoff,
+                    groupOverLimit,
                     mergeOtherBuckets,
                     enableBucketGroups,
                     enableAddMissingBuckets,
@@ -415,10 +433,10 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await addAveragesByFacet(results, axis2, axis1)
         await addPercentilesByFacet(results, axis2, axis1)
 
-        // bucket grouping must be one of the first stages
+        // bucket grouping
         await groupBuckets(results, axis2, axis1)
 
-        // we group cutoff buckets together so it must also come early
+        // group cutoff buckets together
         await cutoffData(results, axis2, axis1)
 
         // for all following steps, use groups as options

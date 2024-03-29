@@ -1,10 +1,11 @@
 import React from 'react'
 import { Control } from '../horizontalBar2/types'
-import ButtonGroup from 'core/components/ButtonGroup'
-import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { useI18n } from '@devographics/react-i18n'
 import { CommonProps } from './types'
+import './Controls.scss'
+import ButtonGroup from 'core/components/ButtonGroup'
+import Button from 'core/components/Button'
 
 export const Controls = ({
     controls,
@@ -16,7 +17,7 @@ export const Controls = ({
     const { getString } = useI18n()
     const axisLabel = facet && getString(`${facet.sectionId}.${facet.id}`)?.t
     return (
-        <div className="chart-controls">
+        <div className="chart-controls" role="tablist" aria-orientation="horizontal">
             <ButtonGroup>
                 {controls.map(control => {
                     const { id, labelId, onClick, isChecked, icon } = control
@@ -28,10 +29,11 @@ export const Controls = ({
                             className={`chart-control-button Button--${
                                 isChecked ? 'selected' : 'unselected'
                             }`}
+                            data-state={isChecked ? 'active' : 'inactive'}
                             onClick={onClick}
                             aria-pressed={isChecked}
                         >
-                            <IconComponent />
+                            <IconComponent size="petite" />
                             <T k={labelId} values={{ axis: axisLabel }} />
                         </Button>
                     )

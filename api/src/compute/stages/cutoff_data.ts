@@ -1,14 +1,14 @@
-import { CUTOFF_ANSWERS, NO_ANSWER } from '@devographics/constants'
+import { COUNT, CUTOFF_ANSWERS, PERCENTAGE_QUESTION } from '@devographics/constants'
 import { ResponseEditionData, ComputeAxisParameters, Bucket, FacetBucket } from '../../types'
-import isNil from 'lodash/isNil.js'
 import sum from 'lodash/sum.js'
 import sumBy from 'lodash/sumBy.js'
 import compact from 'lodash/compact.js'
 import round from 'lodash/round.js'
 import { combineFacetBuckets } from './group_buckets'
 import { BucketUnits, PercentileData, Percentiles } from '@devographics/types'
+import { isSpecialBucket } from './limit_data'
 
-function mergePercentiles(buckets: Bucket[] | FacetBucket[]) {
+export function mergePercentiles(buckets: Bucket[] | FacetBucket[]) {
     const percentileKeys = ['p0', 'p25', 'p50', 'p75', 'p100'] as Percentiles[]
     const percentiles = {} as PercentileData
     for (const key of percentileKeys) {
@@ -16,6 +16,28 @@ function mergePercentiles(buckets: Bucket[] | FacetBucket[]) {
         percentiles[key] = round(sum(values) / buckets.length, 2)
     }
     return percentiles
+}
+
+export function mergeBuckets<T extends Bucket | FacetBucket>(buckets: T[], mergedId: string) {
+    const mergedBucket = {
+        count: sumBy(buckets, b => b.count || 0),
+        id: mergedId,
+        [BucketUnits.PERCENTAGE_QUESTION]: round(
+            sumBy(buckets, b => b[BucketUnits.PERCENTAGE_QUESTION] || 0),
+            2
+        ),
+        [BucketUnits.PERCENTAGE_SURVEY]: round(
+            sumBy(buckets, b => b[BucketUnits.PERCENTAGE_SURVEY] || 0),
+            2
+        ),
+        groupedBucketIds: buckets.map(b => b.id),
+        [BucketUnits.AVERAGE]: round(
+            sumBy(buckets, b => b[BucketUnits.AVERAGE] || 0) / buckets.length,
+            2
+        ),
+        [BucketUnits.PERCENTILES]: mergePercentiles(buckets)
+    } as T
+    return mergedBucket
 }
 /*
 
@@ -25,35 +47,20 @@ Group together any bucket that didn't make cutoff.
 export function groupUnderCutoff<T extends Bucket | FacetBucket>(
     buckets: T[],
     cutoff: number,
+    cutoffPercent?: number,
     axis?: ComputeAxisParameters
 ) {
-    const mainBuckets = buckets.filter(b => (b.count && b.count >= cutoff) || b.id === NO_ANSWER)
-    const cutoffBuckets = buckets.filter(b => b.count && b.count < cutoff && b.id !== NO_ANSWER)
-    const cutoffGroupBucket = {
-        count: sumBy(cutoffBuckets, b => b.count || 0),
-        id: CUTOFF_ANSWERS,
-        [BucketUnits.PERCENTAGE_QUESTION]: round(
-            sumBy(cutoffBuckets, b => b[BucketUnits.PERCENTAGE_QUESTION] || 0),
-            2
-        ),
-        [BucketUnits.PERCENTAGE_SURVEY]: round(
-            sumBy(cutoffBuckets, b => b[BucketUnits.PERCENTAGE_SURVEY] || 0),
-            2
-        ),
-        groupedBucketIds: cutoffBuckets.map(b => b.id),
-        [BucketUnits.AVERAGE]: round(
-            sumBy(cutoffBuckets, b => b[BucketUnits.AVERAGE] || 0) / cutoffBuckets.length,
-            2
-        ),
-        [BucketUnits.PERCENTILES]: mergePercentiles(cutoffBuckets)
-    } as T
+    const keptBuckets = buckets.filter(b => keepBucket<T>(b, cutoff, cutoffPercent))
+    const cutoffBuckets = buckets.filter(b => !keptBuckets.map(b => b.id).includes(b.id))
+    const cutoffGroupBucket = mergeBuckets<T>(cutoffBuckets, CUTOFF_ANSWERS)
+
     if (axis) {
         // if axis is provided, we know it's a top-level Bucket and not a FacetBucket
         ;(cutoffGroupBucket as Bucket).facetBuckets =
             combineFacetBuckets(cutoffBuckets as Bucket[], axis) ?? []
     }
 
-    return [...mainBuckets, cutoffGroupBucket]
+    return cutoffBuckets.length > 0 ? [...keptBuckets, cutoffGroupBucket] : keptBuckets
 }
 
 export async function cutoffData(
@@ -61,7 +68,7 @@ export async function cutoffData(
     axis1: ComputeAxisParameters,
     axis2?: ComputeAxisParameters
 ) {
-    if (axis1.cutoff && axis1.cutoff > 1) {
+    if ((axis1.cutoff && axis1.cutoff > 1) || axis1.cutoffPercent) {
         for (let editionData of resultsByEdition) {
             // first, limit regular buckets
             if (axis1.mergeOtherBuckets === false && axis1.sort === 'options') {
@@ -71,19 +78,19 @@ export async function cutoffData(
                 // (ex: missing "#2" bucket in "rank satisfaction from 1 to 5" question)
             } else {
                 if (axis1.groupUnderCutoff) {
+                    // NOTE: always true
                     // group together all buckets that don't make cutoff
                     editionData.buckets = groupUnderCutoff<Bucket>(
                         editionData.buckets,
                         axis1.cutoff,
+                        axis1.cutoffPercent,
                         axis2
                     )
                 } else {
                     // else, just filter out buckets under cutoff
-                    editionData.buckets = editionData.buckets.filter(
-                        bucket =>
-                            isNil(bucket.count) ||
-                            bucket.count! >= axis1.cutoff ||
-                            bucket.id === NO_ANSWER
+                    // (make an exception for special buckets so they don't get removed)
+                    editionData.buckets = editionData.buckets.filter(bucket =>
+                        keepBucket<Bucket>(bucket, axis1.cutoff, axis1.cutoffPercent)
                     )
                 }
             }
@@ -92,22 +99,35 @@ export async function cutoffData(
                 // then, limit facetBuckets if they exist
                 for (let bucket of editionData.buckets) {
                     if (axis2.groupUnderCutoff) {
+                        // NOTE: always true
                         // group together all buckets that don't make cutoff
                         bucket.facetBuckets = groupUnderCutoff<FacetBucket>(
                             bucket.facetBuckets,
-                            axis1.cutoff
+                            axis1.cutoff,
+                            axis1.cutoffPercent
                         )
                     } else {
                         // else, just filter out buckets under cutoff
-                        bucket.facetBuckets = bucket.facetBuckets.filter(
-                            bucket =>
-                                isNil(bucket.count) ||
-                                bucket.count! >= axis1.cutoff ||
-                                bucket.id === NO_ANSWER
+                        bucket.facetBuckets = bucket.facetBuckets.filter(bucket =>
+                            keepBucket<FacetBucket>(bucket, axis1.cutoff, axis1.cutoffPercent)
                         )
                     }
                 }
             }
         }
+    }
+}
+
+const keepBucket = <T extends Bucket | FacetBucket>(
+    bucket: T,
+    cutoff: number,
+    cutoffPercent?: number
+) => {
+    if (cutoffPercent) {
+        // use cutoffPercent if specified
+        return isSpecialBucket(bucket) || (bucket[PERCENTAGE_QUESTION] || 0) >= cutoffPercent
+    } else {
+        // else use regular count-based cutoff
+        return isSpecialBucket(bucket) || (bucket[COUNT] || 0) >= cutoff
     }
 }

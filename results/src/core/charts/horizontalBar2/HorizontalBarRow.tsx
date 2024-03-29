@@ -7,13 +7,19 @@ import sum from 'lodash/sum'
 import { RowDataProps } from './types'
 import { getViewDefinition } from './helpers/views'
 import { getRowOffset } from './helpers/other'
+import { useGradient } from './helpers/colors'
+import { useTheme } from 'styled-components'
 
 export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
+    const theme = useTheme()
     const { bucket, chartState, chartValues } = props
+    const { question, maxOverallValue = 1 } = chartValues
     const viewDefinition = getViewDefinition(chartState.view)
     const { getValue } = viewDefinition
     const value = getValue(bucket)
-    const width = (100 * value) / chartValues.maxOverallValue
+    const width = (100 * value) / maxOverallValue
+    const gradient = theme.colors.barChart.primaryGradient
+
     return (
         <RowWrapper {...props}>
             <div className="chart-bar">
@@ -24,6 +30,7 @@ export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProp
                     offset={0}
                     cellIndex={0}
                     chartValues={chartValues}
+                    gradient={gradient}
                 />
             </div>
         </RowWrapper>
@@ -34,7 +41,7 @@ export const FacetRow = (props: RowDataProps & RowCommonProps & RowExtraProps) =
     const { buckets, bucket, chartState, chartValues } = props
     const viewDefinition = getViewDefinition(chartState.view)
     const { getValue } = viewDefinition
-    const { maxOverallValue } = chartValues
+    const { maxOverallValue = 1, facetQuestion } = chartValues
     const { facetBuckets } = bucket
 
     const rowOffset = getRowOffset({ buckets, bucket, chartState })
@@ -53,6 +60,8 @@ export const FacetRow = (props: RowDataProps & RowCommonProps & RowExtraProps) =
                             index
                         )
                     )
+                    const gradient = useGradient({ id: facetBucket.id, question: facetQuestion })
+
                     return (
                         <Cell
                             key={id}
@@ -62,6 +71,7 @@ export const FacetRow = (props: RowDataProps & RowCommonProps & RowExtraProps) =
                             offset={offset - rowOffset}
                             cellIndex={index}
                             chartValues={chartValues}
+                            gradient={gradient}
                         />
                     )
                 })}

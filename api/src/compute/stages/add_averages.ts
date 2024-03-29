@@ -1,7 +1,7 @@
 import { BucketUnits, FacetBucket, OptionGroup } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import sumBy from 'lodash/sumBy.js'
-import { CUTOFF_ANSWERS, NO_ANSWER, NOT_APPLICABLE } from '@devographics/constants'
+import { NO_ANSWER, NOT_APPLICABLE } from '@devographics/constants'
 import isNil from 'lodash/isNil.js'
 import isNaN from 'lodash/isNaN.js'
 import round from 'lodash/round.js'

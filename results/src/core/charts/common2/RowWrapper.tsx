@@ -19,10 +19,14 @@ export const RowWrapper = (
 
     return (
         <div className={className}>
-            <RowHeading {...props} />
+            <div className="chart-row-left">
+                <RowHeading {...props} />
+            </div>
             <div className="chart-row-content">{children}</div>
-            <div className="chart-row-metadata">
-                <UserIcon size={'small'} /> {bucket.count}
+            <div className="chart-row-right">
+                <div className="chart-row-metadata">
+                    <UserIcon size={'small'} /> {bucket.count}
+                </div>
             </div>
         </div>
     )

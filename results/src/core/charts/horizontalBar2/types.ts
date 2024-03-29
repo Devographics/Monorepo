@@ -43,7 +43,7 @@ export type ViewDefinition = {
     getValue?: GetValueType
     steps?: Step[]
     showLegend?: boolean
-    component: (props: ViewProps) => JSX.Element
+    component: (props: ViewProps) => JSX.Element | null
 }
 
 export type ViewProps = {

@@ -1,21 +1,23 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import './HorizontalBar.scss'
 import Metadata from '../common2/Metadata'
 import Controls from '../common2/Controls'
-import { BlockComponentProps, BlockDefinition } from 'core/types'
+import { BlockComponentProps, PageContextValue } from 'core/types'
 import { QuestionMetadata, StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
 import { getChartBuckets, getChartCompletion, useQuestionMetadata } from './helpers/other'
 import { useChartState } from './helpers/chartState'
 import { useChartValues } from './helpers/chartValues'
 import { getControls, getViewDefinition } from './helpers/views'
-import Actions from '../common2/Actions'
 import View from '../common2/View'
-import BlockQuestion from 'core/blocks/block/BlockQuestion'
-import { getBlockKey } from 'core/helpers/blockHelpers'
-import { useI18n } from '@devographics/react-i18n'
-import { Legend } from '../common2'
-import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { ChartHeading, ChartWrapper, Legend } from '../common2'
+import { useEntities } from 'core/helpers/entities'
+import { FacetTitle } from '../common2/FacetTitle'
+import { getQuestionOptions } from './helpers/options'
+import { useColorScale } from './helpers/colors'
+import { ChartValues } from '../multiItemsExperience/types'
+import { ChartState } from './types'
+import { CommonProps } from '../common2/types'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -23,24 +25,21 @@ export interface HorizontalBarBlock2Props extends BlockComponentProps {
 }
 
 export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
-    const { block, question } = props
+    const { block, question, pageContext } = props
     // console.log(props)
-    const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
 
     const completion = getChartCompletion(props)
     const facet = block?.filtersState?.facet
 
     const facetQuestion = useQuestionMetadata(facet)
 
-    // const { getString } = useI18n()
     const chartState = useChartState({ facetQuestion })
     const buckets = getChartBuckets({ ...props, chartState })
 
     const chartValues = useChartValues({ buckets, chartState, block, question })
-    const controls = getControls({ chartState, chartValues })
 
-    const viewDefinition = getViewDefinition(chartState.view)
-    const commonProps = {
+    const commonProps: CommonProps = {
+        pageContext,
         buckets,
         chartState,
         chartValues,
@@ -48,41 +47,72 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     }
 
     return (
-        <div className="chart-horizontal-bar">
-            {/* <pre>
+        <ChartWrapper className="chart-horizontal-bar">
+            <>
+                {/* <pre>
                 <code>{JSON.stringify(chartState, null, 2)}</code>
             </pre> */}
-            <div className="chart-facet">
-                <div className="chart-facet-content" ref={parent}>
-                    {facetQuestion && <FacetQuestion facetQuestion={facetQuestion} />}
-                    {controls.length > 0 && <Controls controls={controls} {...commonProps} />}
-                    {viewDefinition.showLegend && <Legend {...commonProps} />}
-                </div>
-            </div>
-            <View {...commonProps} />
 
-            <Metadata completion={completion} {...commonProps} />
-            {/* <Actions {...commonProps} /> */}
-            {/* <pre>
+                {facetQuestion && <FacetHeading facetQuestion={facetQuestion} {...commonProps} />}
+
+                <View {...commonProps} />
+
+                <Metadata completion={completion} {...commonProps} />
+                {/* <Actions {...commonProps} /> */}
+                {/* <pre>
                 <code>{JSON.stringify(buckets, null, 2)}</code>
             </pre> */}
 
-            {/* <pre>
+                {/* <pre>
                 <code>{JSON.stringify(chartValues, null, 2)}</code>
             </pre> */}
-        </div>
+            </>
+        </ChartWrapper>
     )
 }
 
-const FacetQuestion = ({ facetQuestion }: { facetQuestion: QuestionMetadata }) => {
-    const { getString } = useI18n()
+const FacetHeading = (
+    props: CommonProps & {
+        facetQuestion: QuestionMetadata
+        chartState: ChartState
+        chartValues: ChartValues
+        pageContext: PageContextValue
+    }
+) => {
+    const { block, facetQuestion, chartState, chartValues, pageContext } = props
+    const entities = useEntities()
 
-    const facetBlock = {
-        id: facetQuestion?.id,
-        sectionId: facetQuestion?.sectionId
-    } as BlockDefinition
-    const facetQuestionKey = `${getBlockKey({ block: facetBlock })}.question`
-    const translation = getString(facetQuestionKey)?.t
-    return <BlockQuestion question={translation} />
+    // const controls = getControls({ chartState, chartValues })
+
+    const viewDefinition = getViewDefinition(chartState.view)
+    const colorScale = chartValues?.facetQuestion && useColorScale({ question: facetQuestion })
+
+    return (
+        <ChartHeading
+            heading={
+                <FacetTitle
+                    block={block}
+                    facetQuestion={facetQuestion}
+                    pageContext={pageContext}
+                    entities={entities}
+                />
+            }
+        >
+            <div className="chart-horizontal-bar-controls">
+                {viewDefinition.showLegend && facetQuestion && colorScale && (
+                    <Legend
+                        {...props}
+                        options={getQuestionOptions({
+                            question: facetQuestion,
+                            chartState
+                        })}
+                        colorScale={colorScale}
+                        i18nNamespace={facetQuestion.id}
+                    />
+                )}
+                {/* {controls.length > 0 && <Controls controls={controls} {...props} />} */}
+            </div>
+        </ChartHeading>
+    )
 }
 export default HorizontalBarBlock2

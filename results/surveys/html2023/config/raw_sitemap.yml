@@ -62,81 +62,82 @@
       - template: page_introduction
 
       - id: country
-        template: multiple_options
+        template: multiple_options2
         parameters: { limit: 20 }
 
       - id: locale
-        template: multiple_options
+        template: multiple_options2
         parameters: { cutoff: 20 }
 
       - id: hint_hint
         template: hint
 
       - id: completion_stats
-        template: multiple_options
+        template: multiple_options2
 
       - id: age
-        template: multiple_options
+        template: multiple_options2
 
       - id: years_of_experience
-        template: multiple_options
+        template: multiple_options2
 
       - id: company_size
-        template: multiple_options
-        blockType: HorizontalBarBlock2
+        template: multiple_options2
+        variants:
+            - id: company_size_vs_yearly_salary
+              fieldId: company_size
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+              filtersState:
+                  options:
+                      mode: facet
+                  facet:
+                      sectionId: user_info
+                      id: yearly_salary
 
-      - id: company_size2
-        fieldId: company_size
-        template: multiple_options
-        blockType: HorizontalBarBlock2
-        parameters:
-            showNoAnswer: true
-        filtersState:
-            options:
-                mode: facet
-            facet:
-                sectionId: user_info
-                id: yearly_salary
-
-      - id: company_size3
-        fieldId: company_size
-        template: multiple_options
-        blockType: HorizontalBarBlock2
-        parameters:
-            showNoAnswer: true
-        filtersState:
-            options:
-                mode: facet
-            facet:
-                sectionId: user_info
-                id: gender
+            - id: company_size_vs_gender
+              fieldId: company_size
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+              filtersState:
+                  options:
+                      mode: facet
+                  facet:
+                      sectionId: user_info
+                      id: gender
 
       - id: variants_hint
         template: hint
 
       - id: yearly_salary
-        template: multiple_options
+        template: multiple_options2
 
       - id: higher_education_degree
-        template: multiple_options
+        template: multiple_options2
 
       - id: gender
-        template: multiple_options
+        template: multiple_options2
 
       - id: race_ethnicity
-        template: multiple_options_combined
+        template: multiple_options2_combined
 
       - id: disability_status
-        template: multiple_options_combined
+        template: multiple_options2_combined
 
       - id: other_surveys
-        template: multiple_options_combined
+        template: multiple_options2_combined
+        parameters:
+            cutoff: 20
 
       - id: source
-        template: multiple_options_freeform
+        template: multiple_options2_freeform
+        parameters:
+            limit: 20
 
       - id: how_can_we_improve
-        template: multiple_options_freeform
+        template: multiple_options2_freeform
 
       # - id: data_explorer
       #   titleId: sections.data_explorer.title
@@ -226,7 +227,7 @@
             #   template: ???
 
             - id: accessibility_pain_points
-              template: multiple_options_freeform
+              template: multiple_options2_freeform
               blockType: HorizontalBarBlock2
               parameters:
                   showNoAnswer: true
@@ -234,7 +235,7 @@
 
             # - id: accessibility_pain_points2
             #   fieldId: accessibility_pain_points
-            #   template: multiple_options_freeform
+            #   template: multiple_options2_freeform
             #   blockType: HorizontalBarBlock2
             #   parameters:
             #       showNoAnswer: true
@@ -276,13 +277,13 @@
       - template: page_introduction
 
       - id: html_interoperability_features
-        template: multiple_options_freeform
+        template: multiple_options2_freeform
 
       - id: html_functionality_features
-        template: multiple_options_freeform
+        template: multiple_options2_freeform
 
       - id: html_missing_elements
-        template: multiple_options_combined
+        template: multiple_options2_combined
 
       - id: tools_for_other_developers
         template: single_option
@@ -291,10 +292,10 @@
         template: single_option
 
       - id: what_do_you_use_html_for
-        template: multiple_options_combined
+        template: multiple_options2_combined
 
       - id: industry_sector
-        template: multiple_options_combined
+        template: multiple_options2_combined
 
       - id: sharing_hint
         template: hint

@@ -47,6 +47,7 @@ const colors = {
 
     kakiDark: '#9ca033',
     kaki: '#CCD133',
+    electricBlueLighter: '#C5F2FC',
     electricBlueLight: '#AEF0FF',
     electricBlue: '#38D6FE',
     electricBlueDark: '#21B1D6',
@@ -267,10 +268,20 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             pre_post_processors: colors.yellow,
             css_frameworks: colors.pink
         },
+        sentiment: {
+            positive: [colors.green, colors.greenLight],
+            neutral: [colors.grey, colors.greyLight],
+            negative: [colors.red, colors.redLight]
+        },
+        // features: {
+        //     used: [colors.electricBlueLight, colors.electricBlueLighter],
+        //     heard: [colors.electricBlueDarker, colors.electricBlueDark],
+        //     never_heard: [colors.electricBlueDarkest, colors.electricBlueDarkerer]
+        // },
         features: {
-            used: [colors.electricBlueDarker, colors.electricBlueDark],
-            heard: [colors.electricBlue, colors.electricBlueLight],
-            never_heard: [colors.grey, colors.greyLight]
+            never_heard: [velocity[1], velocity[2]],
+            heard: [velocity[4], velocity[5]],
+            used: [velocity[8], velocity[9]]
         },
         features_categories: {
             layout: colors.indigo,

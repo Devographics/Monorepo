@@ -512,8 +512,17 @@ Resolver map used for section_features, section_tools
 
 */
 export const getSectionToolsFeaturesResolverMap = (type: 'tools' | 'features'): ResolverMap => ({
-    items: parent =>
-        getSectionItems(parent.section, type).map(question => ({ ...parent, question })),
+    items: (parent, args, context) => {
+        const items = getSectionItems(parent.section, type).map(question => ({
+            ...parent,
+            question
+        }))
+        // decorate with entities
+        return items.map(item => ({
+            ...item,
+            entity: getEntity({ id: item.question.id, context })
+        }))
+    },
     ids: parent => getSectionItems(parent.section, type).map(q => q.id),
     years: parent => parent.survey.editions.map(e => e.year)
 })
