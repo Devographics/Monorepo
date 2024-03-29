@@ -59,24 +59,13 @@ const Head = () => {
     const hasFonts = fontList && fontList.length > 0
 
     const { colors } = theme
-    const variables = {
-        '--textColor': colors.text,
-        '--backgroundColor': colors.background,
-        '--backgroundBackgroundColor': colors.backgroundBackground,
-        '--backgroundAltColor': colors.backgroundAlt,
-        '--borderColor': colors.border,
-        '--linkColor': colors.link,
-        '--spacing': `${theme.dimensions.spacing}px`
-    }
+
     return (
         <>
             <Helmet
                 defaultTitle={meta.fullTitle}
                 bodyAttributes={{
-                    class: bodyClassNames,
-                    style: Object.keys(variables)
-                        .map(name => `${name}: ${variables[name]};`)
-                        .join('')
+                    class: bodyClassNames
                 }}
             >
                 <html lang="en" />
