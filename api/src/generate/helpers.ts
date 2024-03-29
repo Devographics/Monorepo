@@ -175,7 +175,7 @@ export const getSectionItems = (section: SectionApiObject, type: 'tools' | 'feat
 export const getSectionFeatures = (section: SectionApiObject) =>
     section?.questions?.filter(q => ['feature', 'featurev3'].includes(q.template))
 export const getSectionTools = (section: SectionApiObject) =>
-    section?.questions?.filter(q => q.template === 'tool')
+    section?.questions?.filter(q => ['tool'].includes(q.template))
 
 export const getEditionItems = (edition: EditionApiObject, type: 'tools' | 'features') => {
     let items: QuestionApiObject[] = []
