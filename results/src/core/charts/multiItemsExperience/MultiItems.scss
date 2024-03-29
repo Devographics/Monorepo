@@ -106,16 +106,6 @@
     margin-bottom: 10px;
 }
 
-.multiexp-cell {
-    // border: 1px solid white;
-    // flex-basis: calc(var(--percentageValue) * 1%);
-    width: calc(var(--width) * 1%);
-    position: absolute;
-    left: calc(var(--offset) * 1%);
-    display: block;
-    overflow: hidden;
-    transition: 600ms;
-}
 .multiexp-column-totals {
     position: relative;
     height: var(--totalsHeight);
@@ -137,9 +127,33 @@
     }
 }
 
+.multiexp-cell {
+    // border: 1px solid white;
+    // flex-basis: calc(var(--percentageValue) * 1%);
+    width: calc(var(--width) * 1%);
+    position: absolute;
+    left: calc(var(--offset) * 1%);
+    display: block;
+    overflow: hidden;
+    border-radius: 0;
+    transition: 600ms;
+    &:hover {
+        &:after {
+            background-color: white;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            content: ' ';
+            display: block;
+            mix-blend-mode: soft-light;
+        }
+    }
+}
 .multiexp-cell-segment {
     height: calc(var(--cellHeight) / 2);
-    opacity: 0.3;
+    // opacity: 0.3;
     transition: 600ms;
     &-experience {
         background: var(--experienceColor1)
@@ -159,4 +173,12 @@
     .multiexp-cell:hover & {
         opacity: 1;
     }
+}
+.multiexp-cell-segment-experience {
+    height: calc(var(--cellHeight) * 1);
+}
+
+.multiexp-cell-segment-sentiment {
+    margin-top: calc(var(--cellHeight) * -0.2);
+    height: calc(var(--cellHeight) * 0.2);
 }

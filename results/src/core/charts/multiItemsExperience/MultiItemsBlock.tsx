@@ -66,7 +66,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     let allRowsCellDimensions = sortedItems.map(item =>
         getCellDimensions({
             buckets: sortBuckets(item.combinedBuckets, grouping),
-            variable
+            chartState
         })
     )
 
@@ -107,7 +107,9 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     const options =
         grouping === GroupingOptions.EXPERIENCE
             ? Object.values(FeaturesOptions).map(option => ({ id: option }))
-            : Object.values(SimplifiedSentimentOptions).map(option => ({ id: option }))
+            : Object.values(SimplifiedSentimentOptions)
+                  .filter(o => o !== SimplifiedSentimentOptions.NEUTRAL_SENTIMENT)
+                  .map(option => ({ id: option }))
 
     const colorScale =
         grouping === GroupingOptions.EXPERIENCE

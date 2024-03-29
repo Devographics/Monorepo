@@ -29,8 +29,8 @@ import round from 'lodash/round'
 import { useState } from 'react'
 import { ColumnModes, OrderOptions } from '../common2/types'
 
-export const ITEM_GAP_PERCENT = 1
-export const COLUMN_GAP_PERCENT = 5
+export const ITEM_GAP_PERCENT = 0
+export const COLUMN_GAP_PERCENT = 2
 export const MINIMUM_COLUMN_WIDTH_PERCENT = 25
 
 export const getBuckets = (item: StandardQuestionData) => item.responses.currentEdition.buckets
@@ -54,19 +54,23 @@ const sortBucketsById = <T extends Bucket | FacetBucket>(buckets: T[], sortingAr
 
 export const combineBuckets = (buckets: Bucket[], variable: Variable): CombinedBucket[] =>
     sortBucketsById<Bucket>(buckets, Object.values(FeaturesOptions))
-        .map(bucket =>
+        .map((bucket, groupIndex) =>
             sortBucketsById<FacetBucket>(
                 bucket.facetBuckets,
                 Object.values(SimplifiedSentimentOptions)
-            ).map(facetBucket => ({
-                // combined string id
-                id: `${bucket.id}__${facetBucket.id}`,
-                // also keep track of ids combined to create the bucket
-                ids: [bucket.id, facetBucket.id],
-                bucket,
-                facetBucket,
-                value: facetBucket[variable] || 0
-            }))
+            )
+                .filter(facetBucket => facetBucket[variable] || 0 > 0)
+                .map((facetBucket, subGroupIndex) => ({
+                    // combined string id
+                    id: `${bucket.id}__${facetBucket.id}`,
+                    // also keep track of ids combined to create the bucket
+                    ids: [bucket.id, facetBucket.id],
+                    bucket,
+                    facetBucket,
+                    value: facetBucket[variable] || 0,
+                    groupIndex,
+                    subGroupIndex
+                }))
         )
         .flat()
 
@@ -171,33 +175,51 @@ export const sortBuckets = (combinedBuckets: CombinedBucket[], grouping: Groupin
     }
 }
 
+export const getColumnGap = (
+    buckets: CombinedBucket[],
+    bucket: CombinedBucket,
+    bucketIndex: number,
+    grouping: ChartState['grouping']
+) => {
+    // if this is the first bucket of the group/subgroup (depending on current grouping option),
+    // add column gap to its offset (unless if it's the very first bucket of the row)
+    const indexProp = grouping === GroupingOptions.EXPERIENCE ? 'subGroupIndex' : 'groupIndex'
+    const addGapBefore = bucketIndex > 0 && bucket[indexProp] === 0
+    return addGapBefore ? COLUMN_GAP_PERCENT : 0
+}
+
 export const getCellDimensions = ({
     buckets,
-    variable
+    chartState
 }: {
     buckets: CombinedBucket[]
-    variable: Variable
+    chartState: ChartState
 }) => {
+    const { variable, grouping } = chartState
     let cellDimensions: CellDimension[] = []
 
     const getWidth = (combinedBucket: CombinedBucket) =>
         combinedBucket?.facetBucket?.[variable] || 0
 
-    const nonEmptyBuckets = buckets.filter(bucket => bucket.value !== 0)
+    // keep track of total value to offset column by
+    let columnOffset = 0
 
-    nonEmptyBuckets.forEach((bucket, bucketIndex) => {
+    buckets.forEach((bucket, bucketIndex) => {
         const { id, ids } = bucket
         const width = getWidth(bucket)
-        const offset = sum(
-            take(nonEmptyBuckets, bucketIndex).map(bucket => getWidth(bucket) + ITEM_GAP_PERCENT)
-        )
+        columnOffset += getColumnGap(buckets, bucket, bucketIndex, grouping)
+        const offset =
+            sum(take(buckets, bucketIndex).map(bucket => getWidth(bucket) + ITEM_GAP_PERCENT)) +
+            columnOffset
         cellDimensions.push({ id, ids, width, offset })
     })
 
     // total row width will expand above 100 due to item gap spacers or divergent sorts
     // bring it back to 100 by calculating the appropriate ratio
     const totalWidth =
-        sum(cellDimensions.map(cd => cd.width)) + ITEM_GAP_PERCENT * (cellDimensions.length - 1)
+        sum(cellDimensions.map(cd => cd.width)) +
+        ITEM_GAP_PERCENT * (cellDimensions.length - 1) +
+        columnOffset
     const ratio = 100 / totalWidth
     cellDimensions = applyRatio(cellDimensions, ratio)
     return cellDimensions

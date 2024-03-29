@@ -1,29 +1,10 @@
 import React from 'react'
-import {
-    CellDimension,
-    ChartState,
-    CombinedBucket,
-    CombinedItem,
-    GroupingOptions,
-    MaxValue
-} from './types'
-import {
-    ITEM_GAP_PERCENT,
-    applyRatio,
-    getCellDimensions,
-    getGroupedTotals,
-    getRowOffset,
-    sortBuckets,
-    sortByExperience,
-    sortBySentiment
-} from './helpers'
+import { CellDimension, ChartState, CombinedItem, MaxValue } from './types'
+import { getGroupedTotals } from './helpers'
 import { Cell, ColumnTotal } from './MultiItemsCell'
 import { sortOptions } from './MultiItemsBlock'
 import { RowWrapper } from '../common2/RowWrapper'
 import { Bucket } from '@devographics/types'
-import { ColumnModes } from '../common2/types'
-import round from 'lodash/round'
-import sum from 'lodash/sum'
 
 export const Row = (props: {
     allRowsCellDimensions: CellDimension[][]

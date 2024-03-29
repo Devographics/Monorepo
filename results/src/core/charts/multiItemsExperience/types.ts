@@ -68,6 +68,8 @@ export type CombinedBucket = {
     bucket: Bucket
     facetBucket: FacetBucket
     value: number
+    groupIndex: number
+    subGroupIndex: number
 }
 
 export type Totals = { id: string } & { [key in ColumnId]: number }

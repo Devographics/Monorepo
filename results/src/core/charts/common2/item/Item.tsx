@@ -8,8 +8,9 @@ import Button from 'core/components/Button'
 // import Popover from 'core/components/Popover'
 import Popover from 'core/components/Popover2'
 import { PeopleIcon, PeopleModal } from './People'
-import { FeatureIcon, FeatureModal } from './Feature'
-import { LibraryIcon, LibraryModal } from './Library'
+import { FeatureModal } from './Feature'
+import { LibraryModal } from './Library'
+import { FeatureIcon, LibraryIcon } from 'core/icons'
 
 const entityComponents = {
     [EntityType.PEOPLE]: { icon: PeopleIcon, modal: PeopleModal },

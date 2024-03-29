@@ -48,9 +48,9 @@ export const Cell = ({
     const style = {
         '--percentageValue': value,
         '--experienceColor1': experienceColors[bucket.id as FeaturesOptions][0],
-        '--experienceColor2': experienceColors[bucket.id as FeaturesOptions][1],
+        '--experienceColor2': experienceColors[bucket.id as FeaturesOptions][0],
         '--sentimentColor1': sentimentColors[facetBucket.id as SimplifiedSentimentOptions][0],
-        '--sentimentColor2': sentimentColors[facetBucket.id as SimplifiedSentimentOptions][1],
+        '--sentimentColor2': sentimentColors[facetBucket.id as SimplifiedSentimentOptions][0],
         '--width': width,
         '--offset': offset
     }
@@ -60,7 +60,9 @@ export const Cell = ({
             trigger={
                 <div className="multiexp-cell chart-cell" style={style}>
                     <div className="multiexp-cell-segment multiexp-cell-segment-experience"></div>
-                    <div className="multiexp-cell-segment multiexp-cell-segment-sentiment"></div>
+                    {facetBucket.id !== SimplifiedSentimentOptions.NEUTRAL_SENTIMENT && (
+                        <div className="multiexp-cell-segment multiexp-cell-segment-sentiment"></div>
+                    )}
                 </div>
             }
             contents={
