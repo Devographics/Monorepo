@@ -4,7 +4,9 @@ import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
 import Button from 'core/components/Button'
 import {
-    AddVariantType,
+    CreateVariantType,
+    CustomVariant,
+    DeleteVariantType,
     UpdateVariantType,
     getFiltersQuery,
     getInitFilters,
@@ -22,14 +24,14 @@ import {
     Message_
 } from 'core/blocks/block/BlockData'
 import * as Tabs from '@radix-ui/react-tabs'
-import { TabsList, TabsTrigger } from 'core/blocks/block/BlockTabsWrapper'
+import { TabsList, TabsTrigger, getCustomTabId } from 'core/blocks/block/BlockTabsWrapper'
 import FacetSelection from './FacetSelection'
 import FiltersSelection from './FiltersSelection'
 import { MODE_DEFAULT, MODE_FACET, MODE_COMBINED, MODE_GRID } from './constants'
 import cloneDeep from 'lodash/cloneDeep'
 import { BlockDefinition } from '../types/index'
 import { useStickyState, getFiltersLink } from './helpers'
-import { CheckIcon } from 'core/icons'
+import { CheckIcon, DeleteIcon, EditIcon, TrashIcon } from 'core/icons'
 import { CustomizationDefinition, SupportedMode } from './types'
 import { useAllFilters } from 'core/charts/hooks'
 import { useEntities } from 'core/helpers/entities'
@@ -37,13 +39,13 @@ import ModalTrigger from 'core/components/ModalTrigger'
 import { copyTextToClipboard } from 'core/helpers/utils'
 
 export type FiltersPanelPropsType = {
-    id?: string
     block: BlockDefinition
-    data?: any
-    chartFilters?: CustomizationDefinition
-    addVariant: AddVariantType
+    variant?: CustomVariant
+    createVariant: CreateVariantType
     updateVariant: UpdateVariantType
+    deleteVariant: DeleteVariantType
     closeModal?: any
+    setActiveTab: (value: string) => void
 }
 
 type TabConfigItem = {
@@ -52,13 +54,13 @@ type TabConfigItem = {
 }
 
 const FiltersPanel = ({
-    id,
     block,
-    data,
-    chartFilters,
-    addVariant,
+    variant,
+    createVariant,
     updateVariant,
-    closeModal
+    deleteVariant,
+    closeModal,
+    setActiveTab
 }: FiltersPanelPropsType) => {
     const { getString } = useI18n()
     const pageContext = usePageContext()
@@ -66,12 +68,15 @@ const FiltersPanel = ({
     const allFilters = useAllFilters()
     const entities = useEntities()
 
+    const { id, name, chartFilters } = variant || {}
+    const [variantName, setVariantName] = useState(name)
+
     const chartName = getBlockTitle({ block, pageContext, getString, entities })
 
     let initState = getInitFilters()
-    if (!isEmpty(chartFilters)) {
+    if (variant && !isEmpty(chartFilters)) {
         // if chart filters have been passed, use them to extend the default init filters
-        initState = { ...initState, ...chartFilters }
+        initState = { ...initState, ...variant.chartFilters }
     }
     const [filtersState, setFiltersState] = useState(initState)
 
@@ -81,10 +86,16 @@ const FiltersPanel = ({
         // in case filtersState has been inherited from filtersState defined at build time
         filtersState.options.preventQuery = false
         if (id) {
-            updateVariant(id, { chartFilters: filtersState })
+            updateVariant(id, { chartFilters: filtersState, name: variantName })
+            setActiveTab(getCustomTabId(id))
         } else {
             const name = prompt(getString('charts.new_variant_name_prompt')?.t)
-            addVariant({ blockId: block.id, chartFilters: filtersState, name })
+            const variant = createVariant({
+                blockId: block.id,
+                chartFilters: filtersState,
+                ...(name ? { name } : {})
+            })
+            setActiveTab(getCustomTabId(variant.id))
         }
         closeModal()
     }
@@ -146,7 +157,28 @@ const FiltersPanel = ({
         <Filters_>
             <FiltersTop_>
                 <Heading_>
-                    <T k="filters.compare_chart" values={{ chartName }} />
+                    <span>{chartName}</span>
+                    <span>–</span>
+                    {id ? (
+                        <>
+                            <T k="filters.edit_variant_with_name" values={{ name: variantName }} />
+                            <EditIcon
+                                size="petite"
+                                labelId="filters.edit_name"
+                                onClick={() => {
+                                    const newName = prompt(
+                                        getString('filters.edit_name.description')?.t,
+                                        name
+                                    )
+                                    if (newName) {
+                                        setVariantName(newName)
+                                    }
+                                }}
+                            />
+                        </>
+                    ) : (
+                        <T k="filters.create_variant" />
+                    )}
                 </Heading_>
                 <a
                     href="https://github.com/Devographics/docs/blob/main/results/filters.md"
@@ -187,19 +219,40 @@ const FiltersPanel = ({
                             buttonProps={{ variant: 'link' }}
                         />
                     </li>
-                    <li>
+                    {/* <li>
                         <JSONTrigger data={data} buttonProps={{ variant: 'link' }} />
-                    </li>
-                    <li>
+                    </li> */}
+                    {/* <li>
                         <CopyLink link={filtersLink} />
-                    </li>
-                    <li>
+                    </li> */}
+                    {/* <li>
                         <CopyFilters filtersState={filtersState} />
-                    </li>
+                    </li> */}
                 </FooterLeft_>
-                <Button onClick={handleSubmit}>
-                    <T k="filters.submit" />
-                </Button>
+
+                <FooterRight_>
+                    {id && (
+                        <Button
+                            onClick={() => {
+                                if (
+                                    confirm(
+                                        getString('filters.delete_variant_confirm', {
+                                            values: { name: variantName }
+                                        })?.t
+                                    )
+                                ) {
+                                    deleteVariant(id)
+                                }
+                            }}
+                        >
+                            <T k="filters.delete_variant" />
+                            {/* <TrashIcon size="petite" labelId="filters.delete_variant" /> */}
+                        </Button>
+                    )}
+                    <Button onClick={handleSubmit}>
+                        <T k="filters.submit" />
+                    </Button>
+                </FooterRight_>
             </FiltersBottom_>
             {/* <pre>
                 <code>{JSON.stringify(filtersState, null, 2)}</code>
@@ -259,6 +312,9 @@ export const FiltersTop_ = styled.div`
 
 export const Heading_ = styled.h3`
     margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 `
 
 export const TabsTrigger_ = styled(Tabs.Trigger)`
@@ -306,6 +362,11 @@ const FooterLeft_ = styled.ul`
     li {
         text-align: center;
     }
+`
+const FooterRight_ = styled.div`
+    display: flex;
+    gap: ${spacing()};
+    align-items: center;
 `
 
 const CopyLink_ = styled(Button)`

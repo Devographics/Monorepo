@@ -966,15 +966,21 @@ export type CustomVariant = {
     name?: string
 }
 
-export type VariantOptions = {
-    name?: string | null
+export type CreateVariantOptions = {
+    name?: string
     chartFilters: CustomizationDefinition
+}
+export type UpdateVariantOptions = {
+    name?: string
+    chartFilters?: CustomizationDefinition
 }
 
 export type GetVariantType = (id: CustomVariant['id']) => CustomVariant | undefined
 export type DeleteVariantType = (id: CustomVariant['id']) => void
-export type AddVariantType = (options: VariantOptions & { blockId: string }) => void
-export type UpdateVariantType = (id: CustomVariant['id'], options: VariantOptions) => void
+export type CreateVariantType = (
+    options: CreateVariantOptions & { blockId: string }
+) => CustomVariant
+export type UpdateVariantType = (id: CustomVariant['id'], options: UpdateVariantOptions) => void
 
 export const useCustomVariants = () => {
     const [customVariants, setCustomVariants] = useStickyState<CustomVariant[]>(
@@ -997,7 +1003,7 @@ export const useCustomVariants = () => {
     }
 
     // create new variant for a specific block
-    const addVariant: AddVariantType = options => {
+    const createVariant: CreateVariantType = options => {
         const { name, blockId, chartFilters } = options
         const id = new Date().getTime().toString()
         const newVariant: CustomVariant = { id, blockId, chartFilters }
@@ -1007,19 +1013,21 @@ export const useCustomVariants = () => {
         setCustomVariants(variants => {
             return [...variants, newVariant]
         })
+        return newVariant
     }
 
     // modify an existing variant
     const updateVariant: UpdateVariantType = (id, options) => {
-        const { name, chartFilters } = options
+        const variantIndex = customVariants.findIndex(v => v.id === id)
+        const updatedVariant = { ...customVariants[variantIndex], ...options }
+        customVariants[variantIndex] = updatedVariant
+
         setCustomVariants(variants => {
             const variantIndex = variants.findIndex(v => v.id === id)
-            const updatedVariant = { ...variants[variantIndex], chartFilters }
-            if (name) {
-                updatedVariant.name = name
-            }
-            variants[variantIndex] = updatedVariant
-            return variants
+            const updatedVariant = { ...variants[variantIndex], ...options }
+            const newVariants = [...variants]
+            newVariants[variantIndex] = updatedVariant
+            return newVariants
         })
     }
 
@@ -1028,7 +1036,7 @@ export const useCustomVariants = () => {
         setCustomVariants,
         getVariant,
         deleteVariant,
-        addVariant,
+        createVariant,
         updateVariant
     }
 }

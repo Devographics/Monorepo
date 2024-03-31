@@ -3,16 +3,18 @@ import ModalTrigger from 'core/components/ModalTrigger'
 import { FiltersIcon } from 'core/icons'
 import FiltersPanel, { FiltersPanelPropsType } from './FiltersPanel'
 import { BlockDefinition } from 'core/types'
-import { AddVariantType, UpdateVariantType } from './helpers'
+import { CreateVariantType, UpdateVariantType } from './helpers'
 
 const FiltersTrigger = ({
     block,
-    addVariant,
-    updateVariant
+    createVariant,
+    updateVariant,
+    setActiveTab
 }: {
     block: BlockDefinition
-    addVariant: AddVariantType
+    createVariant: CreateVariantType
     updateVariant: UpdateVariantType
+    setActiveTab: FiltersPanelPropsType['setActiveTab']
 }) => {
     return (
         <ModalTrigger
@@ -22,7 +24,12 @@ const FiltersTrigger = ({
                 </div>
             }
         >
-            <FiltersPanel block={block} addVariant={addVariant} updateVariant={updateVariant} />
+            <FiltersPanel
+                block={block.variants[0]}
+                createVariant={createVariant}
+                updateVariant={updateVariant}
+                setActiveTab={setActiveTab}
+            />
         </ModalTrigger>
     )
 }

@@ -77,7 +77,7 @@ export interface BlockDefinition {
     hasSponsor?: boolean
     hasComments?: boolean
 
-    variants?: Array<BlockVariant>
+    variants: Array<BlockVariant>
 
     wrapBlock?: boolean
 
@@ -123,8 +123,7 @@ export interface BlockLegend {
     gradientColors?: string[]
 }
 
-
 export interface BlockDataType {
     units: 'percentage' | string
-    data: { [units: string]: any },
+    data: { [units: string]: any }
 }

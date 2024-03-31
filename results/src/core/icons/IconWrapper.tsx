@@ -28,21 +28,23 @@ const Icon = styled.span`
     width: ${getIconSize};
     appearance: initial !important;
     display: block;
+    background: none;
+    border: none;
     ${props =>
         props.enableHover &&
         `
-        &:hover {
-            
-        }
-    `}
+            &:hover {
+                
+            }
+        `}
     svg {
         height: ${getIconSize};
         width: ${getIconSize};
         display: block;
         color: ${props => props.theme.colors.text};
         /* path, circle {
-            fill: ${props => props.theme.colors.text};
-        } */
+                fill: ${props => props.theme.colors.text};
+            } */
     }
 `
 
@@ -63,6 +65,7 @@ export interface IconProps {
     values?: any
     inSVG?: boolean
     size?: 'small' | 'petite' | 'medium' | 'large'
+    onClick?: () => void
 }
 
 export interface IconWrapperProps extends IconProps {
@@ -77,11 +80,13 @@ const IconWrapper = ({
     children,
     values,
     inSVG = false,
+    onClick,
     size
 }: IconWrapperProps) => {
     const { getString } = useI18n()
     const label_ = label || (labelId && getString(labelId, { values })?.t) || ''
 
+    const isButton = !!onClick
     const IconComponent = enableHover ? IconWithHover : Icon
     const icon = inSVG ? (
         <g>
@@ -89,7 +94,12 @@ const IconWrapper = ({
             {/* <text className="sr-only">{label_}</text> */}
         </g>
     ) : (
-        <IconComponent size={size} className={`icon-wrapper ${className}`}>
+        <IconComponent
+            as={isButton ? 'button' : 'span'}
+            onClick={onClick}
+            size={size}
+            className={`icon-wrapper ${className}`}
+        >
             {children}
             <span className="sr-only">{label_}</span>
         </IconComponent>

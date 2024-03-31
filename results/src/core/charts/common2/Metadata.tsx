@@ -19,9 +19,9 @@ export const Metadata = ({
 
     return (
         <div className="chart-metadata">
-            <div className="chart-metadata-question">
+            {/* <div className="chart-metadata-question">
                 <QuestionIcon size="petite" /> <div>{blockQuestion}</div>
-            </div>
+            </div> */}
             <div className="chart-metadata-completion">
                 <T
                     k="chart_units.respondents"
