@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Dispatch, SetStateAction } from 'react'
 import cloneDeep from 'lodash/cloneDeep.js'
 import {
     CustomizationDefinition,
@@ -879,15 +879,15 @@ Persist state in localStorage
 https://www.joshwcomeau.com/react/persisting-react-state-in-localstorage/
 
  */
-export function useStickyState(defaultValue: any, key: string) {
-    const [value, setValue] = useState(() => {
+export function useStickyState<T>(defaultValue: any, key: string) {
+    const [value, setValue] = useState<T>(() => {
         const stickyValue = window.localStorage.getItem(key)
         return stickyValue !== null ? JSON.parse(stickyValue) : defaultValue
     })
     useEffect(() => {
         window.localStorage.setItem(key, JSON.stringify(value))
     }, [key, value])
-    return [value, setValue]
+    return [value, setValue] as [T, Dispatch<SetStateAction<T>>]
 }
 
 export const getFiltersLink = ({
@@ -956,5 +956,79 @@ export async function fetchSeriesData({
             }
         })
         return { result: seriesData, query, seriesNames }
+    }
+}
+
+export type CustomVariant = {
+    id: string
+    blockId: string
+    chartFilters: CustomizationDefinition
+    name?: string
+}
+
+export type VariantOptions = {
+    name?: string | null
+    chartFilters: CustomizationDefinition
+}
+
+export type GetVariantType = (id: CustomVariant['id']) => CustomVariant | undefined
+export type DeleteVariantType = (id: CustomVariant['id']) => void
+export type AddVariantType = (options: VariantOptions & { blockId: string }) => void
+export type UpdateVariantType = (id: CustomVariant['id'], options: VariantOptions) => void
+
+export const useCustomVariants = () => {
+    const [customVariants, setCustomVariants] = useStickyState<CustomVariant[]>(
+        [],
+        'customVariants'
+    )
+    // TODO: also handle any variants defined by URL parameters
+
+    // get specific variant
+    const getVariant: GetVariantType = id => {
+        const variant = customVariants.find(v => v.id === id)
+        return variant
+    }
+
+    // delete specific variant
+    const deleteVariant: DeleteVariantType = id => {
+        setCustomVariants(variants => {
+            return variants.filter(v => v.id !== id)
+        })
+    }
+
+    // create new variant for a specific block
+    const addVariant: AddVariantType = options => {
+        const { name, blockId, chartFilters } = options
+        const id = new Date().getTime().toString()
+        const newVariant: CustomVariant = { id, blockId, chartFilters }
+        if (name) {
+            newVariant.name = name
+        }
+        setCustomVariants(variants => {
+            return [...variants, newVariant]
+        })
+    }
+
+    // modify an existing variant
+    const updateVariant: UpdateVariantType = (id, options) => {
+        const { name, chartFilters } = options
+        setCustomVariants(variants => {
+            const variantIndex = variants.findIndex(v => v.id === id)
+            const updatedVariant = { ...variants[variantIndex], chartFilters }
+            if (name) {
+                updatedVariant.name = name
+            }
+            variants[variantIndex] = updatedVariant
+            return variants
+        })
+    }
+
+    return {
+        customVariants,
+        setCustomVariants,
+        getVariant,
+        deleteVariant,
+        addVariant,
+        updateVariant
     }
 }

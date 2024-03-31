@@ -6,3 +6,4 @@ queryOptions:
     subField: freeform
     addGroupedBuckets: true
 parameters: { cutoff: 10 }
+canCustomize: true

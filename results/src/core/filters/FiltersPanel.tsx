@@ -3,7 +3,13 @@ import styled from 'styled-components'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
 import Button from 'core/components/Button'
-import { getFiltersQuery, getInitFilters } from './helpers'
+import {
+    AddVariantType,
+    UpdateVariantType,
+    getFiltersQuery,
+    getInitFilters,
+    useCustomVariants
+} from './helpers'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from '@devographics/react-i18n'
@@ -30,12 +36,14 @@ import { useEntities } from 'core/helpers/entities'
 import ModalTrigger from 'core/components/ModalTrigger'
 import { copyTextToClipboard } from 'core/helpers/utils'
 
-type FiltersPanelPropsType = {
+export type FiltersPanelPropsType = {
+    id?: string
     block: BlockDefinition
-    chartFilters: CustomizationDefinition
-    setChartFilters: Dispatch<SetStateAction<CustomizationDefinition>>
-    closeModal: any
-    data: any
+    data?: any
+    chartFilters?: CustomizationDefinition
+    addVariant: AddVariantType
+    updateVariant: UpdateVariantType
+    closeModal?: any
 }
 
 type TabConfigItem = {
@@ -44,10 +52,12 @@ type TabConfigItem = {
 }
 
 const FiltersPanel = ({
+    id,
     block,
     data,
     chartFilters,
-    setChartFilters,
+    addVariant,
+    updateVariant,
     closeModal
 }: FiltersPanelPropsType) => {
     const { getString } = useI18n()
@@ -70,7 +80,12 @@ const FiltersPanel = ({
     const handleSubmit = () => {
         // in case filtersState has been inherited from filtersState defined at build time
         filtersState.options.preventQuery = false
-        setChartFilters(filtersState)
+        if (id) {
+            updateVariant(id, { chartFilters: filtersState })
+        } else {
+            const name = prompt(getString('charts.new_variant_name_prompt')?.t)
+            addVariant({ blockId: block.id, chartFilters: filtersState, name })
+        }
         closeModal()
     }
 
@@ -86,7 +101,7 @@ const FiltersPanel = ({
         }
     }
 
-    const supportedModes = filtersState.options.supportedModes
+    const supportedModes = filtersState?.options?.supportedModes || [MODE_GRID, MODE_FACET]
 
     // if mode is set to "default" then open first supported filter tab
     const currentMode =

@@ -8,11 +8,13 @@ export const BlockError = ({
     message,
     data,
     block,
+    errorCode,
     children
 }: {
     message?: React.ReactNode
     block: BlockDefinition
     children: React.ReactNode
+    errorCode: string
     data: any
 }) => (
     <Block block={block}>
@@ -20,6 +22,11 @@ export const BlockError = ({
         <div className="error">{message}</div>
         <BlockDebug block={block} data={data} />
         {children}
+        {errorCode && (
+            <pre>
+                <code>{JSON.stringify(errorCode, null, 2)}</code>
+            </pre>
+        )}
     </Block>
 )
 

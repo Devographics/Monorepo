@@ -5,3 +5,4 @@ queryOptions:
     addBucketsEntities: true
     subField: combined
 parameters: { showNoAnswer: true, cutoffPercent: 1 }
+canCustomize: true

@@ -1,16 +1,18 @@
-import React, { useState } from 'react'
+import React from 'react'
 import BlockSwitcher from 'core/blocks/block/BlockSwitcher'
 import * as Tabs from '@radix-ui/react-tabs'
 import BlockTitle from 'core/blocks/block/BlockTitle'
 import styled, { css } from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
-import T from 'core/i18n/T'
-import { getBlockTabKey, getBlockTabTitle } from 'core/helpers/blockHelpers'
+import { getBlockTabTitle } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
-import get from 'lodash/get'
 import { useEntities } from 'core/helpers/entities'
 import BlockTakeaway from './BlockTakeaway'
 import { useI18n } from '@devographics/react-i18n'
+import { BlockDefinition } from 'core/types'
+import { useCustomVariants, useStickyState } from 'core/filters/helpers'
+import FiltersTrigger from 'core/filters/FiltersTrigger'
+import T from 'core/i18n/T'
 
 const BlockHeader = styled.div`
     display: flex;
@@ -68,6 +70,11 @@ export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) 
         titleLink: blockEntity?.homepage?.url
     }
 
+    const { customVariants, getVariant, deleteVariant, addVariant, updateVariant } =
+        useCustomVariants()
+
+    const blockCustomVariants = customVariants.filter(v => v.blockId === block.id)
+
     return (
         <Wrapper className="tabs-wrapper" withMargin={withMargin}>
             <Tabs.Root defaultValue="tab0" orientation="horizontal">
@@ -87,8 +94,25 @@ export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) 
                                     })}
                                 </TabsTrigger>
                             ))}
+                            {blockCustomVariants.map((variant, variantIndex) => (
+                                <TabsTrigger key={variant.name} value={`tabCustom-${variantIndex}`}>
+                                    {variant.name ? (
+                                        variant.name
+                                    ) : (
+                                        <T
+                                            k="charts.custom_variant"
+                                            values={{ index: variantIndex + 1 }}
+                                        />
+                                    )}
+                                </TabsTrigger>
+                            ))}
                         </TabsList>
                     )}
+                    <FiltersTrigger
+                        block={block}
+                        addVariant={addVariant}
+                        updateVariant={updateVariant}
+                    />
                 </BlockHeader>
                 {block.variants.map((block, variantIndex) => (
                     <Tabs.Content key={block.id} value={`tab${variantIndex}`}>
@@ -97,6 +121,18 @@ export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) 
                             pageData={pageData}
                             blockIndex={blockIndex}
                             variantIndex={variantIndex}
+                        />
+                    </Tabs.Content>
+                ))}
+                {blockCustomVariants.map((variant, variantIndex) => (
+                    <Tabs.Content key={variant.name} value={`tabCustom-${variantIndex}`}>
+                        custom variant {variant.name}
+                        <BlockSwitcher
+                            block={block.variants[0]}
+                            pageData={pageData}
+                            blockIndex={blockIndex}
+                            variantIndex={variantIndex}
+                            blockComponentProps={{ variant, updateVariant, deleteVariant }}
                         />
                     </Tabs.Content>
                 ))}
