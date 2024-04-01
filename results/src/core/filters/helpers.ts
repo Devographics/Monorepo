@@ -1,4 +1,4 @@
-import { useState, useEffect, Dispatch, SetStateAction } from 'react'
+import { useState, useEffect, Dispatch, SetStateAction, useRef } from 'react'
 import cloneDeep from 'lodash/cloneDeep.js'
 import {
     CustomizationDefinition,
@@ -1039,4 +1039,17 @@ export const useCustomVariants = () => {
         createVariant,
         updateVariant
     }
+}
+
+// see https://stackoverflow.com/a/57941438
+export const useDidMountEffect = (func: () => void, deps: Array<any>) => {
+    const didMount = useRef(false)
+
+    useEffect(() => {
+        if (didMount.current) {
+            func()
+        } else {
+            didMount.current = true
+        }
+    }, deps)
 }

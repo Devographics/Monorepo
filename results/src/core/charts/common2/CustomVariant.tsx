@@ -8,7 +8,9 @@ import {
     CustomVariant,
     DeleteVariantType,
     UpdateVariantType,
-    fetchSeriesData
+    fetchSeriesData,
+    useDidMountEffect,
+    useStickyState
 } from 'core/filters/helpers'
 import { DataSeries } from 'core/filters/types'
 import { usePageContext } from 'core/helpers/pageContext'
@@ -35,12 +37,22 @@ export const CustomVariantWrapper = ({
     const { getString } = useI18n()
     const [apiError, setApiError] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    const [series, setSeries] = useState<Array<DataSeries<AllQuestionData>>>()
+    const [series, setSeries] = useStickyState<Array<DataSeries<AllQuestionData>>>(
+        [],
+        `data-${variant.id}`
+    )
     const [query, setQuery] = useState<string | undefined>()
     const pageContext = usePageContext()
     const { chartFilters } = variant
     const year = pageContext.currentEdition.year
 
+    // whenever chart filters change, clear out series to trigger a new query
+    // note: we do *not* want this to run on mount
+    useDidMountEffect(() => {
+        setSeries([])
+    }, [chartFilters])
+
+    // whenever series are cleared, re-trigger query
     useEffect(() => {
         const getData = async () => {
             setIsLoading(true)
@@ -63,10 +75,14 @@ export const CustomVariantWrapper = ({
             setIsLoading(false)
         }
 
-        if (!chartFilters.options.preventQuery && chartFilters?.filters?.length > 0) {
+        if (
+            (!series || series.length === 0) &&
+            !chartFilters.options.preventQuery &&
+            chartFilters?.filters?.length > 0
+        ) {
             getData()
         }
-    }, [chartFilters])
+    }, [series])
 
     return (
         <div className="chart-custom-variant">
