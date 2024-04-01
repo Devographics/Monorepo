@@ -7,7 +7,7 @@ import {
     SurveyMetadata
 } from '@devographics/types'
 import { PageContextValue } from 'core/types'
-import { BlockDefinition, BlockUnits } from '../types/block'
+import { BlockVariantDefinition, BlockUnits } from '../types/block'
 import get from 'lodash/get.js'
 import { MODE_FACET } from 'core/filters/constants'
 import { CustomizationDefinition, DataSeries } from 'core/filters/types'
@@ -62,7 +62,7 @@ export const getBlockDataPath = ({
     addRootNode = true,
     suffix = ''
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     addRootNode?: boolean
     suffix?: string
@@ -91,7 +91,7 @@ export const getBlockSeriesData = ({
     pageContext,
     filtersState
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     filtersState?: CustomizationDefinition
 }): Array<DataSeries<any>> => {
@@ -117,7 +117,7 @@ export const getBlockData = ({
     block,
     pageContext
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
 }) => {
     const dataPath = getBlockDataPath({ block, pageContext })

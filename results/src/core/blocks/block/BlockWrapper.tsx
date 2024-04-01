@@ -4,14 +4,14 @@ import EmptyWrapper from 'core/blocks/block/BlockEmptyWrapper'
 import TitleWrapper from 'core/blocks/block/BlockTitleWrapper'
 import { ErrorBoundary } from 'core/blocks/block/BlockError'
 import { usePageContext } from 'core/helpers/pageContext'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 const BlockWrapper = ({
     block,
     index: blockIndex,
     withMargin
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     index?: any
     withMargin?: boolean
 }) => {

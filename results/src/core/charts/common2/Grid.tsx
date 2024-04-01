@@ -43,8 +43,18 @@ const useFiltersLabel = (filters: CustomizationFiltersSeries) => {
     return label
 }
 
-export const GridWrapper = ({ children }: { children: ReactNode }) => {
-    return <div className="chart-grid">{children}</div>
+export const GridWrapper = ({
+    seriesCount,
+    children
+}: {
+    seriesCount: number
+    children: ReactNode
+}) => {
+    return (
+        <div className={seriesCount > 1 ? 'chart-wrapper-grid' : 'chart-wrapper-single'}>
+            {children}
+        </div>
+    )
 }
 
 export const GridItem = ({

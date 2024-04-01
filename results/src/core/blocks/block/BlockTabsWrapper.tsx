@@ -9,9 +9,7 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { useEntities } from 'core/helpers/entities'
 import BlockTakeaway from './BlockTakeaway'
 import { useI18n } from '@devographics/react-i18n'
-import { BlockDefinition } from 'core/types'
-import { useCustomVariants, useStickyState } from 'core/filters/helpers'
-import FiltersTrigger from 'core/filters/FiltersTrigger'
+import { useCustomVariants } from 'core/filters/helpers'
 import T from 'core/i18n/T'
 import { CustomVariantWrapper } from 'core/charts/common2'
 import ModalTrigger from 'core/components/ModalTrigger'
@@ -19,22 +17,36 @@ import Button from 'core/components/Button'
 import FiltersPanel from 'core/filters/FiltersPanel'
 import { EditIcon } from 'core/icons'
 import BlockQuestion from './BlockQuestion'
+import { BlockDefinition } from 'core/types'
 
 export const getRegularTabId = (index: number) => `tab-${index}`
 export const getCustomTabId = (id: string) => `tabCustom-${id}`
 
-export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) => {
+export const TabsWrapper = ({
+    block,
+    pageData,
+    blockIndex,
+    withMargin = true
+}: {
+    block: BlockDefinition
+    pageData: any
+    blockIndex: number
+    withMargin: boolean
+}) => {
     const [activeTab, setActiveTab] = useState(getRegularTabId(0))
     const pageContext = usePageContext()
     const { getString } = useI18n()
     const entities = useEntities()
     let firstBlockVariant = block.variants[0]
+
     const blockEntity = entities.find(e => e.id === firstBlockVariant.id)
-    firstBlockVariant = {
-        ...firstBlockVariant,
-        entity: blockEntity,
-        title: blockEntity?.nameClean || blockEntity?.name,
-        titleLink: blockEntity?.homepage?.url
+    if (blockEntity) {
+        firstBlockVariant = {
+            ...firstBlockVariant,
+            entity: blockEntity
+            // title: blockEntity?.nameClean || blockEntity?.name,
+            // titleLink: blockEntity?.homepage?.url
+        }
     }
 
     const { customVariants, deleteVariant, createVariant, updateVariant } = useCustomVariants()
@@ -51,6 +63,8 @@ export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) 
         deleteVariant,
         setActiveTab
     }
+
+    const regularVariants = block.variants
 
     return (
         <Wrapper className="tabs-wrapper" withMargin={withMargin}>
@@ -126,7 +140,7 @@ export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) 
                         )}
                     </BlockHeaderRight_>
                 </BlockHeader>
-                {block.variants.map((block, variantIndex) => (
+                {regularVariants.map((block, variantIndex) => (
                     <Tabs.Content key={block.id} value={getRegularTabId(variantIndex)}>
                         <BlockSwitcher
                             block={block}
@@ -140,11 +154,10 @@ export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) 
                     <Tabs.Content key={variant.name} value={getCustomTabId(variant.id)}>
                         <CustomVariantWrapper variant={variant} {...variantProps}>
                             <BlockSwitcher
-                                block={firstBlockVariant}
+                                block={{ ...firstBlockVariant, filtersState: variant.chartFilters }}
                                 pageData={pageData}
                                 blockIndex={blockIndex}
                                 variantIndex={variantIndex}
-                                blockComponentProps={{ variant }}
                             />
                         </CustomVariantWrapper>
                     </Tabs.Content>

@@ -17,11 +17,11 @@ import {
     CustomizationFiltersSeries,
     FilterItem
 } from './types'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 interface FiltersSelectionProps {
     allFilters: FilterItem[]
-    block: BlockDefinition
+    block: BlockVariantDefinition
     stateStuff: PanelState
 }
 

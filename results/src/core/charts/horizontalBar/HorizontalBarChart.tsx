@@ -4,7 +4,7 @@ import { ResponsiveBar } from '@nivo/bar'
 import { useI18n } from '@devographics/react-i18n'
 import BarTooltip from 'core/charts/common/BarTooltip'
 import HorizontalBarStripes from './HorizontalBarStripes'
-import { BlockDefinition, ChartComponentProps } from 'core/types/index'
+import { BlockVariantDefinition, ChartComponentProps } from 'core/types/index'
 import TickItem, { getBucketLabel } from 'core/charts/common/TickItem'
 import maxBy from 'lodash/maxBy'
 import ChartLabel from 'core/components/ChartLabel'
@@ -27,10 +27,13 @@ import { INSUFFICIENT_DATA, NO_ANSWER } from '@devographics/constants'
 import sumBy from 'lodash/sumBy'
 import { FilterLegend } from 'core/filters/helpers'
 
-export const getChartDataPath = (block: BlockDefinition) =>
+export const getChartDataPath = (block: BlockVariantDefinition) =>
     `${block?.queryOptions?.subField || 'responses'}.currentEdition.buckets`
 
-export const getChartData = (data: StandardQuestionData, block: BlockDefinition): Array<Bucket> => {
+export const getChartData = (
+    data: StandardQuestionData,
+    block: BlockVariantDefinition
+): Array<Bucket> => {
     const buckets = get(data, getChartDataPath(block))
     return buckets
 }
@@ -125,7 +128,7 @@ const getLabelsLayer = (labelTransformer: any) => (props: any) => {
 const baseUnits = Object.values(BucketUnits)
 
 export interface HorizontalBarChartProps extends ChartComponentProps {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     total: number
     size?: keyof typeof barSizes
     barColor?: BarColor

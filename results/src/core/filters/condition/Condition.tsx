@@ -8,7 +8,7 @@ import { FieldSegment } from './FieldSegment'
 import { ValueSegment } from './ValueSegment'
 import { OperatorSegment } from './OperatorSegment'
 import { CustomizationFiltersCondition, FilterItem, PanelState } from '../types'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 interface ConditionProps {
     seriesIndex: number
@@ -19,7 +19,7 @@ interface ConditionProps {
     condition: CustomizationFiltersCondition
     stateStuff: PanelState
     conditionsCount: number
-    block: BlockDefinition
+    block: BlockVariantDefinition
 }
 
 const Condition = ({

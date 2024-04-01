@@ -2,10 +2,10 @@ import React from 'react'
 import { usePageContext } from 'core/helpers/pageContext'
 import SponsorCredit from './SponsorCredit'
 import SponsorPrompt from './SponsorPrompt'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 interface BlockSponsorProps {
-    block: BlockDefinition
+    block: BlockVariantDefinition
 }
 
 const BlockSponsor = ({ block }: BlockSponsorProps) => {

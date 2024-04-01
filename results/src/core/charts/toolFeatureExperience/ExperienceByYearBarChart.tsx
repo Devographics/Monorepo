@@ -8,11 +8,11 @@ import { isPercentage } from 'core/helpers/units'
 import { BlockLegend, BlockUnits } from 'core/types/index'
 import { FeatureQuestionData, ToolQuestionData } from '@devographics/types'
 import keyBy from 'lodash/keyBy'
-import { BlockDefinition } from 'core/types/block'
+import { BlockVariantDefinition } from 'core/types/block'
 
 interface ExperienceByYearBarChartProps {
     data: FeatureQuestionData | ToolQuestionData
-    block: BlockDefinition
+    block: BlockVariantDefinition
     legends: BlockLegend[]
     units: BlockUnits
     spacing: number
@@ -107,7 +107,7 @@ const ValuesLayer = ({
 
 export const getChartData = (
     data: FeatureQuestionData | ToolQuestionData,
-    block: BlockDefinition,
+    block: BlockVariantDefinition,
     options: any
 ) => {
     const { legends } = options

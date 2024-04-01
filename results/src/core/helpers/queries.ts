@@ -1,4 +1,4 @@
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 import camelCase from 'lodash/camelCase.js'
 import { indentString } from './utils'
 import { ResponsesParameters, Filters, BucketUnits } from '@devographics/types'
@@ -336,7 +336,7 @@ export const getBlockQuery = ({
     queryOptions: providedQueryOptions = {},
     queryArgs = {}
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext?: PageContextValue
     queryOptions?: ProvidedQueryOptions
     // isLog?: boolean

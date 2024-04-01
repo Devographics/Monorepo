@@ -11,7 +11,7 @@ import { getTableData } from 'core/helpers/datatables'
 import { useLegends } from 'core/helpers/legends'
 import { SectionAllToolsData, ToolsOptions } from '@devographics/types'
 import { useEntities } from 'core/helpers/entities'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 const valueKeys = [
     'would_not_use_percentage',
@@ -22,7 +22,7 @@ const valueKeys = [
 
 interface ToolsExperienceMarimekkoBlockProps {
     index: number
-    block: BlockDefinition
+    block: BlockVariantDefinition
     data: SectionAllToolsData
     triggerId: string | null
 }

@@ -11,7 +11,7 @@ import newGithubIssueUrl from 'new-github-issue-url'
 import { EditionMetadata } from '@devographics/types'
 import { CustomizationDefinition } from '../types'
 import { usePageContext } from 'core/helpers/pageContext'
-import { BlockDefinition } from 'core/types/index'
+import { BlockVariantDefinition } from 'core/types/index'
 
 const getIssueReportUrl = ({
     query,
@@ -26,7 +26,7 @@ const getIssueReportUrl = ({
     location: string
     timestamp: Date
     error: any
-    block: BlockDefinition
+    block: BlockVariantDefinition
     chartFilters: CustomizationDefinition
     currentEdition: EditionMetadata
 }) => {

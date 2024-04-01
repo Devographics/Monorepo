@@ -2,14 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 import { fontSize, spacing } from 'core/theme'
 import { useBlockQuestion } from 'core/helpers/blockHelpers'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 import { QuestionIcon } from 'core/icons'
 
 export const BlockQuestion = ({
     block,
     question
 }: {
-    block?: BlockDefinition
+    block?: BlockVariantDefinition
     question?: string
 }) => {
     const blockQuestion = question || (block && useBlockQuestion({ block }))

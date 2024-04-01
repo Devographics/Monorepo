@@ -12,7 +12,7 @@ import {
     FacetItem,
     DataSeries
 } from './types'
-import { BlockDefinition, StringTranslator } from 'core/types'
+import { BlockVariantDefinition, StringTranslator } from 'core/types'
 import {
     MODE_DEFAULT,
     MODE_FACET,
@@ -170,7 +170,7 @@ const getSeriesName = ({
     year,
     conditions
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     year: number
     conditions: CustomizationFiltersCondition[]
 }) => {
@@ -222,7 +222,7 @@ export const getFiltersQuery = ({
     pageContext,
     queryOptions
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     chartFilters: CustomizationDefinition
     currentYear: number
     pageContext: PageContextValue
@@ -665,7 +665,7 @@ export const useFilterLegends = ({
     buckets
 }: {
     chartFilters: CustomizationDefinition
-    block: BlockDefinition
+    block: BlockVariantDefinition
     buckets: Bucket[]
 }) => {
     const context = usePageContext()
@@ -842,7 +842,7 @@ export const useChartFilters = ({
     providedFiltersState,
     buckets
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     options: CustomizationOptions
     providedFiltersState?: CustomizationDefinition
     buckets: Bucket[]
@@ -895,7 +895,7 @@ export const getFiltersLink = ({
     pageContext,
     filtersState
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     filtersState: any
 }) => {
@@ -906,7 +906,7 @@ export const getFiltersLink = ({
 }
 
 export type FetchSeriesDataOptions = {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     chartFilters: CustomizationDefinition
     year: number

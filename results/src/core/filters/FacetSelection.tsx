@@ -5,7 +5,7 @@ import { Options_, Option_ } from './Options'
 import cloneDeep from 'lodash/cloneDeep'
 import { FilterItem, PanelState } from './types'
 import { ItemSelectOptions } from './condition/FieldSegment'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 // NOTE: we shouldn't need to disable any facet if we limit legend to facets that actually
 // have data and use proper default cutoff
@@ -16,7 +16,7 @@ import { BlockDefinition } from 'core/types'
 const disabledFacets = []
 
 interface FacetSelectionProps {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     allFilters: FilterItem[]
     stateStuff: PanelState
 }

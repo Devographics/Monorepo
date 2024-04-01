@@ -29,7 +29,7 @@ import FacetSelection from './FacetSelection'
 import FiltersSelection from './FiltersSelection'
 import { MODE_DEFAULT, MODE_FACET, MODE_COMBINED, MODE_GRID } from './constants'
 import cloneDeep from 'lodash/cloneDeep'
-import { BlockDefinition } from '../types/index'
+import { BlockVariantDefinition } from '../types/index'
 import { useStickyState, getFiltersLink } from './helpers'
 import { CheckIcon, DeleteIcon, EditIcon, TrashIcon } from 'core/icons'
 import { CustomizationDefinition, SupportedMode } from './types'
@@ -39,7 +39,7 @@ import ModalTrigger from 'core/components/ModalTrigger'
 import { copyTextToClipboard } from 'core/helpers/utils'
 
 export type FiltersPanelPropsType = {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     variant?: CustomVariant
     createVariant: CreateVariantType
     updateVariant: UpdateVariantType

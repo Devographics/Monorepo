@@ -5,9 +5,9 @@ import { useI18n } from '@devographics/react-i18n'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getBlockNoteKey } from 'core/helpers/blockHelpers'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
-const BlockNote = ({ block }: { block: BlockDefinition }) => {
+const BlockNote = ({ block }: { block: BlockVariantDefinition }) => {
     const pageContext = usePageContext()
     const { translate } = useI18n()
     if (block.noteId === null) {

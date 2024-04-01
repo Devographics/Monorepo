@@ -49,7 +49,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 
                 {facetQuestion && <FacetHeading facetQuestion={facetQuestion} {...commonProps} />}
 
-                <GridWrapper>
+                <GridWrapper seriesCount={series.length}>
                     {series.map((serie, serieIndex) => {
                         const buckets = getChartBuckets({ serie, block, chartState })
                         const chartValues = useChartValues({ buckets, chartState, block, question })
@@ -61,8 +61,8 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                         }
 
                         const itemFilters =
-                            variant?.chartFilters?.filters[serieIndex] ||
-                            block?.filtersState?.filters[serieIndex]
+                            variant?.chartFilters?.filters?.[serieIndex] ||
+                            block?.filtersState?.filters?.[serieIndex]
                         return (
                             <GridItem key={serie.name} filters={itemFilters}>
                                 <View {...viewProps} />

@@ -4,7 +4,7 @@ import { ChartValues } from '../multiItemsExperience/types'
 import { FacetItem } from 'core/filters/types'
 import { IconProps } from 'core/icons/IconWrapper'
 import { Bucket, FacetBucket } from '@devographics/types'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 export type ChartState = {
     sort: string | undefined
@@ -50,7 +50,7 @@ export type ViewProps = {
     chartState: ChartState
     chartValues: ChartValues
     buckets: Bucket[]
-    block: BlockDefinition
+    block: BlockVariantDefinition
 }
 
 export type Step = (buckets: Bucket[]) => Bucket[]

@@ -2,14 +2,14 @@ import React from 'react'
 import BlockSwitcher from 'core/blocks/block/BlockSwitcher'
 import styled, { css } from 'styled-components'
 import { mq, spacing } from 'core/theme'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 export const EmptyWrapper = ({
     block,
     pageData,
     blockIndex
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageData?: any
     blockIndex?: number
 }) => (

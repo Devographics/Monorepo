@@ -18,7 +18,7 @@ import sortBy from 'lodash/sortBy'
 import take from 'lodash/take'
 import sumBy from 'lodash/sumBy'
 import { OrderOptions } from 'core/charts/common2/types'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -30,7 +30,7 @@ export const getChartCurrentEdition = ({
     block
 }: {
     serie: DataSeries<StandardQuestionData>
-    block: BlockDefinition
+    block: BlockVariantDefinition
 }) => {
     const subField = block?.queryOptions?.subField || ResultsSubFieldEnum.RESPONSES
     const { currentEdition } = serie.data[subField] as ResponseData
@@ -42,7 +42,7 @@ export const getChartCompletion = ({
     block
 }: {
     serie: DataSeries<StandardQuestionData>
-    block: BlockDefinition
+    block: BlockVariantDefinition
 }) => {
     const currentEdition = getChartCurrentEdition({ serie, block })
     return currentEdition.completion
@@ -54,7 +54,7 @@ export const getChartBuckets = ({
     chartState
 }: {
     serie: DataSeries<StandardQuestionData>
-    block: BlockDefinition
+    block: BlockVariantDefinition
     chartState: ChartState
 }) => {
     const { view, sort, facet, order } = chartState

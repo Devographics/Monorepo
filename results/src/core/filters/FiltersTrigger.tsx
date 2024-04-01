@@ -2,7 +2,7 @@ import React from 'react'
 import ModalTrigger from 'core/components/ModalTrigger'
 import { FiltersIcon } from 'core/icons'
 import FiltersPanel, { FiltersPanelPropsType } from './FiltersPanel'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 import { CreateVariantType, UpdateVariantType } from './helpers'
 
 const FiltersTrigger = ({
@@ -11,7 +11,7 @@ const FiltersTrigger = ({
     updateVariant,
     setActiveTab
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     createVariant: CreateVariantType
     updateVariant: UpdateVariantType
     setActiveTab: FiltersPanelPropsType['setActiveTab']

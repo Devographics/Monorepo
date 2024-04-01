@@ -9,7 +9,7 @@ import ChartContainer from 'core/charts/ChartContainer'
 import { getTableData } from 'core/helpers/datatables'
 import { useLegends } from 'core/helpers/legends'
 import { useFeatureSections } from 'core/helpers/metadata'
-import { BlockComponentProps, BlockDefinition } from 'core/types'
+import { BlockComponentProps, BlockVariantDefinition } from 'core/types'
 import { AllFeaturesData, QuestionMetadata, ToolQuestionData } from '@devographics/types'
 
 const modes = ['grouped', 'awareness_rank', 'usage_rank' /*'usage_ratio_rank'*/]
@@ -94,7 +94,7 @@ const useChartData = (data: ToolQuestionData[], translate: any) => {
 }
 
 interface FeaturesOverviewBlockProps {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     data: AllFeaturesData
     triggerId?: string
     controlledMode?: string

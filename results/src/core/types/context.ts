@@ -1,7 +1,7 @@
 import { EditionMetadata, SurveyMetadata } from '@devographics/types'
 import React from 'react'
-import type { Locale } from "@devographics/react-i18n"
-import { BlockDefinition } from './block'
+import type { Locale } from '@devographics/react-i18n'
+import { BlockDefinition, BlockVariantDefinition } from './block'
 import { SponsorOrder, SponsorProduct } from './sponsors'
 
 interface GatsbyPageContext {
@@ -24,7 +24,7 @@ interface SurveyPageContext {
     isCapturing?: boolean
     isDebugEnabled?: boolean
     chartSponsors?: {
-        products?: Array<SponsorProduct>,
+        products?: Array<SponsorProduct>
         orders?: Array<SponsorOrder>
     }
     config?: any
@@ -32,14 +32,14 @@ interface SurveyPageContext {
     currentEdition: EditionMetadata
     locale?: Locale
     block: any
-    blocks?: Array<BlockDefinition>,
-    locales?: Array<Locale>,
-    localePath: string,
+    blocks?: Array<BlockDefinition>
+    locales?: Array<Locale>
+    localePath: string
     localeId: string
     parent?: any
     i18nNamespaces?: any
     // Block page
-    showTitle?: boolean,
+    showTitle?: boolean
     is_hidden?: boolean
 }
 export type PageContextValue = SurveyPageContext & GatsbyPageContext

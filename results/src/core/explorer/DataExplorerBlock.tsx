@@ -7,7 +7,7 @@ import { AllQuestionData, ExplorerData } from '@devographics/types'
 // import Selector from './Selector'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getAxisString, getAxisSegments, runQuery } from './data'
-import { BlockDefinition } from 'core/types/index'
+import { BlockVariantDefinition } from 'core/types/index'
 import last from 'lodash/last'
 import {
     MOBILE_BREAKPOINT_WIDTH,
@@ -34,7 +34,7 @@ const DataExplorerBlock = ({
     block,
     data: defaultData
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     data: ExplorerData
 }) => {
     // console.log(block)

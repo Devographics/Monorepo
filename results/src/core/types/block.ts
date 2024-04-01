@@ -25,7 +25,7 @@ export type BlockSetUnits = React.Dispatch<React.SetStateAction<string>>
 export type BlockMode = 'absolute' | 'relative'
 
 export interface BlockComponentProps {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     question: QuestionMetadata
     variant?: CustomVariant
@@ -39,6 +39,11 @@ export interface BlockQueryOptions {
 }
 
 export interface BlockDefinition {
+    id: string
+    variants: Array<BlockVariantDefinition>
+}
+
+export interface BlockVariantDefinition {
     id: string
     bucketKeysName?: string
     fieldId?: string
@@ -79,8 +84,6 @@ export interface BlockDefinition {
     hasSponsor?: boolean
     hasComments?: boolean
 
-    variants: Array<BlockVariant>
-
     wrapBlock?: boolean
 
     dataPath?: string
@@ -90,10 +93,9 @@ export interface BlockDefinition {
     switcherPosition?: 'top' | 'bottom'
     showNote?: boolean
     customChart?: any
-}
 
-// TODO
-export type BlockVariant = any
+    canCustomize?: boolean
+}
 
 export interface BlockWithAwards {
     /**

@@ -4,26 +4,29 @@ import blockRegistry from 'Config/blocks'
 import isEmpty from 'lodash/isEmpty'
 import { usePageContext } from 'core/helpers/pageContext'
 import { BlockError } from 'core/blocks/block/BlockError'
-import { getBlockData, getBlockSeriesData } from 'core/helpers/data'
-import { BlockDefinition } from 'core/types'
-import { CustomizationDefinition } from 'core/filters/types'
+import { getBlockSeriesData } from 'core/helpers/data'
+import { BlockVariantDefinition } from 'core/types'
 import { getAllQuestions } from 'core/helpers/options'
+import { DataSeries } from 'core/filters/types'
 
 interface BlockSwitcherProps {
-    block: BlockDefinition
+    block: BlockVariantDefinition
+    blockIndex: number
+    variantIndex: number
     pageData?: any
     index?: number
+    series?: DataSeries<any>
 }
 const BlockSwitcher = ({
     pageData,
     block,
-    blockComponentProps,
     index,
-    ...props
+    series: series_,
+    isLoading
 }: BlockSwitcherProps) => {
     const pageContext = usePageContext()
+    const { id, blockType, filtersState, query } = block
 
-    const { id, blockType } = block
     if (!blockRegistry[blockType]) {
         return (
             <BlockError
@@ -35,11 +38,10 @@ const BlockSwitcher = ({
     }
     const BlockComponent = blockRegistry[blockType]
 
-    const { filtersState } = block
-
     const question = getAllQuestions(pageContext.currentEdition).find(
         q => q.id === (block.fieldId ?? block.id)
     )
+    const series = series_ || getBlockSeriesData({ block, pageContext, filtersState })
 
     const blockProps = {
         block,
@@ -49,25 +51,11 @@ const BlockSwitcher = ({
         pageContext,
         // backwards-compatibility
         context: pageContext,
-        blockComponentProps,
-        BlockComponent
+        BlockComponent,
+        series
     }
-    return <BlockSwitcherWithSeriesData {...blockProps} filtersState={filtersState} />
-}
 
-const BlockSwitcherWithSeriesData = (
-    props: BlockSwitcherProps & {
-        filtersState: CustomizationDefinition
-        blockComponent: React.ComponentType<any>
-    }
-) => {
-    const { block, pageData, BlockComponent, pageContext, filtersState, blockComponentProps } =
-        props
-    const { id, blockType } = block
-
-    const series = getBlockSeriesData({ block, pageContext, filtersState })
-
-    if (block.query && (!series || isEmpty(series) || series.length === 0 || !series[0].data)) {
+    if (query && (!series || isEmpty(series) || series.length === 0 || !series[0].data)) {
         return (
             <BlockError
                 block={block}
@@ -80,7 +68,7 @@ const BlockSwitcherWithSeriesData = (
         )
     }
 
-    return <BlockComponent series={series} {...blockComponentProps} {...props} />
+    return <BlockComponent {...blockProps} />
 }
 
 export default BlockSwitcher

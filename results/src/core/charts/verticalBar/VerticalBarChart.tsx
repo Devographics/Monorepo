@@ -14,7 +14,7 @@ import ChartLabel from 'core/components/ChartLabel'
 import {
     ChartComponentProps,
     BlockLegend,
-    BlockDefinition,
+    BlockVariantDefinition,
     StringTranslator
 } from 'core/types/index'
 import { handleNoAnswerBucket } from 'core/helpers/data'
@@ -91,7 +91,7 @@ const getAxisLabels = (v: any, getString: StringTranslator, namespace) => {
 }
 
 export interface VerticalBarChartProps extends ChartComponentProps {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     total: number
     series: DataSeries<StandardQuestionData>[]
     gridIndex?: number

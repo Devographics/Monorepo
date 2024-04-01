@@ -4,14 +4,14 @@ import BlockQuestion from 'core/blocks/block/BlockQuestion'
 import { useBlockQuestion } from 'core/helpers/blockHelpers'
 import T from 'core/i18n/T'
 import { QuestionIcon } from 'core/icons'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 import React from 'react'
 
 export const Metadata = ({
     block,
     completion
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     completion: YearCompletion
 }) => {
     const { count, percentageSurvey, total } = completion

@@ -13,10 +13,10 @@ import { parse } from 'graphql'
 import { print } from 'graphql-print'
 import { CustomizationDefinition } from 'core/filters/types'
 import { TableData } from 'core/helpers/datatables'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 type BlockData = {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     chartFilters: CustomizationDefinition
     tables: TableData[]
 }

@@ -1,7 +1,7 @@
 import { Bucket } from '@devographics/types'
 import { Dispatch, SetStateAction } from 'react'
 import { ChartValues } from '../multiItemsExperience/types'
-import { BlockDefinition, PageContextValue } from 'core/types'
+import { BlockVariantDefinition, PageContextValue } from 'core/types'
 import { ChartState } from '../horizontalBar2/types'
 
 export type RowComponent = (props: any) => JSX.Element | null
@@ -9,7 +9,7 @@ export type RowComponent = (props: any) => JSX.Element | null
 export type RowCommonProps = {
     buckets: Bucket[]
     bucket: Bucket
-    block: BlockDefinition
+    block: BlockVariantDefinition
 }
 
 export type RowExtraProps = {
@@ -36,7 +36,7 @@ export enum ColumnModes {
 export type CommonProps = {
     pageContext: PageContextValue
     chartState: ChartState
-    block: BlockDefinition
+    block: BlockVariantDefinition
 }
 
 export type ViewProps = CommonProps & {

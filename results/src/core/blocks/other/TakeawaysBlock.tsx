@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { fontSize, fontWeight, mq, spacing } from 'core/theme'
 import { Entity } from '@devographics/types'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 import T from 'core/i18n/T'
 import { useI18n } from '@devographics/react-i18n'
 
@@ -17,7 +17,7 @@ const TakeawaysBlock = ({
      * First level are "awards categories",
      * second level are the actual awards
      */
-    block: BlockDefinition
+    block: BlockVariantDefinition
     data: Array<Entity>
 }) => (
     <Wrapper>
