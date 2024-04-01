@@ -1,17 +1,14 @@
+import './CustomVariant.scss'
 import { useI18n } from '@devographics/react-i18n'
-import { getRegularTabId } from 'core/blocks/block/BlockTabsWrapper'
-import Button from 'core/components/Button'
-import ModalTrigger from 'core/components/ModalTrigger'
-import FiltersPanel from 'core/filters/FiltersPanel'
+import Loading from 'core/explorer/Loading'
 import {
     CreateVariantType,
     CustomVariant,
     DeleteVariantType,
     UpdateVariantType
 } from 'core/filters/helpers'
-import T from 'core/i18n/T'
 import { BlockDefinition } from 'core/types'
-import React, { Dispatch, ReactNode, SetStateAction } from 'react'
+import React, { Dispatch, ReactNode, SetStateAction, useState } from 'react'
 
 export const CustomVariantWrapper = ({
     block,
@@ -31,8 +28,9 @@ export const CustomVariantWrapper = ({
     children: ReactNode
 }) => {
     const { getString } = useI18n()
+    const [loading, setLoading] = useState(true)
     return (
-        <div>
+        <div className="chart-custom-variant">
             {/* custom variant {variant.name}
             <Button
                 onClick={() => {
@@ -66,6 +64,8 @@ export const CustomVariantWrapper = ({
                     <code>{JSON.stringify(variant, null, 2)}</code>
                 </pre>
             </div> */}
+            {/* {apiError && <DataLoaderError {...loaderProps} />} */}
+            {loading && <Loading />}
             <div>{children}</div>
         </div>
     )

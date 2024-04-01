@@ -52,11 +52,7 @@ const BlockSwitcher = ({
         blockComponentProps,
         BlockComponent
     }
-    if (filtersState) {
-        return <BlockSwitcherWithSeriesData {...blockProps} filtersState={filtersState} />
-    } else {
-        return <BlockSwitcherWithRegularData {...blockProps} />
-    }
+    return <BlockSwitcherWithSeriesData {...blockProps} filtersState={filtersState} />
 }
 
 const BlockSwitcherWithSeriesData = (
@@ -68,8 +64,6 @@ const BlockSwitcherWithSeriesData = (
     const { block, pageData, BlockComponent, pageContext, filtersState, blockComponentProps } =
         props
     const { id, blockType } = block
-
-    filtersState.options.preventQuery = true
 
     const series = getBlockSeriesData({ block, pageContext, filtersState })
 
@@ -87,25 +81,6 @@ const BlockSwitcherWithSeriesData = (
     }
 
     return <BlockComponent series={series} {...blockComponentProps} {...props} />
-}
-
-const BlockSwitcherWithRegularData = (props: BlockSwitcherProps) => {
-    const { block, pageData, BlockComponent, pageContext, blockComponentProps } = props
-    const { id, blockType } = block
-    const { dataPath, data } = getBlockData({ block, pageContext })
-
-    if (block.query && (!data || data === null || isEmpty(data))) {
-        return (
-            <BlockError
-                block={block}
-                message={`No available data for block ${id} | path(s): ${dataPath} | type: ${blockType}`}
-            >
-                <textarea readOnly value={JSON.stringify(pageData, undefined, 2)} />
-            </BlockError>
-        )
-    }
-
-    return <BlockComponent data={data} {...blockComponentProps} {...props} />
 }
 
 export default BlockSwitcher

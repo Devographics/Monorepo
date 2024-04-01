@@ -7,6 +7,7 @@ import {
 } from '@devographics/types'
 import { CustomizationDefinition } from 'core/filters/types'
 import { PageContextValue } from './context'
+import { CustomVariant } from 'core/filters/helpers'
 
 export type BlockUnits =
     | 'count'
@@ -27,6 +28,7 @@ export interface BlockComponentProps {
     block: BlockDefinition
     pageContext: PageContextValue
     question: QuestionMetadata
+    variant?: CustomVariant
 }
 
 export interface BlockQueryOptions {

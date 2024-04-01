@@ -93,9 +93,9 @@ export const getBlockSeriesData = ({
 }: {
     block: BlockDefinition
     pageContext: PageContextValue
-    filtersState: CustomizationDefinition
+    filtersState?: CustomizationDefinition
 }): Array<DataSeries<any>> => {
-    if (filtersState.options.mode === MODE_FACET) {
+    if (!filtersState || filtersState.options.mode === MODE_FACET) {
         const dataPath = getBlockDataPath({ block, pageContext })
         return [{ dataPath, name: block.id, data: get(pageContext.pageData, dataPath) }]
     } else {

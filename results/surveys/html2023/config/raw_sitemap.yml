@@ -108,6 +108,32 @@
                       sectionId: user_info
                       id: gender
 
+            - id: company_size_by_gender
+              fieldId: company_size
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+              filtersState:
+                  options:
+                      showDefaultSeries: false
+                      mode: grid
+                  filters:
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: male
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: female
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: non_binary
+
       - id: variants_hint
         template: hint
 

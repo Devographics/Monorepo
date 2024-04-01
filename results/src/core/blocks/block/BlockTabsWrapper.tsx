@@ -144,7 +144,7 @@ export const TabsWrapper = ({ block, pageData, blockIndex, withMargin = true }) 
                                 pageData={pageData}
                                 blockIndex={blockIndex}
                                 variantIndex={variantIndex}
-                                blockComponentProps={{ variant, updateVariant, deleteVariant }}
+                                blockComponentProps={{ variant }}
                             />
                         </CustomVariantWrapper>
                     </Tabs.Content>

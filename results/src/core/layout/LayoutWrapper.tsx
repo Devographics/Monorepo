@@ -31,7 +31,10 @@ const ThemedLayout = (props: LayoutProps) => {
         '--backgroundAltColor': colors.backgroundAlt,
         '--borderColor': colors.border,
         '--linkColor': colors.link,
-        '--spacing': `${theme.dimensions.spacing}px`
+        '--spacing': `${theme.dimensions.spacing}px`,
+        '--halfSpacing': `${theme.dimensions.spacing / 2}px`,
+        '--quarterSpacing': `${theme.dimensions.spacing / 4}px`,
+        '--doubleSpacing': `${theme.dimensions.spacing * 2}px`
     }
     return (
         // @ts-expect-errors legacy

@@ -35,8 +35,11 @@ export enum ColumnModes {
 
 export type CommonProps = {
     pageContext: PageContextValue
-    buckets: Bucket[]
     chartState: ChartState
     block: BlockDefinition
+}
+
+export type ViewProps = CommonProps & {
+    buckets: Bucket[]
     chartValues: ChartValues
 }

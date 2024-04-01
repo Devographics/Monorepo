@@ -1,0 +1,12 @@
+.chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing);
+}
+
+.chart-grid-item-heading {
+    background: var(--backgroundAltColor);
+    padding: var(--quarterSpacing) var(--halfSpacing);
+    margin-bottom: var(--spacing);
+    font-size: 0.8rem;
+}

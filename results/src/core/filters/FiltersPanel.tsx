@@ -225,9 +225,9 @@ const FiltersPanel = ({
                     {/* <li>
                         <CopyLink link={filtersLink} />
                     </li> */}
-                    {/* <li>
+                    <li>
                         <CopyFilters filtersState={filtersState} />
-                    </li> */}
+                    </li>
                 </FooterLeft_>
 
                 <FooterRight_>

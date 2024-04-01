@@ -10,7 +10,7 @@ import { useChartState } from './helpers/chartState'
 import { useChartValues } from './helpers/chartValues'
 import { getControls, getViewDefinition } from './helpers/views'
 import View from '../common2/View'
-import { ChartHeading, ChartWrapper, Legend } from '../common2'
+import { ChartHeading, ChartWrapper, GridItem, GridWrapper, Legend } from '../common2'
 import { useEntities } from 'core/helpers/entities'
 import { FacetTitle } from '../common2/FacetTitle'
 import { getQuestionOptions } from './helpers/options'
@@ -25,24 +25,18 @@ export interface HorizontalBarBlock2Props extends BlockComponentProps {
 }
 
 export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
-    const { block, question, pageContext } = props
-    // console.log(props)
+    const { block, series, question, pageContext, variant } = props
 
-    const completion = getChartCompletion(props)
+    const completion = getChartCompletion({ block, serie: series[0] })
     const facet = block?.filtersState?.facet
 
     const facetQuestion = useQuestionMetadata(facet)
 
     const chartState = useChartState({ facetQuestion })
-    const buckets = getChartBuckets({ ...props, chartState })
-
-    const chartValues = useChartValues({ buckets, chartState, block, question })
 
     const commonProps: CommonProps = {
         pageContext,
-        buckets,
         chartState,
-        chartValues,
         block
     }
 
@@ -55,7 +49,27 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 
                 {facetQuestion && <FacetHeading facetQuestion={facetQuestion} {...commonProps} />}
 
-                <View {...commonProps} />
+                <GridWrapper>
+                    {series.map((serie, serieIndex) => {
+                        const buckets = getChartBuckets({ serie, block, chartState })
+                        const chartValues = useChartValues({ buckets, chartState, block, question })
+
+                        const viewProps = {
+                            ...commonProps,
+                            buckets,
+                            chartValues
+                        }
+
+                        const itemFilters =
+                            variant?.chartFilters?.filters[serieIndex] ||
+                            block?.filtersState?.filters[serieIndex]
+                        return (
+                            <GridItem key={serie.name} filters={itemFilters}>
+                                <View {...viewProps} />
+                            </GridItem>
+                        )
+                    })}
+                </GridWrapper>
 
                 <Metadata completion={completion} {...commonProps} />
                 {/* <Actions {...commonProps} /> */}
@@ -75,17 +89,16 @@ const FacetHeading = (
     props: CommonProps & {
         facetQuestion: QuestionMetadata
         chartState: ChartState
-        chartValues: ChartValues
         pageContext: PageContextValue
     }
 ) => {
-    const { block, facetQuestion, chartState, chartValues, pageContext } = props
+    const { block, facetQuestion, chartState, pageContext } = props
     const entities = useEntities()
 
     // const controls = getControls({ chartState, chartValues })
 
     const viewDefinition = getViewDefinition(chartState.view)
-    const colorScale = chartValues?.facetQuestion && useColorScale({ question: facetQuestion })
+    const colorScale = facetQuestion && useColorScale({ question: facetQuestion })
 
     return (
         <ChartHeading
