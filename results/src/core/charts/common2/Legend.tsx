@@ -1,16 +1,13 @@
 import './Legend.scss'
 import React from 'react'
-import { ChartValues } from '../multiItemsExperience/types'
-import { Option, OptionMetadata, QuestionMetadata } from '@devographics/types'
-import { ColorScale, neutralColor, useColorScale } from '../horizontalBar2/helpers/colors'
+import { Option, OptionMetadata } from '@devographics/types'
+import { ColorScale, neutralColor } from '../horizontalBar2/helpers/colors'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
-import { getQuestionOptions } from '../horizontalBar2/helpers/options'
 import { ChartState } from '../horizontalBar2/types'
 import Tooltip from 'core/components/Tooltip'
 import { OrderOptions } from './types'
 import T from 'core/i18n/T'
-import { CellLabel } from './CellLabel'
 import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 
@@ -95,7 +92,7 @@ const LegendItem = ({
                     }}
                 >
                     <div className="legend-item-color" />
-                    <span>{shortLabel}</span>
+                    <span className="legend-item-label">{shortLabel}</span>
                     {/* <CellLabel label={shortLabel} /> */}
                     <span className="order-asc">↑</span>
                     <span className="order-desc">↓</span>

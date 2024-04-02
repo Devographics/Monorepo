@@ -1,4 +1,5 @@
 .chart-legend {
+    flex-shrink: 1;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -7,20 +8,30 @@
     &-heading {
         margin: 0;
     }
+    overflow: hidden;
 }
 .chart-legend-items {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 .chart-legend-item {
-    button {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        white-space: nowrap;
-        // background: linear-gradient(to left, var(--color1), var(--color2));
-        // background: none;
-        // border: 0;
-        // font-size: 0.8rem;
-    }
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+    // background: linear-gradient(to left, var(--color1), var(--color2));
+    // background: none;
+    // border: 0;
+    // font-size: 0.8rem;
+    overflow: hidden;
+    // text-overflow: ellipsis;
+    // flex-shrink: 1;
+    // flex-basis: 50px;
+    flex-shrink: 1;
+    overflow: hidden;
 }
 .legend-item-color {
     // display: none;
@@ -28,6 +39,13 @@
     height: 12px;
     width: 12px;
     border: 1px solid white;
+    flex-shrink: 0;
+}
+.legend-item-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+    white-space: nowrap;
 }
 .chart-legend-heading {
     white-space: nowrap;

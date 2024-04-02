@@ -75,11 +75,7 @@ export const CustomVariantWrapper = ({
             setIsLoading(false)
         }
 
-        if (
-            (!series || series.length === 0) &&
-            !chartFilters.options.preventQuery &&
-            chartFilters?.filters?.length > 0
-        ) {
+        if (!series || series.length === 0) {
             getData()
         }
     }, [series])

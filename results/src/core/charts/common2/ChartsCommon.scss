@@ -41,6 +41,13 @@
         gap: 10px;
     }
 }
+.chart-heading {
+    border-bottom: 1px solid #ffffff33;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing);
+}
 .chart-row-content {
     height: var(--rowHeight);
     position: relative;

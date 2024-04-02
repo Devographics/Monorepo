@@ -17,7 +17,7 @@ import {
 } from './helpers'
 import { Row } from './MultiItemsRow'
 import Rows from '../common2/Rows'
-import { ChartHeading, ChartWrapper, Legend, Note } from '../common2'
+import { ChartWrapper, Legend, Note } from '../common2'
 import { useTheme } from 'styled-components'
 import min from 'lodash/min'
 import max from 'lodash/max'
@@ -119,18 +119,16 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     return (
         <ChartWrapper className={className}>
             <>
-                <ChartHeading>
-                    <div className="multiexp-chart-heading">
-                        <MultiItemsExperienceControls chartState={chartState} />
+                <div className="multiexp-chart-heading">
+                    <MultiItemsExperienceControls chartState={chartState} />
 
-                        <Legend
-                            {...commonProps}
-                            options={options}
-                            colorScale={colorScale}
-                            i18nNamespace={grouping}
-                        />
-                    </div>
-                </ChartHeading>
+                    <Legend
+                        {...commonProps}
+                        options={options}
+                        colorScale={colorScale}
+                        i18nNamespace={grouping}
+                    />
+                </div>
 
                 <Rows>
                     {sortedItems.map((item, i) => (

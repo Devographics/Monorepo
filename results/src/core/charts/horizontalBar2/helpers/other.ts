@@ -18,7 +18,8 @@ import sortBy from 'lodash/sortBy'
 import take from 'lodash/take'
 import sumBy from 'lodash/sumBy'
 import { OrderOptions } from 'core/charts/common2/types'
-import { BlockVariantDefinition } from 'core/types'
+import { BlockDefinition, BlockVariantDefinition } from 'core/types'
+import uniq from 'lodash/uniq'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -159,4 +160,24 @@ export const getRowOffset = ({
     } else {
         return 0
     }
+}
+
+export const getAllFacetBucketIds = ({
+    series,
+    block,
+    chartState
+}: {
+    series: Array<DataSeries<StandardQuestionData>>
+    block: BlockVariantDefinition
+    chartState: ChartState
+}) => {
+    return uniq(
+        series
+            .map(serie => {
+                const buckets = getChartBuckets({ serie, block, chartState })
+                return buckets.map(bucket => bucket.facetBuckets.map(facetBucket => facetBucket.id))
+            })
+            .flat()
+            .flat()
+    )
 }

@@ -305,41 +305,41 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         //     prefer_not_to_say: [velocity[8], velocity[9]],
         //     not_listed: [velocity[10], velocity[11]]
         // },
-        race_ethnicity: {
-            biracial: velocity[0],
-            black_african: velocity[1],
-            east_asian: velocity[2],
-            hispanic_latin: velocity[3],
-            middle_eastern: velocity[4],
-            multiracial: velocity[5],
-            native_american_islander_australian: velocity[6],
-            south_asian: velocity[7],
-            white_european: velocity[8],
-            south_east_asian: velocity[9],
-            not_listed: velocity[10]
-        },
-        yearly_salary: {
-            range_work_for_free: [velocity[0], velocity[1]],
-            range_0_10: [velocity[2], velocity[3]],
-            range_10_30: [velocity[4], velocity[5]],
-            range_30_50: [velocity[6], velocity[7]],
-            range_50_100: [velocity[8], velocity[9]],
-            range_100_200: [velocity[10], velocity[11]],
-            range_more_than_200: [velocity[12], velocity[13]]
-        },
-        years_of_experience: {
-            range_less_than_1: [velocity[0], velocity[1]],
-            range_1_2: [velocity[2], velocity[3]],
-            range_2_5: [velocity[4], velocity[5]],
-            range_5_10: [velocity[6], velocity[7]],
-            range_10_20: [velocity[8], velocity[9]],
-            range_more_than_20: [velocity[10], velocity[11]]
-        },
-        higher_education_degree: {
-            no_degree: velocity[0],
-            yes_related: velocity[2],
-            yes_unrelated: velocity[4]
-        },
+        // race_ethnicity: {
+        //     biracial: velocity[0],
+        //     black_african: velocity[1],
+        //     east_asian: velocity[2],
+        //     hispanic_latin: velocity[3],
+        //     middle_eastern: velocity[4],
+        //     multiracial: velocity[5],
+        //     native_american_islander_australian: velocity[6],
+        //     south_asian: velocity[7],
+        //     white_european: velocity[8],
+        //     south_east_asian: velocity[9],
+        //     not_listed: velocity[10]
+        // },
+        // yearly_salary: {
+        //     range_work_for_free: [velocity[0], velocity[1]],
+        //     range_0_10: [velocity[2], velocity[3]],
+        //     range_10_30: [velocity[4], velocity[5]],
+        //     range_30_50: [velocity[6], velocity[7]],
+        //     range_50_100: [velocity[8], velocity[9]],
+        //     range_100_200: [velocity[10], velocity[11]],
+        //     range_more_than_200: [velocity[12], velocity[13]]
+        // },
+        // years_of_experience: {
+        //     range_less_than_1: [velocity[0], velocity[1]],
+        //     range_1_2: [velocity[2], velocity[3]],
+        //     range_2_5: [velocity[4], velocity[5]],
+        //     range_5_10: [velocity[6], velocity[7]],
+        //     range_10_20: [velocity[8], velocity[9]],
+        //     range_more_than_20: [velocity[10], velocity[11]]
+        // },
+        // higher_education_degree: {
+        //     no_degree: velocity[0],
+        //     yes_related: velocity[2],
+        //     yes_unrelated: velocity[4]
+        // },
         opinions: {
             4: [velocity[9], velocity[8]],
             3: [velocity[7], velocity[6]],

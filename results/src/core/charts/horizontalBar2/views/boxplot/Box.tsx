@@ -58,7 +58,6 @@ export const HorizontalBox = ({
     const gradient = colorScale[bucket.id] || colorScale[DEFAULT]
     const gradientId = `gradient_${bucket.id}`
 
-    console.log(bucket.id, gradient)
     return bucket.hasInsufficientData ? (
         <g>
             <InsufficientData_

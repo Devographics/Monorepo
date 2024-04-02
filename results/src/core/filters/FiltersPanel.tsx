@@ -8,6 +8,7 @@ import {
     CustomVariant,
     DeleteVariantType,
     UpdateVariantType,
+    getFieldLabel,
     getFiltersQuery,
     getInitFilters,
     useCustomVariants
@@ -24,7 +25,12 @@ import {
     Message_
 } from 'core/blocks/block/BlockData'
 import * as Tabs from '@radix-ui/react-tabs'
-import { TabsList, TabsTrigger, getCustomTabId } from 'core/blocks/block/BlockTabsWrapper'
+import {
+    TabsList,
+    TabsTrigger,
+    getCustomTabId,
+    getRegularTabId
+} from 'core/blocks/block/BlockTabsWrapper'
 import FacetSelection from './FacetSelection'
 import FiltersSelection from './FiltersSelection'
 import { MODE_DEFAULT, MODE_FACET, MODE_COMBINED, MODE_GRID } from './constants'
@@ -88,16 +94,31 @@ const FiltersPanel = ({
         if (id) {
             updateVariant(id, { chartFilters: filtersState, name: variantName })
             setActiveTab(getCustomTabId(id))
+            closeModal()
         } else {
-            const name = prompt(getString('charts.new_variant_name_prompt')?.t)
-            const variant = createVariant({
-                blockId: block.id,
-                chartFilters: filtersState,
-                ...(name ? { name } : {})
-            })
-            setActiveTab(getCustomTabId(variant.id))
+            // nice-to-have: try to generate title when a facet is selected
+            const defaultNameSegments = []
+            if (filtersState?.facet) {
+                const field = allFilters.find(q => q.id === filtersState?.facet?.id)
+                if (field) {
+                    const name = getFieldLabel({ getString, field, entities })
+                    defaultNameSegments.push(getString('filters.vs_x', { values: { name } })?.t)
+                }
+            }
+            const name = prompt(
+                getString('charts.new_variant_name_prompt')?.t,
+                defaultNameSegments.join(', ')
+            )
+            if (name) {
+                const variant = createVariant({
+                    blockId: block.id,
+                    chartFilters: filtersState,
+                    ...(name ? { name } : {})
+                })
+                setActiveTab(getCustomTabId(variant.id))
+                closeModal()
+            }
         }
-        closeModal()
     }
 
     const props = {
@@ -233,7 +254,7 @@ const FiltersPanel = ({
                 <FooterRight_>
                     {id && (
                         <Button
-                            onClick={() => {
+                            onClick={e => {
                                 if (
                                     confirm(
                                         getString('filters.delete_variant_confirm', {
@@ -241,6 +262,7 @@ const FiltersPanel = ({
                                         })?.t
                                     )
                                 ) {
+                                    setActiveTab(getRegularTabId(0))
                                     deleteVariant(id)
                                 }
                             }}

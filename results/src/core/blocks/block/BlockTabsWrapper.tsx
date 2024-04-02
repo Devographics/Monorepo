@@ -83,6 +83,7 @@ export const TabsWrapper = ({
                 defaultValue="tab0"
                 orientation="horizontal"
                 value={activeTab}
+                activationMode="manual"
                 onValueChange={(value: string) => {
                     setActiveTab(value)
                 }}
@@ -97,32 +98,31 @@ export const TabsWrapper = ({
                         {showTabs && (
                             <TabsList aria-label="tabs example">
                                 {block.variants.map((block, variantIndex) => (
-                                    <TabsTrigger
-                                        key={block.id}
-                                        value={getRegularTabId(variantIndex)}
-                                    >
-                                        {getBlockTabTitle({
-                                            block,
-                                            pageContext,
-                                            variantIndex,
-                                            getString,
-                                            entities
-                                        })}
-                                    </TabsTrigger>
+                                    <Tab_ key={block.id}>
+                                        <TabsTrigger value={getRegularTabId(variantIndex)}>
+                                            {getBlockTabTitle({
+                                                block,
+                                                pageContext,
+                                                variantIndex,
+                                                getString,
+                                                entities
+                                            })}
+                                        </TabsTrigger>
+                                    </Tab_>
                                 ))}
                                 {blockCustomVariants.map((variant, variantIndex) => (
-                                    <TabsTrigger
-                                        key={variant.name}
-                                        value={getCustomTabId(variant.id)}
-                                    >
-                                        {variant.name ? (
-                                            variant.name
-                                        ) : (
-                                            <T
-                                                k="charts.custom_variant"
-                                                values={{ index: variantIndex + 1 }}
-                                            />
-                                        )}
+                                    <Tab_ key={variant.name}>
+                                        <TabsTrigger value={getCustomTabId(variant.id)}>
+                                            {variant.name ? (
+                                                variant.name
+                                            ) : (
+                                                <T
+                                                    k="charts.custom_variant"
+                                                    values={{ index: variantIndex + 1 }}
+                                                />
+                                            )}
+                                        </TabsTrigger>
+
                                         <ModalTrigger
                                             trigger={
                                                 <EditIcon
@@ -133,7 +133,7 @@ export const TabsWrapper = ({
                                         >
                                             <FiltersPanel {...variantProps} variant={variant} />
                                         </ModalTrigger>
-                                    </TabsTrigger>
+                                    </Tab_>
                                 ))}
                             </TabsList>
                         )}
@@ -212,26 +212,37 @@ export const TabsList = styled(Tabs.List)`
     }
 `
 
-export const TabsTrigger = styled(Tabs.Trigger)`
+export const Tab_ = styled.div`
     border: ${props => props.theme.border};
     background: ${props => props.theme.colors.background};
     /* border: 1px solid ${props => props.theme.colors.border}; */
     border-radius: 3px 3px 0 0;
-    padding: ${spacing(0.5)};
     cursor: pointer;
     margin-right: ${spacing(0.5)};
     margin-bottom: -1px;
     font-size: ${fontSize('smallish')};
     display: flex;
     align-items: center;
-    gap: 5px;
-    &[data-state='active'] {
+    /* gap: 5px; */
+    &:has([data-state='active']) {
         border-bottom: 0;
     }
-    &[data-state='inactive'] {
+    &:has([data-state='inactive']) {
         opacity: 0.6;
         background: ${props => props.theme.colors.backgroundBackground};
     }
+    .icon-wrapper {
+        height: 24px;
+        width: 24px;
+        display: grid;
+        place-items: center;
+        margin-right: ${spacing(0.5)};
+    }
+`
+export const TabsTrigger = styled(Tabs.Trigger)`
+    padding: ${spacing(0.5)};
+    border: 0;
+    background: none;
 `
 
 const BlockHeaderTop_ = styled.div`

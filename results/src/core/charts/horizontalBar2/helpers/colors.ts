@@ -37,8 +37,12 @@ export const useColorScale = ({ question }: { question: QuestionMetadata }) => {
                 })
             } else {
                 question.options.forEach((option, index) => {
-                    const color = theme.colors.distinct[index % theme.colors.distinct.length]
-                    colorScale[option.id] = [color, color]
+                    if (option.id === NOT_APPLICABLE) {
+                        colorScale[option.id] = [neutralColor, neutralColor]
+                    } else {
+                        const color = theme.colors.distinct[index % theme.colors.distinct.length]
+                        colorScale[option.id] = [color, color]
+                    }
                 })
             }
         }

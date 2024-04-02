@@ -9,9 +9,3 @@
     left: calc(var(--offset) * 1%);
     height: var(--rowHeight);
 }
-
-.chart-horizontal-bar-controls {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--spacing);
-}

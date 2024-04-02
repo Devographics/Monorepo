@@ -71,7 +71,6 @@ export const getFacetFragment = (addBucketsEntities?: boolean) => `
         percentageQuestion
         percentageSurvey
         percentageBucket
-        isFreeformData
         hasInsufficientData
         ${addBucketsEntities ? getEntityFragment() : ''}
     }

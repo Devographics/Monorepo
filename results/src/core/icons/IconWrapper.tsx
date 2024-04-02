@@ -30,6 +30,7 @@ const Icon = styled.span`
     display: block;
     background: none;
     border: none;
+    padding: 0;
     ${props =>
         props.enableHover &&
         `
