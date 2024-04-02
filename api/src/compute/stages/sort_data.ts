@@ -12,7 +12,8 @@ import {
 
 export function sortBuckets<T extends Bucket | FacetBucket>(
     buckets: T[],
-    axis: ComputeAxisParameters
+    axis: ComputeAxisParameters,
+    isFacetBuckets?: boolean
 ) {
     const { sort, order, options } = axis
     let sortedBuckets = [...buckets]
@@ -99,7 +100,7 @@ export async function sortData(
         if (axis2) {
             // then, sort facetBuckets if they exist
             for (let bucket of editionData.buckets) {
-                bucket.facetBuckets = sortBuckets<FacetBucket>(bucket.facetBuckets, axis2)
+                bucket.facetBuckets = sortBuckets<FacetBucket>(bucket.facetBuckets, axis2, true)
             }
         }
     }
