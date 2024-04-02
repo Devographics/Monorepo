@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BlockSwitcher from 'core/blocks/block/BlockSwitcher'
 import * as Tabs from '@radix-ui/react-tabs'
 import BlockTitle from 'core/blocks/block/BlockTitle'
@@ -9,7 +9,7 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { useEntities } from 'core/helpers/entities'
 import BlockTakeaway from './BlockTakeaway'
 import { useI18n } from '@devographics/react-i18n'
-import { useCustomVariants } from 'core/filters/helpers'
+import { CustomVariant, useCustomVariants } from 'core/filters/helpers'
 import T from 'core/i18n/T'
 import { CustomVariantWrapper } from 'core/charts/common2'
 import ModalTrigger from 'core/components/ModalTrigger'
@@ -33,6 +33,7 @@ export const TabsWrapper = ({
     blockIndex: number
     withMargin: boolean
 }) => {
+    const [customVariants, setCustomVariants] = useState<CustomVariant[]>([])
     const [activeTab, setActiveTab] = useState(getRegularTabId(0))
     const pageContext = usePageContext()
     const { getString } = useI18n()
@@ -48,8 +49,18 @@ export const TabsWrapper = ({
             // titleLink: blockEntity?.homepage?.url
         }
     }
+    const {
+        customVariants: customVariants_,
+        deleteVariant,
+        createVariant,
+        updateVariant
+    } = useCustomVariants()
 
-    const { customVariants, deleteVariant, createVariant, updateVariant } = useCustomVariants()
+    // small hack to avoid SSR error or hydration mismatch;
+    // this way customVariants is an empty array on both SSR and client first mount
+    useEffect(() => {
+        setCustomVariants(customVariants_)
+    }, [customVariants_])
 
     const blockCustomVariants = customVariants.filter(v => v.blockId === block.id)
 

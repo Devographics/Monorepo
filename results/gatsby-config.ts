@@ -23,6 +23,9 @@ function checkEnv() {
 checkEnv()
 
 export default {
+    flags: {
+        // DEV_SSR: true
+    },
     siteMetadata: {
         title: `Devographics Survey Results`
     },
