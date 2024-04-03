@@ -173,6 +173,7 @@ export interface ProvidedQueryOptions {
     addRootNode?: boolean
     addQuestionEntity?: boolean
     addQuestionComments?: boolean
+    addGroupedBuckets?: boolean
     fieldId?: string
 }
 
@@ -233,7 +234,8 @@ export const getDefaultQuery = ({
         addArgumentsPlaceholder = false,
         addBucketFacetsPlaceholder = false,
         addQuestionEntity = false,
-        addQuestionComments = false
+        addQuestionComments = false,
+        addGroupedBuckets = false
     } = queryOptions
     const queryArgsString = addArgumentsPlaceholder
         ? argumentsPlaceholder
@@ -262,7 +264,7 @@ surveys {
                 ${getBucketFragment({
                     addBucketFacetsPlaceholder,
                     addBucketsEntities,
-                    addGroupedBuckets: true,
+                    addGroupedBuckets,
                     queryArgs
                 })}
               }

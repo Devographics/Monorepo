@@ -100,7 +100,7 @@ export function removeNull(obj: any): any {
     return Array.isArray(obj) ? Object.values(clean) : clean
 }
 
-export const JSONExport = ({ block, data }) => {
+export const JSONExport = ({ data }: { data: any }) => {
     const isArray = Array.isArray(data)
 
     // try to remove entities data
@@ -141,6 +141,16 @@ export const GraphQLExport = ({ query }: { query: string }) => {
     )
 }
 
+export const FiltersExport = ({ filtersState }: { filtersState: CustomizationDefinition }) => {
+    return (
+        <div>
+            <AutoSelectText value={JSON.stringify(filtersState, null, 2)} />
+            <Message_>
+                <T k={'filters.get_code'} html={true} />
+            </Message_>
+        </div>
+    )
+}
 const ExportWrapper = styled.div`
     margin-bottom: ${spacing()};
     display: flex;

@@ -365,8 +365,8 @@ surveys {
                 ${getBucketFragment({
                     addBucketFacetsPlaceholder,
                     addBucketsEntities,
-                    queryArgs,
-                    addGroupedBuckets
+                    addGroupedBuckets,
+                    queryArgs
                 })}
               }
             }

@@ -20,6 +20,7 @@ import isEmpty from 'lodash/isEmpty.js'
 import {
     AutoSelectText,
     ExportButton,
+    FiltersExport,
     GraphQLTrigger,
     JSONTrigger,
     Message_
@@ -240,9 +241,9 @@ const FiltersPanel = ({
                             buttonProps={{ variant: 'link' }}
                         />
                     </li>
-                    {/* <li>
+                    <li>
                         <JSONTrigger data={data} buttonProps={{ variant: 'link' }} />
-                    </li> */}
+                    </li>
                     {/* <li>
                         <CopyLink link={filtersLink} />
                     </li> */}
@@ -315,12 +316,7 @@ const CopyFilters = ({ filtersState }: { filtersState: CustomizationDefinition }
                 </ExportButton>
             }
         >
-            <div>
-                <AutoSelectText value={JSON.stringify(filtersState, null, 2)} />
-                <Message_>
-                    <T k={'filters.get_code'} html={true} />
-                </Message_>
-            </div>
+            <FiltersExport filtersState={filtersState} />
         </ModalTrigger>
     )
 }
@@ -358,7 +354,7 @@ export const TabsTrigger_ = styled(Tabs.Trigger)`
     }
 `
 
-const Tab_ = styled(Tabs.Content)`
+export const Tab_ = styled(Tabs.Content)`
     border-top: 1px solid ${({ theme }) => theme.colors.border};
     padding-top: ${spacing()};
 `

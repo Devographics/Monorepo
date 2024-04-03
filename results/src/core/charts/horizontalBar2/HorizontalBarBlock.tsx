@@ -14,13 +14,14 @@ import { useChartState } from './helpers/chartState'
 import { useChartValues } from './helpers/chartValues'
 import { getViewDefinition } from './helpers/views'
 import View from '../common2/View'
-import { ChartWrapper, GridItem, GridWrapper, Legend } from '../common2'
+import { ChartFooter, ChartWrapper, GridItem, GridWrapper, Legend } from '../common2'
 import { useEntities } from 'core/helpers/entities'
 import { FacetTitle } from '../common2/FacetTitle'
 import { getQuestionOptions } from './helpers/options'
 import { useColorScale } from './helpers/colors'
 import { ChartState } from './types'
 import { CommonProps } from '../common2/types'
+import ChartData from '../common2/ChartData'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -37,6 +38,8 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     const chartState = useChartState({ facetQuestion })
 
     const commonProps: CommonProps = {
+        variant,
+        series,
         pageContext,
         chartState,
         block
@@ -49,9 +52,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                 <code>{JSON.stringify(chartState, null, 2)}</code>
             </pre> */}
 
-                {facetQuestion && (
-                    <FacetHeading series={series} facetQuestion={facetQuestion} {...commonProps} />
-                )}
+                {facetQuestion && <FacetHeading facetQuestion={facetQuestion} {...commonProps} />}
 
                 <GridWrapper seriesCount={series.length}>
                     {series.map((serie, serieIndex) => {
@@ -75,7 +76,12 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                     })}
                 </GridWrapper>
 
-                <Metadata completion={completion} {...commonProps} />
+                <ChartFooter>
+                    <>
+                        <Metadata completion={completion} {...commonProps} />
+                        <ChartData {...commonProps} />
+                    </>
+                </ChartFooter>
                 {/* <Actions {...commonProps} /> */}
                 {/* <pre>
                 <code>{JSON.stringify(buckets, null, 2)}</code>

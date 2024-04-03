@@ -3,6 +3,8 @@ import { Dispatch, SetStateAction } from 'react'
 import { ChartValues } from '../multiItemsExperience/types'
 import { BlockVariantDefinition, PageContextValue } from 'core/types'
 import { ChartState } from '../horizontalBar2/types'
+import { DataSeries } from 'core/filters/types'
+import { CustomVariant } from 'core/filters/helpers'
 
 export type RowComponent = (props: any) => JSX.Element | null
 
@@ -37,6 +39,8 @@ export type CommonProps = {
     pageContext: PageContextValue
     chartState: ChartState
     block: BlockVariantDefinition
+    series: DataSeries<any>[]
+    variant?: CustomVariant
 }
 
 export type ViewProps = CommonProps & {
