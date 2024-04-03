@@ -1,10 +1,11 @@
-import { FacetBucket, OptionGroup, ParentIdGroup } from '@devographics/types'
+import { BucketUnits, FacetBucket, OptionGroup, ParentIdGroup } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import sumBy from 'lodash/sumBy.js'
 import { CUTOFF_ANSWERS, NO_ANSWER, NO_MATCH, OTHER_ANSWERS } from '@devographics/constants'
 import round from 'lodash/round.js'
 import uniq from 'lodash/uniq.js'
 import compact from 'lodash/compact.js'
+import { mergeBuckets } from './cutoff_data'
 
 /*
 
@@ -40,11 +41,18 @@ export const combineFacetBuckets = (
                 // Note: might create issues when option ID is not the same as facet bucket ID
                 id: String(id),
                 label,
-                count: round(
-                    sumBy(sameFacetBuckets, b => b?.count ?? 0),
+                [BucketUnits.COUNT]: round(
+                    sumBy(sameFacetBuckets, b => b?.[BucketUnits.COUNT] ?? 0),
+                    2
+                ),
+                [BucketUnits.PERCENTAGE_BUCKET]: round(
+                    sumBy(sameFacetBuckets, b => b?.[BucketUnits.PERCENTAGE_BUCKET] ?? 0) /
+                        sameFacetBuckets.length,
                     2
                 )
             }
+            // let combinedFacetBucket = mergeBuckets(sameFacetBuckets, { id, label }, true)
+
             // if the facets we're grouping all have groups, also combine the groups
             if (sameFacetBuckets.every(b => b.groupedBuckets)) {
                 const groupedBuckets = uniq(sameFacetBuckets.map(b => b.groupedBuckets!).flat())
@@ -81,9 +89,12 @@ const getMergedBucket = <T extends Bucket | FacetBucket>(
 ) => {
     const bucket = {
         id,
-        count: sumBy(buckets, 'count'),
-        percentageQuestion: round(sumBy(buckets, 'percentageQuestion'), 2),
-        percentageSurvey: round(sumBy(buckets, 'percentageSurvey'), 2),
+        [BucketUnits.COUNT]: sumBy(buckets, BucketUnits.COUNT),
+        [BucketUnits.PERCENTAGE_QUESTION]: round(
+            sumBy(buckets, BucketUnits.PERCENTAGE_QUESTION),
+            2
+        ),
+        [BucketUnits.PERCENTAGE_SURVEY]: round(sumBy(buckets, BucketUnits.PERCENTAGE_SURVEY), 2),
         groupedBuckets: buckets as unknown,
         groupedBucketIds: buckets.map(b => b.id)
     } as T

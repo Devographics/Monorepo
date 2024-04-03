@@ -20,7 +20,7 @@ export function mergePercentiles(buckets: Bucket[] | FacetBucket[]) {
 
 export function mergeBuckets<T extends Bucket | FacetBucket>(
     buckets: T[],
-    mergedId: string,
+    mergedProps: any,
     isFacet: boolean = false
 ) {
     const basicUnits = [
@@ -32,7 +32,7 @@ export function mergeBuckets<T extends Bucket | FacetBucket>(
         basicUnits.push(BucketUnits.PERCENTAGE_BUCKET)
     }
     const mergedBucket = {
-        id: mergedId,
+        ...mergedProps,
         groupedBucketIds: buckets.map(b => b.id),
         [BucketUnits.AVERAGE]: round(
             sumBy(buckets, b => b[BucketUnits.AVERAGE] || 0) / buckets.length,
@@ -68,7 +68,7 @@ export function groupUnderCutoff<T extends Bucket | FacetBucket>({
     const { cutoff, cutoffPercent } = axis1
     const keptBuckets = buckets.filter(b => keepBucket<T>(b, cutoff, cutoffPercent, isFacet))
     const cutoffBuckets = buckets.filter(b => !keptBuckets.map(b => b.id).includes(b.id))
-    const cutoffGroupBucket = mergeBuckets<T>(cutoffBuckets, CUTOFF_ANSWERS, isFacet)
+    const cutoffGroupBucket = mergeBuckets<T>(cutoffBuckets, { id: CUTOFF_ANSWERS }, isFacet)
 
     if (axis2) {
         // if axis2 is provided, we know it's a top-level Bucket and not a FacetBucket

@@ -27,7 +27,7 @@ export function groupOverLimit<T extends Bucket | FacetBucket>(
     axis?: ComputeAxisParameters
 ) {
     const { limitedBuckets, discardedBuckets } = limitBuckets<T>(buckets, limit)
-    const overlimitGroupBucket = mergeBuckets(discardedBuckets, OVERLIMIT_ANSWERS)
+    const overlimitGroupBucket = mergeBuckets(discardedBuckets, { id: OVERLIMIT_ANSWERS })
     if (axis) {
         // if axis is provided, we know it's a top-level Bucket and not a FacetBucket
         ;(overlimitGroupBucket as Bucket).facetBuckets =
