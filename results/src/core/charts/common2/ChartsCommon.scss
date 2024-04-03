@@ -1,9 +1,9 @@
 @import '../../../stylesheets/_breakpoints.scss';
 
 .chart-rows-bars {
-    padding: var(--halfSpacing) 0;
+    // padding: var(--halfSpacing) 0;
     display: flex;
-    gap: var(--spacing);
+    // gap: var(--spacing);
     flex-direction: column;
     // grid-auto-rows: minmax(0, 1fr);
 }
@@ -30,11 +30,11 @@
     &-overall {
         background: #ffffff22;
     }
-    // &:nth-child(2n) {
-    //     .chart-row-content {
-    //         background-color: var(--backgroundAltColor);
-    //     }
-    // }
+    &:nth-child(2n) {
+        .chart-row-content {
+            background-color: color-mix(in srgb, var(--backgroundAltColor) 70%, transparent);
+        }
+    }
 }
 .chart-facet {
     border-bottom: 1px solid #ffffff33;
@@ -58,9 +58,13 @@
 .chart-row-content {
     // padding: var(--quarterSpacing) 0;
 
-    height: var(--rowHeight);
+    height: calc(var(--rowHeight) + var(--spacing));
     position: relative;
     left: calc(var(--rowOffset) * -1px);
+}
+.chart-bar {
+    position: relative;
+    top: var(--halfSpacing);
 }
 .chart-control-button {
     display: flex;
