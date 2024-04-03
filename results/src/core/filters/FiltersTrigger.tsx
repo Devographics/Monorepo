@@ -25,7 +25,7 @@ const FiltersTrigger = ({
             }
         >
             <FiltersPanel
-                block={block.variants[0]}
+                block={block?.variants?.[0]}
                 createVariant={createVariant}
                 updateVariant={updateVariant}
                 setActiveTab={setActiveTab}

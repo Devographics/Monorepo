@@ -11,6 +11,7 @@ import {
 import { BlockComponentProps } from 'core/types'
 import { PERCENTAGE_QUESTION, SENTIMENT_FACET } from '@devographics/constants'
 import { ColumnModes, OrderOptions } from '../common2/types'
+import { DataSeries } from 'core/filters/types'
 
 export const DEFAULT_VARIABLE = PERCENTAGE_QUESTION
 
@@ -24,8 +25,7 @@ type SectionItemsData = {
 }
 
 export interface MultiItemsExperienceBlockProps extends BlockComponentProps {
-    data: SectionItemsData
-    // series: DataSeries<StandardQuestionData>[]
+    series: DataSeries<SectionItemsData>[]
 }
 
 export type ColumnId = FeaturesOptions | SimplifiedSentimentOptions

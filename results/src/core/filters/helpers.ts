@@ -215,6 +215,8 @@ could be avoided by making template query definitions JS/TS objects that
 define how to accept filters and series themselves.
 
 */
+
+const defaultParameters = { facetCutoffPercent: 1 }
 export const getFiltersQuery = ({
     block,
     chartFilters,
@@ -282,7 +284,7 @@ export const getFiltersQuery = ({
 
                 const queryArgs = getQueryArgsString({
                     filters: conditionsToFilters(singleSeries.conditions),
-                    parameters: block.parameters
+                    parameters: { ...defaultParameters, ...block.parameters }
                 })
 
                 seriesFragment = seriesFragment.replace(argumentsPlaceholder, queryArgs || '')
@@ -299,7 +301,7 @@ export const getFiltersQuery = ({
     } else if (facet && mode === MODE_FACET) {
         const queryArgsOptions: QueryArgs = {
             facet,
-            parameters: block.parameters
+            parameters: { ...defaultParameters, ...block.parameters }
         }
         // if we've specified conditions, use the first one to filter facet
         // TODO: support multiple conditions (small multiples) + facets at the same time

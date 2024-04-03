@@ -45,7 +45,8 @@ export const Cell = ({
     const { ref, isWideEnough: showLabel } = useIsWideEnough()
 
     const { question, facetQuestion } = chartValues
-    const viewDefinition = getViewDefinition(chartState.view)
+    const { view, sort } = chartState
+    const viewDefinition = getViewDefinition(view)
     const { getValue } = viewDefinition
     const { getString } = useI18n()
 
@@ -68,10 +69,13 @@ export const Cell = ({
 
     const v = formatValue({ value, chartState, question: facetQuestion || question })
 
+    const isActiveSort = sort === id
+    const className = `chart-cell horizontal-chart-cell ${isActiveSort ? 'active-sort' : ''}`
+
     return (
         <Tooltip
             trigger={
-                <div className="chart-cell horizontal-chart-cell" style={style} ref={ref}>
+                <div className={className} style={style} ref={ref}>
                     {showLabel && <CellLabel label={v} />}
                 </div>
             }

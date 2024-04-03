@@ -29,8 +29,9 @@ export const sortOptions = {
 }
 
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
-    const { data, block, question } = props
-    const { items } = data
+    const { series, block, question } = props
+    console.log(series)
+    const { items } = series[0].data
 
     const theme = useTheme()
     const chartState = useChartState()
