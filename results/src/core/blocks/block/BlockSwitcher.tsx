@@ -52,7 +52,8 @@ const BlockSwitcher = ({
         // backwards-compatibility
         context: pageContext,
         BlockComponent,
-        series
+        series,
+        data: series[0].data // backwards-compatibility
     }
 
     if (query && (!series || isEmpty(series) || series.length === 0 || !series[0].data)) {
