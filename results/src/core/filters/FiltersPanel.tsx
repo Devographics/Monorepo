@@ -233,7 +233,7 @@ const FiltersPanel = ({
             </Tabs.Root>
 
             <FiltersBottom_>
-                <FooterLeft_>
+                {/* <FooterLeft_>
                     <li>
                         <GraphQLTrigger
                             block={block}
@@ -244,17 +244,18 @@ const FiltersPanel = ({
                     <li>
                         <JSONTrigger data={data} buttonProps={{ variant: 'link' }} />
                     </li>
-                    {/* <li>
+                    <li>
                         <CopyLink link={filtersLink} />
-                    </li> */}
+                    </li>
                     <li>
                         <CopyFilters filtersState={filtersState} />
                     </li>
-                </FooterLeft_>
+                </FooterLeft_> */}
 
                 <FooterRight_>
                     {id && (
                         <Button
+                            variant="link"
                             onClick={e => {
                                 if (
                                     confirm(
@@ -367,7 +368,7 @@ const Filters_ = styled.div`
 
 const FiltersBottom_ = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
 `
 
 const FooterLeft_ = styled.ul`
