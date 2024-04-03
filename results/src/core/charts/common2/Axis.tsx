@@ -24,7 +24,7 @@ export const Axis = ({
 }: {
     variant: 'top' | 'bottom'
     ticks: number[]
-    labelId: string
+    labelId?: string
     formatValue: (v: number) => string
 }) => {
     return (
@@ -41,7 +41,7 @@ export const Axis = ({
                         </div>
                     ))}
                 </div>
-                {variant === 'bottom' && (
+                {variant === 'bottom' && labelId && (
                     <div className="chart-axis-label">
                         <T k={labelId} />
                     </div>

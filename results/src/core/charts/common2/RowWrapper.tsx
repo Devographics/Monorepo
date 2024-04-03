@@ -22,7 +22,9 @@ export const RowWrapper = (
             <div className="chart-row-left">
                 <RowHeading {...props} />
             </div>
-            <div className="chart-row-content">{children}</div>
+            <div className="chart-row-content">
+                <div className="chart-bar">{children}</div>
+            </div>
             <div className="chart-row-right">
                 <div className="chart-row-metadata">
                     <UserIcon size={'small'} /> {bucket.count}

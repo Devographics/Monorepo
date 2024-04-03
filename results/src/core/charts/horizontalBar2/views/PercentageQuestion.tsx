@@ -16,6 +16,7 @@ export const PercentageQuestion: ViewDefinition = {
                 ticks={getTicks(props.buckets.map(getValue))}
                 formatValue={t => `${t}%`}
                 labelId="charts.axis_legends.users_percentage_question"
+                hasZebra={true}
             >
                 {props.buckets.map((bucket, i) => (
                     <Row key={bucket.id} bucket={bucket} {...props} rowComponent={SingleBarRow} />

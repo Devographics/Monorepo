@@ -1,7 +1,7 @@
 import './Boxplot.scss'
 import React, { useMemo, useRef } from 'react'
 import { RowDataProps, ViewDefinition, ViewProps } from '../../types'
-import { ROW_HEIGHT, Row, RowWrapper, Rows } from 'core/charts/common2'
+import { BAR_HEIGHT, Row, RowWrapper, Rows } from 'core/charts/common2'
 import { BoxProps, HorizontalBox } from './Box'
 import { RowCommonProps, RowExtraProps } from 'core/charts/common2/types'
 import { useTheme } from 'styled-components'
@@ -20,7 +20,7 @@ const BoxplotView = (viewProps: ViewProps) => {
     const { question, facetQuestion } = chartValues
     const theme = useTheme()
     const { buckets } = viewProps
-    const contentHeight = ROW_HEIGHT
+    const contentHeight = BAR_HEIGHT
 
     if (!facetQuestion) {
         return null
@@ -61,7 +61,7 @@ const BoxplotView = (viewProps: ViewProps) => {
 
     return (
         <div className="chart-boxplot-view">
-            <Rows>
+            <Rows hasZebra={true}>
                 {buckets.map((bucket, i) => (
                     <Row key={bucket.id} bucket={bucket} {...rowProps} rowComponent={BoxplotRow} />
                 ))}
@@ -114,14 +114,14 @@ const BoxplotRow = (
         stroke: theme.colors.text,
         labelFormatter,
         bucket,
-        rowHeight: ROW_HEIGHT,
+        rowHeight: BAR_HEIGHT,
         boxData,
         contentWidth
     }
 
     return (
         <RowWrapper {...props}>
-            <svg style={{ height: ROW_HEIGHT }} className="boxplot-svg">
+            <svg style={{ height: BAR_HEIGHT }} className="boxplot-svg">
                 <HorizontalBox {...boxProps} />
             </svg>
         </RowWrapper>

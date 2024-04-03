@@ -22,17 +22,15 @@ export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProp
 
     return (
         <RowWrapper {...props}>
-            <div className="chart-bar">
-                <Cell
-                    bucket={bucket}
-                    chartState={chartState}
-                    width={width}
-                    offset={0}
-                    cellIndex={0}
-                    chartValues={chartValues}
-                    gradient={gradient}
-                />
-            </div>
+            <Cell
+                bucket={bucket}
+                chartState={chartState}
+                width={width}
+                offset={0}
+                cellIndex={0}
+                chartValues={chartValues}
+                gradient={gradient}
+            />
         </RowWrapper>
     )
 }

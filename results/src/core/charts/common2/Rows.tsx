@@ -7,30 +7,30 @@ import { Bucket } from '@devographics/types'
 
 export const Rows = ({
     children,
-    buckets,
     ticks,
     formatValue,
-    labelId
+    labelId,
+    hasZebra = false
 }: {
     children: React.ReactNode
-    buckets: Bucket[]
     ticks?: number[]
-    labelId: string
-    formatValue: (v: number) => string
+    labelId?: string
+    formatValue?: (v: number) => string
+    hasZebra: boolean
 }) => {
     const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
     return (
-        <div className="chart-rows" ref={parent}>
-            {ticks && (
-                <Axis variant="top" ticks={ticks} formatValue={formatValue} labelId={labelId} />
-            )}
+        <div className={`chart-rows ${hasZebra ? 'chart-rows-zebra' : ''}`}>
+            {ticks && formatValue && <Axis variant="top" ticks={ticks} formatValue={formatValue} />}
 
             <div className="chart-rows-content">
-                <div className="chart-rows-bars">{children}</div>
+                <div className="chart-rows-bars" ref={parent}>
+                    {children}
+                </div>
                 {ticks && <Gridlines ticks={ticks} />}
                 {/* {buckets && <Zebra buckets={buckets} />} */}
             </div>
-            {ticks && (
+            {ticks && formatValue && labelId && (
                 <Axis variant="bottom" ticks={ticks} formatValue={formatValue} labelId={labelId} />
             )}
         </div>

@@ -8,4 +8,9 @@
 .chart-rows-bars {
     position: relative;
     z-index: 1;
+    // padding: var(--halfSpacing) 0;
+    display: flex;
+    // gap: var(--spacing);
+    flex-direction: column;
+    // grid-auto-rows: minmax(0, 1fr);
 }

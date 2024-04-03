@@ -1,0 +1,32 @@
+.chart-row {
+    // padding: var(--spacing) 0;
+}
+.chart-rows-zebra {
+    .chart-row:nth-child(2n) {
+        .chart-row-content {
+            background-color: color-mix(in srgb, var(--backgroundAltColor) 50%, transparent);
+        }
+    }
+}
+
+.chart-row {
+    &-grouped {
+        background: #ffffff11;
+    }
+    &-overall {
+        background: #ffffff22;
+    }
+}
+
+.chart-row-content {
+    padding: var(--halfSpacing) 0;
+
+    // height: calc(var(--barHeight) + var(--spacing));
+    // height: var(--barHeight);
+}
+
+.chart-bar {
+    position: relative;
+    height: var(--barHeight);
+    left: calc(var(--rowOffset) * -1px);
+}
