@@ -26,10 +26,12 @@ const ThemedLayout = (props: LayoutProps) => {
     const { colors } = theme
     const variables = {
         '--textColor': colors.text,
+        '--textAltColor': colors.textAlt,
         '--backgroundColor': colors.background,
         '--backgroundBackgroundColor': colors.backgroundBackground,
         '--backgroundAltColor': colors.backgroundAlt,
         '--borderColor': colors.border,
+        '--borderAltColor': colors.borderAlt,
         '--linkColor': colors.link,
         '--spacing': `${theme.dimensions.spacing}px`,
         '--halfSpacing': `${theme.dimensions.spacing / 2}px`,

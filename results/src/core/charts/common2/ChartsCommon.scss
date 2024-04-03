@@ -1,14 +1,16 @@
 @import '../../../stylesheets/_breakpoints.scss';
 
-.chart-rows {
+.chart-rows-bars {
+    padding: var(--halfSpacing) 0;
     display: flex;
-    gap: 20px;
+    gap: var(--spacing);
     flex-direction: column;
     // grid-auto-rows: minmax(0, 1fr);
 }
 
 .chart-row,
-.chart-axis-bottom {
+.chart-axis,
+.chart-gridlines {
     align-items: center;
     @include small {
         display: flex;
@@ -28,6 +30,11 @@
     &-overall {
         background: #ffffff22;
     }
+    // &:nth-child(2n) {
+    //     .chart-row-content {
+    //         background-color: var(--backgroundAltColor);
+    //     }
+    // }
 }
 .chart-facet {
     border-bottom: 1px solid #ffffff33;
@@ -49,6 +56,8 @@
     gap: var(--spacing);
 }
 .chart-row-content {
+    // padding: var(--quarterSpacing) 0;
+
     height: var(--rowHeight);
     position: relative;
     left: calc(var(--rowOffset) * -1px);
