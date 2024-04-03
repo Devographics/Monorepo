@@ -2,7 +2,7 @@ import './Item.scss'
 
 import React, { ReactNode } from 'react'
 import { useI18n } from '@devographics/react-i18n'
-import { getItemLabel } from 'core/helpers/labels'
+import { LabelObject, getItemLabel } from 'core/helpers/labels'
 import { Bucket, Entity, EntityType } from '@devographics/types'
 import Button from 'core/components/Button'
 // import Popover from 'core/components/Popover'
@@ -11,6 +11,7 @@ import { PeopleIcon, PeopleModal } from './People'
 import { FeatureModal } from './Feature'
 import { LibraryModal } from './Library'
 import { FeatureIcon, LibraryIcon } from 'core/icons'
+import Tooltip from 'core/components/Tooltip'
 
 const entityComponents = {
     [EntityType.PEOPLE]: { icon: PeopleIcon, modal: PeopleModal },
@@ -32,7 +33,7 @@ export const Item = ({
     i18nNamespace: string
 }) => {
     const { getString } = useI18n()
-    const { label, key } = getItemLabel({
+    const label = getItemLabel({
         id,
         label: providedLabel,
         entity,
@@ -84,11 +85,17 @@ const Wrapper = ({ children, type }: { children: ReactNode; type: string }) => (
     <span className={`chart-item chart-item-${type}`}>{children}</span>
 )
 
-const Label = ({ label, href }: { label: string | number; href?: string }) => {
+const Label = ({ label: label_, href }: { label: LabelObject; href?: string }) => {
+    const { label, shortLabel } = label_
     const LabelComponent = href ? 'a' : 'span'
     return (
-        <LabelComponent className="chart-item-label" {...(href ? { href } : {})}>
-            {label}
-        </LabelComponent>
+        <Tooltip
+            trigger={
+                <LabelComponent className="chart-item-label" {...(href ? { href } : {})}>
+                    {shortLabel}
+                </LabelComponent>
+            }
+            contents={<div>{label}</div>}
+        />
     )
 }

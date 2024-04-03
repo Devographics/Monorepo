@@ -20,6 +20,12 @@ const predefinedKeys: { [key: string]: string } = {
     [OVERLIMIT_ANSWERS]: 'charts.overlimit_answers'
 }
 
+export type LabelObject = {
+    key?: string
+    label: string
+    shortLabel: string
+}
+
 export const getItemLabel = (options: {
     id: string | number
     label?: string
@@ -30,7 +36,7 @@ export const getItemLabel = (options: {
     getString: StringTranslator
     i18nNamespace?: string
     values?: any
-}) => {
+}): LabelObject => {
     const {
         label: providedLabel,
         // section,
