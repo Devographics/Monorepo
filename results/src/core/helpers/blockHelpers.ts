@@ -10,7 +10,7 @@ import { removeDoubleSlashes } from './utils'
 export const replaceOthers = s => s?.replace('_others', '.others')
 
 export const getBlockKey = ({ block }: { block: BlockVariantDefinition }) => {
-    let namespace = block.sectionId
+    let namespace = block.i18nNamespace || block.sectionId
     if (block.template === 'feature_experience') {
         namespace = 'features'
     }

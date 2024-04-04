@@ -35,6 +35,9 @@ const getEntityFragment = () => `entity {
     name
     nameHtml
     nameClean
+    description
+    descriptionHtml
+    descriptionClean
     id
     type
     example {

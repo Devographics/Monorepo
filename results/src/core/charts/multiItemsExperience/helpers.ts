@@ -208,7 +208,6 @@ export const getCellDimensions = ({
 
     // keep track of total value to offset column by
     let columnOffset = 0
-    console.log(buckets)
 
     buckets.forEach((bucket, bucketIndex) => {
         const { id, ids } = bucket

@@ -221,15 +221,114 @@
 
             - id: forms_features
               template: multi_items_experience
+              i18nNamespace: features
 
-            - id: adam_argyle
-              template: picks
-              variables:
-                  url: https://zagjs.com/
+            - id: form_input_types
+              template: multiple_options2
+              i18nNamespace: features
 
-            - id: forms_resources
-              items: [fm-gridsflexbox, fm-practicallayouts]
-              template: recommended_resources
+            - id: form_validation_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: forms_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+
+            # - id: adam_argyle
+            #   template: picks
+            #   variables:
+            #       url: https://zagjs.com/
+
+            # - id: forms_resources
+            #   items: [fm-gridsflexbox, fm-practicallayouts]
+            #   template: recommended_resources
+
+      - id: interactivity
+        path: /interactivity
+        blocks:
+            - id: interactivity
+              template: page_introduction
+
+            - id: interactivity_features
+              template: multi_items_experience
+              i18nNamespace: features
+
+            - id: dom_attribute_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: dom_html_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: dom_moving_element_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: interactivity_techniques
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: interactivity_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+
+      - id: content
+        path: /content
+        blocks:
+            - id: content
+              template: page_introduction
+
+            - id: content_features
+              template: multi_items_experience
+              i18nNamespace: features
+
+            - id: external_content_elements
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: privacy_security_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: machine_readable_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: i18n_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: content_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+
+      - id: web_components
+        path: /web_components
+        blocks:
+            - id: web_components
+              template: page_introduction
+
+            - id: web_components_features
+              template: multi_items_experience
+              i18nNamespace: features
+
+            - id: web_components_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: web_components_libraries
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: using_web_components_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+
+            - id: making_web_components_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
 
       - id: accessibility
         path: /accessibility
@@ -239,40 +338,27 @@
 
             - id: accessibility_features
               template: multi_items_experience
+              i18nNamespace: features
 
-            # - id: accessibility_disabilities
-            #   template: ???
+            - id: accessibility_disabilities
+              template: multiple_options2
+              i18nNamespace: features
 
-            # - id: accessibility_techniques
-            #   template: ???
+            - id: accessibility_techniques
+              template: multiple_options2
+              i18nNamespace: features
 
-            # - id: accessibility_screenreaders
-            #   template: ???
+            - id: accessibility_screenreaders
+              template: multiple_options2
+              i18nNamespace: features
 
-            # - id: accessibility_tools
-            #   template: ???
+            - id: accessibility_tools
+              template: multiple_options2
+              i18nNamespace: features
 
             - id: accessibility_pain_points
               template: multiple_options2_freeform
-              blockType: HorizontalBarBlock2
-              parameters:
-                  showNoAnswer: true
-                  cutoff: 10
-
-            # - id: accessibility_pain_points2
-            #   fieldId: accessibility_pain_points
-            #   template: multiple_options2_freeform
-            #   blockType: HorizontalBarBlock2
-            #   parameters:
-            #       showNoAnswer: true
-            #       cutoff: 10
-            #       enableAddOverallBucket: false
-            #   filtersState:
-            #       options:
-            #           mode: facet
-            #       facet:
-            #           sectionId: user_info
-            #           id: years_of_experience
+              i18nNamespace: features
 
       - id: mobile_web_apps
         path: /mobile-web-apps
@@ -282,22 +368,39 @@
 
             - id: mobile_web_apps_features
               template: multi_items_experience
+              i18nNamespace: features
 
-            # - id: native_apps_tools
-            #   template: ???
+            - id: native_apps_tools
+              template: multiple_options2
+              i18nNamespace: features
 
-            # - id: local_storage_features
-            #   template: ???
+            - id: local_storage_features
+              template: multiple_options2
+              i18nNamespace: features
 
-            # - id: pwa_features
-            #   template: ???
+            - id: pwa_features
+              template: multiple_options2
+              i18nNamespace: features
 
-            # - id: mobile_web_apps_pain_points
-            #   template: ???
+            - id: mobile_web_apps_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+
+- id: other_tools
+  path: /other_tools
+  blocks:
+      - template: page_introduction
+
+      - id: site_generators
+        template: multiple_options2_combined
+
+      - id: ai_tools
+        template: multiple_options2_combined
+
+      - id: blast_from_the_past
+        template: multiple_options2
 
 - id: usage
-  descriptionId: sections.usage.description.html2023
-  intlId: usage_html
   path: /usage
   blocks:
       - template: page_introduction

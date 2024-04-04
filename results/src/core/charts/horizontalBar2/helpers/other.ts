@@ -1,14 +1,12 @@
 import {
     Bucket,
-    FacetBucket,
     FeaturesOptions,
     ResponseData,
     ResultsSubFieldEnum,
     SimplifiedSentimentOptions,
     StandardQuestionData
 } from '@devographics/types'
-import { ChartState, GetValueType, Step, Views } from '../types'
-import { HorizontalBarBlock2Props } from '../HorizontalBarBlock'
+import { ChartState, Views } from '../types'
 import { BoxPlotRow, FacetRow, SingleBarRow } from '../HorizontalBarRow'
 import { DataSeries, FacetItem } from 'core/filters/types'
 import { usePageContext } from 'core/helpers/pageContext'
@@ -18,7 +16,7 @@ import sortBy from 'lodash/sortBy'
 import take from 'lodash/take'
 import sumBy from 'lodash/sumBy'
 import { OrderOptions } from 'core/charts/common2/types'
-import { BlockDefinition, BlockVariantDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 import uniq from 'lodash/uniq'
 
 export const sortOptions = {
