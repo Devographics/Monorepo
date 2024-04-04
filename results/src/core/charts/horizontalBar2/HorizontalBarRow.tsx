@@ -9,10 +9,12 @@ import { getViewDefinition } from './helpers/views'
 import { getRowOffset } from './helpers/other'
 import { useGradient } from './helpers/colors'
 import { useTheme } from 'styled-components'
+import { FreeformIcon } from 'core/icons'
 
 export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
     const theme = useTheme()
     const { bucket, chartState, chartValues } = props
+    const { isFreeformData } = bucket
     const { question, maxOverallValue = 1 } = chartValues
     const viewDefinition = getViewDefinition(chartState.view)
     const { getValue } = viewDefinition
@@ -22,15 +24,27 @@ export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProp
 
     return (
         <RowWrapper {...props}>
-            <Cell
-                bucket={bucket}
-                chartState={chartState}
-                width={width}
-                offset={0}
-                cellIndex={0}
-                chartValues={chartValues}
-                gradient={gradient}
-            />
+            <>
+                <Cell
+                    bucket={bucket}
+                    chartState={chartState}
+                    width={width}
+                    offset={0}
+                    cellIndex={0}
+                    chartValues={chartValues}
+                    gradient={gradient}
+                />
+
+                {isFreeformData && (
+                    <div className="chart-row-freeform-icon-wrapper" style={{ '--offset': width }}>
+                        <FreeformIcon
+                            className="chart-row-freeform-icon"
+                            size="petite"
+                            labelId="charts.freeform_data.description"
+                        />
+                    </div>
+                )}
+            </>
         </RowWrapper>
     )
 }

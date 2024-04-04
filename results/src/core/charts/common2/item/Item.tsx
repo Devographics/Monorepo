@@ -7,7 +7,7 @@ import { Bucket, Entity, EntityType } from '@devographics/types'
 import Button from 'core/components/Button'
 // import Popover from 'core/components/Popover'
 import Popover from 'core/components/Popover2'
-import { PeopleIcon, PeopleModal } from './People'
+import { PeopleIcon, PeopleModal, services } from './People'
 import { FeatureModal } from './Feature'
 import { LibraryModal } from './Library'
 import { FeatureIcon, LibraryIcon } from 'core/icons'
@@ -18,6 +18,11 @@ const entityComponents = {
     [EntityType.FEATURE]: { icon: FeatureIcon, modal: FeatureModal },
     [EntityType.LIBRARY]: { icon: LibraryIcon, modal: LibraryModal }
 }
+
+const entityHasData = (entity: Entity) =>
+    ['description', 'example', ...services.map(s => s.service)].some(
+        property => !!entity[property as keyof Entity]
+    )
 
 export const Item = ({
     id,
@@ -30,7 +35,7 @@ export const Item = ({
     label?: string
     bucket: Bucket
     entity?: Entity
-    i18nNamespace: string
+    i18nNamespace?: string
 }) => {
     const { getString } = useI18n()
     const label = getItemLabel({
@@ -46,7 +51,7 @@ export const Item = ({
                 <Label label={label} />
             </Wrapper>
         )
-    } else if (entity.type === EntityType.DEFAULT) {
+    } else if (entity.type === EntityType.DEFAULT || !entityHasData(entity)) {
         const linkUrl = entity?.homepage?.url
         if (linkUrl) {
             return (
@@ -86,7 +91,7 @@ const Wrapper = ({ children, type }: { children: ReactNode; type: string }) => (
 )
 
 const Label = ({ label: label_, href }: { label: LabelObject; href?: string }) => {
-    const { label, shortLabel } = label_
+    const { label, shortLabel, key } = label_
     const LabelComponent = href ? 'a' : 'span'
     return (
         <Tooltip

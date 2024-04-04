@@ -27,11 +27,7 @@ export const LibraryIcon = (props: IconProps) => (
             width={32}
             height={32}
             viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="butt"
-            strokeLinejoin="round"
+            fill="currentColor"
         >
             <path
                 fillRule="evenodd"

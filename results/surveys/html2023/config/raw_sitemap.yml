@@ -234,6 +234,7 @@
             - id: forms_pain_points
               template: multiple_options2_freeform
               i18nNamespace: features
+              parameters: { limit: 10 }
 
             # - id: adam_argyle
             #   template: picks
@@ -273,6 +274,7 @@
             - id: interactivity_pain_points
               template: multiple_options2_freeform
               i18nNamespace: features
+              parameters: { limit: 10 }
 
       - id: content
         path: /content
@@ -303,6 +305,7 @@
             - id: content_pain_points
               template: multiple_options2_freeform
               i18nNamespace: features
+              parameters: { limit: 10 }
 
       - id: web_components
         path: /web_components
@@ -310,7 +313,7 @@
             - id: web_components
               template: page_introduction
 
-            - id: web_components_features
+            - id: web_components_main_features
               template: multi_items_experience
               i18nNamespace: features
 
@@ -325,10 +328,12 @@
             - id: using_web_components_pain_points
               template: multiple_options2_freeform
               i18nNamespace: features
+              parameters: { limit: 10 }
 
             - id: making_web_components_pain_points
               template: multiple_options2_freeform
               i18nNamespace: features
+              parameters: { limit: 10 }
 
       - id: accessibility
         path: /accessibility
@@ -359,6 +364,7 @@
             - id: accessibility_pain_points
               template: multiple_options2_freeform
               i18nNamespace: features
+              parameters: { limit: 10 }
 
       - id: mobile_web_apps
         path: /mobile-web-apps
@@ -385,6 +391,7 @@
             - id: mobile_web_apps_pain_points
               template: multiple_options2_freeform
               i18nNamespace: features
+              parameters: { limit: 10 }
 
 - id: other_tools
   path: /other_tools

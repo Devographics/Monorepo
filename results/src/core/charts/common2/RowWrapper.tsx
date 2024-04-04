@@ -1,7 +1,7 @@
 import React from 'react'
 import { RowHeading } from '../common2/RowHeading'
 import { RowCommonProps, RowExtraProps } from './types'
-import { UserIcon } from 'core/icons'
+import { FreeformIcon, UserIcon } from 'core/icons'
 import classNames from 'classnames'
 import { OVERALL } from '@devographics/constants'
 import { RowDataProps } from '../horizontalBar2/types'
@@ -10,6 +10,7 @@ export const RowWrapper = (
     props: RowDataProps & RowCommonProps & RowExtraProps & { children: JSX.Element }
 ) => {
     const { chartState, bucket, isGroupedBucket = false, children } = props
+    const { isFreeformData } = bucket
     const isOverallBucket = bucket.id === OVERALL
     const className = classNames(
         'chart-row',

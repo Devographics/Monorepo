@@ -30,3 +30,15 @@
     height: var(--barHeight);
     left: calc(var(--rowOffset) * -1px);
 }
+
+.chart-row-freeform-icon-wrapper {
+    position: absolute;
+    left: calc(var(--offset) * 1% + 7px);
+    height: var(--barHeight);
+    display: flex;
+    align-items: center;
+}
+.chart-row-freeform-icon {
+    display: block;
+    opacity: 0.5;
+}
