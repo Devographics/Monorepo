@@ -32,6 +32,11 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     const { series, block, question } = props
     const { items } = series[0].data
 
+    if (!items) {
+        console.log(series)
+        return <div>No data found</div>
+    }
+
     const theme = useTheme()
     const chartState = useChartState()
     const { grouping, variable, sort, order } = chartState
