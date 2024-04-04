@@ -16,6 +16,8 @@
     font-weight: normal;
     gap: 10px;
     max-width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .chart-row-freeform-icon {

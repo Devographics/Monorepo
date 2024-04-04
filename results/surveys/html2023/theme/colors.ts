@@ -126,22 +126,54 @@ const velocity = [
 //     '#FFEFFF'
 // ]
 
+// const distinct = [
+//     colors.indigo,
+//     colors.teal,
+//     colors.pink,
+//     colors.red,
+//     colors.green,
+//     colors.yellow,
+//     colors.aqua,
+//     colors.orange,
+//     colors.olive,
+//     colors.skyblue,
+//     colors.purple,
+//     colors.blueLighter,
+//     colors.greyTeal,
+//     colors.kaki
+// ]
+
 const distinct = [
-    colors.indigo,
-    colors.teal,
-    colors.pink,
-    colors.red,
-    colors.green,
-    colors.yellow,
-    colors.aqua,
-    colors.orange,
-    colors.olive,
-    colors.skyblue,
-    colors.purple,
-    colors.blueLighter,
-    colors.greyTeal,
-    colors.kaki
+    '#5C6ABB',
+    '#7CE2F9',
+    '#F26F9E',
+    '#7EE2A7',
+    '#F6DC80',
+    '#5ECCC5',
+    '#F69158',
+    '#75B756',
+    '#60BAF2',
+    '#9871E9',
+    '#B6D7DA',
+    '#D3D669',
+    '#F56B6B'
 ]
+
+// const distinct = [
+//     '#4E5B9F',
+//     '#71D3E9',
+//     '#C95982',
+//     '#6DCB93',
+//     '#D7C06F',
+//     '#52B4AE',
+//     '#DF8451',
+//     '#77B559',
+//     '#58ACE1',
+//     '#845FD0',
+//     '#A2C1C4',
+//     '#B8BB5C',
+//     '#D75656'
+// ]
 
 const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     background: '#272325',
@@ -280,8 +312,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         // },
         features: {
             never_heard: [velocity[1], velocity[2]],
-            heard: [velocity[4], velocity[5]],
-            used: [velocity[8], velocity[9]]
+            heard: [velocity[5], velocity[6]],
+            used: [velocity[9], velocity[10]]
         },
         features_categories: {
             layout: colors.indigo,

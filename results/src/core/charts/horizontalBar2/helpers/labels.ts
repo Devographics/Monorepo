@@ -52,7 +52,7 @@ function largeNumberFormatter(num: number, digits = 1) {
     return item ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0'
 }
 
-export const formatPercentage = (value: number) => `${round(value, 1)}%`
+export const formatPercentage = (value: number) => `${Math.floor(value)}%`
 
 export const formatValue = ({
     value,

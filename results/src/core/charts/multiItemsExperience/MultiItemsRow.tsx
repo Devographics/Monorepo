@@ -40,7 +40,7 @@ export const Row = (props: {
                         if (!cellDimension) {
                             return null
                         }
-                        const { offset, width, columnId } = cellDimension || {}
+                        const { offset, width } = cellDimension || {}
 
                         return (
                             <>
@@ -51,7 +51,6 @@ export const Row = (props: {
                                     width={width}
                                     offset={offset - rowOffset}
                                     groupedTotals={groupedTotals}
-                                    columnId={columnId}
                                 />
                             </>
                         )

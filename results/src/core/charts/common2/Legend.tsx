@@ -18,6 +18,7 @@ type LegendProps = {
     colorScale: ColorScale
 }
 
+const DEFAULT_SORT = 'default'
 export const Legend = ({ chartState, i18nNamespace, options, colorScale }: LegendProps) => {
     const { getString } = useI18n()
 
@@ -28,7 +29,10 @@ export const Legend = ({ chartState, i18nNamespace, options, colorScale }: Legen
 
     const handleSelect = (optionId: string) => {
         const isEnabled = sort === optionId
-        if (!isEnabled) {
+        if (optionId === DEFAULT_SORT) {
+            setSort(undefined)
+            setOrder(OrderOptions.ASC)
+        } else if (!isEnabled) {
             setSort(optionId as string)
             setOrder(OrderOptions.ASC)
         } else if (sort && order === OrderOptions.ASC) {
@@ -55,6 +59,7 @@ export const Legend = ({ chartState, i18nNamespace, options, colorScale }: Legen
                         handleSelect(e.target.value)
                     }}
                 >
+                    <option value={DEFAULT_SORT}>{getString('filters.legend.default')?.t}</option>
                     {options.map(option => (
                         <SelectItem
                             {...optionProps}

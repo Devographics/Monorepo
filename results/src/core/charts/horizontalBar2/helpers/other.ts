@@ -144,22 +144,31 @@ export const getRowOffset = ({
 }) => {
     const { view, sort } = chartState
     const { getValue } = getViewDefinition(view)
-
     if (getValue && [Views.PERCENTAGE_BUCKET, Views.FACET_COUNTS].includes(view) && sort) {
-        const getOffset = (bucket: Bucket) => {
-            const { facetBuckets } = bucket
-            const currentFacetBucketIndex = facetBuckets.findIndex(fb => fb.id === sort)
-            const previousFacetBuckets = take(facetBuckets, currentFacetBucketIndex)
-            const valuesSum = sumBy(previousFacetBuckets, fb => getValue(fb))
-            return valuesSum
-        }
+        // check if a bucket contains the facet that we're currently sorting by
+        const containsSortedFacet = (b: Bucket) => b.facetBuckets.some(fb => fb.id === sort)
 
-        const firstBucketOffset = getOffset(buckets[0])
-        const currentBucketOffset = getOffset(bucket)
-        return currentBucketOffset - firstBucketOffset
-    } else {
-        return 0
+        // only offset bucket if it actually contains whatever we're sorting by
+        if (containsSortedFacet(bucket)) {
+            const getOffset = (bucket: Bucket) => {
+                const { facetBuckets } = bucket
+                const currentFacetBucketIndex = facetBuckets.findIndex(fb => fb.id === sort)
+                const previousFacetBuckets = take(facetBuckets, currentFacetBucketIndex)
+                const valuesSum = sumBy(previousFacetBuckets, fb => getValue(fb))
+                return valuesSum
+            }
+            // find the first bucket that has the value we're sorting by as a starting
+            // point to calculate offsets
+            const firstBucketWithFacet = buckets.find(containsSortedFacet)
+            // only proceed if at least one bucket contains the facet we're sorting by
+            if (firstBucketWithFacet) {
+                const firstBucketOffset = getOffset(firstBucketWithFacet)
+                const currentBucketOffset = getOffset(bucket)
+                return currentBucketOffset - firstBucketOffset
+            }
+        }
     }
+    return 0
 }
 
 export const getAllFacetBucketIds = ({

@@ -25,7 +25,10 @@ const getQuery = ({
             currentYear: 2024
         })?.query
     } else {
-        return getBlockQuery({ block, pageContext })
+        const queryArgs = {
+            parameters: block.parameters
+        }
+        return getBlockQuery({ block, pageContext, queryArgs })
     }
 }
 

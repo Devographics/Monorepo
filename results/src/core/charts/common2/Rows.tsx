@@ -24,11 +24,11 @@ export const Rows = ({
             {ticks && formatValue && <Axis variant="top" ticks={ticks} formatValue={formatValue} />}
 
             <div className="chart-rows-content">
+                {ticks && <Gridlines ticks={ticks} />}
+                {/* {buckets && <Zebra buckets={buckets} />} */}
                 <div className="chart-rows-bars" ref={parent}>
                     {children}
                 </div>
-                {ticks && <Gridlines ticks={ticks} />}
-                {/* {buckets && <Zebra buckets={buckets} />} */}
             </div>
             {ticks && formatValue && labelId && (
                 <Axis variant="bottom" ticks={ticks} formatValue={formatValue} labelId={labelId} />

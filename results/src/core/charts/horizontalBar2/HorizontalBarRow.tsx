@@ -59,7 +59,6 @@ export const FacetRow = (props: RowDataProps & RowCommonProps & RowExtraProps) =
                         )
                     )
                     const gradient = useGradient({ id: facetBucket.id, question: facetQuestion })
-
                     return (
                         <Cell
                             key={id}

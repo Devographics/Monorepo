@@ -2,7 +2,6 @@ import {
     Bucket,
     FacetBucket,
     FeaturesOptions,
-    SentimentOptions,
     SimplifiedSentimentOptions,
     StandardQuestionData
 } from '@devographics/types'
@@ -11,7 +10,6 @@ import {
     CellDimension,
     ChartState,
     ChartValues,
-    ColumnDimension,
     ColumnId,
     CombinedBucket,
     CombinedItem,
@@ -175,16 +173,23 @@ export const sortBuckets = (combinedBuckets: CombinedBucket[], grouping: Groupin
     }
 }
 
-export const getColumnGap = (
-    buckets: CombinedBucket[],
-    bucket: CombinedBucket,
-    bucketIndex: number,
+export const getColumnGap = ({
+    buckets,
+    bucket,
+    bucketIndex,
+    grouping
+}: {
+    buckets: CombinedBucket[]
+    bucket: CombinedBucket
+    bucketIndex: number
     grouping: ChartState['grouping']
-) => {
-    // if this is the first bucket of the group/subgroup (depending on current grouping option),
-    // add column gap to its offset (unless if it's the very first bucket of the row)
-    const indexProp = grouping === GroupingOptions.EXPERIENCE ? 'subGroupIndex' : 'groupIndex'
-    const addGapBefore = bucketIndex > 0 && bucket[indexProp] === 0
+}) => {
+    // if this is the first bucket of the subgroup (i.e. previous bucket belongs to a different subgroup),
+    // add column gap to its offset
+    const previousBucket = buckets[bucketIndex - 1]
+    const getRelevantId = (bucket: CombinedBucket) =>
+        bucket.ids[grouping === GroupingOptions.EXPERIENCE ? 0 : 1]
+    const addGapBefore = previousBucket && getRelevantId(previousBucket) !== getRelevantId(bucket)
     return addGapBefore ? COLUMN_GAP_PERCENT : 0
 }
 
@@ -203,11 +208,12 @@ export const getCellDimensions = ({
 
     // keep track of total value to offset column by
     let columnOffset = 0
+    console.log(buckets)
 
     buckets.forEach((bucket, bucketIndex) => {
         const { id, ids } = bucket
         const width = getWidth(bucket)
-        columnOffset += getColumnGap(buckets, bucket, bucketIndex, grouping)
+        columnOffset += getColumnGap({ buckets, bucket, bucketIndex, grouping })
         const offset =
             sum(take(buckets, bucketIndex).map(bucket => getWidth(bucket) + ITEM_GAP_PERCENT)) +
             columnOffset
