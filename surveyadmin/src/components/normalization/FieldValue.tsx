@@ -1,7 +1,4 @@
-import {
-  NormalizationMetadata,
-  NormalizationToken,
-} from "~/lib/normalization/types";
+import { NormalizationMetadata, NormalizationToken } from "@devographics/types";
 import { escapeHTML, highlightPatterns } from "../hooks";
 
 export const FieldValue = ({

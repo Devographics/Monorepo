@@ -283,7 +283,13 @@ type ResponseEditionData {
 
 type RawData {
     responseId: String
-    content: JSON # could be String or [String]
+    raw: String
+    tokens: [NormalizationToken]
+}
+
+type NormalizationToken {
+    id: String
+    pattern: String
 }
 
 """
