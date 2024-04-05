@@ -3,8 +3,15 @@ import { useState } from 'react'
 import { QuestionMetadata } from '@devographics/types'
 import { ColumnModes, OrderOptions } from '../../common2/types'
 import { ChartState, Views } from '../types'
+import { BlockVariantDefinition } from 'core/types'
 
-export const getDefaultState = ({ facetQuestion }: { facetQuestion?: QuestionMetadata }) => {
+export const getDefaultState = ({
+    facetQuestion,
+    block
+}: {
+    facetQuestion?: QuestionMetadata
+    block: BlockVariantDefinition
+}) => {
     const defaultState = {} as ChartState
     if (facetQuestion) {
         defaultState.facet = { id: facetQuestion.id, sectionId: facetQuestion.sectionId }
@@ -15,6 +22,9 @@ export const getDefaultState = ({ facetQuestion }: { facetQuestion?: QuestionMet
         }
     } else {
         defaultState.view = Views.PERCENTAGE_QUESTION
+    }
+    if (block?.chartOptions?.limit) {
+        defaultState.rowsLimit = block.chartOptions.limit
     }
     return defaultState
 }

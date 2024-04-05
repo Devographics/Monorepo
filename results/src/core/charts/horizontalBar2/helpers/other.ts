@@ -56,7 +56,7 @@ export const getChartBuckets = ({
     block: BlockVariantDefinition
     chartState: ChartState
 }) => {
-    const { view, sort, facet, order } = chartState
+    const { view, sort, facet, order, rowsLimit } = chartState
     const { steps, getValue } = getViewDefinition(view)
     const currentEdition = getChartCurrentEdition({ serie, block })
 

@@ -432,6 +432,8 @@
 
       - id: industry_sector
         template: multiple_options2_combined
+        chartOptions:
+            limit: 10
 
       - id: sharing_hint
         template: hint

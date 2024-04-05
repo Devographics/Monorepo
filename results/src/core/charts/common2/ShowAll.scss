@@ -4,6 +4,12 @@
     justify-content: center;
     position: relative;
     z-index: 1;
-    padding-top: 60px;
-    top: -40px;
+    padding: 60px 0 20px 0;
+    // margin-top: -60px;
+    // transform: translateY(-100%);
+    // display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }

@@ -22,6 +22,7 @@ import { useColorScale } from './helpers/colors'
 import { ChartState } from './types'
 import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
+import take from 'lodash/take'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -35,7 +36,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 
     const facetQuestion = useQuestionMetadata(facet)
 
-    const chartState = useChartState(getDefaultState({ facetQuestion }))
+    const chartState = useChartState(getDefaultState({ facetQuestion, block }))
 
     const commonProps: CommonProps = {
         variant,
@@ -56,9 +57,12 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 
                 <GridWrapper seriesCount={series.length}>
                     {series.map((serie, serieIndex) => {
-                        const buckets = getChartBuckets({ serie, block, chartState })
+                        let buckets = getChartBuckets({ serie, block, chartState })
                         const chartValues = useChartValues({ buckets, chartState, block, question })
 
+                        if (chartState.rowsLimit) {
+                            buckets = take(buckets, chartState.rowsLimit)
+                        }
                         const viewProps = {
                             ...commonProps,
                             buckets,
