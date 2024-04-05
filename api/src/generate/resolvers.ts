@@ -511,18 +511,22 @@ export const getEditionToolsFeaturesResolverMap = (type: 'tools' | 'features'): 
 Resolver map used for section_features, section_tools
 
 */
+
+// if this is the main "Features" or "Tools" section, return every item; else return
+// only items for current section
+const getItems = (parent: ResolverParent, type: 'tools' | 'features') =>
+    ['features', 'tools'].includes(parent.section.id)
+        ? getEditionItems(parent.edition, type)
+        : getSectionItems(parent.section, type)
+
 export const getSectionToolsFeaturesResolverMap = (type: 'tools' | 'features'): ResolverMap => ({
     items: (parent, args, context) => {
-        const items = getSectionItems(parent.section, type).map(question => ({
+        return getItems(parent, type).map(question => ({
             ...parent,
-            question
-        }))
-        // decorate with entities
-        return items.map(item => ({
-            ...item,
-            entity: getEntity({ id: item.question.id, context })
+            question,
+            entity: getEntity({ id: question.id, context })
         }))
     },
-    ids: parent => getSectionItems(parent.section, type).map(q => q.id),
+    ids: parent => getItems(parent, type).map(q => q.id),
     years: parent => parent.survey.editions.map(e => e.year)
 })

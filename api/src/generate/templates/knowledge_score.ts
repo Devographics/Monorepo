@@ -31,7 +31,6 @@ export const knowledge_score: ApiTemplateFunction = options => {
         },
         defaultSort: 'options',
         groups,
-        options: groups,
         optionsAreSequential: true,
         optionsAreRange: true,
         ...options.question
