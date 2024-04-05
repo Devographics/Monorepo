@@ -189,24 +189,24 @@
   blocks:
       - template: page_introduction
 
-      - id: features_overview
-        template: features_overview
+      - id: all_features
+        template: multi_items_experience
+        i18nNamespace: features
+        chartOptions:
+            limit: 10
 
-      - template: features_experience_linechart
-        tabId: blocks.tools_experience_ranking.percentages
-        parameters:
-            years: [2020, 2021, 2022, 2023]
-            rankCutoff: 10
-        variants:
-            - template: features_experience_ranking
-              tabId: blocks.tools_experience_ranking.rankings
+      # - id: features_overview
+      #   template: features_overview
 
       # - id: knowledge_score
       #   template: single_option
 
       - id: reading_list
-        template: reading_list
-        parameters: { limit: 20 }
+        # template: reading_list
+        template: multiple_options2
+        parameters: { limit: 10 }
+        queryOptions:
+            sectionId: reading_list
 
       - id: features_resources
         items: [fm-learncss]
@@ -422,10 +422,10 @@
         template: multiple_options2_combined
 
       - id: tools_for_other_developers
-        template: single_option
+        template: multiple_options2
 
       - id: html_css_js_balance
-        template: single_option
+        template: multiple_options2
 
       - id: what_do_you_use_html_for
         template: multiple_options2_combined

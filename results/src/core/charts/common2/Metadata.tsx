@@ -4,6 +4,9 @@ import T from 'core/i18n/T'
 import React from 'react'
 
 export const Metadata = ({ completion }: { completion: YearCompletion }) => {
+    if (!completion) {
+        return <div>No completion data</div>
+    }
     const { count, percentageSurvey, total } = completion
 
     return (

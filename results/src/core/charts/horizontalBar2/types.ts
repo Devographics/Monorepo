@@ -15,8 +15,10 @@ export type ChartState = {
     setOrder: Dispatch<SetStateAction<OrderOptions>>
     columnMode: ColumnModes
     setColumnMode: Dispatch<SetStateAction<ColumnModes>>
-    facet: FacetItem
-    setFacet: Dispatch<SetStateAction<FacetItem>>
+    facet: FacetItem | undefined
+    setFacet: Dispatch<SetStateAction<FacetItem | undefined>>
+    rowsLimit: number
+    setRowsLimit: Dispatch<SetStateAction<number>>
 }
 
 export type RowDataProps = { chartState: ChartState; chartValues: ChartValues }

@@ -4,19 +4,26 @@ import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { Gridlines } from './Gridlines'
 import Axis from './Axis'
 import { Bucket } from '@devographics/types'
+import { ShowAll } from './ShowAll'
+import { ChartState } from '../horizontalBar2/types'
+import { ChartValues } from '../multiItemsExperience/types'
 
 export const Rows = ({
+    chartState,
+    chartValues,
     children,
     ticks,
     formatValue,
     labelId,
     hasZebra = false
 }: {
+    chartState: ChartState
+    chartValues: ChartValues
     children: React.ReactNode
     ticks?: number[]
     labelId?: string
     formatValue?: (v: number) => string
-    hasZebra: boolean
+    hasZebra?: boolean
 }) => {
     const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
     return (
@@ -29,6 +36,10 @@ export const Rows = ({
                 <div className="chart-rows-bars" ref={parent}>
                     {children}
                 </div>
+
+                {chartState.rowsLimit ? (
+                    <ShowAll chartState={chartState} chartValues={chartValues} />
+                ) : null}
             </div>
             {ticks && formatValue && labelId && (
                 <Axis variant="bottom" ticks={ticks} formatValue={formatValue} labelId={labelId} />

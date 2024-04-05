@@ -25,6 +25,10 @@ query: >
                                         name
                                         nameClean
                                         nameHtml
+                                        description
+                                        descriptionClean
+                                        descriptionHtml
+                                        type
                                         mdn {
                                             url
                                         }

@@ -10,7 +10,7 @@ export const Average: ViewDefinition = {
     steps: [removeNotApplicable, removeNoAnswer],
     component: props => {
         return (
-            <Rows>
+            <Rows {...props}>
                 {props.buckets.map((bucket, i) => (
                     <Row key={bucket.id} bucket={bucket} {...props} rowComponent={SingleBarRow} />
                 ))}

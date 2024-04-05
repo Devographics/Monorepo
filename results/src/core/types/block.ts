@@ -95,6 +95,13 @@ export interface BlockVariantDefinition {
     customChart?: any
 
     canCustomize?: boolean
+
+    // options that only affect how the chart is displayed, not the query or data
+    chartOptions: ChartOptions
+}
+
+export interface ChartOptions {
+    limit?: number
 }
 
 export interface BlockWithAwards {

@@ -2,6 +2,7 @@ import {
     Bucket,
     FacetBucket,
     FeaturesOptions,
+    QuestionMetadata,
     SimplifiedSentimentOptions,
     StandardQuestionData
 } from '@devographics/types'
@@ -271,7 +272,10 @@ export const applyRatio = (cellDimensions: CellDimension[], ratio: number) =>
         offset: round(offset * ratio, 1)
     }))
 
-export const useChartState = () => {
+export const useChartState = (defaultState?: { [P in keyof ChartState]?: ChartState[P] }) => {
+    const [rowsLimit, setRowsLimit] = useState<ChartState['rowsLimit']>(
+        defaultState?.rowsLimit || 0
+    )
     const [grouping, setGrouping] = useState<ChartState['grouping']>(GroupingOptions.EXPERIENCE)
     const [sort, setSort] = useState<ChartState['sort']>(FeaturesOptions.USED)
     const [order, setOrder] = useState<ChartState['order']>(OrderOptions.DESC)
@@ -291,14 +295,28 @@ export const useChartState = () => {
         variable,
         setVariable,
         columnMode,
-        setColumnMode
+        setColumnMode,
+        rowsLimit,
+        setRowsLimit
     }
     return chartState
 }
 
-export const useChartValues = (buckets: Bucket[], chartState: ChartState) => {
-    const { variable } = chartState
-    const maxOverallValue = max(buckets.map(b => b[variable])) || 0
-    const chartValues: ChartValues = { maxOverallValue }
+export const useChartValues = ({
+    items,
+    chartState,
+    question
+}: {
+    items: CombinedItem[]
+    chartState: ChartState
+    question: QuestionMetadata
+}) => {
+    const chartValues: ChartValues = {
+        totalRows: items.length,
+        question,
+        facetQuestion: {
+            id: '_sentiment'
+        } as QuestionMetadata
+    }
     return chartValues
 }

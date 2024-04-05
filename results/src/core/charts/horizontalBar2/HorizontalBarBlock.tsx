@@ -10,7 +10,7 @@ import {
     getChartCompletion,
     useQuestionMetadata
 } from './helpers/other'
-import { useChartState } from './helpers/chartState'
+import { getDefaultState, useChartState } from './helpers/chartState'
 import { useChartValues } from './helpers/chartValues'
 import { getViewDefinition } from './helpers/views'
 import View from '../common2/View'
@@ -35,7 +35,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 
     const facetQuestion = useQuestionMetadata(facet)
 
-    const chartState = useChartState({ facetQuestion })
+    const chartState = useChartState(getDefaultState({ facetQuestion }))
 
     const commonProps: CommonProps = {
         variant,

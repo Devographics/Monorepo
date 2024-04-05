@@ -61,7 +61,7 @@ const BoxplotView = (viewProps: ViewProps) => {
 
     return (
         <div className="chart-boxplot-view">
-            <Rows hasZebra={true}>
+            <Rows {...viewProps} hasZebra={true}>
                 {buckets.map((bucket, i) => (
                     <Row key={bucket.id} bucket={bucket} {...rowProps} rowComponent={BoxplotRow} />
                 ))}

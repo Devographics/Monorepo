@@ -22,7 +22,8 @@ export const useChartValues = ({
     const allQuestions = useAllQuestionsWithOptions()
     const { facet } = chartState
     const chartValues: ChartValues = {
-        question
+        question,
+        totalRows: buckets.length
     }
     if (getValue) {
         const maxOverallValue = [Views.PERCENTAGE_BUCKET].includes(chartState.view)

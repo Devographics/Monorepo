@@ -13,15 +13,18 @@ import {
     getRowOffset,
     sortBuckets,
     sortItems,
-    useChartState
+    useChartState,
+    useChartValues
 } from './helpers'
 import { Row } from './MultiItemsRow'
 import Rows from '../common2/Rows'
-import { ChartWrapper, Legend, Note } from '../common2'
+import { ChartWrapper, Legend, Note, ShowAll } from '../common2'
 import { useTheme } from 'styled-components'
 import min from 'lodash/min'
 import max from 'lodash/max'
+import take from 'lodash/take'
 import { NoteContents } from './MultiItemsNote'
+import charts from 'core/theme/charts'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -38,7 +41,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     }
 
     const theme = useTheme()
-    const chartState = useChartState()
+    const chartState = useChartState({ rowsLimit: block?.chartOptions?.limit })
     const { grouping, variable, sort, order } = chartState
 
     const columnIds = sortOptions[grouping]
@@ -50,7 +53,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     const className = `multiexp multiexp-groupedBy-${grouping}`
 
     // combine/flatten each item's buckets
-    const combinedItems = combineItems({ items, variable })
+    let combinedItems = combineItems({ items, variable })
 
     // get column-by-column grouped totals
     const groupedTotals = getItemTotals({ combinedItems, columnIds: allColumnIds })
@@ -59,16 +62,15 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     const maxValues = getMaxValues({ groupedTotals, columnIds })
 
     // sort items according to grouped totals
-    const sortedItems = sortItems({ combinedItems, groupedTotals, sort, order })
+    combinedItems = sortItems({ combinedItems, groupedTotals, sort, order })
 
-    const chartValues = {
-        question,
-        facetQuestion: {
-            id: '_sentiment'
-        }
+    const chartValues = useChartValues({ items: combinedItems, chartState, question })
+
+    if (chartState.rowsLimit) {
+        combinedItems = take(combinedItems, chartState.rowsLimit)
     }
 
-    let allRowsCellDimensions = sortedItems.map(item =>
+    let allRowsCellDimensions = combinedItems.map(item =>
         getCellDimensions({
             buckets: sortBuckets(item.combinedBuckets, grouping),
             chartState
@@ -100,7 +102,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     allRowOffsets = allRowOffsets.map(rowOffset => rowOffset * rowOffsetShrinkRatio)
 
     const commonProps = {
-        items: sortedItems,
+        items: combinedItems,
         chartState,
         maxValues,
         chartValues,
@@ -135,12 +137,11 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
                     />
                 </div>
 
-                <Rows>
-                    {sortedItems.map((item, i) => (
+                <Rows {...commonProps}>
+                    {combinedItems.map((item, i) => (
                         <Row key={item.id} rowIndex={i} item={item} {...commonProps} />
                     ))}
                 </Rows>
-
                 <Note>
                     <NoteContents />
                 </Note>

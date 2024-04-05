@@ -12,7 +12,7 @@ export const FacetCounts: ViewDefinition = {
     showLegend: true,
     component: props => {
         return (
-            <Rows>
+            <Rows {...props}>
                 {props.buckets.map((bucket, i) => (
                     <Row key={bucket.id} bucket={bucket} {...props} rowComponent={FacetRow} />
                 ))}

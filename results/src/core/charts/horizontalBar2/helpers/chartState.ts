@@ -4,7 +4,7 @@ import { QuestionMetadata } from '@devographics/types'
 import { ColumnModes, OrderOptions } from '../../common2/types'
 import { ChartState, Views } from '../types'
 
-export const useChartState = ({ facetQuestion }: { facetQuestion?: QuestionMetadata }) => {
+export const getDefaultState = ({ facetQuestion }: { facetQuestion?: QuestionMetadata }) => {
     const defaultState = {} as ChartState
     if (facetQuestion) {
         defaultState.facet = { id: facetQuestion.id, sectionId: facetQuestion.sectionId }
@@ -16,7 +16,13 @@ export const useChartState = ({ facetQuestion }: { facetQuestion?: QuestionMetad
     } else {
         defaultState.view = Views.PERCENTAGE_QUESTION
     }
+    return defaultState
+}
 
+export const useChartState = (defaultState: { [P in keyof ChartState]?: ChartState[P] }) => {
+    const [rowsLimit, setRowsLimit] = useState<ChartState['rowsLimit']>(
+        defaultState?.rowsLimit || 0
+    )
     const [facet, setFacet] = useState<ChartState['facet']>(defaultState.facet)
     const [sort, setSort] = useState<ChartState['sort']>(defaultState.sort)
     const [order, setOrder] = useState<ChartState['order']>(defaultState.order || OrderOptions.DESC)
@@ -35,7 +41,9 @@ export const useChartState = ({ facetQuestion }: { facetQuestion?: QuestionMetad
         view,
         setView,
         columnMode,
-        setColumnMode
+        setColumnMode,
+        rowsLimit,
+        setRowsLimit
     }
     return chartState
 }

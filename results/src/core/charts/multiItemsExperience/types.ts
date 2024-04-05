@@ -47,10 +47,13 @@ export type ChartState = {
     setVariable: Dispatch<SetStateAction<Variable>>
     columnMode: ColumnModes
     setColumnMode: Dispatch<SetStateAction<ColumnModes>>
+    rowsLimit: number
+    setRowsLimit: Dispatch<SetStateAction<number>>
 }
 
 export type ChartValues = {
     maxOverallValue?: number
+    totalRows: number
     question: QuestionMetadata
     facetQuestion?: QuestionMetadata
 }

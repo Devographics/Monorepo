@@ -1,0 +1,9 @@
+.chart-showall {
+    background: linear-gradient(to top, var(--backgroundColor) 20%, #00000000);
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    padding-top: 60px;
+    top: -40px;
+}

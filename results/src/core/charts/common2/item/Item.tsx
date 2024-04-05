@@ -67,6 +67,10 @@ export const Item = ({
             )
         }
     } else {
+        if (!entityComponents[entity.type]) {
+            console.log(entity)
+            return null
+        }
         const { icon: IconComponent, modal: ModalComponent } = entityComponents[entity.type]
 
         return (
