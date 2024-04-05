@@ -9,7 +9,7 @@ import { getViewDefinition } from './helpers/views'
 import { getRowOffset } from './helpers/other'
 import { useGradient } from './helpers/colors'
 import { useTheme } from 'styled-components'
-import { FreeformIcon } from 'core/icons'
+import { FreeformIndicator } from '../common2'
 
 export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
     const theme = useTheme()
@@ -37,11 +37,7 @@ export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProp
 
                 {isFreeformData && (
                     <div className="chart-row-freeform-icon-wrapper" style={{ '--offset': width }}>
-                        <FreeformIcon
-                            className="chart-row-freeform-icon"
-                            size="petite"
-                            labelId="charts.freeform_data.description"
-                        />
+                        <FreeformIndicator />
                     </div>
                 )}
             </>
