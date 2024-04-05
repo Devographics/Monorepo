@@ -9,7 +9,8 @@ import { getViewDefinition } from './helpers/views'
 import { getRowOffset } from './helpers/other'
 import { useGradient } from './helpers/colors'
 import { useTheme } from 'styled-components'
-import { FreeformIndicator } from '../common2'
+import { FreeformIndicator, RespondentCount } from '../common2'
+import { UserIcon } from 'core/icons'
 
 export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
     const theme = useTheme()
@@ -23,7 +24,7 @@ export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProp
     const gradient = theme.colors.barChart.primaryGradient
 
     return (
-        <RowWrapper {...props}>
+        <RowWrapper {...props} rowMetadata={<RespondentCount count={bucket.count} />}>
             <>
                 <Cell
                     bucket={bucket}
@@ -55,7 +56,7 @@ export const FacetRow = (props: RowDataProps & RowCommonProps & RowExtraProps) =
     const rowOffset = getRowOffset({ buckets, bucket, chartState })
 
     return (
-        <RowWrapper {...props}>
+        <RowWrapper {...props} rowMetadata={<RespondentCount count={bucket.count} />}>
             <div className="chart-faceted-bar">
                 {facetBuckets.map((facetBucket, index) => {
                     const { id } = facetBucket

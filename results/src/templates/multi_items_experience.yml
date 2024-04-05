@@ -37,6 +37,11 @@ query: >
                     codeHighlighted
                   }
                 }
+                comments {
+                  currentEdition {
+                    count
+                  }
+                }
                 responses(facet: _sentiment) {
                   currentEdition {
                     buckets {

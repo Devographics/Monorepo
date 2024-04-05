@@ -1,13 +1,11 @@
 import React from 'react'
-import IconWrapper from './IconWrapper'
+import IconWrapper, { IconProps } from './IconWrapper'
 
-export const CommentIcon = props => (
+export const CommentIcon = (props: IconProps) => (
     <IconWrapper {...props}>
         <svg
             className="icon-comment"
             xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
             fill="none"
             strokeWidth="1.5"
             color="currentColor"

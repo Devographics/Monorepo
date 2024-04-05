@@ -38,10 +38,11 @@ export type AllQuestionData =
 export type StandardQuestionData = QuestionData & {
     id: string
     entity: Entity
+    comments: ItemComments
 } & {
     [key in Exclude<
         ResultsSubFieldEnum,
-        ResultsSubFieldEnum.ID | ResultsSubFieldEnum.ENTITY
+        ResultsSubFieldEnum.ID | ResultsSubFieldEnum.ENTITY | ResultsSubFieldEnum.COMMENTS
     >]: ResponseData
 }
 

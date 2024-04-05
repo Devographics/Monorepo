@@ -62,6 +62,7 @@ export type CombinedItem = {
     id: string
     entity: Entity
     combinedBuckets: CombinedBucket[]
+    commentsCount: number
     count: number
 }
 

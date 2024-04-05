@@ -42,3 +42,9 @@
     display: block;
     opacity: 0.5;
 }
+
+.chart-row-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing);
+}

@@ -7,9 +7,11 @@ import { OVERALL } from '@devographics/constants'
 import { RowDataProps } from '../horizontalBar2/types'
 
 export const RowWrapper = (
-    props: RowDataProps & RowCommonProps & RowExtraProps & { children: JSX.Element }
+    props: RowDataProps &
+        RowCommonProps &
+        RowExtraProps & { rowMetadata?: JSX.Element; children: JSX.Element }
 ) => {
-    const { chartState, bucket, isGroupedBucket = false, children } = props
+    const { chartState, bucket, isGroupedBucket = false, children, rowMetadata } = props
     const { isFreeformData } = bucket
     const isOverallBucket = bucket.id === OVERALL
     const className = classNames(
@@ -26,11 +28,7 @@ export const RowWrapper = (
             <div className="chart-row-content">
                 <div className="chart-bar">{children}</div>
             </div>
-            <div className="chart-row-right">
-                <div className="chart-row-metadata">
-                    <UserIcon size={'small'} /> {bucket.count}
-                </div>
-            </div>
+            {rowMetadata && <div className="chart-row-right">{rowMetadata}</div>}
         </div>
     )
 }

@@ -5,6 +5,9 @@ import { Cell, ColumnTotal } from './MultiItemsCell'
 import { sortOptions } from './MultiItemsBlock'
 import { RowWrapper } from '../common2/RowWrapper'
 import { Bucket } from '@devographics/types'
+import { RespondentCount } from '../common2'
+import { Comments } from '../common2/Comments'
+import { BlockVariantDefinition } from 'core/types'
 
 export const Row = (props: {
     allRowsCellDimensions: CellDimension[][]
@@ -14,7 +17,7 @@ export const Row = (props: {
     maxValues: MaxValue[]
     chartState: ChartState
 }) => {
-    const { rowIndex, allRowsCellDimensions, allRowOffsets, item, chartState } = props
+    const { question, rowIndex, allRowsCellDimensions, allRowOffsets, item, chartState } = props
     const { grouping } = chartState
     const { combinedBuckets } = item
 
@@ -29,7 +32,17 @@ export const Row = (props: {
     const rowOffset = allRowOffsets[rowIndex]
 
     return (
-        <RowWrapper {...props} bucket={bucket} chartState={chartState}>
+        <RowWrapper
+            {...props}
+            bucket={bucket}
+            chartState={chartState}
+            rowMetadata={
+                <>
+                    <RespondentCount count={bucket.count} />
+                    <Comments item={item} count={99} />
+                </>
+            }
+        >
             <>
                 <div className="multiexp-cells">
                     {combinedBuckets.map((combinedBucket, i) => {
