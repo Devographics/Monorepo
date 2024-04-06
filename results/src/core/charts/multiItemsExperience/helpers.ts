@@ -34,7 +34,8 @@ export const MINIMUM_COLUMN_WIDTH_PERCENT = 25
 
 export const getBuckets = (item: StandardQuestionData) => item.responses.currentEdition.buckets
 
-export const getCommentsCount = (item: StandardQuestionData) => item.comments.currentEdition.count
+export const getCommentsCount = (item: StandardQuestionData) =>
+    item?.comments?.currentEdition?.count || 0
 
 export const combineItems = ({
     items,
