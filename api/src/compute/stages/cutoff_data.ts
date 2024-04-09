@@ -1,12 +1,11 @@
-import { COUNT, CUTOFF_ANSWERS, PERCENTAGE_QUESTION } from '@devographics/constants'
+import { COUNT, CUTOFF_ANSWERS } from '@devographics/constants'
 import { ResponseEditionData, ComputeAxisParameters, Bucket, FacetBucket } from '../../types'
 import sum from 'lodash/sum.js'
-import sumBy from 'lodash/sumBy.js'
 import compact from 'lodash/compact.js'
 import round from 'lodash/round.js'
-import { combineFacetBuckets } from './group_buckets'
-import { BucketData, BucketUnits, PercentileData, Percentiles } from '@devographics/types'
+import { BucketUnits, PercentileData, Percentiles } from '@devographics/types'
 import { isSpecialBucket } from './limit_data'
+import { mergeBuckets } from './mergeBuckets'
 
 export function mergePercentiles(buckets: Bucket[] | FacetBucket[]) {
     const percentileKeys = ['p0', 'p25', 'p50', 'p75', 'p100'] as Percentiles[]
@@ -18,38 +17,6 @@ export function mergePercentiles(buckets: Bucket[] | FacetBucket[]) {
     return percentiles
 }
 
-export function mergeBuckets<T extends Bucket | FacetBucket>(
-    buckets: T[],
-    mergedProps: any,
-    isFacet: boolean = false
-) {
-    const basicUnits = [
-        BucketUnits.COUNT,
-        BucketUnits.PERCENTAGE_QUESTION,
-        BucketUnits.PERCENTAGE_SURVEY
-    ]
-    if (isFacet) {
-        basicUnits.push(BucketUnits.PERCENTAGE_BUCKET)
-    }
-    const mergedBucket = {
-        ...mergedProps,
-        groupedBucketIds: buckets.map(b => b.id),
-        [BucketUnits.AVERAGE]: round(
-            sumBy(buckets, b => b[BucketUnits.AVERAGE] || 0) / buckets.length,
-            2
-        ),
-        [BucketUnits.PERCENTILES]: mergePercentiles(buckets)
-    } as T
-
-    for (const unit of basicUnits) {
-        const unit2 = unit as keyof BucketData
-        mergedBucket[unit2] = round(
-            sumBy(buckets, b => b[unit2] || 0),
-            2
-        )
-    }
-    return mergedBucket
-}
 /*
 
 Group together any bucket that didn't make cutoff. 
@@ -69,14 +36,16 @@ export function groupUnderCutoff<T extends Bucket | FacetBucket>({
     const { cutoff, cutoffPercent } = mainAxis
     const keptBuckets = buckets.filter(b => keepBucket<T>(b, cutoff, cutoffPercent, isFacet))
     const cutoffBuckets = buckets.filter(b => !keptBuckets.map(b => b.id).includes(b.id))
-    const cutoffGroupBucket = mergeBuckets<T>(cutoffBuckets, { id: CUTOFF_ANSWERS }, isFacet)
-
-    if (secondaryAxis) {
-        // if we know it's a top-level Bucket and not a FacetBucket
-        // we combine the facetBuckets from the cutoff buckets
-        ;(cutoffGroupBucket as Bucket).facetBuckets =
-            combineFacetBuckets(cutoffBuckets as Bucket[], secondaryAxis) ?? []
-    }
+    const cutoffGroupBucket = mergeBuckets<T>({
+        buckets: cutoffBuckets,
+        mergedProps: {
+            id: CUTOFF_ANSWERS,
+            groupedBucketIds: cutoffBuckets.map(b => b.id),
+            groupedBuckets: cutoffBuckets
+        },
+        isFacet,
+        axis: secondaryAxis
+    })
 
     return cutoffBuckets.length > 0 ? [...keptBuckets, cutoffGroupBucket] : keptBuckets
 }

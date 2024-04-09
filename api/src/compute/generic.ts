@@ -415,14 +415,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         results = await applyDatasetCutoff(results, computeArguments)
 
-        if (
-            responsesType === ResponsesTypes.COMBINED ||
-            responsesType === ResponsesTypes.FREEFORM
-        ) {
-            // TODO: probably doesn't work well when a facet is active
-            await groupOtherBuckets(results, axis2, axis1)
-        }
-
         // once buckets don't move anymore we can calculate percentages
         await addPercentages(results)
 
@@ -432,6 +424,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         await addAveragesByFacet(results, axis2, axis1)
         await addPercentilesByFacet(results, axis2, axis1)
+
+        await sortData(results, axis2, axis1)
 
         // bucket grouping
         await groupBuckets(results, axis2, axis1)
@@ -446,8 +440,12 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         if (axis2.enableBucketGroups && axis2.question.groups) {
             axis2.options = axis2.question.groups
         }
-        await sortData(results, axis2, axis1)
         await limitData(results, axis2, axis1)
+
+        // group any "non-standard" bucket, including cutoff data, unmatched answers,
+        // off-limit answers, etc.
+        await groupOtherBuckets(results, axis1)
+
         await addLabels(results, axis2, axis1)
     } else {
         results = await addMissingBuckets(results, axis1)
@@ -455,13 +453,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 
         results = await applyDatasetCutoff(results, computeArguments)
-
-        if (
-            responsesType === ResponsesTypes.COMBINED ||
-            responsesType === ResponsesTypes.FREEFORM
-        ) {
-            await groupOtherBuckets(results, axis1)
-        }
 
         await addPercentages(results)
 
@@ -481,6 +472,11 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         }
         await sortData(results, axis1)
         await limitData(results, axis1)
+
+        // group any "non-standard" bucket, including cutoff data, unmatched answers,
+        // off-limit answers, etc.
+        await groupOtherBuckets(results, axis1)
+
         await addLabels(results, axis1)
     }
 

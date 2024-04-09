@@ -88,20 +88,29 @@ export function putBucketLast<T extends Bucket | FacetBucket>(buckets: T[], buck
     }
 }
 
-export async function sortData(
+export function sortBucketsAndFacets(
+    buckets: Bucket[],
+    axis1: ComputeAxisParameters,
+    axis2?: ComputeAxisParameters
+) {
+    // first, sort regular buckets
+    const sortedBuckets = sortBuckets<Bucket>(buckets, axis1)
+
+    if (axis2) {
+        // then, sort facetBuckets if they exist
+        for (let bucket of sortedBuckets) {
+            bucket.facetBuckets = sortBuckets<FacetBucket>(bucket.facetBuckets, axis2, true)
+        }
+    }
+    return sortedBuckets
+}
+
+export function sortData(
     resultsByEdition: ResponseEditionData[],
     axis1: ComputeAxisParameters,
     axis2?: ComputeAxisParameters
 ) {
     for (let editionData of resultsByEdition) {
-        // first, sort regular buckets
-        editionData.buckets = sortBuckets<Bucket>(editionData.buckets, axis1)
-
-        if (axis2) {
-            // then, sort facetBuckets if they exist
-            for (let bucket of editionData.buckets) {
-                bucket.facetBuckets = sortBuckets<FacetBucket>(bucket.facetBuckets, axis2, true)
-            }
-        }
+        editionData.buckets = sortBucketsAndFacets(editionData.buckets, axis1, axis2)
     }
 }

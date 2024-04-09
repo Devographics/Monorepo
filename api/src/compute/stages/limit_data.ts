@@ -6,15 +6,11 @@ import {
 } from '@devographics/constants'
 import { ResponseEditionData, ComputeAxisParameters, Bucket, FacetBucket } from '../../types'
 import take from 'lodash/take.js'
-import { combineFacetBuckets } from './group_buckets'
-import sumBy from 'lodash/sumBy.js'
-import round from 'lodash/round.js'
-import { BucketUnits } from '@devographics/types'
-import { mergeBuckets, mergePercentiles } from './cutoff_data'
+import { mergeBuckets } from './mergeBuckets'
 
-const specialBucketIds = [NO_ANSWER, CUTOFF_ANSWERS, OTHER_ANSWERS]
+export const specialBucketIds = [NO_ANSWER, CUTOFF_ANSWERS, OTHER_ANSWERS, OVERLIMIT_ANSWERS]
 export const isSpecialBucket = (b: Bucket | FacetBucket) => specialBucketIds.includes(b.id)
-const isNotSpecialBucket = (b: Bucket | FacetBucket) => !isSpecialBucket(b)
+export const isNotSpecialBucket = (b: Bucket | FacetBucket) => !isSpecialBucket(b)
 
 /*
 
@@ -27,12 +23,11 @@ export function groupOverLimit<T extends Bucket | FacetBucket>(
     axis?: ComputeAxisParameters
 ) {
     const { limitedBuckets, discardedBuckets } = limitBuckets<T>(buckets, limit)
-    const overlimitGroupBucket = mergeBuckets(discardedBuckets, { id: OVERLIMIT_ANSWERS })
-    if (axis) {
-        // if axis is provided, we know it's a top-level Bucket and not a FacetBucket
-        ;(overlimitGroupBucket as Bucket).facetBuckets =
-            combineFacetBuckets(discardedBuckets as Bucket[], axis) ?? []
-    }
+    const overlimitGroupBucket = mergeBuckets({
+        buckets: discardedBuckets,
+        mergedProps: { id: OVERLIMIT_ANSWERS },
+        axis
+    })
 
     return discardedBuckets.length > 0 ? [...limitedBuckets, overlimitGroupBucket] : limitedBuckets
 }

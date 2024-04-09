@@ -1,74 +1,9 @@
-import { BucketUnits, FacetBucket, OptionGroup, ParentIdGroup } from '@devographics/types'
+import { FacetBucket, OptionGroup } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
-import sumBy from 'lodash/sumBy.js'
-import { CUTOFF_ANSWERS, NO_ANSWER, NO_MATCH, OTHER_ANSWERS } from '@devographics/constants'
-import round from 'lodash/round.js'
+import { NO_ANSWER } from '@devographics/constants'
 import uniq from 'lodash/uniq.js'
 import compact from 'lodash/compact.js'
-import { mergeBuckets } from './cutoff_data'
-
-/*
-
-Take a range of selected buckets and a list of options, 
-
-*/
-export const combineFacetBuckets = (
-    selectedBuckets: Bucket[],
-    axis?: ComputeAxisParameters
-): FacetBucket[] => {
-    const optionsOrGroups =
-        axis?.enableBucketGroups && axis?.question.groups ? axis.question.groups : axis?.options
-    if (!optionsOrGroups) {
-        return []
-    }
-    const noAnswerOption = { id: NO_ANSWER, label: NO_ANSWER }
-
-    let combinedFacetBuckets = compact(
-        [...optionsOrGroups, noAnswerOption].map(option => {
-            const { id, label } = option
-            // for each facet, find the equivalent facetBuckets in all the main buckets
-            // make sure to compact to remove undefined facetBuckets (when the equivalent
-            // facetBucket doesn't exist in another main bucket)
-            const sameFacetBuckets = compact(
-                selectedBuckets.map(b => b?.facetBuckets?.find(fb => fb.id === option.id)!)
-            )
-            // if the current/option we're considering doen't have any matching facet buckets
-            // across all buckets, return undefined to get rid of it
-            if (sameFacetBuckets.length === 0) {
-                return
-            }
-            let combinedFacetBucket: FacetBucket = {
-                // Note: might create issues when option ID is not the same as facet bucket ID
-                id: String(id),
-                label,
-                [BucketUnits.COUNT]: round(
-                    sumBy(sameFacetBuckets, b => b?.[BucketUnits.COUNT] ?? 0),
-                    2
-                ),
-                [BucketUnits.PERCENTAGE_BUCKET]: round(
-                    sumBy(sameFacetBuckets, b => b?.[BucketUnits.PERCENTAGE_BUCKET] ?? 0) /
-                        sameFacetBuckets.length,
-                    2
-                )
-            }
-            // let combinedFacetBucket = mergeBuckets(sameFacetBuckets, { id, label }, true)
-
-            // if the facets we're grouping all have groups, also combine the groups
-            if (sameFacetBuckets.every(b => b.groupedBuckets)) {
-                const groupedBuckets = uniq(sameFacetBuckets.map(b => b.groupedBuckets!).flat())
-                const groupedBucketIds = groupedBuckets.map(b => b.id)
-                combinedFacetBucket = {
-                    ...combinedFacetBucket,
-                    groupedBuckets,
-                    groupedBucketIds
-                }
-            }
-
-            return combinedFacetBucket
-        })
-    )
-    return combinedFacetBuckets
-}
+import { mergeBuckets } from './mergeBuckets'
 
 const isInBounds = (n: number, lowerBound?: number, upperBound?: number) => {
     if (lowerBound && upperBound) {
@@ -80,33 +15,6 @@ const isInBounds = (n: number, lowerBound?: number, upperBound?: number) => {
     } else {
         throw new Error(`isInBounds: no bounds specified`)
     }
-}
-
-const getMergedBucket = <T extends Bucket | FacetBucket>(
-    buckets: T[],
-    id: string,
-    axis?: ComputeAxisParameters
-) => {
-    const bucket = {
-        id,
-        [BucketUnits.COUNT]: sumBy(buckets, BucketUnits.COUNT),
-        [BucketUnits.PERCENTAGE_QUESTION]: round(
-            sumBy(buckets, BucketUnits.PERCENTAGE_QUESTION),
-            2
-        ),
-        [BucketUnits.PERCENTAGE_SURVEY]: round(sumBy(buckets, BucketUnits.PERCENTAGE_SURVEY), 2),
-        groupedBuckets: buckets as unknown,
-        groupedBucketIds: buckets.map(b => b.id)
-    } as T
-    if (axis) {
-        ;(bucket as Bucket).facetBuckets = combineFacetBuckets(buckets as Bucket[], axis)
-    }
-    if (buckets.every(b => !!b.hasInsufficientData)) {
-        // if every bucket we merge has insufficient data, consider
-        // that the merged bucket also has insufficient data
-        bucket.hasInsufficientData = true
-    }
-    return bucket
 }
 
 function getGroupedBuckets<T extends Bucket | FacetBucket>({
@@ -134,7 +42,7 @@ function getGroupedBuckets<T extends Bucket | FacetBucket>({
             )
         }
         groupedBucketIds = [...groupedBucketIds, ...selectedBuckets.map(b => b.id)]
-        const bucket = getMergedBucket<T>(selectedBuckets, id, axis)
+        const bucket = mergeBuckets<T>({ buckets: selectedBuckets, mergedProps: { id }, axis })
         return bucket
     })
 
@@ -199,40 +107,6 @@ export async function groupBuckets(
                     axis: axis2
                 })
                 editionData.buckets = groupedBuckets
-            }
-        }
-    }
-}
-
-export async function groupOtherBuckets(
-    resultsByEdition: ResponseEditionData[],
-    axis1: ComputeAxisParameters,
-    axis2?: ComputeAxisParameters
-) {
-    for (let editionData of resultsByEdition) {
-        if (axis1.mergeOtherBuckets) {
-            // if mergeOtherBuckets is enabled, merge cutoff answers
-            // and unmatched answers into a single "other answers" bucket
-            const mainBuckets = editionData.buckets.filter(
-                b => ![CUTOFF_ANSWERS, NO_MATCH].includes(b.id)
-            )
-            const cutoffBucket = editionData.buckets.find(b => b.id === CUTOFF_ANSWERS)
-            const unmatchedBucket = editionData.buckets.find(b => b.id === NO_MATCH)
-            if (cutoffBucket && unmatchedBucket) {
-                // if both buckets exist, combine them into one
-                const combinedOtherBucket = getMergedBucket(
-                    [cutoffBucket, unmatchedBucket],
-                    OTHER_ANSWERS,
-                    axis2
-                )
-                editionData.buckets = [...mainBuckets, combinedOtherBucket]
-            } else if (cutoffBucket) {
-                editionData.buckets = [...mainBuckets, { ...cutoffBucket, id: OTHER_ANSWERS }]
-            } else if (unmatchedBucket) {
-                editionData.buckets = [
-                    ...mainBuckets,
-                    { ...unmatchedBucket, groupedBucketIds: [NO_MATCH], id: OTHER_ANSWERS }
-                ]
             }
         }
     }
