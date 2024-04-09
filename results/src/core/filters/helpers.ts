@@ -7,9 +7,7 @@ import {
     CustomizationFiltersCondition,
     CustomizationFiltersSeries,
     FilterValue,
-    FilterValueString,
     OperatorEnum,
-    FacetItem,
     DataSeries
 } from './types'
 import { BlockVariantDefinition, StringTranslator } from 'core/types'
@@ -36,15 +34,7 @@ import uniq from 'lodash/uniq'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getBlockLink } from 'core/helpers/blockHelpers'
 import { getEntityName, useEntities } from 'core/helpers/entities'
-import {
-    getBlockQuery,
-    getQueryArgsString,
-    argumentsPlaceholder,
-    bucketFacetsPlaceholder,
-    getFacetFragment,
-    ProvidedQueryOptions,
-    QueryArgs
-} from 'core/helpers/queries'
+import { getBlockQuery } from 'core/helpers/queries'
 import { PageContextValue } from 'core/types/context'
 import {
     Entity,
@@ -52,7 +42,6 @@ import {
     SectionMetadata,
     BucketUnits,
     Bucket,
-    CombinedBucket,
     OptionMetadata,
     CombinedBucketData,
     FacetBucket
@@ -61,9 +50,8 @@ import { runQuery } from 'core/explorer/data'
 // import { spacing, mq, fontSize } from 'core/theme'
 import get from 'lodash/get'
 import { getBlockDataPath } from 'core/helpers/data'
-import { QueryData, AllQuestionData } from '@devographics/types'
+import { AllQuestionData } from '@devographics/types'
 import { INSUFFICIENT_DATA, NO_ANSWER } from '@devographics/constants'
-import clone from 'lodash/clone'
 import pick from 'lodash/pick'
 import { getItemLabel } from 'core/helpers/labels'
 import merge from 'lodash/merge'
@@ -158,193 +146,13 @@ export const getNewSeries = ({
     }
 }
 
-/*
-
-Get a series' name based on its filters
-
-NOT USED
-
-*/
-const getSeriesName = ({
-    block,
-    year,
-    conditions
-}: {
-    block: BlockVariantDefinition
-    year: number
-    conditions: CustomizationFiltersCondition[]
-}) => {
-    const suffix = conditions.map(
-        ({ fieldId, operator, value }) => `${fieldId}__${operator}__${value.toString()}`
-    )
-    return `${block.id}___${year}___${suffix}`
-}
-
-const cleanUpValue = (s: string) => s?.replaceAll('-', '_')
-
-type FiltersObject = {
-    [key: string]: FilterDefinitionObject
-}
-
-type FilterDefinitionObject = {
-    [key in OperatorEnum]: FilterValue
-}
-
-function getNthPosition(s: string, subString: string, count: number, fromEnd = false) {
-    const regex = new RegExp(subString, 'g')
-    const totalCount = (s.match(regex) || []).length
-    const nthIndex = fromEnd ? totalCount - count : count
-    return s.split(subString, nthIndex).join(subString).length
-}
-
-const conditionsToFilters = (conditions: CustomizationFiltersCondition[]) => {
+export const conditionsToFilters = (conditions: CustomizationFiltersCondition[]) => {
     const filters: Filters = {}
     conditions.forEach(condition => {
         const { sectionId, fieldId, operator, value } = condition
         filters[`${sectionId}__${fieldId}`] = { [operator]: value }
     })
     return filters
-}
-
-/*
-
-Generate query used for filtering
-
-TODO: currently lots of search-and-replace for strings going on which 
-could be avoided by making template query definitions JS/TS objects that 
-define how to accept filters and series themselves.
-
-*/
-
-const defaultParameters = { facetCutoffPercent: 1 }
-export const getFiltersQuery = ({
-    block,
-    chartFilters,
-    currentYear,
-    pageContext,
-    queryOptions
-}: {
-    block: BlockVariantDefinition
-    chartFilters: CustomizationDefinition
-    currentYear: number
-    pageContext: PageContextValue
-    queryOptions?: ProvidedQueryOptions
-}) => {
-    const { options = {}, filters, facet } = chartFilters
-    const { enableYearSelect, mode } = options
-    const query = getBlockQuery({
-        block,
-        pageContext,
-        queryOptions: {
-            ...queryOptions,
-            addArgumentsPlaceholder: true,
-            addBucketFacetsPlaceholder: true
-        }
-    })
-    // fragment starts after fourth "{"
-    const fragmentStartIndex = getNthPosition(query, '{', 5) + 1
-    // fragment ends before fourth "}" when counting from the end
-    const fragmentEndIndex = getNthPosition(query, '}', 5, true) + 1
-    const queryHeader = query.slice(0, fragmentStartIndex)
-    const queryFragment = query.slice(fragmentStartIndex, fragmentEndIndex)
-    let queryBody = queryFragment
-
-    const seriesNames: string[] = []
-
-    const queryFooter = query.slice(fragmentEndIndex)
-
-    if (filters && (mode === MODE_GRID || mode === MODE_COMBINED)) {
-        queryBody = filters
-            .map((singleSeries, seriesIndex) => {
-                let seriesFragment = queryFragment
-
-                // {gender: {eq: male}, company_size: {eq: range_1}}
-                // const filtersObject: FiltersObject = {}
-                // singleSeries.conditions.forEach(condition => {
-                //     const { fieldId, operator, value } = condition
-                //     // transform e.g. es-ES into es_ES
-                //     const cleanValue: FilterValue = Array.isArray(value)
-                //         ? value.map(cleanUpValue)
-                //         : cleanUpValue(value)
-                //     filtersObject[fieldId] = { [operator]: cleanValue }
-                // })
-
-                const seriesName = `${block.id}_${seriesIndex + 1}`
-                seriesNames.push(seriesName)
-
-                const alreadyHasAlias = seriesFragment.includes(':')
-                if (alreadyHasAlias) {
-                    seriesFragment = seriesFragment.replace(block.id, `${seriesName}`)
-                } else {
-                    seriesFragment = seriesFragment.replace(
-                        block.id,
-                        `${seriesName}: ${block.fieldId || block.id}`
-                    )
-                }
-
-                const queryArgs = getQueryArgsString({
-                    filters: conditionsToFilters(singleSeries.conditions),
-                    parameters: { ...defaultParameters, ...block.parameters }
-                })
-
-                seriesFragment = seriesFragment.replace(argumentsPlaceholder, queryArgs || '')
-
-                if (enableYearSelect && singleSeries.year) {
-                    seriesFragment = seriesFragment.replace(
-                        `year: ${currentYear}`,
-                        `year: ${singleSeries.year}`
-                    )
-                }
-                return seriesFragment
-            })
-            .join('')
-    } else if (facet && mode === MODE_FACET) {
-        const queryArgsOptions: QueryArgs = {
-            facet,
-            parameters: { ...defaultParameters, ...block.parameters }
-        }
-        // if we've specified conditions, use the first one to filter facet
-        // TODO: support multiple conditions (small multiples) + facets at the same time
-        if (filters?.[0]?.conditions) {
-            queryArgsOptions.filters = conditionsToFilters(filters[0].conditions)
-        }
-
-        const queryArgs = getQueryArgsString(queryArgsOptions)
-
-        const seriesName = `${block.fieldId || block.id}_by_${facet.id}`
-        seriesNames.push(seriesName)
-
-        const alreadyHasAlias = queryBody.includes(':')
-        if (alreadyHasAlias) {
-            queryBody = queryBody.replace(block.id, `${seriesName}`)
-        } else {
-            queryBody = queryBody.replace(block.id, `${seriesName}: ${block.fieldId || block.id}`)
-        }
-        queryBody = queryBody.replace(argumentsPlaceholder, queryArgs || '')
-
-        queryBody = queryBody.replace(bucketFacetsPlaceholder, getFacetFragment() || '')
-
-        // if (block?.variables?.fixedIds) {
-        //     /*
-
-        //     Because facets are obtained in a "reversed" structure from the API, in some cases
-        //     (e.g. countries) we need to fix the ids to ensure each facet contains the same items.
-
-        //     TODO: return proper structure from API and delete this step
-
-        //     */
-        //     const fixedIdsFilter = `{ ids: { in: [${block?.variables?.fixedIds
-        //         .map(id => `"${id}"`)
-        //         .join()}] } }`
-        //     queryBody = queryBody.replace('filters: {}', `filters: ${fixedIdsFilter}`)
-        // }
-    }
-    queryBody = queryBody.replace(argumentsPlaceholder, '')
-    queryBody = queryBody?.replaceAll(bucketFacetsPlaceholder, '')
-
-    const newQuery = queryHeader + queryBody + queryFooter
-
-    return { query: newQuery, seriesNames }
 }
 
 const baseUnits = Object.values(BucketUnits)
@@ -824,7 +632,7 @@ Initialize the chart customization filter state
 */
 export const getInitFilters = (initOptions?: CustomizationOptions): CustomizationDefinition => ({
     options: {
-        showDefaultSeries: true,
+        showDefaultSeries: false,
         enableYearSelect: false,
         mode: MODE_DEFAULT,
         queryOnLoad: false,
@@ -931,11 +739,10 @@ export async function fetchSeriesData({
     chartFilters,
     year
 }: FetchSeriesDataOptions): Promise<FetchSeriesDataPayload> {
-    const { query, seriesNames } = getFiltersQuery({
+    const { query, seriesNames } = getBlockQuery({
         block,
         pageContext,
-        chartFilters,
-        currentYear: year
+        chartFilters
     })
 
     const url = process.env.GATSBY_API_URL

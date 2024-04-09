@@ -4,37 +4,15 @@ import React from 'react'
 import ModalTrigger from 'core/components/ModalTrigger'
 import { FiltersExport, GraphQLExport, JSONExport } from 'core/blocks/block/BlockData'
 import { CommonProps } from './types'
-import { getFiltersQuery } from 'core/filters/helpers'
 import { getBlockQuery } from 'core/helpers/queries'
-import { CustomizationDefinition } from 'core/filters/types'
 import { TabsList } from 'core/blocks/block/BlockTabsWrapper'
 import { Tab_, TabsTrigger_ } from 'core/filters/FiltersPanel'
 import * as Tabs from '@radix-ui/react-tabs'
 import T from 'core/i18n/T'
 
-const getQuery = ({
-    block,
-    pageContext,
-    chartFilters
-}: { chartFilters?: CustomizationDefinition } & Pick<CommonProps, 'block' | 'pageContext'>) => {
-    if (chartFilters) {
-        return getFiltersQuery({
-            block,
-            pageContext,
-            chartFilters,
-            currentYear: 2024
-        })?.query
-    } else {
-        const queryArgs = {
-            parameters: block.parameters
-        }
-        return getBlockQuery({ block, pageContext, queryArgs })
-    }
-}
-
 export const ChartData = ({ block, pageContext, series, variant }: CommonProps) => {
     const chartFilters = variant?.chartFilters || block.filtersState
-    const query = getQuery({ block, pageContext, chartFilters })
+    const { query } = getBlockQuery({ block, pageContext, chartFilters })
     return (
         <ModalTrigger
             trigger={

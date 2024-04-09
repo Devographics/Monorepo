@@ -5,7 +5,6 @@ import ModalTrigger from 'core/components/ModalTrigger'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
-import { getFiltersQuery } from 'core/filters/helpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getBlockQuery } from 'core/helpers/queries'
 
@@ -25,30 +24,11 @@ const BlockData = (props: BlockData) => {
     const { parameters, fieldId } = block
     const pageContext = usePageContext()
 
-    const query =
-        chartFilters?.filters?.length > 0 || chartFilters?.facet
-            ? getFiltersQuery({
-                  block,
-                  pageContext,
-                  chartFilters,
-                  currentYear: pageContext.currentEdition.year
-              })?.query
-            : getBlockQuery({
-                  block,
-                  pageContext,
-                  queryOptions: {
-                      addArgumentsPlaceholder: false,
-                      addBucketFacetsPlaceholder: false,
-                      fieldId
-                  },
-                  queryArgs: parameters ? { parameters } : {}
-              })
-
     return (
         <>
             <ExportWrapper>
                 <JSONTrigger {...props} />
-                <GraphQLTrigger query={query} />
+                {/* <GraphQLTrigger query={query} /> */}
             </ExportWrapper>
             {tables ? (
                 <Table {...props} />

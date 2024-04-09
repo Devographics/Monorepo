@@ -179,7 +179,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     background: '#272325',
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',
     backgroundAlt3: '#2c3033',
-    backgroundBackground: colors.electricBlueDarkest,
+    backgroundBackground: '#3A4E53',
     backgroundForeground: colors.navyLighter,
     backgroundAlt: '#314448',
     backgroundAltTrans: 'rgba(49, 68, 72, 0.4)',

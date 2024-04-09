@@ -1,3 +1,4 @@
+import './FiltersPanel.scss'
 import React, { useState, Dispatch, SetStateAction, useEffect } from 'react'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
@@ -9,7 +10,6 @@ import {
     DeleteVariantType,
     UpdateVariantType,
     getFieldLabel,
-    getFiltersQuery,
     getInitFilters,
     useCustomVariants
 } from './helpers'
@@ -21,6 +21,7 @@ import {
     AutoSelectText,
     ExportButton,
     FiltersExport,
+    GraphQLExport,
     GraphQLTrigger,
     JSONTrigger,
     Message_
@@ -44,6 +45,9 @@ import { useAllFilters } from 'core/charts/hooks'
 import { useEntities } from 'core/helpers/entities'
 import ModalTrigger from 'core/components/ModalTrigger'
 import { copyTextToClipboard } from 'core/helpers/utils'
+import { Details } from 'core/components/Details'
+import { AdvancedOptions } from './AdvancedOptions'
+import { getBlockQuery } from 'core/helpers/queries'
 
 export type FiltersPanelPropsType = {
     block: BlockVariantDefinition
@@ -151,29 +155,13 @@ const FiltersPanel = ({
         }
     }, [])
 
-    const tabConfig: TabConfigItem[] = [
-        { mode: MODE_COMBINED, component: FiltersSelection },
-        { mode: MODE_GRID, component: FiltersSelection },
-        { mode: MODE_FACET, component: FacetSelection }
-    ]
-    const tabs = tabConfig.filter(tab => supportedModes?.includes(tab.mode))
-
     const filtersLink = getFiltersLink({ block, pageContext, filtersState })
 
-    const handleTabChange = (tab: SupportedMode) => {
-        setFiltersState((fState: CustomizationDefinition) => {
-            const newState = cloneDeep(fState)
-            newState.options.mode = tab
-            return newState
-        })
-    }
-
-    const query = getFiltersQuery({
+    const { query } = getBlockQuery({
         block,
         pageContext,
-        chartFilters: filtersState,
-        currentYear: currentEdition.year
-    })?.query
+        chartFilters: filtersState
+    })
 
     return (
         <Filters_>
@@ -210,28 +198,17 @@ const FiltersPanel = ({
                     <T k="filters.docs" />
                 </a>
             </FiltersTop_>
-            <Tabs.Root
-                defaultValue={currentMode}
-                orientation="horizontal"
-                onValueChange={handleTabChange}
-            >
-                <TabsList aria-label="tabs example">
-                    {tabs.map(tab => (
-                        <TabsTrigger_ key={tab.mode} value={tab.mode}>
-                            <T k={`filters.${tab.mode}_mode`} />
-                        </TabsTrigger_>
-                    ))}
-                </TabsList>
-                {tabs.map(tab => {
-                    const Component = tab.component
-                    return (
-                        <Tab_ key={tab.mode} value={tab.mode}>
-                            <Component {...props} mode={tab.mode} />
-                        </Tab_>
-                    )
-                })}
-            </Tabs.Root>
-
+            <div className="filters-sections">
+                <Details labelId="filters.grid_mode" defaultOpen={true}>
+                    <FiltersSelection {...props} />
+                </Details>
+                <Details labelId="filters.facet_mode" defaultOpen={true}>
+                    <FacetSelection {...props} />
+                </Details>
+                <Details labelId="filters.advanced_options" defaultOpen={false}>
+                    <AdvancedOptions {...props} />
+                </Details>
+            </div>
             <FiltersBottom_>
                 {/* <FooterLeft_>
                     <li>
@@ -280,7 +257,8 @@ const FiltersPanel = ({
             </FiltersBottom_>
             {/* <pre>
                 <code>{JSON.stringify(filtersState, null, 2)}</code>
-            </pre> */}
+            </pre>
+            <GraphQLExport query={query} /> */}
         </Filters_>
     )
 }

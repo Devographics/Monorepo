@@ -2,7 +2,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import { fontSize, spacing } from 'core/theme'
 
-import * as Tooltip from '@radix-ui/react-tooltip'
+import * as RadixTooltip from '@radix-ui/react-tooltip'
 
 export const getTooltipContent = element => styled(element)`
     background: ${props => props.theme.colors.backgroundBackground};
@@ -19,9 +19,9 @@ export const getTooltipContent = element => styled(element)`
     drop-shadow(4px 8px 32px hsl(220deg 60% 50% / 0.3)); */
 `
 
-export const TooltipContent_ = getTooltipContent(Tooltip.Content)
+export const TooltipContent_ = getTooltipContent(RadixTooltip.Content)
 
-const Trigger = styled(Tooltip.Trigger)`
+const Trigger = styled(RadixTooltip.Trigger)`
     /* background: none;
     border: none;
     padding: 0;
@@ -36,26 +36,26 @@ const Trigger = styled(Tooltip.Trigger)`
     }}
 `
 
-const Arrow = styled(Tooltip.Arrow)`
+const Arrow = styled(RadixTooltip.Arrow)`
     fill: ${props => props.theme.colors.backgroundBackground};
     stroke: ${props => props.theme.colors.text};
     stroke-width: 2px;
 `
 
-const Tip = ({ trigger, contents, asChild = true, clickable = false }) => (
-    <Tooltip.Provider>
-        <Tooltip.Root delayDuration={100}>
+export const Tooltip = ({ trigger, contents, asChild = true, clickable = false }) => (
+    <RadixTooltip.Provider>
+        <RadixTooltip.Root delayDuration={100}>
             <Trigger asChild={asChild} $clickable={clickable}>
                 {trigger}
             </Trigger>
-            <Tooltip.Portal>
+            <RadixTooltip.Portal>
                 <TooltipContent_ side="top">
                     {contents}
                     {/* <Arrow /> */}
                 </TooltipContent_>
-            </Tooltip.Portal>
-        </Tooltip.Root>
-    </Tooltip.Provider>
+            </RadixTooltip.Portal>
+        </RadixTooltip.Root>
+    </RadixTooltip.Provider>
 )
 
-export default Tip
+export default Tooltip

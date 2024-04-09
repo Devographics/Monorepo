@@ -22,6 +22,9 @@ export type CustomizationOptions = {
     queryOnLoad?: boolean
     // if true these filters will not trigger a fetch() call
     preventQuery?: boolean
+    cutoff?: number
+    cutoffType?: 'count' | 'percent'
+    limit?: number
 }
 
 export type CustomizationFiltersSeries = {
