@@ -1,6 +1,6 @@
-import { Bucket } from '@devographics/types'
+import { Bucket, QuestionMetadata } from '@devographics/types'
 import { Dispatch, SetStateAction } from 'react'
-import { ChartValues } from '../multiItemsExperience/types'
+import { ChartValues, Dimension } from '../multiItemsExperience/types'
 import { BlockVariantDefinition, PageContextValue } from 'core/types'
 import { ChartState } from '../horizontalBar2/types'
 import { DataSeries } from 'core/filters/types'
@@ -12,6 +12,9 @@ export type RowCommonProps = {
     buckets: Bucket[]
     bucket: Bucket
     block: BlockVariantDefinition
+    rowIndex: number
+    allRowsCellDimensions: Dimension[][]
+    allRowsOffsets: number[]
 }
 
 export type RowExtraProps = {
@@ -41,6 +44,7 @@ export type CommonProps = {
     block: BlockVariantDefinition
     series: DataSeries<any>[]
     variant?: CustomVariant
+    question: QuestionMetadata
 }
 
 export type ViewProps = CommonProps & {

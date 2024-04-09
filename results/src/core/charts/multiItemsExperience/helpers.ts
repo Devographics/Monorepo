@@ -15,6 +15,7 @@ import {
     CombinedBucket,
     CombinedItem,
     DEFAULT_VARIABLE,
+    Dimension,
     GroupingOptions,
     MaxValue,
     Totals,
@@ -211,16 +212,16 @@ export const getCellDimensions = ({
     const getWidth = (combinedBucket: CombinedBucket) =>
         combinedBucket?.facetBucket?.[variable] || 0
 
-    // keep track of total value to offset column by
-    let columnOffset = 0
+    // keep track of total value to offset cells by
+    let cellOffset = 0
 
     buckets.forEach((bucket, bucketIndex) => {
         const { id, ids } = bucket
         const width = getWidth(bucket)
-        columnOffset += getColumnGap({ buckets, bucket, bucketIndex, grouping })
+        cellOffset += getColumnGap({ buckets, bucket, bucketIndex, grouping })
         const offset =
             sum(take(buckets, bucketIndex).map(bucket => getWidth(bucket) + ITEM_GAP_PERCENT)) +
-            columnOffset
+            cellOffset
         cellDimensions.push({ id, ids, width, offset })
     })
 
@@ -229,7 +230,7 @@ export const getCellDimensions = ({
     const totalWidth =
         sum(cellDimensions.map(cd => cd.width)) +
         ITEM_GAP_PERCENT * (cellDimensions.length - 1) +
-        columnOffset
+        cellOffset
     const ratio = 100 / totalWidth
     cellDimensions = applyRatio(cellDimensions, ratio)
     return cellDimensions
@@ -269,7 +270,7 @@ export const getRowOffset = ({
     }
 }
 
-export const applyRatio = (cellDimensions: CellDimension[], ratio: number) =>
+export const applyRatio = <T extends Dimension>(cellDimensions: T[], ratio: number) =>
     cellDimensions.map(({ width, offset, ...rest }) => ({
         ...rest,
         width: round(width * ratio, 1),

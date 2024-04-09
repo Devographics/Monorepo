@@ -3,7 +3,7 @@ import '../common2/ChartsCommon.scss'
 import './MultiItems.scss'
 import { FeaturesOptions, Option, SimplifiedSentimentOptions } from '@devographics/types'
 import { MultiItemsExperienceControls } from './MultiItemsControls'
-import { GroupingOptions, MultiItemsExperienceBlockProps } from './types'
+import { CellDimension, GroupingOptions, MultiItemsExperienceBlockProps } from './types'
 import {
     applyRatio,
     combineItems,
@@ -77,7 +77,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
         })
     )
 
-    let allRowOffsets = allRowsCellDimensions.map(cd =>
+    let allRowsOffsets = allRowsCellDimensions.map(cd =>
         getRowOffset({
             firstRowCellDimensions: allRowsCellDimensions[0],
             cellDimensions: cd,
@@ -88,18 +88,20 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     // offseting row will make the entire chart expand past 100%
     // shrink it down to 100% again
     // note: offsets can be positive (offset to the left) or negative (offset to the right)
-    const largestNegativeOffset = min(allRowOffsets.filter(o => o < 0)) || 0
-    const largestPositiveOffset = max(allRowOffsets.filter(o => o > 0)) || 0
+    const largestNegativeOffset = min(allRowsOffsets.filter(o => o < 0)) || 0
+    const largestPositiveOffset = max(allRowsOffsets.filter(o => o > 0)) || 0
 
     const totalWidthWithOffset = Math.abs(largestNegativeOffset) + largestPositiveOffset + 100
     const rowOffsetShrinkRatio = 100 / totalWidthWithOffset
-    allRowsCellDimensions = allRowsCellDimensions.map(cd => applyRatio(cd, rowOffsetShrinkRatio))
+    allRowsCellDimensions = allRowsCellDimensions.map(cd =>
+        applyRatio<CellDimension>(cd, rowOffsetShrinkRatio)
+    )
     // note: up to now we have only calculated offsets relative to the first row
     // but the first row may itself need to be offseted. In this case
     // subract additional largestPositiveOffset to all offsets
-    allRowOffsets = allRowOffsets.map(rowOffset => rowOffset - largestPositiveOffset)
+    allRowsOffsets = allRowsOffsets.map(rowOffset => rowOffset - largestPositiveOffset)
     // finally, apply shrinking ratio
-    allRowOffsets = allRowOffsets.map(rowOffset => rowOffset * rowOffsetShrinkRatio)
+    allRowsOffsets = allRowsOffsets.map(rowOffset => rowOffset * rowOffsetShrinkRatio)
 
     const commonProps = {
         items: combinedItems,
@@ -108,7 +110,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
         chartValues,
         block,
         allRowsCellDimensions,
-        allRowOffsets
+        allRowOffsets: allRowsOffsets
     }
 
     const options =

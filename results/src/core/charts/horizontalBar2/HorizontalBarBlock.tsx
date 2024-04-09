@@ -4,17 +4,10 @@ import Metadata from '../common2/Metadata'
 import { BlockComponentProps, PageContextValue } from 'core/types'
 import { QuestionMetadata, StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
-import {
-    getAllFacetBucketIds,
-    getChartBuckets,
-    getChartCompletion,
-    useQuestionMetadata
-} from './helpers/other'
+import { getAllFacetBucketIds, getChartCompletion, useQuestionMetadata } from './helpers/other'
 import { getDefaultState, useChartState } from './helpers/chartState'
-import { useChartValues } from './helpers/chartValues'
 import { getViewDefinition } from './helpers/views'
-import View from '../common2/View'
-import { ChartFooter, ChartWrapper, GridItem, GridWrapper, Legend } from '../common2'
+import { ChartFooter, ChartWrapper, GridWrapper, Legend } from '../common2'
 import { useEntities } from 'core/helpers/entities'
 import { FacetTitle } from '../common2/FacetTitle'
 import { getQuestionOptions } from './helpers/options'
@@ -22,7 +15,7 @@ import { useColorScale } from './helpers/colors'
 import { ChartState } from './types'
 import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
-import take from 'lodash/take'
+import { HorizontalBarSerie } from './HorizontalBarSerie'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -40,6 +33,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 
     const commonProps: CommonProps = {
         variant,
+        question,
         series,
         pageContext,
         chartState,
@@ -56,28 +50,14 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                 {facetQuestion && <FacetHeading facetQuestion={facetQuestion} {...commonProps} />}
 
                 <GridWrapper seriesCount={series.length}>
-                    {series.map((serie, serieIndex) => {
-                        let buckets = getChartBuckets({ serie, block, chartState })
-                        const chartValues = useChartValues({ buckets, chartState, block, question })
-
-                        if (chartState.rowsLimit) {
-                            buckets = take(buckets, chartState.rowsLimit)
-                        }
-                        const viewProps = {
-                            ...commonProps,
-                            buckets,
-                            chartValues
-                        }
-
-                        const itemFilters =
-                            variant?.chartFilters?.filters?.[serieIndex] ||
-                            block?.filtersState?.filters?.[serieIndex]
-                        return (
-                            <GridItem key={serie.name} filters={itemFilters}>
-                                <View {...viewProps} />
-                            </GridItem>
-                        )
-                    })}
+                    {series.map((serie, serieIndex) => (
+                        <HorizontalBarSerie
+                            key={serie.name}
+                            serie={serie}
+                            serieIndex={serieIndex}
+                            {...commonProps}
+                        />
+                    ))}
                 </GridWrapper>
 
                 <ChartFooter>

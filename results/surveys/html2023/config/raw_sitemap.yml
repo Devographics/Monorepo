@@ -414,9 +414,11 @@
 
       - id: html_interoperability_features
         template: multiple_options2_freeform
+        parameters: { limit: 20 }
 
       - id: html_functionality_features
         template: multiple_options2_freeform
+        parameters: { limit: 20 }
 
       - id: html_missing_elements
         template: multiple_options2_combined

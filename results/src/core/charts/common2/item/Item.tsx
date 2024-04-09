@@ -43,7 +43,8 @@ export const Item = ({
         label: providedLabel,
         entity,
         getString,
-        i18nNamespace
+        i18nNamespace,
+        html: true
     })
     if (!entity) {
         return (
@@ -100,9 +101,11 @@ const Label = ({ label: label_, href }: { label: LabelObject; href?: string }) =
     return (
         <Tooltip
             trigger={
-                <LabelComponent className="chart-item-label" {...(href ? { href } : {})}>
-                    {shortLabel}
-                </LabelComponent>
+                <LabelComponent
+                    className="chart-item-label"
+                    {...(href ? { href } : {})}
+                    dangerouslySetInnerHTML={{ __html: label }}
+                />
             }
             contents={<div>{label}</div>}
         />

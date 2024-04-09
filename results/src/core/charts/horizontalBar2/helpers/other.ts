@@ -13,8 +13,6 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { applySteps } from './steps'
 import { getViewDefinition } from './views'
 import sortBy from 'lodash/sortBy'
-import take from 'lodash/take'
-import sumBy from 'lodash/sumBy'
 import { OrderOptions } from 'core/charts/common2/types'
 import { BlockVariantDefinition } from 'core/types'
 import uniq from 'lodash/uniq'
@@ -124,49 +122,6 @@ export const useAllQuestionsMetadata = () => {
         }
     }
     return questions
-}
-
-/*
-
-Calculate how much to offset a row by to line up whichever column/cell the chart is sorted by
-
-*/
-export const getRowOffset = ({
-    buckets,
-    bucket,
-    chartState
-}: {
-    buckets: Bucket[]
-    bucket: Bucket
-    chartState: ChartState
-}) => {
-    const { view, sort } = chartState
-    const { getValue } = getViewDefinition(view)
-    if (getValue && [Views.PERCENTAGE_BUCKET, Views.FACET_COUNTS].includes(view) && sort) {
-        // check if a bucket contains the facet that we're currently sorting by
-        const containsSortedFacet = (b: Bucket) => b.facetBuckets.some(fb => fb.id === sort)
-
-        // only offset bucket if it actually contains whatever we're sorting by
-        if (containsSortedFacet(bucket)) {
-            const getOffset = (bucket: Bucket) => {
-                const { facetBuckets } = bucket
-                const currentFacetBucketIndex = facetBuckets.findIndex(fb => fb.id === sort)
-                const previousFacetBuckets = take(facetBuckets, currentFacetBucketIndex)
-                const valuesSum = sumBy(previousFacetBuckets, fb => getValue(fb))
-                return valuesSum
-            }
-            // find the first bucket that has the value we're sorting by as a starting
-            // point to calculate offsets
-            const firstBucketWithFacet = buckets.find(containsSortedFacet)
-            // only proceed if at least one bucket contains the facet we're sorting by
-            if (firstBucketWithFacet) {
-                const firstBucketOffset = getOffset(firstBucketWithFacet)
-                const currentBucketOffset = getOffset(bucket)
-                return currentBucketOffset - firstBucketOffset
-            }
-        }
-    }
-    return 0
 }
 
 export const getAllFacetBucketIds = ({
