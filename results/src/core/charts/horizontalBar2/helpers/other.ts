@@ -137,6 +137,7 @@ export const getAllFacetBucketIds = ({
         series
             .map(serie => {
                 const buckets = getChartBuckets({ serie, block, chartState })
+                console.log(buckets)
                 return buckets.map(bucket => bucket.facetBuckets.map(facetBucket => facetBucket.id))
             })
             .flat()

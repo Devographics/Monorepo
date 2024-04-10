@@ -1,8 +1,8 @@
 import { BlockVariantDefinition } from 'core/types'
-import { ResponsesParameters, Filters, BucketUnits } from '@devographics/types'
+import { ResponsesParameters, Filters, BucketUnits, ResultsSubFieldEnum } from '@devographics/types'
 import { PageContextValue } from 'core/types/context'
 import isEmpty from 'lodash/isEmpty'
-import { CustomizationDefinition, FacetItem } from 'core/filters/types'
+import { CustomizationDefinition, CustomizationOptions, FacetItem } from 'core/filters/types'
 import { conditionsToFilters } from 'core/filters/helpers'
 
 export const argumentsPlaceholder = '<ARGUMENTS_PLACEHOLDER>'
@@ -298,6 +298,27 @@ const getSerieFragment = ({
         }`
 }
 
+export const getParameters = (options: CustomizationOptions) => {
+    const parameters: ResponsesParameters = {}
+    const { cutoff, cutoffType, limit, mergeOtherBuckets } = options
+    if (options.cutoff) {
+        if (cutoffType === 'percent') {
+            // use same cutoff value for both
+            parameters.cutoffPercent = cutoff
+            parameters.facetCutoffPercent = cutoff
+        } else {
+            parameters.cutoff = cutoff
+            parameters.facetCutoff = cutoff
+        }
+    }
+    if (limit) {
+        parameters.limit = limit
+    }
+    if (mergeOtherBuckets) {
+        parameters.mergeOtherBuckets = mergeOtherBuckets
+    }
+    return parameters
+}
 /*
 
 For a given block and pageContext, generate query and query options and return result
@@ -312,30 +333,39 @@ export const getBlockQuery = ({
     block: BlockVariantDefinition
     pageContext: PageContextValue
 }) => {
-    const { facet, filters } = chartFilters || {}
-
+    const { facet, filters, options = {} } = chartFilters || {}
+    const { showDefaultSeries } = options
     const questionId = block.fieldId || block.id
     const queryOptions = {
         surveyId: pageContext?.currentSurvey?.id,
         editionId: pageContext?.currentEdition?.id,
         sectionId: pageContext?.id,
-        questionId
+        questionId,
+        subField: block?.queryOptions?.subField || ResultsSubFieldEnum.RESPONSES
+    }
+    let parameters = block.parameters
+    if (options) {
+        parameters = getParameters(options)
     }
     const defaultQueryArgs = {
         facet,
-        parameters: block.parameters
+        parameters
     }
     const defaultSeriesName = facet ? `${questionId}_by_${facet.id}` : questionId
+    const defaultSeries = { name: defaultSeriesName, queryArgs: defaultQueryArgs }
     let series: SeriesParams[]
     if (filters && filters.length > 0) {
-        series = filters.map((filter, filterIndex) => {
-            const { conditions } = filter
-            const filters = conditionsToFilters(conditions)
-            const name = `${defaultSeriesName}_${filterIndex + 1}`
-            return { name, queryArgs: { ...defaultQueryArgs, filters } }
-        })
+        series = [
+            ...(showDefaultSeries ? [defaultSeries] : []),
+            ...filters.map((filter, filterIndex) => {
+                const { conditions } = filter
+                const filters = conditionsToFilters(conditions)
+                const name = `${defaultSeriesName}_${filterIndex + 1}`
+                return { name, queryArgs: { ...defaultQueryArgs, filters } }
+            })
+        ]
     } else {
-        series = [{ name: defaultSeriesName, queryArgs: defaultQueryArgs }]
+        series = [defaultSeries]
     }
     return {
         query: getDefaultQuery({ queryOptions, series }),

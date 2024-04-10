@@ -89,6 +89,7 @@ const FiltersPanel = ({
         // if chart filters have been passed, use them to extend the default init filters
         initState = { ...initState, ...variant.chartFilters }
     }
+    console.log(initState)
     const [filtersState, setFiltersState] = useState(initState)
 
     const [customPresets, setCustomPresets] = useStickyState([], 'filters_panel_presets')
@@ -210,7 +211,7 @@ const FiltersPanel = ({
                 </Details>
             </div>
             <FiltersBottom_>
-                {/* <FooterLeft_>
+                <FooterLeft_>
                     <li>
                         <GraphQLTrigger
                             block={block}
@@ -218,16 +219,13 @@ const FiltersPanel = ({
                             buttonProps={{ variant: 'link' }}
                         />
                     </li>
-                    <li>
-                        <JSONTrigger data={data} buttonProps={{ variant: 'link' }} />
-                    </li>
-                    <li>
+                    {/* <li>
                         <CopyLink link={filtersLink} />
-                    </li>
+                    </li> */}
                     <li>
                         <CopyFilters filtersState={filtersState} />
                     </li>
-                </FooterLeft_> */}
+                </FooterLeft_>
 
                 <FooterRight_>
                     {id && (
@@ -345,8 +343,10 @@ const Filters_ = styled.div`
 `
 
 const FiltersBottom_ = styled.div`
+    border-top: 1px solid ${({ theme }) => theme.colors.border};
+    padding-top: ${spacing()};
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 `
 
 const FooterLeft_ = styled.ul`

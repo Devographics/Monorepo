@@ -17,6 +17,7 @@ export type CustomizationOptions = {
     name?: string
     showDefaultSeries?: boolean
     enableYearSelect?: boolean
+    mergeOtherBuckets?: boolean
     mode?: SupportedMode
     supportedModes?: SupportedMode[]
     queryOnLoad?: boolean

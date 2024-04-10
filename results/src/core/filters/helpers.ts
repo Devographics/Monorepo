@@ -636,6 +636,10 @@ export const getInitFilters = (initOptions?: CustomizationOptions): Customizatio
         enableYearSelect: false,
         mode: MODE_DEFAULT,
         queryOnLoad: false,
+        cutoff: 1,
+        cutoffType: 'percent',
+        limit: 20,
+        mergeOtherBuckets: true,
         ...initOptions
     },
     filters: []
