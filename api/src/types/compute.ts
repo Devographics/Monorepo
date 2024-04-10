@@ -8,6 +8,9 @@ export interface GenericComputeArguments {
     parameters?: GenericComputeParameters
     facet?: string
     selectedEditionId?: string
+    // indicate if this was a second execution of the generic function
+    // triggered to fetch freeform data for the combined subfield
+    isCombinedPass?: boolean
 }
 
 export interface GenericComputeParameters {
