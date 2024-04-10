@@ -23,7 +23,6 @@ export function mergeBuckets<T extends Bucket | FacetBucket>({
     const getSum = (unit: keyof BucketData) => round(sum(buckets.map(b => getValue(b, unit))), 2)
 
     const mergedBucket = {
-        ...mergedProps,
         groupedBuckets: buckets,
         groupedBucketIds: buckets.map(b => b.id),
         [BucketUnits.COUNT]: getSum(BucketUnits.COUNT),
@@ -33,12 +32,12 @@ export function mergeBuckets<T extends Bucket | FacetBucket>({
             sumBy(buckets, b => b[BucketUnits.AVERAGE] || 0) / buckets.length,
             2
         ),
-        [BucketUnits.PERCENTILES]: mergePercentiles(buckets)
+        [BucketUnits.PERCENTILES]: mergePercentiles(buckets),
+        ...(isFacet
+            ? { [BucketUnits.PERCENTAGE_BUCKET]: getSum(BucketUnits.PERCENTAGE_BUCKET) }
+            : {}),
+        ...mergedProps
     } as T
-
-    if (isFacet) {
-        mergedBucket[BucketUnits.PERCENTAGE_BUCKET] = getSum(BucketUnits.PERCENTAGE_BUCKET)
-    }
 
     if (axis) {
         // if we know it's a top-level Bucket and not a FacetBucket
@@ -79,13 +78,8 @@ export const combineFacetBuckets = (
             // for each facet, find the equivalent facetBuckets in all the main buckets
             // make sure to compact to remove undefined facetBuckets (when the equivalent
             // facetBucket doesn't exist in another main bucket)
-            // and also filter out facetBuckets with insufficient data, otherwise
-            // they will drag the percentageBucket average down
             const sameFacetBuckets = compact(
-                selectedBuckets.map(
-                    b =>
-                        b?.facetBuckets?.find(fb => fb.id === option.id && !fb.hasInsufficientData)!
-                )
+                selectedBuckets.map(b => b?.facetBuckets?.find(fb => fb.id === option.id)!)
             )
             // if the current/option we're considering doen't have any matching facet buckets
             // across all buckets, return undefined to get rid of it

@@ -36,18 +36,22 @@ export function groupUnderCutoff<T extends Bucket | FacetBucket>({
     const { cutoff, cutoffPercent } = mainAxis
     const keptBuckets = buckets.filter(b => keepBucket<T>(b, cutoff, cutoffPercent, isFacet))
     const cutoffBuckets = buckets.filter(b => !keptBuckets.map(b => b.id).includes(b.id))
-    const cutoffGroupBucket = mergeBuckets<T>({
-        buckets: cutoffBuckets,
-        mergedProps: {
-            id: CUTOFF_ANSWERS,
-            groupedBucketIds: cutoffBuckets.map(b => b.id),
-            groupedBuckets: cutoffBuckets
-        },
-        isFacet,
-        axis: secondaryAxis
-    })
+    if (cutoffBuckets.length > 0) {
+        const cutoffGroupBucket = mergeBuckets<T>({
+            buckets: cutoffBuckets,
+            mergedProps: {
+                id: CUTOFF_ANSWERS,
+                groupedBucketIds: cutoffBuckets.map(b => b.id),
+                groupedBuckets: cutoffBuckets
+            },
+            isFacet,
+            axis: secondaryAxis
+        })
 
-    return cutoffBuckets.length > 0 ? [...keptBuckets, cutoffGroupBucket] : keptBuckets
+        return cutoffBuckets.length > 0 ? [...keptBuckets, cutoffGroupBucket] : keptBuckets
+    } else {
+        return buckets
+    }
 }
 
 export async function cutoffData(

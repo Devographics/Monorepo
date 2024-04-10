@@ -4,6 +4,7 @@ import sortBy from 'lodash/sortBy.js'
 import isEmpty from 'lodash/isEmpty.js'
 import {
     CUTOFF_ANSWERS,
+    INSUFFICIENT_DATA,
     NOT_APPLICABLE,
     NO_ANSWER,
     NO_MATCH,
@@ -30,6 +31,7 @@ export function sortBuckets<T extends Bucket | FacetBucket>(
     sortedBuckets = putBucketLast<T>(sortedBuckets, OTHER_ANSWERS)
     sortedBuckets = putBucketLast<T>(sortedBuckets, NOT_APPLICABLE)
     sortedBuckets = putBucketLast<T>(sortedBuckets, NO_ANSWER)
+    sortedBuckets = putBucketLast<T>(sortedBuckets, INSUFFICIENT_DATA)
     return sortedBuckets
 }
 

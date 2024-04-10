@@ -184,7 +184,7 @@ function calculatePercentiles2({
 
     return percentiles
 }
-const zeroPercentiles = {
+export const zeroPercentiles = {
     p0: 0,
     p10: 0,
     p25: 0,

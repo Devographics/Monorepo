@@ -413,10 +413,10 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             await addOverallBucket(results, axis1, options)
         }
 
-        results = await applyDatasetCutoff(results, computeArguments)
-
         // once buckets don't move anymore we can calculate percentages
         await addPercentages(results)
+
+        results = await applyDatasetCutoff(results, computeArguments, axis2, axis1)
 
         // await addDeltas(results)
 
@@ -444,7 +444,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         // group any "non-standard" bucket, including cutoff data, unmatched answers,
         // off-limit answers, etc.
-        await groupOtherBuckets(results, axis1)
+        await groupOtherBuckets(results, axis2, axis1)
 
         await addLabels(results, axis2, axis1)
     } else {
@@ -452,9 +452,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 
-        results = await applyDatasetCutoff(results, computeArguments)
-
         await addPercentages(results)
+
+        results = await applyDatasetCutoff(results, computeArguments, axis1)
 
         // await addDeltas(results)
 

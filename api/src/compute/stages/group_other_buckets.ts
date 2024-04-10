@@ -15,13 +15,15 @@ export async function groupOtherBuckets(
             const regularBuckets = editionData.buckets.filter(isNotSpecialBucket)
             const specialBuckets = editionData.buckets.filter(isSpecialBucket)
 
-            const combinedOtherBucket = mergeBuckets({
-                buckets: specialBuckets,
-                mergedProps: { id: OTHER_ANSWERS },
-                axis: axis2
-            })
+            if (specialBuckets.length > 0) {
+                const combinedOtherBucket = mergeBuckets({
+                    buckets: specialBuckets,
+                    mergedProps: { id: OTHER_ANSWERS },
+                    axis: axis2
+                })
 
-            editionData.buckets = [...regularBuckets, combinedOtherBucket]
+                editionData.buckets = [...regularBuckets, combinedOtherBucket]
+            }
         }
     }
 }

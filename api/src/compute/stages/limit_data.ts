@@ -23,13 +23,19 @@ export function groupOverLimit<T extends Bucket | FacetBucket>(
     axis?: ComputeAxisParameters
 ) {
     const { limitedBuckets, discardedBuckets } = limitBuckets<T>(buckets, limit)
-    const overlimitGroupBucket = mergeBuckets({
-        buckets: discardedBuckets,
-        mergedProps: { id: OVERLIMIT_ANSWERS },
-        axis
-    })
+    if (discardedBuckets.length > 0) {
+        const overlimitGroupBucket = mergeBuckets({
+            buckets: discardedBuckets,
+            mergedProps: { id: OVERLIMIT_ANSWERS },
+            axis
+        })
 
-    return discardedBuckets.length > 0 ? [...limitedBuckets, overlimitGroupBucket] : limitedBuckets
+        return discardedBuckets.length > 0
+            ? [...limitedBuckets, overlimitGroupBucket]
+            : limitedBuckets
+    } else {
+        return buckets
+    }
 }
 
 /*
