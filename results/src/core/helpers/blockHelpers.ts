@@ -17,7 +17,7 @@ export const getBlockKey = ({ block }: { block: BlockDefinition }) => {
     if (block.template === 'tool_experience') {
         namespace = 'tools'
     }
-    const blockId = replaceOthers(block?.id)
+    const blockId = replaceOthers(block?.fieldId || block?.id)
     return `${namespace}.${blockId}`
 }
 
@@ -33,8 +33,8 @@ export const getBlockTabKey = ({
     block.tabId
         ? block.tabId
         : variantIndex === 0
-            ? 'tabs.all_respondents'
-            : getBlockTitleKey({ block, pageContext })
+        ? 'tabs.all_respondents'
+        : getBlockTitleKey({ block, pageContext })
 
 export const getBlockNoteKey = ({ block }: { block: BlockDefinition }) =>
     block.noteId || `${getBlockKey({ block })}.note`
@@ -178,7 +178,6 @@ export const getBlockQuestion = ({
 }) => {
     const blockQuestion = block.questionKey && getString(block.questionKey)?.t
     const questionKey = `${getBlockKey({ block })}.question`
-
     const translation = getString(questionKey)
     return blockQuestion || translation?.tClean || translation?.t
 }

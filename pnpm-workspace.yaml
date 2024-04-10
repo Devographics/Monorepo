@@ -9,6 +9,7 @@ packages:
     - 'surveyform'
     - 'surveyadmin'
     - 'results'
+    - 'results-astro'
     - 'charts' # WIP will replace results
     - 'jobs'
     - 'homepage'

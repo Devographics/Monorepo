@@ -1,19 +1,22 @@
 import React from 'react'
 import { FacetRow } from '../HorizontalBarRow'
 import Legend from '../../common2/Legend'
-import { ViewProps } from '../types'
-import { Row, Rows, SeriesHeading } from 'core/charts/common2'
+import { ViewDefinition } from '../types'
+import { Row, Rows } from 'core/charts/common2'
+import { removeNoAnswer, removeNotApplicable } from '../helpers/steps'
+import { BucketUnits } from '@devographics/types'
 
-export const PercentageBucket = ({ buckets, ...rest }: ViewProps) => {
-    return (
-        <>
-            <SeriesHeading />
-            <Legend {...rest} />
+export const PercentageBucket: ViewDefinition = {
+    getValue: facetBucket => facetBucket[BucketUnits.PERCENTAGE_BUCKET] || 0,
+    steps: [removeNotApplicable, removeNoAnswer],
+    showLegend: true,
+    component: props => {
+        return (
             <Rows>
-                {buckets.map((bucket, i) => (
-                    <Row key={bucket.id} bucket={bucket} {...rest} rowComponent={FacetRow} />
+                {props.buckets.map((bucket, i) => (
+                    <Row key={bucket.id} bucket={bucket} {...props} rowComponent={FacetRow} />
                 ))}
             </Rows>
-        </>
-    )
+        )
+    }
 }

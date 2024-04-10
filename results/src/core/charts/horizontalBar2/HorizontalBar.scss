@@ -1,3 +1,10 @@
+.chart-horizontal-bar {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .chart-bar,
 .chart-faceted-bar {
     position: relative;
@@ -7,7 +14,7 @@
     background: var(--color);
     width: calc(var(--width) * 1%);
     left: calc(var(--offset) * 1%);
-    height: 20px;
+    height: calc(var(--rowHeight) * 1px);
     display: flex;
     justify-content: center;
     align-items: center;

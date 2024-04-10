@@ -5,8 +5,14 @@ import { useBlockQuestion } from 'core/helpers/blockHelpers'
 import { BlockDefinition } from 'core/types'
 import { QuestionIcon } from 'core/icons'
 
-export const BlockQuestion = ({ block }: { block: BlockDefinition }) => {
-    const blockQuestion = useBlockQuestion({ block })
+export const BlockQuestion = ({
+    block,
+    question
+}: {
+    block?: BlockDefinition
+    question?: string
+}) => {
+    const blockQuestion = question || (block && useBlockQuestion({ block }))
     if (blockQuestion) {
         return (
             <Question_ className="Block__Question">

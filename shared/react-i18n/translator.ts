@@ -1,12 +1,12 @@
 // TODO: not yet used in results app
 import template from 'lodash/template.js'
-import {
+import type {
     Locale,
     Translation,
     LegacyTranslator,
     StringTranslator,
     StringTranslatorResult
-} from "./typings"
+} from "@devographics/i18n"
 /*
 
 Returns the translation string object

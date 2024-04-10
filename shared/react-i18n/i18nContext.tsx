@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from 'react'
 import { getTranslator, getStringTranslator } from './translator'
-import { Locale, LegacyTranslator, StringTranslator } from './typings'
+import { Locale, LegacyTranslator, StringTranslator } from '@devographics/i18n'
 
 export const I18nContext = createContext<I18nContextType | null>(null)
 

@@ -8,6 +8,7 @@ import { initRedis, fetchJson as fetchRedis, storeRedis } from '@devographics/re
 import { logToFile } from '@devographics/debug'
 import { CacheType, GetFromCacheOptions, SourceType } from './types'
 import { FetchPipelineStep, runFetchPipeline } from './pipeline'
+import { EnvVar, getEnvVar } from "@devographics/helpers"
 // import { compressJSON, decompressJSON } from './compress'
 
 export const memoryCache = new NodeCache({
@@ -319,7 +320,7 @@ export async function getFromCache<T = any>({
 }
 
 export const getApiUrl = () => {
-    const apiUrl = process.env.API_URL
+    const apiUrl = getEnvVar(EnvVar.API_URL) //process.env.API_URL
     if (!apiUrl) {
         throw new Error('process.env.API_URL not defined, it should point the the API')
     }
@@ -333,7 +334,43 @@ function extractQueryName(queryString: string) {
 }
 
 /**
+ * Generic GraphQL fetcher
+ * Allows to override the API URL
+ * and all other fetch options like "cache"
+ * @param param0 
+ * @returns 
+ */
+export async function graphqlFetcher<TData = any, TVar = any>(
+    query: string,
+    variables?: TVar,
+    fetchOptions?: Partial<ResponseInit>,
+    apiUrl_?: string,
+): Promise<{
+    data?: TData,
+    errors?: Array<Error>
+}> {
+    const apiUrl = apiUrl_ || getApiUrl()
+    // console.debug(`// querying ${apiUrl} (${query.slice(0, 15)}...)`)
+    const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+        },
+        body: JSON.stringify({ query, variables: {} }),
+        ...(fetchOptions || {})
+    })
+    const json: any = await response.json()
+    return json
+}
+
+/**
+ * Generic GraphQL fetcher
+ * 
  * Returns null in case of error
+ * 
+ * @deprecated This function handles file logging internally,
+ * it should be handled at app level instead
  */
 export const fetchGraphQLApi = async <T = any>({
     query,

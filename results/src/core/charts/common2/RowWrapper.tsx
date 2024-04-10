@@ -1,15 +1,26 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import { RowHeading } from '../common2/RowHeading'
 import { RowCommonProps, RowExtraProps } from './types'
 import { UserIcon } from 'core/icons'
+import classNames from 'classnames'
+import { OVERALL } from '@devographics/constants'
+import { RowDataProps } from '../horizontalBar2/types'
 
-export const RowWrapper = (props: RowCommonProps & RowExtraProps & { children: ReactNode }) => {
-    const { bucket, isGroupedBucket = false, children } = props
-    const className = `chart-row chart-row-${isGroupedBucket ? 'grouped' : 'ungrouped'}`
+export const RowWrapper = (
+    props: RowDataProps & RowCommonProps & RowExtraProps & { children: JSX.Element }
+) => {
+    const { chartState, bucket, isGroupedBucket = false, children } = props
+    const isOverallBucket = bucket.id === OVERALL
+    const className = classNames(
+        'chart-row',
+        { 'chart-row-grouped': isGroupedBucket },
+        { 'chart-row-overall': isOverallBucket }
+    )
+
     return (
         <div className={className}>
             <RowHeading {...props} />
-            <div className="chart-row-data">{children}</div>
+            <div className="chart-row-content">{children}</div>
             <div className="chart-row-metadata">
                 <UserIcon size={'small'} /> {bucket.count}
             </div>

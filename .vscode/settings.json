@@ -30,5 +30,6 @@
     "results/public": true,
     "surveyform/logs": true
   },
-  "svn.ignoreMissingSvnWarning": true
+  "svn.ignoreMissingSvnWarning": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
