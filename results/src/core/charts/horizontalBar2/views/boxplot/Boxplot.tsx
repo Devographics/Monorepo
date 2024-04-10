@@ -1,7 +1,7 @@
 import './Boxplot.scss'
 import React, { useMemo, useRef } from 'react'
 import { RowDataProps, ViewDefinition, ViewProps } from '../../types'
-import { BAR_HEIGHT, Row, RowWrapper, Rows } from 'core/charts/common2'
+import { BAR_HEIGHT, RespondentCount, Row, RowWrapper, Rows } from 'core/charts/common2'
 import { BoxProps, HorizontalBox } from './Box'
 import { RowCommonProps, RowExtraProps } from 'core/charts/common2/types'
 import { useTheme } from 'styled-components'
@@ -46,6 +46,7 @@ const BoxplotView = (viewProps: ViewProps) => {
 
     const legends = [] as BlockLegend[]
 
+    console.log({ chartMax, contentHeight, contentWidth, groups })
     const { xScale, yScale } = useScales({ chartMax, contentHeight, contentWidth, groups })
     const rowProps = {
         ...viewProps,
@@ -66,7 +67,7 @@ const BoxplotView = (viewProps: ViewProps) => {
                     <Row key={bucket.id} bucket={bucket} {...rowProps} rowComponent={BoxplotRow} />
                 ))}
             </Rows>
-            <div className="chart-axis-bottom">
+            <div className="chart-axis chart-axis-bottom">
                 <div></div>
                 <div className="chart-row-content" ref={contentRef}>
                     <svg className="boxplot-svg">
@@ -120,7 +121,7 @@ const BoxplotRow = (
     }
 
     return (
-        <RowWrapper {...props}>
+        <RowWrapper {...props} rowMetadata={<RespondentCount count={bucket.count} />}>
             <svg style={{ height: BAR_HEIGHT }} className="boxplot-svg">
                 <HorizontalBox {...boxProps} />
             </svg>

@@ -89,7 +89,6 @@ const FiltersPanel = ({
         // if chart filters have been passed, use them to extend the default init filters
         initState = { ...initState, ...variant.chartFilters }
     }
-    console.log(initState)
     const [filtersState, setFiltersState] = useState(initState)
 
     const [customPresets, setCustomPresets] = useStickyState([], 'filters_panel_presets')

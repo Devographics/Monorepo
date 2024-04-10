@@ -48,8 +48,6 @@ export const PercentageBucket: ViewDefinition = {
         const totalWidthWithOffset = Math.abs(largestNegativeOffset) + largestPositiveOffset + 100
 
         const rowOffsetShrinkRatio = 100 / totalWidthWithOffset
-        console.log(totalWidthWithOffset)
-        console.log(rowOffsetShrinkRatio)
         allRowsCellDimensions = allRowsCellDimensions.map(cd =>
             applyRatio<Dimension>(cd, rowOffsetShrinkRatio)
         )
