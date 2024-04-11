@@ -18,7 +18,7 @@ import { initTheme } from "@/lib/theme";
 import { getLocalesWithStrings } from "@devographics/i18n/server";
 import { makeTranslatorFunc } from "@devographics/i18n";
 import type { PageDefinition } from "@/lib/sitemap";
-import { ClientLayout } from "@/components/ClientLayout";
+import { ClientOnlyLayout } from "@/components/ClientOnlyLayout";
 
 /**
  * TODO: there is no ISR in Astro
@@ -54,6 +54,7 @@ export const getStaticPaths = (async () => {
         locale: "en-US",
       },
       props: {
+        // @ts-ignore TODO
         pageDefinition: pageDefinition as PageDefinition,
       },
     };
@@ -110,7 +111,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 ---
 
 <Layout title="Welcome to Astro.">
-  <ClientLayout client:only>
+  <ClientOnlyLayout client:only>
     <main>
       {/* TODO get showTitle from page context */}
       <PageTemplate showTitle={true} />
@@ -177,5 +178,5 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
         />
       </ul>
     </main>
-  </ClientLayout>
+  </ClientOnlyLayout>
 </Layout>
