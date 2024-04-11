@@ -34,7 +34,7 @@ const { showTitle } = Astro.props;
       !!blocks?.length ? (
         blocks.map((block, i) => {
           // TODO: explore how to properly use client:only to quickly migrate React code that uses Styled Components
-          return <BlockWrapper client:only block={block} index={i} />;
+          return <BlockWrapper client:only="astro" block={block} index={i} />;
         })
       ) : (
         <p>Empty page</p>
