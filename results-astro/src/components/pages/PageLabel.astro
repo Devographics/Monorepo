@@ -14,7 +14,7 @@ const { i18n, survey } = Astro.locals;
 <>
   {
     getPageLabel({
-      pageContext: page,
+      pageDefinition: page,
       survey,
       t: i18n.t,
       options: { includeWebsite },

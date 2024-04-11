@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 // @see https://docs.astro.build/en/recipes/add-yaml-support/
 import yaml from '@rollup/plugin-yaml';
+import react from '@astrojs/react';
 
 // import vercel from "@astrojs/vercel/serverless";
 
@@ -8,7 +9,10 @@ import yaml from '@rollup/plugin-yaml';
 export default defineConfig({
     vite: {
         plugins: [yaml()]
-    }
+    },
+    integrations: [
+        react()
+    ]
     // we do NOT setup i18n here
     // black box i18n redirection are hard to decipher
     // and show an eratic behaviour during dev

@@ -14,7 +14,8 @@ declare namespace App {
     interface Locals {
         survey: import("@devographics/types").EditionMetadata
         sitemap: import("./lib/sitemap").Sitemap
-        pageContext: import("./lib/sitemap").PageDefinition
+        pageDefinition: import("./lib/sitemap").PageDefinition
+        pageData: any,
         theme: import("./lib/theme").Theme,
         i18n: {
             t: import("@devographics/i18n").StringTranslator,

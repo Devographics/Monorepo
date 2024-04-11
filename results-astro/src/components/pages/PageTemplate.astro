@@ -1,8 +1,7 @@
 ---
 import PageHeader from "@/components/pages/PageHeader.astro";
 import PageFooter from "@/components/pages/PageFooter.astro";
-// import PageFooter from 'core/pages/PageFooter'
-// import { usePageContext } from 'core/helpers/pageContext'
+import BlockWrapper from "@/components/block/BlockWrapper.astro";
 // import BlockWrapper from 'core/blocks/block/BlockWrapper'
 //
 //     const context = usePageContext()
@@ -23,12 +22,24 @@ import PageFooter from "@/components/pages/PageFooter.astro";
 interface Props {
   showTitle?: boolean;
 }
-const { i18n, pageContext } = Astro.locals;
-const { is_hidden } = pageContext;
+const { i18n, pageDefinition } = Astro.locals;
+const { is_hidden, blocks } = pageDefinition;
 const { showTitle } = Astro.props;
 ---
 
-<main>
+<Fragment>
   {showTitle && <PageHeader />}
+  <main class="Page__Contents">
+    {
+      !!blocks?.length ? (
+        blocks.map((block, i) => {
+          // TODO: explore how to properly use client:only to quickly migrate React code that uses Styled Components
+          return <BlockWrapper client:only block={block} index={i} />;
+        })
+      ) : (
+        <p>Empty page</p>
+      )
+    }
+  </main>
   {!is_hidden && <PageFooter />}
-</main>
+</Fragment>

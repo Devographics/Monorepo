@@ -1,0 +1,41 @@
+---
+import TabsWrapper from "@/components/block/BlockTabsWrapper";
+import EmptyWrapper from "@/components/block/BlockEmptyWrapper.astro";
+import TitleWrapper from "@/components/ui/Dummy.astro";
+import ErrorBoundary from "@/components/ui/Dummy.astro";
+//import type { BlockVariantDefinition } from "@/lib/core/types";
+
+const { block, index, withMargin } = Astro.props;
+interface Props {
+  block: any; // BlockVariantDefinition,
+  index: number;
+  withMargin?: boolean;
+}
+const { pageDefinition, pageData } = Astro.locals;
+// const { pageData } = pageDefinition;
+// TODO: reintroduce screenshotting blocks via this param
+// It was previously stored in page context but it belongs to the global context instead
+const isCapturing = false;
+const wrapBlock = block.wrapBlock ?? block.variants?.[0]?.wrapBlock ?? true;
+// Dynamic tags are fine in Astro
+// @see https://docs.astro.build/en/basics/astro-syntax/#dynamic-tags
+const WrapperComponent = wrapBlock
+  ? isCapturing
+    ? TitleWrapper
+    : TabsWrapper
+  : EmptyWrapper;
+const isHidden = block.variants?.every((v: any) => v.hidden) && !isCapturing;
+---
+
+{
+  isHidden ? null : (
+    <ErrorBoundary>
+      <WrapperComponent
+        block={block}
+        pageData={pageData}
+        blockIndex={index}
+        withMargin={withMargin}
+      />
+    </ErrorBoundary>
+  )
+}

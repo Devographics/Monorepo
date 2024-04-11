@@ -42,16 +42,18 @@ export const getStaticPaths = (async () => {
     "Paths in sitemap:",
     sitemap.map((s) => s.path),
   );
-  return sitemap.map((pageContext) => {
+  return sitemap.map((pageDefinition) => {
     return {
       params: {
         path:
-          pageContext.path === "/" ? undefined : removeSlash(pageContext.path),
+          pageDefinition.path === "/"
+            ? undefined
+            : removeSlash(pageDefinition.path),
         // TODO: generate for each possible locale here
         locale: "en-US",
       },
       props: {
-        pageContext: pageContext as PageDefinition,
+        pageDefinition: pageDefinition as PageDefinition,
       },
     };
   });
@@ -96,8 +98,8 @@ Astro.locals.i18n = {
 
 // Set page specific values
 
-const { pageContext } = Astro.props;
-Astro.locals.pageContext = pageContext;
+const { pageDefinition } = Astro.props;
+Astro.locals.pageDefinition = pageDefinition;
 
 const { path } = Astro.params;
 
