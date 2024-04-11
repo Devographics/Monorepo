@@ -1,7 +1,9 @@
-import { QuestionMetadata } from '@devographics/types'
+import { Question, QuestionMetadata } from '@devographics/types'
 import { ChartState, Views } from '../types'
 import { ChartValues } from 'core/charts/multiItemsExperience/types'
 import round from 'lodash/round'
+import { StringTranslator } from '@devographics/react-i18n'
+import { getEntityName } from 'core/helpers/entities'
 
 export const isPercentage = (view: ChartState['view']) =>
     [Views.PERCENTAGE_BUCKET, Views.PERCENTAGE_QUESTION].includes(view)
@@ -50,7 +52,7 @@ function largeNumberFormatter(num: number, digits = 1) {
     return item ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0'
 }
 
-export const formatPercentage = (value: number) => `${round(value, 1)}%`
+export const formatPercentage = (value: number) => `${Math.floor(value)}%`
 
 export const formatValue = ({
     value,
@@ -72,4 +74,37 @@ export const formatValue = ({
         }
     }
     return value.toString()
+}
+
+export const getQuestionLabel = ({
+    getString,
+    question,
+    i18nNamespace
+}: {
+    getString: StringTranslator
+    question: QuestionMetadata
+    i18nNamespace?: string
+}) => {
+    let key, label, i18nNamespace_
+    const { sectionId, template, entity, id } = question
+    const entityName = entity && getEntityName(entity)
+    if (entityName) {
+        label = entityName
+    } else {
+        if (i18nNamespace) {
+            i18nNamespace_ = i18nNamespace
+        } else if (sectionId === 'other_tools') {
+            i18nNamespace_ = `tools_others`
+        } else if (['feature', 'feature3'].includes(template)) {
+            i18nNamespace_ = `features`
+        } else if (template === 'tool') {
+            i18nNamespace_ = `tools`
+        } else {
+            i18nNamespace_ = sectionId
+        }
+        key = `${i18nNamespace_}.${id}`
+        const s = getString(key)
+        label = s?.tClean || s?.t || id
+    }
+    return { key, label }
 }

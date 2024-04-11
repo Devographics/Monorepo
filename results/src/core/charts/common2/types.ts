@@ -1,15 +1,20 @@
-import { Bucket } from '@devographics/types'
+import { Bucket, QuestionMetadata } from '@devographics/types'
 import { Dispatch, SetStateAction } from 'react'
-import { ChartValues } from '../multiItemsExperience/types'
-import { BlockDefinition, PageContextValue } from 'core/types'
+import { ChartValues, Dimension } from '../multiItemsExperience/types'
+import { BlockVariantDefinition, PageContextValue } from 'core/types'
 import { ChartState } from '../horizontalBar2/types'
+import { DataSeries } from 'core/filters/types'
+import { CustomVariant } from 'core/filters/helpers'
 
 export type RowComponent = (props: any) => JSX.Element | null
 
 export type RowCommonProps = {
     buckets: Bucket[]
     bucket: Bucket
-    block: BlockDefinition
+    block: BlockVariantDefinition
+    rowIndex: number
+    allRowsCellDimensions: Dimension[][]
+    allRowsOffsets: number[]
 }
 
 export type RowExtraProps = {
@@ -35,8 +40,14 @@ export enum ColumnModes {
 
 export type CommonProps = {
     pageContext: PageContextValue
-    buckets: Bucket[]
     chartState: ChartState
-    block: BlockDefinition
+    block: BlockVariantDefinition
+    series: DataSeries<any>[]
+    variant?: CustomVariant
+    question: QuestionMetadata
+}
+
+export type ViewProps = CommonProps & {
+    buckets: Bucket[]
     chartValues: ChartValues
 }

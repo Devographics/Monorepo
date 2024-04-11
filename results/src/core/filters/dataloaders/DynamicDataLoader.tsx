@@ -1,7 +1,7 @@
 import React, { ReactNode, Dispatch, SetStateAction, useState } from 'react'
 import { MODE_FACET, MODE_COMBINED, MODE_GRID, CHART_MODE_DEFAULT } from '../constants'
 import { CustomizationDefinition, DataSeries } from '../types'
-import { BlockDefinition } from 'core/types/index'
+import { BlockVariantDefinition } from 'core/types/index'
 import { BucketUnits, AllQuestionData, Bucket } from '@devographics/types'
 import GridDataLoader from './GridDataLoader'
 import CombinedDataLoader from './CombinedDataLoader'
@@ -17,7 +17,7 @@ export type ApiError = any
 
 export interface DynamicDataLoaderWrapperProps<T> {
     defaultSeries: DataSeries<T>
-    block: BlockDefinition
+    block: BlockVariantDefinition
     units: BucketUnits
     setUnits: Dispatch<SetStateAction<BucketUnits>>
     children: ReactNode
@@ -25,7 +25,7 @@ export interface DynamicDataLoaderWrapperProps<T> {
     setChartFilters: Dispatch<SetStateAction<CustomizationDefinition>>
     layout?: 'grid' | 'column'
     providedSeries?: DataSeries<T>[]
-    getChartData: (data: T, block: BlockDefinition) => Bucket[]
+    getChartData: (data: T, block: BlockVariantDefinition) => Bucket[]
     getChartDataOptions?: any
 }
 

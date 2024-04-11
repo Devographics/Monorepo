@@ -53,7 +53,7 @@ Pagination.defaultProps = {
 
 const Container = styled.div`
     border-bottom: ${props => props.theme.separationBorder};
-    z-index: 10;
+    /* z-index: 10; */
     position: relative;
     display: grid;
     grid-template-columns: 1fr auto 1fr;

@@ -17,14 +17,14 @@ import {
     CustomizationFiltersSeries,
     PanelState
 } from './types'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 interface SeriesProps {
     allFilters: FilterItem[]
     series: CustomizationFiltersSeries
     index: number
     stateStuff: PanelState
-    block: BlockDefinition
+    block: BlockVariantDefinition
 }
 
 const Series = ({ allFilters, series, index, block, stateStuff }: SeriesProps) => {

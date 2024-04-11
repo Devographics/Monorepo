@@ -1,6 +1,6 @@
 import { useTheme } from 'styled-components'
 import { useI18n } from '@devographics/react-i18n'
-import { BlockLegend, BlockDefinition } from 'core/types/block'
+import { BlockLegend, BlockVariantDefinition } from 'core/types/block'
 import { stripHtml } from 'core/helpers/utils'
 import { useOptions } from 'core/helpers/options'
 
@@ -30,7 +30,7 @@ export const useLegends = ({
     namespace: providedNamespace,
     addNoAnswer = false
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     legendIds?: string[]
     namespace?: string
     addNoAnswer?: boolean

@@ -1,0 +1,21 @@
+.chart-gridlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.chart-gridlines-inner {
+    position: relative;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    height: 100%;
+}
+.chart-gridlines-item {
+    position: absolute;
+    left: calc(var(--index) * var(--interval) * 1%);
+    top: 0px;
+    bottom: 0px;
+    width: 1px;
+    border-right: 1px dotted var(--borderAltColor);
+}

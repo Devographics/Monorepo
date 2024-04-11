@@ -1,7 +1,7 @@
 import { cleanupValue } from "../helpers";
 import { normalize } from "../normalize";
 import set from "lodash/set.js";
-import { NormalizationMetadata, NormalizationToken } from "../../types";
+import { NormalizationMetadata, NormalizationToken } from "@devographics/types";
 import { prefixWithEditionId } from "@devographics/templates";
 import {
   NO_MATCH,

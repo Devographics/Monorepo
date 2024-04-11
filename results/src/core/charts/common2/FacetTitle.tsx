@@ -1,6 +1,6 @@
 import './FacetTitle.scss'
 import React from 'react'
-import { BlockDefinition, PageContextValue } from 'core/types'
+import { BlockVariantDefinition, PageContextValue } from 'core/types'
 import { Entity, QuestionMetadata } from '@devographics/types'
 import { getBlockKey, getBlockTitle } from 'core/helpers/blockHelpers'
 import { useI18n } from '@devographics/react-i18n'
@@ -15,7 +15,7 @@ export const FacetTitle = ({
     entities
 }: {
     facetQuestion: QuestionMetadata
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     entities: Entity[]
 }) => {
@@ -24,7 +24,7 @@ export const FacetTitle = ({
     const facetBlock = {
         id: facetQuestion?.id,
         sectionId: facetQuestion?.sectionId
-    } as BlockDefinition
+    } as BlockVariantDefinition
     const facetQuestionKey = `${getBlockKey({ block: facetBlock })}.question`
     const translation = getString(facetQuestionKey)?.t
     return (

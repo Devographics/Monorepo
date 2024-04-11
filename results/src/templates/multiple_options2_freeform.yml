@@ -5,4 +5,5 @@ queryOptions:
     addBucketsEntities: true
     subField: freeform
     addGroupedBuckets: true
-parameters: { cutoff: 10 }
+parameters: { cutoff: 10, mergeOtherBuckets: true }
+canCustomize: true

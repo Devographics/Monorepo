@@ -13,7 +13,7 @@ export const RowHeading = ({
 }: RowCommonProps & RowExtraProps) => {
     const { entity, id, label } = bucket
     const { isFreeformData } = bucket
-    const { i18nNamespace = block.fieldId || block.id } = block
+    const i18nNamespace = block.fieldId || block.id
 
     return (
         <h3 className="chart-row-heading">
@@ -25,13 +25,6 @@ export const RowHeading = ({
                 i18nNamespace={i18nNamespace}
                 label={label}
             />
-            {isFreeformData && (
-                <FreeformIcon
-                    className="chart-row-freeform-icon"
-                    size="petite"
-                    labelId="charts.freeform_data.description"
-                />
-            )}
             {setShowGroupedBuckets && (
                 <button onClick={() => setShowGroupedBuckets(!showGroupedBuckets)}>
                     {showGroupedBuckets ? '-' : `+${bucket.groupedBuckets?.length}`}

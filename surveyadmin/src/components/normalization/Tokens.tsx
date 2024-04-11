@@ -445,7 +445,7 @@ const PatternsDetails = ({}) => (
           <code>[p]</code>: Match partial word fragments.
         </li>
         <li>
-          <code>[l]</code>: List of items to match in any order.
+          <code>[l]</code>: Comma-separated list of items to match in any order.
         </li>
         <li>
           <code>[e]</code>: Match entire answer exactly.

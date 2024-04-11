@@ -1,0 +1,42 @@
+.chart-axis-top {
+    margin-top: var(--spacing);
+}
+.chart-axis-inner {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    border-top: 1px dotted var(--borderAltColor);
+    font-size: 0.8rem;
+}
+
+.chart-axis-ticks {
+    position: relative;
+    // display: grid;
+    // grid-template-columns: repeat(auto-fit, minmax(1%, 1fr));
+}
+.chart-axis-tick {
+    position: absolute;
+    left: calc(var(--index) * var(--interval) * 1%);
+    &::before {
+        position: absolute;
+        display: block;
+        content: ' ';
+        width: 1px;
+        height: 10px;
+        background: var(--borderAltColor);
+        top: -5px;
+    }
+}
+.chart-axis-tick-label {
+    transform: translate(-50%);
+    position: absolute;
+    top: 5px;
+    color: var(--textAltColor);
+    .chart-axis-top & {
+        top: -30px;
+    }
+}
+.chart-axis-label {
+    margin-top: var(--doubleSpacing);
+    display: flex;
+    justify-content: center;
+}

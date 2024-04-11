@@ -2,17 +2,16 @@ import React from 'react'
 import { RowWrapper } from '../common2/RowWrapper'
 import { Cell } from './HorizontalBarCell'
 import { RowCommonProps, RowExtraProps } from '../common2/types'
-import take from 'lodash/take'
-import sum from 'lodash/sum'
 import { RowDataProps } from './types'
 import { getViewDefinition } from './helpers/views'
-import { getRowOffset } from './helpers/other'
 import { useGradient } from './helpers/colors'
 import { useTheme } from 'styled-components'
+import { FreeformIndicator, RespondentCount } from '../common2'
 
 export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
     const theme = useTheme()
     const { bucket, chartState, chartValues } = props
+    const { isFreeformData } = bucket
     const { question, maxOverallValue = 1 } = chartValues
     const viewDefinition = getViewDefinition(chartState.view)
     const { getValue } = viewDefinition
@@ -21,8 +20,8 @@ export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProp
     const gradient = theme.colors.barChart.primaryGradient
 
     return (
-        <RowWrapper {...props}>
-            <div className="chart-bar">
+        <RowWrapper {...props} rowMetadata={<RespondentCount count={bucket.count} />}>
+            <>
                 <Cell
                     bucket={bucket}
                     chartState={chartState}
@@ -32,36 +31,33 @@ export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProp
                     chartValues={chartValues}
                     gradient={gradient}
                 />
-            </div>
+
+                {isFreeformData && (
+                    <div className="chart-row-freeform-icon-wrapper" style={{ '--offset': width }}>
+                        <FreeformIndicator />
+                    </div>
+                )}
+            </>
         </RowWrapper>
     )
 }
 
 export const FacetRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
-    const { buckets, bucket, chartState, chartValues } = props
-    const viewDefinition = getViewDefinition(chartState.view)
-    const { getValue } = viewDefinition
-    const { maxOverallValue = 1, facetQuestion } = chartValues
+    const { bucket, chartState, chartValues, rowIndex, allRowsCellDimensions, allRowsOffsets } =
+        props
+    const { facetQuestion } = chartValues
     const { facetBuckets } = bucket
 
-    const rowOffset = getRowOffset({ buckets, bucket, chartState })
+    const rowDimensions = allRowsCellDimensions[rowIndex]
+    const rowOffset = allRowsOffsets[rowIndex]
 
     return (
-        <RowWrapper {...props}>
+        <RowWrapper {...props} rowMetadata={<RespondentCount count={bucket.count} />}>
             <div className="chart-faceted-bar">
                 {facetBuckets.map((facetBucket, index) => {
                     const { id } = facetBucket
-                    const value = getValue(facetBucket)
-                    const ratio = 100 / maxOverallValue
-                    const width = value * ratio
-                    const offset = sum(
-                        take(
-                            facetBuckets.map(b => getValue(b) * ratio),
-                            index
-                        )
-                    )
+                    const { width, offset } = rowDimensions[index]
                     const gradient = useGradient({ id: facetBucket.id, question: facetQuestion })
-
                     return (
                         <Cell
                             key={id}

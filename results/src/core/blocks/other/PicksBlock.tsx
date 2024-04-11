@@ -8,6 +8,9 @@ import T from 'core/i18n/T'
 const PicksBlock = ({ block, data: entity }) => {
     const { id: pickId, variables } = block
     const { url } = variables
+    if (!entity) {
+        return
+    }
     const { name: fullName, twitter } = entity
 
     return (

@@ -5,13 +5,13 @@ import ChartContainer from 'core/charts/ChartContainer'
 import { useLegends } from 'core/helpers/legends'
 import { getTableData, groupDataByYears } from 'core/helpers/datatables'
 import { BucketUnits, OpinionQuestionData } from '@devographics/types'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 import OpinionStreamChart, { getChartData } from 'core/charts/opinion/OpinionStreamChart'
 
 const OPINION_BUCKET_KEYS_ID = 'opinions'
 
 interface OpinionBlockProps {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     data: OpinionQuestionData
     defaultUnits: BucketUnits
     keys: string[]

@@ -20,6 +20,21 @@ const predefinedKeys: { [key: string]: string } = {
     [OVERLIMIT_ANSWERS]: 'charts.overlimit_answers'
 }
 
+export type LabelObject = {
+    key?: string
+    label: string
+    shortLabel: string
+}
+
+const getFields = (item: any, fields: string[]) => {
+    for (const field of fields) {
+        if (item[field]) {
+            return item[field] as string
+        }
+    }
+    return undefined
+}
+
 export const getItemLabel = (options: {
     id: string | number
     label?: string
@@ -30,7 +45,8 @@ export const getItemLabel = (options: {
     getString: StringTranslator
     i18nNamespace?: string
     values?: any
-}) => {
+    html?: boolean
+}): LabelObject => {
     const {
         label: providedLabel,
         // section,
@@ -40,7 +56,8 @@ export const getItemLabel = (options: {
         id,
         getString,
         i18nNamespace,
-        values = {}
+        values = {},
+        html = false
     } = options
 
     let key, label, shortLabel
@@ -57,14 +74,14 @@ export const getItemLabel = (options: {
         key = predefinedKey || defaultKey
 
         const i18nLabelObject = getString(key, values)
-        const i18nLabel = i18nLabelObject.tClean || i18nLabelObject.t
+        const i18nLabel = getFields(i18nLabelObject, [html ? 'tHtml' : 'tClean', 't'])
 
         const shortLabelObject = getString(key + '.short', values, i18nLabel)
 
-        const entityName = entity && (entity.nameClean || entity.name)
+        const entityName = entity && getFields(entity, [html ? 'nameHtml' : 'nameClean', 'name'])
 
         label = String(i18nLabel || entityName || id)
-        shortLabel = String(shortLabelObject.tClean || shortLabelObject.t || label)
+        shortLabel = getFields(shortLabelObject, [html ? 'tHtml' : 'tClean', 't']) || label
     }
     return { key, label, shortLabel }
 }

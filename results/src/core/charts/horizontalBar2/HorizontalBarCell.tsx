@@ -10,6 +10,7 @@ import { formatValue } from './helpers/labels'
 import { getViewDefinition } from './helpers/views'
 import { useWidth } from '../common2/helpers'
 import { CellLabel } from '../common2'
+import { useEntities } from 'core/helpers/entities'
 
 // hide labels for cells under this size
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
@@ -44,12 +45,15 @@ export const Cell = ({
 }) => {
     const { ref, isWideEnough: showLabel } = useIsWideEnough()
 
+    const entities = useEntities()
+    const entity = entities.find(e => e.id === bucket.id)
     const { question, facetQuestion } = chartValues
-    const viewDefinition = getViewDefinition(chartState.view)
+    const { view, sort } = chartState
+    const viewDefinition = getViewDefinition(view)
     const { getValue } = viewDefinition
     const { getString } = useI18n()
 
-    const { id, count, entity } = bucket
+    const { id, count } = bucket
     const value = getValue(bucket)
     const style = {
         '--percentageValue': value,
@@ -68,10 +72,13 @@ export const Cell = ({
 
     const v = formatValue({ value, chartState, question: facetQuestion || question })
 
+    const isActiveSort = sort === id
+    const className = `chart-cell horizontal-chart-cell ${isActiveSort ? 'active-sort' : ''}`
+
     return (
         <Tooltip
             trigger={
-                <div className="chart-cell horizontal-chart-cell" style={style} ref={ref}>
+                <div className={className} style={style} ref={ref}>
                     {showLabel && <CellLabel label={v} />}
                 </div>
             }

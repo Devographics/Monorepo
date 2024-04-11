@@ -1,9 +1,16 @@
-import { DEFAULT, NOT_APPLICABLE, NO_ANSWER, OVERALL } from '@devographics/constants'
+import {
+    DEFAULT,
+    INSUFFICIENT_DATA,
+    NOT_APPLICABLE,
+    NO_ANSWER,
+    OVERALL
+} from '@devographics/constants'
 import { QuestionMetadata } from '@devographics/types'
 import { useTheme } from 'styled-components'
 import colors from 'Theme/colors'
 
-export const neutralColor = '#ffffff33'
+export const neutralColor = '#ffffff44'
+export const neutralColor2 = '#ffffff22'
 
 export type ColorScale = {
     [key: string]: string[]
@@ -11,11 +18,13 @@ export type ColorScale = {
 
 export const useDefaultColorScale = () => {
     const theme = useTheme()
+    const { colors } = theme
     return {
-        [DEFAULT]: [theme.colors.velocity[4], theme.colors.velocity[8]],
+        [DEFAULT]: [colors.velocity[4], colors.velocity[8]],
         [NOT_APPLICABLE]: [neutralColor, neutralColor],
         [NO_ANSWER]: [neutralColor, neutralColor],
-        [OVERALL]: [neutralColor, neutralColor]
+        [OVERALL]: [neutralColor, neutralColor],
+        [INSUFFICIENT_DATA]: [neutralColor2, neutralColor2]
     } as ColorScale
 }
 
@@ -37,8 +46,12 @@ export const useColorScale = ({ question }: { question: QuestionMetadata }) => {
                 })
             } else {
                 question.options.forEach((option, index) => {
-                    const color = theme.colors.distinct[index % theme.colors.distinct.length]
-                    colorScale[option.id] = [color, color]
+                    if (option.id === NOT_APPLICABLE) {
+                        colorScale[option.id] = [neutralColor, neutralColor]
+                    } else {
+                        const color = theme.colors.distinct[index % theme.colors.distinct.length]
+                        colorScale[option.id] = [color, color]
+                    }
                 })
             }
         }

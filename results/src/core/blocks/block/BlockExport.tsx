@@ -9,7 +9,7 @@ import { mq, spacing, fontSize } from 'core/theme'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import ModalTrigger from 'core/components/ModalTrigger'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement('#___gatsby')
@@ -48,7 +48,7 @@ const BlockExport = ({
     title
 }: {
     data: any
-    block: BlockDefinition
+    block: BlockVariantDefinition
     title?: any
 }) => {
     return (

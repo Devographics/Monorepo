@@ -1,10 +1,9 @@
-import { BlockDefinition } from 'core/types'
-import camelCase from 'lodash/camelCase.js'
-import { indentString } from './utils'
-import { ResponsesParameters, Filters, BucketUnits } from '@devographics/types'
+import { BlockVariantDefinition } from 'core/types'
+import { ResponsesParameters, Filters, BucketUnits, ResultsSubFieldEnum } from '@devographics/types'
 import { PageContextValue } from 'core/types/context'
 import isEmpty from 'lodash/isEmpty'
-import { FacetItem } from 'core/filters/types'
+import { CustomizationDefinition, CustomizationOptions, FacetItem } from 'core/filters/types'
+import { conditionsToFilters } from 'core/filters/helpers'
 
 export const argumentsPlaceholder = '<ARGUMENTS_PLACEHOLDER>'
 
@@ -14,6 +13,9 @@ export const getEntityFragment = () => `entity {
     name
     nameHtml
     nameClean
+    description
+    descriptionHtml
+    descriptionClean
     id
     type
     example {
@@ -71,7 +73,6 @@ export const getFacetFragment = (addBucketsEntities?: boolean) => `
         percentageQuestion
         percentageSurvey
         percentageBucket
-        isFreeformData
         hasInsufficientData
         ${addBucketsEntities ? getEntityFragment() : ''}
     }
@@ -127,12 +128,18 @@ interface ResponseArgumentsStrings {
 
 const facetItemToFacet = ({ sectionId, id }: FacetItem) => `${sectionId}__${id}`
 
+export interface SeriesParams {
+    name: string
+    queryArgs: QueryArgs
+}
+
 export interface QueryArgs {
     facet?: FacetItem
     filters?: Filters
     parameters?: ResponsesParameters
     xAxis?: string
     yAxis?: string
+    fieldId?: string
 }
 export const getQueryArgsString = ({
     facet,
@@ -174,6 +181,7 @@ export interface ProvidedQueryOptions {
     addRootNode?: boolean
     addQuestionEntity?: boolean
     addQuestionComments?: boolean
+    addGroupedBuckets?: boolean
     fieldId?: string
 }
 
@@ -217,114 +225,100 @@ const getBucketFragment = (options: {
 
 export const getDefaultQuery = ({
     queryOptions,
-    queryArgs = {}
+    series
 }: {
     queryOptions: QueryOptions
-    queryArgs?: QueryArgs
+    series: SeriesParams[]
 }) => {
+    const { surveyId, editionId, sectionId } = queryOptions
+
+    return `
+query {
+    surveys {
+    ${surveyId} {
+        ${editionId} {
+        ${sectionId} {
+            ${series.map(serie => getSerieFragment({ queryOptions, serie }))}
+        }
+        }
+    }
+    }
+}
+`
+}
+
+const getSerieFragment = ({
+    queryOptions,
+    serie
+}: {
+    queryOptions: QueryOptions
+    serie: SeriesParams
+}) => {
+    const { name, queryArgs } = serie
     const {
-        surveyId,
-        editionId,
-        sectionId,
         questionId,
-        fieldId,
         subField = 'responses',
         addBucketsEntities = true,
         allEditions = false,
         addArgumentsPlaceholder = false,
         addBucketFacetsPlaceholder = false,
         addQuestionEntity = false,
-        addQuestionComments = false
+        addQuestionComments = false,
+        addGroupedBuckets = false
     } = queryOptions
     const queryArgsString = addArgumentsPlaceholder
         ? argumentsPlaceholder
         : getQueryArgsString(queryArgs)
     const editionType = allEditions ? 'allEditions' : 'currentEdition'
 
-    const questionIdString = fieldId ? `${questionId}: ${fieldId}` : questionId
+    const questionIdString = name ? `${name}: ${questionId}` : questionId
 
     return `
-surveys {
-  ${surveyId} {
-    ${editionId} {
-      ${sectionId} {
         ${questionIdString} {
-          ${addQuestionEntity ? getEntityFragment() : ''}
-          ${addQuestionComments ? getCommentsCountFragment() : ''}
-          ${subField}${queryArgsString} {
+            ${addQuestionEntity ? getEntityFragment() : ''}
+            ${addQuestionComments ? getCommentsCountFragment() : ''}
+            ${subField}${queryArgsString} {
             ${editionType} {
-              ${allEditions ? allEditionsFragment : ''}
-              completion {
+                ${allEditions ? allEditionsFragment : ''}
+                completion {
                 count
                 percentageSurvey
                 total
-              }
-              buckets {
+                }
+                buckets {
                 ${getBucketFragment({
                     addBucketFacetsPlaceholder,
                     addBucketsEntities,
-                    addGroupedBuckets: true,
+                    addGroupedBuckets,
                     queryArgs
                 })}
-              }
+                }
             }
-          }
+            }
+        }`
+}
+
+export const getParameters = (options: CustomizationOptions) => {
+    const parameters: ResponsesParameters = {}
+    const { cutoff, cutoffType, limit, mergeOtherBuckets } = options
+    if (options.cutoff) {
+        if (cutoffType === 'percent') {
+            // use same cutoff value for both
+            parameters.cutoffPercent = cutoff
+            parameters.facetCutoffPercent = cutoff
+        } else {
+            parameters.cutoff = cutoff
+            parameters.facetCutoff = cutoff
         }
-      }
     }
-  }
-}
-`
-}
-
-export const getQueryName = ({
-    editionId,
-    questionId
-}: {
-    editionId: string
-    questionId: string
-}) => `${camelCase(editionId)}${camelCase(questionId)}Query`
-
-/*
-
-Wrap query contents with query FooQuery {...}
-
-*/
-export const wrapQuery = ({
-    queryName,
-    queryContents,
-    addRootNode = false
-}: {
-    queryName: string
-    queryContents: string
-    addRootNode?: boolean
-}) => {
-    if (addRootNode) {
-        return `query ${queryName} {
-    dataAPI{
-        ${indentString(queryContents, 8)}
+    if (limit) {
+        parameters.limit = limit
     }
-}`
-    } else {
-        return `query ${queryName} {
-    ${indentString(queryContents, 4)}
-}`
+    if (mergeOtherBuckets) {
+        parameters.mergeOtherBuckets = mergeOtherBuckets
     }
+    return parameters
 }
-
-/*
-
-Get query by either
-
-A) generating a default query based on presets
-
-or
-
-B) using query defined in block template definition
-
-*/
-const defaultQueries = ['currentEditionData', 'allEditionsData']
-
 /*
 
 For a given block and pageContext, generate query and query options and return result
@@ -333,97 +327,48 @@ For a given block and pageContext, generate query and query options and return r
 export const getBlockQuery = ({
     block,
     pageContext,
-    queryOptions: providedQueryOptions = {},
-    queryArgs = {}
+    chartFilters
 }: {
-    block: BlockDefinition
-    pageContext?: PageContextValue
-    queryOptions?: ProvidedQueryOptions
-    // isLog?: boolean
-    // enableCache?: boolean
-    // addArgumentsPlaceholder?: boolean
-    // addBucketFacetsPlaceholder?: boolean
-    queryArgs?: QueryArgs
+    chartFilters?: CustomizationDefinition
+    block: BlockVariantDefinition
+    pageContext: PageContextValue
 }) => {
-    let stringQuery
-    const { query, queryOptions: blockQueryOptions } = block
-
-    const defaultQueryOptions = {
+    const { facet, filters, options = {} } = chartFilters || {}
+    const { showDefaultSeries } = options
+    const questionId = block.fieldId || block.id
+    const queryOptions = {
         surveyId: pageContext?.currentSurvey?.id,
         editionId: pageContext?.currentEdition?.id,
         sectionId: pageContext?.id,
-        questionId: block.id
+        questionId,
+        subField: block?.queryOptions?.subField || ResultsSubFieldEnum.RESPONSES
     }
-    const maybeQueryOptions = {
-        ...defaultQueryOptions,
-        ...providedQueryOptions,
-        ...blockQueryOptions
+    let parameters = block.parameters
+    if (options) {
+        parameters = getParameters(options)
     }
-
-    if (!maybeQueryOptions.surveyId) throw new Error('Missing surveyId in queryOptions')
-    if (!maybeQueryOptions.editionId) throw new Error('Missing editionId in queryOptions')
-    const queryOptions = maybeQueryOptions as QueryOptions
-
-    if (!query) {
-        stringQuery = ''
+    const defaultQueryArgs = {
+        facet,
+        parameters
+    }
+    const defaultSeriesName = facet ? `${questionId}_by_${facet.id}` : questionId
+    const defaultSeries = { name: defaultSeriesName, queryArgs: defaultQueryArgs }
+    let series: SeriesParams[]
+    if (filters && filters.length > 0) {
+        series = [
+            ...(showDefaultSeries ? [defaultSeries] : []),
+            ...filters.map((filter, filterIndex) => {
+                const { conditions } = filter
+                const filters = conditionsToFilters(conditions)
+                const name = `${defaultSeriesName}_${filterIndex + 1}`
+                return { name, queryArgs: { ...defaultQueryArgs, filters } }
+            })
+        ]
     } else {
-        stringQuery = getQuery({ query, queryOptions, queryArgs })
+        series = [defaultSeries]
     }
-    return stringQuery
-}
-
-/*
-
-Take query, queryOptions, and queryArgs, and return full query
-
-*/
-export const getQuery = ({
-    query,
-    queryOptions,
-    // isLog = false,
-    // enableCache = false,
-    queryArgs
-}: {
-    query: string
-    queryOptions: QueryOptions
-    // isLog?: boolean
-    // enableCache?: boolean
-    queryArgs?: QueryArgs
-}) => {
-    let queryContents
-
-    const { isLog, addArgumentsPlaceholder } = queryOptions
-
-    if (isLog) {
-        // when logging we can leave out enableCache parameter
-        delete queryArgs?.parameters?.enableCache
+    return {
+        query: getDefaultQuery({ queryOptions, series }),
+        seriesNames: series.map(s => s.name)
     }
-
-    const { editionId, questionId } = queryOptions
-    const queryName = getQueryName({ editionId, questionId })
-
-    if (defaultQueries.includes(query)) {
-        if (['allEditionsData'].includes(query)) {
-            queryOptions.allEditions = true
-        }
-        queryContents = getDefaultQuery({ queryOptions, queryArgs })
-    } else {
-        queryContents = query
-    }
-    if (!isEmpty(queryArgs)) {
-        const queryArgsString = getQueryArgsString(queryArgs)
-        if (queryArgsString) {
-            queryContents = queryContents.replace(argumentsPlaceholder, queryArgsString)
-        }
-    } else {
-        if (!addArgumentsPlaceholder) {
-            queryContents = queryContents.replace(argumentsPlaceholder, '')
-        }
-    }
-    const wrappedQuery = wrapQuery({
-        queryName,
-        queryContents,
-        addRootNode: queryOptions.addRootNode
-    })
-    return wrappedQuery
 }

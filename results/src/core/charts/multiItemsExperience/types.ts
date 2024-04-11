@@ -11,6 +11,7 @@ import {
 import { BlockComponentProps } from 'core/types'
 import { PERCENTAGE_QUESTION, SENTIMENT_FACET } from '@devographics/constants'
 import { ColumnModes, OrderOptions } from '../common2/types'
+import { DataSeries } from 'core/filters/types'
 
 export const DEFAULT_VARIABLE = PERCENTAGE_QUESTION
 
@@ -24,8 +25,7 @@ type SectionItemsData = {
 }
 
 export interface MultiItemsExperienceBlockProps extends BlockComponentProps {
-    data: SectionItemsData
-    // series: DataSeries<StandardQuestionData>[]
+    series: DataSeries<SectionItemsData>[]
 }
 
 export type ColumnId = FeaturesOptions | SimplifiedSentimentOptions
@@ -47,10 +47,13 @@ export type ChartState = {
     setVariable: Dispatch<SetStateAction<Variable>>
     columnMode: ColumnModes
     setColumnMode: Dispatch<SetStateAction<ColumnModes>>
+    rowsLimit: number
+    setRowsLimit: Dispatch<SetStateAction<number>>
 }
 
 export type ChartValues = {
     maxOverallValue?: number
+    totalRows: number
     question: QuestionMetadata
     facetQuestion?: QuestionMetadata
 }
@@ -59,6 +62,7 @@ export type CombinedItem = {
     id: string
     entity: Entity
     combinedBuckets: CombinedBucket[]
+    commentsCount: number
     count: number
 }
 

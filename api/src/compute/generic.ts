@@ -200,7 +200,14 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     const collection = getCollection(db, survey)
 
     // TODO "responsesType" is now called "subField" elsewhere, change it here as well at some point
-    const { responsesType, filters, parameters = {}, facet, selectedEditionId } = computeArguments
+    const {
+        responsesType,
+        filters,
+        parameters = {},
+        facet,
+        selectedEditionId,
+        isCombinedPass = false
+    } = computeArguments
     const {
         cutoff = 1,
         cutoffPercent,
@@ -388,7 +395,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
     if (responsesType === ResponsesTypes.COMBINED) {
         if (isDebug) {
-            console.log('// combined mode: getting freeform results…')
+            console.log(
+                `// combined mode: getting freeform results… (isCombinedPass = ${isCombinedPass.toString()})`
+            )
         }
         results = await combineWithFreeform(results, options)
     }
@@ -413,16 +422,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             await addOverallBucket(results, axis1, options)
         }
 
-        results = await applyDatasetCutoff(results, computeArguments)
-
-        if (
-            responsesType === ResponsesTypes.COMBINED ||
-            responsesType === ResponsesTypes.FREEFORM
-        ) {
-            // TODO: probably doesn't work well when a facet is active
-            await groupOtherBuckets(results, axis2, axis1)
-        }
-
         // once buckets don't move anymore we can calculate percentages
         await addPercentages(results)
 
@@ -433,54 +432,62 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await addAveragesByFacet(results, axis2, axis1)
         await addPercentilesByFacet(results, axis2, axis1)
 
-        // bucket grouping
-        await groupBuckets(results, axis2, axis1)
+        if (!isCombinedPass) {
+            results = await applyDatasetCutoff(results, computeArguments, axis2, axis1)
 
-        // group cutoff buckets together
-        await cutoffData(results, axis2, axis1)
+            await sortData(results, axis2, axis1)
 
-        // for all following steps, use groups as options
-        if (axis1.enableBucketGroups && axis1.question.groups) {
-            axis1.options = axis1.question.groups
+            // bucket grouping
+            await groupBuckets(results, axis2, axis1)
+
+            // group cutoff buckets together
+            await cutoffData(results, axis2, axis1)
+
+            // for all following steps, use groups as options
+            if (axis1.enableBucketGroups && axis1.question.groups) {
+                axis1.options = axis1.question.groups
+            }
+            if (axis2.enableBucketGroups && axis2.question.groups) {
+                axis2.options = axis2.question.groups
+            }
+            await limitData(results, axis2, axis1)
+
+            // group any "non-standard" bucket, including cutoff data, unmatched answers,
+            // off-limit answers, etc.
+            await groupOtherBuckets(results, axis2, axis1)
         }
-        if (axis2.enableBucketGroups && axis2.question.groups) {
-            axis2.options = axis2.question.groups
-        }
-        await sortData(results, axis2, axis1)
-        await limitData(results, axis2, axis1)
         await addLabels(results, axis2, axis1)
     } else {
         results = await addMissingBuckets(results, axis1)
 
         await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
 
-        results = await applyDatasetCutoff(results, computeArguments)
-
-        if (
-            responsesType === ResponsesTypes.COMBINED ||
-            responsesType === ResponsesTypes.FREEFORM
-        ) {
-            await groupOtherBuckets(results, axis1)
-        }
-
         await addPercentages(results)
-
-        // await addDeltas(results)
 
         await addEditionYears(results, survey)
 
-        // we only group buckets after we've calculated every other value
-        // while the buckets are "flat"
-        await groupBuckets(results, axis1)
+        if (!isCombinedPass) {
+            results = await applyDatasetCutoff(results, computeArguments, axis1)
 
-        await cutoffData(results, axis1)
+            // await addDeltas(results)
 
-        // for all following steps, use groups as options
-        if (axis1.enableBucketGroups && axis1.question.groups) {
-            axis1.options = axis1.question.groups
+            // we only group buckets after we've calculated every other value
+            // while the buckets are "flat"
+            await groupBuckets(results, axis1)
+
+            await cutoffData(results, axis1)
+
+            // for all following steps, use groups as options
+            if (axis1.enableBucketGroups && axis1.question.groups) {
+                axis1.options = axis1.question.groups
+            }
+            await sortData(results, axis1)
+            await limitData(results, axis1)
+
+            // group any "non-standard" bucket, including cutoff data, unmatched answers,
+            // off-limit answers, etc.
+            await groupOtherBuckets(results, axis1)
         }
-        await sortData(results, axis1)
-        await limitData(results, axis1)
         await addLabels(results, axis1)
     }
 

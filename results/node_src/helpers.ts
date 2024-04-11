@@ -17,17 +17,17 @@ import { PageContextValue, PageDef } from '../src/core/types'
 export const allowedCachingMethods = (): {
     /**
      * .logs folder (only used for writing, for debugging purpose)
-    */
-    filesystem: boolean,
+     */
+    filesystem: boolean
     /**
      * GraphQL API
      * TODO: it's not a cache but the source of truth, why using this?
      */
-    api: boolean,
+    api: boolean
     /**
      * Redis
      */
-    redis: boolean,
+    redis: boolean
 } => {
     let cacheLevel = { filesystem: true, api: true, redis: true }
     if (process.env.DISABLE_CACHE === 'true') {
@@ -152,8 +152,16 @@ export const createBlockPages = (page, context, createPage, locales, buildInfo) 
 Get a file from the disk or from GitHub
 
 */
-export const getExistingData = async ({ dataFileName, dataFilePath, sectionId, baseUrl }: {
-    dataFileName: string, sectionId: string, dataFilePath: string, baseUrl: string
+export const getExistingData = async ({
+    dataFileName,
+    dataFilePath,
+    sectionId,
+    baseUrl
+}: {
+    dataFileName: string
+    sectionId: string
+    dataFilePath: string
+    baseUrl: string
 }) => {
     let contents, data
     const remoteUrl = `${baseUrl}/data/${sectionId}/${dataFileName}`
@@ -298,7 +306,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                         // }
                         logToFile(queryFileName, prettyQueryLog, {
                             mode: 'overwrite',
-                            dirPath: queryDirPath,
+                            dirPath: queryDirPath
                             //editionId
                         })
                     }
@@ -306,9 +314,12 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                     const result = removeNull(await graphql(query))
                     data = result.data
 
+                    if (!data) {
+                        console.log(result)
+                    }
                     logToFile(dataFileName, data, {
                         mode: 'overwrite',
-                        dirPath: dataDirPath,
+                        dirPath: dataDirPath
                         //editionId
                     })
                 }
@@ -368,12 +379,11 @@ export function removeNull(obj) {
     return Array.isArray(obj) ? Object.values(clean) : clean
 }
 
-
 export const getMetadata = async ({ surveyId, editionId, graphql }) => {
     const metadataQuery = getMetadataQuery({ surveyId, editionId })
 
     logToFile('metadataQuery.graphql', metadataQuery, {
-        mode: 'overwrite',
+        mode: 'overwrite'
         //editionId
     })
 
@@ -386,7 +396,7 @@ export const getMetadata = async ({ surveyId, editionId, graphql }) => {
     )
     const metadataData = metadataResults?.data?.dataAPI
     logToFile('metadataData.json', metadataData, {
-        mode: 'overwrite',
+        mode: 'overwrite'
         // editionId
     })
     const currentSurvey = metadataData.surveys[surveyId]._metadata

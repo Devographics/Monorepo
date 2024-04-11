@@ -1,8 +1,8 @@
 import React from 'react'
-import { BlockComponentProps, BlockDefinition, FacetItem } from '@types/index'
+import { BlockComponentProps, BlockVariantDefinition, FacetItem } from '@types/index'
 
 export interface BlockDebugProps extends BlockComponentProps {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     // should this be optional?
     data: FacetItem
 }

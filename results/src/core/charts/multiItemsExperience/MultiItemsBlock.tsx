@@ -3,7 +3,7 @@ import '../common2/ChartsCommon.scss'
 import './MultiItems.scss'
 import { FeaturesOptions, Option, SimplifiedSentimentOptions } from '@devographics/types'
 import { MultiItemsExperienceControls } from './MultiItemsControls'
-import { GroupingOptions, MultiItemsExperienceBlockProps } from './types'
+import { CellDimension, GroupingOptions, MultiItemsExperienceBlockProps } from './types'
 import {
     applyRatio,
     combineItems,
@@ -13,15 +13,18 @@ import {
     getRowOffset,
     sortBuckets,
     sortItems,
-    useChartState
+    useChartState,
+    useChartValues
 } from './helpers'
 import { Row } from './MultiItemsRow'
 import Rows from '../common2/Rows'
-import { ChartHeading, ChartWrapper, Legend, Note } from '../common2'
+import { ChartWrapper, Legend, Note, ShowAll } from '../common2'
 import { useTheme } from 'styled-components'
 import min from 'lodash/min'
 import max from 'lodash/max'
+import take from 'lodash/take'
 import { NoteContents } from './MultiItemsNote'
+import charts from 'core/theme/charts'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -29,11 +32,16 @@ export const sortOptions = {
 }
 
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
-    const { data, block, question } = props
-    const { items } = data
+    const { series, block, question } = props
+    const { items } = series[0].data
+
+    if (!items) {
+        console.log(series)
+        return <div>No data found</div>
+    }
 
     const theme = useTheme()
-    const chartState = useChartState()
+    const chartState = useChartState({ rowsLimit: block?.chartOptions?.limit })
     const { grouping, variable, sort, order } = chartState
 
     const columnIds = sortOptions[grouping]
@@ -45,7 +53,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     const className = `multiexp multiexp-groupedBy-${grouping}`
 
     // combine/flatten each item's buckets
-    const combinedItems = combineItems({ items, variable })
+    let combinedItems = combineItems({ items, variable })
 
     // get column-by-column grouped totals
     const groupedTotals = getItemTotals({ combinedItems, columnIds: allColumnIds })
@@ -54,23 +62,22 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     const maxValues = getMaxValues({ groupedTotals, columnIds })
 
     // sort items according to grouped totals
-    const sortedItems = sortItems({ combinedItems, groupedTotals, sort, order })
+    combinedItems = sortItems({ combinedItems, groupedTotals, sort, order })
 
-    const chartValues = {
-        question,
-        facetQuestion: {
-            id: '_sentiment'
-        }
+    const chartValues = useChartValues({ items: combinedItems, chartState, question })
+
+    if (chartState.rowsLimit) {
+        combinedItems = take(combinedItems, chartState.rowsLimit)
     }
 
-    let allRowsCellDimensions = sortedItems.map(item =>
+    let allRowsCellDimensions = combinedItems.map(item =>
         getCellDimensions({
             buckets: sortBuckets(item.combinedBuckets, grouping),
             chartState
         })
     )
 
-    let allRowOffsets = allRowsCellDimensions.map(cd =>
+    let allRowsOffsets = allRowsCellDimensions.map(cd =>
         getRowOffset({
             firstRowCellDimensions: allRowsCellDimensions[0],
             cellDimensions: cd,
@@ -81,27 +88,29 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     // offseting row will make the entire chart expand past 100%
     // shrink it down to 100% again
     // note: offsets can be positive (offset to the left) or negative (offset to the right)
-    const largestNegativeOffset = min(allRowOffsets.filter(o => o < 0)) || 0
-    const largestPositiveOffset = max(allRowOffsets.filter(o => o > 0)) || 0
+    const largestNegativeOffset = min(allRowsOffsets.filter(o => o < 0)) || 0
+    const largestPositiveOffset = max(allRowsOffsets.filter(o => o > 0)) || 0
 
     const totalWidthWithOffset = Math.abs(largestNegativeOffset) + largestPositiveOffset + 100
     const rowOffsetShrinkRatio = 100 / totalWidthWithOffset
-    allRowsCellDimensions = allRowsCellDimensions.map(cd => applyRatio(cd, rowOffsetShrinkRatio))
+    allRowsCellDimensions = allRowsCellDimensions.map(cd =>
+        applyRatio<CellDimension>(cd, rowOffsetShrinkRatio)
+    )
     // note: up to now we have only calculated offsets relative to the first row
     // but the first row may itself need to be offseted. In this case
     // subract additional largestPositiveOffset to all offsets
-    allRowOffsets = allRowOffsets.map(rowOffset => rowOffset - largestPositiveOffset)
+    allRowsOffsets = allRowsOffsets.map(rowOffset => rowOffset - largestPositiveOffset)
     // finally, apply shrinking ratio
-    allRowOffsets = allRowOffsets.map(rowOffset => rowOffset * rowOffsetShrinkRatio)
+    allRowsOffsets = allRowsOffsets.map(rowOffset => rowOffset * rowOffsetShrinkRatio)
 
     const commonProps = {
-        items: sortedItems,
+        items: combinedItems,
         chartState,
         maxValues,
         chartValues,
         block,
         allRowsCellDimensions,
-        allRowOffsets
+        allRowOffsets: allRowsOffsets
     }
 
     const options =
@@ -119,25 +128,22 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     return (
         <ChartWrapper className={className}>
             <>
-                <ChartHeading>
-                    <div className="multiexp-chart-heading">
-                        <MultiItemsExperienceControls chartState={chartState} />
+                <div className="multiexp-chart-heading">
+                    <MultiItemsExperienceControls chartState={chartState} />
 
-                        <Legend
-                            {...commonProps}
-                            options={options}
-                            colorScale={colorScale}
-                            i18nNamespace={grouping}
-                        />
-                    </div>
-                </ChartHeading>
+                    <Legend
+                        {...commonProps}
+                        options={options}
+                        colorScale={colorScale}
+                        i18nNamespace={grouping}
+                    />
+                </div>
 
-                <Rows>
-                    {sortedItems.map((item, i) => (
+                <Rows {...commonProps}>
+                    {combinedItems.map((item, i) => (
                         <Row key={item.id} rowIndex={i} item={item} {...commonProps} />
                     ))}
                 </Rows>
-
                 <Note>
                     <NoteContents />
                 </Note>

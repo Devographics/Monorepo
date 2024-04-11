@@ -1,22 +1,21 @@
 import {
     Bucket,
-    FacetBucket,
     FeaturesOptions,
     ResponseData,
     ResultsSubFieldEnum,
-    SimplifiedSentimentOptions
+    SimplifiedSentimentOptions,
+    StandardQuestionData
 } from '@devographics/types'
-import { ChartState, GetValueType, Step, Views } from '../types'
-import { HorizontalBarBlock2Props } from '../HorizontalBarBlock'
+import { ChartState, Views } from '../types'
 import { BoxPlotRow, FacetRow, SingleBarRow } from '../HorizontalBarRow'
-import { FacetItem } from 'core/filters/types'
+import { DataSeries, FacetItem } from 'core/filters/types'
 import { usePageContext } from 'core/helpers/pageContext'
 import { applySteps } from './steps'
 import { getViewDefinition } from './views'
 import sortBy from 'lodash/sortBy'
-import take from 'lodash/take'
-import sumBy from 'lodash/sumBy'
 import { OrderOptions } from 'core/charts/common2/types'
+import { BlockVariantDefinition } from 'core/types'
+import uniq from 'lodash/uniq'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -24,34 +23,40 @@ export const sortOptions = {
 }
 
 export const getChartCurrentEdition = ({
-    data,
-    series,
+    serie,
     block
-}: Pick<HorizontalBarBlock2Props, 'data' | 'series' | 'block'>) => {
+}: {
+    serie: DataSeries<StandardQuestionData>
+    block: BlockVariantDefinition
+}) => {
     const subField = block?.queryOptions?.subField || ResultsSubFieldEnum.RESPONSES
-    // TODO: ideally blocks should always receive either a single series, or an array of series
-    const defaultSeries = data || series[0].data
-    const { currentEdition } = defaultSeries[subField] as ResponseData
+    const { currentEdition } = serie.data[subField] as ResponseData
     return currentEdition
 }
 
 export const getChartCompletion = ({
-    data,
-    series,
+    serie,
     block
-}: Pick<HorizontalBarBlock2Props, 'data' | 'series' | 'block'>) => {
-    const currentEdition = getChartCurrentEdition({ data, series, block })
+}: {
+    serie: DataSeries<StandardQuestionData>
+    block: BlockVariantDefinition
+}) => {
+    const currentEdition = getChartCurrentEdition({ serie, block })
     return currentEdition.completion
 }
+
 export const getChartBuckets = ({
-    data,
-    series,
+    serie,
     block,
     chartState
-}: Pick<HorizontalBarBlock2Props, 'data' | 'series' | 'block'> & { chartState: ChartState }) => {
-    const { view, sort, facet, order } = chartState
+}: {
+    serie: DataSeries<StandardQuestionData>
+    block: BlockVariantDefinition
+    chartState: ChartState
+}) => {
+    const { view, sort, facet, order, rowsLimit } = chartState
     const { steps, getValue } = getViewDefinition(view)
-    const currentEdition = getChartCurrentEdition({ data, series, block })
+    const currentEdition = getChartCurrentEdition({ serie, block })
 
     let buckets = currentEdition.buckets
     if (steps) {
@@ -119,36 +124,22 @@ export const useAllQuestionsMetadata = () => {
     return questions
 }
 
-/*
-
-Calculate how much to offset a row by to line up whichever column/cell the chart is sorted by
-
-*/
-export const getRowOffset = ({
-    buckets,
-    bucket,
+export const getAllFacetBucketIds = ({
+    series,
+    block,
     chartState
 }: {
-    buckets: Bucket[]
-    bucket: Bucket
+    series: Array<DataSeries<StandardQuestionData>>
+    block: BlockVariantDefinition
     chartState: ChartState
 }) => {
-    const { view, sort } = chartState
-    const { getValue } = getViewDefinition(view)
-
-    if (getValue && [Views.PERCENTAGE_BUCKET, Views.FACET_COUNTS].includes(view) && sort) {
-        const getOffset = (bucket: Bucket) => {
-            const { facetBuckets } = bucket
-            const currentFacetBucketIndex = facetBuckets.findIndex(fb => fb.id === sort)
-            const previousFacetBuckets = take(facetBuckets, currentFacetBucketIndex)
-            const valuesSum = sumBy(previousFacetBuckets, fb => getValue(fb))
-            return valuesSum
-        }
-
-        const firstBucketOffset = getOffset(buckets[0])
-        const currentBucketOffset = getOffset(bucket)
-        return currentBucketOffset - firstBucketOffset
-    } else {
-        return 0
-    }
+    return uniq(
+        series
+            .map(serie => {
+                const buckets = getChartBuckets({ serie, block, chartState })
+                return buckets.map(bucket => bucket.facetBuckets.map(facetBucket => facetBucket.id))
+            })
+            .flat()
+            .flat()
+    )
 }

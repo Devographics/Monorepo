@@ -14,7 +14,7 @@ import DynamicDataLoader from 'core/filters/dataloaders/DynamicDataLoader'
 import { useChartFilters } from 'core/filters/helpers'
 import { ToolRatiosQuestionData, Entity, RatiosUnits } from '@devographics/types'
 import { useEntities, getEntityName } from 'core/helpers/entities'
-import { BlockDefinition, StringTranslator } from 'core/types'
+import { BlockVariantDefinition, StringTranslator } from 'core/types'
 import { getItemLabel } from 'core/helpers/labels'
 
 export interface MetricBucket {
@@ -33,7 +33,7 @@ export interface ToolData extends Record<MetricId, MetricBucket[]> {
 }
 
 export interface ToolsExperienceRankingBlockProps {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     triggerId: MetricId
     data: ToolRatiosQuestionData
     titleProps: any

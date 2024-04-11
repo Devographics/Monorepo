@@ -2,7 +2,7 @@ import {
     Bucket,
     FacetBucket,
     FeaturesOptions,
-    SentimentOptions,
+    QuestionMetadata,
     SimplifiedSentimentOptions,
     StandardQuestionData
 } from '@devographics/types'
@@ -11,11 +11,11 @@ import {
     CellDimension,
     ChartState,
     ChartValues,
-    ColumnDimension,
     ColumnId,
     CombinedBucket,
     CombinedItem,
     DEFAULT_VARIABLE,
+    Dimension,
     GroupingOptions,
     MaxValue,
     Totals,
@@ -35,6 +35,9 @@ export const MINIMUM_COLUMN_WIDTH_PERCENT = 25
 
 export const getBuckets = (item: StandardQuestionData) => item.responses.currentEdition.buckets
 
+export const getCommentsCount = (item: StandardQuestionData) =>
+    item?.comments?.currentEdition?.count || 0
+
 export const combineItems = ({
     items,
     variable
@@ -46,6 +49,7 @@ export const combineItems = ({
         id: item.id,
         entity: item.entity,
         combinedBuckets: combineBuckets(getBuckets(item), variable),
+        commentsCount: getCommentsCount(item),
         count: item?.responses?.currentEdition?.completion?.count || 0
     }))
 
@@ -175,16 +179,23 @@ export const sortBuckets = (combinedBuckets: CombinedBucket[], grouping: Groupin
     }
 }
 
-export const getColumnGap = (
-    buckets: CombinedBucket[],
-    bucket: CombinedBucket,
-    bucketIndex: number,
+export const getColumnGap = ({
+    buckets,
+    bucket,
+    bucketIndex,
+    grouping
+}: {
+    buckets: CombinedBucket[]
+    bucket: CombinedBucket
+    bucketIndex: number
     grouping: ChartState['grouping']
-) => {
-    // if this is the first bucket of the group/subgroup (depending on current grouping option),
-    // add column gap to its offset (unless if it's the very first bucket of the row)
-    const indexProp = grouping === GroupingOptions.EXPERIENCE ? 'subGroupIndex' : 'groupIndex'
-    const addGapBefore = bucketIndex > 0 && bucket[indexProp] === 0
+}) => {
+    // if this is the first bucket of the subgroup (i.e. previous bucket belongs to a different subgroup),
+    // add column gap to its offset
+    const previousBucket = buckets[bucketIndex - 1]
+    const getRelevantId = (bucket: CombinedBucket) =>
+        bucket.ids[grouping === GroupingOptions.EXPERIENCE ? 0 : 1]
+    const addGapBefore = previousBucket && getRelevantId(previousBucket) !== getRelevantId(bucket)
     return addGapBefore ? COLUMN_GAP_PERCENT : 0
 }
 
@@ -201,16 +212,16 @@ export const getCellDimensions = ({
     const getWidth = (combinedBucket: CombinedBucket) =>
         combinedBucket?.facetBucket?.[variable] || 0
 
-    // keep track of total value to offset column by
-    let columnOffset = 0
+    // keep track of total value to offset cells by
+    let cellOffset = 0
 
     buckets.forEach((bucket, bucketIndex) => {
         const { id, ids } = bucket
         const width = getWidth(bucket)
-        columnOffset += getColumnGap(buckets, bucket, bucketIndex, grouping)
+        cellOffset += getColumnGap({ buckets, bucket, bucketIndex, grouping })
         const offset =
             sum(take(buckets, bucketIndex).map(bucket => getWidth(bucket) + ITEM_GAP_PERCENT)) +
-            columnOffset
+            cellOffset
         cellDimensions.push({ id, ids, width, offset })
     })
 
@@ -219,7 +230,7 @@ export const getCellDimensions = ({
     const totalWidth =
         sum(cellDimensions.map(cd => cd.width)) +
         ITEM_GAP_PERCENT * (cellDimensions.length - 1) +
-        columnOffset
+        cellOffset
     const ratio = 100 / totalWidth
     cellDimensions = applyRatio(cellDimensions, ratio)
     return cellDimensions
@@ -259,14 +270,17 @@ export const getRowOffset = ({
     }
 }
 
-export const applyRatio = (cellDimensions: CellDimension[], ratio: number) =>
+export const applyRatio = <T extends Dimension>(cellDimensions: T[], ratio: number) =>
     cellDimensions.map(({ width, offset, ...rest }) => ({
         ...rest,
         width: round(width * ratio, 1),
         offset: round(offset * ratio, 1)
     }))
 
-export const useChartState = () => {
+export const useChartState = (defaultState?: { [P in keyof ChartState]?: ChartState[P] }) => {
+    const [rowsLimit, setRowsLimit] = useState<ChartState['rowsLimit']>(
+        defaultState?.rowsLimit || 0
+    )
     const [grouping, setGrouping] = useState<ChartState['grouping']>(GroupingOptions.EXPERIENCE)
     const [sort, setSort] = useState<ChartState['sort']>(FeaturesOptions.USED)
     const [order, setOrder] = useState<ChartState['order']>(OrderOptions.DESC)
@@ -286,14 +300,28 @@ export const useChartState = () => {
         variable,
         setVariable,
         columnMode,
-        setColumnMode
+        setColumnMode,
+        rowsLimit,
+        setRowsLimit
     }
     return chartState
 }
 
-export const useChartValues = (buckets: Bucket[], chartState: ChartState) => {
-    const { variable } = chartState
-    const maxOverallValue = max(buckets.map(b => b[variable])) || 0
-    const chartValues: ChartValues = { maxOverallValue }
+export const useChartValues = ({
+    items,
+    chartState,
+    question
+}: {
+    items: CombinedItem[]
+    chartState: ChartState
+    question: QuestionMetadata
+}) => {
+    const chartValues: ChartValues = {
+        totalRows: items.length,
+        question,
+        facetQuestion: {
+            id: '_sentiment'
+        } as QuestionMetadata
+    }
     return chartValues
 }

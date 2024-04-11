@@ -49,19 +49,15 @@ query ${getQueryName({ editionId, questionId })} {
 }`
 }
 
-const CommentsWrapper = ({ block, name }) => {
-    const pageContext = usePageContext()
+export const CommentsWrapper = ({ queryOptions, name }) => {
     const [data, setData] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    const surveyId = pageContext.currentSurvey.id
-    const editionId = pageContext.currentEdition.id
-    const sectionId = pageContext.id
-    const questionId = block.id
-    const queryOptions = { surveyId, editionId, sectionId, questionId }
+    const { surveyId, editionId, sectionId, questionId } = queryOptions
     useEffect(() => {
         const getData = async () => {
             setIsLoading(true)
             const query = getQuery(queryOptions)
+
             const url = process.env.GATSBY_API_URL
             if (!url) {
                 throw new Error('GATSBY_API_URL env variable is not set')
@@ -132,7 +128,13 @@ const Comment = ({ message, responseId, index, name }) => {
 const CommentsTrigger = props => {
     const { block } = props
     const title = useBlockTitle({ block })
+    const pageContext = usePageContext()
 
+    const surveyId = pageContext.currentSurvey.id
+    const editionId = pageContext.currentEdition.id
+    const sectionId = pageContext.id
+    const questionId = block.id
+    const queryOptions = { surveyId, editionId, sectionId, questionId }
     return (
         <ModalTrigger
             trigger={
@@ -144,7 +146,7 @@ const CommentsTrigger = props => {
                 </span>
             }
         >
-            <CommentsWrapper {...props} name={title} />
+            <CommentsWrapper queryOptions={queryOptions} name={title} />
         </ModalTrigger>
     )
 }

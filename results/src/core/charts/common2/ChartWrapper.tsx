@@ -1,7 +1,7 @@
 import React from 'react'
 import './ChartWrapper.scss'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { ROW_HEIGHT } from './Row'
+import { BAR_HEIGHT } from './Row'
 
 export const ChartWrapper = ({
     children,
@@ -12,7 +12,7 @@ export const ChartWrapper = ({
 }) => {
     const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
     const style = {
-        '--rowHeight': `${ROW_HEIGHT}px`
+        '--barHeight': `${BAR_HEIGHT}px`
     }
     return (
         <div className={`chart-wrapper ${className}`} ref={parent} style={style}>

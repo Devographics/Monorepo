@@ -2,9 +2,9 @@ import React, { memo } from 'react'
 import styled from 'styled-components'
 import { spacing } from 'core/theme'
 import { useBlockTakeaway } from 'core/helpers/blockHelpers'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
-const BlockTakeaway = ({ block }: { block: BlockDefinition }) => {
+const BlockTakeaway = ({ block }: { block: BlockVariantDefinition }) => {
     const takeaway = useBlockTakeaway({ block })
     return takeaway ? <Takeaway_ dangerouslySetInnerHTML={{ __html: takeaway }} /> : null
 }

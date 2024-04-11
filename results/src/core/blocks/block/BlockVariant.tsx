@@ -11,7 +11,7 @@ import BlockShare from 'core/blocks/block/BlockShare'
 // import BlockDebug from 'core/blocks/block/BlockDebug'
 import { ChartIcon, DataIcon, ShareIcon } from 'core/icons'
 import { ErrorBoundary } from 'core/blocks/block/BlockError'
-import { BlockDefinition } from 'core/types/index'
+import { BlockVariantDefinition } from 'core/types/index'
 import { usePageContext } from 'core/helpers/pageContext'
 // import CustomInputTrigger from 'core/blocks/block/CustomInputTrigger'
 import CommentsTrigger from 'core/blocks/block/CommentsTrigger'
@@ -25,7 +25,7 @@ export interface BlockVariantProps {
     units?: BucketUnits
     setUnits?: Dispatch<SetStateAction<BucketUnits>>
     unitsOptions?: BucketUnits[] | string[]
-    block: BlockDefinition
+    block: BlockVariantDefinition
     tables?: TableData[]
 }
 

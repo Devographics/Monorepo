@@ -1,5 +1,6 @@
 defaultUnits: count
-blockType: HorizontalBarBlock
+blockType: HorizontalBarBlock2
+canCustomize: true
 
 # note: reading list can contain tools as well as features, but non-feature
 # items will generally not need to be translated
@@ -24,6 +25,10 @@ query: >
                                         name
                                         nameClean
                                         nameHtml
+                                        description
+                                        descriptionClean
+                                        descriptionHtml
+                                        type
                                         mdn {
                                             url
                                         }

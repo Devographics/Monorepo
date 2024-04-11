@@ -7,6 +7,7 @@ import {
 } from '@devographics/types'
 import { CustomizationDefinition } from 'core/filters/types'
 import { PageContextValue } from './context'
+import { CustomVariant } from 'core/filters/helpers'
 
 export type BlockUnits =
     | 'count'
@@ -24,9 +25,10 @@ export type BlockSetUnits = React.Dispatch<React.SetStateAction<string>>
 export type BlockMode = 'absolute' | 'relative'
 
 export interface BlockComponentProps {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     question: QuestionMetadata
+    variant?: CustomVariant
 }
 
 export interface BlockQueryOptions {
@@ -37,6 +39,11 @@ export interface BlockQueryOptions {
 }
 
 export interface BlockDefinition {
+    id: string
+    variants: Array<BlockVariantDefinition>
+}
+
+export interface BlockVariantDefinition {
     id: string
     bucketKeysName?: string
     fieldId?: string
@@ -77,8 +84,6 @@ export interface BlockDefinition {
     hasSponsor?: boolean
     hasComments?: boolean
 
-    variants?: Array<BlockVariant>
-
     wrapBlock?: boolean
 
     dataPath?: string
@@ -88,10 +93,16 @@ export interface BlockDefinition {
     switcherPosition?: 'top' | 'bottom'
     showNote?: boolean
     customChart?: any
+
+    canCustomize?: boolean
+
+    // options that only affect how the chart is displayed, not the query or data
+    chartOptions: ChartOptions
 }
 
-// TODO
-export type BlockVariant = any
+export interface ChartOptions {
+    limit?: number
+}
 
 export interface BlockWithAwards {
     /**
@@ -123,8 +134,7 @@ export interface BlockLegend {
     gradientColors?: string[]
 }
 
-
 export interface BlockDataType {
     units: 'percentage' | string
-    data: { [units: string]: any },
+    data: { [units: string]: any }
 }

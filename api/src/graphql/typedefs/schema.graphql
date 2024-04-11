@@ -283,7 +283,13 @@ type ResponseEditionData {
 
 type RawData {
     responseId: String
-    content: JSON # could be String or [String]
+    raw: String
+    tokens: [NormalizationToken]
+}
+
+type NormalizationToken {
+    id: String
+    pattern: String
 }
 
 """
@@ -454,6 +460,40 @@ type FacetBucket {
     If bucket was created by grouping other buckets, ids of these grouped buckets
     """
     groupedBucketIds: [String]
+    """
+    If bucket was created by grouping other buckets, contents of these grouped buckets
+    """
+    groupedBuckets: [GroupedFacetBucket]
+}
+
+# same as above except without groupedBucketIds/groupedBuckets
+type GroupedFacetBucket {
+    id: String
+    label: String
+    """
+    Respondent count
+    """
+    count: Int
+    """
+    Percentage relative to question respondents
+    """
+    percentageQuestion: Float
+    """
+    Percentage relative to survey respondents
+    """
+    percentageSurvey: Float
+    """
+    Percentage of the bucket represented by the current facet
+    """
+    percentageBucket: Float
+    """
+    Entity associated with the current bucket
+    """
+    entity: Entity
+    """
+    Indicates if bucket was removed because of insufficient data
+    """
+    hasInsufficientData: Boolean
 }
 
 type Query {

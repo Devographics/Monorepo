@@ -48,9 +48,9 @@ export const Cell = ({
     const style = {
         '--percentageValue': value,
         '--experienceColor1': experienceColors[bucket.id as FeaturesOptions][0],
-        '--experienceColor2': experienceColors[bucket.id as FeaturesOptions][1],
+        '--experienceColor2': experienceColors[bucket.id as FeaturesOptions][0],
         '--sentimentColor1': sentimentColors[facetBucket.id as SimplifiedSentimentOptions][0],
-        '--sentimentColor2': sentimentColors[facetBucket.id as SimplifiedSentimentOptions][1],
+        '--sentimentColor2': sentimentColors[facetBucket.id as SimplifiedSentimentOptions][0],
         '--width': width,
         '--offset': offset
     }
@@ -71,18 +71,16 @@ export const Cell = ({
                 </div>
             }
             contents={
-                <div>
-                    <T
-                        k={
-                            isNeutral
-                                ? `charts.multiexp.cell_tooltip_neutral`
-                                : `charts.multiexp.cell_tooltip`
-                        }
-                        values={values}
-                        html={true}
-                        md={true}
-                    />
-                </div>
+                <T
+                    k={
+                        isNeutral
+                            ? `charts.multiexp.cell_tooltip_neutral`
+                            : `charts.multiexp.cell_tooltip`
+                    }
+                    values={values}
+                    html={true}
+                    md={true}
+                />
             }
         />
     )

@@ -11,12 +11,12 @@ import BlockFooter from 'core/blocks/block/BlockFooter'
 import BlockUnitsSelector from 'core/blocks/block/BlockUnitsSelector'
 import EditInline from 'core/components/EditInline'
 import BlockLinks from 'core/blocks/block/BlockLinks'
-import { BlockDataType, BlockDefinition, BlockLegend } from 'core/types'
+import { BlockDataType, BlockVariantDefinition, BlockLegend } from 'core/types'
 import BlockQuestion from './BlockQuestion'
 import { Entity } from '@devographics/types'
 
 interface BlockChartProps extends BlockDataType {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     children: React.ReactNode
     legends: Array<BlockLegend>
     legendProps?: any
@@ -95,7 +95,7 @@ const BlockChart = (props: BlockChartProps) => {
     )
 }
 
-export const BlockDescriptionContents = ({ block }: { block: BlockDefinition }) => {
+export const BlockDescriptionContents = ({ block }: { block: BlockVariantDefinition }) => {
     const blockTitle = useBlockTitle({ block })
     const blockDescription = useBlockDescription({ block, values: { name: blockTitle } })
     if (blockDescription) {

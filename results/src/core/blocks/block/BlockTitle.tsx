@@ -9,9 +9,9 @@ import BlockCompletionIndicator from 'core/blocks/block/BlockCompletionIndicator
 import { getBlockTitle, useBlockTitle } from 'core/helpers/blockHelpers'
 import BlockSponsor from 'core/blocks/block/sponsor_chart/BlockSponsor'
 import { useEntities } from 'core/helpers/entities'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
-const BlockTitleContents = ({ block }: { block: BlockDefinition }) => {
+const BlockTitleContents = ({ block }: { block: BlockVariantDefinition }) => {
     const title = useBlockTitle({ block })
     return <Title dangerouslySetInnerHTML={{ __html: title }} />
 }
@@ -30,6 +30,8 @@ const BlockTitle = ({
     setView,
     units,
     setUnits
+}: {
+    block: BlockVariantDefinition
 }) => {
     const { id, entity } = block
     const completion =

@@ -76,7 +76,8 @@ export const combineWithFreeform = async (
                 enableAddOverallBucket: false,
                 mergeOtherBuckets: false,
                 enableBucketGroups: false
-            }
+            },
+            isCombinedPass: true
         }
     }
     const freeformResults = await genericComputeFunction(newOptions)

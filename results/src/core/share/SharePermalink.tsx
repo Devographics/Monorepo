@@ -4,7 +4,7 @@ import mq from 'core/theme/mq'
 import { useI18n } from '@devographics/react-i18n'
 import { getBlockMeta } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 const Link = styled.a`
     float: left;
@@ -33,7 +33,7 @@ const Link = styled.a`
     }
 `
 
-const SharePermalink = ({ block }: { block: BlockDefinition }) => {
+const SharePermalink = ({ block }: { block: BlockVariantDefinition }) => {
     const { getString } = useI18n()
     const pageContext = usePageContext()
     const blockMeta = getBlockMeta({ block, pageContext, getString })

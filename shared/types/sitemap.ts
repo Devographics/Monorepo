@@ -12,7 +12,7 @@ export interface SitemapSection extends SitemapSectionFields {
     children?: SitemapSectionFields[]
 }
 
-export interface BlockDefinitionFields {
+export interface BlockVariantDefinition {
     id: string
     fieldId: string
     tabId: string
@@ -28,10 +28,12 @@ export interface BlockDefinitionFields {
     defaultUnits: string
     queryOptions: SitemapBlockQueryOptions
     entity: Entity // Entity type is referenced but not defined in provided GraphQL code. Assuming it exists elsewhere.
+    canCustomize: boolean
 }
 
-export interface BlockDefinition extends BlockDefinitionFields {
-    variants?: BlockDefinitionFields[]
+export interface BlockDefinition {
+    id: string
+    variants: BlockVariantDefinition[]
 }
 
 export interface SitemapBlockParameters {

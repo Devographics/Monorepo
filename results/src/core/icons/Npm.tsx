@@ -5,15 +5,12 @@ export const NpmIcon = (props: IconProps) => (
     <IconWrapper {...props}>
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="210"
-            height="210"
-            fill="none"
-            viewBox="0 0 210 210"
+            width="24"
+            height="24"
+            fill="currentColor"
+            viewBox="0 0 24 24"
         >
-            <path
-                fill="currentColor"
-                d="M22 .722H0v7.334h6.111v1.222H11V8.056h11V.722zM3.667 6.833H1.222V1.944h4.89v4.89H4.888V3.166H3.667v3.666zm3.666 1.223V1.944h4.89v4.89H9.777v1.222H7.333zm6.111-6.112h7.334v4.89h-1.222V3.166h-1.223v3.666h-1.222V3.167H15.89v3.666h-2.445V1.944z"
-            ></path>
+            <path d="M23 9H1v7.334h6.111v1.222H12v-1.222h11V9zM4.667 15.111H2.222v-4.889h4.89v4.89H5.888v-3.668H4.667v3.667zm3.666 1.223v-6.112h4.89v4.89h-2.446v1.222H8.333zm6.111-6.112h7.334v4.89h-1.222v-3.668h-1.223v3.666h-1.222v-3.665H16.89v3.666h-2.445l-.001-4.889z"></path>
         </svg>
     </IconWrapper>
 )

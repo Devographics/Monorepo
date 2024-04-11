@@ -1,58 +1,99 @@
 import './Legend.scss'
-import React from 'react'
-import { ChartValues } from '../multiItemsExperience/types'
-import { Option, OptionMetadata, QuestionMetadata } from '@devographics/types'
-import { ColorScale, neutralColor, useColorScale } from '../horizontalBar2/helpers/colors'
+import React, { SyntheticEvent } from 'react'
+import { OptionMetadata } from '@devographics/types'
+import { ColorScale, neutralColor } from '../horizontalBar2/helpers/colors'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
-import { getQuestionOptions } from '../horizontalBar2/helpers/options'
 import { ChartState } from '../horizontalBar2/types'
 import Tooltip from 'core/components/Tooltip'
 import { OrderOptions } from './types'
 import T from 'core/i18n/T'
-import { CellLabel } from './CellLabel'
 import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 
 type LegendProps = {
     chartState: ChartState
     i18nNamespace: string
-    options: Option[]
+    options: OptionMetadata[]
     colorScale: ColorScale
 }
 
+const DEFAULT_SORT = 'default'
 export const Legend = ({ chartState, i18nNamespace, options, colorScale }: LegendProps) => {
+    const { getString } = useI18n()
+
+    // TODO: maybe use actual width of elements; or even do it via CSS via container query?
+    const useDropdown = options.length > 6
+
+    const { sort, setSort, order, setOrder } = chartState
+
+    const handleSelect = (optionId: string) => {
+        const isEnabled = sort === optionId
+        if (optionId === DEFAULT_SORT) {
+            setSort(undefined)
+            setOrder(OrderOptions.ASC)
+        } else if (!isEnabled) {
+            setSort(optionId as string)
+            setOrder(OrderOptions.ASC)
+        } else if (sort && order === OrderOptions.ASC) {
+            setOrder(OrderOptions.DESC)
+        } else {
+            setSort(undefined)
+            setOrder(OrderOptions.ASC)
+        }
+    }
+
+    const optionProps = { chartState, i18nNamespace, handleSelect }
+
+    const getGradient = (option: OptionMetadata) =>
+        colorScale?.[option.id] || [neutralColor, neutralColor]
+
     return (
         <div className="chart-legend">
             <h4 className="chart-legend-heading">
                 <T k="charts.sort_by" />
             </h4>
-            <ButtonGroup className="chart-legend-items">
-                {options.map(option => (
-                    <LegendItem
-                        key={option.id}
-                        chartState={chartState}
-                        i18nNamespace={i18nNamespace}
-                        option={option}
-                        gradient={colorScale?.[option.id] || [neutralColor, neutralColor]}
-                    />
-                ))}
-            </ButtonGroup>
+            {useDropdown ? (
+                <select
+                    onChange={e => {
+                        handleSelect(e.target.value)
+                    }}
+                >
+                    <option value={DEFAULT_SORT}>{getString('filters.legend.default')?.t}</option>
+                    {options.map(option => (
+                        <SelectItem
+                            {...optionProps}
+                            key={option.id}
+                            option={option}
+                            gradient={getGradient(option)}
+                        />
+                    ))}
+                </select>
+            ) : (
+                <ButtonGroup className="chart-legend-items">
+                    {options.map(option => (
+                        <LegendItem
+                            {...optionProps}
+                            key={option.id}
+                            option={option}
+                            gradient={getGradient(option)}
+                        />
+                    ))}
+                </ButtonGroup>
+            )}
         </div>
     )
 }
 
-const LegendItem = ({
-    chartState,
-    option,
-    gradient,
-    i18nNamespace
-}: {
+type ItemProps = {
     chartState: LegendProps['chartState']
     option: OptionMetadata
     gradient: string[]
     i18nNamespace: LegendProps['i18nNamespace']
-}) => {
+    handleSelect: (optionId: string) => void
+}
+
+const LegendItem = ({ chartState, option, gradient, i18nNamespace, handleSelect }: ItemProps) => {
     const { getString } = useI18n()
 
     const { id, entity } = option
@@ -81,21 +122,13 @@ const LegendItem = ({
                         isEnabled ? 'column-heading-sort-enabled' : ''
                     }`}
                     size="small"
-                    onClick={e => {
+                    onClick={(e: SyntheticEvent) => {
                         e.preventDefault()
-                        if (!isEnabled) {
-                            setSort(id as string)
-                            setOrder(OrderOptions.ASC)
-                        } else if (sort && order === OrderOptions.ASC) {
-                            setOrder(OrderOptions.DESC)
-                        } else {
-                            setSort(undefined)
-                            setOrder(OrderOptions.ASC)
-                        }
+                        handleSelect(String(option.id))
                     }}
                 >
                     <div className="legend-item-color" />
-                    <span>{shortLabel}</span>
+                    <span className="legend-item-label">{shortLabel}</span>
                     {/* <CellLabel label={shortLabel} /> */}
                     <span className="order-asc">↑</span>
                     <span className="order-desc">↓</span>
@@ -112,4 +145,16 @@ const LegendItem = ({
     )
 }
 
+const SelectItem = ({ option, i18nNamespace }: ItemProps) => {
+    const { getString } = useI18n()
+
+    const { id, entity } = option
+    const { label, shortLabel, key } = getItemLabel({
+        id,
+        entity,
+        getString,
+        i18nNamespace
+    })
+    return <option value={option.id}>{label}</option>
+}
 export default Legend

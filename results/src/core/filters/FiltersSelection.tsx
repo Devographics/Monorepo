@@ -17,11 +17,11 @@ import {
     CustomizationFiltersSeries,
     FilterItem
 } from './types'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 interface FiltersSelectionProps {
     allFilters: FilterItem[]
-    block: BlockDefinition
+    block: BlockVariantDefinition
     stateStuff: PanelState
 }
 
@@ -47,32 +47,42 @@ const FiltersSelection = ({ allFilters, block, stateStuff }: FiltersSelectionPro
     }
     return (
         <Wrapper_>
-            <FiltersTop_>
-                <Description_>
-                    <T k="filters.filters.description" html={true} md={true} />
-                </Description_>
-            </FiltersTop_>
-            <Presets stateStuff={stateStuff} />
-            <SeriesList_>
-                <Options filtersState={filtersState} setFiltersState={setFiltersState} />
-                {filtersState?.filters?.map((series: CustomizationFiltersSeries, index: number) => (
-                    <Series
-                        key={index}
-                        series={series}
-                        index={index}
-                        allFilters={allFilters}
-                        stateStuff={stateStuff}
-                        block={block}
-                    />
-                ))}
-                {canAddSeries && (
-                    <EmptySeries_>
-                        <Button size="small" onClick={handleAddSeries}>
-                            <T k="filters.series.add" />
-                        </Button>
-                    </EmptySeries_>
-                )}
-            </SeriesList_>
+            <div className="filters-section">
+                <div className="filters-section-controls">
+                    <div className="filters-section-description">
+                        <T k="filters.filters.description" html={true} md={true} />
+                    </div>
+                    {/* <Presets stateStuff={stateStuff} /> */}
+                    <SeriesList_>
+                        {/* <Options filtersState={filtersState} setFiltersState={setFiltersState} /> */}
+                        {filtersState?.filters?.map(
+                            (series: CustomizationFiltersSeries, index: number) => (
+                                <Series
+                                    key={index}
+                                    series={series}
+                                    index={index}
+                                    allFilters={allFilters}
+                                    stateStuff={stateStuff}
+                                    block={block}
+                                />
+                            )
+                        )}
+                        {canAddSeries && (
+                            <EmptySeries_>
+                                <Button size="small" onClick={handleAddSeries}>
+                                    <T k="filters.series.add" />
+                                </Button>
+                            </EmptySeries_>
+                        )}
+                    </SeriesList_>
+                </div>
+                <div className="filters-section-image">
+                    <FiltersImage />
+                    <figcaption>
+                        <T k="filters.grid_view" />
+                    </figcaption>
+                </div>
+            </div>
         </Wrapper_>
     )
 }
@@ -102,5 +112,23 @@ const EmptySeries_ = styled(Series_)`
     place-items: center;
     padding: ${spacing()};
 `
+
+const FiltersImage = () => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 120 60">
+            {' '}
+            <path d="M50 57v1H0v-1h50zM120 57v1H70v-1h50z"></path>
+            <path d="M0 55h1v5H0v-5zM70 55h1v5h-1v-5zM24 55h1v5h-1v-5zM93 55h1v5h-1v-5zM49 55h1v5h-1v-5zM119 55h1v5h-1v-5z"></path>
+            <path d="M0 0H18.333V4H0z"></path>
+            <path d="M0 14H26.667V18H0z"></path>
+            <path d="M0 28H31.667V32H0z"></path>
+            <path d="M0 42H50V46H0z"></path>
+            <path d="M70 0H120V4H70z"></path>
+            <path d="M70 14H110V18H70z"></path>
+            <path d="M70 42H93.333V46H70z"></path>
+            <path d="M70 28H101.667V32H70z"></path>
+        </svg>
+    )
+}
 
 export default FiltersSelection

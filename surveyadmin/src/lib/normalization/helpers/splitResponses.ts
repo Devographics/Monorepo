@@ -1,6 +1,6 @@
 import { NormalizationResponse } from "../hooks";
 import { DISCARDED_ANSWER } from "@devographics/constants";
-import { NormalizationMetadata } from "../types";
+import { NormalizationMetadata } from "@devographics/types";
 
 /*
 

@@ -8,7 +8,7 @@
 .chart-row-heading {
     margin: 0;
     font-size: var(--chartFontColumnHeading);
-    height: var(--rowHeight);
+    height: var(--barHeight);
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -16,8 +16,6 @@
     font-weight: normal;
     gap: 10px;
     max-width: 100%;
-}
-
-.chart-row-freeform-icon {
-    opacity: 0.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

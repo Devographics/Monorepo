@@ -6,11 +6,11 @@ import { getFieldLabel, getOrderedSections, getSectionLabel } from '../helpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useEntities } from 'core/helpers/entities'
 import { PanelState, FilterItem, CustomizationDefinition } from '../types'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 interface FieldSegmentProps {
     seriesIndex: number
-    block: BlockDefinition
+    block: BlockVariantDefinition
     conditionIndex: number
     stateStuff: PanelState
     field: FilterItem
