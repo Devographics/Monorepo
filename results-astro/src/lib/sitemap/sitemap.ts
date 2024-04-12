@@ -117,13 +117,15 @@ export function processRawSitemap(rawSitemapYaml: Array<SitemapSection>): Sitema
     // deep clone, assuming no circular object in the rawSitemap 
     let rawSitemap = JSON.parse(JSON.stringify(rawSitemapYaml)) as Sitemap // TODO rawSitemapSchema.parse(rawSitemapYaml)
     rawSitemap = rawSitemap.map((page, idx, pages) => {
+        // FIXME: somehow it creates a circular reference in the JSON
+        /*
         if (idx > 0) {
             page.previous = pages[idx - 1]
         }
-        // TODO: somehow it creates a circular reference in the JSON
         if (idx < pages.length - 1) {
             page.next = pages[idx + 1]
         }
+        */
         return page
     })
 

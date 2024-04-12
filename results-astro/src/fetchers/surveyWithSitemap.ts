@@ -10,6 +10,8 @@ import { processRawSitemap, type SurveyWithSitemap } from "@/lib/sitemap";
 // The survey is the same for all pages for a given build
 let surveyWithSitemap: SurveyWithSitemap | null = null
 /**
+ * Get the sitemap and parses it
+ * 
  * Astro prefix means the value is safe to render
  * and properly cached if needed
  * Use Astro.locals for a per-request cache

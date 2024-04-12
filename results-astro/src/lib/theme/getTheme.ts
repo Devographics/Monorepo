@@ -48,7 +48,10 @@ export interface Theme {
     },
     dimensions: {
         /** pixels */
-        spacing: number
+        spacing: number,
+        sidebar: {
+            width: number
+        }
     },
     colors: {
         [key in ColorKeys]?: string
@@ -65,7 +68,10 @@ const defaultTheme: Theme = {
         }
     },
     dimensions: {
-        spacing: 4
+        spacing: 4,
+        sidebar: {
+            width: 100
+        }
     },
     colors: {
         link: "#000000"
