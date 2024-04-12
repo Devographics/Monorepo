@@ -11,12 +11,12 @@ import compact from 'lodash/compact.js'
 export function mergeBuckets<T extends Bucket | FacetBucket>({
     buckets,
     mergedProps,
-    isFacet = false,
+    isFacetBuckets,
     axis
 }: {
     buckets: T[]
     mergedProps: any
-    isFacet?: boolean
+    isFacetBuckets?: boolean
     axis?: ComputeAxisParameters
 }) {
     const getValue = (bucket: Bucket | FacetBucket, unit: keyof BucketData) => bucket[unit] || 0
@@ -33,17 +33,22 @@ export function mergeBuckets<T extends Bucket | FacetBucket>({
             2
         ),
         [BucketUnits.PERCENTILES]: mergePercentiles(buckets),
-        ...(isFacet
+        ...(isFacetBuckets
             ? { [BucketUnits.PERCENTAGE_BUCKET]: getSum(BucketUnits.PERCENTAGE_BUCKET) }
             : {}),
         ...mergedProps
     } as T
 
-    if (axis) {
-        // if we know it's a top-level Bucket and not a FacetBucket
-        // we combine the facetBuckets from the cutoff buckets
-        ;(mergedBucket as Bucket).facetBuckets =
-            combineFacetBuckets(buckets as Bucket[], axis) ?? []
+    // if these are top-level buckets we also combine all *their* facet buckets
+    // with one another to generate a new merged facetBuckets array
+    if (axis && !isFacetBuckets) {
+        const mergedBucket_ = mergedBucket as Bucket
+        mergedBucket_.facetBuckets =
+            combineFacetBuckets({
+                buckets: buckets as Bucket[],
+                axis,
+                mergedBucket: mergedBucket_
+            }) ?? []
     }
 
     if (buckets.every(b => !!b.hasInsufficientData)) {
@@ -57,14 +62,20 @@ export function mergeBuckets<T extends Bucket | FacetBucket>({
 
 /*
 
-Take a range of selected buckets and a list of options,
+Take a range of *top-level* buckets and combine their
+facet buckets among each other
 
 */
 
-export const combineFacetBuckets = (
-    selectedBuckets: Bucket[],
-    axis?: ComputeAxisParameters
-): FacetBucket[] => {
+export const combineFacetBuckets = ({
+    buckets,
+    axis,
+    mergedBucket
+}: {
+    buckets: Bucket[]
+    axis: ComputeAxisParameters
+    mergedBucket: Bucket
+}): FacetBucket[] => {
     const optionsOrGroups =
         axis?.enableBucketGroups && axis?.question.groups ? axis.question.groups : axis?.options
     if (!optionsOrGroups) {
@@ -79,24 +90,21 @@ export const combineFacetBuckets = (
             // make sure to compact to remove undefined facetBuckets (when the equivalent
             // facetBucket doesn't exist in another main bucket)
             const sameFacetBuckets = compact(
-                selectedBuckets.map(b => b?.facetBuckets?.find(fb => fb.id === option.id)!)
+                buckets.map(b => b?.facetBuckets?.find(fb => fb.id === option.id)!)
             )
             // if the current/option we're considering doen't have any matching facet buckets
             // across all buckets, return undefined to get rid of it
             if (sameFacetBuckets.length === 0) {
                 return
             }
+            const countSum = sum(sameFacetBuckets.map(b => b?.[BucketUnits.COUNT] ?? 0))
             let combinedFacetBucket: FacetBucket = {
                 // Note: might create issues when option ID is not the same as facet bucket ID
                 id: String(id),
                 label,
-                [BucketUnits.COUNT]: round(
-                    sumBy(sameFacetBuckets, b => b?.[BucketUnits.COUNT] ?? 0),
-                    2
-                ),
+                [BucketUnits.COUNT]: countSum,
                 [BucketUnits.PERCENTAGE_BUCKET]: round(
-                    sumBy(sameFacetBuckets, b => b?.[BucketUnits.PERCENTAGE_BUCKET] ?? 0) /
-                        sameFacetBuckets.length,
+                    (countSum * 100) / mergedBucket[BucketUnits.COUNT]!,
                     2
                 )
             }

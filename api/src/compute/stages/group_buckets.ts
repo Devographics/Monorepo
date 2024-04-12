@@ -20,11 +20,13 @@ const isInBounds = (n: number, lowerBound?: number, upperBound?: number) => {
 function getGroupedBuckets<T extends Bucket | FacetBucket>({
     groups,
     buckets,
-    axis
+    axis,
+    isFacetBuckets
 }: {
     groups: OptionGroup[]
     buckets: T[]
     axis?: ComputeAxisParameters
+    isFacetBuckets?: boolean
 }) {
     const noAnswerBucket = buckets.find(b => b.id === NO_ANSWER)
     // keep track of the ids of all buckets that got matched into a group
@@ -42,7 +44,12 @@ function getGroupedBuckets<T extends Bucket | FacetBucket>({
             )
         }
         groupedBucketIds = [...groupedBucketIds, ...selectedBuckets.map(b => b.id)]
-        const bucket = mergeBuckets<T>({ buckets: selectedBuckets, mergedProps: { id }, axis })
+        const bucket = mergeBuckets<T>({
+            buckets: selectedBuckets,
+            mergedProps: { id },
+            axis,
+            isFacetBuckets
+        })
         return bucket
     })
 
@@ -94,7 +101,8 @@ export async function groupBuckets(
             for (let bucket of editionData.buckets) {
                 bucket.facetBuckets = getGroupedBuckets<FacetBucket>({
                     groups: axis2.question.groups,
-                    buckets: bucket.facetBuckets
+                    buckets: bucket.facetBuckets,
+                    isFacetBuckets: true
                 })
             }
         }

@@ -1,9 +1,7 @@
 import { Bucket, BucketUnits, FacetBucket, ResponseEditionData } from '@devographics/types'
-import sumBy from 'lodash/sumBy.js'
 import { ComputeAxisParameters, GenericComputeArguments } from '../../types'
 import sortBy from 'lodash/sortBy.js'
 import sum from 'lodash/sum.js'
-import { mergeBuckets } from './mergeBuckets'
 import { INSUFFICIENT_DATA } from '@devographics/constants'
 import { zeroPercentiles } from './add_percentiles'
 
@@ -133,7 +131,7 @@ export const applyBucketCutoff = ({
     return { ...bucketWithCutoff, facetBuckets: facetBucketsWithCutoff }
 }
 
-export const applyDatasetCutoff = (
+export const applyDatasetCutoff = async (
     resultsByEdition: ResponseEditionData[],
     computeArguments: GenericComputeArguments,
     axis1: ComputeAxisParameters,
@@ -149,5 +147,4 @@ export const applyDatasetCutoff = (
             )
         }
     }
-    return resultsByEdition
 }

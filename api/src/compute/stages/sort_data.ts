@@ -13,8 +13,7 @@ import {
 
 export function sortBuckets<T extends Bucket | FacetBucket>(
     buckets: T[],
-    axis: ComputeAxisParameters,
-    isFacetBuckets?: boolean
+    axis: ComputeAxisParameters
 ) {
     const { sort, order, options } = axis
     let sortedBuckets = [...buckets]
@@ -107,7 +106,7 @@ export function sortBucketsAndFacets(
     return sortedBuckets
 }
 
-export function sortData(
+export async function sortData(
     resultsByEdition: ResponseEditionData[],
     axis1: ComputeAxisParameters,
     axis2?: ComputeAxisParameters

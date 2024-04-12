@@ -26,15 +26,15 @@ export function groupUnderCutoff<T extends Bucket | FacetBucket>({
     buckets,
     mainAxis,
     secondaryAxis,
-    isFacet
+    isFacetBuckets
 }: {
     buckets: T[]
     mainAxis: ComputeAxisParameters
     secondaryAxis?: ComputeAxisParameters
-    isFacet: boolean
+    isFacetBuckets?: boolean
 }) {
     const { cutoff, cutoffPercent } = mainAxis
-    const keptBuckets = buckets.filter(b => keepBucket<T>(b, cutoff, cutoffPercent, isFacet))
+    const keptBuckets = buckets.filter(b => keepBucket<T>(b, cutoff, cutoffPercent, isFacetBuckets))
     const cutoffBuckets = buckets.filter(b => !keptBuckets.map(b => b.id).includes(b.id))
     if (cutoffBuckets.length > 0) {
         const cutoffGroupBucket = mergeBuckets<T>({
@@ -44,7 +44,7 @@ export function groupUnderCutoff<T extends Bucket | FacetBucket>({
                 groupedBucketIds: cutoffBuckets.map(b => b.id),
                 groupedBuckets: cutoffBuckets
             },
-            isFacet,
+            isFacetBuckets,
             axis: secondaryAxis
         })
 
@@ -72,8 +72,7 @@ export async function cutoffData(
                 editionData.buckets = groupUnderCutoff<Bucket>({
                     buckets: editionData.buckets,
                     mainAxis: axis1,
-                    secondaryAxis: axis2,
-                    isFacet: false
+                    secondaryAxis: axis2
                 })
             }
 
@@ -86,7 +85,7 @@ export async function cutoffData(
                     bucket.facetBuckets = groupUnderCutoff<FacetBucket>({
                         buckets: bucket.facetBuckets,
                         mainAxis: axis2,
-                        isFacet: true
+                        isFacetBuckets: true
                     })
                 }
             }

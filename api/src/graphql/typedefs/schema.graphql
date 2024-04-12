@@ -340,6 +340,11 @@ type Bucket {
     """
     hasInsufficientData: Boolean
     """
+    Used for double-checking validity of returned data
+    """
+    facetsCountSum: Float # should always be equal to bucket.count
+    facetsPercentSum: Float # should always be equal to 100
+    """
     If bucket was created by grouping other buckets, ids of these grouped buckets
     """
     groupedBucketIds: [String]
@@ -396,6 +401,11 @@ type GroupedBucket {
     Indicates if bucket was removed because of insufficient data
     """
     hasInsufficientData: Boolean
+    """
+    Used for double-checking validity of returned data
+    """
+    facetsCountSum: Float # should always be equal to bucket.count
+    facetsPercentSum: Float # should always be equal to 100
 }
 
 type Percentiles {
@@ -436,14 +446,6 @@ type FacetBucket {
     Respondent count
     """
     count: Int
-    """
-    Percentage relative to question respondents
-    """
-    percentageQuestion: Float
-    """
-    Percentage relative to survey respondents
-    """
-    percentageSurvey: Float
     """
     Percentage of the bucket represented by the current facet
     """

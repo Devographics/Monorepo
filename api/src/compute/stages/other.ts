@@ -204,6 +204,41 @@ export async function removeEmptyEditions(resultsByEdition: ResponseEditionData[
 
 /*
 
+Add facet sums to help double-checking validity of calculations
+
+*/
+export async function addFacetValiditySums(resultsByEdition: ResponseEditionData[]) {
+    for (const editionData of resultsByEdition) {
+        for (const bucket of editionData.buckets) {
+            const { id, facetBuckets, count } = bucket
+            if (facetBuckets) {
+                let facetsCountSum = 0,
+                    facetsPercentSum = 0
+                for (const facetBucket of bucket.facetBuckets) {
+                    facetsCountSum += facetBucket.count || 0
+                    facetsPercentSum += facetBucket.percentageBucket || 0
+                }
+                bucket.facetsCountSum = facetsCountSum
+                bucket.facetsPercentSum = facetsPercentSum
+
+                if (facetsCountSum !== count) {
+                    console.warn(
+                        `⚠️ facetsCountSum (${facetsCountSum}) didn't match bucket count (${count}) for bucket ${id}`
+                    )
+                }
+                // we tolerate between 99 and 101 to account for rounding innacuracies
+                if (!(99 < facetsPercentSum && facetsPercentSum < 101)) {
+                    console.warn(
+                        `⚠️ facetsPercentSum (${facetsPercentSum}) didn't equal 100 for bucket ${id}`
+                    )
+                }
+            }
+        }
+    }
+}
+
+/*
+
 Add labels to buckets (only used for country names currently)
 
 */
