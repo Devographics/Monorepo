@@ -1,8 +1,17 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
 .chart-wrapper-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    row-gap: var(--doubleSpacing);
-    column-gap: var(--spacing);
+    @include small {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing);
+    }
+    @include medium-large {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        row-gap: var(--doubleSpacing);
+        column-gap: var(--spacing);
+    }
 }
 
 .chart-grid-item-heading {

@@ -18,6 +18,9 @@
         .chart-row-left {
             justify-content: flex-end;
         }
+        @include small {
+            row-gap: var(--halfSpacing);
+        }
     }
     .chart-heading {
         display: block;
@@ -38,7 +41,13 @@
 }
 .multiexp-chart-heading {
     display: flex;
-    justify-content: space-between;
+    gap: var(--halfSpacing);
+    @include small {
+        flex-direction: column;
+    }
+    @include medium-large {
+        justify-content: space-between;
+    }
 }
 .multiexp-control {
     display: flex;
@@ -57,6 +66,10 @@
     }
     .radio-unchecked {
         opacity: 0.8;
+    }
+    @include small {
+        justify-content: space-between;
+        width: 100%;
     }
 }
 .multiexp-column-headings {

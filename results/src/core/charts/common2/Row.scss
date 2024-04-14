@@ -1,10 +1,17 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
 .chart-row {
     // padding: var(--spacing) 0;
 }
 .chart-rows-zebra {
     .chart-row:nth-child(2n) {
-        .chart-row-content {
+        @include small {
             background-color: color-mix(in srgb, var(--backgroundAltColor) 50%, transparent);
+        }
+        @include medium-large {
+            .chart-row-content {
+                background-color: color-mix(in srgb, var(--backgroundAltColor) 50%, transparent);
+            }
         }
     }
 }
@@ -43,8 +50,21 @@
     opacity: 0.5;
 }
 
+.chart-row-left {
+    grid-area: heading;
+}
+.chart-row-content {
+    grid-area: content;
+    @include small {
+        padding: 0;
+    }
+}
 .chart-row-right {
+    grid-area: metadata;
     display: flex;
     align-items: center;
     gap: var(--spacing);
+    @include small {
+        justify-content: flex-end;
+    }
 }
