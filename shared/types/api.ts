@@ -35,7 +35,9 @@ export enum DbPathsEnum {
     METADATA = 'metadata',
     ERROR = 'error',
     SUBPATHS = 'subPaths',
-    SKIP = 'skip'
+    SKIP = 'skip',
+    SENTIMENT = 'sentiment',
+    EXPERIENCE = 'experience'
 }
 
 type DbPathsFirstLevel = Exclude<
