@@ -35,6 +35,8 @@ query ${getQueryName({ editionId, questionId })} {
                             currentEdition {
                                 commentsRaw {
                                     message
+                                    experience
+                                    sentiment
                                     responseId
                                 }
                                 count
@@ -110,7 +112,7 @@ const getCommentReportUrl = ({ responseId, message, name }) => {
     })
 }
 
-const Comment = ({ message, responseId, index, name }) => {
+const Comment = ({ message, experience, sentiment, responseId, index, name }) => {
     return (
         <CommentItem>
             <CommentMessageWrapper>
