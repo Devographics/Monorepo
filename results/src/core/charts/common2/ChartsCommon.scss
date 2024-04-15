@@ -1,28 +1,5 @@
 @import '../../../stylesheets/_breakpoints.scss';
 
-.chart-row,
-.chart-axis,
-.chart-gridlines {
-    align-items: center;
-    @include small {
-        // display: flex;
-        // flex-direction: column;
-        padding: var(--halfSpacing) 0;
-        display: grid;
-        column-gap: var(--halfSpacing);
-        row-gap: var(--quarterSpacing);
-        grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
-        grid-template-areas:
-            'heading metadata'
-            'content content';
-    }
-    @include medium-large {
-        display: grid;
-        grid-template-columns: 200px minmax(0, 1fr) 100px;
-        gap: 20px;
-        grid-template-areas: 'heading content metadata';
-    }
-}
 .chart-facet {
     border-bottom: 1px solid #ffffff33;
     padding-bottom: 20px;

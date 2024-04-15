@@ -27,20 +27,15 @@ export const Rows = ({
 }) => {
     const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
     return (
-        <div className={`chart-rows ${hasZebra ? 'chart-rows-zebra' : ''}`}>
+        <div className={`chart-rows ${hasZebra ? 'chart-rows-zebra' : ''}`} ref={parent}>
             {ticks && formatValue && <Axis variant="top" ticks={ticks} formatValue={formatValue} />}
 
-            <div className="chart-rows-content">
-                {ticks && <Gridlines ticks={ticks} />}
-                {/* {buckets && <Zebra buckets={buckets} />} */}
-                <div className="chart-rows-bars" ref={parent}>
-                    {children}
-                </div>
+            {children}
 
-                {chartState.rowsLimit ? (
-                    <ShowAll chartState={chartState} chartValues={chartValues} />
-                ) : null}
-            </div>
+            {chartState.rowsLimit ? (
+                <ShowAll chartState={chartState} chartValues={chartValues} />
+            ) : null}
+
             {ticks && formatValue && labelId && (
                 <Axis variant="bottom" ticks={ticks} formatValue={formatValue} labelId={labelId} />
             )}

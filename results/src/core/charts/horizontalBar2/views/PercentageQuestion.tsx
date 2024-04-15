@@ -11,16 +11,23 @@ export const PercentageQuestion: ViewDefinition = {
     getValue,
     steps: [removeNoAnswer, removeOverLimit],
     component: props => {
+        const ticks = getTicks(props.buckets.map(getValue))
         return (
             <Rows
                 {...props}
-                ticks={getTicks(props.buckets.map(getValue))}
+                ticks={ticks}
                 formatValue={t => `${t}%`}
                 labelId="charts.axis_legends.users_percentage_question"
                 hasZebra={true}
             >
                 {props.buckets.map((bucket, i) => (
-                    <Row key={bucket.id} bucket={bucket} {...props} rowComponent={SingleBarRow} />
+                    <Row
+                        key={bucket.id}
+                        ticks={ticks}
+                        bucket={bucket}
+                        rowComponent={SingleBarRow}
+                        {...props}
+                    />
                 ))}
             </Rows>
         )

@@ -1,8 +1,31 @@
 @import '../../../stylesheets/_breakpoints.scss';
 
-.chart-row {
-    // padding: var(--spacing) 0;
+.chart-row,
+.chart-axis,
+.chart-gridlines {
+    align-items: center;
+    @include small {
+        // display: flex;
+        // flex-direction: column;
+        padding: var(--halfSpacing) 0;
+        display: grid;
+        column-gap: var(--halfSpacing);
+        row-gap: var(--quarterSpacing);
+        grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+        grid-template-areas:
+            'heading metadata'
+            'content content';
+    }
+    @include medium-large {
+        display: grid;
+        grid-template-columns: subgrid;
+        grid-column-start: 1;
+        grid-column-end: 4;
+        // gap: 20px;
+        // grid-template-areas: 'heading content metadata';
+    }
 }
+
 .chart-rows-zebra {
     .chart-row:nth-child(2n) {
         @include small {
@@ -27,7 +50,7 @@
 
 .chart-row-content {
     padding: var(--halfSpacing) 0;
-
+    position: relative;
     // height: calc(var(--barHeight) + var(--spacing));
     // height: var(--barHeight);
 }

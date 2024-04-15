@@ -28,8 +28,8 @@
     .chart-row-content {
         padding: 0;
     }
-    .chart-rows-bars {
-        gap: calc(var(--spacing) * 3);
+    .chart-rows {
+        row-gap: calc(var(--spacing) * 3);
     }
 }
 .multiexp-controls {

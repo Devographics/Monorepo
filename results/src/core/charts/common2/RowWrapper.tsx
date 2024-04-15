@@ -5,13 +5,14 @@ import { FreeformIcon, UserIcon } from 'core/icons'
 import classNames from 'classnames'
 import { OVERALL } from '@devographics/constants'
 import { RowDataProps } from '../horizontalBar2/types'
+import { Gridlines } from './Gridlines'
 
 export const RowWrapper = (
     props: RowDataProps &
         RowCommonProps &
         RowExtraProps & { rowMetadata?: JSX.Element; children: JSX.Element }
 ) => {
-    const { chartState, bucket, isGroupedBucket = false, children, rowMetadata } = props
+    const { chartState, ticks, bucket, isGroupedBucket = false, children, rowMetadata } = props
     const { isFreeformData } = bucket
     const isOverallBucket = bucket.id === OVERALL
     const className = classNames(
@@ -26,6 +27,7 @@ export const RowWrapper = (
                 <RowHeading {...props} />
             </div>
             <div className="chart-row-content">
+                {ticks && <Gridlines ticks={ticks} />}
                 <div className="chart-bar">{children}</div>
             </div>
             {rowMetadata && <div className="chart-row-right">{rowMetadata}</div>}

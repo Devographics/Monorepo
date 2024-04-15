@@ -46,7 +46,6 @@ const BoxplotView = (viewProps: ViewProps) => {
 
     const legends = [] as BlockLegend[]
 
-    console.log({ chartMax, contentHeight, contentWidth, groups })
     const { xScale, yScale } = useScales({ chartMax, contentHeight, contentWidth, groups })
     const rowProps = {
         ...viewProps,
