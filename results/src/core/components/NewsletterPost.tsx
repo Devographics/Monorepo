@@ -74,7 +74,7 @@ const NewsletterForm = ({
 
     return (
         <div className="newsletter-form">
-            <Form_ method="get" action={process.env.GATSBY_EMAIL_POST_URL}>
+            <Form_ method="post" action={process.env.GATSBY_EMAIL_POST_URL}>
                 <Input_
                     className="newsletter-email"
                     id="email_address_email"
