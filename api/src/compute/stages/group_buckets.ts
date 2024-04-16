@@ -4,6 +4,7 @@ import { NO_ANSWER } from '@devographics/constants'
 import uniq from 'lodash/uniq.js'
 import compact from 'lodash/compact.js'
 import { mergeBuckets } from './mergeBuckets'
+import intersection from 'lodash/intersection.js'
 
 const isInBounds = (n: number, lowerBound?: number, upperBound?: number) => {
     if (lowerBound && upperBound) {
@@ -20,19 +21,21 @@ const isInBounds = (n: number, lowerBound?: number, upperBound?: number) => {
 function getGroupedBuckets<T extends Bucket | FacetBucket>({
     groups,
     buckets,
-    axis,
+    primaryAxis,
+    secondaryAxis,
     isFacetBuckets
 }: {
     groups: OptionGroup[]
     buckets: T[]
-    axis?: ComputeAxisParameters
+    primaryAxis: ComputeAxisParameters
+    secondaryAxis?: ComputeAxisParameters
     isFacetBuckets?: boolean
 }) {
     const noAnswerBucket = buckets.find(b => b.id === NO_ANSWER)
     // keep track of the ids of all buckets that got matched into a group
     let groupedBucketIds: string[] = []
     let groupedBuckets = groups.map(group => {
-        const { id, upperBound, lowerBound, items } = group
+        const { id: groupId, upperBound, lowerBound, items } = group
         let selectedBuckets
         if (lowerBound || upperBound) {
             selectedBuckets = buckets.filter(b => isInBounds(Number(b.id), lowerBound, upperBound))
@@ -40,14 +43,15 @@ function getGroupedBuckets<T extends Bucket | FacetBucket>({
             selectedBuckets = buckets.filter(b => items.includes(b.id))
         } else {
             throw new Error(
-                `groupBuckets: please specify lowerBound/upperBound or items array for group ${id}`
+                `groupBuckets: please specify lowerBound/upperBound or items array for group ${groupId}`
             )
         }
         groupedBucketIds = [...groupedBucketIds, ...selectedBuckets.map(b => b.id)]
         const bucket = mergeBuckets<T>({
             buckets: selectedBuckets,
-            mergedProps: { id },
-            axis,
+            mergedProps: { id: groupId },
+            primaryAxis,
+            secondaryAxis,
             isFacetBuckets
         })
         return bucket
@@ -55,7 +59,24 @@ function getGroupedBuckets<T extends Bucket | FacetBucket>({
 
     // add any remaning buckets that were not matched into groups as standalone buckets
     // so that we don't lose any data
-    const remainingUngroupedBuckets = buckets.filter(b => !groupedBucketIds.includes(b.id))
+    let remainingUngroupedBuckets = buckets.filter(b => !groupedBucketIds.includes(b.id))
+
+    // in some cases there will be individual ungrouped buckets with the same id as a bucket group
+    // remove the individual ungrouped bucket to avoid any ambiguities
+    // NOTE: the alternative would be merging the ungrouped bucket into the group somehow but
+    // removing it altogether seemed easier
+    const duplicateBucketIds = intersection(
+        remainingUngroupedBuckets.map(b => b.id),
+        groups.map(g => g.id)
+    )
+    duplicateBucketIds.forEach(id => {
+        console.warn(
+            `⚠️ getGroupedBuckets: found duplicate bucket id: ${id}, removing non-group bucket`
+        )
+    })
+    remainingUngroupedBuckets = remainingUngroupedBuckets.filter(
+        b => !duplicateBucketIds.includes(b.id)
+    )
 
     groupedBuckets = noAnswerBucket
         ? [...groupedBuckets, ...remainingUngroupedBuckets, noAnswerBucket]
@@ -102,6 +123,7 @@ export async function groupBuckets(
                 bucket.facetBuckets = getGroupedBuckets<FacetBucket>({
                     groups: axis2.question.groups,
                     buckets: bucket.facetBuckets,
+                    primaryAxis: axis2,
                     isFacetBuckets: true
                 })
             }
@@ -112,7 +134,8 @@ export async function groupBuckets(
                 const groupedBuckets = getGroupedBuckets<Bucket>({
                     groups,
                     buckets: editionData.buckets,
-                    axis: axis2
+                    primaryAxis: axis1,
+                    secondaryAxis: axis2
                 })
                 editionData.buckets = groupedBuckets
             }

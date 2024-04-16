@@ -21,12 +21,14 @@ export function groupOverLimit<T extends Bucket | FacetBucket>({
     buckets,
     limit,
     isFacetBuckets,
-    primaryAxis
+    primaryAxis,
+    secondaryAxis
 }: {
     buckets: T[]
     limit: number
     isFacetBuckets?: boolean
-    primaryAxis?: ComputeAxisParameters
+    primaryAxis: ComputeAxisParameters
+    secondaryAxis?: ComputeAxisParameters
 }) {
     const { limitedBuckets, discardedBuckets } = limitBuckets<T>({ buckets, limit })
     if (discardedBuckets.length > 0) {
@@ -34,7 +36,8 @@ export function groupOverLimit<T extends Bucket | FacetBucket>({
             buckets: discardedBuckets,
             mergedProps: { id: OVERLIMIT_ANSWERS },
             isFacetBuckets,
-            axis: primaryAxis
+            primaryAxis,
+            secondaryAxis
         })
 
         return discardedBuckets.length > 0
@@ -80,7 +83,8 @@ export async function limitData(
                 editionData.buckets = groupOverLimit<Bucket>({
                     buckets: editionData.buckets,
                     limit: axis1.limit,
-                    primaryAxis: axis2
+                    primaryAxis: axis1,
+                    secondaryAxis: axis2
                 })
             } else {
                 // do not apply limits for aggregations that are sorted along predefined options,
@@ -101,6 +105,7 @@ export async function limitData(
                     bucket.facetBuckets = groupOverLimit<FacetBucket>({
                         buckets: bucket.facetBuckets,
                         isFacetBuckets: true,
+                        primaryAxis: axis2,
                         limit: axis2.limit
                     })
                 } else {

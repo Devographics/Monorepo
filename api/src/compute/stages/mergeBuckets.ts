@@ -7,24 +7,29 @@ import { mergePercentiles } from './cutoff_data'
 import { NO_ANSWER } from '@devographics/constants'
 import uniq from 'lodash/uniq.js'
 import compact from 'lodash/compact.js'
+import { sortBuckets } from './sort_data'
 
 export function mergeBuckets<T extends Bucket | FacetBucket>({
     buckets,
     mergedProps,
     isFacetBuckets,
-    axis
+    primaryAxis,
+    secondaryAxis
 }: {
     buckets: T[]
     mergedProps: any
     isFacetBuckets?: boolean
-    axis?: ComputeAxisParameters
+    primaryAxis: ComputeAxisParameters
+    secondaryAxis?: ComputeAxisParameters
 }) {
     const getValue = (bucket: Bucket | FacetBucket, unit: keyof BucketData) => bucket[unit] || 0
     const getSum = (unit: keyof BucketData) => round(sum(buckets.map(b => getValue(b, unit))), 2)
 
+    const groupedBuckets = sortBuckets(buckets, primaryAxis)
+
     const mergedBucket = {
-        groupedBuckets: buckets,
-        groupedBucketIds: buckets.map(b => b.id),
+        groupedBuckets,
+        groupedBucketIds: groupedBuckets.map(b => b.id),
         [BucketUnits.COUNT]: getSum(BucketUnits.COUNT),
         [BucketUnits.PERCENTAGE_QUESTION]: getSum(BucketUnits.PERCENTAGE_QUESTION),
         [BucketUnits.PERCENTAGE_SURVEY]: getSum(BucketUnits.PERCENTAGE_SURVEY),
@@ -41,12 +46,12 @@ export function mergeBuckets<T extends Bucket | FacetBucket>({
 
     // if these are top-level buckets we also combine all *their* facet buckets
     // with one another to generate a new merged facetBuckets array
-    if (axis && !isFacetBuckets) {
+    if (secondaryAxis && !isFacetBuckets) {
         const mergedBucket_ = mergedBucket as Bucket
         mergedBucket_.facetBuckets =
             combineFacetBuckets({
                 buckets: buckets as Bucket[],
-                axis,
+                axis: secondaryAxis,
                 mergedBucket: mergedBucket_
             }) ?? []
     }
