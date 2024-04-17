@@ -274,15 +274,22 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
     } else {
       if (doc.normalizedFields?.some((field) => field.metadata)) {
         // doc has normalizable fields that contain an answer
-        if (
-          doc.normalizedFields?.every(
-            (field) => field.value.length > 0 && !field.value.includes(NO_MATCH)
+
+        const hasMatch = (field) =>
+          field.value.length > 0 && !field.value.includes(NO_MATCH);
+        if (doc.normalizedFields?.every(hasMatch)) {
+          // every field has had a match for every answer value
+          group = DocumentGroups.NORMALIZED;
+        } else if (
+          doc.normalizedFields?.some(
+            (field) =>
+              field.value.length > 0 && field.value.some((v) => v !== NO_MATCH)
           )
         ) {
-          // every question has had a match
-          group = DocumentGroups.NORMALIZED;
+          // at least one field has one matched answer
+          group = DocumentGroups.PARTIALLY_MATCHED;
         } else {
-          // there are unmatched questions
+          // all fields are unmatched
           group = DocumentGroups.UNMATCHED;
         }
       } else {

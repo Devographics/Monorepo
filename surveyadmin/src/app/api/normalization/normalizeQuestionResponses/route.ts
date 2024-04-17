@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { captureException } from "@sentry/nextjs";
 import { normalizeQuestionResponses } from "~/lib/normalization/actions";
 
-
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
     // Get body data as JSON

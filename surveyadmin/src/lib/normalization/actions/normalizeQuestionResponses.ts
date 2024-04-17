@@ -4,6 +4,7 @@ import { normalizeInBulk } from "../normalize/normalizeInBulk";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import { getSurveyEditionSectionQuestion } from "../helpers/getSurveyEditionQuestion";
 import { getQuestionResponses } from "./getQuestionResponses";
+import { NormalizeInBulkResult } from "../types";
 
 export type NormalizeQuestionResponsesArgs = {
   // note: we need a surveyId to figure out which database to use
@@ -59,12 +60,17 @@ export const normalizeQuestionResponses = async (
 
   console.log(`⛰️ Refreshing responses cache for question ${questionId}…`);
 
-  const questionResponseData = await getQuestionResponses({
+  // note: even if we don't return question responses we do need to refresh the cache
+  // (but we don't need to await the result)
+  const questionResponseData = /* await */ getQuestionResponses({
     surveyId,
     editionId,
     questionId,
     shouldGetFromCache: false,
   });
 
-  return { ...mutationResult, questionResponseData };
+  const result: NormalizeInBulkResult = {
+    ...mutationResult /*, questionResponseData*/,
+  };
+  return result;
 };
