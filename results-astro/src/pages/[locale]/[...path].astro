@@ -8,7 +8,7 @@ import type {
   InferGetStaticParamsType,
   InferGetStaticPropsType,
 } from "astro";
-import Layout from "@/layouts/Layout.astro";
+import Layout from "@/components/layouts/Layout.astro";
 import { astroEnv } from "@/lib/env";
 import { astroSurveyWithSitemap } from "@/fetchers/surveyWithSitemap";
 import PageTemplate from "@/components/pages/PageTemplate.astro";
@@ -17,8 +17,8 @@ import { initTheme } from "@/lib/theme";
 import { getLocalesWithStrings } from "@devographics/i18n/server";
 import { makeTranslatorFunc } from "@devographics/i18n";
 import type { PageDefinition } from "@/lib/sitemap";
-import { ReactLayout } from "@/layouts/ReactLayout";
-import { GlobalLayout } from "@/layouts/GlobalLayout";
+import { ReactLayout } from "@/components/layouts/ReactLayout";
+import { GlobalLayout } from "@/components/layouts/GlobalLayout";
 
 /**
  * TODO: there is no ISR in Astro
@@ -136,3 +136,4 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
     </ReactLayout>
   </GlobalLayout>
 </Layout>
+ @/components/layouts/ReactLayout@/components/layouts/GlobalLayout

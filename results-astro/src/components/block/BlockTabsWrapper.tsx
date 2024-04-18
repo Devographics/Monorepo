@@ -163,7 +163,6 @@ export const TabsWrapper = ({
                     </BlockHeaderRight_>
                 </BlockHeader>
                 {regularVariants.map((block: any, variantIndex: any) => (
-                    /** @ts-expect-error TODO why this happens?  */
                     <Tabs.Content key={block.id} value={getRegularTabId(variantIndex)}>
                         <BlockSwitcher
                             block={block}
@@ -174,7 +173,6 @@ export const TabsWrapper = ({
                     </Tabs.Content>
                 ))}
                 {blockCustomVariants.map((variant: any, variantIndex: any) => (
-                    /** @ts-expect-error TODO why this happens?  */
                     <Tabs.Content key={variant.name} value={getCustomTabId(variant.id)}>
                         <CustomVariantWrapper variant={variant} {...variantProps}>
                             <BlockSwitcher
