@@ -8,8 +8,8 @@ export const RenameTokens = (props) => {
     <ModalTrigger
       isButton={false}
       label="🏷 Rename Tokens…"
-      tooltip="Rename tokens"
-      header={<div>Rename Tokens</div>}
+      tooltip="Rename custom tokens"
+      header={<div>Rename Custom Tokens</div>}
     >
       <Rename {...props} />
     </ModalTrigger>
@@ -29,7 +29,7 @@ const Rename = (props) => {
       </p>
       <hr />
       <label>
-        Old Name:{" "}
+        Current Token:{" "}
         <input
           type="text"
           disabled={loading}
@@ -40,7 +40,7 @@ const Rename = (props) => {
         />
       </label>
       <label>
-        New Name:{" "}
+        New Token:{" "}
         <input
           type="text"
           disabled={loading}
