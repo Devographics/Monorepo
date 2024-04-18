@@ -8,8 +8,19 @@
     "**/.client/**/*.tsx"
   ],
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": ["@remix-run/node", "vite/client"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
+    "types": [
+      "@remix-run/node",
+      "vite/client",
+    ],
+    "typeRoots": [
+      "node_modules/",
+      "./@types/",
+    ],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
@@ -23,9 +34,34 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"]
+      "~/*": [
+        "./app/*"
+      ],
+      // Just to support Next like syntax and Astro code, prefer using ~/foobar
+      "@/*": [
+        "./app/*"
+      ],
+      // TODO: temporary for migration, remove later on
+      "core/*": [
+        "./app/core/*"
+      ],
+      // TODO: remove survey specific code if possible,
+      // or favour dynamic loading rather than hacking webpack to load the right survey like we did in Gatsby
+      // Currently stick to css 2023 for experiments
+      "Theme/*": [
+        "./surveys/css2023/theme/*"
+      ],
+      "Fonts/*": [
+        "./surveys/css2023/fonts/*"
+      ],
+      "Logo/*": [
+        "./surveys/css2023/logo/*"
+      ],
+      // @see https://github.com/remix-run/react-router/issues/10847
+      "react": [
+        "./node_modules/@types/react"
+      ]
     },
-
     // Vite takes care of building everything, not tsc.
     "noEmit": true
   }

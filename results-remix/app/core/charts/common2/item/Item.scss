@@ -1,0 +1,47 @@
+.chart-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 100%;
+}
+.chart-item-label {
+    text-align: right;
+    font-size: 0.8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+}
+button.chart-item {
+    padding: 4px 8px 4px 4px;
+    border-radius: 500px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+.item-name {
+    margin-bottom: 5px;
+}
+.item-description {
+    margin-bottom: var(--spacing);
+    font-size: 0.8rem;
+}
+.item-links {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.item-links-item {
+}
+.item-links-item-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.item-modal {
+    .code-example {
+        padding: var(--spacing);
+        font-size: 0.8rem;
+        background: var(--backgroundColor);
+        margin-bottom: var(--spacing);
+    }
+}

@@ -1,0 +1,26 @@
+translationContexts: [homepage, common, results, countries, state_of_css, state_of_css_2023]
+socialMediaImage: social/state-of-css-2021-logo-social.png
+hashtag: '#StateOfCSS'
+surveySlug: css2023
+slug: state_of_css
+year: 2023
+siteContext: stateofcss
+siteTitle: The State of CSS 2023
+siteUrl: https://2023.stateofcss.com
+emailOctopusUrl: https://emailoctopus.com/lists/ed0386c4-2f55-11e9-a3c9-06b79b628af2/members/embedded/1.3/add
+emailOctopusSiteKey: 6LdYsmsUAAAAAPXVTt-ovRsPIJ_IVhvYBBhGvRV6
+emailOctopusCode: hpc4b27b6e-eb38-11e9-be00-06b4694bee2a
+translationLink: https://github.com/StateOfJS/locale-en-US
+capturesUrl: https://assets.devographics.com/captures/css2022
+discordUrl: https://discord.gg/zRDb35jfrt
+issuesUrl: https://github.com/StateOfJS/Monorepo
+
+tshirtImages: ['shirt-mockup.jpg', 'css2021-tshirt.png', 'shirt-lean.jpg']
+tshirtLink: https://cottonbureau.com/products/css-retro-vhs
+tshirtPrice: 29
+tshirtDesignerLink: https://chriskirknielsen.com/
+
+baseUrl: http://localhost:8001
+# baseUrl: http://localhost:9000
+sitemap: ../../../.logs/flat_sitemap.yml
+# bannerId: general.css2022.js2022_banner

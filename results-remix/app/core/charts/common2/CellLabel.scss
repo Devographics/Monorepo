@@ -1,0 +1,19 @@
+.chart-cell-label {
+    // text-shadow: 1px 1px 0 #000000cc, -1px 1px 0 #000000cc, -1px -1px 0 #000000cc,
+    //     1px -1px 0 #000000cc;
+    font-size: 0.8rem;
+    svg {
+        display: block;
+        width: 100%;
+        height: var(--barHeight);
+        text {
+            fill: var(--textColor);
+            stroke: #00000099;
+
+            paint-order: stroke;
+            stroke-width: 3px;
+            stroke-linecap: butt;
+            stroke-linejoin: miter;
+        }
+    }
+}

@@ -39,10 +39,12 @@ export const getStaticPaths = (async () => {
   }
   const surveyWithSitemap = await astroSurveyWithSitemap();
   const { sitemap } = surveyWithSitemap;
+  /*
   console.log(
     "Paths in sitemap:",
     sitemap.map((s) => s.path),
   );
+  */
   return sitemap.map((pageDefinition) => {
     return {
       params: {
