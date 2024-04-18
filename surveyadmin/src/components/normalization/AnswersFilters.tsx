@@ -76,7 +76,6 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
   // wait until user has stopped typing to filter
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      console.log(localFilterQuery);
       setPageNumber(1);
       setFilterQuery(localFilterQuery);
     }, 500);
@@ -189,7 +188,6 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
               responsesIds: filteredAnswers.map((a) => a.responseId),
               isVerbose: false,
             });
-            console.log(results);
             addToActionLog({ type: "normalization", payload: results });
             if (results.data) {
               const { normalizedDocuments } = results.data;

@@ -9,7 +9,7 @@ import {
   NormalizationSummary,
 } from "./NormalizationResult";
 import { useDidMountEffect } from "../hooks";
-import { SegmentProps } from "./NormalizeQuestion";
+import { CommonNormalizationProps, SegmentProps } from "./NormalizeQuestion";
 import {
   EditionMetadata,
   SurveyMetadata,
@@ -23,6 +23,7 @@ interface ProgressProps extends SegmentProps {
   edition: EditionMetadata;
   question?: QuestionWithSection;
   responsesCount: number;
+  addToActionLog: CommonNormalizationProps["addToActionLog"];
 }
 
 /**
@@ -124,18 +125,6 @@ const SegmentDoneItem = ({
         segments={segments}
       />
       <NormalizationSummary {...data} />
-
-      <a
-        href="#"
-        role="button"
-        onClick={(e) => {
-          e.preventDefault();
-          setShowResults(!showResults);
-        }}
-      >
-        {showResults ? "Hide Results" : "Show Results"}
-      </a>
-      {showResults && <NormalizationResult {...data} showSummary={false} />}
     </article>
   );
 };
@@ -151,6 +140,7 @@ const SegmentInProgressItem = ({
   onlyUnnormalized,
   updateSegments,
   segments,
+  addToActionLog,
 }: Segment &
   ProgressProps & {
     onlyUnnormalized?: boolean;
@@ -180,6 +170,7 @@ const SegmentInProgressItem = ({
           ? await normalizeQuestion({ ...args, questionId: question.id })
           : await normalizeEdition(args);
 
+        addToActionLog({ type: "normalization", payload: result }, false);
         const doneCount = startFrom + (result?.data?.totalDocumentCount || 0);
         updateSegments({
           doneCount,

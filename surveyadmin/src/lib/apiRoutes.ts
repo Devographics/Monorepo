@@ -29,6 +29,10 @@ export const apiRoutes = {
       href: (params) =>
         `/api/normalization/loadCustomNormalizations?${encodeParams(params)}`,
     },
+    loadWordFrequencies: {
+      href: (params) =>
+        `/api/normalization/loadWordFrequencies?${encodeParams(params)}`,
+    },
     normalizeQuestion: {
       href: (params) => `/api/normalization/normalizeQuestion`,
     },

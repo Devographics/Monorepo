@@ -513,3 +513,19 @@ button.button-ghost,
     }
   }
 }
+
+.action-log-modal {
+  article {
+    display: flex;
+    flex-direction: column;
+  }
+}
+.action-log-contents {
+  overflow: scroll;
+}
+
+.word-frequencies-lists {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: $spacing;
+}

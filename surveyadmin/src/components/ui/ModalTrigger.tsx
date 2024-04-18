@@ -5,6 +5,7 @@ import Dialog from "./Dialog";
 export const ModalTrigger = ({
   isButton = true,
   className = "",
+  dialogClassName = "",
   label,
   header,
   children,
@@ -16,6 +17,7 @@ export const ModalTrigger = ({
 }: {
   isButton?: boolean;
   className?: string;
+  dialogClassName?: string;
   label: string;
   header?: React.ReactNode;
   children: React.ReactNode;
@@ -63,6 +65,7 @@ export const ModalTrigger = ({
         header={header}
         onOpen={onOpen}
         onClose={onClose}
+        className={dialogClassName}
       >
         {children}
       </Dialog>

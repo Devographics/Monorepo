@@ -22,15 +22,15 @@ import {
 } from "~/lib/normalization/helpers/splitResponses";
 import sortBy from "lodash/sortBy";
 import { useLocalStorage } from "../hooks";
-
-const queryClient = new QueryClient();
-
 import {
   useQuery,
   // @ts-ignore
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+
+export const queryClient = new QueryClient();
+
 import { apiRoutes } from "~/lib/apiRoutes";
 import { GetQuestionResponsesParams } from "~/lib/normalization/actions/getQuestionResponses";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -55,6 +55,13 @@ export const getDataCacheKey = ({
   questionId,
 }: GetQuestionResponsesParams) => `${surveyId}.${editionId}.${questionId}.data`;
 
+export const getFrequencyCacheKey = ({
+  surveyId,
+  editionId,
+  questionId,
+}: GetQuestionResponsesParams) =>
+  `${surveyId}.${editionId}.${questionId}.frequency`;
+
 export const getCustomNormalizationsCacheKey = ({
   surveyId,
   editionId,
@@ -67,7 +74,7 @@ interface ApiData<T = any> {
   error: any;
 }
 
-const getData = async (url: string) => {
+export const getData = async (url: string) => {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -97,7 +104,13 @@ export interface CommonNormalizationProps extends NormalizationProps {
   setTokenFilter: Dispatch<SetStateAction<null | string[]>>;
   variant: AnswerVariant;
   setVariant: Dispatch<SetStateAction<AnswerVariant>>;
-  addToActionLog: (action: ActionLogItem, showActionLog?: boolean) => void;
+  actionLog: ActionLogItem[];
+  addToActionLog: (
+    action: Omit<ActionLogItem, "timestamp">,
+    showActionLog?: boolean
+  ) => void;
+  showActionLog: boolean;
+  setShowActionLog: Dispatch<SetStateAction<boolean>>;
 }
 
 export const NormalizeQuestion = (props: NormalizeQuestionProps) => {
@@ -211,7 +224,10 @@ export const Normalization = (props: NormalizationProps) => {
     []
   );
   const [showActionLog, setShowActionLog] = useState(false);
-  const addToActionLog = (action: ActionLogItem, showActionLog = true) => {
+  const addToActionLog: CommonNormalizationProps["addToActionLog"] = (
+    action,
+    showActionLog = true
+  ) => {
     setActionLog([...actionLog, { ...action, timestamp: new Date() }]);
     if (showActionLog) {
       setShowActionLog(true);

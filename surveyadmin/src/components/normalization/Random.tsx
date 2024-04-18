@@ -5,7 +5,7 @@ import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
 import sampleSize from "lodash/sampleSize";
 import { useState } from "react";
 
-const defaultCount = 400;
+const defaultCount = 1000;
 
 export const Random = (props: {
   question: QuestionWithSection;

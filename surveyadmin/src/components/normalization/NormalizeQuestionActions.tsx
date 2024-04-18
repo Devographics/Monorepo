@@ -7,6 +7,7 @@ import { Import } from "./Import";
 import { ViewQuestionData } from "./QuestionData";
 import { Random } from "./Random";
 import { ActionLog } from "./ActionLog";
+import { WordFrequencies } from "./WordFrequencies";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
@@ -31,6 +32,7 @@ const Actions = (props: ActionProps) => {
         <Import {...props} />
         <Random {...props} />
         <ActionLog {...props} />
+        <WordFrequencies {...props} />
       </div>
       <div
         className="secondary"
