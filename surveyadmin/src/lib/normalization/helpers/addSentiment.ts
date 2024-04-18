@@ -86,7 +86,7 @@ Get sentiment path
 */
 const getSentimentPath = (question: QuestionTemplateOutputWithSection) => {
   const { normPaths } = question;
-  return normPaths?.base + ".sentiment";
+  return normPaths?.sentiment;
 };
 
 const positiveSentimentOptions = [

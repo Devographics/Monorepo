@@ -1,5 +1,5 @@
 import './Legend.scss'
-import React, { SyntheticEvent } from 'react'
+import React, { SyntheticEvent, useRef } from 'react'
 import { OptionMetadata } from '@devographics/types'
 import { ColorScale, neutralColor } from '../horizontalBar2/helpers/colors'
 import { getItemLabel } from 'core/helpers/labels'
@@ -10,6 +10,7 @@ import { OrderOptions } from './types'
 import T from 'core/i18n/T'
 import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
+import { useWidth } from './helpers'
 
 type LegendProps = {
     chartState: ChartState
@@ -19,11 +20,17 @@ type LegendProps = {
 }
 
 const DEFAULT_SORT = 'default'
+// minimum width for a legend item to be readable
+const MIN_WIDTH_PER_ITEM = 90
+
 export const Legend = ({ chartState, i18nNamespace, options, colorScale }: LegendProps) => {
     const { getString } = useI18n()
 
+    const ref = useRef<HTMLDivElement>(null)
+    const parentWidth = useWidth(ref) || 0
+    const minimumWidth = options.length * MIN_WIDTH_PER_ITEM
     // TODO: maybe use actual width of elements; or even do it via CSS via container query?
-    const useDropdown = options.length > 6
+    const useDropdown = parentWidth < minimumWidth
 
     const { sort, setSort, order, setOrder } = chartState
 
@@ -49,38 +56,47 @@ export const Legend = ({ chartState, i18nNamespace, options, colorScale }: Legen
         colorScale?.[option.id] || [neutralColor, neutralColor]
 
     return (
-        <div className="chart-legend">
+        <div className="chart-legend" ref={ref}>
             <h4 className="chart-legend-heading">
                 <T k="charts.sort_by" />
             </h4>
-            {useDropdown ? (
-                <select
-                    onChange={e => {
-                        handleSelect(e.target.value)
-                    }}
-                >
-                    <option value={DEFAULT_SORT}>{getString('filters.legend.default')?.t}</option>
-                    {options.map(option => (
-                        <SelectItem
-                            {...optionProps}
-                            key={option.id}
-                            option={option}
-                            gradient={getGradient(option)}
-                        />
-                    ))}
-                </select>
-            ) : (
-                <ButtonGroup className="chart-legend-items">
-                    {options.map(option => (
-                        <LegendItem
-                            {...optionProps}
-                            key={option.id}
-                            option={option}
-                            gradient={getGradient(option)}
-                        />
-                    ))}
-                </ButtonGroup>
-            )}
+            <div
+                className={`chart-legend-control chart-legend-control-${
+                    useDropdown ? 'dropdown' : 'buttongroup'
+                }`}
+            >
+                {useDropdown ? (
+                    <select
+                        className="chart-legend-dropdown chart-legend-items"
+                        onChange={e => {
+                            handleSelect(e.target.value)
+                        }}
+                    >
+                        <option value={DEFAULT_SORT}>
+                            {getString('filters.legend.default')?.t}
+                        </option>
+                        {options.map(option => (
+                            <SelectItem
+                                {...optionProps}
+                                key={option.id}
+                                option={option}
+                                gradient={getGradient(option)}
+                            />
+                        ))}
+                    </select>
+                ) : (
+                    <ButtonGroup className="chart-legend-buttongroup chart-legend-items">
+                        {options.map(option => (
+                            <LegendItem
+                                {...optionProps}
+                                key={option.id}
+                                option={option}
+                                gradient={getGradient(option)}
+                            />
+                        ))}
+                    </ButtonGroup>
+                )}
+            </div>
         </div>
     )
 }

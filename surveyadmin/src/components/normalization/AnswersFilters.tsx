@@ -9,7 +9,10 @@ import {
   AnswerVariant,
   CommonNormalizationProps,
   answerVariants,
+  getDataCacheKey,
 } from "./NormalizeQuestion";
+import { useQueryClient } from "@tanstack/react-query";
+import { ResponsesData } from "~/lib/normalization/hooks";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -54,7 +57,9 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
     variant,
     setVariant,
     allAnswers,
+    addToActionLog,
   } = props;
+  const queryClient = useQueryClient();
   const [localFilterQuery, setLocalFilterQuery] = useState("");
   const [localPageNumber, setLocalPageNumber] = useState(String(pageNumber));
   const [topOfTable, setTopOfTable] = useState(0);
@@ -171,13 +176,52 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
       <div className="control control-renormalize">
         <LoadingButton
           action={async () => {
-            const result = await normalizeQuestionResponses({
+            const commonParams = {
+              surveyId: survey.id,
+              editionId: edition.id,
+              questionId: question.id,
+            };
+
+            const results = await normalizeQuestionResponses({
               surveyId: survey.id,
               editionId: edition.id,
               questionId: question.id,
               responsesIds: filteredAnswers.map((a) => a.responseId),
               isVerbose: false,
             });
+            console.log(results);
+            addToActionLog({ type: "normalization", payload: results });
+            if (results.data) {
+              const { normalizedDocuments } = results.data;
+              if (normalizedDocuments && normalizedDocuments.length > 0) {
+                normalizedDocuments.forEach((normalizedDocument) => {
+                  const { normalizedFields, responseId } = normalizedDocument;
+                  if (normalizedFields) {
+                    const normalizedField = normalizedFields[0];
+                    queryClient.setQueryData(
+                      [getDataCacheKey(commonParams)],
+                      (previous: ResponsesData) => {
+                        const { responses } = previous;
+                        return {
+                          ...previous,
+                          responses: responses.map((r) =>
+                            responseId === r.responseId
+                              ? {
+                                  ...r,
+                                  metadata: normalizedField.metadata,
+                                }
+                              : r
+                          ),
+                        };
+                      }
+                    );
+                  }
+                });
+              } else {
+                console.log("No normalizedDocuments returned");
+                console.log(results);
+              }
+            }
           }}
           label="🔄"
           tooltip="Renormalize Current Answers"

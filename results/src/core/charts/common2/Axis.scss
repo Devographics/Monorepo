@@ -2,8 +2,7 @@
     margin-top: var(--spacing);
 }
 .chart-axis-inner {
-    grid-column-start: 2;
-    grid-column-end: 3;
+    grid-area: content;
     border-top: 1px dotted var(--borderAltColor);
     font-size: 0.8rem;
 }

@@ -70,8 +70,6 @@ export const getFacetFragment = (addBucketsEntities?: boolean) => `
     facetBuckets {
         id
         count
-        percentageQuestion
-        percentageSurvey
         percentageBucket
         hasInsufficientData
         ${addBucketsEntities ? getEntityFragment() : ''}

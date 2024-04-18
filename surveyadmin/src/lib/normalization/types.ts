@@ -39,6 +39,7 @@ export type BulkOperation =
 
 export enum DocumentGroups {
   NORMALIZED = "normalized",
+  PARTIALLY_MATCHED = "partiallyMatched",
   UNMATCHED = "unmatched",
   UNNORMALIZABLE = "unnormalizable",
   ERROR = "error",
@@ -69,6 +70,7 @@ export interface NormalizeInBulkResult {
   editionId?: string;
   normalizedDocuments: NormalizedDocumentMetadata[];
   unmatchedDocuments: NormalizedDocumentMetadata[];
+  partiallyMatchedDocuments: NormalizedDocumentMetadata[];
   unnormalizableDocuments: NormalizedDocumentMetadata[];
   errorDocuments: NormalizedDocumentMetadata[];
   emptyDocuments: NormalizedDocumentMetadata[];

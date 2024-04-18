@@ -187,7 +187,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
     text: colors.white,
-    textAlt: 'rgba(255, 246, 229, 0.7)',
+    textAlt: 'rgba(255, 246, 229, 0.65)',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
     link: colors.electricBlue,

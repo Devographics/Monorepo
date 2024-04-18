@@ -2,6 +2,15 @@ import { QuestionApiObject } from './surveys'
 import { Filters } from './filters'
 import { Option, OptionId, ResponsesTypes, SortProperty } from '@devographics/types'
 
+export enum ExecutionContext {
+    // regular execution of the generic function
+    REGULAR = 'regular',
+    // secondary execution triggered to get overall results
+    OVERALL = 'overall',
+    // secondary execution triggered to get freeform combined results
+    COMBINED = 'combined'
+}
+
 export interface GenericComputeArguments {
     responsesType?: ResponsesTypes
     filters?: Filters
@@ -10,7 +19,7 @@ export interface GenericComputeArguments {
     selectedEditionId?: string
     // indicate if this was a second execution of the generic function
     // triggered to fetch freeform data for the combined subfield
-    isCombinedPass?: boolean
+    executionContext: ExecutionContext
 }
 
 export interface GenericComputeParameters {

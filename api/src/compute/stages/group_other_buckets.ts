@@ -19,7 +19,8 @@ export async function groupOtherBuckets(
                 const combinedOtherBucket = mergeBuckets({
                     buckets: specialBuckets,
                     mergedProps: { id: OTHER_ANSWERS },
-                    axis: axis2
+                    primaryAxis: axis1,
+                    secondaryAxis: axis2
                 })
 
                 editionData.buckets = [...regularBuckets, combinedOtherBucket]

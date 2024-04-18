@@ -499,3 +499,17 @@ button.button-ghost,
   align-items: center;
   gap: $spacing/2;
 }
+
+.actionlog-item {
+  border: 1px solid var(--border-color);
+  padding: $spacing/2;
+  border-radius: 3px;
+  summary {
+    display: flex;
+    justify-content: space-between;
+    div {
+      display: flex;
+      gap: $spacing;
+    }
+  }
+}

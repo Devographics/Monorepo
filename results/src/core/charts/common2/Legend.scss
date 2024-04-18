@@ -1,15 +1,28 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
 .chart-legend {
-    flex-shrink: 1;
+    flex-grow: 1;
     display: flex;
     align-items: center;
     gap: 10px;
-    grid-column-start: 2;
-    grid-column-end: 4;
+    @include small {
+        justify-content: space-between;
+    }
+    @include medium-large {
+        justify-content: flex-end;
+    }
+    // grid-column-start: 2;
+    // grid-column-end: 4;
     &-heading {
         margin: 0;
     }
     overflow: hidden;
 }
+.chart-legend-control {
+    overflow: hidden;
+    // width: 100%;
+}
+
 .chart-legend-items {
     display: flex;
     overflow: hidden;

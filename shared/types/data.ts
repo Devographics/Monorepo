@@ -158,6 +158,8 @@ export interface BucketMetadata {
     label?: string
     hasInsufficientData?: boolean
     isFreeformData?: boolean
+    facetsCountSum?: number
+    facetsPercentSum?: number
 }
 
 export interface Bucket extends BucketData, BucketMetadata {

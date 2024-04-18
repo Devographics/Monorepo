@@ -24,17 +24,17 @@ Group together any bucket that didn't make cutoff.
 */
 export function groupUnderCutoff<T extends Bucket | FacetBucket>({
     buckets,
-    mainAxis,
+    primaryAxis,
     secondaryAxis,
-    isFacet
+    isFacetBuckets
 }: {
     buckets: T[]
-    mainAxis: ComputeAxisParameters
+    primaryAxis: ComputeAxisParameters
     secondaryAxis?: ComputeAxisParameters
-    isFacet: boolean
+    isFacetBuckets?: boolean
 }) {
-    const { cutoff, cutoffPercent } = mainAxis
-    const keptBuckets = buckets.filter(b => keepBucket<T>(b, cutoff, cutoffPercent, isFacet))
+    const { cutoff, cutoffPercent } = primaryAxis
+    const keptBuckets = buckets.filter(b => keepBucket<T>(b, cutoff, cutoffPercent, isFacetBuckets))
     const cutoffBuckets = buckets.filter(b => !keptBuckets.map(b => b.id).includes(b.id))
     if (cutoffBuckets.length > 0) {
         const cutoffGroupBucket = mergeBuckets<T>({
@@ -44,8 +44,9 @@ export function groupUnderCutoff<T extends Bucket | FacetBucket>({
                 groupedBucketIds: cutoffBuckets.map(b => b.id),
                 groupedBuckets: cutoffBuckets
             },
-            isFacet,
-            axis: secondaryAxis
+            isFacetBuckets,
+            primaryAxis,
+            secondaryAxis
         })
 
         return cutoffBuckets.length > 0 ? [...keptBuckets, cutoffGroupBucket] : keptBuckets
@@ -71,9 +72,8 @@ export async function cutoffData(
                 // group together all buckets that don't make cutoff
                 editionData.buckets = groupUnderCutoff<Bucket>({
                     buckets: editionData.buckets,
-                    mainAxis: axis1,
-                    secondaryAxis: axis2,
-                    isFacet: false
+                    primaryAxis: axis1,
+                    secondaryAxis: axis2
                 })
             }
 
@@ -85,8 +85,8 @@ export async function cutoffData(
                     // group together all buckets that don't make cutoff
                     bucket.facetBuckets = groupUnderCutoff<FacetBucket>({
                         buckets: bucket.facetBuckets,
-                        mainAxis: axis2,
-                        isFacet: true
+                        primaryAxis: axis2,
+                        isFacetBuckets: true
                     })
                 }
             }

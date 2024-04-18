@@ -1,6 +1,6 @@
 import { ResponseEditionData, ResponsesTypes } from '@devographics/types'
 import { GenericComputeOptions, convertOrderReverse, genericComputeFunction } from '../generic'
-import { ComputeAxisParameters } from '../../types'
+import { ComputeAxisParameters, ExecutionContext } from '../../types'
 import { NO_ANSWER, OVERALL } from '@devographics/constants'
 
 /*
@@ -41,10 +41,11 @@ export const addOverallBucket = async (
                 mergeOtherBuckets: axis.mergeOtherBuckets,
                 enableBucketGroups: axis.enableBucketGroups,
                 limit: axis.limit
-            }
+            },
+            executionContext: ExecutionContext.OVERALL
         }
     }
-    const overallResults = await genericComputeFunction(newOptions)
+    const overallResults: ResponseEditionData[] = await genericComputeFunction(newOptions)
 
     if (overallResults.length === 0) {
         console.log({ axis })

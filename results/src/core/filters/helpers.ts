@@ -373,9 +373,7 @@ export const getFieldLabel = ({
         return entityName
     } else {
         let key
-        if (sectionId === 'other_tools') {
-            key = `tools_others.${id}`
-        } else if (template === 'feature') {
+        if (template === 'feature') {
             key = `features.${id}`
         } else if (template === 'tool') {
             key = `tools.${id}`

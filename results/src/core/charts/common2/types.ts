@@ -15,6 +15,7 @@ export type RowCommonProps = {
     rowIndex: number
     allRowsCellDimensions: Dimension[][]
     allRowsOffsets: number[]
+    ticks?: number[]
 }
 
 export type RowExtraProps = {

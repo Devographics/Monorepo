@@ -117,9 +117,7 @@ const NavItem = ({
     const hasChildren = page.children && page.children.length > 0
     const displayChildren = hasChildren > 0 && isActive
 
-    const match = useMatch(
-        `${get(usePageContext(), 'locale.path')}${parentPage?.path ?? ''}${page.path}`
-    )
+    const match = useMatch(`${get(pageContext, 'locale.id')}${parentPage?.path ?? ''}${page.path}`)
 
     const currentPageBlocks = pageContext.blocks
         .map(b => b.variants[0])
@@ -213,7 +211,7 @@ const InternalLink_ = styled.a`
     &:hover {
         color: ${({ theme }) => theme.colors.text};
     }
-    font-size: ${fontSize('smallish')};
+    font-size: ${fontSize('small')};
 `
 
 export const Nav = ({ closeSidebar }: { closeSidebar: () => void }) => {

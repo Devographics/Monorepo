@@ -9,501 +9,570 @@ interface LogoProps {
     showText?: boolean
 }
 
+const style = `
+    
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;display=swap&amp;text=STATEOF0123456789");
+      
+:root {
+  --color-text: #9f0d47;
+  --color-bg: #4a564b;
+  --color-slash-one-a: #52b384;
+  --color-slash-one-b: #1595e7;
+  --color-slash-one-c: #953dff;
+  --color-slash-two-a: #5f9b9d;
+  --color-slash-two-b: #228ce9;
+  --color-slash-two-c: #4872f1;
+  --color-slash-two-d: #8855e6;
+  --color-slash-three-a: #6d84b5;
+  --color-slash-three-b: #2f83ec;
+  --color-slash-three-c: #3b7bee;
+  --color-slash-three-d: #7a6cce;
+  --color-chevron-back-a: #9f0d47;
+  --color-chevron-back-b: #190941;
+  --color-chevron-front-a: #e02d2d;
+  --color-chevron-front-b: #fff873;
+  --color-grad-shape-a: #fff6e6;
+  --color-grad-shape-b: #ffdea4;
+  --color-shape-shadow-bg: #040823;
+  --color-shape-shadow-stroke: #f7b457;
+  --timeline-base-delay: 100ms;
+  --timeline-chevron-front-anim: 600ms;
+  --timeline-chevron-front-delay: var(--timeline-base-delay);
+  --timeline-chevron-back-anim: calc(var(--timeline-chevron-front-anim) * 0.75);
+  --timeline-chevron-back-delay: calc(var(--timeline-chevron-front-delay) + var(--timeline-chevron-front-anim) * 0.75);
+  --timeline-slash-anim: 600ms;
+  --timeline-slash-delay: calc(var(--timeline-chevron-back-delay) + var(--timeline-slash-anim) * 0.25);
+  --timeline-slash-sub-delay: 250ms;
+  --timeline-shape-shadow-bg-delay: var(--timeline-slash-delay);
+  --timeline-shape-shadow-bg-anim: 800ms;
+  --timeline-shape-shadow-stroke-delay: calc(var(--timeline-shape-shadow-bg-delay) + var(--timeline-shape-shadow-bg-anim) * 0.75);
+  --timeline-shape-shadow-stroke-anim: 1200ms;
+  --timeline-shape-fill-delay: calc(var(--timeline-shape-shadow-stroke-delay) + var(--timeline-shape-shadow-stroke-anim));
+  --timeline-shape-fill-anim: 1200ms;
+  --timeline-text-anim: 1200ms;
+  --timeline-text-delay: calc(var(--timeline-shape-fill-delay) + var(--timeline-shape-fill-anim));
+  --ease-whisk-out: cubic-bezier(0, 1, 0.15, 1);
+  --ease-whisk-in-out: cubic-bezier(0.85, 0, 0.15, 1);
+  --ease-soft-out: cubic-bezier(0, 0, 0.15, 1);
+  --ease-circ-in: cubic-bezier(0, 0, 1, 0);
+  --ease-circ-out: cubic-bezier(0, 0, 0, 1);
+  --ease-more-circ-out: cubic-bezier(0,0.5,0,1);
+  --ease-bouncy-out: cubic-bezier(0.6, 1.5, 0.4, 1);
+  --ease-bouncy-out: cubic-bezier(.47,1.97,0,.71);
+  --ease-bouncy-in-out: cubic-bezier(0.25, -0.25, 0.1, 1.25);
+  --ease-true-bounce-out: linear(
+     0, 0.218 2.1%, 0.862 6.5%, 1.114, 1.296 10.7%, 1.346, 1.37 12.9%, 1.373,
+     1.364 14.5%, 1.315 16.2%, 1.032 21.8%, 0.941 24%, 0.891 25.9%, 0.877,
+     0.869 27.8%, 0.87, 0.882 30.7%, 0.907 32.4%, 0.981 36.4%, 1.012 38.3%, 1.036,
+     1.046 42.7% 44.1%, 1.042 45.7%, 0.996 53.3%, 0.988, 0.984 57.5%, 0.985 60.7%,
+     1.001 68.1%, 1.006 72.2%, 0.998 86.7%, 1
+   );
+  --ease-linear-soft-out: cubic-bezier(.5,.5,.5,1);
+  /* background: var(--color-bg); */
+}
+
+.soh-logo * {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+.soh-slashes {
+  --total-count: 6;
+  --sub-count: calc(var(--total-count) / 2);
+  --dir: 1;
+  --a: 73deg;
+  --angle: calc(73deg + 90deg);
+  --offset: 200px;
+}
+.soh-slashes > * {
+  -webkit-animation: angleSlideIn var(--timeline-slash-anim) var(--ease-whisk-out) calc(var(--timeline-slash-delay) + var(--timeline-slash-sub-delay) 				* (var(--sub-count) - var(--subindex)) 			) backwards 1;
+          animation: angleSlideIn var(--timeline-slash-anim) var(--ease-whisk-out) calc(var(--timeline-slash-delay) + var(--timeline-slash-sub-delay) 				* (var(--sub-count) - var(--subindex)) 			) backwards 1;
+}
+.soh-slashes > :nth-child(n+4) {
+  --dir: -1;
+}
+
+.soh-back-chevron {
+  --dir: 1;
+  --angle: calc(29deg + 180deg);
+  --offset: 909px;
+  --starting-opacity: 1;
+  -webkit-animation: angleSlideIn var(--timeline-chevron-back-anim) var(--ease-linear-soft-out) var(--timeline-chevron-back-delay) backwards 1;
+          animation: angleSlideIn var(--timeline-chevron-back-anim) var(--ease-linear-soft-out) var(--timeline-chevron-back-delay) backwards 1;
+}
+.soh-back-chevron--left {
+  --dir: -1;
+}
+
+.soh-front-chevron {
+  --dir: 1;
+  --angle: 29deg;
+  --offset: 909px;
+  --starting-opacity: 1;
+  -webkit-animation: angleSlideIn var(--timeline-chevron-front-anim) var(--ease-circ-in, linear) var(--timeline-chevron-front-delay) backwards 1;
+          animation: angleSlideIn var(--timeline-chevron-front-anim) var(--ease-circ-in, linear) var(--timeline-chevron-front-delay) backwards 1;
+}
+.soh-front-chevron--right {
+  --dir: -1;
+}
+
+.soh-shape--shadow-bg {
+  -webkit-animation: scaleIn var(--timeline-shape-shadow-bg-anim) var(--ease-bouncy-in-out) var(--timeline-shape-shadow-bg-delay) backwards 1;
+          animation: scaleIn var(--timeline-shape-shadow-bg-anim) var(--ease-bouncy-in-out) var(--timeline-shape-shadow-bg-delay) backwards 1;
+  -webkit-animation-timing-function: var(--ease-true-bounce-out);
+          animation-timing-function: var(--ease-true-bounce-out);
+}
+.soh-shape--shadow-stroke {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 0;
+  -webkit-animation: lineIn var(--timeline-shape-shadow-stroke-anim) var(--ease-soft-out) var(--timeline-shape-shadow-stroke-delay) backwards 1;
+          animation: lineIn var(--timeline-shape-shadow-stroke-anim) var(--ease-soft-out) var(--timeline-shape-shadow-stroke-delay) backwards 1;
+}
+.soh-shape--fill {
+  -webkit-animation: fadeIn var(--timeline-shape-fill-anim) var(--ease-circ-out) var(--timeline-shape-fill-delay) backwards 1, untranslateIn var(--timeline-shape-fill-anim) var(--ease-circ-out) calc(var(--timeline-shape-fill-anim) / 3 + var(--timeline-shape-fill-delay)) backwards 1;
+          animation: fadeIn var(--timeline-shape-fill-anim) var(--ease-circ-out) var(--timeline-shape-fill-delay) backwards 1, untranslateIn var(--timeline-shape-fill-anim) var(--ease-circ-out) calc(var(--timeline-shape-fill-anim) / 3 + var(--timeline-shape-fill-delay)) backwards 1;
+}
+
+.soh-text {
+  --dir: 1;
+  --angle: 30deg;
+  --offset: 300px;
+  font-family: "Bebas Neue", "BebasNeue", "BebasNeueBold", "Bebas", Helvetica, sans-serif;
+  font-weight: 400;
+  fill: var(--color-text);
+  will-change: transform;
+  -webkit-animation: angleSlideIn var(--timeline-text-anim) var(--ease-more-circ-out) var(--timeline-text-delay) backwards 1;
+          animation: angleSlideIn var(--timeline-text-anim) var(--ease-more-circ-out) var(--timeline-text-delay) backwards 1;
+}
+.soh-text * {
+  font-family: inherit;
+}
+
+.soh-text--stateof {
+  letter-spacing: 0.05em;
+  transform-origin: 0% 50%;
+  -webkit-animation-delay: calc(var(--timeline-text-delay) - var(--timeline-shape-fill-anim) * 0.25);
+          animation-delay: calc(var(--timeline-text-delay) - var(--timeline-shape-fill-anim) * 0.25);
+}
+
+.soh-text--year {
+  --dir: -1;
+  letter-spacing: 0.1em;
+  transform-origin: 100% 50%;
+}
+
+@-webkit-keyframes angleSlideIn {
+  from {
+    filter: Opacity(calc(100% * var(--starting-opacity, 0)));
+    opacity: var(--starting-opacity, 0);
+    transform: translate(calc((1 - tan(var(--angle))) * 2 * var(--dir, 1) * var(--offset)), calc(var(--dir, 1) * var(--offset) * sin(var(--angle))));
+  }
+}
+
+@keyframes angleSlideIn {
+  from {
+    filter: Opacity(calc(100% * var(--starting-opacity, 0)));
+    opacity: var(--starting-opacity, 0);
+    transform: translate(calc((1 - tan(var(--angle))) * 2 * var(--dir, 1) * var(--offset)), calc(var(--dir, 1) * var(--offset) * sin(var(--angle))));
+  }
+}
+@-webkit-keyframes scaleIn {
+  from {
+    transform: scale(0.0001);
+  }
+}
+@keyframes scaleIn {
+  from {
+    transform: scale(0.0001);
+  }
+}
+@-webkit-keyframes lineIn {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+@keyframes lineIn {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+@-webkit-keyframes fadeIn {
+  from {
+    filter: opacity(0%);
+    opacity: 0;
+  }
+}
+@keyframes fadeIn {
+  from {
+    filter: opacity(0%);
+    opacity: 0;
+  }
+}
+@-webkit-keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes untranslateIn {
+  from {
+    transform: translate(calc(11.28328377 / 1019.426 * 100%), calc(15.8194327 / 302.4304 * 100%));
+  }
+}
+@keyframes untranslateIn {
+  from {
+    transform: translate(calc(11.28328377 / 1019.426 * 100%), calc(15.8194327 / 302.4304 * 100%));
+  }
+}
+`
 export const Logo = ({ className, animated = true, showText = true, size = 'l' }: LogoProps) => (
     <Wrapper aria-label="State of CSS 2022" className="soc-logo__wrapper">
-        <SOCLogo
-            className="soc-logo"
+        <svg
             xmlns="http://www.w3.org/2000/svg"
             xmlnsXlink="http://www.w3.org/1999/xlink"
-            width={748.163}
-            height={748.163}
-            viewBox="0 0 748.163 748.163"
+            aria-label="State of HTML 2023"
+            className="soh-logo"
+            viewBox="0 0 1819.33 1819.33"
         >
             <defs>
-                <mask id="soc-logo-shadow">
-                    <rect x="0" y="0" width="100%" height="100%" fill="white" />
-                    <polygon
-                        className="soc-logo__shadow"
-                        points="84.683 374.081 376.624 693.354 668.565 374.081 84.683 374.081"
-                        fill="black"
-                        fillRule="evenodd"
-                        style={{ '--g': '1' } as React.CSSProperties}
-                    />
-                </mask>
-
-                <mask id="soc-logo-css">
-                    <rect x="0" y="0" width="100%" height="100%" fill="black" />
-                    <path
-                        d="M320.17056,371.141a56.60842,56.60842,0,0,1,53.515-53.5151V371.141Z"
-                        fill="white"
-                    />
-                    <path
-                        d="M379.56477,317.55174h53.51566a56.60868,56.60868,0,0,1-53.51533,53.515Z"
-                        fill="white"
-                    />
-                    <path
-                        d="M320.17056,430.6122a56.60829,56.60829,0,0,1,53.515-53.51532V430.6122Z"
-                        fill="white"
-                    />
-                    <path
-                        d="M379.56477,377.02194h53.51566a56.60915,56.60915,0,0,1-53.51533,53.51565Z"
-                        fill="white"
-                    />
-                    <path
-                        d="M436.17146,371.141a56.60892,56.60892,0,0,1,53.515-53.5151l.00035,53.5151Z"
-                        fill="white"
-                    />
-                    <path
-                        d="M495.567,317.55174h53.51566a56.61,56.61,0,0,1-53.51566,53.515Z"
-                        fill="white"
-                    />
-                    <path
-                        d="M436.17146,430.6122a56.60879,56.60879,0,0,1,53.515-53.51532l.00035,53.51532Z"
-                        fill="white"
-                    />
-                    <path
-                        d="M495.567,377.02194h53.51566A56.6105,56.6105,0,0,1,495.567,430.53759Z"
-                        fill="white"
-                    />
-                    <path
-                        d="M198.28919,371.141a56.60888,56.60888,0,0,1,53.51523-53.5151V371.141Z"
-                        fill="white"
-                    />
-                    <path
-                        d="M311.27493,317.55042a56.609,56.609,0,0,1-53.515,53.51566V317.55043Z"
-                        fill="white"
-                    />
-                    <path
-                        d="M251.80442,430.53759a56.609,56.609,0,0,1-53.51523-53.51565h53.51523Z"
-                        fill="white"
-                    />
-                    <path
-                        d="M257.75994,377.09688A56.6089,56.6089,0,0,1,311.2756,430.6122H257.75994Z"
-                        fill="white"
-                    />
-                </mask>
-
-                <symbol id="soc-logo-quarter-nw">
-                    <path d="M0,53.5151A56.60887,56.60887,0,0,1,53.51523,0V53.5151Z" />
-                </symbol>
-                <symbol id="soc-logo-quarter-se">
-                    <path d="M53.515,0A56.60894,56.60894,0,0,1,0,53.51565V0Z" />
-                </symbol>
-                <symbol id="soc-logo-quarter-sw">
-                    <path d="M53.51523,53.51565A56.609,56.609,0,0,1,0,0H53.51523Z" />
-                </symbol>
-                <symbol id="soc-logo-quarter-ne">
-                    <path d="M0,0A56.60888,56.60888,0,0,1,53.51565,53.51532H0Z" />
-                </symbol>
-
-                {/* <!-- C --> */}
-                <clipPath id="soc-logo-c1-tl">
-                    <rect width="53.5151" height="53.5151" x="198.28919" y="317.6259" />
-                </clipPath>
-                <clipPath id="soc-logo-c1-tr">
-                    <rect width="53.5151" height="53.5151" x="257.76" y="317.6259" />
-                </clipPath>
-                <clipPath id="soc-logo-c1-bl">
-                    <rect width="53.5151" height="53.5151" x="198.28919" y="377.09688" />
-                </clipPath>
-                <clipPath id="soc-logo-c1-br">
-                    <rect width="53.5151" height="53.5151" x="257.76" y="377.09688" />
-                </clipPath>
-
-                {/* <!-- S1 --> */}
-                <clipPath id="soc-logo-s1-tl">
-                    <rect width="53.5151" height="53.5151" x="320.17056" y="317.6259" />
-                </clipPath>
-                <clipPath id="soc-logo-s1-tr">
-                    <rect width="53.5151" height="53.5151" x="379.56477" y="317.6259" />
-                </clipPath>
-                <clipPath id="soc-logo-s1-bl">
-                    <rect width="53.5151" height="53.5151" x="320.17056" y="377.09688" />
-                </clipPath>
-                <clipPath id="soc-logo-s1-br">
-                    <rect width="53.5151" height="53.5151" x="379.56477" y="377.09688" />
-                </clipPath>
-
-                {/* <!-- S2 --> */}
-                <clipPath id="soc-logo-s2-tl">
-                    <rect width="53.5151" height="53.5151" x="436.17146" y="317.6259" />
-                </clipPath>
-                <clipPath id="soc-logo-s2-tr">
-                    <rect width="53.5151" height="53.5151" x="495.567" y="317.6259" />
-                </clipPath>
-                <clipPath id="soc-logo-s2-bl">
-                    <rect width="53.5151" height="53.5151" x="436.17146" y="377.09688" />
-                </clipPath>
-                <clipPath id="soc-logo-s2-br">
-                    <rect width="53.5151" height="53.5151" x="495.567" y="377.09688" />
-                </clipPath>
-
+                <style>{style}</style>
                 <linearGradient
-                    id="grad-lines"
-                    x1="41.93171"
-                    y1="373.9864"
-                    x2="712.54154"
-                    y2="373.9864"
+                    id="soh-grad-slash-1"
+                    x1="431.96"
+                    x2="774.71"
+                    y1="989.95"
+                    y2="1187.83"
                     gradientUnits="userSpaceOnUse"
                 >
-                    <stop offset="0" stopColor="#DC7B21" />
-                    <stop offset="0.45611" stopColor="#DEB31A" />
-                    <stop offset="1" stopColor="#3398ca" />
+                    <stop offset="0" stopColor="var(--color-slash-one-a)"></stop>
+                    <stop offset="0.33" stopColor="var(--color-slash-one-b)"></stop>
+                    <stop offset="1" stopColor="var(--color-slash-one-c)"></stop>
                 </linearGradient>
-
                 <linearGradient
-                    id="grad-frame-outer"
-                    x1="0%"
-                    y1="0"
-                    x2="100%"
-                    y2="0"
-                    gradientUnits="objectBoundingBox"
+                    id="soh-grad-slash-2"
+                    x1="3140.05"
+                    x2="3711.29"
+                    y1="3222.07"
+                    y2="3551.87"
+                    gradientTransform="matrix(.6 0 0 .6 -1328.87 -1014.18)"
+                    gradientUnits="userSpaceOnUse"
                 >
-                    <stop offset="0" stopColor="#EFCB86" />
-                    <stop offset="0.3333" stopColor="#DE9B1A" />
-                    <stop offset="0.6667" stopColor="#99610c" />
-                    <stop offset="1" stopColor="#74460a" />
+                    <stop offset="0" stopColor="var(--color-slash-two-a)"></stop>
+                    <stop offset="0.33" stopColor="var(--color-slash-two-b)"></stop>
+                    <stop offset="0.67" stopColor="var(--color-slash-two-c)"></stop>
+                    <stop offset="1" stopColor="var(--color-slash-two-d)"></stop>
                 </linearGradient>
-
                 <linearGradient
-                    id="grad-frame-center"
-                    x1="0%"
-                    y1="0"
-                    x2="133%"
-                    y2="0"
-                    xlinkHref="#grad-frame-outer"
-                />
-
-                <linearGradient
-                    id="grad-frame-inner"
-                    x1="0%"
-                    y1="0"
-                    x2="200%"
-                    y2="0"
-                    xlinkHref="#grad-frame-outer"
-                />
-
-                <linearGradient
-                    id="grad-letter"
-                    x1="0%"
-                    y1="0"
-                    x2="100%"
-                    y2="0"
-                    gradientUnits="objectBoundingBox"
+                    id="soh-grad-slash-3"
+                    x1="16680.49"
+                    x2="18394.22"
+                    y1="14382.64"
+                    y2="15372.07"
+                    gradientTransform="matrix(.2 0 0 .2 -2657.74 -2028.37)"
+                    gradientUnits="userSpaceOnUse"
                 >
-                    <stop offset="0" stopColor="#bbb2a4" />
-                    <stop offset="0.16667" stopColor="#ded5c6" />
-                    <stop offset="0.33333" stopColor="#f1e8d8" />
-                    <stop offset="0.5" stopColor="#f6edde" />
-                    <stop offset="0.66667" stopColor="#f1e8d8" />
-                    <stop offset="0.83333" stopColor="#ded5c6" />
-                    <stop offset="1" stopColor="#bbb2a4" />
+                    <stop offset="0" stopColor="var(--color-slash-three-a)"></stop>
+                    <stop offset="0.33" stopColor="var(--color-slash-three-b)"></stop>
+                    <stop offset="0.67" stopColor="var(--color-slash-three-c)"></stop>
+                    <stop offset="1" stopColor="var(--color-slash-three-d)"></stop>
+                </linearGradient>
+                <linearGradient
+                    id="soh-grad-slash-4"
+                    x1="-25642.39"
+                    x2="-23928.66"
+                    y1="-20095.54"
+                    y2="-19106.12"
+                    gradientTransform="matrix(-.2 0 0 -.2 -3986.62 -3042.55)"
+                    gradientUnits="userSpaceOnUse"
+                >
+                    <stop offset="0" stopColor="var(--color-slash-three-a)"></stop>
+                    <stop offset="0.33" stopColor="var(--color-slash-three-b)"></stop>
+                    <stop offset="0.67" stopColor="var(--color-slash-three-c)"></stop>
+                    <stop offset="1" stopColor="var(--color-slash-three-d)"></stop>
+                </linearGradient>
+                <linearGradient
+                    id="soh-grad-slash-5"
+                    x1="-10967.58"
+                    x2="-10396.33"
+                    y1="-8270.66"
+                    y2="-7940.86"
+                    gradientTransform="matrix(-.6 0 0 -.6 -5315.49 -4056.74)"
+                    gradientUnits="userSpaceOnUse"
+                >
+                    <stop offset="0" stopColor="var(--color-slash-two-a)"></stop>
+                    <stop offset="0.33" stopColor="var(--color-slash-two-b)"></stop>
+                    <stop offset="0.67" stopColor="var(--color-slash-two-c)"></stop>
+                    <stop offset="1" stopColor="var(--color-slash-two-d)"></stop>
+                </linearGradient>
+                <linearGradient
+                    id="soh-grad-slash-6"
+                    x1="-8031.95"
+                    x2="-7689.2"
+                    y1="-5906.07"
+                    y2="-5708.18"
+                    gradientTransform="rotate(-180 -3322.18 -2535.46)"
+                    xlinkHref="#soh-grad-slash-1"
+                ></linearGradient>
+                <linearGradient
+                    id="soh-grad-chevron-back-a"
+                    x1="102.8"
+                    x2="764.43"
+                    y1="736.73"
+                    y2="736.73"
+                    gradientUnits="userSpaceOnUse"
+                >
+                    <stop offset="0" stopColor="var(--color-chevron-back-a)"></stop>
+                    <stop offset="1" stopColor="var(--color-chevron-back-b)"></stop>
+                </linearGradient>
+                <linearGradient
+                    id="soh-grad-chevron-back-b"
+                    x1="-12254.28"
+                    x2="-11592.65"
+                    y1="731.48"
+                    y2="731.48"
+                    gradientTransform="rotate(-180 -5268.76 909.92)"
+                    xlinkHref="#soh-grad-chevron-back-a"
+                ></linearGradient>
+                <linearGradient
+                    id="soh-grad-chevron-front-a"
+                    x1="-12254.28"
+                    x2="-11549.08"
+                    y1="1107.33"
+                    y2="1107.33"
+                    gradientTransform="rotate(-180 -5268.76 909.92)"
+                    gradientUnits="userSpaceOnUse"
+                >
+                    <stop offset="0" stopColor="var(--color-chevron-front-a)"></stop>
+                    <stop offset="1" stopColor="var(--color-chevron-front-b)"></stop>
+                </linearGradient>
+                <linearGradient
+                    id="soh-grad-chevron-front-b"
+                    x1="-3148.73"
+                    x2="-2443.05"
+                    y1="7650.22"
+                    y2="7650.22"
+                    gradientTransform="translate(3251.52 -6537.5)"
+                    xlinkHref="#soh-grad-chevron-front-a"
+                ></linearGradient>
+                <symbol id="soh-front-chevron-right">
+                    <path
+                        id="soh-front-chevron-right-path"
+                        d="M1716.76 765.74L1076.4 396.03l-64.84 225.83 705.2 407.14V765.74z"
+                    ></path>
+                </symbol>
+                <symbol id="soh-front-chevron-left">
+                    <path
+                        id="soh-front-chevron-left-path"
+                        d="M102.8 1059.35l640.82 369.99 64.85-225.83L102.8 796.09v263.26z"
+                    ></path>
+                </symbol>
+                <clipPath id="soh-front-chevron-right-clip">
+                    <use xlinkHref="#soh-front-chevron-right-path"></use>
+                </clipPath>
+                <clipPath id="soh-front-chevron-left-clip">
+                    <use xlinkHref="#soh-front-chevron-left-path"></use>
+                </clipPath>
+                <symbol id="soh-back-chevron-left">
+                    <path
+                        id="soh-back-chevron-left-path"
+                        d="M725.56 436.54L102.8 796.09v263.26l532.12-307.22 90.64-315.59z"
+                    ></path>
+                </symbol>
+                <symbol id="soh-back-chevron-right">
+                    <path
+                        id="soh-back-chevron-right-path"
+                        d="M1093.99 1388.56L1716.76 1029V765.74l-532.14 307.23-90.63 315.59z"
+                    ></path>
+                </symbol>
+                <clipPath id="soh-back-chevron-left-clip">
+                    <use xlinkHref="#soh-back-chevron-left-path"></use>
+                </clipPath>
+                <clipPath id="soh-back-chevron-right-clip">
+                    <use xlinkHref="#soh-back-chevron-right-path"></use>
+                </clipPath>
+                <symbol id="soh-shape-html">
+                    <path
+                        id="soh-shape-html-path"
+                        d="M715.04 758.7l-86.72 302.44h-88.41l32.52-113.41-44.62 25.2-25.3 88.21H414.1l86.72-302.43h88.41l-32.52 113.41 44.62-25.2 25.3-88.21h88.41zm489.41 0v.01l-44.62 25.2 7.23-25.2h-88.42l-44.62 25.2 7.23-25.2h-88.41l-86.73 302.43h88.42l50.58-176.42 44.63-25.2-57.82 201.62h88.42l50.58-176.42 44.62-25.2-57.8 201.62h88.4l86.72-302.43h-88.4zm140.66 214.03l61.37-214.02h-88.41l-86.72 302.43h176.82l25.35-88.41h-88.4zm-430.23-125.6l25.35-88.42H727.64l-25.35 88.41h62.09l-61.37 214.02h88.41l61.37-214.02h62.1z"
+                        pathLength="1"
+                    ></path>
+                </symbol>
+                <symbol id="soh-shape-html-letter-h">
+                    <path
+                        d="M715.04 758.71l-86.72 302.43h-88.41l32.52-113.41-44.62 25.2-25.3 88.21H414.1l86.72-302.43h88.41l-32.52 113.41 44.62-25.2 25.3-88.21h88.41z"
+                        pathLength="1"
+                    ></path>
+                </symbol>
+                <symbol id="soh-shape-html-letter-t">
+                    <path
+                        d="M914.88 847.12l25.35-88.41H727.64l-25.35 88.41h62.09l-61.37 214.02h88.41l61.37-214.02h62.09z"
+                        pathLength="1"
+                    ></path>
+                </symbol>
+                <symbol id="soh-shape-html-letter-m">
+                    <path
+                        d="M1204.45 758.71l-44.62 25.2 7.23-25.2h-88.42l-44.62 25.2 7.23-25.2h-88.42l-86.72 302.43h88.42l50.58-176.42 44.63-25.2-57.82 201.62h88.42l50.58-176.42 44.62-25.2-57.81 201.62h88.41l86.72-302.43h-88.41z"
+                        pathLength="1"
+                    ></path>
+                </symbol>
+                <symbol id="soh-shape-html-letter-l">
+                    <path
+                        d="M1406.48 758.71h-88.41l-86.72 302.43h176.82l25.35-88.41h-88.41l61.37-214.02z"
+                        pathLength="1"
+                    ></path>
+                </symbol>
+                <clipPath id="soh-shape-html-mask">
+                    <use xlinkHref="#soh-shape-html-path"></use>
+                </clipPath>
+                <linearGradient
+                    id="soh-grad-logo"
+                    x1="1749.88"
+                    x2="2743.54"
+                    y1="770.39"
+                    y2="1074.18"
+                    gradientTransform="matrix(1 0 -.29 1 -1035.08 0)"
+                    gradientUnits="userSpaceOnUse"
+                >
+                    <stop offset="0" stopColor="var(--color-grad-shape-a)"></stop>
+                    <stop offset="1" stopColor="var(--color-grad-shape-b)"></stop>
                 </linearGradient>
             </defs>
-
-            <g
-                className="soc-logo__lines"
-                mask="url(#soc-logo-shadow)"
-                style={{ '--count': '8' } as React.CSSProperties}
+            <g className="soh-back-chevrons">
+                <g clipPath="url(#soh-back-chevron-left-clip)">
+                    <use
+                        fill="url(#soh-grad-chevron-back-a)"
+                        className="soh-back-chevron soh-back-chevron--left"
+                        xlinkHref="#soh-back-chevron-left"
+                    ></use>
+                </g>
+                <g clipPath="url(#soh-back-chevron-right-clip)">
+                    <use
+                        fill="url(#soh-grad-chevron-back-b)"
+                        className="soh-back-chevron soh-back-chevron--right"
+                        xlinkHref="#soh-back-chevron-right"
+                    ></use>
+                </g>
+            </g>
+            <g className="soh-slashes-clipped">
+                <g className="soh-slashes">
+                    <path
+                        fill="url(#soh-grad-slash-1)"
+                        d="M750.28 576.24l53.02-184.58-38.87 22.44-389.31 1355.7 29.26 16.9 36.86-21.28L778.1 592.3l-27.82-16.06z"
+                        className="soh-slash--a"
+                        style={{ Subindex: '1' }}
+                    ></path>
+                    <path
+                        fill="url(#soh-grad-slash-2)"
+                        d="M537.93 1678.95l-10.55 36.75 37.25-21.51L911.94 484.71l-28.11-16.22 42.46-147.84-38.46 22.21-378.87 1319.36 28.97 16.73z"
+                        className="soh-slash--b"
+                        style={{ Subindex: '2' }}
+                    ></path>
+                    <path
+                        fill="url(#soh-grad-slash-3)"
+                        d="M671.48 1571.2l-21.11 73.49 37.66-21.75 357.44-1244.77-28.4-16.39 32.22-112.14-38.07 21.97-368.43 1283.03 28.69 16.56z"
+                        className="soh-slash--c"
+                        style={{ Subindex: '3' }}
+                    ></path>
+                    <path
+                        fill="url(#soh-grad-slash-4)"
+                        d="M802.95 1463.59l-32.02 111.49 38.06-21.98 368.59-1283.55-28.69-16.55 20.96-72.97-37.66 21.74L774.56 1447.2l28.39 16.39z"
+                        className="soh-slash--d"
+                        style={{ Subindex: '3' }}
+                    ></path>
+                    <path
+                        fill="url(#soh-grad-slash-5)"
+                        d="M936.54 1355.7l-42.62 148.37 38.47-22.21 379.02-1319.89-28.97-16.72 10.4-36.23-37.25 21.51-347.16 1208.95 28.11 16.22z"
+                        className="soh-slash--e"
+                        style={{ Subindex: '2' }}
+                    ></path>
+                    <path
+                        fill="url(#soh-grad-slash-6)"
+                        d="M1069.27 1248.85l-53.02 184.58 38.87-22.44 389.31-1355.7-29.26-16.89-36.85 21.27-336.87 1173.13 27.82 16.05z"
+                        className="soh-slash--f"
+                        style={{ Subindex: '1' }}
+                    ></path>
+                </g>
+            </g>
+            <g className="soh-shape-group">
+                <g clipPath="url(#soh-shape-html-mask)" transform="translate(11.283 15.82)">
+                    <use
+                        fill="var(--color-shape-shadow-bg)"
+                        className="soh-shape--shadow-bg"
+                        xlinkHref="#soh-shape-html"
+                    ></use>
+                    <g
+                        fill="transparent"
+                        stroke="var(--color-shape-shadow-stroke)"
+                        strokeWidth="12"
+                    >
+                        <use
+                            className="soh-shape--shadow-stroke"
+                            xlinkHref="#soh-shape-html-letter-h"
+                        ></use>
+                        <use
+                            className="soh-shape--shadow-stroke"
+                            xlinkHref="#soh-shape-html-letter-t"
+                        ></use>
+                        <use
+                            className="soh-shape--shadow-stroke"
+                            xlinkHref="#soh-shape-html-letter-m"
+                        ></use>
+                        <use
+                            className="soh-shape--shadow-stroke"
+                            xlinkHref="#soh-shape-html-letter-l"
+                        ></use>
+                    </g>
+                </g>
+                <use
+                    fill="url(#soh-grad-logo)"
+                    className="soh-shape--fill"
+                    xlinkHref="#soh-shape-html"
+                ></use>
+            </g>
+            <g className="soh-front-chevrons">
+                <g clipPath="url(#soh-front-chevron-right-clip)">
+                    <use
+                        fill="url(#soh-grad-chevron-front-a)"
+                        className="soh-front-chevron soh-front-chevron--right"
+                        xlinkHref="#soh-front-chevron-right"
+                    ></use>
+                </g>
+                <g clipPath="url(#soh-front-chevron-left-clip)">
+                    <use
+                        fill="url(#soh-grad-chevron-front-b)"
+                        className="soh-front-chevron soh-front-chevron--left"
+                        xlinkHref="#soh-front-chevron-left"
+                    ></use>
+                </g>
+            </g>
+            <text x="1070" y="660" fontSize="90" transform="rotate(30)" className="0">
+                <tspan>S</tspan>
+                <tspan>T</tspan>
+                <tspan>A</tspan>
+                <tspan>T</tspan>
+                <tspan>E</tspan>
+                <tspan></tspan>
+                <tspan>O</tspan>
+                <tspan>F</tspan>
+            </text>
+            <text
+                x="728"
+                y="1260"
+                fontSize="100"
+                textAnchor="end"
+                transform="rotate(30)"
+                className="0"
             >
-                <rect
-                    x="263.49012"
-                    y="95.55474"
-                    width="227.49301"
-                    height="14.8365"
-                    fill="url(#grad-lines)"
-                    style={{ '--i': '0' } as React.CSSProperties}
-                />
-                <rect
-                    x="204.14411"
-                    y="153.41709"
-                    width="346.18502"
-                    height="19.782"
-                    fill="url(#grad-lines)"
-                    style={{ '--i': '1' } as React.CSSProperties}
-                />
-                <rect
-                    x="160.12916"
-                    y="216.22494"
-                    width="434.21492"
-                    height="24.7275"
-                    fill="url(#grad-lines)"
-                    style={{ '--i': '2' } as React.CSSProperties}
-                />
-                <rect
-                    x="78.52841"
-                    y="283.9783"
-                    width="597.41643"
-                    height="29.673"
-                    fill="url(#grad-lines)"
-                    style={{ '--i': '3' } as React.CSSProperties}
-                />
-                <rect
-                    x="41.93171"
-                    y="356.67715"
-                    width="670.60983"
-                    height="34.6185"
-                    fill="url(#grad-lines)"
-                    style={{ '--i': '4' } as React.CSSProperties}
-                />
-                <rect
-                    x="78.52841"
-                    y="434.81606"
-                    width="597.91098"
-                    height="28.6839"
-                    fill="url(#grad-lines)"
-                    style={{ '--i': '5' } as React.CSSProperties}
-                />
-                <rect
-                    x="160.12916"
-                    y="507.02036"
-                    width="434.21492"
-                    height="24.7275"
-                    fill="url(#grad-lines)"
-                    style={{ '--i': '6' } as React.CSSProperties}
-                />
-                <rect
-                    x="204.14411"
-                    y="574.77371"
-                    width="346.18502"
-                    height="19.782"
-                    fill="url(#grad-lines)"
-                    style={{ '--i': '7' } as React.CSSProperties}
-                />
-                <rect
-                    x="264.47922"
-                    y="637.58156"
-                    width="226.50391"
-                    height="14.8365"
-                    fill="url(#grad-lines)"
-                    style={{ '--i': '8' } as React.CSSProperties}
-                />
-            </g>
-
-            <g className="soc-logo__diamond">
-                <polygon
-                    points="374.081 82.14 82.14 374.081 374.081 666.022 666.022 374.081 374.081 82.14"
-                    fill="url(#grad-frame-outer)"
-                    style={{ '--g': '0' } as React.CSSProperties}
-                />
-                <polygon
-                    points="376.624 154.721 84.683 374.081 376.624 593.442 668.565 374.081 376.624 154.721"
-                    fill="url(#grad-frame-center)"
-                    style={{ '--g': '1' } as React.CSSProperties}
-                />
-                <polygon
-                    points="376.624 228.23 84.683 374.081 376.624 519.933 668.565 374.081 376.624 228.23"
-                    fill="url(#grad-frame-inner)"
-                    style={{ '--g': '2' } as React.CSSProperties}
-                />
-            </g>
-
-            <g className="soc-logo__stateof soc-logo__text">
-                <path
-                    d="M228.964,20.64932c5.457,0,8.26172,3.26367,8.26172,8.97558V30.746H231.922V29.26748c0-2.5498-1.01953-3.51855-2.80469-3.51855s-2.80469.96875-2.80469,3.51855c0,7.34375,10.96387,8.72071,10.96387,18.919,0,5.71191-2.85547,8.97558-8.36328,8.97558-5.50684,0-8.36328-3.26367-8.36328-8.97558V45.994h5.30371v2.54981c0,2.5498,1.12207,3.46777,2.90722,3.46777,1.78418,0,2.90625-.918,2.90625-3.46777,0-7.34375-10.96386-8.7207-10.96386-18.91895C220.70324,23.913,223.50792,20.64932,228.964,20.64932Z"
-                    style={{ '--t': '0' } as React.CSSProperties}
-                />
-                <path
-                    d="M264.49718,21.05752h17.33789v5.09961h-5.86426V56.75381h-5.60937V26.15713h-5.86426Z"
-                    style={{ '--t': '1' } as React.CSSProperties}
-                />
-                <path
-                    d="M326.00988,56.75381h-5.66016l-.96875-6.47656h-6.88476l-.96875,6.47656h-5.1504L312.089,21.05752h8.21ZM313.21007,45.43252h5.40625L315.9132,27.38076Z"
-                    style={{ '--t': '2' } as React.CSSProperties}
-                />
-                <path
-                    d="M350.55382,21.05752h17.33789v5.09961h-5.86425V56.75381h-5.60938V26.15713h-5.86426Z"
-                    style={{ '--t': '3' } as React.CSSProperties}
-                />
-                <path
-                    d="M401.28722,36.10049h7.7002V41.2001h-7.7002V51.6542h9.68848v5.09961H395.67785V21.05752H410.9757v5.09961h-9.68848Z"
-                    style={{ '--t': '4' } as React.CSSProperties}
-                />
-                <path
-                    d="M472.89171,29.6249c0-5.71191,3.00782-8.97558,8.51563-8.97558s8.5166,3.26367,8.5166,8.97558V48.18643c0,5.71191-3.00879,8.97558-8.5166,8.97558s-8.51563-3.26367-8.51563-8.97558Zm5.60938,18.919c0,2.5498,1.12109,3.51855,2.90625,3.51855s2.90722-.96875,2.90722-3.51855V29.26748c0-2.5498-1.12207-3.51855-2.90722-3.51855s-2.90625.96875-2.90625,3.51855Z"
-                    style={{ '--t': '5' } as React.CSSProperties}
-                />
-                <path
-                    d="M523.97667,36.9169h7.24121v5.09961h-7.24121v14.7373H518.3673V21.05752h14.83984v5.09961h-9.23047Z"
-                    style={{ '--t': '6' } as React.CSSProperties}
-                />
-            </g>
-
-            <g className="soc-logo__css">
-                {/* <!-- C --> */}
-                <g style={{ '--g': '1' } as React.CSSProperties}>
-                    <g
-                        clipPath="url(#soc-logo-c1-tl)"
-                        style={{ '--a': '-270deg', '--i': ' 1' } as React.CSSProperties}
-                    >
-                        <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="nw">
-                            <use xlinkHref="#soc-logo-quarter-nw" x="198.28919" y="317.6259" />
-                        </g>
-                        <g className="soc-logo__quarter soc-logo__quarter--grad" data-curve="nw">
-                            <use xlinkHref="#soc-logo-quarter-nw" x="198.28919" y="317.6259" />
-                        </g>
-                    </g>
-                    <g
-                        clipPath="url(#soc-logo-c1-tr)"
-                        style={{ '--a': '120deg', '--i': ' 2' } as React.CSSProperties}
-                    >
-                        <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="se">
-                            <use xlinkHref="#soc-logo-quarter-se" x="257.76" y="317.6259" />
-                        </g>
-                        <g className="soc-logo__quarter soc-logo__quarter--grad" data-curve="se">
-                            <use xlinkHref="#soc-logo-quarter-se" x="257.76" y="317.6259" />
-                        </g>
-                    </g>
-                    <g
-                        clipPath="url(#soc-logo-c1-bl)"
-                        style={{ '--a': '150deg', '--i': ' 3' } as React.CSSProperties}
-                    >
-                        <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="sw">
-                            <use xlinkHref="#soc-logo-quarter-sw" x="198.28919" y="377.09688" />
-                        </g>
-                        <g className="soc-logo__quarter soc-logo__quarter--grad" data-curve="sw">
-                            <use xlinkHref="#soc-logo-quarter-sw" x="198.28919" y="377.09688" />
-                        </g>
-                    </g>
-                    <g
-                        clipPath="url(#soc-logo-c1-br)"
-                        style={{ '--a': '270deg', '--i': ' 4' } as React.CSSProperties}
-                    >
-                        <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="ne">
-                            <use xlinkHref="#soc-logo-quarter-ne" x="257.76" y="377.09688" />
-                        </g>
-                        <g className="soc-logo__quarter soc-logo__quarter--grad" data-curve="ne">
-                            <use xlinkHref="#soc-logo-quarter-ne" x="257.76" y="377.09688" />
-                        </g>
-                    </g>
-                </g>
-
-                {/* <!-- S1 --> */}
-                <g style={{ '--g': '2' } as React.CSSProperties}>
-                    <g
-                        clipPath="url(#soc-logo-s1-tl)"
-                        style={{ '--a': '-270deg', '--i': ' 1' } as React.CSSProperties}
-                    >
-                        <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="nw">
-                            <use xlinkHref="#soc-logo-quarter-nw" x="320.17056" y="317.6259" />
-                        </g>
-                        <g className="soc-logo__quarter soc-logo__quarter--grad" data-curve="nw">
-                            <use xlinkHref="#soc-logo-quarter-nw" x="320.17056" y="317.6259" />
-                        </g>
-                    </g>
-                    <g
-                        clipPath="url(#soc-logo-s1-tr)"
-                        style={{ '--a': '120deg', '--i': ' 2' } as React.CSSProperties}
-                    >
-                        <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="se">
-                            <use xlinkHref="#soc-logo-quarter-se" x="379.56477" y="317.6259" />
-                        </g>
-                        <g className="soc-logo__quarter soc-logo__quarter--grad" data-curve="se">
-                            <use xlinkHref="#soc-logo-quarter-se" x="379.56477" y="317.6259" />
-                        </g>
-                    </g>
-                    <g
-                        clipPath="url(#soc-logo-s1-bl)"
-                        style={{ '--a': '-120deg', '--i': ' 3' } as React.CSSProperties}
-                    >
-                        <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="nw">
-                            <use xlinkHref="#soc-logo-quarter-nw" x="320.17056" y="377.09688" />
-                        </g>
-                        <g className="soc-logo__quarter soc-logo__quarter--grad" data-curve="nw">
-                            <use xlinkHref="#soc-logo-quarter-nw" x="320.17056" y="377.09688" />
-                        </g>
-                    </g>
-                    <g
-                        clipPath="url(#soc-logo-s1-br)"
-                        style={{ '--a': '135deg', '--i': ' 4' } as React.CSSProperties}
-                    >
-                        <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="se">
-                            <use xlinkHref="#soc-logo-quarter-se" x="379.56477" y="377.09688" />
-                        </g>
-                        <g className="soc-logo__quarter soc-logo__quarter--grad" data-curve="se">
-                            <use xlinkHref="#soc-logo-quarter-se" x="379.56477" y="377.09688" />
-                        </g>
-                    </g>
-                </g>
-
-                {/* <!-- S2 --> */}
-                <g style={{ '--g': '3' } as React.CSSProperties}>
-                    <g
-                        clipPath="url(#soc-logo-s2-tl)"
-                        style={{ '--a': '-135deg', '--i': ' 1' } as React.CSSProperties}
-                    >
-                        <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="nw">
-                            <use xlinkHref="#soc-logo-quarter-nw" x="436.17146" y="317.6259" />
-                        </g>
-                        <g className="soc-logo__quarter soc-logo__quarter--grad" data-curve="nw">
-                            <use xlinkHref="#soc-logo-quarter-nw" x="436.17146" y="317.6259" />
-                        </g>
-                    </g>
-                    <g
-                        clipPath="url(#soc-logo-s2-tr)"
-                        style={{ '--a': '270deg', '--i': ' 2' } as React.CSSProperties}
-                    >
-                        <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="se">
-                            <use xlinkHref="#soc-logo-quarter-se" x="495.567" y="317.6259" />
-                        </g>
-                        <g className="soc-logo__quarter soc-logo__quarter--grad" data-curve="se">
-                            <use xlinkHref="#soc-logo-quarter-se" x="495.567" y="317.6259" />
-                        </g>
-                    </g>
-                    <g
-                        clipPath="url(#soc-logo-s2-bl)"
-                        style={{ '--a': '180deg', '--i': ' 3' } as React.CSSProperties}
-                    >
-                        <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="nw">
-                            <use xlinkHref="#soc-logo-quarter-nw" x="436.17146" y="377.09688" />
-                        </g>
-                        <g className="soc-logo__quarter soc-logo__quarter--grad" data-curve="nw">
-                            <use xlinkHref="#soc-logo-quarter-nw" x="436.17146" y="377.09688" />
-                        </g>
-                    </g>
-                    <g
-                        clipPath="url(#soc-logo-s2-br)"
-                        style={{ '--a': '-180deg', '--i': ' 4' } as React.CSSProperties}
-                    >
-                        <g className="soc-logo__quarter soc-logo__quarter--ghost" data-curve="se">
-                            <use xlinkHref="#soc-logo-quarter-se" x="495.567" y="377.09688" />
-                        </g>
-                        <g className="soc-logo__quarter soc-logo__quarter--grad" data-curve="se">
-                            <use xlinkHref="#soc-logo-quarter-se" x="495.567" y="377.09688" />
-                        </g>
-                    </g>
-                </g>
-            </g>
-
-            <g className="soc-logo__year soc-logo__text">
-                <path
-                    d="M310.13,691.04287c-1.78515,0-2.90722.96875-2.90722,3.51856v3.82422H301.92v-3.4668c0-5.71191,2.85547-8.97559,8.36231-8.97559,5.50781,0,8.36328,3.26368,8.36328,8.97559,0,11.21875-11.168,15.40039-11.168,21.26465a3.801,3.801,0,0,0,.05176.76465h10.60644v5.09961H301.92V717.662c0-10.50488,11.11621-12.23828,11.11621-22.54C313.03624,691.91006,311.91417,691.04287,310.13,691.04287Z"
-                    style={{ '--t': '0' } as React.CSSProperties}
-                />
-                <path
-                    d="M346.69738,694.91885c0-5.71191,3.00879-8.97559,8.5166-8.97559,5.50683,0,8.51562,3.26368,8.51562,8.97559v18.56152c0,5.71192-3.00879,8.97559-8.51562,8.97559-5.50781,0-8.5166-3.26367-8.5166-8.97559Zm5.60937,18.91894c0,2.54981,1.12207,3.51856,2.90723,3.51856,1.78418,0,2.90625-.96875,2.90625-3.51856V694.56143c0-2.54981-1.12207-3.51856-2.90625-3.51856-1.78516,0-2.90723.96875-2.90723,3.51856Z"
-                    style={{ '--t': '1' } as React.CSSProperties}
-                />
-                <path
-                    d="M400.27648,691.04287c-1.78418,0-2.90625.96875-2.90625,3.51856v3.82422h-5.30371v-3.4668c0-5.71191,2.85547-8.97559,8.36328-8.97559s8.36328,3.26368,8.36328,8.97559c0,11.21875-11.168,15.40039-11.168,21.26465a3.873,3.873,0,0,0,.05078.76465h10.60742v5.09961H392.06652V717.662c0-10.50488,11.11719-12.23828,11.11719-22.54C403.18371,691.91006,402.06163,691.04287,400.27648,691.04287Z"
-                    style={{ '--t': '2' } as React.CSSProperties}
-                />
-
-                {/* <path
-                    d="M 444.2765 691.0429 c -1.7842 0 -2.9063 0.9688 -2.9063 3.5186 v 3.8242 h -5.3037 v -3.4668 c 0 -5.7119 2.8555 -8.9756 8.3633 -8.9756 s 8.3633 3.2637 8.3633 8.9756 c 0 11.2188 -11.168 15.4004 -11.168 21.2646 a 3.873 3.873 0 0 0 0.0508 0.7647 h 10.6074 v 5.0996 H 436.0665 V 717.662 c 0 -10.5049 11.1172 -12.2383 11.1172 -22.54 C 447.1837 691.9101 446.0616 691.0429 444.2765 691.0429 Z"
-                    style={{ '--t': '3' } as React.CSSProperties}
-                /> */}
-                <path
-                    d="M 443.8339 722.592 C 441.069 722.592 438.9698 721.824 437.5362 720.288 C 436.1368 718.752 435.437 716.5504 435.437 713.6832 V 710.7648 H 440.7618 V 713.9392 C 440.7618 716.2944 441.7347 717.472 443.6803 717.472 C 444.636 717.472 445.3528 717.1819 445.8307 716.6016 C 446.3427 715.9872 446.5987 714.9291 446.5987 713.4272 V 710.5088 C 446.5987 708.8704 446.3085 707.7099 445.7283 707.0272 C 445.148 706.3104 444.2093 705.952 442.9123 705.952 H 441.0178 V 700.832 H 443.0659 C 444.1923 700.832 445.0285 700.5419 445.5747 699.9616 C 446.1549 699.3813 446.4451 698.4085 446.4451 697.0432 V 694.432 C 446.4451 693.2032 446.1891 692.2987 445.6771 691.7184 C 445.1651 691.1381 444.4824 690.848 443.6291 690.848 C 441.82 690.848 440.9154 691.9573 440.9154 694.176 V 696.5312 H 435.5906 V 694.6368 C 435.5906 691.7696 436.2904 689.568 437.6898 688.032 C 439.1234 686.496 441.1714 685.728 443.8339 685.728 C 446.5304 685.728 448.5784 686.496 449.9779 688.032 C 451.3773 689.5339 452.0771 691.7184 452.0771 694.5856 V 695.8656 C 452.0771 697.8112 451.7528 699.3813 451.1043 700.576 C 450.4557 701.7365 449.4488 702.5728 448.0835 703.0848 V 703.1872 C 449.5512 703.7333 450.6093 704.6208 451.2579 705.8496 C 451.9064 707.0784 452.2307 708.6485 452.2307 710.56 V 713.7344 C 452.2307 716.6016 451.5139 718.8032 450.0803 720.3392 C 448.6808 721.8411 446.5987 722.592 443.8339 722.592 Z"
-                    style={{ '--t': '3' } as React.CSSProperties}
-                />
-
-                {/* <path
-                    d="M438.6798,690.83877c4.335,0,5.30371-2.09082,6.1709-4.4873h3.77343v35.69629h-5.60937V694.81631h-4.335Z"
-                    style={{ '--t': '3' } as React.CSSProperties}
-                /> */}
-            </g>
-        </SOCLogo>
+                <tspan>2</tspan>
+                <tspan>0</tspan>
+                <tspan>2</tspan>
+                <tspan>3</tspan>
+            </text>
+        </svg>
     </Wrapper>
 )
 

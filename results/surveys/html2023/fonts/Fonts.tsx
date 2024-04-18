@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const fontList = []
+export const fontList = ['IBM+Plex+Mono:300,300i,500,600', 'Bebas+Neue&display=swap']
 
 /*
 

@@ -1,3 +1,4 @@
+export * from './get_data'
 export * from './add_entities'
 export * from './add_tokens'
 export * from './add_percentages'

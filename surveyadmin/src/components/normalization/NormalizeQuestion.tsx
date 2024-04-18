@@ -21,6 +21,7 @@ import {
   splitResponses,
 } from "~/lib/normalization/helpers/splitResponses";
 import sortBy from "lodash/sortBy";
+import { useLocalStorage } from "../hooks";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ import {
 import { apiRoutes } from "~/lib/apiRoutes";
 import { GetQuestionResponsesParams } from "~/lib/normalization/actions/getQuestionResponses";
 import { Dispatch, SetStateAction, useState } from "react";
+import { ResultsPayload } from "~/lib/normalization/services";
 
 interface NormalizeQuestionProps {
   survey: SurveyMetadata;
@@ -95,6 +97,7 @@ export interface CommonNormalizationProps extends NormalizationProps {
   setTokenFilter: Dispatch<SetStateAction<null | string[]>>;
   variant: AnswerVariant;
   setVariant: Dispatch<SetStateAction<AnswerVariant>>;
+  addToActionLog: (action: ActionLogItem, showActionLog?: boolean) => void;
 }
 
 export const NormalizeQuestion = (props: NormalizeQuestionProps) => {
@@ -176,6 +179,13 @@ interface NormalizationProps {
   responsesData?: ResponsesData;
   customNormalizations?: CustomNormalizationDocument[];
 }
+
+export interface ActionLogItem {
+  type: "normalization";
+  payload: ResultsPayload;
+  timestamp: Date;
+}
+
 export const Normalization = (props: NormalizationProps) => {
   const {
     survey,
@@ -184,7 +194,7 @@ export const Normalization = (props: NormalizationProps) => {
     responsesData = {} as ResponsesData,
     customNormalizations = [],
   } = props;
-  console.log(responsesData);
+
   const {
     responsesCount,
     entities,
@@ -196,6 +206,17 @@ export const Normalization = (props: NormalizationProps) => {
 
   const [tokenFilter, setTokenFilter] = useState<null | string[]>(null);
   const [variant, setVariant] = useState<AnswerVariant>("unnormalized");
+  const [actionLog, setActionLog] = useLocalStorage<ActionLogItem[]>(
+    "actionLog",
+    []
+  );
+  const [showActionLog, setShowActionLog] = useState(false);
+  const addToActionLog = (action: ActionLogItem, showActionLog = true) => {
+    setActionLog([...actionLog, { ...action, timestamp: new Date() }]);
+    if (showActionLog) {
+      setShowActionLog(true);
+    }
+  };
 
   const {
     initializeSegments,
@@ -232,6 +253,11 @@ export const Normalization = (props: NormalizationProps) => {
     discardedAnswers,
     variant,
     setVariant,
+    actionLog,
+    setActionLog,
+    addToActionLog,
+    showActionLog,
+    setShowActionLog,
   };
 
   const segmentProps = {

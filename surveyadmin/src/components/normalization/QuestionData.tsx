@@ -9,11 +9,12 @@ import {
   Bucket,
 } from "@devographics/types";
 import { Fragment, useState } from "react";
-import { NormToken } from "./NormToken";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
 import isEmpty from "lodash/isEmpty";
 import { loadQuestionData } from "~/lib/normalization/services";
 import ModalTrigger from "../ui/ModalTrigger";
+import { NormTokenAction } from "./NormTokenAction";
+import { CommonNormalizationProps } from "./NormalizeQuestion";
 
 type QuestionDataProps = {
   questionData: ResponseData;
@@ -22,6 +23,7 @@ type QuestionDataProps = {
   edition: EditionMetadata;
   question: QuestionWithSection;
   entities: Entity[];
+  setTokenFilter: CommonNormalizationProps["setTokenFilter"];
 };
 const QuestionData = ({
   questionData,
@@ -30,9 +32,9 @@ const QuestionData = ({
   edition,
   question,
   entities,
+  setTokenFilter,
 }: QuestionDataProps) => {
   const { buckets } = questionData?.currentEdition;
-  console.log(buckets);
   const bucketProps = { responses, entities };
   return (
     <section>
@@ -65,6 +67,7 @@ const QuestionData = ({
                         bucket={bucket}
                         index={index}
                         hasGroupedBuckets={hasGroupedBuckets}
+                        setTokenFilter={setTokenFilter}
                         {...bucketProps}
                       />
                       {groupedBuckets?.map((groupedBucket, index) => (
@@ -73,6 +76,7 @@ const QuestionData = ({
                           index={index}
                           bucket={groupedBucket}
                           isGroupedBucket={true}
+                          setTokenFilter={setTokenFilter}
                           {...bucketProps}
                         />
                       ))}
@@ -95,6 +99,7 @@ const Row = ({
   isGroupedBucket = false,
   responses,
   entities,
+  setTokenFilter,
 }: {
   bucket: Bucket;
   index: number;
@@ -102,6 +107,7 @@ const Row = ({
   isGroupedBucket?: boolean;
   responses: QuestionDataProps["responses"];
   entities: QuestionDataProps["entities"];
+  setTokenFilter: QuestionDataProps["setTokenFilter"];
 }) => {
   const { id, count } = bucket;
   const rowClass = `row row-${isGroupedBucket ? "sub-row" : "normal-row"}`;
@@ -113,7 +119,7 @@ const Row = ({
         {hasGroupedBuckets ? (
           id
         ) : (
-          <NormToken id={id} responses={responses} entities={entities} />
+          <NormTokenAction id={id} setTokenFilter={setTokenFilter} />
         )}
       </td>
       <td>{count}</td>

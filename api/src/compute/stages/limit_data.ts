@@ -17,17 +17,27 @@ export const isNotSpecialBucket = (b: Bucket | FacetBucket) => !isSpecialBucket(
 Group together any bucket that went over the limit. 
 
 */
-export function groupOverLimit<T extends Bucket | FacetBucket>(
-    buckets: T[],
-    limit: number,
-    axis?: ComputeAxisParameters
-) {
-    const { limitedBuckets, discardedBuckets } = limitBuckets<T>(buckets, limit)
+export function groupOverLimit<T extends Bucket | FacetBucket>({
+    buckets,
+    limit,
+    isFacetBuckets,
+    primaryAxis,
+    secondaryAxis
+}: {
+    buckets: T[]
+    limit: number
+    isFacetBuckets?: boolean
+    primaryAxis: ComputeAxisParameters
+    secondaryAxis?: ComputeAxisParameters
+}) {
+    const { limitedBuckets, discardedBuckets } = limitBuckets<T>({ buckets, limit })
     if (discardedBuckets.length > 0) {
         const overlimitGroupBucket = mergeBuckets({
             buckets: discardedBuckets,
             mergedProps: { id: OVERLIMIT_ANSWERS },
-            axis
+            isFacetBuckets,
+            primaryAxis,
+            secondaryAxis
         })
 
         return discardedBuckets.length > 0
@@ -44,7 +54,13 @@ Only apply the limit to "regular" buckets
 (e.g. not the NO_ANSWER, CUTOFF_ANSWERS, etc. buckets)
 
 */
-function limitBuckets<T extends Bucket | FacetBucket>(buckets: T[], limit: number) {
+function limitBuckets<T extends Bucket | FacetBucket>({
+    buckets,
+    limit
+}: {
+    buckets: T[]
+    limit: number
+}) {
     const regularBuckets = buckets.filter(isNotSpecialBucket)
     const specialBuckets = buckets.filter(isSpecialBucket)
     const regularBucketsLimited = take(regularBuckets, limit)
@@ -64,15 +80,19 @@ export async function limitData(
         if (axis1.sort !== 'options' && axis1.limit && axis1.limit !== 0) {
             if (axis1.groupOverLimit) {
                 // group together all buckets that don't make cutoff
-                editionData.buckets = groupOverLimit<Bucket>(
-                    editionData.buckets,
-                    axis1.limit,
-                    axis2
-                )
+                editionData.buckets = groupOverLimit<Bucket>({
+                    buckets: editionData.buckets,
+                    limit: axis1.limit,
+                    primaryAxis: axis1,
+                    secondaryAxis: axis2
+                })
             } else {
                 // do not apply limits for aggregations that are sorted along predefined options,
                 // as that might result in unexpectedly missing buckets
-                const { limitedBuckets } = limitBuckets<Bucket>(editionData.buckets, axis1.limit)
+                const { limitedBuckets } = limitBuckets<Bucket>({
+                    buckets: editionData.buckets,
+                    limit: axis1.limit
+                })
                 editionData.buckets = limitedBuckets
             }
         }
@@ -82,15 +102,17 @@ export async function limitData(
             for (let bucket of editionData.buckets) {
                 if (axis2.groupOverLimit) {
                     // group together all buckets that don't make cutoff
-                    bucket.facetBuckets = groupOverLimit<FacetBucket>(
-                        bucket.facetBuckets,
-                        axis2.limit
-                    )
+                    bucket.facetBuckets = groupOverLimit<FacetBucket>({
+                        buckets: bucket.facetBuckets,
+                        isFacetBuckets: true,
+                        primaryAxis: axis2,
+                        limit: axis2.limit
+                    })
                 } else {
-                    const { limitedBuckets } = limitBuckets<FacetBucket>(
-                        bucket.facetBuckets,
-                        axis2.limit
-                    )
+                    const { limitedBuckets } = limitBuckets<FacetBucket>({
+                        buckets: bucket.facetBuckets,
+                        limit: axis2.limit
+                    })
                     bucket.facetBuckets = limitedBuckets
                 }
             }

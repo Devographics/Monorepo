@@ -1,5 +1,5 @@
 // import { Entity } from './types'
-import { Entity } from '@devographics/types'
+import { Entity, EntityType } from '@devographics/types'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
@@ -253,9 +253,12 @@ export const getEntity = async ({
         return
     }
 
-    const avatar = await getAvatar(entity)
-    if (avatar) {
-        entity.avatar = avatar
+    if (entity.type === EntityType.PEOPLE) {
+        // TODO: find a way to cache this somehow?
+        const avatar = await getAvatar(entity)
+        if (avatar) {
+            entity.avatar = avatar
+        }
     }
 
     entity.type = getEntityType(entity)

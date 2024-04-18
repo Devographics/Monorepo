@@ -72,12 +72,14 @@ export const normalizeQuestion = async (args: NormalizeQuestionArgs) => {
 
   console.log(`⛰️ Refreshing responses cache for question ${questionId}…`);
 
-  const questionResponseData = await getQuestionResponses({
+  // note: even if we don't return question responses we do need to refresh the cache
+  // (but we don't need to await the result)
+  const questionResponseData = /* await */ getQuestionResponses({
     surveyId,
     editionId,
     questionId,
     shouldGetFromCache: false,
   });
 
-  return { ...mutationResult, questionResponseData };
+  return { ...mutationResult /*, questionResponseData */ };
 };

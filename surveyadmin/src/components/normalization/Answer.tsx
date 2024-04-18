@@ -2,8 +2,6 @@
 import { useState } from "react";
 import { normalizeQuestionResponses } from "~/lib/normalization/services";
 import { LoadingButton } from "../LoadingButton";
-import { NormalizeInBulkResult } from "~/lib/normalization/types";
-import { NormalizationResult } from "./NormalizationResult";
 import {
   NormTokenAction,
   useCustomNormalizationMutation,
@@ -25,10 +23,8 @@ import {
 import { addCustomTokensAction } from "./tokenActions";
 import { EntityList } from "./EntityInput";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  getCustomNormalizationsCacheKey,
-  getDataCacheKey,
-} from "./NormalizeQuestion";
+import { getDataCacheKey } from "./NormalizeQuestion";
+
 export interface AnswerProps extends AnswersProps {
   rawPath: string;
   normPath: string;
@@ -62,14 +58,11 @@ export const Answer = ({
   isRepeating = false,
   filterQuery,
   setTokenFilter,
+  addToActionLog,
 }: AnswerProps) => {
   const queryClient = useQueryClient();
 
   const { _id, responseId, raw: rawValue, tokens = [] } = answer;
-  const [result, setResult] = useState<NormalizeInBulkResult>();
-
-  const [showResult, setShowResult] = useState(true);
-  const [showAllPresets, setShowAllPresets] = useState(false);
   const [autocompleteToken, setAutocompleteToken] = useState<string>();
   const [autocompleteIsLoading, setAutocompleteIsLoading] = useState(false);
 
@@ -298,14 +291,15 @@ export const Answer = ({
                   editionId: edition.id,
                   questionId: question.id,
                 };
-                const result = await normalizeQuestionResponses({
+                const results = await normalizeQuestionResponses({
                   ...commonParams,
                   responsesIds: [responseId],
                   isVerbose: true,
                 });
-                setResult(result.data);
-                if (result.data) {
-                  const { normalizedDocuments } = result.data;
+                addToActionLog({ type: "normalization", payload: results });
+
+                if (results.data) {
+                  const { normalizedDocuments } = results.data;
                   const normalizedDocument = normalizedDocuments[0];
                   if (normalizedDocument) {
                     const { normalizedFields, responseId } = normalizedDocument;
@@ -340,7 +334,7 @@ export const Answer = ({
                     }
                   } else {
                     console.log("No normalizedDocument returned");
-                    console.log(result);
+                    console.log(results);
                   }
                 }
               }}

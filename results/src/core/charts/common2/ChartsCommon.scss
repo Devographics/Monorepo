@@ -1,20 +1,5 @@
 @import '../../../stylesheets/_breakpoints.scss';
 
-.chart-row,
-.chart-axis,
-.chart-gridlines {
-    align-items: center;
-    @include small {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    @include medium-large {
-        display: grid;
-        grid-template-columns: 200px minmax(0, 1fr) 100px;
-        gap: 20px;
-    }
-}
 .chart-facet {
     border-bottom: 1px solid #ffffff33;
     padding-bottom: 20px;
@@ -33,6 +18,9 @@
     display: flex;
     justify-content: space-between;
     gap: var(--spacing);
+    @include small {
+        flex-direction: column;
+    }
 }
 .chart-bar {
     // position: relative;
