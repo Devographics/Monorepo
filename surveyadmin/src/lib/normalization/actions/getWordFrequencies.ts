@@ -125,7 +125,7 @@ function calculateWordFrequencies(data: string[]) {
 
   wordFrequencies = wordFrequencies.filter((w) => w.count > 10);
   wordFrequencies = sortBy(wordFrequencies, "count");
-  wordFrequencies = wordFrequencies.toReversed();
+  wordFrequencies.reverse();
   return wordFrequencies;
 }
 
