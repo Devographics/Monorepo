@@ -2,7 +2,7 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { getPercent, getSortedAnswers } from "./Answers";
 import { IndividualAnswerWithIndex } from "~/lib/normalization/helpers/splitResponses";
-import Tokens from "./Tokens";
+import TokensTrigger from "./Tokens";
 import LoadingButton from "../LoadingButton";
 import { normalizeQuestionResponses } from "~/lib/normalization/services";
 import {
@@ -60,9 +60,17 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
     addToActionLog,
   } = props;
   const queryClient = useQueryClient();
-  const [localFilterQuery, setLocalFilterQuery] = useState("");
+  const [localFilterQuery, setLocalFilterQuery] = useState(filterQuery || "");
   const [localPageNumber, setLocalPageNumber] = useState(String(pageNumber));
   const [topOfTable, setTopOfTable] = useState(0);
+  const [hasReceivedInput, setHasReceivedInput] = useState(false);
+
+  // when filterQuery changes (we're receiving a filter from somewhere else)
+  // also change local state to reflect the change
+  useEffect(() => {
+    setLocalFilterQuery(filterQuery);
+  }, [filterQuery]);
+
   useEffect(() => {
     setLocalPageNumber(String(pageNumber));
   }, [pageNumber]);
@@ -74,14 +82,19 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
   }, []);
 
   // wait until user has stopped typing to filter
+  // note: only do it if the input has actually received input,
+  // not if localFilterQuery is changing for other reasons
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      setPageNumber(1);
-      setFilterQuery(localFilterQuery);
-    }, 500);
+    if (hasReceivedInput) {
+      const delayDebounceFn = setTimeout(() => {
+        setPageNumber(1);
+        setFilterQuery(localFilterQuery);
+        setHasReceivedInput(false);
+      }, 500);
 
-    return () => clearTimeout(delayDebounceFn);
-  }, [localFilterQuery]);
+      return () => clearTimeout(delayDebounceFn);
+    }
+  }, [localFilterQuery, hasReceivedInput]);
 
   return (
     <div className="normalization-controls" ref={myRef}>
@@ -130,7 +143,7 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
       </div>
 
       <div className="control control-tokens">
-        <Tokens {...props} />
+        <TokensTrigger {...props} />
       </div>
 
       <div className="control control-search">
@@ -141,6 +154,7 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
           value={localFilterQuery}
           onChange={(e) => {
             const value = e.target.value;
+            setHasReceivedInput(true);
             setLocalFilterQuery(value);
             // setFilterQueryDebounced(value);
           }}

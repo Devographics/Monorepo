@@ -79,8 +79,8 @@ const replaceWithTag = (text, marker, tag, matches: Match[]) => {
     const matchObject = matches[i++];
 
     if (!matchObject) {
-      console.log(matches);
-      console.log(i);
+      // console.log(matches);
+      // console.log(i);
       return "";
     }
     const { isPrimary, isFilterQuery, pattern, index } = matchObject;

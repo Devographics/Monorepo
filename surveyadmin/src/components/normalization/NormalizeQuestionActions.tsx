@@ -1,7 +1,7 @@
 "use client";
 import { defaultSegmentSize } from "./hooks";
 import Metadata from "./Metadata";
-import Tokens from "./Tokens";
+import TokensTrigger from "./Tokens";
 import { CommonNormalizationProps, SegmentProps } from "./NormalizeQuestion";
 import { Import } from "./Import";
 import { ViewQuestionData } from "./QuestionData";

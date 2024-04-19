@@ -64,6 +64,7 @@ export interface NormTokenActionProps extends NormTokenProps {
   rawPath?: string;
   normPath?: string;
   answerIndex?: number;
+  onClick?: () => void;
 
   isRegular?: boolean;
   isDisabled?: boolean;
@@ -118,6 +119,7 @@ export const NormTokenAction = (props: NormTokenActionProps) => {
     question,
     answerIndex,
     setTokenFilter,
+    onClick,
   } = props;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -146,7 +148,10 @@ export const NormTokenAction = (props: NormTokenActionProps) => {
           onClick={(e) => {
             e.preventDefault();
             // setShowModal(true);
-            setTokenFilter([id]);
+            setTokenFilter([id], "normalized");
+            if (onClick) {
+              onClick();
+            }
           }}
           data-tooltip={`Filter by ${id}`}
         >

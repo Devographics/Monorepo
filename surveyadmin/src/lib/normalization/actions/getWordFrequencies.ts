@@ -62,9 +62,35 @@ const stopWords: Set<string> = new Set([
   "just",
   "able",
   "we",
+  "them",
+  "many",
+  "too",
+  "make",
+  "dont",
+  "still",
+  "much",
+  "things",
+  "they",
+  "out",
+  "has",
+  "lot",
+  "get",
+  "know",
+  "into",
+  "very",
+  "than",
+  "nice",
+  "well",
+  "how",
+  "about",
+  "other",
+  "what",
+  "their",
+  "theyre",
+  "really",
 ]);
 
-type FrequencyItem = {
+export type FrequencyItem = {
   word: string;
   count: number;
 };

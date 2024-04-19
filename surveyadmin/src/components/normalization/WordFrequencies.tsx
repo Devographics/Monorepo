@@ -1,20 +1,17 @@
 "use client";
-import { useState } from "react";
-import { loadQuestionData } from "~/lib/normalization/services";
 import ModalTrigger from "../ui/ModalTrigger";
+import { useQuery } from "@tanstack/react-query";
 import {
-  useQuery,
-  // @ts-ignore
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
-import { getData, getFrequencyCacheKey } from "./NormalizeQuestion";
+  AnswerVariant,
+  getData,
+  getFrequencyCacheKey,
+} from "./NormalizeQuestion";
 import { apiRoutes } from "~/lib/apiRoutes";
+import { ActionProps } from "./NormalizeQuestionActions";
+import { FrequencyItem } from "~/lib/normalization/actions/getWordFrequencies";
+import { Dispatch, SetStateAction } from "react";
 
-export const WordFrequencies = (props) => {
-  const { questionDataQuery, responses, survey, edition, question, entities } =
-    props;
-  const [loading, setLoading] = useState(false);
+export const WordFrequencies = (props: ActionProps) => {
   return (
     <ModalTrigger
       isButton={false}
@@ -50,9 +47,16 @@ export const WordFrequencies = (props) => {
   );
 };
 
-const FrequenciesData = (props) => {
-  const { questionDataQuery, responses, survey, edition, question, entities } =
-    props;
+const FrequenciesData = (props: ActionProps) => {
+  const {
+    questionDataQuery,
+    responses,
+    survey,
+    edition,
+    question,
+    entities,
+    setFilterQuery,
+  } = props;
   const params = {
     surveyId: survey.id,
     editionId: edition.id,
@@ -72,19 +76,23 @@ const FrequenciesData = (props) => {
 };
 
 const Frequencies = (props) => {
-  const { frequencyData } = props;
-  const { normalized, unnormalized, all } = frequencyData;
-  console.log(frequencyData);
   return (
     <div className="word-frequencies-lists">
-      <List list={all} label="All Answers" />
-      <List list={normalized} label="Normalized Answers" />
-      <List list={unnormalized} label="Unnormalized Answers" />
+      {/* <List variant={"all"} label="All Answers" {...props} /> */}
+      <List {...props} variant="normalized" label="Normalized Answers" />
+      <List {...props} variant="unnormalized" label="Unnormalized Answers" />
     </div>
   );
 };
 
-const List = ({ list, label }) => {
+const List = ({
+  frequencyData,
+  variant,
+  label,
+  setFilterQuery,
+  setShowModal,
+}) => {
+  const list = frequencyData[variant];
   return (
     <section>
       <h5>
@@ -93,7 +101,14 @@ const List = ({ list, label }) => {
       <table>
         <tbody>
           {list.map((wordItem) => (
-            <Word key={wordItem.word} wordItem={wordItem} />
+            <Word
+              listLabel={label}
+              key={wordItem.word}
+              wordItem={wordItem}
+              setFilterQuery={setFilterQuery}
+              setShowModal={setShowModal}
+              variant={variant}
+            />
           ))}
         </tbody>
       </table>
@@ -101,11 +116,35 @@ const List = ({ list, label }) => {
   );
 };
 
-const Word = ({ wordItem }) => {
+const Word = ({
+  listLabel,
+  wordItem,
+  setFilterQuery,
+  setShowModal,
+  variant,
+}: {
+  listLabel: string;
+  wordItem: FrequencyItem;
+  setFilterQuery: ActionProps["setFilterQuery"];
+  setShowModal: Dispatch<SetStateAction<boolean>>;
+  variant: AnswerVariant;
+}) => {
   const { word, count } = wordItem;
   return (
     <tr>
-      <td>{word}</td>
+      <td>
+        <a
+          data-tooltip={`Filter ${listLabel} by “${word}”`}
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            setFilterQuery(word, variant);
+            setShowModal(false);
+          }}
+        >
+          {word}
+        </a>
+      </td>
       <td>{count}</td>
     </tr>
   );

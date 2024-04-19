@@ -101,7 +101,15 @@ export interface CommonNormalizationProps extends NormalizationProps {
   normalizedAnswers: IndividualAnswer[];
   discardedAnswers: IndividualAnswer[];
   tokenFilter: string[] | null;
-  setTokenFilter: Dispatch<SetStateAction<null | string[]>>;
+  setTokenFilter: (
+    filterQuery: string[] | null,
+    variant?: AnswerVariant
+  ) => void;
+  filterQuery: string | undefined;
+  setFilterQuery: (
+    filterQuery: string | undefined,
+    variant?: AnswerVariant
+  ) => void;
   variant: AnswerVariant;
   setVariant: Dispatch<SetStateAction<AnswerVariant>>;
   actionLog: ActionLogItem[];
@@ -217,7 +225,8 @@ export const Normalization = (props: NormalizationProps) => {
     durations,
   } = responsesData;
 
-  const [tokenFilter, setTokenFilter] = useState<null | string[]>(null);
+  const [filterQuery, setFilterQuery_] = useState("");
+  const [tokenFilter, setTokenFilter_] = useState<null | string[]>(null);
   const [variant, setVariant] = useState<AnswerVariant>("unnormalized");
   const [actionLog, setActionLog] = useLocalStorage<ActionLogItem[]>(
     "actionLog",
@@ -231,6 +240,26 @@ export const Normalization = (props: NormalizationProps) => {
     setActionLog([...actionLog, { ...action, timestamp: new Date() }]);
     if (showActionLog) {
       setShowActionLog(true);
+    }
+  };
+
+  // setState variants that accept a second argument to also change the view
+  const setFilterQuery = (filterQuery: string, variant?: AnswerVariant) => {
+    console.log(filterQuery);
+    console.log(variant);
+    setFilterQuery_(filterQuery);
+    if (variant) {
+      setVariant(variant);
+    }
+  };
+
+  const setTokenFilter = (
+    tokenFilter: null | string[],
+    variant?: AnswerVariant
+  ) => {
+    setTokenFilter_(tokenFilter);
+    if (variant) {
+      setVariant(variant);
     }
   };
 
@@ -250,7 +279,7 @@ export const Normalization = (props: NormalizationProps) => {
     discardedAnswers,
   } = splitResponses(responses);
 
-  const commonProps = {
+  const commonProps: CommonNormalizationProps = {
     survey,
     edition,
     question,
@@ -270,10 +299,11 @@ export const Normalization = (props: NormalizationProps) => {
     variant,
     setVariant,
     actionLog,
-    setActionLog,
     addToActionLog,
     showActionLog,
     setShowActionLog,
+    filterQuery,
+    setFilterQuery,
   };
 
   const segmentProps = {
