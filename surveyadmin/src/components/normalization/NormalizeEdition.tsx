@@ -3,17 +3,20 @@
 import Progress from "~/components/normalization/Progress";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { defaultSegmentSize, useSegments } from "./hooks";
+import { CommonNormalizationProps } from "./NormalizeQuestion";
 
 export const NormalizeEdition = ({
   survey,
   edition,
   responsesCount,
   normResponsesCount,
+  addToActionLog,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   responsesCount: number;
   normResponsesCount: number;
+  addToActionLog: CommonNormalizationProps["addToActionLog"];
 }) => {
   const {
     initializeSegments,
@@ -34,6 +37,7 @@ export const NormalizeEdition = ({
     enabled,
     setEnabled,
     segments,
+    addToActionLog,
   };
 
   return (

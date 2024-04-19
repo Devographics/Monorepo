@@ -91,6 +91,7 @@ export const normalizeInBulk = async (options: NormalizeInBulkOption) => {
   const mutationResult: NormalizeInBulkResult = {
     normalizedDocuments: [],
     unmatchedDocuments: [],
+    partiallyMatchedDocuments: [],
     unnormalizableDocuments: [],
     errorDocuments: [],
     emptyDocuments: [],

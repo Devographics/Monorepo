@@ -1,7 +1,10 @@
 import uniqBy from "lodash/uniqBy.js";
 import { logToFile } from "@devographics/debug";
-import { QuestionMetadata, EditionMetadata } from "@devographics/types";
-import { FullNormalizationToken } from "../types";
+import {
+  FullNormalizationToken,
+  QuestionMetadata,
+  EditionMetadata,
+} from "@devographics/types";
 import { EntityRule, stringLimit, rulesLimit } from "./helpers";
 
 export const extractTokens = async ({

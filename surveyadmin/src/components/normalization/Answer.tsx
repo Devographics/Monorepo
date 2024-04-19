@@ -37,7 +37,6 @@ export interface AnswerProps extends AnswersProps {
   customNormalization?: CustomNormalizationDocument;
   isRepeating: boolean;
   answerIndex: number;
-  filterQuery?: string;
 }
 
 export const Answer = ({

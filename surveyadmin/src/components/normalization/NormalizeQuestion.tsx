@@ -105,7 +105,7 @@ export interface CommonNormalizationProps extends NormalizationProps {
     filterQuery: string[] | null,
     variant?: AnswerVariant
   ) => void;
-  filterQuery: string | undefined;
+  filterQuery?: string;
   setFilterQuery: (
     filterQuery: string | undefined,
     variant?: AnswerVariant
