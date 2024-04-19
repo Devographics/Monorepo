@@ -10,13 +10,11 @@ export const NormalizeEdition = ({
   edition,
   responsesCount,
   normResponsesCount,
-  addToActionLog,
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   responsesCount: number;
   normResponsesCount: number;
-  addToActionLog: CommonNormalizationProps["addToActionLog"];
 }) => {
   const {
     initializeSegments,
@@ -37,7 +35,6 @@ export const NormalizeEdition = ({
     enabled,
     setEnabled,
     segments,
-    addToActionLog,
   };
 
   return (

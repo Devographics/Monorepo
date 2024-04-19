@@ -23,7 +23,7 @@ interface ProgressProps extends SegmentProps {
   edition: EditionMetadata;
   question?: QuestionWithSection;
   responsesCount: number;
-  addToActionLog: CommonNormalizationProps["addToActionLog"];
+  addToActionLog?: CommonNormalizationProps["addToActionLog"];
 }
 
 /**
@@ -170,7 +170,9 @@ const SegmentInProgressItem = ({
           ? await normalizeQuestion({ ...args, questionId: question.id })
           : await normalizeEdition(args);
 
-        addToActionLog({ type: "normalization", payload: result }, false);
+        if (addToActionLog) {
+          addToActionLog({ type: "normalization", payload: result }, false);
+        }
         const doneCount = startFrom + (result?.data?.totalDocumentCount || 0);
         updateSegments({
           doneCount,

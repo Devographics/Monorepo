@@ -24,8 +24,7 @@ interface AnswersFiltersProps extends CommonNormalizationProps {
   filteredAnswers: IndividualAnswerWithIndex[];
   paginatedAnswers: IndividualAnswerWithIndex[];
   sortedAnswers: IndividualAnswerWithIndex[];
-  filterQuery: string;
-  setFilterQuery: Dispatch<SetStateAction<string>>;
+  filterQuery?: string;
   showCustomOnly: boolean;
   setShowCustomOnly: Dispatch<SetStateAction<boolean>>;
   pageNumber: number;
@@ -68,7 +67,7 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
   // when filterQuery changes (we're receiving a filter from somewhere else)
   // also change local state to reflect the change
   useEffect(() => {
-    setLocalFilterQuery(filterQuery);
+    setLocalFilterQuery(filterQuery || "");
   }, [filterQuery]);
 
   useEffect(() => {
