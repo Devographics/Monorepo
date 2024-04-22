@@ -173,30 +173,32 @@ export const Answer = ({
                 }}
               />
 
-              <a
-                href="#"
-                className="tokens-list-new"
-                onClick={async (e) => {
-                  e.preventDefault();
-                  setAutocompleteIsLoading(true);
-                  if (
-                    autocompleteToken &&
-                    !entities.map((e) => e.id).includes(autocompleteToken)
-                  ) {
-                    await addTokenMutation.mutateAsync({
-                      ...addTokenParams,
-                      isSuggestion: true,
-                      tokens: [autocompleteToken],
-                    });
-                    setAutocompleteToken("");
-                  } else {
-                    alert(`Token ${autocompleteToken} already exists!`);
-                  }
-                  setAutocompleteIsLoading(false);
-                }}
-              >
-                Create token…
-              </a>
+              {autocompleteToken && autocompleteToken.length > 0 && (
+                <a
+                  href="#"
+                  className="tokens-list-new"
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    setAutocompleteIsLoading(true);
+                    if (
+                      autocompleteToken &&
+                      !entities.map((e) => e.id).includes(autocompleteToken)
+                    ) {
+                      await addTokenMutation.mutateAsync({
+                        ...addTokenParams,
+                        isSuggestion: true,
+                        tokens: [autocompleteToken],
+                      });
+                      setAutocompleteToken("");
+                    } else {
+                      alert(`Token ${autocompleteToken} already exists!`);
+                    }
+                    setAutocompleteIsLoading(false);
+                  }}
+                >
+                  Create token…
+                </a>
+              )}
             </div>
             {enabledTokens.map((token) => (
               <NormTokenAction
