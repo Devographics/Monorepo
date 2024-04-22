@@ -69,6 +69,20 @@ export const getCustomNormalizationsCacheKey = ({
 }: GetQuestionResponsesParams) =>
   `${surveyId}.${editionId}.${questionId}.customNormalizations`;
 
+export const getSuggestedTokensKey = ({
+  surveyId,
+  editionId,
+  questionId,
+}: GetQuestionResponsesParams) =>
+  `${surveyId}.${editionId}.${questionId}.suggestedTokens`;
+
+export const getActionLogKey = ({
+  surveyId,
+  editionId,
+  questionId,
+}: GetQuestionResponsesParams) =>
+  `${surveyId}.${editionId}.${questionId}.actionLog`;
+
 interface ApiData<T = any> {
   data: T;
   error: any;
@@ -119,6 +133,8 @@ export interface CommonNormalizationProps extends NormalizationProps {
   ) => void;
   showActionLog: boolean;
   setShowActionLog: Dispatch<SetStateAction<boolean>>;
+  suggestedTokens: string[];
+  addSuggestedToken: (token: string) => void;
 }
 
 export const NormalizeQuestion = (props: NormalizeQuestionProps) => {
@@ -225,11 +241,18 @@ export const Normalization = (props: NormalizationProps) => {
     durations,
   } = responsesData;
 
+  const keyParams = {
+    surveyId: survey.id,
+    editionId: edition.id,
+    sectionId: question.section.id,
+    questionId: question.id,
+  };
+
   const [filterQuery, setFilterQuery_] = useState("");
   const [tokenFilter, setTokenFilter_] = useState<null | string[]>(null);
   const [variant, setVariant] = useState<AnswerVariant>("unnormalized");
   const [actionLog, setActionLog] = useLocalStorage<ActionLogItem[]>(
-    "actionLog",
+    getActionLogKey(keyParams),
     []
   );
   const [showActionLog, setShowActionLog] = useState(false);
@@ -241,6 +264,14 @@ export const Normalization = (props: NormalizationProps) => {
     if (showActionLog) {
       setShowActionLog(true);
     }
+  };
+
+  const [suggestedTokens, setSuggestedTokens] = useLocalStorage<string[]>(
+    getSuggestedTokensKey(keyParams),
+    []
+  );
+  const addSuggestedToken = (token: string) => {
+    setSuggestedTokens([...suggestedTokens, token]);
   };
 
   // setState variants that accept a second argument to also change the view
@@ -302,6 +333,8 @@ export const Normalization = (props: NormalizationProps) => {
     setShowActionLog,
     filterQuery,
     setFilterQuery,
+    suggestedTokens,
+    addSuggestedToken,
   };
 
   const segmentProps = {
@@ -332,6 +365,9 @@ const AllAnswers = (props: CommonNormalizationProps) => {
       <datalist id="entities-list">
         {sortBy(props.entities, (e) => e.id).map((entity, i) => (
           <option key={i} value={entity.id}></option>
+        ))}
+        {props.suggestedTokens.map((t) => (
+          <option key={t} value={t}></option>
         ))}
       </datalist>
       <h3>Answers ({props.allAnswers.length})</h3>
