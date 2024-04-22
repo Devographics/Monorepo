@@ -23,7 +23,7 @@ import {
 import { addCustomTokensAction } from "./tokenActions";
 import { EntityList } from "./EntityInput";
 import { useQueryClient } from "@tanstack/react-query";
-import { CREATE_NEW_TOKEN, getDataCacheKey } from "./NormalizeQuestion";
+import { getDataCacheKey } from "./NormalizeQuestion";
 
 export interface AnswerProps extends AnswersProps {
   rawPath: string;
@@ -64,7 +64,6 @@ export const Answer = ({
   const { _id, responseId, raw: rawValue, tokens = [] } = answer;
   const [autocompleteToken, setAutocompleteToken] = useState<string>();
   const [autocompleteIsLoading, setAutocompleteIsLoading] = useState(false);
-  const [showCreateNew, setShowCreateNew] = useState(false);
 
   const { enabledPresets } = usePresets({ edition, question });
 
@@ -159,7 +158,6 @@ export const Answer = ({
               <EntityList
                 entities={entities}
                 selectedId={autocompleteToken}
-                setShowCreateNew={setShowCreateNew}
                 setSelectedId={async (value) => {
                   setAutocompleteIsLoading(true);
 
