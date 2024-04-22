@@ -223,8 +223,8 @@ export const getEntities = async (
     return entities
 }
 
-export const findEntity = (id: string, entities: Entity[]) =>
-    entities.find(e => {
+export const findEntity = (id: string, entities: Entity[], tag?: string) => {
+    const matchingEntities = entities.filter(e => {
         return (
             (e.id && e.id.toLowerCase() === id) ||
             (e.id && e.id.toLowerCase().replace(/\-/g, '_') === id) ||
@@ -232,14 +232,24 @@ export const findEntity = (id: string, entities: Entity[]) =>
         )
     })
 
+    // in case of multiple entities with same id, we can also pass a tag to break ties
+    if (matchingEntities.length > 1 && tag) {
+        return matchingEntities.find(e => e.tags?.includes(tag)) || matchingEntities[0]
+    } else {
+        return matchingEntities[0]
+    }
+}
+
 export const getEntity = async ({
     id,
     context,
-    includeNormalizationEntities = true
+    includeNormalizationEntities = true,
+    tag
 }: {
     id: string | number
     context?: RequestContext
     includeNormalizationEntities?: boolean
+    tag?: string
 }) => {
     if (!id || typeof id !== 'string') {
         return
@@ -247,7 +257,7 @@ export const getEntity = async ({
 
     const entities = await getEntities({ context, includeNormalizationEntities })
 
-    const entity = findEntity(id.toLowerCase(), entities)
+    const entity = findEntity(id.toLowerCase(), entities, tag)
 
     if (!entity) {
         return

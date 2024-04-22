@@ -427,8 +427,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
     results = await runStage(discardEmptyEditions, [results])
 
-    await runStage(addEntities, [results, context])
-    await runStage(addTokens, [results, context])
+    await runStage(addEntities, [results, context, axis1])
+    await runStage(addTokens, [results, context, axis1])
 
     if (axis2) {
         await runStage(addDefaultBucketCounts, [results])
