@@ -1,9 +1,18 @@
 import './CellLabel.scss'
 import React from 'react'
+import { CharWrapper, characters } from 'core/components/Characters'
 
 export const CellLabel = ({ label }: { label: string }) => (
     <span className="chart-cell-label">
-        <svg>
+        {[...label].map((char, index) => {
+            const Component = characters[char]
+            return (
+                <CharWrapper>
+                    <Component key={index} />
+                </CharWrapper>
+            )
+        })}
+        {/* <svg>
             <text
                 x="50%"
                 y="50%"
@@ -13,6 +22,6 @@ export const CellLabel = ({ label }: { label: string }) => (
             >
                 {label}
             </text>
-        </svg>
+        </svg> */}
     </span>
 )

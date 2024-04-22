@@ -255,7 +255,7 @@ const SentimentItem = ({
     const theme = useTheme()
 
     const sentimentKey = getSentimentKey(experience, sentiment)
-    const style = { '--color': theme.colors.ranges.sentiment[sentiment][0] }
+    const style = { '--color': theme?.colors?.ranges?.sentiment?.[sentiment]?.[0] }
     return (
         <span style={style} className={`sentiment-item sentiment-item-${sentiment}`}>
             <T k={sentimentKey} />
