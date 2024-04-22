@@ -23,7 +23,7 @@ import {
 import { addCustomTokensAction } from "./tokenActions";
 import { EntityList } from "./EntityInput";
 import { useQueryClient } from "@tanstack/react-query";
-import { getDataCacheKey } from "./NormalizeQuestion";
+import { CREATE_NEW_TOKEN, getDataCacheKey } from "./NormalizeQuestion";
 
 export interface AnswerProps extends AnswersProps {
   rawPath: string;
@@ -64,6 +64,7 @@ export const Answer = ({
   const { _id, responseId, raw: rawValue, tokens = [] } = answer;
   const [autocompleteToken, setAutocompleteToken] = useState<string>();
   const [autocompleteIsLoading, setAutocompleteIsLoading] = useState(false);
+  const [showCreateNew, setShowCreateNew] = useState(false);
 
   const { enabledPresets } = usePresets({ edition, question });
 
@@ -95,6 +96,8 @@ export const Answer = ({
   const customTokens = regularTokens.filter(
     (t) => t.pattern === CUSTOM_NORMALIZATION
   );
+
+  const suggestedTokens = customNormalization?.suggestedTokens;
 
   const enabledTokens = regularTokens.filter(
     (t) => !customNormalization?.disabledTokens?.includes(t.id)
@@ -156,8 +159,10 @@ export const Answer = ({
               <EntityList
                 entities={entities}
                 selectedId={autocompleteToken}
+                setShowCreateNew={setShowCreateNew}
                 setSelectedId={async (value) => {
                   setAutocompleteIsLoading(true);
+
                   setAutocompleteToken(value);
                   if (entities.map((e) => e.id).includes(value)) {
                     await addTokenMutation.mutateAsync({
@@ -169,6 +174,31 @@ export const Answer = ({
                   setAutocompleteIsLoading(false);
                 }}
               />
+
+              <a
+                href="#"
+                className="tokens-list-new"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  setAutocompleteIsLoading(true);
+                  if (
+                    autocompleteToken &&
+                    !entities.map((e) => e.id).includes(autocompleteToken)
+                  ) {
+                    await addTokenMutation.mutateAsync({
+                      ...addTokenParams,
+                      isSuggestion: true,
+                      tokens: [autocompleteToken],
+                    });
+                    setAutocompleteToken("");
+                  } else {
+                    alert(`Token ${autocompleteToken} already exists!`);
+                  }
+                  setAutocompleteIsLoading(false);
+                }}
+              >
+                Create token…
+              </a>
             </div>
             {enabledTokens.map((token) => (
               <NormTokenAction
@@ -189,6 +219,16 @@ export const Answer = ({
                 {...normTokenProps}
               />
             ))}
+
+            {suggestedTokens &&
+              suggestedTokens.map((tokenId) => (
+                <NormTokenAction
+                  key={tokenId}
+                  id={tokenId}
+                  isSuggested={true}
+                  {...normTokenProps}
+                />
+              ))}
 
             {customTokens.map((token) => (
               <NormTokenAction

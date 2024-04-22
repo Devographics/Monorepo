@@ -12,6 +12,7 @@ export const getCustomTokens = async ({ rawPath }: { rawPath: string }) => {
     .project({
       responseId: 1,
       customTokens: 1,
+      suggestedTokens: 1,
       disabledTokens: 1,
       answerIndex: 1,
     })

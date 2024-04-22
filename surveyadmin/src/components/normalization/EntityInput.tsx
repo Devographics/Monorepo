@@ -83,7 +83,12 @@ const EntityInput = ({
   );
 };
 
-export const EntityList = ({ entities, selectedId, setSelectedId }) => {
+export const EntityList = ({
+  entities,
+  selectedId,
+  setSelectedId,
+  setShowCreateNew,
+}) => {
   return (
     <>
       <input
@@ -92,6 +97,12 @@ export const EntityList = ({ entities, selectedId, setSelectedId }) => {
         id="entities"
         name="entities"
         value={selectedId}
+        onFocus={(e) => {
+          setShowCreateNew(true);
+        }}
+        onBlur={(e) => {
+          setShowCreateNew(false);
+        }}
         onChange={(e) => {
           const value = e.target.value;
           setSelectedId(value);

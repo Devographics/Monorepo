@@ -245,8 +245,6 @@ export const Normalization = (props: NormalizationProps) => {
 
   // setState variants that accept a second argument to also change the view
   const setFilterQuery = (filterQuery: string, variant?: AnswerVariant) => {
-    console.log(filterQuery);
-    console.log(variant);
     setFilterQuery_(filterQuery);
     if (variant) {
       setVariant(variant);

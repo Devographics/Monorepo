@@ -70,6 +70,7 @@ export interface NormTokenActionProps extends NormTokenProps {
   isDisabled?: boolean;
   isCustom?: boolean;
   isPreset?: boolean;
+  isSuggested?: boolean;
 }
 
 /*
@@ -120,6 +121,7 @@ export const NormTokenAction = (props: NormTokenActionProps) => {
     answerIndex,
     setTokenFilter,
     onClick,
+    isSuggested,
   } = props;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -141,7 +143,9 @@ export const NormTokenAction = (props: NormTokenActionProps) => {
   return (
     <>
       <code
-        className={`normalization-token ${action?.className}`}
+        className={`normalization-token ${action?.className} ${
+          isSuggested ? "normalization-token-suggested" : ""
+        }`}
         aria-busy={isLoading}
       >
         <span
