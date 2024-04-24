@@ -235,7 +235,7 @@
   max-width: 1000px;
 }
 
-.normalization-percentage {
+.normalization-progress {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -246,7 +246,9 @@
     white-space: nowrap;
   }
 }
-
+.normalization-percentage-low {
+  color: rgb(190, 77, 77);
+}
 .normalization-fields {
   position: relative;
 }
