@@ -17,6 +17,7 @@ export const I18nContextProvider = ({
         () => ({
             locale,
             getString: translate,
+            translate,
         }),
         [locale, translate]
     )
@@ -26,6 +27,8 @@ export const I18nContextProvider = ({
 type I18nContextType = {
     locale: Locale
     getString: StringTranslator
+    /** @deprecated courtesy for results app migration */
+    translate: StringTranslator
 }
 
 export const useI18n = () => {

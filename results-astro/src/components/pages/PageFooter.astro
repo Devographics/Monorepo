@@ -3,12 +3,12 @@ import { spacing, fontSize, mq } from "@/lib/theme";
 import PageLabel from "@/components/pages/PageLabel.astro";
 import Button from "@/components/ui/Button.astro";
 import T from "@/components/i18n/T.astro";
-const { pageDefinition, survey, i18n } = Astro.locals;
+const { pageDefinition, edition, i18n } = Astro.locals;
 const { previous, next } = pageDefinition;
 const {
   issuesUrl = "https://github.com/Devographics/Monorepo/issues",
   discordUrl = "https://discord.gg/zRDb35jfrt",
-} = survey;
+} = edition;
 ---
 
 <style

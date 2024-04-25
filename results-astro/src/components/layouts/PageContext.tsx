@@ -1,11 +1,14 @@
-import type { PageDefinition } from '@/lib/sitemap'
+import type { PageDefinition, Sitemap } from '@/lib/sitemap'
+import type { EditionMetadata } from '@devographics/types'
 import React, { createContext, useContext } from 'react'
 
 /**
  * Keep in track with astro.locals in env.d.ts
  */
 export interface PageContextValue {
-    pageDefinition: PageDefinition
+    pageDefinition: PageDefinition,
+    edition: EditionMetadata
+    sitemap: Sitemap
 }
 
 const PageContext = createContext<PageContextValue | null>(null)

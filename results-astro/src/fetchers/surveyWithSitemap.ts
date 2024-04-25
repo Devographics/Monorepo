@@ -17,7 +17,7 @@ let surveyWithSitemap: SurveyWithSitemap | null = null
  * Use Astro.locals for a per-request cache
  * @returns 
  */
-export async function astroSurveyWithSitemap() {
+export async function astroEditionWithSitemap() {
     if (surveyWithSitemap) {
         console.debug("Cache hit surveyWithSitemap")
         return surveyWithSitemap

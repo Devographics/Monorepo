@@ -12,7 +12,7 @@ declare namespace App {
     // Defines Astro.locals valid value
     // these value must be set in a page or middleware
     interface Locals {
-        survey: import("@devographics/types").EditionMetadata
+        edition: import("@devographics/types").EditionMetadata
         sitemap: import("./lib/sitemap").Sitemap
         pageDefinition: import("./lib/sitemap").PageDefinition
         pageData: any,

@@ -10,7 +10,7 @@ import { I18nContextProvider } from '@devographics/react-i18n'
 // import theme from 'Theme/index.ts'
 import { PageContextProvider, type PageContextValue } from './PageContext'
 import { KeydownContextProvider } from './KeydownContext'
-import MainLayout from './MainLayout'
+import LeftMenuLayout from './LeftMenuLayout'
 import { getTheme } from '@/lib/theme'
 
 interface LayoutProps {
@@ -67,7 +67,7 @@ interface Dimensions {
     height: number
 }
 
-export function ReactLayout({ /*showPagination = true,*/ pageContext, children }:
+export function ReactContextLayout({ /*showPagination = true,*/ pageContext, children }:
     {
         /*
         showPagination: boolean
@@ -118,9 +118,9 @@ export function ReactLayout({ /*showPagination = true,*/ pageContext, children }
                     //props={this.props}
                     >
  */}
-                        <MainLayout>
+                        <LeftMenuLayout>
                             {children}
-                        </MainLayout>
+                        </LeftMenuLayout>
                         {/* </ThemedLayout> */}
                     </I18nContextProvider>
                 </PageContextProvider>
