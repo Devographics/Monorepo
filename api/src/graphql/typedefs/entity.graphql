@@ -157,6 +157,9 @@ type Token {
     parentId: String
     tags: [String]
     patterns: [String]
+    name: String
+    nameClean: String
+    nameHtml: String
 }
 
 """

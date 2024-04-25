@@ -12,6 +12,10 @@ export type QueryResults<T> = {
 }
 
 export type SurveysData<T> = {
+    [key: string]: SurveyData<T>
+}
+
+export type SurveyData<T> = {
     [key: string]: EditionData<T>
 }
 export type EditionData<T> = {
@@ -80,6 +84,8 @@ export interface EditionComments {
 export interface Comment {
     message: string
     responseId: string
+    experience: FeaturesOptions
+    sentiment: SimplifiedSentimentOptions
 }
 
 export interface ResponseData {

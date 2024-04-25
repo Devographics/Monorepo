@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { captureException } from "@sentry/nextjs";
-import { addCustomTokens } from "~/lib/normalization/actions";
+import { renameTokens } from "~/lib/normalization/actions/tokens/renameTokens";
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  console.log("// addCustomTokens");
+  console.log("// renameTokens");
   try {
     // Get body data as JSON
     let body: any;
@@ -12,7 +12,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     } catch (err) {
       throw err;
     }
-    const data = await addCustomTokens(body);
+    const data = await renameTokens(body);
     return NextResponse.json({ data });
   } catch (error) {
     console.error(error);
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     return NextResponse.json(
       {
         error: {
-          id: "addCustomTokens_error",
+          id: "renameTokens_error",
           status: 500,
           message: error.message,
           error,

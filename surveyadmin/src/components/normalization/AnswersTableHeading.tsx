@@ -9,8 +9,6 @@ interface AnswersTableHeadingProps extends CommonNormalizationProps {
   filteredAnswers: IndividualAnswerWithIndex[];
   paginatedAnswers: IndividualAnswerWithIndex[];
   sortedAnswers: IndividualAnswerWithIndex[];
-  filterQuery: string;
-  setFilterQuery: Dispatch<SetStateAction<string>>;
   showCustomOnly: boolean;
   setShowCustomOnly: Dispatch<SetStateAction<boolean>>;
   setShowShortlist: Dispatch<SetStateAction<boolean>>;

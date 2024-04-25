@@ -8,7 +8,7 @@ import {
   ResultsSubFieldEnum,
   Bucket,
 } from "@devographics/types";
-import { Fragment, useState } from "react";
+import { Dispatch, Fragment, SetStateAction, useState } from "react";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
 import isEmpty from "lodash/isEmpty";
 import { loadQuestionData } from "~/lib/normalization/services";
@@ -24,6 +24,7 @@ type QuestionDataProps = {
   question: QuestionWithSection;
   entities: Entity[];
   setTokenFilter: CommonNormalizationProps["setTokenFilter"];
+  setShowModal: Dispatch<SetStateAction<boolean>>;
 };
 const QuestionData = ({
   questionData,
@@ -33,9 +34,10 @@ const QuestionData = ({
   question,
   entities,
   setTokenFilter,
+  setShowModal,
 }: QuestionDataProps) => {
   const { buckets } = questionData?.currentEdition;
-  const bucketProps = { responses, entities };
+  const bucketProps = { responses, entities, setShowModal };
   return (
     <section>
       {isEmpty(questionData) ? (
@@ -100,6 +102,7 @@ const Row = ({
   responses,
   entities,
   setTokenFilter,
+  setShowModal,
 }: {
   bucket: Bucket;
   index: number;
@@ -108,6 +111,7 @@ const Row = ({
   responses: QuestionDataProps["responses"];
   entities: QuestionDataProps["entities"];
   setTokenFilter: QuestionDataProps["setTokenFilter"];
+  setShowModal: QuestionDataProps["setShowModal"];
 }) => {
   const { id, count } = bucket;
   const rowClass = `row row-${isGroupedBucket ? "sub-row" : "normal-row"}`;
@@ -119,7 +123,16 @@ const Row = ({
         {hasGroupedBuckets ? (
           id
         ) : (
-          <NormTokenAction id={id} setTokenFilter={setTokenFilter} />
+          <span>
+            <NormTokenAction
+              id={id.replace("catchall_", "")}
+              setTokenFilter={setTokenFilter}
+              onClick={() => {
+                setShowModal(false);
+              }}
+            />{" "}
+            {id.includes("catchall") && <code>catch-all</code>}
+          </span>
         )}
       </td>
       <td>{count}</td>
@@ -171,8 +184,14 @@ export const ViewQuestionData = (props) => {
         </div>
       }
     >
-      <textarea defaultValue={questionDataQuery} />
-      <QuestionData {...props} />
+      <Contents {...props} />
     </ModalTrigger>
   );
 };
+
+const Contents = (props) => (
+  <>
+    <textarea defaultValue={props.questionDataQuery} />
+    <QuestionData {...props} />
+  </>
+);

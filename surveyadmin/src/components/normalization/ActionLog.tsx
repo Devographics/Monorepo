@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import ModalTrigger from "../ui/ModalTrigger";
 import { ActionLogItem, CommonNormalizationProps } from "./NormalizeQuestion";
 import {
@@ -21,7 +21,19 @@ export const ActionLog = ({
   setShowActionLog: Dispatch<SetStateAction<boolean>>;
   setTokenFilter: CommonNormalizationProps["setTokenFilter"];
 }) => {
-  console.log(actionLog);
+  const ref = useRef<HTMLDivElement>(null);
+  // console.log(actionLog);
+
+  const scrollToBottom = () => {
+    const scroll = ref.current;
+    if (scroll) {
+      scroll.scrollTop = scroll.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  });
 
   return (
     <div>
@@ -32,16 +44,19 @@ export const ActionLog = ({
         header={<span>Action Log</span>}
         showModal={showActionLog}
         setShowModal={setShowActionLog}
+        dialogClassName="action-log-modal"
       >
-        {actionLog.map((action, i) => (
-          <LogItem
-            key={i}
-            action={action}
-            setTokenFilter={setTokenFilter}
-            index={i}
-            allActions={actionLog}
-          />
-        ))}
+        <div ref={ref} className="action-log-contents">
+          {actionLog.map((action, i) => (
+            <LogItem
+              key={i}
+              action={action}
+              setTokenFilter={setTokenFilter}
+              index={i}
+              allActions={actionLog}
+            />
+          ))}
+        </div>
       </ModalTrigger>
     </div>
   );
@@ -89,60 +104,77 @@ const LogItem = ({
     partiallyMatchedDocuments,
     unmatchedDocuments,
   } = data || {};
+  const [showDetails, setShowDetails] = useState(
+    index === allActions.length - 1
+  );
   return (
     <div>
-      <details
-        className="actionlog-item"
-        open={index === allActions.length - 1}
-      >
-        <summary>
+      <details className="actionlog-item" open={showDetails}>
+        <summary
+          onClick={(e) => {
+            e.preventDefault();
+            setShowDetails(!showDetails);
+          }}
+        >
           <div>
             {formatReadableDateTime(new Date(timestamp))}{" "}
             <strong>{getSummary(action)}</strong>
           </div>
         </summary>
-        <DocumentList
-          label="Fully Normalized"
-          documents={normalizedDocuments}
-          setTokenFilter={setTokenFilter}
-        />
-        <DocumentList
-          label="Partially Normalized"
-          documents={partiallyMatchedDocuments}
-          setTokenFilter={setTokenFilter}
-        />
-        <DocumentList
-          label="Unmatched"
-          documents={unmatchedDocuments}
-          setTokenFilter={setTokenFilter}
-        />
+        {showDetails && (
+          <>
+            <DocumentList
+              label="Fully Normalized"
+              documents={normalizedDocuments}
+              setTokenFilter={setTokenFilter}
+            />
+            <DocumentList
+              label="Partially Normalized"
+              documents={partiallyMatchedDocuments}
+              setTokenFilter={setTokenFilter}
+            />
+            <DocumentList
+              label="Unmatched"
+              documents={unmatchedDocuments}
+              setTokenFilter={setTokenFilter}
+            />
+          </>
+        )}
       </details>
     </div>
   );
 };
 
 const DocumentList = ({ label, documents, setTokenFilter }) => {
+  const [showDetails, setShowDetails] = useState(false);
   return (
-    <details>
-      <summary>
+    <details open={showDetails}>
+      <summary
+        onClick={(e) => {
+          e.preventDefault();
+          setShowDetails(!showDetails);
+        }}
+      >
         <h5>
           {label} ({documents?.length})
         </h5>
       </summary>
-      <div>
-        <table>
-          <tbody>
-            {documents?.map((document, index) => (
-              <DocumentItem
-                key={document.responseId}
-                document={document}
-                setTokenFilter={setTokenFilter}
-                index={index}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {showDetails && (
+        <div>
+          <table>
+            <tbody>
+              {documents?.map((document, index) => (
+                <DocumentItem
+                  key={document.responseId}
+                  document={document}
+                  setTokenFilter={setTokenFilter}
+                  index={index}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </details>
   );
 };

@@ -9,10 +9,12 @@ import { formatPercentage } from '../horizontalBar2/helpers/labels'
 import { useIsWideEnough } from '../horizontalBar2/HorizontalBarCell'
 import { CellLabel } from '../common2'
 
-const getExperienceKey = (id: FeaturesOptions) => `options.experience.${id}.label.short`
+export const getExperienceKey = (id: FeaturesOptions) => `options.experience.${id}.label.short`
 
-const getSentimentKey = (experienceId: FeaturesOptions, sentimentId: SimplifiedSentimentOptions) =>
-    `options.sentiment.${experienceId}.${sentimentId}.label.short`
+export const getSentimentKey = (
+    experienceId: FeaturesOptions,
+    sentimentId: SimplifiedSentimentOptions
+) => `options.sentiment.${experienceId}.${sentimentId}.label.short`
 
 export const Cell = ({
     combinedBucket,

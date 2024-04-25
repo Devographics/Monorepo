@@ -29,6 +29,10 @@ export const apiRoutes = {
       href: (params) =>
         `/api/normalization/loadCustomNormalizations?${encodeParams(params)}`,
     },
+    loadWordFrequencies: {
+      href: (params) =>
+        `/api/normalization/loadWordFrequencies?${encodeParams(params)}`,
+    },
     normalizeQuestion: {
       href: (params) => `/api/normalization/normalizeQuestion`,
     },
@@ -43,6 +47,9 @@ export const apiRoutes = {
     },
     addCustomTokens: {
       href: (params) => `/api/normalization/addCustomTokens`,
+    },
+    renameTokens: {
+      href: (params) => `/api/normalization/renameTokens`,
     },
     removeCustomTokens: {
       href: (params) => `/api/normalization/removeCustomTokens`,

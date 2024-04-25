@@ -36,7 +36,7 @@ function getGroupedBuckets<T extends Bucket | FacetBucket>({
     let groupedBucketIds: string[] = []
     let groupedBuckets = groups.map(group => {
         const { id: groupId, upperBound, lowerBound, items } = group
-        let selectedBuckets
+        let selectedBuckets: T[]
         if (lowerBound || upperBound) {
             selectedBuckets = buckets.filter(b => isInBounds(Number(b.id), lowerBound, upperBound))
         } else if (items) {
@@ -46,7 +46,20 @@ function getGroupedBuckets<T extends Bucket | FacetBucket>({
                 `groupBuckets: please specify lowerBound/upperBound or items array for group ${groupId}`
             )
         }
+
         groupedBucketIds = [...groupedBucketIds, ...selectedBuckets.map(b => b.id)]
+
+        // if there is an individual ungrouped bucket with the same id as a bucket group,
+        // transform it into a "catch-all" child bucket and add it to the group
+        const catchAllBucket = buckets.find(b => b.id === groupId)
+        if (catchAllBucket) {
+            groupedBucketIds.push(catchAllBucket.id)
+            selectedBuckets = [
+                ...selectedBuckets,
+                { ...catchAllBucket, id: `catchall_${catchAllBucket.id}` }
+            ]
+        }
+
         const bucket = mergeBuckets<T>({
             buckets: selectedBuckets,
             mergedProps: { id: groupId },
@@ -60,23 +73,6 @@ function getGroupedBuckets<T extends Bucket | FacetBucket>({
     // add any remaning buckets that were not matched into groups as standalone buckets
     // so that we don't lose any data
     let remainingUngroupedBuckets = buckets.filter(b => !groupedBucketIds.includes(b.id))
-
-    // in some cases there will be individual ungrouped buckets with the same id as a bucket group
-    // remove the individual ungrouped bucket to avoid any ambiguities
-    // NOTE: the alternative would be merging the ungrouped bucket into the group somehow but
-    // removing it altogether seemed easier
-    const duplicateBucketIds = intersection(
-        remainingUngroupedBuckets.map(b => b.id),
-        groups.map(g => g.id)
-    )
-    duplicateBucketIds.forEach(id => {
-        console.warn(
-            `⚠️ getGroupedBuckets: found duplicate bucket id: ${id}, removing non-group bucket`
-        )
-    })
-    remainingUngroupedBuckets = remainingUngroupedBuckets.filter(
-        b => !duplicateBucketIds.includes(b.id)
-    )
 
     groupedBuckets = noAnswerBucket
         ? [...groupedBuckets, ...remainingUngroupedBuckets, noAnswerBucket]

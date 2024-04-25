@@ -4,16 +4,14 @@ import {
   ResponseData,
   EditionMetadata,
   Entity,
+  NormalizationToken,
 } from "@devographics/types";
 import { Dispatch, SetStateAction, useState } from "react";
 import trim from "lodash/trim";
 import without from "lodash/without";
 import { useLocalStorage } from "../hooks";
 import { addCustomTokens } from "~/lib/normalization/services";
-import {
-  NormalizationToken,
-  NormalizeInBulkResult,
-} from "~/lib/normalization/types";
+import { NormalizeInBulkResult } from "~/lib/normalization/types";
 import { NormalizationResult } from "./NormalizationResult";
 import { FieldValue } from "./FieldValue";
 import { EntityList, getAddEntityUrl, getEditEntityUrl } from "./EntityInput";

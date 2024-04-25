@@ -22,15 +22,15 @@ import {
 } from "~/lib/normalization/helpers/splitResponses";
 import sortBy from "lodash/sortBy";
 import { useLocalStorage } from "../hooks";
-
-const queryClient = new QueryClient();
-
 import {
   useQuery,
   // @ts-ignore
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+
+export const queryClient = new QueryClient();
+
 import { apiRoutes } from "~/lib/apiRoutes";
 import { GetQuestionResponsesParams } from "~/lib/normalization/actions/getQuestionResponses";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -55,6 +55,13 @@ export const getDataCacheKey = ({
   questionId,
 }: GetQuestionResponsesParams) => `${surveyId}.${editionId}.${questionId}.data`;
 
+export const getFrequencyCacheKey = ({
+  surveyId,
+  editionId,
+  questionId,
+}: GetQuestionResponsesParams) =>
+  `${surveyId}.${editionId}.${questionId}.frequency`;
+
 export const getCustomNormalizationsCacheKey = ({
   surveyId,
   editionId,
@@ -62,12 +69,26 @@ export const getCustomNormalizationsCacheKey = ({
 }: GetQuestionResponsesParams) =>
   `${surveyId}.${editionId}.${questionId}.customNormalizations`;
 
+export const getSuggestedTokensKey = ({
+  surveyId,
+  editionId,
+  questionId,
+}: GetQuestionResponsesParams) =>
+  `${surveyId}.${editionId}.${questionId}.suggestedTokens`;
+
+export const getActionLogKey = ({
+  surveyId,
+  editionId,
+  questionId,
+}: GetQuestionResponsesParams) =>
+  `${surveyId}.${editionId}.${questionId}.actionLog`;
+
 interface ApiData<T = any> {
   data: T;
   error: any;
 }
 
-const getData = async (url: string) => {
+export const getData = async (url: string) => {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -94,10 +115,26 @@ export interface CommonNormalizationProps extends NormalizationProps {
   normalizedAnswers: IndividualAnswer[];
   discardedAnswers: IndividualAnswer[];
   tokenFilter: string[] | null;
-  setTokenFilter: Dispatch<SetStateAction<null | string[]>>;
+  setTokenFilter: (
+    filterQuery: string[] | null,
+    variant?: AnswerVariant
+  ) => void;
+  filterQuery?: string;
+  setFilterQuery: (
+    filterQuery: string | undefined,
+    variant?: AnswerVariant
+  ) => void;
   variant: AnswerVariant;
   setVariant: Dispatch<SetStateAction<AnswerVariant>>;
-  addToActionLog: (action: ActionLogItem, showActionLog?: boolean) => void;
+  actionLog: ActionLogItem[];
+  addToActionLog: (
+    action: Omit<ActionLogItem, "timestamp">,
+    showActionLog?: boolean
+  ) => void;
+  showActionLog: boolean;
+  setShowActionLog: Dispatch<SetStateAction<boolean>>;
+  suggestedTokens: string[];
+  addSuggestedToken: (token: string) => void;
 }
 
 export const NormalizeQuestion = (props: NormalizeQuestionProps) => {
@@ -204,17 +241,54 @@ export const Normalization = (props: NormalizationProps) => {
     durations,
   } = responsesData;
 
-  const [tokenFilter, setTokenFilter] = useState<null | string[]>(null);
+  const keyParams = {
+    surveyId: survey.id,
+    editionId: edition.id,
+    sectionId: question.section.id,
+    questionId: question.id,
+  };
+
+  const [filterQuery, setFilterQuery_] = useState("");
+  const [tokenFilter, setTokenFilter_] = useState<null | string[]>(null);
   const [variant, setVariant] = useState<AnswerVariant>("unnormalized");
   const [actionLog, setActionLog] = useLocalStorage<ActionLogItem[]>(
-    "actionLog",
+    getActionLogKey(keyParams),
     []
   );
   const [showActionLog, setShowActionLog] = useState(false);
-  const addToActionLog = (action: ActionLogItem, showActionLog = true) => {
+  const addToActionLog: CommonNormalizationProps["addToActionLog"] = (
+    action,
+    showActionLog = true
+  ) => {
     setActionLog([...actionLog, { ...action, timestamp: new Date() }]);
     if (showActionLog) {
       setShowActionLog(true);
+    }
+  };
+
+  const [suggestedTokens, setSuggestedTokens] = useLocalStorage<string[]>(
+    getSuggestedTokensKey(keyParams),
+    []
+  );
+  const addSuggestedToken = (token: string) => {
+    setSuggestedTokens([...suggestedTokens, token]);
+  };
+
+  // setState variants that accept a second argument to also change the view
+  const setFilterQuery = (filterQuery: string, variant?: AnswerVariant) => {
+    setFilterQuery_(filterQuery);
+    if (variant) {
+      setVariant(variant);
+    }
+  };
+
+  const setTokenFilter = (
+    tokenFilter: null | string[],
+    variant?: AnswerVariant
+  ) => {
+    setTokenFilter_(tokenFilter);
+    if (variant) {
+      setVariant(variant);
     }
   };
 
@@ -234,7 +308,7 @@ export const Normalization = (props: NormalizationProps) => {
     discardedAnswers,
   } = splitResponses(responses);
 
-  const commonProps = {
+  const commonProps: CommonNormalizationProps = {
     survey,
     edition,
     question,
@@ -254,10 +328,13 @@ export const Normalization = (props: NormalizationProps) => {
     variant,
     setVariant,
     actionLog,
-    setActionLog,
     addToActionLog,
     showActionLog,
     setShowActionLog,
+    filterQuery,
+    setFilterQuery,
+    suggestedTokens,
+    addSuggestedToken,
   };
 
   const segmentProps = {
@@ -288,6 +365,9 @@ const AllAnswers = (props: CommonNormalizationProps) => {
       <datalist id="entities-list">
         {sortBy(props.entities, (e) => e.id).map((entity, i) => (
           <option key={i} value={entity.id}></option>
+        ))}
+        {props.suggestedTokens.map((t) => (
+          <option key={t} value={t}></option>
         ))}
       </datalist>
       <h3>Answers ({props.allAnswers.length})</h3>

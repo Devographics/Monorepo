@@ -49,7 +49,6 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
         ...Object.values(FeaturesOptions),
         ...Object.values(SimplifiedSentimentOptions)
     ]
-
     const className = `multiexp multiexp-groupedBy-${grouping}`
 
     // combine/flatten each item's buckets

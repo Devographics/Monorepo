@@ -2,14 +2,14 @@ import React from 'react'
 import { SingleBarRow } from '../HorizontalBarRow'
 import { ViewDefinition } from '../types'
 import { Axis, Row, Rows, getTicks } from 'core/charts/common2'
-import { removeNoAnswer, removeOverLimit } from '../helpers/steps'
+import { removeNoAnswer, removeOverLimit, removeOtherAnswers } from '../helpers/steps'
 import { Bucket, BucketUnits, FacetBucket } from '@devographics/types'
 
 const getValue = (bucket: Bucket | FacetBucket) => bucket[BucketUnits.PERCENTAGE_QUESTION] || 0
 
 export const PercentageQuestion: ViewDefinition = {
     getValue,
-    steps: [removeNoAnswer, removeOverLimit],
+    steps: [removeNoAnswer, removeOverLimit, removeOtherAnswers],
     component: props => {
         const ticks = getTicks(props.buckets.map(getValue))
         return (

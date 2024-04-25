@@ -1,10 +1,11 @@
 "use client";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, cloneElement, useState } from "react";
 import Dialog from "./Dialog";
 
 export const ModalTrigger = ({
   isButton = true,
   className = "",
+  dialogClassName = "",
   label,
   header,
   children,
@@ -16,9 +17,10 @@ export const ModalTrigger = ({
 }: {
   isButton?: boolean;
   className?: string;
+  dialogClassName?: string;
   label: string;
   header?: React.ReactNode;
-  children: React.ReactNode;
+  children: JSX.Element;
   tooltip?: string;
   onOpen?: () => void;
   onClose?: () => void;
@@ -37,6 +39,8 @@ export const ModalTrigger = ({
   }
 
   const TriggerElement = isButton ? "button" : "a";
+
+  const childrenWithProps = cloneElement(children, { showModal, setShowModal });
 
   return (
     <>
@@ -63,8 +67,9 @@ export const ModalTrigger = ({
         header={header}
         onOpen={onOpen}
         onClose={onClose}
+        className={dialogClassName}
       >
-        {children}
+        {childrenWithProps}
       </Dialog>
     </>
   );

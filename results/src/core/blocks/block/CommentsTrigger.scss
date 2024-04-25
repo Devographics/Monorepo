@@ -1,0 +1,26 @@
+.experience-item,
+.sentiment-item {
+    // background-color: var(--bgColor);
+    // border: 2px solid var(--color);
+    font-size: 0.7rem;
+    border-radius: 30px;
+    padding: 2px 8px;
+    background: var(--backgroundColor);
+    background: var(--color);
+    text-shadow: 1px 1px #000000bb;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.comments-header {
+    display: flex;
+    // justify-content: space-between;
+    gap: var(--spacing);
+    flex-direction: column;
+    margin-bottom: var(--spacing);
+}
+
+.comments-filter {
+    display: flex;
+    gap: var(--quarterSpacing);
+}

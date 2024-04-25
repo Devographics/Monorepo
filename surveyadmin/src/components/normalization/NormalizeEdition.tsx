@@ -3,6 +3,7 @@
 import Progress from "~/components/normalization/Progress";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { defaultSegmentSize, useSegments } from "./hooks";
+import { CommonNormalizationProps } from "./NormalizeQuestion";
 
 export const NormalizeEdition = ({
   survey,

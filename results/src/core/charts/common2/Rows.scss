@@ -1,3 +1,5 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
 .chart-rows {
     position: relative;
 }
@@ -13,11 +15,14 @@
     // gap: var(--spacing);
     // flex-direction: column;
     // grid-auto-rows: minmax(0, 1fr);
-    display: grid;
 
-    // grid-template-columns: 200px minmax(0, 1fr) 100px;
-    grid-template-columns: min-content 1fr min-content;
+    @include medium-large {
+        display: grid;
 
-    column-gap: 20px;
-    grid-template-areas: 'heading content metadata';
+        // grid-template-columns: 200px minmax(0, 1fr) 100px;
+        grid-template-columns: min-content 1fr min-content;
+
+        column-gap: 20px;
+        grid-template-areas: 'heading content metadata';
+    }
 }

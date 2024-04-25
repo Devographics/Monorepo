@@ -162,8 +162,8 @@
         parameters:
             limit: 20
 
-      - id: how_can_we_improve
-        template: multiple_options2_freeform
+      # - id: how_can_we_improve
+      #   template: multiple_options2_freeform
 
       # - id: data_explorer
       #   titleId: sections.data_explorer.title

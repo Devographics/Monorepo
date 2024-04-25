@@ -64,11 +64,13 @@ export interface NormTokenActionProps extends NormTokenProps {
   rawPath?: string;
   normPath?: string;
   answerIndex?: number;
+  onClick?: () => void;
 
   isRegular?: boolean;
   isDisabled?: boolean;
   isCustom?: boolean;
   isPreset?: boolean;
+  isSuggested?: boolean;
 }
 
 /*
@@ -118,6 +120,8 @@ export const NormTokenAction = (props: NormTokenActionProps) => {
     question,
     answerIndex,
     setTokenFilter,
+    onClick,
+    isSuggested,
   } = props;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -139,14 +143,19 @@ export const NormTokenAction = (props: NormTokenActionProps) => {
   return (
     <>
       <code
-        className={`normalization-token ${action?.className}`}
+        className={`normalization-token ${action?.className} ${
+          isSuggested ? "normalization-token-suggested" : ""
+        }`}
         aria-busy={isLoading}
       >
         <span
           onClick={(e) => {
             e.preventDefault();
             // setShowModal(true);
-            setTokenFilter([id]);
+            setTokenFilter([id], "normalized");
+            if (onClick) {
+              onClick();
+            }
           }}
           data-tooltip={`Filter by ${id}`}
         >

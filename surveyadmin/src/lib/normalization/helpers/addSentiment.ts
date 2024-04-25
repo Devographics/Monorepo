@@ -197,7 +197,7 @@ export async function addSentiment({
           } else {
             sentimentValue = NEUTRAL_SENTIMENT;
           }
-          const sentimentPath = getSentimentPath(question);
+          const sentimentPath = getSentimentPath(question)!;
           setObject[sentimentPath] = sentimentValue;
         }
       }
