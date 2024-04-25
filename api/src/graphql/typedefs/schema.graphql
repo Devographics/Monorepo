@@ -447,6 +447,14 @@ type FacetBucket {
     """
     count: Int
     """
+    Percentage relative to question respondents
+    """
+    percentageQuestion: Float
+    """
+    Percentage relative to survey respondents
+    """
+    percentageSurvey: Float
+    """
     Percentage of the bucket represented by the current facet
     """
     percentageBucket: Float
