@@ -98,6 +98,7 @@ const ImagesContainer = styled.div`
 `
 
 const Image = styled.div`
+    background: white;
     &:nth-child(1) {
         /* border-bottom: ${props => props.theme.separationBorder}; */
         grid-column-start: 1;

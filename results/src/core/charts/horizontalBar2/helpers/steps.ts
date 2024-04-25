@@ -1,9 +1,19 @@
 import { Bucket } from '@devographics/types'
 import { Step } from '../types'
-import { NOT_APPLICABLE, NO_ANSWER, OVERALL, OVERLIMIT_ANSWERS } from '@devographics/constants'
+import {
+    NOT_APPLICABLE,
+    NO_ANSWER,
+    OTHER_ANSWERS,
+    OVERALL,
+    OVERLIMIT_ANSWERS
+} from '@devographics/constants'
 
 export const applySteps = (buckets: Bucket[], steps: Step[]) => {
     return steps.reduce((obj, func) => func(obj), buckets)
+}
+
+export const removeOtherAnswers: Step = buckets => {
+    return buckets.filter(b => b.id !== OTHER_ANSWERS)
 }
 
 export const removeNoAnswer: Step = buckets => {

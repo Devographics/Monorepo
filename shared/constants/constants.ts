@@ -42,6 +42,7 @@ export const INSUFFICIENT_DATA = 'insufficient_data'
 
 export const PERCENTAGE_SURVEY = 'percentageSurvey'
 export const PERCENTAGE_QUESTION = 'percentageQuestion'
+export const PERCENTAGE_BUCKET = 'percentageBucket'
 export const COUNT = 'count'
 
 export const MAIN_UNITS = [PERCENTAGE_SURVEY, PERCENTAGE_QUESTION, COUNT]
