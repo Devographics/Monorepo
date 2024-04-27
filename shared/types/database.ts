@@ -13,6 +13,7 @@ export interface CustomNormalizationParams {
 
 export interface CustomNormalizationDocument
   extends Omit<CustomNormalizationParams, "tokens"> {
+  _id: string;
   normalizationId: string;
   customTokens: string[];
   suggestedTokens?: string[];
