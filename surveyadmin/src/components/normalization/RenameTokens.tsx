@@ -7,7 +7,7 @@ export const RenameTokens = (props) => {
   return (
     <ModalTrigger
       isButton={false}
-      label="🏷 Rename Tokens…"
+      label="🏷 Rename Tokens"
       tooltip="Rename custom tokens"
       header={<div>Rename Custom Tokens</div>}
     >

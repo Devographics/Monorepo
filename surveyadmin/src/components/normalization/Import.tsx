@@ -54,7 +54,7 @@ export const Import = ({
     <div>
       <ModalTrigger
         isButton={false}
-        label="📥 Import…"
+        label="📥 Import"
         tooltip="Import CSV normalizations"
         header={
           <span>

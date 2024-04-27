@@ -133,8 +133,8 @@ export interface CommonNormalizationProps extends NormalizationProps {
   ) => void;
   showActionLog: boolean;
   setShowActionLog: Dispatch<SetStateAction<boolean>>;
-  suggestedTokens: string[];
-  addSuggestedToken: (token: string) => void;
+  localSuggestedTokens: string[];
+  addLocalSuggestedToken: (token: string) => void;
 }
 
 export const NormalizeQuestion = (props: NormalizeQuestionProps) => {
@@ -266,12 +266,11 @@ export const Normalization = (props: NormalizationProps) => {
     }
   };
 
-  const [suggestedTokens, setSuggestedTokens] = useLocalStorage<string[]>(
-    getSuggestedTokensKey(keyParams),
-    []
-  );
-  const addSuggestedToken = (token: string) => {
-    setSuggestedTokens([...suggestedTokens, token]);
+  const [localSuggestedTokens, setLocalSuggestedTokens] = useLocalStorage<
+    string[]
+  >(getSuggestedTokensKey(keyParams), []);
+  const addLocalSuggestedToken = (token: string) => {
+    setLocalSuggestedTokens([...localSuggestedTokens, token]);
   };
 
   // setState variants that accept a second argument to also change the view
@@ -333,8 +332,8 @@ export const Normalization = (props: NormalizationProps) => {
     setShowActionLog,
     filterQuery,
     setFilterQuery,
-    suggestedTokens,
-    addSuggestedToken,
+    localSuggestedTokens,
+    addLocalSuggestedToken,
   };
 
   const segmentProps = {
@@ -366,7 +365,7 @@ const AllAnswers = (props: CommonNormalizationProps) => {
         {sortBy(props.entities, (e) => e.id).map((entity, i) => (
           <option key={i} value={entity.id}></option>
         ))}
-        {props.suggestedTokens.map((t) => (
+        {props.localSuggestedTokens.map((t) => (
           <option key={t} value={t}></option>
         ))}
       </datalist>

@@ -3,12 +3,12 @@ import { escapeHTML, highlightPatterns } from "../hooks";
 
 export const FieldValue = ({
   raw,
-  tokens,
+  tokens = [],
   currentTokenId,
   filterQuery,
 }: {
   raw: string;
-  tokens: NormalizationToken[];
+  tokens?: NormalizationToken[];
   currentTokenId?: string;
   filterQuery?: string;
 }) => {

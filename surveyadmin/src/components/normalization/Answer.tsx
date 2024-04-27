@@ -58,7 +58,7 @@ export const Answer = ({
   filterQuery,
   setTokenFilter,
   addToActionLog,
-  addSuggestedToken,
+  addLocalSuggestedToken,
 }: AnswerProps) => {
   const queryClient = useQueryClient();
 
@@ -191,7 +191,7 @@ export const Answer = ({
                         tokens: [autocompleteToken],
                       });
                       setAutocompleteToken("");
-                      addSuggestedToken(autocompleteToken);
+                      addLocalSuggestedToken(autocompleteToken);
                     } else {
                       alert(`Token ${autocompleteToken} already exists!`);
                     }

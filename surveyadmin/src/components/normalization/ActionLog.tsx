@@ -39,7 +39,7 @@ export const ActionLog = ({
     <div>
       <ModalTrigger
         isButton={false}
-        label="📒 View Action Log…"
+        label="📒 Action Log"
         tooltip="View log of past actions"
         header={<span>Action Log</span>}
         showModal={showActionLog}

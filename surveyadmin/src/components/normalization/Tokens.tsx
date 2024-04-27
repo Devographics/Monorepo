@@ -58,6 +58,7 @@ const Tokens = ({
 }) => {
   const [sort, setSort] = useState<Sort>("alphabetical");
   const [filterQuery, setFilterQuery] = useState("");
+  // const [showContents`, setShowContents] = useState(true);
 
   const questionObject = getQuestionObject({
     survey,

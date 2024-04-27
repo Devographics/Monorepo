@@ -9,6 +9,7 @@ import { Random } from "./Random";
 import { ActionLog } from "./ActionLog";
 import { WordFrequencies } from "./WordFrequencies";
 import { RenameTokens } from "./RenameTokens";
+import { SuggestedTokens } from "./SuggestedTokens";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
@@ -35,6 +36,7 @@ const Actions = (props: ActionProps) => {
         <ActionLog {...props} />
         <WordFrequencies {...props} />
         <RenameTokens {...props} />
+        <SuggestedTokens {...props} />
       </div>
       <div
         className="secondary"
