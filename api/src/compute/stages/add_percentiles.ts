@@ -6,7 +6,7 @@ import isEmpty from 'lodash/isEmpty.js'
 import compact from 'lodash/compact.js'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { BucketUnits, FacetBucketWithAverage, PercentileData } from '@devographics/types'
-import { getFacetBucketAverage } from './add_averages'
+import { getBucketAverage } from './add_averages'
 import { CUTOFF_ANSWERS, NO_ANSWER, NOT_APPLICABLE } from '@devographics/constants'
 
 // Decorate facet bucket with average
@@ -14,7 +14,7 @@ const decorateWithAverages = (
     facetBuckets: FacetBucket[],
     axis: ComputeAxisParameters
 ): FacetBucketWithAverage[] =>
-    facetBuckets.map(fb => ({ ...fb, average: getFacetBucketAverage(fb, axis) }))
+    facetBuckets.map(fb => ({ ...fb, average: getBucketAverage(fb, axis) }))
 
 // v1: using aggregator
 function calculatePercentiles1({

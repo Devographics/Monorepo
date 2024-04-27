@@ -33,7 +33,7 @@ import {
     addEditionYears,
     discardEmptyEditions,
     addLabels,
-    addAveragesByFacet,
+    addAverages,
     removeEmptyEditions,
     addPercentilesByFacet,
     groupBuckets,
@@ -450,7 +450,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
         await runStage(addEditionYears, [results, survey])
 
-        await runStage(addAveragesByFacet, [results, axis2, axis1])
+        await runStage(addAverages, [results, axis2, axis1])
         await runStage(addPercentilesByFacet, [results, axis2, axis1])
 
         if (executionContext === ExecutionContext.REGULAR) {
@@ -492,6 +492,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await runStage(addPercentages, [results])
 
         await runStage(addEditionYears, [results, survey])
+
+        await runStage(addAverages, [results, axis1])
 
         if (executionContext === ExecutionContext.REGULAR) {
             await runStage(groupBuckets, [results, axis1])
