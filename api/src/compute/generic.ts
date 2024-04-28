@@ -35,7 +35,7 @@ import {
     addLabels,
     addAverages,
     removeEmptyEditions,
-    addPercentilesByFacet,
+    addPercentiles,
     groupBuckets,
     applyDatasetCutoff,
     combineWithFreeform,
@@ -451,7 +451,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await runStage(addEditionYears, [results, survey])
 
         await runStage(addAverages, [results, axis2, axis1])
-        await runStage(addPercentilesByFacet, [results, axis2, axis1])
+        await runStage(addPercentiles, [results, axis2, axis1])
 
         if (executionContext === ExecutionContext.REGULAR) {
             await runStage(sortData, [results, axis2, axis1])
@@ -494,6 +494,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await runStage(addEditionYears, [results, survey])
 
         await runStage(addAverages, [results, axis1])
+        await runStage(addPercentiles, [results, axis1])
 
         if (executionContext === ExecutionContext.REGULAR) {
             await runStage(groupBuckets, [results, axis1])

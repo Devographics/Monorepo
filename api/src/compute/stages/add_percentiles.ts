@@ -137,17 +137,17 @@ function calculatePercentile(datapoints: number[], percentile: number): number {
 
 // v2: expanding buckets into individual datapoints
 function calculatePercentiles2({
-    bucket,
+    buckets,
     axis
 }: {
-    bucket: Bucket
+    buckets: Bucket[] | FacetBucket[]
     axis: ComputeAxisParameters
 }): PercentileData {
     const allFacetBuckets = compact(
-        bucket.facetBuckets
+        buckets
             .map(fb => {
                 if (fb.groupedBuckets) {
-                    // if facet bucket is made of grouped facet buckets, use those
+                    // if bucket is made of grouped buckets, use those
                     return fb.groupedBuckets
                 } else {
                     return [fb]
@@ -156,19 +156,17 @@ function calculatePercentiles2({
             .flat()
     )
 
-    const filteredFacetBuckets = allFacetBuckets.filter(
+    const filteredBuckets = allFacetBuckets.filter(
         fb => fb?.id !== NO_ANSWER && fb?.id !== NOT_APPLICABLE && fb?.id !== CUTOFF_ANSWERS
     )
     // decorate facet buckets with average corresponding to range
-    const facetBucketsWithAverage = decorateWithAverages(cloneDeep(filteredFacetBuckets), axis)
+    const bucketsWithAverage = decorateWithAverages(cloneDeep(filteredBuckets), axis)
 
-    // Sort salaries
-    const sortedFacetBuckets = [...facetBucketsWithAverage].sort(
-        (fb1, fb2) => fb1.average - fb2.average
-    )
+    // Sort buckets
+    const sortedBuckets = [...bucketsWithAverage].sort((fb1, fb2) => fb1.average - fb2.average)
 
     // expand buckets into individual datapoints
-    const allDatapoints = sortedFacetBuckets
+    const allDatapoints = sortedBuckets
         .map(bucket => (bucket.count === 0 ? [] : Array(bucket.count).fill(bucket.average)))
         .flat()
 
@@ -196,18 +194,31 @@ export const zeroPercentiles = {
 
 const calculatePercentiles = calculatePercentiles2
 
-export async function addPercentilesByFacet(
+export async function addPercentiles(
     resultsByEdition: ResponseEditionData[],
     axis1: ComputeAxisParameters,
     axis2: ComputeAxisParameters
 ) {
-    if (axis2.question.optionsAreRange || axis2.question.optionsAreNumeric) {
+    const calculateAxis1Percentiles =
+        axis1 && (axis1.question.optionsAreRange || axis1.question.optionsAreNumeric)
+    const calculateAxis2Percentiles =
+        axis2 && (axis2.question.optionsAreRange || axis2.question.optionsAreNumeric)
+
+    if (calculateAxis1Percentiles || calculateAxis2Percentiles) {
         for (let editionData of resultsByEdition) {
-            if (axis2) {
+            // calculate percentiles of all top-level buckets
+            if (calculateAxis1Percentiles) {
+                editionData.percentiles = calculatePercentiles({
+                    buckets: editionData.buckets,
+                    axis: axis1
+                })
+            }
+            // calculate percentiles of all facet buckets for each top-level bucket
+            if (calculateAxis2Percentiles) {
                 for (let bucket of editionData.buckets) {
                     bucket[BucketUnits.PERCENTILES] = bucket.hasInsufficientData
                         ? zeroPercentiles
-                        : calculatePercentiles({ bucket, axis: axis2 })
+                        : calculatePercentiles({ buckets: bucket.facetBuckets, axis: axis2 })
                 }
             }
         }

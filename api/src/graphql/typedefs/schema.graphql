@@ -282,6 +282,7 @@ type ResponseEditionData {
     Average is only available for numerical data
     """
     average: Float
+    percentiles: Percentiles
     buckets: [Bucket]
 }
 
