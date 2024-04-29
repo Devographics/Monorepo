@@ -7,7 +7,7 @@ import compact from 'lodash/compact.js'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { BucketUnits, FacetBucketWithAverage, PercentileData } from '@devographics/types'
 import { getBucketAverage } from './add_averages'
-import { CUTOFF_ANSWERS, NO_ANSWER, NOT_APPLICABLE } from '@devographics/constants'
+import { CUTOFF_ANSWERS, NO_ANSWER, NOT_APPLICABLE, OVERALL } from '@devographics/constants'
 
 // Decorate facet bucket with average
 const decorateWithAverages = (
@@ -209,7 +209,7 @@ export async function addPercentiles(
             // calculate percentiles of all top-level buckets
             if (calculateAxis1Percentiles) {
                 editionData.percentiles = calculatePercentiles({
-                    buckets: editionData.buckets,
+                    buckets: editionData.buckets.filter(b => b.id !== OVERALL),
                     axis: axis1
                 })
             }

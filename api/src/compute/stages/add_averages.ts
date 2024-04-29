@@ -1,7 +1,7 @@
 import { BucketUnits, FacetBucket, OptionGroup } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import sumBy from 'lodash/sumBy.js'
-import { NO_ANSWER, NOT_APPLICABLE } from '@devographics/constants'
+import { NO_ANSWER, NOT_APPLICABLE, OVERALL } from '@devographics/constants'
 import isNil from 'lodash/isNil.js'
 import isNaN from 'lodash/isNaN.js'
 import round from 'lodash/round.js'
@@ -103,7 +103,7 @@ export async function addAverages(
             // calculate average of all top-level buckets
             if (calculateAxis1Average) {
                 editionData.average = calculateAverage({
-                    buckets: editionData.buckets,
+                    buckets: editionData.buckets.filter(b => b.id !== OVERALL),
                     axis: axis1
                 })
             }
