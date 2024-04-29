@@ -635,6 +635,9 @@ importers:
       sass:
         specifier: ^1.56.1
         version: 1.68.0
+      snarkdown:
+        specifier: ^2.0.0
+        version: 2.0.0
       styled-components:
         specifier: ^5.3.6
         version: 5.3.11(react-dom@18.0.0)(react-is@18.2.0)(react@18.0.0)
@@ -33224,6 +33227,10 @@ packages:
       '@napi-rs/snappy-win32-arm64-msvc': 7.2.2
       '@napi-rs/snappy-win32-ia32-msvc': 7.2.2
       '@napi-rs/snappy-win32-x64-msvc': 7.2.2
+
+  /snarkdown@2.0.0:
+    resolution: {integrity: sha512-MgL/7k/AZdXCTJiNgrO7chgDqaB9FGM/1Tvlcenenb7div6obaDATzs16JhFyHHBGodHT3B7RzRc5qk8pFhg3A==}
+    dev: false
 
   /socket.io-adapter@2.5.2:
     resolution: {integrity: sha512-87C3LO/NOMc+eMcpcxUBebGjkpMDkNBS9tf7KJqcDsmL936EChtVva71Dw2q4tQcuVC+hAUy4an2NO/sYXmwRA==}

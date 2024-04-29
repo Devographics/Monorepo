@@ -1,3 +1,11 @@
 .chart-metadata {
     font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing);
+}
+.chart-metadata-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }

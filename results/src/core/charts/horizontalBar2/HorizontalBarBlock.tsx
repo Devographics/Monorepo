@@ -4,10 +4,10 @@ import Metadata from '../common2/Metadata'
 import { BlockComponentProps, PageContextValue } from 'core/types'
 import { QuestionMetadata, StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
-import { getAllFacetBucketIds, getChartCompletion, useQuestionMetadata } from './helpers/other'
+import { getAllFacetBucketIds, getChartCurrentEdition, useQuestionMetadata } from './helpers/other'
 import { getDefaultState, useChartState } from './helpers/chartState'
 import { getViewDefinition } from './helpers/views'
-import { ChartFooter, ChartWrapper, GridWrapper, Legend } from '../common2'
+import { ChartFooter, ChartWrapper, GridWrapper, Legend, Note } from '../common2'
 import { useEntities } from 'core/helpers/entities'
 import { FacetTitle } from '../common2/FacetTitle'
 import { getQuestionOptions } from './helpers/options'
@@ -16,6 +16,8 @@ import { ChartState } from './types'
 import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
 import { HorizontalBarSerie } from './HorizontalBarSerie'
+import { getBlockNoteKey } from 'core/helpers/blockHelpers'
+import { useI18n } from '@devographics/react-i18n'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -23,8 +25,12 @@ export interface HorizontalBarBlock2Props extends BlockComponentProps {
 }
 
 export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
+    const { getString } = useI18n()
     const { block, series, question, pageContext, variant } = props
-    const completion = getChartCompletion({ block, serie: series[0] })
+    const currentEdition = getChartCurrentEdition({ serie: series[0], block })
+
+    const { average, percentiles, completion } = currentEdition
+
     const facet = block?.filtersState?.facet
 
     const facetQuestion = useQuestionMetadata(facet)
@@ -39,6 +45,9 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
         chartState,
         block
     }
+
+    const key = getBlockNoteKey({ block })
+    const note = getString(key, {}, null)?.t
 
     return (
         <ChartWrapper className="chart-horizontal-bar">
@@ -62,7 +71,12 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 
                 <ChartFooter>
                     <>
-                        <Metadata completion={completion} {...commonProps} />
+                        <Metadata
+                            average={average}
+                            median={percentiles?.p50}
+                            completion={completion}
+                            {...commonProps}
+                        />
                         <ChartData {...commonProps} />
                     </>
                 </ChartFooter>
@@ -74,6 +88,8 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                 {/* <pre>
                 <code>{JSON.stringify(chartValues, null, 2)}</code>
             </pre> */}
+
+                {note && <Note>{note}</Note>}
             </>
         </ChartWrapper>
     )

@@ -279,9 +279,13 @@ const getSerieFragment = ({
             ${editionType} {
                 ${allEditions ? allEditionsFragment : ''}
                 completion {
-                count
-                percentageSurvey
-                total
+                    count
+                    percentageSurvey
+                    total
+                }
+                average
+                percentiles {
+                    p50
                 }
                 buckets {
                 ${getBucketFragment({

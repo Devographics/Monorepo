@@ -6,6 +6,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { useEntities } from 'core/helpers/entities'
 import { usePageContext } from 'core/helpers/pageContext'
 import { removeDoubleSlashes } from './utils'
+import snarkdown from 'snarkdown'
 
 export const replaceOthers = s => s?.replace('_others', '.others')
 
@@ -182,7 +183,8 @@ export const getBlockDescription = ({
     const descriptionKey = `${getBlockKey({ block })}.description`
     const { currentEdition } = pageContext
     const blockDescription =
-        block.descriptionId && getString(block.descriptionId, { values })?.tHtml
+        (block.description && snarkdown(block.description)) ||
+        (block.descriptionId && getString(block.descriptionId, { values })?.tHtml)
     const editionDescription = getString(`${descriptionKey}.${currentEdition.id}`, {
         values
     })?.tHtml

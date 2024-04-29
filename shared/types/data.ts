@@ -98,7 +98,7 @@ export interface ResponseEditionData {
     year: number
     completion: YearCompletion
     buckets: Bucket[]
-    average?: Number
+    average?: number
     percentiles?: PercentileData
 }
 
