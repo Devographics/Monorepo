@@ -1,4 +1,5 @@
 ---
+import { TK_ATTR } from "./attributes";
 const { i18n } = Astro.locals;
 const { k, values, html } = Astro.props;
 interface Props {
@@ -7,6 +8,9 @@ interface Props {
   html?: boolean;
 }
 const res = i18n.t(k, values);
+// the data-dg-tk parameter is used by the translation mode
 ---
 
-<span>{html ? res.tHtml : res.t}</span>
+<span {...{ [TK_ATTR]: k }}
+  >Astro translation key {html ? res.tHtml : res.t}</span
+>
