@@ -110,6 +110,7 @@
         "rehype-raw": "^6.1.1",
         "remove-markdown": "^0.3.0",
         "sass": "^1.56.1",
+        "snarkdown": "^2.0.0",
         "styled-components": "^5.3.6",
         "tinycolor2": "^1.4.2",
         "twitter-api-v2": "^1.12.9",

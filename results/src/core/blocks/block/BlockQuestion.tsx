@@ -5,6 +5,7 @@ import { useBlockQuestion } from 'core/helpers/blockHelpers'
 import { BlockVariantDefinition } from 'core/types'
 import { QuestionIcon } from 'core/icons'
 import { FreeformIndicator } from 'core/charts/common2'
+import Tooltip from 'core/components/Tooltip'
 
 export const BlockQuestion = ({
     block,
@@ -23,6 +24,29 @@ export const BlockQuestion = ({
                 </QuestionLeft_>
                 {isFreeformQuestion && <FreeformIndicator showLabel={true} />}
             </Question_>
+        )
+    }
+    return null
+}
+
+export const BlockQuestionTooltip = ({
+    block,
+    question
+}: {
+    block?: BlockVariantDefinition
+    question?: string
+}) => {
+    const blockQuestion = question || (block && useBlockQuestion({ block }))
+    if (blockQuestion) {
+        return (
+            <Tooltip
+                trigger={
+                    <span>
+                        <QuestionIcon />
+                    </span>
+                }
+                contents={blockQuestion}
+            />
         )
     }
     return null

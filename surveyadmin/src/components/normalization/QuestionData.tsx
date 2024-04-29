@@ -147,7 +147,7 @@ export const ViewQuestionData = (props) => {
   return (
     <ModalTrigger
       isButton={false}
-      label="📊 Question Results…"
+      label="📊 Results"
       tooltip="View tabulated results for current question"
       header={
         <div>

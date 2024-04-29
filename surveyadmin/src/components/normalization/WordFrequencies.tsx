@@ -15,7 +15,7 @@ export const WordFrequencies = (props: ActionProps) => {
   return (
     <ModalTrigger
       isButton={false}
-      label="🔢 Word Frequencies…"
+      label="🔢 Word Frequencies"
       tooltip="View word frequencies for current question"
       header={
         <div>

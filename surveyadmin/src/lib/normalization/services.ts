@@ -132,6 +132,30 @@ export async function renameTokens(params: RenameTokensParams) {
   return result;
 }
 
+export interface ApproveTokensParams {
+  tokens: Array<{
+    normalizationId: string;
+    id: string;
+    renameTo: string;
+    shouldDismiss?: boolean;
+  }>;
+}
+
+export async function approveTokens(params: ApproveTokensParams) {
+  const fetchRes = await fetch(
+    apiRoutes.normalization.approveTokens.href(params),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    }
+  );
+  const result: ResultsPayload = await fetchRes.json();
+  return result;
+}
+
 export async function removeCustomTokens(params: CustomNormalizationParams) {
   const fetchRes = await fetch(
     apiRoutes.normalization.removeCustomTokens.href(params),

@@ -278,6 +278,11 @@ type ResponseEditionData {
     year: Int
     editionId: String
     completion: YearCompletion
+    """
+    Average is only available for numerical data
+    """
+    average: Float
+    percentiles: Percentiles
     buckets: [Bucket]
 }
 

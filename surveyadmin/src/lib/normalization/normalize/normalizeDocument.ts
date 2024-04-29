@@ -234,7 +234,7 @@ const normalizeResponse = async (
     normResp: normResp_,
   } = normalizationParams;
   if (verbose) {
-    console.log(`⛰️ Normalizing document ${response._id}…`);
+    console.log(`🚦 Normalizing document ${response._id}…`);
   }
 
   const fields = {

@@ -64,25 +64,37 @@
       - id: country
         template: multiple_options2
         parameters: { limit: 20 }
+        description: >
+            While many respondents (**19%**) came from the U.S., we also had strong representation from Germany, France, the U.K., and the Netherlands (**24% combined**), reflecting the liveliness of the front end community in these countries.
 
       - id: locale
         template: multiple_options2
         parameters: { cutoff: 20 }
+        description: >
+            The language respondents selected to fill out the survey.
 
       - id: hint_hint
         template: hint
 
       - id: completion_stats
         template: multiple_options2
+        description: >
+            The proportion of the survey filled out by respondents.
 
       - id: age
         template: multiple_options2
+        description: >
+            Survey respondents were on average **33.6** years old, slightly higher than the [State of JS](https://2022.stateofjs.com) (**32.2**) and [State of CSS](https://2023.stateofcss.com) (**33.5**) surveys.
 
       - id: years_of_experience
         template: multiple_options2
+        description: >
+            Respondents had on average **10.7** years of web development experience.
 
       - id: company_size
         template: multiple_options2
+        description: >
+            Respondents tended to work for mostly mid-sized organizations, with a median company size of **75* employees.
         variants:
             - id: company_size_vs_yearly_salary
               fieldId: company_size
@@ -191,7 +203,6 @@
 
       - id: all_features
         template: multi_items_experience
-        i18nNamespace: features
         chartOptions:
             limit: 10
 

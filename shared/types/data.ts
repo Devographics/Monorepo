@@ -98,6 +98,8 @@ export interface ResponseEditionData {
     year: number
     completion: YearCompletion
     buckets: Bucket[]
+    average?: number
+    percentiles?: PercentileData
 }
 
 export interface OptionData extends Option {

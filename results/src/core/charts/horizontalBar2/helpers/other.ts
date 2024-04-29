@@ -34,17 +34,6 @@ export const getChartCurrentEdition = ({
     return currentEdition
 }
 
-export const getChartCompletion = ({
-    serie,
-    block
-}: {
-    serie: DataSeries<StandardQuestionData>
-    block: BlockVariantDefinition
-}) => {
-    const currentEdition = getChartCurrentEdition({ serie, block })
-    return currentEdition.completion
-}
-
 export const getChartBuckets = ({
     serie,
     block,

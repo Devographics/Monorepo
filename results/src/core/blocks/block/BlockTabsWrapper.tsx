@@ -18,6 +18,7 @@ import FiltersPanel from 'core/filters/FiltersPanel'
 import { EditIcon } from 'core/icons'
 import BlockQuestion from './BlockQuestion'
 import { BlockDefinition } from 'core/types'
+import { BlockDescriptionContents } from './BlockChart'
 
 export const getRegularTabId = (index: number) => `tab-${index}`
 export const getCustomTabId = (id: string) => `tabCustom-${id}`
@@ -91,7 +92,8 @@ export const TabsWrapper = ({
                 <BlockHeader className="block-header">
                     <BlockHeaderTop_>
                         <BlockTitle block={firstBlockVariant} />
-                        <BlockQuestion block={firstBlockVariant} />
+                        {/* <BlockQuestion block={firstBlockVariant} /> */}
+                        <BlockDescriptionContents block={firstBlockVariant} />
                         <BlockTakeaway block={firstBlockVariant} />
                     </BlockHeaderTop_>
                     <BlockHeaderRight_>

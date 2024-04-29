@@ -362,6 +362,10 @@ surveys {
                 percentageSurvey
                 total
               }
+              average
+              percentiles {
+                p50
+              }
               buckets {
                 ${getBucketFragment({
                     addBucketFacetsPlaceholder,

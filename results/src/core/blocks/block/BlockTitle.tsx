@@ -1,3 +1,4 @@
+import './BlockTitle.scss'
 import React, { memo, useState } from 'react'
 import styled, { css } from 'styled-components'
 import last from 'lodash/last'
@@ -10,6 +11,8 @@ import { getBlockTitle, useBlockTitle } from 'core/helpers/blockHelpers'
 import BlockSponsor from 'core/blocks/block/sponsor_chart/BlockSponsor'
 import { useEntities } from 'core/helpers/entities'
 import { BlockVariantDefinition } from 'core/types'
+import { BlockQuestionTooltip } from './BlockQuestion'
+import { FreeformIndicator } from 'core/charts/common2'
 
 const BlockTitleContents = ({ block }: { block: BlockVariantDefinition }) => {
     const title = useBlockTitle({ block })
@@ -63,6 +66,7 @@ const BlockTitle = ({
         units,
         setUnits
     }
+    const isFreeformQuestion = ['multiple_options2_freeform'].includes(block.template)
 
     return (
         <>
@@ -70,11 +74,17 @@ const BlockTitle = ({
                 <LeftPart>
                     <BlockTitleText className="BlockTitleText">
                         <SharePermalink block={block} />
-                        <BlockTitleContents block={block} />
-                        {completion && !pageContext.isCapturing && (
-                            <BlockCompletionIndicator completion={completion} />
-                        )}
-                        {!isCapturing && enableChartSponsorships && <BlockSponsor block={block} />}
+                        <div className="block-title-contents">
+                            <BlockTitleContents block={block} />
+                            {completion && !pageContext.isCapturing && (
+                                <BlockCompletionIndicator completion={completion} />
+                            )}
+                            <BlockQuestionTooltip block={block} />
+                            {isFreeformQuestion && <FreeformIndicator showLabel={false} />}
+                            {!isCapturing && enableChartSponsorships && (
+                                <BlockSponsor block={block} />
+                            )}
+                        </div>
                     </BlockTitleText>
                     {/* <Popover trigger={<More />}>
                         <PopoverContents>

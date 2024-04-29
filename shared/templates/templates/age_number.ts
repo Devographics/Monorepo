@@ -44,6 +44,11 @@ const groups = [
 
 export const age_number: TemplateFunction = options => {
     const id = 'age'
-    const output: QuestionTemplateOutput = { ...number(addQuestionId(options, id)), groups }
+    const filterFunction = (value: number) => value > 0 && value < 100
+    const output: QuestionTemplateOutput = {
+        ...number(addQuestionId(options, id)),
+        groups,
+        filterFunction
+    }
     return output
 }

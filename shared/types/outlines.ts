@@ -303,6 +303,7 @@ export interface QuestionTemplateOutput extends QuestionWithId {
     normPaths?: DbPaths
     options?: Option[]
     extends?: string
+    filterFunction?: (value: any) => boolean
 }
 
 export interface QuestionTemplateOutputWithSection extends QuestionTemplateOutput {

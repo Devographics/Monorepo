@@ -38,7 +38,7 @@ export const Random = (props: {
     <div>
       <ModalTrigger
         isButton={false}
-        label="🎲 Get Random Sample…"
+        label="🎲 Get Sample"
         tooltip="Get a random sample of answers"
         onOpen={regenerate}
         header={
