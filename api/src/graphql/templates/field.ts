@@ -1,4 +1,9 @@
-import { QuestionApiObject, TypeDefTemplateOutput, TypeTypeEnum } from '../../types'
+import {
+    QuestionApiObject,
+    SurveyApiObject,
+    TypeDefTemplateOutput,
+    TypeTypeEnum
+} from '../../types'
 import { subFields } from '../../generate/subfields'
 /*
 
@@ -38,5 +43,40 @@ export const generateFieldType = async ({
                 ${includedSubFields.map(({ def }) => def(question)).join('\n  ')}
               }`
         }
+    }
+}
+
+/*
+
+Same as above but generates a generic version which contains all subfields
+
+Useful when merging question data
+
+*/
+export const getGenericFieldTypeName = () => `GenericField`
+
+export const generateGenericFieldType = ({
+    surveys
+}: {
+    surveys: SurveyApiObject[]
+}): TypeDefTemplateOutput => {
+    const fieldTypeName = getGenericFieldTypeName()
+
+    // for the following fields, merging data doesn't make sense
+    const disallowedFields = ['_metadata', 'options', 'entity']
+
+    const validSubFields = subFields.filter(f => !disallowedFields.includes(f.id))
+
+    // this will determine which filters, facets, etc. are used for the generic field type
+    // just use State of JS as convention since we need to pick one
+    const question = { surveyId: 'state_of_js' } as QuestionApiObject
+
+    return {
+        generatedBy: 'field',
+        typeName: fieldTypeName,
+        typeType: TypeTypeEnum.FIELD_GENERATED,
+        typeDef: `type ${fieldTypeName} {
+                ${validSubFields.map(({ def }) => def(question)).join('\n  ')}
+              }`
     }
 }

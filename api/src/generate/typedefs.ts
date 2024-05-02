@@ -15,7 +15,8 @@ import {
     generateResponsesType,
     generateI18nContextsEnum,
     generateLocaleIDEnum,
-    generateSurveysEnumType
+    generateSurveysEnumType,
+    generateGenericFieldType
 } from '../graphql/templates/index'
 import {} from '../graphql/templates/locale_id_enum'
 import { generateToolsEnumType } from '../graphql/templates/tools_enum'
@@ -53,6 +54,8 @@ export const generateSurveysTypeObjects = async ({ surveys }: { surveys: SurveyA
     addToTypeObjects(generateSurveysEnumType({ surveys, path }))
     addToTypeObjects(generateSurveysType({ surveys, path }))
     addToTypeObjects(generateAllEditionsEnumType({ surveys, path }))
+
+    addToTypeObjects(generateGenericFieldType({ surveys }))
 
     for (const survey of surveys) {
         path = getPath({ survey })

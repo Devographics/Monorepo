@@ -46,7 +46,9 @@ export const likert: ApiTemplateFunction = ({ question: question_, survey, editi
         fieldTypeName,
         typeDef: `type ${fieldTypeName} {
 ${includedSubFields.map(({ def }) => def(question)).join('\n  ')}
-${question.options?.map(option => getResponsesTypeDef(question, String(option.id))).join('\n')}
+${question.options
+    ?.map(option => getResponsesTypeDef(question.surveyId, String(option.id)))
+    .join('\n')}
         }`,
         resolverMap: getResolverMap(question)
     }
