@@ -1,5 +1,6 @@
 import React from 'react'
 import { QuestionMetadata } from '@devographics/types'
+import { OrderOptions } from 'core/charts/common2/types'
 
 export interface CustomizationDefinition {
     options: CustomizationOptions
@@ -26,6 +27,8 @@ export type CustomizationOptions = {
     cutoff?: number
     cutoffType?: 'count' | 'percent'
     limit?: number
+    sort?: string
+    order?: OrderOptions
 }
 
 export type CustomizationFiltersSeries = {

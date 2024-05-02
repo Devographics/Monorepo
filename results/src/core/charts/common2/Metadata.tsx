@@ -5,6 +5,7 @@ import T from 'core/i18n/T'
 import { AverageIcon, MedianIcon, PercentIcon, UserIcon } from 'core/icons'
 import { IconProps } from 'core/icons/IconWrapper'
 import React from 'react'
+import { formatNumber } from './helpers'
 
 export const Metadata = ({
     completion,
@@ -59,21 +60,20 @@ const MetadataItem = ({
     total: number
 }) => {
     const Icon = icon
-    const format = new Intl.NumberFormat().format
     return (
         <Tooltip
             trigger={
                 <div className="chart-metadata-item">
                     <Icon size="petite" />
-                    <span className="chart-metadata-item-value">{format(value)}</span>
+                    <span className="chart-metadata-item-value">{formatNumber(value)}</span>
                 </div>
             }
             contents={
                 <T
                     k={`charts.metadata.${id}`}
                     values={{
-                        value: format(value),
-                        total: format(total)
+                        value: formatNumber(value),
+                        total: formatNumber(total)
                     }}
                     html={true}
                     md={true}

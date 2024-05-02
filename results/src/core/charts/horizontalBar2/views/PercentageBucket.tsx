@@ -3,7 +3,12 @@ import { FacetRow } from '../HorizontalBarRow'
 import Legend from '../../common2/Legend'
 import { ViewDefinition } from '../types'
 import { Row, Rows, getTicks } from 'core/charts/common2'
-import { removeNoAnswer, removeNotApplicable } from '../helpers/steps'
+import {
+    removeNoAnswer,
+    removeNotApplicable,
+    removeOtherAnswers,
+    removeOverLimit
+} from '../helpers/steps'
 import { BucketUnits, FacetBucket } from '@devographics/types'
 import { getCellDimensions, getRowOffset } from '../helpers/dimensions'
 import min from 'lodash/min'
@@ -15,7 +20,7 @@ const getValue = (facetBucket: FacetBucket) => facetBucket[BucketUnits.PERCENTAG
 
 export const PercentageBucket: ViewDefinition = {
     getValue,
-    steps: [removeNoAnswer],
+    steps: [removeNoAnswer, removeOverLimit, removeOtherAnswers],
     showLegend: true,
     component: props => {
         const { buckets, chartState } = props

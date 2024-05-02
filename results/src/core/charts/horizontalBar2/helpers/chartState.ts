@@ -26,6 +26,13 @@ export const getDefaultState = ({
     if (block?.chartOptions?.limit) {
         defaultState.rowsLimit = block.chartOptions.limit
     }
+    if (block?.filtersState?.options?.sort) {
+        defaultState.sort = block?.filtersState?.options?.sort
+    }
+    if (block?.filtersState?.options?.order) {
+        defaultState.order = block?.filtersState?.options?.order
+    }
+    console.log(block)
     return defaultState
 }
 

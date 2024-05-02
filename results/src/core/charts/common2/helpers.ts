@@ -10,3 +10,5 @@ export const useWidth = (ref: RefObject<HTMLElement>) => {
     }, []) // The empty dependency array makes sure this runs only once after component mount
     return width
 }
+
+export const formatNumber = new Intl.NumberFormat().format

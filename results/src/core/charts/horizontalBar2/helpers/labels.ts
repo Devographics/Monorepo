@@ -63,6 +63,9 @@ export const formatValue = ({
     chartState: ChartState
     question: QuestionMetadata
 }) => {
+    if (!value) {
+        return
+    }
     const { view } = chartState
     if (isPercentage(view)) {
         return formatPercentage(value)

@@ -34,6 +34,9 @@ import OpinionBlock from 'core/charts/opinion'
 // brackets
 import BracketWinsBlock from 'core/charts/brackets/BracketWinsBlock.tsx'
 
+// takeaways
+import TakeawaysBlock from 'core/blocks/other/TakeawaysBlock.tsx'
+
 const chartBlocks = {
     HorizontalBarBlock,
     HorizontalBarBlock2,
@@ -105,7 +108,7 @@ const otherBlocks = {
     HowToHelpBlock,
     SponsorFinishBlock,
     LivestreamBlock,
-
+    TakeawaysBlock,
     DataExplorerBlock
 }
 

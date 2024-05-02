@@ -54,6 +54,26 @@
 #             xAxis: user_info__yearly_salary
 #             yAxis: user_info__years_of_experience
 
+- id: takeaways
+  path: /takeaways
+  blocks:
+      - id: takeaways
+        blockType: TakeawaysBlock
+        disableExport: true
+        wrapBlock: false
+        items:
+            - id: median_salary_2023
+            - id: previous_compensation_2023
+            - id: negotiated_compensation_2023
+            - id: unemployed_respondents_2023
+            - id: job_search_status_2023
+            - id: international_subsidiary_2023
+            - id: remote_work_2023
+            - id: women_vs_men_experience_2023
+            - id: women_vs_men_professional_qualifications_2023
+            - id: overtime_2023
+            - id: programming_languages_2023
+
 - id: user_info
   titleId: sections.demographics.title
   descriptionId: sections.user_info.description.css2023
@@ -94,7 +114,7 @@
       - id: company_size
         template: multiple_options2
         description: >
-            Respondents tended to work for mostly mid-sized organizations, with a median company size of **75* employees.
+            Respondents tended to work for mostly mid-sized organizations, with a median company size of **75** employees.
         variants:
             - id: company_size_vs_yearly_salary
               fieldId: company_size
@@ -151,15 +171,73 @@
 
       - id: yearly_salary
         template: multiple_options2
+        description: >
+            Respondents had a median income of USD $75,000, noticeably higher than the **$59,970** figure reported by the [Stack Overflow Developer Survey](https://survey.stackoverflow.co/2023/#section-salary-salary-by-developer-type).
 
       - id: higher_education_degree
         template: multiple_options2
+        description: >
+            Having a higher-education degree did not translate in meaningful differences in yearly income.
+        variants:
+            - id: higher_education_degree_vs_yearly_salary
+              fieldId: higher_education_degree
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+              filtersState:
+                  options:
+                      mode: facet
+                  facet:
+                      sectionId: user_info
+                      id: yearly_salary
 
       - id: gender
         template: multiple_options2
+        description: >
+            Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries tended to fare worse.
+        variants:
+            - id: gender_vs_yearly_salary
+              fieldId: gender
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+              filtersState:
+                  options:
+                      mode: facet
+                  facet:
+                      sectionId: user_info
+                      id: yearly_salary
+            - id: country_vs_gender
+              fieldId: country
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+                  limit: 15
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
 
       - id: race_ethnicity
         template: multiple_options2_combined
+        description: >
+            The survey's non-white population tended to have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
+        variants:
+            - id: race_ethnicity_vs_years_of_experience
+              fieldId: race_ethnicity
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+              filtersState:
+                  options:
+                      mode: facet
+                  facet:
+                      sectionId: user_info
+                      id: years_of_experience
 
       - id: disability_status
         template: multiple_options2_combined
@@ -220,7 +298,7 @@
             sectionId: reading_list
 
       - id: features_resources
-        items: [fm-learncss]
+        items: [fm-intermediate-html-css]
         template: recommended_resources
 
   children:
@@ -252,9 +330,9 @@
             #   variables:
             #       url: https://zagjs.com/
 
-            # - id: forms_resources
-            #   items: [fm-gridsflexbox, fm-practicallayouts]
-            #   template: recommended_resources
+            - id: forms_resources
+              items: [fm-web-development-v3]
+              template: recommended_resources
 
       - id: interactivity
         path: /interactivity
@@ -287,6 +365,10 @@
               i18nNamespace: features
               parameters: { limit: 10 }
 
+            - id: interactivity_resources
+              items: [fm-vanilla-js-apps]
+              template: recommended_resources
+
       - id: content
         path: /content
         blocks:
@@ -318,6 +400,10 @@
               i18nNamespace: features
               parameters: { limit: 10 }
 
+            - id: interactivity_resources
+              items: [fm-svg-essentials-animation]
+              template: recommended_resources
+
       - id: web_components
         path: /web_components
         blocks:
@@ -345,6 +431,10 @@
               template: multiple_options2_freeform
               i18nNamespace: features
               parameters: { limit: 10 }
+
+            - id: web_components_resources
+              items: [fm-web-components]
+              template: recommended_resources
 
       - id: accessibility
         path: /accessibility
@@ -377,6 +467,10 @@
               i18nNamespace: features
               parameters: { limit: 10 }
 
+            - id: accessibility_resources
+              items: [fm-react-accessibility]
+              template: recommended_resources
+
       - id: mobile_web_apps
         path: /mobile-web-apps
         blocks:
@@ -404,6 +498,10 @@
               i18nNamespace: features
               parameters: { limit: 10 }
 
+            - id: mobile_web_apps_resources
+              items: [fm-pwas]
+              template: recommended_resources
+
 - id: other_tools
   path: /other_tools
   blocks:
@@ -417,6 +515,10 @@
 
       - id: blast_from_the_past
         template: multiple_options2
+
+      - id: other_tools_resources
+        items: [fm-next-js-v3]
+        template: recommended_resources
 
 - id: usage
   path: /usage
@@ -450,6 +552,10 @@
 
       - id: sharing_hint
         template: hint
+
+      - id: usage_resources
+        items: [fm-homepage]
+        template: recommended_resources
 
 # - id: awards
 #   path: /awards
