@@ -208,17 +208,25 @@ export async function addPercentiles(
         for (let editionData of resultsByEdition) {
             // calculate percentiles of all top-level buckets
             if (calculateAxis1Percentiles) {
-                editionData.percentiles = calculatePercentiles({
+                const percentiles = calculatePercentiles({
                     buckets: editionData.buckets.filter(b => b.id !== OVERALL),
                     axis: axis1
                 })
+                editionData.percentiles = percentiles
+                editionData.median = percentiles.p50
             }
             // calculate percentiles of all facet buckets for each top-level bucket
             if (calculateAxis2Percentiles) {
                 for (let bucket of editionData.buckets) {
-                    bucket[BucketUnits.PERCENTILES] = bucket.hasInsufficientData
+                    const percentiles = bucket.hasInsufficientData
                         ? zeroPercentiles
-                        : calculatePercentiles({ buckets: bucket.facetBuckets, axis: axis2 })
+                        : calculatePercentiles({
+                              buckets: bucket.facetBuckets,
+                              axis: axis2
+                          })
+
+                    bucket[BucketUnits.PERCENTILES] = percentiles
+                    bucket[BucketUnits.MEDIAN] = percentiles.p50
                 }
             }
         }

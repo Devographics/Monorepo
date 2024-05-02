@@ -454,8 +454,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await runStage(addPercentiles, [results, axis2, axis1])
 
         if (executionContext === ExecutionContext.REGULAR) {
-            await runStage(sortData, [results, axis2, axis1])
-
             // bucket grouping
             await runStage(groupBuckets, [results, axis2, axis1])
 
@@ -472,6 +470,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             if (axis2.enableBucketGroups && axis2.question.groups) {
                 axis2.options = axis2.question.groups
             }
+            await runStage(sortData, [results, axis2, axis1])
+
             await runStage(limitData, [results, axis2, axis1])
 
             // group any "non-standard" bucket, including cutoff data, unmatched answers,

@@ -259,8 +259,8 @@ enum SortProperty {
     count
     percent
     id
-    mean
-    average
+    medianByFacet
+    averageByFacet
 }
 
 enum SortOrder {
@@ -333,6 +333,10 @@ type Bucket {
     """
     averageByFacet: Float
     """
+    Median by facet (same as percentiles.p50)
+    """
+    medianByFacet: Float
+    """
     Percentiles by facet
     """
     percentilesByFacet: Percentiles
@@ -394,6 +398,10 @@ type GroupedBucket {
     or some other numerical value
     """
     averageByFacet: Float
+    """
+    Median by facet (same as percentiles.p50)
+    """
+    medianByFacet: Float
     """
     Percentiles by facet
     """
