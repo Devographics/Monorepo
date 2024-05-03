@@ -1,0 +1,50 @@
+// Super naive logic to translate "{{surveyId}}.foobar" into "state_of_html.foobar"
+// To be improved and optimized
+/**
+ * "{{surveyId}}.foobar" => html2023.foobar
+ * "[[chart_type]].foobar" => ["bar_chart.foobar", "pie_chart.foobar"]
+ * "{{*}}.foobar" => null (we don't resolve wildcard in advance)
+ * @param tExpr 
+ * @param ctx 
+ * @returns 
+ */
+// function resolve(tExpr: string, ctx: { surveyId: string, editionId: string }): string | Array<string> | null {
+//     return tExpr
+//         .replaceAll(/\{\{surveyId\}\}/g, ctx.surveyId)
+//         .replaceAll(/\{\{editionId\}\}/g, ctx.editionId);
+// }
+
+
+export class TokenExpr {
+    expr: string
+    regex: RegExp
+    constructor(expr: string, ctx: { surveyId: string, editionId: string }) {
+        this.expr = expr
+        this.regex = new RegExp(expr
+            // preserves "dots"
+            .replaceAll(".", "\\.")
+            // replace contextual values by their actual value
+            .replaceAll(/\{\{surveyId\}\}/g, ctx.surveyId)
+            .replaceAll(/\{\{editionId\}\}/g, ctx.editionId)
+            // replace wild cards by regex wild cards
+            .replaceAll(/\{\{\*\}\}/g, "(.*)")
+        )
+        console.log("this.regex", this.regex)
+    }
+    /**
+     * html2023.foobar should match "{{surveyId}}.foobar", if current survey is HTML 2023
+     * pie_chart.foobar should match "[[chart_type]].foobar", if possible chart_types are ["pie_chart", "bar_chart"]
+     * hello.title should match "{{*}}.title" wildcard
+     * @param token 
+     * @returns 
+     */
+    match(token: string) {
+        // TODO: this is a super naive implementation only supporting surveyId, editionId
+        // Instead we should transform the token expression into a grammar or a kind of regex, depending on the context
+        // so "{{surveyId}}.foobar" becomes "html2023.foobar" (literally)
+        // and "[[chart_type]].foobar" becomes "/(pie_chart|bar_chart).title/"
+        // and "{{*}}.foobar" becomes /(.*).title/
+
+        return this.regex.test(token)
+    }
+}
