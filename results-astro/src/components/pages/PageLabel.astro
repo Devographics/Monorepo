@@ -8,14 +8,14 @@ interface Props {
   includeWebsite?: boolean;
 }
 const { page, includeWebsite } = Astro.props;
-const { i18n, survey } = Astro.locals;
+const { i18n, edition } = Astro.locals;
 ---
 
 <>
   {
     getPageLabel({
       pageDefinition: page,
-      survey,
+      edition,
       t: i18n.t,
       options: { includeWebsite },
     })

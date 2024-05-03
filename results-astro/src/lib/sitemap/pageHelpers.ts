@@ -4,7 +4,13 @@ import type { PageDefinition } from "./sitemap"
 import type { EditionMetadata, SurveyMetadata } from "@devographics/types"
 import type { PageContextValue } from "@/components/layouts/PageContext"
 // TODO: get pages from the sitemap
+/**
+ * TODO: try to use a generic token expression system instead?
+ * @param pageDefinition 
+ * @returns 
+ */
 export const getPageLabelKey = (pageDefinition: PageDefinition): string =>
+    // TODO: this "OR" is an edge case in dynamic values injection, we might need to support that in the token expression language
     pageDefinition.titleId || `sections.${pageDefinition.intlId || pageDefinition.id}.title`
 
 export const getPageLabel = ({

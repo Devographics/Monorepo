@@ -5,6 +5,8 @@ import { Sidebar } from "@/components/sidebar/Sidebar"
 import { useI18n } from '@devographics/react-i18n'
 import Hamburger from '@/components/ui/Hamburger'
 import { screenReadersOnly } from '@/lib/theme/mixins'
+import { T } from '../i18n/T'
+import { tokensMap } from "./LeftMenuLayout.tokens"
 // import SurveyBanner from 'core/components/SurveyBanner'
 
 function useSidebar() {
@@ -17,6 +19,7 @@ function useSidebar() {
     }
     return [showSidebar, { closeSidebar, toggleSidebar }] as const
 }
+
 const LeftMenuLayout = ({
     showPagination,
     children
@@ -28,7 +31,7 @@ const LeftMenuLayout = ({
     const [showSidebar, { toggleSidebar, closeSidebar }] = useSidebar()
     return (
         <>
-            <a href="#page-main">{getString('general.skip_to_content')?.t}</a>
+            <a href="#page-main"><T token={tokensMap["general.skip_to_content"]} /></a>
             {/* <SurveyBanner /> */}
             <div>
                 <header>
@@ -37,7 +40,9 @@ const LeftMenuLayout = ({
                         aria-haspopup="menu"
                         aria-expanded={showSidebar}
                     >
-                        <span className={screenReadersOnly}>{getString('general.open_nav')?.t}</span>
+                        <T
+                            token={tokensMap["general.open_nav"]}
+                            className={screenReadersOnly} />
                         <Hamburger />
                     </button>
                     <Sidebar showSidebar={showSidebar} closeSidebar={closeSidebar} />

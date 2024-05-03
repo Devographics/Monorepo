@@ -1,16 +1,17 @@
 ---
 import { TK_ATTR } from "./attributes";
 const { i18n } = Astro.locals;
-const { k, values, html } = Astro.props;
+const { token, values, html } = Astro.props;
 interface Props {
-  k: string;
+  /** Can be a token expression see React T version */
+  token: string;
   values?: Record<string, string>;
   html?: boolean;
 }
-const res = i18n.t(k, values);
+const res = i18n.t(token, values);
 // the data-dg-tk parameter is used by the translation mode
 ---
 
-<span {...{ [TK_ATTR]: k }}
+<span {...{ [TK_ATTR]: token }}
   >Astro translation key {html ? res.tHtml : res.t}</span
 >

@@ -18,6 +18,8 @@ import { getLocalesWithStrings } from "@devographics/i18n/server";
 import { makeTranslatorFunc } from "@devographics/i18n";
 import type { PageDefinition } from "@/lib/sitemap";
 import { ReactContextLayout } from "@/components/layouts/ReactContextLayout";
+import reactContextTokens from "@/components/layouts/ReactContextLayout.tokens";
+
 import { GlobalClientLayout } from "@/components/layouts/GlobalClientLayout";
 
 /**
@@ -94,6 +96,7 @@ const localeWithStrings = localesWithStrings[0];
 // TODO: also get the default locale see what we do in Next
 console.log(localeWithStrings);
 
+// Translations available in all Astro components
 Astro.locals.i18n = {
   t: makeTranslatorFunc(localeWithStrings),
   locale: { id: locale },
@@ -101,11 +104,41 @@ Astro.locals.i18n = {
 };
 
 // Set page specific values
-
 const { pageDefinition } = Astro.props;
 Astro.locals.pageDefinition = pageDefinition;
 
 const { path } = Astro.params;
+
+// Filter translations to be sent client-side, for the current page
+// 1. get layout translations that are shared for all pages
+let clientSideStrings: Record<string, string> = {};
+let tokenExpressions = [...reactContextTokens];
+localeWithStrings.strings.forEach((str) => {
+  // Try to match a token expression from the client
+  const matchedExpression = tokenExpressions.find((tExpr) => {
+    // Super naive logic to translate "{{surveyId}}.foobar" into "state_of_html.foobar"
+    const resolvedToken = tExpr
+      .replaceAll(/\{\{surveyId\}\}/g, surveyId)
+      .replaceAll(/\{\{editionId\}\}/g, editionId);
+    if (str.key === resolvedToken) {
+      // match, we keep this string
+      if (clientSideStrings[resolvedToken]) {
+        console.warn(
+          `Token expression ${resolvedToken} (resolved to ${str.key}) was already matched, previous value: "${clientSideStrings[resolvedToken]}", new value: "${str.t}"`,
+        );
+      }
+      // The token key will be "{{surveyId}}.foobar"
+      // and NOT the resolved "html2022.foobar"
+      // This way the client doesn't have to bother injecting the right value,
+      // it can use token expressions with contextual values directly
+      clientSideStrings[resolvedToken] = str.t;
+      // clientSideStrings[str.k] = str.t
+    }
+  });
+});
+console.log("clientSideStrings", clientSideStrings);
+// 2. get translations for this specific page
+// TODO
 
 // TODO: normally this isn't needed, need to check my versions
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
