@@ -68,7 +68,7 @@ interface Dimensions {
     height: number
 }
 
-export function ReactContextLayout({ /*showPagination = true,*/ pageContext, children }:
+export function ReactContextLayout({ /*showPagination = true,*/ pageContext, children, locale }:
     {
         /*
         showPagination: boolean
@@ -83,7 +83,8 @@ export function ReactContextLayout({ /*showPagination = true,*/ pageContext, chi
             protocol: string
         }*/
         pageContext: PageContextValue,
-        children?: React.ReactNode
+        children?: React.ReactNode,
+        locale: any
     })
 // { showSidebar?: boolean; width?: number; height?: number }
 {
@@ -108,7 +109,7 @@ export function ReactContextLayout({ /*showPagination = true,*/ pageContext, chi
             <KeydownContextProvider>
                 <PageContextProvider pageContext={mergedPageContext}>
                     {/** Locales are being fetched into "create_pages.mjs" and "locales.mjs" */}
-                    <I18nContextProvider locale={{ id: "en-US" }}>
+                    <I18nContextProvider locale={locale}>
                         {/*
                     <ThemedLayout
                         context={mergedPageContext}

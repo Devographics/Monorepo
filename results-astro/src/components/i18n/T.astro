@@ -10,6 +10,12 @@ interface Props {
 }
 const res = i18n.t(token, values);
 // the data-dg-tk parameter is used by the translation mode
+
+// TODO: we should be able to use token expressions here,
+// in order to stay consistent with the frontend
+// like "{{surveyId}}.foobar"
+// Since we are server-side, we can easily access the full context and replace {{surveyId}} with the right value
+// we don't need something as elaborate than client-side, which also needs filtering
 ---
 
 <span {...{ [TK_ATTR]: token }}

@@ -35,6 +35,9 @@ const LeftMenuLayout = ({
             {/* <SurveyBanner /> */}
             <div>
                 <header>
+                    <T
+                        token={tokensMap["general.{{editionId}}.results_intro"]}
+                        className={screenReadersOnly} />
                     <button
                         onClick={toggleSidebar}
                         aria-haspopup="menu"

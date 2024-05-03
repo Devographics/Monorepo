@@ -21,7 +21,7 @@ import { ReactContextLayout } from "@/components/layouts/ReactContextLayout";
 import reactContextTokens from "@/components/layouts/ReactContextLayout.tokens";
 
 import { GlobalClientLayout } from "@/components/layouts/GlobalClientLayout";
-import { TokenExpr } from "@/lib/i18n/tokenExpressions";
+import { filterClientSideStrings } from "@/lib/i18n/filterClientSideStrings";
 
 /**
  * TODO: there is no ISR in Astro
@@ -91,11 +91,20 @@ const localesWithStrings = await getLocalesWithStrings({
   localeIds: [locale], //["en-US"], //
   // TODO: translationContexts are currently hard-coded in the results app code
   //  and not visible in the "surveys" repo, we need to move them there, or compute the context from the survey id
-  contexts: ["results", surveyId, surveyId + "_" + edition.year],
+  contexts: ["common", "results", surveyId, surveyId + "_" + edition.year],
 });
 const localeWithStrings = localesWithStrings[0];
-// TODO: also get the default locale see what we do in Next
-console.log(localeWithStrings);
+// Filter translations to be sent client-side, for the current page
+const tokenExprs = [...reactContextTokens];
+const clientSideStrings = filterClientSideStrings(
+  localeWithStrings.strings,
+  tokenExprs,
+  { surveyId, editionId },
+);
+const clientSideLocaleWithStrings = {
+  ...localeWithStrings,
+  strings: clientSideStrings,
+};
 
 // Translations available in all Astro components
 Astro.locals.i18n = {
@@ -110,45 +119,8 @@ Astro.locals.pageDefinition = pageDefinition;
 
 const { path } = Astro.params;
 
-// Filter translations to be sent client-side, for the current page
-// 1. get layout translations that are shared for all pages
-let clientSideStrings: Record<string, string> = {};
-// Parse token expressions
-let tokenExpressions = [...reactContextTokens].map(
-  (tExpr) => new TokenExpr(tExpr, { surveyId, editionId }),
-);
-let matchedExpressions = new Set();
-localeWithStrings.strings.forEach((str) => {
-  // Try to match a token expression from the client
-  const matchedExpr = tokenExpressions.find((tExpr) => {
-    tExpr.match(str.key);
-  });
-  if (matchedExpr) {
-    if (clientSideStrings[matchedExpr.expr]) {
-      // match, we keep this string
-      console.warn(
-        `Token expression ${matchedExpr.expr} (matched by ${str.key}) was already matched, previous value: "${clientSideStrings[matchedExpr.expr]}", new value: "${str.t}"`,
-      );
-    }
-    matchedExpressions.add(matchedExpr.expr);
-    // The token key will be "{{surveyId}}.foobar"
-    // and NOT the resolved "html2022.foobar"
-    // This way the client doesn't have to bother injecting the right value,
-    // it can use token expressions with contextual values directly
-    clientSideStrings[matchedExpr.expr] = str.t;
-    // clientSideStrings[str.k] = str.t
-  }
-});
-const missingTokens = tokenExpressions.filter(
-  (te) => !matchedExpressions.has(te),
-);
-if (missingTokens.length) {
-  console.warn(
-    "Some token expressions required by client components, were not matched",
-    missingTokens,
-  );
-}
-console.log("clientSideStrings", clientSideStrings);
+// TODO: clientSideStrings not yet used
+// they should be passed to the client context, rather than all the strings
 // 2. get translations for this specific page
 // TODO
 
@@ -166,6 +138,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
         edition,
         sitemap,
       }}
+      locale={clientSideLocaleWithStrings}
     >
       <main>
         {/* TODO get showTitle from page context */}
