@@ -9,6 +9,8 @@ import { BucketUnits, FacetBucketWithAverage, PercentileData } from '@devographi
 import { getBucketAverage } from './add_averages'
 import { CUTOFF_ANSWERS, NO_ANSWER, NOT_APPLICABLE, OVERALL } from '@devographics/constants'
 
+export const percentileSteps = [0, 10, 25, 50, 75, 90, 100]
+
 // Decorate facet bucket with average
 const decorateWithAverages = (
     facetBuckets: FacetBucket[],

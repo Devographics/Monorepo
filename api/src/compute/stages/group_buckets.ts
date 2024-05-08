@@ -1,10 +1,10 @@
-import { FacetBucket, OptionGroup } from '@devographics/types'
+import { Entity, FacetBucket, OptionGroup, Token } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import { NO_ANSWER } from '@devographics/constants'
 import uniq from 'lodash/uniq.js'
 import compact from 'lodash/compact.js'
 import { mergeBuckets } from './mergeBuckets'
-import intersection from 'lodash/intersection.js'
+import { getEntity } from '../../load/entities'
 
 const isInBounds = (n: number, lowerBound?: number, upperBound?: number) => {
     if (lowerBound && upperBound) {
@@ -18,7 +18,7 @@ const isInBounds = (n: number, lowerBound?: number, upperBound?: number) => {
     }
 }
 
-function getGroupedBuckets<T extends Bucket | FacetBucket>({
+async function getGroupedBuckets<T extends Bucket | FacetBucket>({
     groups,
     buckets,
     primaryAxis,
@@ -34,7 +34,8 @@ function getGroupedBuckets<T extends Bucket | FacetBucket>({
     const noAnswerBucket = buckets.find(b => b.id === NO_ANSWER)
     // keep track of the ids of all buckets that got matched into a group
     let groupedBucketIds: string[] = []
-    let groupedBuckets = groups.map(group => {
+    let groupedBuckets: T[] = []
+    for (const group of groups) {
         const { id: groupId, upperBound, lowerBound, items } = group
         let selectedBuckets: T[]
         if (lowerBound || upperBound) {
@@ -60,15 +61,26 @@ function getGroupedBuckets<T extends Bucket | FacetBucket>({
             ]
         }
 
+        // if created grouped bucket has associated entity/token, add them here
+        const mergedProps: { id: string; entity?: Entity; token?: Token } = { id: groupId }
+        const entity = await getEntity({ id: groupId })
+        const token = await getEntity({ id: groupId, includeNormalizationEntities: true })
+
+        if (entity) {
+            mergedProps.entity = entity
+        }
+        if (token) {
+            mergedProps.token = token
+        }
         const bucket = mergeBuckets<T>({
             buckets: selectedBuckets,
-            mergedProps: { id: groupId },
+            mergedProps,
             primaryAxis,
             secondaryAxis,
             isFacetBuckets
         })
-        return bucket
-    })
+        groupedBuckets.push(bucket)
+    }
 
     // add any remaning buckets that were not matched into groups as standalone buckets
     // so that we don't lose any data
@@ -116,7 +128,7 @@ export async function groupBuckets(
         if (axis2 && axis2.enableBucketGroups && axis2.question.groups) {
             // first, group facetBuckets if needed
             for (let bucket of editionData.buckets) {
-                bucket.facetBuckets = getGroupedBuckets<FacetBucket>({
+                bucket.facetBuckets = await getGroupedBuckets<FacetBucket>({
                     groups: axis2.question.groups,
                     buckets: bucket.facetBuckets,
                     primaryAxis: axis2,
@@ -127,7 +139,7 @@ export async function groupBuckets(
         if (axis1.enableBucketGroups) {
             const groups = axis1.question.groups || getParentIdGroups(editionData.buckets)
             if (groups) {
-                const groupedBuckets = getGroupedBuckets<Bucket>({
+                const groupedBuckets = await getGroupedBuckets<Bucket>({
                     groups,
                     buckets: editionData.buckets,
                     primaryAxis: axis1,
