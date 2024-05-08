@@ -100,6 +100,7 @@ export interface ResponseEditionData {
     buckets: Bucket[]
     average?: number
     percentiles?: PercentileData
+    median?: number
 }
 
 export interface OptionData extends Option {
