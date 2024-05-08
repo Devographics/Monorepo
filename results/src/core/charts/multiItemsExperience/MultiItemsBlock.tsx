@@ -33,7 +33,7 @@ export const sortOptions = {
 
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
     const { series, block, question } = props
-    const { items } = series[0].data
+    const items = series[0].data
 
     if (!items) {
         console.log(series)
