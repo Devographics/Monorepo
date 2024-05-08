@@ -24,6 +24,7 @@ export type LabelObject = {
     key?: string
     label: string
     shortLabel: string
+    description?: string
 }
 
 const getFields = (item: any, fields: string[]) => {
@@ -60,7 +61,7 @@ export const getItemLabel = (options: {
         html = false
     } = options
 
-    let key, label, shortLabel
+    let key, label, shortLabel, description
 
     if (providedLabel) {
         // if a label is provided, use that
@@ -75,13 +76,19 @@ export const getItemLabel = (options: {
 
         const i18nLabelObject = getString(key, values)
         const i18nLabel = getFields(i18nLabelObject, [html ? 'tHtml' : 'tClean', 't'])
+        const entityName = entity && getFields(entity, [html ? 'nameHtml' : 'nameClean', 'name'])
 
         const shortLabelObject = getString(key + '.short', values, i18nLabel)
 
-        const entityName = entity && getFields(entity, [html ? 'nameHtml' : 'nameClean', 'name'])
+        const i18nDescriptionObject = getString(key, values)
+        const i18nDescription = getFields(i18nDescriptionObject, [html ? 'tHtml' : 'tClean', 't'])
+        const entityDescription =
+            entity &&
+            getFields(entity, [html ? 'descriptionHtml' : 'descriptionClean', 'description'])
 
         label = String(i18nLabel || entityName || id)
         shortLabel = getFields(shortLabelObject, [html ? 'tHtml' : 'tClean', 't']) || label
+        description = i18nDescription || entityDescription
     }
-    return { key, label, shortLabel }
+    return { key, label, shortLabel, description }
 }

@@ -1,12 +1,11 @@
 import './Rows.scss'
 import React from 'react'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { Gridlines } from './Gridlines'
 import Axis from './Axis'
-import { Bucket } from '@devographics/types'
 import { ShowAll } from './ShowAll'
 import { ChartState } from '../horizontalBar2/types'
 import { ChartValues } from '../multiItemsExperience/types'
+import { Tick } from './types'
 
 export const Rows = ({
     chartState,
@@ -20,7 +19,7 @@ export const Rows = ({
     chartState: ChartState
     chartValues: ChartValues
     children: React.ReactNode
-    ticks?: number[]
+    ticks?: Tick[]
     labelId?: string
     formatValue?: (v: number) => string
     hasZebra?: boolean

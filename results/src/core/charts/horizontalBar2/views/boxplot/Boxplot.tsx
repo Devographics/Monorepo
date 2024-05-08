@@ -1,23 +1,23 @@
 import './Boxplot.scss'
 import React, { useMemo, useRef } from 'react'
 import { RowDataProps, ViewDefinition, ViewProps } from '../../types'
-import { BAR_HEIGHT, RespondentCount, Row, RowWrapper, Rows } from 'core/charts/common2'
+import { Axis, BAR_HEIGHT, RespondentCount, Row, RowWrapper, Rows } from 'core/charts/common2'
 import { BoxProps, HorizontalBox } from './Box'
-import { RowCommonProps, RowExtraProps } from 'core/charts/common2/types'
+import { RowCommonProps, RowExtraProps, Tick } from 'core/charts/common2/types'
 import { useTheme } from 'styled-components'
 import * as d3 from 'd3'
-import AxisBottom from './Axis'
+import { Axis as BoxplotAxis } from './Axis'
 import { BlockLegend } from 'core/types'
 import { useWidth } from 'core/charts/common2/helpers'
 import { useBoxplotData, useScales } from './helpers'
 import { formatValue } from '../../helpers/labels'
 import { removeNoAnswer } from '../../helpers/steps'
 
-const PIXEL_PER_TICKS = 130
+const PIXEL_PER_TICKS = 100
 
 const BoxplotView = (viewProps: ViewProps) => {
     const { chartState, chartValues } = viewProps
-    const { question, facetQuestion } = chartValues
+    const { facetQuestion } = chartValues
     const theme = useTheme()
     const { buckets } = viewProps
     const contentHeight = BAR_HEIGHT
@@ -26,7 +26,8 @@ const BoxplotView = (viewProps: ViewProps) => {
         return null
     }
 
-    // note: we need the bottom axis to be able to calculate the content width
+    // note: we need a placeholder that's part of the grid/subgrid layout
+    // to be able to calculate the content width
     const contentRef = useRef<HTMLDivElement>(null)
     const contentWidth = useWidth(contentRef) || 0
 
@@ -47,6 +48,18 @@ const BoxplotView = (viewProps: ViewProps) => {
     const legends = [] as BlockLegend[]
 
     const { xScale, yScale } = useScales({ chartMax, contentHeight, contentWidth, groups })
+
+    const range = xScale.range()
+
+    const ticks: Tick[] = useMemo(() => {
+        const width = range[1] - range[0]
+        const numberOfTicksTarget = Math.floor(width / PIXEL_PER_TICKS)
+        return xScale.ticks(numberOfTicksTarget).map(value => ({
+            value,
+            xOffset: xScale(value)
+        }))
+    }, [xScale])
+
     const rowProps = {
         ...viewProps,
         labelFormatter,
@@ -56,31 +69,43 @@ const BoxplotView = (viewProps: ViewProps) => {
         contentHeight,
         xScale,
         yScale,
-        contentWidth
+        contentWidth,
+        ticks
     }
 
     return (
         <div className="chart-boxplot-view">
             <Rows {...viewProps} hasZebra={true}>
-                {buckets.map((bucket, i) => (
-                    <Row key={bucket.id} bucket={bucket} {...rowProps} rowComponent={BoxplotRow} />
-                ))}
-            </Rows>
-            <div className="chart-axis chart-axis-bottom">
-                <div></div>
-                <div className="chart-row-content" ref={contentRef}>
-                    <svg className="boxplot-svg">
-                        <AxisBottom
-                            xScale={xScale}
-                            pixelsPerTick={PIXEL_PER_TICKS}
-                            labelFormatter={labelFormatter}
-                            legends={legends}
-                            stroke={theme.colors.text}
+                <>
+                    <div className="chart-row chart-boxplot-placeholder">
+                        <div className="chart-row-content" ref={contentRef} />
+                    </div>
+
+                    <Axis ticks={ticks} variant="top" formatValue={labelFormatter} />
+
+                    {buckets.map((bucket, i) => (
+                        <Row
+                            key={bucket.id}
+                            bucket={bucket}
+                            {...rowProps}
+                            rowComponent={BoxplotRow}
                         />
-                    </svg>
-                </div>
-                <div></div>
-            </div>
+                    ))}
+
+                    <Axis ticks={ticks} variant="bottom" formatValue={labelFormatter} />
+                    {/* <div className="chart-axis chart-axis-bottom">
+                        <div className="chart-row-content">
+                            <BoxplotAxis
+                                ticks={ticks}
+                                labelFormatter={labelFormatter}
+                                legends={legends}
+                                stroke={theme.colors.text}
+                                variant="bottom"
+                            />
+                        </div>
+                    </div> */}
+                </>
+            </Rows>
         </div>
     )
 }

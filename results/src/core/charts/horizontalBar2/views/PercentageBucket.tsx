@@ -66,7 +66,14 @@ export const PercentageBucket: ViewDefinition = {
         return (
             <Rows
                 {...props}
-                ticks={[0, 20, 40, 60, 80, 100]}
+                ticks={[
+                    { value: 0 },
+                    { value: 20 },
+                    { value: 40 },
+                    { value: 60 },
+                    { value: 80 },
+                    { value: 100 }
+                ]}
                 formatValue={t => `${t}%`}
                 labelId="charts.axis_legends.users_percentageBucket"
                 hasZebra={true}

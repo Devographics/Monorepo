@@ -45,15 +45,15 @@ export const Cell = ({
 }) => {
     const { ref, isWideEnough: showLabel } = useIsWideEnough()
 
-    const entities = useEntities()
-    const entity = entities.find(e => e.id === bucket.id)
+    // const entities = useEntities()
+    // const entity = entities.find(e => e.id === bucket.id)
     const { question, facetQuestion } = chartValues
     const { view, sort } = chartState
     const viewDefinition = getViewDefinition(view)
     const { getValue } = viewDefinition
     const { getString } = useI18n()
 
-    const { id, count } = bucket
+    const { id, count, entity, token } = bucket
     const value = getValue(bucket)
     const style = {
         '--percentageValue': value,

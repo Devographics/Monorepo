@@ -10,9 +10,15 @@ export const Count: ViewDefinition = {
     steps: [removeNoAnswer],
     component: props => {
         return (
-            <Rows {...props}>
+            <Rows {...props} hasZebra={true}>
                 {props.buckets.map((bucket, i) => (
-                    <Row key={bucket.id} bucket={bucket} {...props} rowComponent={SingleBarRow} />
+                    <Row
+                        key={bucket.id}
+                        bucket={bucket}
+                        {...props}
+                        rowComponent={SingleBarRow}
+                        showCount={false}
+                    />
                 ))}
             </Rows>
         )

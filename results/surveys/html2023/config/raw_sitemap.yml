@@ -86,6 +86,9 @@
         parameters: { limit: 20 }
         description: >
             While many respondents (**19%**) came from the U.S., we also had strong representation from Germany, France, the U.K., and the Netherlands (**24% combined**), reflecting the liveliness of the front end community in these countries.
+        variants:
+            - template: vs_salary
+              parameters: { limit: 20, sort: { property: medianByFacet, order: desc } }
 
       - id: locale
         template: multiple_options2
@@ -105,66 +108,60 @@
         template: multiple_options2
         description: >
             Survey respondents were on average **33.6** years old, slightly higher than the [State of JS](https://2022.stateofjs.com) (**32.2**) and [State of CSS](https://2023.stateofcss.com) (**33.5**) surveys.
+        variants:
+            - template: vs_salary
 
       - id: years_of_experience
         template: multiple_options2
         description: >
             Respondents had on average **10.7** years of web development experience.
+        variants:
+            - template: vs_salary
 
       - id: company_size
         template: multiple_options2
         description: >
             Respondents tended to work for mostly mid-sized organizations, with a median company size of **75** employees.
         variants:
-            - id: company_size_vs_yearly_salary
-              fieldId: company_size
-              template: multiple_options2
-              parameters:
-                  showNoAnswer: true
-              filtersState:
-                  options:
-                      mode: facet
-                  facet:
-                      sectionId: user_info
-                      id: yearly_salary
+            - template: vs_salary
 
-            - id: company_size_vs_gender
-              fieldId: company_size
-              template: multiple_options2
-              parameters:
-                  showNoAnswer: true
-              filtersState:
-                  options:
-                      mode: facet
-                  facet:
-                      sectionId: user_info
-                      id: gender
+            # - id: company_size_vs_gender
+            #   fieldId: company_size
+            #   template: multiple_options2
+            #   parameters:
+            #       showNoAnswer: true
+            #   filtersState:
+            #       options:
+            #           mode: facet
+            #       facet:
+            #           sectionId: user_info
+            #           id: gender
 
-            - id: company_size_by_gender
-              fieldId: company_size
-              template: multiple_options2
-              parameters:
-                  showNoAnswer: true
-              filtersState:
-                  options:
-                      showDefaultSeries: false
-                      mode: grid
-                  filters:
-                      - conditions:
-                            - fieldId: gender
-                              sectionId: user_info
-                              operator: eq
-                              value: male
-                      - conditions:
-                            - fieldId: gender
-                              sectionId: user_info
-                              operator: eq
-                              value: female
-                      - conditions:
-                            - fieldId: gender
-                              sectionId: user_info
-                              operator: eq
-                              value: non_binary
+            # - id: company_size_by_gender
+            #   fieldId: company_size
+            #   template: multiple_options2
+            #   parameters:
+            #       showNoAnswer: true
+            #   filtersState:
+            #       options:
+            #           showDefaultSeries: false
+            #           mode: grid
+            #       filters:
+            #           - conditions:
+            #                 - fieldId: gender
+            #                   sectionId: user_info
+            #                   operator: eq
+            #                   value: male
+            #           - conditions:
+            #                 - fieldId: gender
+            #                   sectionId: user_info
+            #                   operator: eq
+            #                   value: female
+            #           - conditions:
+            #                 - fieldId: gender
+            #                   sectionId: user_info
+            #                   operator: eq
+            #                   value: non_binary
 
       - id: variants_hint
         template: hint
@@ -179,34 +176,14 @@
         description: >
             Having a higher-education degree did not translate in meaningful differences in yearly income.
         variants:
-            - id: higher_education_degree_vs_yearly_salary
-              fieldId: higher_education_degree
-              template: multiple_options2
-              parameters:
-                  showNoAnswer: true
-              filtersState:
-                  options:
-                      mode: facet
-                  facet:
-                      sectionId: user_info
-                      id: yearly_salary
+            - template: vs_salary
 
       - id: gender
         template: multiple_options2
         description: >
             Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries tended to fare worse.
         variants:
-            - id: gender_vs_yearly_salary
-              fieldId: gender
-              template: multiple_options2
-              parameters:
-                  showNoAnswer: true
-              filtersState:
-                  options:
-                      mode: facet
-                  facet:
-                      sectionId: user_info
-                      id: yearly_salary
+            - template: vs_salary
             - id: country_vs_gender
               fieldId: country
               template: multiple_options2
@@ -225,19 +202,10 @@
       - id: race_ethnicity
         template: multiple_options2_combined
         description: >
-            The survey's non-white population tended to have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
+            The survey's non-white population tended to be younger and have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
         variants:
-            - id: race_ethnicity_vs_years_of_experience
-              fieldId: race_ethnicity
-              template: multiple_options2
-              parameters:
-                  showNoAnswer: true
-              filtersState:
-                  options:
-                      mode: facet
-                  facet:
-                      sectionId: user_info
-                      id: years_of_experience
+            - template: vs_years_of_experience
+            - template: vs_age
 
       - id: disability_status
         template: multiple_options2_combined

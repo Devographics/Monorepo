@@ -13,15 +13,19 @@ export const getDefaultState = ({
     block: BlockVariantDefinition
 }) => {
     const defaultState = {} as ChartState
-    if (facetQuestion) {
-        defaultState.facet = { id: facetQuestion.id, sectionId: facetQuestion.sectionId }
-        if (facetQuestion.optionsAreSequential) {
-            defaultState.view = Views.BOXPLOT
-        } else {
-            defaultState.view = Views.PERCENTAGE_BUCKET
-        }
+    if (block.defaultView) {
+        defaultState.view = block.defaultView
     } else {
-        defaultState.view = Views.PERCENTAGE_QUESTION
+        if (facetQuestion) {
+            defaultState.facet = { id: facetQuestion.id, sectionId: facetQuestion.sectionId }
+            if (facetQuestion.optionsAreSequential || facetQuestion.optionsAreNumeric) {
+                defaultState.view = Views.BOXPLOT
+            } else {
+                defaultState.view = Views.PERCENTAGE_BUCKET
+            }
+        } else {
+            defaultState.view = Views.PERCENTAGE_QUESTION
+        }
     }
     if (block?.chartOptions?.limit) {
         defaultState.rowsLimit = block.chartOptions.limit
@@ -32,7 +36,6 @@ export const getDefaultState = ({
     if (block?.filtersState?.options?.order) {
         defaultState.order = block?.filtersState?.options?.order
     }
-    console.log(block)
     return defaultState
 }
 

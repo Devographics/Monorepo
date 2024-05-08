@@ -10,7 +10,7 @@ import { FreeformIndicator, RespondentCount } from '../common2'
 
 export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
     const theme = useTheme()
-    const { bucket, chartState, chartValues } = props
+    const { bucket, chartState, chartValues, showCount = true } = props
     const { isFreeformData } = bucket
     const { question, maxOverallValue = 1 } = chartValues
     const viewDefinition = getViewDefinition(chartState.view)
@@ -19,8 +19,12 @@ export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProp
     const width = (100 * value) / maxOverallValue
     const gradient = theme.colors.barChart.primaryGradient
 
+    const rowWrapperProps = showCount
+        ? { ...props, rowMetadata: <RespondentCount count={bucket.count} /> }
+        : props
+
     return (
-        <RowWrapper {...props} rowMetadata={<RespondentCount count={bucket.count} />}>
+        <RowWrapper {...rowWrapperProps}>
             <>
                 <Cell
                     bucket={bucket}

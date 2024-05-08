@@ -45,7 +45,7 @@ const Arrow = styled(RadixTooltip.Arrow)`
 export const Tooltip = ({ trigger, contents, asChild = true, clickable = false }) => (
     <RadixTooltip.Provider>
         <RadixTooltip.Root delayDuration={100}>
-            <Trigger asChild={asChild} $clickable={clickable}>
+            <Trigger className="tooltip-trigger" asChild={asChild} $clickable={clickable}>
                 {trigger}
             </Trigger>
             <RadixTooltip.Portal>

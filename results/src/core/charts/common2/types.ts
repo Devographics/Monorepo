@@ -15,10 +15,11 @@ export type RowCommonProps = {
     rowIndex: number
     allRowsCellDimensions: Dimension[][]
     allRowsOffsets: number[]
-    ticks?: number[]
+    ticks?: Tick[]
 }
 
 export type RowExtraProps = {
+    showCount?: boolean
     containerWidth: number
     isGroupedBucket?: boolean
     showGroupedBuckets?: boolean
@@ -51,4 +52,9 @@ export type CommonProps = {
 export type ViewProps = CommonProps & {
     buckets: Bucket[]
     chartValues: ChartValues
+}
+
+export type Tick = {
+    value: number
+    xOffset?: number
 }

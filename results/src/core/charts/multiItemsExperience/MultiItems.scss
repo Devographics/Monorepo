@@ -30,6 +30,7 @@
     }
     .chart-rows {
         row-gap: calc(var(--spacing) * 3);
+        padding-bottom: var(--doubleSpacing);
     }
 }
 .multiexp-controls {

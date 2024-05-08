@@ -3,18 +3,19 @@ import './Axis.scss'
 import React from 'react'
 import max from 'lodash/max'
 import round from 'lodash/round'
+import { Tick } from './types'
 
 export const getTicks = (values: number[]) => {
     const NUMBER_OF_TICKS = 5
     const maxValue = max(values) || 0
     const ticks = [...Array(NUMBER_OF_TICKS + 1)].map(
-        (a, i) => round((i * maxValue) / NUMBER_OF_TICKS),
+        (a, i) => ({ value: round((i * maxValue) / NUMBER_OF_TICKS) }),
         1
     )
     return ticks
 }
 
-export const getInterval = (ticks: number[]) => 100 / (ticks.length - 1)
+export const getInterval = (tickCount: number) => 100 / (tickCount - 1)
 
 export const Axis = ({
     variant,
@@ -23,23 +24,34 @@ export const Axis = ({
     formatValue
 }: {
     variant: 'top' | 'bottom'
-    ticks: number[]
+    ticks: Tick[]
     labelId?: string
     formatValue: (v: number) => string
 }) => {
+    const interval = getInterval(ticks.length)
+
     return (
         <div className={`chart-axis chart-axis-${variant}`}>
             <div className="chart-axis-inner">
                 <div className="chart-axis-ticks">
-                    {ticks.map((tick, index) => (
-                        <div
-                            key={tick}
-                            className="chart-axis-tick"
-                            style={{ '--index': index, '--interval': getInterval(ticks) }}
-                        >
-                            <div className="chart-axis-tick-label">{formatValue(tick)}</div>
-                        </div>
-                    ))}
+                    {ticks.map((tick, index) => {
+                        // if a tick's xOffset is specified, use it as a px value
+                        // if not, assume all ticks are spaced out equally using % values
+                        const xOffset = tick.xOffset ? `${tick.xOffset}px` : `${index * interval}%`
+                        return (
+                            <div
+                                key={tick.value}
+                                className="chart-axis-tick"
+                                style={{
+                                    '--xOffset': xOffset
+                                }}
+                            >
+                                <div className="chart-axis-tick-label">
+                                    {formatValue(tick.value)}
+                                </div>
+                            </div>
+                        )
+                    })}
                 </div>
                 {variant === 'bottom' && labelId && (
                     <div className="chart-axis-label">
