@@ -26,6 +26,7 @@ export const getQuestionData = async ({
   const queryArgs = { parameters: { enableCache: shouldGetFromCache } };
   const data = await fetchQuestionData({
     shouldGetFromCache,
+    getQuery: getQuestionDataQuery,
     ...queryOptions,
     queryArgs,
   });

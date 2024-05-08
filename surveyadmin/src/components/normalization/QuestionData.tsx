@@ -26,6 +26,63 @@ type QuestionDataProps = {
   setTokenFilter: CommonNormalizationProps["setTokenFilter"];
   setShowModal: Dispatch<SetStateAction<boolean>>;
 };
+
+export const ViewQuestionData = (props) => {
+  const { questionDataQuery, responses, survey, edition, question, entities } =
+    props;
+  const [loading, setLoading] = useState(false);
+  return (
+    <ModalTrigger
+      isButton={false}
+      label="📊 Results"
+      tooltip="View tabulated results for current question"
+      header={
+        <div>
+          Current Normalized Results{" "}
+          {/* <a
+          role="button"
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            setShowData(!showData);
+          }}
+        >
+          {showData ? "Hide" : "Show"}
+        </a> */}
+          <a
+            role="button"
+            href="#"
+            aria-busy={loading}
+            onClick={async (e) => {
+              setLoading(true);
+              e.preventDefault();
+              await loadQuestionData({
+                surveyId: survey.id,
+                editionId: edition.id,
+                sectionId: question.section.id,
+                questionId: question.id,
+                shouldGetFromCache: false,
+              });
+              setLoading(false);
+            }}
+          >
+            Refresh
+          </a>
+        </div>
+      }
+    >
+      <Contents {...props} />
+    </ModalTrigger>
+  );
+};
+
+const Contents = (props) => (
+  <>
+    <textarea defaultValue={props.questionDataQuery} />
+    <QuestionData {...props} />
+  </>
+);
+
 const QuestionData = ({
   questionData,
   responses,
@@ -56,6 +113,7 @@ const QuestionData = ({
                 <tr>
                   <th></th>
                   <th>ID</th>
+                  <th>Label</th>
                   <th>Count</th>
                 </tr>
               </thead>
@@ -113,8 +171,11 @@ const Row = ({
   setTokenFilter: QuestionDataProps["setTokenFilter"];
   setShowModal: QuestionDataProps["setShowModal"];
 }) => {
-  const { id, count } = bucket;
+  const { id, count, entity, token } = bucket;
   const rowClass = `row row-${isGroupedBucket ? "sub-row" : "normal-row"}`;
+  const label =
+    entity?.nameHtml || entity?.name || token?.nameHtml || token?.name || "";
+  const description = token?.descriptionClean || entity?.descriptionClean || "";
   return (
     <tr key={id} className={rowClass}>
       <td>{!isGroupedBucket && `${index + 1}.`}</td>
@@ -135,63 +196,15 @@ const Row = ({
           </span>
         )}
       </td>
+      <td>
+        <span
+          data-tooltip={description}
+          dangerouslySetInnerHTML={{
+            __html: label,
+          }}
+        />
+      </td>
       <td>{count}</td>
     </tr>
   );
 };
-
-export const ViewQuestionData = (props) => {
-  const { questionDataQuery, responses, survey, edition, question, entities } =
-    props;
-  const [loading, setLoading] = useState(false);
-  return (
-    <ModalTrigger
-      isButton={false}
-      label="📊 Results"
-      tooltip="View tabulated results for current question"
-      header={
-        <div>
-          Current Normalized Results{" "}
-          {/* <a
-          role="button"
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            setShowData(!showData);
-          }}
-        >
-          {showData ? "Hide" : "Show"}
-        </a> */}
-          <a
-            role="button"
-            href="#"
-            aria-busy={loading}
-            onClick={async (e) => {
-              setLoading(true);
-              e.preventDefault();
-              await loadQuestionData({
-                surveyId: survey.id,
-                editionId: edition.id,
-                sectionId: question.section.id,
-                questionId: question.id,
-                shouldGetFromCache: false,
-              });
-              setLoading(false);
-            }}
-          >
-            Refresh
-          </a>
-        </div>
-      }
-    >
-      <Contents {...props} />
-    </ModalTrigger>
-  );
-};
-
-const Contents = (props) => (
-  <>
-    <textarea defaultValue={props.questionDataQuery} />
-    <QuestionData {...props} />
-  </>
-);
