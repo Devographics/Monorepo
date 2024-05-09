@@ -1,3 +1,4 @@
+import { RawDataItem } from '@devographics/types/normalization'
 import { ResultsSubFieldEnum } from './api'
 import { Entity, Token } from './entities'
 import { Option } from './outlines'
@@ -89,8 +90,9 @@ export interface Comment {
 }
 
 export interface ResponseData {
-    allEditions: [ResponseEditionData]
+    allEditions: ResponseEditionData[]
     currentEdition: ResponseEditionData
+    rawData: RawDataItem[]
 }
 
 export interface ResponseEditionData {

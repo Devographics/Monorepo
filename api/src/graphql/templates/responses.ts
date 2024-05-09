@@ -31,7 +31,7 @@ export const generateResponsesType = ({
         typeDef: `type ${typeName} {
     allEditions: [ResponseEditionData]
     currentEdition: ResponseEditionData
-    rawData: [RawData]
+    rawData(token: String): [RawData]
 }`
     }
 }
