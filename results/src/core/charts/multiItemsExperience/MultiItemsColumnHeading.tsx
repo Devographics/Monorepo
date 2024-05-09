@@ -62,6 +62,7 @@ export const ColumnHeading = ({
                         md={true}
                     />
                 }
+                showBorder={false}
             />
         </div>
     )

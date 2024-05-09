@@ -1,7 +1,7 @@
 import React from 'react'
 import '../common2/ChartsCommon.scss'
 import './MultiItems.scss'
-import { FeaturesOptions, Option, SimplifiedSentimentOptions } from '@devographics/types'
+import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
 import { MultiItemsExperienceControls } from './MultiItemsControls'
 import { CellDimension, GroupingOptions, MultiItemsExperienceBlockProps } from './types'
 import {
@@ -18,13 +18,12 @@ import {
 } from './helpers'
 import { Row } from './MultiItemsRow'
 import Rows from '../common2/Rows'
-import { ChartWrapper, Legend, Note, ShowAll } from '../common2'
+import { ChartWrapper, Legend, Note } from '../common2'
 import { useTheme } from 'styled-components'
 import min from 'lodash/min'
 import max from 'lodash/max'
 import take from 'lodash/take'
 import { NoteContents } from './MultiItemsNote'
-import charts from 'core/theme/charts'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),

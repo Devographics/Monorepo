@@ -89,6 +89,7 @@ export const Cell = ({
                     md={true}
                 />
             }
+            showBorder={false}
         />
     )
 }

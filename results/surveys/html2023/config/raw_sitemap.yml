@@ -54,25 +54,25 @@
 #             xAxis: user_info__yearly_salary
 #             yAxis: user_info__years_of_experience
 
-- id: takeaways
-  path: /takeaways
-  blocks:
-      - id: takeaways
-        blockType: TakeawaysBlock
-        disableExport: true
-        wrapBlock: false
-        items:
-            - id: median_salary_2023
-            - id: previous_compensation_2023
-            - id: negotiated_compensation_2023
-            - id: unemployed_respondents_2023
-            - id: job_search_status_2023
-            - id: international_subsidiary_2023
-            - id: remote_work_2023
-            - id: women_vs_men_experience_2023
-            - id: women_vs_men_professional_qualifications_2023
-            - id: overtime_2023
-            - id: programming_languages_2023
+# - id: takeaways
+#   path: /takeaways
+#   blocks:
+#       - id: takeaways
+#         blockType: TakeawaysBlock
+#         disableExport: true
+#         wrapBlock: false
+#         items:
+#             - id: median_salary_2023
+#             - id: previous_compensation_2023
+#             - id: negotiated_compensation_2023
+#             - id: unemployed_respondents_2023
+#             - id: job_search_status_2023
+#             - id: international_subsidiary_2023
+#             - id: remote_work_2023
+#             - id: women_vs_men_experience_2023
+#             - id: women_vs_men_professional_qualifications_2023
+#             - id: overtime_2023
+#             - id: programming_languages_2023
 
 - id: user_info
   titleId: sections.demographics.title
@@ -601,8 +601,7 @@
       - id: conclusion
         template: conclusion
         variables:
-            author: chen_hui_jing
-            entities: '"chen_hui_jing"'
+            author: sacha_greif
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock

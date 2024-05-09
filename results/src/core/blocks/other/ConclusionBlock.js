@@ -5,10 +5,9 @@ import T from 'core/i18n/T'
 import CreditItem from 'core/blocks/other/CreditItem'
 import { usePageContext } from 'core/helpers/pageContext'
 
-const ConclusionBlock = ({ block, data: entities }) => {
+const ConclusionBlock = ({ block, data: author }) => {
     const { currentEdition } = usePageContext()
-    const entity = entities && entities.find(e => e.id === block.variables.author)
-    if (!entity) {
+    if (!author) {
         return null
     }
     return (
@@ -18,8 +17,8 @@ const ConclusionBlock = ({ block, data: entities }) => {
                     <T k="sections.conclusion.title" />
                 </Title> */}
                 <CreditItem
-                    id={block.variables.author}
-                    entity={entity}
+                    id={author.id}
+                    entity={author}
                     labelId={`conclusion.${currentEdition.id}.bio`}
                 />
             </Heading>
