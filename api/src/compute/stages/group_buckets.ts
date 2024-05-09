@@ -1,6 +1,6 @@
 import { Entity, FacetBucket, OptionGroup, Token } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
-import { NO_ANSWER } from '@devographics/constants'
+import { CATCHALL_PREFIX, NO_ANSWER } from '@devographics/constants'
 import uniq from 'lodash/uniq.js'
 import compact from 'lodash/compact.js'
 import { mergeBuckets } from './mergeBuckets'
@@ -57,7 +57,7 @@ async function getGroupedBuckets<T extends Bucket | FacetBucket>({
             groupedBucketIds.push(catchAllBucket.id)
             selectedBuckets = [
                 ...selectedBuckets,
-                { ...catchAllBucket, id: `catchall_${catchAllBucket.id}` }
+                { ...catchAllBucket, id: `${CATCHALL_PREFIX}${catchAllBucket.id}` }
             ]
         }
 

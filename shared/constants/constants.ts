@@ -60,3 +60,5 @@ export const POSITIVE_SENTIMENT = 'positive'
 export const NEGATIVE_SENTIMENT = 'negative'
 
 export const SENTIMENT_FACET = '_sentiment'
+
+export const CATCHALL_PREFIX = 'catchall_'
