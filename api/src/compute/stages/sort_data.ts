@@ -100,7 +100,7 @@ export function sortBucketsAndFacets(
     if (axis2) {
         // then, sort facetBuckets if they exist
         for (let bucket of sortedBuckets) {
-            bucket.facetBuckets = sortBuckets<FacetBucket>(bucket.facetBuckets, axis2, true)
+            bucket.facetBuckets = sortBuckets<FacetBucket>(bucket.facetBuckets, axis2)
         }
     }
     return sortedBuckets

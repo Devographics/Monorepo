@@ -13,6 +13,7 @@ export const Row = (props: { rowComponent: RowComponent } & RowDataProps & RowCo
     const RowComponent = rowComponent
     const rowComponentProps = {
         ...props,
+        hasGroupedBuckets,
         ...(hasGroupedBuckets ? { showGroupedBuckets, setShowGroupedBuckets } : {})
     }
     return (

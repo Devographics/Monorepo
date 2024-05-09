@@ -160,6 +160,9 @@ type Token {
     name: String
     nameClean: String
     nameHtml: String
+    description: String
+    descriptionClean: String
+    descriptionHtml: String
 }
 
 """

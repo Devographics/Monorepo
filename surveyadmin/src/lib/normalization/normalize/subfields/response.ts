@@ -5,6 +5,7 @@ import {
   SubfieldProcessFunction,
   getQuestionPaths,
 } from "../normalizeField";
+import uniq from "lodash/uniq.js";
 
 export const response: SubfieldProcessFunction = async ({
   edition,
@@ -18,7 +19,11 @@ export const response: SubfieldProcessFunction = async ({
   // start by copying over the "main" response value
   if (rawPaths.response && normPaths.response) {
     const fieldPath = prefixWithEditionId(rawPaths.response, edition.id);
-    const responseValue = response[fieldPath];
+    let responseValue = response[fieldPath];
+    // if value is an array, remove any duplicates
+    if (Array.isArray(responseValue)) {
+      responseValue = uniq(responseValue);
+    }
     const isNotUndefined = typeof responseValue !== "undefined";
     // if question has a filter function associated, use it to test validity of response
     const isValid = filterFunction

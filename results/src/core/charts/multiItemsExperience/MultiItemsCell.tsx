@@ -89,6 +89,7 @@ export const Cell = ({
                     md={true}
                 />
             }
+            showBorder={false}
         />
     )
 }
@@ -136,6 +137,7 @@ export const ColumnTotal = ({
                     md={true}
                 />
             }
+            showBorder={false}
         />
     )
 }

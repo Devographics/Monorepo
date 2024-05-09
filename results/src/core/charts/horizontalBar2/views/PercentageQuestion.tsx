@@ -1,7 +1,7 @@
 import React from 'react'
 import { SingleBarRow } from '../HorizontalBarRow'
 import { ViewDefinition } from '../types'
-import { Axis, Row, Rows, getTicks } from 'core/charts/common2'
+import { Row, Rows, getTicks } from 'core/charts/common2'
 import { removeNoAnswer, removeOverLimit, removeOtherAnswers } from '../helpers/steps'
 import { Bucket, BucketUnits, FacetBucket } from '@devographics/types'
 
@@ -26,6 +26,7 @@ export const PercentageQuestion: ViewDefinition = {
                         ticks={ticks}
                         bucket={bucket}
                         rowComponent={SingleBarRow}
+                        rowIndex={i}
                         {...props}
                     />
                 ))}

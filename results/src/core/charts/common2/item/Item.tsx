@@ -38,7 +38,7 @@ export const Item = ({
     i18nNamespace?: string
 }) => {
     const { getString } = useI18n()
-    const label = getItemLabel({
+    const labelObject = getItemLabel({
         id,
         label: providedLabel,
         entity,
@@ -49,7 +49,7 @@ export const Item = ({
     if (!entity) {
         return (
             <Wrapper type="noEntity">
-                <Label label={label} />
+                <Label label={labelObject} />
             </Wrapper>
         )
     } else if (entity.type === EntityType.DEFAULT || !entityHasData(entity)) {
@@ -57,13 +57,13 @@ export const Item = ({
         if (linkUrl) {
             return (
                 <Wrapper type="default">
-                    <Label label={label} href={linkUrl} />
+                    <Label label={labelObject} href={linkUrl} />
                 </Wrapper>
             )
         } else {
             return (
                 <Wrapper type="default">
-                    <Label label={label} />
+                    <Label label={labelObject} />
                 </Wrapper>
             )
         }
@@ -77,9 +77,9 @@ export const Item = ({
         return (
             <Popover
                 trigger={
-                    <Button className={`chart-item chart-item-${entity.type}`}>
+                    <Button className={`chart-item chart-item-entity chart-item-${entity.type}`}>
                         <IconComponent entity={entity} size="petite" />
-                        <Label label={label} />
+                        <Label label={labelObject} />
                     </Button>
                 }
             >
@@ -96,18 +96,21 @@ const Wrapper = ({ children, type }: { children: ReactNode; type: string }) => (
 )
 
 const Label = ({ label: label_, href }: { label: LabelObject; href?: string }) => {
-    const { label, shortLabel, key } = label_
-    const LabelComponent = href ? 'a' : 'span'
-    return (
-        <Tooltip
-            trigger={
-                <LabelComponent
-                    className="chart-item-label"
-                    {...(href ? { href } : {})}
-                    dangerouslySetInnerHTML={{ __html: label }}
-                />
-            }
-            contents={<div>{label}</div>}
+    const { label, description, shortLabel, key } = label_
+    const LabelElement = href ? 'a' : 'span'
+    const labelComponent = (
+        <LabelElement
+            className={`chart-item-label ${description ? 'withTooltip' : ''}`}
+            {...(href ? { href } : {})}
+            dangerouslySetInnerHTML={{ __html: shortLabel }}
         />
+    )
+    return description ? (
+        <Tooltip
+            trigger={labelComponent}
+            contents={<div dangerouslySetInnerHTML={{ __html: description }} />}
+        />
+    ) : (
+        labelComponent
     )
 }

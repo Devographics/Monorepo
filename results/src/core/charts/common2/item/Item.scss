@@ -11,6 +11,11 @@
     text-overflow: ellipsis;
     max-width: 300px;
 }
+.chart-item-entity {
+    .tooltip-trigger {
+        border-bottom: none;
+    }
+}
 button.chart-item {
     padding: 4px 8px 4px 4px;
     border-radius: 500px;

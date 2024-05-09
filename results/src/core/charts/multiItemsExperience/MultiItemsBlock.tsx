@@ -1,7 +1,7 @@
 import React from 'react'
 import '../common2/ChartsCommon.scss'
 import './MultiItems.scss'
-import { FeaturesOptions, Option, SimplifiedSentimentOptions } from '@devographics/types'
+import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
 import { MultiItemsExperienceControls } from './MultiItemsControls'
 import { CellDimension, GroupingOptions, MultiItemsExperienceBlockProps } from './types'
 import {
@@ -18,13 +18,12 @@ import {
 } from './helpers'
 import { Row } from './MultiItemsRow'
 import Rows from '../common2/Rows'
-import { ChartWrapper, Legend, Note, ShowAll } from '../common2'
+import { ChartWrapper, Legend, Note } from '../common2'
 import { useTheme } from 'styled-components'
 import min from 'lodash/min'
 import max from 'lodash/max'
 import take from 'lodash/take'
 import { NoteContents } from './MultiItemsNote'
-import charts from 'core/theme/charts'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -33,7 +32,7 @@ export const sortOptions = {
 
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
     const { series, block, question } = props
-    const { items } = series[0].data
+    const items = series[0].data
 
     if (!items) {
         console.log(series)
@@ -140,7 +139,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
 
                 <Rows {...commonProps}>
                     {combinedItems.map((item, i) => (
-                        <Row key={item.id} rowIndex={i} item={item} {...commonProps} />
+                        <Row key={item.id + i} rowIndex={i} item={item} {...commonProps} />
                     ))}
                 </Rows>
                 <Note>

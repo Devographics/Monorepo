@@ -22,7 +22,7 @@ import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
 import { localesResolvers } from '../resolvers/locales'
 import { subFields } from './subfields'
-import { ResultsSubFieldEnum } from '@devographics/types'
+import { ResultsSubFieldEnum, Section } from '@devographics/types'
 import { loadOrGetParsedSurveys } from '../load/surveys'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
@@ -246,9 +246,19 @@ const getSectionResolver =
         edition: EditionApiObject
         section: SectionApiObject
     }): ResolverType =>
-    (parent, args, context, info) => {
+    async (parent, args, context, info) => {
         console.log('// section resolver')
-        return section
+        const _items = await getItems({
+            survey,
+            edition,
+            section,
+            type: 'features',
+            context
+        })
+        return {
+            ...section,
+            _items
+        }
     }
 
 const getQuestionResolverMap = async ({
@@ -350,7 +360,8 @@ export const currentEditionResolver: ResolverType = async (parent, args, context
 export const rawDataResolver: ResolverType = async (parent, args, context, info) => {
     console.log('// rawDataResolver')
     const { survey, edition, section, question } = parent
-    return await getRawData({ survey, edition, section, question, context })
+    const { token } = args
+    return await getRawData({ survey, edition, section, question, context, token })
 }
 
 export const responsesResolverMap: ResolverMap = {
@@ -514,19 +525,53 @@ Resolver map used for section_features, section_tools
 
 // if this is the main "Features" or "Tools" section, return every item; else return
 // only items for current section
-const getItems = (parent: ResolverParent, type: 'tools' | 'features') =>
-    ['features', 'tools'].includes(parent.section.id)
-        ? getEditionItems(parent.edition, type)
-        : getSectionItems(parent.section, type)
 
-export const getSectionToolsFeaturesResolverMap = (type: 'tools' | 'features'): ResolverMap => ({
-    items: (parent, args, context) => {
-        return getItems(parent, type).map(question => ({
-            ...parent,
-            question,
-            entity: getEntity({ id: question.id, context })
-        }))
-    },
-    ids: parent => getItems(parent, type).map(q => q.id),
+const getItems = async ({
+    survey,
+    edition,
+    section,
+    type,
+    context
+}: {
+    survey: SurveyApiObject
+    edition: EditionApiObject
+    section: SectionApiObject
+    type: 'tools' | 'features'
+    context: RequestContext
+}) => {
+    const items = ['features', 'tools'].includes(section.id)
+        ? getEditionItems(edition, type)
+        : getSectionItems(section, type)
+
+    return items.map(async question => ({
+        survey,
+        edition,
+        section,
+        question,
+        entity: await getEntity({ id: question.id, context })
+    }))
+}
+
+export const getSectionToolsFeaturesResolverMap = async (
+    type: 'tools' | 'features'
+): Promise<ResolverMap> => ({
+    items: async (parent, args, context) =>
+        await getItems({
+            survey: parent.survey,
+            edition: parent.edition,
+            section: parent.section,
+            type,
+            context
+        }),
+    ids: async (parent, args, context) =>
+        (
+            await getItems({
+                survey: parent.survey,
+                edition: parent.edition,
+                section: parent.section,
+                type,
+                context
+            })
+        ).map(q => q.question.id),
     years: parent => parent.survey.editions.map(e => e.year)
 })

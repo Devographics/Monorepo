@@ -216,7 +216,7 @@ const Comments = ({ comments, name }: { comments: Comment[]; name: string }) => 
     )
 }
 
-const getCommentReportUrl = ({
+export const getCommentReportUrl = ({
     responseId,
     message,
     name
@@ -310,18 +310,18 @@ const CommentsList = styled.div`
     row-gap: ${spacing()}; */
 `
 
-const CommentItem_ = styled.div`
+export const CommentItem_ = styled.div`
     margin-bottom: ${spacing()};
 `
 
-const CommentMessageWrapper = styled.div`
+export const CommentMessageWrapper = styled.div`
     border-radius: 5px;
     background: ${({ theme }) => theme.colors.backgroundAlt2};
     padding: ${spacing()};
     position: relative;
 `
 
-const CommentIndex = styled.div`
+export const CommentIndex = styled.div`
     font-weight: bold;
     font-size: 1.8rem;
     position: absolute;
@@ -332,7 +332,7 @@ const CommentIndex = styled.div`
     opacity: 0.15;
 `
 
-const CommentQuote = styled.div`
+export const CommentQuote = styled.div`
     font-size: 6rem;
     position: absolute;
     top: 0px;
@@ -342,22 +342,22 @@ const CommentQuote = styled.div`
     ${secondaryFontMixin}
 `
 
-const CommentMessage = styled.div``
+export const CommentMessage = styled.div``
 
-const CommentReportLink = styled.a`
-    font-size: 0.6rem;
+export const CommentReportLink = styled.a`
+    font-size: 0.7rem;
     margin-top: 3px;
     text-align: right;
     display: block;
 `
 
-const CommentFooter_ = styled.div`
+export const CommentFooter_ = styled.div`
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
 `
 
-const CommentResponse_ = styled.div`
+export const CommentResponse_ = styled.div`
     display: flex;
     gap: 10px;
     position: relative;

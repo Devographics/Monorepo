@@ -53,8 +53,8 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
         <ChartWrapper className="chart-horizontal-bar">
             <>
                 {/* <pre>
-                <code>{JSON.stringify(chartState, null, 2)}</code>
-            </pre> */}
+                    <code>{JSON.stringify(chartState, null, 2)}</code>
+                </pre> */}
 
                 {facetQuestion && <FacetHeading facetQuestion={facetQuestion} {...commonProps} />}
 

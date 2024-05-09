@@ -39,12 +39,18 @@ export const generateSectionType = ({
 }): TypeDefTemplateOutput => {
     const typeName = `${graphqlize(edition.id)}${graphqlize(section.id)}Section`
 
+    // TODO: find better way to figure out if a section is a feature or tool section
+    const isFeatureOrToolSection =
+        section.id === 'features' ||
+        (section.template && ['featurev3', 'tool'].includes(section.template))
+
     return {
         generatedBy: 'section',
         path,
         typeName,
         typeType: TypeTypeEnum.SECTION,
         typeDef: `type ${typeName} {
+            ${isFeatureOrToolSection ? `_items: [${graphqlize(survey.id)}Feature]` : ''}
     ${section.questions
         .filter(q => q.hasApiEndpoint !== false)
         .map((question: QuestionApiObject) => {

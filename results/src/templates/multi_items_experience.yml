@@ -6,62 +6,60 @@ query: >
       ${surveyId} {
         ${editionId} {
           ${sectionId} {
-            ${questionId}: _${sectionId}_items {
-              items {
-                id
-                entity {
+            ${questionId}: _items {
+              id
+              entity {
+                name
+                nameClean
+                nameHtml
+                type
+                description
+                descriptionClean
+                descriptionHtml
+                homepage {
+                  url
+                }
+                caniuse {
                   name
-                  nameClean
-                  nameHtml
-                  type
-                  description
-                  descriptionClean
-                  descriptionHtml
-                  homepage {
-                    url
-                  }
-                  caniuse {
-                    name
-                    url
-                  }
-                  mdn {
-                    locale
-                    url
-                    title
-                    summary
-                  }
-                  example {
-                    label
-                    language
-                    code
-                    codeHighlighted
-                  }
+                  url
                 }
-                comments {
-                  currentEdition {
+                mdn {
+                  locale
+                  url
+                  title
+                  summary
+                }
+                example {
+                  label
+                  language
+                  code
+                  codeHighlighted
+                }
+              }
+              comments {
+                currentEdition {
+                  count
+                }
+              }
+              responses(facet: _sentiment) {
+                currentEdition {
+                  buckets {
                     count
-                  }
-                }
-                responses(facet: _sentiment) {
-                  currentEdition {
-                    buckets {
+                    id
+                    facetBuckets {
                       count
                       id
-                      facetBuckets {
-                        count
-                        id
-                        percentageBucket
-                        percentageQuestion
-                        percentageSurvey
-                      }
+                      percentageBucket
                       percentageQuestion
                       percentageSurvey
                     }
-                    completion {
-                      count
-                      percentageSurvey
-                      total
-                    }
+                    percentageQuestion
+                    percentageSurvey
+                  }
+                  completion {
+                    count
+                    percentageSurvey
+                    total
                   }
                 }
               }

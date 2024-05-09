@@ -171,7 +171,7 @@ export const CharPercent = () => (
         ></path>
     </>
 )
-export const characters = {
+export const characters: { [key in string | number]: () => JSX.Element } = {
     1: Char1,
     2: Char2,
     3: Char3,

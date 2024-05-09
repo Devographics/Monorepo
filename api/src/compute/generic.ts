@@ -411,6 +411,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await logToFile('last_query/match.json', match)
         await logToFile('last_query/pipeline.json', pipeline)
         await logToFile('last_query/rawResults.yml', results)
+
+        const normalizedCollectionName = survey?.normalizedCollectionName || 'normalized_responses'
+        await logToFile('last_query/database.yml', { db: db.namespace, normalizedCollectionName })
     }
 
     if (!axis2) {
@@ -454,8 +457,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await runStage(addPercentiles, [results, axis2, axis1])
 
         if (executionContext === ExecutionContext.REGULAR) {
-            await runStage(sortData, [results, axis2, axis1])
-
             // bucket grouping
             await runStage(groupBuckets, [results, axis2, axis1])
 
@@ -472,6 +473,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             if (axis2.enableBucketGroups && axis2.question.groups) {
                 axis2.options = axis2.question.groups
             }
+            await runStage(sortData, [results, axis2, axis1])
+
             await runStage(limitData, [results, axis2, axis1])
 
             // group any "non-standard" bucket, including cutoff data, unmatched answers,

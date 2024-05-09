@@ -42,10 +42,20 @@ const Arrow = styled(RadixTooltip.Arrow)`
     stroke-width: 2px;
 `
 
-export const Tooltip = ({ trigger, contents, asChild = true, clickable = false }) => (
+export const Tooltip = ({
+    trigger,
+    contents,
+    asChild = true,
+    clickable = false,
+    showBorder = true
+}) => (
     <RadixTooltip.Provider>
         <RadixTooltip.Root delayDuration={100}>
-            <Trigger asChild={asChild} $clickable={clickable}>
+            <Trigger
+                className={`tooltip-trigger ${showBorder ? 'tooltip-trigger-withBorder' : ''}`}
+                asChild={asChild}
+                $clickable={clickable}
+            >
                 {trigger}
             </Trigger>
             <RadixTooltip.Portal>

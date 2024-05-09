@@ -152,7 +152,7 @@ export enum OptionsOrder {
     ALPHA = 'alphabetical'
 }
 
-export type SortProperty = 'options' | 'count' | 'percent' | 'id'
+export type SortProperty = 'options' | 'count' | 'percent' | 'id' | 'averageByFacet' | 'mean'
 
 /**
  * Keep in sync with QuestionMetadata in

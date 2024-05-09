@@ -70,6 +70,12 @@ export interface Token {
   parentId?: string;
   tags?: string[];
   patterns?: string[];
+  name?: string;
+  nameClean?: string;
+  nameHtml?: string;
+  description?: string;
+  descriptionClean?: string;
+  descriptionHtml?: string;
 }
 
 export interface Resource {

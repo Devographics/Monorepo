@@ -232,12 +232,19 @@ export const findEntity = (id: string, entities: Entity[], tag?: string) => {
         )
     })
 
-    // in case of multiple entities with same id, we can also pass a tag to break ties
-    if (matchingEntities.length > 1 && tag) {
-        return matchingEntities.find(e => e.tags?.includes(tag)) || matchingEntities[0]
-    } else {
-        return matchingEntities[0]
+    // keep the first entity we found
+    const entity = matchingEntities[0]
+
+    // if we're passing a tag, then find the version of the entity with that tag,
+    // and use that to figure out the parentId
+    if (tag) {
+        const entityWithTag = matchingEntities.find(e => e.tags?.includes(tag))
+        if (entityWithTag) {
+            entity.parentId = entityWithTag?.parentId
+        }
     }
+
+    return entity
 }
 
 export const getEntity = async ({

@@ -27,6 +27,8 @@ export function mergeBuckets<T extends Bucket | FacetBucket>({
 
     const groupedBuckets = sortBuckets(buckets, primaryAxis)
 
+    const mergedPercentiles = mergePercentiles(buckets)
+
     const mergedBucket = {
         groupedBuckets,
         groupedBucketIds: groupedBuckets.map(b => b.id),
@@ -37,7 +39,8 @@ export function mergeBuckets<T extends Bucket | FacetBucket>({
             sumBy(buckets, b => b[BucketUnits.AVERAGE] || 0) / buckets.length,
             2
         ),
-        [BucketUnits.PERCENTILES]: mergePercentiles(buckets),
+        [BucketUnits.PERCENTILES]: mergedPercentiles,
+        [BucketUnits.MEDIAN]: mergedPercentiles.p50,
         ...(isFacetBuckets
             ? { [BucketUnits.PERCENTAGE_BUCKET]: getSum(BucketUnits.PERCENTAGE_BUCKET) }
             : {}),

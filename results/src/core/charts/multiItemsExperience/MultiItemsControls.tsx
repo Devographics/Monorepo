@@ -33,7 +33,7 @@ export const MultiItemsExperienceControls = ({ chartState }: { chartState: Chart
                                 className={`Button--${isChecked ? 'selected' : 'unselected'}`}
                                 onClick={() => {
                                     setGrouping(id)
-                                    setSort(sortOptions[id][0])
+                                    // setSort(sortOptions[id][0])
                                 }}
                                 aria-pressed={isChecked}
                             >

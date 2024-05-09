@@ -18,3 +18,9 @@ export interface FullNormalizationToken extends CustomNormalizationToken {
     rules: number
     range: [number, number]
 }
+
+export interface RawDataItem {
+    responseId: string
+    raw: string
+    tokens: NormalizationToken[]
+}

@@ -7,7 +7,6 @@ import { RowWrapper } from '../common2/RowWrapper'
 import { Bucket } from '@devographics/types'
 import { RespondentCount } from '../common2'
 import { Comments } from '../common2/Comments'
-import { BlockVariantDefinition } from 'core/types'
 
 export const Row = (props: {
     allRowsCellDimensions: CellDimension[][]
@@ -58,7 +57,7 @@ export const Row = (props: {
                         return (
                             <>
                                 <Cell
-                                    key={item.id + combinedBucket.id + i}
+                                    key={combinedBucket.id}
                                     combinedBucket={combinedBucket}
                                     chartState={chartState}
                                     width={width}

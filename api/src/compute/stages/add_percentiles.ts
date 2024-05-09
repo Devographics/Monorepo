@@ -9,6 +9,8 @@ import { BucketUnits, FacetBucketWithAverage, PercentileData } from '@devographi
 import { getBucketAverage } from './add_averages'
 import { CUTOFF_ANSWERS, NO_ANSWER, NOT_APPLICABLE, OVERALL } from '@devographics/constants'
 
+export const percentileSteps = [0, 10, 25, 50, 75, 90, 100]
+
 // Decorate facet bucket with average
 const decorateWithAverages = (
     facetBuckets: FacetBucket[],
@@ -208,17 +210,25 @@ export async function addPercentiles(
         for (let editionData of resultsByEdition) {
             // calculate percentiles of all top-level buckets
             if (calculateAxis1Percentiles) {
-                editionData.percentiles = calculatePercentiles({
+                const percentiles = calculatePercentiles({
                     buckets: editionData.buckets.filter(b => b.id !== OVERALL),
                     axis: axis1
                 })
+                editionData.percentiles = percentiles
+                editionData.median = percentiles.p50
             }
             // calculate percentiles of all facet buckets for each top-level bucket
             if (calculateAxis2Percentiles) {
                 for (let bucket of editionData.buckets) {
-                    bucket[BucketUnits.PERCENTILES] = bucket.hasInsufficientData
+                    const percentiles = bucket.hasInsufficientData
                         ? zeroPercentiles
-                        : calculatePercentiles({ buckets: bucket.facetBuckets, axis: axis2 })
+                        : calculatePercentiles({
+                              buckets: bucket.facetBuckets,
+                              axis: axis2
+                          })
+
+                    bucket[BucketUnits.PERCENTILES] = percentiles
+                    bucket[BucketUnits.MEDIAN] = percentiles.p50
                 }
             }
         }

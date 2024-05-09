@@ -74,7 +74,7 @@ export interface IconWrapperProps extends IconProps {
 }
 const IconWrapper = ({
     className = '',
-    enableHover = true,
+    enableHover = false,
     enableTooltip = true,
     labelId,
     label,

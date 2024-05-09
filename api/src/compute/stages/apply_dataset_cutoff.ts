@@ -23,6 +23,7 @@ const getZeroBucket = <T extends Bucket | FacetBucket>(bucket: T) => ({
     [BucketUnits.PERCENTAGE_SURVEY]: 0,
     [BucketUnits.PERCENTILES]: zeroPercentiles,
     [BucketUnits.AVERAGE]: 0,
+    [BucketUnits.MEDIAN]: 0,
     hasInsufficientData: true
 })
 

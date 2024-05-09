@@ -8,7 +8,7 @@ import { isSpecialBucket } from './limit_data'
 import { mergeBuckets } from './mergeBuckets'
 
 export function mergePercentiles(buckets: Bucket[] | FacetBucket[]) {
-    const percentileKeys = ['p0', 'p25', 'p50', 'p75', 'p100'] as Percentiles[]
+    const percentileKeys = ['p0', 'p10', 'p25', 'p50', 'p75', 'p90', 'p100'] as Percentiles[]
     const percentiles = {} as PercentileData
     for (const key of percentileKeys) {
         const values = compact(buckets.map(b => b?.percentilesByFacet?.[key]))

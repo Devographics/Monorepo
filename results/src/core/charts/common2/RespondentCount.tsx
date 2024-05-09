@@ -1,11 +1,12 @@
 import { UserIcon } from 'core/icons'
 import './RespondentCount.scss'
 import React from 'react'
+import { formatNumber } from './helpers'
 
 export const RespondentCount = ({ count }: { count?: number }) => {
     return (
         <div className="chart-respondent-count">
-            <UserIcon size={'small'} /> {count || 0}
+            <UserIcon size={'small'} /> {formatNumber(count || 0)}
         </div>
     )
 }
