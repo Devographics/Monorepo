@@ -17,8 +17,10 @@ import { initTheme } from "@/lib/theme";
 import { getLocalesWithStrings } from "@devographics/i18n/server";
 import { makeTranslatorFunc } from "@devographics/i18n";
 import type { PageDefinition } from "@/lib/sitemap";
-import { ReactContextLayout } from "@/components/layouts/ReactContextLayout";
-import reactContextTokens from "@/components/layouts/ReactContextLayout.tokens";
+import {
+  ReactContextLayout,
+  tokens as ReactContextLayoutTokens,
+} from "@/components/layouts/ReactContextLayout";
 
 import { GlobalClientLayout } from "@/components/layouts/GlobalClientLayout";
 import { filterClientSideStrings } from "@/lib/i18n/filterClientSideStrings";
@@ -95,7 +97,7 @@ const localesWithStrings = await getLocalesWithStrings({
 });
 const localeWithStrings = localesWithStrings[0];
 // Filter translations to be sent client-side, for the current page
-const tokenExprs = [...reactContextTokens];
+const tokenExprs = [...ReactContextLayoutTokens];
 const clientSideStrings = filterClientSideStrings(
   localeWithStrings.strings,
   tokenExprs,

@@ -2,7 +2,7 @@
 // TODO: make node:test work with TS to avoid depending on Bun ?
 // Run this file with bun test
 import { test, expect } from "bun:test"
-import { TokenExpr } from "./tokenExpressions"
+import { TokenExpr } from "./tokenExpr"
 
 const makeCtx = () => ({
     editionId: "html2022", surveyId: "state_of_html"

@@ -1,5 +1,5 @@
 import type { Translation } from "@devographics/i18n";
-import { TokenExpr } from "./tokenExpressions";
+import { TokenExpr } from "./tokenExpr";
 
 /**
  * 
