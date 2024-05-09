@@ -7,10 +7,11 @@ import { getViewDefinition } from './helpers/views'
 import { useGradient } from './helpers/colors'
 import { useTheme } from 'styled-components'
 import { FreeformIndicator, RespondentCount } from '../common2'
+import { FreeformAnswersTrigger } from '../common2/FreeformAnswers'
 
 export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
     const theme = useTheme()
-    const { bucket, chartState, chartValues, showCount = true } = props
+    const { block, bucket, chartState, chartValues, showCount = true } = props
     const { isFreeformData } = bucket
     const { question, maxOverallValue = 1 } = chartValues
     const viewDefinition = getViewDefinition(chartState.view)
@@ -19,9 +20,20 @@ export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProp
     const width = (100 * value) / maxOverallValue
     const gradient = theme.colors.barChart.primaryGradient
 
-    const rowWrapperProps = showCount
-        ? { ...props, rowMetadata: <RespondentCount count={bucket.count} /> }
-        : props
+    const isFreeformQuestion =
+        block.template && ['multiple_options2_freeform'].includes(block.template)
+
+    const rowMetadata = isFreeformQuestion ? (
+        <FreeformAnswersTrigger
+            bucket={bucket}
+            questionId={question.id}
+            sectionId={block.sectionId}
+            block={block}
+        />
+    ) : (
+        <RespondentCount count={bucket.count} />
+    )
+    const rowWrapperProps = showCount ? { ...props, rowMetadata } : props
 
     return (
         <RowWrapper {...rowWrapperProps}>

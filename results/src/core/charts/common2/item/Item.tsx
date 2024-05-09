@@ -102,7 +102,7 @@ const Label = ({ label: label_, href }: { label: LabelObject; href?: string }) =
         <LabelElement
             className={`chart-item-label ${description ? 'chart-item-label-withTooltip' : ''}`}
             {...(href ? { href } : {})}
-            dangerouslySetInnerHTML={{ __html: label }}
+            dangerouslySetInnerHTML={{ __html: shortLabel }}
         />
     )
     return description ? (
