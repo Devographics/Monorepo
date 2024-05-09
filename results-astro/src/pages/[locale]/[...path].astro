@@ -14,8 +14,7 @@ import { astroEditionWithSitemap } from "@/fetchers/surveyWithSitemap";
 import PageTemplate from "@/components/pages/PageTemplate.astro";
 import { initTheme } from "@/lib/theme";
 // Reason why we use the Bundler moduleResolution: https://stackoverflow.com/questions/58990498/package-json-exports-field-not-working-with-typescript
-import { getLocalesWithStrings } from "@devographics/i18n/server";
-import { makeTranslatorFunc } from "@devographics/i18n";
+import { getLocaleWithStrings } from "@devographics/i18n/server";
 import type { PageDefinition } from "@/lib/sitemap";
 import {
   ReactContextLayout,
@@ -24,6 +23,7 @@ import {
 
 import { GlobalClientLayout } from "@/components/layouts/GlobalClientLayout";
 import { filterClientSideStrings } from "@/lib/i18n/filterClientSideStrings";
+import { astroI18nCtx } from "@/lib/i18n/serverContext";
 
 /**
  * TODO: there is no ISR in Astro
@@ -86,36 +86,26 @@ const theme = initTheme();
 Astro.locals.theme = theme;
 
 // I18n
-const { locale } = Astro.params; // TODO: is there a better way to handle mandatory params in Astro?
+const { locale } = Astro.params;
 if (!locale) throw new Error("Can't render without locale");
 // TODO: we should load locales one at a time during rendering, we don't need all of them at once
-const localesWithStrings = await getLocalesWithStrings({
-  localeIds: [locale], //["en-US"], //
-  // TODO: translationContexts are currently hard-coded in the results app code
+const localeWithStrings = await getLocaleWithStrings({
+  localeId: locale,
+  // TODO: "translationContexts" for a survey are currently hard-coded in the results app code
   //  and not visible in the "surveys" repo, we need to move them there, or compute the context from the survey id
   contexts: ["common", "results", surveyId, surveyId + "_" + edition.year],
 });
-const localeWithStrings = localesWithStrings[0];
+// Translation logic available in all Astro components
+Astro.locals.i18n = astroI18nCtx(localeWithStrings);
 // Filter translations to be sent client-side, for the current page
 const tokenExprs = [...ReactContextLayoutTokens];
-const clientSideStrings = filterClientSideStrings(
-  localeWithStrings.strings,
+const clientLocaleWithStrings = filterClientSideStrings(
+  localeWithStrings,
   tokenExprs,
   { surveyId, editionId },
 );
-const clientSideLocaleWithStrings = {
-  ...localeWithStrings,
-  strings: clientSideStrings,
-};
 
-// Translations available in all Astro components
-Astro.locals.i18n = {
-  t: makeTranslatorFunc(localeWithStrings),
-  locale: { id: locale },
-  localizePath: (p) => `/${locale}${path}`,
-};
-
-// Set page specific values
+// Set page specific server context
 const { pageDefinition } = Astro.props;
 Astro.locals.pageDefinition = pageDefinition;
 
@@ -140,7 +130,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
         edition,
         sitemap,
       }}
-      locale={clientSideLocaleWithStrings}
+      locale={clientLocaleWithStrings}
     >
       <main>
         {/* TODO get showTitle from page context */}

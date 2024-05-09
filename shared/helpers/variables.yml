@@ -326,6 +326,16 @@
   usedBy:
       - surveyform
       - results
+      - results-astro
+
+- id: DISABLE_REDIS_CACHE
+  optional: true
+  description: Set to `true` to always fetch data via API
+  example: "'true' or ''"
+  usedBy:
+      - surveyform
+      - results
+      - results-astro
 
 - id: PORT
   optional: true

@@ -1,5 +1,7 @@
-import type { Translation } from "@devographics/i18n";
+import type { LocaleWithStrings, Translation } from "@devographics/i18n";
 import { TokenExpr } from "./tokenExpr";
+
+
 
 /**
  * 
@@ -15,7 +17,8 @@ import { TokenExpr } from "./tokenExpr";
  * This may create a slight mismatch with how pure server components work for now,
  * we need to study that later on, maybe use token expressions in RSCs/Astro components too
  */
-export function filterClientSideStrings(allStrings: Array<Translation>, rawExprs: Array<string>, ctx: { surveyId: string, editionId: string }): Array<Translation> {
+export function filterClientSideStrings(locale: LocaleWithStrings, rawExprs: Array<string>, ctx: { surveyId: string, editionId: string }): LocaleWithStrings {
+    const allStrings = locale.strings
     let clientSideStrings: Record<string, string> = {};
     // Parse expressions
     const tExprs = rawExprs.map((rawExpr) => new TokenExpr(rawExpr, ctx))
@@ -49,5 +52,8 @@ export function filterClientSideStrings(allStrings: Array<Translation>, rawExprs
         );
     }
     // Use the same shape as strings
-    return Object.entries(clientSideStrings).map(([key, t]) => ({ key, t } as Translation))
+    return {
+        ...locale,
+        strings: Object.entries(clientSideStrings).map(([key, t]) => ({ key, t } as Translation))
+    }
 }
