@@ -136,6 +136,7 @@ export const ColumnTotal = ({
                     md={true}
                 />
             }
+            showBorder={false}
         />
     )
 }

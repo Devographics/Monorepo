@@ -88,6 +88,7 @@ export const Cell = ({
                     <T k="charts.facet_respondents" values={{ count }} />
                 </div>
             }
+            showBorder={false}
         />
     )
 }

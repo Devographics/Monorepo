@@ -46,6 +46,9 @@
     &-overall {
         background: #ffffff22;
     }
+    &:hover {
+        background: #ffffff11;
+    }
 }
 
 .chart-row-content {
@@ -75,6 +78,15 @@
 
 .chart-row-left {
     grid-area: heading;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing);
+}
+.chart-row-index {
+    color: var(--textAltColor);
+    opacity: 0.5;
+    font-size: 1.1rem;
 }
 .chart-row-content {
     grid-area: content;

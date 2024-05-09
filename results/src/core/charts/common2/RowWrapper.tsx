@@ -12,7 +12,15 @@ export const RowWrapper = (
         RowCommonProps &
         RowExtraProps & { rowMetadata?: JSX.Element; children: JSX.Element }
 ) => {
-    const { chartState, ticks, bucket, isGroupedBucket = false, children, rowMetadata } = props
+    const {
+        chartState,
+        ticks,
+        bucket,
+        isGroupedBucket = false,
+        children,
+        rowMetadata,
+        rowIndex
+    } = props
     const { isFreeformData } = bucket
     const isOverallBucket = bucket.id === OVERALL
     const className = classNames(
@@ -24,6 +32,7 @@ export const RowWrapper = (
     return (
         <div className={className}>
             <div className="chart-row-left">
+                <div className="chart-row-index">{rowIndex + 1}</div>
                 <RowHeading {...props} />
             </div>
             <div className="chart-row-content">

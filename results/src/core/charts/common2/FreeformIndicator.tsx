@@ -14,6 +14,7 @@ export const FreeformIndicator = ({ showLabel = false }: { showLabel?: boolean }
                 </div>
             }
             contents={<T k="charts.freeform_data.description" />}
+            showBorder={false}
         />
     )
 }

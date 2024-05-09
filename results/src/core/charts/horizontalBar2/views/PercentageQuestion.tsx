@@ -26,6 +26,7 @@ export const PercentageQuestion: ViewDefinition = {
                         ticks={ticks}
                         bucket={bucket}
                         rowComponent={SingleBarRow}
+                        rowIndex={i}
                         {...props}
                     />
                 ))}

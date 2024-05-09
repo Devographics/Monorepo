@@ -15,9 +15,6 @@
             display: flex;
             align-items: center;
         }
-        .chart-row-left {
-            justify-content: flex-end;
-        }
         @include small {
             row-gap: var(--halfSpacing);
         }

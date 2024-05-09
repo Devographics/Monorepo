@@ -21,9 +21,10 @@ export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProp
     const gradient = theme.colors.barChart.primaryGradient
 
     const isFreeformQuestion =
-        block.template && ['multiple_options2_freeform'].includes(block.template)
+        block.template &&
+        ['multiple_options2_freeform'].includes(block.template) &&
+        block.id !== 'source'
 
-    console.log(props)
     const rowMetadata = isFreeformQuestion ? (
         <FreeformAnswersTrigger
             bucket={bucket}
@@ -49,7 +50,6 @@ export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProp
                     chartValues={chartValues}
                     gradient={gradient}
                 />
-
                 {isFreeformData && (
                     <div className="chart-row-freeform-icon-wrapper" style={{ '--offset': width }}>
                         <FreeformIndicator />
