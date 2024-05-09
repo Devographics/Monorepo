@@ -11,7 +11,7 @@ import { FreeformAnswersTrigger } from '../common2/FreeformAnswers'
 
 export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
     const theme = useTheme()
-    const { block, bucket, chartState, chartValues, showCount = true } = props
+    const { block, bucket, chartState, chartValues, showCount = true, hasGroupedBuckets } = props
     const { isFreeformData } = bucket
     const { question, maxOverallValue = 1 } = chartValues
     const viewDefinition = getViewDefinition(chartState.view)
@@ -23,12 +23,14 @@ export const SingleBarRow = (props: RowDataProps & RowCommonProps & RowExtraProp
     const isFreeformQuestion =
         block.template && ['multiple_options2_freeform'].includes(block.template)
 
+    console.log(props)
     const rowMetadata = isFreeformQuestion ? (
         <FreeformAnswersTrigger
             bucket={bucket}
             questionId={question.id}
             sectionId={block.sectionId}
             block={block}
+            enableModal={!hasGroupedBuckets}
         />
     ) : (
         <RespondentCount count={bucket.count} />

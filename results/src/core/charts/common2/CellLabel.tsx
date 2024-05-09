@@ -7,7 +7,7 @@ export const CellLabel = ({ label }: { label: string }) => (
         {[...label].map((char, index) => {
             const Component = characters[char]
             return (
-                <CharWrapper>
+                <CharWrapper key={char + index}>
                     <Component key={index} />
                 </CharWrapper>
             )

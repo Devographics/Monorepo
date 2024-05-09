@@ -10,12 +10,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 300px;
-    &-withTooltip {
-        border-bottom: 1px dotted #ffffff99;
-    }
 }
 .chart-item-entity {
-    .chart-item-label-withTooltip {
+    .tooltip-trigger {
         border-bottom: none;
     }
 }

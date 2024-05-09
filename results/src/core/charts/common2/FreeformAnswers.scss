@@ -1,4 +1,10 @@
-.freeform-answers-heading {
+.chart-freeform-answers {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.chart-freeform-answers-heading {
     div {
         display: inline;
     }

@@ -140,7 +140,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
 
                 <Rows {...commonProps}>
                     {combinedItems.map((item, i) => (
-                        <Row key={item.id} rowIndex={i} item={item} {...commonProps} />
+                        <Row key={item.id + i} rowIndex={i} item={item} {...commonProps} />
                     ))}
                 </Rows>
                 <Note>

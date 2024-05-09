@@ -20,6 +20,7 @@ import T from 'core/i18n/T'
 import { runQuery } from 'core/explorer/data'
 import { formatNumber } from './helpers'
 import { Bucket, RawDataItem, StandardQuestionData } from '@devographics/types'
+import { CATCHALL_PREFIX } from '@devographics/constants'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { BlockVariantDefinition } from 'core/types'
 
@@ -68,15 +69,22 @@ export const FreeformAnswersTrigger = (props: {
     questionId: string
     sectionId: string
     block: BlockVariantDefinition
+    enableModal: boolean
 }) => {
-    const { questionId, bucket, sectionId, block } = props
+    const { questionId, bucket, sectionId, block, enableModal } = props
     const { id, count, entity, token } = bucket
     const { getString } = useI18n()
     const pageContext = usePageContext()
 
     const surveyId = pageContext.currentSurvey.id
     const editionId = pageContext.currentEdition.id
-    const queryOptions = { surveyId, editionId, sectionId, questionId, token: id }
+    const queryOptions = {
+        surveyId,
+        editionId,
+        sectionId,
+        questionId,
+        token: id.replace(CATCHALL_PREFIX, '')
+    }
     const i18nNamespace = sectionId
 
     const questionLabel = getBlockTitle({ block, pageContext, getString })
@@ -89,25 +97,19 @@ export const FreeformAnswersTrigger = (props: {
         html: true
     })
 
-    return (
+    const label = (
+        <div className="chart-freeform-answers">
+            <CommentIcon size={'small'} /> {formatNumber(count || 0)}
+        </div>
+    )
+    return enableModal ? (
         <ModalTrigger
             trigger={
                 <div>
                     <Tooltip
-                        trigger={
-                            <div className="chart-comments">
-                                <CommentIcon size={'small'} /> {formatNumber(count || 0)}
-                            </div>
-                        }
+                        trigger={label}
                         contents={
-                            <>
-                                {questionLabel}:
-                                <T
-                                    k="answers.answers_for"
-                                    values={{ name: tokenLabel }}
-                                    md={true}
-                                />
-                            </>
+                            <T k="answers.answers_for" values={{ name: tokenLabel }} md={true} />
                         }
                     />
                 </div>
@@ -119,6 +121,8 @@ export const FreeformAnswersTrigger = (props: {
                 tokenLabel={tokenLabel}
             />
         </ModalTrigger>
+    ) : (
+        label
     )
 }
 
@@ -161,7 +165,7 @@ export const FreeformAnswersModal = ({
     }, [])
     return (
         <div>
-            <h2 className="freeform-answers-heading">
+            <h2 className="chart-freeform-answers-heading">
                 {questionLabel}:{' '}
                 <T k="answers.answers_for" values={{ name: tokenLabel }} md={true} />
             </h2>

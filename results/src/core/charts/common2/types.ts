@@ -21,6 +21,7 @@ export type RowCommonProps = {
 export type RowExtraProps = {
     showCount?: boolean
     containerWidth: number
+    hasGroupedBuckets: boolean
     isGroupedBucket?: boolean
     showGroupedBuckets?: boolean
     setShowGroupedBuckets?: Dispatch<SetStateAction<boolean>>
