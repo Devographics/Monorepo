@@ -1,29 +1,17 @@
 /**
+ * In process of being deprecated, see newer "pipeline" system
+ * 
  * 1) get from in-memory cache if available (short TTL because it can't be emptied)
  * 2) get from Redis if available (longer TTL, can be invalidated/updated easily)
  * 3) get from Github in last resort
  */
-import NodeCache from 'node-cache'
 import { initRedis, fetchJson as fetchRedis, storeRedis } from '@devographics/redis'
 import { logToFile } from '@devographics/debug'
-import { CacheType, GetFromCacheOptions, SourceType } from './types'
-import { FetchPipelineStep, runFetchPipeline } from './pipeline'
-// import { compressJSON, decompressJSON } from './compress'
+import { CacheType, type GetFromCacheOptions, SourceType } from './types'
+import { type FetchPipelineStep, runFetchPipeline } from './pipeline'
+import { memoryCache } from './fetch-inmemory'
+import { getApiUrl } from "./api"
 
-export const memoryCache = new NodeCache({
-    // This TTL must stay short, because we manually invalidate this cache
-    stdTTL: 5 * 60, // in seconds
-    // needed for caching promises
-    useClones: false
-})
-
-export const getCacheStats = () => {
-    return memoryCache.getStats()
-}
-
-export const flushInMemoryCache = () => {
-    memoryCache.flushAll()
-}
 
 const isNodeRuntime = !process.env.NEXT_RUNTIME || process.env.NEXT_RUNTIME === 'nodejs'
 
@@ -318,13 +306,6 @@ export async function getFromCache<T = any>({
     }
 }
 
-export const getApiUrl = () => {
-    const apiUrl = process.env.API_URL
-    if (!apiUrl) {
-        throw new Error('process.env.API_URL not defined, it should point the the API')
-    }
-    return apiUrl
-}
 
 function extractQueryName(queryString: string) {
     const regex = /query\s+(\w+)/
@@ -332,8 +313,14 @@ function extractQueryName(queryString: string) {
     return match ? match[1] : null
 }
 
+
 /**
+ * Generic GraphQL fetcher
+ * 
  * Returns null in case of error
+ * 
+ * @deprecated This function handles file logging internally,
+ * it should be handled at app level instead
  */
 export const fetchGraphQLApi = async <T = any>({
     query,

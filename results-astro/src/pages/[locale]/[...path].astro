@@ -1,0 +1,152 @@
+---
+/**
+ * All paths of the app are generated based on
+ * the declarative sitemap for the current survey
+ */
+import type {
+  GetStaticPaths,
+  InferGetStaticParamsType,
+  InferGetStaticPropsType,
+} from "astro";
+import AstroLayout from "@/components/layouts/AstroRootLayout.astro";
+import { astroEnv } from "@/lib/env";
+import { astroEditionWithSitemap } from "@/fetchers/surveyWithSitemap";
+import PageTemplate from "@/components/pages/PageTemplate.astro";
+import { initTheme } from "@/lib/theme";
+// Reason why we use the Bundler moduleResolution: https://stackoverflow.com/questions/58990498/package-json-exports-field-not-working-with-typescript
+import { getLocaleWithStrings } from "@devographics/i18n/server";
+import type { PageDefinition } from "@/lib/sitemap";
+import {
+  ReactContextLayout,
+  tokens as ReactContextLayoutTokens,
+} from "@/components/layouts/ReactContextLayout";
+
+import { GlobalClientLayout } from "@/components/layouts/GlobalClientLayout";
+import { filterClientSideStrings } from "@/lib/i18n/filterClientSideStrings";
+import { astroI18nCtx } from "@/lib/i18n/serverContext";
+
+/**
+ * TODO: there is no ISR in Astro
+ * UNLESS we use Vercel ISR: https://docs.astro.build/en/guides/integrations-guide/vercel/#isr
+ * So it means we might want to remove this function altogether,
+ * and instead check if the current path is valid for each new request
+ *
+ * We must either use static rendering for everything
+ * Or SSR + HTTP cache for incremental rendering
+ * @see https://github.com/withastro/roadmap/discussions/228
+ * @see https://vercel.com/docs/edge-network/caching#how-to-cache-responses
+ */
+export const getStaticPaths = (async () => {
+  function removeSlash(str: string) {
+    if (!str) return str;
+    if (str[0] === "/") return str.slice(1);
+    return str;
+  }
+  const surveyWithSitemap = await astroEditionWithSitemap();
+  const { sitemap } = surveyWithSitemap;
+  /*
+  console.log(
+    "Paths in sitemap:",
+    sitemap.map((s) => s.path),
+  );
+  */
+  return sitemap.map((pageDefinition) => {
+    return {
+      params: {
+        path:
+          pageDefinition.path === "/"
+            ? undefined
+            : removeSlash(pageDefinition.path),
+        // TODO: generate for each possible locale here
+        locale: "en-US",
+      },
+      props: {
+        // @ts-ignore TODO
+        pageDefinition: pageDefinition as PageDefinition,
+      },
+    };
+  });
+}) satisfies GetStaticPaths;
+
+// Each survey edition has its own domain
+// so we can stick to global env variable to pick the edition we want
+const { editionId, surveyId } = astroEnv();
+
+// Set global values
+// As a convenience, we get all contextual values from Astro.locals (~ to React "cache")
+// Which avoid props drilling/module top-level values
+
+// Survey, sitemap
+const edition = await astroEditionWithSitemap();
+const { sitemap } = edition;
+Astro.locals.edition = edition;
+Astro.locals.sitemap = sitemap;
+// Theme
+const theme = initTheme();
+Astro.locals.theme = theme;
+
+// I18n
+const { locale } = Astro.params;
+if (!locale) throw new Error("Can't render without locale");
+// TODO: we should load locales one at a time during rendering, we don't need all of them at once
+const localeWithStrings = await getLocaleWithStrings({
+  localeId: locale,
+  // TODO: "translationContexts" for a survey are currently hard-coded in the results app code
+  //  and not visible in the "surveys" repo, we need to move them there, or compute the context from the survey id
+  contexts: ["common", "results", surveyId, surveyId + "_" + edition.year],
+});
+// Translation logic available in all Astro components
+Astro.locals.i18n = astroI18nCtx(localeWithStrings);
+// Filter translations to be sent client-side, for the current page
+const tokenExprs = [...ReactContextLayoutTokens];
+const clientLocaleWithStrings = filterClientSideStrings(
+  localeWithStrings,
+  tokenExprs,
+  { surveyId, editionId },
+);
+
+// Set page specific server context
+const { pageDefinition } = Astro.props;
+Astro.locals.pageDefinition = pageDefinition;
+
+const { path } = Astro.params;
+
+// TODO: clientSideStrings not yet used
+// they should be passed to the client context, rather than all the strings
+// 2. get translations for this specific page
+// TODO
+
+// TODO: normally this isn't needed, need to check my versions
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+---
+
+<AstroLayout title="Welcome to Astro.">
+  <GlobalClientLayout client:only>
+    <ReactContextLayout
+      client:only
+      pageContext={{
+        pageDefinition,
+        edition,
+        sitemap,
+      }}
+      locale={clientLocaleWithStrings}
+    >
+      <main>
+        {/* TODO get showTitle from page context */}
+        <PageTemplate showTitle={true} />
+        <p>
+          You are reading the survey of surveyId "{surveyId}" and editionId "{
+            editionId
+          }", accessing the path "{path}"
+        </p>
+        <div>
+          <p>Raw Sitemap</p>
+          <pre><code>
+          {JSON.stringify(edition.rawSitemap, null, 2)}
+        </code></pre>
+        </div>
+      </main>
+    </ReactContextLayout>
+  </GlobalClientLayout>
+</AstroLayout>

@@ -1,0 +1,20 @@
+.chart-facet-title {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.chart-facet-title-item {
+    background: var(--backgroundAltColor);
+    display: inline-block;
+    border-radius: 20px;
+    padding: 2px 8px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.chart-facet-facet {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}

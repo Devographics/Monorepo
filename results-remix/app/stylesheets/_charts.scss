@@ -1,0 +1,165 @@
+/*
+
+Vertical Bar Chart
+
+*/
+.OpinionScaleChart {
+    padding-top: $spacing;
+    svg {
+        overflow: visible;
+    }
+}
+/*
+
+Gauge Chart
+
+*/
+
+.FeaturesOverviewChart {
+    height: 100%;
+    // @include xsmall {
+    //     height: 800px;
+    // }
+    // @include small {
+    //     height: 800px;
+    // }
+    // @include medium {
+    //     height: 800px;
+    // }
+    // @include large {
+    //     height: 800px;
+    // }
+}
+.FeaturesSectionOverviewChart {
+    @include xsmall {
+        height: 200px;
+    }
+    @include small {
+        height: 400px;
+    }
+    @include medium {
+        height: 500px;
+    }
+    @include large {
+        height: 500px;
+    }
+}
+.ToolsOverviewCirclePackingChart {
+    svg {
+        overflow: visible;
+    }
+}
+
+/*
+
+Technologies Overview Chart
+
+*/
+.TechnologiesOverviewChart {
+    @include xsmall {
+        height: 800px;
+    }
+    @include small {
+        height: 800px;
+    }
+    @include medium {
+        height: 800px;
+    }
+    @include large {
+        height: 800px;
+    }
+}
+/*
+
+Quadrant/Scatterplot Chart
+
+*/
+.Scatterplot__Crosshair__Line {
+    @include svgAnts;
+}
+
+/*
+
+Bump Chart
+
+*/
+@mixin coloredText($color) {
+    display: inline-block;
+    background: $teal;
+    color: $navy;
+    border-radius: 15px;
+    padding: 0 12px;
+    background: $color;
+    @include font-bold;
+}
+.text-highlight {
+    @include coloredText(#000);
+}
+.text-green {
+    @include coloredText($green);
+}
+
+.text-pink {
+    @include coloredText($pink);
+}
+.text-pink-light {
+    @include coloredText($pinkLight);
+}
+.text-pink-lighter {
+    @include coloredText($pinkLighter);
+}
+.text-red {
+    @include coloredText($red);
+}
+.text-teal {
+    // @include coloredText($teal);
+}
+.text-teal-dark {
+    // @include coloredText($tealDark);
+}
+.text-teal-darker {
+    // @include coloredText($tealDarker);
+    // color: #fff;
+}
+
+.text-blue {
+    @include coloredText($blue);
+}
+.text-blackred {
+    @include coloredText(black(0.3));
+    color: $teal;
+    border: 1px solid $red;
+}
+
+.text-bold {
+    @include font-bold;
+}
+
+.Chip {
+    display: block;
+    margin-right: 7px;
+    position: relative;
+    overflow: hidden;
+    height: 12px;
+    width: 12px;
+}
+.Chip__Inner {
+    height: 100%;
+    width: 100%;
+    display: block;
+    .Chip--split & {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+
+        &:last-child {
+            z-index: 2;
+            width: 200%;
+            height: 100%;
+            transform: translateX(-3px) translateY(5px) rotate(-45deg);
+        }
+    }
+}

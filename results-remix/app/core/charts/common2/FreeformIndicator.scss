@@ -1,0 +1,10 @@
+.chart-freeform {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 40px;
+    background: var(--backgroundColor);
+    padding: 2px 8px;
+    text-transform: uppercase;
+    gap: var(--quarterSpacing);
+}

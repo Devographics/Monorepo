@@ -1,12 +1,11 @@
-import { EditionMetadata } from '@devographics/types'
+import { type EditionMetadata } from '@devographics/types'
 import { getFromCache, fetchGraphQLApi } from '../fetch'
 import { editionSitemapCacheKey } from '../cache_keys'
 import { getEditionSitemapQuery } from '../queries'
-import { FetcherFunctionOptions } from '../types'
+import { type FetcherFunctionOptions } from '../types'
 
 /**
- * Load the metadata of a survey edition for the surveyform app
- * @returns
+ * Survey edition, including the sitemap object
  */
 export async function fetchEditionSitemap(
     options: FetcherFunctionOptions & {
@@ -37,8 +36,7 @@ export async function fetchEditionSitemap(
             })
             if (!result) {
                 throw new Error(
-                    `Couldn't fetch survey ${editionId}, result: ${
-                        result && JSON.stringify(result)
+                    `Couldn't fetch survey ${editionId}, result: ${result && JSON.stringify(result)
                     }`
                 )
             }

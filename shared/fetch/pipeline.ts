@@ -116,3 +116,26 @@ export async function runFetchPipeline<T>(steps: Array<FetchPipelineStep<T>>): P
     // It's up to the caller to decide to throw or not
     return null
 }
+
+/**
+ * Generate a fetch pipeline
+ * Each step acts as a cache, or a logger, until the source of truth
+ * @returns const p = pipeline().step({get:, set:}).step(); const data= await p.run()
+ */
+export function pipeline<T>() {
+    const p: Array<FetchPipelineStep<T>> = []
+    return {
+        p,
+        step: function (s: FetchPipelineStep<T>) {
+            this.p.push(s)
+            return this
+        },
+        steps: function (...s: Array<FetchPipelineStep<T>>) {
+            this.p.push(...s)
+            return this
+        },
+        run: function () {
+            return runFetchPipeline<T>(p)
+        }
+    }
+}

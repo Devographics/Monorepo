@@ -1,1 +1,2 @@
-export * from './i18n'
+export * from "./typings"
+export * from "./translate"

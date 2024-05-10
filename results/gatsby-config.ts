@@ -39,6 +39,7 @@ export default {
                 path: path.resolve(__dirname, "./src/data/")
             }
         },
+        // This allows to access the internal API, on the "dataAPI" graphql field
         {
             resolve: 'gatsby-source-graphql',
             options: {

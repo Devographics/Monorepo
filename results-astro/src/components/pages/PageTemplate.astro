@@ -1,0 +1,29 @@
+---
+import PageHeader from "@/components/pages/PageHeader.astro";
+import PageFooter from "@/components/pages/PageFooter.astro";
+import BlockDemo from "@/components/block/BlockDemo";
+interface Props {
+  showTitle?: boolean;
+}
+const { i18n, pageDefinition } = Astro.locals;
+const { is_hidden, blocks } = pageDefinition;
+const { showTitle } = Astro.props;
+---
+
+<Fragment>
+  {showTitle && <PageHeader />}
+  <main class="Page__Contents">
+    {
+      !!blocks?.length ? (
+        blocks.map((block, i) => {
+          // TODO: explore how to properly use client:only to quickly migrate React code that uses Styled Components
+          // /!\ we can't use client:only on an Astro component
+          return <BlockDemo block={block} index={i} />;
+        })
+      ) : (
+        <p>Empty page</p>
+      )
+    }
+  </main>
+  {!is_hidden && <PageFooter />}
+</Fragment>
