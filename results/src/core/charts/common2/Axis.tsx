@@ -31,7 +31,7 @@ export const Axis = ({
     const interval = getInterval(ticks.length)
 
     return (
-        <div className={`chart-axis chart-axis-${variant}`}>
+        <div className={`chart-axis chart-axis-${variant} chart-subgrid`}>
             <div className="chart-axis-inner">
                 <div className="chart-axis-ticks">
                     {ticks.map((tick, index) => {

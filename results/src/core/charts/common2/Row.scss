@@ -1,21 +1,10 @@
 @import '../../../stylesheets/_breakpoints.scss';
 
 .chart-row,
-.chart-axis,
-.chart-gridlines {
-    align-items: center;
-    @include small {
-        // display: flex;
-        // flex-direction: column;
-        padding: var(--halfSpacing) 0;
-        display: grid;
-        column-gap: var(--halfSpacing);
-        row-gap: var(--quarterSpacing);
-        grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
-        grid-template-areas:
-            'heading metadata'
-            'content content';
-    }
+.chart-axis {
+}
+
+.chart-subgrid {
     @include medium-large {
         display: grid;
         grid-template-columns: subgrid;
@@ -25,7 +14,36 @@
         // grid-template-areas: 'heading content metadata';
     }
 }
-
+.chart-row {
+    align-items: center;
+    @include small {
+        // display: flex;
+        // flex-direction: column;
+        padding: var(--spacing) 0;
+        display: grid;
+        column-gap: var(--halfSpacing);
+        row-gap: var(--spacing);
+        grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+        grid-template-areas:
+            'heading metadata'
+            'content content';
+        position: relative;
+    }
+}
+.chart-axis {
+    align-items: center;
+    @include small {
+        // display: flex;
+        // flex-direction: column;
+        // display: grid;
+        // column-gap: var(--halfSpacing);
+        // grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+        // grid-template-areas:
+        //     'heading metadata'
+        //     'content content';
+        // position: relative;
+    }
+}
 .chart-rows-zebra {
     .chart-row:nth-child(2n) {
         @include small {
@@ -53,7 +71,9 @@
 
 .chart-row-content {
     padding: var(--halfSpacing) 0;
-    position: relative;
+    @include medium-large {
+        position: relative;
+    }
     // height: calc(var(--barHeight) + var(--spacing));
     // height: var(--barHeight);
 }
@@ -79,14 +99,22 @@
 .chart-row-left {
     grid-area: heading;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--spacing);
+    @include small {
+        padding-left: var(--quarterSpacing);
+    }
+    @include medium-large {
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--spacing);
+    }
 }
 .chart-row-index {
     color: var(--textAltColor);
     opacity: 0.5;
     font-size: 1.1rem;
+    @include small {
+        display: none;
+    }
 }
 .chart-row-content {
     grid-area: content;
@@ -101,5 +129,6 @@
     gap: var(--spacing);
     @include small {
         justify-content: flex-end;
+        padding-right: var(--quarterSpacing);
     }
 }

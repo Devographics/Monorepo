@@ -15,9 +15,6 @@
             display: flex;
             align-items: center;
         }
-        @include small {
-            row-gap: var(--halfSpacing);
-        }
     }
     .chart-heading {
         display: block;
@@ -28,6 +25,9 @@
     .chart-rows {
         row-gap: calc(var(--spacing) * 3);
         padding-bottom: var(--doubleSpacing);
+    }
+    .chart-bar {
+        height: calc(var(--cellHeight) + var(--totalsHeight) + 10px);
     }
 }
 .multiexp-controls {

@@ -25,6 +25,7 @@ export const RowWrapper = (
     const isOverallBucket = bucket.id === OVERALL
     const className = classNames(
         'chart-row',
+        'chart-subgrid',
         { 'chart-row-grouped': isGroupedBucket },
         { 'chart-row-overall': isOverallBucket }
     )

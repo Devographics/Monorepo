@@ -21,6 +21,8 @@ button.chart-item {
     border-radius: 500px;
     font-size: 0.9rem;
     white-space: nowrap;
+    background: var(--backgroundColor);
+    z-index: 1;
 }
 .item-name {
     margin-bottom: 5px;
