@@ -1,4 +1,4 @@
-import { RawDataItem } from '@devographics/types/normalization'
+import { RawDataItem } from './normalization'
 import { ResultsSubFieldEnum } from './api'
 import { Entity, Token } from './entities'
 import { Option } from './outlines'
