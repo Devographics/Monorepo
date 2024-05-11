@@ -162,7 +162,6 @@ const BlockTitleText = styled.h3`
 `
 
 const LeftPart = styled.div`
-    margin-bottom: ${spacing(0.5)};
     @media ${mq.small} {
     }
 

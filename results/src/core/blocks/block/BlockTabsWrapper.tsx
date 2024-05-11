@@ -248,7 +248,7 @@ export const TabsTrigger = styled(Tabs.Trigger)`
 `
 
 const BlockHeaderTop_ = styled.div`
-    margin-bottom: ${spacing()};
+    margin-bottom: ${spacing(0.5)};
 `
 
 const BlockHeaderRight_ = styled.div`

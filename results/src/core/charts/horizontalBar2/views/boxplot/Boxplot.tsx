@@ -77,7 +77,7 @@ const BoxplotView = (viewProps: ViewProps) => {
         <div className="chart-boxplot-view">
             <Rows {...viewProps} hasZebra={true}>
                 <>
-                    <div className="chart-row chart-boxplot-placeholder">
+                    <div className="chart-row chart-subgrid chart-boxplot-placeholder">
                         <div className="chart-row-content" ref={contentRef} />
                     </div>
 
@@ -89,6 +89,7 @@ const BoxplotView = (viewProps: ViewProps) => {
                             bucket={bucket}
                             {...rowProps}
                             rowComponent={BoxplotRow}
+                            rowIndex={i}
                         />
                     ))}
 
