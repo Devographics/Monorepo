@@ -68,8 +68,8 @@ export const generateGenericFieldType = ({
     const validSubFields = subFields.filter(f => !disallowedFields.includes(f.id))
 
     // this will determine which filters, facets, etc. are used for the generic field type
-    // just use State of JS as convention since we need to pick one
-    const question = { surveyId: 'state_of_js' } as QuestionApiObject
+    // just use latest survey as convention since we need to pick one
+    const question = { surveyId: surveys.at(-1)?.id } as QuestionApiObject
 
     return {
         generatedBy: 'field',
