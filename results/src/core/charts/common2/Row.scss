@@ -101,6 +101,8 @@
     display: flex;
     @include small {
         padding-left: var(--quarterSpacing);
+        align-items: center;
+        gap: 5px;
     }
     @include medium-large {
         justify-content: space-between;
@@ -113,7 +115,7 @@
     opacity: 0.5;
     font-size: 1.1rem;
     @include small {
-        display: none;
+        font-size: 0.9rem;
     }
 }
 .chart-row-content {
