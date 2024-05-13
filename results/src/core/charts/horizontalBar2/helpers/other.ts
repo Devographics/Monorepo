@@ -1,6 +1,7 @@
 import {
     Bucket,
     FeaturesOptions,
+    QuestionMetadata,
     ResponseData,
     ResultsSubFieldEnum,
     SimplifiedSentimentOptions,
@@ -110,7 +111,7 @@ export const useAllQuestionsMetadata = () => {
             questions.push({ sectionId: section.id, ...question })
         }
     }
-    return questions
+    return questions as Array<QuestionMetadata & { sectionId: string }>
 }
 
 export const getAllFacetBucketIds = ({

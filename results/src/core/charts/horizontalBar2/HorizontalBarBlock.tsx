@@ -28,7 +28,6 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     const { getString } = useI18n()
     const { block, series, question, pageContext, variant } = props
     const currentEdition = getChartCurrentEdition({ serie: series[0], block })
-
     const { average, percentiles, completion } = currentEdition
 
     const facet = block?.filtersState?.facet

@@ -34,6 +34,7 @@ export type CustomizationOptions = {
 export type CustomizationFiltersSeries = {
     year?: number
     conditions: CustomizationFiltersCondition[]
+    isDefault?: boolean
 }
 
 export type CustomizationFiltersCondition = {

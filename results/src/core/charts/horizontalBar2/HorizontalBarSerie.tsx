@@ -1,14 +1,36 @@
 import React from 'react'
 import { StandardQuestionData } from '@devographics/types'
-import { DataSeries } from 'core/filters/types'
+import { CustomizationDefinition, CustomizationFiltersSeries, DataSeries } from 'core/filters/types'
 import { getChartBuckets } from './helpers/other'
 import { useChartValues } from './helpers/chartValues'
 import View from '../common2/View'
 import { GridItem } from '../common2'
 import { CommonProps } from '../common2/types'
 import take from 'lodash/take'
-import { getCellDimensions } from './helpers/dimensions'
-import { getViewDefinition } from './helpers/views'
+import { CustomVariant } from 'core/filters/helpers'
+import { BlockVariantDefinition } from 'core/types'
+
+const getItemFilters = ({
+    variant,
+    block,
+    serieIndex
+}: {
+    variant?: CustomVariant
+    block?: BlockVariantDefinition
+    serieIndex: number
+}) => {
+    const filtersState = variant?.chartFilters || block?.filtersState
+    if (!filtersState) {
+        return
+    }
+    const showDefaultSeries = filtersState?.options?.showDefaultSeries || false
+    const defaultFilters: CustomizationFiltersSeries = { isDefault: true, conditions: [] }
+    const filters = showDefaultSeries
+        ? [defaultFilters, ...filtersState.filters]
+        : filtersState?.filters
+    const itemFilters = filters?.[serieIndex]
+    return itemFilters
+}
 
 export const HorizontalBarSerie = (
     props: {
@@ -39,8 +61,8 @@ export const HorizontalBarSerie = (
         chartValues
     }
 
-    const itemFilters =
-        variant?.chartFilters?.filters?.[serieIndex] || block?.filtersState?.filters?.[serieIndex]
+    const itemFilters = getItemFilters({ variant, block, serieIndex })
+
     return (
         <GridItem key={serie.name} filters={itemFilters}>
             <View {...viewProps} />

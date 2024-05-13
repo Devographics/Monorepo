@@ -353,7 +353,9 @@ export const getBlockQuery = ({
         facet,
         parameters
     }
-    const defaultSeriesName = facet ? `${questionId}_by_${facet.id}` : questionId
+    const seriesName = facet ? `${questionId}_by_${facet.id}` : `${questionId}`
+    const defaultSeriesName = `${seriesName}_default`
+
     const defaultSeries = { name: defaultSeriesName, queryArgs: defaultQueryArgs }
     let series: SeriesParams[]
     if (filters && filters.length > 0) {
@@ -362,7 +364,7 @@ export const getBlockQuery = ({
             ...filters.map((filter, filterIndex) => {
                 const { conditions } = filter
                 const filters = conditionsToFilters(conditions)
-                const name = `${defaultSeriesName}_${filterIndex + 1}`
+                const name = `${seriesName}_${filterIndex + 1}`
                 return { name, queryArgs: { ...defaultQueryArgs, filters } }
             })
         ]
