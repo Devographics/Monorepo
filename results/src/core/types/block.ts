@@ -56,6 +56,7 @@ export interface BlockVariantDefinition {
     questionKey?: string
     description?: string
     descriptionId?: string
+    takeaway?: string
     takeawayKey?: string
     noteId?: string
 

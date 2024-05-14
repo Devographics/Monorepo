@@ -10,7 +10,6 @@ const BlockTakeaway = ({ block }: { block: BlockVariantDefinition }) => {
 }
 
 const Takeaway_ = styled.div`
-    margin-bottom: ${spacing()};
     p:last-child {
         margin: 0;
     }

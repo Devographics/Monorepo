@@ -84,7 +84,7 @@
       - id: country
         template: multiple_options2
         parameters: { limit: 20 }
-        description: >
+        takeaway: >
             While many respondents (**19%**) came from the U.S., we also had strong representation from Germany, France, the U.K., and the Netherlands (**24% combined**), reflecting the liveliness of the front end community in these countries.
         variants:
             - template: vs_salary
@@ -93,7 +93,7 @@
       - id: locale
         template: multiple_options2
         parameters: { cutoff: 20 }
-        description: >
+        takeaway: >
             The language respondents selected to fill out the survey.
 
       - id: hint_hint
@@ -101,26 +101,26 @@
 
       - id: completion_stats
         template: multiple_options2
-        description: >
+        takeaway: >
             The proportion of the survey filled out by respondents.
 
       - id: age
         template: multiple_options2
-        description: >
+        takeaway: >
             Survey respondents were on average **33.6** years old, slightly higher than the [State of JS](https://2022.stateofjs.com) (**32.2**) and [State of CSS](https://2023.stateofcss.com) (**33.5**) surveys.
         variants:
             - template: vs_salary
 
       - id: years_of_experience
         template: multiple_options2
-        description: >
+        takeaway: >
             Respondents had on average **10.7** years of web development experience.
         variants:
             - template: vs_salary
 
       - id: company_size
         template: multiple_options2
-        description: >
+        takeaway: >
             Respondents tended to work for mostly mid-sized organizations, with a median company size of **75** employees.
         variants:
             - template: vs_salary
@@ -168,19 +168,19 @@
 
       - id: yearly_salary
         template: multiple_options2
-        description: >
+        takeaway: >
             Respondents had a median income of USD $75,000, noticeably higher than the **$59,970** figure reported by the [Stack Overflow Developer Survey](https://survey.stackoverflow.co/2023/#section-salary-salary-by-developer-type).
 
       - id: higher_education_degree
         template: multiple_options2
-        description: >
+        takeaway: >
             Having a higher-education degree did not translate in meaningful differences in yearly income.
         variants:
             - template: vs_salary
 
       - id: gender
         template: multiple_options2
-        description: >
+        takeaway: >
             Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
         variants:
             - template: vs_salary
@@ -201,7 +201,7 @@
 
       - id: race_ethnicity
         template: multiple_options2_combined
-        description: >
+        takeaway: >
             The survey's non-white population tended to be younger and have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
         variants:
             - template: vs_years_of_experience
@@ -342,6 +342,9 @@
         blocks:
             - id: content
               template: page_introduction
+              variables:
+                  contents: >
+                      SVG implementations have been historically neglected by browsers, despite extremely high usage on the Web (96% of respondents having used the `<svg>` element). It is therefore no surprise that SVG issues were the top [content-related pain point](#content_pain_points).
 
             - id: content_features
               template: multi_items_experience
@@ -377,6 +380,12 @@
         blocks:
             - id: web_components
               template: page_introduction
+              variables:
+                  contents: >
+                      Despite JavaScript frameworks being used more widely than ever, there is still a need for native solutions. Yet Web Components currently fall short of addressing developer pain points effectively, with Web Components APIs and especially Shadow DOM dominating the top 10 of worst experiences across all HTML-related technologies. 
+
+
+                      This indicates that there is still significant work to be done before they can truly enhance HTML's extensibility and become a strong alternative to framework components. However, the ongoing activity in this area leaves me hopeful.
 
             - id: web_components_main_features
               template: multi_items_experience
@@ -409,6 +418,9 @@
         blocks:
             - id: accessibility
               template: page_introduction
+              variables:
+                  contents: >
+                      This was our first survey to study accessibility in such depth. What we found is that while respondents clearly care about accessibility, they struggle to implement it in practice as they lack technical, educational, and organizational support.
 
             - id: accessibility_features
               template: multi_items_experience
@@ -444,6 +456,9 @@
         blocks:
             - id: mobile_web_apps
               template: page_introduction
+              variables:
+                  contents: >
+                      Native-like web apps are another area where respondent interest is high, but the platform fails to deliver. The primary pain point here is interoperability, and while there are promising initiatives such as [Interop 2024](https://web.dev/blog/interop-2024), the mobile landscape especially remains very fragmented.
 
             - id: mobile_web_apps_features
               template: multi_items_experience
@@ -503,6 +518,7 @@
 
       - id: html_missing_elements
         template: multiple_options2_combined
+        parameters: { cutoff: 25, cutoffPercent: 0 }
 
       - id: tools_for_other_developers
         template: multiple_options2
@@ -600,6 +616,7 @@
   blocks:
       - id: conclusion
         template: conclusion
+        blockType: ConclusionBlock
         variables:
             author: lea_verou
 

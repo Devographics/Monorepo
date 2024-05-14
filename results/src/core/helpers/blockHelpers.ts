@@ -146,7 +146,7 @@ export const getBlockTakeaway = ({
         values
     })?.tHtml
     const genericTakeaway = getString(takeawayKey, { values })?.tHtml
-    return blockTakeaway ?? editionTakeaway ?? genericTakeaway
+    return block.takeaway ?? blockTakeaway ?? editionTakeaway ?? genericTakeaway
 }
 
 export const useBlockTakeaway = ({ block }: { block: BlockVariantDefinition }) => {

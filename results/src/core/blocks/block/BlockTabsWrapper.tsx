@@ -92,7 +92,7 @@ export const TabsWrapper = ({
                 <BlockHeader className="block-header">
                     <BlockHeaderTop_>
                         <BlockTitle block={firstBlockVariant} />
-                        {/* <BlockQuestion block={firstBlockVariant} /> */}
+                        <BlockQuestion block={firstBlockVariant} />
                         <BlockDescriptionContents block={firstBlockVariant} />
                         <BlockTakeaway block={firstBlockVariant} />
                     </BlockHeaderTop_>
@@ -248,7 +248,10 @@ export const TabsTrigger = styled(Tabs.Trigger)`
 `
 
 const BlockHeaderTop_ = styled.div`
-    margin-bottom: ${spacing(0.5)};
+    margin-bottom: ${spacing()};
+    display: flex;
+    flex-direction: column;
+    gap: ${spacing(0.5)};
 `
 
 const BlockHeaderRight_ = styled.div`

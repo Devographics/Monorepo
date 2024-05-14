@@ -79,7 +79,7 @@ const BlockTitle = ({
                             {completion && !pageContext.isCapturing && (
                                 <BlockCompletionIndicator completion={completion} />
                             )}
-                            <BlockQuestionTooltip block={block} />
+                            {/* <BlockQuestionTooltip block={block} /> */}
                             {isFreeformQuestion && <FreeformIndicator showLabel={false} />}
                             {!isCapturing && enableChartSponsorships && (
                                 <BlockSponsor block={block} />
