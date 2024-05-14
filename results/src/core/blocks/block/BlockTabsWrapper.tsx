@@ -93,7 +93,7 @@ export const TabsWrapper = ({
                     <BlockHeaderTop_>
                         <BlockTitle block={firstBlockVariant} />
                         <BlockQuestion block={firstBlockVariant} />
-                        <BlockDescriptionContents block={firstBlockVariant} />
+                        {/* <BlockDescriptionContents block={firstBlockVariant} /> */}
                         <BlockTakeaway block={firstBlockVariant} />
                     </BlockHeaderTop_>
                     <BlockHeaderRight_>
