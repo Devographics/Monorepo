@@ -152,7 +152,6 @@ const style = `
 }
 
 .soh-text--stateof {
-  letter-spacing: 0.05em;
   transform-origin: 0% 50%;
   -webkit-animation-delay: calc(var(--timeline-text-delay) - var(--timeline-shape-fill-anim) * 0.25);
           animation-delay: calc(var(--timeline-text-delay) - var(--timeline-shape-fill-anim) * 0.25);
@@ -160,9 +159,9 @@ const style = `
 
 .soh-text--year {
   --dir: -1;
-  letter-spacing: 0.1em;
   transform-origin: 100% 50%;
 }
+.soh-text > text { letter-spacing: 0.1625em; }
 
 @-webkit-keyframes angleSlideIn {
   from {
