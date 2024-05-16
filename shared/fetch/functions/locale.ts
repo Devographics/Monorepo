@@ -6,7 +6,8 @@ import { FetcherFunctionOptions } from '../types'
 
 /**
  * Fetch metadata and strings for a specific locale
- * @deprecated Use react-i18n version
+ * 
+ * @deprecated Use @devographics/i18n/server version
  */
 export const fetchLocale = async (
     options: FetcherFunctionOptions & {

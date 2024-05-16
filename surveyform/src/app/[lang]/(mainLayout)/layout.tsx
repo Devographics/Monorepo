@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 import ClientLayout from "~/app/[lang]/ClientLayout";
 import { DebugRSC } from "~/components/debug/DebugRSC";
-import { getCommonContexts, getLocaleIdFromParams } from "~/i18n/config";
+import { getCommonContexts } from "~/i18n/config";
 import { rscIntlContext } from "~/i18n/rsc-fetchers";
-import { rscAllLocalesMetadata, rscLocale } from "~/lib/api/rsc-fetchers";
+import { rscAllLocalesMetadata, rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
 import { metadata as defaultMetadata } from "../../layout";
 
 // TODO: not yet compatible with having dynamic pages down the tree
@@ -39,31 +39,23 @@ export default async function RootLayout({
     lang: string;
   };
 }) {
-  const contexts = getCommonContexts();
-  const localeId = getLocaleIdFromParams(params);
-  const {
-    data: locale,
-    error,
-    ___metadata: ___rscLocale_CommonContexts,
-  } = await rscLocale({
-    localeId,
-    contexts,
-  });
+  const { locale, localeId, error } = await rscLocaleFromParams(params)
   const { data: locales, ___metadata: ___rscAllLocalesMetadata } =
     await rscAllLocalesMetadata();
   if (error) {
     return <div>{JSON.stringify(error, null, 2)}</div>;
   }
   return (
+    // TODO: stop passing all the locales there, filter them per page
     <ClientLayout
       params={params}
       locales={locales}
       localeId={localeId}
       localeStrings={locale}
     >
-      <DebugRSC
+      {/*<DebugRSC
         {...{ ___rscLocale_CommonContexts, ___rscAllLocalesMetadata }}
-      />
+  />*/}
       {children}
     </ClientLayout>
   );

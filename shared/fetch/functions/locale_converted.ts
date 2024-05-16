@@ -7,6 +7,7 @@ import { FetcherFunctionOptions } from '../types'
 /**
  * Fetch metadata and strings for a specific locale
  * with strings in a format expected by surveyform and other apps
+ * @deprecated Use @devographics/i18n/server
  * @returns
  */
 export const fetchLocaleConverted = async (

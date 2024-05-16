@@ -6,7 +6,7 @@
 import { getLocalesQuery, getLocaleContextQuery, localeWithStringsQuery } from './graphql'
 import { logToFile } from '@devographics/debug'
 import { Locale, LocaleWithStrings, Translation } from "../typings"
-import { FetchPipelineStep, runFetchPipeline, allowedCachingMethods, graphqlFetcher, pipeline, redisFetchStep } from '@devographics/fetch'
+import { FetchPipelineStep, runFetchPipeline, allowedCachingMethods, graphqlFetcher, cachedPipeline } from '@devographics/fetch'
 
 export function removeNull(obj: any): any {
     const clean = Object.fromEntries(
@@ -72,22 +72,8 @@ async function getAllLocaleDefinitions({ contexts }: {
     /** I18n scopes */
     contexts: Array<string>
 }): Promise<Array<Locale>> {
-    const allowedCaches = allowedCachingMethods()
     const allLocalesKey = allLocalesCacheKey()
-    const localeDefinitions = await pipeline<Array<Locale>>().steps(
-        // log locales in file system for debugging
-        {
-            name: "logToFile",
-            set: (locales) => {
-                logToFile('localesMetadataRedis.json', locales)
-            },
-            disabled: !allowedCaches.filesystem,
-        },
-        // get from Redis
-        {
-            ...redisFetchStep(allLocalesKey),
-            disabled: !allowedCaches.redis
-        },
+    const { data: localeDefinitions } = await cachedPipeline<Array<Locale>>({ cacheKey: allLocalesKey }).steps(
         // GraphQL API = source of truth
         {
             get: async () => {
@@ -103,48 +89,23 @@ async function getAllLocaleDefinitions({ contexts }: {
 async function getLocaleContextStrings({ locale, context }: { locale: Locale, context: string }) {
     const allowedCaches = allowedCachingMethods()
     const contextKey = getLocaleContextCacheKey(locale.id, context)
-    const localeContextStringsFetchSteps: Array<
-        FetchPipelineStep<Array<Translation>>> = [
-            {
-                ...redisFetchStep(contextKey),
-                disabled: !allowedCaches.redis
-            },
-            {
-                get: async () => {
-                    const data = await getLocaleContextGraphQL({
-                        localeId: locale.id,
-                        context,
-                        key: contextKey
-                    })
-                    return data?.strings
-                }
-            },
-
-
-        ]
-    const strings = await runFetchPipeline(localeContextStringsFetchSteps)
+    const strings = await cachedPipeline<Array<Translation>>({ cacheKey: contextKey }).fetcher(
+        async () => {
+            const data = await getLocaleContextGraphQL({
+                localeId: locale.id,
+                context,
+                key: contextKey
+            })
+            return data?.strings
+        }
+    ).run()
     if (!strings) throw new Error(`Strings not found for locale ${locale.id}`)
     return strings
 }
 
 
-function logStep(filename: string): FetchPipelineStep<any> {
-    const allowedCaches = allowedCachingMethods()
-    return {
-        name: "logToFile",
-        set(data) { logToFile(filename, data) },
-        disabled: !allowedCaches.filesystem,
-    }
-}
-// Tiny wrapper to disable depending on global conflig
-function redisStep(...args: Parameters<typeof redisFetchStep<any>>): ReturnType<typeof redisFetchStep<any>> {
-    const allowedCaches = allowedCachingMethods()
-    return {
-        ...redisFetchStep(...args),
-        disabled: !allowedCaches.redis
-    }
 
-}
+
 /**
  * Newer function (2024) using fetch pipeline to get strings
  * @param param0 
@@ -155,23 +116,16 @@ export async function getLocaleWithStrings({ localeId, contexts }: {
     contexts: Array<string>
 }) {
     const cacheKey = `localeWithStrings_${localeId}_${contexts.sort().join(",")}`
-    const localeDefinition = await pipeline<LocaleWithStrings>().steps(
-        // log locale in file system for debugging
-        logStep(`${cacheKey}.json`),
-        redisStep(cacheKey),
-        // GraphQL API = source of truth
-        {
-            name: "graphql",
-            get: async () => {
-                const { data, errors } = await graphqlFetcher<{ locale: LocaleWithStrings }>(localeWithStringsQuery({ localeId, contexts }))
-                if (errors?.length) throw new Error(errors.map(e => e.message).join("\n"))
-                return data?.locale
-            }
+    const { data: locale, error } = await cachedPipeline<LocaleWithStrings>({ cacheKey }).fetcher(
+        async () => {
+            const { data, errors } = await graphqlFetcher<{ locale: LocaleWithStrings }>(localeWithStringsQuery({ localeId, contexts }))
+            if (errors?.length) throw new Error(errors.map(e => e.message).join("\n"))
+            return data?.locale
         }
     )
         .run()
-    if (!localeDefinition) throw new Error("Couldn't get locales")
-    return localeDefinition
+    if (!locale) throw new Error("Couldn't get locales")
+    return { locale, error }
 }
 /**
  * Get the strings for some locales and contexts
@@ -196,7 +150,9 @@ export const getLocalesWithStrings = async ({ localeIds, contexts }: {
     for (const locale of locales) {
         let localeStrings: Array<Translation> = []
         for (const context of contexts) {
-            const strings = await getLocaleContextStrings({ locale, context })
+            const { data: strings, error } = await getLocaleContextStrings({ locale, context })
+            if (error) throw error
+            if (!strings) throw new Error("No strings for locale " + locale.id)
             localeStrings = [...localeStrings, ...strings]
         }
         locale.strings = localeStrings

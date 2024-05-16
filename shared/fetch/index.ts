@@ -5,6 +5,8 @@ export * from './queries'
 export * from './refresh'
 export * from "./pipeline"
 export * from "./pipeline-redis"
+export * from "./pipeline-file-logger"
+export * from "./pipeline-cached"
 export * from "./helpers"
 export * from "./types"
 export * from "./graphql"

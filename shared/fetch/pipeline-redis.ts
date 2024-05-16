@@ -1,11 +1,12 @@
 
 import { initRedis, fetchJson as fetchRedis, storeRedis } from '@devographics/redis'
 import { type FetchPipelineStep } from './pipeline'
+import { allowedCachingMethods } from './helpers'
 
 /**
  * Generic get/set for redis, for a given cache key
  */
-export function redisFetchStep<T = any>(cacheKey: string): FetchPipelineStep<T> {
+export function redisPipelineStep<T = any>(cacheKey: string): FetchPipelineStep<T> {
     initRedis()
     return {
         name: "redis",
@@ -15,5 +16,6 @@ export function redisFetchStep<T = any>(cacheKey: string): FetchPipelineStep<T> 
         set: async (locales) => {
             await storeRedis(cacheKey, locales)
         },
+        disabled: !allowedCachingMethods().redis
     }
 }
