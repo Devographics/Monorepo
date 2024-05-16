@@ -14,8 +14,20 @@ import { getLocaleWithStrings } from "@devographics/i18n/server"
  * (eg fetching ["general"] then ["general", "survey"])
  */
 export const rscLocale = cache((options: any) => fetchLocaleConverted(options));
-export const rscLocaleNew = cache((options: { localeId: string, contexts: Array<string> }) =>
-  getLocaleWithStrings(options)
+export const rscLocaleNew = cache(async (options: { localeId: string, contexts: Array<string> }) => {
+  const { locale, error } = await getLocaleWithStrings(options)
+  if (error) return { error }
+  // react-i18n expects {foo1: bar1, foo2: bar2} etc. map whereas
+  // api returns [{key: foo1, t: bar1}, {key: foo2, t: bar2}] etc. array
+  const convertedStrings: { [key: string]: string } = {}
+  locale.strings &&
+    locale.strings.forEach(({ key, t, tHtml }) => {
+      convertedStrings[key] = tHtml || t
+    })
+  const convertedLocale = { ...locale, strings: convertedStrings }
+  // TODO: handle this more cleanly
+  return { locale: convertedLocale }
+}
 )
 
 export const rscLocaleFromParams = cache(async (params: { lang: string }) => {

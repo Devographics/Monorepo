@@ -128,8 +128,8 @@ export async function runFetchPipeline<T>(steps: Array<FetchPipelineStep<T>>): P
         }
         // It's up to the caller to decide to throw or not
         return { data: null, error: undefined }
-    } catch (error) {
-        return { data: undefined, error }
+    } catch (error: unknown) {
+        return { data: undefined, error: error as Error }
     }
 }
 

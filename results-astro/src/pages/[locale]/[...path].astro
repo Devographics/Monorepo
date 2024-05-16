@@ -89,12 +89,13 @@ Astro.locals.theme = theme;
 const { locale } = Astro.params;
 if (!locale) throw new Error("Can't render without locale");
 // TODO: we should load locales one at a time during rendering, we don't need all of them at once
-const localeWithStrings = await getLocaleWithStrings({
+const { locale: localeWithStrings, error} = await getLocaleWithStrings({
   localeId: locale,
   // TODO: "translationContexts" for a survey are currently hard-coded in the results app code
   //  and not visible in the "surveys" repo, we need to move them there, or compute the context from the survey id
   contexts: ["common", "results", surveyId, surveyId + "_" + edition.year],
 });
+if (error) throw error
 // Translation logic available in all Astro components
 Astro.locals.i18n = astroI18nCtx(localeWithStrings);
 // Filter translations to be sent client-side, for the current page
