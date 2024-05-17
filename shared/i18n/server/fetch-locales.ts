@@ -124,8 +124,9 @@ export async function getLocaleWithStrings({ localeId, contexts }: {
         }
     )
         .run()
-    if (!locale) throw new Error("Couldn't get locales")
-    return { locale, error }
+    if (error) return { error }
+    if (!locale) { return { error: new Error(`Locale ${localeId} not found`) } }
+    return { locale }
 }
 /**
  * Get the strings for some locales and contexts

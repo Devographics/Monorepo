@@ -15,7 +15,14 @@ export interface Locale {
      */
     label?: string
 }
+/**
+ * Locale with strings as an array
+ */
 export type LocaleWithStrings = Locale & Required<Pick<Locale, "strings">>
+/**
+ * Locale with strings as a record
+ */
+export type LocaleParsed = Omit<Locale, "strings"> & { strings: Record<string, Translation> }
 
 interface InterpolationValues {
     values?: { [key: string]: string | number }

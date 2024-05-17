@@ -7,11 +7,14 @@ import {
 import { AppName } from "@devographics/types";
 import { getCommonContexts, getLocaleIdFromParams } from "~/i18n/config";
 import { getLocaleWithStrings } from "@devographics/i18n/server"
+import { type LocaleParsed } from "@devographics/i18n";
+import { rscLocaleIdContext } from "~/i18n/rsc-context";
 
 /**
  * Will cache per localeId and contexts
  * /!\ Will not automatically merge cache if contexts are repeated
  * (eg fetching ["general"] then ["general", "survey"])
+ * @deprecated replace by the new version
  */
 export const rscLocale = cache((options: any) => fetchLocaleConverted(options));
 export const rscLocaleNew = cache(async (options: { localeId: string, contexts: Array<string> }) => {
@@ -21,15 +24,22 @@ export const rscLocaleNew = cache(async (options: { localeId: string, contexts: 
   // api returns [{key: foo1, t: bar1}, {key: foo2, t: bar2}] etc. array
   const convertedStrings: { [key: string]: string } = {}
   locale.strings &&
-    locale.strings.forEach(({ key, t, tHtml }) => {
-      convertedStrings[key] = tHtml || t
+    locale.strings.forEach((item/*{ key, t, tHtml }*/) => {
+      // DO not try to pick t or tHtml here, keep both so each component can pick the right one
+      // TODO: assess if it's the right decisio
+      convertedStrings[item.key] = item //tHtml || t
     })
-  const convertedLocale = { ...locale, strings: convertedStrings }
-  // TODO: handle this more cleanly
+  const convertedLocale: LocaleParsed = { ...locale, strings: convertedStrings }
   return { locale: convertedLocale }
 }
 )
 
+/**
+ * Get locale with strings, based on "lang" param
+ * 
+ * To be used in pages and layouts
+ * @see rscLocaleFromContext to get the locale from server components
+ */
 export const rscLocaleFromParams = cache(async (params: { lang: string }) => {
   const contexts = getCommonContexts();
   const localeId = getLocaleIdFromParams(params);
@@ -43,7 +53,17 @@ export const rscLocaleFromParams = cache(async (params: { lang: string }) => {
     localeId,
     contexts,
   });
-  return { locale, localeId, error }
+  if (error) return { error }
+  return { locale, localeId }
+})
+
+/**
+ * Get current locale strings within React Server Components
+ * Uses a server context to retrieve the "lang" param
+ */
+export const rscLocaleFromContext = cache(async () => {
+  const localeId = rscLocaleIdContext()
+  return rscLocaleFromParams({ lang: localeId })
 })
 
 export const rscAllLocalesMetadata = cache((options?: any) =>

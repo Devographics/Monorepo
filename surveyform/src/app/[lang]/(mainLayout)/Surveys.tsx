@@ -8,6 +8,8 @@ import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import sortBy from "lodash/sortBy";
 import { rscCurrentUserWithResponses } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { ResponseDetails } from "~/components/surveys/ResponseDetails";
+import { rscLocaleIdContext } from "~/i18n/rsc-context";
+import { ServerT } from "~/i18n/components/ServerT";
 
 const a = 1;
 
@@ -43,7 +45,7 @@ const EditionItem = async ({
                   height={200}
                   src={imageUrl}
                   alt={getEditionTitle({ edition })}
-                  //quality={100}
+                //quality={100}
                 />
               )}
             </div>
@@ -63,11 +65,9 @@ const EditionItem = async ({
 const EditionGroup = ({
   allEditions,
   status,
-  localeId,
 }: {
   allEditions: Array<EditionMetadata>;
   status: SurveyStatusEnum;
-  localeId: string;
 }) => {
   if (!status) throw new Error("SurveyGroup must receive a defined status");
   const filteredEditions = allEditions.filter((s) => s.status === status);
@@ -75,14 +75,22 @@ const EditionGroup = ({
     filteredEditions,
     (edition: EditionMetadata) => new Date(edition.startedAt)
   ).reverse();
-  // const { locale } = useLocaleContext();
+  const localeId = rscLocaleIdContext()
   const locale = { id: localeId };
   return (
     <div className="surveys-group">
       <h3 className="surveys-group-heading">
-        <FormattedMessage
+        {/** 
+         * This is an example of a dynamic token
+         * We can't replace it by a token expression because status is an actual JS variable
+         * that is not known from the build context
+         * But we could filter tokens on the expression "general.[possibleSurveyStatus]_surveys"
+         * (not needed for server translations thogugh)
+         *  */}
+        <ServerT token={`general.${SurveyStatusEnum[status].toLowerCase()}_surveys`} />
+        {/*<FormattedMessage
           id={`general.${SurveyStatusEnum[status].toLowerCase()}_surveys`}
-        />
+        />*/}
       </h3>
       {sortedEdition.length > 0 ? (
         sortedEdition.map((edition) => (
@@ -105,10 +113,8 @@ const EditionGroup = ({
 
 const Surveys = ({
   surveys,
-  localeId,
 }: {
   surveys: Array<SurveyMetadata>;
-  localeId: string;
 }) => {
   const allEditions = surveys
     .map((survey) => survey.editions.map((e) => ({ ...e, survey })))
@@ -119,17 +125,14 @@ const Surveys = ({
       <EditionGroup
         allEditions={allEditions}
         status={SurveyStatusEnum.OPEN}
-        localeId={localeId}
       />
       <EditionGroup
         allEditions={allEditions}
         status={SurveyStatusEnum.PREVIEW}
-        localeId={localeId}
       />
       <EditionGroup
         allEditions={allEditions}
         status={SurveyStatusEnum.CLOSED}
-        localeId={localeId}
       />
       {/*<Translators />*/}
     </div>

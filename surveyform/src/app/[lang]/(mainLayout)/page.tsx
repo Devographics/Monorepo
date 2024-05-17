@@ -6,6 +6,8 @@ import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
 
 import { rscAllLocalesIds, rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
 import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
+import { setLocaleIdServerContext } from "~/i18n/rsc-context";
+import { NextPageParams } from "~/app/typings";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
 export const revalidate = DEFAULT_REVALIDATE_S;
@@ -15,7 +17,8 @@ export async function generateStaticParams() {
   return localeIds?.data.map((localeId) => ({ lang: localeId })) || [];
 }
 
-const IndexPage = async ({ params }) => {
+const IndexPage = async ({ params }: NextPageParams<{ lang: string }>) => {
+  setLocaleIdServerContext(params.lang)
   const { locale, localeId } = await rscLocaleFromParams(params)
   // Filter locale strings
   console.log({ locale }, "page locale")
@@ -23,7 +26,7 @@ const IndexPage = async ({ params }) => {
     <RSCFetch
       fetch={async () => rscFetchSurveysMetadata({ shouldThrow: false })}
       render={({ data: surveys }) => (
-        <Surveys localeId={localeId} surveys={surveys} />
+        <Surveys surveys={surveys} />
       )}
     />
   );
