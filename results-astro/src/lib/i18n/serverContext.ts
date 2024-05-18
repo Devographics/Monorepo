@@ -1,9 +1,9 @@
-import { makeTranslatorFunc, type LocaleWithStrings } from "@devographics/i18n";
+import { makeTranslatorFunc, type LocaleParsed } from "@devographics/i18n";
 
-export function astroI18nCtx(localeWithStrings: LocaleWithStrings) {
+export function astroI18nCtx(localeDict: LocaleParsed) {
     return {
-        t: makeTranslatorFunc(localeWithStrings),
-        locale: localeWithStrings,
-        localizePath: (p: string) => `/${localeWithStrings.id}${p}`,
+        t: makeTranslatorFunc(localeDict),
+        locale: localeDict,
+        localizePath: (p: string) => `/${localeDict.id}${p}`,
     }
 }

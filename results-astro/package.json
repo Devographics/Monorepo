@@ -16,7 +16,7 @@
     "@devographics/fetch": "workspace:^1.0.0",
     "@devographics/helpers": "workspace:^1.0.0",
     "@devographics/i18n": "workspace:^1.0.0",
-    "@devographics/react-i18n": "workspace:^1.0.0",
+    "@devographics/react-i18n": "workspace:^",
     "@devographics/types": "workspace:^1.0.0",
     "@radix-ui/react-tabs": "^1.0.1",
     "@types/react": "^18.2.75",

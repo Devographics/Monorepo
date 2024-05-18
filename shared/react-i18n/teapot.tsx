@@ -1,4 +1,4 @@
-import { T, type TProps } from "@/components/i18n/T"
+import { T, type TProps } from "./T"
 /**
  * Temporary solution to generate a typed T component
  * This will be replaced by a "normal" T component + a bundler plugin that collects all calls to "T"

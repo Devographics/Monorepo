@@ -12,7 +12,7 @@ import { PageContextProvider, type PageContextValue } from './PageContext'
 import { KeydownContextProvider } from './KeydownContext'
 import LeftMenuLayout, { tokens as LeftMenuLayoutTokens } from './LeftMenuLayout'
 import { getTheme } from '@/lib/theme'
-import { teapot } from '@/lib/i18n/teapot'
+import { teapot } from '@devographics/react-i18n'
 
 // TODO: this is an example of centralizing the tokens used by all children of ReactContextLayout
 // In the future this should be built by a bundler plugin automatically

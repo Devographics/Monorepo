@@ -7,6 +7,11 @@ type MaybePromise<T> = Promise<T> | T
 /**
  * Get/set method for a given cache policy
  * 
+ * Avoid implementing parsing within "get" functions,
+ * as when the parsing logic changes,
+ * you may end up with cached values with an outdated data structure
+ * Instead parse the data returned by the pipeline
+ * 
  */
 export interface FetchPipelineStep<T = unknown> {
     /**

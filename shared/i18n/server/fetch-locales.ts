@@ -5,7 +5,7 @@
  */
 import { getLocalesQuery, getLocaleContextQuery, localeWithStringsQuery } from './graphql'
 import { logToFile } from '@devographics/debug'
-import { Locale, LocaleWithStrings, Translation } from "../typings"
+import { Locale, LocaleParsed, LocaleWithStrings, Translation } from "../typings"
 import { FetchPipelineStep, runFetchPipeline, allowedCachingMethods, graphqlFetcher, cachedPipeline } from '@devographics/fetch'
 
 export function removeNull(obj: any): any {
@@ -111,7 +111,7 @@ async function getLocaleContextStrings({ locale, context }: { locale: Locale, co
  * @param param0 
  * @returns 
  */
-export async function getLocaleWithStrings({ localeId, contexts }: {
+export async function getLocaleDict({ localeId, contexts }: {
     localeId: string,
     contexts: Array<string>
 }) {
@@ -126,10 +126,22 @@ export async function getLocaleWithStrings({ localeId, contexts }: {
         .run()
     if (error) return { error }
     if (!locale) { return { error: new Error(`Locale ${localeId} not found`) } }
-    return { locale }
+    // api returns an array
+    // we transform to a record that is easier to consume
+    // NOTE: we parse after the data fetching to avoid issues with caching different structure
+    const dict: typeof localeParsed["dict"] = {}
+    const { strings, ...localeDef } = locale
+    strings.forEach((item/*{ key, t, tHtml }*/) => {
+        // DO not try to pick t or tHtml here, keep both so each component can pick the right one
+        // TODO: assess if it's the right decisio
+        dict[item.key] = item //tHtml || t
+    })
+    const localeParsed: LocaleParsed = { ...localeDef, dict }
+    return { locale: localeParsed }
 }
 /**
  * Get the strings for some locales and contexts
+ * @deprecated Use getLocaleDict
  */
 export const getLocalesWithStrings = async ({ localeIds, contexts }: {
     /**

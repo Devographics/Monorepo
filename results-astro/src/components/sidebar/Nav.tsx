@@ -1,6 +1,5 @@
-import { getPageLabelKey } from "@/lib/sitemap"
+//import { getPageLabelKey } from "@/lib/sitemap"
 import { usePageContext } from "../layouts/PageContext"
-import { T } from "../i18n/T"
 import { useI18n } from "@devographics/react-i18n"
 
 

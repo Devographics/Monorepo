@@ -3,7 +3,7 @@ import Pagination from "@/components/ui/DummyReact" //'core/pages/Pagination'
 import { Sidebar } from "@/components/sidebar/Sidebar"
 import Hamburger from '@/components/ui/Hamburger'
 import { screenReadersOnly } from '@/lib/theme/mixins'
-import { teapot } from '@/lib/i18n/teapot'
+import { teapot } from '@devographics/react-i18n'
 
 function useSidebar() {
     const [showSidebar, setShowSidebar] = useState<boolean>(false)

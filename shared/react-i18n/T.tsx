@@ -1,4 +1,4 @@
-import { useI18n } from "@devographics/react-i18n";
+import { useI18n } from "./i18nContext";
 import { TK_ATTR } from "./attributes";
 import React from "react";
 
@@ -53,5 +53,6 @@ export function T({
     return <Tag {...{
         [TK_ATTR]: token,
         "data-dg-fallback-children": useFallbackChildren ? "true" : undefined
+        // @ts-ignore Weird error with Children due to different versions of React
     }} {...otherProps}>{displayedValue || children}</Tag>
 }
