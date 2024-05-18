@@ -5,7 +5,7 @@
     "type": "module",
     "exports": {
         ".": "./index.ts",
-        "./server": "./index.server.ts"
+        "./server": "./server/index.ts"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"

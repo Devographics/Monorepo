@@ -8,6 +8,7 @@ import { rscAllLocalesIds, rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
 import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
 import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 import { NextPageParams } from "~/app/typings";
+import { filterClientSideStrings } from "@devographics/i18n/server";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
 export const revalidate = DEFAULT_REVALIDATE_S;
@@ -19,9 +20,12 @@ export async function generateStaticParams() {
 
 const IndexPage = async ({ params }: NextPageParams<{ lang: string }>) => {
   setLocaleIdServerContext(params.lang)
-  const { locale, localeId } = await rscLocaleFromParams(params)
-  // Filter locale strings
-  console.log({ locale }, "page locale")
+  const { locale, localeId, error } = await rscLocaleFromParams(params)
+  if (error) return <div>Can't load translations</div>
+  const tokenExprs = ["general.open_surveys"]
+  const clientSideStrings = filterClientSideStrings<{}>(locale, tokenExprs, {})
+  console.log({ clientSideStrings })
+
   return (
     <RSCFetch
       fetch={async () => rscFetchSurveysMetadata({ shouldThrow: false })}

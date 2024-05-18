@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import ClientLayout from "~/app/[lang]/ClientLayout";
-import { DebugRSC } from "~/components/debug/DebugRSC";
+// import { DebugRSC } from "~/components/debug/DebugRSC";
 import { getCommonContexts } from "~/i18n/config";
 import { rscIntlContext } from "~/i18n/rsc-fetchers";
 import { rscAllLocalesMetadata, rscLocaleFromParams } from "~/lib/api/rsc-fetchers";

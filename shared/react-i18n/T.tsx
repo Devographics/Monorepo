@@ -1,6 +1,6 @@
 import { useI18n } from "@devographics/react-i18n";
 import { TK_ATTR } from "./attributes";
-import type React from "react";
+import React from "react";
 
 export type TProps = {
     /**

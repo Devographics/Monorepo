@@ -5,10 +5,10 @@ export interface Translation {
 
 /**
  * Locale definition, optionally including strings
- * TODO: having every field optional is probably wrong
  */
 export interface Locale {
     id: string
+    // TODO: remove this to clarify LocaleDefinition, LocaleStrings, LocaleParsed as dict
     strings?: Translation[]
     /**
      * TODO: this value was not present in the type def here but is expected by Popover
@@ -17,12 +17,14 @@ export interface Locale {
 }
 /**
  * Locale with strings as an array
+ * as returned by the API
  */
 export type LocaleWithStrings = Locale & Required<Pick<Locale, "strings">>
 /**
- * Locale with strings as a record
+ * Locale with strings as a record,
+ * to be used in applications
  */
-export type LocaleParsed = Omit<Locale, "strings"> & { strings: Record<string, Translation> }
+export type LocaleParsed = Locale & { dict: Record<string, Translation> }
 
 interface InterpolationValues {
     values?: { [key: string]: string | number }

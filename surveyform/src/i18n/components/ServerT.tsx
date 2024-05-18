@@ -14,6 +14,7 @@ import { rscLocaleFromContext } from "~/lib/api/rsc-fetchers";
  * we should handle edge cases : children fallback, adding data attributes etc.
  */
 export async function ServerT({ token }: { token: string }) {
-    const { locale } = await rscLocaleFromContext()
-    return <span>{locale?.strings[token]?.t}</span>
+    const { locale, error } = await rscLocaleFromContext()
+    if (error) return <span>Can't load locales</span>
+    return <span>{locale.dict[token]?.t}</span>
 }

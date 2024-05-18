@@ -14,7 +14,7 @@ import { astroEditionWithSitemap } from "@/fetchers/surveyWithSitemap";
 import PageTemplate from "@/components/pages/PageTemplate.astro";
 import { initTheme } from "@/lib/theme";
 // Reason why we use the Bundler moduleResolution: https://stackoverflow.com/questions/58990498/package-json-exports-field-not-working-with-typescript
-import { getLocaleWithStrings } from "@devographics/i18n/server";
+import { getLocaleWithStrings, filterClientSideStrings } from "@devographics/i18n/server";
 import type { PageDefinition } from "@/lib/sitemap";
 import {
   ReactContextLayout,
@@ -22,7 +22,6 @@ import {
 } from "@/components/layouts/ReactContextLayout";
 
 import { GlobalClientLayout } from "@/components/layouts/GlobalClientLayout";
-import { filterClientSideStrings } from "@/lib/i18n/filterClientSideStrings";
 import { astroI18nCtx } from "@/lib/i18n/serverContext";
 
 /**

@@ -1,5 +1,5 @@
-import type { LocaleWithStrings, Translation } from "@devographics/i18n";
-import { TokenExpr } from "./tokenExpr";
+import type { LocaleParsed, Translation } from "../typings";
+import { TokenExpr } from "../tokenExpr";
 
 
 
@@ -17,21 +17,26 @@ import { TokenExpr } from "./tokenExpr";
  * This may create a slight mismatch with how pure server components work for now,
  * we need to study that later on, maybe use token expressions in RSCs/Astro components too
  */
-export function filterClientSideStrings(locale: LocaleWithStrings, rawExprs: Array<string>, ctx: { surveyId: string, editionId: string }): LocaleWithStrings {
-    const allStrings = locale.strings
-    let clientSideStrings: Record<string, string> = {};
+export function filterClientSideStrings<TContext extends Record<string, any>>(
+    locale: LocaleParsed,
+    rawExprs: Array<string>,
+    ctx: TContext): LocaleParsed {
+    const allStrings = Object.values(locale.dict)
+    let clientSideDict: typeof locale.dict = {}
     // Parse expressions
-    const tExprs = rawExprs.map((rawExpr) => new TokenExpr(rawExpr, ctx))
+    const tExprs = rawExprs.map((rawExpr) => new TokenExpr<TContext>(rawExpr, ctx))
     // Helps figuring unmatched values
-    let matchedExprs = new Set<TokenExpr>();
-    allStrings.forEach((str) => {
+    let matchedExprs = new Set<TokenExpr<TContext>>();
+    allStrings.forEach((trans: Translation) => {
         // Try to match a token expression from the client
-        const matchedExpr = tExprs.find((tExpr) => tExpr.match(str.key));
+        const matchedExpr = tExprs.find((tExpr) => tExpr.match(trans.key));
         if (matchedExpr) {
-            if (clientSideStrings[matchedExpr.expr]) {
+            if (clientSideDict[matchedExpr.expr]) {
                 // Duplicates, warn
                 console.warn(
-                    `Token expression ${matchedExpr.expr} (matched by ${str.key}) was already matched, previous value: "${clientSideStrings[matchedExpr.expr]}", new value: "${str.t}"`,
+                    `Token expression ${matchedExpr.expr} (matched by ${trans.key}) was already matched, 
+                    previous value: "${clientSideDict[matchedExpr.expr]}", 
+                    new value: "${trans.t}"`,
                 );
             }
             matchedExprs.add(matchedExpr);
@@ -39,7 +44,7 @@ export function filterClientSideStrings(locale: LocaleWithStrings, rawExprs: Arr
             // and NOT the resolved "html2022.foobar"
             // This way the client doesn't have to bother injecting the right value,
             // it can use token expressions with contextual values directly
-            clientSideStrings[matchedExpr.expr] = str.t;
+            clientSideDict[matchedExpr.expr] = trans;
             // clientSideStrings[str.k] = str.t
         }
     });
@@ -54,6 +59,6 @@ export function filterClientSideStrings(locale: LocaleWithStrings, rawExprs: Arr
     // Use the same shape as strings
     return {
         ...locale,
-        strings: Object.entries(clientSideStrings).map(([key, t]) => ({ key, t } as Translation))
+        dict: clientSideDict
     }
 }

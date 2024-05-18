@@ -15,17 +15,18 @@
 // }
 
 
-export class TokenExpr {
+export class TokenExpr<TContext extends Record<string, any>> {
     expr: string
     regex: RegExp
-    constructor(expr: string, ctx: { surveyId: string, editionId: string }) {
+    constructor(expr: string, ctx: TContext) {
         this.expr = expr
         this.regex = new RegExp(expr
             // preserves "dots"
             .replaceAll(".", "\\.")
             // replace contextual values by their actual value
-            .replaceAll(/\{\{surveyId\}\}/g, ctx.surveyId)
-            .replaceAll(/\{\{editionId\}\}/g, ctx.editionId)
+            // TODO: guess automatically from context
+            .replaceAll(/\{\{surveyId\}\}/g, ctx["surveyId"])
+            .replaceAll(/\{\{editionId\}\}/g, ctx["editionId"])
             // replace wild cards by regex wild cards
             .replaceAll(/\{\{\*\}\}/g, "(.*)")
         )

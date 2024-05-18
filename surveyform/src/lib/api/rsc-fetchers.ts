@@ -17,19 +17,21 @@ import { rscLocaleIdContext } from "~/i18n/rsc-context";
  * @deprecated replace by the new version
  */
 export const rscLocale = cache((options: any) => fetchLocaleConverted(options));
-export const rscLocaleNew = cache(async (options: { localeId: string, contexts: Array<string> }) => {
+export const rscLocaleNew = cache(async (options: { localeId: string, contexts: Array<string> }):
+  // FIXME: the type is not properly inferred at time of writing, despite being correct in the package
+  Promise<{ locale: LocaleParsed, error?: undefined } | { error: Error, locale?: undefined }> => {
   const { locale, error } = await getLocaleWithStrings(options)
   if (error) return { error }
   // react-i18n expects {foo1: bar1, foo2: bar2} etc. map whereas
   // api returns [{key: foo1, t: bar1}, {key: foo2, t: bar2}] etc. array
-  const convertedStrings: { [key: string]: string } = {}
+  const dict: { [key: string]: string } = {}
   locale.strings &&
     locale.strings.forEach((item/*{ key, t, tHtml }*/) => {
       // DO not try to pick t or tHtml here, keep both so each component can pick the right one
       // TODO: assess if it's the right decisio
-      convertedStrings[item.key] = item //tHtml || t
+      dict[item.key] = item //tHtml || t
     })
-  const convertedLocale: LocaleParsed = { ...locale, strings: convertedStrings }
+  const convertedLocale: LocaleParsed = { ...locale, dict }
   return { locale: convertedLocale }
 }
 )
