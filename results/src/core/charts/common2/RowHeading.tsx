@@ -26,7 +26,10 @@ export const RowHeading = ({
                 label={label}
             />
             {setShowGroupedBuckets && (
-                <button onClick={() => setShowGroupedBuckets(!showGroupedBuckets)}>
+                <button
+                    onClick={() => setShowGroupedBuckets(!showGroupedBuckets)}
+                    aria-expanded={showGroupedBuckets}
+                >
                     {showGroupedBuckets ? '-' : `+${bucket.groupedBuckets?.length}`}
                 </button>
             )}
