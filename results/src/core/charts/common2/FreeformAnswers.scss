@@ -1,9 +1,15 @@
 .chart-freeform-answers {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    &-button {
+        background: none;
+        border: none;
+        padding: 0;
+    }
 }
-
 .chart-freeform-answers-heading {
     div {
         display: inline;

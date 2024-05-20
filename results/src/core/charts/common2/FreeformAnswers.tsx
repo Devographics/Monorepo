@@ -97,17 +97,25 @@ export const FreeformAnswersTrigger = (props: {
         html: true
     })
 
+    const answersLabel = getString('answers.answers_for', { values: { name: tokenLabel } })?.t
+
     const label = (
-        <div className="chart-freeform-answers">
-            <CommentIcon size={'small'} /> {formatNumber(count || 0)}
-        </div>
+        <span>
+            <CommentIcon size={'small'} label={answersLabel} enableTooltip={false} />{' '}
+            {formatNumber(count || 0)}
+        </span>
     )
+
     return enableModal ? (
         <ModalTrigger
             trigger={
                 <div>
                     <Tooltip
-                        trigger={label}
+                        trigger={
+                            <button className="chart-freeform-answers chart-freeform-answers-button">
+                                {label}
+                            </button>
+                        }
                         contents={
                             <T k="answers.answers_for" values={{ name: tokenLabel }} md={true} />
                         }
@@ -122,7 +130,7 @@ export const FreeformAnswersTrigger = (props: {
             />
         </ModalTrigger>
     ) : (
-        label
+        <div className="chart-freeform-answers">{label}</div>
     )
 }
 

@@ -89,9 +89,11 @@ const IconWrapper = ({
 
     const isButton = !!onClick
     const IconComponent = enableHover ? IconWithHover : Icon
+
+    const children_ = React.cloneElement(children, { 'aria-hidden': true })
     const icon = inSVG ? (
         <g>
-            {children}
+            {children_}
             {/* <text className="sr-only">{label_}</text> */}
         </g>
     ) : (
@@ -101,7 +103,7 @@ const IconWrapper = ({
             size={size}
             className={`icon-wrapper ${className}`}
         >
-            {children}
+            {children_}
             <span className="sr-only">{label_}</span>
         </IconComponent>
     )

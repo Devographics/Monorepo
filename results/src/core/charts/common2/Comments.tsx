@@ -32,17 +32,26 @@ export const Comments = ({ item }: { item: CombinedItem }) => {
         i18nNamespace
     })
 
+    const commentLabel = getString('comments.comments_for', { values: { name: label.label } })?.t
+
     return (
         <ModalTrigger
             trigger={
                 <div>
                     <Tooltip
                         trigger={
-                            <div className="chart-comments">
-                                <CommentIcon size={'small'} /> {commentsCount || 0}
-                            </div>
+                            <button className="chart-comments">
+                                <CommentIcon
+                                    size={'small'}
+                                    label={commentLabel}
+                                    enableTooltip={false}
+                                />{' '}
+                                {commentsCount || 0}
+                            </button>
                         }
-                        contents={<T k="comments.comments_for" values={{ name: label.label }} />}
+                        contents={
+                            <T k="comments.comments_for" values={{ name: label.label }} md={true} />
+                        }
                     />
                 </div>
             }
