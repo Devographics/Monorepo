@@ -31,7 +31,7 @@ export const combineFacetBuckets = (
             const sameFacetBuckets = compact(
                 selectedBuckets.map(b => b?.facetBuckets?.find(fb => fb.id === option.id)!)
             )
-            // if the current/option we're considering doen't have any matching facet buckets
+            // if the current/option we're considering doesn't have any matching facet buckets
             // across all buckets, return undefined to get rid of it
             if (sameFacetBuckets.length === 0) {
                 return

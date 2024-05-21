@@ -1,6 +1,6 @@
 # Devographics Monorepo
 
-This is the codebase that runs the Devographics surveys, such as [State of JS](http://stateofjs.com/) and [State of CSS](https://stateofcss.com/).
+This is the codebase that runs the Devographics surveys, such as [State of JS](https://stateofjs.com/) and [State of CSS](https://stateofcss.com/).
 
 ## Setup
 

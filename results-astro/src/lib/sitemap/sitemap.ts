@@ -35,7 +35,7 @@ interface BaseBlockDefinition {
 
 /**
  * A processed sitemap section, to be used in the result app
- * (@devographis/types only expose the raw sitemap type that can be used by other apps)
+ * (@devographics/types only expose the raw sitemap type that can be used by other apps)
  * 
  * TODO: work in progress
  * It's actually the type of a raw sitemap
@@ -78,7 +78,7 @@ export interface PageDefinition {
                         }
                     }
                     filters: Array<{
-                        conditons: Array<{
+                        conditions: Array<{
                             fieldId: "string",
                             sectionId: string,
                             operator: "in",

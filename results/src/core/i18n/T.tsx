@@ -45,7 +45,7 @@ export const T = ({
     if (override) {
         classNames.push('t-override')
     } else {
-        // FIXME: expects a fallabck value, not "isFallback boolean"
+        // FIXME: expects a fallback value, not "isFallback boolean"
         const tFullString = getString(k, { values }, isFallback)
         const tShortString = getString(`${k}.short`, { values }, isFallback)
 
