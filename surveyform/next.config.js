@@ -114,8 +114,6 @@ const moduleExports = (phase, { defaultConfig }) => {
   };
   //*** */ Enable Webpack analyzer
   if (process.env.ANALYZE) {
-    const debug = require("debug")("webpack");
-    debug("Enabling Webpack bundle analyzer");
     const withBundleAnalyzer = require("@next/bundle-analyzer")({
       enabled: !!process.env.ANALYZE,
     });
