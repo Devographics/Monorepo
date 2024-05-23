@@ -1,4 +1,12 @@
-import { rscLocaleFromContext } from "~/lib/api/rsc-fetchers";
+import { makeTea, DATA_TOKEN_ATTR } from "@devographics/i18n"
+import { rscLocaleCached } from "~/lib/api/rsc-fetchers";
+
+export async function rscTeapot({ contexts }: { contexts?: Array<string> } = {}) {
+    const { locale, error } = await rscLocaleCached({ contexts })
+    if (error) return { error }
+    const t = makeTea(locale)
+    return { t }
+}
 
 /**
  * A formatted message,
@@ -14,7 +22,7 @@ import { rscLocaleFromContext } from "~/lib/api/rsc-fetchers";
  * we should handle edge cases : children fallback, adding data attributes etc.
  */
 export async function ServerT({ token }: { token: string }) {
-    const { locale, error } = await rscLocaleFromContext()
+    const { t, error } = await rscTeapot()
     if (error) return <span>Can't load locales</span>
-    return <span>{locale.dict[token]?.t}</span>
+    return <span {...{ [DATA_TOKEN_ATTR]: token }}>{t(token).t}</span>
 }

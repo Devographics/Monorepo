@@ -1,5 +1,5 @@
 ---
-import { TK_ATTR } from "@devographics/i18n";
+import { DATA_TOKEN_ATTR } from "@devographics/i18n";
 const { i18n } = Astro.locals;
 const { token, values, html } = Astro.props;
 interface Props {
@@ -18,6 +18,6 @@ const res = i18n.t(token, values);
 // we don't need something as elaborate than client-side, which also needs filtering
 ---
 
-<span {...{ [TK_ATTR]: token }}
+<span {...{ [DATA_TOKEN_ATTR]: token }}
   >Astro translation key {html ? res.tHtml : res.t}</span
 >

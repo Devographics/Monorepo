@@ -1,10 +1,8 @@
 import { Metadata } from "next";
 import ClientLayout from "~/app/[lang]/ClientLayout";
-// import { DebugRSC } from "~/components/debug/DebugRSC";
-import { getCommonContexts } from "~/i18n/config";
-import { rscIntlContext } from "~/i18n/rsc-fetchers";
 import { rscAllLocalesMetadata, rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
 import { metadata as defaultMetadata } from "../../layout";
+import { rscTeapot } from "~/i18n/components/ServerT";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -22,10 +20,10 @@ export async function generateMetadata({
 }: {
   params: PageServerProps;
 }): Promise<Metadata | undefined> {
-  const contexts = getCommonContexts();
-  const intlContext = await rscIntlContext({ localeId: params.lang, contexts });
-  const title = intlContext.formatMessage({ id: "general.title" });
-  const description = intlContext.formatMessage({ id: "general.description" });
+  const { t, error } = await rscTeapot()
+  if (error) return defaultMetadata
+  const title = t("general.title").t
+  const description = t("general.description").t
   const metadata = { ...defaultMetadata, title, description };
   return metadata;
 }

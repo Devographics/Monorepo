@@ -10,7 +10,7 @@ import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import {
   getCommonContexts,
   getEditionContexts,
-  getLocaleIdFromParams,
+  safeLocaleIdFromParams,
 } from "~/i18n/config";
 import { rscAllLocalesMetadata, rscLocale } from "~/lib/api/rsc-fetchers";
 import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
@@ -44,7 +44,7 @@ export default async function SurveyLayout({
 }) {
   const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
   // survey specific strings
-  const localeId = getLocaleIdFromParams(params);
+  const localeId = safeLocaleIdFromParams(params);
   if (localeId.includes(".")) {
     console.error(`Error: matched a file instead of a lang: ${localeId}.
 This is a bug in current Next.js version (13.0.4, november 2022). 

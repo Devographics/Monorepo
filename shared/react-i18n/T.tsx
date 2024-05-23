@@ -1,5 +1,5 @@
 import { useI18n } from "./i18nContext";
-import { TK_ATTR } from "./attributes";
+import { DATA_TOKEN_ATTR } from "@devographics/i18n";
 import React from "react";
 
 export type TProps = {
@@ -51,7 +51,7 @@ export function T({
     // having a wrapper element is mandatory to attach some metadata
     // helping live translation later on
     return <Tag {...{
-        [TK_ATTR]: token,
+        [DATA_TOKEN_ATTR]: token,
         "data-dg-fallback-children": useFallbackChildren ? "true" : undefined
         // @ts-ignore Weird error with Children due to different versions of React
     }} {...otherProps}>{displayedValue || children}</Tag>

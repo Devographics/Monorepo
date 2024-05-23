@@ -11,6 +11,7 @@ import { defaultLocaleId } from "~/i18n/config";
 import { captureException } from "@sentry/nextjs";
 import { LocaleDef, LocaleDefWithStrings } from "../typings";
 import { useCurrentUser } from "~/lib/users/hooks";
+import { LocaleParsed } from "@devographics/i18n";
 
 interface LocaleContextValue {
   setLocale: (localId: string) => Promise<void>;
@@ -67,7 +68,7 @@ export const useSetLocale = (updateUser?: any) => {
  */
 export const LocaleContextProvider = (props: {
   localeId: string;
-  localeStrings: LocaleDefWithStrings;
+  localeStrings: LocaleParsed;
   locales: Array<LocaleDef>;
   /** Optionally store the selected locale */
   updateUser?: any;
@@ -88,6 +89,7 @@ export const LocaleContextProvider = (props: {
   const { children } = props;
 
   const stringsRegistry = new StringsRegistry("en-US");
+  // @ts-ignore
   stringsRegistry.addStrings(localeId, localeStrings.strings);
   return (
     // NOTE: IntlContextProvider is in charge of merging strings with a previously existing parent

@@ -6,8 +6,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { useKeydownContext } from 'core/helpers/keydownContext'
 
 const getGitHubSearchUrl = (k: string, localeId = 'en') =>
-    `https://github.com/search?q=${k}+repo%3AStateOfJS%2Fstate-of-js-graphql-results-api+path%3A%2Fsrc%2Fi18n%2F${
-        localeId || 'en'
+    `https://github.com/search?q=${k}+repo%3AStateOfJS%2Fstate-of-js-graphql-results-api+path%3A%2Fsrc%2Fi18n%2F${localeId || 'en'
     }%2F+path%3A%2Fsrc%2Fi18n%2Fen-US%2F&type=Code&ref=advsearch&l=&l=`
 
 interface TProps {

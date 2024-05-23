@@ -1,11 +1,12 @@
 import { cache } from "react";
+import { unstable_cache } from "next/cache"
 import {
   fetchAllLocalesIds,
   fetchAllLocalesMetadata,
   fetchLocaleConverted,
 } from "@devographics/fetch";
 import { AppName } from "@devographics/types";
-import { getCommonContexts, getLocaleIdFromParams } from "~/i18n/config";
+import { getCommonContexts, safeLocaleIdFromParams } from "~/i18n/config";
 import { getLocaleDict } from "@devographics/i18n/server"
 import { type LocaleParsed } from "@devographics/i18n";
 import { rscLocaleIdContext } from "~/i18n/rsc-context";
@@ -28,15 +29,21 @@ export const rscLocaleNew = cache(async (options: { localeId: string, contexts: 
 }
 )
 
+
+interface LocaleParams {
+  lang: string,
+  contexts?: Array<string>
+}
 /**
  * Get locale with strings, based on "lang" param
  * 
  * To be used in pages and layouts
- * @see rscLocaleFromContext to get the locale from server components
+ * @see rscLocaleCached to get the locale from server components
  */
-export const rscLocaleFromParams = cache(async (params: { lang: string }) => {
-  const contexts = getCommonContexts();
-  const localeId = getLocaleIdFromParams(params);
+export const rscLocaleFromParams = (params: LocaleParams) => unstable_cache(
+  async (params: LocaleParams) => {
+    const contexts = params.contexts || getCommonContexts();
+    const localeId = safeLocaleIdFromParams({ lang: params.lang });
   // TODO: our previous implemention returns "data", "error", common in graphql
   // while the pipeline system insteads return the data or throw
   /*const {
@@ -44,21 +51,25 @@ export const rscLocaleFromParams = cache(async (params: { lang: string }) => {
     error,
     ___metadata: ___rscLocale_CommonContexts,
   }*/ const { locale, error } = await rscLocaleNew({
-    localeId,
-    contexts,
-  });
-  if (error) return { error }
-  return { locale, localeId }
-})
+      localeId,
+      contexts,
+    });
+    if (error) return { error }
+    return { locale, localeId }
+  },
+  // convoluted syntax that let's us compute cache key based on function params
+  ["locale", ...(params.contexts || [])])(params)
 
 /**
  * Get current locale strings within React Server Components
  * Uses a server context to retrieve the "lang" param
+ * 
+ * Contexts must be passed as a rest parameter in order to allow caching
  */
-export const rscLocaleFromContext = cache(async () => {
-  const localeId = rscLocaleIdContext()
-  return rscLocaleFromParams({ lang: localeId })
-})
+export const rscLocaleCached = async ({ contexts }: { contexts?: Array<string> } = {}) => {
+  const lang = rscLocaleIdContext()
+  return rscLocaleFromParams({ lang, contexts })
+}
 
 export const rscAllLocalesMetadata = cache((options?: any) =>
   fetchAllLocalesMetadata(options)

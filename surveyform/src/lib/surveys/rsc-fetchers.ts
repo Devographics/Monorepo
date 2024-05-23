@@ -4,11 +4,11 @@ import type { Metadata } from "next";
 import { publicConfig } from "~/config/public";
 import { rscMustGetSurveyEditionFromUrl } from "~/app/[lang]/survey/[slug]/[year]/rsc-fetchers";
 import { getCommonContexts, getEditionContexts } from "~/i18n/config";
-import { rscIntlContext } from "~/i18n/rsc-fetchers";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import { getSectioni18nIds } from "~/i18n/survey";
 import { serverConfig } from "~/config/server";
+import { rscTeapot } from "~/i18n/components/ServerT";
 
 export const rscFetchSurveysMetadata = cache(
   async (options?: FetcherFunctionOptions) => {
@@ -42,7 +42,9 @@ export const rscGetMetadata = async ({
   const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
 
   const contexts = [...getCommonContexts(), ...getEditionContexts({ edition })];
-  const intlContext = await rscIntlContext({ localeId: lang, contexts });
+
+  const { t, error } = await rscTeapot(...contexts)
+  if (error) throw new Error("Could not access translation function:" + error)
 
   const { socialImageUrl, year } = edition;
   const { name = "" } = edition.survey;
@@ -50,10 +52,7 @@ export const rscGetMetadata = async ({
   const imageUrl = getEditionImageUrl(edition, "og");
   let imageAbsoluteUrl = socialImageUrl || imageUrl;
   const url = edition.questionsUrl || publicConfig.appUrl;
-  const description = intlContext.formatMessage({
-    id: "general.take_survey",
-    values: { name, year: year + "" },
-  });
+  const description = t("general.take_survey", { name, year: year + "" }).t
 
   let title = getEditionTitle({ edition });
 
@@ -62,7 +61,7 @@ export const rscGetMetadata = async ({
 
   if (section) {
     const { title: sectionTitleId } = getSectioni18nIds({ section });
-    const sectionTitle = intlContext.formatMessage({ id: sectionTitleId });
+    const sectionTitle = t(sectionTitleId)
     title += `: ${sectionTitle}`;
   }
 

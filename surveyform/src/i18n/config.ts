@@ -14,7 +14,7 @@ export const getEditionContexts = ({
   edition: EditionMetadata;
 }) => [edition.survey.id];
 
-export const getLocaleIdFromParams = (params: { lang: string }) => {
+export const safeLocaleIdFromParams = (params: { lang: string }) => {
   const localeId = filterLang(params.lang);
   if (!localeId) {
     throw new Error(
@@ -43,7 +43,7 @@ function filterLang(maybeLocale: string): string | null {
     if (publicConfig.isDev) {
       console.warn(
         "Trying to render with param lang literally set to '[lang]'." +
-          "This issue has appeared in Next 13.1.0+ (fev 2023)."
+        "This issue has appeared in Next 13.1.0+ (fev 2023)."
       );
     }
     return null;

@@ -15,12 +15,12 @@
 // but need to play around with declaratively rendering each portal in a loop
 // import { createPortal } from "react-dom"
 import { createRoot } from "react-dom/client"
-import { TK_ATTR, TK_DATASET } from "./attributes";
+import { DATA_TOKEN_ATTR, TOKEN_DATASET } from "@devographics/i18n";
 
 
 function enableTranslation() {
   console.log("Enabling translations");
-  document.querySelectorAll(`[${TK_ATTR}]`).forEach((el: Element) => {
+  document.querySelectorAll(`[${DATA_TOKEN_ATTR}]`).forEach((el: Element) => {
     console.debug("Found a translated element", el);
     if (!(el instanceof HTMLElement)) {
       console.warn(
@@ -29,7 +29,7 @@ function enableTranslation() {
       );
       return;
     }
-    const key = el.dataset?.[TK_DATASET];
+    const key = el.dataset?.[TOKEN_DATASET];
     if (!key) {
       console.warn("Found a translation element with an empty key", el);
       return;
