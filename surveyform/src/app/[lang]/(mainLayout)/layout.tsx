@@ -22,8 +22,8 @@ export async function generateMetadata({
 }): Promise<Metadata | undefined> {
   const { t, error } = await rscTeapot()
   if (error) return defaultMetadata
-  const title = t("general.title").t
-  const description = t("general.description").t
+  const title = t("general.title")
+  const description = t("general.description")
   const metadata = { ...defaultMetadata, title, description };
   return metadata;
 }

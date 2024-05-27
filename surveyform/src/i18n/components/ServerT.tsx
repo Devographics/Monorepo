@@ -4,8 +4,8 @@ import { rscLocaleCached } from "~/lib/api/rsc-fetchers";
 export async function rscTeapot({ contexts }: { contexts?: Array<string> } = {}) {
     const { locale, error } = await rscLocaleCached({ contexts })
     if (error) return { error }
-    const t = makeTea(locale)
-    return { t }
+    const { t, getMessage } = makeTea(locale)
+    return { t, getMessage }
 }
 
 /**
@@ -21,8 +21,8 @@ export async function rscTeapot({ contexts }: { contexts?: Array<string> } = {})
  * TODO: this is just a draft to check that everything is plugged
  * we should handle edge cases : children fallback, adding data attributes etc.
  */
-export async function ServerT({ token }: { token: string }) {
+export async function ServerT({ token, values, fallback }: { token: string, values?: Record<string, any>, fallback?: string }) {
     const { t, error } = await rscTeapot()
     if (error) return <span>Can't load locales</span>
-    return <span {...{ [DATA_TOKEN_ATTR]: token }}>{t(token).t}</span>
+    return <span {...{ [DATA_TOKEN_ATTR]: token }}>{t(token, values, fallback)}</span>
 }

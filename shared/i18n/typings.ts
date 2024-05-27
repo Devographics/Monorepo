@@ -1,6 +1,8 @@
 export interface Translation {
     key: string
     t: string
+    tHtml?: string,
+    tClean?: string
 }
 
 /**

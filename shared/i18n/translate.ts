@@ -16,6 +16,9 @@ const findString = (key: string, strings: Translation[]) => {
         .find(t => t.key === key)
 }
 
+/**
+ * "Hello {foobar }", {foobar: "world"} => "hello world"
+ */
 const applyTemplate = ({
     t,
     values,
@@ -28,6 +31,7 @@ const applyTemplate = ({
     key: string
 }) => {
     try {
+        // Detect any text within {}
         return template(t, { interpolate: /{([\s\S]+?)}/g })(values)
     } catch (error) {
         console.error(error)
@@ -37,8 +41,6 @@ const applyTemplate = ({
 
 /**
  * @deprecated Use makeTea with a parsed locale using a dictionary of translations
- * @param locale 
- * @returns 
  */
 export const makeTranslatorFunc =
     (locale: Locale): StringTranslator =>
@@ -71,32 +73,56 @@ export const makeTranslatorFunc =
             return result as StringTranslatorResult
         }
 
+
+/** Matches anything betwen { }, tolerate spaces, allow multiple interpolations */
+const INTERPOLATION_REGEX = /{([\s\S]+?)}/g
+/**
+ * TODO: see the perf impact of computing the templates
+ * Precomputing is probably useless, but we could cache computations
+ */
+function injectValues(str: string, values: Record<string, any>) {
+    return template(str, { interpolate: INTERPOLATION_REGEX })(values)
+}
+
 export function makeTea(locale: LocaleParsed) {
-    return function t(key: string, values: Record<string, any> = {}, fallback?: string) {
-        const { dict, ...rest } = locale
-        let result: Partial<StringTranslatorResult> = { key, locale: rest }
-        const stringObject = dict[key]
-        if (stringObject) {
-            result = { ...result, ...stringObject }
-        } else {
+
+    /**
+     * Get the full translation with metadata, HTML and clean versions
+     */
+    function getMessage(key: string, values: Record<string, any> = {}, fallback?: string) {
+        // get the string or template
+        let result: StringTranslatorResult = {
+            key,
+            locale: { id: locale.id, label: locale.label },
+            t: fallback || ""
+        }
+        const translation = locale.dict[key]
+        if (!translation) {
             result.missing = true
-            if (fallback) {
-                result.t = fallback
+        } else {
+            result = {
+                ...result,
+                ...translation,
             }
         }
-
-        const injectValues = (s: string) =>
-            values ? applyTemplate({ t: s, values, locale, key }) : s
-
-        if (result.t) {
-            const t = injectValues(result.t)
-            result.t = t
-            result.tClean = injectValues(result.tClean ?? t)
-            result.tHtml = injectValues(result.tHtml ?? t)
-        }
-
-        // TODO: this object seems super heavy
-        console.log(result, stringObject, key)
+        // interpolate values
+        const t = injectValues(result.t, values)
+        // handle tClean and tHTML variations
+        result.t = t
+        result.tClean = result.tClean ? injectValues(result.tClean, values) : result.t
+        result.tHtml = result.tHtml ? injectValues(result.tHtml, values) : result.t
         return result as StringTranslatorResult
     }
+    /**
+     * Shortcut to get a translated string
+     * 
+     * Prefer "getMessage" for more elaborate usage (HTML content, handling missing values...)
+     */
+    function t(key: string, values: Record<string, any> = {}, fallback?: string) {
+        let result = locale.dict[key]?.t || fallback || ""
+        result = injectValues(result, values)
+        return result
+
+    }
+    return { t, getMessage }
 }
