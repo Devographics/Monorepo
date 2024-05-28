@@ -169,6 +169,15 @@ export const mergeSections = (sections1: Section[] = [], sections2: Section[] = 
     return sections
 }
 
+// TODO: do this better
+export const getSectionType = (section: SectionApiObject) => {
+    if (['tools', 'libraries'].includes(section.id) || section.template === 'tool') {
+        return 'tools'
+    } else {
+        return 'features'
+    }
+}
+
 export const getSectionItems = (section: SectionApiObject, type: 'tools' | 'features') =>
     type === 'tools' ? getSectionTools(section) : getSectionFeatures(section)
 // TODO: do this better

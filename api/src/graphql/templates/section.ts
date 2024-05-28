@@ -41,6 +41,7 @@ export const generateSectionType = ({
 
     // TODO: find better way to figure out if a section is a feature or tool section
     const isFeatureOrToolSection =
+        section.id === 'libraries' ||
         section.id === 'features' ||
         (section.template && ['featurev3', 'tool'].includes(section.template))
 
