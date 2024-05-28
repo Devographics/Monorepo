@@ -33,7 +33,14 @@ export const ITEM_GAP_PERCENT = 0
 export const COLUMN_GAP_PERCENT = 2
 export const MINIMUM_COLUMN_WIDTH_PERCENT = 25
 
-export const getBuckets = (item: StandardQuestionData) => item.responses.currentEdition.buckets
+export const getBuckets = (item: StandardQuestionData) => {
+    const buckets = item?.responses?.currentEdition?.buckets
+    if (!buckets) {
+        console.warn('Could not find buckets for item:')
+        console.log(item)
+    }
+    return buckets
+}
 
 export const getCommentsCount = (item: StandardQuestionData) =>
     item?.comments?.currentEdition?.count || 0

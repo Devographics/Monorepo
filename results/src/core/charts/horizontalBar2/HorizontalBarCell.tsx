@@ -10,7 +10,6 @@ import { formatValue } from './helpers/labels'
 import { getViewDefinition } from './helpers/views'
 import { useWidth } from '../common2/helpers'
 import { CellLabel } from '../common2'
-import { useEntities } from 'core/helpers/entities'
 
 // hide labels for cells under this size
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30

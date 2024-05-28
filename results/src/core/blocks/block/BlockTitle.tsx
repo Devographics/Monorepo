@@ -76,11 +76,11 @@ const BlockTitle = ({
                         <SharePermalink block={block} />
                         <div className="block-title-contents">
                             <BlockTitleContents block={block} />
-                            {completion && !pageContext.isCapturing && (
+                            {/* {completion && !pageContext.isCapturing && (
                                 <BlockCompletionIndicator completion={completion} />
-                            )}
+                            )} */}
                             {/* <BlockQuestionTooltip block={block} /> */}
-                            {isFreeformQuestion && <FreeformIndicator showLabel={false} />}
+                            {/* {isFreeformQuestion && <FreeformIndicator showLabel={false} />} */}
                             {!isCapturing && enableChartSponsorships && (
                                 <BlockSponsor block={block} />
                             )}

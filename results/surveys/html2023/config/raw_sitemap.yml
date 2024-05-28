@@ -76,7 +76,7 @@
 
 - id: user_info
   titleId: sections.demographics.title
-  descriptionId: sections.user_info.description.css2023
+  # descriptionId: sections.user_info.description.css2023
   path: /demographics
   blocks:
       - template: page_introduction
@@ -124,44 +124,6 @@
             Respondents tended to work for mostly mid-sized organizations, with a median company size of **75** employees.
         variants:
             - template: vs_salary
-
-            # - id: company_size_vs_gender
-            #   fieldId: company_size
-            #   template: multiple_options2
-            #   parameters:
-            #       showNoAnswer: true
-            #   filtersState:
-            #       options:
-            #           mode: facet
-            #       facet:
-            #           sectionId: user_info
-            #           id: gender
-
-            # - id: company_size_by_gender
-            #   fieldId: company_size
-            #   template: multiple_options2
-            #   parameters:
-            #       showNoAnswer: true
-            #   filtersState:
-            #       options:
-            #           showDefaultSeries: false
-            #           mode: grid
-            #       filters:
-            #           - conditions:
-            #                 - fieldId: gender
-            #                   sectionId: user_info
-            #                   operator: eq
-            #                   value: male
-            #           - conditions:
-            #                 - fieldId: gender
-            #                   sectionId: user_info
-            #                   operator: eq
-            #                   value: female
-            #           - conditions:
-            #                 - fieldId: gender
-            #                   sectionId: user_info
-            #                   operator: eq
-            #                   value: non_binary
 
       - id: variants_hint
         template: hint

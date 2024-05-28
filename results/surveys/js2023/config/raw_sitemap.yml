@@ -1,0 +1,713 @@
+- id: introduction
+  path: /
+  showTitle: false
+  blocks:
+      # - id: survey_livestream
+      #   blockType: LivestreamBlock
+      #   disableExport: true
+      #   wrapBlock: false
+      - id: survey_intro
+        blockType: SurveyIntroBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_credits
+        template: credits
+      - id: survey_newsletter
+        blockType: NewsletterBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_sponsors
+        template: sponsors
+      - id: survey_partners
+        template: sponsors
+        blockType: PartnersBlock
+      - id: survey_translators
+        blockType: TranslatorsBlock
+        disableExport: true
+        wrapBlock: false
+
+- id: tshirt
+  path: /tshirt
+  showTitle: false
+  blocks:
+      - id: tshirt_intro
+        template: page_introduction
+      - id: tshirt_block
+        blockType: TshirtBlock
+        wrapBlock: false
+        disableExport: true
+
+# - id: data_explorer
+#   titleId: sections.data_explorer.title
+#   path: /explorer
+#   blocks:
+#       - template: page_introduction
+
+#       - id: data_explorer
+#         showTitle: false
+#         chartOnly: true
+#         wrapBlock: false
+#         template: data_explorer
+#         parameters: { showNoAnswer: true }
+#         variables:
+#             xAxis: user_info__yearly_salary
+#             yAxis: user_info__years_of_experience
+
+- id: user_info
+  titleId: sections.demographics.title
+  path: /demographics
+  blocks:
+      - template: page_introduction
+
+      - id: country
+        template: multiple_options2
+        parameters: { limit: 20 }
+        takeaway: >
+            While many respondents (**19%**) came from the U.S., we also had strong representation from Germany, France, the U.K., and the Netherlands (**24% combined**), reflecting the liveliness of the front end community in these countries.
+        variants:
+            - template: vs_salary
+              parameters: { limit: 20, sort: { property: medianByFacet, order: desc } }
+
+      - id: locale
+        template: multiple_options2
+        parameters: { cutoff: 20 }
+        takeaway: >
+            The language respondents selected to fill out the survey.
+
+      - id: hint_hint
+        template: hint
+
+      - id: completion_stats
+        template: multiple_options2
+        takeaway: >
+            The proportion of the survey filled out by respondents.
+
+      - id: age
+        template: multiple_options2
+        takeaway: >
+            Survey respondents were on average **33.6** years old, slightly higher than the [State of JS](https://2022.stateofjs.com) (**32.2**) and [State of CSS](https://2023.stateofcss.com) (**33.5**) surveys.
+        variants:
+            - template: vs_salary
+
+      - id: years_of_experience
+        template: multiple_options2
+        takeaway: >
+            Respondents had on average **10.7** years of web development experience.
+        variants:
+            - template: vs_salary
+
+      - id: company_size
+        template: multiple_options2
+        takeaway: >
+            Respondents tended to work for mostly mid-sized organizations, with a median company size of **75** employees.
+        variants:
+            - template: vs_salary
+
+      - id: variants_hint
+        template: hint
+      - id: yearly_salary
+        template: multiple_options2
+        takeaway: >
+            Respondents had a median income of USD $75,000, noticeably higher than the **$59,970** figure reported by the [Stack Overflow Developer Survey](https://survey.stackoverflow.co/2023/#section-salary-salary-by-developer-type).
+
+      - id: higher_education_degree
+        template: multiple_options2
+        takeaway: >
+            Having a higher-education degree did not translate in meaningful differences in yearly income.
+        variants:
+            - template: vs_salary
+
+      - id: gender
+        template: multiple_options2
+        takeaway: >
+            Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
+        variants:
+            - template: vs_salary
+            - id: country_vs_gender
+              fieldId: country
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+                  limit: 15
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+
+      - id: race_ethnicity
+        template: multiple_options2_combined
+        takeaway: >
+            The survey's non-white population tended to be younger and have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
+        variants:
+            - template: vs_years_of_experience
+            - template: vs_age
+
+      - id: disability_status
+        template: multiple_options2_combined
+
+      - id: source
+        template: multiple_options2_freeform
+        parameters:
+            limit: 20
+
+      - id: user_info_resources
+        items: [renderatl]
+        template: recommended_resources
+
+- id: features
+  path: /features
+  blocks:
+      - template: page_introduction
+
+      # Note: JS 2023 did not have any "main features", only "mini-features"
+
+      # - id: features_overview
+      #   template: features_overview
+
+      # - id: knowledge_score
+      #   template: multiple_options
+
+      - id: features_resources
+        items: [fm-javascript]
+        template: recommended_resources
+
+      - id: syntax_features
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: string_features
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: array_features
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: async_features
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: browser_api_features
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: language_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        parameters: { limit: 10 }
+
+      - id: browser_apis_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        parameters: { limit: 10 }
+
+- id: libraries
+  path: /libraries
+  blocks:
+      - id: librariesIntroduction
+        template: page_introduction
+
+      - id: all_tools2
+        template: multi_items_experience
+        chartOptions:
+            limit: 10
+
+      # hidden question used to load data for next 3 charts; don't remove
+      - template: all_tools
+
+      - template: tools_arrows
+
+      - template: tier_list
+
+      - template: scatterplot_overview
+
+      # - id: all_sections_tools_cardinality_by_user
+      #   template: tools_cardinality_by_user_js
+
+  children:
+      - id: front_end_frameworks
+        path: /front-end-frameworks
+        blocks:
+            - template: page_introduction
+
+            - template: tools_experience_linechart
+              tabId: blocks.tools_experience_ranking.percentages
+
+            - id: front_end_frameworks_items
+              template: multi_items_experience
+              i18nNamespace: tools
+
+            - id: tool_modal_hint
+              template: hint
+
+            - template: section_prenormalized_tools
+              parameters:
+                  limit: 10
+
+            - id: lee_robinson
+              template: picks
+              variables:
+                  url: https://kit.svelte.dev/
+
+            - template: happiness
+
+            - id: front_end_frameworks_happiness
+              template: multiple_options2
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: front_end_frameworks_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: front_end_frameworks_resources
+              items: [fm-react, fm-vue]
+              template: recommended_resources
+
+      - id: meta_frameworks
+        path: /meta-frameworks
+        blocks:
+            - template: page_introduction
+
+            - template: tools_experience_linechart
+              tabId: blocks.tools_experience_ranking.percentages
+
+            - id: meta_frameworks_items
+              template: multi_items_experience
+              i18nNamespace: tools
+
+            - id: tool_modal_hint
+              template: hint
+
+            - template: section_prenormalized_tools
+              parameters:
+                  limit: 10
+
+            - id: lee_robinson
+              template: picks
+              variables:
+                  url: https://kit.svelte.dev/
+
+            - template: happiness
+
+            - id: meta_frameworks_happiness
+              template: multiple_options2
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: meta_frameworks_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: meta_frameworks_resources
+              items: [fm-fullstack-app-next, fm-servers-node-js]
+              template: recommended_resources
+
+      - id: testing
+        path: /testing
+        blocks:
+            - template: page_introduction
+
+            - template: tools_experience_linechart
+              tabId: blocks.tools_experience_ranking.percentages
+
+            - id: testing_items
+              template: multi_items_experience
+              i18nNamespace: tools
+
+            - id: tool_modal_hint
+              template: hint
+
+            - template: section_prenormalized_tools
+              parameters:
+                  limit: 10
+
+            - id: lee_robinson
+              template: picks
+              variables:
+                  url: https://kit.svelte.dev/
+
+            - template: happiness
+
+            - id: testing_happiness
+              template: multiple_options2
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: testing_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: testing_resources
+              items: [fm-testing-practices-principles]
+              template: recommended_resources
+
+      - id: mobile_desktop
+        path: /mobile_desktop
+        blocks:
+            - template: page_introduction
+
+            - template: tools_experience_linechart
+              tabId: blocks.tools_experience_ranking.percentages
+
+            - id: mobile_desktop_items
+              template: multi_items_experience
+              i18nNamespace: tools
+
+            - id: tool_modal_hint
+              template: hint
+
+            - template: section_prenormalized_tools
+              parameters:
+                  limit: 10
+
+            - id: lee_robinson
+              template: picks
+              variables:
+                  url: https://kit.svelte.dev/
+
+            - template: happiness
+
+            - id: mobile_desktop_happiness
+              template: multiple_options2
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: mobile_desktop_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: mobile_desktop_resources
+              items: [fm-react-native-v2, fm-intermediate-react-native]
+              template: recommended_resources
+
+      - id: build_tools
+        path: /build_tools
+        blocks:
+            - template: page_introduction
+
+            - template: tools_experience_linechart
+              tabId: blocks.tools_experience_ranking.percentages
+
+            - id: build_tools_items
+              template: multi_items_experience
+              i18nNamespace: tools
+
+            - id: tool_modal_hint
+              template: hint
+
+            - template: section_prenormalized_tools
+              parameters:
+                  limit: 10
+
+            - id: lee_robinson
+              template: picks
+              variables:
+                  url: https://kit.svelte.dev/
+
+            - template: happiness
+
+            - id: build_tools_happiness
+              template: multiple_options2
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: build_tools_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: build_tools_resources
+              items: [fm-xstate]
+              template: recommended_resources
+
+      - id: monorepo_tools
+        path: /monorepo_tools
+        blocks:
+            - template: page_introduction
+
+            - template: tools_experience_linechart
+              tabId: blocks.tools_experience_ranking.percentages
+
+            - id: monorepo_tools_items
+              template: multi_items_experience
+              i18nNamespace: tools
+
+            - id: tool_modal_hint
+              template: hint
+
+            - template: section_prenormalized_tools
+              parameters:
+                  limit: 10
+
+            - id: lee_robinson
+              template: picks
+              variables:
+                  url: https://kit.svelte.dev/
+
+            - template: happiness
+
+            - id: monorepo_tools_happiness
+              template: multiple_options2
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: monorepo_tools_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: monorepo_tools_resources
+              items: [fm-monorepos]
+              template: recommended_resources
+
+- id: other_tools
+  path: /other-tools
+  blocks:
+      - id: tools_others_intro
+        template: page_introduction
+
+      - id: libraries
+        template: multiple_options2_combined
+
+      - id: theo_browne
+        template: picks
+        variables:
+            url: https://trpc.io/
+
+      - id: graphics_animation
+        template: multiple_options2_combined
+
+      - id: backend_frameworks
+        template: multiple_options2_combined
+
+      - id: runtimes
+        template: multiple_options2_combined
+
+      - id: edge_runtimes
+        template: multiple_options2_combined
+
+      - id: non_js_languages
+        template: multiple_options2_combined
+
+      - id: ai_tools
+        template: multiple_options2
+
+      - id: hosting
+        template: multiple_options2_combined
+
+      - id: sharing_hint
+        template: hint
+
+      - id: ben_holmes
+        template: picks
+        variables:
+            url: https://github.com/colinhacks/zod
+
+      - id: tools_others_resources
+        items: [fm-typescript, fm-node-js]
+        template: recommended_resources
+- id: usage
+  intlId: usage_js
+  path: /usage
+  blocks:
+      - template: page_introduction
+
+      - id: js_ts_balance
+        template: multiple_options2
+
+      - id: usage_type
+        template: multiple_options2
+
+      - id: what_do_you_use_js_for
+        template: multiple_options2_combined
+
+      - id: industry_sector
+        template: multiple_options2_combined
+
+      - id: js_app_patterns
+        template: multiple_options2_combined
+
+      - id: top_js_pain_points
+        template: multiple_options2_combined
+
+      - id: top_currently_missing_from_js
+        template: multiple_options2_combined
+
+      - id: usage_resources
+        items: [fm-algorithms, fm-js-patterns]
+        template: recommended_resources
+
+- id: resources
+  path: /resources
+  blocks:
+      - template: page_introduction
+
+      - id: shaundai_person
+        template: picks
+        variables:
+            url: https://sarahdrasnerdesign.com/
+
+      - id: paid_courses
+        template: multiple_options2_freeform
+
+      - id: tyler_mcginnis
+        template: picks
+        variables:
+            url: https://tanstack.com/
+
+      - id: podcasts
+        template: multiple_options2_freeform
+
+      - id: video_creators
+        template: multiple_options2_freeform
+
+      - id: people
+        template: multiple_options2_freeform
+
+      - id: other_surveys
+        template: multiple_options2_combined
+
+      - id: resources_resources
+        items: [reactathon]
+        template: recommended_resources
+- id: awards
+  path: /awards
+  blocks:
+      - template: page_introduction
+
+      - id: awards
+        template: awards
+        variables:
+            entities: '"top_level_await","array_at","string_replace_all","vite","vitest","pnpm","vite","vitest","testing_library","turbopack","turborepo","astro","fnm","azure_functions","private_fields","proxies","nullish_coalescing","react","angular","storybook"'
+        awards:
+            - id: feature_adoption_delta_award
+              template: award
+              awards:
+                  - id: top_level_await
+                    value: '+26.4%'
+                  - id: array_at
+                    value: '+14.2%'
+                  - id: string_replace_all
+                    value: '+9.6%'
+
+            - id: tool_usage_delta_award
+              template: award
+              awards:
+                  - id: vite
+                    value: '+18.8%'
+                  - id: vitest
+                    value: '+11.1%'
+                  - id: pnpm
+                    value: '+8.4%'
+
+            - id: tool_satisfaction_award
+              template: award
+              awards:
+                  - id: vite
+                    value: '98%'
+                  - id: vitest
+                    value: '97%'
+                  - id: testing_library
+                    value: '95%'
+
+            - id: tool_interest_award
+              template: award
+              awards:
+                  - id: vite
+                    value: '81%'
+                  - id: turbopack
+                    value: '80%'
+                  - id: turborepo
+                    value: '77%'
+
+            - id: most_write_ins_award
+              template: award
+              awards:
+                  - id: astro
+                    value: '402'
+                  - id: fnm
+                    value: '338'
+                  - id: azure_functions
+                    value: '234'
+
+            - id: most_commented_feature_award
+              template: award
+              awards:
+                  - id: private_fields
+                    value: 102
+                  - id: proxies
+                    value: 71
+                  - id: nullish_coalescing
+                    value: 66
+
+            - id: most_commented_tool_award
+              template: award
+              awards:
+                  - id: react
+                    value: 66
+                  - id: angular
+                    value: 47
+                  - id: storybook
+                    value: 42
+
+      - id: awards_resources
+        items: [road-to-react]
+        template: recommended_resources
+
+- id: conclusion
+  path: /conclusion
+  blocks:
+      - id: conclusion
+        template: conclusion
+        variables:
+            author: sarah_drasner
+            entities: '"sarah_drasner"'
+
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+        wrapBlock: false
+        disableExport: true
+
+# note: other pages need to be included in the sitemap too so they can get the proper
+# locale passed to them
+
+- id: about
+  path: /about
+  blocks:
+      - id: about_contents
+        blockType: AboutBlock
+        wrapBlock: false
+        disableExport: true
+
+- id: support
+  path: /support
+  is_hidden: true
+  blocks:
+      - id: support
+        template: page_introduction
+
+- id: sponsor_finish
+  path: /sponsor-chart-finish
+  is_hidden: true
+  blocks:
+      - id: sponsor_finish
+        blockType: SponsorFinishBlock
+        wrapBlock: false
+
+- id: notfound
+  titleId: notfound.title
+  path: /404
+  is_hidden: true
+  blocks:
+      - id: notfound
+        blockType: NotFoundBlock
+        wrapBlock: false

@@ -30,6 +30,8 @@ export const sortOptions = {
     sentiment: Object.values(SimplifiedSentimentOptions)
 }
 
+const defaultLimit = 5
+
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
     const { series, block, question } = props
     const items = series[0].data
@@ -40,7 +42,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     }
 
     const theme = useTheme()
-    const chartState = useChartState({ rowsLimit: block?.chartOptions?.limit })
+    const chartState = useChartState({ rowsLimit: block?.chartOptions?.limit || defaultLimit })
     const { grouping, variable, sort, order } = chartState
 
     const columnIds = sortOptions[grouping]
