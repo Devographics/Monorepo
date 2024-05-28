@@ -71,8 +71,7 @@ export const Cell = ({
 
     const v = formatValue({ value, chartState, question: facetQuestion || question })
 
-    const isActiveSort = sort === id
-    const className = `chart-cell horizontal-chart-cell ${isActiveSort ? 'active-sort' : ''}`
+    const className = `chart-cell vertical-chart-cell`
 
     return (
         <Tooltip

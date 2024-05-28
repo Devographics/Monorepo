@@ -3,11 +3,8 @@ import { Cell } from './VerticalBarCell'
 import { RowCommonProps, RowExtraProps } from '../common2/types'
 import { RowDataProps } from './types'
 import { getViewDefinition } from './helpers/views'
-import { useGradient } from '../horizontalBar2/helpers/colors'
 import { useTheme } from 'styled-components'
-import { ColumnWrapper, FreeformIndicator, RespondentCount, RowHeading } from '../common2'
-import classNames from 'classnames'
-import { OVERALL } from '@devographics/constants'
+import { ColumnWrapper, RespondentCount } from '../common2'
 
 export const SingleBarColumn = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
     const theme = useTheme()
@@ -36,40 +33,6 @@ export const SingleBarColumn = (props: RowDataProps & RowCommonProps & RowExtraP
                     gradient={gradient}
                 />
             </>
-        </ColumnWrapper>
-    )
-}
-
-export const FacetColumn = (props: RowDataProps & RowCommonProps & RowExtraProps) => {
-    const { bucket, chartState, chartValues, rowIndex, allRowsCellDimensions, allRowsOffsets } =
-        props
-    const { facetQuestion } = chartValues
-    const { facetBuckets } = bucket
-
-    const rowDimensions = allRowsCellDimensions[rowIndex]
-    const rowOffset = allRowsOffsets[rowIndex]
-
-    return (
-        <ColumnWrapper {...props} rowMetadata={<RespondentCount count={bucket.count} />}>
-            <div className="chart-faceted-bar">
-                {facetBuckets.map((facetBucket, index) => {
-                    const { id } = facetBucket
-                    const { width, offset } = rowDimensions[index]
-                    const gradient = useGradient({ id: facetBucket.id, question: facetQuestion })
-                    return (
-                        <Cell
-                            key={id}
-                            bucket={facetBucket}
-                            chartState={chartState}
-                            width={width}
-                            offset={offset - rowOffset}
-                            cellIndex={index}
-                            chartValues={chartValues}
-                            gradient={gradient}
-                        />
-                    )
-                })}
-            </div>
         </ColumnWrapper>
     )
 }

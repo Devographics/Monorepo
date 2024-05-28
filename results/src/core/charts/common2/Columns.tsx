@@ -1,4 +1,4 @@
-import './Rows.scss'
+import './Columns.scss'
 import React from 'react'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import Axis from './Axis'
@@ -25,7 +25,7 @@ export const Columns = ({
     hasZebra?: boolean
 }) => {
     return (
-        <div className={`chart-columns ${hasZebra ? 'chart-columns-zebra' : ''}`}>
+        <div className="chart-columns">
             {/* {ticks && formatValue && <Axis variant="top" ticks={ticks} formatValue={formatValue} />} */}
 
             {children}

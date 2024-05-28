@@ -1,3 +1,4 @@
+import './ColumnWrapper.scss'
 import React from 'react'
 import { RowCommonProps, RowExtraProps } from '../common2/types'
 import { RowDataProps } from './types'
@@ -14,7 +15,8 @@ export const ColumnWrapper = (
         isGroupedBucket = false,
         children,
         rowMetadata,
-        rowIndex
+        rowIndex,
+        edition
     } = props
 
     return (
@@ -27,13 +29,8 @@ export const ColumnWrapper = (
             </div>
 
             <div className="chart-column-bottom">
-                <div className="chart-row-index">{rowIndex + 1}</div>
-                <ColumnHeading {...props} />
+                <div className="chart-column-year">{edition.year}</div>
             </div>
         </div>
     )
-}
-
-const ColumnHeading = ({ edition }) => {
-    return <div>{edition.year}</div>
 }

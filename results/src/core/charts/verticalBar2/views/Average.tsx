@@ -1,7 +1,7 @@
 import React from 'react'
 import { SingleBarColumn } from '../VerticalBarColumn'
 import { ViewDefinition } from '../types'
-import { Column, Columns, Row, Rows } from 'core/charts/common2'
+import { Columns } from 'core/charts/common2'
 // import { removeNoAnswer } from '../helpers/steps'
 import { BucketUnits } from '@devographics/types'
 
@@ -15,11 +15,10 @@ export const Average: ViewDefinition = {
         return (
             <Columns {...props} hasZebra={true}>
                 {props.editions.map((edition, i) => (
-                    <Column
+                    <SingleBarColumn
+                        {...props}
                         key={edition.editionId}
                         edition={edition}
-                        {...props}
-                        columnComponent={SingleBarColumn}
                         showCount={false}
                     />
                 ))}

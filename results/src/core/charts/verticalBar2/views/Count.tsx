@@ -1,7 +1,7 @@
 import React from 'react'
 import { SingleBarColumn } from '../VerticalBarColumn'
 import { ViewDefinition } from '../types'
-import { Column, Columns, Row, Rows } from 'core/charts/common2'
+import { Columns } from 'core/charts/common2'
 // import { removeNoAnswer } from '../helpers/steps'
 import { BucketUnits } from '@devographics/types'
 
@@ -13,12 +13,11 @@ export const Count: ViewDefinition = {
     component: props => {
         return (
             <Columns {...props} hasZebra={true}>
-                {props.buckets.map((bucket, i) => (
-                    <Column
-                        key={bucket.id}
-                        bucket={bucket}
+                {props.editions.map((edition, i) => (
+                    <SingleBarColumn
                         {...props}
-                        columnComponent={SingleBarColumn}
+                        key={edition.editionId}
+                        edition={edition}
                         showCount={false}
                     />
                 ))}
