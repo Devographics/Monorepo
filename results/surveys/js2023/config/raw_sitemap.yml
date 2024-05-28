@@ -253,12 +253,12 @@
               variables:
                   url: https://kit.svelte.dev/
 
-            - template: happiness
+            - template: happiness2
 
-            - id: front_end_frameworks_happiness
-              template: multiple_options2
-              i18nNamespace: features
-              parameters: { limit: 10 }
+            # - id: front_end_frameworks_happiness
+            #   template: multiple_options2
+            #   i18nNamespace: features
+            #   parameters: { limit: 10 }
 
             - id: front_end_frameworks_pain_points
               template: multiple_options2_freeform
@@ -293,12 +293,12 @@
               variables:
                   url: https://kit.svelte.dev/
 
-            - template: happiness
+            - template: happiness2
 
-            - id: meta_frameworks_happiness
-              template: multiple_options2
-              i18nNamespace: features
-              parameters: { limit: 10 }
+            # - id: meta_frameworks_happiness
+            #   template: multiple_options2
+            #   i18nNamespace: features
+            #   parameters: { limit: 10 }
 
             - id: meta_frameworks_pain_points
               template: multiple_options2_freeform
@@ -333,12 +333,12 @@
               variables:
                   url: https://kit.svelte.dev/
 
-            - template: happiness
+            - template: happiness2
 
-            - id: testing_happiness
-              template: multiple_options2
-              i18nNamespace: features
-              parameters: { limit: 10 }
+            # - id: testing_happiness
+            #   template: multiple_options2
+            #   i18nNamespace: features
+            #   parameters: { limit: 10 }
 
             - id: testing_pain_points
               template: multiple_options2_freeform
@@ -373,12 +373,12 @@
               variables:
                   url: https://kit.svelte.dev/
 
-            - template: happiness
+            - template: happiness2
 
-            - id: mobile_desktop_happiness
-              template: multiple_options2
-              i18nNamespace: features
-              parameters: { limit: 10 }
+            # - id: mobile_desktop_happiness
+            #   template: multiple_options2
+            #   i18nNamespace: features
+            #   parameters: { limit: 10 }
 
             - id: mobile_desktop_pain_points
               template: multiple_options2_freeform
@@ -413,12 +413,12 @@
               variables:
                   url: https://kit.svelte.dev/
 
-            - template: happiness
+            - template: happiness2
 
-            - id: build_tools_happiness
-              template: multiple_options2
-              i18nNamespace: features
-              parameters: { limit: 10 }
+            # - id: build_tools_happiness
+            #   template: multiple_options2
+            #   i18nNamespace: features
+            #   parameters: { limit: 10 }
 
             - id: build_tools_pain_points
               template: multiple_options2_freeform
@@ -453,12 +453,12 @@
               variables:
                   url: https://kit.svelte.dev/
 
-            - template: happiness
+            - template: happiness2
 
-            - id: monorepo_tools_happiness
-              template: multiple_options2
-              i18nNamespace: features
-              parameters: { limit: 10 }
+            # - id: monorepo_tools_happiness
+            #   template: multiple_options2
+            #   i18nNamespace: features
+            #   parameters: { limit: 10 }
 
             - id: monorepo_tools_pain_points
               template: multiple_options2_freeform

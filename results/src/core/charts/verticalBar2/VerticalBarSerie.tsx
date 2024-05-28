@@ -1,8 +1,8 @@
 import React from 'react'
 import { StandardQuestionData } from '@devographics/types'
 import { CustomizationDefinition, CustomizationFiltersSeries, DataSeries } from 'core/filters/types'
-import { getChartBuckets } from './helpers/other'
-import { useChartValues } from './helpers/chartValues'
+import { getChartBuckets } from '../horizontalBar2/helpers/other'
+import { useChartValues } from '../horizontalBar2/helpers/chartValues'
 import { GridItem } from '../common2'
 import { CommonProps } from '../common2/types'
 import take from 'lodash/take'
@@ -32,7 +32,7 @@ const getItemFilters = ({
     return itemFilters
 }
 
-export const HorizontalBarSerie = (
+export const VerticalBarSerie = (
     props: {
         serie: DataSeries<StandardQuestionData>
         serieIndex: number
@@ -40,12 +40,11 @@ export const HorizontalBarSerie = (
 ) => {
     const { serie, serieIndex, block, chartState, variant, question } = props
     const { rowsLimit } = chartState
-    let buckets = getChartBuckets({ serie, block, chartState })
+    // const buckets = getChartBuckets({ serie, block, chartState })
+    const buckets = []
     const chartValues = useChartValues({ buckets, chartState, block, question })
 
-    if (rowsLimit) {
-        buckets = take(buckets, chartState.rowsLimit)
-    }
+    const editions = serie.data.responses.allEditions
 
     // let allRowOffsets = allRowsCellDimensions.map(cd =>
     //     getRowOffset({
@@ -57,7 +56,7 @@ export const HorizontalBarSerie = (
 
     const viewProps = {
         ...props,
-        buckets,
+        editions,
         chartValues
     }
 

@@ -1,0 +1,8 @@
+id: '${sectionId}_happiness'
+titleId: tools.happiness
+blockType: VerticalBarBlock2
+showDescription: false
+i18nNamespace: happiness
+hasSponsor: true
+query: allEditionsData
+parameters: { showNoAnswer: true }
