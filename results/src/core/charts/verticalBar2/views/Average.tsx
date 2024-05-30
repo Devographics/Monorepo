@@ -1,21 +1,22 @@
 import React from 'react'
-import { SingleBarColumn } from '../VerticalBarColumn'
-import { ViewDefinition } from '../types'
+import { ColumnSingle } from '../columns/ColumnSingle'
+import { HorizontalBarViewDefinition } from '../../horizontalBar2/types'
 import { Columns } from 'core/charts/common2'
 // import { removeNoAnswer } from '../helpers/steps'
-import { BucketUnits } from '@devographics/types'
 
-export const Average: ViewDefinition = {
-    getValue: bucket => bucket[BucketUnits.PERCENTAGE_QUESTION] || 0,
-    steps: [
+export const Average: HorizontalBarViewDefinition = {
+    getValue: edition => edition.average,
+    getTicks: () => [{ value: 0 }, { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }],
+    dataFilters: [
         /*removeNoAnswer*/
     ],
     component: props => {
-        console.log(props)
+        const { chartValues } = props
+        const { question } = chartValues
         return (
-            <Columns {...props} hasZebra={true}>
+            <Columns {...props} hasZebra={true} labelId="average_foo">
                 {props.editions.map((edition, i) => (
-                    <SingleBarColumn
+                    <ColumnSingle
                         {...props}
                         key={edition.editionId}
                         edition={edition}

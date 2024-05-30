@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ChartValues } from '../multiItemsExperience/types'
+import { MultiItemsChartValues } from '../multiItemsExperience/types'
 import Tooltip from 'core/components/Tooltip'
 import { Bucket, FacetBucket } from '@devographics/types'
-import { ChartState } from './types'
-import T from 'core/i18n/T'
-import { getItemLabel } from 'core/helpers/labels'
+import { VerticalBarChartState } from './types'
 import { useI18n } from '@devographics/react-i18n'
 import { formatValue } from '../horizontalBar2/helpers/labels'
-import { getViewDefinition } from './helpers/views'
 import { useWidth } from '../common2/helpers'
 import { CellLabel } from '../common2'
+import max from 'lodash/max'
 
 // hide labels for cells under this size
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
@@ -26,17 +24,19 @@ export const useIsWideEnough = () => {
 }
 
 export const Cell = ({
-    bucket,
+    edition,
+    value,
     chartState,
     chartValues,
     width,
+    height,
     offset,
     cellIndex,
     gradient
 }: {
     bucket: Bucket | FacetBucket
-    chartState: ChartState
-    chartValues: ChartValues
+    chartState: VerticalBarChartState
+    chartValues: MultiItemsChartValues
     width: number
     offset: number
     cellIndex: number
@@ -46,44 +46,28 @@ export const Cell = ({
 
     // const entities = useEntities()
     // const entity = entities.find(e => e.id === bucket.id)
-    const { question, facetQuestion } = chartValues
-    const { view, sort } = chartState
-    const viewDefinition = getViewDefinition(view)
-    const { getValue } = viewDefinition
+    const { question, facetQuestion, ticks } = chartValues
     const { getString } = useI18n()
 
-    const { id, count, entity, token } = bucket
-    const value = getValue(bucket)
     const style = {
-        '--percentageValue': value,
-        '--width': width,
-        '--offset': offset,
         '--color1': gradient[0],
-        '--color2': gradient[1]
+        '--color2': gradient[1],
+        '--height': height,
+        '--offset': offset
     }
 
-    const { key, label } = getItemLabel({
-        getString,
-        i18nNamespace: facetQuestion?.id || question.id,
-        id,
-        entity
-    })
-
     const v = formatValue({ value, chartState, question: facetQuestion || question })
-
-    const className = `chart-cell vertical-chart-cell`
 
     return (
         <Tooltip
             trigger={
-                <div className={className} style={style} ref={ref}>
+                <div className="chart-cell vertical-chart-cell" style={style} ref={ref}>
                     {showLabel && <CellLabel label={v} />}
                 </div>
             }
             contents={
                 <div>
-                    {label}: <strong>{v}</strong>{' '}
-                    <T k="charts.facet_respondents" values={{ count }} />
+                    {edition.year}: <strong>{v}</strong>{' '}
                 </div>
             }
             showBorder={false}

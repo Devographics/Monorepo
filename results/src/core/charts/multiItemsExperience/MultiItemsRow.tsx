@@ -1,9 +1,9 @@
 import React from 'react'
-import { CellDimension, ChartState, CombinedItem, MaxValue } from './types'
+import { CellDimension, MultiItemsChartState, CombinedItem, MaxValue } from './types'
 import { getGroupedTotals } from './helpers'
 import { Cell, ColumnTotal } from './MultiItemsCell'
 import { sortOptions } from './MultiItemsBlock'
-import { RowWrapper } from '../common2/RowWrapper'
+import { RowWrapper } from '../horizontalBar2/rows/RowWrapper'
 import { Bucket } from '@devographics/types'
 import { RespondentCount } from '../common2'
 import { Comments } from '../common2/Comments'
@@ -14,7 +14,7 @@ export const Row = (props: {
     rowIndex: number
     item: CombinedItem
     maxValues: MaxValue[]
-    chartState: ChartState
+    chartState: MultiItemsChartState
 }) => {
     const { question, rowIndex, allRowsCellDimensions, allRowOffsets, item, chartState } = props
     const { grouping } = chartState

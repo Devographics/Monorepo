@@ -1,6 +1,11 @@
-import { ChartState, Control, ViewDefinition, Views } from '../../horizontalBar2/types'
+import {
+    VerticalBarChartState,
+    Control,
+    VerticalBarViewDefinition,
+    Views
+} from '../../verticalBar2/types'
 import { Bars, FacetBars, Boxplot as BoxplotIcon, FacetCountsBars } from 'core/icons'
-import { ChartValues } from '../../multiItemsExperience/types'
+import { MultiItemsChartValues } from '../../multiItemsExperience/types'
 import { Average, Count, PercentageQuestion } from '../views'
 
 const controlIcons = {
@@ -17,8 +22,8 @@ export const getControls = ({
     chartState,
     chartValues
 }: {
-    chartState: ChartState
-    chartValues: ChartValues
+    chartState: VerticalBarChartState
+    chartValues: MultiItemsChartValues
 }) => {
     const { view, setView } = chartState
     const { facetQuestion } = chartValues
@@ -40,7 +45,7 @@ export const getControls = ({
     return controls
 }
 
-export const viewDefinitions: { [key: string]: ViewDefinition } = {
+export const viewDefinitions: { [key: string]: VerticalBarViewDefinition } = {
     // regular views
     [Views.PERCENTAGE_QUESTION]: PercentageQuestion,
     [Views.COUNT]: Count,
@@ -57,5 +62,5 @@ export const getViewComponent = (view: Views) => {
 export const getViewDefinition = (view: Views) => {
     // define dummy getValue which will be overwritten
     const getValue = () => 0
-    return { getValue, ...viewDefinitions[view] }
+    return { getValue, ...viewDefinitions[view] } as VerticalBarViewDefinition
 }

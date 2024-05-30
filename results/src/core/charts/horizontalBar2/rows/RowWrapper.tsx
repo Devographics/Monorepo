@@ -1,26 +1,23 @@
 import React from 'react'
-import { RowHeading } from '../common2/RowHeading'
-import { RowCommonProps, RowExtraProps } from './types'
-import { FreeformIcon, UserIcon } from 'core/icons'
+import { RowHeading } from './RowHeading'
 import classNames from 'classnames'
 import { OVERALL } from '@devographics/constants'
-import { RowDataProps } from '../horizontalBar2/types'
-import { Gridlines } from './Gridlines'
+import { Gridlines } from '../../common2/Gridlines'
+import { RowComponentProps } from '../types'
 
 export const RowWrapper = (
-    props: RowDataProps &
-        RowCommonProps &
-        RowExtraProps & { rowMetadata?: JSX.Element; children: JSX.Element }
+    props: RowComponentProps & { rowMetadata?: JSX.Element; children: JSX.Element }
 ) => {
     const {
         chartState,
-        ticks,
+        chartValues,
         bucket,
         isGroupedBucket = false,
         children,
         rowMetadata,
         rowIndex
     } = props
+    const { ticks } = chartValues
     const { isFreeformData } = bucket
     const isOverallBucket = bucket.id === OVERALL
     const className = classNames(

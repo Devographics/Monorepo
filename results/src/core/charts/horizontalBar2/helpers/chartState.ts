@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { QuestionMetadata } from '@devographics/types'
 import { ColumnModes, OrderOptions } from '../../common2/types'
-import { ChartState, Views } from '../types'
+import { HorizontalBarChartState, Views } from '../types'
 import { BlockVariantDefinition } from 'core/types'
 
 export const getDefaultState = ({
@@ -12,7 +12,7 @@ export const getDefaultState = ({
     facetQuestion?: QuestionMetadata
     block: BlockVariantDefinition
 }) => {
-    const defaultState = {} as ChartState
+    const defaultState = {} as HorizontalBarChartState
     if (block.defaultView) {
         defaultState.view = block.defaultView
     } else {
@@ -39,19 +39,25 @@ export const getDefaultState = ({
     return defaultState
 }
 
-export const useChartState = (defaultState: { [P in keyof ChartState]?: ChartState[P] }) => {
-    const [rowsLimit, setRowsLimit] = useState<ChartState['rowsLimit']>(
+export const useChartState = (defaultState: {
+    [P in keyof HorizontalBarChartState]?: HorizontalBarChartState[P]
+}) => {
+    const [rowsLimit, setRowsLimit] = useState<HorizontalBarChartState['rowsLimit']>(
         defaultState?.rowsLimit || 0
     )
-    const [facet, setFacet] = useState<ChartState['facet']>(defaultState.facet)
-    const [sort, setSort] = useState<ChartState['sort']>(defaultState.sort)
-    const [order, setOrder] = useState<ChartState['order']>(defaultState.order || OrderOptions.DESC)
-    const [view, setView] = useState<ChartState['view']>(defaultState.view || Views.COUNT)
-    const [columnMode, setColumnMode] = useState<ChartState['columnMode']>(
+    const [facet, setFacet] = useState<HorizontalBarChartState['facet']>(defaultState.facet)
+    const [sort, setSort] = useState<HorizontalBarChartState['sort']>(defaultState.sort)
+    const [order, setOrder] = useState<HorizontalBarChartState['order']>(
+        defaultState.order || OrderOptions.DESC
+    )
+    const [view, setView] = useState<HorizontalBarChartState['view']>(
+        defaultState.view || Views.COUNT
+    )
+    const [columnMode, setColumnMode] = useState<HorizontalBarChartState['columnMode']>(
         defaultState.columnMode || ColumnModes.STACKED
     )
 
-    const chartState: ChartState = {
+    const chartState: HorizontalBarChartState = {
         facet,
         setFacet,
         sort,

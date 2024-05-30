@@ -17,7 +17,7 @@ import {
     useChartValues
 } from './helpers'
 import { Row } from './MultiItemsRow'
-import Rows from '../common2/Rows'
+import Rows from '../horizontalBar2/rows/Rows'
 import { ChartWrapper, Legend, Note } from '../common2'
 import { useTheme } from 'styled-components'
 import min from 'lodash/min'

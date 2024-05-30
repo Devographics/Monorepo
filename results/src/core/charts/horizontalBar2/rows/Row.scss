@@ -1,4 +1,4 @@
-@import '../../../stylesheets/_breakpoints.scss';
+@import '../../../../stylesheets/_breakpoints.scss';
 
 .chart-row,
 .chart-axis {
@@ -133,4 +133,30 @@
         justify-content: flex-end;
         padding-right: var(--quarterSpacing);
     }
+}
+
+.chart-row-heading-label {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+}
+
+.chart-row-heading {
+    margin: 0;
+    font-size: var(--chartFontColumnHeading);
+    height: var(--barHeight);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 0.9rem;
+    font-weight: normal;
+    gap: 10px;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chart-row-heading-grouped {
+    opacity: 0.5;
 }

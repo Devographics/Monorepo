@@ -39,7 +39,7 @@ export const useColorScale = ({ question }: { question: QuestionMetadata }) => {
     } else {
         colorScale = defaultColors as { [key: string]: string[] }
         if (question.options) {
-            if (question.optionsAreSequential) {
+            if (question.optionsAreSequential || question.optionsAreNumeric) {
                 question.options.forEach((option, index) => {
                     const color = theme.colors.velocity[index]
                     colorScale[option.id] = [color, color]

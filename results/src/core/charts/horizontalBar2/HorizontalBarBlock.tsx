@@ -12,7 +12,7 @@ import { useEntities } from 'core/helpers/entities'
 import { FacetTitle } from '../common2/FacetTitle'
 import { getQuestionOptions } from './helpers/options'
 import { useColorScale } from './helpers/colors'
-import { ChartState } from './types'
+import { HorizontalBarChartState } from './types'
 import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
 import { HorizontalBarSerie } from './HorizontalBarSerie'
@@ -36,7 +36,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 
     const chartState = useChartState(getDefaultState({ facetQuestion, block }))
 
-    const commonProps: CommonProps = {
+    const commonProps: CommonProps<HorizontalBarChartState> = {
         variant,
         question,
         series,
@@ -46,7 +46,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     }
 
     const key = getBlockNoteKey({ block })
-    const note = getString(key, {}, null)?.t
+    const note = getString(key, {})?.t
 
     return (
         <ChartWrapper className="chart-horizontal-bar">
@@ -95,10 +95,10 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 }
 
 const FacetHeading = (
-    props: CommonProps & {
+    props: CommonProps<HorizontalBarChartState> & {
         series: DataSeries<StandardQuestionData>[]
         facetQuestion: QuestionMetadata
-        chartState: ChartState
+        chartState: HorizontalBarChartState
         pageContext: PageContextValue
     }
 ) => {

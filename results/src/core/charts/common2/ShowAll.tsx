@@ -1,17 +1,15 @@
 import './ShowAll.scss'
 import React from 'react'
 import Button from 'core/components/Button'
-import { ChartState } from '../horizontalBar2/types'
+import { HorizontalBarChartState, HorizontalBarChartValues } from '../horizontalBar2/types'
 import T from 'core/i18n/T'
-import { Bucket } from '@devographics/types'
-import { ChartValues } from '../multiItemsExperience/types'
 
 export const ShowAll = ({
     chartState,
     chartValues
 }: {
-    chartState: ChartState
-    chartValues: ChartValues
+    chartState: HorizontalBarChartState
+    chartValues: HorizontalBarChartValues
 }) => {
     return (
         <div className="chart-showall">

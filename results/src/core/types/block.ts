@@ -48,7 +48,7 @@ export interface BlockVariantDefinition {
     id: string
     bucketKeysName?: string
     fieldId?: string
-    sectionId?: string
+    sectionId: string
     template?: string
     blockType?: string
     tabId?: string

@@ -1,4 +1,4 @@
-import { CustomizationFiltersSeries, DataSeries, FilterItem } from 'core/filters/types'
+import { CustomizationFiltersSeries } from 'core/filters/types'
 import './Grid.scss'
 import React, { Fragment, ReactNode } from 'react'
 import { useFiltersLabel } from '../horizontalBar2/helpers/labels'

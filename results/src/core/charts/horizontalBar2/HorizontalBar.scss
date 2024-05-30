@@ -1,6 +1,8 @@
-.chart-bar,
-.chart-faceted-bar {
-    position: relative;
+.chart-row {
+    .chart-bar,
+    .chart-faceted-bar {
+        position: relative;
+    }
 }
 .horizontal-chart-cell {
     position: absolute;

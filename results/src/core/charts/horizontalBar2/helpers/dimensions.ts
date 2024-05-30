@@ -1,5 +1,5 @@
 import { FacetBucket } from '@devographics/types'
-import { ChartState } from '../types'
+import { HorizontalBarChartState } from '../types'
 import { getViewDefinition } from './views'
 import take from 'lodash/take'
 import sum from 'lodash/sum'
@@ -14,7 +14,7 @@ export const getCellDimensions = ({
     chartState
 }: {
     facetBuckets: FacetBucket[]
-    chartState: ChartState
+    chartState: HorizontalBarChartState
 }) => {
     const viewDefinition = getViewDefinition(chartState.view)
     const { getValue } = viewDefinition
@@ -51,7 +51,7 @@ export const getRowOffset = ({
 }: {
     buckets: Bucket[]
     bucket: Bucket
-    chartState: ChartState
+    chartState: HorizontalBarChartState
 }) => {
     const { view, sort } = chartState
     const { getValue } = getViewDefinition(view)

@@ -1,20 +1,28 @@
 import React from 'react'
-import { SingleBarColumn } from '../VerticalBarColumn'
-import { ViewDefinition } from '../types'
+import { ColumnStacked } from '../columns/ColumnStacked'
+import { VerticalBarViewDefinition } from '../types'
 import { Columns } from 'core/charts/common2'
 // import { removeNoAnswer } from '../helpers/steps'
 import { BucketUnits } from '@devographics/types'
 
-export const PercentageQuestion: ViewDefinition = {
+export const PercentageQuestion: VerticalBarViewDefinition = {
     getValue: bucket => bucket[BucketUnits.PERCENTAGE_QUESTION] || 0,
-    steps: [
+    getTicks: () => [
+        { value: 0 },
+        { value: 20 },
+        { value: 40 },
+        { value: 60 },
+        { value: 80 },
+        { value: 100 }
+    ],
+    dataFilters: [
         /*removeNoAnswer*/
     ],
     component: props => {
         return (
             <Columns {...props} hasZebra={true}>
                 {props.editions.map((edition, i) => (
-                    <SingleBarColumn
+                    <ColumnStacked
                         {...props}
                         key={edition.editionId}
                         edition={edition}

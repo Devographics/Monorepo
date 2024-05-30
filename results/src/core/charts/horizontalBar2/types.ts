@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from 'react'
-import { ColumnModes, OrderOptions } from '../common2/types'
-import { ChartValues } from '../multiItemsExperience/types'
+import { ColumnModes, OrderOptions, Tick } from '../common2/types'
 import { FacetItem } from 'core/filters/types'
 import { IconProps } from 'core/icons/IconWrapper'
-import { Bucket, FacetBucket } from '@devographics/types'
+import { Bucket, FacetBucket, QuestionMetadata } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
+import { Dimension } from '../multiItemsExperience/types'
 
-export type ChartState = {
+export type HorizontalBarChartState = {
     sort: string | undefined
     setSort: Dispatch<SetStateAction<string | undefined>>
     view: Views
@@ -21,7 +21,13 @@ export type ChartState = {
     setRowsLimit: Dispatch<SetStateAction<number>>
 }
 
-export type RowDataProps = { chartState: ChartState; chartValues: ChartValues }
+export type HorizontalBarChartValues = {
+    maxOverallValue?: number
+    totalRows: number
+    question: QuestionMetadata
+    facetQuestion?: QuestionMetadata
+    ticks?: Tick[]
+}
 
 export enum Views {
     BOXPLOT = 'percentilesByFacet',
@@ -40,19 +46,38 @@ export type Control = {
     onClick: (e: SyntheticEvent) => void
 }
 
-export type GetValueType = (bucket: Bucket | FacetBucket) => number
-export type ViewDefinition = {
+type GetValueType = (bucket: Bucket | FacetBucket) => number
+export type HorizontalBarViewDefinition = {
     getValue?: GetValueType
-    steps?: Step[]
+    getTicks?: (values: number[]) => Tick[]
+    dataFilters?: DataFilter[]
     showLegend?: boolean
-    component: (props: ViewProps) => JSX.Element | null
+    component: (props: HorizontalBarViewProps) => JSX.Element | null
 }
 
-export type ViewProps = {
-    chartState: ChartState
-    chartValues: ChartValues
+export type HorizontalBarViewProps = {
+    chartState: HorizontalBarChartState
+    chartValues: HorizontalBarChartValues
     buckets: Bucket[]
     block: BlockVariantDefinition
 }
 
-export type Step = (buckets: Bucket[]) => Bucket[]
+export type DataFilter = (buckets: Bucket[]) => Bucket[]
+
+export type RowComponent = (props: RowComponentProps) => JSX.Element | null
+
+export type RowGroupProps = HorizontalBarViewProps & {
+    rowComponent: RowComponent
+    bucket: Bucket
+    rowIndex: number
+    showCount?: boolean
+    allRowsCellDimensions?: Dimension[][]
+    allRowsOffsets?: number[]
+}
+
+export type RowComponentProps = Omit<RowGroupProps, 'rowComponent'> & {
+    hasGroupedBuckets?: boolean
+    showGroupedBuckets?: boolean
+    setShowGroupedBuckets?: Dispatch<SetStateAction<boolean>>
+    isGroupedBucket?: boolean
+}

@@ -7,8 +7,7 @@ import {
     SimplifiedSentimentOptions,
     StandardQuestionData
 } from '@devographics/types'
-import { ChartState, Views } from '../types'
-import { BoxPlotRow, FacetRow, SingleBarRow } from '../HorizontalBarRow'
+import { HorizontalBarChartState, Views } from '../types'
 import { DataSeries, FacetItem } from 'core/filters/types'
 import { usePageContext } from 'core/helpers/pageContext'
 import { applySteps } from './steps'
@@ -17,6 +16,8 @@ import sortBy from 'lodash/sortBy'
 import { OrderOptions } from 'core/charts/common2/types'
 import { BlockVariantDefinition } from 'core/types'
 import uniq from 'lodash/uniq'
+import { RowSingle } from '../rows/RowSingle'
+import { RowStacked } from '../rows/RowStacked'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -42,10 +43,10 @@ export const getChartBuckets = ({
 }: {
     serie: DataSeries<StandardQuestionData>
     block: BlockVariantDefinition
-    chartState: ChartState
+    chartState: HorizontalBarChartState
 }) => {
     const { view, sort, facet, order, rowsLimit } = chartState
-    const { steps, getValue } = getViewDefinition(view)
+    const { dataFilters: steps, getValue } = getViewDefinition(view)
     const currentEdition = getChartCurrentEdition({ serie, block })
 
     let buckets = currentEdition.buckets
@@ -77,20 +78,20 @@ export const getChartBuckets = ({
     return buckets
 }
 
-export const getRowComponent = (bucket: Bucket, chartState: ChartState) => {
+export const getRowComponent = (bucket: Bucket, chartState: HorizontalBarChartState) => {
     const { view } = chartState
     const { facetBuckets } = bucket
     const hasFacetBuckets = facetBuckets && facetBuckets.length > 0
     if (hasFacetBuckets) {
         if (view === Views.BOXPLOT) {
-            return BoxPlotRow
+            return null
         } else if (view === Views.PERCENTAGE_BUCKET) {
-            return FacetRow
+            return RowSingle
         } else {
-            return SingleBarRow
+            return RowStacked
         }
     } else {
-        return SingleBarRow
+        return RowSingle
     }
 }
 
@@ -121,7 +122,7 @@ export const getAllFacetBucketIds = ({
 }: {
     series: Array<DataSeries<StandardQuestionData>>
     block: BlockVariantDefinition
-    chartState: ChartState
+    chartState: HorizontalBarChartState
 }) => {
     return uniq(
         series

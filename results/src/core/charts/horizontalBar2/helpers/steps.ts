@@ -1,5 +1,5 @@
 import { Bucket } from '@devographics/types'
-import { Step } from '../types'
+import { DataFilter } from '../types'
 import {
     NOT_APPLICABLE,
     NO_ANSWER,
@@ -8,26 +8,26 @@ import {
     OVERLIMIT_ANSWERS
 } from '@devographics/constants'
 
-export const applySteps = (buckets: Bucket[], steps: Step[]) => {
+export const applySteps = (buckets: Bucket[], steps: DataFilter[]) => {
     return steps.reduce((obj, func) => func(obj), buckets)
 }
 
-export const removeOtherAnswers: Step = buckets => {
+export const removeOtherAnswers: DataFilter = buckets => {
     return buckets.filter(b => b.id !== OTHER_ANSWERS)
 }
 
-export const removeNoAnswer: Step = buckets => {
+export const removeNoAnswer: DataFilter = buckets => {
     return buckets.filter(b => b.id !== NO_ANSWER)
 }
 
-export const removeOverall: Step = buckets => {
+export const removeOverall: DataFilter = buckets => {
     return buckets.filter(b => b.id !== OVERALL)
 }
 
-export const removeNotApplicable: Step = buckets => {
+export const removeNotApplicable: DataFilter = buckets => {
     return buckets.filter(b => b.id !== NOT_APPLICABLE)
 }
 
-export const removeOverLimit: Step = buckets => {
+export const removeOverLimit: DataFilter = buckets => {
     return buckets.filter(b => b.id !== OVERLIMIT_ANSWERS)
 }

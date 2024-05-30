@@ -2,7 +2,7 @@ import { ResponseData, ResultsSubFieldEnum, StandardQuestionData } from '@devogr
 import { DataSeries } from 'core/filters/types'
 import { BlockVariantDefinition } from 'core/types'
 
-export const getChartCurrentEdition = ({
+export const getAllEditions = ({
     serie,
     block
 }: {
@@ -11,5 +11,5 @@ export const getChartCurrentEdition = ({
 }) => {
     const subField = block?.queryOptions?.subField || ResultsSubFieldEnum.RESPONSES
     const { allEditions } = serie.data[subField] as ResponseData
-    return allEditions.at(-1)
+    return allEditions
 }

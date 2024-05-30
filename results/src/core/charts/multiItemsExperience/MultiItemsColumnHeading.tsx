@@ -3,7 +3,7 @@ import './MultiItems.scss'
 import { useI18n } from '@devographics/react-i18n'
 import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
-import { ChartState, ColumnId } from './types'
+import { MultiItemsChartState, ColumnId } from './types'
 import { OrderOptions } from '../common2/types'
 
 export const ColumnHeading = ({
@@ -15,7 +15,7 @@ export const ColumnHeading = ({
     columnId: ColumnId
     width: number
     offset: number
-    chartState: ChartState
+    chartState: MultiItemsChartState
 }) => {
     const { getString } = useI18n()
     const { sort, setSort, order, setOrder, grouping } = chartState

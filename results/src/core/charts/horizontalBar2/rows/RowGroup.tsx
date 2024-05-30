@@ -1,11 +1,10 @@
 import './Row.scss'
 import React, { useState } from 'react'
-import { RowCommonProps, RowComponent } from '../common2/types'
-import { RowDataProps } from '../horizontalBar2/types'
+import { RowGroupProps } from '../types'
 
 export const BAR_HEIGHT = 25
 
-export const Row = (props: { rowComponent: RowComponent } & RowDataProps & RowCommonProps) => {
+export const RowGroup = (props: RowGroupProps) => {
     const [showGroupedBuckets, setShowGroupedBuckets] = useState(false)
     const { bucket, rowComponent } = props
     const { groupedBuckets } = bucket

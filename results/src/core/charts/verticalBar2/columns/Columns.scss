@@ -1,0 +1,12 @@
+.chart-columns-wrapper {
+    display: flex;
+    gap: var(--spacing);
+}
+.chart-columns {
+    // flex: 1;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(1%, 1fr));
+    grid-template-rows: 300px 60px;
+    gap: var(--spacing);
+}

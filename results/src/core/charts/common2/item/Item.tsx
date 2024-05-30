@@ -3,7 +3,7 @@ import './Item.scss'
 import React, { ReactNode } from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import { LabelObject, getItemLabel } from 'core/helpers/labels'
-import { Bucket, Entity, EntityType } from '@devographics/types'
+import { Bucket, Entity, EntityType, FacetBucket } from '@devographics/types'
 import Button from 'core/components/Button'
 // import Popover from 'core/components/Popover'
 import Popover from 'core/components/Popover2'
@@ -33,7 +33,7 @@ export const Item = ({
 }: {
     id: string
     label?: string
-    bucket: Bucket
+    bucket: Bucket | FacetBucket
     entity?: Entity
     i18nNamespace?: string
 }) => {

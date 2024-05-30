@@ -1,7 +1,7 @@
-import './ColumnWrapper.scss'
+import './Column.scss'
 import React from 'react'
-import { RowCommonProps, RowExtraProps } from '../common2/types'
-import { RowDataProps } from './types'
+import { RowCommonProps, RowExtraProps } from '../../common2/types'
+import { RowDataProps } from '../../common2/types'
 
 export const ColumnWrapper = (
     props: RowDataProps &

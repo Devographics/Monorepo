@@ -255,6 +255,9 @@
 
             - template: happiness2
 
+            - template: happiness2
+              defaultView: percentageQuestion
+
             # - id: front_end_frameworks_happiness
             #   template: multiple_options2
             #   i18nNamespace: features

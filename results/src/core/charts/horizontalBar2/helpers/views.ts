@@ -1,6 +1,11 @@
-import { ChartState, Control, ViewDefinition, Views } from '../types'
+import {
+    HorizontalBarChartState,
+    Control,
+    HorizontalBarViewDefinition,
+    Views,
+    HorizontalBarChartValues
+} from '../types'
 import { Bars, FacetBars, Boxplot as BoxplotIcon, FacetCountsBars } from 'core/icons'
-import { ChartValues } from '../../multiItemsExperience/types'
 import {
     Average,
     Boxplot,
@@ -24,8 +29,8 @@ export const getControls = ({
     chartState,
     chartValues
 }: {
-    chartState: ChartState
-    chartValues: ChartValues
+    chartState: HorizontalBarChartState
+    chartValues: HorizontalBarChartValues
 }) => {
     const { view, setView } = chartState
     const { facetQuestion } = chartValues
@@ -47,7 +52,7 @@ export const getControls = ({
     return controls
 }
 
-export const viewDefinitions: { [key: string]: ViewDefinition } = {
+export const viewDefinitions: { [key: string]: HorizontalBarViewDefinition } = {
     // regular views
     [Views.PERCENTAGE_QUESTION]: PercentageQuestion,
     [Views.COUNT]: Count,

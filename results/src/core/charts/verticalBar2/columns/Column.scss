@@ -1,0 +1,16 @@
+.chart-column {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: 1/3;
+    // grid-template-columns: subgrid;
+}
+.chart-column-content {
+    // grid-row-start: 1;
+    // grid-row-end: 2;
+}
+.chart-column-bottom {
+    grid-row: 2 / 3;
+}
+.chart-column-year {
+    text-align: center;
+}

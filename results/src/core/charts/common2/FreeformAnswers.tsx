@@ -19,7 +19,7 @@ import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
 import { runQuery } from 'core/explorer/data'
 import { formatNumber } from './helpers'
-import { Bucket, RawDataItem, StandardQuestionData } from '@devographics/types'
+import { Bucket, FacetBucket, RawDataItem, StandardQuestionData } from '@devographics/types'
 import { CATCHALL_PREFIX } from '@devographics/constants'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { BlockVariantDefinition } from 'core/types'
@@ -65,7 +65,7 @@ query ${getQueryName({ editionId, questionId, token })} {
 }
 
 export const FreeformAnswersTrigger = (props: {
-    bucket: Bucket
+    bucket: Bucket | FacetBucket
     questionId: string
     sectionId: string
     block: BlockVariantDefinition

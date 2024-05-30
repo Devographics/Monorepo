@@ -1,8 +1,6 @@
-import './RowHeading.scss'
 import React from 'react'
-import { RowCommonProps, RowExtraProps } from './types'
-import { FreeformIcon } from 'core/icons'
-import { Item } from './item'
+import { Item } from '../../common2/item'
+import { RowComponentProps } from '../types'
 
 export const RowHeading = ({
     bucket,
@@ -10,7 +8,7 @@ export const RowHeading = ({
     isGroupedBucket,
     showGroupedBuckets,
     setShowGroupedBuckets
-}: RowCommonProps & RowExtraProps) => {
+}: RowComponentProps) => {
     const { entity, id, label } = bucket
     const { isFreeformData } = bucket
     const i18nNamespace = block.fieldId || block.id

@@ -1,7 +1,7 @@
 import React from 'react'
 import './ChartWrapper.scss'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { BAR_HEIGHT } from './Row'
+import { BAR_HEIGHT } from '../horizontalBar2/rows/RowGroup'
 
 export const ChartWrapper = ({
     children,

@@ -1,18 +1,24 @@
 import React from 'react'
-import { SingleBarRow } from '../HorizontalBarRow'
-import { ViewDefinition } from '../types'
-import { Row, Rows } from 'core/charts/common2'
+import { RowSingle } from '../rows/RowSingle'
+import { HorizontalBarViewDefinition } from '../types'
 import { removeNoAnswer, removeNotApplicable } from '../helpers/steps'
 import { BucketUnits } from '@devographics/types'
+import { RowGroup, Rows } from '../rows'
 
-export const Average: ViewDefinition = {
+export const Average: HorizontalBarViewDefinition = {
     getValue: bucket => bucket[BucketUnits.AVERAGE] || 0,
-    steps: [removeNotApplicable, removeNoAnswer],
+    dataFilters: [removeNotApplicable, removeNoAnswer],
     component: props => {
         return (
             <Rows {...props}>
                 {props.buckets.map((bucket, i) => (
-                    <Row key={bucket.id} bucket={bucket} {...props} rowComponent={SingleBarRow} />
+                    <RowGroup
+                        rowIndex={i}
+                        key={bucket.id}
+                        bucket={bucket}
+                        {...props}
+                        rowComponent={RowSingle}
+                    />
                 ))}
             </Rows>
         )

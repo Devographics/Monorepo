@@ -1,39 +1,32 @@
 import { useState } from 'react'
-
-import { QuestionMetadata } from '@devographics/types'
-import { ColumnModes, OrderOptions } from '../../common2/types'
-import { ChartState, Views } from '../types'
+import { ColumnModes } from '../../common2/types'
+import { VerticalBarChartState, Views } from '../types'
 import { BlockVariantDefinition } from 'core/types'
 
-export const getDefaultState = ({
-    facetQuestion,
-    block
-}: {
-    facetQuestion?: QuestionMetadata
-    block: BlockVariantDefinition
-}) => {
-    const defaultState = {} as ChartState
+export const getDefaultState = ({ block }: { block: BlockVariantDefinition }) => {
+    const defaultState = {} as VerticalBarChartState
     if (block.defaultView) {
         defaultState.view = block.defaultView
     } else {
-        if (facetQuestion) {
-            defaultState.facet = { id: facetQuestion.id, sectionId: facetQuestion.sectionId }
-            defaultState.view = Views.PERCENTAGE_BUCKET
-        } else {
-            defaultState.view = Views.AVERAGE
-        }
+        defaultState.view = Views.AVERAGE
     }
+    console.log(block)
+    console.log({ defaultState })
     return defaultState
 }
 
-export const useChartState = (defaultState: { [P in keyof ChartState]?: ChartState[P] }) => {
-    const [facet, setFacet] = useState<ChartState['facet']>(defaultState.facet)
-    const [view, setView] = useState<ChartState['view']>(defaultState.view || Views.COUNT)
-    const [columnMode, setColumnMode] = useState<ChartState['columnMode']>(
+export const useChartState = (defaultState: {
+    [P in keyof VerticalBarChartState]?: VerticalBarChartState[P]
+}) => {
+    const [facet, setFacet] = useState<VerticalBarChartState['facet']>(defaultState.facet)
+    const [view, setView] = useState<VerticalBarChartState['view']>(
+        defaultState.view || Views.COUNT
+    )
+    const [columnMode, setColumnMode] = useState<VerticalBarChartState['columnMode']>(
         defaultState.columnMode || ColumnModes.STACKED
     )
 
-    const chartState: ChartState = {
+    const chartState: VerticalBarChartState = {
         facet,
         setFacet,
         view,

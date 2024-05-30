@@ -1,7 +1,7 @@
 // not used anymore, replace with common/Axis
 import React from 'react'
 import { BlockLegend } from 'core/types'
-import { Tick } from './Boxplot'
+import { Tick } from 'core/charts/common2/types'
 
 type AxisProps = {
     ticks: Tick[]

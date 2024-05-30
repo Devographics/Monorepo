@@ -1,30 +1,25 @@
 import './Rows.scss'
 import React from 'react'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import Axis from './Axis'
-import { ShowAll } from './ShowAll'
-import { ChartState } from '../horizontalBar2/types'
-import { ChartValues } from '../multiItemsExperience/types'
-import { Tick } from './types'
+import Axis from '../../common2/Axis'
+import { ShowAll } from '../../common2/ShowAll'
+import { HorizontalBarViewProps } from '../types'
 
 export const Rows = ({
     chartState,
     chartValues,
     children,
-    ticks,
     formatValue,
     labelId,
     hasZebra = false
-}: {
-    chartState: ChartState
-    chartValues: ChartValues
+}: HorizontalBarViewProps & {
     children: React.ReactNode
-    ticks?: Tick[]
     labelId?: string
     formatValue?: (v: number) => string
     hasZebra?: boolean
 }) => {
     const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
+    const { ticks } = chartValues
     return (
         <div className={`chart-rows ${hasZebra ? 'chart-rows-zebra' : ''}`} ref={parent}>
             {ticks && formatValue && <Axis variant="top" ticks={ticks} formatValue={formatValue} />}

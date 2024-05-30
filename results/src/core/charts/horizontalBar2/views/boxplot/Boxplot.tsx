@@ -1,21 +1,22 @@
 import './Boxplot.scss'
 import React, { useMemo, useRef } from 'react'
-import { RowDataProps, ViewDefinition, ViewProps } from '../../types'
-import { Axis, BAR_HEIGHT, RespondentCount, Row, RowWrapper, Rows } from 'core/charts/common2'
+import { HorizontalBarViewDefinition, HorizontalBarViewProps, RowComponentProps } from '../../types'
+import { Axis, RespondentCount } from 'core/charts/common2'
 import { BoxProps, HorizontalBox } from './Box'
-import { RowCommonProps, RowExtraProps, Tick } from 'core/charts/common2/types'
+import { Tick } from 'core/charts/common2/types'
 import { useTheme } from 'styled-components'
 import * as d3 from 'd3'
-import { Axis as BoxplotAxis } from './Axis'
 import { BlockLegend } from 'core/types'
 import { useWidth } from 'core/charts/common2/helpers'
 import { useBoxplotData, useScales } from './helpers'
 import { formatValue } from '../../helpers/labels'
 import { removeNoAnswer } from '../../helpers/steps'
+import { BAR_HEIGHT, RowGroup } from '../../rows/RowGroup'
+import { RowWrapper, Rows } from '../../rows'
 
 const PIXEL_PER_TICKS = 100
 
-const BoxplotView = (viewProps: ViewProps) => {
+const BoxplotView = (viewProps: HorizontalBarViewProps) => {
     const { chartState, chartValues } = viewProps
     const { facetQuestion } = chartValues
     const theme = useTheme()
@@ -84,7 +85,7 @@ const BoxplotView = (viewProps: ViewProps) => {
                     <Axis ticks={ticks} variant="top" formatValue={labelFormatter} />
 
                     {buckets.map((bucket, i) => (
-                        <Row
+                        <RowGroup
                             key={bucket.id}
                             bucket={bucket}
                             {...rowProps}
@@ -111,20 +112,14 @@ const BoxplotView = (viewProps: ViewProps) => {
     )
 }
 
-type BoxplotRowProps = {
+type BoxplotRowProps = RowComponentProps & {
+    labelFormatter: (v: number) => string
+    contentWidth: number
     xScale: d3.ScaleLinear<number, number, never>
     yScale: d3.ScaleBand<string>
 }
 
-const BoxplotRow = (
-    props: {
-        labelFormatter: (v: number) => string
-        contentWidth: number
-    } & BoxplotRowProps &
-        RowDataProps &
-        RowCommonProps &
-        RowExtraProps
-) => {
+const BoxplotRow = (props: BoxplotRowProps) => {
     const { bucket, xScale, yScale, labelFormatter, contentWidth } = props
 
     const theme = useTheme()
@@ -154,7 +149,7 @@ const BoxplotRow = (
     )
 }
 
-export const Boxplot: ViewDefinition = {
+export const Boxplot: HorizontalBarViewDefinition = {
     component: BoxplotView,
-    steps: [removeNoAnswer]
+    dataFilters: [removeNoAnswer]
 }
