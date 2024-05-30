@@ -1,5 +1,4 @@
 import { QuestionMetadata } from '@devographics/types'
-import { HorizontalBarChartState } from '../../horizontalBar2/types'
 import { StringTranslator } from '@devographics/react-i18n'
 import { getEntityName } from 'core/helpers/entities'
 import { CustomizationFiltersSeries, FilterItem } from 'core/filters/types'
@@ -9,10 +8,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { useEntities } from 'core/helpers/entities'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useAllQuestionsMetadata } from '../../horizontalBar2/helpers/other'
-import { ChartState, Views } from '../types'
-
-export const isPercentage = (view: HorizontalBarChartState['view']) =>
-    [Views.PERCENTAGE_BUCKET, Views.PERCENTAGE_QUESTION].includes(view)
+import round from 'lodash/round'
 
 /*
 
@@ -58,31 +54,24 @@ function largeNumberFormatter(num: number, digits = 1) {
     return item ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0'
 }
 
-export const formatPercentage = (value: number) => `${Math.floor(value)}%`
+export const formatPercentage = (value: number) => {
+    if (value < 0.1) {
+        return round(value, 2).toString()
+    } else if (value < 1) {
+        return round(value, 1).toString()
+    } else {
+        return round(value).toString()
+    }
+}
 
-export const formatValue = ({
-    value,
-    chartState,
-    question
-}: {
-    value: number
-    chartState: ChartState
-    question: QuestionMetadata
-}) => {
-    if (typeof value === 'undefined') {
-        return ''
+export const formatCurrency = (value: number, question: QuestionMetadata) => {
+    if (isDollar(question)) {
+        return usdFormatter.format(value)
+    } else if (isYen(question)) {
+        return `¥${largeNumberFormatter(value)}`
+    } else {
+        return value.toString()
     }
-    const { view } = chartState
-    if (isPercentage(view)) {
-        return formatPercentage(value)
-    } else if ([Views.BOXPLOT, Views.AVERAGE].includes(view)) {
-        if (isDollar(question)) {
-            return usdFormatter.format(value)
-        } else if (isYen(question)) {
-            return `¥${largeNumberFormatter(value)}`
-        }
-    }
-    return value.toString()
 }
 
 export const getQuestionLabel = ({

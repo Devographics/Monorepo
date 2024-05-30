@@ -1,11 +1,16 @@
 import { SyntheticEvent } from 'react'
-import { ChartState, Tick } from '../common2/types'
+import { ChartState, FormatValueType, Tick } from '../common2/types'
 import { IconProps } from 'core/icons/IconWrapper'
 import { Bucket, QuestionMetadata, ResponseEditionData } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 
-export interface VerticalBarChartState extends ChartState {
-    foo: number
+export interface VerticalBarChartState extends ChartState<VerticalBarViews> {
+    foo?: number
+}
+
+export enum VerticalBarViews {
+    PERCENTAGE_QUESTION = 'percentageQuestion',
+    AVERAGE = 'average'
 }
 
 export type Control = {
@@ -19,6 +24,7 @@ export type Control = {
 export type VerticalBarViewDefinition = {
     getEditionValue?: (edition: ResponseEditionData) => number
     getBucketValue?: (bucket: Bucket) => number
+    formatValue?: FormatValueType
     getTicks?: (values: number[]) => Tick[]
     dataFilters?: DataFilter[]
     showLegend?: boolean

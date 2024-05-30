@@ -4,9 +4,11 @@ import { VerticalBarViewDefinition } from '../types'
 // import { removeNoAnswer } from '../helpers/steps'
 import { BucketUnits } from '@devographics/types'
 import Columns from '../columns/Columns'
+import { formatPercentage } from 'core/charts/common2/helpers/labels'
 
 export const PercentageQuestion: VerticalBarViewDefinition = {
     getBucketValue: bucket => bucket[BucketUnits.PERCENTAGE_QUESTION] || 0,
+    formatValue: formatPercentage,
     getTicks: () => [
         { value: 0 },
         { value: 20 },
@@ -20,7 +22,7 @@ export const PercentageQuestion: VerticalBarViewDefinition = {
     ],
     component: props => {
         return (
-            <Columns {...props} hasZebra={true} formatValue={t => `${t}%`}>
+            <Columns {...props} hasZebra={true}>
                 {props.editions.map((edition, i) => (
                     <ColumnStacked
                         columnIndex={i}

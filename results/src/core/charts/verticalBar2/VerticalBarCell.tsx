@@ -2,23 +2,22 @@ import React, { useEffect, useRef, useState } from 'react'
 import Tooltip from 'core/components/Tooltip'
 import { ResponseEditionData } from '@devographics/types'
 import { VerticalBarChartState, VerticalBarChartValues } from './types'
-import { useI18n } from '@devographics/react-i18n'
-import { formatValue } from '../common2/helpers/labels'
-import { useWidth } from '../common2/helpers'
+import { useHeight } from '../common2/helpers'
 import { CellLabel } from '../common2'
+import { getViewDefinition } from './helpers/views'
 
-// hide labels for cells under this size
-export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
+// hide labels for cells under this height
+export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 20
 
-export const useIsWideEnough = () => {
+export const useIsTallEnough = () => {
     const ref = useRef<HTMLDivElement>(null)
-    const cellWidth = useWidth(ref)
-    const [isWideEnough, setIsWideEnough] = useState(false)
+    const cellHeight = useHeight(ref)
+    const [isTallEnough, setIsTallEnough] = useState(false)
 
     useEffect(() => {
-        setIsWideEnough(!!(cellWidth && cellWidth > MINIMUM_CELL_SIZE_TO_SHOW_LABEL))
-    }, [cellWidth])
-    return { ref, isWideEnough, cellWidth }
+        setIsTallEnough(!!(cellHeight && cellHeight > MINIMUM_CELL_SIZE_TO_SHOW_LABEL))
+    }, [cellHeight])
+    return { ref, cellHeight, isTallEnough }
 }
 
 export const Cell = ({
@@ -40,12 +39,7 @@ export const Cell = ({
     cellIndex: number
     gradient: string[]
 }) => {
-    const { ref, isWideEnough: showLabel } = useIsWideEnough()
-
-    // const entities = useEntities()
-    // const entity = entities.find(e => e.id === bucket.id)
-    const { question, ticks } = chartValues
-    const { getString } = useI18n()
+    const { ref, cellHeight, isTallEnough: showLabel } = useIsTallEnough()
 
     const style = {
         '--color1': gradient[0],
@@ -54,7 +48,12 @@ export const Cell = ({
         '--offset': offset
     }
 
-    const v = formatValue({ value, chartState, question })
+    const { question } = chartValues
+    const { view } = chartState
+    const viewDefinition = getViewDefinition(view)
+    const { formatValue } = viewDefinition
+
+    const v = formatValue(value, question)
 
     return (
         <Tooltip

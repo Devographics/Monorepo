@@ -9,10 +9,11 @@ import * as d3 from 'd3'
 import { BlockLegend } from 'core/types'
 import { useWidth } from 'core/charts/common2/helpers'
 import { useBoxplotData, useScales } from './helpers'
-import { formatValue } from '../../../common2/helpers/labels'
 import { removeNoAnswer } from '../../helpers/steps'
 import { BAR_HEIGHT, RowGroup } from '../../rows/RowGroup'
 import { RowWrapper, Rows } from '../../rows'
+import { getViewDefinition } from '../../helpers/views'
+import { formatCurrency } from 'core/charts/common2/helpers/labels'
 
 const PIXEL_PER_TICKS = 100
 
@@ -26,6 +27,10 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
     if (!facetQuestion) {
         return null
     }
+
+    const { view } = chartState
+    const viewDefinition = getViewDefinition(view)
+    const { formatValue } = viewDefinition
 
     // note: we need a placeholder that's part of the grid/subgrid layout
     // to be able to calculate the content width
@@ -43,8 +48,7 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
         return { chartMin, chartMax, groups }
     }, [buckets])
 
-    const labelFormatter = (value: number) =>
-        formatValue({ value, chartState, question: facetQuestion })
+    const labelFormatter = (value: number) => formatValue(value, facetQuestion)
 
     const legends = [] as BlockLegend[]
 
@@ -74,6 +78,8 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
         ticks
     }
 
+    const axisProps = { ticks, formatValue, question: facetQuestion }
+
     return (
         <div className="chart-boxplot-view">
             <Rows {...viewProps} hasZebra={true}>
@@ -82,7 +88,7 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
                         <div className="chart-row-content" ref={contentRef} />
                     </div>
 
-                    <Axis ticks={ticks} variant="top" formatValue={labelFormatter} />
+                    <Axis variant="top" {...axisProps} />
 
                     {buckets.map((bucket, i) => (
                         <RowGroup
@@ -94,7 +100,7 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
                         />
                     ))}
 
-                    <Axis ticks={ticks} variant="bottom" formatValue={labelFormatter} />
+                    <Axis variant="bottom" {...axisProps} />
                     {/* <div className="chart-axis chart-axis-bottom">
                         <div className="chart-row-content">
                             <BoxplotAxis
@@ -151,5 +157,6 @@ const BoxplotRow = (props: BoxplotRowProps) => {
 
 export const Boxplot: HorizontalBarViewDefinition = {
     component: BoxplotView,
+    // formatValue: formatCurrency,
     dataFilters: [removeNoAnswer]
 }

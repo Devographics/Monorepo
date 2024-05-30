@@ -1,20 +1,23 @@
 import T from 'core/i18n/T'
 import './Axis.scss'
 import React from 'react'
-import { Tick } from './types'
+import { FormatValueType, Tick } from './types'
+import { QuestionMetadata } from '@devographics/types'
 
 export const getInterval = (tickCount: number) => 100 / (tickCount - 1)
 
 export const Axis = ({
     variant,
     ticks,
+    question,
     labelId,
     formatValue
 }: {
     variant: 'top' | 'bottom'
     ticks: Tick[]
+    question: QuestionMetadata
     labelId?: string
-    formatValue: (v: number) => string
+    formatValue: FormatValueType
 }) => {
     const interval = getInterval(ticks.length)
 
@@ -35,7 +38,7 @@ export const Axis = ({
                                 }}
                             >
                                 <div className="chart-axis-tick-label">
-                                    {formatValue(tick.value)}
+                                    {formatValue(tick.value, question)}
                                 </div>
                             </div>
                         )

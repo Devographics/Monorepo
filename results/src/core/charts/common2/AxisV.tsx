@@ -3,7 +3,8 @@ import './AxisV.scss'
 import React from 'react'
 import max from 'lodash/max'
 import round from 'lodash/round'
-import { Tick } from './types'
+import { FormatValueType, Tick } from './types'
+import { QuestionMetadata } from '@devographics/types'
 
 export const getTicks = (values: number[]) => {
     const NUMBER_OF_TICKS = 5
@@ -20,13 +21,15 @@ export const getInterval = (tickCount: number) => 100 / (tickCount - 1)
 export const AxisV = ({
     variant,
     ticks,
+    question,
     labelId,
-    formatValue = v => v.toString()
+    formatValue
 }: {
     variant: 'left' | 'right'
     ticks: Tick[]
+    question: QuestionMetadata
     labelId?: string
-    formatValue?: (v: number) => string
+    formatValue: FormatValueType
 }) => {
     const interval = getInterval(ticks.length)
 
@@ -48,7 +51,7 @@ export const AxisV = ({
                                 }}
                             >
                                 <div className="chart-axis-tick-label">
-                                    {formatValue(tick.value)}
+                                    {formatValue(tick.value, question)}
                                 </div>
                             </div>
                         )

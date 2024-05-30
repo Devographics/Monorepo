@@ -2,8 +2,8 @@ import {
     HorizontalBarChartState,
     Control,
     HorizontalBarViewDefinition,
-    Views,
-    HorizontalBarChartValues
+    HorizontalBarChartValues,
+    HorizontalBarViews
 } from '../types'
 import { Bars, FacetBars, Boxplot as BoxplotIcon, FacetCountsBars } from 'core/icons'
 import {
@@ -16,12 +16,12 @@ import {
 } from '../views'
 
 const controlIcons = {
-    [Views.BOXPLOT]: BoxplotIcon,
-    [Views.AVERAGE]: Bars,
-    [Views.FACET_COUNTS]: FacetCountsBars,
-    [Views.COUNT]: Bars,
-    [Views.PERCENTAGE_BUCKET]: FacetBars,
-    [Views.PERCENTAGE_QUESTION]: Bars
+    [HorizontalBarViews.BOXPLOT]: BoxplotIcon,
+    [HorizontalBarViews.AVERAGE]: Bars,
+    [HorizontalBarViews.FACET_COUNTS]: FacetCountsBars,
+    [HorizontalBarViews.COUNT]: Bars,
+    [HorizontalBarViews.PERCENTAGE_BUCKET]: FacetBars,
+    [HorizontalBarViews.PERCENTAGE_QUESTION]: Bars
 }
 
 // TODO: put this together with view definition
@@ -36,8 +36,13 @@ export const getControls = ({
     const { facetQuestion } = chartValues
     const views = facetQuestion
         ? facetQuestion.optionsAreSequential
-            ? [Views.BOXPLOT, Views.AVERAGE, Views.PERCENTAGE_BUCKET, Views.FACET_COUNTS]
-            : [Views.PERCENTAGE_BUCKET, Views.FACET_COUNTS]
+            ? [
+                  HorizontalBarViews.BOXPLOT,
+                  HorizontalBarViews.AVERAGE,
+                  HorizontalBarViews.PERCENTAGE_BUCKET,
+                  HorizontalBarViews.FACET_COUNTS
+              ]
+            : [HorizontalBarViews.PERCENTAGE_BUCKET, HorizontalBarViews.FACET_COUNTS]
         : []
     const controls: Control[] = views.map(id => ({
         id,
@@ -54,21 +59,22 @@ export const getControls = ({
 
 export const viewDefinitions: { [key: string]: HorizontalBarViewDefinition } = {
     // regular views
-    [Views.PERCENTAGE_QUESTION]: PercentageQuestion,
-    [Views.COUNT]: Count,
+    [HorizontalBarViews.PERCENTAGE_QUESTION]: PercentageQuestion,
+    [HorizontalBarViews.COUNT]: Count,
     // faceted views
-    [Views.AVERAGE]: Average,
-    [Views.BOXPLOT]: Boxplot,
-    [Views.FACET_COUNTS]: FacetCounts,
-    [Views.PERCENTAGE_BUCKET]: PercentageBucket
+    [HorizontalBarViews.AVERAGE]: Average,
+    [HorizontalBarViews.BOXPLOT]: Boxplot,
+    [HorizontalBarViews.FACET_COUNTS]: FacetCounts,
+    [HorizontalBarViews.PERCENTAGE_BUCKET]: PercentageBucket
 }
 
-export const getViewComponent = (view: Views) => {
+export const getViewComponent = (view: HorizontalBarViews) => {
     return getViewDefinition(view).component
 }
 
-export const getViewDefinition = (view: Views) => {
-    // define dummy getValue which will be overwritten
+export const getViewDefinition = (view: HorizontalBarViews) => {
+    // define dummy getValue and formatValue which will be overwritten
     const getValue = () => 0
-    return { getValue, ...viewDefinitions[view] }
+    const formatValue = (v: number) => v.toString()
+    return { getValue, formatValue, ...viewDefinitions[view] }
 }

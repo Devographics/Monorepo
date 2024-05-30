@@ -7,7 +7,7 @@ import {
     SimplifiedSentimentOptions,
     StandardQuestionData
 } from '@devographics/types'
-import { HorizontalBarChartState, Views } from '../types'
+import { HorizontalBarChartState, HorizontalBarViews } from '../types'
 import { DataSeries, FacetItem } from 'core/filters/types'
 import { usePageContext } from 'core/helpers/pageContext'
 import { applySteps } from './steps'
@@ -83,9 +83,9 @@ export const getRowComponent = (bucket: Bucket, chartState: HorizontalBarChartSt
     const { facetBuckets } = bucket
     const hasFacetBuckets = facetBuckets && facetBuckets.length > 0
     if (hasFacetBuckets) {
-        if (view === Views.BOXPLOT) {
+        if (view === HorizontalBarViews.BOXPLOT) {
             return null
-        } else if (view === Views.PERCENTAGE_BUCKET) {
+        } else if (view === HorizontalBarViews.PERCENTAGE_BUCKET) {
             return RowSingle
         } else {
             return RowStacked

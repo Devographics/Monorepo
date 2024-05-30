@@ -6,6 +6,7 @@ import max from 'lodash/max'
 import round from 'lodash/round'
 import { RowSingle } from '../rows/RowSingle'
 import { RowGroup, Rows } from '../rows'
+import { formatPercentage } from 'core/charts/common2/helpers/labels'
 
 const getValue = (bucket: Bucket | FacetBucket) => bucket[BucketUnits.PERCENTAGE_QUESTION] || 0
 
@@ -21,13 +22,13 @@ const getTicks = (values: number[]) => {
 
 export const PercentageQuestion: HorizontalBarViewDefinition = {
     getValue,
+    formatValue: formatPercentage,
     getTicks,
     dataFilters: [removeNoAnswer, removeOverLimit, removeOtherAnswers],
     component: props => {
         return (
             <Rows
                 {...props}
-                formatValue={t => `${t}%`}
                 labelId="charts.axis_legends.users_percentage_question"
                 hasZebra={true}
             >

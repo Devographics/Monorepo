@@ -5,18 +5,14 @@ import { DataSeries } from 'core/filters/types'
 import { CustomVariant } from 'core/filters/helpers'
 import { Dispatch, SetStateAction } from 'react'
 
-export interface ChartState {
-    view: Views
-    setView: Dispatch<SetStateAction<Views>>
+export interface ChartState<ViewsType> {
+    view: ViewsType
+    setView: Dispatch<SetStateAction<ViewsType>>
 }
 
-export enum Views {
-    BOXPLOT = 'percentilesByFacet',
+export enum PercentViews {
     PERCENTAGE_BUCKET = 'percentageBucket',
-    PERCENTAGE_QUESTION = 'percentageQuestion',
-    FACET_COUNTS = 'facetCounts',
-    COUNT = 'count',
-    AVERAGE = 'average'
+    PERCENTAGE_QUESTION = 'percentageQuestion'
 }
 
 export enum OrderOptions {
@@ -49,3 +45,5 @@ export type Tick = {
     xOffset?: number
     yOffset?: number
 }
+
+export type FormatValueType = (v: number, question: QuestionMetadata) => string

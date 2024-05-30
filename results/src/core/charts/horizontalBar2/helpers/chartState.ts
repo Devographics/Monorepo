@@ -1,8 +1,7 @@
 import { useState } from 'react'
-
 import { QuestionMetadata } from '@devographics/types'
 import { ColumnModes, OrderOptions } from '../../common2/types'
-import { HorizontalBarChartState, Views } from '../types'
+import { HorizontalBarChartState, HorizontalBarViews } from '../types'
 import { BlockVariantDefinition } from 'core/types'
 
 export const getDefaultState = ({
@@ -19,12 +18,12 @@ export const getDefaultState = ({
         if (facetQuestion) {
             defaultState.facet = { id: facetQuestion.id, sectionId: facetQuestion.sectionId }
             if (facetQuestion.optionsAreSequential || facetQuestion.optionsAreNumeric) {
-                defaultState.view = Views.BOXPLOT
+                defaultState.view = HorizontalBarViews.BOXPLOT
             } else {
-                defaultState.view = Views.PERCENTAGE_BUCKET
+                defaultState.view = HorizontalBarViews.PERCENTAGE_BUCKET
             }
         } else {
-            defaultState.view = Views.PERCENTAGE_QUESTION
+            defaultState.view = HorizontalBarViews.PERCENTAGE_QUESTION
         }
     }
     if (block?.chartOptions?.limit) {
@@ -51,7 +50,7 @@ export const useChartState = (defaultState: {
         defaultState.order || OrderOptions.DESC
     )
     const [view, setView] = useState<HorizontalBarChartState['view']>(
-        defaultState.view || Views.COUNT
+        defaultState.view || HorizontalBarViews.COUNT
     )
     const [columnMode, setColumnMode] = useState<HorizontalBarChartState['columnMode']>(
         defaultState.columnMode || ColumnModes.STACKED

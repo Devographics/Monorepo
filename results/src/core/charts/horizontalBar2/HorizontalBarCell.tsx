@@ -5,7 +5,6 @@ import { HorizontalBarChartState, HorizontalBarChartValues } from './types'
 import T from 'core/i18n/T'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
-import { formatValue } from '../common2/helpers/labels'
 import { getViewDefinition } from './helpers/views'
 import { useWidth } from '../common2/helpers'
 import { CellLabel } from '../common2'
@@ -48,7 +47,7 @@ export const Cell = ({
     const { question, facetQuestion } = chartValues
     const { view, sort } = chartState
     const viewDefinition = getViewDefinition(view)
-    const { getValue } = viewDefinition
+    const { getValue, formatValue } = viewDefinition
     const { getString } = useI18n()
 
     const { id, count, entity, token } = bucket
@@ -68,7 +67,7 @@ export const Cell = ({
         entity
     })
 
-    const v = formatValue({ value, chartState, question: facetQuestion || question })
+    const v = formatValue(value)
 
     const isActiveSort = sort === id
     const className = `chart-cell horizontal-chart-cell ${isActiveSort ? 'active-sort' : ''}`

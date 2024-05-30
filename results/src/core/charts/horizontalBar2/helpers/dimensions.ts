@@ -1,11 +1,10 @@
 import { FacetBucket } from '@devographics/types'
-import { HorizontalBarChartState } from '../types'
+import { HorizontalBarChartState, HorizontalBarViews } from '../types'
 import { getViewDefinition } from './views'
 import take from 'lodash/take'
 import sum from 'lodash/sum'
 import { Dimension } from 'core/charts/multiItemsExperience/types'
 import { Bucket } from '@devographics/types'
-import { Views } from '../types'
 import sumBy from 'lodash/sumBy'
 import round from 'lodash/round'
 
@@ -55,7 +54,11 @@ export const getRowOffset = ({
 }) => {
     const { view, sort } = chartState
     const { getValue } = getViewDefinition(view)
-    if (getValue && [Views.PERCENTAGE_BUCKET, Views.FACET_COUNTS].includes(view) && sort) {
+    if (
+        getValue &&
+        [HorizontalBarViews.PERCENTAGE_BUCKET, HorizontalBarViews.FACET_COUNTS].includes(view) &&
+        sort
+    ) {
         // check if a bucket contains the facet that we're currently sorting by
         const containsSortedFacet = (b: Bucket) => b.facetBuckets.some(fb => fb.id === sort)
 

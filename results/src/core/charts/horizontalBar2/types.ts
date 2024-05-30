@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from 'react'
-import { ChartState, ColumnModes, OrderOptions, Tick } from '../common2/types'
+import { ChartState, ColumnModes, FormatValueType, OrderOptions, Tick } from '../common2/types'
 import { FacetItem } from 'core/filters/types'
 import { IconProps } from 'core/icons/IconWrapper'
 import { Bucket, FacetBucket, QuestionMetadata } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 import { Dimension } from '../multiItemsExperience/types'
 
-export interface HorizontalBarChartState extends ChartState {
+export interface HorizontalBarChartState extends ChartState<HorizontalBarViews> {
     sort: string | undefined
     setSort: Dispatch<SetStateAction<string | undefined>>
     order: OrderOptions
@@ -17,6 +17,15 @@ export interface HorizontalBarChartState extends ChartState {
     setFacet: Dispatch<SetStateAction<FacetItem | undefined>>
     rowsLimit: number
     setRowsLimit: Dispatch<SetStateAction<number>>
+}
+
+export enum HorizontalBarViews {
+    BOXPLOT = 'percentilesByFacet',
+    PERCENTAGE_BUCKET = 'percentageBucket',
+    PERCENTAGE_QUESTION = 'percentageQuestion',
+    FACET_COUNTS = 'facetCounts',
+    COUNT = 'count',
+    AVERAGE = 'average'
 }
 
 export type HorizontalBarChartValues = {
@@ -38,6 +47,7 @@ export type Control = {
 type GetValueType = (bucket: Bucket | FacetBucket) => number
 export type HorizontalBarViewDefinition = {
     getValue?: GetValueType
+    formatValue?: FormatValueType
     getTicks?: (values: number[]) => Tick[]
     dataFilters?: DataFilter[]
     showLegend?: boolean

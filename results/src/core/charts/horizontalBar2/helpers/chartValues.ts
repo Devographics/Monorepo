@@ -1,9 +1,10 @@
 import { Bucket, QuestionMetadata } from '@devographics/types'
-import { HorizontalBarChartState, HorizontalBarChartValues, Views } from '../types'
+import { HorizontalBarChartState, HorizontalBarChartValues } from '../types'
 import max from 'lodash/max'
 import { BlockVariantDefinition } from 'core/types'
 import { useAllQuestionsWithOptions } from '../../hooks'
 import { getViewDefinition } from './views'
+import { Views } from 'core/charts/common2/types'
 
 export const useChartValues = ({
     buckets,

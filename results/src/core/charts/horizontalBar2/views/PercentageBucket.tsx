@@ -9,11 +9,13 @@ import max from 'lodash/max'
 import { applyRatio } from 'core/charts/multiItemsExperience/helpers'
 import { Dimension } from 'core/charts/multiItemsExperience/types'
 import { RowGroup, Rows } from '../rows'
+import { formatPercentage } from 'core/charts/common2/helpers/labels'
 
 const getValue = (facetBucket: FacetBucket) => facetBucket[BucketUnits.PERCENTAGE_BUCKET] || 0
 
 export const PercentageBucket: HorizontalBarViewDefinition = {
     getValue,
+    formatValue: formatPercentage,
     getTicks: () => [
         { value: 0 },
         { value: 20 },
@@ -66,12 +68,7 @@ export const PercentageBucket: HorizontalBarViewDefinition = {
         allRowsOffsets = allRowsOffsets.map(rowOffset => rowOffset * rowOffsetShrinkRatio)
 
         return (
-            <Rows
-                {...props}
-                formatValue={t => `${t}%`}
-                labelId="charts.axis_legends.users_percentageBucket"
-                hasZebra={true}
-            >
+            <Rows {...props} labelId="charts.axis_legends.users_percentageBucket" hasZebra={true}>
                 {props.buckets.map((bucket, i) => (
                     <RowGroup
                         key={bucket.id}
