@@ -1,10 +1,8 @@
 import { Bucket, QuestionMetadata } from '@devographics/types'
-import { HorizontalBarChartState, HorizontalBarChartValues } from '../types'
+import { HorizontalBarChartState, HorizontalBarChartValues, HorizontalBarViews } from '../types'
 import max from 'lodash/max'
 import { BlockVariantDefinition } from 'core/types'
 import { useAllQuestionsWithOptions } from '../../hooks'
-import { getViewDefinition } from './views'
-import { Views } from 'core/charts/common2/types'
 
 export const useChartValues = ({
     buckets,
@@ -17,7 +15,7 @@ export const useChartValues = ({
     block: BlockVariantDefinition
     question: QuestionMetadata
 }) => {
-    const viewDefinition = getViewDefinition(chartState.view)
+    const { viewDefinition } = chartState
     const { getValue, getTicks } = viewDefinition
     const allQuestions = useAllQuestionsWithOptions()
     const values = buckets.map(b => getValue(b))
@@ -27,7 +25,7 @@ export const useChartValues = ({
         totalRows: buckets.length
     }
 
-    const maxOverallValue = [Views.PERCENTAGE_BUCKET].includes(chartState.view)
+    const maxOverallValue = [HorizontalBarViews.PERCENTAGE_BUCKET].includes(chartState.view)
         ? 100
         : max(values) || 0
 

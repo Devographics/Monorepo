@@ -6,7 +6,6 @@ import { QuestionMetadata, StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
 import { getAllFacetBucketIds, getChartCurrentEdition, useQuestionMetadata } from './helpers/other'
 import { getDefaultState, useChartState } from './helpers/chartState'
-import { getViewDefinition } from './helpers/views'
 import { ChartFooter, ChartWrapper, GridWrapper, Legend, Note } from '../common2'
 import { useEntities } from 'core/helpers/entities'
 import { FacetTitle } from '../common2/FacetTitle'
@@ -103,11 +102,11 @@ const FacetHeading = (
     }
 ) => {
     const { block, facetQuestion, chartState, pageContext, series } = props
+    const { viewDefinition } = chartState
     const entities = useEntities()
 
     // const controls = getControls({ chartState, chartValues })
 
-    const viewDefinition = getViewDefinition(chartState.view)
     const colorScale = facetQuestion && useColorScale({ question: facetQuestion })
 
     const allOptions = getQuestionOptions({

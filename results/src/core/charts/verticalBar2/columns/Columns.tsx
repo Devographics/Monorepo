@@ -1,10 +1,9 @@
 import './Columns.scss'
 import React from 'react'
-import { FormatValueType, Tick } from '../../common2/types'
+import { Tick } from '../../common2/types'
 import AxisV from '../../common2/AxisV'
 import { VerticalBarChartState, VerticalBarChartValues } from '../types'
 import { Gridlines } from './Gridlines'
-import { getViewDefinition } from '../helpers/views'
 
 export const Columns = ({
     chartState,
@@ -20,8 +19,7 @@ export const Columns = ({
     labelId?: string
     hasZebra?: boolean
 }) => {
-    const { view } = chartState
-    const viewDefinition = getViewDefinition(view)
+    const { viewDefinition } = chartState
     const { formatValue } = viewDefinition
     const { question, ticks, totalColumns } = chartValues
     const style = { '--totalColumns': totalColumns }

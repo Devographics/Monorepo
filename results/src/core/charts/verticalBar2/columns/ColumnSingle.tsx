@@ -1,5 +1,4 @@
 import { ColumnComponentProps } from '../types'
-import { getViewDefinition } from '../helpers/views'
 import { useTheme } from 'styled-components'
 import { RespondentCount } from '../../common2'
 import React from 'react'
@@ -10,7 +9,7 @@ import { ColumnWrapper } from './ColumnWrapper'
 export const ColumnSingle = (props: ColumnComponentProps) => {
     const theme = useTheme()
     const { edition, chartState, chartValues, showCount = true } = props
-    const viewDefinition = getViewDefinition(chartState.view)
+    const { viewDefinition } = chartState
     const { getEditionValue } = viewDefinition
     const { ticks } = chartValues
 

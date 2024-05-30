@@ -4,7 +4,6 @@ import { useAutoAnimate } from '@formkit/auto-animate/react'
 import Axis from '../../common2/Axis'
 import { ShowAll } from '../../common2/ShowAll'
 import { HorizontalBarViewProps } from '../types'
-import { getViewDefinition } from '../helpers/views'
 
 export const Rows = ({
     chartState,
@@ -20,8 +19,7 @@ export const Rows = ({
     const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
     const { ticks, question } = chartValues
 
-    const { view } = chartState
-    const viewDefinition = getViewDefinition(view)
+    const { viewDefinition } = chartState
     const { formatValue } = viewDefinition
     const axisProps = { question, formatValue, labelId }
     return (

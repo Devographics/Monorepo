@@ -3,6 +3,7 @@ import { QuestionMetadata } from '@devographics/types'
 import { ColumnModes, OrderOptions } from '../../common2/types'
 import { HorizontalBarChartState, HorizontalBarViews } from '../types'
 import { BlockVariantDefinition } from 'core/types'
+import { getViewDefinition } from './views'
 
 export const getDefaultState = ({
     facetQuestion,
@@ -56,6 +57,8 @@ export const useChartState = (defaultState: {
         defaultState.columnMode || ColumnModes.STACKED
     )
 
+    const viewDefinition = getViewDefinition(view)
+
     const chartState: HorizontalBarChartState = {
         facet,
         setFacet,
@@ -65,6 +68,7 @@ export const useChartState = (defaultState: {
         setOrder,
         view,
         setView,
+        viewDefinition,
         columnMode,
         setColumnMode,
         rowsLimit,

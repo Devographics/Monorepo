@@ -12,7 +12,6 @@ import { useBoxplotData, useScales } from './helpers'
 import { removeNoAnswer } from '../../helpers/steps'
 import { BAR_HEIGHT, RowGroup } from '../../rows/RowGroup'
 import { RowWrapper, Rows } from '../../rows'
-import { getViewDefinition } from '../../helpers/views'
 import { formatCurrency } from 'core/charts/common2/helpers/labels'
 
 const PIXEL_PER_TICKS = 100
@@ -28,8 +27,7 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
         return null
     }
 
-    const { view } = chartState
-    const viewDefinition = getViewDefinition(view)
+    const { viewDefinition } = chartState
     const { formatValue } = viewDefinition
 
     // note: we need a placeholder that's part of the grid/subgrid layout
@@ -157,6 +155,6 @@ const BoxplotRow = (props: BoxplotRowProps) => {
 
 export const Boxplot: HorizontalBarViewDefinition = {
     component: BoxplotView,
-    // formatValue: formatCurrency,
+    formatValue: formatCurrency,
     dataFilters: [removeNoAnswer]
 }

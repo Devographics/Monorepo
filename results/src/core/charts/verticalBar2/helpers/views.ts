@@ -16,8 +16,5 @@ export const getViewComponent = (view: VerticalBarViews) => {
 }
 
 export const getViewDefinition = (view: VerticalBarViews) => {
-    // define dummy getValue and formatValue which will be overwritten
-    const getValue = () => 0
-    const formatValue = (v: number) => v.toString()
-    return { getValue, formatValue, ...viewDefinitions[view] }
+    return viewDefinitions[view]
 }

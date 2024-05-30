@@ -49,8 +49,7 @@ export const Cell = ({
     }
 
     const { question } = chartValues
-    const { view } = chartState
-    const viewDefinition = getViewDefinition(view)
+    const { viewDefinition } = chartState
     const { formatValue } = viewDefinition
 
     const v = formatValue(value, question)

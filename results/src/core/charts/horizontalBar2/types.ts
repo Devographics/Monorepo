@@ -17,6 +17,7 @@ export interface HorizontalBarChartState extends ChartState<HorizontalBarViews> 
     setFacet: Dispatch<SetStateAction<FacetItem | undefined>>
     rowsLimit: number
     setRowsLimit: Dispatch<SetStateAction<number>>
+    viewDefinition: HorizontalBarViewDefinition
 }
 
 export enum HorizontalBarViews {
@@ -46,8 +47,8 @@ export type Control = {
 
 type GetValueType = (bucket: Bucket | FacetBucket) => number
 export type HorizontalBarViewDefinition = {
-    getValue?: GetValueType
-    formatValue?: FormatValueType
+    getValue: GetValueType
+    formatValue: FormatValueType
     getTicks?: (values: number[]) => Tick[]
     dataFilters?: DataFilter[]
     showLegend?: boolean

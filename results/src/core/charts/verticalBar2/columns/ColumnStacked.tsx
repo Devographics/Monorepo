@@ -1,5 +1,4 @@
 import { ColumnComponentProps } from '../types'
-import { getViewDefinition } from '../helpers/views'
 import React from 'react'
 import { Cell } from '../VerticalBarCell'
 import { useGradient } from '../../horizontalBar2/helpers/colors'
@@ -10,7 +9,7 @@ import { ColumnWrapper } from './ColumnWrapper'
 
 export const ColumnStacked = (props: ColumnComponentProps) => {
     const { edition, chartState, chartValues } = props
-    const viewDefinition = getViewDefinition(chartState.view)
+    const { viewDefinition } = chartState
     const { getBucketValue } = viewDefinition
     if (!getBucketValue) {
         throw new Error('getBucketValue not defined')

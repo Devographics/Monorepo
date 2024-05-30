@@ -21,5 +21,3 @@ export const useHeight = (ref: RefObject<HTMLElement>) => {
     }, []) // The empty dependency array makes sure this runs only once after component mount
     return height
 }
-
-export const formatNumber = new Intl.NumberFormat().format

@@ -8,7 +8,7 @@ import { formatCurrency } from 'core/charts/common2/helpers/labels'
 export const Average: VerticalBarViewDefinition = {
     getEditionValue: edition => edition.average || 0,
     getTicks: () => [{ value: 0 }, { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }],
-    // formatValue: formatCurrency,
+    formatValue: formatCurrency,
     dataFilters: [
         /*removeNoAnswer*/
     ],

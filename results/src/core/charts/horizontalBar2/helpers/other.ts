@@ -11,7 +11,6 @@ import { HorizontalBarChartState, HorizontalBarViews } from '../types'
 import { DataSeries, FacetItem } from 'core/filters/types'
 import { usePageContext } from 'core/helpers/pageContext'
 import { applySteps } from './steps'
-import { getViewDefinition } from './views'
 import sortBy from 'lodash/sortBy'
 import { OrderOptions } from 'core/charts/common2/types'
 import { BlockVariantDefinition } from 'core/types'
@@ -46,7 +45,8 @@ export const getChartBuckets = ({
     chartState: HorizontalBarChartState
 }) => {
     const { view, sort, facet, order, rowsLimit } = chartState
-    const { dataFilters: steps, getValue } = getViewDefinition(view)
+    const { viewDefinition } = chartState
+    const { dataFilters: steps, getValue } = viewDefinition
     const currentEdition = getChartCurrentEdition({ serie, block })
 
     let buckets = currentEdition.buckets

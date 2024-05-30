@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { VerticalBarChartState, VerticalBarViews } from '../types'
 import { BlockVariantDefinition } from 'core/types'
+import { getViewDefinition } from './views'
 
 export const getDefaultState = ({ block }: { block: BlockVariantDefinition }) => {
     const defaultState = {} as VerticalBarChartState
@@ -19,9 +20,11 @@ export const useChartState = (defaultState: {
         defaultState.view || VerticalBarViews.AVERAGE
     )
 
+    const viewDefinition = getViewDefinition(view)
     const chartState: VerticalBarChartState = {
         view,
-        setView
+        setView,
+        viewDefinition
     }
     return chartState
 }

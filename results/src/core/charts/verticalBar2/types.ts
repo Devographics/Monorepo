@@ -5,7 +5,7 @@ import { Bucket, QuestionMetadata, ResponseEditionData } from '@devographics/typ
 import { BlockVariantDefinition } from 'core/types'
 
 export interface VerticalBarChartState extends ChartState<VerticalBarViews> {
-    foo?: number
+    viewDefinition: VerticalBarViewDefinition
 }
 
 export enum VerticalBarViews {
@@ -24,7 +24,7 @@ export type Control = {
 export type VerticalBarViewDefinition = {
     getEditionValue?: (edition: ResponseEditionData) => number
     getBucketValue?: (bucket: Bucket) => number
-    formatValue?: FormatValueType
+    formatValue: FormatValueType
     getTicks?: (values: number[]) => Tick[]
     dataFilters?: DataFilter[]
     showLegend?: boolean

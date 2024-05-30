@@ -54,6 +54,8 @@ function largeNumberFormatter(num: number, digits = 1) {
     return item ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0'
 }
 
+export const formatNumber = new Intl.NumberFormat().format
+
 export const formatPercentage = (value: number) => {
     if (value < 0.1) {
         return round(value, 2).toString()

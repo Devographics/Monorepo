@@ -2,7 +2,6 @@ import React from 'react'
 import { RowWrapper } from './RowWrapper'
 import { Cell } from '../HorizontalBarCell'
 import { RowComponentProps } from '../types'
-import { getViewDefinition } from '../helpers/views'
 import { useTheme } from 'styled-components'
 import { FreeformIndicator, RespondentCount } from '../../common2'
 import { FreeformAnswersTrigger } from '../../common2/FreeformAnswers'
@@ -12,7 +11,7 @@ export const RowSingle = (props: RowComponentProps) => {
     const { block, bucket, chartState, chartValues, showCount = true, hasGroupedBuckets } = props
     const { isFreeformData } = bucket
     const { question, maxOverallValue = 1 } = chartValues
-    const viewDefinition = getViewDefinition(chartState.view)
+    const { viewDefinition } = chartState
     const { getValue } = viewDefinition
     const value = getValue(bucket)
     const width = (100 * value) / maxOverallValue
