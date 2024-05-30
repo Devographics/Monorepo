@@ -1,9 +1,9 @@
 import React from 'react'
 import { ColumnSingle } from '../columns/ColumnSingle'
 import { VerticalBarViewDefinition } from '../types'
-import { Columns } from 'core/charts/common2'
 // import { removeNoAnswer } from '../helpers/steps'
 import { BucketUnits } from '@devographics/types'
+import Columns from '../columns/Columns'
 
 export const Count: VerticalBarViewDefinition = {
     getValue: bucket => bucket[BucketUnits.COUNT] || 0,
@@ -15,6 +15,7 @@ export const Count: VerticalBarViewDefinition = {
             <Columns {...props} hasZebra={true}>
                 {props.editions.map((edition, i) => (
                     <ColumnSingle
+                        columnIndex={i}
                         {...props}
                         key={edition.editionId}
                         edition={edition}

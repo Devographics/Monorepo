@@ -1,12 +1,13 @@
-import { ColumnDataProps } from '../types'
+import { ColumnComponentProps } from '../types'
 import { getViewDefinition } from '../helpers/views'
 import { useTheme } from 'styled-components'
-import { ColumnWrapper, RespondentCount } from '../../common2'
+import { RespondentCount } from '../../common2'
 import React from 'react'
 import { Cell } from '../VerticalBarCell'
 import max from 'lodash/max'
+import { ColumnWrapper } from './ColumnWrapper'
 
-export const ColumnSingle = (props: ColumnDataProps & RowCommonProps & RowExtraProps) => {
+export const ColumnSingle = (props: ColumnComponentProps) => {
     const theme = useTheme()
     const { edition, chartState, chartValues, showCount = true } = props
     const viewDefinition = getViewDefinition(chartState.view)

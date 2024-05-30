@@ -1,10 +1,10 @@
 import React from 'react'
 import { ColumnSingle } from '../columns/ColumnSingle'
-import { HorizontalBarViewDefinition } from '../../horizontalBar2/types'
-import { Columns } from 'core/charts/common2'
+import Columns from '../columns/Columns'
+import { VerticalBarViewDefinition } from '../types'
 // import { removeNoAnswer } from '../helpers/steps'
 
-export const Average: HorizontalBarViewDefinition = {
+export const Average: VerticalBarViewDefinition = {
     getValue: edition => edition.average,
     getTicks: () => [{ value: 0 }, { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }],
     dataFilters: [
@@ -18,6 +18,7 @@ export const Average: HorizontalBarViewDefinition = {
                 {props.editions.map((edition, i) => (
                     <ColumnSingle
                         {...props}
+                        columnIndex={i}
                         key={edition.editionId}
                         edition={edition}
                         showCount={false}

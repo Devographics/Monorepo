@@ -10,8 +10,6 @@ export const getDefaultState = ({ block }: { block: BlockVariantDefinition }) =>
     } else {
         defaultState.view = Views.AVERAGE
     }
-    console.log(block)
-    console.log({ defaultState })
     return defaultState
 }
 

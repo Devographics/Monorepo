@@ -1,14 +1,14 @@
-import { ColumnCommonProps, ColumnDataProps, ColumnExtraProps } from '../types'
+import { ColumnComponentProps } from '../types'
 import { getViewDefinition } from '../helpers/views'
-import { ColumnWrapper } from '../../common2'
 import React from 'react'
 import { Cell } from '../VerticalBarCell'
 import { useGradient } from '../../horizontalBar2/helpers/colors'
 import max from 'lodash/max'
 import sum from 'lodash/sum'
 import take from 'lodash/take'
+import { ColumnWrapper } from './ColumnWrapper'
 
-export const ColumnStacked = (props: ColumnDataProps & ColumnCommonProps & ColumnExtraProps) => {
+export const ColumnStacked = (props: ColumnComponentProps) => {
     const { edition, chartState, chartValues } = props
     const viewDefinition = getViewDefinition(chartState.view)
     const { getValue } = viewDefinition

@@ -9,23 +9,6 @@ export type VerticalBarChartState = {
     setView: Dispatch<SetStateAction<Views>>
 }
 
-export type ColumnDataProps = {
-    chartState: VerticalBarChartState
-    chartValues: VerticalBarChartValues
-}
-
-export type ColumnCommonProps = {
-    block: BlockVariantDefinition
-    columnIndex: number
-}
-
-export type ColumnExtraProps = {
-    component: (props: {
-        containerWidth: number | undefined
-        contentWidth: number | undefined
-    }) => JSX.Element
-}
-
 export enum Views {
     PERCENTAGE_QUESTION = 'percentageQuestion',
     AVERAGE = 'average'
@@ -62,3 +45,9 @@ export type VerticalBarChartValues = {
 }
 
 export type DataFilter = (buckets: Bucket[]) => Bucket[]
+
+export type ColumnComponentProps = VerticalBarViewProps & {
+    edition: ResponseEditionData
+    columnIndex: number
+    showCount?: boolean
+}
