@@ -1,9 +1,32 @@
 .chart-column {
+    padding: 0 var(--spacing);
     display: grid;
     grid-template-rows: subgrid;
     grid-row: 1/3;
+    grid-column: var(--columnStart) / var(--columnEnd);
     // grid-template-columns: subgrid;
+    // &:nth-child(1 of .chart-column) {
+    //     padding-left: var(--doubleSpacing);
+    // }
+    // &:nth-last-child(1 of .chart-column) {
+    //     padding-right: var(--doubleSpacing);
+    // }
 }
+.chart-column {
+    .chart-bar,
+    .chart-faceted-bar {
+        position: relative;
+        height: 100%;
+    }
+}
+.vertical-chart-cell {
+    position: absolute;
+    background: linear-gradient(to top, var(--color1), var(--color2));
+    width: 100%;
+    height: calc(var(--height) * 1%);
+    bottom: calc(var(--offset) * 1%);
+}
+
 .chart-column-content {
     // grid-row-start: 1;
     // grid-row-end: 2;

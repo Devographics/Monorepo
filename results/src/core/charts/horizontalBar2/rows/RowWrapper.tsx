@@ -2,7 +2,7 @@ import React from 'react'
 import { RowHeading } from './RowHeading'
 import classNames from 'classnames'
 import { OVERALL } from '@devographics/constants'
-import { Gridlines } from '../../common2/Gridlines'
+import { Gridlines } from './Gridlines'
 import { RowComponentProps } from '../types'
 
 export const RowWrapper = (

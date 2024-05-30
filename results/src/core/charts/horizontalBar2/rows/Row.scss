@@ -160,3 +160,19 @@
 .chart-row-heading-grouped {
     opacity: 0.5;
 }
+
+.chart-row-gridlines {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.chart-row-gridlines-item {
+    position: absolute;
+    left: var(--xOffset);
+    top: 0px;
+    bottom: 0px;
+    width: 1px;
+    border-right: 1px dotted var(--borderAltColor);
+}

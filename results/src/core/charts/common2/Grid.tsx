@@ -1,7 +1,7 @@
 import { CustomizationFiltersSeries } from 'core/filters/types'
 import './Grid.scss'
 import React, { Fragment, ReactNode } from 'react'
-import { useFiltersLabel } from '../horizontalBar2/helpers/labels'
+import { useFiltersLabel } from './helpers/labels'
 import T from 'core/i18n/T'
 
 export const GridWrapper = ({

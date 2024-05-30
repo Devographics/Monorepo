@@ -43,7 +43,8 @@ export const AxisV = ({
                                 key={tick.value}
                                 className="chart-axis-tick"
                                 style={{
-                                    '--xOffset': xOffset
+                                    '--xOffset': xOffset,
+                                    '--order': index + 1
                                 }}
                             >
                                 <div className="chart-axis-tick-label">

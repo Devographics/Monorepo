@@ -1,26 +1,24 @@
 import './Column.scss'
 import React from 'react'
-import { RowCommonProps, RowExtraProps } from '../../common2/types'
-import { RowDataProps } from '../../common2/types'
+import { ColumnComponentProps } from '../types'
 
 export const ColumnWrapper = (
-    props: RowDataProps &
-        RowCommonProps &
-        RowExtraProps & { rowMetadata?: JSX.Element; children: JSX.Element }
+    props: ColumnComponentProps & { rowMetadata?: JSX.Element; children: JSX.Element }
 ) => {
-    const {
-        chartState,
-        ticks,
-        bucket,
-        isGroupedBucket = false,
-        children,
-        rowMetadata,
-        rowIndex,
-        edition
-    } = props
+    const { chartState, columnIndex, children, rowMetadata, edition } = props
 
+    /*
+
+    We add +1 because grid columns are 1-indexed, and +1 again to
+    account for left axis column, and +1 again to account for spacer columns.
+
+    */
+    const style = {
+        '--columnStart': columnIndex + 3,
+        '--columnEnd': columnIndex + 4
+    }
     return (
-        <div className="chart-column">
+        <div className="chart-column" style={style}>
             {rowMetadata && <div className="chart-column-top">{rowMetadata}</div>}
 
             <div className="chart-column-content">

@@ -35,10 +35,6 @@
             width: 1px;
             height: 10px;
             background: var(--borderAltColor);
-            top: -5px;
-        }
-        .chart-axis-top &::before {
-            top: 25px;
         }
     }
     .chart-axis-tick-label {
@@ -54,5 +50,19 @@
         margin-top: var(--spacing);
         display: flex;
         justify-content: center;
+    }
+}
+.chart-axis-bottom {
+    .chart-axis-tick {
+        &::before {
+            top: -5px;
+        }
+    }
+}
+.chart-axis-top {
+    .chart-axis-tick {
+        &::before {
+            top: 25px;
+        }
     }
 }

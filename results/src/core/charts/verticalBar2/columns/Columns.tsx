@@ -3,6 +3,7 @@ import React from 'react'
 import { Tick } from '../../common2/types'
 import AxisV from '../../common2/AxisV'
 import { VerticalBarChartState, VerticalBarChartValues } from '../types'
+import { Gridlines } from './Gridlines'
 
 export const Columns = ({
     chartState,
@@ -20,10 +21,14 @@ export const Columns = ({
     formatValue?: (v: number) => string
     hasZebra?: boolean
 }) => {
-    const { ticks } = chartValues
+    const { ticks, totalColumns } = chartValues
+    const style = { '--totalColumns': totalColumns }
+
     return (
         <div className="chart-columns-wrapper">
-            <div className="chart-columns">
+            <div className="chart-columns" style={style}>
+                {ticks && <Gridlines ticks={ticks} />}
+
                 {ticks && (
                     <AxisV
                         variant="left"

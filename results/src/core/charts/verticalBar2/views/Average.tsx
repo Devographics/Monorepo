@@ -5,7 +5,7 @@ import { VerticalBarViewDefinition } from '../types'
 // import { removeNoAnswer } from '../helpers/steps'
 
 export const Average: VerticalBarViewDefinition = {
-    getValue: edition => edition.average,
+    getEditionValue: edition => edition.average || 0,
     getTicks: () => [{ value: 0 }, { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }],
     dataFilters: [
         /*removeNoAnswer*/

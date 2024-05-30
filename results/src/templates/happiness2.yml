@@ -6,3 +6,4 @@ i18nNamespace: happiness
 hasSponsor: true
 query: allEditionsData
 parameters: { showNoAnswer: true }
+canCustomize: true

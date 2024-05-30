@@ -1,16 +1,14 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from 'react'
-import { ColumnModes, OrderOptions, Tick } from '../common2/types'
+import { ChartState, ColumnModes, OrderOptions, Tick } from '../common2/types'
 import { FacetItem } from 'core/filters/types'
 import { IconProps } from 'core/icons/IconWrapper'
 import { Bucket, FacetBucket, QuestionMetadata } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 import { Dimension } from '../multiItemsExperience/types'
 
-export type HorizontalBarChartState = {
+export interface HorizontalBarChartState extends ChartState {
     sort: string | undefined
     setSort: Dispatch<SetStateAction<string | undefined>>
-    view: Views
-    setView: Dispatch<SetStateAction<Views>>
     order: OrderOptions
     setOrder: Dispatch<SetStateAction<OrderOptions>>
     columnMode: ColumnModes
@@ -27,15 +25,6 @@ export type HorizontalBarChartValues = {
     question: QuestionMetadata
     facetQuestion?: QuestionMetadata
     ticks?: Tick[]
-}
-
-export enum Views {
-    BOXPLOT = 'percentilesByFacet',
-    PERCENTAGE_BUCKET = 'percentageBucket',
-    PERCENTAGE_QUESTION = 'percentageQuestion',
-    FACET_COUNTS = 'facetCounts',
-    COUNT = 'count',
-    AVERAGE = 'average'
 }
 
 export type Control = {

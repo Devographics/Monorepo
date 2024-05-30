@@ -1,5 +1,5 @@
 import { QuestionMetadata } from '@devographics/types'
-import { HorizontalBarChartState, Views } from '../types'
+import { HorizontalBarChartState } from '../../horizontalBar2/types'
 import { StringTranslator } from '@devographics/react-i18n'
 import { getEntityName } from 'core/helpers/entities'
 import { CustomizationFiltersSeries, FilterItem } from 'core/filters/types'
@@ -8,7 +8,8 @@ import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import { useEntities } from 'core/helpers/entities'
 import { usePageContext } from 'core/helpers/pageContext'
-import { useAllQuestionsMetadata } from './other'
+import { useAllQuestionsMetadata } from '../../horizontalBar2/helpers/other'
+import { ChartState, Views } from '../types'
 
 export const isPercentage = (view: HorizontalBarChartState['view']) =>
     [Views.PERCENTAGE_BUCKET, Views.PERCENTAGE_QUESTION].includes(view)
@@ -65,7 +66,7 @@ export const formatValue = ({
     question
 }: {
     value: number
-    chartState: HorizontalBarChartState
+    chartState: ChartState
     question: QuestionMetadata
 }) => {
     if (typeof value === 'undefined') {

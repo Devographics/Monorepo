@@ -6,7 +6,7 @@ import { BucketUnits } from '@devographics/types'
 import Columns from '../columns/Columns'
 
 export const Count: VerticalBarViewDefinition = {
-    getValue: bucket => bucket[BucketUnits.COUNT] || 0,
+    getBucketValue: bucket => bucket[BucketUnits.COUNT] || 0,
     dataFilters: [
         /*removeNoAnswer*/
     ],

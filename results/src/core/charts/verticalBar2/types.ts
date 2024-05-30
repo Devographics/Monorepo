@@ -1,17 +1,11 @@
-import { Dispatch, SetStateAction, SyntheticEvent } from 'react'
-import { Tick } from '../common2/types'
+import { SyntheticEvent } from 'react'
+import { ChartState, Tick } from '../common2/types'
 import { IconProps } from 'core/icons/IconWrapper'
-import { Bucket, FacetBucket, QuestionMetadata, ResponseEditionData } from '@devographics/types'
+import { Bucket, QuestionMetadata, ResponseEditionData } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 
-export type VerticalBarChartState = {
-    view: Views
-    setView: Dispatch<SetStateAction<Views>>
-}
-
-export enum Views {
-    PERCENTAGE_QUESTION = 'percentageQuestion',
-    AVERAGE = 'average'
+export interface VerticalBarChartState extends ChartState {
+    foo: number
 }
 
 export type Control = {
@@ -22,9 +16,9 @@ export type Control = {
     onClick: (e: SyntheticEvent) => void
 }
 
-export type GetValueType = (bucket: Bucket | FacetBucket) => number
 export type VerticalBarViewDefinition = {
-    getValue?: GetValueType
+    getEditionValue?: (edition: ResponseEditionData) => number
+    getBucketValue?: (bucket: Bucket) => number
     getTicks?: (values: number[]) => Tick[]
     dataFilters?: DataFilter[]
     showLegend?: boolean

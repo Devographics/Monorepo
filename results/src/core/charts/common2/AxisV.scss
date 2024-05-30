@@ -20,32 +20,29 @@
         // display: grid;
         // grid-template-columns: repeat(auto-fit, minmax(1%, 1fr));
         display: flex;
-        flex-direction: column;
+        flex-direction: column-reverse;
+        justify-content: space-between;
         height: 100%;
-        display: grid;
-        grid-template-rows: repeat(auto-fit, minmax(1%, 1fr));
+        // display: grid;
+        // grid-template-rows: repeat(auto-fit, minmax(1%, 1fr));
     }
     .chart-axis-tick {
-        background-color: red;
-        // position: absolute;
-        // left: var(--xOffset);
-        // &::before {
-        //     position: absolute;
-        //     display: block;
-        //     content: ' ';
-        //     width: 1px;
-        //     height: 10px;
-        //     background: var(--borderAltColor);
-        //     top: -5px;
-        // }
-        // .chart-axis-top &::before {
-        //     top: 25px;
-        // }
+        position: relative;
+        height: 1px;
+        &::after {
+            position: absolute;
+            display: block;
+            content: ' ';
+            height: 1px;
+            width: 10px;
+            background: var(--borderAltColor);
+            top: -0px;
+        }
     }
     .chart-axis-tick-label {
-        // transform: translate(-50%);
+        transform: translateY(-50%);
         // position: absolute;
-        // top: 5px;
+        // top: 0px;
         // color: var(--textAltColor);
         // .chart-axis-top & {
         //     // top: -30px;
@@ -55,5 +52,21 @@
         // margin-top: var(--spacing);
         // display: flex;
         // justify-content: center;
+    }
+}
+.chart-axis-left {
+    .chart-axis-tick {
+        padding-right: 15px;
+        &::after {
+            right: -5px;
+        }
+    }
+}
+.chart-axis-right {
+    .chart-axis-tick {
+        padding-left: 15px;
+        &::after {
+            left: -5px;
+        }
     }
 }

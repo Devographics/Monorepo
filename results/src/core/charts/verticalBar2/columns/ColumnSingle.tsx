@@ -11,16 +11,23 @@ export const ColumnSingle = (props: ColumnComponentProps) => {
     const theme = useTheme()
     const { edition, chartState, chartValues, showCount = true } = props
     const viewDefinition = getViewDefinition(chartState.view)
-    const { getValue } = viewDefinition
+    const { getEditionValue } = viewDefinition
     const { ticks } = chartValues
 
-    const value = getValue(edition)
+    if (!getEditionValue) {
+        throw new Error('getEditionValue not defined')
+    }
+    if (!ticks) {
+        throw new Error('ticks not defined')
+    }
+
+    const value = getEditionValue(edition)
     const gradient = theme.colors.barChart.primaryGradient
 
     const rowMetadata = <RespondentCount count={edition.completion.count} />
     const rowWrapperProps = showCount ? { ...props, rowMetadata } : props
 
-    const maxValue = max(ticks.map(tick => tick.value))
+    const maxValue = max(ticks.map(tick => tick.value)) || 0
     const height = (value * 100) / maxValue
 
     return (

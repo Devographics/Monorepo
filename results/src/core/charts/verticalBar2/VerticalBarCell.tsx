@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { MultiItemsChartValues } from '../multiItemsExperience/types'
 import Tooltip from 'core/components/Tooltip'
-import { Bucket, FacetBucket } from '@devographics/types'
-import { VerticalBarChartState } from './types'
+import { ResponseEditionData } from '@devographics/types'
+import { VerticalBarChartState, VerticalBarChartValues } from './types'
 import { useI18n } from '@devographics/react-i18n'
-import { formatValue } from '../horizontalBar2/helpers/labels'
+import { formatValue } from '../common2/helpers/labels'
 import { useWidth } from '../common2/helpers'
 import { CellLabel } from '../common2'
-import max from 'lodash/max'
 
 // hide labels for cells under this size
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
@@ -28,16 +26,16 @@ export const Cell = ({
     value,
     chartState,
     chartValues,
-    width,
     height,
     offset,
     cellIndex,
     gradient
 }: {
-    bucket: Bucket | FacetBucket
+    edition: ResponseEditionData
+    value: number
     chartState: VerticalBarChartState
-    chartValues: MultiItemsChartValues
-    width: number
+    chartValues: VerticalBarChartValues
+    height: number
     offset: number
     cellIndex: number
     gradient: string[]
@@ -46,7 +44,7 @@ export const Cell = ({
 
     // const entities = useEntities()
     // const entity = entities.find(e => e.id === bucket.id)
-    const { question, facetQuestion, ticks } = chartValues
+    const { question, ticks } = chartValues
     const { getString } = useI18n()
 
     const style = {
@@ -56,7 +54,7 @@ export const Cell = ({
         '--offset': offset
     }
 
-    const v = formatValue({ value, chartState, question: facetQuestion || question })
+    const v = formatValue({ value, chartState, question })
 
     return (
         <Tooltip
