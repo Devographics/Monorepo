@@ -155,6 +155,7 @@ const BoxplotRow = (props: BoxplotRowProps) => {
 
 export const Boxplot: HorizontalBarViewDefinition = {
     component: BoxplotView,
+    getValue: b => 0,
     formatValue: formatCurrency,
     dataFilters: [removeNoAnswer]
 }

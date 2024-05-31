@@ -3,7 +3,7 @@ fieldId: ${mainBlockId}
 i18nNamespace: ${mainBlockId}
 tabId: tabs.by_salary
 defaultUnits: percentilesByFacet
-blockType: HorizontalBarBlock
+blockType: HorizontalBarBlock2
 query: currentEditionData
 parameters:
     showNoAnswer: true

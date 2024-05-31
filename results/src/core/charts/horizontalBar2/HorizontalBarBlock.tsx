@@ -1,4 +1,5 @@
 import React from 'react'
+import '../common2/ChartsCommon.scss'
 import './HorizontalBar.scss'
 import Metadata from '../common2/Metadata'
 import { BlockComponentProps, PageContextValue } from 'core/types'
