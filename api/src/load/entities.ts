@@ -271,7 +271,7 @@ export const getEntity = async ({
         return
     }
 
-    if (entity.type === EntityType.PEOPLE) {
+    if (entity.entityType === EntityType.PEOPLE) {
         // TODO: find a way to cache this somehow?
         const avatar = await getAvatar(entity)
         if (avatar) {
@@ -279,7 +279,7 @@ export const getEntity = async ({
         }
     }
 
-    entity.type = getEntityType(entity)
+    entity.entityType = getEntityType(entity)
 
     if (entity.belongsTo) {
         // if entity A belongs to another entity B, extend B with A and return the result
