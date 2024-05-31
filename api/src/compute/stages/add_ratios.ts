@@ -25,7 +25,7 @@ export async function addRatios(
         const heardBucket = buckets.find(b => b.id === FeaturesOptions.HEARD)
         const usedBucket = buckets.find(b => b.id === FeaturesOptions.USED)
         if (!neverHeardBucket || !heardBucket || !usedBucket) {
-            return
+            return {}
         }
         const total = getCount(neverHeardBucket) + getCount(heardBucket) + getCount(usedBucket)
 
