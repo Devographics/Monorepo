@@ -61,6 +61,7 @@ import { computeKey } from '../helpers/caching'
 import isEmpty from 'lodash/isEmpty.js'
 import { logToFile } from '@devographics/debug'
 import { SENTIMENT_FACET } from '@devographics/constants'
+import { addRatios } from './stages/add_ratios'
 
 type StageLogItem = {
     name: string
@@ -480,6 +481,11 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             // group any "non-standard" bucket, including cutoff data, unmatched answers,
             // off-limit answers, etc.
             await runStage(groupOtherBuckets, [results, axis2, axis1])
+
+            if (facet === SENTIMENT_FACET) {
+                // only enable ratios when we're using sentiment facet
+                await runStage(addRatios, [results, axis1, axis2])
+            }
         }
 
         // run this after we've grouped buckets to detect any errors introduced during

@@ -10,7 +10,7 @@ import {
     TypeDefTemplateOutput,
     TypeTypeEnum
 } from '../../types'
-
+import { getFeatureFieldTypeName } from '../../generate/templates/feature'
 /*
 
 Sample output:
@@ -51,7 +51,7 @@ export const generateSectionType = ({
         typeName,
         typeType: TypeTypeEnum.SECTION,
         typeDef: `type ${typeName} {
-            ${isFeatureOrToolSection ? `_items: [${graphqlize(survey.id)}Feature]` : ''}
+            ${isFeatureOrToolSection ? `_items: [${getFeatureFieldTypeName({ survey })}]` : ''}
     ${section.questions
         .filter(q => q.hasApiEndpoint !== false)
         .map((question: QuestionApiObject) => {

@@ -68,7 +68,7 @@ export const generateResolvers = async ({
     } as any
 
     for (const survey of surveys) {
-        resolvers[getResponseTypeName(survey.id)] = responsesResolverMap
+        resolvers[getResponseTypeName()] = responsesResolverMap
 
         // generate resolver map for each survey field (i.e. each survey edition)
         const surveyFieldsResolvers = Object.fromEntries(

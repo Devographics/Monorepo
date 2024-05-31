@@ -284,12 +284,33 @@ type ResponseEditionData {
     average: Float
     percentiles: Percentiles
     buckets: [Bucket]
+    """
+    Ratios are only available for features/tools
+    """
+    ratios: RatiosData
 }
 
 type RawData {
     responseId: String
     raw: String
     tokens: [NormalizationToken]
+}
+
+type RatiosData {
+    # (heard + used) / total
+    awareness: Float
+
+    # heard positive / heard
+    interest: Float
+
+    # used / total
+    usage: Float
+
+    # used positive / used
+    retention: Float
+
+    # all positive / total
+    positivity: Float
 }
 
 type NormalizationToken {
