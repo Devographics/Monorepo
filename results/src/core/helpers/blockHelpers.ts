@@ -101,8 +101,12 @@ export const getBlockTitle = ({
     const key = getBlockTitleKey({ block, pageContext })
     const defaultTitle = getString(getBlockKey({ block }))?.tClean
     const fieldTitle =
-        block.fieldId && getString(getBlockKey({ block: { ...block, id: block.fieldId } }))?.tClean
-    const tabTitle = block.tabId && `${fieldTitle} ${getString(block.tabId)?.tClean}`
+        block.fieldId &&
+        getString(
+            getBlockKey({ block: { ...block, i18nNamespace: block.sectionId, id: block.fieldId } })
+        )?.t
+    const tabTitle =
+        block.tabId && `${fieldTitle || block.fieldId} ${getString(block.tabId)?.tClean}`
     const values = [specifiedTitle, defaultTitle, tabTitle, fieldTitle, entityName, key]
     // console.table(values)
     return values.find(v => v !== undefined)

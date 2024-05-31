@@ -17,7 +17,7 @@ export const getEntityFragment = () => `entity {
     descriptionHtml
     descriptionClean
     id
-    type
+    entityType
     example {
       label
       language

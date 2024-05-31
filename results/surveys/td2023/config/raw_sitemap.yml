@@ -269,7 +269,7 @@
             - template: vs_salary_tokyodev
 
       - id: searching_for_job
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
