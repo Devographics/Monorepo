@@ -32,8 +32,10 @@ export const Columns = ({
 
                 {ticks && <AxisV variant="left" {...axisProps} ticks={ticks} />}
                 {children}
-
                 {ticks && <AxisV variant="right" {...axisProps} ticks={ticks} />}
+                <div className="chart-axis-label">
+                    <div>{labelId}</div>
+                </div>
             </div>
         </div>
     )

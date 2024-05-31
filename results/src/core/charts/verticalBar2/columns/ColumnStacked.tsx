@@ -2,7 +2,6 @@ import { ColumnComponentProps } from '../types'
 import React from 'react'
 import { Cell } from '../VerticalBarCell'
 import { useGradient } from '../../horizontalBar2/helpers/colors'
-import max from 'lodash/max'
 import sum from 'lodash/sum'
 import take from 'lodash/take'
 import { ColumnWrapper } from './ColumnWrapper'
@@ -14,14 +13,10 @@ export const ColumnStacked = (props: ColumnComponentProps) => {
     if (!getBucketValue) {
         throw new Error('getBucketValue not defined')
     }
-    const { question, ticks } = chartValues
-    if (!ticks) {
-        throw new Error('ticks not defined')
-    }
+    const { question, maxValue } = chartValues
+
     // const rowDimensions = allRowsCellDimensions[rowIndex]
     // const rowOffset = allRowsOffsets[rowIndex]
-
-    const maxValue = max(ticks.map(tick => tick.value)) || 0
 
     return (
         <ColumnWrapper {...props}>

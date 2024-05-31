@@ -14,8 +14,8 @@ export const ColumnWrapper = (
 
     */
     const style = {
-        '--columnStart': columnIndex + 3,
-        '--columnEnd': columnIndex + 4
+        '--columnStart': columnIndex + 2,
+        '--columnEnd': columnIndex + 3
     }
     return (
         <div className="chart-column" style={style}>

@@ -1,16 +1,7 @@
-.chart-axis-inner {
-    .chart-axis-left & {
-        border-right: 1px dotted var(--borderAltColor);
-    }
-
-    .chart-axis-right & {
-        border-left: 1px dotted var(--borderAltColor);
-    }
-}
 .chart-axis-vertical {
     display: grid;
     grid-template-rows: subgrid;
-    grid-row: 1/3;
+    grid-row: 1/2;
     .chart-axis-inner {
         height: 100%;
     }
@@ -55,6 +46,11 @@
     }
 }
 .chart-axis-left {
+    grid-column: 1/2;
+
+    .chart-axis-inner {
+        border-right: 1px dotted var(--borderAltColor);
+    }
     .chart-axis-tick {
         padding-right: 15px;
         &::after {
@@ -63,6 +59,11 @@
     }
 }
 .chart-axis-right {
+    grid-column: calc(var(--totalColumns) + 2) / span 1;
+
+    .chart-axis-inner {
+        border-left: 1px dotted var(--borderAltColor);
+    }
     .chart-axis-tick {
         padding-left: 15px;
         &::after {

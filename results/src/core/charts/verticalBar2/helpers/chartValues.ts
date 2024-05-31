@@ -2,6 +2,7 @@ import { QuestionMetadata, ResponseEditionData } from '@devographics/types'
 import { VerticalBarChartState, VerticalBarChartValues } from '../types'
 import { BlockVariantDefinition } from 'core/types'
 import { getViewDefinition } from './views'
+import max from 'lodash/max'
 
 export const useChartValues = ({
     editions,
@@ -18,10 +19,14 @@ export const useChartValues = ({
     const { getTicks } = viewDefinition
     const chartValues: VerticalBarChartValues = {
         question,
-        totalColumns: editions.length
+        totalColumns: editions.length,
+        maxValue: 0
     }
     if (getTicks) {
-        chartValues.ticks = getTicks()
+        const ticks = getTicks()
+        chartValues.ticks = ticks
+        chartValues.maxValue = max(ticks.map(tick => tick.value)) || 0
     }
+
     return chartValues
 }

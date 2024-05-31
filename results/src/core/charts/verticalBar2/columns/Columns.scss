@@ -14,9 +14,7 @@
     left axis | left spacer | columns… | right spacer | right axis
     
     */
-    grid-template-columns:
-        min-content var(--spacing) repeat(var(--totalColumns), 1fr) var(--spacing)
-        min-content;
+    grid-template-columns: min-content repeat(var(--totalColumns), 1fr) min-content 30px;
     grid-template-rows: var(--contentHeight) min-content;
     // gap: var(--doubleSpacing);
 }
@@ -26,7 +24,7 @@
     grid-template-columns: subgrid;
     grid-template-rows: subgrid;
     grid-row: 1/2;
-    grid-column: 2 / span calc(var(--totalColumns) + 2);
+    grid-column: 1 / span calc(var(--totalColumns) + 1);
     position: relative;
     margin-bottom: 1px;
 }
@@ -37,4 +35,11 @@
     right: 0px;
     height: 1px;
     border-bottom: 1px dotted var(--borderAltColor);
+}
+.chart-axis-label {
+    display: grid;
+    place-items: center;
+    div {
+        transform: rotate(-90deg) translateY(-100%);
+    }
 }

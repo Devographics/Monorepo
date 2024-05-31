@@ -32,9 +32,9 @@ export const VerticalBarSerie = (
         <GridItem key={serie.name} filters={itemFilters}>
             <ViewComponent {...viewProps} />
 
-            <pre>
+            {/* <pre>
                 <code>{JSON.stringify(chartValues, null, 2)}</code>
-            </pre>
+            </pre> */}
         </GridItem>
     )
 }

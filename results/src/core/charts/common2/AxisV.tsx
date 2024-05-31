@@ -57,11 +57,6 @@ export const AxisV = ({
                         )
                     })}
                 </div>
-                {variant === 'right' && labelId && (
-                    <div className="chart-axis-label">
-                        <T k={labelId} />
-                    </div>
-                )}
             </div>
         </div>
     )

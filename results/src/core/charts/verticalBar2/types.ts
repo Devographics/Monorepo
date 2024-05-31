@@ -42,6 +42,7 @@ export type VerticalBarChartValues = {
     totalColumns: number
     question: QuestionMetadata
     ticks?: Tick[]
+    maxValue: number
 }
 
 export type DataFilter = (buckets: Bucket[]) => Bucket[]
@@ -50,4 +51,9 @@ export type ColumnComponentProps = VerticalBarViewProps & {
     edition: ResponseEditionData
     columnIndex: number
     showCount?: boolean
+    showBar?: boolean
+}
+
+export type LinesComponentProps = VerticalBarViewProps & {
+    editions: ResponseEditionData[]
 }
