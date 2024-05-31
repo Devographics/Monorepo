@@ -46,7 +46,6 @@ const ThemedLayout = (props: LayoutProps) => {
             <Head />
             <style>{`
         :root {
-            background: yellow;
             ${Object.keys(variables)
                 .map(name => `${name}: ${variables[name]};`)
                 .join('')}
