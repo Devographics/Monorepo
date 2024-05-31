@@ -18,6 +18,7 @@ import ChartData from '../common2/ChartData'
 import { HorizontalBarSerie } from './HorizontalBarSerie'
 import { getBlockNoteKey } from 'core/helpers/blockHelpers'
 import { useI18n } from '@devographics/react-i18n'
+import ChartShare from '../common2/ChartShare'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -68,17 +69,23 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                     ))}
                 </GridWrapper>
 
-                <ChartFooter>
-                    <>
+                <ChartFooter
+                    left={
                         <Metadata
                             average={average}
                             median={percentiles?.p50}
                             completion={completion}
                             {...commonProps}
                         />
-                        <ChartData {...commonProps} />
-                    </>
-                </ChartFooter>
+                    }
+                    right={
+                        <>
+                            <ChartShare {...commonProps} />
+                            <ChartData {...commonProps} />
+                        </>
+                    }
+                />
+
                 {/* <Actions {...commonProps} /> */}
                 {/* <pre>
                 <code>{JSON.stringify(buckets, null, 2)}</code>

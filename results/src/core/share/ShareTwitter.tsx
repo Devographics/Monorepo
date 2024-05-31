@@ -4,7 +4,7 @@ import track from './tracking'
 import ShareLink from './ShareLink'
 import { TwitterIcon } from 'core/icons'
 
-const ShareTwitter = ({ twitterText, twitterLink, trackingId, ...rest }) => {
+const ShareTwitter = ({ twitterText, link, trackingId, ...rest }) => {
     const { translate } = useI18n()
 
     return (
@@ -12,7 +12,7 @@ const ShareTwitter = ({ twitterText, twitterLink, trackingId, ...rest }) => {
             onClick={track('Twitter', trackingId)}
             media="twitter"
             href={`https://twitter.com/intent/tweet/?url=${encodeURIComponent(
-                twitterLink
+                link
             )}&text=${encodeURIComponent(twitterText)}`}
             target="_blank"
             rel="noopener noreferrer"

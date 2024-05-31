@@ -238,7 +238,7 @@ export const getBlockImage = ({
     pageContext: PageContextValue
 }) => {
     const capturesUrl = `${process.env.GATSBY_ASSETS_URL}/captures/${pageContext.currentEdition.id}`
-    return `${capturesUrl}${get(pageContext, 'locale.path')}/${block.id}.png`
+    return `${capturesUrl}/${get(pageContext, 'locale.id')}/${block.id}.png`
 }
 
 interface UrlParams {
@@ -267,9 +267,8 @@ export const getBlockLinkLocal = ({
     const { id } = block
     const paramsString = params ? `?${new URLSearchParams(params).toString()}` : ''
     const { currentPath } = pageContext
-    let path = useRedirect
-        ? `${currentPath}/${id}${paramsString}`
-        : `${currentPath}/${paramsString}#${id}`
+    const fullUrl = pageContext.currentEdition.resultsUrl + currentPath
+    let path = useRedirect ? `${fullUrl}/${id}${paramsString}` : `${fullUrl}/${paramsString}#${id}`
 
     // remove any double slashes
     path = removeDoubleSlashes(path)
