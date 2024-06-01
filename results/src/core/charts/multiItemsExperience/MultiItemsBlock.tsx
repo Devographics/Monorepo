@@ -18,12 +18,13 @@ import {
 } from './helpers'
 import { Row } from './MultiItemsRow'
 import Rows from '../horizontalBar2/rows/Rows'
-import { ChartWrapper, Legend, Note } from '../common2'
+import { ChartFooter, ChartWrapper, Legend, Note } from '../common2'
 import { useTheme } from 'styled-components'
 import min from 'lodash/min'
 import max from 'lodash/max'
 import take from 'lodash/take'
 import { NoteContents } from './MultiItemsNote'
+import ChartShare from '../common2/ChartShare'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -144,6 +145,16 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
                         <Row key={item.id + i} rowIndex={i} item={item} {...commonProps} />
                     ))}
                 </Rows>
+
+                <ChartFooter
+                    right={
+                        <>
+                            <ChartShare {...commonProps} />
+                            {/* <ChartData {...commonProps} /> */}
+                        </>
+                    }
+                />
+
                 <Note>
                     <NoteContents />
                 </Note>

@@ -14,6 +14,7 @@ import { getBlockNoteKey } from 'core/helpers/blockHelpers'
 import { useI18n } from '@devographics/react-i18n'
 import { VerticalBarSerie } from './VerticalBarSerie'
 import { VerticalBarChartState } from './types'
+import ChartShare from '../common2/ChartShare'
 
 export interface VerticalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -68,17 +69,23 @@ export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
                     ))}
                 </GridWrapper>
 
-                <ChartFooter>
-                    <>
+                <ChartFooter
+                    left={
                         <Metadata
                             average={average}
                             median={percentiles?.p50}
                             completion={completion}
                             {...commonProps}
                         />
-                        <ChartData {...commonProps} />
-                    </>
-                </ChartFooter>
+                    }
+                    right={
+                        <>
+                            <ChartShare {...commonProps} />
+                            <ChartData {...commonProps} />
+                        </>
+                    }
+                />
+
                 {/* <Actions {...commonProps} /> */}
 
                 {note && <Note>{note}</Note>}

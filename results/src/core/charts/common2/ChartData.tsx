@@ -17,7 +17,7 @@ export const ChartData = ({ block, pageContext, series, variant }: CommonProps) 
         <ModalTrigger
             trigger={
                 <Button variant="link" className="chart-data">
-                    <T k="charts.share" />
+                    <T k="charts.export" />
                 </Button>
             }
         >
