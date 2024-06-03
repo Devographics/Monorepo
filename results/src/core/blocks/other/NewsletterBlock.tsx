@@ -4,7 +4,7 @@ import Newsletter from 'core/components/Newsletter'
 import { useI18n } from '@devographics/react-i18n'
 import { spacing } from 'core/theme'
 import NewsletterMC from 'core/components/NewsletterMC'
-import NewsletterPOST from 'core/components/NewsletterPOST'
+import NewsletterPOST from 'core/components/NewsletterPost'
 
 const NewsletterBlock = () => {
     const { translate } = useI18n()

@@ -234,7 +234,7 @@ export const getBlockImage = ({
     pageContext: PageContextValue
 }) => {
     const capturesUrl = `${process.env.GATSBY_ASSETS_URL}/captures/${pageContext.currentEdition.id}`
-    return `${capturesUrl}${get(pageContext, 'locale.path')}/${block.id}.png`
+    return `${capturesUrl}/${get(pageContext, 'locale.id')}/${block.id}.png`
 }
 
 interface UrlParams {
