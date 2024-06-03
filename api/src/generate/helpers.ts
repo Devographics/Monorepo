@@ -68,7 +68,7 @@ export const mergeOptions = (options1: Option[], options2: Option[]) => {
                 ...(existingOption?.editions || []),
                 ...(o2?.editions || [])
             ])
-            const newOption = { ...existingOption, editions: mergedEditions }
+            const newOption = { ...existingOption, ...o2, editions: mergedEditions }
             options[existingOptionIndex] = newOption
         } else {
             options.push(o2)
@@ -92,7 +92,7 @@ export const applyQuestionTemplate = (options: {
         if (templateFunction) {
             output = { ...output, template, ...templateFunction(options) }
         } else {
-            console.log(`// template ${template} not found!`)
+            console.log(`// template ${template} not found! (${edition.id})`)
             console.log(question)
             output = { ...output, template }
         }
