@@ -1,11 +1,13 @@
-import { SyntheticEvent } from 'react'
-import { ChartState, FormatValueType, Tick, ViewDefinition } from '../common2/types'
+import { Dispatch, SetStateAction, SyntheticEvent } from 'react'
+import { ChartState, Tick, ViewDefinition } from '../common2/types'
 import { IconProps } from 'core/icons/IconWrapper'
 import { Bucket, Entity, QuestionMetadata, ResponseEditionData } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 
 export interface VerticalBarChartState extends ChartState {
     viewDefinition: VerticalBarViewDefinition
+    highlighted: string | null
+    setHighlighted: Dispatch<SetStateAction<string | null>>
 }
 
 export enum VerticalBarViews {
@@ -63,4 +65,6 @@ export type LineItem = {
 export type LineComponentProps = VerticalBarViewProps &
     LineItem & {
         lineIndex: number
+        width: number
+        height: number
     }

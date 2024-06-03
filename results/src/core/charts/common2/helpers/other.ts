@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useState } from 'react'
 
-export const useWidth = (ref: RefObject<HTMLElement>) => {
+export const useWidth = (ref: RefObject<HTMLElement | SVGSVGElement>) => {
     const [width, setWidth] = useState<number | undefined>()
 
     useEffect(() => {

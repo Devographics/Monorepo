@@ -10,7 +10,7 @@ import ChartData from '../common2/ChartData'
 import { getBlockNoteKey } from 'core/helpers/blockHelpers'
 import { useI18n } from '@devographics/react-i18n'
 import RatiosSerie from './RatiosSerie'
-import { MultiRatioSerie } from './types'
+import { MultiRatioSerie, MultiRatiosChartState } from './types'
 import ChartShare from '../common2/ChartShare'
 import { getDefaultState, useChartState } from './helpers/chartState'
 import { MultiItemsChartState } from '../multiItemsExperience/types'
@@ -28,7 +28,7 @@ export const MultiRatiosBlock = (props: MultiRatiosBlockProps) => {
 
     const chartState = useChartState(getDefaultState({ block }))
 
-    const commonProps: CommonProps<MultiItemsChartState> = {
+    const commonProps: CommonProps<MultiRatiosChartState> = {
         variant,
         question,
         series,

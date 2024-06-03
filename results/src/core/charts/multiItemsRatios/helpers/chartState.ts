@@ -9,10 +9,13 @@ export const getDefaultState = ({ block }: { block: BlockVariantDefinition }) =>
 
 export const useChartState = (defaultState: MultiRatiosChartState) => {
     const [view, setView] = useState<Ratios>(defaultState.view)
+    const [highlighted, setHighlighted] = useState<string | null>(null)
 
     const chartState: MultiRatiosChartState = {
         view,
         setView,
+        highlighted,
+        setHighlighted,
         viewDefinition: {
             formatValue: formatPercentage,
             getEditionValue: (edition, chartState) =>

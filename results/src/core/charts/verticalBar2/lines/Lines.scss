@@ -1,4 +1,4 @@
-.chart-columns-lines-wrapper {
+.chart-lines-wrapper {
     // display: grid;
     // grid-template-columns: subgrid;
     // grid-template-rows: subgrid;
@@ -8,24 +8,44 @@
     margin-bottom: 1px;
 }
 
-.chart-columns-lines {
+.chart-lines {
     height: 100%;
     width: 100%;
     overflow: visible;
-    line {
+}
+.chart-line {
+    .chart-line-segment {
         stroke: currentColor;
         stroke-width: 2px;
+        transition: all 0.5s ease;
     }
 
-    circle {
+    .chart-line-dot-visible {
         stroke: currentColor;
         stroke-width: 2px;
         fill: var(--backgroundColor);
+        transition: all 0.5s ease;
     }
-    text {
+    .chart-line-dot-invisible {
+        stroke: none;
+        fill: #00000000;
+    }
+    .chart-line-label {
         fill: var(--textColor);
         text-anchor: middle;
         dominant-baseline: middle;
         font-size: 0.8rem;
+    }
+}
+.chart-line-highlightActive {
+    opacity: 0.4;
+}
+.chart-line-highlighted {
+    opacity: 1;
+    .chart-line-segment {
+        stroke-width: 4px;
+    }
+    .chart-line-dot-visible {
+        stroke-width: 4px;
     }
 }

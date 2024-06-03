@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import take from 'lodash/take'
 import { useTheme } from 'styled-components'
 import { getEditionByYear } from '../helpers/other'
@@ -17,10 +17,12 @@ export const Line = ({
     chartState,
     chartValues,
     editions,
-    lineIndex
+    lineIndex,
+    width,
+    height
 }: LineComponentProps) => {
     const theme = useTheme()
-    const { viewDefinition } = chartState
+    const { viewDefinition, highlighted } = chartState
     const { getEditionValue, formatValue } = viewDefinition
     const { totalColumns, maxValue, years, question } = chartValues
     if (!getEditionValue) {
@@ -35,9 +37,17 @@ export const Line = ({
         color: lineColor
     }
 
+    const highlightIsActive = highlighted !== null
+    const isHighlighted = highlighted === id
     const interval = 100 / totalColumns
     return (
-        <g data-id={id} style={style}>
+        <g
+            data-id={id}
+            style={style}
+            className={`chart-line ${highlightIsActive ? 'chart-line-highlightActive' : ''} ${
+                isHighlighted ? 'chart-line-highlighted' : ''
+            }`}
+        >
             {take(editions, editions.length - 1).map((edition, i) => {
                 // line starts at the index for the current edition's year
                 const startIndex = years.findIndex(year => year === edition.year)
@@ -53,6 +63,8 @@ export const Line = ({
                         value1={getEditionValue(edition, chartState)}
                         value2={getEditionValue(editions[i + 1], chartState)}
                         maxValue={maxValue}
+                        width={width}
+                        height={height}
                     />
                 )
             })}
@@ -70,6 +82,8 @@ export const Line = ({
                         entity={entity}
                         id={id}
                         value={getEditionValue(edition, chartState)}
+                        // width={width}
+                        // height={height}
                     />
                 ) : null
             })}
@@ -106,8 +120,19 @@ const Dot = ({
         <Tooltip
             trigger={
                 <g className="chart-line-dot">
-                    <circle cx={`${cx}%`} cy={`${cy}%`} r={dotRadius} />
-                    {/* <text x={`${cx}%`} y={`${cy + 10}%`}>
+                    <circle
+                        className="chart-line-dot-visible"
+                        cx={`${cx}%`}
+                        cy={`${cy}%`}
+                        r={dotRadius}
+                    />
+                    <circle
+                        className="chart-line-dot-invisible"
+                        cx={`${cx}%`}
+                        cy={`${cy}%`}
+                        r={dotRadius * 3}
+                    />
+                    {/* <text className="chart-line-label" x={`${cx}%`} y={`${cy + 10}%`}>
                         {value}
                     </text> */}
                 </g>
@@ -124,7 +149,9 @@ const LineSegment = ({
     endIndex,
     value1,
     value2,
-    maxValue
+    maxValue,
+    width,
+    height
 }: {
     interval: number
     startIndex: number
@@ -132,10 +159,21 @@ const LineSegment = ({
     value1: number
     value2: number
     maxValue: number
+    width: number
+    height: number
 }) => {
-    const x1 = interval * startIndex + interval / 2
-    const x2 = interval * endIndex + interval / 2
-    const y1 = 100 - (value1 * 100) / maxValue
-    const y2 = 100 - (value2 * 100) / maxValue
-    return <line x1={`${x1}%`} y1={`${y1}%`} x2={`${x2}%`} y2={`${y2}%`} />
+    const x1 = ((interval * startIndex + interval / 2) * width) / 100
+    const x2 = ((interval * endIndex + interval / 2) * width) / 100
+    const y1 = ((100 - (value1 * 100) / maxValue) * height) / 100
+    const y2 = ((100 - (value2 * 100) / maxValue) * height) / 100
+    return <path className="chart-line-segment" d={`M${x1} ${y1} L${x2} ${y2}`} />
+    // return (
+    //     <line
+    //         className="chart-line-segment"
+    //         x1={`${x1}%`}
+    //         y1={`${y1}%`}
+    //         x2={`${x2}%`}
+    //         y2={`${y2}%`}
+    //     />
+    // )
 }

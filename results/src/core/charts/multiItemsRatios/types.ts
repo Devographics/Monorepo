@@ -23,6 +23,8 @@ export type MultiRatiosChartState = {
     view: Ratios
     setView: Dispatch<SetStateAction<Ratios>>
     viewDefinition: MultiRatiosViewDefinition
+    highlighted: string | null
+    setHighlighted: Dispatch<SetStateAction<string | null>>
 }
 
 export type MultiRatiosChartValues = VerticalBarChartValues
