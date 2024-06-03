@@ -1,3 +1,4 @@
+"use client"
 import React, { createContext, useContext, useMemo } from 'react'
 import { makeTranslatorFunc, type Locale, type StringTranslator } from '@devographics/i18n'
 

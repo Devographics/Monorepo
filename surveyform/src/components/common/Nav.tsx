@@ -8,7 +8,7 @@ import { EditionMetadata } from "@devographics/types";
 import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
-const Navigation = ({ edition }: { edition: EditionMetadata }) => {
+const Navigation = ({ edition }: { edition?: EditionMetadata }) => {
   const { locale } = useLocaleContext();
   return (
     <div className="nav-wrapper">

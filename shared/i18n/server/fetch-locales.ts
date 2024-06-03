@@ -136,7 +136,10 @@ export async function getLocaleDict({ localeId, contexts }: {
         // TODO: assess if it's the right decisio
         dict[item.key] = item //tHtml || t
     })
-    const localeParsed: LocaleParsed = { ...localeDef, dict }
+    const localeParsed: LocaleParsed = {
+        ...localeDef,
+        strings, dict
+    }
     return { locale: localeParsed }
 }
 /**

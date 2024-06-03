@@ -14,6 +14,7 @@
 // TODO: create Portal might be usable to avoid having many React roots?
 // but need to play around with declaratively rendering each portal in a loop
 // import { createPortal } from "react-dom"
+"use client"
 import { createRoot } from "react-dom/client"
 import { DATA_TOKEN_ATTR, TOKEN_DATASET } from "@devographics/i18n";
 

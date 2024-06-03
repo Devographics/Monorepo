@@ -10,7 +10,10 @@ export interface Translation {
  */
 export interface Locale {
     id: string
-    // TODO: remove this to clarify LocaleDefinition, LocaleStrings, LocaleParsed as dict
+    /**
+     * @deprecated Prefer using "LocaleParsed" dict object
+     * This is the structure returned by the API but it shouldn't be used after parsing
+     */
     strings?: Translation[]
     /**
      * TODO: this value was not present in the type def here but is expected by Popover

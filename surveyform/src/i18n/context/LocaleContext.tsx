@@ -4,6 +4,9 @@ import {
   IntlContextProvider,
   StringsRegistry,
 } from "@devographics/react-i18n-legacy";
+import {
+  I18nContextProvider
+} from "@devographics/react-i18n"
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { LOCALE_COOKIE_NAME } from "../cookie";
@@ -63,6 +66,8 @@ export const useSetLocale = (updateUser?: any) => {
 /**
  * Provide methods to get/set the current locale
  * + initialize an IntlProvider
+ * 
+ * @deprecated use @devographics/React-i18n
  * @param props
  * @returns
  */
@@ -90,7 +95,7 @@ export const LocaleContextProvider = (props: {
 
   const stringsRegistry = new StringsRegistry("en-US");
   // @ts-ignore
-  stringsRegistry.addStrings(localeId, localeStrings.strings);
+  stringsRegistry.addStrings(localeId, localeStrings.dict);
   return (
     // NOTE: IntlContextProvider is in charge of merging strings with a previously existing parent
     <IntlContextProvider stringsRegistry={stringsRegistry} localeId={localeId}>
