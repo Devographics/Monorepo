@@ -1,7 +1,7 @@
 import { SyntheticEvent } from 'react'
 import { ChartState, FormatValueType, Tick, ViewDefinition } from '../common2/types'
 import { IconProps } from 'core/icons/IconWrapper'
-import { Bucket, QuestionMetadata, ResponseEditionData } from '@devographics/types'
+import { Bucket, Entity, QuestionMetadata, ResponseEditionData } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 
 export interface VerticalBarChartState extends ChartState {
@@ -56,6 +56,7 @@ export type EmptyColumnProps = Omit<ColumnComponentProps, 'edition' | 'editions'
 
 export type LineItem = {
     id: string
+    entity?: Entity
     editions: ResponseEditionData[]
 }
 

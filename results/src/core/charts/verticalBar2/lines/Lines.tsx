@@ -5,7 +5,6 @@ import { Line } from './Line'
 
 export const Lines = (props: VerticalBarViewProps & { items: LineItem[] }) => {
     const { items } = props
-
     return (
         <div className="chart-columns-lines-wrapper">
             <svg className="chart-columns-lines">
@@ -16,6 +15,7 @@ export const Lines = (props: VerticalBarViewProps & { items: LineItem[] }) => {
                             key={item.id}
                             lineIndex={i}
                             id={item.id}
+                            entity={item.entity}
                             editions={item.editions}
                         />
                     )

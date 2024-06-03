@@ -1,0 +1,8 @@
+.chart-legend-2 {
+    border: 1px solid var(--borderColor);
+    padding: var(--spacing);
+    display: grid;
+    column-gap: var(--spacing);
+    row-gap: var(--halfSpacing);
+    grid-template-columns: repeat(auto-fit, minmax(140px, auto));
+}

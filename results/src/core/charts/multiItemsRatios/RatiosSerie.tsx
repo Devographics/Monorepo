@@ -28,7 +28,7 @@ export const RatiosSerie = (
 
     return (
         <GridItem key={serie.name} filters={itemFilters}>
-            <Columns {...commonProps} hasZebra={true} labelId="average_foo">
+            <Columns {...commonProps} hasZebra={true}>
                 <>
                     {/* {props.editions.map((edition, i) => (
                         <ColumnSingle
@@ -53,6 +53,7 @@ export const RatiosSerie = (
                         {...commonProps}
                         items={items.map(item => ({
                             id: item.id,
+                            entity: item.entity,
                             editions: item.responses.allEditions
                         }))}
                     />

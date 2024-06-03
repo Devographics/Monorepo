@@ -7,18 +7,22 @@
 .chart-columns {
     width: 100%;
     display: grid;
+    grid-template-rows: var(--contentHeight) min-content;
+    // gap: var(--doubleSpacing);
+}
+.chart-columns-withLabel {
     /*
     
     Columns: 
 
-    left axis | left spacer | columns… | right spacer | right axis
+    left axis | columns… | right axis | label
     
     */
     grid-template-columns: min-content repeat(var(--totalColumns), 1fr) min-content 30px;
-    grid-template-rows: var(--contentHeight) min-content;
-    // gap: var(--doubleSpacing);
 }
-
+.chart-columns-noLabel {
+    grid-template-columns: min-content repeat(var(--totalColumns), 1fr) min-content;
+}
 .chart-columns-gridlines {
     display: grid;
     grid-template-columns: subgrid;

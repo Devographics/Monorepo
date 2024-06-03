@@ -27,15 +27,20 @@ export const Columns = ({
 
     return (
         <div className="chart-columns-wrapper">
-            <div className="chart-columns" style={style}>
+            <div
+                className={`chart-columns chart-columns-${labelId ? 'withLabel' : 'noLabel'}`}
+                style={style}
+            >
                 {ticks && <Gridlines ticks={ticks} />}
 
                 {ticks && <AxisV variant="left" {...axisProps} ticks={ticks} />}
                 {children}
                 {ticks && <AxisV variant="right" {...axisProps} ticks={ticks} />}
-                <div className="chart-axis-label">
-                    <div>{labelId}</div>
-                </div>
+                {labelId && (
+                    <div className="chart-axis-label">
+                        <div>{labelId}</div>
+                    </div>
+                )}
             </div>
         </div>
     )

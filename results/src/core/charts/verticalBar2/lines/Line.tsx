@@ -4,14 +4,25 @@ import { useTheme } from 'styled-components'
 import { getEditionByYear } from '../helpers/other'
 import Tooltip from 'core/components/Tooltip'
 import { LineComponentProps } from '../types'
+import { ViewDefinition } from 'core/charts/common2/types'
+import { Entity, QuestionMetadata } from '@devographics/types'
+import { getItemLabel } from 'core/helpers/labels'
+import { useI18n } from '@devographics/react-i18n'
 
-const dotRadius = 8
+const dotRadius = 6
 
-export const Line = ({ id, chartState, chartValues, editions, lineIndex }: LineComponentProps) => {
+export const Line = ({
+    id,
+    entity,
+    chartState,
+    chartValues,
+    editions,
+    lineIndex
+}: LineComponentProps) => {
     const theme = useTheme()
     const { viewDefinition } = chartState
-    const { getEditionValue } = viewDefinition
-    const { totalColumns, maxValue, years } = chartValues
+    const { getEditionValue, formatValue } = viewDefinition
+    const { totalColumns, maxValue, years, question } = chartValues
     if (!getEditionValue) {
         throw new Error(`getEditionValue not defined`)
     }
@@ -53,6 +64,11 @@ export const Line = ({ id, chartState, chartValues, editions, lineIndex }: LineC
                         interval={interval}
                         maxValue={maxValue}
                         editionIndex={i}
+                        formatValue={formatValue}
+                        question={question}
+                        year={year}
+                        entity={entity}
+                        id={id}
                         value={getEditionValue(edition, chartState)}
                     />
                 ) : null
@@ -62,29 +78,41 @@ export const Line = ({ id, chartState, chartValues, editions, lineIndex }: LineC
 }
 
 const Dot = ({
+    id,
     editionIndex,
     interval,
     maxValue,
-    value
+    value,
+    formatValue,
+    question,
+    year,
+    entity
 }: {
+    id: string
     editionIndex: number
     interval: number
     maxValue: number
     value: number
+    formatValue: ViewDefinition['formatValue']
+    question: QuestionMetadata
+    year: number
+    entity?: Entity
 }) => {
+    const { getString } = useI18n()
     const cx = interval * editionIndex + interval / 2
     const cy = 100 - (value * 100) / maxValue
+    const { label } = getItemLabel({ id, entity, getString })
     return (
         <Tooltip
             trigger={
                 <g className="chart-line-dot">
                     <circle cx={`${cx}%`} cy={`${cy}%`} r={dotRadius} />
-                    <text x={`${cx}%`} y={`${cy + 10}%`}>
+                    {/* <text x={`${cx}%`} y={`${cy + 10}%`}>
                         {value}
-                    </text>
+                    </text> */}
                 </g>
             }
-            contents={'label'}
+            contents={`${label}: ${formatValue(value, question)} (${year})`}
             asChild={true}
         />
     )
