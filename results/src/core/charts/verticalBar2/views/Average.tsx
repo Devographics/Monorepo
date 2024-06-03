@@ -3,8 +3,10 @@ import { ColumnSingle } from '../columns/ColumnSingle'
 import Columns from '../columns/Columns'
 import { VerticalBarViewDefinition } from '../types'
 import { formatCurrency } from 'core/charts/common2/helpers/labels'
-import { Line } from '../lines'
+import { Lines } from '../lines'
 import { ColumnStacked } from '../columns/ColumnStacked'
+import { getEditionByYear } from '../helpers/other'
+import { ColumnEmpty } from '../columns/ColumnEmpty'
 // import { removeNoAnswer } from '../helpers/steps'
 
 export const Average: VerticalBarViewDefinition = {
@@ -16,21 +18,15 @@ export const Average: VerticalBarViewDefinition = {
     ],
     component: props => {
         const { chartValues, editions } = props
-        const { question } = chartValues
+        const { years, question } = chartValues
+        const item = { id: question.id, editions }
         return (
             <Columns {...props} hasZebra={true} labelId="average_foo">
                 <>
-                    {props.editions.map((edition, i) => (
-                        <ColumnSingle
-                            columnIndex={i}
-                            {...props}
-                            key={edition.editionId}
-                            edition={edition}
-                            showCount={false}
-                            showBar={false}
-                        />
+                    {years.map((year, i) => (
+                        <ColumnEmpty {...props} columnIndex={i} key={year} year={year} />
                     ))}
-                    <Line editions={editions} {...props} />
+                    <Lines items={[item]} {...props} />
                 </>
             </Columns>
         )

@@ -1,19 +1,26 @@
 import './Lines.scss'
 import React from 'react'
-import { Tick } from '../../common2/types'
-import AxisV from '../../common2/AxisV'
-import { LinesComponentProps, VerticalBarChartState, VerticalBarChartValues } from '../types'
+import { LineItem, VerticalBarViewProps } from '../types'
+import { Line } from './Line'
 
-export const Lines = ({ chartState, chartValues, editions }: LinesComponentProps) => {
-    const { viewDefinition } = chartState
-    const { formatValue } = viewDefinition
-    const { question, ticks, totalColumns } = chartValues
-    const style = { '--totalColumns': totalColumns }
-    const axisProps = { question, labelId, formatValue }
+export const Lines = (props: VerticalBarViewProps & { items: LineItem[] }) => {
+    const { items } = props
 
     return (
-        <div className="chart-columns-lines">
-            <svg></svg>
+        <div className="chart-columns-lines-wrapper">
+            <svg className="chart-columns-lines">
+                {items.map((item, i) => {
+                    return (
+                        <Line
+                            {...props}
+                            key={item.id}
+                            lineIndex={i}
+                            id={item.id}
+                            editions={item.editions}
+                        />
+                    )
+                })}
+            </svg>
         </div>
     )
 }

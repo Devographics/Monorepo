@@ -1,6 +1,6 @@
 import './Columns.scss'
 import React from 'react'
-import { Tick } from '../../common2/types'
+import { ChartState, Tick } from '../../common2/types'
 import AxisV from '../../common2/AxisV'
 import { VerticalBarChartState, VerticalBarChartValues } from '../types'
 import { Gridlines } from './Gridlines'
@@ -12,7 +12,7 @@ export const Columns = ({
     labelId,
     hasZebra = false
 }: {
-    chartState: VerticalBarChartState
+    chartState: ChartState // keep generic here
     chartValues: VerticalBarChartValues
     children: React.ReactNode
     ticks?: Tick[]

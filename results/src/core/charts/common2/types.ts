@@ -5,9 +5,16 @@ import { DataSeries } from 'core/filters/types'
 import { CustomVariant } from 'core/filters/helpers'
 import { Dispatch, SetStateAction } from 'react'
 
-export interface ChartState<ViewsType> {
-    view: ViewsType
-    setView: Dispatch<SetStateAction<ViewsType>>
+export interface ChartState {
+    view: string
+    setView: Dispatch<SetStateAction<string>>
+    viewDefinition: ViewDefinition
+}
+
+export type ViewDefinition = {
+    formatValue: FormatValueType
+    getTicks?: (values: number[]) => Tick[]
+    showLegend?: boolean
 }
 
 export enum PercentViews {

@@ -1,4 +1,9 @@
-import { ResponseData, ResultsSubFieldEnum, StandardQuestionData } from '@devographics/types'
+import {
+    ResponseData,
+    ResponseEditionData,
+    ResultsSubFieldEnum,
+    StandardQuestionData
+} from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
 import { BlockVariantDefinition } from 'core/types'
 
@@ -13,3 +18,6 @@ export const getAllEditions = ({
     const { allEditions } = serie.data[subField] as ResponseData
     return allEditions
 }
+
+export const getEditionByYear = (year: number, editions: ResponseEditionData[]) =>
+    editions.find(e => e.year === year)

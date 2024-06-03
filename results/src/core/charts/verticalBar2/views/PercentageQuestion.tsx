@@ -5,6 +5,8 @@ import { VerticalBarViewDefinition } from '../types'
 import { BucketUnits } from '@devographics/types'
 import Columns from '../columns/Columns'
 import { formatPercentage } from 'core/charts/common2/helpers/labels'
+import { getEditionByYear } from '../helpers/other'
+import { ColumnEmpty } from '../columns/ColumnEmpty'
 
 export const PercentageQuestion: VerticalBarViewDefinition = {
     getBucketValue: bucket => bucket[BucketUnits.PERCENTAGE_QUESTION] || 0,
@@ -21,17 +23,25 @@ export const PercentageQuestion: VerticalBarViewDefinition = {
         /*removeNoAnswer*/
     ],
     component: props => {
+        const { chartValues } = props
+        const { years } = chartValues
         return (
             <Columns {...props} hasZebra={true}>
-                {props.editions.map((edition, i) => (
-                    <ColumnStacked
-                        columnIndex={i}
-                        {...props}
-                        key={edition.editionId}
-                        edition={edition}
-                        showCount={false}
-                    />
-                ))}
+                {years.map((year, i) => {
+                    const edition = getEditionByYear(year, props.editions)
+                    return edition ? (
+                        <ColumnStacked
+                            columnIndex={i}
+                            {...props}
+                            key={year}
+                            year={year}
+                            edition={edition}
+                            showCount={false}
+                        />
+                    ) : (
+                        <ColumnEmpty {...props} columnIndex={i} key={year} year={year} />
+                    )
+                })}
             </Columns>
         )
     }

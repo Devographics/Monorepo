@@ -7,7 +7,7 @@ import { ColumnWrapper } from './ColumnWrapper'
 
 export const ColumnSingle = (props: ColumnComponentProps) => {
     const theme = useTheme()
-    const { edition, chartState, chartValues, showCount = true, showBar = true } = props
+    const { year, edition, chartState, chartValues, showCount = true } = props
     const { viewDefinition } = chartState
     const { getEditionValue } = viewDefinition
     const { maxValue } = chartValues
@@ -16,7 +16,8 @@ export const ColumnSingle = (props: ColumnComponentProps) => {
         throw new Error('getEditionValue not defined')
     }
 
-    const value = getEditionValue(edition)
+    const value = edition && getEditionValue(edition, chartState)
+
     const gradient = theme.colors.barChart.primaryGradient
 
     const rowMetadata = <RespondentCount count={edition.completion.count} />
@@ -26,20 +27,16 @@ export const ColumnSingle = (props: ColumnComponentProps) => {
 
     return (
         <ColumnWrapper {...rowWrapperProps}>
-            {showBar ? (
-                <Cell
-                    edition={edition}
-                    value={value}
-                    chartState={chartState}
-                    offset={0}
-                    height={height}
-                    cellIndex={0}
-                    chartValues={chartValues}
-                    gradient={gradient}
-                />
-            ) : (
-                <span />
-            )}
+            <Cell
+                edition={edition}
+                value={value}
+                chartState={chartState}
+                offset={0}
+                height={height}
+                cellIndex={0}
+                chartValues={chartValues}
+                gradient={gradient}
+            />
         </ColumnWrapper>
     )
 }

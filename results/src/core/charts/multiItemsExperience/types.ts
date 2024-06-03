@@ -20,7 +20,7 @@ export enum GroupingOptions {
     SENTIMENT = 'sentiment'
 }
 
-type SectionItemsData = {
+export type SectionItemsData = {
     items: StandardQuestionData[]
 }
 

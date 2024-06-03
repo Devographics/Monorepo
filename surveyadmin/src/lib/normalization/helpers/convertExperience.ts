@@ -97,6 +97,7 @@ export async function convertExperience({
   const { data: edition } = await fetchEditionMetadataAdmin({
     surveyId,
     editionId,
+    shouldGetFromCache: false,
   });
 
   const editionQuestions = getEditionQuestions(edition);

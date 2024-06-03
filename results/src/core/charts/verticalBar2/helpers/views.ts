@@ -11,10 +11,10 @@ export const viewDefinitions: { [key: string]: VerticalBarViewDefinition } = {
     // [Views.PERCENTAGE_BUCKET]: PercentageBucket
 }
 
-export const getViewComponent = (view: VerticalBarViews) => {
+export const getViewComponent = (view: string) => {
     return getViewDefinition(view).component
 }
 
-export const getViewDefinition = (view: VerticalBarViews) => {
+export const getViewDefinition = (view: string) => {
     return viewDefinitions[view]
 }

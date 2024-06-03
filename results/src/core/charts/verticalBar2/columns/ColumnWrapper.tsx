@@ -1,11 +1,14 @@
 import './Column.scss'
 import React from 'react'
-import { ColumnComponentProps } from '../types'
+import { EmptyColumnProps } from '../types'
 
 export const ColumnWrapper = (
-    props: ColumnComponentProps & { rowMetadata?: JSX.Element; children: JSX.Element }
+    props: EmptyColumnProps & {
+        rowMetadata?: JSX.Element
+        children?: JSX.Element
+    }
 ) => {
-    const { chartState, columnIndex, children, rowMetadata, edition } = props
+    const { year, columnIndex, children, rowMetadata } = props
 
     /*
 
@@ -21,13 +24,15 @@ export const ColumnWrapper = (
         <div className="chart-column" style={style}>
             {rowMetadata && <div className="chart-column-top">{rowMetadata}</div>}
 
-            <div className="chart-column-content">
-                {/* {ticks && <Gridlines ticks={ticks} />} */}
-                <div className="chart-bar">{children}</div>
-            </div>
+            {children && (
+                <div className="chart-column-content">
+                    {/* {ticks && <Gridlines ticks={ticks} />} */}
+                    <div className="chart-bar">{children}</div>
+                </div>
+            )}
 
             <div className="chart-column-bottom">
-                <div className="chart-column-year">{edition.year}</div>
+                <div className="chart-column-year">{year}</div>
             </div>
         </div>
     )

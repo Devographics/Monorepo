@@ -1,10 +1,10 @@
 import { SyntheticEvent } from 'react'
-import { ChartState, FormatValueType, Tick } from '../common2/types'
+import { ChartState, FormatValueType, Tick, ViewDefinition } from '../common2/types'
 import { IconProps } from 'core/icons/IconWrapper'
 import { Bucket, QuestionMetadata, ResponseEditionData } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 
-export interface VerticalBarChartState extends ChartState<VerticalBarViews> {
+export interface VerticalBarChartState extends ChartState {
     viewDefinition: VerticalBarViewDefinition
 }
 
@@ -21,13 +21,10 @@ export type Control = {
     onClick: (e: SyntheticEvent) => void
 }
 
-export type VerticalBarViewDefinition = {
-    getEditionValue?: (edition: ResponseEditionData) => number
+export type VerticalBarViewDefinition = ViewDefinition & {
+    getEditionValue?: (edition: ResponseEditionData, chartState: VerticalBarChartState) => number
     getBucketValue?: (bucket: Bucket) => number
-    formatValue: FormatValueType
-    getTicks?: (values: number[]) => Tick[]
     dataFilters?: DataFilter[]
-    showLegend?: boolean
     component: (props: VerticalBarViewProps) => JSX.Element | null
 }
 
@@ -42,18 +39,27 @@ export type VerticalBarChartValues = {
     totalColumns: number
     question: QuestionMetadata
     ticks?: Tick[]
+    years: number[]
     maxValue: number
 }
 
 export type DataFilter = (buckets: Bucket[]) => Bucket[]
 
 export type ColumnComponentProps = VerticalBarViewProps & {
+    year: number
     edition: ResponseEditionData
     columnIndex: number
     showCount?: boolean
-    showBar?: boolean
 }
 
-export type LinesComponentProps = VerticalBarViewProps & {
+export type EmptyColumnProps = Omit<ColumnComponentProps, 'edition' | 'editions' | 'chartState'>
+
+export type LineItem = {
+    id: string
     editions: ResponseEditionData[]
 }
+
+export type LineComponentProps = VerticalBarViewProps &
+    LineItem & {
+        lineIndex: number
+    }

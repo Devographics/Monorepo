@@ -1,12 +1,19 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from 'react'
-import { ChartState, ColumnModes, FormatValueType, OrderOptions, Tick } from '../common2/types'
+import {
+    ChartState,
+    ColumnModes,
+    FormatValueType,
+    OrderOptions,
+    Tick,
+    ViewDefinition
+} from '../common2/types'
 import { FacetItem } from 'core/filters/types'
 import { IconProps } from 'core/icons/IconWrapper'
 import { Bucket, FacetBucket, QuestionMetadata } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 import { Dimension } from '../multiItemsExperience/types'
 
-export interface HorizontalBarChartState extends ChartState<HorizontalBarViews> {
+export interface HorizontalBarChartState extends ChartState {
     sort: string | undefined
     setSort: Dispatch<SetStateAction<string | undefined>>
     order: OrderOptions
@@ -46,12 +53,10 @@ export type Control = {
 }
 
 type GetValueType = (bucket: Bucket | FacetBucket) => number
-export type HorizontalBarViewDefinition = {
+
+export type HorizontalBarViewDefinition = ViewDefinition & {
     getValue: GetValueType
-    formatValue: FormatValueType
-    getTicks?: (values: number[]) => Tick[]
     dataFilters?: DataFilter[]
-    showLegend?: boolean
     component: (props: HorizontalBarViewProps) => JSX.Element | null
 }
 

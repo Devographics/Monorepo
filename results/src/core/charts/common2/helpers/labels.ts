@@ -56,14 +56,17 @@ function largeNumberFormatter(num: number, digits = 1) {
 
 export const formatNumber = new Intl.NumberFormat().format
 
-export const formatPercentage = (value: number) => {
+export const roundPercentage = (value: number) => {
     if (value < 0.1) {
-        return round(value, 2).toString()
+        return round(value, 2)
     } else if (value < 1) {
-        return round(value, 1).toString()
+        return round(value, 1)
     } else {
-        return round(value).toString()
+        return round(value)
     }
+}
+export const formatPercentage = (value: number) => {
+    return `${roundPercentage(value)}%`
 }
 
 export const formatCurrency = (value: number, question: QuestionMetadata) => {

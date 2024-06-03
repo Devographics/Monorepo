@@ -1,6 +1,6 @@
-id: ${sectionId}_items
+id: ${sectionId}_ratios
 titleId: sections.${sectionId}.title
-blockType: MultiItemsExperienceBlock
+blockType: MultiItemsRatiosBlock
 hasSponsor: true
 query: >
     surveys {
@@ -37,25 +37,16 @@ query: >
                   codeHighlighted
                 }
               }
-              comments {
-                currentEdition {
-                  count
-                }
-              }
               responses(facet: _sentiment) {
-                currentEdition {
-                  buckets {
-                    count
-                    id
-                    facetBuckets {
-                      count
-                      id
-                      percentageBucket
-                      percentageQuestion
-                      percentageSurvey
-                    }
-                    percentageQuestion
-                    percentageSurvey
+                allEditions {
+                  year
+                  editionId
+                  ratios {
+                    awareness
+                    interest
+                    usage
+                    retention
+                    positivity
                   }
                   completion {
                     count
