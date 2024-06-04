@@ -105,7 +105,9 @@ export function ClientLayout(props: AppLayoutProps) {
               <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
                 <KeydownContextProvider>
                   <UserMessagesProvider>
-                    {addWrapper ? <Layout>{children}</Layout> : children}
+                    {addWrapper ?
+                      <Layout>{children}</Layout>
+                      : children}
                   </UserMessagesProvider>
                 </KeydownContextProvider>
               </ErrorBoundary>

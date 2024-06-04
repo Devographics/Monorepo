@@ -12,10 +12,10 @@ import { T, type TProps } from "./T"
  * 
  * @param tokenExprs A list of token expressions as strings
  */
-export function teapot<T extends Readonly<Array<string>>>(tokenExprs: T) {
+export function teapot<TExprs extends Readonly<Array<string>>>(tokenExprs: TExprs) {
     // @ts-ignore
     return {
-        T: (props: Omit<TProps, "token"> & { token: T[number] }) => <T {...props} />,
+        T: (props: Omit<TProps, "token"> & { token: TExprs[number] }) => <T {...props} />,
         tokens: tokenExprs
     }
 }

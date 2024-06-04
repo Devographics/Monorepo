@@ -3,6 +3,8 @@ import ClientLayout from "~/app/[lang]/ClientLayout";
 import { rscAllLocalesMetadata, rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
 import { metadata as defaultMetadata } from "../../layout";
 import { rscTeapot } from "~/i18n/components/ServerT";
+import { setLocaleIdServerContext } from "~/i18n/rsc-context";
+import { filterClientSideStrings } from "@devographics/i18n/server";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -37,12 +39,16 @@ export default async function RootLayout({
     lang: string;
   };
 }) {
+  setLocaleIdServerContext(params.lang) // Needed for "ServerT"
   const { locale, localeId, error } = await rscLocaleFromParams(params)
   const { data: locales, ___metadata: ___rscAllLocalesMetadata } =
     await rscAllLocalesMetadata();
   if (error) {
     return <div>{JSON.stringify(error, null, 2)}</div>;
   }
+  // TODO: see "Layout" to get the right expressions
+  const tokenExprs = []
+  const clientSideLocale = filterClientSideStrings<{}>(locale, tokenExprs, {})
   return (
     // TODO: stop passing all the locales there, filter them per page
     <ClientLayout
