@@ -25,7 +25,12 @@
     stroke-width: 20px;
     stroke: transparent;
 }
-
+.chart-line-dot {
+    transition: all 0.3s ease;
+    &:hover {
+        transform: scale(1.5);
+    }
+}
 .chart-line-dot-visible {
     stroke: currentColor;
     stroke-width: 2px;

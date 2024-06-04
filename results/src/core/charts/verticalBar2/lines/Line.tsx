@@ -133,7 +133,7 @@ const Dot = ({
     return (
         <Tooltip
             trigger={
-                <g className="chart-line-dot">
+                <g className="chart-line-dot" transform-origin={`${cx} ${cy}`}>
                     <circle className="chart-line-dot-visible" cx={cx} cy={cy} r={dotRadius} />
                     <circle
                         className="chart-line-dot-invisible"
