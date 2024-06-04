@@ -17,18 +17,21 @@ import {
     useChartValues
 } from './helpers'
 import { Row } from './MultiItemsRow'
-import Rows from '../common2/Rows'
-import { ChartWrapper, Legend, Note } from '../common2'
+import Rows from '../horizontalBar2/rows/Rows'
+import { ChartFooter, ChartWrapper, Legend, Note } from '../common2'
 import { useTheme } from 'styled-components'
 import min from 'lodash/min'
 import max from 'lodash/max'
 import take from 'lodash/take'
 import { NoteContents } from './MultiItemsNote'
+import ChartShare from '../common2/ChartShare'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
     sentiment: Object.values(SimplifiedSentimentOptions)
 }
+
+const defaultLimit = 5
 
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
     const { series, block, question } = props
@@ -40,7 +43,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     }
 
     const theme = useTheme()
-    const chartState = useChartState({ rowsLimit: block?.chartOptions?.limit })
+    const chartState = useChartState({ rowsLimit: block?.chartOptions?.limit || defaultLimit })
     const { grouping, variable, sort, order } = chartState
 
     const columnIds = sortOptions[grouping]
@@ -142,6 +145,16 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
                         <Row key={item.id + i} rowIndex={i} item={item} {...commonProps} />
                     ))}
                 </Rows>
+
+                <ChartFooter
+                    right={
+                        <>
+                            <ChartShare {...commonProps} />
+                            {/* <ChartData {...commonProps} /> */}
+                        </>
+                    }
+                />
+
                 <Note>
                     <NoteContents />
                 </Note>

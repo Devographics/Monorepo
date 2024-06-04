@@ -23,7 +23,7 @@ export const generateResponsesType = ({
     survey: SurveyApiObject
     path: string
 }): TypeDefTemplateOutput => {
-    const typeName = getResponseTypeName(survey.id)
+    const typeName = getResponseTypeName()
     return {
         generatedBy: 'responses',
         path,

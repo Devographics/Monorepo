@@ -73,6 +73,7 @@ export const getItemLabel = (options: {
         const predefinedKey = predefinedKeys[id]
 
         key = predefinedKey || defaultKey
+        const descriptionKey = `${key}.description`
 
         const i18nLabelObject = getString(key, values)
         const i18nLabel = getFields(i18nLabelObject, [html ? 'tHtml' : 'tClean', 't'])
@@ -80,7 +81,7 @@ export const getItemLabel = (options: {
 
         const shortLabelObject = getString(key + '.short', values, i18nLabel)
 
-        const i18nDescriptionObject = getString(key, values)
+        const i18nDescriptionObject = getString(descriptionKey, values)
         const i18nDescription = getFields(i18nDescriptionObject, [html ? 'tHtml' : 'tClean', 't'])
         const entityDescription =
             entity &&

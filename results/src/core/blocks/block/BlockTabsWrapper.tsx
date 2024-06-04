@@ -80,24 +80,24 @@ export const TabsWrapper = ({
 
     return (
         <Wrapper className="tabs-wrapper" withMargin={withMargin}>
-            <Tabs.Root
-                defaultValue="tab0"
-                orientation="horizontal"
-                value={activeTab}
-                activationMode="manual"
-                onValueChange={(value: string) => {
-                    setActiveTab(value)
-                }}
-            >
-                <BlockHeader className="block-header">
-                    <BlockHeaderTop_>
-                        <BlockTitle block={firstBlockVariant} />
-                        {/* <BlockQuestion block={firstBlockVariant} /> */}
-                        <BlockDescriptionContents block={firstBlockVariant} />
-                        <BlockTakeaway block={firstBlockVariant} />
-                    </BlockHeaderTop_>
-                    <BlockHeaderRight_>
-                        {showTabs && (
+            <BlockHeaderTop_>
+                <BlockTitle block={firstBlockVariant} />
+                <BlockQuestion block={firstBlockVariant} />
+                {/* <BlockDescriptionContents block={firstBlockVariant} /> */}
+                <BlockTakeaway block={firstBlockVariant} />
+            </BlockHeaderTop_>
+            {showTabs ? (
+                <Tabs.Root
+                    defaultValue="tab0"
+                    orientation="horizontal"
+                    value={activeTab}
+                    activationMode="manual"
+                    onValueChange={(value: string) => {
+                        setActiveTab(value)
+                    }}
+                >
+                    <BlockHeader className="block-header">
+                        <BlockHeaderRight_>
                             <TabsList aria-label="tabs example">
                                 {block.variants.map((block, variantIndex) => (
                                     <Tab_ key={block.id}>
@@ -138,44 +138,57 @@ export const TabsWrapper = ({
                                     </Tab_>
                                 ))}
                             </TabsList>
-                        )}
 
-                        {firstBlockVariant.canCustomize && (
-                            <ModalTrigger
-                                trigger={
-                                    <CustomizeButton_ variant="link">
-                                        <T k="filters.customize_chart" />
-                                    </CustomizeButton_>
-                                }
-                            >
-                                <FiltersPanel {...variantProps} />
-                            </ModalTrigger>
-                        )}
-                    </BlockHeaderRight_>
-                </BlockHeader>
-                {regularVariants.map((block, variantIndex) => (
-                    <Tabs.Content key={block.id} value={getRegularTabId(variantIndex)}>
-                        <BlockSwitcher
-                            block={block}
-                            pageData={pageData}
-                            blockIndex={blockIndex}
-                            variantIndex={variantIndex}
-                        />
-                    </Tabs.Content>
-                ))}
-                {blockCustomVariants.map((variant, variantIndex) => (
-                    <Tabs.Content key={variant.name} value={getCustomTabId(variant.id)}>
-                        <CustomVariantWrapper variant={variant} {...variantProps}>
+                            {firstBlockVariant.canCustomize && (
+                                <ModalTrigger
+                                    trigger={
+                                        <CustomizeButton_ variant="link">
+                                            <T k="filters.customize_chart" />
+                                        </CustomizeButton_>
+                                    }
+                                >
+                                    <FiltersPanel {...variantProps} />
+                                </ModalTrigger>
+                            )}
+                        </BlockHeaderRight_>
+                    </BlockHeader>
+                    {regularVariants.map((block, variantIndex) => (
+                        <Tabs.Content key={block.id} value={getRegularTabId(variantIndex)}>
                             <BlockSwitcher
-                                block={{ ...firstBlockVariant, filtersState: variant.chartFilters }}
+                                block={block}
                                 pageData={pageData}
                                 blockIndex={blockIndex}
                                 variantIndex={variantIndex}
                             />
-                        </CustomVariantWrapper>
-                    </Tabs.Content>
-                ))}
-            </Tabs.Root>
+                        </Tabs.Content>
+                    ))}
+                    {blockCustomVariants.map((variant, variantIndex) => (
+                        <Tabs.Content key={variant.name} value={getCustomTabId(variant.id)}>
+                            <CustomVariantWrapper variant={variant} {...variantProps}>
+                                <BlockSwitcher
+                                    block={{
+                                        ...firstBlockVariant,
+                                        filtersState: variant.chartFilters
+                                    }}
+                                    pageData={pageData}
+                                    blockIndex={blockIndex}
+                                    variantIndex={variantIndex}
+                                />
+                            </CustomVariantWrapper>
+                        </Tabs.Content>
+                    ))}
+                </Tabs.Root>
+            ) : (
+                <BlockSwitcher
+                    block={{
+                        ...firstBlockVariant,
+                        filtersState: firstBlockVariant.filtersState
+                    }}
+                    pageData={pageData}
+                    blockIndex={blockIndex}
+                    variantIndex={0}
+                />
+            )}
         </Wrapper>
     )
 }
@@ -249,6 +262,9 @@ export const TabsTrigger = styled(Tabs.Trigger)`
 
 const BlockHeaderTop_ = styled.div`
     margin-bottom: ${spacing()};
+    display: flex;
+    flex-direction: column;
+    gap: ${spacing(0.5)};
 `
 
 const BlockHeaderRight_ = styled.div`

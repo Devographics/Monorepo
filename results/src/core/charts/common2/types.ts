@@ -1,34 +1,25 @@
 import { Bucket, QuestionMetadata } from '@devographics/types'
-import { Dispatch, SetStateAction } from 'react'
-import { ChartValues, Dimension } from '../multiItemsExperience/types'
+import { MultiItemsChartValues } from '../multiItemsExperience/types'
 import { BlockVariantDefinition, PageContextValue } from 'core/types'
-import { ChartState } from '../horizontalBar2/types'
 import { DataSeries } from 'core/filters/types'
 import { CustomVariant } from 'core/filters/helpers'
+import { Dispatch, SetStateAction } from 'react'
 
-export type RowComponent = (props: any) => JSX.Element | null
-
-export type RowCommonProps = {
-    buckets: Bucket[]
-    bucket: Bucket
-    block: BlockVariantDefinition
-    rowIndex: number
-    allRowsCellDimensions: Dimension[][]
-    allRowsOffsets: number[]
-    ticks?: Tick[]
+export interface ChartState {
+    view: string
+    setView: Dispatch<SetStateAction<string>>
+    viewDefinition: ViewDefinition
 }
 
-export type RowExtraProps = {
-    showCount?: boolean
-    containerWidth: number
-    hasGroupedBuckets: boolean
-    isGroupedBucket?: boolean
-    showGroupedBuckets?: boolean
-    setShowGroupedBuckets?: Dispatch<SetStateAction<boolean>>
-    component: (props: {
-        containerWidth: number | undefined
-        contentWidth: number | undefined
-    }) => JSX.Element
+export type ViewDefinition = {
+    formatValue: FormatValueType
+    getTicks?: (values: number[]) => Tick[]
+    showLegend?: boolean
+}
+
+export enum PercentViews {
+    PERCENTAGE_BUCKET = 'percentageBucket',
+    PERCENTAGE_QUESTION = 'percentageQuestion'
 }
 
 export enum OrderOptions {
@@ -41,21 +32,25 @@ export enum ColumnModes {
     STACKED = 'stacked'
 }
 
-export type CommonProps = {
+export type CommonProps<ChartStateType> = {
     pageContext: PageContextValue
-    chartState: ChartState
+    chartState: ChartStateType
     block: BlockVariantDefinition
     series: DataSeries<any>[]
     variant?: CustomVariant
     question: QuestionMetadata
 }
 
-export type ViewProps = CommonProps & {
+export type ViewProps<ChartStateType> = CommonProps<ChartStateType> & {
     buckets: Bucket[]
-    chartValues: ChartValues
+    chartValues: MultiItemsChartValues
 }
 
 export type Tick = {
     value: number
+    label?: string
     xOffset?: number
+    yOffset?: number
 }
+
+export type FormatValueType = (v: number, question: QuestionMetadata) => string

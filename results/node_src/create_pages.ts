@@ -258,7 +258,10 @@ export const createPagesSingleLoop = async ({
          * Important otherwise Gatsby will mangle errors and output "p" is not defined
          * Maybe a bug in the error display itself in Gatsby?
          */
-        console.error('ERROR WHILE RUNNING createPagesSingleLoop', err)
-        // throw err
+        if (err.fatal) {
+            throw err
+        } else {
+            console.error('ERROR WHILE RUNNING createPagesSingleLoop', err)
+        }
     }
 }

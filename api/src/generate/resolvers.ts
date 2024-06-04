@@ -8,7 +8,7 @@ import {
     ResolverParent,
     IncludeEnum
 } from '../types/surveys'
-import { getPath, getEditionById } from './helpers'
+import { getPath, getEditionById, getSectionType } from './helpers'
 import { genericComputeFunction, getGenericCacheKey } from '../compute'
 import { useCache } from '../helpers/caching'
 import { getRawCommentsWithCache } from '../compute/comments'
@@ -68,7 +68,7 @@ export const generateResolvers = async ({
     } as any
 
     for (const survey of surveys) {
-        resolvers[getResponseTypeName(survey.id)] = responsesResolverMap
+        resolvers[getResponseTypeName()] = responsesResolverMap
 
         // generate resolver map for each survey field (i.e. each survey edition)
         const surveyFieldsResolvers = Object.fromEntries(
@@ -248,11 +248,12 @@ const getSectionResolver =
     }): ResolverType =>
     async (parent, args, context, info) => {
         console.log('// section resolver')
+        const type = getSectionType(section)
         const _items = await getItems({
             survey,
             edition,
             section,
-            type: 'features',
+            type,
             context
         })
         return {
@@ -539,7 +540,7 @@ const getItems = async ({
     type: 'tools' | 'features'
     context: RequestContext
 }) => {
-    const items = ['features', 'tools'].includes(section.id)
+    const items = ['features', 'tools', 'libraries'].includes(section.id)
         ? getEditionItems(edition, type)
         : getSectionItems(section, type)
 

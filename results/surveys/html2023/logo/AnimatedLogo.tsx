@@ -13,7 +13,7 @@ const style = `
     
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;display=swap&amp;text=STATEOF0123456789");
       
-:root {
+.soh-logo {
   --color-text: #9f0d47;
   --color-bg: #4a564b;
   --color-slash-one-a: #52b384;
@@ -88,6 +88,9 @@ const style = `
   -webkit-animation: angleSlideIn var(--timeline-slash-anim) var(--ease-whisk-out) calc(var(--timeline-slash-delay) + var(--timeline-slash-sub-delay) 				* (var(--sub-count) - var(--subindex)) 			) backwards 1;
           animation: angleSlideIn var(--timeline-slash-anim) var(--ease-whisk-out) calc(var(--timeline-slash-delay) + var(--timeline-slash-sub-delay) 				* (var(--sub-count) - var(--subindex)) 			) backwards 1;
 }
+.soh-slash--a, .soh-slash--f { --subindex: 1; }
+.soh-slash--b, .soh-slash--e { --subindex: 2; }
+.soh-slash--c, .soh-slash--d { --subindex: 3; }
 .soh-slashes > :nth-child(n+4) {
   --dir: -1;
 }
@@ -149,7 +152,6 @@ const style = `
 }
 
 .soh-text--stateof {
-  letter-spacing: 0.05em;
   transform-origin: 0% 50%;
   -webkit-animation-delay: calc(var(--timeline-text-delay) - var(--timeline-shape-fill-anim) * 0.25);
           animation-delay: calc(var(--timeline-text-delay) - var(--timeline-shape-fill-anim) * 0.25);
@@ -157,9 +159,9 @@ const style = `
 
 .soh-text--year {
   --dir: -1;
-  letter-spacing: 0.1em;
   transform-origin: 100% 50%;
 }
+.soh-text > text { letter-spacing: 0.1625em; }
 
 @-webkit-keyframes angleSlideIn {
   from {
@@ -230,7 +232,7 @@ const style = `
 }
 `
 export const Logo = ({ className, animated = true, showText = true, size = 'l' }: LogoProps) => (
-    <Wrapper aria-label="State of CSS 2022" className="soc-logo__wrapper">
+    <Wrapper className="soc-logo__wrapper">
         <svg
             xmlns="http://www.w3.org/2000/svg"
             xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -463,37 +465,31 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                         fill="url(#soh-grad-slash-1)"
                         d="M750.28 576.24l53.02-184.58-38.87 22.44-389.31 1355.7 29.26 16.9 36.86-21.28L778.1 592.3l-27.82-16.06z"
                         className="soh-slash--a"
-                        style={{ Subindex: '1' }}
                     ></path>
                     <path
                         fill="url(#soh-grad-slash-2)"
                         d="M537.93 1678.95l-10.55 36.75 37.25-21.51L911.94 484.71l-28.11-16.22 42.46-147.84-38.46 22.21-378.87 1319.36 28.97 16.73z"
                         className="soh-slash--b"
-                        style={{ Subindex: '2' }}
                     ></path>
                     <path
                         fill="url(#soh-grad-slash-3)"
                         d="M671.48 1571.2l-21.11 73.49 37.66-21.75 357.44-1244.77-28.4-16.39 32.22-112.14-38.07 21.97-368.43 1283.03 28.69 16.56z"
                         className="soh-slash--c"
-                        style={{ Subindex: '3' }}
                     ></path>
                     <path
                         fill="url(#soh-grad-slash-4)"
                         d="M802.95 1463.59l-32.02 111.49 38.06-21.98 368.59-1283.55-28.69-16.55 20.96-72.97-37.66 21.74L774.56 1447.2l28.39 16.39z"
                         className="soh-slash--d"
-                        style={{ Subindex: '3' }}
                     ></path>
                     <path
                         fill="url(#soh-grad-slash-5)"
                         d="M936.54 1355.7l-42.62 148.37 38.47-22.21 379.02-1319.89-28.97-16.72 10.4-36.23-37.25 21.51-347.16 1208.95 28.11 16.22z"
                         className="soh-slash--e"
-                        style={{ Subindex: '2' }}
                     ></path>
                     <path
                         fill="url(#soh-grad-slash-6)"
                         d="M1069.27 1248.85l-53.02 184.58 38.87-22.44 389.31-1355.7-29.26-16.89-36.85 21.27-336.87 1173.13 27.82 16.05z"
                         className="soh-slash--f"
-                        style={{ Subindex: '1' }}
                     ></path>
                 </g>
             </g>
@@ -549,29 +545,33 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                     ></use>
                 </g>
             </g>
-            <text x="1070" y="660" fontSize="90" transform="rotate(30)" className="0">
-                <tspan>S</tspan>
-                <tspan>T</tspan>
-                <tspan>A</tspan>
-                <tspan>T</tspan>
-                <tspan>E</tspan>
-                <tspan></tspan>
-                <tspan>O</tspan>
-                <tspan>F</tspan>
-            </text>
-            <text
-                x="728"
-                y="1260"
-                fontSize="100"
-                textAnchor="end"
-                transform="rotate(30)"
-                className="0"
-            >
-                <tspan>2</tspan>
-                <tspan>0</tspan>
-                <tspan>2</tspan>
-                <tspan>3</tspan>
-            </text>
+            <g>
+    			<g transform="rotate(30)">
+    				<g className="soh-text soh-text--stateof">
+    					<text x="1070" y="660" font-size="90">
+    						<tspan>S</tspan>
+    						<tspan>T</tspan>
+    						<tspan>A</tspan>
+    						<tspan>T</tspan>
+    						<tspan>E</tspan>
+    						<tspan> </tspan>
+    						<tspan>O</tspan>
+    						<tspan>F</tspan>
+    					</text>
+    				</g>
+    			</g>
+    
+    			<g transform="rotate(30)">
+    				<g className="soh-text soh-text--year">
+    					<text x="728" y="1260" font-size="100" text-anchor="end">
+    						<tspan>2</tspan>
+    						<tspan>0</tspan>
+    						<tspan>2</tspan>
+    						<tspan>3</tspan>
+    					</text>
+    				</g>
+    			</g>
+    		</g>
         </svg>
     </Wrapper>
 )

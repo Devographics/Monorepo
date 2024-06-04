@@ -1,6 +1,6 @@
 id: ${sectionId}_others
 titleId: blocks.category_other_tools
-blockType: HorizontalBarBlock
+blockType: HorizontalBarBlock2
 defaultUnits: count
 # dataPath: 'dataAPI.survey.${sectionId}_others.year'
 hasSponsor: true

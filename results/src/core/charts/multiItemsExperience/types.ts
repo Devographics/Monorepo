@@ -10,7 +10,7 @@ import {
 } from '@devographics/types'
 import { BlockComponentProps } from 'core/types'
 import { PERCENTAGE_QUESTION, SENTIMENT_FACET } from '@devographics/constants'
-import { ColumnModes, OrderOptions } from '../common2/types'
+import { ColumnModes, OrderOptions, Tick } from '../common2/types'
 import { DataSeries } from 'core/filters/types'
 
 export const DEFAULT_VARIABLE = PERCENTAGE_QUESTION
@@ -20,7 +20,7 @@ export enum GroupingOptions {
     SENTIMENT = 'sentiment'
 }
 
-type SectionItemsData = {
+export type SectionItemsData = {
     items: StandardQuestionData[]
 }
 
@@ -34,7 +34,7 @@ export type Variable = typeof PERCENTAGE_QUESTION
 
 export type FacetId = string
 
-export type ChartState = {
+export type MultiItemsChartState = {
     facetId: FacetId
     setFacetId: Dispatch<SetStateAction<FacetId>>
     grouping: GroupingOptions
@@ -51,11 +51,12 @@ export type ChartState = {
     setRowsLimit: Dispatch<SetStateAction<number>>
 }
 
-export type ChartValues = {
+export type MultiItemsChartValues = {
     maxOverallValue?: number
     totalRows: number
     question: QuestionMetadata
     facetQuestion?: QuestionMetadata
+    ticks?: Tick[]
 }
 
 export type CombinedItem = {
@@ -93,6 +94,6 @@ export type ColumnDimension = Dimension
 
 export type RowDataProps = {
     bucket: Bucket
-    chartState: ChartState
-    chartValues: ChartValues
+    chartState: MultiItemsChartState
+    chartValues: MultiItemsChartValues
 }

@@ -26,7 +26,7 @@ This copies over sentiment data to a structure that's easier to deal with:
           "followup_predefined": ["sentiment_interested"]
         }
       },
-      "sentiment": ["sentiment_interested"]  // <------ here
+      "sentiment": "sentiment_interested"  // <------ here
     }
   }
 }
@@ -125,6 +125,10 @@ export async function addSentiment({
         question,
       })
     );
+
+  if (sentimentQuestions.length === 0) {
+    throw new Error(`// addSentiment: no sentiment questions found`);
+  }
 
   const selector = { editionId };
 

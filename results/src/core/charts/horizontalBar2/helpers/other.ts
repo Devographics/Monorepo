@@ -1,21 +1,22 @@
 import {
     Bucket,
     FeaturesOptions,
+    QuestionMetadata,
     ResponseData,
     ResultsSubFieldEnum,
     SimplifiedSentimentOptions,
     StandardQuestionData
 } from '@devographics/types'
-import { ChartState, Views } from '../types'
-import { BoxPlotRow, FacetRow, SingleBarRow } from '../HorizontalBarRow'
+import { HorizontalBarChartState, HorizontalBarViews } from '../types'
 import { DataSeries, FacetItem } from 'core/filters/types'
 import { usePageContext } from 'core/helpers/pageContext'
 import { applySteps } from './steps'
-import { getViewDefinition } from './views'
 import sortBy from 'lodash/sortBy'
 import { OrderOptions } from 'core/charts/common2/types'
 import { BlockVariantDefinition } from 'core/types'
 import uniq from 'lodash/uniq'
+import { RowSingle } from '../rows/RowSingle'
+import { RowStacked } from '../rows/RowStacked'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -41,10 +42,11 @@ export const getChartBuckets = ({
 }: {
     serie: DataSeries<StandardQuestionData>
     block: BlockVariantDefinition
-    chartState: ChartState
+    chartState: HorizontalBarChartState
 }) => {
     const { view, sort, facet, order, rowsLimit } = chartState
-    const { steps, getValue } = getViewDefinition(view)
+    const { viewDefinition } = chartState
+    const { dataFilters: steps, getValue } = viewDefinition
     const currentEdition = getChartCurrentEdition({ serie, block })
 
     let buckets = currentEdition.buckets
@@ -76,20 +78,20 @@ export const getChartBuckets = ({
     return buckets
 }
 
-export const getRowComponent = (bucket: Bucket, chartState: ChartState) => {
+export const getRowComponent = (bucket: Bucket, chartState: HorizontalBarChartState) => {
     const { view } = chartState
     const { facetBuckets } = bucket
     const hasFacetBuckets = facetBuckets && facetBuckets.length > 0
     if (hasFacetBuckets) {
-        if (view === Views.BOXPLOT) {
-            return BoxPlotRow
-        } else if (view === Views.PERCENTAGE_BUCKET) {
-            return FacetRow
+        if (view === HorizontalBarViews.BOXPLOT) {
+            return null
+        } else if (view === HorizontalBarViews.PERCENTAGE_BUCKET) {
+            return RowSingle
         } else {
-            return SingleBarRow
+            return RowStacked
         }
     } else {
-        return SingleBarRow
+        return RowSingle
     }
 }
 
@@ -110,7 +112,7 @@ export const useAllQuestionsMetadata = () => {
             questions.push({ sectionId: section.id, ...question })
         }
     }
-    return questions
+    return questions as Array<QuestionMetadata & { sectionId: string }>
 }
 
 export const getAllFacetBucketIds = ({
@@ -120,7 +122,7 @@ export const getAllFacetBucketIds = ({
 }: {
     series: Array<DataSeries<StandardQuestionData>>
     block: BlockVariantDefinition
-    chartState: ChartState
+    chartState: HorizontalBarChartState
 }) => {
     return uniq(
         series

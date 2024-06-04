@@ -24,6 +24,7 @@ const Language = styled.h4`
     padding: ${spacing(0.1)} ${spacing(0.4)};
     text-transform: uppercase;
     font-size: ${fontSize('small')};
+    text-shadow: #000000cc 0px 1px 2px;
 `
 
 const Pre = styled.pre`

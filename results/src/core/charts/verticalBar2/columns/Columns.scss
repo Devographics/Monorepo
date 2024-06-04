@@ -1,0 +1,49 @@
+.chart-columns-wrapper {
+    display: flex;
+    gap: var(--spacing);
+    position: relative;
+    --contentHeight: 300px;
+}
+.chart-columns {
+    width: 100%;
+    display: grid;
+    grid-template-rows: var(--contentHeight) min-content;
+    // gap: var(--doubleSpacing);
+}
+.chart-columns-withLabel {
+    /*
+    
+    Columns: 
+
+    left axis | columns… | right axis | label
+    
+    */
+    grid-template-columns: min-content repeat(var(--totalColumns), 1fr) min-content 30px;
+}
+.chart-columns-noLabel {
+    grid-template-columns: min-content repeat(var(--totalColumns), 1fr) min-content;
+}
+.chart-columns-gridlines {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-template-rows: subgrid;
+    grid-row: 1/2;
+    grid-column: 1 / span calc(var(--totalColumns) + 1);
+    position: relative;
+    margin-bottom: 1px;
+}
+.chart-columns-gridlines-item {
+    position: absolute;
+    top: var(--yOffset);
+    left: 0px;
+    right: 0px;
+    height: 1px;
+    border-bottom: 1px dotted var(--borderAltColor);
+}
+.chart-axis-label {
+    display: grid;
+    place-items: center;
+    div {
+        transform: rotate(-90deg) translateY(-100%);
+    }
+}

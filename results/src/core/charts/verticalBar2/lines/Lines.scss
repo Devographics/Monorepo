@@ -1,0 +1,67 @@
+.chart-lines-wrapper {
+    // display: grid;
+    // grid-template-columns: subgrid;
+    // grid-template-rows: subgrid;
+    grid-row: 1/2;
+    grid-column: 2 / span calc(var(--totalColumns));
+    position: relative;
+    margin-bottom: 1px;
+}
+
+.chart-lines {
+    height: 100%;
+    width: 100%;
+    overflow: visible;
+}
+.chart-line {
+    transition: all 0.3s ease;
+}
+.chart-line-segment {
+    stroke: currentColor;
+    stroke-width: 2px;
+    transition: all 0.5s ease;
+}
+.chart-line-segment-invisible {
+    stroke-width: 20px;
+    stroke: transparent;
+}
+.chart-line-dot {
+    transition: all 0.3s ease;
+    &:hover {
+        transform: scale(1.5);
+    }
+}
+.chart-line-dot-visible {
+    stroke: currentColor;
+    stroke-width: 2px;
+    fill: var(--backgroundColor);
+    transition: all 0.5s ease;
+}
+.chart-line-dot-invisible {
+    stroke: none;
+    fill: transparent;
+}
+.chart-line-label {
+    display: none;
+    fill: var(--textColor);
+    text-anchor: middle;
+    dominant-baseline: middle;
+    font-weight: bold;
+    text-shadow: #000000ee 1px 1px 2px;
+    font-size: 0.9rem;
+}
+.chart-line-highlightActive {
+    opacity: 0.25;
+}
+.chart-line-highlighted {
+    opacity: 1;
+    .chart-line-segment {
+        stroke-width: 4px;
+    }
+    .chart-line-dot-visible {
+        stroke-width: 4px;
+    }
+    .chart-line-label {
+        display: block;
+    }
+}

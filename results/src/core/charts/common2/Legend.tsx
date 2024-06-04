@@ -4,7 +4,7 @@ import { OptionMetadata } from '@devographics/types'
 import { ColorScale, neutralColor } from '../horizontalBar2/helpers/colors'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
-import { ChartState } from '../horizontalBar2/types'
+import { HorizontalBarChartState } from '../horizontalBar2/types'
 import Tooltip from 'core/components/Tooltip'
 import { OrderOptions } from './types'
 import T from 'core/i18n/T'
@@ -13,7 +13,7 @@ import Button from 'core/components/Button'
 import { useWidth } from './helpers'
 
 type LegendProps = {
-    chartState: ChartState
+    chartState: HorizontalBarChartState
     i18nNamespace: string
     options: OptionMetadata[]
     colorScale: ColorScale

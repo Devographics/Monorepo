@@ -33,7 +33,7 @@ export const generateEnumType = ({
         return
     }
     return {
-        generatedBy: 'enum',
+        generatedBy: `enum/[${question.editions?.join(',')}]/${question.id}`,
         typeName: enumTypeName,
         typeType: TypeTypeEnum.ENUM,
         typeDef: `enum ${enumTypeName} {

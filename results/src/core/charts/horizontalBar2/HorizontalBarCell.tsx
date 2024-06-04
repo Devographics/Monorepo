@@ -1,16 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ChartValues } from '../multiItemsExperience/types'
 import Tooltip from 'core/components/Tooltip'
 import { Bucket, FacetBucket } from '@devographics/types'
-import { ChartState } from './types'
+import { HorizontalBarChartState, HorizontalBarChartValues } from './types'
 import T from 'core/i18n/T'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
-import { formatValue } from './helpers/labels'
-import { getViewDefinition } from './helpers/views'
 import { useWidth } from '../common2/helpers'
 import { CellLabel } from '../common2'
-import { useEntities } from 'core/helpers/entities'
 
 // hide labels for cells under this size
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
@@ -36,8 +32,8 @@ export const Cell = ({
     gradient
 }: {
     bucket: Bucket | FacetBucket
-    chartState: ChartState
-    chartValues: ChartValues
+    chartState: HorizontalBarChartState
+    chartValues: HorizontalBarChartValues
     width: number
     offset: number
     cellIndex: number
@@ -48,9 +44,8 @@ export const Cell = ({
     // const entities = useEntities()
     // const entity = entities.find(e => e.id === bucket.id)
     const { question, facetQuestion } = chartValues
-    const { view, sort } = chartState
-    const viewDefinition = getViewDefinition(view)
-    const { getValue } = viewDefinition
+    const { sort, viewDefinition } = chartState
+    const { getValue, formatValue } = viewDefinition
     const { getString } = useI18n()
 
     const { id, count, entity, token } = bucket
@@ -70,7 +65,7 @@ export const Cell = ({
         entity
     })
 
-    const v = formatValue({ value, chartState, question: facetQuestion || question })
+    const v = formatValue(value)
 
     const isActiveSort = sort === id
     const className = `chart-cell horizontal-chart-cell ${isActiveSort ? 'active-sort' : ''}`

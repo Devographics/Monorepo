@@ -129,9 +129,10 @@ export const CustomVariantWrapper = ({
                     <Loading />
                 </>
             ) : (
-                <div>
+                <div className="chart-variant">
                     {React.cloneElement(children, {
-                        series
+                        series,
+                        variant
                     })}
                 </div>
             )}

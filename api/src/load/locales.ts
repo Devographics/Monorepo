@@ -40,7 +40,7 @@ export const loadAllFromGitHub = async (options?: LoadAllOptions): Promise<RawLo
         return await loadAllFromGitHubMultiRepo({ org })
     } else {
         throw new Error(
-            'loadAllFromGitHub: Variable GITHUB_PATH_LOCALES ("org/repo/dir") did not contained an [org] segment'
+            'loadAllFromGitHub: Variable GITHUB_PATH_LOCALES ("org/repo/dir") did not contain an [org] segment'
         )
     }
 }

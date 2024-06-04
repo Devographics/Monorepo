@@ -76,11 +76,11 @@ const BlockTitle = ({
                         <SharePermalink block={block} />
                         <div className="block-title-contents">
                             <BlockTitleContents block={block} />
-                            {completion && !pageContext.isCapturing && (
+                            {/* {completion && !pageContext.isCapturing && (
                                 <BlockCompletionIndicator completion={completion} />
-                            )}
-                            <BlockQuestionTooltip block={block} />
-                            {isFreeformQuestion && <FreeformIndicator showLabel={false} />}
+                            )} */}
+                            {/* <BlockQuestionTooltip block={block} /> */}
+                            {/* {isFreeformQuestion && <FreeformIndicator showLabel={false} />} */}
                             {!isCapturing && enableChartSponsorships && (
                                 <BlockSponsor block={block} />
                             )}
@@ -162,7 +162,6 @@ const BlockTitleText = styled.h3`
 `
 
 const LeftPart = styled.div`
-    margin-bottom: ${spacing(0.5)};
     @media ${mq.small} {
     }
 

@@ -8,6 +8,7 @@ import { getBlockSeriesData } from 'core/helpers/data'
 import { BlockVariantDefinition } from 'core/types'
 import { getAllQuestions } from 'core/helpers/options'
 import { DataSeries } from 'core/filters/types'
+import { CustomVariant } from 'core/filters/helpers'
 
 interface BlockSwitcherProps {
     block: BlockVariantDefinition
@@ -16,18 +17,21 @@ interface BlockSwitcherProps {
     pageData?: any
     index?: number
     series?: DataSeries<any>
+    variant?: CustomVariant
 }
 const BlockSwitcher = ({
     pageData,
     block,
     index,
     series: series_,
+    variant,
     isLoading
 }: BlockSwitcherProps) => {
     const pageContext = usePageContext()
     const { id, blockType, filtersState, query } = block
 
     if (!blockRegistry[blockType]) {
+        console.log(block)
         return (
             <BlockError
                 block={block}
@@ -53,6 +57,7 @@ const BlockSwitcher = ({
         context: pageContext,
         BlockComponent,
         series,
+        variant,
         data: series?.[0]?.data // backwards-compatibility
     }
 

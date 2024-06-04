@@ -3,7 +3,7 @@ import './Item.scss'
 import React, { ReactNode } from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import { LabelObject, getItemLabel } from 'core/helpers/labels'
-import { Bucket, Entity, EntityType } from '@devographics/types'
+import { Bucket, Entity, EntityType, FacetBucket } from '@devographics/types'
 import Button from 'core/components/Button'
 // import Popover from 'core/components/Popover'
 import Popover from 'core/components/Popover2'
@@ -33,7 +33,7 @@ export const Item = ({
 }: {
     id: string
     label?: string
-    bucket: Bucket
+    bucket: Bucket | FacetBucket
     entity?: Entity
     i18nNamespace?: string
 }) => {
@@ -52,7 +52,11 @@ export const Item = ({
                 <Label label={labelObject} />
             </Wrapper>
         )
-    } else if (entity.type === EntityType.DEFAULT || !entityHasData(entity)) {
+    } else if (
+        entity.entityType === EntityType.DEFAULT ||
+        !entityHasData(entity) ||
+        !entityComponents[entity.entityType]
+    ) {
         const linkUrl = entity?.homepage?.url
         if (linkUrl) {
             return (
@@ -68,16 +72,14 @@ export const Item = ({
             )
         }
     } else {
-        if (!entityComponents[entity.type]) {
-            console.log(entity)
-            return null
-        }
-        const { icon: IconComponent, modal: ModalComponent } = entityComponents[entity.type]
+        const { icon: IconComponent, modal: ModalComponent } = entityComponents[entity.entityType]
 
         return (
             <Popover
                 trigger={
-                    <Button className={`chart-item chart-item-entity chart-item-${entity.type}`}>
+                    <Button
+                        className={`chart-item chart-item-entity chart-item-${entity.entityType}`}
+                    >
                         <IconComponent entity={entity} size="petite" />
                         <Label label={labelObject} />
                     </Button>

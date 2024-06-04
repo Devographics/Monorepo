@@ -1,21 +1,22 @@
 import './Boxplot.scss'
 import React, { useMemo, useRef } from 'react'
-import { RowDataProps, ViewDefinition, ViewProps } from '../../types'
-import { Axis, BAR_HEIGHT, RespondentCount, Row, RowWrapper, Rows } from 'core/charts/common2'
+import { HorizontalBarViewDefinition, HorizontalBarViewProps, RowComponentProps } from '../../types'
+import { Axis, RespondentCount } from 'core/charts/common2'
 import { BoxProps, HorizontalBox } from './Box'
-import { RowCommonProps, RowExtraProps, Tick } from 'core/charts/common2/types'
+import { Tick } from 'core/charts/common2/types'
 import { useTheme } from 'styled-components'
 import * as d3 from 'd3'
-import { Axis as BoxplotAxis } from './Axis'
 import { BlockLegend } from 'core/types'
 import { useWidth } from 'core/charts/common2/helpers'
 import { useBoxplotData, useScales } from './helpers'
-import { formatValue } from '../../helpers/labels'
 import { removeNoAnswer } from '../../helpers/steps'
+import { BAR_HEIGHT, RowGroup } from '../../rows/RowGroup'
+import { RowWrapper, Rows } from '../../rows'
+import { formatCurrency } from 'core/charts/common2/helpers/labels'
 
 const PIXEL_PER_TICKS = 100
 
-const BoxplotView = (viewProps: ViewProps) => {
+const BoxplotView = (viewProps: HorizontalBarViewProps) => {
     const { chartState, chartValues } = viewProps
     const { facetQuestion } = chartValues
     const theme = useTheme()
@@ -25,6 +26,9 @@ const BoxplotView = (viewProps: ViewProps) => {
     if (!facetQuestion) {
         return null
     }
+
+    const { viewDefinition } = chartState
+    const { formatValue } = viewDefinition
 
     // note: we need a placeholder that's part of the grid/subgrid layout
     // to be able to calculate the content width
@@ -42,8 +46,7 @@ const BoxplotView = (viewProps: ViewProps) => {
         return { chartMin, chartMax, groups }
     }, [buckets])
 
-    const labelFormatter = (value: number) =>
-        formatValue({ value, chartState, question: facetQuestion })
+    const labelFormatter = (value: number) => formatValue(value, facetQuestion)
 
     const legends = [] as BlockLegend[]
 
@@ -73,26 +76,29 @@ const BoxplotView = (viewProps: ViewProps) => {
         ticks
     }
 
+    const axisProps = { ticks, formatValue, question: facetQuestion }
+
     return (
         <div className="chart-boxplot-view">
             <Rows {...viewProps} hasZebra={true}>
                 <>
-                    <div className="chart-row chart-boxplot-placeholder">
+                    <div className="chart-row chart-subgrid chart-boxplot-placeholder">
                         <div className="chart-row-content" ref={contentRef} />
                     </div>
 
-                    <Axis ticks={ticks} variant="top" formatValue={labelFormatter} />
+                    <Axis variant="top" {...axisProps} />
 
                     {buckets.map((bucket, i) => (
-                        <Row
+                        <RowGroup
                             key={bucket.id}
                             bucket={bucket}
                             {...rowProps}
                             rowComponent={BoxplotRow}
+                            rowIndex={i}
                         />
                     ))}
 
-                    <Axis ticks={ticks} variant="bottom" formatValue={labelFormatter} />
+                    <Axis variant="bottom" {...axisProps} />
                     {/* <div className="chart-axis chart-axis-bottom">
                         <div className="chart-row-content">
                             <BoxplotAxis
@@ -110,20 +116,14 @@ const BoxplotView = (viewProps: ViewProps) => {
     )
 }
 
-type BoxplotRowProps = {
+type BoxplotRowProps = RowComponentProps & {
+    labelFormatter: (v: number) => string
+    contentWidth: number
     xScale: d3.ScaleLinear<number, number, never>
     yScale: d3.ScaleBand<string>
 }
 
-const BoxplotRow = (
-    props: {
-        labelFormatter: (v: number) => string
-        contentWidth: number
-    } & BoxplotRowProps &
-        RowDataProps &
-        RowCommonProps &
-        RowExtraProps
-) => {
+const BoxplotRow = (props: BoxplotRowProps) => {
     const { bucket, xScale, yScale, labelFormatter, contentWidth } = props
 
     const theme = useTheme()
@@ -153,7 +153,9 @@ const BoxplotRow = (
     )
 }
 
-export const Boxplot: ViewDefinition = {
+export const Boxplot: HorizontalBarViewDefinition = {
     component: BoxplotView,
-    steps: [removeNoAnswer]
+    getValue: b => 0,
+    formatValue: formatCurrency,
+    dataFilters: [removeNoAnswer]
 }

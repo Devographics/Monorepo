@@ -51,7 +51,7 @@ export interface Entity extends EntityResolvedFields {
 
   avatar?: Avatar;
 
-  type: EntityType;
+  entityType: EntityType;
 }
 
 export enum EntityType {

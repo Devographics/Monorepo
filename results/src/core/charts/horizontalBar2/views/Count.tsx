@@ -1,22 +1,25 @@
 import React from 'react'
-import { SingleBarRow } from '../HorizontalBarRow'
-import { ViewDefinition } from '../types'
-import { Row, Rows } from 'core/charts/common2'
+import { RowSingle } from '../rows/RowSingle'
+import { HorizontalBarViewDefinition } from '../types'
 import { removeNoAnswer } from '../helpers/steps'
 import { BucketUnits } from '@devographics/types'
+import { RowGroup, Rows } from '../rows'
+import { formatNumber } from 'core/charts/common2/helpers/labels'
 
-export const Count: ViewDefinition = {
+export const Count: HorizontalBarViewDefinition = {
     getValue: bucket => bucket[BucketUnits.COUNT] || 0,
-    steps: [removeNoAnswer],
+    formatValue: formatNumber,
+    dataFilters: [removeNoAnswer],
     component: props => {
         return (
             <Rows {...props} hasZebra={true}>
                 {props.buckets.map((bucket, i) => (
-                    <Row
+                    <RowGroup
                         key={bucket.id}
                         bucket={bucket}
+                        rowIndex={i}
                         {...props}
-                        rowComponent={SingleBarRow}
+                        rowComponent={RowSingle}
                         showCount={false}
                     />
                 ))}

@@ -1,16 +1,21 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from 'react'
-import { ColumnModes, OrderOptions } from '../common2/types'
-import { ChartValues } from '../multiItemsExperience/types'
+import {
+    ChartState,
+    ColumnModes,
+    FormatValueType,
+    OrderOptions,
+    Tick,
+    ViewDefinition
+} from '../common2/types'
 import { FacetItem } from 'core/filters/types'
 import { IconProps } from 'core/icons/IconWrapper'
-import { Bucket, FacetBucket } from '@devographics/types'
+import { Bucket, FacetBucket, QuestionMetadata } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
+import { Dimension } from '../multiItemsExperience/types'
 
-export type ChartState = {
+export interface HorizontalBarChartState extends ChartState {
     sort: string | undefined
     setSort: Dispatch<SetStateAction<string | undefined>>
-    view: Views
-    setView: Dispatch<SetStateAction<Views>>
     order: OrderOptions
     setOrder: Dispatch<SetStateAction<OrderOptions>>
     columnMode: ColumnModes
@@ -19,17 +24,24 @@ export type ChartState = {
     setFacet: Dispatch<SetStateAction<FacetItem | undefined>>
     rowsLimit: number
     setRowsLimit: Dispatch<SetStateAction<number>>
+    viewDefinition: HorizontalBarViewDefinition
 }
 
-export type RowDataProps = { chartState: ChartState; chartValues: ChartValues }
-
-export enum Views {
+export enum HorizontalBarViews {
     BOXPLOT = 'percentilesByFacet',
     PERCENTAGE_BUCKET = 'percentageBucket',
     PERCENTAGE_QUESTION = 'percentageQuestion',
     FACET_COUNTS = 'facetCounts',
     COUNT = 'count',
     AVERAGE = 'average'
+}
+
+export type HorizontalBarChartValues = {
+    maxOverallValue?: number
+    totalRows: number
+    question: QuestionMetadata
+    facetQuestion?: QuestionMetadata
+    ticks?: Tick[]
 }
 
 export type Control = {
@@ -40,19 +52,37 @@ export type Control = {
     onClick: (e: SyntheticEvent) => void
 }
 
-export type GetValueType = (bucket: Bucket | FacetBucket) => number
-export type ViewDefinition = {
-    getValue?: GetValueType
-    steps?: Step[]
-    showLegend?: boolean
-    component: (props: ViewProps) => JSX.Element | null
+type GetValueType = (bucket: Bucket | FacetBucket) => number
+
+export type HorizontalBarViewDefinition = ViewDefinition & {
+    getValue: GetValueType
+    dataFilters?: DataFilter[]
+    component: (props: HorizontalBarViewProps) => JSX.Element | null
 }
 
-export type ViewProps = {
-    chartState: ChartState
-    chartValues: ChartValues
+export type HorizontalBarViewProps = {
+    chartState: HorizontalBarChartState
+    chartValues: HorizontalBarChartValues
     buckets: Bucket[]
     block: BlockVariantDefinition
 }
 
-export type Step = (buckets: Bucket[]) => Bucket[]
+export type DataFilter = (buckets: Bucket[]) => Bucket[]
+
+export type RowComponent = (props: RowComponentProps) => JSX.Element | null
+
+export type RowGroupProps = HorizontalBarViewProps & {
+    rowComponent: RowComponent
+    bucket: Bucket
+    rowIndex: number
+    showCount?: boolean
+    allRowsCellDimensions?: Dimension[][]
+    allRowsOffsets?: number[]
+}
+
+export type RowComponentProps = Omit<RowGroupProps, 'rowComponent'> & {
+    hasGroupedBuckets?: boolean
+    showGroupedBuckets?: boolean
+    setShowGroupedBuckets?: Dispatch<SetStateAction<boolean>>
+    isGroupedBucket?: boolean
+}

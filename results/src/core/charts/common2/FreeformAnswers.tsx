@@ -18,8 +18,8 @@ import { useI18n } from '@devographics/react-i18n'
 import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
 import { runQuery } from 'core/explorer/data'
-import { formatNumber } from './helpers'
-import { Bucket, RawDataItem, StandardQuestionData } from '@devographics/types'
+import { formatNumber } from './helpers/labels'
+import { Bucket, FacetBucket, RawDataItem, StandardQuestionData } from '@devographics/types'
 import { CATCHALL_PREFIX } from '@devographics/constants'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { BlockVariantDefinition } from 'core/types'
@@ -65,7 +65,7 @@ query ${getQueryName({ editionId, questionId, token })} {
 }
 
 export const FreeformAnswersTrigger = (props: {
-    bucket: Bucket
+    bucket: Bucket | FacetBucket
     questionId: string
     sectionId: string
     block: BlockVariantDefinition
@@ -97,17 +97,25 @@ export const FreeformAnswersTrigger = (props: {
         html: true
     })
 
+    const answersLabel = getString('answers.answers_for', { values: { name: tokenLabel } })?.t
+
     const label = (
-        <div className="chart-freeform-answers">
-            <CommentIcon size={'small'} /> {formatNumber(count || 0)}
-        </div>
+        <span>
+            <CommentIcon size={'small'} label={answersLabel} enableTooltip={false} />{' '}
+            {formatNumber(count || 0)}
+        </span>
     )
+
     return enableModal ? (
         <ModalTrigger
             trigger={
                 <div>
                     <Tooltip
-                        trigger={label}
+                        trigger={
+                            <button className="chart-freeform-answers chart-freeform-answers-button">
+                                {label}
+                            </button>
+                        }
                         contents={
                             <T k="answers.answers_for" values={{ name: tokenLabel }} md={true} />
                         }
@@ -122,7 +130,7 @@ export const FreeformAnswersTrigger = (props: {
             />
         </ModalTrigger>
     ) : (
-        label
+        <div className="chart-freeform-answers">{label}</div>
     )
 }
 

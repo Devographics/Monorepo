@@ -1,1 +1,1 @@
-export * from './MultiItemsBlock'
+export { default } from './MultiItemsBlock'

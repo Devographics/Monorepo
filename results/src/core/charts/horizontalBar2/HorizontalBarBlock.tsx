@@ -1,4 +1,5 @@
 import React from 'react'
+import '../common2/ChartsCommon.scss'
 import './HorizontalBar.scss'
 import Metadata from '../common2/Metadata'
 import { BlockComponentProps, PageContextValue } from 'core/types'
@@ -6,18 +7,18 @@ import { QuestionMetadata, StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
 import { getAllFacetBucketIds, getChartCurrentEdition, useQuestionMetadata } from './helpers/other'
 import { getDefaultState, useChartState } from './helpers/chartState'
-import { getViewDefinition } from './helpers/views'
 import { ChartFooter, ChartWrapper, GridWrapper, Legend, Note } from '../common2'
 import { useEntities } from 'core/helpers/entities'
 import { FacetTitle } from '../common2/FacetTitle'
 import { getQuestionOptions } from './helpers/options'
 import { useColorScale } from './helpers/colors'
-import { ChartState } from './types'
+import { HorizontalBarChartState } from './types'
 import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
 import { HorizontalBarSerie } from './HorizontalBarSerie'
 import { getBlockNoteKey } from 'core/helpers/blockHelpers'
 import { useI18n } from '@devographics/react-i18n'
+import ChartShare from '../common2/ChartShare'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -28,7 +29,6 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     const { getString } = useI18n()
     const { block, series, question, pageContext, variant } = props
     const currentEdition = getChartCurrentEdition({ serie: series[0], block })
-
     const { average, percentiles, completion } = currentEdition
 
     const facet = block?.filtersState?.facet
@@ -37,7 +37,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 
     const chartState = useChartState(getDefaultState({ facetQuestion, block }))
 
-    const commonProps: CommonProps = {
+    const commonProps: CommonProps<HorizontalBarChartState> = {
         variant,
         question,
         series,
@@ -47,7 +47,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     }
 
     const key = getBlockNoteKey({ block })
-    const note = getString(key, {}, null)?.t
+    const note = getString(key, {})?.t
 
     return (
         <ChartWrapper className="chart-horizontal-bar">
@@ -69,17 +69,23 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                     ))}
                 </GridWrapper>
 
-                <ChartFooter>
-                    <>
+                <ChartFooter
+                    left={
                         <Metadata
                             average={average}
                             median={percentiles?.p50}
                             completion={completion}
                             {...commonProps}
                         />
-                        <ChartData {...commonProps} />
-                    </>
-                </ChartFooter>
+                    }
+                    right={
+                        <>
+                            <ChartShare {...commonProps} />
+                            <ChartData {...commonProps} />
+                        </>
+                    }
+                />
+
                 {/* <Actions {...commonProps} /> */}
                 {/* <pre>
                 <code>{JSON.stringify(buckets, null, 2)}</code>
@@ -96,19 +102,19 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 }
 
 const FacetHeading = (
-    props: CommonProps & {
+    props: CommonProps<HorizontalBarChartState> & {
         series: DataSeries<StandardQuestionData>[]
         facetQuestion: QuestionMetadata
-        chartState: ChartState
+        chartState: HorizontalBarChartState
         pageContext: PageContextValue
     }
 ) => {
     const { block, facetQuestion, chartState, pageContext, series } = props
+    const { viewDefinition } = chartState
     const entities = useEntities()
 
     // const controls = getControls({ chartState, chartValues })
 
-    const viewDefinition = getViewDefinition(chartState.view)
     const colorScale = facetQuestion && useColorScale({ question: facetQuestion })
 
     const allOptions = getQuestionOptions({

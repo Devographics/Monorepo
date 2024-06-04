@@ -1,11 +1,11 @@
 import React from 'react'
 import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
-import { ChartState, ColumnId, CombinedBucket, GroupingOptions, Totals } from './types'
+import { MultiItemsChartState, ColumnId, CombinedBucket, GroupingOptions, Totals } from './types'
 import Tooltip from 'core/components/Tooltip'
 import { useI18n } from '@devographics/react-i18n'
 import T from 'core/i18n/T'
 import { useTheme } from 'styled-components'
-import { formatPercentage } from '../horizontalBar2/helpers/labels'
+import { formatPercentage } from '../common2/helpers/labels'
 import { useIsWideEnough } from '../horizontalBar2/HorizontalBarCell'
 import { CellLabel } from '../common2'
 
@@ -24,7 +24,7 @@ export const Cell = ({
     groupedTotals
 }: {
     combinedBucket: CombinedBucket
-    chartState: ChartState
+    chartState: MultiItemsChartState
     width: number
     offset: number
     groupedTotals: Totals
@@ -105,7 +105,7 @@ export const ColumnTotal = ({
     groupedTotals: Totals
     width: number
     offset: number
-    chartState: ChartState
+    chartState: MultiItemsChartState
 }) => {
     const { getString } = useI18n()
     const { grouping } = chartState

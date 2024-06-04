@@ -18,6 +18,7 @@ interface TProps {
     isFallback?: boolean
     useShort?: boolean
     element?: string
+    fallback?: string
 }
 
 export const T = ({
@@ -26,6 +27,7 @@ export const T = ({
     values,
     md = false,
     html = false,
+    fallback,
     isFallback = false,
     useShort = false,
     element
@@ -70,6 +72,9 @@ export const T = ({
                 // a translation was found, but it's a fallback placeholder
                 translation = md ? translationObject.tHtml : translationObject.t
                 classNames.push('t-isFallback')
+            } else if (fallback) {
+                translation = fallback
+                classNames.push('t-providedFallback')
             } else {
                 // no translation was found
                 translation = `[${translationObject.locale.id}] ${k}`

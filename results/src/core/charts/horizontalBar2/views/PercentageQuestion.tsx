@@ -1,31 +1,42 @@
 import React from 'react'
-import { SingleBarRow } from '../HorizontalBarRow'
-import { ViewDefinition } from '../types'
-import { Row, Rows, getTicks } from 'core/charts/common2'
+import { HorizontalBarViewDefinition } from '../types'
 import { removeNoAnswer, removeOverLimit, removeOtherAnswers } from '../helpers/steps'
 import { Bucket, BucketUnits, FacetBucket } from '@devographics/types'
+import max from 'lodash/max'
+import round from 'lodash/round'
+import { RowSingle } from '../rows/RowSingle'
+import { RowGroup, Rows } from '../rows'
+import { formatPercentage } from 'core/charts/common2/helpers/labels'
 
 const getValue = (bucket: Bucket | FacetBucket) => bucket[BucketUnits.PERCENTAGE_QUESTION] || 0
 
-export const PercentageQuestion: ViewDefinition = {
+const getTicks = (values: number[]) => {
+    const NUMBER_OF_TICKS = 5
+    const maxValue = max(values) || 0
+    const ticks = [...Array(NUMBER_OF_TICKS + 1)].map(
+        (a, i) => ({ value: round((i * maxValue) / NUMBER_OF_TICKS) }),
+        1
+    )
+    return ticks
+}
+
+export const PercentageQuestion: HorizontalBarViewDefinition = {
     getValue,
-    steps: [removeNoAnswer, removeOverLimit, removeOtherAnswers],
+    formatValue: formatPercentage,
+    getTicks,
+    dataFilters: [removeNoAnswer, removeOverLimit, removeOtherAnswers],
     component: props => {
-        const ticks = getTicks(props.buckets.map(getValue))
         return (
             <Rows
                 {...props}
-                ticks={ticks}
-                formatValue={t => `${t}%`}
                 labelId="charts.axis_legends.users_percentage_question"
                 hasZebra={true}
             >
                 {props.buckets.map((bucket, i) => (
-                    <Row
+                    <RowGroup
                         key={bucket.id}
-                        ticks={ticks}
                         bucket={bucket}
-                        rowComponent={SingleBarRow}
+                        rowComponent={RowSingle}
                         rowIndex={i}
                         {...props}
                     />

@@ -1,8 +1,14 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
 .chart-metadata {
     font-size: 0.8rem;
     display: flex;
     align-items: center;
     gap: var(--spacing);
+    @include small {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 }
 .chart-metadata-item {
     display: flex;

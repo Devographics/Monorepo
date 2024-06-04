@@ -101,8 +101,12 @@ export const getBlockTitle = ({
     const key = getBlockTitleKey({ block, pageContext })
     const defaultTitle = getString(getBlockKey({ block }))?.tClean
     const fieldTitle =
-        block.fieldId && getString(getBlockKey({ block: { ...block, id: block.fieldId } }))?.tClean
-    const tabTitle = block.tabId && `${fieldTitle} ${getString(block.tabId)?.tClean}`
+        block.fieldId &&
+        getString(
+            getBlockKey({ block: { ...block, i18nNamespace: block.sectionId, id: block.fieldId } })
+        )?.t
+    const tabTitle =
+        block.tabId && `${fieldTitle || block.fieldId} ${getString(block.tabId)?.tClean}`
     const values = [specifiedTitle, defaultTitle, tabTitle, fieldTitle, entityName, key]
     // console.table(values)
     return values.find(v => v !== undefined)
@@ -146,7 +150,7 @@ export const getBlockTakeaway = ({
         values
     })?.tHtml
     const genericTakeaway = getString(takeawayKey, { values })?.tHtml
-    return blockTakeaway ?? editionTakeaway ?? genericTakeaway
+    return block.takeaway ?? blockTakeaway ?? editionTakeaway ?? genericTakeaway
 }
 
 export const useBlockTakeaway = ({ block }: { block: BlockVariantDefinition }) => {
@@ -263,9 +267,8 @@ export const getBlockLinkLocal = ({
     const { id } = block
     const paramsString = params ? `?${new URLSearchParams(params).toString()}` : ''
     const { currentPath } = pageContext
-    let path = useRedirect
-        ? `${currentPath}/${id}${paramsString}`
-        : `${currentPath}/${paramsString}#${id}`
+    const fullUrl = pageContext.currentEdition.resultsUrl + currentPath
+    let path = useRedirect ? `${fullUrl}/${id}${paramsString}` : `${fullUrl}/${paramsString}#${id}`
 
     // remove any double slashes
     path = removeDoubleSlashes(path)

@@ -3,18 +3,18 @@ import { StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
 import { getChartBuckets } from './helpers/other'
 import { useChartValues } from './helpers/chartValues'
-import View from '../common2/View'
 import { GridItem } from '../common2'
 import { CommonProps } from '../common2/types'
 import take from 'lodash/take'
-import { getCellDimensions } from './helpers/dimensions'
-import { getViewDefinition } from './helpers/views'
+import { getViewComponent } from './helpers/views'
+import { getItemFilters } from '../common2/helpers/filters'
+import { HorizontalBarChartState } from './types'
 
 export const HorizontalBarSerie = (
     props: {
         serie: DataSeries<StandardQuestionData>
         serieIndex: number
-    } & CommonProps
+    } & CommonProps<HorizontalBarChartState>
 ) => {
     const { serie, serieIndex, block, chartState, variant, question } = props
     const { rowsLimit } = chartState
@@ -39,11 +39,13 @@ export const HorizontalBarSerie = (
         chartValues
     }
 
-    const itemFilters =
-        variant?.chartFilters?.filters?.[serieIndex] || block?.filtersState?.filters?.[serieIndex]
+    const itemFilters = getItemFilters({ variant, block, serieIndex })
+
+    const ViewComponent = getViewComponent(chartState.view)
+
     return (
         <GridItem key={serie.name} filters={itemFilters}>
-            <View {...viewProps} />
+            <ViewComponent {...viewProps} />
         </GridItem>
     )
 }

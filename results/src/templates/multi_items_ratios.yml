@@ -1,0 +1,62 @@
+id: ${sectionId}_ratios
+titleId: sections.${sectionId}.title
+blockType: MultiItemsRatiosBlock
+hasSponsor: true
+query: >
+    surveys {
+      ${surveyId} {
+        ${editionId} {
+          ${sectionId} {
+            ${questionId}: _items {
+              id
+              entity {
+                name
+                nameClean
+                nameHtml
+                entityType
+                description
+                descriptionClean
+                descriptionHtml
+                homepage {
+                  url
+                }
+                caniuse {
+                  name
+                  url
+                }
+                mdn {
+                  locale
+                  url
+                  title
+                  summary
+                }
+                example {
+                  label
+                  language
+                  code
+                  codeHighlighted
+                }
+              }
+              responses(facet: _sentiment) {
+                allEditions {
+                  year
+                  editionId
+                  ratios {
+                    awareness
+                    interest
+                    usage
+                    retention
+                    positivity
+                  }
+                  completion {
+                    count
+                    percentageSurvey
+                    total
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }

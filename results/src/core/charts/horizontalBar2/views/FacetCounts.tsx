@@ -1,20 +1,27 @@
 import React from 'react'
-import { FacetRow } from '../HorizontalBarRow'
-import Legend from '../../common2/Legend'
-import { ViewDefinition } from '../types'
-import { Row, Rows } from 'core/charts/common2'
-import { removeNoAnswer, removeNotApplicable, removeOverall } from '../helpers/steps'
+import { RowStacked } from '../rows/RowStacked'
+import { HorizontalBarViewDefinition } from '../types'
+import { removeNoAnswer, removeOverall } from '../helpers/steps'
 import { BucketUnits } from '@devographics/types'
+import { RowGroup, Rows } from '../rows'
+import { formatNumber } from 'core/charts/common2/helpers/labels'
 
-export const FacetCounts: ViewDefinition = {
+export const FacetCounts: HorizontalBarViewDefinition = {
     getValue: facetBucket => facetBucket[BucketUnits.COUNT] || 0,
-    steps: [removeOverall, removeNoAnswer],
+    formatValue: formatNumber,
+    dataFilters: [removeOverall, removeNoAnswer],
     showLegend: true,
     component: props => {
         return (
             <Rows {...props}>
                 {props.buckets.map((bucket, i) => (
-                    <Row key={bucket.id} bucket={bucket} {...props} rowComponent={FacetRow} />
+                    <RowGroup
+                        key={bucket.id}
+                        bucket={bucket}
+                        rowIndex={i}
+                        {...props}
+                        rowComponent={RowStacked}
+                    />
                 ))}
             </Rows>
         )

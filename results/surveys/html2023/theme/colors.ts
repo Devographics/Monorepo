@@ -311,9 +311,9 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         //     never_heard: [colors.electricBlueDarkest, colors.electricBlueDarkerer]
         // },
         features: {
-            never_heard: [velocity[1], velocity[2]],
-            heard: [velocity[5], velocity[6]],
-            used: [velocity[9], velocity[10]]
+            never_heard: ['#064151', '#074B5C'],
+            heard: ['#129DC0', '#21B1D6'],
+            used: ['#AEEFFF', '#D3F6FF']
         },
         features_categories: {
             layout: colors.indigo,

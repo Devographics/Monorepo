@@ -54,7 +54,7 @@
       - template: page_introduction
 
       - id: japan_province
-        template: multiple_options
+        template: multiple_options2
         defaultUnits: percentageQuestion
         parameters:
             cutoff: 10
@@ -68,24 +68,24 @@
                   cutoff: 10
 
       - id: reason_for_relocation
-        template: single_option_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
-        blockType: HorizontalBarBlock
+        blockType: HorizontalBarBlock2
         parameters: { showNoAnswer: true, sort: { property: count } }
         variants:
             - template: vs_salary_tokyodev
             - template: vs_current_employer_tokyodev
 
       - id: residency_status
-        template: single_option_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
-        blockType: HorizontalBarBlock
+        blockType: HorizontalBarBlock2
         parameters: { showNoAnswer: true, sort: { property: count } }
         variants:
             - template: vs_salary_tokyodev
 
       - id: country
-        template: multiple_options
+        template: multiple_options2
         defaultUnits: percentageQuestion
         parameters: { cutoff: 10, limit: 0, showNoAnswer: true, enableAddMissingBuckets: false }
         variants:
@@ -95,14 +95,14 @@
                   cutoff: 10
 
       - id: age
-        template: multiple_options
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - template: vs_man_woman_tokyodev
 
       - id: gender
-        template: multiple_options
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
@@ -111,7 +111,7 @@
         titleId: user_info.years_of_experience
         questionKey: user_info.years_of_experience.question
         i18nNamespace: years
-        template: multiple_options
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
@@ -124,7 +124,7 @@
       #   titleId: user_info.experience_by_gender
       #   tabId: tabs.experience_by_gender_men
       #   i18nNamespace: years
-      #   blockType: HorizontalBarBlock
+      #   blockType: HorizontalBarBlock2
       #   query: currentEditionData
       #   parameters:
       #       showNoAnswer: true
@@ -152,7 +152,7 @@
       #   variants:
       #       - id: experience_by_gender_women
       #         fieldId: years_of_experience
-      #         blockType: HorizontalBarBlock
+      #         blockType: HorizontalBarBlock2
       #         query: currentEditionData
       #         parameters:
       #             showNoAnswer: true
@@ -181,7 +181,7 @@
       #                 id: current_total_annual_compensation
 
       - id: years_in_japan
-        template: multiple_options
+        template: multiple_options2
         defaultUnits: percentageQuestion
         i18nNamespace: years
         titleId: user_info.years_in_japan
@@ -193,19 +193,19 @@
               i18nNamespace: years
 
       - id: educational_attainment
-        template: multiple_options_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
 
       - id: professional_qualifications
-        template: multiple_options_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - id: professional_qualifications_by_years_of_experience
               fieldId: professional_qualifications
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -220,21 +220,21 @@
             - template: vs_man_woman_tokyodev
 
       - id: language_proficiency_english
-        template: multiple_options
+        template: multiple_options2
         defaultUnits: percentageQuestion
         parameters: { showNoAnswer: true, sort: { property: options } }
         variants:
             - template: vs_salary_tokyodev
 
       - id: language_proficiency_japanese
-        template: multiple_options
+        template: multiple_options2
         defaultUnits: percentageQuestion
         parameters: { showNoAnswer: true, sort: { property: options } }
         variants:
             - template: vs_salary_tokyodev
             - id: language_proficiency_japanese_by_years_in_japan
               fieldId: language_proficiency_japanese
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -248,7 +248,7 @@
                       id: years_in_japan
 
       - id: source
-        template: multiple_options_freeform
+        template: multiple_options2_freeform
         defaultUnits: percentageQuestion
         parameters: { cutoff: 10 }
         variants:
@@ -262,26 +262,26 @@
   path: /job-info
   blocks:
       - id: employment_status
-        template: multiple_options_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         parameters: { showNoAnswer: true, sort: { property: count } }
         variants:
             - template: vs_salary_tokyodev
 
       - id: searching_for_job
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
 
       - id: current_job_description
-        template: multiple_options_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - id: current_job_description_by_educational_attainment
               fieldId: current_job_description
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -295,13 +295,13 @@
                       id: educational_attainment
 
       - id: coworker_nationalities_engineers
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - id: coworker_nationalities_engineers_by_years_in_japan
               fieldId: coworker_nationalities_engineers
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -315,13 +315,13 @@
                       id: years_in_japan
 
       - id: coworker_nationalities_non_engineers
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - id: coworker_nationalities_non_engineers_by_years_in_japan
               fieldId: coworker_nationalities_non_engineers
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -335,21 +335,21 @@
                       id: years_in_japan
 
       - id: languages_used_colleagues_japanese
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - template: vs_current_employer_tokyodev
 
       - id: languages_used_colleagues_english
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - template: vs_current_employer_tokyodev
 
       - id: years_employed
-        template: multiple_options
+        template: multiple_options2
         defaultUnits: percentageQuestion
         titleId: job_info.years_employed
         questionKey: job_info.years_employed.question
@@ -359,7 +359,7 @@
               i18nNamespace: years
 
       - id: hours_per_day
-        template: multiple_options
+        template: multiple_options2
         defaultUnits: percentageQuestion
         parameters: { cutoff: 10 }
         variants:
@@ -369,14 +369,14 @@
                   cutoff: 10
 
       - id: how_did_you_find_your_current_job
-        template: single_option_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         parameters: { showNoAnswer: true, sort: { property: count } }
         variants:
             - template: vs_salary_tokyodev
             - id: how_did_you_find_your_current_job_by_current_employer
               fieldId: how_did_you_find_your_current_job
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -404,13 +404,13 @@
   path: /employer-info
   blocks:
       - id: current_employer
-        template: single_option_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - id: current_employer_by_residency_status
               fieldId: current_employer
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -424,7 +424,7 @@
                       id: residency_status
 
       - id: industry_sector
-        template: multiple_options_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         parameters: { showNoAnswer: true, cutoff: 10 }
         variants:
@@ -432,13 +432,13 @@
             - template: vs_current_employer_tokyodev
 
       - id: remote_work_policy
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - id: remote_work_policy_by_years_of_experience
               fieldId: remote_work_policy
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -452,9 +452,8 @@
                       id: years_of_experience
 
       - id: company_size
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
-        blockType: HorizontalBarBlock
         variants:
             - template: vs_salary_tokyodev
             - template: vs_current_employer_tokyodev
@@ -463,19 +462,19 @@
   path: /compensation
   blocks:
       - id: current_total_annual_compensation
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         titleId: compensation.current_total_annual_compensation
         questionKey: compensation.current_total_annual_compensation.question
 
       - id: previous_compensation
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - id: previous_compensation_by_negotiated_compensation
               fieldId: previous_compensation
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -489,13 +488,13 @@
                       id: negotiated_compensation
 
       - id: desired_compensation
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - id: desired_compensation_by_negotiated_compensation
               fieldId: desired_compensation
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -509,13 +508,13 @@
                       id: negotiated_compensation
 
       - id: negotiated_compensation
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - id: negotiated_compensation_by_current_employer
               fieldId: negotiated_compensation
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -543,14 +542,14 @@
         i18nNamespace: annual_paid_leave
         titleId: compensation.annual_paid_leave
         questionKey: compensation.annual_paid_leave.question
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
 
       # - id: country_vs_salary
       #   fieldId: country
-      #   template: multiple_options
+      #   template: multiple_options2
       #   parameters: { cutoff: 20, showNoAnswer: true }
       #   defaultUnits: averageByFacet
       #   queryOptions: { sectionId: user_info }
@@ -571,8 +570,8 @@
 
       # - id: gender_vs_salary
       #   fieldId: gender
-      #   template: multiple_options
-      #   blockType: HorizontalBarBlock
+      #   template: multiple_options2
+      #   blockType: HorizontalBarBlock2
       #   defaultUnits: percentilesByFacet
       #   parameters: { cutoff: 20 }
       #   queryOptions: { sectionId: user_info }
@@ -593,8 +592,8 @@
 
       # - id: salary_by_age
       #   fieldId: age_grouped
-      #   blockType: HorizontalBarBlock
-      #   template: multiple_options
+      #   blockType: HorizontalBarBlock2
+      #   template: multiple_options2
       #   defaultUnits: percentilesByFacet
       #   queryOptions: { sectionId: user_info }
       #   filtersState:
@@ -614,8 +613,8 @@
 
       # - id: salary_by_experience
       #   fieldId: years_of_experience_grouped
-      #   blockType: HorizontalBarBlock
-      #   template: multiple_options
+      #   blockType: HorizontalBarBlock2
+      #   template: multiple_options2
       #   defaultUnits: percentilesByFacet
       #   queryOptions: { sectionId: user_info }
       #   filtersState:
@@ -637,14 +636,14 @@
   path: /technology
   blocks:
       - id: programming_languages
-        template: multiple_options_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         parameters: { cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
             - id: programming_languages_by_company_size
               fieldId: programming_languages
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -658,21 +657,21 @@
                       id: company_size
 
       - id: databases
-        template: multiple_options_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         parameters: { cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
 
       - id: web_frameworks
-        template: multiple_options_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         parameters: { cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
             - id: web_frameworks_by_current_job_description
               fieldId: web_frameworks
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -698,14 +697,14 @@
                               value: developer_back_end
 
       - id: other_frameworks_libraries
-        template: multiple_options_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         parameters: { cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
             - id: other_frameworks_libraries_by_data_scientist_or_machine_learning
               fieldId: other_frameworks_libraries
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -724,14 +723,14 @@
                               value: data_scientist_or_machine_learning
 
       - id: developer_tools
-        template: multiple_options_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         parameters: { cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
             - id: other_frameworks_libraries_by_devops_specialist
               fieldId: developer_tools
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -750,14 +749,14 @@
                               value: devops_specialist
 
       - id: developer_environments
-        template: multiple_options_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         parameters: { cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
 
       - id: cloud_platforms
-        template: multiple_options_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         parameters: { cutoff: 10 }
         variants:
@@ -770,14 +769,14 @@
 
       - id: life_in_japan__visa_situation
         i18nNamespace: satisfaction
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - id: life_in_japan__visa_situation_by_residency_status
               i18nNamespace: satisfaction
               fieldId: life_in_japan__visa_situation
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -803,14 +802,14 @@
 
       - id: life_in_japan__professional_life
         i18nNamespace: satisfaction
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - id: life_in_japan__professional_life_by_remote_work_policy
               i18nNamespace: satisfaction
               fieldId: life_in_japan__professional_life
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -840,14 +839,14 @@
 
       - id: life_in_japan__family_life
         i18nNamespace: satisfaction
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - id: life_in_japan__family_life_by_age
               i18nNamespace: satisfaction
               fieldId: life_in_japan__family_life
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -873,14 +872,14 @@
 
       - id: life_in_japan__social_life
         i18nNamespace: satisfaction
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - id: life_in_japan__social_life_by_language_proficiency_japanese
               i18nNamespace: satisfaction
               fieldId: life_in_japan__social_life
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -910,7 +909,7 @@
 
       - id: life_in_japan__cultural_adjustment
         i18nNamespace: satisfaction
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
@@ -918,7 +917,7 @@
             - id: life_in_japan__cultural_adjustment_by_language_proficiency_japanese
               i18nNamespace: satisfaction
               fieldId: life_in_japan__cultural_adjustment
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -948,7 +947,7 @@
 
       - id: life_in_japan__quality_of_life
         i18nNamespace: satisfaction
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
@@ -958,7 +957,7 @@
 
       - id: life_in_japan__housing
         i18nNamespace: satisfaction
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
@@ -966,7 +965,7 @@
             - id: life_in_japan__housing_by_japanese_province
               i18nNamespace: satisfaction
               fieldId: life_in_japan__housing
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -1000,21 +999,21 @@
 
       - id: life_in_japan__financial_situation
         i18nNamespace: satisfaction
-        template: single_option_horizontal
+        template: multiple_options2
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: satisfaction
 
       - id: communities
-        template: multiple_options_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         parameters: { cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
             - id: communities_by_gender
               fieldId: communities
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true
@@ -1028,13 +1027,13 @@
                       id: gender
 
       - id: keyboard_layout
-        template: multiple_options_combined
+        template: multiple_options2_combined
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
             - id: keyboard_layout_by_japanese_proficiency
               fieldId: keyboard_layout
-              blockType: HorizontalBarBlock
+              blockType: HorizontalBarBlock2
               query: currentEditionData
               parameters:
                   showNoAnswer: true

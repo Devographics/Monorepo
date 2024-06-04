@@ -1,26 +1,30 @@
 import React from 'react'
-import { FacetRow } from '../HorizontalBarRow'
-import Legend from '../../common2/Legend'
-import { ViewDefinition } from '../types'
-import { Row, Rows, getTicks } from 'core/charts/common2'
-import {
-    removeNoAnswer,
-    removeNotApplicable,
-    removeOtherAnswers,
-    removeOverLimit
-} from '../helpers/steps'
+import { RowStacked } from '../rows/RowStacked'
+import { HorizontalBarViewDefinition } from '../types'
+import { removeNoAnswer, removeOtherAnswers, removeOverLimit } from '../helpers/steps'
 import { BucketUnits, FacetBucket } from '@devographics/types'
 import { getCellDimensions, getRowOffset } from '../helpers/dimensions'
 import min from 'lodash/min'
 import max from 'lodash/max'
 import { applyRatio } from 'core/charts/multiItemsExperience/helpers'
 import { Dimension } from 'core/charts/multiItemsExperience/types'
+import { RowGroup, Rows } from '../rows'
+import { formatPercentage } from 'core/charts/common2/helpers/labels'
 
 const getValue = (facetBucket: FacetBucket) => facetBucket[BucketUnits.PERCENTAGE_BUCKET] || 0
 
-export const PercentageBucket: ViewDefinition = {
+export const PercentageBucket: HorizontalBarViewDefinition = {
     getValue,
-    steps: [removeNoAnswer, removeOverLimit, removeOtherAnswers],
+    formatValue: formatPercentage,
+    getTicks: () => [
+        { value: 0 },
+        { value: 20 },
+        { value: 40 },
+        { value: 60 },
+        { value: 80 },
+        { value: 100 }
+    ],
+    dataFilters: [removeNoAnswer, removeOverLimit, removeOtherAnswers],
     showLegend: true,
     component: props => {
         const { buckets, chartState } = props
@@ -64,26 +68,13 @@ export const PercentageBucket: ViewDefinition = {
         allRowsOffsets = allRowsOffsets.map(rowOffset => rowOffset * rowOffsetShrinkRatio)
 
         return (
-            <Rows
-                {...props}
-                ticks={[
-                    { value: 0 },
-                    { value: 20 },
-                    { value: 40 },
-                    { value: 60 },
-                    { value: 80 },
-                    { value: 100 }
-                ]}
-                formatValue={t => `${t}%`}
-                labelId="charts.axis_legends.users_percentageBucket"
-                hasZebra={true}
-            >
+            <Rows {...props} labelId="charts.axis_legends.users_percentageBucket" hasZebra={true}>
                 {props.buckets.map((bucket, i) => (
-                    <Row
+                    <RowGroup
                         key={bucket.id}
                         bucket={bucket}
                         {...props}
-                        rowComponent={FacetRow}
+                        rowComponent={RowStacked}
                         rowIndex={i}
                         allRowsCellDimensions={allRowsCellDimensions}
                         allRowsOffsets={allRowsOffsets}

@@ -1,4 +1,4 @@
-import { type RawDataItem } from './normalization'
+import { RawDataItem } from './normalization'
 import { ResultsSubFieldEnum } from './api'
 import { Entity, Token } from './entities'
 import { Option } from './outlines'
@@ -103,6 +103,15 @@ export interface ResponseEditionData {
     average?: number
     percentiles?: PercentileData
     median?: number
+    ratios?: RatiosData
+}
+
+export interface RatiosData {
+    awareness: number
+    interest: number
+    usage: number
+    retention: number
+    positivity: number
 }
 
 export interface OptionData extends Option {

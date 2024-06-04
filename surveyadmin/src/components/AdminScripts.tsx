@@ -1,11 +1,12 @@
 "use client";
+import { fetchSurveysMetadata } from "@devographics/fetch";
 import Link from "next/link";
 import { useState } from "react";
 import { routes } from "~/lib/routes";
 import { runScript } from "~/lib/scripts/services";
 // import { MutationButton } from "~/core/components/ui/MutationButton";
 
-const AdminScripts = ({ scripts }) => {
+const AdminScripts = ({ scripts, surveys }) => {
   return (
     <div className="admin-scripts admin-content">
       <h2>Scripts</h2>
@@ -21,7 +22,7 @@ const AdminScripts = ({ scripts }) => {
         </thead>
         <tbody>
           {scripts.map((script) => (
-            <Script key={script.id} {...script} />
+            <Script key={script.id} {...script} surveys={surveys} />
           ))}
         </tbody>
       </table>
@@ -29,10 +30,12 @@ const AdminScripts = ({ scripts }) => {
   );
 };
 
-const Script = ({ id, description, args, done }) => {
+const Script = ({ id, description, args, done, surveys }) => {
   const [result, setResult] = useState<any | undefined>();
   const [scriptArgs, setScriptArgs] = useState({});
   const [loading, setLoading] = useState(false);
+  const [editionIds, setEditionIds] = useState([]);
+
   const handleSubmit = async () => {
     setLoading(true);
     const result = await runScript({ id, scriptArgs });
@@ -55,6 +58,9 @@ const Script = ({ id, description, args, done }) => {
                   argName={argName}
                   scriptArgs={scriptArgs}
                   setScriptArgs={setScriptArgs}
+                  surveys={surveys}
+                  editionIds={editionIds}
+                  setEditionIds={setEditionIds}
                 />
               ))}
             </form>
@@ -89,18 +95,92 @@ const Script = ({ id, description, args, done }) => {
   );
 };
 
-const ArgumentField = ({ argName, scriptArgs, setScriptArgs }) => (
-  <label>
-    <span>{argName}</span>
-    <input
-      type="text"
-      value={scriptArgs[argName]}
-      onChange={(e) => {
-        const newValue = e.target.value;
-        setScriptArgs((scriptArgs) => ({ ...scriptArgs, [argName]: newValue }));
-      }}
-    />
-  </label>
+const ArgumentField = ({
+  argName,
+  scriptArgs,
+  setScriptArgs,
+  surveys,
+  editionIds,
+  setEditionIds,
+}) => {
+  const selectProps = {
+    argName,
+    scriptArgs,
+    setScriptArgs,
+    surveys,
+    editionIds,
+    setEditionIds,
+  };
+  return (
+    <label>
+      <span>{argName}</span>
+      {argName === "surveyId" ? (
+        <SurveySelect {...selectProps} />
+      ) : argName === "editionId" ? (
+        <EditionSelect {...selectProps} />
+      ) : (
+        <input
+          type="text"
+          value={scriptArgs[argName]}
+          onChange={(e) => {
+            const newValue = e.target.value;
+            setScriptArgs((scriptArgs) => ({
+              ...scriptArgs,
+              [argName]: newValue,
+            }));
+          }}
+        />
+      )}
+    </label>
+  );
+};
+
+const SurveySelect = ({
+  scriptArgs,
+  argName,
+  setEditionIds,
+  setScriptArgs,
+  surveys,
+}) => (
+  <select
+    value={scriptArgs[argName]}
+    onChange={(e) => {
+      const newValue = e.target.value;
+      const survey = surveys.find((s) => s.id === newValue);
+      const editionIds = survey.editions.map((e) => e.id);
+      setEditionIds(editionIds);
+      setScriptArgs((scriptArgs) => ({
+        ...scriptArgs,
+        surveyId: newValue,
+        editionId: editionIds[0],
+      }));
+    }}
+  >
+    {surveys.map((survey) => (
+      <option key={survey.id} value={survey.id}>
+        {survey.id}
+      </option>
+    ))}
+  </select>
+);
+
+const EditionSelect = ({ scriptArgs, argName, setScriptArgs, editionIds }) => (
+  <select
+    value={scriptArgs[argName]}
+    onChange={(e) => {
+      const newValue = e.target.value;
+      setScriptArgs((scriptArgs) => ({
+        ...scriptArgs,
+        [argName]: newValue,
+      }));
+    }}
+  >
+    {editionIds.map((editionId) => (
+      <option key={editionId} value={editionId}>
+        {editionId}
+      </option>
+    ))}
+  </select>
 );
 
 export default AdminScripts;

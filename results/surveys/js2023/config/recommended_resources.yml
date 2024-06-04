@@ -1,0 +1,256 @@
+# Front End Masters
+
+- name: Write Professional, Modern JavaScript
+  id: fm-javascript
+  description: Take your first steps into the wide world of JavaScript and walk away with the core skills needed to become a professional JavaScript programmer!
+  url:  https://frontendmasters.com/courses/javascript-first-steps/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/vakil/thumb@2x.webp
+  teacher: Anjana Vakil
+  # company: Software Engineer & Educator
+
+- name: |
+    JavaScript: The Hard Parts, v2
+  id: fm-javascript-hard-parts-v2
+  description: >
+    Combining mental models of JavaScript's inner workings and hands-on programming challenges, this course will give you a solid understanding of callbacks and higher-order functions, closure, asynchronous JavaScript, and object-oriented JavaScript.
+  url: https://frontendmasters.com/courses/javascript-hard-parts-v2/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/sentance/thumb@2x.webp
+  teacher: Will Sentance
+  company: Codesmith
+
+- name: Exploring Service Workers
+  id: fm-service-workers
+  description: PWAs represent the dream of web apps getting all the same capabilities, and performance, of native apps. 
+  url: https://frontendmasters.com/courses/service-workers/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/simpson/thumb@2x.webp
+  teacher: Kyle Simpson
+  company: You Don't Know JS
+  
+- name: Web Assembly (Wasm)
+  id: fm-web-assembly
+  description: In this course, you'll learn foundational, low-level programming such as binary, hexadecimal, and all about how memory works within computers. 
+  url: https://frontendmasters.com/courses/web-assembly/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/young/thumb@2x.webp
+  teacher: Jem Young
+  company: Netflix
+  
+- name: Build Progressive Web Apps (PWAs) from Scratch
+  id: fm-pwas
+  description: Wouldn't it be fantastic if you could build apps that didn't always rely on an internet connection? Modern web browsers now enable you to create offline-capable Progressive Web Apps (PWAs)! 
+  url: https://frontendmasters.com/courses/pwas/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/firtman/thumb@2x.webp
+  teacher: Maximiliano Firtman
+  company: Independent Consultant
+  
+- name: Be Productive with React.js, Today's Most Popular Framework
+  id: fm-react
+  description: Much more than an intro, you’ll build with the latest features in React, including hooks, effects, context, and portals.
+  url: https://frontendmasters.com/learn/react/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/holt/thumb.webp
+  teacher: Brian Holt
+  company: Stripe
+  
+- name: Learn Vue.js, An Easy to Pick Up and Powerful Framework
+  id: fm-vue
+  description: Learn fundamental concepts in Vue, such as directives, methods, and computed watchers. You’ll learn Vue’s reactivity system and the new Composition API in Vue 3.
+  url: https://frontendmasters.com/learn/vue/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/hong/thumb.webp
+  teacher: Ben Hong
+  company: Netlify
+  
+- name: API Design in Node.js, v4
+  id: fm-api-design-nodejs-v4
+  description: Design and build APIs in Node.js from the ground up! You'll plan your routes and model data for real-world applications using Express, Prisma, and TypeScript.
+  url: https://frontendmasters.com/courses/api-design-nodejs-v4/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
+  teacher: Scott Moss
+  company: Netflix
+
+- name: Introduction to Next.js
+  id: fm-next-js
+  description: In this course, you'll learn server-side rendering, static site generation, data fetching, build API endpoints, creating pages with the file system, add CSS modules inside of Next.js, and much more!
+  url: https://frontendmasters.com/courses/next-js/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
+  teacher: Scott Moss
+  company: Netflix
+  
+- name: React Native, v2
+  id: fm-react-native-v2
+  description: Leverage your JavaScript and React skills for mobile iOS and Android platforms using React Native.
+  url: https://frontendmasters.com/courses/react-native-v2/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/kraman/thumb@2x.webp
+  teacher: Kadi Kraman
+  company: Formidable
+  
+- name: Intermediate React Native
+  id: fm-intermediate-react-native
+  description: Go beyond the basics of React Native. You’ll learn how to persist data across app launches, various ways of handling images and SVG, adding app icons and splash screens, animations, and gestures. 
+  url: https://frontendmasters.com/courses/intermediate-react-native/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/kraman/thumb@2x.webp
+  teacher: Kadi Kraman
+  company: Formidable
+  
+- name: Learn Webpack, the most popular and flexible build tool for JavaScript
+  id: fm-webpack
+  description: Webpack enables you to integrate your favorite tools and take control of how you deliver your JavaScript, CSS, and more!​
+  url: https://frontendmasters.com/learn/webpack/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/larkin/thumb.webp
+  teacher: Sean Larkin
+  company: Microsoft
+  
+- name: JavaScript and TypeScript Monorepos
+  id: fm-monorepos
+  description: You'll get hands-on experience with best-in-class tools designed to keep the workflows for even complex projects simple!
+  url: https://frontendmasters.com/courses/monorepos/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/north/thumb@2x.webp
+  teacher: Mike North
+  company: LinkedIn
+  
+- name: Add Types to Your Web and Node.js Apps with TypeScript
+  id: fm-typescript
+  description: Write robust JavaScript with a superior developer experience for your teams with Typescript.
+  url: https://frontendmasters.com/learn/typescript/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/north/thumb.webp
+  teacher: Mike North
+  company: LinkedIn
+  
+- name: Build Web APIs and Applications with Node.js
+  id: fm-node-js
+  description: Node.js has emerged as one of the main server-side language choices that powers the web!
+  url: https://frontendmasters.com/learn/node-js/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/moss/thumb.webp
+  teacher: Scott Moss
+  company: Netflix
+  
+- name: JavaScript Testing Practices and Principles
+  id: fm-testing-practices-principles
+  description: Learn the principles and best practices for writing maintainable test applications to catch errors before your product reaches the end user!
+  url: https://frontendmasters.com/courses/testing-practices-principles/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/dodds/thumb@2x.webp
+  teacher: Kent C. Dodds
+  company: Remix
+  
+- name: |
+    [Free] The Last Algorithms Course You'll Need
+  id: fm-algorithms
+  description: |
+    You'll learn big o time complexity, fundamental data structures like arrays, lists, trees, graphs, and maps, and searching and sorting algorithms.
+  url: https://frontendmasters.com/courses/algorithms/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/theprimeagen/thumb@2x.webp
+  teacher: ThePrimeagen
+  company: Netflix
+  
+- name: Build a Fullstack App from Scratch (feat Next.js)
+  id: fm-fullstack-app-next
+  description: |
+    You’ll build a music app with features like playlists, audio player, shuffle, and more! Use a modern stack of tools: React, Next.js, Typescript, and Postgres. 
+  url: https://frontendmasters.com/courses/fullstack-app-next/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
+  teacher: Scott Moss
+  company: Netflix
+  
+- name: A Tour of JavaScript & React Patterns
+  id: fm-js-patterns
+  description: |
+    You’ll get an overview of more traditional design patterns with JavaScript, such as the Singleton and Proxy patterns. Then see React patterns such as the Hooks and Higher Order Component patterns.
+  url: https://frontendmasters.com/courses/tour-js-patterns/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/hallie/thumb@2x.webp
+  teacher: Lydia Hallie
+  # company: 
+  
+- name: Web Components
+  id: fm-web-components
+  description: |
+    Learn where to find excellent Web Components to build web apps. You’ll also learn how to create your own custom components using JavaScript and libraries like Lit that will help you make them faster!
+  url: https://frontendmasters.com/courses/web-components/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/rupert/thumb@2x.webp
+  teacher: Dave Rupert
+  company: Paravel
+  
+- name: The Hard Parts of Servers & Node.js
+  id: fm-servers-node-js
+  description: |
+    In this course you’ll go under the hood of Node.js in two contrasting ways - by understanding how to develop servers from intuitive first-principles (HTTP, TCP/IP, Ports, Loopback, SSH) and by understanding the JavaScript features that make up Node.
+  url: https://frontendmasters.com/courses/servers-node-js/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/sentance/thumb@2x.webp
+  teacher: Will Sentance
+  company: Codesmith
+  
+- name: The Hard Parts of Functional JavaScript
+  id: fm-js-fundamentals
+  description: |
+    You’ll learn how to wield and manipulate functions to develop more readable, maintainable and manageable codebases. Learn about techniques like: Higher Order Functions, Function Composition, Pure Functions, and Immutability.
+  url: https://frontendmasters.com/courses/functional-js-fundamentals/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/sentance/thumb@2x.webp
+  teacher: Will Sentance
+  company: Codesmith
+  
+- name: State Machines in JavaScript with XState, v2
+  id: fm-xstate
+  description: |
+    Learn to model your app with clear and robust app logic with state machines and statecharts. You'll build state machines without any libraries in pure JavaScript, then use XState to take advantage of a wide variety of other features.
+  url: https://frontendmasters.com/courses/xstate-v2/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: https://static.frontendmasters.com/assets/teachers/khourshid/thumb@2x.webp
+  teacher: David Khourshid
+  company: Microsoft
+
+# Road to React
+
+- name: Road to React
+  id: road-to-react
+  description: |
+    The Road to React is used by universities, bootcamps and self-taught developers to learn about React.js. With its annual editions since 2017, it is the most read React book with 75.000+ readers. While each chapter teaches a new fundamental lesson, students learn how to create a React project from the zero to production.
+  url: https://www.roadtoreact.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: /images/resources/road_to_react.png
+  teacher: Robin Wieruch
+
+# Reacthathon
+
+- name: Reactathon returns in San Francisco May 2 - 3!
+  id: reactathon
+  description: |
+    Join 400+ frontend React devs in the beautiful Pacific Heights & Japantown neighborhoods of San Francisco for 2 days of  fun & talks from speakers including Theo Browne, Wes Bos, Tanner Linsley, & more! Use discount code "SOJS" for an exclusive 40% off the ticket price! 
+  url: https://ti.to/real-world-react/reactathon-2023
+  image: /images/resources/reactathon.png
+  teacher: San Francisco, CA
+  
+# Render
+
+- name: |
+    RenderATL: Javascript’s Favorite Event 
+  id: renderatl
+  description: |
+    Join us for three days of presentations & workshops focused on Front-End Engineering 
+    featuring Sarah Drasner, Mark Techson, Chris Coyier, Scott Toliniski, Charlie Gerard, 
+    and 80+ additional speakers. Use promo code “StateOfJS” to receive $50 off each ticket! 
+    
+  url: http://www.renderatl.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+  image: /images/resources/renderatl-stacked.png
+  teacher: Atlanta, Georgia
+  
+# - name: 
+#   id: 
+#   description: |
+
+#   url: ?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+#   image: 
+#   teacher: 
+#   company: 
+  
+# - name: 
+#   id: 
+#   description: |
+
+#   url: ?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+#   image: 
+#   teacher: 
+#   company: 
+  
+# - name: 
+#   id: 
+#   description: |
+
+#   url: ?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2022
+#   image: 
+#   teacher: 
+#   company: 

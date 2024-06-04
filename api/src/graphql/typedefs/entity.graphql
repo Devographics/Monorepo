@@ -27,7 +27,7 @@ type Entity {
     exactMatch: Boolean
 
     # auto-generated field, equal to default/people/feature/library
-    type: String
+    entityType: String
 
     apiOnly: Boolean
 

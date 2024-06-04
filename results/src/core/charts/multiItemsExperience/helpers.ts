@@ -9,8 +9,8 @@ import {
 import sumBy from 'lodash/sumBy'
 import {
     CellDimension,
-    ChartState,
-    ChartValues,
+    MultiItemsChartState,
+    MultiItemsChartValues,
     ColumnId,
     CombinedBucket,
     CombinedItem,
@@ -33,7 +33,14 @@ export const ITEM_GAP_PERCENT = 0
 export const COLUMN_GAP_PERCENT = 2
 export const MINIMUM_COLUMN_WIDTH_PERCENT = 25
 
-export const getBuckets = (item: StandardQuestionData) => item.responses.currentEdition.buckets
+export const getBuckets = (item: StandardQuestionData) => {
+    const buckets = item?.responses?.currentEdition?.buckets
+    if (!buckets) {
+        console.warn('Could not find buckets for item:')
+        console.log(item)
+    }
+    return buckets
+}
 
 export const getCommentsCount = (item: StandardQuestionData) =>
     item?.comments?.currentEdition?.count || 0
@@ -188,7 +195,7 @@ export const getColumnGap = ({
     buckets: CombinedBucket[]
     bucket: CombinedBucket
     bucketIndex: number
-    grouping: ChartState['grouping']
+    grouping: MultiItemsChartState['grouping']
 }) => {
     // if this is the first bucket of the subgroup (i.e. previous bucket belongs to a different subgroup),
     // add column gap to its offset
@@ -204,7 +211,7 @@ export const getCellDimensions = ({
     chartState
 }: {
     buckets: CombinedBucket[]
-    chartState: ChartState
+    chartState: MultiItemsChartState
 }) => {
     const { variable, grouping } = chartState
     let cellDimensions: CellDimension[] = []
@@ -248,7 +255,7 @@ export const getRowOffset = ({
 }: {
     firstRowCellDimensions: CellDimension[]
     cellDimensions: CellDimension[]
-    chartState: ChartState
+    chartState: MultiItemsChartState
 }) => {
     const { sort } = chartState
 
@@ -277,18 +284,28 @@ export const applyRatio = <T extends Dimension>(cellDimensions: T[], ratio: numb
         offset: round(offset * ratio, 1)
     }))
 
-export const useChartState = (defaultState?: { [P in keyof ChartState]?: ChartState[P] }) => {
-    const [rowsLimit, setRowsLimit] = useState<ChartState['rowsLimit']>(
+export const useChartState = (defaultState?: {
+    [P in keyof MultiItemsChartState]?: MultiItemsChartState[P]
+}) => {
+    const [rowsLimit, setRowsLimit] = useState<MultiItemsChartState['rowsLimit']>(
         defaultState?.rowsLimit || 0
     )
-    const [grouping, setGrouping] = useState<ChartState['grouping']>(GroupingOptions.EXPERIENCE)
-    const [sort, setSort] = useState<ChartState['sort']>(FeaturesOptions.USED)
-    const [order, setOrder] = useState<ChartState['order']>(OrderOptions.DESC)
-    const [variable, setVariable] = useState<ChartState['variable']>(DEFAULT_VARIABLE)
-    const [columnMode, setColumnMode] = useState<ChartState['columnMode']>(ColumnModes.STACKED)
-    const [facetId, setFacetId] = useState<ChartState['facetId']>('sentiment')
+    const [grouping, setGrouping] = useState<MultiItemsChartState['grouping']>(
+        GroupingOptions.EXPERIENCE
+    )
+    const [sort, setSort] = useState<MultiItemsChartState['sort']>(FeaturesOptions.USED)
+    const [order, setOrder] = useState<MultiItemsChartState['order']>(OrderOptions.DESC)
+    const [variable, setVariable] = useState<MultiItemsChartState['variable']>(DEFAULT_VARIABLE)
+    const [columnMode, setColumnMode] = useState<MultiItemsChartState['columnMode']>(
+        ColumnModes.STACKED
+    )
+    const [facetId, setFacetId] = useState<MultiItemsChartState['facetId']>('sentiment')
 
-    const chartState: ChartState = {
+    // not used but expected by Rows.tsx
+    const viewDefinition = {}
+
+    const chartState: MultiItemsChartState = {
+        viewDefinition,
         facetId,
         setFacetId,
         grouping,
@@ -313,10 +330,10 @@ export const useChartValues = ({
     question
 }: {
     items: CombinedItem[]
-    chartState: ChartState
+    chartState: MultiItemsChartState
     question: QuestionMetadata
 }) => {
-    const chartValues: ChartValues = {
+    const chartValues: MultiItemsChartValues = {
         totalRows: items.length,
         question,
         facetQuestion: {

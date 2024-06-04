@@ -7,6 +7,8 @@ import { usePageContext } from 'core/helpers/pageContext'
 
 const ConclusionBlock = ({ block, data: author }) => {
     const { currentEdition } = usePageContext()
+    const { variables } = block
+    const { authorId, bio, contents } = variables
     if (!author) {
         return null
     }
@@ -17,12 +19,12 @@ const ConclusionBlock = ({ block, data: author }) => {
                     <T k="sections.conclusion.title" />
                 </Title> */}
                 <CreditItem
-                    id={author.id}
+                    id={author?.id}
                     entity={author}
                     labelId={`conclusion.${currentEdition.id}.bio`}
                 />
             </Heading>
-            <T k={`conclusion.${currentEdition.id}`} md={true} />
+            <T k={`conclusion.${currentEdition.id}`} md={true} fallback={variables.contents} />
         </Conclusion>
     )
 }

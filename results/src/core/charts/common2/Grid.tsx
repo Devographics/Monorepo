@@ -1,47 +1,8 @@
-import { CustomizationFiltersSeries, DataSeries, FilterItem } from 'core/filters/types'
+import { CustomizationFiltersSeries } from 'core/filters/types'
 import './Grid.scss'
-import React, { ReactNode } from 'react'
-import { useAllQuestionsMetadata } from '../horizontalBar2/helpers/other'
-import { getItemLabel } from 'core/helpers/labels'
-import { useI18n } from '@devographics/react-i18n'
-import { useEntities } from 'core/helpers/entities'
-import { usePageContext } from 'core/helpers/pageContext'
-import { getQuestionLabel } from '../horizontalBar2/helpers/labels'
-
-const useFiltersLabel = (filters: CustomizationFiltersSeries) => {
-    const context = usePageContext()
-    const { i18nNamespaces } = context
-    const { getString } = useI18n()
-    const entities = useEntities()
-    const allQuestions = useAllQuestionsMetadata()
-
-    const labelSegments = filters.conditions.map(({ fieldId, operator, value }) => {
-        const question = allQuestions.find(q => q.id === fieldId) as FilterItem
-        const optionI18nNamespace = i18nNamespaces[question.id] || question.id
-
-        const { key, label: questionLabel } = getQuestionLabel({
-            getString,
-            question,
-            i18nNamespace: question.i18nNamespace || question.sectionId
-        })
-        const operatorLabel = getString(`filters.operators.${operator}`, {}, operator)?.t
-        const valueArray = Array.isArray(value) ? value : [value]
-        const valueLabel = valueArray
-            .map(valueString => {
-                const { key, label } = getItemLabel({
-                    id: valueString,
-                    getString,
-                    entity: entities.find(e => e.id === valueString),
-                    i18nNamespace: optionI18nNamespace
-                })
-                return label
-            })
-            .join(', ')
-        return `<strong>${questionLabel}</strong> <span class="operator">${operatorLabel}</span> <strong>${valueLabel}</strong>`
-    })
-    const label = labelSegments.join(', ')
-    return label
-}
+import React, { Fragment, ReactNode } from 'react'
+import { useFiltersLabel } from './helpers/labels'
+import T from 'core/i18n/T'
 
 export const GridWrapper = ({
     seriesCount,
@@ -73,14 +34,27 @@ export const GridItem = ({
 }
 
 export const GridItemHeading = ({ filters }: { filters: CustomizationFiltersSeries }) => {
-    const label = useFiltersLabel(filters)
-    return (
-        <div className="chart-grid-item-heading">
-            <span
-                dangerouslySetInnerHTML={{
-                    __html: label
-                }}
-            />
-        </div>
-    )
+    if (filters.isDefault) {
+        return (
+            <div className="chart-grid-item-heading">
+                <T k="charts.overall" />
+            </div>
+        )
+    } else {
+        const labelSegments = useFiltersLabel(filters)
+        return (
+            <div className="chart-grid-item-heading">
+                {labelSegments.map((segment, i) => (
+                    <Fragment key={i}>
+                        <span>
+                            <strong>{segment.questionLabel}</strong>{' '}
+                            <span className="operator">{segment.operatorLabel}</span>{' '}
+                            <strong>{segment.valueLabel}</strong>
+                        </span>
+                        {i + 1 < labelSegments.length && <span>, </span>}
+                    </Fragment>
+                ))}
+            </div>
+        )
+    }
 }

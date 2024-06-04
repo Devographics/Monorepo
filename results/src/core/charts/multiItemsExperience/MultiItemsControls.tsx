@@ -1,5 +1,5 @@
 import React from 'react'
-import { ChartState, GroupingOptions } from './types'
+import { MultiItemsChartState, GroupingOptions } from './types'
 import { useI18n } from '@devographics/react-i18n'
 import { SplitIcon, StackedIcon } from 'core/icons'
 import ButtonGroup from 'core/components/ButtonGroup'
@@ -13,7 +13,11 @@ const icons = {
     [ColumnModes.STACKED]: StackedIcon
 }
 
-export const MultiItemsExperienceControls = ({ chartState }: { chartState: ChartState }) => {
+export const MultiItemsExperienceControls = ({
+    chartState
+}: {
+    chartState: MultiItemsChartState
+}) => {
     const { getString } = useI18n()
     const { grouping, setGrouping, sort, setSort, order, setOrder, columnMode, setColumnMode } =
         chartState
