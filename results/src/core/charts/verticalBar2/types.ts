@@ -72,4 +72,5 @@ export type LineComponentProps = VerticalBarViewProps &
         lineIndex: number
         width: number
         height: number
+        hasMultiple?: boolean
     }

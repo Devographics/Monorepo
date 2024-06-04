@@ -394,6 +394,11 @@ export const getMetadata = async ({ surveyId, editionId, graphql }) => {
             `
         )
     )
+    if (metadataResults.errors) {
+        const err = new Error(metadataResults.errors[0].message)
+        err.fatal = true
+        throw err
+    }
     const metadataData = metadataResults?.data?.dataAPI
     logToFile('metadataData.json', metadataData, {
         mode: 'overwrite'
