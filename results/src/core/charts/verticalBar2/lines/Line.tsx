@@ -90,8 +90,6 @@ export const Line = ({
                         endIndex={endIndex}
                         value1={getEditionValue(edition, chartState)}
                         value2={getEditionValue(editions[i + 1], chartState)}
-                        rank1={edition.rank}
-                        rank2={nextEdition.rank}
                     />
                 )
             })}
@@ -104,7 +102,6 @@ export const Line = ({
                         editionIndex={i}
                         year={year}
                         value={getEditionValue(edition, chartState)}
-                        rank={edition.rank}
                     />
                 ) : null
             })}
@@ -119,7 +116,6 @@ const Dot = ({
     formatValue,
     question,
     year,
-    rank,
     getXCoord,
     getYCoord
 }: {
@@ -129,7 +125,6 @@ const Dot = ({
     formatValue: ViewDefinition['formatValue']
     question: QuestionMetadata
     year: number
-    rank: number
     getXCoord: (value: number) => number
     getYCoord: (value: number) => number
 }) => {

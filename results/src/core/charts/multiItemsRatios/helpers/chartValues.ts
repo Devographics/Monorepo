@@ -5,6 +5,7 @@ import max from 'lodash/max'
 import { getYears } from 'core/charts/verticalBar2/helpers/chartValues'
 import { LegendItem } from '../Legend'
 import range from 'lodash/range'
+import { getAllEditions } from './other'
 
 export const useChartValues = ({
     items,
@@ -20,11 +21,9 @@ export const useChartValues = ({
     legendItems: LegendItem[]
 }) => {
     const { mode } = chartState
-    const allYears = items
-        .map(item => item.responses.allEditions.map(edition => edition.year))
-        .flat()
+    const allYears = items.map(item => getAllEditions(item).map(edition => edition.year)).flat()
     const years = getYears(allYears)
-    const allEditionsCounts = items.map(item => item.responses.allEditions.length || 0)
+    const allEditionsCounts = items.map(item => getAllEditions(item).length || 0)
     const ticks =
         mode === Modes.VALUE
             ? [
@@ -42,7 +41,7 @@ export const useChartValues = ({
     const chartValues: MultiRatiosChartValues = {
         question,
         years,
-        totalColumns: max(allEditionsCounts) || 0,
+        totalColumns: years.length,
         legendItems,
         maxValue: max(ticks.map(tick => tick.value)) || 0,
         ticks

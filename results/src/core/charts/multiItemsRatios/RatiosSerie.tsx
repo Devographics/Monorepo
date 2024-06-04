@@ -15,6 +15,7 @@ import { StandardQuestionData } from '@devographics/types'
 import { getEditionByYear } from '../verticalBar2/helpers/other'
 import sortBy from 'lodash/sortBy'
 import { LegendItem } from './Legend'
+import { getAllEditions } from './helpers/other'
 
 /*
 
@@ -24,11 +25,11 @@ import { LegendItem } from './Legend'
 const getItemsWithRank = (items: StandardQuestionData[], view: Ratios) => {
     const itemsWithRank: LineItem[] = items.map(item => ({
         ...item,
-        editions: item.responses.allEditions.map(edition => {
+        editions: getAllEditions(item).map(edition => {
             // find ratios for all items for current year/edition
             let allItemsRatios = items.map(item => {
                 // for each item, get the edition of the same year as the one we're currently looking at
-                const sameYearEdition = getEditionByYear(edition.year, item.responses.allEditions)
+                const sameYearEdition = getEditionByYear(edition.year, getAllEditions(item))
                 const ratio = sameYearEdition?.ratios?.[view]
                 return { id: item.id, ratio }
             })

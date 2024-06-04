@@ -19,11 +19,14 @@ export const useChartState = (defaultState: {
     const [view, setView] = useState<VerticalBarChartState['view']>(
         defaultState.view || VerticalBarViews.AVERAGE
     )
+    const [highlighted, setHighlighted] = useState<string | null>(null)
 
     const viewDefinition = getViewDefinition(view)
     const chartState: VerticalBarChartState = {
         view,
         setView,
+        highlighted,
+        setHighlighted,
         viewDefinition
     }
     return chartState

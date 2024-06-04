@@ -32,7 +32,7 @@ export const useChartValues = ({
     const years = getYears(editions.map(e => e.year))
     const chartValues: VerticalBarChartValues = {
         question,
-        totalColumns: editions.length,
+        totalColumns: years.length,
         years,
         maxValue: 0
     }
@@ -41,6 +41,5 @@ export const useChartValues = ({
         chartValues.ticks = ticks
         chartValues.maxValue = max(ticks.map(tick => tick.value)) || 0
     }
-
     return chartValues
 }

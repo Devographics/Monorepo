@@ -15,19 +15,21 @@ export const Lines = (props: VerticalBarViewProps & { items: LineItem[] }) => {
     const highlightedItem = itemsWithIndex.filter(item => item.id === highlighted)
 
     const ref = useRef<HTMLDivElement>(null)
-    const width = useWidth(ref) || 0
-    const height = useHeight(ref) || 0
+    const width = useWidth(ref)
+    const height = useHeight(ref)
     const commonProps = { ...props, width, height }
     return (
         <div className="chart-lines-wrapper" ref={ref}>
-            <svg className="chart-lines">
-                {regularItems.map((item, i) => {
-                    return <Line {...commonProps} key={item.id} {...item} />
-                })}
-                {highlightedItem.map((item, i) => {
-                    return <Line {...commonProps} key={item.id} {...item} />
-                })}
-            </svg>
+            {height && width && (
+                <svg className="chart-lines">
+                    {regularItems.map((item, i) => {
+                        return <Line {...commonProps} key={item.id} {...item} />
+                    })}
+                    {highlightedItem.map((item, i) => {
+                        return <Line {...commonProps} key={item.id} {...item} />
+                    })}
+                </svg>
+            )}
         </div>
     )
 }
