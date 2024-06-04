@@ -9,6 +9,7 @@ export const Lines = (props: VerticalBarViewProps & { items: LineItem[] }) => {
     // since SVG doesn't support z-index, we need to put any highlighted line last in the
     // DOM to make sure it appears above the others
     const { highlighted } = chartState
+
     const itemsWithIndex = items.map((item, i) => ({ ...item, lineIndex: i }))
     const regularItems = itemsWithIndex.filter(item => item.id !== highlighted)
     const highlightedItem = itemsWithIndex.filter(item => item.id === highlighted)

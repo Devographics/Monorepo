@@ -14,31 +14,39 @@
     overflow: visible;
 }
 .chart-line {
-    .chart-line-segment {
-        stroke: currentColor;
-        stroke-width: 2px;
-        transition: all 0.5s ease;
-    }
+    transition: all 0.3s ease;
+}
+.chart-line-segment {
+    stroke: currentColor;
+    stroke-width: 2px;
+    transition: all 0.5s ease;
+}
+.chart-line-segment-invisible {
+    stroke-width: 20px;
+    stroke: transparent;
+}
 
-    .chart-line-dot-visible {
-        stroke: currentColor;
-        stroke-width: 2px;
-        fill: var(--backgroundColor);
-        transition: all 0.5s ease;
-    }
-    .chart-line-dot-invisible {
-        stroke: none;
-        fill: #00000000;
-    }
-    .chart-line-label {
-        fill: var(--textColor);
-        text-anchor: middle;
-        dominant-baseline: middle;
-        font-size: 0.8rem;
-    }
+.chart-line-dot-visible {
+    stroke: currentColor;
+    stroke-width: 2px;
+    fill: var(--backgroundColor);
+    transition: all 0.5s ease;
+}
+.chart-line-dot-invisible {
+    stroke: none;
+    fill: transparent;
+}
+.chart-line-label {
+    display: none;
+    fill: var(--textColor);
+    text-anchor: middle;
+    dominant-baseline: middle;
+    font-weight: bold;
+    text-shadow: #000000ee 1px 1px 2px;
+    font-size: 0.9rem;
 }
 .chart-line-highlightActive {
-    opacity: 0.4;
+    opacity: 0.25;
 }
 .chart-line-highlighted {
     opacity: 1;
@@ -47,5 +55,8 @@
     }
     .chart-line-dot-visible {
         stroke-width: 4px;
+    }
+    .chart-line-label {
+        display: block;
     }
 }

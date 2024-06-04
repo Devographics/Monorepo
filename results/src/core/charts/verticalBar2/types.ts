@@ -28,6 +28,7 @@ export type VerticalBarViewDefinition = ViewDefinition & {
     getBucketValue?: (bucket: Bucket) => number
     dataFilters?: DataFilter[]
     component: (props: VerticalBarViewProps) => JSX.Element | null
+    invertYAxis?: boolean
 }
 
 export type VerticalBarViewProps = {
@@ -56,10 +57,14 @@ export type ColumnComponentProps = VerticalBarViewProps & {
 
 export type EmptyColumnProps = Omit<ColumnComponentProps, 'edition' | 'editions' | 'chartState'>
 
+export type EditionWithRank = ResponseEditionData & {
+    rank: number
+}
+
 export type LineItem = {
     id: string
     entity?: Entity
-    editions: ResponseEditionData[]
+    editions: Array<EditionWithRank>
 }
 
 export type LineComponentProps = VerticalBarViewProps &

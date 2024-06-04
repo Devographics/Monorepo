@@ -234,9 +234,6 @@
         blocks:
             - template: page_introduction
 
-            - template: tools_experience_linechart
-              tabId: blocks.tools_experience_ranking.percentages
-
             - id: front_end_frameworks_ratios
               template: multi_items_ratios
               i18nNamespace: tools
@@ -281,8 +278,9 @@
         blocks:
             - template: page_introduction
 
-            - template: tools_experience_linechart
-              tabId: blocks.tools_experience_ranking.percentages
+            - id: meta_frameworks_ratios
+              template: multi_items_ratios
+              i18nNamespace: tools
 
             - id: meta_frameworks_items
               template: multi_items_experience
@@ -321,8 +319,9 @@
         blocks:
             - template: page_introduction
 
-            - template: tools_experience_linechart
-              tabId: blocks.tools_experience_ranking.percentages
+            - id: testing_ratios
+              template: multi_items_ratios
+              i18nNamespace: tools
 
             - id: testing_items
               template: multi_items_experience
@@ -361,8 +360,9 @@
         blocks:
             - template: page_introduction
 
-            - template: tools_experience_linechart
-              tabId: blocks.tools_experience_ranking.percentages
+            - id: mobile_desktop_ratios
+              template: multi_items_ratios
+              i18nNamespace: tools
 
             - id: mobile_desktop_items
               template: multi_items_experience
@@ -401,8 +401,9 @@
         blocks:
             - template: page_introduction
 
-            - template: tools_experience_linechart
-              tabId: blocks.tools_experience_ranking.percentages
+            - id: build_tools_ratios
+              template: multi_items_ratios
+              i18nNamespace: tools
 
             - id: build_tools_items
               template: multi_items_experience
@@ -441,8 +442,9 @@
         blocks:
             - template: page_introduction
 
-            - template: tools_experience_linechart
-              tabId: blocks.tools_experience_ranking.percentages
+            - id: monorepo_tools_ratios
+              template: multi_items_ratios
+              i18nNamespace: tools
 
             - id: monorepo_tools_items
               template: multi_items_experience

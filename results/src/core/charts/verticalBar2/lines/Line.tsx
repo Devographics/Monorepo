@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import take from 'lodash/take'
 import { useTheme } from 'styled-components'
 import { getEditionByYear } from '../helpers/other'
 import Tooltip from 'core/components/Tooltip'
 import { LineComponentProps } from '../types'
 import { ViewDefinition } from 'core/charts/common2/types'
-import { Entity, QuestionMetadata } from '@devographics/types'
+import { QuestionMetadata } from '@devographics/types'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 
@@ -21,10 +21,12 @@ export const Line = ({
     width,
     height
 }: LineComponentProps) => {
+    const { getString } = useI18n()
+
     const theme = useTheme()
     const { viewDefinition, highlighted } = chartState
-    const { getEditionValue, formatValue } = viewDefinition
-    const { totalColumns, maxValue, years, question } = chartValues
+    const { getEditionValue, formatValue, invertYAxis } = viewDefinition
+    const { totalColumns, maxValue, years, question, legendItems = [] } = chartValues
     if (!getEditionValue) {
         throw new Error(`getEditionValue not defined`)
     }
@@ -37,9 +39,35 @@ export const Line = ({
         color: lineColor
     }
 
+    const { label: lineLabel } = getItemLabel({ id, entity, getString })
+
     const highlightIsActive = highlighted !== null
     const isHighlighted = highlighted === id
-    const interval = 100 / totalColumns
+    const interval = width / totalColumns
+    const totalItems = legendItems.length
+
+    const getXCoord = (yearIndex: number) => interval * yearIndex + interval / 2
+    const getYCoord = (value: number) => {
+        // SVG coordinates are inverted by default
+        const v = invertYAxis ? value : maxValue - value
+        return (v * height) / maxValue
+    }
+
+    const commonProps = {
+        chartState,
+        chartValues,
+        interval,
+        width,
+        height,
+        totalItems,
+        lineLabel,
+        maxValue,
+        formatValue,
+        question,
+        getXCoord,
+        getYCoord
+    }
+
     return (
         <g
             data-id={id}
@@ -56,15 +84,14 @@ export const Line = ({
                 const endIndex = years.findIndex(year => year === nextEdition.year)
                 return (
                     <LineSegment
+                        {...commonProps}
                         key={edition.editionId}
-                        interval={interval}
                         startIndex={startIndex}
                         endIndex={endIndex}
                         value1={getEditionValue(edition, chartState)}
                         value2={getEditionValue(editions[i + 1], chartState)}
-                        maxValue={maxValue}
-                        width={width}
-                        height={height}
+                        rank1={edition.rank}
+                        rank2={nextEdition.rank}
                     />
                 )
             })}
@@ -72,18 +99,12 @@ export const Line = ({
                 const edition = getEditionByYear(year, editions)
                 return edition ? (
                     <Dot
+                        {...commonProps}
                         key={edition.editionId}
-                        interval={interval}
-                        maxValue={maxValue}
                         editionIndex={i}
-                        formatValue={formatValue}
-                        question={question}
                         year={year}
-                        entity={entity}
-                        id={id}
                         value={getEditionValue(edition, chartState)}
-                        // width={width}
-                        // height={height}
+                        rank={edition.rank}
                     />
                 ) : null
             })}
@@ -92,88 +113,84 @@ export const Line = ({
 }
 
 const Dot = ({
-    id,
+    lineLabel,
     editionIndex,
-    interval,
-    maxValue,
     value,
     formatValue,
     question,
     year,
-    entity
+    rank,
+    getXCoord,
+    getYCoord
 }: {
-    id: string
+    lineLabel: string
     editionIndex: number
-    interval: number
-    maxValue: number
     value: number
     formatValue: ViewDefinition['formatValue']
     question: QuestionMetadata
     year: number
-    entity?: Entity
+    rank: number
+    getXCoord: (value: number) => number
+    getYCoord: (value: number) => number
 }) => {
-    const { getString } = useI18n()
-    const cx = interval * editionIndex + interval / 2
-    const cy = 100 - (value * 100) / maxValue
-    const { label } = getItemLabel({ id, entity, getString })
+    const cx = getXCoord(editionIndex)
+    const cy = getYCoord(value)
     return (
         <Tooltip
             trigger={
                 <g className="chart-line-dot">
-                    <circle
-                        className="chart-line-dot-visible"
-                        cx={`${cx}%`}
-                        cy={`${cy}%`}
-                        r={dotRadius}
-                    />
+                    <circle className="chart-line-dot-visible" cx={cx} cy={cy} r={dotRadius} />
                     <circle
                         className="chart-line-dot-invisible"
-                        cx={`${cx}%`}
-                        cy={`${cy}%`}
+                        cx={cx}
+                        cy={cy}
                         r={dotRadius * 3}
                     />
-                    {/* <text className="chart-line-label" x={`${cx}%`} y={`${cy + 10}%`}>
-                        {value}
-                    </text> */}
+                    <text className="chart-line-label" x={cx} y={`${cy + 20}`}>
+                        {formatValue(value, question)}
+                    </text>
                 </g>
             }
-            contents={`${label}: ${formatValue(value, question)} (${year})`}
+            contents={`${lineLabel}: ${formatValue(value, question)} (${year})`}
             asChild={true}
         />
     )
 }
 
 const LineSegment = ({
-    interval,
+    lineLabel,
     startIndex,
     endIndex,
     value1,
     value2,
-    maxValue,
-    width,
-    height
+    getXCoord,
+    getYCoord
 }: {
-    interval: number
+    lineLabel: string
     startIndex: number
     endIndex: number
     value1: number
     value2: number
-    maxValue: number
-    width: number
-    height: number
+    getXCoord: (value: number) => number
+    getYCoord: (value: number) => number
 }) => {
-    const x1 = ((interval * startIndex + interval / 2) * width) / 100
-    const x2 = ((interval * endIndex + interval / 2) * width) / 100
-    const y1 = ((100 - (value1 * 100) / maxValue) * height) / 100
-    const y2 = ((100 - (value2 * 100) / maxValue) * height) / 100
-    return <path className="chart-line-segment" d={`M${x1} ${y1} L${x2} ${y2}`} />
-    // return (
-    //     <line
-    //         className="chart-line-segment"
-    //         x1={`${x1}%`}
-    //         y1={`${y1}%`}
-    //         x2={`${x2}%`}
-    //         y2={`${y2}%`}
-    //     />
-    // )
+    const x1 = getXCoord(startIndex)
+    const x2 = getXCoord(endIndex)
+    const y1 = getYCoord(value1)
+    const y2 = getYCoord(value2)
+    return (
+        <Tooltip
+            trigger={
+                <g>
+                    <path className="chart-line-segment" d={`M${x1} ${y1} L${x2} ${y2}`} />
+                    <path
+                        className="chart-line-segment-invisible"
+                        d={`M${x1} ${y1} L${x2} ${y2}`}
+                    />
+                </g>
+            }
+            contents={lineLabel}
+            asChild={true}
+        />
+    )
 }

@@ -13,7 +13,6 @@ import RatiosSerie from './RatiosSerie'
 import { MultiRatioSerie, MultiRatiosChartState } from './types'
 import ChartShare from '../common2/ChartShare'
 import { getDefaultState, useChartState } from './helpers/chartState'
-import { MultiItemsChartState } from '../multiItemsExperience/types'
 import ViewSwitcher from './ViewSwitcher'
 import Legend from './Legend'
 import uniqBy from 'lodash/uniqBy'
@@ -25,6 +24,8 @@ export interface MultiRatiosBlockProps extends BlockComponentProps {
 export const MultiRatiosBlock = (props: MultiRatiosBlockProps) => {
     const { getString } = useI18n()
     const { block, series, question, pageContext, variant } = props
+
+    const legendItems = uniqBy(series.map(serie => serie.data).flat(), item => item.id)
 
     const chartState = useChartState(getDefaultState({ block }))
 
@@ -40,9 +41,6 @@ export const MultiRatiosBlock = (props: MultiRatiosBlockProps) => {
     const key = getBlockNoteKey({ block })
     const note = getString(key, {})?.t
 
-    const allItems = uniqBy(series.map(serie => serie.data).flat(), item => item.id)
-
-    console.log({ allItems })
     return (
         <ChartWrapper className="chart-vertical-bar chart-multi-ratios">
             <>
@@ -50,7 +48,7 @@ export const MultiRatiosBlock = (props: MultiRatiosBlockProps) => {
                     <code>{JSON.stringify(chartState, null, 2)}</code>
                 </pre> */}
 
-                <Legend chartState={chartState} items={allItems} />
+                <Legend chartState={chartState} items={legendItems} />
                 <ViewSwitcher chartState={chartState} />
 
                 <GridWrapper seriesCount={series.length}>
@@ -59,6 +57,7 @@ export const MultiRatiosBlock = (props: MultiRatiosBlockProps) => {
                             key={serie.name}
                             serie={serie}
                             serieIndex={serieIndex}
+                            legendItems={legendItems}
                             {...commonProps}
                         />
                     ))}

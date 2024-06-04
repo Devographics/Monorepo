@@ -1,15 +1,12 @@
 import './Legend.scss'
 import React from 'react'
 import { Entity } from '@devographics/types'
-import Tooltip from 'core/components/Tooltip'
-import Button from 'core/components/Button'
-import T from 'core/i18n/T'
 import { useI18n } from '@devographics/react-i18n'
 import { useTheme } from 'styled-components'
 import { getItemLabel } from 'core/helpers/labels'
 import { MultiRatiosChartState } from './types'
 
-type LegendItem = {
+export type LegendItem = {
     id: string
     entity?: Entity
 }
