@@ -1,11 +1,13 @@
 "use client";
-import { useEffect, useState, createContext, useContext } from "react";
-import FormMessages, { Message } from "../form/FormMessages";
+import { useState, createContext, useContext } from "react";
+import FormMessages, { type Message, tokens as tokensFormMessages } from "../form/FormMessages";
+
+export const tokens = [...tokensFormMessages]
 
 const userMessagesContext = createContext<{
   messages: Message[];
   addMessage: (Message) => void;
-}>({ messages: [], addMessage: () => {} });
+}>({ messages: [], addMessage: () => { } });
 
 const UserMessagesProviderInner = ({ children }) => {
   const [messages, setMessages] = useState<Message[]>([]);

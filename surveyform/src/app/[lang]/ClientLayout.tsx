@@ -17,11 +17,11 @@ import React from "react";
 import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 
 import { ErrorBoundary } from "~/components/error";
-import Layout from "~/components/common/Layout";
+import Layout, { tokens as tokensLayout } from "~/components/common/Layout";
 import type { LocaleDef } from "~/i18n/typings";
 import { SWRConfig } from "swr";
 import { KeydownContextProvider } from "~/components/common/KeydownContext";
-import { UserMessagesProvider } from "~/components/common/UserMessagesContext";
+import { UserMessagesProvider, tokens as tokensUserMessages } from "~/components/common/UserMessagesContext";
 
 import { Analytics } from "@vercel/analytics/react";
 import { Referrer } from "~/components/common/ReferrerStorage";
@@ -29,6 +29,9 @@ import { ApiData, apiRoutes } from "~/lib/apiRoutes";
 import { UserWithResponses } from "~/lib/responses/typings";
 import PlausibleProvider from "next-plausible";
 import { LocaleParsed } from "@devographics/i18n";
+
+/** Reexport i18n tokens from children to allow filtering client-side translations */
+export const tokens = [...tokensLayout, ...tokensUserMessages]
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */

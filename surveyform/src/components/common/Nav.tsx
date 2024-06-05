@@ -3,10 +3,12 @@ import React from "react";
 import LocaleSwitcher from "./LocaleSwitcher";
 import Link from "next/link";
 import { routes } from "~/lib/routes";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { EditionMetadata } from "@devographics/types";
 import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
+import { teapot } from "@devographics/react-i18n";
+
+export const { T, tokens } = teapot(["nav.surveys"])
 
 const Navigation = ({ edition }: { edition?: EditionMetadata }) => {
   const { locale } = useLocaleContext();
@@ -14,7 +16,7 @@ const Navigation = ({ edition }: { edition?: EditionMetadata }) => {
     <div className="nav-wrapper">
       <div className="nav-surveys">
         <Link className="nav-surveys-link" href={routes.home.href}>
-          <FormattedMessage id="nav.surveys" />
+          <T token="nav.surveys" />
         </Link>
         {edition && (
           <>

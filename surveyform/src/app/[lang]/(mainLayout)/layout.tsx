@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import ClientLayout from "~/app/[lang]/ClientLayout";
+import ClientLayout, { tokens as tokensClientLayout } from "~/app/[lang]/ClientLayout";
 import { rscAllLocalesMetadata, rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
 import { metadata as defaultMetadata } from "../../layout";
 import { rscTeapot } from "~/i18n/components/ServerT";
@@ -30,6 +30,13 @@ export async function generateMetadata({
   return metadata;
 }
 
+/**
+ *  TODO for i18n:
+ * - Footer "LinkItem" is displaying error messages that are selected dynamically
+ * - UserMessages too
+ * - Dropdown too
+ */
+
 export default async function RootLayout({
   children,
   params,
@@ -46,9 +53,9 @@ export default async function RootLayout({
   if (error) {
     return <div>{JSON.stringify(error, null, 2)}</div>;
   }
-  // TODO: see "Layout" to get the right expressions
-  const tokenExprs = []
-  const clientSideLocale = filterClientSideStrings<{}>(locale, tokenExprs, {})
+  /** Filter to keep only tokens used by children components */
+  const tokens = [...tokensClientLayout]
+  const clientSideLocale = filterClientSideStrings<{}>(locale, tokens, {})
   return (
     // TODO: stop passing all the locales there, filter them per page
     <ClientLayout

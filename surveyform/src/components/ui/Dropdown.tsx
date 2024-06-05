@@ -2,7 +2,7 @@
 import React from "react";
 import BsDropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
-import { FormattedMessage } from "../common/FormattedMessage";
+import { T } from "@devographics/react-i18n";
 const DropdownItem = BsDropdown.Item;
 // import { LinkContainer } from "react-router-bootstrap";
 
@@ -28,7 +28,7 @@ const Item = ({
   if (component) {
     menuComponent = React.cloneElement(component, componentProps);
   } else if (labelId) {
-    menuComponent = <FormattedMessage id={labelId} />;
+    menuComponent = <T token={labelId} />;
   } else {
     menuComponent = <span>{label}</span>;
   }
@@ -100,12 +100,12 @@ export const Dropdown = ({
   const menuBody = menuContents
     ? menuContents
     : menuItems.map((item, index) => {
-        if (item === "divider") {
-          return <BsDropdown.Divider key={index} />;
-        } else {
-          return <Node {...item} key={index} index={index} />;
-        }
-      });
+      if (item === "divider") {
+        return <BsDropdown.Divider key={index} />;
+      } else {
+        return <Node {...item} key={index} index={index} />;
+      }
+    });
 
   if (variant === "flat") {
     return menuBody;
@@ -124,7 +124,7 @@ export const Dropdown = ({
         <DropdownButton
           menuVariant="dark"
           {...buttonProps}
-          title={labelId ? <FormattedMessage id={labelId} /> : label}
+          title={labelId ? <T token={labelId} /> : label}
           {...dropdownProps}
         >
           {menuBody}

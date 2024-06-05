@@ -1,10 +1,15 @@
-import { makeTea, DATA_TOKEN_ATTR } from "@devographics/i18n"
+import { makeTranslationFunction, DATA_TOKEN_ATTR } from "@devographics/i18n"
 import { rscLocaleCached } from "~/lib/api/rsc-fetchers";
 
+/**
+ * Generate a function that can translate content for the current locale
+ * @param param0 
+ * @returns 
+ */
 export async function rscTeapot({ contexts }: { contexts?: Array<string> } = {}) {
     const { locale, error } = await rscLocaleCached({ contexts })
     if (error) return { error }
-    const { t, getMessage } = makeTea(locale)
+    const { t, getMessage } = makeTranslationFunction(locale)
     return { t, getMessage }
 }
 

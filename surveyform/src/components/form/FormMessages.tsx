@@ -2,12 +2,11 @@
 
 "use client";
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
-import { FormInputProps } from "./typings";
 import Toast from "react-bootstrap/Toast";
-import { FormattedMessage } from "../common/FormattedMessage";
 import ToastContainer from "react-bootstrap/ToastContainer";
 import newGithubIssueUrl from "new-github-issue-url";
 import { Share } from "../icons";
+import { T, teapot } from "@devographics/react-i18n";
 
 export interface Message {
   type: "error" | "success" | "info";
@@ -30,7 +29,7 @@ export interface FormMessagesProps {
 const FormMessages = (props: FormMessagesProps) => {
   const { stateStuff } = props;
   const { messages } = stateStuff;
-  useEffect(() => {}, [messages]);
+  useEffect(() => { }, [messages]);
   return (
     <ToastContainer className="form-messages">
       {props.stateStuff.messages.map((message, i) => (
@@ -66,9 +65,9 @@ const FormMessage = ({ message }: { message: Message }) => {
       {(headerId || header) && (
         <Toast.Header>
           <strong className="me-auto">
-            <FormattedMessage
-              id={headerId || ""}
-              defaultMessage={header}
+            <T
+              token={headerId || ""}
+              fallback={header}
               values={headerValues}
             />
           </strong>
@@ -76,9 +75,9 @@ const FormMessage = ({ message }: { message: Message }) => {
         </Toast.Header>
       )}
       <Toast.Body>
-        <FormattedMessage
-          id={bodyId || ""}
-          defaultMessage={body}
+        <T
+          token={bodyId || ""}
+          fallback={body}
           values={bodyValues}
         />
         {debugInfo && <DebugLink debugInfo={debugInfo} />}
@@ -120,6 +119,7 @@ ${JSON.stringify(error, null, 2)}
   });
 };
 
+export const { tokens } = teapot(["error.report_issue"])
 const DebugLink = ({ debugInfo }) => {
   return (
     <a
@@ -128,7 +128,7 @@ const DebugLink = ({ debugInfo }) => {
       rel="nofollow"
       href={getIssueReportUrl(debugInfo)}
     >
-      <FormattedMessage id="error.report_issue" />
+      <T token="error.report_issue" />
       <Share />
     </a>
   );

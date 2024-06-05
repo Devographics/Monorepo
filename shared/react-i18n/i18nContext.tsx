@@ -1,6 +1,6 @@
 "use client"
 import React, { createContext, useContext, useMemo } from 'react'
-import { makeTranslatorFunc, type Locale, type StringTranslator } from '@devographics/i18n'
+import { LocaleParsed, makeTranslationFunction, makeTranslatorFunc, type Locale, type StringTranslator } from '@devographics/i18n'
 
 export const I18nContext = createContext<I18nContextType | null>(null)
 
@@ -9,9 +9,10 @@ export const I18nContextProvider = ({
     locale
 }: {
     children: React.ReactNode
-    locale: Locale
+    locale: LocaleParsed
 }) => {
     const translate = makeTranslatorFunc(locale)
+    const { t, getMessage } = makeTranslationFunction(locale)
 
     // useMemo because the value is an object
     const value = useMemo(
@@ -19,6 +20,9 @@ export const I18nContextProvider = ({
             locale,
             getString: translate,
             translate,
+            t,
+            getMessage
+
         }),
         [locale, translate]
     )
@@ -27,13 +31,16 @@ export const I18nContextProvider = ({
 
 type I18nContextType = {
     locale: Locale
+    /** @deprecated use "t" or "getMessage" */
     getString: StringTranslator
-    /** @deprecated courtesy for results app migration */
-    translate: StringTranslator
+    /** @deprecated  use "t" or "getMessage" */
+    translate: StringTranslator,
+    t: ReturnType<typeof makeTranslationFunction>["t"],
+    getMessage: ReturnType<typeof makeTranslationFunction>["getMessage"],
 }
 
-export const useI18n = () => {
+export const useTeapot = () => {
     const ctx = useContext(I18nContext)
-    if (!ctx) throw new Error("Can't call useI18n before I18nContextProvider is set")
+    if (!ctx) throw new Error("Can't call useTeapot before I18nContextProvider is set")
     return ctx
 }

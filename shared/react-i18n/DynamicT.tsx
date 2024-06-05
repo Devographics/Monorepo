@@ -1,4 +1,4 @@
-import { useI18n } from "./i18nContext";
+import { useTeapot } from "./i18nContext";
 import { DATA_TOKEN_ATTR } from "@devographics/i18n";
 import React from "react";
 
@@ -17,6 +17,8 @@ export type TProps = {
      * TODO: should we accept multiple tokens for fallback?
      */
     token: string,
+    values?: Record<string, any>,
+    fallback?: string,
     /**
      * Use the HTML instead of the default "t" value
      * TODO: not yet actually used, not sure of use cases at this point, need to check existing code
@@ -34,19 +36,37 @@ export type TProps = {
     & React.HTMLProps<HTMLSpanElement> & React.HTMLProps<HTMLDivElement>
 
 /**
- * TODO: we cannot yet inject translations into React world, see Astro version
+ * Translation component, for tokens that are not known ahead of time
+ * This is typically used for low-level UI components
+ * 
+ * @example function MenuItem({menuToken}) { return <div><DynamicT token={menuToken} /></div> }
+ * 
+ * If the token is a string, or a token expression, 
+ * you should instead rely on the `teapot` function
+ * 
+ * @example export const { T }
+ * 
+ * @deprecated Favour passing the rendered text from parent component instead,
+ * so your UI component don't have to think about i18n,
+ * In the parent, use the "teapot" function with token expressions 
+ * @example function MenuItem({menuText}) { return <div>{menuText}</div> }
+ * // define menuText from parent
+ * 
+ *
  */
-export function T({
+export function DynamicT({
     token,
+    values,
+    fallback,
     mode,
     tag = "span",
     children,
     ...otherProps
 }: TProps) {
-    const { getString } = useI18n()
-    const value = getString(token)
+    const { t } = useTeapot()
+    const value = t(token, values, fallback)
     const Tag = tag // uppercase for JSX
-    const displayedValue = value.t
+    const displayedValue = value
     let useFallbackChildren = !displayedValue && !!children
     // having a wrapper element is mandatory to attach some metadata
     // helping live translation later on
