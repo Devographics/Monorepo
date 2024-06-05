@@ -567,6 +567,7 @@
 
       - id: paid_courses
         template: multiple_options2_freeform
+        parameters: { limit: 20 }
 
       - id: tyler_mcginnis
         template: picks
@@ -575,12 +576,15 @@
 
       - id: podcasts
         template: multiple_options2_freeform
+        parameters: { limit: 20 }
 
       - id: video_creators
         template: multiple_options2_freeform
+        parameters: { limit: 20 }
 
       - id: people
         template: multiple_options2_freeform
+        parameters: { limit: 20 }
 
       - id: other_surveys
         template: multiple_options2_combined

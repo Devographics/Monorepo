@@ -4,7 +4,6 @@ titleId: blocks.tools_arrows
 descriptionId: blocks.tools_arrows.description
 noteId: blocks.tools_arrows.note
 hasSponsor: true
-# query should be exactly the same as multi_items_experience.yml
 query: >
     surveys {
       ${surveyId} {
@@ -46,7 +45,7 @@ query: >
                 }
               }
               responses(facet: _sentiment) {
-                currentEdition {
+                allEditions {
                   ratios {
                     awareness
                     interest
