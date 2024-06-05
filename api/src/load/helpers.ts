@@ -119,7 +119,7 @@ export const getEntityType = (entity: Entity) => {
         return EntityType.PEOPLE
     } else if (entity?.tags?.includes('features')) {
         return EntityType.FEATURE
-    } else if (entity?.tags?.includes('libraries')) {
+    } else if (entity?.tags?.includes('libraries') || entity?.tags?.includes('languages')) {
         return EntityType.LIBRARY
     } else {
         return EntityType.DEFAULT

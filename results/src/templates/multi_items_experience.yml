@@ -44,6 +44,13 @@ query: >
               }
               responses(facet: _sentiment) {
                 currentEdition {
+                  ratios {
+                    awareness
+                    interest
+                    usage
+                    retention
+                    positivity
+                  }
                   buckets {
                     count
                     id

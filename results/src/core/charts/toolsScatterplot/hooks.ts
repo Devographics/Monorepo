@@ -10,7 +10,7 @@ import {
     ToolsQuadrantsChartToolData,
     ToolsQuadrantsChartToolsCategoryData
 } from './types'
-import { ToolQuestionData, SectionMetadata, Entity } from '@devographics/types'
+import { ToolQuestionData, SectionMetadata, Entity, FeaturesOptions } from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
 import { useEntities } from 'core/helpers/entities'
 
@@ -23,61 +23,27 @@ const extractToolData = (
 ): ToolsQuadrantsChartToolData | null => {
     const { id, responses } = tool
     const buckets = responses.currentEdition?.buckets
-    const total = responses.currentEdition?.completion.total
 
     // if the tool doesn't have experience data, abort
     if (!buckets) return null
 
-    // get count for a given experience choice
-    const getCount = (experienceId: ToolExperienceId) => {
-        const experienceBucket = buckets.find(b => b.id === experienceId)
-
-        return experienceBucket ? experienceBucket.count : 0
-    }
-
-    const counts: Record<ToolExperienceId, number> = {
-        never_heard: getCount('never_heard'),
-        interested: getCount('interested'),
-        not_interested: getCount('not_interested'),
-        would_use: getCount('would_use'),
-        would_not_use: getCount('would_not_use')
-    }
-
-    const totals = {
-        usage: counts.would_use + counts.would_not_use,
-        // calculate satisfaction ratio against usage
-        satisfaction: counts.would_use + counts.would_not_use,
-        // calculate interest ratio against awareness
-        interest: counts.interested + counts.not_interested,
-        // calculate awareness ratio against total
-        awareness: total
-    }
-
-    const getPercentage = (experienceId: ToolExperienceId) => {
-        return toPercentage(counts[experienceId] / totals[metric])
-    }
-
-    const percentages = {
-        satisfaction: getPercentage('would_use'),
-        interest: getPercentage('interested'),
-        awareness: 100 - getPercentage('never_heard')
-    }
+    const usage =
+        tool.responses.currentEdition.buckets.find(b => b.id === FeaturesOptions.USED)?.count || 0
 
     const entity = entities.find(e => e.id === id)
 
     if (!entity) {
         throw new Error(`Could not find entity for tool id ${id}`)
     }
-
     // note: we use the same x (nb of users) for all metrics to stay consistent
     return {
         id,
         name: entity?.name,
-        usage_count: totals?.usage,
-        satisfaction_percentage: percentages?.satisfaction,
-        interest_percentage: percentages?.interest,
-        x: totals?.usage,
-        y: percentages[metric]
+        usage_count: usage,
+        satisfaction_percentage: (tool.responses.currentEdition.ratios?.retention || 0) * 100,
+        interest_percentage: (tool.responses.currentEdition.ratios?.interest || 0) * 100,
+        x: usage,
+        y: (tool.responses.currentEdition.ratios?.[metric] || 0) * 100
     }
 }
 
@@ -107,11 +73,11 @@ export const useChartData = (
         // filter out categories without data
         return categoryData.length > 0
             ? {
-                id: toolsSectionId as ToolsSectionId,
-                name: translate(`page.${toolsSectionId}`),
-                color,
-                data: compact(categoryData)
-            }
+                  id: toolsSectionId as ToolsSectionId,
+                  name: translate(`page.${toolsSectionId}`),
+                  color,
+                  data: compact(categoryData)
+              }
             : null
     })
 

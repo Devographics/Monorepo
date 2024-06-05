@@ -1,91 +1,63 @@
-import React, { useMemo, useState } from 'react'
-import Block from 'core/blocks/block/BlockVariant'
-import ChartContainer from 'core/charts/ChartContainer'
-import { ToolsSectionId } from 'core/bucket_keys'
-import { ToolsScatterplotBlockData, ToolsQuadrantsMetric } from './types'
-import { useChartData, useTabularData } from './hooks'
+import React from 'react'
+import { ToolsScatterplotBlockData } from './types'
+import { useChartData } from './hooks'
 import ToolsQuadrantsChart from './ToolsScatterplotChart'
-import { AllToolsData, SectionMetadata } from '@devographics/types'
+import { AllToolsData, SectionMetadata, StandardQuestionData } from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
 import { useI18n } from '@devographics/react-i18n'
 import { useTheme } from 'styled-components'
-
-const ENABLE_METRIC_SWITCH = false
+import { DataSeries } from 'core/filters/types'
+import { ChartFooter, ChartWrapper, Legend } from '../common2'
+import ChartShare from '../common2/ChartShare'
+import { useChartState } from './chartState'
 
 export const ToolsScatterplotBlock = ({
     block,
-    data,
-    triggerId
+    series
 }: {
     block: ToolsScatterplotBlockData
     data: AllToolsData
+    series: DataSeries<StandardQuestionData[]>[]
     // used for the report, to control which category is highlighted
-    triggerId?: ToolsSectionId
 }) => {
-    const { translate } = useI18n()
+    const { data } = series[0]
+
+    const { getString } = useI18n()
     const theme = useTheme()
     const toolSections = useToolSections()
-    const [metric, setMetric] = useState<ToolsQuadrantsMetric>('satisfaction')
-    const modeProps = useMemo(
-        () => ({
-            units: metric,
-            options: ['satisfaction', 'interest'],
-            onChange: setMetric,
-            i18nNamespace: 'options.experience_ranking'
-        }),
-        [metric, setMetric]
-    )
+    const metric = 'retention'
+    const chartData = useChartData(data, metric)
+    // const tabularData = useTabularData(data, metric)
 
-    const chartData = useChartData(data.items, metric)
-    const tabularData = useTabularData(data.items, metric)
-
-    const [currentCategory, setCurrentCategory] = useState<ToolsSectionId | null>(null)
-    const controlledCurrentCategory = triggerId || currentCategory
-
-    const chartClassName = controlledCurrentCategory
-        ? `ToolsScatterplotChart--${controlledCurrentCategory}`
-        : ''
-
-    const legends = toolSections.map((section: SectionMetadata) => ({
-        id: `toolCategories.${section.id}`,
-        label: translate(`sections.${section.id}.title`),
-        keyLabel: `${translate(`sections.${section.id}.title`)}:`,
+    const chartState = useChartState()
+    const { highlighted, setHighlighted } = chartState
+    const legendItems = toolSections.map((section: SectionMetadata) => ({
+        id: section.id,
+        label: getString(`sections.${section.id}.title`)?.t,
         color: theme.colors.ranges.toolSections[section.id]
     }))
 
-    const legendProps = useMemo(
-        () => ({
-            legends,
-            onMouseEnter: ({ id }: { id: string }) => {
-                setCurrentCategory(id.replace('toolCategories.', '') as ToolsSectionId)
-            },
-            onMouseLeave: () => {
-                setCurrentCategory(null)
-            }
-        }),
-        [legends, setCurrentCategory]
-    )
-
     return (
-        <Block
-            className="ToolsScatterplotBlock"
-            data={data}
-            tables={tabularData}
-            block={{ ...block, blockName: 'tools_quadrant' }}
-            legends={legends}
-            legendProps={legendProps}
-            modeProps={ENABLE_METRIC_SWITCH ? modeProps : undefined}
-        >
-            <ChartContainer vscroll={false}>
+        <ChartWrapper>
+            <>
+                <Legend items={legendItems} chartState={chartState} />
+
                 <ToolsQuadrantsChart
-                    className={`ToolsScatterplotChart ${chartClassName}`}
+                    className={`ToolsScatterplotChart `}
                     data={chartData}
                     metric={metric}
-                    currentCategory={controlledCurrentCategory}
-                    setCurrentCategory={setCurrentCategory}
+                    currentCategory={highlighted}
+                    setCurrentCategory={setHighlighted}
                 />
-            </ChartContainer>
-        </Block>
+                <ChartFooter
+                    right={
+                        <>
+                            <ChartShare block={block} />
+                        </>
+                    }
+                />
+            </>
+        </ChartWrapper>
     )
 }
 

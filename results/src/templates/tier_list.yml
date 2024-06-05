@@ -3,5 +3,79 @@ blockType: ToolsTierListBlock
 titleId: blocks.tools_tier_list
 descriptionId: blocks.tools_tier_list.description
 noteId: blocks.tools_tier_list.note
-dataPath: 'dataAPI.surveys.${surveyId}.${editionId}.libraries.all_tools'
 hasSponsor: true
+# query should be exactly the same as multi_items_experience.yml
+query: >
+    surveys {
+      ${surveyId} {
+        ${editionId} {
+          ${sectionId} {
+            ${questionId}: _items {
+              id
+              entity {
+                name
+                nameClean
+                nameHtml
+                entityType
+                description
+                descriptionClean
+                descriptionHtml
+                homepage {
+                  url
+                }
+                caniuse {
+                  name
+                  url
+                }
+                mdn {
+                  locale
+                  url
+                  title
+                  summary
+                }
+                example {
+                  label
+                  language
+                  code
+                  codeHighlighted
+                }
+              }
+              comments {
+                currentEdition {
+                  count
+                }
+              }
+              responses(facet: _sentiment) {
+                currentEdition {
+                  ratios {
+                    awareness
+                    interest
+                    usage
+                    retention
+                    positivity
+                  }
+                  buckets {
+                    count
+                    id
+                    facetBuckets {
+                      count
+                      id
+                      percentageBucket
+                      percentageQuestion
+                      percentageSurvey
+                    }
+                    percentageQuestion
+                    percentageSurvey
+                  }
+                  completion {
+                    count
+                    percentageSurvey
+                    total
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }

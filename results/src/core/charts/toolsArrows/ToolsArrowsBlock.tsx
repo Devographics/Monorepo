@@ -19,7 +19,7 @@ interface ToolsArrowsBlockProps {
 
 export const ToolsArrowsBlock = ({ block, data, triggerId = null }: ToolsArrowsBlockProps) => {
     const controlledCurrent = triggerId
-
+    return <div>foo</div>
     return (
         <Block block={block} data={data}>
             <ChartContainer vscroll={false}>

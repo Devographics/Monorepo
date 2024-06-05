@@ -1,4 +1,4 @@
-import { Bucket, QuestionMetadata } from '@devographics/types'
+import { Bucket, Entity, QuestionMetadata } from '@devographics/types'
 import { MultiItemsChartValues } from '../multiItemsExperience/types'
 import { BlockVariantDefinition, PageContextValue } from 'core/types'
 import { DataSeries } from 'core/filters/types'
@@ -54,3 +54,10 @@ export type Tick = {
 }
 
 export type FormatValueType = (v: number, question: QuestionMetadata) => string
+
+export type LegendItem = {
+    id: string
+    label?: string
+    color?: string
+    entity?: Entity
+}

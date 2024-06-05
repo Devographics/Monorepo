@@ -211,19 +211,19 @@
       - id: librariesIntroduction
         template: page_introduction
 
-      - id: all_tools2
+      - id: all_tools_experience
         template: multi_items_experience
         chartOptions:
             limit: 10
 
-      # hidden question used to load data for next 3 charts; don't remove
-      # - template: all_tools
+      - id: tools_arrows
+        template: tools_arrows
 
-      # - template: tools_arrows
+      - id: tier_list
+        template: tier_list
 
-      # - template: tier_list
-
-      # - template: scatterplot_overview
+      - id: scatterplot_overview
+        template: scatterplot_overview
 
       # - id: all_sections_tools_cardinality_by_user
       #   template: tools_cardinality_by_user_js

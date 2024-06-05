@@ -8,10 +8,10 @@ const { totalCountRounded } = variables
 // those labels are picked depending on the `metric` property
 // passed to the chart.
 export const quadrantLabels: Record<ToolsQuadrantsMetric, string[]> = {
-    // satisfaction: ['assess', 'adopt', 'avoid', 'analyze'],
+    // retention: ['assess', 'adopt', 'avoid', 'analyze'],
     // interest: ['mainstream', 'next_big_thing', 'unknown', 'low_interest'],
-    satisfaction: ['1', '2', '3', '4'],
-    interest: ['1', '2', '3', '4'],
+    retention: ['1', '2', '3', '4'],
+    interest: ['1', '2', '3', '4']
 }
 
 export const staticProps = {
@@ -20,7 +20,7 @@ export const staticProps = {
     nodeRadius: 7,
     nodeCaptureRadius: 16,
     formatPercentage: (value: number) => `${value}%`,
-    quadrantBorder: 2,
+    quadrantBorder: 2
 }
 
 // base scales configuration when no quadrant is zoomed in.
@@ -28,7 +28,7 @@ export const baseScales = {
     // user count
     xRange: [0, totalCountRounded],
     // percentage
-    yRange: [0, 100],
+    yRange: [0, 100]
 }
 
 // ranges are expressed as values, not dimensions,
@@ -61,7 +61,7 @@ export const quadrantsConfig: QuadrantConfig[] = [
         xRange: [0, totalCountRounded / 2],
         xZoomRange: [0, totalCountRounded / 2 + X_SCALE_VALUE_OFFSET],
         yRange: [100, 50],
-        yZoomRange: [50 - Y_SCALE_VALUE_OFFSET, 100],
+        yZoomRange: [50 - Y_SCALE_VALUE_OFFSET, 100]
     },
     // 'Adopt' when using 'satisfaction' as a metric, top right
     {
@@ -69,7 +69,7 @@ export const quadrantsConfig: QuadrantConfig[] = [
         xRange: [totalCountRounded / 2, totalCountRounded],
         xZoomRange: [totalCountRounded / 2 - X_SCALE_VALUE_OFFSET, totalCountRounded],
         yRange: [100, 50],
-        yZoomRange: [50 - Y_SCALE_VALUE_OFFSET, 100],
+        yZoomRange: [50 - Y_SCALE_VALUE_OFFSET, 100]
     },
     // 'Avoid' when using 'satisfaction' as a metric, bottom left
     {
@@ -77,32 +77,35 @@ export const quadrantsConfig: QuadrantConfig[] = [
         xRange: [0, totalCountRounded / 2],
         xZoomRange: [0, totalCountRounded / 2 + X_SCALE_VALUE_OFFSET],
         yRange: [50, 0],
-        yZoomRange: [0, 50 + Y_SCALE_VALUE_OFFSET],
+        yZoomRange: [0, 50 + Y_SCALE_VALUE_OFFSET]
     },
     // 'Analyze' when using 'satisfaction' as a metric, bottom right
     {
         color: 'background',
         xRange: [totalCountRounded / 2, totalCountRounded],
-        xZoomRange: [totalCountRounded / 2 -  X_SCALE_VALUE_OFFSET, totalCountRounded],
+        xZoomRange: [totalCountRounded / 2 - X_SCALE_VALUE_OFFSET, totalCountRounded],
         yRange: [50, 0],
-        yZoomRange: [0, 50 + Y_SCALE_VALUE_OFFSET],
-    },
+        yZoomRange: [0, 50 + Y_SCALE_VALUE_OFFSET]
+    }
 ]
 
 export const crosshair = {
     labelWidth: 70,
     labelHeight: 24,
-    circleRadius: 14,
+    circleRadius: 14
 }
 
 // This can be used to force the position of nodes' label.
-export const forcedLabelPositions: Record<ToolsQuadrantsMetric, Record<string, [x: number, y: number]>> = {
-    satisfaction: {
+export const forcedLabelPositions: Record<
+    ToolsQuadrantsMetric,
+    Record<string, [x: number, y: number]>
+> = {
+    retention: {
         halfmoon: [0, -15],
         primer: [0, -15],
-        twin: [-40, 0],
+        twin: [-40, 0]
     },
     interest: {
-        'NW.js': [0, 5],
-    },
+        'NW.js': [0, 5]
+    }
 }

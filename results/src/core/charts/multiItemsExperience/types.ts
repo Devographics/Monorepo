@@ -20,12 +20,8 @@ export enum GroupingOptions {
     SENTIMENT = 'sentiment'
 }
 
-export type SectionItemsData = {
-    items: StandardQuestionData[]
-}
-
 export interface MultiItemsExperienceBlockProps extends BlockComponentProps {
-    series: DataSeries<SectionItemsData>[]
+    series: DataSeries<StandardQuestionData[]>[]
 }
 
 export type ColumnId = FeaturesOptions | SimplifiedSentimentOptions

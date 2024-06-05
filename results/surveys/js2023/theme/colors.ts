@@ -271,6 +271,7 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         toolSections: {
             front_end_frameworks: colors.pinkLight,
             rendering_frameworks: colors.purple,
+            meta_frameworks: colors.purple,
             testing: colors.orange,
             build_tools: colors.teal,
             mobile_desktop: colors.green,

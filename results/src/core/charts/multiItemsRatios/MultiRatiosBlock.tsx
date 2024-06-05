@@ -14,7 +14,7 @@ import { MultiRatioSerie, MultiRatiosChartState } from './types'
 import ChartShare from '../common2/ChartShare'
 import { getDefaultState, useChartState } from './helpers/chartState'
 import ViewSwitcher from './ViewSwitcher'
-import Legend from './Legend'
+import Legend from '../common2/Legend'
 import uniqBy from 'lodash/uniqBy'
 
 export interface MultiRatiosBlockProps extends BlockComponentProps {

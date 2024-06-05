@@ -7,7 +7,7 @@ import { QuestionMetadata, StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
 import { getAllFacetBucketIds, getChartCurrentEdition, useQuestionMetadata } from './helpers/other'
 import { getDefaultState, useChartState } from './helpers/chartState'
-import { ChartFooter, ChartWrapper, GridWrapper, Legend, Note } from '../common2'
+import { ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
 import { useEntities } from 'core/helpers/entities'
 import { FacetTitle } from '../common2/FacetTitle'
 import { getQuestionOptions } from './helpers/options'
@@ -19,6 +19,7 @@ import { HorizontalBarSerie } from './HorizontalBarSerie'
 import { getBlockNoteKey } from 'core/helpers/blockHelpers'
 import { useI18n } from '@devographics/react-i18n'
 import ChartShare from '../common2/ChartShare'
+import Legend from './Legend'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData

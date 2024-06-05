@@ -14,7 +14,7 @@ import { LineItem } from '../verticalBar2/types'
 import { StandardQuestionData } from '@devographics/types'
 import { getEditionByYear } from '../verticalBar2/helpers/other'
 import sortBy from 'lodash/sortBy'
-import { LegendItem } from './Legend'
+import { LegendItem } from './Legend-old'
 import { getAllEditions } from './helpers/other'
 
 /*

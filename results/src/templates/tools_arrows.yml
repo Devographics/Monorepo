@@ -4,34 +4,78 @@ titleId: blocks.tools_arrows
 descriptionId: blocks.tools_arrows.description
 noteId: blocks.tools_arrows.note
 hasSponsor: true
+# query should be exactly the same as multi_items_experience.yml
 query: >
     surveys {
-        ${surveyId} {
-            ${editionId} {
-                libraries {
-                    tools_arrows: all_tools {
-                        items {
-                            id
-                            responses<ARGUMENTS_PLACEHOLDER> {
-                                allEditions {
-                                    year
-                                    editionId
-                                    buckets {
-                                        id
-                                        percentageQuestion
-                                        percentageSurvey
-                                        count
-                                    }
-                                    completion {
-                                        count
-                                        percentageSurvey
-                                        total
-                                    }
-                                }
-                            }
-                        }
-                    }
+      ${surveyId} {
+        ${editionId} {
+          ${sectionId} {
+            ${questionId}: _items {
+              id
+              entity {
+                name
+                nameClean
+                nameHtml
+                entityType
+                description
+                descriptionClean
+                descriptionHtml
+                homepage {
+                  url
                 }
+                caniuse {
+                  name
+                  url
+                }
+                mdn {
+                  locale
+                  url
+                  title
+                  summary
+                }
+                example {
+                  label
+                  language
+                  code
+                  codeHighlighted
+                }
+              }
+              comments {
+                currentEdition {
+                  count
+                }
+              }
+              responses(facet: _sentiment) {
+                currentEdition {
+                  ratios {
+                    awareness
+                    interest
+                    usage
+                    retention
+                    positivity
+                  }
+                  buckets {
+                    count
+                    id
+                    facetBuckets {
+                      count
+                      id
+                      percentageBucket
+                      percentageQuestion
+                      percentageSurvey
+                    }
+                    percentageQuestion
+                    percentageSurvey
+                  }
+                  completion {
+                    count
+                    percentageSurvey
+                    total
+                  }
+                }
+              }
             }
+          }
         }
+      }
     }
