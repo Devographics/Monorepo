@@ -4,11 +4,21 @@ import Link from "next/link";
 import { useCurrentUser } from "~/lib/users/hooks";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components/LogoutButton";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { DebugZone } from "./DebugZone";
 import { publicConfig } from "~/config/public";
+import { teapot } from "@devographics/react-i18n";
 
-const links = [
+export const { T, tokens } = teapot([
+  "nav.account",
+  "accounts.sign_in",
+  "general.privacy_policy",
+  "general.leave_issue2",
+  "general.help_us_translate",
+  "Demo survey"
+] as const)
+
+type LinkItemProps = { component?: React.ReactNode, showIf?: (args: { currentUser: any }) => boolean, id?: typeof tokens[number], href?: string }
+const links: Array<LinkItemProps> = [
   {
     component:
       process.env.NEXT_PUBLIC_CONFIG === "tokyodev" ? (
@@ -78,12 +88,7 @@ const LinkItem = ({
   href,
   showIf,
   component,
-}: {
-  id?: string;
-  href?: string;
-  component?: React.ReactNode;
-  showIf?: ({ currentUser }: { currentUser: any }) => boolean;
-}) => {
+}: LinkItemProps) => {
   const { currentUser } = useCurrentUser();
   if (showIf && !showIf({ currentUser })) {
     return null;
@@ -102,11 +107,11 @@ const LinkItem = ({
     <LinkWrapper>
       {isOutboundLink ? (
         <a href={href}>
-          <FormattedMessage id={id} />
+          <T token={id} />
         </a>
       ) : (
         <Link href={href}>
-          <FormattedMessage id={id} />
+          <T token={id} />
         </Link>
       )}
     </LinkWrapper>

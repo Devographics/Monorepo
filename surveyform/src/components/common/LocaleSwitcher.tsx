@@ -2,6 +2,14 @@
 
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { Dropdown } from "~/components/ui/Dropdown";
+import { teapot } from "@devographics/react-i18n";
+
+export const { T, tokens } = teapot([
+  // TODO: list possible locale ids, used as translation tokens
+  // might need a token expression?
+  "fr_FR"
+
+])
 
 const LocaleSwitcher = () => {
   const { locales = [] } = useLocaleContext();
@@ -15,9 +23,12 @@ const LocaleSwitcher = () => {
         variant: "default",
       }}
       label={
-        currentLocale?.label || currentLocale?.id || "Please select a locale"
+        currentLocale?.label || (currentLocale?.id && <T
+          token={currentLocale?.id} />) || "Please select a locale"
       }
       id="locale-dropdown"
+      className="nav-locale-dropdown"
+      //@ts-ignore TODO: why onSelect doesn't exist
       onSelect={(index) => {
         if (!index) {
           index = 0;
@@ -27,7 +38,6 @@ const LocaleSwitcher = () => {
         // so have to do a hard refresh
         window.location.reload();
       }}
-      className="nav-locale-dropdown"
       menuItems={locales.map(({ label, id }) => ({
         label: id === currentLocale?.id ? `${label} ✓` : label,
       }))}

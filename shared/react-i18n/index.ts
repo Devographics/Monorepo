@@ -1,4 +1,4 @@
 export * from "./i18nContext"
-export * from "./T"
+export * from "./DynamicT"
 export * from "./teapot"
 export * from "./TranslationMode"

@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "./Footer";
 import Header, { tokens as tokensHeader } from "./Header";
-// import DevographicsBanner from "./DevographicsBanner";
+// import DevographicsBanner, {tokens as tokensDevographicsBanner} from "./DevographicsBanner";
 import TokyoDev from "~/components/common/TokyoDev";
 import { teapot } from "@devographics/react-i18n";
 

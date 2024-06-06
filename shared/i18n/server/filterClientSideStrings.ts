@@ -2,7 +2,6 @@ import type { LocaleParsed, Translation } from "../typings";
 import { TokenExpr } from "../tokenExpr";
 
 
-
 /**
  * 
  * @param allStrings Tokens from the backend

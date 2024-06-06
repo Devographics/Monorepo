@@ -6,7 +6,7 @@ import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
 import newGithubIssueUrl from "new-github-issue-url";
 import { Share } from "../icons";
-import { T, teapot } from "@devographics/react-i18n";
+import { teapot } from "@devographics/react-i18n";
 
 export interface Message {
   type: "error" | "success" | "info";
@@ -119,7 +119,7 @@ ${JSON.stringify(error, null, 2)}
   });
 };
 
-export const { tokens } = teapot(["error.report_issue"])
+export const { T, tokens } = teapot(["error.report_issue"])
 const DebugLink = ({ debugInfo }) => {
   return (
     <a

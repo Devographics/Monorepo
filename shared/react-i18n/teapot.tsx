@@ -8,6 +8,8 @@ import { DynamicT, type TProps } from "./DynamicT"
  * 
  * @example 
  * ```js
+ * // Notice the "as const", it allows proper typing
+ *
  * export const { T, tokens } = teapot(["some.token.{{surveyId}}", ...tokensOfChildComponent] as const)
  * 
  * function MyComponent() { return <T token={"some.token.{{surveyId}}"} /> }
