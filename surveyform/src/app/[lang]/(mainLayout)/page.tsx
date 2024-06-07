@@ -25,6 +25,7 @@ const IndexPage = async ({ params }: NextPageParams<{ lang: string }>) => {
   if (error) return <div>Can't load translations</div>
   const tokenExprs = ["general.open_surveys"]
   const clientSideLocale = filterClientSideStrings<{}>(locale, tokenExprs, {})
+  console.log({ clientSideLocale })
   return (
     <I18nContextProvider
       locale={clientSideLocale}

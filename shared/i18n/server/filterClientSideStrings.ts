@@ -55,9 +55,12 @@ export function filterClientSideStrings<TContext extends Record<string, any>>(
             missingTokens,
         );
     }
+    const clientSideStrings = locale.strings?.filter(({ key }) => key in clientSideDict)
     // Use the same shape as strings
     return {
         ...locale,
+        /** TODO: for now we pass the array representation but it should be removed later on */
+        strings: clientSideStrings,
         dict: clientSideDict
     }
 }
