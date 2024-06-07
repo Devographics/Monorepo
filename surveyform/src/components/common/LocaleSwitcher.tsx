@@ -3,13 +3,9 @@
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { Dropdown } from "~/components/ui/Dropdown";
 import { teapot } from "@devographics/react-i18n";
+import { tokens } from "./LocalSwitcher.tokens";
 
-export const { T, tokens } = teapot([
-  // TODO: list possible locale ids, used as translation tokens
-  // might need a token expression?
-  "fr_FR"
-
-])
+const { T } = teapot(tokens)
 
 const LocaleSwitcher = () => {
   const { locales = [] } = useLocaleContext();

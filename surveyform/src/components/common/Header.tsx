@@ -1,8 +1,6 @@
 import React from "react";
-import Nav, { tokens as tokensNav } from "./Nav";
+import Nav from "./Nav";
 import { EditionMetadata } from "@devographics/types";
-
-export const tokens = [...tokensNav]
 
 const Header = (props: { edition?: EditionMetadata }) => {
   return (

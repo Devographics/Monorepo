@@ -7,15 +7,9 @@ import { LogoutButton } from "~/account/user/components/LogoutButton";
 import { DebugZone } from "./DebugZone";
 import { publicConfig } from "~/config/public";
 import { teapot } from "@devographics/react-i18n";
+import { tokens } from "./Footer.tokens";
 
-export const { T, tokens } = teapot([
-  "nav.account",
-  "accounts.sign_in",
-  "general.privacy_policy",
-  "general.leave_issue2",
-  "general.help_us_translate",
-  "Demo survey"
-] as const)
+const { T } = teapot(tokens)
 
 type LinkItemProps = { component?: React.ReactNode, showIf?: (args: { currentUser: any }) => boolean, id?: typeof tokens[number], href?: string }
 const links: Array<LinkItemProps> = [

@@ -1,8 +1,6 @@
 "use client";
 import { useState, createContext, useContext } from "react";
-import FormMessages, { type Message, tokens as tokensFormMessages } from "../form/FormMessages";
-
-export const tokens = [...tokensFormMessages]
+import FormMessages, { type Message } from "../form/FormMessages";
 
 const userMessagesContext = createContext<{
   messages: Message[];

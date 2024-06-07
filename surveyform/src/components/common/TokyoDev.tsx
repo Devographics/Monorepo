@@ -1,7 +1,9 @@
 "use client";
 import { teapot } from "@devographics/react-i18n";
+import { tokens } from "./TokyoDev.tokens";
 
-export const { T, tokens } = teapot(["tokyodev.founder", "tokyodev.about", "tokyodev.description"])
+const { T } = teapot(tokens)
+
 export const TokyoDev = () => {
   return process.env.NEXT_PUBLIC_CONFIG === "tokyodev" ? (
     <section className="tokyodev-info">

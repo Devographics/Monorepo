@@ -1,5 +1,6 @@
 import { Metadata } from "next";
-import ClientLayout, { tokens } from "~/app/[lang]/ClientLayout";
+import ClientLayout from "~/app/[lang]/ClientLayout";
+import { tokens as tokensClientLayout } from "~/app/[lang]/ClientLayout.tokens"
 import { rscAllLocalesMetadata, rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
 import { metadata as defaultMetadata } from "../../layout";
 import { rscTeapot } from "~/i18n/components/ServerT";
@@ -54,7 +55,7 @@ export default async function RootLayout({
     return <div>{JSON.stringify(error, null, 2)}</div>;
   }
   /** Filter to keep only tokens used by children components */
-  //const tokens = [...tokensClientLayout]
+  const tokens = [...tokensClientLayout]
   const clientSideLocale = filterClientSideStrings<{}>(locale, tokens, {})
   return (
     // TODO: stop passing all the locales there, filter them per page

@@ -1,11 +1,12 @@
 import React from "react";
 import Footer from "./Footer";
-import Header, { tokens as tokensHeader } from "./Header";
+import Header from "./Header";
 // import DevographicsBanner, {tokens as tokensDevographicsBanner} from "./DevographicsBanner";
 import TokyoDev from "~/components/common/TokyoDev";
 import { teapot } from "@devographics/react-i18n";
+import { tokens } from "./Layout.tokens";
 
-export const { T, tokens } = teapot(["general.skip_to_content", ...tokensHeader])
+const { T } = teapot(tokens)
 
 export const Layout = ({ children }: { children: any }) => {
   return (

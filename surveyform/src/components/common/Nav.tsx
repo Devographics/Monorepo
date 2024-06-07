@@ -7,8 +7,9 @@ import { EditionMetadata } from "@devographics/types";
 import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { teapot } from "@devographics/react-i18n";
+import { tokens } from "./Nav.tokens";
 
-export const { T, tokens } = teapot(["nav.surveys"])
+const { T } = teapot(tokens)
 
 const Navigation = ({ edition }: { edition?: EditionMetadata }) => {
   const { locale } = useLocaleContext();
