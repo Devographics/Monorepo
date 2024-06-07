@@ -46,6 +46,7 @@ query: >
               }
               responses(facet: _sentiment) {
                 allEditions {
+                  year
                   ratios {
                     awareness
                     interest

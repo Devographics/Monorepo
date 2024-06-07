@@ -93,6 +93,7 @@ export const ToolsArrowsChart = ({
                         .map(({ id, percentageQuestion }) =>
                             conditionDiffs[id].map(d => d * percentageQuestion)
                         )
+                    // console.log(points)
                     return [
                         round(sum(points.map(d => d[0])), 3),
                         round(sum(points.map(d => d[1])), 3),
@@ -252,7 +253,7 @@ export const ToolsArrowsChart = ({
     }
 
     return (
-        <>
+        <div className="ToolsArrowsChart-wrapper">
             <div className="ToolsArrowsChart">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -479,7 +480,7 @@ export const ToolsArrowsChart = ({
                     {translate('charts.tools_arrows.popularity_negative')}
                 </p>
             </div>
-        </>
+        </div>
     )
 }
 
