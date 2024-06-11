@@ -1,6 +1,6 @@
 //import { getPageLabelKey } from "@/lib/sitemap"
 import { usePageContext } from "../layouts/PageContext"
-import { useI18n } from "@devographics/react-i18n"
+import { useTeapot } from "@devographics/react-i18n"
 
 
 // TODO: should be in survey config not hard written here
@@ -31,7 +31,7 @@ const NavItem = ({
     depth?: number
 }) => {
     const pageContext = usePageContext()
-    const i18n = useI18n()
+    const { locale } = useTeapot()
 
     /*
     TODO: reenable this logic
@@ -59,13 +59,13 @@ const NavItem = ({
         <div>
             <a
                 className={match ? '_is-active' : undefined}
-                href={`/${i18n.locale.id}${currentPath}`}
+                href={`/${locale.id}${currentPath}`}
             // page={page}
             // depth={depth}
             // isHidden={isHidden}
             // parentPage={parentPage}
             >
-                <span>/{i18n.locale.id}{currentPath}</span>
+                <span>/{locale.id}{currentPath}</span>
             </a>
         </div>
     )

@@ -1,6 +1,6 @@
 import React from 'react'
 import { usePageContext } from '../layouts/PageContext'
-import { useI18n } from '@devographics/react-i18n'
+import { useTeapot } from '@devographics/react-i18n'
 import { screenReadersOnly } from '@/lib/theme'
 import { getSiteTitle } from '@/lib/sitemap'
 import { Nav } from './Nav'
@@ -30,7 +30,7 @@ export const Sidebar = ({
     showSidebar?: boolean
     closeSidebar: () => void
 }) => {
-    const { translate } = useI18n()
+    const { t } = useTeapot()
     const pageContext = usePageContext()
 
     return (
@@ -41,7 +41,7 @@ export const Sidebar = ({
                 aria-expanded={showSidebar}
             >
                 <CloseIcon />
-                <span className={screenReadersOnly}>{translate('general.close_nav').t}</span>
+                <span className={screenReadersOnly}>{t('general.close_nav')}</span>
             </button>
             <span className={screenReadersOnly}>{getSiteTitle({ edition: pageContext.edition })}</span>
             <Nav closeSidebar={closeSidebar} />
