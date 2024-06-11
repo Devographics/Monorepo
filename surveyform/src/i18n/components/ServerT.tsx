@@ -27,7 +27,16 @@ export async function rscTeapot({ contexts }: { contexts?: Array<string> } = {})
  * we should handle edge cases : children fallback, adding data attributes etc.
  */
 export async function ServerT({ token, values, fallback }: { token: string, values?: Record<string, any>, fallback?: string }) {
-    const { t, error } = await rscTeapot()
+    const { getMessage, error } = await rscTeapot()
     if (error) return <span>Can't load locales</span>
-    return <span {...{ [DATA_TOKEN_ATTR]: token }}>{t(token, values, fallback)}</span>
+    const message = getMessage(token, values, fallback)
+    const wrapperProps = { [DATA_TOKEN_ATTR]: token }
+    // Render structured versions in priority
+    if (message.tHtml) {
+        return <span {...wrapperProps} dangerouslySetInnerHTML={{ __html: message.tHtml }} />
+    }
+    if (message.tClean) {
+        return <span {...wrapperProps}>{message.tClean}</span>
+    }
+    return <span {...wrapperProps}>{message.t}</span>
 }

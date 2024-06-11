@@ -115,8 +115,9 @@ export function makeTranslationFunction(locale: LocaleParsed) {
         const t = injectValues(result.t, values)
         // handle tClean and tHTML variations
         result.t = t
-        result.tClean = result.tClean ? injectValues(result.tClean, values) : result.t
-        result.tHtml = result.tHtml ? injectValues(result.tHtml, values) : result.t
+        // Keep empty if not defined, so that the rendered logic can prioritize 1) HTML version 2) clean version 3) raw text depending on which is defined
+        result.tClean = result.tClean ? injectValues(result.tClean, values) : undefined//result.t
+        result.tHtml = result.tHtml ? injectValues(result.tHtml, values) : undefined//result.t
         return result as StringTranslatorResult
     }
     /**
