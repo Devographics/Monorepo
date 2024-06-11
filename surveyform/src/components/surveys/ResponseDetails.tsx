@@ -1,9 +1,12 @@
+import { teapot } from "@devographics/react-i18n";
 import {
   EditionMetadata,
   ResponseDocument,
   ResultsStatusEnum,
 } from "@devographics/types";
-import { ServerT } from "~/i18n/components/ServerT";
+import { tokens } from "./ResponseDetails.tokens";
+
+const { T } = teapot(tokens)
 
 export const ResponseDetails = ({
   edition,
@@ -19,7 +22,7 @@ export const ResponseDetails = ({
       {resultsUrl && resultsStatus === ResultsStatusEnum.PUBLISHED && (
         <p>
           <a href={resultsUrl}>
-            <ServerT token="general.survey_results" />
+            <T token="general.survey_results" />
           </a>
         </p>
       )}
@@ -33,12 +36,12 @@ const ResponseMetadata = ({ response }: { response: ResponseDocument }) => {
     <>
       <p>
         {updatedAt ? (
-          <ServerT
+          <T
             token="general.last_modified_on"
             values={{ updatedAt: new Date(updatedAt)?.toDateString() }}
           />
         ) : (
-          <ServerT
+          <T
             token="general.started_on"
             values={{ createdAt: new Date(createdAt)?.toDateString() }}
           />
@@ -46,7 +49,7 @@ const ResponseMetadata = ({ response }: { response: ResponseDocument }) => {
       </p>
       {typeof completion !== "undefined" && (
         <p>
-          <ServerT token="general.completion" values={{ completion }} />
+          <T token="general.completion" values={{ completion }} />
         </p>
       )}
     </>
