@@ -6,7 +6,6 @@ import PrivacyPolicy from "./PrivacyPolicy";
 // Render in each language
 import { rscAllLocalesIds } from "~/lib/api/rsc-fetchers";
 import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
-import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
 export const revalidate = DEFAULT_REVALIDATE_S;
@@ -16,8 +15,7 @@ export async function generateStaticParams() {
   return localeIds.data?.map((localeId) => ({ lang: localeId })) || [];
 }
 
-const PrivacyPolicyPage = ({ params }) => {
-  setLocaleIdServerContext(params.lang)
+const PrivacyPolicyPage = () => {
   return <PrivacyPolicy />;
 };
 

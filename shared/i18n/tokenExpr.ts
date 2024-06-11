@@ -29,6 +29,9 @@ export class TokenExpr<TContext extends Record<string, any>> {
             .replaceAll(/\{\{editionId\}\}/g, ctx["editionId"])
             // replace wild cards by regex wild cards
             .replaceAll(/\{\{\*\}\}/g, "(.*)")
+            + "$" // match full word
+            ,
+            "i"
         )
         console.log("this.regex", this.regex)
     }

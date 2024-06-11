@@ -1,4 +1,4 @@
-import { DynamicT, type TProps } from "./DynamicT"
+import { InternalT, type TProps } from "./DynamicT"
 /**
  * Helper that helps listing the tokens required by client component.
  *
@@ -48,7 +48,7 @@ export function teapot<TExprs extends Readonly<Array<string>>>(tokenExprs: TExpr
          * Works exactly the same as the imported T function
          * We can still use "useTeapot" to get "t", "getMessage" functions
          */
-        T: (props: Omit<TProps, "token"> & { token: TExprs[number] }) => <DynamicT {...props} />,
+        T: (props: Omit<TProps, "token"> & { token: TExprs[number] }) => <InternalT {...props} />,
         tokens: tokenExprs
     }
 }

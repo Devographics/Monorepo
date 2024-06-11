@@ -1,3 +1,4 @@
+"use client"
 import { useTeapot } from "./i18nContext";
 import { DATA_TOKEN_ATTR } from "@devographics/i18n";
 import React from "react";
@@ -36,6 +37,46 @@ export type TProps = {
     & React.HTMLProps<HTMLSpanElement> & React.HTMLProps<HTMLDivElement>
 
 /**
+ * Do not use in your app,
+ * use DynamicT
+ * 
+ * Keep code in sync with ServerT
+ */
+export function InternalT({
+    token,
+    values,
+    fallback,
+    mode,
+    tag = "span",
+    children,
+    ...otherProps
+}: TProps) {
+    const { getMessage } = useTeapot()
+    const message = getMessage(token, values, fallback)
+    const Tag = tag // uppercase for JSX
+    const wrapperProps = {
+        [DATA_TOKEN_ATTR]: token,
+        // @ts-ignore Weird error with Children due to different versions of React
+        ...otherProps
+    }
+
+    if (message.tHtml) {
+        return <span {...wrapperProps} dangerouslySetInnerHTML={{ __html: message.tHtml }} />
+    }
+    if (message.tClean) {
+        return <span {...wrapperProps}>{message.tClean}</span>
+    }
+    const displayedValue = message.t
+    let useFallbackChildren = !displayedValue && !!children
+    if (useFallbackChildren) {
+        wrapperProps["data-dg-fallback-children"] = true
+    }
+    return <span {...wrapperProps}>{displayedValue || children}</span>
+    // having a wrapper element is mandatory to attach some metadata
+    // helping live translation later on
+}
+
+/**
  * Translation component, for tokens that are not known ahead of time
  * This is typically used for low-level UI components
  * 
@@ -54,25 +95,4 @@ export type TProps = {
  * 
  *
  */
-export function DynamicT({
-    token,
-    values,
-    fallback,
-    mode,
-    tag = "span",
-    children,
-    ...otherProps
-}: TProps) {
-    const { t } = useTeapot()
-    const value = t(token, values, fallback)
-    const Tag = tag // uppercase for JSX
-    const displayedValue = value
-    let useFallbackChildren = !displayedValue && !!children
-    // having a wrapper element is mandatory to attach some metadata
-    // helping live translation later on
-    return <Tag {...{
-        [DATA_TOKEN_ATTR]: token,
-        "data-dg-fallback-children": useFallbackChildren ? "true" : undefined
-        // @ts-ignore Weird error with Children due to different versions of React
-    }} {...otherProps}>{displayedValue || children}</Tag>
-}
+export const DynamicT = InternalT

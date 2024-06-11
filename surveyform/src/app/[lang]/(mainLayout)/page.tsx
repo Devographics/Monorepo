@@ -23,9 +23,9 @@ const IndexPage = async ({ params }: NextPageParams<{ lang: string }>) => {
   setLocaleIdServerContext(params.lang)
   const { locale, localeId, error } = await rscLocaleFromParams(params)
   if (error) return <div>Can't load translations</div>
+  // TODO: get correct tokens
   const tokenExprs = ["general.open_surveys"]
   const clientSideLocale = filterClientSideStrings<{}>(locale, tokenExprs, {})
-  console.log({ clientSideLocale })
   return (
     <I18nContextProvider
       locale={clientSideLocale}
