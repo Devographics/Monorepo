@@ -1,6 +1,7 @@
 import {
     CUTOFF_ANSWERS,
     NO_ANSWER,
+    NO_MATCH,
     OTHER_ANSWERS,
     OVERLIMIT_ANSWERS
 } from '@devographics/constants'
@@ -8,7 +9,13 @@ import { ResponseEditionData, ComputeAxisParameters, Bucket, FacetBucket } from 
 import take from 'lodash/take.js'
 import { mergeBuckets } from './mergeBuckets'
 
-export const specialBucketIds = [NO_ANSWER, CUTOFF_ANSWERS, OTHER_ANSWERS, OVERLIMIT_ANSWERS]
+export const specialBucketIds = [
+    NO_ANSWER,
+    NO_MATCH,
+    CUTOFF_ANSWERS,
+    OTHER_ANSWERS,
+    OVERLIMIT_ANSWERS
+]
 export const isSpecialBucket = (b: Bucket | FacetBucket) => specialBucketIds.includes(b.id)
 export const isNotSpecialBucket = (b: Bucket | FacetBucket) => !isSpecialBucket(b)
 
