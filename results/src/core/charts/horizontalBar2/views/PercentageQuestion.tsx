@@ -1,6 +1,11 @@
 import React from 'react'
 import { HorizontalBarViewDefinition } from '../types'
-import { removeNoAnswer, removeOverLimit, removeOtherAnswers } from '../helpers/steps'
+import {
+    removeNoAnswer,
+    removeOverLimit,
+    removeOtherAnswers,
+    removeUnderCutoff
+} from '../helpers/steps'
 import { Bucket, BucketUnits, FacetBucket } from '@devographics/types'
 import max from 'lodash/max'
 import round from 'lodash/round'
@@ -20,11 +25,19 @@ const getTicks = (values: number[]) => {
     return ticks
 }
 
+const dataFilters = [
+    // foo,
+    removeNoAnswer
+    // removeOverLimit,
+    // removeUnderCutoff,
+    // removeOtherAnswers
+]
+
 export const PercentageQuestion: HorizontalBarViewDefinition = {
     getValue,
     formatValue: formatPercentage,
     getTicks,
-    dataFilters: [removeNoAnswer, removeOverLimit, removeOtherAnswers],
+    dataFilters,
     component: props => {
         return (
             <Rows

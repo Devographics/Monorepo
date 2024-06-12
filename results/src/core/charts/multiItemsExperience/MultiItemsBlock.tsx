@@ -42,7 +42,6 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
         console.log(series)
         return <div>No data found</div>
     }
-
     const theme = useTheme()
     const chartState = useChartState({ rowsLimit: block?.chartOptions?.limit || defaultLimit })
     const { grouping, variable, sort, order } = chartState

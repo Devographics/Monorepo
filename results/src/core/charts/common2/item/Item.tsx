@@ -102,6 +102,7 @@ const Label = ({ label: label_, href }: { label: LabelObject; href?: string }) =
     const LabelElement = href ? 'a' : 'span'
     const labelComponent = (
         <LabelElement
+            data-key={key}
             className={`chart-item-label ${description ? 'withTooltip' : ''}`}
             {...(href ? { href } : {})}
             dangerouslySetInnerHTML={{ __html: shortLabel }}

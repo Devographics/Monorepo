@@ -1,5 +1,4 @@
 id: ${sectionId}_items
-titleId: sections.${sectionId}.title
 blockType: MultiItemsExperienceBlock
 hasSponsor: true
 query: >

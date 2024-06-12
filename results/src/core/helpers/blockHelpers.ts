@@ -88,18 +88,26 @@ export const getBlockTitle = ({
     block,
     pageContext,
     getString,
-    entities
+    entities,
+    useShortLabel
 }: {
     block: BlockVariantDefinition
     pageContext: PageContextValue
     getString: StringTranslator
     entities?: Entity[]
+    useShortLabel?: boolean
 }) => {
+    let shortTitle
     const entity = entities?.find(e => e.id === block.id)
     const entityName = entity?.nameClean || entity?.name
     const specifiedTitle = block.titleId && getString(block.titleId)?.tClean
     const key = getBlockTitleKey({ block, pageContext })
     const defaultTitle = getString(getBlockKey({ block }))?.tClean
+
+    if (useShortLabel) {
+        shortTitle = getString(getBlockKey({ block }) + '.short')?.tClean
+    }
+
     const fieldTitle =
         block.fieldId &&
         getString(
@@ -107,7 +115,7 @@ export const getBlockTitle = ({
         )?.t
     const tabTitle =
         block.tabId && `${fieldTitle || block.fieldId} ${getString(block.tabId)?.tClean}`
-    const values = [specifiedTitle, defaultTitle, tabTitle, fieldTitle, entityName, key]
+    const values = [specifiedTitle, shortTitle, defaultTitle, tabTitle, fieldTitle, entityName, key]
     // console.table(values)
     return values.find(v => v !== undefined)
 }

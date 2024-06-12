@@ -1,8 +1,7 @@
 id: '${sectionId}_happiness'
-titleId: tools.happiness
 blockType: VerticalBarBlock2
 showDescription: false
-i18nNamespace: happiness
+i18nNamespace: tools
 hasSponsor: true
 query: allEditionsData
 parameters: { showNoAnswer: true }

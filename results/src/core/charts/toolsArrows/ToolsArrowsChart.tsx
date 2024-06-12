@@ -105,8 +105,6 @@ export const ToolsArrowsChart = ({
         [data]
     )
 
-    console.log(data)
-    console.log(items)
     items = compact(items)
 
     const scales = useMemo(() => {

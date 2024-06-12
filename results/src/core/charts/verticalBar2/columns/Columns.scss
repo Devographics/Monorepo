@@ -43,6 +43,7 @@
 .chart-axis-label {
     display: grid;
     place-items: center;
+    padding-left: 10px;
     div {
         transform: rotate(-90deg) translateY(-100%);
     }

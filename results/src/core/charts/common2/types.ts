@@ -11,6 +11,11 @@ export interface ChartState {
     viewDefinition: ViewDefinition
 }
 
+export interface ChartValues {
+    question: QuestionMetadata
+    i18nNamespace?: string
+}
+
 export type ViewDefinition = {
     formatValue: FormatValueType
     getTicks?: (values: number[]) => Tick[]

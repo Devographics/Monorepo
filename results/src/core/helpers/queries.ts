@@ -338,17 +338,20 @@ export const getBlockQuery = ({
     const { facet, filters, options = {} } = chartFilters || {}
     const { showDefaultSeries } = options
     const questionId = block.fieldId || block.id
+    const allEditions = block.query === 'allEditionsData'
     const queryOptions = {
         surveyId: pageContext?.currentSurvey?.id,
         editionId: pageContext?.currentEdition?.id,
         sectionId: pageContext?.id,
         questionId,
-        subField: block?.queryOptions?.subField || ResultsSubFieldEnum.RESPONSES
+        subField: block?.queryOptions?.subField || ResultsSubFieldEnum.RESPONSES,
+        allEditions
     }
     let parameters = block.parameters
-    if (options) {
+    if (options && !isEmpty(options)) {
         parameters = getParameters(options)
     }
+
     const defaultQueryArgs = {
         facet,
         parameters

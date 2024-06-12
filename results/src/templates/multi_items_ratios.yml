@@ -1,5 +1,4 @@
 id: ${sectionId}_ratios
-titleId: sections.${sectionId}.title
 blockType: MultiItemsRatiosBlock
 hasSponsor: true
 query: >

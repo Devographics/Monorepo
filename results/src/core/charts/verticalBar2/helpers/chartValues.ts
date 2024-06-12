@@ -27,10 +27,12 @@ export const useChartValues = ({
     block: BlockVariantDefinition
     question: QuestionMetadata
 }) => {
+    const { i18nNamespace } = block
     const viewDefinition = getViewDefinition(chartState.view)
     const { getTicks } = viewDefinition
     const years = getYears(editions.map(e => e.year))
     const chartValues: VerticalBarChartValues = {
+        i18nNamespace,
         question,
         totalColumns: years.length,
         years,

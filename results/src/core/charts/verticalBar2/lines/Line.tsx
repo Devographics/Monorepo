@@ -8,6 +8,7 @@ import { ViewDefinition } from 'core/charts/common2/types'
 import { QuestionMetadata } from '@devographics/types'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
+import { getQuestionLabel } from 'core/charts/common2/helpers/labels'
 
 const dotRadius = 6
 
@@ -27,7 +28,7 @@ export const Line = ({
     const theme = useTheme()
     const { viewDefinition, highlighted } = chartState
     const { getEditionValue, formatValue, invertYAxis } = viewDefinition
-    const { totalColumns, maxValue, years, question, legendItems = [] } = chartValues
+    const { totalColumns, maxValue, years, question, legendItems = [], i18nNamespace } = chartValues
     if (!getEditionValue) {
         throw new Error(`getEditionValue not defined`)
     }
@@ -39,7 +40,14 @@ export const Line = ({
         color: lineColor
     }
 
-    const { label: lineLabel } = getItemLabel({ id, entity, getString })
+    let lineLabel
+    if (entity) {
+        const labelObject = getItemLabel({ id, entity, getString, i18nNamespace })
+        lineLabel = labelObject.label
+    } else {
+        const labelObject = getQuestionLabel({ question, getString, i18nNamespace })
+        lineLabel = labelObject.label
+    }
 
     const highlightIsActive = highlighted !== null
     const isHighlighted = highlighted === id

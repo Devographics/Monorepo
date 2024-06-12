@@ -63,7 +63,7 @@
         template: multiple_options2
         parameters: { limit: 20 }
         takeaway: >
-            While many respondents (**19%**) came from the U.S., we also had strong representation from Germany, France, the U.K., and the Netherlands (**24% combined**), reflecting the liveliness of the front end community in these countries.
+            While **16%** of respondents came from the U.S., we also had strong representation from the JavaScript community in Germany, France, and the U.K.,(**19% combined**).
         variants:
             - template: vs_salary
               parameters: { limit: 20, sort: { property: medianByFacet, order: desc } }
@@ -85,14 +85,14 @@
       - id: age
         template: multiple_options2
         takeaway: >
-            Survey respondents were on average **33.6** years old, slightly higher than the [State of JS](https://2022.stateofjs.com) (**32.2**) and [State of CSS](https://2023.stateofcss.com) (**33.5**) surveys.
+            Survey respondents were on average **31.7** years old, slightly lower than the [State of HTML](https://2022.stateofjs.com) (**33.6**) and [State of CSS](https://2023.stateofcss.com) (**33.5**) surveys.
         variants:
             - template: vs_salary
 
       - id: years_of_experience
         template: multiple_options2
         takeaway: >
-            Respondents had on average **10.7** years of web development experience.
+            Respondents had on average **9.3** years of web development experience.
         variants:
             - template: vs_salary
 
@@ -246,8 +246,6 @@
               template: hint
 
             - template: section_prenormalized_tools
-              parameters:
-                  limit: 10
 
             - id: lee_robinson
               template: picks
@@ -256,8 +254,8 @@
 
             - template: happiness2
 
-            - template: happiness2
-              defaultView: percentageQuestion
+            # - template: happiness2
+            #   defaultView: percentageQuestion
 
             # - id: front_end_frameworks_happiness
             #   template: multiple_options2
@@ -266,8 +264,7 @@
 
             - id: front_end_frameworks_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: features
-              parameters: { limit: 10 }
+              i18nNamespace: tools
 
             - id: front_end_frameworks_resources
               items: [fm-react, fm-vue]
@@ -282,7 +279,7 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: meta_frameworks_items
+            - id: meta_frameworks_experience
               template: multi_items_experience
               i18nNamespace: tools
 
@@ -290,8 +287,6 @@
               template: hint
 
             - template: section_prenormalized_tools
-              parameters:
-                  limit: 10
 
             - id: lee_robinson
               template: picks
@@ -307,8 +302,7 @@
 
             - id: meta_frameworks_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: features
-              parameters: { limit: 10 }
+              i18nNamespace: tools
 
             - id: meta_frameworks_resources
               items: [fm-fullstack-app-next, fm-servers-node-js]
@@ -323,7 +317,7 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: testing_items
+            - id: testing_experience
               template: multi_items_experience
               i18nNamespace: tools
 
@@ -348,8 +342,7 @@
 
             - id: testing_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: features
-              parameters: { limit: 10 }
+              i18nNamespace: tools
 
             - id: testing_resources
               items: [fm-testing-practices-principles]
@@ -364,7 +357,7 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: mobile_desktop_items
+            - id: mobile_desktop_experience
               template: multi_items_experience
               i18nNamespace: tools
 
@@ -389,8 +382,7 @@
 
             - id: mobile_desktop_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: features
-              parameters: { limit: 10 }
+              i18nNamespace: tools
 
             - id: mobile_desktop_resources
               items: [fm-react-native-v2, fm-intermediate-react-native]
@@ -405,7 +397,7 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: build_tools_items
+            - id: build_tools_experience
               template: multi_items_experience
               i18nNamespace: tools
 
@@ -430,8 +422,7 @@
 
             - id: build_tools_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: features
-              parameters: { limit: 10 }
+              i18nNamespace: tools
 
             - id: build_tools_resources
               items: [fm-xstate]
@@ -446,7 +437,7 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: monorepo_tools_items
+            - id: monorepo_tools_experience
               template: multi_items_experience
               i18nNamespace: tools
 
@@ -471,8 +462,7 @@
 
             - id: monorepo_tools_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: features
-              parameters: { limit: 10 }
+              i18nNamespace: tools
 
             - id: monorepo_tools_resources
               items: [fm-monorepos]
@@ -567,7 +557,6 @@
 
       - id: paid_courses
         template: multiple_options2_freeform
-        parameters: { limit: 20 }
 
       - id: tyler_mcginnis
         template: picks
@@ -576,15 +565,12 @@
 
       - id: podcasts
         template: multiple_options2_freeform
-        parameters: { limit: 20 }
 
       - id: video_creators
         template: multiple_options2_freeform
-        parameters: { limit: 20 }
 
       - id: people
         template: multiple_options2_freeform
-        parameters: { limit: 20 }
 
       - id: other_surveys
         template: multiple_options2_combined

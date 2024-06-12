@@ -7,12 +7,12 @@ export interface BlockDebugProps extends BlockComponentProps {
     data: FacetItem
 }
 
-const BlockDebug = ({ block, data }: BlockDebugProps) => {
+const BlockDebug = ({ block, series }: BlockDebugProps) => {
     return (
         <div>
             debug
             <pre className="error error-data">
-                <code>{JSON.stringify(data, undefined, 2)}</code>
+                <code>{JSON.stringify(series, undefined, 2)}</code>
             </pre>
         </div>
     )

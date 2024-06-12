@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from 'react'
 import {
     ChartState,
+    ChartValues,
     ColumnModes,
     FormatValueType,
     OrderOptions,
@@ -36,10 +37,9 @@ export enum HorizontalBarViews {
     AVERAGE = 'average'
 }
 
-export type HorizontalBarChartValues = {
+export interface HorizontalBarChartValues extends ChartValues {
     maxOverallValue?: number
     totalRows: number
-    question: QuestionMetadata
     facetQuestion?: QuestionMetadata
     ticks?: Tick[]
 }

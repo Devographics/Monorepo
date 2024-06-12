@@ -12,7 +12,7 @@ import { useBoxplotData, useScales } from './helpers'
 import { removeNoAnswer } from '../../helpers/steps'
 import { BAR_HEIGHT, RowGroup } from '../../rows/RowGroup'
 import { RowWrapper, Rows } from '../../rows'
-import { formatCurrency } from 'core/charts/common2/helpers/labels'
+import { formatQuestionValue } from 'core/charts/common2/helpers/labels'
 
 const PIXEL_PER_TICKS = 100
 
@@ -156,6 +156,6 @@ const BoxplotRow = (props: BoxplotRowProps) => {
 export const Boxplot: HorizontalBarViewDefinition = {
     component: BoxplotView,
     getValue: b => 0,
-    formatValue: formatCurrency,
+    formatValue: formatQuestionValue,
     dataFilters: [removeNoAnswer]
 }

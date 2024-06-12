@@ -10,7 +10,7 @@ import {
 } from '@devographics/types'
 import { BlockComponentProps } from 'core/types'
 import { PERCENTAGE_QUESTION, SENTIMENT_FACET } from '@devographics/constants'
-import { ColumnModes, OrderOptions, Tick } from '../common2/types'
+import { ChartValues, ColumnModes, OrderOptions, Tick } from '../common2/types'
 import { DataSeries } from 'core/filters/types'
 
 export const DEFAULT_VARIABLE = PERCENTAGE_QUESTION
@@ -47,10 +47,9 @@ export type MultiItemsChartState = {
     setRowsLimit: Dispatch<SetStateAction<number>>
 }
 
-export type MultiItemsChartValues = {
+export interface MultiItemsChartValues extends ChartValues {
     maxOverallValue?: number
     totalRows: number
-    question: QuestionMetadata
     facetQuestion?: QuestionMetadata
     ticks?: Tick[]
 }

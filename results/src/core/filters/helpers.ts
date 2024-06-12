@@ -637,7 +637,7 @@ export const getInitFilters = (initOptions?: CustomizationOptions): Customizatio
         cutoff: 1,
         cutoffType: 'percent',
         limit: 20,
-        mergeOtherBuckets: true,
+        mergeOtherBuckets: false,
         ...initOptions
     },
     filters: []
