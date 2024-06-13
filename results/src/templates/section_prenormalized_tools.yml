@@ -5,8 +5,10 @@ defaultUnits: count
 hasSponsor: true
 query: currentEditionData
 i18nNamespace: tools
-variables:
-    limit: 10
+canCustomize: true
+parameters: { limit: 10 }
+# chartOptions:
+#     limit: 10
 queryOptions:
     addBucketsEntities: true
     subField: prenormalized

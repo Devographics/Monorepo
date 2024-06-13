@@ -99,19 +99,21 @@ const Wrapper = ({ children, type }: { children: ReactNode; type: string }) => (
 
 const Label = ({ label: label_, href }: { label: LabelObject; href?: string }) => {
     const { label, description, shortLabel, key } = label_
+    const longLabel = label !== shortLabel ? label : null
+    const tooltipContents = description || longLabel
     const LabelElement = href ? 'a' : 'span'
     const labelComponent = (
         <LabelElement
             data-key={key}
-            className={`chart-item-label ${description ? 'withTooltip' : ''}`}
+            className={`chart-item-label ${tooltipContents ? 'withTooltip' : ''}`}
             {...(href ? { href } : {})}
             dangerouslySetInnerHTML={{ __html: shortLabel }}
         />
     )
-    return description ? (
+    return tooltipContents ? (
         <Tooltip
             trigger={labelComponent}
-            contents={<div dangerouslySetInnerHTML={{ __html: description }} />}
+            contents={<div dangerouslySetInnerHTML={{ __html: tooltipContents }} />}
         />
     ) : (
         labelComponent

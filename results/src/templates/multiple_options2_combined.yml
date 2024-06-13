@@ -4,5 +4,7 @@ query: currentEditionData
 queryOptions:
     addBucketsEntities: true
     subField: combined
-parameters: { showNoAnswer: true, cutoffPercent: 1, mergeOtherBuckets: false }
+parameters: { showNoAnswer: true, cutoff: 10, limit: 20, mergeOtherBuckets: true }
+chartOptions:
+    limit: 10
 canCustomize: true

@@ -5,7 +5,7 @@ queryOptions:
     addBucketsEntities: true
     subField: freeform
     addGroupedBuckets: true
-parameters: { limit: 20 }
+parameters: { showNoAnswer: true, cutoff: 10, limit: 20, mergeOtherBuckets: true }
 canCustomize: true
 chartOptions:
     limit: 10

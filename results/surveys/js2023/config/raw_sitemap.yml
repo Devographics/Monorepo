@@ -212,6 +212,7 @@
         template: page_introduction
 
       - id: all_tools_experience
+        titleId: tools.all_items.experience
         template: multi_items_experience
         chartOptions:
             limit: 10
@@ -325,8 +326,6 @@
               template: hint
 
             - template: section_prenormalized_tools
-              parameters:
-                  limit: 10
 
             - id: lee_robinson
               template: picks
@@ -365,8 +364,6 @@
               template: hint
 
             - template: section_prenormalized_tools
-              parameters:
-                  limit: 10
 
             - id: lee_robinson
               template: picks
@@ -405,8 +402,6 @@
               template: hint
 
             - template: section_prenormalized_tools
-              parameters:
-                  limit: 10
 
             - id: lee_robinson
               template: picks
@@ -445,8 +440,6 @@
               template: hint
 
             - template: section_prenormalized_tools
-              parameters:
-                  limit: 10
 
             - id: lee_robinson
               template: picks
@@ -557,6 +550,8 @@
 
       - id: paid_courses
         template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
 
       - id: tyler_mcginnis
         template: picks
@@ -565,12 +560,18 @@
 
       - id: podcasts
         template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
 
       - id: video_creators
         template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
 
       - id: people
         template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
 
       - id: other_surveys
         template: multiple_options2_combined
