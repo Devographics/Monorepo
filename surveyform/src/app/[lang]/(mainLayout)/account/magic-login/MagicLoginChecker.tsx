@@ -16,11 +16,14 @@ import { useState, useEffect } from "react";
 import { verifyMagicToken } from "~/account/magicLogin/client-actions";
 import { routes } from "~/lib/routes";
 
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { Loading } from "~/components/ui/Loading";
 import { useClientData } from "~/components/page/hooks";
 import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
+import { teapot } from "@devographics/react-i18n";
+import { tokens } from "./MagicLoginChecker.tokens";
+
+const { T } = teapot(tokens)
 
 interface ResponseCreationData {
   /** editionId and surveyId are mandatory when createResponse is true */
@@ -110,7 +113,7 @@ export const MagicLoginChecker = ({
   if (error) return <p>Error: {error.message}</p>;
   return (
     <p>
-      <FormattedMessage id="accounts.token_verified" />
+      <T token="accounts.token_verified" />
     </p>
   );
 };

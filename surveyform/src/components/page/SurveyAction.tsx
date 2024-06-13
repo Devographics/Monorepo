@@ -10,7 +10,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { SurveyStatusEnum } from "@devographics/types";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { useRouter } from "next/navigation";
 import { useCurrentUser } from "~/lib/users/hooks";
 import { Loading } from "~/components/ui/Loading";
@@ -24,6 +23,10 @@ import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { ResponseError } from "~/components/error/ResponseError";
 import { ResponseDetails } from "../surveys/ResponseDetails";
 import { clearLocalStorageData, useClientData } from "./hooks";
+import { tokens } from "./SurveyAction.tokens";
+import { teapot } from "@devographics/react-i18n";
+
+const { T } = teapot(tokens)
 
 /**
  * - Logged in and survey open : create new response
@@ -61,16 +64,16 @@ const EditionAction = ({ edition }: { edition: EditionMetadata }) => {
       } else {
         // 1b. there is a response already
         return (
-          <EditionLink response={response} message="general.continue_survey" />
+          <EditionLink response={response} message={<T token="general.continue_survey" />} />
         );
       }
     } else {
       // 2. the survey is no longer available
       return hasResponse ? (
-        <EditionLink message="general.review_answers" response={response} />
+        <EditionLink message={<T token="general.review_answers" />} response={response} />
       ) : (
         // will point to the outline
-        <EditionLink message="general.review_survey" readOnly={true} />
+        <EditionLink message={<T token="general.review_survey" />} readOnly={true} />
       );
     }
   };
@@ -138,7 +141,7 @@ const SurveyStart = ({
   };
   return (
     <LoadingButton {...loadingButtonProps}>
-      <FormattedMessage id="general.start_survey" />
+      <T token="general.start_survey" />
     </LoadingButton>
   );
 };
@@ -154,7 +157,7 @@ const EditionLink = ({
   readOnly,
 }: {
   response?: ResponseDocument;
-  message: string;
+  message: string | React.ReactNode;
   readOnly?: boolean;
 }) => {
   const { edition } = useEdition();
@@ -172,7 +175,7 @@ const EditionLink = ({
         type="button"
         className="btn btn-primary"
       >
-        <FormattedMessage id={message} />
+        {message}
       </Link>
       <ResponseDetails edition={edition} response={response} />
     </div>

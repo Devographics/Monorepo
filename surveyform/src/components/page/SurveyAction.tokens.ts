@@ -1,0 +1,1 @@
+export const tokens = ["general.continue_survey", "general.review_answers", "general.review_survey", "general.start_survey"] as const

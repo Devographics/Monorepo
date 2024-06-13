@@ -1,16 +1,15 @@
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import type { EditionMetadata, Credit } from "@devographics/types";
-import { EnvVar } from "@devographics/helpers";
 import { publicConfig } from "~/config/public";
+import { ServerT } from "~/i18n/components/ServerT";
 
 const SurveyCredits = ({ edition }: { edition: EditionMetadata }) => {
   return (
     <div className="survey-credits survey-page-block">
       <h3 className="survey-credits-heading survey-page-block-heading">
-        <FormattedMessage id="credits.contributors" />
+        <ServerT token="credits.contributors" />
       </h3>
       <p>
-        <FormattedMessage id="credits.contributors.description" />
+        <ServerT token="credits.contributors.description" />
       </p>
       <div className="survey-credits-items">
         {edition.credits
@@ -31,8 +30,8 @@ const SurveyCredit = ({ id, role, entity }: Credit) => {
   const link = homepageUrl
     ? homepageUrl
     : twitterName
-    ? `https://twitter.com/${twitterName}`
-    : "#";
+      ? `https://twitter.com/${twitterName}`
+      : "#";
   return (
     <div className="survey-credits-item">
       <a href={link} className="survey-credits-item-avatar">

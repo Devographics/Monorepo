@@ -17,7 +17,6 @@ const Login = async ({
   const user = await rscCurrentUser();
   const { locale, error } = await rscLocaleFromParams(params)
   if (error) return <div>Can't load translations</div>
-  // TODO: get correct tokens
   const clientSideLocale = filterClientSideStrings<{}>(locale, clientTokens, {})
 
   return (

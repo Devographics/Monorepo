@@ -1,11 +1,11 @@
 import ShareSite from "../share/ShareSite";
 import Score from "../common/Score";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import ReadingListResults from "~/components/reading_list/ReadingListResults";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
 import { ThanksBackButton } from "./ThanksBackButton";
+import { ServerT } from "~/i18n/components/ServerT";
 
 export const Finish = ({
   edition,
@@ -33,7 +33,7 @@ export const Finish = ({
         response={response}
       />
       <div className="survey-message survey-finished">
-        <FormattedMessage id="general.thanks1" />
+        <ServerT token="general.thanks1" />
       </div>
       <h1 className="survey-image survey-image-small">
         {imageUrl && (
@@ -42,7 +42,7 @@ export const Finish = ({
             height={280}
             src={imageUrl}
             alt={getEditionTitle({ edition })}
-            //quality={100}
+          //quality={100}
           />
         )}
       </h1>
@@ -52,7 +52,7 @@ export const Finish = ({
       )}
 
       <div>
-        <FormattedMessage id="general.thanks2" />
+        <ServerT token="general.thanks2" />
       </div>
       <ShareSite edition={edition} />
     </div>
