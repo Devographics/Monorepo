@@ -4,7 +4,7 @@ import './MultiRatios.scss'
 import { BlockComponentProps } from 'core/types'
 // import { getDefaultState, useChartState } from './helpers/chartState'
 // import { getAllEditions } from './helpers/other'
-import { ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
+import { ChartControls, ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
 import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
 import { getBlockNoteKey } from 'core/helpers/blockHelpers'
@@ -16,6 +16,7 @@ import { getDefaultState, useChartState } from './helpers/chartState'
 import ViewSwitcher from './ViewSwitcher'
 import Legend from '../common2/Legend'
 import uniqBy from 'lodash/uniqBy'
+import ModeSwitcher from './ModeSwitcher'
 
 export interface MultiRatiosBlockProps extends BlockComponentProps {
     series: MultiRatioSerie[]
@@ -49,7 +50,10 @@ export const MultiRatiosBlock = (props: MultiRatiosBlockProps) => {
                 </pre> */}
 
                 <Legend chartState={chartState} items={legendItems} />
-                <ViewSwitcher chartState={chartState} />
+                <ChartControls
+                    left={<ModeSwitcher chartState={chartState} />}
+                    right={<ViewSwitcher chartState={chartState} />}
+                />
 
                 <GridWrapper seriesCount={series.length}>
                     {series.map((serie, serieIndex) => (
@@ -63,6 +67,8 @@ export const MultiRatiosBlock = (props: MultiRatiosBlockProps) => {
                     ))}
                 </GridWrapper>
 
+                <Note block={block} />
+
                 <ChartFooter
                     right={
                         <>
@@ -71,8 +77,6 @@ export const MultiRatiosBlock = (props: MultiRatiosBlockProps) => {
                         </>
                     }
                 />
-
-                {note && <Note>{note}</Note>}
             </>
         </ChartWrapper>
     )

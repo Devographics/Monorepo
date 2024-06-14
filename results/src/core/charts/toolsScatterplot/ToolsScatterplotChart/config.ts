@@ -8,7 +8,7 @@ const { totalCountRounded } = variables
 // those labels are picked depending on the `metric` property
 // passed to the chart.
 export const quadrantLabels: Record<ToolsQuadrantsMetric, string[]> = {
-    // retention: ['assess', 'adopt', 'avoid', 'analyze'],
+    // satisfaction: ['assess', 'adopt', 'avoid', 'analyze'],
     // interest: ['mainstream', 'next_big_thing', 'unknown', 'low_interest'],
     retention: ['1', '2', '3', '4'],
     interest: ['1', '2', '3', '4']
@@ -16,7 +16,7 @@ export const quadrantLabels: Record<ToolsQuadrantsMetric, string[]> = {
 
 export const staticProps = {
     containerStyle: { height: 600 },
-    margin: { top: 20, right: 90, bottom: 70, left: 90 },
+    margin: { top: 20, right: 0, bottom: 70, left: 70 },
     nodeRadius: 7,
     nodeCaptureRadius: 16,
     formatPercentage: (value: number) => `${value}%`,

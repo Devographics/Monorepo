@@ -2,7 +2,7 @@ import React from 'react'
 import { RowWrapper } from './RowWrapper'
 import { Cell } from '../HorizontalBarCell'
 import { RowComponentProps } from '../types'
-import { useGradient } from '../helpers/colors'
+import { useGradient } from '../../common2/helpers/colors'
 import { RespondentCount } from '../../common2'
 import { Bucket } from '@devographics/types'
 

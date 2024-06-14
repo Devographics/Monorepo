@@ -1,3 +1,4 @@
+import './Scatterplot.scss'
 import React from 'react'
 import { ToolsScatterplotBlockData } from './types'
 import { useChartData } from './hooks'

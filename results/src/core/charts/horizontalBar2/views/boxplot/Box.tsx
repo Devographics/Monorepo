@@ -4,7 +4,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { fontSize, fontWeight } from 'core/theme'
 import Tip from 'core/components/Tooltip'
 import { Bucket, PercentileData, Percentiles } from '@devographics/types'
-import { useDefaultColorScale } from '../../helpers/colors'
+import { useDefaultColorScale } from '../../../common2/helpers/colors'
 import { DEFAULT } from '@devographics/constants'
 const STROKE_WIDTH = 1
 

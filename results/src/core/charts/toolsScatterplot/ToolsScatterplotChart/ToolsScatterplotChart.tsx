@@ -92,7 +92,8 @@ export const ToolsQuadrantsChart = ({
             bottom: {
                 legend: translate!('charts.axis_legends.users_count'),
                 legendPosition: 'middle' as const,
-                legendOffset: 46
+                legendOffset: 60,
+                tickRotation: -90
             }
         }),
         [translate, metric]

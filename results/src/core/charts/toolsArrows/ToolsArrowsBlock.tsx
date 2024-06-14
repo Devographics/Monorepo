@@ -1,27 +1,20 @@
 import React from 'react'
-import Block from 'core/blocks/block/BlockVariant'
 import ChartContainer from 'core/charts/ChartContainer'
-import { BlockContext } from 'core/blocks/types'
 import { ToolsArrowsChart } from './ToolsArrowsChart'
 import {
-    AllToolsData,
     Bucket,
     FeaturesOptions,
     SimplifiedSentimentOptions,
     StandardQuestionData
 } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
-import { ChartFooter, ChartWrapper } from '../common2'
+import { ChartFooter, ChartWrapper, Note } from '../common2'
 import ChartShare from '../common2/ChartShare'
+import { BlockVariantDefinition } from 'core/types'
 
 interface ToolsArrowsBlockProps {
     index: number
-    block: BlockContext<
-        'toolsExperienceMarimekkoTemplate',
-        'ToolsExperienceMarimekkoBlock',
-        { toolIds: string },
-        any
-    >
+    block: BlockVariantDefinition
     series: DataSeries<StandardQuestionData[]>[]
     triggerId: string | null
 }
@@ -85,14 +78,19 @@ const convertData = (data: StandardQuestionData[]) => {
 export const ToolsArrowsBlock = ({ block, series, triggerId = null }: ToolsArrowsBlockProps) => {
     const controlledCurrent = triggerId
     const { data } = series[0]
+
     return (
         <ChartWrapper>
             <>
-                <ToolsArrowsChart
-                    data={convertData(data)}
-                    current={controlledCurrent}
-                    activeCategory="all"
-                />
+                <ChartContainer>
+                    <ToolsArrowsChart
+                        data={convertData(data)}
+                        current={controlledCurrent}
+                        activeCategory="all"
+                    />
+                </ChartContainer>
+                <Note block={block} />
+
                 <ChartFooter
                     right={
                         <>

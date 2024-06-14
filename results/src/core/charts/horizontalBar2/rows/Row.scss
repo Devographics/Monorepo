@@ -100,9 +100,14 @@
     grid-area: heading;
     display: flex;
     @include small {
-        padding-left: var(--quarterSpacing);
         align-items: center;
-        gap: 5px;
+        gap: var(--halfSpacing);
+        .chart-row-index {
+            order: 2;
+            &::before {
+                content: '#';
+            }
+        }
     }
     @include medium-large {
         justify-content: space-between;
@@ -112,7 +117,7 @@
 }
 .chart-row-index {
     color: var(--textAltColor);
-    opacity: 0.5;
+    opacity: 0.7;
     font-size: 1.1rem;
     @include small {
         font-size: 0.9rem;

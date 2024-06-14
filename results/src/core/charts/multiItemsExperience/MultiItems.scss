@@ -37,16 +37,7 @@
         margin: 0;
     }
 }
-.multiexp-chart-heading {
-    display: flex;
-    gap: var(--halfSpacing);
-    @include small {
-        flex-direction: column;
-    }
-    @include medium-large {
-        justify-content: space-between;
-    }
-}
+
 .multiexp-control {
     display: flex;
     align-items: center;

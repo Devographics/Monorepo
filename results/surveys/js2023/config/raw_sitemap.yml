@@ -119,8 +119,8 @@
 
       - id: gender
         template: multiple_options2
-        takeaway: >
-            Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
+        # takeaway: >
+        #     Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
         variants:
             - template: vs_salary
             - id: country_vs_gender

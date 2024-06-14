@@ -17,22 +17,24 @@ export const RowSingle = (props: RowComponentProps) => {
     const width = (100 * value) / maxOverallValue
     const gradient = theme.colors.barChart.primaryGradient
 
+    // TODO: do this better
     const isFreeformQuestion =
         block.template &&
         ['multiple_options2_freeform'].includes(block.template) &&
         block.id !== 'source'
 
-    const rowMetadata = isFreeformQuestion ? (
-        <FreeformAnswersTrigger
-            bucket={bucket}
-            questionId={question.id}
-            sectionId={block.sectionId}
-            block={block}
-            enableModal={!hasGroupedBuckets}
-        />
-    ) : (
-        <RespondentCount count={bucket.count} />
-    )
+    const rowMetadata =
+        isFreeformQuestion || isFreeformData ? (
+            <FreeformAnswersTrigger
+                bucket={bucket}
+                questionId={question.id}
+                sectionId={block.sectionId}
+                block={block}
+                enableModal={!hasGroupedBuckets}
+            />
+        ) : (
+            <RespondentCount count={bucket.count} />
+        )
     const rowWrapperProps = showCount ? { ...props, rowMetadata } : props
 
     return (

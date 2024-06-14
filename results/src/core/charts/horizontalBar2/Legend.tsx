@@ -1,6 +1,6 @@
 import React, { SyntheticEvent, useRef } from 'react'
 import { OptionMetadata } from '@devographics/types'
-import { ColorScale, neutralColor } from './helpers/colors'
+import { ColorScale, neutralColor } from '../common2/helpers/colors'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import { HorizontalBarChartState } from './types'
