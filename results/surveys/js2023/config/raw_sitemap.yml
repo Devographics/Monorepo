@@ -171,10 +171,6 @@
       # - id: knowledge_score
       #   template: multiple_options
 
-      - id: features_resources
-        items: [fm-javascript]
-        template: recommended_resources
-
       - id: syntax_features
         template: multiple_options2
         i18nNamespace: features
@@ -191,6 +187,11 @@
         template: multiple_options2
         i18nNamespace: features
 
+      - id: dax_raad
+        template: picks
+        variables:
+            url: https://replicache.dev/
+
       - id: browser_api_features
         template: multiple_options2
         i18nNamespace: features
@@ -205,6 +206,9 @@
         i18nNamespace: features
         parameters: { limit: 10 }
 
+      - id: features_resources
+        items: [fm-javascript]
+        template: recommended_resources
 - id: libraries
   path: /libraries
   blocks:
@@ -219,6 +223,11 @@
 
       - id: tools_arrows
         template: tools_arrows
+
+      - id: rich_harris
+        template: picks
+        variables:
+            url: https://www.localfirst.fm/
 
       - id: tier_list
         template: tier_list
@@ -248,10 +257,10 @@
 
             - template: section_prenormalized_tools
 
-            - id: lee_robinson
+            - id: emma_bostian
               template: picks
               variables:
-                  url: https://kit.svelte.dev/
+                  url: https://leaddev.com/personal-development/how-build-trust-new-engineering-manager
 
             - template: happiness2
 
@@ -289,10 +298,10 @@
 
             - template: section_prenormalized_tools
 
-            - id: lee_robinson
+            - id: fireship
               template: picks
               variables:
-                  url: https://kit.svelte.dev/
+                  url: https://pocketbase.io
 
             - template: happiness2
 
@@ -327,10 +336,10 @@
 
             - template: section_prenormalized_tools
 
-            - id: lee_robinson
+            - id: quarkstuff
               template: picks
               variables:
-                  url: https://kit.svelte.dev/
+                  url: https://nuxt.com/
 
             - template: happiness2
 
@@ -365,10 +374,10 @@
 
             - template: section_prenormalized_tools
 
-            - id: lee_robinson
+            - id: david_khourshid
               template: picks
               variables:
-                  url: https://kit.svelte.dev/
+                  url: https://tldraw.com
 
             - template: happiness2
 
@@ -403,10 +412,10 @@
 
             - template: section_prenormalized_tools
 
-            - id: lee_robinson
+            - id: sacha_greif
               template: picks
               variables:
-                  url: https://kit.svelte.dev/
+                  url: https://auto-animate.formkit.com/
 
             - template: happiness2
 
@@ -441,10 +450,10 @@
 
             - template: section_prenormalized_tools
 
-            - id: lee_robinson
+            - id: german_jablonski
               template: picks
               variables:
-                  url: https://kit.svelte.dev/
+                  url: https://lexical.dev/
 
             - template: happiness2
 
@@ -470,10 +479,10 @@
       - id: libraries
         template: multiple_options2_combined
 
-      - id: theo_browne
+      - id: alina_listunova
         template: picks
         variables:
-            url: https://trpc.io/
+            url: https://marvinh.dev/blog/speeding-up-javascript-ecosystem/
 
       - id: graphics_animation
         template: multiple_options2_combined
@@ -499,10 +508,10 @@
       - id: sharing_hint
         template: hint
 
-      - id: ben_holmes
+      - id: shadowingszy
         template: picks
         variables:
-            url: https://github.com/colinhacks/zod
+            url: https://www.rspack.dev/
 
       - id: tools_others_resources
         items: [fm-typescript, fm-node-js]
@@ -528,6 +537,11 @@
       - id: js_app_patterns
         template: multiple_options2_combined
 
+      # - id: xxx
+      #   template: picks
+      #   variables:
+      #       url: xxx
+
       - id: top_js_pain_points
         template: multiple_options2_combined
 
@@ -543,20 +557,10 @@
   blocks:
       - template: page_introduction
 
-      - id: shaundai_person
-        template: picks
-        variables:
-            url: https://sarahdrasnerdesign.com/
-
       - id: paid_courses
         template: multiple_options2_freeform
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
-
-      - id: tyler_mcginnis
-        template: picks
-        variables:
-            url: https://tanstack.com/
 
       - id: podcasts
         template: multiple_options2_freeform
@@ -567,6 +571,11 @@
         template: multiple_options2_freeform
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
+
+      - id: martin_heidegger
+        template: picks
+        variables:
+            url: https://www.npmjs.com/package/tess2
 
       - id: people
         template: multiple_options2_freeform
@@ -579,89 +588,89 @@
       - id: resources_resources
         items: [reactathon]
         template: recommended_resources
-- id: awards
-  path: /awards
-  blocks:
-      - template: page_introduction
+# - id: awards
+#   path: /awards
+#   blocks:
+#       - template: page_introduction
 
-      - id: awards
-        template: awards
-        variables:
-            entities: '"top_level_await","array_at","string_replace_all","vite","vitest","pnpm","vite","vitest","testing_library","turbopack","turborepo","astro","fnm","azure_functions","private_fields","proxies","nullish_coalescing","react","angular","storybook"'
-        awards:
-            - id: feature_adoption_delta_award
-              template: award
-              awards:
-                  - id: top_level_await
-                    value: '+26.4%'
-                  - id: array_at
-                    value: '+14.2%'
-                  - id: string_replace_all
-                    value: '+9.6%'
+#       - id: awards
+#         template: awards
+#         variables:
+#             entities: '"top_level_await","array_at","string_replace_all","vite","vitest","pnpm","vite","vitest","testing_library","turbopack","turborepo","astro","fnm","azure_functions","private_fields","proxies","nullish_coalescing","react","angular","storybook"'
+#         awards:
+#             - id: feature_adoption_delta_award
+#               template: award
+#               awards:
+#                   - id: top_level_await
+#                     value: '+26.4%'
+#                   - id: array_at
+#                     value: '+14.2%'
+#                   - id: string_replace_all
+#                     value: '+9.6%'
 
-            - id: tool_usage_delta_award
-              template: award
-              awards:
-                  - id: vite
-                    value: '+18.8%'
-                  - id: vitest
-                    value: '+11.1%'
-                  - id: pnpm
-                    value: '+8.4%'
+#             - id: tool_usage_delta_award
+#               template: award
+#               awards:
+#                   - id: vite
+#                     value: '+18.8%'
+#                   - id: vitest
+#                     value: '+11.1%'
+#                   - id: pnpm
+#                     value: '+8.4%'
 
-            - id: tool_satisfaction_award
-              template: award
-              awards:
-                  - id: vite
-                    value: '98%'
-                  - id: vitest
-                    value: '97%'
-                  - id: testing_library
-                    value: '95%'
+#             - id: tool_satisfaction_award
+#               template: award
+#               awards:
+#                   - id: vite
+#                     value: '98%'
+#                   - id: vitest
+#                     value: '97%'
+#                   - id: testing_library
+#                     value: '95%'
 
-            - id: tool_interest_award
-              template: award
-              awards:
-                  - id: vite
-                    value: '81%'
-                  - id: turbopack
-                    value: '80%'
-                  - id: turborepo
-                    value: '77%'
+#             - id: tool_interest_award
+#               template: award
+#               awards:
+#                   - id: vite
+#                     value: '81%'
+#                   - id: turbopack
+#                     value: '80%'
+#                   - id: turborepo
+#                     value: '77%'
 
-            - id: most_write_ins_award
-              template: award
-              awards:
-                  - id: astro
-                    value: '402'
-                  - id: fnm
-                    value: '338'
-                  - id: azure_functions
-                    value: '234'
+#             - id: most_write_ins_award
+#               template: award
+#               awards:
+#                   - id: astro
+#                     value: '402'
+#                   - id: fnm
+#                     value: '338'
+#                   - id: azure_functions
+#                     value: '234'
 
-            - id: most_commented_feature_award
-              template: award
-              awards:
-                  - id: private_fields
-                    value: 102
-                  - id: proxies
-                    value: 71
-                  - id: nullish_coalescing
-                    value: 66
+#             - id: most_commented_feature_award
+#               template: award
+#               awards:
+#                   - id: private_fields
+#                     value: 102
+#                   - id: proxies
+#                     value: 71
+#                   - id: nullish_coalescing
+#                     value: 66
 
-            - id: most_commented_tool_award
-              template: award
-              awards:
-                  - id: react
-                    value: 66
-                  - id: angular
-                    value: 47
-                  - id: storybook
-                    value: 42
+#             - id: most_commented_tool_award
+#               template: award
+#               awards:
+#                   - id: react
+#                     value: 66
+#                   - id: angular
+#                     value: 47
+#                   - id: storybook
+#                     value: 42
 
-      - id: awards_resources
-        items: [road-to-react]
-        template: recommended_resources
+#       - id: awards_resources
+#         items: [road-to-react]
+#         template: recommended_resources
 
 - id: conclusion
   path: /conclusion

@@ -13,6 +13,7 @@ export const getEntityFragment = () => `entity {
     name
     nameHtml
     nameClean
+    alias
     description
     descriptionHtml
     descriptionClean

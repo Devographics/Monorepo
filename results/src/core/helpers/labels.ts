@@ -83,7 +83,8 @@ export const getItemLabel = (options: {
 
         const i18nLabelObject = getString(key, values)
         const i18nLabel = getFields(i18nLabelObject, [html ? 'tHtml' : 'tClean', 't'])
-        const entityName = entity && getFields(entity, [html ? 'nameHtml' : 'nameClean', 'name'])
+        const entityName =
+            entity && getFields(entity, ['alias', html ? 'nameHtml' : 'nameClean', 'name'])
 
         const shortLabelObject = getString(key + '.short', values, i18nLabel)
 

@@ -25,6 +25,7 @@ query: >
                                         name
                                         nameClean
                                         nameHtml
+                                        alias
                                         description
                                         descriptionClean
                                         descriptionHtml

@@ -1,5 +1,5 @@
 import './Toggle.scss'
-import React, { SyntheticEvent, useRef } from 'react'
+import React, { SyntheticEvent, useEffect, useRef, useState } from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
@@ -41,12 +41,21 @@ const DEFAULT_SORT = 'default'
 
 export const Toggle = ({ labelId, items, handleSelect, hasDefault = false }: ToggleProps) => {
     const { getString } = useI18n()
-
+    const [useDropdown, setUseDropdown] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
-    const currentWidth = useWidth(ref) || 0
+    const currentWidth = useWidth(ref)
     const minimumWidth = getMinToggleWidth(items)
     // TODO: maybe use actual width of elements; or even do it via CSS via container query?
-    const useDropdown = currentWidth < minimumWidth
+    console.log(labelId, currentWidth, minimumWidth)
+
+    useEffect(() => {
+        // note: only make calculation once currentWidth is defined
+        if (currentWidth) {
+            const isSmushed = currentWidth < minimumWidth
+            setUseDropdown(isSmushed)
+        }
+    }, [currentWidth]) // The empty dependency array makes sure this runs only once after component mount
+
     return (
         <div className="chart-toggle">
             <h4 className="chart-toggle-heading">

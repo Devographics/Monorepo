@@ -16,6 +16,7 @@ query: >
                 name
                 nameClean
                 nameHtml
+                alias
                 entityType
                 description
                 descriptionClean
