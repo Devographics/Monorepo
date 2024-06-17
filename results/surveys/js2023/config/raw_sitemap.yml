@@ -496,6 +496,11 @@
       - id: edge_runtimes
         template: multiple_options2_combined
 
+      - id: augustin_mauroy
+        template: picks
+        variables:
+            url: https://x.com/wunderacle
+
       - id: non_js_languages
         template: multiple_options2_combined
 
@@ -537,10 +542,10 @@
       - id: js_app_patterns
         template: multiple_options2_combined
 
-      # - id: xxx
-      #   template: picks
-      #   variables:
-      #       url: xxx
+      - id: gustavo_vasquez
+        template: picks
+        variables:
+            url: https://medium.com/@devgustavovasquez/the-future-of-web-development-embracing-interoperable-runtimes-bd2006e9b9d7
 
       - id: top_js_pain_points
         template: multiple_options2_combined
@@ -561,6 +566,11 @@
         template: multiple_options2_freeform
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
+
+      - id: rexhent
+        template: picks
+        variables:
+            url: https://nuxt.com/
 
       - id: podcasts
         template: multiple_options2_freeform
@@ -588,89 +598,99 @@
       - id: resources_resources
         items: [reactathon]
         template: recommended_resources
-# - id: awards
-#   path: /awards
-#   blocks:
-#       - template: page_introduction
+- id: awards
+  path: /awards
+  blocks:
+      - template: page_introduction
 
-#       - id: awards
-#         template: awards
-#         variables:
-#             entities: '"top_level_await","array_at","string_replace_all","vite","vitest","pnpm","vite","vitest","testing_library","turbopack","turborepo","astro","fnm","azure_functions","private_fields","proxies","nullish_coalescing","react","angular","storybook"'
-#         awards:
-#             - id: feature_adoption_delta_award
-#               template: award
-#               awards:
-#                   - id: top_level_await
-#                     value: '+26.4%'
-#                   - id: array_at
-#                     value: '+14.2%'
-#                   - id: string_replace_all
-#                     value: '+9.6%'
+      - id: awards
+        template: awards
+        variables:
+            entities: '"vite","esbuild","vitest","playwright","bun","astro","ember","react","nextjs","storybook","jest"'
+        awards:
+            # - id: feature_adoption_delta_award
+            #   template: award
+            #   awards:
+            #       - id: top_level_await
+            #         value: '+26.4%'
+            #       - id: array_at
+            #         value: '+14.2%'
+            #       - id: string_replace_all
+            #         value: '+9.6%'
 
-#             - id: tool_usage_delta_award
-#               template: award
-#               awards:
-#                   - id: vite
-#                     value: '+18.8%'
-#                   - id: vitest
-#                     value: '+11.1%'
-#                   - id: pnpm
-#                     value: '+8.4%'
+            - id: tool_usage_delta_award
+              template: award
+              awards:
+                  - id: vite
+                    value: '+25%'
+                  - id: esbuild
+                    value: '+21%'
+                  - id: vitest
+                    value: '+20%'
 
-#             - id: tool_satisfaction_award
-#               template: award
-#               awards:
-#                   - id: vite
-#                     value: '98%'
-#                   - id: vitest
-#                     value: '97%'
-#                   - id: testing_library
-#                     value: '95%'
+            - id: tool_satisfaction_award
+              template: award
+              awards:
+                  - id: vite
+                    value: '98%'
+                  - id: vitest
+                    value: '96%'
+                  - id: playwright
+                    value: '95%'
 
-#             - id: tool_interest_award
-#               template: award
-#               awards:
-#                   - id: vite
-#                     value: '81%'
-#                   - id: turbopack
-#                     value: '80%'
-#                   - id: turborepo
-#                     value: '77%'
+            - id: tool_interest_award
+              template: award
+              awards:
+                  - id: vitest
+                    value: '79%'
+                  - id: vite
+                    value: '77%'
+                  - id: playwright
+                    value: '76%'
 
-#             - id: most_write_ins_award
-#               template: award
-#               awards:
-#                   - id: astro
-#                     value: '402'
-#                   - id: fnm
-#                     value: '338'
-#                   - id: azure_functions
-#                     value: '234'
+            - id: most_write_ins_award
+              template: award
+              awards:
+                  - id: bun
+                    value: '353'
+                  - id: astro
+                    value: '299'
+                  - id: ember
+                    value: '81'
 
-#             - id: most_commented_feature_award
-#               template: award
-#               awards:
-#                   - id: private_fields
-#                     value: 102
-#                   - id: proxies
-#                     value: 71
-#                   - id: nullish_coalescing
-#                     value: 66
+            # - id: most_commented_feature_award
+            #   template: award
+            #   awards:
+            #       - id: private_fields
+            #         value: 102
+            #       - id: proxies
+            #         value: 71
+            #       - id: nullish_coalescing
+            #         value: 66
 
-#             - id: most_commented_tool_award
-#               template: award
-#               awards:
-#                   - id: react
-#                     value: 66
-#                   - id: angular
-#                     value: 47
-#                   - id: storybook
-#                     value: 42
+            - id: most_commented_tool_award
+              template: award
+              awards:
+                  - id: react
+                    value: 119
+                  - id: nextjs
+                    value: 92
+                  - id: storybook
+                    value: 72
 
-#       - id: awards_resources
-#         items: [road-to-react]
-#         template: recommended_resources
+            - id: most_loved_tool_award
+              template: award
+              awards:
+                  - id: vite
+                    value: '88.7%'
+                  - id: jest
+                    value: '73.2%'
+                  - id: react
+                    value: '71.2%'
+
+      - id: awards_resources
+        items: [road-to-react]
+        template: recommended_resources
 
 - id: conclusion
   path: /conclusion

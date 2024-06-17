@@ -5,6 +5,7 @@ import { RowComponentProps } from '../types'
 import { useTheme } from 'styled-components'
 import { FreeformIndicator, RespondentCount } from '../../common2'
 import { FreeformAnswersTrigger } from '../../common2/FreeformAnswers'
+import { CUTOFF_ANSWERS, NO_MATCH, OVERLIMIT_ANSWERS } from '@devographics/constants'
 
 export const RowSingle = (props: RowComponentProps) => {
     const theme = useTheme()
@@ -23,18 +24,19 @@ export const RowSingle = (props: RowComponentProps) => {
         ['multiple_options2_freeform'].includes(block.template) &&
         block.id !== 'source'
 
-    const rowMetadata =
-        isFreeformQuestion || isFreeformData ? (
-            <FreeformAnswersTrigger
-                bucket={bucket}
-                questionId={question.id}
-                sectionId={block.sectionId}
-                block={block}
-                enableModal={!hasGroupedBuckets}
-            />
-        ) : (
-            <RespondentCount count={bucket.count} />
-        )
+    const isSpecialBucket = [OVERLIMIT_ANSWERS, CUTOFF_ANSWERS, NO_MATCH].includes(bucket.id)
+    const showFreeformAnswers = !isSpecialBucket && (isFreeformQuestion || isFreeformData)
+    const rowMetadata = showFreeformAnswers ? (
+        <FreeformAnswersTrigger
+            bucket={bucket}
+            questionId={question.id}
+            sectionId={block.sectionId}
+            block={block}
+            enableModal={!hasGroupedBuckets}
+        />
+    ) : (
+        <RespondentCount count={bucket.count} />
+    )
     const rowWrapperProps = showCount ? { ...props, rowMetadata } : props
 
     return (
