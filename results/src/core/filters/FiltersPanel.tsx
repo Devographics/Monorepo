@@ -1,8 +1,8 @@
 import './FiltersPanel.scss'
-import React, { useState, Dispatch, SetStateAction, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
-import { mq, spacing, fontSize } from 'core/theme'
+import { spacing, fontSize } from 'core/theme'
 import Button from 'core/components/Button'
 import {
     CreateVariantType,
@@ -10,36 +10,22 @@ import {
     DeleteVariantType,
     UpdateVariantType,
     getFieldLabel,
-    getInitFilters,
-    useCustomVariants
+    getInitFilters
 } from './helpers'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from '@devographics/react-i18n'
 import isEmpty from 'lodash/isEmpty.js'
-import {
-    AutoSelectText,
-    ExportButton,
-    FiltersExport,
-    GraphQLExport,
-    GraphQLTrigger,
-    JSONTrigger,
-    Message_
-} from 'core/blocks/block/BlockData'
+import { ExportButton, FiltersExport, GraphQLTrigger } from 'core/blocks/block/BlockData'
 import * as Tabs from '@radix-ui/react-tabs'
-import {
-    TabsList,
-    TabsTrigger,
-    getCustomTabId,
-    getRegularTabId
-} from 'core/blocks/block/BlockTabsWrapper'
+import { getCustomTabId, getRegularTabId } from 'core/blocks/block/BlockTabsWrapper'
 import FacetSelection from './FacetSelection'
 import FiltersSelection from './FiltersSelection'
-import { MODE_DEFAULT, MODE_FACET, MODE_COMBINED, MODE_GRID } from './constants'
+import { MODE_DEFAULT, MODE_FACET, MODE_GRID } from './constants'
 import cloneDeep from 'lodash/cloneDeep'
 import { BlockVariantDefinition } from '../types/index'
 import { useStickyState, getFiltersLink } from './helpers'
-import { CheckIcon, DeleteIcon, EditIcon, TrashIcon } from 'core/icons'
+import { CheckIcon, EditIcon } from 'core/icons'
 import { CustomizationDefinition, SupportedMode } from './types'
 import { useAllFilters } from 'core/charts/hooks'
 import { useEntities } from 'core/helpers/entities'
@@ -47,7 +33,7 @@ import ModalTrigger from 'core/components/ModalTrigger'
 import { copyTextToClipboard } from 'core/helpers/utils'
 import { Details } from 'core/components/Details'
 import { AdvancedOptions } from './AdvancedOptions'
-import { getBlockQuery } from 'core/helpers/queries'
+import { getBlockQuery } from 'core/queries/queries'
 
 export type FiltersPanelPropsType = {
     block: BlockVariantDefinition
@@ -84,7 +70,8 @@ const FiltersPanel = ({
 
     const chartName = getBlockTitle({ block, pageContext, getString, entities })
 
-    let initState = getInitFilters()
+    let initState = getInitFilters({ block })
+
     if (variant && !isEmpty(chartFilters)) {
         // if chart filters have been passed, use them to extend the default init filters
         initState = { ...initState, ...variant.chartFilters }
@@ -163,6 +150,7 @@ const FiltersPanel = ({
         chartFilters: filtersState
     })
 
+    const { customizationModes = [] } = block
     return (
         <Filters_>
             <FiltersTop_>
@@ -199,12 +187,16 @@ const FiltersPanel = ({
                 </a>
             </FiltersTop_>
             <div className="filters-sections">
-                <Details labelId="filters.grid_mode" defaultOpen={true}>
-                    <FiltersSelection {...props} />
-                </Details>
-                <Details labelId="filters.facet_mode" defaultOpen={true}>
-                    <FacetSelection {...props} />
-                </Details>
+                {customizationModes.includes('filters') && (
+                    <Details labelId="filters.grid_mode" defaultOpen={true}>
+                        <FiltersSelection {...props} />
+                    </Details>
+                )}
+                {customizationModes.includes('facets') && (
+                    <Details labelId="filters.facet_mode" defaultOpen={true}>
+                        <FacetSelection {...props} />
+                    </Details>
+                )}
                 <Details labelId="filters.advanced_options" defaultOpen={false}>
                     <AdvancedOptions {...props} />
                 </Details>

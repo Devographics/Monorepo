@@ -40,13 +40,12 @@ type ToggleProps = {
 const DEFAULT_SORT = 'default'
 
 export const Toggle = ({ labelId, items, handleSelect, hasDefault = false }: ToggleProps) => {
-    const { getString } = useI18n()
     const [useDropdown, setUseDropdown] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
     const currentWidth = useWidth(ref)
     const minimumWidth = getMinToggleWidth(items)
-    // TODO: maybe use actual width of elements; or even do it via CSS via container query?
-    console.log(labelId, currentWidth, minimumWidth)
+
+    const commonProps = { handleSelect, hasDefault, items }
 
     useEffect(() => {
         // note: only make calculation once currentWidth is defined
@@ -68,34 +67,58 @@ export const Toggle = ({ labelId, items, handleSelect, hasDefault = false }: Tog
                 ref={ref}
             >
                 {useDropdown ? (
-                    <select
-                        className="chart-toggle-dropdown chart-toggle-items"
-                        onChange={e => {
-                            handleSelect(e.target.value)
-                        }}
-                    >
-                        {hasDefault && (
-                            <option value={DEFAULT_SORT}>
-                                {getString('filters.legend.default')?.t}
-                            </option>
-                        )}
-                        {items.map(item => (
-                            <SelectItem key={item.id} item={item} />
-                        ))}
-                    </select>
+                    <Dropdown {...commonProps} />
                 ) : (
-                    <ButtonGroup className="chart-toggle-buttongroup chart-toggle-items">
-                        {items.map(item => (
-                            <ToggleItem key={item.id} item={item} handleSelect={handleSelect} />
-                        ))}
-                    </ButtonGroup>
+                    <SegmentedControl {...commonProps} />
                 )}
             </div>
         </div>
     )
 }
 
-const ToggleItem = ({
+const Dropdown = ({
+    handleSelect,
+    hasDefault,
+    items
+}: Pick<ToggleProps, 'handleSelect' | 'hasDefault' | 'items'>) => {
+    const { getString } = useI18n()
+
+    return (
+        <select
+            className="chart-toggle-dropdown chart-toggle-items"
+            onChange={e => {
+                handleSelect(e.target.value)
+            }}
+        >
+            {hasDefault && (
+                <option value={DEFAULT_SORT}>{getString('filters.legend.default')?.t}</option>
+            )}
+            {items.map(item => (
+                <DropdownItem key={item.id} item={item} />
+            ))}
+        </select>
+    )
+}
+
+const DropdownItem = ({ item }: { item: ToggleItemType }) => {
+    const { label, id } = item
+    return <option value={id}>{label}</option>
+}
+
+const SegmentedControl = ({
+    handleSelect,
+    items
+}: Pick<ToggleProps, 'handleSelect' | 'hasDefault' | 'items'>) => {
+    return (
+        <ButtonGroup className="chart-toggle-buttongroup chart-toggle-items">
+            {items.map(item => (
+                <SegmentedControlItem key={item.id} item={item} handleSelect={handleSelect} />
+            ))}
+        </ButtonGroup>
+    )
+}
+
+const SegmentedControlItem = ({
     item,
     handleSelect
 }: {
@@ -104,13 +127,12 @@ const ToggleItem = ({
 }) => {
     const { label, id, isEnabled, gradient, className, tooltip } = item
     const ref = useRef<HTMLDivElement>(null)
-    console.log(item.id)
-    console.log(ref.current?.scrollWidth)
-    console.log(ref.current?.offsetWidth)
 
     const component = (
         <Button
-            className={`chart-toggle-item column-heading ${className}`}
+            className={`chart-toggle-item column-heading chart-toggle-item-${
+                isEnabled ? 'enabled' : 'disabled'
+            } ${className}`}
             size="small"
             onClick={(e: SyntheticEvent) => {
                 e.preventDefault()
@@ -134,11 +156,6 @@ const ItemColor = ({ gradient }: { gradient: string[] }) => {
         '--color2': gradient[1]
     }
     return <div style={style} className="legend-item-color" />
-}
-
-const SelectItem = ({ item }: { item: ToggleItemType }) => {
-    const { label, id } = item
-    return <option value={id}>{label}</option>
 }
 
 export default Toggle

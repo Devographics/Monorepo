@@ -5,7 +5,7 @@ defaultUnits: count
 hasSponsor: true
 query: currentEditionData
 i18nNamespace: tools
-canCustomize: true
+customizationModes: [filters, facets]
 parameters: { limit: 10 }
 # chartOptions:
 #     limit: 10

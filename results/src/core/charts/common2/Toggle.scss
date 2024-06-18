@@ -31,6 +31,9 @@
     // flex-wrap: wrap;
     justify-content: center;
 }
+.chart-toggle-item-enabled {
+    background: var(--backgroundAltColor);
+}
 .chart-toggle-item {
     display: flex;
     align-items: center;

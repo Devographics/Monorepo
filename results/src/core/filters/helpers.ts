@@ -34,7 +34,7 @@ import uniq from 'lodash/uniq'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getBlockLink } from 'core/helpers/blockHelpers'
 import { getEntityName, useEntities } from 'core/helpers/entities'
-import { getBlockQuery } from 'core/helpers/queries'
+import { getBlockQuery } from 'core/queries/queries'
 import { PageContextValue } from 'core/types/context'
 import {
     Entity,
@@ -628,24 +628,45 @@ export const useFilterLegends = ({
 Initialize the chart customization filter state
 
 */
-export const getInitFilters = (initOptions?: CustomizationOptions): CustomizationDefinition => ({
-    options: {
+export const getInitFilters = ({
+    block,
+    initOptions
+}: {
+    block: BlockVariantDefinition
+    initOptions?: CustomizationOptions
+}): CustomizationDefinition => {
+    const { parameters = {} } = block
+    const { cutoff, cutoffPercent, limit } = parameters
+
+    let cutoffObject
+    if (cutoff !== undefined) {
+        cutoffObject = { cutoff, cutoffType: 'count' }
+    } else if (cutoffPercent !== undefined) {
+        cutoffObject = { cutoff: cutoffPercent, cutoffType: 'percent' }
+    } else {
+        cutoffObject = { cutoff: 1, cutoffType: 'percent' }
+    }
+    const options = {
         showDefaultSeries: false,
         enableYearSelect: false,
         mode: MODE_DEFAULT,
         queryOnLoad: false,
-        cutoff: 1,
-        cutoffType: 'percent',
-        limit: 20,
+        ...cutoffObject,
+        limit: limit ?? 20,
         mergeOtherBuckets: false,
         ...initOptions
-    },
-    filters: []
-})
+    }
+    return {
+        options,
+        filters: []
+    }
+}
 
 /*
 
 Hook to initialize chart filters
+
+not used anymore?
 
 */
 export const useChartFilters = ({
@@ -668,7 +689,7 @@ export const useChartFilters = ({
         loadFiltersFromUrl = urlFilters && block.id === queryParams.blockId
     }
 
-    const initFilters = getInitFilters(options)
+    const initFilters = getInitFilters({ block, initOptions: options })
     const initFiltersState = loadFiltersFromUrl
         ? merge({}, initFilters, urlFilters, { options: { queryOnLoad: true } })
         : merge({}, initFilters, providedFiltersState)

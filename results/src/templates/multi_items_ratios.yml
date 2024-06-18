@@ -1,6 +1,17 @@
 id: ${sectionId}_ratios
 blockType: MultiItemsRatiosBlock
 hasSponsor: true
+customizationModes: ['filters']
+queryOptions:
+    questionId: _items
+    addBuckets: false
+    addRatios: true
+    addQuestionEntity: true
+    allEditions: true
+parameters:
+    cutoffPercent: 0
+    facetCutoffPercent: 0
+    limit: 0
 query: >
     surveys {
       ${surveyId} {

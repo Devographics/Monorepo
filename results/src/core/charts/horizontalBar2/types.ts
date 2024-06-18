@@ -1,10 +1,8 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from 'react'
 import {
-    ChartState,
+    ChartStateWithSort,
     ChartValues,
     ColumnModes,
-    FormatValueType,
-    OrderOptions,
     Tick,
     ViewDefinition
 } from '../common2/types'
@@ -14,11 +12,7 @@ import { Bucket, FacetBucket, QuestionMetadata } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 import { Dimension } from '../multiItemsExperience/types'
 
-export interface HorizontalBarChartState extends ChartState {
-    sort: string | undefined
-    setSort: Dispatch<SetStateAction<string | undefined>>
-    order: OrderOptions
-    setOrder: Dispatch<SetStateAction<OrderOptions>>
+export interface HorizontalBarChartState extends ChartStateWithSort {
     columnMode: ColumnModes
     setColumnMode: Dispatch<SetStateAction<ColumnModes>>
     facet: FacetItem | undefined

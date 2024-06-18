@@ -4,7 +4,7 @@ query: currentEditionData
 queryOptions:
     addBucketsEntities: true
     subField: combined
+customizationModes: [filters, facets]
 parameters: { showNoAnswer: true, cutoff: 10, limit: 20, mergeOtherBuckets: true }
 chartOptions:
     limit: 10
-canCustomize: true

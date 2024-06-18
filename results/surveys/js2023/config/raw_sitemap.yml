@@ -125,6 +125,7 @@
             - template: vs_salary
             - id: country_vs_gender
               fieldId: country
+              tabId: tabs.by_country
               template: multiple_options2
               parameters:
                   showNoAnswer: true
@@ -199,12 +200,16 @@
       - id: language_pain_points
         template: multiple_options2_freeform
         i18nNamespace: features
-        parameters: { limit: 10 }
 
       - id: browser_apis_pain_points
         template: multiple_options2_freeform
         i18nNamespace: features
-        parameters: { limit: 10 }
+
+      - id: reading_list
+        # template: reading_list
+        template: multiple_options2
+        queryOptions:
+            sectionId: reading_list
 
       - id: features_resources
         items: [fm-javascript]

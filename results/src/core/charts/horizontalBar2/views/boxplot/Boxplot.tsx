@@ -16,6 +16,9 @@ import { formatQuestionValue } from 'core/charts/common2/helpers/labels'
 
 const PIXEL_PER_TICKS = 100
 
+// use a value slightly larger than max to leave margin for labels, etc. on right side of chart
+const MAX_COEFF = 1.2
+
 const BoxplotView = (viewProps: HorizontalBarViewProps) => {
     const { chartState, chartValues } = viewProps
     const { facetQuestion } = chartValues
@@ -43,7 +46,7 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
         const allP90 = buckets.map(bucket => bucket.percentilesByFacet?.p90 || 0)
         const [chartMin, chartMax] = [Math.min(...allP10), Math.max(...allP90)]
         const groups = [...new Set(buckets.map(bucket => bucket.id))]
-        return { chartMin, chartMax, groups }
+        return { chartMin, chartMax: chartMax * MAX_COEFF, groups }
     }, [buckets])
 
     const labelFormatter = (value: number) => formatValue(value, facetQuestion)

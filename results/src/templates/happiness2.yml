@@ -5,4 +5,4 @@ i18nNamespace: tools
 hasSponsor: true
 query: allEditionsData
 parameters: { showNoAnswer: true }
-canCustomize: true
+customizationModes: [filters]

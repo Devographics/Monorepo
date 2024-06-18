@@ -11,6 +11,13 @@ export interface ChartState {
     viewDefinition: ViewDefinition
 }
 
+export interface ChartStateWithSort extends ChartState {
+    sort: string | undefined
+    setSort: Dispatch<SetStateAction<string | undefined>>
+    order: OrderOptions
+    setOrder: Dispatch<SetStateAction<OrderOptions>>
+}
+
 export interface ChartValues {
     question: QuestionMetadata
     i18nNamespace?: string

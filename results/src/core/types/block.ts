@@ -99,7 +99,7 @@ export interface BlockVariantDefinition {
     showNote?: boolean
     customChart?: any
 
-    canCustomize?: boolean
+    customizationModes?: string[]
 
     // options that only affect how the chart is displayed, not the query or data
     chartOptions: ChartOptions
