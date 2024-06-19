@@ -700,11 +700,17 @@
 - id: conclusion
   path: /conclusion
   blocks:
-      - id: conclusion
+      - id: conclusion_cassidy
         template: conclusion
         variables:
-            author: sarah_drasner
-            entities: '"sarah_drasner"'
+            author: cassidy_williams
+            entities: '"cassidy_williams"'
+
+      - id: conclusion_theo
+        template: conclusion
+        variables:
+            author: theo_browne
+            entities: '"theo_browne"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock
