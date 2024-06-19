@@ -1,8 +1,8 @@
-// import { BucketUnits } from '@devographics/types'
+import { BucketUnits } from '@devographics/types'
 import { getEntityFragment } from './getEntityFragment'
 import { getFacetFragment } from './getFacetFragment'
 import { getPercentilesFragment } from './getPercentilesFragment'
-// import { QueryArgs } from '../types'
+import { QueryArgs } from '../types'
 
 export const getBucketsFragment = (options: {
     addBucketsEntities: boolean

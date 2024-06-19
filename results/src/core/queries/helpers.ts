@@ -1,9 +1,8 @@
 import isEmpty from 'lodash/isEmpty.js'
-// import { FacetItem } from 'core/filters/types'
-// import { QueryArgs, ResponseArgumentsStrings } from './types'
-// import { SENTIMENT_FACET } from '@devographics/constants'
+import { FacetItem } from 'core/filters/types'
+import { QueryArgs, ResponseArgumentsStrings } from './types'
+import { SENTIMENT_FACET } from '@devographics/constants'
 
-const SENTIMENT_FACET = '_sentiment'
 export const facetItemToFacet = ({ sectionId, id }: FacetItem) =>
     id === SENTIMENT_FACET ? SENTIMENT_FACET : `${sectionId}__${id}`
 
