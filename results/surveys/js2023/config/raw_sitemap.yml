@@ -156,7 +156,7 @@
             limit: 20
 
       - id: user_info_resources
-        items: [fm-javascript-first-steps]
+        items: [fm-javascript-first-steps, fm-getting-a-job-v2]
         template: recommended_resources
 
 - id: features
@@ -212,7 +212,7 @@
             sectionId: reading_list
 
       - id: features_resources
-        items: [fm-javascript-quiz, fm-javascript-recent-parts]
+        items: [fm-javascript-quiz, fm-javascript-hard-parts-v2]
         template: recommended_resources
 
 - id: libraries
@@ -244,9 +244,9 @@
       # - id: all_sections_tools_cardinality_by_user
       #   template: tools_cardinality_by_user_js
 
-      # - id: libraries_resources
-      #   items: [fm-javascript-quiz, fm-javascript-recent-parts]
-      #   template: recommended_resources
+      - id: libraries_resources
+        items: [fm-vite, fm-design-systems-v2]
+        template: recommended_resources
 
   children:
       - id: front_end_frameworks
@@ -287,7 +287,7 @@
               i18nNamespace: tools
 
             - id: front_end_frameworks_resources
-              items: [fm-react-v8, fm-svelte-v2]
+              items: [fm-react, fm-vanilla-js-apps]
               template: recommended_resources
 
       - id: meta_frameworks
@@ -325,7 +325,7 @@
               i18nNamespace: tools
 
             - id: meta_frameworks_resources
-              items: [fm-nextjs-v3, fm-sveltekit]
+              items: [fm-nextjs-v3, fm-openai-node]
               template: recommended_resources
 
       - id: testing
@@ -363,7 +363,7 @@
               i18nNamespace: tools
 
             - id: testing_resources
-              items: [fm-testing-practices-principles]
+              items: [fm-enterprise-ui-dev, fm-web-app-testing]
               template: recommended_resources
 
       - id: mobile_desktop
@@ -401,7 +401,7 @@
               i18nNamespace: tools
 
             - id: mobile_desktop_resources
-              items: [fm-react-native-v2, fm-intermediate-react-native]
+              items: [fm-react-native-v2, fm-electron-v3]
               template: recommended_resources
 
       - id: build_tools
@@ -477,7 +477,7 @@
               i18nNamespace: tools
 
             - id: monorepo_tools_resources
-              items: [fm-monorepos]
+              items: [fm-monorepos, fm-git]
               template: recommended_resources
 
 - id: other_tools
@@ -529,7 +529,7 @@
             url: https://www.rspack.dev/
 
       - id: tools_others_resources
-        items: [fm-typescript-v4, fm-rust-ts-devs]
+        items: [fm-node-js, fm-fullstack-v3]
         template: recommended_resources
 - id: usage
   intlId: usage_js
@@ -564,7 +564,7 @@
         template: multiple_options2_combined
 
       - id: usage_resources
-        items: [fm-algorithms, fm-js-patterns]
+        items: [fm-professional, fm-fullstack]
         template: recommended_resources
 
 - id: resources
@@ -606,7 +606,7 @@
         template: multiple_options2_combined
 
       - id: resources_resources
-        items: [fm-htmx-go, fm-git]
+        items: [fm-algorithms, fm-primeagen]
         template: recommended_resources
 
 - id: awards
