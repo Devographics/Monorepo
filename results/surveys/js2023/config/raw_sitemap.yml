@@ -156,7 +156,7 @@
             limit: 20
 
       - id: user_info_resources
-        items: [renderatl]
+        items: [fm-javascript-first-steps]
         template: recommended_resources
 
 - id: features
@@ -212,8 +212,9 @@
             sectionId: reading_list
 
       - id: features_resources
-        items: [fm-javascript]
+        items: [fm-javascript-quiz, fm-javascript-recent-parts]
         template: recommended_resources
+
 - id: libraries
   path: /libraries
   blocks:
@@ -242,6 +243,10 @@
 
       # - id: all_sections_tools_cardinality_by_user
       #   template: tools_cardinality_by_user_js
+
+      # - id: libraries_resources
+      #   items: [fm-javascript-quiz, fm-javascript-recent-parts]
+      #   template: recommended_resources
 
   children:
       - id: front_end_frameworks
@@ -282,7 +287,7 @@
               i18nNamespace: tools
 
             - id: front_end_frameworks_resources
-              items: [fm-react, fm-vue]
+              items: [fm-react-v8, fm-svelte-v2]
               template: recommended_resources
 
       - id: meta_frameworks
@@ -320,7 +325,7 @@
               i18nNamespace: tools
 
             - id: meta_frameworks_resources
-              items: [fm-fullstack-app-next, fm-servers-node-js]
+              items: [fm-nextjs-v3, fm-sveltekit]
               template: recommended_resources
 
       - id: testing
@@ -434,7 +439,7 @@
               i18nNamespace: tools
 
             - id: build_tools_resources
-              items: [fm-xstate]
+              items: [fm-vite, fm-webpack-fundamentals]
               template: recommended_resources
 
       - id: monorepo_tools
@@ -524,7 +529,7 @@
             url: https://www.rspack.dev/
 
       - id: tools_others_resources
-        items: [fm-typescript, fm-node-js]
+        items: [fm-typescript-v4, fm-rust-ts-devs]
         template: recommended_resources
 - id: usage
   intlId: usage_js
@@ -601,8 +606,9 @@
         template: multiple_options2_combined
 
       - id: resources_resources
-        items: [reactathon]
+        items: [fm-htmx-go, fm-git]
         template: recommended_resources
+
 - id: awards
   path: /awards
   blocks:
@@ -693,9 +699,9 @@
                   - id: react
                     value: '71.2%'
 
-      - id: awards_resources
-        items: [road-to-react]
-        template: recommended_resources
+      # - id: awards_resources
+      #   items: [road-to-react]
+      #   template: recommended_resources
 
 - id: conclusion
   path: /conclusion
