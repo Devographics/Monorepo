@@ -19,14 +19,9 @@ dotenv.config({
 
 export const createPages = createPagesSingleLoop
 
-
 // Allow absolute imports and inject `ENV`
 export const onCreateWebpackConfig = ({ stage, actions, plugins }: CreateWebpackConfigArgs) => {
-    console.log(
-
-        "THEME",
-        path.resolve(__dirname, `surveys/${process.env.EDITIONID}/theme`),
-    )
+    console.log('THEME', path.resolve(__dirname, `surveys/${process.env.EDITIONID}/theme`))
     actions.setWebpackConfig({
         resolve: {
             alias: {

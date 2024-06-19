@@ -1,7 +1,6 @@
 import camelCase from 'lodash/camelCase.js'
 import { indentString } from './indent_string'
-import isEmpty from 'lodash/isEmpty.js'
-
+import { getFacetFragment, getDefaultQueryFragment, getQueryArgsString } from '../src/core/queries'
 const MODE_COMBINED = 'combined'
 const MODE_GRID = 'grid'
 const MODE_FACET = 'facet'
@@ -11,231 +10,9 @@ const MODE_FACET = 'facet'
 
 export const OPERATORS = ['eq', 'in', 'nin']
 
-const BucketUnits = {
-    AVERAGE: 'averageByFacet'
-}
-
 export const argumentsPlaceholder = '<ARGUMENTS_PLACEHOLDER>'
 
 export const bucketFacetsPlaceholder = '<BUCKETFACETS_PLACEHOLDER>'
-
-export const getPercentilesFragment = () => `
-    percentilesByFacet {
-        p0
-        p10
-        p25
-        p50
-        p75
-        p90
-        p100
-    }
-`
-
-const getEntityFragment = () => `entity {
-    name
-    nameHtml
-    nameClean
-    alias
-    description
-    descriptionHtml
-    descriptionClean
-    id
-    entityType
-    example {
-      label
-      language
-      code
-      codeHighlighted
-    }
-    avatar {
-      url
-    }
-    homepage {
-      url
-    }
-    youtube {
-      url
-    }
-    twitter {
-      url
-    }
-    twitch {
-      url
-    }
-    rss {
-      url
-    }
-    blog {
-        url
-    }
-    mastodon {
-        url
-    }
-    github {
-        url
-    }
-    npm {
-        url
-    }
-    mdn {
-        url
-    }
-    caniuse {
-        url
-    }
-    resources {
-        url
-        title
-    }
-}`
-
-const getTokenFragment = () => `token {
-    id
-    parentId
-}`
-
-const getFacetFragment = (addBucketsEntities?: boolean) => `
-    facetBuckets {
-        id
-        count
-        percentageBucket
-        hasInsufficientData
-        ${addBucketsEntities ? getEntityFragment() : ''}
-        ${addBucketsEntities ? getTokenFragment() : ''}
-    }
-`
-
-const getCommentsCountFragment = () => `
-comments {
-    currentEdition {
-      count
-    }
-  }
-`
-
-export const getMetadataQuery = ({
-    surveyId,
-    editionId
-}: {
-    surveyId: string
-    editionId: string
-}) => {
-    return `
-query {
-    dataAPI {
-        surveys {
-            ${surveyId} {
-                _metadata {
-                    domain
-                    id
-                    name
-                    emailOctopus {
-                        listId
-                    }
-                    partners {
-                        name
-                        url
-                        imageUrl
-                    }
-                    editions {
-                        year
-                        id
-                        resultsUrl
-                    }
-                }
-                ${editionId} {
-                    _metadata {
-                        id
-                        year
-                        status
-                        startedAt
-                        endedAt
-                        questionsUrl
-                        issuesUrl
-                        discordUrl
-                        resultsUrl
-                        imageUrl
-                        faviconUrl
-                        socialImageUrl
-                        hashtag
-                        enableChartSponsorships
-                        tshirt {
-                            images
-                            url
-                            price
-                            designerUrl
-                        }
-                        sponsors {
-                            id
-                            name
-                            url
-                            imageUrl
-                        }
-                        credits {
-                            id
-                            role
-                            ${getEntityFragment()}
-                        }
-                        sections {
-                            id
-                            questions {
-                                id
-                                template
-                                optionsAreNumeric
-                                optionsAreRange
-                                optionsAreSequential
-                                entity {
-                                    id
-                                    name
-                                    nameClean
-                                    nameHtml
-                                    alias
-                                }
-                                options {
-                                    ${getEntityFragment()}
-                                    id
-                                    average
-                                }
-                                groups {
-                                    id
-                                    average
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}`
-}
-
-const allEditionsFragment = `editionId
-  year`
-
-// v1: {"foo": "bar"} => {foo: "bar"}
-// const unquote = s => s.replace(/"([^"]+)":/g, '$1:')
-
-// v2: {"foo": "bar"} => {foo: bar} (for enums)
-const unquote = s => s.replaceAll('"', '')
-
-/**
- * Transform JSON into graphql function args
- * {foo: hello, bar: world} => (foo: hello, bar: world)
- */
-const wrapArguments = (args: any): string => {
-    const keys = Object.keys(args)
-
-    return keys.length > 0
-        ? `(${keys
-              .filter(k => !!args[k])
-              .map(k => `${k}: ${args[k]}`)
-              .join(', ')})`
-        : ''
-}
-
-const facetItemToFacet = ({ sectionId, id }: { sectionId: string; id: string }) =>
-    `${sectionId}__${id}`
 
 // TODO: what is this exactly?
 interface DataQueryConfig {
@@ -245,146 +22,15 @@ interface DataQueryConfig {
     xAxis?: any
     yAxis?: any
 }
-interface ParsedDataQueryConfig {
-    facet?: any
-    filters?: any
-    parameters?: any
-    axis1?: any
-    axis2?: any
-}
+// interface ParsedDataQueryConfig {
+//     facet?: any
+//     filters?: any
+//     parameters?: any
+//     axis1?: any
+//     axis2?: any
+// }
 
 export type QueryArgs = any
-
-export const getQueryArgsString = ({
-    facet,
-    filters,
-    parameters,
-    xAxis,
-    yAxis
-}: DataQueryConfig) => {
-    // TODO: is this type a kind of "FilterDefinition"?
-    const args: ParsedDataQueryConfig = {}
-    if (facet) {
-        args.facet = facetItemToFacet(facet)
-    }
-    if (filters && !isEmpty(filters)) {
-        args.filters = unquote(JSON.stringify(filters))
-    }
-    if (parameters && !isEmpty(parameters)) {
-        args.parameters = unquote(JSON.stringify(parameters))
-    }
-    // for data explorer
-    if (yAxis && !isEmpty(yAxis)) {
-        args.axis1 = yAxis
-    }
-    if (xAxis && !isEmpty(xAxis)) {
-        args.axis2 = xAxis
-    }
-    if (isEmpty(args)) {
-        return ''
-    } else {
-        return wrapArguments(args)
-    }
-}
-
-const getBucketFragment = (options: {
-    addBucketsEntities: boolean
-    addBucketFacetsPlaceholder: boolean
-    queryArgs: QueryArgs
-    addGroupedBuckets: boolean
-}): string => {
-    const { addBucketsEntities, addBucketFacetsPlaceholder, queryArgs, addGroupedBuckets } = options
-    const { facet } = queryArgs
-    return `
-                    count
-                    id
-                    percentageQuestion
-                    percentageSurvey
-                    isFreeformData
-                    hasInsufficientData
-                    ${addBucketsEntities ? getEntityFragment() : ''}
-                    ${facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
-                    ${facet || addBucketFacetsPlaceholder ? getPercentilesFragment() : ''}
-                    ${facet ? getFacetFragment(addBucketsEntities) : ''}
-                    ${addBucketFacetsPlaceholder ? bucketFacetsPlaceholder : ''}
-                    ${
-                        addGroupedBuckets
-                            ? `groupedBuckets {
-                        ${getBucketFragment({ ...options, addGroupedBuckets: false })}
-                    }
-                    `
-                            : ''
-                    }
-`
-}
-
-export const getDefaultQuery = ({
-    queryOptions,
-    queryArgs = {}
-}: {
-    queryOptions: any
-    queryArgs: DataQueryConfig
-}) => {
-    const {
-        surveyId,
-        editionId,
-        sectionId,
-        questionId,
-        fieldId,
-        subField = 'responses',
-        addBucketsEntities = true,
-        allEditions = false,
-        addArgumentsPlaceholder = false,
-        addBucketFacetsPlaceholder = false,
-        addQuestionEntity = false,
-        addQuestionComments = false,
-        addGroupedBuckets = false
-    } = queryOptions
-
-    const queryArgsString = addArgumentsPlaceholder
-        ? argumentsPlaceholder
-        : getQueryArgsString(queryArgs)
-    const editionType = allEditions ? 'allEditions' : 'currentEdition'
-
-    const questionIdString = fieldId ? `${questionId}: ${fieldId}` : questionId
-
-    return `
-surveys {
-  ${surveyId} {
-    ${editionId} {
-      ${sectionId} {
-        ${questionIdString} {
-          ${addQuestionEntity ? getEntityFragment() : ''}
-          ${addQuestionComments ? getCommentsCountFragment() : ''}
-          ${subField}${queryArgsString} {
-            ${editionType} {
-              ${allEditions ? allEditionsFragment : ''}
-              completion {
-                count
-                percentageSurvey
-                total
-              }
-              average
-              percentiles {
-                p50
-              }
-              buckets {
-                ${getBucketFragment({
-                    addBucketFacetsPlaceholder,
-                    addBucketsEntities,
-                    addGroupedBuckets,
-                    queryArgs
-                })}
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-`
-}
 
 export const getQueryName = ({
     editionId,
@@ -399,7 +45,7 @@ export const getQueryName = ({
 Wrap query contents with query FooQuery {...}
 
 */
-export const wrapQuery = ({ queryName, queryContents, addRootNode }) => {
+const wrapQuery = ({ queryName, queryContents, addRootNode }) => {
     if (addRootNode) {
         return `query ${queryName} {
     dataAPI{
@@ -453,7 +99,10 @@ export const getQuery = ({ query: query_, queryOptions, queryArgs }) => {
         if (['allEditionsData'].includes(query)) {
             queryOptions.allEditions = true
         }
-        queryContents = getDefaultQuery({ queryOptions, queryArgs })
+        queryContents = getDefaultQueryFragment({
+            queryOptions,
+            series: [{ name: questionId, queryArgs }]
+        })
     } else {
         queryContents = query
         if (queryOptions.isLog) {

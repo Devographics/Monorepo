@@ -6,7 +6,8 @@ import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { TwitterApi } from 'twitter-api-v2'
 import { logToFile } from './log_to_file'
-import { argumentsPlaceholder, getFiltersQuery, getQuery, getMetadataQuery } from './queries'
+import { argumentsPlaceholder, getFiltersQuery, getQuery } from './queries'
+import { getMetadataQuery } from '../src/core/queries'
 // import { allowedCachingMethods } from "@devographics/fetch"
 import { PageContextValue, PageDef } from '../src/core/types'
 
