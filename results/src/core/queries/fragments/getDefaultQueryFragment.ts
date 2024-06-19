@@ -1,4 +1,4 @@
-import { QueryOptions, SeriesParams } from '../types'
+// import { QueryOptions, SeriesParams } from '../types'
 import { getSerieFragment } from './getSerieFragment'
 
 export const getDefaultQueryFragment = ({

@@ -22,7 +22,7 @@ const TakeawaysBlock = ({
 }) => (
     <Wrapper>
         {block.items.map(item => (
-            <Takeaway key={item} id={item.id} />
+            <Takeaway key={item} id={item} />
         ))}
     </Wrapper>
 )

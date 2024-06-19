@@ -4,3 +4,6 @@ translationContexts: [homepage, common, results, countries, tokyodev]
 baseUrl: http://localhost:9000
 sitemap: ../../../.logs-tokyodev/flat_sitemap.yml
 # bannerId: general.css2022.js2022_banner
+
+enableItemPopovers: false
+generateBlocks: true

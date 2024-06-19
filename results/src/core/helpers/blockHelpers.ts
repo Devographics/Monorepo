@@ -321,7 +321,10 @@ export const getBlockLinkRemote = ({
     return url
 }
 export const getBlockLink = (props: GetBlockLinkProps) => {
-    if (process.env.GATSBY_GENERATE_BLOCKS) {
+    const { pageContext } = props
+    const { config } = pageContext
+    const { generateBlocks = false } = config
+    if (generateBlocks) {
         return getBlockLinkLocal(props)
     } else {
         return getBlockLinkRemote(props)

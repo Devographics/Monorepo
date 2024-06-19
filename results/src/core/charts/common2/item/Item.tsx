@@ -1,6 +1,6 @@
 import './Item.scss'
 
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useContext } from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import { LabelObject, getItemLabel } from 'core/helpers/labels'
 import { Bucket, Entity, EntityType, FacetBucket } from '@devographics/types'
@@ -12,6 +12,7 @@ import { FeatureModal } from './Feature'
 import { LibraryModal } from './Library'
 import { FeatureIcon, LibraryIcon } from 'core/icons'
 import Tooltip from 'core/components/Tooltip'
+import { usePageContext } from 'core/helpers/pageContext'
 
 const entityComponents = {
     [EntityType.PEOPLE]: { icon: PeopleIcon, modal: PeopleModal },
@@ -37,6 +38,9 @@ export const Item = ({
     entity?: Entity
     i18nNamespace?: string
 }) => {
+    const { config } = usePageContext()
+    const { enableItemPopovers = true } = config
+
     const { getString } = useI18n()
     const labelObject = getItemLabel({
         id,
@@ -53,6 +57,7 @@ export const Item = ({
             </Wrapper>
         )
     } else if (
+        !enableItemPopovers ||
         entity.entityType === EntityType.DEFAULT ||
         !entityHasData(entity) ||
         !entityComponents[entity.entityType]

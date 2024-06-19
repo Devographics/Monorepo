@@ -1,12 +1,13 @@
 import { getBucketsFragment } from './getBucketsFragment'
 import { getCommentsCountFragment } from './getCommentsCountFragment'
 import { getEntityFragment } from './getEntityFragment'
-import { QueryOptions, SeriesParams } from '../types'
+// import { QueryOptions, SeriesParams } from '../types'
 import { getQueryArgsString } from '../helpers'
 import { getAllEditionsFragment } from './getAllEditionsFragment'
 import { getRatiosFragment } from './getRatiosFragment'
-import { SENTIMENT_FACET } from '@devographics/constants'
+// import { SENTIMENT_FACET } from '@devographics/constants'
 
+const SENTIMENT_FACET = '_sentiment'
 export const getSerieFragment = ({
     queryOptions,
     serie
@@ -23,7 +24,7 @@ export const getSerieFragment = ({
         addQuestionEntity = false,
         addQuestionComments = false,
         addBuckets = true,
-        addRatios = true,
+        addRatios = false,
         addGroupedBuckets = false
     } = queryOptions
 
