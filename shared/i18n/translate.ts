@@ -43,9 +43,9 @@ const applyTemplate = ({
  * @deprecated Use makeTranslationFunction with a parsed locale using a dictionary of translations
  */
 export const makeTranslatorFunc =
-    (locale: Locale): StringTranslator =>
+    (locale: Locale)/*: StringTranslator*/ =>
         // TODO: here optimize the strings to use Map instead of navigating an array which will be super slow
-        (key, { values } = {}, fallback) => {
+        (key: string, { values }: Record<string, any> = {}, fallback?: string) => {
             const { strings = [], ...rest } = locale
             let result: Partial<StringTranslatorResult> = { key, locale: rest }
 
@@ -70,7 +70,10 @@ export const makeTranslatorFunc =
                 result.tHtml = injectValues(result.tHtml ?? t)
             }
 
-            return result as StringTranslatorResult
+            // TODO: this seems consistant with "results" app usage of this function,
+            // it returns a string and not the initial value
+            return result.t
+            //return result as StringTranslatorResult
         }
 
 

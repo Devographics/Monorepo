@@ -44,3 +44,5 @@ export const useTeapot = () => {
     if (!ctx) throw new Error("Can't call useTeapot before I18nContextProvider is set")
     return ctx
 }
+/** Alias for non-fancy people */
+export const useI18n = useTeapot

@@ -109,3 +109,8 @@ export interface GitHub {
   opened_issues?: number;
   homepage: string;
 }
+
+export interface CanIUse {
+  /** URL */
+  spec: string
+}

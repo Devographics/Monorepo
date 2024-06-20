@@ -1,7 +1,8 @@
 import React, { memo } from 'react'
 import { useI18n } from '@devographics/react-i18n'
+import { CanIUse, MDN } from '@devographics/types'
 
-const FeatureResources = ({ id, mdnInfo, caniuseInfo }) => {
+const FeatureResources = ({ id, mdnInfo, caniuseInfo }: { id: string, mdnInfo: MDN, caniuseInfo: CanIUse }) => {
     const { translate } = useI18n()
     if (!caniuseInfo && !mdnInfo) {
         return null
