@@ -29,6 +29,8 @@ import { ApiData, apiRoutes } from "~/lib/apiRoutes";
 import { UserWithResponses } from "~/lib/responses/typings";
 import PlausibleProvider from "next-plausible";
 import { LocaleParsed } from "@devographics/i18n";
+import { I18nContextProvider } from "@devographics/react-i18n";
+
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
@@ -101,16 +103,21 @@ export function ClientLayout(props: AppLayoutProps) {
               localeId={localeId}
               localeStrings={localeStrings}
             >
-              {/** @ts-ignore */}
-              <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
-                <KeydownContextProvider>
-                  <UserMessagesProvider>
-                    {addWrapper ?
-                      <Layout>{children}</Layout>
-                      : children}
-                  </UserMessagesProvider>
-                </KeydownContextProvider>
-              </ErrorBoundary>
+
+              <I18nContextProvider
+                locale={localeStrings}
+              >
+                {/** @ts-ignore */}
+                <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
+                  <KeydownContextProvider>
+                    <UserMessagesProvider>
+                      {addWrapper ?
+                        <Layout>{children}</Layout>
+                        : children}
+                    </UserMessagesProvider>
+                  </KeydownContextProvider>
+                </ErrorBoundary>
+              </I18nContextProvider>
             </LocaleContextProvider>
           </SWRConfig>
         </ErrorBoundary>

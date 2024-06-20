@@ -40,7 +40,7 @@ const applyTemplate = ({
 }
 
 /**
- * @deprecated Use makeTea with a parsed locale using a dictionary of translations
+ * @deprecated Use makeTranslationFunction with a parsed locale using a dictionary of translations
  */
 export const makeTranslatorFunc =
     (locale: Locale): StringTranslator =>
@@ -84,7 +84,13 @@ function injectValues(str: string, values: Record<string, any>) {
     return template(str, { interpolate: INTERPOLATION_REGEX })(values)
 }
 
-export function makeTea(locale: LocaleParsed) {
+/**
+ * Generate a translation helper function "t" (and "getMessage")
+ * for a given locale
+ * @param locale 
+ * @returns 
+ */
+export function makeTranslationFunction(locale: LocaleParsed) {
 
     /**
      * Get the full translation with metadata, HTML and clean versions
@@ -109,8 +115,9 @@ export function makeTea(locale: LocaleParsed) {
         const t = injectValues(result.t, values)
         // handle tClean and tHTML variations
         result.t = t
-        result.tClean = result.tClean ? injectValues(result.tClean, values) : result.t
-        result.tHtml = result.tHtml ? injectValues(result.tHtml, values) : result.t
+        // Keep empty if not defined, so that the rendered logic can prioritize 1) HTML version 2) clean version 3) raw text depending on which is defined
+        result.tClean = result.tClean ? injectValues(result.tClean, values) : undefined//result.t
+        result.tHtml = result.tHtml ? injectValues(result.tHtml, values) : undefined//result.t
         return result as StringTranslatorResult
     }
     /**

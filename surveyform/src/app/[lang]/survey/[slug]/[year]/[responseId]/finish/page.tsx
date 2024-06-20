@@ -4,6 +4,7 @@ import { rscMustGetResponse } from "~/lib/responses/rsc-fetchers";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { routes } from "~/lib/routes";
 import { redirect } from "next/navigation";
+import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 // TODO: getResponseWithRanking will include the schema that can contain functions
 // thus it's not accepted
 // Uncomment to investigate
@@ -19,6 +20,7 @@ const FinishPage = async ({
     year: string;
   };
 }) => {
+  setLocaleIdServerContext(lang) // Needed for "ServerT"
   const currentUser = await rscCurrentUser();
   if (!currentUser) {
     redirect(

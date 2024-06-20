@@ -1,7 +1,11 @@
 import { notFound } from "next/navigation";
 import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
 import { SurveySectionOutline } from "~/components/questions/SurveySectionOutline";
+import { tokens as tokensSurveySectionOutline } from "~/components/questions/SurveySectionContents.tokens";
 import { rscGetEditionsMetadata } from "../../rsc-fetchers";
+import { filterClientSideStrings } from "@devographics/i18n/server";
+import { rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
+import { I18nContextProvider } from "@devographics/react-i18n";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
 export const revalidate = DEFAULT_REVALIDATE_S;
@@ -45,15 +49,22 @@ export async function generateStaticParams() {
 
 // SectionNumber is optional in the URL so this page is exactly the same as ../index.tsx
 export default async function SurveySectionOutlinePage({
-  params: { sectionNumber },
+  params: { sectionNumber, lang },
 }: {
   params: {
     slug: string;
     year: string;
     sectionNumber: string;
+    lang: string,
   };
 }) {
+  const { locale, localeId, error: localeError } = await rscLocaleFromParams({ lang })
+  if (localeError) return <div>Can't load translations</div>
+  // TODO: get correct tokens
+  const clientSideLocale = filterClientSideStrings<{}>(locale, [], {})
   const sn = parseInt(sectionNumber);
   if (isNaN(sn)) notFound();
-  return <SurveySectionOutline />;
+  return <I18nContextProvider locale={clientSideLocale}>
+    <SurveySectionOutline />;
+  </I18nContextProvider>
 }

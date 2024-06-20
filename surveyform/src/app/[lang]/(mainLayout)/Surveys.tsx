@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { SurveyStatusEnum } from "@devographics/types";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
@@ -10,8 +9,6 @@ import { rscCurrentUserWithResponses } from "~/account/user/rsc-fetchers/rscCurr
 import { ResponseDetails } from "~/components/surveys/ResponseDetails";
 import { rscLocaleIdContext } from "~/i18n/rsc-context";
 import { ServerT } from "~/i18n/components/ServerT";
-
-const a = 1;
 
 const EditionItem = async ({
   edition,
@@ -102,8 +99,7 @@ const EditionGroup = ({
         ))
       ) : (
         <div className={`surveys-none surveys-no${status}`}>
-          <FormattedMessage
-            id={`general.no_${SurveyStatusEnum[status].toLowerCase()}_surveys`}
+          <ServerT token={`general.no_${SurveyStatusEnum[status].toLowerCase()}_surveys`}
           />
         </div>
       )}

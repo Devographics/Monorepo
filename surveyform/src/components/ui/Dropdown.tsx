@@ -1,8 +1,7 @@
 // TODO: uses react bootstrap a lot, need a refactor
 import React from "react";
-import BsDropdown from "react-bootstrap/Dropdown";
+import BsDropdown, { DropdownProps } from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
-import { FormattedMessage } from "../common/FormattedMessage";
 const DropdownItem = BsDropdown.Item;
 // import { LinkContainer } from "react-router-bootstrap";
 
@@ -15,22 +14,21 @@ components are properly passed down to MenuItem
 const Item = ({
   index,
   //to,
-  labelId,
   label,
   component,
   componentProps = {},
   itemProps,
   //linkProps,
   ...rest
-}: any) => {
+}: { index: number, label?: string | React.ReactNode, component?: any, componentProps?: any, itemProps?: any }) => {
   let menuComponent;
 
   if (component) {
     menuComponent = React.cloneElement(component, componentProps);
-  } else if (labelId) {
-    menuComponent = <FormattedMessage id={labelId} />;
-  } else {
+  } else if (typeof label === "string") {
     menuComponent = <span>{label}</span>;
+  } else {
+    menuComponent = label
   }
 
   const item = (
@@ -67,7 +65,7 @@ Item.propTypes = {
 A node contains a menu item, and optionally a list of child items
 
 */
-const Node = ({ childrenItems, ...rest }) => {
+const Node = ({ childrenItems, ...rest }: any) => {
   return (
     <>
       <Item {...rest} />
@@ -87,25 +85,29 @@ Node.propTypes = {
 };
 */
 
+type MenuItem = { label?: string | React.ReactNode } | "divider"
+
 export const Dropdown = ({
   label,
-  labelId,
   trigger,
   menuItems,
   menuContents,
   variant = "dropdown",
   buttonProps,
   ...dropdownProps
-}: any) => {
+}: {
+  label: string | React.ReactNode, trigger: any, menuContents?: React.ReactNode, menuItems?: Array<MenuItem>, variant?: "dropdown" | "flat", buttonProps?: any
+  // dropdown props
+} & DropdownProps) => {
   const menuBody = menuContents
     ? menuContents
-    : menuItems.map((item, index) => {
-        if (item === "divider") {
-          return <BsDropdown.Divider key={index} />;
-        } else {
-          return <Node {...item} key={index} index={index} />;
-        }
-      });
+    : (menuItems || []).map((item, index) => {
+      if (item === "divider") {
+        return <BsDropdown.Divider key={index} />;
+      } else {
+        return <Node {...item} key={index} index={index} />;
+      }
+    });
 
   if (variant === "flat") {
     return menuBody;
@@ -124,7 +126,7 @@ export const Dropdown = ({
         <DropdownButton
           menuVariant="dark"
           {...buttonProps}
-          title={labelId ? <FormattedMessage id={labelId} /> : label}
+          title={label}
           {...dropdownProps}
         >
           {menuBody}
@@ -133,17 +135,5 @@ export const Dropdown = ({
     }
   }
 };
-
-/*
-BootstrapDropdown.propTypes = {
-  labelId: PropTypes.string, // menu title/label i18n string
-  label: PropTypes.string, // menu title/label
-  trigger: PropTypes.object, // component used as menu trigger (the part you click to open the menu)
-  menuContents: PropTypes.object, // a component specifying the menu contents
-  menuItems: PropTypes.array, // an array of menu items, used if menuContents is not provided
-  variant: PropTypes.string, // dropdown (default) or flat
-  buttonProps: PropTypes.object, // props specific to the dropdown button
-};
-*/
 
 export default Dropdown;

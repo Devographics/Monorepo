@@ -1,9 +1,11 @@
 "use client";
 import React from "react";
 import { useCookies } from "react-cookie";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { useEffect, useState } from "react";
+import { teapot } from "@devographics/react-i18n";
+import { tokens } from "./DevographicsBanner.tokens";
 
+const { T } = teapot(tokens)
 /**
  *
  * @returns true on the second client-render, when hydratation is done
@@ -30,7 +32,7 @@ const DevographicsBanner = () => {
     <div className="devographics-banner">
       <div className="devographics-banner-inner">
         <div className="devographics-banner-message">
-          <FormattedMessage id="general.devographics_banner" />
+          <T token="general.devographics_banner" />
         </div>
       </div>
       <div className="devographics-banner-close" onClick={handleClose}>

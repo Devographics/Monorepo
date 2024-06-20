@@ -1,11 +1,11 @@
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { ServerT } from "~/i18n/components/ServerT";
 
 const PrivacyPolicy = () => (
   <div className="contents-narrow privacy-policy">
     <h2>
-      <FormattedMessage id="general.privacy_policy" />
+      <ServerT token="general.privacy_policy" />
     </h2>
-    <FormattedMessage id="general.privacy_policy.description" />
+    <ServerT token="general.privacy_policy.description" />
   </div>
 );
 

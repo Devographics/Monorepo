@@ -1,5 +1,8 @@
 "use client";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { teapot } from "@devographics/react-i18n";
+import { tokens } from "./TokyoDev.tokens";
+
+const { T } = teapot(tokens)
 
 export const TokyoDev = () => {
   return process.env.NEXT_PUBLIC_CONFIG === "tokyodev" ? (
@@ -8,19 +11,19 @@ export const TokyoDev = () => {
         <div className="tokyodev-info-founder">
           <img src="https://www.tokyodev.com/assets/paul-4a180dffafbb67b795ebac5b1a08f58fc937705f015d9fd6197f7237416dc4f6.jpg" />
           <h5>
-            <FormattedMessage id="tokyodev.founder" />
+            <T token="tokyodev.founder" />
           </h5>
         </div>
         <div className="tokyodev-info-contents">
           <h3>
-            <FormattedMessage id="tokyodev.about" />
+            <T token="tokyodev.about" />
           </h3>
           <div>
-            <FormattedMessage id="tokyodev.description" />
+            <T token="tokyodev.description" />
           </div>
           <p>
             <a href="https://www.tokyodev.com/about">
-              <FormattedMessage id="tokyodev.learn_more" />
+              <T token="tokyodev.learn_more" />
             </a>
           </p>
         </div>

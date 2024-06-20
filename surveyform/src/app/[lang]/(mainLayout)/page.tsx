@@ -1,4 +1,5 @@
 import Surveys from "~/app/[lang]/(mainLayout)/Surveys";
+import { tokens as tokensSurveys } from "~/app/[lang]/(mainLayout)/Surveys.tokens"
 import { RSCFetch } from "~/components/common/RSCFetch";
 // import { DebugRSC } from "~/components/debug/DebugRSC";
 
@@ -19,12 +20,14 @@ export async function generateStaticParams() {
   return localeIds?.data.map((localeId) => ({ lang: localeId })) || [];
 }
 
+const tokens = [...tokensSurveys]
+
 const IndexPage = async ({ params }: NextPageParams<{ lang: string }>) => {
   setLocaleIdServerContext(params.lang)
   const { locale, localeId, error } = await rscLocaleFromParams(params)
   if (error) return <div>Can't load translations</div>
-  const tokenExprs = ["general.open_surveys"]
-  const clientSideLocale = filterClientSideStrings<{}>(locale, tokenExprs, {})
+  // TODO: get correct tokens
+  const clientSideLocale = filterClientSideStrings<{}>(locale, tokens, {})
   return (
     <I18nContextProvider
       locale={clientSideLocale}

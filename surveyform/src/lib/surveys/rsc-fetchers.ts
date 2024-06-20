@@ -43,7 +43,7 @@ export const rscGetMetadata = async ({
 
   const contexts = [...getCommonContexts(), ...getEditionContexts({ edition })];
 
-  const { t, error } = await rscTeapot(...contexts)
+  const { t, error } = await rscTeapot({ contexts })
   if (error) throw new Error("Could not access translation function:" + error)
 
   const { socialImageUrl, year } = edition;
@@ -52,7 +52,7 @@ export const rscGetMetadata = async ({
   const imageUrl = getEditionImageUrl(edition, "og");
   let imageAbsoluteUrl = socialImageUrl || imageUrl;
   const url = edition.questionsUrl || publicConfig.appUrl;
-  const description = t("general.take_survey", { name, year: year + "" }).t
+  const description = t("general.take_survey", { name, year: year + "" })
 
   let title = getEditionTitle({ edition });
 

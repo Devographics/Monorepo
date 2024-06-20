@@ -6,7 +6,10 @@ import { useCurrentUser } from "~/lib/users/hooks";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
 import { LoadingButton } from "~/components/ui/LoadingButton";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { teapot } from "@devographics/react-i18n";
+import { tokens } from "./StandaloneMagicLoginForm.tokens";
+
+const { T } = teapot(tokens)
 
 const GmailMessage = ({
   domain,
@@ -19,7 +22,7 @@ const GmailMessage = ({
     `from:${domain}+OR+from:stateofjs+OR+from:devographics+in:anywhere`
   )}`;
   return (
-    <FormattedMessage id="accounts.magic_link.browser" values={{ link }} />
+    <T token="accounts.magic_link.browser" values={{ link }} />
   );
 };
 
@@ -100,7 +103,7 @@ export const StandaloneMagicLoginForm = ({
       {errorMsg && <div className="error magic-error">{errorMsg}</div>}
       {successEmail && (
         <div className="success magic-success">
-          <FormattedMessage id="accounts.magic_link.success" />
+          <T token="accounts.magic_link.success" />
           {surveyId && successEmail.match("gmail.com") && (
             <>
               {" "}
