@@ -72,7 +72,7 @@ export const makeTranslatorFunc =
 
             // TODO: this seems consistant with "results" app usage of this function,
             // it returns a string and not the initial value
-            return result.t
+            return result
             //return result as StringTranslatorResult
         }
 

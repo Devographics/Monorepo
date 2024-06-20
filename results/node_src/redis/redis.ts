@@ -2,12 +2,16 @@
 // import { logToFile } from '@devographics/debug'
 // import { EnvVar, getEnvVar } from '@devographics/helpers'
 // import { Redis } from '@upstash/redis'
-import Redis from 'ioredis'
+// import Redis from 'ioredis'
+export { initRedis, getRedisClient } from "../redis"
+import { getRedisClient } from "../redis"
 
 // 30 mn (but only 3 in dev)
+/*
 const TTL_SECONDS = process.env.NODE_ENV === 'development' ? 60 * 3 : 60 * 30
 
 let redis: Redis | undefined = undefined
+*/
 
 /**
  * If url/token not passed,
@@ -17,6 +21,7 @@ let redis: Redis | undefined = undefined
  * @param token_
  * @returns
  */
+/*
 export function initRedis(url_?: string, token_?: string) {
     const url = url_ || process.env.REDIS_URL // TODO: doesn't work - getEnvVar(EnvVar.REDIS_UPSTASH_URL)
     const token = token_ || process.env.REDIS_TOKEN // TODO: doesn't work - getEnvVar(EnvVar.REDIS_TOKEN)
@@ -38,11 +43,13 @@ export function initRedis(url_?: string, token_?: string) {
     return redis
 }
 
+
 export const getRedisClient = () => {
     // console.debug("get redis client");
     if (!redis) throw new Error('Calling getRedisClient before calling initRedis')
     return redis
 }
+    */
 
 // TODO: feed the cache in surveyadmin
 

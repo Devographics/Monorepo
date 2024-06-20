@@ -21,6 +21,7 @@ import { getLocalesWithStrings } from './react-i18n/fetch-locales'
 import { allowedCachingMethods } from './helpers'
 import type { PageContextValue } from '../src/core/types/context'
 import type { SponsorProduct } from '../src/core/types/sponsors'
+import { LocaleWithStrings } from './react-i18n/typings'
 
 //  Not needed in TS/ recent versions of node
 // import { fileURLToPath } from 'url'
@@ -124,12 +125,19 @@ export const createPagesSingleLoop = async ({
 
         // loading i18n data
 
-        const locales = await getLocalesWithStrings({
-            localeIds,
-            graphql,
-            contexts: config.translationContexts
-            //editionId
-        })
+        let locales: Array<LocaleWithStrings> = []
+        // Stop the build if there is an error rather than building a non-sensical context
+        try {
+            locales = await getLocalesWithStrings({
+                localeIds,
+                graphql,
+                contexts: config.translationContexts
+                //editionId
+            })
+        } catch (err) {
+            err.fatal = true
+            throw err
+        }
 
         buildInfo.localeCount = locales.length
 

@@ -11,20 +11,21 @@ export const I18nContextProvider = ({
     children: React.ReactNode
     locale: LocaleParsed
 }) => {
-    const translate = makeTranslatorFunc(locale)
+    const getString = makeTranslatorFunc(locale)
     const { t, getMessage } = makeTranslationFunction(locale)
 
     // useMemo because the value is an object
     const value = useMemo(
         () => ({
             locale,
-            getString: translate,
-            translate,
+            getString,
+            //@ts-ignore
+            translate: (...args) => getString(...args)?.t,
             t,
             getMessage
 
         }),
-        [locale, translate]
+        [locale, getString]
     )
     return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>
 }
@@ -34,7 +35,7 @@ type I18nContextType = {
     /** @deprecated use "t" or "getMessage" */
     getString: StringTranslator
     /** @deprecated  use "t" or "getMessage" */
-    translate: StringTranslator,
+    translate: (key: string, opts?: { values?: Record<string, any> }, fallback?: boolean) => string,
     t: ReturnType<typeof makeTranslationFunction>["t"],
     getMessage: ReturnType<typeof makeTranslationFunction>["getMessage"],
 }

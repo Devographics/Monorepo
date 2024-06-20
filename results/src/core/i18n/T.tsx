@@ -1,4 +1,4 @@
-// TODO: make reusable?
+// TODO: reuse T component from @devographics/react-i18n
 import React from 'react'
 import { useI18n } from '@devographics/react-i18n'
 // import ReactMarkdown from 'react-markdown'
@@ -47,8 +47,8 @@ export const T = ({
         classNames.push('t-override')
     } else {
         // FIXME: expects a fallabck value, not "isFallback boolean"
-        const tFullString = getString(k, { values }, isFallback)
-        const tShortString = getString(`${k}.short`, { values }, isFallback)
+        const tFullString = getString(k, { values }, fallback)//isFallback)
+        const tShortString = getString(`${k}.short`, { values }, fallback)// isFallback)
 
         const translationObject = useShort && !tShortString.missing ? tShortString : tFullString
 
