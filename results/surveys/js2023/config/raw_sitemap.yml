@@ -325,7 +325,7 @@
               i18nNamespace: tools
 
             - id: meta_frameworks_resources
-              items: [fm-nextjs-v3, fm-openai-node]
+              items: [fm-nextjs-v3, fullstack-app-next-v3]
               template: recommended_resources
 
       - id: testing

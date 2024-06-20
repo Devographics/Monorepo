@@ -107,12 +107,22 @@
 #   teacher: Rich Harris
 #   company: Vercel
 
+# - name: |
+#       Build AI-Powered Apps with OpenAI and Node.js
+#   id: fm-openai-node
+#   description: >
+#       Set up Node.js with the OpenAI API, build an AI chat interface, and then get hands-on with image generation, semantic search, and document QA systems.
+#   url: https://frontendmasters.com/courses/openai-node/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
+#   image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
+#   teacher: Scott Moss
+#   company: Superfilter AI
+
 - name: |
-      Build AI-Powered Apps with OpenAI and Node.js
-  id: fm-openai-node
+      Build an AI-Powered Fullstack Next.js App, v3
+  id: fullstack-app-next-v3
   description: >
-      Set up Node.js with the OpenAI API, build an AI chat interface, and then get hands-on with image generation, semantic search, and document QA systems.
-  url: https://frontendmasters.com/courses/openai-node/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
+      Create a full-stack AI-powered Journal app from scratch in Next.js. See how all the pieces of Next.js/React fit together: client components, server components, static and dynamic routing, server actions, middleware, and layouts.
+  url: https://frontendmasters.com/courses/fullstack-app-next-v3/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
   image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
   teacher: Scott Moss
   company: Superfilter AI

@@ -155,7 +155,7 @@ const TierItem = ({
     const isHighlighted = currentCategory ? currentCategory === sectionId : true
 
     const entity = entityProp || useEntity(id)
-    console.log(entity)
+
     return (
         <Link color={color} isHighlighted={isHighlighted}>
             <ColorWrapper color={color}>
