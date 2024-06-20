@@ -6,7 +6,7 @@ import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
-import { getBlockQuery } from 'core/helpers/queries'
+import { getBlockQuery } from 'core/queries/queries'
 
 import { parse } from 'graphql'
 import { print } from 'graphql-print'

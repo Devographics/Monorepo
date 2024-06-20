@@ -88,6 +88,18 @@ const stopWords: Set<string> = new Set([
   "their",
   "theyre",
   "really",
+  "lack",
+  "hard",
+  "one",
+  "new",
+  "which",
+  "same",
+  "easy",
+  "enough",
+  "difficult",
+  "most",
+  "work",
+  "why",
 ]);
 
 export type FrequencyItem = {

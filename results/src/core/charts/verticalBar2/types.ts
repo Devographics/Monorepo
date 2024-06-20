@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from 'react'
-import { ChartState, Tick, ViewDefinition } from '../common2/types'
+import { ChartState, ChartValues, Tick, ViewDefinition } from '../common2/types'
 import { IconProps } from 'core/icons/IconWrapper'
 import { Bucket, Entity, QuestionMetadata, ResponseEditionData } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
@@ -38,9 +38,8 @@ export type VerticalBarViewProps = {
     block: BlockVariantDefinition
 }
 
-export type VerticalBarChartValues = {
+export interface VerticalBarChartValues extends ChartValues {
     totalColumns: number
-    question: QuestionMetadata
     ticks?: Tick[]
     years: number[]
     maxValue: number

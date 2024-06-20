@@ -10,7 +10,8 @@ export const Rows = ({
     chartValues,
     children,
     labelId,
-    hasZebra = false
+    hasZebra = false,
+    buckets
 }: HorizontalBarViewProps & {
     children: React.ReactNode
     labelId?: string
@@ -28,7 +29,7 @@ export const Rows = ({
 
             {children}
 
-            {chartState.rowsLimit ? (
+            {chartState.rowsLimit && chartState.rowsLimit < chartValues.totalRows ? (
                 <ShowAll chartState={chartState} chartValues={chartValues} />
             ) : null}
 

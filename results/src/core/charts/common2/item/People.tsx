@@ -86,14 +86,17 @@ export const getSocialLinks = (entity: Entity) => {
 export const PeopleIcon = ({ entity }: LabelProps) =>
     entity?.avatar?.url ? <Avatar entity={entity} size={30} /> : <UserIcon />
 
-export const PeopleModal = ({ entity }: LabelProps) => (
-    <div>
-        <h3 className="item-name">{entity.name}</h3>
-        <ul className="item-links">
-            <ItemLinks entity={entity} />
-        </ul>
-    </div>
-)
+export const PeopleModal = ({ entity }: LabelProps) => {
+    const { alias, name } = entity
+    return (
+        <div>
+            <h3 className="item-name">{alias ? `${alias} (${name})` : name}</h3>
+            <ul className="item-links">
+                <ItemLinks entity={entity} />
+            </ul>
+        </div>
+    )
+}
 
 export const ItemLinks = ({ entity }: { entity: Entity }) => {
     const links = getSocialLinks(entity)

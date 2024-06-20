@@ -31,17 +31,6 @@
     align-items: center;
 }
 
-.chart-controls {
-    flex: 1;
-    .ButtonGroup {
-        width: 100%;
-        display: flex;
-    }
-    .Button {
-        flex: 1;
-    }
-}
-.chart-controls,
 .chart-actions {
     display: flex;
     justify-content: center;

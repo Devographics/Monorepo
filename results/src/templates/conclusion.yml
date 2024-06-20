@@ -1,9 +1,9 @@
 blockType: ConclusionBlock
 wrapBlock: false
 disableExport: true
-dataPath: dataAPI.author
+dataPath: dataAPI.conclusion_${author}
 query: >
-    author: entity(id: "${author}") {
+    conclusion_${author}: entity(id: "${author}") {
         id
         name
         homepage{

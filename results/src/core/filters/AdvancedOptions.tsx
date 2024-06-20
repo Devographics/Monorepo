@@ -88,7 +88,7 @@ const BooleanParameter = ({
 }) => {
     const value = !!getParameter<boolean>(id)
     return (
-        <div className="filters-parameter">
+        <label className="filters-parameter">
             <ParameterLabel id={id} />
             <div className="filters-parameter-input">
                 <input
@@ -99,15 +99,15 @@ const BooleanParameter = ({
                     }}
                 />
             </div>
-        </div>
+        </label>
     )
 }
 
 const CustomParameter = ({ id, children }: { id: string; children: JSX.Element }) => (
-    <div className="filters-parameter">
+    <label className="filters-parameter">
         <ParameterLabel id={id} />
         <div className="filters-parameter-input">{children}</div>
-    </div>
+    </label>
 )
 
 const ParameterLabel = ({ id }: { id: string }) => (

@@ -38,6 +38,7 @@ export const getBuckets = (item: StandardQuestionData) => {
     if (!buckets) {
         console.warn('Could not find buckets for item:')
         console.log(item)
+        return []
     }
     return buckets
 }

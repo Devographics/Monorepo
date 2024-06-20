@@ -6,9 +6,10 @@ import CreditItem from 'core/blocks/other/CreditItem'
 import { usePageContext } from 'core/helpers/pageContext'
 
 const ConclusionBlock = ({ block, data: author }) => {
+    console.log(block)
+    console.log(author)
     const { currentEdition } = usePageContext()
     const { variables } = block
-    const { authorId, bio, contents } = variables
     if (!author) {
         return null
     }
@@ -21,10 +22,14 @@ const ConclusionBlock = ({ block, data: author }) => {
                 <CreditItem
                     id={author?.id}
                     entity={author}
-                    labelId={`conclusion.${currentEdition.id}.bio`}
+                    labelId={`conclusion.${currentEdition.id}.${author.id}.bio`}
                 />
             </Heading>
-            <T k={`conclusion.${currentEdition.id}`} md={true} fallback={variables.contents} />
+            <T
+                k={`conclusion.${currentEdition.id}.${author.id}`}
+                md={true}
+                fallback={variables.contents}
+            />
         </Conclusion>
     )
 }

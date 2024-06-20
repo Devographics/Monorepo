@@ -47,7 +47,7 @@ export interface ToolsQuadrantsChartToolData {
     interest_percentage: number
     // nb of users of the tool
     x: number
-    // satisfaction or interest percentage, depends on the selected metric
+    // retention or interest percentage, depends on the selected metric
     y: number
 }
 
@@ -59,7 +59,7 @@ export interface ToolsQuadrantsChartToolsCategoryData {
     data: ToolsQuadrantsChartToolData[]
 }
 
-export type ToolsQuadrantsMetric = 'satisfaction' | 'interest'
+export type ToolsQuadrantsMetric = 'retention' | 'interest'
 
 export type ChartLayerProps = ScatterPlotLayerProps<ToolsQuadrantsChartToolData>
 

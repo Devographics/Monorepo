@@ -1,6 +1,7 @@
 import { Bucket } from '@devographics/types'
 import { DataFilter } from '../types'
 import {
+    CUTOFF_ANSWERS,
     NOT_APPLICABLE,
     NO_ANSWER,
     OTHER_ANSWERS,
@@ -30,4 +31,8 @@ export const removeNotApplicable: DataFilter = buckets => {
 
 export const removeOverLimit: DataFilter = buckets => {
     return buckets.filter(b => b.id !== OVERLIMIT_ANSWERS)
+}
+
+export const removeUnderCutoff: DataFilter = buckets => {
+    return buckets.filter(b => b.id !== CUTOFF_ANSWERS)
 }

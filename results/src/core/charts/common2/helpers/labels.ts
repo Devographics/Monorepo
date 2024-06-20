@@ -33,6 +33,9 @@ export const isDollar = (question: QuestionMetadata) => ['yearly_salary'].includ
 export const isYen = (question: QuestionMetadata) =>
     ['current_total_annual_compensation'].includes(question.id)
 
+export const isPercentage = (question: QuestionMetadata) =>
+    ['completion_stats'].includes(question.id)
+
 // https://stackoverflow.com/a/9462382
 function largeNumberFormatter(num: number, digits = 1) {
     const lookup = [
@@ -69,13 +72,15 @@ export const formatPercentage = (value: number) => {
     return `${roundPercentage(value)}%`
 }
 
-export const formatCurrency = (value: number, question: QuestionMetadata) => {
+export const formatQuestionValue = (value: number, question: QuestionMetadata) => {
     if (isDollar(question)) {
         return usdFormatter.format(value)
     } else if (isYen(question)) {
         return `¥${largeNumberFormatter(value)}`
+    } else if (isPercentage(question)) {
+        return formatPercentage(value)
     } else {
-        return value.toString()
+        return formatNumber(value)
     }
 }
 

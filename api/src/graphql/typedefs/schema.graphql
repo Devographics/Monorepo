@@ -497,6 +497,10 @@ type FacetBucket {
     """
     entity: Entity
     """
+    Normalization Token associated with the current bucket
+    """
+    token: Token
+    """
     Indicates if bucket was removed because of insufficient data
     """
     hasInsufficientData: Boolean

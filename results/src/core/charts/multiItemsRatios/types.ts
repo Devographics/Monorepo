@@ -3,7 +3,7 @@ import { QuestionMetadata, ResponseEditionData, StandardQuestionData } from '@de
 import { Dispatch, SetStateAction } from 'react'
 import { FormatValueType, Tick } from '../common2/types'
 import { EditionWithRank, VerticalBarChartValues } from '../verticalBar2/types'
-import { LegendItem } from './Legend'
+import { LegendItem } from './Legend-old'
 
 export type MultiRatioSerie = DataSeries<StandardQuestionData[]>
 

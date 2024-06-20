@@ -3,7 +3,7 @@ import { BlockVariantDefinition } from 'core/types'
 import { Modes, MultiRatiosChartState, MultiRatiosChartValues } from '../types'
 import max from 'lodash/max'
 import { getYears } from 'core/charts/verticalBar2/helpers/chartValues'
-import { LegendItem } from '../Legend'
+import { LegendItem } from '../Legend-old'
 import range from 'lodash/range'
 import { getAllEditions } from './other'
 

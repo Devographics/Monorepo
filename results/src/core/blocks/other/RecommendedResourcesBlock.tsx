@@ -19,7 +19,9 @@ const RecommendedResourcesBlock = ({ block, data }) => {
         return null
     }
     const { id } = block
-    const sectionResources = resources.filter(r => sponsors.includes(r.id))
+    const sectionResources = sponsors.map((sponsorId: string) =>
+        resources.find(r => r.id === sponsorId)
+    )
 
     if (!sectionResources.length) {
         return null

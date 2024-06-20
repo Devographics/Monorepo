@@ -37,7 +37,7 @@ export const Comments = ({ item }: { item: CombinedItem }) => {
     return (
         <ModalTrigger
             trigger={
-                <div>
+                <div className="chart-comments-wrapper">
                     <Tooltip
                         trigger={
                             <button className="chart-comments">

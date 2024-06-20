@@ -1,18 +1,19 @@
-import React, { useState, useMemo } from 'react'
+import React from 'react'
 import { useTheme } from 'styled-components'
-import Block from 'core/blocks/block/BlockVariant'
 import TierListChart, { TierItemData, TierData } from 'core/charts/toolsTierList/TierListChart'
-import { useI18n } from '@devographics/react-i18n'
-import ChartContainer from 'core/charts/ChartContainer'
 import sortBy from 'lodash/sortBy.js'
-import { BlockContext } from 'core/blocks/types'
-import { AllToolsData, ToolQuestionData, SectionMetadata } from '@devographics/types'
+import { SectionMetadata, StandardQuestionData, FeaturesOptions } from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
 import { BlockComponentProps } from 'core/types/block'
+import { DataSeries } from 'core/filters/types'
+import { Ratios } from '../multiItemsRatios/types'
+import { ChartFooter, ChartWrapper, Legend } from '../common2'
+import ChartShare from '../common2/ChartShare'
+import { useChartState } from './chartState'
+import { useI18n } from '@devographics/react-i18n'
 
 interface TierListBlockProps extends BlockComponentProps {
-    block: BlockContext<'toolsTierListTemplate', 'ToolsTierListBlock', { toolIds: string }, any>
-    data: AllToolsData
+    series: DataSeries<StandardQuestionData[]>[]
 }
 
 // minimum user percentage of total respondents to consider for tier list
@@ -32,21 +33,20 @@ Parse data and convert it into a format compatible with the TierList chart
 
 */
 const getChartData = (
-    data: AllToolsData,
+    serie: DataSeries<StandardQuestionData[]>,
     theme: any,
     toolsSections: SectionMetadata[]
 ): TierData[] => {
     let sortedData = tiers.map((tier, index) => ({ ...tier, index, items: [] as TierItemData[] }))
     // remove native apps for this chart
-    const items = data.items.filter(tool => tool.id !== 'nativeapps')
+    const items = serie.data.filter(tool => tool.id !== 'nativeapps')
     items.forEach(tool => {
         const total = tool?.responses?.currentEdition?.completion?.total || 0
         const buckets = tool?.responses?.currentEdition?.buckets
-        const wouldUseCount = buckets?.find(b => b.id === 'would_use')?.count || 0
-        const wouldNotUseCount = buckets?.find(b => b.id === 'would_not_use')?.count || 0
-        const userCount = wouldUseCount + wouldNotUseCount
+        const userCount = buckets?.find(b => b.id === FeaturesOptions.USED)?.count || 0
         const cutoff = Math.round((total * cutoffPercentage) / 100)
-        const satisfactionRatio = Math.round((wouldUseCount / userCount) * 100)
+        const satisfactionRatio =
+            (tool.responses.currentEdition.ratios?.[Ratios.RETENTION] || 0) * 100
         const section = toolsSections.find((section: SectionMetadata) =>
             section.questions.find(q => q.id === tool.id)
         )
@@ -76,52 +76,36 @@ const getChartData = (
     return sortedData
 }
 
-const TierListBlock = ({ block, data }: TierListBlockProps) => {
-    const { translate } = useI18n()
+const TierListBlock = (props: TierListBlockProps) => {
+    const { getString } = useI18n()
+    const { block, series } = props
     const theme = useTheme()
     const toolsSections = useToolSections()
-    const chartData = getChartData(data, theme, toolsSections)
+    const chartData = getChartData(series[0], theme, toolsSections)
+    const chartState = useChartState()
+    const { highlighted: currentCategory } = chartState
 
-    const legends = toolsSections.map(({ id }: SectionMetadata) => ({
-        id: `toolCategories.${id}`,
-        label: translate(`sections.${id}.title`),
-        keyLabel: `${translate(`sections.${id}.title`)}:`,
+    const legendItems = toolsSections.map(({ id }: SectionMetadata) => ({
+        id,
+        label: getString(`sections.${id}.title`)?.t,
         color: theme.colors.ranges.toolSections[id]
     }))
 
-    const [currentCategory, setCurrentCategory] = useState<string | null>(null)
-
-    const legendProps = useMemo(
-        () => ({
-            legends,
-            onMouseEnter: ({ id }: { id: string }) => {
-                setCurrentCategory(id.replace('toolCategories.', ''))
-            },
-            onMouseLeave: () => {
-                setCurrentCategory(null)
-            }
-        }),
-        [legends, setCurrentCategory]
-    )
-
     return (
-        <Block
-            legends={legends}
-            legendProps={legendProps}
-            className="ToolsScatterplotBlock"
-            data={data}
-            // tables={[
-            //     getTableData({
-            //         data: data.map(tool => getNodeData(tool)),
-            //         valueKeys: ['usage_count', 'satisfaction_percentage', 'interest_percentage']
-            //     })
-            // ]}
-            block={block}
-        >
-            <ChartContainer vscroll={true} fit={true}>
+        <ChartWrapper className="tier-list">
+            <>
+                <Legend items={legendItems} chartState={chartState} />
                 <TierListChart data={chartData} currentCategory={currentCategory} />
-            </ChartContainer>
-        </Block>
+                <ChartFooter
+                    right={
+                        <>
+                            <ChartShare block={block} />
+                            {/* <ChartData {...commonProps} /> */}
+                        </>
+                    }
+                />
+            </>
+        </ChartWrapper>
     )
 }
 

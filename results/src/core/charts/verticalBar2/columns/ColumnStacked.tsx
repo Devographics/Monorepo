@@ -1,7 +1,7 @@
 import { ColumnComponentProps } from '../types'
 import React from 'react'
 import { Cell } from '../VerticalBarCell'
-import { useGradient } from '../../horizontalBar2/helpers/colors'
+import { useGradient } from '../../common2/helpers/colors'
 import sum from 'lodash/sum'
 import take from 'lodash/take'
 import { ColumnWrapper } from './ColumnWrapper'

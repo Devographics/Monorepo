@@ -4,6 +4,7 @@ import { ChartState, Tick } from '../../common2/types'
 import AxisV from '../../common2/AxisV'
 import { VerticalBarChartState, VerticalBarChartValues } from '../types'
 import { Gridlines } from './Gridlines'
+import T from 'core/i18n/T'
 
 export const Columns = ({
     chartState,
@@ -38,7 +39,9 @@ export const Columns = ({
                 {ticks && <AxisV variant="right" {...axisProps} ticks={ticks} />}
                 {labelId && (
                     <div className="chart-axis-label">
-                        <div>{labelId}</div>
+                        <div>
+                            <T k={labelId} />
+                        </div>
                     </div>
                 )}
             </div>

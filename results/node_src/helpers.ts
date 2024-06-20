@@ -235,7 +235,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                     )
                     data = existingData
                 } else {
-                    console.log(`// 🔍 Running query for file ${dataFileName}…`)
+                    console.log(`// 🔍 Running uncached query for file ${dataFileName}…`)
                     const questionId = block.id
                     const queryOptions = {
                         surveyId,
@@ -248,10 +248,14 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                         ...block.queryOptions
                     }
 
+                    // always disable cache when json file is missing
+                    // const enableCache = useApiCache
+                    const enableCache = false
+
                     const queryArgs = {
                         facet: block.facet,
                         filters: block.filters,
-                        parameters: { ...block.parameters, enableCache: useApiCache },
+                        parameters: { ...block.parameters, enableCache },
                         xAxis: block?.variables?.xAxis,
                         yAxis: block?.variables?.yAxis
                     }
@@ -264,7 +268,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                             queryOptions,
                             chartFilters: block.filtersState,
                             currentYear: currentEdition.year,
-                            enableCache: useApiCache
+                            enableCache
                         })
                         query = filtersQueryResult.query
                     } else {
@@ -285,7 +289,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                                 queryOptions: { ...queryOptions, isLog: true, addRootNode: false },
                                 chartFilters: block.filtersState,
                                 currentYear: currentEdition.year,
-                                enableCache: useApiCache
+                                enableCache
                             })
                             queryLog = filtersQueryResult.query
                         } else {

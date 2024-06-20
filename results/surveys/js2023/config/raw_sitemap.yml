@@ -63,7 +63,7 @@
         template: multiple_options2
         parameters: { limit: 20 }
         takeaway: >
-            While many respondents (**19%**) came from the U.S., we also had strong representation from Germany, France, the U.K., and the Netherlands (**24% combined**), reflecting the liveliness of the front end community in these countries.
+            While **16%** of respondents came from the U.S., we also had strong representation from the JavaScript community in Germany, France, and the U.K.,(**19% combined**).
         variants:
             - template: vs_salary
               parameters: { limit: 20, sort: { property: medianByFacet, order: desc } }
@@ -85,14 +85,14 @@
       - id: age
         template: multiple_options2
         takeaway: >
-            Survey respondents were on average **33.6** years old, slightly higher than the [State of JS](https://2022.stateofjs.com) (**32.2**) and [State of CSS](https://2023.stateofcss.com) (**33.5**) surveys.
+            Survey respondents were on average **31.7** years old, slightly lower than the [State of HTML](https://2022.stateofjs.com) (**33.6**) and [State of CSS](https://2023.stateofcss.com) (**33.5**) surveys.
         variants:
             - template: vs_salary
 
       - id: years_of_experience
         template: multiple_options2
         takeaway: >
-            Respondents had on average **10.7** years of web development experience.
+            Respondents had on average **9.3** years of web development experience.
         variants:
             - template: vs_salary
 
@@ -119,12 +119,13 @@
 
       - id: gender
         template: multiple_options2
-        takeaway: >
-            Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
+        # takeaway: >
+        #     Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
         variants:
             - template: vs_salary
             - id: country_vs_gender
               fieldId: country
+              tabId: tabs.by_country
               template: multiple_options2
               parameters:
                   showNoAnswer: true
@@ -155,7 +156,7 @@
             limit: 20
 
       - id: user_info_resources
-        items: [renderatl]
+        items: [fm-javascript-first-steps, fm-getting-a-job-v2]
         template: recommended_resources
 
 - id: features
@@ -170,10 +171,6 @@
 
       # - id: knowledge_score
       #   template: multiple_options
-
-      - id: features_resources
-        items: [fm-javascript]
-        template: recommended_resources
 
       - id: syntax_features
         template: multiple_options2
@@ -191,6 +188,11 @@
         template: multiple_options2
         i18nNamespace: features
 
+      - id: dax_raad
+        template: picks
+        variables:
+            url: https://replicache.dev/
+
       - id: browser_api_features
         template: multiple_options2
         i18nNamespace: features
@@ -198,12 +200,20 @@
       - id: language_pain_points
         template: multiple_options2_freeform
         i18nNamespace: features
-        parameters: { limit: 10 }
 
       - id: browser_apis_pain_points
         template: multiple_options2_freeform
         i18nNamespace: features
-        parameters: { limit: 10 }
+
+      - id: reading_list
+        # template: reading_list
+        template: multiple_options2
+        queryOptions:
+            sectionId: reading_list
+
+      - id: features_resources
+        items: [fm-javascript-quiz, fm-javascript-hard-parts-v2]
+        template: recommended_resources
 
 - id: libraries
   path: /libraries
@@ -211,22 +221,32 @@
       - id: librariesIntroduction
         template: page_introduction
 
-      - id: all_tools2
+      - id: all_tools_experience
+        titleId: tools.all_items.experience
         template: multi_items_experience
         chartOptions:
             limit: 10
 
-      # hidden question used to load data for next 3 charts; don't remove
-      # - template: all_tools
+      - id: tools_arrows
+        template: tools_arrows
 
-      # - template: tools_arrows
+      - id: rich_harris
+        template: picks
+        variables:
+            url: https://www.localfirst.fm/
 
-      # - template: tier_list
+      - id: tier_list
+        template: tier_list
 
-      # - template: scatterplot_overview
+      - id: scatterplot_overview
+        template: scatterplot_overview
 
       # - id: all_sections_tools_cardinality_by_user
       #   template: tools_cardinality_by_user_js
+
+      - id: libraries_resources
+        items: [fm-vite, fm-design-systems-v2]
+        template: recommended_resources
 
   children:
       - id: front_end_frameworks
@@ -246,18 +266,16 @@
               template: hint
 
             - template: section_prenormalized_tools
-              parameters:
-                  limit: 10
 
-            - id: lee_robinson
+            - id: emma_bostian
               template: picks
               variables:
-                  url: https://kit.svelte.dev/
+                  url: https://leaddev.com/personal-development/how-build-trust-new-engineering-manager
 
             - template: happiness2
 
-            - template: happiness2
-              defaultView: percentageQuestion
+            # - template: happiness2
+            #   defaultView: percentageQuestion
 
             # - id: front_end_frameworks_happiness
             #   template: multiple_options2
@@ -266,11 +284,10 @@
 
             - id: front_end_frameworks_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: features
-              parameters: { limit: 10 }
+              i18nNamespace: tools
 
             - id: front_end_frameworks_resources
-              items: [fm-react, fm-vue]
+              items: [fm-react, fm-vanilla-js-apps]
               template: recommended_resources
 
       - id: meta_frameworks
@@ -282,7 +299,7 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: meta_frameworks_items
+            - id: meta_frameworks_experience
               template: multi_items_experience
               i18nNamespace: tools
 
@@ -290,13 +307,11 @@
               template: hint
 
             - template: section_prenormalized_tools
-              parameters:
-                  limit: 10
 
-            - id: lee_robinson
+            - id: fireship
               template: picks
               variables:
-                  url: https://kit.svelte.dev/
+                  url: https://pocketbase.io
 
             - template: happiness2
 
@@ -307,11 +322,10 @@
 
             - id: meta_frameworks_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: features
-              parameters: { limit: 10 }
+              i18nNamespace: tools
 
             - id: meta_frameworks_resources
-              items: [fm-fullstack-app-next, fm-servers-node-js]
+              items: [fm-nextjs-v3, fullstack-app-next-v3]
               template: recommended_resources
 
       - id: testing
@@ -323,7 +337,7 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: testing_items
+            - id: testing_experience
               template: multi_items_experience
               i18nNamespace: tools
 
@@ -331,13 +345,11 @@
               template: hint
 
             - template: section_prenormalized_tools
-              parameters:
-                  limit: 10
 
-            - id: lee_robinson
+            - id: quarkstuff
               template: picks
               variables:
-                  url: https://kit.svelte.dev/
+                  url: https://nuxt.com/
 
             - template: happiness2
 
@@ -348,11 +360,10 @@
 
             - id: testing_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: features
-              parameters: { limit: 10 }
+              i18nNamespace: tools
 
             - id: testing_resources
-              items: [fm-testing-practices-principles]
+              items: [fm-enterprise-ui-dev, fm-web-app-testing]
               template: recommended_resources
 
       - id: mobile_desktop
@@ -364,7 +375,7 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: mobile_desktop_items
+            - id: mobile_desktop_experience
               template: multi_items_experience
               i18nNamespace: tools
 
@@ -372,13 +383,11 @@
               template: hint
 
             - template: section_prenormalized_tools
-              parameters:
-                  limit: 10
 
-            - id: lee_robinson
+            - id: david_khourshid
               template: picks
               variables:
-                  url: https://kit.svelte.dev/
+                  url: https://tldraw.com
 
             - template: happiness2
 
@@ -389,11 +398,10 @@
 
             - id: mobile_desktop_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: features
-              parameters: { limit: 10 }
+              i18nNamespace: tools
 
             - id: mobile_desktop_resources
-              items: [fm-react-native-v2, fm-intermediate-react-native]
+              items: [fm-react-native-v2, fm-electron-v3]
               template: recommended_resources
 
       - id: build_tools
@@ -405,7 +413,7 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: build_tools_items
+            - id: build_tools_experience
               template: multi_items_experience
               i18nNamespace: tools
 
@@ -413,13 +421,11 @@
               template: hint
 
             - template: section_prenormalized_tools
-              parameters:
-                  limit: 10
 
-            - id: lee_robinson
+            - id: sacha_greif
               template: picks
               variables:
-                  url: https://kit.svelte.dev/
+                  url: https://auto-animate.formkit.com/
 
             - template: happiness2
 
@@ -430,11 +436,10 @@
 
             - id: build_tools_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: features
-              parameters: { limit: 10 }
+              i18nNamespace: tools
 
             - id: build_tools_resources
-              items: [fm-xstate]
+              items: [fm-vite, fm-webpack-fundamentals]
               template: recommended_resources
 
       - id: monorepo_tools
@@ -446,7 +451,7 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: monorepo_tools_items
+            - id: monorepo_tools_experience
               template: multi_items_experience
               i18nNamespace: tools
 
@@ -454,13 +459,11 @@
               template: hint
 
             - template: section_prenormalized_tools
-              parameters:
-                  limit: 10
 
-            - id: lee_robinson
+            - id: german_jablonski
               template: picks
               variables:
-                  url: https://kit.svelte.dev/
+                  url: https://lexical.dev/
 
             - template: happiness2
 
@@ -471,11 +474,10 @@
 
             - id: monorepo_tools_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: features
-              parameters: { limit: 10 }
+              i18nNamespace: tools
 
             - id: monorepo_tools_resources
-              items: [fm-monorepos]
+              items: [fm-monorepos, fm-git]
               template: recommended_resources
 
 - id: other_tools
@@ -487,10 +489,10 @@
       - id: libraries
         template: multiple_options2_combined
 
-      - id: theo_browne
+      - id: alina_listunova
         template: picks
         variables:
-            url: https://trpc.io/
+            url: https://marvinh.dev/blog/speeding-up-javascript-ecosystem/
 
       - id: graphics_animation
         template: multiple_options2_combined
@@ -504,6 +506,11 @@
       - id: edge_runtimes
         template: multiple_options2_combined
 
+      - id: augustin_mauroy
+        template: picks
+        variables:
+            url: https://x.com/wunderacle
+
       - id: non_js_languages
         template: multiple_options2_combined
 
@@ -516,13 +523,13 @@
       - id: sharing_hint
         template: hint
 
-      - id: ben_holmes
+      - id: shadowingszy
         template: picks
         variables:
-            url: https://github.com/colinhacks/zod
+            url: https://www.rspack.dev/
 
       - id: tools_others_resources
-        items: [fm-typescript, fm-node-js]
+        items: [fm-node-js, fm-fullstack-v3]
         template: recommended_resources
 - id: usage
   intlId: usage_js
@@ -536,6 +543,11 @@
       - id: usage_type
         template: multiple_options2
 
+      - id: kilian_valkhof
+        template: picks
+        variables:
+            url: https://www.electronjs.org/
+
       - id: what_do_you_use_js_for
         template: multiple_options2_combined
 
@@ -545,6 +557,11 @@
       - id: js_app_patterns
         template: multiple_options2_combined
 
+      - id: gustavo_vasquez
+        template: picks
+        variables:
+            url: https://medium.com/@devgustavovasquez/the-future-of-web-development-embracing-interoperable-runtimes-bd2006e9b9d7
+
       - id: top_js_pain_points
         template: multiple_options2_combined
 
@@ -552,7 +569,7 @@
         template: multiple_options2_combined
 
       - id: usage_resources
-        items: [fm-algorithms, fm-js-patterns]
+        items: [fm-professional, fm-fullstack]
         template: recommended_resources
 
 - id: resources
@@ -560,34 +577,43 @@
   blocks:
       - template: page_introduction
 
-      - id: shaundai_person
-        template: picks
-        variables:
-            url: https://sarahdrasnerdesign.com/
-
       - id: paid_courses
         template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
 
-      - id: tyler_mcginnis
+      - id: rexhent
         template: picks
         variables:
-            url: https://tanstack.com/
+            url: https://nuxt.com/
 
       - id: podcasts
         template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
 
       - id: video_creators
         template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
+
+      - id: martin_heidegger
+        template: picks
+        variables:
+            url: https://www.npmjs.com/package/tess2
 
       - id: people
         template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
 
       - id: other_surveys
         template: multiple_options2_combined
 
       - id: resources_resources
-        items: [reactathon]
+        items: [fm-algorithms, fm-primeagen]
         template: recommended_resources
+
 - id: awards
   path: /awards
   blocks:
@@ -596,27 +622,27 @@
       - id: awards
         template: awards
         variables:
-            entities: '"top_level_await","array_at","string_replace_all","vite","vitest","pnpm","vite","vitest","testing_library","turbopack","turborepo","astro","fnm","azure_functions","private_fields","proxies","nullish_coalescing","react","angular","storybook"'
+            entities: '"vite","esbuild","vitest","playwright","bun","astro","ember","react","nextjs","storybook","jest"'
         awards:
-            - id: feature_adoption_delta_award
-              template: award
-              awards:
-                  - id: top_level_await
-                    value: '+26.4%'
-                  - id: array_at
-                    value: '+14.2%'
-                  - id: string_replace_all
-                    value: '+9.6%'
+            # - id: feature_adoption_delta_award
+            #   template: award
+            #   awards:
+            #       - id: top_level_await
+            #         value: '+26.4%'
+            #       - id: array_at
+            #         value: '+14.2%'
+            #       - id: string_replace_all
+            #         value: '+9.6%'
 
             - id: tool_usage_delta_award
               template: award
               awards:
                   - id: vite
-                    value: '+18.8%'
+                    value: '+25%'
+                  - id: esbuild
+                    value: '+21%'
                   - id: vitest
-                    value: '+11.1%'
-                  - id: pnpm
-                    value: '+8.4%'
+                    value: '+20%'
 
             - id: tool_satisfaction_award
               template: award
@@ -624,62 +650,78 @@
                   - id: vite
                     value: '98%'
                   - id: vitest
-                    value: '97%'
-                  - id: testing_library
+                    value: '96%'
+                  - id: playwright
                     value: '95%'
 
             - id: tool_interest_award
               template: award
               awards:
+                  - id: vitest
+                    value: '79%'
                   - id: vite
-                    value: '81%'
-                  - id: turbopack
-                    value: '80%'
-                  - id: turborepo
                     value: '77%'
+                  - id: playwright
+                    value: '76%'
 
             - id: most_write_ins_award
               template: award
               awards:
+                  - id: bun
+                    value: '353'
                   - id: astro
-                    value: '402'
-                  - id: fnm
-                    value: '338'
-                  - id: azure_functions
-                    value: '234'
+                    value: '299'
+                  - id: ember
+                    value: '81'
 
-            - id: most_commented_feature_award
-              template: award
-              awards:
-                  - id: private_fields
-                    value: 102
-                  - id: proxies
-                    value: 71
-                  - id: nullish_coalescing
-                    value: 66
+            # - id: most_commented_feature_award
+            #   template: award
+            #   awards:
+            #       - id: private_fields
+            #         value: 102
+            #       - id: proxies
+            #         value: 71
+            #       - id: nullish_coalescing
+            #         value: 66
 
             - id: most_commented_tool_award
               template: award
               awards:
                   - id: react
-                    value: 66
-                  - id: angular
-                    value: 47
+                    value: 119
+                  - id: nextjs
+                    value: 92
                   - id: storybook
-                    value: 42
+                    value: 72
 
-      - id: awards_resources
-        items: [road-to-react]
-        template: recommended_resources
+            - id: most_loved_tool_award
+              template: award
+              awards:
+                  - id: vite
+                    value: '88.7%'
+                  - id: jest
+                    value: '73.2%'
+                  - id: react
+                    value: '71.2%'
+
+      # - id: awards_resources
+      #   items: [road-to-react]
+      #   template: recommended_resources
 
 - id: conclusion
   path: /conclusion
   blocks:
-      - id: conclusion
+      - id: conclusion_cassidy
         template: conclusion
         variables:
-            author: sarah_drasner
-            entities: '"sarah_drasner"'
+            author: cassidy_williams
+            entities: '"cassidy_williams"'
+
+      - id: conclusion_theo
+        template: conclusion
+        variables:
+            author: theo_browne
+            entities: '"theo_browne"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock

@@ -10,8 +10,6 @@ import { getAllEditions } from './helpers/other'
 import { ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
 import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
-import { getBlockNoteKey } from 'core/helpers/blockHelpers'
-import { useI18n } from '@devographics/react-i18n'
 import { VerticalBarSerie } from './VerticalBarSerie'
 import { VerticalBarChartState } from './types'
 import ChartShare from '../common2/ChartShare'
@@ -27,7 +25,6 @@ Note: always used for historical data
 
 */
 export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
-    const { getString } = useI18n()
     const { block, series, question, pageContext, variant } = props
     const allEditions = getAllEditions({ serie: series[0], block })
     const currentEdition = allEditions.at(-1)
@@ -48,9 +45,6 @@ export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
         block
     }
 
-    const key = getBlockNoteKey({ block })
-    const note = getString(key, {})?.t
-
     return (
         <ChartWrapper className="chart-vertical-bar">
             <>
@@ -68,6 +62,8 @@ export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
                         />
                     ))}
                 </GridWrapper>
+
+                <Note block={block} />
 
                 <ChartFooter
                     left={
@@ -87,8 +83,6 @@ export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
                 />
 
                 {/* <Actions {...commonProps} /> */}
-
-                {note && <Note>{note}</Note>}
             </>
         </ChartWrapper>
     )

@@ -1,4 +1,4 @@
-import { Bucket, QuestionMetadata } from '@devographics/types'
+import { Bucket, Entity, QuestionMetadata } from '@devographics/types'
 import { MultiItemsChartValues } from '../multiItemsExperience/types'
 import { BlockVariantDefinition, PageContextValue } from 'core/types'
 import { DataSeries } from 'core/filters/types'
@@ -9,6 +9,18 @@ export interface ChartState {
     view: string
     setView: Dispatch<SetStateAction<string>>
     viewDefinition: ViewDefinition
+}
+
+export interface ChartStateWithSort extends ChartState {
+    sort: string | undefined
+    setSort: Dispatch<SetStateAction<string | undefined>>
+    order: OrderOptions
+    setOrder: Dispatch<SetStateAction<OrderOptions>>
+}
+
+export interface ChartValues {
+    question: QuestionMetadata
+    i18nNamespace?: string
 }
 
 export type ViewDefinition = {
@@ -54,3 +66,10 @@ export type Tick = {
 }
 
 export type FormatValueType = (v: number, question: QuestionMetadata) => string
+
+export type LegendItem = {
+    id: string
+    label?: string
+    color?: string
+    entity?: Entity
+}

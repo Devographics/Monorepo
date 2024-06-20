@@ -31,6 +31,7 @@ const BlockSwitcher = ({
     const { id, blockType, filtersState, query } = block
 
     if (!blockRegistry[blockType]) {
+        console.log(blockType)
         console.log(block)
         return (
             <BlockError

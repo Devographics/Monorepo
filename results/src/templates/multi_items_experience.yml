@@ -1,7 +1,18 @@
 id: ${sectionId}_items
-titleId: sections.${sectionId}.title
 blockType: MultiItemsExperienceBlock
 hasSponsor: true
+customizationModes: ['filters']
+queryOptions:
+    questionId: _items
+    addBuckets: true
+    addRatios: true # necessary to automatically enable _sentiment facet
+    addQuestionEntity: true
+    allEditions: false
+    addQuestionComments: true
+parameters:
+    cutoffPercent: 0
+    facetCutoffPercent: 0
+    limit: 0
 query: >
     surveys {
       ${surveyId} {
@@ -13,6 +24,7 @@ query: >
                 name
                 nameClean
                 nameHtml
+                alias
                 entityType
                 description
                 descriptionClean
@@ -44,6 +56,13 @@ query: >
               }
               responses(facet: _sentiment) {
                 currentEdition {
+                  ratios {
+                    awareness
+                    interest
+                    usage
+                    retention
+                    positivity
+                  }
                   buckets {
                     count
                     id

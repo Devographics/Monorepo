@@ -5,14 +5,16 @@ import floor from 'lodash/floor.js'
 const getCount = (bucket: Bucket) => bucket.count || 0
 
 const getPositiveCount = (bucket: Bucket) =>
-    bucket.facetBuckets.find(fb => fb.id === SimplifiedSentimentOptions.POSITIVE_SENTIMENT)
+    bucket?.facetBuckets?.find(fb => fb.id === SimplifiedSentimentOptions.POSITIVE_SENTIMENT)
         ?.count || 0
 
 const getNegativeCount = (bucket: Bucket) =>
-    bucket.facetBuckets.find(fb => fb.id === SimplifiedSentimentOptions.NEGATIVE_SENTIMENT)
+    bucket?.facetBuckets?.find(fb => fb.id === SimplifiedSentimentOptions.NEGATIVE_SENTIMENT)
         ?.count || 0
 
 const roundRatio = (r: number) => floor(r, 2)
+
+const emptyBucket = { count: 0 } as Bucket
 
 export async function addRatios(
     resultsByEdition: ResponseEditionData[],
@@ -21,12 +23,11 @@ export async function addRatios(
 ) {
     for (let editionData of resultsByEdition) {
         const { buckets } = editionData
-        const neverHeardBucket = buckets.find(b => b.id === FeaturesOptions.NEVER_HEARD)
-        const heardBucket = buckets.find(b => b.id === FeaturesOptions.HEARD)
-        const usedBucket = buckets.find(b => b.id === FeaturesOptions.USED)
-        if (!neverHeardBucket || !heardBucket || !usedBucket) {
-            return {}
-        }
+        const neverHeardBucket =
+            buckets.find(b => b.id === FeaturesOptions.NEVER_HEARD) || emptyBucket
+        const heardBucket = buckets.find(b => b.id === FeaturesOptions.HEARD) || emptyBucket
+        const usedBucket = buckets.find(b => b.id === FeaturesOptions.USED) || emptyBucket
+
         const total = getCount(neverHeardBucket) + getCount(heardBucket) + getCount(usedBucket)
 
         // (heard + used) / total

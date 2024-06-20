@@ -5,7 +5,8 @@ import {
     CUTOFF_ANSWERS,
     OVERALL,
     INSUFFICIENT_DATA,
-    OVERLIMIT_ANSWERS
+    OVERLIMIT_ANSWERS,
+    NOT_APPLICABLE
 } from '@devographics/constants'
 import { StringTranslator } from '@devographics/react-i18n'
 import { Entity } from '@devographics/types'
@@ -61,13 +62,18 @@ export const getItemLabel = (options: {
         html = false
     } = options
 
-    let key, label, shortLabel, description
+    let key, label, shortLabel, genericLabel, description
 
     if (providedLabel) {
         // if a label is provided, use that
         label = providedLabel
         shortLabel = providedLabel
     } else {
+        // some ids have generic labels that work for all questions
+        if (id === NOT_APPLICABLE) {
+            genericLabel = getString('options.na')?.t
+        }
+
         // else, try using an i18n key
         const defaultKey = `options.${i18nNamespace}.${id}`
         const predefinedKey = predefinedKeys[id]
@@ -77,7 +83,8 @@ export const getItemLabel = (options: {
 
         const i18nLabelObject = getString(key, values)
         const i18nLabel = getFields(i18nLabelObject, [html ? 'tHtml' : 'tClean', 't'])
-        const entityName = entity && getFields(entity, [html ? 'nameHtml' : 'nameClean', 'name'])
+        const entityName =
+            entity && getFields(entity, ['alias', html ? 'nameHtml' : 'nameClean', 'name'])
 
         const shortLabelObject = getString(key + '.short', values, i18nLabel)
 
@@ -87,7 +94,7 @@ export const getItemLabel = (options: {
             entity &&
             getFields(entity, [html ? 'descriptionHtml' : 'descriptionClean', 'description'])
 
-        label = String(i18nLabel || entityName || id)
+        label = String(i18nLabel || entityName || genericLabel || id)
         shortLabel = getFields(shortLabelObject, [html ? 'tHtml' : 'tClean', 't']) || label
         description = i18nDescription || entityDescription
     }

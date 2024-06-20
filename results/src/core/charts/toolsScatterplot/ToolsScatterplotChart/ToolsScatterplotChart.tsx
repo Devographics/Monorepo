@@ -17,8 +17,8 @@ import { Crosshair } from './Crosshair'
 interface ToolsScatterPlotProps {
     data: ToolsQuadrantsChartToolsCategoryData[]
     metric: ToolsQuadrantsMetric
-    currentCategory: ToolsSectionId | null
-    setCurrentCategory: (category: ToolsSectionId | null) => void
+    currentCategory?: ToolsSectionId | null
+    setCurrentCategory?: (category: ToolsSectionId | null) => void
     className: string
 }
 
@@ -31,7 +31,7 @@ const layers = [Quadrants, 'grid' as const, 'axes' as const, Nodes, Crosshair]
  * depending on the selected metric:
  *
  *   +––––––––––+––––––––––––––+––––––––––––––––+
- *   | Quadrant | satisfaction | interest       |
+ *   | Quadrant | retention    | interest       |
  *   +––––––––––+––––––––––––––+––––––––––––––––+
  *   |        0 | assess       | mainstream     |
  *   |        1 | adopt        | next_big_thing |
@@ -39,7 +39,7 @@ const layers = [Quadrants, 'grid' as const, 'axes' as const, Nodes, Crosshair]
  *   |        3 | analyze      | low_interest   |
  *   +––––––––––+––––––––––––––+––––––––––––––––+
  *
- * The quadrant a tool is in depends on 2 metrics, satisfaction
+ * The quadrant a tool is in depends on 2 metrics, retention
  * or interest (%) and number of users.
  *
  * We have the ability to highlight a specific tool on hover,
@@ -61,8 +61,10 @@ const layers = [Quadrants, 'grid' as const, 'axes' as const, Nodes, Crosshair]
 export const ToolsQuadrantsChart = ({
     data,
     metric,
-    currentCategory,
-    setCurrentCategory,
+    currentCategory = null,
+    setCurrentCategory = () => {
+        return
+    },
     className
 }: ToolsScatterPlotProps) => {
     const { xScale, yScale, context } = useToolsQuadrantsChart({
@@ -90,7 +92,8 @@ export const ToolsQuadrantsChart = ({
             bottom: {
                 legend: translate!('charts.axis_legends.users_count'),
                 legendPosition: 'middle' as const,
-                legendOffset: 46
+                legendOffset: 60,
+                tickRotation: -90
             }
         }),
         [translate, metric]

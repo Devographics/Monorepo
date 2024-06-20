@@ -12,8 +12,6 @@
         .chart-row-left,
         .chart-row-right {
             height: var(--cellHeight);
-            display: flex;
-            align-items: center;
         }
     }
     .chart-heading {
@@ -37,16 +35,7 @@
         margin: 0;
     }
 }
-.multiexp-chart-heading {
-    display: flex;
-    gap: var(--halfSpacing);
-    @include small {
-        flex-direction: column;
-    }
-    @include medium-large {
-        justify-content: space-between;
-    }
-}
+
 .multiexp-control {
     display: flex;
     align-items: center;

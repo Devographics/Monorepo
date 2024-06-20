@@ -66,7 +66,8 @@ export const TabsWrapper = ({
     const blockCustomVariants = customVariants.filter(v => v.blockId === block.id)
 
     const showTabs =
-        [...block.variants, ...blockCustomVariants].length >= 2 || firstBlockVariant.canCustomize
+        [...block.variants, ...blockCustomVariants].length >= 2 ||
+        firstBlockVariant.customizationModes
 
     const variantProps = {
         block: firstBlockVariant,
@@ -139,7 +140,7 @@ export const TabsWrapper = ({
                                 ))}
                             </TabsList>
 
-                            {firstBlockVariant.canCustomize && (
+                            {firstBlockVariant.customizationModes && (
                                 <ModalTrigger
                                     trigger={
                                         <CustomizeButton_ variant="link">

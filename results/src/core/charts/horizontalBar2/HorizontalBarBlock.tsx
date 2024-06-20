@@ -7,18 +7,17 @@ import { QuestionMetadata, StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
 import { getAllFacetBucketIds, getChartCurrentEdition, useQuestionMetadata } from './helpers/other'
 import { getDefaultState, useChartState } from './helpers/chartState'
-import { ChartFooter, ChartWrapper, GridWrapper, Legend, Note } from '../common2'
+import { ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
 import { useEntities } from 'core/helpers/entities'
 import { FacetTitle } from '../common2/FacetTitle'
 import { getQuestionOptions } from './helpers/options'
-import { useColorScale } from './helpers/colors'
+import { useColorScale } from '../common2/helpers/colors'
 import { HorizontalBarChartState } from './types'
 import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
 import { HorizontalBarSerie } from './HorizontalBarSerie'
-import { getBlockNoteKey } from 'core/helpers/blockHelpers'
-import { useI18n } from '@devographics/react-i18n'
 import ChartShare from '../common2/ChartShare'
+import Legend from './Legend'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -26,7 +25,6 @@ export interface HorizontalBarBlock2Props extends BlockComponentProps {
 }
 
 export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
-    const { getString } = useI18n()
     const { block, series, question, pageContext, variant } = props
     const currentEdition = getChartCurrentEdition({ serie: series[0], block })
     const { average, percentiles, completion } = currentEdition
@@ -45,9 +43,6 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
         chartState,
         block
     }
-
-    const key = getBlockNoteKey({ block })
-    const note = getString(key, {})?.t
 
     return (
         <ChartWrapper className="chart-horizontal-bar">
@@ -68,6 +63,8 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                         />
                     ))}
                 </GridWrapper>
+
+                <Note block={block} />
 
                 <ChartFooter
                     left={
@@ -94,8 +91,6 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                 {/* <pre>
                 <code>{JSON.stringify(chartValues, null, 2)}</code>
             </pre> */}
-
-                {note && <Note>{note}</Note>}
             </>
         </ChartWrapper>
     )

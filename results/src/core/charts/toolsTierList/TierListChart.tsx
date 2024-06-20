@@ -148,17 +148,18 @@ const TierItem = ({
     sectionId,
     currentCategory
 }: TierItemProps) => {
-    const imageSrc = customImages[id]
-        ? `${process.env.GATSBY_ASSETS_URL}/projects/${id}.${customImages[id]}`
-        : `https://bestofjs.org/logos/${id}.svg`
+    const imageSrc = `${process.env.GATSBY_ASSETS_URL}/projects/${id}.${
+        customImages[id] ? customImages[id] : 'svg'
+    }`
 
     const isHighlighted = currentCategory ? currentCategory === sectionId : true
 
     const entity = entityProp || useEntity(id)
+
     return (
         <Link color={color} isHighlighted={isHighlighted}>
             <ColorWrapper color={color}>
-                <ImageWrapper>
+                <ImageWrapper href={entity.homepage?.url}>
                     <Image
                         // src={`/images/logos/${id}.svg`}
                         width="100%"
@@ -170,7 +171,9 @@ const TierItem = ({
                     <RatioNumber>{satisfactionRatio}%</RatioNumber>
                 </Ratio>
             </ColorWrapper>
-            <Name color={color}>{entity?.name}</Name>
+            <Name href={entity.homepage?.url} color={color}>
+                {entity?.name}
+            </Name>
         </Link>
     )
 }
@@ -198,7 +201,8 @@ const ColorWrapper = styled.div`
     aspect-ratio: 1 / 1;
 `
 
-const ImageWrapper = styled.div`
+const ImageWrapper = styled.a`
+    display: block;
     width: 100%;
     aspect-ratio: 1 / 1;
     padding: 7px;
@@ -213,7 +217,7 @@ const Image = styled.img`
     aspect-ratio: 1 / 1;
 `
 
-const Name = styled.span`
+const Name = styled.a`
     background: ${({ color }) => color}cc;
     text-align: center;
     font-weight: ${fontWeight('bold')};
@@ -224,6 +228,11 @@ const Name = styled.span`
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    &,
+    &:link,
+    &:visited {
+        color: var(--textColor);
+    }
 `
 
 const Ratio = styled.span`

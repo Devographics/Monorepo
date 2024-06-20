@@ -35,6 +35,7 @@ const getEntityFragment = () => `entity {
     name
     nameHtml
     nameClean
+    alias
     description
     descriptionHtml
     descriptionClean
@@ -188,6 +189,7 @@ query {
                                     name
                                     nameClean
                                     nameHtml
+                                    alias
                                 }
                                 options {
                                     ${getEntityFragment()}

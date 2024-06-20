@@ -1,0 +1,15 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
+.chart-controls {
+    display: flex;
+    gap: var(--halfSpacing);
+    @include small {
+        flex-direction: column;
+    }
+    @include medium-large {
+        justify-content: space-between;
+    }
+}
+.chart-controls-left,
+.chart-controls-right {
+}

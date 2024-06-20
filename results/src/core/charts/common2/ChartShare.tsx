@@ -2,11 +2,11 @@ import Button from 'core/components/Button'
 import './ChartFooter.scss'
 import React from 'react'
 import ModalTrigger from 'core/components/ModalTrigger'
-import { CommonProps } from './types'
 import T from 'core/i18n/T'
 import BlockShare from 'core/blocks/block/BlockShare'
+import { BlockVariantDefinition } from 'core/types'
 
-export const ChartShare = ({ block, pageContext, series, variant }: CommonProps) => {
+export const ChartShare = ({ block }: { block: BlockVariantDefinition }) => {
     return (
         <ModalTrigger
             trigger={
