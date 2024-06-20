@@ -543,6 +543,11 @@
       - id: usage_type
         template: multiple_options2
 
+      - id: kilian_valkhof
+        template: picks
+        variables:
+            url: https://www.electronjs.org/
+
       - id: what_do_you_use_js_for
         template: multiple_options2_combined
 
