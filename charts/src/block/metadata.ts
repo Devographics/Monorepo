@@ -114,7 +114,7 @@ const getBlockLink = ({
 
     const segments = [localeId, sectionId === 'user_info' ? 'demographics' : sectionId]
     if (subSectionId) {
-        segments.push(subSectionId)
+        segments.push(subSectionId.replaceAll('_', '-'))
     }
     const pathname = `/${segments.join('/')}/#${blockId}`
     const url = new URL(pathname, resultsUrl)
