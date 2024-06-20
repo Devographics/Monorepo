@@ -148,9 +148,9 @@ const TierItem = ({
     sectionId,
     currentCategory
 }: TierItemProps) => {
-    const imageSrc = customImages[id]
-        ? `${process.env.GATSBY_ASSETS_URL}/projects/${id}.${customImages[id]}`
-        : `https://bestofjs.org/logos/${id}.svg`
+    const imageSrc = `${process.env.GATSBY_ASSETS_URL}/projects/${id}.${
+        customImages[id] ? customImages[id] : 'svg'
+    }`
 
     const isHighlighted = currentCategory ? currentCategory === sectionId : true
 
