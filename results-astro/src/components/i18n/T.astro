@@ -1,4 +1,7 @@
 ---
+// TODO: keep in sync with Next.js ServerT
+// use case is similar
+// surveyform/src/i18n/components/ServerT.tsx
 import { DATA_TOKEN_ATTR } from "@devographics/i18n";
 const { i18n } = Astro.locals;
 const { token, values, html } = Astro.props;
@@ -17,7 +20,6 @@ const res = i18n.t(token, values);
 // Since we are server-side, we can easily access the full context and replace {{surveyId}} with the right value
 // we don't need something as elaborate than client-side, which also needs filtering
 ---
-
 <span {...{ [DATA_TOKEN_ATTR]: token }}
   >Astro translation key {html ? res.tHtml : res.t}</span
 >

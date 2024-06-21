@@ -6,7 +6,7 @@ import { rscMustGetSurveyEditionFromUrl } from "~/app/[lang]/survey/[slug]/[year
 import { getCommonContexts, getEditionContexts } from "~/i18n/config";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
-import { getSectioni18nIds } from "~/i18n/survey";
+import { getSectionTokens } from "~/i18n/survey";
 import { serverConfig } from "~/config/server";
 import { rscTeapot } from "~/i18n/components/ServerT";
 
@@ -60,7 +60,7 @@ export const rscGetMetadata = async ({
     sectionNumber && edition.sections?.[parseInt(sectionNumber) - 1];
 
   if (section) {
-    const { title: sectionTitleId } = getSectioni18nIds({ section });
+    const { title: sectionTitleId } = getSectionTokens({ section });
     const sectionTitle = t(sectionTitleId)
     title += `: ${sectionTitle}`;
   }

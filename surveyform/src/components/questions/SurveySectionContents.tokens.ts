@@ -1,2 +1,3 @@
 import { tokens as tokensEditionMessage } from "../surveys/SurveyMessage.tokens"
-export const tokens = [...tokensEditionMessage] as const
+import { tokens as tokensFormSection } from "../form/FormSection.tokens"
+export const tokens = [...tokensEditionMessage, ...tokensFormSection] as const

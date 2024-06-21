@@ -20,6 +20,13 @@ export class TokenExpr<TContext extends Record<string, any>> {
     regex: RegExp
     constructor(expr: string, ctx: TContext) {
         this.expr = expr
+        if (typeof expr !== "string") {
+            if (Array.isArray(expr)) {
+                throw new Error(`Got an array instead of a token expression: ${expr}. 
+You probably forgot to spread this array.`)
+            }
+            throw new Error(`Got a non string Token expression: ${expr}`)
+        }
         this.regex = new RegExp(expr
             // preserves "dots"
             .replaceAll(".", "\\.")
@@ -28,7 +35,8 @@ export class TokenExpr<TContext extends Record<string, any>> {
             .replaceAll(/\{\{surveyId\}\}/g, ctx["surveyId"])
             .replaceAll(/\{\{editionId\}\}/g, ctx["editionId"])
             // replace wild cards by regex wild cards
-            .replaceAll(/\{\{\*\}\}/g, "(.*)")
+            // survey.*.foobar
+            .replaceAll(/\*/g, "(.*)")
             + "$" // match full word
             ,
             "i"

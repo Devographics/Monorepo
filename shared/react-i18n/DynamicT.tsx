@@ -79,15 +79,13 @@ export function InternalT({
 /**
  * Translation component, for tokens that are not known ahead of time
  * This is typically used for low-level UI components
+ * or generated UIs such as form based on a yaml file
  * 
  * @example function MenuItem({menuToken}) { return <div><DynamicT token={menuToken} /></div> }
  * 
- * If the token is a string, or a token expression, 
- * you should instead rely on the `teapot` function
+ * Use only as a last resort for truely dynamic tokens
  * 
- * @example export const { T }
- * 
- * @deprecated Favour passing the rendered text from parent component instead,
+ * Favour passing the rendered text from parent component instead,
  * so your UI component don't have to think about i18n,
  * In the parent, use the "teapot" function with token expressions 
  * @example function MenuItem({menuText}) { return <div>{menuText}</div> }

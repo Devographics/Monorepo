@@ -18,6 +18,8 @@ export async function computeParticipationByYear({
     const aggregationPipeline = [
         {
             $match: {
+                // In older surveys it was "survey" rather than "surveyId"
+                // don't forget to add an index on "surveyId" in normalized_response collection
                 surveyId: survey.id
             }
         },

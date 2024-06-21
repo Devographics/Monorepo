@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import QuestionLabel from "../form/QuestionLabel";
-import { getSectioni18nIds } from "~/i18n/survey";
+import { getSectionTokens } from "~/i18n/survey";
 import { questionIsCompleted } from "~/lib/responses/helpers";
 import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { FormLayoutProps } from "../form/FormLayout";
 import { useFormStateContext } from "../form/FormStateContext";
 import { useFormPropsContext } from "../form/FormPropsContext";
+import { DynamicT } from "@devographics/react-i18n";
+
 
 const SurveySectionHeading = ({ section }: FormLayoutProps) => {
   const { stateStuff, response } = useFormStateContext();
@@ -31,7 +32,7 @@ const SurveySectionHeading = ({ section }: FormLayoutProps) => {
   }, []);
 
   const description = intl.formatMessage({
-    id: getSectioni18nIds({ section }).description,
+    id: getSectionTokens({ section }).description,
   });
   return (
     <div className="section-heading">
@@ -41,18 +42,18 @@ const SurveySectionHeading = ({ section }: FormLayoutProps) => {
             <span className="section-title-pagenumber">
               {sectionNumber}/{edition.sections.length}
             </span>
-            <FormattedMessage
+            <DynamicT
               className="section-title-label"
-              id={getSectioni18nIds({ section }).title}
-              defaultMessage={id}
+              token={getSectionTokens({ section }).title}
+              fallback={id}
               values={{ ...edition }}
             />
           </h2>
           {description && (
             <p className="section-description">
-              <FormattedMessage
-                id={getSectioni18nIds({ section }).description}
-                defaultMessage={id}
+              <DynamicT
+                token={getSectionTokens({ section }).description}
+                fallback={id}
                 values={{ ...edition }}
               />
             </p>
@@ -112,9 +113,8 @@ const QuestionItem = ({
     <li>
       <a
         href={`#${question.id}`}
-        className={`${isHighlighted ? "highlighted" : "not-highlighted"} ${
-          isCompleted ? "completed" : "not-completed"
-        }`}
+        className={`${isHighlighted ? "highlighted" : "not-highlighted"} ${isCompleted ? "completed" : "not-completed"
+          }`}
       >
         <QuestionLabel
           section={section}

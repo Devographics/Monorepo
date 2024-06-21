@@ -22,7 +22,7 @@ test("substring 'foobar' doesn't match complete string 'foobar.action", () => {
 
 })
 test("wildcard matches any param", () => {
-    const te = new TokenExpr("{{*}}.title", makeCtx())
+    const te = new TokenExpr("*.title", makeCtx())
     expect(te.match("hello.title")).toBeTrue()
     expect(te.match("hello.nope")).toBeFalse()
 })

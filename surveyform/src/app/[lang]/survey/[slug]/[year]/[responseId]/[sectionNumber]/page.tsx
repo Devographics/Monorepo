@@ -4,23 +4,36 @@ import {
   SurveySectionReadOnly,
 } from "~/components/questions/SurveySection";
 import { rscMustGetSurveyEditionFromUrl } from "../../rsc-fetchers";
-import { rscMustGetUserResponse } from "~/lib/responses/rsc-fetchers";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { routes } from "~/lib/routes";
 import { SurveyStatusEnum } from "@devographics/types";
 import { DebugRSC } from "~/components/debug/DebugRSC";
+import { setLocaleIdServerContext } from "~/i18n/rsc-context";
+import { rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
+import { filterClientSideStrings } from "@devographics/i18n/server";
+import { tokens as tokensSurveySection } from "~/components/questions/SurveySection.tokens"
+import { I18nContextProvider } from "@devographics/react-i18n";
+
+const clientTokens = [...tokensSurveySection]
 
 // SectionNumber is optional in the URL so this page is exactly the same as ../index.tsx
 const SurveyFromResponseIdPage = async ({
-  params: { slug, year, responseId, sectionNumber },
+  params: { slug, year, responseId, sectionNumber, lang },
 }: {
   params: {
+    lang: string;
     slug: string;
     year: string;
     responseId: string;
     sectionNumber: string;
   };
 }) => {
+  setLocaleIdServerContext(lang) // Needed for "ServerT"
+  const { locale, localeId, error } = await rscLocaleFromParams({ lang })
+  if (error) return <div>Can't load translations</div>
+  // TODO: get correct tokens
+  const clientSideLocale = filterClientSideStrings<{}>(locale, clientTokens, {})
+
   const { data: edition, ___metadata: ___rscMustGetSurveyEditionFromUrl } =
     await rscMustGetSurveyEditionFromUrl({
       slug,
@@ -40,10 +53,10 @@ const SurveyFromResponseIdPage = async ({
   }
   // TODO: @see https://github.com/vercel/next.js/issues/49387#issuecomment-1564539515
   return (
-    <>
+    <I18nContextProvider locale={clientSideLocale}>
       <DebugRSC {...{ ___rscMustGetSurveyEditionFromUrl }} />
       <SurveySection />
-    </>
+    </I18nContextProvider >
   );
 };
 

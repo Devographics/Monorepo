@@ -7,7 +7,7 @@ import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPa
 import { SectionMetadata } from "@devographics/types";
 import { useEdition } from "../SurveyContext/Provider";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
-import { getSectioni18nIds } from "~/i18n/survey";
+import { getSectionTokens } from "~/i18n/survey";
 import { FormLayoutProps } from "./FormLayout";
 import { useFormStateContext } from "./FormStateContext";
 import { useFormPropsContext } from "./FormPropsContext";
@@ -57,7 +57,7 @@ const SurveyNavItem = ({
   if (page) {
     pagei18nId = `sections.${page}.title`;
   } else if (section) {
-    pagei18nId = getSectioni18nIds({ section }).title;
+    pagei18nId = getSectionTokens({ section }).title;
   }
 
   const path = getEditionSectionPath({
