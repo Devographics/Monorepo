@@ -34,7 +34,8 @@ export async function addRatios(
         const awareness = (getCount(heardBucket) + getCount(usedBucket)) / total
 
         // heard positive / heard
-        const interest = getPositiveCount(heardBucket) / getCount(heardBucket)
+        const interest =
+            getCount(heardBucket) === 0 ? 0 : getPositiveCount(heardBucket) / getCount(heardBucket)
 
         // used / total
         const usage = getCount(usedBucket) / total
