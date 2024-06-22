@@ -112,7 +112,10 @@ const getBlockLink = ({
     const { edition, localeId, sectionId, subSectionId } = pageContext
     const { resultsUrl } = edition
 
-    const segments = [localeId, sectionId === 'user_info' ? 'demographics' : sectionId]
+    const segments = [
+        localeId,
+        sectionId === 'user_info' ? 'demographics' : sectionId.replaceAll('_', '-')
+    ]
     if (subSectionId) {
         segments.push(subSectionId.replaceAll('_', '-'))
     }
