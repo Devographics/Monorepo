@@ -1,5 +1,3 @@
-import { inspect } from 'util'
-import config from '../config'
 import { generateFiltersQuery } from '../filters'
 import { computeParticipationByYear } from './demographics'
 import { getGenericPipeline } from './generic_pipeline'
@@ -7,11 +5,8 @@ import { computeCompletionByYear } from './completion'
 import {
     RequestContext,
     GenericComputeArguments,
-    Survey,
-    Edition,
     Section,
     QuestionApiObject,
-    ResponseEditionData,
     ComputeAxisParameters,
     EditionApiObject,
     SortSpecifier,
@@ -34,7 +29,6 @@ import {
     discardEmptyEditions,
     addLabels,
     addAverages,
-    removeEmptyEditions,
     addPercentiles,
     groupBuckets,
     applyDatasetCutoff,
@@ -43,11 +37,12 @@ import {
     addOverallBucket,
     addTokens,
     getData,
-    addFacetValiditySums
-} from './stages/index'
+    addFacetValiditySums,
+    addRatios,
+    detectNaN
+} from './stages'
 import {
     ResponsesTypes,
-    DbSuffixes,
     SurveyMetadata,
     EditionMetadata,
     ResponsesParameters,
@@ -55,13 +50,11 @@ import {
     ResultsSubFieldEnum,
     SortProperty
 } from '@devographics/types'
-import { getCollection } from '../helpers/db'
 import { getPastEditions } from '../helpers/surveys'
 import { computeKey } from '../helpers/caching'
 import isEmpty from 'lodash/isEmpty.js'
 import { logToFile } from '@devographics/debug'
 import { SENTIMENT_FACET } from '@devographics/constants'
-import { addRatios } from './stages/add_ratios'
 
 type StageLogItem = {
     name: string
@@ -525,6 +518,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         }
         await runStage(addLabels, [results, axis1])
     }
+
+    await runStage(detectNaN, [results])
 
     const endAt = new Date()
     if (isDebug) {
