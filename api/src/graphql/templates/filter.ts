@@ -17,18 +17,28 @@ export const generateFilterType = ({
 }: {
     question: QuestionApiObject
 }): TypeDefTemplateOutput | undefined => {
-    const { filterTypeName, enumTypeName } = question
+    const { filterTypeName, enumTypeName, optionsAreNumeric } = question
     if (!filterTypeName) return
+    let typeDef
+    if (optionsAreNumeric) {
+        typeDef = `input ${filterTypeName} {
+            eq: Float
+            lt: Float
+            gt: Float
+        }`
+    } else {
+        typeDef = `input ${filterTypeName} {
+            eq: ${enumTypeName}
+            in: [${enumTypeName}]
+            nin: [${enumTypeName}]
+        }`
+    }
     return {
         generatedBy: 'filter',
         typeName: filterTypeName,
         typeType: TypeTypeEnum.FILTER,
         surveyId: question.surveyId,
         questionId: question.id,
-        typeDef: `input ${filterTypeName} {
-    eq: ${enumTypeName}
-    in: [${enumTypeName}]
-    nin: [${enumTypeName}]
-}`
+        typeDef
     }
 }
