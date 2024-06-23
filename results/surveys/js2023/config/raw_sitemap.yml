@@ -205,6 +205,11 @@
         template: multiple_options2_freeform
         i18nNamespace: features
 
+      - id: arisa_fukuzaki
+        template: picks
+        variables:
+            url: https://x.com/dawntraoz
+
       - id: reading_list
         # template: reading_list
         template: multiple_options2
@@ -352,7 +357,7 @@
             - id: quarkstuff
               template: picks
               variables:
-                  url: https://nuxt.com/
+                  url: https://unjs.io/
 
             - template: happiness2
 
