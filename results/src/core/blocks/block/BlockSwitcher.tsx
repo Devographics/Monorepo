@@ -32,6 +32,7 @@ const BlockSwitcher = ({
 
     if (!blockRegistry[blockType]) {
         console.log(blockType)
+        console.log(blockRegistry)
         console.log(block)
         return (
             <BlockError
