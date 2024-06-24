@@ -425,10 +425,10 @@ export const getValueLabel = ({
         return label
     } else if (entity) {
         return getEntityName(entity)
-    } else if (template === 'feature') {
-        return getString(`options.features.${value}.label`)?.t
-    } else if (template === 'tool') {
-        return getString(`options.tools.${value}.short`)?.t
+    } else if (template === 'feature' || template === 'featurev3') {
+        return getString(`options.experience.${value}`)?.t
+    } else if (template === 'tool' || template === 'toolv3') {
+        return getString(`options.experience.${value}.short`)?.t
     } else {
         switch (field.id) {
             case 'source': {

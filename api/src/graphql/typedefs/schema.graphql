@@ -632,16 +632,14 @@ enum FeatureOptionID {
 }
 
 type ToolOption {
-    id: ToolOptionID
+    id: ExperienceOptionID
     label: String
     entity: Entity
 }
 
-enum ToolOptionID {
-    would_use
-    would_not_use
-    interested
-    not_interested
+enum ExperienceOptionID {
+    used
+    heard
     never_heard
 }
 

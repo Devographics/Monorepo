@@ -99,6 +99,8 @@ export interface Filter<T> {
     eq?: T
     in?: T[]
     nin?: T[]
+    lt?: T
+    gt?: T
 }
 
 export interface ResponsesParameters {

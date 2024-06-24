@@ -1,5 +1,3 @@
-import { inspect } from 'util'
-import config from '../config'
 import { generateFiltersQuery } from '../filters'
 import { computeParticipationByYear } from './demographics'
 import { getGenericPipeline } from './generic_pipeline'
@@ -7,11 +5,8 @@ import { computeCompletionByYear } from './completion'
 import {
     RequestContext,
     GenericComputeArguments,
-    Survey,
-    Edition,
     Section,
     QuestionApiObject,
-    ResponseEditionData,
     ComputeAxisParameters,
     EditionApiObject,
     SortSpecifier,
@@ -34,7 +29,6 @@ import {
     discardEmptyEditions,
     addLabels,
     addAverages,
-    removeEmptyEditions,
     addPercentiles,
     groupBuckets,
     applyDatasetCutoff,
@@ -43,11 +37,12 @@ import {
     addOverallBucket,
     addTokens,
     getData,
-    addFacetValiditySums
-} from './stages/index'
+    addFacetValiditySums,
+    addRatios,
+    detectNaN
+} from './stages'
 import {
     ResponsesTypes,
-    DbSuffixes,
     SurveyMetadata,
     EditionMetadata,
     ResponsesParameters,
@@ -55,13 +50,11 @@ import {
     ResultsSubFieldEnum,
     SortProperty
 } from '@devographics/types'
-import { getCollection } from '../helpers/db'
 import { getPastEditions } from '../helpers/surveys'
 import { computeKey } from '../helpers/caching'
 import isEmpty from 'lodash/isEmpty.js'
 import { logToFile } from '@devographics/debug'
 import { SENTIMENT_FACET } from '@devographics/constants'
-import { addRatios } from './stages/add_ratios'
 
 type StageLogItem = {
     name: string
@@ -247,6 +240,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         enableAddMissingBuckets
     } = parameters
 
+    const logPath = `last_query/${executionContext}`
+
     if (isDebug) {
         console.log(`//--- start genericComputeFunction (executionContext = ${executionContext})`)
     }
@@ -406,15 +401,15 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         // console.log('// raw results')
         // console.log(JSON.stringify(results, null, 2))
 
-        await logToFile('last_query/computeArguments.json', computeArguments)
-        await logToFile('last_query/axis1.json', axis1)
-        await logToFile('last_query/axis2.json', axis2)
-        await logToFile('last_query/match.json', match)
-        await logToFile('last_query/pipeline.json', pipeline)
-        await logToFile('last_query/rawResults.yml', results)
+        await logToFile(`${logPath}/computeArguments.json'`, computeArguments)
+        await logToFile(`${logPath}/axis1.json`, axis1)
+        await logToFile(`${logPath}/axis2.json`, axis2)
+        await logToFile(`${logPath}/match.json`, match)
+        await logToFile(`${logPath}/pipeline.json`, pipeline)
+        await logToFile(`${logPath}/rawResults.yml`, results)
 
         const normalizedCollectionName = survey?.normalizedCollectionName || 'normalized_responses'
-        await logToFile('last_query/database.yml', { db: db.namespace, normalizedCollectionName })
+        await logToFile(`${logPath}/database.yml`, { db: db.namespace, normalizedCollectionName })
     }
 
     if (!axis2) {
@@ -526,18 +521,20 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await runStage(addLabels, [results, axis1])
     }
 
+    await runStage(detectNaN, [results])
+
     const endAt = new Date()
     if (isDebug) {
         // console.log('// results final')
         // console.log(JSON.stringify(results, undefined, 2))
-        await logToFile('last_query/results.yml', results)
+        await logToFile(`${logPath}/results.yml`, results)
         const log = {
             startAt,
             endAt,
             duration: Math.abs((startAt.getTime() - endAt.getTime()) / 1000),
             log: stageLog.map(({ name, duration }) => ({ name, duration }))
         }
-        await logToFile('last_query/stages.yml', log)
+        await logToFile(`${logPath}/stages.yml`, log)
     }
 
     if (isDebug) {

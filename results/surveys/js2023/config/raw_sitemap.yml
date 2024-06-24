@@ -205,6 +205,11 @@
         template: multiple_options2_freeform
         i18nNamespace: features
 
+      - id: arisa_fukuzaki
+        template: picks
+        variables:
+            url: https://x.com/dawntraoz
+
       - id: reading_list
         # template: reading_list
         template: multiple_options2
@@ -265,7 +270,8 @@
             - id: tool_modal_hint
               template: hint
 
-            - template: section_prenormalized_tools
+            - id: front_end_frameworks_others
+              template: section_prenormalized_tools
 
             - id: emma_bostian
               template: picks
@@ -306,7 +312,8 @@
             - id: tool_modal_hint
               template: hint
 
-            - template: section_prenormalized_tools
+            - id: meta_frameworks_others
+              template: section_prenormalized_tools
 
             - id: fireship
               template: picks
@@ -344,12 +351,13 @@
             - id: tool_modal_hint
               template: hint
 
-            - template: section_prenormalized_tools
+            - id: testing_others
+              template: section_prenormalized_tools
 
             - id: quarkstuff
               template: picks
               variables:
-                  url: https://nuxt.com/
+                  url: https://unjs.io/
 
             - template: happiness2
 
@@ -382,7 +390,8 @@
             - id: tool_modal_hint
               template: hint
 
-            - template: section_prenormalized_tools
+            - id: mobile_desktop_others
+              template: section_prenormalized_tools
 
             - id: david_khourshid
               template: picks
@@ -420,7 +429,8 @@
             - id: tool_modal_hint
               template: hint
 
-            - template: section_prenormalized_tools
+            - id: build_tools_others
+              template: section_prenormalized_tools
 
             - id: sacha_greif
               template: picks
@@ -458,7 +468,8 @@
             - id: tool_modal_hint
               template: hint
 
-            - template: section_prenormalized_tools
+            - id: monorepo_tools_others
+              template: section_prenormalized_tools
 
             - id: german_jablonski
               template: picks

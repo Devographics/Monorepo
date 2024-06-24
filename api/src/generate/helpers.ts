@@ -171,7 +171,10 @@ export const mergeSections = (sections1: Section[] = [], sections2: Section[] = 
 
 // TODO: do this better
 export const getSectionType = (section: SectionApiObject) => {
-    if (['tools', 'libraries'].includes(section.id) || section.template === 'tool') {
+    if (
+        ['tools', 'libraries'].includes(section.id) ||
+        (section.template && ['tool', 'toolv3'].includes(section.template))
+    ) {
         return 'tools'
     } else {
         return 'features'
@@ -183,8 +186,9 @@ export const getSectionItems = (section: SectionApiObject, type: 'tools' | 'feat
 // TODO: do this better
 export const getSectionFeatures = (section: SectionApiObject) =>
     section?.questions?.filter(q => ['feature', 'featurev3'].includes(q.template))
-export const getSectionTools = (section: SectionApiObject) =>
-    section?.questions?.filter(q => ['tool'].includes(q.template))
+export const getSectionTools = (section: SectionApiObject) => {
+    return section?.questions?.filter(q => ['tool', 'toolv3'].includes(q.template))
+}
 
 export const getEditionItems = (edition: EditionApiObject, type: 'tools' | 'features') => {
     let items: QuestionApiObject[] = []
