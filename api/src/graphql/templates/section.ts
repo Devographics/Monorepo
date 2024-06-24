@@ -43,7 +43,7 @@ export const generateSectionType = ({
     const isFeatureOrToolSection =
         section.id === 'libraries' ||
         section.id === 'features' ||
-        (section.template && ['featurev3', 'tool'].includes(section.template))
+        (section.template && ['featurev3', 'tool', 'toolv3'].includes(section.template))
 
     return {
         generatedBy: 'section',

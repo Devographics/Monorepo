@@ -7,6 +7,10 @@ export interface FilterQuery<T> {
     $in?: T[]
     // must not be one of given values
     $nin?: T[]
+    // lower than
+    $lt?: T
+    // greater than
+    $gt?: T
 }
 
 export interface FiltersQuery {

@@ -270,6 +270,12 @@ export enum FeaturesOptions {
     NEVER_HEARD = 'never_heard'
 }
 
+export enum ExperienceOptions {
+    USED = 'used',
+    HEARD = 'heard',
+    NEVER_HEARD = 'never_heard'
+}
+
 export enum SentimentOptions {
     INTERESTED = 'sentiment_interested',
     NOT_INTERESTED = 'sentiment_not_interested',

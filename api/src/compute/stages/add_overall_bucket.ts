@@ -48,9 +48,8 @@ export const addOverallBucket = async (
     const overallResults: ResponseEditionData[] = await genericComputeFunction(newOptions)
 
     if (overallResults.length === 0) {
-        console.log({ axis })
-        console.log({ options })
-        throw new Error(`addOverallBucket: no overall results found`)
+        // this specific combination of parameters has 0 results
+        return
     }
     for (let editionData of resultsByEdition) {
         // for each edition, find corresponding edition in overall results
