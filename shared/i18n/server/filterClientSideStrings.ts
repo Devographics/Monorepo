@@ -1,5 +1,7 @@
 import type { LocaleParsed, Translation } from "../typings";
 import { TokenExpr } from "../tokenExpr";
+import { i18nDebugger } from "./i18n-debugger"
+
 
 
 /**
@@ -19,7 +21,8 @@ import { TokenExpr } from "../tokenExpr";
 export function filterClientSideStrings<TContext extends Record<string, any>>(
     locale: LocaleParsed,
     rawExprs: Array<string>,
-    ctx: TContext): LocaleParsed {
+    ctx: TContext,
+): LocaleParsed {
     const allStrings = Object.values(locale.dict)
     let clientSideDict: typeof locale.dict = {}
     // Parse expressions
@@ -56,6 +59,9 @@ export function filterClientSideStrings<TContext extends Record<string, any>>(
         );
     }
     const clientSideStrings = locale.strings?.filter(({ key }) => key in clientSideDict)
+
+    // TODO: setup a debugger that display the filtered tokens for a given page, and outputs a log file
+    console.log("current context", i18nDebugger.getPageName())
     // Use the same shape as strings
     return {
         ...locale,
