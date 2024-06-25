@@ -7,7 +7,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { usePageContext } from 'core/helpers/pageContext'
 import SharePermalink from 'core/share/SharePermalink'
 import BlockCompletionIndicator from 'core/blocks/block/BlockCompletionIndicator'
-import { getBlockTitle, useBlockTitle } from 'core/helpers/blockHelpers'
+import { getBlockKey, getBlockTitle, useBlockTitle } from 'core/helpers/blockHelpers'
 import BlockSponsor from 'core/blocks/block/sponsor_chart/BlockSponsor'
 import { useEntities } from 'core/helpers/entities'
 import { BlockVariantDefinition } from 'core/types'
@@ -74,7 +74,7 @@ const BlockTitle = ({
                 <LeftPart>
                     <BlockTitleText className="BlockTitleText">
                         <SharePermalink block={block} />
-                        <div className="block-title-contents">
+                        <div className="block-title-contents" data-key={getBlockKey({ block })}>
                             <BlockTitleContents block={block} />
                             {/* {completion && !pageContext.isCapturing && (
                                 <BlockCompletionIndicator completion={completion} />

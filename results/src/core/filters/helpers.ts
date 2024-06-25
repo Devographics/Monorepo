@@ -55,6 +55,7 @@ import { INSUFFICIENT_DATA, NO_ANSWER } from '@devographics/constants'
 import pick from 'lodash/pick'
 import { getItemLabel } from 'core/helpers/labels'
 import merge from 'lodash/merge'
+import { isFeatureTemplate, isToolTemplate } from '@devographics/helpers'
 
 export const getNewCondition = ({
     filter,
@@ -373,9 +374,9 @@ export const getFieldLabel = ({
         return entityName
     } else {
         let key
-        if (template === 'feature') {
+        if (isFeatureTemplate(template)) {
             key = `features.${id}`
-        } else if (template === 'tool') {
+        } else if (isToolTemplate(template)) {
             key = `tools.${id}`
         } else {
             key = `${sectionId}.${id}`
@@ -425,21 +426,21 @@ export const getValueLabel = ({
         return label
     } else if (entity) {
         return getEntityName(entity)
-    } else if (template === 'feature' || template === 'featurev3') {
+    } else if (isFeatureTemplate(template)) {
         return getString(`options.experience.${value}`)?.t
-    } else if (template === 'tool' || template === 'toolv3') {
+    } else if (isToolTemplate(template)) {
         return getString(`options.experience.${value}.short`)?.t
     } else {
         switch (field.id) {
             case 'source': {
                 const source = allFilters
-                    .find(q => q.id === 'source')
+                    ?.find(q => q.id === 'source')
                     ?.options.find(s => s.id === value)
                 return source?.entity?.name || value
             }
             case 'locale': {
                 const locale = allFilters
-                    .find(q => q.id === 'locale')
+                    ?.find(q => q.id === 'locale')
                     ?.options.find(l => l.id === value)
                 const fallback = locale?.label
                 return getString(`options.${field.id}.${value}`, {}, fallback)?.t
