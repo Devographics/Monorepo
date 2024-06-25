@@ -40,16 +40,22 @@ export type CustomizationFiltersSeries = {
 export type CustomizationFiltersCondition = {
     sectionId: string
     fieldId: string
-    operator: OperatorEnum
+    operator: OptionsOperatorEnum | NumericOperatorEnum
     value: FilterValue
 }
 
 export type Operator = 'eq' | 'in' | 'nin'
 
-export enum OperatorEnum {
+export enum OptionsOperatorEnum {
     EQ = 'eq',
     IN = 'in',
     NIN = 'nin'
+}
+
+export enum NumericOperatorEnum {
+    EQ = 'eq',
+    LT = 'lt',
+    GT = 'gt'
 }
 
 export type FilterItem = QuestionMetadata

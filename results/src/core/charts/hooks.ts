@@ -469,11 +469,32 @@ export const useAllQuestionsWithOptions = (): FilterItem[] => {
 
 /*
 
+Get options keys ([{ id: 'range_work_for_free' }, { id: 'range_0_10' }, { id: 'range_10_30' }, ...]) for all chart types
+
+Version that doesn't use groups, since we can't (yet) filter by group
+
+*/
+export const useAllQuestionsWithOptions2 = (): FilterItem[] => {
+    const context = usePageContext()
+    const { currentEdition } = context
+    const keys = []
+    for (const section of currentEdition.sections) {
+        for (const question of section.questions) {
+            if (question.options || question.groups) {
+                keys.push({ sectionId: section.id, ...question })
+            }
+        }
+    }
+    return keys
+}
+
+/*
+
 Get all available filters, while optionally filtering out the current question's id
 
 */
 export const useAllFilters = (excludeFilterId?: string) => {
-    const allFilters = useAllQuestionsWithOptions()
+    const allFilters = useAllQuestionsWithOptions2()
     return allFilters.filter(q => q.id !== excludeFilterId)
 }
 

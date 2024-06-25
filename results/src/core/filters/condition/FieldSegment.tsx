@@ -41,11 +41,15 @@ export const FieldSegment = ({
                         condition.fieldId = fieldId
                         condition.sectionId = sectionId
                         // if we're changing the field, also change the value
-                        const newValue = allFilters.find(f => f.id === fieldId)?.options[0].id
+                        const field = allFilters.find(f => f.id === fieldId)
+                        const newValue = field?.options?.[0]?.id
                         if (newValue) {
                             // if current value is an array, make sure new value is an array too
                             condition.value = Array.isArray(condition.value) ? [newValue] : newValue
+                        } else {
+                            condition.value = null
                         }
+                        console.log(newState)
                         return newState
                     })
                 }}
@@ -115,6 +119,12 @@ export const Label_ = styled.label`
 `
 
 export const Select_ = styled.select`
+    max-width: 300px;
+    width: 100%;
+    padding: 4px 2px;
+`
+
+export const Input_ = styled.input`
     max-width: 300px;
     width: 100%;
 `

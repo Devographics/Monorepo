@@ -7,8 +7,9 @@ import {
     CustomizationFiltersCondition,
     CustomizationFiltersSeries,
     FilterValue,
-    OperatorEnum,
-    DataSeries
+    OptionsOperatorEnum,
+    DataSeries,
+    NumericOperatorEnum
 } from './types'
 import { BlockVariantDefinition, StringTranslator } from 'core/types'
 import {
@@ -64,14 +65,20 @@ export const getNewCondition = ({
     filter: FilterItem
     option?: OptionMetadata
 }): CustomizationFiltersCondition => {
+    let value
     const field = filter
-    const { id: fieldId, sectionId, options } = field
-    const option = providedOption || options[0]
+    const { id: fieldId, sectionId, options, optionsAreNumeric } = field
+    if (optionsAreNumeric) {
+        value = null
+    } else {
+        const option = providedOption || options?.[0]
+        value = option?.id
+    }
     return {
         fieldId,
         sectionId,
-        operator: OperatorEnum['EQ'],
-        value: option.id
+        operator: OptionsOperatorEnum['EQ'],
+        value
     }
 }
 
@@ -129,17 +136,22 @@ export const getNewSeries = ({
         const firstConditionField = allFilters.find(
             f => f.id === firstCondition.fieldId
         ) as FilterItem
-        const optionsInUse = getOptionsInUse({ filterId: firstCondition.fieldId, filtersState })
-        // exclude any option currently in use
-        const availableOptions = firstConditionField?.options.filter(
-            o => !optionsInUse.includes(o.id)
-        )
-        // get first available option, unless no option is available
-        // in which case just take first option from default list
-        const option =
-            availableOptions.length > 0 ? availableOptions[0] : firstConditionField?.options[0]
+        if (!firstConditionField?.options) {
+            // if options are not provided (e.g. question is numeric)
+            conditionOptions = { filter: firstConditionField }
+        } else {
+            const optionsInUse = getOptionsInUse({ filterId: firstCondition.fieldId, filtersState })
+            // exclude any option currently in use
+            const availableOptions = firstConditionField?.options.filter(
+                o => !optionsInUse.includes(o.id)
+            )
+            // get first available option, unless no option is available
+            // in which case just take first option from default list
+            const option =
+                availableOptions.length > 0 ? availableOptions[0] : firstConditionField?.options[0]
 
-        conditionOptions = { filter: firstConditionField, option }
+            conditionOptions = { filter: firstConditionField, option }
+        }
     }
     return {
         year,
@@ -396,7 +408,7 @@ export const getOperatorLabel = ({
     operator
 }: {
     getString: StringTranslator
-    operator: OperatorEnum
+    operator: OptionsOperatorEnum | NumericOperatorEnum
 }) => getString(`filters.operators.${operator}`, {}, operator)?.t
 
 /*

@@ -56,8 +56,7 @@ export const getBlockQuery = ({
         ...block.queryOptions
     }
     let parameters = block.parameters || {}
-    console.log(parameters)
-    console.log(options)
+
     if (options && !isEmpty(options)) {
         parameters = { ...parameters, ...getParameters(options) }
     }
