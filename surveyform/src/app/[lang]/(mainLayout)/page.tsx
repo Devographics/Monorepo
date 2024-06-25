@@ -27,7 +27,8 @@ const IndexPage = async ({ params }: NextPageParams<{ lang: string }>) => {
   const { locale, localeId, error } = await rscLocaleFromParams(params)
   if (error) return <div>Can't load translations</div>
   // TODO: get correct tokens
-  const clientSideLocale = filterClientSideStrings<{}>(locale, tokens, {})
+  let clientSideLocale
+  clientSideLocale = filterClientSideStrings<{}>(locale, tokens, {}, { pageName: "lang_mainLayout_page" })
   return (
     <I18nContextProvider
       locale={clientSideLocale}

@@ -23,7 +23,7 @@
             "es2021"
         ],
         "module": "esnext",
-        "moduleResolution": "node",
+        "moduleResolution": "Bundler",
         "noEmit": true,
         "noFallthroughCasesInSwitch": true,
         "noUnusedLocals": false, // won't fail on unused variables

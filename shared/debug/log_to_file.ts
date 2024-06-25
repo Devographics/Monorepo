@@ -33,7 +33,7 @@ export const logToFile = async (filePath: string, object: any, options: LogOptio
         const envLogsDirPath = process.env.LOGS_PATH
 
         if (!envLogsDirPath) {
-            console.warn('Please define LOGS_PATH in your .env file to enable logging')
+            console.warn('📄 Please define LOGS_PATH in your .env file to enable logging')
             return
         }
 
@@ -43,10 +43,11 @@ export const logToFile = async (filePath: string, object: any, options: LogOptio
 
         const logsDirPath = envLogsDirPath + '/' + relativeDirPath
 
-        if (!(await fs.existsSync(logsDirPath))) {
+        if (!(fs.existsSync(logsDirPath))) {
             fs.mkdirSync(logsDirPath, { recursive: true })
         }
         const fullPath = `${logsDirPath}/${fileName}`
+        console.debug(`📄 Creating log file file://${fullPath}`)
 
         let contents
         if (typeof object === 'string') {
@@ -57,7 +58,7 @@ export const logToFile = async (filePath: string, object: any, options: LogOptio
                     contents = print(ast, { preserveComments: true })
                 } catch (error: any) {
                     console.warn(
-                        `‼️  logToFile ${fileName}: error when parsing GraphQL content (${JSON.stringify(
+                        `📄 ‼️  logToFile ${fileName}: error when parsing GraphQL content (${JSON.stringify(
                             error.locations
                         )}).`
                     )
