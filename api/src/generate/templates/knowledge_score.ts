@@ -33,6 +33,7 @@ export const knowledge_score: ApiTemplateFunction = options => {
         groups,
         optionsAreSequential: true,
         optionsAreRange: true,
+        optionsAreNumeric: true,
         ...options.question
     }
     return output
