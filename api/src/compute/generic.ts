@@ -521,7 +521,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await runStage(addLabels, [results, axis1])
     }
 
-    await runStage(detectNaN, [results])
+    await runStage(detectNaN, [results, isDebug, logPath])
 
     const endAt = new Date()
     if (isDebug) {
