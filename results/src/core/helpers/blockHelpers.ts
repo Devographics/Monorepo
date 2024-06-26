@@ -84,28 +84,31 @@ export const getBlockTitleKey = ({
     pageContext?: PageContextValue
 }) => block.titleId || getBlockKey({ block })
 
-export const getBlockTitle = ({
-    block,
-    pageContext,
-    getString,
-    entities,
-    useShortLabel
-}: {
+export const getBlockTitle = (options: {
     block: BlockVariantDefinition
     pageContext: PageContextValue
     getString: StringTranslator
     entities?: Entity[]
     useShortLabel?: boolean
+    useFullVersion?: boolean
 }) => {
+    const {
+        block,
+        pageContext,
+        getString,
+        entities,
+        useShortLabel,
+        useFullVersion = true
+    } = options
     let shortTitle
     const entity = entities?.find(e => e.id === block.id)
     const entityName = entity?.nameClean || entity?.name
     const specifiedTitle = block.titleId && getString(block.titleId)?.tClean
-    const key = getBlockTitleKey({ block, pageContext })
-    const defaultTitle = getString(getBlockKey({ block }))?.tClean
+    const key = getBlockKey({ block })
+    const defaultTitle = getString(key)?.tClean
 
     if (useShortLabel) {
-        shortTitle = getString(getBlockKey({ block }) + '.short')?.tClean
+        shortTitle = getString(key + '.short')?.tClean
     }
 
     const fieldTitle =
@@ -113,10 +116,14 @@ export const getBlockTitle = ({
         getString(
             getBlockKey({ block: { ...block, i18nNamespace: block.sectionId, id: block.fieldId } })
         )?.t
+    // when sharing block we want full version (e.g. "Years of Experience By Salary") but
+    // in other context we might not
     const tabTitle =
-        block.tabId && `${fieldTitle || block.fieldId} ${getString(block.tabId)?.tClean}`
+        block.tabId && useFullVersion
+            ? `${fieldTitle || block.fieldId} ${getString(block.tabId)?.tClean}`
+            : getString(block.tabId)?.tClean
     const values = [specifiedTitle, shortTitle, defaultTitle, tabTitle, fieldTitle, entityName, key]
-    // console.table(values)
+    console.table(values)
     return values.find(v => v !== undefined)
 }
 
