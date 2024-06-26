@@ -123,7 +123,7 @@ export const getBlockTitle = (options: {
             ? `${fieldTitle || block.fieldId} ${getString(block.tabId)?.tClean}`
             : getString(block.tabId)?.tClean
     const values = [specifiedTitle, shortTitle, defaultTitle, tabTitle, fieldTitle, entityName, key]
-    console.table(values)
+    // console.table(values)
     return values.find(v => v !== undefined)
 }
 
