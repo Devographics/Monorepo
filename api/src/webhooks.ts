@@ -24,8 +24,8 @@ export function ghWebhooks(context: RequestContext): Router {
      * @see https://docs.github.com/fr/webhooks
      * @see https://docs.github.com/en/webhooks/using-webhooks/securing-your-webhooks#typescript-example
      */
-    ghRouter.post('/reinitialize-surveys', checkMainPushAction, async function (req, res) {
-        console.log('Triggering surveys reinitialization from GitHub webhook')
+    ghRouter.post('/reinitialize-surveys-github', checkMainPushAction, async function (req, res) {
+        console.log('🟠 surveys: Triggering reinitialization from GitHub webhook')
         await reinitialize({ context, initList: ['surveys'] })
         // TODO: check if the push in on main branch
         return res.status(200).send('Surveys reloaded')
@@ -36,12 +36,12 @@ export function ghWebhooks(context: RequestContext): Router {
      * @see https://docs.github.com/en/webhooks/using-webhooks/securing-your-webhooks#typescript-example
      */
     ghRouter.post(
-        '/reinitialize-entities',
+        '/reinitialize-entities-github',
         json(),
         verifyGhWebhookMiddleware, // important
         checkMainPushAction,
         async function (req, res) {
-            console.log('Triggering entities reinitialization from GitHub webhook')
+            console.log('🔵 entities: Triggering reinitialization from GitHub webhook')
             await reinitialize({ context, initList: ['entities', 'surveys'] })
             // TODO: check if the push in on main branch
             return res.status(200).send('Entities (and surveys) reloaded')
@@ -58,7 +58,7 @@ export function ghWebhooks(context: RequestContext): Router {
         verifyGhWebhookMiddleware, // important
         checkMainPushAction,
         async function (req, res) {
-            console.log('🟣 Triggering locales reinitialization from GitHub webhook')
+            console.log('🟣 locales: Triggering reinitialization from GitHub webhook')
             await reinitialize({ context, initList: ['locales'] })
             // TODO: check if the push in on main branch
             return res.status(200).send('Locales reloaded')

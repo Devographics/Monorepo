@@ -237,11 +237,6 @@ const start = async () => {
         })
     })
 
-    app.post('/reinitialize-locales-github', async function (req, res) {
-        await reinitialize({ context, initList: ['locales'] })
-        res.status(200).send('🔵 [github webhook] Locales reloaded')
-    })
-
     /**
      * Key must be passed as query param
      */
