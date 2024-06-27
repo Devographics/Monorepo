@@ -7,8 +7,9 @@ import {
     CustomizationFiltersCondition,
     CustomizationFiltersSeries,
     FilterValue,
-    OperatorEnum,
-    DataSeries
+    OptionsOperatorEnum,
+    DataSeries,
+    NumericOperatorEnum
 } from './types'
 import { BlockVariantDefinition, StringTranslator } from 'core/types'
 import {
@@ -55,6 +56,7 @@ import { INSUFFICIENT_DATA, NO_ANSWER } from '@devographics/constants'
 import pick from 'lodash/pick'
 import { getItemLabel } from 'core/helpers/labels'
 import merge from 'lodash/merge'
+import { isFeatureTemplate, isToolTemplate } from '@devographics/helpers'
 
 export const getNewCondition = ({
     filter,
@@ -63,14 +65,20 @@ export const getNewCondition = ({
     filter: FilterItem
     option?: OptionMetadata
 }): CustomizationFiltersCondition => {
+    let value
     const field = filter
-    const { id: fieldId, sectionId, options } = field
-    const option = providedOption || options[0]
+    const { id: fieldId, sectionId, options, optionsAreNumeric } = field
+    if (optionsAreNumeric) {
+        value = null
+    } else {
+        const option = providedOption || options?.[0]
+        value = option?.id
+    }
     return {
         fieldId,
         sectionId,
-        operator: OperatorEnum['EQ'],
-        value: option.id
+        operator: OptionsOperatorEnum['EQ'],
+        value
     }
 }
 
@@ -128,17 +136,22 @@ export const getNewSeries = ({
         const firstConditionField = allFilters.find(
             f => f.id === firstCondition.fieldId
         ) as FilterItem
-        const optionsInUse = getOptionsInUse({ filterId: firstCondition.fieldId, filtersState })
-        // exclude any option currently in use
-        const availableOptions = firstConditionField?.options.filter(
-            o => !optionsInUse.includes(o.id)
-        )
-        // get first available option, unless no option is available
-        // in which case just take first option from default list
-        const option =
-            availableOptions.length > 0 ? availableOptions[0] : firstConditionField?.options[0]
+        if (!firstConditionField?.options) {
+            // if options are not provided (e.g. question is numeric)
+            conditionOptions = { filter: firstConditionField }
+        } else {
+            const optionsInUse = getOptionsInUse({ filterId: firstCondition.fieldId, filtersState })
+            // exclude any option currently in use
+            const availableOptions = firstConditionField?.options.filter(
+                o => !optionsInUse.includes(o.id)
+            )
+            // get first available option, unless no option is available
+            // in which case just take first option from default list
+            const option =
+                availableOptions.length > 0 ? availableOptions[0] : firstConditionField?.options[0]
 
-        conditionOptions = { filter: firstConditionField, option }
+            conditionOptions = { filter: firstConditionField, option }
+        }
     }
     return {
         year,
@@ -373,9 +386,9 @@ export const getFieldLabel = ({
         return entityName
     } else {
         let key
-        if (template === 'feature') {
+        if (isFeatureTemplate(template)) {
             key = `features.${id}`
-        } else if (template === 'tool') {
+        } else if (isToolTemplate(template)) {
             key = `tools.${id}`
         } else {
             key = `${sectionId}.${id}`
@@ -395,7 +408,7 @@ export const getOperatorLabel = ({
     operator
 }: {
     getString: StringTranslator
-    operator: OperatorEnum
+    operator: OptionsOperatorEnum | NumericOperatorEnum
 }) => getString(`filters.operators.${operator}`, {}, operator)?.t
 
 /*
@@ -425,21 +438,21 @@ export const getValueLabel = ({
         return label
     } else if (entity) {
         return getEntityName(entity)
-    } else if (template === 'feature' || template === 'featurev3') {
+    } else if (isFeatureTemplate(template)) {
         return getString(`options.experience.${value}`)?.t
-    } else if (template === 'tool' || template === 'toolv3') {
+    } else if (isToolTemplate(template)) {
         return getString(`options.experience.${value}.short`)?.t
     } else {
         switch (field.id) {
             case 'source': {
                 const source = allFilters
-                    .find(q => q.id === 'source')
+                    ?.find(q => q.id === 'source')
                     ?.options.find(s => s.id === value)
                 return source?.entity?.name || value
             }
             case 'locale': {
                 const locale = allFilters
-                    .find(q => q.id === 'locale')
+                    ?.find(q => q.id === 'locale')
                     ?.options.find(l => l.id === value)
                 const fallback = locale?.label
                 return getString(`options.${field.id}.${value}`, {}, fallback)?.t

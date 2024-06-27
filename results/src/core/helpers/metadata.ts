@@ -1,11 +1,12 @@
 import { EditionMetadata, SectionMetadata } from '@devographics/types'
 import { usePageContext } from './pageContext'
+import { isToolTemplate, isFeatureTemplate } from '@devographics/helpers'
 
 export const useToolSections = () => {
     const context = usePageContext()
     const { currentEdition } = context
     const toolSections = currentEdition.sections.filter(s =>
-        s.questions.some(q => q.template === 'tool')
+        s.questions.some(q => isToolTemplate(q.template))
     )
     return toolSections
 }
@@ -14,7 +15,7 @@ export const useFeatureSections = () => {
     const context = usePageContext()
     const { currentEdition } = context
     const featureSections = currentEdition.sections.filter(s =>
-        s.questions.some(q => q.template === 'feature')
+        s.questions.some(q => isFeatureTemplate(q.template))
     )
     return featureSections
 }

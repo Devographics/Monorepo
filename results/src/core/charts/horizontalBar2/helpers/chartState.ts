@@ -18,7 +18,7 @@ export const getDefaultState = ({
     } else {
         if (facetQuestion) {
             defaultState.facet = { id: facetQuestion.id, sectionId: facetQuestion.sectionId }
-            if (facetQuestion.optionsAreSequential || facetQuestion.optionsAreNumeric) {
+            if (facetQuestion.optionsAreRange || facetQuestion.optionsAreNumeric) {
                 defaultState.view = HorizontalBarViews.BOXPLOT
             } else {
                 defaultState.view = HorizontalBarViews.PERCENTAGE_BUCKET

@@ -9,6 +9,7 @@ import { useEntities } from 'core/helpers/entities'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useAllQuestionsMetadata } from '../../horizontalBar2/helpers/other'
 import round from 'lodash/round'
+import { isFeatureTemplate, isToolTemplate } from '@devographics/helpers'
 
 /*
 
@@ -103,9 +104,9 @@ export const getQuestionLabel = ({
             i18nNamespace_ = i18nNamespace
         } else if (sectionId === 'other_tools') {
             i18nNamespace_ = `tools_others`
-        } else if (['feature', 'feature3'].includes(template)) {
+        } else if (isFeatureTemplate(template)) {
             i18nNamespace_ = `features`
-        } else if (template === 'tool') {
+        } else if (isToolTemplate(template)) {
             i18nNamespace_ = `tools`
         } else {
             i18nNamespace_ = sectionId

@@ -6,7 +6,6 @@ import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
 import { DetailedErrorObject } from "./validation";
 import { captureException } from "@sentry/nextjs";
 
-
 interface HandlerErrorObjectParams extends DetailedErrorObject {
   status?: number;
 }
@@ -67,8 +66,8 @@ export class HandlerError extends Error {
       properties,
       message,
       error: initialError,
-    }
-    captureException(error)
+    };
+    // captureException(error);
     return NextResponse.json(
       {
         error,

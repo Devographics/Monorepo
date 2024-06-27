@@ -2,17 +2,26 @@ import React from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { getOperatorLabel } from '../helpers'
-import { PanelState, FilterValue, CustomizationDefinition, OperatorEnum } from '../types'
+import {
+    PanelState,
+    FilterValue,
+    CustomizationDefinition,
+    OptionsOperatorEnum,
+    NumericOperatorEnum
+} from '../types'
 import { Label_, Select_ } from './FieldSegment'
+import { QuestionMetadata } from '@devographics/types'
 
 type OperatorSegmentProps = {
     seriesIndex: number
     conditionIndex: number
     stateStuff: PanelState
     value: FilterValue
+    field: QuestionMetadata
 }
 
 export const OperatorSegment = ({
+    field,
     seriesIndex,
     conditionIndex,
     stateStuff,
@@ -20,12 +29,17 @@ export const OperatorSegment = ({
 }: OperatorSegmentProps) => {
     const { setFiltersState } = stateStuff
     const { getString } = useI18n()
+    const operatorItems = field.optionsAreNumeric
+        ? Object.values(NumericOperatorEnum)
+        : Object.values(OptionsOperatorEnum)
     return (
         <Label_>
             {/* <span>{segmentId}</span> */}
             <Select_
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    const operatorValue = e.target.value as OperatorEnum
+                    const operatorValue = e.target.value as
+                        | OptionsOperatorEnum
+                        | NumericOperatorEnum
                     setFiltersState((fState: CustomizationDefinition) => {
                         const newState = cloneDeep(fState)
                         newState.filters[seriesIndex].conditions[conditionIndex].operator =
@@ -53,7 +67,7 @@ export const OperatorSegment = ({
                 <option value="" disabled>
                     {getString && getString('explorer.select_item')?.t}
                 </option>
-                {Object.values(OperatorEnum).map(operator => (
+                {operatorItems.map(operator => (
                     <option key={operator} value={operator}>
                         {getOperatorLabel({ getString, operator })}
                     </option>

@@ -401,7 +401,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         // console.log('// raw results')
         // console.log(JSON.stringify(results, null, 2))
 
-        await logToFile(`${logPath}/computeArguments.json'`, computeArguments)
+        await logToFile(`${logPath}/computeArguments.json`, computeArguments)
         await logToFile(`${logPath}/axis1.json`, axis1)
         await logToFile(`${logPath}/axis2.json`, axis2)
         await logToFile(`${logPath}/match.json`, match)
@@ -456,11 +456,11 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             // bucket grouping
             await runStage(groupBuckets, [results, axis2, axis1])
 
-            // apply overall dataset cutoff
-            await runStage(applyDatasetCutoff, [results, computeArguments, axis2, axis1])
-
             // group cutoff buckets together
             await runStage(cutoffData, [results, axis2, axis1])
+
+            // apply overall dataset cutoff
+            await runStage(applyDatasetCutoff, [results, computeArguments, axis2, axis1])
 
             // for all following steps, use groups as options
             if (axis1.enableBucketGroups && axis1.question.groups) {
@@ -503,9 +503,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         if (executionContext === ExecutionContext.REGULAR) {
             await runStage(groupBuckets, [results, axis1])
 
-            await runStage(applyDatasetCutoff, [results, computeArguments, axis1])
-
             await runStage(cutoffData, [results, axis1])
+
+            await runStage(applyDatasetCutoff, [results, computeArguments, axis1])
 
             // for all following steps, use groups as options
             if (axis1.enableBucketGroups && axis1.question.groups) {
@@ -521,7 +521,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await runStage(addLabels, [results, axis1])
     }
 
-    await runStage(detectNaN, [results])
+    await runStage(detectNaN, [results, isDebug, logPath])
 
     const endAt = new Date()
     if (isDebug) {

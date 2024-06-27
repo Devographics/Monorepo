@@ -79,7 +79,7 @@
         "gatsby-source-graphql": "^5.11.0",
         "gatsby-transformer-remark": "^6.11.0",
         "gatsby-transformer-yaml": "^5.11.0",
-        "graphql": "16.7.1",
+        "graphql": "16.9.0",
         "graphql-print": "^1.0.1",
         "html-loader": "^4.2.0",
         "indent-string": "^5.0.0",
@@ -162,6 +162,7 @@
         "typecheck": "tsc --noEmit --p ./tsconfig.check.json"
     },
     "resolutions": {
-        "webpack": "5.88.2"
+        "webpack": "5.88.2",
+        "graphql": "^16.7.1"
     }
 }

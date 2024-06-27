@@ -8,12 +8,12 @@ import {
     FilterValueString,
     FilterValueArray,
     FilterItem,
-    OperatorEnum
+    OptionsOperatorEnum
 } from '../types'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 import { DeleteIcon, PlusIcon } from 'core/icons'
-import { Label_, Select_ } from './FieldSegment'
+import { Input_, Label_, Select_ } from './FieldSegment'
 import { OptionMetadata } from '@devographics/types'
 import Button from 'core/components/Button'
 
@@ -24,7 +24,7 @@ interface ValueSegmentProps<T> {
     options: OptionMetadata[]
     field: FilterItem
     allFilters: FilterItem[]
-    operator: OperatorEnum
+    operator: OptionsOperatorEnum
     value: T
 }
 
@@ -51,38 +51,54 @@ const ValueSegmentField = ({
 }: ValueSegmentFieldProps) => {
     const { setFiltersState } = stateStuff
     const { getString } = useI18n()
-    return (
-        <Label_>
-            {/* <span>{segmentId}</span> */}
-            <Select_
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    const value = e.target.value
-                    setFiltersState(fState => {
-                        const newState = cloneDeep(fState)
-                        newState.filters[seriesIndex].conditions[conditionIndex].value = value
-                        return newState
-                    })
-                }}
-                value={value}
-            >
-                <option value="" disabled>
-                    {getString && getString('explorer.select_item')?.t}
-                </option>
-                {options.map(({ id, entity, label }) => (
-                    <option key={id} value={id}>
-                        {getValueLabel({
-                            getString,
-                            field,
-                            value: id,
-                            allFilters,
-                            entity,
-                            label
-                        })}
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value
+        setFiltersState(fState => {
+            const newState = cloneDeep(fState)
+            newState.filters[seriesIndex].conditions[conditionIndex].value = value
+            return newState
+        })
+    }
+    if (field.optionsAreNumeric) {
+        return (
+            <Label_>
+                <Input_ onChange={handleChange} value={value} type="number" />
+            </Label_>
+        )
+    } else {
+        return (
+            <Label_>
+                {/* <span>{segmentId}</span> */}
+                <Select_
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const value = e.target.value
+                        setFiltersState(fState => {
+                            const newState = cloneDeep(fState)
+                            newState.filters[seriesIndex].conditions[conditionIndex].value = value
+                            return newState
+                        })
+                    }}
+                    value={value}
+                >
+                    <option value="" disabled>
+                        {getString && getString('explorer.select_item')?.t}
                     </option>
-                ))}
-            </Select_>
-        </Label_>
-    )
+                    {options.map(({ id, entity, label }) => (
+                        <option key={id} value={id}>
+                            {getValueLabel({
+                                getString,
+                                field,
+                                value: id,
+                                allFilters,
+                                entity,
+                                label
+                            })}
+                        </option>
+                    ))}
+                </Select_>
+            </Label_>
+        )
+    }
 }
 
 type ValueSegmentArrayProps = ValueSegmentProps<FilterValueArray>

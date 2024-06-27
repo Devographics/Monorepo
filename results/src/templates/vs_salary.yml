@@ -7,6 +7,7 @@ blockType: HorizontalBarBlock2
 query: currentEditionData
 parameters:
     showNoAnswer: true
+    cutoff: 10
 filtersState:
     options:
         mode: facet
