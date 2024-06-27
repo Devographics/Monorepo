@@ -2,5 +2,9 @@
     "devDependencies": {
         "concurrently": "^7.4.0"
     },
-    "packageManager": "pnpm@8.7.0"
+    "packageManager": "pnpm@8.7.0",
+    "resolutions": {
+        "webpack": "5.88.2",
+        "graphql": "16.9.0"
+    }
 }
