@@ -5,6 +5,7 @@ import { EditionProvider } from "~/components/SurveyContext/Provider";
 import { rscMustGetSurveyEditionFromUrl } from "./rsc-fetchers";
 import ClientLayout from "~/app/[lang]/ClientLayout";
 import EditionLayout from "~/components/common/EditionLayout";
+import { tokens as editionLayoutTokens } from "~/components/common/EditionLayout.tokens";
 
 import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import {
@@ -32,6 +33,8 @@ export async function generateMetadata({
   return await rscGetMetadata({ params });
 }
 
+
+const clientTokens = [...editionLayoutTokens]
 /**
  * TODO: get the list of surveys statically during getStaticParams call
  * @param param0
@@ -50,7 +53,7 @@ export default async function SurveyLayout({
   const { locale, localeId, error: localeError } = await rscLocaleFromParams({ lang: params.lang, contexts: [...i18nContexts, ...getCommonContexts()] })
   if (localeError) return <div>Can't load translations</div>
   // TODO: get correct tokens
-  const clientSideLocale = filterClientSideStrings<{}>(locale, [], {})
+  const clientSideLocale = filterClientSideStrings<{}>(locale, clientTokens, {}, { pageName: "survey_slug_year_layout" })
   // locales lists
   const {
     data: locales,

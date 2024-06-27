@@ -56,7 +56,7 @@ export default async function RootLayout({
   }
   /** Filter to keep only tokens used by children components */
   const tokens = [...tokensClientLayout]
-  const clientSideLocale = filterClientSideStrings<{}>(locale, tokens, {})
+  const clientSideLocale = filterClientSideStrings<{}>(locale, tokens, {}, { pageName: "root_layout" })
   return (
     // TODO: stop passing all the locales there, filter them per page
     <ClientLayout

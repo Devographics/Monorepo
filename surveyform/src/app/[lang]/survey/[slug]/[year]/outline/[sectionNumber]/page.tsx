@@ -61,7 +61,7 @@ export default async function SurveySectionOutlinePage({
   const { locale, localeId, error: localeError } = await rscLocaleFromParams({ lang })
   if (localeError) return <div>Can't load translations</div>
   // TODO: get correct tokens
-  const clientSideLocale = filterClientSideStrings<{}>(locale, [], {})
+  const clientSideLocale = filterClientSideStrings<{}>(locale, [], {}, { pageName: "survey_slug_year_outline" })
   const sn = parseInt(sectionNumber);
   if (isNaN(sn)) notFound();
   return <I18nContextProvider locale={clientSideLocale}>

@@ -17,7 +17,7 @@ const Login = async ({
   const user = await rscCurrentUser();
   const { locale, error } = await rscLocaleFromParams(params)
   if (error) return <div>Can't load translations</div>
-  const clientSideLocale = filterClientSideStrings<{}>(locale, clientTokens, {})
+  const clientSideLocale = filterClientSideStrings<{}>(locale, clientTokens, {}, { pageName: "account_login" })
 
   return (
     <div className="contents-narrow">

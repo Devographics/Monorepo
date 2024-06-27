@@ -97,7 +97,7 @@ export default async function SurveyPage({
   const { locale, localeId, error } = await rscLocaleFromParams(params)
   if (error) return <div>Can't load translations</div>
   // TODO: get correct tokens
-  const clientSideLocale = filterClientSideStrings<{}>(locale, clientTokens, {})
+  const clientSideLocale = filterClientSideStrings<{}>(locale, clientTokens, {}, { pageName: "survey_slug_year" })
   const { slug, year } = params;
   const { data: edition, ___metadata: ___rscMustGetSurveyEditionFromUrl } =
     await rscMustGetSurveyEditionFromUrl({

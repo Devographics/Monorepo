@@ -32,7 +32,7 @@ const SurveyFromResponseIdPage = async ({
   const { locale, localeId, error } = await rscLocaleFromParams({ lang })
   if (error) return <div>Can't load translations</div>
   // TODO: get correct tokens
-  const clientSideLocale = filterClientSideStrings<{}>(locale, clientTokens, {})
+  const clientSideLocale = filterClientSideStrings<{}>(locale, clientTokens, {}, { pageName: "survey_slug_year_responseId_sectionNumber" })
 
   const { data: edition, ___metadata: ___rscMustGetSurveyEditionFromUrl } =
     await rscMustGetSurveyEditionFromUrl({

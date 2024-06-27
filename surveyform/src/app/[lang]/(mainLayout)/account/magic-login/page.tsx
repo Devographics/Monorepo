@@ -17,7 +17,7 @@ export default async function MagicLoginCheckPage({
 >) {
   const { locale, error } = await rscLocaleFromParams(params)
   if (error) return <div>Can't load translations</div>
-  const clientSideLocale = filterClientSideStrings<{}>(locale, clientTokens, {})
+  const clientSideLocale = filterClientSideStrings<{}>(locale, clientTokens, {}, { pageName: "magic_login" })
 
   const { token, redirectTo, editionId, surveyId } = searchParams;
   if (!token) throw new Error("No magic token found in query params.");
