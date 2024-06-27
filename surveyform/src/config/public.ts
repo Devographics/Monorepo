@@ -7,7 +7,7 @@
 const appUrl =
   process.env.NEXT_PUBLIC_NODE_ENV === "production"
     ? process.env.NEXT_PUBLIC_APP_URL ||
-      `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+    `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
     : `http://localhost:${process.env.PORT || 3000}`;
 /**
  *

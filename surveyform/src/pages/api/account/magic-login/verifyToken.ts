@@ -3,7 +3,7 @@
  */
 import passport from "passport";
 import nextConnect from "next-connect";
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { apiWrapper } from "~/lib/server/sentry";
 
 import { magicLinkStrategy } from "~/account/magicLogin/api/passport/magic-login-strategy";

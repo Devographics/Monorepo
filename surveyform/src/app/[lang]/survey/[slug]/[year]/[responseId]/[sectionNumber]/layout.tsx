@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { SectionProvider } from "~/components/SectionContext/SectionProvider";
 import {
   rscGetSurveyEditionFromUrl

@@ -1,5 +1,5 @@
 import "~/stylesheets/main.scss";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getConfig, setAppName } from "@devographics/helpers";
 import { AppName } from "@devographics/types";

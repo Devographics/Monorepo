@@ -6,12 +6,17 @@ import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components/LogoutButton";
 import { DebugZone } from "./DebugZone";
 import { publicConfig } from "~/config/public";
+import { enableTranslatorMode } from "@devographics/i18n";
 import { teapot } from "@devographics/react-i18n";
 import { tokens } from "./Footer.tokens";
 
-const { T } = teapot(tokens)
+const { T } = teapot([...tokens] as const)
 
-type LinkItemProps = { component?: React.ReactNode, showIf?: (args: { currentUser: any }) => boolean, id?: typeof tokens[number], href?: string }
+type LinkItemProps = {
+  component?: React.ReactNode, showIf?: (args: { currentUser: any }) => boolean,
+  id?: typeof tokens[number],
+  href?: string
+}
 const links: Array<LinkItemProps> = [
   {
     component:
@@ -52,9 +57,16 @@ const links: Array<LinkItemProps> = [
     href: "https://github.com/Devographics/locale-en-US",
   },
   {
-    showIf: () => publicConfig.isDev === true || publicConfig.isTest === true,
+    showIf: () => publicConfig.isDev || publicConfig.isTest,
+    // @ts-ignore
     id: "Demo survey",
     href: routes.survey.demo.href,
+  },
+  {
+    showIf: () => publicConfig.isDev || publicConfig.isTest,
+    // @ts-ignore
+    id: "Translator mode",
+    component: <button onClick={() => { enableTranslatorMode() }}>Translator mode</button>
   },
 ];
 
@@ -101,11 +113,11 @@ const LinkItem = ({
     <LinkWrapper>
       {isOutboundLink ? (
         <a href={href}>
-          <T token={id} />
+          <T token={id} fallback={id} />
         </a>
       ) : (
         <Link href={href}>
-          <T token={id} />
+          <T token={id} fallback={id} />
         </Link>
       )}
     </LinkWrapper>

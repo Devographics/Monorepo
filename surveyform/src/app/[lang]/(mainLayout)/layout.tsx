@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import ClientLayout from "~/app/[lang]/ClientLayout";
 import { tokens as tokensClientLayout } from "~/app/[lang]/ClientLayout.tokens"
 import { rscAllLocalesMetadata, rscLocaleFromParams } from "~/lib/api/rsc-fetchers";

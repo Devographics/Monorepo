@@ -1,6 +1,6 @@
 
 import { getAppClient } from "@devographics/mongo";
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * Force connecting to the mongo database

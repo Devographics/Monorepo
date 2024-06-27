@@ -41,7 +41,6 @@ You probably forgot to spread this array.`)
             ,
             "i"
         )
-        console.log("this.regex", this.regex)
     }
     /**
      * html2023.foobar should match "{{surveyId}}.foobar", if current survey is HTML 2023

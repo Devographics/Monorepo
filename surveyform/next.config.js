@@ -34,7 +34,9 @@ const moduleExports = (phase, { defaultConfig }) => {
       // your project has ESLint errors.
       ignoreDuringBuilds: true,
     },
-    env: {},
+    env: {
+      NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV
+    },
     webpack: function (configArg, otherArgs) {
       // run previously configured function!
       /** @type {import("webpack").Configuration} */

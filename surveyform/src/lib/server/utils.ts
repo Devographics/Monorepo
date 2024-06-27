@@ -1,4 +1,4 @@
-import { NextApiRequest } from "next";
+import type { NextApiRequest } from "next";
 
 export const getRootUrl = (req: NextApiRequest) => {
   const { headers } = req;
