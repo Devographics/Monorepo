@@ -13,7 +13,7 @@ import HorizontalBarBlock2 from 'core/charts/horizontalBar2'
 import VerticalBarBlock from 'core/charts/verticalBar'
 import PeopleBlock from 'core/charts/people'
 import ToolFeatureExperienceBlock from 'core/charts/toolFeatureExperience'
-import { MultiItemsExperienceBlock } from 'core/charts/multiItemsExperience'
+import MultiItemsExperienceBlock from 'core/charts/multiItemsExperience'
 
 // features
 import FeaturesOverviewBlock from 'core/charts/featuresOverview'

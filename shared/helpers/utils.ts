@@ -14,3 +14,9 @@ export const measureTime = async (run: any, message: string) => {
     )
     return result
 }
+
+export const isToolTemplate = (template?: string) =>
+    template && ['tool', 'toolv3'].includes(template)
+
+export const isFeatureTemplate = (template?: string) =>
+    template && ['feature', 'featurev3'].includes(template)

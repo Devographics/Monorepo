@@ -40,7 +40,6 @@ export const MultiItemsSerie = (
 ) => {
     const { serie, chartState, question, variant, block, serieIndex } = props
     const items = serie.data
-    console.log(1, items)
 
     if (!items) {
         console.log(serie)
@@ -56,7 +55,7 @@ export const MultiItemsSerie = (
 
     // combine/flatten each item's buckets
     let combinedItems = combineItems({ items, variable })
-    console.log(2, combinedItems)
+
     // get column-by-column grouped totals
     const groupedTotals = getItemTotals({ combinedItems, columnIds: allColumnIds })
 
@@ -117,7 +116,6 @@ export const MultiItemsSerie = (
 
     const itemFilters = getItemFilters({ variant, block, serieIndex })
 
-    console.log(3, combinedItems)
     return (
         <GridItem key={serie.name} filters={itemFilters}>
             <Rows {...commonProps}>

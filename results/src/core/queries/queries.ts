@@ -55,9 +55,10 @@ export const getBlockQuery = ({
         allEditions,
         ...block.queryOptions
     }
-    let parameters = block.parameters
+    let parameters = block.parameters || {}
+
     if (options && !isEmpty(options)) {
-        parameters = getParameters(options)
+        parameters = { ...parameters, ...getParameters(options) }
     }
 
     const defaultQueryArgs = {

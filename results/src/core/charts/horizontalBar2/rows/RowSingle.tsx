@@ -6,11 +6,14 @@ import { useTheme } from 'styled-components'
 import { FreeformIndicator, RespondentCount } from '../../common2'
 import { FreeformAnswersTrigger } from '../../common2/FreeformAnswers'
 import { CUTOFF_ANSWERS, NO_MATCH, OVERLIMIT_ANSWERS } from '@devographics/constants'
+import T from 'core/i18n/T'
+import Tooltip from 'core/components/Tooltip'
+import { InsufficientDataIndicator } from 'core/charts/common2/InsufficientDataIndicator'
 
 export const RowSingle = (props: RowComponentProps) => {
     const theme = useTheme()
     const { block, bucket, chartState, chartValues, showCount = true, hasGroupedBuckets } = props
-    const { isFreeformData } = bucket
+    const { isFreeformData, hasInsufficientData } = bucket
     const { question, maxOverallValue = 1 } = chartValues
     const { viewDefinition } = chartState
     const { getValue } = viewDefinition
@@ -54,6 +57,11 @@ export const RowSingle = (props: RowComponentProps) => {
                 {isFreeformData && (
                     <div className="chart-row-freeform-icon-wrapper" style={{ '--offset': width }}>
                         <FreeformIndicator />
+                    </div>
+                )}
+                {hasInsufficientData && (
+                    <div className="chart-row-insufficient-data-wrapper">
+                        <InsufficientDataIndicator />
                     </div>
                 )}
             </>

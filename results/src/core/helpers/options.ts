@@ -1,4 +1,5 @@
 import { NO_ANSWER } from '@devographics/constants'
+import { isFeatureTemplate, isToolTemplate } from '@devographics/helpers'
 import {
     Edition,
     Question,
@@ -26,9 +27,9 @@ export const useOptions = (questionId: string, addNoAnswer = false) => {
     if (question.options) {
         const options = question.options.map((o: Option) => o.id)
         return addNoAnswer ? [...options, NO_ANSWER] : options
-    } else if (question.template === 'tool') {
+    } else if (isToolTemplate(question.template)) {
         return Object.values(ToolsOptions)
-    } else if (question.template === 'feature') {
+    } else if (isFeatureTemplate(question.template)) {
         return Object.values(FeaturesOptions)
     } else {
         return

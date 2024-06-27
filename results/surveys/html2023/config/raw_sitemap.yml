@@ -148,6 +148,7 @@
             - template: vs_salary
             - id: country_vs_gender
               fieldId: country
+              tabId: tabs.by_country
               template: multiple_options2
               parameters:
                   showNoAnswer: true

@@ -3,6 +3,4 @@ hasSponsor: true
 query: currentEditionData
 translateData: true
 customizationModes: [filters, facets]
-parameters: { showNoAnswer: true, cutoff: 10, limit: 20, mergeOtherBuckets: false }
-chartOptions:
-    limit: 10
+parameters: { showNoAnswer: true, mergeOtherBuckets: false }

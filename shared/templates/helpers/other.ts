@@ -20,3 +20,6 @@ they will throw an error
 export const addQuestionId = (options: TemplateArguments, id: string): TemplateArguments => {
     return { ...options, question: { ...options.question, id } }
 }
+
+export const isToolTemplate = (template?: string) =>
+    template && ['tool', 'toolv3'].includes(template)

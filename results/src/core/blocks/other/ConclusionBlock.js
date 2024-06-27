@@ -6,8 +6,6 @@ import CreditItem from 'core/blocks/other/CreditItem'
 import { usePageContext } from 'core/helpers/pageContext'
 
 const ConclusionBlock = ({ block, data: author }) => {
-    console.log(block)
-    console.log(author)
     const { currentEdition } = usePageContext()
     const { variables } = block
     if (!author) {

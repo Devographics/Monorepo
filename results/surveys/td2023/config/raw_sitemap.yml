@@ -380,6 +380,7 @@
               query: currentEditionData
               parameters:
                   showNoAnswer: true
+                  sort: { property: count }
               defaultUnits: percentageQuestion
               tabId: tabs.by_current_employer
               filtersState:
@@ -647,6 +648,7 @@
               query: currentEditionData
               parameters:
                   showNoAnswer: true
+                  sort: { property: medianByFacet }
               defaultUnits: percentageBucket
               tabId: tabs.by_company_size
               filtersState:
@@ -659,7 +661,8 @@
       - id: databases
         template: multiple_options2_combined
         defaultUnits: percentageQuestion
-        parameters: { cutoff: 10 }
+        parameters:
+            cutoff: 10
         variants:
             - template: vs_salary_tokyodev
 
@@ -773,6 +776,7 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              i18nNamespace: satisfaction
             - id: life_in_japan__visa_situation_by_residency_status
               i18nNamespace: satisfaction
               fieldId: life_in_japan__visa_situation
@@ -806,6 +810,7 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              i18nNamespace: satisfaction
             - id: life_in_japan__professional_life_by_remote_work_policy
               i18nNamespace: satisfaction
               fieldId: life_in_japan__professional_life
@@ -843,32 +848,33 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
-            - id: life_in_japan__family_life_by_age
               i18nNamespace: satisfaction
-              fieldId: life_in_japan__family_life
-              blockType: HorizontalBarBlock2
-              query: currentEditionData
-              parameters:
-                  showNoAnswer: true
-              defaultUnits: percentageQuestion
-              tabId: tabs.by_age
-              filtersState:
-                  options:
-                      mode: grid
-                      showDefaultSeries: false
-                  filters:
-                      - year: 2023
-                        conditions:
-                            - fieldId: age
-                              sectionId: user_info
-                              operator: eq
-                              value: range_20_29
-                      - year: 2023
-                        conditions:
-                            - fieldId: age
-                              sectionId: user_info
-                              operator: eq
-                              value: range_30_39
+            # - id: life_in_japan__family_life_by_age
+            #   i18nNamespace: satisfaction
+            #   fieldId: life_in_japan__family_life
+            #   blockType: HorizontalBarBlock2
+            #   query: currentEditionData
+            #   parameters:
+            #       showNoAnswer: true
+            #   defaultUnits: percentageQuestion
+            #   tabId: tabs.by_age
+            #   filtersState:
+            #       options:
+            #           mode: grid
+            #           showDefaultSeries: false
+            #       filters:
+            #           - year: 2023
+            #             conditions:
+            #                 - fieldId: age
+            #                   sectionId: user_info
+            #                   operator: eq
+            #                   value: range_20_29
+            #           - year: 2023
+            #             conditions:
+            #                 - fieldId: age
+            #                   sectionId: user_info
+            #                   operator: eq
+            #                   value: range_30_39
 
       - id: life_in_japan__social_life
         i18nNamespace: satisfaction
@@ -876,6 +882,7 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              i18nNamespace: satisfaction
             - id: life_in_japan__social_life_by_language_proficiency_japanese
               i18nNamespace: satisfaction
               fieldId: life_in_japan__social_life
@@ -1011,6 +1018,7 @@
         parameters: { cutoff: 10 }
         variants:
             - template: vs_salary_tokyodev
+              i18nNamespace: satisfaction
             - id: communities_by_gender
               fieldId: communities
               blockType: HorizontalBarBlock2

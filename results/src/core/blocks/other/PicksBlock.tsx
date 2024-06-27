@@ -11,7 +11,7 @@ const PicksBlock = ({ block, data: entity }) => {
     if (!entity) {
         return
     }
-    const { name: fullName, twitter } = entity
+    const { name: fullName, twitter, homepage } = entity
 
     return (
         <PicksContainer className="Block">
@@ -57,7 +57,7 @@ const PicksBlock = ({ block, data: entity }) => {
                         </PickImage>
                         <PickCredit>
                             <PickName>
-                                <a href={twitter?.url}>{fullName}</a>
+                                <a href={homepage?.url || twitter?.url}>{fullName}</a>
                             </PickName>
                             <PickBio>
                                 <T k={`picks.${pickId}.bio`} md={true} />

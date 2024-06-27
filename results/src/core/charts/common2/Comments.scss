@@ -5,8 +5,4 @@
     border: none;
     background: none;
     padding: 0;
-    .chart-grid-item & {
-        // hide when inside a chart comparison grid, to save space
-        display: none;
-    }
 }
