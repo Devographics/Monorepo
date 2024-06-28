@@ -48,6 +48,7 @@
       - surveyform
 
 - id: LOCALE_IDS
+  optional: true
   description: Restrict the list of locales to be loaded
   example: en-US, ja-JA
   usedBy:
