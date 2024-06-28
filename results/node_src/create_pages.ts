@@ -22,6 +22,7 @@ import { allowedCachingMethods } from './helpers'
 import type { PageContextValue } from '../src/core/types/context'
 import type { SponsorProduct } from '../src/core/types/sponsors'
 import { LocaleWithStrings } from './react-i18n/typings'
+import trim from 'lodash/trim.js'
 
 //  Not needed in TS/ recent versions of node
 // import { fileURLToPath } from 'url'
@@ -93,8 +94,8 @@ export const createPagesSingleLoop = async ({
             .map(cm => (cachingMethods[cm] ? cm : strikeThrough(cm)))
             .join(', ')
 
-        // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster
-        const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []
+        const localeIdsEnvArray = process.env.LOCALE_IDS?.split(',')?.map(l => trim(l))
+        const localeIds = localeIdsEnvArray || []
 
         const appConfig = process.env.CONFIG ? process.env.CONFIG : 'default'
 
@@ -106,7 +107,7 @@ export const createPagesSingleLoop = async ({
 • 📁 caching methods = ${cachingMethodsString}
 • ⏱️ fast build = ${USE_FAST_BUILD}
 • 📖 surveys load method = ${getLoadMethod()}
-• 🌐 locales = ${localeIds.length > 0 ? localeIds.join(', ') : 'all'}`
+• 🌐 locales = ${localeIds.length > 0 ? localeIds.join(', ') : 'all available'}`
         )
 
         // load metadata

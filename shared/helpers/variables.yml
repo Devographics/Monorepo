@@ -53,6 +53,8 @@
   example: en-US, ja-JA
   usedBy:
       - api
+      - surveyform
+      - results
 
 - id: NODE_ENV
   aliases:
