@@ -25,7 +25,8 @@ import {
     getEntityType,
     getIdFromFileName,
     highlightEntitiesExampleCode,
-    parseEntitiesMarkdown
+    parseEntitiesMarkdown,
+    splitEnvVar
 } from './helpers'
 
 let Entities: Entity[] = []
@@ -53,20 +54,30 @@ export const loadOrGetEntities = async (
 
 export const loadFromGitHub = async () => {
     const octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
-    const [owner, repo, path = ''] = getEnvVar(EnvVar.GITHUB_PATH_ENTITIES)?.split('/') || []
+    const entitiesPathArray = splitEnvVar(getEnvVar(EnvVar.GITHUB_PATH_ENTITIES))
 
-    if (!owner) {
-        throw new Error(
-            'loadFromGitHub: env variable GITHUB_PATH_SURVEYS did not contain [owner] segment'
-        )
-    }
-    if (!repo) {
-        throw new Error(
-            'loadFromGitHub: env variable GITHUB_PATH_SURVEYS did not contain [repo] segment'
-        )
-    }
+    let entities: Entity[] = []
 
-    return await getGitHubDirEntities({ octokit, owner, repo }, path, [])
+    if (entitiesPathArray) {
+        for (const entitiesDirPath of entitiesPathArray) {
+            const [owner, repo, path = ''] = entitiesDirPath?.split('/') || []
+
+            if (!owner) {
+                throw new Error(
+                    `loadFromGitHub: env variable GITHUB_PATH_ENTITIES did not contain [owner] segment: ${entitiesDirPath}`
+                )
+            }
+            if (!repo) {
+                throw new Error(
+                    `loadFromGitHub: env variable GITHUB_PATH_ENTITIES did not contain [repo] segment: ${entitiesDirPath}`
+                )
+            }
+
+            const loadedEntities = await getGitHubDirEntities({ octokit, owner, repo }, path, [])
+            entities = [...entities, ...loadedEntities]
+        }
+    }
+    return entities
 }
 
 const getGitHubDirEntities = async (
@@ -129,9 +140,16 @@ const getGitHubDirEntities = async (
 
 // when developing locally, load from local files
 export const loadLocally = async () => {
-    const entitiesDirPath = path.resolve(getEnvVar(EnvVar.ENTITIES_PATH))
-
-    return await getLocalDirEntities(entitiesDirPath, [])
+    const entitiesPathArray = splitEnvVar(getEnvVar(EnvVar.ENTITIES_PATH))
+    const entitiesDirPaths = entitiesPathArray?.map(dirPath => path.resolve(dirPath))
+    let entities: Entity[] = []
+    if (entitiesDirPaths) {
+        for (const entitiesDirPath of entitiesDirPaths) {
+            const loadedEntities = await getLocalDirEntities(entitiesDirPath, [])
+            entities = [...entities, ...loadedEntities]
+        }
+    }
+    return entities
 }
 
 export const getLocalDirEntities = async (entitiesDirPath: string, parentDirs: string[]) => {

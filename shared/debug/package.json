@@ -17,6 +17,7 @@
     "license": "ISC",
     "dependencies": {
         "@devographics/types": "workspace:^1.0.0",
+        "@devographics/helpers": "workspace:^1.0.0",
         "graphql": "^16.8.0",
         "graphql-print": "^1.0.1",
         "js-yaml": "^4.1.0",

@@ -1047,6 +1047,9 @@ importers:
 
   shared/debug:
     dependencies:
+      '@devographics/helpers':
+        specifier: workspace:^1.0.0
+        version: link:../helpers
       '@devographics/types':
         specifier: workspace:^1.0.0
         version: link:../types

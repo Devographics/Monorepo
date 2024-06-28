@@ -20,3 +20,17 @@ export const isToolTemplate = (template?: string) =>
 
 export const isFeatureTemplate = (template?: string) =>
     template && ['feature', 'featurev3'].includes(template)
+
+export function concatPath(...segments: string[]) {
+    if (segments.length === 0) {
+        return ''
+    }
+
+    return segments.reduce((acc, curr) => {
+        if (acc.endsWith('/') || curr.startsWith('/')) {
+            return acc + curr
+        } else {
+            return acc + '/' + curr
+        }
+    })
+}
