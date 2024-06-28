@@ -7,6 +7,8 @@ export const TOKEN_DATASET = "dgTk"
 export const DATA_TOKEN_ATTR = "data-dg-tk"
 /** If enabled, a fallback string was used */
 export const DATA_MISSING_ATTR = "data-dg-missing"
+/** If enabled, the node children has been used as fallback value (for React) */
+export const DATA_FALLBACK_CHILDREN_ATTR = "data-dg-children-fallback"
 /** Get translation spans */
 export const I18N_TOKEN_SELECTOR = `[${DATA_TOKEN_ATTR}]`
 

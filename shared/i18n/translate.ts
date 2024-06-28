@@ -72,8 +72,8 @@ export const makeTranslatorFunc =
 
             // TODO: this seems consistant with "results" app usage of this function,
             // it returns a string and not the initial value
-            return result
-            //return result as StringTranslatorResult
+            //return result 
+            return result as StringTranslatorResult
         }
 
 
@@ -90,6 +90,9 @@ function injectValues(str: string, values: Record<string, any>) {
 /**
  * Generate a translation helper function "t" (and "getMessage")
  * for a given locale
+ * 
+ * It only handle strings, if you want to use a React component as fallback,
+ * implement it in your component
  * @param locale 
  * @returns 
  */

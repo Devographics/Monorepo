@@ -43,7 +43,8 @@ function getFormattedString({
   if (values && typeof values === "object") {
     Object.keys(values).forEach((key) => {
       // es2021 syntax
-      message = (message as any).replaceAll(`{${key}}`, values[key]); // TODO: false positive on replaceAll not existing in TS
+      // @ts-ignore
+      message.t = (message as any).t.replaceAll(`{${key}}`, values[key]); // TODO: false positive on replaceAll not existing in TS
     });
   }
   // @ts-ignore message should normally already be a "string" but this functions is not working as expected and gets the whole object

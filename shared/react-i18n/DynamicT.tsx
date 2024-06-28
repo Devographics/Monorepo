@@ -1,6 +1,6 @@
 "use client"
 import { useTeapot } from "./i18nContext";
-import { DATA_TOKEN_ATTR } from "@devographics/i18n";
+import { DATA_FALLBACK_CHILDREN_ATTR, DATA_MISSING_ATTR, DATA_TOKEN_ATTR } from "@devographics/i18n";
 import React from "react";
 
 export type TProps = {
@@ -19,6 +19,10 @@ export type TProps = {
      */
     token: string,
     values?: Record<string, any>,
+    /**
+     * Fallback string
+     * If you need a React component as fallback, use "children" instead
+     */
     fallback?: string,
     /**
      * Use the HTML instead of the default "t" value
@@ -53,25 +57,34 @@ export function InternalT({
 }: TProps) {
     const { getMessage } = useTeapot()
     const message = getMessage(token, values, fallback)
-    const Tag = tag // uppercase for JSX
+    //const Tag = tag // uppercase for JSX
     const wrapperProps = {
         [DATA_TOKEN_ATTR]: token,
         // @ts-ignore Weird error with Children due to different versions of React
         ...otherProps
     }
-
     if (message.tHtml) {
         return <span {...wrapperProps} dangerouslySetInnerHTML={{ __html: message.tHtml }} />
     }
     if (message.tClean) {
         return <span {...wrapperProps}>{message.tClean}</span>
     }
-    const displayedValue = message.t
-    let useFallbackChildren = !displayedValue && !!children
-    if (useFallbackChildren) {
-        wrapperProps["data-dg-fallback-children"] = true
+    if (message.missing) {
+        // Try to use children value as fallback
+        if (fallback && children) {
+            console.warn(`Ambiguous fallback for token ${token}. Use either "fallback" props or React "children", but not both. Will use "fallback" prop.`)
+            wrapperProps[DATA_MISSING_ATTR] = true
+            return <span {...wrapperProps}> {message.t}</span >
+        } else if (children) {
+            wrapperProps[DATA_MISSING_ATTR] = true
+            wrapperProps[DATA_FALLBACK_CHILDREN_ATTR] = true
+            return <span {...wrapperProps}>{children}</span >
+        } else {
+            // "getMessage" already put "fallback" into "t" for us
+            return <span {...wrapperProps}>{message.t}</span >
+        }
     }
-    return <span {...wrapperProps}>{displayedValue || children}</span>
+    return <span {...wrapperProps}>{message.t}</span>
     // having a wrapper element is mandatory to attach some metadata
     // helping live translation later on
 }
