@@ -5,10 +5,10 @@ export enum EnvVar {
     APP_NAME = 'APP_NAME',
     API_URL = 'API_URL',
     APP_URL = 'APP_URL',
-    DISABLE_API_CACHE = "DISABLE_API_CACHE",
-    DISABLE_CACHE = "DISABLE_CACHE",
-    DISABLE_FILESYSTEM_CACHE = "DISABLE_FILESYSTEM_CACHE",
-    DISABLE_REDIS_CACHE = "DISABLE_REDIS_CACHE",
+    DISABLE_API_CACHE = 'DISABLE_API_CACHE',
+    DISABLE_CACHE = 'DISABLE_CACHE',
+    DISABLE_FILESYSTEM_CACHE = 'DISABLE_FILESYSTEM_CACHE',
+    DISABLE_REDIS_CACHE = 'DISABLE_REDIS_CACHE',
     MONGO_PRIVATE_URI = 'MONGO_PRIVATE_URI',
     MONGO_PRIVATE_URI_READONLY = 'MONGO_PRIVATE_URI_READONLY',
     MONGO_PRIVATE_DB = 'MONGO_PRIVATE_DB',
@@ -40,7 +40,8 @@ export enum EnvVar {
     ENABLE_CACHE = 'ENABLE_CACHE',
     PORT = 'PORT',
     EDITIONID = 'EDITIONID',
-    SURVEYID = 'SURVEYID'
+    SURVEYID = 'SURVEYID',
+    LOCALE_IDS = 'LOCALE_IDS'
 }
 
 interface EnvVariable {
@@ -111,7 +112,8 @@ const getValue = (variable: EnvVariable) => {
  */
 export const getConfig = (options: GetConfigOptions = {}) => {
     const { appName: appName_, showWarnings = false } = options
-    const appName = appName_ || appNameGlobal || (getValue({ id: EnvVar.APP_NAME })?.value as AppName)
+    const appName =
+        appName_ || appNameGlobal || (getValue({ id: EnvVar.APP_NAME })?.value as AppName)
     if (!appName) {
         throw new Error(
             'getConfig: please pass variable, set env variable, or call setAppName() to specify appName'

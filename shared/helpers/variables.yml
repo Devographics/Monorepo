@@ -47,6 +47,12 @@
   usedBy:
       - surveyform
 
+- id: LOCALE_IDS
+  description: Restrict the list of locales to be loaded
+  example: en-US, ja-JA
+  usedBy:
+      - api
+
 - id: NODE_ENV
   aliases:
       - NEXT_PUBLIC_NODE_ENV

@@ -17,6 +17,7 @@ hljs.registerLanguage('http', http)
 hljs.registerLanguage('css', css)
 hljs.registerLanguage('graphql', graphql)
 hljs.registerLanguage('json', json)
+import trim from 'lodash/trim.js'
 
 // entities
 
@@ -125,3 +126,5 @@ export const getEntityType = (entity: Entity) => {
         return EntityType.DEFAULT
     }
 }
+
+export const splitEnvVar = (v?: string) => v?.split(',').map(s => trim(s))
