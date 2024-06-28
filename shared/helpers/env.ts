@@ -41,7 +41,9 @@ export enum EnvVar {
     PORT = 'PORT',
     EDITIONID = 'EDITIONID',
     SURVEYID = 'SURVEYID',
-    LOCALE_IDS = 'LOCALE_IDS'
+    LOCALE_IDS = 'LOCALE_IDS',
+    // Feature flags
+    FLAG_ENABLE_STRING_FILTER = "FLAG_ENABLE_STRING_FILTER"
 }
 
 interface EnvVariable {

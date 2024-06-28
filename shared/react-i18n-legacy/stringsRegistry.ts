@@ -46,7 +46,8 @@ function getFormattedString({
       message = (message as any).replaceAll(`{${key}}`, values[key]); // TODO: false positive on replaceAll not existing in TS
     });
   }
-  return message;
+  // @ts-ignore message should normally already be a "string" but this functions is not working as expected and gets the whole object
+  return message?.t;
 }
 
 export class StringsRegistry {

@@ -2,6 +2,7 @@ import type { LocaleParsed, Translation } from "../typings";
 import { TokenExpr } from "../tokenExpr";
 import { EOL } from "os"
 import { logToFile } from "@devographics/debug"
+import { getEnvVar, EnvVar } from "@devographics/helpers"
 
 
 class Meta {
@@ -90,6 +91,10 @@ export function filterClientSideStrings<TContext extends Record<string, any>>(
         pageName?: string
     }
 ): LocaleParsed {
+    if (!getEnvVar(EnvVar.FLAG_ENABLE_STRING_FILTER)) {
+        console.warn("Client-side string filtering is not enabled", EnvVar.FLAG_ENABLE_STRING_FILTER)
+        return locale
+    }
     const translations = Object.values(locale.dict)
     const logger = new Meta(translations, rawExprs, meta?.pageName)
     let clientSideDict: typeof locale.dict = {}

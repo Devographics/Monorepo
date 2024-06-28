@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 'use client'
 /**
  * Context that provides methods to access translated strings
@@ -16,16 +14,17 @@ export interface IntlContextFormat extends IntlContextValue {
     formatMessage: (msg: Message) => string
 }
 
-const makeContext = ({ localeId, stringsRegistry }: IntlContextInput): IntlContextFormat => ({
+const makeContext = ({ localeId, stringsRegistry }: { localeId: string, stringsRegistry: StringsRegistry }): IntlContextFormat => ({
     localeId,
     stringsRegistry,
     formatMessage: ({ id, defaultMessage, values }: Message) => {
-        return stringsRegistry.getString({
+        const str = stringsRegistry.getString({
             id,
             defaultMessage,
             values,
             localeId
         })
+        return str
     }
 })
 
@@ -58,4 +57,7 @@ export const IntlContextProvider = ({
     )
 }
 
+/**
+ * @deprecated
+ */
 export const useIntlContext = () => useContext(IntlContext)
