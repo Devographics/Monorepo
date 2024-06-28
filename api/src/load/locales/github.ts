@@ -1,15 +1,11 @@
-import { Locale, RawLocale } from '@devographics/types'
+import { RawLocale } from '@devographics/types'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
-import { readdir, readFile } from 'fs/promises'
 import last from 'lodash/last.js'
-import path from 'path'
 import { EnvVar, getEnvVar } from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
 
-import { RequestContext } from '../../types'
-import { processLocales } from '../../helpers/locales'
 import { splitEnvVar } from '../helpers'
 import { LoadAllOptions, addToAllContexts, excludedFiles, mergeLocales } from './locales'
 
@@ -21,12 +17,14 @@ import { LoadAllOptions, addToAllContexts, excludedFiles, mergeLocales } from '.
 const loadLocalesFromGitHubSameRepo = async ({
     locales,
     localeIds,
+    pathIndex,
     org,
     repo,
     dir
 }: {
     locales: RawLocale[]
     localeIds?: string[]
+    pathIndex: number
     org: string
     repo: string
     dir: string
@@ -35,7 +33,6 @@ const loadLocalesFromGitHubSameRepo = async ({
     console.log(`🌐 loadLocalesFromGitHubSameRepo (${url})`)
 
     const octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
-    // let locales: RawLocale[] = []
     let i = 0
 
     const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
@@ -59,8 +56,7 @@ const loadLocalesFromGitHubSameRepo = async ({
                 repo,
                 path: localeDirectory.path
             })
-            const localeRawData = await processGitHubLocale(contents, localeDirectory)
-            // locales.push(localeRawData)
+            const localeRawData = await processGitHubLocale(contents, localeDirectory, pathIndex)
             const existingLocaleIndex = locales.findIndex(l => l.id === localeRawData.id)
             if (existingLocaleIndex !== -1) {
                 locales[existingLocaleIndex] = mergeLocales(
@@ -72,7 +68,6 @@ const loadLocalesFromGitHubSameRepo = async ({
             }
         }
     }
-    // return locales
 }
 
 /*
@@ -83,10 +78,12 @@ const loadLocalesFromGitHubSameRepo = async ({
 const loadLocalesFromGitHubMultiRepo = async ({
     locales,
     localeIds,
+    pathIndex,
     org
 }: {
     locales: RawLocale[]
     localeIds?: string[]
+    pathIndex: number
     org: string
 }) => {
     const url = `/orgs/${org}/repos`
@@ -100,35 +97,34 @@ const loadLocalesFromGitHubMultiRepo = async ({
         per_page: 100 // max
     })
     const allRepos = result.data
-    const localeRepos = allRepos.filter(repo => repo.name.includes('locale-'))
+    let localeRepos = allRepos.filter(repo => repo.name.includes('locale-'))
+
+    if (localeIds && localeIds.length > 0) {
+        localeRepos = localeRepos.filter(repo =>
+            localeIds.includes(repo.name.replace('locale-', ''))
+        )
+    }
 
     for (const localeRepo of localeRepos) {
-        const localeId = localeRepo.full_name.replace('locale-', '')
-        if (localeIds && localeIds.length > 0 && localeIds.includes(localeId)) {
-            i++
-            console.log(`-> loading repo ${localeRepo.full_name} (${i}/${localeRepos.length})`)
-            const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
-                owner: org,
-                repo: localeRepo.name,
-                path: ''
-            })
-            const localeRawData = await processGitHubLocale(contents, localeRepo)
-            // locales.push(localeRawData)
-            const existingLocaleIndex = locales.findIndex(l => l.id === localeRawData.id)
-            if (existingLocaleIndex !== -1) {
-                locales[existingLocaleIndex] = mergeLocales(
-                    locales[existingLocaleIndex],
-                    localeRawData
-                )
-            } else {
-                locales.push(localeRawData)
-            }
+        const localeId = localeRepo.name.replace('locale-', '')
+        i++
+        console.log(`-> loading repo ${localeRepo.full_name} (${i}/${localeRepos.length})`)
+        const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
+            owner: org,
+            repo: localeRepo.name,
+            path: ''
+        })
+        const localeRawData = await processGitHubLocale(contents, localeRepo, pathIndex)
+        const existingLocaleIndex = locales.findIndex(l => l.id === localeRawData.id)
+        if (existingLocaleIndex !== -1) {
+            locales[existingLocaleIndex] = mergeLocales(locales[existingLocaleIndex], localeRawData)
+        } else {
+            locales.push(localeRawData)
         }
     }
-    // return locales
 }
 
-const processGitHubLocale = async (contents: any, localeRepo: any) => {
+const processGitHubLocale = async (contents: any, localeRepo: any, pathIndex: number) => {
     const files = contents.data as any[]
     const localeConfigFile = files.find(f => f.name === 'config.yml')
     if (!localeConfigFile) {
@@ -162,7 +158,7 @@ const processGitHubLocale = async (contents: any, localeRepo: any) => {
             }
         }
     }
-    logToFile(`locales_raw/github_${localeConfig.id}.yml`, localeRawData, {
+    logToFile(`locales_raw/github_${localeConfig.id}_${pathIndex}.yml`, localeRawData, {
         mode: 'overwrite'
     })
     return localeRawData
@@ -173,12 +169,21 @@ export const loadAllFromGitHub = async (options: LoadAllOptions = {}): Promise<R
     const localesPathArray = splitEnvVar(getEnvVar(EnvVar.GITHUB_PATH_LOCALES))
     let locales: RawLocale[] = []
     if (localesPathArray) {
+        let pathIndex = 0
         for (const localesPath of localesPathArray) {
+            pathIndex++
             const [org, repo, dir] = localesPath?.split('/') || []
             if (repo && dir) {
-                await loadLocalesFromGitHubSameRepo({ locales, localeIds, org, repo, dir })
+                await loadLocalesFromGitHubSameRepo({
+                    locales,
+                    localeIds,
+                    pathIndex,
+                    org,
+                    repo,
+                    dir
+                })
             } else if (org) {
-                await loadLocalesFromGitHubMultiRepo({ locales, localeIds, org })
+                await loadLocalesFromGitHubMultiRepo({ locales, localeIds, pathIndex, org })
             } else {
                 throw new Error(
                     'loadAllFromGitHub: Variable GITHUB_PATH_LOCALES ("org/repo/dir") did not contain an [org] segment'
