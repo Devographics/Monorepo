@@ -1,4 +1,4 @@
-import { makeTranslationFunction, DATA_TOKEN_ATTR } from "@devographics/i18n"
+import { makeTranslationFunction, DATA_TOKEN_ATTR, DATA_MISSING_ATTR, DATA_FALLBACK_CHILDREN_ATTR } from "@devographics/i18n"
 import { rscLocaleCached } from "~/lib/api/rsc-fetchers";
 
 /**
@@ -48,12 +48,20 @@ export async function ServerT({ token, values, fallback, children }: {
     if (message.tClean) {
         return <span {...wrapperProps}>{message.tClean}</span>
     }
-    // use children as fallback if none is defined
-    const displayedValue = message.t
-    let useFallbackChildren = !displayedValue && !!children
-    if (useFallbackChildren) {
-        wrapperProps["data-dg-fallback-children"] = true
-
+    if (message.missing) {
+        // Try to use children value as fallback
+        if (fallback && children) {
+            console.warn(`Ambiguous fallback for token ${token}. Use either "fallback" props or React "children", but not both. Will use "fallback" prop.`)
+            wrapperProps[DATA_MISSING_ATTR] = true
+            return <span {...wrapperProps}> {message.t}</span >
+        } else if (children) {
+            wrapperProps[DATA_MISSING_ATTR] = true
+            wrapperProps[DATA_FALLBACK_CHILDREN_ATTR] = true
+            return <span {...wrapperProps}>{children}</span >
+        } else {
+            // "getMessage" already put "fallback" into "t" for us
+            return <span {...wrapperProps}>{message.t}</span >
+        }
     }
-    return <span {...wrapperProps}>{displayedValue || children}</span>
+    return <span {...wrapperProps}>{message.t}</span>
 }
