@@ -199,7 +199,7 @@ async function getFromCachePipeline<T = any>({
 
         }*/
     ]
-    const data = await runFetchPipeline(pipeline)
+    const data = await runFetchPipeline(pipeline, key)
     const endAt = new Date()
     const duration = endAt.getTime() - startAt.getTime()
     const result = {

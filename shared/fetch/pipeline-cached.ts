@@ -12,7 +12,7 @@ import { redisPipelineStep } from "./pipeline-redis"
  * @returns 
  */
 export function cachedPipeline<TData>({ cacheKey }: { cacheKey: string }) {
-    return pipeline<TData>().steps(
+    return pipeline<TData>(cacheKey).steps(
         fileLoggerPipelineStep(cacheKey + ".json"),
         redisPipelineStep(cacheKey),
     )

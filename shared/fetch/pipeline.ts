@@ -72,7 +72,7 @@ export interface FetchPipelineStep<T = unknown> {
  * we could extend this behaviour is the future 
  * by adding a "isMatch" method in steps
  */
-export async function runFetchPipeline<T>(steps: Array<FetchPipelineStep<T>>): Promise<{ data: T | null | undefined, error: undefined }
+export async function runFetchPipeline<T>(steps: Array<FetchPipelineStep<T>>, key:string): Promise<{ data: T | null | undefined, error: undefined }
     | { data: undefined, error: Error }> {
     try {
 
@@ -93,7 +93,7 @@ export async function runFetchPipeline<T>(steps: Array<FetchPipelineStep<T>>): P
 
         for (const step of steps) {
             if (step.disabled) {
-                console.log(`Skipping disabled step "${step.name}"`)
+                console.log(`[${key}] Skipping disabled step "${step.name}"`)
                 continue
             }
             // Remember previous steps to later cache the values
@@ -148,7 +148,7 @@ export async function runFetchPipeline<T>(steps: Array<FetchPipelineStep<T>>): P
  * 
  * @returns const p = pipeline().step({get:, set:}).step(); const data= await p.run()
  */
-export function pipeline<T>() {
+export function pipeline<T>(cacheKey:string) {
     const p: Array<FetchPipelineStep<T>> = []
     return {
         p,
@@ -205,7 +205,7 @@ export function pipeline<T>() {
             return this
         },
         run: function () {
-            return runFetchPipeline<T>(p)
+            return runFetchPipeline<T>(p, cacheKey)
         }
     }
 }
