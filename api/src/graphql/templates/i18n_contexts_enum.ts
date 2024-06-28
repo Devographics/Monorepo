@@ -14,7 +14,7 @@ enum I18nContexts {
 }
 */
 
-import { getAllContexts, loadOrGetLocales } from '../../load/locales'
+import { getAllContexts, loadOrGetLocales } from '../../load/locales/locales'
 import { TypeDefTemplateOutput } from '../../types'
 
 export const generateI18nContextsEnum = async ({

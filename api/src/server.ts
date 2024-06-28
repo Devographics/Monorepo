@@ -36,7 +36,7 @@ import { ghWebhooks } from './webhooks'
 import { getRepoSHA } from './external_apis'
 import { initProjects } from './load/projects'
 import { getEntitiesLoadMethod } from './load/entities'
-import { getLocaleIds, getLocalesLoadMethod } from './load/locales'
+import { getLocaleIds, getLocalesLoadMethod } from './load/locales/locales'
 
 const envPath = process.env.ENV_FILE ? process.env.ENV_FILE : '.env'
 dotenv.config({ path: envPath })
