@@ -8,6 +8,6 @@ export function fileLoggerPipelineStep(filename: string): FetchPipelineStep<any>
     return {
         name: "logToFile",
         set(data) { logToFile(filename, data) },
-        disabled: !allowedCaches.filesystem,
+        disabled: false,
     }
 }
