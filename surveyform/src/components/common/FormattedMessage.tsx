@@ -35,7 +35,7 @@ export const FormattedMessage = ({
   const classNames = ["i18n-message", className, "t"];
   props.className = classNames.join(" ");
   const renderedMessage = (
-    <span {...props} dangerouslySetInnerHTML={{ __html: message }} />
+    <span {...props} dangerouslySetInnerHTML={{ __html: message || id }} />
   );
   if (translatorMode)
     return (
