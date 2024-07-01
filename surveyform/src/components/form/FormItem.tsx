@@ -46,7 +46,7 @@ export interface FormItemProps extends FormInputProps {
   isInvalid?: boolean;
 }
 
-const { T } = teapot(tokens)
+const { T } = teapot(tokens);
 
 export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
   function FormItem(props: FormItemProps, parentRef) {
@@ -90,7 +90,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
 
     // open the comment widget if there is already a comment or this is the first question
     const [showCommentInput, setShowCommentInput] = useState(
-      (!readOnly && question.showCommentInput) || !!commentValue
+      (!readOnly && question.showCommentInput) || !!commentValue,
     );
 
     const childRef = useRef<HTMLDivElement>(null);
@@ -181,7 +181,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
 
     if (allowComment && !commentPath)
       console.warn(
-        `Allowed comments for component of template ${question.template}, but it doesn't have a commentPath`
+        `Allowed comments for component of template ${question.template}, but it doesn't have a commentPath`,
       );
     return (
       <div
@@ -224,7 +224,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 export const SkipButton = ({
@@ -246,10 +246,12 @@ export const SkipButton = ({
       overlay={
         <Tooltip id="general.skip_question.description">
           <T
-              token={isSkipped
+            token={
+              isSkipped
                 ? "general.unskip_question.description"
-                : "general.skip_question.description"}
-            />
+                : "general.skip_question.description"
+            }
+          />
         </Tooltip>
       }
     >
@@ -261,8 +263,10 @@ export const SkipButton = ({
           }}
         >
           <T
-              token={isSkipped ? "general.unskip_question" : "general.skip_question"}
-            />
+            token={
+              isSkipped ? "general.unskip_question" : "general.skip_question"
+            }
+          />
           {isSkipped ? <Unskip /> : <Skip />}
         </Button>
       </div>
@@ -271,7 +275,7 @@ export const SkipButton = ({
 };
 
 export const FormItemTitle = (
-  props: FormItemProps & { section: SectionMetadata }
+  props: FormItemProps & { section: SectionMetadata },
 ) => {
   const { question, enableReadingList, section } = props;
   const intl = useIntlContext();
@@ -308,7 +312,7 @@ export const FormItemTitle = (
 };
 
 export const FormItemDescription = (
-  props: FormItemProps & { section: SectionMetadata }
+  props: FormItemProps & { section: SectionMetadata },
 ) => {
   const { question } = props;
   const { entity } = question;
@@ -335,18 +339,16 @@ export const FormItemLimit = ({ question }: FormItemProps) => {
   const { limit } = question;
   return limit ? (
     <div className="form-item-limit">
-      <FormattedMessage values={{ limit }} id="general.pick_up_to" />
+      <T values={{ limit }} token="general.pick_up_to" />
     </div>
   ) : null;
 };
 
 export const FormItemNote = (
-  props: FormItemProps & { section: SectionMetadata }
+  props: FormItemProps & { section: SectionMetadata },
 ) => {
   const intl = useIntlContext();
   const intlIds = getQuestioni18nIds({ ...props });
   const note = intl.formatMessage({ id: intlIds.note });
-  return note ? (
-    <FormattedMessage className="form-note" id={intlIds.note} />
-  ) : null;
+  return note ? <T className="form-note" token={intlIds.note} /> : null;
 };

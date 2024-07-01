@@ -7,6 +7,10 @@ import { useOptionTitle } from "~/lib/surveys/helpers/useOptionTitle";
 import AddToList from "~/components/reading_list/AddToList";
 import OptionLabel from "./OptionLabel";
 import { FollowUps } from "../inputs/experience/Followup2";
+import { teapot } from "@devographics/react-i18n";
+// import { tokens } from "./TODO.tokens";
+
+const { T } = teapot(["TOKEN"]);
 
 interface FormOptionProps extends FormInputProps {
   option: OptionMetadata;
@@ -72,10 +76,7 @@ const OptionDescription = (props: FormOptionProps) => {
   const entityDescription = null;
 
   return i18nDescription ? (
-    <FormattedMessage
-      className="form-option-description"
-      id={i18n.description}
-    />
+    <T className="form-option-description" token={i18n.description} />
   ) : entityDescription ? (
     <span
       className="form-option-description"

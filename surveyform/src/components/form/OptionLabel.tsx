@@ -8,6 +8,10 @@ import {
 } from "@devographics/types";
 import { getOptioni18nIds } from "~/i18n/survey";
 import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { teapot } from "@devographics/react-i18n";
+// import { tokens } from "./TODO.tokens";
+
+const { T } = teapot(["TOKEN"]);
 
 const OptionLabel = ({
   option,
@@ -35,7 +39,7 @@ const OptionLabel = ({
   return entityName ? (
     <EntityLabel entity={entity} />
   ) : (
-    <FormattedMessage id={i18n.base} defaultMessage={defaultMessage} />
+    <T token={i18n.base} fallback={defaultMessage} />
   );
 };
 

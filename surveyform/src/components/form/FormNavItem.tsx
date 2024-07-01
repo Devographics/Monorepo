@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getSectionCompletionPercentage } from "~/lib/responses/helpers";
 import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { SectionMetadata } from "@devographics/types";
@@ -11,6 +10,10 @@ import { getSectionTokens } from "~/i18n/survey";
 import { FormLayoutProps } from "./FormLayout";
 import { useFormStateContext } from "./FormStateContext";
 import { useFormPropsContext } from "./FormPropsContext";
+import { teapot } from "@devographics/react-i18n";
+// import { tokens } from "./TODO.tokens";
+
+const { T } = teapot(["TOKEN"]);
 
 interface SurveyNavItemProps extends Omit<FormLayoutProps, "section"> {
   setShown: any;
@@ -130,7 +133,7 @@ const SurveyNavItem = ({
             </>
           )}
         </span>
-        <FormattedMessage className="section-nav-item-label" id={pagei18nId} />
+        <T className="section-nav-item-label" token={pagei18nId} />
       </Link>
     </li>
   );

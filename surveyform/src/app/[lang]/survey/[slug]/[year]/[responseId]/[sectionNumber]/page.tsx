@@ -11,10 +11,12 @@ import { DebugRSC } from "~/components/debug/DebugRSC";
 import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 import { rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
 import { filterClientSideStrings } from "@devographics/i18n/server";
-import { tokens as tokensSurveySection } from "~/components/questions/SurveySection.tokens"
+import { tokens as tokensSurveySection } from "~/components/questions/SurveySection.tokens";
 import { I18nContextProvider } from "@devographics/react-i18n";
+import { getCommonContexts, getEditionContexts } from "~/i18n/config";
+import { Context } from "@sentry/node/types/integrations";
 
-const clientTokens = [...tokensSurveySection]
+const clientTokens = [...tokensSurveySection];
 
 // SectionNumber is optional in the URL so this page is exactly the same as ../index.tsx
 const SurveyFromResponseIdPage = async ({
@@ -28,12 +30,6 @@ const SurveyFromResponseIdPage = async ({
     sectionNumber: string;
   };
 }) => {
-  setLocaleIdServerContext(lang) // Needed for "ServerT"
-  const { locale, localeId, error } = await rscLocaleFromParams({ lang })
-  if (error) return <div>Can't load translations</div>
-  // TODO: get correct tokens
-  const clientSideLocale = filterClientSideStrings<{}>(locale, clientTokens, {}, { pageName: "survey_slug_year_responseId_sectionNumber" })
-
   const { data: edition, ___metadata: ___rscMustGetSurveyEditionFromUrl } =
     await rscMustGetSurveyEditionFromUrl({
       slug,
@@ -42,6 +38,23 @@ const SurveyFromResponseIdPage = async ({
   const sn = parseInt(sectionNumber);
   if (isNaN(sn)) notFound();
 
+  setLocaleIdServerContext(lang); // Needed for "ServerT"
+  const contexts = [...getCommonContexts(), ...getEditionContexts({ edition })];
+  const { locale, localeId, error } = await rscLocaleFromParams({
+    lang,
+    contexts,
+  });
+  console.log(locale);
+  if (error) return <div>Can't load translations</div>;
+  // TODO: get correct tokens
+  const clientSideLocale = filterClientSideStrings<{}>(
+    locale,
+    clientTokens,
+    {},
+    { pageName: "survey_slug_year_responseId_sectionNumber" }
+  );
+  console.log(clientSideLocale);
+  console.log(contexts);
   const currentUser = await rscCurrentUser();
   if (!currentUser) {
     return redirect(routes.account.login.from(`/survey/${slug}/${year}`));

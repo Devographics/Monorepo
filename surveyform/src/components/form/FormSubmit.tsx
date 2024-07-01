@@ -14,6 +14,10 @@ import { getSectionTokens } from "~/i18n/survey";
 import { FormLayoutProps } from "./FormLayout";
 import { useFormPropsContext } from "./FormPropsContext";
 import { useFormStateContext } from "./FormStateContext";
+import { teapot } from "@devographics/react-i18n";
+// import { tokens } from "./TODO.tokens";
+
+const { T } = teapot(["TOKEN"]);
 
 interface FormSubmitProps extends FormLayoutProps {
   path: string;
@@ -110,11 +114,11 @@ const SubmitButton = (props: SubmitButtonProps) => {
   const isFinished =
     sectionNumber === edition.sections.length && type === "next";
 
-  const sectionName = <FormattedMessage id={intlId} defaultMessage={intlId} />;
+  const sectionName = <T token={intlId} />;
   const contents = (
     <>
       <span className="sr-only">
-        <FormattedMessage id={`general.${type}_section`} />
+        <T token={`general.${type}_section`} />
       </span>
       {type === "previous" ? (
         <>
