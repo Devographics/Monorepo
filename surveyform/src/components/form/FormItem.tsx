@@ -34,6 +34,9 @@ import { useFormPropsContext } from "./FormPropsContext";
 import { SectionMetadata } from "@devographics/types";
 import { DbPathsEnum } from "@devographics/types";
 
+import { teapot } from "@devographics/react-i18n";
+import { tokens } from "./FormItem.tokens";
+
 export interface FormItemProps extends FormInputProps {
   children: ReactNode;
   showMore?: boolean;
@@ -42,6 +45,8 @@ export interface FormItemProps extends FormInputProps {
   className?: string;
   isInvalid?: boolean;
 }
+
+const { T } = teapot(tokens)
 
 export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
   function FormItem(props: FormItemProps, parentRef) {
@@ -240,13 +245,11 @@ export const SkipButton = ({
       placement="top"
       overlay={
         <Tooltip id="general.skip_question.description">
-          <FormattedMessage
-            id={
-              isSkipped
+          <T
+              token={isSkipped
                 ? "general.unskip_question.description"
-                : "general.skip_question.description"
-            }
-          />
+                : "general.skip_question.description"}
+            />
         </Tooltip>
       }
     >
@@ -257,9 +260,9 @@ export const SkipButton = ({
             toggleSkipped();
           }}
         >
-          <FormattedMessage
-            id={isSkipped ? "general.unskip_question" : "general.skip_question"}
-          />
+          <T
+              token={isSkipped ? "general.unskip_question" : "general.skip_question"}
+            />
           {isSkipped ? <Unskip /> : <Skip />}
         </Button>
       </div>

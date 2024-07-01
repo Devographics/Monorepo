@@ -47,16 +47,16 @@ const SurveyFromResponseIdPage = async ({
     return redirect(routes.account.login.from(`/survey/${slug}/${year}`));
   }
 
-  // read-only mode
-  if (edition.status === SurveyStatusEnum.CLOSED) {
-    return <SurveySectionReadOnly />;
-  }
   // TODO: @see https://github.com/vercel/next.js/issues/49387#issuecomment-1564539515
   return (
     <I18nContextProvider locale={clientSideLocale}>
       <DebugRSC {...{ ___rscMustGetSurveyEditionFromUrl }} />
-      <SurveySection />
-    </I18nContextProvider >
+      {edition.status === SurveyStatusEnum.CLOSED ? (
+        <SurveySectionReadOnly />
+      ) : (
+        <SurveySection />
+      )}
+    </I18nContextProvider>
   );
 };
 
