@@ -1,7 +1,21 @@
-type TokensMap = {
-  [token: string]: string;
+export enum TokenType {
+  REGULAR = "regular",
+  DEFAULT_LOCALE_FALLBACK = "default_locale_fallback",
+  DEFAULT_MESSAGE_FALLBACK = "default_message_fallback",
+  KEY_FALLBACK = "key_fallback",
+}
+export type I18nToken = {
+  key: string;
+  t: string;
+  tClean?: null | string;
+  tHtml?: null | string;
+  type: TokenType;
 };
-type StringsMap = {
+
+export type TokensMap = {
+  [token: string]: I18nToken;
+};
+export type StringsMap = {
   [localeId: string]: TokensMap;
 };
 
@@ -30,20 +44,28 @@ function getFormattedString({
   defaultLocaleId: string;
   Strings: StringsMap;
 }) {
-  let message = "";
+  let message: I18nToken;
   if (Strings[localeId] && Strings[localeId][id]) {
     message = Strings[localeId][id];
+    message.type = TokenType.REGULAR;
   } else if (Strings[defaultLocaleId] && Strings[defaultLocaleId][id]) {
-    // debug(`\x1b[32m>> INTL: No string found for id "${id}" in locale "${locale}", using defaultLocale "${defaultLocale}".\x1b[0m`);
+    // debug(`\x1b[32m>> INTL: No string found for key "${id}" in locale "${locale}", using defaultLocale "${defaultLocale}".\x1b[0m`);
     message = Strings[defaultLocaleId] && Strings[defaultLocaleId][id];
+    message.type = TokenType.DEFAULT_LOCALE_FALLBACK;
   } else if (defaultMessage) {
-    // debug(`\x1b[32m>> INTL: No string found for id "${id}" in locale "${locale}", using default message "${defaultMessage}".\x1b[0m`);
-    message = defaultMessage;
+    // debug(`\x1b[32m>> INTL: No string found for key "${id}" in locale "${locale}", using default message "${defaultMessage}".\x1b[0m`);
+    message = {
+      key: "default",
+      t: defaultMessage,
+      type: TokenType.DEFAULT_MESSAGE_FALLBACK,
+    };
+  } else {
+    // debug(`\x1b[32m>> INTL: No string found for key "${id}" in locale "${locale}", using key as fallback.\x1b[0m`);
+    message = { key: "key-fallback", t: id, type: TokenType.KEY_FALLBACK };
   }
   if (values && typeof values === "object") {
     Object.keys(values).forEach((key) => {
       // es2021 syntax
-      console.log({ message })
       if (typeof message === "string") {
         message = (message as any)?.replaceAll(`{${key}}`, values[key]); // TODO: false positive on replaceAll not existing in TS
       } else {
@@ -52,8 +74,14 @@ function getFormattedString({
       }
     });
   }
+  if (!message.tHtml) {
+    message.tHtml = message.t;
+  }
+  if (!message.tClean) {
+    message.tClean = message.t;
+  }
   // @ts-ignore message should normally already be a "string" but this functions is not working as expected and gets the whole object
-  return message?.t;
+  return message;
 }
 
 export class StringsRegistry {

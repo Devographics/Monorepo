@@ -24,9 +24,11 @@ export const LogoutButton = ({ asLink }: { asLink?: boolean }) => {
       }}
       {...(asLink && { href: "#" })}
     >
-      {intl.formatMessage({
-        id: `accounts.sign_out`,
-      })}
+      {
+        intl.formatMessage({
+          id: `accounts.sign_out`,
+        })?.t
+      }
     </LinkOrButton>
   );
 };

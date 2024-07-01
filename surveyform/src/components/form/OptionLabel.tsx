@@ -31,7 +31,7 @@ const OptionLabel = ({
 
   const defaultMessage =
     option.id === OPTION_NA
-      ? intl.formatMessage({ id: "options.na" })
+      ? intl.formatMessage({ id: "options.na" })?.t
       : i18n.base + " ❔";
 
   const entityName = getEntityName(entity);

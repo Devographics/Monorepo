@@ -9,7 +9,7 @@ import { LoadingButton } from "~/components/ui/LoadingButton";
 import { teapot } from "@devographics/react-i18n";
 import { tokens } from "./StandaloneMagicLoginForm.tokens";
 
-const { T } = teapot(tokens)
+const { T } = teapot(tokens);
 
 const GmailMessage = ({
   domain,
@@ -19,11 +19,9 @@ const GmailMessage = ({
 }) => {
   // will look in spams too
   const link = `https://mail.google.com/mail/u/0/#search/${encodeURIComponent(
-    `from:${domain}+OR+from:stateofjs+OR+from:devographics+in:anywhere`
+    `from:${domain}+OR+from:stateofjs+OR+from:devographics+in:anywhere`,
   )}`;
-  return (
-    <T token="accounts.magic_link.browser" values={{ link }} />
-  );
+  return <T token="accounts.magic_link.browser" values={{ link }} />;
 };
 
 export interface StandaloneMagicLoginFormProps {
@@ -49,7 +47,7 @@ export const StandaloneMagicLoginForm = ({
   redirectTo,
 }: StandaloneMagicLoginFormProps) => {
   const intl = useIntlContext();
-  const placeholder = intl.formatMessage({ id: `accounts.your_email` });
+  const placeholder = intl.formatMessage({ id: `accounts.your_email` })?.t;
   const [errorMsg, setErrorMsg] = useState("");
   const [successEmail, setSuccessEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -66,7 +64,9 @@ export const StandaloneMagicLoginForm = ({
     resetMessages();
     const email = e?.currentTarget?.email?.value;
     if (!email) {
-      setErrorMsg(intl.formatMessage({ id: `accounts.magic_link.no_email` }));
+      setErrorMsg(
+        intl.formatMessage({ id: `accounts.magic_link.no_email` })?.t,
+      );
       return;
     }
     localStorage && localStorage.setItem("email", email);

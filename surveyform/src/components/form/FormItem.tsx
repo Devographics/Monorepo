@@ -13,7 +13,7 @@ import React, {
   RefObject,
 } from "react";
 
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { TokenType, useIntlContext } from "@devographics/react-i18n-legacy";
 import Form from "react-bootstrap/Form";
 import { FormInputProps } from "./typings";
 import { CommentTrigger, CommentInput } from "./FormComment";
@@ -292,7 +292,7 @@ export const FormItemTitle = (
           {yearAdded === 2023 && (
             <span
               className="question-label-new"
-              title={intl.formatMessage({ id: "general.newly_added" })}
+              title={intl.formatMessage({ id: "general.newly_added" })?.t}
             >
               {yearAdded}
             </span>
@@ -320,9 +320,9 @@ export const FormItemDescription = (
   const intlIds = getQuestioni18nIds({ ...props });
   const i18nDescription = intl.formatMessage({ id: intlIds.description });
   const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
-  return i18nDescription ? (
+  return i18nDescription && i18nDescription.type !== TokenType.KEY_FALLBACK ? (
     <div className="form-item-description">
-      <FormattedMessage id={intlIds.description} />
+      <T token={intlIds.description} />
     </div>
   ) : entityDescription ? (
     <p className="form-item-description">
@@ -349,6 +349,6 @@ export const FormItemNote = (
 ) => {
   const intl = useIntlContext();
   const intlIds = getQuestioni18nIds({ ...props });
-  const note = intl.formatMessage({ id: intlIds.note });
+  const note = intl.formatMessage({ id: intlIds.note })?.t;
   return note ? <T className="form-note" token={intlIds.note} /> : null;
 };

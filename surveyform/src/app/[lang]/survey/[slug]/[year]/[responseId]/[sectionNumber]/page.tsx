@@ -44,17 +44,14 @@ const SurveyFromResponseIdPage = async ({
     lang,
     contexts,
   });
-  console.log(locale);
   if (error) return <div>Can't load translations</div>;
   // TODO: get correct tokens
   const clientSideLocale = filterClientSideStrings<{}>(
     locale,
     clientTokens,
     {},
-    { pageName: "survey_slug_year_responseId_sectionNumber" }
+    { pageName: "survey_slug_year_responseId_sectionNumber" },
   );
-  console.log(clientSideLocale);
-  console.log(contexts);
   const currentUser = await rscCurrentUser();
   if (!currentUser) {
     return redirect(routes.account.login.from(`/survey/${slug}/${year}`));

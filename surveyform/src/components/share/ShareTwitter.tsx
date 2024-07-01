@@ -14,11 +14,11 @@ const ShareTwitter = ({
       // onClick={track('Twitter', trackingId)}
       className="share__link--twitter share__link"
       href={`https://twitter.com/intent/tweet/?text=${encodeURIComponent(
-        text
+        text,
       )}`}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={intl.formatMessage({ id: "share.twitter" })}
+      aria-label={intl.formatMessage({ id: "share.twitter" })?.t}
     >
       <div className="resp-sharing-button resp-sharing-button--twitter resp-sharing-button--small">
         <div
@@ -42,7 +42,7 @@ const ShareTwitter = ({
         </div>
       </div>
       <span className="sr-only">
-        {intl.formatMessage({ id: "share.twitter" })}
+        {intl.formatMessage({ id: "share.twitter" })?.t}
       </span>
     </a>
   );

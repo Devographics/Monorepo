@@ -34,7 +34,7 @@ export const FormOption = (props: FormOptionProps) => {
 
   const optionDescription = intl.formatMessage({
     id: i18n.description,
-  });
+  })?.t;
 
   const { clean: label } = useOptionTitle({ question, option });
 
@@ -69,7 +69,7 @@ const OptionDescription = (props: FormOptionProps) => {
 
   const i18nDescription = intl.formatMessage({
     id: i18n.description,
-  });
+  })?.t;
 
   const entity = option?.entity;
   // const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;

@@ -40,7 +40,7 @@ export const IconWrapper = (props: IconWrapperProps & any) => {
   } = props;
 
   const label_ =
-    label || (labelId && intl.formatMessage({ id: labelId, values }));
+    label || (labelId && intl.formatMessage({ id: labelId, values }))?.t;
 
   const iconElement = cloneElement(children, {
     role: "img",

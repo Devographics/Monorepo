@@ -18,11 +18,11 @@ const ShareLinkedIn = ({
       // onClick={track('LinkedIn', trackingId)}
       className="share__link--linkedin share__link"
       href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
-        link
+        link,
       )}&title=${title}&summary=${summary}`}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={intl.formatMessage({ id: "share.linkedin" })}
+      aria-label={intl.formatMessage({ id: "share.linkedin" })?.t}
     >
       <div className="resp-sharing-button resp-sharing-button--linkedin resp-sharing-button--small">
         <div
@@ -40,7 +40,7 @@ const ShareLinkedIn = ({
         </div>
       </div>
       <span className="sr-only">
-        {intl.formatMessage({ id: "share.linkedin" })}
+        {intl.formatMessage({ id: "share.linkedin" })?.t}
       </span>
     </a>
   );

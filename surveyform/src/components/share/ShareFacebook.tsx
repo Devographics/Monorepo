@@ -16,11 +16,11 @@ const ShareFacebook = ({
       // onClick={track('Facebook', trackingId)}
       className="share__link--facebook share__link"
       href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-        link
+        link,
       )}&quote=${encodeURIComponent(quote)}`}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={intl.formatMessage({ id: "share.facebook" })}
+      aria-label={intl.formatMessage({ id: "share.facebook" })?.t}
     >
       <div className="resp-sharing-button resp-sharing-button--facebook resp-sharing-button--small">
         <div
@@ -44,7 +44,7 @@ const ShareFacebook = ({
         </div>
       </div>
       <span className="sr-only">
-        {intl.formatMessage({ id: "share.facebook" })}
+        {intl.formatMessage({ id: "share.facebook" })?.t}
       </span>
     </a>
   );

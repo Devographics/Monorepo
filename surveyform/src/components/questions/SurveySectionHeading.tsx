@@ -8,7 +8,6 @@ import { useFormStateContext } from "../form/FormStateContext";
 import { useFormPropsContext } from "../form/FormPropsContext";
 import { DynamicT } from "@devographics/react-i18n";
 
-
 const SurveySectionHeading = ({ section }: FormLayoutProps) => {
   const { stateStuff, response } = useFormStateContext();
   const { sectionNumber, edition } = useFormPropsContext();
@@ -33,7 +32,7 @@ const SurveySectionHeading = ({ section }: FormLayoutProps) => {
 
   const description = intl.formatMessage({
     id: getSectionTokens({ section }).description,
-  });
+  })?.t;
   return (
     <div className="section-heading">
       <div className="section-heading-contents">
@@ -89,7 +88,7 @@ Get the item currently in viewport
 const offset = 200;
 export const getItemIdInViewport = (
   scrollPosition: number,
-  itemPositions: { [key: string]: number }
+  itemPositions: { [key: string]: number },
 ) => {
   return Object.keys(itemPositions)
     .reverse()
@@ -113,8 +112,9 @@ const QuestionItem = ({
     <li>
       <a
         href={`#${question.id}`}
-        className={`${isHighlighted ? "highlighted" : "not-highlighted"} ${isCompleted ? "completed" : "not-completed"
-          }`}
+        className={`${isHighlighted ? "highlighted" : "not-highlighted"} ${
+          isCompleted ? "completed" : "not-completed"
+        }`}
       >
         <QuestionLabel
           section={section}

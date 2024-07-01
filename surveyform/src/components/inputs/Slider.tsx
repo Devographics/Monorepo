@@ -25,7 +25,7 @@ export const Slider = (props: FormInputProps) => {
                 : "form-check-unchecked"
               : "";
             const i18n = getOptioni18nIds({ question, option });
-            const optionLabel = intl.formatMessage({ id: i18n.base });
+            const optionLabel = intl.formatMessage({ id: i18n.base })?.t;
             // TODO: we don't really use this label, we only use it
             // to check if there is a translation for this value
             return (

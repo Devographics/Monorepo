@@ -105,10 +105,10 @@ const ListItem = ({
 
   const featureDescription = intl.formatMessage({
     id: `features.${itemId}.description`,
-  });
+  })?.t;
   const toolDescription = intl.formatMessage({
     id: `tools.${itemId}.description`,
-  });
+  })?.t;
   const entityDescription = descriptionHtml || descriptionClean;
   const description =
     featureDescription || toolDescription || entityDescription;
@@ -221,7 +221,7 @@ export const SendByEmail = ({
       </p>
       <div className="reading-list-form">
         <FormControl
-          placeholder={intl.formatMessage({ id: "user_info.email" })}
+          placeholder={intl.formatMessage({ id: "user_info.email" })?.t}
           type="email"
           value={email}
           onChange={handleChange}

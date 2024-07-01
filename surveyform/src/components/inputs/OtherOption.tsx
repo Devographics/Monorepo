@@ -16,7 +16,7 @@ const OtherOption = (
     setShowOther: Dispatch<SetStateAction<boolean>>;
     type: "radio" | "checkbox";
     mainValue: string | number | Array<string | number>;
-  }
+  },
 ) => {
   const {
     edition,
@@ -33,7 +33,7 @@ const OtherOption = (
   const path = formPaths.other!;
   const otherValue = response?.[path];
 
-  const { formatMessage } = useIntlContext();
+  const intl = useIntlContext();
 
   // keep track of "other" field value locally
   const [localValue, setLocalValue] = useState(otherValue);
@@ -92,7 +92,9 @@ const OtherOption = (
           onChange={handleChangeDebounced}
           onBlur={handleChange}
           disabled={disabled}
-          placeholder={formatMessage({ id: "options.other.placeholder" })}
+          placeholder={
+            intl.formatMessage({ id: "options.other.placeholder" })?.t
+          }
         />
       )}
     </div>

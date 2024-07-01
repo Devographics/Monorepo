@@ -10,8 +10,8 @@ export interface FormattedMessageProps {
 }
 /**
  * @deprecated Use @devographics/react-i18n
- * @param param0 
- * @returns 
+ * @param param0
+ * @returns
  */
 export const FormattedMessage = ({
   id,
@@ -26,9 +26,7 @@ export const FormattedMessage = ({
   const translatorMode = useTranslatorMode();
 
   // The message can contain sanitized HTML
-  let message = intl.formatMessage({ id, defaultMessage, values })
-    // @ts-expect-error TODO: now the parsed message returns the "t" and "tHTML" values
-    ?.t;
+  let message = intl.formatMessage({ id, defaultMessage, values })?.t;
   const props: any = {
     "data-key": id,
   };

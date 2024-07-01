@@ -19,8 +19,8 @@ export const useOptionTitle = ({
 
   // TODO: formatMessage should return an object with html and clean versions
   // instead of just a string
-  const i18nNameHtml = intl.formatMessage({ id: i18n.base });
-  const i18nNameClean = intl.formatMessage({ id: i18n.base });
+  const i18nNameHtml = intl.formatMessage({ id: i18n.base })?.t;
+  const i18nNameClean = intl.formatMessage({ id: i18n.base })?.t;
 
   return {
     html: entityNameHtml || i18nNameHtml,

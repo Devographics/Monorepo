@@ -16,10 +16,10 @@ const ShareEmail = ({
       // onClick={track('Email', trackingId)}
       className="share__link--email share__link"
       href={`mailto:?subject=${encodeURIComponent(
-        subject
+        subject,
       )}&body=${encodeURIComponent(body)}`}
       target="_self"
-      aria-label={intl.formatMessage({ id: "share.email" })}
+      aria-label={intl.formatMessage({ id: "share.email" })?.t}
     >
       <div className="resp-sharing-button resp-sharing-button--email resp-sharing-button--small">
         <div
@@ -41,7 +41,7 @@ const ShareEmail = ({
         </div>
       </div>
       <span className="sr-only">
-        {intl.formatMessage({ id: "share.email" })}
+        {intl.formatMessage({ id: "share.email" })?.t}
       </span>
     </a>
   );
