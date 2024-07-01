@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import QuestionLabel from "../form/QuestionLabel";
 import { getSectionTokens } from "~/i18n/survey";
 import { questionIsCompleted } from "~/lib/responses/helpers";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { TokenType, useIntlContext } from "@devographics/react-i18n-legacy";
 import { FormLayoutProps } from "../form/FormLayout";
 import { useFormStateContext } from "../form/FormStateContext";
 import { useFormPropsContext } from "../form/FormPropsContext";
@@ -30,9 +30,11 @@ const SurveySectionHeading = ({ section }: FormLayoutProps) => {
     };
   }, []);
 
-  const description = intl.formatMessage({
-    id: getSectionTokens({ section }).description,
-  })?.t;
+  const hasDescription =
+    intl.formatMessage({
+      id: getSectionTokens({ section }).description,
+    }).type !== TokenType.KEY_FALLBACK;
+
   return (
     <div className="section-heading">
       <div className="section-heading-contents">
@@ -48,7 +50,7 @@ const SurveySectionHeading = ({ section }: FormLayoutProps) => {
               values={{ ...edition }}
             />
           </h2>
-          {description && (
+          {hasDescription && (
             <p className="section-description">
               <DynamicT
                 token={getSectionTokens({ section }).description}

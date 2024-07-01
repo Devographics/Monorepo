@@ -26,13 +26,6 @@ export const useQuestionTitle = ({
     id: i18n.question,
   });
 
-  console.log("//////");
-  console.log(i18n);
-  console.log(i18nNameHtmlBase);
-  console.log(i18nNameCleanBase);
-  console.log(i18nNameHtmlQuestion);
-  console.log(i18nNameCleanQuestion);
-
   // by default, try to use the "foo.question" field or else default to just "foo"
   let htmlLabel = i18nNameHtmlQuestion.tHtml || i18nNameHtmlBase.tHtml;
   let cleanLabel = i18nNameCleanQuestion.tClean || i18nNameCleanBase.tClean;
