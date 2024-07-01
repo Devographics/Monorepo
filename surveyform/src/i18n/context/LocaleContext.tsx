@@ -4,14 +4,12 @@ import {
   IntlContextProvider,
   StringsRegistry,
 } from "@devographics/react-i18n-legacy";
-import {
-  I18nContextProvider
-} from "@devographics/react-i18n"
+import { I18nContextProvider } from "@devographics/react-i18n";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { LOCALE_COOKIE_NAME } from "../cookie";
 import { defaultLocaleId } from "~/i18n/config";
-import { captureException } from "@sentry/nextjs";
+// import { captureException } from "@sentry/nextjs";
 import { LocaleDef, LocaleDefWithStrings } from "../typings";
 import { useCurrentUser } from "~/lib/users/hooks";
 import { LocaleParsed } from "@devographics/i18n";
@@ -54,7 +52,7 @@ export const useSetLocale = (updateUser?: any) => {
         });
       } catch (err) {
         console.error("Could not update user language");
-        captureException(err);
+        // captureException(err);
       }
     }
     // the middleware will rerun and redirect user to right locale
@@ -66,7 +64,7 @@ export const useSetLocale = (updateUser?: any) => {
 /**
  * Provide methods to get/set the current locale
  * + initialize an IntlProvider
- * 
+ *
  * @deprecated use @devographics/React-i18n
  * @param props
  * @returns
@@ -86,9 +84,9 @@ export const LocaleContextProvider = (props: {
   let locale = locales.find((l) => l.id === localeId);
   if (!locale) {
     locale = locales.find((l) => l.id === defaultLocaleId)!;
-    captureException(
-      `${localeId} doesn't exist, falling back to defaultLocale`
-    );
+    // captureException(
+    //   `${localeId} doesn't exist, falling back to defaultLocale`
+    // );
   }
 
   const { children } = props;

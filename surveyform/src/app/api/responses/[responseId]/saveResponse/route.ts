@@ -4,11 +4,11 @@ import { RouteHandlerOptions } from "~/app/api/typings";
 import { loadResponse } from "~/lib/responses/db-actions/load";
 import { saveResponse } from "~/lib/responses/db-actions/save";
 import { HandlerError } from "~/lib/handler-error";
-import { captureException } from "@sentry/nextjs";
+// import { captureException } from "@sentry/nextjs";
 
 export async function POST(
   req: NextRequest,
-  { params }: RouteHandlerOptions<{ responseId: string }>
+  { params }: RouteHandlerOptions<{ responseId: string }>,
 ) {
   try {
     // Get current user
@@ -57,7 +57,7 @@ export async function POST(
       return await error.toNextResponse(req);
     } else {
       console.error(error);
-      captureException(error);
+      // captureException(error);
       return NextResponse.json(
         {
           error: {
@@ -67,7 +67,7 @@ export async function POST(
             error,
           },
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }

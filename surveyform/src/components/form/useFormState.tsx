@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { captureException } from "@sentry/nextjs";
+// import { captureException } from "@sentry/nextjs";
 import { saveResponse } from "~/components/page/services";
 import { useRouter } from "next/navigation";
 import isEmpty from "lodash/isEmpty";
@@ -24,7 +24,7 @@ const initFormState = () => ({
 const mergeWithResponse = (
   response: ResponseDocument,
   currentValues: Partial<ResponseDocument>,
-  deletedValues
+  deletedValues,
 ) => {
   return { ...response, ...currentValues };
 };
@@ -40,7 +40,7 @@ export const useFormState = ({
   const [loading, setLoading] = useState(false);
   const [currentTabindex, setCurrentTabindex] = useState<number | null>(null);
   const [currentFocusIndex, setCurrentFocusIndex] = useState<number | null>(
-    null
+    null,
   );
   const [errorResponse, setErrorResponse] = useState();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -85,7 +85,7 @@ export const useFormState = ({
         };
       });
     },
-    [setFormState]
+    [setFormState],
   );
 
   /**
@@ -107,7 +107,7 @@ export const useFormState = ({
   }) => {
     if (!response) {
       throw new Error(
-        "Can't submit for if there is no response (read-only or outline mode)"
+        "Can't submit for if there is no response (read-only or outline mode)",
       );
     }
     setErrorResponse(undefined);
@@ -141,7 +141,7 @@ export const useFormState = ({
       }
       if (res.error) {
         console.error(res.error);
-        captureException(res.error);
+        // captureException(res.error);
         setErrorResponse(res.error);
         const { id, message, status } = res.error;
         addMessage({
@@ -175,7 +175,7 @@ export const useFormState = ({
     mergeWithResponse(
       originalResponse,
       formState.currentValues,
-      formState.deletedValues
+      formState.deletedValues,
     );
 
   return {

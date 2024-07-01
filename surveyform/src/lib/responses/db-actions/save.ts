@@ -7,7 +7,7 @@ import { getResponseSchema } from "~/lib/responses/schema";
 import { restoreTypes, runFieldCallbacks, OnUpdateProps } from "~/lib/schemas";
 import type { ResponseDocument } from "@devographics/types";
 import { subscribe } from "~/lib/server/email/email_octopus";
-import { captureException } from "@sentry/nextjs";
+// import { captureException } from "@sentry/nextjs";
 import { HandlerError } from "~/lib/handler-error";
 import { validateResponse } from "./validate";
 import { emailPlaceholder } from "~/lib/responses/schema";
@@ -102,7 +102,7 @@ export async function saveResponse({
         serverData.isSubscribed = true;
       } catch (error) {
         // We do not hard fail on subscription error, just log to Sentry
-        captureException(error);
+        // captureException(error);
         console.error(error);
       }
     }

@@ -9,7 +9,7 @@ import { Schema, extendSchema } from "~/lib/schemas";
 import { nanoid } from "nanoid";
 import { getCompletionPercentage, getKnowledgeScore } from "./helpers";
 import { getFormPaths } from "@devographics/templates";
-import { captureException } from "@sentry/nextjs";
+// import { captureException } from "@sentry/nextjs";
 import { serverConfig } from "~/config/server";
 
 export enum Actions {
@@ -73,9 +73,9 @@ export const responseBaseSchema: Schema = {
       const updatedAt = new Date();
       const createdAt = existingResponse.createdAt as Date;
       if (!createdAt) {
-        captureException(
-          `duration callback error: response ${existingResponse._id} missing createdAt field`
-        );
+        // captureException(
+        //   `duration callback error: response ${existingResponse._id} missing createdAt field`
+        // );
         return;
       }
       const differenceInMilliseconds =
