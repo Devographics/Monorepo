@@ -3,6 +3,7 @@ import { rscLocaleCached } from "~/lib/api/rsc-fetchers";
 
 /**
  * Generate a function that can translate content for the current locale
+ * Similar to "ServerT" but can be used in metadata function
  * @param param0 
  * @returns 
  */
@@ -22,10 +23,8 @@ export async function rscTeapot({ contexts }: { contexts?: Array<string> } = {})
  * before this component is rendered
  * 
  * See Astro equivalent in the results-astro app
- * 
- * TODO: this is just a draft to check that everything is plugged
- * we should handle edge cases : children fallback, adding data attributes etc.
- * 
+ *
+ * KEEP IN SYNC with DynamicT/T from "@devographics/react-i18n" 
  */
 export async function ServerT({ token, values, fallback, children }: {
     token: string, values?: Record<string, any>,

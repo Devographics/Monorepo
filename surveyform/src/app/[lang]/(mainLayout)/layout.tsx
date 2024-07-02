@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import ClientLayout from "~/app/[lang]/ClientLayout";
-import { tokens as tokensClientLayout } from "~/app/[lang]/ClientLayout.tokens"
 import { rscAllLocalesMetadata, rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
 import { metadata as defaultMetadata } from "../../layout";
 import { rscTeapot } from "~/i18n/components/ServerT";
 import { setLocaleIdServerContext } from "~/i18n/rsc-context";
-import { filterClientSideStrings } from "@devographics/i18n/server";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -54,16 +52,13 @@ export default async function RootLayout({
   if (error) {
     return <div>{JSON.stringify(error, null, 2)}</div>;
   }
-  /** Filter to keep only tokens used by children components */
-  const tokens = [...tokensClientLayout]
-  const clientSideLocale = filterClientSideStrings<{}>(locale, tokens, {}, { pageName: "root_layout" })
   return (
     // TODO: stop passing all the locales there, filter them per page
     <ClientLayout
       params={params}
       locales={locales}
       localeId={localeId}
-      localeStrings={clientSideLocale}
+      localeStrings={locale}
     >
       {/*<DebugRSC
         {...{ ___rscLocale_CommonContexts, ___rscAllLocalesMetadata }}

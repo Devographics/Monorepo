@@ -5,10 +5,8 @@ import {
 } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
 import { UserDocument } from "~/account/user/typings";
 import { ResponseDocument } from "@devographics/types";
-import { teapot } from "@devographics/react-i18n";
-import { tokens } from "./LoginDialog.tokens";
+import { T } from "@devographics/react-i18n"
 
-const { T } = teapot(tokens)
 export const LoginDialog = ({
   hideGuest,
   user,

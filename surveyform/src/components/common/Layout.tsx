@@ -3,10 +3,10 @@ import Footer from "./Footer";
 import Header from "./Header";
 // import DevographicsBanner, {tokens as tokensDevographicsBanner} from "./DevographicsBanner";
 import TokyoDev from "~/components/common/TokyoDev";
-import { teapot } from "@devographics/react-i18n";
-import { tokens } from "./Layout.tokens";
 
-const { T } = teapot(tokens)
+
+import { T } from "@devographics/react-i18n"
+
 
 export const Layout = ({ children }: { children: any }) => {
   return (

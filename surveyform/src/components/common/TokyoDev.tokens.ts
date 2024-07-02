@@ -1,1 +1,0 @@
-export const tokens = ["tokyodev.founder", "tokyodev.about", "tokyodev.description", "tokyodev.learn_more"] as const

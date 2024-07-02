@@ -1,9 +1,9 @@
 "use client";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
-import { tokens } from "./Translators.tokens";
-import { teapot } from "@devographics/react-i18n";
 
-const { T } = teapot(tokens)
+
+
+import { T } from "@devographics/react-i18n"
 
 const Translators = () => {
   // TODO: pass locale list from context to make it a server component

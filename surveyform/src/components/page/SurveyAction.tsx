@@ -23,10 +23,10 @@ import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { ResponseError } from "~/components/error/ResponseError";
 import { ResponseDetails } from "../surveys/ResponseDetails";
 import { clearLocalStorageData, useClientData } from "./hooks";
-import { tokens } from "./SurveyAction.tokens";
-import { teapot } from "@devographics/react-i18n";
 
-const { T } = teapot(tokens)
+
+
+import { T } from "@devographics/react-i18n"
 
 /**
  * - Logged in and survey open : create new response

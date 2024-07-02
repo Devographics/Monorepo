@@ -1,9 +1,9 @@
 import { EditionMetadata, ResultsStatusEnum } from "@devographics/types";
 import { SurveyStatusEnum } from "@devographics/types";
-import { tokens } from "./SurveyMessage.tokens";
-import { teapot } from "@devographics/react-i18n";
 
-const { T } = teapot(tokens)
+
+
+import { T } from "@devographics/react-i18n"
 
 const EditionMessage = ({ edition }: { edition: EditionMetadata }) => {
   const { status, resultsStatus, resultsUrl, endedAt, feedbackUrl } = edition;

@@ -1,8 +1,8 @@
 "use client";
-import { teapot } from "@devographics/react-i18n";
-import { tokens } from "./TokyoDev.tokens";
 
-const { T } = teapot(tokens)
+
+
+import { T } from "@devographics/react-i18n"
 
 export const TokyoDev = () => {
   return process.env.NEXT_PUBLIC_CONFIG === "tokyodev" ? (

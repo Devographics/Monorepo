@@ -6,10 +6,7 @@ import { useCurrentUser } from "~/lib/users/hooks";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
 import { LoadingButton } from "~/components/ui/LoadingButton";
-import { teapot } from "@devographics/react-i18n";
-import { tokens } from "./StandaloneMagicLoginForm.tokens";
-
-const { T } = teapot(tokens);
+import { T } from "@devographics/react-i18n";
 
 const GmailMessage = ({
   domain,

@@ -7,14 +7,14 @@ import { LogoutButton } from "~/account/user/components/LogoutButton";
 import { DebugZone } from "./DebugZone";
 import { publicConfig } from "~/config/public";
 import { enableTranslatorMode } from "@devographics/i18n";
-import { teapot } from "@devographics/react-i18n";
-import { tokens } from "./Footer.tokens";
 
-const { T } = teapot([...tokens] as const)
+
+import { T } from "@devographics/react-i18n"
+
 
 type LinkItemProps = {
   component?: React.ReactNode, showIf?: (args: { currentUser: any }) => boolean,
-  id?: typeof tokens[number],
+  id?: string,
   href?: string
 }
 const links: Array<LinkItemProps> = [

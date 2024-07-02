@@ -8,10 +8,10 @@ import {
 } from "@devographics/types";
 import { getOptioni18nIds } from "~/i18n/survey";
 import { useIntlContext } from "@devographics/react-i18n-legacy";
-import { teapot } from "@devographics/react-i18n";
-// import { tokens } from "./TODO.tokens";
 
-const { T } = teapot(["TOKEN"]);
+//  
+
+import { T } from "@devographics/react-i18n";
 
 const OptionLabel = ({
   option,

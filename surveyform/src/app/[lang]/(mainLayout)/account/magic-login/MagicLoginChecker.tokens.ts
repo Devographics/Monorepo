@@ -1,1 +1,0 @@
-export const tokens = ["accounts.token_verified"] as const

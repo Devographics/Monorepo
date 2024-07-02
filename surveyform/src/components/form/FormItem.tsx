@@ -34,8 +34,8 @@ import { useFormPropsContext } from "./FormPropsContext";
 import { SectionMetadata } from "@devographics/types";
 import { DbPathsEnum } from "@devographics/types";
 
-import { teapot } from "@devographics/react-i18n";
-import { tokens } from "./FormItem.tokens";
+
+
 
 export interface FormItemProps extends FormInputProps {
   children: ReactNode;
@@ -46,7 +46,7 @@ export interface FormItemProps extends FormInputProps {
   isInvalid?: boolean;
 }
 
-const { T } = teapot(tokens);
+import { T } from "@devographics/react-i18n";
 
 export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
   function FormItem(props: FormItemProps, parentRef) {

@@ -2,11 +2,11 @@ import { EditionMetadata } from "@devographics/types";
 import Header from "~/components/common/Header";
 import Footer from "~/components/common/Footer";
 import { ReactNode } from "react";
-import { teapot } from "@devographics/react-i18n";
-import { tokens } from "./EditionLayout.tokens";
+
+
 // import DevographicsBanner from "./DevographicsBanner";
 
-const { T } = teapot(tokens)
+import { T } from "@devographics/react-i18n"
 
 const EditionLayout = ({
   edition,

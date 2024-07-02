@@ -1,1 +1,0 @@
-export const tokens = ["general.survey_preview", "general.survey_feedback", "general.survey_closed_on", "general.survey_results"]

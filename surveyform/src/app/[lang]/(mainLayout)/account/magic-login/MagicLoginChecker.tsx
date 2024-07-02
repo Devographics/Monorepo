@@ -20,10 +20,10 @@ import { Loading } from "~/components/ui/Loading";
 import { useClientData } from "~/components/page/hooks";
 import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
-import { teapot } from "@devographics/react-i18n";
-import { tokens } from "./MagicLoginChecker.tokens";
+import { T } from "@devographics/react-i18n";
 
-const { T } = teapot(tokens)
+
+
 
 interface ResponseCreationData {
   /** editionId and surveyId are mandatory when createResponse is true */

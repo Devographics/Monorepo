@@ -10,10 +10,10 @@ import { getSectionTokens } from "~/i18n/survey";
 import { FormLayoutProps } from "./FormLayout";
 import { useFormStateContext } from "./FormStateContext";
 import { useFormPropsContext } from "./FormPropsContext";
-import { teapot } from "@devographics/react-i18n";
-// import { tokens } from "./TODO.tokens";
 
-const { T } = teapot(["TOKEN"]);
+//  
+
+import { T } from "@devographics/react-i18n";
 
 interface SurveyNavItemProps extends Omit<FormLayoutProps, "section"> {
   setShown: any;

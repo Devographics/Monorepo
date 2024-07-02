@@ -1,12 +1,12 @@
-import { teapot } from "@devographics/react-i18n";
+
 import {
   EditionMetadata,
   ResponseDocument,
   ResultsStatusEnum,
 } from "@devographics/types";
-import { tokens } from "./ResponseDetails.tokens";
 
-const { T } = teapot(tokens)
+
+import { T } from "@devographics/react-i18n"
 
 export const ResponseDetails = ({
   edition,

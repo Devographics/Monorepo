@@ -2,10 +2,9 @@
 import React from "react";
 import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
-import { teapot } from "@devographics/react-i18n";
-import { tokens } from "./DevographicsBanner.tokens";
+import { T } from "@devographics/react-i18n"
 
-const { T } = teapot(tokens)
+
 /**
  *
  * @returns true on the second client-render, when hydratation is done

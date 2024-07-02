@@ -5,7 +5,7 @@ import { EditionProvider } from "~/components/SurveyContext/Provider";
 import { rscMustGetSurveyEditionFromUrl } from "./rsc-fetchers";
 import ClientLayout from "~/app/[lang]/ClientLayout";
 import EditionLayout from "~/components/common/EditionLayout";
-import { tokens as editionLayoutTokens } from "~/components/common/EditionLayout.tokens";
+
 
 import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import {
@@ -17,7 +17,6 @@ import { rscAllLocalesMetadata, rscLocale, rscLocaleFromParams } from "~/lib/api
 import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
 import { setLocaleIdServerContext } from "~/i18n/rsc-context";
-import { filterClientSideStrings } from "@devographics/i18n/server";
 interface SurveyPageServerProps {
   lang: string;
   slug: string;
@@ -34,7 +33,6 @@ export async function generateMetadata({
 }
 
 
-const clientTokens = [...editionLayoutTokens]
 /**
  * TODO: get the list of surveys statically during getStaticParams call
  * @param param0
@@ -50,10 +48,9 @@ export default async function SurveyLayout({
   setLocaleIdServerContext(params.lang) // Needed for "ServerT"
   const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
   const i18nContexts = getEditionContexts({ edition });
+  // TODO: should we load common contexts here ? They may already be fetched by the common layout ?
   const { locale, localeId, error: localeError } = await rscLocaleFromParams({ lang: params.lang, contexts: [...i18nContexts, ...getCommonContexts()] })
   if (localeError) return <div>Can't load translations</div>
-  // TODO: get correct tokens
-  const clientSideLocale = filterClientSideStrings<{}>(locale, clientTokens, {}, { pageName: "survey_slug_year_layout" })
   // locales lists
   const {
     data: locales,
@@ -69,7 +66,7 @@ export default async function SurveyLayout({
       params={params}
       locales={locales}
       localeId={localeId}
-      localeStrings={clientSideLocale}
+      localeStrings={locale}
       addWrapper={false}
     >
       <EditionProvider

@@ -7,10 +7,10 @@ import { useOptionTitle } from "~/lib/surveys/helpers/useOptionTitle";
 import AddToList from "~/components/reading_list/AddToList";
 import OptionLabel from "./OptionLabel";
 import { FollowUps } from "../inputs/experience/Followup2";
-import { teapot } from "@devographics/react-i18n";
-// import { tokens } from "./TODO.tokens";
 
-const { T } = teapot(["TOKEN"]);
+//  
+
+import { T } from "@devographics/react-i18n";
 
 interface FormOptionProps extends FormInputProps {
   option: OptionMetadata;

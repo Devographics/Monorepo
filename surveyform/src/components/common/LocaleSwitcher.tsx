@@ -2,10 +2,10 @@
 
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { Dropdown } from "~/components/ui/Dropdown";
-import { teapot } from "@devographics/react-i18n";
-import { tokens } from "./LocalSwitcher.tokens";
 
-const { T } = teapot(tokens)
+
+
+import { T } from "@devographics/react-i18n"
 
 const LocaleSwitcher = () => {
   const { locales = [] } = useLocaleContext();

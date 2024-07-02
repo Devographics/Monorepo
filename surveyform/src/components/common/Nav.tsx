@@ -6,10 +6,10 @@ import { routes } from "~/lib/routes";
 import { EditionMetadata } from "@devographics/types";
 import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
-import { teapot } from "@devographics/react-i18n";
-import { tokens } from "./Nav.tokens";
 
-const { T } = teapot(tokens)
+
+
+import { T } from "@devographics/react-i18n"
 
 const Navigation = ({ edition }: { edition?: EditionMetadata }) => {
   const { locale } = useLocaleContext();

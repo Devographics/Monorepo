@@ -1,1 +1,0 @@
-export const tokens = ["general.skip_question"]
