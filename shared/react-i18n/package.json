@@ -23,7 +23,7 @@
         "lodash": "^4.17.21"
     },
     "devDependencies": {
-        "@types/react": "^18.0.27",
+        "@types/react": "^18.3.3",
         "react": "^17.0.1"
     },
     "gitHead": "672e9ed494ded98361abe47132899d3f825d6d23"
