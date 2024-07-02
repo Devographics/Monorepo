@@ -1,13 +1,24 @@
-import { EditionMetadata } from "@devographics/types";
+import {
+  EnvVar,
+  parseEnvVariableArray,
+  getEnvVar,
+} from "@devographics/helpers";
+import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { publicConfig } from "~/config/public";
 
 export const defaultLocaleId = "en-US";
 
 // i18n contexts common to all surveys and editions
-export const getCommonContexts = () => ["common", "surveys", "accounts"];
+export const getCommonContexts = () => {
+  return parseEnvVariableArray(getEnvVar(EnvVar.DEFAULT_LOCALE_CONTEXTS));
+};
 
-// i18n contexts specific to an edition
+// i18n contexts specific to a survey/edition
 // (note that all editions of the same survey share the same locale context)
+export const getSurveyContexts = ({ survey }: { survey: SurveyMetadata }) => [
+  survey.id,
+];
+
 export const getEditionContexts = ({
   edition,
 }: {
@@ -43,7 +54,7 @@ function filterLang(maybeLocale: string): string | null {
     if (publicConfig.isDev) {
       console.warn(
         "Trying to render with param lang literally set to '[lang]'." +
-        "This issue has appeared in Next 13.1.0+ (fev 2023)."
+          "This issue has appeared in Next 13.1.0+ (fev 2023)."
       );
     }
     return null;
