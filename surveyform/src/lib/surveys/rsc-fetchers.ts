@@ -1,5 +1,8 @@
 import { cache } from "react";
-import { fetchSurveysMetadata, FetcherFunctionOptions } from "@devographics/fetch";
+import {
+  fetchSurveysMetadata,
+  FetcherFunctionOptions,
+} from "@devographics/fetch";
 import type { Metadata } from "next";
 import { publicConfig } from "~/config/public";
 import { rscMustGetSurveyEditionFromUrl } from "~/app/[lang]/survey/[slug]/[year]/rsc-fetchers";
@@ -43,8 +46,11 @@ export const rscGetMetadata = async ({
 
   const contexts = [...getCommonContexts(), ...getEditionContexts({ edition })];
 
-  const { t, error } = await rscTeapot({ contexts })
-  if (error) throw new Error("Could not access translation function:" + error)
+  const { t, error } = await rscTeapot({ contexts });
+  if (error)
+    throw new Error(
+      "Could not access translation function:" + JSON.stringify(error)
+    );
 
   const { socialImageUrl, year } = edition;
   const { name = "" } = edition.survey;
@@ -52,7 +58,7 @@ export const rscGetMetadata = async ({
   const imageUrl = getEditionImageUrl(edition, "og");
   let imageAbsoluteUrl = socialImageUrl || imageUrl;
   const url = edition.questionsUrl || publicConfig.appUrl;
-  const description = t("general.take_survey", { name, year: year + "" })
+  const description = t("general.take_survey", { name, year: year + "" });
 
   let title = getEditionTitle({ edition });
 
@@ -61,7 +67,7 @@ export const rscGetMetadata = async ({
 
   if (section) {
     const { title: sectionTitleId } = getSectionTokens({ section });
-    const sectionTitle = t(sectionTitleId)
+    const sectionTitle = t(sectionTitleId);
     title += `: ${sectionTitle}`;
   }
 
