@@ -25,7 +25,7 @@
     "mkdir:reports": "rm -Rf reports && mkdir reports || true # intermediate script",
     "//mongo": "# shortcut for start:mongo",
     "mongo": "pnpm run start:mongo",
-    "on:server:start": "node ./scripts/dist/onServerStart.mjs",
+    "//on:server:start": "node ./scripts/dist/onServerStart.mjs",
     "detect-leaks": "docker run -v $(pwd):/path zricethezav/gitleaks:latest detect -v --source=\"/path\"",
     "pre-commit:gitleaks": "docker run -v $(pwd):/path zricethezav/gitleaks:latest protect -v  --source=\"/path\" --staged",
     "prereport:combined": "npm run combine:reports # intermediate script",
