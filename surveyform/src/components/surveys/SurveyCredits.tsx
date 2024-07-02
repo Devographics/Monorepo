@@ -1,15 +1,15 @@
 import type { EditionMetadata, Credit } from "@devographics/types";
 import { publicConfig } from "~/config/public";
-import { ServerT } from "~/i18n/components/ServerT";
+import { DynamicT } from "@devographics/react-i18n";
 
 const SurveyCredits = ({ edition }: { edition: EditionMetadata }) => {
   return (
     <div className="survey-credits survey-page-block">
       <h3 className="survey-credits-heading survey-page-block-heading">
-        <ServerT token="credits.contributors" />
+        <DynamicT token="credits.contributors" />
       </h3>
       <p>
-        <ServerT token="credits.contributors.description" />
+        <DynamicT token="credits.contributors.description" />
       </p>
       <div className="survey-credits-items">
         {edition.credits
@@ -30,8 +30,8 @@ const SurveyCredit = ({ id, role, entity }: Credit) => {
   const link = homepageUrl
     ? homepageUrl
     : twitterName
-      ? `https://twitter.com/${twitterName}`
-      : "#";
+    ? `https://twitter.com/${twitterName}`
+    : "#";
   return (
     <div className="survey-credits-item">
       <a href={link} className="survey-credits-item-avatar">

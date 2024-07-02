@@ -1,5 +1,5 @@
 import React from "react";
-import { ServerT } from "~/i18n/components/ServerT";
+import { DynamicT } from "@devographics/react-i18n";
 
 const defaultItems = [
   // "create_account",
@@ -17,7 +17,7 @@ const Faq = ({ edition }) => {
   return items ? (
     <div className="faq survey-page-block">
       <h3 className="faq-heading survey-page-block-heading">
-        <ServerT token="general.faq" />
+        <DynamicT token="general.faq" />
       </h3>
       <div className="faq-contents">
         {items.map((item, index) => (
@@ -33,14 +33,14 @@ const FaqItem = ({ item, index }) => {
     <dl className="faq-item">
       <dt className="faq-item-heading">
         {/**
-         * If we need to make it a client component, 
-         * we can use a token expression to select only the relevant i18n tokens 
+         * If we need to make it a client component,
+         * we can use a token expression to select only the relevant i18n tokens
          * "faq.[*]"" and "faq.[*].description"
          */}
-        <ServerT token={`faq.${item}`} />
+        <DynamicT token={`faq.${item}`} />
       </dt>
       <dd className="faq-item-body">
-        <ServerT token={`faq.${item}.description`} />
+        <DynamicT token={`faq.${item}.description`} />
       </dd>
     </dl>
   );

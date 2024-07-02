@@ -1,11 +1,11 @@
-import { ServerT } from "~/i18n/components/ServerT";
+import { DynamicT } from "@devographics/react-i18n";
 
 const PrivacyPolicy = () => (
   <div className="contents-narrow privacy-policy">
     <h2>
-      <ServerT token="general.privacy_policy" />
+      <DynamicT token="general.privacy_policy" />
     </h2>
-    <ServerT token="general.privacy_policy.description" />
+    <DynamicT token="general.privacy_policy.description" />
   </div>
 );
 

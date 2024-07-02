@@ -1,8 +1,6 @@
 import Support from "~/components/common/Support";
 import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
-import {
-  rscMustGetSurveyEditionFromUrl,
-} from "./rsc-fetchers";
+import { rscMustGetSurveyEditionFromUrl } from "./rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
 import Faq from "~/components/common/Faq";
 import Translators from "~/components/common/Translators";
@@ -12,16 +10,20 @@ import EditionMessage from "~/components/surveys/SurveyMessage";
 import { tokens as tokensEditionMessage } from "~/components/surveys/SurveyMessage.tokens";
 import { type EditionMetadata } from "@devographics/types";
 import { EditionMain } from "./client-components";
-import { tokens as tokensEditionMain } from "./client-components.tokens"
+import { tokens as tokensEditionMain } from "./client-components.tokens";
 import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
 import TokyoDev from "~/components/common/TokyoDev";
 import { setLocaleIdServerContext } from "~/i18n/rsc-context";
-import { ServerT } from "~/i18n/components/ServerT";
+import { DynamicT } from "@devographics/react-i18n";
 import { rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
 import { filterClientSideStrings } from "@devographics/i18n/server";
 import { I18nContextProvider } from "@devographics/react-i18n";
 
-const clientTokens = [...tokensEditionMain, ...tokensTranslators, ...tokensEditionMessage]
+const clientTokens = [
+  ...tokensEditionMain,
+  ...tokensTranslators,
+  ...tokensEditionMessage,
+];
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
 export const revalidate = DEFAULT_REVALIDATE_S;
@@ -72,11 +74,11 @@ const EditionPageComponent = ({
         </h1>
       )}
       <div className="survey-page-block">
-        {/** 
+        {/**
          * If moving to a client component,
          * we can use a token expression instead "general.{{editionId}}.survey_intro"
          */}
-        <ServerT token={`general.${edition.id}.survey_intro`} />
+        <DynamicT token={`general.${edition.id}.survey_intro`} />
         <EditionMain edition={edition} />
       </div>
       <Faq edition={edition} />
@@ -93,11 +95,16 @@ export default async function SurveyPage({
 }: {
   params: SurveyPageServerProps;
 }) {
-  setLocaleIdServerContext(params.lang) // Needed for "ServerT"
-  const { locale, localeId, error } = await rscLocaleFromParams(params)
-  if (error) return <div>Can't load translations</div>
+  setLocaleIdServerContext(params.lang); // Needed for "ServerT"
+  const { locale, localeId, error } = await rscLocaleFromParams(params);
+  if (error) return <div>Can't load translations</div>;
   // TODO: get correct tokens
-  const clientSideLocale = filterClientSideStrings<{}>(locale, clientTokens, {}, { pageName: "survey_slug_year" })
+  const clientSideLocale = filterClientSideStrings<{}>(
+    locale,
+    clientTokens,
+    {},
+    { pageName: "survey_slug_year" }
+  );
   const { slug, year } = params;
   const { data: edition, ___metadata: ___rscMustGetSurveyEditionFromUrl } =
     await rscMustGetSurveyEditionFromUrl({
