@@ -15,6 +15,7 @@ export const dynamicParams = true;
  * but this is not possible to mix static and dynamic pages in the same parent layout (yet)
  * @see https://github.com/vercel/next.js/issues/44712
  */
+/*
 export async function generateStaticParams() {
   const editions = await rscGetEditionsMetadata({ removeHidden: true });
   const sections = editions.map((e) => ({
@@ -44,8 +45,8 @@ export async function generateStaticParams() {
         }))
     )
     .flat();*/
-  return sections;
-}
+//   return sections;
+// }
 
 // SectionNumber is optional in the URL so this page is exactly the same as ../index.tsx
 export default async function SurveySectionOutlinePage({

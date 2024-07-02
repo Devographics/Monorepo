@@ -15,10 +15,12 @@ import { I18nContextProvider } from "@devographics/react-i18n";
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
 export const revalidate = DEFAULT_REVALIDATE_S;
 export const dynamicParams = true;
+/*
 export async function generateStaticParams() {
   const localeIds = await rscAllLocalesIds();
   return localeIds?.data.map((localeId) => ({ lang: localeId })) || [];
 }
+*/
 
 const tokens = [...tokensSurveys]
 
