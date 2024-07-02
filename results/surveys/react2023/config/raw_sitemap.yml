@@ -1,0 +1,661 @@
+- id: introduction
+  path: /
+  showTitle: false
+  blocks:
+      # - id: survey_livestream
+      #   blockType: LivestreamBlock
+      #   disableExport: true
+      #   wrapBlock: false
+      - id: survey_intro
+        blockType: SurveyIntroBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_credits
+        template: credits
+      - id: survey_newsletter
+        blockType: NewsletterBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_sponsors
+        template: sponsors
+      - id: survey_partners
+        template: sponsors
+        blockType: PartnersBlock
+      - id: survey_translators
+        blockType: TranslatorsBlock
+        disableExport: true
+        wrapBlock: false
+
+- id: tshirt
+  path: /tshirt
+  showTitle: false
+  blocks:
+      - id: tshirt_intro
+        template: page_introduction
+      - id: tshirt_block
+        blockType: TshirtBlock
+        wrapBlock: false
+        disableExport: true
+
+# - id: data_explorer
+#   titleId: sections.data_explorer.title
+#   path: /explorer
+#   blocks:
+#       - template: page_introduction
+
+#       - id: data_explorer
+#         showTitle: false
+#         chartOnly: true
+#         wrapBlock: false
+#         template: data_explorer
+#         parameters: { showNoAnswer: true }
+#         variables:
+#             xAxis: user_info__yearly_salary
+#             yAxis: user_info__years_of_experience
+
+- id: user_info
+  titleId: sections.demographics.title
+  path: /demographics
+  blocks:
+      - template: page_introduction
+
+      - id: country
+        template: multiple_options2
+        parameters: { limit: 20 }
+        takeaway: >
+            TODO
+        variants:
+            - template: vs_salary
+              parameters: { cutoff: 100, limit: 20, sort: { property: medianByFacet, order: desc } }
+
+      - id: locale
+        template: multiple_options2
+        parameters: { cutoff: 20 }
+        takeaway: >
+            The language respondents selected to fill out the survey.
+
+      - id: hint_hint
+        template: hint
+
+      - id: completion_stats
+        template: multiple_options2
+        takeaway: >
+            The proportion of the survey filled out by respondents.
+
+      - id: age
+        template: multiple_options2
+        takeaway: >
+            TODO
+        variants:
+            - template: vs_salary
+
+      - id: years_of_experience
+        template: multiple_options2
+        takeaway: >
+            TODO
+        variants:
+            - template: vs_salary
+
+      - id: company_size
+        template: multiple_options2
+        takeaway: >
+            TODO
+        variants:
+            - template: vs_salary
+
+      - id: variants_hint
+        template: hint
+
+      - id: yearly_salary
+        template: multiple_options2
+        takeaway: >
+            TODO
+
+      - id: higher_education_degree
+        template: multiple_options2
+        takeaway: >
+            TODO
+        variants:
+            - template: vs_salary
+
+      - id: gender
+        template: multiple_options2
+        # takeaway: >
+        #     Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
+        variants:
+            - template: vs_salary
+            - id: country_vs_gender
+              fieldId: country
+              tabId: tabs.by_country
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+                  limit: 15
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+
+      - id: race_ethnicity
+        template: multiple_options2_combined
+        takeaway: >
+            TODO
+        variants:
+            - template: vs_years_of_experience
+            - template: vs_age
+
+      - id: disability_status
+        template: multiple_options2_combined
+
+      - id: source
+        template: multiple_options2_freeform
+        parameters:
+            limit: 20
+
+      - id: user_info_resources
+        items: [fm-javascript-first-steps, fm-getting-a-job-v2]
+        template: recommended_resources
+
+- id: features
+  path: /features
+  blocks:
+      - template: page_introduction
+
+      - id: all_features
+        template: multi_items_experience
+        chartOptions:
+            limit: 10
+
+      - id: reading_list
+        # template: reading_list
+        template: multiple_options2
+        queryOptions:
+            sectionId: reading_list
+
+      - id: features_resources
+        items: [fm-javascript-quiz, fm-javascript-hard-parts-v2]
+        template: recommended_resources
+
+  children:
+      - id: main_apis
+        path: /main-apis
+        blocks:
+            - id: main_apis
+              template: page_introduction
+
+            - id: main_apis_items
+              template: multi_items_experience
+              i18nNamespace: features
+
+            - id: main_apis_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: forms_resources
+              items: [fm-web-development-v3]
+              template: recommended_resources
+
+      - id: hooks
+        path: /hooks
+        blocks:
+            - id: hooks
+              template: page_introduction
+
+            - id: hooks_items
+              template: multi_items_experience
+              i18nNamespace: features
+
+            - id: hooks_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: forms_resources
+              items: [fm-web-development-v3]
+              template: recommended_resources
+
+      - id: new_apis
+        path: /new-apis
+        blocks:
+            - id: new_apis
+              template: page_introduction
+
+            - id: new_apis_items
+              template: multi_items_experience
+              i18nNamespace: features
+
+            - id: new_apis_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: forms_resources
+              items: [fm-web-development-v3]
+              template: recommended_resources
+
+- id: libraries
+  path: /libraries
+  blocks:
+      - id: librariesIntroduction
+        template: page_introduction
+
+      - id: all_tools_experience
+        titleId: tools.all_items.experience
+        template: multi_items_experience
+        chartOptions:
+            limit: 10
+
+      - id: rich_harris
+        template: picks
+        variables:
+            url: https://www.localfirst.fm/
+
+      - id: tier_list
+        template: tier_list
+
+      - id: scatterplot_overview
+        template: scatterplot_overview
+
+      # - id: all_sections_tools_cardinality_by_user
+      #   template: tools_cardinality_by_user_js
+
+      - id: libraries_resources
+        items: [fm-vite, fm-design-systems-v2]
+        template: recommended_resources
+
+  children:
+      - id: component_libraries
+        path: /component-libraries
+        blocks:
+            - template: page_introduction
+
+            # - id: front_end_frameworks_ratios
+            #   template: multi_items_ratios
+            #   i18nNamespace: tools
+
+            - id: component_libraries_experience
+              template: multi_items_experience
+              i18nNamespace: tools
+
+            - id: tool_modal_hint
+              template: hint
+
+            - id: component_libraries_others
+              template: section_prenormalized_tools
+
+            - id: animation_libraries
+              template: multiple_options2_combined
+              i18nNamespace: features
+
+            - id: data_visualization_libraries
+              template: multiple_options2_combined
+              i18nNamespace: features
+
+            - id: form_libraries
+              template: multiple_options2_combined
+              i18nNamespace: features
+
+            - id: css_tools
+              template: multiple_options2_combined
+              i18nNamespace: features
+
+            - id: component_libraries_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+            - id: component_libraries_resources
+              items: [fm-react, fm-vanilla-js-apps]
+              template: recommended_resources
+
+      - id: state_management
+        path: /state-management
+        blocks:
+            - template: page_introduction
+
+            - id: state_management_experience
+              template: multi_items_experience
+              i18nNamespace: tools
+
+            - id: state_management_others
+              template: section_prenormalized_tools
+
+            - id: state_management_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+            - id: state_management_resources
+              items: [fm-nextjs-v3, fullstack-app-next-v3]
+              template: recommended_resources
+
+      - id: data_loading
+        path: /data-loading
+        blocks:
+            - template: page_introduction
+
+            - id: data_loading_experience
+              template: multi_items_experience
+              i18nNamespace: tools
+
+            - id: data_loading_others
+              template: section_prenormalized_tools
+
+            - id: data_loading_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+            - id: data_loading_resources
+              items: [fm-enterprise-ui-dev, fm-web-app-testing]
+              template: recommended_resources
+
+      - id: back_end_infrastructure
+        path: /back-end-infrastructure
+        blocks:
+            - template: page_introduction
+
+            - id: meta_frameworks_experience
+              template: multi_items_experience
+              i18nNamespace: tools
+
+            - id: meta_frameworks_others
+              template: section_prenormalized_tools
+
+            - id: build_tools
+              template: multiple_options2_combined
+              i18nNamespace: features
+
+            - id: hosting
+              template: multiple_options2_combined
+              i18nNamespace: features
+
+            - id: other_services
+              template: multiple_options2_combined
+              i18nNamespace: features
+
+            - id: backend_language
+              template: multiple_options2_combined
+              i18nNamespace: features
+
+            - id: back_end_infrastructure_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+            - id: back_end_infrastructure_resources
+              items: [fm-react-native-v2, fm-electron-v3]
+              template: recommended_resources
+
+- id: other_tools
+  path: /other-tools
+  blocks:
+      - id: tools_others_intro
+        template: page_introduction
+
+      - id: testing
+        template: multiple_options2_combined
+
+      - id: renderers
+        template: multiple_options2_combined
+
+      - id: validation
+        template: multiple_options2_combined
+
+      - id: auth
+        template: multiple_options2_combined
+
+      - id: mobile_development
+        template: multiple_options2_combined
+
+      - id: other_frontend_frameworks
+        template: multiple_options2_combined
+
+      - id: tools_others_resources
+        items: [fm-node-js, fm-fullstack-v3]
+        template: recommended_resources
+- id: usage
+  intlId: usage_js
+  path: /usage
+  blocks:
+      - template: page_introduction
+
+      - id: what_do_you_use_react_for
+        template: multiple_options2
+
+      - id: react_version
+        template: multiple_options2
+
+      - id: kilian_valkhof
+        template: picks
+        variables:
+            url: https://www.electronjs.org/
+
+      - id: usage_type
+        template: multiple_options2_combined
+
+      - id: industry_sector
+        template: multiple_options2_combined
+
+      - id: js_app_patterns
+        template: multiple_options2_combined
+
+      - id: gustavo_vasquez
+        template: picks
+        variables:
+            url: https://medium.com/@devgustavovasquez/the-future-of-web-development-embracing-interoperable-runtimes-bd2006e9b9d7
+
+      - id: state_of_react
+        template: happiness2
+
+      - id: new_features
+        template: multiple_options2_combined
+
+      - id: usage_pain_points
+        template: multiple_options2_combined
+
+      - id: usage_resources
+        items: [fm-professional, fm-fullstack]
+        template: recommended_resources
+
+- id: resources
+  path: /resources
+  blocks:
+      - template: page_introduction
+
+      - id: learning_methods
+        template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
+
+      - id: blogs_news_magazines
+        template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
+
+      - id: sites_courses
+        template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
+
+      - id: rexhent
+        template: picks
+        variables:
+            url: https://nuxt.com/
+
+      - id: podcasts
+        template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
+
+      - id: video_creators
+        template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
+
+      - id: martin_heidegger
+        template: picks
+        variables:
+            url: https://www.npmjs.com/package/tess2
+
+      - id: people
+        template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
+
+      - id: other_surveys
+        template: multiple_options2_combined
+
+      - id: resources_resources
+        items: [fm-algorithms, fm-primeagen]
+        template: recommended_resources
+
+- id: awards
+  path: /awards
+  blocks:
+      - template: page_introduction
+
+      - id: awards
+        template: awards
+        variables:
+            entities: '"vite","esbuild","vitest","playwright","bun","astro","ember","react","nextjs","storybook","jest"'
+        awards:
+            # - id: feature_adoption_delta_award
+            #   template: award
+            #   awards:
+            #       - id: top_level_await
+            #         value: '+26.4%'
+            #       - id: array_at
+            #         value: '+14.2%'
+            #       - id: string_replace_all
+            #         value: '+9.6%'
+
+            - id: tool_usage_delta_award
+              template: award
+              awards:
+                  - id: vite
+                    value: '+25%'
+                  - id: esbuild
+                    value: '+21%'
+                  - id: vitest
+                    value: '+20%'
+
+            - id: tool_satisfaction_award
+              template: award
+              awards:
+                  - id: vite
+                    value: '98%'
+                  - id: vitest
+                    value: '96%'
+                  - id: playwright
+                    value: '95%'
+
+            - id: tool_interest_award
+              template: award
+              awards:
+                  - id: vitest
+                    value: '79%'
+                  - id: vite
+                    value: '77%'
+                  - id: playwright
+                    value: '76%'
+
+            - id: most_write_ins_award
+              template: award
+              awards:
+                  - id: bun
+                    value: '353'
+                  - id: astro
+                    value: '299'
+                  - id: ember
+                    value: '81'
+
+            # - id: most_commented_feature_award
+            #   template: award
+            #   awards:
+            #       - id: private_fields
+            #         value: 102
+            #       - id: proxies
+            #         value: 71
+            #       - id: nullish_coalescing
+            #         value: 66
+
+            - id: most_commented_tool_award
+              template: award
+              awards:
+                  - id: react
+                    value: 119
+                  - id: nextjs
+                    value: 92
+                  - id: storybook
+                    value: 72
+
+            - id: most_loved_tool_award
+              template: award
+              awards:
+                  - id: vite
+                    value: '88.7%'
+                  - id: jest
+                    value: '73.2%'
+                  - id: react
+                    value: '71.2%'
+
+      # - id: awards_resources
+      #   items: [road-to-react]
+      #   template: recommended_resources
+
+- id: conclusion
+  path: /conclusion
+  blocks:
+      - id: conclusion_cassidy
+        template: conclusion
+        variables:
+            author: cassidy_williams
+            entities: '"cassidy_williams"'
+
+      - id: conclusion_theo
+        template: conclusion
+        variables:
+            author: theo_browne
+            entities: '"theo_browne"'
+
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+        wrapBlock: false
+        disableExport: true
+
+# note: other pages need to be included in the sitemap too so they can get the proper
+# locale passed to them
+
+- id: about
+  path: /about
+  blocks:
+      - id: about_contents
+        blockType: AboutBlock
+        wrapBlock: false
+        disableExport: true
+
+- id: support
+  path: /support
+  is_hidden: true
+  blocks:
+      - id: support
+        template: page_introduction
+
+- id: sponsor_finish
+  path: /sponsor-chart-finish
+  is_hidden: true
+  blocks:
+      - id: sponsor_finish
+        blockType: SponsorFinishBlock
+        wrapBlock: false
+
+- id: notfound
+  titleId: notfound.title
+  path: /404
+  is_hidden: true
+  blocks:
+      - id: notfound
+        blockType: NotFoundBlock
+        wrapBlock: false
