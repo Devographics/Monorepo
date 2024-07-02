@@ -33,12 +33,12 @@ const commonConfig = {
 export default defineConfig([
   // We need 3 configs instead of 3 entries
   // so that all scripts are stored at the root of "/dist" folder
-  {
-    // Register your TS scripts here (custom scripts)
-    entry: ["./scripts/onServerStart.ts"],
-    format: ["esm"],
-    ...commonConfig,
-  },
+  // {
+  //   // Register your TS scripts here (custom scripts)
+  //   entry: ["./scripts/onServerStart.ts"],
+  //   format: ["esm"],
+  //   ...commonConfig,
+  // },
   {
     entry: ["./.vn/scripts/ts-sources/db/seed.ts"],
     format: ["esm"],
