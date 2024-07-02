@@ -99,6 +99,8 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              parameters:
+                  sort: { property: options }
             - template: vs_man_woman_tokyodev
 
       - id: gender
@@ -116,6 +118,8 @@
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: years
+              parameters:
+                  sort: { property: options }
             - template: vs_man_woman_tokyodev
               i18nNamespace: years
 
@@ -189,6 +193,8 @@
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: years
+              parameters:
+                  sort: { property: options }
             - template: vs_man_woman_tokyodev
               i18nNamespace: years
 
@@ -225,6 +231,8 @@
         parameters: { showNoAnswer: true, sort: { property: options } }
         variants:
             - template: vs_salary_tokyodev
+              parameters:
+                  sort: { property: options }
 
       - id: language_proficiency_japanese
         template: multiple_options2
@@ -232,6 +240,8 @@
         parameters: { showNoAnswer: true, sort: { property: options } }
         variants:
             - template: vs_salary_tokyodev
+              parameters:
+                  sort: { property: options }
             - id: language_proficiency_japanese_by_years_in_japan
               fieldId: language_proficiency_japanese
               blockType: HorizontalBarBlock2
@@ -299,6 +309,8 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              parameters:
+                  sort: { property: options }
             - id: coworker_nationalities_engineers_by_years_in_japan
               fieldId: coworker_nationalities_engineers
               blockType: HorizontalBarBlock2
@@ -319,6 +331,8 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              parameters:
+                  sort: { property: options }
             - id: coworker_nationalities_non_engineers_by_years_in_japan
               fieldId: coworker_nationalities_non_engineers
               blockType: HorizontalBarBlock2
@@ -339,6 +353,8 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              parameters:
+                  sort: { property: options }
             - template: vs_current_employer_tokyodev
 
       - id: languages_used_colleagues_english
@@ -346,6 +362,8 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              parameters:
+                  sort: { property: options }
             - template: vs_current_employer_tokyodev
 
       - id: years_employed
@@ -357,6 +375,8 @@
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: years
+              parameters:
+                  sort: { property: options }
 
       - id: hours_per_day
         template: multiple_options2
@@ -367,6 +387,7 @@
               parameters:
                   showNoAnswer: true
                   cutoff: 10
+                  sort: { property: options }
 
       - id: how_did_you_find_your_current_job
         template: multiple_options2_combined
@@ -437,6 +458,8 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              parameters:
+                  sort: { property: options }
             - id: remote_work_policy_by_years_of_experience
               fieldId: remote_work_policy
               blockType: HorizontalBarBlock2
@@ -457,6 +480,8 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              parameters:
+                  sort: { property: options }
             - template: vs_current_employer_tokyodev
 
 - id: compensation
@@ -547,6 +572,8 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
+              parameters:
+                  sort: { property: options }
 
       # - id: country_vs_salary
       #   fieldId: country
@@ -777,6 +804,8 @@
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: satisfaction
+              parameters:
+                  sort: { property: options }
             - id: life_in_japan__visa_situation_by_residency_status
               i18nNamespace: satisfaction
               fieldId: life_in_japan__visa_situation
@@ -811,6 +840,8 @@
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: satisfaction
+              parameters:
+                  sort: { property: options }
             - id: life_in_japan__professional_life_by_remote_work_policy
               i18nNamespace: satisfaction
               fieldId: life_in_japan__professional_life
@@ -849,6 +880,8 @@
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: satisfaction
+              parameters:
+                  sort: { property: options }
             # - id: life_in_japan__family_life_by_age
             #   i18nNamespace: satisfaction
             #   fieldId: life_in_japan__family_life
@@ -883,6 +916,8 @@
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: satisfaction
+              parameters:
+                  sort: { property: options }
             - id: life_in_japan__social_life_by_language_proficiency_japanese
               i18nNamespace: satisfaction
               fieldId: life_in_japan__social_life
@@ -921,6 +956,8 @@
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: satisfaction
+              parameters:
+                  sort: { property: options }
             - id: life_in_japan__cultural_adjustment_by_language_proficiency_japanese
               i18nNamespace: satisfaction
               fieldId: life_in_japan__cultural_adjustment
@@ -959,6 +996,8 @@
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: satisfaction
+              parameters:
+                  sort: { property: options }
             - template: vs_man_woman_tokyodev
               i18nNamespace: satisfaction
 
@@ -969,6 +1008,8 @@
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: satisfaction
+              parameters:
+                  sort: { property: options }
             - id: life_in_japan__housing_by_japanese_province
               i18nNamespace: satisfaction
               fieldId: life_in_japan__housing
@@ -1011,6 +1052,8 @@
         variants:
             - template: vs_salary_tokyodev
               i18nNamespace: satisfaction
+              parameters:
+                  sort: { property: options }
 
       - id: communities
         template: multiple_options2_combined
