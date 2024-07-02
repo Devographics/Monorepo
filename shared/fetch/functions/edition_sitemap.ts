@@ -32,7 +32,8 @@ export async function fetchEditionSitemap(
         fetchFunction: async () => {
             const result = await fetchGraphQLApi({
                 query,
-                key
+                key,
+                cache: "force-cache"
             })
             if (!result) {
                 throw new Error(

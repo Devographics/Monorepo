@@ -30,7 +30,9 @@ export function initRedis(url_?: string, token_?: string) {
         // redis = new Redis(redisUrl)
         redis = new Redis({
             url,
-            token
+            token,
+            // @see https://github.com/upstash/redis-js/issues/397
+            cache: "default"
         })
     }
     return redis

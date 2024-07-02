@@ -37,7 +37,7 @@ export type TProps = {
     ///** Switch between div and span */
     tag?: 'div' | 'span'
 } & // Approximation to allow other common props
-React.HTMLProps<HTMLSpanElement> &
+    React.HTMLProps<HTMLSpanElement> &
     React.HTMLProps<HTMLDivElement>
 
 /**
@@ -109,3 +109,9 @@ export function InternalT({
  *
  */
 export const DynamicT = InternalT
+
+/**
+ * If you don't want to use the client-side tokens filtering system,
+ * you can use "T" directly without using the "teapot" utility
+ */
+export const T = DynamicT

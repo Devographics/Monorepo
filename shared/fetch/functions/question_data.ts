@@ -57,11 +57,11 @@ export async function fetchQuestionData(
       const result = await fetchGraphQLApi({
         query,
         key,
+        cache: "force-cache"
       });
       if (!result) {
         throw new Error(
-          `Couldn't fetch data for question ${questionId}, result: ${
-            result && JSON.stringify(result)
+          `Couldn't fetch data for question ${questionId}, result: ${result && JSON.stringify(result)
           }`
         );
       }

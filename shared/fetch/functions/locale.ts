@@ -24,7 +24,8 @@ export const fetchLocale = async (
         fetchFunction: async () => {
             const result = await fetchGraphQLApi({
                 query,
-                key
+                key,
+                cache: "force-cache"
             })
             if (!result) throw new Error(`Couldn't fetch locale ${localeId}`)
             const locale = result.locale

@@ -294,13 +294,14 @@ export async function getFromCache<T = any>({
         return result
     } catch (error: any) {
         // rethrow Next.js error
-        // @see  https://nextjs.org/docs/messages/dynamic-server-error
-        if (error?.digest === "DYNAMIC_SERVER_USAGE") throw error
         console.error('// getFromCache error')
-        console.error(error)
+        console.error(error, Object.keys(error))
         console.debug(`🔴 [${key}] error when fetching from Redis or source ${calledFromLog}`)
         memoryCache.del(key)
-        if (shouldThrow) {
+        // always throw Next.js config related errors
+        // @see  https://nextjs.org/docs/messages/dynamic-server-error
+        const mustThrow = error.digest === "DYNAMIC_SERVER_USAGE"
+        if (mustThrow || shouldThrow) {
             throw error
         } else {
             const result = { error: error.message } as FetchPayloadSuccessOrError<T>
@@ -337,7 +338,7 @@ export const fetchGraphQLApi = async <T = any>({
     apiUrl?: string
     /**
      * Override Next.js caching
-     * "no-store" will prevent static rendering
+     * Using "no-store" will prevent static rendering
      * @see https://developer.mozilla.org/en-US/docs/Web/API/Request/cache
      */
     cache?: RequestCache

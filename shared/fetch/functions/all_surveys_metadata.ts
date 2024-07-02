@@ -15,7 +15,7 @@ export const fetchSurveysMetadata = async (options?: FetcherFunctionOptions) => 
     const result = await getFromCache<Array<SurveyMetadata>>({
         key,
         fetchFunction: async () => {
-            const result = await fetchGraphQLApi({ query, key })
+            const result = await fetchGraphQLApi({ query, key, cache: "force-cache" })
             if (!result) throw new Error(`Couldn't fetch surveys`)
             const surveys = result._metadata.surveys as SurveyMetadata[]
             return surveys
