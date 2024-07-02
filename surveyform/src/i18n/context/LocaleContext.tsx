@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, ReactNode } from "react";
 import {
   IntlContextProvider,
   StringsRegistry,
@@ -75,7 +75,7 @@ export const LocaleContextProvider = (props: {
   locales: Array<LocaleDef>;
   /** Optionally store the selected locale */
   updateUser?: any;
-  children: React.ReactNode;
+  children: ReactNode;
   /** Context to add to the default ones */
   contexts?: Array<string>;
 }) => {

@@ -111,7 +111,7 @@ const Score = ({
       usage_count: usage.count,
       rank,
     },
-  });
+  })?.t;
 
   // if (loading) return <Components.Loading />;
   // if (error) return <span>Could not load entities</span>;
