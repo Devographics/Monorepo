@@ -293,6 +293,9 @@ export async function getFromCache<T = any>({
         result.duration = endAt.getTime() - startAt.getTime()
         return result
     } catch (error: any) {
+        // rethrow Next.js error
+        // @see  https://nextjs.org/docs/messages/dynamic-server-error
+        if (error?.digest === "DYNAMIC_SERVER_USAGE") throw error
         console.error('// getFromCache error')
         console.error(error)
         console.debug(`🔴 [${key}] error when fetching from Redis or source ${calledFromLog}`)
