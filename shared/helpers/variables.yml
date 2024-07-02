@@ -56,6 +56,14 @@
       - surveyform
       - results
 
+- id: DEFAULT_LOCALE_CONTEXTS
+  optional: true
+  description: List of default locale contexts to load
+  example: common,surveys,accounts
+  usedBy:
+      - surveyform
+      - results
+
 - id: NODE_ENV
   aliases:
       - NEXT_PUBLIC_NODE_ENV
