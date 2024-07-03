@@ -47,7 +47,7 @@ const loadLocalesFromGitHubSameRepo = async ({
         if (localeIds && localeIds.length > 0 && localeIds.includes(localeId)) {
             i++
             console.log(
-                `-> loading directory ${localeDirectory.name || localeDirectory.full_name} (${i}/${
+                `📁 loading directory ${localeDirectory.name || localeDirectory.full_name} (${i}/${
                     localeDirectories.length
                 }) (/repos/${org}/${repo}/contents/${localeDirectory.path})`
             )
@@ -108,13 +108,14 @@ const loadLocalesFromGitHubMultiRepo = async ({
     for (const localeRepo of localeRepos) {
         const localeId = localeRepo.name.replace('locale-', '')
         i++
-        console.log(`-> loading repo ${localeRepo.full_name} (${i}/${localeRepos.length})`)
+        console.log(`📁 loading repo ${localeRepo.full_name} (${i}/${localeRepos.length})`)
         const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
             owner: org,
             repo: localeRepo.name,
             path: ''
         })
         const localeRawData = await processGitHubLocale(contents, localeRepo, pathIndex)
+
         const existingLocaleIndex = locales.findIndex(l => l.id === localeRawData.id)
         if (existingLocaleIndex !== -1) {
             locales[existingLocaleIndex] = mergeLocales(locales[existingLocaleIndex], localeRawData)
@@ -126,6 +127,7 @@ const loadLocalesFromGitHubMultiRepo = async ({
 
 const processGitHubLocale = async (contents: any, localeRepo: any, pathIndex: number) => {
     const files = contents.data as any[]
+    const localeFiles: string[] = []
     const localeConfigFile = files.find(f => f.name === 'config.yml')
     if (!localeConfigFile) {
         throw new Error(`Could not find config.yml file for locale ${localeRepo.full_name}`)
@@ -147,6 +149,7 @@ const processGitHubLocale = async (contents: any, localeRepo: any, pathIndex: nu
                 const strings = yamlContents.translations
                 const context = file.name.replace('./', '').replace('.yml', '')
                 addToAllContexts(context)
+                localeFiles.push(file.name)
                 localeRawData.stringFiles.push({
                     strings,
                     url: file.download_url,
@@ -161,6 +164,8 @@ const processGitHubLocale = async (contents: any, localeRepo: any, pathIndex: nu
     logToFile(`locales_raw/github_${localeConfig.id}_${pathIndex}.yml`, localeRawData, {
         mode: 'overwrite'
     })
+    console.log(`-> 📄 Processeded ${localeFiles.length} files (${localeFiles.join(', ')})`)
+
     return localeRawData
 }
 

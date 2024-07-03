@@ -189,7 +189,7 @@ const getGlobalMetadataResolver = (): ResolverType => async (parent, args) => {
 const getSurveyResolver =
     ({ survey }: { survey: SurveyApiObject }): ResolverType =>
     (parent, args, context, info) => {
-        console.log('// survey resolver')
+        console.log(`// survey resolver: ${survey.id}`)
         return survey
     }
 
@@ -204,7 +204,7 @@ copy of the survey metadata from memory
 const getSurveyMetadataResolver =
     ({ survey }: { survey: SurveyApiObject }): ResolverType =>
     async (parent, args, context, info) => {
-        console.log('// survey metadata resolver')
+        console.log(`// survey metadata resolver: ${survey.id}`)
         const parsedSurveys = await loadOrGetParsedSurveys()
         const freshSurvey = parsedSurveys.find(s => s.id === survey.id)
         return freshSurvey
@@ -213,7 +213,7 @@ const getSurveyMetadataResolver =
 const getEditionResolver =
     ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
     (parent, args, context, info) => {
-        console.log('// edition resolver')
+        console.log(`// edition resolver: ${edition.id}`)
         return edition
     }
 
@@ -225,7 +225,7 @@ See getSurveyMetadataResolver() note above
 const getEditionMetadataResolver =
     ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
     async (parent, args, context, info) => {
-        console.log('// edition metadata resolver')
+        console.log(`// edition metadata resolver: ${edition.id}`)
         const freshEdition = await getEditionById(edition.id)
         const sections = freshEdition.sections.map(section => ({
             ...section,
