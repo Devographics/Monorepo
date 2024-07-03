@@ -2,17 +2,17 @@
     "name": "graphiql",
     "private": true,
     "dependencies": {
-        "@graphiql/plugin-explorer": "^0.3.0",
-        "@graphiql/toolkit": "^0.8.4",
-        "@types/jest": "^29.5.3",
-        "@types/node": "^20.4.1",
-        "@types/react": "^18.2.14",
-        "@types/react-dom": "^18.2.6",
-        "dotenv": "^16.3.1",
-        "graphiql": "^3.0.0",
-        "graphql": "^16.7.1",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
+        "@graphiql/plugin-explorer": "^0.3.5",
+        "@graphiql/toolkit": "^0.9.1",
+        "@types/jest": "^29.5.12",
+        "@types/node": "^20.14.9",
+        "@types/react": "^18.3.3",
+        "@types/react-dom": "^18.3.0",
+        "dotenv": "^16.4.5",
+        "graphiql": "^3.3.2",
+        "graphql": "^16.9.0",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
         "react-scripts": "5.0.1"
     },
     "scripts": {
@@ -20,7 +20,8 @@
         "dev-production": "PORT=4031 REACT_APP_API_URL=https://api.devographics.com/graphql react-scripts start",
         "dev-staging": "PORT=4032 REACT_APP_API_URL=https://api-staging.devographics.com/graphql react-scripts start",
         "tokyodev": "PORT=5030 REACT_APP_API_URL=http://localhost:5020/graphql react-scripts start",
-        "build": "react-scripts build"
+        "build": "react-scripts build",
+        "typecheck": "tsc --noEmit --p ./tsconfig.json"
     },
     "browserslist": {
         "production": [
