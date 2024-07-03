@@ -24,10 +24,11 @@ const IndexPage = async ({ params }: NextPageParams<{ lang: string }>) => {
   setLocaleIdServerContext(params.lang);
   const { locale, localeId, error } = await rscLocaleFromParams(params);
   if (error) {
-    return;
-    <div>
-      Can't load translations: <code>{JSON.stringify(error)}</code>
-    </div>;
+    return (
+      <div>
+        Can't load translations: <code>{JSON.stringify(error)}</code>
+      </div>
+    );
   }
   return (
     <I18nContextProvider locale={locale}>
