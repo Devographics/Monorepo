@@ -1,7 +1,7 @@
 import { initMemoryCache } from '../init'
 import { RequestContext, WatchedItem } from '../types'
 import chokidar from 'chokidar'
-import { splitEnvVar } from '../load/helpers'
+import { parseEnvVariableArray } from '@devographics/helpers'
 
 type Config = {
     [K in WatchedItem]?: string
@@ -23,7 +23,7 @@ export const watchFiles = async ({
 
     for (const itemType of items) {
         const dirPathString = config[itemType]
-        const dirPathArray = splitEnvVar(dirPathString)
+        const dirPathArray = parseEnvVariableArray(dirPathString)
         if (dirPathArray) {
             for (const dirPath of dirPathArray) {
                 console.log(`👓 Starting to watch ${itemType} directory (${dirPath})…`)

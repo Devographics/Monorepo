@@ -126,5 +126,3 @@ export const getEntityType = (entity: Entity) => {
         return EntityType.DEFAULT
     }
 }
-
-export const splitEnvVar = (v?: string) => v?.split(',').map(s => trim(s))

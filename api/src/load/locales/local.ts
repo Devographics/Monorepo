@@ -9,7 +9,7 @@ import { LoadAllOptions, addToAllContexts, excludedFiles, mergeLocales } from '.
 
 // when developing locally, load from local files
 export const loadAllLocally = async (options: LoadAllOptions = {}): Promise<RawLocale[]> => {
-    const { localeIds } = options
+    const { localeIds, localeContexts = [] } = options
     let i = 0
     let locales: RawLocale[] = []
 
@@ -53,12 +53,14 @@ export const loadAllLocally = async (options: LoadAllOptions = {}): Promise<RawL
                     const yamlContents: any = yaml.load(contents)
                     const strings = yamlContents.translations
                     const context = fileName.replace('./', '').replace('.yml', '')
-                    addToAllContexts(context)
-                    localeRawData.stringFiles.push({
-                        strings,
-                        url: filePath,
-                        context
-                    })
+                    if (localeContexts.length === 0 || localeContexts.includes(context)) {
+                        addToAllContexts(context)
+                        localeRawData.stringFiles.push({
+                            strings,
+                            url: filePath,
+                            context
+                        })
+                    }
                 }
             }
             logToFile(`locales_raw/filesystem_${localeConfig.id}_${pathIndex}.yml`, localeRawData)

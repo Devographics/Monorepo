@@ -3,10 +3,9 @@ import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import last from 'lodash/last.js'
-import { EnvVar, getEnvVar } from '@devographics/helpers'
+import { EnvVar, getEnvVar, parseEnvVariableArray } from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
 
-import { splitEnvVar } from '../helpers'
 import { LoadAllOptions, addToAllContexts, excludedFiles, mergeLocales } from './locales'
 
 /*
@@ -17,6 +16,7 @@ import { LoadAllOptions, addToAllContexts, excludedFiles, mergeLocales } from '.
 const loadLocalesFromGitHubSameRepo = async ({
     locales,
     localeIds,
+    localeContexts,
     pathIndex,
     org,
     repo,
@@ -24,6 +24,7 @@ const loadLocalesFromGitHubSameRepo = async ({
 }: {
     locales: RawLocale[]
     localeIds?: string[]
+    localeContexts?: string[]
     pathIndex: number
     org: string
     repo: string
@@ -56,7 +57,12 @@ const loadLocalesFromGitHubSameRepo = async ({
                 repo,
                 path: localeDirectory.path
             })
-            const localeRawData = await processGitHubLocale(contents, localeDirectory, pathIndex)
+            const localeRawData = await processGitHubLocale({
+                contents,
+                localeRepo: localeDirectory,
+                pathIndex,
+                localeContexts
+            })
             const existingLocaleIndex = locales.findIndex(l => l.id === localeRawData.id)
             if (existingLocaleIndex !== -1) {
                 locales[existingLocaleIndex] = mergeLocales(
@@ -78,11 +84,13 @@ const loadLocalesFromGitHubSameRepo = async ({
 const loadLocalesFromGitHubMultiRepo = async ({
     locales,
     localeIds,
+    localeContexts,
     pathIndex,
     org
 }: {
     locales: RawLocale[]
     localeIds?: string[]
+    localeContexts?: string[]
     pathIndex: number
     org: string
 }) => {
@@ -114,7 +122,12 @@ const loadLocalesFromGitHubMultiRepo = async ({
             repo: localeRepo.name,
             path: ''
         })
-        const localeRawData = await processGitHubLocale(contents, localeRepo, pathIndex)
+        const localeRawData = await processGitHubLocale({
+            contents,
+            localeRepo,
+            pathIndex,
+            localeContexts
+        })
 
         const existingLocaleIndex = locales.findIndex(l => l.id === localeRawData.id)
         if (existingLocaleIndex !== -1) {
@@ -125,7 +138,17 @@ const loadLocalesFromGitHubMultiRepo = async ({
     }
 }
 
-const processGitHubLocale = async (contents: any, localeRepo: any, pathIndex: number) => {
+const processGitHubLocale = async ({
+    contents,
+    localeRepo,
+    pathIndex,
+    localeContexts = []
+}: {
+    contents: any
+    localeRepo: any
+    pathIndex: number
+    localeContexts?: string[]
+}) => {
     const files = contents.data as any[]
     const localeFiles: string[] = []
     const localeConfigFile = files.find(f => f.name === 'config.yml')
@@ -148,13 +171,15 @@ const processGitHubLocale = async (contents: any, localeRepo: any, pathIndex: nu
                 const yamlContents: any = yaml.load(contents)
                 const strings = yamlContents.translations
                 const context = file.name.replace('./', '').replace('.yml', '')
-                addToAllContexts(context)
-                localeFiles.push(file.name)
-                localeRawData.stringFiles.push({
-                    strings,
-                    url: file.download_url,
-                    context
-                })
+                if (localeContexts.length === 0 || localeContexts.includes(context)) {
+                    addToAllContexts(context)
+                    localeFiles.push(file.name)
+                    localeRawData.stringFiles.push({
+                        strings,
+                        url: file.download_url,
+                        context
+                    })
+                }
             } catch (error) {
                 console.log(`// Error loading file ${file.name}`)
                 console.log(error)
@@ -170,8 +195,8 @@ const processGitHubLocale = async (contents: any, localeRepo: any, pathIndex: nu
 }
 
 export const loadAllFromGitHub = async (options: LoadAllOptions = {}): Promise<RawLocale[]> => {
-    const { localeIds } = options
-    const localesPathArray = splitEnvVar(getEnvVar(EnvVar.GITHUB_PATH_LOCALES))
+    const { localeIds, localeContexts } = options
+    const localesPathArray = parseEnvVariableArray(getEnvVar(EnvVar.GITHUB_PATH_LOCALES))
     let locales: RawLocale[] = []
     if (localesPathArray) {
         let pathIndex = 0
@@ -182,13 +207,20 @@ export const loadAllFromGitHub = async (options: LoadAllOptions = {}): Promise<R
                 await loadLocalesFromGitHubSameRepo({
                     locales,
                     localeIds,
+                    localeContexts,
                     pathIndex,
                     org,
                     repo,
                     dir
                 })
             } else if (org) {
-                await loadLocalesFromGitHubMultiRepo({ locales, localeIds, pathIndex, org })
+                await loadLocalesFromGitHubMultiRepo({
+                    locales,
+                    localeIds,
+                    localeContexts,
+                    pathIndex,
+                    org
+                })
             } else {
                 throw new Error(
                     'loadAllFromGitHub: Variable GITHUB_PATH_LOCALES ("org/repo/dir") did not contain an [org] segment'

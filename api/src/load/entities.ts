@@ -2,13 +2,11 @@
 import { Entity, EntityType } from '@devographics/types'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
-import yaml from 'js-yaml'
 import { readdir, readFile, stat } from 'fs/promises'
-import { EnvVar, getEnvVar } from '@devographics/helpers'
+import { EnvVar, getEnvVar, parseEnvVariableArray } from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
 
 import path from 'path'
-import marked from 'marked'
 
 // import hljs from 'highlight.js/lib/common'
 
@@ -25,8 +23,7 @@ import {
     getEntityType,
     getIdFromFileName,
     highlightEntitiesExampleCode,
-    parseEntitiesMarkdown,
-    splitEnvVar
+    parseEntitiesMarkdown
 } from './helpers'
 
 let Entities: Entity[] = []
@@ -54,7 +51,7 @@ export const loadOrGetEntities = async (
 
 export const loadFromGitHub = async () => {
     const octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
-    const entitiesPathArray = splitEnvVar(getEnvVar(EnvVar.GITHUB_PATH_ENTITIES))
+    const entitiesPathArray = parseEnvVariableArray(getEnvVar(EnvVar.GITHUB_PATH_ENTITIES))
 
     let entities: Entity[] = []
 
@@ -140,7 +137,7 @@ const getGitHubDirEntities = async (
 
 // when developing locally, load from local files
 export const loadLocally = async () => {
-    const entitiesPathArray = splitEnvVar(getEnvVar(EnvVar.ENTITIES_PATH))
+    const entitiesPathArray = parseEnvVariableArray(getEnvVar(EnvVar.ENTITIES_PATH))
     const entitiesDirPaths = entitiesPathArray?.map(dirPath => path.resolve(dirPath))
     let entities: Entity[] = []
     if (entitiesDirPaths) {

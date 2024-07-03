@@ -56,6 +56,13 @@
       - surveyform
       - results
 
+- id: LOCALE_CONTEXTS
+  optional: true
+  description: Restrict the list of contexts to be loaded
+  example: common, survey, results
+  usedBy:
+      - api
+
 - id: DEFAULT_LOCALE_CONTEXTS
   optional: true
   description: List of default locale contexts to load

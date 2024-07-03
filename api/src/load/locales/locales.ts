@@ -1,9 +1,8 @@
 import { Locale, RawLocale } from '@devographics/types'
-import { EnvVar, getEnvVar } from '@devographics/helpers'
+import { EnvVar, getEnvVar, parseEnvVariableArray } from '@devographics/helpers'
 
 import { RequestContext } from '../../types'
 import { processLocales } from '../../helpers/locales'
-import { splitEnvVar } from '../helpers'
 import { loadAllLocally } from './local'
 import { loadAllFromGitHub } from './github'
 
@@ -24,6 +23,7 @@ export const getAllContexts = () => {
 
 export interface LoadAllOptions {
     localeIds?: string[]
+    localeContexts?: string[]
 }
 
 export const mergeLocales = (locale1: RawLocale, locale2: RawLocale) => {
@@ -53,8 +53,9 @@ export const loadOrGetLocales = async (
 ): Promise<Array<Locale>> => {
     const { forceReload } = options
     const localeIds = getLocaleIds()
+    const contextsIds = getContextsIds()
     if (forceReload || Locales.length === 0) {
-        const rawLocales = await loadLocales(localeIds)
+        const rawLocales = await loadLocales(localeIds, contextsIds)
         Locales = processLocales(rawLocales)
         if (context) {
             context.locales = Locales
@@ -72,27 +73,33 @@ export const getLocalesLoadMethod = () => (getEnvVar(EnvVar.LOCALES_PATH) ? 'loc
 
 export const getLocaleIds = () => {
     const enableFastBuild = process.env.FAST_BUILD === 'true'
-    const envLocaleIds = splitEnvVar(getEnvVar(EnvVar.LOCALE_IDS))
+    const envLocaleIds = parseEnvVariableArray(getEnvVar(EnvVar.LOCALE_IDS))
     const localeIds = enableFastBuild ? ['en-US', 'ru-RU'] : envLocaleIds || []
     return localeIds
 }
 
+export const getContextsIds = () => {
+    return parseEnvVariableArray(getEnvVar(EnvVar.LOCALE_CONTEXTS))
+}
 /*
 
 Load locales contents through GitHub API or locally
 
 */
-export const loadLocales = async (localeIds: string[] = []): Promise<RawLocale[]> => {
+export const loadLocales = async (
+    localeIds: string[] = [],
+    localeContexts: string[] = []
+): Promise<RawLocale[]> => {
     const mode = getLocalesLoadMethod()
     console.log(
         `🌐 loading locales… (mode: ${mode} ${
             localeIds.length > 0 ? `; localeIds: ${localeIds.join(', ')}` : ''
-        })`
+        }${localeContexts.length > 0 ? `; localeContexts: ${localeContexts.join(', ')}` : ''})`
     )
     const locales =
         mode === 'local'
-            ? await loadAllLocally({ localeIds })
-            : await loadAllFromGitHub({ localeIds })
+            ? await loadAllLocally({ localeIds, localeContexts })
+            : await loadAllFromGitHub({ localeIds, localeContexts })
     console.log('🌐 done loading locales')
     return locales
 }
