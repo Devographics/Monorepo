@@ -17,7 +17,7 @@ import {
   rscLocale,
   rscLocaleFromParams,
 } from "~/lib/api/rsc-fetchers";
-import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
+// import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
 import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 interface SurveyPageServerProps {
@@ -60,7 +60,13 @@ export default async function SurveyLayout({
     lang: params.lang,
     contexts: [...i18nContexts, ...getCommonContexts()],
   });
-  if (localeError) return <div>Can't load translations</div>;
+  if (localeError) {
+    return (
+      <div>
+        Can't load translations: <code>{JSON.stringify(localeError)}</code>
+      </div>
+    );
+  }
   // locales lists
   const {
     data: locales,

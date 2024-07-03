@@ -21,18 +21,19 @@ export async function generateStaticParams() {
 */
 
 const IndexPage = async ({ params }: NextPageParams<{ lang: string }>) => {
-  setLocaleIdServerContext(params.lang)
-  const { locale, localeId, error } = await rscLocaleFromParams(params)
-  if (error) return <div>Can't load translations</div>
+  setLocaleIdServerContext(params.lang);
+  const { locale, localeId, error } = await rscLocaleFromParams(params);
+  if (error) {
+    return;
+    <div>
+      Can't load translations: <code>{JSON.stringify(error)}</code>
+    </div>;
+  }
   return (
-    <I18nContextProvider
-      locale={locale}
-    >
+    <I18nContextProvider locale={locale}>
       <RSCFetch
         fetch={async () => rscFetchSurveysMetadata({ shouldThrow: false })}
-        render={({ data: surveys }) => (
-          <Surveys surveys={surveys} />
-        )}
+        render={({ data: surveys }) => <Surveys surveys={surveys} />}
       />
     </I18nContextProvider>
   );
