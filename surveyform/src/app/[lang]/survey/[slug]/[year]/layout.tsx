@@ -6,14 +6,17 @@ import { rscMustGetSurveyEditionFromUrl } from "./rsc-fetchers";
 import ClientLayout from "~/app/[lang]/ClientLayout";
 import EditionLayout from "~/components/common/EditionLayout";
 
-
 import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import {
   getCommonContexts,
   getEditionContexts,
   safeLocaleIdFromParams,
 } from "~/i18n/config";
-import { rscAllLocalesMetadata, rscLocale, rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
+import {
+  rscAllLocalesMetadata,
+  rscLocale,
+  rscLocaleFromParams,
+} from "~/lib/api/rsc-fetchers";
 import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
 import { setLocaleIdServerContext } from "~/i18n/rsc-context";
@@ -29,9 +32,9 @@ export async function generateMetadata({
   params: SurveyPageServerProps;
 }): Promise<Metadata | undefined> {
   // TODO: it seems we need to call this initialization code on all relevant pages/layouts
-  return await rscGetMetadata({ params });
+  return undefined;
+  // return await rscGetMetadata({ params });
 }
-
 
 /**
  * TODO: get the list of surveys statically during getStaticParams call
@@ -45,12 +48,19 @@ export default async function SurveyLayout({
   children: React.ReactNode;
   params: { slug: string; year: string; lang: string };
 }) {
-  setLocaleIdServerContext(params.lang) // Needed for "ServerT"
+  setLocaleIdServerContext(params.lang); // Needed for "ServerT"
   const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
   const i18nContexts = getEditionContexts({ edition });
   // TODO: should we load common contexts here ? They may already be fetched by the common layout ?
-  const { locale, localeId, error: localeError } = await rscLocaleFromParams({ lang: params.lang, contexts: [...i18nContexts, ...getCommonContexts()] })
-  if (localeError) return <div>Can't load translations</div>
+  const {
+    locale,
+    localeId,
+    error: localeError,
+  } = await rscLocaleFromParams({
+    lang: params.lang,
+    contexts: [...i18nContexts, ...getCommonContexts()],
+  });
+  if (localeError) return <div>Can't load translations</div>;
   // locales lists
   const {
     data: locales,

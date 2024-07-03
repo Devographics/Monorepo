@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { SectionProvider } from "~/components/SectionContext/SectionProvider";
-import {
-  rscGetSurveyEditionFromUrl
-} from "../../rsc-fetchers";
+import { rscGetSurveyEditionFromUrl } from "../../rsc-fetchers";
 import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
 
 interface SurveySectionParams {
@@ -16,8 +14,9 @@ export async function generateMetadata({
   params,
 }: {
   params: SurveySectionParams;
-}): Promise<Metadata> {
-  return await rscGetMetadata({ params });
+}): Promise<Metadata | undefined> {
+  return undefined;
+  // return await rscGetMetadata({ params });
 }
 
 export default async function WithSectionLayout({
