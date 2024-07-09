@@ -290,19 +290,19 @@
 
             - id: animation_libraries
               template: multiple_options2_combined
-              i18nNamespace: features
+              i18nNamespace: other_tools
 
             - id: data_visualization_libraries
               template: multiple_options2_combined
-              i18nNamespace: features
+              i18nNamespace: other_tools
 
             - id: form_libraries
               template: multiple_options2_combined
-              i18nNamespace: features
+              i18nNamespace: other_tools
 
             - id: css_tools
               template: multiple_options2_combined
-              i18nNamespace: features
+              i18nNamespace: other_tools
 
             - id: component_libraries_pain_points
               template: multiple_options2_freeform
@@ -319,7 +319,7 @@
 
             - id: state_management_experience
               template: multi_items_experience
-              i18nNamespace: tools
+              i18nNamespace: other_tools
 
             - id: state_management_others
               template: section_prenormalized_tools
@@ -366,19 +366,19 @@
 
             - id: build_tools
               template: multiple_options2_combined
-              i18nNamespace: features
+              i18nNamespace: other_tools
 
             - id: hosting
               template: multiple_options2_combined
-              i18nNamespace: features
+              i18nNamespace: other_tools
 
             - id: other_services
               template: multiple_options2_combined
-              i18nNamespace: features
+              i18nNamespace: other_tools
 
             - id: backend_language
               template: multiple_options2_combined
-              i18nNamespace: features
+              i18nNamespace: other_tools
 
             - id: back_end_infrastructure_pain_points
               template: multiple_options2_freeform
@@ -416,7 +416,6 @@
         items: [fm-node-js, fm-fullstack-v3]
         template: recommended_resources
 - id: usage
-  intlId: usage_js
   path: /usage
   blocks:
       - template: page_introduction
@@ -446,14 +445,14 @@
         variables:
             url: https://medium.com/@devgustavovasquez/the-future-of-web-development-embracing-interoperable-runtimes-bd2006e9b9d7
 
-      - id: state_of_react
-        template: happiness2
+      # - id: state_of_react
+      #   template: happiness2
 
       - id: new_features
         template: multiple_options2_combined
 
       - id: usage_pain_points
-        template: multiple_options2_combined
+        template: multiple_options2_freeform
 
       - id: usage_resources
         items: [fm-professional, fm-fullstack]
@@ -465,17 +464,17 @@
       - template: page_introduction
 
       - id: learning_methods
-        template: multiple_options2_freeform
+        template: multiple_options2_combined
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
 
       - id: blogs_news_magazines
-        template: multiple_options2_freeform
+        template: multiple_options2_combined
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
 
       - id: sites_courses
-        template: multiple_options2_freeform
+        template: multiple_options2_combined
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
 
@@ -485,7 +484,7 @@
             url: https://nuxt.com/
 
       - id: podcasts
-        template: multiple_options2_freeform
+        template: multiple_options2_combined
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
 

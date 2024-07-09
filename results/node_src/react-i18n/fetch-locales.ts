@@ -48,8 +48,13 @@ export const getLocalesGraphQL = async ({ graphql, contexts, key }) => {
         )
     )
     logToFile(`locales/${key}.json`, localesResults)
-    const locales = localesResults.data.dataAPI.locales
-    return locales
+    try {
+        const locales = localesResults.data.dataAPI.locales
+        return locales
+    } catch (error) {
+        const graphqlError = localesResults?.errors?.[0]?.message
+        throw graphqlError || error
+    }
 }
 
 export const getLocaleContextGraphQL = async ({ localeId, context, graphql, key }) => {

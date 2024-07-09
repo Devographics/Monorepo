@@ -30,15 +30,15 @@ export const ViewSwitcher = ({
         const isEnabled = sort === optionId
         if (optionId === DEFAULT_SORT) {
             setSort(undefined)
-            setOrder(OrderOptions.ASC)
+            setOrder(OrderOptions.DESC)
         } else if (!isEnabled) {
             setSort(optionId as string)
-            setOrder(OrderOptions.ASC)
-        } else if (sort && order === OrderOptions.ASC) {
             setOrder(OrderOptions.DESC)
+        } else if (sort && order === OrderOptions.DESC) {
+            setOrder(OrderOptions.ASC)
         } else {
             setSort(undefined)
-            setOrder(OrderOptions.ASC)
+            setOrder(OrderOptions.DESC)
         }
     }
 
