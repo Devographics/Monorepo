@@ -17,6 +17,9 @@ import { BlockVariantDefinition } from 'core/types'
 import uniq from 'lodash/uniq'
 import { RowSingle } from '../rows/RowSingle'
 import { RowStacked } from '../rows/RowStacked'
+import { allDataFilters } from '../helpers/steps'
+
+console.log(allDataFilters)
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -35,6 +38,9 @@ export const getChartCurrentEdition = ({
     return currentEdition
 }
 
+const getDataFilters = (dataFilters: string[]) =>
+    dataFilters.map(filterName => allDataFilters[filterName])
+
 export const getChartBuckets = ({
     serie,
     block,
@@ -46,12 +52,16 @@ export const getChartBuckets = ({
 }) => {
     const { view, sort, facet, order, rowsLimit } = chartState
     const { viewDefinition } = chartState
-    const { dataFilters: steps, getValue } = viewDefinition
+    const { dataFilters: viewDataFilters, getValue } = viewDefinition
     const currentEdition = getChartCurrentEdition({ serie, block })
 
     let buckets = currentEdition.buckets
-    if (steps) {
-        buckets = applySteps(buckets, steps)
+
+    const { chartOptions = {} } = block
+    const { dataFilters: blockDataFilters } = chartOptions
+    const dataFilters = (blockDataFilters && getDataFilters(blockDataFilters)) || viewDataFilters
+    if (dataFilters) {
+        buckets = applySteps(buckets, dataFilters)
     }
     if (sort && getValue) {
         if (facet) {

@@ -8,6 +8,7 @@ query: currentEditionData
 parameters:
     showNoAnswer: true
     cutoff: 10
+    sort: { property: medianByFacet }
 filtersState:
     options:
         mode: facet

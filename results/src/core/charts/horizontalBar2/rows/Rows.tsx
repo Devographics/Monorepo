@@ -4,6 +4,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react'
 import Axis from '../../common2/Axis'
 import { ShowAll } from '../../common2/ShowAll'
 import { HorizontalBarViewProps } from '../types'
+import { applyRowsLimit } from 'core/charts/multiItemsExperience/helpers'
 
 export const Rows = ({
     chartState,
@@ -29,7 +30,7 @@ export const Rows = ({
 
             {children}
 
-            {chartState.rowsLimit && chartState.rowsLimit < chartValues.totalRows ? (
+            {applyRowsLimit(chartState.rowsLimit, chartValues.totalRows) ? (
                 <ShowAll chartState={chartState} chartValues={chartValues} />
             ) : null}
 

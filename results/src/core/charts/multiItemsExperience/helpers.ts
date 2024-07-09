@@ -285,6 +285,9 @@ export const applyRatio = <T extends Dimension>(cellDimensions: T[], ratio: numb
         offset: round(offset * ratio, 1)
     }))
 
+export const applyRowsLimit = (rowsLimit: number, totalRows: number) =>
+    rowsLimit && rowsLimit + 3 < totalRows
+
 export const useChartState = (defaultState?: {
     [P in keyof MultiItemsChartState]?: MultiItemsChartState[P]
 }) => {

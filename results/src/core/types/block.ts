@@ -37,6 +37,7 @@ export interface BlockQueryOptions {
     addQuestionEntity?: boolean
     addQuestionComments?: boolean
     subField?: ResultsSubFieldEnum
+    sectionId?: string
 }
 
 export interface BlockDefinition {
@@ -107,6 +108,7 @@ export interface BlockVariantDefinition {
 
 export interface ChartOptions {
     limit?: number
+    dataFilters?: string[]
 }
 
 export interface BlockWithAwards {

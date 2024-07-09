@@ -36,3 +36,14 @@ export const removeOverLimit: DataFilter = buckets => {
 export const removeUnderCutoff: DataFilter = buckets => {
     return buckets.filter(b => b.id !== CUTOFF_ANSWERS)
 }
+
+type AllDataFilters = { [key: string]: DataFilter }
+
+export const allDataFilters: AllDataFilters = {
+    removeOtherAnswers,
+    removeNoAnswer,
+    removeOverall,
+    removeNotApplicable,
+    removeOverLimit,
+    removeUnderCutoff
+}

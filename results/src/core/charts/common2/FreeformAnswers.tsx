@@ -81,7 +81,7 @@ export const FreeformAnswersTrigger = (props: {
     const queryOptions = {
         surveyId,
         editionId,
-        sectionId,
+        sectionId: block?.queryOptions?.sectionId || sectionId,
         questionId,
         token: id.replace(CATCHALL_PREFIX, '')
     }

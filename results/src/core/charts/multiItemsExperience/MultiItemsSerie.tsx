@@ -5,6 +5,7 @@ import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types
 import { CellDimension } from './types'
 import {
     applyRatio,
+    applyRowsLimit,
     combineItems,
     getCellDimensions,
     getItemTotals,
@@ -67,7 +68,7 @@ export const MultiItemsSerie = (
 
     const chartValues = useChartValues({ items: combinedItems, chartState, question })
 
-    if (chartState.rowsLimit) {
+    if (applyRowsLimit(chartState.rowsLimit, combinedItems.length)) {
         combinedItems = take(combinedItems, chartState.rowsLimit)
     }
 

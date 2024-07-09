@@ -88,6 +88,8 @@
             TODO
         variants:
             - template: vs_salary
+              parameters:
+                  sort: { property: options }
 
       - id: years_of_experience
         template: multiple_options2
@@ -95,6 +97,8 @@
             TODO
         variants:
             - template: vs_salary
+              parameters:
+                  sort: { property: options }
 
       - id: company_size
         template: multiple_options2
@@ -102,6 +106,8 @@
             TODO
         variants:
             - template: vs_salary
+              parameters:
+                  sort: { property: options }
 
       - id: variants_hint
         template: hint
@@ -170,73 +176,99 @@
         chartOptions:
             limit: 10
 
+      - id: main_apis_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        parameters: { limit: 10 }
+        queryOptions:
+            sectionId: main_apis
+
+      - id: hooks_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        parameters: { limit: 10 }
+        queryOptions:
+            sectionId: hooks
+
+      - id: new_apis_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        parameters: { limit: 10 }
+        queryOptions:
+            sectionId: new_apis
+
       - id: reading_list
         # template: reading_list
         template: multiple_options2
+        parameters:
+            limit: 20
         queryOptions:
             sectionId: reading_list
+        chartOptions:
+            dataFilters: [removeOverLimit, removeNoAnswer]
+            limit: 10
 
       - id: features_resources
         items: [fm-javascript-quiz, fm-javascript-hard-parts-v2]
         template: recommended_resources
 
-  children:
-      - id: main_apis
-        path: /main-apis
-        blocks:
-            - id: main_apis
-              template: page_introduction
+  # children:
+  #     - id: main_apis
+  #       path: /main-apis
+  #       blocks:
+  #           - id: main_apis
+  #             template: page_introduction
 
-            - id: main_apis_items
-              template: multi_items_experience
-              i18nNamespace: features
+  #           - id: main_apis_items
+  #             template: multi_items_experience
+  #             i18nNamespace: features
 
-            - id: main_apis_pain_points
-              template: multiple_options2_freeform
-              i18nNamespace: features
-              parameters: { limit: 10 }
+  #           - id: main_apis_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+  #             parameters: { limit: 10 }
 
-            - id: forms_resources
-              items: [fm-web-development-v3]
-              template: recommended_resources
+  #           - id: forms_resources
+  #             items: [fm-web-development-v3]
+  #             template: recommended_resources
 
-      - id: hooks
-        path: /hooks
-        blocks:
-            - id: hooks
-              template: page_introduction
+  #     - id: hooks
+  #       path: /hooks
+  #       blocks:
+  #           - id: hooks
+  #             template: page_introduction
 
-            - id: hooks_items
-              template: multi_items_experience
-              i18nNamespace: features
+  #           - id: hooks_items
+  #             template: multi_items_experience
+  #             i18nNamespace: features
 
-            - id: hooks_pain_points
-              template: multiple_options2_freeform
-              i18nNamespace: features
-              parameters: { limit: 10 }
+  #           - id: hooks_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+  #             parameters: { limit: 10 }
 
-            - id: forms_resources
-              items: [fm-web-development-v3]
-              template: recommended_resources
+  #           - id: forms_resources
+  #             items: [fm-web-development-v3]
+  #             template: recommended_resources
 
-      - id: new_apis
-        path: /new-apis
-        blocks:
-            - id: new_apis
-              template: page_introduction
+  #     - id: new_apis
+  #       path: /new-apis
+  #       blocks:
+  #           - id: new_apis
+  #             template: page_introduction
 
-            - id: new_apis_items
-              template: multi_items_experience
-              i18nNamespace: features
+  #           - id: new_apis_items
+  #             template: multi_items_experience
+  #             i18nNamespace: features
 
-            - id: new_apis_pain_points
-              template: multiple_options2_freeform
-              i18nNamespace: features
-              parameters: { limit: 10 }
+  #           - id: new_apis_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+  #             parameters: { limit: 10 }
 
-            - id: forms_resources
-              items: [fm-web-development-v3]
-              template: recommended_resources
+  #           - id: forms_resources
+  #             items: [fm-web-development-v3]
+  #             template: recommended_resources
 
 - id: libraries
   path: /libraries
@@ -290,19 +322,19 @@
 
             - id: animation_libraries
               template: multiple_options2_combined
-              i18nNamespace: other_tools
+              i18nNamespace: tools
 
             - id: data_visualization_libraries
               template: multiple_options2_combined
-              i18nNamespace: other_tools
+              i18nNamespace: tools
 
             - id: form_libraries
               template: multiple_options2_combined
-              i18nNamespace: other_tools
+              i18nNamespace: tools
 
             - id: css_tools
               template: multiple_options2_combined
-              i18nNamespace: other_tools
+              i18nNamespace: tools
 
             - id: component_libraries_pain_points
               template: multiple_options2_freeform
@@ -319,7 +351,7 @@
 
             - id: state_management_experience
               template: multi_items_experience
-              i18nNamespace: other_tools
+              i18nNamespace: tools
 
             - id: state_management_others
               template: section_prenormalized_tools
@@ -366,19 +398,19 @@
 
             - id: build_tools
               template: multiple_options2_combined
-              i18nNamespace: other_tools
+              i18nNamespace: tools
 
             - id: hosting
               template: multiple_options2_combined
-              i18nNamespace: other_tools
+              i18nNamespace: tools
 
             - id: other_services
               template: multiple_options2_combined
-              i18nNamespace: other_tools
+              i18nNamespace: tools
 
             - id: backend_language
               template: multiple_options2_combined
-              i18nNamespace: other_tools
+              i18nNamespace: tools
 
             - id: back_end_infrastructure_pain_points
               template: multiple_options2_freeform

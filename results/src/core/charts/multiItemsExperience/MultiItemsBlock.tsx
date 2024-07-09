@@ -17,6 +17,7 @@ const defaultLimit = 5
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
     const { series, block, question, pageContext } = props
     const theme = useTheme()
+
     const chartState = useChartState({ rowsLimit: block?.chartOptions?.limit || defaultLimit })
     const { grouping } = chartState
 

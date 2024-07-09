@@ -9,6 +9,7 @@ import take from 'lodash/take'
 import { getViewComponent } from './helpers/views'
 import { getItemFilters } from '../common2/helpers/filters'
 import { HorizontalBarChartState } from './types'
+import { applyRowsLimit } from '../multiItemsExperience/helpers'
 
 export const HorizontalBarSerie = (
     props: {
@@ -21,7 +22,7 @@ export const HorizontalBarSerie = (
     let buckets = getChartBuckets({ serie, block, chartState })
     const chartValues = useChartValues({ buckets, chartState, block, question })
 
-    if (rowsLimit) {
+    if (applyRowsLimit(rowsLimit, chartValues.totalRows)) {
         buckets = take(buckets, chartState.rowsLimit)
     }
 
