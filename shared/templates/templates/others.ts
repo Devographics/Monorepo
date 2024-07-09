@@ -11,17 +11,15 @@ export const others: TemplateFunction = options => {
     const { edition, section } = options
     const question = checkHasId(options)
 
-    const sectionSegment = isToolTemplate(section?.template)
-        ? 'tools_others'
-        : section.slug || section.id
-    const questionSegment = question.id?.replace('_others', '')
-
-    const basePath = `${sectionSegment}.${questionSegment}.${DbSuffixes.OTHERS}`
+    const sectionSegment = section.slug || section.id
+    const questionSegment = question.id
 
     const rawPaths: DbPaths = {
         other: `${sectionSegment}__${questionSegment}__${DbSuffixes.OTHERS}`,
         skip: `${sectionSegment}__${questionSegment}__${DbPathsEnum.SKIP}`
     }
+
+    const basePath = `${sectionSegment}.${questionSegment}`
 
     const normPaths: DbPaths = {
         base: basePath,

@@ -11,18 +11,16 @@ export const projects: TemplateFunction = options => {
     const { edition, section } = options
     const question = checkHasId(options)
 
-    const sectionSegment = isToolTemplate(section?.template)
-        ? 'tools_others'
-        : section.slug || section.id
-    const questionSegment = question?.id?.replace('_prenormalized', '').replace('_others', '')
-
-    const basePath = `${sectionSegment}.${questionSegment}.${DbSuffixes.OTHERS}`
+    const sectionSegment = section.slug || section.id
+    const questionSegment = question?.id
 
     const rawPaths: DbPaths = {
         [DbPathsEnum.RESPONSE]: `${sectionSegment}__${questionSegment}__${DbSuffixes.PRENORMALIZED}`,
         [DbPathsEnum.PRENORMALIZED]: `${sectionSegment}__${questionSegment}__${DbSuffixes.PRENORMALIZED}`,
         [DbPathsEnum.SKIP]: `${sectionSegment}__${questionSegment}__${DbPathsEnum.SKIP}`
     }
+
+    const basePath = `${sectionSegment}.${questionSegment}`
 
     const normPaths: DbPaths = {
         [DbPathsEnum.BASE]: basePath,
