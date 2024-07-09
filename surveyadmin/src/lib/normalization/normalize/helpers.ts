@@ -55,7 +55,7 @@ Extract matching tokens from a string
 */
 const enableLimit = false;
 export const stringLimit = enableLimit ? 170 : 1000; // max length of string to try and find tokens in
-export const rulesLimit = 2500; // max number of rules to try and match for any given string
+export const rulesLimit = 4000; // max number of rules to try and match for any given string
 
 /*
 

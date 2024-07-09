@@ -49,6 +49,7 @@ import uniq from "lodash/uniq";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import { getEditionQuestions } from "~/lib/normalization/helpers/getEditionQuestions";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
+import { logToFile } from "@devographics/debug";
 
 // how many bulk operation to perform in one go
 const operationsPerStep = 1000;
@@ -71,7 +72,7 @@ Also limit to featurev3 questions for now
 */
 const isSentimentQuestion = (question: QuestionWithSection) => {
   return (
-    question.template === "featurev3" &&
+    (question.template === "featurev3" || question.template === "toolv3") &&
     question.followups &&
     question.followups.every((followup) =>
       followup.options.every((option) => isSentimentOption(option.id))
@@ -148,6 +149,9 @@ export async function addSentiment({
     removeOperation
   );
 
+  console.log(`// addSentiment: removeOperation completed`);
+  console.log(removeDbResult);
+
   const badlyFormattedResponses: string[] = [];
 
   /*
@@ -212,6 +216,7 @@ export async function addSentiment({
         },
       });
     }
+    logToFile("addSentiment.json", bulkOperations);
     const operationResult = await normalizedResponses.bulkWrite(
       bulkOperations,
       {

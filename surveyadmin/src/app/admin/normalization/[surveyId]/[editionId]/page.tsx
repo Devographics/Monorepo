@@ -152,7 +152,9 @@ const Question = ({
         {stats && (
           <div
             className={`normalization-progress ${
-              hasLowProgress(stats) ? "normalization-progress-low" : ""
+              hasLowProgress(stats)
+                ? "normalization-progress-low"
+                : "normalization-progress-normal"
             }`}
           >
             <progress value={stats.percentage} max="100"></progress>{" "}

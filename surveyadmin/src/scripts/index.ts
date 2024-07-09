@@ -13,3 +13,4 @@ export * from "./testDbConnection";
 export * from "./generateSourceField";
 export * from "./addSentiment";
 export * from "./convertExperience";
+export * from "./migrateToolsPaths";
