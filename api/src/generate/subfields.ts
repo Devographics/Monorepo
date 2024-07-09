@@ -38,7 +38,6 @@ export const subFields: Array<SubField> = [
         addIf: () => true,
         resolverFunction: ({ question }) => {
             console.log('// question metadata resolver')
-            console.log(question)
             return question
         }
     },

@@ -180,6 +180,7 @@ type RawDbPaths {
 }
 
 type NormDbPaths {
+    base: String
     response: String
     other: String
     prenormalized: String
