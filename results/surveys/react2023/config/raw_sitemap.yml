@@ -428,21 +428,27 @@
 
       - id: testing
         template: multiple_options2_combined
+        i18nNamespace: tools
 
       - id: renderers
         template: multiple_options2_combined
+        i18nNamespace: tools
 
       - id: validation
         template: multiple_options2_combined
+        i18nNamespace: tools
 
       - id: auth
         template: multiple_options2_combined
+        i18nNamespace: tools
 
       - id: mobile_development
         template: multiple_options2_combined
+        i18nNamespace: tools
 
       - id: other_frontend_frameworks
         template: multiple_options2_combined
+        i18nNamespace: tools
 
       - id: tools_others_resources
         items: [fm-node-js, fm-fullstack-v3]
@@ -452,16 +458,8 @@
   blocks:
       - template: page_introduction
 
-      - id: what_do_you_use_react_for
-        template: multiple_options2
-
-      - id: react_version
-        template: multiple_options2
-
-      - id: kilian_valkhof
-        template: picks
-        variables:
-            url: https://www.electronjs.org/
+      - id: js_app_patterns
+        template: multiple_options2_combined
 
       - id: usage_type
         template: multiple_options2_combined
@@ -469,8 +467,16 @@
       - id: industry_sector
         template: multiple_options2_combined
 
-      - id: js_app_patterns
+      - id: what_do_you_use_react_for
         template: multiple_options2_combined
+
+      - id: react_version
+        template: multiple_options2_combined
+
+      - id: kilian_valkhof
+        template: picks
+        variables:
+            url: https://www.electronjs.org/
 
       - id: gustavo_vasquez
         template: picks
