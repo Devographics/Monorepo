@@ -277,7 +277,7 @@
         template: page_introduction
 
       - id: all_tools_experience
-        titleId: tools.all_items.experience
+        i18nNamespace: tools
         template: multi_items_experience
         chartOptions:
             limit: 10
@@ -287,10 +287,11 @@
         variables:
             url: https://www.localfirst.fm/
 
-      - id: tier_list
-        template: tier_list
+      # - id: tier_list
+      #   template: tier_list
 
       - id: scatterplot_overview
+        i18nNamespace: tools
         template: scatterplot_overview
 
       # - id: all_sections_tools_cardinality_by_user
@@ -650,12 +651,6 @@
         variables:
             author: cassidy_williams
             entities: '"cassidy_williams"'
-
-      - id: conclusion_theo
-        template: conclusion
-        variables:
-            author: theo_browne
-            entities: '"theo_browne"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock

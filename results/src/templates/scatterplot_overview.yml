@@ -1,8 +1,5 @@
 id: scatterplot_overview
 blockType: ToolsScatterplotBlock
-titleId: blocks.tools_quadrant
-descriptionId: blocks.tools_quadrant.description
-noteId: blocks.tools_quadrant.note
 hasSponsor: true
 # query should be exactly the same as multi_items_experience.yml
 query: >

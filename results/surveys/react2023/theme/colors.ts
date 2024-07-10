@@ -269,13 +269,10 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
             never_heard: [colors.greyLight, colors.greyLightest]
         },
         toolSections: {
-            front_end_frameworks: colors.pinkLight,
-            rendering_frameworks: colors.purple,
-            meta_frameworks: colors.purple,
-            testing: colors.orange,
-            build_tools: colors.teal,
-            mobile_desktop: colors.green,
-            monorepo_tools: colors.navyLighter
+            component_libraries: colors.pinkLight,
+            state_management: colors.teal,
+            data_loading: colors.green,
+            back_end_infrastructure: colors.orange
         },
         sentiment: {
             positive: [colors.green, colors.greenLight],
