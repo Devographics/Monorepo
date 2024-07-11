@@ -26,5 +26,13 @@
     ],
     "strict": false,
     "strictNullChecks": true
+  },
+  // So cypress use a different config than Next.js
+  // @see https://github.com/cypress-io/cypress/issues/26308
+  "ts-node": {
+    "compilerOptions": {
+      "module": "ESNext",
+      "moduleResolution": "Node"
+    }
   }
 }
