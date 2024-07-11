@@ -9,6 +9,7 @@
     "noEmit": false,
     "sourceMap": false,
     "isolatedModules": false,
+    "module": "CommonJS",
     // @see https://github.com/scottohara/loot/issues/185
     // ES2020 won't work
     "target": "ES2019"

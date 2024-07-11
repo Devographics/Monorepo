@@ -2,10 +2,6 @@ const path = require("path");
 // Use @next/mdx for a basic MDX support.
 // See the how Vulcan Next docs are setup with next-mdx-remote
 // which is more advanced (loading remote MD, supporting styling correctly etc.)
-const withPkgInfo = require("./.vn/nextConfig/withPkgInfo");
-
-const flowRight = require("lodash/flowRight");
-const debug = require("debug")("devographics:next");
 
 // const { withSentryConfig } = require("@sentry/nextjs");
 
@@ -121,16 +117,6 @@ const moduleExports = (phase, { defaultConfig }) => {
     });
     nextConfig = withBundleAnalyzer(nextConfig);
   }
-
-  // Finally add relevant webpack configs/utils
-  nextConfig = flowRight([
-    withPkgInfo,
-    //withMDX,
-    // (config) => withSentryConfig(config, sentryWebpackPluginOptions),
-    // add other wrappers here
-  ])(nextConfig);
-
-  debug("Extended next config FINAL " + JSON.stringify(nextConfig));
 
   if (process.env.MAINTENANCE_MODE) {
     nextConfig.redirects = async () => {
