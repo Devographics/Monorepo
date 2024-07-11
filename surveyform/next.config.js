@@ -45,11 +45,6 @@ const moduleExports = (phase, { defaultConfig }) => {
         use: "js-yaml-loader",
       });
 
-      config.module.rules.push({
-        test: /\.node$/,
-        use: "node-loader",
-      });
-
       // Support differentiated import for the same folder
       if (!config.resolve.mainFiles) {
         config.resolve.mainFiles = [
