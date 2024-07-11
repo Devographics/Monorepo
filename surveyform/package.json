@@ -103,6 +103,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.2",
+    "@esbuild/linux-x64": "^0.23.0",
     "@sentry/cli": "^2.20.6",
     "@sentry/types": "^7.19.0",
     "@types/express": "^4.17.17",
