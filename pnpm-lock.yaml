@@ -1835,8 +1835,8 @@ importers:
         specifier: ^7.20.2
         version: 7.22.20
       '@esbuild/linux-x64':
-        specifier: 0.16.17
-        version: 0.16.17
+        specifier: 0.17.6
+        version: 0.17.6
       '@sentry/cli':
         specifier: ^2.20.6
         version: 2.21.0
@@ -9352,6 +9352,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
+    optional: true
 
   /@esbuild/linux-x64@0.17.19:
     resolution: {integrity: sha512-68ngA9lg2H6zkZcyp22tsVt38mlhWde8l3eJLWkyLrp4HwMUr3c1s/M2t7+kHIhvMjglIBrFpncX1SzMckomGw==}
@@ -9368,7 +9369,6 @@ packages:
     os: [linux]
     requiresBuild: true
     dev: true
-    optional: true
 
   /@esbuild/linux-x64@0.18.20:
     resolution: {integrity: sha512-UYqiqemphJcNsFEskc73jQ7B9jgwjWrSayxawS6UVFZGWrAAtkzjxSqnoclCXxWtfwLdzU+vTpcNYhpn43uP1w==}
