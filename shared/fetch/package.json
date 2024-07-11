@@ -7,7 +7,7 @@
     "types": "./index.ts",
     "exports": {
         ".": "./index.ts",
-        "./edge": "./index.edge.ts"
+        "./edge-light": "./index.edge.ts"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
