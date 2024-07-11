@@ -1834,9 +1834,6 @@ importers:
       '@babel/core':
         specifier: ^7.20.2
         version: 7.22.20
-      '@esbuild/linux-x64':
-        specifier: 0.17.6
-        version: 0.17.6
       '@sentry/cli':
         specifier: ^2.20.6
         version: 2.21.0
@@ -1882,12 +1879,6 @@ importers:
       dotenv:
         specifier: ^10.0.0
         version: 10.0.0
-      e:
-        specifier: ^0.2.33
-        version: 0.2.33
-      esbuild-plugin-yaml:
-        specifier: ^0.0.1
-        version: 0.0.1
       eslint:
         specifier: ^7.32.0
         version: 7.32.0
@@ -9369,6 +9360,7 @@ packages:
     os: [linux]
     requiresBuild: true
     dev: true
+    optional: true
 
   /@esbuild/linux-x64@0.18.20:
     resolution: {integrity: sha512-UYqiqemphJcNsFEskc73jQ7B9jgwjWrSayxawS6UVFZGWrAAtkzjxSqnoclCXxWtfwLdzU+vTpcNYhpn43uP1w==}
@@ -25526,11 +25518,6 @@ packages:
       inherits: 2.0.4
       readable-stream: 2.3.8
       stream-shift: 1.0.3
-    dev: true
-
-  /e@0.2.33:
-    resolution: {integrity: sha512-anpW+L+S+xxSOg0/IdVDwcjxS6b63Cbg0EPhiUbvfr2xSQ9IB0BK+QOjj1ndn5RfnhOyM20AwTOt26xyw/BCLA==}
-    engines: {node: '>=12', npm: '>=6'}
     dev: true
 
   /eastasianwidth@0.2.0:
