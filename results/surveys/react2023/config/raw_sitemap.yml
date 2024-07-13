@@ -62,8 +62,6 @@
       - id: country
         template: multiple_options2
         parameters: { limit: 20 }
-        takeaway: >
-            TODO
         variants:
             - template: vs_salary
               parameters: { cutoff: 100, limit: 20, sort: { property: medianByFacet, order: desc } }
@@ -71,21 +69,15 @@
       - id: locale
         template: multiple_options2
         parameters: { cutoff: 20 }
-        takeaway: >
-            The language respondents selected to fill out the survey.
 
       - id: hint_hint
         template: hint
 
       - id: completion_stats
         template: multiple_options2
-        takeaway: >
-            The proportion of the survey filled out by respondents.
 
       - id: age
         template: multiple_options2
-        takeaway: >
-            TODO
         variants:
             - template: vs_salary
               parameters:
@@ -93,8 +85,6 @@
 
       - id: years_of_experience
         template: multiple_options2
-        takeaway: >
-            TODO
         variants:
             - template: vs_salary
               parameters:
@@ -102,8 +92,6 @@
 
       - id: company_size
         template: multiple_options2
-        takeaway: >
-            TODO
         variants:
             - template: vs_salary
               parameters:
@@ -114,20 +102,14 @@
 
       - id: yearly_salary
         template: multiple_options2
-        takeaway: >
-            TODO
 
       - id: higher_education_degree
         template: multiple_options2
-        takeaway: >
-            TODO
         variants:
             - template: vs_salary
 
       - id: gender
         template: multiple_options2
-        # takeaway: >
-        #     Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
         variants:
             - template: vs_salary
             - id: country_vs_gender
@@ -148,8 +130,6 @@
 
       - id: race_ethnicity
         template: multiple_options2_combined
-        takeaway: >
-            TODO
         variants:
             - template: vs_years_of_experience
             - template: vs_age
@@ -549,99 +529,99 @@
         items: [fm-algorithms, fm-primeagen]
         template: recommended_resources
 
-- id: awards
-  path: /awards
-  blocks:
-      - template: page_introduction
+# - id: awards
+#   path: /awards
+#   blocks:
+#       - template: page_introduction
 
-      - id: awards
-        template: awards
-        variables:
-            entities: '"vite","esbuild","vitest","playwright","bun","astro","ember","react","nextjs","storybook","jest"'
-        awards:
-            # - id: feature_adoption_delta_award
-            #   template: award
-            #   awards:
-            #       - id: top_level_await
-            #         value: '+26.4%'
-            #       - id: array_at
-            #         value: '+14.2%'
-            #       - id: string_replace_all
-            #         value: '+9.6%'
+#       - id: awards
+#         template: awards
+#         variables:
+#             entities: '"vite","esbuild","vitest","playwright","bun","astro","ember","react","nextjs","storybook","jest"'
+#         awards:
+#             # - id: feature_adoption_delta_award
+#             #   template: award
+#             #   awards:
+#             #       - id: top_level_await
+#             #         value: '+26.4%'
+#             #       - id: array_at
+#             #         value: '+14.2%'
+#             #       - id: string_replace_all
+#             #         value: '+9.6%'
 
-            - id: tool_usage_delta_award
-              template: award
-              awards:
-                  - id: vite
-                    value: '+25%'
-                  - id: esbuild
-                    value: '+21%'
-                  - id: vitest
-                    value: '+20%'
+#             - id: tool_usage_delta_award
+#               template: award
+#               awards:
+#                   - id: vite
+#                     value: '+25%'
+#                   - id: esbuild
+#                     value: '+21%'
+#                   - id: vitest
+#                     value: '+20%'
 
-            - id: tool_satisfaction_award
-              template: award
-              awards:
-                  - id: vite
-                    value: '98%'
-                  - id: vitest
-                    value: '96%'
-                  - id: playwright
-                    value: '95%'
+#             - id: tool_satisfaction_award
+#               template: award
+#               awards:
+#                   - id: vite
+#                     value: '98%'
+#                   - id: vitest
+#                     value: '96%'
+#                   - id: playwright
+#                     value: '95%'
 
-            - id: tool_interest_award
-              template: award
-              awards:
-                  - id: vitest
-                    value: '79%'
-                  - id: vite
-                    value: '77%'
-                  - id: playwright
-                    value: '76%'
+#             - id: tool_interest_award
+#               template: award
+#               awards:
+#                   - id: vitest
+#                     value: '79%'
+#                   - id: vite
+#                     value: '77%'
+#                   - id: playwright
+#                     value: '76%'
 
-            - id: most_write_ins_award
-              template: award
-              awards:
-                  - id: bun
-                    value: '353'
-                  - id: astro
-                    value: '299'
-                  - id: ember
-                    value: '81'
+#             - id: most_write_ins_award
+#               template: award
+#               awards:
+#                   - id: bun
+#                     value: '353'
+#                   - id: astro
+#                     value: '299'
+#                   - id: ember
+#                     value: '81'
 
-            # - id: most_commented_feature_award
-            #   template: award
-            #   awards:
-            #       - id: private_fields
-            #         value: 102
-            #       - id: proxies
-            #         value: 71
-            #       - id: nullish_coalescing
-            #         value: 66
+#             # - id: most_commented_feature_award
+#             #   template: award
+#             #   awards:
+#             #       - id: private_fields
+#             #         value: 102
+#             #       - id: proxies
+#             #         value: 71
+#             #       - id: nullish_coalescing
+#             #         value: 66
 
-            - id: most_commented_tool_award
-              template: award
-              awards:
-                  - id: react
-                    value: 119
-                  - id: nextjs
-                    value: 92
-                  - id: storybook
-                    value: 72
+#             - id: most_commented_tool_award
+#               template: award
+#               awards:
+#                   - id: react
+#                     value: 119
+#                   - id: nextjs
+#                     value: 92
+#                   - id: storybook
+#                     value: 72
 
-            - id: most_loved_tool_award
-              template: award
-              awards:
-                  - id: vite
-                    value: '88.7%'
-                  - id: jest
-                    value: '73.2%'
-                  - id: react
-                    value: '71.2%'
+#             - id: most_loved_tool_award
+#               template: award
+#               awards:
+#                   - id: vite
+#                     value: '88.7%'
+#                   - id: jest
+#                     value: '73.2%'
+#                   - id: react
+#                     value: '71.2%'
 
-      # - id: awards_resources
-      #   items: [road-to-react]
-      #   template: recommended_resources
+#       # - id: awards_resources
+#       #   items: [road-to-react]
+#       #   template: recommended_resources
 
 - id: conclusion
   path: /conclusion

@@ -157,7 +157,7 @@ const distinct = [
 ]
 
 const stateOfJSThemeColors: DefaultTheme['colors'] = {
-    background: '#272325',
+    background: '#182C36',
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',
     backgroundAlt3: '#27242E',
     backgroundBackground: colors.lilacDarkest4,
