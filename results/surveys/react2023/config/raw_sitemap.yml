@@ -626,11 +626,11 @@
 - id: conclusion
   path: /conclusion
   blocks:
-      - id: conclusion_cassidy
+      - id: conclusion_josh
         template: conclusion
         variables:
-            author: cassidy_williams
-            entities: '"cassidy_williams"'
+            author: josh_comeau
+            entities: '"josh_comeau"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock

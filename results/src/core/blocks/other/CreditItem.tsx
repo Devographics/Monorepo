@@ -32,7 +32,7 @@ const CreditItem = ({ entity, role, labelId }: Credit & { labelId?: string }) =>
                     <a href={`https://twitter.com/${twitterName}`}>@{twitterName}</a>
                 </Twitter> */}
                 <Role>
-                    <T k={labelId ?? `credits.${role}`} />
+                    <T k={labelId ?? `credits.${role}`} html={true} md={true} />
                 </Role>
             </Details>
         </CreditItemDiv>
