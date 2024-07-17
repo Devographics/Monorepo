@@ -53,9 +53,9 @@ export const loadOrGetLocales = async (
 ): Promise<Array<Locale>> => {
     const { forceReload } = options
     const localeIds = getLocaleIds()
-    const contextsIds = getContextsIds()
+    const localeContexts = getLocaleContexts()
     if (forceReload || Locales.length === 0) {
-        const rawLocales = await loadLocales(localeIds, contextsIds)
+        const rawLocales = await loadLocales(localeIds, localeContexts)
         Locales = processLocales(rawLocales)
         if (context) {
             context.locales = Locales
@@ -78,7 +78,7 @@ export const getLocaleIds = () => {
     return localeIds
 }
 
-export const getContextsIds = () => {
+export const getLocaleContexts = () => {
     return parseEnvVariableArray(getEnvVar(EnvVar.LOCALE_CONTEXTS))
 }
 /*

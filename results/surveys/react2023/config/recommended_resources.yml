@@ -1,5 +1,7 @@
 # Front End Masters
 
+# demographics
+
 - name: |
       Free: Getting a Software Engineering Job, v2
   id: fm-getting-a-job-v2
@@ -20,63 +22,7 @@
   teacher: Anjana Vakil
   company: Software Engineer & Educator
 
-# - name: |
-#       JavaScript: The Recent Parts
-#   id: fm-javascript-recent-parts
-#   description: >
-#       Learn the latest features in JavaScript with Kyle Simpson, author of the popular, You Don't Know JS, book series. You'll get up to speed with new JavaScript features like tagged template literals, destructuring, iterators, generators, regex improvements and async await.
-#   url: https://frontendmasters.com/courses/js-recent-parts/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-#   image: https://static.frontendmasters.com/assets/teachers/simpson/thumb@2x.webp
-#   teacher: Kyle Simpson
-#   company: You Don't Know JS
-
-- name: |
-      JavaScript: The Hard Parts, v2
-  id: fm-javascript-hard-parts-v2
-  description: >
-      Combining mental models of JavaScript's inner workings and hands-on programming challenges, this course will give you a solid understanding of callbacks and higher-order functions, closure, asynchronous JavaScript, and object-oriented JavaScript.
-  url: https://frontendmasters.com/courses/javascript-hard-parts-v2/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-  image: https://static.frontendmasters.com/assets/teachers/sentance/thumb@2x.webp
-  teacher: Will Sentance
-  company: Codesmith
-
-- name: |
-      Test Your JavaScript Knowledge
-  id: fm-javascript-quiz
-  description: >
-      Challenge your core knowledge of JavaScript with 50 interactive quiz questions covering topics like the event loop, scopes and closures, the "this" keyword, classes and prototypes, garbage collection, and more!
-  url: https://frontendmasters.com/courses/javascript-quiz/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-  image: https://static.frontendmasters.com/assets/teachers/hallie/thumb@2x.webp
-  teacher: Lydia Hallie
-
-- name: Design Systems with Storybook, v2
-  id: fm-design-systems-v2
-  description: >
-      Create reusable UI components with composable styles and variants using Tailwind CSS. Use MDX for documentation, set up interaction testing, and add data fetching to create a robust dev environment for your component library.
-  url: https://frontendmasters.com/courses/design-systems-v2/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-  image: https://static.frontendmasters.com/assets/teachers/kinney/thumb@2x.webp
-  teacher: Steve Kinney
-  company: Temporal
-
-# - name: |
-#       Complete Intro to React, v8
-#   id: fm-react-v8
-#   description: >
-#       Learn to build real-world applications using modern React 18.x+! Much more than an intro, you’ll start from the ground up, getting to using the latest features in React, including hooks, effects, context, and portals.
-#   url: https://frontendmasters.com/courses/complete-react-v8/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-#   image: https://static.frontendmasters.com/assets/teachers/holt/thumb@2x.webp
-#   teacher: Brian Holt
-#   company: SQLite Cloud
-
-# - name: |
-#       Svelte Fundamentals
-#   id: fm-svelte-v2
-#   description: >
-#       Learn the Svelte framework from the creator himself, Rich Harris! Get hands-on with all the fundamentals of Svelte: reactivity, props, events, data binding, lifecycle functions, and stores.
-#   url: https://frontendmasters.com/courses/svelte-v2/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-#   image: https://static.frontendmasters.com/assets/teachers/harris/thumb@2x.webp
-#   teacher: Rich Harris
-#   company: Vercel
+# features
 
 - name: |
       Be Productive with React.js, Today's Most Popular Framework
@@ -88,45 +34,16 @@
   teacher: Brian Holt
   company: SQLite Cloud
 
-- name: |
-      Vanilla JS: You Might Not Need a Framework
-  id: fm-vanilla-js-apps
-  description: >
-      See how you can build rich web apps and websites without depending on libraries or frameworks, using only the core JavaScript language. You'll learn fundamental concepts like the DOM API, finding and modifying elements in the DOM, and event handling.
-  url: https://frontendmasters.com/courses/vanilla-js-apps/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-  image: https://static.frontendmasters.com/assets/teachers/firtman/thumb@2x.webp
-  teacher: Maximiliano Firtman
-  company: Independent Consultant
+- name: A Tour of JavaScript & React Patterns
+  id: fm-js-patterns
+  description: |
+      You’ll get an overview of more traditional design patterns with JavaScript, such as the Singleton and Proxy patterns. Then see React patterns such as the Hooks and Higher Order Component patterns.
+  url: https://frontendmasters.com/courses/tour-js-patterns/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
+  image: https://static.frontendmasters.com/assets/teachers/hallie/thumb@2x.webp
+  teacher: Lydia Hallie
+  # company:
 
-# - name: |
-#       Fullstack Svelte with SvelteKit
-#   id: fm-sveltekit
-#   description: >
-#       Build full stack web apps with SvelteKit by the creator himself, Rich Harris! Discover the magic of SvelteKit, a “love letter to web development” framework that offers server-side rendering paired with client-side navigation capabilities.
-#   url: https://frontendmasters.com/courses/sveltekit/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-#   image: https://static.frontendmasters.com/assets/teachers/harris/thumb@2x.webp
-#   teacher: Rich Harris
-#   company: Vercel
-
-# - name: |
-#       Build AI-Powered Apps with OpenAI and Node.js
-#   id: fm-openai-node
-#   description: >
-#       Set up Node.js with the OpenAI API, build an AI chat interface, and then get hands-on with image generation, semantic search, and document QA systems.
-#   url: https://frontendmasters.com/courses/openai-node/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-#   image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
-#   teacher: Scott Moss
-#   company: Superfilter AI
-
-- name: |
-      Build an AI-Powered Fullstack Next.js App, v3
-  id: fullstack-app-next-v3
-  description: >
-      Create a full-stack AI-powered Journal app from scratch in Next.js. See how all the pieces of Next.js/React fit together: client components, server components, static and dynamic routing, server actions, middleware, and layouts.
-  url: https://frontendmasters.com/courses/fullstack-app-next-v3/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-  image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
-  teacher: Scott Moss
-  company: Superfilter AI
+# libraries
 
 - name: |
       Introduction to Next.js 13+, v3
@@ -138,14 +55,91 @@
   teacher: Scott Moss
   company: Superfilter AI
 
-# - name: JavaScript Testing Practices and Principles
-#   id: fm-testing-practices-principles
-#   description: >
-#       Learn the principles and best practices for writing maintainable test applications to catch errors before your product reaches the end user!
-#   url: https://frontendmasters.com/courses/testing-practices-principles/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-#   image: https://static.frontendmasters.com/assets/teachers/dodds/thumb@2x.webp
-#   teacher: Kent C. Dodds
-#   # company: Remix
+- name: |
+      Redux Fundamentals (feat. React)
+  id: fm-redux-fundamentals
+  description: >
+      In this course, you’ll start by learning pure Redux fundamentals from scratch and move onto learning to hook Redux into a React application.
+  url: https://frontendmasters.com/courses/redux-fundamentals/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
+  image: https://static.frontendmasters.com/assets/teachers/kinney/thumb@2x.webp
+  teacher: Steve Kinney
+  company: Temporal
+
+# component_libraries
+
+- name: |
+      Tailwind CSS
+  id: fm-tailwind-css
+  description: >
+      By the end of this course, you'll be proficient in building visually stunning, responsive, and maintainable user interfaces with Tailwind CSS!
+  url: https://frontendmasters.com/courses/tailwind-css/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
+  image: https://static.frontendmasters.com/assets/teachers/kinney/thumb@2x.webp
+  teacher: Steve Kinney
+  company: Temporal
+
+- name: Design Systems with Storybook, v2
+  id: fm-design-systems-v2
+  description: >
+      Create reusable UI components with composable styles and variants using Tailwind CSS. Use MDX for documentation, set up interaction testing, and add data fetching to create a robust dev environment for your component library.
+  url: https://frontendmasters.com/courses/design-systems-v2/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
+  image: https://static.frontendmasters.com/assets/teachers/kinney/thumb@2x.webp
+  teacher: Steve Kinney
+  company: Temporal
+
+# state management
+
+- name: Advanced Redux with Redux Toolkit
+  id: fm-advanced-redux
+  description: >
+      In this course, you'll use Redux Toolkit to simplify reducer logic and actions, use TypeScript with Redux, add tests, and use RTK Query to fetch data in real-world projects.
+  url: https://frontendmasters.com/courses/advanced-redux/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
+  image: https://static.frontendmasters.com/assets/teachers/kinney/thumb@2x.webp
+  teacher: Steve Kinney
+  company: Temporal
+
+- name: State Modeling in React with XState
+  id: fm-xstate-react
+  description: >
+      In this course, we'll be learning to model state before we code using state machines and statecharts and then use those in our app to orchestrate complex app logic.
+  url: https://frontendmasters.com/courses/advanced-redux/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
+  image: https://static.frontendmasters.com/assets/teachers/khourshid/thumb@2x.webp
+  teacher: David Khourshid
+  company: Microsoft
+
+# data loading
+
+- name: |
+      Client-Side GraphQL with React, v2
+  id: fm-client-graphql-react-v2
+  description: >
+      Use type-safe GraphQL APIs in your React applications. Learn the GraphQL Query Language and write queries and mutations while building a data layer with the Urql GraphQL client.
+  url: https://frontendmasters.com/courses/client-graphql-react-v2/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
+  image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
+  teacher: Scott Moss
+  company: Superfilter AI
+
+# back end & infrastructure
+
+- name: |
+      Intermediate Next.js
+  id: fm-intermediate-next-js
+  description: >
+      Level up your Next.js skills to build production-ready applications. Dive into advanced concepts like server actions, route slots, and data fetching strategies.
+  url: https://frontendmasters.com/courses/intermediate-next-js/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
+  image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
+  teacher: Scott Moss
+  company: Superfilter AI
+
+- name: Expand Your Abilities to the Server and Master the Fullstack
+  id: fm-fullstack
+  description: |
+      Set up servers, create APIs, and deploy your code to the world by learning the full stack.
+  url: https://frontendmasters.com/learn/fullstack/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
+  image: https://static.frontendmasters.com/assets/teachers/young/thumb@2x.webp
+  teacher: Jem Young
+  company: Netflix
+
+  # other tools
 
 - name: |
       Enterprise UI Development: Testing & Code Quality
@@ -157,15 +151,6 @@
   teacher: Steve Kinney
   company: Temporal
 
-- name: Web App Testing & Tools
-  id: fm-web-app-testing
-  description: >
-      Dive into testing with Miško Hevery, covering unit and end-to-end testing, refactoring for testability, and using tools like Vitest and Playwright.
-  url: https://frontendmasters.com/courses/web-app-testing/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-  image: https://static.frontendmasters.com/assets/teachers/hevery/thumb@2x.webp
-  teacher: Miško Hevery
-  company: Qwik Creator (Previously Angular)
-
 - name: React Native, v2
   id: fm-react-native-v2
   description: >
@@ -173,105 +158,9 @@
   url: https://frontendmasters.com/courses/react-native-v2/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
   image: https://static.frontendmasters.com/assets/teachers/kraman/thumb@2x.webp
   teacher: Kadi Kraman
-  company: Formidable
+  company: Expo
 
-# - name: Intermediate React Native
-#   id: fm-intermediate-react-native
-#   description: >
-#       Go beyond the basics of React Native. You’ll learn how to persist data across app launches, various ways of handling images and SVG, adding app icons and splash screens, animations, and gestures.
-#   url: https://frontendmasters.com/courses/intermediate-react-native/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-#   image: https://static.frontendmasters.com/assets/teachers/kraman/thumb@2x.webp
-#   teacher: Kadi Kraman
-#   company: Formidable
-
-- name: Electron, v3
-  id: fm-electron-v3
-  description: >
-      Build native, cross-platform desktop apps using HTML, CSS, JavaScript, and React.js with Electron. Get hands-on experience building real-world apps for the menubar and system tray.
-  url: https://frontendmasters.com/courses/electron-v3/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-  image: https://static.frontendmasters.com/assets/teachers/kinney/thumb@2x.webp
-  teacher: Steve Kinney
-  company: Temporal
-
-- name: Vite
-  id: fm-vite
-  description: >
-      Tour Vite's capabilities include bundling, optimizing static assets, hot module reloading, and its rich plugin ecosystem. Integrate Vite with popular frameworks like React and Svelte and leverage dynamic imports for code splitting.
-  url: https://frontendmasters.com/courses/vite/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-  image: https://static.frontendmasters.com/assets/teachers/kinney/thumb@2x.webp
-  teacher: Steve Kinney
-  company: Temporal
-
-- name: Webpack 4 Fundamentals
-  id: fm-webpack-fundamentals
-  description: >
-      Webpack enables you to integrate your favorite tools and take control of how you deliver your JavaScript, CSS, and more!​
-  url: https://frontendmasters.com/courses/webpack-fundamentals/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-  image: https://static.frontendmasters.com/assets/teachers/larkin/thumb.webp
-  teacher: Sean Larkin
-  company: Microsoft
-
-- name: JavaScript and TypeScript Monorepos
-  id: fm-monorepos
-  description: You'll get hands-on experience with best-in-class tools designed to keep the workflows for even complex projects simple!
-  url: https://frontendmasters.com/courses/monorepos/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-  image: https://static.frontendmasters.com/assets/teachers/north/thumb@2x.webp
-  teacher: Mike North
-  company: LinkedIn
-
-- name: Everything You'll Need to Know About Git
-  id: fm-git
-  description: >
-      Never run into an unsolvable Git problem again. Create and manage repos, branch for parallel development, and resolve conflicts with merge and rebase.
-  url: https://frontendmasters.com/courses/everything-git/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-  image: https://static.frontendmasters.com/assets/teachers/theprimeagen/thumb@2x.webp
-  teacher: ThePrimeagen
-  company: terminal
-
-# - name: TypeScript 5+ Fundamentals, v4
-#   id: fm-typescript-v4
-#   description: >
-#       Learn all the key Typescript features such as variable typing, function signatures, union and intersection types, type aliases, and generics
-#   url: https://frontendmasters.com/courses/typescript-v4/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-#   image: https://static.frontendmasters.com/assets/teachers/north/thumb.webp
-#   teacher: Mike North
-#   company: Stripe
-
-# - name: Rust for TypeScript Developers
-#   id: fm-rust-ts-devs
-#   description: >
-#       As a TypeScript developer, expanding your skills with Rust can be a game-changer. Rust offers memory safety without a garbage collector, impressive performance, and a strong type system similar to TypeScript, but with even more robustness.
-#   url: https://frontendmasters.com/courses/rust-ts-devs/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-#   image: https://static.frontendmasters.com/assets/teachers/theprimeagen/thumb@2x.webp
-#   teacher: ThePrimeagen
-#   company: terminal
-
-- name: Build Web APIs and Applications with Node.js
-  id: fm-node-js
-  description: >
-      Write JavaScript on the server and learn why Node.js is the go-to platform for high-performing web and CLI applications.
-  url: https://frontendmasters.com/learn/node-js/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-  image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
-  teacher: Scott Moss
-  company: Superfilter AI
-
-- name: Full Stack for Front-End Engineers, v3
-  id: fm-fullstack-v3
-  description: >
-      You’ll dive deep into servers, work with the command line, understand networking and security, set up continuous integration and deployment, manage databases, and build containers.
-  url: https://frontendmasters.com/courses/fullstack-v3/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-  image: https://frontendmasters.com/teachers/jem-young/
-  teacher: Jem Young
-  company: Netflix
-
-# - name: A Tour of JavaScript & React Patterns
-#   id: fm-js-patterns
-#   description: |
-#       You’ll get an overview of more traditional design patterns with JavaScript, such as the Singleton and Proxy patterns. Then see React patterns such as the Hooks and Higher Order Component patterns.
-#   url: https://frontendmasters.com/courses/tour-js-patterns/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-#   image: https://static.frontendmasters.com/assets/teachers/hallie/thumb@2x.webp
-#   teacher: Lydia Hallie
-#   # company:
+# usage
 
 - name: Your Path to Becoming a Senior Web Developer!
   id: fm-professional
@@ -282,33 +171,7 @@
   teacher: Will Sentance
   company: Codesmith
 
-- name: Expand Your Abilities to the Server and Master the Fullstack
-  id: fm-fullstack
-  description: |
-      Set up servers, create APIs, and deploy your code to the world by learning the full stack.
-  url: https://frontendmasters.com/learn/fullstack/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-  image: https://static.frontendmasters.com/assets/teachers/young/thumb@2x.webp
-  teacher: Jem Young
-  company: Netflix
-
-# - name: HTMX & Go
-#   id: fm-htmx-go
-#   description: >
-#       Make web app development simpler using HTMX! Using Go, you’ll build a simple server to respond to routes with templates. Then enhance your HTML with HTMX attributes to target updates on parts of the page.
-#   url: https://frontendmasters.com/courses/htmx/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-#   image: https://static.frontendmasters.com/assets/teachers/theprimeagen/thumb@2x.webp
-#   teacher: ThePrimeagen
-#   company: terminal
-
-- name: |
-      Free: The Last Algorithms Course You'll Need
-  id: fm-algorithms
-  description: |
-      You'll learn big o time complexity, fundamental data structures like arrays, lists, trees, graphs, and maps, and searching and sorting algorithms.
-  url: https://frontendmasters.com/courses/algorithms/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2023
-  image: https://static.frontendmasters.com/assets/teachers/theprimeagen/thumb@2x.webp
-  teacher: ThePrimeagen
-  company: Netflix
+# resources
 
 - name: |
       Courses by ThePrimeagen: Algorithms, VIM, Git, and more!
