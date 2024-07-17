@@ -129,6 +129,7 @@ query {
                     domain
                     id
                     name
+                    hashtag
                     emailOctopus {
                         listId
                     }

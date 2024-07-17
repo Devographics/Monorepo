@@ -19,8 +19,6 @@ import { RowSingle } from '../rows/RowSingle'
 import { RowStacked } from '../rows/RowStacked'
 import { allDataFilters } from '../helpers/steps'
 
-console.log(allDataFilters)
-
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
     sentiment: Object.values(SimplifiedSentimentOptions)

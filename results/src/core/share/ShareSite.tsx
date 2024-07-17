@@ -12,8 +12,9 @@ const ShareSite = () => {
     const { translate } = useI18n()
 
     const pageContext = usePageContext()
-    const { currentEdition } = pageContext
-    const { hashtag, year, resultsUrl } = currentEdition
+    const { currentSurvey, currentEdition } = pageContext
+    const { year, resultsUrl } = currentEdition
+    const { hashtag } = currentSurvey
     const siteTitle = getSiteTitle({ pageContext })
 
     const options = { values: { hashtag, year, siteTitle, link: resultsUrl } }
