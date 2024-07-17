@@ -1,4 +1,4 @@
-translationContexts: [homepage, common, results, countries, tokyodev]
+translationContexts: [common, results, countries, tdquestions, tdresults, td2023]
 
 # baseUrl: http://localhost:8001
 baseUrl: http://localhost:9000
