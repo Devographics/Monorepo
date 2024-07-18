@@ -231,10 +231,16 @@ export type Question = {
 
     followups?: Followups[]
 
-    /**
-     * To use a textarea in TextList
-     */
+    // To use a textarea in TextList
     longText?: boolean
+
+    // for numerical questions, specify value units
+    units?: NumericalUnits
+}
+
+export enum NumericalUnits {
+    YEARS = 'years',
+    YEARS_OLD = 'years_old'
 }
 
 export type Option = {
