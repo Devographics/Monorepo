@@ -34,9 +34,6 @@ import { useFormPropsContext } from "./FormPropsContext";
 import { SectionMetadata } from "@devographics/types";
 import { DbPathsEnum } from "@devographics/types";
 
-
-
-
 export interface FormItemProps extends FormInputProps {
   children: ReactNode;
   showMore?: boolean;
@@ -90,7 +87,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
 
     // open the comment widget if there is already a comment or this is the first question
     const [showCommentInput, setShowCommentInput] = useState(
-      (!readOnly && question.showCommentInput) || !!commentValue,
+      (!readOnly && question.showCommentInput) || !!commentValue
     );
 
     const childRef = useRef<HTMLDivElement>(null);
@@ -181,7 +178,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
 
     if (allowComment && !commentPath)
       console.warn(
-        `Allowed comments for component of template ${question.template}, but it doesn't have a commentPath`,
+        `Allowed comments for component of template ${question.template}, but it doesn't have a commentPath`
       );
     return (
       <div
@@ -224,7 +221,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
 export const SkipButton = ({
@@ -275,7 +272,7 @@ export const SkipButton = ({
 };
 
 export const FormItemTitle = (
-  props: FormItemProps & { section: SectionMetadata },
+  props: FormItemProps & { section: SectionMetadata }
 ) => {
   const { question, enableReadingList, section } = props;
   const intl = useIntlContext();
@@ -312,27 +309,45 @@ export const FormItemTitle = (
 };
 
 export const FormItemDescription = (
-  props: FormItemProps & { section: SectionMetadata },
+  props: FormItemProps & { section: SectionMetadata }
 ) => {
   const { question } = props;
   const { entity } = question;
   const intl = useIntlContext();
   const intlIds = getQuestioni18nIds({ ...props });
   const i18nDescription = intl.formatMessage({ id: intlIds.description });
+  const i18nPrompt = intl.formatMessage({ id: intlIds.prompt });
+
   const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
-  return i18nDescription && i18nDescription.type !== TokenType.KEY_FALLBACK ? (
-    <div className="form-item-description">
-      <T token={intlIds.description} />
-    </div>
-  ) : entityDescription ? (
-    <p className="form-item-description">
-      <span
-        dangerouslySetInnerHTML={{
-          __html: entityDescription,
-        }}
-      />
-    </p>
-  ) : null;
+
+  if (i18nPrompt && i18nPrompt.type !== TokenType.KEY_FALLBACK) {
+    return (
+      <div className="form-item-description">
+        <T token={intlIds.prompt} />
+      </div>
+    );
+  } else if (
+    i18nDescription &&
+    i18nDescription.type !== TokenType.KEY_FALLBACK
+  ) {
+    return (
+      <div className="form-item-description">
+        <T token={intlIds.description} />
+      </div>
+    );
+  } else if (entityDescription) {
+    return (
+      <p className="form-item-description">
+        <span
+          dangerouslySetInnerHTML={{
+            __html: entityDescription,
+          }}
+        />
+      </p>
+    );
+  } else {
+    return null;
+  }
 };
 
 export const FormItemLimit = ({ question }: FormItemProps) => {
@@ -345,7 +360,7 @@ export const FormItemLimit = ({ question }: FormItemProps) => {
 };
 
 export const FormItemNote = (
-  props: FormItemProps & { section: SectionMetadata },
+  props: FormItemProps & { section: SectionMetadata }
 ) => {
   const intl = useIntlContext();
   const intlIds = getQuestioni18nIds({ ...props });

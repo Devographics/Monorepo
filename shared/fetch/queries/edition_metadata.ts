@@ -105,6 +105,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
               order
               optionsAreNumeric
               # optionsAreRange
+              units
               entity {
                 ${getEntityFragment()}
               }

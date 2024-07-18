@@ -165,6 +165,8 @@ type QuestionMetadata {
     hidden: Boolean
     # textarea vs input for freeform questions
     longText: Boolean
+    # for numerical questions, specify value units
+    units: String
 }
 
 type RawDbPaths {
