@@ -13,17 +13,17 @@ export const getCommonContexts = () => {
   return parseEnvVariableArray(getEnvVar(EnvVar.DEFAULT_LOCALE_CONTEXTS));
 };
 
-// i18n contexts specific to a survey/edition
-// (note that all editions of the same survey share the same locale context)
-export const getSurveyContexts = ({ survey }: { survey: SurveyMetadata }) => [
+// i18n contexts for a survey
+export const getSurveyContexts = (survey: SurveyMetadata) => [
+  ...getCommonContexts(),
   survey.id,
 ];
 
-export const getEditionContexts = ({
-  edition,
-}: {
-  edition: EditionMetadata;
-}) => [edition.survey.id];
+// i18n contexts for an edition of a survey
+export const getEditionContexts = (edition: EditionMetadata) => [
+  ...getSurveyContexts(edition.survey),
+  edition.id,
+];
 
 export const safeLocaleIdFromParams = (params: { lang: string }) => {
   const localeId = filterLang(params.lang);

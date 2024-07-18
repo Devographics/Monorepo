@@ -50,7 +50,7 @@ export default async function SurveyLayout({
 }) {
   setLocaleIdServerContext(params.lang); // Needed for "ServerT"
   const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
-  const i18nContexts = getEditionContexts({ edition });
+  const i18nContexts = getEditionContexts(edition);
   // TODO: should we load common contexts here ? They may already be fetched by the common layout ?
   const {
     locale,

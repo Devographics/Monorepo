@@ -31,7 +31,6 @@ import PlausibleProvider from "next-plausible";
 import { LocaleParsed } from "@devographics/i18n";
 import { I18nContextProvider } from "@devographics/react-i18n";
 
-
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
   localeId: string;
@@ -103,17 +102,15 @@ export function ClientLayout(props: AppLayoutProps) {
               localeId={localeId}
               localeStrings={localeStrings}
             >
-
-              <I18nContextProvider
-                locale={localeStrings}
-              >
+              <I18nContextProvider locale={localeStrings}>
                 {/** @ts-ignore */}
-                <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
+                <ErrorBoundary
+                  proposeReload={true}
+                  proposeHomeRedirection={true}
+                >
                   <KeydownContextProvider>
                     <UserMessagesProvider>
-                      {addWrapper ?
-                        <Layout>{children}</Layout>
-                        : children}
+                      {addWrapper ? <Layout>{children}</Layout> : children}
                     </UserMessagesProvider>
                   </KeydownContextProvider>
                 </ErrorBoundary>
