@@ -1,23 +1,24 @@
 import get from 'lodash/get'
-import { BlockDefinition, PageContextValue, StringTranslator } from 'core/types'
+import { BlockVariantDefinition, PageContextValue, StringTranslator } from 'core/types'
 import { Entity } from '@devographics/types'
 import { getSiteTitle } from './pageHelpers'
 import { useI18n } from '@devographics/react-i18n'
 import { useEntities } from 'core/helpers/entities'
 import { usePageContext } from 'core/helpers/pageContext'
 import { removeDoubleSlashes } from './utils'
+import snarkdown from 'snarkdown'
 
 export const replaceOthers = s => s?.replace('_others', '.others')
 
-export const getBlockKey = ({ block }: { block: BlockDefinition }) => {
-    let namespace = block.sectionId
+export const getBlockKey = ({ block }: { block: BlockVariantDefinition }) => {
+    let namespace = block.i18nNamespace || block.sectionId
     if (block.template === 'feature_experience') {
         namespace = 'features'
     }
     if (block.template === 'tool_experience') {
         namespace = 'tools'
     }
-    const blockId = replaceOthers(block?.fieldId || block?.id)
+    const blockId = block?.fieldId || block?.id
     return `${namespace}.${blockId}`
 }
 
@@ -26,7 +27,7 @@ export const getBlockTabKey = ({
     pageContext,
     variantIndex
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     variantIndex: number
 }) =>
@@ -36,41 +37,97 @@ export const getBlockTabKey = ({
         ? 'tabs.all_respondents'
         : getBlockTitleKey({ block, pageContext })
 
-export const getBlockNoteKey = ({ block }: { block: BlockDefinition }) =>
+export const getBlockTabTitle = ({
+    block,
+    pageContext,
+    variantIndex,
+    getString,
+    entities
+}: {
+    block: BlockVariantDefinition
+    pageContext: PageContextValue
+    variantIndex: number
+    getString: StringTranslator
+    entities: Entity[]
+}) => {
+    if (block.tabId) {
+        return getString(block.tabId)?.t
+    } else if (variantIndex === 0) {
+        return getString('tabs.all_respondents')?.t
+    } else {
+        const facetBlock = {
+            id: block.filtersState?.facet?.id,
+            sectionId: block.filtersState?.facet?.sectionId
+        } as BlockVariantDefinition
+
+        const facetTitle = getBlockTitle({
+            block: facetBlock,
+            pageContext,
+            getString,
+            entities
+        })
+        if (facetTitle) {
+            return getString('charts.vs')?.t + ' ' + facetTitle
+        } else {
+            return getString(getBlockTitleKey({ block, pageContext }))?.t
+        }
+    }
+}
+
+export const getBlockNoteKey = ({ block }: { block: BlockVariantDefinition }) =>
     block.noteId || `${getBlockKey({ block })}.note`
 
 export const getBlockTitleKey = ({
     block
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext?: PageContextValue
 }) => block.titleId || getBlockKey({ block })
 
-export const getBlockTitle = ({
-    block,
-    pageContext,
-    getString,
-    entities
-}: {
-    block: BlockDefinition
+export const getBlockTitle = (options: {
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     getString: StringTranslator
     entities?: Entity[]
+    useShortLabel?: boolean
+    useFullVersion?: boolean
 }) => {
+    const {
+        block,
+        pageContext,
+        getString,
+        entities,
+        useShortLabel,
+        useFullVersion = true
+    } = options
+    let shortTitle
     const entity = entities?.find(e => e.id === block.id)
     const entityName = entity?.nameClean || entity?.name
     const specifiedTitle = block.titleId && getString(block.titleId)?.tClean
-    const key = getBlockTitleKey({ block, pageContext })
-    const defaultTitle = getString(getBlockKey({ block }))?.tClean
+    const key = getBlockKey({ block })
+    const defaultTitle = getString(key)?.tClean
+
+    if (useShortLabel) {
+        shortTitle = getString(key + '.short')?.tClean
+    }
+
     const fieldTitle =
-        block.fieldId && getString(getBlockKey({ block: { ...block, id: block.fieldId } }))?.tClean
-    const tabTitle = block.tabId && `${fieldTitle} ${getString(block.tabId)?.tClean}`
-    const values = [specifiedTitle, defaultTitle, tabTitle, fieldTitle, entityName, key]
+        block.fieldId &&
+        getString(
+            getBlockKey({ block: { ...block, i18nNamespace: block.sectionId, id: block.fieldId } })
+        )?.t
+    // when sharing block we want full version (e.g. "Years of Experience By Salary") but
+    // in other context we might not
+    const tabTitle =
+        block.tabId && useFullVersion
+            ? `${fieldTitle || block.fieldId} ${getString(block.tabId)?.tClean}`
+            : getString(block.tabId)?.tClean
+    const values = [specifiedTitle, shortTitle, defaultTitle, tabTitle, fieldTitle, entityName, key]
     // console.table(values)
     return values.find(v => v !== undefined)
 }
 
-export const useBlockTitle = ({ block }: { block: BlockDefinition }) => {
+export const useBlockTitle = ({ block }: { block: BlockVariantDefinition }) => {
     const { getString } = useI18n()
     const entities = useEntities()
     const pageContext = usePageContext()
@@ -93,7 +150,7 @@ export const getBlockTakeaway = ({
     values,
     options
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     getString: StringTranslator
     values?: any
@@ -108,10 +165,10 @@ export const getBlockTakeaway = ({
         values
     })?.tHtml
     const genericTakeaway = getString(takeawayKey, { values })?.tHtml
-    return blockTakeaway ?? editionTakeaway ?? genericTakeaway
+    return block.takeaway ?? blockTakeaway ?? editionTakeaway ?? genericTakeaway
 }
 
-export const useBlockTakeaway = ({ block }: { block: BlockDefinition }) => {
+export const useBlockTakeaway = ({ block }: { block: BlockVariantDefinition }) => {
     const { getString } = useI18n()
     const entities = useEntities()
     const pageContext = usePageContext()
@@ -134,7 +191,7 @@ export const getBlockDescription = ({
     values,
     options
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     getString: StringTranslator
     values?: any
@@ -145,7 +202,8 @@ export const getBlockDescription = ({
     const descriptionKey = `${getBlockKey({ block })}.description`
     const { currentEdition } = pageContext
     const blockDescription =
-        block.descriptionId && getString(block.descriptionId, { values })?.tHtml
+        (block.description && snarkdown(block.description)) ||
+        (block.descriptionId && getString(block.descriptionId, { values })?.tHtml)
     const editionDescription = getString(`${descriptionKey}.${currentEdition.id}`, {
         values
     })?.tHtml
@@ -158,7 +216,7 @@ export const useBlockDescription = ({
     values,
     options
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     values?: any
     options?: {
         isHtml?: boolean
@@ -173,7 +231,7 @@ export const getBlockQuestion = ({
     block,
     getString
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     getString: StringTranslator
 }) => {
     const blockQuestion = block.questionKey && getString(block.questionKey)?.t
@@ -182,7 +240,7 @@ export const getBlockQuestion = ({
     return blockQuestion || translation?.tClean || translation?.t
 }
 
-export const useBlockQuestion = ({ block }: { block: BlockDefinition }) => {
+export const useBlockQuestion = ({ block }: { block: BlockVariantDefinition }) => {
     const { getString } = useI18n()
     return getBlockQuestion({ block, getString })
 }
@@ -191,7 +249,7 @@ export const getBlockImage = ({
     block,
     pageContext
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
 }) => {
     const capturesUrl = `${process.env.GATSBY_ASSETS_URL}/captures/${pageContext.currentEdition.id}`
@@ -208,7 +266,7 @@ interface UrlParams {
 }
 
 interface GetBlockLinkProps {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     params?: any
     useRedirect?: boolean
@@ -224,9 +282,8 @@ export const getBlockLinkLocal = ({
     const { id } = block
     const paramsString = params ? `?${new URLSearchParams(params).toString()}` : ''
     const { currentPath } = pageContext
-    let path = useRedirect
-        ? `${currentPath}/${id}${paramsString}`
-        : `${currentPath}/${paramsString}#${id}`
+    const fullUrl = pageContext.currentEdition.resultsUrl + currentPath
+    let path = useRedirect ? `${fullUrl}/${id}${paramsString}` : `${fullUrl}/${paramsString}#${id}`
 
     // remove any double slashes
     path = removeDoubleSlashes(path)
@@ -271,7 +328,10 @@ export const getBlockLinkRemote = ({
     return url
 }
 export const getBlockLink = (props: GetBlockLinkProps) => {
-    if (process.env.GATSBY_GENERATE_BLOCKS) {
+    const { pageContext } = props
+    const { config } = pageContext
+    const { generateBlocks = false } = config
+    if (generateBlocks) {
         return getBlockLinkLocal(props)
     } else {
         return getBlockLinkRemote(props)
@@ -284,7 +344,7 @@ export const getBlockMeta = ({
     getString,
     title
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     getString: StringTranslator
     title?: string

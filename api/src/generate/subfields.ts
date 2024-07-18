@@ -2,6 +2,7 @@ import { QuestionApiObject, ResolverType } from '../types/surveys'
 import { getFiltersTypeName, getFacetsTypeName, graphqlize } from '../generate/helpers'
 import { Option, ResultsSubFieldEnum } from '@devographics/types'
 import { getEntities, getEntity } from '../load/entities'
+import { getResponseTypeName } from '../graphql/templates'
 
 interface SubField {
     id: ResultsSubFieldEnum
@@ -11,15 +12,10 @@ interface SubField {
     resolverFunction?: ResolverType
 }
 
-export const getResponsesTypeDef = (
-    { surveyId }: QuestionApiObject,
-    subField: ResultsSubFieldEnum | string
-) =>
+export const getResponsesTypeDef = (surveyId: string, subField: ResultsSubFieldEnum | string) =>
     `${subField}(filters: ${getFiltersTypeName(
         surveyId
-    )}, parameters: Parameters, facet: ${getFacetsTypeName(surveyId)}): ${graphqlize(
-        surveyId
-    )}Responses`
+    )}, parameters: Parameters, facet: ${getFacetsTypeName(surveyId)}): ${getResponseTypeName()}`
 
 const responsesResolverFunction: ResolverType = async (parent, args, context, info) => {
     console.log('// responses resolver')
@@ -42,31 +38,30 @@ export const subFields: Array<SubField> = [
         addIf: () => true,
         resolverFunction: ({ question }) => {
             console.log('// question metadata resolver')
-            console.log(question)
             return question
         }
     },
     {
         id: ResultsSubFieldEnum.RESPONSES,
-        def: question => getResponsesTypeDef(question, ResultsSubFieldEnum.RESPONSES),
+        def: question => getResponsesTypeDef(question.surveyId, ResultsSubFieldEnum.RESPONSES),
         addIf: ({ normPaths }) => !!normPaths?.response,
         resolverFunction: responsesResolverFunction
     },
     {
         id: ResultsSubFieldEnum.PRENORMALIZED,
-        def: question => getResponsesTypeDef(question, ResultsSubFieldEnum.PRENORMALIZED),
+        def: question => getResponsesTypeDef(question.surveyId, ResultsSubFieldEnum.PRENORMALIZED),
         addIf: ({ normPaths }) => !!normPaths?.prenormalized,
         resolverFunction: responsesResolverFunction
     },
     {
         id: ResultsSubFieldEnum.COMBINED,
-        def: question => getResponsesTypeDef(question, ResultsSubFieldEnum.COMBINED),
+        def: question => getResponsesTypeDef(question.surveyId, ResultsSubFieldEnum.COMBINED),
         addIf: ({ normPaths }) => !!normPaths?.other && !!normPaths?.response,
         resolverFunction: responsesResolverFunction
     },
     {
         id: ResultsSubFieldEnum.FREEFORM,
-        def: question => getResponsesTypeDef(question, ResultsSubFieldEnum.FREEFORM),
+        def: question => getResponsesTypeDef(question.surveyId, ResultsSubFieldEnum.FREEFORM),
         addIf: ({ normPaths }) => !!normPaths?.other,
         resolverFunction: responsesResolverFunction
     },

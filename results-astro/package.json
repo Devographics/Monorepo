@@ -7,7 +7,8 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "bun test"
   },
   "dependencies": {
     "@astrojs/check": "^0.5.4",
@@ -15,14 +16,23 @@
     "@devographics/fetch": "workspace:^1.0.0",
     "@devographics/helpers": "workspace:^1.0.0",
     "@devographics/i18n": "workspace:^1.0.0",
-    "@devographics/react-i18n": "workspace:^1.0.0",
+    "@devographics/react-i18n": "workspace:^",
     "@devographics/types": "workspace:^1.0.0",
+    "@radix-ui/react-tabs": "^1.0.1",
+    "@types/react": "^18.2.75",
     "astro": "^4.5.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "styled-components": "^5.3.6",
     "typescript": "^5.3.3",
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@astrojs/react": "^3.0.7",
     "@rollup/plugin-yaml": "^4.1.2",
+    "@types/bun": "^1.1.1",
+    "@types/react-dom": "^18.3.0",
+    "@types/styled-components": "^5.1.26",
     "prettier": "^3.2.5",
     "sass": "^1.71.1"
   }

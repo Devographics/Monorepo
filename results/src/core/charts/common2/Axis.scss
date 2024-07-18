@@ -1,0 +1,68 @@
+.chart-axis {
+    font-size: 0.8rem;
+}
+.chart-axis-inner {
+    .chart-axis-top & {
+        border-bottom: 1px dotted var(--borderAltColor);
+    }
+
+    .chart-axis-bottom & {
+        border-top: 1px dotted var(--borderAltColor);
+    }
+}
+
+.chart-axis-horizontal {
+    .chart-axis-top {
+        // margin-top: var(--spacing);
+    }
+    .chart-axis-inner {
+        grid-area: content;
+    }
+
+    .chart-axis-ticks {
+        position: relative;
+        height: 30px;
+        // display: grid;
+        // grid-template-columns: repeat(auto-fit, minmax(1%, 1fr));
+    }
+    .chart-axis-tick {
+        position: absolute;
+        left: var(--xOffset);
+        &::before {
+            position: absolute;
+            display: block;
+            content: ' ';
+            width: 1px;
+            height: 10px;
+            background: var(--borderAltColor);
+        }
+    }
+    .chart-axis-tick-label {
+        transform: translate(-50%);
+        position: absolute;
+        top: 5px;
+        color: var(--textAltColor);
+        .chart-axis-top & {
+            // top: -30px;
+        }
+    }
+    .chart-axis-label {
+        margin-top: var(--spacing);
+        display: flex;
+        justify-content: center;
+    }
+}
+.chart-axis-bottom {
+    .chart-axis-tick {
+        &::before {
+            top: -5px;
+        }
+    }
+}
+.chart-axis-top {
+    .chart-axis-tick {
+        &::before {
+            top: 25px;
+        }
+    }
+}

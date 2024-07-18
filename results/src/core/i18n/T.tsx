@@ -1,4 +1,4 @@
-// TODO: make reusable?
+// TODO: reuse T component from @devographics/react-i18n
 import React from 'react'
 import { useI18n } from '@devographics/react-i18n'
 // import ReactMarkdown from 'react-markdown'
@@ -6,8 +6,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { useKeydownContext } from 'core/helpers/keydownContext'
 
 const getGitHubSearchUrl = (k: string, localeId = 'en') =>
-    `https://github.com/search?q=${k}+repo%3AStateOfJS%2Fstate-of-js-graphql-results-api+path%3A%2Fsrc%2Fi18n%2F${
-        localeId || 'en'
+    `https://github.com/search?q=${k}+repo%3AStateOfJS%2Fstate-of-js-graphql-results-api+path%3A%2Fsrc%2Fi18n%2F${localeId || 'en'
     }%2F+path%3A%2Fsrc%2Fi18n%2Fen-US%2F&type=Code&ref=advsearch&l=&l=`
 
 interface TProps {
@@ -19,6 +18,7 @@ interface TProps {
     isFallback?: boolean
     useShort?: boolean
     element?: string
+    fallback?: string
 }
 
 export const T = ({
@@ -27,6 +27,7 @@ export const T = ({
     values,
     md = false,
     html = false,
+    fallback,
     isFallback = false,
     useShort = false,
     element
@@ -45,9 +46,9 @@ export const T = ({
     if (override) {
         classNames.push('t-override')
     } else {
-        // FIXME: expects a fallback value, not "isFallback boolean"
-        const tFullString = getString(k, { values }, isFallback)
-        const tShortString = getString(`${k}.short`, { values }, isFallback)
+        // FIXME: expects a fallabck value, not "isFallback boolean"
+        const tFullString = getString(k, { values }, fallback)//isFallback)
+        const tShortString = getString(`${k}.short`, { values }, fallback)// isFallback)
 
         const translationObject = useShort && !tShortString.missing ? tShortString : tFullString
 
@@ -71,6 +72,9 @@ export const T = ({
                 // a translation was found, but it's a fallback placeholder
                 translation = md ? translationObject.tHtml : translationObject.t
                 classNames.push('t-isFallback')
+            } else if (fallback) {
+                translation = fallback
+                classNames.push('t-providedFallback')
             } else {
                 // no translation was found
                 translation = `[${translationObject.locale.id}] ${k}`

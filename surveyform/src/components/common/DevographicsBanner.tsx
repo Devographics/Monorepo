@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
 import { useCookies } from "react-cookie";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { useEffect, useState } from "react";
+import { T } from "@devographics/react-i18n"
+
 
 /**
  *
@@ -30,7 +31,7 @@ const DevographicsBanner = () => {
     <div className="devographics-banner">
       <div className="devographics-banner-inner">
         <div className="devographics-banner-message">
-          <FormattedMessage id="general.devographics_banner" />
+          <T token="general.devographics_banner" />
         </div>
       </div>
       <div className="devographics-banner-close" onClick={handleClose}>

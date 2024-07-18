@@ -1,4 +1,4 @@
-import { NextConfig } from "next";
+import type { NextConfig } from "next";
 
 const { extendNextConfig } = require("../../packages/@vulcanjs/next-config");
 const flowRight = require("lodash/flowRight");

@@ -10,6 +10,8 @@ type Entity {
     name: String
     nameClean: String
     nameHtml: String
+    # for streamers, etc. who are best know by their nickname
+    alias: String
     otherName: String
     homepageUrl: String
     homepage: Homepage
@@ -22,10 +24,12 @@ type Entity {
     description: String
     descriptionClean: String
     descriptionHtml: String
-    type: String
     tags: [String]
     patterns: [String]
     exactMatch: Boolean
+
+    # auto-generated field, equal to default/people/feature/library
+    entityType: String
 
     apiOnly: Boolean
 
@@ -53,6 +57,9 @@ type Entity {
 
     # for features
     example: Example
+
+    # for people
+    avatar: Avatar
 }
 
 """
@@ -152,4 +159,17 @@ type Token {
     parentId: String
     tags: [String]
     patterns: [String]
+    name: String
+    nameClean: String
+    nameHtml: String
+    description: String
+    descriptionClean: String
+    descriptionHtml: String
+}
+
+"""
+Link to an avatar
+"""
+type Avatar {
+    url: String
 }

@@ -8,7 +8,7 @@ import get from 'lodash/get'
 import { AutoSelectText, TextArea, Message_ } from 'core/blocks/block/BlockData'
 import { EditIcon } from 'core/icons'
 import isEmpty from 'lodash/isEmpty'
-import { getBlockQuery } from 'core/helpers/queries'
+import { getBlockQuery } from 'core/queries/queries'
 import { usePageContext } from 'core/helpers/pageContext'
 
 const parseData = (block, contents) => {

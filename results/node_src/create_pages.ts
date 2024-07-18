@@ -1,4 +1,4 @@
-import type { CreatePagesArgs, Page } from "gatsby"
+import type { CreatePagesArgs, Page } from 'gatsby'
 import { computeSitemap } from './sitemap'
 import {
     getPageContext,
@@ -7,7 +7,8 @@ import {
     createBlockPages,
     runPageQueries,
     getLoadMethod,
-    getMetadata
+    getMetadata,
+    getTranslationContexts
 } from './helpers'
 import { getSendOwlData } from './sendowl'
 // @ts-ignore
@@ -15,12 +16,14 @@ import yaml from 'js-yaml'
 import fs from 'fs'
 import path from 'path'
 import { logToFile } from './log_to_file'
-import { getLocalesWithStrings } from "./react-i18n/fetch-locales"
+import { getLocalesWithStrings } from './react-i18n/fetch-locales'
 // import { getLocalesWithStrings } from "@devographics/react-i18n/server"
 // import { allowedCachingMethods } from "@devographics/fetch"
-import { allowedCachingMethods } from "./helpers"
+import { allowedCachingMethods } from './helpers'
 import type { PageContextValue } from '../src/core/types/context'
-import type { SponsorProduct } from "../src/core/types/sponsors"
+import type { SponsorProduct } from '../src/core/types/sponsors'
+import { LocaleWithStrings } from './react-i18n/typings'
+import trim from 'lodash/trim.js'
 
 //  Not needed in TS/ recent versions of node
 // import { fileURLToPath } from 'url'
@@ -59,7 +62,6 @@ function strikeThrough(text) {
         .join('')
 }
 
-
 /**
  * @see createPages https://www.gatsbyjs.com/docs/how-to/querying-data/using-gatsby-without-graphql/#the-approach-fetch-data-and-use-gatsbys-createpages-api
  */
@@ -78,6 +80,8 @@ export const createPagesSingleLoop = async ({
         const editionId = process.env.EDITIONID
         if (!editionId) throw new Error(`Must provide "EDITIONID" env variable`)
 
+        const translationContexts = getTranslationContexts({ surveyId, editionId })
+
         const buildInfo = {
             USE_FAST_BUILD,
             localeCount: 0,
@@ -85,7 +89,7 @@ export const createPagesSingleLoop = async ({
             pageCount: 0,
             blocks: [],
             blockCount: 0,
-            translationContexts: config.translationContexts
+            translationContexts
         }
 
         const cachingMethods = allowedCachingMethods()
@@ -93,8 +97,8 @@ export const createPagesSingleLoop = async ({
             .map(cm => (cachingMethods[cm] ? cm : strikeThrough(cm)))
             .join(', ')
 
-        // if USE_FAST_BUILD is turned on only keep en-US and ru-RU locale to make build faster
-        const localeIds = USE_FAST_BUILD ? ['en-US', 'ru-RU'] : []
+        const localeIdsEnvArray = process.env.LOCALE_IDS?.split(',')?.map(l => trim(l))
+        const localeIds = localeIdsEnvArray || []
 
         const appConfig = process.env.CONFIG ? process.env.CONFIG : 'default'
 
@@ -105,12 +109,17 @@ export const createPagesSingleLoop = async ({
 • 📡 apiUrl = ${process.env.GATSBY_API_URL}
 • 📁 caching methods = ${cachingMethodsString}
 • ⏱️ fast build = ${USE_FAST_BUILD}
-• 📖 load method = ${getLoadMethod()}
-• 🌐 locales = ${localeIds.length > 0 ? localeIds.join(', ') : 'all'}`
+• 📖 surveys load method = ${getLoadMethod()}
+• 🌐 locales = ${localeIds.length > 0 ? localeIds.join(', ') : 'all available'}
+• 🌐 contexts = ${translationContexts.join(', ')}`
         )
 
         // load metadata
-        const { currentSurvey, currentEdition } = await getMetadata({ surveyId, editionId, graphql })
+        const { currentSurvey, currentEdition } = await getMetadata({
+            surveyId,
+            editionId,
+            graphql
+        })
         const { enableChartSponsorships, resultsUrl } = currentEdition
         const metadata = []
 
@@ -121,21 +130,28 @@ export const createPagesSingleLoop = async ({
 
         // loading i18n data
 
-        const locales = await getLocalesWithStrings({
-            localeIds,
-            graphql,
-            contexts: config.translationContexts,
-            //editionId
-        })
+        let locales: Array<LocaleWithStrings> = []
+        // Stop the build if there is an error rather than building a non-sensical context
+        try {
+            locales = await getLocalesWithStrings({
+                localeIds,
+                graphql,
+                contexts: translationContexts
+                //editionId
+            })
+        } catch (err) {
+            err.fatal = true
+            throw err
+        }
 
         buildInfo.localeCount = locales.length
 
         const cleanLocales = getCleanLocales(locales)
-        logToFile('locales.json', cleanLocales, { mode: 'overwrite'/*,surveyId*/ })
+        logToFile('locales.json', cleanLocales, { mode: 'overwrite' /*,surveyId*/ })
         locales.forEach(locale => {
             logToFile(`${locale.id}.json`, locale, {
                 mode: 'overwrite',
-                subDir: 'locales',
+                subDir: 'locales'
                 //editionId
             })
         })
@@ -151,7 +167,7 @@ export const createPagesSingleLoop = async ({
 
         const flatSitemap = { locales: cleanLocales, contents: flat }
         logToFile('flat_sitemap.yml', yaml.dump(flatSitemap, { noRefs: true }), {
-            mode: 'overwrite',
+            mode: 'overwrite'
             //editionId
         })
 
@@ -193,7 +209,13 @@ export const createPagesSingleLoop = async ({
 
             try {
                 // pageData = await runPageQuery({ page, graphql })
-                pageData = await runPageQueries({ page, graphql, surveyId, editionId, currentEdition })
+                pageData = await runPageQueries({
+                    page,
+                    graphql,
+                    surveyId,
+                    editionId,
+                    currentEdition
+                })
             } catch (error) {
                 console.log(`// GraphQL error for page ${page.id}`)
                 console.log(page)
@@ -241,7 +263,7 @@ export const createPagesSingleLoop = async ({
             }
         }
         logToFile('build.yml', yaml.dump(buildInfo, { noRefs: true }), {
-            mode: 'overwrite',
+            mode: 'overwrite'
             //editionId
         })
     } catch (err) {
@@ -249,7 +271,10 @@ export const createPagesSingleLoop = async ({
          * Important otherwise Gatsby will mangle errors and output "p" is not defined
          * Maybe a bug in the error display itself in Gatsby?
          */
-        console.error("ERROR WHILE RUNNING createPagesSingleLoop", err)
-        // throw err
+        if (err.fatal) {
+            throw err
+        } else {
+            console.error('ERROR WHILE RUNNING createPagesSingleLoop', err)
+        }
     }
 }

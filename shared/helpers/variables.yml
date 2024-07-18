@@ -47,6 +47,30 @@
   usedBy:
       - surveyform
 
+- id: LOCALE_IDS
+  optional: true
+  description: Restrict the list of locales to be loaded
+  example: en-US, ja-JA
+  usedBy:
+      - api
+      - surveyform
+      - results
+
+- id: LOCALE_CONTEXTS
+  optional: true
+  description: Restrict the list of contexts to be loaded
+  example: common, survey, results
+  usedBy:
+      - api
+
+- id: CUSTOM_LOCALE_CONTEXTS
+  optional: true
+  description: List of custom locale contexts to load
+  example: tdresults
+  usedBy:
+      - surveyform
+      - results
+
 - id: NODE_ENV
   aliases:
       - NEXT_PUBLIC_NODE_ENV
@@ -326,6 +350,16 @@
   usedBy:
       - surveyform
       - results
+      - results-astro
+
+- id: DISABLE_REDIS_CACHE
+  optional: true
+  description: Set to `true` to always fetch data via API
+  example: "'true' or ''"
+  usedBy:
+      - surveyform
+      - results
+      - results-astro
 
 - id: PORT
   optional: true

@@ -4,35 +4,50 @@ import blockRegistry from 'Config/blocks'
 import isEmpty from 'lodash/isEmpty'
 import { usePageContext } from 'core/helpers/pageContext'
 import { BlockError } from 'core/blocks/block/BlockError'
-import { getBlockData, getBlockSeriesData } from 'core/helpers/data'
-import { BlockDefinition } from 'core/types'
-import { CustomizationDefinition } from 'core/filters/types'
+import { getBlockSeriesData } from 'core/helpers/data'
+import { BlockVariantDefinition } from 'core/types'
 import { getAllQuestions } from 'core/helpers/options'
+import { DataSeries } from 'core/filters/types'
+import { CustomVariant } from 'core/filters/helpers'
 
 interface BlockSwitcherProps {
-    block: BlockDefinition
+    block: BlockVariantDefinition
+    blockIndex: number
+    variantIndex: number
     pageData?: any
     index?: number
+    series?: DataSeries<any>
+    variant?: CustomVariant
 }
-const BlockSwitcher = ({ pageData, block, index, ...props }: BlockSwitcherProps) => {
+const BlockSwitcher = ({
+    pageData,
+    block,
+    index,
+    series: series_,
+    variant,
+    isLoading
+}: BlockSwitcherProps) => {
     const pageContext = usePageContext()
+    const { id, blockType, filtersState, query } = block
 
-    const { id, blockType } = block
     if (!blockRegistry[blockType]) {
+        console.log(blockType)
+        console.log(blockRegistry)
+        console.log(block)
         return (
             <BlockError
                 block={block}
                 message={`Missing Block Component! Block ID: ${id} | type: ${blockType}`}
+                errorCode={{ block }}
             />
         )
     }
     const BlockComponent = blockRegistry[blockType]
 
-    const { filtersState } = block
-
     const question = getAllQuestions(pageContext.currentEdition).find(
         q => q.id === (block.fieldId ?? block.id)
     )
+    const series = series_ || getBlockSeriesData({ block, pageContext, filtersState })
 
     const blockProps = {
         block,
@@ -42,29 +57,13 @@ const BlockSwitcher = ({ pageData, block, index, ...props }: BlockSwitcherProps)
         pageContext,
         // backwards-compatibility
         context: pageContext,
-        BlockComponent
+        BlockComponent,
+        series,
+        variant,
+        data: series?.[0]?.data // backwards-compatibility
     }
-    if (filtersState) {
-        return <BlockSwitcherWithSeriesData {...blockProps} filtersState={filtersState} />
-    } else {
-        return <BlockSwitcherWithRegularData {...blockProps} />
-    }
-}
 
-const BlockSwitcherWithSeriesData = (
-    props: BlockSwitcherProps & {
-        filtersState: CustomizationDefinition
-        blockComponent: React.ComponentType<any>
-    }
-) => {
-    const { block, pageData, BlockComponent, pageContext, filtersState } = props
-    const { id, blockType } = block
-
-    filtersState.options.preventQuery = true
-
-    const series = getBlockSeriesData({ block, pageContext, filtersState })
-
-    if (block.query && (!series || isEmpty(series) || series.length === 0 || !series[0].data)) {
+    if (query && (!series || isEmpty(series) || series.length === 0 || !series[0].data)) {
         return (
             <BlockError
                 block={block}
@@ -77,26 +76,7 @@ const BlockSwitcherWithSeriesData = (
         )
     }
 
-    return <BlockComponent series={series} {...props} />
-}
-
-const BlockSwitcherWithRegularData = (props: BlockSwitcherProps) => {
-    const { block, pageData, BlockComponent, pageContext } = props
-    const { id, blockType } = block
-    const { dataPath, data } = getBlockData({ block, pageContext })
-
-    if (block.query && (!data || data === null || isEmpty(data))) {
-        return (
-            <BlockError
-                block={block}
-                message={`No available data for block ${id} | path(s): ${dataPath} | type: ${blockType}`}
-            >
-                <textarea readOnly value={JSON.stringify(pageData, undefined, 2)} />
-            </BlockError>
-        )
-    }
-
-    return <BlockComponent data={data} {...props} />
+    return <BlockComponent {...blockProps} />
 }
 
 export default BlockSwitcher

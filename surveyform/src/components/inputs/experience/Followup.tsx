@@ -36,7 +36,7 @@ export const FollowUps = (
   props: ExperienceProps & {
     option: OptionMetadata;
     followupData: FollowupData;
-  }
+  },
 ) => {
   const {
     updateCurrentValues,
@@ -58,13 +58,13 @@ export const FollowUps = (
 
   if (!predefinedFollowupPath || !freeformFollowupPath) {
     throw new Error(
-      `Could not find predefinedFollowupPath or freeformFollowupPath for question ${question.id}`
+      `Could not find predefinedFollowupPath or freeformFollowupPath for question ${question.id}`,
     );
   }
 
   const intl = useIntlContext();
 
-  const placeholder = intl.formatMessage({ id: `followups.placeholder` });
+  const placeholder = intl.formatMessage({ id: `followups.placeholder` })?.t;
 
   return (
     <div className="followups">
@@ -75,7 +75,7 @@ export const FollowUps = (
         <div className="followups-predefined">
           {optionFollowUps.map((followupOption, index) => {
             const isChecked = predefinedFollowupValue?.includes(
-              followupOption.id
+              followupOption.id,
             );
             return (
               <Button

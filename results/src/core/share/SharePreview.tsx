@@ -42,9 +42,17 @@ const Legend = styled.div`
     color: ${props => props.theme.colors.textAlt};
 `
 
+const getUrl = url => {
+    try {
+        return new URL(url)
+    } catch (error) {
+        return { hostname: '' }
+    }
+}
+
 const SharePreview = ({ title, subtitle, image, link }) => {
     const context = usePageContext()
-    const { hostname } = new URL(context.currentEdition.resultsUrl)
+    const { hostname } = getUrl(context.currentEdition.resultsUrl)
     return (
         <div>
             <Container>

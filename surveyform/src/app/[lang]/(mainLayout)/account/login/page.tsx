@@ -1,16 +1,15 @@
 import { LoginDialog } from "~/account/LoginDialog";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
+import { NextPageParams } from "~/app/typings";
 import { routes } from "~/lib/routes";
 
 const Login = async ({
+  params,
   searchParams,
-}: {
-  searchParams: {
-    /** Redirect back to this page on success */
-    from: string;
-  };
-}) => {
+}: NextPageParams<{ lang: string }, { from: string }>
+) => {
   const user = await rscCurrentUser();
+
   return (
     <div className="contents-narrow">
       <LoginDialog

@@ -47,7 +47,7 @@ export const normalizeEdition = async (args: NormalizeEditionArgs) => {
   const { data: edition } = await fetchEditionMetadataAdmin({
     surveyId,
     editionId,
-    shouldGetFromCache: false,
+    shouldGetFromCache: true,
   });
   if (!edition) {
     throw new Error(`Could not find edition for editionId ${editionId}`);

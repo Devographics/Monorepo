@@ -8,12 +8,13 @@ import {
   ResultsSubFieldEnum,
   Bucket,
 } from "@devographics/types";
-import { Fragment, useState } from "react";
-import { NormToken } from "./NormToken";
+import { Dispatch, Fragment, SetStateAction, useState } from "react";
 import { NormalizationResponse } from "~/lib/normalization/hooks";
 import isEmpty from "lodash/isEmpty";
 import { loadQuestionData } from "~/lib/normalization/services";
 import ModalTrigger from "../ui/ModalTrigger";
+import { NormTokenAction } from "./NormTokenAction";
+import { CommonNormalizationProps } from "./NormalizeQuestion";
 
 type QuestionDataProps = {
   questionData: ResponseData;
@@ -22,103 +23,8 @@ type QuestionDataProps = {
   edition: EditionMetadata;
   question: QuestionWithSection;
   entities: Entity[];
-};
-const QuestionData = ({
-  questionData,
-  responses,
-  survey,
-  edition,
-  question,
-  entities,
-}: QuestionDataProps) => {
-  const { buckets } = questionData?.currentEdition;
-  console.log(buckets);
-  const bucketProps = { responses, entities };
-  return (
-    <section>
-      {isEmpty(questionData) ? (
-        <p>No question data found.</p>
-      ) : (
-        <div>
-          <p>
-            <p>
-              This table shows aggregated counts for the subset of the data that
-              has already been processed.
-            </p>
-          </p>
-          <div>
-            <table>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>ID</th>
-                  <th>Count</th>
-                </tr>
-              </thead>
-              <tbody>
-                {buckets.map((bucket, index) => {
-                  const { id, groupedBuckets = [] } = bucket;
-                  const hasGroupedBuckets = groupedBuckets.length > 0;
-                  return (
-                    <Fragment key={id}>
-                      <Row
-                        bucket={bucket}
-                        index={index}
-                        hasGroupedBuckets={hasGroupedBuckets}
-                        {...bucketProps}
-                      />
-                      {groupedBuckets?.map((groupedBucket, index) => (
-                        <Row
-                          key={groupedBucket.id}
-                          index={index}
-                          bucket={groupedBucket}
-                          isGroupedBucket={true}
-                          {...bucketProps}
-                        />
-                      ))}
-                    </Fragment>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-    </section>
-  );
-};
-
-const Row = ({
-  bucket,
-  index,
-  hasGroupedBuckets = false,
-  isGroupedBucket = false,
-  responses,
-  entities,
-}: {
-  bucket: Bucket;
-  index: number;
-  hasGroupedBuckets?: boolean;
-  isGroupedBucket?: boolean;
-  responses: QuestionDataProps["responses"];
-  entities: QuestionDataProps["entities"];
-}) => {
-  const { id, count } = bucket;
-  const rowClass = `row row-${isGroupedBucket ? "sub-row" : "normal-row"}`;
-  return (
-    <tr key={id} className={rowClass}>
-      <td>{!isGroupedBucket && `${index + 1}.`}</td>
-      <td>
-        {isGroupedBucket && "↳ "}
-        {hasGroupedBuckets ? (
-          id
-        ) : (
-          <NormToken id={id} responses={responses} entities={entities} />
-        )}
-      </td>
-      <td>{count}</td>
-    </tr>
-  );
+  setTokenFilter: CommonNormalizationProps["setTokenFilter"];
+  setShowModal: Dispatch<SetStateAction<boolean>>;
 };
 
 export const ViewQuestionData = (props) => {
@@ -128,7 +34,7 @@ export const ViewQuestionData = (props) => {
   return (
     <ModalTrigger
       isButton={false}
-      label="📊 Question Results…"
+      label="📊 Results"
       tooltip="View tabulated results for current question"
       header={
         <div>
@@ -165,8 +71,140 @@ export const ViewQuestionData = (props) => {
         </div>
       }
     >
-      <textarea defaultValue={questionDataQuery} />
-      <QuestionData {...props} />
+      <Contents {...props} />
     </ModalTrigger>
+  );
+};
+
+const Contents = (props) => (
+  <>
+    <textarea defaultValue={props.questionDataQuery} />
+    <QuestionData {...props} />
+  </>
+);
+
+const QuestionData = ({
+  questionData,
+  responses,
+  survey,
+  edition,
+  question,
+  entities,
+  setTokenFilter,
+  setShowModal,
+}: QuestionDataProps) => {
+  const { buckets } = questionData?.currentEdition;
+  const bucketProps = { responses, entities, setShowModal };
+  return (
+    <section>
+      {isEmpty(questionData) ? (
+        <p>No question data found.</p>
+      ) : (
+        <div>
+          <p>
+            <p>
+              This table shows aggregated counts for the subset of the data that
+              has already been processed.
+            </p>
+          </p>
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>ID</th>
+                  <th>Label</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                {buckets.map((bucket, index) => {
+                  const { id, groupedBuckets = [] } = bucket;
+                  const hasGroupedBuckets = groupedBuckets.length > 0;
+                  return (
+                    <Fragment key={id}>
+                      <Row
+                        bucket={bucket}
+                        index={index}
+                        hasGroupedBuckets={hasGroupedBuckets}
+                        setTokenFilter={setTokenFilter}
+                        {...bucketProps}
+                      />
+                      {groupedBuckets?.map((groupedBucket, index) => (
+                        <Row
+                          key={groupedBucket.id}
+                          index={index}
+                          bucket={groupedBucket}
+                          isGroupedBucket={true}
+                          setTokenFilter={setTokenFilter}
+                          {...bucketProps}
+                        />
+                      ))}
+                    </Fragment>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+};
+
+const Row = ({
+  bucket,
+  index,
+  hasGroupedBuckets = false,
+  isGroupedBucket = false,
+  responses,
+  entities,
+  setTokenFilter,
+  setShowModal,
+}: {
+  bucket: Bucket;
+  index: number;
+  hasGroupedBuckets?: boolean;
+  isGroupedBucket?: boolean;
+  responses: QuestionDataProps["responses"];
+  entities: QuestionDataProps["entities"];
+  setTokenFilter: QuestionDataProps["setTokenFilter"];
+  setShowModal: QuestionDataProps["setShowModal"];
+}) => {
+  const { id, count, entity, token } = bucket;
+  const rowClass = `row row-${isGroupedBucket ? "sub-row" : "normal-row"}`;
+  const label =
+    entity?.nameHtml || entity?.name || token?.nameHtml || token?.name || "";
+  const description = token?.descriptionClean || entity?.descriptionClean || "";
+  return (
+    <tr key={id} className={rowClass}>
+      <td>{!isGroupedBucket && `${index + 1}.`}</td>
+      <td>
+        {isGroupedBucket && "↳ "}
+        {hasGroupedBuckets ? (
+          id
+        ) : (
+          <span>
+            <NormTokenAction
+              id={id.replace("catchall_", "")}
+              setTokenFilter={setTokenFilter}
+              onClick={() => {
+                setShowModal(false);
+              }}
+            />{" "}
+            {id.includes("catchall") && <code>catch-all</code>}
+          </span>
+        )}
+      </td>
+      <td>
+        <span
+          data-tooltip={description}
+          dangerouslySetInnerHTML={{
+            __html: label,
+          }}
+        />
+      </td>
+      <td>{count}</td>
+    </tr>
   );
 };

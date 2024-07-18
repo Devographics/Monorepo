@@ -152,7 +152,7 @@ export enum OptionsOrder {
     ALPHA = 'alphabetical'
 }
 
-export type SortProperty = 'options' | 'count' | 'percent' | 'id'
+export type SortProperty = 'options' | 'count' | 'percent' | 'id' | 'averageByFacet' | 'mean'
 
 /**
  * Keep in sync with QuestionMetadata in
@@ -303,6 +303,7 @@ export interface QuestionTemplateOutput extends QuestionWithId {
     normPaths?: DbPaths
     options?: Option[]
     extends?: string
+    filterFunction?: (value: any) => boolean
 }
 
 export interface QuestionTemplateOutputWithSection extends QuestionTemplateOutput {

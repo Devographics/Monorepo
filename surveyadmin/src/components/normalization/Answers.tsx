@@ -54,17 +54,6 @@ export const getSortedAnswers = (variantAnswers) => {
 };
 
 const Answers = (props: AnswersProps) => {
-  const [showResponses, setShowResponses] = useState(true);
-  const [showIds, setShowIds] = useState(false);
-  const [filterQuery, setFilterQuery] = useState("");
-  const [showShortlist, setShowShortlist] = useState(false);
-  const [showCustomOnly, setShowCustomOnly] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
-
-  const showPresetsShortlistModal = () => {
-    setShowShortlist(true);
-  };
-
   const {
     survey,
     edition,
@@ -82,7 +71,19 @@ const Answers = (props: AnswersProps) => {
     tokenFilter,
     variant,
     setVariant,
+    filterQuery,
+    setFilterQuery,
   } = props;
+
+  const [showResponses, setShowResponses] = useState(true);
+  const [showIds, setShowIds] = useState(false);
+  const [showShortlist, setShowShortlist] = useState(false);
+  const [showCustomOnly, setShowCustomOnly] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const showPresetsShortlistModal = () => {
+    setShowShortlist(true);
+  };
 
   const variantAnswers = props[`${variant}Answers`];
 

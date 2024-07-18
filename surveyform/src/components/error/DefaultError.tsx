@@ -54,9 +54,8 @@ export const DefaultErrorDisplay = ({
   const intl = useIntlContext();
   // TODO: detect when intl is not set and display the fallback messages instead
   // console.log(intl);
-  const { formatMessage } = intl;
   const t = (token) => {
-    return formatMessage({ id: token });
+    return intl.formatMessage({ id: token })?.t;
   };
   const router = useRouter();
 

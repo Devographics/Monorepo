@@ -1,5 +1,3 @@
-import { inspect } from 'util'
-import config from '../config'
 import { generateFiltersQuery } from '../filters'
 import { computeParticipationByYear } from './demographics'
 import { getGenericPipeline } from './generic_pipeline'
@@ -7,16 +5,14 @@ import { computeCompletionByYear } from './completion'
 import {
     RequestContext,
     GenericComputeArguments,
-    Survey,
-    Edition,
     Section,
     QuestionApiObject,
-    ResponseEditionData,
     ComputeAxisParameters,
     EditionApiObject,
     SortSpecifier,
     SortOrder,
-    SortOrderNumeric
+    SortOrderNumeric,
+    ExecutionContext
 } from '../types'
 import {
     discardEmptyIds,
@@ -32,19 +28,21 @@ import {
     addEditionYears,
     discardEmptyEditions,
     addLabels,
-    addAveragesByFacet,
-    removeEmptyEditions,
-    addPercentilesByFacet,
+    addAverages,
+    addPercentiles,
     groupBuckets,
     applyDatasetCutoff,
     combineWithFreeform,
     groupOtherBuckets,
     addOverallBucket,
-    addTokens
-} from './stages/index'
+    addTokens,
+    getData,
+    addFacetValiditySums,
+    addRatios,
+    detectNaN
+} from './stages'
 import {
     ResponsesTypes,
-    DbSuffixes,
     SurveyMetadata,
     EditionMetadata,
     ResponsesParameters,
@@ -52,12 +50,18 @@ import {
     ResultsSubFieldEnum,
     SortProperty
 } from '@devographics/types'
-import { getCollection } from '../helpers/db'
 import { getPastEditions } from '../helpers/surveys'
 import { computeKey } from '../helpers/caching'
 import isEmpty from 'lodash/isEmpty.js'
 import { logToFile } from '@devographics/debug'
 import { SENTIMENT_FACET } from '@devographics/constants'
+
+type StageLogItem = {
+    name: string
+    startAt: Date
+    endAt: Date
+    duration: number
+}
 
 export const convertOrder = (order: SortOrder): SortOrderNumeric => (order === 'asc' ? 1 : -1)
 
@@ -65,6 +69,8 @@ export const convertOrderReverse = (order: SortOrderNumeric): SortOrder =>
     order === 1 ? 'asc' : 'desc'
 
 /*
+
+Always use freeform/other field for source field
 
 TODO:
 
@@ -78,14 +84,19 @@ export const getDbPath = (
     responsesType: ResponsesTypes = ResponsesTypes.RESPONSES
 ) => {
     const { normPaths } = question
-    if (responsesType === ResponsesTypes.RESPONSES) {
-        return normPaths?.response
-    } else if (responsesType === ResponsesTypes.COMBINED) {
-        return normPaths?.response
-    } else if (responsesType === ResponsesTypes.PRENORMALIZED) {
-        return normPaths?.prenormalized
-    } else {
+
+    if (question.id === 'source') {
         return normPaths?.other
+    } else {
+        if (responsesType === ResponsesTypes.RESPONSES) {
+            return normPaths?.response
+        } else if (responsesType === ResponsesTypes.COMBINED) {
+            return normPaths?.response
+        } else if (responsesType === ResponsesTypes.PRENORMALIZED) {
+            return normPaths?.prenormalized
+        } else {
+            return normPaths?.other
+        }
     }
 }
 
@@ -106,7 +117,7 @@ const getQuestionSort = ({
     } else if (question.defaultSort) {
         // if question has a default sort, use it
         defaultSort = question.defaultSort
-    } else if (question.optionsAreNumeric) {
+    } else if (question.optionsAreSequential) {
         if (question.options) {
             defaultSort = 'options'
         } else {
@@ -185,40 +196,74 @@ export type GenericComputeOptions = {
 const DEFAULT_LIMIT = 50
 
 export async function genericComputeFunction(options: GenericComputeOptions) {
+    const startAt = new Date()
+    const stageLog: StageLogItem[] = []
+
+    const runStage = async (f: (...args: any[]) => Promise<any>, args: any) => {
+        const startAt = new Date()
+        const result = await f.apply(null, args)
+        const endAt = new Date()
+        const duration = Math.abs(endAt.getTime() - startAt.getTime())
+        const logItem = { name: f.name, startAt, endAt, duration }
+        stageLog.push(logItem)
+        return result
+    }
+
     const { context, survey, edition, question, questionObjects, computeArguments } = options
 
     let axis1: ComputeAxisParameters,
         axis2: ComputeAxisParameters | null = null
     const { db, isDebug } = context
-    const collection = getCollection(db, survey)
 
     // TODO "responsesType" is now called "subField" elsewhere, change it here as well at some point
-    const { responsesType, filters, parameters = {}, facet, selectedEditionId } = computeArguments
+    const {
+        responsesType,
+        filters,
+        parameters = {},
+        facet,
+        selectedEditionId,
+        executionContext = ExecutionContext.REGULAR
+    } = computeArguments
     const {
         cutoff = 1,
+        cutoffPercent,
         sort,
         limit = DEFAULT_LIMIT,
         facetSort,
         facetLimit = DEFAULT_LIMIT,
         facetCutoff = 1,
+        facetCutoffPercent,
         showNoAnswer,
-        groupUnderCutoff = true,
         mergeOtherBuckets = true,
         enableBucketGroups = true,
         enableAddOverallBucket = true,
         enableAddMissingBuckets
     } = parameters
 
+    const logPath = `last_query/${executionContext}`
+
+    if (isDebug) {
+        console.log(`//--- start genericComputeFunction (executionContext = ${executionContext})`)
+    }
+
+    // these are not passed as parameters anymore, but just default to being always true
+    // if the extra groups are not needed they can just be ignored by the user
+    const groupUnderCutoff = true
+    const groupOverLimit = true
+
     /*
 
     Axis 1
 
     */
+    const sortSpecifier = getQuestionSort({ specifier: sort, question, enableBucketGroups })
     axis1 = {
         question,
-        ...getQuestionSort({ specifier: sort, question, enableBucketGroups }),
+        ...sortSpecifier,
         cutoff,
+        cutoffPercent,
         groupUnderCutoff,
+        groupOverLimit,
         mergeOtherBuckets,
         enableBucketGroups,
         enableAddMissingBuckets,
@@ -274,7 +319,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
                         enableBucketGroups
                     }),
                     cutoff: facetCutoff,
+                    cutoffPercent: facetCutoffPercent,
                     groupUnderCutoff,
+                    groupOverLimit,
                     mergeOtherBuckets,
                     enableBucketGroups,
                     enableAddMissingBuckets,
@@ -304,7 +351,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         [dbPath]: { $nin: [null, '', [], {}] }
     }
     if (filters) {
-        const filtersQuery = await generateFiltersQuery({ filters, dbPath })
+        const filtersQuery = await runStage(generateFiltersQuery, [{ filters, dbPath }])
         match = { ...match, ...filtersQuery }
     }
     if (selectedEditionId) {
@@ -317,8 +364,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     }
 
     // TODO: merge these counts into the main aggregation pipeline if possible
-    const totalRespondentsByYear = await computeParticipationByYear({ context, survey })
-    const completionByYear = await computeCompletionByYear({ context, match, survey })
+    const totalRespondentsByYear = await runStage(computeParticipationByYear, [{ context, survey }])
+    const completionByYear = await runStage(computeCompletionByYear, [{ context, match, survey }])
 
     const pipelineProps = {
         surveyId: survey.id,
@@ -332,16 +379,16 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         edition
     }
 
-    const pipeline = await getGenericPipeline(pipelineProps)
+    const pipeline = await runStage(getGenericPipeline, [pipelineProps])
 
-    let results = (await collection.aggregate(pipeline).toArray()) as ResponseEditionData[]
+    let results = await runStage(getData, [db, survey, pipeline])
 
     if (isDebug) {
-        console.log(
-            `// Using collection ${
-                survey.normalizedCollectionName || 'normalized_responses'
-            } on db ${process.env.MONGO_PUBLIC_DB}`
-        )
+        // console.log(
+        //     `// Using collection ${
+        //         survey.normalizedCollectionName || 'normalized_responses'
+        //     } on db ${process.env.MONGO_PUBLIC_DB}`
+        // )
         // console.log(
         //     inspect(
         //         {
@@ -354,122 +401,144 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         // console.log('// raw results')
         // console.log(JSON.stringify(results, null, 2))
 
-        await logToFile('last_query/computeArguments.json', computeArguments)
-        await logToFile('last_query/axis1.json', axis1)
-        await logToFile('last_query/axis2.json', axis2)
-        await logToFile('last_query/match.json', match)
-        await logToFile('last_query/pipeline.json', pipeline)
-        await logToFile('last_query/rawResults.yml', results)
+        await logToFile(`${logPath}/computeArguments.json`, computeArguments)
+        await logToFile(`${logPath}/axis1.json`, axis1)
+        await logToFile(`${logPath}/axis2.json`, axis2)
+        await logToFile(`${logPath}/match.json`, match)
+        await logToFile(`${logPath}/pipeline.json`, pipeline)
+        await logToFile(`${logPath}/rawResults.yml`, results)
+
+        const normalizedCollectionName = survey?.normalizedCollectionName || 'normalized_responses'
+        await logToFile(`${logPath}/database.yml`, { db: db.namespace, normalizedCollectionName })
     }
 
     if (!axis2) {
         // TODO: get rid of this by rewriting the mongo aggregation
         // if no facet is specified, move default buckets down one level
-        await moveFacetBucketsToDefaultBuckets(results)
+        await runStage(moveFacetBucketsToDefaultBuckets, [results])
     }
 
     if (responsesType === ResponsesTypes.COMBINED) {
-        if (isDebug) {
-            console.log('// combined mode: getting freeform results…')
-        }
-        results = await combineWithFreeform(results, options)
+        results = await runStage(combineWithFreeform, [results, options])
     }
 
-    await discardEmptyIds(results)
+    await runStage(discardEmptyIds, [results])
 
-    results = await discardEmptyEditions(results)
+    results = await runStage(discardEmptyEditions, [results])
 
-    await addEntities(results, context)
-    await addTokens(results, context)
+    await runStage(addEntities, [results, context, axis1])
+    await runStage(addTokens, [results, context, axis1])
 
     if (axis2) {
-        await addDefaultBucketCounts(results)
+        await runStage(addDefaultBucketCounts, [results])
 
-        await addMissingBuckets(results, axis2, axis1)
+        await runStage(addMissingBuckets, [results, axis2, axis1])
 
-        await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
+        await runStage(addCompletionCounts, [results, totalRespondentsByYear, completionByYear])
 
         // optionally add overall, non-facetted bucket as a point of comparison
         // note: for now, disable this for sentiment questions to avoid infinite loops
         if (enableAddOverallBucket && facet !== SENTIMENT_FACET) {
-            await addOverallBucket(results, axis1, options)
-        }
-
-        results = await applyDatasetCutoff(results, computeArguments)
-
-        if (
-            responsesType === ResponsesTypes.COMBINED ||
-            responsesType === ResponsesTypes.FREEFORM
-        ) {
-            // TODO: probably doesn't work well when a facet is active
-            await groupOtherBuckets(results, axis2, axis1)
+            await runStage(addOverallBucket, [results, axis1, options])
         }
 
         // once buckets don't move anymore we can calculate percentages
-        await addPercentages(results)
+        await runStage(addPercentages, [results])
 
         // await addDeltas(results)
 
-        await addEditionYears(results, survey)
+        await runStage(addEditionYears, [results, survey])
 
-        await addAveragesByFacet(results, axis2, axis1)
-        await addPercentilesByFacet(results, axis2, axis1)
+        await runStage(addAverages, [results, axis2, axis1])
+        await runStage(addPercentiles, [results, axis2, axis1])
 
-        // bucket grouping must be one of the first stages
-        await groupBuckets(results, axis2, axis1)
+        if (executionContext === ExecutionContext.REGULAR) {
+            // bucket grouping
+            await runStage(groupBuckets, [results, axis2, axis1])
 
-        // we group cutoff buckets together so it must also come early
-        await cutoffData(results, axis2, axis1)
+            // group cutoff buckets together
+            await runStage(cutoffData, [results, axis2, axis1])
 
-        // for all following steps, use groups as options
-        if (axis1.enableBucketGroups && axis1.question.groups) {
-            axis1.options = axis1.question.groups
+            // apply overall dataset cutoff
+            await runStage(applyDatasetCutoff, [results, computeArguments, axis2, axis1])
+
+            // for all following steps, use groups as options
+            if (axis1.enableBucketGroups && axis1.question.groups) {
+                axis1.options = axis1.question.groups
+            }
+            if (axis2.enableBucketGroups && axis2.question.groups) {
+                axis2.options = axis2.question.groups
+            }
+            await runStage(sortData, [results, axis2, axis1])
+
+            await runStage(limitData, [results, axis2, axis1])
+
+            // group any "non-standard" bucket, including cutoff data, unmatched answers,
+            // off-limit answers, etc.
+            await runStage(groupOtherBuckets, [results, axis2, axis1])
+
+            if (facet === SENTIMENT_FACET) {
+                // only enable ratios when we're using sentiment facet
+                await runStage(addRatios, [results, axis1, axis2])
+            }
         }
-        if (axis2.enableBucketGroups && axis2.question.groups) {
-            axis2.options = axis2.question.groups
-        }
-        await sortData(results, axis2, axis1)
-        await limitData(results, axis2, axis1)
-        await addLabels(results, axis2, axis1)
+
+        // run this after we've grouped buckets to detect any errors introduced during
+        // that process
+        await runStage(addFacetValiditySums, [results])
+
+        await runStage(addLabels, [results, axis2, axis1])
     } else {
-        results = await addMissingBuckets(results, axis1)
+        results = await runStage(addMissingBuckets, [results, axis1])
 
-        await addCompletionCounts(results, totalRespondentsByYear, completionByYear)
+        await runStage(addCompletionCounts, [results, totalRespondentsByYear, completionByYear])
 
-        results = await applyDatasetCutoff(results, computeArguments)
+        await runStage(addPercentages, [results])
 
-        if (
-            responsesType === ResponsesTypes.COMBINED ||
-            responsesType === ResponsesTypes.FREEFORM
-        ) {
-            await groupOtherBuckets(results, axis1)
+        await runStage(addEditionYears, [results, survey])
+
+        await runStage(addAverages, [results, axis1])
+        await runStage(addPercentiles, [results, axis1])
+
+        if (executionContext === ExecutionContext.REGULAR) {
+            await runStage(groupBuckets, [results, axis1])
+
+            await runStage(cutoffData, [results, axis1])
+
+            await runStage(applyDatasetCutoff, [results, computeArguments, axis1])
+
+            // for all following steps, use groups as options
+            if (axis1.enableBucketGroups && axis1.question.groups) {
+                axis1.options = axis1.question.groups
+            }
+            await runStage(sortData, [results, axis1])
+            await runStage(limitData, [results, axis1])
+
+            // group any "non-standard" bucket, including cutoff data, unmatched answers,
+            // off-limit answers, etc.
+            await runStage(groupOtherBuckets, [results, axis1])
         }
-
-        await addPercentages(results)
-
-        // await addDeltas(results)
-
-        await addEditionYears(results, survey)
-
-        // we only group buckets after we've calculated every other value
-        // while the buckets are "flat"
-        await groupBuckets(results, axis1)
-
-        await cutoffData(results, axis1)
-
-        // for all following steps, use groups as options
-        if (axis1.enableBucketGroups && axis1.question.groups) {
-            axis1.options = axis1.question.groups
-        }
-        await sortData(results, axis1)
-        await limitData(results, axis1)
-        await addLabels(results, axis1)
+        await runStage(addLabels, [results, axis1])
     }
 
+    await runStage(detectNaN, [results, isDebug, logPath])
+
+    const endAt = new Date()
     if (isDebug) {
         // console.log('// results final')
         // console.log(JSON.stringify(results, undefined, 2))
-        await logToFile('last_query/results.yml', results)
+        await logToFile(`${logPath}/results.yml`, results)
+        const log = {
+            startAt,
+            endAt,
+            duration: Math.abs((startAt.getTime() - endAt.getTime()) / 1000),
+            log: stageLog.map(({ name, duration }) => ({ name, duration }))
+        }
+        await logToFile(`${logPath}/stages.yml`, log)
+    }
+
+    if (isDebug) {
+        console.log(`end genericComputeFunction (executionContext = ${executionContext}) ---//`)
     }
 
     return results

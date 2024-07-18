@@ -9,6 +9,10 @@ import {
 import { getOptioni18nIds } from "~/i18n/survey";
 import { useIntlContext } from "@devographics/react-i18n-legacy";
 
+//  
+
+import { T } from "@devographics/react-i18n";
+
 const OptionLabel = ({
   option,
   question,
@@ -27,7 +31,7 @@ const OptionLabel = ({
 
   const defaultMessage =
     option.id === OPTION_NA
-      ? intl.formatMessage({ id: "options.na" })
+      ? intl.formatMessage({ id: "options.na" })?.t
       : i18n.base + " ❔";
 
   const entityName = getEntityName(entity);
@@ -35,7 +39,7 @@ const OptionLabel = ({
   return entityName ? (
     <EntityLabel entity={entity} />
   ) : (
-    <FormattedMessage id={i18n.base} defaultMessage={defaultMessage} />
+    <T token={i18n.base} fallback={defaultMessage} />
   );
 };
 

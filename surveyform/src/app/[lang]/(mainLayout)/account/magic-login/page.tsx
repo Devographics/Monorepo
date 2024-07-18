@@ -1,11 +1,12 @@
 import { NextPageParams } from "~/app/typings";
 import { MagicLoginChecker } from "./MagicLoginChecker";
+
 import { CenteredContainer } from "~/components/ui/CenteredContainer";
+
 
 export default async function MagicLoginCheckPage({
   searchParams,
 }: NextPageParams<
-  any,
   { token: string; redirectTo?: string; editionId?: string; surveyId?: string }
 >) {
   const { token, redirectTo, editionId, surveyId } = searchParams;

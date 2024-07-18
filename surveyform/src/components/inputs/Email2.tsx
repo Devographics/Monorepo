@@ -80,7 +80,7 @@ export const Email2 = (props: FormInputProps) => {
         <div>
           {/* @ts-ignore */}
           <FormControl
-            placeholder={intl.formatMessage({ id: "user_info.email" })}
+            placeholder={intl.formatMessage({ id: "user_info.email" })?.t}
             type="email"
             value={localValue}
             onChange={handleChangeDebounced}

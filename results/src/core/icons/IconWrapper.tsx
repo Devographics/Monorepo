@@ -28,21 +28,24 @@ const Icon = styled.span`
     width: ${getIconSize};
     appearance: initial !important;
     display: block;
+    background: none;
+    border: none;
+    padding: 0;
     ${props =>
         props.enableHover &&
         `
-        &:hover {
-            
-        }
-    `}
+            &:hover {
+                
+            }
+        `}
     svg {
         height: ${getIconSize};
         width: ${getIconSize};
         display: block;
         color: ${props => props.theme.colors.text};
         /* path, circle {
-            fill: ${props => props.theme.colors.text};
-        } */
+                fill: ${props => props.theme.colors.text};
+            } */
     }
 `
 
@@ -55,6 +58,7 @@ const IconWithHover = styled(Icon)`
 `
 
 export interface IconProps {
+    className?: string
     enableHover?: boolean
     enableTooltip?: boolean
     labelId?: string
@@ -62,33 +66,44 @@ export interface IconProps {
     values?: any
     inSVG?: boolean
     size?: 'small' | 'petite' | 'medium' | 'large'
+    onClick?: () => void
 }
 
 export interface IconWrapperProps extends IconProps {
     children: React.ReactElement
 }
 const IconWrapper = ({
-    enableHover = true,
+    className = '',
+    enableHover = false,
     enableTooltip = true,
     labelId,
     label,
     children,
     values,
     inSVG = false,
+    onClick,
     size
 }: IconWrapperProps) => {
     const { getString } = useI18n()
     const label_ = label || (labelId && getString(labelId, { values })?.t) || ''
 
+    const isButton = !!onClick
     const IconComponent = enableHover ? IconWithHover : Icon
+
+    const children_ = React.cloneElement(children, { 'aria-hidden': true })
     const icon = inSVG ? (
         <g>
-            {children}
+            {children_}
             {/* <text className="sr-only">{label_}</text> */}
         </g>
     ) : (
-        <IconComponent size={size} className="icon-wrapper">
-            {children}
+        <IconComponent
+            as={isButton ? 'button' : 'span'}
+            onClick={onClick}
+            size={size}
+            className={`icon-wrapper ${className}`}
+        >
+            {children_}
             <span className="sr-only">{label_}</span>
         </IconComponent>
     )

@@ -1,11 +1,9 @@
-// @ts-nocheck
-
 'use client'
 /**
  * Context that provides methods to access translated strings
  */
-import { useContext, createContext } from 'react'
-import { StringsRegistry } from './stringsRegistry'
+import { useContext, createContext, ReactNode } from 'react'
+import { I18nToken, StringsRegistry } from './stringsRegistry'
 import { Message } from './typings'
 
 interface IntlContextValue {
@@ -13,19 +11,26 @@ interface IntlContextValue {
     stringsRegistry: StringsRegistry
 }
 export interface IntlContextFormat extends IntlContextValue {
-    formatMessage: (msg: Message) => string
+    formatMessage: (msg: Message) => I18nToken
 }
 
-const makeContext = ({ localeId, stringsRegistry }: IntlContextInput): IntlContextFormat => ({
+const makeContext = ({
+    localeId,
+    stringsRegistry
+}: {
+    localeId: string
+    stringsRegistry: StringsRegistry
+}): IntlContextFormat => ({
     localeId,
     stringsRegistry,
     formatMessage: ({ id, defaultMessage, values }: Message) => {
-        return stringsRegistry.getString({
+        const message = stringsRegistry.getString({
             id,
             defaultMessage,
             values,
             localeId
         })
+        return message
     }
 })
 
@@ -38,7 +43,7 @@ export const IntlContext = createContext<IntlContextFormat>(
 )
 
 export interface IntlProviderProps extends IntlContextValue {
-    children: React.ReactNode
+    children: ReactNode
 }
 export const IntlContextProvider = ({
     localeId,
@@ -58,4 +63,7 @@ export const IntlContextProvider = ({
     )
 }
 
+/**
+ * @deprecated
+ */
 export const useIntlContext = () => useContext(IntlContext)

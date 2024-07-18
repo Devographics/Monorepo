@@ -1,10 +1,12 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import ClientLayout from "~/app/[lang]/ClientLayout";
-import { DebugRSC } from "~/components/debug/DebugRSC";
-import { getCommonContexts, getLocaleIdFromParams } from "~/i18n/config";
-import { rscIntlContext } from "~/i18n/rsc-fetchers";
-import { rscAllLocalesMetadata, rscLocale } from "~/lib/api/rsc-fetchers";
+import {
+  rscAllLocalesMetadata,
+  rscLocaleFromParams,
+} from "~/lib/api/rsc-fetchers";
 import { metadata as defaultMetadata } from "../../layout";
+import { rscTeapot } from "~/i18n/components/ServerT";
+import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -22,13 +24,21 @@ export async function generateMetadata({
 }: {
   params: PageServerProps;
 }): Promise<Metadata | undefined> {
-  const contexts = getCommonContexts();
-  const intlContext = await rscIntlContext({ localeId: params.lang, contexts });
-  const title = intlContext.formatMessage({ id: "general.title" });
-  const description = intlContext.formatMessage({ id: "general.description" });
-  const metadata = { ...defaultMetadata, title, description };
-  return metadata;
+  return {};
+  // const { t, error } = await rscTeapot()
+  // if (error) return defaultMetadata
+  // const title = t("general.title")
+  // const description = t("general.description")
+  // const metadata = { ...defaultMetadata, title, description };
+  // return metadata;
 }
+
+/**
+ *  TODO for i18n:
+ * - Footer "LinkItem" is displaying error messages that are selected dynamically
+ * - UserMessages too
+ * - Dropdown too
+ */
 
 export default async function RootLayout({
   children,
@@ -39,31 +49,24 @@ export default async function RootLayout({
     lang: string;
   };
 }) {
-  const contexts = getCommonContexts();
-  const localeId = getLocaleIdFromParams(params);
-  const {
-    data: locale,
-    error,
-    ___metadata: ___rscLocale_CommonContexts,
-  } = await rscLocale({
-    localeId,
-    contexts,
-  });
+  setLocaleIdServerContext(params.lang); // Needed for "ServerT"
+  const { locale, localeId, error } = await rscLocaleFromParams(params);
   const { data: locales, ___metadata: ___rscAllLocalesMetadata } =
     await rscAllLocalesMetadata();
   if (error) {
     return <div>{JSON.stringify(error, null, 2)}</div>;
   }
   return (
+    // TODO: stop passing all the locales there, filter them per page
     <ClientLayout
       params={params}
       locales={locales}
       localeId={localeId}
       localeStrings={locale}
     >
-      <DebugRSC
+      {/*<DebugRSC
         {...{ ___rscLocale_CommonContexts, ___rscAllLocalesMetadata }}
-      />
+  />*/}
       {children}
     </ClientLayout>
   );

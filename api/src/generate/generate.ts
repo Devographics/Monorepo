@@ -175,7 +175,7 @@ export const getQuestionObjects = ({ surveys }: { surveys: Survey[] }) => {
 
                         if (existingQuestionObject) {
                             surveyQuestionObjects[existingQuestionObjectIndex] =
-                                mergeQuestionObjects(existingQuestionObject, questionObject)
+                                mergeQuestionObjectsv2(existingQuestionObject, questionObject)
                         } else {
                             surveyQuestionObjects.push(questionObject)
                         }
@@ -284,5 +284,27 @@ export const mergeQuestionObjects = (q1: QuestionApiObject, q2: QuestionApiObjec
         sectionIds,
         editions,
         ...(newOptions ? { options: newOptions } : {})
+    }
+}
+
+/* 
+
+v2: instead of trying to merge the two questions, only keep the one belonging to the most
+recent edition
+
+*/
+export const mergeQuestionObjectsv2 = (q1: QuestionApiObject, q2: QuestionApiObject) => {
+    const q1IsMoreRecent = (q1?.edition?.year || 0) > (q2?.edition?.year || 0)
+
+    const q = q1IsMoreRecent ? q1 : q2
+
+    const editions = uniq([...(q1?.editions || []), ...(q2?.editions || [])])
+
+    const sectionIds = uniq([...(q1.sectionIds || []), ...(q2.sectionIds || [])])
+
+    return {
+        ...q,
+        sectionIds,
+        editions
     }
 }

@@ -91,8 +91,8 @@ const Score = ({
   const rank = rankLoading
     ? "..."
     : rankError || !dataRank?.data
-    ? 100
-    : dataRank.data;
+      ? 100
+      : dataRank.data;
 
   const { survey, questionsUrl } = edition;
   const { name, hashtag } = survey;
@@ -111,7 +111,7 @@ const Score = ({
       usage_count: usage.count,
       rank,
     },
-  });
+  })?.t;
 
   // if (loading) return <Components.Loading />;
   // if (error) return <span>Could not load entities</span>;
@@ -213,12 +213,12 @@ const Score = ({
               usage_score: `<span class="score-percentage used">${usage.score}%</span>`,
               awareness_total: awareness.total,
               awareness_count: `<span class="score-number score-number-counted heard">${awareness.count}</span>`,
-              awareness_score: `<span class="score-percentage heard" title="${intl.formatMessage(
-                {
+              awareness_score: `<span class="score-percentage heard" title="${
+                intl.formatMessage({
                   id: "thanks.score_awareness_explanation",
                   values: { awareness_total: awareness.total },
-                }
-              )}">${awareness.score}%</span>`,
+                })?.t
+              }">${awareness.score}%</span>`,
               knowledgeRankingFromTop: `<span class="score-number score-rank">${rank}%</span>`,
             }}
           />
@@ -227,7 +227,7 @@ const Score = ({
           <Button
             target="_blank"
             href={`https://twitter.com/intent/tweet/?text=${encodeURIComponent(
-              text
+              text,
             )}`}
           >
             <FormattedMessage id="thanks.share_on_twitter" />

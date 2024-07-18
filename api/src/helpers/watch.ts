@@ -1,7 +1,7 @@
 import { initMemoryCache } from '../init'
 import { RequestContext, WatchedItem } from '../types'
 import chokidar from 'chokidar'
-import path from 'path'
+import { parseEnvVariableArray } from '@devographics/helpers'
 
 type Config = {
     [K in WatchedItem]?: string
@@ -22,24 +22,27 @@ export const watchFiles = async ({
     const items = Object.keys(config) as WatchedItem[]
 
     for (const itemType of items) {
-        const dirPath = config[itemType]
-        if (dirPath) {
-            console.log(`👓 Starting to watch ${itemType} directory (${dirPath})…`)
+        const dirPathString = config[itemType]
+        const dirPathArray = parseEnvVariableArray(dirPathString)
+        if (dirPathArray) {
+            for (const dirPath of dirPathArray) {
+                console.log(`👓 Starting to watch ${itemType} directory (${dirPath})…`)
 
-            // Initialize watcher.
-            const watcher = chokidar.watch(dirPath, {
-                ignored,
-                persistent: true
-            })
+                // Initialize watcher.
+                const watcher = chokidar.watch(dirPath, {
+                    ignored,
+                    persistent: true
+                })
 
-            watcher
-                .on('add', path => {
-                    // log(`👓 File ${path} has been added`)
-                })
-                .on('change', async path => {
-                    log(`👓 File ${path} has been changed`)
-                    await initMemoryCache({ context, initList: [itemType] })
-                })
+                watcher
+                    .on('add', path => {
+                        // log(`👓 File ${path} has been added`)
+                    })
+                    .on('change', async path => {
+                        log(`👓 File ${path} has been changed`)
+                        await initMemoryCache({ context, initList: [itemType] })
+                    })
+            }
         }
     }
 }

@@ -117,9 +117,7 @@ const NavItem = ({
     const hasChildren = page.children && page.children.length > 0
     const displayChildren = hasChildren > 0 && isActive
 
-    const match = useMatch(
-        `${get(usePageContext(), 'locale.path')}${parentPage?.path ?? ''}${page.path}`
-    )
+    const match = useMatch(`${get(pageContext, 'locale.id')}${parentPage?.path ?? ''}${page.path}`)
 
     const currentPageBlocks = pageContext.blocks
         .map(b => b.variants[0])
@@ -145,7 +143,7 @@ const NavItem = ({
                 <T k={getPageLabelKey({ pageContext: page })} />
             </StyledPageLink>
             {match && currentPageBlocks.length > 1 && (
-                <InternalLinks_>
+                <InternalLinks_ className={`internal-links-depth-${depth}`}>
                     {currentPageBlocks.map(block => (
                         <BlockItem
                             key={block.id}
@@ -187,7 +185,7 @@ const BlockItem = ({ block, closeSidebar, page }) => {
                 onClick={closeSidebar}
                 page={page}
             >
-                {getBlockTitle({ block, pageContext, getString, entities })}
+                {getBlockTitle({ block, pageContext, getString, entities, useShortLabel: true })}
                 {/* <T k={getBlockTitleKey({ block: { ...block, sectionId: page.id } })} /> */}
             </InternalLink_>
         </InternalLinkWrapper_>
@@ -202,7 +200,12 @@ const InternalLinks_ = styled.div`
 `
 
 const InternalLinkWrapper_ = styled.div`
-    margin-left: ${spacing()};
+    .internal-links-depth-0 & {
+        margin-left: ${spacing(1)};
+    }
+    .internal-links-depth-1 & {
+        margin-left: ${spacing(1.9)};
+    }
 `
 const InternalLink_ = styled.a`
     &,
@@ -213,7 +216,7 @@ const InternalLink_ = styled.a`
     &:hover {
         color: ${({ theme }) => theme.colors.text};
     }
-    font-size: ${fontSize('smallish')};
+    font-size: ${fontSize('small')};
 `
 
 export const Nav = ({ closeSidebar }: { closeSidebar: () => void }) => {

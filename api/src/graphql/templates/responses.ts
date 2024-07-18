@@ -14,7 +14,7 @@ type Surveys {
 }
 */
 
-export const getResponseTypeName = (surveyId: string) => `${graphqlize(surveyId)}Responses`
+export const getResponseTypeName = () => `Responses`
 
 export const generateResponsesType = ({
     survey,
@@ -23,7 +23,7 @@ export const generateResponsesType = ({
     survey: SurveyApiObject
     path: string
 }): TypeDefTemplateOutput => {
-    const typeName = getResponseTypeName(survey.id)
+    const typeName = getResponseTypeName()
     return {
         generatedBy: 'responses',
         path,
@@ -31,7 +31,7 @@ export const generateResponsesType = ({
         typeDef: `type ${typeName} {
     allEditions: [ResponseEditionData]
     currentEdition: ResponseEditionData
-    rawData: [RawData]
+    rawData(token: String): [RawData]
 }`
     }
 }

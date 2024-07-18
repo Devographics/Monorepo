@@ -1,33 +1,42 @@
 import './Boxplot.scss'
 import React, { useMemo, useRef } from 'react'
-import { RowDataProps, ViewDefinition, ViewProps } from '../../types'
-import { ROW_HEIGHT, Row, RowWrapper, Rows } from 'core/charts/common2'
+import { HorizontalBarViewDefinition, HorizontalBarViewProps, RowComponentProps } from '../../types'
+import { Axis, RespondentCount } from 'core/charts/common2'
 import { BoxProps, HorizontalBox } from './Box'
-import { RowCommonProps, RowExtraProps } from 'core/charts/common2/types'
+import { Tick } from 'core/charts/common2/types'
 import { useTheme } from 'styled-components'
 import * as d3 from 'd3'
-import AxisBottom from './Axis'
 import { BlockLegend } from 'core/types'
 import { useWidth } from 'core/charts/common2/helpers'
 import { useBoxplotData, useScales } from './helpers'
-import { formatValue } from '../../helpers/labels'
+import { removeNoAnswer } from '../../helpers/steps'
+import { BAR_HEIGHT, RowGroup } from '../../rows/RowGroup'
+import { RowWrapper, Rows } from '../../rows'
+import { formatQuestionValue } from 'core/charts/common2/helpers/labels'
 
-const PIXEL_PER_TICKS = 130
+const PIXEL_PER_TICKS = 100
 
-const BoxplotView = (viewProps: ViewProps) => {
+// use a value slightly larger than max to leave margin for labels, etc. on right side of chart
+const MAX_COEFF = 1.2
+
+const BoxplotView = (viewProps: HorizontalBarViewProps) => {
     const { chartState, chartValues } = viewProps
-    const { question, facetQuestion } = chartValues
+    const { facetQuestion } = chartValues
     const theme = useTheme()
     const { buckets } = viewProps
-    const contentHeight = ROW_HEIGHT
+    const contentHeight = BAR_HEIGHT
 
     if (!facetQuestion) {
         return null
     }
 
-    // note: we need the bottom axis to be able to calculate the content width
+    const { viewDefinition } = chartState
+    const { formatValue } = viewDefinition
+
+    // note: we need a placeholder that's part of the grid/subgrid layout
+    // to be able to calculate the content width
     const contentRef = useRef<HTMLDivElement>(null)
-    const contentWidth = useWidth(contentRef)
+    const contentWidth = useWidth(contentRef) || 0
 
     // Compute everything derived from the dataset:
     const { chartMin, chartMax, groups } = useMemo(() => {
@@ -37,15 +46,26 @@ const BoxplotView = (viewProps: ViewProps) => {
         const allP90 = buckets.map(bucket => bucket.percentilesByFacet?.p90 || 0)
         const [chartMin, chartMax] = [Math.min(...allP10), Math.max(...allP90)]
         const groups = [...new Set(buckets.map(bucket => bucket.id))]
-        return { chartMin, chartMax, groups }
+        return { chartMin, chartMax: chartMax * MAX_COEFF, groups }
     }, [buckets])
 
-    const labelFormatter = (value: number) =>
-        formatValue({ value, chartState, question: facetQuestion })
+    const labelFormatter = (value: number) => formatValue(value, facetQuestion)
 
     const legends = [] as BlockLegend[]
 
     const { xScale, yScale } = useScales({ chartMax, contentHeight, contentWidth, groups })
+
+    const range = xScale.range()
+
+    const ticks: Tick[] = useMemo(() => {
+        const width = range[1] - range[0]
+        const numberOfTicksTarget = Math.floor(width / PIXEL_PER_TICKS)
+        return xScale.ticks(numberOfTicksTarget).map(value => ({
+            value,
+            xOffset: xScale(value)
+        }))
+    }, [xScale])
+
     const rowProps = {
         ...viewProps,
         labelFormatter,
@@ -55,56 +75,64 @@ const BoxplotView = (viewProps: ViewProps) => {
         contentHeight,
         xScale,
         yScale,
-        contentWidth
+        contentWidth,
+        ticks
     }
+
+    const axisProps = { ticks, formatValue, question: facetQuestion }
 
     return (
         <div className="chart-boxplot-view">
-            <Rows>
-                {buckets.map((bucket, i) => (
-                    <Row key={bucket.id} bucket={bucket} {...rowProps} rowComponent={BoxplotRow} />
-                ))}
-            </Rows>
-            <div className="chart-axis-bottom">
-                <div></div>
-                <div className="chart-row-content" ref={contentRef}>
-                    <svg className="boxplot-svg">
-                        <AxisBottom
-                            xScale={xScale}
-                            pixelsPerTick={PIXEL_PER_TICKS}
-                            labelFormatter={labelFormatter}
-                            legends={legends}
-                            stroke={theme.colors.text}
+            <Rows {...viewProps} hasZebra={true}>
+                <>
+                    <div className="chart-row chart-subgrid chart-boxplot-placeholder">
+                        <div className="chart-row-content" ref={contentRef} />
+                    </div>
+
+                    <Axis variant="top" {...axisProps} />
+
+                    {buckets.map((bucket, i) => (
+                        <RowGroup
+                            key={bucket.id}
+                            bucket={bucket}
+                            {...rowProps}
+                            rowComponent={BoxplotRow}
+                            rowIndex={i}
                         />
-                    </svg>
-                </div>
-                <div></div>
-            </div>
+                    ))}
+
+                    <Axis variant="bottom" {...axisProps} />
+                    {/* <div className="chart-axis chart-axis-bottom">
+                        <div className="chart-row-content">
+                            <BoxplotAxis
+                                ticks={ticks}
+                                labelFormatter={labelFormatter}
+                                legends={legends}
+                                stroke={theme.colors.text}
+                                variant="bottom"
+                            />
+                        </div>
+                    </div> */}
+                </>
+            </Rows>
         </div>
     )
 }
 
-type BoxplotRowProps = {
+type BoxplotRowProps = RowComponentProps & {
+    labelFormatter: (v: number) => string
+    contentWidth: number
     xScale: d3.ScaleLinear<number, number, never>
     yScale: d3.ScaleBand<string>
 }
 
-const BoxplotRow = (
-    props: {
-        labelFormatter: (s: string) => string
-        contentWidth: number
-    } & BoxplotRowProps &
-        RowDataProps &
-        RowCommonProps &
-        RowExtraProps
-) => {
+const BoxplotRow = (props: BoxplotRowProps) => {
     const { bucket, xScale, yScale, labelFormatter, contentWidth } = props
 
-    console.log(props)
     const theme = useTheme()
 
     const boxData = useBoxplotData({ bucket, xScale, yScale })
-    if (!bucket.percentilesByFacet) {
+    if (!bucket.percentilesByFacet || !boxData) {
         return null
     }
 
@@ -114,20 +142,23 @@ const BoxplotRow = (
         stroke: theme.colors.text,
         labelFormatter,
         bucket,
-        rowHeight: ROW_HEIGHT,
+        rowHeight: BAR_HEIGHT,
         boxData,
         contentWidth
     }
 
     return (
-        <RowWrapper {...props}>
-            <svg style={{ height: ROW_HEIGHT }} className="boxplot-svg">
+        <RowWrapper {...props} rowMetadata={<RespondentCount count={bucket.count} />}>
+            <svg style={{ height: BAR_HEIGHT }} className="boxplot-svg">
                 <HorizontalBox {...boxProps} />
             </svg>
         </RowWrapper>
     )
 }
 
-export const Boxplot: ViewDefinition = {
-    component: BoxplotView
+export const Boxplot: HorizontalBarViewDefinition = {
+    component: BoxplotView,
+    getValue: b => 0,
+    formatValue: formatQuestionValue,
+    dataFilters: [removeNoAnswer]
 }

@@ -1,6 +1,6 @@
-import { parseEnvVariableArray } from "~/lib/utils";
 import { serverConfig } from "~/config/server";
 import debug from "debug";
+import { parseEnvVariableArray } from "@devographics/helpers";
 const debugCors = debug("vns:cors");
 
 const corsWhitelist = parseEnvVariableArray(

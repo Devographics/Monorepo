@@ -1,7 +1,7 @@
 import { initEntities, cacheSurveysEntities } from './load/entities'
 import { initSurveys } from './load/surveys'
 import { initProjects } from './load/projects'
-import { initLocales } from './load/locales'
+import { initLocales } from './load/locales/locales'
 import { RequestContext, WatchedItem } from './types'
 import { applyEntityResolvers } from './load/entities'
 import { cacheSurveys } from './load/surveys'
@@ -84,14 +84,16 @@ export const reinitialize = async ({ context, initList = defaultInitList }: Init
     // However, we still inform the surveyform that a refresh is needed, via it's API
     // TODO: in the future this could be made unnecessary if surveyform consumed the values set by the API more directly
     try {
-        if (!process.env.SURVEYFORM_URL) throw new Error("SURVEYFORM_URL not set")
+        if (!process.env.SURVEYFORM_URL) throw new Error('SURVEYFORM_URL not set')
         // assuming API and surveyform use the same secret key for hooks
-        const resetUrl = `${process.env.SURVEYFORM_URL}/api/cache/refresh-cache?key=${process.env.SECRET_KEY}&${initList.map(item => encodeURIComponent(item)).join("&")}`
+        const resetUrl = `${process.env.SURVEYFORM_URL}/api/cache/refresh-cache?key=${
+            process.env.SECRET_KEY
+        }&${initList.map(item => encodeURIComponent(item)).join('&')}`
         // NOTE: it's ok to log this secret key as it's already included in the URL,
         // it's not used to secure any user data just to protect API calls from abuses
-        console.log("Resetting surveyform on URL:", resetUrl)
+        console.log('Resetting surveyform on URL:', resetUrl)
         await fetch(resetUrl)
     } catch (err) {
-        console.warn("Could not reinitialize surveyform cache:", err)
+        console.warn('Could not reinitialize surveyform cache:', err)
     }
 }

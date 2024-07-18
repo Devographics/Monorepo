@@ -30,7 +30,9 @@ export function initRedis(url_?: string, token_?: string) {
         // redis = new Redis(redisUrl)
         redis = new Redis({
             url,
-            token
+            token,
+            // @see https://github.com/upstash/redis-js/issues/397
+            cache: "default"
         })
     }
     return redis
@@ -78,10 +80,20 @@ export async function fetchJson<T = any>(key: string): Promise<T | null> {
     let maybeStr: string | any
     const redisClient = getRedisClient()
     try {
+        // This may trigger an "unexpected end of JSON input"
+        // when the REDIS TOKEN is incorrect and we get a 401
+        // (the parsing error is unrelated to the actual data we want to get)
         maybeStr = await redisClient.get(key)
         if (!maybeStr) return null
         // note: depending on Redis client, str might already be a valid object
-        const json = typeof maybeStr === 'object' ? maybeStr : JSON.parse(maybeStr)
+        let json
+        try {
+            json = typeof maybeStr === 'object' ? maybeStr : JSON.parse(maybeStr)
+        } catch (err) {
+            // Proper log of parsing errors
+            console.error(`Could not parse ${maybeStr} to JSON`)
+            throw err
+        }
         // await logToFile(`fetchJson(${key}).json`, json, { mode: 'overwrite' })
         return json
     } catch (error) {

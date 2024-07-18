@@ -1,3 +1,4 @@
+import { RawDataItem } from './normalization'
 import { ResultsSubFieldEnum } from './api'
 import { Entity, Token } from './entities'
 import { Option } from './outlines'
@@ -12,6 +13,10 @@ export type QueryResults<T> = {
 }
 
 export type SurveysData<T> = {
+    [key: string]: SurveyData<T>
+}
+
+export type SurveyData<T> = {
     [key: string]: EditionData<T>
 }
 export type EditionData<T> = {
@@ -38,14 +43,15 @@ export type AllQuestionData =
 export type StandardQuestionData = QuestionData & {
     id: string
     entity: Entity
+    comments: ItemComments
 } & {
     [key in Exclude<
         ResultsSubFieldEnum,
-        ResultsSubFieldEnum.ID | ResultsSubFieldEnum.ENTITY
+        ResultsSubFieldEnum.ID | ResultsSubFieldEnum.ENTITY | ResultsSubFieldEnum.COMMENTS
     >]: ResponseData
 }
 
-export interface OpinionQuestionData extends StandardQuestionData {}
+export interface OpinionQuestionData extends StandardQuestionData { }
 
 export interface OptionsQuestionData extends QuestionData {
     options: OptionData[]
@@ -63,7 +69,7 @@ export interface ToolQuestionData extends QuestionData {
     responses: ResponseData
 }
 
-export interface FeatureQuestionData extends ToolQuestionData {}
+export interface FeatureQuestionData extends ToolQuestionData { }
 
 export interface ItemComments {
     allEditions: EditionComments[]
@@ -79,11 +85,14 @@ export interface EditionComments {
 export interface Comment {
     message: string
     responseId: string
+    experience: FeaturesOptions
+    sentiment: SimplifiedSentimentOptions
 }
 
 export interface ResponseData {
-    allEditions: [ResponseEditionData]
+    allEditions: ResponseEditionData[]
     currentEdition: ResponseEditionData
+    rawData: RawDataItem[]
 }
 
 export interface ResponseEditionData {
@@ -91,6 +100,18 @@ export interface ResponseEditionData {
     year: number
     completion: YearCompletion
     buckets: Bucket[]
+    average?: number
+    percentiles?: PercentileData
+    median?: number
+    ratios?: RatiosData
+}
+
+export interface RatiosData {
+    awareness: number
+    interest: number
+    usage: number
+    retention: number
+    positivity: number
 }
 
 export interface OptionData extends Option {
@@ -156,6 +177,9 @@ export interface BucketMetadata {
     token?: Token
     label?: string
     hasInsufficientData?: boolean
+    isFreeformData?: boolean
+    facetsCountSum?: number
+    facetsPercentSum?: number
 }
 
 export interface Bucket extends BucketData, BucketMetadata {
@@ -170,7 +194,7 @@ export type CombinedBucketData = {
     [key in BucketUnits as `${key}__${number}`]: number
 }
 
-export interface CombinedBucket extends Bucket, CombinedBucketData {}
+export interface CombinedBucket extends Bucket, CombinedBucketData { }
 
 export interface FacetBucket extends Omit<Bucket, 'facetBuckets' | 'groupedBuckets'> {
     groupedBuckets?: FacetBucket[]
@@ -180,7 +204,7 @@ export interface FacetBucketWithAverage extends FacetBucket {
     average: number
 }
 
-export interface BucketCompletion extends FacetCompletion {}
+export interface BucketCompletion extends FacetCompletion { }
 
 /*
 
@@ -226,9 +250,9 @@ export interface AllToolsData {
     ids: string[]
     years: number[]
 }
-export interface SectionAllToolsData extends AllToolsData {}
-export interface AllFeaturesData extends AllToolsData {}
-export interface SectionAllFeaturesData extends AllFeaturesData {}
+export interface SectionAllToolsData extends AllToolsData { }
+export interface AllFeaturesData extends AllToolsData { }
+export interface SectionAllFeaturesData extends AllFeaturesData { }
 
 export const OPTION_NA = 'na'
 
@@ -241,9 +265,15 @@ export enum ToolsOptions {
 }
 
 export enum FeaturesOptions {
-    NEVER_HEARD = 'never_heard',
+    USED = 'used',
     HEARD = 'heard',
-    USED = 'used'
+    NEVER_HEARD = 'never_heard'
+}
+
+export enum ExperienceOptions {
+    USED = 'used',
+    HEARD = 'heard',
+    NEVER_HEARD = 'never_heard'
 }
 
 export enum SentimentOptions {

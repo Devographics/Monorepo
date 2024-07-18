@@ -1,16 +1,15 @@
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import type { EditionMetadata, Credit } from "@devographics/types";
-import { EnvVar } from "@devographics/helpers";
 import { publicConfig } from "~/config/public";
+import { DynamicT } from "@devographics/react-i18n";
 
 const SurveyCredits = ({ edition }: { edition: EditionMetadata }) => {
   return (
     <div className="survey-credits survey-page-block">
       <h3 className="survey-credits-heading survey-page-block-heading">
-        <FormattedMessage id="credits.contributors" />
+        <DynamicT token="credits.contributors" />
       </h3>
       <p>
-        <FormattedMessage id="credits.contributors.description" />
+        <DynamicT token="credits.contributors.description" />
       </p>
       <div className="survey-credits-items">
         {edition.credits

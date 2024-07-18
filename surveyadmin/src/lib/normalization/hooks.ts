@@ -6,7 +6,7 @@ import {
 } from "@devographics/types";
 import useSWR from "swr";
 import { apiRoutes } from "~/lib/apiRoutes";
-import { NormalizationMetadata } from "./types";
+import { NormalizationMetadata } from "@devographics/types";
 
 const basicFetcher = (url: string): any => fetch(url).then((r) => r.json());
 

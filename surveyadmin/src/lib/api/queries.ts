@@ -71,6 +71,30 @@ query ${editionId}MetadataQuery {
               intlId
               label
             }
+            rawPaths {
+              base
+              response
+              other
+              comment
+              prenormalized
+              followup_predefined
+              followup_freeform
+              subPaths
+              skip
+            }
+            normPaths {
+              base
+              response
+              other
+              prenormalized
+              comment
+              followup_predefined
+              followup_freeform
+              raw
+              patterns
+              metadata
+              error
+            }
           }
         }
       }

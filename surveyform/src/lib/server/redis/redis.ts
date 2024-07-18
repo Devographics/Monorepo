@@ -1,5 +1,5 @@
 import { initRedis } from "@devographics/redis";
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { serverConfig } from "~/config/server";
 
 /**

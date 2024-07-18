@@ -9,11 +9,17 @@ export function useLocalStorage<T>(storageKey, fallbackState) {
     if (localStorageState) {
       initState = JSON.parse(localStorageState);
     }
-  } catch (error) {}
+  } catch (error) {
+    console.warn(error);
+  }
   const [value, setValue] = React.useState(initState);
 
   React.useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify(value));
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(value));
+    } catch (error) {
+      console.warn(error);
+    }
   }, [value, storageKey]);
 
   return [value, setValue] as [T, any];
@@ -73,8 +79,8 @@ const replaceWithTag = (text, marker, tag, matches: Match[]) => {
     const matchObject = matches[i++];
 
     if (!matchObject) {
-      console.log(matches);
-      console.log(i);
+      // console.log(matches);
+      // console.log(i);
       return "";
     }
     const { isPrimary, isFilterQuery, pattern, index } = matchObject;

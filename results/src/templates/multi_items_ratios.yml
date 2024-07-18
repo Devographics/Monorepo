@@ -1,0 +1,73 @@
+id: ${sectionId}_ratios
+blockType: MultiItemsRatiosBlock
+hasSponsor: true
+customizationModes: ['filters']
+queryOptions:
+    questionId: _items
+    addBuckets: false
+    addRatios: true
+    addQuestionEntity: true
+    allEditions: true
+parameters:
+    cutoffPercent: 0
+    facetCutoffPercent: 0
+    limit: 0
+query: >
+    surveys {
+      ${surveyId} {
+        ${editionId} {
+          ${sectionId} {
+            ${questionId}: _items {
+              id
+              entity {
+                name
+                nameClean
+                nameHtml
+                alias
+                entityType
+                description
+                descriptionClean
+                descriptionHtml
+                homepage {
+                  url
+                }
+                caniuse {
+                  name
+                  url
+                }
+                mdn {
+                  locale
+                  url
+                  title
+                  summary
+                }
+                example {
+                  label
+                  language
+                  code
+                  codeHighlighted
+                }
+              }
+              responses(facet: _sentiment) {
+                allEditions {
+                  year
+                  editionId
+                  ratios {
+                    awareness
+                    interest
+                    usage
+                    retention
+                    positivity
+                  }
+                  completion {
+                    count
+                    percentageSurvey
+                    total
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }

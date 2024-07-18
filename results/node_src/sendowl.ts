@@ -1,9 +1,4 @@
-import {
-    sleep,
-    getTwitterUser,
-    getDataLocations,
-    getExistingData,
-} from './helpers'
+import { sleep, getTwitterUser, getDataLocations, getExistingJSON } from './helpers'
 import fetch from 'node-fetch'
 import _ from 'lodash'
 import FormData from 'form-data'
@@ -59,13 +54,17 @@ const fetchUntilNoMore = async (url: string, options: any) => {
     return allData
 }
 
-const getProducts = async ({ editionId }: { editionId: string }): Promise<Array<SponsorProduct>> => {
+const getProducts = async ({
+    editionId
+}: {
+    editionId: string
+}): Promise<Array<SponsorProduct>> => {
     // get products
     const productsData = await fetchUntilNoMore(
         `${sendOwlAPIUrl}/v1/products/`,
         getSendOwlOptions()
     )
-    logToFile('products.json', productsData, { ...logOptions/*, editionId*/ })
+    logToFile('products.json', productsData, { ...logOptions /*, editionId*/ })
 
     let productsDataClean = productsData.map(({ product }) => ({
         editionId: product.name.split('___')[0],
@@ -76,19 +75,25 @@ const getProducts = async ({ editionId }: { editionId: string }): Promise<Array<
         sales_page_url: product.sales_page_url
     }))
     productsDataClean = productsDataClean.filter(p => p.editionId === editionId)
-    logToFile('product_clean.json', productsDataClean, { ...logOptions/*, editionId*/ })
+    logToFile('product_clean.json', productsDataClean, { ...logOptions /*, editionId*/ })
 
     return productsDataClean
 }
 
 interface Order {
-    orderId: string,
-    chartId: string,
-    amount?: number,
+    orderId: string
+    chartId: string
+    amount?: number
     twitterName?: string
     twitterData?: any
 }
-const getOrders = async ({ products, editionId }: { products: Array<SponsorProduct>, editionId: string }) => {
+const getOrders = async ({
+    products,
+    editionId
+}: {
+    products: Array<SponsorProduct>
+    editionId: string
+}) => {
     // get orders
     const orders: Array<Order> = []
     const ordersData = await fetchUntilNoMore(`${sendOwlAPIUrl}/v1_3/orders/`, getSendOwlOptions())
@@ -128,17 +133,17 @@ const getOrders = async ({ products, editionId }: { products: Array<SponsorProdu
             }
         }
     }
-    logToFile('orders.json', ordersData, { ...logOptions/*, editionId */ })
-    logToFile('orders_clean.json', orders, { ...logOptions/*, editionId */ })
+    logToFile('orders.json', ordersData, { ...logOptions /*, editionId */ })
+    logToFile('orders_clean.json', orders, { ...logOptions /*, editionId */ })
 
     return orders
 }
 
 interface Product {
-    chartId,
-    instant_buy_url: string,
-    add_to_cart_url: string,
-    sales_page_url: string,
+    chartId
+    instant_buy_url: string
+    add_to_cart_url: string
+    sales_page_url: string
 }
 const maxProductsToCreateInOneGo = 100
 const createMissingProducts = async ({ products, chartVariants, editionId, siteUrl }) => {
@@ -170,7 +175,7 @@ const createMissingProducts = async ({ products, chartVariants, editionId, siteU
 
             logToFile('created_products.json', createProductData, {
                 mode: 'append',
-                subDir: 'chart_sponsors',
+                subDir: 'chart_sponsors'
                 //editionId
             })
 
@@ -202,10 +207,9 @@ export const getSendOwlData = async ({ flat, surveyId, editionId, siteUrl }) => 
     const dataDirName = 'results/chart_sponsorships'
     const dataDirPath = localPath + '/' + dataDirName
     // @ts-expect-error TODO: this function expects a non-optional section Id
-    const existingData = await getExistingData({
-        dataFileName,
-        dataFilePath: dataDirPath + '/' + dataFileName,
-        baseUrl: url + '/' + dataDirName
+    const existingData = await getExistingJSON({
+        localPath: dataDirPath + '/' + dataFileName,
+        remoteUrl: `${url + '/' + dataDirName}/data/${dataFileName}`
     })
 
     if (existingData && useCache) {

@@ -7,6 +7,7 @@ import {
   SurveyMetadata,
   NormalizedResponseDocument,
   CustomNormalizationDocument,
+  NormalizationMetadata,
 } from "@devographics/types";
 import { EntityRule } from "./normalize/helpers";
 
@@ -36,29 +37,9 @@ export type BulkOperation =
   | DeleteBulkOperation
   | InsertBulkOperation;
 
-export interface NormalizationMetadata {
-  raw: string;
-  tokens: NormalizationToken[];
-}
-
-export interface NormalizationToken {
-  id: string;
-  pattern: string;
-}
-
-export interface CustomNormalizationToken extends NormalizationToken {
-  match?: string;
-}
-
-export interface FullNormalizationToken extends CustomNormalizationToken {
-  match: string;
-  length: number;
-  rules: number;
-  range: [number, number];
-}
-
 export enum DocumentGroups {
   NORMALIZED = "normalized",
+  PARTIALLY_MATCHED = "partiallyMatched",
   UNMATCHED = "unmatched",
   UNNORMALIZABLE = "unnormalizable",
   ERROR = "error",
@@ -89,6 +70,7 @@ export interface NormalizeInBulkResult {
   editionId?: string;
   normalizedDocuments: NormalizedDocumentMetadata[];
   unmatchedDocuments: NormalizedDocumentMetadata[];
+  partiallyMatchedDocuments: NormalizedDocumentMetadata[];
   unnormalizableDocuments: NormalizedDocumentMetadata[];
   errorDocuments: NormalizedDocumentMetadata[];
   emptyDocuments: NormalizedDocumentMetadata[];

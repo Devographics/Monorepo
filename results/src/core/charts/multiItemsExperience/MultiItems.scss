@@ -4,20 +4,41 @@
     margin: 20px 0;
     --chartFontColumnHeading: 0.9rem;
     --chartFontSmall: 0.7rem;
-    --cellHeight: 40px;
+    --cellHeight: 30px;
     --totalsHeight: 30px;
     --headingsHeight: var(--cellHeight);
+    .chart-row {
+        align-items: normal;
+        .chart-row-left,
+        .chart-row-right {
+            height: var(--cellHeight);
+        }
+    }
+    .chart-heading {
+        display: block;
+    }
+    .chart-row-content {
+        padding: 0;
+    }
+    .chart-rows {
+        row-gap: calc(var(--spacing) * 3);
+        padding-bottom: var(--doubleSpacing);
+    }
+    .chart-bar {
+        height: calc(var(--cellHeight) + var(--totalsHeight) + 10px);
+    }
 }
 .multiexp-controls {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 40px;
     h4 {
         margin: 0;
     }
 }
+
 .multiexp-control {
     display: flex;
+    align-items: center;
     gap: 15px;
     margin: 0;
     .radio {
@@ -32,6 +53,10 @@
     }
     .radio-unchecked {
         opacity: 0.8;
+    }
+    @include small {
+        justify-content: space-between;
+        width: 100%;
     }
 }
 .multiexp-column-headings {
@@ -92,16 +117,6 @@
     margin-bottom: 10px;
 }
 
-.multiexp-cell {
-    // border: 1px solid white;
-    // flex-basis: calc(var(--percentageValue) * 1%);
-    width: calc(var(--width) * 1%);
-    position: absolute;
-    left: calc(var(--offset) * 1%);
-
-    overflow: hidden;
-    transition: 600ms;
-}
 .multiexp-column-totals {
     position: relative;
     height: var(--totalsHeight);
@@ -123,18 +138,48 @@
     }
 }
 
+.multiexp-cell {
+    // border: 1px solid white;
+    // flex-basis: calc(var(--percentageValue) * 1%);
+    width: calc(var(--width) * 1%);
+    position: absolute;
+    left: calc(var(--offset) * 1%);
+    display: block;
+    overflow: hidden;
+    border-radius: 0;
+    transition: 600ms;
+    &:hover {
+        &:after {
+            background-color: white;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            content: ' ';
+            display: block;
+            mix-blend-mode: soft-light;
+        }
+    }
+}
 .multiexp-cell-segment {
     height: calc(var(--cellHeight) / 2);
-    opacity: 0.3;
+    // opacity: 0.3;
     transition: 600ms;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     &-experience {
-        background: var(--experienceColor);
+        background: var(--experienceColor1)
+            linear-gradient(to left, var(--experienceColor1), var(--experienceColor2));
         .multiexp-groupedBy-experience & {
             opacity: 1;
         }
     }
     &-sentiment {
-        background: var(--sentimentColor);
+        background: var(--sentimentColor1)
+            linear-gradient(to left, var(--sentimentColor1), var(--sentimentColor2));
+
         .multiexp-groupedBy-sentiment & {
             opacity: 1;
         }
@@ -142,4 +187,12 @@
     .multiexp-cell:hover & {
         opacity: 1;
     }
+}
+.multiexp-cell-segment-experience {
+    height: var(--cellHeight);
+}
+
+.multiexp-cell-segment-sentiment {
+    margin-top: calc(var(--cellHeight) * -0.2);
+    height: calc(var(--cellHeight) * 0.2);
 }

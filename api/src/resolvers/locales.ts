@@ -1,7 +1,7 @@
 import { RequestContext } from '../types'
 import { filterContexts } from '../helpers/locales'
 import { Locale } from '@devographics/types'
-import { loadOrGetLocales } from '../load/locales'
+import { loadOrGetLocales } from '../load/locales/locales'
 
 /*
 
@@ -20,7 +20,7 @@ export const localesResolvers = {
         { localeId, contexts }: { localeId: string; contexts: string[] },
         context: RequestContext
     ) => {
-        console.log('// locale resolver')
+        console.log(`// locale resolver: ${localeId} (${contexts.join(', ')})`)
         return await getLocale({ localeId: convert(localeId), contexts, context })
     },
     locales: async (
@@ -101,11 +101,12 @@ export const getTranslation = async ({
     localeId: string
     context: RequestContext
 }) => {
+    console.log(`// translation resolver for key ${key} [${localeId}]`)
     const locales = await loadOrGetLocales()
     const locale = locales.find(l => l.id === localeId)
     if (!locale) {
         throw new Error(`getTranslation error: could not find locale with id ${localeId}`)
     }
-    const t = locale.strings?.reverse().find((s: any) => s.key === key)
+    const t = locale.strings?.toReversed().find((s: any) => s.key === key)
     return t
 }

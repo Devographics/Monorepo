@@ -54,7 +54,7 @@ export const Import = ({
     <div>
       <ModalTrigger
         isButton={false}
-        label="📥 Import…"
+        label="📥 Import"
         tooltip="Import CSV normalizations"
         header={
           <span>
@@ -62,27 +62,29 @@ export const Import = ({
           </span>
         }
       >
-        <p>
-          Format: CSV with two columns, <code>rawValue</code> and{" "}
-          <code>entityId</code>
-        </p>
-        <textarea
-          onChange={(e) => {
-            setValue(e.target.value);
-          }}
-        >
-          {value}
-        </textarea>
-        <LoadingButton
-          action={async () => {
-            await mutation.mutateAsync({
-              ...commonParams,
-              data: value,
-            });
-          }}
-          label="Submit"
-          tooltip="Import Normalizations"
-        />
+        <>
+          <p>
+            Format: CSV with two columns, <code>rawValue</code> and{" "}
+            <code>entityId</code>
+          </p>
+          <textarea
+            onChange={(e) => {
+              setValue(e.target.value);
+            }}
+          >
+            {value}
+          </textarea>
+          <LoadingButton
+            action={async () => {
+              await mutation.mutateAsync({
+                ...commonParams,
+                data: value,
+              });
+            }}
+            label="Submit"
+            tooltip="Import Normalizations"
+          />
+        </>
       </ModalTrigger>
     </div>
   );

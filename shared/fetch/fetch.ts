@@ -1,30 +1,16 @@
 /**
+ * In process of being deprecated, see newer "pipeline" system
+ *
  * 1) get from in-memory cache if available (short TTL because it can't be emptied)
  * 2) get from Redis if available (longer TTL, can be invalidated/updated easily)
  * 3) get from Github in last resort
  */
-import NodeCache from 'node-cache'
 import { initRedis, fetchJson as fetchRedis, storeRedis } from '@devographics/redis'
 import { logToFile } from '@devographics/debug'
-import { CacheType, GetFromCacheOptions, SourceType } from './types'
-import { FetchPipelineStep, runFetchPipeline } from './pipeline'
-import { EnvVar, getEnvVar } from "@devographics/helpers"
-// import { compressJSON, decompressJSON } from './compress'
-
-export const memoryCache = new NodeCache({
-    // This TTL must stay short, because we manually invalidate this cache
-    stdTTL: 5 * 60, // in seconds
-    // needed for caching promises
-    useClones: false
-})
-
-export const getCacheStats = () => {
-    return memoryCache.getStats()
-}
-
-export const flushInMemoryCache = () => {
-    memoryCache.flushAll()
-}
+import { CacheType, type GetFromCacheOptions, SourceType } from './types'
+import { type FetchPipelineStep, runFetchPipeline } from './pipeline'
+import { memoryCache } from './fetch-inmemory'
+import { getApiUrl } from './api'
 
 const isNodeRuntime = !process.env.NEXT_RUNTIME || process.env.NEXT_RUNTIME === 'nodejs'
 
@@ -152,10 +138,10 @@ async function getFromCacheOrSource<T = any>({
 /**
  * TODO: work in progress, rewrite getFromCache as a pipeline for simplicity
  * need to be careful to have the same compression logic than the existing method
- * 
+ *
  * Also, this version doesn't handle concurrency out of the box
  * We expect the caller to handle it, eg via Next.js unstable_cache/app router
- * 
+ *
  * NOTE: it's perhaps to build generic pipelines within each app,
  * to avoid having a too generic function with a ton of config,
  * so this function might not be needed at all
@@ -169,18 +155,18 @@ async function getFromCachePipeline<T = any>({
     redisUrl,
     redisToken
 }: {
-    key: string,
+    key: string
     /**
      * Disable all caches, will use the source of truth directly
-     * 
+     *
      * Previously "shouldGetFromCache", but reversed
      * Gets priority over env variables
      * If not set, DISABLE_CACHE env variable allow to disable caches too
      */
-    disableCache: boolean,
+    disableCache: boolean
     disableMemoryCache: boolean
-    disableRedisCache: boolean,
-    redisUrl: string,
+    disableRedisCache: boolean
+    redisUrl: string
     redisToken: string
 }) {
     const startAt = new Date()
@@ -198,12 +184,12 @@ async function getFromCachePipeline<T = any>({
             get: () => {
                 return memoryCache.get<T>(key)
             },
-            set: (data) => {
+            set: data => {
                 memoryCache.set<T>(key, data)
             },
             disabled: disableCache || disableMemoryCache,
-            name: "In-memory"
-        }, /*{
+            name: 'In-memory'
+        } /*{
             get: () => {
 
             }
@@ -212,7 +198,7 @@ async function getFromCachePipeline<T = any>({
 
         }*/
     ]
-    const data = await runFetchPipeline(pipeline)
+    const data = await runFetchPipeline(pipeline, key)
     const endAt = new Date()
     const duration = endAt.getTime() - startAt.getTime()
     const result = {
@@ -224,9 +210,9 @@ async function getFromCachePipeline<T = any>({
 
 /**
  * Generic function to fetch something from cache, or store it if cache misses
- * 
+ *
  * Handls concurrency out of the box
- * 
+ *
  * TODO: replace by the pipeline version for simplification
  * @returns
  */
@@ -306,25 +292,21 @@ export async function getFromCache<T = any>({
         result.duration = endAt.getTime() - startAt.getTime()
         return result
     } catch (error: any) {
+        // rethrow Next.js error
         console.error('// getFromCache error')
-        console.error(error)
+        console.error(error, Object.keys(error))
         console.debug(`🔴 [${key}] error when fetching from Redis or source ${calledFromLog}`)
         memoryCache.del(key)
-        if (shouldThrow) {
+        // always throw Next.js config related errors
+        // @see  https://nextjs.org/docs/messages/dynamic-server-error
+        const mustThrow = error.digest === 'DYNAMIC_SERVER_USAGE'
+        if (mustThrow || shouldThrow) {
             throw error
         } else {
             const result = { error: error.message } as FetchPayloadSuccessOrError<T>
             return result
         }
     }
-}
-
-export const getApiUrl = () => {
-    const apiUrl = getEnvVar(EnvVar.API_URL) //process.env.API_URL
-    if (!apiUrl) {
-        throw new Error('process.env.API_URL not defined, it should point the the API')
-    }
-    return apiUrl
 }
 
 function extractQueryName(queryString: string) {
@@ -335,40 +317,9 @@ function extractQueryName(queryString: string) {
 
 /**
  * Generic GraphQL fetcher
- * Allows to override the API URL
- * and all other fetch options like "cache"
- * @param param0 
- * @returns 
- */
-export async function graphqlFetcher<TData = any, TVar = any>(
-    query: string,
-    variables?: TVar,
-    fetchOptions?: Partial<ResponseInit>,
-    apiUrl_?: string,
-): Promise<{
-    data?: TData,
-    errors?: Array<Error>
-}> {
-    const apiUrl = apiUrl_ || getApiUrl()
-    // console.debug(`// querying ${apiUrl} (${query.slice(0, 15)}...)`)
-    const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
-        },
-        body: JSON.stringify({ query, variables: {} }),
-        ...(fetchOptions || {})
-    })
-    const json: any = await response.json()
-    return json
-}
-
-/**
- * Generic GraphQL fetcher
- * 
+ *
  * Returns null in case of error
- * 
+ *
  * @deprecated This function handles file logging internally,
  * it should be handled at app level instead
  */
@@ -384,7 +335,7 @@ export const fetchGraphQLApi = async <T = any>({
     apiUrl?: string
     /**
      * Override Next.js caching
-     * "no-store" will prevent static rendering
+     * Using "no-store" will prevent static rendering
      * @see https://developer.mozilla.org/en-US/docs/Web/API/Request/cache
      */
     cache?: RequestCache

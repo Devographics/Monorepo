@@ -4,11 +4,20 @@ import Link from "next/link";
 import { useCurrentUser } from "~/lib/users/hooks";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components/LogoutButton";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { DebugZone } from "./DebugZone";
 import { publicConfig } from "~/config/public";
+import { enableTranslatorMode } from "@devographics/i18n";
 
-const links = [
+
+import { T } from "@devographics/react-i18n"
+
+
+type LinkItemProps = {
+  component?: React.ReactNode, showIf?: (args: { currentUser: any }) => boolean,
+  id?: string,
+  href?: string
+}
+const links: Array<LinkItemProps> = [
   {
     component:
       process.env.NEXT_PUBLIC_CONFIG === "tokyodev" ? (
@@ -48,9 +57,16 @@ const links = [
     href: "https://github.com/Devographics/locale-en-US",
   },
   {
-    showIf: () => publicConfig.isDev === true || publicConfig.isTest === true,
+    showIf: () => publicConfig.isDev || publicConfig.isTest,
+    // @ts-ignore
     id: "Demo survey",
     href: routes.survey.demo.href,
+  },
+  {
+    showIf: () => publicConfig.isDev || publicConfig.isTest,
+    // @ts-ignore
+    id: "Translator mode",
+    component: <button onClick={() => { enableTranslatorMode() }}>Translator mode</button>
   },
 ];
 
@@ -78,12 +94,7 @@ const LinkItem = ({
   href,
   showIf,
   component,
-}: {
-  id?: string;
-  href?: string;
-  component?: React.ReactNode;
-  showIf?: ({ currentUser }: { currentUser: any }) => boolean;
-}) => {
+}: LinkItemProps) => {
   const { currentUser } = useCurrentUser();
   if (showIf && !showIf({ currentUser })) {
     return null;
@@ -102,11 +113,11 @@ const LinkItem = ({
     <LinkWrapper>
       {isOutboundLink ? (
         <a href={href}>
-          <FormattedMessage id={id} />
+          <T token={id} fallback={id} />
         </a>
       ) : (
         <Link href={href}>
-          <FormattedMessage id={id} />
+          <T token={id} fallback={id} />
         </Link>
       )}
     </LinkWrapper>

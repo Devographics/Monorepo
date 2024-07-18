@@ -120,6 +120,9 @@ export default async function Page({ params }) {
 //   );
 // };
 
+const hasLowProgress = (stats) =>
+  stats.percentage < 75 && stats.totalCount - stats.normalizedCount > 200;
+
 const Question = ({
   survey,
   edition,
@@ -147,14 +150,24 @@ const Question = ({
       </th>
       <td>
         {stats && (
-          <div className="normalization-percentage">
+          <div
+            className={`normalization-progress ${
+              hasLowProgress(stats)
+                ? "normalization-progress-low"
+                : "normalization-progress-normal"
+            }`}
+          >
             <progress value={stats.percentage} max="100"></progress>{" "}
           </div>
         )}
       </td>
       <td>
         {stats && (
-          <p>
+          <p
+            className={`normalization-percentage ${
+              hasLowProgress(stats) ? "normalization-percentage-low" : ""
+            }`}
+          >
             {stats.percentage}% ({stats.normalizedCount}/
             <strong>{stats.totalCount}</strong>)
           </p>

@@ -68,7 +68,7 @@ export const mergeOptions = (options1: Option[], options2: Option[]) => {
                 ...(existingOption?.editions || []),
                 ...(o2?.editions || [])
             ])
-            const newOption = { ...existingOption, editions: mergedEditions }
+            const newOption = { ...existingOption, ...o2, editions: mergedEditions }
             options[existingOptionIndex] = newOption
         } else {
             options.push(o2)
@@ -92,7 +92,7 @@ export const applyQuestionTemplate = (options: {
         if (templateFunction) {
             output = { ...output, template, ...templateFunction(options) }
         } else {
-            console.log(`// template ${template} not found!`)
+            console.log(`// template ${template} not found! (${edition.id})`)
             console.log(question)
             output = { ...output, template }
         }
@@ -169,13 +169,26 @@ export const mergeSections = (sections1: Section[] = [], sections2: Section[] = 
     return sections
 }
 
+// TODO: do this better
+export const getSectionType = (section: SectionApiObject) => {
+    if (
+        ['tools', 'libraries'].includes(section.id) ||
+        (section.template && ['tool', 'toolv3'].includes(section.template))
+    ) {
+        return 'tools'
+    } else {
+        return 'features'
+    }
+}
+
 export const getSectionItems = (section: SectionApiObject, type: 'tools' | 'features') =>
     type === 'tools' ? getSectionTools(section) : getSectionFeatures(section)
 // TODO: do this better
 export const getSectionFeatures = (section: SectionApiObject) =>
     section?.questions?.filter(q => ['feature', 'featurev3'].includes(q.template))
-export const getSectionTools = (section: SectionApiObject) =>
-    section?.questions?.filter(q => q.template === 'tool')
+export const getSectionTools = (section: SectionApiObject) => {
+    return section?.questions?.filter(q => ['tool', 'toolv3'].includes(q.template))
+}
 
 export const getEditionItems = (edition: EditionApiObject, type: 'tools' | 'features') => {
     let items: QuestionApiObject[] = []

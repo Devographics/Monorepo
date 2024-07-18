@@ -4,7 +4,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { fontSize, fontWeight } from 'core/theme'
 import Tip from 'core/components/Tooltip'
 import { Bucket, PercentileData, Percentiles } from '@devographics/types'
-import { useDefaultColorScale } from '../../helpers/colors'
+import { useDefaultColorScale } from '../../../common2/helpers/colors'
 import { DEFAULT } from '@devographics/constants'
 const STROKE_WIDTH = 1
 
@@ -16,10 +16,8 @@ export type BoxProps = {
     stroke: string
     fill?: string
     labelFormatter: (v: number) => string
-    label: string
     contentWidth: number
     bucket: Bucket
-    height: number
 }
 
 export const HorizontalBox = ({
@@ -60,7 +58,6 @@ export const HorizontalBox = ({
     const gradient = colorScale[bucket.id] || colorScale[DEFAULT]
     const gradientId = `gradient_${bucket.id}`
 
-    console.log(bucket.id, gradient)
     return bucket.hasInsufficientData ? (
         <g>
             <InsufficientData_

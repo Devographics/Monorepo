@@ -180,6 +180,7 @@ type RawDbPaths {
 }
 
 type NormDbPaths {
+    base: String
     response: String
     other: String
     prenormalized: String
@@ -221,14 +222,15 @@ type GroupsMetadata {
 input Parameters {
     limit: Int
     cutoff: Int
+    cutoffPercent: Int
     sort: SortSpecifier
     facetSort: SortSpecifier
     facetLimit: Int
     facetCutoff: Int
+    facetCutoffPercent: Int
     enableCache: Boolean
     showNoAnswer: Boolean
     showNoMatch: Boolean
-    groupUnderCutoff: Boolean
     enableBucketGroups: Boolean
     # Merge cutoff answers and unmatched answers into a single "other answers" bucket
     mergeOtherBuckets: Boolean
@@ -258,8 +260,8 @@ enum SortProperty {
     count
     percent
     id
-    mean
-    average
+    medianByFacet
+    averageByFacet
 }
 
 enum SortOrder {
@@ -277,12 +279,44 @@ type ResponseEditionData {
     year: Int
     editionId: String
     completion: YearCompletion
+    """
+    Average is only available for numerical data
+    """
+    average: Float
+    percentiles: Percentiles
     buckets: [Bucket]
+    """
+    Ratios are only available for features/tools
+    """
+    ratios: RatiosData
 }
 
 type RawData {
     responseId: String
-    content: JSON # could be String or [String]
+    raw: String
+    tokens: [NormalizationToken]
+}
+
+type RatiosData {
+    # (heard + used) / total
+    awareness: Float
+
+    # heard positive / heard
+    interest: Float
+
+    # used / total
+    usage: Float
+
+    # used positive / used
+    retention: Float
+
+    # all positive / total
+    positivity: Float
+}
+
+type NormalizationToken {
+    id: String
+    pattern: String
 }
 
 """
@@ -321,6 +355,10 @@ type Bucket {
     """
     averageByFacet: Float
     """
+    Median by facet (same as percentiles.p50)
+    """
+    medianByFacet: Float
+    """
     Percentiles by facet
     """
     percentilesByFacet: Percentiles
@@ -332,6 +370,11 @@ type Bucket {
     Indicates if bucket was removed because of insufficient data
     """
     hasInsufficientData: Boolean
+    """
+    Used for double-checking validity of returned data
+    """
+    facetsCountSum: Float # should always be equal to bucket.count
+    facetsPercentSum: Float # should always be equal to 100
     """
     If bucket was created by grouping other buckets, ids of these grouped buckets
     """
@@ -378,6 +421,10 @@ type GroupedBucket {
     """
     averageByFacet: Float
     """
+    Median by facet (same as percentiles.p50)
+    """
+    medianByFacet: Float
+    """
     Percentiles by facet
     """
     percentilesByFacet: Percentiles
@@ -389,6 +436,11 @@ type GroupedBucket {
     Indicates if bucket was removed because of insufficient data
     """
     hasInsufficientData: Boolean
+    """
+    Used for double-checking validity of returned data
+    """
+    facetsCountSum: Float # should always be equal to bucket.count
+    facetsPercentSum: Float # should always be equal to 100
 }
 
 type Percentiles {
@@ -446,6 +498,10 @@ type FacetBucket {
     """
     entity: Entity
     """
+    Normalization Token associated with the current bucket
+    """
+    token: Token
+    """
     Indicates if bucket was removed because of insufficient data
     """
     hasInsufficientData: Boolean
@@ -453,6 +509,40 @@ type FacetBucket {
     If bucket was created by grouping other buckets, ids of these grouped buckets
     """
     groupedBucketIds: [String]
+    """
+    If bucket was created by grouping other buckets, contents of these grouped buckets
+    """
+    groupedBuckets: [GroupedFacetBucket]
+}
+
+# same as above except without groupedBucketIds/groupedBuckets
+type GroupedFacetBucket {
+    id: String
+    label: String
+    """
+    Respondent count
+    """
+    count: Int
+    """
+    Percentage relative to question respondents
+    """
+    percentageQuestion: Float
+    """
+    Percentage relative to survey respondents
+    """
+    percentageSurvey: Float
+    """
+    Percentage of the bucket represented by the current facet
+    """
+    percentageBucket: Float
+    """
+    Entity associated with the current bucket
+    """
+    entity: Entity
+    """
+    Indicates if bucket was removed because of insufficient data
+    """
+    hasInsufficientData: Boolean
 }
 
 type Query {
@@ -543,16 +633,14 @@ enum FeatureOptionID {
 }
 
 type ToolOption {
-    id: ToolOptionID
+    id: ExperienceOptionID
     label: String
     entity: Entity
 }
 
-enum ToolOptionID {
-    would_use
-    would_not_use
-    interested
-    not_interested
+enum ExperienceOptionID {
+    used
+    heard
     never_heard
 }
 

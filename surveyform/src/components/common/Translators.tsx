@@ -1,6 +1,9 @@
 "use client";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
+
+
+
+import { T } from "@devographics/react-i18n"
 
 const Translators = () => {
   // TODO: pass locale list from context to make it a server component
@@ -13,7 +16,7 @@ const Translators = () => {
   return showTranslators ? (
     <div className="translators survey-page-block">
       <h3 className="translators-heading survey-page-block-heading">
-        <FormattedMessage id="general.translation_help" />
+        <T token="general.translation_help" />
       </h3>
       <div className="translators-locales">
         {locales
@@ -28,7 +31,7 @@ const Translators = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <FormattedMessage id="general.help_us_translate" />
+          <T token="general.help_us_translate" />
         </a>
       </h4>
     </div>

@@ -186,7 +186,7 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
                   if (allPredefinedFollowupPaths) {
                     // when main value changes, also clear all predefined follow-ups
                     for (const followUpPath of Object.values(
-                      allPredefinedFollowupPaths
+                      allPredefinedFollowupPaths,
                     )) {
                       updateCurrentValues({ [followUpPath]: null });
                     }
@@ -251,7 +251,7 @@ export const ReadingListPrompt = ({ setHighlightReadingList }) => {
   const intl = useIntlContext();
   const optionLabel = intl.formatMessage({
     id: "followups.sentiment_interested",
-  });
+  })?.t;
   return (
     <Alert
       variant="warning"

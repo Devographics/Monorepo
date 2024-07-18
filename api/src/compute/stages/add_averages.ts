@@ -1,7 +1,7 @@
 import { BucketUnits, FacetBucket, OptionGroup } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import sumBy from 'lodash/sumBy.js'
-import { CUTOFF_ANSWERS, NO_ANSWER, NOT_APPLICABLE } from '@devographics/constants'
+import { NO_ANSWER, NOT_APPLICABLE, OVERALL } from '@devographics/constants'
 import isNil from 'lodash/isNil.js'
 import isNaN from 'lodash/isNaN.js'
 import round from 'lodash/round.js'
@@ -23,37 +23,37 @@ const getGroupAverage = (group: OptionGroup) => {
     }
 }
 
-// Given a facet bucket, find the corresponding average corresponding to its range
-export const getFacetBucketAverage = (
-    facetBucket: FacetBucket,
+// Given a bucket, find the corresponding average corresponding to its range
+export const getBucketAverage = (
+    bucket: FacetBucket | Bucket,
     axis: ComputeAxisParameters
 ): number => {
-    if (facetBucket.id === 'range_work_for_free') {
+    if (bucket.id === 'range_work_for_free') {
         // note: yearly_salary's "range_work_for_free" is not in options anymore, so hardcode it
         // here for backwards compatibility's sake
         return 0
     }
-    const groupedBuckets = facetBucket.groupedBuckets
+    const groupedBuckets = bucket.groupedBuckets
     if (groupedBuckets) {
-        // if facet is a group of other facet buckets we need to get the average of all the
+        // if bucket is a group of other buckets we need to get the average of all the
         // grouped buckets
         const average =
             groupedBuckets.length === 0
                 ? 0
-                : sumBy(groupedBuckets, bucket => getFacetBucketAverage(bucket, axis)) /
+                : sumBy(groupedBuckets, bucket => getBucketAverage(bucket, axis)) /
                   groupedBuckets.length
         return average
     } else {
-        // facet is not a group, we just get the average from the corresponding option;
+        // bucket is not a group, we just get the average from the corresponding option;
         // or the bucket id itself if the question is numeric
         const average = axis?.question?.optionsAreNumeric
-            ? Number(facetBucket.id)
-            : axis?.options?.find(o => o.id === facetBucket.id)?.average
+            ? Number(bucket.id)
+            : axis?.options?.find(o => o.id === bucket.id)?.average
         if (typeof average === 'undefined') {
-            console.log({ facetBucket })
+            console.log({ bucket })
             console.log({ axis })
             throw new Error(
-                `getFacetBucketAverage: could not find option average for facet bucket "${facetBucket.id}" with axis "${axis.question.id}"`
+                `getBucketAverage: could not find option average for bucket "${bucket.id}" with axis "${axis.question.id}"`
             )
         }
         return average
@@ -61,53 +61,63 @@ export const getFacetBucketAverage = (
 }
 
 export const calculateAverage = ({
-    bucket,
+    buckets,
     axis
 }: {
-    bucket: Bucket
+    buckets: Bucket[] | FacetBucket[]
     axis: ComputeAxisParameters
 }) => {
-    const { count, facetBuckets } = bucket
-    if (!count) {
-        return 0
-    }
     /*
 
     We exclude NO_ANSWER and na ("not applicable") facet buckets because otherwise they would
     warp the resulting average towards 0.
 
     */
-    const filteredFacetBuckets = facetBuckets.filter(
-        f => f.id !== NO_ANSWER && f.id !== NOT_APPLICABLE
-    )
-    const facetTotal = sumBy(filteredFacetBuckets, facetBucket => facetBucket.count || 0)
+    const filteredBuckets = buckets.filter(f => f.id !== NO_ANSWER && f.id !== NOT_APPLICABLE)
+    const total = sumBy(filteredBuckets, bucket => bucket.count || 0)
 
     const averageValue =
-        sumBy(filteredFacetBuckets, facetBucket => {
-            const average = getFacetBucketAverage(facetBucket, axis)
-            if (facetBucket.count && average) {
-                return facetBucket.count * average
+        sumBy(filteredBuckets, bucket => {
+            const average = getBucketAverage(bucket, axis)
+            if (bucket.count && average) {
+                return bucket.count * average
             } else {
                 return 0
             }
-        }) / facetTotal
+        }) / total
     return round(averageValue, 1)
 }
 
-export async function addAveragesByFacet(
+export async function addAverages(
     resultsByEdition: ResponseEditionData[],
     axis1: ComputeAxisParameters,
     axis2: ComputeAxisParameters
 ) {
-    if (axis2.question.optionsAreRange || axis2.question.optionsAreNumeric) {
+    const calculateAxis1Average =
+        axis1 && (axis1.question.optionsAreRange || axis1.question.optionsAreNumeric)
+    const calculateAxis2Average =
+        axis2 && (axis2.question.optionsAreRange || axis2.question.optionsAreNumeric)
+
+    if (calculateAxis1Average || calculateAxis2Average) {
         for (let editionData of resultsByEdition) {
-            if (axis2) {
+            // calculate average of all top-level buckets
+            if (calculateAxis1Average) {
+                editionData.average = calculateAverage({
+                    buckets: editionData.buckets.filter(b => b.id !== OVERALL),
+                    axis: axis1
+                })
+            }
+            // calculate averages of all facet buckets for each top-level bucket
+            if (calculateAxis2Average) {
                 for (let bucket of editionData.buckets) {
                     if (bucket.id !== NOT_APPLICABLE) {
                         if (bucket.hasInsufficientData) {
                             bucket[BucketUnits.AVERAGE] = 0
                         } else {
-                            const average = calculateAverage({ bucket, axis: axis2 })
+                            const average = calculateAverage({
+                                buckets: bucket.facetBuckets,
+                                axis: axis2
+                            })
                             if (!isNil(average) && !isNaN(average)) {
                                 bucket[BucketUnits.AVERAGE] = average
                             }

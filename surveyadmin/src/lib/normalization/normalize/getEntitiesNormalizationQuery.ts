@@ -9,7 +9,6 @@ query EntitiesQuery {
     nameHtml
     twitterName
     tags
-    exactMatch
     patterns
   }
 }

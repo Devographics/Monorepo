@@ -107,6 +107,8 @@ export const getNormPaths = (
     let paths = {
         base: getPath(basePathSegments),
         response: getPath(suffix ? [...basePathSegments, suffix] : basePathSegments),
+        experience: getPath([...basePathSegments, DbPathsEnum.EXPERIENCE]),
+        sentiment: getPath([...basePathSegments, DbPathsEnum.SENTIMENT]),
         skip: getPath([...basePathSegments, DbPathsEnum.SKIP])
     } as DbPaths
 

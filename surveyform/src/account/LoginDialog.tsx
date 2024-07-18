@@ -3,9 +3,9 @@ import {
   StandaloneMagicLoginForm,
   StandaloneMagicLoginFormProps,
 } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { UserDocument } from "~/account/user/typings";
 import { ResponseDocument } from "@devographics/types";
+import { T } from "@devographics/react-i18n"
 
 export const LoginDialog = ({
   hideGuest,
@@ -32,36 +32,36 @@ export const LoginDialog = ({
     <div className="survey-login-options">
       <div className="survey-login-option">
         <h4>
-          <FormattedMessage id="accounts.create_account" />
+          <T token="accounts.create_account" />
         </h4>
         <div className="survey-login-option-description">
-          <FormattedMessage id="accounts.create_account.description" />
+          <T token="accounts.create_account.description" />
         </div>
         <div className="survey-login-action">
           <StandaloneMagicLoginForm
             surveyId={surveyId}
             editionId={editionId}
-            label={<FormattedMessage id="accounts.create_account.action" />}
+            label={<T token="accounts.create_account.action" />}
             redirectTo={successRedirectionPath}
-            // loginOptions={loginOptions}
+          // loginOptions={loginOptions}
           />
         </div>
         <div className="survey-login-option-note">
-          <FormattedMessage id="accounts.create_account.note" />
+          <T token="accounts.create_account.note" />
         </div>
       </div>
       {!hideGuest && (
         <div className="survey-login-option">
           <h4>
-            <FormattedMessage id="accounts.continue_as_guest" />
+            <T token="accounts.continue_as_guest" />
           </h4>
           <div className="survey-login-option-description">
-            <FormattedMessage id="accounts.continue_as_guest.description" />
+            <T token="accounts.continue_as_guest.description" />
           </div>
           <div className="survey-login-action">
             <AnonymousLoginForm
               label={
-                <FormattedMessage id="accounts.continue_as_guest.action" />
+                <T token="accounts.continue_as_guest.action" />
               }
               successRedirectionFunction={successRedirectionFunction}
               successRedirectionPath={successRedirectionPath}

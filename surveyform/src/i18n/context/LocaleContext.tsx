@@ -1,16 +1,18 @@
 "use client";
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, ReactNode } from "react";
 import {
   IntlContextProvider,
   StringsRegistry,
 } from "@devographics/react-i18n-legacy";
+import { I18nContextProvider } from "@devographics/react-i18n";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { LOCALE_COOKIE_NAME } from "../cookie";
 import { defaultLocaleId } from "~/i18n/config";
-import { captureException } from "@sentry/nextjs";
+// import { captureException } from "@sentry/nextjs";
 import { LocaleDef, LocaleDefWithStrings } from "../typings";
 import { useCurrentUser } from "~/lib/users/hooks";
+import { LocaleParsed } from "@devographics/i18n";
 
 interface LocaleContextValue {
   setLocale: (localId: string) => Promise<void>;
@@ -50,7 +52,7 @@ export const useSetLocale = (updateUser?: any) => {
         });
       } catch (err) {
         console.error("Could not update user language");
-        captureException(err);
+        // captureException(err);
       }
     }
     // the middleware will rerun and redirect user to right locale
@@ -62,16 +64,18 @@ export const useSetLocale = (updateUser?: any) => {
 /**
  * Provide methods to get/set the current locale
  * + initialize an IntlProvider
+ *
+ * @deprecated use @devographics/React-i18n
  * @param props
  * @returns
  */
 export const LocaleContextProvider = (props: {
   localeId: string;
-  localeStrings: LocaleDefWithStrings;
+  localeStrings: LocaleParsed;
   locales: Array<LocaleDef>;
   /** Optionally store the selected locale */
   updateUser?: any;
-  children: React.ReactNode;
+  children: ReactNode;
   /** Context to add to the default ones */
   contexts?: Array<string>;
 }) => {
@@ -80,15 +84,16 @@ export const LocaleContextProvider = (props: {
   let locale = locales.find((l) => l.id === localeId);
   if (!locale) {
     locale = locales.find((l) => l.id === defaultLocaleId)!;
-    captureException(
-      `${localeId} doesn't exist, falling back to defaultLocale`
-    );
+    // captureException(
+    //   `${localeId} doesn't exist, falling back to defaultLocale`
+    // );
   }
 
   const { children } = props;
 
   const stringsRegistry = new StringsRegistry("en-US");
-  stringsRegistry.addStrings(localeId, localeStrings.strings);
+  // @ts-ignore
+  stringsRegistry.addStrings(localeId, localeStrings.dict);
   return (
     // NOTE: IntlContextProvider is in charge of merging strings with a previously existing parent
     <IntlContextProvider stringsRegistry={stringsRegistry} localeId={localeId}>

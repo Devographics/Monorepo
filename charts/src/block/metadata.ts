@@ -12,7 +12,7 @@
 // import { getSiteTitle } from './pageHelpers'
 
 // TODO: enable shared folders
-import { BlockDefinition, EditionMetadata, Entity } from '@devographics/types'
+import { BlockVariantDefinition, EditionMetadata, Entity } from '@devographics/types'
 import { PageContextValue } from './typings'
 import type { StringTranslator } from '@/i18n/typings'
 
@@ -24,7 +24,7 @@ export const getBlockKey = ({
     block,
     pageContext
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
 }) => {
     const { id, i18nNamespace } = block
@@ -43,7 +43,7 @@ const getBlockTitleKey = ({
     block,
     pageContext
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
 }) => block.titleId || getBlockKey({ block, pageContext })
 
@@ -52,7 +52,7 @@ const getBlockTitle = ({
     pageContext,
     getString
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     getString: StringTranslator
 }) => {
@@ -79,7 +79,7 @@ const getBlockDescription = ({
     values
 }: // options
 {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     getString: StringTranslator
     values?: any
@@ -104,7 +104,7 @@ const getBlockLink = ({
     pageContext,
     useRedirect = true
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     useRedirect?: boolean
 }) => {
@@ -112,9 +112,12 @@ const getBlockLink = ({
     const { edition, localeId, sectionId, subSectionId } = pageContext
     const { resultsUrl } = edition
 
-    const segments = [localeId, sectionId]
+    const segments = [
+        localeId,
+        sectionId === 'user_info' ? 'demographics' : sectionId.replaceAll('_', '-')
+    ]
     if (subSectionId) {
-        segments.push(subSectionId)
+        segments.push(subSectionId.replaceAll('_', '-'))
     }
     const pathname = `/${segments.join('/')}/#${blockId}`
     const url = new URL(pathname, resultsUrl)
@@ -139,7 +142,7 @@ export const getBlockMeta = ({
     pageContext,
     getString
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     blockParameters: any
     pageContext: PageContextValue
     getString: StringTranslator

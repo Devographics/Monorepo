@@ -1,7 +1,6 @@
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components/LogoutButton";
 import UserResponses from "~/components/users/UserResponses";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { redirect } from "next/navigation";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { UserDocument } from "~/account/user/typings";
@@ -10,6 +9,8 @@ import { type ResponseDocument } from "@devographics/types";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
 import { StandaloneMagicLoginForm } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
+import { setLocaleIdServerContext } from "~/i18n/rsc-context";
+import { DynamicT } from "@devographics/react-i18n";
 
 const getResponses = cache(
   async ({ currentUser }: { currentUser: UserDocument }) => {
@@ -26,6 +27,7 @@ const getResponses = cache(
 );
 
 const Profile = async ({ params }) => {
+  setLocaleIdServerContext(params.lang); // Needed for "ServerT"
   const { data: surveys } = await rscFetchSurveysMetadata({
     calledFrom: "UserResponses",
   });
@@ -43,20 +45,20 @@ const Profile = async ({ params }) => {
         {currentUser.authMode === "anonymous" ? (
           <div className="mb-5">
             <strong>
-              <FormattedMessage id="accounts.logged_in_as_guest" />
+              <DynamicT token="accounts.logged_in_as_guest" />
             </strong>
             <p>
-              <FormattedMessage id="accounts.upgrade_account.description" />
+              <DynamicT token="accounts.upgrade_account.description" />
             </p>
             <StandaloneMagicLoginForm
-              label={<FormattedMessage id="accounts.upgrade_account.action" />}
+              label={<DynamicT token="accounts.upgrade_account.action" />}
             />
           </div>
         ) : (
           <div className="mb-5">
             <strong>
-              <FormattedMessage
-                id="accounts.logged_in_as"
+              <DynamicT
+                token="accounts.logged_in_as"
                 // TODO: older translations expect an "email" parameter
                 // but we one-way encrypt email so we don't know them anymore
                 // only en-US translation is up to date (09/2023)
@@ -75,7 +77,7 @@ const Profile = async ({ params }) => {
         />
       )}
       <p>
-        <FormattedMessage id="accounts.questions" />
+        <DynamicT token="accounts.questions" />
       </p>
       <p>
         <LogoutButton />

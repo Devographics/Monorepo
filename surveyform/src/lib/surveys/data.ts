@@ -55,6 +55,7 @@ export const getSurveyParamsTable = (): SurveyParamsTable => ({
     2021: { surveyId: "tokyodev", editionId: "td2021" },
     2022: { surveyId: "tokyodev", editionId: "td2022" },
     2023: { surveyId: "tokyodev", editionId: "td2023" },
+    2024: { surveyId: "tokyodev", editionId: "td2024" },
   },
 });
 

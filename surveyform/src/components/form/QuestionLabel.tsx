@@ -14,21 +14,25 @@ export const QuestionLabel = ({
   formatCode?: boolean;
   variant?: "short" | "full";
 }) => {
-  const { html, clean, isEntity } = useQuestionTitle({
+  const { html, clean, isEntity, key } = useQuestionTitle({
     section,
     question,
     variant,
   });
-  const labelClass = isEntity ? "entity-label" : "question-label";
+  let labelClass = isEntity ? "entity-label" : "question-label";
+  labelClass += formatCode ? " label-html" : " label-plaintext";
   return formatCode ? (
     <span
+      data-key={key}
       className={labelClass}
       dangerouslySetInnerHTML={{
         __html: html || clean,
       }}
     />
   ) : (
-    <span className={labelClass}>{clean}</span>
+    <span data-key={key} className={labelClass}>
+      {clean}
+    </span>
   );
 };
 

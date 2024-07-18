@@ -77,25 +77,34 @@ export const getRawComments = async ({
     const { db, isDebug } = context
     const collection = getCollection(db, survey)
 
-    const dbPath = question?.normPaths?.comment
-    if (!dbPath) {
+    const {
+        comment: commentPath,
+        experience: experiencePath,
+        sentiment: sentimentPath
+    } = question?.normPaths || {}
+
+    if (!commentPath) {
         throw new Error(`Could not find comments dbPath for question ${survey.id}/${question.id}`)
     }
 
     const selector = {
         surveyId,
-        [dbPath]: { $exists: true },
+        [commentPath]: { $exists: true },
         ...(editionId && { editionId })
     }
-    const cursor = await collection.find(selector).project({ surveySlug: 1, [dbPath]: 1 })
+    const cursor = await collection.find(selector)
 
     const results = await cursor.toArray()
+
     // console.log(selector)
-    // console.log(results)
+    // console.log(JSON.stringify(results, null, 2))
+
     const comments = results.map(r => ({
-        editionId: r.surveySlug,
-        message: get(r, dbPath),
-        responseId: r._id
+        editionId: r.editionId,
+        message: get(r, commentPath) as string,
+        experience: get(r, experiencePath!) as string,
+        sentiment: get(r, sentimentPath!) as string,
+        responseId: r._id as unknown as string
     })) as CommentObject[]
     // results = await addSentimentAnalysis(results)
     const resultsByEdition = groupByEdition(comments)

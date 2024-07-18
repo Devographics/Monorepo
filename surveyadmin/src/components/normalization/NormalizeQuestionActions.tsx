@@ -1,11 +1,15 @@
 "use client";
 import { defaultSegmentSize } from "./hooks";
 import Metadata from "./Metadata";
-import Tokens from "./Tokens";
+import TokensTrigger from "./Tokens";
 import { CommonNormalizationProps, SegmentProps } from "./NormalizeQuestion";
 import { Import } from "./Import";
 import { ViewQuestionData } from "./QuestionData";
 import { Random } from "./Random";
+import { ActionLog } from "./ActionLog";
+import { WordFrequencies } from "./WordFrequencies";
+import { RenameTokens } from "./RenameTokens";
+import { SuggestedTokens } from "./SuggestedTokens";
 // import Dropdown from "~/core/components/ui/Dropdown";
 
 export const allFields = { id: "all_fields", label: "All Fields" };
@@ -29,6 +33,10 @@ const Actions = (props: ActionProps) => {
         {/* <Tokens {...props} /> */}
         <Import {...props} />
         <Random {...props} />
+        <ActionLog {...props} />
+        <WordFrequencies {...props} />
+        <RenameTokens {...props} />
+        <SuggestedTokens {...props} />
       </div>
       <div
         className="secondary"

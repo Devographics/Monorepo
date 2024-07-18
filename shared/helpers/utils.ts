@@ -14,3 +14,34 @@ export const measureTime = async (run: any, message: string) => {
     )
     return result
 }
+
+export const isToolTemplate = (template?: string) =>
+    template && ['tool', 'toolv3'].includes(template)
+
+export const isFeatureTemplate = (template?: string) =>
+    template && ['feature', 'featurev3'].includes(template)
+
+export function concatPath(...segments: string[]) {
+    if (segments.length === 0) {
+        return ''
+    }
+
+    return segments.reduce((acc, curr) => {
+        if (acc.endsWith('/') || curr.startsWith('/')) {
+            return acc + curr
+        } else {
+            return acc + '/' + curr
+        }
+    })
+}
+
+/**
+ * Example:
+ * APOLLO_SERVER_CORS_WHITELIST=http://localhost:5000,https://www.my-client.org
+ * => parse the string and makes it an array
+ * @param {*} variable Env array variables, with values separated by a comma (spaces allowed)
+ */
+export const parseEnvVariableArray = (variable = '') => {
+    if (!variable) return []
+    return variable.split(',').map(s => s.trim())
+}

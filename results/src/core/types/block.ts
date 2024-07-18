@@ -7,6 +7,8 @@ import {
 } from '@devographics/types'
 import { CustomizationDefinition } from 'core/filters/types'
 import { PageContextValue } from './context'
+import { CustomVariant } from 'core/filters/helpers'
+import { Views } from 'core/charts/horizontalBar2/types'
 
 export type BlockUnits =
     | 'count'
@@ -24,9 +26,10 @@ export type BlockSetUnits = React.Dispatch<React.SetStateAction<string>>
 export type BlockMode = 'absolute' | 'relative'
 
 export interface BlockComponentProps {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     pageContext: PageContextValue
     question: QuestionMetadata
+    variant?: CustomVariant
 }
 
 export interface BlockQueryOptions {
@@ -34,24 +37,34 @@ export interface BlockQueryOptions {
     addQuestionEntity?: boolean
     addQuestionComments?: boolean
     subField?: ResultsSubFieldEnum
+    sectionId?: string
 }
 
 export interface BlockDefinition {
     id: string
+    variants: Array<BlockVariantDefinition>
+}
+
+export interface BlockVariantDefinition {
+    id: string
     bucketKeysName?: string
     fieldId?: string
-    sectionId?: string
+    sectionId: string
     template?: string
     blockType?: string
     tabId?: string
     titleId?: string
     questionKey?: string
+    description?: string
     descriptionId?: string
+    takeaway?: string
     takeawayKey?: string
     noteId?: string
 
     defaultUnits?: BucketUnits
     availableUnits?: Array<BucketUnits>
+
+    defaultView?: Views
 
     // data
     query?: string
@@ -77,8 +90,6 @@ export interface BlockDefinition {
     hasSponsor?: boolean
     hasComments?: boolean
 
-    variants?: Array<BlockVariant>
-
     wrapBlock?: boolean
 
     dataPath?: string
@@ -88,10 +99,17 @@ export interface BlockDefinition {
     switcherPosition?: 'top' | 'bottom'
     showNote?: boolean
     customChart?: any
+
+    customizationModes?: string[]
+
+    // options that only affect how the chart is displayed, not the query or data
+    chartOptions: ChartOptions
 }
 
-// TODO
-export type BlockVariant = any
+export interface ChartOptions {
+    limit?: number
+    dataFilters?: string[]
+}
 
 export interface BlockWithAwards {
     /**
@@ -123,8 +141,7 @@ export interface BlockLegend {
     gradientColors?: string[]
 }
 
-
 export interface BlockDataType {
     units: 'percentage' | string
-    data: { [units: string]: any },
+    data: { [units: string]: any }
 }

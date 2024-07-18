@@ -19,7 +19,13 @@ import { rootDir } from './rootDir'
 // import { cacheAvatars } from './avatars'
 
 import { AppName } from '@devographics/types'
-import { EnvVar, getConfig, getEnvVar, setAppName } from '@devographics/helpers'
+import {
+    EnvVar,
+    getConfig,
+    getEnvVar,
+    parseEnvVariableArray,
+    setAppName
+} from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
 import { getSurveysLoadMethod, loadOrGetSurveys } from './load/surveys'
 
@@ -36,7 +42,7 @@ import { ghWebhooks } from './webhooks'
 import { getRepoSHA } from './external_apis'
 import { initProjects } from './load/projects'
 import { getEntitiesLoadMethod } from './load/entities'
-import { getLocalesLoadMethod } from './load/locales'
+import { getLocaleIds, getLocalesLoadMethod } from './load/locales/locales'
 
 const envPath = process.env.ENV_FILE ? process.env.ENV_FILE : '.env'
 dotenv.config({ path: envPath })
@@ -100,13 +106,22 @@ const start = async () => {
     //     .map(cm => (cachingMethods[cm] ? cm : strikeThrough(cm)))
     //     .join(', ')
 
+    const localeIds = getLocaleIds()
+
+    const translationContexts = parseEnvVariableArray(process.env.LOCALE_CONTEXTS)
+
     console.log(
         `---------------------------------------------------------------
 • 📄 env file = ${envPath}
 • 📄 config = ${process.env.CONFIG}
 • 📖 surveys = ${getSurveysLoadMethod()}
 • ⏱️ fast build = ${process.env.FAST_BUILD === 'true'}
-• 🌐 locales = ${getLocalesLoadMethod()}
+• 🌐 locales = ${
+            localeIds.length === 0 ? 'all available' : localeIds.join(', ')
+        } (load method: ${getLocalesLoadMethod()})
+• 🌐 contexts = ${
+            translationContexts.length === 0 ? 'all available' : translationContexts.join(', ')
+        }
 • 🙎 entities = ${getEntitiesLoadMethod()}
 ---------------------------------------------------------------`
     )

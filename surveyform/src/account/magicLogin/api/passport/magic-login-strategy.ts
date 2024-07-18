@@ -10,7 +10,7 @@ import { UserTypeServer } from "~/lib/users/model.server";
 import { routes } from "~/lib/routes";
 import { serverConfig } from "~/config/server";
 import { UserDocument } from "~/account/user/typings";
-import { NextApiRequest } from "next";
+import type { NextApiRequest } from "next";
 // TODO: perhaps pass those via an init function/closure to make the account package independant from user db actions
 import { upgradeUser } from "~/account/user/db-actions/upgrade";
 import { createOrUpgradeUser } from "~/account/user/db-actions/createOrUpgrade";

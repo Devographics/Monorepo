@@ -1,9 +1,9 @@
 blockType: ConclusionBlock
 wrapBlock: false
 disableExport: true
-dataPath: dataAPI.entities
+dataPath: dataAPI.conclusion_${author}
 query: >
-    entities(ids: [${entities}]) {
+    conclusion_${author}: entity(id: "${author}") {
         id
         name
         homepage{
@@ -13,6 +13,9 @@ query: >
         twitterName
         twitter {
             name
+            url
+        }
+        avatar {
             url
         }
     }

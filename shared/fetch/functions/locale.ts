@@ -6,7 +6,8 @@ import { FetcherFunctionOptions } from '../types'
 
 /**
  * Fetch metadata and strings for a specific locale
- * @deprecated Use react-i18n version
+ * 
+ * @deprecated Use @devographics/i18n/server version
  */
 export const fetchLocale = async (
     options: FetcherFunctionOptions & {
@@ -23,7 +24,8 @@ export const fetchLocale = async (
         fetchFunction: async () => {
             const result = await fetchGraphQLApi({
                 query,
-                key
+                key,
+                cache: "force-cache"
             })
             if (!result) throw new Error(`Couldn't fetch locale ${localeId}`)
             const locale = result.locale

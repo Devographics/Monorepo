@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { handlerMustHaveCurrentUser } from "~/account/user/route-handlers/getters";
 import { createResponse } from "~/lib/responses/db-actions/create";
 import { HandlerError } from "~/lib/handler-error";
-import { captureException } from "@sentry/nextjs";
+// import { captureException } from "@sentry/nextjs";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       return await error.toNextResponse(req);
     } else {
       console.error(error);
-      captureException(error);
+      // captureException(error);
       return NextResponse.json(
         {
           error: {
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             error,
           },
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }

@@ -1,8 +1,8 @@
-import { EditionMetadata } from '@devographics/types'
+import { type EditionMetadata } from '@devographics/types'
 import { getFromCache, fetchGraphQLApi } from '../fetch'
 import { editionSitemapCacheKey } from '../cache_keys'
 import { getEditionSitemapQuery } from '../queries'
-import { FetcherFunctionOptions } from '../types'
+import { type FetcherFunctionOptions } from '../types'
 
 /**
  * Survey edition, including the sitemap object
@@ -32,7 +32,8 @@ export async function fetchEditionSitemap(
         fetchFunction: async () => {
             const result = await fetchGraphQLApi({
                 query,
-                key
+                key,
+                cache: "force-cache"
             })
             if (!result) {
                 throw new Error(

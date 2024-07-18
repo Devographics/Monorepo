@@ -1,0 +1,43 @@
+---
+/**
+ * This translation scripts bypasses React and avoids the need
+ * to add containers everywhere in the DOM
+ *
+ * Must be used with a client direction to use some JS code
+ *
+ * TODO: it's not doing much currently
+ * + we could make the input a React component rendered where the translation token is
+ * or make it a link that opens another tab but that's more cumbersome
+ */
+---
+
+<script>
+  function enableTranslation() {
+    console.log("Enabling translations");
+    document.querySelectorAll("[data-tk]").forEach((el: Element) => {
+      console.debug("Found a translated element", el);
+      if (!(el instanceof HTMLElement)) {
+        console.warn(
+          "Found a translation element which is not an HTMLElement",
+          el,
+        );
+        return;
+      }
+      const input = document.createElement("input");
+      const key = el.dataset?.["tk"];
+      if (!key) {
+        console.warn("Found a translation element with an empty key", el);
+        return;
+      }
+      input.defaultValue = el.textContent || "<Error: empty translation token>";
+      input.name = key;
+      input.type = "text";
+      el.replaceWith(input);
+    });
+  }
+  // @ts-ignore
+  window.enableTranslation = enableTranslation;
+</script>
+<button onclick="
+enableTranslation()
+">Enable translation mode</button>

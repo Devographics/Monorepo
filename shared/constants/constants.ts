@@ -26,6 +26,8 @@ export const OTHER_ANSWERS = 'other_answers'
 
 export const CUTOFF_ANSWERS = 'cutoff_answers'
 
+export const OVERLIMIT_ANSWERS = 'overlimit_answers'
+
 export const NOT_APPLICABLE = 'na'
 
 export const DEFAULT = 'default'
@@ -40,6 +42,7 @@ export const INSUFFICIENT_DATA = 'insufficient_data'
 
 export const PERCENTAGE_SURVEY = 'percentageSurvey'
 export const PERCENTAGE_QUESTION = 'percentageQuestion'
+export const PERCENTAGE_BUCKET = 'percentageBucket'
 export const COUNT = 'count'
 
 export const MAIN_UNITS = [PERCENTAGE_SURVEY, PERCENTAGE_QUESTION, COUNT]
@@ -57,3 +60,5 @@ export const POSITIVE_SENTIMENT = 'positive'
 export const NEGATIVE_SENTIMENT = 'negative'
 
 export const SENTIMENT_FACET = '_sentiment'
+
+export const CATCHALL_PREFIX = 'catchall_'

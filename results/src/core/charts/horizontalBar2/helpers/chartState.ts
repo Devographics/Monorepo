@@ -1,31 +1,65 @@
 import { useState } from 'react'
-
 import { QuestionMetadata } from '@devographics/types'
 import { ColumnModes, OrderOptions } from '../../common2/types'
-import { ChartState, Views } from '../types'
+import { HorizontalBarChartState, HorizontalBarViews } from '../types'
+import { BlockVariantDefinition } from 'core/types'
+import { getViewDefinition } from './views'
 
-export const useChartState = ({ facetQuestion }: { facetQuestion?: QuestionMetadata }) => {
-    const defaultState = {} as ChartState
-    if (facetQuestion) {
-        defaultState.facet = { id: facetQuestion.id, sectionId: facetQuestion.sectionId }
-        if (facetQuestion.optionsAreSequential) {
-            defaultState.view = Views.PERCENTAGE_BUCKET
-        } else {
-            defaultState.view = Views.PERCENTAGE_BUCKET
-        }
+export const getDefaultState = ({
+    facetQuestion,
+    block
+}: {
+    facetQuestion?: QuestionMetadata
+    block: BlockVariantDefinition
+}) => {
+    const defaultState = {} as HorizontalBarChartState
+    if (block.defaultView) {
+        defaultState.view = block.defaultView
     } else {
-        defaultState.view = Views.PERCENTAGE_QUESTION
+        if (facetQuestion) {
+            defaultState.facet = { id: facetQuestion.id, sectionId: facetQuestion.sectionId }
+            if (facetQuestion.optionsAreRange || facetQuestion.optionsAreNumeric) {
+                defaultState.view = HorizontalBarViews.BOXPLOT
+            } else {
+                defaultState.view = HorizontalBarViews.PERCENTAGE_BUCKET
+            }
+        } else {
+            defaultState.view = HorizontalBarViews.PERCENTAGE_QUESTION
+        }
     }
+    if (block?.chartOptions?.limit) {
+        defaultState.rowsLimit = block.chartOptions.limit
+    }
+    if (block?.filtersState?.options?.sort) {
+        defaultState.sort = block?.filtersState?.options?.sort
+    }
+    if (block?.filtersState?.options?.order) {
+        defaultState.order = block?.filtersState?.options?.order
+    }
+    return defaultState
+}
 
-    const [facet, setFacet] = useState<ChartState['facet']>(defaultState.facet)
-    const [sort, setSort] = useState<ChartState['sort']>(defaultState.sort)
-    const [order, setOrder] = useState<ChartState['order']>(defaultState.order || OrderOptions.DESC)
-    const [view, setView] = useState<ChartState['view']>(defaultState.view || Views.COUNT)
-    const [columnMode, setColumnMode] = useState<ChartState['columnMode']>(
+export const useChartState = (defaultState: {
+    [P in keyof HorizontalBarChartState]?: HorizontalBarChartState[P]
+}) => {
+    const [rowsLimit, setRowsLimit] = useState<HorizontalBarChartState['rowsLimit']>(
+        defaultState?.rowsLimit || 0
+    )
+    const [facet, setFacet] = useState<HorizontalBarChartState['facet']>(defaultState.facet)
+    const [sort, setSort] = useState<HorizontalBarChartState['sort']>(defaultState.sort)
+    const [order, setOrder] = useState<HorizontalBarChartState['order']>(
+        defaultState.order || OrderOptions.DESC
+    )
+    const [view, setView] = useState<HorizontalBarChartState['view']>(
+        defaultState.view || HorizontalBarViews.COUNT
+    )
+    const [columnMode, setColumnMode] = useState<HorizontalBarChartState['columnMode']>(
         defaultState.columnMode || ColumnModes.STACKED
     )
 
-    const chartState: ChartState = {
+    const viewDefinition = getViewDefinition(view)
+
+    const chartState: HorizontalBarChartState = {
         facet,
         setFacet,
         sort,
@@ -34,8 +68,11 @@ export const useChartState = ({ facetQuestion }: { facetQuestion?: QuestionMetad
         setOrder,
         view,
         setView,
+        viewDefinition,
         columnMode,
-        setColumnMode
+        setColumnMode,
+        rowsLimit,
+        setRowsLimit
     }
     return chartState
 }

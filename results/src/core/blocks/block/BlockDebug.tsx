@@ -1,18 +1,18 @@
 import React from 'react'
-import { BlockComponentProps, BlockDefinition, FacetItem } from '@types/index'
+import { BlockComponentProps, BlockVariantDefinition, FacetItem } from '@types/index'
 
 export interface BlockDebugProps extends BlockComponentProps {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     // should this be optional?
     data: FacetItem
 }
 
-const BlockDebug = ({ block, data }: BlockDebugProps) => {
+const BlockDebug = ({ block, series }: BlockDebugProps) => {
     return (
         <div>
             debug
             <pre className="error error-data">
-                <code>{JSON.stringify(data, undefined, 2)}</code>
+                <code>{JSON.stringify(series, undefined, 2)}</code>
             </pre>
         </div>
     )

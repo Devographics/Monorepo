@@ -33,12 +33,12 @@ export async function fetchEditionMetadata(
         fetchFunction: async () => {
             const result = await fetchGraphQLApi({
                 query,
-                key
+                key,
+                cache: "force-cache"
             })
             if (!result) {
                 throw new Error(
-                    `Couldn't fetch survey ${editionId}, result: ${
-                        result && JSON.stringify(result)
+                    `Couldn't fetch survey ${editionId}, result: ${result && JSON.stringify(result)
                     }`
                 )
             }

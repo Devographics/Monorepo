@@ -4,18 +4,43 @@ import { mq, spacing } from 'core/theme'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from '@devographics/react-i18n'
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 
-const PageIntroductionBlock = () => {
-    const page = usePageContext()
+const PageIntroductionBlock = ({ block }) => {
+    const context = usePageContext()
+    const { currentEdition } = context
     const { getString } = useI18n()
-
-    const key = page.descriptionId || `sections.${page.intlId || page.id}.description`
-    const t = getString(key)
-    return t.missing ? null : (
-        <Introduction className="Page__Introduction">
-            <T k={key} md={true} />
-        </Introduction>
-    )
+    const contents = block.variables?.contents
+    const editionKey =
+        context.descriptionId ||
+        `sections.${context.intlId || context.id}.description.${currentEdition.id}`
+    const surveyKey = `sections.${context.intlId || context.id}.description`
+    const editionIntro = getString(editionKey)
+    const surveyIntro = getString(surveyKey)
+    if (contents) {
+        return (
+            <Introduction>
+                <ReactMarkdown rehypePlugins={[rehypeRaw]}>{contents}</ReactMarkdown>
+            </Introduction>
+        )
+    } else if (editionIntro?.tHtml) {
+        return (
+            <Introduction
+                className="Page__Introduction"
+                dangerouslySetInnerHTML={{ __html: editionIntro?.tHtml }}
+            />
+        )
+    } else if (surveyIntro?.tHtml) {
+        return (
+            <Introduction
+                className="Page__Introduction"
+                dangerouslySetInnerHTML={{ __html: surveyIntro?.tHtml }}
+            />
+        )
+    } else {
+        return null
+    }
 }
 
 const Introduction = styled.div`

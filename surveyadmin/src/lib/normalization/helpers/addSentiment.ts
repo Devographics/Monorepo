@@ -26,7 +26,7 @@ This copies over sentiment data to a structure that's easier to deal with:
           "followup_predefined": ["sentiment_interested"]
         }
       },
-      "sentiment": ["sentiment_interested"]  // <------ here
+      "sentiment": "sentiment_interested"  // <------ here
     }
   }
 }
@@ -49,6 +49,7 @@ import uniq from "lodash/uniq";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import { getEditionQuestions } from "~/lib/normalization/helpers/getEditionQuestions";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
+import { logToFile } from "@devographics/debug";
 
 // how many bulk operation to perform in one go
 const operationsPerStep = 1000;
@@ -71,7 +72,7 @@ Also limit to featurev3 questions for now
 */
 const isSentimentQuestion = (question: QuestionWithSection) => {
   return (
-    question.template === "featurev3" &&
+    (question.template === "featurev3" || question.template === "toolv3") &&
     question.followups &&
     question.followups.every((followup) =>
       followup.options.every((option) => isSentimentOption(option.id))
@@ -86,7 +87,7 @@ Get sentiment path
 */
 const getSentimentPath = (question: QuestionTemplateOutputWithSection) => {
   const { normPaths } = question;
-  return normPaths?.base + ".sentiment";
+  return normPaths?.sentiment;
 };
 
 const positiveSentimentOptions = [
@@ -126,6 +127,10 @@ export async function addSentiment({
       })
     );
 
+  if (sentimentQuestions.length === 0) {
+    throw new Error(`// addSentiment: no sentiment questions found`);
+  }
+
   const selector = { editionId };
 
   /*
@@ -143,6 +148,9 @@ export async function addSentiment({
     selector,
     removeOperation
   );
+
+  console.log(`// addSentiment: removeOperation completed`);
+  console.log(removeDbResult);
 
   const badlyFormattedResponses: string[] = [];
 
@@ -197,7 +205,7 @@ export async function addSentiment({
           } else {
             sentimentValue = NEUTRAL_SENTIMENT;
           }
-          const sentimentPath = getSentimentPath(question);
+          const sentimentPath = getSentimentPath(question)!;
           setObject[sentimentPath] = sentimentValue;
         }
       }
@@ -208,6 +216,7 @@ export async function addSentiment({
         },
       });
     }
+    logToFile("addSentiment.json", bulkOperations);
     const operationResult = await normalizedResponses.bulkWrite(
       bulkOperations,
       {

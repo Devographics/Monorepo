@@ -1,12 +1,14 @@
 id: ${sectionId}_others
-titleId: blocks.category_other_tools
-blockType: HorizontalBarBlock
+blockType: HorizontalBarBlock2
 defaultUnits: count
 # dataPath: 'dataAPI.survey.${sectionId}_others.year'
 hasSponsor: true
 query: currentEditionData
-variables:
-    limit: 20
+i18nNamespace: tools
+customizationModes: [filters, facets]
+parameters: { limit: 10 }
+# chartOptions:
+#     limit: 10
 queryOptions:
     addBucketsEntities: true
     subField: prenormalized

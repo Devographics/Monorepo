@@ -1,6 +1,6 @@
 defaultUnits: count
-blockType: HorizontalBarBlock
-
+blockType: HorizontalBarBlock2
+customizationModes: [filters, facets]
 # note: reading list can contain tools as well as features, but non-feature
 # items will generally not need to be translated
 i18nNamespace: features
@@ -24,6 +24,11 @@ query: >
                                         name
                                         nameClean
                                         nameHtml
+                                        alias
+                                        description
+                                        descriptionClean
+                                        descriptionHtml
+                                        type
                                         mdn {
                                             url
                                         }

@@ -1,0 +1,183 @@
+@import '../../../../stylesheets/_breakpoints.scss';
+
+.chart-row,
+.chart-axis {
+}
+
+.chart-subgrid {
+    @include medium-large {
+        display: grid;
+        grid-template-columns: subgrid;
+        grid-column-start: 1;
+        grid-column-end: 4;
+        // gap: 20px;
+        // grid-template-areas: 'heading content metadata';
+    }
+}
+.chart-row {
+    align-items: center;
+    @include small {
+        // display: flex;
+        // flex-direction: column;
+        padding: var(--spacing) 0;
+        display: grid;
+        column-gap: var(--halfSpacing);
+        row-gap: var(--spacing);
+        grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+        grid-template-areas:
+            'heading metadata'
+            'content content';
+        position: relative;
+    }
+}
+.chart-axis {
+    align-items: center;
+    @include small {
+        // display: flex;
+        // flex-direction: column;
+        // display: grid;
+        // column-gap: var(--halfSpacing);
+        // grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+        // grid-template-areas:
+        //     'heading metadata'
+        //     'content content';
+        // position: relative;
+    }
+}
+.chart-rows-zebra {
+    .chart-row:nth-child(2n) {
+        @include small {
+            background-color: color-mix(in srgb, var(--backgroundAltColor) 50%, transparent);
+        }
+        @include medium-large {
+            .chart-row-content {
+                background-color: color-mix(in srgb, var(--backgroundAltColor) 50%, transparent);
+            }
+        }
+    }
+}
+
+.chart-row {
+    &-grouped {
+        background: #ffffff11;
+    }
+    &-overall {
+        background: #ffffff22;
+    }
+    &:hover {
+        background: #ffffff11;
+    }
+}
+
+.chart-row-content {
+    padding: var(--halfSpacing) 0;
+    @include medium-large {
+        position: relative;
+    }
+    // height: calc(var(--barHeight) + var(--spacing));
+    // height: var(--barHeight);
+}
+
+.chart-bar {
+    position: relative;
+    height: var(--barHeight);
+    left: calc(var(--rowOffset) * -1px);
+}
+
+.chart-row-freeform-icon-wrapper {
+    position: absolute;
+    left: calc(var(--offset) * 1% + 7px);
+    height: var(--barHeight);
+    display: flex;
+    align-items: center;
+}
+.chart-row-freeform-icon {
+    display: block;
+    opacity: 0.5;
+}
+
+.chart-row-left {
+    grid-area: heading;
+    display: flex;
+    @include small {
+        align-items: center;
+        gap: var(--halfSpacing);
+        .chart-row-index {
+            order: 2;
+            &::before {
+                content: '#';
+            }
+        }
+    }
+    @include medium-large {
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--spacing);
+    }
+}
+.chart-row-index {
+    color: var(--textAltColor);
+    opacity: 0.7;
+    font-size: 1.1rem;
+    @include small {
+        font-size: 0.9rem;
+    }
+}
+.chart-row-content {
+    grid-area: content;
+    @include small {
+        padding: 0;
+    }
+}
+.chart-row-right {
+    grid-area: metadata;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing);
+    @include small {
+        justify-content: flex-end;
+        padding-right: var(--quarterSpacing);
+    }
+}
+
+.chart-row-heading-label {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+}
+
+.chart-row-heading {
+    margin: 0;
+    font-size: var(--chartFontColumnHeading);
+    height: var(--barHeight);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 0.9rem;
+    font-weight: normal;
+    gap: 10px;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chart-row-heading-grouped {
+    opacity: 0.5;
+}
+
+.chart-row-gridlines {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.chart-row-gridlines-item {
+    position: absolute;
+    left: var(--xOffset);
+    top: 0px;
+    bottom: 0px;
+    width: 1px;
+    border-right: 1px dotted var(--borderAltColor);
+}

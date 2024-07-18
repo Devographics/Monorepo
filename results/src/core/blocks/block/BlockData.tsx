@@ -5,18 +5,17 @@ import ModalTrigger from 'core/components/ModalTrigger'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { mq, spacing, fontSize } from 'core/theme'
-import { getFiltersQuery } from 'core/filters/helpers'
 import { usePageContext } from 'core/helpers/pageContext'
-import { getBlockQuery } from 'core/helpers/queries'
+import { getBlockQuery } from 'core/queries/queries'
 
 import { parse } from 'graphql'
 import { print } from 'graphql-print'
 import { CustomizationDefinition } from 'core/filters/types'
 import { TableData } from 'core/helpers/datatables'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 
 type BlockData = {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     chartFilters: CustomizationDefinition
     tables: TableData[]
 }
@@ -25,30 +24,11 @@ const BlockData = (props: BlockData) => {
     const { parameters, fieldId } = block
     const pageContext = usePageContext()
 
-    const query =
-        chartFilters?.filters?.length > 0 || chartFilters?.facet
-            ? getFiltersQuery({
-                  block,
-                  pageContext,
-                  chartFilters,
-                  currentYear: pageContext.currentEdition.year
-              })?.query
-            : getBlockQuery({
-                  block,
-                  pageContext,
-                  queryOptions: {
-                      addArgumentsPlaceholder: false,
-                      addBucketFacetsPlaceholder: false,
-                      fieldId
-                  },
-                  queryArgs: parameters ? { parameters } : {}
-              })
-
     return (
         <>
             <ExportWrapper>
                 <JSONTrigger {...props} />
-                <GraphQLTrigger query={query} />
+                {/* <GraphQLTrigger query={query} /> */}
             </ExportWrapper>
             {tables ? (
                 <Table {...props} />
@@ -100,7 +80,7 @@ export function removeNull(obj: any): any {
     return Array.isArray(obj) ? Object.values(clean) : clean
 }
 
-export const JSONExport = ({ block, data }) => {
+export const JSONExport = ({ data }: { data: any }) => {
     const isArray = Array.isArray(data)
 
     // try to remove entities data
@@ -141,6 +121,16 @@ export const GraphQLExport = ({ query }: { query: string }) => {
     )
 }
 
+export const FiltersExport = ({ filtersState }: { filtersState: CustomizationDefinition }) => {
+    return (
+        <div>
+            <AutoSelectText value={JSON.stringify(filtersState, null, 2)} />
+            <Message_>
+                <T k={'filters.get_code'} html={true} />
+            </Message_>
+        </div>
+    )
+}
 const ExportWrapper = styled.div`
     margin-bottom: ${spacing()};
     display: flex;

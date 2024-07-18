@@ -1,11 +1,11 @@
 import ShareSite from "../share/ShareSite";
 import Score from "../common/Score";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import ReadingListResults from "~/components/reading_list/ReadingListResults";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
 import { ThanksBackButton } from "./ThanksBackButton";
+import { DynamicT } from "@devographics/react-i18n";
 
 export const Finish = ({
   edition,
@@ -33,7 +33,7 @@ export const Finish = ({
         response={response}
       />
       <div className="survey-message survey-finished">
-        <FormattedMessage id="general.thanks1" />
+        <DynamicT token="general.thanks1" />
       </div>
       <h1 className="survey-image survey-image-small">
         {imageUrl && (
@@ -52,7 +52,7 @@ export const Finish = ({
       )}
 
       <div>
-        <FormattedMessage id="general.thanks2" />
+        <DynamicT token="general.thanks2" />
       </div>
       <ShareSite edition={edition} />
     </div>

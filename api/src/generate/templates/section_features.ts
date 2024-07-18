@@ -1,3 +1,5 @@
+// not used anymore, replaced by the _items field that lives directly on the section object
+
 import { ApiTemplateFunction } from '../../types/surveys'
 import { graphqlize } from '../helpers'
 import { getSectionToolsFeaturesResolverMap } from '../resolvers'

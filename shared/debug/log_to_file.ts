@@ -4,6 +4,7 @@ import { parse } from 'graphql'
 import { print } from 'graphql-print'
 // @ts-ignore
 import fsp from 'fs/promises'
+import { concatPath } from '@devographics/helpers'
 
 export type LogOptions = {
     mode?: 'append' | 'overwrite'
@@ -33,20 +34,21 @@ export const logToFile = async (filePath: string, object: any, options: LogOptio
         const envLogsDirPath = process.env.LOGS_PATH
 
         if (!envLogsDirPath) {
-            console.warn('Please define LOGS_PATH in your .env file to enable logging')
+            console.warn('📄 Please define LOGS_PATH in your .env file to enable logging')
             return
         }
 
         const relativeDirPathSegments = filePath.split('/').slice(0, -1)
         const relativeDirPath = relativeDirPathSegments.join('/')
-        const fileName = filePath.split('/').at(-1)
+        const fileName = filePath.split('/').at(-1) || ''
 
-        const logsDirPath = envLogsDirPath + '/' + relativeDirPath
+        const logsDirPath = concatPath(envLogsDirPath, relativeDirPath)
 
-        if (!(await fs.existsSync(logsDirPath))) {
+        if (!fs.existsSync(logsDirPath)) {
             fs.mkdirSync(logsDirPath, { recursive: true })
         }
-        const fullPath = `${logsDirPath}/${fileName}`
+        const fullPath = concatPath(logsDirPath, fileName)
+        console.debug(`📄 Creating log file file://${fullPath}`)
 
         let contents
         if (typeof object === 'string') {
@@ -57,7 +59,7 @@ export const logToFile = async (filePath: string, object: any, options: LogOptio
                     contents = print(ast, { preserveComments: true })
                 } catch (error: any) {
                     console.warn(
-                        `‼️  logToFile ${fileName}: error when parsing GraphQL content (${JSON.stringify(
+                        `📄 ‼️  logToFile ${fileName}: error when parsing GraphQL content (${JSON.stringify(
                             error.locations
                         )}).`
                     )

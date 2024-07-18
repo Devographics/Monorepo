@@ -1,10 +1,8 @@
 import { Bucket, QuestionMetadata } from '@devographics/types'
-import { ChartState, Views } from '../types'
-import { ChartValues } from '../../multiItemsExperience/types'
+import { HorizontalBarChartState, HorizontalBarChartValues, HorizontalBarViews } from '../types'
 import max from 'lodash/max'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
 import { useAllQuestionsWithOptions } from '../../hooks'
-import { getViewDefinition } from './views'
 
 export const useChartValues = ({
     buckets,
@@ -13,23 +11,28 @@ export const useChartValues = ({
     question
 }: {
     buckets: Bucket[]
-    chartState: ChartState
-    block: BlockDefinition
+    chartState: HorizontalBarChartState
+    block: BlockVariantDefinition
     question: QuestionMetadata
 }) => {
-    const viewDefinition = getViewDefinition(chartState.view)
-    const { getValue } = viewDefinition
+    const { viewDefinition } = chartState
+    const { getValue, getTicks } = viewDefinition
     const allQuestions = useAllQuestionsWithOptions()
+    const values = buckets.map(b => getValue(b))
     const { facet } = chartState
-    const chartValues: ChartValues = {
-        question
+    const chartValues: HorizontalBarChartValues = {
+        question,
+        totalRows: buckets.length
     }
-    if (getValue) {
-        const maxOverallValue = [Views.PERCENTAGE_BUCKET].includes(chartState.view)
-            ? 100
-            : max(buckets.map(b => getValue(b))) || 0
 
-        chartValues.maxOverallValue = maxOverallValue
+    const maxOverallValue = [HorizontalBarViews.PERCENTAGE_BUCKET].includes(chartState.view)
+        ? 100
+        : max(values) || 0
+
+    chartValues.maxOverallValue = maxOverallValue
+
+    if (getTicks) {
+        chartValues.ticks = getTicks(values)
     }
     if (facet) {
         chartValues.facetQuestion = allQuestions.find(

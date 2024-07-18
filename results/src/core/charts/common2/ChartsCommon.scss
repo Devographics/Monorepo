@@ -1,33 +1,4 @@
 @import '../../../stylesheets/_breakpoints.scss';
-
-.chart-rows {
-    display: flex;
-    gap: 20px;
-    flex-direction: column;
-    // grid-auto-rows: minmax(0, 1fr);
-}
-
-.chart-row,
-.chart-axis-bottom,
-.chart-facet {
-    align-items: center;
-    @include small {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    @include medium-large {
-        display: grid;
-        grid-template-columns: 250px minmax(0, 1fr) 100px;
-        gap: 10px;
-    }
-    &-grouped {
-        background: #ffffff11;
-    }
-    &-overall {
-        background: #ffffff22;
-    }
-}
 .chart-facet {
     border-bottom: 1px solid #ffffff33;
     padding-bottom: 20px;
@@ -40,42 +11,44 @@
         gap: 10px;
     }
 }
-.chart-row-heading {
-    margin: 0;
-    font-size: var(--chartFontColumnHeading);
-    height: var(--rowHeight);
+.chart-heading {
+    border-bottom: 1px solid #ffffff33;
+    padding-bottom: 20px;
     display: flex;
-    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing);
+    @include small {
+        flex-direction: column;
+    }
 }
-.chart-row-content {
-    height: calc(var(--rowHeight) * 1px);
-    position: relative;
-    left: calc(var(--rowOffset) * -1px);
+.chart-bar {
+    // position: relative;
+    // top: var(--halfSpacing);
 }
-
 .chart-control-button {
     display: flex;
     gap: 5px;
     align-items: center;
 }
 
-.chart-row-metadata {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-}
-
-.chart-controls {
-    .ButtonGroup {
-        width: 100%;
-        display: flex;
-    }
-    .Button {
-        flex: 1;
-    }
-}
-.chart-controls,
 .chart-actions {
     display: flex;
     justify-content: center;
+}
+
+.chart-heading-facet {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.chart-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+}
+
+.tooltip-trigger-withBorder {
+    border-bottom: 1px dotted #ffffff99;
 }

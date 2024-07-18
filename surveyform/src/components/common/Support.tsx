@@ -1,11 +1,11 @@
 import { EditionMetadata, SponsorItem } from "@devographics/types";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { DynamicT } from "@devographics/react-i18n";
 
 const Support = ({ edition }: { edition: EditionMetadata }) => {
   return (
     <div className="support survey-page-block">
       <h3 className="support-heading survey-page-block-heading">
-        <FormattedMessage id="general.support_from" />
+        <DynamicT token="general.support_from" />
       </h3>
       {edition.survey.partners.map((sponsor) => (
         <SupportItem key={sponsor.id} sponsor={sponsor} />

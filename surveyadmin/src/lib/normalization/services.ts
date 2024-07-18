@@ -31,6 +31,11 @@ import { CustomNormalizationParams } from "@devographics/types";
 //   return result;
 // }
 
+export type ResultsPayload = {
+  data?: NormalizeInBulkResult;
+  error: any;
+};
+
 export async function normalizeResponses(params: NormalizeResponsesArgs) {
   const fetchRes = await fetch(
     apiRoutes.normalization.normalizeResponses.href(params),
@@ -42,8 +47,7 @@ export async function normalizeResponses(params: NormalizeResponsesArgs) {
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: NormalizeInBulkResult; error: any } =
-    await fetchRes.json();
+  const result: ResultsPayload = await fetchRes.json();
   return result;
 }
 
@@ -60,8 +64,7 @@ export async function normalizeQuestionResponses(
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: NormalizeInBulkResult; error: any } =
-    await fetchRes.json();
+  const result: ResultsPayload = await fetchRes.json();
   return result;
 }
 
@@ -76,8 +79,7 @@ export async function normalizeQuestion(params: NormalizeQuestionArgs) {
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: NormalizeInBulkResult; error: any } =
-    await fetchRes.json();
+  const result: ResultsPayload = await fetchRes.json();
   return result;
 }
 
@@ -92,8 +94,7 @@ export async function normalizeEdition(params: NormalizeEditionArgs) {
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: NormalizeInBulkResult; error: any } =
-    await fetchRes.json();
+  const result: ResultsPayload = await fetchRes.json();
   return result;
 }
 
@@ -108,8 +109,50 @@ export async function addCustomTokens(params: CustomNormalizationParams) {
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: NormalizeInBulkResult; error: any } =
-    await fetchRes.json();
+  const result: ResultsPayload = await fetchRes.json();
+  return result;
+}
+
+export interface RenameTokensParams {
+  tokens: Array<{ from: string; to: string }>;
+}
+
+export async function renameTokens(params: RenameTokensParams) {
+  const fetchRes = await fetch(
+    apiRoutes.normalization.renameTokens.href(params),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    }
+  );
+  const result: ResultsPayload = await fetchRes.json();
+  return result;
+}
+
+export interface ApproveTokensParams {
+  tokens: Array<{
+    normalizationId: string;
+    id: string;
+    renameTo: string;
+    shouldDismiss?: boolean;
+  }>;
+}
+
+export async function approveTokens(params: ApproveTokensParams) {
+  const fetchRes = await fetch(
+    apiRoutes.normalization.approveTokens.href(params),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    }
+  );
+  const result: ResultsPayload = await fetchRes.json();
   return result;
 }
 
@@ -124,8 +167,7 @@ export async function removeCustomTokens(params: CustomNormalizationParams) {
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: NormalizeInBulkResult; error: any } =
-    await fetchRes.json();
+  const result: ResultsPayload = await fetchRes.json();
   return result;
 }
 export async function enableRegularTokens(params: CustomNormalizationParams) {
@@ -139,8 +181,7 @@ export async function enableRegularTokens(params: CustomNormalizationParams) {
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: NormalizeInBulkResult; error: any } =
-    await fetchRes.json();
+  const result: ResultsPayload = await fetchRes.json();
   return result;
 }
 
@@ -155,8 +196,7 @@ export async function disableRegularTokens(params: CustomNormalizationParams) {
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: NormalizeInBulkResult; error: any } =
-    await fetchRes.json();
+  const result: ResultsPayload = await fetchRes.json();
   return result;
 }
 
@@ -187,7 +227,6 @@ export async function importNormalizations(params: ImportNormalizationArgs) {
       body: JSON.stringify(params),
     }
   );
-  const result: { data?: NormalizeInBulkResult; error: any } =
-    await fetchRes.json();
+  const result: ResultsPayload = await fetchRes.json();
   return result;
 }

@@ -18,7 +18,7 @@ import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
 
 import { ErrorBoundary } from "~/components/error";
 import Layout from "~/components/common/Layout";
-import type { LocaleDef, LocaleDefWithStrings } from "~/i18n/typings";
+import type { LocaleDef } from "~/i18n/typings";
 import { SWRConfig } from "swr";
 import { KeydownContextProvider } from "~/components/common/KeydownContext";
 import { UserMessagesProvider } from "~/components/common/UserMessagesContext";
@@ -28,11 +28,13 @@ import { Referrer } from "~/components/common/ReferrerStorage";
 import { ApiData, apiRoutes } from "~/lib/apiRoutes";
 import { UserWithResponses } from "~/lib/responses/typings";
 import PlausibleProvider from "next-plausible";
+import { LocaleParsed } from "@devographics/i18n";
+import { I18nContextProvider } from "@devographics/react-i18n";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
   localeId: string;
-  localeStrings: LocaleDefWithStrings;
+  localeStrings: LocaleParsed;
   locales: Array<LocaleDef>;
   // When on a specific survey
   children: React.ReactNode;
@@ -100,14 +102,19 @@ export function ClientLayout(props: AppLayoutProps) {
               localeId={localeId}
               localeStrings={localeStrings}
             >
-              {/** @ts-ignore */}
-              <ErrorBoundary proposeReload={true} proposeHomeRedirection={true}>
-                <KeydownContextProvider>
-                  <UserMessagesProvider>
-                    {addWrapper ? <Layout>{children}</Layout> : children}
-                  </UserMessagesProvider>
-                </KeydownContextProvider>
-              </ErrorBoundary>
+              <I18nContextProvider locale={localeStrings}>
+                {/** @ts-ignore */}
+                <ErrorBoundary
+                  proposeReload={true}
+                  proposeHomeRedirection={true}
+                >
+                  <KeydownContextProvider>
+                    <UserMessagesProvider>
+                      {addWrapper ? <Layout>{children}</Layout> : children}
+                    </UserMessagesProvider>
+                  </KeydownContextProvider>
+                </ErrorBoundary>
+              </I18nContextProvider>
             </LocaleContextProvider>
           </SWRConfig>
         </ErrorBoundary>

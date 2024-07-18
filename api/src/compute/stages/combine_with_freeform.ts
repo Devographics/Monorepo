@@ -1,6 +1,7 @@
 import { NO_ANSWER } from '@devographics/constants'
 import { ResponseEditionData, ResponsesTypes } from '@devographics/types'
 import { GenericComputeOptions, genericComputeFunction } from '../generic'
+import { ExecutionContext } from '../../types'
 
 /*
 
@@ -76,7 +77,8 @@ export const combineWithFreeform = async (
                 enableAddOverallBucket: false,
                 mergeOtherBuckets: false,
                 enableBucketGroups: false
-            }
+            },
+            executionContext: ExecutionContext.COMBINED
         }
     }
     const freeformResults = await genericComputeFunction(newOptions)

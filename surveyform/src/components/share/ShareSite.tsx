@@ -12,8 +12,8 @@ const ShareSite = ({ edition }) => {
   const link = `${questionsUrl}?source=post_survey_share`;
   const surveyName = getEditionTitle({ edition });
   const values = { surveyName, link };
-  const title = intl.formatMessage({ id: "general.share_subject", values });
-  const body = intl.formatMessage({ id: "general.share_text", values });
+  const title = intl.formatMessage({ id: "general.share_subject", values })?.t;
+  const body = intl.formatMessage({ id: "general.share_text", values })?.t;
 
   return (
     <div className="ShareSite">

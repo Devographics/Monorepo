@@ -1,26 +1,18 @@
-.chart-horizontal-bar {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.chart-bar,
-.chart-faceted-bar {
-    position: relative;
+.chart-row {
+    .chart-bar,
+    .chart-faceted-bar {
+        position: relative;
+    }
 }
 .horizontal-chart-cell {
     position: absolute;
-    background: var(--color);
+    background: linear-gradient(to left, var(--color1), var(--color2));
     width: calc(var(--width) * 1%);
     left: calc(var(--offset) * 1%);
-    height: calc(var(--rowHeight) * 1px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    text-shadow: 1px 1px 0 #000000cc, -1px 1px 0 #000000cc, -1px -1px 0 #000000cc,
-        1px -1px 0 #000000cc;
-    border-radius: 2px;
-    font-size: 0.8rem;
+    height: var(--barHeight);
+    &.active-sort {
+        // border: 2px solid #ffffffee;
+        box-shadow: 0px 0px 0px 2px #ffffffee;
+        z-index: 1;
+    }
 }

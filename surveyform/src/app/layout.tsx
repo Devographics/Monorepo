@@ -1,5 +1,5 @@
 import "~/stylesheets/main.scss";
-import { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from "next";
 import { setAppName } from "@devographics/helpers";
 import { AppName } from "@devographics/types";
 import { getConfig } from "@devographics/helpers";

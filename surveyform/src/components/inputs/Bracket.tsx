@@ -97,7 +97,7 @@ const Bracket = (props: FormInputProps) => {
     updateCurrentValues,
   } = props;
   const [results, setResults] = useState(
-    isEmpty(value) ? initResults() : value
+    isEmpty(value) ? initResults() : value,
   );
   const { options: _options = [], label } = question;
   // add index to all options since we use that to keep track of them
@@ -350,7 +350,7 @@ const BracketItem = (props) => {
 const WrapWithDescriptionTooltip = ({ player, children }) => {
   const intl = useIntlContext();
   const description =
-    player && intl.formatMessage({ id: `${player.intlId}.description` });
+    player && intl.formatMessage({ id: `${player.intlId}.description` })?.t;
 
   //return children;
   return description ? (
@@ -410,7 +410,7 @@ interface BracketItemCancelProps {
   cancelMatch: (
     matchIndex?: number,
     playerIndex?: number,
-    isOverallWinnder?: boolean
+    isOverallWinnder?: boolean,
   ) => void;
 }
 // cancel a match
@@ -471,7 +471,7 @@ const BracketItemOverallWinner = (
   props: {
     player?: any;
     canCancel?: boolean;
-  } & BracketItemCancelProps
+  } & BracketItemCancelProps,
 ) => {
   const { player, canCancel } = props;
   return (

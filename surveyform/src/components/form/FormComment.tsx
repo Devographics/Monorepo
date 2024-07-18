@@ -41,7 +41,7 @@ export const CommentTrigger = ({
           }`}
           type="button"
           aria-describedby="popover-basic"
-          aria-label={intl.formatMessage({ id: "experience.leave_comment" })}
+          aria-label={intl.formatMessage({ id: "experience.leave_comment" })?.t}
           onClick={() => {
             setShowCommentInput(!showCommentInput);
           }}
@@ -77,7 +77,7 @@ export const CommentInput = (props: CommentInputProps) => {
   let translatedAnswer: string | undefined;
   const option = question.options?.find((o) => o.id === questionValue);
   const i18n = option && getOptioni18nIds({ ...props, option });
-  translatedAnswer = i18n && intl.formatMessage({ id: i18n.base });
+  translatedAnswer = i18n && intl.formatMessage({ id: i18n.base })?.t;
 
   return (
     <div className="comment-input">

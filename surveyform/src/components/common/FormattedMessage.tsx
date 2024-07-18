@@ -8,6 +8,11 @@ export interface FormattedMessageProps {
   defaultMessage?: string;
   className?: string;
 }
+/**
+ * @deprecated Use @devographics/react-i18n
+ * @param param0
+ * @returns
+ */
 export const FormattedMessage = ({
   id,
   values,
@@ -21,14 +26,14 @@ export const FormattedMessage = ({
   const translatorMode = useTranslatorMode();
 
   // The message can contain sanitized HTML
-  let message = intl.formatMessage({ id, defaultMessage, values });
+  let message = intl.formatMessage({ id, defaultMessage, values })?.t;
   const props: any = {
     "data-key": id,
   };
   const classNames = ["i18n-message", className, "t"];
   props.className = classNames.join(" ");
   const renderedMessage = (
-    <span {...props} dangerouslySetInnerHTML={{ __html: message }} />
+    <span {...props} dangerouslySetInnerHTML={{ __html: message || id }} />
   );
   if (translatorMode)
     return (

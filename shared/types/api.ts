@@ -35,7 +35,9 @@ export enum DbPathsEnum {
     METADATA = 'metadata',
     ERROR = 'error',
     SUBPATHS = 'subPaths',
-    SKIP = 'skip'
+    SKIP = 'skip',
+    SENTIMENT = 'sentiment',
+    EXPERIENCE = 'experience'
 }
 
 type DbPathsFirstLevel = Exclude<
@@ -97,19 +99,24 @@ export interface Filter<T> {
     eq?: T
     in?: T[]
     nin?: T[]
+    lt?: T
+    gt?: T
 }
 
 export interface ResponsesParameters {
     cutoff?: number
+    cutoffPercent?: number
     limit?: number
     sort?: SortSpecifier
 
     facetCutoff?: number
+    facetCutoffPercent?: number
     facetLimit?: number
     facetSort?: SortSpecifier
 
     enableCache?: boolean
     showNoAnswer?: boolean
+    mergeOtherBuckets?: boolean
 }
 
 export interface SortSpecifier {

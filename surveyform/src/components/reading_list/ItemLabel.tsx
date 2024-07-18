@@ -1,7 +1,6 @@
 import { EntityWithQuestion } from "~/lib/surveys/types";
 import QuestionLabel from "../form/QuestionLabel";
 import EntityLabel from "~/components/common/EntityLabel";
-import { getQuestioni18nIds } from "~/i18n/survey";
 import { useIntlContext } from "@devographics/react-i18n-legacy";
 import OptionLabel from "../form/OptionLabel";
 

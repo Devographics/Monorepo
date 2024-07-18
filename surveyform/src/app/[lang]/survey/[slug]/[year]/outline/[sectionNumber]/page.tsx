@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
 import { SurveySectionOutline } from "~/components/questions/SurveySectionOutline";
-import { rscGetEditionsMetadata } from "../../rsc-fetchers";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
 export const revalidate = DEFAULT_REVALIDATE_S;
@@ -11,6 +10,7 @@ export const dynamicParams = true;
  * but this is not possible to mix static and dynamic pages in the same parent layout (yet)
  * @see https://github.com/vercel/next.js/issues/44712
  */
+/*
 export async function generateStaticParams() {
   const editions = await rscGetEditionsMetadata({ removeHidden: true });
   const sections = editions.map((e) => ({
@@ -40,19 +40,21 @@ export async function generateStaticParams() {
         }))
     )
     .flat();*/
-  return sections;
-}
+//   return sections;
+// }
 
 // SectionNumber is optional in the URL so this page is exactly the same as ../index.tsx
 export default async function SurveySectionOutlinePage({
-  params: { sectionNumber },
+  params: { sectionNumber, lang },
 }: {
   params: {
     slug: string;
     year: string;
     sectionNumber: string;
+    lang: string,
   };
 }) {
+  // TODO: get correct tokens
   const sn = parseInt(sectionNumber);
   if (isNaN(sn)) notFound();
   return <SurveySectionOutline />;

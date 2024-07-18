@@ -54,89 +54,137 @@
 #             xAxis: user_info__yearly_salary
 #             yAxis: user_info__years_of_experience
 
+# - id: takeaways
+#   path: /takeaways
+#   blocks:
+#       - id: takeaways
+#         blockType: TakeawaysBlock
+#         disableExport: true
+#         wrapBlock: false
+#         items:
+#             - id: median_salary_2023
+#             - id: previous_compensation_2023
+#             - id: negotiated_compensation_2023
+#             - id: unemployed_respondents_2023
+#             - id: job_search_status_2023
+#             - id: international_subsidiary_2023
+#             - id: remote_work_2023
+#             - id: women_vs_men_experience_2023
+#             - id: women_vs_men_professional_qualifications_2023
+#             - id: overtime_2023
+#             - id: programming_languages_2023
+
 - id: user_info
   titleId: sections.demographics.title
-  descriptionId: sections.user_info.description.css2023
+  # descriptionId: sections.user_info.description.css2023
   path: /demographics
   blocks:
       - template: page_introduction
 
       - id: country
-        template: multiple_options
+        template: multiple_options2
         parameters: { limit: 20 }
+        takeaway: >
+            While many respondents (**19%**) came from the U.S., we also had strong representation from Germany, France, the U.K., and the Netherlands (**24% combined**), reflecting the liveliness of the front end community in these countries.
+        variants:
+            - template: vs_salary
+              parameters: { limit: 20, sort: { property: medianByFacet, order: desc } }
 
       - id: locale
-        template: multiple_options
+        template: multiple_options2
         parameters: { cutoff: 20 }
+        takeaway: >
+            The language respondents selected to fill out the survey.
 
       - id: hint_hint
         template: hint
 
       - id: completion_stats
-        template: multiple_options
+        template: multiple_options2
+        takeaway: >
+            The proportion of the survey filled out by respondents.
 
       - id: age
-        template: multiple_options
+        template: multiple_options2
+        takeaway: >
+            Survey respondents were on average **33.6** years old, slightly higher than the [State of JS](https://2022.stateofjs.com) (**32.2**) and [State of CSS](https://2023.stateofcss.com) (**33.5**) surveys.
+        variants:
+            - template: vs_salary
 
       - id: years_of_experience
-        template: multiple_options
+        template: multiple_options2
+        takeaway: >
+            Respondents had on average **10.7** years of web development experience.
+        variants:
+            - template: vs_salary
 
       - id: company_size
-        template: multiple_options
-        blockType: HorizontalBarBlock2
-
-      - id: company_size2
-        fieldId: company_size
-        template: multiple_options
-        blockType: HorizontalBarBlock2
-        parameters:
-            showNoAnswer: true
-        filtersState:
-            options:
-                mode: facet
-            facet:
-                sectionId: user_info
-                id: yearly_salary
-
-      - id: company_size3
-        fieldId: company_size
-        template: multiple_options
-        blockType: HorizontalBarBlock2
-        parameters:
-            showNoAnswer: true
-        filtersState:
-            options:
-                mode: facet
-            facet:
-                sectionId: user_info
-                id: gender
+        template: multiple_options2
+        takeaway: >
+            Respondents tended to work for mostly mid-sized organizations, with a median company size of **75** employees.
+        variants:
+            - template: vs_salary
 
       - id: variants_hint
         template: hint
 
       - id: yearly_salary
-        template: multiple_options
+        template: multiple_options2
+        takeaway: >
+            Respondents had a median income of USD $75,000, noticeably higher than the **$59,970** figure reported by the [Stack Overflow Developer Survey](https://survey.stackoverflow.co/2023/#section-salary-salary-by-developer-type).
 
       - id: higher_education_degree
-        template: multiple_options
+        template: multiple_options2
+        takeaway: >
+            Having a higher-education degree did not translate in meaningful differences in yearly income.
+        variants:
+            - template: vs_salary
 
       - id: gender
-        template: multiple_options
+        template: multiple_options2
+        takeaway: >
+            Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
+        variants:
+            - template: vs_salary
+            - id: country_vs_gender
+              fieldId: country
+              tabId: tabs.by_country
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+                  limit: 15
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
 
       - id: race_ethnicity
-        template: multiple_options_combined
+        template: multiple_options2_combined
+        takeaway: >
+            The survey's non-white population tended to be younger and have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
+        variants:
+            - template: vs_years_of_experience
+            - template: vs_age
 
       - id: disability_status
-        template: multiple_options_combined
+        template: multiple_options2_combined
 
       - id: other_surveys
-        template: multiple_options_combined
+        template: multiple_options2_combined
+        parameters:
+            cutoff: 20
 
       - id: source
-        template: multiple_options_freeform
+        template: multiple_options2_freeform
+        parameters:
+            limit: 20
 
-      - id: how_can_we_improve
-        template: multiple_options_freeform
+      # - id: how_can_we_improve
+      #   template: multiple_options2_freeform
 
       # - id: data_explorer
       #   titleId: sections.data_explorer.title
@@ -162,27 +210,26 @@
   blocks:
       - template: page_introduction
 
-      - id: features_overview
-        template: features_overview
+      - id: all_features
+        template: multi_items_experience
+        chartOptions:
+            limit: 10
 
-      - template: features_experience_linechart
-        tabId: blocks.tools_experience_ranking.percentages
-        parameters:
-            years: [2020, 2021, 2022, 2023]
-            rankCutoff: 10
-        variants:
-            - template: features_experience_ranking
-              tabId: blocks.tools_experience_ranking.rankings
+      # - id: features_overview
+      #   template: features_overview
 
       # - id: knowledge_score
       #   template: single_option
 
       - id: reading_list
-        template: reading_list
-        parameters: { limit: 20 }
+        # template: reading_list
+        template: multiple_options2
+        parameters: { limit: 10 }
+        queryOptions:
+            sectionId: reading_list
 
       - id: features_resources
-        items: [fm-learncss]
+        items: [fm-intermediate-html-css]
         template: recommended_resources
 
   children:
@@ -194,14 +241,139 @@
 
             - id: forms_features
               template: multi_items_experience
+              i18nNamespace: features
 
-            - id: adam_argyle
-              template: picks
-              variables:
-                  url: https://zagjs.com/
+            - id: form_input_types
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: form_validation_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: forms_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            # - id: adam_argyle
+            #   template: picks
+            #   variables:
+            #       url: https://zagjs.com/
 
             - id: forms_resources
-              items: [fm-gridsflexbox, fm-practicallayouts]
+              items: [fm-web-development-v3]
+              template: recommended_resources
+
+      - id: interactivity
+        path: /interactivity
+        blocks:
+            - id: interactivity
+              template: page_introduction
+
+            - id: interactivity_features
+              template: multi_items_experience
+              i18nNamespace: features
+
+            - id: dom_attribute_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: dom_html_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: dom_moving_element_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: interactivity_techniques
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: interactivity_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: interactivity_resources
+              items: [fm-vanilla-js-apps]
+              template: recommended_resources
+
+      - id: content
+        path: /content
+        blocks:
+            - id: content
+              template: page_introduction
+              variables:
+                  contents: >
+                      SVG implementations have been historically neglected by browsers, despite extremely high usage on the Web (96% of respondents having used the `<svg>` element). It is therefore no surprise that SVG issues were the top [content-related pain point](#content_pain_points).
+
+            - id: content_features
+              template: multi_items_experience
+              i18nNamespace: features
+
+            - id: external_content_elements
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: privacy_security_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: machine_readable_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: i18n_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: content_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: interactivity_resources
+              items: [fm-svg-essentials-animation]
+              template: recommended_resources
+
+      - id: web_components
+        path: /web_components
+        blocks:
+            - id: web_components
+              template: page_introduction
+              variables:
+                  contents: >
+                      Despite JavaScript frameworks being used more widely than ever, there is still a need for native solutions. Yet Web Components currently fall short of addressing developer pain points effectively, with Web Components APIs and especially Shadow DOM dominating the top 10 of worst experiences across all HTML-related technologies. 
+
+
+                      This indicates that there is still significant work to be done before they can truly enhance HTML's extensibility and become a strong alternative to framework components. However, the ongoing activity in this area leaves me hopeful.
+
+            - id: web_components_main_features
+              template: multi_items_experience
+              i18nNamespace: features
+
+            - id: web_components_features
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: web_components_libraries
+              template: multiple_options2
+              i18nNamespace: features
+
+            - id: using_web_components_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: making_web_components_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: web_components_resources
+              items: [fm-web-components]
               template: recommended_resources
 
       - id: accessibility
@@ -209,174 +381,207 @@
         blocks:
             - id: accessibility
               template: page_introduction
+              variables:
+                  contents: >
+                      This was our first survey to study accessibility in such depth. What we found is that while respondents clearly care about accessibility, they struggle to implement it in practice as they lack technical, educational, and organizational support.
 
             - id: accessibility_features
               template: multi_items_experience
+              i18nNamespace: features
 
-            # - id: accessibility_disabilities
-            #   template: ???
+            - id: accessibility_disabilities
+              template: multiple_options2
+              i18nNamespace: features
 
-            # - id: accessibility_techniques
-            #   template: ???
+            - id: accessibility_techniques
+              template: multiple_options2
+              i18nNamespace: features
 
-            # - id: accessibility_screenreaders
-            #   template: ???
+            - id: accessibility_screenreaders
+              template: multiple_options2
+              i18nNamespace: features
 
-            # - id: accessibility_tools
-            #   template: ???
+            - id: accessibility_tools
+              template: multiple_options2
+              i18nNamespace: features
 
             - id: accessibility_pain_points
-              template: multiple_options_freeform
-              blockType: HorizontalBarBlock2
-              parameters:
-                  showNoAnswer: true
-                  cutoff: 10
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
 
-            # - id: accessibility_pain_points2
-            #   fieldId: accessibility_pain_points
-            #   template: multiple_options_freeform
-            #   blockType: HorizontalBarBlock2
-            #   parameters:
-            #       showNoAnswer: true
-            #       cutoff: 10
-            #       enableAddOverallBucket: false
-            #   filtersState:
-            #       options:
-            #           mode: facet
-            #       facet:
-            #           sectionId: user_info
-            #           id: years_of_experience
+            - id: accessibility_resources
+              items: [fm-react-accessibility]
+              template: recommended_resources
 
       - id: mobile_web_apps
         path: /mobile-web-apps
         blocks:
             - id: mobile_web_apps
               template: page_introduction
+              variables:
+                  contents: >
+                      Native-like web apps are another area where respondent interest is high, but the platform fails to deliver. The primary pain point here is interoperability, and while there are promising initiatives such as [Interop 2024](https://web.dev/blog/interop-2024), the mobile landscape especially remains very fragmented.
 
             - id: mobile_web_apps_features
               template: multi_items_experience
+              i18nNamespace: features
 
-            # - id: native_apps_tools
-            #   template: ???
+            - id: native_apps_tools
+              template: multiple_options2
+              i18nNamespace: features
 
-            # - id: local_storage_features
-            #   template: ???
+            - id: local_storage_features
+              template: multiple_options2
+              i18nNamespace: features
 
-            # - id: pwa_features
-            #   template: ???
+            - id: pwa_features
+              template: multiple_options2
+              i18nNamespace: features
 
-            # - id: mobile_web_apps_pain_points
-            #   template: ???
+            - id: mobile_web_apps_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              parameters: { limit: 10 }
+
+            - id: mobile_web_apps_resources
+              items: [fm-pwas]
+              template: recommended_resources
+
+- id: other_tools
+  path: /other_tools
+  blocks:
+      - template: page_introduction
+
+      - id: site_generators
+        template: multiple_options2_combined
+
+      - id: ai_tools
+        template: multiple_options2_combined
+
+      - id: blast_from_the_past
+        template: multiple_options2
+
+      - id: other_tools_resources
+        items: [fm-next-js-v3]
+        template: recommended_resources
 
 - id: usage
-  descriptionId: sections.usage.description.html2023
-  intlId: usage_html
   path: /usage
   blocks:
       - template: page_introduction
 
       - id: html_interoperability_features
-        template: multiple_options_freeform
+        template: multiple_options2_freeform
+        parameters: { limit: 20 }
 
       - id: html_functionality_features
-        template: multiple_options_freeform
+        template: multiple_options2_freeform
+        parameters: { limit: 20 }
 
       - id: html_missing_elements
-        template: multiple_options_combined
+        template: multiple_options2_combined
+        parameters: { cutoff: 25, cutoffPercent: 0 }
 
       - id: tools_for_other_developers
-        template: single_option
+        template: multiple_options2
 
       - id: html_css_js_balance
-        template: single_option
+        template: multiple_options2
 
       - id: what_do_you_use_html_for
-        template: multiple_options_combined
+        template: multiple_options2_combined
 
       - id: industry_sector
-        template: multiple_options_combined
+        template: multiple_options2_combined
+        chartOptions:
+            limit: 10
 
       - id: sharing_hint
         template: hint
 
-- id: awards
-  path: /awards
-  blocks:
-      - template: page_introduction
+      - id: usage_resources
+        items: [fm-homepage]
+        template: recommended_resources
 
-      - id: awards
-        template: awards
-        variables:
-            entities: '"has_selector","at_container","viewport_percentage_length_units","subgrid","at_container","css_nesting","open_props","css_modules","uno_css","panda_css","material_ui","yandex"'
-        awards:
-            - id: feature_adoption_delta_award
-              template: award
-              awards:
-                  - id: has_selector
-                    value: '+16.4%'
-                  - id: at_container
-                    value: '+14.1%'
-                  - id: viewport_percentage_length_units
-                    value: '+13%'
+# - id: awards
+#   path: /awards
+#   blocks:
+#       - template: page_introduction
 
-            - id: most_commented_feature_award
-              template: award
-              awards:
-                  - id: subgrid
-                    value: 531
-                  - id: at_container
-                    value: 78
-                  - id: css_nesting
-                    value: 65
+#       - id: awards
+#         template: awards
+#         variables:
+#             entities: '"has_selector","at_container","viewport_percentage_length_units","subgrid","at_container","css_nesting","open_props","css_modules","uno_css","panda_css","material_ui","yandex"'
+#         awards:
+#             - id: feature_adoption_delta_award
+#               template: award
+#               awards:
+#                   - id: has_selector
+#                     value: '+16.4%'
+#                   - id: at_container
+#                     value: '+14.1%'
+#                   - id: viewport_percentage_length_units
+#                     value: '+13%'
 
-            # - id: tool_usage_delta_award
-            #   template: award
-            #   awards:
-            #     - id: tailwind_css
-            #       value: "+17.8%"
-            #     - id: atomic_css
-            #       value: "+10.8%"
-            #     - id: css_modules
-            #       value: "+10.1%"
+#             - id: most_commented_feature_award
+#               template: award
+#               awards:
+#                   - id: subgrid
+#                     value: 531
+#                   - id: at_container
+#                     value: 78
+#                   - id: css_nesting
+#                     value: 65
 
-            - id: tool_satisfaction_award
-              template: award
-              awards:
-                  - id: open_props
-                    value: '91%'
-                  - id: css_modules
-                    value: '84.5%'
-                  - id: uno_css
-                    value: '82%'
+#             # - id: tool_usage_delta_award
+#             #   template: award
+#             #   awards:
+#             #     - id: tailwind_css
+#             #       value: "+17.8%"
+#             #     - id: atomic_css
+#             #       value: "+10.8%"
+#             #     - id: css_modules
+#             #       value: "+10.1%"
 
-            # - id: tool_interest_award
-            #   template: award
-            #   awards:
-            #     - id: css_modules
-            #       value: "74%"
-            #     - id: vanilla_extract
-            #       value: "68%"
-            #     - id: stitches
-            #       value: "55%"
+#             - id: tool_satisfaction_award
+#               template: award
+#               awards:
+#                   - id: open_props
+#                     value: '91%'
+#                   - id: css_modules
+#                     value: '84.5%'
+#                   - id: uno_css
+#                     value: '82%'
 
-            - id: most_write_ins_award
-              template: award
-              awards:
-                  - id: panda_css
-                    value: 52
-                  - id: material_ui
-                    value: 38
-                  - id: yandex
-                    value: 24
+#             # - id: tool_interest_award
+#             #   template: award
+#             #   awards:
+#             #     - id: css_modules
+#             #       value: "74%"
+#             #     - id: vanilla_extract
+#             #       value: "68%"
+#             #     - id: stitches
+#             #       value: "55%"
+
+#             - id: most_write_ins_award
+#               template: award
+#               awards:
+#                   - id: panda_css
+#                     value: 52
+#                   - id: material_ui
+#                     value: 38
+#                   - id: yandex
+#                     value: 24
 
 - id: conclusion
   path: /conclusion
   blocks:
       - id: conclusion
         template: conclusion
+        blockType: ConclusionBlock
         variables:
-            author: chen_hui_jing
-            entities: '"chen_hui_jing"'
+            author: lea_verou
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock

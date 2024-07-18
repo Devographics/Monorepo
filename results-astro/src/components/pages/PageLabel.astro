@@ -1,0 +1,23 @@
+---
+import { getPageLabel, type PageDefinition } from "@/lib/sitemap";
+// import { useTools } from 'core/helpers/toolsContext'
+
+interface Props {
+  /** Can be used for the current page but also other pages */
+  page: PageDefinition;
+  includeWebsite?: boolean;
+}
+const { page, includeWebsite } = Astro.props;
+const { i18n, edition } = Astro.locals;
+---
+
+<>
+  {
+    getPageLabel({
+      pageDefinition: page,
+      edition,
+      t: i18n.t,
+      options: { includeWebsite },
+    })
+  }
+</>

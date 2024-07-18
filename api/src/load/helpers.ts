@@ -1,4 +1,5 @@
-import { Entity } from '@devographics/types'
+import { Avatar, Entity, EntityType } from '@devographics/types'
+import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import sanitizeHtml from 'sanitize-html'
 import uniq from 'lodash/uniq.js'
@@ -16,6 +17,7 @@ hljs.registerLanguage('http', http)
 hljs.registerLanguage('css', css)
 hljs.registerLanguage('graphql', graphql)
 hljs.registerLanguage('json', json)
+import trim from 'lodash/trim.js'
 
 // entities
 
@@ -94,4 +96,33 @@ export const highlightEntitiesExampleCode = async (entities: Entity[]) => {
         }
     }
     return entities
+}
+
+async function checkImageExists(url: string): Promise<boolean> {
+    try {
+        const response = await fetch(url, { method: 'HEAD' })
+        return response.ok // Image exists if response status is within the 200-299 range
+    } catch (error) {
+        return false // Error occurred or status code is not within the 200-299 range
+    }
+}
+
+export const getAvatar = async (entity: Entity) => {
+    const avatarUrl = `${process.env.ASSETS_URL}/avatars/${entity.id}.jpg`
+    const imageExists = await checkImageExists(avatarUrl)
+    if (imageExists) {
+        return { url: avatarUrl } as Avatar
+    }
+}
+
+export const getEntityType = (entity: Entity) => {
+    if (entity?.tags?.includes('people')) {
+        return EntityType.PEOPLE
+    } else if (entity?.tags?.includes('features')) {
+        return EntityType.FEATURE
+    } else if (entity?.tags?.includes('libraries') || entity?.tags?.includes('languages')) {
+        return EntityType.LIBRARY
+    } else {
+        return EntityType.DEFAULT
+    }
 }

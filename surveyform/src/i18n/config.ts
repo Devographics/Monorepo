@@ -1,20 +1,36 @@
-import { EditionMetadata } from "@devographics/types";
+import {
+  EnvVar,
+  parseEnvVariableArray,
+  getEnvVar,
+} from "@devographics/helpers";
+import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { publicConfig } from "~/config/public";
 
 export const defaultLocaleId = "en-US";
 
+const baseContexts = ["common", "surveys", "accounts"];
+
 // i18n contexts common to all surveys and editions
-export const getCommonContexts = () => ["common", "surveys", "accounts"];
+export const getCommonContexts = () => {
+  const customContexts = parseEnvVariableArray(
+    getEnvVar(EnvVar.CUSTOM_LOCALE_CONTEXTS)
+  );
+  return [...baseContexts, ...customContexts];
+};
 
-// i18n contexts specific to an edition
-// (note that all editions of the same survey share the same locale context)
-export const getEditionContexts = ({
-  edition,
-}: {
-  edition: EditionMetadata;
-}) => [edition.survey.id];
+// i18n contexts for a survey
+export const getSurveyContexts = (survey: SurveyMetadata) => [
+  ...getCommonContexts(),
+  survey.id,
+];
 
-export const getLocaleIdFromParams = (params: { lang: string }) => {
+// i18n contexts for an edition of a survey
+export const getEditionContexts = (edition: EditionMetadata) => [
+  ...getSurveyContexts(edition.survey),
+  edition.id,
+];
+
+export const safeLocaleIdFromParams = (params: { lang: string }) => {
   const localeId = filterLang(params.lang);
   if (!localeId) {
     throw new Error(

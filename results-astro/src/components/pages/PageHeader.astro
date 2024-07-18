@@ -3,16 +3,16 @@ import { secondaryFontMixin, mq, fontSize } from "@/lib/theme";
 import { getPageLabelKey } from "@/lib/sitemap";
 // import styled from 'styled-components'
 /*
-import { usePageContext } from '../helpers/pageContext'
+import { usePageContext } from '../helpers/pageDefinition'
 import { getPageLabelKey } from '../helpers/pageHelpers'
 import { mq, secondaryFontMixin, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 
 const PageHeader = () => {
-    const pageContext = usePageContext()
+    const pageDefinition = usePageContext()
     return (
         <PageTitle>
-            <T k={getPageLabelKey({ pageContext })} />
+            <T k={getPageLabelKey({ pageDefinition })} />
         </PageTitle>
     )
 }
@@ -20,7 +20,7 @@ const PageHeader = () => {
 */
 
 // TODO: check if Astro.path can be used in the underlying JS file?
-const { pageDefinition } = Astro.locals;
+const { pageDefinition, i18n } = Astro.locals;
 ---
 
 <style
@@ -35,4 +35,4 @@ const { pageDefinition } = Astro.locals;
     }
     `}
 ></style>
-<h2 class="PageTitle">{getPageLabelKey(pageDefinition)}</h2>
+<h2 class="PageTitle">{i18n.t(getPageLabelKey(pageDefinition)).t}</h2>

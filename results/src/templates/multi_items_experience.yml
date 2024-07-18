@@ -1,53 +1,85 @@
-titleId: sections.${sectionId}.title
+id: ${sectionId}_items
 blockType: MultiItemsExperienceBlock
 hasSponsor: true
+customizationModes: ['filters']
+queryOptions:
+    questionId: _items
+    addBuckets: true
+    addRatios: true # necessary to automatically enable _sentiment facet
+    addQuestionEntity: true
+    allEditions: false
+    addQuestionComments: true
+parameters:
+    cutoffPercent: 0
+    facetCutoffPercent: 0
+    limit: 0
 query: >
     surveys {
       ${surveyId} {
         ${editionId} {
           ${sectionId} {
-            ${questionId}: _${sectionId}_items {
-              items {
-                id
-                entity {
-                  name
-                  nameClean
-                  nameHtml
-                  homepage {
-                    url
-                  }
-                  caniuse {
-                    name
-                    url
-                  }
-                  mdn {
-                    locale
-                    url
-                    title
-                    summary
-                  }
-                  example {
-                    label
-                    language
-                    code
-                    codeHighlighted
-                  }
+            ${questionId}: _items {
+              id
+              entity {
+                name
+                nameClean
+                nameHtml
+                alias
+                entityType
+                description
+                descriptionClean
+                descriptionHtml
+                homepage {
+                  url
                 }
-                responses(facet: _sentiment) {
-                  currentEdition {
-                    buckets {
+                caniuse {
+                  name
+                  url
+                }
+                mdn {
+                  locale
+                  url
+                  title
+                  summary
+                }
+                example {
+                  label
+                  language
+                  code
+                  codeHighlighted
+                }
+              }
+              comments {
+                currentEdition {
+                  count
+                }
+              }
+              responses(facet: _sentiment) {
+                currentEdition {
+                  ratios {
+                    awareness
+                    interest
+                    usage
+                    retention
+                    positivity
+                  }
+                  buckets {
+                    count
+                    id
+                    facetBuckets {
                       count
                       id
-                      facetBuckets {
-                        count
-                        id
-                        percentageBucket
-                        percentageQuestion
-                        percentageSurvey
-                      }
+                      percentageBucket
                       percentageQuestion
                       percentageSurvey
                     }
+                    percentageQuestion
+                    percentageSurvey
+                  }
+                  completion {
+                    count
+                    percentageSurvey
+                    total
                   }
                 }
               }

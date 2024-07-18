@@ -1,0 +1,6 @@
+translationContexts: [homepage, common, results, countries, state_of_js, state_of_js_2023]
+
+baseUrl: http://localhost:8001
+# baseUrl: http://localhost:9000
+sitemap: ../../../.logs/flat_sitemap.yml
+# bannerId: general.css2022.js2022_banner

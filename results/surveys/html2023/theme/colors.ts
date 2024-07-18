@@ -47,6 +47,7 @@ const colors = {
 
     kakiDark: '#9ca033',
     kaki: '#CCD133',
+    electricBlueLighter: '#C5F2FC',
     electricBlueLight: '#AEF0FF',
     electricBlue: '#38D6FE',
     electricBlueDark: '#21B1D6',
@@ -125,28 +126,60 @@ const velocity = [
 //     '#FFEFFF'
 // ]
 
+// const distinct = [
+//     colors.indigo,
+//     colors.teal,
+//     colors.pink,
+//     colors.red,
+//     colors.green,
+//     colors.yellow,
+//     colors.aqua,
+//     colors.orange,
+//     colors.olive,
+//     colors.skyblue,
+//     colors.purple,
+//     colors.blueLighter,
+//     colors.greyTeal,
+//     colors.kaki
+// ]
+
 const distinct = [
-    colors.indigo,
-    colors.teal,
-    colors.pink,
-    colors.red,
-    colors.green,
-    colors.yellow,
-    colors.aqua,
-    colors.orange,
-    colors.olive,
-    colors.skyblue,
-    colors.purple,
-    colors.blueLighter,
-    colors.greyTeal,
-    colors.kaki
+    '#5C6ABB',
+    '#7CE2F9',
+    '#F26F9E',
+    '#7EE2A7',
+    '#F6DC80',
+    '#5ECCC5',
+    '#F69158',
+    '#75B756',
+    '#60BAF2',
+    '#9871E9',
+    '#B6D7DA',
+    '#D3D669',
+    '#F56B6B'
 ]
+
+// const distinct = [
+//     '#4E5B9F',
+//     '#71D3E9',
+//     '#C95982',
+//     '#6DCB93',
+//     '#D7C06F',
+//     '#52B4AE',
+//     '#DF8451',
+//     '#77B559',
+//     '#58ACE1',
+//     '#845FD0',
+//     '#A2C1C4',
+//     '#B8BB5C',
+//     '#D75656'
+// ]
 
 const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     background: '#272325',
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',
     backgroundAlt3: '#2c3033',
-    backgroundBackground: colors.electricBlueDarkest,
+    backgroundBackground: '#3A4E53',
     backgroundForeground: colors.navyLighter,
     backgroundAlt: '#314448',
     backgroundAltTrans: 'rgba(49, 68, 72, 0.4)',
@@ -154,7 +187,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
     text: colors.white,
-    textAlt: 'rgba(255, 246, 229, 0.5)',
+    textAlt: 'rgba(255, 246, 229, 0.65)',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
     link: colors.electricBlue,
@@ -267,10 +300,20 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             pre_post_processors: colors.yellow,
             css_frameworks: colors.pink
         },
+        sentiment: {
+            positive: [colors.green, colors.greenLight],
+            neutral: [colors.grey, colors.greyLight],
+            negative: [colors.red, colors.redLight]
+        },
+        // features: {
+        //     used: [colors.electricBlueLight, colors.electricBlueLighter],
+        //     heard: [colors.electricBlueDarker, colors.electricBlueDark],
+        //     never_heard: [colors.electricBlueDarkest, colors.electricBlueDarkerer]
+        // },
         features: {
-            used: [colors.electricBlueDarker, colors.electricBlueDark],
-            heard: [colors.electricBlue, colors.electricBlueLight],
-            never_heard: [colors.grey, colors.greyLight]
+            never_heard: ['#064151', '#074B5C'],
+            heard: ['#129DC0', '#21B1D6'],
+            used: ['#AEEFFF', '#D3F6FF']
         },
         features_categories: {
             layout: colors.indigo,
@@ -294,41 +337,41 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         //     prefer_not_to_say: [velocity[8], velocity[9]],
         //     not_listed: [velocity[10], velocity[11]]
         // },
-        race_ethnicity: {
-            biracial: velocity[0],
-            black_african: velocity[1],
-            east_asian: velocity[2],
-            hispanic_latin: velocity[3],
-            middle_eastern: velocity[4],
-            multiracial: velocity[5],
-            native_american_islander_australian: velocity[6],
-            south_asian: velocity[7],
-            white_european: velocity[8],
-            south_east_asian: velocity[9],
-            not_listed: velocity[10]
-        },
-        yearly_salary: {
-            range_work_for_free: [velocity[0], velocity[1]],
-            range_0_10: [velocity[2], velocity[3]],
-            range_10_30: [velocity[4], velocity[5]],
-            range_30_50: [velocity[6], velocity[7]],
-            range_50_100: [velocity[8], velocity[9]],
-            range_100_200: [velocity[10], velocity[11]],
-            range_more_than_200: [velocity[12], velocity[13]]
-        },
-        years_of_experience: {
-            range_less_than_1: [velocity[0], velocity[1]],
-            range_1_2: [velocity[2], velocity[3]],
-            range_2_5: [velocity[4], velocity[5]],
-            range_5_10: [velocity[6], velocity[7]],
-            range_10_20: [velocity[8], velocity[9]],
-            range_more_than_20: [velocity[10], velocity[11]]
-        },
-        higher_education_degree: {
-            no_degree: velocity[0],
-            yes_related: velocity[2],
-            yes_unrelated: velocity[4]
-        },
+        // race_ethnicity: {
+        //     biracial: velocity[0],
+        //     black_african: velocity[1],
+        //     east_asian: velocity[2],
+        //     hispanic_latin: velocity[3],
+        //     middle_eastern: velocity[4],
+        //     multiracial: velocity[5],
+        //     native_american_islander_australian: velocity[6],
+        //     south_asian: velocity[7],
+        //     white_european: velocity[8],
+        //     south_east_asian: velocity[9],
+        //     not_listed: velocity[10]
+        // },
+        // yearly_salary: {
+        //     range_work_for_free: [velocity[0], velocity[1]],
+        //     range_0_10: [velocity[2], velocity[3]],
+        //     range_10_30: [velocity[4], velocity[5]],
+        //     range_30_50: [velocity[6], velocity[7]],
+        //     range_50_100: [velocity[8], velocity[9]],
+        //     range_100_200: [velocity[10], velocity[11]],
+        //     range_more_than_200: [velocity[12], velocity[13]]
+        // },
+        // years_of_experience: {
+        //     range_less_than_1: [velocity[0], velocity[1]],
+        //     range_1_2: [velocity[2], velocity[3]],
+        //     range_2_5: [velocity[4], velocity[5]],
+        //     range_5_10: [velocity[6], velocity[7]],
+        //     range_10_20: [velocity[8], velocity[9]],
+        //     range_more_than_20: [velocity[10], velocity[11]]
+        // },
+        // higher_education_degree: {
+        //     no_degree: velocity[0],
+        //     yes_related: velocity[2],
+        //     yes_unrelated: velocity[4]
+        // },
         opinions: {
             4: [velocity[9], velocity[8]],
             3: [velocity[7], velocity[6]],

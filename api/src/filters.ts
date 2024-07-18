@@ -25,7 +25,12 @@ const mapFilter = <T>(filter: Filter<T>): FilterQuery<T> => {
         }
         q['$nin'] = filter.nin
     }
-
+    if (filter.lt !== undefined) {
+        q['$lt'] = filter.lt
+    }
+    if (filter.gt !== undefined) {
+        q['$gt'] = filter.gt
+    }
     return q
 }
 

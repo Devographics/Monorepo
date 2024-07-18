@@ -10,13 +10,15 @@ export async function GET(req: NextRequest, res: NextResponse) {
   const editionId = req.nextUrl.searchParams.get("editionId")!;
   const sectionId = req.nextUrl.searchParams.get("sectionId")!;
   const questionId = req.nextUrl.searchParams.get("questionId")!;
+  const shouldGetFromCache =
+    req.nextUrl.searchParams.get("shouldGetFromCache")! === "true";
   try {
     const { data, query } = await getQuestionData({
       surveyId,
       editionId,
       sectionId,
       questionId,
-      shouldGetFromCache: false,
+      shouldGetFromCache,
     });
     return NextResponse.json({ data, query });
   } catch (error) {

@@ -7,7 +7,7 @@ hasComments: true
 hasSponsor: true
 query: allEditionsData
 parameters: { showNoAnswer: true }
-hidden: true
+# hidden: true
 queryOptions:
     addQuestionEntity: true
     addQuestionComments: true

@@ -6,7 +6,7 @@ import { useCurrentUser } from "~/lib/users/hooks";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
 import { LoadingButton } from "~/components/ui/LoadingButton";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T } from "@devographics/react-i18n";
 
 const GmailMessage = ({
   domain,
@@ -16,11 +16,9 @@ const GmailMessage = ({
 }) => {
   // will look in spams too
   const link = `https://mail.google.com/mail/u/0/#search/${encodeURIComponent(
-    `from:${domain}+OR+from:stateofjs+OR+from:devographics+in:anywhere`
+    `from:${domain}+OR+from:stateofjs+OR+from:devographics+in:anywhere`,
   )}`;
-  return (
-    <FormattedMessage id="accounts.magic_link.browser" values={{ link }} />
-  );
+  return <T token="accounts.magic_link.browser" values={{ link }} />;
 };
 
 export interface StandaloneMagicLoginFormProps {
@@ -46,7 +44,7 @@ export const StandaloneMagicLoginForm = ({
   redirectTo,
 }: StandaloneMagicLoginFormProps) => {
   const intl = useIntlContext();
-  const placeholder = intl.formatMessage({ id: `accounts.your_email` });
+  const placeholder = intl.formatMessage({ id: `accounts.your_email` })?.t;
   const [errorMsg, setErrorMsg] = useState("");
   const [successEmail, setSuccessEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -63,7 +61,9 @@ export const StandaloneMagicLoginForm = ({
     resetMessages();
     const email = e?.currentTarget?.email?.value;
     if (!email) {
-      setErrorMsg(intl.formatMessage({ id: `accounts.magic_link.no_email` }));
+      setErrorMsg(
+        intl.formatMessage({ id: `accounts.magic_link.no_email` })?.t,
+      );
       return;
     }
     localStorage && localStorage.setItem("email", email);
@@ -100,7 +100,7 @@ export const StandaloneMagicLoginForm = ({
       {errorMsg && <div className="error magic-error">{errorMsg}</div>}
       {successEmail && (
         <div className="success magic-success">
-          <FormattedMessage id="accounts.magic_link.success" />
+          <T token="accounts.magic_link.success" />
           {surveyId && successEmail.match("gmail.com") && (
             <>
               {" "}

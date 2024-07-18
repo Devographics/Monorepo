@@ -13,7 +13,7 @@ import HorizontalBarBlock2 from 'core/charts/horizontalBar2'
 import VerticalBarBlock from 'core/charts/verticalBar'
 import PeopleBlock from 'core/charts/people'
 import ToolFeatureExperienceBlock from 'core/charts/toolFeatureExperience'
-import { MultiItemsExperienceBlock } from 'core/charts/multiItemsExperience'
+import MultiItemsExperienceBlock from 'core/charts/multiItemsExperience'
 
 // features
 import FeaturesOverviewBlock from 'core/charts/featuresOverview'
@@ -33,6 +33,9 @@ import OpinionBlock from 'core/charts/opinion'
 
 // brackets
 import BracketWinsBlock from 'core/charts/brackets/BracketWinsBlock.tsx'
+
+// takeaways
+import TakeawaysBlock from 'core/blocks/other/TakeawaysBlock.tsx'
 
 const chartBlocks = {
     HorizontalBarBlock,
@@ -105,7 +108,7 @@ const otherBlocks = {
     HowToHelpBlock,
     SponsorFinishBlock,
     LivestreamBlock,
-
+    TakeawaysBlock,
     DataExplorerBlock
 }
 

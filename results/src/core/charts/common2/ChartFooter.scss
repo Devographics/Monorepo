@@ -1,0 +1,20 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
+.chart-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #ffffff33;
+    padding-top: var(--spacing);
+    @include small {
+        flex-direction: column;
+        gap: var(--spacing);
+    }
+}
+
+.chart-footer-right {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing);
+}

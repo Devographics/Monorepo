@@ -2,7 +2,6 @@ import SurveySectionHeading from "~/components/questions/SurveySectionHeading";
 import FormNav from "./FormNav";
 import { FormElement } from "./FormElement";
 import { FormSubmit } from "./FormSubmit";
-import { FormInputProps } from "./typings";
 import { ReactNode } from "react";
 import { SectionMetadata } from "@devographics/types";
 import ReadingList from "../reading_list/ReadingList";

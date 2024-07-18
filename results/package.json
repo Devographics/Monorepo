@@ -79,7 +79,7 @@
         "gatsby-source-graphql": "^5.11.0",
         "gatsby-transformer-remark": "^6.11.0",
         "gatsby-transformer-yaml": "^5.11.0",
-        "graphql": "16.7.1",
+        "graphql": "16.9.0",
         "graphql-print": "^1.0.1",
         "html-loader": "^4.2.0",
         "indent-string": "^5.0.0",
@@ -110,6 +110,7 @@
         "rehype-raw": "^6.1.1",
         "remove-markdown": "^0.3.0",
         "sass": "^1.56.1",
+        "snarkdown": "^2.0.0",
         "styled-components": "^5.3.6",
         "tinycolor2": "^1.4.2",
         "twitter-api-v2": "^1.12.9",
@@ -161,6 +162,7 @@
         "typecheck": "tsc --noEmit --p ./tsconfig.check.json"
     },
     "resolutions": {
-        "webpack": "5.88.2"
+        "webpack": "5.88.2",
+        "graphql": "^16.7.1"
     }
 }

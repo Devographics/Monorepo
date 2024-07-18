@@ -20,7 +20,7 @@ export const FormComponentSelect = (props: FormInputProps) => {
   const intl = useIntlContext();
   const emptyValue = "";
   const noneOption = {
-    label: intl.formatMessage({ id: "forms.select_option" }),
+    label: intl.formatMessage({ id: "forms.select_option" })?.t,
     id: emptyValue,
     disabled: true,
   };
@@ -47,7 +47,7 @@ export const FormComponentSelect = (props: FormInputProps) => {
             label ||
             intl.formatMessage({
               id: i18n.base,
-            });
+            })?.t;
           return (
             <option key={id} value={id}>
               {optionLabel}

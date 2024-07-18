@@ -1,5 +1,8 @@
-import { EditionMetadata, QuestionTemplateOutput } from "@devographics/types";
-import { FullNormalizationToken } from "../types";
+import {
+  EditionMetadata,
+  QuestionTemplateOutput,
+  FullNormalizationToken,
+} from "@devographics/types";
 import { extractTokens } from "./extractTokens";
 import { getQuestionRules } from "./getQuestionRules";
 import { EntityRule } from "./helpers";

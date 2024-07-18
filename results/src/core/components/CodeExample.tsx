@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import { mq, fontWeight, fontSize, spacing, color } from 'core/theme'
 
-const CodeExample = ({ language, code }: { language: string; code: string }) => (
-    <Wrapper>
-        <Language>{language}</Language>
+const CodeExample = ({ language, code }: { language?: string; code: string }) => (
+    <Wrapper className="code-example">
+        {language && <Language>{language}</Language>}
         <Pre>
             <Code>{code}</Code>
         </Pre>
@@ -24,11 +24,12 @@ const Language = styled.h4`
     padding: ${spacing(0.1)} ${spacing(0.4)};
     text-transform: uppercase;
     font-size: ${fontSize('small')};
+    text-shadow: #000000cc 0px 1px 2px;
 `
 
 const Pre = styled.pre`
     /* max-width: 300px; */
-    /* overflow-x: scroll; */
+    overflow-x: scroll;
     margin: 0;
 `
 

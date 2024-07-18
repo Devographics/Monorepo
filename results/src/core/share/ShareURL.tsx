@@ -25,10 +25,7 @@ import { usePageContext } from 'core/helpers/pageContext'
 // }
 
 const ShareURL = ({ link, ...rest }: { link: string }) => {
-    const pageContext = usePageContext()
-    const { currentEdition } = pageContext
-    const { resultsUrl } = currentEdition
-    const url = removeDoubleSlashes(resultsUrl + link)
+    const url = removeDoubleSlashes(link)
     const [isCopied, setIsCopied] = useState(false)
 
     // onClick handler function for the copy button

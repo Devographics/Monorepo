@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { captureException } from "@sentry/nextjs";
 import { addCustomTokens } from "~/lib/normalization/actions";
 
-
 export async function POST(req: NextRequest, res: NextResponse) {
   console.log("// addCustomTokens");
   try {
@@ -21,7 +20,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     return NextResponse.json(
       {
         error: {
-          id: "add_manual_normalizations_error",
+          id: "addCustomTokens_error",
           status: 500,
           message: error.message,
           error,

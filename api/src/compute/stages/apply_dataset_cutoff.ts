@@ -1,7 +1,9 @@
 import { Bucket, BucketUnits, FacetBucket, ResponseEditionData } from '@devographics/types'
-import sumBy from 'lodash/sumBy.js'
-import { GenericComputeArguments } from '../../types'
+import { ComputeAxisParameters, GenericComputeArguments } from '../../types'
 import sortBy from 'lodash/sortBy.js'
+import sum from 'lodash/sum.js'
+import { INSUFFICIENT_DATA } from '@devographics/constants'
+import { zeroPercentiles } from './add_percentiles'
 
 // when a filter is applied, never publish any dataset with fewer than 10 *total* items;
 // when a facet is applied, require every *individual facet* to have more than 10 items
@@ -14,18 +16,16 @@ messing up the charts because of missing datapoints.
 
 */
 
-const getZeroBucket = <T extends Bucket | FacetBucket>({
-    bucket,
-    clearCount = false
-}: {
-    bucket: T
-    clearCount: boolean
-}) => {
-    const zeroBucket = clearCount
-        ? { ...bucket, count: 0, hasInsufficientData: true }
-        : { ...bucket, hasInsufficientData: true }
-    return zeroBucket
-}
+const getZeroBucket = <T extends Bucket | FacetBucket>(bucket: T) => ({
+    ...bucket,
+    [BucketUnits.COUNT]: 0,
+    [BucketUnits.PERCENTAGE_QUESTION]: 0,
+    [BucketUnits.PERCENTAGE_SURVEY]: 0,
+    [BucketUnits.PERCENTILES]: zeroPercentiles,
+    [BucketUnits.AVERAGE]: 0,
+    [BucketUnits.MEDIAN]: 0,
+    hasInsufficientData: true
+})
 
 export const getDatasetCutoff = () => {
     return process.env.DATASET_CUTOFF ? Number(process.env.DATASET_CUTOFF) : DEFAULT_DATASET_CUTOFF
@@ -44,18 +44,27 @@ we don't need to censor the parent bucket
 export const applyBucketCutoff = ({
     bucket,
     hasFilter,
-    hasFacet
+    hasFacet,
+    axis1,
+    axis2
 }: {
     bucket: Bucket
     hasFilter: boolean
     hasFacet: boolean
+    axis1: ComputeAxisParameters
+    axis2?: ComputeAxisParameters
 }) => {
     const cutoff = getDatasetCutoff()
 
-    const facetBucketsWithCutoff = hasFacet
+    /*
+
+    First, mark any bucket that comes in under the cutoff with hasInsufficientData: true flag
+
+    */
+    let facetBucketsWithCutoff = hasFacet
         ? bucket.facetBuckets.map(facetBucket => {
               return facetBucket.count !== undefined && facetBucket.count < cutoff
-                  ? getZeroBucket({ bucket: facetBucket, clearCount: true })
+                  ? { ...facetBucket, hasInsufficientData: true }
                   : facetBucket
           })
         : []
@@ -77,11 +86,34 @@ export const applyBucketCutoff = ({
         const secondSmallestFacetBucketIndex = facetBucketsWithCutoff.findIndex(
             fb => fb.id === secondSmallestFacetBucket.id
         )
-        facetBucketsWithCutoff[secondSmallestFacetBucketIndex] = getZeroBucket({
-            bucket: secondSmallestFacetBucket,
-            clearCount: true
-        })
+        facetBucketsWithCutoff[secondSmallestFacetBucketIndex] = {
+            ...secondSmallestFacetBucket,
+            hasInsufficientData: true
+        }
     }
+
+    /*
+
+    After all facets under cutoff have been identified, merge them into 
+    a single "INSUFFICIENT_DATA" facet bucket
+
+    */
+    const facetBucketsOverCutoff = facetBucketsWithCutoff.filter(fb => !fb.hasInsufficientData)
+    const facetBucketsUnderCutoff = facetBucketsWithCutoff.filter(fb => fb.hasInsufficientData)
+
+    const insufficientDataCount = sum(facetBucketsUnderCutoff.map(fb => fb[BucketUnits.COUNT]))
+    const insufficientDataBucketPercentage = Math.round(
+        sum(facetBucketsUnderCutoff.map(fb => fb[BucketUnits.PERCENTAGE_BUCKET]))
+    )
+
+    const insufficientDataBucket = {
+        id: INSUFFICIENT_DATA,
+        [BucketUnits.COUNT]: insufficientDataCount,
+        [BucketUnits.PERCENTAGE_BUCKET]: insufficientDataBucketPercentage
+    }
+
+    facetBucketsWithCutoff = [...facetBucketsOverCutoff, insufficientDataBucket]
+
     /* 
     
     In some cases, the main bucket has a total count over the cutoff,
@@ -89,21 +121,22 @@ export const applyBucketCutoff = ({
     We also mark these buckets as having insufficient data
 
     */
+    // TODO: should these buckets just be removed from the dataset altogether?
     const allFacetsUnderCutoff = facetBucketsWithCutoff.every(fb => fb.hasInsufficientData)
     const mainBucketIsInsufficient =
         (bucket.count !== undefined && bucket.count < cutoff) || (hasFacet && allFacetsUnderCutoff)
     // We only need to clear the main bucket's count when a filter is applied to segment the data
     const clearCount = hasFilter
-    const bucketWithCutoff = mainBucketIsInsufficient
-        ? getZeroBucket({ bucket, clearCount })
-        : bucket
+    const bucketWithCutoff = mainBucketIsInsufficient ? getZeroBucket(bucket) : bucket
 
     return { ...bucketWithCutoff, facetBuckets: facetBucketsWithCutoff }
 }
 
-export const applyDatasetCutoff = (
+export const applyDatasetCutoff = async (
     resultsByEdition: ResponseEditionData[],
-    computeArguments: GenericComputeArguments
+    computeArguments: GenericComputeArguments,
+    axis1: ComputeAxisParameters,
+    axis2?: ComputeAxisParameters
 ) => {
     const hasFilter = !!computeArguments.filters
     const hasFacet = !!computeArguments.facet
@@ -111,9 +144,8 @@ export const applyDatasetCutoff = (
         for (let editionData of resultsByEdition) {
             // "censor" out data for any bucket that comes under cutoff
             editionData.buckets = editionData.buckets.map(bucket =>
-                applyBucketCutoff({ bucket, hasFilter, hasFacet })
+                applyBucketCutoff({ bucket, hasFilter, hasFacet, axis1, axis2 })
             )
         }
     }
-    return resultsByEdition
 }

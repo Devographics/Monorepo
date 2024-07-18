@@ -17,6 +17,7 @@ const Item = styled.span`
     font-size: ${fontSize('medium')};
     display: flex;
     align-items: center;
+    white-space: nowrap;
     @media ${mq.smallMedium} {
         font-size: ${fontSize('small')};    
     }

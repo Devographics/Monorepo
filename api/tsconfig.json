@@ -3,7 +3,7 @@
         "target": "es2021",
         "moduleResolution": "Node",
         "module": "ES2020",
-        "lib": ["es7", "es2019", "es2021"],
+        "lib": ["ESNext.Array", "es7", "es2019", "es2021"],
         "outDir": "dist",
         "rootDir": "src",
         "removeComments": true,

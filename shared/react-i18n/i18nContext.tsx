@@ -1,6 +1,6 @@
+"use client"
 import React, { createContext, useContext, useMemo } from 'react'
-import { getTranslator, getStringTranslator } from './translator'
-import { Locale, LegacyTranslator, StringTranslator } from '@devographics/i18n'
+import { LocaleParsed, makeTranslationFunction, makeTranslatorFunc, type Locale, type StringTranslator } from '@devographics/i18n'
 
 export const I18nContext = createContext<I18nContextType | null>(null)
 
@@ -9,31 +9,41 @@ export const I18nContextProvider = ({
     locale
 }: {
     children: React.ReactNode
-    locale: Locale
+    locale: LocaleParsed
 }) => {
-    const translate = getTranslator(locale)
-    const getString = getStringTranslator(locale)
+    const getString = makeTranslatorFunc(locale)
+    const { t, getMessage } = makeTranslationFunction(locale)
 
     // useMemo because the value is an object
     const value = useMemo(
         () => ({
             locale,
-            translate,
-            getString
+            getString,
+            //@ts-ignore
+            translate: (...args) => getString(...args)?.t,
+            t,
+            getMessage
+
         }),
-        [locale, translate, getString]
+        [locale, getString]
     )
     return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>
 }
 
 type I18nContextType = {
     locale: Locale
-    translate: LegacyTranslator
+    /** @deprecated use "t" or "getMessage" */
     getString: StringTranslator
+    /** @deprecated  use "t" or "getMessage" */
+    translate: (key: string, opts?: { values?: Record<string, any> }, fallback?: boolean) => string,
+    t: ReturnType<typeof makeTranslationFunction>["t"],
+    getMessage: ReturnType<typeof makeTranslationFunction>["getMessage"],
 }
 
-export const useI18n = () => {
+export const useTeapot = () => {
     const ctx = useContext(I18nContext)
-    if (!ctx) throw new Error("Can't call useI18n before I18nContextProvider is set")
+    if (!ctx) throw new Error("Can't call useTeapot before I18nContextProvider is set")
     return ctx
 }
+/** Alias for non-fancy people */
+export const useI18n = useTeapot

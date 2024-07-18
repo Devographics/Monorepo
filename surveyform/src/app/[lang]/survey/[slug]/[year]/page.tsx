@@ -1,20 +1,22 @@
 import Support from "~/components/common/Support";
 import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
-import {
-  getEditionParams,
-  rscGetEditionsMetadata,
-  rscMustGetSurveyEditionFromUrl,
-} from "./rsc-fetchers";
+import { rscMustGetSurveyEditionFromUrl } from "./rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
 import Faq from "~/components/common/Faq";
 import Translators from "~/components/common/Translators";
+
 import SurveyCredits from "~/components/surveys/SurveyCredits";
 import EditionMessage from "~/components/surveys/SurveyMessage";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
-import { EditionMetadata } from "@devographics/types";
+
+import { type EditionMetadata } from "@devographics/types";
 import { EditionMain } from "./client-components";
+
 import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
 import TokyoDev from "~/components/common/TokyoDev";
+import { setLocaleIdServerContext } from "~/i18n/rsc-context";
+import { DynamicT } from "@devographics/react-i18n";
+import { rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
+import { I18nContextProvider } from "@devographics/react-i18n";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
 export const revalidate = DEFAULT_REVALIDATE_S;
@@ -65,7 +67,11 @@ const EditionPageComponent = ({
         </h1>
       )}
       <div className="survey-page-block">
-        <FormattedMessage id={`general.${edition.id}.survey_intro`} />
+        {/**
+         * If moving to a client component,
+         * we can use a token expression instead "general.{{editionId}}.survey_intro"
+         */}
+        <DynamicT token={`general.${edition.id}.survey_intro`} />
         <EditionMain edition={edition} />
       </div>
       <Faq edition={edition} />
@@ -82,6 +88,7 @@ export default async function SurveyPage({
 }: {
   params: SurveyPageServerProps;
 }) {
+  setLocaleIdServerContext(params.lang); // Needed for "ServerT"
   const { slug, year } = params;
   const { data: edition, ___metadata: ___rscMustGetSurveyEditionFromUrl } =
     await rscMustGetSurveyEditionFromUrl({

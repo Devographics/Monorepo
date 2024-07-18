@@ -26,5 +26,12 @@
     ],
     "strict": false,
     "strictNullChecks": true
-  }
+  },
+  // @see https://github.com/cypress-io/cypress/issues/27731#issuecomment-1796430350
+  "ts-node": {
+    "compilerOptions": {
+      "module": "esnext",
+      "moduleResolution": "bundler",
+    },
+  },
 }

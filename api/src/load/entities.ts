@@ -1,14 +1,12 @@
 // import { Entity } from './types'
-import { Entity } from '@devographics/types'
+import { Entity, EntityType } from '@devographics/types'
 import { Octokit } from '@octokit/core'
 import fetch from 'node-fetch'
-import yaml from 'js-yaml'
 import { readdir, readFile, stat } from 'fs/promises'
-import { EnvVar, getEnvVar } from '@devographics/helpers'
+import { EnvVar, getEnvVar, parseEnvVariableArray } from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
 
 import path from 'path'
-import marked from 'marked'
 
 // import hljs from 'highlight.js/lib/common'
 
@@ -20,7 +18,9 @@ import isEmpty from 'lodash/isEmpty.js'
 import { OptionId } from '@devographics/types'
 import clone from 'lodash/clone.js'
 import {
+    getAvatar,
     getEntitiesFromYaml,
+    getEntityType,
     getIdFromFileName,
     highlightEntitiesExampleCode,
     parseEntitiesMarkdown
@@ -51,20 +51,30 @@ export const loadOrGetEntities = async (
 
 export const loadFromGitHub = async () => {
     const octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
-    const [owner, repo, path = ''] = getEnvVar(EnvVar.GITHUB_PATH_ENTITIES)?.split('/') || []
+    const entitiesPathArray = parseEnvVariableArray(getEnvVar(EnvVar.GITHUB_PATH_ENTITIES))
 
-    if (!owner) {
-        throw new Error(
-            'loadFromGitHub: env variable GITHUB_PATH_SURVEYS did not contain [owner] segment'
-        )
-    }
-    if (!repo) {
-        throw new Error(
-            'loadFromGitHub: env variable GITHUB_PATH_SURVEYS did not contain [repo] segment'
-        )
-    }
+    let entities: Entity[] = []
 
-    return await getGitHubDirEntities({ octokit, owner, repo }, path, [])
+    if (entitiesPathArray) {
+        for (const entitiesDirPath of entitiesPathArray) {
+            const [owner, repo, path = ''] = entitiesDirPath?.split('/') || []
+
+            if (!owner) {
+                throw new Error(
+                    `loadFromGitHub: env variable GITHUB_PATH_ENTITIES did not contain [owner] segment: ${entitiesDirPath}`
+                )
+            }
+            if (!repo) {
+                throw new Error(
+                    `loadFromGitHub: env variable GITHUB_PATH_ENTITIES did not contain [repo] segment: ${entitiesDirPath}`
+                )
+            }
+
+            const loadedEntities = await getGitHubDirEntities({ octokit, owner, repo }, path, [])
+            entities = [...entities, ...loadedEntities]
+        }
+    }
+    return entities
 }
 
 const getGitHubDirEntities = async (
@@ -127,9 +137,16 @@ const getGitHubDirEntities = async (
 
 // when developing locally, load from local files
 export const loadLocally = async () => {
-    const entitiesDirPath = path.resolve(getEnvVar(EnvVar.ENTITIES_PATH))
-
-    return await getLocalDirEntities(entitiesDirPath, [])
+    const entitiesPathArray = parseEnvVariableArray(getEnvVar(EnvVar.ENTITIES_PATH))
+    const entitiesDirPaths = entitiesPathArray?.map(dirPath => path.resolve(dirPath))
+    let entities: Entity[] = []
+    if (entitiesDirPaths) {
+        for (const entitiesDirPath of entitiesDirPaths) {
+            const loadedEntities = await getLocalDirEntities(entitiesDirPath, [])
+            entities = [...entities, ...loadedEntities]
+        }
+    }
+    return entities
 }
 
 export const getLocalDirEntities = async (entitiesDirPath: string, parentDirs: string[]) => {
@@ -221,8 +238,9 @@ export const getEntities = async (
     return entities
 }
 
-export const findEntity = (id: string, entities: Entity[]) =>
-    entities.find(e => {
+export const findEntity = (id: string, entities: Entity[], tag?: string) => {
+    let parentId
+    const matchingEntities = entities.filter(e => {
         return (
             (e.id && e.id.toLowerCase() === id) ||
             (e.id && e.id.toLowerCase().replace(/\-/g, '_') === id) ||
@@ -230,14 +248,31 @@ export const findEntity = (id: string, entities: Entity[]) =>
         )
     })
 
+    // keep the first entity we found
+    const entity = matchingEntities[0]
+
+    // if we're passing a tag, then find the version of the entity with that tag,
+    // and use that to figure out the parentId
+    if (tag) {
+        const entityWithTag = matchingEntities.find(e => e.tags?.includes(tag))
+        if (entityWithTag) {
+            parentId = entityWithTag?.parentId
+        }
+    }
+
+    return { ...entity, parentId }
+}
+
 export const getEntity = async ({
     id,
     context,
-    includeNormalizationEntities = true
+    includeNormalizationEntities = true,
+    tag
 }: {
     id: string | number
     context?: RequestContext
     includeNormalizationEntities?: boolean
+    tag?: string
 }) => {
     if (!id || typeof id !== 'string') {
         return
@@ -245,10 +280,20 @@ export const getEntity = async ({
 
     const entities = await getEntities({ context, includeNormalizationEntities })
 
-    const entity = findEntity(id.toLowerCase(), entities)
+    const entity = findEntity(id.toLowerCase(), entities, tag)
 
     if (!entity) {
         return
+    }
+
+    entity.entityType = getEntityType(entity)
+
+    if (entity.entityType === EntityType.PEOPLE) {
+        // TODO: find a way to cache this somehow?
+        const avatar = await getAvatar(entity)
+        if (avatar) {
+            entity.avatar = avatar
+        }
     }
 
     if (entity.belongsTo) {

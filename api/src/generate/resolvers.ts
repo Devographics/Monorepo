@@ -8,7 +8,7 @@ import {
     ResolverParent,
     IncludeEnum
 } from '../types/surveys'
-import { getPath, getEditionById } from './helpers'
+import { getPath, getEditionById, getSectionType } from './helpers'
 import { genericComputeFunction, getGenericCacheKey } from '../compute'
 import { useCache } from '../helpers/caching'
 import { getRawCommentsWithCache } from '../compute/comments'
@@ -22,7 +22,7 @@ import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
 import { localesResolvers } from '../resolvers/locales'
 import { subFields } from './subfields'
-import { ResultsSubFieldEnum } from '@devographics/types'
+import { ResultsSubFieldEnum, Section } from '@devographics/types'
 import { loadOrGetParsedSurveys } from '../load/surveys'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
@@ -68,7 +68,7 @@ export const generateResolvers = async ({
     } as any
 
     for (const survey of surveys) {
-        resolvers[getResponseTypeName(survey.id)] = responsesResolverMap
+        resolvers[getResponseTypeName()] = responsesResolverMap
 
         // generate resolver map for each survey field (i.e. each survey edition)
         const surveyFieldsResolvers = Object.fromEntries(
@@ -189,7 +189,7 @@ const getGlobalMetadataResolver = (): ResolverType => async (parent, args) => {
 const getSurveyResolver =
     ({ survey }: { survey: SurveyApiObject }): ResolverType =>
     (parent, args, context, info) => {
-        console.log('// survey resolver')
+        console.log(`// survey resolver: ${survey.id}`)
         return survey
     }
 
@@ -204,7 +204,7 @@ copy of the survey metadata from memory
 const getSurveyMetadataResolver =
     ({ survey }: { survey: SurveyApiObject }): ResolverType =>
     async (parent, args, context, info) => {
-        console.log('// survey metadata resolver')
+        console.log(`// survey metadata resolver: ${survey.id}`)
         const parsedSurveys = await loadOrGetParsedSurveys()
         const freshSurvey = parsedSurveys.find(s => s.id === survey.id)
         return freshSurvey
@@ -213,7 +213,7 @@ const getSurveyMetadataResolver =
 const getEditionResolver =
     ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
     (parent, args, context, info) => {
-        console.log('// edition resolver')
+        console.log(`// edition resolver: ${edition.id}`)
         return edition
     }
 
@@ -225,7 +225,7 @@ See getSurveyMetadataResolver() note above
 const getEditionMetadataResolver =
     ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
     async (parent, args, context, info) => {
-        console.log('// edition metadata resolver')
+        console.log(`// edition metadata resolver: ${edition.id}`)
         const freshEdition = await getEditionById(edition.id)
         const sections = freshEdition.sections.map(section => ({
             ...section,
@@ -246,9 +246,20 @@ const getSectionResolver =
         edition: EditionApiObject
         section: SectionApiObject
     }): ResolverType =>
-    (parent, args, context, info) => {
+    async (parent, args, context, info) => {
         console.log('// section resolver')
-        return section
+        const type = getSectionType(section)
+        const _items = await getItems({
+            survey,
+            edition,
+            section,
+            type,
+            context
+        })
+        return {
+            ...section,
+            _items
+        }
     }
 
 const getQuestionResolverMap = async ({
@@ -350,7 +361,8 @@ export const currentEditionResolver: ResolverType = async (parent, args, context
 export const rawDataResolver: ResolverType = async (parent, args, context, info) => {
     console.log('// rawDataResolver')
     const { survey, edition, section, question } = parent
-    return await getRawData({ survey, edition, section, question, context })
+    const { token } = args
+    return await getRawData({ survey, edition, section, question, context, token })
 }
 
 export const responsesResolverMap: ResolverMap = {
@@ -511,9 +523,56 @@ export const getEditionToolsFeaturesResolverMap = (type: 'tools' | 'features'): 
 Resolver map used for section_features, section_tools
 
 */
-export const getSectionToolsFeaturesResolverMap = (type: 'tools' | 'features'): ResolverMap => ({
-    items: parent =>
-        getSectionItems(parent.section, type).map(question => ({ ...parent, question })),
-    ids: parent => getSectionItems(parent.section, type).map(q => q.id),
+
+// if this is the main "Features" or "Tools" section, return every item; else return
+// only items for current section
+
+const getItems = async ({
+    survey,
+    edition,
+    section,
+    type,
+    context
+}: {
+    survey: SurveyApiObject
+    edition: EditionApiObject
+    section: SectionApiObject
+    type: 'tools' | 'features'
+    context: RequestContext
+}) => {
+    const items = ['features', 'tools', 'libraries'].includes(section.id)
+        ? getEditionItems(edition, type)
+        : getSectionItems(section, type)
+
+    return items.map(async question => ({
+        survey,
+        edition,
+        section,
+        question,
+        entity: await getEntity({ id: question.id, context })
+    }))
+}
+
+export const getSectionToolsFeaturesResolverMap = async (
+    type: 'tools' | 'features'
+): Promise<ResolverMap> => ({
+    items: async (parent, args, context) =>
+        await getItems({
+            survey: parent.survey,
+            edition: parent.edition,
+            section: parent.section,
+            type,
+            context
+        }),
+    ids: async (parent, args, context) =>
+        (
+            await getItems({
+                survey: parent.survey,
+                edition: parent.edition,
+                section: parent.section,
+                type,
+                context
+            })
+        ).map(q => q.question.id),
     years: parent => parent.survey.editions.map(e => e.year)
 })

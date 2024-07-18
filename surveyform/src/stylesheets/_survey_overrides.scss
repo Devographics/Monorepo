@@ -65,6 +65,7 @@ These styles will only be active for specific surveys and/or editions
 .tokyodev-info {
   max-width: 800px;
   margin: 0 auto;
+  margin-bottom: $spacing * 2;
   // background-image: repeating-radial-gradient(
   //     circle at 0px 0px,
   //     transparent 0px,
@@ -95,4 +96,12 @@ These styles will only be active for specific surveys and/or editions
       line-height: 1.5;
     }
   }
+}
+
+.translators-locales {
+  display: flex;
+  justify-content: center;
+}
+.translators-help {
+  display: none;
 }

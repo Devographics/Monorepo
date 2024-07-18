@@ -2,8 +2,6 @@
 import { useState } from "react";
 import { normalizeQuestionResponses } from "~/lib/normalization/services";
 import { LoadingButton } from "../LoadingButton";
-import { NormalizeInBulkResult } from "~/lib/normalization/types";
-import { NormalizationResult } from "./NormalizationResult";
 import {
   NormTokenAction,
   useCustomNormalizationMutation,
@@ -25,10 +23,8 @@ import {
 import { addCustomTokensAction } from "./tokenActions";
 import { EntityList } from "./EntityInput";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  getCustomNormalizationsCacheKey,
-  getDataCacheKey,
-} from "./NormalizeQuestion";
+import { getDataCacheKey } from "./NormalizeQuestion";
+
 export interface AnswerProps extends AnswersProps {
   rawPath: string;
   normPath: string;
@@ -41,7 +37,6 @@ export interface AnswerProps extends AnswersProps {
   customNormalization?: CustomNormalizationDocument;
   isRepeating: boolean;
   answerIndex: number;
-  filterQuery?: string;
 }
 
 export const Answer = ({
@@ -62,14 +57,12 @@ export const Answer = ({
   isRepeating = false,
   filterQuery,
   setTokenFilter,
+  addToActionLog,
+  addLocalSuggestedToken,
 }: AnswerProps) => {
   const queryClient = useQueryClient();
 
   const { _id, responseId, raw: rawValue, tokens = [] } = answer;
-  const [result, setResult] = useState<NormalizeInBulkResult>();
-
-  const [showResult, setShowResult] = useState(true);
-  const [showAllPresets, setShowAllPresets] = useState(false);
   const [autocompleteToken, setAutocompleteToken] = useState<string>();
   const [autocompleteIsLoading, setAutocompleteIsLoading] = useState(false);
 
@@ -103,6 +96,8 @@ export const Answer = ({
   const customTokens = regularTokens.filter(
     (t) => t.pattern === CUSTOM_NORMALIZATION
   );
+
+  const suggestedTokens = customNormalization?.suggestedTokens;
 
   const enabledTokens = regularTokens.filter(
     (t) => !customNormalization?.disabledTokens?.includes(t.id)
@@ -166,6 +161,7 @@ export const Answer = ({
                 selectedId={autocompleteToken}
                 setSelectedId={async (value) => {
                   setAutocompleteIsLoading(true);
+
                   setAutocompleteToken(value);
                   if (entities.map((e) => e.id).includes(value)) {
                     await addTokenMutation.mutateAsync({
@@ -177,6 +173,34 @@ export const Answer = ({
                   setAutocompleteIsLoading(false);
                 }}
               />
+
+              {autocompleteToken && autocompleteToken.length > 0 && (
+                <a
+                  href="#"
+                  className="tokens-list-new"
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    setAutocompleteIsLoading(true);
+                    if (
+                      autocompleteToken &&
+                      !entities.map((e) => e.id).includes(autocompleteToken)
+                    ) {
+                      await addTokenMutation.mutateAsync({
+                        ...addTokenParams,
+                        isSuggestion: true,
+                        tokens: [autocompleteToken],
+                      });
+                      setAutocompleteToken("");
+                      addLocalSuggestedToken(autocompleteToken);
+                    } else {
+                      alert(`Token ${autocompleteToken} already exists!`);
+                    }
+                    setAutocompleteIsLoading(false);
+                  }}
+                >
+                  Create token…
+                </a>
+              )}
             </div>
             {enabledTokens.map((token) => (
               <NormTokenAction
@@ -197,6 +221,16 @@ export const Answer = ({
                 {...normTokenProps}
               />
             ))}
+
+            {suggestedTokens &&
+              suggestedTokens.map((tokenId) => (
+                <NormTokenAction
+                  key={tokenId}
+                  id={tokenId}
+                  isSuggested={true}
+                  {...normTokenProps}
+                />
+              ))}
 
             {customTokens.map((token) => (
               <NormTokenAction
@@ -298,14 +332,15 @@ export const Answer = ({
                   editionId: edition.id,
                   questionId: question.id,
                 };
-                const result = await normalizeQuestionResponses({
+                const results = await normalizeQuestionResponses({
                   ...commonParams,
                   responsesIds: [responseId],
                   isVerbose: true,
                 });
-                setResult(result.data);
-                if (result.data) {
-                  const { normalizedDocuments } = result.data;
+                addToActionLog({ type: "normalization", payload: results });
+
+                if (results.data) {
+                  const { normalizedDocuments } = results.data;
                   const normalizedDocument = normalizedDocuments[0];
                   if (normalizedDocument) {
                     const { normalizedFields, responseId } = normalizedDocument;
@@ -328,19 +363,10 @@ export const Answer = ({
                           };
                         }
                       );
-                      const metadataItem =
-                        normalizedField?.metadata?.at(answerIndex);
-                      alert(
-                        `Normalized string "${
-                          metadataItem?.raw
-                        }" with tokens ${metadataItem?.tokens
-                          .map((t) => t.id)
-                          .join(",")}`
-                      );
                     }
                   } else {
                     console.log("No normalizedDocument returned");
-                    console.log(result);
+                    console.log(results);
                   }
                 }
               }}

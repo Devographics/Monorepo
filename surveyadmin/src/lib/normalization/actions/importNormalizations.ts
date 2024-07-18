@@ -7,7 +7,7 @@ import { getSurveyEditionSectionQuestion } from "../helpers/getSurveyEditionQues
 import { getFormPaths } from "@devographics/templates";
 import { addCustomTokens } from "./tokens/addCustomTokens";
 import get from "lodash/get";
-import { NormalizationMetadata } from "../types";
+import { NormalizationMetadata } from "@devographics/types";
 
 export interface ImportNormalizationArgs {
   surveyId: string;

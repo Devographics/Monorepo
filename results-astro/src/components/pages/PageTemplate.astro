@@ -1,30 +1,29 @@
 ---
 import PageHeader from "@/components/pages/PageHeader.astro";
-// import PageFooter from 'core/pages/PageFooter'
-// import { usePageContext } from 'core/helpers/pageContext'
-// import BlockWrapper from 'core/blocks/block/BlockWrapper'
-//
-//     const context = usePageContext()
-//     const { showTitle = true, is_hidden = false } = context
-//     return (
-//         <>
-//             {showTitle && <PageHeader />}
-//             <main className="Page__Contents">
-//                 {context.blocks &&
-//                     context.blocks.map((block, i) => (
-//                         <BlockWrapper key={`${block.id}_${i}`} block={block} index={i} />
-//                     ))}
-//             </main>
-//             {!is_hidden && <PageFooter />}
-//         </>
-//     )
-// }
+import PageFooter from "@/components/pages/PageFooter.astro";
+import BlockDemo from "@/components/block/BlockDemo";
 interface Props {
   showTitle?: boolean;
 }
+const { i18n, pageDefinition } = Astro.locals;
+const { is_hidden, blocks } = pageDefinition;
 const { showTitle } = Astro.props;
 ---
 
-<main>
+<Fragment>
   {showTitle && <PageHeader />}
-</main>
+  <main class="Page__Contents">
+    {
+      !!blocks?.length ? (
+        blocks.map((block, i) => {
+          // TODO: explore how to properly use client:only to quickly migrate React code that uses Styled Components
+          // /!\ we can't use client:only on an Astro component
+          return <BlockDemo block={block} index={i} />;
+        })
+      ) : (
+        <p>Empty page</p>
+      )
+    }
+  </main>
+  {!is_hidden && <PageFooter />}
+</Fragment>

@@ -10,12 +10,12 @@ import { useEntities } from 'core/helpers/entities'
 import { getItemLabel } from 'core/helpers/labels'
 import { StringTranslator } from 'core/types'
 import { useI18n } from '@devographics/react-i18n'
-import { BlockDefinition } from 'core/types/index'
+import { BlockVariantDefinition } from 'core/types/index'
 import { MetricId } from 'core/helpers/units'
 
 export const getChartData = (
     data: ToolRatiosQuestionData,
-    block: BlockDefinition,
+    block: BlockVariantDefinition,
     options: {
         allEntities: Entity[]
         units: RatiosUnits
@@ -132,7 +132,7 @@ const CustomTooltip = (props: CustomTooltipProps) => {
 
 interface RankingChartProps {
     units: MetricId
-    block: BlockDefinition
+    block: BlockVariantDefinition
     data: ToolRatiosQuestionData
     i18nNamespace?: string
 }

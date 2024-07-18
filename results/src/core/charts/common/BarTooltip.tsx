@@ -130,7 +130,7 @@ const BarTooltip = props => {
             {isFreeformData && (
                 <span>
                     {' '}
-                    <T k="charts.freeform_data" />
+                    <T k="charts.freeform_data_indicator" />
                 </span>
             )}
             :&nbsp;

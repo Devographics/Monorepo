@@ -18,7 +18,8 @@ export const fetchAllLocalesMetadata = async (options?: FetcherFunctionOptions) 
         fetchFunction: async () => {
             const result = await fetchGraphQLApi({
                 query,
-                key
+                key,
+                cache: "force-cache"
             })
             return result.locales
         },
@@ -42,7 +43,8 @@ export const fetchAllLocalesIds = async (options?: FetcherFunctionOptions) => {
         fetchFunction: async () => {
             const result = await fetchGraphQLApi<{ locales: Array<LocaleDef> }>({
                 query,
-                key
+                key,
+                cache: "default"
             })
             return result?.locales.map(l => l.id) || []
         }

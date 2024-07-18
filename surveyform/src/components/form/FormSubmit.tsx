@@ -10,10 +10,14 @@ import Link from "next/link";
 import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { useState } from "react";
 import Button from "react-bootstrap/esm/Button";
-import { getSectioni18nIds } from "~/i18n/survey";
+import { getSectionTokens } from "~/i18n/survey";
 import { FormLayoutProps } from "./FormLayout";
 import { useFormPropsContext } from "./FormPropsContext";
 import { useFormStateContext } from "./FormStateContext";
+
+//  
+
+import { T } from "@devographics/react-i18n";
 
 interface FormSubmitProps extends FormLayoutProps {
   path: string;
@@ -64,7 +68,7 @@ export const FormSubmit = (props: FormLayoutProps) => {
           <SubmitButton
             {...props}
             type="next"
-            intlId={getSectioni18nIds({ section: nextSection }).title}
+            intlId={getSectionTokens({ section: nextSection }).title}
             path={nextPath}
           />
         )}
@@ -80,7 +84,7 @@ export const FormSubmit = (props: FormLayoutProps) => {
           <SubmitButton
             {...props}
             type="previous"
-            intlId={getSectioni18nIds({ section: previousSection }).title}
+            intlId={getSectionTokens({ section: previousSection }).title}
             path={getEditionSectionPath({
               ...pathProps,
               number: sectionNumber - 1,
@@ -110,11 +114,11 @@ const SubmitButton = (props: SubmitButtonProps) => {
   const isFinished =
     sectionNumber === edition.sections.length && type === "next";
 
-  const sectionName = <FormattedMessage id={intlId} defaultMessage={intlId} />;
+  const sectionName = <T token={intlId} />;
   const contents = (
     <>
       <span className="sr-only">
-        <FormattedMessage id={`general.${type}_section`} />
+        <T token={`general.${type}_section`} />
       </span>
       {type === "previous" ? (
         <>

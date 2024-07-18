@@ -8,6 +8,10 @@ import AddToList from "~/components/reading_list/AddToList";
 import OptionLabel from "./OptionLabel";
 import { FollowUps } from "../inputs/experience/Followup2";
 
+//  
+
+import { T } from "@devographics/react-i18n";
+
 interface FormOptionProps extends FormInputProps {
   option: OptionMetadata;
   isNA?: boolean;
@@ -30,7 +34,7 @@ export const FormOption = (props: FormOptionProps) => {
 
   const optionDescription = intl.formatMessage({
     id: i18n.description,
-  });
+  })?.t;
 
   const { clean: label } = useOptionTitle({ question, option });
 
@@ -65,17 +69,14 @@ const OptionDescription = (props: FormOptionProps) => {
 
   const i18nDescription = intl.formatMessage({
     id: i18n.description,
-  });
+  })?.t;
 
   const entity = option?.entity;
   // const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
   const entityDescription = null;
 
   return i18nDescription ? (
-    <FormattedMessage
-      className="form-option-description"
-      id={i18n.description}
-    />
+    <T className="form-option-description" token={i18n.description} />
   ) : entityDescription ? (
     <span
       className="form-option-description"

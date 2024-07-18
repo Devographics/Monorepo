@@ -7,7 +7,7 @@ import { AllQuestionData, ExplorerData } from '@devographics/types'
 // import Selector from './Selector'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getAxisString, getAxisSegments, runQuery } from './data'
-import { BlockDefinition } from 'core/types/index'
+import { BlockVariantDefinition } from 'core/types/index'
 import last from 'lodash/last'
 import {
     MOBILE_BREAKPOINT_WIDTH,
@@ -24,7 +24,7 @@ import { useLocation } from '@reach/router'
 import { useI18n } from '@devographics/react-i18n'
 import { useWindowDimensions } from './helpers'
 import { useEntities } from 'core/helpers/entities'
-import { getBlockQuery } from 'core/helpers/queries'
+import { getBlockQuery } from 'core/queries/queries'
 import { getFieldLabel } from 'core/filters/helpers'
 import { useAllFilters } from 'core/charts/hooks'
 import { FilterItem } from 'core/filters/types'
@@ -34,7 +34,7 @@ const DataExplorerBlock = ({
     block,
     data: defaultData
 }: {
-    block: BlockDefinition
+    block: BlockVariantDefinition
     data: ExplorerData
 }) => {
     // console.log(block)

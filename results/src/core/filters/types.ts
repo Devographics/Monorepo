@@ -1,5 +1,6 @@
 import React from 'react'
 import { QuestionMetadata } from '@devographics/types'
+import { OrderOptions } from 'core/charts/common2/types'
 
 export interface CustomizationDefinition {
     options: CustomizationOptions
@@ -17,31 +18,44 @@ export type CustomizationOptions = {
     name?: string
     showDefaultSeries?: boolean
     enableYearSelect?: boolean
+    mergeOtherBuckets?: boolean
     mode?: SupportedMode
     supportedModes?: SupportedMode[]
     queryOnLoad?: boolean
     // if true these filters will not trigger a fetch() call
     preventQuery?: boolean
+    cutoff?: number
+    cutoffType?: 'count' | 'percent'
+    limit?: number
+    sort?: string
+    order?: OrderOptions
 }
 
 export type CustomizationFiltersSeries = {
     year?: number
     conditions: CustomizationFiltersCondition[]
+    isDefault?: boolean
 }
 
 export type CustomizationFiltersCondition = {
     sectionId: string
     fieldId: string
-    operator: OperatorEnum
+    operator: OptionsOperatorEnum | NumericOperatorEnum
     value: FilterValue
 }
 
 export type Operator = 'eq' | 'in' | 'nin'
 
-export enum OperatorEnum {
+export enum OptionsOperatorEnum {
     EQ = 'eq',
     IN = 'in',
     NIN = 'nin'
+}
+
+export enum NumericOperatorEnum {
+    EQ = 'eq',
+    LT = 'lt',
+    GT = 'gt'
 }
 
 export type FilterItem = QuestionMetadata

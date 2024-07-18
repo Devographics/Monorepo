@@ -40,7 +40,7 @@ const cutoffMargin = 2;
  * @returns
  */
 export const FormComponentCheckboxGroup = (
-  props: FormInputProps<string[] | number[]>
+  props: FormInputProps<string[] | number[]>,
 ) => {
   const { value, edition, question } = props;
   const { response } = useFormStateContext();
@@ -64,7 +64,7 @@ export const FormComponentCheckboxGroup = (
 
   if (!options_) {
     throw new Error(
-      `Question ${question.id} does not have any options defined.`
+      `Question ${question.id} does not have any options defined.`,
     );
   }
 
@@ -139,7 +139,7 @@ export const FormComponentCheckboxGroup = (
               setShowMore(true);
             }}
           >
-            {intl.formatMessage({ id: "forms.more_options" })}
+            {intl.formatMessage({ id: "forms.more_options" })?.t}
           </Button>
         )}
         {allowOther && (!enableCutoff || showMore) && (
@@ -173,7 +173,7 @@ const Checkbox = (
     hasValue: boolean;
     hasReachedLimit: boolean;
     value: Array<string | number>;
-  }
+  },
 ) => {
   const {
     index,

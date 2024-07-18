@@ -14,12 +14,32 @@ import Details from "../ui/Details";
 import { CommonNormalizationProps } from "./NormalizeQuestion";
 import { usePresets } from "./hooks";
 import without from "lodash/without";
+import { NormTokenAction } from "./NormTokenAction";
 
 const EMPTY_TAG = "EMPTY_TAG";
 
 type Sort = "alphabetical" | "matches";
 
 type Token = Entity & { tag: string; matchCount: number };
+
+const TokensTrigger = (props) => {
+  const { tokenFilter, question } = props;
+  return (
+    <ModalTrigger
+      isButton={true}
+      className="button-ghost"
+      label={`🏷️ Tokens… ${tokenFilter ? `[${tokenFilter.join(",")}]` : ""}`}
+      tooltip="View entity tokens for current question"
+      header={
+        <span>
+          Tokens for <code>{question.id}</code>
+        </span>
+      }
+    >
+      <Tokens {...props} />
+    </ModalTrigger>
+  );
+};
 
 const Tokens = ({
   survey,
@@ -31,12 +51,14 @@ const Tokens = ({
   isButton = true,
   setVariant,
   allAnswers,
+  setShowModal,
 }: CommonNormalizationProps & {
   isButton?: boolean;
+  setShowModal: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [showModal, setShowModal] = useState(false);
   const [sort, setSort] = useState<Sort>("alphabetical");
   const [filterQuery, setFilterQuery] = useState("");
+  // const [showContents`, setShowContents] = useState(true);
 
   const questionObject = getQuestionObject({
     survey,
@@ -81,34 +103,22 @@ const Tokens = ({
     usePresets({ edition, question });
 
   const { disallowedTokenIds } = question;
+
   return (
-    <ModalTrigger
-      isButton={true}
-      className="button-ghost"
-      label={`🏷️ Tokens… ${tokenFilter ? `(${tokenFilter.length})` : ""}`}
-      tooltip="View entity tokens for current question"
-      header={
-        <span>
-          Tokens for <code>{question.id}</code>
-        </span>
-      }
-      showModal={showModal}
-      setShowModal={setShowModal}
-    >
-      <div>
-        {disallowedTokenIds && (
-          <p>
-            ⚠️ Ignored tokens:{" "}
-            {disallowedTokenIds.map((token) => (
-              <code key={token}>{token}</code>
-            ))}
-          </p>
-        )}
-        <MatchTagsDetails questionObject={questionObject} />
-        <PatternsDetails />
-        <ExportDetails allTokens={allTokens} />
-        <p className="tokens-actions">
-          {/* <button
+    <div>
+      {disallowedTokenIds && (
+        <p>
+          ⚠️ Ignored tokens:{" "}
+          {disallowedTokenIds.map((token) => (
+            <code key={token}>{token}</code>
+          ))}
+        </p>
+      )}
+      <MatchTagsDetails questionObject={questionObject} />
+      <PatternsDetails />
+      <ExportDetails allTokens={allTokens} />
+      <p className="tokens-actions">
+        {/* <button
             className="button-ghost"
             onClick={(e) => {
               e.preventDefault();
@@ -117,100 +127,98 @@ const Tokens = ({
           >
             Enable All
           </button> */}
-          <div className="tokens-actions-sort">
-            <button
-              className="button-ghost"
-              onClick={(e) => {
-                e.preventDefault();
-                setSort("alphabetical");
-              }}
-            >
-              Sort Alphabetically
-            </button>
+        <div className="tokens-actions-sort">
+          <button
+            className="button-ghost"
+            onClick={(e) => {
+              e.preventDefault();
+              setSort("alphabetical");
+            }}
+          >
+            Sort Alphabetically
+          </button>
 
-            <button
-              className="button-ghost"
-              onClick={(e) => {
-                e.preventDefault();
-                setSort("matches");
-              }}
-            >
-              Sort by Matches
-            </button>
+          <button
+            className="button-ghost"
+            onClick={(e) => {
+              e.preventDefault();
+              setSort("matches");
+            }}
+          >
+            Sort by Matches
+          </button>
 
-            <div className="control control-search">
-              <input
-                type="search"
-                id="search"
-                placeholder="Filter…"
-                value={filterQuery}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setFilterQuery(value);
-                  // setFilterQueryDebounced(value);
-                }}
-              />
-            </div>
+          <div className="control control-search">
+            <input
+              type="search"
+              id="search"
+              placeholder="Filter…"
+              value={filterQuery}
+              onChange={(e) => {
+                const value = e.target.value;
+                setFilterQuery(value);
+                // setFilterQueryDebounced(value);
+              }}
+            />
           </div>
-          <div className="token-actions-deselect">
-            <button
-              className="button-ghost"
-              onClick={(e) => {
-                e.preventDefault();
-                setTokenFilter(null);
-              }}
-            >
-              Clear All Filters
-            </button>
+        </div>
+        <div className="token-actions-deselect">
+          <button
+            className="button-ghost"
+            onClick={(e) => {
+              e.preventDefault();
+              setTokenFilter(null);
+            }}
+          >
+            Clear All Filters
+          </button>
 
-            <button
-              className="button-ghost"
-              onClick={(e) => {
-                e.preventDefault();
-                setEnabledPresets([]);
+          <button
+            className="button-ghost"
+            onClick={(e) => {
+              e.preventDefault();
+              setEnabledPresets([]);
+            }}
+          >
+            Clear Shortlist
+          </button>
+        </div>
+      </p>
+      <table className="tokens-table">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Matches</th>
+            <th>Patterns</th>
+            {/* <th>Other Tags</th> */}
+            <th>Filter By</th>
+            <th>Shortlist</th>
+          </tr>
+        </thead>
+        <tbody>
+          {allTokens.map((token, index) => (
+            <Row
+              key={`${token.id}_${index}`}
+              {...{
+                token,
+                allTokens,
+                index,
+                entities,
+                tokenFilter,
+                setTokenFilter,
+                setVariant,
+                setShowModal,
+                enabledPresets,
+                setEnabledPresets,
+                disallowedTokenIds,
               }}
-            >
-              Clear Shortlist
-            </button>
-          </div>
-        </p>
-        <table className="tokens-table">
-          <thead>
-            <tr>
-              <th>Token</th>
-              <th>Matches</th>
-              <th>Patterns</th>
-              {/* <th>Other Tags</th> */}
-              <th>Filter By</th>
-              <th>Shortlist</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allTokens.map((token, index) => (
-              <Row
-                key={`${token.id}_${index}`}
-                {...{
-                  token,
-                  allTokens,
-                  index,
-                  entities,
-                  tokenFilter,
-                  setTokenFilter,
-                  setVariant,
-                  setShowModal,
-                  enabledPresets,
-                  setEnabledPresets,
-                  disallowedTokenIds,
-                }}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </ModalTrigger>
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
-
 interface RowProps {
   token: Token;
   allTokens: Token[];
@@ -293,12 +301,12 @@ const Row = (props: RowProps) => {
 
           <div>
             {parentId && "↳ "}
-            <MainId
+            <NormTokenAction
               id={id}
               setTokenFilter={setTokenFilter}
-              setVariant={setVariant}
-              setShowModal={setShowModal}
-              isDisallowed={disallowedTokenIds.includes(id)}
+              onClick={() => {
+                setShowModal(false);
+              }}
             />
           </div>
         </td>
@@ -364,36 +372,6 @@ const Row = (props: RowProps) => {
   );
 };
 
-const MainId = ({
-  id,
-  setTokenFilter,
-  setShowModal,
-  setVariant,
-  isDisallowed,
-}) => (
-  <a
-    data-tooltip={`Filter by ${id}`}
-    href="#"
-    className={`id id-main`}
-    onClick={(e) => {
-      e.preventDefault();
-      setTokenFilter([id]);
-      setVariant("normalized");
-      setShowModal(false);
-    }}
-  >
-    {isDisallowed ? (
-      <span>
-        ⚠️ <s>{id}</s>
-      </span>
-    ) : (
-      id
-    )}
-  </a>
-);
-
-export default Tokens;
-
 const MatchTagsDetails = ({ questionObject }) => (
   <Details label="About Question Match Tags">
     <ul>
@@ -445,7 +423,7 @@ const PatternsDetails = ({}) => (
           <code>[p]</code>: Match partial word fragments.
         </li>
         <li>
-          <code>[l]</code>: List of items to match in any order.
+          <code>[l]</code>: Comma-separated list of items to match in any order.
         </li>
         <li>
           <code>[e]</code>: Match entire answer exactly.
@@ -473,3 +451,5 @@ const ExportDetails = ({ allTokens }) => (
     />
   </Details>
 );
+
+export default TokensTrigger;

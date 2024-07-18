@@ -35,12 +35,20 @@ const getEntityFragment = () => `entity {
     name
     nameHtml
     nameClean
+    alias
+    description
+    descriptionHtml
+    descriptionClean
     id
+    entityType
     example {
       label
       language
       code
       codeHighlighted
+    }
+    avatar {
+      url
     }
     homepage {
       url
@@ -90,8 +98,6 @@ const getFacetFragment = (addBucketsEntities?: boolean) => `
     facetBuckets {
         id
         count
-        percentageQuestion
-        percentageSurvey
         percentageBucket
         hasInsufficientData
         ${addBucketsEntities ? getEntityFragment() : ''}
@@ -123,6 +129,7 @@ query {
                     domain
                     id
                     name
+                    hashtag
                     emailOctopus {
                         listId
                     }
@@ -183,6 +190,7 @@ query {
                                     name
                                     nameClean
                                     nameHtml
+                                    alias
                                 }
                                 options {
                                     ${getEntityFragment()}
@@ -293,6 +301,7 @@ const getBucketFragment = (options: {
                     id
                     percentageQuestion
                     percentageSurvey
+                    isFreeformData
                     hasInsufficientData
                     ${addBucketsEntities ? getEntityFragment() : ''}
                     ${facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
@@ -329,7 +338,8 @@ export const getDefaultQuery = ({
         addArgumentsPlaceholder = false,
         addBucketFacetsPlaceholder = false,
         addQuestionEntity = false,
-        addQuestionComments = false
+        addQuestionComments = false,
+        addGroupedBuckets = false
     } = queryOptions
 
     const queryArgsString = addArgumentsPlaceholder
@@ -355,12 +365,16 @@ surveys {
                 percentageSurvey
                 total
               }
+              average
+              percentiles {
+                p50
+              }
               buckets {
                 ${getBucketFragment({
                     addBucketFacetsPlaceholder,
                     addBucketsEntities,
-                    queryArgs,
-                    addGroupedBuckets: true
+                    addGroupedBuckets,
+                    queryArgs
                 })}
               }
             }
@@ -427,11 +441,6 @@ Note: query can be either a query name, or the full query text
 export const getQuery = ({ query: query_, queryOptions, queryArgs }) => {
     let queryContents
     const query = query_
-
-    if (queryOptions.isLog) {
-        // when logging we can leave out enableCache parameter
-        delete queryArgs?.parameters?.enableCache
-    }
 
     const { editionId, questionId } = queryOptions
     const queryName = getQueryName({ editionId, questionId })

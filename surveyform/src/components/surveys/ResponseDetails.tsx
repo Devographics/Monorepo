@@ -1,9 +1,12 @@
+
 import {
   EditionMetadata,
   ResponseDocument,
   ResultsStatusEnum,
 } from "@devographics/types";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+
+
+import { T } from "@devographics/react-i18n"
 
 export const ResponseDetails = ({
   edition,
@@ -19,7 +22,7 @@ export const ResponseDetails = ({
       {resultsUrl && resultsStatus === ResultsStatusEnum.PUBLISHED && (
         <p>
           <a href={resultsUrl}>
-            <FormattedMessage id="general.survey_results" />
+            <T token="general.survey_results" />
           </a>
         </p>
       )}
@@ -33,20 +36,20 @@ const ResponseMetadata = ({ response }: { response: ResponseDocument }) => {
     <>
       <p>
         {updatedAt ? (
-          <FormattedMessage
-            id="general.last_modified_on"
+          <T
+            token="general.last_modified_on"
             values={{ updatedAt: new Date(updatedAt)?.toDateString() }}
           />
         ) : (
-          <FormattedMessage
-            id="general.started_on"
+          <T
+            token="general.started_on"
             values={{ createdAt: new Date(createdAt)?.toDateString() }}
           />
         )}
       </p>
       {typeof completion !== "undefined" && (
         <p>
-          <FormattedMessage id="general.completion" values={{ completion }} />
+          <T token="general.completion" values={{ completion }} />
         </p>
       )}
     </>

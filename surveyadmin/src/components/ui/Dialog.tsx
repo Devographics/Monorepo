@@ -8,6 +8,7 @@ export const Dialog = ({
   header,
   onOpen,
   onClose,
+  className = "",
 }: {
   children;
   showModal: boolean;
@@ -15,6 +16,7 @@ export const Dialog = ({
   header?;
   onOpen?: () => void;
   onClose?: () => void;
+  className?: string;
 }) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const articleRef = useRef<HTMLElement>(null);
@@ -35,7 +37,7 @@ export const Dialog = ({
   }, [showModal]);
 
   return showModal ? (
-    <dialog open ref={dialogRef}>
+    <dialog open ref={dialogRef} className={className}>
       <article ref={articleRef}>
         {header && (
           <header>
@@ -52,7 +54,7 @@ export const Dialog = ({
             {header}
           </header>
         )}
-        <div>{children}</div>
+        {children}
       </article>
     </dialog>
   ) : null;

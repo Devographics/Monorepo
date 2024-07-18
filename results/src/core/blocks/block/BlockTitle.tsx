@@ -1,3 +1,4 @@
+import './BlockTitle.scss'
 import React, { memo, useState } from 'react'
 import styled, { css } from 'styled-components'
 import last from 'lodash/last'
@@ -6,12 +7,14 @@ import { useI18n } from '@devographics/react-i18n'
 import { usePageContext } from 'core/helpers/pageContext'
 import SharePermalink from 'core/share/SharePermalink'
 import BlockCompletionIndicator from 'core/blocks/block/BlockCompletionIndicator'
-import { getBlockTitle, useBlockTitle } from 'core/helpers/blockHelpers'
+import { getBlockKey, getBlockTitle, useBlockTitle } from 'core/helpers/blockHelpers'
 import BlockSponsor from 'core/blocks/block/sponsor_chart/BlockSponsor'
 import { useEntities } from 'core/helpers/entities'
-import { BlockDefinition } from 'core/types'
+import { BlockVariantDefinition } from 'core/types'
+import { BlockQuestionTooltip } from './BlockQuestion'
+import { FreeformIndicator } from 'core/charts/common2'
 
-const BlockTitleContents = ({ block }: { block: BlockDefinition }) => {
+const BlockTitleContents = ({ block }: { block: BlockVariantDefinition }) => {
     const title = useBlockTitle({ block })
     return <Title dangerouslySetInnerHTML={{ __html: title }} />
 }
@@ -30,6 +33,8 @@ const BlockTitle = ({
     setView,
     units,
     setUnits
+}: {
+    block: BlockVariantDefinition
 }) => {
     const { id, entity } = block
     const completion =
@@ -61,6 +66,7 @@ const BlockTitle = ({
         units,
         setUnits
     }
+    const isFreeformQuestion = ['multiple_options2_freeform'].includes(block.template)
 
     return (
         <>
@@ -68,11 +74,17 @@ const BlockTitle = ({
                 <LeftPart>
                     <BlockTitleText className="BlockTitleText">
                         <SharePermalink block={block} />
-                        <BlockTitleContents block={block} />
-                        {completion && !pageContext.isCapturing && (
-                            <BlockCompletionIndicator completion={completion} />
-                        )}
-                        {!isCapturing && enableChartSponsorships && <BlockSponsor block={block} />}
+                        <div className="block-title-contents" data-key={getBlockKey({ block })}>
+                            <BlockTitleContents block={block} />
+                            {/* {completion && !pageContext.isCapturing && (
+                                <BlockCompletionIndicator completion={completion} />
+                            )} */}
+                            {/* <BlockQuestionTooltip block={block} /> */}
+                            {/* {isFreeformQuestion && <FreeformIndicator showLabel={false} />} */}
+                            {!isCapturing && enableChartSponsorships && (
+                                <BlockSponsor block={block} />
+                            )}
+                        </div>
                     </BlockTitleText>
                     {/* <Popover trigger={<More />}>
                         <PopoverContents>
@@ -150,7 +162,6 @@ const BlockTitleText = styled.h3`
 `
 
 const LeftPart = styled.div`
-    margin-bottom: ${spacing(0.5)};
     @media ${mq.small} {
     }
 

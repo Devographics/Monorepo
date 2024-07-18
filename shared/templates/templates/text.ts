@@ -5,13 +5,13 @@ import {
     QuestionTemplateOutput,
     TemplateFunction
 } from '@devographics/types'
-import { checkHasId } from '../helpers'
+import { checkHasId, isToolTemplate } from '../helpers'
 
 export const text: TemplateFunction = options => {
     const { edition, section } = options
     const question = checkHasId(options)
 
-    const sectionSegment = section.template === 'tool' ? 'tools_others' : section.slug || section.id
+    const sectionSegment = section.slug || section.id
     const questionSegment = question.id
 
     // TODO: currently surveyform looks in "response" for all fields,

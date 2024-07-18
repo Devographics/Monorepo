@@ -1,0 +1,35 @@
+// .chart-heading-facet {
+//     border-bottom: 1px solid var(--borderColor);
+//     padding-right: 10px;
+// }
+// .chart-controls {
+//     display: flex;
+//     gap: 5px;
+// }
+// .chart-control-button {
+//     flex: 1;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     border: 1px solid var(--borderColor);
+//     background: var(--backgroundColor);
+//     /* border: 1px solid ${props => props.theme.colors.border}; */
+//     border-radius: 3px 3px 0 0;
+//     padding: 10px;
+//     cursor: pointer;
+//     margin-bottom: -1px;
+//     font-size: 0.9rem;
+//     &[data-state='active'] {
+//         border-bottom: 0;
+//     }
+//     &[data-state='inactive'] {
+//         opacity: 0.6;
+//         background: var(--backgroundBackgroundColor);
+//     }
+//     &:hover {
+//         color: var(--linkColor);
+//         svg {
+//             color: var(--linkColor);
+//         }
+//     }
+// }
