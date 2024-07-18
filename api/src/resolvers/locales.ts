@@ -101,11 +101,12 @@ export const getTranslation = async ({
     localeId: string
     context: RequestContext
 }) => {
+    console.log(`// translation resolver for key ${key} [${localeId}]`)
     const locales = await loadOrGetLocales()
     const locale = locales.find(l => l.id === localeId)
     if (!locale) {
         throw new Error(`getTranslation error: could not find locale with id ${localeId}`)
     }
-    const t = locale.strings?.reverse().find((s: any) => s.key === key)
+    const t = locale.strings?.toReversed().find((s: any) => s.key === key)
     return t
 }

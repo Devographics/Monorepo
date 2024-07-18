@@ -19,7 +19,13 @@ import { rootDir } from './rootDir'
 // import { cacheAvatars } from './avatars'
 
 import { AppName } from '@devographics/types'
-import { EnvVar, getConfig, getEnvVar, setAppName } from '@devographics/helpers'
+import {
+    EnvVar,
+    getConfig,
+    getEnvVar,
+    parseEnvVariableArray,
+    setAppName
+} from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
 import { getSurveysLoadMethod, loadOrGetSurveys } from './load/surveys'
 
@@ -102,6 +108,8 @@ const start = async () => {
 
     const localeIds = getLocaleIds()
 
+    const translationContexts = parseEnvVariableArray(process.env.LOCALE_CONTEXTS)
+
     console.log(
         `---------------------------------------------------------------
 • 📄 env file = ${envPath}
@@ -111,6 +119,9 @@ const start = async () => {
 • 🌐 locales = ${
             localeIds.length === 0 ? 'all available' : localeIds.join(', ')
         } (load method: ${getLocalesLoadMethod()})
+• 🌐 contexts = ${
+            translationContexts.length === 0 ? 'all available' : translationContexts.join(', ')
+        }
 • 🙎 entities = ${getEntitiesLoadMethod()}
 ---------------------------------------------------------------`
     )
