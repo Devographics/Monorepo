@@ -491,3 +491,25 @@ export const getMetadata = async ({ surveyId, editionId, graphql }) => {
     }
     return { currentSurvey, currentEdition }
 }
+
+/**
+ * Example:
+ * APOLLO_SERVER_CORS_WHITELIST=http://localhost:5000,https://www.my-client.org
+ * => parse the string and makes it an array
+ * @param {*} variable Env array variables, with values separated by a comma (spaces allowed)
+ */
+export const parseEnvVariableArray = (variable = '') => {
+    if (!variable) return []
+    return variable.split(',').map(s => s.trim())
+}
+
+export const getTranslationContexts = ({
+    surveyId,
+    editionId
+}: {
+    surveyId: string
+    editionId: string
+}) => {
+    const translationContexts = parseEnvVariableArray(process.env.DEFAULT_LOCALE_CONTEXTS)
+    return [...translationContexts, surveyId, editionId]
+}

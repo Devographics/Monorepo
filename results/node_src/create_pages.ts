@@ -7,7 +7,8 @@ import {
     createBlockPages,
     runPageQueries,
     getLoadMethod,
-    getMetadata
+    getMetadata,
+    getTranslationContexts
 } from './helpers'
 import { getSendOwlData } from './sendowl'
 // @ts-ignore
@@ -79,6 +80,8 @@ export const createPagesSingleLoop = async ({
         const editionId = process.env.EDITIONID
         if (!editionId) throw new Error(`Must provide "EDITIONID" env variable`)
 
+        const translationContexts = getTranslationContexts({ surveyId, editionId })
+
         const buildInfo = {
             USE_FAST_BUILD,
             localeCount: 0,
@@ -86,7 +89,7 @@ export const createPagesSingleLoop = async ({
             pageCount: 0,
             blocks: [],
             blockCount: 0,
-            translationContexts: config.translationContexts
+            translationContexts
         }
 
         const cachingMethods = allowedCachingMethods()
@@ -107,7 +110,8 @@ export const createPagesSingleLoop = async ({
 • 📁 caching methods = ${cachingMethodsString}
 • ⏱️ fast build = ${USE_FAST_BUILD}
 • 📖 surveys load method = ${getLoadMethod()}
-• 🌐 locales = ${localeIds.length > 0 ? localeIds.join(', ') : 'all available'}`
+• 🌐 locales = ${localeIds.length > 0 ? localeIds.join(', ') : 'all available'}
+• 🌐 contexts = ${translationContexts.join(', ')}`
         )
 
         // load metadata
@@ -132,7 +136,7 @@ export const createPagesSingleLoop = async ({
             locales = await getLocalesWithStrings({
                 localeIds,
                 graphql,
-                contexts: config.translationContexts
+                contexts: translationContexts
                 //editionId
             })
         } catch (err) {
