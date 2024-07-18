@@ -8,15 +8,14 @@ import { DebugZone } from "./DebugZone";
 import { publicConfig } from "~/config/public";
 import { enableTranslatorMode } from "@devographics/i18n";
 
-
-import { T } from "@devographics/react-i18n"
-
+import { T } from "@devographics/react-i18n";
 
 type LinkItemProps = {
-  component?: React.ReactNode, showIf?: (args: { currentUser: any }) => boolean,
-  id?: string,
-  href?: string
-}
+  component?: React.ReactNode;
+  showIf?: (args: { currentUser: any }) => boolean;
+  id?: string;
+  href?: string;
+};
 const links: Array<LinkItemProps> = [
   {
     component:
@@ -66,7 +65,15 @@ const links: Array<LinkItemProps> = [
     showIf: () => publicConfig.isDev || publicConfig.isTest,
     // @ts-ignore
     id: "Translator mode",
-    component: <button onClick={() => { enableTranslatorMode() }}>Translator mode</button>
+    component: (
+      <button
+        onClick={() => {
+          enableTranslatorMode();
+        }}
+      >
+        Translator mode
+      </button>
+    ),
   },
 ];
 
@@ -89,12 +96,7 @@ const LinkWrapper = ({ children }) => (
   <span className="footer-link-item">{children}</span>
 );
 
-const LinkItem = ({
-  id,
-  href,
-  showIf,
-  component,
-}: LinkItemProps) => {
+const LinkItem = ({ id, href, showIf, component }: LinkItemProps) => {
   const { currentUser } = useCurrentUser();
   if (showIf && !showIf({ currentUser })) {
     return null;

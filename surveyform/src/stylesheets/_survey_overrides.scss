@@ -98,10 +98,20 @@ These styles will only be active for specific surveys and/or editions
   }
 }
 
+.translators {
+  border: none;
+  padding: 0;
+}
 .translators-locales {
   display: flex;
   justify-content: center;
 }
 .translators-help {
   display: none;
+}
+
+.footer {
+  .footer-link-item:has(span[data-dg-tk="general.help_us_translate"]) {
+    display: none;
+  }
 }

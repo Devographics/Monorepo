@@ -78,6 +78,9 @@
   display: flex;
   align-items: center;
   gap: $spacing;
+  height: 50px;
+  width: 50px;
+  position: relative;
 }
 .section-nav-item-label {
   display: block;
@@ -94,8 +97,8 @@
   background: var(--bg-color) !important;
   padding: 0 !important;
   border-radius: 100%;
-  height: 50px;
-  width: 50px;
+  height: 100%;
+  width: 100%;
   display: grid !important;
   place-items: center;
   &-label {
@@ -124,7 +127,11 @@
 
 .section-nav-hidden {
   > .section-nav-inner > button {
-    background-image: linear-gradient(to right, hsl(0 0% 100% / .2) calc(1% * var(--completion-percentage)), transparent 0)
+    background-image: linear-gradient(
+      to right,
+      hsl(0 0% 100% / 0.2) calc(1% * var(--completion-percentage)),
+      transparent 0
+    );
   }
 }
 
@@ -178,7 +185,7 @@
     place-items: center;
     &,
     &:hover {
-      position: static;
+      // position: static;
     }
   }
   .section-nav-item-label {
@@ -186,7 +193,7 @@
     transform-origin: bottom left;
     white-space: nowrap;
     top: -22px;
-    left: calc(100% - 15px);
+    left: calc(100% + 15px);
     position: absolute;
     font-size: $smallish-font;
   }
