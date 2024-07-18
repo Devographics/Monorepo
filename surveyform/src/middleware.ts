@@ -44,9 +44,9 @@ async function getLang(pathname: string) {
   if (
     // it really looks like a locale (be careful to avoid using ambiguous params like filenames)
     maybeLocale(firstParam) ||
-    // known locale
+    // or it's a known locale
     localesIds.includes(firstParam) ||
-    // matches a known country
+    // or it matches a known country
     (firstParam.length === 2 &&
       localesIds.map((l) => l.slice(0, 2)).includes(firstParam))
   ) {
@@ -65,13 +65,13 @@ function isFile(pathname: string) {
 async function localize(request: NextRequest): Promise<NextResponse> {
   const langFromPath = await getLang(request.nextUrl.pathname);
   /**
-   * NOTE: we have similar code in route handlers that produce localized responses
    * Priorities:
-   * 1. locale cookie
-   * 2. lang already in URL
+   * 1. lang already in URL
+   * 2. locale cookie : user can change locale cookie via the locale selector menu
    * 3. accept-language header
    *
-   * User can change locale cookie via the locale selector menu
+   * This order may affect the LocaleSwitcher implementation,
+   * be careful with how it handle URL based redirection when the cookie is changed
    */
   const cookieLocale = request.cookies.get(LOCALE_COOKIE_NAME)?.value;
   const pathLocale = langFromPath;
@@ -79,7 +79,7 @@ async function localize(request: NextRequest): Promise<NextResponse> {
     request.headers.get("accept-language")
   );
   const defaultLocale = "en-US";
-  const locale = cookieLocale || pathLocale || headerLocale || defaultLocale;
+  const locale = pathLocale || cookieLocale || headerLocale || defaultLocale;
 
   // get the closest valid locale
   const validLocale = await getClosestLocale(locale);
