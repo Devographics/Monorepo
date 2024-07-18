@@ -4,14 +4,16 @@ const { survey, surveys, locale } = Astro.props
 const otherSurveys = surveys.filter(s => s.id !== survey.id)
 ---
 
-<div class="other-surveys">
-  <div class="other-surveys-inner">
+<header class="other-surveys">
+  <nav class="other-surveys-inner">
     <T locale={locale} k="homepage.other_surveys" />
+    <ul class="other-surveys-list">
     {otherSurveys.map(
-    ({name, domain})=> (<a class="other-survey-link" href={`https://${domain}`}>{name}</a>)
+    ({name, domain})=> (<li class="other-survey-item"><a class="other-survey-link" href={`https://${domain}`}>{name}</a></li>)
     )}
-  </div>
-</div>
+    </ul>
+  </nav>
+</header>
 
 <style lang="scss">
   .other-surveys {
@@ -24,13 +26,23 @@ const otherSurveys = surveys.filter(s => s.id !== survey.id)
   .other-surveys-inner {
     width: 100%;
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
 
     @media screen and (max-width: 666px) {
       font-size: var(--small-font);
+      flex-wrap: wrap;
     }
   }
 
-  .other-survey-link {
+  .other-surveys-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0;
+  }
+
+  .other-survey-item {
     display: inline-block;
     margin-left: var(--doublespacing);
 
@@ -38,4 +50,5 @@ const otherSurveys = surveys.filter(s => s.id !== survey.id)
       margin-left: var(--halfspacing);
     }
   }
+
 </style>
