@@ -62,6 +62,13 @@ function strikeThrough(text) {
         .join('')
 }
 
+class FatalError extends Error {
+    constructor(error) {
+        super(error)
+        this.fatal = true
+    }
+}
+
 /**
  * @see createPages https://www.gatsbyjs.com/docs/how-to/querying-data/using-gatsby-without-graphql/#the-approach-fetch-data-and-use-gatsbys-createpages-api
  */
@@ -140,8 +147,7 @@ export const createPagesSingleLoop = async ({
                 //editionId
             })
         } catch (err) {
-            err.fatal = true
-            throw err
+            throw new FatalError(err)
         }
 
         buildInfo.localeCount = locales.length
