@@ -857,6 +857,11 @@
 .form-input-number {
   max-width: 100px;
 }
+.form-input-number-wrapper {
+  display: flex;
+  align-items: center;
+  gap: $spacing/2;
+}
 
 .invalid-feedback {
   color: var(--text-color-error);

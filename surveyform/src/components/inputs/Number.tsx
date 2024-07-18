@@ -4,7 +4,7 @@ import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
-import { FormattedMessage } from "../common/FormattedMessage";
+import { DynamicT } from "@devographics/react-i18n";
 
 const checkIsValid = (rawValue) =>
   !isNaN(Number(rawValue)) && Number(rawValue) >= 0;
@@ -19,6 +19,8 @@ export const FormComponentNumber = (props: FormInputProps) => {
     updateCurrentValues,
     readOnly,
   } = props;
+
+  const { units } = question;
 
   const value = value_ as number;
 
@@ -48,20 +50,24 @@ export const FormComponentNumber = (props: FormInputProps) => {
 
   return (
     <FormItem {...props} isInvalid={!checkIsValid(localValue)}>
-      <FormControl
-        // type="number"
-        type="text"
-        inputMode="numeric"
-        pattern="[0-9]*"
-        value={localValue}
-        onChange={handleChangeDebounced}
-        onBlur={handleChange}
-        disabled={readOnly}
-        className="form-input-number"
-      />
+      <div className="form-input-number-wrapper">
+        <FormControl
+          // type="number"
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          value={localValue}
+          onChange={handleChangeDebounced}
+          onBlur={handleChange}
+          disabled={readOnly}
+          className="form-input-number"
+        />
+        {units && <DynamicT token={`general.numeric_input.unit.${units}`} />}
+      </div>
+
       {!checkIsValid(localValue) && (
         <FormControl.Feedback type="invalid">
-          <FormattedMessage id="general.numeric_input.invalid_input" />
+          <DynamicT token="general.numeric_input.invalid_input" />
         </FormControl.Feedback>
       )}
     </FormItem>
