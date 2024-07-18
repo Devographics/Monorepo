@@ -510,6 +510,7 @@ export const getTranslationContexts = ({
     surveyId: string
     editionId: string
 }) => {
-    const translationContexts = parseEnvVariableArray(process.env.DEFAULT_LOCALE_CONTEXTS)
-    return [...translationContexts, surveyId, editionId]
+    const baseContexts = ['common', 'results', 'countries']
+    const extraTranslationContexts = parseEnvVariableArray(process.env.CUSTOM_LOCALE_CONTEXTS)
+    return [...baseContexts, ...extraTranslationContexts, surveyId, editionId]
 }

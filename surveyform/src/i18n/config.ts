@@ -8,9 +8,14 @@ import { publicConfig } from "~/config/public";
 
 export const defaultLocaleId = "en-US";
 
+const baseContexts = ["common", "surveys", "accounts"];
+
 // i18n contexts common to all surveys and editions
 export const getCommonContexts = () => {
-  return parseEnvVariableArray(getEnvVar(EnvVar.DEFAULT_LOCALE_CONTEXTS));
+  const customContexts = parseEnvVariableArray(
+    getEnvVar(EnvVar.CUSTOM_LOCALE_CONTEXTS)
+  );
+  return [...baseContexts, ...customContexts];
 };
 
 // i18n contexts for a survey

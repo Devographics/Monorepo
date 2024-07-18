@@ -63,10 +63,10 @@
   usedBy:
       - api
 
-- id: DEFAULT_LOCALE_CONTEXTS
+- id: CUSTOM_LOCALE_CONTEXTS
   optional: true
-  description: List of default locale contexts to load
-  example: common,surveys,accounts
+  description: List of custom locale contexts to load
+  example: tdresults
   usedBy:
       - surveyform
       - results

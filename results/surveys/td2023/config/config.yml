@@ -1,5 +1,3 @@
-translationContexts: [common, results, countries, tdquestions, tdresults, td2023]
-
 # baseUrl: http://localhost:8001
 baseUrl: http://localhost:9000
 sitemap: ../../../.logs-tokyodev/flat_sitemap.yml
