@@ -104,11 +104,18 @@ const BreadcrumbSegment = ({
       <details role="list" className="dropdown">
         <summary aria-haspopup="listbox"></summary>
         <ul role="listbox">
-          {items.map(({ id, path }) => (
-            <li key={id}>
-              <Link href={path!}>{id}</Link>
-            </li>
-          ))}
+          {items.map(({ id, path }) => {
+            const isCurrent = id === currentItem.id;
+            return (
+              <li key={id}>
+                {isCurrent ? (
+                  <strong>{id}</strong>
+                ) : (
+                  <Link href={path!}>{id}</Link>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </details>
     </li>
