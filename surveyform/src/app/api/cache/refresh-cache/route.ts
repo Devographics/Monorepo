@@ -28,15 +28,18 @@ export async function GET(req: NextRequest) {
   } else {
     // @see WatchedItems type in API
 
-    console.log(`💾 Refreshing Redis & in-memory cache…`);
-
-    const enOnly = req.nextUrl.searchParams.get("en-only");
-
     const items = req.nextUrl.searchParams.getAll("items");
     if (!items.length) {
       // reset everything is no items are provided
       items.push("surveys", "locales", "entities");
     }
+
+    console.log(
+      `💾 Refreshing Redis & in-memory cache… (items: ${items.join()})`
+    );
+
+    const enOnly = req.nextUrl.searchParams.get("en-only");
+
     if (items.includes("surveys")) {
       await refreshSurveysCache({ target: "production" });
     }
