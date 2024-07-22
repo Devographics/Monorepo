@@ -40,6 +40,7 @@ export const getEditionSitemapQuery = ({ editionId }: { editionId: string }) => 
             hashtag
             emailOctopus {
               listId
+              submitUrl
             }
             partners {
               id

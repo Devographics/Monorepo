@@ -17,6 +17,7 @@ query SurveysMetadataQuery {
       imageUrl
       emailOctopus {
         listId
+        submitUrl
       }
       partners {
         id

@@ -47,6 +47,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
             hashtag
             emailOctopus {
               listId
+              submitUrl
             }
             partners {
               id
