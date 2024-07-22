@@ -19,6 +19,7 @@ export interface SurveyConfig {
 
 export interface EmailOctopusData {
     listId: string
+    submitUrl: string
 }
 
 export interface SponsorItem {
