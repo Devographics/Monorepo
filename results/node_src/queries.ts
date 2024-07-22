@@ -132,6 +132,7 @@ query {
                     hashtag
                     emailOctopus {
                         listId
+                        submitUrl
                     }
                     partners {
                         name

@@ -6,22 +6,16 @@ import Button from './Button'
 import styled from 'styled-components'
 import { spacing } from 'core/theme'
 
-const getEOConfig = (listId: string) => ({
-    emailOctopusUrl: `https://emailoctopus.com/lists/${listId}/members/embedded/1.3/add`,
-    emailOctopusSiteKey: '6LdYsmsUAAAAAPXVTt-ovRsPIJ_IVhvYBBhGvRV6',
-    emailOctopusCode: 'hpc4b27b6e-eb38-11e9-be00-06b4694bee2a'
-})
-
 export default function Newsletter({ locale }: { locale?: any }) {
     const { currentSurvey } = usePageContext()
-    const listId = currentSurvey?.emailOctopus?.listId
+    const submitUrl = currentSurvey?.emailOctopus?.submitUrl
 
     const [email, setEmail] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<{ message: string } | null>(null)
     const [success, setSuccess] = useState<{ message: string } | null>(null)
 
-    const config = getEOConfig(listId)
+    // const config = getEOConfig(listId)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const email = e.target.value
@@ -34,9 +28,9 @@ export default function Newsletter({ locale }: { locale?: any }) {
         console.log('SUBMITTING')
 
         e.preventDefault()
-        const response = await fetch(config.emailOctopusUrl, {
+        const response = await fetch(submitUrl, {
             method: 'POST',
-            body: `field_0=${encodeURIComponent(email)}`,
+            body: `field_0=${encodeURIComponent(email)}&hpc4b27b6e-eb38-11e9-be00-06b4694bee2a=`,
             headers: {
                 Accept: '*/*',
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -73,7 +67,7 @@ export default function Newsletter({ locale }: { locale?: any }) {
                     loading={loading}
                     handleSubmit={handleSubmit}
                     handleChange={handleChange}
-                    {...config}
+                    submitUrl={submitUrl}
                 />
             )}
         </div>
@@ -85,29 +79,20 @@ const NewsletterForm = ({
     loading,
     handleSubmit,
     handleChange,
-    emailOctopusUrl,
-    emailOctopusSiteKey,
-    emailOctopusCode
+    submitUrl
 }: //locale
 {
     email: string
     loading?: boolean
     handleSubmit?: any
     handleChange?: any
-    emailOctopusUrl: string
-    emailOctopusSiteKey: string
-    emailOctopusCode: string
+    submitUrl: string
 }) => {
     const { getString } = useI18n()
 
     return (
         <div className="newsletter-form">
-            <Form_
-                method="post"
-                action={emailOctopusUrl}
-                data-sitekey={emailOctopusSiteKey}
-                onSubmit={handleSubmit}
-            >
+            <Form_ method="post" action={submitUrl} onSubmit={handleSubmit}>
                 <Input_
                     className="newsletter-email"
                     id="field_0"
@@ -117,13 +102,6 @@ const NewsletterForm = ({
                     onChange={handleChange}
                     value={email}
                     disabled={loading}
-                />
-                <input
-                    type="text"
-                    name={emailOctopusCode}
-                    tabIndex={-1}
-                    autoComplete="nope"
-                    style={{ display: 'none' }}
                 />
                 <Button type="submit" name="subscribe" className="newsletter-button button">
                     <T k="newsletter.submit" />
