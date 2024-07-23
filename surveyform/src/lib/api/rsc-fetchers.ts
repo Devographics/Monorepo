@@ -3,7 +3,6 @@ import { unstable_cache } from "next/cache";
 import {
   fetchAllLocalesIds,
   fetchAllLocalesMetadata,
-  fetchLocaleConverted,
 } from "@devographics/fetch";
 import { AppName } from "@devographics/types";
 import { getCommonContexts, safeLocaleIdFromParams } from "~/i18n/config";
@@ -17,16 +16,15 @@ import { rscLocaleIdContext } from "~/i18n/rsc-context";
  * (eg fetching ["general"] then ["general", "survey"])
  * @deprecated replace by the new version
  */
-export const rscLocale = cache((options: any) => fetchLocaleConverted(options));
 export const rscLocaleNew = cache(
   async (options: {
     localeId: string;
     contexts: Array<string>;
   }): // FIXME: the type is not properly inferred at time of writing, despite being correct in the package
-  Promise<
-    | { locale: LocaleParsed; error?: undefined }
-    | { error: Error; locale?: undefined }
-  > => {
+    Promise<
+      | { locale: LocaleParsed; error?: undefined }
+      | { error: Error; locale?: undefined }
+    > => {
     const { locale, error } = (await getLocaleDict(options)) as
       | { locale: LocaleParsed; error?: undefined }
       | { locale?: undefined; error: Error };

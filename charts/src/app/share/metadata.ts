@@ -2,8 +2,6 @@ import { getBlockMeta } from '@/block/metadata'
 import {
     fetchEditionSitemap,
     fetchAllLocalesIds,
-    fetchEditionMetadata,
-    fetchLocaleConverted,
     fetchLocale
 } from '@devographics/fetch'
 import { ChartParams } from './typings'

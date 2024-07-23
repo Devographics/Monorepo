@@ -14,7 +14,6 @@ import {
 } from "~/i18n/config";
 import {
   rscAllLocalesMetadata,
-  rscLocale,
   rscLocaleFromParams,
 } from "~/lib/api/rsc-fetchers";
 // import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";

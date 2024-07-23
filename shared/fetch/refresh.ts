@@ -2,7 +2,6 @@ import {
     fetchAllLocalesMetadata,
     fetchEditionMetadata,
     fetchLocale,
-    fetchLocaleConverted,
     fetchSurveysMetadata
 } from './functions'
 import { FetcherFunctionOptions } from './types'
@@ -91,13 +90,6 @@ export const refreshLocalesCache = async args => {
         })
         refreshedCacheKeys.push(cacheKey!)
 
-        // note: get rid of this once surveyform uses normal locale format
-        const { cacheKey: cacheKeyConverted } = await fetchLocaleConverted({
-            ...options,
-            localeId: locale.id,
-            contexts: getCommonContexts()
-        })
-        refreshedCacheKeys.push(cacheKeyConverted!)
         // end
 
         // survey-specific context
@@ -109,15 +101,6 @@ export const refreshLocalesCache = async args => {
                 contexts: [survey.id]
             })
             refreshedCacheKeys.push(cacheKey!)
-
-            // note: get rid of this once surveyform uses normal locale format
-            const { cacheKey: cacheKeyConverted } = await fetchLocaleConverted({
-                ...options,
-                localeId: locale.id,
-                contexts: [survey.id]
-            })
-            refreshedCacheKeys.push(cacheKeyConverted!)
-            // end
         }
     }
 

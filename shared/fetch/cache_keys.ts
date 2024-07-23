@@ -40,13 +40,6 @@ export const localeCacheKey = (
     }
 ) => `${getAppName(options)}__${options.localeId}__${options.contexts.join('_')}`
 
-export const localeConvertedCacheKey = (
-    options: CacheKeyOptions & {
-        localeId: string
-        contexts: string[]
-    }
-) => `${getAppName(options)}__${options.localeId}__${options.contexts.join('_')}__converted`
-
 export const allEntitiesCacheKey = (options?: CacheKeyOptions) =>
     `${getAppName(options)}__allEntities`
 
@@ -59,6 +52,5 @@ export const questionDataCacheKey = (
         questionId: string
     }
 ) =>
-    `${getAppName(options)}__${options.surveyId}__${options.editionId}__${options.sectionId}__${
-        options.questionId
+    `${getAppName(options)}__${options.surveyId}__${options.editionId}__${options.sectionId}__${options.questionId
     }__questionData`
