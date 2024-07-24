@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
   if (key !== process.env.SECRET_KEY) {
     return NextResponse.json({ error: "invalid_key" });
   } else {
-    console.log(`💾 Refreshing Redis & in-memory cache…`);
+    console.log(`💾 Refreshing in-memory cache…`);
     flushInMemoryCache();
     return NextResponse.json({ data: { result: "ok" } });
   }

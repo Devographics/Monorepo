@@ -30,6 +30,7 @@ export const getSurveyParamsTable = (): SurveyParamsTable => ({
     2021: { surveyId: "state_of_css", editionId: "css2021" },
     2022: { surveyId: "state_of_css", editionId: "css2022" },
     2023: { surveyId: "state_of_css", editionId: "css2023" },
+    2024: { surveyId: "state_of_css", editionId: "css2024" },
   },
   "state-of-graphql": {
     2022: { surveyId: "state_of_graphql", editionId: "graphql2022" },
