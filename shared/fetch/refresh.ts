@@ -1,3 +1,4 @@
+import { localeCacheKey, localeWithStringsCacheKey } from './cache_keys'
 import {
     fetchAllLocalesMetadata,
     fetchEditionMetadata,
@@ -52,6 +53,14 @@ export const refreshSurveysCache = async args => {
 // i18n contexts common to all surveys and editions
 export const getCommonContexts = () => ['common', 'surveys', 'accounts']
 
+/**
+ * Refresh Redis cache for locales
+ * 
+ * We do so by computing the keys based on locale list
+ * 
+ * TODO: it might be more robust to issue Redis commands
+ * removing keys based on  a prefix instead
+ */
 export const refreshLocalesCache = async args => {
     const { localeIds, target } = args
     const { data: allSurveys } = await fetchSurveysMetadata()
@@ -83,24 +92,30 @@ export const refreshLocalesCache = async args => {
         console.log(
             `// Refreshing ${locale.id} metadata cache… (${getCommonContexts().join(', ')})`
         )
-        const { cacheKey } = await fetchLocale({
+
+        // Legacy locales loading
+        // remove when this function is not used anymore in surveyform
+        const cacheKey = localeCacheKey({ ...options, localeId: locale.id, contexts: getCommonContexts() }) /*await fetchLocale({
             ...options,
             localeId: locale.id,
             contexts: getCommonContexts()
-        })
+        })*/
         refreshedCacheKeys.push(cacheKey!)
+        // New version
+        refreshedCacheKeys.push(localeWithStringsCacheKey({ ...options, localeId: locale.id, contexts: getCommonContexts() }))
 
         // end
 
         // survey-specific context
         for (const survey of allSurveys) {
             console.log(`// Refreshing ${locale.id} metadata cache… (${survey.id})`)
-            const { cacheKey } = await fetchLocale({
+            const cacheKey = localeCacheKey({ ...options, localeId: locale.id, contexts: [survey.id] }) /*await fetchLocale({
                 ...options,
                 localeId: locale.id,
                 contexts: [survey.id]
-            })
+            })*/
             refreshedCacheKeys.push(cacheKey!)
+            refreshedCacheKeys.push(localeWithStringsCacheKey({ ...options, localeId: locale.id, contexts: getCommonContexts() }))
         }
     }
 

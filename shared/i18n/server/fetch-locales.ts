@@ -7,11 +7,10 @@ import { getLocalesQuery, getLocaleContextQuery, localeWithStringsQuery } from '
 import { logToFile } from '@devographics/debug'
 import { Locale, LocaleParsed, LocaleWithStrings, Translation } from '../typings'
 import {
-    FetchPipelineStep,
-    runFetchPipeline,
     allowedCachingMethods,
     graphqlFetcher,
-    cachedPipeline
+    cachedPipeline,
+    localeWithStringsCacheKey
 } from '@devographics/fetch'
 
 export function removeNull(obj: any): any {
@@ -138,7 +137,7 @@ export async function getLocaleDict({
     localeId: string
     contexts: Array<string>
 }) {
-    const cacheKey = `localeWithStrings_${localeId}_${contexts.sort().join(',')}`
+    const cacheKey = localeWithStringsCacheKey({ localeId, contexts })
     const { data: locale, error } = await cachedPipeline<LocaleWithStrings>({
         cacheKey
     })
