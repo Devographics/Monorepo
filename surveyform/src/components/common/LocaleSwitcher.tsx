@@ -39,6 +39,8 @@ const LocaleSwitcher = () => {
   const switchLocale = useLocaleSwitcher()
   const { locale: currentLocale, allLocales } = useI18n()
 
+  const currentLocaleDef = allLocales.find(l => l.id === currentLocale.id) || currentLocale
+
   const showSwitcher = allLocales.length > 0;
 
   return showSwitcher ? (
@@ -47,8 +49,8 @@ const LocaleSwitcher = () => {
         variant: "default",
       }}
       label={
-        currentLocale?.label ||
-        (currentLocale?.id && <T token={currentLocale?.id} />) ||
+        currentLocaleDef?.label ||
+        (currentLocaleDef?.id && <T token={currentLocaleDef?.id} />) ||
         "Please select a locale"
       }
       id="locale-dropdown"
