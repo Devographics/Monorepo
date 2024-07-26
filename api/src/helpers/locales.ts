@@ -22,7 +22,7 @@ export const resolveAliases = (stringFile: StringFile, localeRawData: RawLocale)
             // look through all stringFiles to find the "real" string being aliased
             let realString
             for (const sf of localeRawData.stringFiles) {
-                const rs = sf.strings.find((ss: TranslationStringObject) => ss.key === s.aliasFor)
+                const rs = sf?.strings?.find((ss: TranslationStringObject) => ss.key === s.aliasFor)
                 if (rs) {
                     realString = rs
                     break
