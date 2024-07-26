@@ -14,7 +14,6 @@ import { rscLocaleIdContext } from "~/i18n/rsc-context";
  * Will cache per localeId and contexts
  * /!\ Will not automatically merge cache if contexts are repeated
  * (eg fetching ["general"] then ["general", "survey"])
- * @deprecated replace by the new version
  */
 export const rscLocaleNew = cache(
   async (options: {

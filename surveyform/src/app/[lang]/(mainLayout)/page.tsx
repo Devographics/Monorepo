@@ -4,11 +4,9 @@ import { RSCFetch } from "~/components/common/RSCFetch";
 
 import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
 
-import { rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
 import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
 import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 import { NextPageParams } from "~/app/typings";
-import { I18nContextProvider } from "@devographics/react-i18n";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
 export const revalidate = DEFAULT_REVALIDATE_S;
@@ -22,21 +20,11 @@ export async function generateStaticParams() {
 
 const IndexPage = async ({ params }: NextPageParams<{ lang: string }>) => {
   setLocaleIdServerContext(params.lang);
-  const { locale, localeId, error } = await rscLocaleFromParams(params);
-  if (error) {
-    return (
-      <div>
-        Can't load translations: <code>{JSON.stringify(error)}</code>
-      </div>
-    );
-  }
   return (
-    <I18nContextProvider locale={locale}>
-      <RSCFetch
-        fetch={async () => rscFetchSurveysMetadata({ shouldThrow: false })}
-        render={({ data: surveys }) => <Surveys surveys={surveys} />}
-      />
-    </I18nContextProvider>
+    <RSCFetch
+      fetch={async () => rscFetchSurveysMetadata({ shouldThrow: false })}
+      render={({ data: surveys }) => <Surveys surveys={surveys} />}
+    />
   );
 };
 

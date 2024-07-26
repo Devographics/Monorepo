@@ -10,6 +10,7 @@ import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import {
   getCommonContexts,
   getEditionContexts,
+  getSurveyContexts,
   safeLocaleIdFromParams,
 } from "~/i18n/config";
 import {
@@ -49,15 +50,17 @@ export default async function SurveyLayout({
 }) {
   setLocaleIdServerContext(params.lang); // Needed for "ServerT"
   const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
-  const i18nContexts = getEditionContexts(edition);
-  // TODO: should we load common contexts here ? They may already be fetched by the common layout ?
   const {
     locale,
     localeId,
     error: localeError,
   } = await rscLocaleFromParams({
     lang: params.lang,
-    contexts: [...i18nContexts, ...getCommonContexts()],
+    contexts: [
+      // TODO: we should have a shared layout between (mainLayout) pages and "survey/[slug]/[year]" that handle locales
+      // so we don't have to reload commonContext translations in the surveys page
+      ...getCommonContexts(),
+      ...getSurveyContexts(edition.survey), ...getEditionContexts(edition)],
   });
   if (localeError) {
     return (
