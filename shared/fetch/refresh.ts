@@ -2,7 +2,6 @@ import { localeCacheKey, localeWithStringsCacheKey } from './cache_keys'
 import {
     fetchAllLocalesMetadata,
     fetchEditionMetadata,
-    fetchLocale,
     fetchSurveysMetadata
 } from './functions'
 import { FetcherFunctionOptions } from './types'

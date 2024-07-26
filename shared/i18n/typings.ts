@@ -17,9 +17,16 @@ export interface Locale {
     strings?: Translation[]
     /**
      * TODO: this value was not present in the type def here but is expected by Popover
+     * and LocaleSwitcher
      */
     label?: string
+    translators?: Array<string>;
+    completion?: number;
+    repo?: string;
+    translatedCount?: number;
+    totalCount?: number;
 }
+
 /**
  * Locale with strings as an array
  * as returned by the API

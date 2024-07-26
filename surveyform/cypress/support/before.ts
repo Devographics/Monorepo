@@ -14,6 +14,4 @@ before(() => {
     );
     window.localStorage.setItem("debug", debugLevel);
   }
-  console.info("Setting locale cookie to en-US");
-  cy.setCookie(/*"locale"*/ "NEXT_LOCALE", "en-US");
 });

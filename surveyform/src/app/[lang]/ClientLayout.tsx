@@ -16,7 +16,6 @@ import React from "react";
 
 import { ErrorBoundary } from "~/components/error";
 import Layout from "~/components/common/Layout";
-import type { LocaleDef } from "~/i18n/typings";
 import { SWRConfig } from "swr";
 import { KeydownContextProvider } from "~/components/common/KeydownContext";
 import { UserMessagesProvider } from "~/components/common/UserMessagesContext";
@@ -26,14 +25,14 @@ import { Referrer } from "~/components/common/ReferrerStorage";
 import { ApiData, apiRoutes } from "~/lib/apiRoutes";
 import { UserWithResponses } from "~/lib/responses/typings";
 import PlausibleProvider from "next-plausible";
-import { LocaleParsed } from "@devographics/i18n";
+import { type LocaleParsed, type Locale } from "@devographics/i18n";
 import { I18nContextProvider } from "@devographics/react-i18n";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
   localeId: string;
   localeStrings: LocaleParsed;
-  locales: Array<LocaleDef>;
+  locales: Array<Locale>;
   // When on a specific survey
   children: React.ReactNode;
   params: { lang: string };

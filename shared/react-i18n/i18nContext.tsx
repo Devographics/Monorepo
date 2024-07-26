@@ -1,7 +1,6 @@
 "use client"
-import React, { createContext, useContext, useMemo } from 'react'
-import { LocaleParsed, LocaleWithStrings, makeTranslationFunction, makeTranslatorFunc, type Locale, type StringTranslator } from '@devographics/i18n'
-import { LocaleDef } from '~/i18n/typings'
+import React, { createContext, useCallback, useContext, useMemo } from 'react'
+import { LocaleParsed, makeTranslationFunction, makeTranslatorFunc, type Locale, type StringTranslator } from '@devographics/i18n'
 
 export const I18nContext = createContext<I18nContextType | null>(null)
 
@@ -39,6 +38,10 @@ export const I18nContextProvider = ({
     const getString = makeTranslatorFunc(mergedLocale)
     const { t, getMessage } = makeTranslationFunction(mergedLocale)
 
+    const localizePath = useCallback((pathname: string) => {
+        return `/${mergedLocale.id}${pathname}`
+    }, [mergedLocale.id])
+
     // useMemo because the value is an object
     const value = useMemo(
         () => ({
@@ -48,7 +51,8 @@ export const I18nContextProvider = ({
             //@ts-ignore
             translate: (...args) => getString(...args)?.t,
             t,
-            getMessage
+            getMessage,
+            localizePath
 
         }),
         [mergedLocale, getString]
@@ -59,13 +63,14 @@ export const I18nContextProvider = ({
 type I18nContextType = {
     locale: LocaleParsed
     /** For the locale switcher */
-    allLocales: Array<LocaleDef>,
+    allLocales: Array<Locale>,
     /** @deprecated use "t" or "getMessage" */
     getString: StringTranslator
     /** @deprecated  use "t" or "getMessage" */
     translate: (key: string, opts?: { values?: Record<string, any> }, fallback?: boolean) => string,
     t: ReturnType<typeof makeTranslationFunction>["t"],
     getMessage: ReturnType<typeof makeTranslationFunction>["getMessage"],
+    localizePath: (pathname: string) => string
 }
 
 export const useTeapot = () => {

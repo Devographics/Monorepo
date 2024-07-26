@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getClosestLocale } from "~/i18n/data/locales";
-// import { fetchLocaleStrings } from "~/i18n/db-actions/fetchLocales";
 import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
 import { DetailedErrorObject } from "./validation";
 // import { captureException } from "@sentry/nextjs";
@@ -52,7 +51,6 @@ export class HandlerError extends Error {
     // context is important to get the minimum necessary data
     // we might want to add a timemout and return the default message if this request is too slow
     /// const localeId = handlerLocaleId(request)
-    // await fetchLocaleStrings({ localeId: validLocale, contexts: ["errors"] })
 
     // TODO: then apply the translation: factor code from surveyform/src/app/[lang]/(mainLayout)/layout.tsx
     // that creates a StringsRegistry sever side

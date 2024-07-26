@@ -11,11 +11,11 @@ import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import { T, useI18n } from "@devographics/react-i18n"
 
 const Navigation = ({ edition }: { edition?: EditionMetadata }) => {
-  const { locale } = useI18n()
+  const { locale, localizePath } = useI18n()
   return (
     <div className="nav-wrapper">
       <div className="nav-surveys">
-        <Link className="nav-surveys-link" href={routes.home.href}>
+        <Link className="nav-surveys-link" href={localizePath(routes.home.href)}>
           <T token="nav.surveys" />
         </Link>
         {edition && (

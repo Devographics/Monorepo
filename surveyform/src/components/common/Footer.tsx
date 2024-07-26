@@ -8,7 +8,7 @@ import { DebugZone } from "./DebugZone";
 import { publicConfig } from "~/config/public";
 import { enableTranslatorMode } from "@devographics/i18n";
 
-import { T } from "@devographics/react-i18n";
+import { T, useI18n } from "@devographics/react-i18n";
 
 type LinkItemProps = {
   component?: React.ReactNode;
@@ -97,6 +97,7 @@ const LinkWrapper = ({ children }) => (
 );
 
 const LinkItem = ({ id, href, showIf, component }: LinkItemProps) => {
+  const { localizePath } = useI18n()
   const { currentUser } = useCurrentUser();
   if (showIf && !showIf({ currentUser })) {
     return null;
@@ -118,7 +119,7 @@ const LinkItem = ({ id, href, showIf, component }: LinkItemProps) => {
           <T token={id} fallback={id} />
         </a>
       ) : (
-        <Link href={href}>
+        <Link href={localizePath(href)}>
           <T token={id} fallback={id} />
         </Link>
       )}
