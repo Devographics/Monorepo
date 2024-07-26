@@ -91,15 +91,21 @@ export const refreshLocalesCache = async args => {
         console.log(
             `// Refreshing ${locale.id} metadata cache… (${getCommonContexts().join(', ')})`
         )
-
         refreshedCacheKeys.push(localeWithStringsCacheKey({ ...options, localeId: locale.id, contexts: getCommonContexts() }))
-
         // end
 
         // survey-specific context
+        // KEEP in sync with surveyform layouts that fetch the locales
         for (const survey of allSurveys) {
-            console.log(`// Refreshing ${locale.id} metadata cache… (${survey.id})`)
-            refreshedCacheKeys.push(localeWithStringsCacheKey({ ...options, localeId: locale.id, contexts: getCommonContexts() }))
+            for (const edition of survey.editions) {
+                console.log(`// Refreshing ${locale.id} metadata cache… (${survey.id})`)
+                refreshedCacheKeys.push(localeWithStringsCacheKey({
+                    ...options, localeId: locale.id, contexts: [
+                        ...getCommonContexts(), survey.id, edition.id
+                    ]
+                }))
+
+            }
         }
     }
 

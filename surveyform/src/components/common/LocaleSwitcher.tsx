@@ -44,6 +44,7 @@ const LocaleSwitcher = () => {
   const showSwitcher = allLocales.length > 0;
 
   return showSwitcher ? (
+    // @ts-ignore
     <Dropdown
       buttonProps={{
         variant: "default",
@@ -58,7 +59,7 @@ const LocaleSwitcher = () => {
       //@ts-ignore TODO: why onSelect doesn't exist
       onSelect={(index) => {
         if (!index) {
-          index = 0;
+          index = "0";
         }
         const newLocale = allLocales[index];
         switchLocale(newLocale)
