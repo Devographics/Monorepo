@@ -1,4 +1,4 @@
-import { localeCacheKey, localeWithStringsCacheKey } from './cache_keys'
+import { localeWithStringsCacheKey } from './cache_keys'
 import {
     fetchAllLocalesMetadata,
     fetchEditionMetadata,
@@ -92,15 +92,6 @@ export const refreshLocalesCache = async args => {
             `// Refreshing ${locale.id} metadata cache… (${getCommonContexts().join(', ')})`
         )
 
-        // Legacy locales loading
-        // remove when this function is not used anymore in surveyform
-        const cacheKey = localeCacheKey({ ...options, localeId: locale.id, contexts: getCommonContexts() }) /*await fetchLocale({
-            ...options,
-            localeId: locale.id,
-            contexts: getCommonContexts()
-        })*/
-        refreshedCacheKeys.push(cacheKey!)
-        // New version
         refreshedCacheKeys.push(localeWithStringsCacheKey({ ...options, localeId: locale.id, contexts: getCommonContexts() }))
 
         // end
@@ -108,12 +99,6 @@ export const refreshLocalesCache = async args => {
         // survey-specific context
         for (const survey of allSurveys) {
             console.log(`// Refreshing ${locale.id} metadata cache… (${survey.id})`)
-            const cacheKey = localeCacheKey({ ...options, localeId: locale.id, contexts: [survey.id] }) /*await fetchLocale({
-                ...options,
-                localeId: locale.id,
-                contexts: [survey.id]
-            })*/
-            refreshedCacheKeys.push(cacheKey!)
             refreshedCacheKeys.push(localeWithStringsCacheKey({ ...options, localeId: locale.id, contexts: getCommonContexts() }))
         }
     }

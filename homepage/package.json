@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "@devographics/fetch": "workspace:^",
+        "@devographics/i18n": "workspace:^",
         "@devographics/helpers": "workspace:^",
         "@devographics/types": "workspace:^",
         "@types/react": "^18.2.45",

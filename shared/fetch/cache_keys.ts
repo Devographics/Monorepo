@@ -47,17 +47,6 @@ export const allLocalesMetadataCacheKey = (options?: CacheKeyOptions) =>
 export const allLocalesIdsCacheKey = (options?: CacheKeyOptions) =>
     `${getAppName(options)}__allLocalesIds`
 
-/**
- * @deprecated Used by deprecated "fetchLocale" method
- * Use the new @devographics/i18n package instead
- */
-export const localeCacheKey = (
-    options: CacheKeyOptions & {
-        localeId: string
-        contexts: string[]
-    }
-) => `${getAppName(options)}__${options.localeId}__${options.contexts.join('_')}`
-
 export const allEntitiesCacheKey = (options?: CacheKeyOptions) =>
     `${getAppName(options)}__allEntities`
 

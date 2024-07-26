@@ -11,6 +11,7 @@
     },
     "dependencies": {
         "@devographics/fetch": "workspace:^1.0.0",
+        "@devographics/i18n": "workspace:^1.0.0",
         "@devographics/helpers": "workspace:^1.0.0",
         "@devographics/types": "workspace:^1.0.0",
         "@picocss/pico": "^1.5.10",
