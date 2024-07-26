@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import QuestionLabel from "../form/QuestionLabel";
 import { getSectionTokens } from "~/i18n/survey";
 import { questionIsCompleted } from "~/lib/responses/helpers";
-import { TokenType, useIntlContext } from "@devographics/react-i18n-legacy";
 import { FormLayoutProps } from "../form/FormLayout";
 import { useFormStateContext } from "../form/FormStateContext";
 import { useFormPropsContext } from "../form/FormPropsContext";
