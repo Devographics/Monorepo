@@ -73,7 +73,9 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
       setReactToChanges,
     } = stateStuff;
 
-    const { allowComment } = question;
+    // const { allowComment } = question;
+    // allow comments on all questions
+    const allowComment = true;
 
     const formPaths = getFormPaths({ edition, question });
     const commentPath = formPaths.comment;
