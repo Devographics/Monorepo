@@ -9,7 +9,7 @@ import { loadAllFromGitHub } from './github'
 let Locales: Locale[] = []
 
 export const allContexts: string[] = []
-export const excludedFiles = ['config.yml', 'crowdin.yml', 'legacy.yml']
+export const excludedFiles = ['config.yml', 'crowdin.yml', 'legacy.yml', 'yaml-lint-config.yml']
 
 export const addToAllContexts = (context: string) => {
     if (!allContexts.includes(context)) {
