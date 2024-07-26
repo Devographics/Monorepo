@@ -105,6 +105,7 @@
 
       - id: variants_hint
         template: hint
+
       - id: yearly_salary
         template: multiple_options2
         takeaway: >
@@ -211,10 +212,14 @@
             url: https://x.com/dawntraoz
 
       - id: reading_list
-        # template: reading_list
         template: multiple_options2
+        parameters:
+            limit: 20
         queryOptions:
             sectionId: reading_list
+        chartOptions:
+            dataFilters: [removeOverLimit, removeNoAnswer]
+            limit: 10
 
       - id: features_resources
         items: [fm-javascript-quiz, fm-javascript-hard-parts-v2]
@@ -244,6 +249,7 @@
         template: tier_list
 
       - id: scatterplot_overview
+        i18nNamespace: tools
         template: scatterplot_overview
 
       # - id: all_sections_tools_cardinality_by_user
