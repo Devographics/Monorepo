@@ -1,10 +1,10 @@
 "use client";
 
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { Dropdown } from "~/components/ui/Dropdown";
 
-import { T } from "@devographics/react-i18n";
+import { T, useI18n } from "@devographics/react-i18n";
 import { useParams, usePathname, useRouter } from "next/navigation";
+import { useCallback } from "react";
 
 /**
  * We suppose the current locale is known and is in the URL
@@ -23,14 +23,23 @@ function replaceLocale(pathname: string, params: any, newLocale: string) {
   return pathname.replace(params.lang, newLocale);
 }
 
-const LocaleSwitcher = () => {
-  const router = useRouter();
-  const params = useParams();
+function useLocaleSwitcher() {
+  // In previous implementations we were using a locale cookies
+  // now we use locales indicated directly in the URL
+  const router = useRouter()
   const pathname = usePathname();
-  const { locales = [] } = useLocaleContext();
-  const { locale: currentLocale, setLocale } = useLocaleContext();
+  const params = useParams();
+  const switchLocale = useCallback((newLocale) => {
+    router.replace(replaceLocale(pathname || "", params, newLocale.id));
+  }, [router, params?.lang])
+  return switchLocale
+}
 
-  const showSwitcher = locales.filter((l) => l.id !== "en-US").length > 0;
+const LocaleSwitcher = () => {
+  const switchLocale = useLocaleSwitcher()
+  const { locale: currentLocale, allLocales } = useI18n()
+
+  const showSwitcher = allLocales.length > 0;
 
   return showSwitcher ? (
     <Dropdown
@@ -49,11 +58,10 @@ const LocaleSwitcher = () => {
         if (!index) {
           index = 0;
         }
-        const locale = locales[index];
-        setLocale(locale.id);
-        router.replace(replaceLocale(pathname || "", params, locale.id));
+        const newLocale = allLocales[index];
+        switchLocale(newLocale)
       }}
-      menuItems={locales.map(({ label, id }) => ({
+      menuItems={allLocales.map(({ label, id }) => ({
         label: id === currentLocale?.id ? `${label} ✓` : label,
       }))}
     />

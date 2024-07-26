@@ -1,7 +1,7 @@
 "use client";
 import Form from "react-bootstrap/Form";
 
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 
 import {
   DbPaths,
@@ -11,9 +11,7 @@ import {
 } from "@devographics/types";
 import without from "lodash/without.js";
 
-import { Button } from "~/components/ui/Button";
 import { CommentTextarea } from "~/components/form/FormComment";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { ExperienceProps } from "./Experience";
 import { FormInputProps } from "~/components/form/typings";
 import { Dispatch, SetStateAction } from "react";
@@ -85,7 +83,7 @@ export const FollowUps = (
   return optionFollowUps ? (
     <fieldset className={`followups-v2 sentiments ${hasValueClass}`}>
       <legend className="sr-only">
-        <FormattedMessage id="followups.description.short" />
+        <T token="followups.description.short" />
       </legend>
       {optionFollowUps.map((followupOption, index) => {
         const isChecked = predefinedFollowupValue?.includes(followupOption.id);
@@ -168,8 +166,8 @@ export const FollowUps = (
               }}
             />
             <span className="sentiment-icon" aria-hidden={true} />
-            <FormattedMessage
-              id={`followups.${followupOption.id}`}
+            <T
+              token={`followups.${followupOption.id}`}
               className="sentiment-label"
             />
           </label>
@@ -202,8 +200,8 @@ export const FollowUpComment = (
     );
   }
 
-  const intl = useIntlContext();
-  const placeholder = intl.formatMessage({ id: `followups.placeholder` })?.t;
+  const { t } = useI18n();
+  const placeholder = t(`followups.placeholder`);
 
   return (
     <div className="form-input-followups-freeform">

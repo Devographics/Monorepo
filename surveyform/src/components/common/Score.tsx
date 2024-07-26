@@ -7,13 +7,12 @@ import get from "lodash/get.js";
 import CountUp from "react-countup";
 import Confetti from "react-confetti";
 import take from "lodash/take.js";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { Button } from "~/components/ui/Button";
 import { EditionMetadata } from "@devographics/types";
 import { USED_PTS, HEARD_PTS } from "~/lib/responses/helpers";
 import useSWR from "swr";
 import { apiRoutes } from "~/lib/apiRoutes";
+import { T, useI18n } from "@devographics/react-i18n";
 
 const Features = ({
   features,
@@ -26,7 +25,7 @@ const Features = ({
   return (
     <div className="score-features">
       <h4 className="score-features-heading">
-        <FormattedMessage id="thanks.learn_more_about" />
+        <T token="thanks.learn_more_about" />
       </h4>{" "}
       <div className="score-features-items">
         {limitedFeatures.map((feature, i) => (
@@ -76,7 +75,7 @@ const Score = ({
   response: any;
   edition: EditionMetadata;
 }) => {
-  const intl = useIntlContext();
+  const { t } = useI18n()
   const containerRef = useRef<HTMLInputElement | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const { known, total, score, usage, awareness } = getKnowledgeScore({
@@ -97,9 +96,9 @@ const Score = ({
   const { survey, questionsUrl } = edition;
   const { name, hashtag } = survey;
 
-  const text = intl.formatMessage({
-    id: "thanks.share_score_message",
-    values: {
+  const text = t(
+    "thanks.share_score_message",
+    {
       // TODO: at the time of writing (09/2023) translations include an additional %
       // need to check if we keep the % around
       score,
@@ -110,8 +109,8 @@ const Score = ({
       awareness_count: awareness.count,
       usage_count: usage.count,
       rank,
-    },
-  })?.t;
+    }
+  )
 
   // if (loading) return <Components.Loading />;
   // if (error) return <span>Could not load entities</span>;
@@ -141,24 +140,24 @@ const Score = ({
     >
       <div className="score-calculation">
         <div className="score-calcuation-heading">
-          <FormattedMessage id="thanks.features_score" />
+          <T token="thanks.features_score" />
         </div>
         <OverlayTrigger
           placement="bottom"
           overlay={
             <Tooltip>
               {usage.count}&times;{USED_PTS}{" "}
-              <FormattedMessage
-                id="thanks.points"
+              <T
+                token="thanks.points"
                 className="score-suffix"
-                defaultMessage="pts."
+                fallback="pts."
               />{" "}
               +&nbsp;
               {awareness.count}&times;{HEARD_PTS}{" "}
-              <FormattedMessage
-                id="thanks.point"
+              <T
+                token="thanks.point"
                 className="score-suffix"
-                defaultMessage="pt."
+                fallback="pt."
               />
             </Tooltip>
           }
@@ -195,16 +194,16 @@ const Score = ({
                 />
               )}
             </div>
-            <FormattedMessage
-              id="thanks.points"
+            <T
+              token="thanks.points"
               className="score-suffix"
-              defaultMessage="pts."
+              fallback="pts."
             />
           </div>
         </OverlayTrigger>
         <div className="score-ratio">
-          <FormattedMessage
-            id="thanks.score_statistics"
+          <T
+            token="thanks.score_statistics"
             values={{
               known,
               total: `<span class="score-number score-number-total">${total}</span>`,
@@ -213,12 +212,11 @@ const Score = ({
               usage_score: `<span class="score-percentage used">${usage.score}%</span>`,
               awareness_total: awareness.total,
               awareness_count: `<span class="score-number score-number-counted heard">${awareness.count}</span>`,
-              awareness_score: `<span class="score-percentage heard" title="${
-                intl.formatMessage({
-                  id: "thanks.score_awareness_explanation",
-                  values: { awareness_total: awareness.total },
-                })?.t
-              }">${awareness.score}%</span>`,
+              awareness_score: `<span class="score-percentage heard" title="${t(
+                "thanks.score_awareness_explanation",
+                { awareness_total: awareness.total }
+              )
+                }">${awareness.score}%</span>`,
               knowledgeRankingFromTop: `<span class="score-number score-rank">${rank}%</span>`,
             }}
           />
@@ -230,7 +228,7 @@ const Score = ({
               text,
             )}`}
           >
-            <FormattedMessage id="thanks.share_on_twitter" />
+            <T token="thanks.share_on_twitter" />
           </Button>
         </div>
         {/* {unknownFeatures.length > 0 && (

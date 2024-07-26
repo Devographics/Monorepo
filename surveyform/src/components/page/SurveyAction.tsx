@@ -19,14 +19,13 @@ import { createResponse } from "./services";
 import type { EditionMetadata } from "@devographics/types";
 import type { ResponseDocument } from "@devographics/types";
 import { useEdition } from "../SurveyContext/Provider";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { ResponseError } from "~/components/error/ResponseError";
 import { ResponseDetails } from "../surveys/ResponseDetails";
 import { clearLocalStorageData, useClientData } from "./hooks";
 
 
 
-import { T } from "@devographics/react-i18n"
+import { T, useI18n } from "@devographics/react-i18n"
 
 /**
  * - Logged in and survey open : create new response
@@ -95,7 +94,7 @@ const SurveyStart = ({
   const [loading, setLoading] = useState(false);
   const { edition } = useEdition();
   const router = useRouter();
-  const { locale } = useLocaleContext();
+  const { locale } = useI18n()
 
   const data = useClientData({
     surveyId: edition.survey.id,
@@ -161,7 +160,7 @@ const EditionLink = ({
   readOnly?: boolean;
 }) => {
   const { edition } = useEdition();
-  const { locale } = useLocaleContext();
+  const { locale } = useI18n()
   return (
     <div className="edition-link">
       <Link

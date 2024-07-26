@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 import { useRouter } from "next/navigation";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components";
@@ -51,12 +51,7 @@ export const DefaultErrorDisplay = ({
 }: DefaultErrorProps) => {
   //const classes = useStyles();
   //const { t } = useTranslation("common");
-  const intl = useIntlContext();
-  // TODO: detect when intl is not set and display the fallback messages instead
-  // console.log(intl);
-  const t = (token) => {
-    return intl.formatMessage({ id: token })?.t;
-  };
+  const { t } = useI18n()  // TODO: detect when intl is not set and display the fallback messages instead
   const router = useRouter();
 
   // const hasAccessToken = !!getAccessToken();
@@ -83,7 +78,7 @@ export const DefaultErrorDisplay = ({
       {/*<WarningIcon fontSize="large" />*/}
       <h2>
         {errorTitle}
-        {error?.name && <span> {}</span>}
+        {error?.name && <span> { }</span>}
       </h2>
       {!!errorMessage && (
         <p>

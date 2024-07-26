@@ -1,7 +1,6 @@
 import { FormInputProps } from "~/components/form/typings";
 import { OptionMetadata } from "@devographics/types";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 import { getOptioni18nIds } from "~/i18n/survey";
 import { useOptionTitle } from "~/lib/surveys/helpers/useOptionTitle";
 import AddToList from "~/components/reading_list/AddToList";
@@ -10,7 +9,6 @@ import { FollowUps } from "../inputs/experience/Followup2";
 
 //  
 
-import { T } from "@devographics/react-i18n";
 
 interface FormOptionProps extends FormInputProps {
   option: OptionMetadata;
@@ -29,12 +27,10 @@ export const FormOption = (props: FormOptionProps) => {
   } = props;
   const { entity } = option;
 
-  const intl = useIntlContext();
+  const { t } = useI18n();
   const i18n = getOptioni18nIds(props);
 
-  const optionDescription = intl.formatMessage({
-    id: i18n.description,
-  })?.t;
+  const optionDescription = t(i18n.description)
 
   const { clean: label } = useOptionTitle({ question, option });
 
@@ -64,18 +60,18 @@ export const FormOption = (props: FormOptionProps) => {
 
 const OptionDescription = (props: FormOptionProps) => {
   const { option } = props;
-  const intl = useIntlContext();
+  const { t, getMessage } = useI18n();
   const i18n = getOptioni18nIds(props);
 
-  const i18nDescription = intl.formatMessage({
-    id: i18n.description,
-  })?.t;
+  const i18nDescription = getMessage(
+    i18n.description
+  )
 
   const entity = option?.entity;
   // const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
   const entityDescription = null;
 
-  return i18nDescription ? (
+  return !i18nDescription.missing ? (
     <T className="form-option-description" token={i18n.description} />
   ) : entityDescription ? (
     <span

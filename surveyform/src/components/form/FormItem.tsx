@@ -13,11 +13,10 @@ import React, {
   RefObject,
 } from "react";
 
-import { TokenType, useIntlContext } from "@devographics/react-i18n-legacy";
 import Form from "react-bootstrap/Form";
 import { FormInputProps } from "./typings";
 import { CommentTrigger, CommentInput } from "./FormComment";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 import { getQuestioni18nIds } from "~/i18n/survey";
 import { useQuestionTitle } from "~/lib/surveys/helpers/useQuestionTitle";
 import { getFormPaths } from "@devographics/templates";
@@ -43,7 +42,6 @@ export interface FormItemProps extends FormInputProps {
   isInvalid?: boolean;
 }
 
-import { T } from "@devographics/react-i18n";
 
 export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
   function FormItem(props: FormItemProps, parentRef) {
@@ -275,7 +273,7 @@ export const FormItemTitle = (
   props: FormItemProps & { section: SectionMetadata }
 ) => {
   const { question, enableReadingList, section } = props;
-  const intl = useIntlContext();
+  const { t } = useI18n();
   const { yearAdded } = question;
 
   const { clean: label } = useQuestionTitle({ section, question });
@@ -289,7 +287,7 @@ export const FormItemTitle = (
           {yearAdded === 2023 && (
             <span
               className="question-label-new"
-              title={intl.formatMessage({ id: "general.newly_added" })?.t}
+              title={t("general.newly_added")}
             >
               {yearAdded}
             </span>
@@ -313,14 +311,14 @@ export const FormItemDescription = (
 ) => {
   const { question } = props;
   const { entity } = question;
-  const intl = useIntlContext();
+  const { t, getMessage } = useI18n();
   const intlIds = getQuestioni18nIds({ ...props });
-  const i18nDescription = intl.formatMessage({ id: intlIds.description });
-  const i18nPrompt = intl.formatMessage({ id: intlIds.prompt });
+  const i18nDescription = getMessage(intlIds.description);
+  const i18nPrompt = getMessage(intlIds.prompt);
 
   const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
 
-  if (i18nPrompt && i18nPrompt.type !== TokenType.KEY_FALLBACK) {
+  if (i18nPrompt && !i18nPrompt.missing) {// .type !== TokenType.KEY_FALLBACK) {
     return (
       <div className="form-item-description">
         <T token={intlIds.prompt} />
@@ -328,7 +326,7 @@ export const FormItemDescription = (
     );
   } else if (
     i18nDescription &&
-    i18nDescription.type !== TokenType.KEY_FALLBACK
+    !i18nDescription.missing //.type !== TokenType.KEY_FALLBACK
   ) {
     return (
       <div className="form-item-description">
@@ -362,8 +360,8 @@ export const FormItemLimit = ({ question }: FormItemProps) => {
 export const FormItemNote = (
   props: FormItemProps & { section: SectionMetadata }
 ) => {
-  const intl = useIntlContext();
+  const { t } = useI18n();
   const intlIds = getQuestioni18nIds({ ...props });
-  const note = intl.formatMessage({ id: intlIds.note })?.t;
+  const note = t(intlIds.note);
   return note ? <T className="form-note" token={intlIds.note} /> : null;
 };

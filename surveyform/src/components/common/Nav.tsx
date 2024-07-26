@@ -5,14 +5,13 @@ import Link from "next/link";
 import { routes } from "~/lib/routes";
 import { EditionMetadata } from "@devographics/types";
 import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
 
 
 
-import { T } from "@devographics/react-i18n"
+import { T, useI18n } from "@devographics/react-i18n"
 
 const Navigation = ({ edition }: { edition?: EditionMetadata }) => {
-  const { locale } = useLocaleContext();
+  const { locale } = useI18n()
   return (
     <div className="nav-wrapper">
       <div className="nav-surveys">

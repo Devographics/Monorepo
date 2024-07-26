@@ -1,5 +1,5 @@
 import { Entity } from "@devographics/types";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T } from "@devographics/react-i18n";
 import { getEntityName } from "~/lib/surveys/helpers/getEntityName";
 import { EntityPopoverTrigger } from "./EntityPopover";
 
@@ -18,7 +18,7 @@ interface EntityLabelDefinition {
   fallback?: any;
   entity?: Entity;
 }
-export interface EntityLabelProps extends EntityLabelDefinition, StringLabel {}
+export interface EntityLabelProps extends EntityLabelDefinition, StringLabel { }
 
 export const EntityLabel = (props: EntityLabelProps) => {
   const { entity } = props;
@@ -62,7 +62,7 @@ export const EntityLabelContents = ({
   } else {
     return (
       <span className="entity-label entity-label-fallback">
-        <FormattedMessage id={intlId || ""} defaultMessage={fallback} />
+        <T token={intlId || ""} fallback={fallback} />
       </span>
     );
   }

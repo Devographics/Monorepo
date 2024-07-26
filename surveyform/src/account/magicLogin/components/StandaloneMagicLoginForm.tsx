@@ -1,12 +1,10 @@
 "use client";
 import { useState, ReactNode } from "react";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { sendMagicLoginEmail } from "~/account/magicLogin/client-actions/sendMagicLoginEmail";
 import { useCurrentUser } from "~/lib/users/hooks";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { FormComponentEmail } from "./FormComponentEmail";
 import { LoadingButton } from "~/components/ui/LoadingButton";
-import { T } from "@devographics/react-i18n";
+import { T, useI18n } from "@devographics/react-i18n";
 
 const GmailMessage = ({
   domain,
@@ -43,8 +41,8 @@ export const StandaloneMagicLoginForm = ({
   editionId,
   redirectTo,
 }: StandaloneMagicLoginFormProps) => {
-  const intl = useIntlContext();
-  const placeholder = intl.formatMessage({ id: `accounts.your_email` })?.t;
+  const { t, locale } = useI18n()
+  const placeholder = t(`accounts.your_email`)
   const [errorMsg, setErrorMsg] = useState("");
   const [successEmail, setSuccessEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -53,7 +51,6 @@ export const StandaloneMagicLoginForm = ({
     if (successEmail) setErrorMsg("");
   };
   const { currentUser } = useCurrentUser();
-  const { locale } = useLocaleContext();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -62,7 +59,7 @@ export const StandaloneMagicLoginForm = ({
     const email = e?.currentTarget?.email?.value;
     if (!email) {
       setErrorMsg(
-        intl.formatMessage({ id: `accounts.magic_link.no_email` })?.t,
+        t(`accounts.magic_link.no_email`),
       );
       return;
     }

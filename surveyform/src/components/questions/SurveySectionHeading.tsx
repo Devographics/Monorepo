@@ -6,7 +6,7 @@ import { TokenType, useIntlContext } from "@devographics/react-i18n-legacy";
 import { FormLayoutProps } from "../form/FormLayout";
 import { useFormStateContext } from "../form/FormStateContext";
 import { useFormPropsContext } from "../form/FormPropsContext";
-import { DynamicT } from "@devographics/react-i18n";
+import { T, useI18n } from "@devographics/react-i18n";
 
 const SurveySectionHeading = ({ section }: FormLayoutProps) => {
   const { stateStuff, response } = useFormStateContext();
@@ -14,7 +14,7 @@ const SurveySectionHeading = ({ section }: FormLayoutProps) => {
 
   const { id, intlId } = section;
   const { itemPositions } = stateStuff;
-  const intl = useIntlContext();
+  const { t, getMessage } = useI18n();
   const [scrollPosition, setScrollPosition] = useState(0);
 
   const handleScroll = () => {
@@ -31,9 +31,9 @@ const SurveySectionHeading = ({ section }: FormLayoutProps) => {
   }, []);
 
   const hasDescription =
-    intl.formatMessage({
-      id: getSectionTokens({ section }).description,
-    }).type !== TokenType.KEY_FALLBACK;
+    !getMessage(
+      getSectionTokens({ section }).description
+    ).missing// type !== TokenType.KEY_FALLBACK;
 
   return (
     <div className="section-heading">
@@ -43,7 +43,7 @@ const SurveySectionHeading = ({ section }: FormLayoutProps) => {
             <span className="section-title-pagenumber">
               {sectionNumber}/{edition.sections.length}
             </span>
-            <DynamicT
+            <T
               className="section-title-label"
               token={getSectionTokens({ section }).title}
               fallback={id}
@@ -52,7 +52,7 @@ const SurveySectionHeading = ({ section }: FormLayoutProps) => {
           </h2>
           {hasDescription && (
             <p className="section-description">
-              <DynamicT
+              <T
                 token={getSectionTokens({ section }).description}
                 fallback={id}
                 values={{ ...edition }}
@@ -114,9 +114,8 @@ const QuestionItem = ({
     <li>
       <a
         href={`#${question.id}`}
-        className={`${isHighlighted ? "highlighted" : "not-highlighted"} ${
-          isCompleted ? "completed" : "not-completed"
-        }`}
+        className={`${isHighlighted ? "highlighted" : "not-highlighted"} ${isCompleted ? "completed" : "not-completed"
+          }`}
       >
         <QuestionLabel
           section={section}

@@ -8,7 +8,7 @@ import sortBy from "lodash/sortBy";
 import { rscCurrentUserWithResponses } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { ResponseDetails } from "~/components/surveys/ResponseDetails";
 import { rscLocaleIdContext } from "~/i18n/rsc-context";
-import { DynamicT } from "@devographics/react-i18n";
+import { T } from "@devographics/react-i18n";
 
 const EditionItem = async ({
   edition,
@@ -42,7 +42,7 @@ const EditionItem = async ({
                   height={200}
                   src={imageUrl}
                   alt={getEditionTitle({ edition })}
-                  //quality={100}
+                //quality={100}
                 />
               )}
             </div>
@@ -77,19 +77,9 @@ const EditionGroup = ({
   return (
     <div className="surveys-group">
       <h3 className="surveys-group-heading">
-        {/**
-         * This is an example of a dynamic token
-         * We can't replace it by a token expression because status is an actual JS variable
-         * that is not known from the build context
-         * But we could filter tokens on the expression "general.[possibleSurveyStatus]_surveys"
-         * (not needed for server translations thogugh)
-         *  */}
-        <DynamicT
+        <T
           token={`general.${SurveyStatusEnum[status].toLowerCase()}_surveys`}
         />
-        {/*<FormattedMessage
-          id={`general.${SurveyStatusEnum[status].toLowerCase()}_surveys`}
-        />*/}
       </h3>
       {sortedEdition.length > 0 ? (
         sortedEdition.map((edition) => (
@@ -101,7 +91,7 @@ const EditionGroup = ({
         ))
       ) : (
         <div className={`surveys-none surveys-no${status}`}>
-          <DynamicT
+          <T
             token={`general.no_${SurveyStatusEnum[
               status
             ].toLowerCase()}_surveys`}
@@ -118,7 +108,6 @@ const Surveys = ({ surveys }: { surveys: Array<SurveyMetadata> }) => {
     .flat();
   return (
     <div className="surveys">
-      {/* FIXME won't load useLocaleContext correctly... <LocaleSelector />*/}
       <EditionGroup allEditions={allEditions} status={SurveyStatusEnum.OPEN} />
       <EditionGroup
         allEditions={allEditions}

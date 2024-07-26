@@ -1,12 +1,11 @@
 import { EntityWithQuestion } from "~/lib/surveys/types";
 import QuestionLabel from "../form/QuestionLabel";
 import EntityLabel from "~/components/common/EntityLabel";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 import OptionLabel from "../form/OptionLabel";
 
 const ItemLabel = ({ entity }: { entity: EntityWithQuestion }) => {
-  const intl = useIntlContext();
-
+  const { t } = useI18n()
   const { question, id } = entity;
   if (!question) {
     return null;

@@ -14,8 +14,6 @@
  */
 import React from "react";
 
-import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
-
 import { ErrorBoundary } from "~/components/error";
 import Layout from "~/components/common/Layout";
 import type { LocaleDef } from "~/i18n/typings";
@@ -97,25 +95,19 @@ export function ClientLayout(props: AppLayoutProps) {
               fallback,
             }}
           >
-            <LocaleContextProvider
-              locales={locales}
-              localeId={localeId}
-              localeStrings={localeStrings}
-            >
-              <I18nContextProvider locale={localeStrings}>
-                {/** @ts-ignore */}
-                <ErrorBoundary
-                  proposeReload={true}
-                  proposeHomeRedirection={true}
-                >
-                  <KeydownContextProvider>
-                    <UserMessagesProvider>
-                      {addWrapper ? <Layout>{children}</Layout> : children}
-                    </UserMessagesProvider>
-                  </KeydownContextProvider>
-                </ErrorBoundary>
-              </I18nContextProvider>
-            </LocaleContextProvider>
+            <I18nContextProvider locale={localeStrings} allLocales={locales}>
+              {/** @ts-ignore */}
+              <ErrorBoundary
+                proposeReload={true}
+                proposeHomeRedirection={true}
+              >
+                <KeydownContextProvider>
+                  <UserMessagesProvider>
+                    {addWrapper ? <Layout>{children}</Layout> : children}
+                  </UserMessagesProvider>
+                </KeydownContextProvider>
+              </ErrorBoundary>
+            </I18nContextProvider>
           </SWRConfig>
         </ErrorBoundary>
         <Referrer />

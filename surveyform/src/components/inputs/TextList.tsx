@@ -4,7 +4,7 @@ import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 import { getQuestioni18nIds } from "~/i18n/survey";
 
 const MemoFormControl = memo(FormControl);
@@ -551,23 +551,22 @@ const TextListItem = memo(function TextListItem({
   onItemKeyDown: any;
   onItemKeyUp: any;
 }) {
-  const intl = useIntlContext();
-
-  const defaultPlaceholder = intl.formatMessage({
-    id: "textlist.placeholder",
-    values: { index: index + 1 },
-  })?.t;
+  const { t } = useI18n()
+  const defaultPlaceholder = t(
+    "textlist.placeholder",
+    { index: index + 1 }
+  );
   const i18n = getQuestioni18nIds({ section, question });
 
-  const questionPlaceholder = intl.formatMessage({
-    id: `${i18n.base}.placeholder`,
-    values: { index: index + 1 },
-  })?.t;
+  const questionPlaceholder = t(
+    `${i18n.base}.placeholder`,
+    { index: index + 1 }
+  );
 
-  const indexPlaceholder = intl.formatMessage({
-    id: `${i18n.base}.placeholder.${index + 1}`,
-    values: { index: index + 1 },
-  })?.t;
+  const indexPlaceholder = t(
+    `${i18n.base}.placeholder.${index + 1}`,
+    { index: index + 1 }
+  );
 
   const placeholder =
     indexPlaceholder || questionPlaceholder || defaultPlaceholder;

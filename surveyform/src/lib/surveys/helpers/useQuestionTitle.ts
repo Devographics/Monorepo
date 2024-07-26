@@ -1,5 +1,5 @@
 import { SectionMetadata, QuestionMetadata } from "@devographics/types";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 import { getQuestioni18nIds } from "~/i18n/survey";
 
 export const useQuestionTitle = ({
@@ -11,20 +11,20 @@ export const useQuestionTitle = ({
   question: QuestionMetadata;
   variant?: "short" | "full";
 }) => {
-  const intl = useIntlContext();
+  const { t, getMessage } = useI18n();
   const { id, entity } = question;
   const i18n = getQuestioni18nIds({ section, question });
 
   const entityNameClean = entity && (entity.nameClean || entity.name);
   const entityNameHtml = entity && (entity.nameHtml || entityNameClean);
 
-  const i18nNameHtmlBase = intl.formatMessage({ id: i18n.base });
-  const i18nNameCleanBase = intl.formatMessage({ id: i18n.base });
+  const i18nNameHtmlBase = getMessage(i18n.base);
+  const i18nNameCleanBase = getMessage(i18n.base);
 
-  const i18nNameHtmlQuestion = intl.formatMessage({ id: i18n.question });
-  const i18nNameCleanQuestion = intl.formatMessage({
-    id: i18n.question,
-  });
+  const i18nNameHtmlQuestion = getMessage(i18n.question);
+  const i18nNameCleanQuestion = getMessage(
+    i18n.question,
+  );
 
   // by default, try to use the "foo.question" field or else default to just "foo"
   let htmlLabel = i18nNameHtmlQuestion.tHtml || i18nNameHtmlBase.tHtml;

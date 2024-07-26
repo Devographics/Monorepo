@@ -1,6 +1,7 @@
 "use client"
 import React, { createContext, useContext, useMemo } from 'react'
 import { LocaleParsed, LocaleWithStrings, makeTranslationFunction, makeTranslatorFunc, type Locale, type StringTranslator } from '@devographics/i18n'
+import { LocaleDef } from '~/i18n/typings'
 
 export const I18nContext = createContext<I18nContextType | null>(null)
 
@@ -13,10 +14,12 @@ export const I18nContext = createContext<I18nContextType | null>(null)
  */
 export const I18nContextProvider = ({
     children,
-    locale
+    locale,
+    allLocales
 }: {
     children: React.ReactNode
     locale: LocaleParsed
+    allLocales: Array<Locale>
 }) => {
     // merge with an existing context upper in the hierarchy
     // TODO: we could have a smarter strategy,
@@ -40,6 +43,7 @@ export const I18nContextProvider = ({
     const value = useMemo(
         () => ({
             locale: mergedLocale,
+            allLocales,
             getString,
             //@ts-ignore
             translate: (...args) => getString(...args)?.t,
@@ -54,6 +58,8 @@ export const I18nContextProvider = ({
 
 type I18nContextType = {
     locale: LocaleParsed
+    /** For the locale switcher */
+    allLocales: Array<LocaleDef>,
     /** @deprecated use "t" or "getMessage" */
     getString: StringTranslator
     /** @deprecated  use "t" or "getMessage" */

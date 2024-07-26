@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
 
@@ -21,7 +21,6 @@ import { getFormPaths } from "@devographics/templates";
 import get from "lodash/get.js";
 import { FollowupData, /*FollowUpComment,*/ FollowUps } from "./Followup2";
 // import { CommentTrigger } from "~/components/form/FormComment";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
 
 import Alert from "react-bootstrap/Alert";
 import { useFormPropsContext } from "~/components/form/FormPropsContext";
@@ -84,7 +83,7 @@ export const CodeExample = ({
   return (
     <div className="code-example">
       <h5 className="code-example-heading">
-        {label || language || <FormattedMessage id="general.code_example" />}{" "}
+        {label || language || <T token="general.code_example" />}{" "}
       </h5>
       <pre>
         <code dangerouslySetInnerHTML={{ __html: codeHighlighted }}></code>
@@ -209,7 +208,7 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
               placement="top"
               overlay={
                 <Tooltip id={`${question.id}_unimplemented_tooltip`}>
-                  <FormattedMessage id="feature.unimplemented.description" />
+                  <T token="feature.unimplemented.description" />
                 </Tooltip>
               }
             >
@@ -217,7 +216,7 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
                 className="feature-unimplemented"
                 aria-describedby={`${question.id}_unimplemented_tooltip`}
               >
-                <FormattedMessage id="feature.unimplemented" />
+                <T token="feature.unimplemented" />
               </span>
             </OverlayTrigger>
           )}
@@ -248,10 +247,10 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
 };
 
 export const ReadingListPrompt = ({ setHighlightReadingList }) => {
-  const intl = useIntlContext();
-  const optionLabel = intl.formatMessage({
-    id: "followups.sentiment_interested",
-  })?.t;
+  const { t } = useI18n();
+  const optionLabel = t(
+    "followups.sentiment_interested"
+  )
   return (
     <Alert
       variant="warning"
@@ -261,8 +260,8 @@ export const ReadingListPrompt = ({ setHighlightReadingList }) => {
       }}
     >
       <div className="reading-list-prompt">
-        <FormattedMessage
-          id="readinglist.prompt"
+        <T
+          token="readinglist.prompt"
           values={{ option: optionLabel }}
         />
       </div>

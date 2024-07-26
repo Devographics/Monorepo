@@ -7,10 +7,10 @@ import { CenteredContainer } from "~/components/ui/CenteredContainer";
 import { useClientData } from "~/components/page/hooks";
 import { useCurrentUser } from "~/lib/users/hooks";
 import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
+import { useI18n } from "@devographics/react-i18n";
 
 export const EditionMain = ({ edition }: { edition: EditionMetadata }) => {
-  const { locale } = useLocaleContext();
+  const { locale } = useI18n()
   const { currentUser, loading } = useCurrentUser();
   const clientData = useClientData({
     editionId: edition.id,

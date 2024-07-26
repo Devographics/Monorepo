@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { FormattedMessage } from "../common/FormattedMessage";
 import { FormInputProps } from "../form/typings";
 import { EntityWithQuestion } from "~/lib/surveys/types";
 import { getEditionQuestions } from "~/lib/surveys/helpers/getEditionQuestions";
@@ -17,6 +16,7 @@ import ItemLabel from "./ItemLabel";
 import { FormLayoutProps } from "../form/FormLayout";
 import { useFormPropsContext } from "../form/FormPropsContext";
 import { useFormStateContext } from "../form/FormStateContext";
+import { T } from "@devographics/react-i18n";
 
 const cutoff = 5;
 const animationDurationInMs = 700;
@@ -67,15 +67,14 @@ export const ReadingList = (props: FormLayoutProps) => {
 
   return (
     <div
-      className={`reading-list reading-list-summary ${
-        animate ? "reading-list-animate" : ""
-      }`}
+      className={`reading-list reading-list-summary ${animate ? "reading-list-animate" : ""
+        }`}
     >
       <h5 className="reading-list-title">
-        <FormattedMessage id="readinglist.title" />
+        <T token="readinglist.title" />
       </h5>
       <div className="reading-list-description">
-        <FormattedMessage id="readinglist.description" />
+        <T token="readinglist.description" />
       </div>
       <ul className="reading-list-items">
         {cutoffReadingList.map((itemId) => {
@@ -98,8 +97,8 @@ export const ReadingList = (props: FormLayoutProps) => {
             setShowMore((showMore) => !showMore);
           }}
         >
-          <FormattedMessage
-            id={showMore ? "forms.less_options" : "forms.more_options"}
+          <T
+            token={showMore ? "forms.less_options" : "forms.more_options"}
           />
         </Button>
       )}

@@ -3,11 +3,11 @@ import { useState, useEffect, useCallback } from "react";
 import { saveResponse } from "~/components/page/services";
 import { useRouter } from "next/navigation";
 import isEmpty from "lodash/isEmpty";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { useResponse } from "../ResponseContext/ResponseProvider";
 import { Message } from "./FormMessages";
 import { useMessagesContext } from "../common/UserMessagesContext";
 import { ResponseDocument } from "@devographics/types";
+import { useI18n } from "@devographics/react-i18n";
 
 interface ClientData {
   [key: string]: any;
@@ -49,7 +49,7 @@ export const useFormState = ({
 
   const { addMessage } = useMessagesContext();
 
-  const { locale } = useLocaleContext();
+  const { locale } = useI18n()
 
   const { updateResponseFromClient } = useResponse();
 

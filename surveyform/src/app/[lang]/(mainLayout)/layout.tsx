@@ -8,6 +8,7 @@ import { metadata as defaultMetadata } from "../../layout";
 // import { rscTeapot } from "~/i18n/components/ServerT";
 import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 import { getCommonContexts } from "@devographics/fetch";
+import { rscTeapot } from "~/i18n/components/ServerT";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -24,15 +25,14 @@ export async function generateMetadata({
   params,
 }: {
   params: PageServerProps;
-}): Promise<Metadata | undefined> {
-  return {};
-  // TODO: reneable
-  // const { t, error } = await rscTeapot()
-  // if (error) return defaultMetadata
-  // const title = t("general.title")
-  // const description = t("general.description")
-  // const metadata = { ...defaultMetadata, title, description };
-  // return metadata;
+}): Promise<Metadata> {
+  setLocaleIdServerContext(params.lang)
+  const { t, error } = await rscTeapot()
+  if (error) return defaultMetadata
+  const title = t("general.title")
+  const description = t("general.description")
+  const metadata = { ...defaultMetadata, title, description };
+  return metadata;
 }
 
 /**
@@ -59,7 +59,6 @@ export default async function RootLayout({
     return <div>{JSON.stringify(error, null, 2)}</div>;
   }
   return (
-    // TODO: stop passing all the locales there, filter them per page
     <ClientLayout
       params={params}
       locales={locales}

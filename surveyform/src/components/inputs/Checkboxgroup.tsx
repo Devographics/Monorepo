@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import without from "lodash/without.js";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 import { Button } from "~/components/ui/Button";
 import { FormItem } from "~/components/form/FormItem";
 import { FormInputProps } from "~/components/form/typings";
@@ -45,8 +45,7 @@ export const FormComponentCheckboxGroup = (
   const { value, edition, question } = props;
   const { response } = useFormStateContext();
   const hasValue = value?.length > 0;
-  const intl = useIntlContext();
-
+  const { t } = useI18n()
   const formPaths = getFormPaths({ edition, question });
   const otherValue = response?.[formPaths.other!];
 
@@ -133,7 +132,7 @@ export const FormComponentCheckboxGroup = (
               setShowMore(true);
             }}
           >
-            {intl.formatMessage({ id: "forms.more_options" })?.t}
+            {t("forms.more_options")}
           </Button>
         )}
         {allowOther && (!enableCutoff || showMore) && (

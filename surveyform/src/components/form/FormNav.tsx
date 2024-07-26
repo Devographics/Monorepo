@@ -7,7 +7,7 @@
 
 */
 import { useState, useEffect } from "react";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 import FormNavItem from "./FormNavItem";
 import { getCompletionPercentage } from "~/lib/responses/helpers";
 import { Button } from "~/components/ui/Button";
@@ -85,9 +85,8 @@ const FormNav = (props: FormLayoutProps) => {
 
   return (
     <nav
-      className={`section-nav ${
-        shown ? "section-nav-shown" : "section-nav-hidden"
-      }`}
+      className={`section-nav ${shown ? "section-nav-shown" : "section-nav-hidden"
+        }`}
       style={style}
       aria-label={`${edition.survey.name} ${edition.year}`}
     >
@@ -106,8 +105,8 @@ const FormNav = (props: FormLayoutProps) => {
         >
           <span className="section-nav-head-left">
             <h3 className="section-nav-toc">
-              <FormattedMessage
-                id="general.table_of_contents"
+              <T
+                token="general.table_of_contents"
                 values={{
                   sectionCount: edition.sections.length,
                   completion: completionPercentage,
@@ -149,7 +148,7 @@ const FormNav = (props: FormLayoutProps) => {
             {/* {response && <li>Overall: {getOverallCompletionPercentage(response)}%</li>} */}
           </ul>
           {/* <p className="completion-message">
-            <FormattedMessage id="general.all_questions_optional" />
+            <T token="general.all_questions_optional" />
           </p> */}
         </div>
         {navLoading && (

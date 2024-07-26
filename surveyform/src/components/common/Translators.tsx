@@ -1,15 +1,11 @@
 "use client";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
-
-
-
-import { T } from "@devographics/react-i18n"
+import { T, useI18n } from "@devographics/react-i18n"
 
 const Translators = () => {
   // TODO: pass locale list from context to make it a server component
-  const { locales } = useLocaleContext();
+  const { allLocales } = useI18n()
 
-  const showTranslators = locales.some(
+  const showTranslators = allLocales.some(
     (l) => l?.translators && l?.translators?.length > 0
   );
 
@@ -19,7 +15,7 @@ const Translators = () => {
         <T token="general.translation_help" />
       </h3>
       <div className="translators-locales">
-        {locales
+        {allLocales
           .filter((l) => l.translators && l.translators.length > 0)
           .map((l) => (
             <LocaleItem key={l.id} locale={l} />

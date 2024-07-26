@@ -2,7 +2,7 @@
 import { FormItem } from "~/components/form/FormItem";
 import Form from "react-bootstrap/Form";
 
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
 

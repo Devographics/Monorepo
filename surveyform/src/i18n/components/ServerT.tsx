@@ -4,6 +4,9 @@ import { rscLocaleCached } from "~/lib/api/rsc-fetchers";
 /**
  * Generate a function that can translate content for the current locale
  * Similar to "ServerT" but can be used in metadata function
+ * 
+ * Expect "setLocaleIdServerContext" to be called
+
  * @param param0 
  * @returns 
  */

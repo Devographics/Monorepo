@@ -5,7 +5,6 @@ import { getSectionCompletionPercentage } from "~/lib/responses/helpers";
 import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { SectionMetadata } from "@devographics/types";
 import { useEdition } from "../SurveyContext/Provider";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { getSectionTokens } from "~/i18n/survey";
 import { FormLayoutProps } from "./FormLayout";
 import { useFormStateContext } from "./FormStateContext";
@@ -13,7 +12,7 @@ import { useFormPropsContext } from "./FormPropsContext";
 
 //  
 
-import { T } from "@devographics/react-i18n";
+import { T, useI18n } from "@devographics/react-i18n";
 
 interface SurveyNavItemProps extends Omit<FormLayoutProps, "section"> {
   setShown: any;
@@ -35,7 +34,7 @@ const SurveyNavItem = ({
   const { stateStuff, response, submitForm } = useFormStateContext();
   const { readOnly, sectionNumber } = useFormPropsContext();
   const { currentTabindex, setCurrentFocusIndex } = stateStuff;
-  const { locale } = useLocaleContext();
+  const { locale } = useI18n()
   const textInput = useRef<any>(null);
   const { edition } = useEdition();
   const completion =

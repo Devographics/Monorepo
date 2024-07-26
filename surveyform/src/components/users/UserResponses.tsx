@@ -4,7 +4,7 @@ import {
   SurveyStatusEnum,
   ResponseDocument,
 } from "@devographics/types";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 import { UserDocument } from "~/account/user/typings";
 import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { ResponseDetails } from "../surveys/ResponseDetails";
@@ -24,7 +24,7 @@ const UserResponses = ({
     <div>
       <div>
         <h3>
-          <FormattedMessage id="accounts.your_surveys" />
+          <T token="accounts.your_surveys" />
         </h3>
         <ul className="user-responses-list">
           {responses &&
@@ -41,7 +41,7 @@ const UserResponses = ({
       </div>
       {/* <div>
         <h3>
-          <FormattedMessage id="account.past_surveys" />
+          <T token="account.past_surveys" />
         </h3>
         <ul>
           <ResponseItem response={{}}/>
@@ -87,7 +87,7 @@ const ResponseItem = ({
           {survey.name} {year}
         </Link>
         <span className={`survey-status survey-status-${surveyStatus}`}>
-          <FormattedMessage id={`general.survey_status_${surveyStatus}`} />
+          <T token={`general.survey_status_${surveyStatus}`} />
         </span>
       </h4>
       <ResponseDetails edition={edition} response={response} />

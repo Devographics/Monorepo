@@ -1,17 +1,12 @@
 import { getEntityName } from "~/lib/surveys/helpers/getEntityName";
 import EntityLabel from "~/components/common/EntityLabel";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 import {
   OPTION_NA,
   OptionMetadata,
   QuestionMetadata,
 } from "@devographics/types";
 import { getOptioni18nIds } from "~/i18n/survey";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
-
-//  
-
-import { T } from "@devographics/react-i18n";
 
 const OptionLabel = ({
   option,
@@ -20,7 +15,7 @@ const OptionLabel = ({
   option: OptionMetadata;
   question: QuestionMetadata;
 }) => {
-  const intl = useIntlContext();
+  const { t } = useI18n();
   const { entity, label } = option;
 
   if (label) {
@@ -31,7 +26,7 @@ const OptionLabel = ({
 
   const defaultMessage =
     option.id === OPTION_NA
-      ? intl.formatMessage({ id: "options.na" })?.t
+      ? t("options.na")
       : i18n.base + " ❔";
 
   const entityName = getEntityName(entity);
