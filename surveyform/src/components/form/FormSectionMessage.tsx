@@ -1,5 +1,5 @@
-import { FormattedMessage } from "../common/FormattedMessage";
 import { SectionMetadata } from "@devographics/types";
+import { T } from "@devographics/react-i18n";
 
 export const FormSectionMessage = ({
   section,
@@ -8,7 +8,7 @@ export const FormSectionMessage = ({
 }) => {
   return (
     <div className="form-section-message form-help">
-      <FormattedMessage id={section.messageId!} />
+      <T token={section.messageId!} />
     </div>
   );
 };
