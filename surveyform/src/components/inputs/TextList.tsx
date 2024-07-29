@@ -551,24 +551,11 @@ const TextListItem = memo(function TextListItem({
   onItemKeyDown: any;
   onItemKeyUp: any;
 }) {
-  const { t } = useI18n();
+  const { getFallbacks } = useI18n();
   const index_ = index + 1;
   const i18n = getQuestioni18nIds({ section, question });
 
-  // take a list of keys and return the first one that has a valid translation
-  const getTranslationWithFallbacks = (keys: string[], values: any) => {
-    let tObject;
-    for (const key of keys) {
-      tObject = t(key, values);
-      console.log(tObject);
-      if (tObject) {
-        return tObject;
-      }
-    }
-    // return the last object if nothing else worked
-  };
-
-  const placeholder = getTranslationWithFallbacks(
+  const placeholder = getFallbacks(
     [
       `${i18n.base}.placeholder.${index_}`,
       `${i18n.base}.placeholder`,
