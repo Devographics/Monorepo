@@ -288,13 +288,22 @@ export const FormItemTitle = (
         <Form.Label>
           <QuestionLabel section={section} question={question} />
 
-          {yearAdded === 2023 && (
-            <span
-              className="question-label-new"
-              title={intl.formatMessage({ id: "general.newly_added" })?.t}
+          {yearAdded === 2024 && (
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id="general.newly_added">
+                  <T token="general.newly_added" />
+                </Tooltip>
+              }
             >
-              {yearAdded}
-            </span>
+              <span
+                className="question-label-new"
+                title={intl.formatMessage({ id: "general.newly_added" })?.t}
+              >
+                {yearAdded}
+              </span>
+            </OverlayTrigger>
           )}
         </Form.Label>
 
