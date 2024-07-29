@@ -26,20 +26,24 @@ function replaceLocale(pathname: string, params: any, newLocale: string) {
 function useLocaleSwitcher() {
   // In previous implementations we were using a locale cookies
   // now we use locales indicated directly in the URL
-  const router = useRouter()
+  const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
-  const switchLocale = useCallback((newLocale) => {
-    router.replace(replaceLocale(pathname || "", params, newLocale.id));
-  }, [router, params?.lang])
-  return switchLocale
+  const switchLocale = useCallback(
+    (newLocale) => {
+      router.replace(replaceLocale(pathname || "", params, newLocale.id));
+    },
+    [router, params?.lang]
+  );
+  return switchLocale;
 }
 
 const LocaleSwitcher = () => {
-  const switchLocale = useLocaleSwitcher()
-  const { locale: currentLocale, allLocales } = useI18n()
+  const switchLocale = useLocaleSwitcher();
+  const { locale: currentLocale, allLocales } = useI18n();
 
-  const currentLocaleDef = allLocales.find(l => l.id === currentLocale.id) || currentLocale
+  const currentLocaleDef =
+    allLocales.find((l) => l.id === currentLocale.id) || currentLocale;
 
   const showSwitcher = allLocales.length > 0;
 
@@ -62,7 +66,7 @@ const LocaleSwitcher = () => {
           index = "0";
         }
         const newLocale = allLocales[index];
-        switchLocale(newLocale)
+        switchLocale(newLocale);
       }}
       menuItems={allLocales.map(({ label, id }) => ({
         label: id === currentLocale?.id ? `${label} ✓` : label,

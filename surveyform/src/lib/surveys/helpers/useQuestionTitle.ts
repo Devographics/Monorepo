@@ -32,5 +32,5 @@ export const useQuestionTitle = ({
 
   const title = getFallbacks(keys);
 
-  return title;
+  return title || {};
 };

@@ -74,13 +74,14 @@
 }
 .section-nav-item-link {
   font-weight: $medium !important;
-  width: 100%;
   display: flex;
   align-items: center;
   gap: $spacing;
-  height: 50px;
-  width: 50px;
   position: relative;
+  @include large {
+    height: 50px;
+    width: 50px;
+  }
 }
 .section-nav-item-label {
   display: block;
@@ -97,8 +98,8 @@
   background: var(--bg-color) !important;
   padding: 0 !important;
   border-radius: 100%;
-  height: 100%;
-  width: 100%;
+  height: 50px;
+  width: 50px;
   display: grid !important;
   place-items: center;
   &-label {
