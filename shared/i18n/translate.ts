@@ -6,7 +6,7 @@ import type {
     StringTranslator,
     StringTranslatorResult,
     LocaleParsed
-} from "./typings"
+} from './typings'
 
 const findString = (key: string, strings: Translation[]) => {
     // reverse strings so that strings added last take priority
@@ -43,39 +43,38 @@ const applyTemplate = ({
  * @deprecated Use makeTranslationFunction with a parsed locale using a dictionary of translations
  */
 export const makeTranslatorFunc =
-    (locale: Locale)/*: StringTranslator*/ =>
-        // TODO: here optimize the strings to use Map instead of navigating an array which will be super slow
-        (key: string, { values }: Record<string, any> = {}, fallback?: string) => {
-            const { strings = [], ...rest } = locale
-            let result: Partial<StringTranslatorResult> = { key, locale: rest }
+    (locale: Locale) /*: StringTranslator*/ =>
+    // TODO: here optimize the strings to use Map instead of navigating an array which will be super slow
+    (key: string, { values }: Record<string, any> = {}, fallback?: string) => {
+        const { strings = [], ...rest } = locale
+        let result: Partial<StringTranslatorResult> = { key, locale: rest }
 
-            const stringObject = findString(key, strings)
+        const stringObject = findString(key, strings)
 
-            if (stringObject) {
-                result = { ...result, ...stringObject }
-            } else {
-                result.missing = true
-                if (fallback) {
-                    result.t = fallback
-                }
+        if (stringObject) {
+            result = { ...result, ...stringObject }
+        } else {
+            result.missing = true
+            if (fallback) {
+                result.t = fallback
             }
-
-            const injectValues = (s: string) =>
-                values ? applyTemplate({ t: s, values, locale, key }) : s
-
-            if (result.t) {
-                const t = injectValues(result.t)
-                result.t = t
-                result.tClean = injectValues(result.tClean ?? t)
-                result.tHtml = injectValues(result.tHtml ?? t)
-            }
-
-            // TODO: this seems consistant with "results" app usage of this function,
-            // it returns a string and not the initial value
-            //return result 
-            return result as StringTranslatorResult
         }
 
+        const injectValues = (s: string) =>
+            values ? applyTemplate({ t: s, values, locale, key }) : s
+
+        if (result.t) {
+            const t = injectValues(result.t)
+            result.t = t
+            result.tClean = injectValues(result.tClean ?? t)
+            result.tHtml = injectValues(result.tHtml ?? t)
+        }
+
+        // TODO: this seems consistant with "results" app usage of this function,
+        // it returns a string and not the initial value
+        //return result
+        return result as StringTranslatorResult
+    }
 
 /** Matches anything betwen { }, tolerate spaces, allow multiple interpolations */
 const INTERPOLATION_REGEX = /{([\s\S]+?)}/g
@@ -90,14 +89,13 @@ function injectValues(str: string, values: Record<string, any>) {
 /**
  * Generate a translation helper function "t" (and "getMessage")
  * for a given locale
- * 
+ *
  * It only handle strings, if you want to use a React component as fallback,
  * implement it in your component
- * @param locale 
- * @returns 
+ * @param locale
+ * @returns
  */
 export function makeTranslationFunction(locale: LocaleParsed) {
-
     /**
      * Get the full translation with metadata, HTML and clean versions
      */
@@ -106,7 +104,7 @@ export function makeTranslationFunction(locale: LocaleParsed) {
         let result: StringTranslatorResult = {
             key,
             locale: { id: locale.id, label: locale.label },
-            t: fallback || ""
+            t: fallback || ''
         }
         const translation = locale.dict[key]
         if (!translation) {
@@ -114,28 +112,26 @@ export function makeTranslationFunction(locale: LocaleParsed) {
         } else {
             result = {
                 ...result,
-                ...translation,
+                ...translation
             }
         }
         // interpolate values
         const t = injectValues(result.t, values)
         // handle tClean and tHTML variations
         result.t = t
-        // Keep empty if not defined, so that the rendered logic can prioritize 1) HTML version 2) clean version 3) raw text depending on which is defined
-        result.tClean = result.tClean ? injectValues(result.tClean, values) : undefined//result.t
-        result.tHtml = result.tHtml ? injectValues(result.tHtml, values) : undefined//result.t
+        result.tClean = result.tClean ? injectValues(result.tClean, values) : result.t
+        result.tHtml = result.tHtml ? injectValues(result.tHtml, values) : result.t
         return result as StringTranslatorResult
     }
     /**
      * Shortcut to get a translated string
-     * 
+     *
      * Prefer "getMessage" for more elaborate usage (HTML content, handling missing values...)
      */
     function t(key: string, values: Record<string, any> = {}, fallback?: string) {
-        let result = locale.dict[key]?.t || fallback || ""
+        let result = locale.dict[key]?.t || fallback || ''
         result = injectValues(result, values)
         return result
-
     }
     return { t, getMessage }
 }
