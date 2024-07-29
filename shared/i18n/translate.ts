@@ -86,6 +86,8 @@ function injectValues(str: string, values: Record<string, any>) {
     return template(str, { interpolate: INTERPOLATION_REGEX })(values)
 }
 
+type ValuesType = Record<string, any>
+
 /**
  * Generate a translation helper function "t" (and "getMessage")
  * for a given locale
@@ -99,7 +101,7 @@ export function makeTranslationFunction(locale: LocaleParsed) {
     /**
      * Get the full translation with metadata, HTML and clean versions
      */
-    function getMessage(key: string, values: Record<string, any> = {}, fallback?: string) {
+    function getMessage(key: string, values: ValuesType = {}, fallback?: string) {
         // get the string or template
         let result: StringTranslatorResult = {
             key,
@@ -123,6 +125,25 @@ export function makeTranslationFunction(locale: LocaleParsed) {
         result.tHtml = result.tHtml ? injectValues(result.tHtml, values) : result.t
         return result as StringTranslatorResult
     }
+
+    // take either i18n keys, or functions that return a message
+    function getFallbacks(
+        keys: Array<string | ((values?: ValuesType) => StringTranslatorResult)>,
+        values?: ValuesType
+    ) {
+        let message: StringTranslatorResult
+        for (const keyOrFunction of keys) {
+            if (typeof keyOrFunction === 'function') {
+                message = keyOrFunction(values)
+            } else {
+                message = getMessage(keyOrFunction, values)
+            }
+            if (message?.t && !message?.missing) {
+                return message
+            }
+        }
+    }
+
     /**
      * Shortcut to get a translated string
      *
@@ -133,5 +154,5 @@ export function makeTranslationFunction(locale: LocaleParsed) {
         result = injectValues(result, values)
         return result
     }
-    return { t, getMessage }
+    return { t, getMessage, getFallbacks }
 }
