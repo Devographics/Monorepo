@@ -222,11 +222,14 @@
       #   template: single_option
 
       - id: reading_list
-        # template: reading_list
         template: multiple_options2
-        parameters: { limit: 10 }
+        parameters:
+            limit: 20
         queryOptions:
             sectionId: reading_list
+        chartOptions:
+            dataFilters: [removeOverLimit, removeNoAnswer]
+            limit: 10
 
       - id: features_resources
         items: [fm-intermediate-html-css]

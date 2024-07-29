@@ -42,7 +42,6 @@ export interface FormItemProps extends FormInputProps {
   isInvalid?: boolean;
 }
 
-
 export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
   function FormItem(props: FormItemProps, parentRef) {
     // TODO: using response here makes the component rerender for nothing
@@ -71,7 +70,9 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
       setReactToChanges,
     } = stateStuff;
 
-    const { allowComment } = question;
+    // const { allowComment } = question;
+    // allow comments on all questions
+    const allowComment = true;
 
     const formPaths = getFormPaths({ edition, question });
     const commentPath = formPaths.comment;
@@ -284,13 +285,22 @@ export const FormItemTitle = (
         <Form.Label>
           <QuestionLabel section={section} question={question} />
 
-          {yearAdded === 2023 && (
-            <span
-              className="question-label-new"
-              title={t("general.newly_added")}
+          {yearAdded === 2024 && (
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id="general.newly_added">
+                  <T token="general.newly_added" />
+                </Tooltip>
+              }
             >
-              {yearAdded}
-            </span>
+              <span
+                className="question-label-new"
+                title={t("general.newly_added")}
+              >
+                {yearAdded}
+              </span>
+            </OverlayTrigger>
           )}
         </Form.Label>
 
@@ -318,7 +328,8 @@ export const FormItemDescription = (
 
   const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
 
-  if (i18nPrompt && !i18nPrompt.missing) {// .type !== TokenType.KEY_FALLBACK) {
+  if (i18nPrompt && !i18nPrompt.missing) {
+    // .type !== TokenType.KEY_FALLBACK) {
     return (
       <div className="form-item-description">
         <T token={intlIds.prompt} />

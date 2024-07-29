@@ -241,7 +241,8 @@ export type Question = {
 
 export enum NumericalUnits {
     YEARS = 'years',
-    YEARS_OLD = 'years_old'
+    YEARS_OLD = 'years_old',
+    HOURS = 'hours'
 }
 
 export type Option = {

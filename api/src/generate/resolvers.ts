@@ -362,7 +362,8 @@ export const rawDataResolver: ResolverType = async (parent, args, context, info)
     console.log('// rawDataResolver')
     const { survey, edition, section, question } = parent
     const { token } = args
-    return await getRawData({ survey, edition, section, question, context, token })
+    const rawData = await getRawData({ survey, edition, section, question, context, token })
+    return rawData
 }
 
 export const responsesResolverMap: ResolverMap = {

@@ -17,7 +17,8 @@ export const projects: TemplateFunction = options => {
     const rawPaths: DbPaths = {
         [DbPathsEnum.RESPONSE]: `${sectionSegment}__${questionSegment}__${DbSuffixes.PRENORMALIZED}`,
         [DbPathsEnum.PRENORMALIZED]: `${sectionSegment}__${questionSegment}__${DbSuffixes.PRENORMALIZED}`,
-        [DbPathsEnum.SKIP]: `${sectionSegment}__${questionSegment}__${DbPathsEnum.SKIP}`
+        [DbPathsEnum.SKIP]: `${sectionSegment}__${questionSegment}__${DbPathsEnum.SKIP}`,
+        [DbPathsEnum.COMMENT]: `${sectionSegment}__${questionSegment}__${DbPathsEnum.COMMENT}`
     }
 
     const basePath = `${sectionSegment}.${questionSegment}`
@@ -28,7 +29,8 @@ export const projects: TemplateFunction = options => {
         [DbPathsEnum.METADATA]: `${basePath}.${DbSuffixes.METADATA}`,
         [DbPathsEnum.ERROR]: `${basePath}.${DbSuffixes.ERROR}`,
         [DbPathsEnum.PRENORMALIZED]: `${basePath}.${DbSuffixes.NORMALIZED}`,
-        [DbPathsEnum.SKIP]: `${basePath}.${DbPathsEnum.SKIP}`
+        [DbPathsEnum.SKIP]: `${basePath}.${DbPathsEnum.SKIP}`,
+        [DbPathsEnum.COMMENT]: `${basePath}.${DbPathsEnum.COMMENT}`
     }
 
     const output: QuestionTemplateOutput = {

@@ -79,6 +79,12 @@
   usedBy:
       - surveyform
 
+- id: FROZEN
+  description: Freeze the site/data as it is even if query changes are detected
+  example: true
+  usedBy:
+      - results
+
   # Mongo
 
 - id: MONGO_PRIVATE_URI

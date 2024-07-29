@@ -14,3 +14,4 @@ export * from "./generateSourceField";
 export * from "./addSentiment";
 export * from "./convertExperience";
 export * from "./migrateToolsPaths";
+export * from "./renameRawField";

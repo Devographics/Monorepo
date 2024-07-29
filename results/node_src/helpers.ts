@@ -366,7 +366,11 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
 
                 const queryHasChanged = newQueryFormatted !== existingQueryFormatted
 
-                if (useFilesystemCache && existingData && !queryHasChanged) {
+                if (
+                    useFilesystemCache &&
+                    existingData &&
+                    (process.env.FROZEN || !queryHasChanged)
+                ) {
                     console.log(
                         `// 🎯 File ${dataFileName} found on ${getLoadMethod()}, loading its contents…`
                     )

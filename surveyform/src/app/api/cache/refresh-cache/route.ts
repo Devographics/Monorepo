@@ -34,9 +34,7 @@ export async function GET(req: NextRequest) {
       items.push("surveys", "locales", "entities");
     }
 
-    console.log(
-      `💾 Refreshing Redis & in-memory cache… (items: ${items.join()})`
-    );
+    console.log(`💾 Refreshing Redis cache… (items: ${items.join()})`);
 
     const enOnly = req.nextUrl.searchParams.get("en-only");
 
@@ -54,6 +52,8 @@ export async function GET(req: NextRequest) {
     // Currently we don't cache entities
     // if (items.includes("entities")) {
     // }
+    console.log(`💾 Refreshing in-memory cache…`);
+
     // Also empty the in-memory cache for immediate results
     flushInMemoryCache();
 

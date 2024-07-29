@@ -51,9 +51,9 @@ export const getRawPaths = (
     if (question.allowPrenormalized) {
         paths.other = getPath([DbSuffixes.PRENORMALIZED])
     }
-    if (question.allowComment) {
-        paths[DbSuffixes.COMMENT] = getPath([DbSuffixes.COMMENT])
-    }
+
+    // always allow comments on all questions
+    paths[DbSuffixes.COMMENT] = getPath([DbSuffixes.COMMENT])
 
     // note: for now we only support follow-ups with questions that have options
     if (question.options && question.followups) {
@@ -122,9 +122,8 @@ export const getNormPaths = (
         }
     }
 
-    if (question.allowComment) {
-        paths.comment = getPath([...basePathSegments, DbSuffixes.COMMENT])
-    }
+    // always allow comments on all questions
+    paths.comment = getPath([...basePathSegments, DbSuffixes.COMMENT])
 
     if (question.options && question.followups) {
         const options = question.options
