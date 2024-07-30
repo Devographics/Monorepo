@@ -277,7 +277,7 @@ export const FormItemTitle = (
   const { t } = useI18n();
   const { yearAdded } = question;
 
-  const { clean: label } = useQuestionTitle({ section, question });
+  const { tClean: label } = useQuestionTitle({ section, question });
 
   return (
     <legend className="form-label-legend">
@@ -305,7 +305,7 @@ export const FormItemTitle = (
         </Form.Label>
 
         {enableReadingList && question.entity && (
-          <AddToList {...props} label={label} id={question.id} />
+          <AddToList {...props} label={label || ""} id={question.id} />
         )}
 
         {/* <span className="form-label-number">

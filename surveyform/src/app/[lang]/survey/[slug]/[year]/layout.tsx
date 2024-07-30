@@ -63,11 +63,7 @@ export default async function SurveyLayout({
       ...getSurveyContexts(edition.survey), ...getEditionContexts(edition)],
   });
   if (localeError) {
-    return (
-      <div>
-        Can't load translations: <code>{JSON.stringify(localeError)}</code>
-      </div>
-    );
+    throw new Error(`Can't load translations from API, error: ${JSON.stringify(localeError)}`)
   }
   // locales lists
   const {

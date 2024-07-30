@@ -27,7 +27,7 @@ export const QuestionLabel = ({
       data-key={key}
       className={labelClass}
       dangerouslySetInnerHTML={{
-        __html: tHtml || tClean,
+        __html: tHtml || tClean || "",
       }}
     />
   ) : (

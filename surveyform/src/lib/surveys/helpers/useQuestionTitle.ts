@@ -1,7 +1,7 @@
 import { SectionMetadata, QuestionMetadata } from "@devographics/types";
 import { useI18n } from "@devographics/react-i18n";
 import { getQuestioni18nIds } from "~/i18n/survey";
-import { StringTranslatorResult } from "@devographics/i18n";
+import type { StringTranslatorResult } from "@devographics/i18n";
 
 export const useQuestionTitle = ({
   section,
@@ -11,8 +11,8 @@ export const useQuestionTitle = ({
   section: SectionMetadata;
   question: QuestionMetadata;
   variant?: "short" | "full";
-}) => {
-  const { t, getMessage, getFallbacks } = useI18n();
+}): StringTranslatorResult => {
+  const { t, getMessage, getFallbacks, locale } = useI18n();
   const { id, entity } = question;
   const i18n = getQuestioni18nIds({ section, question });
 
@@ -32,5 +32,5 @@ export const useQuestionTitle = ({
 
   const title = getFallbacks(keys);
 
-  return title || {};
+  return title || { locale, t: "" };
 };
