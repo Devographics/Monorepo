@@ -611,7 +611,7 @@ type Locale {
     translatedCount: Int
     totalCount: Int
     completion: Int
-    untranslatedKeys: [String]
+    untranslatedStrings: [TranslationString]
 }
 
 type FeatureOption {
