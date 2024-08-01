@@ -1,7 +1,7 @@
 export interface Translation {
     key: string
     t: string
-    tHtml?: string,
+    tHtml?: string
     tClean?: string
 }
 
@@ -20,18 +20,18 @@ export interface Locale {
      * and LocaleSwitcher
      */
     label?: string
-    translators?: Array<string>;
-    completion?: number;
-    repo?: string;
-    translatedCount?: number;
-    totalCount?: number;
+    translators?: Array<string>
+    completion?: number
+    repo?: string
+    translatedCount?: number
+    totalCount?: number
 }
 
 /**
  * Locale with strings as an array
  * as returned by the API
  */
-export type LocaleWithStrings = Locale & Required<Pick<Locale, "strings">>
+export type LocaleWithStrings = Locale & Required<Pick<Locale, 'strings'>>
 /**
  * Locale with strings as a record,
  * to be used in applications
@@ -50,19 +50,19 @@ export interface StringTranslatorResult {
     locale: Omit<Locale, 'strings'>
     /**
      * A fallback was used (provided fallback, or token id)
-     * 
+     *
      * NOTE: "t" is usually non-empty, even when missing is "true",
      * since we use fallback strings/token key as fallback
      */
     missing?: boolean
     key?: string
     t: string
-    /** 
+    /**
      * If defined, should be used in priority over t
      * Will not be defined if missing="true"
      */
     tHtml?: string
-    /** 
+    /**
      * If defined, should be used in priority over t
      * Will not be defined if missing="true"
      * <form foo="bar"> clean version would be 'form foo="bar"', useful eg for tooltips
