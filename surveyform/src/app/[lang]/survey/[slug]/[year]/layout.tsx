@@ -17,7 +17,7 @@ import {
   rscAllLocalesMetadata,
   rscLocaleFromParams,
 } from "~/lib/api/rsc-fetchers";
-// import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
+import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
 import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 interface SurveyPageServerProps {
@@ -31,9 +31,7 @@ export async function generateMetadata({
 }: {
   params: SurveyPageServerProps;
 }): Promise<Metadata | undefined> {
-  // TODO: it seems we need to call this initialization code on all relevant pages/layouts
-  return undefined;
-  // return await rscGetMetadata({ params });
+  return await rscGetMetadata({ params });
 }
 
 /**

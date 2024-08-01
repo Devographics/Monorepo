@@ -12,6 +12,7 @@ import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import { getSectionTokens } from "~/i18n/survey";
 import { serverConfig } from "~/config/server";
 import { rscTeapot } from "~/i18n/components/ServerT";
+import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 
 export const rscFetchSurveysMetadata = cache(
   async (options?: FetcherFunctionOptions) => {
@@ -41,12 +42,14 @@ export const rscGetMetadata = async ({
 }: {
   params: { lang: string; sectionNumber?: string; slug: string; year: string };
 }) => {
+  // Important : this allow nested server-side method to know the current language
+  // setLocaleIdServerContext(params.lang)
   const { lang, sectionNumber } = params;
   const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
 
   const contexts = getEditionContexts(edition);
 
-  const { t, error } = await rscTeapot({ contexts });
+  const { t, error } = await rscTeapot({ contexts, localeId: params.lang });
   if (error)
     throw new Error(
       "Could not access translation function:" + JSON.stringify(error)

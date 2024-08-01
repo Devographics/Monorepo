@@ -173,7 +173,7 @@ export const RawErrorDisplay = ({
     proposeLoginRedirection ||
     shouldProposeLogout;
   const errorMessage =
-    message || error.message || "An error has occurred"
+    message || error?.message || "An error has occurred"
 
   const errorTitle =
     title || error?.name
