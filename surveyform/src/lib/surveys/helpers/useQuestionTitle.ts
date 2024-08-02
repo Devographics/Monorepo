@@ -19,18 +19,25 @@ export const useQuestionTitle = ({
   const getEntityLabel = () => {
     return (entity?.id && {
       key: "entity",
-      t: entity.name,
+      t: entity.nameClean || entity.name,
       tHtml: entity.nameHtml,
       tClean: entity.nameClean,
     }) as StringTranslatorResult;
   };
 
+  const defaultTitle = {
+    key: question.id,
+    t: question.id,
+    tHtml: question.id,
+    tClean: question.id,
+  } as StringTranslatorResult;
+
   const keys =
     variant === "short"
-      ? [getEntityLabel, i18n.base]
+      ? [getEntityLabel, i18n.base, i18n.question]
       : [getEntityLabel, i18n.question, i18n.base];
 
   const title = getFallbacks(keys);
 
-  return title || {};
+  return title || defaultTitle;
 };

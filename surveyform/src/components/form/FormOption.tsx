@@ -7,8 +7,7 @@ import AddToList from "~/components/reading_list/AddToList";
 import OptionLabel from "./OptionLabel";
 import { FollowUps } from "../inputs/experience/Followup2";
 
-//  
-
+//
 
 interface FormOptionProps extends FormInputProps {
   option: OptionMetadata;
@@ -30,7 +29,7 @@ export const FormOption = (props: FormOptionProps) => {
   const { t } = useI18n();
   const i18n = getOptioni18nIds(props);
 
-  const optionDescription = t(i18n.description)
+  const optionDescription = t(i18n.description);
 
   const { clean: label } = useOptionTitle({ question, option });
 
@@ -63,13 +62,10 @@ const OptionDescription = (props: FormOptionProps) => {
   const { t, getMessage } = useI18n();
   const i18n = getOptioni18nIds(props);
 
-  const i18nDescription = getMessage(
-    i18n.description
-  )
+  const i18nDescription = getMessage(i18n.description);
 
   const entity = option?.entity;
-  // const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
-  const entityDescription = null;
+  const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
 
   return !i18nDescription.missing ? (
     <T className="form-option-description" token={i18n.description} />

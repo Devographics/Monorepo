@@ -15,11 +15,12 @@ import {
   Example,
   FeaturesOptions,
   OptionMetadata,
+  SimplifiedSentimentOptions,
 } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 
 import get from "lodash/get.js";
-import { FollowupData, /*FollowUpComment,*/ FollowUps } from "./Followup2";
+import { FollowupData, /*FollowUpComment,*/ FollowUps } from "./Followup3";
 // import { CommentTrigger } from "~/components/form/FormComment";
 
 import Alert from "react-bootstrap/Alert";
@@ -118,29 +119,22 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
 
   const formPaths = getFormPaths({ edition, question });
 
-  // get the paths of the predefined and freeform followup answers
-  // inside the overall response document for this specific option
-  const allPredefinedFollowupPaths = formPaths[DbPathsEnum.FOLLOWUP_PREDEFINED];
-  const predefinedFollowupPath = allPredefinedFollowupPaths?.[option.id];
-  const freeformFollowupPath =
-    formPaths[DbPathsEnum.FOLLOWUP_FREEFORM]?.[option.id];
+  // get path to store sentiment for this question
+  const sentimentPath = formPaths[DbPathsEnum.SENTIMENT];
+  const sentimentValue = (sentimentPath && get(response, sentimentPath)) || [];
 
-  const predefinedFollowupValue =
-    (predefinedFollowupPath && get(response, predefinedFollowupPath)) || [];
-  const freeformFollowupValue =
-    (freeformFollowupPath && get(response, freeformFollowupPath)) || "";
-
-  const hasFollowupData =
-    !isEmpty(predefinedFollowupValue) || !isEmpty(freeformFollowupValue);
-  // const [showFollowupComment, setShowFollowupComment] =
-  // useState(hasFollowupData);
+  const hasFollowupData = !isEmpty(sentimentValue);
 
   const followupData: FollowupData = {
-    predefinedFollowupPath,
-    freeformFollowupPath,
-    predefinedFollowupValue,
-    freeformFollowupValue,
+    sentimentPath,
+    sentimentValue,
   };
+
+  console.log("/////////");
+  console.log(question.id);
+  console.log(question);
+  console.log({ formPaths });
+  console.log({ followupData });
 
   const isChecked = value === option.id;
   const checkClass = hasValue
@@ -182,13 +176,12 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
                 }}
                 onChange={(e) => {
                   updateCurrentValues({ [path]: e.target.value });
-                  if (allPredefinedFollowupPaths) {
-                    // when main value changes, also clear all predefined follow-ups
-                    for (const followUpPath of Object.values(
-                      allPredefinedFollowupPaths,
-                    )) {
-                      updateCurrentValues({ [followUpPath]: null });
-                    }
+                  if (sentimentPath) {
+                    // when main experience value changes, set sentiment to "neutral" by default
+                    updateCurrentValues({
+                      [sentimentPath]:
+                        SimplifiedSentimentOptions.NEUTRAL_SENTIMENT,
+                    });
                   }
                 }}
                 type="radio"
@@ -248,9 +241,7 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
 
 export const ReadingListPrompt = ({ setHighlightReadingList }) => {
   const { t } = useI18n();
-  const optionLabel = t(
-    "followups.sentiment_interested"
-  )
+  const optionLabel = t("followups.sentiment_interested");
   return (
     <Alert
       variant="warning"
@@ -260,10 +251,7 @@ export const ReadingListPrompt = ({ setHighlightReadingList }) => {
       }}
     >
       <div className="reading-list-prompt">
-        <T
-          token="readinglist.prompt"
-          values={{ option: optionLabel }}
-        />
+        <T token="readinglist.prompt" values={{ option: optionLabel }} />
       </div>
     </Alert>
   );
