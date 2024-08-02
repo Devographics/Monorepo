@@ -17,7 +17,7 @@ import {
   rscAllLocalesMetadata,
   rscLocaleFromParams,
 } from "~/lib/api/rsc-fetchers";
-// import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
+import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
 import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 interface SurveyPageServerProps {
@@ -31,9 +31,7 @@ export async function generateMetadata({
 }: {
   params: SurveyPageServerProps;
 }): Promise<Metadata | undefined> {
-  // TODO: it seems we need to call this initialization code on all relevant pages/layouts
-  return undefined;
-  // return await rscGetMetadata({ params });
+  return await rscGetMetadata({ params });
 }
 
 /**
@@ -63,11 +61,7 @@ export default async function SurveyLayout({
       ...getSurveyContexts(edition.survey), ...getEditionContexts(edition)],
   });
   if (localeError) {
-    return (
-      <div>
-        Can't load translations: <code>{JSON.stringify(localeError)}</code>
-      </div>
-    );
+    throw new Error(`Can't load translations from API, error: ${JSON.stringify(localeError)}`)
   }
   // locales lists
   const {

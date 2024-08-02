@@ -305,7 +305,7 @@ export const FormItemTitle = (
         </Form.Label>
 
         {enableReadingList && question.entity && (
-          <AddToList {...props} label={label} id={question.id} />
+          <AddToList {...props} label={label || ""} id={question.id} />
         )}
 
         {/* <span className="form-label-number">

@@ -76,14 +76,21 @@ export const rscLocaleFromParams = (params: LocaleParams) =>
 
 /**
  * Get current locale strings within React Server Components
+ * 
  * Uses a server context to retrieve the "lang" param
+ * supposing that you called setLocaleIdServerContext(params.lang) earlier
+ * or optionaly an explicit "localeIdParams"
  *
  * Contexts must be passed as a rest parameter in order to allow caching
  */
 export const rscLocaleCached = async ({
   contexts,
-}: { contexts?: Array<string> } = {}) => {
-  const lang = rscLocaleIdContext();
+  localeId
+}: {
+  contexts?: Array<string>,
+  localeId?: string
+} = {}) => {
+  const lang = localeId || rscLocaleIdContext();
   return rscLocaleFromParams({ lang, contexts });
 };
 

@@ -10,8 +10,17 @@ import { rscLocaleCached } from "~/lib/api/rsc-fetchers";
  * @param param0 
  * @returns 
  */
-export async function rscTeapot({ contexts }: { contexts?: Array<string> } = {}) {
-    const { locale, error } = await rscLocaleCached({ contexts })
+export async function rscTeapot({ contexts, localeId }: {
+    contexts?: Array<string>,
+    /** 
+     * Locale is normally obtained from server context,
+     * supposing that you called setLocaleIdServerContext(params.lang) earlier
+     * However you can optionnaly pass the localeId more directly if you can access it
+     * (eg from metadata functions)
+     **/
+    localeId?: string
+} = {}) {
+    const { locale, error } = await rscLocaleCached({ contexts, localeId })
     if (error) return { error }
     const { t, getMessage } = makeTranslationFunction(locale)
     return { t, getMessage }
