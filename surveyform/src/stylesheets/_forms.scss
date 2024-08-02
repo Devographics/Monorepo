@@ -23,7 +23,7 @@
     }
     @include large {
       @include border;
-      padding: $spacing $spacing $spacing * 2.5 $spacing;
+      padding: $spacing $spacing $spacing $spacing;
       &.form-item-skipped {
         padding: $spacing;
       }
@@ -410,6 +410,35 @@
       }
     }
   }
+  .form-check {
+    &:nth-child(2),
+    &:nth-child(3),
+    &:nth-child(4),
+    &:nth-child(6),
+    &:nth-child(7),
+    &:nth-child(8) {
+      .form-option-label {
+        display: none;
+      }
+    }
+  }
+  @include small {
+    .form-check {
+      &:nth-child(1) {
+        .form-option {
+          left: 0;
+        }
+      }
+      &:nth-child(9) {
+        .form-option {
+          right: 0;
+        }
+      }
+    }
+  }
+  .form-option-label {
+    white-space: nowrap;
+  }
 }
 
 .experience-contents {
@@ -712,6 +741,9 @@
   grid-template-rows: 1fr;
 }
 .form-item-contents-inner {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing/2;
   // use overflow: clip instead of overflow: hidden because
   // it doesn't interfere with position: sticky
   // https://stackoverflow.com/a/74462258

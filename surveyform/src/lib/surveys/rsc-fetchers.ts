@@ -47,7 +47,7 @@ export const rscGetMetadata = async ({
   const { lang, sectionNumber } = params;
   const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
 
-  const contexts = getEditionContexts(edition);
+  const contexts = getEditionContexts(edition, true);
 
   const { t, error } = await rscTeapot({ contexts, localeId: params.lang });
   if (error)

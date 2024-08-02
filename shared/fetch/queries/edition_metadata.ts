@@ -125,6 +125,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
                 response
                 subPaths
                 skip
+                sentiment
               }
               options {
                 id

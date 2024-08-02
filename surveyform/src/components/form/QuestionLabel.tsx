@@ -14,7 +14,7 @@ export const QuestionLabel = ({
   formatCode?: boolean;
   variant?: "short" | "full";
 }) => {
-  const { tHtml, tClean, key } = useQuestionTitle({
+  const { t, tHtml, tClean, key } = useQuestionTitle({
     section,
     question,
     variant,
@@ -27,7 +27,7 @@ export const QuestionLabel = ({
       data-key={key}
       className={labelClass}
       dangerouslySetInnerHTML={{
-        __html: tHtml || tClean || "",
+        __html: tHtml || tClean || t,
       }}
     />
   ) : (
