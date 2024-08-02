@@ -180,6 +180,7 @@ type RawDbPaths {
     followup_freeform: JSON
     subPaths: JSON
     skip: String
+    sentiment: String
 }
 
 type NormDbPaths {
@@ -194,6 +195,7 @@ type NormDbPaths {
     patterns: String
     metadata: String
     error: String
+    sentiment: String
 }
 
 enum ContentType {

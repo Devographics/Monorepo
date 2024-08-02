@@ -69,6 +69,7 @@ export const getRawPaths = (
 
         paths[DbSuffixes.FOLLOWUP_PREDEFINED] = getOptionsPaths(DbSuffixes.FOLLOWUP_PREDEFINED)
         paths[DbSuffixes.FOLLOWUP_FREEFORM] = getOptionsPaths(DbSuffixes.FOLLOWUP_FREEFORM)
+        paths[DbSuffixes.SENTIMENT] = getPath([DbSuffixes.SENTIMENT])
     }
 
     if (subPaths) {
@@ -218,6 +219,13 @@ export const getFormPaths = ({
         if (question.rawPaths[DbPathsEnum.SUBPATHS]) {
             paths[DbPathsEnum.SUBPATHS] = prefixPathsObjectWithEditionId(
                 question.rawPaths[DbPathsEnum.SUBPATHS],
+                edition.id
+            )
+        }
+        if (question.rawPaths[DbPathsEnum.SENTIMENT]) {
+            // simplified sentiment handling version
+            paths[DbPathsEnum.SENTIMENT] = prefixWithEditionId(
+                question.rawPaths[DbPathsEnum.SENTIMENT],
                 edition.id
             )
         }

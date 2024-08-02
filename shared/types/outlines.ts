@@ -293,7 +293,8 @@ export enum DbSuffixes {
     ERROR = 'error',
     // PATTERNS = 'patterns',
     RAW = 'raw',
-    METADATA = 'metadata'
+    METADATA = 'metadata',
+    SENTIMENT = 'sentiment'
 }
 
 // once a question has gone through a template it should always have an id
