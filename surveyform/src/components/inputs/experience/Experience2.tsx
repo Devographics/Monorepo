@@ -130,12 +130,6 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
     sentimentValue,
   };
 
-  console.log("/////////");
-  console.log(question.id);
-  console.log(question);
-  console.log({ formPaths });
-  console.log({ followupData });
-
   const isChecked = value === option.id;
   const checkClass = hasValue
     ? isChecked
