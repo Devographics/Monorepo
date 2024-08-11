@@ -3,17 +3,17 @@ import ShareTwitter from "./ShareTwitter";
 import ShareEmail from "./ShareEmail";
 import ShareFacebook from "./ShareFacebook";
 import ShareLinkedIn from "./ShareLinkedIn";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 
 const ShareSite = ({ edition }) => {
-  const intl = useIntlContext();
+  const { t } = useI18n();
   const { questionsUrl } = edition;
   const link = `${questionsUrl}?source=post_survey_share`;
   const surveyName = getEditionTitle({ edition });
   const values = { surveyName, link };
-  const title = intl.formatMessage({ id: "general.share_subject", values })?.t;
-  const body = intl.formatMessage({ id: "general.share_text", values })?.t;
+  const title = t("general.share_subject", values);
+  const body = t("general.share_text", values);
 
   return (
     <div className="ShareSite">

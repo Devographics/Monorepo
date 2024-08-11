@@ -1,12 +1,11 @@
 "use client";
 import { useState } from "react";
-import { FormattedMessage } from "../common/FormattedMessage";
 import { FormInputProps } from "../form/typings";
 import { EntityWithQuestion } from "~/lib/surveys/types";
 import { getEditionEntities } from "~/lib/surveys/helpers/getEditionEntities";
 import { Button } from "~/components/ui/Button";
 import { Share } from "~/components/icons";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { T, useI18n } from "@devographics/react-i18n";
 // import { captureException } from "@sentry/nextjs";
 
 import FormControl from "react-bootstrap/FormControl";
@@ -35,9 +34,9 @@ export const ReadingList = ({
     return (
       <div className="reading-list reading-list-results">
         <h5 className="reading-list-title">
-          <FormattedMessage id="readinglist.title" />
+          <T token="readinglist.title" />
         </h5>
-        <FormattedMessage id="readinglist.empty" />
+        <T token="readinglist.empty" />
       </div>
     );
   } else {
@@ -49,10 +48,10 @@ export const ReadingList = ({
     return (
       <div className="reading-list reading-list-results">
         <h5 className="reading-list-title">
-          <FormattedMessage id="readinglist.title" />
+          <T token="readinglist.title" />
         </h5>
         <p className="reading-list-description">
-          <FormattedMessage id="readinglist.results" />
+          <T token="readinglist.results" />
         </p>
         <div className="reading-list-items">
           {cutoffReadingList.map((itemId) => {
@@ -69,8 +68,8 @@ export const ReadingList = ({
                   setShowMore((showMore) => !showMore);
                 }}
               >
-                <FormattedMessage
-                  id={showMore ? "forms.less_options" : "forms.more_options"}
+                <T
+                  token={showMore ? "forms.less_options" : "forms.more_options"}
                 />
               </Button>
             </div>
@@ -101,14 +100,9 @@ const ListItem = ({
     question,
   } = entity;
 
-  const intl = useIntlContext();
-
-  const featureDescription = intl.formatMessage({
-    id: `features.${itemId}.description`,
-  })?.t;
-  const toolDescription = intl.formatMessage({
-    id: `tools.${itemId}.description`,
-  })?.t;
+  const { t } = useI18n()
+  const featureDescription = t(`features.${itemId}.description`);
+  const toolDescription = t(`tools.${itemId}.description`)
   const entityDescription = descriptionHtml || descriptionClean;
   const description =
     featureDescription || toolDescription || entityDescription;
@@ -189,8 +183,7 @@ export const SendByEmail = ({
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [errorResponse, setErrorResponse] = useState();
-  const intl = useIntlContext();
-
+  const { t } = useI18n()
   const handleChange = (event) => {
     const value = event.target.value;
     setEmail(value);
@@ -217,17 +210,17 @@ export const SendByEmail = ({
   return (
     <div className="reading-list-send">
       <p className="reading-list-send-title">
-        <FormattedMessage id="readinglist.receive_copy" />
+        <T token="readinglist.receive_copy" />
       </p>
       <div className="reading-list-form">
         <FormControl
-          placeholder={intl.formatMessage({ id: "user_info.email" })?.t}
+          placeholder={t("user_info.email")}
           type="email"
           value={email}
           onChange={handleChange}
         />
         <LoadingButton loading={loading} onClick={handleSubmit}>
-          <FormattedMessage id="readinglist.send_by_email" />
+          <T token="readinglist.send_by_email" />
         </LoadingButton>
       </div>
       {errorResponse && (
@@ -235,7 +228,7 @@ export const SendByEmail = ({
       )}
       {showSuccess && (
         <div className="survey-message survey-success">
-          <FormattedMessage id="readinglist.email_sent" />
+          <T token="readinglist.email_sent" />
         </div>
       )}
     </div>

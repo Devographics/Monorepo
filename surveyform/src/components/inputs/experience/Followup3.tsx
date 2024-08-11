@@ -1,3 +1,16 @@
+/*
+
+Version with simplified sentiment paths
+
+instead of:
+
+css2024__features__at_scope__heard__followup_predefined
+
+use: 
+
+css2024__features__at_scope__sentiment
+
+*/
 "use client";
 import Form from "react-bootstrap/Form";
 
@@ -6,8 +19,10 @@ import { T, useI18n } from "@devographics/react-i18n";
 import {
   DbPaths,
   DbPathsEnum,
+  FeaturesOptions,
   OptionMetadata,
   SentimentOptions,
+  SimplifiedSentimentOptions,
 } from "@devographics/types";
 import without from "lodash/without.js";
 
@@ -18,10 +33,8 @@ import { Dispatch, SetStateAction } from "react";
 import isEmpty from "lodash/isEmpty";
 
 export interface FollowupData {
-  predefinedFollowupPath?: string;
-  freeformFollowupPath?: string;
-  predefinedFollowupValue?: string[];
-  freeformFollowupValue?: string;
+  sentimentPath?: string;
+  sentimentValue?: string[];
 }
 
 export const FollowUps = (
@@ -36,7 +49,7 @@ export const FollowUps = (
     setShowReadingListPrompt?: Dispatch<SetStateAction<boolean>>;
     followupMode?: "radio" | "checkbox";
     formPaths?: DbPaths;
-  },
+  }
 ) => {
   const {
     updateCurrentValues,
@@ -50,26 +63,23 @@ export const FollowUps = (
     setShowReadingListPrompt,
     optionIsChecked,
     followupMode = "radio",
-    formPaths,
   } = props;
 
-  const { followups = [] } = question;
-  const optionFollowUps = followups.find(
-    (f) => f.id === option.id || f.id === "default",
-  )?.options;
+  const sentimentOptions = [
+    { id: SimplifiedSentimentOptions.POSITIVE_SENTIMENT },
+    { id: SimplifiedSentimentOptions.NEGATIVE_SENTIMENT },
+  ];
 
-  const { predefinedFollowupValue, predefinedFollowupPath } = followupData;
+  const { sentimentValue, sentimentPath } = followupData;
 
-  if (!predefinedFollowupPath) {
-    throw new Error(
-      `Could not find predefinedFollowupPath for question ${question.id}`,
-    );
+  if (!sentimentPath) {
+    throw new Error(`Could not find sentimentPath for question ${question.id}`);
   }
 
   const parentMode =
     question.template === "multipleWithOtherSentiment" ? "checkbox" : "radio";
 
-  const hasValueClass = !isEmpty(predefinedFollowupValue)
+  const hasValueClass = !isEmpty(sentimentValue)
     ? "has-selected"
     : "none-selected";
 
@@ -77,16 +87,13 @@ export const FollowUps = (
 
   const tabIndexProp = optionIsChecked ? {} : { tabIndex: -1 };
 
-  const allPredefinedFollowupPaths =
-    formPaths?.[DbPathsEnum.FOLLOWUP_PREDEFINED];
-
-  return optionFollowUps ? (
+  return sentimentOptions ? (
     <fieldset className={`followups-v2 sentiments ${hasValueClass}`}>
       <legend className="sr-only">
         <T token="followups.description.short" />
       </legend>
-      {optionFollowUps.map((followupOption, index) => {
-        const isChecked = predefinedFollowupValue?.includes(followupOption.id);
+      {sentimentOptions.map((followupOption, index) => {
+        const isChecked = sentimentValue?.includes(followupOption.id);
         const sentimentClasses = ["positive", "negative"];
         const isCheckedClass = isChecked ? "is-selected" : "is-not-selected";
         return (
@@ -108,9 +115,9 @@ export const FollowUps = (
                 // remove it on click (radio mode only)
                 if (
                   followupMode === "radio" &&
-                  predefinedFollowupValue?.includes(followupOption.id)
+                  sentimentValue?.includes(followupOption.id)
                 ) {
-                  updateCurrentValues({ [predefinedFollowupPath]: null });
+                  updateCurrentValues({ [sentimentPath]: null });
                 }
               }}
               onChange={(event) => {
@@ -119,14 +126,6 @@ export const FollowUps = (
                 if (parentMode === "radio") {
                   // check "main" parent answer
                   updateCurrentValues({ [path]: option.id });
-                  if (allPredefinedFollowupPaths) {
-                    // when a follow-up is clicked, also clear all other predefined follow-ups
-                    for (const followUpPath of Object.values(
-                      allPredefinedFollowupPaths,
-                    )) {
-                      updateCurrentValues({ [followUpPath]: null });
-                    }
-                  }
                 } else {
                   // add value to "main" parent answer
                   const parentValue = value as Array<number | string>;
@@ -136,19 +135,19 @@ export const FollowUps = (
                 if (followupMode === "checkbox") {
                   // checkbox version
                   const newValue = isChecked
-                    ? [...predefinedFollowupValue!, followupOption.id]
-                    : without(predefinedFollowupValue, followupOption.id);
+                    ? [...sentimentValue!, followupOption.id]
+                    : without(sentimentValue, followupOption.id);
                 } else {
                   // radio button version
-                  const newValue = isChecked ? [followupOption.id] : [];
+                  const newValue = isChecked ? followupOption.id : null;
                   updateCurrentValues({
-                    [predefinedFollowupPath]: newValue,
+                    [sentimentPath]: newValue,
                   });
                 }
 
                 // show reading list prompt if needed
                 const hasSeenPromptString = localStorage.getItem(
-                  "hasSeenReadingListPrompt",
+                  "hasSeenReadingListPrompt"
                 );
                 const hasSeenPrompt =
                   hasSeenPromptString && JSON.parse(hasSeenPromptString);
@@ -156,7 +155,9 @@ export const FollowUps = (
                   setHighlightReadingList &&
                   setShowReadingListPrompt &&
                   isChecked &&
-                  followupOption.id === SentimentOptions.INTERESTED &&
+                  option.id === FeaturesOptions.HEARD &&
+                  followupOption.id ===
+                    SimplifiedSentimentOptions.POSITIVE_SENTIMENT &&
                   !hasSeenPrompt
                 ) {
                   setHighlightReadingList(true);
@@ -167,7 +168,7 @@ export const FollowUps = (
             />
             <span className="sentiment-icon" aria-hidden={true} />
             <T
-              token={`followups.${followupOption.id}`}
+              token={`options.sentiment.${option.id}.${followupOption.id}.label`}
               className="sentiment-label"
             />
           </label>
@@ -175,42 +176,4 @@ export const FollowUps = (
       })}
     </fieldset>
   ) : null;
-};
-
-export const FollowUpComment = (
-  props: ExperienceProps & {
-    option: OptionMetadata;
-    followupData: FollowupData;
-  },
-) => {
-  const {
-    updateCurrentValues,
-    option,
-    question,
-    readOnly,
-    path,
-    followupData,
-  } = props;
-
-  const { freeformFollowupValue, freeformFollowupPath } = followupData;
-
-  if (!freeformFollowupPath) {
-    throw new Error(
-      `Could not find freeformFollowupPath for question ${question.id}`,
-    );
-  }
-
-  const { t } = useI18n();
-  const placeholder = t(`followups.placeholder`);
-
-  return (
-    <div className="form-input-followups-freeform">
-      <CommentTextarea
-        readOnly={!!readOnly}
-        value={freeformFollowupValue!}
-        path={freeformFollowupPath}
-        placeholder={placeholder}
-      />
-    </div>
-  );
 };

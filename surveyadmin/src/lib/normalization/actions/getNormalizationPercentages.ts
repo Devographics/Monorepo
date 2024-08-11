@@ -49,8 +49,10 @@ export const getNormalizationPercentages = async (
     throw new Error(`Could not find edition with id ${editionId}`);
   }
 
-  return await getFromCache<NormalizationProgressStats>({
-    key: getNormalizationPercentagesCacheKey({ survey, edition }),
+  const key = getNormalizationPercentagesCacheKey({ survey, edition });
+
+  const result = await getFromCache<NormalizationProgressStats>({
+    key,
     fetchFunction: async () => {
       const stats = {};
       const questions = getNormalizableQuestions({ survey, edition });
@@ -88,4 +90,5 @@ export const getNormalizationPercentages = async (
     shouldGetFromCache,
     ...rest,
   });
+  return result;
 };

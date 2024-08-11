@@ -1,8 +1,22 @@
+/**
+ * We have to centralize cache key in this file,
+ * even if they are specific to an app or use case
+ * in order to avoid circular dependencies with more specific packages like "@devographics/i18n"
+ * 
+ * TODO: define if @devographics/fetch should be a utility library used by others (i18n etc.)
+ * or a centralization libs that uses others libs (to handle cache etc.)
+ */
+
 type CacheKeyOptions = {
     appName?: string
 }
 
 const getAppName = (options?: { appName?: string }) => options?.appName || process.env.APP_NAME
+
+/** Will dedupe and sort contexts to get a unique key */
+export const localeWithStringsCacheKey =
+    (options: CacheKeyOptions & { localeId: string, contexts: Array<string> }) =>
+        `${getAppName(options)}_localeWithStrings_${options.localeId}_${[...(new Set(options.contexts)).values()].sort().join(',')}`
 
 export const editionMetadataCacheKey = (
     options: CacheKeyOptions & {
@@ -33,20 +47,6 @@ export const allLocalesMetadataCacheKey = (options?: CacheKeyOptions) =>
 export const allLocalesIdsCacheKey = (options?: CacheKeyOptions) =>
     `${getAppName(options)}__allLocalesIds`
 
-export const localeCacheKey = (
-    options: CacheKeyOptions & {
-        localeId: string
-        contexts: string[]
-    }
-) => `${getAppName(options)}__${options.localeId}__${options.contexts.join('_')}`
-
-export const localeConvertedCacheKey = (
-    options: CacheKeyOptions & {
-        localeId: string
-        contexts: string[]
-    }
-) => `${getAppName(options)}__${options.localeId}__${options.contexts.join('_')}__converted`
-
 export const allEntitiesCacheKey = (options?: CacheKeyOptions) =>
     `${getAppName(options)}__allEntities`
 
@@ -59,6 +59,5 @@ export const questionDataCacheKey = (
         questionId: string
     }
 ) =>
-    `${getAppName(options)}__${options.surveyId}__${options.editionId}__${options.sectionId}__${
-        options.questionId
+    `${getAppName(options)}__${options.surveyId}__${options.editionId}__${options.sectionId}__${options.questionId
     }__questionData`

@@ -13,11 +13,10 @@ import React, {
   RefObject,
 } from "react";
 
-import { TokenType, useIntlContext } from "@devographics/react-i18n-legacy";
 import Form from "react-bootstrap/Form";
 import { FormInputProps } from "./typings";
 import { CommentTrigger, CommentInput } from "./FormComment";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 import { getQuestioni18nIds } from "~/i18n/survey";
 import { useQuestionTitle } from "~/lib/surveys/helpers/useQuestionTitle";
 import { getFormPaths } from "@devographics/templates";
@@ -34,9 +33,6 @@ import { useFormPropsContext } from "./FormPropsContext";
 import { SectionMetadata } from "@devographics/types";
 import { DbPathsEnum } from "@devographics/types";
 
-
-
-
 export interface FormItemProps extends FormInputProps {
   children: ReactNode;
   showMore?: boolean;
@@ -45,8 +41,6 @@ export interface FormItemProps extends FormInputProps {
   className?: string;
   isInvalid?: boolean;
 }
-
-import { T } from "@devographics/react-i18n";
 
 export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
   function FormItem(props: FormItemProps, parentRef) {
@@ -76,7 +70,9 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
       setReactToChanges,
     } = stateStuff;
 
-    const { allowComment } = question;
+    // const { allowComment } = question;
+    // allow comments on all questions
+    const allowComment = true;
 
     const formPaths = getFormPaths({ edition, question });
     const commentPath = formPaths.comment;
@@ -90,7 +86,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
 
     // open the comment widget if there is already a comment or this is the first question
     const [showCommentInput, setShowCommentInput] = useState(
-      (!readOnly && question.showCommentInput) || !!commentValue,
+      (!readOnly && question.showCommentInput) || !!commentValue
     );
 
     const childRef = useRef<HTMLDivElement>(null);
@@ -181,7 +177,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
 
     if (allowComment && !commentPath)
       console.warn(
-        `Allowed comments for component of template ${question.template}, but it doesn't have a commentPath`,
+        `Allowed comments for component of template ${question.template}, but it doesn't have a commentPath`
       );
     return (
       <div
@@ -224,7 +220,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
 export const SkipButton = ({
@@ -275,13 +271,13 @@ export const SkipButton = ({
 };
 
 export const FormItemTitle = (
-  props: FormItemProps & { section: SectionMetadata },
+  props: FormItemProps & { section: SectionMetadata }
 ) => {
   const { question, enableReadingList, section } = props;
-  const intl = useIntlContext();
+  const { t } = useI18n();
   const { yearAdded } = question;
 
-  const { clean: label } = useQuestionTitle({ section, question });
+  const { tClean: label } = useQuestionTitle({ section, question });
 
   return (
     <legend className="form-label-legend">
@@ -289,18 +285,27 @@ export const FormItemTitle = (
         <Form.Label>
           <QuestionLabel section={section} question={question} />
 
-          {yearAdded === 2023 && (
-            <span
-              className="question-label-new"
-              title={intl.formatMessage({ id: "general.newly_added" })?.t}
+          {yearAdded === 2024 && (
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id="general.newly_added">
+                  <T token="general.newly_added" />
+                </Tooltip>
+              }
             >
-              {yearAdded}
-            </span>
+              <span
+                className="question-label-new"
+                title={t("general.newly_added")}
+              >
+                {yearAdded}
+              </span>
+            </OverlayTrigger>
           )}
         </Form.Label>
 
         {enableReadingList && question.entity && (
-          <AddToList {...props} label={label} id={question.id} />
+          <AddToList {...props} label={label || ""} id={question.id} />
         )}
 
         {/* <span className="form-label-number">
@@ -312,27 +317,46 @@ export const FormItemTitle = (
 };
 
 export const FormItemDescription = (
-  props: FormItemProps & { section: SectionMetadata },
+  props: FormItemProps & { section: SectionMetadata }
 ) => {
   const { question } = props;
   const { entity } = question;
-  const intl = useIntlContext();
+  const { t, getMessage } = useI18n();
   const intlIds = getQuestioni18nIds({ ...props });
-  const i18nDescription = intl.formatMessage({ id: intlIds.description });
+  const i18nDescription = getMessage(intlIds.description);
+  const i18nPrompt = getMessage(intlIds.prompt);
+
   const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
-  return i18nDescription && i18nDescription.type !== TokenType.KEY_FALLBACK ? (
-    <div className="form-item-description">
-      <T token={intlIds.description} />
-    </div>
-  ) : entityDescription ? (
-    <p className="form-item-description">
-      <span
-        dangerouslySetInnerHTML={{
-          __html: entityDescription,
-        }}
-      />
-    </p>
-  ) : null;
+
+  if (i18nPrompt && !i18nPrompt.missing) {
+    // .type !== TokenType.KEY_FALLBACK) {
+    return (
+      <div className="form-item-description">
+        <T token={intlIds.prompt} />
+      </div>
+    );
+  } else if (
+    i18nDescription &&
+    !i18nDescription.missing //.type !== TokenType.KEY_FALLBACK
+  ) {
+    return (
+      <div className="form-item-description">
+        <T token={intlIds.description} />
+      </div>
+    );
+  } else if (entityDescription) {
+    return (
+      <p className="form-item-description">
+        <span
+          dangerouslySetInnerHTML={{
+            __html: entityDescription,
+          }}
+        />
+      </p>
+    );
+  } else {
+    return null;
+  }
 };
 
 export const FormItemLimit = ({ question }: FormItemProps) => {
@@ -345,10 +369,10 @@ export const FormItemLimit = ({ question }: FormItemProps) => {
 };
 
 export const FormItemNote = (
-  props: FormItemProps & { section: SectionMetadata },
+  props: FormItemProps & { section: SectionMetadata }
 ) => {
-  const intl = useIntlContext();
+  const { t } = useI18n();
   const intlIds = getQuestioni18nIds({ ...props });
-  const note = intl.formatMessage({ id: intlIds.note })?.t;
+  const note = t(intlIds.note);
   return note ? <T className="form-note" token={intlIds.note} /> : null;
 };

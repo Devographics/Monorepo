@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 import { FormInputProps } from "~/components/form/typings";
 
 import FormControl from "react-bootstrap/FormControl";
@@ -20,8 +20,7 @@ export const Email2 = (props: FormInputProps) => {
 
   const { id: questionId } = question;
   const checkboxValue = response?.receiveNotifications;
-  const intl = useIntlContext();
-
+  const { t } = useI18n()
   const localStorageEmail =
     typeof localStorage !== "undefined" && localStorage.getItem("email");
   const responseEmail = response?.email;
@@ -80,7 +79,7 @@ export const Email2 = (props: FormInputProps) => {
         <div>
           {/* @ts-ignore */}
           <FormControl
-            placeholder={intl.formatMessage({ id: "user_info.email" })?.t}
+            placeholder={t("user_info.email")}
             type="email"
             value={localValue}
             onChange={handleChangeDebounced}

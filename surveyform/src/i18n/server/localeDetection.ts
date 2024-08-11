@@ -6,7 +6,6 @@
  * in "packages" folder
  */
 import { IncomingMessage } from "http";
-import { LOCALE_COOKIE_NAME } from "../cookie";
 
 // Add language info to the custom _document header
 export interface DocumentLanguageProps {
@@ -37,24 +36,6 @@ export const getReqCookies = (req: IncomingMessage) => {
   return req?.headers?.cookie;
 };
 /**
- * @param cookieHeader
- * @returns
- */
-export const getLocaleFromCookie = (cookieHeader?: string | null) => {
-  if (!cookieHeader) return undefined;
-  // foo=1;bar=hello
-  const cookies = cookieHeader.split(";").map((c) => c.trim().split("="));
-  const localeCookie = cookies.find(([cookieName, cookieValue]) => {
-    return cookieName === LOCALE_COOKIE_NAME;
-  });
-  if (!localeCookie?.length) {
-    // Try to get from accept-language
-    return undefined;
-  }
-  const localeValue = localeCookie[1];
-  return localeValue;
-};
-/**
  * 1. Get from cookie
  * 2. Get from Accept-Language
  * TODO: should be in sync with middleware, that
@@ -75,8 +56,6 @@ export const getLocaleFromCookie = (cookieHeader?: string | null) => {
  * @returns
  */
 export const getLocaleFromReq = (req: IncomingMessage) => {
-  const fromCookie = getLocaleFromCookie(getReqAcceptLanguage(req));
-  if (fromCookie) return fromCookie;
   const fromAcceptLanguage = getLocaleFromAcceptLanguage(getReqCookies(req));
   if (fromAcceptLanguage) return fromAcceptLanguage;
   return undefined;

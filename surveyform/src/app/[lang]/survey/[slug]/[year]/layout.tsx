@@ -10,14 +10,14 @@ import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import {
   getCommonContexts,
   getEditionContexts,
+  getSurveyContexts,
   safeLocaleIdFromParams,
 } from "~/i18n/config";
 import {
   rscAllLocalesMetadata,
-  rscLocale,
   rscLocaleFromParams,
 } from "~/lib/api/rsc-fetchers";
-// import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
+import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
 import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 interface SurveyPageServerProps {
@@ -31,9 +31,7 @@ export async function generateMetadata({
 }: {
   params: SurveyPageServerProps;
 }): Promise<Metadata | undefined> {
-  // TODO: it seems we need to call this initialization code on all relevant pages/layouts
-  return undefined;
-  // return await rscGetMetadata({ params });
+  return await rscGetMetadata({ params });
 }
 
 /**
@@ -50,22 +48,20 @@ export default async function SurveyLayout({
 }) {
   setLocaleIdServerContext(params.lang); // Needed for "ServerT"
   const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
-  const i18nContexts = getEditionContexts(edition);
-  // TODO: should we load common contexts here ? They may already be fetched by the common layout ?
   const {
     locale,
     localeId,
     error: localeError,
   } = await rscLocaleFromParams({
     lang: params.lang,
-    contexts: [...i18nContexts, ...getCommonContexts()],
+    contexts: [
+      // TODO: we should have a shared layout between (mainLayout) pages and "survey/[slug]/[year]" that handle locales
+      // so we don't have to reload commonContext translations in the surveys page
+      ...getCommonContexts(),
+      ...getSurveyContexts(edition.survey), ...getEditionContexts(edition)],
   });
   if (localeError) {
-    return (
-      <div>
-        Can't load translations: <code>{JSON.stringify(localeError)}</code>
-      </div>
-    );
+    throw new Error(`Can't load translations from API, error: ${JSON.stringify(localeError)}`)
   }
   // locales lists
   const {

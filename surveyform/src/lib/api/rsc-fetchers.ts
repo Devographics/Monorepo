@@ -3,7 +3,6 @@ import { unstable_cache } from "next/cache";
 import {
   fetchAllLocalesIds,
   fetchAllLocalesMetadata,
-  fetchLocaleConverted,
 } from "@devographics/fetch";
 import { AppName } from "@devographics/types";
 import { getCommonContexts, safeLocaleIdFromParams } from "~/i18n/config";
@@ -15,18 +14,16 @@ import { rscLocaleIdContext } from "~/i18n/rsc-context";
  * Will cache per localeId and contexts
  * /!\ Will not automatically merge cache if contexts are repeated
  * (eg fetching ["general"] then ["general", "survey"])
- * @deprecated replace by the new version
  */
-export const rscLocale = cache((options: any) => fetchLocaleConverted(options));
 export const rscLocaleNew = cache(
   async (options: {
     localeId: string;
     contexts: Array<string>;
   }): // FIXME: the type is not properly inferred at time of writing, despite being correct in the package
-  Promise<
-    | { locale: LocaleParsed; error?: undefined }
-    | { error: Error; locale?: undefined }
-  > => {
+    Promise<
+      | { locale: LocaleParsed; error?: undefined }
+      | { error: Error; locale?: undefined }
+    > => {
     const { locale, error } = (await getLocaleDict(options)) as
       | { locale: LocaleParsed; error?: undefined }
       | { locale?: undefined; error: Error };
@@ -79,14 +76,21 @@ export const rscLocaleFromParams = (params: LocaleParams) =>
 
 /**
  * Get current locale strings within React Server Components
+ * 
  * Uses a server context to retrieve the "lang" param
+ * supposing that you called setLocaleIdServerContext(params.lang) earlier
+ * or optionaly an explicit "localeIdParams"
  *
  * Contexts must be passed as a rest parameter in order to allow caching
  */
 export const rscLocaleCached = async ({
   contexts,
-}: { contexts?: Array<string> } = {}) => {
-  const lang = rscLocaleIdContext();
+  localeId
+}: {
+  contexts?: Array<string>,
+  localeId?: string
+} = {}) => {
+  const lang = localeId || rscLocaleIdContext();
   return rscLocaleFromParams({ lang, contexts });
 };
 

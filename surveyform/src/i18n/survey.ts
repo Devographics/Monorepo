@@ -14,18 +14,19 @@ const separator = ".";
  * sections.<sectionNamespace>.<base>
  * TODO: could be computed a bit more precisely based on the survey yaml
  */
-export const sectionTokens = ["sections.*", "sections.*.*", "sections.*.*.title", "section.*.*.description"]
+export const sectionTokens = [
+  "sections.*",
+  "sections.*.*",
+  "sections.*.*.title",
+  "section.*.*.description",
+];
 
 /**
  * When using this function,
  * be careful to define client tokens accordingly
- * @returns 
+ * @returns
  */
-export const getSectionTokens = ({
-  section,
-}: {
-  section: SectionMetadata;
-}) => {
+export const getSectionTokens = ({ section }: { section: SectionMetadata }) => {
   const { id: sectionId, intlId } = section;
 
   const sectionNamespace = sectionId;
@@ -50,7 +51,13 @@ export const getSectionTokens = ({
  * TODO: could be computed more precisely based on the current survey
  * <sectionNamespace>.<questionNamespace>.title
  */
-export const questionTokens = ["*.*.title", "*.*.description", "*.*.question", "*.*.note", "*.*.others"]
+export const questionTokens = [
+  "*.*.title",
+  "*.*.description",
+  "*.*.question",
+  "*.*.note",
+  "*.*.others",
+];
 
 export const getQuestioni18nIds = ({
   section,
@@ -82,6 +89,8 @@ export const getQuestioni18nIds = ({
     title: joinWithBase("title"),
     // e.g. user_info.yearly_salary.description => "How much do you earn?" (legacy)
     description: joinWithBase("description"),
+    // e.g. user_info.yearly_salary.prompt => "In USD, pre-tax income"
+    prompt: joinWithBase("prompt"),
     // e.g. user_info.yearly_salary.question => "How much do you earn?"
     question: joinWithBase("question"),
     // e.g. user_info.yearly_salary.note => a note about the question displayed below
@@ -94,10 +103,10 @@ export const getQuestioni18nIds = ({
 };
 
 /**
- * TODO: compute more precisely 
+ * TODO: compute more precisely
  * options.<questionNamespace>.<questionId>.description
  */
-export const optionsTokens = ["options.*.*", "options.*.*.description"]
+export const optionsTokens = ["options.*.*", "options.*.*.description"];
 
 export const getOptioni18nIds = ({
   question,

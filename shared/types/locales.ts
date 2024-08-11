@@ -62,9 +62,9 @@ export interface LocaleDynamicMetaData {
 }
 
 /**
-* Full locale data
-    * @deprecated Migrate towards @devographics/react-i18n based on "results" and shared with surveyform
-        */
+ * Full locale data
+ * @deprecated Migrate towards @devographics/react-i18n based on "results" and shared with surveyform
+ */
 export interface Locale {
     id: string
     label?: string
@@ -74,7 +74,7 @@ export interface Locale {
     translatedCount?: number
     totalCount?: number
     completion?: number
-    untranslatedKeys?: string[]
+    untranslatedStrings?: TranslationStringObject[]
 }
 export interface TranslationStringObject {
     key: string

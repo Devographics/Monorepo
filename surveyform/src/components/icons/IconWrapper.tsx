@@ -2,7 +2,7 @@
 
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 import { ReactNode, cloneElement } from "react";
 import { Button } from "~/components/ui/Button";
 
@@ -26,8 +26,7 @@ export interface IconWrapperProps extends IconProps {
 }
 
 export const IconWrapper = (props: IconWrapperProps & any) => {
-  const intl = useIntlContext();
-
+  const { t } = useI18n()
   const {
     enableTooltip = false,
     isButton = false,
@@ -40,7 +39,7 @@ export const IconWrapper = (props: IconWrapperProps & any) => {
   } = props;
 
   const label_ =
-    label || (labelId && intl.formatMessage({ id: labelId, values }))?.t;
+    label || (labelId && t(labelId, values));
 
   const iconElement = cloneElement(children, {
     role: "img",

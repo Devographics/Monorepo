@@ -1,5 +1,5 @@
 import React from "react";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 
 const ShareLinkedIn = ({
   link,
@@ -12,7 +12,7 @@ const ShareLinkedIn = ({
   summary?: string;
   trackingId?: string;
 }) => {
-  const intl = useIntlContext();
+  const { t } = useI18n();
   return (
     <a
       // onClick={track('LinkedIn', trackingId)}
@@ -22,7 +22,7 @@ const ShareLinkedIn = ({
       )}&title=${title}&summary=${summary}`}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={intl.formatMessage({ id: "share.linkedin" })?.t}
+      aria-label={t("share.linkedin")}
     >
       <div className="resp-sharing-button resp-sharing-button--linkedin resp-sharing-button--small">
         <div
@@ -40,7 +40,7 @@ const ShareLinkedIn = ({
         </div>
       </div>
       <span className="sr-only">
-        {intl.formatMessage({ id: "share.linkedin" })?.t}
+        {t("share.linkedin")}
       </span>
     </a>
   );

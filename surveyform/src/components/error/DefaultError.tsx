@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 import { useRouter } from "next/navigation";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components";
@@ -37,6 +37,12 @@ const getTitleFromError = (error: Error | undefined, t: any) => {
   //if (errorI18nTokens?.titleI18nToken) return t(errorI18nTokens.titleI18nToken);
   return `${t("error.unknown")} "${error.name}"`;
 };
+
+/**
+ * Expect to be nested below the translation context
+ * @param param0 
+ * @returns 
+ */
 export const DefaultErrorDisplay = ({
   error,
   message,
@@ -51,12 +57,7 @@ export const DefaultErrorDisplay = ({
 }: DefaultErrorProps) => {
   //const classes = useStyles();
   //const { t } = useTranslation("common");
-  const intl = useIntlContext();
-  // TODO: detect when intl is not set and display the fallback messages instead
-  // console.log(intl);
-  const t = (token) => {
-    return intl.formatMessage({ id: token })?.t;
-  };
+  const { t } = useI18n()  // TODO: detect when intl is not set and display the fallback messages instead
   const router = useRouter();
 
   // const hasAccessToken = !!getAccessToken();
@@ -83,7 +84,7 @@ export const DefaultErrorDisplay = ({
       {/*<WarningIcon fontSize="large" />*/}
       <h2>
         {errorTitle}
-        {error?.name && <span> {}</span>}
+        {error?.name && <span> { }</span>}
       </h2>
       {!!errorMessage && (
         <p>
@@ -132,6 +133,105 @@ export const DefaultErrorDisplay = ({
               }}
             >
               {t("error.redirect_to_login") || "Go to login"}
+            </Button>
+          )}
+          {shouldProposeLogout && <LogoutButton />}
+        </div>
+      )}
+    </div>
+  );
+};
+
+
+/**
+ * Can be placed outside the i18n context, won't try to access the i18n context
+ * @returns 
+ */
+export const RawErrorDisplay = ({
+  error,
+  message,
+  title,
+  proposeReload,
+  proposeHomeRedirection,
+  proposeLoginRedirection,
+  onReload,
+  proposeLogout,
+}: DefaultErrorProps) => {
+  //const classes = useStyles();
+  //const { t } = useTranslation("common");
+  const router = useRouter();
+
+  // const hasAccessToken = !!getAccessToken();
+  const shouldProposeLogout = false; /*proposeLogout
+    ? !!currentUser || (isUserServiceUnavailable(error) && hasAccessToken)
+    : false;
+    */
+
+  const hasButtons =
+    proposeReload ||
+    proposeHomeRedirection ||
+    proposeLoginRedirection ||
+    shouldProposeLogout;
+  const errorMessage =
+    message || error?.message || "An error has occurred"
+
+  const errorTitle =
+    title || error?.name
+
+  return (
+    <div className={classes.wrapper}>
+      {/*<WarningIcon fontSize="large" />*/}
+      <h2>
+        {errorTitle}
+        {error?.name && <span> { }</span>}
+      </h2>
+      {!!errorMessage && (
+        <p>
+          <span>Error message: {addPointToSentence(errorMessage)}</span>{" "}
+          <span>A message has been sent to the technical team.</span>
+        </p>
+      )}
+      {hasButtons && (
+        <div className={classes.buttonsWrapper}>
+          {proposeReload && (
+            <>
+              <p /*className={classes.tryReloadMessage}*/>
+                {" "}
+                {"Try reloading the page"}
+              </p>
+              <Button
+                //color="primary"
+                //variant="outlined"
+                onClick={() => {
+                  if (onReload) {
+                    onReload();
+                  } else {
+                    window.location.reload();
+                  }
+                }}
+              >
+                {"Reload"}
+              </Button>
+            </>
+          )}
+          {proposeHomeRedirection && (
+            <Button
+              //variant="outlined"
+              onClick={() => {
+                router.push(routes.home.href);
+              }}
+            >
+              {"Back to home"}
+            </Button>
+          )}
+          {proposeLoginRedirection && (
+            <Button
+              //variant="outlined"
+              onClick={() => {
+                router.push(routes.home.href);
+              }}
+            >
+              {"Go to login"}
             </Button>
           )}
           {shouldProposeLogout && <LogoutButton />}

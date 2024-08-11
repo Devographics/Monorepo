@@ -15,19 +15,21 @@ export const others: TemplateFunction = options => {
     const questionSegment = question.id
 
     const rawPaths: DbPaths = {
-        other: `${sectionSegment}__${questionSegment}__${DbSuffixes.OTHERS}`,
-        skip: `${sectionSegment}__${questionSegment}__${DbPathsEnum.SKIP}`
+        [DbPathsEnum.OTHERS]: `${sectionSegment}__${questionSegment}__${DbSuffixes.OTHERS}`,
+        [DbPathsEnum.SKIP]: `${sectionSegment}__${questionSegment}__${DbPathsEnum.SKIP}`,
+        [DbPathsEnum.COMMENT]: `${sectionSegment}__${questionSegment}__${DbPathsEnum.COMMENT}`
     }
 
     const basePath = `${sectionSegment}.${questionSegment}`
 
     const normPaths: DbPaths = {
-        base: basePath,
-        raw: `${basePath}.${DbSuffixes.RAW}`,
-        metadata: `${basePath}.${DbSuffixes.METADATA}`,
-        error: `${basePath}.${DbSuffixes.ERROR}`,
-        other: `${basePath}.${DbSuffixes.NORMALIZED}`,
-        skip: `${basePath}.${DbPathsEnum.SKIP}`
+        [DbPathsEnum.BASE]: basePath,
+        [DbPathsEnum.RAW]: `${basePath}.${DbSuffixes.RAW}`,
+        [DbPathsEnum.METADATA]: `${basePath}.${DbSuffixes.METADATA}`,
+        [DbPathsEnum.ERROR]: `${basePath}.${DbSuffixes.ERROR}`,
+        [DbPathsEnum.OTHERS]: `${basePath}.${DbSuffixes.NORMALIZED}`,
+        [DbPathsEnum.SKIP]: `${basePath}.${DbPathsEnum.SKIP}`,
+        [DbPathsEnum.COMMENT]: `${basePath}.${DbPathsEnum.COMMENT}`
     }
 
     const output: QuestionTemplateOutput = {

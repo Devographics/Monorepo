@@ -1,8 +1,8 @@
 import type { ResponseDocument, SurveyMetadata } from "@devographics/types";
 import { EditionMetadata } from "@devographics/types";
-import { LocaleDef } from "~/i18n/typings";
 import { reverseSurveyParamsLookup } from "../data";
 import { outlineSegment } from "../../routes";
+import { type Locale } from "@devographics/i18n";
 
 export function getEditionSectionPath({
   survey,
@@ -17,7 +17,7 @@ export function getEditionSectionPath({
   edition: Pick<EditionMetadata, "id">;
   survey: Pick<SurveyMetadata, "id">;
   /** [state-of-js, 2022] */
-  locale: LocaleDef;
+  locale: Locale;
   /** No response is needed in read only mode */
   readOnly?: boolean;
   // section

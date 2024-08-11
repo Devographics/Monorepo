@@ -1,5 +1,5 @@
 import { number } from './number'
-import { TemplateFunction, QuestionTemplateOutput } from '@devographics/types'
+import { TemplateFunction, QuestionTemplateOutput, NumericalUnits } from '@devographics/types'
 import { addQuestionId } from '../helpers'
 
 /*
@@ -48,7 +48,8 @@ export const age_number: TemplateFunction = options => {
     const output: QuestionTemplateOutput = {
         ...number(addQuestionId(options, id)),
         groups,
-        filterFunction
+        filterFunction,
+        units: NumericalUnits.YEARS_OLD
     }
     return output
 }

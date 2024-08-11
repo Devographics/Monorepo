@@ -20,7 +20,7 @@ export const localesResolvers = {
         { localeId, contexts }: { localeId: string; contexts: string[] },
         context: RequestContext
     ) => {
-        console.log(`// locale resolver: ${localeId} (${contexts.join(', ')})`)
+        console.log(`// locale resolver: ${localeId} ${contexts ? `(${contexts.join(', ')})` : ''}`)
         return await getLocale({ localeId: convert(localeId), contexts, context })
     },
     locales: async (

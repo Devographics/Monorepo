@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
 
@@ -15,13 +15,13 @@ import {
   Example,
   FeaturesOptions,
   OptionMetadata,
+  SimplifiedSentimentOptions,
 } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 
 import get from "lodash/get.js";
-import { FollowupData, /*FollowUpComment,*/ FollowUps } from "./Followup2";
+import { FollowupData, /*FollowUpComment,*/ FollowUps } from "./Followup3";
 // import { CommentTrigger } from "~/components/form/FormComment";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
 
 import Alert from "react-bootstrap/Alert";
 import { useFormPropsContext } from "~/components/form/FormPropsContext";
@@ -84,7 +84,7 @@ export const CodeExample = ({
   return (
     <div className="code-example">
       <h5 className="code-example-heading">
-        {label || language || <FormattedMessage id="general.code_example" />}{" "}
+        {label || language || <T token="general.code_example" />}{" "}
       </h5>
       <pre>
         <code dangerouslySetInnerHTML={{ __html: codeHighlighted }}></code>
@@ -119,28 +119,15 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
 
   const formPaths = getFormPaths({ edition, question });
 
-  // get the paths of the predefined and freeform followup answers
-  // inside the overall response document for this specific option
-  const allPredefinedFollowupPaths = formPaths[DbPathsEnum.FOLLOWUP_PREDEFINED];
-  const predefinedFollowupPath = allPredefinedFollowupPaths?.[option.id];
-  const freeformFollowupPath =
-    formPaths[DbPathsEnum.FOLLOWUP_FREEFORM]?.[option.id];
+  // get path to store sentiment for this question
+  const sentimentPath = formPaths[DbPathsEnum.SENTIMENT];
+  const sentimentValue = (sentimentPath && get(response, sentimentPath)) || [];
 
-  const predefinedFollowupValue =
-    (predefinedFollowupPath && get(response, predefinedFollowupPath)) || [];
-  const freeformFollowupValue =
-    (freeformFollowupPath && get(response, freeformFollowupPath)) || "";
-
-  const hasFollowupData =
-    !isEmpty(predefinedFollowupValue) || !isEmpty(freeformFollowupValue);
-  // const [showFollowupComment, setShowFollowupComment] =
-  // useState(hasFollowupData);
+  const hasFollowupData = !isEmpty(sentimentValue);
 
   const followupData: FollowupData = {
-    predefinedFollowupPath,
-    freeformFollowupPath,
-    predefinedFollowupValue,
-    freeformFollowupValue,
+    sentimentPath,
+    sentimentValue,
   };
 
   const isChecked = value === option.id;
@@ -183,13 +170,12 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
                 }}
                 onChange={(e) => {
                   updateCurrentValues({ [path]: e.target.value });
-                  if (allPredefinedFollowupPaths) {
-                    // when main value changes, also clear all predefined follow-ups
-                    for (const followUpPath of Object.values(
-                      allPredefinedFollowupPaths,
-                    )) {
-                      updateCurrentValues({ [followUpPath]: null });
-                    }
+                  if (sentimentPath) {
+                    // when main experience value changes, set sentiment to "neutral" by default
+                    updateCurrentValues({
+                      [sentimentPath]:
+                        SimplifiedSentimentOptions.NEUTRAL_SENTIMENT,
+                    });
                   }
                 }}
                 type="radio"
@@ -209,7 +195,7 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
               placement="top"
               overlay={
                 <Tooltip id={`${question.id}_unimplemented_tooltip`}>
-                  <FormattedMessage id="feature.unimplemented.description" />
+                  <T token="feature.unimplemented.description" />
                 </Tooltip>
               }
             >
@@ -217,7 +203,7 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
                 className="feature-unimplemented"
                 aria-describedby={`${question.id}_unimplemented_tooltip`}
               >
-                <FormattedMessage id="feature.unimplemented" />
+                <T token="feature.unimplemented" />
               </span>
             </OverlayTrigger>
           )}
@@ -248,10 +234,8 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
 };
 
 export const ReadingListPrompt = ({ setHighlightReadingList }) => {
-  const intl = useIntlContext();
-  const optionLabel = intl.formatMessage({
-    id: "followups.sentiment_interested",
-  })?.t;
+  const { t } = useI18n();
+  const optionLabel = t("followups.sentiment_interested");
   return (
     <Alert
       variant="warning"
@@ -261,10 +245,7 @@ export const ReadingListPrompt = ({ setHighlightReadingList }) => {
       }}
     >
       <div className="reading-list-prompt">
-        <FormattedMessage
-          id="readinglist.prompt"
-          values={{ option: optionLabel }}
-        />
+        <T token="readinglist.prompt" values={{ option: optionLabel }} />
       </div>
     </Alert>
   );

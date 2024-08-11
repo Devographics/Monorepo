@@ -1,10 +1,9 @@
 "use client";
 import Link from "next/link";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
 import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { useEdition } from "../SurveyContext/Provider";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import type { DetailedErrorObject } from "~/lib/validation";
+import { T, useI18n } from "@devographics/react-i18n";
 
 export const duplicateResponseErrorId = "duplicate_response";
 
@@ -14,7 +13,7 @@ export const ResponseError = ({
   responseError: DetailedErrorObject;
 }) => {
   console.log("responseError", { responseError });
-  const { locale } = useLocaleContext();
+  const { locale } = useI18n()
   const { id, properties } = responseError;
   const { edition } = useEdition();
   return (
@@ -34,7 +33,7 @@ export const ResponseError = ({
             locale,
           })}
         >
-          <FormattedMessage id="general.continue_survey" />
+          <T token="general.continue_survey" />
         </Link>
       )}
     </div>
@@ -49,7 +48,7 @@ export const ResponseErrorContents = ({
   const { id, message, error, properties } = responseError;
   return (
     <div>
-      <FormattedMessage id={`error.${id}`} defaultMessage={message} />
+      <T token={`error.${id}`} fallback={message} />
     </div>
   );
 };

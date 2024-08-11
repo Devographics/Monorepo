@@ -4,7 +4,7 @@ import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 import { getQuestioni18nIds } from "~/i18n/survey";
 
 const MemoFormControl = memo(FormControl);
@@ -32,7 +32,7 @@ const keysMemo = (items: Array<Item>): string =>
   items.map((i) => i.key).join("-");
 const selectItem = (
   wrapper: Element | undefined | null,
-  key: string,
+  key: string
 ): HTMLInputElement | null | undefined => {
   const maybeItem = wrapper?.querySelector(itemSelector(key));
   if (!maybeItem) console.warn(`Item key ${key} not found`);
@@ -45,7 +45,7 @@ const selectItem = (
  */
 const getItemValues = (
   wrapper: Element | undefined | null,
-  items: Array<Item>,
+  items: Array<Item>
 ) => {
   const itemElems = items
     .map((item) => selectItem(wrapper, item.key))
@@ -54,7 +54,7 @@ const getItemValues = (
 };
 const getEmptyKeys = (
   wrapper: Element | undefined | null,
-  items: Array<Item>,
+  items: Array<Item>
 ) => {
   return items
     .map(({ key }) => ({
@@ -77,7 +77,7 @@ const focusInputEnd = (maybeInput: HTMLInputElement | null | undefined) => {
   if (maybeInput.value?.length) {
     maybeInput.setSelectionRange(
       maybeInput.value.length,
-      maybeInput.value.length,
+      maybeInput.value.length
     ); // hack to force focusing at the end
   }
 };
@@ -182,7 +182,7 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
         virtualItems,
       }));
     },
-    [setRealVirtualItems],
+    [setRealVirtualItems]
   );
   function expectedNbVirtual(nbItems: number) {
     // Virtual fields incitate user to answer
@@ -226,7 +226,7 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
       });
       refillVirtualItems();
     },
-    [setRealVirtualItems, refillVirtualItems],
+    [setRealVirtualItems, refillVirtualItems]
   );
 
   // Manage real items
@@ -239,14 +239,14 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
         ...items.slice(index),
       ]);
     },
-    [setItems],
+    [setItems]
   );
   const removeItemAt = useCallback(
     (idx: number) => {
       setItems((items) => [...items.slice(0, idx), ...items.slice(idx + 1)]);
       refillVirtualItems();
     },
-    [setItems, refillVirtualItems],
+    [setItems, refillVirtualItems]
   );
 
   const removeKeys = useCallback(
@@ -254,7 +254,7 @@ const useRealVirtualItems = (values: Array<string>, limit?: number) => {
       setItems((items) => items.filter(({ key }) => !keys.includes(key)));
       refillVirtualItems();
     },
-    [setItems],
+    [setItems]
   );
 
   return [
@@ -336,12 +336,12 @@ const TextList = (props: FormInputProps<Array<string>>) => {
       }
       return selectItem(wrapperRef.current, items[index - 1].key);
     },
-    [keysMemo(items), keysMemo(virtualItems)],
+    [keysMemo(items), keysMemo(virtualItems)]
   );
   const selectFirstVirtualItem = useCallback(
     // We may have no virtualItems when reaching the limit and the last virtual item is turned into a real one
     () => selectItem(wrapperRef.current, virtualItems[0]?.key),
-    [virtualItems[0]?.key],
+    [virtualItems[0]?.key]
   );
 
   const hasNextItem = useCallback(
@@ -350,7 +350,7 @@ const TextList = (props: FormInputProps<Array<string>>) => {
       if (nextIdx > limit - 1) return false;
       return true;
     },
-    [keysMemo(items), keysMemo(virtualItems)],
+    [keysMemo(items), keysMemo(virtualItems)]
   );
   const selectNextItem = useCallback(
     (index: number) => {
@@ -359,7 +359,7 @@ const TextList = (props: FormInputProps<Array<string>>) => {
       }
       return selectItem(wrapperRef.current, items[index + 1].key);
     },
-    [keysMemo(items), keysMemo(virtualItems), hasNextItem],
+    [keysMemo(items), keysMemo(virtualItems), hasNextItem]
   );
 
   const onFormBlur = useCallback(
@@ -371,25 +371,25 @@ const TextList = (props: FormInputProps<Array<string>>) => {
         removeEmptyItems();
       }
     },
-    [removeEmptyItems],
+    [removeEmptyItems]
   );
   const onItemBlur = useCallback(
     (
       index: number,
       event:
         | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-        | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>, // onBlur
+        | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement> // onBlur
     ) => {
       updateValue(items);
     },
-    [items],
+    [items]
   );
 
   const onItemChange = useCallback(
     (
       index: number,
       key: string,
-      evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+      evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
       // We only update values on blur,
       // but on change, if the input is virtual,
@@ -401,7 +401,7 @@ const TextList = (props: FormInputProps<Array<string>>) => {
       }
       updateValueDebounced(items);
     },
-    [reifyVirtualItem, keysMemo(items)],
+    [reifyVirtualItem, keysMemo(items)]
   );
   /**
    * if pressing backspace in an empty input,
@@ -410,7 +410,7 @@ const TextList = (props: FormInputProps<Array<string>>) => {
   const onBackspaceDeleteKeyDown = useCallback(
     (
       evt: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
-      index: number,
+      index: number
     ) => {
       // @ts-ignore TODO: not sure why we don't have a value despite using an HTMLInputElement
       const value: string = evt.target.value;
@@ -444,7 +444,7 @@ const TextList = (props: FormInputProps<Array<string>>) => {
         removeItemAt(index);
       }
     },
-    [removeItemAt, selectNextItem, selectPreviousItem],
+    [removeItemAt, selectNextItem, selectPreviousItem]
   );
   const onItemKeyUp = useCallback((evt: KeyEvent) => {
     if (evt.key === "Backspace" || evt.key === "Delete") {
@@ -499,7 +499,7 @@ const TextList = (props: FormInputProps<Array<string>>) => {
         onBackspaceDeleteKeyDown(evt, index);
       }
     },
-    [items.length, selectNextItem],
+    [items.length, selectNextItem]
   );
 
   const itemProps = {
@@ -551,35 +551,27 @@ const TextListItem = memo(function TextListItem({
   onItemKeyDown: any;
   onItemKeyUp: any;
 }) {
-  const intl = useIntlContext();
-
-  const defaultPlaceholder = intl.formatMessage({
-    id: "textlist.placeholder",
-    values: { index: index + 1 },
-  })?.t;
+  const { getFallbacks } = useI18n();
+  const index_ = index + 1;
   const i18n = getQuestioni18nIds({ section, question });
 
-  const questionPlaceholder = intl.formatMessage({
-    id: `${i18n.base}.placeholder`,
-    values: { index: index + 1 },
-  })?.t;
-
-  const indexPlaceholder = intl.formatMessage({
-    id: `${i18n.base}.placeholder.${index + 1}`,
-    values: { index: index + 1 },
-  })?.t;
-
-  const placeholder =
-    indexPlaceholder || questionPlaceholder || defaultPlaceholder;
+  const placeholder = getFallbacks(
+    [
+      `${i18n.base}.placeholder.${index_}`,
+      `${i18n.base}.placeholder`,
+      "textlist.placeholder",
+    ],
+    { index: index_ }
+  );
 
   const onBlur = useCallback((evt) => onItemBlur(index, evt), [onItemBlur]);
   const onChange = useCallback(
     (evt) => onItemChange(index, item.key, evt),
-    [onItemChange],
+    [onItemChange]
   );
   const onKeyDown = useCallback(
     (evt) => onItemKeyDown(index, evt),
-    [onItemKeyDown],
+    [onItemKeyDown]
   );
   const onKeyUp = useCallback((evt) => onItemKeyUp(evt), [onItemKeyUp]);
   return (
@@ -590,7 +582,7 @@ const TextListItem = memo(function TextListItem({
       style={formControlStyle}
       // TODO: use different templates to simplify?
       as={question.longText ? "textarea" : "input"}
-      placeholder={placeholder}
+      placeholder={placeholder?.t}
       defaultValue={item.initialValue}
       onBlur={onBlur}
       onChange={onChange}

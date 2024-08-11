@@ -7,7 +7,13 @@ import { findDuplicates } from './utilities'
 import sortBy from 'lodash/sortBy.js'
 
 export const filterContexts = ({ locale, contexts }: { locale: Locale; contexts: string[] }) => {
-    return { ...locale, strings: locale.strings.filter(s => contexts.includes(s.context)) }
+    return {
+        ...locale,
+        strings: locale.strings.filter(s => contexts.includes(s.context)),
+        untranslatedStrings: (locale.untranslatedStrings || []).filter(s =>
+            contexts.includes(s.context)
+        )
+    }
 }
 
 /*
@@ -22,7 +28,7 @@ export const resolveAliases = (stringFile: StringFile, localeRawData: RawLocale)
             // look through all stringFiles to find the "real" string being aliased
             let realString
             for (const sf of localeRawData.stringFiles) {
-                const rs = sf.strings.find((ss: TranslationStringObject) => ss.key === s.aliasFor)
+                const rs = sf?.strings?.find((ss: TranslationStringObject) => ss.key === s.aliasFor)
                 if (rs) {
                     realString = rs
                     break
@@ -136,10 +142,13 @@ export const flattenStringFiles = (
     return stringObjects
 }
 
-export const addLocaleMetadata = (locale: Locale, untranslatedKeys: string[]): Locale => {
+export const addLocaleMetadata = (
+    locale: Locale,
+    untranslatedStrings: TranslationStringObject[]
+): Locale => {
     const isEn = locale.id === 'en-US'
     const totalCount = locale.strings.length
-    const translatedCount = totalCount - untranslatedKeys.length
+    const translatedCount = totalCount - untranslatedStrings.length
     const completion = isEn ? 100 : Math.round((translatedCount * 100) / totalCount)
     const repo = `devographics/locale-${locale.id}`
     const dynamicData = {
@@ -148,20 +157,18 @@ export const addLocaleMetadata = (locale: Locale, untranslatedKeys: string[]): L
         completion,
         repo
     }
-    return { ...locale, ...dynamicData }
+    return { ...locale, ...dynamicData, untranslatedStrings }
 }
 
-export const computeUntranslatedKeys = (
+export const computeUntranslatedStrings = (
     locale: RawLocale,
     allStrings: TranslationStringObject[]
 ) => {
     const isEn = locale.id === 'en-US'
-    const untranslatedKeys = isEn
+    const untranslatedStrings = isEn
         ? []
-        : allStrings
-              .filter((s: TranslationStringObject) => s.isFallback)
-              .map((s: TranslationStringObject) => s.key)
-    return untranslatedKeys
+        : allStrings.filter((s: TranslationStringObject) => s.isFallback)
+    return untranslatedStrings
 }
 
 export const checkForDuplicates = (
@@ -254,8 +261,8 @@ export const processLocale = (
     const { stringFiles, ...localeWithoutStringfiles } = locale
     let processedLocale = { ...localeWithoutStringfiles, strings: allLocaleStrings }
 
-    const untranslatedKeys = computeUntranslatedKeys(locale, processedLocale.strings)
-    const processedLocaleWithMetadata = addLocaleMetadata(processedLocale, untranslatedKeys)
+    const untranslatedStrings = computeUntranslatedStrings(locale, processedLocale.strings)
+    const processedLocaleWithMetadata = addLocaleMetadata(processedLocale, untranslatedStrings)
 
     logToFile(`locales_processed/${processedLocale.id}.yml`, processedLocaleWithMetadata)
     return processedLocaleWithMetadata

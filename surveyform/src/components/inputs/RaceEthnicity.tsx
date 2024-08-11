@@ -1,5 +1,5 @@
 import React from "react";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 import FormComponentCheckboxGroup from "./Checkboxgroup";
 import { FormInputProps } from "../form/typings";
 import { useFormStateContext } from "../form/FormStateContext";
@@ -22,7 +22,7 @@ export const RaceEthnicity = (props: FormInputProps<string[]>) => {
     <div className="form-race-ethnicity">
       {isDisabled && (
         <div className="form-race-ethnicity-not-allowed">
-          <FormattedMessage id="user_info.race_ethnicity.not_allowed" />
+          <T token="user_info.race_ethnicity.not_allowed" />
         </div>
       )}
       <FormComponentCheckboxGroup {...checkboxProps} />

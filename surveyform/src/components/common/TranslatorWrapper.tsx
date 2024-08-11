@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useKeydownContext } from "./KeydownContext";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
+import { useI18n } from "@devographics/react-i18n";
 
 const githubOrg = "Devographics";
 const localeRepoName = (localeId: string) => `locale-${localeId}`;
@@ -54,8 +53,7 @@ export const TranslatorWrapper = ({
   message: string;
   children: React.ReactNode;
 }) => {
-  const { localeId } = useLocaleContext();
-  const intl = useIntlContext();
+  const { locale } = useI18n()
   // modKey = cmd or alt
   const { modKeyDown } = useKeydownContext();
   const shouldRedirectToTranslation = modKeyDown;
@@ -64,7 +62,7 @@ export const TranslatorWrapper = ({
     // note: `fallback` here denotes whether a string is itself a fallback for a missing string
     e.preventDefault();
     e.stopPropagation();
-    window.open(getGitHubSearchUrl(id, localeId));
+    window.open(getGitHubSearchUrl(id, locale.id));
   };
 
   const title = shouldRedirectToTranslation

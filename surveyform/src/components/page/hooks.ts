@@ -4,8 +4,8 @@ import type { BrowserData } from "@devographics/types"
 // for some reason this throws error?
 // TODO: do we need a dynamic require?
 import bowser from "bowser";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { useReferrer } from "../common/ReferrerStorage";
+import { useI18n } from "@devographics/react-i18n";
 
 export const useSurveyActionParams = (): {
   source?: string;
@@ -72,7 +72,7 @@ export const useClientData = ({
   surveyId?: string;
 }) => {
   const { source, referrer } = useSurveyActionParams();
-  const { locale } = useLocaleContext();
+  const { locale } = useI18n()
   // prefilled data
   let data: PrefilledData = {
     locale: locale.id,

@@ -18,17 +18,33 @@ export const getCommonContexts = () => {
   return [...baseContexts, ...customContexts];
 };
 
-// i18n contexts for a survey
-export const getSurveyContexts = (survey: SurveyMetadata) => [
-  ...getCommonContexts(),
-  survey.id,
-];
+/**
+ * i18n contexts for a survey
+ * Will NOT load common contexts,
+ * you are expected to use I18nContext multiple time
+ * - one for /[lang]
+ * - one for /[lang]/[survey]
+ * etc., the context will automatically merge contexts
+ * this prevents loading the same locales again when navigating
+ */
+export const getSurveyContexts = (survey: SurveyMetadata, includeAll = false) =>
+  includeAll ? [...getCommonContexts(), survey.id] : [survey.id];
 
-// i18n contexts for an edition of a survey
-export const getEditionContexts = (edition: EditionMetadata) => [
-  ...getSurveyContexts(edition.survey),
-  edition.id,
-];
+/**
+ *
+ * i18n contexts for an edition of a survey
+ * will NOT load common contexts and generic survey context
+ * the parent layout should take care of that
+ * @param edition
+ * @returns
+ */
+export const getEditionContexts = (
+  edition: EditionMetadata,
+  includeAll = false
+) =>
+  includeAll
+    ? [...getSurveyContexts(edition.survey, includeAll), edition.id]
+    : [edition.id];
 
 export const safeLocaleIdFromParams = (params: { lang: string }) => {
   const localeId = filterLang(params.lang);

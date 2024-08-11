@@ -423,6 +423,7 @@
 
       - id: reading_list
         template: reading_list
+        blockType: HorizontalBarBlock
         parameters: { limit: 20 }
 
       - id: features_resources

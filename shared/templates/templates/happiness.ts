@@ -6,7 +6,12 @@ section segment and also the "_happiness" suffix needs to be removed.
 TODO: make paths more standard
 
 */
-import { TemplateFunction, QuestionTemplateOutput, DbPathsEnum } from '@devographics/types'
+import {
+    TemplateFunction,
+    QuestionTemplateOutput,
+    DbPathsEnum,
+    DbSuffixes
+} from '@devographics/types'
 import { checkHasId } from '../helpers'
 
 const specialFieldNames = [
@@ -32,11 +37,13 @@ export const happiness: TemplateFunction = options => {
         })),
         rawPaths: {
             response: `happiness__${questionSegment}`,
-            skip: `happiness__${questionSegment}__${DbPathsEnum.SKIP}`
+            skip: `happiness__${questionSegment}__${DbPathsEnum.SKIP}`,
+            [DbSuffixes.COMMENT]: `happiness__${questionSegment}__${DbSuffixes.COMMENT}`
         },
         normPaths: {
             response: `happiness.${happinessDbFieldName}`,
-            skip: `happiness.${happinessDbFieldName}.${DbPathsEnum.SKIP}`
+            skip: `happiness.${happinessDbFieldName}.${DbPathsEnum.SKIP}`,
+            comment: `happiness.${happinessDbFieldName}.${DbPathsEnum.COMMENT}`
         },
         ...question
     }

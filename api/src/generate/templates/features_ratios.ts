@@ -79,6 +79,7 @@ export const features_ratios: ApiTemplateFunction = ({ survey, edition, section,
     return {
         ...question,
         id: `features_ratios`,
+        generatedBy: 'features_ratios',
         fieldTypeName,
         typeDef: `type ${fieldTypeName} {
             ids: [String]

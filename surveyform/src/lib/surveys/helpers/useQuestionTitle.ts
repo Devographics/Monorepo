@@ -1,6 +1,7 @@
 import { SectionMetadata, QuestionMetadata } from "@devographics/types";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 import { getQuestioni18nIds } from "~/i18n/survey";
+import type { StringTranslatorResult } from "@devographics/i18n";
 
 export const useQuestionTitle = ({
   section,
@@ -10,39 +11,33 @@ export const useQuestionTitle = ({
   section: SectionMetadata;
   question: QuestionMetadata;
   variant?: "short" | "full";
-}) => {
-  const intl = useIntlContext();
+}): StringTranslatorResult => {
+  const { t, getMessage, getFallbacks, locale } = useI18n();
   const { id, entity } = question;
   const i18n = getQuestioni18nIds({ section, question });
 
-  const entityNameClean = entity && (entity.nameClean || entity.name);
-  const entityNameHtml = entity && (entity.nameHtml || entityNameClean);
-
-  const i18nNameHtmlBase = intl.formatMessage({ id: i18n.base });
-  const i18nNameCleanBase = intl.formatMessage({ id: i18n.base });
-
-  const i18nNameHtmlQuestion = intl.formatMessage({ id: i18n.question });
-  const i18nNameCleanQuestion = intl.formatMessage({
-    id: i18n.question,
-  });
-
-  // by default, try to use the "foo.question" field or else default to just "foo"
-  let htmlLabel = i18nNameHtmlQuestion.tHtml || i18nNameHtmlBase.tHtml;
-  let cleanLabel = i18nNameCleanQuestion.tClean || i18nNameCleanBase.tClean;
-
-  // if this is the short variant, force using just "foo" (which should hopefully be shorter)
-  if (variant === "short") {
-    htmlLabel = i18nNameHtmlBase?.tHtml;
-    cleanLabel = i18nNameCleanBase?.tClean;
-  }
-
-  const key = i18n.question;
-  const title = {
-    key,
-    html: entityNameHtml || htmlLabel || key,
-    clean: entityNameClean || cleanLabel || key,
-    isEntity: !!(entityNameHtml || entityNameClean),
+  const getEntityLabel = () => {
+    return (entity?.id && {
+      key: "entity",
+      t: entity.nameClean || entity.name,
+      tHtml: entity.nameHtml,
+      tClean: entity.nameClean,
+    }) as StringTranslatorResult;
   };
 
-  return title;
+  const defaultTitle = {
+    key: question.id,
+    t: question.id,
+    tHtml: question.id,
+    tClean: question.id,
+  } as StringTranslatorResult;
+
+  const keys =
+    variant === "short"
+      ? [getEntityLabel, i18n.base, i18n.question]
+      : [getEntityLabel, i18n.question, i18n.base];
+
+  const title = getFallbacks(keys);
+
+  return title || defaultTitle;
 };

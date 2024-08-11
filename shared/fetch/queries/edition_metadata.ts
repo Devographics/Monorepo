@@ -47,6 +47,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
             hashtag
             emailOctopus {
               listId
+              submitUrl
             }
             partners {
               id
@@ -105,6 +106,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
               order
               optionsAreNumeric
               # optionsAreRange
+              units
               entity {
                 ${getEntityFragment()}
               }
@@ -123,6 +125,7 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
                 response
                 subPaths
                 skip
+                sentiment
               }
               options {
                 id

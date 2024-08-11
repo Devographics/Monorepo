@@ -1,13 +1,13 @@
 import { EditionMetadata } from "@devographics/types";
-import { LocaleDef } from "~/i18n/typings";
 import { reverseSurveyParamsLookup } from "../data";
+import { type Locale } from "@devographics/i18n";
 
 export function getEditionHomePath({
   edition,
   locale,
 }: {
   edition: EditionMetadata;
-  locale: LocaleDef;
+  locale: Locale;
 }) {
   const { surveySlug, editionSlug } = reverseSurveyParamsLookup({
     surveyId: edition.survey.id,

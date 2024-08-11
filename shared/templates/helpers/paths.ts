@@ -51,9 +51,9 @@ export const getRawPaths = (
     if (question.allowPrenormalized) {
         paths.other = getPath([DbSuffixes.PRENORMALIZED])
     }
-    if (question.allowComment) {
-        paths[DbSuffixes.COMMENT] = getPath([DbSuffixes.COMMENT])
-    }
+
+    // always allow comments on all questions
+    paths[DbSuffixes.COMMENT] = getPath([DbSuffixes.COMMENT])
 
     // note: for now we only support follow-ups with questions that have options
     if (question.options && question.followups) {
@@ -69,6 +69,7 @@ export const getRawPaths = (
 
         paths[DbSuffixes.FOLLOWUP_PREDEFINED] = getOptionsPaths(DbSuffixes.FOLLOWUP_PREDEFINED)
         paths[DbSuffixes.FOLLOWUP_FREEFORM] = getOptionsPaths(DbSuffixes.FOLLOWUP_FREEFORM)
+        paths[DbSuffixes.SENTIMENT] = getPath([DbSuffixes.SENTIMENT])
     }
 
     if (subPaths) {
@@ -122,9 +123,8 @@ export const getNormPaths = (
         }
     }
 
-    if (question.allowComment) {
-        paths.comment = getPath([...basePathSegments, DbSuffixes.COMMENT])
-    }
+    // always allow comments on all questions
+    paths.comment = getPath([...basePathSegments, DbSuffixes.COMMENT])
 
     if (question.options && question.followups) {
         const options = question.options
@@ -219,6 +219,13 @@ export const getFormPaths = ({
         if (question.rawPaths[DbPathsEnum.SUBPATHS]) {
             paths[DbPathsEnum.SUBPATHS] = prefixPathsObjectWithEditionId(
                 question.rawPaths[DbPathsEnum.SUBPATHS],
+                edition.id
+            )
+        }
+        if (question.rawPaths[DbPathsEnum.SENTIMENT]) {
+            // simplified sentiment handling version
+            paths[DbPathsEnum.SENTIMENT] = prefixWithEditionId(
+                question.rawPaths[DbPathsEnum.SENTIMENT],
                 edition.id
             )
         }

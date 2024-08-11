@@ -60,48 +60,62 @@ These styles will only be active for specific surveys and/or editions
   //   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
   //     Liberation Mono, Courier New, monospace;
   // }
-}
 
-.tokyodev-info {
-  max-width: 800px;
-  margin: 0 auto;
-  margin-bottom: $spacing * 2;
-  // background-image: repeating-radial-gradient(
-  //     circle at 0px 0px,
-  //     transparent 0px,
-  //     rgb(3, 13, 31) 10px
-  //   ),
-  //   repeating-linear-gradient(rgba(8, 34, 54, 0.333), rgb(8, 34, 54));
-  background-image: linear-gradient(to right, var(--tw-gradient-stops));
-  padding: $spacing/2;
-  .tokyodev-info-inner {
-    background: rgb(3, 13, 31);
-    padding: $spacing;
-    @include medium-large {
-      display: grid;
-      grid-template-columns: 150px 1fr;
-      column-gap: $spacing * 2;
+  .tokyodev-info {
+    max-width: 800px;
+    margin: 0 auto;
+    margin-bottom: $spacing * 2;
+    // background-image: repeating-radial-gradient(
+    //     circle at 0px 0px,
+    //     transparent 0px,
+    //     rgb(3, 13, 31) 10px
+    //   ),
+    //   repeating-linear-gradient(rgba(8, 34, 54, 0.333), rgb(8, 34, 54));
+    background-image: linear-gradient(to right, var(--tw-gradient-stops));
+    padding: $spacing/2;
+    .tokyodev-info-inner {
+      background: rgb(3, 13, 31);
+      padding: $spacing;
+      @include medium-large {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        column-gap: $spacing * 2;
+      }
+    }
+    .tokyodev-info-founder {
+      img {
+        display: block;
+        width: 100%;
+        border-radius: 100%;
+      }
+      h5 {
+        font-size: $smallish-font;
+        margin-top: $spacing/2;
+        text-align: center;
+        line-height: 1.5;
+      }
     }
   }
-  .tokyodev-info-founder {
-    img {
-      display: block;
-      width: 100%;
-      border-radius: 100%;
-    }
-    h5 {
-      font-size: $smallish-font;
-      margin-top: $spacing/2;
-      text-align: center;
-      line-height: 1.5;
+
+  .translators {
+    border: none;
+    padding: 0;
+  }
+  .translators-locales {
+    display: flex;
+    justify-content: center;
+  }
+  .translators-help {
+    display: none;
+  }
+
+  .footer {
+    .footer-link-item:has(span[data-dg-tk="general.help_us_translate"]) {
+      display: none;
     }
   }
-}
 
-.translators-locales {
-  display: flex;
-  justify-content: center;
-}
-.translators-help {
-  display: none;
+  .comment-trigger-wrapper {
+    display: none;
+  }
 }

@@ -1,16 +1,16 @@
 import React from "react";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 
 const ShareFacebook = ({
   link,
   quote = "",
 }: //trackingId,
-{
-  link: string;
-  quote?: string;
-  //trackingId?: string;
-}) => {
-  const intl = useIntlContext();
+  {
+    link: string;
+    quote?: string;
+    //trackingId?: string;
+  }) => {
+  const { t } = useI18n();
   return (
     <a
       // onClick={track('Facebook', trackingId)}
@@ -20,7 +20,7 @@ const ShareFacebook = ({
       )}&quote=${encodeURIComponent(quote)}`}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={intl.formatMessage({ id: "share.facebook" })?.t}
+      aria-label={t("share.facebook")}
     >
       <div className="resp-sharing-button resp-sharing-button--facebook resp-sharing-button--small">
         <div
@@ -44,7 +44,7 @@ const ShareFacebook = ({
         </div>
       </div>
       <span className="sr-only">
-        {intl.formatMessage({ id: "share.facebook" })?.t}
+        {t("share.facebook")}
       </span>
     </a>
   );

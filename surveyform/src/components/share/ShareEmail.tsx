@@ -1,16 +1,16 @@
 import React from "react";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 
 const ShareEmail = ({
   subject,
   body,
 }: //trackingId,
-{
-  subject: string;
-  body: string;
-  //trackingId?: string;
-}) => {
-  const intl = useIntlContext();
+  {
+    subject: string;
+    body: string;
+    //trackingId?: string;
+  }) => {
+  const { t } = useI18n();
   return (
     <a
       // onClick={track('Email', trackingId)}
@@ -19,7 +19,7 @@ const ShareEmail = ({
         subject,
       )}&body=${encodeURIComponent(body)}`}
       target="_self"
-      aria-label={intl.formatMessage({ id: "share.email" })?.t}
+      aria-label={t("share.email")}
     >
       <div className="resp-sharing-button resp-sharing-button--email resp-sharing-button--small">
         <div
@@ -41,7 +41,7 @@ const ShareEmail = ({
         </div>
       </div>
       <span className="sr-only">
-        {intl.formatMessage({ id: "share.email" })?.t}
+        {t("share.email")}
       </span>
     </a>
   );

@@ -29,6 +29,7 @@ type SurveyMetadata {
 
 type EmailOctopusData {
     listId: String
+    submitUrl: String
 }
 
 type EditionMetadata {
@@ -165,6 +166,8 @@ type QuestionMetadata {
     hidden: Boolean
     # textarea vs input for freeform questions
     longText: Boolean
+    # for numerical questions, specify value units
+    units: String
 }
 
 type RawDbPaths {
@@ -177,6 +180,7 @@ type RawDbPaths {
     followup_freeform: JSON
     subPaths: JSON
     skip: String
+    sentiment: String
 }
 
 type NormDbPaths {
@@ -191,6 +195,7 @@ type NormDbPaths {
     patterns: String
     metadata: String
     error: String
+    sentiment: String
 }
 
 enum ContentType {
@@ -608,7 +613,7 @@ type Locale {
     translatedCount: Int
     totalCount: Int
     completion: Int
-    untranslatedKeys: [String]
+    untranslatedStrings: [TranslationString]
 }
 
 type FeatureOption {

@@ -19,8 +19,7 @@ import { routes } from "~/lib/routes";
 import { Loading } from "~/components/ui/Loading";
 import { useClientData } from "~/components/page/hooks";
 import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
-import { T } from "@devographics/react-i18n";
+import { T, useI18n } from "@devographics/react-i18n";
 
 
 
@@ -41,7 +40,7 @@ const useMagicLoginCheck = ({
   token: string;
   redirectTo?: string;
 } & ResponseCreationData) => {
-  const { locale } = useLocaleContext();
+  const { locale } = useI18n()
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | Error>(null);

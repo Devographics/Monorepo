@@ -3,15 +3,14 @@ import { FormItem } from "~/components/form/FormItem";
 import type { FormInputProps } from "~/components/form/typings";
 import Form from "react-bootstrap/Form";
 import { FormOption } from "~/components/form/FormOption";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 import { getOptioni18nIds } from "~/i18n/survey";
 
 export const Slider = (props: FormInputProps) => {
   const { path, value, question, readOnly, updateCurrentValues } = props;
   const { options } = question;
   const hasValue = value !== "";
-  const intl = useIntlContext();
-
+  const { t } = useI18n()
   return (
     <FormItem {...props}>
       <div className="form-slider">
@@ -25,7 +24,7 @@ export const Slider = (props: FormInputProps) => {
                 : "form-check-unchecked"
               : "";
             const i18n = getOptioni18nIds({ question, option });
-            const optionLabel = intl.formatMessage({ id: i18n.base })?.t;
+            const optionLabel = t(i18n.base);
             // TODO: we don't really use this label, we only use it
             // to check if there is a translation for this value
             return (

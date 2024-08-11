@@ -1,14 +1,13 @@
 "use client";
 import Form from "react-bootstrap/Form";
 
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 
 import { OptionMetadata } from "@devographics/types";
 import without from "lodash/without.js";
 
 import { Button } from "~/components/ui/Button";
 import { CommentTextarea } from "~/components/form/FormComment";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
 import { ExperienceProps } from "./Experience";
 
 export interface FollowupData {
@@ -27,7 +26,7 @@ export const FollowUpsTrigger = ({ showFollowups, setShowFollowups }) => {
         setShowFollowups(!showFollowups);
       }}
     >
-      <FormattedMessage id="followups.button" />
+      <T token="followups.button" />
     </Button>
   );
 };
@@ -62,14 +61,13 @@ export const FollowUps = (
     );
   }
 
-  const intl = useIntlContext();
-
-  const placeholder = intl.formatMessage({ id: `followups.placeholder` })?.t;
+  const { t } = useI18n()
+  const placeholder = t(`followups.placeholder`);
 
   return (
     <div className="followups">
       <h5>
-        <FormattedMessage id="followups.description" />
+        <T token="followups.description" />
       </h5>
       {optionFollowUps && (
         <div className="followups-predefined">
@@ -101,7 +99,7 @@ export const FollowUps = (
                     }}
                   />
                   <span>
-                    <FormattedMessage id={`followups.${followupOption.id}`} />
+                    <T token={`followups.${followupOption.id}`} />
                   </span>
                 </label>
               </Button>

@@ -14,11 +14,8 @@
  */
 import React from "react";
 
-import { LocaleContextProvider } from "~/i18n/context/LocaleContext";
-
 import { ErrorBoundary } from "~/components/error";
 import Layout from "~/components/common/Layout";
-import type { LocaleDef } from "~/i18n/typings";
 import { SWRConfig } from "swr";
 import { KeydownContextProvider } from "~/components/common/KeydownContext";
 import { UserMessagesProvider } from "~/components/common/UserMessagesContext";
@@ -28,14 +25,14 @@ import { Referrer } from "~/components/common/ReferrerStorage";
 import { ApiData, apiRoutes } from "~/lib/apiRoutes";
 import { UserWithResponses } from "~/lib/responses/typings";
 import PlausibleProvider from "next-plausible";
-import { LocaleParsed } from "@devographics/i18n";
+import { type LocaleParsed, type Locale } from "@devographics/i18n";
 import { I18nContextProvider } from "@devographics/react-i18n";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
   localeId: string;
   localeStrings: LocaleParsed;
-  locales: Array<LocaleDef>;
+  locales: Array<Locale>;
   // When on a specific survey
   children: React.ReactNode;
   params: { lang: string };
@@ -97,25 +94,19 @@ export function ClientLayout(props: AppLayoutProps) {
               fallback,
             }}
           >
-            <LocaleContextProvider
-              locales={locales}
-              localeId={localeId}
-              localeStrings={localeStrings}
-            >
-              <I18nContextProvider locale={localeStrings}>
-                {/** @ts-ignore */}
-                <ErrorBoundary
-                  proposeReload={true}
-                  proposeHomeRedirection={true}
-                >
-                  <KeydownContextProvider>
-                    <UserMessagesProvider>
-                      {addWrapper ? <Layout>{children}</Layout> : children}
-                    </UserMessagesProvider>
-                  </KeydownContextProvider>
-                </ErrorBoundary>
-              </I18nContextProvider>
-            </LocaleContextProvider>
+            <I18nContextProvider locale={localeStrings} allLocales={locales}>
+              {/** @ts-ignore */}
+              <ErrorBoundary
+                proposeReload={true}
+                proposeHomeRedirection={true}
+              >
+                <KeydownContextProvider>
+                  <UserMessagesProvider>
+                    {addWrapper ? <Layout>{children}</Layout> : children}
+                  </UserMessagesProvider>
+                </KeydownContextProvider>
+              </ErrorBoundary>
+            </I18nContextProvider>
           </SWRConfig>
         </ErrorBoundary>
         <Referrer />

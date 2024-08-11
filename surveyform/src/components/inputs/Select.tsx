@@ -1,5 +1,5 @@
 "use client";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 import type { FormInputProps } from "~/components/form/typings";
 import Form from "react-bootstrap/Form";
 import { FormItem } from "~/components/form/FormItem";
@@ -17,10 +17,10 @@ export const FormComponentSelect = (props: FormInputProps) => {
     readOnly,
   } = props;
   const { options, optionsAreNumeric } = question;
-  const intl = useIntlContext();
+  const { t } = useI18n();
   const emptyValue = "";
   const noneOption = {
-    label: intl.formatMessage({ id: "forms.select_option" })?.t,
+    label: t("forms.select_option"),
     id: emptyValue,
     disabled: true,
   };
@@ -45,9 +45,7 @@ export const FormComponentSelect = (props: FormInputProps) => {
           });
           const optionLabel =
             label ||
-            intl.formatMessage({
-              id: i18n.base,
-            })?.t;
+            t(i18n.base);
           return (
             <option key={id} value={id}>
               {optionLabel}

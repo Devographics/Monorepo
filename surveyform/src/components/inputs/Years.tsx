@@ -5,7 +5,7 @@ import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
 import Form from "react-bootstrap/Form";
-import { FormattedMessage } from "../common/FormattedMessage";
+import { T } from "@devographics/react-i18n";
 
 const lessThanOneYearValue = 0.5;
 
@@ -123,7 +123,7 @@ export const FormComponentYears = (props: FormInputProps) => {
       </Form.Check>
 
       <FormControl.Feedback type="invalid">
-        <FormattedMessage id="general.numeric_input.invalid_input" />
+        <T token="general.numeric_input.invalid_input" />
       </FormControl.Feedback>
     </FormItem>
   );
@@ -207,7 +207,7 @@ const Label = ({ labelId }) => (
   <div className="form-option">
     <div className="form-option-item">
       <span className="form-option-label">
-        <FormattedMessage id={labelId} />
+        <T token={labelId} />
       </span>
     </div>
   </div>

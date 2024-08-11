@@ -19,6 +19,7 @@ export interface SurveyConfig {
 
 export interface EmailOctopusData {
     listId: string
+    submitUrl: string
 }
 
 export interface SponsorItem {
@@ -231,10 +232,17 @@ export type Question = {
 
     followups?: Followups[]
 
-    /**
-     * To use a textarea in TextList
-     */
+    // To use a textarea in TextList
     longText?: boolean
+
+    // for numerical questions, specify value units
+    units?: NumericalUnits
+}
+
+export enum NumericalUnits {
+    YEARS = 'years',
+    YEARS_OLD = 'years_old',
+    HOURS = 'hours'
 }
 
 export type Option = {
@@ -285,7 +293,8 @@ export enum DbSuffixes {
     ERROR = 'error',
     // PATTERNS = 'patterns',
     RAW = 'raw',
-    METADATA = 'metadata'
+    METADATA = 'metadata',
+    SENTIMENT = 'sentiment'
 }
 
 // once a question has gone through a template it should always have an id

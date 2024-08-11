@@ -1,5 +1,5 @@
 import React from "react";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
+import { useI18n } from "@devographics/react-i18n";
 
 const ShareTwitter = ({
   text,
@@ -8,7 +8,7 @@ const ShareTwitter = ({
   text: string;
   trackingId?: string;
 }) => {
-  const intl = useIntlContext();
+  const { t } = useI18n();
   return (
     <a
       // onClick={track('Twitter', trackingId)}
@@ -18,7 +18,7 @@ const ShareTwitter = ({
       )}`}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={intl.formatMessage({ id: "share.twitter" })?.t}
+      aria-label={t("share.twitter")}
     >
       <div className="resp-sharing-button resp-sharing-button--twitter resp-sharing-button--small">
         <div
@@ -42,7 +42,7 @@ const ShareTwitter = ({
         </div>
       </div>
       <span className="sr-only">
-        {intl.formatMessage({ id: "share.twitter" })?.t}
+        {t("share.twitter")}
       </span>
     </a>
   );

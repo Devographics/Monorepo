@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
-import { LOCALE_COOKIE_NAME } from "./i18n/cookie";
 import { getClosestLocale } from "./i18n/data/locales";
 // @devographics/fetch is expected to have an "edge-light" export to work in middlewares
 // https://runtime-keys.proposal.wintercg.org/
@@ -44,9 +43,9 @@ async function getLang(pathname: string) {
   if (
     // it really looks like a locale (be careful to avoid using ambiguous params like filenames)
     maybeLocale(firstParam) ||
-    // known locale
+    // or it's a known locale
     localesIds.includes(firstParam) ||
-    // matches a known country
+    // or it matches a known country
     (firstParam.length === 2 &&
       localesIds.map((l) => l.slice(0, 2)).includes(firstParam))
   ) {
@@ -65,21 +64,19 @@ function isFile(pathname: string) {
 async function localize(request: NextRequest): Promise<NextResponse> {
   const langFromPath = await getLang(request.nextUrl.pathname);
   /**
-   * NOTE: we have similar code in route handlers that produce localized responses
    * Priorities:
-   * 1. locale cookie
-   * 2. lang already in URL
-   * 3. accept-language header
+   * 1. lang already in URL
+   * 2. accept-language header
    *
-   * User can change locale cookie via the locale selector menu
+   * This order may affect the LocaleSwitcher implementation,
+   * be careful with how it handle URL based redirection when the cookie is changed
    */
-  const cookieLocale = request.cookies.get(LOCALE_COOKIE_NAME)?.value;
   const pathLocale = langFromPath;
   const headerLocale = getLocaleFromAcceptLanguage(
     request.headers.get("accept-language")
   );
   const defaultLocale = "en-US";
-  const locale = cookieLocale || pathLocale || headerLocale || defaultLocale;
+  const locale = pathLocale || headerLocale || defaultLocale;
 
   // get the closest valid locale
   const validLocale = await getClosestLocale(locale);

@@ -1,13 +1,12 @@
 "use client";
 import { useEffect } from "react";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 import { useRouter } from "next/navigation";
 import { LoadingButton } from "~/components/ui/LoadingButton";
 import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { SectionMetadata } from "@devographics/types";
 import { useEdition } from "~/components/SurveyContext/Provider";
 import Link from "next/link";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import { getSectionTokens } from "~/i18n/survey";
@@ -16,8 +15,6 @@ import { useFormPropsContext } from "./FormPropsContext";
 import { useFormStateContext } from "./FormStateContext";
 
 //  
-
-import { T } from "@devographics/react-i18n";
 
 interface FormSubmitProps extends FormLayoutProps {
   path: string;
@@ -30,7 +27,7 @@ export const FormSubmit = (props: FormLayoutProps) => {
   const { response } = useFormStateContext();
   const { nextSection, previousSection } = props;
 
-  const { locale } = useLocaleContext();
+  const { locale } = useI18n()
   const { edition } = useEdition();
   const router = useRouter();
 

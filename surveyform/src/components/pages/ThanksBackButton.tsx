@@ -1,9 +1,8 @@
 "use client";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
 import Link from "next/link";
-import { useLocaleContext } from "~/i18n/context/LocaleContext";
 import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
-import { FormattedMessage } from "../common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 
 export const ThanksBackButton = ({
   edition,
@@ -14,7 +13,7 @@ export const ThanksBackButton = ({
   response: ResponseDocument;
   readOnly?: boolean;
 }) => {
-  const { locale } = useLocaleContext();
+  const { locale } = useI18n()
   return (
     <div className="form-submit form-section-nav form-section-nav-bottom">
       <div className="form-submit-actions form-submit-back">
@@ -29,7 +28,7 @@ export const ThanksBackButton = ({
             locale,
           })}
         >
-          « <FormattedMessage id="general.back_to_survey" />
+          « <T token="general.back_to_survey" />
         </Link>
       </div>
     </div>

@@ -4,8 +4,7 @@ import sampleSize from "lodash/sampleSize.js";
 import isNil from "lodash/isNil.js";
 import isEmpty from "lodash/isEmpty.js";
 import cloneDeep from "lodash/cloneDeep.js";
-import { useIntlContext } from "@devographics/react-i18n-legacy";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 import { FormItem } from "~/components/form/FormItem";
 import { TooltipTrigger } from "~/components/ui/TooltipTrigger";
 import { Button } from "~/components/ui/Button";
@@ -177,10 +176,10 @@ const BracketLegend = ({ options }) => {
         {options.map(({ value, intlId }, index) => (
           <tr className="bracket-legend-item" key={value}>
             <th className="bracket-legend-heading">
-              <FormattedMessage id={intlId} />
+              <T token={intlId} />
             </th>
             <td className="bracket-legend-description">
-              <FormattedMessage id={`${intlId}.description`} />
+              <T token={`${intlId}.description`} />
             </td>
           </tr>
         ))}
@@ -212,16 +211,15 @@ const BracketMatchGroup = (props) => {
   const { results, isOverallWinner, level } = rest;
   return (
     <div
-      className={`bracket-matchgroup bracket-matchgroup-level${level} bracket-matchgroup-${
-        isOverallWinner ? "overall-winner" : ""
-      }`}
+      className={`bracket-matchgroup bracket-matchgroup-level${level} bracket-matchgroup-${isOverallWinner ? "overall-winner" : ""
+        }`}
     >
       <p className="visually-hidden">
         {isOverallWinner ? (
-          <FormattedMessage id="bracket.result" />
+          <T token="bracket.result" />
         ) : (
           <>
-            <FormattedMessage id="bracket.round" /> {level}
+            <T token="bracket.round" /> {level}
           </>
         )}
       </p>
@@ -270,9 +268,9 @@ const BracketMatch = (props) => {
   ) : (
     <fieldset key={index} className="bracket-match">
       <legend className="visually-hidden">
-        <FormattedMessage id={p1?.intlId} />,{" "}
-        <FormattedMessage id="bracket.vs" />.{" "}
-        <FormattedMessage id={p2?.intlId} />
+        <T token={p1?.intlId} />,{" "}
+        <T token="bracket.vs" />.{" "}
+        <T token={p2?.intlId} />
       </legend>
       <div className="bracket-match">
         <BracketItem
@@ -348,9 +346,9 @@ const BracketItem = (props) => {
 
 // wrap an item with a description or not based on its availability
 const WrapWithDescriptionTooltip = ({ player, children }) => {
-  const intl = useIntlContext();
+  const { t } = useI18n();
   const description =
-    player && intl.formatMessage({ id: `${player.intlId}.description` })?.t;
+    player && t(`${player.intlId}.description`);
 
   //return children;
   return description ? (
@@ -391,10 +389,10 @@ const BracketItemButton = (props) => {
             pickWinner(matchIndex, playerIndex);
           }}
         >
-          <FormattedMessage id={props.player.intlId} />
+          <T token={props.player.intlId} />
           <span className="visually-hidden">
             (
-            <FormattedMessage id={`${props.player.intlId}.description`} />)
+            <T token={`${props.player.intlId}.description`} />)
           </span>
         </button>
       </WrapWithDescriptionTooltip>
@@ -432,7 +430,7 @@ const BracketItemCancel = ({
         >
           <span>
             <span className="visually-hidden">
-              <FormattedMessage id="bracket.cancel" />
+              <T token="bracket.cancel" />
             </span>
             <BracketItemCancelIcon />
           </span>
@@ -440,7 +438,7 @@ const BracketItemCancel = ({
       }
     >
       <div className="bracket-item-details" aria-hidden="true">
-        <FormattedMessage id="bracket.cancel" />
+        <T token="bracket.cancel" />
       </div>
     </TooltipTrigger>
   );
@@ -479,7 +477,7 @@ const BracketItemOverallWinner = (
       <WrapWithDescriptionTooltip player={player}>
         <div className="bracket-item-button bracket-item-button-overall-winner">
           <div className="bracket-item-label">
-            <FormattedMessage id={player?.intlId} />
+            <T token={player?.intlId} />
           </div>
           {/* <BracketStartOver {...props} /> */}
         </div>
@@ -498,7 +496,7 @@ export const BracketStartOver = ({ startOver }: { startOver: () => void }) => {
         startOver();
       }}
     >
-      <FormattedMessage id="bracket.start_over" />
+      <T token="bracket.start_over" />
     </Button>
   );
 };
@@ -510,7 +508,7 @@ const EmptyBracketItem = ({ classnames }: { classnames: Array<string> }) => {
       <div className="bracket-item-inner">
         <span aria-hidden="true">...</span>
         <span className="visually-hidden">
-          <FormattedMessage id="bracket.empty_bracket" />
+          <T token="bracket.empty_bracket" />
         </span>
       </div>
     </div>

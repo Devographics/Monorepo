@@ -2,10 +2,8 @@ import { getBlockMeta } from '@/block/metadata'
 import {
     fetchEditionSitemap,
     fetchAllLocalesIds,
-    fetchEditionMetadata,
-    fetchLocaleConverted,
-    fetchLocale
 } from '@devographics/fetch'
+import { getLocaleDict } from "@devographics/i18n/server"
 import { ChartParams } from './typings'
 import { getBlock } from '@/lib/helpers'
 import { getStringTranslator } from '@/lib/i18n'
@@ -71,7 +69,7 @@ export async function getBlockMetaFromParams(chartParams: ChartParams) {
         console.warn(`Locale ${localeId} unknown, fallback to en-US for block metadata`)
         localeId = 'en-US'
     }
-    const { data: locale, error: localeError } = await fetchLocale({
+    const { data: locale, error: localeError } = await getLocaleDict({
         localeId,
         // TODO: define contexts as part of edition config?
         contexts: ['common', 'results', 'countries', surveyId, `${surveyId}_${edition.year}`]

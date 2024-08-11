@@ -15,8 +15,6 @@ import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
 import TokyoDev from "~/components/common/TokyoDev";
 import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 import { DynamicT } from "@devographics/react-i18n";
-import { rscLocaleFromParams } from "~/lib/api/rsc-fetchers";
-import { I18nContextProvider } from "@devographics/react-i18n";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
 export const revalidate = DEFAULT_REVALIDATE_S;

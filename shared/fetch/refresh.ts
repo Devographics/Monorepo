@@ -1,8 +1,7 @@
+import { localeWithStringsCacheKey } from './cache_keys'
 import {
     fetchAllLocalesMetadata,
     fetchEditionMetadata,
-    fetchLocale,
-    fetchLocaleConverted,
     fetchSurveysMetadata
 } from './functions'
 import { FetcherFunctionOptions } from './types'
@@ -53,6 +52,14 @@ export const refreshSurveysCache = async args => {
 // i18n contexts common to all surveys and editions
 export const getCommonContexts = () => ['common', 'surveys', 'accounts']
 
+/**
+ * Refresh Redis cache for locales
+ * 
+ * We do so by computing the keys based on locale list
+ * 
+ * TODO: it might be more robust to issue Redis commands
+ * removing keys based on  a prefix instead
+ */
 export const refreshLocalesCache = async args => {
     const { localeIds, target } = args
     const { data: allSurveys } = await fetchSurveysMetadata()
@@ -84,40 +91,21 @@ export const refreshLocalesCache = async args => {
         console.log(
             `// Refreshing ${locale.id} metadata cache… (${getCommonContexts().join(', ')})`
         )
-        const { cacheKey } = await fetchLocale({
-            ...options,
-            localeId: locale.id,
-            contexts: getCommonContexts()
-        })
-        refreshedCacheKeys.push(cacheKey!)
-
-        // note: get rid of this once surveyform uses normal locale format
-        const { cacheKey: cacheKeyConverted } = await fetchLocaleConverted({
-            ...options,
-            localeId: locale.id,
-            contexts: getCommonContexts()
-        })
-        refreshedCacheKeys.push(cacheKeyConverted!)
+        refreshedCacheKeys.push(localeWithStringsCacheKey({ ...options, localeId: locale.id, contexts: getCommonContexts() }))
         // end
 
         // survey-specific context
+        // KEEP in sync with surveyform layouts that fetch the locales
         for (const survey of allSurveys) {
-            console.log(`// Refreshing ${locale.id} metadata cache… (${survey.id})`)
-            const { cacheKey } = await fetchLocale({
-                ...options,
-                localeId: locale.id,
-                contexts: [survey.id]
-            })
-            refreshedCacheKeys.push(cacheKey!)
+            for (const edition of survey.editions) {
+                console.log(`// Refreshing ${locale.id} metadata cache… (${survey.id})`)
+                refreshedCacheKeys.push(localeWithStringsCacheKey({
+                    ...options, localeId: locale.id, contexts: [
+                        ...getCommonContexts(), survey.id, edition.id
+                    ]
+                }))
 
-            // note: get rid of this once surveyform uses normal locale format
-            const { cacheKey: cacheKeyConverted } = await fetchLocaleConverted({
-                ...options,
-                localeId: locale.id,
-                contexts: [survey.id]
-            })
-            refreshedCacheKeys.push(cacheKeyConverted!)
-            // end
+            }
         }
     }
 

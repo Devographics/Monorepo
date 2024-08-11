@@ -366,7 +366,11 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
 
                 const queryHasChanged = newQueryFormatted !== existingQueryFormatted
 
-                if (useFilesystemCache && existingData && !queryHasChanged) {
+                if (
+                    useFilesystemCache &&
+                    existingData &&
+                    (process.env.FROZEN || !queryHasChanged)
+                ) {
                     console.log(
                         `// 🎯 File ${dataFileName} found on ${getLoadMethod()}, loading its contents…`
                     )
@@ -510,7 +514,7 @@ export const getTranslationContexts = ({
     surveyId: string
     editionId: string
 }) => {
-    const baseContexts = ['common', 'results', 'countries']
+    const baseContexts = ['homepage', 'common', 'results', 'countries']
     const extraTranslationContexts = parseEnvVariableArray(process.env.CUSTOM_LOCALE_CONTEXTS)
     return [...baseContexts, ...extraTranslationContexts, surveyId, editionId]
 }

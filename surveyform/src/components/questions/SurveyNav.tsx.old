@@ -9,7 +9,7 @@
 import { useFormContext } from "@devographics/react-form";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { FormattedMessage } from "~/components/common/FormattedMessage";
+import { T, useI18n } from "@devographics/react-i18n";
 import SurveyNavItem from "~/components/questions/SurveyNavItem";
 import { getCompletionPercentage } from "~/lib/responses/helpers";
 import { Button } from "~/components/ui/Button";
@@ -100,7 +100,7 @@ const SurveyNav = ({
         >
           <span className="section-nav-head-left">
             <h3 className="section-nav-toc">
-              <FormattedMessage id="general.table_of_contents" />
+              <T token="general.table_of_contents" />
             </h3>
             {overallCompletion && (
               <span className="section-nav-completion">
@@ -129,7 +129,7 @@ const SurveyNav = ({
             {/* {response && <li>Overall: {getOverallCompletionPercentage(response)}%</li>} */}
           </ul>
           <p className="completion-message">
-            <FormattedMessage id="general.all_questions_optional" />
+            <T token="general.all_questions_optional" />
           </p>
         </div>
         {navLoading && (

@@ -55,7 +55,7 @@ export function computeUserRank(score: number, globalScores: GlobalScores) {
         return 100;
     }
 
-    // @ts-expect-error https://github.com/microsoft/TypeScript/issues/48829
+    // @ts-ignore
     const rank = globalScores.ranks.findLast((stats) => stats.score <= score)?.rank ?? 100;
     return Math.max(1, rank);
 }

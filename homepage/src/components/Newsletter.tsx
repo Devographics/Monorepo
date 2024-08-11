@@ -3,26 +3,14 @@ import { useI18n } from '../helpers/i18nContext'
 import '../stylesheets/_newsletter.scss'
 import T from './T'
 
-import {
-    getStringTranslator,
-    Locale,
-} from '../helpers/translator'
+import { getStringTranslator, Locale } from '../helpers/translator'
 
-
-const getEOConfig = listId => ({
-    emailOctopusUrl: `https://emailoctopus.com/lists/${listId}/members/embedded/1.3/add`,
-    emailOctopusSiteKey: '6LdYsmsUAAAAAPXVTt-ovRsPIJ_IVhvYBBhGvRV6',
-    emailOctopusCode: 'hpc4b27b6e-eb38-11e9-be00-06b4694bee2a'
-})
-
-export default function Newsletter({ listId, locale }) {
+export default function Newsletter({ submitUrl, locale }) {
     const [email, setEmail] = useState('')
     const [submitted, setSubmitted] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(null)
-
-    const eoConfig = getEOConfig(listId)
 
     const handleChange = e => {
         const email = e.target.value
@@ -35,7 +23,7 @@ export default function Newsletter({ listId, locale }) {
         console.log('SUBMITTING')
 
         e.preventDefault()
-        const response = await fetch(eoConfig.emailOctopusUrl, {
+        const response = await fetch(submitUrl, {
             method: 'POST',
             body: `field_0=${encodeURIComponent(email)}`,
             headers: {
@@ -75,34 +63,20 @@ export default function Newsletter({ listId, locale }) {
                     handleSubmit={handleSubmit}
                     handleChange={handleChange}
                     locale={locale}
-                    {...eoConfig}
+                    submitUrl={submitUrl}
                 />
             )}
         </div>
     )
 }
 
-const NewsletterForm = ({
-    email,
-    loading,
-    handleSubmit,
-    handleChange,
-    emailOctopusUrl,
-    emailOctopusSiteKey,
-    emailOctopusCode,
-    locale,
-}) => {
+const NewsletterForm = ({ email, loading, handleSubmit, handleChange, submitUrl, locale }) => {
     // const { getString } = useI18n()
     const getString = getStringTranslator(locale)
 
     return (
         <div className="newsletter-form">
-            <form
-                method="post"
-                action={emailOctopusUrl}
-                data-sitekey={emailOctopusSiteKey}
-                onSubmit={handleSubmit}
-            >
+            <form method="post" action={submitUrl} onSubmit={handleSubmit}>
                 <input
                     className="newsletter-email"
                     id="field_0"
@@ -112,13 +86,6 @@ const NewsletterForm = ({
                     onChange={handleChange}
                     value={email}
                     disabled={loading}
-                />
-                <input
-                    type="text"
-                    name={emailOctopusCode}
-                    tabIndex={-1}
-                    autoComplete="nope"
-                    style={{ display: 'none' }}
                 />
                 <button type="submit" name="subscribe" className="newsletter-button button">
                     {getString('newsletter.submit')?.t}

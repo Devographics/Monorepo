@@ -6,7 +6,7 @@ import { FormItem } from "~/components/form/FormItem";
 import { getFormPaths } from "@devographics/templates";
 import { DbPathsEnum, Option } from "@devographics/types";
 import { useFormStateContext } from "../form/FormStateContext";
-import { FormattedMessage } from "../common/FormattedMessage";
+import { T } from "@devographics/react-i18n";
 
 const columns = [0, 1, 2, 3, 4];
 
@@ -22,7 +22,7 @@ export const FormComponentLikertScale = (props: FormInputProps) => {
         <div className="likert-legends">
           {columns?.map((column, i) => (
             <span key={i} className="likert-legend-label">
-              <FormattedMessage id={`likert.option.${i}`} />
+              <T token={`likert.option.${i}`} />
             </span>
           ))}
         </div>
@@ -107,7 +107,7 @@ const Radio = (props: RowProps & { radioIndex: number }) => {
           />
         </div>
         <span className="sr-only">
-          <FormattedMessage id={`likert.option.${radioIndex}`} />
+          <T token={`likert.option.${radioIndex}`} />
         </span>
       </Form.Check.Label>
     </Form.Check>

@@ -225,6 +225,9 @@ importers:
       '@devographics/helpers':
         specifier: workspace:^1.0.0
         version: link:../shared/helpers
+      '@devographics/i18n':
+        specifier: workspace:^1.0.0
+        version: link:../shared/i18n
       '@devographics/types':
         specifier: workspace:^1.0.0
         version: link:../shared/types
@@ -329,6 +332,9 @@ importers:
       '@devographics/helpers':
         specifier: workspace:^
         version: link:../shared/helpers
+      '@devographics/i18n':
+        specifier: workspace:^
+        version: link:../shared/i18n
       '@devographics/types':
         specifier: workspace:^
         version: link:../shared/types
@@ -1637,9 +1643,6 @@ importers:
       '@devographics/react-i18n':
         specifier: workspace:1.0.0
         version: link:../shared/react-i18n
-      '@devographics/react-i18n-legacy':
-        specifier: workspace:1.0.0
-        version: link:../shared/react-i18n-legacy
       '@devographics/redis':
         specifier: workspace:^1.0.0
         version: link:../shared/redis

@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { LOCALE_COOKIE_NAME } from "~/i18n/cookie";
 import { getClosestLocale } from "~/i18n/data/locales";
-// import { fetchLocaleStrings } from "~/i18n/db-actions/fetchLocales";
 import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
 import { DetailedErrorObject } from "./validation";
 // import { captureException } from "@sentry/nextjs";
@@ -13,19 +11,18 @@ export interface HandlerErrorObject extends DetailedErrorObject {
   status: number;
 }
 
-function handlerLocaleId(request: NextRequest) {
+function handlerLocaleId(request: NextRequest, langFromPath?: string) {
   /**
    * NOTE: we have similar code in route handlers that produce localized responses
    * Priorities:
-   * 1. locale cookie
-   * (2. lang already in URL) => this is only for web pages, not API calls
-   * 3. accept-language header
+   * 1. lang already in URL => to be passed from the route handler if available
+   * 2. accept-language header
+   * 3. en-US/default locale
    *
    * User can change locale cookie via the locale selector menu
    */
   const locale =
-    request.cookies.get(LOCALE_COOKIE_NAME)?.value ||
-    //langFromPath ||
+    langFromPath ||
     getLocaleFromAcceptLanguage(request.headers.get("accept-language")) ||
     "en-US";
   const validLocale = getClosestLocale(locale);
@@ -54,7 +51,6 @@ export class HandlerError extends Error {
     // context is important to get the minimum necessary data
     // we might want to add a timemout and return the default message if this request is too slow
     /// const localeId = handlerLocaleId(request)
-    // await fetchLocaleStrings({ localeId: validLocale, contexts: ["errors"] })
 
     // TODO: then apply the translation: factor code from surveyform/src/app/[lang]/(mainLayout)/layout.tsx
     // that creates a StringsRegistry sever side
