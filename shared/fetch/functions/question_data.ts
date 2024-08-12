@@ -57,7 +57,7 @@ export async function fetchQuestionData(
       const result = await fetchGraphQLApi({
         query,
         key,
-        cache: "force-cache"
+        //cache: "force-cache"
       });
       if (!result) {
         throw new Error(

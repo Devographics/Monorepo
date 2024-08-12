@@ -33,7 +33,8 @@ export async function fetchEditionSitemap(
             const result = await fetchGraphQLApi({
                 query,
                 key,
-                cache: "force-cache"
+                // force-cache forces to remove .next in dev mode
+                //cache: "force-cache"
             })
             if (!result) {
                 throw new Error(

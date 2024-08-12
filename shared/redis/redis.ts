@@ -32,7 +32,8 @@ export function initRedis(url_?: string, token_?: string) {
             url,
             token,
             // @see https://github.com/upstash/redis-js/issues/397
-            cache: "default"
+            // In Next 14 Redis is not compatible with static rendering
+            // cache: "default"
         })
     }
     return redis
