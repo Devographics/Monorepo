@@ -36,4 +36,4 @@ export const allowedCachingMethods = (): {
 }
 
 export const getCacheOption = () =>
-    process.env.NODE_ENV === 'developement' ? 'no-store' : 'force-cache'
+    process.env.NODE_ENV === 'development' ? 'no-store' : 'force-cache'
