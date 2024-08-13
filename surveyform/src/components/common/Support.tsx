@@ -7,7 +7,7 @@ const Support = ({ edition }: { edition: EditionMetadata }) => {
       <h3 className="support-heading survey-page-block-heading">
         <DynamicT token="general.support_from" />
       </h3>
-      {edition.survey.partners.map((sponsor) => (
+      {edition.sponsors.map((sponsor) => (
         <SupportItem key={sponsor.id} sponsor={sponsor} />
       ))}
     </div>

@@ -56,6 +56,7 @@ export type Edition = {
     status: SurveyStatus
     tshirt: Tshirt
     colors: Colors
+    sponsors: SponsorItem[]
     enableReadingList: boolean
     enableChartSponsorships: boolean
     enableSkip: boolean
