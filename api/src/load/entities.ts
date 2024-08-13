@@ -282,7 +282,7 @@ export const getEntity = async ({
 
     const entity = findEntity(id.toLowerCase(), entities, tag)
 
-    if (!entity) {
+    if (!entity.id) {
         return
     }
 
