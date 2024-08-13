@@ -50,6 +50,7 @@ export const getSurveyParamsTable = (): SurveyParamsTable => ({
   },
   "state-of-html": {
     2023: { surveyId: "state_of_html", editionId: "html2023" },
+    2024: { surveyId: "state_of_html", editionId: "html2024" },
   },
   tokyodev: {
     2020: { surveyId: "tokyodev", editionId: "td2020" },
