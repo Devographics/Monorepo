@@ -3,6 +3,7 @@ import { getFromCache, fetchGraphQLApi } from '../fetch'
 import { editionSitemapCacheKey } from '../cache_keys'
 import { getEditionSitemapQuery } from '../queries'
 import { type FetcherFunctionOptions } from '../types'
+import { getCacheOption } from '../helpers'
 
 /**
  * Survey edition, including the sitemap object
@@ -33,11 +34,12 @@ export async function fetchEditionSitemap(
             const result = await fetchGraphQLApi({
                 query,
                 key,
-                cache: "force-cache"
+                cache: getCacheOption()
             })
             if (!result) {
                 throw new Error(
-                    `Couldn't fetch survey ${editionId}, result: ${result && JSON.stringify(result)
+                    `Couldn't fetch survey ${editionId}, result: ${
+                        result && JSON.stringify(result)
                     }`
                 )
             }

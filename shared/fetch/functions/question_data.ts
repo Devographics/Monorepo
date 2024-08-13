@@ -1,74 +1,74 @@
-import { ResponseData, ResultsSubFieldEnum } from "@devographics/types";
-import { getFromCache, fetchGraphQLApi } from "../fetch";
-import { questionDataCacheKey } from "../cache_keys";
-import { FetcherFunctionOptions } from "../types";
-import { QueryArgs, getQuestionDataQuery } from "../queries/question_data";
+import { ResponseData, ResultsSubFieldEnum } from '@devographics/types'
+import { getFromCache, fetchGraphQLApi } from '../fetch'
+import { questionDataCacheKey } from '../cache_keys'
+import { FetcherFunctionOptions } from '../types'
+import { QueryArgs, getQuestionDataQuery } from '../queries/question_data'
+import { getCacheOption } from '../helpers'
 
 /**
  * Load a question's data
  * @returns
  */
 export async function fetchQuestionData(
-  options: FetcherFunctionOptions & {
-    surveyId: string;
-    editionId: string;
-    sectionId: string;
-    questionId: string;
-    subField: ResultsSubFieldEnum;
-    queryArgs?: QueryArgs;
-  }
+    options: FetcherFunctionOptions & {
+        surveyId: string
+        editionId: string
+        sectionId: string
+        questionId: string
+        subField: ResultsSubFieldEnum
+        queryArgs?: QueryArgs
+    }
 ) {
-  const {
-    appName,
-    surveyId,
-    editionId,
-    sectionId,
-    questionId,
-    subField,
-    calledFrom,
-    queryArgs = {},
-  } = options;
-  const getQuery = options.getQuery || getQuestionDataQuery;
-  const queryOptions = {
-    surveyId,
-    editionId,
-    sectionId,
-    questionId,
-    subField,
-  };
-  const query = getQuery({ queryOptions, queryArgs });
+    const {
+        appName,
+        surveyId,
+        editionId,
+        sectionId,
+        questionId,
+        subField,
+        calledFrom,
+        queryArgs = {}
+    } = options
+    const getQuery = options.getQuery || getQuestionDataQuery
+    const queryOptions = {
+        surveyId,
+        editionId,
+        sectionId,
+        questionId,
+        subField
+    }
+    const query = getQuery({ queryOptions, queryArgs })
 
-  if (!surveyId) {
-    throw new Error(`surveyId not defined (calledFrom: ${calledFrom})`);
-  }
-  if (!editionId) {
-    throw new Error(`editionId not defined (calledFrom: ${calledFrom})`);
-  }
-  const key = questionDataCacheKey({
-    appName,
-    surveyId,
-    editionId,
-    sectionId,
-    questionId,
-  });
-  return await getFromCache<ResponseData>({
-    key,
-    fetchFunction: async () => {
-      const result = await fetchGraphQLApi({
-        query,
-        key,
-        cache: "force-cache"
-      });
-      if (!result) {
-        throw new Error(
-          `Couldn't fetch data for question ${questionId}, result: ${result && JSON.stringify(result)
-          }`
-        );
-      }
-      return result?.surveys?.[surveyId]?.[editionId]?.[sectionId]?.[
+    if (!surveyId) {
+        throw new Error(`surveyId not defined (calledFrom: ${calledFrom})`)
+    }
+    if (!editionId) {
+        throw new Error(`editionId not defined (calledFrom: ${calledFrom})`)
+    }
+    const key = questionDataCacheKey({
+        appName,
+        surveyId,
+        editionId,
+        sectionId,
         questionId
-      ]?.[subField];
-    },
-    ...options,
-  });
+    })
+    return await getFromCache<ResponseData>({
+        key,
+        fetchFunction: async () => {
+            const result = await fetchGraphQLApi({
+                query,
+                key,
+                cache: getCacheOption()
+            })
+            if (!result) {
+                throw new Error(
+                    `Couldn't fetch data for question ${questionId}, result: ${
+                        result && JSON.stringify(result)
+                    }`
+                )
+            }
+            return result?.surveys?.[surveyId]?.[editionId]?.[sectionId]?.[questionId]?.[subField]
+        },
+        ...options
+    })
 }

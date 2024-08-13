@@ -3,6 +3,7 @@ import { surveysMetadataCacheKey } from '../cache_keys'
 import { fetchGraphQLApi, getFromCache } from '../fetch'
 import { getSurveysQuery } from '../queries'
 import { FetcherFunctionOptions } from '../types'
+import { getCacheOption } from '../helpers'
 
 /**
  * Fetch metadata for all surveys
@@ -15,7 +16,7 @@ export const fetchSurveysMetadata = async (options?: FetcherFunctionOptions) => 
     const result = await getFromCache<Array<SurveyMetadata>>({
         key,
         fetchFunction: async () => {
-            const result = await fetchGraphQLApi({ query, key, cache: "force-cache" })
+            const result = await fetchGraphQLApi({ query, key, cache: getCacheOption() })
             if (!result) throw new Error(`Couldn't fetch surveys`)
             const surveys = result._metadata.surveys as SurveyMetadata[]
             return surveys
@@ -27,7 +28,6 @@ export const fetchSurveysMetadata = async (options?: FetcherFunctionOptions) => 
         result.data = result.data.map(survey => ({
             ...survey,
             editions: survey.editions?.map(edition => ({ ...edition, survey }))
-
         }))
     }
     return result

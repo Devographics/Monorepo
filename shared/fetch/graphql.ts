@@ -1,11 +1,12 @@
-import { getApiUrl } from "./api"
+import { getApiUrl } from './api'
+import { getCacheOption } from './helpers'
 
 /**
  * Generic GraphQL fetcher
  * Allows to override the API URL
  * and all other fetch options like "cache"
- * @param param0 
- * @returns 
+ * @param param0
+ * @returns
  */
 export async function graphqlFetcher<TData = any, TVar = any>(
     query: string,
@@ -18,9 +19,9 @@ export async function graphqlFetcher<TData = any, TVar = any>(
      */
     variables?: TVar,
     fetchOptions?: Partial<ResponseInit>,
-    apiUrl_?: string,
+    apiUrl_?: string
 ): Promise<{
-    data?: TData,
+    data?: TData
     errors?: Array<Error>
 }> {
     const apiUrl = apiUrl_ || getApiUrl()
@@ -32,6 +33,7 @@ export async function graphqlFetcher<TData = any, TVar = any>(
             Accept: 'application/json'
         },
         body: JSON.stringify({ query, variables: variables || {} }),
+        cache: getCacheOption(),
         ...(fetchOptions || {})
     })
     const json: any = await response.json()

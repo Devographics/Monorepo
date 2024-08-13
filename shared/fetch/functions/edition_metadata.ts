@@ -3,6 +3,7 @@ import { getFromCache, fetchGraphQLApi } from '../fetch'
 import { editionMetadataCacheKey } from '../cache_keys'
 import { getEditionMetadataQuery } from '../queries'
 import { FetcherFunctionOptions } from '../types'
+import { getCacheOption } from '../helpers'
 
 /**
  * Load the metadata of a survey edition for the surveyform app
@@ -34,11 +35,12 @@ export async function fetchEditionMetadata(
             const result = await fetchGraphQLApi({
                 query,
                 key,
-                cache: "force-cache"
+                cache: getCacheOption()
             })
             if (!result) {
                 throw new Error(
-                    `Couldn't fetch survey ${editionId}, result: ${result && JSON.stringify(result)
+                    `Couldn't fetch survey ${editionId}, result: ${
+                        result && JSON.stringify(result)
                     }`
                 )
             }

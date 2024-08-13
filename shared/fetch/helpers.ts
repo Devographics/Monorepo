@@ -1,4 +1,4 @@
-import { EnvVar, getEnvVar } from "@devographics/helpers"
+import { EnvVar, getEnvVar } from '@devographics/helpers'
 /**
  * Get caching methods based on current config
  * It can enable or disable either caching or writing, depending on the cache type
@@ -6,20 +6,20 @@ import { EnvVar, getEnvVar } from "@devographics/helpers"
 export const allowedCachingMethods = (): {
     /**
      * .logs folder (only used for writing, for debugging purpose)
-    */
-    filesystem: boolean,
+     */
+    filesystem: boolean
     /**
      * GraphQL API
      * TODO: it's not a cache but the source of truth, why using this?
      */
-    api: boolean,
+    api: boolean
     /**
      * Redis
      */
-    redis: boolean,
+    redis: boolean
 } => {
     let cacheLevel = { filesystem: true, api: true, redis: true }
-    if (getEnvVar(EnvVar.DISABLE_CACHE) === "true") {
+    if (getEnvVar(EnvVar.DISABLE_CACHE) === 'true') {
         cacheLevel = { filesystem: false, api: false, redis: false }
     } else {
         if (getEnvVar(EnvVar.DISABLE_FILESYSTEM_CACHE) === 'true') {
@@ -34,3 +34,6 @@ export const allowedCachingMethods = (): {
     }
     return cacheLevel
 }
+
+export const getCacheOption = () =>
+    process.env.NODE_ENV === 'developement' ? 'no-store' : 'force-cache'
