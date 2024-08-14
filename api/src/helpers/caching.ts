@@ -144,7 +144,11 @@ export const setCache = async (key: string, value: any, context: RequestContext)
     if (cacheType === 'local') {
         nodeCache.set(key, value)
     } else {
-        await context.redisClient.set(key, JSON.stringify(value))
+        try {
+            await context.redisClient.set(key, JSON.stringify(value))
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 

@@ -89,16 +89,20 @@ export const entityResolverMap: EntityResolverMap = {
         }
 
         const funcOptions = { path: entity.mdn }
-        const mdn = await useCache({
-            func: fetchMdnResource,
-            key: computeKey(fetchMdnResource, funcOptions),
-            context,
-            funcOptions
-        })
+        try {
+            const mdn = await useCache({
+                func: fetchMdnResource,
+                key: computeKey(fetchMdnResource, funcOptions),
+                context,
+                funcOptions
+            })
 
-        if (mdn && Array.isArray(mdn)) {
-            return mdn.find((t: any) => t.locale === 'en-US')
-        } else {
+            if (mdn && Array.isArray(mdn)) {
+                return mdn.find((t: any) => t.locale === 'en-US')
+            } else {
+                return
+            }
+        } catch (error) {
             return
         }
     },
