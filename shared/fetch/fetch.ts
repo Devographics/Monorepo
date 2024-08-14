@@ -380,21 +380,26 @@ export async function storePayload<T>(
         cacheType: CacheType.REDIS
     }
 ): Promise<boolean> {
-    const { shouldCompress, cacheType } = options
-    const storeFunction = cacheFunctions[cacheType]['store'] as GenericStoreFunction
+    try {
+        const { shouldCompress, cacheType } = options
+        const storeFunction = cacheFunctions[cacheType]['store'] as GenericStoreFunction
 
-    if (shouldCompress && isNodeRuntime) {
-        const { compressJSON } = await import('./compress')
+        if (shouldCompress && isNodeRuntime) {
+            const { compressJSON } = await import('./compress')
 
-        const compressedData = await compressJSON(payload.data)
-        const compressedPayload = {
-            ...payload,
-            ___metadata: { ...payload.___metadata, isCompressed: true },
-            data: compressedData
+            const compressedData = await compressJSON(payload.data)
+            const compressedPayload = {
+                ...payload,
+                ___metadata: { ...payload.___metadata, isCompressed: true },
+                data: compressedData
+            }
+            return await storeFunction(key, compressedPayload)
+        } else {
+            return await storeFunction(key, payload)
         }
-        return await storeFunction(key, compressedPayload)
-    } else {
-        return await storeFunction(key, payload)
+    } catch (error) {
+        // do not throw an error when cache-related operations fail
+        return false
     }
 }
 
@@ -409,18 +414,23 @@ export async function fetchPayload<T>(
     key: string,
     options: FetchPayloadOptions = { cacheType: CacheType.REDIS }
 ): Promise<FetchPayload<T> | null> {
-    const { cacheType } = options
-    const fetchFunction = cacheFunctions[cacheType]['fetch'] as GenericFetchFunction<T>
+    try {
+        const { cacheType } = options
+        const fetchFunction = cacheFunctions[cacheType]['fetch'] as GenericFetchFunction<T>
 
-    const payload = await fetchFunction(key)
-    if (payload?.___metadata?.isCompressed && isNodeRuntime) {
-        const { decompressJSON } = await import('./compress')
-        const uncompressedData = (await decompressJSON(payload.data)) as T
-        return {
-            ...payload,
-            data: uncompressedData
+        const payload = await fetchFunction(key)
+        if (payload?.___metadata?.isCompressed && isNodeRuntime) {
+            const { decompressJSON } = await import('./compress')
+            const uncompressedData = (await decompressJSON(payload.data)) as T
+            return {
+                ...payload,
+                data: uncompressedData
+            }
+        } else {
+            return payload
         }
-    } else {
-        return payload
+    } catch (error) {
+        // do not throw an error when cache-related operations fail
+        return null
     }
 }
