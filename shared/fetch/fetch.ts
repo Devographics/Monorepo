@@ -223,7 +223,7 @@ export async function getFromCache<T = any>({
     redisUrl,
     redisToken,
     shouldGetFromCache: shouldGetFromCacheOptions,
-    shouldUpdateCache = true,
+    shouldUpdateCache: shouldUpdateCacheOptions = true,
     shouldThrow = true,
     shouldCompress = false,
     cacheType = CacheType.REDIS
@@ -233,8 +233,20 @@ export async function getFromCache<T = any>({
     initRedis(redisUrl, redisToken)
     const calledFromLog = calledFrom ? `(↪️  ${calledFrom})` : ''
 
-    const shouldGetFromCacheEnv = !(process.env.DISABLE_CACHE === 'true')
-    const shouldGetFromCache = shouldGetFromCacheOptions ?? shouldGetFromCacheEnv
+    const cacheIsDisabled = process.env.DISABLE_CACHE === 'true'
+    const shouldGetFromCache = !cacheIsDisabled && shouldGetFromCacheOptions
+    const shouldUpdateCache = !cacheIsDisabled && shouldUpdateCacheOptions
+
+    if (cacheIsDisabled && shouldGetFromCache === true) {
+        console.warn(
+            'Cache is turned off in env settings, ignoring shouldGetFromCache = true option'
+        )
+    }
+    if (cacheIsDisabled && shouldUpdateCache === true) {
+        console.warn(
+            'Cache is turned off in env settings, ignoring shouldUpdateCache = true option'
+        )
+    }
 
     async function fetchAndProcess<T>(source: SourceType) {
         const data = await fetchFromSource()
