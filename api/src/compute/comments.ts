@@ -26,6 +26,9 @@ type CommentObject = {
     message: string
     responseId: string
     editionId: string
+    responseValue?: string | string[] | number | number[]
+    experience?: string
+    sentiment?: string
     sentimentScore?: number
 }
 
@@ -80,7 +83,8 @@ export const getRawComments = async ({
     const {
         comment: commentPath,
         experience: experiencePath,
-        sentiment: sentimentPath
+        sentiment: sentimentPath,
+        response: responsePath
     } = question?.normPaths || {}
 
     if (!commentPath) {
@@ -99,13 +103,23 @@ export const getRawComments = async ({
     // console.log(selector)
     // console.log(JSON.stringify(results, null, 2))
 
-    const comments = results.map(r => ({
-        editionId: r.editionId,
-        message: get(r, commentPath) as string,
-        experience: get(r, experiencePath!) as string,
-        sentiment: get(r, sentimentPath!) as string,
-        responseId: r._id as unknown as string
-    })) as CommentObject[]
+    const comments = results.map(r => {
+        const comment: CommentObject = {
+            editionId: r.editionId,
+            message: get(r, commentPath) as string,
+            responseId: r._id as unknown as string
+        }
+        if (responsePath) {
+            comment.responseValue = get(r, responsePath)
+        }
+        if (experiencePath) {
+            comment.experience = get(r, experiencePath)
+        }
+        if (sentimentPath) {
+            comment.sentiment = get(r, sentimentPath!)
+        }
+        return comment
+    })
     // results = await addSentimentAnalysis(results)
     const resultsByEdition = groupByEdition(comments)
     // console.log(JSON.stringify(resultsByYear, null, 2))
