@@ -192,25 +192,35 @@
   blocks:
       - template: page_introduction
 
-      - id: features_overview
-        template: features_overview
+      - id: all_features
+        template: multi_items_experience
+        chartOptions:
+            limit: 10
 
-      - template: features_experience_linechart
-        tabId: blocks.tools_experience_ranking.percentages
-        parameters:
-            years: [2020, 2021, 2022, 2023]
-            rankCutoff: 10
-        variants:
-            - template: features_experience_ranking
-              tabId: blocks.tools_experience_ranking.rankings
+      # - id: features_overview
+      #   template: features_overview
 
-      - id: knowledge_score
-        template: demographics
+      # - template: features_experience_linechart
+      #   tabId: blocks.tools_experience_ranking.percentages
+      #   parameters:
+      #       years: [2020, 2021, 2022, 2023]
+      #       rankCutoff: 10
+      #   variants:
+      #       - template: features_experience_ranking
+      #         tabId: blocks.tools_experience_ranking.rankings
+
+      # - id: knowledge_score
+      #   template: demographics
 
       - id: reading_list
-        template: reading_list
-        blockType: HorizontalBarBlock
-        parameters: { limit: 20 }
+        template: multiple_options2
+        parameters:
+            limit: 20
+        queryOptions:
+            sectionId: reading_list
+        chartOptions:
+            dataFilters: [removeOverLimit, removeNoAnswer]
+            limit: 10
 
       - id: features_resources
         items: [fm-learncss]

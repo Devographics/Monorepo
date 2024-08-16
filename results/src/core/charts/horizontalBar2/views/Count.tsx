@@ -4,7 +4,7 @@ import { HorizontalBarViewDefinition } from '../types'
 import { removeNoAnswer } from '../helpers/steps'
 import { BucketUnits } from '@devographics/types'
 import { RowGroup, Rows } from '../rows'
-import { formatNumber } from 'core/charts/common2/helpers/labels'
+import { formatNumber } from 'core/charts/common2/helpers/format'
 
 export const Count: HorizontalBarViewDefinition = {
     getValue: bucket => bucket[BucketUnits.COUNT] || 0,

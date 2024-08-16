@@ -4,7 +4,7 @@ import { VerticalBarViewDefinition } from '../types'
 // import { removeNoAnswer } from '../helpers/steps'
 import { BucketUnits } from '@devographics/types'
 import Columns from '../columns/Columns'
-import { formatPercentage } from 'core/charts/common2/helpers/labels'
+import { formatPercentage } from 'core/charts/common2/helpers/format'
 import { getEditionByYear } from '../helpers/other'
 import { ColumnEmpty } from '../columns/ColumnEmpty'
 

@@ -12,7 +12,7 @@ import { useBoxplotData, useScales } from './helpers'
 import { removeNoAnswer } from '../../helpers/steps'
 import { BAR_HEIGHT, RowGroup } from '../../rows/RowGroup'
 import { RowWrapper, Rows } from '../../rows'
-import { formatQuestionValue } from 'core/charts/common2/helpers/labels'
+import { formatQuestionValue } from 'core/charts/common2/helpers/format'
 
 const PIXEL_PER_TICKS = 100
 

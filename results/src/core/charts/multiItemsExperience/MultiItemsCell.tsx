@@ -5,7 +5,7 @@ import Tooltip from 'core/components/Tooltip'
 import { useI18n } from '@devographics/react-i18n'
 import T from 'core/i18n/T'
 import { useTheme } from 'styled-components'
-import { formatPercentage } from '../common2/helpers/labels'
+import { formatPercentage } from '../common2/helpers/format'
 import { useIsWideEnough } from '../horizontalBar2/HorizontalBarCell'
 import { CellLabel } from '../common2'
 

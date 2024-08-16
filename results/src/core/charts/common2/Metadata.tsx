@@ -5,7 +5,7 @@ import T from 'core/i18n/T'
 import { AverageIcon, MedianIcon, PercentIcon, UserIcon } from 'core/icons'
 import { IconProps } from 'core/icons/IconWrapper'
 import React from 'react'
-import { formatNumber, formatPercentage, formatQuestionValue } from './helpers/labels'
+import { formatNumber, formatPercentage, formatQuestionValue } from './helpers/format'
 
 export const Metadata = ({
     completion,

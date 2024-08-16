@@ -4,7 +4,7 @@ import { HorizontalBarViewDefinition } from '../types'
 import { removeNoAnswer, removeNotApplicable } from '../helpers/steps'
 import { BucketUnits } from '@devographics/types'
 import { RowGroup, Rows } from '../rows'
-import { formatQuestionValue } from 'core/charts/common2/helpers/labels'
+import { formatQuestionValue } from 'core/charts/common2/helpers/format'
 
 export const Average: HorizontalBarViewDefinition = {
     getValue: bucket => bucket[BucketUnits.AVERAGE] || 0,

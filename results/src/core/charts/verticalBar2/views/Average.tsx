@@ -1,7 +1,7 @@
 import React from 'react'
 import Columns from '../columns/Columns'
 import { VerticalBarViewDefinition } from '../types'
-import { formatQuestionValue } from 'core/charts/common2/helpers/labels'
+import { formatQuestionValue } from 'core/charts/common2/helpers/format'
 import { Lines } from '../lines'
 import { ColumnEmpty } from '../columns/ColumnEmpty'
 // import { removeNoAnswer } from '../helpers/steps'

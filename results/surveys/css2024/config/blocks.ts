@@ -8,10 +8,11 @@
 /* ---------------------------------------------------------------------- */
 
 // generic charts
-import HorizontalBarBlock from 'core/charts/horizontalBar/index'
-import VerticalBarBlock from 'core/charts/verticalBar'
-import PeopleBlock from 'core/charts/people'
+import HorizontalBarBlock2 from 'core/charts/horizontalBar2'
+import VerticalBarBlock2 from 'core/charts/verticalBar2'
 import ToolFeatureExperienceBlock from 'core/charts/toolFeatureExperience'
+import MultiItemsExperienceBlock from 'core/charts/multiItemsExperience'
+import MultiItemsRatiosBlock from 'core/charts/multiItemsRatios'
 
 // features
 import FeaturesOverviewBlock from 'core/charts/featuresOverview'
@@ -33,9 +34,10 @@ import OpinionBlock from 'core/charts/opinion'
 import BracketWinsBlock from 'core/charts/brackets/BracketWinsBlock.tsx'
 
 const chartBlocks = {
-    HorizontalBarBlock,
-    VerticalBarBlock,
-    PeopleBlock,
+    HorizontalBarBlock2,
+    VerticalBarBlock2,
+    MultiItemsExperienceBlock,
+    MultiItemsRatiosBlock,
 
     ToolFeatureExperienceBlock,
 

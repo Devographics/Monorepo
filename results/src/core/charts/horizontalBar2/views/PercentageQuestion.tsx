@@ -11,7 +11,7 @@ import max from 'lodash/max'
 import round from 'lodash/round'
 import { RowSingle } from '../rows/RowSingle'
 import { RowGroup, Rows } from '../rows'
-import { formatPercentage } from 'core/charts/common2/helpers/labels'
+import { formatPercentage } from 'core/charts/common2/helpers/format'
 
 const getValue = (bucket: Bucket | FacetBucket) => bucket[BucketUnits.PERCENTAGE_QUESTION] || 0
 

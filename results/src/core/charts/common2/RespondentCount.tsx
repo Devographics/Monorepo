@@ -1,7 +1,7 @@
 import { UserIcon } from 'core/icons'
 import './RespondentCount.scss'
 import React from 'react'
-import { formatNumber } from './helpers/labels'
+import { formatNumber } from './helpers/format'
 
 export const RespondentCount = ({ count }: { count?: number }) => {
     return (

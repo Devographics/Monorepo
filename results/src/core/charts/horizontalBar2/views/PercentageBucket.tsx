@@ -9,7 +9,7 @@ import max from 'lodash/max'
 import { applyRatio } from 'core/charts/multiItemsExperience/helpers'
 import { Dimension } from 'core/charts/multiItemsExperience/types'
 import { RowGroup, Rows } from '../rows'
-import { formatPercentage } from 'core/charts/common2/helpers/labels'
+import { formatPercentage } from 'core/charts/common2/helpers/format'
 
 const getValue = (facetBucket: FacetBucket) => facetBucket[BucketUnits.PERCENTAGE_BUCKET] || 0
 
