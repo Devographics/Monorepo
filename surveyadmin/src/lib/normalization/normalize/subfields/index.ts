@@ -5,3 +5,4 @@ export * from "./freeform";
 export * from "./prenormalized";
 export * from "./response";
 export * from "./skip";
+export * from "./sentiment";

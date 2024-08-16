@@ -23,6 +23,7 @@ import {
   freeform,
   prenormalized,
   skip,
+  sentiment,
   response as responseSubfieldFunction,
 } from "./subfields";
 
@@ -107,6 +108,7 @@ export const normalizeField = async ({
     // else, when normalizing from scratch we process all sub-fields
     subfields = [
       responseSubfieldFunction,
+      sentiment,
       comment,
       prenormalized,
       freeform,
