@@ -1,13 +1,25 @@
 const convertToGraphQLEnum = (s: string) => s.replace('-', '_')
 
-export const localeWithStringsQuery = ({ localeId, contexts }: { localeId: string, contexts: Array<string> }) => {
+export const localeWithStringsQuery = ({
+    localeId,
+    contexts
+}: {
+    localeId: string
+    contexts: Array<string>
+}) => {
     // en-US must become en_US ion the query
     // we do not need GraphQL variables because the localeId and contexts are not dynamic,
     // they are known ahead of time
     return `
     {
-        locale(localeId: ${localeId.replaceAll("-", "_")}, contexts:[${contexts.join(",")}]) {
+        locale(localeId: ${localeId.replaceAll('-', '_')}, contexts:[${contexts.join(',')}]) {
             id
+            completion
+            label
+            repo
+            totalCount
+            translatedCount
+            translators
             strings {
                 key
                 t
@@ -32,8 +44,9 @@ query {
             completion
             id
             label
-            ${loadStrings
-            ? `strings {
+            ${
+                loadStrings
+                    ? `strings {
                 key
                 t
                 tHtml
@@ -41,8 +54,8 @@ query {
                 context
                 isFallback
             }`
-            : ''
-        }
+                    : ''
+            }
             translators
         }
 }
