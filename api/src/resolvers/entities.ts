@@ -28,6 +28,7 @@ import { getEntities } from '../load/entities'
 
 export const entitiesResolvers = {
     entity: async (root: any, { id }: { id: string }, context: RequestContext) => {
+        console.log(`// entity resolver: ${id}`)
         return await getEntity({ id, context })
     },
     token: async (root: any, { id }: { id: string }, context: RequestContext) => {
@@ -48,6 +49,8 @@ export const entitiesResolvers = {
         },
         context: RequestContext
     ) => {
+        console.log(`// entities resolver: ${ids.join(', ')}`)
+
         return getEntities({
             ids,
             tags,

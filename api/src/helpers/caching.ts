@@ -147,6 +147,7 @@ export const setCache = async (key: string, value: any, context: RequestContext)
         try {
             await context.redisClient.set(key, JSON.stringify(value))
         } catch (error) {
+            console.log(`setCache failed for key ${key} with error:`)
             console.log(error)
         }
     }
