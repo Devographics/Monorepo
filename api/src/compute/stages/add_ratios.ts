@@ -28,32 +28,39 @@ export async function addRatios(
         const heardBucket = buckets.find(b => b.id === FeaturesOptions.HEARD) || emptyBucket
         const usedBucket = buckets.find(b => b.id === FeaturesOptions.USED) || emptyBucket
 
-        const total = getCount(neverHeardBucket) + getCount(heardBucket) + getCount(usedBucket)
+        const neverHeardBucketCount = getCount(neverHeardBucket)
+        const neverHeardBucketPositiveCount = getPositiveCount(neverHeardBucket)
+
+        const heardBucketCount = getCount(heardBucket)
+        const heardBucketPositiveCount = getPositiveCount(heardBucket)
+        const heardBucketNegativeCount = getNegativeCount(heardBucket)
+
+        const usedBucketCount = getCount(usedBucket)
+        const usedBucketPositiveCount = getPositiveCount(usedBucket)
+        const usedBucketNegativeCount = getNegativeCount(usedBucket)
+
+        const total = neverHeardBucketCount + heardBucketCount + usedBucketCount
 
         // (heard + used) / total
-        const awareness = (getCount(heardBucket) + getCount(usedBucket)) / total
+        const awareness = (heardBucketCount + usedBucketCount) / total
 
         // heard positive / (heard positive + heard negative)
         const interest =
-            getCount(heardBucket) === 0
+            heardBucketPositiveCount + heardBucketNegativeCount === 0
                 ? 0
-                : getPositiveCount(heardBucket) /
-                  (getPositiveCount(heardBucket) + getNegativeCount(heardBucket))
+                : heardBucketPositiveCount / (heardBucketPositiveCount + heardBucketNegativeCount)
 
         // used / total
-        const usage = getCount(usedBucket) / total
+        const usage = usedBucketCount / total
 
         // used positive / (used positive + used negative)
         const retention =
-            getCount(usedBucket) === 0
+            usedBucketPositiveCount + usedBucketNegativeCount === 0
                 ? 0
-                : getPositiveCount(usedBucket) /
-                  (getPositiveCount(usedBucket) + getNegativeCount(usedBucket))
+                : usedBucketPositiveCount / (usedBucketPositiveCount + usedBucketNegativeCount)
 
         const allPositive =
-            getPositiveCount(neverHeardBucket) +
-            getPositiveCount(heardBucket) +
-            getPositiveCount(usedBucket)
+            neverHeardBucketPositiveCount + heardBucketPositiveCount + usedBucketPositiveCount
         // all positive / total
         const positivity = allPositive / total
 

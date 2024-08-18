@@ -49,7 +49,7 @@ export const entitiesResolvers = {
         },
         context: RequestContext
     ) => {
-        console.log(`// entities resolver: ${ids.join(', ')}`)
+        console.log(`// entities resolver ${ids ? `: ${ids.join(', ')}` : ''}`)
 
         return getEntities({
             ids,
