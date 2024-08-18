@@ -157,7 +157,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     textAlt: 'rgba(255, 246, 229, 0.5)',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
-    link: colors.electricBlue,
+    link: '#68F177',
     linkActive: '#5C63E0',
     contrast: '#0bdf67',
     border: '#FFF6E6',
@@ -230,8 +230,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     ],
     barColorDefault: {
         id: 'barColorDefault',
-        color: colors.electricBlue,
-        gradient: [colors.electricBlueDarkerer, colors.electricBlueDark]
+        color: '#64FF3E',
+        gradient: ['#61EC4C', '#19B330']
     },
     barColorNoAnswer: {
         id: 'barColorNoAnswer',
@@ -239,8 +239,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         gradient: [colors.greyLight, colors.greyLightest]
     },
     barChart: {
-        primary: colors.electricBlue,
-        primaryGradient: [colors.electricBlueDarkerer, colors.electricBlueDark],
+        primary: '#73D17D',
+        primaryGradient: ['#268530', '#73D17D'],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.pink,
@@ -266,6 +266,11 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             css_in_js: colors.blue,
             pre_post_processors: colors.yellow,
             css_frameworks: colors.pink
+        },
+        sentiment: {
+            positive: [colors.green, colors.greenLight],
+            neutral: [colors.grey, colors.greyLight],
+            negative: [colors.red, colors.redLight]
         },
         features: {
             used: [colors.electricBlueDarker, colors.electricBlueDark],

@@ -226,111 +226,6 @@
         items: [fm-learncss]
         template: recommended_resources
 
-  children:
-      - id: layout
-        path: /layout
-        blocks:
-            - id: layout
-              template: page_introduction
-
-            - id: layout_features
-              template: multi_items_experience
-              i18nNamespace: features
-
-            - id: comments_hint
-              template: hint
-
-            - id: layout_resources
-              items: [fm-gridsflexbox, fm-practicallayouts]
-              template: recommended_resources
-
-      - id: shapes_graphics
-        path: /shapes-and-graphics
-        blocks:
-            - id: shapes_graphics
-              template: page_introduction
-
-            - id: shapes_graphics_features
-              template: multi_items_experience
-              i18nNamespace: features
-
-            - id: export_hint
-              template: hint
-
-            - id: shapes_graphics_resources
-              items: [fm-svg]
-              template: recommended_resources
-
-      - id: colors
-        path: /colors
-        blocks:
-            - id: colors
-              template: page_introduction
-
-            - id: colors_features
-              template: multi_items_experience
-              i18nNamespace: features
-
-            - id: share_hint
-              template: hint
-
-            - id: colors_resources
-              items: [fm-design-developers]
-              template: recommended_resources
-
-      - id: interactions
-        path: /interactions
-        blocks:
-            - id: interactions
-              template: page_introduction
-
-            - id: interactions_features
-              template: multi_items_experience
-              i18nNamespace: features
-
-            - id: shapes_graphics_resources
-              items: [fm-animations-transitions]
-              template: recommended_resources
-
-      - id: typography
-        path: /typography
-        blocks:
-            - id: typography
-              template: page_introduction
-
-            - id: typography_features
-              template: multi_items_experience
-              i18nNamespace: features
-
-            - items: [fm-typography]
-              template: recommended_resources
-
-      - id: accessibility
-        path: /accessibility
-        blocks:
-            - id: accessibility
-              template: page_introduction
-
-            - id: accessibility_features
-              template: multi_items_experience
-              i18nNamespace: features
-
-            - items: [fm-accessibility]
-              template: recommended_resources
-
-      - id: other_features
-        path: /other-features
-        blocks:
-            - id: other_features
-              template: page_introduction
-
-            - id: other_features_features
-              template: multi_items_experience
-              i18nNamespace: features
-
-            - items: [fm-cssvariables]
-              template: recommended_resources
-
 - id: other_tools
   path: /other-tools
   descriptionId: sections.other_tools.description.css2023
@@ -340,18 +235,23 @@
 
       - id: css_frameworks
         template: multiple_options2_combined
+        i18nNamespace: tools
 
       - id: css_in_js
         template: multiple_options2_combined
+        i18nNamespace: tools
 
       - id: pre_post_processors
         template: multiple_options2_combined
+        i18nNamespace: tools
 
       - id: utilities
         template: multiple_options2_combined
+        i18nNamespace: tools
 
       - id: browsers
         template: multiple_options2_combined
+        i18nNamespace: tools
 
 - id: usage
   descriptionId: sections.usage.description.css2023
@@ -395,9 +295,11 @@
 
       - id: state_of_the_web_happiness
         template: happiness2
+        i18nNamespace: usage
 
       - id: state_of_css_happiness
         template: happiness2
+        i18nNamespace: usage
 
       - id: features_resources
         items: [fm-learncss]
