@@ -58,10 +58,15 @@ export default async function SurveyLayout({
       // TODO: we should have a shared layout between (mainLayout) pages and "survey/[slug]/[year]" that handle locales
       // so we don't have to reload commonContext translations in the surveys page
       ...getCommonContexts(),
-      ...getSurveyContexts(edition.survey), ...getEditionContexts(edition)],
+      ...getSurveyContexts(edition.survey),
+      ...getEditionContexts(edition),
+    ],
   });
   if (localeError) {
-    throw new Error(`Can't load translations from API, error: ${JSON.stringify(localeError)}`)
+    console.log(localeError);
+    throw new Error(
+      `Can't load translations from API, error: ${JSON.stringify(localeError)}`
+    );
   }
   // locales lists
   const {

@@ -73,8 +73,7 @@ const EditionPageComponent = ({
         <EditionMain edition={edition} />
       </div>
       <Faq edition={edition} />
-      {edition.credits && <SurveyCredits edition={edition} />}
-
+      <SurveyCredits edition={edition} />
       <TokyoDev />
       <Translators />
     </div>

@@ -3,7 +3,11 @@ import { publicConfig } from "~/config/public";
 import { DynamicT } from "@devographics/react-i18n";
 
 const SurveyCredits = ({ edition }: { edition: EditionMetadata }) => {
-  return (
+  const credits = edition?.credits?.filter((c) =>
+    ["survey_design", "survey_review"].includes(c.role)
+  );
+
+  return credits && credits.length > 0 ? (
     <div className="survey-credits survey-page-block">
       <h3 className="survey-credits-heading survey-page-block-heading">
         <DynamicT token="credits.contributors" />
@@ -12,14 +16,12 @@ const SurveyCredits = ({ edition }: { edition: EditionMetadata }) => {
         <DynamicT token="credits.contributors.description" />
       </p>
       <div className="survey-credits-items">
-        {edition.credits
-          .filter((c) => ["survey_design", "survey_review"].includes(c.role))
-          .map((c) => (
-            <SurveyCredit key={c.id} {...c} />
-          ))}
+        {credits.map((c) => (
+          <SurveyCredit key={c.id} {...c} />
+        ))}
       </div>
     </div>
-  );
+  ) : null;
 };
 
 const SurveyCredit = ({ id, role, entity }: Credit) => {
