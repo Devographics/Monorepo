@@ -27,8 +27,9 @@ const getLocaleContextCacheKey = (localeId: string, context: string) =>
     `${process.env.APP_NAME}__locale__${localeId}__${context}__parsed`
 
 /**
- * TODO: does it get the strings too?
- *
+ * Get list of locales, without strings
+ * 
+ * TODO: contexts are probably unused in this scenario, since we don't get strings
  *
  * @param param0
  * @returns
@@ -37,7 +38,7 @@ export const getLocalesGraphQL = async ({
     contexts,
     key
 }: {
-    contexts: Array<string>
+    contexts?: Array<string>
     key: string
 }) => {
     const localesQuery = getLocalesQuery(contexts, false)
@@ -83,27 +84,28 @@ export const getLocaleContextGraphQL = async ({
     return locale
 }
 
-async function getAllLocaleDefinitions({
-    contexts
-}: {
-    /** I18n scopes */
-    contexts: Array<string>
-}): Promise<Array<Locale>> {
+/**
+ * Replaces fetchAllLocalesMetadata
+ * @param param0 
+ * @returns 
+ */
+export async function getAllLocaleDefinitions(): Promise<{ error: Error, locales: undefined } | { error: undefined, locales: Array<Pick<Locale, "label" | "id" | "translators" | "completion">> }> {
     const allLocalesKey = allLocalesCacheKey()
-    const { data: localeDefinitions } = await cachedPipeline<Array<Locale>>({
+    const { data: localeDefinitions, error } = await cachedPipeline<Array<Locale>>({
         cacheKey: allLocalesKey
     })
         .steps(
             // GraphQL API = source of truth
             {
                 get: async () => {
-                    return await getLocalesGraphQL({ contexts, key: allLocalesKey })
+                    return await getLocalesGraphQL({ key: allLocalesKey })
                 }
             }
         )
         .run()
-    if (!localeDefinitions) throw new Error("Couldn't get locales")
-    return localeDefinitions
+    if (error) return { error, locales: undefined }
+    if (!localeDefinitions) return { error: new Error("Couldn't get locales"), locales: undefined }
+    return { locales: localeDefinitions, error: undefined }
 }
 
 async function getLocaleContextStrings({ locale, context }: { locale: Locale; context: string }) {
@@ -191,7 +193,9 @@ export const getLocalesWithStrings = async ({
 }): Promise<Array<LocaleWithStrings>> => {
     // We always get all locales definitions, and filters afterwards
     // TODO: improve to get a single call
-    let locales: Array<Locale> = await getAllLocaleDefinitions({ contexts })
+    const { error, locales: localesData } = await getAllLocaleDefinitions({ contexts })
+    if (error) return []
+    let locales = localesData
     if (localeIds && localeIds.length > 0) {
         locales = locales.filter(({ id }) => localeIds.includes(id))
     }
@@ -209,6 +213,7 @@ export const getLocalesWithStrings = async ({
             if (!strings) throw new Error('No strings for locale ' + locale.id)
             localeStrings = [...localeStrings, ...strings]
         }
+        // @ts-ignore
         locale.strings = localeStrings
     }
     logToFile('localesResultsRedis.json', locales)

@@ -1,14 +1,9 @@
-import { fetchAllLocalesMetadata, fetchSurveysMetadata } from '@devographics/fetch'
-import { getLocaleDict } from "@devographics/i18n/server"
+import { fetchSurveysMetadata } from '@devographics/fetch'
+import { getAllLocaleDefinitions, getLocaleDict } from "@devographics/i18n/server"
 import { getConfig } from '@devographics/helpers'
 import { SurveyStatusEnum } from '@devographics/types'
 
-type HomepageData = {
-    allSurveys?: any[]
-    locales?: any[]
-}
-
-export const getData = async (): Promise<HomepageData> => {
+export const getData = async () => {
     process.env.APP_NAME = import.meta.env.APP_NAME
     process.env.API_URL = import.meta.env.API_URL
     process.env.SURVEYID = import.meta.env.SURVEYID
@@ -30,7 +25,7 @@ export const getData = async (): Promise<HomepageData> => {
     }
     const { data: allSurveysData } = await fetchSurveysMetadata(options)
 
-    const { data: allLocalesMetadata } = await fetchAllLocalesMetadata(options)
+    const { locales: allLocalesMetadata } = await getAllLocaleDefinitions()
 
     const localesToUse = fastBuild
         ? allLocalesMetadata.filter(l => ['en-US', 'ru-RU'].includes(l.id))

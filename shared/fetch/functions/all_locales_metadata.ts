@@ -8,7 +8,8 @@ import { getCacheOption } from '../helpers'
 
 /**
  * Fetch metadata for all locales
- * @returns
+ * 
+ * @deprecated Use getAllLocaleDefinitions but be careful that they don't get exactly the same data
  */
 export const fetchAllLocalesMetadata = async (options?: FetcherFunctionOptions) => {
     const getQuery = options?.getQuery || getAllLocalesMetadataQuery
