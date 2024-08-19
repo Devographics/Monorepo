@@ -34,8 +34,8 @@ export const useQuestionTitle = ({
 
   const keys =
     variant === "short"
-      ? [getEntityLabel, i18n.base, i18n.question]
-      : [getEntityLabel, i18n.question, i18n.base];
+      ? [i18n.base, i18n.question, getEntityLabel]
+      : [i18n.question, i18n.base, getEntityLabel];
 
   const title = getFallbacks(keys);
 
