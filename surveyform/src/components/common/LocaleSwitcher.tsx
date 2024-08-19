@@ -23,6 +23,10 @@ function replaceLocale(pathname: string, params: any, newLocale: string) {
   return pathname.replace(params.lang, newLocale);
 }
 
+function paramsFootprint(params: any) {
+  return Object.keys(params).sort().join("-")
+}
+
 function useLocaleSwitcher() {
   // In previous implementations we were using a locale cookies
   // now we use locales indicated directly in the URL
@@ -33,12 +37,12 @@ function useLocaleSwitcher() {
     (newLocale) => {
       router.replace(replaceLocale(pathname || "", params, newLocale.id));
     },
-    [router, params?.lang]
+    [router, paramsFootprint(params), pathname]
   );
   return switchLocale;
 }
 
-const LocaleSwitcher = () => {
+export default function LocaleSwitcher() {
   const switchLocale = useLocaleSwitcher();
   const { locale: currentLocale, allLocales } = useI18n();
 
@@ -74,5 +78,3 @@ const LocaleSwitcher = () => {
     />
   ) : null;
 };
-
-export default LocaleSwitcher;
