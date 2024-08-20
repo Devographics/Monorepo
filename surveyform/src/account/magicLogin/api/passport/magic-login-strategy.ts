@@ -45,6 +45,12 @@ const computeMagicLink = (req: NextApiRequest, href: string) => {
   return magicLinkUrl.toString();
 };
 
+/**
+ * Magic link will expire after a duration
+ * 
+ * It can be clicked multiple time within this timeframe, this is expected
+ * @see https://github.com/mxstbr/passport-magic-login/issues/36
+ */
 async function sendMagicLink(
   destination: string,
 
@@ -109,6 +115,7 @@ async function sendMagicLink(
  * @param param0
  */
 async function verify(
+  /** request data sent from magic login form */
   payload: {
     destination: string;
     anonymousId?: string;
@@ -188,4 +195,10 @@ export const magicLinkStrategy = new MagicLoginStrategy({
   // @ts-ignore
   sendMagicLink,
   verify,
+  // Optional: options passed to the jwt.sign call (https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
+  jwtOptions: {
+    // will be passed to vercel/ms
+    // @see https://github.com/vercel/ms
+    expiresIn: "30min",
+  }
 });
