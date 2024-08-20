@@ -1,4 +1,4 @@
-import { EntityResolvedFields, Entity } from '@devographics/types'
+import { EntityResolvedFields, Entity, EntityAppearance } from '@devographics/types'
 import { RequestContext } from '../types'
 // import projects from '../data/bestofjs.yml'
 import { fetchMdnResource, fetchTwitterUser } from '../external_apis'
@@ -6,6 +6,7 @@ import { computeKey, useCache } from '../helpers/caching'
 import { getEntity } from '../load/entities'
 import compact from 'lodash/compact.js'
 import { getEntities } from '../load/entities'
+import { loadOrGetParsedSurveys } from '../load/surveys'
 
 // const getSimulatedGithub = (id: string): GitHub | null => {
 //     const project = projects.find((p: Entity) => p.id === id)
@@ -203,5 +204,36 @@ export const entityResolverMap: EntityResolverMap = {
         } else {
             return
         }
+    },
+    appearsIn: async (entity: Entity) => {
+        const { id } = entity
+        const appearances: EntityAppearance[] = []
+        const surveys = await loadOrGetParsedSurveys()
+        for (const survey of surveys) {
+            for (const edition of survey.editions) {
+                for (const section of edition.sections) {
+                    for (const question of section.questions) {
+                        if (question.id === id) {
+                            appearances.push({ survey, edition, section, question, as: 'question' })
+                        }
+                        if (question.options) {
+                            for (const option of question.options) {
+                                if (option.id === id) {
+                                    appearances.push({
+                                        survey,
+                                        edition,
+                                        section,
+                                        question,
+                                        option,
+                                        as: 'option'
+                                    })
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return appearances
     }
 }

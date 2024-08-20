@@ -60,6 +60,18 @@ type Entity {
 
     # for people
     avatar: Avatar
+
+    # which surveys/editions/etc. the entity appears in
+    appearsIn: [EntityAppearance]
+}
+
+type EntityAppearance {
+    survey: SurveyMetadata
+    edition: EditionMetadata
+    section: SectionMetadata
+    question: QuestionMetadata
+    option: OptionMetadata
+    as: String
 }
 
 """
