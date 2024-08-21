@@ -9,7 +9,7 @@ import {
     QuestionMetadata,
     SectionMetadata,
     SurveyMetadata
-} from 'metadata'
+} from './metadata'
 
 export interface EntityResolvedFields {
     homepage?: Resource
