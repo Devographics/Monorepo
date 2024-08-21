@@ -18,23 +18,21 @@ const OptionLabel = ({
   const { t } = useI18n();
   const { entity, label } = option;
 
-  if (label) {
-    return <>{label}</>;
-  }
-
   const i18n = getOptioni18nIds({ option, question });
 
-  const defaultMessage =
-    option.id === OPTION_NA
-      ? t("options.na")
-      : i18n.base + " ❔";
+  let fallback;
+  if (label) {
+    fallback = label;
+  } else if (option.id === OPTION_NA) {
+    fallback = t("options.na");
+  }
 
   const entityName = getEntityName(entity);
 
   return entityName ? (
     <EntityLabel entity={entity} />
   ) : (
-    <T token={i18n.base} fallback={defaultMessage} />
+    <T token={i18n.base} fallback={fallback} />
   );
 };
 
