@@ -7,9 +7,11 @@ import { HandlerError } from "~/lib/handler-error";
  * - cron jobs
  * - cache resets
  * etc.
- * The SECRET_KEY environment variable should match the "key" query params
- * In Vercel, we have to use "CRON_SECRET" specifically
  * 
+ * The SECRET_KEY environment variable should match the "key" query params
+ * 
+ * On Vercel the CRON_SECRET environment variable should be set when using cron jobs
+ *  
  * NOTE: this is NOT for secure endpoints like auth (secret is passed via URL as is)! 
  * Only endpoints that should not be abused too much by bots (or nosy users)
  */
@@ -18,7 +20,7 @@ export function checkSecretKey(req: NextRequest) {
         console.warn("SECRET_KEY not configured, will prevent calling secured API endpoint for cache invalidation or recurring computations like score quantiles")
     }
     if (process.env.VERCEL && !process.env.CRON_SECRET) {
-        console.warn("CRON_SECRET not configured while hosting on Vercel, will prevent calling secured API endpoint from cron jobs")
+        console.warn("CRON_SECRET not configured while hosting on Vercel, will prevent calling secured API endpoints from cron jobs")
     }
     // 1. Using a secret key passed within the URL
     const key = req.nextUrl.searchParams.get("key");
@@ -27,6 +29,7 @@ export function checkSecretKey(req: NextRequest) {
     }
     // 2. Or using a CRON_SECRET (Vercel)
     const authHeader = req.headers.get("Authorization")
+    console.log({ authHeader })
     if (
         process.env.VERCEL && process.env.CRON_SECRET && authHeader && authHeader === `Bearer ${process.env.CRON_SECRET}`
     ) {
