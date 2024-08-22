@@ -18,6 +18,8 @@ export interface GlobalScores {
 }
 
 /**
+ * Must be triggered during the survey to update the quantile computation to score people
+ * It is costly, so we don't want to call it for each response, but only every X minutes
  * Transform groups returned by Mongo into structured buckets
  * @param rawBuckets 
  * @returns 

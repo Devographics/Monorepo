@@ -1,5 +1,4 @@
 import { getRawResponsesCollection } from "@devographics/mongo";
-import { ResponseDocument } from "@devographics/types";
 import { NextRequest, NextResponse } from "next/server";
 import { checkSecretKey } from "../../../secretKey";
 import { HandlerError } from "~/lib/handler-error";
