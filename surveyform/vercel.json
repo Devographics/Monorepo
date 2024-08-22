@@ -6,7 +6,22 @@
       "memory": 768
     }
   },
-  "github": {
-    "silent": true
-  }
+   "crons": [
+    {
+      "path": "/api/stats/score-quantiles/compute?editionId=css2024",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/stats/score-quantiles/compute?editionId=js2024",
+      "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/stats/score-quantiles/compute?editionId=html2024",
+      "schedule": "0 5 * * *"
+    },
+    {
+      "path": "/api/stats/score-quantiles/compute?editionId=react2024",
+      "schedule": "0 6 * * *"
+    }
+  ]
 }
