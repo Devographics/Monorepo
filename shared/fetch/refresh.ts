@@ -3,7 +3,6 @@ import { fetchAllLocalesMetadata, fetchEditionMetadata, fetchSurveysMetadata } f
 import { FetcherFunctionOptions } from './types'
 import { AppName } from '@devographics/types'
 import { EnvVar, parseEnvVariableArray, getEnvVar } from '@devographics/helpers'
-import uniq from 'lodash/uniq'
 
 //   export const refreshCache = async (args) => {
 //     const { key } = args;
@@ -50,6 +49,9 @@ export const refreshSurveysCache = async args => {
 // TODO: de-dupe baseContexts and getCommonContexts from surveyform,
 // move to i18n package
 const baseContexts = ['common', 'surveys', 'accounts']
+
+// see https://youmightnotneed.com/lodash#uniq
+const uniq = a => [...new Set(a)]
 
 // i18n contexts common to all surveys and editions
 export const getCommonContexts = () => {
