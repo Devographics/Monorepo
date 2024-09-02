@@ -1,54 +1,51 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useCurrentUser } from "~/lib/users/hooks";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/account/user/components/LogoutButton";
+import { DebugZone } from "./DebugZone";
 import { publicConfig } from "~/config/public";
-import { useEdition } from "../SurveyContext/Provider";
+import { enableTranslatorMode } from "@devographics/i18n";
 
 import { T, useI18n } from "@devographics/react-i18n";
-import { TranslatorModeButton } from "./TranslatorModeButton";
-import { EditionMetadata } from "@devographics/types";
 
 type LinkItemProps = {
   component?: React.ReactNode;
   showIf?: (args: { currentUser: any }) => boolean;
   id?: string;
-  href?: (edition: EditionMetadata) => string;
+  href?: string;
 };
-
 const links: Array<LinkItemProps> = [
   {
     component:
       process.env.NEXT_PUBLIC_CONFIG === "tokyodev" ? (
         <span>
-          &copy; 2024 <a href="https://tokyodev.com/">TokyoDev</a>
+          &copy; 2023 <a href="https://tokyodev.com/">TokyoDev</a>
         </span>
       ) : (
         <span>
-          &copy; 2024 <a href="https://devographics.com/">Devographics</a>
+          &copy; 2023 <a href="https://devographics.com/">Devographics</a>
         </span>
       ),
   },
   {
     showIf: ({ currentUser }) => !!currentUser,
     id: "nav.account",
-    href: () => routes.account.profile.href,
+    href: routes.account.profile.href,
   },
   {
     showIf: ({ currentUser }) => !currentUser,
     id: "accounts.sign_in",
-    href: () => routes.account.login.href,
+    href: routes.account.login.href,
   },
   {
     id: "general.privacy_policy",
-    href: () => "/privacy-policy",
+    href: "/privacy-policy",
   },
   {
     id: "general.leave_issue2",
-    href: (edition) =>
-      edition?.issuesUrl || "https://github.com/Devographics/Monorepo/issues",
+    href: "https://github.com/Devographics/Monorepo/issues",
   },
   {
     showIf: ({ currentUser }) => !!currentUser,
@@ -56,32 +53,41 @@ const links: Array<LinkItemProps> = [
   },
   {
     id: "general.help_us_translate",
-    href: (edition) => "https://github.com/Devographics/locale-en-US",
+    href: "https://github.com/Devographics/locale-en-US",
   },
   {
     showIf: () => publicConfig.isDev || publicConfig.isTest,
     // @ts-ignore
     id: "Demo survey",
-    href: () => routes.survey.demo.href,
+    href: routes.survey.demo.href,
   },
   {
     showIf: () => publicConfig.isDev || publicConfig.isTest,
     // @ts-ignore
     id: "Translator mode",
-    component: <TranslatorModeButton />,
+    component: (
+      <button
+        onClick={() => {
+          enableTranslatorMode();
+        }}
+      >
+        Translator mode
+      </button>
+    ),
   },
 ];
 
 export const Footer = () => {
-  const { edition } = useEdition();
+  const [showDebug, setShowDebug] = useState(false);
 
   return (
     <footer className="footer">
       <div className="footer-top">
         {links.map((link, index) => (
-          <LinkItem key={index} {...link} edition={edition} />
+          <LinkItem key={index} {...link} />
         ))}
       </div>
+      {showDebug && <DebugZone />}
     </footer>
   );
 };
@@ -90,16 +96,8 @@ const LinkWrapper = ({ children }) => (
   <span className="footer-link-item">{children}</span>
 );
 
-const LinkItem = ({
-  id,
-  href,
-  showIf,
-  component,
-  edition,
-}: LinkItemProps & {
-  edition: EditionMetadata;
-}) => {
-  const { localizePath } = useI18n();
+const LinkItem = ({ id, href, showIf, component }: LinkItemProps) => {
+  const { localizePath } = useI18n()
   const { currentUser } = useCurrentUser();
   if (showIf && !showIf({ currentUser })) {
     return null;
@@ -112,16 +110,16 @@ const LinkItem = ({
       "id and href are mandatory in LinkItem if 'component' is not set"
     );
   }
-  const isOutboundLink = href(edition)?.includes("http");
+  const isOutboundLink = href?.includes("http");
 
   return (
     <LinkWrapper>
       {isOutboundLink ? (
-        <a href={href(edition)}>
+        <a href={href}>
           <T token={id} fallback={id} />
         </a>
       ) : (
-        <Link href={localizePath(href(edition))}>
+        <Link href={localizePath(href)}>
           <T token={id} fallback={id} />
         </Link>
       )}
