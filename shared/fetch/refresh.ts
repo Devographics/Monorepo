@@ -1,11 +1,9 @@
 import { localeWithStringsCacheKey } from './cache_keys'
-import {
-    fetchAllLocalesMetadata,
-    fetchEditionMetadata,
-    fetchSurveysMetadata
-} from './functions'
+import { fetchAllLocalesMetadata, fetchEditionMetadata, fetchSurveysMetadata } from './functions'
 import { FetcherFunctionOptions } from './types'
 import { AppName } from '@devographics/types'
+import { EnvVar, parseEnvVariableArray, getEnvVar } from '@devographics/helpers'
+import uniq from 'lodash/uniq'
 
 //   export const refreshCache = async (args) => {
 //     const { key } = args;
@@ -49,14 +47,21 @@ export const refreshSurveysCache = async args => {
     return { refreshedCacheKeys }
 }
 
+// TODO: de-dupe baseContexts and getCommonContexts from surveyform,
+// move to i18n package
+const baseContexts = ['common', 'surveys', 'accounts']
+
 // i18n contexts common to all surveys and editions
-export const getCommonContexts = () => ['common', 'surveys', 'accounts']
+export const getCommonContexts = () => {
+    const customContexts = parseEnvVariableArray(getEnvVar(EnvVar.CUSTOM_LOCALE_CONTEXTS))
+    return uniq([...baseContexts, ...customContexts])
+}
 
 /**
  * Refresh Redis cache for locales
- * 
+ *
  * We do so by computing the keys based on locale list
- * 
+ *
  * TODO: it might be more robust to issue Redis commands
  * removing keys based on  a prefix instead
  */
@@ -91,7 +96,13 @@ export const refreshLocalesCache = async args => {
         console.log(
             `// Refreshing ${locale.id} metadata cache… (${getCommonContexts().join(', ')})`
         )
-        refreshedCacheKeys.push(localeWithStringsCacheKey({ ...options, localeId: locale.id, contexts: getCommonContexts() }))
+        refreshedCacheKeys.push(
+            localeWithStringsCacheKey({
+                ...options,
+                localeId: locale.id,
+                contexts: getCommonContexts()
+            })
+        )
         // end
 
         // survey-specific context
@@ -99,12 +110,13 @@ export const refreshLocalesCache = async args => {
         for (const survey of allSurveys) {
             for (const edition of survey.editions) {
                 console.log(`// Refreshing ${locale.id} metadata cache… (${survey.id})`)
-                refreshedCacheKeys.push(localeWithStringsCacheKey({
-                    ...options, localeId: locale.id, contexts: [
-                        ...getCommonContexts(), survey.id, edition.id
-                    ]
-                }))
-
+                refreshedCacheKeys.push(
+                    localeWithStringsCacheKey({
+                        ...options,
+                        localeId: locale.id,
+                        contexts: [...getCommonContexts(), survey.id, edition.id]
+                    })
+                )
             }
         }
     }
