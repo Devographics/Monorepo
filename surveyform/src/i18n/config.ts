@@ -5,8 +5,10 @@ import {
 } from "@devographics/helpers";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { publicConfig } from "~/config/public";
-import uniq from "lodash/uniq";
 export const defaultLocaleId = "en-US";
+
+// see https://youmightnotneed.com/lodash#uniq
+const uniq = (a) => [...new Set(a)];
 
 const baseContexts = ["common", "surveys", "accounts"];
 
@@ -15,7 +17,7 @@ export const getCommonContexts = () => {
   const customContexts = parseEnvVariableArray(
     getEnvVar(EnvVar.CUSTOM_LOCALE_CONTEXTS)
   );
-  return uniq([...baseContexts, ...customContexts]);
+  return uniq([...baseContexts, ...customContexts]) as string[];
 };
 
 /**
