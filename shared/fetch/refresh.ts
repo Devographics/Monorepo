@@ -56,7 +56,7 @@ const uniq = a => [...new Set(a)]
 // i18n contexts common to all surveys and editions
 export const getCommonContexts = () => {
     const customContexts = parseEnvVariableArray(getEnvVar(EnvVar.CUSTOM_LOCALE_CONTEXTS))
-    return uniq([...baseContexts, ...customContexts])
+    return uniq([...baseContexts, ...customContexts]) as string[]
 }
 
 /**
