@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+// import { notFound } from "next/navigation";
 import { EditionProvider } from "~/components/SurveyContext/Provider";
 
 import { rscMustGetSurveyEditionFromUrl } from "./rsc-fetchers";
@@ -55,7 +55,10 @@ export default async function SurveyLayout({
   } = await rscLocaleFromParams({
     lang: params.lang,
     contexts: [
-      // TODO: we should have a shared layout between (mainLayout) pages and "survey/[slug]/[year]" that handle locales
+      // NOTE: 
+      // we reload common contexts here because there is no parent layout,
+      // context is not shared with (mainLayout pages) that are outside of the scope of a precise survey
+      // we could have a shared layout between (mainLayout) and "survey/[slug]/[year]" that handle common locales
       // so we don't have to reload commonContext translations in the surveys page
       ...getCommonContexts(),
       ...getSurveyContexts(edition.survey),
@@ -82,7 +85,6 @@ export default async function SurveyLayout({
     <ClientLayout
       params={params}
       locales={locales}
-      localeId={localeId}
       localeStrings={locale}
       addWrapper={false}
     >

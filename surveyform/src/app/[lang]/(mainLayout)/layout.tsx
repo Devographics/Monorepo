@@ -65,7 +65,6 @@ export default async function RootLayout({
     <ClientLayout
       params={params}
       locales={locales}
-      localeId={localeId}
       localeStrings={locale}
     >
       {/*<DebugRSC

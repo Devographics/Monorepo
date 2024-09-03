@@ -172,7 +172,8 @@ export async function getLocaleDict({
     const localeParsed: LocaleParsed = {
         ...localeDef,
         strings,
-        dict
+        dict,
+        contexts
     }
     return { locale: localeParsed }
 }
@@ -193,7 +194,7 @@ export const getLocalesWithStrings = async ({
 }): Promise<Array<LocaleWithStrings>> => {
     // We always get all locales definitions, and filters afterwards
     // TODO: improve to get a single call
-    const { error, locales: localesData } = await getAllLocaleDefinitions({ contexts })
+    const { error, locales: localesData } = await getAllLocaleDefinitions()
     if (error) return []
     let locales = localesData
     if (localeIds && localeIds.length > 0) {

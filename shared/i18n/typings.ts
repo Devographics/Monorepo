@@ -36,7 +36,11 @@ export type LocaleWithStrings = Locale & Required<Pick<Locale, 'strings'>>
  * Locale with strings as a record,
  * to be used in applications
  */
-export type LocaleParsed = Locale & { dict: Record<string, Translation> }
+export type LocaleParsed = Locale & {
+    dict: Record<string, Translation>,
+    /** Contexts used to load the strings */
+    contexts?: Array<string>
+}
 
 interface InterpolationValues {
     values?: { [key: string]: string | number }

@@ -30,7 +30,6 @@ import { I18nContextProvider } from "@devographics/react-i18n";
 
 export interface AppLayoutProps {
   /** Locale extracted from cookies server-side */
-  localeId: string;
   localeStrings: LocaleParsed;
   locales: Array<Locale>;
   // When on a specific survey
@@ -48,7 +47,6 @@ export interface AppLayoutProps {
 export function ClientLayout(props: AppLayoutProps) {
   const {
     children,
-    localeId,
     locales,
     localeStrings,
     params,
