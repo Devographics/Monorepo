@@ -222,7 +222,7 @@ export async function getFromCache<T = any>({
     calledFrom,
     redisUrl,
     redisToken,
-    shouldGetFromCache: shouldGetFromCacheOptions,
+    shouldGetFromCache: shouldGetFromCacheOptions = true,
     shouldUpdateCache: shouldUpdateCacheOptions = true,
     shouldThrow = true,
     shouldCompress = false,
