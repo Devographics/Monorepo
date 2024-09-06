@@ -69,3 +69,7 @@ scripts/dist
 !.yarn/versions
 # Sentry
 .sentryclirc
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
