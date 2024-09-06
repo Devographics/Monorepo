@@ -6,4 +6,5 @@
  */
 
 // @see https://github.com/testing-library/jest-dom
+// TODO: this library will load @types/jest which in turns lead to issue with Playwright by overriding the "test" object
 import "@testing-library/jest-dom";

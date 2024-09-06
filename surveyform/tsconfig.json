@@ -4,13 +4,13 @@
     "next-env.d.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
-    // helps having Node types in the config
-    "tsup.config.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [
     "**/*.test.ts",
     "**/*.tests.ts",
+    "**/*.spec.ts",
+    "tests",
     // must exclude collocated code too
     // can create inconsistencies with VS Code...
     "cypress"
@@ -26,12 +26,5 @@
     ],
     "strict": false,
     "strictNullChecks": true
-  },
-  // @see https://github.com/cypress-io/cypress/issues/27731#issuecomment-1796430350
-  "ts-node": {
-    "compilerOptions": {
-      "module": "esnext",
-      "moduleResolution": "bundler",
-    },
-  },
+  }
 }

@@ -13,6 +13,7 @@ const commonConfig: Config = {
   testPathIgnorePatterns: [
     "/node_modules/",
     "/cypress/",
+    "/tests/",
     "/.next/",
   ],
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
@@ -23,10 +24,6 @@ const commonConfig: Config = {
   // A map from regular expressions to module names that allow to stub out resources with a single module
   moduleNameMapper: {
     "~/(.*)": "<rootDir>/src/$1",
-    "@vulcanjs/(.*)": [
-      "<rootDir>/node_modules/@vulcanjs/$1",
-      "<rootDir>/packages/@vulcanjs/$1",
-    ],
   },
 
   // The directory where Jest should output its coverage files
@@ -187,6 +184,7 @@ const config: Config = {
     "!**/*.stor{y,ies}.{js,ts,jsx,tsx}",
     "!**/node_modules/**",
     "!**/cypress/**",
+    "!**/tests/**",
     "!jest.config.js",
     "!**/out/**",
     "!**/dist/**",

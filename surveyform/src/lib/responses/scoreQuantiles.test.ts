@@ -1,3 +1,4 @@
+import { test, expect } from "@jest/globals"
 import { computeGlobalScore, computeUserRank } from "./scoreQuantiles"
 
 test("compute global scores from mongo results", () => {

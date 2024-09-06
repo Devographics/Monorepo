@@ -3,7 +3,6 @@ import { routes } from "~/lib/routes";
 // Set to english (NOTE: this won't work in before.ts)
 import { LOCALE_COOKIE_NAME } from "~/i18n/cookie";
 import { startSurveyButtonName } from "../../helpers/selectors";
-import { getContinueAsGuestButton, getLinkToSection, openNavigationMenu } from "../..//helpers/getters";
 
 before(() => {
   // NOTE: those operations are expensive! When testing less-critical part of your UI,
