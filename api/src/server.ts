@@ -43,9 +43,11 @@ import { getRepoSHA } from './external_apis'
 import { initProjects } from './load/projects'
 import { getEntitiesLoadMethod } from './load/entities'
 import { getLocaleIds, getLocalesLoadMethod } from './load/locales/locales'
+import { loadSettings } from './helpers/settings'
 
 const envPath = process.env.ENV_FILE ? process.env.ENV_FILE : '.env'
 dotenv.config({ path: envPath })
+export const appSettings = loadSettings()
 
 const app = express()
 
