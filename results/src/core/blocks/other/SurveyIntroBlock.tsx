@@ -3,6 +3,7 @@ import IntroductionFooter from 'core/pages/IntroductionFooter'
 import T from 'core/i18n/T'
 import styled from 'styled-components'
 import { mq, fontSize } from 'core/theme'
+// TODO: could not figure how to avoid IntroLogo typing conflict here
 import IntroLogo from 'Logo/IntroLogo'
 import { usePageContext } from 'core/helpers/pageContext'
 
@@ -11,6 +12,7 @@ const SurveyIntroBlock = () => {
 
     return (
         <>
+            {/** @ts-ignore */}
             <IntroLogo />
             <div className="SurveyIntro">
                 <Content className="SurveyIntro__Content">

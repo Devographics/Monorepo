@@ -22,6 +22,7 @@ module.exports = {
         "@typescript-eslint"
     ],
     "rules": {
-        "react/prop-types": 0
+        "react/prop-types": 0,
+        "@typescript-eslint/ban-ts-comment": 1
     }
 };
