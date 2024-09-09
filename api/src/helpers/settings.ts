@@ -26,9 +26,9 @@ export interface AppSettings {
  *    BEFORE server.ts => be careful on top-level code that uses process.env,
  *    values might be undefined
  */
-const loadSettings = () => {
+export const loadSettings = () => {
     const cacheType = process.env.CACHE_TYPE === 'local' ? 'local' : 'redis'
-    const disableCache = !!process.env.DISABLE_CACHE
+    const disableCache = process.env.DISABLE_CACHE === 'true'
     const loadLocalesMode = process.env.LOAD_DATA
     // if (loadLocalesMode && !['local'].includes(loadLocalesMode)) {
     //     throw new Error(`LOAD_LOCALES possible values: ["local"]; found: ${loadLocalesMode}`)
@@ -63,5 +63,3 @@ const loadSettings = () => {
     }
     return settings
 }
-
-export const appSettings = loadSettings()

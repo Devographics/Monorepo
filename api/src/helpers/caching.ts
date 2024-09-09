@@ -2,7 +2,7 @@ import { RequestContext } from '../types'
 import { AppSettings } from './settings'
 
 import NodeCache from 'node-cache'
-import { appSettings } from './settings'
+import { appSettings } from '../server'
 const nodeCache = new NodeCache()
 import compact from 'lodash/compact.js'
 

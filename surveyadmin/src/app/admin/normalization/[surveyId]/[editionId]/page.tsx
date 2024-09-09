@@ -149,7 +149,7 @@ const Question = ({
         </Link>
       </th>
       <td>
-        {stats && (
+        {stats && stats.totalCount > 0 && (
           <div
             className={`normalization-progress ${
               hasLowProgress(stats)
