@@ -4,8 +4,6 @@ import React, { useContext, FC } from 'react'
 // import rehypeRaw from 'rehype-raw'
 import { getStringTranslator, Locale } from '../helpers/translator'
 
-import { dataFetcher } from '../helpers/data'
-
 export interface Tproperties {
     k: string
     t?: string
@@ -17,6 +15,12 @@ export interface Tproperties {
     locale?: Locale
 }
 
+/**
+ * @deprecated Should be merged with @devographics/react-i18n or the incoming Astro results app at some point
+ * We could use the React T implementation + a context, or a pure Astro implementation
+ * @param param0 
+ * @returns 
+ */
 export default function T({
     t: override,
     k,
