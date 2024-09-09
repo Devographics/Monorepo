@@ -16,16 +16,18 @@ type LinkItemProps = {
   id?: string;
   href?: string;
 };
+
+const CurrentYear = () => <span suppressHydrationWarning={true}>{(new Date()).getFullYear()}</span>
 const links: Array<LinkItemProps> = [
   {
     component:
       process.env.NEXT_PUBLIC_CONFIG === "tokyodev" ? (
         <span>
-          &copy; 2023 <a href="https://tokyodev.com/">TokyoDev</a>
+          &copy; <CurrentYear /> <a href="https://tokyodev.com/">TokyoDev</a>
         </span>
       ) : (
         <span>
-          &copy; 2023 <a href="https://devographics.com/">Devographics</a>
+          &copy; <CurrentYear /> <a href="https://devographics.com/">Devographics</a>
         </span>
       ),
   },
