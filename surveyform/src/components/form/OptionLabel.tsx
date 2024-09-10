@@ -25,6 +25,8 @@ const OptionLabel = ({
     fallback = label;
   } else if (option.id === OPTION_NA) {
     fallback = t("options.na");
+  } else {
+    fallback = option.id;
   }
 
   const entityName = getEntityName(entity);

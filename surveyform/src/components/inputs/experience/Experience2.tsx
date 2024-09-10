@@ -32,14 +32,14 @@ export interface ExperienceProps extends FormInputProps {
 }
 
 const unimplementedFeatures = [
-  "selectlist_element",
-  "accordion_element",
-  "focusgroup_attribute",
-  "dom_parts",
-  "model_element",
-  "html_modules",
-  "scoped_element_registries",
-  "isolated_webapps",
+  // "selectlist_element",
+  // "accordion_element",
+  // "focusgroup_attribute",
+  // "dom_parts",
+  // "model_element",
+  // "html_modules",
+  // "scoped_element_registries",
+  // "isolated_webapps",
 ];
 
 export const Experience2 = (props: ExperienceProps) => {
