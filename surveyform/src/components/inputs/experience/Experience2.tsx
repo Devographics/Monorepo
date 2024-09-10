@@ -32,6 +32,7 @@ export interface ExperienceProps extends FormInputProps {
 }
 
 const unimplementedFeatures = [
+  "foo",
   // "selectlist_element",
   // "accordion_element",
   // "focusgroup_attribute",
