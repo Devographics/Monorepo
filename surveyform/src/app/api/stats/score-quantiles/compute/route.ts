@@ -1,5 +1,4 @@
 import { getRawResponsesCollection } from "@devographics/mongo";
-import { ResponseDocument } from "@devographics/types";
 import { NextRequest, NextResponse } from "next/server";
 import { checkSecretKey } from "../../../secretKey";
 import { HandlerError } from "~/lib/handler-error";
@@ -14,16 +13,26 @@ import { getSurveyformStatsCollection } from "~/lib/stats/model";
 export const maxDuration = 300;
 
 /**
- *
- * NOTE: similar code exists in API to compute more advanced facetted quantiles
  * This endpoint is protected by a secret key
  *
+ * - To call manually on demand, open the following URL in your browser
  * /api/stats/score-quantiles/compute?editionId=html2023&key=XXX
  * (key = SECRET_KEY env variable)
+ * 
+ * - To call from a Vercel cron job, update vercel.json config
+ * (currently we must hard code the list of cron jobs,
+ * if a survey is not open, the call will be made but it will be a noop, it's ok to leave the cron job running)
+ * the CRON_SECRET env variable must be set
+ * https://vercel.com/docs/cron-jobs#validate-cron-expressions
+ * 
+ * - To call from a Render.com cron job, set a cron using curl:
+ * curl process.env.APP_URL + "/api/stats/score-quantiles/compute?editionId=html2023&key=" + process.env.SECRET_KEY
  *
  * @returns A table where percentiles[i] = the score for percentile i
  * To compute user rank, find the first index that is above user score
  * Score = 350 and percentiles = [100,200, 570] => user is in the top (100-2) = 98%
+ *
+ * Similar code exists in API to compute more advanced facetted quantiles
  */
 export const GET = async (req: NextRequest) => {
   try {

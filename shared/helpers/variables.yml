@@ -240,9 +240,19 @@
       Surveyform and API should have a different key
       Surveyadmin should know both keys to be able to send request
       New keys can be generated via "openssl -base64 32
+      Please update CRON_SECRET as well when changing this value
   usedBy:
       - surveyform
       - api
+- id: CRON_SECRET
+  description: >
+      Identical to SECRET_KEY 
+      but we need to use this value for Vercel crons
+      New keys can be generated via "openssl -base64 32
+  usedBy:
+      - surveyform
+      - surveyadmin
+  optional: true
 - id: API_SECRET_KEY
   usedBy:
       - surveyadmin
