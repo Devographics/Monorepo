@@ -1,0 +1,14 @@
+---
+import { getData } from '@helpers/data'
+
+export async function getStaticPaths() {
+    const { locales } = await getData()
+
+    return locales.map(locale => ({
+        params: { aliasedLocaleId: locale.id.toLowerCase() },
+        props: { locale }
+    }));
+}
+
+return Astro.redirect(`/${Astro.props.locale}`);
+---

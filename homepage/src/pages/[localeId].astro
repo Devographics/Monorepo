@@ -7,18 +7,10 @@ import DefaultLayout from '../layouts/DefaultLayout.astro'
 export async function getStaticPaths() {
     const data = await getData()
     const { allSurveys: surveys, locales } = data
-    // add support for both en-US/ and en-us/
-    // TODO: find a better way to do this that doesn't require generating
-    // all the pages twice
-    const originalCase = locales.map(locale => ({
+    return locales.map(locale => ({
         params: { localeId: locale.id },
         props: { locale, locales, surveys }
-    }))
-    const lowerCase =  locales.map(locale => ({
-        params: { localeId: locale.id.toLowerCase() },
-        props: { locale, locales, surveys }
-    }))
-    return [...originalCase, ...lowerCase]
+    }));
 }
 
 const { locale, locales, surveys } = Astro.props
