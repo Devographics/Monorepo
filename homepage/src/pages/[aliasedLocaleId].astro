@@ -10,5 +10,5 @@ export async function getStaticPaths() {
     }));
 }
 
-return Astro.redirect(`/${Astro.props.locale}`);
+return Astro.redirect(`/${Astro.props.locale.id}`);
 ---
