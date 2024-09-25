@@ -11,7 +11,7 @@ import { T, useI18n } from "@devographics/react-i18n";
 import FormControl from "react-bootstrap/FormControl";
 import { sendReadingList } from "../page/services";
 import { LoadingButton } from "../ui/LoadingButton";
-import { EditionMetadata, ResponseDocument } from "@devographics/types";
+import { EditionMetadata, ResponseDocument, SurveyStatusEnum } from "@devographics/types";
 import ItemLabel from "./ItemLabel";
 import truncate from "lodash/truncate";
 
@@ -31,6 +31,9 @@ export const ReadingList = ({
   const [showMore, setShowMore] = useState(false);
 
   if (!readingList || readingList.length === 0) {
+    // We can't update readling lists for closed surveys,
+    // so there is no point into showing the empty message
+    if (edition.status === SurveyStatusEnum.CLOSED) return null
     return (
       <div className="reading-list reading-list-results">
         <h5 className="reading-list-title">
