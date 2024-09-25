@@ -61,9 +61,11 @@ const EditionItem = async ({
 const EditionGroup = ({
   allEditions,
   status,
+  localeId,
 }: {
   allEditions: Array<EditionMetadata>;
   status: SurveyStatusEnum;
+  localeId: string;
 }) => {
   if (!status) throw new Error("SurveyGroup must receive a defined status");
   const filteredEditions = allEditions.filter((s) => s.status === status);
@@ -71,7 +73,6 @@ const EditionGroup = ({
     filteredEditions,
     (edition: EditionMetadata) => new Date(edition.startedAt)
   ).reverse();
-  const localeId = rscLocaleIdContext();
   const locale = { id: localeId };
   return (
     <div className="surveys-group">
@@ -101,18 +102,18 @@ const EditionGroup = ({
   );
 };
 
-const Surveys = ({ surveys }: { surveys: Array<SurveyMetadata> }) => {
+const Surveys = ({ surveys, localeId }: { surveys: Array<SurveyMetadata>, localeId: string }) => {
   const allEditions = surveys
     .map((survey) => survey.editions.map((e) => ({ ...e, survey })))
     .flat();
   return (
     <div className="surveys">
-      <EditionGroup allEditions={allEditions} status={SurveyStatusEnum.OPEN} />
-      <EditionGroup
+      <EditionGroup localeId={localeId} allEditions={allEditions} status={SurveyStatusEnum.OPEN} />
+      <EditionGroup localeId={localeId}
         allEditions={allEditions}
         status={SurveyStatusEnum.PREVIEW}
       />
-      <EditionGroup
+      <EditionGroup localeId={localeId}
         allEditions={allEditions}
         status={SurveyStatusEnum.CLOSED}
       />

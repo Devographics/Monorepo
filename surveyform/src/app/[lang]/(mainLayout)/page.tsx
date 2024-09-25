@@ -21,7 +21,7 @@ const IndexPage = async ({ params }: NextPageParams<{ lang: string }>) => {
   return (
     <RSCFetch
       fetch={async () => rscFetchSurveysMetadata({ shouldThrow: false })}
-      render={({ data: surveys }) => <Surveys surveys={surveys} />}
+      render={({ data: surveys }) => <Surveys localeId={params.lang} surveys={surveys} />}
     />
   );
 };
