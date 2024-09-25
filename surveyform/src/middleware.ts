@@ -1,11 +1,63 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import type { NextFetchEvent, NextRequest } from "next/server";
 
 import { getLocaleFromAcceptLanguage } from "~/lib/i18n/server/localeDetection";
 import { getClosestLocale } from "./lib/i18n/data/locales";
 // @devographics/fetch is expected to have an "edge-light" export to work in middlewares
 // https://runtime-keys.proposal.wintercg.org/
 import { fetchAllLocalesIds } from "@devographics/fetch";
+
+import { Ratelimit } from "@upstash/ratelimit";
+import { initRedis } from "@devographics/redis";
+
+// RATE LIMITING
+
+initRedis()
+/**
+ * 50 requests per 10 seconds fixed size window
+ */
+const ratelimit = new Ratelimit({
+  redis: initRedis(),
+  limiter: Ratelimit.fixedWindow(50, "10s"),
+  ephemeralCache: new Map(),
+  prefix: "@upstash/ratelimit",
+  analytics: true,
+});
+
+/**
+ * @returns a response if the rate limit is exceeded, undefined otherwise
+ */
+async function apiPostRateLimit(request: NextRequest, context: NextFetchEvent): Promise<NextResponse | undefined> {
+  if (request.method === "POST") {
+    // whitelisted routes that do not have a problematic side effect
+    // - saving a response
+    // - logging out
+    if (request.url.match(/saveResponse|logout/)) {
+      return undefined
+    }
+    const ip = request.ip || request.headers.get("x-forwarded-for")
+    if (ip) {
+      const { success, pending, limit, remaining } = await ratelimit.limit(ip);
+      // we use context.waitUntil since analytics: true.
+      // see https://upstash.com/docs/oss/sdks/ts/ratelimit/gettingstarted#serverless-environments
+      context.waitUntil(pending);
+      if (!success) {
+        const res = NextResponse.json({ error: "Too many requests on POST endpoints for current IP", limit, remaining, ip }, {
+          status: 429,
+          headers: {
+            "X-RateLimit-Success": success.toString(),
+            "X-RateLimit-Limit": limit.toString(),
+            "X-RateLimit-Remaining": remaining.toString(),
+          }
+        })
+        return res
+      }
+    }
+  }
+  return undefined
+}
+
+// I18N
 
 function getFirstParam(pathname: string) {
   if (!pathname) {
@@ -61,6 +113,7 @@ function isFile(pathname: string) {
   return pathname.includes(".") || getFirstParam(pathname) === "_next";
 }
 
+
 async function localize(request: NextRequest): Promise<NextResponse> {
   const langFromPath = await getLang(request.nextUrl.pathname);
   /**
@@ -103,7 +156,7 @@ async function localize(request: NextRequest): Promise<NextResponse> {
   return NextResponse.redirect(url);
 }
 
-export async function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest, context: NextFetchEvent) {
   const pathname = request.nextUrl.pathname;
   // NOTE: _next/static files are already bypassed by the matcher
   // but next/public files could be matched
@@ -111,6 +164,12 @@ export async function middleware(request: NextRequest) {
   // NOTE: current matcher bypasses API calls anyway
   // it should be reenabled if we implement bot protections etc.
   const api = isApi(pathname);
+
+  if (api) {
+    const rateLimitResponse = await apiPostRateLimit(request, context)
+    if (rateLimitResponse) return rateLimitResponse
+  }
+
   const shouldLocalize = !api && !file;
   if (shouldLocalize) {
     return await localize(request);
@@ -123,11 +182,10 @@ export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
-     * - API routes
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 }

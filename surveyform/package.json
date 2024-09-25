@@ -52,6 +52,7 @@
     "@sentry/nextjs": "^6.19.7",
     "@sentry/node": "^7.19.0",
     "@sentry/react": "^7.19.0",
+    "@upstash/ratelimit": "^2.0.3",
     "@vercel/analytics": "^0.1.5",
     "bowser": "^2.11.0",
     "cookie": "^0.5.0",

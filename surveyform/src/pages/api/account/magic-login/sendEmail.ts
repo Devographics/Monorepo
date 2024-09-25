@@ -20,7 +20,9 @@ const checkBody = (req: NextApiRequest, res: NextApiResponse, next) => {
   next();
 };
 
-// Prevent spam
+// TODO: we already have a rate limiter in place for the IP address in middleware.ts
+// but I keep this one around until we migrate to route handlers
+// remove when migrating (and add an e2e test for rate limiting like we used to do)
 import rateLimit from "express-rate-limit";
 import { connectToRedisMiddleware } from "~/lib/server/redis";
 import { MagicLoginSendEmailBody } from "~/lib/account/magicLogin/typings/requests-body";

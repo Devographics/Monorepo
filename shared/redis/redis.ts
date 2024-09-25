@@ -10,8 +10,8 @@ let redis: Redis | undefined = undefined
 
 /**
  * If url/token not passed,
- * will use REDIS_UPSTASH_URL
- * and REDIS_TOKEN
+ * will use REDIS_UPSTASH_URL and REDIS_TOKEN
+ * If already initialized, will return the existing client
  * @param url_ 
  * @param token_ 
  * @returns 
