@@ -11,7 +11,7 @@ export async function getStaticPaths() {
     return locales.map(locale => ({
         params: { localeId: locale.id },
         props: { locale, locales, surveys }
-    }))
+    }));
 }
 
 const { locale, locales, surveys } = Astro.props
