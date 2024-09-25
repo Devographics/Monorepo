@@ -5,7 +5,7 @@ import { getSectionCompletionPercentage } from "~/lib/responses/helpers";
 import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { SectionMetadata } from "@devographics/types";
 import { useEdition } from "../SurveyContext/Provider";
-import { getSectionTokens } from "~/i18n/survey";
+import { getSectionTokens } from "~/lib/i18n/survey";
 import { FormLayoutProps } from "./FormLayout";
 import { useFormStateContext } from "./FormStateContext";
 import { useFormPropsContext } from "./FormPropsContext";

@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
+import { rscCurrentUser } from "~/lib/users/rsc-fetchers/rscCurrentUser";
 import { NextLayoutParams } from "~/app/typings";
 import { WithErrorCatcher } from "~/app/utils";
 import { ResponseProvider } from "~/components/ResponseContext/ResponseProvider";

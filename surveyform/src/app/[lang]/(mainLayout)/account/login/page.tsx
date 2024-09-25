@@ -1,7 +1,7 @@
-import { LoginDialog } from "~/account/LoginDialog";
-import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
+import { rscCurrentUser } from "~/lib/users/rsc-fetchers/rscCurrentUser";
 import { NextPageParams } from "~/app/typings";
 import { routes } from "~/lib/routes";
+import { LoginDialog } from "~/components/users/LoginDialog";
 
 const Login = async ({
   params,

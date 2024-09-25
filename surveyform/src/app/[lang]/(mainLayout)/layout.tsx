@@ -3,10 +3,10 @@ import ClientLayout from "~/app/[lang]/ClientLayout";
 import {
   rscAllLocalesMetadata,
   rscLocaleFromParams,
-} from "~/i18n/api/rsc-fetchers";
+} from "~/lib/i18n/api/rsc-fetchers";
 import { metadata as defaultMetadata } from "../../layout";
-import { rscTeapot } from "~/i18n/components/ServerT";
-import { getCommonContexts } from "~/i18n/config";
+import { rscTeapot } from "~/lib/i18n/components/ServerT";
+import { getCommonContexts } from "~/lib/i18n/config";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead

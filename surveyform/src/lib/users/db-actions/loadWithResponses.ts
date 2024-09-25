@@ -1,8 +1,7 @@
 import { getUsersCollection } from "@devographics/mongo";
 import {
   UserDocument,
-  UserDocumentWithResponses,
-} from "~/account/user/typings";
+} from "~/lib/users/typings";
 import { populateUserResponses } from "~/lib/responses/db-actions/populateUserResponses";
 
 /**

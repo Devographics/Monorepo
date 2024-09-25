@@ -8,7 +8,7 @@ import { HandlerError } from "~/lib/handler-error";
 import { ActionContexts, Actions, getZodSchema } from "~/lib/validation";
 import { getResponseSchema } from "../schema";
 import omitBy from "lodash/omitBy";
-import { UserDocument } from "~/account/user/typings";
+import { UserDocument } from "~/lib/users/typings";
 
 export const validateResponse = ({
   currentUser,

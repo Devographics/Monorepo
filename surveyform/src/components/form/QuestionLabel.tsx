@@ -1,5 +1,5 @@
 import { T, useI18n } from "@devographics/react-i18n";
-import { getQuestioni18nIds } from "~/i18n/survey";
+import { getQuestioni18nIds } from "~/lib/i18n/survey";
 import { QuestionMetadata, SectionMetadata } from "@devographics/types";
 import { useQuestionTitle } from "~/lib/surveys/helpers/useQuestionTitle";
 

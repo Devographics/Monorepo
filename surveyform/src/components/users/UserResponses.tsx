@@ -5,7 +5,7 @@ import {
   ResponseDocument,
 } from "@devographics/types";
 import { T, useI18n } from "@devographics/react-i18n";
-import { UserDocument } from "~/account/user/typings";
+import { UserDocument } from "~/lib/users/typings";
 import { getEditionSectionPath } from "~/lib/surveys/helpers/getEditionSectionPath";
 import { ResponseDetails } from "../surveys/ResponseDetails";
 

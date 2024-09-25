@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { handlerMustHaveCurrentUser } from "~/account/user/route-handlers/getters";
+import { handlerMustHaveCurrentUser } from "~/lib/users/route-handlers/getters";
 import { RouteHandlerOptions } from "~/app/api/typings";
 import { HandlerError } from "~/lib/handler-error";
 import { fetchEditionMetadata } from "@devographics/fetch";
@@ -9,16 +9,15 @@ import {
   ResponseDocument,
 } from "@devographics/types";
 import { getReadingListEmail } from "./generateReadingListEmail";
+import { loadResponse } from "~/lib/responses/db-actions/load";
 
 export async function POST(
   req: NextRequest,
   { params }: RouteHandlerOptions<{ responseId: string }>
 ) {
   try {
-    await handlerMustHaveCurrentUser(req);
+    const currentUser = await handlerMustHaveCurrentUser(req);
 
-    // Get responseId
-    // TODO: this should be a route parameter instead
     const responseId = params.responseId;
     if (!responseId) {
       throw new HandlerError({
@@ -49,11 +48,7 @@ export async function POST(
     });
     const survey = edition.survey;
 
-    // TODO: handle string _id better
-    const RawResponse = await getRawResponsesCollection();
-    const response = (await RawResponse.findOne({
-      _id: responseId,
-    })) as ResponseDocument;
+    const response = await loadResponse({ responseId, currentUser });
 
     const { subject, text, html, readingList, entities } =
       await getReadingListEmail({

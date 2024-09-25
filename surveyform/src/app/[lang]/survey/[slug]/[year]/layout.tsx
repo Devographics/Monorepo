@@ -11,11 +11,11 @@ import {
   getCommonContexts,
   getEditionContexts,
   getSurveyContexts,
-} from "~/i18n/config";
+} from "~/lib/i18n/config";
 import {
   rscAllLocalesMetadata,
   rscLocaleFromParams,
-} from "~/i18n/api/rsc-fetchers";
+} from "~/lib/i18n/api/rsc-fetchers";
 import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
 interface SurveyPageServerProps {

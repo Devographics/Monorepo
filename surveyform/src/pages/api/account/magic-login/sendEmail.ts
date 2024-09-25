@@ -6,7 +6,7 @@ import nextConnect from "next-connect";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { apiWrapper } from "~/lib/server/sentry";
 
-import { magicLinkStrategy } from "~/account/magicLogin/api/passport/magic-login-strategy";
+import { magicLinkStrategy } from "~/lib/account/magicLogin/api/passport/magic-login-strategy";
 import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
 
 // check request validity
@@ -23,7 +23,7 @@ const checkBody = (req: NextApiRequest, res: NextApiResponse, next) => {
 // Prevent spam
 import rateLimit from "express-rate-limit";
 import { connectToRedisMiddleware } from "~/lib/server/redis";
-import { MagicLoginSendEmailBody } from "~/account/magicLogin/typings/requests-body";
+import { MagicLoginSendEmailBody } from "~/lib/account/magicLogin/typings/requests-body";
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
   max: 10, // 10 request max for a key

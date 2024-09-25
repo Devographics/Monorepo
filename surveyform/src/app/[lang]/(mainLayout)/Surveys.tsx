@@ -5,7 +5,7 @@ import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import sortBy from "lodash/sortBy";
-import { rscCurrentUserWithResponses } from "~/account/user/rsc-fetchers/rscCurrentUser";
+import { rscCurrentUserWithResponses } from "~/lib/users/rsc-fetchers/rscCurrentUser";
 import { ResponseDetails } from "~/components/surveys/ResponseDetails";
 import { T } from "@devographics/react-i18n";
 

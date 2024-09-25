@@ -12,9 +12,9 @@ import nextConnect from "next-connect";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { apiWrapper } from "~/lib/server/sentry";
 
-import { anonymousLoginStrategy } from "~/account/anonymousLogin/api/passport/anonymous-strategy";
+import { anonymousLoginStrategy } from "~/lib/account/anonymousLogin/api/passport/anonymous-strategy";
 import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
-import { setToken } from "~/account/middlewares/setToken";
+import { setToken } from "~/lib/account/middlewares/setToken";
 
 passport.use(anonymousLoginStrategy);
 

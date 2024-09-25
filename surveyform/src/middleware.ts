@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
-import { getClosestLocale } from "./i18n/data/locales";
+import { getLocaleFromAcceptLanguage } from "~/lib/i18n/server/localeDetection";
+import { getClosestLocale } from "./lib/i18n/data/locales";
 // @devographics/fetch is expected to have an "edge-light" export to work in middlewares
 // https://runtime-keys.proposal.wintercg.org/
 import { fetchAllLocalesIds } from "@devographics/fetch";

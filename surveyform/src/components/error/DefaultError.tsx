@@ -4,7 +4,7 @@ import React from "react";
 import { useI18n } from "@devographics/react-i18n";
 import { useRouter } from "next/navigation";
 import { routes } from "~/lib/routes";
-import { LogoutButton } from "~/account/user/components";
+import { LogoutButton } from "~/components/users";
 import { Button } from "~/components/ui/Button";
 import classes from "./DefaultError.module.scss";
 

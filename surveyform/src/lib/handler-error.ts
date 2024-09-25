@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getClosestLocale } from "~/i18n/data/locales";
-import { getLocaleFromAcceptLanguage } from "~/i18n/server/localeDetection";
+import { getClosestLocale } from "~/lib/i18n/data/locales";
+import { getLocaleFromAcceptLanguage } from "~/lib/i18n/server/localeDetection";
 import { DetailedErrorObject } from "./validation";
 // import { captureException } from "@sentry/nextjs";
 

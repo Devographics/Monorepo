@@ -4,7 +4,7 @@ import {
   SurveySectionReadOnly,
 } from "~/components/questions/SurveySection";
 import { rscMustGetSurveyEditionFromUrl } from "../../rsc-fetchers";
-import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
+import { rscCurrentUser } from "~/lib/users/rsc-fetchers/rscCurrentUser";
 import { routes } from "~/lib/routes";
 import { SurveyStatusEnum } from "@devographics/types";
 import { DebugRSC } from "~/components/debug/DebugRSC";

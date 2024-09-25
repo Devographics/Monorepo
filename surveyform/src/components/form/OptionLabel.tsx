@@ -6,7 +6,7 @@ import {
   OptionMetadata,
   QuestionMetadata,
 } from "@devographics/types";
-import { getOptioni18nIds } from "~/i18n/survey";
+import { getOptioni18nIds } from "~/lib/i18n/survey";
 
 const OptionLabel = ({
   option,

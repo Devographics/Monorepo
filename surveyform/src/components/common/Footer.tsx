@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useCurrentUser } from "~/lib/users/hooks";
 import { routes } from "~/lib/routes";
-import { LogoutButton } from "~/account/user/components/LogoutButton";
+import { LogoutButton } from "~/components/users/LogoutButton";
 import { DebugZone } from "./DebugZone";
 import { publicConfig } from "~/config/public";
 import { enableTranslatorMode } from "@devographics/i18n";

@@ -6,9 +6,9 @@ import nextConnect from "next-connect";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { apiWrapper } from "~/lib/server/sentry";
 
-import { magicLinkStrategy } from "~/account/magicLogin/api/passport/magic-login-strategy";
+import { magicLinkStrategy } from "~/lib/account/magicLogin/api/passport/magic-login-strategy";
 import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
-import { setToken } from "~/account/middlewares/setToken";
+import { setToken } from "~/lib/account/middlewares/setToken";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { ResponseDocument } from "@devographics/types";
 import { createResponse } from "~/lib/responses/db-actions/create";

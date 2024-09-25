@@ -6,12 +6,12 @@ import {
 import type { Metadata } from "next";
 import { publicConfig } from "~/config/public";
 import { rscMustGetSurveyEditionFromUrl } from "~/app/[lang]/survey/[slug]/[year]/rsc-fetchers";
-import { getCommonContexts, getEditionContexts } from "~/i18n/config";
+import { getCommonContexts, getEditionContexts } from "~/lib/i18n/config";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
-import { getSectionTokens } from "~/i18n/survey";
+import { getSectionTokens } from "~/lib/i18n/survey";
 import { serverConfig } from "~/config/server";
-import { rscTeapot } from "~/i18n/components/ServerT";
+import { rscTeapot } from "~/lib/i18n/components/ServerT";
 
 export const rscFetchSurveysMetadata = cache(
   async (options?: FetcherFunctionOptions) => {

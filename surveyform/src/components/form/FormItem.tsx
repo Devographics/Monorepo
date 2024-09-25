@@ -17,7 +17,7 @@ import Form from "react-bootstrap/Form";
 import { FormInputProps } from "./typings";
 import { CommentTrigger, CommentInput } from "./FormComment";
 import { T, useI18n } from "@devographics/react-i18n";
-import { getQuestioni18nIds } from "~/i18n/survey";
+import { getQuestioni18nIds } from "~/lib/i18n/survey";
 import { useQuestionTitle } from "~/lib/surveys/helpers/useQuestionTitle";
 import { getFormPaths } from "@devographics/templates";
 import AddToList from "~/components/reading_list/AddToList";
