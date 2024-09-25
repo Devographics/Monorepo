@@ -3,7 +3,7 @@ import ClientLayout from "~/app/[lang]/ClientLayout";
 import {
   rscAllLocalesMetadata,
   rscLocaleFromParams,
-} from "~/lib/api/rsc-fetchers";
+} from "~/i18n/api/rsc-fetchers";
 import { metadata as defaultMetadata } from "../../layout";
 import { rscTeapot } from "~/i18n/components/ServerT";
 import { getCommonContexts } from "~/i18n/config";

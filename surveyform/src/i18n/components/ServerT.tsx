@@ -1,5 +1,5 @@
 import { makeTranslationFunction, DATA_TOKEN_ATTR, DATA_MISSING_ATTR, DATA_FALLBACK_CHILDREN_ATTR } from "@devographics/i18n"
-import { rscLocaleFromParams } from "~/lib/api/rsc-fetchers"
+import { rscLocaleFromParams } from "~/i18n/api/rsc-fetchers"
 
 /**
  * Generate a function that can translate content for the current locale

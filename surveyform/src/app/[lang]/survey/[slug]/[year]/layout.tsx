@@ -15,7 +15,7 @@ import {
 import {
   rscAllLocalesMetadata,
   rscLocaleFromParams,
-} from "~/lib/api/rsc-fetchers";
+} from "~/i18n/api/rsc-fetchers";
 import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
 interface SurveyPageServerProps {
