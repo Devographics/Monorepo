@@ -4,10 +4,6 @@ import { RouteHandlerOptions } from "~/app/api/typings";
 import { HandlerError } from "~/lib/handler-error";
 import { fetchEditionMetadata } from "@devographics/fetch";
 import { localMailTransport } from "~/lib/server/mail/transports";
-import { getRawResponsesCollection } from "@devographics/mongo";
-import {
-  ResponseDocument,
-} from "@devographics/types";
 import { getReadingListEmail } from "./generateReadingListEmail";
 import { loadResponse } from "~/lib/responses/db-actions/load";
 

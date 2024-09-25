@@ -4,7 +4,7 @@ import { HandlerError } from "~/lib/handler-error";
 import { ResponseDocument } from "@devographics/types";
 
 /**
- * Will check permissions access
+ * Will throw if user doesn't own the response
  * @param param0 
  * @returns 
  */
