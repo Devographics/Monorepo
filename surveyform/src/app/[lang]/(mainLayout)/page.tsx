@@ -5,7 +5,6 @@ import { RSCFetch } from "~/components/common/RSCFetch";
 import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
 
 import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
-import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 import { NextPageParams } from "~/app/typings";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
@@ -19,7 +18,6 @@ export async function generateStaticParams() {
 */
 
 const IndexPage = async ({ params }: NextPageParams<{ lang: string }>) => {
-  setLocaleIdServerContext(params.lang);
   return (
     <RSCFetch
       fetch={async () => rscFetchSurveysMetadata({ shouldThrow: false })}

@@ -8,7 +8,6 @@ import { AppName } from "@devographics/types";
 import { getCommonContexts, safeLocaleIdFromParams } from "~/i18n/config";
 import { getLocaleDict } from "@devographics/i18n/server";
 import { type LocaleParsed } from "@devographics/i18n";
-import { rscLocaleIdContext } from "~/i18n/rsc-context";
 
 /**
  * Will cache per localeId and contexts
@@ -73,26 +72,6 @@ export const rscLocaleFromParams = (params: LocaleParams) =>
     // convoluted syntax that let's us compute cache key based on function params
     ["locale", ...(params.contexts || [])]
   )(params);
-
-/**
- * Get current locale strings within React Server Components
- * 
- * Uses a server context to retrieve the "lang" param
- * supposing that you called setLocaleIdServerContext(params.lang) earlier
- * or optionaly an explicit "localeIdParams"
- *
- * Contexts must be passed as a rest parameter in order to allow caching
- */
-export const rscLocaleCached = async ({
-  contexts,
-  localeId
-}: {
-  contexts?: Array<string>,
-  localeId?: string
-} = {}) => {
-  const lang = localeId || rscLocaleIdContext();
-  return rscLocaleFromParams({ lang, contexts });
-};
 
 export const rscAllLocalesMetadata = cache((options?: any) =>
   fetchAllLocalesMetadata(options)

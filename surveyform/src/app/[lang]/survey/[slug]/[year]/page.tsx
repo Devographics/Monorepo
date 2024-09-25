@@ -13,7 +13,6 @@ import { EditionMain } from "./client-components";
 
 import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
 import TokyoDev from "~/components/common/TokyoDev";
-import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 import { DynamicT } from "@devographics/react-i18n";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
@@ -85,7 +84,6 @@ export default async function SurveyPage({
 }: {
   params: SurveyPageServerProps;
 }) {
-  setLocaleIdServerContext(params.lang); // Needed for "ServerT"
   const { slug, year } = params;
   const { data: edition, ___metadata: ___rscMustGetSurveyEditionFromUrl } =
     await rscMustGetSurveyEditionFromUrl({

@@ -12,7 +12,6 @@ import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import { getSectionTokens } from "~/i18n/survey";
 import { serverConfig } from "~/config/server";
 import { rscTeapot } from "~/i18n/components/ServerT";
-import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 
 export const rscFetchSurveysMetadata = cache(
   async (options?: FetcherFunctionOptions) => {

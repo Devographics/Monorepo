@@ -9,7 +9,6 @@ import { type ResponseDocument } from "@devographics/types";
 import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
 import { StandaloneMagicLoginForm } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
-import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 import { DynamicT } from "@devographics/react-i18n";
 
 const getResponses = cache(
@@ -27,7 +26,6 @@ const getResponses = cache(
 );
 
 const Profile = async ({ params }) => {
-  setLocaleIdServerContext(params.lang); // Needed for "ServerT"
   const { data: surveys } = await rscFetchSurveysMetadata({
     calledFrom: "UserResponses",
   });

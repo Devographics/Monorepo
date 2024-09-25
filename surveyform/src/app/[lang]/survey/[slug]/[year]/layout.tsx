@@ -11,7 +11,6 @@ import {
   getCommonContexts,
   getEditionContexts,
   getSurveyContexts,
-  safeLocaleIdFromParams,
 } from "~/i18n/config";
 import {
   rscAllLocalesMetadata,
@@ -19,7 +18,6 @@ import {
 } from "~/lib/api/rsc-fetchers";
 import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
-import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 interface SurveyPageServerProps {
   lang: string;
   slug: string;
@@ -46,7 +44,6 @@ export default async function SurveyLayout({
   children: React.ReactNode;
   params: { slug: string; year: string; lang: string };
 }) {
-  setLocaleIdServerContext(params.lang); // Needed for "ServerT"
   const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
   const {
     locale,

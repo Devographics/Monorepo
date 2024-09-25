@@ -1,5 +1,5 @@
 import { makeTranslationFunction, DATA_TOKEN_ATTR, DATA_MISSING_ATTR, DATA_FALLBACK_CHILDREN_ATTR } from "@devographics/i18n"
-import { rscLocaleCached } from "~/lib/api/rsc-fetchers";
+import { rscLocaleFromParams } from "~/lib/api/rsc-fetchers"
 
 /**
  * Generate a function that can translate content for the current locale
@@ -12,15 +12,9 @@ import { rscLocaleCached } from "~/lib/api/rsc-fetchers";
  */
 export async function rscTeapot({ contexts, localeId }: {
     contexts?: Array<string>,
-    /** 
-     * Locale is normally obtained from server context,
-     * supposing that you called setLocaleIdServerContext(params.lang) earlier
-     * However you can optionnaly pass the localeId more directly if you can access it
-     * (eg from metadata functions)
-     **/
-    localeId?: string
-} = {}) {
-    const { locale, error } = await rscLocaleCached({ contexts, localeId })
+    localeId: string
+}) {
+    const { locale, error } = await rscLocaleFromParams({ contexts, lang: localeId })
     if (error) return { error }
     const { t, getMessage } = makeTranslationFunction(locale)
     return { t, getMessage }
@@ -38,7 +32,7 @@ export async function rscTeapot({ contexts, localeId }: {
  *
  * KEEP IN SYNC with DynamicT/T from "@devographics/react-i18n" 
  */
-export async function ServerT({ token, values, fallback, children }: {
+export async function ServerT({ token, values, fallback, children, localeId }: {
     token: string, values?: Record<string, any>,
     /** 
      * Default fallback text
@@ -46,9 +40,11 @@ export async function ServerT({ token, values, fallback, children }: {
      */
     fallback?: string,
     /** Can use children as a fallback */
-    children?: React.ReactNode
+    children?: React.ReactNode,
+    /** We don't use a server context, too complicated, so we expect the localeId to be passed directly */
+    localeId: string
 }) {
-    const { getMessage, error } = await rscTeapot()
+    const { getMessage, error } = await rscTeapot({ localeId })
     if (error) return <span>Can't load locales</span>
     const message = getMessage(token, values, fallback)
     const wrapperProps = { [DATA_TOKEN_ATTR]: token }

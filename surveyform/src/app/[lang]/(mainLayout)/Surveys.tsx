@@ -7,7 +7,6 @@ import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import sortBy from "lodash/sortBy";
 import { rscCurrentUserWithResponses } from "~/account/user/rsc-fetchers/rscCurrentUser";
 import { ResponseDetails } from "~/components/surveys/ResponseDetails";
-import { rscLocaleIdContext } from "~/i18n/rsc-context";
 import { T } from "@devographics/react-i18n";
 
 const EditionItem = async ({

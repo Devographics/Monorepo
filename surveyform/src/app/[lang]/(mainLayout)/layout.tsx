@@ -5,8 +5,6 @@ import {
   rscLocaleFromParams,
 } from "~/lib/api/rsc-fetchers";
 import { metadata as defaultMetadata } from "../../layout";
-// import { rscTeapot } from "~/i18n/components/ServerT";
-import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 import { rscTeapot } from "~/i18n/components/ServerT";
 import { getCommonContexts } from "~/i18n/config";
 
@@ -26,8 +24,7 @@ export async function generateMetadata({
 }: {
   params: PageServerProps;
 }): Promise<Metadata> {
-  setLocaleIdServerContext(params.lang);
-  const { t, error } = await rscTeapot();
+  const { t, error } = await rscTeapot({ localeId: params.lang });
   if (error) return defaultMetadata;
   const title = t("general.title");
   const description = t("general.description");
@@ -51,7 +48,6 @@ export default async function RootLayout({
     lang: string;
   };
 }) {
-  setLocaleIdServerContext(params.lang); // Needed for "ServerT"
   const { locale, localeId, error } = await rscLocaleFromParams({
     ...params,
     contexts: getCommonContexts(),
