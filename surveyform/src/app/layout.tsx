@@ -5,6 +5,8 @@ import { AppName } from "@devographics/types";
 import { getConfig } from "@devographics/helpers";
 import Script from "next/script";
 import PlausibleProvider from "next-plausible";
+import { SpeedInsights } from '@vercel/speed-insights/next';
+
 
 export default function RootLayout({
   children,
@@ -39,7 +41,10 @@ export default function RootLayout({
           />
         )}
       </head>
-      <body className={configClass}>{children}</body>
+      <body className={configClass}>
+        {children}
+        <SpeedInsights />
+      </body>
     </html>
   );
 }

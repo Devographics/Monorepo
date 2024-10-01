@@ -54,6 +54,7 @@
     "@sentry/react": "^7.19.0",
     "@upstash/ratelimit": "^2.0.3",
     "@vercel/analytics": "^0.1.5",
+    "@vercel/speed-insights": "^1.0.12",
     "bowser": "^2.11.0",
     "cookie": "^0.5.0",
     "cross-env": "7.0.2",
