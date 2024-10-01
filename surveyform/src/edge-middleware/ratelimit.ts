@@ -3,19 +3,27 @@ import { initRedis } from "@devographics/redis";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
 
 // RATE LIMITING
+// Rates are relatively high,
+// these limits do not replace a protection against bots
 
 initRedis()
-// TODO: find a way to pass the "limiter" as parameter when computing the limit
-export const ratelimit50per10s = new Ratelimit({
+/**
+ * For all POST requests
+ * like saving responses
+ */
+export const ratelimitLax= new Ratelimit({
     redis: initRedis(),
-    limiter: Ratelimit.fixedWindow(50, "10s"),
+    limiter: Ratelimit.fixedWindow(100, "1m"),
     ephemeralCache: new Map(),
     prefix: "@upstash/ratelimit",
     analytics: true,
 });
-export const ratelimit10per15mn = new Ratelimit({
+/**
+ * For sensitive requests : login, mail sending
+ */
+export const ratelimitStrong = new Ratelimit({
     redis: initRedis(),
-    limiter: Ratelimit.fixedWindow(10, "15m"),
+    limiter: Ratelimit.fixedWindow(10, "1m"),
     ephemeralCache: new Map(),
     prefix: "@upstash/ratelimit",
     analytics: true,
@@ -36,7 +44,7 @@ export async function apiPostRateLimit(request: NextRequest, context: NextFetchE
         if (ip) {
             const limiter =
                 // more sensitive routes that sends an email
-                request.url.match(/sendEmail|sendReadingList/) ? ratelimit10per15mn : ratelimit50per10s
+                request.url.match(/sendEmail|sendReadingList/) ? ratelimitStrong : ratelimitLax
             const { success, pending, limit, remaining } = await limiter.limit(ip);
             // we use context.waitUntil since analytics: true.
             // see https://upstash.com/docs/oss/sdks/ts/ratelimit/gettingstarted#serverless-environments
@@ -50,8 +58,9 @@ export async function apiPostRateLimit(request: NextRequest, context: NextFetchE
                     status: 429,
                     headers: {
                         "X-RateLimit-Success": success.toString(),
-                        "X-RateLimit-Limit": limit.toString(),
-                        "X-RateLimit-Remaining": remaining.toString(),
+                        // We don't show limits to avoid informing attackers
+                        // "X-RateLimit-Limit": limit.toString(),
+                        // "X-RateLimit-Remaining": remaining.toString(),
                     }
                 })
                 return res
