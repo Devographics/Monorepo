@@ -13,6 +13,8 @@ import { getSectionTokens } from "~/lib/i18n/survey";
 import { serverConfig } from "~/config/server";
 import { rscTeapot } from "~/lib/i18n/components/ServerT";
 
+const MIN_YEAR = 2020;
+
 export const rscFetchSurveysMetadata = cache(
   async (options?: FetcherFunctionOptions) => {
     const result = await fetchSurveysMetadata({
@@ -20,13 +22,17 @@ export const rscFetchSurveysMetadata = cache(
       calledFrom: __filename,
       getServerConfig: serverConfig,
     });
-    // remove survey editions with no questions
     result.data = result.data?.map((survey) => ({
       ...survey,
-      editions: survey?.editions?.filter(
-        (edition) => edition?.sections?.length > 0
-      ),
+      editions: survey?.editions
+        // remove older editions that don't have an API context anymore
+        ?.filter(e => e.year >= MIN_YEAR)
+        // remove survey editions with no questions
+        ?.filter(
+          (edition) => edition?.sections?.length > 0
+        )
     }));
+
     return result;
   }
 );
