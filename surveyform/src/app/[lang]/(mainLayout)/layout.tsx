@@ -7,6 +7,7 @@ import {
 import { metadata as defaultMetadata } from "../../layout";
 import { rscTeapot } from "~/lib/i18n/components/ServerT";
 import { getCommonContexts } from "~/lib/i18n/config";
+import { notFound } from "next/navigation";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -33,6 +34,20 @@ export async function generateMetadata({
 }
 
 /**
+ * When a file is not found in "/public"
+ * Next will try to match a route
+ * so it will treat the file as the [lang] parameter, erroneously
+ * so lang = "/apple-touch-icon.png" for instance
+ * We need to catch this scenario in the layout
+ * @param params 
+ */
+function ignoreNotFoundFile(params) {
+  if (params.lang.includes(".")) {
+    notFound()
+  }
+}
+
+/**
  *  TODO for i18n:
  * - Footer "LinkItem" is displaying error messages that are selected dynamically
  * - UserMessages too
@@ -48,6 +63,7 @@ export default async function RootLayout({
     lang: string;
   };
 }) {
+  ignoreNotFoundFile(params)
   const { locale, localeId, error } = await rscLocaleFromParams({
     ...params,
     contexts: getCommonContexts(),
