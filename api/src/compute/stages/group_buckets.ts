@@ -7,11 +7,11 @@ import { mergeBuckets } from './mergeBuckets'
 import { getEntity } from '../../load/entities'
 
 const isInBounds = (n: number, lowerBound?: number, upperBound?: number) => {
-    if (lowerBound && upperBound) {
+    if (typeof lowerBound !== 'undefined' && typeof upperBound !== 'undefined') {
         return n >= lowerBound && n < upperBound
-    } else if (lowerBound) {
+    } else if (typeof lowerBound !== 'undefined') {
         return n >= lowerBound
-    } else if (upperBound) {
+    } else if (typeof upperBound !== 'undefined') {
         return n < upperBound
     } else {
         throw new Error(`isInBounds: no bounds specified`)
@@ -38,7 +38,7 @@ async function getGroupedBuckets<T extends Bucket | FacetBucket>({
     for (const group of groups) {
         const { id: groupId, upperBound, lowerBound, items } = group
         let selectedBuckets: T[]
-        if (lowerBound || upperBound) {
+        if (typeof lowerBound !== 'undefined' || typeof upperBound !== 'undefined') {
             selectedBuckets = buckets.filter(b => isInBounds(Number(b.id), lowerBound, upperBound))
         } else if (items) {
             selectedBuckets = buckets.filter(b => items.includes(b.id))
