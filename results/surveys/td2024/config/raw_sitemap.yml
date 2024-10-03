@@ -125,6 +125,8 @@
 
       - id: total_employers
         template: multiple_options2
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: years_in_japan
         template: multiple_options2
@@ -195,6 +197,8 @@
 
       - id: finding_first_job_number_of_applications
         template: multiple_options2
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: source
         template: multiple_options2_freeform
@@ -307,15 +311,23 @@
 
       - id: coworker_gender_engineers
         template: multiple_options2
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: work_hours_per_week
         template: multiple_options2
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: workplace_perks
         template: multiple_options2
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: workplace_difficulties
         template: multiple_options2
+        variants:
+            - template: vs_salary_tokyodev
 
 - id: employer_info
   path: /employer-info
@@ -390,9 +402,14 @@
 
       - id: paid_leave_percentage
         template: multiple_options2
+        variants:
+            - template: vs_salary_tokyodev
 
       - id: most_important_benefit
         template: multiple_options2
+        variants:
+            - template: vs_salary_tokyodev
+
 - id: technology
   path: /technology
   blocks:
@@ -790,6 +807,8 @@
 
       - id: favourite_thing_about_japan
         template: multiple_options2_freeform
+        variants:
+            - template: vs_salary_tokyodev
 
 - id: conclusion
   path: /conclusion
