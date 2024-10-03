@@ -318,6 +318,8 @@
         template: multiple_options2
         variants:
             - template: vs_salary_tokyodev
+              parameters:
+                  sort: { property: options }
 
       - id: workplace_perks
         template: multiple_options2
@@ -807,8 +809,6 @@
 
       - id: favourite_thing_about_japan
         template: multiple_options2_freeform
-        variants:
-            - template: vs_salary_tokyodev
 
 - id: conclusion
   path: /conclusion
