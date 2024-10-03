@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { handlerCurrentUser } from "~/account/user/route-handlers/getters";
 import { populateUserResponses } from "~/lib/responses/db-actions/populateUserResponses";
 import { HandlerError } from "~/lib/handler-error";
+import { handlerCurrentUser } from "~/lib/users/route-handlers/getters";
 
 // TODO: it seems that 'auto' always give a 304 on this endpoint,
 // despite using "req"

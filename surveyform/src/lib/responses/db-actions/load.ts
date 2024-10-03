@@ -3,6 +3,11 @@ import { getRawResponsesCollection } from "@devographics/mongo";
 import { HandlerError } from "~/lib/handler-error";
 import { ResponseDocument } from "@devographics/types";
 
+/**
+ * Will throw if user doesn't own the response
+ * @param param0 
+ * @returns 
+ */
 export async function loadResponse({
   responseId,
   currentUser,

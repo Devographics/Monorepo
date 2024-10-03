@@ -1,4 +1,4 @@
-import { UserDocument as UserTypeShared } from "../../account/user/typings";
+import { UserDocument as UserTypeShared } from "./typings";
 
 export type UserTypeServer = UserTypeShared & { hash?: string; salt?: string };
 

@@ -13,7 +13,7 @@
  * UI in case of error.
  */
 import { useState, useEffect } from "react";
-import { verifyMagicToken } from "~/account/magicLogin/client-actions";
+import { verifyMagicToken } from "~/lib/account/magicLogin/client-actions";
 import { routes } from "~/lib/routes";
 
 import { Loading } from "~/components/ui/Loading";

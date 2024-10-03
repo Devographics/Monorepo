@@ -1,5 +1,5 @@
 import { getUsersCollection } from "@devographics/mongo";
-import { UserDocument } from "~/account/user/typings";
+import { UserDocument } from "~/lib/users/typings";
 
 /**
  * Load only minimal data about the user

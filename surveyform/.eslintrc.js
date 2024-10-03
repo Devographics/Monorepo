@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ["plugin:cypress/recommended", "next"],
+  extends: ["next"],
   root: true,
   plugins: [],
   env: {
@@ -7,6 +7,7 @@ module.exports = {
     commonjs: true,
     es6: true,
     node: true,
+    jest: false,
   },
   parserOptions: {
     ecmaVersion: 2018,
@@ -21,7 +22,7 @@ module.exports = {
     },
   },
   overrides: [
-    { files: ["**/__tests__/**"], env: { jest: true } },
+    { files: ["tests/**/*.spec.ts"], env: { jest: false } },
     {
       files: ["**/*.ts", "**/*.tsx"],
       rules: {

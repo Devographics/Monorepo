@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { handlerMustHaveCurrentUser } from "~/account/user/route-handlers/getters";
 import { RouteHandlerOptions } from "~/app/api/typings";
 import { loadResponse } from "~/lib/responses/db-actions/load";
 import { saveResponse } from "~/lib/responses/db-actions/save";
 import { HandlerError } from "~/lib/handler-error";
+import { handlerMustHaveCurrentUser } from "~/lib/users/route-handlers/getters";
 // import { captureException } from "@sentry/nextjs";
 
 export async function POST(

@@ -5,7 +5,7 @@ import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
 import { useI18n } from "@devographics/react-i18n";
-import { getQuestioni18nIds } from "~/i18n/survey";
+import { getQuestioni18nIds } from "~/lib/i18n/survey";
 
 const MemoFormControl = memo(FormControl);
 

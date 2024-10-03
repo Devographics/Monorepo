@@ -1,3 +1,4 @@
+import { test, expect } from "@jest/globals"
 import { computeGlobalScore, computeUserRank } from "./scoreQuantiles"
 
 test("compute global scores from mongo results", () => {
@@ -20,8 +21,8 @@ test("compute global scores from mongo results", () => {
     expect(computeUserRank(0, gs)).toEqual(100)
     // existing value = 100 - proportion until this value
     expect(computeUserRank(1, gs)).toEqual(100 - 13)
-    // above max should give 1%
-    expect(computeUserRank(4, gs)).toEqual(1)
+    // above max should give 0.1%
+    expect(computeUserRank(4, gs)).toEqual(0.1)
 
     /*
 

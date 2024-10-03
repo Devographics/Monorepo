@@ -9,7 +9,7 @@ import { useEdition } from "~/components/SurveyContext/Provider";
 import Link from "next/link";
 import { useState } from "react";
 import Button from "react-bootstrap/esm/Button";
-import { getSectionTokens } from "~/i18n/survey";
+import { getSectionTokens } from "~/lib/i18n/survey";
 import { FormLayoutProps } from "./FormLayout";
 import { useFormPropsContext } from "./FormPropsContext";
 import { useFormStateContext } from "./FormStateContext";

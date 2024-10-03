@@ -1,6 +1,6 @@
 import { SectionMetadata, QuestionMetadata } from "@devographics/types";
 import { useI18n } from "@devographics/react-i18n";
-import { getQuestioni18nIds } from "~/i18n/survey";
+import { getQuestioni18nIds } from "~/lib/i18n/survey";
 import type { StringTranslatorResult } from "@devographics/i18n";
 
 export const useQuestionTitle = ({

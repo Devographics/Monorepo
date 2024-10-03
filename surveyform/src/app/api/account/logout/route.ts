@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { handlerRemoveTokenCookie } from "~/account/user/api";
+import { handlerRemoveTokenCookie } from "~/lib/account/session";
 
 export async function POST(req: NextRequest) {
   const res = NextResponse.json({})

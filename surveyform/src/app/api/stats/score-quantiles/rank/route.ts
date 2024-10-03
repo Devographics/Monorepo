@@ -45,7 +45,7 @@ export const GET = async (req: NextRequest) => {
 
     // top 100%
     if (!globalScore) {
-      console.warn(`globalScore not found in database for survey ${editionId}, 
+      console.warn(` found in database for survey ${editionId}, 
             call the '/api/stats/score-quantiles/compute?editionId=${editionId}&key=SECRET_KEY' endpoint to update score quantiles`);
       if (!globalScore) return NextResponse.json({ data: 100 });
     }

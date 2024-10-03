@@ -4,7 +4,7 @@ import type { FormInputProps } from "~/components/form/typings";
 import Form from "react-bootstrap/Form";
 import { FormOption } from "~/components/form/FormOption";
 import { useI18n } from "@devographics/react-i18n";
-import { getOptioni18nIds } from "~/i18n/survey";
+import { getOptioni18nIds } from "~/lib/i18n/survey";
 
 export const Slider = (props: FormInputProps) => {
   const { path, value, question, readOnly, updateCurrentValues } = props;

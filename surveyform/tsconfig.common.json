@@ -22,10 +22,6 @@
     "noUnusedLocals": false, // won't fail on unused variables
     "noUnusedParameters": false,
     "paths": {
-      "@vulcanjs/*": [
-        "packages/@vulcanjs/*",
-        "node_modules/@vulcanjs/*"
-      ],
       "~/*": [
         "src/*"
       ]

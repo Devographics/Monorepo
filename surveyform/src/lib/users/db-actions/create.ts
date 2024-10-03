@@ -1,5 +1,5 @@
 import { getUsersCollection, newMongoId } from "@devographics/mongo";
-import { UserDocument } from "~/account/user/typings";
+import { UserDocument } from "~/lib/users/typings";
 
 export const createUser = async ({ data }): Promise<UserDocument> => {
   const Users = await getUsersCollection<UserDocument>();

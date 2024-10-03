@@ -1,7 +1,9 @@
 ---
 import T from '@components/T'
 import LanguageLink from '@components/LanguageLink'
-const { locale, locales = [], canonicalUrl, survey } = Astro.props
+import { CommonProps } from '@helpers/typings'
+const { locale, locales = [], canonicalUrl } = Astro.props
+export type Props = CommonProps & { canonicalUrl: {pathname: string}}
 const { pathname } = canonicalUrl
 ---
 

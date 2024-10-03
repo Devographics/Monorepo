@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useCurrentUser } from "~/lib/users/hooks";
 import { routes } from "~/lib/routes";
-import { LogoutButton } from "~/account/user/components/LogoutButton";
+import { LogoutButton } from "~/components/users/LogoutButton";
 import { DebugZone } from "./DebugZone";
 import { publicConfig } from "~/config/public";
 import { enableTranslatorMode } from "@devographics/i18n";
@@ -16,16 +16,18 @@ type LinkItemProps = {
   id?: string;
   href?: string;
 };
+
+const CurrentYear = () => <span suppressHydrationWarning={true}>{(new Date()).getFullYear()}</span>
 const links: Array<LinkItemProps> = [
   {
     component:
       process.env.NEXT_PUBLIC_CONFIG === "tokyodev" ? (
         <span>
-          &copy; 2023 <a href="https://tokyodev.com/">TokyoDev</a>
+          &copy; <CurrentYear /> <a href="https://tokyodev.com/">TokyoDev</a>
         </span>
       ) : (
         <span>
-          &copy; 2023 <a href="https://devographics.com/">Devographics</a>
+          &copy; <CurrentYear /> <a href="https://devographics.com/">Devographics</a>
         </span>
       ),
   },

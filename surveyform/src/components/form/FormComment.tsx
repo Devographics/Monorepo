@@ -9,7 +9,7 @@ import debounce from "lodash/debounce.js";
 import IconComment from "~/components/icons/Comment";
 import IconCommentDots from "~/components/icons/CommentDots";
 import { FormInputProps } from "./typings";
-import { getOptioni18nIds } from "~/i18n/survey";
+import { getOptioni18nIds } from "~/lib/i18n/survey";
 import isEmpty from "lodash/isEmpty";
 import { useFormStateContext } from "./FormStateContext";
 

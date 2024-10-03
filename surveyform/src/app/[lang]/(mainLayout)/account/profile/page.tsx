@@ -1,15 +1,14 @@
 import { routes } from "~/lib/routes";
-import { LogoutButton } from "~/account/user/components/LogoutButton";
+import { LogoutButton } from "~/components/users/LogoutButton";
 import UserResponses from "~/components/users/UserResponses";
 import { redirect } from "next/navigation";
 import { getRawResponsesCollection } from "@devographics/mongo";
-import { UserDocument } from "~/account/user/typings";
+import { type UserDocument } from "~/lib/users/typings";
 import { cache } from "react";
 import { type ResponseDocument } from "@devographics/types";
-import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
+import { rscCurrentUser } from "~/lib/users/rsc-fetchers/rscCurrentUser";
 import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
-import { StandaloneMagicLoginForm } from "~/account/magicLogin/components/StandaloneMagicLoginForm";
-import { setLocaleIdServerContext } from "~/i18n/rsc-context";
+import { StandaloneMagicLoginForm } from "~/lib/account/magicLogin/components/StandaloneMagicLoginForm";
 import { DynamicT } from "@devographics/react-i18n";
 
 const getResponses = cache(
@@ -27,7 +26,6 @@ const getResponses = cache(
 );
 
 const Profile = async ({ params }) => {
-  setLocaleIdServerContext(params.lang); // Needed for "ServerT"
   const { data: surveys } = await rscFetchSurveysMetadata({
     calledFrom: "UserResponses",
   });

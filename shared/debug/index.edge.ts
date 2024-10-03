@@ -4,6 +4,8 @@
  * @see https://github.com/vercel/next.js/pull/45188
  */
 export const logToFile = (...args: any) => {
-    console.warn("📄 logToFile is a noop in edge environments. Filepath:", args?.[0])
+    if (process.env.NODE_ENV === "development") {
+        console.warn("📄 logToFile is a noop in edge environments. Filepath:", args?.[0])
+    }
 }
 export * from "./edge-friendly"

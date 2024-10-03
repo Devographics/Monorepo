@@ -3,7 +3,7 @@ import { getRawResponsesCollection } from "@devographics/mongo";
 import {
   UserDocument,
   UserDocumentWithResponses,
-} from "~/account/user/typings";
+} from "~/lib/users/typings";
 import { ResponseDocument } from "@devographics/types";
 
 /**

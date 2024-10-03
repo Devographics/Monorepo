@@ -1,4 +1,4 @@
-import { getEntityName } from "~/lib/surveys/helpers/getEntityName";
+import { getEntityNameHtml } from "~/lib/surveys/helpers/getEntityName";
 import EntityLabel from "~/components/common/EntityLabel";
 import { T, useI18n } from "@devographics/react-i18n";
 import {
@@ -6,7 +6,7 @@ import {
   OptionMetadata,
   QuestionMetadata,
 } from "@devographics/types";
-import { getOptioni18nIds } from "~/i18n/survey";
+import { getOptioni18nIds } from "~/lib/i18n/survey";
 
 const OptionLabel = ({
   option,
@@ -29,9 +29,9 @@ const OptionLabel = ({
     fallback = option.id;
   }
 
-  const entityName = getEntityName(entity);
+  const hasEntityName = !!getEntityNameHtml(entity);
 
-  return entityName ? (
+  return hasEntityName ? (
     <EntityLabel entity={entity} />
   ) : (
     <T token={i18n.base} fallback={fallback} />

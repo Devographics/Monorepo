@@ -1,6 +1,6 @@
 import { Entity } from "@devographics/types";
 import { T } from "@devographics/react-i18n";
-import { getEntityName } from "~/lib/surveys/helpers/getEntityName";
+import { getEntityNameHtml } from "~/lib/surveys/helpers/getEntityName";
 import { EntityPopoverTrigger } from "./EntityPopover";
 
 /**
@@ -42,7 +42,7 @@ export const EntityLabelContents = ({
   label,
   fallback,
 }: EntityLabelProps) => {
-  const entityName = getEntityName(entity);
+  const entityName = getEntityNameHtml(entity);
 
   if (entityName) {
     return (

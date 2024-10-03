@@ -6,8 +6,8 @@ import { serverConfig } from "~/config/server";
  * @see https://nodemailer.com/transports/stream/
  */
 let transport: any;
-if (!process.env.SMTP_HOST) {
-  console.warn("SMTP_HOST not found, using debug transport");
+if (!!process.env.SMTP_DEBUG_LOCAL) {
+  console.warn("SMTP_DEBUG_LOCAL enabled, using debug transport, mails will be logged in the server console");
   transport = {
     streamTransport: true,
     newline: "unix",

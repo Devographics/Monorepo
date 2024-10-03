@@ -1,8 +1,10 @@
 ---
 import T from './T'
 import LanguageSwitcher from './LanguageSwitcher.astro'
+import { CommonProps } from '@helpers/typings'
 
 const { survey, locale, locales } = Astro.props
+export type Props = CommonProps
 
 const getLinks = (survey) => [
     {

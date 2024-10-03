@@ -3,12 +3,11 @@ import ClientLayout from "~/app/[lang]/ClientLayout";
 import {
   rscAllLocalesMetadata,
   rscLocaleFromParams,
-} from "~/lib/api/rsc-fetchers";
+} from "~/lib/i18n/api/rsc-fetchers";
 import { metadata as defaultMetadata } from "../../layout";
-// import { rscTeapot } from "~/i18n/components/ServerT";
-import { setLocaleIdServerContext } from "~/i18n/rsc-context";
-import { rscTeapot } from "~/i18n/components/ServerT";
-import { getCommonContexts } from "~/i18n/config";
+import { rscTeapot } from "~/lib/i18n/components/ServerT";
+import { getCommonContexts } from "~/lib/i18n/config";
+import { notFound } from "next/navigation";
 
 // TODO: not yet compatible with having dynamic pages down the tree
 // we may have to call generateStaticParams in each static page instead
@@ -26,13 +25,26 @@ export async function generateMetadata({
 }: {
   params: PageServerProps;
 }): Promise<Metadata> {
-  setLocaleIdServerContext(params.lang);
-  const { t, error } = await rscTeapot();
+  const { t, error } = await rscTeapot({ localeId: params.lang });
   if (error) return defaultMetadata;
   const title = t("general.title");
   const description = t("general.description");
   const metadata = { ...defaultMetadata, title, description };
   return metadata;
+}
+
+/**
+ * When a file is not found in "/public"
+ * Next will try to match a route
+ * so it will treat the file as the [lang] parameter, erroneously
+ * so lang = "/apple-touch-icon.png" for instance
+ * We need to catch this scenario in the layout
+ * @param params 
+ */
+function ignoreNotFoundFile(params) {
+  if (params.lang.includes(".")) {
+    notFound()
+  }
 }
 
 /**
@@ -51,7 +63,7 @@ export default async function RootLayout({
     lang: string;
   };
 }) {
-  setLocaleIdServerContext(params.lang); // Needed for "ServerT"
+  ignoreNotFoundFile(params)
   const { locale, localeId, error } = await rscLocaleFromParams({
     ...params,
     contexts: getCommonContexts(),
@@ -65,7 +77,6 @@ export default async function RootLayout({
     <ClientLayout
       params={params}
       locales={locales}
-      localeId={localeId}
       localeStrings={locale}
     >
       {/*<DebugRSC

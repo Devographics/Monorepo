@@ -1,6 +1,6 @@
 import { T } from "@devographics/react-i18n";
 import React from "react";
-import { getQuestioni18nIds } from "~/i18n/survey";
+import { getQuestioni18nIds } from "~/lib/i18n/survey";
 
 export const Help = (props) => {
   const i18n = getQuestioni18nIds(props);

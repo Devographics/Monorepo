@@ -4,11 +4,10 @@ import {
   SurveySectionReadOnly,
 } from "~/components/questions/SurveySection";
 import { rscMustGetSurveyEditionFromUrl } from "../../rsc-fetchers";
-import { rscCurrentUser } from "~/account/user/rsc-fetchers/rscCurrentUser";
+import { rscCurrentUser } from "~/lib/users/rsc-fetchers/rscCurrentUser";
 import { routes } from "~/lib/routes";
 import { SurveyStatusEnum } from "@devographics/types";
 import { DebugRSC } from "~/components/debug/DebugRSC";
-import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 
 // SectionNumber is optional in the URL so this page is exactly the same as ../index.tsx
 const SurveyFromResponseIdPage = async ({
@@ -30,7 +29,6 @@ const SurveyFromResponseIdPage = async ({
   const sn = parseInt(sectionNumber);
   if (isNaN(sn)) notFound();
 
-  setLocaleIdServerContext(lang); // Needed for "ServerT"
   const currentUser = await rscCurrentUser();
   if (!currentUser) {
     return redirect(routes.account.login.from(`/survey/${slug}/${year}`));

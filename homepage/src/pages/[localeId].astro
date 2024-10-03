@@ -2,6 +2,7 @@
 import Homepage from '../components/Homepage.astro'
 
 import { getData } from '@helpers/data'
+import { type CommonProps } from '@helpers/typings'
 import DefaultLayout from '../layouts/DefaultLayout.astro'
 
 export async function getStaticPaths() {
@@ -14,9 +15,10 @@ export async function getStaticPaths() {
 }
 
 const { locale, locales, surveys } = Astro.props
+export type Props = CommonProps
 const survey = surveys.find(s => s.id === import.meta.env.SURVEYID)
 ---
 
-<DefaultLayout {...Astro.props} survey={survey}>
-    <Homepage {...Astro.props} survey={survey} />
+<DefaultLayout surveys={surveys} locale={locale} locales={locales} survey={survey}>
+    <Homepage surveys={surveys} locale={locale} locales={locales} survey={survey} />
 </DefaultLayout>

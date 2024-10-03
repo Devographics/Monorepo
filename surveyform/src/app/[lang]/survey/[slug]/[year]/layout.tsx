@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+// import { notFound } from "next/navigation";
 import { EditionProvider } from "~/components/SurveyContext/Provider";
 
 import { rscMustGetSurveyEditionFromUrl } from "./rsc-fetchers";
@@ -11,15 +11,13 @@ import {
   getCommonContexts,
   getEditionContexts,
   getSurveyContexts,
-  safeLocaleIdFromParams,
-} from "~/i18n/config";
+} from "~/lib/i18n/config";
 import {
   rscAllLocalesMetadata,
   rscLocaleFromParams,
-} from "~/lib/api/rsc-fetchers";
+} from "~/lib/i18n/api/rsc-fetchers";
 import { rscGetMetadata } from "~/lib/surveys/rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
-import { setLocaleIdServerContext } from "~/i18n/rsc-context";
 interface SurveyPageServerProps {
   lang: string;
   slug: string;
@@ -46,7 +44,6 @@ export default async function SurveyLayout({
   children: React.ReactNode;
   params: { slug: string; year: string; lang: string };
 }) {
-  setLocaleIdServerContext(params.lang); // Needed for "ServerT"
   const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
   const {
     locale,
@@ -55,7 +52,10 @@ export default async function SurveyLayout({
   } = await rscLocaleFromParams({
     lang: params.lang,
     contexts: [
-      // TODO: we should have a shared layout between (mainLayout) pages and "survey/[slug]/[year]" that handle locales
+      // NOTE: 
+      // we reload common contexts here because there is no parent layout,
+      // context is not shared with (mainLayout pages) that are outside of the scope of a precise survey
+      // we could have a shared layout between (mainLayout) and "survey/[slug]/[year]" that handle common locales
       // so we don't have to reload commonContext translations in the surveys page
       ...getCommonContexts(),
       ...getSurveyContexts(edition.survey),
@@ -82,7 +82,6 @@ export default async function SurveyLayout({
     <ClientLayout
       params={params}
       locales={locales}
-      localeId={localeId}
       localeStrings={locale}
       addWrapper={false}
     >

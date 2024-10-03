@@ -31,9 +31,9 @@ export const localeWithStringsQuery = ({
     `
 }
 
-export const getLocalesQuery = (contexts: Array<string>, loadStrings = true) => {
+export const getLocalesQuery = (contexts?: Array<string>, loadStrings = true) => {
     const args: Array<string> = []
-    if (contexts.length > 0) {
+    if (contexts && contexts.length > 0) {
         args.push(`contexts: [${contexts.join(', ')}]`)
     }
 
@@ -44,9 +44,8 @@ query {
             completion
             id
             label
-            ${
-                loadStrings
-                    ? `strings {
+            ${loadStrings
+            ? `strings {
                 key
                 t
                 tHtml
@@ -54,8 +53,8 @@ query {
                 context
                 isFallback
             }`
-                    : ''
-            }
+            : ''
+        }
             translators
         }
 }

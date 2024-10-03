@@ -2,7 +2,7 @@ import { getStringTranslator } from '@helpers/translator'
 
 export const getMeta = ({ survey, locale, lastEdition }) => {
     const { name, slug, domain } = survey
-    const { socialImageUrl} = lastEdition
+    const { socialImageUrl } = lastEdition
 
     const getString = getStringTranslator(locale)
 

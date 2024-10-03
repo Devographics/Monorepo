@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { handlerMustHaveCurrentUser } from "~/account/user/route-handlers/getters";
 import { RouteHandlerOptions } from "~/app/api/typings";
 import { loadResponse } from "~/lib/responses/db-actions/load";
 import { HandlerError } from "~/lib/handler-error";
+import { handlerMustHaveCurrentUser } from "~/lib/users/route-handlers/getters";
 
 export async function GET(
   req: NextRequest,
