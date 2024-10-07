@@ -59,13 +59,9 @@ const ValueSegmentField = ({
             return newState
         })
     }
-    if (field.optionsAreNumeric) {
-        return (
-            <Label_>
-                <Input_ onChange={handleChange} value={value} type="number" />
-            </Label_>
-        )
-    } else {
+    const groupsOrOptions = field.groups || field.options
+    const useNumericInput = field.optionsAreNumeric && !groupsOrOptions
+    if (groupsOrOptions) {
         return (
             <Label_>
                 {/* <span>{segmentId}</span> */}
@@ -83,19 +79,34 @@ const ValueSegmentField = ({
                     <option value="" disabled>
                         {getString && getString('explorer.select_item')?.t}
                     </option>
-                    {options.map(({ id, entity, label }) => (
-                        <option key={id} value={id}>
-                            {getValueLabel({
-                                getString,
-                                field,
-                                value: id,
-                                allFilters,
-                                entity,
-                                label
-                            })}
-                        </option>
-                    ))}
+                    {groupsOrOptions.map(optionOrGroup => {
+                        const { id, label } = optionOrGroup
+                        return (
+                            <option key={id} value={id}>
+                                {getValueLabel({
+                                    getString,
+                                    field,
+                                    value: id,
+                                    allFilters,
+                                    entity: optionOrGroup?.entity,
+                                    label
+                                })}
+                            </option>
+                        )
+                    })}
                 </Select_>
+            </Label_>
+        )
+    } else if (useNumericInput) {
+        return (
+            <Label_>
+                <Input_ onChange={handleChange} value={value} type="number" />
+            </Label_>
+        )
+    } else {
+        return (
+            <Label_>
+                <Input_ onChange={handleChange} value={value} />
             </Label_>
         )
     }
@@ -114,8 +125,6 @@ const ValueSegmentArray = ({
 }: ValueSegmentArrayProps) => {
     const { setFiltersState } = stateStuff
     const { getString } = useI18n()
-
-    const canAddNewValue = options.length > value.length
 
     const handleDeleteValue = (valueIndex: number) => {
         setFiltersState(fState => {
@@ -139,6 +148,9 @@ const ValueSegmentArray = ({
             return newState
         })
     }
+    const groupsOrOptions = field.groups || field.options
+
+    const canAddNewValue = groupsOrOptions.length > value.length
 
     return (
         <Values_>
@@ -162,7 +174,7 @@ const ValueSegmentArray = ({
                             <option value="" disabled>
                                 {getString && getString('explorer.select_item')?.t}
                             </option>
-                            {options.map(({ id, entity, label }) => (
+                            {groupsOrOptions.map(({ id, entity, label }) => (
                                 <option key={id} value={id}>
                                     {getValueLabel({
                                         getString,
