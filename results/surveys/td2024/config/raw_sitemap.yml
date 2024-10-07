@@ -395,6 +395,8 @@
 
       - id: most_important_benefit
         template: multiple_options2
+        parameters:
+            sort: { property: count }
         variants:
             - template: vs_salary_tokyodev
 
