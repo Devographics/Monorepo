@@ -10,6 +10,7 @@
         "typecheck": "tsc --noEmit --p tsconfig.json"
     },
     "dependencies": {
+        "@devographics/debug": "workspace:^1.0.0",
         "@devographics/fetch": "workspace:^1.0.0",
         "@devographics/i18n": "workspace:^1.0.0",
         "@devographics/helpers": "workspace:^1.0.0",
@@ -30,5 +31,9 @@
     },
     "devDependencies": {
         "@types/mongodb": "^4.0.7"
+    },
+    "packageManager": "pnpm@8.7.0",
+    "engines": {
+        "node": ">=18.0.0"
     }
 }

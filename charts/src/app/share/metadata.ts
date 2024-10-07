@@ -4,6 +4,7 @@ import { getLocaleDict } from '@devographics/i18n/server'
 import { ChartParams } from './typings'
 import { getBlock } from '@/lib/helpers'
 import { getStringTranslator } from '@/lib/i18n'
+import { Locale } from '@devographics/types'
 
 /*
 
@@ -28,12 +29,13 @@ export async function getBlockMetaFromParams(chartParams: ChartParams) {
     //     editionId: chartParams.edition,
     //     calledFrom: 'charts'
     // })
-    const { data: edition, error } = await fetchEditionSitemap({
+    const editionFetchResult = await fetchEditionSitemap({
         surveyId,
         editionId,
         calledFrom: 'charts'
     })
 
+    const { data: edition, error } = editionFetchResult
     const { sitemap } = edition
 
     if (!sitemap) {
@@ -79,7 +81,7 @@ export async function getBlockMetaFromParams(chartParams: ChartParams) {
     const { strings, ...localeWithoutStrings } = locale
     console.log('Got locale with string for block metadata', localeWithoutStrings)
 
-    const getString = getStringTranslator(locale)
+    const getString = getStringTranslator(locale as unknown as Locale)
 
     const blockMeta = getBlockMeta({
         block: blockDefinition,
