@@ -47,6 +47,7 @@ export const getSurveyParamsTable = (): SurveyParamsTable => ({
   },
   "state-of-react": {
     2023: { surveyId: "state_of_react", editionId: "react2023" },
+    2024: { surveyId: "state_of_react", editionId: "react2024" },
   },
   "state-of-html": {
     2023: { surveyId: "state_of_html", editionId: "html2023" },
