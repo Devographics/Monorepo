@@ -232,20 +232,6 @@
         defaultUnits: percentageQuestion
         variants:
             - template: vs_salary_tokyodev
-            - id: current_job_description_by_educational_attainment
-              fieldId: current_job_description
-              blockType: HorizontalBarBlock2
-              query: currentEditionData
-              parameters:
-                  showNoAnswer: true
-              defaultUnits: percentageBucket
-              tabId: tabs.by_educational_attainment
-              filtersState:
-                  options:
-                      mode: facet
-                  facet:
-                      sectionId: user_info
-                      id: educational_attainment
 
       - id: coworker_nationalities_engineers
         template: multiple_options2

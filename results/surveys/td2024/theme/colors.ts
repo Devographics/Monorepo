@@ -168,7 +168,7 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     textAlt: 'rgba(220, 223, 255, 0.6)',
     textInverted: '#272325',
     textHighlight: colors.yellowDarker,
-    link: '#818cf8',
+    link: 'rgba(16, 185, 129, 0.9)',
     linkActive: '#4E46DD',
     contrast: '#4E46DD',
     border: '#FFF6E6',
@@ -241,8 +241,8 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     ],
     barColorDefault: {
         id: 'barColorDefault',
-        color: '#818cf8',
-        gradient: ['#818cf8', '#4039BD']
+        color: 'rgba(16, 185, 129, 0.9)',
+        gradient: ['rgba(16, 185, 129, 0.9)', 'rgba(16, 185, 129, 0.6)']
     },
     barColorOverall: {
         id: 'barColorOverall',
@@ -255,8 +255,8 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         gradient: [colors.greyLight, colors.greyLightest]
     },
     barChart: {
-        primary: '#818cf8',
-        primaryGradient: ['#818cf8', '#4039BD'],
+        primary: 'rgba(16, 185, 129, 0.9)',
+        primaryGradient: ['rgba(16, 185, 129, 0.9)', 'rgba(16, 185, 129, 0.6)'],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.pink,
