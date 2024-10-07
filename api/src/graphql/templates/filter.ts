@@ -20,7 +20,14 @@ export const generateFilterType = ({
     const { filterTypeName, enumTypeName, optionsAreNumeric } = question
     if (!filterTypeName) return
     let typeDef
-    if (optionsAreNumeric) {
+    const hasGroupsOrOptions = question.groups || question.options
+    if (hasGroupsOrOptions) {
+        typeDef = `input ${filterTypeName} {
+            eq: ${enumTypeName}
+            in: [${enumTypeName}]
+            nin: [${enumTypeName}]
+        }`
+    } else if (optionsAreNumeric) {
         typeDef = `input ${filterTypeName} {
             eq: Float
             lt: Float
@@ -28,9 +35,9 @@ export const generateFilterType = ({
         }`
     } else {
         typeDef = `input ${filterTypeName} {
-            eq: ${enumTypeName}
-            in: [${enumTypeName}]
-            nin: [${enumTypeName}]
+            eq: String
+            in: String
+            nin: String
         }`
     }
     return {
