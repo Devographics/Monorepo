@@ -75,7 +75,10 @@ export const getItemLabel = (options: {
         }
 
         // else, try using an i18n key
-        const defaultKey = `options.${i18nNamespace}.${id}`
+        // note: make an exception for "features" namespace because it does not use the
+        // "options." prefix
+        const defaultKey =
+            i18nNamespace === 'features' ? `features.${id}` : `options.${i18nNamespace}.${id}`
         const predefinedKey = predefinedKeys[id]
 
         key = predefinedKey || defaultKey

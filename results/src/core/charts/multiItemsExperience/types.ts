@@ -10,7 +10,14 @@ import {
 } from '@devographics/types'
 import { BlockComponentProps } from 'core/types'
 import { PERCENTAGE_QUESTION, SENTIMENT_FACET } from '@devographics/constants'
-import { ChartStateWithSort, ChartValues, ColumnModes, OrderOptions, Tick } from '../common2/types'
+import {
+    ChartStateWithFilter,
+    ChartStateWithSort,
+    ChartValues,
+    ColumnModes,
+    OrderOptions,
+    Tick
+} from '../common2/types'
 import { DataSeries } from 'core/filters/types'
 
 export const DEFAULT_VARIABLE = PERCENTAGE_QUESTION
@@ -32,7 +39,7 @@ export type Variable = typeof PERCENTAGE_QUESTION
 
 export type FacetId = string
 
-export interface MultiItemsChartState extends ChartStateWithSort {
+export interface MultiItemsChartState extends ChartStateWithFilter {
     facetId: FacetId
     setFacetId: Dispatch<SetStateAction<FacetId>>
     grouping: GroupingOptions
@@ -58,6 +65,7 @@ export type CombinedItem = {
     combinedBuckets: CombinedBucket[]
     commentsCount: number
     count: number
+    _metadata: QuestionMetadata
 }
 
 export type CombinedBucket = {

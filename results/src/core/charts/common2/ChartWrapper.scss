@@ -1,6 +1,6 @@
 .chart-wrapper {
-    margin-top: 20px;
+    margin-top: var(--doubleSpacing);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: var(--doubleSpacing);
 }

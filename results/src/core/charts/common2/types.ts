@@ -18,6 +18,11 @@ export interface ChartStateWithSort extends ChartState {
     setOrder: Dispatch<SetStateAction<OrderOptions>>
 }
 
+export interface ChartStateWithFilter extends ChartStateWithSort {
+    filter: string | undefined
+    setFilter: Dispatch<SetStateAction<string | undefined>>
+}
+
 export interface ChartValues {
     question: QuestionMetadata
     i18nNamespace?: string

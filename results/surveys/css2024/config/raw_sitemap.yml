@@ -114,6 +114,8 @@
             Survey respondents were on average **31.7** years old, slightly lower than the [State of HTML](https://2022.stateofjs.com) (**33.6**) and [State of CSS](https://2023.stateofcss.com) (**33.5**) surveys.
         variants:
             - template: vs_salary
+              parameters:
+                  sort: { property: options }
 
       - id: years_of_experience
         template: multiple_options2
@@ -121,6 +123,8 @@
             Respondents had on average **9.3** years of web development experience.
         variants:
             - template: vs_salary
+              parameters:
+                  sort: { property: options }
 
       - id: company_size
         template: multiple_options2
@@ -128,6 +132,8 @@
             Respondents tended to work for mostly mid-sized organizations, with a median company size of **75** employees.
         variants:
             - template: vs_salary
+              parameters:
+                  sort: { property: options }
 
       - id: variants_hint
         template: hint
@@ -143,6 +149,8 @@
             Having a higher-education degree did not translate in meaningful differences in yearly income.
         variants:
             - template: vs_salary
+              parameters:
+                  sort: { property: options }
 
       - id: gender
         template: multiple_options2
@@ -194,8 +202,19 @@
 
       - id: all_features
         template: multi_items_experience
+        i18nNamespace: features
         chartOptions:
             limit: 10
+            categories:
+                [
+                    layout,
+                    shapes_graphics,
+                    colors,
+                    interactions,
+                    typography,
+                    accessibility,
+                    other_features
+                ]
 
       # - id: features_overview
       #   template: features_overview

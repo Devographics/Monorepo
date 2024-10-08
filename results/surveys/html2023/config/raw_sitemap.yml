@@ -362,7 +362,7 @@
               i18nNamespace: features
 
             - id: web_components_libraries
-              template: multiple_options2
+              template: multiple_options2_combined
               i18nNamespace: features
 
             - id: using_web_components_pain_points
@@ -393,24 +393,29 @@
               i18nNamespace: features
 
             - id: accessibility_disabilities
-              template: multiple_options2
-              i18nNamespace: features
+              titleId: features.accessibility_disabilities
+              questionKey: features.accessibility_disabilities.question
+              template: multiple_options2_combined
 
             - id: accessibility_techniques
-              template: multiple_options2
-              i18nNamespace: features
+              titleId: features.accessibility_techniques
+              questionKey: features.accessibility_techniques.question
+              template: multiple_options2_combined
 
             - id: accessibility_screenreaders
-              template: multiple_options2
-              i18nNamespace: features
+              titleId: features.accessibility_screenreaders
+              questionKey: features.accessibility_screenreaders.question
+              template: multiple_options2_combined
 
             - id: accessibility_tools
-              template: multiple_options2
-              i18nNamespace: features
+              titleId: features.accessibility_tools
+              questionKey: features.accessibility_tools.question
+              template: multiple_options2_combined
 
             - id: accessibility_pain_points
+              titleId: features.accessibility_pain_points
+              questionKey: features.accessibility_pain_points.question
               template: multiple_options2_freeform
-              i18nNamespace: features
               parameters: { limit: 10 }
 
             - id: accessibility_resources
@@ -431,8 +436,9 @@
               i18nNamespace: features
 
             - id: native_apps_tools
+              titleId: features.native_apps_tools
+              questionKey: features.native_apps_tools.question
               template: multiple_options2
-              i18nNamespace: features
 
             - id: local_storage_features
               template: multiple_options2

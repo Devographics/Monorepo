@@ -11,6 +11,7 @@ import { NoteContents } from './MultiItemsNote'
 import ChartShare from '../common2/ChartShare'
 import ViewSwitcher from '../horizontalBar2/ViewSwitcher'
 import MultiItemsSerie from './MultiItemsSerie'
+import MultiItemsCategories from './MultiItemsCategories'
 
 const defaultLimit = 5
 
@@ -47,7 +48,12 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
         <ChartWrapper className={className}>
             <>
                 <ChartControls
-                    left={<MultiItemsExperienceControls chartState={chartState} />}
+                    top={
+                        block?.chartOptions?.categories ? (
+                            <MultiItemsCategories {...commonProps} />
+                        ) : undefined
+                    }
+                    left={<MultiItemsExperienceControls {...commonProps} />}
                     right={
                         <ViewSwitcher
                             {...commonProps}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Item } from '../../common2/item'
+import { ChartItem } from '../../common2/item'
 import { RowComponentProps } from '../types'
 
 export const RowHeading = ({
@@ -16,7 +16,7 @@ export const RowHeading = ({
     return (
         <h3 className="chart-row-heading">
             {isGroupedBucket && <span className="chart-row-heading-grouped">↳&nbsp;</span>}
-            <Item
+            <ChartItem
                 id={id}
                 entity={entity}
                 bucket={bucket}

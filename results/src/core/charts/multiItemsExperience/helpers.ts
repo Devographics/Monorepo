@@ -55,6 +55,7 @@ export const combineItems = ({
 }): CombinedItem[] =>
     items.map(item => ({
         id: item.id,
+        _metadata: item._metadata,
         entity: item.entity,
         combinedBuckets: combineBuckets(getBuckets(item), variable),
         commentsCount: getCommentsCount(item),
@@ -298,6 +299,7 @@ export const useChartState = (defaultState?: {
         GroupingOptions.EXPERIENCE
     )
     const [sort, setSort] = useState<MultiItemsChartState['sort']>(FeaturesOptions.USED)
+    const [filter, setFilter] = useState<MultiItemsChartState['filter']>()
     const [order, setOrder] = useState<MultiItemsChartState['order']>(OrderOptions.DESC)
     const [variable, setVariable] = useState<MultiItemsChartState['variable']>(DEFAULT_VARIABLE)
     const [columnMode, setColumnMode] = useState<MultiItemsChartState['columnMode']>(
@@ -316,6 +318,8 @@ export const useChartState = (defaultState?: {
         setGrouping,
         sort,
         setSort,
+        filter,
+        setFilter,
         order,
         setOrder,
         variable,

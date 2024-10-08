@@ -109,6 +109,7 @@ export interface BlockVariantDefinition {
 export interface ChartOptions {
     limit?: number
     dataFilters?: string[]
+    categories?: string[]
 }
 
 export interface BlockWithAwards {
