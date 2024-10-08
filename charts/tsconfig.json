@@ -14,8 +14,7 @@
     "esModuleInterop": true,
     "module": "esnext",
     // need to wait TS 5
-    //"moduleResolution": "bundler",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",

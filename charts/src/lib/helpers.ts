@@ -51,6 +51,7 @@ export const getBlock = (options: {
     ]) as BlockVariantDefinition[]
     const block = allSectionVariants.find(b => b.id === blockId)
     if (!block) {
+        console.error("Possible blocks where: ", allSectionVariants)
         throw new Error(`getBlock: could not find block for id ${blockId}`)
     }
     return block
