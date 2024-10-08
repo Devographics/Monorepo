@@ -38,7 +38,9 @@ export const subFields: Array<SubField> = [
         addIf: () => true,
         resolverFunction: ({ question }) => {
             console.log('// question metadata resolver')
-            return question
+            // note: providing the question's original sectionId is useful for filtering
+            const sectionId = question?.section?.id
+            return { ...question, sectionId }
         }
     },
     {

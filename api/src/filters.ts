@@ -69,6 +69,9 @@ function expandFilter(filter: Filter<string | number>, groups: OptionGroup[]) {
         if (filter.in) {
             eqInFilters = [...eqInFilters, ...filter.in]
         }
+        // TODO: filter.in could include open-ended ranges such as
+        // range_over_20 which cannot be handled using this method
+        // and will need to use lt/gt instead
         newFilter.in = expandFilterGroups(eqInFilters, groups)
     }
     if (filter.nin) {
