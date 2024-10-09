@@ -196,7 +196,7 @@
 
 - id: features
   path: /features
-  descriptionId: sections.features.description.css2023
+  descriptionId: sections.features.description.css2024
   blocks:
       - template: page_introduction
 
@@ -216,17 +216,9 @@
                     other_features
                 ]
 
-      # - id: features_overview
-      #   template: features_overview
-
-      # - template: features_experience_linechart
+      # - id: features_ratios_over_time
+      #   template: multi_items_ratios
       #   tabId: blocks.tools_experience_ranking.percentages
-      #   parameters:
-      #       years: [2020, 2021, 2022, 2023]
-      #       rankCutoff: 10
-      #   variants:
-      #       - template: features_experience_ranking
-      #         tabId: blocks.tools_experience_ranking.rankings
 
       # - id: knowledge_score
       #   template: demographics
@@ -247,7 +239,7 @@
 
 - id: other_tools
   path: /other-tools
-  descriptionId: sections.other_tools.description.css2023
+  descriptionId: sections.other_tools.description.css2024
   blocks:
       - id: tools_others_intro
         template: page_introduction
@@ -273,7 +265,7 @@
         i18nNamespace: tools
 
 - id: usage
-  descriptionId: sections.usage.description.css2023
+  descriptionId: sections.usage.description.css2024
   intlId: usage_css
   path: /usage
   blocks:
@@ -326,7 +318,7 @@
 
 - id: resources
   intlId: resources_css
-  descriptionId: sections.resources.description.css2023
+  descriptionId: sections.resources.description.css2024
   path: /resources
   blocks:
       - template: page_introduction
