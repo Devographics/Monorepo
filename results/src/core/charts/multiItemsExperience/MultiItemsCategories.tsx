@@ -54,8 +54,9 @@ export const MultiItemsCategories = ({ block, chartState }: MultiItemsCategories
             label: shortLabel,
             tooltip: (
                 <T
-                    k={isEnabled ? 'charts.sorted_by_sort_order' : 'charts.sort_by_sort'}
+                    k={isEnabled ? 'charts.filtered_by_value' : 'charts.filter_by_value'}
                     md={true}
+                    values={{ value: shortLabel }}
                 />
             )
         }

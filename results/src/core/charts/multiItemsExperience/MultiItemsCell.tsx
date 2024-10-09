@@ -11,10 +11,8 @@ import { CellLabel } from '../common2'
 
 export const getExperienceKey = (id: FeaturesOptions) => `options.experience.${id}.label.short`
 
-export const getSentimentKey = (
-    experienceId: FeaturesOptions,
-    sentimentId: SimplifiedSentimentOptions
-) => `options.sentiment.${experienceId}.${sentimentId}.label.short`
+export const getSentimentKey = (sentimentId: SimplifiedSentimentOptions) =>
+    `options.sentiment.${sentimentId}.label.short`
 
 export const Cell = ({
     combinedBucket,
