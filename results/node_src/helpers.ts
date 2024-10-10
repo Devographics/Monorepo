@@ -369,18 +369,19 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                 if (
                     useFilesystemCache &&
                     existingData &&
-                    (process.env.FROZEN || !queryHasChanged)
+                    (process.env.FROZEN === 'true' || !queryHasChanged)
                 ) {
                     console.log(
                         `// 🎯 File ${dataFileName} found on ${getLoadMethod()}, loading its contents…`
                     )
                     data = existingData
                 } else {
-                    console.log(
-                        `// 🔍 ${
-                            queryHasChanged ? '[query change detected] ' : ''
-                        }Running uncached query for file ${dataFileName}…`
-                    )
+                    const reason = !existingData
+                        ? '[no data found] '
+                        : queryHasChanged
+                        ? '[query change detected] '
+                        : ''
+                    console.log(`// 🔍 ${reason}Running uncached query for file ${dataFileName}…`)
 
                     const query = await getBlockQuery({
                         block,

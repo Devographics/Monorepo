@@ -1263,7 +1263,7 @@
 - id: conclusion
   path: /conclusion
   blocks:
-      - id: conclusion
+      - id: conclusion_chen_hui_jing
         template: conclusion
         variables:
             author: chen_hui_jing
