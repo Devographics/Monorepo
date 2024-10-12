@@ -320,6 +320,17 @@ const getBucketFragment = (options: {
 `
 }
 
+export const getResponseMetadataFragment = () => `_metadata {
+    axis1Sort {
+    property
+    order
+    }
+    axis2Sort {
+    property
+    order
+    }
+}`
+
 export const getDefaultQuery = ({
     queryOptions,
     queryArgs = {}
@@ -360,6 +371,7 @@ surveys {
           ${addQuestionComments ? getCommentsCountFragment() : ''}
           ${subField}${queryArgsString} {
             ${editionType} {
+              ${getResponseMetadataFragment()}
               ${allEditions ? allEditionsFragment : ''}
               completion {
                 count

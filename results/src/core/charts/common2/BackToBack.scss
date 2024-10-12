@@ -1,0 +1,54 @@
+.back-to-back-wrapper {
+    display: grid;
+    grid-template-columns: 1fr min-content 1fr;
+    gap: var(--quarterSpacing);
+}
+.back-to-back-serie-1,
+.back-to-back-serie-2 {
+    .chart-row-left {
+        display: none;
+    }
+}
+.serie-axis {
+    .chart-grid-item-heading {
+        visibility: hidden;
+        width: 1px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    .chart-rows {
+        grid-template-columns: min-content 0px 0px;
+        gap: 0px;
+    }
+    .chart-row-content {
+        // width: 1px;
+        // overflow: hidden;
+        visibility: hidden;
+    }
+    .chart-axis {
+        visibility: hidden;
+    }
+    .chart-row-index {
+        display: none;
+    }
+    .chart-row-right {
+        // display: none;
+        visibility: hidden;
+    }
+    .chart-row-left {
+        justify-content: center;
+    }
+}
+.serie-reversed {
+    .chart-rows {
+        grid-template-areas: 'metadata content heading';
+    }
+    .horizontal-chart-cell {
+        left: auto;
+        right: calc(var(--offset) * 1%);
+    }
+    .chart-axis-tick {
+        left: auto;
+        right: var(--xOffset);
+    }
+}

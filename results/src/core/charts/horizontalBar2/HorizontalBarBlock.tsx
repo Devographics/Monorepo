@@ -3,7 +3,7 @@ import '../common2/ChartsCommon.scss'
 import './HorizontalBar.scss'
 import Metadata from '../common2/Metadata'
 import { BlockComponentProps, PageContextValue } from 'core/types'
-import { QuestionMetadata, StandardQuestionData } from '@devographics/types'
+import { QuestionMetadata, StandardQuestionData, sortProperties } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
 import { getAllFacetBucketIds, getChartCurrentEdition, useQuestionMetadata } from './helpers/other'
 import { getDefaultState, useChartState } from './helpers/chartState'
@@ -18,6 +18,7 @@ import ChartData from '../common2/ChartData'
 import { HorizontalBarSerie } from './HorizontalBarSerie'
 import ChartShare from '../common2/ChartShare'
 import Legend from './Legend'
+import { BackToBack } from '../common2/BackToBack'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -44,25 +45,36 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
         block
     }
 
+    // figure out if all series are sorted by options
+    const allSortedByOptions = series.every(
+        s =>
+            s?.data?.responses?.currentEdition?._metadata?.axis1Sort?.property ===
+            sortProperties.OPTIONS
+    )
+    const useBackToBackSeriesView = series.length === 2 && allSortedByOptions
+
     return (
         <ChartWrapper className="chart-horizontal-bar">
             <>
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>
                 </pre> */}
-
                 {facetQuestion && <FacetHeading facetQuestion={facetQuestion} {...commonProps} />}
 
-                <GridWrapper seriesCount={series.length}>
-                    {series.map((serie, serieIndex) => (
-                        <HorizontalBarSerie
-                            key={serie.name}
-                            serie={serie}
-                            serieIndex={serieIndex}
-                            {...commonProps}
-                        />
-                    ))}
-                </GridWrapper>
+                {useBackToBackSeriesView ? (
+                    <BackToBack serie1={series[0]} serie2={series[1]} {...commonProps} />
+                ) : (
+                    <GridWrapper seriesCount={series.length}>
+                        {series.map((serie, serieIndex) => (
+                            <HorizontalBarSerie
+                                key={serie.name}
+                                serie={serie}
+                                serieIndex={serieIndex}
+                                {...commonProps}
+                            />
+                        ))}
+                    </GridWrapper>
+                )}
 
                 <Note block={block} />
 

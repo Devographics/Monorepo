@@ -6,6 +6,7 @@ import { getQueryArgsString } from '../helpers'
 import { getAllEditionsFragment } from './getAllEditionsFragment'
 import { getRatiosFragment } from './getRatiosFragment'
 import { SENTIMENT_FACET } from '@devographics/constants'
+import { getResponseMetadataFragment } from './getResponseMetadataFragment'
 
 export const getSerieFragment = ({
     queryOptions,
@@ -44,6 +45,7 @@ export const getSerieFragment = ({
             ${addQuestionComments ? getCommentsCountFragment() : ''}
             ${subField}${queryArgsString} {
             ${editionType} {
+                ${getResponseMetadataFragment()}
                 ${allEditions ? getAllEditionsFragment() : ''}
                 completion {
                     count
