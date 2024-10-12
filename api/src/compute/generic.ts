@@ -39,7 +39,8 @@ import {
     getData,
     addFacetValiditySums,
     addRatios,
-    detectNaN
+    detectNaN,
+    addMetadata
 } from './stages'
 import {
     ResponsesTypes,
@@ -279,6 +280,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
     
     */
+    let axis2SortSpecifier
     if (facet) {
         if (facet === SENTIMENT_FACET) {
             /*
@@ -311,13 +313,14 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
                 q => q.id === facetId && q.surveyId === survey.id
             )
             if (facetQuestion) {
+                axis2SortSpecifier = getQuestionSort({
+                    specifier: facetSort,
+                    question: facetQuestion,
+                    enableBucketGroups
+                })
                 axis2 = {
                     question: facetQuestion,
-                    ...getQuestionSort({
-                        specifier: facetSort,
-                        question: facetQuestion,
-                        enableBucketGroups
-                    }),
+                    ...axis2SortSpecifier,
                     cutoff: facetCutoff,
                     cutoffPercent: facetCutoffPercent,
                     groupUnderCutoff,
@@ -488,6 +491,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await runStage(addFacetValiditySums, [results])
 
         await runStage(addLabels, [results, axis2, axis1])
+        await runStage(addMetadata, [results, axis2, axis1])
     } else {
         results = await runStage(addMissingBuckets, [results, axis1])
 
@@ -519,6 +523,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             await runStage(groupOtherBuckets, [results, axis1])
         }
         await runStage(addLabels, [results, axis1])
+        await runStage(addMetadata, [results, axis1])
     }
 
     await runStage(detectNaN, [results, isDebug, logPath])

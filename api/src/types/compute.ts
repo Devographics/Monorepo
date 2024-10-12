@@ -1,6 +1,12 @@
 import { QuestionApiObject } from './surveys'
 import { Filters } from './filters'
-import { Option, OptionId, ResponsesTypes, SortProperty } from '@devographics/types'
+import {
+    Option,
+    OptionId,
+    ResponsesTypes,
+    SortOrderNumeric,
+    SortProperty
+} from '@devographics/types'
 
 export enum ExecutionContext {
     // regular execution of the generic function
@@ -59,11 +65,3 @@ export interface ComputeAxisParameters {
     limit: number
     options?: Option[]
 }
-
-export interface SortSpecifier {
-    property: SortProperty
-    order: SortOrder
-}
-
-export type SortOrder = 'asc' | 'desc'
-export type SortOrderNumeric = 1 | -1

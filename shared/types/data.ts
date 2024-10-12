@@ -1,7 +1,7 @@
 import { RawDataItem } from './normalization'
 import { ResultsSubFieldEnum } from './api'
 import { Entity, Token } from './entities'
-import { Option } from './outlines'
+import { Option, SortOrder, SortProperty } from './outlines'
 import { QuestionMetadata } from './metadata'
 
 export type QueryData<T> = {
@@ -56,7 +56,7 @@ export type StandardQuestionData = QuestionData & {
     >]: ResponseData
 }
 
-export interface OpinionQuestionData extends StandardQuestionData { }
+export interface OpinionQuestionData extends StandardQuestionData {}
 
 export interface OptionsQuestionData extends QuestionData {
     options: OptionData[]
@@ -74,7 +74,7 @@ export interface ToolQuestionData extends QuestionData {
     responses: ResponseData
 }
 
-export interface FeatureQuestionData extends ToolQuestionData { }
+export interface FeatureQuestionData extends ToolQuestionData {}
 
 export interface ItemComments {
     allEditions: EditionComments[]
@@ -101,6 +101,7 @@ export interface ResponseData {
 }
 
 export interface ResponseEditionData {
+    _metadata: ResponseEditionMetadata
     editionId: string
     year: number
     completion: YearCompletion
@@ -109,6 +110,16 @@ export interface ResponseEditionData {
     percentiles?: PercentileData
     median?: number
     ratios?: RatiosData
+}
+
+export interface SortSpecifier {
+    property: SortProperty
+    order: SortOrder
+}
+
+export interface ResponseEditionMetadata {
+    axis1Sort: SortSpecifier
+    axis2Sort: SortSpecifier
 }
 
 export interface RatiosData {
@@ -199,7 +210,7 @@ export type CombinedBucketData = {
     [key in BucketUnits as `${key}__${number}`]: number
 }
 
-export interface CombinedBucket extends Bucket, CombinedBucketData { }
+export interface CombinedBucket extends Bucket, CombinedBucketData {}
 
 export interface FacetBucket extends Omit<Bucket, 'facetBuckets' | 'groupedBuckets'> {
     groupedBuckets?: FacetBucket[]
@@ -209,7 +220,7 @@ export interface FacetBucketWithAverage extends FacetBucket {
     average: number
 }
 
-export interface BucketCompletion extends FacetCompletion { }
+export interface BucketCompletion extends FacetCompletion {}
 
 /*
 
@@ -255,9 +266,9 @@ export interface AllToolsData {
     ids: string[]
     years: number[]
 }
-export interface SectionAllToolsData extends AllToolsData { }
-export interface AllFeaturesData extends AllToolsData { }
-export interface SectionAllFeaturesData extends AllFeaturesData { }
+export interface SectionAllToolsData extends AllToolsData {}
+export interface AllFeaturesData extends AllToolsData {}
+export interface SectionAllFeaturesData extends AllFeaturesData {}
 
 export const OPTION_NA = 'na'
 
