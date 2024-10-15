@@ -19,7 +19,12 @@ export const BackToBack = ({
     return (
         <div className="back-to-back-wrapper">
             <div className="back-to-back-serie-1 serie-reversed">
-                <HorizontalBarSerie serie={serie1} serieIndex={0} {...commonProps} />
+                <HorizontalBarSerie
+                    serie={serie1}
+                    serieIndex={0}
+                    {...commonProps}
+                    isReversed={true}
+                />
             </div>
             <div className="back-to-back-axis serie-axis">
                 <HorizontalBarSerie serie={serie1} serieIndex={0} {...commonProps} />

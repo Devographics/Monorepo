@@ -8,19 +8,30 @@ import { CommonProps } from '../common2/types'
 import take from 'lodash/take'
 import { getViewComponent } from './helpers/views'
 import { getItemFilters } from '../common2/helpers/filters'
-import { HorizontalBarChartState } from './types'
+import { HorizontalBarChartState, HorizontalBarViewProps, HorizontalBarViews } from './types'
 import { applyRowsLimit } from '../multiItemsExperience/helpers'
 
 export const HorizontalBarSerie = (
     props: {
         serie: DataSeries<StandardQuestionData>
         serieIndex: number
+        isReversed?: boolean
     } & CommonProps<HorizontalBarChartState>
 ) => {
-    const { serie, serieIndex, block, chartState, variant, question } = props
+    const {
+        seriesMetadata,
+        serie,
+        serieIndex,
+        block,
+        chartState,
+        variant,
+        question,
+        isReversed = false
+    } = props
     const { rowsLimit } = chartState
+
     let buckets = getChartBuckets({ serie, block, chartState })
-    const chartValues = useChartValues({ buckets, chartState, block, question })
+    const chartValues = useChartValues({ seriesMetadata, buckets, chartState, question })
 
     if (applyRowsLimit(rowsLimit, chartValues.totalRows)) {
         buckets = take(buckets, chartState.rowsLimit)
@@ -34,15 +45,16 @@ export const HorizontalBarSerie = (
     //     })
     // )
 
-    const viewProps = {
+    const viewProps: HorizontalBarViewProps = {
         ...props,
+        isReversed,
         buckets,
         chartValues
     }
 
     const itemFilters = getItemFilters({ variant, block, serieIndex })
 
-    const ViewComponent = getViewComponent(chartState.view)
+    const ViewComponent = getViewComponent(chartState.view as HorizontalBarViews)
 
     return (
         <GridItem key={serie.name} filters={itemFilters}>

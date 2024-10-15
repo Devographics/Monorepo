@@ -20,10 +20,10 @@ const PIXEL_PER_TICKS = 100
 const MAX_COEFF = 1.2
 
 const BoxplotView = (viewProps: HorizontalBarViewProps) => {
-    const { chartState, chartValues } = viewProps
+    const { chartState, chartValues, seriesMetadata } = viewProps
     const { facetQuestion } = chartValues
     const theme = useTheme()
-    const { buckets } = viewProps
+    const { buckets, isReversed } = viewProps
     const contentHeight = BAR_HEIGHT
 
     if (!facetQuestion) {
@@ -44,7 +44,9 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
         const allP10 = buckets.map(bucket => bucket.percentilesByFacet?.p10 || 0)
 
         const allP90 = buckets.map(bucket => bucket.percentilesByFacet?.p90 || 0)
-        const [chartMin, chartMax] = [Math.min(...allP10), Math.max(...allP90)]
+        // to ensure all series have same scale, use global series max if available
+        const p90Max = seriesMetadata.seriesMaxValue || Math.max(...allP90)
+        const [chartMin, chartMax] = [Math.min(...allP10), p90Max]
         const groups = [...new Set(buckets.map(bucket => bucket.id))]
         return { chartMin, chartMax: chartMax * MAX_COEFF, groups }
     }, [buckets])
@@ -76,7 +78,8 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
         xScale,
         yScale,
         contentWidth,
-        ticks
+        ticks,
+        isReversed
     }
 
     const axisProps = { ticks, formatValue, question: facetQuestion }
@@ -124,14 +127,15 @@ type BoxplotRowProps = RowComponentProps & {
     contentWidth: number
     xScale: d3.ScaleLinear<number, number, never>
     yScale: d3.ScaleBand<string>
+    isReversed?: boolean
 }
 
 const BoxplotRow = (props: BoxplotRowProps) => {
-    const { bucket, xScale, yScale, labelFormatter, contentWidth } = props
+    const { bucket, xScale, yScale, labelFormatter, contentWidth, isReversed = false } = props
 
     const theme = useTheme()
 
-    const boxData = useBoxplotData({ bucket, xScale, yScale })
+    const boxData = useBoxplotData({ bucket, xScale, yScale, isReversed })
     if (!bucket.percentilesByFacet || !boxData) {
         return null
     }
@@ -144,7 +148,8 @@ const BoxplotRow = (props: BoxplotRowProps) => {
         bucket,
         rowHeight: BAR_HEIGHT,
         boxData,
-        contentWidth
+        contentWidth,
+        isReversed
     }
 
     return (
@@ -158,7 +163,7 @@ const BoxplotRow = (props: BoxplotRowProps) => {
 
 export const Boxplot: HorizontalBarViewDefinition = {
     component: BoxplotView,
-    getValue: b => 0,
+    getValue: b => b.percentilesByFacet?.p90 || 0,
     formatValue: formatQuestionValue,
     dataFilters: [removeNoAnswer]
 }

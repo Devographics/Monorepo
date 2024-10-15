@@ -5,14 +5,19 @@ import Metadata from '../common2/Metadata'
 import { BlockComponentProps, PageContextValue } from 'core/types'
 import { QuestionMetadata, StandardQuestionData, sortProperties } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
-import { getAllFacetBucketIds, getChartCurrentEdition, useQuestionMetadata } from './helpers/other'
+import {
+    getAllFacetBucketIds,
+    getChartCurrentEdition,
+    getSeriesMetadata,
+    useQuestionMetadata
+} from './helpers/other'
 import { getDefaultState, useChartState } from './helpers/chartState'
 import { ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
 import { useEntities } from 'core/helpers/entities'
 import { FacetTitle } from '../common2/FacetTitle'
 import { getQuestionOptions } from './helpers/options'
 import { useColorScale } from '../common2/helpers/colors'
-import { HorizontalBarChartState } from './types'
+import { HorizontalBarChartState, HorizontalBarViews } from './types'
 import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
 import { HorizontalBarSerie } from './HorizontalBarSerie'
@@ -36,13 +41,20 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 
     const chartState = useChartState(getDefaultState({ facetQuestion, block }))
 
+    const seriesMetadata = getSeriesMetadata({
+        series,
+        block,
+        chartState
+    })
+
     const commonProps: CommonProps<HorizontalBarChartState> = {
         variant,
         question,
         series,
         pageContext,
         chartState,
-        block
+        block,
+        seriesMetadata
     }
 
     // figure out if all series are sorted by options
