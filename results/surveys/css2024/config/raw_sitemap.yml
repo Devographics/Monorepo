@@ -116,6 +116,11 @@
               parameters:
                   sort: { property: options }
 
+      - id: augustin_mauroy
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/:has
+
       - id: company_size
         template: multiple_options2
         variants:
@@ -128,6 +133,29 @@
 
       - id: yearly_salary
         template: multiple_options2
+        variants:
+            - id: yearly_salary_us_vs_world
+              fieldId: yearly_salary
+              tabId: tabs.usa_vs_the_world
+              blockType: HorizontalBarBlock2
+              query: currentEditionData
+              filtersState:
+                  options:
+                      mode: grid
+                      showDefaultSeries: false
+                  filters:
+                      - year: 2024
+                        conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: in
+                              value: [USA]
+                      - year: 2024
+                        conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value: [USA]
 
       - id: higher_education_degree
         template: multiple_options2
@@ -135,6 +163,11 @@
             - template: vs_salary
               parameters:
                   sort: { property: options }
+
+      - id: lea_verou
+        template: picks
+        variables:
+            url: https://developer.chrome.com/docs/css-ui/style-queries
 
       - id: gender
         template: multiple_options2
@@ -169,6 +202,8 @@
         template: multiple_options2_freeform
         parameters:
             limit: 20
+        queryOptions:
+            addQuestionComments: false
 
       - id: user_info_resources
         items: [fm-javascript-first-steps, fm-getting-a-job-v2]
@@ -204,12 +239,18 @@
       # - id: knowledge_score
       #   template: demographics
 
+      - id: chris_coyier
+        template: picks
+        variables:
+            url: https://web.dev/
+
       - id: reading_list
         template: multiple_options2
         parameters:
             limit: 20
         queryOptions:
             sectionId: reading_list
+            addQuestionComments: false
         chartOptions:
             dataFilters: [removeOverLimit, removeNoAnswer]
             limit: 10
@@ -233,6 +274,11 @@
       - id: css_in_js
         template: multiple_options2_combined
         i18nNamespace: tools
+
+      - id: temani_afif
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/@property
 
       - id: pre_post_processors
         template: multiple_options2_combined
@@ -262,6 +308,11 @@
       - id: what_do_you_use_css_for
         template: multiple_options2_combined
 
+      - id: adam_argyle
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/blog/custom-easing-in-css-with-linear/
+
       - id: industry_sector
         template: multiple_options2_combined
 
@@ -276,6 +327,11 @@
 
       - id: css_interoperability_features
         template: multiple_options2_freeform
+
+      - id: andy_bell
+        template: picks
+        variables:
+            url: https://polypane.app/blog/getting-stuck-all-the-ways-position-sticky-can-fail/
 
       - id: css_missing_features
         template: multiple_options2_freeform
@@ -311,6 +367,11 @@
       - id: courses
         template: multiple_options2_freeform
 
+      - id: miguel_angel_duran
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/@view-transition
+
       - id: podcasts
         template: multiple_options2_freeform
 
@@ -319,6 +380,11 @@
 
       - id: people
         template: multiple_options2_freeform
+
+      - id: sacha_greif
+        template: picks
+        variables:
+            url: https://www.sarasoueidan.com/
 
       - id: other_surveys
         template: multiple_options2_combined

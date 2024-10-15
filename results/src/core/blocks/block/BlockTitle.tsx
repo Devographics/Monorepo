@@ -6,13 +6,12 @@ import { mq, spacing, fontSize, secondaryFontMixin } from 'core/theme'
 import { useI18n } from '@devographics/react-i18n'
 import { usePageContext } from 'core/helpers/pageContext'
 import SharePermalink from 'core/share/SharePermalink'
-import BlockCompletionIndicator from 'core/blocks/block/BlockCompletionIndicator'
 import { getBlockKey, getBlockTitle, useBlockTitle } from 'core/helpers/blockHelpers'
 import BlockSponsor from 'core/blocks/block/sponsor_chart/BlockSponsor'
 import { useEntities } from 'core/helpers/entities'
 import { BlockVariantDefinition } from 'core/types'
-import { BlockQuestionTooltip } from './BlockQuestion'
-import { FreeformIndicator } from 'core/charts/common2'
+import { getBlockSeriesData } from 'core/helpers/data'
+import { Comments } from 'core/charts/common2/Comments'
 
 const BlockTitleContents = ({ block }: { block: BlockVariantDefinition }) => {
     const title = useBlockTitle({ block })
@@ -68,10 +67,13 @@ const BlockTitle = ({
     }
     const isFreeformQuestion = ['multiple_options2_freeform'].includes(block.template)
 
+    const firstVariantData = getBlockSeriesData({ block, pageContext })[0].data
+    const commentsCount = firstVariantData?.comments?.currentEdition?.count
+
     return (
         <>
             <StyledBlockTitle isCapturing={isCapturing} className="Block__Title">
-                <LeftPart>
+                <LeftPart_>
                     <BlockTitleText className="BlockTitleText">
                         <SharePermalink block={block} />
                         <div className="block-title-contents" data-key={getBlockKey({ block })}>
@@ -96,11 +98,16 @@ const BlockTitle = ({
                         <BlockTitleActions {...properties} />
                     </BlockTitleActionsWrapper> */}
                     {/* {entity && !isCapturing && <BlockLinks entity={entity} />} */}
-                </LeftPart>
+                </LeftPart_>
                 {/* <BlockTitleSwitcherWrapper>
                     <BlockTitleSwitcher {...properties} />
                     {closeComponent}
                 </BlockTitleSwitcherWrapper> */}
+                <RightPart_>
+                    {!!commentsCount && (
+                        <Comments questionId={block.id} commentsCount={commentsCount} />
+                    )}
+                </RightPart_>
             </StyledBlockTitle>
             {/* {showDescription && <BlockDescriptionContents block={block} context={context} />} */}
         </>
@@ -120,6 +127,7 @@ const StyledBlockTitle = styled.div`
         `}
     display: flex;
     align-items: center;
+    justify-content: space-between;
     /* .Block__Title__Share {
         margin-left: ${spacing(0.5)};
     } */
@@ -161,7 +169,7 @@ const BlockTitleText = styled.h3`
     }
 `
 
-const LeftPart = styled.div`
+const LeftPart_ = styled.div`
     @media ${mq.small} {
     }
 
@@ -173,5 +181,7 @@ const LeftPart = styled.div`
         gap: ${spacing(0.5)};
     }
 `
+
+const RightPart_ = styled.div``
 
 export default memo(BlockTitle)

@@ -10,28 +10,35 @@ import { CombinedItem } from '../multiItemsExperience/types'
 import { useAllQuestionsMetadata } from '../horizontalBar2/helpers/other'
 import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
+import { Entity } from '@devographics/types'
+import { getQuestionLabel } from './helpers/labels'
 
-export const Comments = ({ item }: { item: CombinedItem }) => {
+export const Comments = ({
+    questionId,
+    commentsCount,
+    entity
+}: {
+    questionId: string
+    commentsCount: number
+    entity?: Entity
+}) => {
     const { getString } = useI18n()
     const pageContext = usePageContext()
 
-    const { id: questionId, commentsCount } = item
     const allQuestions = useAllQuestionsMetadata()
     const question = allQuestions.find(q => q.id === questionId)
 
+    if (!question) {
+        return null
+    }
+
     const surveyId = pageContext.currentSurvey.id
     const editionId = pageContext.currentEdition.id
-    const sectionId = question?.sectionId
+    const sectionId = question.sectionId
     const queryOptions = { surveyId, editionId, sectionId, questionId }
     const i18nNamespace = sectionId
 
-    const label = getItemLabel({
-        id: questionId,
-        entity: item.entity,
-        getString,
-        i18nNamespace
-    })
-
+    const label = getQuestionLabel({ question, getString, i18nNamespace })
     const commentLabel = getString('comments.comments_for', { values: { name: label.label } })?.t
 
     return (

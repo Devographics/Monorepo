@@ -8,7 +8,6 @@ queryOptions:
     addRatios: true # necessary to automatically enable _sentiment facet
     addQuestionEntity: true
     allEditions: false
-    addQuestionComments: true
 parameters:
     cutoffPercent: 0
     facetCutoffPercent: 0

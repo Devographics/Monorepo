@@ -6,4 +6,3 @@ query: allEditionsData
 parameters: { showNoAnswer: true }
 queryOptions:
     addQuestionEntity: true
-    addQuestionComments: true

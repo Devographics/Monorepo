@@ -38,7 +38,11 @@ export const Row = (props: {
             rowMetadata={
                 <>
                     <RespondentCount count={bucket.count} />
-                    <Comments item={item} count={99} />
+                    <Comments
+                        questionId={item.id}
+                        entity={item.entity}
+                        commentsCount={item.commentsCount}
+                    />
                 </>
             }
         >

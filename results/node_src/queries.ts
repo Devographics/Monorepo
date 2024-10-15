@@ -350,7 +350,7 @@ export const getDefaultQuery = ({
         addArgumentsPlaceholder = false,
         addBucketFacetsPlaceholder = false,
         addQuestionEntity = false,
-        addQuestionComments = false,
+        addQuestionComments = true,
         addGroupedBuckets = false
     } = queryOptions
 

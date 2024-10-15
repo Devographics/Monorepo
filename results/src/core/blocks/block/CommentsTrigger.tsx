@@ -151,62 +151,67 @@ const Comments = ({ comments, name }: { comments: Comment[]; name: string }) => 
     if (sentimentFilter) {
         filteredComments = filteredComments.filter(c => c.sentiment === sentimentFilter)
     }
+    const hasFilters = experienceFilter || sentimentFilter
     return (
         <div>
-            <div className="comments-header">
-                <div className="comments-filter">
-                    <T k="comments.filter.experience" />
-                    <ButtonGroup>
-                        <Button
-                            size="small"
-                            className={experienceFilter ? '' : 'Button--selected'}
-                            onClick={() => {
-                                setExperienceFilter(null)
-                            }}
-                        >
-                            <T k="comments.filter.all" />
-                        </Button>
-                        {Object.values(FeaturesOptions).map(option => (
+            {hasFilters && (
+                <div className="comments-header">
+                    <div className="comments-filter">
+                        <T k="comments.filter.experience" />
+                        <ButtonGroup>
                             <Button
                                 size="small"
-                                className={experienceFilter === option ? 'Button--selected' : ''}
-                                key={option}
+                                className={experienceFilter ? '' : 'Button--selected'}
                                 onClick={() => {
-                                    setExperienceFilter(option)
+                                    setExperienceFilter(null)
                                 }}
                             >
-                                <T k={`options.features.${option}.label.short`} />
+                                <T k="comments.filter.all" />
                             </Button>
-                        ))}
-                    </ButtonGroup>
-                </div>
-                <div className="comments-filter">
-                    <T k="comments.filter.sentiment" />
-                    <ButtonGroup>
-                        <Button
-                            size="small"
-                            className={sentimentFilter ? '' : 'Button--selected'}
-                            onClick={() => {
-                                setSentimentFilter(null)
-                            }}
-                        >
-                            <T k="comments.filter.all" />
-                        </Button>
-                        {Object.values(SimplifiedSentimentOptions).map(option => (
+                            {Object.values(FeaturesOptions).map(option => (
+                                <Button
+                                    size="small"
+                                    className={
+                                        experienceFilter === option ? 'Button--selected' : ''
+                                    }
+                                    key={option}
+                                    onClick={() => {
+                                        setExperienceFilter(option)
+                                    }}
+                                >
+                                    <T k={`options.features.${option}.label.short`} />
+                                </Button>
+                            ))}
+                        </ButtonGroup>
+                    </div>
+                    <div className="comments-filter">
+                        <T k="comments.filter.sentiment" />
+                        <ButtonGroup>
                             <Button
                                 size="small"
-                                className={sentimentFilter === option ? 'Button--selected' : ''}
-                                key={option}
+                                className={sentimentFilter ? '' : 'Button--selected'}
                                 onClick={() => {
-                                    setSentimentFilter(option)
+                                    setSentimentFilter(null)
                                 }}
                             >
-                                <T k={`options.sentiment.${option}.label.short`} />
+                                <T k="comments.filter.all" />
                             </Button>
-                        ))}
-                    </ButtonGroup>
+                            {Object.values(SimplifiedSentimentOptions).map(option => (
+                                <Button
+                                    size="small"
+                                    className={sentimentFilter === option ? 'Button--selected' : ''}
+                                    key={option}
+                                    onClick={() => {
+                                        setSentimentFilter(option)
+                                    }}
+                                >
+                                    <T k={`options.sentiment.${option}.label.short`} />
+                                </Button>
+                            ))}
+                        </ButtonGroup>
+                    </div>
                 </div>
-            </div>
+            )}
             <CommentsList>
                 {filteredComments?.map((comment, i) => (
                     <CommentItem key={i} index={i} {...comment} name={name} />
@@ -279,12 +284,14 @@ const CommentItem = ({
                 <CommentMessage>{message}</CommentMessage>
             </CommentMessageWrapper>
             <CommentFooter_>
-                <CommentResponse_>
-                    <ExperienceItem experience={experience} />
-                    {sentiment !== 'neutral' && (
-                        <SentimentItem experience={experience} sentiment={sentiment} />
-                    )}
-                </CommentResponse_>
+                {experience && (
+                    <CommentResponse_>
+                        <ExperienceItem experience={experience} />
+                        {sentiment && sentiment !== 'neutral' && (
+                            <SentimentItem experience={experience} sentiment={sentiment} />
+                        )}
+                    </CommentResponse_>
+                )}
                 <CommentReportLink href={getCommentReportUrl({ responseId, message, name })}>
                     <T k="comments.report_abuse" />
                 </CommentReportLink>
