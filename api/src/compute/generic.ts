@@ -349,12 +349,13 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         )
     }
 
+    const surveyId = survey.id
     let match: any = {
-        surveyId: survey.id,
+        surveyId,
         [dbPath]: { $nin: [null, '', [], {}] }
     }
     if (filters) {
-        const filtersQuery = await runStage(generateFiltersQuery, [{ filters, dbPath }])
+        const filtersQuery = await runStage(generateFiltersQuery, [{ filters, dbPath, surveyId }])
         match = { ...match, ...filtersQuery }
     }
     if (selectedEditionId) {

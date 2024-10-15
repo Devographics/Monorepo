@@ -63,7 +63,7 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
     }
 
     if (filters) {
-        const filtersQuery = await generateFiltersQuery({ filters, dbPath: axis1DbPath })
+        const filtersQuery = await generateFiltersQuery({ filters, dbPath: axis1DbPath, surveyId })
         match = { ...match, ...filtersQuery }
     }
 
