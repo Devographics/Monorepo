@@ -14,7 +14,7 @@ import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 import { DeleteIcon, PlusIcon } from 'core/icons'
 import { Input_, Label_, Select_ } from './FieldSegment'
-import { OptionMetadata } from '@devographics/types'
+import { OptionGroup, OptionMetadata } from '@devographics/types'
 import Button from 'core/components/Button'
 
 interface ValueSegmentProps<T> {
@@ -68,6 +68,8 @@ const ValueSegmentField = ({
                 <Select_
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const value = e.target.value
+                        console.log(value)
+
                         setFiltersState(fState => {
                             const newState = cloneDeep(fState)
                             newState.filters[seriesIndex].conditions[conditionIndex].value = value
@@ -125,6 +127,7 @@ const ValueSegmentArray = ({
 }: ValueSegmentArrayProps) => {
     const { setFiltersState } = stateStuff
     const { getString } = useI18n()
+    const groupsOrOptions = field.groups || (field.options as Array<OptionGroup | OptionMetadata>)
 
     const handleDeleteValue = (valueIndex: number) => {
         setFiltersState(fState => {
@@ -140,7 +143,8 @@ const ValueSegmentArray = ({
         setFiltersState(fState => {
             const newState = cloneDeep(fState)
             const currentValue = newState.filters[seriesIndex].conditions[conditionIndex].value
-            const newValue = options.find(({ id }) => !value.includes(id))?.id as FilterValueString
+            const newValue = groupsOrOptions.find(({ id }) => !value.includes(id))
+                ?.id as FilterValueString
             newState.filters[seriesIndex].conditions[conditionIndex].value = [
                 ...currentValue,
                 newValue
@@ -148,8 +152,8 @@ const ValueSegmentArray = ({
             return newState
         })
     }
-    const groupsOrOptions = field.groups || field.options
 
+    const canDeleteValue = value.length > 1
     const canAddNewValue = groupsOrOptions.length > value.length
 
     return (
@@ -161,6 +165,8 @@ const ValueSegmentArray = ({
                         <Select_
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 const value = e.target.value
+                                console.log(value)
+
                                 setFiltersState(fState => {
                                     const newState = cloneDeep(fState)
                                     const currentValueArray = newState.filters[seriesIndex]
@@ -189,13 +195,15 @@ const ValueSegmentArray = ({
                         </Select_>
                     </Label_>
 
-                    <DeleteValue_
-                        onClick={() => {
-                            handleDeleteValue(valueIndex)
-                        }}
-                    >
-                        <DeleteIcon labelId="filters.value.delete" />
-                    </DeleteValue_>
+                    {canDeleteValue && (
+                        <DeleteValue_
+                            onClick={() => {
+                                handleDeleteValue(valueIndex)
+                            }}
+                        >
+                            <DeleteIcon labelId="filters.value.delete" />
+                        </DeleteValue_>
+                    )}
                 </Value_>
             ))}
             {canAddNewValue && (
