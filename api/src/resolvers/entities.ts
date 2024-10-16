@@ -7,6 +7,7 @@ import { getEntity } from '../load/entities'
 import compact from 'lodash/compact.js'
 import { getEntities } from '../load/entities'
 import { loadOrGetParsedSurveys } from '../load/surveys'
+import { features } from 'web-features'
 
 // const getSimulatedGithub = (id: string): GitHub | null => {
 //     const project = projects.find((p: Entity) => p.id === id)
@@ -204,6 +205,12 @@ export const entityResolverMap: EntityResolverMap = {
         } else {
             return
         }
+    },
+    webFeature: async (entity: Entity) => {
+        if (!entity.webFeaturesId) {
+            return
+        }
+        return features[entity.webFeaturesId]
     },
     appearsIn: async (entity: Entity) => {
         const { id } = entity
