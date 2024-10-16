@@ -105,7 +105,11 @@ const BlockTitle = ({
                 </BlockTitleSwitcherWrapper> */}
                 <RightPart_>
                     {!!commentsCount && (
-                        <Comments questionId={block.id} commentsCount={commentsCount} />
+                        <Comments
+                            block={block}
+                            questionId={block.id}
+                            commentsCount={commentsCount}
+                        />
                     )}
                 </RightPart_>
             </StyledBlockTitle>

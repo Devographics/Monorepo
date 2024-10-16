@@ -12,12 +12,15 @@ import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
 import { Entity } from '@devographics/types'
 import { getQuestionLabel } from './helpers/labels'
+import { BlockVariantDefinition } from 'core/types'
 
 export const Comments = ({
+    block,
     questionId,
     commentsCount,
     entity
 }: {
+    block: BlockVariantDefinition
     questionId: string
     commentsCount: number
     entity?: Entity
@@ -36,7 +39,7 @@ export const Comments = ({
     const editionId = pageContext.currentEdition.id
     const sectionId = question.sectionId
     const queryOptions = { surveyId, editionId, sectionId, questionId }
-    const i18nNamespace = sectionId
+    const i18nNamespace = block.i18nNamespace || sectionId
 
     const label = getQuestionLabel({ question, getString, i18nNamespace })
     const commentLabel = getString('comments.comments_for', { values: { name: label.label } })?.t
