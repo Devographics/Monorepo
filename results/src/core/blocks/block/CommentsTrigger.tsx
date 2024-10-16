@@ -62,6 +62,9 @@ query ${getQueryName({ editionId, questionId })} {
 }`
 }
 
+/**
+ * @deprecated only used by old chart layout
+ */
 const CommentsTrigger = ({
     block,
     originalData = {}
@@ -77,6 +80,7 @@ const CommentsTrigger = ({
     const sectionId = pageContext.id
     const questionId = block.id
     const queryOptions = { surveyId, editionId, sectionId, questionId }
+    const hasFilters = true
     return (
         <ModalTrigger
             trigger={
@@ -86,17 +90,19 @@ const CommentsTrigger = ({
                 </span>
             }
         >
-            <CommentsWrapper queryOptions={queryOptions} name={title} />
+            <CommentsWrapper queryOptions={queryOptions} name={title} hasFilters={hasFilters} />
         </ModalTrigger>
     )
 }
 
 export const CommentsWrapper = ({
     queryOptions,
-    name
+    name,
+    hasFilters
 }: {
     queryOptions: GetQueryProps
     name: string
+    hasFilters: boolean
 }) => {
     const [data, setData] = useState<Comment[]>([])
     const [isLoading, setIsLoading] = useState(false)
@@ -135,12 +141,26 @@ export const CommentsWrapper = ({
             <p>
                 <T k="comments.description" />
             </p>
-            <div>{isLoading ? <div>Loading…</div> : <Comments comments={data} name={name} />}</div>
+            <div>
+                {isLoading ? (
+                    <div>Loading…</div>
+                ) : (
+                    <Comments comments={data} name={name} hasFilters={hasFilters} />
+                )}
+            </div>
         </div>
     )
 }
 
-const Comments = ({ comments, name }: { comments: Comment[]; name: string }) => {
+const Comments = ({
+    comments,
+    name,
+    hasFilters
+}: {
+    comments: Comment[]
+    name: string
+    hasFilters: boolean
+}) => {
     const [experienceFilter, setExperienceFilter] = useState<FeaturesOptions | null>(null)
     const [sentimentFilter, setSentimentFilter] = useState<SimplifiedSentimentOptions | null>(null)
 
@@ -151,7 +171,6 @@ const Comments = ({ comments, name }: { comments: Comment[]; name: string }) => 
     if (sentimentFilter) {
         filteredComments = filteredComments.filter(c => c.sentiment === sentimentFilter)
     }
-    const hasFilters = experienceFilter || sentimentFilter
     return (
         <div>
             {hasFilters && (
@@ -250,16 +269,10 @@ const ExperienceItem = ({ experience }: { experience: FeaturesOptions }) => {
     )
 }
 
-const SentimentItem = ({
-    experience,
-    sentiment
-}: {
-    experience: FeaturesOptions
-    sentiment: SimplifiedSentimentOptions
-}) => {
+const SentimentItem = ({ sentiment }: { sentiment: SimplifiedSentimentOptions }) => {
     const theme = useTheme()
 
-    const sentimentKey = getSentimentKey(experience, sentiment)
+    const sentimentKey = getSentimentKey(sentiment)
     const style = { '--color': theme?.colors?.ranges?.sentiment?.[sentiment]?.[0] }
     return (
         <span style={style} className={`sentiment-item sentiment-item-${sentiment}`}>
@@ -288,7 +301,7 @@ const CommentItem = ({
                     <CommentResponse_>
                         <ExperienceItem experience={experience} />
                         {sentiment && sentiment !== 'neutral' && (
-                            <SentimentItem experience={experience} sentiment={sentiment} />
+                            <SentimentItem sentiment={sentiment} />
                         )}
                     </CommentResponse_>
                 )}

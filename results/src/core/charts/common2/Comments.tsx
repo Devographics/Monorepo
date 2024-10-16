@@ -41,6 +41,8 @@ export const Comments = ({
     const label = getQuestionLabel({ question, getString, i18nNamespace })
     const commentLabel = getString('comments.comments_for', { values: { name: label.label } })?.t
 
+    // TODO: find a better way to do this; or dynamically adapt filters to question
+    const hasFilters = ['featurev3', 'toolv3'].includes(question.template)
     return (
         <ModalTrigger
             trigger={
@@ -63,7 +65,11 @@ export const Comments = ({
                 </div>
             }
         >
-            <CommentsWrapper queryOptions={queryOptions} name={label.label} />
+            <CommentsWrapper
+                queryOptions={queryOptions}
+                name={label.label}
+                hasFilters={hasFilters}
+            />
         </ModalTrigger>
     )
 }
