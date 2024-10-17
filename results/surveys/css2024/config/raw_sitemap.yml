@@ -342,6 +342,11 @@
       - id: favorite_new_features
         template: multiple_options2_freeform
 
+      - id: ahmad_shadeed
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll-driven_animations
+
       - id: state_of_the_web_happiness
         template: happiness2
         i18nNamespace: usage
@@ -449,8 +454,8 @@
       - id: conclusion
         template: conclusion
         variables:
-            author: chen_hui_jing
-            entities: '"chen_hui_jing"'
+            author: ahmad_shadeed
+            entities: '"ahmad_shadeed"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock
