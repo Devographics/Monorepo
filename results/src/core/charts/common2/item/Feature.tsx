@@ -60,7 +60,7 @@ const WebFeatureData = ({ data }: { data: WebFeature }) => {
                     <Browser key={id} id={id} icon={icon} support={data?.status?.support?.[id]} />
                 ))}
             </div>
-            <a href="https://web.dev/baseline">
+            <a href="https://web-platform-dx.github.io/web-features/">
                 <T k="baseline.learn_more" />
             </a>
         </div>

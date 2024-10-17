@@ -206,7 +206,7 @@
             addQuestionComments: false
 
       - id: user_info_resources
-        items: [fm-javascript-first-steps, fm-getting-a-job-v2]
+        items: [fm-learncss]
         template: recommended_resources
 
 - id: features
@@ -256,7 +256,7 @@
             limit: 10
 
       - id: features_resources
-        items: [fm-learncss]
+        items: [fm-cssvariables, fm-accessibility]
         template: recommended_resources
 
 - id: other_tools
@@ -291,6 +291,10 @@
       - id: browsers
         template: multiple_options2_combined
         i18nNamespace: tools
+
+      - id: other_tools_resources
+        items: [fm-gridsflexbox, fm-practicallayouts]
+        template: recommended_resources
 
 - id: usage
   descriptionId: sections.usage.description.css2024
@@ -355,8 +359,8 @@
         template: happiness2
         i18nNamespace: usage
 
-      - id: features_resources
-        items: [fm-learncss]
+      - id: usage_resources
+        items: [fm-svg, fm-design-developers]
         template: recommended_resources
 
 - id: resources
@@ -394,8 +398,8 @@
       - id: other_surveys
         template: multiple_options2_combined
 
-      - id: features_resources
-        items: [fm-learncss]
+      - id: resources_resources
+        items: [fm-animations-transitions, fm-typography]
         template: recommended_resources
 
 - id: awards
