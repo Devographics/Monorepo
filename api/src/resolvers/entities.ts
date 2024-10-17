@@ -210,7 +210,14 @@ export const entityResolverMap: EntityResolverMap = {
         if (!entity.webFeaturesId) {
             return
         }
-        return features[entity.webFeaturesId]
+        const webFeatureData = features[entity.webFeaturesId]
+        if (webFeatureData) {
+            const specArray = Array.isArray(webFeatureData.spec)
+                ? webFeatureData.spec
+                : [webFeatureData.spec]
+            const data = { ...webFeatureData, spec: specArray, id: entity.webFeaturesId }
+            return data
+        }
     },
     appearsIn: async (entity: Entity) => {
         const { id } = entity

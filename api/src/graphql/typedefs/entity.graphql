@@ -198,7 +198,7 @@ type WebFeature {
     description_html: String
     group: String
     name: String
-    spec: String
+    spec: [String]
     status: WebFeatureStatus
 }
 
