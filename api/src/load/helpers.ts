@@ -33,6 +33,10 @@ export const getEntitiesFromYaml = ({
         const entities: Entity[] = yamlContents.map(entity => {
             // merge tagsToAdd and entity's own tags property and keep unique tags
             const tags = uniq([...tagsToAdd, ...(entity.tags || [])])
+            if (entity.webFeaturesId) {
+                // special tag to denote if entity has a webFeatureId
+                tags.push('has_web_features_id')
+            }
             const isToken = tagsToAdd.includes('tokens')
             return {
                 normalizationOnly: isToken,
