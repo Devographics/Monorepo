@@ -115,20 +115,24 @@ export interface WebFeature {
     description_html: string
     group: string
     name: string
-    spec: string
-    status: {
-        baseline: string
-        baseline_low_date: string
-        support: {
-            chrome: string
-            chrome_android: string
-            edge: string
-            firefox: string
-            firefox_android: string
-            safari: string
-            safari_ios: string
-        }
-    }
+    spec: string[]
+    status: WebFeatureStatus
+}
+
+export interface WebFeatureStatus {
+    baseline: string
+    baseline_low_date: string
+    support: WebFeatureSupport
+}
+
+export interface WebFeatureSupport {
+    chrome: string
+    chrome_android: string
+    edge: string
+    firefox: string
+    firefox_android: string
+    safari: string
+    safari_ios: string
 }
 
 export interface Example {
