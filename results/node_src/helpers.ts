@@ -362,6 +362,8 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                     newQueryFormatted = print(ast, { preserveComments: true })
                 } catch (error) {
                     console.warn(error)
+                    console.log('⚠️ Detected issue in follwing query: ')
+                    console.log(newQuery)
                 }
 
                 const queryHasChanged = newQueryFormatted !== existingQueryFormatted

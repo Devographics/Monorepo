@@ -492,6 +492,9 @@ importers:
       babel-plugin-styled-components:
         specifier: ^1.13.3
         version: 1.13.3(styled-components@5.3.11)
+      baseline-status:
+        specifier: ^1.0.7
+        version: 1.0.7
       bowser:
         specifier: 2.11.0
         version: 2.11.0
@@ -10098,6 +10101,22 @@ packages:
     resolution: {integrity: sha512-Wst46p51km8gH0ZUmeNrtpRYmdlRHUpN1DQd3GFAyKANi8WVz8c2jHYTf1CVScFaCjQw1iO3ZZdqGDxQPRErTg==}
     dependencies:
       '@lezer/common': 1.2.1
+    dev: false
+
+  /@lit-labs/ssr-dom-shim@1.2.1:
+    resolution: {integrity: sha512-wx4aBmgeGvFmOKucFKY+8VFJSYZxs9poN3SDNQFF6lT6NrQUnHiPB2PWz2sc4ieEcAaYYzN+1uWahEeTq2aRIQ==}
+    dev: false
+
+  /@lit/reactive-element@2.0.4:
+    resolution: {integrity: sha512-GFn91inaUa2oHLak8awSIigYz0cU0Payr1rcFsrkf5OJ5eSPxElyZfKh0f2p9FsTiZWXQdWGJeXZICEfXXYSXQ==}
+    dependencies:
+      '@lit-labs/ssr-dom-shim': 1.2.1
+    dev: false
+
+  /@lit/task@1.0.1:
+    resolution: {integrity: sha512-fVLDtmwCau8NywnFIXaJxsCZjzaIxnVq+cFRKYC1Y4tA4/0rMTvF6DLZZ2JE51BwzOluaKtgJX8x1QDsQtAaIw==}
+    dependencies:
+      '@lit/reactive-element': 2.0.4
     dev: false
 
   /@lmdb/lmdb-darwin-arm64@2.5.2:
@@ -21014,6 +21033,13 @@ packages:
     engines: {node: ^4.5.0 || >= 5.9}
     dev: false
 
+  /baseline-status@1.0.7:
+    resolution: {integrity: sha512-yrCfbacroXOD1rmAbQkcGUqqQsFLx7nDEbXHo3iX0jCIfWJCpLLkvZCCFuwose/CN8KgSpqHBf++MjoseTFqGA==}
+    dependencies:
+      '@lit/task': 1.0.1
+      lit: 3.2.1
+    dev: false
+
   /basic-auth@2.0.1:
     resolution: {integrity: sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==}
     engines: {node: '>= 0.8'}
@@ -31021,6 +31047,28 @@ packages:
     resolution: {integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==}
     dependencies:
       uc.micro: 2.1.0
+    dev: false
+
+  /lit-element@4.1.1:
+    resolution: {integrity: sha512-HO9Tkkh34QkTeUmEdNYhMT8hzLid7YlMlATSi1q4q17HE5d9mrrEHJ/o8O2D0cMi182zK1F3v7x0PWFjrhXFew==}
+    dependencies:
+      '@lit-labs/ssr-dom-shim': 1.2.1
+      '@lit/reactive-element': 2.0.4
+      lit-html: 3.2.1
+    dev: false
+
+  /lit-html@3.2.1:
+    resolution: {integrity: sha512-qI/3lziaPMSKsrwlxH/xMgikhQ0EGOX2ICU73Bi/YHFvz2j/yMCIrw4+puF2IpQ4+upd3EWbvnHM9+PnJn48YA==}
+    dependencies:
+      '@types/trusted-types': 2.0.4
+    dev: false
+
+  /lit@3.2.1:
+    resolution: {integrity: sha512-1BBa1E/z0O9ye5fZprPtdqnc0BFzxIxTTOO/tQFmyC/hj1O3jL4TfmLBw0WEwjAokdLwpclkvGgDJwTIh0/22w==}
+    dependencies:
+      '@lit/reactive-element': 2.0.4
+      lit-element: 4.1.1
+      lit-html: 3.2.1
     dev: false
 
   /lmdb@2.5.2:
