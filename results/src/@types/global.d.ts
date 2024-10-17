@@ -15,9 +15,3 @@ declare module 'Theme/*' {
 declare module 'Config/*' {
     export default any
 }
-
-declare namespace JSX {
-    interface IntrinsicElements {
-        'baseline-status': any // You can specify stricter types here
-    }
-}
