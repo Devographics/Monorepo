@@ -44,7 +44,7 @@ const MainLayout = ({
                         </MenuToggle>
                         <Sidebar showSidebar={showSidebar} closeSidebar={closeSidebar} />
                     </Header_>
-                    <PageContent className="PageContent">
+                    <PageContent className="PageContent" id="pageContent">
                         <PaginationWrapper>
                             {showPagination && <Pagination /*position="top"*/ />}
                         </PaginationWrapper>
@@ -66,6 +66,9 @@ const MainLayout_ = styled.div`
     grid-template-rows: min-content minmax(0, 1fr);
     grid-template-areas: 'banner' 'content';
     height: 100vh;
+    @media ${mq.large} {
+        overflow: hidden;
+    }
 `
 
 const Header_ = styled.header``

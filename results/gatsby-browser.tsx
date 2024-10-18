@@ -23,3 +23,8 @@ import LayoutWrapper from './src/core/layout/LayoutWrapper'
 export const wrapPageElement = ({ element, props }) => {
     return <LayoutWrapper {...props}>{element}</LayoutWrapper>
 }
+
+export const onRouteUpdate = ({ location, prevLocation }) => {
+    const pageContent = document.getElementById('pageContent')
+    pageContent.scrollTop = 0
+}
