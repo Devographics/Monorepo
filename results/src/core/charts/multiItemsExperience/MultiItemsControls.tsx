@@ -7,6 +7,7 @@ import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { ColumnModes } from '../common2/types'
 import { sortOptions } from './MultiItemsBlock'
+import { Toggle } from '../common2'
 
 const icons = {
     [ColumnModes.SPLIT]: SplitIcon,
@@ -21,31 +22,32 @@ export const MultiItemsExperienceControls = ({
     const { getString } = useI18n()
     const { grouping, setGrouping, sort, setSort, order, setOrder, columnMode, setColumnMode } =
         chartState
+    const items = Object.values(GroupingOptions).map(id => {
+        const label = getString(`charts.group.${id}`)?.t
+        const isEnabled = grouping === id
+        return {
+            id,
+            label,
+            isEnabled,
+            tooltip: (
+                <T
+                    k={isEnabled ? 'charts.grouped_by_group' : 'charts.group_by_group'}
+                    values={{ group: label }}
+                    md={true}
+                />
+            )
+        }
+    })
     return (
         <div className="multiexp-controls">
             <div className="multiexp-control multiexp-control-grouping">
-                <h4 className="chart-legend-heading">
-                    <T k="charts.group_by" />
-                </h4>
-                <ButtonGroup>
-                    {Object.values(GroupingOptions).map(id => {
-                        const isChecked = grouping === id
-                        return (
-                            <Button
-                                key={id}
-                                size="small"
-                                className={`Button--${isChecked ? 'selected' : 'unselected'}`}
-                                onClick={() => {
-                                    setGrouping(id)
-                                    // setSort(sortOptions[id][0])
-                                }}
-                                aria-pressed={isChecked}
-                            >
-                                <T k={`charts.group.${id}`} />
-                            </Button>
-                        )
-                    })}
-                </ButtonGroup>
+                <Toggle
+                    labelId="charts.group_by"
+                    handleSelect={(id: string) => {
+                        setGrouping(id as GroupingOptions)
+                    }}
+                    items={items}
+                />
             </div>
 
             {false && (

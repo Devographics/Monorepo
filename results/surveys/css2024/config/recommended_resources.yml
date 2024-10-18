@@ -37,12 +37,11 @@
   teacher: Jen Kramer
   # company:
 
-- name: CSS Grid & Flexbox for Responsive Layouts, v2
+- name: Ultimate CSS Grid & Layout Techniques, v3
   id: fm-gridsflexbox
   description: |
-      Learn the essential CSS layout techniques for building responsive, beautiful web applications. 
-      You'll get hands-on practice using CSS Grid for two-dimensional, grid-based layouts and Flexbox for styling one-directional flow.
-  url: https://frontendmasters.com/courses/css-grid-flexbox-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
+      You’ll learn to achieve complex layouts with minimal code. You'll also explore advanced techniques like container queries for adaptive components and subgrids for nested layouts.
+  url: https://frontendmasters.com/courses/css-grid/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024&utm_content=textlink
   image: https://static.frontendmasters.com/assets/teachers/kramer/thumb@2x.webp
   teacher: Jen Kramer
   # company:
