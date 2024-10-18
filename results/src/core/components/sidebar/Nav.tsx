@@ -200,11 +200,13 @@ const InternalLinks_ = styled.div`
 `
 
 const InternalLinkWrapper_ = styled.div`
-    .internal-links-depth-0 & {
-        margin-left: ${spacing(1)};
-    }
-    .internal-links-depth-1 & {
-        margin-left: ${spacing(1.9)};
+    @media ${mq.large} {
+        .internal-links-depth-0 & {
+            margin-left: ${spacing(1)};
+        }
+        .internal-links-depth-1 & {
+            margin-left: ${spacing(1.9)};
+        }
     }
 `
 const InternalLink_ = styled.a`

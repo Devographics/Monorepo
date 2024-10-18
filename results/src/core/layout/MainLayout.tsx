@@ -7,7 +7,7 @@ import colors from 'core/theme/colors'
 import classNames from 'classnames'
 import Hamburger from 'core/components/Hamburger'
 import { useI18n } from '@devographics/react-i18n'
-// import SurveyBanner from 'core/components/SurveyBanner'
+import SurveyBanner from 'core/components/SurveyBanner'
 
 const MainLayout = ({
     context,
@@ -28,32 +28,46 @@ const MainLayout = ({
     return (
         <>
             <Skip href="#page-main">{getString('general.skip_to_content')?.t}</Skip>
-            {/* <SurveyBanner /> */}
-            <Page showSidebar={showSidebar}>
-                <header>
-                    <MenuToggle
-                        onClick={toggleSidebar}
-                        aria-haspopup="menu"
-                        aria-expanded={showSidebar}
-                    >
-                        <ScreenReadersHint>{getString('general.open_nav')?.t}</ScreenReadersHint>
-                        <Hamburger />
-                    </MenuToggle>
-                    <Sidebar showSidebar={showSidebar} closeSidebar={closeSidebar} />
-                </header>
-                <PageContent className="PageContent">
-                    <PaginationWrapper>
-                        {showPagination && <Pagination /*position="top"*/ />}
-                    </PaginationWrapper>
-                    <PageMain id="page-main">
-                        {/* <PageMetaDebug /> */}
-                        {children}
-                    </PageMain>
-                </PageContent>
-            </Page>
+            <MainLayout_>
+                <SurveyBanner />
+                <Page showSidebar={showSidebar}>
+                    <Header_>
+                        <MenuToggle
+                            onClick={toggleSidebar}
+                            aria-haspopup="menu"
+                            aria-expanded={showSidebar}
+                        >
+                            <ScreenReadersHint>
+                                {getString('general.open_nav')?.t}
+                            </ScreenReadersHint>
+                            <Hamburger />
+                        </MenuToggle>
+                        <Sidebar showSidebar={showSidebar} closeSidebar={closeSidebar} />
+                    </Header_>
+                    <PageContent className="PageContent">
+                        <PaginationWrapper>
+                            {showPagination && <Pagination /*position="top"*/ />}
+                        </PaginationWrapper>
+                        <PageMain id="page-main">
+                            {/* <PageMetaDebug /> */}
+                            {children}
+                        </PageMain>
+                    </PageContent>
+                </Page>
+            </MainLayout_>
         </>
     )
 }
+
+const MainLayout_ = styled.div`
+    /* display: flex; */
+    /* flex-direction: column; */
+    display: grid;
+    grid-template-rows: min-content minmax(0, 1fr);
+    height: 100vh;
+`
+
+const Header_ = styled.header``
 
 const ScreenReadersHint = styled.span`
     ${screenReadersOnlyMixin}
@@ -125,9 +139,13 @@ const MenuToggle = styled.button`
 const PageContent = styled.div`
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
+    /* height: 100vh; */
+    overscroll-behavior: contain;
 `
 
 const Page = styled.div`
+    flex: 1;
     @media ${mq.large} {
         display: grid;
         grid-template-columns: ${({ theme }) => theme.dimensions.sidebar.width}px calc(
@@ -139,7 +157,7 @@ const Page = styled.div`
         grid-template-columns: 5rem auto;
     }
 
-    min-height: 100vh;
+    /* min-height: 100vh; */
     position: relative;
 `
 

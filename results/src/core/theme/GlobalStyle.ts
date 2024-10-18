@@ -12,6 +12,7 @@ export const GlobalStyle = createGlobalStyle`
         padding: 0;
         font-feature-settings: 'liga' 0;
         line-height: 1.7;
+
         ${primaryFontMixin};
         
         @media ${mq.small} {
@@ -20,7 +21,7 @@ export const GlobalStyle = createGlobalStyle`
         
         @media ${mq.large} {
             font-size: ${props => props.theme.typography.rootSize.desktop};
-            min-height: 100vh;
+            /* min-height: 100vh; */
         }
     }
     
