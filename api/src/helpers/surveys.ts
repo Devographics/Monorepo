@@ -5,15 +5,27 @@ import {
     ResultsSubFieldEnum,
     SurveyMetadata
 } from '@devographics/types'
+import takeRight from 'lodash/takeRight.js'
 
-export const getPastEditions = ({
+// restrict aggregation to current and past editions, to avoid including results from the future
+// when regenerating older surveys
+// optionally also only keep n most recent editions
+export const getPastNEditions = ({
     survey,
-    edition
+    edition,
+    editionCount
 }: {
     survey: SurveyMetadata
     edition: EditionMetadata
+    editionCount?: number
 }) => {
-    return survey.editions.filter(e => new Date(e.startedAt) <= new Date(edition.startedAt))
+    let pastEditions = survey.editions.filter(
+        e => new Date(e.startedAt) <= new Date(edition.startedAt)
+    )
+    if (editionCount) {
+        pastEditions = takeRight(pastEditions, editionCount)
+    }
+    return pastEditions
 }
 
 /*

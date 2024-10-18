@@ -23,6 +23,7 @@ export interface GenericComputeArguments {
     parameters?: GenericComputeParameters
     facet?: string
     selectedEditionId?: string
+    editionCount?: number
     // indicate if this was a second execution of the generic function
     // triggered to fetch freeform data for the combined subfield
     executionContext: ExecutionContext

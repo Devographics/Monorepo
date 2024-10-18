@@ -29,7 +29,7 @@ export const generateResponsesType = ({
         path,
         typeName,
         typeDef: `type ${typeName} {
-    allEditions: [ResponseEditionData]
+    allEditions(editionCount: Int, editionId: AllEditionsID): [ResponseEditionData]
     currentEdition: ResponseEditionData
     rawData(token: String): [RawData]
 }`

@@ -51,7 +51,7 @@ import {
     ResultsSubFieldEnum,
     SortProperty
 } from '@devographics/types'
-import { getPastEditions } from '../helpers/surveys'
+import { getPastNEditions } from '../helpers/surveys'
 import { computeKey } from '../helpers/caching'
 import isEmpty from 'lodash/isEmpty.js'
 import { logToFile } from '@devographics/debug'
@@ -152,6 +152,7 @@ export const getGenericCacheKey = ({
     question,
     subField = ResultsSubFieldEnum.RESPONSES,
     selectedEditionId,
+    editionCount,
     parameters,
     filters,
     facet
@@ -160,6 +161,7 @@ export const getGenericCacheKey = ({
     question: QuestionApiObject
     subField: ResultsSubFieldEnum
     selectedEditionId: string
+    editionCount: number
     parameters?: ResponsesParameters
     filters?: Filters
     facet?: string
@@ -167,6 +169,7 @@ export const getGenericCacheKey = ({
     const cacheKeyOptions: any = {
         editionId: selectedEditionId || `allEditions(${edition.id})`,
         questionId: question.id,
+        editionCount,
         subField
     }
     if (!isEmpty(parameters)) {
@@ -223,6 +226,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         parameters = {},
         facet,
         selectedEditionId,
+        editionCount,
         executionContext = ExecutionContext.REGULAR
     } = computeArguments
     const {
@@ -363,7 +367,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         match.editionId = selectedEditionId
     } else {
         // restrict aggregation to current and past editions, to avoid including results from the future
-        const pastEditions = getPastEditions({ survey, edition })
+        // when regenerating older surveys
+        const pastEditions = getPastNEditions({ survey, edition, editionCount })
         match.editionId = { $in: pastEditions.map(e => e.id) }
     }
 
@@ -374,6 +379,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     const pipelineProps = {
         surveyId: survey.id,
         selectedEditionId,
+        editionCount,
         filters,
         axis1,
         axis2,

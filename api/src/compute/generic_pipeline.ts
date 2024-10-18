@@ -3,11 +3,12 @@ import { ComputeAxisParameters, GenericComputeParameters } from '../types'
 import { NO_ANSWER } from '@devographics/constants'
 import { getDbPath } from './generic'
 import { EditionMetadata, ResponsesTypes, SurveyMetadata } from '@devographics/types'
-import { getPastEditions } from '../helpers/surveys'
+import { getPastNEditions } from '../helpers/surveys'
 
 export interface PipelineProps extends GenericComputeParameters {
     surveyId: string
     selectedEditionId?: string
+    editionCount?: number
     filters?: any
     axis1: ComputeAxisParameters
     axis2?: ComputeAxisParameters | null
@@ -21,6 +22,7 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
     const {
         surveyId,
         selectedEditionId,
+        editionCount,
         filters,
         axis1,
         axis2,
@@ -72,7 +74,8 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         match.editionId = selectedEditionId
     } else {
         // restrict aggregation to current and past editions, to avoid including results from the future
-        const pastEditions = getPastEditions({ survey, edition })
+        // when regenerating older surveys
+        const pastEditions = getPastNEditions({ survey, edition, editionCount })
         match.editionId = { $in: pastEditions.map(e => e.id) }
     }
 
