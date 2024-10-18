@@ -288,6 +288,11 @@
         template: multiple_options2_combined
         i18nNamespace: tools
 
+      - id: josh_comeau
+        template: picks
+        variables:
+            url: https://css-articles.com/
+
       - id: browsers
         template: multiple_options2_combined
         i18nNamespace: tools
