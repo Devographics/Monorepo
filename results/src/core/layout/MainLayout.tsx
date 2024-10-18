@@ -64,6 +64,7 @@ const MainLayout_ = styled.div`
     /* flex-direction: column; */
     display: grid;
     grid-template-rows: min-content minmax(0, 1fr);
+    grid-template-areas: 'banner' 'content';
     height: 100vh;
 `
 
@@ -145,7 +146,7 @@ const PageContent = styled.div`
 `
 
 const Page = styled.div`
-    flex: 1;
+    grid-area: content;
     @media ${mq.large} {
         display: grid;
         grid-template-columns: ${({ theme }) => theme.dimensions.sidebar.width}px calc(

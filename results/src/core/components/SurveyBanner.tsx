@@ -23,6 +23,7 @@ const SurveyBanner = () => {
 }
 
 const Banner_ = styled.div`
+    grid-area: banner;
     width: 100%;
     background: var(--backgroundAltColor);
     text-align: center;
