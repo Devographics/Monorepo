@@ -96,6 +96,9 @@ $hover-color: $contrast-color;
   --link-color: #{$link-color};
   --hover-color: #{$contrast-color};
   --border-color: #{$border-color};
+  @media (prefers-color-scheme: dark) {
+    --border-color: #{$dark-border-color};
+  }
   --dark-border-color: #{$dark-border-color};
   --active-color: #{$active-color};
   --contrast-color: #{$contrast-color};
