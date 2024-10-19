@@ -25,6 +25,10 @@ export const wrapPageElement = ({ element, props }) => {
 }
 
 export const onRouteUpdate = ({ location, prevLocation }) => {
-    const pageContent = document.getElementById('pageContent')
-    pageContent.scrollTop = 0
+    // only scroll to top if the pathname has actually changed
+    // (i.e. not for internal anchor links)
+    if (location?.pathname !== prevLocation?.pathname) {
+        const pageContent = document.getElementById('pageContent')
+        pageContent.scrollTop = 0
+    }
 }
