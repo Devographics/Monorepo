@@ -1,3 +1,4 @@
+import { SortSpecifier } from './data'
 import { ResponsesTypes } from './metadata'
 
 // export interface QuestionParsed extends Omit<TemplateOutputQuestion, 'fieldTypeName'> {
