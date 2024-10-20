@@ -119,8 +119,3 @@ export interface ResponsesParameters {
     showNoAnswer?: boolean
     mergeOtherBuckets?: boolean
 }
-
-export interface SortSpecifier {
-    order: 'asc' | 'desc'
-    property: 'options' | 'count' | 'percent' | 'id' | 'mean' | 'average'
-}
