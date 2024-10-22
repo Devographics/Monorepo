@@ -11,18 +11,21 @@ const SurveyIntroBlock = () => {
     const { currentEdition } = usePageContext()
 
     return (
-        <>
+        <IntroWrapper_>
             {/** @ts-ignore */}
             <IntroLogo />
             <div className="SurveyIntro">
                 <Content className="SurveyIntro__Content">
                     <T k={`introduction.${currentEdition.id}`} md={true} />
-                    <IntroductionFooter />
                 </Content>
             </div>
-        </>
+        </IntroWrapper_>
     )
 }
+
+const IntroWrapper_ = styled.div`
+    margin-bottom: var(--doubleSpacing);
+`
 
 const Content = styled.div`
     @media ${mq.large} {
