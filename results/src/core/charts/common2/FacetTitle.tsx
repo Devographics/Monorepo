@@ -23,7 +23,8 @@ export const FacetTitle = ({
 
     const facetBlock = {
         id: facetQuestion?.id,
-        sectionId: facetQuestion?.sectionId
+        sectionId: facetQuestion?.sectionId,
+        i18nNamespace: facetQuestion?.i18nNamespace
     } as BlockVariantDefinition
     const facetQuestionKey = `${getBlockKey({ block: facetBlock })}.question`
     const translation = getString(facetQuestionKey)?.t
