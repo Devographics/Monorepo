@@ -202,6 +202,7 @@ query {
                             id
                             questions {
                                 id
+                                i18nNamespace
                                 template
                                 optionsAreNumeric
                                 optionsAreRange
