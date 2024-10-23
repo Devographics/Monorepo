@@ -62,5 +62,11 @@
             left: auto;
             right: var(--xOffset);
         }
+
+        .chart-row-insufficient-data-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: var(--halfSpacing);
+        }
     }
 }
