@@ -9,7 +9,7 @@
     font-size: 0.8rem;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 300px;
+    max-width: 200px;
 }
 .chart-item-entity {
     .tooltip-trigger {
@@ -35,6 +35,19 @@ button.chart-item {
     list-style-type: none;
     padding: 0;
     margin: 0;
+}
+.item-resources {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--borderAltColor);
+    padding-top: var(--quarterSpacing);
+    margin-top: var(--quarterSpacing);
+    li {
+        border-bottom: 1px solid var(--borderAltColor);
+        padding-bottom: var(--quarterSpacing);
+        margin-bottom: var(--quarterSpacing);
+    }
 }
 .item-links-item {
 }

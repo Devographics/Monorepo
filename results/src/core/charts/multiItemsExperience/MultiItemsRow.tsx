@@ -7,8 +7,10 @@ import { Bucket } from '@devographics/types'
 import { RespondentCount } from '../common2'
 import { Comments } from '../common2/Comments'
 import { sortOptions } from './MultiItemsSerie'
+import { BlockVariantDefinition } from 'core/types'
 
 export const Row = (props: {
+    block: BlockVariantDefinition
     allRowsCellDimensions: CellDimension[][]
     allRowOffsets: number[]
     rowIndex: number
@@ -16,7 +18,7 @@ export const Row = (props: {
     maxValues: MaxValue[]
     chartState: MultiItemsChartState
 }) => {
-    const { rowIndex, allRowsCellDimensions, allRowOffsets, item, chartState } = props
+    const { block, rowIndex, allRowsCellDimensions, allRowOffsets, item, chartState } = props
     const { grouping } = chartState
     const { combinedBuckets } = item
 
@@ -38,7 +40,12 @@ export const Row = (props: {
             rowMetadata={
                 <>
                     <RespondentCount count={bucket.count} />
-                    <Comments item={item} count={99} />
+                    <Comments
+                        block={block}
+                        questionId={item.id}
+                        entity={item.entity}
+                        commentsCount={item.commentsCount}
+                    />
                 </>
             }
         >

@@ -73,6 +73,8 @@
         parameters: { cutoff: 20 }
         takeaway: >
             The language respondents selected to fill out the survey.
+        queryOptions:
+            addQuestionComments: false
 
       - id: hint_hint
         template: hint
@@ -81,6 +83,8 @@
         template: multiple_options2
         takeaway: >
             The proportion of the survey filled out by respondents.
+        queryOptions:
+            addQuestionComments: false
 
       - id: age
         template: multiple_options2
@@ -155,6 +159,8 @@
         template: multiple_options2_freeform
         parameters:
             limit: 20
+        queryOptions:
+            addQuestionComments: false
 
       - id: user_info_resources
         items: [fm-javascript-first-steps, fm-getting-a-job-v2]
@@ -217,6 +223,7 @@
             limit: 20
         queryOptions:
             sectionId: reading_list
+            addQuestionComments: false
         chartOptions:
             dataFilters: [removeOverLimit, removeNoAnswer]
             limit: 10

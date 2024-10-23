@@ -46,7 +46,7 @@ export const MultiItemsSerie = (
         console.log(serie)
         return <div>No data found</div>
     }
-    const { grouping, variable, sort, order } = chartState
+    const { grouping, variable, sort, order, filter } = chartState
 
     const columnIds = sortOptions[grouping]
     const allColumnIds = [
@@ -56,6 +56,11 @@ export const MultiItemsSerie = (
 
     // combine/flatten each item's buckets
     let combinedItems = combineItems({ items, variable })
+
+    // filter items if needed
+    if (filter) {
+        combinedItems = combinedItems.filter(i => i._metadata.sectionId === filter)
+    }
 
     // get column-by-column grouped totals
     const groupedTotals = getItemTotals({ combinedItems, columnIds: allColumnIds })

@@ -6,15 +6,15 @@ import round from 'lodash/round'
 import { FormatValueType, Tick } from './types'
 import { QuestionMetadata } from '@devographics/types'
 
-export const getTicks = (values: number[]) => {
-    const NUMBER_OF_TICKS = 5
-    const maxValue = max(values) || 0
-    const ticks = [...Array(NUMBER_OF_TICKS + 1)].map(
-        (a, i) => ({ value: round((i * maxValue) / NUMBER_OF_TICKS) }),
-        1
-    )
-    return ticks
-}
+// export const getTicks = (values: number[]) => {
+//     const NUMBER_OF_TICKS = 5
+//     const maxValue = max(values) || 0
+//     const ticks = [...Array(NUMBER_OF_TICKS + 1)].map(
+//         (a, i) => ({ value: round((i * maxValue) / NUMBER_OF_TICKS) }),
+//         1
+//     )
+//     return ticks
+// }
 
 export const getInterval = (tickCount: number) => 100 / (tickCount - 1)
 

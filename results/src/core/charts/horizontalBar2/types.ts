@@ -3,6 +3,7 @@ import {
     ChartStateWithSort,
     ChartValues,
     ColumnModes,
+    SeriesMetadata,
     Tick,
     ViewDefinition
 } from '../common2/types'
@@ -59,6 +60,8 @@ export type HorizontalBarViewProps = {
     chartValues: HorizontalBarChartValues
     buckets: Bucket[]
     block: BlockVariantDefinition
+    isReversed?: boolean
+    seriesMetadata: SeriesMetadata
 }
 
 export type DataFilter = (buckets: Bucket[]) => Bucket[]

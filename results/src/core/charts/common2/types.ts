@@ -18,6 +18,11 @@ export interface ChartStateWithSort extends ChartState {
     setOrder: Dispatch<SetStateAction<OrderOptions>>
 }
 
+export interface ChartStateWithFilter extends ChartStateWithSort {
+    filter: string | undefined
+    setFilter: Dispatch<SetStateAction<string | undefined>>
+}
+
 export interface ChartValues {
     question: QuestionMetadata
     i18nNamespace?: string
@@ -25,7 +30,7 @@ export interface ChartValues {
 
 export type ViewDefinition = {
     formatValue: FormatValueType
-    getTicks?: (values: number[]) => Tick[]
+    getTicks?: (maxValue?: number) => Tick[]
     showLegend?: boolean
 }
 
@@ -51,6 +56,7 @@ export type CommonProps<ChartStateType> = {
     series: DataSeries<any>[]
     variant?: CustomVariant
     question: QuestionMetadata
+    seriesMetadata: SeriesMetadata
 }
 
 export type ViewProps<ChartStateType> = CommonProps<ChartStateType> & {
@@ -72,4 +78,8 @@ export type LegendItem = {
     label?: string
     color?: string
     entity?: Entity
+}
+
+export interface SeriesMetadata {
+    seriesMaxValue: number
 }

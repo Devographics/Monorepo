@@ -25,6 +25,7 @@ export interface EntityResolvedFields {
     company?: Entity
     blog?: Resource
     rss?: Resource
+    webFeature?: WebFeature
     appearsIn?: EntityAppearance[]
 }
 
@@ -61,6 +62,9 @@ export interface Entity extends EntityResolvedFields {
     avatar?: Avatar
 
     entityType: EntityType
+
+    webFeaturesId?: string
+    webFeature?: WebFeature
 
     appearsIn: EntityAppearance[]
 }
@@ -102,6 +106,33 @@ export interface Resource {
     name?: string
     title?: string
     url: string
+}
+
+export interface WebFeature {
+    id: string
+    compat_features: string[]
+    description: string
+    description_html: string
+    group: string
+    name: string
+    spec: string[]
+    status: WebFeatureStatus
+}
+
+export interface WebFeatureStatus {
+    baseline: string
+    baseline_low_date: string
+    support: WebFeatureSupport
+}
+
+export interface WebFeatureSupport {
+    chrome: string
+    chrome_android: string
+    edge: string
+    firefox: string
+    firefox_android: string
+    safari: string
+    safari_ios: string
 }
 
 export interface Example {

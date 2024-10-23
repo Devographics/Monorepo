@@ -22,6 +22,9 @@
   padding: $spacing;
   border-bottom: 1px solid var(--border-color);
   background-color: rgb(236, 236, 236);
+  @media (prefers-color-scheme: dark) {
+    background-color: rgb(27, 27, 27);
+  }
   margin-bottom: $spacing;
   display: flex;
   align-items: center;
@@ -292,9 +295,12 @@
     position: sticky;
     top: 0;
     th {
-      background: white;
+      background: rgba(255, 255, 255);
       margin-bottom: 0;
       border: 0;
+      @media (prefers-color-scheme: dark) {
+        background-color: rgb(12, 12, 12);
+      }
     }
     z-index: 10;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
@@ -402,6 +408,10 @@ button.button-ghost,
   // border: 1px solid var(--primary);
   border-color: rgb(185, 185, 185);
   background: rgb(232, 232, 232);
+  @media (prefers-color-scheme: dark) {
+    border-color: rgb(92, 92, 92);
+    background: rgb(37, 37, 37);
+  }
   // padding: 6px 8px;
   color: var(--primary);
 }
@@ -444,6 +454,9 @@ button.button-ghost,
 .answer-row-same {
   td {
     background: rgb(215, 255, 215);
+    @media (prefers-color-scheme: dark) {
+      background: rgb(66, 92, 66);
+    }
   }
 }
 
@@ -454,6 +467,9 @@ button.button-ghost,
 .breadcrumbs {
   border-bottom: 1px solid var(--border-color);
   background-color: rgb(236, 236, 236);
+  @media (prefers-color-scheme: dark) {
+    background-color: rgb(50, 50, 50);
+  }
   margin: 0px -1 * $spacing;
   // margin-bottom: $spacing;
   padding: $spacing;

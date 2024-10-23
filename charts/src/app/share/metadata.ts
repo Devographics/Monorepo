@@ -1,12 +1,10 @@
 import { getBlockMeta } from '@/block/metadata'
-import {
-    fetchEditionSitemap,
-    fetchAllLocalesIds,
-} from '@devographics/fetch'
-import { getLocaleDict } from "@devographics/i18n/server"
+import { fetchEditionSitemap, fetchAllLocalesIds } from '@devographics/fetch'
+import { getLocaleDict } from '@devographics/i18n/server'
 import { ChartParams } from './typings'
 import { getBlock } from '@/lib/helpers'
 import { getStringTranslator } from '@/lib/i18n'
+import { Locale } from '@devographics/types'
 
 /*
 
@@ -31,12 +29,13 @@ export async function getBlockMetaFromParams(chartParams: ChartParams) {
     //     editionId: chartParams.edition,
     //     calledFrom: 'charts'
     // })
-    const { data: edition, error } = await fetchEditionSitemap({
+    const editionFetchResult = await fetchEditionSitemap({
         surveyId,
         editionId,
         calledFrom: 'charts'
     })
 
+    const { data: edition, error } = editionFetchResult
     const { sitemap } = edition
 
     if (!sitemap) {
@@ -69,18 +68,20 @@ export async function getBlockMetaFromParams(chartParams: ChartParams) {
         console.warn(`Locale ${localeId} unknown, fallback to en-US for block metadata`)
         localeId = 'en-US'
     }
-    const { data: locale, error: localeError } = await getLocaleDict({
+    const result = await getLocaleDict({
         localeId,
         // TODO: define contexts as part of edition config?
-        contexts: ['common', 'results', 'countries', surveyId, `${surveyId}_${edition.year}`]
+        contexts: ['common', 'results', 'countries', surveyId, editionId]
     })
-    if (localeError) {
+    const { locale, error: localeError } = result
+    if (localeError || !locale) {
+        console.log(localeError)
         throw new Error(`Could not get locales strings (${JSON.stringify(chartParams)})`)
     }
     const { strings, ...localeWithoutStrings } = locale
     console.log('Got locale with string for block metadata', localeWithoutStrings)
 
-    const getString = getStringTranslator(locale)
+    const getString = getStringTranslator(locale as unknown as Locale)
 
     const blockMeta = getBlockMeta({
         block: blockDefinition,

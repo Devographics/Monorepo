@@ -7,6 +7,7 @@ import { getEntity } from '../load/entities'
 import compact from 'lodash/compact.js'
 import { getEntities } from '../load/entities'
 import { loadOrGetParsedSurveys } from '../load/surveys'
+import { features } from 'web-features'
 
 // const getSimulatedGithub = (id: string): GitHub | null => {
 //     const project = projects.find((p: Entity) => p.id === id)
@@ -203,6 +204,19 @@ export const entityResolverMap: EntityResolverMap = {
             return { name: twitchName, url }
         } else {
             return
+        }
+    },
+    webFeature: async (entity: Entity) => {
+        if (!entity.webFeaturesId) {
+            return
+        }
+        const webFeatureData = features[entity.webFeaturesId]
+        if (webFeatureData) {
+            const specArray = Array.isArray(webFeatureData.spec)
+                ? webFeatureData.spec
+                : [webFeatureData.spec]
+            const data = { ...webFeatureData, spec: specArray, id: entity.webFeaturesId }
+            return data
         }
     },
     appearsIn: async (entity: Entity) => {

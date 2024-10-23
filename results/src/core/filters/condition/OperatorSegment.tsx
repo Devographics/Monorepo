@@ -29,7 +29,9 @@ export const OperatorSegment = ({
 }: OperatorSegmentProps) => {
     const { setFiltersState } = stateStuff
     const { getString } = useI18n()
-    const operatorItems = field.optionsAreNumeric
+    const groupsOrOptions = field.groups || field.options
+    const useNumericInput = field.optionsAreNumeric && !groupsOrOptions
+    const operatorItems = useNumericInput
         ? Object.values(NumericOperatorEnum)
         : Object.values(OptionsOperatorEnum)
     return (

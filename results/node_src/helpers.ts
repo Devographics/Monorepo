@@ -6,12 +6,13 @@ import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { TwitterApi } from 'twitter-api-v2'
 import { logToFile } from './log_to_file'
-import { argumentsPlaceholder, getFiltersQuery, getQuery, getMetadataQuery } from './queries'
+import { argumentsPlaceholder, getFiltersQuery, getQuery } from './queries'
 // import { allowedCachingMethods } from "@devographics/fetch"
 import { PageContextValue, PageDef } from '../src/core/types'
 
 import { parse } from 'graphql'
 import { print } from 'graphql-print'
+import { getMetadataQuery } from './fragments/getMetadataQuery'
 
 /**
  * Get caching methods based on current config
@@ -362,6 +363,8 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                     newQueryFormatted = print(ast, { preserveComments: true })
                 } catch (error) {
                     console.warn(error)
+                    console.log('⚠️ Detected issue in follwing query: ')
+                    console.log(newQuery)
                 }
 
                 const queryHasChanged = newQueryFormatted !== existingQueryFormatted
@@ -369,18 +372,19 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                 if (
                     useFilesystemCache &&
                     existingData &&
-                    (process.env.FROZEN || !queryHasChanged)
+                    (process.env.FROZEN === 'true' || !queryHasChanged)
                 ) {
                     console.log(
                         `// 🎯 File ${dataFileName} found on ${getLoadMethod()}, loading its contents…`
                     )
                     data = existingData
                 } else {
-                    console.log(
-                        `// 🔍 ${
-                            queryHasChanged ? '[query change detected] ' : ''
-                        }Running uncached query for file ${dataFileName}…`
-                    )
+                    const reason = !existingData
+                        ? '[no data found] '
+                        : queryHasChanged
+                        ? '[query change detected] '
+                        : ''
+                    console.log(`// 🔍 ${reason}Running uncached query for file ${dataFileName}…`)
 
                     const query = await getBlockQuery({
                         block,

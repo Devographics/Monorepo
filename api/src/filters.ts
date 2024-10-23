@@ -52,7 +52,7 @@ function expandFilterGroups(filterValues: Array<string | number>, groups: Option
         const { items, lowerBound, upperBound } = group
         if (items) {
             allValues = [...allValues, ...items]
-        } else if (lowerBound && upperBound) {
+        } else if (typeof lowerBound !== 'undefined' && typeof upperBound !== 'undefined') {
             allValues = [...allValues, ...range(lowerBound, upperBound)]
         }
     }
@@ -69,6 +69,9 @@ function expandFilter(filter: Filter<string | number>, groups: OptionGroup[]) {
         if (filter.in) {
             eqInFilters = [...eqInFilters, ...filter.in]
         }
+        // TODO: filter.in could include open-ended ranges such as
+        // range_over_20 which cannot be handled using this method
+        // and will need to use lt/gt instead
         newFilter.in = expandFilterGroups(eqInFilters, groups)
     }
     if (filter.nin) {
@@ -82,10 +85,12 @@ function expandFilter(filter: Filter<string | number>, groups: OptionGroup[]) {
  */
 export const generateFiltersQuery = async ({
     filters,
-    dbPath
+    dbPath,
+    surveyId
 }: {
     filters?: Filters
     dbPath?: string
+    surveyId: string
 }): Promise<FiltersQuery> => {
     const { surveys } = await loadOrGetSurveys()
     const questionObjects = getQuestionObjects({ surveys })
@@ -94,7 +99,9 @@ export const generateFiltersQuery = async ({
     if (filters) {
         for (const filterKey of Object.keys(filters)) {
             const [sectionId, filterId] = filterKey.split('__')
-            const filterField = questionObjects.find(q => q.id === filterId)
+            const filterField = questionObjects.find(
+                q => q.id === filterId && q.surveyId === surveyId
+            )
             if (!filterField) {
                 throw new Error(`generateFiltersQuery: could not find question with id ${filterId}`)
             }

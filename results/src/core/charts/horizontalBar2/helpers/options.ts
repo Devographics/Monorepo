@@ -15,3 +15,17 @@ export const getQuestionOptions = ({
         return [...question.options, { id: NO_ANSWER }]
     }
 }
+
+export const getQuestionGroups = ({
+    question,
+    chartState
+}: {
+    question: QuestionMetadata
+    chartState: HorizontalBarChartState
+}) => {
+    if (!question.groups) {
+        return []
+    } else {
+        return [...question.groups, { id: NO_ANSWER }]
+    }
+}

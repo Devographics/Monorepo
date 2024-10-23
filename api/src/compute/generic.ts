@@ -39,7 +39,9 @@ import {
     getData,
     addFacetValiditySums,
     addRatios,
-    detectNaN
+    detectNaN,
+    addMetadata,
+    restrictBuckets
 } from './stages'
 import {
     ResponsesTypes,
@@ -50,7 +52,7 @@ import {
     ResultsSubFieldEnum,
     SortProperty
 } from '@devographics/types'
-import { getPastEditions } from '../helpers/surveys'
+import { getPastNEditions } from '../helpers/surveys'
 import { computeKey } from '../helpers/caching'
 import isEmpty from 'lodash/isEmpty.js'
 import { logToFile } from '@devographics/debug'
@@ -151,6 +153,7 @@ export const getGenericCacheKey = ({
     question,
     subField = ResultsSubFieldEnum.RESPONSES,
     selectedEditionId,
+    editionCount,
     parameters,
     filters,
     facet
@@ -159,6 +162,7 @@ export const getGenericCacheKey = ({
     question: QuestionApiObject
     subField: ResultsSubFieldEnum
     selectedEditionId: string
+    editionCount: number
     parameters?: ResponsesParameters
     filters?: Filters
     facet?: string
@@ -166,6 +170,7 @@ export const getGenericCacheKey = ({
     const cacheKeyOptions: any = {
         editionId: selectedEditionId || `allEditions(${edition.id})`,
         questionId: question.id,
+        editionCount,
         subField
     }
     if (!isEmpty(parameters)) {
@@ -220,8 +225,10 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         responsesType,
         filters,
         parameters = {},
+        bucketsFilter,
         facet,
         selectedEditionId,
+        editionCount,
         executionContext = ExecutionContext.REGULAR
     } = computeArguments
     const {
@@ -267,6 +274,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         mergeOtherBuckets,
         enableBucketGroups,
         enableAddMissingBuckets,
+        bucketsFilter,
         limit
     }
     if (question.options) {
@@ -279,6 +287,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
     
     */
+    let axis2SortSpecifier
     if (facet) {
         if (facet === SENTIMENT_FACET) {
             /*
@@ -311,13 +320,14 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
                 q => q.id === facetId && q.surveyId === survey.id
             )
             if (facetQuestion) {
+                axis2SortSpecifier = getQuestionSort({
+                    specifier: facetSort,
+                    question: facetQuestion,
+                    enableBucketGroups
+                })
                 axis2 = {
                     question: facetQuestion,
-                    ...getQuestionSort({
-                        specifier: facetSort,
-                        question: facetQuestion,
-                        enableBucketGroups
-                    }),
+                    ...axis2SortSpecifier,
                     cutoff: facetCutoff,
                     cutoffPercent: facetCutoffPercent,
                     groupUnderCutoff,
@@ -346,12 +356,13 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         )
     }
 
+    const surveyId = survey.id
     let match: any = {
-        surveyId: survey.id,
+        surveyId,
         [dbPath]: { $nin: [null, '', [], {}] }
     }
     if (filters) {
-        const filtersQuery = await runStage(generateFiltersQuery, [{ filters, dbPath }])
+        const filtersQuery = await runStage(generateFiltersQuery, [{ filters, dbPath, surveyId }])
         match = { ...match, ...filtersQuery }
     }
     if (selectedEditionId) {
@@ -359,7 +370,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         match.editionId = selectedEditionId
     } else {
         // restrict aggregation to current and past editions, to avoid including results from the future
-        const pastEditions = getPastEditions({ survey, edition })
+        // when regenerating older surveys
+        const pastEditions = getPastNEditions({ survey, edition, editionCount })
         match.editionId = { $in: pastEditions.map(e => e.id) }
     }
 
@@ -370,6 +382,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     const pipelineProps = {
         surveyId: survey.id,
         selectedEditionId,
+        editionCount,
         filters,
         axis1,
         axis2,
@@ -456,8 +469,11 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             // bucket grouping
             await runStage(groupBuckets, [results, axis2, axis1])
 
-            // group cutoff buckets together
+            // cutoff data
             await runStage(cutoffData, [results, axis2, axis1])
+
+            // restrict buckets to the ones specified in bucketsFilter if needed
+            await runStage(restrictBuckets, [results, axis2, axis1])
 
             // apply overall dataset cutoff
             await runStage(applyDatasetCutoff, [results, computeArguments, axis2, axis1])
@@ -488,6 +504,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await runStage(addFacetValiditySums, [results])
 
         await runStage(addLabels, [results, axis2, axis1])
+        await runStage(addMetadata, [results, axis2, axis1])
     } else {
         results = await runStage(addMissingBuckets, [results, axis1])
 
@@ -505,6 +522,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
             await runStage(cutoffData, [results, axis1])
 
+            // restrict buckets to the ones specified in bucketsFilter if needed
+            await runStage(restrictBuckets, [results, axis1])
+
             await runStage(applyDatasetCutoff, [results, computeArguments, axis1])
 
             // for all following steps, use groups as options
@@ -519,6 +539,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             await runStage(groupOtherBuckets, [results, axis1])
         }
         await runStage(addLabels, [results, axis1])
+        await runStage(addMetadata, [results, axis1])
     }
 
     await runStage(detectNaN, [results, isDebug, logPath])

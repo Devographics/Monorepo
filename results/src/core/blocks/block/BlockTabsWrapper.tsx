@@ -19,6 +19,7 @@ import { EditIcon } from 'core/icons'
 import BlockQuestion from './BlockQuestion'
 import { BlockDefinition } from 'core/types'
 import { BlockDescriptionContents } from './BlockChart'
+import { getBlockSeriesData } from 'core/helpers/data'
 
 export const getRegularTabId = (index: number) => `tab-${index}`
 export const getCustomTabId = (id: string) => `tabCustom-${id}`

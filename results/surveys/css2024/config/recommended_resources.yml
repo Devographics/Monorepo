@@ -8,7 +8,7 @@
 
       Use code “StateOfCSS to receive $50 off each ticket!
 
-  url: http://www.renderatl.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofcss2023
+  url: http://www.renderatl.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofcss2024
   image: /images/resources/renderatl-stacked.png
   teacher: Atlanta, Georgia
 
@@ -17,14 +17,14 @@
 - name: Frontend Masters
   id: fm-homepage
   description: Advance Your Skills with In-Depth, Modern Front-End Engineering Courses
-  url: https://frontendmasters.com/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/brand/logos/m-black.jpg
 
 - name: Learn CSS, from Laying Out Websites to Performant Animations
   id: fm-learncss
   description: >
       CSS is rich in capabilities and is more than simply laying out pages! Replace costly JavaScript with CSS.
-  url: https://frontendmasters.com/learn/css/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/learn/css/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/brand/icons/icon-paths.jpg
 
 - name: Getting Started with CSS
@@ -32,17 +32,16 @@
   description: |
       Get to know CSS in the right way without the fluff. 
       You'll style text, build navigation bars, headers/footers, add icons, and more.
-  url: https://frontendmasters.com/courses/getting-started-css/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/courses/getting-started-css/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/teachers/kramer/thumb@2x.webp
   teacher: Jen Kramer
   # company:
 
-- name: CSS Grid & Flexbox for Responsive Layouts, v2
+- name: Ultimate CSS Grid & Layout Techniques, v3
   id: fm-gridsflexbox
   description: |
-      Learn the essential CSS layout techniques for building responsive, beautiful web applications. 
-      You'll get hands-on practice using CSS Grid for two-dimensional, grid-based layouts and Flexbox for styling one-directional flow.
-  url: https://frontendmasters.com/courses/css-grid-flexbox-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+      You’ll learn to achieve complex layouts with minimal code. You'll also explore advanced techniques like container queries for adaptive components and subgrids for nested layouts.
+  url: https://frontendmasters.com/courses/css-grid/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024&utm_content=textlink
   image: https://static.frontendmasters.com/assets/teachers/kramer/thumb@2x.webp
   teacher: Jen Kramer
   # company:
@@ -51,7 +50,7 @@
   id: fm-animations-transitions
   description: |
       Learn CSS animation basics and transition to advanced concepts like orchestration and choreography.
-  url: https://frontendmasters.com/courses/css-animations/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/courses/css-animations/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/teachers/khourshid/thumb@2x.webp
   teacher: David Khourshid
   company: Microsoft
@@ -61,7 +60,7 @@
   description: >
       In this course, you'll master
       type fundamentals to create better user experiences on mobile and desktop.
-  url: https://frontendmasters.com/courses/responsive-typography-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/courses/responsive-typography-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/teachers/pamental/thumb@2x.jpg
   teacher: Jason Pamental
   company: Isovera
@@ -71,7 +70,7 @@
   description: >
       Learn how to make your website applications accessible to a wider audience.
        Use keyboard shortcuts and navigation to help both power users and those with disabilities.
-  url: https://frontendmasters.com/courses/accessibility-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/courses/accessibility-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/teachers/kuperman/thumb@2x.webp
   teacher: Jon Kuperman
   company: Cloudflare
@@ -81,7 +80,7 @@
   description: |
       Modern browsers ship with CSS Custom Properties, also known as “CSS variables”, 
       a superpower that enables us to create reusable components without any JavaScript dependencies needed
-  url: https://frontendmasters.com/courses/css-variables/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/courses/css-variables/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/teachers/verou/thumb@2x.webp
   teacher: Lea Verou
   company: MIT
@@ -90,7 +89,7 @@
   id: fm-svg
   description: |
       In this course, you'll learn to create immersive graphics and make them alive with animations!
-  url: https://frontendmasters.com/courses/svg-essentials-animation/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/courses/svg-essentials-animation/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/teachers/drasner/thumb@2x.webp
   teacher: Sarah Drasner
   company: Netlify
@@ -100,7 +99,7 @@
   description: |
       Learn how to become self-sufficient for 
       the entire process of execution from concept to design to implementation.
-  url: https://frontendmasters.com/courses/design-for-developers/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/courses/design-for-developers/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/teachers/drasner/thumb@2x.webp
   teacher: Sarah Drasner
   company: Netlify
@@ -109,7 +108,7 @@
   id: fm-converting
   description: |
       Learn to make websites more engaging through good design, fascinating content, and solid UX.
-  url: https://frontendmasters.com/courses/ux-design-principles/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/courses/ux-design-principles/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/teachers/boag/thumb@2x.webp
   teacher: Paul Boag
   company: Boagworld
@@ -119,7 +118,7 @@
   description: |
       Learn Figma for creating user interface prototypes. 
       Make shapes and frames that will hold the different pieces of the UI.
-  url: https://frontendmasters.com/courses/figma/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/courses/figma/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/teachers/kinney/thumb@2x.webp
   teacher: Steve Kinney
   company: Temporal
@@ -129,7 +128,7 @@
   description: |
       In the course, you’ll learn a robust process to successfully take your design project 
       from initial briefing to final delivery, avoiding common pitfalls.
-  url: https://frontendmasters.com/courses/design-process/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/courses/design-process/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/teachers/boag/thumb@2x.webp
   teacher: Paul Boag
   company: Boagworld
@@ -139,7 +138,7 @@
   description: |
       Tour the vast landscape of graphics programming on the web. Learn about generative art, interactive animations, 
       3D graphics with ThreeJS, and custom shaders in GLSL.
-  url: https://frontendmasters.com/courses/canvas-webgl/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/courses/canvas-webgl/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/teachers/deslauriers/thumb@2x.webp
   teacher: Matt DesLauriers
   # company:
@@ -149,14 +148,14 @@
   description: |
       Learn the hard parts of CSS, including inheritance, specificity, and the cascade. 
       Plus, get hands-on with modern CSS selectors like :is(), :where(), and :has().
-  url: https://frontendmasters.com/courses/intermediate-html-css/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/courses/intermediate-html-css/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/teachers/kramer/thumb@2x.webp
   teacher: Jen Kramer
   # company:
 
 - name: Intermediate React, v5
   id: fm-reactv5
-  url: https://frontendmasters.com/courses/intermediate-react-v5/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/courses/intermediate-react-v5/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/teachers/holt/thumb@2x.webp
   description: >
       Learn to build scalable React applications using the latest tools and 
@@ -169,7 +168,7 @@
   id: fm-storybook
   description: >
       Design systems increase the speed of development across teams, as well as make your applications look and feel consistent.
-  url: https://frontendmasters.com/courses/design-systems/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/courses/design-systems/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/teachers/bostian/thumb@2x.jpg
   teacher: Emma Bostian
   company: Spotify
@@ -178,14 +177,14 @@
   id: fm-practicallayouts
   description: >
       Starting with the basics of CSS and HTML, you'll progress through creating responsive designs for mobile, tablet, and desktop layouts.
-  url: https://frontendmasters.com/courses/css-layouts/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  url: https://frontendmasters.com/courses/css-layouts/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
   image: https://static.frontendmasters.com/assets/teachers/kramer/thumb@2x.webp
   teacher: Jen Kramer
   company: Freelance Instructor
 # - name:
 #   id:
 #   description:
-#   url: ?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+#   url: ?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
 #   image:
 #   teacher:
 #   company:

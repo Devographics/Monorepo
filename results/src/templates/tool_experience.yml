@@ -10,4 +10,3 @@ parameters: { showNoAnswer: true }
 # hidden: true
 queryOptions:
     addQuestionEntity: true
-    addQuestionComments: true

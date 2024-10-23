@@ -69,12 +69,16 @@
       - id: locale
         template: multiple_options2
         parameters: { cutoff: 20 }
+        queryOptions:
+            addQuestionComments: false
 
       - id: hint_hint
         template: hint
 
       - id: completion_stats
         template: multiple_options2
+        queryOptions:
+            addQuestionComments: false
 
       - id: age
         template: multiple_options2
@@ -141,6 +145,8 @@
         template: multiple_options2_freeform
         parameters:
             limit: 20
+        queryOptions:
+            addQuestionComments: false
 
       - id: user_info_resources
         items: [fm-javascript-first-steps, fm-getting-a-job-v2]
@@ -189,6 +195,7 @@
             limit: 20
         queryOptions:
             sectionId: reading_list
+            addQuestionComments: false
         chartOptions:
             dataFilters: [removeOverLimit, removeNoAnswer]
             limit: 10

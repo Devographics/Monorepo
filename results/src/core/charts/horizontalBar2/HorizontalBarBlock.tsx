@@ -3,21 +3,27 @@ import '../common2/ChartsCommon.scss'
 import './HorizontalBar.scss'
 import Metadata from '../common2/Metadata'
 import { BlockComponentProps, PageContextValue } from 'core/types'
-import { QuestionMetadata, StandardQuestionData } from '@devographics/types'
+import { QuestionMetadata, StandardQuestionData, sortProperties } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
-import { getAllFacetBucketIds, getChartCurrentEdition, useQuestionMetadata } from './helpers/other'
+import {
+    getAllFacetBucketIds,
+    getChartCurrentEdition,
+    getSeriesMetadata,
+    useQuestionMetadata
+} from './helpers/other'
 import { getDefaultState, useChartState } from './helpers/chartState'
 import { ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
 import { useEntities } from 'core/helpers/entities'
 import { FacetTitle } from '../common2/FacetTitle'
-import { getQuestionOptions } from './helpers/options'
+import { getQuestionGroups, getQuestionOptions } from './helpers/options'
 import { useColorScale } from '../common2/helpers/colors'
-import { HorizontalBarChartState } from './types'
+import { HorizontalBarChartState, HorizontalBarViews } from './types'
 import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
 import { HorizontalBarSerie } from './HorizontalBarSerie'
 import ChartShare from '../common2/ChartShare'
 import Legend from './Legend'
+import { BackToBack } from '../common2/BackToBack'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -35,14 +41,29 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 
     const chartState = useChartState(getDefaultState({ facetQuestion, block }))
 
+    const seriesMetadata = getSeriesMetadata({
+        series,
+        block,
+        chartState
+    })
+
     const commonProps: CommonProps<HorizontalBarChartState> = {
         variant,
         question,
         series,
         pageContext,
         chartState,
-        block
+        block,
+        seriesMetadata
     }
+
+    // figure out if all series are sorted by options
+    const allSortedByOptions = series.every(
+        s =>
+            s?.data?.responses?.currentEdition?._metadata?.axis1Sort?.property ===
+            sortProperties.OPTIONS
+    )
+    const useBackToBackSeriesView = series.length === 2 && allSortedByOptions
 
     return (
         <ChartWrapper className="chart-horizontal-bar">
@@ -50,19 +71,22 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>
                 </pre> */}
-
                 {facetQuestion && <FacetHeading facetQuestion={facetQuestion} {...commonProps} />}
 
-                <GridWrapper seriesCount={series.length}>
-                    {series.map((serie, serieIndex) => (
-                        <HorizontalBarSerie
-                            key={serie.name}
-                            serie={serie}
-                            serieIndex={serieIndex}
-                            {...commonProps}
-                        />
-                    ))}
-                </GridWrapper>
+                {useBackToBackSeriesView ? (
+                    <BackToBack serie1={series[0]} serie2={series[1]} {...commonProps} />
+                ) : (
+                    <GridWrapper seriesCount={series.length}>
+                        {series.map((serie, serieIndex) => (
+                            <HorizontalBarSerie
+                                key={serie.name}
+                                serie={serie}
+                                serieIndex={serieIndex}
+                                {...commonProps}
+                            />
+                        ))}
+                    </GridWrapper>
+                )}
 
                 <Note block={block} />
 
@@ -116,11 +140,18 @@ const FacetHeading = (
         question: facetQuestion,
         chartState
     })
+    const allGroups = getQuestionGroups({
+        question: facetQuestion,
+        chartState
+    })
+    const allGroupsOrOptions = allGroups?.length > 1 ? allGroups : allOptions
 
     const allFacetBucketIds = getAllFacetBucketIds({ series, block, chartState })
 
     // only keep options that are actually used in the current dataset
-    const usedOptions = allOptions.filter(option => allFacetBucketIds.includes(String(option.id)))
+    const usedOptions = allGroupsOrOptions.filter(optionOrGroup =>
+        allFacetBucketIds.includes(String(optionOrGroup.id))
+    )
 
     return (
         <div className="chart-heading">

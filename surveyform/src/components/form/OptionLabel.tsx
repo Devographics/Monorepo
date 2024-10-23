@@ -15,7 +15,7 @@ const OptionLabel = ({
   option: OptionMetadata;
   question: QuestionMetadata;
 }) => {
-  const { t } = useI18n();
+  const { t, getString } = useI18n();
   const { entity, label } = option;
 
   const i18n = getOptioni18nIds({ option, question });
@@ -31,8 +31,11 @@ const OptionLabel = ({
 
   const hasEntityName = !!getEntityNameHtml(entity);
 
+  const i18nObject = getString(i18n.base);
+  const i18nLabel = i18nObject.missing ? undefined : i18nObject?.t;
+
   return hasEntityName ? (
-    <EntityLabel entity={entity} />
+    <EntityLabel entity={entity} i18nLabel={i18nLabel} />
   ) : (
     <T token={i18n.base} fallback={fallback} />
   );

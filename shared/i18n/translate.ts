@@ -34,7 +34,8 @@ const applyTemplate = ({
         // Detect any text within {}
         return template(t, { interpolate: /{([\s\S]+?)}/g })(values)
     } catch (error) {
-        console.error(error)
+        // note: console.error() crashes Gatsby build on render.com
+        // console.error(error)
         return `[${locale.id}][ERR] ${key}`
     }
 }

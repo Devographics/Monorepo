@@ -18,6 +18,7 @@ export type BoxProps = {
     labelFormatter: (v: number) => string
     contentWidth: number
     bucket: Bucket
+    isReversed?: boolean
 }
 
 export const HorizontalBox = ({
@@ -28,7 +29,8 @@ export const HorizontalBox = ({
     contentWidth,
     bucket,
     rowHeight,
-    labelFormatter
+    labelFormatter,
+    isReversed
 }: BoxProps) => {
     const { getString } = useI18n()
 
@@ -44,13 +46,16 @@ export const HorizontalBox = ({
 
     const p50Ref = React.createRef<SVGGElement>()
 
-    const percentileProps = {
+    const getXCoord = (x: number) => (isReversed ? contentWidth - x : x)
+
+    const percentileProps: PercentileDotProps = {
         boxData,
         percentilesData,
         stroke,
         strokeWidth: STROKE_WIDTH,
         rowHeight,
-        labelFormatter
+        labelFormatter,
+        getXCoord
     }
 
     const colorScale = useDefaultColorScale()
@@ -81,8 +86,8 @@ export const HorizontalBox = ({
 
             {/* horizontal line */}
             <line
-                x1={p10}
-                x2={p90}
+                x1={getXCoord(p10)}
+                x2={getXCoord(p90)}
                 y1={rowHeight / 2}
                 y2={rowHeight / 2}
                 stroke={stroke}
@@ -102,7 +107,7 @@ export const HorizontalBox = ({
 
             {/* box */}
             <rect
-                x={p25}
+                x={isReversed ? getXCoord(p75) : p25}
                 y={0}
                 width={p75 - p25}
                 height={rowHeight}
@@ -115,7 +120,7 @@ export const HorizontalBox = ({
             <line x1={p50} x2={p50} y1={0} y2={0} stroke={stroke} strokeWidth={STROKE_WIDTH * 3} />
             <Tip
                 trigger={
-                    <g transform={`translate(${p50}, ${rowHeight / 2})`} ref={p50Ref}>
+                    <g transform={`translate(${getXCoord(p50)}, ${rowHeight / 2})`} ref={p50Ref}>
                         <Background_
                             height={valueLabelHeight}
                             width={valueLabelWidth}
@@ -147,6 +152,17 @@ export const HorizontalBox = ({
 }
 
 const DOT_RADIUS = 10
+
+interface PercentileDotProps {
+    boxData: BoxProps['boxData']
+    percentilesData: BoxProps['percentilesData']
+    stroke: string
+    strokeWidth: number
+    rowHeight: number
+    labelFormatter: BoxProps['labelFormatter']
+    getXCoord: (x: number) => number
+}
+
 const PercentileDot = ({
     p,
     boxData,
@@ -154,20 +170,13 @@ const PercentileDot = ({
     stroke,
     strokeWidth,
     rowHeight,
-    labelFormatter
-}: {
-    p: number
-    boxData: BoxProps['boxData']
-    percentilesData: BoxProps['percentilesData']
-    stroke: string
-    strokeWidth: number
-    rowHeight: number
-    labelFormatter: BoxProps['labelFormatter']
-}) => {
+    labelFormatter,
+    getXCoord
+}: PercentileDotProps & { p: number }) => {
     const { getString } = useI18n()
 
     const pKey = `p${p}` as Percentiles
-    const x = boxData[pKey]
+    const x = getXCoord(boxData[pKey])
     const value = percentilesData[pKey]
     const pRef = React.createRef<SVGCircleElement>()
 

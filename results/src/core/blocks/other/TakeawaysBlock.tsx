@@ -44,6 +44,7 @@ const Takeaway = ({ id }) => {
     )
 }
 const Wrapper = styled.div`
+    margin-bottom: var(--doubleSpacing);
     @media ${mq.small} {
         display: flex;
         flex-direction: column;

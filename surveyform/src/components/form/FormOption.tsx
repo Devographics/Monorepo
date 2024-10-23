@@ -65,6 +65,13 @@ const OptionDescription = (props: FormOptionProps) => {
   const i18nDescription = getMessage(i18n.description);
 
   const entity = option?.entity;
+
+  if (entity?.tags?.includes("libraries")) {
+    // we don't need to show description for libraries since it's just
+    // a matter of whether you recognize the name or not
+    return null;
+  }
+
   const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
 
   return !i18nDescription.missing ? (

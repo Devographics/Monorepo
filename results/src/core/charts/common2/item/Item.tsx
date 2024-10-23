@@ -25,7 +25,7 @@ const entityHasData = (entity: Entity) =>
         property => !!entity[property as keyof Entity]
     )
 
-export const Item = ({
+export const ChartItem = ({
     id,
     bucket,
     label: providedLabel,

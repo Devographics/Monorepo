@@ -7,11 +7,11 @@ import { mergeBuckets } from './mergeBuckets'
 import { getEntity } from '../../load/entities'
 
 const isInBounds = (n: number, lowerBound?: number, upperBound?: number) => {
-    if (lowerBound && upperBound) {
+    if (typeof lowerBound !== 'undefined' && typeof upperBound !== 'undefined') {
         return n >= lowerBound && n < upperBound
-    } else if (lowerBound) {
+    } else if (typeof lowerBound !== 'undefined') {
         return n >= lowerBound
-    } else if (upperBound) {
+    } else if (typeof upperBound !== 'undefined') {
         return n < upperBound
     } else {
         throw new Error(`isInBounds: no bounds specified`)
@@ -38,7 +38,7 @@ async function getGroupedBuckets<T extends Bucket | FacetBucket>({
     for (const group of groups) {
         const { id: groupId, upperBound, lowerBound, items } = group
         let selectedBuckets: T[]
-        if (lowerBound || upperBound) {
+        if (typeof lowerBound !== 'undefined' || typeof upperBound !== 'undefined') {
             selectedBuckets = buckets.filter(b => isInBounds(Number(b.id), lowerBound, upperBound))
         } else if (items) {
             selectedBuckets = buckets.filter(b => items.includes(b.id))
@@ -52,14 +52,16 @@ async function getGroupedBuckets<T extends Bucket | FacetBucket>({
 
         // if there is an individual ungrouped bucket with the same id as a bucket group,
         // transform it into a "catch-all" child bucket and add it to the group
-        const catchAllBucket = buckets.find(b => b.id === groupId)
-        if (catchAllBucket) {
-            groupedBucketIds.push(catchAllBucket.id)
-            selectedBuckets = [
-                ...selectedBuckets,
-                { ...catchAllBucket, id: `${CATCHALL_PREFIX}${catchAllBucket.id}` }
-            ]
-        }
+        // TODO: figure out why we do this and whether it should be re-enabled
+        // NOTE: breaks when a group has the same id as a bucket
+        // const catchAllBucket = buckets.find(b => b.id === groupId)
+        // if (catchAllBucket) {
+        //     groupedBucketIds.push(catchAllBucket.id)
+        //     selectedBuckets = [
+        //         ...selectedBuckets,
+        //         { ...catchAllBucket, id: `${CATCHALL_PREFIX}${catchAllBucket.id}` }
+        //     ]
+        // }
 
         // if created grouped bucket has associated entity/token, add them here
         const mergedProps: { id: string; entity?: Entity; token?: Token } = { id: groupId }

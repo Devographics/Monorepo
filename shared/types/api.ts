@@ -1,3 +1,4 @@
+import { SortSpecifier } from './data'
 import { ResponsesTypes } from './metadata'
 
 // export interface QuestionParsed extends Omit<TemplateOutputQuestion, 'fieldTypeName'> {
@@ -81,6 +82,7 @@ export type ResponseArguments = {
     filters: Filters
     facet: string
     parameters: ResponsesParameters
+    bucketsFilter: Filter<string>
 }
 
 export interface Filters {
@@ -118,9 +120,4 @@ export interface ResponsesParameters {
     enableCache?: boolean
     showNoAnswer?: boolean
     mergeOtherBuckets?: boolean
-}
-
-export interface SortSpecifier {
-    order: 'asc' | 'desc'
-    property: 'options' | 'count' | 'percent' | 'id' | 'mean' | 'average'
 }

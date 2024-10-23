@@ -14,7 +14,7 @@ import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
 import { DeleteIcon, PlusIcon } from 'core/icons'
 import { Input_, Label_, Select_ } from './FieldSegment'
-import { OptionMetadata } from '@devographics/types'
+import { OptionGroup, OptionMetadata } from '@devographics/types'
 import Button from 'core/components/Button'
 
 interface ValueSegmentProps<T> {
@@ -59,19 +59,17 @@ const ValueSegmentField = ({
             return newState
         })
     }
-    if (field.optionsAreNumeric) {
-        return (
-            <Label_>
-                <Input_ onChange={handleChange} value={value} type="number" />
-            </Label_>
-        )
-    } else {
+    const groupsOrOptions = field.groups || field.options
+    const useNumericInput = field.optionsAreNumeric && !groupsOrOptions
+    if (groupsOrOptions) {
         return (
             <Label_>
                 {/* <span>{segmentId}</span> */}
                 <Select_
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const value = e.target.value
+                        console.log(value)
+
                         setFiltersState(fState => {
                             const newState = cloneDeep(fState)
                             newState.filters[seriesIndex].conditions[conditionIndex].value = value
@@ -83,19 +81,34 @@ const ValueSegmentField = ({
                     <option value="" disabled>
                         {getString && getString('explorer.select_item')?.t}
                     </option>
-                    {options.map(({ id, entity, label }) => (
-                        <option key={id} value={id}>
-                            {getValueLabel({
-                                getString,
-                                field,
-                                value: id,
-                                allFilters,
-                                entity,
-                                label
-                            })}
-                        </option>
-                    ))}
+                    {groupsOrOptions.map(optionOrGroup => {
+                        const { id, label } = optionOrGroup
+                        return (
+                            <option key={id} value={id}>
+                                {getValueLabel({
+                                    getString,
+                                    field,
+                                    value: id,
+                                    allFilters,
+                                    entity: optionOrGroup?.entity,
+                                    label
+                                })}
+                            </option>
+                        )
+                    })}
                 </Select_>
+            </Label_>
+        )
+    } else if (useNumericInput) {
+        return (
+            <Label_>
+                <Input_ onChange={handleChange} value={value} type="number" />
+            </Label_>
+        )
+    } else {
+        return (
+            <Label_>
+                <Input_ onChange={handleChange} value={value} />
             </Label_>
         )
     }
@@ -114,8 +127,7 @@ const ValueSegmentArray = ({
 }: ValueSegmentArrayProps) => {
     const { setFiltersState } = stateStuff
     const { getString } = useI18n()
-
-    const canAddNewValue = options.length > value.length
+    const groupsOrOptions = field.groups || (field.options as Array<OptionGroup | OptionMetadata>)
 
     const handleDeleteValue = (valueIndex: number) => {
         setFiltersState(fState => {
@@ -131,7 +143,8 @@ const ValueSegmentArray = ({
         setFiltersState(fState => {
             const newState = cloneDeep(fState)
             const currentValue = newState.filters[seriesIndex].conditions[conditionIndex].value
-            const newValue = options.find(({ id }) => !value.includes(id))?.id as FilterValueString
+            const newValue = groupsOrOptions.find(({ id }) => !value.includes(id))
+                ?.id as FilterValueString
             newState.filters[seriesIndex].conditions[conditionIndex].value = [
                 ...currentValue,
                 newValue
@@ -139,6 +152,9 @@ const ValueSegmentArray = ({
             return newState
         })
     }
+
+    const canDeleteValue = value.length > 1
+    const canAddNewValue = groupsOrOptions.length > value.length
 
     return (
         <Values_>
@@ -149,6 +165,8 @@ const ValueSegmentArray = ({
                         <Select_
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 const value = e.target.value
+                                console.log(value)
+
                                 setFiltersState(fState => {
                                     const newState = cloneDeep(fState)
                                     const currentValueArray = newState.filters[seriesIndex]
@@ -162,7 +180,7 @@ const ValueSegmentArray = ({
                             <option value="" disabled>
                                 {getString && getString('explorer.select_item')?.t}
                             </option>
-                            {options.map(({ id, entity, label }) => (
+                            {groupsOrOptions.map(({ id, entity, label }) => (
                                 <option key={id} value={id}>
                                     {getValueLabel({
                                         getString,
@@ -177,13 +195,15 @@ const ValueSegmentArray = ({
                         </Select_>
                     </Label_>
 
-                    <DeleteValue_
-                        onClick={() => {
-                            handleDeleteValue(valueIndex)
-                        }}
-                    >
-                        <DeleteIcon labelId="filters.value.delete" />
-                    </DeleteValue_>
+                    {canDeleteValue && (
+                        <DeleteValue_
+                            onClick={() => {
+                                handleDeleteValue(valueIndex)
+                            }}
+                        >
+                            <DeleteIcon labelId="filters.value.delete" />
+                        </DeleteValue_>
+                    )}
                 </Value_>
             ))}
             {canAddNewValue && (

@@ -1,7 +1,7 @@
 @import '../../../stylesheets/_breakpoints.scss';
 
 .chart-toggle {
-    flex-grow: 1;
+    // flex-grow: 1;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -32,7 +32,7 @@
     justify-content: center;
 }
 .chart-toggle-item-enabled {
-    background: var(--backgroundAltColor);
+    background: var(--backgroundAltColor) !important;
 }
 .chart-toggle-item {
     display: flex;

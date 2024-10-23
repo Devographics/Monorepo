@@ -7,7 +7,18 @@
  *
  * https://blog.vulcanjs.org/render-anything-statically-with-next-js-and-the-megaparam-4039e66ffde
  */
+import { z } from 'zod'
 import { ChartParams } from './typings'
+
+const paramsSchema = z.object({
+    surveyId: z.string(),
+    editionId: z.string(),
+    sectionId: z.string(),
+    localeId: z.string(),
+    subSectionId: z.string().optional().nullable(),
+    blockId: z.string(),
+    params: z.string().optional().nullable()
+})
 
 /**
  * Asynchronous because validation might require accessing
@@ -20,15 +31,17 @@ export async function decodeChartParams(chartParamsStr: string): Promise<ChartPa
     console.log('decoding', { decodedParams, chartParamsStr })
     const params = new URLSearchParams(decodedParams)
     // TODO: use Zod to actually validate the params
-    return {
-        localeId: params.get('localeId')!,
-        surveyId: params.get('surveyId')!,
-        editionId: params.get('editionId')!,
-        sectionId: params.get('sectionId')!,
-        subSectionId: params.get('subSectionId')!,
-        blockId: params.get('blockId')!,
-        params: params.get('params')!
+    const paramsObject = {
+        localeId: params.get('localeId'),
+        surveyId: params.get('surveyId'),
+        editionId: params.get('editionId'),
+        sectionId: params.get('sectionId'),
+        subSectionId: params.get('subSectionId'),
+        blockId: params.get('blockId'),
+        params: params.get('params')
     }
+    // @ts-ignore TODO: zod type is wrong somehow
+    return paramsSchema.parse(paramsObject)
 }
 /**
  * Encode chart params provided as search parameters

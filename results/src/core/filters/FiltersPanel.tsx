@@ -125,23 +125,6 @@ const FiltersPanel = ({
         }
     }
 
-    const supportedModes = filtersState?.options?.supportedModes || [MODE_GRID, MODE_FACET]
-
-    // if mode is set to "default" then open first supported filter tab
-    const currentMode =
-        filtersState.options.mode === MODE_DEFAULT ? supportedModes?.[0] : filtersState.options.mode
-
-    // whenever this panel is loaded without a mode specified, set mode to currentMode
-    useEffect(() => {
-        if (filtersState.options.mode === MODE_DEFAULT) {
-            setFiltersState((fState: CustomizationDefinition) => {
-                const newState = cloneDeep(fState)
-                newState.options.mode = currentMode
-                return newState
-            })
-        }
-    }, [])
-
     const filtersLink = getFiltersLink({ block, pageContext, filtersState })
 
     const { query } = getBlockQuery({

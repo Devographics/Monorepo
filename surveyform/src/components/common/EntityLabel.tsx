@@ -4,21 +4,15 @@ import { getEntityNameHtml } from "~/lib/surveys/helpers/getEntityName";
 import { EntityPopoverTrigger } from "./EntityPopover";
 
 /**
- * When using a string as label
- */
-interface StringLabel {
-  label?: any;
-}
-/**
  * When using an entity as the label, based on their id
  */
-interface EntityLabelDefinition {
+interface EntityLabelProps {
   id?: string;
   intlId?: string;
   fallback?: any;
   entity?: Entity;
+  i18nLabel?: string;
 }
-export interface EntityLabelProps extends EntityLabelDefinition, StringLabel { }
 
 export const EntityLabel = (props: EntityLabelProps) => {
   const { entity } = props;
@@ -39,24 +33,24 @@ export const EntityLabelContents = ({
   //id,
   entity,
   intlId,
-  label,
+  i18nLabel,
   fallback,
 }: EntityLabelProps) => {
   const entityName = getEntityNameHtml(entity);
 
-  if (entityName) {
-    return (
-      <span
-        className="entity-label"
-        dangerouslySetInnerHTML={{ __html: entityName }}
-      />
-    );
-  } else if (label) {
+  if (i18nLabel) {
     // if label is provided, use that
     return (
       <span
         className="entity-label entity-label-i18n"
-        dangerouslySetInnerHTML={{ __html: label }}
+        dangerouslySetInnerHTML={{ __html: i18nLabel }}
+      />
+    );
+  } else if (entityName) {
+    return (
+      <span
+        className="entity-label"
+        dangerouslySetInnerHTML={{ __html: entityName }}
       />
     );
   } else {

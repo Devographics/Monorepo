@@ -31,6 +31,7 @@ export async function decompressJSON(compressedString) {
         const compressedBuffer = Buffer.from(compressedString, 'base64')
 
         // Decompress the buffer
+        // @ts-ignore should be using an ArrayBuffer maybe ?
         const decompressedBuffer = (await gunzip(compressedBuffer)) as Buffer
 
         // Convert the buffer to a JSON string

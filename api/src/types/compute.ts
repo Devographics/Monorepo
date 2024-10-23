@@ -1,6 +1,13 @@
 import { QuestionApiObject } from './surveys'
 import { Filters } from './filters'
-import { Option, OptionId, ResponsesTypes, SortProperty } from '@devographics/types'
+import {
+    Filter,
+    Option,
+    OptionId,
+    ResponsesTypes,
+    SortOrderNumeric,
+    SortProperty
+} from '@devographics/types'
 
 export enum ExecutionContext {
     // regular execution of the generic function
@@ -15,8 +22,10 @@ export interface GenericComputeArguments {
     responsesType?: ResponsesTypes
     filters?: Filters
     parameters?: GenericComputeParameters
+    bucketsFilter?: Filter<string>
     facet?: string
     selectedEditionId?: string
+    editionCount?: number
     // indicate if this was a second execution of the generic function
     // triggered to fetch freeform data for the combined subfield
     executionContext: ExecutionContext
@@ -58,12 +67,5 @@ export interface ComputeAxisParameters {
     enableAddMissingBuckets?: boolean
     limit: number
     options?: Option[]
+    bucketsFilter?: Filter<string>
 }
-
-export interface SortSpecifier {
-    property: SortProperty
-    order: SortOrder
-}
-
-export type SortOrder = 'asc' | 'desc'
-export type SortOrderNumeric = 1 | -1

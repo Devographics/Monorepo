@@ -48,10 +48,10 @@ twitter {
   url
   name
 }
+tags
 ${
     isFull
         ? `
-tags
 exactMatch
 parentId
 patterns`

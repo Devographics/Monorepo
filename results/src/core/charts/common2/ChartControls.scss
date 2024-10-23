@@ -2,6 +2,15 @@
 
 .chart-controls {
     display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+}
+.chart-controls-top {
+    display: flex;
+    justify-content: center;
+}
+.chart-controls-bottom {
+    display: flex;
     gap: var(--halfSpacing);
     @include small {
         flex-direction: column;

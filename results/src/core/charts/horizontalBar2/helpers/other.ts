@@ -12,12 +12,13 @@ import { DataSeries, FacetItem } from 'core/filters/types'
 import { usePageContext } from 'core/helpers/pageContext'
 import { applySteps } from './steps'
 import sortBy from 'lodash/sortBy'
-import { OrderOptions } from 'core/charts/common2/types'
+import { CommonProps, OrderOptions, SeriesMetadata } from 'core/charts/common2/types'
 import { BlockVariantDefinition } from 'core/types'
 import uniq from 'lodash/uniq'
 import { RowSingle } from '../rows/RowSingle'
 import { RowStacked } from '../rows/RowStacked'
 import { allDataFilters } from '../helpers/steps'
+import max from 'lodash/max'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -136,9 +137,48 @@ export const getAllFacetBucketIds = ({
         series
             .map(serie => {
                 const buckets = getChartBuckets({ serie, block, chartState })
-                return buckets.map(bucket => bucket.facetBuckets.map(facetBucket => facetBucket.id))
+                return (
+                    buckets.map(bucket =>
+                        bucket?.facetBuckets?.map(facetBucket => facetBucket.id)
+                    ) || []
+                )
             })
             .flat()
             .flat()
     )
+}
+
+export const getMaxValue = ({ values, view }: { values: number[]; view: HorizontalBarViews }) => {
+    return [HorizontalBarViews.PERCENTAGE_BUCKET].includes(view) ? 100 : max(values) || 0
+}
+
+/*
+
+Calculate metadata about all series (in the cases where we're showing multiple)
+
+(note: just max value between all series for now)
+
+*/
+export const getSeriesMetadata = ({
+    series,
+    block,
+    chartState
+}: {
+    series: CommonProps<HorizontalBarChartState>['series']
+    block: BlockVariantDefinition
+    chartState: HorizontalBarChartState
+}) => {
+    const { viewDefinition } = chartState
+    const { getValue } = viewDefinition
+
+    const allSeriesValues = series
+        .map(serie => {
+            const buckets = getChartBuckets({ serie, block, chartState })
+            const values = buckets.map(getValue)
+            return values
+        })
+        .flat()
+    const seriesMaxValue = max(allSeriesValues) || 0
+    const metadata: SeriesMetadata = { seriesMaxValue }
+    return metadata
 }

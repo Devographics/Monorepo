@@ -260,6 +260,11 @@ input SortSpecifier {
     order: SortOrder
 }
 
+type SortSpecifierOutput {
+    property: SortProperty
+    order: SortOrder
+}
+
 enum SortProperty {
     options
     count
@@ -281,6 +286,10 @@ enum OptionsOrder {
 }
 
 type ResponseEditionData {
+    """
+    Metadata about the current query results
+    """
+    _metadata: ResponseEditionMetadata
     year: Int
     editionId: String
     completion: YearCompletion
@@ -294,6 +303,11 @@ type ResponseEditionData {
     Ratios are only available for features/tools
     """
     ratios: RatiosData
+}
+
+type ResponseEditionMetadata {
+    axis1Sort: SortSpecifierOutput
+    axis2Sort: SortSpecifierOutput
 }
 
 type RawData {

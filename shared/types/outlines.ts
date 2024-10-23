@@ -154,7 +154,19 @@ export enum OptionsOrder {
     ALPHA = 'alphabetical'
 }
 
-export type SortProperty = 'options' | 'count' | 'percent' | 'id' | 'averageByFacet' | 'mean'
+export const sortProperties = {
+    OPTIONS: 'options',
+    COUNT: 'count',
+    PERCENT: 'percent',
+    ID: 'id',
+    AVERAGE_BY_FACET: 'averageByFacet',
+    MEAN: 'mean'
+} as const
+
+export type SortProperty = (typeof sortProperties)[keyof typeof sortProperties]
+
+export type SortOrder = 'asc' | 'desc'
+export type SortOrderNumeric = 1 | -1
 
 /**
  * Keep in sync with QuestionMetadata in

@@ -303,16 +303,24 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
     const subField: ResultsSubFieldEnum = info?.path?.prev?.key
 
     const { survey, edition, section, question, responseArguments, questionObjects } = parent
-    const { parameters = {}, filters, facet, responsesType = subField } = responseArguments || {}
+    const {
+        parameters = {},
+        filters,
+        facet,
+        responsesType = subField,
+        bucketsFilter
+    } = responseArguments || {}
     const { enableCache } = parameters
 
-    const { selectedEditionId } = args
+    const { editionCount, editionId: selectedEditionId } = args
     const computeArguments = {
         responsesType,
+        bucketsFilter,
         parameters,
         filters,
         facet,
-        selectedEditionId
+        selectedEditionId,
+        editionCount
     }
     const funcOptions = {
         survey,
@@ -328,6 +336,7 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
         question,
         subField,
         selectedEditionId,
+        editionCount,
         parameters,
         filters,
         facet
@@ -351,7 +360,7 @@ export const currentEditionResolver: ResolverType = async (parent, args, context
     console.log('// currentEditionResolver')
     const result = await allEditionsResolver(
         parent,
-        { selectedEditionId: parent.edition.id },
+        { editionId: parent.edition.id },
         context,
         info
     )

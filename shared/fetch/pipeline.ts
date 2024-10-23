@@ -115,7 +115,8 @@ export async function runFetchPipeline<T>(steps: Array<FetchPipelineStep<T>>, ke
             const nonNullData = data !== null && typeof data !== 'undefined'
             if (nonNullData) {
                 console.debug(`🟢 [${step.name}] data hit`)
-                if (typeof nonNullData === "object" && "error" in nonNullData) {
+                // null also has type object
+                if (typeof nonNullData === "object" && nonNullData && "error" in nonNullData) {
                     console.warn(`A pipeline step (${step.name}) returned an object containing an 'error' field. 
                     This mighe be a mistake.
                     Pipeline step should throw errors in order to avoid caching them upper in the pipeline.`)

@@ -1,6 +1,8 @@
 import camelCase from 'lodash/camelCase.js'
 import { indentString } from './indent_string'
 import isEmpty from 'lodash/isEmpty.js'
+import { getDefaultQueryFragment } from './fragments/getDefaultQueryFragment'
+import { getFacetFragment } from './fragments/getFacetFragment'
 
 const MODE_COMBINED = 'combined'
 const MODE_GRID = 'grid'
@@ -11,209 +13,9 @@ const MODE_FACET = 'facet'
 
 export const OPERATORS = ['eq', 'in', 'nin']
 
-const BucketUnits = {
-    AVERAGE: 'averageByFacet'
-}
-
 export const argumentsPlaceholder = '<ARGUMENTS_PLACEHOLDER>'
 
 export const bucketFacetsPlaceholder = '<BUCKETFACETS_PLACEHOLDER>'
-
-export const getPercentilesFragment = () => `
-    percentilesByFacet {
-        p0
-        p10
-        p25
-        p50
-        p75
-        p90
-        p100
-    }
-`
-
-const getEntityFragment = () => `entity {
-    name
-    nameHtml
-    nameClean
-    alias
-    description
-    descriptionHtml
-    descriptionClean
-    id
-    entityType
-    example {
-      label
-      language
-      code
-      codeHighlighted
-    }
-    avatar {
-      url
-    }
-    homepage {
-      url
-    }
-    youtube {
-      url
-    }
-    twitter {
-      url
-    }
-    twitch {
-      url
-    }
-    rss {
-      url
-    }
-    blog {
-        url
-    }
-    mastodon {
-        url
-    }
-    github {
-        url
-    }
-    npm {
-        url
-    }
-    mdn {
-        url
-    }
-    caniuse {
-        url
-    }
-    resources {
-        url
-        title
-    }
-}`
-
-const getTokenFragment = () => `token {
-    id
-    parentId
-}`
-
-const getFacetFragment = (addBucketsEntities?: boolean) => `
-    facetBuckets {
-        id
-        count
-        percentageBucket
-        hasInsufficientData
-        ${addBucketsEntities ? getEntityFragment() : ''}
-        ${addBucketsEntities ? getTokenFragment() : ''}
-    }
-`
-
-const getCommentsCountFragment = () => `
-comments {
-    currentEdition {
-      count
-    }
-  }
-`
-
-export const getMetadataQuery = ({
-    surveyId,
-    editionId
-}: {
-    surveyId: string
-    editionId: string
-}) => {
-    return `
-query {
-    dataAPI {
-        surveys {
-            ${surveyId} {
-                _metadata {
-                    domain
-                    id
-                    name
-                    hashtag
-                    emailOctopus {
-                        listId
-                        submitUrl
-                    }
-                    partners {
-                        name
-                        url
-                        imageUrl
-                    }
-                    editions {
-                        year
-                        id
-                        resultsUrl
-                    }
-                }
-                ${editionId} {
-                    _metadata {
-                        id
-                        year
-                        status
-                        startedAt
-                        endedAt
-                        questionsUrl
-                        issuesUrl
-                        discordUrl
-                        resultsUrl
-                        imageUrl
-                        faviconUrl
-                        socialImageUrl
-                        hashtag
-                        enableChartSponsorships
-                        tshirt {
-                            images
-                            url
-                            price
-                            designerUrl
-                        }
-                        sponsors {
-                            id
-                            name
-                            url
-                            imageUrl
-                        }
-                        credits {
-                            id
-                            role
-                            ${getEntityFragment()}
-                        }
-                        sections {
-                            id
-                            questions {
-                                id
-                                template
-                                optionsAreNumeric
-                                optionsAreRange
-                                optionsAreSequential
-                                entity {
-                                    id
-                                    name
-                                    nameClean
-                                    nameHtml
-                                    alias
-                                }
-                                options {
-                                    ${getEntityFragment()}
-                                    id
-                                    average
-                                }
-                                groups {
-                                    id
-                                    average
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}`
-}
-
-const allEditionsFragment = `editionId
-  year`
 
 // v1: {"foo": "bar"} => {foo: "bar"}
 // const unquote = s => s.replace(/"([^"]+)":/g, '$1:')
@@ -240,13 +42,14 @@ const facetItemToFacet = ({ sectionId, id }: { sectionId: string; id: string }) 
     `${sectionId}__${id}`
 
 // TODO: what is this exactly?
-interface DataQueryConfig {
+export interface DataQueryConfig {
     facet?: any
     filters?: any
     parameters?: any
     xAxis?: any
     yAxis?: any
 }
+
 interface ParsedDataQueryConfig {
     facet?: any
     filters?: any
@@ -287,105 +90,6 @@ export const getQueryArgsString = ({
     } else {
         return wrapArguments(args)
     }
-}
-
-const getBucketFragment = (options: {
-    addBucketsEntities: boolean
-    addBucketFacetsPlaceholder: boolean
-    queryArgs: QueryArgs
-    addGroupedBuckets: boolean
-}): string => {
-    const { addBucketsEntities, addBucketFacetsPlaceholder, queryArgs, addGroupedBuckets } = options
-    const { facet } = queryArgs
-    return `
-                    count
-                    id
-                    percentageQuestion
-                    percentageSurvey
-                    isFreeformData
-                    hasInsufficientData
-                    ${addBucketsEntities ? getEntityFragment() : ''}
-                    ${facet || addBucketFacetsPlaceholder ? BucketUnits.AVERAGE : ''}
-                    ${facet || addBucketFacetsPlaceholder ? getPercentilesFragment() : ''}
-                    ${facet ? getFacetFragment(addBucketsEntities) : ''}
-                    ${addBucketFacetsPlaceholder ? bucketFacetsPlaceholder : ''}
-                    ${
-                        addGroupedBuckets
-                            ? `groupedBuckets {
-                        ${getBucketFragment({ ...options, addGroupedBuckets: false })}
-                    }
-                    `
-                            : ''
-                    }
-`
-}
-
-export const getDefaultQuery = ({
-    queryOptions,
-    queryArgs = {}
-}: {
-    queryOptions: any
-    queryArgs: DataQueryConfig
-}) => {
-    const {
-        surveyId,
-        editionId,
-        sectionId,
-        questionId,
-        fieldId,
-        subField = 'responses',
-        addBucketsEntities = true,
-        allEditions = false,
-        addArgumentsPlaceholder = false,
-        addBucketFacetsPlaceholder = false,
-        addQuestionEntity = false,
-        addQuestionComments = false,
-        addGroupedBuckets = false
-    } = queryOptions
-
-    const queryArgsString = addArgumentsPlaceholder
-        ? argumentsPlaceholder
-        : getQueryArgsString(queryArgs)
-    const editionType = allEditions ? 'allEditions' : 'currentEdition'
-
-    const questionIdString = fieldId ? `${questionId}: ${fieldId}` : questionId
-
-    return `
-surveys {
-  ${surveyId} {
-    ${editionId} {
-      ${sectionId} {
-        ${questionIdString} {
-          ${addQuestionEntity ? getEntityFragment() : ''}
-          ${addQuestionComments ? getCommentsCountFragment() : ''}
-          ${subField}${queryArgsString} {
-            ${editionType} {
-              ${allEditions ? allEditionsFragment : ''}
-              completion {
-                count
-                percentageSurvey
-                total
-              }
-              average
-              percentiles {
-                p50
-              }
-              buckets {
-                ${getBucketFragment({
-                    addBucketFacetsPlaceholder,
-                    addBucketsEntities,
-                    addGroupedBuckets,
-                    queryArgs
-                })}
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-`
 }
 
 export const getQueryName = ({
@@ -450,7 +154,7 @@ export const getQuery = ({ query: query_, queryOptions, queryArgs }) => {
         if (['allEditionsData'].includes(query)) {
             queryOptions.allEditions = true
         }
-        queryContents = getDefaultQuery({ queryOptions, queryArgs })
+        queryContents = getDefaultQueryFragment({ queryOptions, queryArgs })
     } else {
         queryContents = query
         if (queryOptions.isLog) {
@@ -568,7 +272,10 @@ export const getFiltersQuery = ({
 
     const queryFooter = query.slice(fragmentEndIndex)
 
-    if (filters && (mode === MODE_GRID || mode === MODE_COMBINED)) {
+    if (filters) {
+        if (block.id === 'paid_leave_percentage_japanese_vs_non_japanese_coworkers') {
+            console.log(filters)
+        }
         queryBody = filters
             .map((singleSeries, seriesIndex) => {
                 let seriesFragment = queryFragment
@@ -610,7 +317,7 @@ export const getFiltersQuery = ({
                 return seriesFragment
             })
             .join('')
-    } else if (facet && mode === MODE_FACET) {
+    } else {
         const queryArgsOptions: DataQueryConfig = {
             facet,
             parameters: { enableCache, ...block.parameters }

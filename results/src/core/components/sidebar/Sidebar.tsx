@@ -30,38 +30,45 @@ export const Sidebar = ({
     const pageContext = usePageContext()
 
     return (
-        <SidebarContainer id="sidebar" show={showSidebar} className="Sidebar">
-            <SidebarCloseButton
-                onClick={closeSidebar}
-                aria-haspopup="menu"
-                aria-expanded={showSidebar}
-            >
-                <CloseIcon />
-                <ScreenReadersHint>{translate('general.close_nav')}</ScreenReadersHint>
-            </SidebarCloseButton>
+        <>
+            <SidebarContainer id="sidebar" show={showSidebar} className="Sidebar">
+                <SidebarScreenReadersTitle>
+                    {getSiteTitle({ pageContext })}
+                </SidebarScreenReadersTitle>
 
-            <SidebarScreenReadersTitle>{getSiteTitle({ pageContext })}</SidebarScreenReadersTitle>
-            <SidebarHeader>
-                <SidebarLogoLink to="/">
-                    <SidebarLogo />
-                    <ScreenReadersHint>{translate('general.back_to_intro')}</ScreenReadersHint>
-                </SidebarLogoLink>
-            </SidebarHeader>
-            <Nav closeSidebar={closeSidebar} />
-            <ShareSite />
-        </SidebarContainer>
+                <SidebarHeader>
+                    <SidebarLogoLink to="/">
+                        <SidebarLogo />
+                        <ScreenReadersHint>{translate('general.back_to_intro')}</ScreenReadersHint>
+                    </SidebarLogoLink>
+                    <SidebarCloseButton
+                        onClick={closeSidebar}
+                        aria-haspopup="menu"
+                        aria-expanded={showSidebar}
+                    >
+                        <CloseIcon />
+                        <ScreenReadersHint>{translate('general.close_nav')}</ScreenReadersHint>
+                    </SidebarCloseButton>
+                </SidebarHeader>
+                <Nav closeSidebar={closeSidebar} />
+                <ShareSite />
+            </SidebarContainer>
+        </>
     )
 }
 
 const SidebarContainer = styled.div`
     border-right: ${props => props.theme.separationBorder};
     display: grid;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: min-content minmax(0, 1fr) min-content;
 
     @media ${mq.large} {
         width: ${({ theme }) => theme.dimensions.sidebar.width}px;
-        height: 100vh;
-        position: fixed;
+        /* height: 100%; */
+        /* position: fixed; */
+        position: absolute;
+        top: 0;
+        bottom: 0;
     }
 
     @media ${mq.smallMedium} {
@@ -122,10 +129,10 @@ const SidebarCloseButton = styled.button`
     background: none;
     cursor: pointer;
     border: none;
-    position: absolute;
+    /* position: absolute; */
 
     box-sizing: border-box;
-    width: calc(calc(100vw - 270px) / 2);
+    /* width: calc(calc(100vw - 270px) / 2); */
     height: 68px;
 
     svg {
