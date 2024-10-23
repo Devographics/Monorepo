@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useCurrentUser } from "~/lib/users/hooks";
 import { routes } from "~/lib/routes";
@@ -9,6 +9,7 @@ import { publicConfig } from "~/config/public";
 import { enableTranslatorMode } from "@devographics/i18n";
 
 import { T, useI18n } from "@devographics/react-i18n";
+import { useClient } from "./useClient";
 
 type LinkItemProps = {
   component?: React.ReactNode;
@@ -32,6 +33,33 @@ function TranslatorModeButton() {
     }}
   >
     {translatorMode ? "Refresh to leave translator mode" : "Translator mode"}
+  </button>
+}
+function ForceLightModeButton() {
+  // implem convoluted because we would need a mutation observer
+  // to properly sync with html classnames
+  // it would be costly
+  const [isLight, setIsLight] = useState(false)
+  const isClient = useClient()
+  useEffect(() => {
+    const htmlElement = window.document.querySelector("html")
+    setIsLight(!!htmlElement?.classList.contains("force-light-mode"))
+  }, [])
+  if (!isClient) return null
+  return <button
+    title="Enables an experimental light mode, results not guaranteed."
+    onClick={() => {
+      const htmlElement = window.document.querySelector("html")
+      if (!htmlElement) return;
+      if (!isLight) {
+        htmlElement.classList.add("force-light-mode")
+      } else {
+        htmlElement.classList.remove("force-light-mode")
+      }
+      setIsLight(isLight => !isLight)
+    }}
+  >
+    {!isLight ? "Light mode" : "Dark mode"}
   </button>
 }
 
@@ -73,6 +101,9 @@ const links: Array<LinkItemProps> = [
   {
     id: "general.help_us_translate",
     href: "https://github.com/Devographics/locale-en-US",
+  },
+  {
+    component: <ForceLightModeButton />
   },
   {
     showIf: () => publicConfig.isDev || publicConfig.isTest,
