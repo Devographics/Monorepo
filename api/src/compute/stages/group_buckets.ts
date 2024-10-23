@@ -52,14 +52,16 @@ async function getGroupedBuckets<T extends Bucket | FacetBucket>({
 
         // if there is an individual ungrouped bucket with the same id as a bucket group,
         // transform it into a "catch-all" child bucket and add it to the group
-        const catchAllBucket = buckets.find(b => b.id === groupId)
-        if (catchAllBucket) {
-            groupedBucketIds.push(catchAllBucket.id)
-            selectedBuckets = [
-                ...selectedBuckets,
-                { ...catchAllBucket, id: `${CATCHALL_PREFIX}${catchAllBucket.id}` }
-            ]
-        }
+        // TODO: figure out why we do this and whether it should be re-enabled
+        // NOTE: breaks when a group has the same id as a bucket
+        // const catchAllBucket = buckets.find(b => b.id === groupId)
+        // if (catchAllBucket) {
+        //     groupedBucketIds.push(catchAllBucket.id)
+        //     selectedBuckets = [
+        //         ...selectedBuckets,
+        //         { ...catchAllBucket, id: `${CATCHALL_PREFIX}${catchAllBucket.id}` }
+        //     ]
+        // }
 
         // if created grouped bucket has associated entity/token, add them here
         const mergedProps: { id: string; entity?: Entity; token?: Token } = { id: groupId }
