@@ -5,10 +5,9 @@
 html.force-light-mode {
   filter: hue-rotate(180deg) invert(1);
   color-scheme: light;
-}
-
-img,
-video,
-picture {
-  filter: hue-rotate(180deg) invert(1);
+  img,
+  video,
+  picture {
+    filter: hue-rotate(180deg) invert(1);
+  }
 }
