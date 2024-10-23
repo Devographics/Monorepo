@@ -15,7 +15,7 @@ import { getDefaultState, useChartState } from './helpers/chartState'
 import { ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
 import { useEntities } from 'core/helpers/entities'
 import { FacetTitle } from '../common2/FacetTitle'
-import { getQuestionOptions } from './helpers/options'
+import { getQuestionGroups, getQuestionOptions } from './helpers/options'
 import { useColorScale } from '../common2/helpers/colors'
 import { HorizontalBarChartState, HorizontalBarViews } from './types'
 import { CommonProps } from '../common2/types'
@@ -140,11 +140,18 @@ const FacetHeading = (
         question: facetQuestion,
         chartState
     })
+    const allGroups = getQuestionGroups({
+        question: facetQuestion,
+        chartState
+    })
+    const allGroupsOrOptions = allGroups || allOptions
 
     const allFacetBucketIds = getAllFacetBucketIds({ series, block, chartState })
 
     // only keep options that are actually used in the current dataset
-    const usedOptions = allOptions.filter(option => allFacetBucketIds.includes(String(option.id)))
+    const usedOptions = allGroupsOrOptions.filter(optionOrGroup =>
+        allFacetBucketIds.includes(String(optionOrGroup.id))
+    )
 
     return (
         <div className="chart-heading">
