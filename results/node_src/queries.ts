@@ -1,10 +1,8 @@
 import camelCase from 'lodash/camelCase.js'
 import { indentString } from './indent_string'
 import isEmpty from 'lodash/isEmpty.js'
-import { getEntityFragment } from './fragments/getEntityFragment'
-import { getCommentsCountFragment } from './fragments/getCommentsCountFragment'
-import { getBucketFragment } from './fragments/getBucketFragment'
 import { getDefaultQueryFragment } from './fragments/getDefaultQueryFragment'
+import { getFacetFragment } from './fragments/getFacetFragment'
 
 const MODE_COMBINED = 'combined'
 const MODE_GRID = 'grid'
@@ -274,7 +272,10 @@ export const getFiltersQuery = ({
 
     const queryFooter = query.slice(fragmentEndIndex)
 
-    if (filters && (mode === MODE_GRID || mode === MODE_COMBINED)) {
+    if (filters) {
+        if (block.id === 'paid_leave_percentage_japanese_vs_non_japanese_coworkers') {
+            console.log(filters)
+        }
         queryBody = filters
             .map((singleSeries, seriesIndex) => {
                 let seriesFragment = queryFragment
@@ -316,7 +317,7 @@ export const getFiltersQuery = ({
                 return seriesFragment
             })
             .join('')
-    } else if (facet && mode === MODE_FACET) {
+    } else {
         const queryArgsOptions: DataQueryConfig = {
             facet,
             parameters: { enableCache, ...block.parameters }

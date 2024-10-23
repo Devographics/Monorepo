@@ -293,6 +293,10 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
             used_it: '#59DF7F'
         },
         gender: {
+            // grouped
+            man: [velocity[0], velocity[1]],
+            non_man: [velocity[3], velocity[4]],
+            // non-grouped
             male: [velocity[0], velocity[1]],
             female: [velocity[3], velocity[4]],
             non_binary: [velocity[6], velocity[7]],

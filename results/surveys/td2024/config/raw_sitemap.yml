@@ -373,15 +373,16 @@
             - template: tokyodev_variant_base
               id: company_size_high_salaries
               tabId: tabs.high_salaries
-              filters:
-                  - conditions:
-                        - fieldId: current_total_annual_compensation
-                          sectionId: compensation
-                          operator: in
-                          value:
-                              - range_20000000_to_29999999
-                              - range_30000000_to_49999999
-                              - range_over_50000000
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: current_total_annual_compensation
+                              sectionId: compensation
+                              operator: in
+                              value:
+                                  - range_20000000_to_29999999
+                                  - range_30000000_to_49999999
+                                  - range_over_50000000
 
 - id: compensation
   path: /compensation
@@ -557,6 +558,7 @@
             - template: tokyodev_variant_base
               id: life_in_japan__professional_life_by_remote_work_policy
               i18nNamespace: satisfaction
+              tabId: tabs.by_remote_work_policy
               queryOptions:
                   addQuestionComments: false
               filtersState:
