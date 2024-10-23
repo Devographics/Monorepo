@@ -9,8 +9,6 @@ parameters:
     showNoAnswer: true
     sort: { property: medianByFacet }
 filtersState:
-    options:
-        mode: facet
     facet:
         sectionId: compensation
         id: current_total_annual_compensation

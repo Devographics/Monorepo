@@ -69,6 +69,7 @@ import TextBlock from 'core/blocks/other/TextBlock'
 import RecommendedResourcesBlock from 'core/blocks/other/RecommendedResourcesBlock'
 import PageIntroductionBlock from 'core/blocks/other/PageIntroductionBlock'
 import SurveyIntroBlock from 'core/blocks/other/SurveyIntroBlock'
+import SurveyStartBlock from 'core/blocks/other/SurveyStartBlock'
 import NewsletterBlock from 'core/blocks/other/NewsletterBlock'
 import SponsorsBlock from 'core/blocks/other/SponsorsBlock'
 import PartnersBlock from 'core/blocks/other/PartnersBlock'
@@ -92,6 +93,7 @@ const otherBlocks = {
     RecommendedResourcesBlock,
     TshirtBlock,
     SurveyIntroBlock,
+    SurveyStartBlock,
     AwardsBlock,
     ConclusionBlock,
     NewsletterBlock,

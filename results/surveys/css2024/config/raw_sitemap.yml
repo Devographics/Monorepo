@@ -32,6 +32,11 @@
         disableExport: true
         wrapBlock: false
 
+      - id: survey_start
+        blockType: SurveyStartBlock
+        disableExport: true
+        wrapBlock: false
+
       - id: survey_sponsors
         template: sponsors
 
