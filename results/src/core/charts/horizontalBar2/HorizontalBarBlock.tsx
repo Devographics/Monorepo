@@ -144,7 +144,7 @@ const FacetHeading = (
         question: facetQuestion,
         chartState
     })
-    const allGroupsOrOptions = allGroups || allOptions
+    const allGroupsOrOptions = allGroups?.length > 1 ? allGroups : allOptions
 
     const allFacetBucketIds = getAllFacetBucketIds({ series, block, chartState })
 

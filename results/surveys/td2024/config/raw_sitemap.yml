@@ -154,27 +154,40 @@
               i18nNamespace: years
               parameters:
                   sort: { property: options }
-            - template: tokyodev_men_vs_non_men
-              i18nNamespace: years
 
       - id: professional_qualifications
         template: multiple_options2_combined
         defaultUnits: percentageQuestion
         variants:
             - template: tokyodev_vs_salary
-            - id: professional_qualifications_by_years_of_experience
-              fieldId: professional_qualifications
-              blockType: HorizontalBarBlock2
-              query: currentEditionData
-              parameters:
-                  showNoAnswer: true
-              defaultUnits: percentageBucket
+            - template: tokyodev_variant_base
+              id: professional_qualifications_by_years_of_experience
               tabId: tabs.by_years_of_experience
               filtersState:
                   facet:
                       sectionId: user_info
                       id: years_of_experience
             - template: tokyodev_men_vs_non_men
+            - template: tokyodev_variant_base
+              fieldId: years_of_experience
+              i18nNamespace: years
+              id: years_of_experience_by_compensation_and_qualifications
+              tabId: tabs.by_compensation_and_qualifications
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: professional_qualifications
+                              sectionId: user_info
+                              operator: eq
+                              value: coding_bootcamp
+                      - conditions:
+                            - fieldId: professional_qualifications
+                              sectionId: user_info
+                              operator: eq
+                              value: bachelors_degree
+                  facet:
+                      sectionId: compensation
+                      id: current_total_annual_compensation
 
       - id: language_proficiency_english
         template: multiple_options2
@@ -422,6 +435,29 @@
             sort: { property: count }
         variants:
             - template: tokyodev_vs_salary
+            - template: tokyodev_variant_base
+              id: most_important_benefit_by_remote_work_policy
+              tabId: tabs.by_remote_work_policy
+              filtersState:
+                  bucketsFilter:
+                      - remote_work
+                  filters:
+                      - conditions:
+                            - fieldId: remote_work_policy
+                              sectionId: employer_info
+                              operator: eq
+                              value:
+                                  - hybrid
+                            - fieldId: remote_work_policy
+                              sectionId: employer_info
+                              operator: eq
+                              value:
+                                  - up_to_employee
+                            - fieldId: remote_work_policy
+                              sectionId: employer_info
+                              operator: eq
+                              value:
+                                  - fully_remote
 
 - id: technology
   path: /technology
@@ -499,7 +535,6 @@
             - template: tokyodev_vs_salary
             - template: tokyodev_variant_base
               id: other_frameworks_libraries_by_devops_specialist
-              fieldId: developer_tools
               tabId: tabs.devops
               filtersState:
                   filters:
@@ -529,6 +564,13 @@
         parameters: { cutoff: 10 }
         variants:
             - template: tokyodev_vs_salary
+            - template: tokyodev_variant_base
+              id: development_processes_by_job_search_status
+              tabId: tabs.by_job_search_status
+              filtersState:
+                  facet:
+                      sectionId: job_info
+                      id: searching_for_job
 
       - id: productivity_tools
         template: multiple_options2_combined
