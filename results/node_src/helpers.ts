@@ -6,12 +6,13 @@ import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { TwitterApi } from 'twitter-api-v2'
 import { logToFile } from './log_to_file'
-import { argumentsPlaceholder, getFiltersQuery, getQuery, getMetadataQuery } from './queries'
+import { argumentsPlaceholder, getFiltersQuery, getQuery } from './queries'
 // import { allowedCachingMethods } from "@devographics/fetch"
 import { PageContextValue, PageDef } from '../src/core/types'
 
 import { parse } from 'graphql'
 import { print } from 'graphql-print'
+import { getMetadataQuery } from './fragments/getMetadataQuery'
 
 /**
  * Get caching methods based on current config
