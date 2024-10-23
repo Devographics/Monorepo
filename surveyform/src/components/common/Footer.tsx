@@ -18,6 +18,23 @@ type LinkItemProps = {
 };
 
 const CurrentYear = () => <span suppressHydrationWarning={true}>{(new Date()).getFullYear()}</span>
+
+function TranslatorModeButton() {
+  const [translatorMode, setTranslatorMode] = useState(false)
+  return <button
+    onClick={() => {
+      if (!translatorMode) {
+        enableTranslatorMode();
+        setTranslatorMode(true)
+      } else {
+        window.location.reload()
+      }
+    }}
+  >
+    {translatorMode ? "Refresh to leave translator mode" : "Translator mode"}
+  </button>
+}
+
 const links: Array<LinkItemProps> = [
   {
     component:
@@ -68,13 +85,7 @@ const links: Array<LinkItemProps> = [
     // @ts-ignore
     id: "Translator mode",
     component: (
-      <button
-        onClick={() => {
-          enableTranslatorMode();
-        }}
-      >
-        Translator mode
-      </button>
+      <TranslatorModeButton />
     ),
   },
 ];
