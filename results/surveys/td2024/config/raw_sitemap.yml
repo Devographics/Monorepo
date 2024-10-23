@@ -413,7 +413,7 @@
                       - conditions:
                             - fieldId: coworker_nationalities_engineers
                               sectionId: job_info
-                              operator: nin
+                              operator: in
                               value: all_non_japanese
 
       - id: most_important_benefit
