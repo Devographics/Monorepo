@@ -25,7 +25,7 @@ const FinishPage = async ({
       routes.account.login.from(`/survey/${slug}/${year}/${responseId}/thanks`)
     );
   }
-  const response = await rscMustGetResponse({ responseId, currentUser });
+  const response = await rscMustGetResponse({ responseId });
   const { data: edition } = await rscMustGetSurveyEditionFromUrl({
     slug,
     year,

@@ -15,6 +15,11 @@ export default WithErrorCatcher(async function ResponseLayout({
   params,
 }: NextLayoutParams<{ slug: string; year: string; responseId: string }>) {
   const { slug, year, responseId } = params;
+  /** NOTE:
+   * user checks in the layouts are NOT security mechanism
+   * the static pages under a layout can still be accessible
+   * they are only there for proper UX with redirection in case the user is logged out
+   */
   const currentUser = await rscCurrentUser();
   if (!currentUser) {
     return redirect(routes.account.login.from(`/survey/${slug}/${year}`));
@@ -27,7 +32,6 @@ export default WithErrorCatcher(async function ResponseLayout({
   // but this RSC will also check if the response id/user matches
   // for clearer error messages
   const response = await rscMustGetResponse({
-    currentUser,
     responseId,
   });
   // NOTE: this context is used only by client components
