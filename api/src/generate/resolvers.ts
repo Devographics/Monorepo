@@ -303,12 +303,19 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
     const subField: ResultsSubFieldEnum = info?.path?.prev?.key
 
     const { survey, edition, section, question, responseArguments, questionObjects } = parent
-    const { parameters = {}, filters, facet, responsesType = subField } = responseArguments || {}
+    const {
+        parameters = {},
+        filters,
+        facet,
+        responsesType = subField,
+        bucketsFilter
+    } = responseArguments || {}
     const { enableCache } = parameters
 
     const { editionCount, editionId: selectedEditionId } = args
     const computeArguments = {
         responsesType,
+        bucketsFilter,
         parameters,
         filters,
         facet,

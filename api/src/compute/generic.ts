@@ -40,7 +40,8 @@ import {
     addFacetValiditySums,
     addRatios,
     detectNaN,
-    addMetadata
+    addMetadata,
+    restrictBuckets
 } from './stages'
 import {
     ResponsesTypes,
@@ -224,6 +225,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         responsesType,
         filters,
         parameters = {},
+        bucketsFilter,
         facet,
         selectedEditionId,
         editionCount,
@@ -272,6 +274,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         mergeOtherBuckets,
         enableBucketGroups,
         enableAddMissingBuckets,
+        bucketsFilter,
         limit
     }
     if (question.options) {
@@ -466,8 +469,11 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             // bucket grouping
             await runStage(groupBuckets, [results, axis2, axis1])
 
-            // group cutoff buckets together
+            // cutoff data
             await runStage(cutoffData, [results, axis2, axis1])
+
+            // restrict buckets to the ones specified in bucketsFilter if needed
+            await runStage(restrictBuckets, [results, axis2, axis1])
 
             // apply overall dataset cutoff
             await runStage(applyDatasetCutoff, [results, computeArguments, axis2, axis1])
@@ -515,6 +521,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             await runStage(groupBuckets, [results, axis1])
 
             await runStage(cutoffData, [results, axis1])
+
+            // restrict buckets to the ones specified in bucketsFilter if needed
+            await runStage(restrictBuckets, [results, axis1])
 
             await runStage(applyDatasetCutoff, [results, computeArguments, axis1])
 

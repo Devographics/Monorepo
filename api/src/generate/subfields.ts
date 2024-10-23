@@ -12,10 +12,17 @@ interface SubField {
     resolverFunction?: ResolverType
 }
 
-export const getResponsesTypeDef = (surveyId: string, subField: ResultsSubFieldEnum | string) =>
-    `${subField}(filters: ${getFiltersTypeName(
-        surveyId
-    )}, parameters: Parameters, facet: ${getFacetsTypeName(surveyId)}): ${getResponseTypeName()}`
+export const getResponsesTypeDef = (
+    question: QuestionApiObject,
+    subField: ResultsSubFieldEnum | string
+) =>
+    `${subField}(${
+        question.filterTypeName ? `bucketsFilter: ${question.filterTypeName},` : ''
+    } filters: ${getFiltersTypeName(
+        question.surveyId
+    )}, parameters: Parameters, facet: ${getFacetsTypeName(
+        question.surveyId
+    )}): ${getResponseTypeName()}`
 
 const responsesResolverFunction: ResolverType = async (parent, args, context, info) => {
     console.log('// responses resolver')
@@ -45,25 +52,25 @@ export const subFields: Array<SubField> = [
     },
     {
         id: ResultsSubFieldEnum.RESPONSES,
-        def: question => getResponsesTypeDef(question.surveyId, ResultsSubFieldEnum.RESPONSES),
+        def: question => getResponsesTypeDef(question, ResultsSubFieldEnum.RESPONSES),
         addIf: ({ normPaths }) => !!normPaths?.response,
         resolverFunction: responsesResolverFunction
     },
     {
         id: ResultsSubFieldEnum.PRENORMALIZED,
-        def: question => getResponsesTypeDef(question.surveyId, ResultsSubFieldEnum.PRENORMALIZED),
+        def: question => getResponsesTypeDef(question, ResultsSubFieldEnum.PRENORMALIZED),
         addIf: ({ normPaths }) => !!normPaths?.prenormalized,
         resolverFunction: responsesResolverFunction
     },
     {
         id: ResultsSubFieldEnum.COMBINED,
-        def: question => getResponsesTypeDef(question.surveyId, ResultsSubFieldEnum.COMBINED),
+        def: question => getResponsesTypeDef(question, ResultsSubFieldEnum.COMBINED),
         addIf: ({ normPaths }) => !!normPaths?.other && !!normPaths?.response,
         resolverFunction: responsesResolverFunction
     },
     {
         id: ResultsSubFieldEnum.FREEFORM,
-        def: question => getResponsesTypeDef(question.surveyId, ResultsSubFieldEnum.FREEFORM),
+        def: question => getResponsesTypeDef(question, ResultsSubFieldEnum.FREEFORM),
         addIf: ({ normPaths }) => !!normPaths?.other,
         resolverFunction: responsesResolverFunction
     },

@@ -82,6 +82,7 @@ export type ResponseArguments = {
     filters: Filters
     facet: string
     parameters: ResponsesParameters
+    bucketsFilter: Filter<string>
 }
 
 export interface Filters {

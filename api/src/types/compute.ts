@@ -1,6 +1,7 @@
 import { QuestionApiObject } from './surveys'
 import { Filters } from './filters'
 import {
+    Filter,
     Option,
     OptionId,
     ResponsesTypes,
@@ -21,6 +22,7 @@ export interface GenericComputeArguments {
     responsesType?: ResponsesTypes
     filters?: Filters
     parameters?: GenericComputeParameters
+    bucketsFilter?: Filter<string>
     facet?: string
     selectedEditionId?: string
     editionCount?: number
@@ -65,4 +67,5 @@ export interface ComputeAxisParameters {
     enableAddMissingBuckets?: boolean
     limit: number
     options?: Option[]
+    bucketsFilter?: Filter<string>
 }
