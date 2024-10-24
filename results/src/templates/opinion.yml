@@ -2,4 +2,5 @@ blockType: OpinionBlock
 translateData: true
 i18nNamespace: opinions
 hasSponsor: true
-query: allEditionsData
+queryOptions:
+    allEditions: true
