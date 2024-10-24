@@ -4,3 +4,5 @@ query: currentEditionData
 parameters:
     showNoAnswer: true
 defaultUnits: percentageBucket
+queryOptions:
+    addBucketsEntities: false

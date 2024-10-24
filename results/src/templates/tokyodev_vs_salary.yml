@@ -5,6 +5,8 @@ tabId: tabs.by_salary
 defaultUnits: percentilesByFacet
 blockType: HorizontalBarBlock2
 query: currentEditionData
+queryOptions:
+    addBucketsEntities: false
 parameters:
     showNoAnswer: true
     sort: { property: medianByFacet }
