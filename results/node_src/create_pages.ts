@@ -5,11 +5,11 @@ import {
     getLocalizedPath,
     getCleanLocales,
     createBlockPages,
-    runPageQueries,
     getLoadMethod,
     getMetadata,
     getTranslationContexts
 } from './helpers'
+import { runPageQueries } from './run_page_queries'
 import { getSendOwlData } from './sendowl'
 // @ts-ignore
 import yaml from 'js-yaml'
