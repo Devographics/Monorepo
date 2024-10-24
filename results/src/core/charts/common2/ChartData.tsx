@@ -12,7 +12,15 @@ import T from 'core/i18n/T'
 
 export const ChartData = ({ block, pageContext, series, variant }: CommonProps) => {
     const chartFilters = variant?.chartFilters || block.filtersState
-    const { query } = getBlockQuery({ block, pageContext, chartFilters })
+    const { currentSurvey, currentEdition, id: pageId } = pageContext
+
+    const { query } = getBlockQuery({
+        block,
+        chartFilters,
+        survey: currentSurvey,
+        edition: currentEdition,
+        section: { id: pageId }
+    })
     return (
         <ModalTrigger
             trigger={

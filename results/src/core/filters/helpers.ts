@@ -775,9 +775,13 @@ export async function fetchSeriesData({
     chartFilters,
     year
 }: FetchSeriesDataOptions): Promise<FetchSeriesDataPayload> {
+    const { currentEdition, currentSurvey, id: pageId } = pageContext
+
     const { query, seriesNames } = getBlockQuery({
         block,
-        pageContext,
+        survey: currentSurvey,
+        edition: currentEdition,
+        section: { id: pageId },
         chartFilters
     })
 

@@ -64,9 +64,13 @@ const DataExplorerBlock = ({
     const defaultYSection = ySegments.sectionId
     const defaultYField = ySegments.questionId
 
+    const { currentSurvey, currentEdition, id: pageId } = pageContext
+
     const defaultQuery = getBlockQuery({
         block,
-        pageContext,
+        survey: currentSurvey,
+        edition: currentEdition,
+        section: { id: pageId },
         queryArgs: { xAxis: defaultXAxis, yAxis: defaultYAxis, parameters: { showNoAnswer: true } }
     })
 
@@ -201,7 +205,9 @@ const DataExplorerBlock = ({
 
             const query = getBlockQuery({
                 block,
-                pageContext,
+                survey: currentSurvey,
+                edition: currentEdition,
+                section: { id: pageId },
                 queryArgs: { xAxis, yAxis, parameters: { showNoAnswer: true } }
             })
             // console.log('// query')
@@ -230,7 +236,7 @@ const DataExplorerBlock = ({
         if (xField && yField) {
             getData()
         }
-    }, [xField, yField])
+    }, [xField, yField, currentSurvey, currentEdition, pageId])
 
     return (
         <Wrapper_>

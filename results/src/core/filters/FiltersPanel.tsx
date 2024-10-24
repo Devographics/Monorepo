@@ -61,7 +61,7 @@ const FiltersPanel = ({
 }: FiltersPanelPropsType) => {
     const { getString } = useI18n()
     const pageContext = usePageContext()
-    const { currentEdition } = pageContext
+    const { currentEdition, currentSurvey, id: pageId } = pageContext
     const allFilters = useAllFilters()
     const entities = useEntities()
 
@@ -129,7 +129,9 @@ const FiltersPanel = ({
 
     const { query } = getBlockQuery({
         block,
-        pageContext,
+        survey: currentSurvey,
+        edition: currentEdition,
+        section: { id: pageId },
         chartFilters: filtersState
     })
 
