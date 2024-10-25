@@ -46,43 +46,40 @@ export const CustomVariantWrapper = ({
     const { chartFilters } = variant
     const year = pageContext.currentEdition.year
 
-    // whenever chart filters change, clear out series to trigger a new query
-    // note: we do *not* want this to run on mount
-    useDidMountEffect(() => {
-        // set loading now so that query has time to run before trying
-        // to display chart contents
-        setSeries(null)
+    const getData = async () => {
+        console.log('// getData')
         setIsLoading(true)
-    }, [chartFilters])
-
-    // whenever series are cleared, re-trigger query
-    useEffect(() => {
-        const getData = async () => {
-            setIsLoading(true)
-            setApiError(null)
-            const {
-                result: seriesData,
-                error,
-                query
-            } = await fetchSeriesData({
-                block,
-                pageContext,
-                chartFilters,
-                year
-            })
-            setQuery(query)
-            if (error) {
-                setApiError(error)
-            } else if (seriesData) {
-                setSeries(seriesData)
-            }
-            setIsLoading(false)
+        setApiError(null)
+        const {
+            result: seriesData,
+            error,
+            query
+        } = await fetchSeriesData({
+            block,
+            pageContext,
+            chartFilters,
+            year
+        })
+        setQuery(query)
+        if (error) {
+            setApiError(error)
+        } else if (seriesData) {
+            setSeries(seriesData)
         }
+        setIsLoading(false)
+    }
 
+    // on initial render, only trigger a new query if series are empty
+    useEffect(() => {
         if (!series || series.length === 0) {
             getData()
         }
-    }, [series])
+    }, [])
+
+    // on subsequent renders, trigger a new query whenever chart filters change
+    useDidMountEffect(() => {
+        getData()
+    }, [chartFilters])
 
     return (
         <div className="chart-custom-variant">

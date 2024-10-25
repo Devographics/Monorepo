@@ -68,8 +68,6 @@ const ValueSegmentField = ({
                 <Select_
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const value = e.target.value
-                        console.log(value)
-
                         setFiltersState(fState => {
                             const newState = cloneDeep(fState)
                             newState.filters[seriesIndex].conditions[conditionIndex].value = value
