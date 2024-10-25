@@ -172,6 +172,7 @@ export const TabsWrapper = ({
                                         ...firstBlockVariant,
                                         filtersState: variant.chartFilters
                                     }}
+                                    isCustomVariant={true}
                                     pageData={pageData}
                                     blockIndex={blockIndex}
                                     variantIndex={variantIndex}

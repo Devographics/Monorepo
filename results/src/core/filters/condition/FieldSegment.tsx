@@ -42,14 +42,14 @@ export const FieldSegment = ({
                         condition.sectionId = sectionId
                         // if we're changing the field, also change the value
                         const field = allFilters.find(f => f.id === fieldId)
-                        const newValue = field?.options?.[0]?.id
+                        const optionsOrGroups = field?.groups || field?.options || []
+                        const newValue = optionsOrGroups[0]?.id
                         if (newValue) {
                             // if current value is an array, make sure new value is an array too
                             condition.value = Array.isArray(condition.value) ? [newValue] : newValue
                         } else {
                             condition.value = null
                         }
-                        console.log(newState)
                         return newState
                     })
                 }}

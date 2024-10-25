@@ -106,6 +106,13 @@ export interface Filter<T> {
     gt?: T
 }
 
+export type MongoCondition<T> =
+    | { $eq?: T }
+    | { $in?: T[] }
+    | { $nin?: T[] }
+    | { $lt?: T }
+    | { $gt?: T }
+
 export interface ResponsesParameters {
     cutoff?: number
     cutoffPercent?: number

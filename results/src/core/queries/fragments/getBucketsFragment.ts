@@ -17,6 +17,7 @@ export const getBucketsFragment = (options: {
                     id
                     percentageQuestion
                     percentageSurvey
+                    isFreeformData
                     hasInsufficientData
                     ${addBucketsEntities ? getEntityFragment() : ''}
                     ${facet ? BucketUnits.AVERAGE : ''}

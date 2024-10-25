@@ -116,16 +116,17 @@ export const DataLoaderError = ({
 }
 
 const Error_ = styled.section`
-    position: absolute;
+    /* position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(6px);
-    z-index: 20;
+    z-index: 20; */
     display: grid;
     place-items: center;
+    padding: var(--spacing) 0;
 `
 
 const Contents_ = styled.div`

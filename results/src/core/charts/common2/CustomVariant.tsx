@@ -35,10 +35,10 @@ export const CustomVariantWrapper = ({
     children: JSX.Element
 }) => {
     const { getString } = useI18n()
-    const [apiError, setApiError] = useState()
+    const [apiError, setApiError] = useState<any | null>(null)
     const [isLoading, setIsLoading] = useState(false)
-    const [series, setSeries] = useStickyState<Array<DataSeries<AllQuestionData>>>(
-        [],
+    const [series, setSeries] = useStickyState<Array<DataSeries<AllQuestionData>> | null>(
+        null,
         `data-${variant.id}`
     )
     const [query, setQuery] = useState<string | undefined>()
@@ -49,13 +49,17 @@ export const CustomVariantWrapper = ({
     // whenever chart filters change, clear out series to trigger a new query
     // note: we do *not* want this to run on mount
     useDidMountEffect(() => {
-        setSeries([])
+        // set loading now so that query has time to run before trying
+        // to display chart contents
+        setSeries(null)
+        setIsLoading(true)
     }, [chartFilters])
 
     // whenever series are cleared, re-trigger query
     useEffect(() => {
         const getData = async () => {
             setIsLoading(true)
+            setApiError(null)
             const {
                 result: seriesData,
                 error,
@@ -115,15 +119,14 @@ export const CustomVariantWrapper = ({
                     <code>{JSON.stringify(variant, null, 2)}</code>
                 </pre>
             </div> */}
-            {apiError && (
+            {apiError ? (
                 <DataLoaderError
                     block={block}
                     apiError={apiError}
                     query={query}
                     chartFilters={chartFilters}
                 />
-            )}
-            {isLoading ? (
+            ) : series === null || series.length === 0 || isLoading ? (
                 <>
                     <div className="chart-placeholder"></div>
                     <Loading />

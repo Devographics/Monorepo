@@ -18,6 +18,7 @@ interface BlockSwitcherProps {
     index?: number
     series?: DataSeries<any>
     variant?: CustomVariant
+    isCustomVariant?: boolean
 }
 const BlockSwitcher = ({
     pageData,
@@ -25,7 +26,8 @@ const BlockSwitcher = ({
     index,
     series: series_,
     variant,
-    isLoading
+    isLoading,
+    isCustomVariant = false
 }: BlockSwitcherProps) => {
     const pageContext = usePageContext()
     const { id, blockType, filtersState, query } = block
@@ -47,7 +49,10 @@ const BlockSwitcher = ({
     const question = getAllQuestions(pageContext.currentEdition).find(
         q => q.id === (block.fieldId ?? block.id)
     )
-    const series = series_ || getBlockSeriesData({ block, pageContext, filtersState })
+    const series = isCustomVariant
+        ? series_
+        : getBlockSeriesData({ block, pageContext, filtersState })
+
 
     const blockProps = {
         block,
