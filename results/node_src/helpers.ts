@@ -7,6 +7,7 @@ import { TwitterApi } from 'twitter-api-v2'
 import { logToFile } from './log_to_file'
 // import { allowedCachingMethods } from "@devographics/fetch"
 import { PageContextValue, PageDef } from '../src/core/types'
+import template from 'lodash/template.js'
 
 import { getMetadataQuery } from './queries/fragments/getMetadataQuery'
 
@@ -316,4 +317,34 @@ export const getTranslationContexts = ({
     const baseContexts = ['homepage', 'common', 'results', 'countries']
     const extraTranslationContexts = parseEnvVariableArray(process.env.CUSTOM_LOCALE_CONTEXTS)
     return [...baseContexts, ...extraTranslationContexts, surveyId, editionId]
+}
+
+/*
+
+This takes a string query and inserts variables
+- surveyId
+- editionId
+- sectionId
+- questionId
+*/
+type QueryVariables = {
+    surveyId: string
+    editionId: string
+    sectionId: string
+    questionId: string
+}
+export const parseCustomQuery = ({
+    query,
+    variables
+}: {
+    query: string
+    variables: QueryVariables
+}) => {
+    try {
+        const interpolatedQuery = template(query)(variables)
+        return interpolatedQuery
+    } catch (error) {
+        console.log(`// parseCustomQuery error in question "${variables.questionId}"`)
+        console.log(error)
+    }
 }

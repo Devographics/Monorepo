@@ -12,6 +12,7 @@ import {
     getExistingJSON,
     getExistingString,
     getLoadMethod,
+    parseCustomQuery,
     removeNull
 } from './helpers'
 
@@ -21,10 +22,11 @@ Try loading data from disk or GitHub, or else run queries for *each block* in a 
 
 */
 export const runPageQueries = async ({ page, graphql, surveyId, editionId, currentEdition }) => {
+    const sectionId = page.id
     const startedAt = new Date()
     const useFilesystemCache = allowedCachingMethods().filesystem
     const useApiCache = allowedCachingMethods().api
-    console.log(`// Running GraphQL queries for page ${page.id}…`)
+    console.log(`// Running GraphQL queries for page ${sectionId}…`)
 
     const paths = getDataLocations(surveyId, editionId)
 
@@ -35,31 +37,47 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
 
     for (const b of page.blocks) {
         for (const block of b.variants) {
-            if (block.query) {
+            if (block.hasData || block.query) {
                 let data
 
-                const dataDirPath = path.resolve(`${basePath}/data/${page.id}`)
+                const dataDirPath = path.resolve(`${basePath}/data/${sectionId}`)
                 const dataFileName = `${block.id}.json`
                 const dataFilePath = `${dataDirPath}/${dataFileName}`
-                const queryDirPath = path.resolve(`${basePath}/queries/${page.id}`)
+                const queryDirPath = path.resolve(`${basePath}/queries/${sectionId}`)
                 const queryFileName = `${block.id}.graphql`
                 const queryFilePath = `${queryDirPath}/${queryFileName}`
 
                 const existingData = await getExistingJSON({
                     localPath: dataFilePath,
-                    remoteUrl: `${baseUrl}/data/${page.id}/${dataFileName}`
+                    remoteUrl: `${baseUrl}/data/${sectionId}/${dataFileName}`
                 })
                 const existingQueryFormatted = await getExistingString({
                     localPath: queryFilePath,
-                    remoteUrl: `${baseUrl}/queries/${page.id}/${queryFileName}`
+                    remoteUrl: `${baseUrl}/queries/${sectionId}/${queryFileName}`
                 })
-                const { query: newQuery } = await getBlockQuery({
-                    block,
-                    survey: { id: surveyId },
-                    edition: currentEdition,
-                    section: { id: page.id },
-                    chartFilters: block.filtersState
-                })
+                let newQuery
+                if (block.query) {
+                    const questionId = block.fieldId || block.id
+                    newQuery = parseCustomQuery({
+                        query: block.query,
+                        variables: {
+                            surveyId,
+                            editionId,
+                            sectionId,
+                            questionId
+                        }
+                    })
+                    newQuery = `query {${newQuery}}`
+                } else {
+                    const { query } = await getBlockQuery({
+                        block,
+                        survey: { id: surveyId },
+                        edition: currentEdition,
+                        section: { id: sectionId },
+                        chartFilters: block.filtersState
+                    })
+                    newQuery = query
+                }
                 let newQueryFormatted
                 try {
                     const ast = parse(newQuery)
