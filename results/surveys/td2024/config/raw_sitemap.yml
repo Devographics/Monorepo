@@ -248,6 +248,31 @@
         defaultUnits: percentageQuestion
         variants:
             - template: tokyodev_vs_salary
+            - template: tokyodev_variant_base
+              id: most_important_benefit_by_remote_work_policy
+              tabId: tabs.by_remote_work_policy
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: remote_work_policy
+                              sectionId: employer_info
+                              operator: eq
+                              value: no_remote_work
+                      - conditions:
+                            - fieldId: remote_work_policy
+                              sectionId: employer_info
+                              operator: eq
+                              value: hybrid
+                      - conditions:
+                            - fieldId: remote_work_policy
+                              sectionId: employer_info
+                              operator: eq
+                              value: up_to_employee
+                      - conditions:
+                            - fieldId: remote_work_policy
+                              sectionId: employer_info
+                              operator: eq
+                              value: fully_remote
 
       - id: current_job_description
         template: tokyodev_multiple_options2_combined
@@ -267,23 +292,20 @@
                   options:
                       showDefaultSeries: false
                   filters:
-                      - year: 2024
-                        conditions:
+                      - conditions:
                             - fieldId: years_of_experience
                               sectionId: user_info
                               operator: in
                               value:
                                   - range_1_3
-                      - year: 2024
-                        conditions:
+                      - conditions:
                             - fieldId: years_of_experience
                               sectionId: user_info
                               operator: in
                               value:
                                   - range_4_6
                                   - range_7_9
-                      - year: 2024
-                        conditions:
+                      - conditions:
                             - fieldId: years_of_experience
                               sectionId: user_info
                               operator: in
@@ -300,6 +322,21 @@
             - template: tokyodev_vs_salary
               parameters:
                   sort: { property: options }
+            - template: tokyodev_variant_base
+              id: coworker_nationalities_engineers_by_reason_for_relocation
+              tabId: tabs.by_reason_for_relocation
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: reason_for_relocation
+                              sectionId: user_info
+                              operator: eq
+                              value: born_in_japan
+                      - conditions:
+                            - fieldId: reason_for_relocation
+                              sectionId: user_info
+                              operator: nin
+                              value: [born_in_japan]
 
       - id: coworker_nationalities_non_engineers
         template: tokyodev_multiple_options2
@@ -308,6 +345,13 @@
             - template: tokyodev_vs_salary
               parameters:
                   sort: { property: options }
+            - template: tokyodev_variant_base
+              id: coworker_nationalities_non_engineers_by_coworker_nationalities_engineers
+              tabId: tabs.by_coworker_nationalities_engineers
+              filtersState:
+                  facet:
+                      id: coworker_nationalities_engineers
+                      sectionId: job_info
 
       - id: languages_used_colleagues_japanese
         template: tokyodev_multiple_options2
@@ -346,6 +390,21 @@
         template: tokyodev_multiple_options2
         variants:
             - template: tokyodev_vs_salary
+            - template: tokyodev_variant_base
+              id: workplace_perks_by_job_search_status
+              tabId: tabs.by_job_search_status
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: searching_for_job
+                              sectionId: job_info
+                              operator: eq
+                              value: yes
+                      - conditions:
+                            - fieldId: searching_for_job
+                              sectionId: job_info
+                              operator: eq
+                              value: no
 
       - id: workplace_difficulties
         template: tokyodev_multiple_options2
