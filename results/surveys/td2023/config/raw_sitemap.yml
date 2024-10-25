@@ -129,7 +129,7 @@
       #   tabId: tabs.experience_by_gender_men
       #   i18nNamespace: years
       #   blockType: HorizontalBarBlock2
-      #   query: currentEditionData
+      #   hasData: true
       #   parameters:
       #       showNoAnswer: true
       #   defaultUnits: percentilesByFacet
@@ -157,7 +157,7 @@
       #       - id: experience_by_gender_women
       #         fieldId: years_of_experience
       #         blockType: HorizontalBarBlock2
-      #         query: currentEditionData
+      #         hasData: true
       #         parameters:
       #             showNoAnswer: true
       #         defaultUnits: percentilesByFacet
@@ -212,7 +212,7 @@
             - id: professional_qualifications_by_years_of_experience
               fieldId: professional_qualifications
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageBucket
@@ -245,7 +245,7 @@
             - id: language_proficiency_japanese_by_years_in_japan
               fieldId: language_proficiency_japanese
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageBucket
@@ -292,7 +292,7 @@
             - id: current_job_description_by_educational_attainment
               fieldId: current_job_description
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageBucket
@@ -314,7 +314,7 @@
             - id: coworker_nationalities_engineers_by_years_in_japan
               fieldId: coworker_nationalities_engineers
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentilesByFacet
@@ -336,7 +336,7 @@
             - id: coworker_nationalities_non_engineers_by_years_in_japan
               fieldId: coworker_nationalities_non_engineers
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageBucket
@@ -398,7 +398,7 @@
             - id: how_did_you_find_your_current_job_by_current_employer
               fieldId: how_did_you_find_your_current_job
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
                   sort: { property: count }
@@ -433,7 +433,7 @@
             - id: current_employer_by_residency_status
               fieldId: current_employer
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageBucket
@@ -463,7 +463,7 @@
             - id: remote_work_policy_by_years_of_experience
               fieldId: remote_work_policy
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentilesByFacet
@@ -501,7 +501,7 @@
             - id: previous_compensation_by_negotiated_compensation
               fieldId: previous_compensation
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageBucket
@@ -521,7 +521,7 @@
             - id: desired_compensation_by_negotiated_compensation
               fieldId: desired_compensation
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageBucket
@@ -541,7 +541,7 @@
             - id: negotiated_compensation_by_current_employer
               fieldId: negotiated_compensation
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageQuestion
@@ -672,7 +672,7 @@
             - id: programming_languages_by_company_size
               fieldId: programming_languages
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
                   sort: { property: medianByFacet }
@@ -702,7 +702,7 @@
             - id: web_frameworks_by_current_job_description
               fieldId: web_frameworks
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageQuestion
@@ -735,7 +735,7 @@
             - id: other_frameworks_libraries_by_data_scientist_or_machine_learning
               fieldId: other_frameworks_libraries
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageQuestion
@@ -761,7 +761,7 @@
             - id: other_frameworks_libraries_by_devops_specialist
               fieldId: developer_tools
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageQuestion
@@ -810,7 +810,7 @@
               i18nNamespace: satisfaction
               fieldId: life_in_japan__visa_situation
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageQuestion
@@ -846,7 +846,7 @@
               i18nNamespace: satisfaction
               fieldId: life_in_japan__professional_life
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageQuestion
@@ -886,7 +886,7 @@
             #   i18nNamespace: satisfaction
             #   fieldId: life_in_japan__family_life
             #   blockType: HorizontalBarBlock2
-            #   query: currentEditionData
+            #   hasData: true
             #   parameters:
             #       showNoAnswer: true
             #   defaultUnits: percentageQuestion
@@ -922,7 +922,7 @@
               i18nNamespace: satisfaction
               fieldId: life_in_japan__social_life
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageQuestion
@@ -962,7 +962,7 @@
               i18nNamespace: satisfaction
               fieldId: life_in_japan__cultural_adjustment
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageQuestion
@@ -1014,7 +1014,7 @@
               i18nNamespace: satisfaction
               fieldId: life_in_japan__housing
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageQuestion
@@ -1065,7 +1065,7 @@
             - id: communities_by_gender
               fieldId: communities
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageBucket
@@ -1085,7 +1085,7 @@
             - id: keyboard_layout_by_japanese_proficiency
               fieldId: keyboard_layout
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageQuestion

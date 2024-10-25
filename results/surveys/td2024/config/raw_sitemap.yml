@@ -71,7 +71,7 @@
             - id: japan_province_by_social_life_satisfaction
               fieldId: japan_province
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
                   limit: 10
@@ -204,7 +204,7 @@
             - id: language_proficiency_japanese_by_years_in_japan
               fieldId: language_proficiency_japanese
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               parameters:
                   showNoAnswer: true
               defaultUnits: percentageBucket
@@ -468,6 +468,9 @@
             - template: tokyodev_variant_base
               id: most_important_benefit_by_remote_work_policy
               tabId: tabs.by_remote_work_policy
+              parameters:
+                  sort: { property: count }
+                  limit: 1
               filtersState:
                   bucketsFilter:
                       - remote_work
@@ -476,18 +479,17 @@
                             - fieldId: remote_work_policy
                               sectionId: employer_info
                               operator: eq
-                              value:
-                                  - hybrid
+                              value: hybrid
+                      - conditions:
                             - fieldId: remote_work_policy
                               sectionId: employer_info
                               operator: eq
-                              value:
-                                  - up_to_employee
+                              value: up_to_employee
+                      - conditions:
                             - fieldId: remote_work_policy
                               sectionId: employer_info
                               operator: eq
-                              value:
-                                  - fully_remote
+                              value: fully_remote
 
 - id: technology
   path: /technology

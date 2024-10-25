@@ -4,5 +4,5 @@ blockType: VerticalBarBlock
 showDescription: false
 i18nNamespace: happiness
 hasSponsor: true
-query: currentEditionData
+hasData: true
 parameters: { showNoAnswer: true }

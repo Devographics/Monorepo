@@ -4,7 +4,7 @@ fieldId: ${mainBlockId}
 # tabId: tabs.by_salary
 # defaultUnits: percentilesByFacet
 blockType: HorizontalBarBlock2
-query: currentEditionData
+hasData: true
 parameters:
     showNoAnswer: true
     cutoff: 10

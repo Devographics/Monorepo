@@ -3,7 +3,7 @@ blockType: HorizontalBarBlock2
 defaultUnits: count
 # dataPath: 'dataAPI.survey.${sectionId}_others.year'
 hasSponsor: true
-query: currentEditionData
+hasData: true
 i18nNamespace: tools
 customizationModes: [filters, facets]
 parameters: { limit: 10 }

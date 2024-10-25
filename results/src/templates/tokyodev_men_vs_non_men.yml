@@ -1,7 +1,7 @@
 id: ${mainBlockId}_men_vs_non_men
 fieldId: ${mainBlockId}
 blockType: HorizontalBarBlock2
-query: currentEditionData
+hasData: true
 parameters:
     showNoAnswer: true
 defaultUnits: percentageQuestion

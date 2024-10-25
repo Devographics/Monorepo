@@ -2,5 +2,5 @@ blockType: VerticalBarBlock
 defaultUnits: percentageSurvey
 # blockNamespace: user_info
 hasSponsor: true
-query: currentEditionData
+hasData: true
 parameters: { showNoAnswer: true }
