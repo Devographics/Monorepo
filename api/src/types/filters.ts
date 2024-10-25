@@ -13,6 +13,8 @@ export interface FilterQuery<T> {
     $gt?: T
 }
 
-export interface FiltersQuery {
+export type FiltersQuery = {
     [key: string]: FilterQuery<string | number>
+} & {
+    $or?: Array<FilterQuery<string | number>>
 }

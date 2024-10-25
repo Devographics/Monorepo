@@ -1,95 +1,217 @@
 import { loadOrGetSurveys } from './load/surveys'
 import { getQuestionObjects } from './generate/generate'
 import { Filter, Filters, FilterQuery, FiltersQuery, ComputeAxisParameters } from './types'
-import { OptionGroup } from '@devographics/types'
+import { MongoCondition, OptionGroup } from '@devographics/types'
 import range from 'lodash/range.js'
 import { getMainSubfieldPath } from './helpers/surveys'
+import merge from 'lodash/merge.js'
+import clone from 'lodash/clone.js'
 
 /**
  * Map natural operators (exposed by the API), to MongoDB operators.
+ *
+ * input:
+ *
+ * {
+ *   in: [4, 5, 6],
+ *   gt: 7
+ * }
+ *
+ * output:
+ *
+ * [
+ *   { $in: [4,5,6]},
+ *   { $gt: 7}
+ * ]
  */
-const mapFilter = <T>(filter: Filter<T>): FilterQuery<T> => {
-    const q: FilterQuery<T> = {}
-    if (filter.eq !== undefined) {
-        q['$eq'] = filter.eq
+const mapFilter = <T>(filter: Filter<T>) => {
+    const { eq, /* in, */ nin, lt, gt } = filter
+    const conditions: Array<MongoCondition<T>> = []
+    if (eq !== undefined) {
+        conditions.push({ $eq: eq })
     }
     if (filter.in !== undefined) {
         if (!Array.isArray(filter.in)) {
             throw new Error(`'in' operator only supports arrays`)
         }
-        q['$in'] = filter.in
+        conditions.push({ $in: filter.in })
     }
-    if (filter.nin !== undefined) {
-        if (!Array.isArray(filter.nin)) {
+    if (nin !== undefined) {
+        if (!Array.isArray(nin)) {
             throw new Error(`'nin' operator only supports arrays`)
         }
-        q['$nin'] = filter.nin
+        conditions.push({ $nin: nin })
     }
-    if (filter.lt !== undefined) {
-        q['$lt'] = filter.lt
+    if (lt !== undefined) {
+        conditions.push({ $lt: lt })
     }
-    if (filter.gt !== undefined) {
-        q['$gt'] = filter.gt
+    if (gt !== undefined) {
+        conditions.push({ $gt: gt })
     }
-    return q
+    return conditions
 }
 
 /*
-                    
-Expand filter groups from e.g. { eq: 'range_30_34' } to 
-{ in: [30, 31, 32, 34] }
+
+Take an option group and expand it into its individual items – or
+gt/lt bounds for an open group (e.g. "range_over_20")
+
+TODO: in theory, {in: [4, 5, 6, 7, 8]} could be replaced by {gt: 4, lt: 9}
+but then how to handle discoutinous series? (e.g. [2, 5, 10] ?)
 
 */
-function expandFilterGroups(filterValues: Array<string | number>, groups: OptionGroup[]) {
-    let allValues: Array<string | number> = []
-    for (const value of filterValues) {
-        const group = groups.find(g => g.id === value)
-        if (!group) {
-            console.log({ filterValues })
-            console.log({ groups })
-            throw new Error(`expandFilterGroups: could not find group with id ${value}`)
-        }
-        const { items, lowerBound, upperBound } = group
+function expandGroup(group: OptionGroup, isNin: boolean = false) {
+    const filter: Filter<string | number> = {}
+    const { items, lowerBound, upperBound } = group
+    if (isNin) {
+        // this is a "not in" group, so we *exclude* items
         if (items) {
-            allValues = [...allValues, ...items]
-        } else if (typeof lowerBound !== 'undefined' && typeof upperBound !== 'undefined') {
-            allValues = [...allValues, ...range(lowerBound, upperBound)]
+            // group has items; keep everything that *doesn't* match those items
+            filter.nin = items
+        } else if (lowerBound && upperBound) {
+            // group has both bounds defined; keep everything that *isn't* in between
+            filter.nin = range(lowerBound, upperBound)
+        } else if (lowerBound) {
+            // group only has lower bound; keep everything under
+            filter.lt = lowerBound
+        } else if (upperBound) {
+            // group only has upper bound; keep everything above
+            filter.gt = upperBound
+        }
+    } else {
+        if (items) {
+            // group has items; keep everything that matches those items
+            filter.in = items
+        } else if (lowerBound && upperBound) {
+            // group has both bounds defined; keep everything in between
+            filter.in = range(lowerBound, upperBound)
+        } else if (lowerBound) {
+            // group only has lower bound; keep everything above
+            filter.gt = lowerBound
+        } else if (upperBound) {
+            // group only has upper bound; keep everything under
+            filter.lt = upperBound
         }
     }
-    return allValues
+    return filter
 }
 
-function expandFilter(filter: Filter<string | number>, groups: OptionGroup[]) {
+/*
+
+Merge two sets of filters while properly concatenating in/nin fields
+
+*/
+function mergeFilters(
+    currentFilters: Filter<string | number>,
+    newFilters: Filter<string | number>
+) {
+    const mergedFilters = clone(currentFilters)
+    if (newFilters.eq) {
+        if (currentFilters.eq) {
+            console.warn(
+                `mergeFilters: {eq: ${currentFilters.eq}} will be overwritten by {eq: ${newFilters.eq}}`
+            )
+        }
+        mergedFilters.eq = newFilters.eq
+    }
+    if (newFilters.gt) {
+        if (currentFilters.gt) {
+            console.warn(
+                `mergeFilters: {gt: ${currentFilters.gt}} will be overwritten by {gt: ${newFilters.gt}}`
+            )
+        }
+        mergedFilters.gt = newFilters.gt
+    }
+    if (newFilters.lt) {
+        if (currentFilters.lt) {
+            console.warn(
+                `mergeFilters: {lt: ${currentFilters.lt}} will be overwritten by {lt: ${newFilters.lt}}`
+            )
+        }
+        mergedFilters.lt = newFilters.lt
+    }
+    if (newFilters.in) {
+        mergedFilters.in = [...(currentFilters.in || []), ...newFilters.in]
+    }
+    if (newFilters.nin) {
+        mergedFilters.nin = [...(currentFilters.nin || []), ...newFilters.nin]
+    }
+    return mergedFilters
+}
+
+function expandFilter(filter: Filter<string | number>, groups?: OptionGroup[]) {
     let newFilter: Filter<string | number> = {}
-    if (filter.eq || filter.in) {
-        let eqInFilters: Array<string | number> = []
-        if (filter.eq) {
-            eqInFilters = [filter.eq]
+    const getGroup = (value: string | number) => groups?.find(g => g.id === value)
+    if (filter.eq) {
+        const group = getGroup(filter.eq)
+        if (group) {
+            const groupFilter = expandGroup(group)
+            newFilter = mergeFilters(newFilter, groupFilter)
+        } else {
+            newFilter.eq = filter.eq
         }
-        if (filter.in) {
-            eqInFilters = [...eqInFilters, ...filter.in]
-        }
-        // TODO: filter.in could include open-ended ranges such as
-        // range_over_20 which cannot be handled using this method
-        // and will need to use lt/gt instead
-        newFilter.in = expandFilterGroups(eqInFilters, groups)
+    }
+    if (filter.in) {
+        filter.in.forEach(value => {
+            const group = getGroup(value)
+            if (group) {
+                const groupFilter = expandGroup(group)
+                newFilter = mergeFilters(newFilter, groupFilter)
+            } else {
+                newFilter = mergeFilters(newFilter, { in: [value] })
+            }
+        })
     }
     if (filter.nin) {
-        newFilter.nin = expandFilterGroups(filter.nin, groups)
+        filter.nin.forEach(value => {
+            const group = getGroup(value)
+            if (group) {
+                const groupFilter = expandGroup(group, true)
+                newFilter = mergeFilters(newFilter, groupFilter)
+            } else {
+                newFilter = mergeFilters(newFilter, { nin: [value] })
+            }
+        })
     }
     return newFilter
 }
 
 /**
  * Generate a MongoDB $match query from filters object.
+ *
+ * input:
+ *
+ * {
+ *   in: [ range_10_12, range_13_15, range_16_20, range_over_20],
+ * }
+ *
+ * output:
+ *
+ *    {
+ *      "surveyId": "tokyodev",
+ *      "editionId": "td2024",
+ *      "employer_info.current_employer.choices": {
+ *        "$nin": [null, "", [], {}]
+ *      },
+ *      "$or": [
+ *        {
+ *          "user_info.years_of_experience.choices": {
+ *            "$in": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+ *          }
+ *        },
+ *        {
+ *          "user_info.years_of_experience.choices": {
+ *            "$gt": 20
+ *          }
+ *        }
+ *      ]
+ *    }
  */
 export const generateFiltersQuery = async ({
     filters,
-    dbPath,
     surveyId
 }: {
     filters?: Filters
-    dbPath?: string
     surveyId: string
 }): Promise<FiltersQuery> => {
     const { surveys } = await loadOrGetSurveys()
@@ -108,34 +230,10 @@ export const generateFiltersQuery = async ({
             const filter = filters[filterKey]
             const subFieldPath = getMainSubfieldPath(filterField)
             if (subFieldPath) {
-                if (filterField.groups) {
-                    match[subFieldPath] = mapFilter<string | number>(
-                        expandFilter(filter, filterField.groups)
-                    )
-                } else {
-                    match[subFieldPath] = mapFilter<string | number>(filter)
-                }
+                const expandedFilters = expandFilter(filter, filterField.groups)
+                const conditions = mapFilter<string | number>(expandedFilters)
+                match.$or = conditions.map(c => ({ [subFieldPath]: c }))
             }
-        }
-        if (filters.ids !== undefined && dbPath) {
-            match[dbPath] = mapFilter(filters.ids)
-        }
-        if (filters.locale !== undefined) {
-            /*
-
-            Note: this logic is only needed because the current system only supports enums
-            as filters, not strings (for compatibility with the filtering UI)
-
-            */
-            const cleanedUpFilters = {}
-            const cleanUp = (s: string) => s.replace('_', '-')
-            Object.keys(filters.locale).forEach(k => {
-                const filterValues = filters.locale[k]
-                cleanedUpFilters[k] = Array.isArray(filterValues)
-                    ? filterValues.map(cleanUp)
-                    : cleanUp(filterValues)
-            })
-            match['user_info.locale'] = mapFilter(cleanedUpFilters)
         }
     }
 
