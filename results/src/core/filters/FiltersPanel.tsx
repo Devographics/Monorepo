@@ -1,5 +1,5 @@
 import './FiltersPanel.scss'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, SyntheticEvent } from 'react'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 import { spacing, fontSize } from 'core/theme'
@@ -16,9 +16,8 @@ import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from '@devographics/react-i18n'
 import isEmpty from 'lodash/isEmpty.js'
-import { ExportButton, FiltersExport, GraphQLTrigger } from 'core/blocks/block/BlockData'
-import * as Tabs from '@radix-ui/react-tabs'
-import { getCustomTabId, getRegularTabId } from 'core/blocks/block/BlockTabsWrapper'
+import { AutoSelectText, ExportButton, GraphQLTrigger, TextArea } from 'core/blocks/block/BlockData'
+import { getCustomTabId, getRegularTabId, TabsList } from 'core/blocks/block/BlockTabsWrapper'
 import FacetSelection from './FacetSelection'
 import FiltersSelection from './FiltersSelection'
 import { MODE_DEFAULT, MODE_FACET, MODE_GRID } from './constants'
@@ -26,7 +25,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import { BlockVariantDefinition } from '../types/index'
 import { useStickyState, getFiltersLink } from './helpers'
 import { CheckIcon, EditIcon } from 'core/icons'
-import { CustomizationDefinition, SupportedMode } from './types'
+import { CustomizationDefinition, PanelState, SupportedMode } from './types'
 import { useAllFilters } from 'core/charts/hooks'
 import { useEntities } from 'core/helpers/entities'
 import ModalTrigger from 'core/components/ModalTrigger'
@@ -34,6 +33,7 @@ import { copyTextToClipboard } from 'core/helpers/utils'
 import { Details } from 'core/components/Details'
 import { AdvancedOptions } from './AdvancedOptions'
 import { getBlockQuery } from 'core/queries/queries'
+import * as Tabs from '@radix-ui/react-tabs'
 
 export type FiltersPanelPropsType = {
     block: BlockVariantDefinition
@@ -199,7 +199,10 @@ const FiltersPanel = ({
                         <CopyLink link={filtersLink} />
                     </li> */}
                     <li>
-                        <CopyFilters filtersState={filtersState} />
+                        <FiltersModal
+                            filtersState={filtersState}
+                            setFiltersState={setFiltersState}
+                        />
                     </li>
                 </FooterLeft_>
 
@@ -259,20 +262,86 @@ const CopyLink = ({ link }: { link: string }) => {
     )
 }
 
-const CopyFilters = ({ filtersState }: { filtersState: CustomizationDefinition }) => {
+const FiltersModal = ({
+    filtersState,
+    setFiltersState
+}: {
+    filtersState: PanelState['filtersState']
+    setFiltersState: PanelState['setFiltersState']
+}) => {
     return (
         <ModalTrigger
             trigger={
                 <ExportButton className="ExportButton" size="small" variant="link">
-                    <T k="filters.get_code" />
+                    <T k="filters.code" />
                     {/* <ExportIcon /> */}
                 </ExportButton>
             }
         >
-            <FiltersExport filtersState={filtersState} />
+            <FiltersExport filtersState={filtersState} setFiltersState={setFiltersState} />
         </ModalTrigger>
     )
 }
+
+export const FiltersExport = ({
+    filtersState,
+    setFiltersState,
+    closeModal
+}: {
+    filtersState: CustomizationDefinition
+    setFiltersState: PanelState['setFiltersState']
+    closeModal: () => void
+}) => {
+    const { getString } = useI18n()
+    const [importCode, setImportCode] = useState<string>('')
+    const placeholder = getString('filters.paste_filters_code')?.t
+    const handleSubmit = () => {
+        const customizationDefinition = JSON.parse(importCode) as CustomizationDefinition
+        setFiltersState(customizationDefinition)
+        closeModal()
+    }
+    return (
+        <div>
+            <Tabs.Root defaultValue="tab-get-code" orientation="horizontal">
+                <TabsList aria-label="tabs example">
+                    <TabsTrigger_ value="tab-get-code">
+                        <T k="filters.get_code" />
+                    </TabsTrigger_>
+                    <TabsTrigger_ value="tab-import-code">
+                        <T k="filters.import_code" />
+                    </TabsTrigger_>
+                </TabsList>
+
+                <Tab_ value="tab-get-code">
+                    <div>
+                        <AutoSelectText value={JSON.stringify(filtersState, null, 2)} />
+                    </div>
+                </Tab_>
+
+                <Tab_ value="tab-import-code">
+                    <div>
+                        <TextArea
+                            placeholder={placeholder}
+                            value={importCode}
+                            onChange={e => {
+                                const value = e?.target?.value
+                                setImportCode(value)
+                            }}
+                        />
+                        <Button onClick={handleSubmit}>
+                            <T k="filters.import_code" />
+                        </Button>
+                    </div>
+                </Tab_>
+            </Tabs.Root>
+        </div>
+    )
+}
+
+const Message_ = styled.div`
+    margin-top: ${spacing(0.5)};
+    font-size: ${fontSize('small')};
+`
 
 export const FiltersTop_ = styled.div`
     display: flex;
