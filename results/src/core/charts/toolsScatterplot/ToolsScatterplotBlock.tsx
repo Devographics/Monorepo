@@ -3,7 +3,12 @@ import React from 'react'
 import { ToolsScatterplotBlockData } from './types'
 import { useChartData } from './hooks'
 import ToolsQuadrantsChart from './ToolsScatterplotChart'
-import { AllToolsData, SectionMetadata, StandardQuestionData } from '@devographics/types'
+import {
+    AllToolsData,
+    QuestionMetadata,
+    SectionMetadata,
+    StandardQuestionData
+} from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
 import { useI18n } from '@devographics/react-i18n'
 import { useTheme } from 'styled-components'
@@ -14,11 +19,13 @@ import { useChartState } from './chartState'
 
 export const ToolsScatterplotBlock = ({
     block,
-    series
+    series,
+    question
 }: {
     block: ToolsScatterplotBlockData
     data: AllToolsData
     series: DataSeries<StandardQuestionData[]>[]
+    question: QuestionMetadata
     // used for the report, to control which category is highlighted
 }) => {
     const { data } = series[0]
@@ -39,7 +46,7 @@ export const ToolsScatterplotBlock = ({
     }))
 
     return (
-        <ChartWrapper>
+        <ChartWrapper question={question}>
             <>
                 <Legend items={legendItems} chartState={chartState} />
 

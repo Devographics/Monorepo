@@ -70,7 +70,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     const useBackToBackSeriesView = series.length === 2 && allSortedByOptions
 
     return (
-        <ChartWrapper className="chart-horizontal-bar">
+        <ChartWrapper question={question} className="chart-horizontal-bar">
             <>
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>

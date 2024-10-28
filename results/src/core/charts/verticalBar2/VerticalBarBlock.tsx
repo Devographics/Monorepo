@@ -46,7 +46,7 @@ export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
     }
 
     return (
-        <ChartWrapper className="chart-vertical-bar">
+        <ChartWrapper question={question} className="chart-vertical-bar">
             <>
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>

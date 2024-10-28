@@ -43,7 +43,7 @@ export const MultiRatiosBlock = (props: MultiRatiosBlockProps) => {
     const note = getString(key, {})?.t
 
     return (
-        <ChartWrapper className="chart-vertical-bar chart-multi-ratios">
+        <ChartWrapper question={question} className="chart-vertical-bar chart-multi-ratios">
             <>
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>

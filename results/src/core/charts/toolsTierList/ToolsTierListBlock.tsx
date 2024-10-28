@@ -78,7 +78,7 @@ const getChartData = (
 
 const TierListBlock = (props: TierListBlockProps) => {
     const { getString } = useI18n()
-    const { block, series } = props
+    const { block, series, question } = props
     const theme = useTheme()
     const toolsSections = useToolSections()
     const chartData = getChartData(series[0], theme, toolsSections)
@@ -92,7 +92,7 @@ const TierListBlock = (props: TierListBlockProps) => {
     }))
 
     return (
-        <ChartWrapper className="tier-list">
+        <ChartWrapper question={question} className="tier-list">
             <>
                 <Legend items={legendItems} chartState={chartState} />
                 <TierListChart data={chartData} currentCategory={currentCategory} />

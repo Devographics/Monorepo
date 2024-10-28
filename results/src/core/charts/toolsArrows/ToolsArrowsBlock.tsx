@@ -75,12 +75,17 @@ const convertData = (data: StandardQuestionData[]) => {
         }
     })
 }
-export const ToolsArrowsBlock = ({ block, series, triggerId = null }: ToolsArrowsBlockProps) => {
+export const ToolsArrowsBlock = ({
+    block,
+    question,
+    series,
+    triggerId = null
+}: ToolsArrowsBlockProps) => {
     const controlledCurrent = triggerId
     const { data } = series[0]
 
     return (
-        <ChartWrapper>
+        <ChartWrapper question={question}>
             <>
                 <ChartContainer>
                     <ToolsArrowsChart
