@@ -165,7 +165,7 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
     text: colors.white,
-    textAlt: 'rgba(220, 223, 255, 0.6)',
+    textAlt: 'rgba(134 139 163)',
     textInverted: '#272325',
     textHighlight: colors.yellowDarker,
     link: 'rgba(16, 185, 129, 0.9)',

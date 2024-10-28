@@ -218,7 +218,7 @@ const InternalLink_ = styled.a`
     &:hover {
         color: ${({ theme }) => theme.colors.text};
     }
-    font-size: ${fontSize('small')};
+    font-size: 0.9rem;
 `
 
 export const Nav = ({ closeSidebar }: { closeSidebar: () => void }) => {
