@@ -3,6 +3,7 @@ import './Grid.scss'
 import React, { Fragment, ReactNode } from 'react'
 import { useFiltersLabel } from './helpers/labels'
 import T from 'core/i18n/T'
+import { SortProperty } from '@devographics/types'
 
 export const GridWrapper = ({
     seriesCount,
@@ -20,13 +21,15 @@ export const GridWrapper = ({
 
 export const GridItem = ({
     children,
-    filters
+    filters,
+    currentSort
 }: {
     children: ReactNode
     filters?: CustomizationFiltersSeries
+    currentSort: SortProperty
 }) => {
     return (
-        <div className="chart-grid-item">
+        <div className={`chart-grid-item chart-sort-${currentSort}`}>
             {filters && <GridItemHeading filters={filters} />}
             <div className="chart-grid-item-contents">{children}</div>
         </div>

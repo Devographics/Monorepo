@@ -24,7 +24,8 @@ export const RowWrapper = (
         'chart-row',
         'chart-subgrid',
         { 'chart-row-grouped': isGroupedBucket },
-        { 'chart-row-overall': isOverallBucket }
+        { 'chart-row-overall': isOverallBucket },
+        { 'chart-row-insufficient-data': bucket.hasInsufficientData }
     )
 
     return (

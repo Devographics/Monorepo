@@ -2,4 +2,7 @@
     display: flex;
     gap: 5px;
     align-items: center;
+    .chart-row-insufficient-data & {
+        display: none;
+    }
 }

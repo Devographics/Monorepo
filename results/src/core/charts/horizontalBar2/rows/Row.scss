@@ -122,6 +122,9 @@
     @include small {
         font-size: 0.9rem;
     }
+    .chart-sort-options & {
+        display: none;
+    }
 }
 .chart-row-content {
     grid-area: content;
