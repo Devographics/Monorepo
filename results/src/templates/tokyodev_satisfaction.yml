@@ -1,0 +1,9 @@
+i18nNamespace: satisfaction
+blockType: HorizontalBarBlock2
+hasData: true
+customizationModes: [filters, facets]
+parameters: { showNoAnswer: true, mergeOtherBuckets: false }
+defaultUnits: percentageQuestion
+queryOptions:
+    addQuestionComments: false
+    sectionId: other
