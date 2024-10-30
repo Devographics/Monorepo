@@ -131,7 +131,21 @@
             - template: tokyodev_vs_salary
               parameters:
                   sort: { property: options }
-            - template: tokyodev_men_vs_non_men
+            - template: tokyodev_variant_base
+              id: years_of_experience_men_vs_non_men
+              tabId: tabs.men_vs_non_men
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: man
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: woman
 
       - id: total_employers
         template: tokyodev_multiple_options2
