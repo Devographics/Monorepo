@@ -61,6 +61,7 @@ const Question_ = styled.div`
     border-radius: 100px;
     padding: ${spacing(0.5)};
     font-size: ${fontSize('small')};
+    margin-top: var(--spacing);
 `
 const QuestionLeft_ = styled.div`
     .rawchartmode & {
