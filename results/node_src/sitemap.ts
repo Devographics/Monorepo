@@ -6,10 +6,10 @@ import template from 'lodash/template.js'
 import yaml from 'js-yaml'
 import { getQuestionId, loadTemplate } from './helpers'
 import merge from 'lodash/merge.js'
-import type { RawSitemap, PageDef, BlockDefinition, BlockVariant } from "../src/core/types"
+import type { RawSitemap, PageDef, BlockDefinition, BlockVariant } from '../src/core/types'
 
 type Stack = { flat: Array<PageDef> }
-type EditionVariables = { editionId: string, surveyId: string }
+type EditionVariables = { editionId: string; surveyId: string }
 
 const stringify = (value: any) => {
     const json = JSON.stringify(value)
@@ -62,15 +62,21 @@ const applyTemplate = ({
     }
 
     const populatedTemplate = injectVariables(templateObject, variables, templateObject.name)
+    const mergedTemplate = merge({}, populatedTemplate, block)
 
-    return merge({}, populatedTemplate, block)
+    return mergedTemplate
 }
 
 /**
  * Gets list of pages as a flat array given root pages
  * Called recursively
  */
-const flattenSitemap = (stack: { flat: Array<PageDef> }, pages: Array<PageDef>, parent: PageDef, pageIndex: number) => {
+const flattenSitemap = (
+    stack: { flat: Array<PageDef> },
+    pages: Array<PageDef>,
+    parent: PageDef,
+    pageIndex: number
+) => {
     pages.forEach(page => {
         if (parent) {
             page.parent = omit(parent, 'children')
@@ -179,7 +185,10 @@ export const pageFromConfig = async (page: PageDef, pageIndex: number, editionVa
 }
 
 const computedSitemap = null
-export const computeSitemap = async (rawSitemap: RawSitemap, editionVariables: EditionVariables): Promise<Stack> => {
+export const computeSitemap = async (
+    rawSitemap: RawSitemap,
+    editionVariables: EditionVariables
+): Promise<Stack> => {
     if (computedSitemap !== null) {
         return computedSitemap
     }

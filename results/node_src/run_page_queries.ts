@@ -22,11 +22,10 @@ Try loading data from disk or GitHub, or else run queries for *each block* in a 
 
 */
 export const runPageQueries = async ({ page, graphql, surveyId, editionId, currentEdition }) => {
-    const sectionId = page.id
     const startedAt = new Date()
     const useFilesystemCache = allowedCachingMethods().filesystem
     const useApiCache = allowedCachingMethods().api
-    console.log(`// Running GraphQL queries for page ${sectionId}…`)
+    console.log(`// Running GraphQL queries for page ${page.id}…`)
 
     const paths = getDataLocations(surveyId, editionId)
 
@@ -40,6 +39,7 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
             if (block.hasData || block.query) {
                 let data
 
+                const sectionId = block?.queryOptions?.sectionId || page.id
                 const dataDirPath = path.resolve(`${basePath}/data/${sectionId}`)
                 const dataFileName = `${block.id}.json`
                 const dataFilePath = `${dataDirPath}/${dataFileName}`
