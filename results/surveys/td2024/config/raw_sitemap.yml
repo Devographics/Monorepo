@@ -133,6 +133,13 @@
             - template: tokyodev_vs_salary
               parameters:
                   sort: { property: options }
+            - template: tokyodev_variant_base
+              id: total_employers_by_years_of_experience
+              tabId: tabs.by_years_of_experience
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: years_of_experience
 
       - id: years_in_japan
         template: tokyodev_multiple_options2
@@ -143,20 +150,21 @@
             - template: tokyodev_vs_salary
               parameters:
                   sort: { property: options }
+            - template: tokyodev_variant_base
+              id: years_in_japan_by_country
+              tabId: tabs.by_country
+              parameters:
+                  limit: 20
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: country
 
       - id: professional_qualifications
         template: tokyodev_multiple_options2_combined
         defaultUnits: percentageQuestion
         variants:
             - template: tokyodev_vs_salary
-            - template: tokyodev_variant_base
-              id: professional_qualifications_by_years_of_experience
-              tabId: tabs.by_years_of_experience
-              filtersState:
-                  facet:
-                      sectionId: user_info
-                      id: years_of_experience
-            - template: tokyodev_men_vs_non_men
             - template: tokyodev_variant_base
               fieldId: years_of_experience
               i18nNamespace: years
@@ -934,6 +942,7 @@
         defaultUnits: percentageQuestion
         parameters: { cutoff: 10 }
         queryOptions:
+            addBucketsEntities: true
             addQuestionComments: false
             sectionId: user_info
         variants:
