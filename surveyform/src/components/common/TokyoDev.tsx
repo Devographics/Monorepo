@@ -1,15 +1,13 @@
 "use client";
 
-
-
-import { T } from "@devographics/react-i18n"
+import { T } from "@devographics/react-i18n";
 
 export const TokyoDev = () => {
   return process.env.NEXT_PUBLIC_CONFIG === "tokyodev" ? (
     <section className="tokyodev-info">
       <div className="tokyodev-info-inner">
         <div className="tokyodev-info-founder">
-          <img src="https://www.tokyodev.com/assets/paul-4a180dffafbb67b795ebac5b1a08f58fc937705f015d9fd6197f7237416dc4f6.jpg" />
+          <img src="https://assets.surveys.tokyodev.com/images/avatars/paul_mcmahon.jpg" />
           <h5>
             <T token="tokyodev.founder" />
           </h5>
