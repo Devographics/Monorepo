@@ -175,7 +175,27 @@ const start = async () => {
         // cacheControl: true,
         introspection: true,
         // playground: false,
-        plugins: [responseCachePlugin()],
+        plugins: [
+            responseCachePlugin(),
+            {
+                // TODO: update to Apollo 4 to make this work
+                async willSendResponse(requestContext) {
+                    console.log('requestDidStart')
+                    const query = requestContext?.request?.query
+                    const errors = requestContext?.errors
+                    if (query) {
+                        const match = query.match(/query (\w+)/)
+                        const queryName = match ? match[1] : `query`
+                        const fileName = `${new Date().getTime()}__${queryName}`
+                        const dirName = errors ? 'errorQueries' : 'queries'
+                        await logToFile(`${dirName}/${fileName}.graphql`, query)
+                        if (errors) {
+                            await logToFile(`errors/${fileName}`, JSON.stringify(errors, null, 2))
+                        }
+                    }
+                }
+            }
+        ],
         // engine: {
         //     debugPrintReports: true
         // },
