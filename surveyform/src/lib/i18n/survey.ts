@@ -40,8 +40,8 @@ export const getSectionTokens = ({ section }: { section: SectionMetadata }) => {
     base,
     // e.g. user_info.title => "About You"
     title: joinWithBase("title"),
-    // e.g. user_info.description => "Let's get to know the real you."
-    description: joinWithBase("description"),
+    // e.g. user_info.prompt => "Let's get to know the real you."
+    prompt: joinWithBase("prompt"),
   };
 
   return ids;

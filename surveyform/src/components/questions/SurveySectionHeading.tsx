@@ -29,10 +29,7 @@ const SurveySectionHeading = ({ section }: FormLayoutProps) => {
     };
   }, []);
 
-  const hasDescription =
-    !getMessage(
-      getSectionTokens({ section }).description
-    ).missing// type !== TokenType.KEY_FALLBACK;
+  const hasPrompt = !getMessage(getSectionTokens({ section }).prompt).missing; // type !== TokenType.KEY_FALLBACK;
 
   return (
     <div className="section-heading">
@@ -49,10 +46,10 @@ const SurveySectionHeading = ({ section }: FormLayoutProps) => {
               values={{ ...edition }}
             />
           </h2>
-          {hasDescription && (
+          {hasPrompt && (
             <p className="section-description">
               <T
-                token={getSectionTokens({ section }).description}
+                token={getSectionTokens({ section }).prompt}
                 fallback={id}
                 values={{ ...edition }}
               />
@@ -89,7 +86,7 @@ Get the item currently in viewport
 const offset = 200;
 export const getItemIdInViewport = (
   scrollPosition: number,
-  itemPositions: { [key: string]: number },
+  itemPositions: { [key: string]: number }
 ) => {
   return Object.keys(itemPositions)
     .reverse()
@@ -113,8 +110,9 @@ const QuestionItem = ({
     <li>
       <a
         href={`#${question.id}`}
-        className={`${isHighlighted ? "highlighted" : "not-highlighted"} ${isCompleted ? "completed" : "not-completed"
-          }`}
+        className={`${isHighlighted ? "highlighted" : "not-highlighted"} ${
+          isCompleted ? "completed" : "not-completed"
+        }`}
       >
         <QuestionLabel
           section={section}
