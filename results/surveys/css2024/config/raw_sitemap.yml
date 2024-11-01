@@ -264,15 +264,6 @@
         items: [fm-cssvariables, fm-accessibility]
         template: recommended_resources
 
-- id: layout
-  path: /layout
-  blocks:
-      - id: layout_features
-        template: multi_items_experience
-        i18nNamespace: features
-        chartOptions:
-            limit: 10
-
 - id: other_tools
   path: /tools
   titleId: sections.tools.css2024
