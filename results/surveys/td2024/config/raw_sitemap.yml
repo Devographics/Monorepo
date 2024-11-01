@@ -955,6 +955,38 @@
         variants:
             - template: tokyodev_vs_salary
               queryOptions: { sectionId: user_info }
+            - template: tokyodev_variant_base
+              id: finding_first_job_number_of_applications_by_years_of_experience
+              tabId: tabs.by_years_of_experience
+              queryOptions: { sectionId: user_info }
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: years_of_experience
+            - template: tokyodev_variant_base
+              id: finding_first_job_number_of_applications_by_years_in_japan
+              tabId: tabs.by_years_in_japan
+              queryOptions: { sectionId: user_info }
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: years_in_japan
+            - template: tokyodev_variant_base
+              id: finding_first_job_number_of_applications_by_compensation_and_qualifications
+              tabId: tabs.by_compensation_and_qualifications
+              queryOptions: { sectionId: user_info }
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: professional_qualifications
+                              sectionId: user_info
+                              operator: eq
+                              value: coding_bootcamp
+                      - conditions:
+                            - fieldId: professional_qualifications
+                              sectionId: user_info
+                              operator: eq
+                              value: bachelors_degree
 
       - id: searching_for_job
         queryOptions: { sectionId: job_info }
