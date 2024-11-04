@@ -71,7 +71,12 @@ export const Legend = ({ chartState, i18nNamespace, options, colorScale }: Legen
     })
     return (
         <div className="chart-legend">
-            <Toggle labelId="charts.sort_by" handleSelect={handleSelect} items={items} />
+            <Toggle
+                labelId="charts.sort_by"
+                handleSelect={handleSelect}
+                items={items}
+                hasDefault={true}
+            />
         </div>
     )
 }

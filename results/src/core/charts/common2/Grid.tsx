@@ -3,6 +3,8 @@ import './Grid.scss'
 import React, { Fragment, ReactNode } from 'react'
 import { useFiltersLabel } from './helpers/labels'
 import T from 'core/i18n/T'
+import { SortProperty } from '@devographics/types'
+import Tooltip from 'core/components/Tooltip'
 
 export const GridWrapper = ({
     seriesCount,
@@ -20,13 +22,15 @@ export const GridWrapper = ({
 
 export const GridItem = ({
     children,
-    filters
+    filters,
+    currentSort
 }: {
     children: ReactNode
     filters?: CustomizationFiltersSeries
+    currentSort: SortProperty
 }) => {
     return (
-        <div className="chart-grid-item">
+        <div className={`chart-grid-item chart-sort-${currentSort}`}>
             {filters && <GridItemHeading filters={filters} />}
             <div className="chart-grid-item-contents">{children}</div>
         </div>
@@ -42,19 +46,23 @@ export const GridItemHeading = ({ filters }: { filters: CustomizationFiltersSeri
         )
     } else {
         const labelSegments = useFiltersLabel(filters)
+        const headingContents = labelSegments.map((segment, i) => (
+            <Fragment key={i}>
+                <span>
+                    <strong>{segment.questionLabel}</strong>{' '}
+                    <span className="operator">{segment.operatorLabel}</span>{' '}
+                    <strong>{segment.valueLabel}</strong>
+                </span>
+                {i + 1 < labelSegments.length && <span>, </span>}
+            </Fragment>
+        ))
+
         return (
-            <div className="chart-grid-item-heading">
-                {labelSegments.map((segment, i) => (
-                    <Fragment key={i}>
-                        <span>
-                            <strong>{segment.questionLabel}</strong>{' '}
-                            <span className="operator">{segment.operatorLabel}</span>{' '}
-                            <strong>{segment.valueLabel}</strong>
-                        </span>
-                        {i + 1 < labelSegments.length && <span>, </span>}
-                    </Fragment>
-                ))}
-            </div>
+            <Tooltip
+                trigger={<div className="chart-grid-item-heading">{headingContents}</div>}
+                contents={headingContents}
+                showBorder={false}
+            />
         )
     }
 }

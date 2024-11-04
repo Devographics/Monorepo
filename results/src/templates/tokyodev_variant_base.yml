@@ -1,6 +1,8 @@
 fieldId: ${mainBlockId}
 blockType: HorizontalBarBlock2
-query: currentEditionData
+hasData: true
 parameters:
     showNoAnswer: true
 defaultUnits: percentageBucket
+queryOptions:
+    addBucketsEntities: false

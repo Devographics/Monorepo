@@ -14,10 +14,17 @@
     }
 }
 
+.chart-grid-item {
+    min-width: 0;
+}
 .chart-grid-item-heading {
     background: var(--backgroundAltColor);
     padding: var(--quarterSpacing) var(--halfSpacing);
     margin-bottom: var(--spacing);
     font-size: 0.8rem;
     border-radius: 3px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
 }

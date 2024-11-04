@@ -35,10 +35,10 @@ export const CustomVariantWrapper = ({
     children: JSX.Element
 }) => {
     const { getString } = useI18n()
-    const [apiError, setApiError] = useState()
+    const [apiError, setApiError] = useState<any | null>(null)
     const [isLoading, setIsLoading] = useState(false)
-    const [series, setSeries] = useStickyState<Array<DataSeries<AllQuestionData>>>(
-        [],
+    const [series, setSeries] = useStickyState<Array<DataSeries<AllQuestionData>> | null>(
+        null,
         `data-${variant.id}`
     )
     const [query, setQuery] = useState<string | undefined>()
@@ -46,39 +46,40 @@ export const CustomVariantWrapper = ({
     const { chartFilters } = variant
     const year = pageContext.currentEdition.year
 
-    // whenever chart filters change, clear out series to trigger a new query
-    // note: we do *not* want this to run on mount
-    useDidMountEffect(() => {
-        setSeries([])
-    }, [chartFilters])
-
-    // whenever series are cleared, re-trigger query
-    useEffect(() => {
-        const getData = async () => {
-            setIsLoading(true)
-            const {
-                result: seriesData,
-                error,
-                query
-            } = await fetchSeriesData({
-                block,
-                pageContext,
-                chartFilters,
-                year
-            })
-            setQuery(query)
-            if (error) {
-                setApiError(error)
-            } else if (seriesData) {
-                setSeries(seriesData)
-            }
-            setIsLoading(false)
+    const getData = async () => {
+        console.log('// getData')
+        setIsLoading(true)
+        setApiError(null)
+        const {
+            result: seriesData,
+            error,
+            query
+        } = await fetchSeriesData({
+            block,
+            pageContext,
+            chartFilters,
+            year
+        })
+        setQuery(query)
+        if (error) {
+            setApiError(error)
+        } else if (seriesData) {
+            setSeries(seriesData)
         }
+        setIsLoading(false)
+    }
 
+    // on initial render, only trigger a new query if series are empty
+    useEffect(() => {
         if (!series || series.length === 0) {
             getData()
         }
-    }, [series])
+    }, [])
+
+    // on subsequent renders, trigger a new query whenever chart filters change
+    useDidMountEffect(() => {
+        getData()
+    }, [chartFilters])
 
     return (
         <div className="chart-custom-variant">
@@ -115,15 +116,14 @@ export const CustomVariantWrapper = ({
                     <code>{JSON.stringify(variant, null, 2)}</code>
                 </pre>
             </div> */}
-            {apiError && (
+            {apiError ? (
                 <DataLoaderError
                     block={block}
                     apiError={apiError}
                     query={query}
                     chartFilters={chartFilters}
                 />
-            )}
-            {isLoading ? (
+            ) : series === null || series.length === 0 || isLoading ? (
                 <>
                     <div className="chart-placeholder"></div>
                     <Loading />

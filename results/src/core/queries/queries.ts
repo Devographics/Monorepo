@@ -1,5 +1,11 @@
 import { BlockVariantDefinition } from 'core/types'
-import { ResponsesParameters, ResultsSubFieldEnum } from '@devographics/types'
+import {
+    EditionMetadata,
+    ResponsesParameters,
+    ResultsSubFieldEnum,
+    SectionMetadata,
+    SurveyMetadata
+} from '@devographics/types'
 import { PageContextValue } from 'core/types/context'
 import isEmpty from 'lodash/isEmpty'
 import { CustomizationDefinition, CustomizationOptions } from 'core/filters/types'
@@ -35,24 +41,26 @@ For a given block and pageContext, generate query and query options and return r
 */
 export const getBlockQuery = ({
     block,
-    pageContext,
+    survey,
+    edition,
+    section,
     chartFilters
 }: {
     chartFilters?: CustomizationDefinition
     block: BlockVariantDefinition
-    pageContext: PageContextValue
+    survey: SurveyMetadata
+    edition: EditionMetadata
+    section: { id: SectionMetadata['id'] }
 }) => {
     const { facet, filters, options = {} } = chartFilters || {}
     const { showDefaultSeries } = options
     const questionId = block.fieldId || block.id
-    const allEditions = block.query === 'allEditionsData'
     const queryOptions = {
-        surveyId: pageContext?.currentSurvey?.id,
-        editionId: pageContext?.currentEdition?.id,
-        sectionId: pageContext?.id,
+        surveyId: survey?.id,
+        editionId: edition?.id,
+        sectionId: section?.id,
         questionId,
         subField: block?.queryOptions?.subField || ResultsSubFieldEnum.RESPONSES,
-        allEditions,
         ...block.queryOptions
     }
     let parameters = block.parameters || {}
@@ -65,12 +73,15 @@ export const getBlockQuery = ({
         facet,
         parameters
     }
-    const seriesName = facet ? `${questionId}_by_${facet.id}` : `${questionId}`
-    const defaultSeriesName = `${seriesName}_default`
+    const hasFilters = filters && filters.length > 0
+    // ? do we need custom seriesName here?
+    // const seriesName = facet ? `${questionId}_by_${facet.id}` : `${questionId}`
+    const seriesName = block.id
+    const defaultSeriesName = hasFilters ? `${seriesName}_default` : seriesName
 
     const defaultSeries = { name: defaultSeriesName, queryArgs: defaultQueryArgs }
     let series: SeriesParams[]
-    if (filters && filters.length > 0) {
+    if (hasFilters) {
         series = [
             ...(showDefaultSeries ? [defaultSeries] : []),
             ...filters.map((filter, filterIndex) => {

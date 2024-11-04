@@ -18,28 +18,67 @@ export const filterContexts = ({ locale, contexts }: { locale: Locale; contexts:
 
 /*
 
-Resolve aliases
+Look through all stringFiles to find the "real" string being aliased
 
 */
+const findRealString = (aliasKey: string, localeRawData: RawLocale) => {
+    let realString
+    for (const sf of localeRawData.stringFiles) {
+        const rs = sf?.strings?.find((ss: TranslationStringObject) => ss.key === aliasKey)
+        if (rs) {
+            return rs
+            break
+        }
+    }
+}
+
 export const resolveAliases = (stringFile: StringFile, localeRawData: RawLocale) => {
+    const aliasedStrings: TranslationStringObject[] = []
+    /*
+    pattern 1: 
+
+    - key: foo.bar
+      t: Foobar
+
+    - key: foo.baz
+      aliasFor: foo.bar
+
+    */
     stringFile.strings = stringFile.strings.map((s: TranslationStringObject) => {
         // resolve alias
         if (s.aliasFor) {
-            // look through all stringFiles to find the "real" string being aliased
-            let realString
-            for (const sf of localeRawData.stringFiles) {
-                const rs = sf?.strings?.find((ss: TranslationStringObject) => ss.key === s.aliasFor)
-                if (rs) {
-                    realString = rs
-                    break
-                }
-            }
+            const realString = findRealString(s.aliasFor, localeRawData)
             if (realString) {
                 s = { ...realString, key: s.key, aliasFor: s.aliasFor }
+            } else {
+                console.warn(`resolveAliases: could not resolve alias ${s.aliasFor}`)
             }
         }
         return s
     })
+    /*
+    pattern 2: (better)
+
+    - key: foo.bar
+      t: Foobar 
+      aliases: foo.baz
+
+    */
+
+    stringFile.strings.forEach((s: TranslationStringObject) => {
+        // resolve aliases
+        if (s.aliases) {
+            s.aliases.forEach((aliasKey: string) => {
+                aliasedStrings.push({
+                    ...s,
+                    key: aliasKey,
+                    aliasFor: s.key
+                })
+            })
+        }
+    })
+
+    stringFile.strings = [...stringFile.strings, ...aliasedStrings]
     return stringFile
 }
 

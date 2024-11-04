@@ -1,0 +1,11 @@
+blockType: HorizontalBarBlock2
+hasSponsor: true
+hasData: true
+queryOptions:
+    addBucketsEntities: false
+    subField: combined
+    addGroupedBuckets: true
+customizationModes: [filters, facets]
+parameters: { showNoAnswer: true, cutoff: 10, limit: 20, mergeOtherBuckets: true }
+chartOptions:
+    limit: 10

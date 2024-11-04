@@ -1,7 +1,7 @@
 import React from 'react'
-import { StandardQuestionData } from '@devographics/types'
+import { sortProperties, StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
-import { getChartBuckets } from './helpers/other'
+import { getChartBuckets, getChartCurrentEdition } from './helpers/other'
 import { useChartValues } from './helpers/chartValues'
 import { GridItem } from '../common2'
 import { CommonProps } from '../common2/types'
@@ -56,8 +56,9 @@ export const HorizontalBarSerie = (
 
     const ViewComponent = getViewComponent(chartState.view as HorizontalBarViews)
 
+    const currentSort = getChartCurrentEdition({ serie, block })?._metadata?.axis1Sort?.property
     return (
-        <GridItem key={serie.name} filters={itemFilters}>
+        <GridItem key={serie.name} filters={itemFilters} currentSort={currentSort}>
             <ViewComponent {...viewProps} />
         </GridItem>
     )

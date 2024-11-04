@@ -4,7 +4,7 @@ blockType: HorizontalBarBlock
 defaultUnits: count
 # dataPath: 'dataAPI.survey.${sectionId}_others.year'
 hasSponsor: true
-query: currentEditionData
+hasData: true
 variables:
     limit: 20
 queryOptions:

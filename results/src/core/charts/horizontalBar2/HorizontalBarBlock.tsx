@@ -33,6 +33,10 @@ export interface HorizontalBarBlock2Props extends BlockComponentProps {
 export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     const { block, series, question, pageContext, variant } = props
     const currentEdition = getChartCurrentEdition({ serie: series[0], block })
+    if (!currentEdition) {
+        // TODO: handle empty results case better
+        return <div>No data</div>
+    }
     const { average, percentiles, completion } = currentEdition
 
     const facet = block?.filtersState?.facet
@@ -66,7 +70,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     const useBackToBackSeriesView = series.length === 2 && allSortedByOptions
 
     return (
-        <ChartWrapper className="chart-horizontal-bar">
+        <ChartWrapper question={question} className="chart-horizontal-bar">
             <>
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>

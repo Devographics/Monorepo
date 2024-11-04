@@ -1,0 +1,8 @@
+blockType: HorizontalBarBlock2
+hasSponsor: true
+hasData: true
+translateData: true
+customizationModes: [filters, facets]
+parameters: { showNoAnswer: true, mergeOtherBuckets: false }
+queryOptions:
+    addBucketsEntities: false

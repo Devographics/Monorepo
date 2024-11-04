@@ -328,6 +328,11 @@ export const FormItemDescription = (
 
   const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
 
+  // we don't need to show description for libraries since it's just
+  // a matter of whether you recognize the name or not
+  const showDescription =
+    entityDescription && !entity?.tags?.includes("libraries");
+
   if (i18nPrompt && !i18nPrompt.missing) {
     // .type !== TokenType.KEY_FALLBACK) {
     return (
@@ -344,7 +349,7 @@ export const FormItemDescription = (
         <T token={intlIds.description} />
       </div>
     );
-  } else if (entityDescription) {
+  } else if (showDescription) {
     return (
       <p className="form-item-description">
         <span

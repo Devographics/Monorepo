@@ -41,6 +41,7 @@ const InputData = ({ block, closeModal }) => {
         closeModal()
     }
 
+    const { currentSurvey, currentEdition, id: pageId } = pageContext
     return (
         <div>
             <TextFieldWrapper>
@@ -48,7 +49,15 @@ const InputData = ({ block, closeModal }) => {
                     <TextFieldHeading>
                         <T k="custom_data.graphql_query" />
                     </TextFieldHeading>
-                    <GraphQLTextArea value={getBlockQuery({ block, pageContext })} size="s" />
+                    <GraphQLTextArea
+                        value={getBlockQuery({
+                            block,
+                            survey: currentSurvey,
+                            edition: currentEdition,
+                            section: { id: pageId }
+                        })}
+                        size="s"
+                    />
                 </TextFieldContainer>
                 <TextFieldContainer>
                     <TextFieldHeading>

@@ -93,6 +93,8 @@
       - id: locale
         template: multiple_options2
         parameters: { cutoff: 20 }
+        queryOptions:
+            addQuestionComments: false
         takeaway: >
             The language respondents selected to fill out the survey.
 
@@ -101,6 +103,8 @@
 
       - id: completion_stats
         template: multiple_options2
+        queryOptions:
+            addQuestionComments: false
         takeaway: >
             The proportion of the survey filled out by respondents.
 
@@ -180,6 +184,8 @@
 
       - id: source
         template: multiple_options2_freeform
+        queryOptions:
+            addQuestionComments: false
         parameters:
             limit: 20
 
@@ -227,6 +233,7 @@
             limit: 20
         queryOptions:
             sectionId: reading_list
+            addQuestionComments: false
         chartOptions:
             dataFilters: [removeOverLimit, removeNoAnswer]
             limit: 10

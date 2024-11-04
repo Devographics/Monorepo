@@ -143,7 +143,7 @@
               fieldId: yearly_salary
               tabId: tabs.usa_vs_the_world
               blockType: HorizontalBarBlock2
-              query: currentEditionData
+              hasData: true
               filtersState:
                   options:
                       mode: grid

@@ -1,5 +1,5 @@
 export const getCommentsCountFragment = () => `
-comments {
+  comments {
     currentEdition {
       count
     }

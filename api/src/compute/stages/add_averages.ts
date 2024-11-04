@@ -102,8 +102,9 @@ export async function addAverages(
         for (let editionData of resultsByEdition) {
             // calculate average of all top-level buckets
             if (calculateAxis1Average) {
+                const buckets = editionData.buckets.filter(b => b.id !== OVERALL)
                 editionData.average = calculateAverage({
-                    buckets: editionData.buckets.filter(b => b.id !== OVERALL),
+                    buckets,
                     axis: axis1
                 })
             }
@@ -114,12 +115,15 @@ export async function addAverages(
                         if (bucket.hasInsufficientData) {
                             bucket[BucketUnits.AVERAGE] = 0
                         } else {
-                            const average = calculateAverage({
-                                buckets: bucket.facetBuckets,
-                                axis: axis2
-                            })
-                            if (!isNil(average) && !isNaN(average)) {
-                                bucket[BucketUnits.AVERAGE] = average
+                            const buckets = bucket.facetBuckets
+                            if (buckets) {
+                                const average = calculateAverage({
+                                    buckets,
+                                    axis: axis2
+                                })
+                                if (!isNil(average) && !isNaN(average)) {
+                                    bucket[BucketUnits.AVERAGE] = average
+                                }
                             }
                         }
                     }

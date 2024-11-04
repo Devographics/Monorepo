@@ -84,4 +84,5 @@ export interface TranslationStringObject {
     context: string
     isFallback: Boolean
     aliasFor?: string
+    aliases?: string[]
 }

@@ -45,7 +45,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
             : theme.colors.ranges.sentiment
 
     return (
-        <ChartWrapper className={className}>
+        <ChartWrapper question={question} className={className}>
             <>
                 <ChartControls
                     top={

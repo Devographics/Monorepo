@@ -1,5 +1,5 @@
 blockType: HorizontalBarBlock
 hasSponsor: true
-query: currentEditionData
+hasData: true
 queryOptions:
     addBucketsEntities: true

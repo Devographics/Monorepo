@@ -1,18 +1,15 @@
 import omit from 'lodash/omit.js'
-import merge from 'lodash/merge.js'
 import path from 'path'
 import fs from 'fs'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
 import { TwitterApi } from 'twitter-api-v2'
 import { logToFile } from './log_to_file'
-import { argumentsPlaceholder, getFiltersQuery, getQuery } from './queries'
 // import { allowedCachingMethods } from "@devographics/fetch"
 import { PageContextValue, PageDef } from '../src/core/types'
+import template from 'lodash/template.js'
 
-import { parse } from 'graphql'
-import { print } from 'graphql-print'
-import { getMetadataQuery } from './fragments/getMetadataQuery'
+import { getMetadataQuery } from './queries/fragments/getMetadataQuery'
 
 /**
  * Get caching methods based on current config
@@ -217,208 +214,7 @@ export const getDataLocations = (surveyId, editionId) => {
     }
 }
 
-export const getBlockQuery = async ({
-    block,
-    surveyId,
-    currentEdition,
-    sectionId,
-    queryFileName,
-    queryDirPath,
-    addRootNode = true
-}) => {
-    const questionId = block.id
-    const queryOptions = {
-        surveyId,
-        editionId: currentEdition.id,
-        sectionId,
-        questionId,
-        fieldId: block.fieldId,
-        isLog: false,
-        addRootNode,
-        ...block.queryOptions
-    }
-
-    // always disable cache when json file is missing
-    const enableCache = false
-
-    const queryArgs = {
-        facet: block.facet,
-        filters: block.filters,
-        parameters: { ...block.parameters, enableCache },
-        xAxis: block?.variables?.xAxis,
-        yAxis: block?.variables?.yAxis
-    }
-
-    let query
-
-    if (block.filtersState) {
-        const filtersQueryResult = getFiltersQuery({
-            block,
-            queryOptions,
-            chartFilters: block.filtersState,
-            currentYear: currentEdition.year,
-            enableCache
-        })
-        query = filtersQueryResult.query
-    } else {
-        query = getQuery({
-            query: block.query,
-            queryOptions,
-            queryArgs
-        })
-    }
-
-    if (query.includes('dataAPI')) {
-        // note: this duplicates the if (block.filtersState) {...} logic above
-        // TODO: group getFiltersQuery and getQuery in a single function
-        let queryLog
-        if (block.filtersState) {
-            const filtersQueryResult = getFiltersQuery({
-                block,
-                queryOptions: { ...queryOptions, isLog: true, addRootNode: false },
-                chartFilters: block.filtersState,
-                currentYear: currentEdition.year,
-                enableCache
-            })
-            queryLog = filtersQueryResult.query
-        } else {
-            queryLog = getQuery({
-                query: block.query,
-                queryOptions: { ...queryOptions, isLog: true, addRootNode: false },
-                queryArgs
-            })
-        }
-
-        const prettyQueryLog = queryLog.replace(argumentsPlaceholder, '')
-        // try {
-        //     const ast = parse(queryLog)
-        //     prettyQueryLog = print(ast, { preserveComments: true })
-        // } catch (error) {
-        //     console.log(`error parsing query for ${block.id}`)
-        //     console.log(queryLog)
-        // }
-        logToFile(queryFileName, prettyQueryLog, {
-            mode: 'overwrite',
-            dirPath: queryDirPath
-            //editionId
-        })
-    }
-    return query
-}
-
 const cleanQuery = (query: string) => query.replaceAll('\n', '').replaceAll(' ', '')
-
-/*
-
-Try loading data from disk or GitHub, or else run queries for *each block* in a page
-
-*/
-export const runPageQueries = async ({ page, graphql, surveyId, editionId, currentEdition }) => {
-    const startedAt = new Date()
-    const useFilesystemCache = allowedCachingMethods().filesystem
-    const useApiCache = allowedCachingMethods().api
-    console.log(`// Running GraphQL queries for page ${page.id}…`)
-
-    const paths = getDataLocations(surveyId, editionId)
-
-    const basePath = paths.localPath + '/results'
-    const baseUrl = paths.url + '/results'
-
-    let pageData = {}
-
-    for (const b of page.blocks) {
-        for (const block of b.variants) {
-            if (block.query) {
-                let data
-
-                const dataDirPath = path.resolve(`${basePath}/data/${page.id}`)
-                const dataFileName = `${block.id}.json`
-                const dataFilePath = `${dataDirPath}/${dataFileName}`
-                const queryDirPath = path.resolve(`${basePath}/queries/${page.id}`)
-                const queryFileName = `${block.id}.graphql`
-                const queryFilePath = `${queryDirPath}/${queryFileName}`
-
-                const existingData = await getExistingJSON({
-                    localPath: dataFilePath,
-                    remoteUrl: `${baseUrl}/data/${page.id}/${dataFileName}`
-                })
-                const existingQueryFormatted = await getExistingString({
-                    localPath: queryFilePath,
-                    remoteUrl: `${baseUrl}/queries/${page.id}/${queryFileName}`
-                })
-
-                const newQuery = await getBlockQuery({
-                    block,
-                    surveyId,
-                    currentEdition,
-                    sectionId: page.id,
-                    queryFileName,
-                    queryDirPath,
-                    addRootNode: false
-                })
-
-                let newQueryFormatted
-                try {
-                    const ast = parse(newQuery)
-                    newQueryFormatted = print(ast, { preserveComments: true })
-                } catch (error) {
-                    console.warn(error)
-                    console.log('⚠️ Detected issue in follwing query: ')
-                    console.log(newQuery)
-                }
-
-                const queryHasChanged = newQueryFormatted !== existingQueryFormatted
-
-                if (
-                    useFilesystemCache &&
-                    existingData &&
-                    (process.env.FROZEN === 'true' || !queryHasChanged)
-                ) {
-                    console.log(
-                        `// 🎯 File ${dataFileName} found on ${getLoadMethod()}, loading its contents…`
-                    )
-                    data = existingData
-                } else {
-                    const reason = !existingData
-                        ? '[no data found] '
-                        : queryHasChanged
-                        ? '[query change detected] '
-                        : ''
-                    console.log(`// 🔍 ${reason}Running uncached query for file ${dataFileName}…`)
-
-                    const query = await getBlockQuery({
-                        block,
-                        surveyId,
-                        currentEdition,
-                        sectionId: page.id,
-                        queryFileName,
-                        queryDirPath,
-                        addRootNode: true // add dataAPI {...} for Gatsby
-                    })
-
-                    const result = removeNull(await graphql(query))
-                    data = result.data
-
-                    if (!data) {
-                        console.log(result)
-                    }
-                    logToFile(dataFileName, data, {
-                        mode: 'overwrite',
-                        dirPath: dataDirPath
-                        //editionId
-                    })
-                }
-                pageData = merge(pageData, data)
-            }
-        }
-    }
-
-    const finishedAt = new Date()
-    const duration = finishedAt.getTime() - startedAt.getTime()
-
-    console.log(`-> Done in ${duration}ms`)
-    return pageData
-}
 
 // Instanciate with desired auth type (here's Bearer v2 auth)
 const twitterClient = new TwitterApi(process.env.TWITTER_BEARER_TOKEN || '')
@@ -521,4 +317,34 @@ export const getTranslationContexts = ({
     const baseContexts = ['homepage', 'common', 'results', 'countries']
     const extraTranslationContexts = parseEnvVariableArray(process.env.CUSTOM_LOCALE_CONTEXTS)
     return [...baseContexts, ...extraTranslationContexts, surveyId, editionId]
+}
+
+/*
+
+This takes a string query and inserts variables
+- surveyId
+- editionId
+- sectionId
+- questionId
+*/
+type QueryVariables = {
+    surveyId: string
+    editionId: string
+    sectionId: string
+    questionId: string
+}
+export const parseCustomQuery = ({
+    query,
+    variables
+}: {
+    query: string
+    variables: QueryVariables
+}) => {
+    try {
+        const interpolatedQuery = template(query)(variables)
+        return interpolatedQuery
+    } catch (error) {
+        console.log(`// parseCustomQuery error in question "${variables.questionId}"`)
+        console.log(error)
+    }
 }

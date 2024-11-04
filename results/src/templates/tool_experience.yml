@@ -5,8 +5,8 @@ noteId: blocks.tool_experience.note
 i18nNamespace: tools
 hasComments: true
 hasSponsor: true
-query: allEditionsData
 parameters: { showNoAnswer: true }
 # hidden: true
 queryOptions:
     addQuestionEntity: true
+    allEditions: true

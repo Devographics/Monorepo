@@ -3,6 +3,8 @@ blockType: VerticalBarBlock2
 showDescription: false
 i18nNamespace: tools
 hasSponsor: true
-query: allEditionsData
 parameters: { showNoAnswer: true }
 customizationModes: [filters]
+hasData: true
+queryOptions:
+    allEditions: true

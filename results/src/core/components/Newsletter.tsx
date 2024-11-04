@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { useI18n } from '@devographics/react-i18n'
-import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 import Button from './Button'
 import styled from 'styled-components'
 import { spacing } from 'core/theme'
+import T from 'core/i18n/T'
 
 export default function Newsletter({ locale }: { locale?: any }) {
     const { currentSurvey } = usePageContext()
@@ -13,7 +13,7 @@ export default function Newsletter({ locale }: { locale?: any }) {
     const [email, setEmail] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<{ message: string } | null>(null)
-    const [success, setSuccess] = useState<{ message: string } | null>(null)
+    const [success, setSuccess] = useState<boolean>(false)
 
     // const config = getEOConfig(listId)
 
@@ -37,16 +37,17 @@ export default function Newsletter({ locale }: { locale?: any }) {
             }
         })
         const result = await response.json()
-        const { error, message } = result
+        console.log(result)
+        const { error, message, contact, success } = result
 
         setLoading(false)
 
         if (error) {
             setError(error)
-            setSuccess(null)
+            setSuccess(false)
         } else {
             setError(null)
-            setSuccess({ message })
+            setSuccess(true)
         }
     }
 
@@ -60,7 +61,9 @@ export default function Newsletter({ locale }: { locale?: any }) {
             </p>{' '}
             {error && <div className="newsletter-message newsletter-error">{error.message}</div>}
             {success ? (
-                <div className="newsletter-message newsletter-success">{success.message}</div>
+                <div className="newsletter-message newsletter-success">
+                    <T k="newsletter.thanks" />
+                </div>
             ) : (
                 <NewsletterForm
                     email={email}

@@ -16,7 +16,6 @@ query {
                     domain
                     id
                     name
-                    hashtag
                     emailOctopus {
                         listId
                         submitUrl
@@ -69,7 +68,6 @@ query {
                             id
                             questions {
                                 id
-                                i18nNamespace
                                 template
                                 optionsAreNumeric
                                 optionsAreRange

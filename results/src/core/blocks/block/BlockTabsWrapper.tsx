@@ -84,7 +84,6 @@ export const TabsWrapper = ({
         <Wrapper className="tabs-wrapper" withMargin={withMargin}>
             <BlockHeaderTop_>
                 <BlockTitle block={firstBlockVariant} />
-                <BlockQuestion block={firstBlockVariant} />
                 {/* <BlockDescriptionContents block={firstBlockVariant} /> */}
                 <BlockTakeaway block={firstBlockVariant} />
             </BlockHeaderTop_>
@@ -172,6 +171,7 @@ export const TabsWrapper = ({
                                         ...firstBlockVariant,
                                         filtersState: variant.chartFilters
                                     }}
+                                    isCustomVariant={true}
                                     pageData={pageData}
                                     blockIndex={blockIndex}
                                     variantIndex={variantIndex}
@@ -191,6 +191,7 @@ export const TabsWrapper = ({
                     variantIndex={0}
                 />
             )}
+            <BlockQuestion block={firstBlockVariant} />
         </Wrapper>
     )
 }

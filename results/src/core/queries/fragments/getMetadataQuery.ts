@@ -18,6 +18,7 @@ query {
                     name
                     emailOctopus {
                         listId
+                        submitUrl
                     }
                     partners {
                         name

@@ -375,6 +375,13 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         match.editionId = { $in: pastEditions.map(e => e.id) }
     }
 
+    if (isDebug) {
+        await logToFile(`${logPath}/computeArguments.json`, computeArguments)
+        await logToFile(`${logPath}/axis1.json`, axis1)
+        await logToFile(`${logPath}/axis2.json`, axis2)
+        await logToFile(`${logPath}/match.json`, match)
+    }
+
     // TODO: merge these counts into the main aggregation pipeline if possible
     const totalRespondentsByYear = await runStage(computeParticipationByYear, [{ context, survey }])
     const completionByYear = await runStage(computeCompletionByYear, [{ context, match, survey }])
@@ -414,13 +421,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         // console.log('// raw results')
         // console.log(JSON.stringify(results, null, 2))
 
-        await logToFile(`${logPath}/computeArguments.json`, computeArguments)
-        await logToFile(`${logPath}/axis1.json`, axis1)
-        await logToFile(`${logPath}/axis2.json`, axis2)
-        await logToFile(`${logPath}/match.json`, match)
         await logToFile(`${logPath}/pipeline.json`, pipeline)
         await logToFile(`${logPath}/rawResults.yml`, results)
-
         const normalizedCollectionName = survey?.normalizedCollectionName || 'normalized_responses'
         await logToFile(`${logPath}/database.yml`, { db: db.namespace, normalizedCollectionName })
     }

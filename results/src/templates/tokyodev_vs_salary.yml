@@ -4,7 +4,9 @@ i18nNamespace: ${mainBlockId}
 tabId: tabs.by_salary
 defaultUnits: percentilesByFacet
 blockType: HorizontalBarBlock2
-query: currentEditionData
+hasData: true
+queryOptions:
+    addBucketsEntities: false
 parameters:
     showNoAnswer: true
     sort: { property: medianByFacet }

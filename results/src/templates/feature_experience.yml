@@ -2,7 +2,7 @@ blockType: ToolFeatureExperienceBlock
 i18nNamespace: features
 hasComments: true
 hasSponsor: true
-query: allEditionsData
 parameters: { showNoAnswer: true }
 queryOptions:
     addQuestionEntity: true
+    allEditions: true
