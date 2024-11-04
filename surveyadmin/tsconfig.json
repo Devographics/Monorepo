@@ -1,5 +1,46 @@
 {
-  "extends": "./tsconfig.common.json",
+  "compilerOptions": {
+    /**
+    /!\ This is important for pnpm to load the right versions
+    */
+    "preserveSymlinks": true,
+    "allowJs": true,
+    "alwaysStrict": true,
+    "baseUrl": "./",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "lib": [
+      "ESNext.Array",
+      "dom",
+      "es2022"
+    ],
+    "module": "esnext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": false, // won't fail on unused variables
+    "noUnusedParameters": false,
+    "paths": {
+      "~/*": [
+        "src/*"
+      ]
+    },
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    //"strict": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "target": "esnext",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "strict": false,
+  },
   "include": [
     "next-env.d.ts",
     "src/**/*.ts",
@@ -13,21 +54,6 @@
     "**/*.tests.ts",
     // must exclude collocated code too
     // can create inconsistencies with VS Code...
-    "cypress"
+    "node_modules"
   ],
-  // need to wait TS 5
-  "moduleResolution": "bundler",
-  // if possible extend tsconfig.common instead
-  // (this is a trick to correctly handle colocated non-built files such as unit tests)
-  "compilerOptions": {
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "strict": false,
-    "strictNullChecks": true,
-    "lib": ["ESNext.Array", "dom", "es2022"]
-  }
 }
