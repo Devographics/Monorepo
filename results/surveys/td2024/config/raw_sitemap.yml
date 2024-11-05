@@ -615,15 +615,32 @@
             - template: tokyodev_variant_base
               queryOptions:
                   addBucketsEntities: true
-              id: programming_languages_by_company_size
-              parameters:
-                  showNoAnswer: true
-                  sort: { property: medianByFacet }
-              tabId: tabs.by_company_size
+              id: programming_languages_by_current_employer
+              tabId: tabs.by_current_employer
               filtersState:
-                  facet:
-                      sectionId: employer_info
-                      id: company_size
+                  filters:
+                      - conditions:
+                            - fieldId: current_employer
+                              sectionId: employer_info
+                              operator: eq
+                              value: japanese_company
+                      - conditions:
+                            - fieldId: current_employer
+                              sectionId: employer_info
+                              operator: eq
+                              value: japanese_subsidiary
+            # - template: tokyodev_variant_base
+            #   queryOptions:
+            #       addBucketsEntities: true
+            #   id: programming_languages_by_company_size
+            #   parameters:
+            #       showNoAnswer: true
+            #       sort: { property: medianByFacet }
+            #   tabId: tabs.by_company_size
+            #   filtersState:
+            #       facet:
+            #           sectionId: employer_info
+            #           id: company_size
 
       - id: databases
         template: tokyodev_multiple_options2_combined
@@ -764,6 +781,27 @@
             - template: tokyodev_vs_salary
               queryOptions:
                   addBucketsEntities: true
+            - template: tokyodev_variant_base
+              id: productivity_tools_by_job_search_status
+              tabId: tabs.by_job_search_status
+              queryOptions:
+                  addBucketsEntities: true
+              filtersState:
+                  options:
+                      sort: yes
+                      order: desc
+                  facet:
+                      sectionId: job_info
+                      id: searching_for_job
+            - template: tokyodev_variant_base
+              id: productivity_tools_by_industry_sector
+              tabId: tabs.by_industry_sector
+              queryOptions:
+                  addBucketsEntities: true
+              filtersState:
+                  facet:
+                      sectionId: employer_info
+                      id: industry_sector
 
 - id: satisfaction
   path: /satisfaction
