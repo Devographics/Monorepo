@@ -5,6 +5,6 @@ baseUrl: http://localhost:8001
 sitemap: ../../../.logs/flat_sitemap.yml
 # bannerId: general.css2022.js2022_banner
 
-bannerId: banner.html2024
-bannerLink: https://survey.devographics.com/en-US/survey/state-of-html/2024/?source=css2024
-bannerColor: rgba(96, 96, 232)
+# bannerId: banner.html2024
+# bannerLink: https://survey.devographics.com/en-US/survey/state-of-html/2024/?source=css2024
+# bannerColor: rgba(96, 96, 232)
