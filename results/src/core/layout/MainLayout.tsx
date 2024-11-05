@@ -152,6 +152,7 @@ const PageContent = styled.div`
     /* overflow-y: scroll; */
     /* height: 100vh; */
     overscroll-behavior: contain;
+    min-width: 0;
 `
 
 const Page = styled.div`
