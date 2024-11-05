@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useI18n } from '../helpers/i18nContext'
+// import { useI18n } from '../helpers/i18nContext'
 import '../stylesheets/_newsletter.scss'
 import T from './T'
 
@@ -11,6 +11,8 @@ export default function Newsletter({ submitUrl, locale }) {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(null)
+
+    // const i18n = useI18n()
 
     const handleChange = e => {
         const email = e.target.value

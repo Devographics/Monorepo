@@ -8,6 +8,12 @@ export const variants = {
   square: "png",
 };
 
+/**
+ * Images live in the "images" repository
+ * https://github.com/Devographics/images
+ * And deployed on https://assets.devographics.com/
+ * For instance an "-og.png" variation for images is expected to exist in this app
+ */
 export const getEditionImageUrl = (
   edition: EditionMetadata,
   variant?: "og" | "sidebar" | "square"

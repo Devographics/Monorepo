@@ -1,0 +1,13 @@
+/**
+    Quick light mode for a11y
+    https://github.com/Devographics/Monorepo/issues/309
+    */
+html.force-light-mode {
+  filter: hue-rotate(180deg) invert(1);
+  color-scheme: light;
+  img,
+  video,
+  picture {
+    filter: hue-rotate(180deg) invert(1);
+  }
+}

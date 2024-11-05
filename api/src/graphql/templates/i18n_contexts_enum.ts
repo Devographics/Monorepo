@@ -11,6 +11,11 @@ enum I18nContexts {
 
     state_of_js
     state_of_css
+
+    js2020
+    js2021
+    js2022
+    js2023
 }
 */
 

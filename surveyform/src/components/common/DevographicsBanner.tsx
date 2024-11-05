@@ -1,26 +1,14 @@
 "use client";
 import React from "react";
 import { useCookies } from "react-cookie";
-import { useEffect, useState } from "react";
 import { T } from "@devographics/react-i18n"
+import { useClient } from "./useClient";
 
 
-/**
- *
- * @returns true on the second client-render, when hydratation is done
- * false on server  and first client-render (for hydratation)
- */
-export const useMounted = () => {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  return mounted;
-};
 
 const DevographicsBanner = () => {
   const [cookies, setCookie] = useCookies(["hideDevographicsBanner"]);
-  const mounted = useMounted();
+  const mounted = useClient()
   const hideBanner = !mounted || cookies.hideDevographicsBanner;
 
   const handleClose = () => {

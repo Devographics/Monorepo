@@ -210,7 +210,17 @@ Page-specific styles
   justify-content: center;
   flex-wrap: wrap;
 }
-.footer-link-item {
+.footer-link-item button {
+  /** link style */
+  color: var(--link-color);
+  display: inline;
+  background-color: transparent;
+  border: 0px;
+  font-weight: bold;
+  &:hover {
+    text-decoration: underline;
+    color: var(--hover-color)
+  }
 }
 .footer-bottom {
   margin-top: $spacing;

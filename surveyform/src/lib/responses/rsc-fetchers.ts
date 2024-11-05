@@ -5,6 +5,7 @@ import { cache } from "react";
 import { UserDocument } from "~/lib/users/typings";
 import { rscMustGetSurveyEditionFromUrl } from "~/app/[lang]/survey/[slug]/[year]/rsc-fetchers";
 import { RscError } from "../rsc-error";
+import { rscCurrentUser } from "../users/rsc-fetchers/rscCurrentUser";
 
 /**
  * Get user response for a survey
@@ -58,14 +59,16 @@ export const rscMustGetUserResponse = cache(
  * - if response id doesn't match the provided responseId
  *  */
 export const rscMustGetResponse = cache(
-  async ({
-    responseId,
-    currentUser,
-  }: {
-    responseId: string;
-    currentUser: UserDocument;
-  }) => {
+  async ({ responseId }: { responseId: string }) => {
     const Responses = await getRawResponsesCollection();
+    const currentUser = await rscCurrentUser();
+    if (!currentUser) {
+      throw new RscError({
+        id: "response.permission",
+        message: "You cannot access this response.",
+        status: 400,
+      });
+    }
     // get the response by id, than only check if it belong to current user
     // this helps having a clearer error message
     const selector = {

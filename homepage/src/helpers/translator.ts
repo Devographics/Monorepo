@@ -65,28 +65,28 @@ export const applyTemplate = (
 
 export const getStringTranslator =
     (locale: Locale = {}): StringTranslator =>
-    (key, { values } = {}, fallback) => {
-        const { strings = [], ...rest } = locale
-        let result: StringTranslatorResult = { key, locale: rest }
+        (key, { values } = {}, fallback) => {
+            const { strings = [], ...rest } = locale
+            let result: StringTranslatorResult = { key, locale: rest }
 
-        const stringObject = findString(key, strings)
+            const stringObject = findString(key, strings)
 
-        if (stringObject) {
-            result = { ...result, ...stringObject }
-        } else {
-            result.missing = true
-            if (fallback) {
-                result.t = fallback
+            if (stringObject) {
+                result = { ...result, ...stringObject }
+            } else {
+                result.missing = true
+                if (fallback) {
+                    result.t = fallback
+                }
             }
-        }
 
-        if (result.t) {
-            result.t = values ? applyTemplate(result.t, values, locale, key) : result.t
-            result.tHtml = values ? applyTemplate(result.tHtml, values, locale, key) : result.tHtml
-        }
+            if (result.t) {
+                result.t = values ? applyTemplate(result.t, values, locale, key) : result.t
+                result.tHtml = values ? applyTemplate(result.tHtml, values, locale, key) : result.tHtml
+            }
 
-        return result
-    }
+            return result
+        }
 
 export const getLocaleSubset = (locale: Locale, keys: string[]) => {
     const strings = locale.strings.filter(s => keys.includes(s.key))

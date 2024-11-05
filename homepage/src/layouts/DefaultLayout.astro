@@ -1,5 +1,5 @@
 ---
-import { I18nContext, I18nContextProvider } from '../helpers/i18nContext'
+import { I18nProvider } from '../helpers/i18nContext'
 import Footer from '@components/Footer.astro'
 import Partners from '@components/Partners.astro'
 import OtherSurveys from '@components/OtherSurveys.astro'
@@ -27,10 +27,8 @@ const variables = `
         --text: ${text};
       }
 `
-
 ---
 
-<I18nContextProvider locale={locale} locales={locales}>
   <html lang="en">
 
   <head>
@@ -52,6 +50,7 @@ const variables = `
   </head>
 
   <body>
+<I18nProvider client:load locale={locale} locales={locales}>
       <OtherSurveys locale={locale} surveys={surveys} survey={survey} />
       <div class="layout">
         <div>
@@ -60,10 +59,10 @@ const variables = `
         {survey.partners && <Partners {...Astro.props} />}
         <Footer {...Astro.props} />
       </div>
+</I18nContextProvider>
   </body>
 
   </html>
-</I18nContextProvider>
 
 <style lang="scss" is:global>
   body {

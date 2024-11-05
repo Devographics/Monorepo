@@ -2,6 +2,7 @@ import { EditionMetadata, SponsorItem } from "@devographics/types";
 import { DynamicT } from "@devographics/react-i18n";
 
 const Support = ({ edition }: { edition: EditionMetadata }) => {
+  if (!edition.sponsors) return null
   return (
     <div className="support survey-page-block">
       <h3 className="support-heading survey-page-block-heading">
