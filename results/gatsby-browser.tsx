@@ -29,6 +29,8 @@ export const onRouteUpdate = ({ location, prevLocation }) => {
     // (i.e. not for internal anchor links)
     if (location?.pathname !== prevLocation?.pathname) {
         const pageContent = document.getElementById('pageContent')
-        pageContent.scrollTop = 0
+        if (pageContent) {
+            pageContent.scrollTop = 0
+        }
     }
 }

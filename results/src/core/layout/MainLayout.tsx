@@ -65,13 +65,19 @@ const MainLayout_ = styled.div`
     display: grid;
     grid-template-rows: min-content minmax(0, 1fr);
     grid-template-areas: 'banner' 'content';
-    height: 100vh;
     @media ${mq.large} {
-        overflow: hidden;
+        /* overflow: hidden; */
     }
 `
 
-const Header_ = styled.header``
+const Header_ = styled.header`
+    @media ${mq.large} {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overscroll-behavior: contain;
+    }
+`
 
 const ScreenReadersHint = styled.span`
     ${screenReadersOnlyMixin}
@@ -143,7 +149,7 @@ const MenuToggle = styled.button`
 const PageContent = styled.div`
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     /* height: 100vh; */
     overscroll-behavior: contain;
 `
