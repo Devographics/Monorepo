@@ -1,0 +1,101 @@
+# Render
+
+- name: |
+      RenderATL: RenderATL: Meet the inventor of CSS
+  id: renderatl
+  description: |
+      Attend the ultimate three-day tech conference & cultural festival featuring the Father of CSS, Håkon Wium Lie, as well as 50+ additional speakers & workshops with tracks for Design/CSS, Leadership & Entrepreneurship, Product & Project Management, Web/Mobile Software Engineering, and so much more.
+
+      Use code “StateOfCSS to receive $50 off each ticket!
+
+  url: http://www.renderatl.com/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofcss2023
+  image: /images/resources/renderatl-stacked.png
+  teacher: Atlanta, Georgia
+
+# Front End Masters
+
+- name: Frontend Masters
+  id: fm-homepage
+  description: Advance Your Skills with In-Depth, Modern Front-End Engineering Courses
+  url: https://frontendmasters.com/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2023
+  image: https://static.frontendmasters.com/assets/brand/logos/m-black.jpg
+
+- name: Intermediate HTML & CSS
+  id: fm-intermediate-html-css
+  description: |
+      Discover new HTML elements and CSS Selectors that you might not know! 
+      Learn the hard parts of CSS, including inheritance, specificity, and the cascade.
+  url: https://frontendmasters.com/courses/css-grid-flexbox-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2023
+  image: https://static.frontendmasters.com/assets/teachers/kramer/thumb@2x.webp
+  teacher: Jen Kramer
+  # company:
+
+- name: Complete Intro to Web Development, v3
+  id: fm-web-development-v3
+  description: |
+      More than an introduction, you'll build your first website and get a solid foundation for becoming a professional web developer with modern skills
+  url: https://frontendmasters.com/courses/web-development-v3/?utm_source=stateofhtml&utm_medium=website&utm_campaign=html2023
+  image: https://static.frontendmasters.com/assets/teachers/holt/thumb@2x.webp
+  teacher: Brian Holt
+  company: SQLite Cloud
+
+- name: 'Vanilla JS: You Might Not Need a Framework'
+  id: fm-vanilla-js-apps
+  description: |
+      See how you can build rich web apps and websites without depending on libraries or frameworks, using only the core JavaScript language. You'll
+  url: https://frontendmasters.com/courses/vanilla-js-apps/?utm_source=stateofhtml&utm_medium=website&utm_campaign=html2023
+  image: https://static.frontendmasters.com/assets/teachers/firtman/thumb@2x.webp
+  teacher: Maximiliano Firtman
+  # company:
+
+- name: SVG Essentials & Animation, v2
+  id: fm-svg-essentials-animation
+  description: |
+      Learn to build and optimize SVG – the scalable graphics format for the web that can achieve impressively small filesizes for fast-loading websites.
+  url: https://frontendmasters.com/courses/svg-essentials-animation/?utm_source=stateofhtml&utm_medium=website&utm_campaign=html2023
+  image: https://static.frontendmasters.com/assets/teachers/drasner/thumb@2x.webp
+  teacher: Sarah Drasner
+  company: Google
+
+- name: Web Components
+  id: fm-web-components
+  description: |
+      Learn where to find excellent Web Components to build web apps. You’ll also learn how to create your own custom components using JavaScript and libraries like Lit that will help you make them faster!
+  url: https://frontendmasters.com/courses/web-components/?utm_source=stateofhtml&utm_medium=website&utm_campaign=html2023
+  image: https://static.frontendmasters.com/assets/teachers/rupert/thumb@2x.webp
+  teacher: Dave Rupert
+  company: Paravel
+
+- name: Web App Accessibility (feat. React)
+  id: fm-react-accessibility
+  description: |
+      Solve the most common accessibility issues in React apps using testing tools, semantic HTML, and ARIA attributes to make interactive elements accessible.
+  url: https://frontendmasters.com/courses/react-accessibility/?utm_source=stateofhtml&utm_medium=website&utm_campaign=html2023
+  image: https://static.frontendmasters.com/assets/teachers/sutton/thumb@2x.webp
+  teacher: Marcy Sutton Todd
+  company: Principle Studios
+
+- name: Build Progressive Web Apps (PWAs) from Scratch
+  id: fm-pwas
+  description: |
+      Modern web browsers now enable you to create offline-capable Progressive Web Apps (PWAs)! Your web apps can now go beyond the browser and install natively on iOS, Android, and desktop.
+  url: https://frontendmasters.com/courses/pwas/?utm_source=stateofhtml&utm_medium=website&utm_campaign=html2023
+  image: https://static.frontendmasters.com/assets/teachers/firtman/thumb@2x.webp
+  teacher: Maximiliano Firtman
+  # company:
+
+- name: Introduction to Next.js 13+, v3
+  id: fm-next-js-v3
+  description: |
+      In this course, you'll learn server-side rendering, static site generation, data fetching, building API endpoints, creating pages, and new features in Next 13+, like using the app router, server and client components, and server actions!
+  url: https://frontendmasters.com/courses/next-js-v3/?utm_source=stateofhtml&utm_medium=website&utm_campaign=html2023
+  image: https://static.frontendmasters.com/assets/teachers/moss/thumb@2x.webp
+  teacher: Scott Moss
+  company: Initialized
+# - name:
+#   id:
+#   description:
+#   url:
+#   image:
+#   teacher:
+#   company:
