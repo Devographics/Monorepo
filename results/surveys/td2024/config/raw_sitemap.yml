@@ -929,11 +929,6 @@
               queryOptions:
                   addQuestionComments: false
                   sectionId: other
-            - template: tokyodev_men_vs_non_men
-              i18nNamespace: satisfaction
-              queryOptions:
-                  addQuestionComments: false
-                  sectionId: other
 
       - id: life_in_japan__housing
         template: tokyodev_satisfaction
@@ -945,33 +940,6 @@
               queryOptions:
                   addQuestionComments: false
                   sectionId: other
-            - template: tokyodev_variant_base
-              id: life_in_japan__housing_by_japanese_province
-              i18nNamespace: satisfaction
-              tabId: tabs.by_japanese_province
-              queryOptions:
-                  addQuestionComments: false
-                  sectionId: other
-              filtersState:
-                  filters:
-                      - conditions:
-                            - fieldId: japan_province
-                              sectionId: user_info
-                              operator: in
-                              value:
-                                  - tokyo
-                                  - chiba
-                                  - saitama
-                                  - kanagawa
-                      - conditions:
-                            - fieldId: japan_province
-                              sectionId: user_info
-                              operator: nin
-                              value:
-                                  - tokyo
-                                  - chiba
-                                  - saitama
-                                  - kanagawa
 
       - id: life_in_japan__financial_situation
         template: tokyodev_satisfaction
