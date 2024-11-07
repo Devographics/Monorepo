@@ -88,12 +88,12 @@ interface ApiData<T = any> {
   error: any;
 }
 
-export const getData = async (url: string) => {
+export const getData = async <TData = ResponsesData,>(url: string) => {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   } else {
-    const result: ApiData<ResponsesData> = await response.json();
+    const result: ApiData<TData> = await response.json();
     if (result.error) {
       throw result.error;
     }
@@ -150,7 +150,7 @@ export const NormalizeQuestion = (props: NormalizeQuestionProps) => {
     queryFn: () =>
       getData(apiRoutes.normalization.loadQuestionResponses.href(params)),
   });
-  const customNormalizationsQuery = useQuery({
+  const customNormalizationsQuery = useQuery<CustomNormalizationDocument[]>({
     queryKey: [getCustomNormalizationsCacheKey(params)],
     queryFn: () =>
       getData(apiRoutes.normalization.loadCustomNormalizations.href(params)),

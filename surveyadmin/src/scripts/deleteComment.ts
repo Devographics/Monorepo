@@ -98,6 +98,8 @@ export const deleteUser = async ({ email, reallyDelete = 0 }) => {
   };
 };
 
+/*
 deleteComment.args = ["commentId"];
 
 deleteComment.description = `Delete a specific comment `;
+*/

@@ -1,5 +1,5 @@
 import { fetchSurveysMetadata, getFromCache } from "@devographics/fetch";
-import { CommonOptions } from "@devographics/fetch/types";
+import { type CommonOptions } from "@devographics/fetch";
 import { splitResponses } from "../helpers/splitResponses";
 import { getNormalizableQuestions } from "../helpers/getNormalizableQuestions";
 import { getAllResponses } from "../helpers/getAllResponses";

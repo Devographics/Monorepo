@@ -31,7 +31,7 @@ export const removeCustomTokens = async (params: CustomNormalizationParams) => {
         customTokens: tokens[0],
       },
     },
-    { returnNewDocument: true, returnDocument: "after" }
+    { returnDocument: "after" }
   );
   const document = updateResult.value;
   const deleteResult = await cleanUpIfNeeded(document);

@@ -17,7 +17,7 @@
     "test": "npm run test:unit && npm run test:e2e",
     "tokyodev": "dotenv -e .env.tokyodev.local next",
     "typecheck-watch": "tsc --noEmit --p src/tsconfig.json -w",
-    "typecheck": "tsc --noEmit --p src/tsconfig.json"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@devographics/constants": "workspace:^",

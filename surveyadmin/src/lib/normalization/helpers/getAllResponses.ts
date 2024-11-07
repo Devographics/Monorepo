@@ -12,7 +12,7 @@ import { getNormResponsesCollection } from "@devographics/mongo";
 import { getFromCache } from "@devographics/fetch";
 import { getQuestionObject } from "./getQuestionObject";
 import { getAllResponsesSelector } from "./getSelectors";
-import { CommonOptions } from "@devographics/fetch/types";
+import { CommonOptions } from "@devographics/fetch";
 import { ResponsesResult } from "../normalize/helpers";
 
 export const getAllResponsesCacheKey = ({ survey, edition, question }) =>

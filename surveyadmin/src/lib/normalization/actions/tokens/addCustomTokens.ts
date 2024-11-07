@@ -32,7 +32,7 @@ export const addCustomTokens = async (params: CustomNormalizationParams) => {
         [isSuggestion ? "suggestedTokens" : "customTokens"]: { $each: tokens },
       },
     },
-    { upsert: true, returnNewDocument: true }
+    { upsert: true, returnDocument: "after" }
   );
   // TODO: it should be possible to avoid having to make a separate query,
   // but somehow findOneAndUpdate doesn't return a document when upserting. bug?

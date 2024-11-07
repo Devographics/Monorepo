@@ -13,7 +13,7 @@ export const disableRegularTokens = async (
   const { tokens, ...rest } = params;
   const normalizationId = getNormalizationId(params);
   const customNormCollection = await getCustomNormalizationsCollection();
-  const updateResult = customNormCollection.updateOne(
+  const updateResult = await customNormCollection.updateOne(
     { normalizationId },
     {
       $set: { normalizationId, ...rest },
@@ -21,7 +21,7 @@ export const disableRegularTokens = async (
         disabledTokens: { $each: tokens },
       },
     },
-    { upsert: true, returnNewDocument: true }
+    { upsert: true }
   );
   const document = await customNormCollection.findOne({ normalizationId });
   return { action: "disableRegularTokens", updateResult, document };
