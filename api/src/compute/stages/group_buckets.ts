@@ -50,18 +50,34 @@ async function getGroupedBuckets<T extends Bucket | FacetBucket>({
 
         groupedBucketIds = [...groupedBucketIds, ...selectedBuckets.map(b => b.id)]
 
-        // if there is an individual ungrouped bucket with the same id as a bucket group,
-        // transform it into a "catch-all" child bucket and add it to the group
-        // TODO: figure out why we do this and whether it should be re-enabled
-        // NOTE: breaks when a group has the same id as a bucket
-        // const catchAllBucket = buckets.find(b => b.id === groupId)
-        // if (catchAllBucket) {
-        //     groupedBucketIds.push(catchAllBucket.id)
-        //     selectedBuckets = [
-        //         ...selectedBuckets,
-        //         { ...catchAllBucket, id: `${CATCHALL_PREFIX}${catchAllBucket.id}` }
-        //     ]
-        // }
+        /*
+
+        If there is an individual ungrouped bucket with the same id as a bucket group,
+        transform it into a "catch-all" child bucket and add it to the group.
+
+        For example, if we have a `styling_customization` token that becomes a group parent, 
+        put all its matched elements into a `catchall_styling_customization` child token
+
+        styling_customization
+            - catchall_styling_customization ⬅️
+            - styling_select_inputs
+            - styling_date_pickers
+            - ...
+    
+        NOTE: this breaks when a group has the same id as a bucket, for example if
+        we want to create one group for `men` and one group for `women_and_non_b` in a situation
+        where there is already a `men` bucket. 
+
+        */
+
+        const catchAllBucket = buckets.find(b => b.id === groupId)
+        if (catchAllBucket) {
+            groupedBucketIds.push(catchAllBucket.id)
+            selectedBuckets = [
+                ...selectedBuckets,
+                { ...catchAllBucket, id: `${CATCHALL_PREFIX}${catchAllBucket.id}` }
+            ]
+        }
 
         // if created grouped bucket has associated entity/token, add them here
         const mergedProps: { id: string; entity?: Entity; token?: Token } = { id: groupId }

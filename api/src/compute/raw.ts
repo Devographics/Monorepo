@@ -14,6 +14,7 @@ import {
 import { getCollection } from '../helpers/db'
 import get from 'lodash/get.js'
 import { NormalizationMetadata, RawDataItem } from '@devographics/types'
+import { NO_MATCH } from '@devographics/constants'
 
 type GetRawDataOptions = {
     survey: SurveyApiObject
@@ -61,9 +62,13 @@ export const getRawData = async ({
         if (token) {
             // since we can have multiple answers per response, some of them might
             // not contain the token we're filtering by, or even no tokens at all
-            data = data.filter(
-                answer => answer.tokens && answer.tokens.map(t => t.id).includes(token)
-            )
+            data = data.filter(answer => {
+                if (token === NO_MATCH) {
+                    return !answer.tokens
+                } else {
+                    return answer.tokens && answer.tokens.map(t => t.id).includes(token)
+                }
+            })
         }
 
         return data
