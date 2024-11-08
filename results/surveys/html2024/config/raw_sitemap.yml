@@ -256,7 +256,7 @@
             - id: forms_pain_points
               template: multiple_options2_freeform
               i18nNamespace: features
-              parameters: { limit: 10 }
+              parameters: { limit: 15 }
 
             # - id: adam_argyle
             #   template: picks
@@ -276,7 +276,7 @@
             - id: interactivity_pain_points
               template: multiple_options2_freeform
               i18nNamespace: features
-              parameters: { limit: 10 }
+              parameters: { limit: 15 }
 
             - id: interactivity_resources
               items: [fm-vanilla-js-apps]
@@ -298,7 +298,7 @@
             - id: content_pain_points
               template: multiple_options2_freeform
               i18nNamespace: features
-              parameters: { limit: 10 }
+              parameters: { limit: 15 }
 
             - id: interactivity_resources
               items: [fm-svg-essentials-animation]
@@ -316,6 +316,10 @@
 
                       This indicates that there is still significant work to be done before they can truly enhance HTML's extensibility and become a strong alternative to framework components. However, the ongoing activity in this area leaves me hopeful.
 
+            - id: web_component_features
+              template: multi_items_experience
+              i18nNamespace: features
+
             - id: web_components_libraries
               template: multiple_options2_combined
               i18nNamespace: features
@@ -328,7 +332,7 @@
             - id: making_web_components_pain_points
               template: multiple_options2_freeform
               i18nNamespace: features
-              parameters: { limit: 10 }
+              parameters: { limit: 15 }
 
             - id: web_components_resources
               items: [fm-web-components]
@@ -371,7 +375,7 @@
               titleId: features.accessibility_pain_points
               questionKey: features.accessibility_pain_points.question
               template: multiple_options2_freeform
-              parameters: { limit: 10 }
+              parameters: { limit: 15 }
 
             - id: accessibility_resources
               items: [fm-react-accessibility]
@@ -398,7 +402,7 @@
             - id: mobile_web_apps_pain_points
               template: multiple_options2_freeform
               i18nNamespace: features
-              parameters: { limit: 10 }
+              parameters: { limit: 15 }
 
             - id: mobile_web_apps_resources
               items: [fm-pwas]

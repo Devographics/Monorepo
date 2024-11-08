@@ -27,10 +27,10 @@ const style = `
   --color-slash-three-b: #2f83ec;
   --color-slash-three-c: #3b7bee;
   --color-slash-three-d: #7a6cce;
-  --color-chevron-back-a: #9f0d47;
+  --color-chevron-back-a: #B94FAF;
   --color-chevron-back-b: #190941;
-  --color-chevron-front-a: #e02d2d;
-  --color-chevron-front-b: #fff873;
+  --color-chevron-front-a: #2DAAE0;
+  --color-chevron-front-b: #FFF873;
   --color-grad-shape-a: #fff6e6;
   --color-grad-shape-b: #ffdea4;
   --color-shape-shadow-bg: #040823;
@@ -546,32 +546,32 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                 </g>
             </g>
             <g>
-    			<g transform="rotate(30)">
-    				<g className="soh-text soh-text--stateof">
-    					<text x="1070" y="660" font-size="90">
-    						<tspan>S</tspan>
-    						<tspan>T</tspan>
-    						<tspan>A</tspan>
-    						<tspan>T</tspan>
-    						<tspan>E</tspan>
-    						<tspan> </tspan>
-    						<tspan>O</tspan>
-    						<tspan>F</tspan>
-    					</text>
-    				</g>
-    			</g>
-    
-    			<g transform="rotate(30)">
-    				<g className="soh-text soh-text--year">
-    					<text x="728" y="1260" font-size="100" text-anchor="end">
-    						<tspan>2</tspan>
-    						<tspan>0</tspan>
-    						<tspan>2</tspan>
-    						<tspan>3</tspan>
-    					</text>
-    				</g>
-    			</g>
-    		</g>
+                <g transform="rotate(30)">
+                    <g className="soh-text soh-text--stateof">
+                        <text x="1070" y="660" font-size="90">
+                            <tspan>S</tspan>
+                            <tspan>T</tspan>
+                            <tspan>A</tspan>
+                            <tspan>T</tspan>
+                            <tspan>E</tspan>
+                            <tspan> </tspan>
+                            <tspan>O</tspan>
+                            <tspan>F</tspan>
+                        </text>
+                    </g>
+                </g>
+
+                <g transform="rotate(30)">
+                    <g className="soh-text soh-text--year">
+                        <text x="728" y="1260" font-size="100" text-anchor="end">
+                            <tspan>2</tspan>
+                            <tspan>0</tspan>
+                            <tspan>2</tspan>
+                            <tspan>4</tspan>
+                        </text>
+                    </g>
+                </g>
+            </g>
         </svg>
     </Wrapper>
 )
