@@ -26,6 +26,7 @@ import { ResultsSubFieldEnum, Section } from '@devographics/types'
 import { loadOrGetParsedSurveys } from '../load/surveys'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
+import { stringOrArray } from '../graphql/string_or_array'
 
 export const generateResolvers = async ({
     surveys,
@@ -64,7 +65,8 @@ export const generateResolvers = async ({
         QuestionMetadata: questionMetadataResolverMap,
         SitemapBlock: sitemapBlockResolverMap,
         SitemapBlockVariant: sitemapBlockResolverMap,
-        StringOrInt: new GraphQLScalarType(stringOrInt)
+        StringOrInt: new GraphQLScalarType(stringOrInt),
+        StringOrArray: new GraphQLScalarType(stringOrArray)
     } as any
 
     for (const survey of surveys) {

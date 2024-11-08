@@ -205,6 +205,8 @@ enum ContentType {
 
 scalar StringOrInt
 
+scalar StringOrArray
+
 type OptionMetadata {
     id: StringOrInt
     intlId: String
