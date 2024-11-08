@@ -168,8 +168,8 @@ const Question = ({
               hasLowProgress(stats) ? "normalization-percentage-low" : ""
             }`}
           >
-            {stats.percentage}% ({stats.normalizedCount}/
-            <strong>{stats.totalCount}</strong>)
+            {stats.percentage}% ({stats.unnormalizedCount} remaining out of{" "}
+            {stats.totalCount})
           </p>
         )}
       </td>
