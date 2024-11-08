@@ -119,7 +119,9 @@ export const freeform: SubfieldProcessFunction = async ({
                 tokens = [...tokens, ...customTokens];
               }
               if (disabledTokensIds) {
-                logIfVerbose(`⛰️ Disabled tokens: [${customTokensIds.join()}]`);
+                logIfVerbose(
+                  `⛰️ Disabled tokens: [${disabledTokensIds.join()}]`
+                );
                 // if some tokens are disabled, remove them
                 tokens = tokens.filter(
                   (t) => !disabledTokensIds.includes(t.id)
