@@ -6,7 +6,7 @@ type Comment {
     responseId: String
     experience: String
     sentiment: String
-    responseValue: StringOrArray
+    responseValue: StringOrFloatOrArray
     # sentimentScore: Float # not implemented yet
 }
 

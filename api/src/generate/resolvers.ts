@@ -22,11 +22,11 @@ import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
 import { localesResolvers } from '../resolvers/locales'
 import { subFields } from './subfields'
-import { ResultsSubFieldEnum, Section } from '@devographics/types'
+import { ResultsSubFieldEnum } from '@devographics/types'
 import { loadOrGetParsedSurveys } from '../load/surveys'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
-import { stringOrArray } from '../graphql/string_or_array'
+import StringOrFloatOrArray from '../graphql/string_or_array'
 
 export const generateResolvers = async ({
     surveys,
@@ -66,7 +66,7 @@ export const generateResolvers = async ({
         SitemapBlock: sitemapBlockResolverMap,
         SitemapBlockVariant: sitemapBlockResolverMap,
         StringOrInt: new GraphQLScalarType(stringOrInt),
-        StringOrArray: new GraphQLScalarType(stringOrArray)
+        StringOrFloatOrArray: new GraphQLScalarType(StringOrFloatOrArray)
     } as any
 
     for (const survey of surveys) {
