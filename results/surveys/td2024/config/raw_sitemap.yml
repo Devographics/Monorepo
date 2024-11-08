@@ -12,17 +12,16 @@
         disableExport: true
         wrapBlock: false
         items:
-            - median_salary_2024
-            - previous_compensation_2024
-            - negotiated_compensation_2024
-            - unemployed_respondents_2024
-            - job_search_status_2024
-            - international_subsidiary_2024
+            - median_compensation_2024
+            - gender_2024
+            - language_2024
+            - employer_2024
+            - gaming_2024
+            - hours_per_week_2024
             - remote_work_2024
-            - women_vs_men_experience_2024
-            - women_vs_men_professional_qualifications_2024
-            - overtime_2024
-            - programming_languages_2024
+            - training_2024
+            - satisfaction_2024
+            - favourite_thing_about_japan_2024
 
       - id: survey_newsletter
         blockType: NewsletterBlock
@@ -1067,6 +1066,35 @@
 
       - id: favourite_thing_about_japan
         template: tokyodev_multiple_options2_freeform
+        variants:
+            - template: tokyodev_variant_base
+              id: favourite_thing_by_years_in_japan
+              tabId: tabs.by_years_in_japan
+              parameters: { showNoAnswer: true, cutoff: 10, limit: 10, mergeOtherBuckets: true }
+              queryOptions:
+                  addBucketsEntities: false
+                  subField: freeform
+                  addGroupedBuckets: true
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: years_in_japan
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_under_1
+                                  - range_1_3
+                      - conditions:
+                            - fieldId: years_in_japan
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_4_6
+                                  - range_7_9
+                                  - range_10_12
+                                  - range_13_15
+                                  - range_16_20
+                                  - range_over_20
 
 - id: conclusion
   path: /conclusion
