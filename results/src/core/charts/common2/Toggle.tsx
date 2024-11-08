@@ -33,7 +33,7 @@ export type ToggleItemType = {
 type ToggleProps = {
     labelId: string
     items: ToggleItemType[]
-    handleSelect: (id: string) => void
+    handleSelect: (id: string | number) => void
     hasDefault?: boolean
 }
 

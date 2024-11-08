@@ -64,6 +64,7 @@ export const CommentsWrapper = ({
     question
 }: { queryOptions: GetQueryProps } & CommentsCommonProps) => {
     const [data, setData] = useState<Comment[]>([])
+    const [error, setError] = useState<any>(null)
     const [isLoading, setIsLoading] = useState(false)
     const { surveyId, editionId, sectionId, questionId } = queryOptions
     useEffect(() => {
@@ -80,18 +81,21 @@ export const CommentsWrapper = ({
                 query,
                 getQueryName(queryOptions)
             )
-            const questionData = result?.surveys?.[surveyId]?.[editionId]?.[sectionId]?.[questionId]
-            const comments = questionData?.comments?.currentEdition?.commentsRaw
-            if (comments) {
-                setData(comments)
+            if (error) {
+                setError(error)
+            } else {
+                const questionData =
+                    result?.surveys?.[surveyId]?.[editionId]?.[sectionId]?.[questionId]
+                const comments = questionData?.comments?.currentEdition?.commentsRaw
+                if (comments) {
+                    setData(comments)
+                }
             }
-
             setIsLoading(false)
         }
 
         getData()
     }, [])
-
     return (
         <div>
             <h2>
@@ -103,6 +107,10 @@ export const CommentsWrapper = ({
             <div>
                 {isLoading ? (
                     <div>Loading…</div>
+                ) : error ? (
+                    <div className="error">
+                        <code>{error?.message}</code>
+                    </div>
                 ) : (
                     <CommentsContent comments={data} name={name} question={question} />
                 )}
@@ -111,14 +119,20 @@ export const CommentsWrapper = ({
     )
 }
 
-export const filterCommentsByValue = (comments: Comment[], value: string | number | null) =>
-    value === null ? comments : comments.filter(c => String(c.responseValue) === String(value))
+export const filterCommentsByValue = (comments: Comment[], value: string | number) =>
+    value === ''
+        ? comments
+        : comments.filter(c =>
+              Array.isArray(c.responseValue)
+                  ? c.responseValue.map(String).includes(String(value))
+                  : String(c.responseValue) === String(value)
+          )
 
 export const filterCommentsByExperience = (comments: Comment[], value: string | number | null) =>
-    value === null ? comments : comments.filter(c => String(c.experience) === String(value))
+    value === '' ? comments : comments.filter(c => String(c.experience) === String(value))
 
 export const filterCommentsBySentiment = (comments: Comment[], value: string | number | null) =>
-    value === null ? comments : comments.filter(c => String(c.sentiment) === String(value))
+    value === '' ? comments : comments.filter(c => String(c.sentiment) === String(value))
 
 export interface CommentsFiltersState {
     experienceFilter: FeaturesOptions | null
@@ -136,9 +150,9 @@ export const CommentsContent = ({
 }: {
     comments: Comment[]
 } & CommentsCommonProps) => {
-    const [experienceFilter, setExperienceFilter] = useState<FeaturesOptions | null>(null)
-    const [sentimentFilter, setSentimentFilter] = useState<SimplifiedSentimentOptions | null>(null)
-    const [valueFilter, setValueFilter] = useState<string | null>(null)
+    const [experienceFilter, setExperienceFilter] = useState<FeaturesOptions | ''>('')
+    const [sentimentFilter, setSentimentFilter] = useState<SimplifiedSentimentOptions | ''>('')
+    const [valueFilter, setValueFilter] = useState<string | number>('')
 
     const stateStuff = {
         experienceFilter,
@@ -150,10 +164,10 @@ export const CommentsContent = ({
     }
 
     let filteredComments = comments
+
     filteredComments = filterCommentsByExperience(filteredComments, experienceFilter)
     filteredComments = filterCommentsBySentiment(filteredComments, sentimentFilter)
     filteredComments = filterCommentsByValue(filteredComments, valueFilter)
-
     return (
         <div>
             <CommentsFilters comments={comments} question={question} stateStuff={stateStuff} />

@@ -46,8 +46,10 @@ export const CommentsFilters = ({
                         labelId="comments.filter.experience"
                         items={[
                             {
-                                label: getString('comments.filter.all')?.t,
-                                id: null,
+                                label: `${getString('comments.filter.all')?.t} (${
+                                    comments.length
+                                })`,
+                                id: '',
                                 isEnabled: experienceFilter === null
                             },
                             ...Object.values(FeaturesOptions).map(id => ({
@@ -68,8 +70,10 @@ export const CommentsFilters = ({
                         labelId="comments.filter.sentiment"
                         items={[
                             {
-                                label: getString('comments.filter.all')?.t,
-                                id: null,
+                                label: `${getString('comments.filter.all')?.t} (${
+                                    comments.length
+                                })`,
+                                id: '',
                                 isEnabled: sentimentFilter === null
                             },
                             ...Object.values(SimplifiedSentimentOptions).map(id => ({
@@ -110,8 +114,10 @@ export const CommentsFilters = ({
                         labelId="charts.filter_by"
                         items={[
                             {
-                                label: getString('comments.filter.all')?.t,
-                                id: null,
+                                label: `${getString('comments.filter.all')?.t} (${
+                                    comments.length
+                                })`,
+                                id: '',
                                 isEnabled: valueFilter === null
                             },
                             ...items

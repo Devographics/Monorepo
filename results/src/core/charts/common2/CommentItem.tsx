@@ -42,7 +42,11 @@ export const CommentItem = ({
     question,
     name
 }: Comment & { name: string; index: number; question: QuestionMetadata }) => {
-    const option = question?.options?.find(o => String(o.id) === String(responseValue))
+    // extract any options that were inlcuded in the user's corresponding response
+    const responseValueArray = Array.isArray(responseValue) ? responseValue : [responseValue]
+    const questionOptions =
+        question?.options?.filter(o => responseValueArray.map(String).includes(String(o.id))) || []
+
     return (
         <div className="comment-item">
             <div className="comment-message-wrapper">
@@ -58,9 +62,11 @@ export const CommentItem = ({
                             <SentimentItem sentiment={sentiment} />
                         )}
                     </div>
-                ) : option !== undefined ? (
+                ) : questionOptions.length > 0 ? (
                     <div className="comment-response">
-                        <ValueItem option={option} question={question} />
+                        {questionOptions.map(option => (
+                            <ValueItem key={option.id} option={option} question={question} />
+                        ))}
                     </div>
                 ) : null}
                 <a
