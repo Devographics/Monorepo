@@ -41,7 +41,7 @@ export const happiness: TemplateFunction = options => {
             [DbSuffixes.COMMENT]: `happiness__${questionSegment}__${DbSuffixes.COMMENT}`
         },
         normPaths: {
-            response: `happiness.${happinessDbFieldName}`,
+            response: `happiness.${happinessDbFieldName}.${DbSuffixes.CHOICES}`,
             skip: `happiness.${happinessDbFieldName}.${DbPathsEnum.SKIP}`,
             comment: `happiness.${happinessDbFieldName}.${DbPathsEnum.COMMENT}`
         },
