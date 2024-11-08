@@ -9,17 +9,19 @@ import newGithubIssueUrl from 'new-github-issue-url'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useBlockTitle } from 'core/helpers/blockHelpers'
 import {
-    AllQuestionData,
     Comment,
     FeaturesOptions,
+    OptionMetadata,
+    QuestionMetadata,
     SimplifiedSentimentOptions,
     StandardQuestionData
 } from '@devographics/types'
 import { getExperienceKey, getSentimentKey } from 'core/charts/multiItemsExperience/MultiItemsCell'
 import './CommentsTrigger.scss'
-import ButtonGroup from 'core/components/ButtonGroup'
-import Button from 'core/components/Button'
 import { BlockVariantDefinition } from 'core/types'
+import { Toggle } from 'core/charts/common2'
+import { useI18n } from '@devographics/react-i18n'
+import { getItemLabel } from 'core/helpers/labels'
 
 type GetQueryNameProps = {
     editionId: string
@@ -49,6 +51,7 @@ query ${getQueryName({ editionId, questionId })} {
                                     experience
                                     sentiment
                                     responseId
+                                    responseValue
                                 }
                                 count
                                 year
@@ -80,7 +83,6 @@ const CommentsTrigger = ({
     const sectionId = pageContext.id
     const questionId = block.id
     const queryOptions = { surveyId, editionId, sectionId, questionId }
-    const hasFilters = true
     return (
         <ModalTrigger
             trigger={
@@ -90,20 +92,20 @@ const CommentsTrigger = ({
                 </span>
             }
         >
-            <CommentsWrapper queryOptions={queryOptions} name={title} hasFilters={hasFilters} />
+            <CommentsWrapper queryOptions={queryOptions} name={title} />
         </ModalTrigger>
     )
 }
 
+interface CommentsCommonProps {
+    name: string
+    question: QuestionMetadata
+}
 export const CommentsWrapper = ({
     queryOptions,
     name,
-    hasFilters
-}: {
-    queryOptions: GetQueryProps
-    name: string
-    hasFilters: boolean
-}) => {
+    question
+}: { queryOptions: GetQueryProps } & CommentsCommonProps) => {
     const [data, setData] = useState<Comment[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const { surveyId, editionId, sectionId, questionId } = queryOptions
@@ -145,24 +147,35 @@ export const CommentsWrapper = ({
                 {isLoading ? (
                     <div>Loading…</div>
                 ) : (
-                    <Comments comments={data} name={name} hasFilters={hasFilters} />
+                    <Comments comments={data} name={name} question={question} />
                 )}
             </div>
         </div>
     )
 }
 
+const filterCommentsByValue = (comments: Comment[], value: string | number | null) =>
+    value === null ? comments : comments.filter(c => String(c.responseValue) === String(value))
+
 const Comments = ({
     comments,
     name,
-    hasFilters
+    question
 }: {
     comments: Comment[]
-    name: string
-    hasFilters: boolean
-}) => {
+} & CommentsCommonProps) => {
     const [experienceFilter, setExperienceFilter] = useState<FeaturesOptions | null>(null)
     const [sentimentFilter, setSentimentFilter] = useState<SimplifiedSentimentOptions | null>(null)
+    const [valueFilter, setValueFilter] = useState<string | null>(null)
+
+    const stateStuff = {
+        experienceFilter,
+        setExperienceFilter,
+        sentimentFilter,
+        setSentimentFilter,
+        valueFilter,
+        setValueFilter
+    }
 
     let filteredComments = comments
     if (experienceFilter) {
@@ -171,73 +184,135 @@ const Comments = ({
     if (sentimentFilter) {
         filteredComments = filteredComments.filter(c => c.sentiment === sentimentFilter)
     }
+    filteredComments = filterCommentsByValue(filteredComments, valueFilter)
     return (
         <div>
-            {hasFilters && (
-                <div className="comments-header">
-                    <div className="comments-filter">
-                        <T k="comments.filter.experience" />
-                        <ButtonGroup>
-                            <Button
-                                size="small"
-                                className={experienceFilter ? '' : 'Button--selected'}
-                                onClick={() => {
-                                    setExperienceFilter(null)
-                                }}
-                            >
-                                <T k="comments.filter.all" />
-                            </Button>
-                            {Object.values(FeaturesOptions).map(option => (
-                                <Button
-                                    size="small"
-                                    className={
-                                        experienceFilter === option ? 'Button--selected' : ''
-                                    }
-                                    key={option}
-                                    onClick={() => {
-                                        setExperienceFilter(option)
-                                    }}
-                                >
-                                    <T k={`options.features.${option}.label.short`} />
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </div>
-                    <div className="comments-filter">
-                        <T k="comments.filter.sentiment" />
-                        <ButtonGroup>
-                            <Button
-                                size="small"
-                                className={sentimentFilter ? '' : 'Button--selected'}
-                                onClick={() => {
-                                    setSentimentFilter(null)
-                                }}
-                            >
-                                <T k="comments.filter.all" />
-                            </Button>
-                            {Object.values(SimplifiedSentimentOptions).map(option => (
-                                <Button
-                                    size="small"
-                                    className={sentimentFilter === option ? 'Button--selected' : ''}
-                                    key={option}
-                                    onClick={() => {
-                                        setSentimentFilter(option)
-                                    }}
-                                >
-                                    <T k={`options.sentiment.${option}.label.short`} />
-                                </Button>
-                            ))}
-                        </ButtonGroup>
-                    </div>
-                </div>
-            )}
+            <CommentsFilters comments={comments} question={question} stateStuff={stateStuff} />
+
             <CommentsList>
                 {filteredComments?.map((comment, i) => (
-                    <CommentItem key={i} index={i} {...comment} name={name} />
+                    <CommentItem key={i} index={i} {...comment} name={name} question={question} />
                 ))}
             </CommentsList>
         </div>
     )
+}
+
+interface CommentsFiltersState {
+    experienceFilter: FeaturesOptions | null
+    setExperienceFilter: React.Dispatch<React.SetStateAction<FeaturesOptions | null>>
+    sentimentFilter: SimplifiedSentimentOptions | null
+    setSentimentFilter: React.Dispatch<React.SetStateAction<SimplifiedSentimentOptions | null>>
+    valueFilter: string | null
+    setValueFilter: React.Dispatch<React.SetStateAction<string | null>>
+}
+
+const CommentsFilters = ({
+    comments,
+    question,
+    stateStuff
+}: {
+    comments: Comment[]
+    question: QuestionMetadata
+    stateStuff: CommentsFiltersState
+}) => {
+    const { getString } = useI18n()
+
+    const { options, groups, i18nNamespace } = question
+    // const optionsOrGroups = groups || options
+    const isExperienceQuestion = ['featurev3', 'toolv3'].includes(question.template)
+    const {
+        experienceFilter,
+        setExperienceFilter,
+        sentimentFilter,
+        setSentimentFilter,
+        valueFilter,
+        setValueFilter
+    } = stateStuff
+    if (isExperienceQuestion) {
+        return (
+            <div className="comments-header">
+                <div className="comments-filter">
+                    <Toggle
+                        labelId="comments.filter.experience"
+                        items={[
+                            {
+                                label: getString('comments.filter.all')?.t,
+                                id: null,
+                                isEnabled: experienceFilter === null
+                            },
+                            ...Object.values(FeaturesOptions).map(id => ({
+                                id,
+                                label: getString(`options.features.${id}.label.short`)?.t,
+                                isEnabled: id === experienceFilter
+                            }))
+                        ]}
+                        handleSelect={id => {
+                            setExperienceFilter(id as FeaturesOptions)
+                        }}
+                    />
+                </div>
+                <div className="comments-filter">
+                    <Toggle
+                        labelId="comments.filter.sentiment"
+                        items={[
+                            {
+                                label: getString('comments.filter.all')?.t,
+                                id: null,
+                                isEnabled: sentimentFilter === null
+                            },
+                            ...Object.values(SimplifiedSentimentOptions).map(id => ({
+                                id,
+                                label: getString(`options.sentiment.${id}.label.short`)?.t,
+                                isEnabled: id === sentimentFilter
+                            }))
+                        ]}
+                        handleSelect={id => {
+                            setSentimentFilter(id as SimplifiedSentimentOptions)
+                        }}
+                    />
+                </div>
+            </div>
+        )
+    } else if (options) {
+        const items = options.map(option => {
+            const { id, entity } = option
+            const { label, shortLabel, key } = getItemLabel({
+                id,
+                entity,
+                getString,
+                i18nNamespace: question.id
+            })
+            return {
+                id: option.id,
+                label: `${shortLabel} (${filterCommentsByValue(comments, option.id).length})`,
+                isEnabled: option.id === valueFilter
+            }
+        })
+
+        return (
+            <div className="comments-header">
+                <div className="comments-filter">
+                    <Toggle
+                        labelId="charts.filter_by"
+                        items={[
+                            {
+                                label: getString('comments.filter.all')?.t,
+                                id: null,
+                                isEnabled: valueFilter === null
+                            },
+                            ...items
+                        ]}
+                        handleSelect={id => {
+                            setValueFilter(id)
+                        }}
+                    />
+                </div>
+            </div>
+        )
+    } else {
+        return null
+    }
 }
 
 export const getCommentReportUrl = ({
@@ -256,6 +331,63 @@ export const getCommentReportUrl = ({
         labels: ['reported comment'],
         body: `Please explain below why you think this comment should be deleted. \n\n ### Reported Comment \n\n - question: ${name} \n - comment ID: ${responseId} \n - comment: \n\n > ${message} \n\n ### Your Report \n\n --explain why you're reporting this comment here--`
     })
+}
+
+const CommentItem = ({
+    message,
+    experience,
+    sentiment,
+    responseId,
+    responseValue,
+    index,
+    question,
+    name
+}: Comment & { name: string; index: number; question: QuestionMetadata }) => {
+    const option = question?.options?.find(o => String(o.id) === String(responseValue))
+    return (
+        <CommentItem_>
+            <CommentMessageWrapper>
+                <CommentQuote>“</CommentQuote>
+                <CommentIndex>#{index + 1}</CommentIndex>
+                <CommentMessage>{message}</CommentMessage>
+            </CommentMessageWrapper>
+            <CommentFooter_>
+                {experience ? (
+                    <CommentResponse_>
+                        <ExperienceItem experience={experience} />
+                        {sentiment && sentiment !== 'neutral' && (
+                            <SentimentItem sentiment={sentiment} />
+                        )}
+                    </CommentResponse_>
+                ) : option !== undefined ? (
+                    <CommentResponse_>
+                        <ValueItem option={option} question={question} />
+                    </CommentResponse_>
+                ) : null}
+                <CommentReportLink href={getCommentReportUrl({ responseId, message, name })}>
+                    <T k="comments.report_abuse" />
+                </CommentReportLink>
+            </CommentFooter_>
+        </CommentItem_>
+    )
+}
+
+const ValueItem = ({
+    option,
+    question
+}: {
+    option: OptionMetadata
+    question: QuestionMetadata
+}) => {
+    const { getString } = useI18n()
+    const { id, entity } = option
+    const { label, shortLabel, key } = getItemLabel({
+        id,
+        entity,
+        getString,
+        i18nNamespace: question.id
+    })
+    return <span className="experience-item value-item">{shortLabel}</span>
 }
 
 const ExperienceItem = ({ experience }: { experience: FeaturesOptions }) => {
@@ -278,38 +410,6 @@ const SentimentItem = ({ sentiment }: { sentiment: SimplifiedSentimentOptions })
         <span style={style} className={`sentiment-item sentiment-item-${sentiment}`}>
             <T k={sentimentKey} />
         </span>
-    )
-}
-
-const CommentItem = ({
-    message,
-    experience,
-    sentiment,
-    responseId,
-    index,
-    name
-}: Comment & { name: string; index: number }) => {
-    return (
-        <CommentItem_>
-            <CommentMessageWrapper>
-                <CommentQuote>“</CommentQuote>
-                <CommentIndex>#{index + 1}</CommentIndex>
-                <CommentMessage>{message}</CommentMessage>
-            </CommentMessageWrapper>
-            <CommentFooter_>
-                {experience && (
-                    <CommentResponse_>
-                        <ExperienceItem experience={experience} />
-                        {sentiment && sentiment !== 'neutral' && (
-                            <SentimentItem sentiment={sentiment} />
-                        )}
-                    </CommentResponse_>
-                )}
-                <CommentReportLink href={getCommentReportUrl({ responseId, message, name })}>
-                    <T k="comments.report_abuse" />
-                </CommentReportLink>
-            </CommentFooter_>
-        </CommentItem_>
     )
 }
 

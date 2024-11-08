@@ -90,6 +90,7 @@ export interface EditionComments {
 export interface Comment {
     message: string
     responseId: string
+    responseValue: string
     experience: FeaturesOptions
     sentiment: SimplifiedSentimentOptions
 }

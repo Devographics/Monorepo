@@ -23,7 +23,7 @@ const getMinToggleWidth = (items: ToggleItemType[]) =>
 
 export type ToggleItemType = {
     label: string
-    id: string | number
+    id: string | number | null
     isEnabled: boolean
     className?: string
     tooltip?: JSX.Element
@@ -136,7 +136,7 @@ const SegmentedControlItem = ({
             size="small"
             onClick={(e: SyntheticEvent) => {
                 e.preventDefault()
-                handleSelect(String(id))
+                handleSelect(id)
             }}
             ref={ref}
         >

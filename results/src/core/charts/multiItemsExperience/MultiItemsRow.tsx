@@ -8,6 +8,7 @@ import { RespondentCount } from '../common2'
 import { Comments } from '../common2/Comments'
 import { sortOptions } from './MultiItemsSerie'
 import { BlockVariantDefinition } from 'core/types'
+import { CommentsTrigger } from '../common2/CommentsTrigger'
 
 export const Row = (props: {
     block: BlockVariantDefinition
@@ -40,7 +41,7 @@ export const Row = (props: {
             rowMetadata={
                 <>
                     <RespondentCount count={bucket.count} />
-                    <Comments
+                    <CommentsTrigger
                         block={block}
                         questionId={item.id}
                         entity={item.entity}

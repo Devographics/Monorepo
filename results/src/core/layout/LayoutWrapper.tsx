@@ -30,13 +30,15 @@ const ThemedLayout = (props: LayoutProps) => {
         '--backgroundColor': colors.background,
         '--backgroundBackgroundColor': colors.backgroundBackground,
         '--backgroundAltColor': colors.backgroundAlt,
+        '--backgroundAlt2Color': colors.backgroundAlt2,
         '--borderColor': colors.border,
         '--borderAltColor': colors.borderAlt,
         '--linkColor': colors.link,
         '--spacing': `${theme.dimensions.spacing}px`,
         '--halfSpacing': `${theme.dimensions.spacing / 2}px`,
         '--quarterSpacing': `${theme.dimensions.spacing / 4}px`,
-        '--doubleSpacing': `${theme.dimensions.spacing * 2}px`
+        '--doubleSpacing': `${theme.dimensions.spacing * 2}px`,
+        '--secondaryFontFamily': `${theme.typography.fontFamily2}`
     }
     return (
         // @ts-expect-errors legacy

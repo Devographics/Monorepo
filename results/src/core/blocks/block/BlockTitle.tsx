@@ -12,6 +12,7 @@ import { useEntities } from 'core/helpers/entities'
 import { BlockVariantDefinition } from 'core/types'
 import { getBlockSeriesData } from 'core/helpers/data'
 import { Comments } from 'core/charts/common2/Comments'
+import { CommentsTrigger } from 'core/charts/common2/CommentsTrigger'
 
 const BlockTitleContents = ({ block }: { block: BlockVariantDefinition }) => {
     const title = useBlockTitle({ block })
@@ -105,7 +106,7 @@ const BlockTitle = ({
                 </BlockTitleSwitcherWrapper> */}
                 <RightPart_>
                     {!!commentsCount && (
-                        <Comments
+                        <CommentsTrigger
                             block={block}
                             questionId={block.id}
                             commentsCount={commentsCount}

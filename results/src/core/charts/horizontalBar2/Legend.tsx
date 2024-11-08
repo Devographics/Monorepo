@@ -6,7 +6,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { HorizontalBarChartState } from './types'
 import { OrderOptions } from '../common2/types'
 import T from 'core/i18n/T'
-import { Toggle } from '../common2'
+import { Toggle, ToggleItemType } from '../common2'
 
 type LegendProps = {
     chartState: HorizontalBarChartState
@@ -17,31 +17,25 @@ type LegendProps = {
 
 const DEFAULT_SORT = 'default'
 
-export const Legend = ({ chartState, i18nNamespace, options, colorScale }: LegendProps) => {
+export const useOptionsToggleItems = ({
+    options,
+    i18nNamespace,
+    sort,
+    order = OrderOptions.DESC,
+    colorScale
+}: {
+    options: OptionMetadata[]
+    i18nNamespace?: string
+    colorScale?: ColorScale
+    sort?: string | undefined
+    order?: OrderOptions
+}): ToggleItemType[] => {
     const { getString } = useI18n()
-
-    const { sort, setSort, order, setOrder } = chartState
-
-    const handleSelect = (optionId: string) => {
-        const isEnabled = sort === optionId
-        if (optionId === DEFAULT_SORT) {
-            setSort(undefined)
-            setOrder(OrderOptions.ASC)
-        } else if (!isEnabled) {
-            setSort(optionId as string)
-            setOrder(OrderOptions.ASC)
-        } else if (sort && order === OrderOptions.ASC) {
-            setOrder(OrderOptions.DESC)
-        } else {
-            setSort(undefined)
-            setOrder(OrderOptions.ASC)
-        }
-    }
 
     const getGradient = (option: OptionMetadata) =>
         colorScale?.[option.id] || [neutralColor, neutralColor]
 
-    const items = options.map(option => {
+    return options.map(option => {
         const { id, entity } = option
         const isEnabled = sort === id
         const { label, shortLabel, key } = getItemLabel({
@@ -69,6 +63,30 @@ export const Legend = ({ chartState, i18nNamespace, options, colorScale }: Legen
             )
         }
     })
+}
+export const Legend = ({ chartState, i18nNamespace, options, colorScale }: LegendProps) => {
+    const { getString } = useI18n()
+
+    const { sort, setSort, order, setOrder } = chartState
+
+    const handleSelect = (optionId: string) => {
+        const isEnabled = sort === optionId
+        if (optionId === DEFAULT_SORT) {
+            setSort(undefined)
+            setOrder(OrderOptions.ASC)
+        } else if (!isEnabled) {
+            setSort(optionId as string)
+            setOrder(OrderOptions.ASC)
+        } else if (sort && order === OrderOptions.ASC) {
+            setOrder(OrderOptions.DESC)
+        } else {
+            setSort(undefined)
+            setOrder(OrderOptions.ASC)
+        }
+    }
+
+    const items = useOptionsToggleItems({ options, colorScale, sort, order, i18nNamespace })
+
     return (
         <div className="chart-legend">
             <Toggle

@@ -10,6 +10,10 @@
     text-shadow: 1px 1px #000000bb;
     font-weight: bold;
     text-transform: uppercase;
+    &.value-item {
+        background: var(--backgroundBackgroundColor);
+        box-shadow: 1px 1px 2px #00000088;
+    }
 }
 
 .comments-header {

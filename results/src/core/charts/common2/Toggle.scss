@@ -33,6 +33,9 @@
 }
 .chart-toggle-item-enabled {
     background: var(--backgroundAltColor) !important;
+    .ModalContent & {
+        background: var(--backgroundColor) !important;
+    }
 }
 .chart-toggle-item {
     display: flex;
