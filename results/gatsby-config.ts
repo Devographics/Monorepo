@@ -1,6 +1,5 @@
-import path from "path"
+import path from 'path'
 import dotenv from 'dotenv'
-
 
 // For mjs and Node <20, not needed in TS or with Node 20+
 // import path from 'path'
@@ -32,11 +31,12 @@ export default {
     plugins: [
         'gatsby-plugin-pnpm',
         'gatsby-transformer-yaml',
+        `gatsby-plugin-catch-links`,
         {
             resolve: 'gatsby-source-filesystem',
             options: {
                 name: `data`,
-                path: path.resolve(__dirname, "./src/data/")
+                path: path.resolve(__dirname, './src/data/')
             }
         },
         // This allows to access the internal API, on the "dataAPI" graphql field

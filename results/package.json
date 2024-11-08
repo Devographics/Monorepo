@@ -68,6 +68,7 @@
         "form-data": "^4.0.0",
         "gatsby": "^5.13.7",
         "gatsby-cli": "^5.13.3",
+        "gatsby-plugin-catch-links": "^5.14.0",
         "gatsby-plugin-mdx": "^5.13.1",
         "gatsby-plugin-netlify": "^5.1.1",
         "gatsby-plugin-plausible": "^0.0.7",
