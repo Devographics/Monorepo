@@ -65,3 +65,29 @@ button.chart-item {
         margin-bottom: var(--spacing);
     }
 }
+
+.baseline-indicator {
+    height: 8px;
+    width: 8px;
+    border-radius: 100%;
+    overflow: hidden;
+    color: #00000000;
+    &-false {
+        background-color: var(--textColor);
+    }
+    &-low {
+        background-color: rgb(54, 108, 235);
+    }
+    &-high {
+        background-color: rgb(79, 162, 81);
+    }
+}
+.baseline-indicator-text {
+    border-bottom: 3px solid;
+    &-low {
+        border-color: rgb(54, 108, 235);
+    }
+    &-high {
+        border-color: rgb(79, 162, 81);
+    }
+}

@@ -52,7 +52,12 @@ const WebFeatureData = ({ data }: { data: WebFeature }) => {
     return (
         <div className="baseline-data">
             <h4>
-                <T k="baseline.baseline" /> <T k={`baseline.support.${data.status.baseline}`} />
+                <T k="baseline.baseline" />{' '}
+                <span
+                    className={`baseline-indicator-text baseline-indicator-text-${data.status.baseline}`}
+                >
+                    <T k={`baseline.support.${data.status.baseline}`} />
+                </span>
             </h4>
             <div className="baseline-support">
                 {browsers.map(({ id, icon }) => (

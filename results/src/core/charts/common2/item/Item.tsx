@@ -13,6 +13,7 @@ import { LibraryModal } from './Library'
 import { FeatureIcon, LibraryIcon } from 'core/icons'
 import Tooltip from 'core/components/Tooltip'
 import { usePageContext } from 'core/helpers/pageContext'
+import T from 'core/i18n/T'
 
 const entityComponents = {
     [EntityType.PEOPLE]: { icon: PeopleIcon, modal: PeopleModal },
@@ -79,6 +80,7 @@ export const ChartItem = ({
     } else {
         const { icon: IconComponent, modal: ModalComponent } = entityComponents[entity.entityType]
 
+        const baseline = entity?.webFeature?.status?.baseline
         return (
             <Popover
                 trigger={
@@ -87,6 +89,11 @@ export const ChartItem = ({
                     >
                         <IconComponent entity={entity} size="petite" />
                         <Label label={labelObject} />
+                        {baseline && (
+                            <span className={`baseline-indicator baseline-indicator-${baseline}`}>
+                                <T k="baseline.baseline" /> <T k={`baseline.support.${baseline}`} />
+                            </span>
+                        )}
                     </Button>
                 }
             >
