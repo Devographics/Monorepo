@@ -272,9 +272,9 @@
         blocks:
             - id: content
               template: page_introduction
-              variables:
-                  contents: >
-                      SVG implementations have been historically neglected by browsers, despite extremely high usage on the Web (96% of respondents having used the `<svg>` element). It is therefore no surprise that SVG issues were the top [content-related pain point](#content_pain_points).
+              # variables:
+              #     contents: >
+              #         SVG implementations have been historically neglected by browsers, despite extremely high usage on the Web (96% of respondents having used the `<svg>` element). It is therefore no surprise that SVG issues were the top [content-related pain point](#content_pain_points).
 
             - id: content_features
               template: multi_items_experience
@@ -294,14 +294,13 @@
         blocks:
             - id: web_components
               template: page_introduction
-              variables:
-                  contents: >
-                      Despite JavaScript frameworks being used more widely than ever, there is still a need for native solutions. Yet Web Components currently fall short of addressing developer pain points effectively, with Web Components APIs and especially Shadow DOM dominating the top 10 of worst experiences across all HTML-related technologies. 
+              # variables:
+              #     contents: >
+              #         Despite JavaScript frameworks being used more widely than ever, there is still a need for native solutions. Yet Web Components currently fall short of addressing developer pain points effectively, with Web Components APIs and especially Shadow DOM dominating the top 10 of worst experiences across all HTML-related technologies.
 
+              #         This indicates that there is still significant work to be done before they can truly enhance HTML's extensibility and become a strong alternative to framework components. However, the ongoing activity in this area leaves me hopeful.
 
-                      This indicates that there is still significant work to be done before they can truly enhance HTML's extensibility and become a strong alternative to framework components. However, the ongoing activity in this area leaves me hopeful.
-
-            - id: web_component_features
+            - id: web_components_features
               template: multi_items_experience
               i18nNamespace: features
 
@@ -328,9 +327,9 @@
         blocks:
             - id: accessibility
               template: page_introduction
-              variables:
-                  contents: >
-                      This was our first survey to study accessibility in such depth. What we found is that while respondents clearly care about accessibility, they struggle to implement it in practice as they lack technical, educational, and organizational support.
+              # variables:
+              #     contents: >
+              #         This was our first survey to study accessibility in such depth. What we found is that while respondents clearly care about accessibility, they struggle to implement it in practice as they lack technical, educational, and organizational support.
 
             - id: accessibility_features
               template: multi_items_experience
@@ -367,13 +366,13 @@
               template: recommended_resources
 
       - id: mobile_web_apps
-        path: /mobile-web-apps
+        path: /native-web-apps
         blocks:
             - id: mobile_web_apps
               template: page_introduction
-              variables:
-                  contents: >
-                      Native-like web apps are another area where respondent interest is high, but the platform fails to deliver. The primary pain point here is interoperability, and while there are promising initiatives such as [Interop 2024](https://web.dev/blog/interop-2024), the mobile landscape especially remains very fragmented.
+              # variables:
+              #     contents: >
+              #         Native-like web apps are another area where respondent interest is high, but the platform fails to deliver. The primary pain point here is interoperability, and while there are promising initiatives such as [Interop 2024](https://web.dev/blog/interop-2024), the mobile landscape especially remains very fragmented.
 
             - id: mobile_web_apps_features
               template: multi_items_experience
