@@ -145,18 +145,13 @@
               blockType: HorizontalBarBlock2
               hasData: true
               filtersState:
-                  options:
-                      mode: grid
-                      showDefaultSeries: false
                   filters:
-                      - year: 2024
-                        conditions:
+                      - conditions:
                             - fieldId: country
                               sectionId: user_info
                               operator: in
                               value: [USA]
-                      - year: 2024
-                        conditions:
+                      - conditions:
                             - fieldId: country
                               sectionId: user_info
                               operator: nin

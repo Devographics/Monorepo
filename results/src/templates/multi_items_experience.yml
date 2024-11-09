@@ -50,6 +50,10 @@ query: >
                   code
                   codeHighlighted
                 }
+                resources {
+                  title
+                  url
+                }
                 webFeature {
                   id
                   description_html

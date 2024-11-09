@@ -54,26 +54,6 @@
 #             xAxis: user_info__yearly_salary
 #             yAxis: user_info__years_of_experience
 
-# - id: takeaways
-#   path: /takeaways
-#   blocks:
-#       - id: takeaways
-#         blockType: TakeawaysBlock
-#         disableExport: true
-#         wrapBlock: false
-#         items:
-#             - id: median_salary_2023
-#             - id: previous_compensation_2023
-#             - id: negotiated_compensation_2023
-#             - id: unemployed_respondents_2023
-#             - id: job_search_status_2023
-#             - id: international_subsidiary_2023
-#             - id: remote_work_2023
-#             - id: women_vs_men_experience_2023
-#             - id: women_vs_men_professional_qualifications_2023
-#             - id: overtime_2023
-#             - id: programming_languages_2023
-
 - id: user_info
   titleId: sections.demographics.title
   # descriptionId: sections.user_info.description.css2023
@@ -84,8 +64,6 @@
       - id: country
         template: multiple_options2
         parameters: { limit: 20 }
-        takeaway: >
-            While many respondents (**19%**) came from the U.S., we also had strong representation from Germany, France, the U.K., and the Netherlands (**24% combined**), reflecting the liveliness of the front end community in these countries.
         variants:
             - template: vs_salary
               parameters: { limit: 20, sort: { property: medianByFacet, order: desc } }
@@ -95,8 +73,6 @@
         parameters: { cutoff: 20 }
         queryOptions:
             addQuestionComments: false
-        takeaway: >
-            The language respondents selected to fill out the survey.
 
       - id: hint_hint
         template: hint
@@ -105,27 +81,19 @@
         template: multiple_options2
         queryOptions:
             addQuestionComments: false
-        takeaway: >
-            The proportion of the survey filled out by respondents.
 
       - id: age
         template: multiple_options2
-        takeaway: >
-            Survey respondents were on average **33.6** years old, slightly higher than the [State of JS](https://2022.stateofjs.com) (**32.2**) and [State of CSS](https://2023.stateofcss.com) (**33.5**) surveys.
         variants:
             - template: vs_salary
 
       - id: years_of_experience
         template: multiple_options2
-        takeaway: >
-            Respondents had on average **10.7** years of web development experience.
         variants:
             - template: vs_salary
 
       - id: company_size
         template: multiple_options2
-        takeaway: >
-            Respondents tended to work for mostly mid-sized organizations, with a median company size of **75** employees.
         variants:
             - template: vs_salary
 
@@ -134,20 +102,32 @@
 
       - id: yearly_salary
         template: multiple_options2
-        takeaway: >
-            Respondents had a median income of USD $75,000, noticeably higher than the **$59,970** figure reported by the [Stack Overflow Developer Survey](https://survey.stackoverflow.co/2023/#section-salary-salary-by-developer-type).
+        variants:
+            - id: yearly_salary_us_vs_world
+              fieldId: yearly_salary
+              tabId: tabs.usa_vs_the_world
+              blockType: HorizontalBarBlock2
+              hasData: true
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: in
+                              value: [USA]
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value: [USA]
 
       - id: higher_education_degree
         template: multiple_options2
-        takeaway: >
-            Having a higher-education degree did not translate in meaningful differences in yearly income.
         variants:
             - template: vs_salary
 
       - id: gender
         template: multiple_options2
-        takeaway: >
-            Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
         variants:
             - template: vs_salary
             - id: country_vs_gender
@@ -168,8 +148,6 @@
 
       - id: race_ethnicity
         template: multiple_options2_combined
-        takeaway: >
-            The survey's non-white population tended to be younger and have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
         variants:
             - template: vs_years_of_experience
             - template: vs_age
@@ -177,10 +155,10 @@
       - id: disability_status
         template: multiple_options2_combined
 
-      - id: other_surveys
-        template: multiple_options2_combined
-        parameters:
-            cutoff: 20
+      # - id: other_surveys
+      #   template: multiple_options2_combined
+      #   parameters:
+      #       cutoff: 20
 
       - id: source
         template: multiple_options2_freeform
@@ -218,8 +196,11 @@
 
       - id: all_features
         template: multi_items_experience
+        i18nNamespace: features
         chartOptions:
             limit: 10
+            categories:
+                [forms, interactivity, content, web_components, accessibility, mobile_web_apps]
 
       # - id: features_overview
       #   template: features_overview
@@ -272,6 +253,10 @@
         blocks:
             - id: interactivity
               template: page_introduction
+
+            - id: interactivity_features
+              template: multi_items_experience
+              i18nNamespace: features
 
             - id: interactivity_pain_points
               template: multiple_options2_freeform
