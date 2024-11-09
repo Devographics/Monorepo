@@ -33,6 +33,11 @@ export const sortOptions = {
     sentiment: Object.values(SimplifiedSentimentOptions)
 }
 
+export const allColumnIds = [
+    ...Object.values(FeaturesOptions),
+    ...Object.values(SimplifiedSentimentOptions)
+]
+
 export const MultiItemsSerie = (
     props: {
         serie: MultiItemSerie
@@ -49,10 +54,6 @@ export const MultiItemsSerie = (
     const { grouping, variable, sort, order, filter } = chartState
 
     const columnIds = sortOptions[grouping]
-    const allColumnIds = [
-        ...Object.values(FeaturesOptions),
-        ...Object.values(SimplifiedSentimentOptions)
-    ]
 
     // combine/flatten each item's buckets
     let combinedItems = combineItems({ items, variable })

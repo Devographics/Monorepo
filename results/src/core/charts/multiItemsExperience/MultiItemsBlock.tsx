@@ -3,7 +3,7 @@ import '../common2/ChartsCommon.scss'
 import './MultiItems.scss'
 import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
 import { MultiItemsExperienceControls } from './MultiItemsControls'
-import { GroupingOptions, MultiItemsExperienceBlockProps } from './types'
+import { COMMENTS, GroupingOptions, MultiItemsExperienceBlockProps } from './types'
 import { useChartState } from './helpers'
 import { ChartControls, ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
 import { useTheme } from 'styled-components'
@@ -12,6 +12,7 @@ import ChartShare from '../common2/ChartShare'
 import ViewSwitcher from '../horizontalBar2/ViewSwitcher'
 import MultiItemsSerie from './MultiItemsSerie'
 import MultiItemsCategories from './MultiItemsCategories'
+import { MultiItemsStats } from './MultiItemsStats'
 
 const defaultLimit = 5
 
@@ -47,6 +48,9 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
     return (
         <ChartWrapper question={question} className={className}>
             <>
+                {/* <pre>
+                    <code>{JSON.stringify(chartState, null, 2)}</code>
+                </pre> */}
                 <ChartControls
                     top={
                         block?.chartOptions?.categories ? (
@@ -57,7 +61,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
                     right={
                         <ViewSwitcher
                             {...commonProps}
-                            options={options}
+                            options={[...options, { id: COMMENTS }]}
                             colorScale={colorScale}
                             i18nNamespace={grouping}
                         />
@@ -85,6 +89,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
                     <NoteContents />
                 </Note>
                 <ChartFooter
+                    left={<MultiItemsStats {...commonProps} />}
                     right={
                         <>
                             <ChartShare {...commonProps} />

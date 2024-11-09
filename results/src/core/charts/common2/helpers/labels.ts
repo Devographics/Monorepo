@@ -9,15 +9,18 @@ import { useEntities } from 'core/helpers/entities'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useAllQuestionsMetadata } from '../../horizontalBar2/helpers/other'
 import { isFeatureTemplate, isToolTemplate } from '@devographics/helpers'
+import { BlockVariantDefinition } from 'core/types'
 
 export const getQuestionLabel = ({
     getString,
     question,
-    i18nNamespace
+    i18nNamespace,
+    block
 }: {
     getString: StringTranslator
     question: QuestionMetadata
     i18nNamespace?: string
+    block?: BlockVariantDefinition
 }) => {
     let key, label, i18nNamespace_
     const { sectionId, template, entity, id } = question
@@ -25,18 +28,22 @@ export const getQuestionLabel = ({
     if (entityName) {
         label = entityName
     } else {
-        if (i18nNamespace) {
-            i18nNamespace_ = i18nNamespace
-        } else if (sectionId === 'other_tools') {
-            i18nNamespace_ = `tools_others`
-        } else if (isFeatureTemplate(template)) {
-            i18nNamespace_ = `features`
-        } else if (isToolTemplate(template)) {
-            i18nNamespace_ = `tools`
+        if (block?.titleId) {
+            key = block.titleId
         } else {
-            i18nNamespace_ = sectionId
+            if (i18nNamespace) {
+                i18nNamespace_ = i18nNamespace
+            } else if (sectionId === 'other_tools') {
+                i18nNamespace_ = `tools_others`
+            } else if (isFeatureTemplate(template)) {
+                i18nNamespace_ = `features`
+            } else if (isToolTemplate(template)) {
+                i18nNamespace_ = `tools`
+            } else {
+                i18nNamespace_ = sectionId
+            }
+            key = `${i18nNamespace_}.${id}`
         }
-        key = `${i18nNamespace_}.${id}`
         const s = getString(key)
         label = s?.tClean || s?.t || id
     }

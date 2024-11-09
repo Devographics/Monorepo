@@ -6,6 +6,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { ChartStateWithSort, OrderOptions } from '../common2/types'
 import T from 'core/i18n/T'
 import { Toggle, ToggleItemType } from '../common2'
+import { COMMENTS } from '../multiItemsExperience/types'
 
 type ViewSwitcherProps = {
     chartState: ChartStateWithSort
@@ -43,7 +44,7 @@ export const ViewSwitcher = ({
     }
 
     const getGradient = (option: OptionMetadata) =>
-        colorScale?.[option.id] || [neutralColor, neutralColor]
+        option.id === COMMENTS ? undefined : colorScale?.[option.id] || [neutralColor, neutralColor]
 
     const items: ToggleItemType[] = options.map(option => {
         const { id, entity } = option

@@ -33,7 +33,8 @@ export interface MultiItemsExperienceBlockProps extends BlockComponentProps {
     series: MultiItemSerie[]
 }
 
-export type ColumnId = FeaturesOptions | SimplifiedSentimentOptions
+export const COMMENTS = 'comments' as const
+export type ColumnId = FeaturesOptions | SimplifiedSentimentOptions | typeof COMMENTS
 
 export type Variable = typeof PERCENTAGE_QUESTION
 

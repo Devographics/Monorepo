@@ -19,7 +19,8 @@ import {
     GroupingOptions,
     MaxValue,
     Totals,
-    Variable
+    Variable,
+    COMMENTS
 } from './types'
 import sortBy from 'lodash/sortBy'
 import max from 'lodash/max'
@@ -105,7 +106,11 @@ export const sortItems = ({
     groupedTotals: Totals[]
 }) => {
     let sortedItems = sortBy(combinedItems, item => {
-        return groupedTotals.find(total => total.id === item.id)?.[sort]
+        if (sort === COMMENTS) {
+            return item.commentsCount
+        } else {
+            return groupedTotals.find(total => total.id === item.id)?.[sort]
+        }
     })
     if (order === OrderOptions.DESC) {
         sortedItems = sortedItems.toReversed()

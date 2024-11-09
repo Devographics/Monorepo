@@ -60,7 +60,7 @@ export const Metadata = ({
     )
 }
 
-const MetadataItem = ({
+export const MetadataItem = ({
     id,
     icon,
     value,

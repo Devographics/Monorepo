@@ -39,7 +39,7 @@ export const CommentsTrigger = ({
     const queryOptions = { surveyId, editionId, sectionId, questionId }
     const i18nNamespace = block.i18nNamespace || sectionId
 
-    const label = getQuestionLabel({ question, getString, i18nNamespace })
+    const label = getQuestionLabel({ question, getString, i18nNamespace, block })
     const commentLabel = getString('comments.comments_for', { values: { name: label.label } })?.t
 
     return (
