@@ -29,7 +29,7 @@ export const getChartCurrentEdition = ({
     serie,
     block
 }: {
-    serie: DataSeries<StandardQuestionData>
+    serie: DataSeries<any>
     block: BlockVariantDefinition
 }) => {
     const subField = block?.queryOptions?.subField || ResultsSubFieldEnum.RESPONSES
