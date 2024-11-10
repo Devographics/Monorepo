@@ -124,7 +124,12 @@ export const MultiItemsSerie = (
     const itemFilters = getItemFilters({ variant, block, serieIndex })
 
     return (
-        <GridItem key={serie.name} filters={itemFilters}>
+        <GridItem<MultiItemSerie>
+            key={serie.name}
+            filters={itemFilters}
+            serie={serie}
+            block={block}
+        >
             <Rows {...commonProps}>
                 {combinedItems.map((item, i) => (
                     <Row key={item.id + i} rowIndex={i} item={item} {...commonProps} />

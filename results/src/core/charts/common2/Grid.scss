@@ -18,13 +18,19 @@
     min-width: 0;
 }
 .chart-grid-item-heading {
+    display: flex;
+    justify-content: space-between;
     background: var(--backgroundAltColor);
     padding: var(--quarterSpacing) var(--halfSpacing);
     margin-bottom: var(--spacing);
     font-size: 0.8rem;
     border-radius: 3px;
+    width: 100%;
+}
+.chart-grid-item-heading-label {
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 100%;
     overflow: hidden;
+}
+.chart-grid-item-heading-count {
 }

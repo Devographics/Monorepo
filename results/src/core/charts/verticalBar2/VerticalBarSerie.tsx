@@ -29,7 +29,12 @@ export const VerticalBarSerie = (
     const ViewComponent = getViewComponent(chartState.view)
 
     return (
-        <GridItem key={serie.name} filters={itemFilters}>
+        <GridItem<DataSeries<StandardQuestionData>>
+            key={serie.name}
+            filters={itemFilters}
+            serie={serie}
+            block={block}
+        >
             <ViewComponent {...viewProps} />
 
             {/* <pre>

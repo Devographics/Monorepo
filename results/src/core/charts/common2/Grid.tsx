@@ -1,10 +1,12 @@
-import { CustomizationFiltersSeries } from 'core/filters/types'
+import { CustomizationFiltersSeries, DataSeries } from 'core/filters/types'
 import './Grid.scss'
 import React, { Fragment, ReactNode } from 'react'
 import { useFiltersLabel } from './helpers/labels'
 import T from 'core/i18n/T'
 import { SortProperty } from '@devographics/types'
 import Tooltip from 'core/components/Tooltip'
+import { getChartCurrentEdition } from '../horizontalBar2/helpers/other'
+import { BlockVariantDefinition } from 'core/types'
 
 export const GridWrapper = ({
     seriesCount,
@@ -20,24 +22,41 @@ export const GridWrapper = ({
     )
 }
 
-export const GridItem = ({
+export const GridItem = <SerieType extends DataSeries<any>>({
     children,
     filters,
-    currentSort
+    currentSort,
+    serie,
+    block
 }: {
     children: ReactNode
     filters?: CustomizationFiltersSeries
-    currentSort: SortProperty
+    currentSort?: SortProperty
+    serie: SerieType
+    block: BlockVariantDefinition
 }) => {
     return (
         <div className={`chart-grid-item chart-sort-${currentSort}`}>
-            {filters && <GridItemHeading filters={filters} />}
+            {filters && (
+                <GridItemHeading<SerieType> filters={filters} serie={serie} block={block} />
+            )}
             <div className="chart-grid-item-contents">{children}</div>
         </div>
     )
 }
 
-export const GridItemHeading = ({ filters }: { filters: CustomizationFiltersSeries }) => {
+export const GridItemHeading = <SerieType extends DataSeries<any>>({
+    filters,
+    block,
+    serie
+}: {
+    filters: CustomizationFiltersSeries
+    block: BlockVariantDefinition
+    serie: SerieType
+}) => {
+    // if we can, figure out how many respondents are in this particular data serie
+    const currentEdition = serie && block && getChartCurrentEdition({ serie, block })
+    const serieCount = currentEdition?.completion?.count
     if (filters.isDefault) {
         return (
             <div className="chart-grid-item-heading">
@@ -59,7 +78,14 @@ export const GridItemHeading = ({ filters }: { filters: CustomizationFiltersSeri
 
         return (
             <Tooltip
-                trigger={<div className="chart-grid-item-heading">{headingContents}</div>}
+                trigger={
+                    <div className="chart-grid-item-heading">
+                        <span className="chart-grid-item-heading-label">{headingContents}</span>
+                        {serieCount && (
+                            <span className="chart-grid-item-heading-count">{serieCount}</span>
+                        )}
+                    </div>
+                }
                 contents={headingContents}
                 showBorder={false}
             />

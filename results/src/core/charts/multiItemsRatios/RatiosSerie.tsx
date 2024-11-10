@@ -65,7 +65,12 @@ export const RatiosSerie = (
     const itemsWithRank = getItemsWithRank(items, view)
 
     return (
-        <GridItem key={serie.name} filters={itemFilters}>
+        <GridItem<MultiRatioSerie>
+            key={serie.name}
+            filters={itemFilters}
+            serie={serie}
+            block={block}
+        >
             <Columns {...commonProps} hasZebra={true}>
                 <>
                     {/* {props.editions.map((edition, i) => (

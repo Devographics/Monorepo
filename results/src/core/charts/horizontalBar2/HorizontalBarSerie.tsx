@@ -58,7 +58,13 @@ export const HorizontalBarSerie = (
 
     const currentSort = getChartCurrentEdition({ serie, block })?._metadata?.axis1Sort?.property
     return (
-        <GridItem key={serie.name} filters={itemFilters} currentSort={currentSort}>
+        <GridItem<DataSeries<StandardQuestionData>>
+            key={serie.name}
+            filters={itemFilters}
+            currentSort={currentSort}
+            serie={serie}
+            block={block}
+        >
             <ViewComponent {...viewProps} />
         </GridItem>
     )
