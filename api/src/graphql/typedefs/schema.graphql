@@ -310,6 +310,8 @@ type ResponseEditionData {
 type ResponseEditionMetadata {
     axis1Sort: SortSpecifierOutput
     axis2Sort: SortSpecifierOutput
+    cutoff: Float
+    limit: Float
 }
 
 type RawData {

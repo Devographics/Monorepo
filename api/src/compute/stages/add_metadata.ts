@@ -12,7 +12,10 @@ export async function addMetadata(
     axis2?: ComputeAxisParameters | null
 ) {
     for (const editionData of resultsByEdition) {
-        editionData._metadata = {} as ResponseEditionData['_metadata']
+        editionData._metadata = {
+            cutoff: axis1.cutoff,
+            limit: axis1.limit
+        } as ResponseEditionData['_metadata']
         if (axis1.sort) {
             editionData._metadata.axis1Sort = {
                 property: axis1.sort,
