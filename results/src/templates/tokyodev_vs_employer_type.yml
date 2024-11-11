@@ -9,30 +9,33 @@ queryOptions:
     addBucketsEntities: false
 parameters:
     showNoAnswer: true
-    sort: { property: count }
+    # sort: { property: count }
 filtersState:
-    filters:
-        - year: 2024
-          conditions:
-              - fieldId: current_employer
-                sectionId: employer_info
-                operator: eq
-                value: japanese_company
-        - year: 2024
-          conditions:
-              - fieldId: current_employer
-                sectionId: employer_info
-                operator: eq
-                value: japanese_subsidiary
-        - year: 2024
-          conditions:
-              - fieldId: current_employer
-                sectionId: employer_info
-                operator: eq
-                value: international_company
-        - year: 2024
-          conditions:
-              - fieldId: current_employer
-                sectionId: employer_info
-                operator: eq
-                value: sole_proprietorship
+    facet:
+        sectionId: employer_info
+        id: current_employer
+    # filters:
+    #     - year: 2024
+    #       conditions:
+    #           - fieldId: current_employer
+    #             sectionId: employer_info
+    #             operator: eq
+    #             value: japanese_company
+    #     - year: 2024
+    #       conditions:
+    #           - fieldId: current_employer
+    #             sectionId: employer_info
+    #             operator: eq
+    #             value: japanese_subsidiary
+    #     - year: 2024
+    #       conditions:
+    #           - fieldId: current_employer
+    #             sectionId: employer_info
+    #             operator: eq
+    #             value: international_company
+    #     - year: 2024
+    #       conditions:
+    #           - fieldId: current_employer
+    #             sectionId: employer_info
+    #             operator: eq
+    #             value: sole_proprietorship
