@@ -104,6 +104,8 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                         ? '[no data found] '
                         : queryHasChanged
                         ? '[query change detected] '
+                        : process.env.DISABLE_CACHE === 'true'
+                        ? '[cache disabled] '
                         : ''
                     console.log(`// 🔍 ${reason}Running uncached query for file ${dataFileName}…`)
 

@@ -45,7 +45,10 @@ export default {
             options: {
                 typeName: 'DataAPI',
                 fieldName: 'dataAPI',
-                url: process.env.GATSBY_API_URL
+                url: process.env.GATSBY_API_URL,
+                headers: {
+                    DisableCache: process.env.DISABLE_CACHE === 'true'
+                }
             }
         },
         'gatsby-plugin-react-helmet',
