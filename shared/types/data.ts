@@ -121,6 +121,8 @@ export interface SortSpecifier {
 export interface ResponseEditionMetadata {
     axis1Sort: SortSpecifier
     axis2Sort: SortSpecifier
+    cutoff: number
+    limit: number
 }
 
 export interface RatiosData {

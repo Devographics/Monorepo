@@ -3,7 +3,13 @@ import './Item.scss'
 import React, { ReactNode, useContext } from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import { LabelObject, getItemLabel } from 'core/helpers/labels'
-import { Bucket, Entity, EntityType, FacetBucket } from '@devographics/types'
+import {
+    Bucket,
+    Entity,
+    EntityType,
+    FacetBucket,
+    ResponseEditionMetadata
+} from '@devographics/types'
 import Button from 'core/components/Button'
 // import Popover from 'core/components/Popover'
 import Popover from 'core/components/Popover2'
@@ -14,6 +20,7 @@ import { FeatureIcon, LibraryIcon } from 'core/icons'
 import Tooltip from 'core/components/Tooltip'
 import { usePageContext } from 'core/helpers/pageContext'
 import T from 'core/i18n/T'
+import { SeriesMetadata } from '../types'
 
 const entityComponents = {
     [EntityType.PEOPLE]: { icon: PeopleIcon, modal: PeopleModal },
@@ -31,13 +38,15 @@ export const ChartItem = ({
     bucket,
     label: providedLabel,
     entity,
-    i18nNamespace
+    i18nNamespace,
+    serieMetadata
 }: {
     id: string
     label?: string
     bucket: Bucket | FacetBucket
     entity?: Entity
     i18nNamespace?: string
+    serieMetadata?: ResponseEditionMetadata
 }) => {
     const { config } = usePageContext()
     const { enableItemPopovers = true } = config
@@ -49,7 +58,8 @@ export const ChartItem = ({
         entity,
         getString,
         i18nNamespace,
-        html: true
+        html: true,
+        values: serieMetadata
     })
     if (!entity) {
         return (

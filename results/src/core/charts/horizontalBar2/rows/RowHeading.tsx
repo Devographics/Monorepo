@@ -7,12 +7,12 @@ export const RowHeading = ({
     block,
     isGroupedBucket,
     showGroupedBuckets,
-    setShowGroupedBuckets
+    setShowGroupedBuckets,
+    serieMetadata
 }: RowComponentProps) => {
     const { entity, id, label } = bucket
     const { isFreeformData } = bucket
     const i18nNamespace = block.i18nNamespace || block.fieldId || block.id
-
     return (
         <h3 className="chart-row-heading">
             {isGroupedBucket && <span className="chart-row-heading-grouped">↳&nbsp;</span>}
@@ -22,6 +22,7 @@ export const RowHeading = ({
                 bucket={bucket}
                 i18nNamespace={i18nNamespace}
                 label={label}
+                serieMetadata={serieMetadata}
             />
             {setShowGroupedBuckets && (
                 <button

@@ -9,7 +9,7 @@ import {
 } from '../common2/types'
 import { FacetItem } from 'core/filters/types'
 import { IconProps } from 'core/icons/IconWrapper'
-import { Bucket, FacetBucket, QuestionMetadata } from '@devographics/types'
+import { Bucket, FacetBucket, QuestionMetadata, ResponseEditionMetadata } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 import { Dimension } from '../multiItemsExperience/types'
 
@@ -62,6 +62,7 @@ export type HorizontalBarViewProps = {
     block: BlockVariantDefinition
     isReversed?: boolean
     seriesMetadata: SeriesMetadata
+    serieMetadata: ResponseEditionMetadata
 }
 
 export type DataFilter = (buckets: Bucket[]) => Bucket[]

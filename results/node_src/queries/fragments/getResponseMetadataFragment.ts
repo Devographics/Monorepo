@@ -1,10 +1,12 @@
 export const getResponseMetadataFragment = () => `_metadata {
     axis1Sort {
-    property
-    order
+        property
+        order
     }
     axis2Sort {
-    property
-    order
+        property
+        order
     }
+    limit
+    cutoff
 }`

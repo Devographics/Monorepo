@@ -170,7 +170,7 @@ export const getSeriesMetadata = ({
 }) => {
     const { viewDefinition } = chartState
     const { getValue } = viewDefinition
-
+    console.log(series)
     const allSeriesValues = series
         .map(serie => {
             const buckets = getChartBuckets({ serie, block, chartState })
@@ -180,5 +180,22 @@ export const getSeriesMetadata = ({
         .flat()
     const seriesMaxValue = max(allSeriesValues) || 0
     const metadata: SeriesMetadata = { seriesMaxValue }
+    return metadata
+}
+
+/*
+
+Get metadata for single serie
+
+*/
+export const getSerieMetadata = ({
+    serie,
+    block
+}: {
+    serie: DataSeries<any>
+    block: BlockVariantDefinition
+}) => {
+    const currentEdition = getChartCurrentEdition({ serie, block })
+    const metadata = currentEdition?._metadata
     return metadata
 }

@@ -10,7 +10,7 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         row-gap: var(--doubleSpacing);
-        column-gap: var(--spacing);
+        column-gap: var(--doubleSpacing);
     }
 }
 

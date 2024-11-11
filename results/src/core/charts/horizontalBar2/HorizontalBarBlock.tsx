@@ -8,6 +8,7 @@ import { DataSeries } from 'core/filters/types'
 import {
     getAllFacetBucketIds,
     getChartCurrentEdition,
+    getSerieMetadata,
     getSeriesMetadata,
     useQuestionMetadata
 } from './helpers/other'
@@ -62,11 +63,10 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     }
 
     // figure out if all series are sorted by options
-    const allSortedByOptions = series.every(
-        s =>
-            s?.data?.responses?.currentEdition?._metadata?.axis1Sort?.property ===
-            sortProperties.OPTIONS
-    )
+    const allSortedByOptions = series.every(serie => {
+        const serieMetadata = getSerieMetadata({ serie, block })
+        return serieMetadata?.axis1Sort?.property === sortProperties.OPTIONS
+    })
     const useBackToBackSeriesView = series.length === 2 && allSortedByOptions
 
     return (
