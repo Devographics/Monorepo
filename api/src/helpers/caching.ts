@@ -54,13 +54,18 @@ const getEnableCache = (
     appSettings: AppSettings,
     enableCache?: boolean
 ) => {
-    if (appSettings.disableCache) {
-        // cache is disabled on an app-wide basis
-        return false
-    } else if (typeof enableCache === 'undefined') {
-        return context.isDebug ? false : true
-    } else {
+    if (typeof enableCache !== 'undefined') {
+        // if cache is specified through query parameters, respect that value
         return enableCache
+    } else if (appSettings.disableCache || context.disableCache || context.isDebug) {
+        // cache is disabled on an app-wide basis
+        // or cache is disabled on a per-request basis,
+        // either manually through disablecache header
+        // or because this is debug mode
+        return false
+    } else {
+        // default to enabling cache
+        return true
     }
 }
 

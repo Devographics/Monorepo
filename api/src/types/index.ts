@@ -10,6 +10,7 @@ export interface RequestContext {
     isDebug?: Boolean
     entities?: Entity[]
     locales?: Locale[]
+    disableCache?: boolean
 }
 
 export type WatchedItem = 'locales' | 'entities' | 'surveys' | 'projects'

@@ -208,9 +208,15 @@ const start = async () => {
             const isDebug =
                 expressContext?.req?.rawHeaders?.includes('http://localhost:4030') ||
                 expressContext?.req?.rawHeaders?.includes('http://localhost:5030')
+
+            // add a way to disable cache through headers, so we don't need to modify
+            // the actual GraphQL query
+            const disableCache = expressContext?.req?.headers.disablecache === 'true'
+
             return {
                 ...context,
-                isDebug
+                isDebug,
+                disableCache
             }
         }
     })

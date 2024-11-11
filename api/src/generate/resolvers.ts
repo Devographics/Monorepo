@@ -22,7 +22,7 @@ import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
 import { localesResolvers } from '../resolvers/locales'
 import { subFields } from './subfields'
-import { ResultsSubFieldEnum } from '@devographics/types'
+import { ResponsesParameters, ResultsSubFieldEnum } from '@devographics/types'
 import { loadOrGetParsedSurveys } from '../load/surveys'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
@@ -312,7 +312,6 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
         responsesType = subField,
         bucketsFilter
     } = responseArguments || {}
-    const { enableCache } = parameters
 
     const { editionCount, editionId: selectedEditionId } = args
     const computeArguments = {
@@ -349,7 +348,7 @@ export const allEditionsResolver: ResolverType = async (parent, args, context, i
         func: genericComputeFunction,
         context,
         funcOptions,
-        enableCache
+        enableCache: parameters.enableCache
     })
 
     if (question.transformFunction) {
