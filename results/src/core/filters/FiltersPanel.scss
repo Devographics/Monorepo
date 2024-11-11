@@ -1,3 +1,5 @@
+@import '../../stylesheets/_breakpoints.scss';
+
 .filters-sections {
     display: flex;
     flex-direction: column;
@@ -5,10 +7,12 @@
 }
 
 .filters-section {
-    display: grid;
-    grid-template-columns: 1fr minmax(120px, min-content);
-    // justify-content: space-between;
-    gap: var(--doubleSpacing);
+    @include medium-large {
+        display: grid;
+        grid-template-columns: 1fr minmax(120px, min-content);
+        // justify-content: space-between;
+        gap: var(--doubleSpacing);
+    }
 }
 
 .filters-section-description {
@@ -19,6 +23,9 @@
 }
 
 .filters-section-image {
+    @include small {
+        display: none;
+    }
     display: flex;
     flex-direction: column;
     gap: var(--halfSpacing);

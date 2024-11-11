@@ -130,7 +130,7 @@ const Content = styled.div<{ size: string }>`
     @media ${mq.small} {
         top: ${spacing()};
         left: ${spacing()};
-        width: calc(100% - 40px);
+        width: calc(100vw - 40px);
     }
     @media ${mq.mediumLarge} {
         top: 50%;

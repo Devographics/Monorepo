@@ -62,9 +62,12 @@ const MainLayout = ({
 const MainLayout_ = styled.div`
     /* display: flex; */
     /* flex-direction: column; */
-    display: grid;
+
+    /* note: disable for now because it messes up the mobile layout */
+    /* display: grid;
     grid-template-rows: min-content minmax(0, 1fr);
-    grid-template-areas: 'banner' 'content';
+    grid-template-areas: 'banner' 'content'; */
+
     @media ${mq.large} {
         /* overflow: hidden; */
     }
