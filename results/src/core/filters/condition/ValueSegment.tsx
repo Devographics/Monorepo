@@ -163,8 +163,6 @@ const ValueSegmentArray = ({
                         <Select_
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 const value = e.target.value
-                                console.log(value)
-
                                 setFiltersState(fState => {
                                     const newState = cloneDeep(fState)
                                     const currentValueArray = newState.filters[seriesIndex]

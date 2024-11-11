@@ -13,8 +13,6 @@ export const AdvancedOptions = ({
     allFilters: FilterItem[]
     stateStuff: PanelState
 }) => {
-    console.log(allFilters)
-    console.log(stateStuff)
     const { filtersState, setFiltersState } = stateStuff
 
     const getParameter = <T,>(id: string) =>

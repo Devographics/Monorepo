@@ -15,7 +15,7 @@ const BlockNote = ({ block }: { block: BlockVariantDefinition }) => {
         return null
     }
     const key = getBlockNoteKey({ block })
-    const blockNote = translate(key, {}, null)
+    const blockNote = translate(key, {})
     if (blockNote) {
         return (
             <Note_ className="Block__Note">

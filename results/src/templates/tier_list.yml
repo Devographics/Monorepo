@@ -1,7 +1,6 @@
 id: tier_list
 blockType: ToolsTierListBlock
 titleId: blocks.tools_tier_list
-descriptionId: blocks.tools_tier_list.description
 noteId: blocks.tools_tier_list.note
 hasSponsor: true
 # query should be exactly the same as multi_items_experience.yml

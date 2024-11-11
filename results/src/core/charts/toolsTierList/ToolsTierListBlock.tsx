@@ -7,7 +7,7 @@ import { useToolSections } from 'core/helpers/metadata'
 import { BlockComponentProps } from 'core/types/block'
 import { DataSeries } from 'core/filters/types'
 import { Ratios } from '../multiItemsRatios/types'
-import { ChartFooter, ChartWrapper, Legend } from '../common2'
+import { ChartFooter, ChartWrapper, Legend, Note } from '../common2'
 import ChartShare from '../common2/ChartShare'
 import { useChartState } from './chartState'
 import { useI18n } from '@devographics/react-i18n'
@@ -96,6 +96,7 @@ const TierListBlock = (props: TierListBlockProps) => {
             <>
                 <Legend items={legendItems} chartState={chartState} />
                 <TierListChart data={chartData} currentCategory={currentCategory} />
+                <Note block={block} />
                 <ChartFooter
                     right={
                         <>
