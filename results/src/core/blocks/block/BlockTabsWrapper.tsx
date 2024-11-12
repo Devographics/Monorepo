@@ -217,10 +217,14 @@ const BlockHeader = styled.div`
     border-bottom: ${props => props.theme.border};
 `
 
-export const TabsList = styled(Tabs.List)`
+const BlockHeaderRight_ = styled.div`
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-end;
+    /* justify-content: flex-end; */
+    align-items: center;
+    gap: 10px;
+    @media ${mq.large} {
+        /* padding-right: 52px; */
+    }
     overflow: auto;
     overflow-y: hidden;
 
@@ -228,6 +232,12 @@ export const TabsList = styled(Tabs.List)`
         overflow: visible;
         width: max-content;
     }
+`
+
+export const TabsList = styled(Tabs.List)`
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
 `
 
 export const Tab_ = styled.div`
@@ -268,16 +278,6 @@ const BlockHeaderTop_ = styled.div`
     display: flex;
     flex-direction: column;
     gap: ${spacing(0.5)};
-`
-
-const BlockHeaderRight_ = styled.div`
-    display: flex;
-    /* justify-content: flex-end; */
-    align-items: center;
-    gap: 10px;
-    @media ${mq.large} {
-        /* padding-right: 52px; */
-    }
 `
 
 const CustomizeButton_ = styled(Button)`
