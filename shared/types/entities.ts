@@ -27,6 +27,8 @@ export interface EntityResolvedFields {
     rss?: Resource
     webFeature?: WebFeature
     appearsIn?: EntityAppearance[]
+    bluesky?: any
+    threads?: any
 }
 
 export interface Entity extends EntityResolvedFields {
@@ -67,6 +69,9 @@ export interface Entity extends EntityResolvedFields {
     webFeature?: WebFeature
 
     appearsIn: EntityAppearance[]
+
+    threadsId?: string
+    blueskyId?: string
 }
 
 export type EntityAppearance = {

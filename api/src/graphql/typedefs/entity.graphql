@@ -39,6 +39,12 @@ type Entity {
     twitterName: String
     twitter: Twitter
 
+    blueskyId: String
+    bluesky: Bluesky
+
+    threadsId: String
+    threads: Threads
+
     youtubeName: String
     youtube: YouTube
 
@@ -88,6 +94,22 @@ type Homepage {
 Mastodon Info
 """
 type Mastodon {
+    name: String
+    url: String
+}
+
+"""
+Bluesky Info
+"""
+type Bluesky {
+    name: String
+    url: String
+}
+
+"""
+Threads Info
+"""
+type Threads {
     name: String
     url: String
 }

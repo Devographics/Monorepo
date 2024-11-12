@@ -174,6 +174,22 @@ export const entityResolverMap: EntityResolverMap = {
         const url = `https://${server}/@${userName}`
         return { name, url }
     },
+    bluesky: async entity => {
+        if (!entity || !entity.blueskyId) {
+            return
+        }
+        const name = entity.blueskyId
+        const url = `https://bsky.app/profile/${name}`
+        return { name, url }
+    },
+    threads: async entity => {
+        if (!entity || !entity.threadsId) {
+            return
+        }
+        const name = entity.threadsId
+        const url = `https://www.threads.net/@${name}`
+        return { name, url }
+    },
     youtube: async entity => {
         if (!entity) {
             return
