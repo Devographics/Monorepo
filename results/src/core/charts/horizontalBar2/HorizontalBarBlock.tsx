@@ -132,7 +132,7 @@ const FacetHeading = (
         pageContext: PageContextValue
     }
 ) => {
-    const { block, facetQuestion, chartState, pageContext, series } = props
+    const { block, facetQuestion, chartState, pageContext, series, question } = props
     const { viewDefinition } = chartState
     const entities = useEntities()
 
@@ -164,6 +164,7 @@ const FacetHeading = (
                 facetQuestion={facetQuestion}
                 pageContext={pageContext}
                 entities={entities}
+                question={question}
             />
             {viewDefinition.showLegend && facetQuestion && colorScale && (
                 <Legend
