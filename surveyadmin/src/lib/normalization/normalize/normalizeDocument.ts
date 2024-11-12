@@ -337,6 +337,9 @@ const responseIsEmptyLegacy = ({
   return contentFields.length === 0;
 };
 
+// note: if you try to normalize a js2023 response from the react2023
+// dashboard this will return that the response is empty since the
+// fields don't start with "react2023"
 function responseIsEmpty({
   response,
   edition,

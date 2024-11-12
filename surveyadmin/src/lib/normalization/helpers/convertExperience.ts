@@ -159,11 +159,15 @@ export async function convertExperience({
           // if a legacyValue exists use it, else use regular value
           const oldExperienceValue = legacyValue || experienceValue;
           if (oldExperienceValue) {
-            const { experience: newExperience, sentiment } =
-              conversionTable[oldExperienceValue];
-            setObject[experiencePath] = newExperience;
-            setObject[experienceLegacyPath] = oldExperienceValue;
-            setObject[sentimentPath] = sentiment;
+            const conversion = conversionTable[oldExperienceValue];
+            if (conversion) {
+              const { experience: newExperience, sentiment } = conversion;
+              setObject[experiencePath] = newExperience;
+              setObject[experienceLegacyPath] = oldExperienceValue;
+              setObject[sentimentPath] = sentiment;
+            } else {
+              console.log(`// skipping value ${oldExperienceValue}`);
+            }
           }
         }
         bulkOperations.push({
