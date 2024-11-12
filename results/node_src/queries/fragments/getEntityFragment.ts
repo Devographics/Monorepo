@@ -26,6 +26,12 @@ export const getEntityFragment = () => `entity {
     twitter {
       url
     }
+    bluesky {
+      url
+    }
+    threads {
+      url
+    }
     twitch {
       url
     }

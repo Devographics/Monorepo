@@ -15,6 +15,8 @@ import {
     BlogIcon
 } from 'core/icons'
 import T from 'core/i18n/T'
+import { ThreadsIcon } from 'core/icons/Threads'
+import { BlueskyIcon } from 'core/icons/Bluesky'
 
 export const services: ServiceDefinition[] = [
     {
@@ -60,6 +62,14 @@ export const services: ServiceDefinition[] = [
     {
         service: 'caniuse',
         icon: UserIcon
+    },
+    {
+        service: 'threads',
+        icon: ThreadsIcon
+    },
+    {
+        service: 'bluesky',
+        icon: BlueskyIcon
     }
 ]
 
