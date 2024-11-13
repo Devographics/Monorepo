@@ -12,9 +12,11 @@ const CreditItem = ({ entity, role, labelId }: Credit & { labelId?: string }) =>
     const { name, homepage, twitter, company } = entity
     return (
         <CreditItemDiv>
-            <CreditAvatar_>
-                <Avatar entity={entity} />
-            </CreditAvatar_>
+            {entity?.avatar?.url && (
+                <CreditAvatar_>
+                    <Avatar entity={entity} />
+                </CreditAvatar_>
+            )}
             <Details>
                 <Name>
                     <a href={homepage?.url || twitter?.url}>{name}</a>

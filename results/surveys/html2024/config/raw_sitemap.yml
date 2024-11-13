@@ -552,7 +552,7 @@
         template: conclusion
         blockType: ConclusionBlock
         variables:
-            author: lea_verou
+            author: patrick_brosset
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock
