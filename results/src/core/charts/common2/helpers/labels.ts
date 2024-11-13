@@ -92,13 +92,13 @@ export const getFiltersLabel = ({
         const valueArray = Array.isArray(value) ? value : [value]
         const valueLabel = valueArray
             .map(valueString => {
-                const { key, label } = getItemLabel({
+                const { key, label, shortLabel } = getItemLabel({
                     id: valueString,
                     getString,
                     entity: entities.find(e => e.id === valueString),
                     i18nNamespace: optionI18nNamespace
                 })
-                return label
+                return shortLabel
             })
             .join(', ')
         return { questionLabel, operatorLabel, valueLabel } as FilterLabelObject

@@ -26,6 +26,7 @@
     font-size: 0.8rem;
     border-radius: 3px;
     width: 100%;
+    gap: var(--spacing);
 }
 .chart-grid-item-heading-label {
     text-overflow: ellipsis;
