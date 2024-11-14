@@ -25,6 +25,7 @@ import { HorizontalBarSerie } from './HorizontalBarSerie'
 import ChartShare from '../common2/ChartShare'
 import Legend from './Legend'
 import { BackToBack } from '../common2/BackToBack'
+import { NoData } from '../common2/NoData'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -35,8 +36,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     const { block, series, question, pageContext, variant } = props
     const currentEdition = getChartCurrentEdition({ serie: series[0], block })
     if (!currentEdition) {
-        // TODO: handle empty results case better
-        return <div>No data</div>
+        return <NoData />
     }
     const { average, percentiles, completion } = currentEdition
 

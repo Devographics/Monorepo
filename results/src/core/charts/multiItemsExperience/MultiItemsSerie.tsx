@@ -27,6 +27,7 @@ import { CommonProps } from '../common2/types'
 // import { MultiRatioSerie, VerticalBarChartState } from './types'
 import { MultiItemSerie, MultiItemsChartState } from './types'
 import { getItemFilters } from '../common2/helpers'
+import { NoData } from '../common2/NoData'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -49,7 +50,7 @@ export const MultiItemsSerie = (
 
     if (!items) {
         console.log(serie)
-        return <div>No data found</div>
+        return <NoData />
     }
     const { grouping, variable, sort, order, filter } = chartState
 

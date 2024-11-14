@@ -4,6 +4,11 @@
     @include font-bold;
 }
 
+.warning {
+    color: #f5ef7e;
+    border: 3px solid #aaa433;
+    padding: $spacing;
+}
 .error {
     color: $red;
     border: 3px solid $redLighter;
@@ -16,7 +21,6 @@
 .Tooltip {
     z-index: 1000;
 }
-
 
 /*
 

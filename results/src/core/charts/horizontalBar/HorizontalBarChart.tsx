@@ -26,6 +26,7 @@ import InsufficientData from './InsufficientData'
 import { INSUFFICIENT_DATA, NO_ANSWER } from '@devographics/constants'
 import sumBy from 'lodash/sumBy'
 import { FilterLegend } from 'core/filters/helpers'
+import { NoData } from '../common2/NoData'
 
 export const getChartDataPath = (block: BlockVariantDefinition) =>
     `${block?.queryOptions?.subField || 'responses'}.currentEdition.buckets`
@@ -179,8 +180,9 @@ const HorizontalBarChart = ({
     let buckets = cloneDeep(getChartData(series[0].data, block))
 
     if (!buckets) {
-        return <div>No data found.</div>
+        return <NoData />
     }
+
     if (facet) {
         buckets = buckets.map(bucket => {
             baseUnits.forEach(unit => {
