@@ -10,10 +10,10 @@ export const initProjects = async ({ context }: { context: RequestContext }) => 
     const { db } = context
     const projectsCollection = await getProjectsCollection()
 
-    console.log('// Adding Best of JS projects to DB…')
+    console.log('// 🅱️ Adding Best of JS projects to DB…')
     await projectsCollection.deleteMany({})
 
-    const response = await fetch('https://bestofjs-static-api.vercel.app/projects-full.json')
+    const response = await fetch('https://bestofjs-static-api-v2.vercel.app/projects-full.json')
     const BestOfJSData: any = await response.json()
     const projectsData = BestOfJSData.projects.filter((p: any) => !!p[idFieldName])
 
