@@ -5,23 +5,29 @@ import ShareFacebook from "./ShareFacebook";
 import ShareLinkedIn from "./ShareLinkedIn";
 import { useI18n } from "@devographics/react-i18n";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
+import ShareBluesky from "./ShareBluesky";
 
 const ShareSite = ({ edition }) => {
   const { t } = useI18n();
   const { questionsUrl } = edition;
-  const link = `${questionsUrl}?source=post_survey_share`;
+  const getLink = (source) =>
+    `${questionsUrl}?source=post_survey_share_${source}`;
   const surveyName = getEditionTitle({ edition });
-  const values = { surveyName, link };
-  const title = t("general.share_subject", values);
-  const body = t("general.share_text", values);
+  const getValues = (source) => ({ surveyName, link: getLink(source) });
+  const getTitle = (source) => t("general.share_subject", getValues(source));
+  const getBody = (source) => t("general.share_text", getValues(source));
 
   return (
     <div className="ShareSite">
       <div className="ShareSite__Content">
-        <ShareTwitter text={body} />
-        <ShareFacebook link={link} quote={body} />
-        <ShareLinkedIn link={link} title={title} />
-        <ShareEmail subject={title} body={body} />
+        <ShareTwitter text={getBody("twitter")} />
+        <ShareBluesky text={getBody("bluesky")} />
+        <ShareFacebook link={getLink("facebook")} quote={getBody("facebook")} />
+        <ShareLinkedIn
+          link={getLink("linkedin")}
+          title={getTitle("linkedin")}
+        />
+        <ShareEmail subject={getTitle("email")} body={getBody("email")} />
       </div>
     </div>
   );
