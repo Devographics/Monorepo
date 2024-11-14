@@ -93,7 +93,7 @@ const FiltersPanel = ({
             if (filtersState?.facet) {
                 const field = allFilters.find(q => q.id === filtersState?.facet?.id)
                 if (field) {
-                    const name = getFieldLabel({ getString, field, entities })
+                    const { label: name } = getFieldLabel({ getString, field, entities })
                     defaultNameSegments.push(getString('filters.vs_x', { values: { name } })?.t)
                 }
             }

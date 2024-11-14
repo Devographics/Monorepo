@@ -99,12 +99,12 @@ const DataExplorerBlock = ({
         (queryParams.showNoAnswer === 'true' ? true : false) || SHOW_NO_ANSWER
     )
 
-    const xAxisLabel = getFieldLabel({
+    const { label: xAxisLabel } = getFieldLabel({
         getString,
         field: allFilters.find(f => f.id === xField) as FilterItem,
         entities
     })
-    const yAxisLabel = getFieldLabel({
+    const { label: yAxisLabel } = getFieldLabel({
         getString,
         field: allFilters.find(f => f.id === yField) as FilterItem,
         entities

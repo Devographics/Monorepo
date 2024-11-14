@@ -382,10 +382,10 @@ export const getFieldLabel = ({
     const { sectionId, template, id: id } = field
     const entity = entities.find(e => e.id === id)
     const entityName = entity && getEntityName(entity)
+    let label, key
     if (entityName) {
-        return entityName
+        label = entityName
     } else {
-        let key
         if (isFeatureTemplate(template)) {
             key = `features.${id}`
         } else if (isToolTemplate(template)) {
@@ -394,8 +394,9 @@ export const getFieldLabel = ({
             key = `${sectionId}.${id}`
         }
         const s = getString(key)
-        return s?.tClean || s?.t || id
+        label = s?.tClean || s?.t || id
     }
+    return { label, key }
 }
 
 /*
@@ -539,7 +540,11 @@ export const useFilterLegends = ({
                         ...labelSegments,
                         seriesItem.conditions.map(({ fieldId, operator, value }) => {
                             const field = allFilters.find(f => f.id === fieldId) as FilterItem
-                            const fieldLabel = getFieldLabel({ getString, field, entities })
+                            const { label: fieldLabel } = getFieldLabel({
+                                getString,
+                                field,
+                                entities
+                            })
                             const operatorLabel = getOperatorLabel({ getString, operator })
                             const valueArray = Array.isArray(value) ? value : [value]
                             const valueLabel = valueArray

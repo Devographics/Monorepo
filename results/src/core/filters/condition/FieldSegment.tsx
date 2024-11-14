@@ -91,15 +91,18 @@ export const ItemSelectOptions = ({
                 const sectionItems = allFilters.filter(o => o.sectionId === section.id)
                 return sectionItems.length > 0 ? (
                     <optgroup key={section.id} label={getSectionLabel({ getString, section })}>
-                        {sectionItems.map((o: FilterItem) => (
-                            <option
-                                key={o.id}
-                                value={o.id}
-                                disabled={[...disabledList, currentQuestionId]?.includes(o.id)}
-                            >
-                                {getFieldLabel({ getString, field: o, entities })}
-                            </option>
-                        ))}
+                        {sectionItems.map((o: FilterItem) => {
+                            const { label, key } = getFieldLabel({ getString, field: o, entities })
+                            return (
+                                <option
+                                    key={o.id}
+                                    value={o.id}
+                                    disabled={[...disabledList, currentQuestionId]?.includes(o.id)}
+                                >
+                                    {label}
+                                </option>
+                            )
+                        })}
                     </optgroup>
                 ) : null
             })}

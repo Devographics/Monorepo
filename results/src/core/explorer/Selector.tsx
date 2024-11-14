@@ -70,11 +70,13 @@ const Selector = ({ axis, stateStuff, entities }: SelectorProps) => {
                 </option> */}
                 {sectionItems.map(field => (
                     <option key={field.id} value={field.id}>
-                        {getFieldLabel({
-                            getString,
-                            field,
-                            entities
-                        })}
+                        {
+                            getFieldLabel({
+                                getString,
+                                field,
+                                entities
+                            })?.label
+                        }
                     </option>
                 ))}
             </select>
