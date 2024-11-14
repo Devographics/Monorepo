@@ -1,0 +1,11 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
+.disclaimer-block {
+    font-style: italic;
+    background: #ffff0022;
+    padding: var(--spacing);
+    @include large {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+}

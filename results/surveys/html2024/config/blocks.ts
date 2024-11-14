@@ -88,6 +88,7 @@ import AboutBlock from 'core/blocks/other/AboutBlock'
 import HowToHelpBlock from 'core/blocks/other/HowToHelpBlock'
 import SponsorFinishBlock from 'core/blocks/block/sponsor_chart/SponsorFinishBlock'
 import LivestreamBlock from 'core/blocks/other/LivestreamBlock'
+import DisclaimerBlock from 'core/blocks/other/DisclaimerBlock'
 
 const otherBlocks = {
     PageIntroductionBlock,
@@ -111,7 +112,8 @@ const otherBlocks = {
     SponsorFinishBlock,
     LivestreamBlock,
     TakeawaysBlock,
-    DataExplorerBlock
+    DataExplorerBlock,
+    DisclaimerBlock
 }
 
 export default { ...chartBlocks, ...otherBlocks }

@@ -7,6 +7,11 @@
         disableExport: true
         wrapBlock: false
 
+      - id: survey_disclaimer
+        blockType: DisclaimerBlock
+        disableExport: true
+        wrapBlock: false
+
       - id: survey_sponsors
         template: sponsors
 
