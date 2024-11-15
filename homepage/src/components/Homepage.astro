@@ -51,7 +51,7 @@ const [lastEdition, ...pastEditions] = allEditions
 </div>
 
 <style lang="scss">
-    @import '../stylesheets/_breakpoints.scss';
+    @use '../stylesheets/_breakpoints.scss';
 
     h1 {
         font-size: var(--title-font);
@@ -59,7 +59,7 @@ const [lastEdition, ...pastEditions] = allEditions
         margin-bottom: var(--halfspacing);
         line-height: 1;
 
-        @include small {
+        @include breakpoints.small {
             font-size: var(--largest-font);
         }
     }
@@ -82,7 +82,7 @@ const [lastEdition, ...pastEditions] = allEditions
         margin-bottom: var(--doublespacing);
         text-align: center;
 
-        @include small {
+        @include breakpoints.small {
             font-size: var(--medium-font);
         }
     }

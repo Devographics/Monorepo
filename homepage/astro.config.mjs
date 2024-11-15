@@ -10,7 +10,14 @@ export default defineConfig({
     integrations: [react()],
     // adapter: netlify()
     vite: {
-        plugins: [yaml()]
+        plugins: [yaml()],
+        css: {
+            preprocessorOptions: {
+                scss: {
+                    api: 'modern-compiler' // or "modern"
+                }
+            }
+        }
     },
     redirects: {
         '/': '/en-US'

@@ -1,73 +1,74 @@
-@use "sass:math";
-@import "_breakpoints.scss";
+@use 'sass:math';
+@use '_breakpoints.scss';
 
 .newsletter {
-  background: var(--background);
-  padding: var(--spacing);
-  margin-bottom: var(--doublespacing);
-  text-align: center;
+    background: var(--background);
+    padding: var(--spacing);
+    margin-bottom: var(--doublespacing);
+    text-align: center;
 }
 
 .newsletter-heading {
-  margin-bottom: var(--halfspacing);
+    margin-bottom: var(--halfspacing);
 }
 
 .newsletter-details {
-  margin-bottom: var(--spacing);
+    margin-bottom: var(--spacing);
 }
 
 .newsletter-form {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  form {
-      flex: 1;
-      width: 100%;
-      @include medium-large {
-          display: flex;
-      }
-      margin: 0;
-  }
-  .hidden{
-    display: none;
-  }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    form {
+        flex: 1;
+        width: 100%;
+        margin: 0;
+
+        @include breakpoints.medium-large {
+            display: flex;
+        }
+    }
+    .hidden {
+        display: none;
+    }
 }
 
 .newsletter-email {
-  @include small {
-      margin-bottom: var(--halfspacing);
-  }
-  display: block;
-  padding: var(--halfspacing)  var(--halfspacing);
-  border: none;
-  margin-right: var(--halfspacing);
-  flex-grow: 1;
-  width: 100%;
-  &:focus {
-      outline: none;
-  }
-  .newsletter-loading & {
-      background: var(--background-secondary);
-  }
+    display: block;
+    padding: var(--halfspacing) var(--halfspacing);
+    border: none;
+    margin-right: var(--halfspacing);
+    flex-grow: 1;
+    width: 100%;
+    @include breakpoints.small {
+        margin-bottom: var(--halfspacing);
+    }
+    &:focus {
+        outline: none;
+    }
+    .newsletter-loading & {
+        background: var(--background-secondary);
+    }
 }
 .newsletter-button {
-  min-width: 140px;
-  display: block;
-  @include small {
-      width: 100%;
-  }
+    min-width: 140px;
+    display: block;
+    @include breakpoints.small {
+        width: 100%;
+    }
 }
 .newsletter-message {
-  width: 100%;
-  padding: var(--spacing);
-  text-align: center;
+    width: 100%;
+    padding: var(--spacing);
+    text-align: center;
 }
 .newsletter-error {
-  border-color: var(--red);
-  color: var(--red);
-  margin-top: var(--spacing);
+    border-color: var(--red);
+    color: var(--red);
+    margin-top: var(--spacing);
 }
 .newsletter-success {
-  border-color: var(--border-color);
-  color: var(--border-color);
+    border-color: var(--border-color);
+    color: var(--border-color);
 }

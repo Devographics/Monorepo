@@ -24,7 +24,7 @@ const { editions, locale, survey } = Astro.props
 
 
 <style lang="scss">
-    @import '../stylesheets/_breakpoints.scss';
+    @use '../stylesheets/_breakpoints.scss';
 
 
     .last-edition,
@@ -38,7 +38,7 @@ const { editions, locale, survey } = Astro.props
         row-gap: var(--doublespacing);
         grid-template-columns: 1fr 1fr;
 
-        @include small {
+        @include breakpoints.small {
             grid-template-columns: 1fr;
         }
     }

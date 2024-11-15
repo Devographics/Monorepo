@@ -26,7 +26,7 @@ const { partners } = survey
 </section>
 
 <style lang="scss">
-    @import '../stylesheets/_breakpoints.scss';
+    @use '../stylesheets/_breakpoints.scss';
 
     section {
         text-align: center;
@@ -37,7 +37,7 @@ const { partners } = survey
     }
 
     // .partner-list {
-    //     @include large {
+    //     @include breakpoints.large {
     //         display: grid;
     //         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     //         column-gap: var(--spacing);
