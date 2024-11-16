@@ -33,10 +33,13 @@ const keysMemo = (items: Array<Item>): string =>
 const selectItem = (
   wrapper: Element | undefined | null,
   key: string
-): HTMLInputElement | null | undefined => {
+): HTMLInputElement | HTMLTextAreaElement | null | undefined => {
   const maybeItem = wrapper?.querySelector(itemSelector(key));
   if (!maybeItem) console.warn(`Item key ${key} not found`);
-  if (maybeItem instanceof HTMLInputElement) {
+  if (
+    maybeItem instanceof HTMLInputElement ||
+    maybeItem instanceof HTMLTextAreaElement
+  ) {
     return maybeItem;
   }
 };
@@ -71,7 +74,9 @@ const getEmptyKeys = (
  * When focusing an input the focus is at the beggining of the text
  * This function will focus at the end instead to add more content
  */
-const focusInputEnd = (maybeInput: HTMLInputElement | null | undefined) => {
+const focusInputEnd = (
+  maybeInput: HTMLInputElement | HTMLTextAreaElement | null | undefined
+) => {
   if (!maybeInput) return;
   maybeInput.focus();
   if (maybeInput.value?.length) {
