@@ -7,7 +7,8 @@ export const gender: TemplateFunction = options => {
     const id = 'gender'
     const output: QuestionTemplateOutput = {
         ...single(addQuestionId(options, id)),
-        ...questionOptions[id]
+        ...questionOptions[id],
+        inputComponent: 'gender'
     }
     return output
 }

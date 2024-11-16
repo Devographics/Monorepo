@@ -22,6 +22,7 @@ import TextList from "~/components/inputs/TextList";
 import { ComponentType } from "react";
 import { FormInputProps } from "~/components/form/typings";
 import Likert from "~/components/inputs/Likert";
+import Gender from "~/components/inputs/Gender";
 
 //
 
@@ -30,6 +31,7 @@ const customComponents: { [key: string]: ComponentType<FormInputProps> } = {
   receive_notifications: Email2,
   subheading: Subheading,
   hidden: Hidden,
+  gender: Gender,
   race_ethnicity: RaceEthnicity,
   bracket: Bracket,
   feature: Feature,

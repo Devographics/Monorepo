@@ -926,3 +926,19 @@
     top: 50%;
   }
 }
+
+.snowball-sampling-note {
+  margin-top: $spacing;
+  padding: $spacing;
+  background: #d4cc3322;
+  input {
+    background: #00000066;
+    padding: 2px 6px;
+    display: block;
+    width: 100%;
+    border: none;
+    @include monospace;
+    color: $text-color;
+    font-size: 0.8rem;
+  }
+}
