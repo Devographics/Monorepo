@@ -218,7 +218,7 @@ type WebFeature {
     compat_features: [String]
     description: String
     description_html: String
-    group: String
+    group: [String]
     name: String
     spec: [String]
     status: WebFeatureStatus
