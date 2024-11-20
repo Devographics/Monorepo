@@ -254,7 +254,7 @@
 
 .magic-error,
 .magic-success {
-  padding: $spacing/2;
+  padding: $spacing-half;
   font-size: $smallish-font;
   margin-top: $spacing;
 }
@@ -268,8 +268,8 @@
 
 .form-note {
   // background: var(--bg-color-light);
-  // padding: $spacing/2;
-  margin-top: $spacing/2;
+  // padding: $spacing-half;
+  margin-top: $spacing-half;
   display: block;
   color: var(--text-color-dark);
   font-size: $small-font;
@@ -285,7 +285,7 @@
 }
 
 .form-race-ethnicity-not-allowed {
-  padding: $spacing/1.5;
+  padding: $spacing-two-thirds;
   background: $redTransparent;
   margin-bottom: $spacing;
   p {
@@ -298,7 +298,7 @@
   border-radius: 10px;
   padding: $spacing * 1.5 $spacing;
   // margin-top: $spacing;
-  margin-bottom: $spacing / 2;
+  margin-bottom: $spacing-half;
   position: relative;
   // background: $bg-color-light;
 
@@ -320,7 +320,7 @@
     text-transform: uppercase;
     font-size: $small-font;
     // border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-    // padding: $spacing/2 $spacing/3;
+    // padding: $spacing-half $spacing-third;
   }
 }
 
@@ -537,7 +537,7 @@
   font-size: $medium-font;
   display: flex;
   align-items: center;
-  gap: $spacing/2;
+  gap: $spacing-half;
 }
 
 .form-option-description {
@@ -568,7 +568,7 @@
   background: none;
   backdrop-filter: blur(6px);
   &:not(:last-child) {
-    margin-bottom: $spacing/2;
+    margin-bottom: $spacing-half;
   }
 }
 .form-message-error {
@@ -593,10 +593,10 @@
   }
 }
 .form-message-debug-link {
-  margin-top: $spacing/2;
+  margin-top: $spacing-half;
   display: flex;
   align-items: center;
-  gap: $spacing/4;
+  gap: $spacing-quarter;
   svg {
     height: 16px;
     width: 16px;
@@ -604,7 +604,7 @@
 }
 
 .followups {
-  margin: $spacing/2;
+  margin: $spacing-half;
   // background: var(--bg-color-light);
   padding: $spacing;
   font-size: $medium-font;
@@ -645,7 +645,7 @@
   &-predefined {
     display: flex;
     flex-wrap: wrap;
-    gap: $spacing/2;
+    gap: $spacing-half;
     margin-bottom: $spacing;
     &-item {
     }
@@ -653,7 +653,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: $spacing/2;
+      gap: $spacing-half;
     }
   }
 }
@@ -743,7 +743,7 @@
 .form-item-contents-inner {
   display: flex;
   flex-direction: column;
-  gap: $spacing/2;
+  gap: $spacing-half;
   // use overflow: clip instead of overflow: hidden because
   // it doesn't interfere with position: sticky
   // https://stackoverflow.com/a/74462258
@@ -778,7 +778,7 @@
 
 .form-input-moreThanOneYear {
   .form-check-label {
-    gap: $spacing/2;
+    gap: $spacing-half;
   }
   input[type="number"] {
     width: 100px;
@@ -789,7 +789,7 @@
   .form-item-input {
     display: flex;
     flex-direction: column;
-    gap: $spacing/2;
+    gap: $spacing-half;
     @include small {
       position: relative;
     }
@@ -806,7 +806,7 @@
   // display: grid;
   // grid-template-columns: 1fr 1fr;
   display: flex;
-  padding: $spacing/2;
+  padding: $spacing-half;
   &:nth-child(2n) {
     background: rgba(255, 255, 255, 0.04);
   }
@@ -822,7 +822,7 @@
 .likert-options,
 .likert-legends {
   display: flex;
-  gap: $spacing/2;
+  gap: $spacing-half;
   @include small {
     justify-content: space-between;
     padding: 0 $spacing * 1;
@@ -839,10 +839,10 @@
     padding: 0;
     .form-check-label {
       @include small {
-        padding: $spacing/3 $spacing/4;
+        padding: $spacing-third $spacing-quarter;
       }
       @include medium-large {
-        padding: $spacing/3;
+        padding: $spacing-third;
       }
       display: block;
     }
@@ -861,7 +861,7 @@
 }
 .likert-legends-wrapper {
   height: 110px;
-  padding: 0 $spacing/2;
+  padding: 0 $spacing-half;
   @include small {
     padding-bottom: 5px;
     position: sticky;
@@ -892,7 +892,7 @@
 .form-input-number-wrapper {
   display: flex;
   align-items: center;
-  gap: $spacing/2;
+  gap: $spacing-half;
 }
 
 .invalid-feedback {

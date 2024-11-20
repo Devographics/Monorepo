@@ -42,7 +42,7 @@ These styles will only be active for specific surveys and/or editions
   }
   .header {
     background-image: linear-gradient(to right, var(--tw-gradient-stops));
-    padding: $spacing/1.5;
+    padding: $spacing-two-thirds;
   }
   .nav-wrapper {
     background: var(--bg-color-dark);
@@ -72,7 +72,7 @@ These styles will only be active for specific surveys and/or editions
     //   ),
     //   repeating-linear-gradient(rgba(8, 34, 54, 0.333), rgb(8, 34, 54));
     background-image: linear-gradient(to right, var(--tw-gradient-stops));
-    padding: $spacing/2;
+    padding: $spacing-half;
     .tokyodev-info-inner {
       background: rgb(3, 13, 31);
       padding: $spacing;
@@ -90,7 +90,7 @@ These styles will only be active for specific surveys and/or editions
       }
       h5 {
         font-size: $smallish-font;
-        margin-top: $spacing/2;
+        margin-top: $spacing-half;
         text-align: center;
         line-height: 1.5;
       }
