@@ -14,7 +14,7 @@ import { FormLayoutProps } from "./FormLayout";
 import { useFormPropsContext } from "./FormPropsContext";
 import { useFormStateContext } from "./FormStateContext";
 
-//  
+//
 
 interface FormSubmitProps extends FormLayoutProps {
   path: string;
@@ -27,7 +27,7 @@ export const FormSubmit = (props: FormLayoutProps) => {
   const { response } = useFormStateContext();
   const { nextSection, previousSection } = props;
 
-  const { locale } = useI18n()
+  const { locale } = useI18n();
   const { edition } = useEdition();
   const router = useRouter();
 
