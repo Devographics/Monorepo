@@ -210,7 +210,6 @@ const Checkbox = (
             id={`${path}.${index}`}
             name={path}
             value={option.id}
-            // ref={refFunction}
             onChange={(event) => {
               // event.preventDefault();
               const isChecked = event.target.checked;

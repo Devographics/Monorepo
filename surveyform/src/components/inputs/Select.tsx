@@ -29,8 +29,6 @@ export const FormComponentSelect = (props: FormInputProps) => {
   return (
     <FormItem {...props}>
       <Form.Select
-        // ref={refFunction}
-        // defaultValue={emptyValue}
         onChange={(e) => {
           updateCurrentValues({ [path]: e.target.value });
         }}
@@ -43,9 +41,7 @@ export const FormComponentSelect = (props: FormInputProps) => {
             question,
             option,
           });
-          const optionLabel =
-            label ||
-            t(i18n.base);
+          const optionLabel = label || t(i18n.base);
           return (
             <option key={id} value={id}>
               {optionLabel}

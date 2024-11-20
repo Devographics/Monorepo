@@ -110,7 +110,6 @@ const Radio = ({ index, value, option, hasValue, formProps, setShowOther }) => {
             value={option.id}
             name={path}
             id={`${path}.${index}`}
-            // ref={refFunction}
             checked={isChecked}
             className={checkClass}
             onClick={(e) => {

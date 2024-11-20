@@ -40,12 +40,12 @@ const cutoffMargin = 2;
  * @returns
  */
 export const FormComponentCheckboxGroup = (
-  props: FormInputProps<string[] | number[]>,
+  props: FormInputProps<string[] | number[]>
 ) => {
   const { value, edition, question } = props;
   const { response } = useFormStateContext();
   const hasValue = value?.length > 0;
-  const { t } = useI18n()
+  const { t } = useI18n();
   const formPaths = getFormPaths({ edition, question });
   const otherValue = response?.[formPaths.other!];
 
@@ -63,7 +63,7 @@ export const FormComponentCheckboxGroup = (
 
   if (!options_) {
     throw new Error(
-      `Question ${question.id} does not have any options defined.`,
+      `Question ${question.id} does not have any options defined.`
     );
   }
 
@@ -172,7 +172,7 @@ const Checkbox = (
     hasValue: boolean;
     hasReachedLimit: boolean;
     value: Array<string | number>;
-  },
+  }
 ) => {
   const {
     index,
@@ -255,7 +255,6 @@ const Checkbox = (
             id={`${path}.${index}`}
             name={path}
             value={option.id}
-            // ref={refFunction}
             onChange={(event) => {
               const isChecked = event.target.checked;
               const newValue = getNewValue(isChecked);

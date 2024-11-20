@@ -183,7 +183,6 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
                 value={option.id}
                 name={path}
                 id={`${path}.${i}`}
-                // ref={refFunction}
                 checked={isChecked}
                 className={checkClass}
                 disabled={readOnly}

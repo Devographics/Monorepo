@@ -19,7 +19,7 @@ export const CommentTrigger = ({
   setShowCommentInput,
 }) => {
   const isActive = showCommentInput || !!value;
-  const { t } = useI18n()
+  const { t } = useI18n();
   const target = useRef(null);
 
   return (
@@ -34,8 +34,9 @@ export const CommentTrigger = ({
       >
         <button
           ref={target}
-          className={`comment-trigger comment-trigger-${isActive ? "active" : "inactive"
-            }`}
+          className={`comment-trigger comment-trigger-${
+            isActive ? "active" : "inactive"
+          }`}
           type="button"
           aria-describedby="popover-basic"
           aria-label={t("experience.leave_comment")}
@@ -123,20 +124,20 @@ export const CommentTextarea = ({
 
   const handleChange =
     (isDebounced = false) =>
-      (event) => {
-        let value = event.target.value;
-        setLocalValue(value);
-        const _updateCurrentValues = isDebounced
-          ? updateCurrentValuesDebounced
-          : updateCurrentValues;
-        if (value === "") {
-          // @ts-ignore
-          _updateCurrentValues({ [path]: null });
-        } else {
-          // @ts-ignore
-          _updateCurrentValues({ [path]: value });
-        }
-      };
+    (event) => {
+      let value = event.target.value;
+      setLocalValue(value);
+      const _updateCurrentValues = isDebounced
+        ? updateCurrentValuesDebounced
+        : updateCurrentValues;
+      if (value === "") {
+        // @ts-ignore
+        _updateCurrentValues({ [path]: null });
+      } else {
+        // @ts-ignore
+        _updateCurrentValues({ [path]: value });
+      }
+    };
 
   return (
     <FormControl
@@ -146,8 +147,6 @@ export const CommentTextarea = ({
       value={localValue || ""}
       disabled={readOnly}
       placeholder={placeholder}
-    // ref={refFunction}
-    // {...inputProperties}
     />
   );
 };

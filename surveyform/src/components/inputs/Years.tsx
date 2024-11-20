@@ -145,7 +145,6 @@ const LessThanOneYearRadio = ({
       value={RadioValues.LESS_THAN_ONE_YEAR}
       name={path}
       id={`${path}.0`}
-      // ref={refFunction}
       checked={isChecked}
       className={getcheckClass(RadioValues.LESS_THAN_ONE_YEAR, radioValue)}
       onClick={(e) => {
@@ -181,7 +180,6 @@ const MoreThanOneYearRadio = ({
       value={RadioValues.MORE_THAN_ONE_YEAR}
       name={path}
       id={`${path}.1`}
-      // ref={refFunction}
       checked={isChecked}
       className={getcheckClass(RadioValues.MORE_THAN_ONE_YEAR, radioValue)}
       onClick={(e) => {

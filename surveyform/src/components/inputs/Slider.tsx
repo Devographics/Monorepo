@@ -10,7 +10,7 @@ export const Slider = (props: FormInputProps) => {
   const { path, value, question, readOnly, updateCurrentValues } = props;
   const { options } = question;
   const hasValue = value !== "";
-  const { t } = useI18n()
+  const { t } = useI18n();
   return (
     <FormItem {...props}>
       <div className="form-slider">
@@ -36,7 +36,6 @@ export const Slider = (props: FormInputProps) => {
                       value={option.id}
                       name={path}
                       id={`${path}.${i}`}
-                      // ref={refFunction}
                       checked={isChecked}
                       className={checkClass}
                       onChange={(e) => {

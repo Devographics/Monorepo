@@ -108,7 +108,6 @@ export const FollowUps = (
               checked={isChecked}
               disabled={readOnly}
               id={`${path}.followup.${index}`}
-              // ref={refFunction}
               {...tabIndexProp}
               onClick={(event) => {
                 // if follow up option is already part of the selected options,
