@@ -4,11 +4,12 @@ import { MagicLoginChecker } from "./MagicLoginChecker";
 import { CenteredContainer } from "~/components/ui/CenteredContainer";
 
 
-export default async function MagicLoginCheckPage({
-  searchParams,
-}: NextPageParams<
-  { token: string; redirectTo?: string; editionId?: string; surveyId?: string }
->) {
+export default async function MagicLoginCheckPage(
+  props: NextPageParams<
+    { token: string; redirectTo?: string; editionId?: string; surveyId?: string }
+  >
+) {
+  const searchParams = await props.searchParams;
   const { token, redirectTo, editionId, surveyId } = searchParams;
   if (!token) throw new Error("No magic token found in query params.");
   return (

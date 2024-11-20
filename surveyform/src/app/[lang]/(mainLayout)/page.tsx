@@ -17,7 +17,8 @@ export async function generateStaticParams() {
 }
 */
 
-const IndexPage = async ({ params }: NextPageParams<{ lang: string }>) => {
+const IndexPage = async (props: NextPageParams<{ lang: string }>) => {
+  const params = await props.params;
   return (
     <RSCFetch
       fetch={async () => rscFetchSurveysMetadata({ shouldThrow: false })}

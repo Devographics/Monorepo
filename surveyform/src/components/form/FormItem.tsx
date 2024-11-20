@@ -90,7 +90,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
     );
 
     const childRef = useRef<HTMLDivElement>(null);
-    const myRef = (parentRef as RefObject<HTMLDivElement>) || childRef;
+    const myRef = (parentRef as RefObject<HTMLDivElement | null>) || childRef;
     const firstRenderRef1 = useRef(true);
     const firstRenderRef2 = useRef(true);
 

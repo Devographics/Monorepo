@@ -44,16 +44,23 @@ export async function generateStaticParams() {
 // }
 
 // SectionNumber is optional in the URL so this page is exactly the same as ../index.tsx
-export default async function SurveySectionOutlinePage({
-  params: { sectionNumber, lang },
-}: {
-  params: {
-    slug: string;
-    year: string;
-    sectionNumber: string;
-    lang: string,
-  };
-}) {
+export default async function SurveySectionOutlinePage(
+  props: {
+    params: Promise<{
+      slug: string;
+      year: string;
+      sectionNumber: string;
+      lang: string,
+    }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    sectionNumber,
+    lang
+  } = params;
+
   // TODO: get correct tokens
   const sn = parseInt(sectionNumber);
   if (isNaN(sn)) notFound();

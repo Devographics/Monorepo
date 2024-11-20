@@ -10,21 +10,27 @@ interface SurveySectionParams {
   sectionNumber: string;
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: SurveySectionParams;
-}): Promise<Metadata | undefined> {
+export async function generateMetadata(
+  props: {
+    params: Promise<SurveySectionParams>;
+  }
+): Promise<Metadata | undefined> {
+  const params = await props.params;
   return await rscGetMetadata({ params });
 }
 
-export default async function WithSectionLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: SurveySectionParams;
-}) {
+export default async function WithSectionLayout(
+  props: {
+    children: React.ReactNode;
+    params: Promise<SurveySectionParams>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const edition = await rscGetSurveyEditionFromUrl(params);
 
   if (!edition) {
@@ -36,8 +42,8 @@ export default async function WithSectionLayout({
   return (
     // TODO: useParams should be enough, we don't need data fetching here
     // but it's not yet implemented in Next 13.0.6 (07/12/2022)
-    <SectionProvider section={parseInt(params.sectionNumber)}>
+    (<SectionProvider section={parseInt(params.sectionNumber)}>
       {children}
-    </SectionProvider>
+    </SectionProvider>)
   );
 }
