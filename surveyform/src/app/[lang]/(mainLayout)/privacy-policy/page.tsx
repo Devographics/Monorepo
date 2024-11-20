@@ -1,8 +1,5 @@
 import PrivacyPolicy from "./PrivacyPolicy";
 
-// Uncomment to debug if this page is not statically rendered
-// export const dynamic = "error";
-
 // Render in each language
 import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
 import { NextPageParams } from "~/app/typings";
