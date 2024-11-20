@@ -185,7 +185,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
         ref={myRef}
         onBlur={onBlur}
       >
-        <Form.Group as="fieldset" controlId={path}>
+        <fieldset id={path}>
           <FormItemTitle {...props} section={section} />
           <div className="form-item-contents">
             <div className="form-item-contents-inner">
@@ -210,7 +210,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
               )}
             </div>
           </div>
-        </Form.Group>
+        </fieldset>
         {enableSkip && (
           <SkipButton
             skipPath={skipPath}
@@ -282,7 +282,7 @@ export const FormItemTitle = (
   return (
     <legend className="form-label-legend">
       <h3 className="form-label-heading" id={question.id}>
-        <Form.Label>
+        <label>
           <QuestionLabel section={section} question={question} />
 
           {yearAdded === 2024 && (
@@ -302,7 +302,7 @@ export const FormItemTitle = (
               </span>
             </OverlayTrigger>
           )}
-        </Form.Label>
+        </label>
 
         {enableReadingList && question.entity && (
           <AddToList {...props} label={label || ""} id={question.id} />
