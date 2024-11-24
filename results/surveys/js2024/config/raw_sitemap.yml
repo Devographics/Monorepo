@@ -115,6 +115,13 @@
         takeaway: >
             Respondents had a median income of USD $75,000, noticeably higher than the **$59,970** figure reported by the [Stack Overflow Developer Survey](https://survey.stackoverflow.co/2023/#section-salary-salary-by-developer-type).
 
+      - id: job_title
+        template: multiple_options2_freeform
+        takeaway: >
+            Respondents tended to work for mostly mid-sized organizations, with a median company size of **75** employees.
+        variants:
+            - template: vs_salary
+
       - id: higher_education_degree
         template: multiple_options2
         takeaway: >
@@ -192,6 +199,14 @@
         i18nNamespace: features
 
       - id: async_features
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: set_features
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: object_features
         template: multiple_options2
         i18nNamespace: features
 
@@ -286,6 +301,10 @@
             - id: front_end_frameworks_others
               template: section_prenormalized_tools
 
+            - id: front_end_frameworks_work
+              template: multiple_options2
+              i18nNamespace: features
+
             - id: emma_bostian
               template: picks
               variables:
@@ -328,6 +347,10 @@
             - id: meta_frameworks_others
               template: section_prenormalized_tools
 
+            - id: meta_frameworks_work
+              template: multiple_options2
+              i18nNamespace: features
+
             - id: fireship
               template: picks
               variables:
@@ -366,6 +389,10 @@
 
             - id: testing_others
               template: section_prenormalized_tools
+
+            - id: testing_work
+              template: multiple_options2
+              i18nNamespace: features
 
             - id: quarkstuff
               template: picks
@@ -406,6 +433,10 @@
             - id: mobile_desktop_others
               template: section_prenormalized_tools
 
+            - id: mobile_desktop_work
+              template: multiple_options2
+              i18nNamespace: features
+
             - id: david_khourshid
               template: picks
               variables:
@@ -445,6 +476,10 @@
             - id: build_tools_others
               template: section_prenormalized_tools
 
+            - id: build_tools_work
+              template: multiple_options2
+              i18nNamespace: features
+
             - id: sacha_greif
               template: picks
               variables:
@@ -483,6 +518,10 @@
 
             - id: monorepo_tools_others
               template: section_prenormalized_tools
+
+            - id: monorepo_tools_work
+              template: multiple_options2
+              i18nNamespace: features
 
             - id: german_jablonski
               template: picks
@@ -564,6 +603,12 @@
       - id: js_ts_balance
         template: multiple_options2
 
+      - id: compiled_code_balance
+        template: multiple_options2
+
+      - id: ai_generated_code_balance
+        template: multiple_options2
+
       - id: usage_type
         template: multiple_options2
 
@@ -589,7 +634,13 @@
       - id: top_js_pain_points
         template: multiple_options2_combined
 
+      - id: js_new_features
+        template: multiple_options2_combined
+
       - id: top_currently_missing_from_js
+        template: multiple_options2_combined
+
+      - id: native_types_proposal
         template: multiple_options2_combined
 
       - id: state_of_the_web_happiness
@@ -611,7 +662,7 @@
   blocks:
       - template: page_introduction
 
-      - id: paid_courses
+      - id: courses
         template: multiple_options2_freeform
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
@@ -620,6 +671,11 @@
         template: picks
         variables:
             url: https://nuxt.com/
+
+      - id: newsletters
+        template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
 
       - id: podcasts
         template: multiple_options2_freeform
