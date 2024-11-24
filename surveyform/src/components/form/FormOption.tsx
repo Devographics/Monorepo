@@ -63,27 +63,37 @@ const OptionDescription = (props: FormOptionProps) => {
   const i18n = getOptioni18nIds(props);
 
   const i18nDescription = getMessage(i18n.description);
-
+  const entityDescriptioni18nKey = `entities.${option.id}.description`;
+  const entityI18nDescription = getMessage(entityDescriptioni18nKey);
   const entity = option?.entity;
-
-  if (entity?.tags?.includes("libraries")) {
-    // we don't need to show description for libraries since it's just
-    // a matter of whether you recognize the name or not
-    return null;
-  }
-
   const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
 
-  return !i18nDescription.missing ? (
-    <T className="form-option-description" token={i18n.description} />
-  ) : entityDescription ? (
-    <span
-      className="form-option-description"
-      dangerouslySetInnerHTML={{
-        __html: entityDescription,
-      }}
-    />
-  ) : null;
+  if (!i18nDescription.missing) {
+    // 1. option has a translated description
+    return <T className="form-option-description" token={i18n.description} />;
+  } else if (!entityI18nDescription.missing) {
+    // 2. entity has a translated description
+    return (
+      <T className="form-option-description" token={entityDescriptioni18nKey} />
+    );
+  } else if (entityDescription) {
+    // 3. entity has a hardcoded description
+    if (entity?.tags?.includes("libraries")) {
+      // we don't need to show description for libraries since it's just
+      // a matter of whether you recognize the name or not
+      return null;
+    }
+    return (
+      <span
+        className="form-option-description"
+        dangerouslySetInnerHTML={{
+          __html: entityDescription,
+        }}
+      />
+    );
+  } else {
+    return null;
+  }
 };
 
 export default FormOption;
