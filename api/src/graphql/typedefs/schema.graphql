@@ -348,6 +348,7 @@ A data bucket
 type Bucket {
     id: String
     label: String
+    index: Float
     """
     Respondent count
     """
@@ -412,6 +413,7 @@ type Bucket {
 Same as above, but without the "groupedBucket" field
 """
 type GroupedBucket {
+    index: Float
     id: String
     label: String
     """
@@ -500,6 +502,7 @@ type Percentiles {
 type FacetBucket {
     id: String
     label: String
+    index: Float
     """
     Respondent count
     """

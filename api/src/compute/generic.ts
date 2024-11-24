@@ -441,9 +441,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
     results = await runStage(discardEmptyEditions, [results])
 
-    await runStage(addEntities, [results, context, axis1])
-    await runStage(addTokens, [results, context, axis1])
-
     if (axis2) {
         await runStage(addDefaultBucketCounts, [results])
 
@@ -543,6 +540,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await runStage(addLabels, [results, axis1])
         await runStage(addMetadata, [results, axis1])
     }
+
+    await runStage(addEntities, [results, context, axis1])
+    await runStage(addTokens, [results, context, axis1])
 
     await runStage(detectNaN, [results, isDebug, logPath])
 
