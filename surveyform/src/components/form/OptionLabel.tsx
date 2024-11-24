@@ -32,7 +32,8 @@ const OptionLabel = ({
   const hasEntityName = !!getEntityNameHtml(entity);
 
   const i18nObject = getString(i18n.base);
-  const i18nLabel = i18nObject.missing ? undefined : i18nObject?.t;
+  const i18nEntityObject = getString(`entities.${option.id}.name`);
+  const i18nLabel = i18nObject?.t || i18nEntityObject?.t;
 
   return hasEntityName ? (
     <EntityLabel entity={entity} i18nLabel={i18nLabel} />
