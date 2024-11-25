@@ -2,10 +2,11 @@ import { Locale, RawLocale } from '@devographics/types'
 import { EnvVar, getEnvVar, parseEnvVariableArray } from '@devographics/helpers'
 
 import { RequestContext } from '../../types'
-import { processLocales } from '../../helpers/locales'
+import { processLocale, processLocales, processStringFile } from '../../helpers/locales'
 import { loadAllLocally } from './local'
 import { loadAllFromGitHub } from './github'
 
+let RawLocales: RawLocale[] = []
 let Locales: Locale[] = []
 
 export const allContexts: string[] = []
@@ -48,15 +49,20 @@ Load locales if not yet loaded
 
 */
 export const loadOrGetLocales = async (
-    options: { forceReload?: boolean } = { forceReload: false },
+    options: { forceReload?: boolean; localeIds?: string[] } = { forceReload: false },
     context?: RequestContext
 ): Promise<Array<Locale>> => {
     const { forceReload } = options
-    const localeIds = getLocaleIds()
+    const localeIds = options.localeIds || getLocaleIds()
     const localeContexts = getLocaleContexts()
     if (forceReload || Locales.length === 0) {
         const rawLocales = await loadLocales(localeIds, localeContexts)
-        Locales = processLocales(rawLocales)
+        RawLocales = rawLocales
+        const rawEnLocale = rawLocales.find(l => l.id === 'en-US')
+        if (!rawEnLocale) {
+            throw Error('loadOrGetLocales: en-US not found in loaded locales')
+        }
+        Locales = processLocales({ rawLocales, rawEnLocale })
         if (context) {
             context.locales = Locales
         }
@@ -64,9 +70,29 @@ export const loadOrGetLocales = async (
     return Locales
 }
 
-export const initLocales = async () => {
-    const locales = await loadOrGetLocales({ forceReload: true })
+export const initLocales = async ({ localeIds }: { localeIds?: string[] }) => {
+    const locales = await loadOrGetLocales({ forceReload: true, localeIds })
     Locales = locales
+}
+
+export const reloadLocale = async ({
+    localeId,
+    context
+}: {
+    localeId: string
+    context?: RequestContext
+}) => {
+    const rawEnLocale = RawLocales.find(l => l.id === 'en-US')
+    if (!rawEnLocale) {
+        throw Error('reloadLocale: en-US not found in loaded locales')
+    }
+    const rawLocales = await loadLocales([localeId])
+    const processedLocales = processLocales({ rawLocales, rawEnLocale })
+    const reloadedLocale = processedLocales[0]
+    if (context?.locales) {
+        context.locales = [...context.locales?.filter(l => l.id !== localeId), reloadedLocale]
+    }
+    return reloadedLocale
 }
 
 export const getLocalesLoadMethod = () => (getEnvVar(EnvVar.LOCALES_PATH) ? 'local' : 'github')
@@ -74,7 +100,7 @@ export const getLocalesLoadMethod = () => (getEnvVar(EnvVar.LOCALES_PATH) ? 'loc
 export const getLocaleIds = () => {
     const enableFastBuild = process.env.FAST_BUILD === 'true'
     const envLocaleIds = parseEnvVariableArray(getEnvVar(EnvVar.LOCALE_IDS))
-    const localeIds = enableFastBuild ? ['en-US', 'ru-RU'] : envLocaleIds || []
+    const localeIds = enableFastBuild ? ['en-US', 'ru-RU', 'ua-UA', 'es-ES'] : envLocaleIds || []
     return localeIds
 }
 

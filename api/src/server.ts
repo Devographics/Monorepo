@@ -38,7 +38,7 @@ import { watchFiles } from './helpers/watch'
 
 import { initRedis } from '@devographics/redis'
 import { getPublicDb } from '@devographics/mongo'
-import { ghWebhooks } from './webhooks'
+import { ghActions, ghWebhooks } from './webhooks'
 import { getRepoSHA } from './external_apis'
 import { initProjects } from './load/projects'
 import { getEntitiesLoadMethod } from './load/entities'
@@ -291,6 +291,8 @@ const start = async () => {
     })
 
     app.use('/gh', ghWebhooks(context))
+
+    app.use('/gh-actions', ghActions(context))
 
     // app.get('/cache-avatars', async function (req, res) {
     //     checkSecretKey(req)

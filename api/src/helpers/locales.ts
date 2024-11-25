@@ -312,13 +312,15 @@ export const processLocale = (
 Process all locales
 
 */
-export const processLocales = (allLocalesRawData: Array<RawLocale>): Array<Locale> => {
+export const processLocales = ({
+    rawLocales,
+    rawEnLocale
+}: {
+    rawLocales: Array<RawLocale>
+    rawEnLocale: RawLocale
+}): Array<Locale> => {
     const allLocales = []
     let i = 0
-    const rawEnLocale = allLocalesRawData.find(l => l.id === 'en-US')
-    if (!rawEnLocale) {
-        throw Error('en-US not found in loaded locales')
-    }
 
     // parse en-US strings only once outside of main loop to
     // avoid repeating work
@@ -326,10 +328,10 @@ export const processLocales = (allLocalesRawData: Array<RawLocale>): Array<Local
         return processStringFile({ locale: rawEnLocale, stringFile })
     })
 
-    for (const locale of allLocalesRawData) {
+    for (const locale of rawLocales) {
         let j = 0
         i++
-        console.log(`\n🌐 Processing locale [${locale.id}] (${i}/${allLocalesRawData.length})`)
+        console.log(`\n🌐 Processing locale [${locale.id}] (${i}/${rawLocales.length})`)
         allLocales.push(processLocale(locale, enParsedStringFiles))
     }
 
