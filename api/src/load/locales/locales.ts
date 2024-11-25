@@ -2,7 +2,7 @@ import { Locale, RawLocale } from '@devographics/types'
 import { EnvVar, getEnvVar, parseEnvVariableArray } from '@devographics/helpers'
 
 import { RequestContext } from '../../types'
-import { processLocale, processLocales, processStringFile } from '../../helpers/locales'
+import { processLocales } from '../../helpers/locales'
 import { loadAllLocally } from './local'
 import { loadAllFromGitHub } from './github'
 
@@ -89,9 +89,8 @@ export const reloadLocale = async ({
     const rawLocales = await loadLocales([localeId])
     const processedLocales = processLocales({ rawLocales, rawEnLocale })
     const reloadedLocale = processedLocales[0]
-    if (context?.locales) {
-        context.locales = [...context.locales?.filter(l => l.id !== localeId), reloadedLocale]
-    }
+    const localeIndex = Locales.findIndex(l => l.id === localeId)
+    Locales = Locales.with(localeIndex, reloadedLocale)
     return reloadedLocale
 }
 
