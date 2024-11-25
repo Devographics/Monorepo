@@ -90,8 +90,12 @@ export function ghActions(context: RequestContext): Router {
             const localeRepo = req.query.locale as string
             const localeId = localeRepo.replace('locale-', '')
             console.log(`🟣 ${localeId}: Triggering reinitialization from GitHub action`)
-            await reloadLocale({ localeId, context })
-            return res.status(200).send(`Locale ${localeId} reloaded`)
+            const { localeDiff, reloadedLocale } = await reloadLocale({ localeId, context })
+            const log = `Locale ${localeId} reloaded \n ${localeDiff.map(
+                t => `[${t.key}] ${t.t}\n`
+            )}`
+            console.log(log)
+            return res.status(200).send(log)
         }
     )
 

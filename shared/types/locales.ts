@@ -6,7 +6,7 @@ export interface RawLocale {
     id: string
     label: string
     translators: Array<string>
-    dynamic?: boolean
+    // dynamic?: boolean
     completion?: number
     repo?: string
     translatedCount?: number

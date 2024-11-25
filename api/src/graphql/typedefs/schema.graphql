@@ -635,6 +635,7 @@ type Locale {
     totalCount: Int
     completion: Int
     untranslatedStrings: [TranslationString]
+    active: Boolean
 }
 
 type FeatureOption {

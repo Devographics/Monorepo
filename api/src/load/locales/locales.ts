@@ -2,7 +2,7 @@ import { Locale, RawLocale } from '@devographics/types'
 import { EnvVar, getEnvVar, parseEnvVariableArray } from '@devographics/helpers'
 
 import { RequestContext } from '../../types'
-import { processLocales } from '../../helpers/locales'
+import { getLocaleDiff, processLocales } from '../../helpers/locales'
 import { loadAllLocally } from './local'
 import { loadAllFromGitHub } from './github'
 
@@ -82,6 +82,7 @@ export const reloadLocale = async ({
     localeId: string
     context?: RequestContext
 }) => {
+    const currentLocale = Locales.find(l => l.id === localeId)!
     const rawEnLocale = RawLocales.find(l => l.id === 'en-US')
     if (!rawEnLocale) {
         throw Error('reloadLocale: en-US not found in loaded locales')
@@ -89,9 +90,12 @@ export const reloadLocale = async ({
     const rawLocales = await loadLocales([localeId])
     const processedLocales = processLocales({ rawLocales, rawEnLocale })
     const reloadedLocale = processedLocales[0]
+    // get diff to figure out which strings were added/modified
+    const localeDiff = getLocaleDiff(currentLocale, reloadedLocale)
+    // update Locales global object
     const localeIndex = Locales.findIndex(l => l.id === localeId)
     Locales = Locales.with(localeIndex, reloadedLocale)
-    return reloadedLocale
+    return { reloadedLocale, localeDiff }
 }
 
 export const getLocalesLoadMethod = () => (getEnvVar(EnvVar.LOCALES_PATH) ? 'local' : 'github')

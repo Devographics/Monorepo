@@ -337,3 +337,21 @@ export const processLocales = ({
 
     return allLocales
 }
+
+/*
+
+Return all strings in locale2 that are different from locale1
+
+*/
+export const getLocaleDiff = (locale1: Locale, locale2: Locale) => {
+    // Extract the 't' values from the first array into a Set for quick lookup
+    const locale1keys = new Set(locale1.strings.map(obj => obj.key))
+    const locale1values = new Set(locale1.strings.map(obj => obj.t))
+
+    // Filter the second array for objects with 't' or 'key' not in the first array
+    const diffObjects = locale2.strings.filter(
+        obj => !locale1values.has(obj.t) || !locale1keys.has(obj.key)
+    )
+
+    return diffObjects
+}
