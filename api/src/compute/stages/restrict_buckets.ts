@@ -25,6 +25,10 @@ export async function restrictBuckets(
                 if (bucketsFilter.nin) {
                     return !bucketsFilter.nin?.includes(bucket.id)
                 }
+                if (bucketsFilter.hasTags) {
+                    return bucketsFilter.hasTags.every(tag => bucket?.entity?.tags?.includes(tag))
+                }
+                return true
             })
 
             if (axis2) {

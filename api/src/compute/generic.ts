@@ -471,9 +471,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             // cutoff data
             await runStage(cutoffData, [results, axis2, axis1])
 
-            // restrict buckets to the ones specified in bucketsFilter if needed
-            await runStage(restrictBuckets, [results, axis2, axis1])
-
             // apply overall dataset cutoff
             await runStage(applyDatasetCutoff, [results, computeArguments, axis2, axis1])
 
@@ -521,9 +518,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
             await runStage(cutoffData, [results, axis1])
 
-            // restrict buckets to the ones specified in bucketsFilter if needed
-            await runStage(restrictBuckets, [results, axis1])
-
             await runStage(applyDatasetCutoff, [results, computeArguments, axis1])
 
             // for all following steps, use groups as options
@@ -543,6 +537,10 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
     await runStage(addEntities, [results, context, axis1])
     await runStage(addTokens, [results, context, axis1])
+
+    // restrict buckets to the ones specified in bucketsFilter if needed
+    // note: this uses entity tags so do it after addEntities
+    await runStage(restrictBuckets, [results, axis1])
 
     await runStage(detectNaN, [results, isDebug, logPath])
 

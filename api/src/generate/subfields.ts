@@ -16,9 +16,9 @@ export const getResponsesTypeDef = (
     question: QuestionApiObject,
     subField: ResultsSubFieldEnum | string
 ) =>
-    `${subField}(${
-        question.filterTypeName ? `bucketsFilter: ${question.filterTypeName},` : ''
-    } filters: ${getFiltersTypeName(
+    `${subField}(bucketsFilter: ${
+        question.filterTypeName || 'GenericFilter'
+    }, filters: ${getFiltersTypeName(
         question.surveyId
     )}, parameters: Parameters, facet: ${getFacetsTypeName(
         question.surveyId

@@ -1,3 +1,4 @@
+import { Entity } from '@devographics/types'
 import { generateAllEditionsEnumType } from '../graphql/templates/all_editions_enum'
 import { generateFeaturesEnumType } from '../graphql/templates/features_enum'
 import {
@@ -16,7 +17,8 @@ import {
     generateI18nContextsEnum,
     generateLocaleIDEnum,
     generateSurveysEnumType,
-    generateGenericFieldType
+    generateGenericFieldType,
+    generateEntitiesTagsEnum
 } from '../graphql/templates/index'
 import {} from '../graphql/templates/locale_id_enum'
 import { generateToolsEnumType } from '../graphql/templates/tools_enum'
@@ -165,4 +167,8 @@ export const generateFacetsTypeObjects = ({
     questionObjects: QuestionApiObject[]
 }) => {
     return surveys.map(survey => generateFacetsType({ survey, questionObjects }))
+}
+
+export const generateEntitiesTypeObjects = ({ entities }: { entities: Entity[] }) => {
+    return [generateEntitiesTagsEnum({ entities })]
 }
