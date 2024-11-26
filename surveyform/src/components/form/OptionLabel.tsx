@@ -33,7 +33,11 @@ const OptionLabel = ({
 
   const i18nObject = getString(i18n.base);
   const i18nEntityObject = getString(`entities.${option.id}.name`);
-  const i18nLabel = i18nObject?.t || i18nEntityObject?.t;
+  const i18nLabel =
+    i18nObject?.tHtml ||
+    i18nObject?.tClean ||
+    i18nEntityObject?.tHtml ||
+    i18nEntityObject?.tClean;
 
   return hasEntityName ? (
     <EntityLabel entity={entity} i18nLabel={i18nLabel} />
