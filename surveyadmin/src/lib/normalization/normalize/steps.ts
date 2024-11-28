@@ -6,7 +6,7 @@ import { getUUID } from "~/lib/email";
 import { NormalizationParams, StepFunction } from "../types";
 import clone from "lodash/clone";
 import { emptyValues } from "../helpers/getSelectors";
-import type { GenericResponseDocument } from "@devographics/types"
+import type { GenericResponseDocument } from "@devographics/types";
 
 // const replaceAll = function (target, search, replacement) {
 //   return target.replace(new RegExp(search, "g"), replacement);
@@ -33,14 +33,18 @@ import type { GenericResponseDocument } from "@devographics/types"
 // };
 
 /**
- * 
+ *
  *  Fields to copy, along with the path at which to copy them (if different)
  *  It also acts as the source of truth to identify empty responses in "responseIsEmpty"
  *  @see surveyadmin/src/lib/normalization/normalize/normalizeDocument.ts
- * @param editionId 
- * @returns 
+ * @param editionId
+ * @returns
  */
-export const getFieldsToCopy = (editionId: String): Array<[keyof GenericResponseDocument] | [keyof GenericResponseDocument, string]> => [
+export const getFieldsToCopy = (
+  editionId: String
+): Array<
+  [keyof GenericResponseDocument] | [keyof GenericResponseDocument, string]
+> => [
   ["year"],
   ["surveyId"],
   ["editionId"],
@@ -68,6 +72,8 @@ export const getFieldsToCopy = (editionId: String): Array<[keyof GenericResponse
   ["isFake"],
   // @ts-ignore Legacy
   ["common__user_info__authmode", "user_info.authmode"],
+  // @ts-ignore Legacy
+  ["previous_participations", "user_info.previous_participations"],
 ];
 
 export const copyFields: StepFunction = async ({

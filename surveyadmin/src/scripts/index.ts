@@ -16,3 +16,4 @@ export * from "./convertExperience";
 export * from "./migrateToolsPaths";
 export * from "./renameRawField";
 export * from "./convertHappiness";
+export * from "./addMissingEditionCounts";
