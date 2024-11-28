@@ -268,13 +268,13 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             css_frameworks: colors.pink
         },
         sentiment: {
-            positive: [colors.green, colors.greenLight],
+            positive: ['#5ce593', colors.greenLight],
             neutral: [colors.grey, colors.greyLight],
-            negative: [colors.red, colors.redLight]
+            negative: ['#e45959', colors.redLight]
         },
         features: {
-            used: [colors.electricBlueDarker, colors.electricBlueDark],
-            heard: [colors.electricBlue, colors.electricBlueLight],
+            heard: ['#AEEFFF', '#D3F6FF'],
+            used: ['#129DC0', '#21B1D6'],
             never_heard: [colors.grey, colors.greyLight]
         },
         features_categories: {

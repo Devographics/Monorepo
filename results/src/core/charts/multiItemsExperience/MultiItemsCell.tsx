@@ -14,7 +14,7 @@ export const getExperienceKey = (id: FeaturesOptions) => `options.experience.${i
 export const getSentimentKey = (sentimentId: SimplifiedSentimentOptions) =>
     `options.sentiment.${sentimentId}.label.short`
 
-export const Cell = ({
+export const MultiItemsCell = ({
     combinedBucket,
     chartState,
     width,
@@ -36,10 +36,7 @@ export const Cell = ({
 
     const value = facetBucket[variable] || 0
     const experienceKey = getExperienceKey(bucket.id as FeaturesOptions)
-    const sentimentKey = getSentimentKey(
-        bucket.id as FeaturesOptions,
-        facetBucket.id as SimplifiedSentimentOptions
-    )
+    const sentimentKey = getSentimentKey(facetBucket.id as SimplifiedSentimentOptions)
 
     const values = {
         value,
@@ -114,8 +111,9 @@ export const ColumnTotal = ({
     const columnTotal = groupedTotals[columnId]
     const answerKey =
         grouping === GroupingOptions.EXPERIENCE
-            ? getExperienceKey(columnId)
-            : getSentimentKey(columnId)
+            ? getExperienceKey(columnId as FeaturesOptions)
+            : getSentimentKey(columnId as SimplifiedSentimentOptions)
+
     const answer = getString(answerKey)?.t
     return (
         <Tooltip

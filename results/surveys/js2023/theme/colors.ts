@@ -278,19 +278,14 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
             monorepo_tools: colors.navyLighter
         },
         sentiment: {
-            positive: [colors.green, colors.greenLight],
+            positive: ['#5ce593', colors.greenLight],
             neutral: [colors.grey, colors.greyLight],
-            negative: [colors.red, colors.redLight]
+            negative: ['#e45959', colors.redLight]
         },
-        // features: {
-        //     used: [colors.electricBlueLight, colors.electricBlueLighter],
-        //     heard: [colors.electricBlueDarker, colors.electricBlueDark],
-        //     never_heard: [colors.electricBlueDarkest, colors.electricBlueDarkerer]
-        // },
         features: {
-            never_heard: ['#064151', '#074B5C'],
-            heard: ['#129DC0', '#21B1D6'],
-            used: ['#AEEFFF', '#D3F6FF']
+            heard: ['#AEEFFF', '#D3F6FF'],
+            used: ['#129DC0', '#21B1D6'],
+            never_heard: [colors.grey, colors.greyLight]
         },
         features_categories: {
             language: colors.purple,

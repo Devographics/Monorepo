@@ -15,7 +15,7 @@ import {
     sortItems,
     useChartValues
 } from './helpers'
-import { Row } from './MultiItemsRow'
+import { MultiItemsRow } from './MultiItemsRow'
 import Rows from '../horizontalBar2/rows/Rows'
 import min from 'lodash/min'
 import max from 'lodash/max'
@@ -133,7 +133,7 @@ export const MultiItemsSerie = (
         >
             <Rows {...commonProps}>
                 {combinedItems.map((item, i) => (
-                    <Row key={item.id + i} rowIndex={i} item={item} {...commonProps} />
+                    <MultiItemsRow key={item.id + i} rowIndex={i} item={item} {...commonProps} />
                 ))}
             </Rows>
         </GridItem>
