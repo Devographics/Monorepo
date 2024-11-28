@@ -102,10 +102,19 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
                 [`${axis1DbPath}`]: {
                     $cond: [
                         {
-                            $and: [
-                                { $not: [`$${axis1DbPath}`] },
+                            $or: [
+                                // the value in "axis1DbPath" is equal to []
+                                { $eq: [`$${axis1DbPath}`, []] },
+                                // OR the following conditions must be true:
                                 {
-                                    $ne: [`$${axis1DbPath}`, 0]
+                                    $and: [
+                                        // the value in "axis1DbPath" is falsy
+                                        { $not: [`$${axis1DbPath}`] },
+                                        // but it's not "0" (which is a valid value)
+                                        {
+                                            $ne: [`$${axis1DbPath}`, 0]
+                                        }
+                                    ]
                                 }
                             ]
                         },
