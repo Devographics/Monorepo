@@ -1,4 +1,4 @@
-import { OptionGroup } from '@devographics/types'
+import { Entity, OptionGroup } from '@devographics/types'
 import {
     Survey,
     Edition,
@@ -23,7 +23,8 @@ import {
     generateQuestionsTypeObjects,
     generateFiltersTypeObjects,
     generateFacetsTypeObjects,
-    generateI18nTypeObjects
+    generateI18nTypeObjects,
+    generateEntitiesTypeObjects
 } from './typedefs'
 import uniq from 'lodash/uniq.js'
 
@@ -106,10 +107,12 @@ avoid duplicating similar GraphQL types and reuse definitions for similar questi
 */
 export const generateTypeObjects = async ({
     surveys,
-    questionObjects
+    questionObjects,
+    entities
 }: {
     surveys: SurveyApiObject[]
     questionObjects: QuestionApiObject[]
+    entities: Entity[]
 }): Promise<TypeObject[]> => {
     const i18nTypeObjects = await generateI18nTypeObjects({
         surveys
@@ -128,12 +131,15 @@ export const generateTypeObjects = async ({
         surveys,
         questionObjects
     })
+    const entitiesTypeObjects = generateEntitiesTypeObjects({ entities })
+
     const allTypeObjects = [
         ...i18nTypeObjects,
         ...surveysTypeObjects,
         ...questionsTypeObjects,
         ...filtersTypeObjects,
-        ...facetsTypeObjects
+        ...facetsTypeObjects,
+        ...entitiesTypeObjects
     ]
     return allTypeObjects
 }

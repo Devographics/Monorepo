@@ -14,8 +14,9 @@ export interface Locale {
      * TODO: this value was not present in the type def here but is expected by Popover
      */
     label?: string
+    active: boolean
 }
-export type LocaleWithStrings = Locale & Required<Pick<Locale, "strings">>
+export type LocaleWithStrings = Locale & Required<Pick<Locale, 'strings'>>
 
 interface InterpolationValues {
     values?: { [key: string]: string | number }

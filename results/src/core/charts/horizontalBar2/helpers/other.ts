@@ -33,8 +33,8 @@ export const getChartCurrentEdition = ({
     block: BlockVariantDefinition
 }) => {
     const subField = block?.queryOptions?.subField || ResultsSubFieldEnum.RESPONSES
-    const { currentEdition } = serie.data[subField] as ResponseData
-    return currentEdition
+    const subFieldObject = serie?.data?.[subField] as ResponseData
+    return subFieldObject?.currentEdition
 }
 
 const getDataFilters = (dataFilters: string[]) =>

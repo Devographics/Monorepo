@@ -244,6 +244,11 @@
   usedBy:
       - surveyform
       - api
+- id: I18N_SECRET_KEY
+  description: >
+      Secret key used to verify external requests related to i18n GitHub Actions
+  usedBy:
+      - api
 - id: CRON_SECRET
   description: >
       Identical to SECRET_KEY 

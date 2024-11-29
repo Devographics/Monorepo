@@ -67,3 +67,9 @@ export interface BrowserData {
     common__user_info__version?: string
     common__user_info__os?: string
 }
+
+export type PreviousParticipationData = {
+    surveys: string[]
+    editions: string[]
+    same_survey_count: number
+}

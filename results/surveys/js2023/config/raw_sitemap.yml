@@ -592,12 +592,6 @@
       - id: top_currently_missing_from_js
         template: multiple_options2_combined
 
-      - id: top_js_pain_points
-        template: multiple_options2_combined
-
-      - id: top_currently_missing_from_js
-        template: multiple_options2_combined
-
       - id: state_of_the_web_happiness
         titleId: happiness.state_of_the_web
         questionKey: happiness.state_of_the_web.question

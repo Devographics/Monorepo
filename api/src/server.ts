@@ -38,10 +38,10 @@ import { watchFiles } from './helpers/watch'
 
 import { initRedis } from '@devographics/redis'
 import { getPublicDb } from '@devographics/mongo'
-import { ghWebhooks } from './webhooks'
+import { ghActions, ghWebhooks } from './webhooks'
 import { getRepoSHA } from './external_apis'
 import { initProjects } from './load/projects'
-import { getEntitiesLoadMethod } from './load/entities'
+import { getEntitiesLoadMethod, loadOrGetEntities } from './load/entities'
 import { getLocaleIds, getLocalesLoadMethod } from './load/locales/locales'
 import { loadSettings } from './helpers/settings'
 
@@ -140,8 +140,8 @@ const start = async () => {
     // so the types such as "Db" are not exactly the same depending on the situation
     const db = (await getPublicDb()) as any
 
-    // const entities = await loadOrGetEntities({})
-    const context: RequestContext = { db, redisClient }
+    const entities = await loadOrGetEntities({})
+    const context: RequestContext = { db, redisClient, entities }
 
     const { surveys } = await loadOrGetSurveys()
 
@@ -149,7 +149,11 @@ const start = async () => {
 
     const parsedSurveys = parseSurveys({ surveys })
 
-    const typeObjects = await generateTypeObjects({ surveys: parsedSurveys, questionObjects })
+    const typeObjects = await generateTypeObjects({
+        surveys: parsedSurveys,
+        questionObjects,
+        entities
+    })
     const allTypeDefsString = typeObjects.map(t => t.typeDef).join('\n\n')
 
     await logToFile('questionObjects.yml', questionObjects)
@@ -291,6 +295,8 @@ const start = async () => {
     })
 
     app.use('/gh', ghWebhooks(context))
+
+    app.use('/gh-actions', ghActions(context))
 
     // app.get('/cache-avatars', async function (req, res) {
     //     checkSecretKey(req)

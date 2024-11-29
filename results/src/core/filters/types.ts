@@ -4,8 +4,16 @@ import { OrderOptions } from 'core/charts/common2/types'
 
 export interface CustomizationDefinition {
     options: CustomizationOptions
-    filters: CustomizationFiltersSeries[]
+    filters?: CustomizationFiltersSeries[]
     facet?: FacetItem
+    bucketsFilter?: BucketsFilterDefinition
+}
+
+export interface BucketsFilterDefinition {
+    eq?: string
+    in?: string[]
+    nin?: string[]
+    hasTags?: string[]
 }
 
 export interface PresetDefinition extends CustomizationDefinition {

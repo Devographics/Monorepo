@@ -231,7 +231,15 @@ export const entityResolverMap: EntityResolverMap = {
             const specArray = Array.isArray(webFeatureData.spec)
                 ? webFeatureData.spec
                 : [webFeatureData.spec]
-            const data = { ...webFeatureData, spec: specArray, id: entity.webFeaturesId }
+            const groupArray = Array.isArray(webFeatureData.group)
+                ? webFeatureData.group
+                : [webFeatureData.group]
+            const data = {
+                ...webFeatureData,
+                spec: specArray,
+                group: groupArray,
+                id: entity.webFeaturesId
+            }
             return data
         }
     },

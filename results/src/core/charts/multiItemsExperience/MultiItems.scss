@@ -20,7 +20,7 @@
         padding: 0;
     }
     .chart-rows {
-        row-gap: calc(var(--spacing) * 3);
+        row-gap: calc(var(--spacing) * 2);
         padding-bottom: var(--doubleSpacing);
     }
     .chart-bar {
@@ -113,7 +113,7 @@
 .multiexp-cells {
     position: relative;
     height: var(--cellHeight);
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .multiexp-column-totals {
@@ -168,30 +168,29 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    &-experience {
-        background: var(--experienceColor1)
-            linear-gradient(to left, var(--experienceColor1), var(--experienceColor2));
-        .multiexp-groupedBy-experience & {
-            opacity: 1;
-        }
-    }
-    &-sentiment {
-        background: var(--sentimentColor1)
-            linear-gradient(to left, var(--sentimentColor1), var(--sentimentColor2));
-
-        .multiexp-groupedBy-sentiment & {
-            opacity: 1;
-        }
-    }
     .multiexp-cell:hover & {
         opacity: 1;
     }
 }
 .multiexp-cell-segment-experience {
+    background: var(--experienceColor1)
+        linear-gradient(to left, var(--experienceColor1), var(--experienceColor2));
+
     height: var(--cellHeight);
+    .multiexp-groupedBy-experience & {
+        opacity: 1;
+    }
 }
 
 .multiexp-cell-segment-sentiment {
-    margin-top: calc(var(--cellHeight) * -0.2);
+    background: var(--sentimentColor1)
+        linear-gradient(to left, var(--sentimentColor1), var(--sentimentColor2));
+
+    // margin-top: calc(var(--cellHeight) * -0.2);
+    margin-top: 2px;
     height: calc(var(--cellHeight) * 0.2);
+
+    .multiexp-groupedBy-sentiment & {
+        opacity: 1;
+    }
 }

@@ -150,11 +150,16 @@ export const createPagesSingleLoop = async ({
             throw new FatalError(err)
         }
 
-        buildInfo.localeCount = locales.length
+        // TODO: only build pages for locales that are actively being maintained
+        // const activeLocales = locales.filter(l => l.active)
 
-        const cleanLocales = getCleanLocales(locales)
+        const activeLocales = locales
+
+        buildInfo.localeCount = activeLocales.length
+
+        const cleanLocales = getCleanLocales(activeLocales)
         logToFile('locales.json', cleanLocales, { mode: 'overwrite' /*,surveyId*/ })
-        locales.forEach(locale => {
+        activeLocales.forEach(locale => {
             logToFile(`${locale.id}.json`, locale, {
                 mode: 'overwrite',
                 subDir: 'locales'
@@ -229,10 +234,10 @@ export const createPagesSingleLoop = async ({
             }
 
             // loop over locales
-            for (let index = 0; index < locales.length; index++) {
+            for (let index = 0; index < activeLocales.length; index++) {
                 buildInfo.pageCount++
 
-                const locale = locales[index]
+                const locale = activeLocales[index]
                 const localePath = `/${locale.id}`
 
                 const pageObject: Page<PageContextValue> = {
@@ -265,7 +270,7 @@ export const createPagesSingleLoop = async ({
 
             if (GENERATE_BLOCKS) {
                 // skip this is fast_build option is enabled
-                createBlockPages(page, fullContext, createPage, locales, buildInfo)
+                createBlockPages(page, fullContext, createPage, activeLocales, buildInfo)
             }
         }
         logToFile('build.yml', yaml.dump(buildInfo, { noRefs: true }), {

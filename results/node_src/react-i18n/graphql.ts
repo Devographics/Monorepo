@@ -19,17 +19,20 @@ query {
             completion
             id
             label
-            ${loadStrings
-            ? `strings {
+            active
+            ${
+                loadStrings
+                    ? `strings {
                 key
                 t
                 tHtml
                 tClean
                 context
                 isFallback
+                active
             }`
-            : ''
-        }
+                    : ''
+            }
             translators
         }
     }

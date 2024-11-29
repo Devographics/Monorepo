@@ -52,6 +52,7 @@ export interface Filter<T> {
     nin?: T[]
     lt?: T
     gt?: T
+    hasTags?: T[]
 }
 
 export enum BucketUnits {

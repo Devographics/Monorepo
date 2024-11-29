@@ -210,7 +210,7 @@ export const getColumnGap = ({
     const getRelevantId = (bucket: CombinedBucket) =>
         bucket.ids[grouping === GroupingOptions.EXPERIENCE ? 0 : 1]
     const addGapBefore = previousBucket && getRelevantId(previousBucket) !== getRelevantId(bucket)
-    return addGapBefore ? COLUMN_GAP_PERCENT : 0
+    return addGapBefore ? COLUMN_GAP_PERCENT : 0.3
 }
 
 export const getCellDimensions = ({
