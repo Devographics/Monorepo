@@ -1,5 +1,6 @@
 import type { Document } from 'mongodb'
 import type { SurveyMetadata, EditionMetadata } from './metadata'
+import z from 'zod'
 
 export interface ResponseDocument extends Omit<Document, '_id'> {
     _id: string
@@ -59,6 +60,26 @@ export type CustomNormalizationDefinition = {
     tokens: string[]
 }
 
+const browserDataSchema = z.object({
+    common__user_info__source: z.string().optional(),
+    common__user_info__referrer: z.string().optional(),
+    common__user_info__device: z.string().optional(),
+    common__user_info__browser: z.string().optional(),
+    common__user_info__version: z.string().optional(),
+    common__user_info__os: z.string().optional()
+})
+/**
+ * TODO: move to devographics/types but check if a dependency on zod doesn't break everything
+ * also check why surveyId is optional in @devographics/types
+ */
+export const prefilledResponseSchema = browserDataSchema.augment({
+    surveyId: z.string().optional(),
+    editionId: z.string().optional(),
+    locale: z.string().optional()
+})
+export type BrowserData = z.infer<typeof browserDataSchema>
+export type PrefilledResponse = z.infer<typeof prefilledResponseSchema>
+/*
 export interface BrowserData {
     common__user_info__source?: string
     common__user_info__referrer?: string
@@ -67,6 +88,11 @@ export interface BrowserData {
     common__user_info__version?: string
     common__user_info__os?: string
 }
+export interface PrefilledResponse extends BrowserData {
+    surveyId?: string
+    editionId?: string
+    locale: string
+}*/
 
 export type PreviousParticipationData = {
     surveys: string[]
