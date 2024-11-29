@@ -1,11 +1,10 @@
 import PrivacyPolicy from "./PrivacyPolicy";
 
 // Render in each language
-import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
 import { NextPageParams } from "~/app/typings";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
-export const revalidate = DEFAULT_REVALIDATE_S;
+export const revalidate = 15 * 3600; // 15mn
 export const dynamicParams = true;
 /*
 export async function generateStaticParams() {

@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
-import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
 import { SurveySectionOutline } from "~/components/questions/SurveySectionOutline";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
-export const revalidate = DEFAULT_REVALIDATE_S;
+export const revalidate = 15 * 3600; // 15mn
 export const dynamicParams = true;
 /**
  * NOTE: ideally we would load surveys in the layout directly
@@ -44,22 +43,17 @@ export async function generateStaticParams() {
 // }
 
 // SectionNumber is optional in the URL so this page is exactly the same as ../index.tsx
-export default async function SurveySectionOutlinePage(
-  props: {
-    params: Promise<{
-      slug: string;
-      year: string;
-      sectionNumber: string;
-      lang: string,
-    }>;
-  }
-) {
+export default async function SurveySectionOutlinePage(props: {
+  params: Promise<{
+    slug: string;
+    year: string;
+    sectionNumber: string;
+    lang: string;
+  }>;
+}) {
   const params = await props.params;
 
-  const {
-    sectionNumber,
-    lang
-  } = params;
+  const { sectionNumber, lang } = params;
 
   // TODO: get correct tokens
   const sn = parseInt(sectionNumber);

@@ -11,12 +11,11 @@ import EditionMessage from "~/components/surveys/SurveyMessage";
 import { type EditionMetadata } from "@devographics/types";
 import { EditionMain } from "./client-components";
 
-import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
 import TokyoDev from "~/components/common/TokyoDev";
 import { DynamicT } from "@devographics/react-i18n";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
-export const revalidate = DEFAULT_REVALIDATE_S;
+export const revalidate = 15 * 3600; // 15mn
 export const dynamicParams = true;
 /**
  * NOTE: ideally we would load surveys in the layout directly
@@ -79,11 +78,9 @@ const EditionPageComponent = ({
   );
 };
 
-export default async function SurveyPage(
-  props: {
-    params: Promise<SurveyPageServerProps>;
-  }
-) {
+export default async function SurveyPage(props: {
+  params: Promise<SurveyPageServerProps>;
+}) {
   const params = await props.params;
   const { slug, year } = params;
   const { data: edition, ___metadata: ___rscMustGetSurveyEditionFromUrl } =
