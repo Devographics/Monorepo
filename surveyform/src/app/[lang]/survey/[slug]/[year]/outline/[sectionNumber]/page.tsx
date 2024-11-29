@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { SurveySectionOutline } from "~/components/questions/SurveySectionOutline";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
-export const revalidate = 15 * 3600; // 15mn
+export const revalidate = 54000; // 15mn
 export const dynamicParams = true;
 /**
  * NOTE: ideally we would load surveys in the layout directly
