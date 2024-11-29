@@ -46,7 +46,7 @@ export const getBlockQuery = ({
     edition: EditionMetadata
     section: SectionMetadata
 }) => {
-    const { facet, filters, options = {} } = chartFilters || {}
+    const { facet, filters, bucketsFilter, options = {} } = chartFilters || {}
     const { showDefaultSeries } = options
     const questionId = block.fieldId || block.id
     const queryOptions = {
@@ -65,6 +65,7 @@ export const getBlockQuery = ({
 
     const defaultQueryArgs = {
         facet,
+        bucketsFilter,
         parameters
     }
     const hasFilters = filters && filters.length > 0

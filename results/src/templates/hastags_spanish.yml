@@ -1,0 +1,21 @@
+# same as multiple_options2_freeform
+blockType: HorizontalBarBlock2
+hasSponsor: true
+hasData: true
+queryOptions:
+    addBucketsEntities: true
+    subField: freeform
+    addGroupedBuckets: true
+customizationModes: [filters, facets]
+parameters: { showNoAnswer: true, cutoff: 10, limit: 20, mergeOtherBuckets: true }
+chartOptions:
+    limit: 10
+
+# specific
+id: ${mainBlockId}_spanish
+fieldId: ${mainBlockId}
+tabId: tabs.spanish
+filtersState:
+    bucketsFilter:
+        hasTags:
+            - spanish

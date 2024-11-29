@@ -52,7 +52,7 @@ export const getBlockQuery = ({
     edition: EditionMetadata
     section: { id: SectionMetadata['id'] }
 }) => {
-    const { facet, filters, options = {} } = chartFilters || {}
+    const { facet, filters, bucketsFilter, options = {} } = chartFilters || {}
     const { showDefaultSeries } = options
     const questionId = block.fieldId || block.id
     const queryOptions = {
@@ -71,7 +71,8 @@ export const getBlockQuery = ({
 
     const defaultQueryArgs = {
         facet,
-        parameters
+        parameters,
+        bucketsFilter
     }
     const hasFilters = filters && filters.length > 0
     // ? do we need custom seriesName here?

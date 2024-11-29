@@ -686,6 +686,8 @@
         template: multiple_options2_freeform
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
+        variants:
+            - template: hastags_spanish
 
       - id: martin_heidegger
         template: picks
@@ -696,6 +698,8 @@
         template: multiple_options2_freeform
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
+        variants:
+            - template: hastags_spanish
 
       - id: other_surveys
         template: multiple_options2_combined

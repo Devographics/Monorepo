@@ -1,4 +1,4 @@
-import { ResponsesParameters, Filters } from './imports'
+import { ResponsesParameters, Filters, Filter } from './imports'
 import { FacetItem } from './imports'
 
 export interface ResponseArgumentsStrings {
@@ -7,6 +7,7 @@ export interface ResponseArgumentsStrings {
     parameters?: string
     axis1?: string
     axis2?: string
+    bucketsFilter?: string
 }
 
 export interface SeriesParams {
@@ -18,6 +19,7 @@ export interface QueryArgs {
     facet?: FacetItem
     filters?: Filters
     parameters?: ResponsesParameters
+    bucketsFilter?: Filter<string>
     xAxis?: string
     yAxis?: string
     fieldId?: string

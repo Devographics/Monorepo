@@ -11,6 +11,7 @@ export const getQueryArgsString = ({
     facet,
     filters,
     parameters,
+    bucketsFilter,
     xAxis,
     yAxis
 }: QueryArgs): string | undefined => {
@@ -23,6 +24,9 @@ export const getQueryArgsString = ({
     }
     if (parameters && !isEmpty(parameters)) {
         args.parameters = unquote(JSON.stringify(parameters))
+    }
+    if (bucketsFilter && !isEmpty(bucketsFilter)) {
+        args.bucketsFilter = unquote(JSON.stringify(bucketsFilter))
     }
     // for data explorer
     if (yAxis && !isEmpty(yAxis)) {
