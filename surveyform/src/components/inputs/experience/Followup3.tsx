@@ -102,7 +102,7 @@ export const FollowUps = (
             className={`followups-predefined-label2 sentiment ${sentimentClasses[index]} ${isCheckedClass}`}
             {...roleProp}
           >
-            <Form.Check.Input
+            <FormCheckInput
               className="visually-hidden"
               type={followupMode}
               checked={isChecked}

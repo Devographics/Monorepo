@@ -159,9 +159,9 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
           // layout="elementOnly"
           type="radio"
         >
-          <Form.Check.Label htmlFor={`${path}.${i}`}>
+          <FormCheckLabel htmlFor={`${path}.${i}`}>
             <div className="form-input-wrapper">
-              <Form.Check.Input
+              <FormCheckInput
                 onClick={(e) => {
                   const target = e.target as HTMLInputElement;
                   const clickedValue = target.value;
@@ -189,7 +189,7 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
               />
             </div>
             <FormOption {...props} isChecked={isChecked} option={option} />
-          </Form.Check.Label>
+          </FormCheckLabel>
           {unimplemented && (
             <OverlayTrigger
               placement="top"
@@ -220,7 +220,7 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
               formPaths={formPaths}
             />
           )}
-        </Form.Check>
+        </FormCheck>
         {/* <CommentTrigger /> */}
       </div>
       {showReadingListPrompt && (

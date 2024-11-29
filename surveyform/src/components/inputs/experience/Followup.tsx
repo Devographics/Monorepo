@@ -82,7 +82,7 @@ export const FollowUps = (
                 size="sm"
               >
                 <label className="followups-predefined-label">
-                  <Form.Check.Input
+                  <FormCheckInput
                     type="checkbox"
                     checked={isChecked}
                     disabled={readOnly}

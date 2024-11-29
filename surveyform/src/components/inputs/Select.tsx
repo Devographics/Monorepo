@@ -1,7 +1,6 @@
 "use client";
 import { useI18n } from "@devographics/react-i18n";
 import type { FormInputProps } from "~/components/form/typings";
-import Form from "react-bootstrap/Form";
 import { FormItem } from "~/components/form/FormItem";
 import { getOptioni18nIds } from "~/lib/i18n/survey";
 

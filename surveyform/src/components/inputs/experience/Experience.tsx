@@ -88,9 +88,9 @@ const ExperienceOption = (
         // layout="elementOnly"
         type="radio"
       >
-        <Form.Check.Label htmlFor={`${path}.${i}`}>
+        <FormCheckLabel htmlFor={`${path}.${i}`}>
           <div className="form-input-wrapper">
-            <Form.Check.Input
+            <FormCheckInput
               onClick={(e) => {
                 const target = e.target as HTMLInputElement;
                 const clickedValue = target.value;
@@ -111,14 +111,14 @@ const ExperienceOption = (
             />
           </div>
           <FormOption {...props} isChecked={isChecked} option={option} />
-        </Form.Check.Label>
+        </FormCheckLabel>
         {followups && isChecked && (
           <FollowUpsTrigger
             showFollowups={showFollowups}
             setShowFollowups={setShowFollowups}
           />
         )}
-      </Form.Check>
+      </FormCheck>
       {showFollowups && isChecked && (
         <FollowUps {...props} followupData={followupData} />
       )}

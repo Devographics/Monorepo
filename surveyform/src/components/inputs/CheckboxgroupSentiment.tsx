@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import Form from "react-bootstrap/Form";
 import without from "lodash/without.js";
 import { useI18n } from "@devographics/react-i18n";
 import { Button } from "~/components/ui/Button";
@@ -239,16 +238,18 @@ const Checkbox = (
   };
 
   return (
-    <Form.Check
+    <div
       className={[
         checkClass,
+        "form-check",
         `form-option-${option.id}`,
         "form-checkbox-option",
       ].join(" ")}
     >
-      <Form.Check.Label htmlFor={`${path}.${index}`}>
+      <label className="form-check-label" htmlFor={`${path}.${index}`}>
         <div className="form-input-wrapper">
-          <Form.Check.Input
+          <input
+            className="form-check-input"
             type="checkbox"
             checked={isChecked}
             disabled={disabled}
@@ -277,8 +278,8 @@ const Checkbox = (
           value={value}
           isChecked={isChecked}
         />
-      </Form.Check.Label>
-    </Form.Check>
+      </label>
+    </div>
   );
 };
 export default FormComponentCheckboxGroup;

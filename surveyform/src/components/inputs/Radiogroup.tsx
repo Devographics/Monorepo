@@ -1,5 +1,4 @@
 "use client";
-import Form from "react-bootstrap/Form";
 import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
 import { FormItem } from "~/components/form/FormItem";
@@ -9,6 +8,7 @@ import { memo, useState } from "react";
 import isNil from "lodash/isNil";
 import { useFormStateContext } from "../form/FormStateContext";
 import { OPTION_NA } from "@devographics/types";
+import { FormCheck, FormCheckInput, FormCheckLabel } from "../form/FormCheck";
 
 export const FormComponentRadioGroup = (props: FormInputProps) => {
   const { response } = useFormStateContext();
@@ -102,10 +102,10 @@ const Radio = ({ index, value, option, hasValue, formProps, setShowOther }) => {
   const disabled = readOnly;
 
   return (
-    <Form.Check type="radio">
-      <Form.Check.Label htmlFor={`${path}.${index}`}>
+    <FormCheck type="radio">
+      <FormCheckLabel htmlFor={`${path}.${index}`}>
         <div className="form-input-wrapper">
-          <Form.Check.Input
+          <FormCheckInput
             type="radio"
             value={option.id}
             name={path}
@@ -120,6 +120,7 @@ const Radio = ({ index, value, option, hasValue, formProps, setShowOther }) => {
               }
             }}
             onChange={(e) => {
+              // @ts-ignore
               const v = e.target.value;
               const newValue = question.optionsAreNumeric ? Number(v) : v;
               updateCurrentValues({ [path]: newValue });
@@ -131,8 +132,8 @@ const Radio = ({ index, value, option, hasValue, formProps, setShowOther }) => {
           />
         </div>
         <FormOption {...formProps} option={option} />
-      </Form.Check.Label>
-    </Form.Check>
+      </FormCheckLabel>
+    </FormCheck>
   );
 };
 export default memo(FormComponentRadioGroup);
