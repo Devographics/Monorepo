@@ -1,5 +1,4 @@
 "use client";
-import Form from "react-bootstrap/Form";
 
 import { T, useI18n } from "@devographics/react-i18n";
 
@@ -16,6 +15,7 @@ import { ExperienceProps } from "./Experience";
 import { FormInputProps } from "~/components/form/typings";
 import { Dispatch, SetStateAction } from "react";
 import isEmpty from "lodash/isEmpty";
+import { FormCheckInput } from "~/components/form/FormCheck";
 
 export interface FollowupData {
   predefinedFollowupPath?: string;
@@ -113,7 +113,7 @@ export const FollowUps = (
                 }
               }}
               onChange={(event) => {
-                const isChecked = event.target.checked;
+                const isChecked = event.currentTarget.checked;
 
                 if (parentMode === "radio") {
                   // check "main" parent answer

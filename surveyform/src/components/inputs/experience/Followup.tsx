@@ -1,5 +1,4 @@
 "use client";
-import Form from "react-bootstrap/Form";
 
 import { T, useI18n } from "@devographics/react-i18n";
 
@@ -9,6 +8,7 @@ import without from "lodash/without.js";
 import { Button } from "~/components/ui/Button";
 import { CommentTextarea } from "~/components/form/FormComment";
 import { ExperienceProps } from "./Experience";
+import { FormCheckInput } from "~/components/form/FormCheck";
 
 export interface FollowupData {
   predefinedFollowupPath?: string;
@@ -88,7 +88,7 @@ export const FollowUps = (
                     disabled={readOnly}
                     id={`${path}.followup.${index}`}
                     onChange={(event) => {
-                      const isChecked = event.target.checked;
+                      const isChecked = event.currentTarget.checked;
                       const newValue = isChecked
                         ? [...predefinedFollowupValue!, followupOption.id]
                         : without(predefinedFollowupValue, followupOption.id);

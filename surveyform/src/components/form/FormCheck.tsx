@@ -1,9 +1,9 @@
 export function FormCheck({
   children,
   className,
-  type,
+  type = "checkbox",
   ...rest
-}: { type: "checkbox" | "radio" } & React.HTMLProps<HTMLDivElement>) {
+}: { type?: "checkbox" | "radio" } & React.HTMLProps<HTMLDivElement>) {
   return (
     <div className={["form-check", className].join(" ")} {...rest}>
       {children}

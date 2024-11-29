@@ -1,8 +1,5 @@
 "use client";
 import { FormItem } from "~/components/form/FormItem";
-import Form from "react-bootstrap/Form";
-
-import { T, useI18n } from "@devographics/react-i18n";
 import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
 
@@ -16,6 +13,11 @@ import { FollowupData, FollowUpsTrigger, FollowUps } from "./Followup";
 import { useFormStateContext } from "~/components/form/FormStateContext";
 import { useFormPropsContext } from "~/components/form/FormPropsContext";
 import { CodeExample } from "./Experience2";
+import {
+  FormCheck,
+  FormCheckInput,
+  FormCheckLabel,
+} from "~/components/form/FormCheck";
 
 export interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
@@ -83,23 +85,18 @@ const ExperienceOption = (
 
   return (
     <div className="form-experience-option">
-      <Form.Check
-        key={i}
-        // layout="elementOnly"
-        type="radio"
-      >
+      <FormCheck key={i} type="radio">
         <FormCheckLabel htmlFor={`${path}.${i}`}>
           <div className="form-input-wrapper">
             <FormCheckInput
               onClick={(e) => {
-                const target = e.target as HTMLInputElement;
-                const clickedValue = target.value;
+                const clickedValue = e.currentTarget.value;
                 if (clickedValue === value) {
                   updateCurrentValues({ [path]: null });
                 }
               }}
               onChange={(e) => {
-                updateCurrentValues({ [path]: e.target.value });
+                updateCurrentValues({ [path]: e.currentTarget.value });
               }}
               type="radio"
               value={option.id}

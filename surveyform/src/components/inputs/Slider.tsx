@@ -41,10 +41,8 @@ export const Slider = (props: FormInputProps) => {
                       onChange={(e) => {
                         const val =
                           typeof option.id === "number"
-                            ? //@ts-ignore
-                              parseInt(e.target.value)
-                            : // @ts-ignore
-                              e.target.value;
+                            ? parseInt(e.currentTarget.value)
+                            : e.currentTarget.value;
                         updateCurrentValues({ [path]: val });
                       }}
                       disabled={readOnly}

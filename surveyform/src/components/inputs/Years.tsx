@@ -3,9 +3,9 @@ import { useState } from "react";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
-import Form from "react-bootstrap/Form";
 import { T } from "@devographics/react-i18n";
 import { FormFeedback } from "../form/FormFeedback";
+import { FormCheck, FormCheckInput, FormCheckLabel } from "../form/FormCheck";
 
 const lessThanOneYearValue = 0.5;
 
