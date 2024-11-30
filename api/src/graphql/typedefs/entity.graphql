@@ -5,6 +5,7 @@ For example: a library, a podcast, a blog, a framework…
 """
 type Entity {
     id: String
+    idAliases: [String]
     parentId: String
     belongsTo: String
     name: String

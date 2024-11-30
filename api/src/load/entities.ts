@@ -244,7 +244,8 @@ export const findEntity = (id: string, entities: Entity[], tag?: string) => {
         return (
             (e.id && e.id.toLowerCase() === id) ||
             (e.id && e.id.toLowerCase().replace(/\-/g, '_') === id) ||
-            (e.name && e.name.toLowerCase() === id)
+            (e.name && e.name.toLowerCase() === id) ||
+            e.idAliases?.includes(id)
         )
     })
 
