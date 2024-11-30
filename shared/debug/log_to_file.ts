@@ -48,7 +48,7 @@ export const logToFile = async (filePath: string, object: any, options: LogOptio
             fs.mkdirSync(logsDirPath, { recursive: true })
         }
         const fullPath = concatPath(logsDirPath, fileName)
-        console.debug(`📄 Creating log file file://${fullPath}`)
+        // console.debug(`📄 Creating log file file://${fullPath}`)
 
         let contents
         if (typeof object === 'string') {

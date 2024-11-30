@@ -32,7 +32,7 @@ const findRealString = (aliasKey: string, localeRawData: RawLocale) => {
     }
 }
 
-export const resolveAliases = (stringFile: StringFile, localeRawData: RawLocale) => {
+export const resolveAliases = (stringFile: StringFile, localeRawData: RawLocale, report) => {
     const aliasedStrings: TranslationStringObject[] = []
     /*
     pattern 1: 
@@ -51,7 +51,7 @@ export const resolveAliases = (stringFile: StringFile, localeRawData: RawLocale)
             if (realString) {
                 s = { ...realString, key: s.key, aliasFor: s.aliasFor }
             } else {
-                console.warn(`resolveAliases: could not resolve alias ${s.aliasFor}`)
+                report.unresolvedAliases.push(s.aliasFor)
             }
         }
         return s
@@ -213,12 +213,13 @@ export const computeUntranslatedStrings = (
 export const checkForDuplicates = (
     locale: RawLocale,
     strings: TranslationStringObject[],
-    context: string
+    context: string,
+    report: any
 ) => {
     const allKeys = strings.filter(s => !s.aliasFor).map(s => s.key)
     const duplicateKeys = findDuplicates(allKeys)
     for (const duplicateKey of duplicateKeys) {
-        console.warn(`[⚠️ ${context}]: duplicate key ${duplicateKey}`)
+        report.duplicates.push({ context, duplicateKey })
     }
 }
 
@@ -230,13 +231,15 @@ Take a single string file (e.g. the contents of common.yml) and process it
 export const processStringFile = ({
     locale,
     stringFile,
-    enStringFile
+    enStringFile,
+    report
 }: {
     locale: RawLocale
     stringFile: StringFile
     enStringFile?: StringFile
+    report: any
 }) => {
-    let processedStringFile = resolveAliases(stringFile, locale)
+    let processedStringFile = resolveAliases(stringFile, locale, report)
     processedStringFile = parseMarkdown(processedStringFile)
     if (enStringFile) {
         processedStringFile = addFallbacks(processedStringFile, locale, enStringFile)
@@ -247,7 +250,7 @@ export const processStringFile = ({
         context: stringFile.context
     }))
 
-    checkForDuplicates(locale, processedStringFile.strings, stringFile.context)
+    checkForDuplicates(locale, processedStringFile.strings, stringFile.context, report)
 
     return processedStringFile
 }
@@ -261,8 +264,12 @@ export const processLocale = (
     locale: RawLocale,
     enParsedStringFiles: Array<StringFile>
 ): Locale => {
+    let report = {
+        missingContexts: [] as string[],
+        duplicates: [],
+        unresolvedAliases: []
+    }
     const parsedStringFiles: StringFile[] = []
-    const missingContexts = []
 
     // always use en-US as reference to know what to include
     for (const enStringFile of enParsedStringFiles) {
@@ -274,7 +281,7 @@ export const processLocale = (
         if (!localeStringFile) {
             // this context does not exist in the current locale
             // use en-US with every string marked as being a fallback instead
-            missingContexts.push(enStringFile.context)
+            report.missingContexts.push(enStringFile.context)
             stringFile = {
                 context: enStringFile.context,
                 strings: enStringFile.strings.map((s: TranslationStringObject) => ({
@@ -285,14 +292,15 @@ export const processLocale = (
             }
         } else {
             // this context does exist, go through parsing process
-            stringFile = processStringFile({ locale, stringFile: localeStringFile, enStringFile })
+            stringFile = processStringFile({
+                locale,
+                stringFile: localeStringFile,
+                enStringFile,
+                report
+            })
         }
 
         parsedStringFiles.push(stringFile)
-    }
-
-    if (missingContexts.length > 0) {
-        console.warn(`${missingContexts.length} missing contexts: ${missingContexts.join(', ')}`)
     }
 
     const allLocaleStrings: TranslationStringObject[] = flattenStringFiles(parsedStringFiles)
@@ -303,7 +311,17 @@ export const processLocale = (
     const untranslatedStrings = computeUntranslatedStrings(locale, processedLocale.strings)
     const processedLocaleWithMetadata = addLocaleMetadata(processedLocale, untranslatedStrings)
 
+    logToFile(`locales_processed/${processedLocale.id}-report.yml`, report)
     logToFile(`locales_processed/${processedLocale.id}.yml`, processedLocaleWithMetadata)
+    if (
+        report.missingContexts.length > 0 ||
+        report.unresolvedAliases.length > 0 ||
+        report.duplicates.length > 0
+    ) {
+        console.warn(
+            `⚠️ ${report.missingContexts.length} missing contexts, ${report.unresolvedAliases.length} unresolved aliases, ${report.duplicates.length} duplicates. Check ${processedLocale.id}-report.yml file for details. `
+        )
+    }
     return processedLocaleWithMetadata
 }
 
