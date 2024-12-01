@@ -62,8 +62,6 @@
       - id: country
         template: multiple_options2
         parameters: { limit: 20 }
-        takeaway: >
-            While **16%** of respondents came from the U.S., we also had strong representation from the JavaScript community in Germany, France, and the U.K.,(**19% combined**).
         variants:
             - template: vs_salary
               parameters: { cutoff: 100, limit: 20, sort: { property: medianByFacet, order: desc } }
@@ -71,8 +69,6 @@
       - id: locale
         template: multiple_options2
         parameters: { cutoff: 20 }
-        takeaway: >
-            The language respondents selected to fill out the survey.
         queryOptions:
             addQuestionComments: false
 
@@ -81,29 +77,21 @@
 
       - id: completion_stats
         template: multiple_options2
-        takeaway: >
-            The proportion of the survey filled out by respondents.
         queryOptions:
             addQuestionComments: false
 
       - id: age
         template: multiple_options2
-        takeaway: >
-            Survey respondents were on average **31.7** years old, slightly lower than the [State of HTML](https://2022.stateofjs.com) (**33.6**) and [State of CSS](https://2023.stateofcss.com) (**33.5**) surveys.
         variants:
             - template: vs_salary
 
       - id: years_of_experience
         template: multiple_options2
-        takeaway: >
-            Respondents had on average **9.3** years of web development experience.
         variants:
             - template: vs_salary
 
       - id: company_size
         template: multiple_options2
-        takeaway: >
-            Respondents tended to work for mostly mid-sized organizations, with a median company size of **75** employees.
         variants:
             - template: vs_salary
 
@@ -112,20 +100,16 @@
 
       - id: yearly_salary
         template: multiple_options2
-        takeaway: >
-            Respondents had a median income of USD $75,000, noticeably higher than the **$59,970** figure reported by the [Stack Overflow Developer Survey](https://survey.stackoverflow.co/2023/#section-salary-salary-by-developer-type).
 
       - id: job_title
         template: multiple_options2_freeform
-        takeaway: >
-            Respondents tended to work for mostly mid-sized organizations, with a median company size of **75** employees.
         variants:
             - template: vs_salary
+              queryOptions:
+                  subField: freeform
 
       - id: higher_education_degree
         template: multiple_options2
-        takeaway: >
-            Having a higher-education degree did not translate in meaningful differences in yearly income.
         variants:
             - template: vs_salary
 
@@ -166,6 +150,17 @@
         template: multiple_options2_freeform
         parameters:
             limit: 20
+        queryOptions:
+            addQuestionComments: false
+
+      - id: previous_surveys
+        template: multiple_options2
+        queryOptions:
+            addQuestionComments: false
+            addBucketsEntities: true
+
+      - id: same_survey_count
+        template: multiple_options2
         queryOptions:
             addQuestionComments: false
 
@@ -663,7 +658,7 @@
       - template: page_introduction
 
       - id: courses
-        template: multiple_options2_freeform
+        template: multiple_options2_combined
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
 
@@ -673,12 +668,12 @@
             url: https://nuxt.com/
 
       - id: newsletters
-        template: multiple_options2_freeform
+        template: multiple_options2_combined
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
 
       - id: podcasts
-        template: multiple_options2_freeform
+        template: multiple_options2_combined
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
 

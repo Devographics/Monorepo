@@ -9,6 +9,7 @@ import { CUTOFF_ANSWERS, NO_MATCH, OVERLIMIT_ANSWERS } from '@devographics/const
 import T from 'core/i18n/T'
 import Tooltip from 'core/components/Tooltip'
 import { InsufficientDataIndicator } from 'core/charts/common2/InsufficientDataIndicator'
+import { ResultsSubFieldEnum } from '@devographics/types'
 
 export const RowSingle = (props: RowComponentProps) => {
     const theme = useTheme()
@@ -23,9 +24,10 @@ export const RowSingle = (props: RowComponentProps) => {
 
     // TODO: do this better
     const isFreeformQuestion =
-        block.template &&
-        ['multiple_options2_freeform'].includes(block.template) &&
-        block.id !== 'source'
+        block.queryOptions?.subField === ResultsSubFieldEnum.FREEFORM ||
+        (block.template &&
+            ['multiple_options2_freeform'].includes(block.template) &&
+            block.id !== 'source')
 
     const isSpecialBucket = [OVERLIMIT_ANSWERS, CUTOFF_ANSWERS].includes(bucket.id)
     const showFreeformAnswers = !isSpecialBucket && (isFreeformQuestion || isFreeformData)

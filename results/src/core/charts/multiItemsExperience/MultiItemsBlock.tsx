@@ -13,6 +13,7 @@ import ViewSwitcher from '../horizontalBar2/ViewSwitcher'
 import MultiItemsSerie from './MultiItemsSerie'
 import MultiItemsCategories from './MultiItemsCategories'
 import { MultiItemsStats } from './MultiItemsStats'
+import ChartData from '../common2/ChartData'
 
 const defaultLimit = 5
 
@@ -93,7 +94,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
                     right={
                         <>
                             <ChartShare {...commonProps} />
-                            {/* <ChartData {...commonProps} /> */}
+                            <ChartData {...commonProps} />
                         </>
                     }
                 />
