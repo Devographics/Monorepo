@@ -5,5 +5,6 @@ export const getRatiosFragment = () => `
       usage
       retention
       positivity
+      positivityRelative
     }
 `

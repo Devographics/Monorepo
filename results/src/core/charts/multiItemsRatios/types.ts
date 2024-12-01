@@ -12,7 +12,8 @@ export enum Ratios {
     AWARENESS = 'awareness',
     INTEREST = 'interest',
     RETENTION = 'retention',
-    POSITIVITY = 'positivity'
+    POSITIVITY = 'positivity',
+    RELATIVE_POSITIVITY = 'positivityRelative'
 }
 
 export enum Modes {

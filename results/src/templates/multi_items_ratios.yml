@@ -58,6 +58,7 @@ query: >
                     usage
                     retention
                     positivity
+                    positivityRelative
                   }
                   completion {
                     count
