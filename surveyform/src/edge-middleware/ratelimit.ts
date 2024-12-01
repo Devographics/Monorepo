@@ -2,6 +2,8 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { initRedis } from "@devographics/redis";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
 
+import { ipAddress } from "@vercel/functions";
+
 // RATE LIMITING
 // Rates are relatively high,
 // these limits do not replace a protection against bots
@@ -40,7 +42,7 @@ export async function apiPostRateLimit(request: NextRequest, context: NextFetchE
         if (request.url.match(/saveResponse|logout/)) {
             return undefined
         }
-        const ip = request.ip || request.headers.get("x-forwarded-for")
+        const ip = ipAddress(request) || request.headers.get("x-forwarded-for")
         if (ip) {
             const limiter =
                 // more sensitive routes that sends an email

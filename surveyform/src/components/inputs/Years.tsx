@@ -1,11 +1,11 @@
 "use client";
 import { useState } from "react";
-import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
-import Form from "react-bootstrap/Form";
 import { T } from "@devographics/react-i18n";
+import { FormFeedback } from "../form/FormFeedback";
+import { FormCheck, FormCheckInput, FormCheckLabel } from "../form/FormCheck";
 
 const lessThanOneYearValue = 0.5;
 
@@ -89,23 +89,23 @@ export const FormComponentYears = (props: FormInputProps) => {
 
   return (
     <FormItem {...props} isInvalid={!checkIsValid(localValue)}>
-      <Form.Check type="radio" className="form-input-lessThanOneYear">
-        <Form.Check.Label htmlFor={`${path}.0`}>
+      <FormCheck type="radio" className="form-input-lessThanOneYear">
+        <FormCheckLabel htmlFor={`${path}.0`}>
           <LessThanOneYearRadio
             {...radioProps}
             isChecked={radioValue === RadioValues.LESS_THAN_ONE_YEAR}
           />
           <Label labelId="years.less_than_one_year" />
-        </Form.Check.Label>
-      </Form.Check>
-      <Form.Check type="radio" className="form-input-moreThanOneYear">
-        <Form.Check.Label htmlFor={`${path}.1`}>
+        </FormCheckLabel>
+      </FormCheck>
+      <FormCheck type="radio" className="form-input-moreThanOneYear">
+        <FormCheckLabel htmlFor={`${path}.1`}>
           <MoreThanOneYearRadio
             {...radioProps}
             isChecked={radioValue === RadioValues.MORE_THAN_ONE_YEAR}
           />
 
-          <FormControl
+          <input
             // type="number"
             type="text"
             inputMode="numeric"
@@ -114,17 +114,20 @@ export const FormComponentYears = (props: FormInputProps) => {
             onChange={handleChangeDebounced}
             onBlur={handleChange}
             disabled={readOnly}
-            className="form-input-number"
-            isInvalid={!checkIsValid(localValue)}
+            className={
+              "form-control form-input-number" + " " + checkIsValid(localValue)
+                ? "is-valid"
+                : "is-invalid"
+            }
           />
 
           <Label labelId="years.years" />
-        </Form.Check.Label>
-      </Form.Check>
+        </FormCheckLabel>
+      </FormCheck>
 
-      <FormControl.Feedback type="invalid">
+      <FormFeedback type="invalid">
         <T token="general.numeric_input.invalid_input" />
-      </FormControl.Feedback>
+      </FormFeedback>
     </FormItem>
   );
 };
@@ -140,12 +143,11 @@ const LessThanOneYearRadio = ({
   disabled,
 }) => (
   <div className="form-input-wrapper">
-    <Form.Check.Input
+    <FormCheckInput
       type="radio"
       value={RadioValues.LESS_THAN_ONE_YEAR}
       name={path}
       id={`${path}.0`}
-      // ref={refFunction}
       checked={isChecked}
       className={getcheckClass(RadioValues.LESS_THAN_ONE_YEAR, radioValue)}
       onClick={(e) => {
@@ -176,12 +178,11 @@ const MoreThanOneYearRadio = ({
   disabled,
 }) => (
   <div className="form-input-wrapper">
-    <Form.Check.Input
+    <FormCheckInput
       type="radio"
       value={RadioValues.MORE_THAN_ONE_YEAR}
       name={path}
       id={`${path}.1`}
-      // ref={refFunction}
       checked={isChecked}
       className={getcheckClass(RadioValues.MORE_THAN_ONE_YEAR, radioValue)}
       onClick={(e) => {

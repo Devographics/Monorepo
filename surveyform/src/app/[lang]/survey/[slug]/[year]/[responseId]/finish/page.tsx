@@ -9,16 +9,25 @@ import { redirect } from "next/navigation";
 // Uncomment to investigate
 // import { getResponseWithRanking } from "./getResponseWithRanking";
 
-const FinishPage = async ({
-  params: { responseId, slug, year, lang },
-}: {
-  params: {
-    lang: string;
-    responseId: string;
-    slug: string;
-    year: string;
-  };
-}) => {
+const FinishPage = async (
+  props: {
+    params: Promise<{
+      lang: string;
+      responseId: string;
+      slug: string;
+      year: string;
+    }>;
+  }
+) => {
+  const params = await props.params;
+
+  const {
+    responseId,
+    slug,
+    year,
+    lang
+  } = params;
+
   const currentUser = await rscCurrentUser();
   if (!currentUser) {
     redirect(

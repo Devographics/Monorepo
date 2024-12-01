@@ -10,17 +10,27 @@ import { SurveyStatusEnum } from "@devographics/types";
 import { DebugRSC } from "~/components/debug/DebugRSC";
 
 // SectionNumber is optional in the URL so this page is exactly the same as ../index.tsx
-const SurveyFromResponseIdPage = async ({
-  params: { slug, year, responseId, sectionNumber, lang },
-}: {
-  params: {
-    lang: string;
-    slug: string;
-    year: string;
-    responseId: string;
-    sectionNumber: string;
-  };
-}) => {
+const SurveyFromResponseIdPage = async (
+  props: {
+    params: Promise<{
+      lang: string;
+      slug: string;
+      year: string;
+      responseId: string;
+      sectionNumber: string;
+    }>;
+  }
+) => {
+  const params = await props.params;
+
+  const {
+    slug,
+    year,
+    responseId,
+    sectionNumber,
+    lang
+  } = params;
+
   const { data: edition, ___metadata: ___rscMustGetSurveyEditionFromUrl } =
     await rscMustGetSurveyEditionFromUrl({
       slug,

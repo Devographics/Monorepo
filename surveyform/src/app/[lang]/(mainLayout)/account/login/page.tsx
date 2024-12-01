@@ -3,11 +3,8 @@ import { NextPageParams } from "~/app/typings";
 import { routes } from "~/lib/routes";
 import { LoginDialog } from "~/components/users/LoginDialog";
 
-const Login = async ({
-  params,
-  searchParams,
-}: NextPageParams<{ lang: string }, { from: string }>
-) => {
+const Login = async (props: NextPageParams<{ lang: string }, { from: string }>) => {
+  const searchParams = await props.searchParams;
   const user = await rscCurrentUser();
 
   return (

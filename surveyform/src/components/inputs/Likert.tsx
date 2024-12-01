@@ -1,5 +1,4 @@
 "use client";
-import Form from "react-bootstrap/Form";
 import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
 import { FormItem } from "~/components/form/FormItem";
@@ -7,6 +6,7 @@ import { getFormPaths } from "@devographics/templates";
 import { DbPathsEnum, Option } from "@devographics/types";
 import { useFormStateContext } from "../form/FormStateContext";
 import { T } from "@devographics/react-i18n";
+import { FormCheck, FormCheckInput, FormCheckLabel } from "../form/FormCheck";
 
 const columns = [0, 1, 2, 3, 4];
 
@@ -85,10 +85,10 @@ const Radio = (props: RowProps & { radioIndex: number }) => {
   const disabled = readOnly;
 
   return (
-    <Form.Check type="radio" className="likert-option">
-      <Form.Check.Label htmlFor={`${formPath}.${radioIndex}`}>
+    <FormCheck type="radio" className="likert-option">
+      <FormCheckLabel htmlFor={`${formPath}.${radioIndex}`}>
         <div className="form-input-wrapper">
-          <Form.Check.Input
+          <FormCheckInput
             type="radio"
             value={radioIndex}
             name={formPath}
@@ -109,8 +109,8 @@ const Radio = (props: RowProps & { radioIndex: number }) => {
         <span className="sr-only">
           <T token={`likert.option.${radioIndex}`} />
         </span>
-      </Form.Check.Label>
-    </Form.Check>
+      </FormCheckLabel>
+    </FormCheck>
   );
 };
 export default FormComponentLikertScale;

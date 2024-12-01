@@ -4,11 +4,10 @@ import { RSCFetch } from "~/components/common/RSCFetch";
 
 import { rscFetchSurveysMetadata } from "~/lib/surveys/rsc-fetchers";
 
-import { DEFAULT_REVALIDATE_S } from "~/app/revalidation";
 import { NextPageParams } from "~/app/typings";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
-export const revalidate = DEFAULT_REVALIDATE_S;
+export const revalidate = 54000; // 15mn;
 export const dynamicParams = true;
 /*
 export async function generateStaticParams() {
@@ -17,11 +16,14 @@ export async function generateStaticParams() {
 }
 */
 
-const IndexPage = async ({ params }: NextPageParams<{ lang: string }>) => {
+const IndexPage = async (props: NextPageParams<{ lang: string }>) => {
+  const params = await props.params;
   return (
     <RSCFetch
       fetch={async () => rscFetchSurveysMetadata({ shouldThrow: false })}
-      render={({ data: surveys }) => <Surveys localeId={params.lang} surveys={surveys} />}
+      render={({ data: surveys }) => (
+        <Surveys localeId={params.lang} surveys={surveys} />
+      )}
     />
   );
 };

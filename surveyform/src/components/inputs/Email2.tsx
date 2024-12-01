@@ -3,10 +3,6 @@ import { useState } from "react";
 import { useI18n } from "@devographics/react-i18n";
 import { FormInputProps } from "~/components/form/typings";
 
-import FormControl from "react-bootstrap/FormControl";
-
-import Form from "react-bootstrap/Form";
-
 import FormOption from "~/components/form/FormOption";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
@@ -20,7 +16,7 @@ export const Email2 = (props: FormInputProps) => {
 
   const { id: questionId } = question;
   const checkboxValue = response?.receiveNotifications;
-  const { t } = useI18n()
+  const { t } = useI18n();
   const localStorageEmail =
     typeof localStorage !== "undefined" && localStorage.getItem("email");
   const responseEmail = response?.email;
@@ -49,10 +45,11 @@ export const Email2 = (props: FormInputProps) => {
 
   return (
     <FormItem {...props}>
-      <Form.Check name="show_email">
-        <Form.Check.Label htmlFor="show_email">
+      <div className="form-check">
+        <label className="form-check-label" htmlFor="show_email">
           <div className="form-input-wrapper">
-            <Form.Check.Input
+            <input
+              className="form-check-input"
               id="show_email"
               checked={receiveNotifications}
               type="checkbox"
@@ -72,13 +69,12 @@ export const Email2 = (props: FormInputProps) => {
               option={{ id: "yes" }}
             />
           </div>
-        </Form.Check.Label>
-      </Form.Check>
+        </label>
+      </div>
 
       {receiveNotifications && (
         <div>
-          {/* @ts-ignore */}
-          <FormControl
+          <input
             placeholder={t("user_info.email")}
             type="email"
             value={localValue}

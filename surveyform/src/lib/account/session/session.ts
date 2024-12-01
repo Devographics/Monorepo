@@ -3,7 +3,11 @@
 import Iron from "@hapi/iron";
 import type { NextApiRequest } from "next";
 import { UserDocument } from "~/lib/users/typings";
-import { apiGetTokenCookie } from "./auth-cookies";
+import { AUTH_TOKEN } from ".";
+
+function apiGetTokenCookie(req: NextApiRequest) {
+  return req.cookies[AUTH_TOKEN];
+}
 
 // Use an environment variable here instead of a hardcoded value for production
 

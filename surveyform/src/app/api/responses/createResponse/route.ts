@@ -4,7 +4,7 @@ import { HandlerError } from "~/lib/handler-error";
 import { handlerMustHaveCurrentUser } from "~/lib/users/route-handlers/getters";
 // import { captureException } from "@sentry/nextjs";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   try {
     // Get current user
     const currentUser = await handlerMustHaveCurrentUser(req);
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             error,
           },
         },
-        { status: 500 },
+        { status: 500 }
       );
     }
   }

@@ -10,8 +10,10 @@ import { magicLinkStrategy } from "~/lib/account/magicLogin/api/passport/magic-l
 import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
 import { setToken } from "~/lib/account/middlewares/setToken";
 import { getRawResponsesCollection } from "@devographics/mongo";
-import { ResponseDocument } from "@devographics/types";
+import type { ResponseDocument, PrefilledResponse } from "@devographics/types";
+import { prefilledResponseSchema } from "@devographics/types";
 import { createResponse } from "~/lib/responses/db-actions/create";
+import z from "zod";
 
 passport.use(magicLinkStrategy);
 
@@ -31,6 +33,14 @@ interface VerifyTokenResponse {
   redirectTo?: string;
 }
 
+// TODO: how to just tweak a zod schema to ahve some fields as required?
+// doesn't seem to have a built-in solution
+const expectedClientDataSchema = z.object({
+  // these are not optional here
+  editionId: z.string(),
+  surveyId: z.string(),
+});
+type ExpectedClientData = z.infer<typeof expectedClientDataSchema>;
 // NOTE: adding NextApiRequest, NextApiResponse is required to get the right typings in next-connect
 // this is the normal behaviour
 // @ts-ignore TODO Eric
@@ -67,9 +77,17 @@ const login = nextConnect<NextApiRequest, NextApiResponse>()
           `Could not find clientData, cannot create or find response while verifying token.`
         );
       }
-      const { editionId, surveyId } = clientData;
+      const parsedData = prefilledResponseSchema.safeParse(clientData);
+      if (!parsedData.success) {
+        return res.status(400).send("Invalid prefilled data");
+      }
+      const { editionId, surveyId } = parsedData.data;
+      if (!(editionId && surveyId))
+        return res.status(400).send("Invalid editionId or surveyId");
+      // TODO: parse better with zod
+      const prefilledResponse = clientData as unknown as PrefilledResponse;
       const currentUser = req.user;
-      const userId = currentUser?._id;
+      const userId = currentUser._id!;
 
       // if a specific edition is passed as body parameter,
       // 1. look for an existing response for this edition from this user
@@ -82,7 +100,10 @@ const login = nextConnect<NextApiRequest, NextApiResponse>()
         response = existingResponse;
         responseType = "existing";
       } else {
-        response = await createResponse({ clientData, currentUser });
+        response = await createResponse({
+          clientData: prefilledResponse,
+          currentUser,
+        });
         responseType = "new";
       }
       const result: VerifyTokenResponse = {

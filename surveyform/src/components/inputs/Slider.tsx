@@ -1,16 +1,16 @@
 "use client";
 import { FormItem } from "~/components/form/FormItem";
 import type { FormInputProps } from "~/components/form/typings";
-import Form from "react-bootstrap/Form";
 import { FormOption } from "~/components/form/FormOption";
 import { useI18n } from "@devographics/react-i18n";
 import { getOptioni18nIds } from "~/lib/i18n/survey";
+import { FormCheck, FormCheckInput, FormCheckLabel } from "../form/FormCheck";
 
 export const Slider = (props: FormInputProps) => {
   const { path, value, question, readOnly, updateCurrentValues } = props;
   const { options } = question;
   const hasValue = value !== "";
-  const { t } = useI18n()
+  const { t } = useI18n();
   return (
     <FormItem {...props}>
       <div className="form-slider">
@@ -28,22 +28,21 @@ export const Slider = (props: FormInputProps) => {
             // TODO: we don't really use this label, we only use it
             // to check if there is a translation for this value
             return (
-              <Form.Check key={i} type="radio">
-                <Form.Check.Label htmlFor={`${path}.${i}`}>
+              <FormCheck key={i} type="radio">
+                <FormCheckLabel htmlFor={`${path}.${i}`}>
                   <div className="form-input-wrapper">
-                    <Form.Check.Input
+                    <FormCheckInput
                       type="radio"
                       value={option.id}
                       name={path}
                       id={`${path}.${i}`}
-                      // ref={refFunction}
                       checked={isChecked}
                       className={checkClass}
                       onChange={(e) => {
                         const val =
                           typeof option.id === "number"
-                            ? parseInt(e.target.value)
-                            : e.target.value;
+                            ? parseInt(e.currentTarget.value)
+                            : e.currentTarget.value;
                         updateCurrentValues({ [path]: val });
                       }}
                       disabled={readOnly}
@@ -62,8 +61,8 @@ export const Slider = (props: FormInputProps) => {
                       </div>
                     </div>
                   )}
-                </Form.Check.Label>
-              </Form.Check>
+                </FormCheckLabel>
+              </FormCheck>
             );
           })}
         </div>

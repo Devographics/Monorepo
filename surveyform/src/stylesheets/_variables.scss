@@ -1,4 +1,11 @@
+@use "sass:math";
 $spacing: 20px;
+$spacing-half: math.div($spacing, 2);
+$spacing-quarter: math.div($spacing, 4);
+$spacing-third: math.div($spacing, 3);
+$spacing-two-thirds: math.div($spacing * 2, 3);
+$spacing-eighth: math.div($spacing, 8);
+$spacing-sixth: math.div($spacing, 6);
 
 $antsBg: $navyLight;
 $antsFg: $pink;
@@ -40,7 +47,7 @@ $border-radius: 3px;
 
 @mixin clearfix {
   &:after {
-    content: '';
+    content: "";
     display: table;
     clear: both;
   }
@@ -59,7 +66,7 @@ $border-radius: 3px;
   z-index: 5;
   &:before {
     z-index: 1;
-    content: ' ';
+    content: " ";
     display: block;
     position: absolute;
     top: 6px;
@@ -113,7 +120,14 @@ $border-radius: 3px;
 @mixin ants {
   border: 1px solid transparent;
   background: linear-gradient($antsBg, $antsBg) padding-box,
-    repeating-linear-gradient(-45deg, $antsFg 0, $antsFg 25%, transparent 0, transparent 50%) 0 / 0.6em 0.6em;
+    repeating-linear-gradient(
+        -45deg,
+        $antsFg 0,
+        $antsFg 25%,
+        transparent 0,
+        transparent 50%
+      )
+      0 / 0.6em 0.6em;
   animation: ants 12s linear infinite;
 }
 

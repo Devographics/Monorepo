@@ -1,17 +1,18 @@
 "use client";
 import { useState } from "react";
-import { FormInputProps } from "../form/typings";
 import { EntityWithQuestion } from "~/lib/surveys/types";
 import { getEditionEntities } from "~/lib/surveys/helpers/getEditionEntities";
 import { Button } from "~/components/ui/Button";
 import { Share } from "~/components/icons";
 import { T, useI18n } from "@devographics/react-i18n";
-// import { captureException } from "@sentry/nextjs";
 
-import FormControl from "react-bootstrap/FormControl";
 import { sendReadingList } from "../page/services";
 import { LoadingButton } from "../ui/LoadingButton";
-import { EditionMetadata, ResponseDocument, SurveyStatusEnum } from "@devographics/types";
+import {
+  EditionMetadata,
+  ResponseDocument,
+  SurveyStatusEnum,
+} from "@devographics/types";
 import ItemLabel from "./ItemLabel";
 import truncate from "lodash/truncate";
 
@@ -33,7 +34,7 @@ export const ReadingList = ({
   if (!readingList || readingList.length === 0) {
     // We can't update readling lists for closed surveys,
     // so there is no point into showing the empty message
-    if (edition.status === SurveyStatusEnum.CLOSED) return null
+    if (edition.status === SurveyStatusEnum.CLOSED) return null;
     return (
       <div className="reading-list reading-list-results">
         <h5 className="reading-list-title">
@@ -103,9 +104,9 @@ const ListItem = ({
     question,
   } = entity;
 
-  const { t } = useI18n()
+  const { t } = useI18n();
   const featureDescription = t(`features.${itemId}.description`);
-  const toolDescription = t(`tools.${itemId}.description`)
+  const toolDescription = t(`tools.${itemId}.description`);
   const entityDescription = descriptionHtml || descriptionClean;
   const description =
     featureDescription || toolDescription || entityDescription;
@@ -186,7 +187,7 @@ export const SendByEmail = ({
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [errorResponse, setErrorResponse] = useState();
-  const { t } = useI18n()
+  const { t } = useI18n();
   const handleChange = (event) => {
     const value = event.target.value;
     setEmail(value);
@@ -216,7 +217,8 @@ export const SendByEmail = ({
         <T token="readinglist.receive_copy" />
       </p>
       <div className="reading-list-form">
-        <FormControl
+        <input
+          className="form-control"
           placeholder={t("user_info.email")}
           type="email"
           value={email}

@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import FormControl from "react-bootstrap/FormControl";
 
 export const LoginFormItem = ({
   label,
@@ -30,22 +29,20 @@ interface FormComponentEmailProps {
 export const FormComponentEmail = (props: FormComponentEmailProps) => {
   const { placeholder, label } = props;
   const name = "email";
-  const componentProperties = {
-    placeholder,
-    name,
-    id: name,
-    type: "email",
-    required: true,
-    autoCorrect: "off",
-    autoCapitalize: "none",
-    label: placeholder,
-  };
-
   return (
     // passing the name is important to get the right label
     <LoginFormItem label={label || name} name={name}>
-      {/** @ts-ignore the "as" prop is problematic */}
-      <FormControl {...componentProperties} />
+      <input
+        className="form-control"
+        placeholder={placeholder}
+        name="email"
+        id={name}
+        type={"email"}
+        required={true}
+        autoCorrect={"off"}
+        autoCapitalize={"none"}
+        // label={placeholder}
+      />
     </LoginFormItem>
   );
 };

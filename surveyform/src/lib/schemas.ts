@@ -2,14 +2,14 @@
  * Homemade generic schema system,
  * that can be later converted to a specific format like Zod validation
  */
-import type { ResponseDocument } from "@devographics/types";
+import type { PrefilledResponse, ResponseDocument } from "@devographics/types";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
 import { Actions } from "./validation";
 import clone from "lodash/clone.js";
 
 export interface OnCreateProps {
   currentUser: any;
-  clientData: ResponseDocument;
+  clientData: PrefilledResponse | ResponseDocument;
   survey: SurveyMetadata;
   edition: EditionMetadata;
 }
@@ -34,22 +34,22 @@ export interface SchemaObject<T> {
   /** @returns the value to set on creation */
   onCreate?: OnCreate<
     T extends StringConstructor
-    ? string
-    : T extends NumberConstructor
-    ? number
-    : T extends BooleanConstructor
-    ? boolean
-    : Date
+      ? string
+      : T extends NumberConstructor
+      ? number
+      : T extends BooleanConstructor
+      ? boolean
+      : Date
   >;
   /** @returns the value to set on updates */
   onUpdate?: OnUpdate<
     T extends StringConstructor
-    ? string
-    : T extends NumberConstructor
-    ? number
-    : T extends BooleanConstructor
-    ? boolean
-    : Date
+      ? string
+      : T extends NumberConstructor
+      ? number
+      : T extends BooleanConstructor
+      ? boolean
+      : Date
   >;
 }
 
@@ -89,7 +89,7 @@ export const restoreTypes = ({
   document,
   schema,
 }: {
-  document: ResponseDocument;
+  document: any;
   schema: Schema;
 }) => {
   Object.keys(schema).forEach((fieldName) => {
@@ -109,7 +109,7 @@ export const runFieldCallbacks = async <
   action,
   props,
 }: {
-  document: ResponseDocument;
+  document: any;
   schema: Schema;
   action: Actions;
   props: T;

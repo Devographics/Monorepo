@@ -1,5 +1,4 @@
 "use client";
-import Form from "react-bootstrap/Form";
 
 import { T, useI18n } from "@devographics/react-i18n";
 
@@ -9,6 +8,7 @@ import without from "lodash/without.js";
 import { Button } from "~/components/ui/Button";
 import { CommentTextarea } from "~/components/form/FormComment";
 import { ExperienceProps } from "./Experience";
+import { FormCheckInput } from "~/components/form/FormCheck";
 
 export interface FollowupData {
   predefinedFollowupPath?: string;
@@ -35,7 +35,7 @@ export const FollowUps = (
   props: ExperienceProps & {
     option: OptionMetadata;
     followupData: FollowupData;
-  },
+  }
 ) => {
   const {
     updateCurrentValues,
@@ -57,11 +57,11 @@ export const FollowUps = (
 
   if (!predefinedFollowupPath || !freeformFollowupPath) {
     throw new Error(
-      `Could not find predefinedFollowupPath or freeformFollowupPath for question ${question.id}`,
+      `Could not find predefinedFollowupPath or freeformFollowupPath for question ${question.id}`
     );
   }
 
-  const { t } = useI18n()
+  const { t } = useI18n();
   const placeholder = t(`followups.placeholder`);
 
   return (
@@ -73,7 +73,7 @@ export const FollowUps = (
         <div className="followups-predefined">
           {optionFollowUps.map((followupOption, index) => {
             const isChecked = predefinedFollowupValue?.includes(
-              followupOption.id,
+              followupOption.id
             );
             return (
               <Button
@@ -82,14 +82,13 @@ export const FollowUps = (
                 size="sm"
               >
                 <label className="followups-predefined-label">
-                  <Form.Check.Input
+                  <FormCheckInput
                     type="checkbox"
                     checked={isChecked}
                     disabled={readOnly}
                     id={`${path}.followup.${index}`}
-                    // ref={refFunction}
                     onChange={(event) => {
-                      const isChecked = event.target.checked;
+                      const isChecked = event.currentTarget.checked;
                       const newValue = isChecked
                         ? [...predefinedFollowupValue!, followupOption.id]
                         : without(predefinedFollowupValue, followupOption.id);

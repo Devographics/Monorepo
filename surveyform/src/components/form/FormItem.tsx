@@ -13,7 +13,6 @@ import React, {
   RefObject,
 } from "react";
 
-import Form from "react-bootstrap/Form";
 import { FormInputProps } from "./typings";
 import { CommentTrigger, CommentInput } from "./FormComment";
 import { T, useI18n } from "@devographics/react-i18n";
@@ -90,7 +89,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
     );
 
     const childRef = useRef<HTMLDivElement>(null);
-    const myRef = (parentRef as RefObject<HTMLDivElement>) || childRef;
+    const myRef = (parentRef as RefObject<HTMLDivElement | null>) || childRef;
     const firstRenderRef1 = useRef(true);
     const firstRenderRef2 = useRef(true);
 
@@ -185,7 +184,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
         ref={myRef}
         onBlur={onBlur}
       >
-        <Form.Group as="fieldset" controlId={path}>
+        <fieldset id={path}>
           <FormItemTitle {...props} section={section} />
           <div className="form-item-contents">
             <div className="form-item-contents-inner">
@@ -210,7 +209,7 @@ export const FormItem = forwardRef<HTMLDivElement, FormItemProps>(
               )}
             </div>
           </div>
-        </Form.Group>
+        </fieldset>
         {enableSkip && (
           <SkipButton
             skipPath={skipPath}
@@ -282,7 +281,7 @@ export const FormItemTitle = (
   return (
     <legend className="form-label-legend">
       <h3 className="form-label-heading" id={question.id}>
-        <Form.Label>
+        <label>
           <QuestionLabel section={section} question={question} />
 
           {yearAdded === 2024 && (
@@ -302,7 +301,7 @@ export const FormItemTitle = (
               </span>
             </OverlayTrigger>
           )}
-        </Form.Label>
+        </label>
 
         {enableReadingList && question.entity && (
           <AddToList {...props} label={label || ""} id={question.id} />

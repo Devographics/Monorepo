@@ -7,10 +7,8 @@ import { localMailTransport } from "~/lib/server/mail/transports";
 import { getReadingListEmail } from "./generateReadingListEmail";
 import { loadResponse } from "~/lib/responses/db-actions/load";
 
-export async function POST(
-  req: NextRequest,
-  { params }: RouteHandlerOptions<{ responseId: string }>
-) {
+export async function POST(req: NextRequest, props: RouteHandlerOptions<{ responseId: string }>) {
+  const params = await props.params;
   try {
     const currentUser = await handlerMustHaveCurrentUser(req);
 
