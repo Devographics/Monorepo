@@ -335,6 +335,9 @@ type RatiosData {
 
     # all positive / total
     positivity: Float
+
+    # all positive / total (with sentiment)
+    positivityRelative: Float
 }
 
 type NormalizationToken {

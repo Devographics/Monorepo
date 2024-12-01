@@ -30,6 +30,7 @@ export async function addRatios(
 
         const neverHeardBucketCount = getCount(neverHeardBucket)
         const neverHeardBucketPositiveCount = getPositiveCount(neverHeardBucket)
+        const neverHeardBucketNegativeCount = getNegativeCount(neverHeardBucket)
 
         const heardBucketCount = getCount(heardBucket)
         const heardBucketPositiveCount = getPositiveCount(heardBucket)
@@ -38,6 +39,14 @@ export async function addRatios(
         const usedBucketCount = getCount(usedBucket)
         const usedBucketPositiveCount = getPositiveCount(usedBucket)
         const usedBucketNegativeCount = getNegativeCount(usedBucket)
+
+        const withSentimentTotal =
+            neverHeardBucketPositiveCount +
+            neverHeardBucketNegativeCount +
+            heardBucketPositiveCount +
+            heardBucketNegativeCount +
+            usedBucketPositiveCount +
+            usedBucketNegativeCount
 
         const total = neverHeardBucketCount + heardBucketCount + usedBucketCount
 
@@ -64,12 +73,15 @@ export async function addRatios(
         // all positive / total
         const positivity = allPositive / total
 
+        const positivityRelative = allPositive / withSentimentTotal
+
         const ratios = {
             awareness: roundRatio(awareness),
             interest: roundRatio(interest),
             usage: roundRatio(usage),
             retention: roundRatio(retention),
-            positivity: roundRatio(positivity)
+            positivity: roundRatio(positivity),
+            positivityRelative: roundRatio(positivityRelative)
         }
         editionData.ratios = ratios
     }
