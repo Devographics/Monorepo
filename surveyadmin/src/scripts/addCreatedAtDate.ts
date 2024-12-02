@@ -5,21 +5,21 @@ import { PreviousParticipationData } from "@devographics/types";
 // how many bulk operation to perform in one go
 const operationsPerStep = 1000;
 
-export const addMissingEditionCounts = async (args) => {
+export const addCreatedAtDate = async (args) => {
   const { surveyId, editionId } = args;
   const Responses = await getRawResponsesCollection();
 
   const selector = {
     surveyId,
     editionId,
-    [`user_info.${PREVIOUS_PARTICIPATIONS}`]: { $exists: false },
+    createdAtDate: { $exists: false },
   };
 
   const total = await Responses.countDocuments(selector);
   const totalSteps = Math.floor(total / operationsPerStep);
 
   console.log(
-    `// Found ${total} responses with missing "${PREVIOUS_PARTICIPATIONS}" field, processing…`
+    `// Found ${total} responses with missing createdAtDate field, processing…`
   );
 
   for (let step = 0; step <= totalSteps; step++) {
@@ -39,27 +39,11 @@ export const addMissingEditionCounts = async (args) => {
     for await (const response of responses) {
       count++;
 
-      const { userId } = response;
+      const { createdAt } = response;
 
-      // find all of the user's *other* responses
-      const allOtherResponses = await Responses.find({
-        userId,
-        editionId: { $ne: editionId },
-      }).toArray();
-
-      const surveys = [...new Set(allOtherResponses.map((r) => r.surveyId))];
-      const editions = allOtherResponses.map((r) => r.editionId);
-
-      const same_survey = allOtherResponses.filter(
-        (r) => r.surveyId === surveyId
-      );
-
-      const participationData: PreviousParticipationData = {
-        surveys,
-        editions,
-        same_survey_count: same_survey.length,
-      };
-      const setObject = { [PREVIOUS_PARTICIPATIONS]: participationData };
+      let date = new Date(createdAt);
+      date.setUTCHours(0, 0, 0, 0);
+      const setObject = { createdAtDate: date };
 
       bulkOperations.push({
         updateOne: {
@@ -70,7 +54,7 @@ export const addMissingEditionCounts = async (args) => {
     }
 
     if (bulkOperations.length > 0) {
-      console.log(JSON.stringify(bulkOperations, null, 2));
+      //   console.log(JSON.stringify(bulkOperations, null, 2));
       const operationResult = await Responses.bulkWrite(bulkOperations, {
         ordered: false,
       });
@@ -81,6 +65,6 @@ export const addMissingEditionCounts = async (args) => {
   }
 };
 
-addMissingEditionCounts.args = ["surveyId", "editionId"];
+addCreatedAtDate.args = ["surveyId", "editionId"];
 
-addMissingEditionCounts.description = `Add previous edition counts (how many times someone has taken the same survey before) where missing.`;
+addCreatedAtDate.description = `Add createdAtDate where missing.`;

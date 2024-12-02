@@ -49,6 +49,7 @@ export const getFieldsToCopy = (
   ["surveyId"],
   ["editionId"],
   ["createdAt"],
+  ["createdAtDate"],
   ["updatedAt"],
   ["finishedAt"],
   ["completion", "user_info.completion"],
