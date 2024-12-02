@@ -19,12 +19,12 @@ Discard any result where id is {}, "", [], etc.
 export async function discardEmptyIds(resultsByEdition: ResponseEditionData[]) {
     for (let editionData of resultsByEdition) {
         editionData.buckets = editionData.buckets.filter(
-            b => typeof b.id === 'number' || !isEmpty(b.id)
+            b => (b.id as any) instanceof Date || typeof b.id === 'number' || !isEmpty(b.id)
         )
         for (let bucket of editionData.buckets) {
             if (bucket.facetBuckets) {
                 bucket.facetBuckets = bucket.facetBuckets.filter(
-                    b => typeof b.id === 'number' || !isEmpty(b.id)
+                    b => (b.id as any) instanceof Date || typeof b.id === 'number' || !isEmpty(b.id)
                 )
             }
         }
