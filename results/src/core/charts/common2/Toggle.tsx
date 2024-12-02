@@ -18,7 +18,7 @@ const MIN_WIDTH_PER_CHAR = 8
 const RATIO = 0.7
 
 const getMinToggleWidth = (items: ToggleItemType[]) =>
-    sum(items.map(item => item.label.length * MIN_WIDTH_PER_CHAR)) * RATIO +
+    sum(items.map(item => (item?.label?.length || 0) * MIN_WIDTH_PER_CHAR)) * RATIO +
     items.length * PADDING_PER_ITEM
 
 export type ToggleItemType = {
