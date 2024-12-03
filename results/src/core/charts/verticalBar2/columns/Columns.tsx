@@ -1,10 +1,11 @@
 import './Columns.scss'
 import React from 'react'
-import { ChartState, Tick } from '../../common2/types'
+import { Tick } from '../../common2/types'
 import AxisV from '../../common2/AxisV'
 import { VerticalBarChartState, VerticalBarChartValues } from '../types'
 import { Gridlines } from './Gridlines'
 import T from 'core/i18n/T'
+import { getViewComponent } from '../helpers/views'
 
 export const Columns = ({
     chartState,
@@ -13,14 +14,15 @@ export const Columns = ({
     labelId,
     hasZebra = false
 }: {
-    chartState: ChartState // keep generic here
+    chartState: VerticalBarChartState
     chartValues: VerticalBarChartValues
     children: React.ReactNode
     ticks?: Tick[]
     labelId?: string
     hasZebra?: boolean
 }) => {
-    const { viewDefinition } = chartState
+    const { view } = chartState
+    const viewDefinition = getViewComponent(view)
     const { formatValue } = viewDefinition
     const { question, ticks, totalColumns } = chartValues
     const style = { '--totalColumns': totalColumns }

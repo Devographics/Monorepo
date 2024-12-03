@@ -14,13 +14,15 @@ import { BlockVariantDefinition } from 'core/types'
 import { Dimension } from '../multiItemsExperience/types'
 
 export interface HorizontalBarChartState extends ChartStateWithSort {
+    view: HorizontalBarViews
+    setView: Dispatch<SetStateAction<HorizontalBarViews>>
+    viewDefinition: HorizontalBarViewDefinition
     columnMode: ColumnModes
     setColumnMode: Dispatch<SetStateAction<ColumnModes>>
     facet: FacetItem | undefined
     setFacet: Dispatch<SetStateAction<FacetItem | undefined>>
     rowsLimit: number
     setRowsLimit: Dispatch<SetStateAction<number>>
-    viewDefinition: HorizontalBarViewDefinition
 }
 
 export enum HorizontalBarViews {

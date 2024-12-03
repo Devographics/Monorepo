@@ -19,5 +19,5 @@ export const getAllEditions = ({
     return allEditions
 }
 
-export const getEditionByYear = (columnId: string, editions: Array<ResponseEditionData>) =>
+export const getEditionByYear = (columnId: string | number, editions: Array<ResponseEditionData>) =>
     editions.find(e => e.year.toString() === columnId)

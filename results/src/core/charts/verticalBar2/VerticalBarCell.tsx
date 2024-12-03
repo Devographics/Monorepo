@@ -4,7 +4,7 @@ import { ResponseEditionData } from '@devographics/types'
 import { VerticalBarChartState, VerticalBarChartValues } from './types'
 import { useHeight } from '../common2/helpers'
 import { CellLabel } from '../common2'
-import { getViewDefinition } from './helpers/views'
+import { getViewComponent, getViewDefinition } from './helpers/views'
 
 // hide labels for cells under this height
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 20
@@ -49,7 +49,8 @@ export const Cell = ({
     }
 
     const { question } = chartValues
-    const { viewDefinition } = chartState
+    const { view } = chartState
+    const viewDefinition = getViewComponent(view)
     const { formatValue } = viewDefinition
 
     const v = formatValue(value, question, chartState)

@@ -7,6 +7,7 @@ import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import { useWidth } from '../common2/helpers'
 import { CellLabel } from '../common2'
+import { getViewDefinition } from './helpers/views'
 
 // hide labels for cells under this size
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
@@ -44,7 +45,8 @@ export const Cell = ({
     // const entities = useEntities()
     // const entity = entities.find(e => e.id === bucket.id)
     const { question, facetQuestion } = chartValues
-    const { sort, viewDefinition } = chartState
+    const { sort, view } = chartState
+    const viewDefinition = getViewDefinition(view)
     const { getValue, formatValue } = viewDefinition
     const { getString } = useI18n()
 

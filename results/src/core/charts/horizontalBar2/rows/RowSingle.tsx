@@ -5,18 +5,18 @@ import { RowComponentProps } from '../types'
 import { useTheme } from 'styled-components'
 import { FreeformIndicator, RespondentCount } from '../../common2'
 import { FreeformAnswersTrigger } from '../../common2/FreeformAnswers'
-import { CUTOFF_ANSWERS, NO_MATCH, OVERLIMIT_ANSWERS } from '@devographics/constants'
-import T from 'core/i18n/T'
-import Tooltip from 'core/components/Tooltip'
+import { CUTOFF_ANSWERS, OVERLIMIT_ANSWERS } from '@devographics/constants'
 import { InsufficientDataIndicator } from 'core/charts/common2/InsufficientDataIndicator'
 import { ResultsSubFieldEnum } from '@devographics/types'
+import { getViewDefinition } from '../helpers/views'
 
 export const RowSingle = (props: RowComponentProps) => {
     const theme = useTheme()
     const { block, bucket, chartState, chartValues, showCount = true, hasGroupedBuckets } = props
     const { isFreeformData, hasInsufficientData } = bucket
     const { question, maxOverallValue = 1 } = chartValues
-    const { viewDefinition } = chartState
+    const { view } = chartState
+    const viewDefinition = getViewDefinition(view)
     const { getValue } = viewDefinition
     const value = getValue(bucket)
     const width = (100 * value) / maxOverallValue

@@ -8,12 +8,12 @@ import {
 } from '../types'
 import { formatQuestionValue } from 'core/charts/common2/helpers/format'
 import { Lines } from '../lines'
-import { ColumnEmpty } from '../columns/ColumnEmpty'
 // import { removeNoAnswer } from '../helpers/steps'
 import max from 'lodash/max'
 import min from 'lodash/min'
 import range from 'lodash/range'
 import { StandardQuestionData } from '@devographics/types'
+import { ColumnWrapper } from '../columns/ColumnWrapper'
 
 export const Average: VerticalBarViewDefinition<
     StandardQuestionData,
@@ -59,7 +59,7 @@ export const Average: VerticalBarViewDefinition<
             <Columns {...props} hasZebra={true} labelId="chart_units.average">
                 <>
                     {columnIds.map((columnId, i) => (
-                        <ColumnEmpty
+                        <ColumnWrapper<EditionWithPointData>
                             {...props}
                             columnIndex={i}
                             key={columnId}

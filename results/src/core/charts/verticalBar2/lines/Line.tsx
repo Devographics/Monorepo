@@ -10,6 +10,7 @@ import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import { getQuestionLabel } from 'core/charts/common2/helpers/labels'
 import { Modes } from 'core/charts/multiItemsRatios/types'
+import { getViewComponent } from '../helpers/views'
 
 const dotRadius = 6
 
@@ -27,7 +28,8 @@ export const Line = <PointData extends BasicPointData>({
     const { getString } = useI18n()
 
     const theme = useTheme()
-    const { viewDefinition, highlighted, view, mode } = chartState
+    const { highlighted, view, mode } = chartState
+    const viewDefinition = getViewComponent(view)
     const { getPointValue, formatValue } = viewDefinition
     const invertYAxis = mode === Modes.RANK
     const {

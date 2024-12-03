@@ -26,6 +26,7 @@ import ChartShare from '../common2/ChartShare'
 import Legend from './Legend'
 import { BackToBack } from '../common2/BackToBack'
 import { NoData } from '../common2/NoData'
+import { getViewDefinition } from './helpers/views'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -133,7 +134,8 @@ const FacetHeading = (
     }
 ) => {
     const { block, facetQuestion, chartState, pageContext, series, question } = props
-    const { viewDefinition } = chartState
+    const { view } = chartState
+    const viewDefinition = getViewDefinition(view)
     const entities = useEntities()
 
     // const controls = getControls({ chartState, chartValues })

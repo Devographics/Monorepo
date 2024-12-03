@@ -1,12 +1,12 @@
 import React from 'react'
 import { ColumnStacked } from '../columns/ColumnStacked'
-import { VerticalBarViewDefinition, VerticalBarViews } from '../types'
+import { VerticalBarViewDefinition } from '../types'
 // import { removeNoAnswer } from '../helpers/steps'
 import { BucketUnits } from '@devographics/types'
 import Columns from '../columns/Columns'
 import { formatPercentage } from 'core/charts/common2/helpers/format'
 import { getEditionByYear } from '../helpers/other'
-import { ColumnEmpty } from '../columns/ColumnEmpty'
+import { ColumnWrapper } from '../columns/ColumnWrapper'
 
 export const PercentageQuestion: VerticalBarViewDefinition = {
     getBucketValue: bucket => bucket[BucketUnits.PERCENTAGE_QUESTION] || 0,
@@ -39,7 +39,7 @@ export const PercentageQuestion: VerticalBarViewDefinition = {
                             showCount={false}
                         />
                     ) : (
-                        <ColumnEmpty {...props} columnIndex={i} key={year} year={year} />
+                        <ColumnWrapper {...props} columnIndex={i} key={year} year={year} />
                     )
                 })}
             </Columns>

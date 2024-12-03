@@ -1,5 +1,9 @@
 import React from 'react'
-import { EditionWithPointData, VerticalBarViewDefinition } from 'core/charts/verticalBar2/types'
+import {
+    EditionWithPointData,
+    LineItem,
+    VerticalBarViewDefinition
+} from 'core/charts/verticalBar2/types'
 import { EditionWithRank, Modes, MultiRatiosChartState } from './types'
 import { StandardQuestionData } from '@devographics/types'
 import { getEditionByYear } from '../verticalBar2/helpers/other'
@@ -9,6 +13,7 @@ import min from 'lodash/min'
 import Columns from '../verticalBar2/columns/Columns'
 import { ColumnEmpty } from '../verticalBar2/columns/ColumnEmpty'
 import { Lines } from '../verticalBar2/lines'
+import { ColumnWrapper } from '../verticalBar2/columns/ColumnWrapper'
 
 export const getAllEditions = (item: StandardQuestionData) => item?.responses?.allEditions || []
 
@@ -43,6 +48,7 @@ export const multiRatiosViewDefinition: VerticalBarViewDefinition<
                 const rank = allItemsRatios.findIndex(r => r.id === item.id) + 1
                 return {
                     ...edition,
+                    id: edition.editionId,
                     rank,
                     value: edition?.ratios?.[view],
                     columnIndex: edition.year - startYear
@@ -74,7 +80,7 @@ export const multiRatiosViewDefinition: VerticalBarViewDefinition<
                     />
                 ))} */}
                     {columnIds.map((columnId, i) => (
-                        <ColumnEmpty
+                        <ColumnWrapper
                             {...props}
                             chartValues={chartValues}
                             columnIndex={i}

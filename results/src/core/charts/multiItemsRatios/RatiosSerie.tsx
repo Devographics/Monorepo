@@ -14,7 +14,7 @@ export const RatiosSerie = (
     } & CommonProps<MultiRatiosChartState>
 ) => {
     const { serie, serieIndex, block, chartState, variant, question, legendItems } = props
-    const { viewDefinition } = chartState
+    const viewDefinition = multiRatiosViewDefinition
     const { getLineItems } = viewDefinition
     const lineItems = getLineItems({ serie, question, chartState })
 

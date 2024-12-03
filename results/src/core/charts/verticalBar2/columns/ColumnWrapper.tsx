@@ -1,9 +1,9 @@
 import './Column.scss'
 import React from 'react'
-import { EmptyColumnProps } from '../types'
+import { BasicPointData, EmptyColumnProps } from '../types'
 
-export const ColumnWrapper = (
-    props: EmptyColumnProps & {
+export const ColumnWrapper = <PointData extends BasicPointData>(
+    props: EmptyColumnProps<PointData> & {
         rowMetadata?: JSX.Element
         children?: JSX.Element
     }

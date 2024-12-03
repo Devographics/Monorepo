@@ -21,13 +21,11 @@ export const useChartState = (defaultState: {
     )
     const [highlighted, setHighlighted] = useState<string | null>(null)
 
-    const viewDefinition = getViewDefinition(view)
     const chartState: VerticalBarChartState = {
         view,
         setView,
         highlighted,
-        setHighlighted,
-        viewDefinition
+        setHighlighted
     }
     return chartState
 }

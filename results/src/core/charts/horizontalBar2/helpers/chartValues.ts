@@ -4,6 +4,7 @@ import { BlockVariantDefinition } from 'core/types'
 import { useAllQuestionsWithOptions } from '../../hooks'
 import { CommonProps, SeriesMetadata } from 'core/charts/common2/types'
 import { getMaxValue } from './other'
+import { getViewDefinition } from './views'
 
 export const useChartValues = ({
     buckets,
@@ -16,7 +17,8 @@ export const useChartValues = ({
     question: QuestionMetadata
     seriesMetadata: SeriesMetadata
 }) => {
-    const { viewDefinition } = chartState
+    const { view } = chartState
+    const viewDefinition = getViewDefinition(view)
     const { getValue, getTicks } = viewDefinition
     const allQuestions = useAllQuestionsWithOptions()
     const values = buckets.map(getValue)
@@ -25,8 +27,6 @@ export const useChartValues = ({
         question,
         totalRows: buckets.length
     }
-
-    const view = chartState.view as HorizontalBarViews
     const maxOverallValue = seriesMetadata.seriesMaxValue || getMaxValue({ values, view })
 
     chartValues.maxOverallValue = maxOverallValue

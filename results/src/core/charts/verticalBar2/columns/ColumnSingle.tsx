@@ -4,11 +4,13 @@ import { RespondentCount } from '../../common2'
 import React from 'react'
 import { Cell } from '../VerticalBarCell'
 import { ColumnWrapper } from './ColumnWrapper'
+import { getViewComponent } from '../helpers/views'
 
 export const ColumnSingle = (props: ColumnComponentProps) => {
     const theme = useTheme()
     const { year, edition, chartState, chartValues, showCount = true } = props
-    const { viewDefinition } = chartState
+    const { view } = chartState
+    const viewDefinition = getViewComponent(view)
     const { getPointValue } = viewDefinition
     const { maxValue } = chartValues
 

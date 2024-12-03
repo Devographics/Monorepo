@@ -1,9 +1,6 @@
-import T from 'core/i18n/T'
 import './AxisV.scss'
 import React from 'react'
-import max from 'lodash/max'
-import round from 'lodash/round'
-import { ChartState, FormatValueType, Tick } from './types'
+import { FormatValueType, Tick } from './types'
 import { QuestionMetadata } from '@devographics/types'
 
 // export const getTicks = (values: number[]) => {
@@ -18,7 +15,7 @@ import { QuestionMetadata } from '@devographics/types'
 
 export const getInterval = (tickCount: number) => 100 / (tickCount - 1)
 
-export const AxisV = ({
+export const AxisV = <ChartStateType,>({
     variant,
     ticks,
     question,
@@ -31,7 +28,7 @@ export const AxisV = ({
     question: QuestionMetadata
     labelId?: string
     formatValue: FormatValueType
-    chartState: ChartState
+    chartState: ChartStateType
 }) => {
     const interval = getInterval(ticks.length)
 

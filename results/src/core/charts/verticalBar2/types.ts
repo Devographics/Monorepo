@@ -1,18 +1,13 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from 'react'
-import { ChartState, ChartValues, Tick, ViewDefinition } from '../common2/types'
+import { ChartValues, Tick, ViewDefinition } from '../common2/types'
 import { IconProps } from 'core/icons/IconWrapper'
-import {
-    Bucket,
-    Entity,
-    QuestionMetadata,
-    ResponseEditionData,
-    StandardQuestionData
-} from '@devographics/types'
+import { Bucket, Entity, QuestionMetadata, ResponseEditionData } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 import { DataSeries } from 'core/filters/types'
 
-export interface VerticalBarChartState extends ChartState {
-    viewDefinition: VerticalBarViewDefinition
+export interface VerticalBarChartState {
+    view: string
+    setView: Dispatch<SetStateAction<string>>
     highlighted: string | null
     setHighlighted: Dispatch<SetStateAction<string | null>>
 }
@@ -42,8 +37,8 @@ export type VerticalBarViewDefinition<
     /**
      * Chart state type
      */
-    ChartState
-> = ViewDefinition & {
+    ChartStateType
+> = ViewDefinition<ChartStateType> & {
     /**
      * Takes a serie and return all line objects
      */
@@ -54,12 +49,12 @@ export type VerticalBarViewDefinition<
     }: {
         serie: DataSeries<SerieData>
         question: QuestionMetadata
-        chartState: ChartState
+        chartState: ChartStateType
     }) => LineItem<PointData>[]
     /**
      * Takes a point object and return its value
      */
-    getPointValue?: (point: PointData, chartState: ChartState) => number
+    getPointValue?: (point: PointData, chartState: ChartStateType) => number
     getBucketValue?: (bucket: Bucket) => number
     dataFilters?: DataFilter[]
     component: (props: VerticalBarViewProps<PointData>) => JSX.Element | null
@@ -85,17 +80,22 @@ export interface VerticalBarChartValues extends ChartValues {
 
 export type DataFilter = (buckets: Bucket[]) => Bucket[]
 
-export type ColumnComponentProps = VerticalBarViewProps & {
-    year: number
-    edition: ResponseEditionData
-    columnIndex: number
-    showCount?: boolean
-}
+export type ColumnComponentProps<PointData extends BasicPointData> =
+    VerticalBarViewProps<PointData> & {
+        year: number
+        edition: ResponseEditionData
+        columnIndex: number
+        showCount?: boolean
+    }
 
-export type EmptyColumnProps = Omit<ColumnComponentProps, 'edition' | 'editions' | 'chartState'>
+export type EmptyColumnProps<PointData extends BasicPointData> = Omit<
+    ColumnComponentProps<PointData>,
+    'edition' | 'editions' | 'chartState'
+>
 
 export type BasicPointData = {
     id: string
+    columnId: string
     columnIndex: number
 }
 

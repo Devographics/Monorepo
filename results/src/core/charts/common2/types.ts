@@ -5,13 +5,13 @@ import { DataSeries } from 'core/filters/types'
 import { CustomVariant } from 'core/filters/helpers'
 import { Dispatch, SetStateAction } from 'react'
 
-export interface ChartState {
-    view: string
-    setView: Dispatch<SetStateAction<string>>
-    viewDefinition: ViewDefinition
-}
+// export interface ChartStateWithView {
+//     view: string
+//     setView: Dispatch<SetStateAction<string>>
+//     viewDefinition: ViewDefinition
+// }
 
-export interface ChartStateWithSort extends ChartState {
+export interface ChartStateWithSort {
     sort: string | undefined
     setSort: Dispatch<SetStateAction<string | undefined>>
     order: OrderOptions
@@ -28,8 +28,8 @@ export interface ChartValues {
     i18nNamespace?: string
 }
 
-export type ViewDefinition = {
-    formatValue: FormatValueType
+export type ViewDefinition<ChartStateType> = {
+    formatValue: FormatValueType<ChartStateType>
     getTicks?: (maxValue?: number) => Tick[]
     showLegend?: boolean
 }
@@ -71,10 +71,10 @@ export type Tick = {
     yOffset?: number
 }
 
-export type FormatValueType = (
+export type FormatValueType<ChartStateType> = (
     v: number,
     question: QuestionMetadata,
-    chartState: ChartState
+    chartState: ChartStateType
 ) => string
 
 export type LegendItem = {

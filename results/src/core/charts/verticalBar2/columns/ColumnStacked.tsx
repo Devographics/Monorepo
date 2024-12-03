@@ -5,10 +5,12 @@ import { useGradient } from '../../common2/helpers/colors'
 import sum from 'lodash/sum'
 import take from 'lodash/take'
 import { ColumnWrapper } from './ColumnWrapper'
+import { getViewComponent } from '../helpers/views'
 
 export const ColumnStacked = (props: ColumnComponentProps) => {
     const { edition, chartState, chartValues } = props
-    const { viewDefinition } = chartState
+    const { view } = chartState
+    const viewDefinition = getViewComponent(view)
     const { getBucketValue } = viewDefinition
     if (!getBucketValue) {
         throw new Error('getBucketValue not defined')

@@ -19,6 +19,7 @@ import { RowSingle } from '../rows/RowSingle'
 import { RowStacked } from '../rows/RowStacked'
 import { allDataFilters } from '../helpers/steps'
 import max from 'lodash/max'
+import { getViewDefinition } from './views'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -168,7 +169,8 @@ export const getSeriesMetadata = ({
     block: BlockVariantDefinition
     chartState: HorizontalBarChartState
 }) => {
-    const { viewDefinition } = chartState
+    const { view } = chartState
+    const viewDefinition = getViewDefinition(view)
     const { getValue } = viewDefinition
     const allSeriesValues = series
         .map(serie => {

@@ -15,7 +15,8 @@ export const VerticalBarSerie = (
     } & CommonProps<VerticalBarChartState>
 ) => {
     const { serie, serieIndex, block, chartState, variant, question } = props
-    const viewDefinition = getViewDefinition(chartState.view)
+    const { view } = chartState
+    const viewDefinition = getViewDefinition(view)
     const { getLineItems } = viewDefinition
     const lineItems = getLineItems({ serie, question, chartState })
 

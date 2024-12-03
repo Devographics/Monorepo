@@ -28,7 +28,8 @@ export const useChartValues = <PointData extends BasicPointData>({
     question: QuestionMetadata
 }) => {
     const { i18nNamespace } = block
-    const viewDefinition = getViewDefinition(chartState.view)
+    const { view } = chartState
+    const viewDefinition = getViewDefinition(view)
     const { getTicks, getColumnIds } = viewDefinition
 
     const columnIds = getColumnIds(lineItems)

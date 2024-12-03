@@ -5,6 +5,7 @@ import Axis from '../../common2/Axis'
 import { ShowAll } from '../../common2/ShowAll'
 import { HorizontalBarViewProps } from '../types'
 import { applyRowsLimit } from 'core/charts/multiItemsExperience/helpers'
+import { getViewDefinition } from '../helpers/views'
 
 export const Rows = ({
     chartState,
@@ -21,7 +22,8 @@ export const Rows = ({
     const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
     const { ticks, question } = chartValues
 
-    const { viewDefinition } = chartState
+    const { view } = chartState
+    const viewDefinition = getViewDefinition(view)
     const { formatValue } = viewDefinition
     const axisProps = { question, formatValue, labelId }
     return (

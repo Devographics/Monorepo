@@ -18,8 +18,7 @@ export const useChartState = (defaultState: MultiRatiosChartState) => {
         mode,
         setMode,
         highlighted,
-        setHighlighted,
-        viewDefinition: multiRatiosViewDefinition
+        setHighlighted
     }
     return chartState
 }
