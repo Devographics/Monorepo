@@ -71,7 +71,11 @@ export type Tick = {
     yOffset?: number
 }
 
-export type FormatValueType = (v: number, question: QuestionMetadata) => string
+export type FormatValueType = (
+    v: number,
+    question: QuestionMetadata,
+    chartState: ChartState
+) => string
 
 export type LegendItem = {
     id: string

@@ -170,7 +170,6 @@ export const getSeriesMetadata = ({
 }) => {
     const { viewDefinition } = chartState
     const { getValue } = viewDefinition
-    console.log(series)
     const allSeriesValues = series
         .map(serie => {
             const buckets = getChartBuckets({ serie, block, chartState })
