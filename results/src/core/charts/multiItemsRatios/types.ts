@@ -2,7 +2,11 @@ import { DataSeries } from 'core/filters/types'
 import { QuestionMetadata, ResponseEditionData, StandardQuestionData } from '@devographics/types'
 import { Dispatch, SetStateAction } from 'react'
 import { FormatValueType, Tick } from '../common2/types'
-import { EditionWithRank, VerticalBarChartValues } from '../verticalBar2/types'
+import {
+    EditionWithPointData,
+    EditionWithRank,
+    VerticalBarChartValues
+} from '../verticalBar2/types'
 import { LegendItem } from './Legend-old'
 
 export type MultiRatioSerie = DataSeries<StandardQuestionData[]>
@@ -38,3 +42,7 @@ export type MultiRatiosChartState = {
 }
 
 export type MultiRatiosChartValues = VerticalBarChartValues & { legendItems: LegendItem[] }
+
+export type EditionWithRank = EditionWithPointData & {
+    rank: number
+}

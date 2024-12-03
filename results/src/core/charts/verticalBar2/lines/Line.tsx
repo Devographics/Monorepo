@@ -9,6 +9,7 @@ import { QuestionMetadata } from '@devographics/types'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import { getQuestionLabel } from 'core/charts/common2/helpers/labels'
+import { Modes } from 'core/charts/multiItemsRatios/types'
 
 const dotRadius = 6
 
@@ -26,8 +27,9 @@ export const Line = <PointData extends BasicPointData>({
     const { getString } = useI18n()
 
     const theme = useTheme()
-    const { viewDefinition, highlighted, view } = chartState
-    const { getPointValue, formatValue, invertYAxis } = viewDefinition
+    const { viewDefinition, highlighted, view, mode } = chartState
+    const { getPointValue, formatValue } = viewDefinition
+    const invertYAxis = mode === Modes.RANK
     const {
         totalColumns,
         maxValue,
@@ -111,7 +113,7 @@ export const Line = <PointData extends BasicPointData>({
             {columnIds.map((columnId, i) => {
                 const edition = getEditionByYear(columnId, points)
                 return edition ? (
-                    <Dot
+                    <Dot<PointData>
                         {...commonProps}
                         key={edition.editionId}
                         editionIndex={i}
@@ -124,7 +126,7 @@ export const Line = <PointData extends BasicPointData>({
     )
 }
 
-const Dot = ({
+const Dot = <PointData extends BasicPointData>({
     lineLabel,
     editionIndex,
     value,
@@ -132,7 +134,8 @@ const Dot = ({
     question,
     columnId,
     getXCoord,
-    getYCoord
+    getYCoord,
+    chartState
 }: {
     lineLabel: string
     editionIndex: number
@@ -142,6 +145,7 @@ const Dot = ({
     columnId: string
     getXCoord: (value: number) => number
     getYCoord: (value: number) => number
+    chartState: LineComponentProps<PointData>['chartState']
 }) => {
     const cx = getXCoord(editionIndex)
     const cy = getYCoord(value)
@@ -157,11 +161,11 @@ const Dot = ({
                         r={dotRadius * 3}
                     />
                     <text className="chart-line-label" x={cx} y={`${cy + 20}`}>
-                        {formatValue(value, question)}
+                        {formatValue(value, question, chartState)}
                     </text>
                 </g>
             }
-            contents={`${lineLabel}: ${formatValue(value, question)} (${columnId})`}
+            contents={`${lineLabel}: ${formatValue(value, question, chartState)} (${columnId})`}
             asChild={true}
         />
     )

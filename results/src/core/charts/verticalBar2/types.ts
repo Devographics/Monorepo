@@ -30,25 +30,30 @@ export type Control = {
     onClick: (e: SyntheticEvent) => void
 }
 
-export type VerticalBarViewDefinition<PointData extends BasicPointData> = ViewDefinition & {
+export type VerticalBarViewDefinition<
+    SerieData,
+    PointData extends BasicPointData,
+    ChartState
+> = ViewDefinition & {
     /**
      * Takes a serie and return all line objects
      */
     getLineItems: ({
         serie,
-        question
+        question,
+        chartState
     }: {
-        serie: DataSeries<StandardQuestionData>
+        serie: DataSeries<SerieData>
         question: QuestionMetadata
+        chartState: ChartState
     }) => LineItem<PointData>[]
     /**
      * Takes a point object and return its value
      */
-    getPointValue?: (edition: ResponseEditionData, chartState: VerticalBarChartState) => number
+    getPointValue?: (point: PointData, chartState: ChartState) => number
     getBucketValue?: (bucket: Bucket) => number
     dataFilters?: DataFilter[]
     component: (props: VerticalBarViewProps<PointData>) => JSX.Element | null
-    invertYAxis?: boolean
     /**
      * Generate list of ids for all columns
      */

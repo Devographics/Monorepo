@@ -24,7 +24,7 @@ export const Columns = ({
     const { formatValue } = viewDefinition
     const { question, ticks, totalColumns } = chartValues
     const style = { '--totalColumns': totalColumns }
-    const axisProps = { question, labelId, formatValue }
+    const axisProps = { question, labelId, formatValue, chartState }
 
     return (
         <div className="chart-columns-wrapper">

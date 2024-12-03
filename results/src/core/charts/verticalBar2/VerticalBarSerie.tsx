@@ -17,7 +17,7 @@ export const VerticalBarSerie = (
     const { serie, serieIndex, block, chartState, variant, question } = props
     const viewDefinition = getViewDefinition(chartState.view)
     const { getLineItems } = viewDefinition
-    const lineItems = getLineItems({ serie, question })
+    const lineItems = getLineItems({ serie, question, chartState })
 
     const chartValues = useChartValues({ lineItems, chartState, block, question })
 

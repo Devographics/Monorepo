@@ -1,6 +1,11 @@
 import React from 'react'
 import Columns from '../columns/Columns'
-import { EditionWithPointData, LineItem, VerticalBarViewDefinition } from '../types'
+import {
+    EditionWithPointData,
+    LineItem,
+    VerticalBarChartState,
+    VerticalBarViewDefinition
+} from '../types'
 import { formatQuestionValue } from 'core/charts/common2/helpers/format'
 import { Lines } from '../lines'
 import { ColumnEmpty } from '../columns/ColumnEmpty'
@@ -9,8 +14,13 @@ import { ColumnEmpty } from '../columns/ColumnEmpty'
 import max from 'lodash/max'
 import min from 'lodash/min'
 import range from 'lodash/range'
+import { StandardQuestionData } from '@devographics/types'
 
-export const Average: VerticalBarViewDefinition<EditionWithPointData> = {
+export const Average: VerticalBarViewDefinition<
+    StandardQuestionData,
+    EditionWithPointData,
+    VerticalBarChartState
+> = {
     getLineItems: ({ serie, question }) => {
         const { allEditions } = serie.data.responses
         const startYear = min(allEditions.map(e => e.year)) ?? 0

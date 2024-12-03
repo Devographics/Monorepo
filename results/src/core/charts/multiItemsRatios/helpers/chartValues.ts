@@ -22,7 +22,7 @@ export const useChartValues = ({
 }) => {
     const { mode } = chartState
     const allYears = items.map(item => getAllEditions(item).map(edition => edition.year)).flat()
-    const years = getYears(allYears)
+    const columnIds = getYears(allYears).map(y => y.toString())
     const allEditionsCounts = items.map(item => getAllEditions(item).length || 0)
     const ticks =
         mode === Modes.VALUE
@@ -40,8 +40,8 @@ export const useChartValues = ({
 
     const chartValues: MultiRatiosChartValues = {
         question,
-        years,
-        totalColumns: years.length,
+        columnIds,
+        totalColumns: columnIds.length,
         legendItems,
         maxValue: max(ticks.map(tick => tick.value)) || 0,
         ticks

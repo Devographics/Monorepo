@@ -1,6 +1,5 @@
 import React from 'react'
 import '../common2/ChartsCommon.scss'
-import './MultiRatios.scss'
 import { BlockComponentProps } from 'core/types'
 // import { getDefaultState, useChartState } from './helpers/chartState'
 // import { getAllEditions } from './helpers/other'

@@ -52,7 +52,7 @@ export const Cell = ({
     const { viewDefinition } = chartState
     const { formatValue } = viewDefinition
 
-    const v = formatValue(value, question)
+    const v = formatValue(value, question, chartState)
 
     return (
         <Tooltip
