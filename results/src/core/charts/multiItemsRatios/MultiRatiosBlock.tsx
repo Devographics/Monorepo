@@ -15,7 +15,7 @@ import ViewSwitcher from './ViewSwitcher'
 import Legend from '../common2/Legend'
 import uniqBy from 'lodash/uniqBy'
 import ModeSwitcher from './ModeSwitcher'
-import { VerticalBarSerie } from '../verticalBar2/VerticalBarSerie'
+import { VerticalBarSerie } from '../verticalBar2/VerticalBarSerieOld'
 
 export interface MultiRatiosBlockProps extends BlockComponentProps {
     series: MultiRatioSerie[]
@@ -54,7 +54,7 @@ export const MultiRatiosBlock = (props: MultiRatiosBlockProps) => {
                     right={<ViewSwitcher chartState={chartState} />}
                 />
 
-                <GridWrapper seriesCount={series.length}>
+                {/* <GridWrapper seriesCount={series.length}>
                     {series.map((serie, serieIndex) => (
                         <VerticalBarSerie
                             key={serie.name}
@@ -64,7 +64,7 @@ export const MultiRatiosBlock = (props: MultiRatiosBlockProps) => {
                             {...commonProps}
                         />
                     ))}
-                </GridWrapper>
+                </GridWrapper> */}
 
                 <Note block={block} />
 

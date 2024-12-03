@@ -13,6 +13,7 @@ export const Rows = ({
     children,
     labelId,
     hasZebra = false,
+    viewDefinition,
     buckets
 }: HorizontalBarViewProps & {
     children: React.ReactNode
@@ -23,7 +24,6 @@ export const Rows = ({
     const { ticks, question } = chartValues
 
     const { view } = chartState
-    const viewDefinition = getViewDefinition(view)
     const { formatValue } = viewDefinition
     const axisProps = { question, formatValue, labelId }
     return (

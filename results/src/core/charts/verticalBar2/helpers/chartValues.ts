@@ -22,7 +22,7 @@ export const useChartValues = <PointData extends BasicPointData>({
     block,
     question
 }: {
-    lineItems: LineItem<PointData>
+    lineItems: LineItem<PointData>[]
     chartState: VerticalBarChartState
     block: BlockVariantDefinition
     question: QuestionMetadata

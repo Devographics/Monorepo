@@ -1,20 +1,21 @@
 import React from 'react'
-import '../common2/ChartsCommon.scss'
-import './VerticalBar.scss'
 import { DataSeries } from 'core/filters/types'
-import { CommonProps } from '../common2/types'
 import { GridItem } from '../common2'
+import { ChartStateWithView, CommonProps } from '../common2/types'
+import { getViewComponent } from './helpers/views'
 import { getItemFilters } from '../common2/helpers/filters'
 
-export const VerticalBarSerie = <SerieData, ChartStateType>(
+export const VerticalBarSerie = <SerieData, ChartStateType extends ChartStateWithView>(
     props: {
         serie: DataSeries<SerieData>
         serieIndex: number
-        children: React.ReactNode
     } & CommonProps<ChartStateType>
 ) => {
-    const { serie, serieIndex, block, variant, children } = props
+    const { serie, serieIndex, block, chartState, viewDefinition, variant } = props
+
     const itemFilters = getItemFilters({ variant, block, serieIndex })
+
+    const ViewComponent = viewDefinition.component
 
     return (
         <GridItem<DataSeries<SerieData>>
@@ -23,7 +24,7 @@ export const VerticalBarSerie = <SerieData, ChartStateType>(
             serie={serie}
             block={block}
         >
-            {children}
+            <ViewComponent {...props} />
 
             {/* <pre>
                 <code>{JSON.stringify(chartValues, null, 2)}</code>

@@ -15,8 +15,13 @@ import range from 'lodash/range'
 import { StandardQuestionData } from '@devographics/types'
 import { ColumnWrapper } from '../columns/ColumnWrapper'
 import { useChartValues } from '../helpers/chartValues'
+import { VerticalBarWrapper } from '../VerticalBarWrapper'
+import { DataSeries } from 'core/filters/types'
+import { BlockComponentProps } from 'core/types'
+import { getAllEditions } from '../helpers/other'
+import { getDefaultState, useChartState } from '../helpers/chartState'
 
-export const Average: VerticalBarViewDefinition<
+export const viewDefinition: VerticalBarViewDefinition<
     StandardQuestionData,
     EditionWithPointData,
     VerticalBarChartState
@@ -53,36 +58,56 @@ export const Average: VerticalBarViewDefinition<
     formatValue: formatQuestionValue,
     dataFilters: [
         /*removeNoAnswer*/
-    ],
-    component: props => {
-        const { serie, question, chartState, block, viewDefinition } = props
-        const { getLineItems } = viewDefinition
-        const lineItems = getLineItems({ serie, question, chartState })
-        const chartValues = useChartValues({ lineItems, chartState, block, question })
-        const { columnIds } = chartValues
-        return (
-            <Columns
-                {...props}
-                chartValues={chartValues}
-                hasZebra={true}
-                labelId="chart_units.average"
-            >
+    ]
+}
+
+export interface AverageByEditionProps extends BlockComponentProps {
+    data: StandardQuestionData
+    series: DataSeries<StandardQuestionData>[]
+}
+
+export const AverageByEdition = (props: AverageByEditionProps) => {
+    const { block, series, question } = props
+    const serie = series[0]
+    const allEditions = getAllEditions({ serie, block })
+    const currentEdition = allEditions.at(-1)
+    if (currentEdition === undefined) {
+        throw new Error(`${block.id}: empty allEditions array`)
+    }
+
+    const chartState = useChartState(getDefaultState({ block }))
+
+    const { getLineItems } = viewDefinition
+    const lineItems = getLineItems({ serie, question, chartState })
+    const chartValues = useChartValues({ lineItems, chartState, block, question })
+    const { columnIds } = chartValues
+
+    const commonProps = {
+        ...props,
+        chartState,
+        chartValues,
+        currentEdition,
+        viewDefinition
+    }
+
+    return (
+        <VerticalBarWrapper {...props}>
+            <Columns {...commonProps} hasZebra={true} labelId="chart_units.average">
                 <>
                     {columnIds.map((columnId, i) => (
                         <ColumnWrapper<EditionWithPointData>
-                            {...props}
+                            {...commonProps}
                             columnIndex={i}
                             key={columnId}
                             columnId={columnId}
                         />
                     ))}
                     <Lines<StandardQuestionData, EditionWithPointData, VerticalBarChartState>
-                        {...props}
+                        {...commonProps}
                         lineItems={lineItems}
-                        chartValues={chartValues}
                     />
                 </>
             </Columns>
-        )
-    }
+        </VerticalBarWrapper>
+    )
 }

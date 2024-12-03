@@ -5,11 +5,10 @@ import { DataSeries } from 'core/filters/types'
 import { CustomVariant } from 'core/filters/helpers'
 import { Dispatch, SetStateAction } from 'react'
 
-// export interface ChartStateWithView {
-//     view: string
-//     setView: Dispatch<SetStateAction<string>>
-//     viewDefinition: ViewDefinition
-// }
+export interface ChartStateWithView {
+    view: string
+    setView: Dispatch<SetStateAction<string>>
+}
 
 export interface ChartStateWithSort {
     sort: string | undefined

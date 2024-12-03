@@ -1,11 +1,25 @@
 import './Lines.scss'
 import React, { useRef } from 'react'
-import { BasicPointData, LineItem, VerticalBarViewProps } from '../types'
+import {
+    BasicPointData,
+    LineItem,
+    VerticalBarChartValues,
+    VerticalBarViewDefinition
+} from '../types'
 import { Line } from './Line'
 import { useHeight, useWidth } from 'core/charts/common2/helpers'
+import { BlockVariantDefinition } from 'core/types'
 
-export const Lines = <PointData extends BasicPointData>(
-    props: VerticalBarViewProps & { lineItems: LineItem<PointData>[] }
+type LinesComponentProps<SerieData, PointData extends BasicPointData, ChartStateType> = {
+    chartState: ChartStateType
+    block: BlockVariantDefinition
+    lineItems: LineItem<PointData>[]
+    chartValues: VerticalBarChartValues
+    viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
+}
+
+export const Lines = <SerieData, PointData extends BasicPointData, ChartStateType>(
+    props: LinesComponentProps<SerieData, PointData, ChartStateType>
 ) => {
     const { lineItems, chartState } = props
 
@@ -27,7 +41,7 @@ export const Lines = <PointData extends BasicPointData>(
                 <svg className="chart-lines">
                     {regularItems.map(item => {
                         return (
-                            <Line<PointData>
+                            <Line<SerieData, PointData, ChartStateType>
                                 {...commonProps}
                                 width={width}
                                 height={height}
@@ -38,7 +52,7 @@ export const Lines = <PointData extends BasicPointData>(
                     })}
                     {highlightedItem.map(item => {
                         return (
-                            <Line<PointData>
+                            <Line<SerieData, PointData, ChartStateType>
                                 {...commonProps}
                                 width={width}
                                 height={height}

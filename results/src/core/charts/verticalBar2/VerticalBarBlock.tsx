@@ -10,9 +10,10 @@ import { getAllEditions } from './helpers/other'
 import { ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
 import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
-import { VerticalBarSerie } from './VerticalBarSerie'
+import { VerticalBarSerie } from './VerticalBarSerieOld'
 import { VerticalBarChartState } from './types'
 import ChartShare from '../common2/ChartShare'
+import { getViewComponent, getViewDefinition } from './helpers/views'
 
 export interface VerticalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -35,13 +36,16 @@ export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
     const { average, percentiles, completion } = currentEdition
 
     const chartState = useChartState(getDefaultState({ block }))
+    const { view } = chartState
+    const viewDefinition = getViewDefinition(view)
 
-    const commonProps: CommonProps<VerticalBarChartState> = {
+    const commonProps = {
         variant,
         question,
         series,
         pageContext,
         chartState,
+        viewDefinition,
         block
     }
 

@@ -1,13 +1,7 @@
 import React from 'react'
 import { HorizontalBarViewDefinition } from '../types'
-import {
-    removeNoAnswer,
-    removeOverLimit,
-    removeOtherAnswers,
-    removeUnderCutoff
-} from '../helpers/steps'
+import { removeNoAnswer } from '../helpers/steps'
 import { Bucket, BucketUnits, FacetBucket } from '@devographics/types'
-import max from 'lodash/max'
 import round from 'lodash/round'
 import { RowSingle } from '../rows/RowSingle'
 import { RowGroup, Rows } from '../rows'

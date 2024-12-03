@@ -2,27 +2,27 @@ import './Columns.scss'
 import React from 'react'
 import { Tick } from '../../common2/types'
 import AxisV from '../../common2/AxisV'
-import { VerticalBarChartState, VerticalBarChartValues } from '../types'
+import { BasicPointData, VerticalBarChartValues, VerticalBarViewDefinition } from '../types'
 import { Gridlines } from './Gridlines'
 import T from 'core/i18n/T'
-import { getViewComponent } from '../helpers/views'
 
-export const Columns = ({
+type ColumnsComponentProps<SerieData, PointData extends BasicPointData, ChartStateType> = {
+    chartState: ChartStateType
+    chartValues: VerticalBarChartValues
+    children: React.ReactNode
+    viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
+    ticks?: Tick[]
+    labelId?: string
+    hasZebra?: boolean
+}
+
+export const Columns = <SerieData, PointData extends BasicPointData, ChartStateType>({
     chartState,
     chartValues,
     children,
     labelId,
-    hasZebra = false
-}: {
-    chartState: VerticalBarChartState
-    chartValues: VerticalBarChartValues
-    children: React.ReactNode
-    ticks?: Tick[]
-    labelId?: string
-    hasZebra?: boolean
-}) => {
-    const { view } = chartState
-    const viewDefinition = getViewComponent(view)
+    viewDefinition
+}: ColumnsComponentProps<SerieData, PointData, ChartStateType>) => {
     const { formatValue } = viewDefinition
     const { question, ticks, totalColumns } = chartValues
     const style = { '--totalColumns': totalColumns }

@@ -96,12 +96,12 @@ export const getRowComponent = (bucket: Bucket, chartState: HorizontalBarChartSt
         if (view === HorizontalBarViews.BOXPLOT) {
             return null
         } else if (view === HorizontalBarViews.PERCENTAGE_BUCKET) {
-            return RowSingle
+            return null
         } else {
-            return RowStacked
+            return null
         }
     } else {
-        return RowSingle
+        return null
     }
 }
 

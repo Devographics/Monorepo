@@ -1,6 +1,6 @@
 import { QuestionMetadata, StandardQuestionData } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
-import { EditionWithRank, Modes, MultiRatiosChartState, MultiRatiosChartValues } from '../types'
+import { EditionWithRank, ModesEnum, MultiRatiosChartState, MultiRatiosChartValues } from '../types'
 import max from 'lodash/max'
 import { getYears } from 'core/charts/verticalBar2/helpers/chartValues'
 import range from 'lodash/range'
@@ -26,7 +26,7 @@ export const useChartValues = ({
     const columnIds = getYears(allYears).map(y => y.toString())
     const allEditionsCounts = lineItems.map(item => getAllEditions(item).length || 0)
     const ticks =
-        mode === Modes.VALUE
+        mode === ModesEnum.VALUE
             ? [
                   { value: 0 },
                   { value: 20 },

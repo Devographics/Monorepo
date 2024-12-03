@@ -2,36 +2,56 @@ import React from 'react'
 import take from 'lodash/take'
 import { useTheme } from 'styled-components'
 import { getEditionByYear } from '../helpers/other'
-import Tooltip from 'core/components/Tooltip'
-import { BasicPointData, LineComponentProps } from '../types'
-import { ViewDefinition } from 'core/charts/common2/types'
-import { QuestionMetadata } from '@devographics/types'
+import {
+    BasicPointData,
+    LineItem,
+    VerticalBarChartValues,
+    VerticalBarViewDefinition
+} from '../types'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import { getQuestionLabel } from 'core/charts/common2/helpers/labels'
-import { Modes } from 'core/charts/multiItemsRatios/types'
-import { getViewComponent } from '../helpers/views'
+import { ModesEnum } from 'core/charts/multiItemsRatios/types'
+import { BlockVariantDefinition } from 'core/types'
+import { Dot } from './Dot'
+import { LineSegment } from './LineSegment'
 
-const dotRadius = 6
+export type LineComponentProps<
+    SerieData,
+    PointData extends BasicPointData,
+    ChartStateType
+> = LineItem<PointData> & {
+    chartState: ChartStateType
+    chartValues: VerticalBarChartValues
+    block: BlockVariantDefinition
+    lineIndex: number
+    width: number
+    height: number
+    hasMultiple?: boolean
+    viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
+}
 
-export const Line = <PointData extends BasicPointData>({
-    id,
-    entity,
-    chartState,
-    chartValues,
-    points,
-    lineIndex,
-    width,
-    height,
-    hasMultiple = false
-}: LineComponentProps<PointData>) => {
+export const Line = <SerieData, PointData extends BasicPointData, ChartStateType>(
+    props: LineComponentProps<SerieData, PointData, ChartStateType>
+) => {
+    const {
+        id,
+        entity,
+        chartState,
+        chartValues,
+        viewDefinition,
+        points,
+        lineIndex,
+        width,
+        height,
+        hasMultiple = false
+    } = props
     const { getString } = useI18n()
 
     const theme = useTheme()
     const { highlighted, view, mode } = chartState
-    const viewDefinition = getViewComponent(view)
-    const { getPointValue, formatValue } = viewDefinition
-    const invertYAxis = mode === Modes.RANK
+    const { getPointValue } = viewDefinition
+    const invertYAxis = mode === ModesEnum.RANK
     const {
         totalColumns,
         maxValue,
@@ -73,15 +93,13 @@ export const Line = <PointData extends BasicPointData>({
     }
 
     const commonProps = {
-        chartState,
-        chartValues,
+        ...props,
         interval,
         width,
         height,
         totalItems,
         lineLabel,
         maxValue,
-        formatValue,
         question,
         getXCoord,
         getYCoord
@@ -115,7 +133,7 @@ export const Line = <PointData extends BasicPointData>({
             {columnIds.map((columnId, i) => {
                 const edition = getEditionByYear(columnId, points)
                 return edition ? (
-                    <Dot<PointData>
+                    <Dot<SerieData, PointData, ChartStateType>
                         {...commonProps}
                         key={edition.editionId}
                         editionIndex={i}
@@ -125,88 +143,5 @@ export const Line = <PointData extends BasicPointData>({
                 ) : null
             })}
         </g>
-    )
-}
-
-const Dot = <PointData extends BasicPointData>({
-    lineLabel,
-    editionIndex,
-    value,
-    formatValue,
-    question,
-    columnId,
-    getXCoord,
-    getYCoord,
-    chartState
-}: {
-    lineLabel: string
-    editionIndex: number
-    value: number
-    formatValue: ViewDefinition['formatValue']
-    question: QuestionMetadata
-    columnId: string
-    getXCoord: (value: number) => number
-    getYCoord: (value: number) => number
-    chartState: LineComponentProps<PointData>['chartState']
-}) => {
-    const cx = getXCoord(editionIndex)
-    const cy = getYCoord(value)
-    return (
-        <Tooltip
-            trigger={
-                <g className="chart-line-dot" transform-origin={`${cx} ${cy}`}>
-                    <circle className="chart-line-dot-visible" cx={cx} cy={cy} r={dotRadius} />
-                    <circle
-                        className="chart-line-dot-invisible"
-                        cx={cx}
-                        cy={cy}
-                        r={dotRadius * 3}
-                    />
-                    <text className="chart-line-label" x={cx} y={`${cy + 20}`}>
-                        {formatValue(value, question, chartState)}
-                    </text>
-                </g>
-            }
-            contents={`${lineLabel}: ${formatValue(value, question, chartState)} (${columnId})`}
-            asChild={true}
-        />
-    )
-}
-
-const LineSegment = ({
-    lineLabel,
-    startIndex,
-    endIndex,
-    value1,
-    value2,
-    getXCoord,
-    getYCoord
-}: {
-    lineLabel: string
-    startIndex: number
-    endIndex: number
-    value1: number
-    value2: number
-    getXCoord: (value: number) => number
-    getYCoord: (value: number) => number
-}) => {
-    const x1 = getXCoord(startIndex)
-    const x2 = getXCoord(endIndex)
-    const y1 = getYCoord(value1)
-    const y2 = getYCoord(value2)
-    return (
-        <Tooltip
-            trigger={
-                <g>
-                    <path className="chart-line-segment" d={`M${x1} ${y1} L${x2} ${y2}`} />
-                    <path
-                        className="chart-line-segment-invisible"
-                        d={`M${x1} ${y1} L${x2} ${y2}`}
-                    />
-                </g>
-            }
-            contents={lineLabel}
-            asChild={true}
-        />
     )
 }

@@ -4,7 +4,7 @@ import {
     LineItem,
     VerticalBarViewDefinition
 } from 'core/charts/verticalBar2/types'
-import { EditionWithRank, Modes, MultiRatiosChartState } from './types'
+import { EditionWithRank, ModesEnum, MultiRatiosChartState } from './types'
 import { StandardQuestionData } from '@devographics/types'
 import { getEditionByYear } from '../verticalBar2/helpers/other'
 import sortBy from 'lodash/sortBy'
@@ -59,14 +59,14 @@ export const multiRatiosViewDefinition: VerticalBarViewDefinition<
         return itemsWithRank
     },
     formatValue: (value, question, chartState) =>
-        chartState.mode === Modes.VALUE ? formatPercentage(value) : `#${value + 1}`,
+        chartState.mode === ModesEnum.VALUE ? formatPercentage(value) : `#${value + 1}`,
     getPointValue: (point, chartState) =>
-        chartState.mode === Modes.VALUE
+        chartState.mode === ModesEnum.VALUE
             ? Math.floor((point?.ratios?.[chartState.view] || 0) * 100)
             : point.rank - 1,
     component: props => {
         const { serie, question, chartState, block } = props
-        const viewDefinition = getViewComponent()
+        const viewDefinition = getViewDefinition()
         const { getLineItems } = viewDefinition
         const lineItems = getLineItems({ serie, question, chartState })
 
@@ -102,4 +102,6 @@ export const multiRatiosViewDefinition: VerticalBarViewDefinition<
     }
 }
 
-export const getViewComponent = () => multiRatiosViewDefinition.component
+export const getViewDefinition = () => multiRatiosViewDefinition
+
+export const getViewComponent = () => getViewDefinition().component

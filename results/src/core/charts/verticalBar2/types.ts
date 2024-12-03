@@ -57,17 +57,14 @@ export type VerticalBarViewDefinition<
     getPointValue?: (point: PointData, chartState: ChartStateType) => number
     getBucketValue?: (bucket: Bucket) => number
     dataFilters?: DataFilter[]
-    component: (props: VerticalBarViewProps<PointData>) => JSX.Element | null
     /**
      * Generate list of ids for all columns
      */
     getColumnIds?: (lineItems: LineItem<PointData>[]) => string[]
 }
 
-export type VerticalBarViewProps<PointData extends BasicPointData> = {
-    chartState: VerticalBarChartState
-    chartValues: VerticalBarChartValues
-    lineItems: LineItem<PointData>[]
+export type VerticalBarViewProps<ChartStateType> = {
+    chartState: ChartStateType
     block: BlockVariantDefinition
 }
 
@@ -106,11 +103,3 @@ export type LineItem<PointData extends BasicPointData> = {
     entity?: Entity
     points: Array<PointData>
 }
-
-export type LineComponentProps<PointData extends BasicPointData> = VerticalBarViewProps<PointData> &
-    LineItem<PointData> & {
-        lineIndex: number
-        width: number
-        height: number
-        hasMultiple?: boolean
-    }

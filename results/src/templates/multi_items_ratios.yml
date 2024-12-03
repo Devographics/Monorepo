@@ -1,5 +1,5 @@
 id: ${sectionId}_ratios
-blockType: MultiItemsRatiosBlock
+blockType: RatiosByEdition
 hasSponsor: true
 customizationModes: ['filters']
 queryOptions:

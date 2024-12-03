@@ -16,5 +16,9 @@ export const getViewComponent = (view: string) => {
 }
 
 export const getViewDefinition = (view: string) => {
-    return viewDefinitions[view]
+    const viewDefinition = viewDefinitions[view]
+    if (!viewDefinition) {
+        throw new Error(`getViewDefinition: could not find view definition for view ${view}`)
+    }
+    return viewDefinition
 }

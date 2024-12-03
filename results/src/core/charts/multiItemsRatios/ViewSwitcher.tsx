@@ -1,12 +1,13 @@
 import React from 'react'
-import { MultiRatiosChartState, Ratios } from './types'
+import { MultiRatiosChartState } from './types'
 import { Toggle, ToggleItemType } from '../common2'
 import { useI18n } from '@devographics/react-i18n'
+import { RatiosEnum } from '@devographics/types'
 
 const ViewSwitcher = ({ chartState }: { chartState: MultiRatiosChartState }) => {
     const { view, setView } = chartState
     const { getString } = useI18n()
-    const items: ToggleItemType[] = Object.values(Ratios).map(id => {
+    const items: ToggleItemType[] = Object.values(RatiosEnum).map(id => {
         return {
             id,
             isEnabled: view === id,
