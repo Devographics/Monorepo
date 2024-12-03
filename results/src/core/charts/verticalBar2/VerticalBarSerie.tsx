@@ -3,7 +3,7 @@ import { StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
 import { GridItem } from '../common2'
 import { CommonProps } from '../common2/types'
-import { getViewComponent } from './helpers/views'
+import { getViewComponent, getViewDefinition } from './helpers/views'
 import { useChartValues } from './helpers/chartValues'
 import { VerticalBarChartState } from './types'
 import { getItemFilters } from '../common2/helpers/filters'
@@ -15,12 +15,15 @@ export const VerticalBarSerie = (
     } & CommonProps<VerticalBarChartState>
 ) => {
     const { serie, serieIndex, block, chartState, variant, question } = props
-    const editions = serie.data.responses.allEditions
-    const chartValues = useChartValues({ editions, chartState, block, question })
+    const viewDefinition = getViewDefinition(chartState.view)
+    const { getPoints } = viewDefinition
+    const points = getPoints(serie)
+
+    const chartValues = useChartValues({ points, chartState, block, question })
 
     const viewProps = {
         ...props,
-        editions,
+        points,
         chartValues
     }
 

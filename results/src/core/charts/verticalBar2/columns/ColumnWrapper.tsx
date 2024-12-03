@@ -8,7 +8,7 @@ export const ColumnWrapper = (
         children?: JSX.Element
     }
 ) => {
-    const { year, columnIndex, children, rowMetadata } = props
+    const { columnId, columnIndex, children, rowMetadata } = props
 
     /*
 
@@ -32,7 +32,7 @@ export const ColumnWrapper = (
             )}
 
             <div className="chart-column-bottom">
-                <div className="chart-column-year">{year}</div>
+                <div className="chart-column-id">{columnId}</div>
             </div>
         </div>
     )

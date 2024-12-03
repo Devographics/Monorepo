@@ -1,8 +1,15 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from 'react'
 import { ChartState, ChartValues, Tick, ViewDefinition } from '../common2/types'
 import { IconProps } from 'core/icons/IconWrapper'
-import { Bucket, Entity, QuestionMetadata, ResponseEditionData } from '@devographics/types'
+import {
+    Bucket,
+    Entity,
+    QuestionMetadata,
+    ResponseEditionData,
+    StandardQuestionData
+} from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
+import { DataSeries } from 'core/filters/types'
 
 export interface VerticalBarChartState extends ChartState {
     viewDefinition: VerticalBarViewDefinition
@@ -23,25 +30,36 @@ export type Control = {
     onClick: (e: SyntheticEvent) => void
 }
 
-export type VerticalBarViewDefinition = ViewDefinition & {
-    getEditionValue?: (edition: ResponseEditionData, chartState: VerticalBarChartState) => number
+export type VerticalBarViewDefinition<PointData> = ViewDefinition & {
+    /**
+     * Takes a serie and return all point objects
+     */
+    getPoints: (serie: DataSeries<StandardQuestionData>) => Array<PointData>
+    /**
+     * Takes a point object and return its value
+     */
+    getPointValue?: (edition: ResponseEditionData, chartState: VerticalBarChartState) => number
     getBucketValue?: (bucket: Bucket) => number
     dataFilters?: DataFilter[]
-    component: (props: VerticalBarViewProps) => JSX.Element | null
+    component: (props: VerticalBarViewProps<PointData>) => JSX.Element | null
     invertYAxis?: boolean
+    /**
+     * Generate list of ids for all columns
+     */
+    getColumnIds?: (points: PointData[]) => string[]
 }
 
-export type VerticalBarViewProps = {
+export type VerticalBarViewProps<PointData> = {
     chartState: VerticalBarChartState
     chartValues: VerticalBarChartValues
-    editions: ResponseEditionData[]
+    points: PointData[]
     block: BlockVariantDefinition
 }
 
 export interface VerticalBarChartValues extends ChartValues {
     totalColumns: number
+    columnIds: string[]
     ticks?: Tick[]
-    years: number[]
     maxValue: number
 }
 
@@ -56,18 +74,25 @@ export type ColumnComponentProps = VerticalBarViewProps & {
 
 export type EmptyColumnProps = Omit<ColumnComponentProps, 'edition' | 'editions' | 'chartState'>
 
-export type EditionWithRank = ResponseEditionData & {
+export type BasicPointData = {
+    id: string
+    columnIndex: number
+}
+
+export type EditionWithPointData = ResponseEditionData & BasicPointData
+
+export type EditionWithRank = EditionWithPointData & {
     rank: number
 }
 
-export type LineItem = {
+export type LineItem<PointData extends BasicPointData> = {
     id: string
     entity?: Entity
-    editions: Array<EditionWithRank>
+    points: Array<PointData>
 }
 
-export type LineComponentProps = VerticalBarViewProps &
-    LineItem & {
+export type LineComponentProps<PointData extends BasicPointData> = VerticalBarViewProps<PointData> &
+    LineItem<PointData> & {
         lineIndex: number
         width: number
         height: number

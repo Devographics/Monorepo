@@ -9,14 +9,14 @@ export const ColumnSingle = (props: ColumnComponentProps) => {
     const theme = useTheme()
     const { year, edition, chartState, chartValues, showCount = true } = props
     const { viewDefinition } = chartState
-    const { getEditionValue } = viewDefinition
+    const { getPointValue } = viewDefinition
     const { maxValue } = chartValues
 
-    if (!getEditionValue) {
-        throw new Error('getEditionValue not defined')
+    if (!getPointValue) {
+        throw new Error('getPointValue not defined')
     }
 
-    const value = edition && getEditionValue(edition, chartState)
+    const value = edition && getPointValue(edition, chartState)
 
     const gradient = theme.colors.barChart.primaryGradient
 

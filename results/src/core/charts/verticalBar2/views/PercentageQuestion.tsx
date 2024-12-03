@@ -1,6 +1,6 @@
 import React from 'react'
 import { ColumnStacked } from '../columns/ColumnStacked'
-import { VerticalBarViewDefinition } from '../types'
+import { VerticalBarViewDefinition, VerticalBarViews } from '../types'
 // import { removeNoAnswer } from '../helpers/steps'
 import { BucketUnits } from '@devographics/types'
 import Columns from '../columns/Columns'

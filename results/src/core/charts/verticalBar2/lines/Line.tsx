@@ -3,7 +3,7 @@ import take from 'lodash/take'
 import { useTheme } from 'styled-components'
 import { getEditionByYear } from '../helpers/other'
 import Tooltip from 'core/components/Tooltip'
-import { LineComponentProps } from '../types'
+import { BasicPointData, LineComponentProps } from '../types'
 import { ViewDefinition } from 'core/charts/common2/types'
 import { QuestionMetadata } from '@devographics/types'
 import { getItemLabel } from 'core/helpers/labels'
@@ -12,25 +12,32 @@ import { getQuestionLabel } from 'core/charts/common2/helpers/labels'
 
 const dotRadius = 6
 
-export const Line = ({
+export const Line = <PointData extends BasicPointData>({
     id,
     entity,
     chartState,
     chartValues,
-    editions,
+    points,
     lineIndex,
     width,
     height,
     hasMultiple = false
-}: LineComponentProps) => {
+}: LineComponentProps<PointData>) => {
     const { getString } = useI18n()
 
     const theme = useTheme()
-    const { viewDefinition, highlighted } = chartState
-    const { getEditionValue, formatValue, invertYAxis } = viewDefinition
-    const { totalColumns, maxValue, years, question, legendItems = [], i18nNamespace } = chartValues
-    if (!getEditionValue) {
-        throw new Error(`getEditionValue not defined`)
+    const { viewDefinition, highlighted, view } = chartState
+    const { getPointValue, formatValue, invertYAxis } = viewDefinition
+    const {
+        totalColumns,
+        maxValue,
+        columnIds,
+        question,
+        legendItems = [],
+        i18nNamespace
+    } = chartValues
+    if (!getPointValue) {
+        throw new Error(`getPointValue not defined for view ${view}`)
     }
 
     const lineColor = hasMultiple
@@ -84,32 +91,32 @@ export const Line = ({
                 isHighlighted ? 'chart-line-highlighted' : ''
             }`}
         >
-            {take(editions, editions.length - 1).map((edition, i) => {
+            {take(points, points.length - 1).map((point, i) => {
                 // line starts at the index for the current edition's year
-                const startIndex = years.findIndex(year => year === edition.year)
+                const startIndex = point.columnIndex
                 // line ends at the index for the next edition's year
-                const nextEdition = editions[i + 1]
-                const endIndex = years.findIndex(year => year === nextEdition.year)
+                const nextPoint = points[i + 1]
+                const endIndex = nextPoint.columnIndex
                 return (
                     <LineSegment
                         {...commonProps}
-                        key={edition.editionId}
+                        key={point.id}
                         startIndex={startIndex}
                         endIndex={endIndex}
-                        value1={getEditionValue(edition, chartState)}
-                        value2={getEditionValue(editions[i + 1], chartState)}
+                        value1={getPointValue(point, chartState)}
+                        value2={getPointValue(points[i + 1], chartState)}
                     />
                 )
             })}
-            {years.map((year, i) => {
-                const edition = getEditionByYear(year, editions)
+            {columnIds.map((columnId, i) => {
+                const edition = getEditionByYear(columnId, points)
                 return edition ? (
                     <Dot
                         {...commonProps}
                         key={edition.editionId}
                         editionIndex={i}
-                        year={year}
-                        value={getEditionValue(edition, chartState)}
+                        columnId={columnId}
+                        value={getPointValue(edition, chartState)}
                     />
                 ) : null
             })}
@@ -123,7 +130,7 @@ const Dot = ({
     value,
     formatValue,
     question,
-    year,
+    columnId,
     getXCoord,
     getYCoord
 }: {
@@ -132,7 +139,7 @@ const Dot = ({
     value: number
     formatValue: ViewDefinition['formatValue']
     question: QuestionMetadata
-    year: number
+    columnId: string
     getXCoord: (value: number) => number
     getYCoord: (value: number) => number
 }) => {
@@ -154,7 +161,7 @@ const Dot = ({
                     </text>
                 </g>
             }
-            contents={`${lineLabel}: ${formatValue(value, question)} (${year})`}
+            contents={`${lineLabel}: ${formatValue(value, question)} (${columnId})`}
             asChild={true}
         />
     )
