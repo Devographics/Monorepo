@@ -30,11 +30,17 @@ export type Control = {
     onClick: (e: SyntheticEvent) => void
 }
 
-export type VerticalBarViewDefinition<PointData> = ViewDefinition & {
+export type VerticalBarViewDefinition<PointData extends BasicPointData> = ViewDefinition & {
     /**
-     * Takes a serie and return all point objects
+     * Takes a serie and return all line objects
      */
-    getPoints: (serie: DataSeries<StandardQuestionData>) => Array<PointData>
+    getLineItems: ({
+        serie,
+        question
+    }: {
+        serie: DataSeries<StandardQuestionData>
+        question: QuestionMetadata
+    }) => LineItem<PointData>[]
     /**
      * Takes a point object and return its value
      */
@@ -46,13 +52,13 @@ export type VerticalBarViewDefinition<PointData> = ViewDefinition & {
     /**
      * Generate list of ids for all columns
      */
-    getColumnIds?: (points: PointData[]) => string[]
+    getColumnIds?: (lineItems: LineItem<PointData>[]) => string[]
 }
 
-export type VerticalBarViewProps<PointData> = {
+export type VerticalBarViewProps<PointData extends BasicPointData> = {
     chartState: VerticalBarChartState
     chartValues: VerticalBarChartValues
-    points: PointData[]
+    lineItems: LineItem<PointData>[]
     block: BlockVariantDefinition
 }
 
@@ -80,10 +86,6 @@ export type BasicPointData = {
 }
 
 export type EditionWithPointData = ResponseEditionData & BasicPointData
-
-export type EditionWithRank = EditionWithPointData & {
-    rank: number
-}
 
 export type LineItem<PointData extends BasicPointData> = {
     id: string

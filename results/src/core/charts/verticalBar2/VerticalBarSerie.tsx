@@ -16,14 +16,14 @@ export const VerticalBarSerie = (
 ) => {
     const { serie, serieIndex, block, chartState, variant, question } = props
     const viewDefinition = getViewDefinition(chartState.view)
-    const { getPoints } = viewDefinition
-    const points = getPoints(serie)
+    const { getLineItems } = viewDefinition
+    const lineItems = getLineItems({ serie, question })
 
-    const chartValues = useChartValues({ points, chartState, block, question })
+    const chartValues = useChartValues({ lineItems, chartState, block, question })
 
     const viewProps = {
         ...props,
-        points,
+        lineItems,
         chartValues
     }
 

@@ -5,7 +5,7 @@ import { Line } from './Line'
 import { useHeight, useWidth } from 'core/charts/common2/helpers'
 
 export const Lines = <PointData extends BasicPointData>(
-    props: VerticalBarViewProps<PointData> & { lineItems: LineItem<PointData>[] }
+    props: VerticalBarViewProps & { lineItems: LineItem<PointData>[] }
 ) => {
     const { lineItems, chartState } = props
 

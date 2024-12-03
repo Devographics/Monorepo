@@ -1,5 +1,5 @@
 import { QuestionMetadata, ResponseEditionData } from '@devographics/types'
-import { BasicPointData, VerticalBarChartState, VerticalBarChartValues } from '../types'
+import { BasicPointData, LineItem, VerticalBarChartState, VerticalBarChartValues } from '../types'
 import { BlockVariantDefinition } from 'core/types'
 import { getViewDefinition } from './views'
 import max from 'lodash/max'
@@ -17,12 +17,12 @@ export const getYears = (allYears: number[]) => {
 }
 
 export const useChartValues = <PointData extends BasicPointData>({
-    points,
+    lineItems,
     chartState,
     block,
     question
 }: {
-    points: PointData[]
+    lineItems: LineItem<PointData>
     chartState: VerticalBarChartState
     block: BlockVariantDefinition
     question: QuestionMetadata
@@ -31,7 +31,7 @@ export const useChartValues = <PointData extends BasicPointData>({
     const viewDefinition = getViewDefinition(chartState.view)
     const { getTicks, getColumnIds } = viewDefinition
 
-    const columnIds = getColumnIds(points)
+    const columnIds = getColumnIds(lineItems)
 
     const chartValues: VerticalBarChartValues = {
         i18nNamespace,

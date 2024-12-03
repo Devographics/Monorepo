@@ -1,6 +1,6 @@
 import React from 'react'
 import Columns from '../columns/Columns'
-import { EditionWithPointData, VerticalBarViewDefinition } from '../types'
+import { EditionWithPointData, LineItem, VerticalBarViewDefinition } from '../types'
 import { formatQuestionValue } from 'core/charts/common2/helpers/format'
 import { Lines } from '../lines'
 import { ColumnEmpty } from '../columns/ColumnEmpty'
@@ -11,17 +11,24 @@ import min from 'lodash/min'
 import range from 'lodash/range'
 
 export const Average: VerticalBarViewDefinition<EditionWithPointData> = {
-    getPoints: serie => {
+    getLineItems: ({ serie, question }) => {
         const { allEditions } = serie.data.responses
         const startYear = min(allEditions.map(e => e.year)) ?? 0
-        return allEditions.map(e => ({
+        const points = allEditions.map(e => ({
             ...e,
             id: e.editionId,
             columnIndex: e.year - startYear
         }))
+        // this view returns a single line item for now
+        const lineItem = { id: question.id, entity: question.entity, points }
+        return [lineItem]
     },
-    getColumnIds: (points: EditionWithPointData[]) => {
-        const allYears = points.map(p => p.year)
+    getColumnIds: (lineItems: LineItem<EditionWithPointData>[]) => {
+        // in case we have multiple lines, make sure we collect years from all of them
+        const allYears = lineItems
+            .map(l => l.points)
+            .flat()
+            .map(p => p.year)
         const minYear = min(allYears)
         const maxYear = max(allYears)
         if (minYear === undefined || maxYear === undefined) {
@@ -37,9 +44,8 @@ export const Average: VerticalBarViewDefinition<EditionWithPointData> = {
         /*removeNoAnswer*/
     ],
     component: props => {
-        const { chartValues, points } = props
-        const { columnIds, question } = chartValues
-        const lineItem = { id: question.id, points }
+        const { chartValues } = props
+        const { columnIds } = chartValues
         return (
             <Columns {...props} hasZebra={true} labelId="chart_units.average">
                 <>
@@ -51,7 +57,7 @@ export const Average: VerticalBarViewDefinition<EditionWithPointData> = {
                             columnId={columnId}
                         />
                     ))}
-                    <Lines<EditionWithPointData> lineItems={[lineItem]} {...props} />
+                    <Lines<EditionWithPointData> {...props} />
                 </>
             </Columns>
         )
