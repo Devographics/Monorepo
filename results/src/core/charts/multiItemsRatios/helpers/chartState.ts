@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { BlockVariantDefinition } from 'core/types'
 import { Modes, MultiRatiosChartState, Ratios } from '../types'
-import { formatPercentage } from 'core/charts/common2/helpers/format'
-import { multiRatiosViewDefinition } from './view'
+import { multiRatiosViewDefinition } from '../View'
 
 export const getDefaultState = ({ block }: { block: BlockVariantDefinition }) => {
     return { view: Ratios.USAGE, mode: Modes.VALUE } as MultiRatiosChartState

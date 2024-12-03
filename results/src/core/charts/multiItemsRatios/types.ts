@@ -5,7 +5,8 @@ import { FormatValueType, Tick } from '../common2/types'
 import {
     EditionWithPointData,
     EditionWithRank,
-    VerticalBarChartValues
+    VerticalBarChartValues,
+    VerticalBarViewDefinition
 } from '../verticalBar2/types'
 import { LegendItem } from './Legend-old'
 
@@ -25,18 +26,12 @@ export enum Modes {
     RANK = 'rank'
 }
 
-export type MultiRatiosViewDefinition = {
-    getEditionValue?: (edition: EditionWithRank, chartState: MultiRatiosChartState) => number
-    formatValue: FormatValueType
-    invertYAxis?: boolean
-}
-
 export type MultiRatiosChartState = {
     view: Ratios
     setView: Dispatch<SetStateAction<Ratios>>
     mode: Modes
     setMode: Dispatch<SetStateAction<Modes>>
-    viewDefinition: MultiRatiosViewDefinition
+    viewDefinition: VerticalBarViewDefinition
     highlighted: string | null
     setHighlighted: Dispatch<SetStateAction<string | null>>
 }

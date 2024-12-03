@@ -10,7 +10,6 @@ import { formatQuestionValue } from 'core/charts/common2/helpers/format'
 import { Lines } from '../lines'
 import { ColumnEmpty } from '../columns/ColumnEmpty'
 // import { removeNoAnswer } from '../helpers/steps'
-
 import max from 'lodash/max'
 import min from 'lodash/min'
 import range from 'lodash/range'

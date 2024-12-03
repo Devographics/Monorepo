@@ -31,8 +31,17 @@ export type Control = {
 }
 
 export type VerticalBarViewDefinition<
+    /**
+     * Type for the kind of data each data serie uses
+     */
     SerieData,
+    /**
+     * Type for the kind of data a single point of a line uses
+     */
     PointData extends BasicPointData,
+    /**
+     * Chart state type
+     */
     ChartState
 > = ViewDefinition & {
     /**

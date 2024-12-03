@@ -1,10 +1,14 @@
+import React from 'react'
 import { EditionWithPointData, VerticalBarViewDefinition } from 'core/charts/verticalBar2/types'
-import { EditionWithRank, Modes, MultiRatiosChartState } from '../types'
+import { EditionWithRank, Modes, MultiRatiosChartState } from './types'
 import { StandardQuestionData } from '@devographics/types'
-import { getEditionByYear } from '../../verticalBar2/helpers/other'
+import { getEditionByYear } from '../verticalBar2/helpers/other'
 import sortBy from 'lodash/sortBy'
 import { formatPercentage } from 'core/charts/common2/helpers/format'
 import min from 'lodash/min'
+import Columns from '../verticalBar2/columns/Columns'
+import { ColumnEmpty } from '../verticalBar2/columns/ColumnEmpty'
+import { Lines } from '../verticalBar2/lines'
 
 export const getAllEditions = (item: StandardQuestionData) => item?.responses?.allEditions || []
 
@@ -52,5 +56,35 @@ export const multiRatiosViewDefinition: VerticalBarViewDefinition<
     getPointValue: (point, chartState) =>
         chartState.mode === Modes.VALUE
             ? Math.floor((point?.ratios?.[chartState.view] || 0) * 100)
-            : point.rank - 1
+            : point.rank - 1,
+    component: props => {
+        const { chartValues } = props
+        const { columnIds } = chartValues
+        return (
+            <Columns {...props} hasZebra={true}>
+                <>
+                    {/* {props.editions.map((edition, i) => (
+                    <ColumnSingle
+                        columnIndex={i}
+                        {...props}
+                        key={edition.editionId}
+                        edition={edition}
+                        showCount={false}
+                        showBar={false}
+                    />
+                ))} */}
+                    {columnIds.map((columnId, i) => (
+                        <ColumnEmpty
+                            {...props}
+                            chartValues={chartValues}
+                            columnIndex={i}
+                            key={columnId}
+                            columnId={columnId}
+                        />
+                    ))}
+                    <Lines<EditionWithRank> {...props} />
+                </>
+            </Columns>
+        )
+    }
 }

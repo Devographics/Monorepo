@@ -1,29 +1,30 @@
 import { QuestionMetadata, StandardQuestionData } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
-import { Modes, MultiRatiosChartState, MultiRatiosChartValues } from '../types'
+import { EditionWithRank, Modes, MultiRatiosChartState, MultiRatiosChartValues } from '../types'
 import max from 'lodash/max'
 import { getYears } from 'core/charts/verticalBar2/helpers/chartValues'
 import { LegendItem } from '../Legend-old'
 import range from 'lodash/range'
 import { getAllEditions } from './other'
+import { LineItem } from 'core/charts/verticalBar2/types'
 
 export const useChartValues = ({
-    items,
+    lineItems,
     chartState,
     block,
     question,
     legendItems
 }: {
-    items: StandardQuestionData[]
+    lineItems: LineItem<EditionWithRank>[]
     chartState: MultiRatiosChartState
     block: BlockVariantDefinition
     question: QuestionMetadata
     legendItems: LegendItem[]
 }) => {
     const { mode } = chartState
-    const allYears = items.map(item => getAllEditions(item).map(edition => edition.year)).flat()
+    const allYears = lineItems.map(item => getAllEditions(item).map(edition => edition.year)).flat()
     const columnIds = getYears(allYears).map(y => y.toString())
-    const allEditionsCounts = items.map(item => getAllEditions(item).length || 0)
+    const allEditionsCounts = lineItems.map(item => getAllEditions(item).length || 0)
     const ticks =
         mode === Modes.VALUE
             ? [
