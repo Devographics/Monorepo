@@ -82,9 +82,9 @@ export type DataFilter = (buckets: Bucket[]) => Bucket[]
 
 export type ColumnComponentProps<PointData extends BasicPointData> =
     VerticalBarViewProps<PointData> & {
-        year: number
         edition: ResponseEditionData
         columnIndex: number
+        columnId: string
         showCount?: boolean
     }
 

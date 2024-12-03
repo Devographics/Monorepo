@@ -1,15 +1,16 @@
 import React from 'react'
-import { DataSeries } from 'core/filters/types'
 import { GridItem } from '../common2'
-import { CommonProps } from '../common2/types'
-import { getViewComponent } from './helpers/views'
+import { CommonProps, LegendItem } from '../common2/types'
 import { getItemFilters } from '../common2/helpers/filters'
+import { MultiRatioSerie, MultiRatiosChartState } from './types'
+import { getViewComponent } from './View'
 
-export const VerticalBarSerie = <SerieData, ChartStateType>(
+export const RatiosSerie = (
     props: {
-        serie: DataSeries<SerieData>
+        legendItems: LegendItem[]
+        serie: MultiRatioSerie
         serieIndex: number
-    } & CommonProps<ChartStateType>
+    } & CommonProps<MultiRatiosChartState>
 ) => {
     const { serie, serieIndex, block, chartState, variant } = props
 
@@ -18,17 +19,15 @@ export const VerticalBarSerie = <SerieData, ChartStateType>(
     const ViewComponent = getViewComponent(chartState.view)
 
     return (
-        <GridItem<DataSeries<SerieData>>
+        <GridItem<MultiRatioSerie>
             key={serie.name}
             filters={itemFilters}
             serie={serie}
             block={block}
         >
             <ViewComponent {...props} />
-
-            {/* <pre>
-                <code>{JSON.stringify(chartValues, null, 2)}</code>
-            </pre> */}
         </GridItem>
     )
 }
+
+export default RatiosSerie

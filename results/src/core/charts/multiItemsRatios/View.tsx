@@ -14,6 +14,7 @@ import Columns from '../verticalBar2/columns/Columns'
 import { ColumnEmpty } from '../verticalBar2/columns/ColumnEmpty'
 import { Lines } from '../verticalBar2/lines'
 import { ColumnWrapper } from '../verticalBar2/columns/ColumnWrapper'
+import { useChartValues } from './helpers/chartValues'
 
 export const getAllEditions = (item: StandardQuestionData) => item?.responses?.allEditions || []
 
@@ -64,7 +65,13 @@ export const multiRatiosViewDefinition: VerticalBarViewDefinition<
             ? Math.floor((point?.ratios?.[chartState.view] || 0) * 100)
             : point.rank - 1,
     component: props => {
-        const { chartValues } = props
+        const { serie, question, chartState, block } = props
+        const viewDefinition = getViewComponent()
+        const { getLineItems } = viewDefinition
+        const lineItems = getLineItems({ serie, question, chartState })
+
+        const chartValues = useChartValues({ lineItems, chartState, block, question, legendItems })
+
         const { columnIds } = chartValues
         return (
             <Columns {...props} hasZebra={true}>
@@ -94,3 +101,5 @@ export const multiRatiosViewDefinition: VerticalBarViewDefinition<
         )
     }
 }
+
+export const getViewComponent = () => multiRatiosViewDefinition.component

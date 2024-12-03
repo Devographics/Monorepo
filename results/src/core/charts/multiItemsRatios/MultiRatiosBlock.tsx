@@ -8,7 +8,6 @@ import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
 import { getBlockNoteKey } from 'core/helpers/blockHelpers'
 import { useI18n } from '@devographics/react-i18n'
-import RatiosSerie from './RatiosSerie'
 import { MultiRatioSerie, MultiRatiosChartState } from './types'
 import ChartShare from '../common2/ChartShare'
 import { getDefaultState, useChartState } from './helpers/chartState'
@@ -16,6 +15,7 @@ import ViewSwitcher from './ViewSwitcher'
 import Legend from '../common2/Legend'
 import uniqBy from 'lodash/uniqBy'
 import ModeSwitcher from './ModeSwitcher'
+import { VerticalBarSerie } from '../verticalBar2/VerticalBarSerie'
 
 export interface MultiRatiosBlockProps extends BlockComponentProps {
     series: MultiRatioSerie[]
@@ -56,7 +56,7 @@ export const MultiRatiosBlock = (props: MultiRatiosBlockProps) => {
 
                 <GridWrapper seriesCount={series.length}>
                     {series.map((serie, serieIndex) => (
-                        <RatiosSerie
+                        <VerticalBarSerie
                             key={serie.name}
                             serie={serie}
                             serieIndex={serieIndex}

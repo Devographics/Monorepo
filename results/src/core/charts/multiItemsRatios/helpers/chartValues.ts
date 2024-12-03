@@ -3,10 +3,10 @@ import { BlockVariantDefinition } from 'core/types'
 import { EditionWithRank, Modes, MultiRatiosChartState, MultiRatiosChartValues } from '../types'
 import max from 'lodash/max'
 import { getYears } from 'core/charts/verticalBar2/helpers/chartValues'
-import { LegendItem } from '../Legend-old'
 import range from 'lodash/range'
 import { getAllEditions } from './other'
 import { LineItem } from 'core/charts/verticalBar2/types'
+import { LegendItem } from 'core/charts/common2/types'
 
 export const useChartValues = ({
     lineItems,

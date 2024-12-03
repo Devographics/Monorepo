@@ -56,7 +56,7 @@ export type CommonProps<ChartStateType> = {
     series: DataSeries<any>[]
     variant?: CustomVariant
     question: QuestionMetadata
-    seriesMetadata: SeriesMetadata
+    seriesMetadata?: SeriesMetadata
 }
 
 export type ViewProps<ChartStateType> = CommonProps<ChartStateType> & {

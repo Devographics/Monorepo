@@ -14,6 +14,8 @@ import min from 'lodash/min'
 import range from 'lodash/range'
 import { StandardQuestionData } from '@devographics/types'
 import { ColumnWrapper } from '../columns/ColumnWrapper'
+import { getViewDefinition } from '../helpers/views'
+import { useChartValues } from '../helpers/chartValues'
 
 export const Average: VerticalBarViewDefinition<
     StandardQuestionData,
@@ -26,6 +28,7 @@ export const Average: VerticalBarViewDefinition<
         const points = allEditions.map(e => ({
             ...e,
             id: e.editionId,
+            columnId: e.year.toString(),
             columnIndex: e.year - startYear
         }))
         // this view returns a single line item for now
@@ -53,7 +56,14 @@ export const Average: VerticalBarViewDefinition<
         /*removeNoAnswer*/
     ],
     component: props => {
-        const { chartValues } = props
+        const { serie, question, chartState, block } = props
+        const { view } = chartState
+        const viewDefinition = getViewDefinition(view)
+        const { getLineItems } = viewDefinition
+        const lineItems = getLineItems({ serie, question, chartState })
+
+        const chartValues = useChartValues({ lineItems, chartState, block, question })
+
         const { columnIds } = chartValues
         return (
             <Columns {...props} hasZebra={true} labelId="chart_units.average">
