@@ -158,14 +158,25 @@ export const getBlockTakeaway = ({
         isHtml?: boolean
     }
 }) => {
+    const { getFallbacks } = useI18n()
     const takeawayKey = `${getBlockKey({ block })}.takeaway`
+    const descriptionKey = getBlockDescriptionKey(block)
     const { currentEdition } = pageContext
-    const blockTakeaway = block.takeawayKey && getString(block.takeawayKey, { values })?.tHtml
-    const editionTakeaway = getString(`${takeawayKey}.${currentEdition.id}`, {
-        values
-    })?.tHtml
-    const genericTakeaway = getString(takeawayKey, { values })?.tHtml
-    return block.takeaway ?? blockTakeaway ?? editionTakeaway ?? genericTakeaway
+
+    const keysList = [
+        // edition-specific takeaway
+        `${takeawayKey}.${currentEdition.id}`,
+        // generic takeaway
+        takeawayKey,
+        // generic block description
+        descriptionKey
+    ]
+    if (block.takeawayKey) {
+        keysList.unshift(block.takeawayKey)
+    }
+    const tObject = getFallbacks(keysList, values)
+    console.log(tObject)
+    return tObject?.tHtml || tObject?.t
 }
 
 export const useBlockTakeaway = ({ block }: { block: BlockVariantDefinition }) => {
@@ -184,6 +195,8 @@ In order of priority, use:
 3. a generic description key (e.g. user_info.age.description.js2022)
 
 */
+export const getBlockDescriptionKey = (block: BlockVariantDefinition) =>
+    `${getBlockKey({ block })}.description`
 export const getBlockDescription = ({
     block,
     pageContext,
@@ -199,7 +212,7 @@ export const getBlockDescription = ({
         isHtml?: boolean
     }
 }) => {
-    const descriptionKey = `${getBlockKey({ block })}.description`
+    const descriptionKey = getBlockDescriptionKey(block)
     const { currentEdition } = pageContext
     const blockDescription =
         (block.description && snarkdown(block.description)) ||

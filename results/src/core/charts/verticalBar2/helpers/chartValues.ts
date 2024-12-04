@@ -37,7 +37,6 @@ export const useChartValues = <SerieData, PointData extends BasicPointData, Char
     // const { view } = chartState
     // const viewDefinition = getViewDefinition(view)
     const { getTicks, getColumnIds, getPointValue } = viewDefinition
-    console.log(viewDefinition)
     const columnIds = getColumnIds(lineItems)
 
     const maxValue = max(
@@ -58,6 +57,5 @@ export const useChartValues = <SerieData, PointData extends BasicPointData, Char
         chartValues.ticks = ticks
         chartValues.maxTick = max(ticks.map(t => t.value)) || 0
     }
-    console.log({ chartValues })
     return chartValues
 }

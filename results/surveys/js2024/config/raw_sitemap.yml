@@ -792,7 +792,6 @@
 # locale passed to them
 
 - id: user_metadata
-  titleId: sections.metadata.title
   path: /metadata
   blocks:
       - template: page_introduction

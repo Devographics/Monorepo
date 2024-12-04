@@ -2,7 +2,12 @@ import React from 'react'
 import { useTheme } from 'styled-components'
 import TierListChart, { TierItemData, TierData } from 'core/charts/toolsTierList/TierListChart'
 import sortBy from 'lodash/sortBy.js'
-import { SectionMetadata, StandardQuestionData, FeaturesOptions } from '@devographics/types'
+import {
+    SectionMetadata,
+    StandardQuestionData,
+    FeaturesOptions,
+    RatiosEnum
+} from '@devographics/types'
 import { useToolSections } from 'core/helpers/metadata'
 import { BlockComponentProps } from 'core/types/block'
 import { DataSeries } from 'core/filters/types'
@@ -46,7 +51,7 @@ const getChartData = (
         const userCount = buckets?.find(b => b.id === FeaturesOptions.USED)?.count || 0
         const cutoff = Math.round((total * cutoffPercentage) / 100)
         const satisfactionRatio =
-            (tool.responses.currentEdition.ratios?.[Ratios.RETENTION] || 0) * 100
+            (tool.responses.currentEdition.ratios?.[RatiosEnum.RETENTION] || 0) * 100
         const section = toolsSections.find((section: SectionMetadata) =>
             section.questions.find(q => q.id === tool.id)
         )
