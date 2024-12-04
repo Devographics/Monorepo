@@ -7,7 +7,7 @@ import { RowSingle } from '../rows/RowSingle'
 import { RowGroup, Rows } from '../rows'
 import { formatPercentage } from 'core/charts/common2/helpers/format'
 
-const getValue = (bucket: Bucket | FacetBucket) => bucket[BucketUnits.PERCENTAGE_QUESTION] || 0
+const getValue = (bucket: Bucket | FacetBucket) => bucket[BucketUnits.PERCENTAGE_SURVEY] || 0
 
 const getTicks = (maxValue?: number) => {
     const NUMBER_OF_TICKS = 5
@@ -25,18 +25,14 @@ const dataFilters = [
     // removeOtherAnswers
 ]
 
-export const PercentageQuestion: HorizontalBarViewDefinition = {
+export const PercentageSurvey: HorizontalBarViewDefinition = {
     getValue,
     formatValue: formatPercentage,
     getTicks,
     dataFilters,
     component: props => {
         return (
-            <Rows
-                {...props}
-                labelId="charts.axis_legends.users_percentage_question"
-                hasZebra={true}
-            >
+            <Rows {...props} labelId="charts.axis_legends.users_percentage_survey" hasZebra={true}>
                 {props.buckets.map((bucket, i) => (
                     <RowGroup
                         key={bucket.id}

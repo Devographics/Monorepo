@@ -798,30 +798,56 @@
 
       - id: locale
         template: multiple_options2
+        defaultView: percentageSurvey
         parameters: { cutoff: 20 }
         queryOptions:
             addQuestionComments: false
 
       - id: completion_stats
         template: multiple_options2
+        defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
 
-      - id: source
-        template: multiple_options2_freeform
-        parameters:
-            limit: 20
+      - id: authmode
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: device
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: browser
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      # - id: version
+      #   template: multiple_options2
+      #   queryOptions:
+      #       addQuestionComments: false
+
+      - id: os
+        template: multiple_options2
+        defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
 
       - id: previous_surveys
         template: multiple_options2
+        defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
             addBucketsEntities: true
 
       - id: same_survey_count
         template: multiple_options2
+        defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
 
@@ -836,23 +862,11 @@
         queryOptions:
             addQuestionComments: false
 
-      - id: device
-        template: multiple_options2
-        queryOptions:
-            addQuestionComments: false
-
-      - id: browser
-        template: multiple_options2
-        queryOptions:
-            addQuestionComments: false
-
-      # - id: version
-      #   template: multiple_options2
-      #   queryOptions:
-      #       addQuestionComments: false
-
-      - id: os
-        template: multiple_options2
+      - id: source
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        parameters:
+            limit: 20
         queryOptions:
             addQuestionComments: false
 

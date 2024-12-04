@@ -12,7 +12,8 @@ import {
     Count,
     PercentageBucket,
     PercentageQuestion,
-    FacetCounts
+    FacetCounts,
+    PercentageSurvey
 } from '../views'
 
 const controlIcons = {
@@ -60,6 +61,7 @@ export const getControls = ({
 export const viewDefinitions: { [key: string]: HorizontalBarViewDefinition } = {
     // regular views
     [HorizontalBarViews.PERCENTAGE_QUESTION]: PercentageQuestion,
+    [HorizontalBarViews.PERCENTAGE_SURVEY]: PercentageSurvey,
     [HorizontalBarViews.COUNT]: Count,
     // faceted views
     [HorizontalBarViews.AVERAGE]: Average,

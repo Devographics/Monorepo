@@ -29,6 +29,7 @@ export enum HorizontalBarViews {
     BOXPLOT = 'percentilesByFacet',
     PERCENTAGE_BUCKET = 'percentageBucket',
     PERCENTAGE_QUESTION = 'percentageQuestion',
+    PERCENTAGE_SURVEY = 'percentageSurvey',
     FACET_COUNTS = 'facetCounts',
     COUNT = 'count',
     AVERAGE = 'average'
