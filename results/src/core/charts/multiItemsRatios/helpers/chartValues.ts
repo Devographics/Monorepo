@@ -1,30 +1,32 @@
-import { QuestionMetadata, StandardQuestionData } from '@devographics/types'
+import { QuestionMetadata } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
-import { EditionWithRank, ModesEnum, MultiRatiosChartState, MultiRatiosChartValues } from '../types'
+import {
+    EditionWithRankAndPointData,
+    ModesEnum,
+    MultiRatiosChartState,
+    MultiRatiosChartValues
+} from '../types'
 import max from 'lodash/max'
-import { getYears } from 'core/charts/verticalBar2/helpers/chartValues'
 import range from 'lodash/range'
-import { getAllEditions } from './other'
+import { viewDefinition } from './viewDefinition'
 import { LineItem } from 'core/charts/verticalBar2/types'
 import { LegendItem } from 'core/charts/common2/types'
 
 export const useChartValues = ({
     lineItems,
     chartState,
-    block,
     question,
     legendItems
 }: {
-    lineItems: LineItem<EditionWithRank>[]
+    lineItems: LineItem<EditionWithRankAndPointData>[]
     chartState: MultiRatiosChartState
     block: BlockVariantDefinition
     question: QuestionMetadata
     legendItems: LegendItem[]
 }) => {
     const { mode } = chartState
-    const allYears = lineItems.map(item => getAllEditions(item).map(edition => edition.year)).flat()
-    const columnIds = getYears(allYears).map(y => y.toString())
-    const allEditionsCounts = lineItems.map(item => getAllEditions(item).length || 0)
+    const { getColumnIds } = viewDefinition
+    const columnIds = getColumnIds(lineItems)
     const ticks =
         mode === ModesEnum.VALUE
             ? [

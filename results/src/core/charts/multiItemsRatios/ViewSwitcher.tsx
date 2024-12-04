@@ -14,7 +14,7 @@ const ViewSwitcher = ({ chartState }: { chartState: MultiRatiosChartState }) => 
             label: getString(`ratios.${id}`)?.t
         }
     })
-    return <Toggle labelId="charts.view" handleSelect={setView} items={items} />
+    return <Toggle<RatiosEnum> labelId="charts.view" handleSelect={setView} items={items} />
 }
 
 export default ViewSwitcher

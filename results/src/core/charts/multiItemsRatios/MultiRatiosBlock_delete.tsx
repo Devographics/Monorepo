@@ -15,7 +15,7 @@ import ViewSwitcher from './ViewSwitcher'
 import Legend from '../common2/Legend'
 import uniqBy from 'lodash/uniqBy'
 import ModeSwitcher from './ModeSwitcher'
-import { VerticalBarSerie } from '../verticalBar2/VerticalBarSerieOld'
+import { VerticalBarSerie } from '../verticalBar2/VerticalBarSerieOld_delete'
 
 export interface MultiRatiosBlockProps extends BlockComponentProps {
     series: MultiRatioSerie[]

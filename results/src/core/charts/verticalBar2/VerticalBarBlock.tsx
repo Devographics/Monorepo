@@ -8,12 +8,11 @@ import { DataSeries } from 'core/filters/types'
 import { getDefaultState, useChartState } from './helpers/chartState'
 import { getAllEditions } from './helpers/other'
 import { ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
-import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
-import { VerticalBarSerie } from './VerticalBarSerieOld'
 import { VerticalBarChartState } from './types'
 import ChartShare from '../common2/ChartShare'
-import { getViewComponent, getViewDefinition } from './helpers/views'
+import { getViewDefinition } from './helpers/views'
+import { VerticalBarSerieWrapper } from './VerticalBarSerieWrapper'
 
 export interface VerticalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -38,6 +37,7 @@ export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
     const chartState = useChartState(getDefaultState({ block }))
     const { view } = chartState
     const viewDefinition = getViewDefinition(view)
+    const ViewComponent = viewDefinition.component
 
     const commonProps = {
         variant,
@@ -58,12 +58,14 @@ export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
 
                 <GridWrapper seriesCount={series.length}>
                     {series.map((serie, serieIndex) => (
-                        <VerticalBarSerie
+                        <VerticalBarSerieWrapper<StandardQuestionData, VerticalBarChartState>
                             key={serie.name}
                             serie={serie}
                             serieIndex={serieIndex}
                             {...commonProps}
-                        />
+                        >
+                            <ViewComponent serie={serie} serieIndex={serieIndex} {...commonProps} />
+                        </VerticalBarSerieWrapper>
                     ))}
                 </GridWrapper>
 

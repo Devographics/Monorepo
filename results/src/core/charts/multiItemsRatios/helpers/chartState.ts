@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BlockVariantDefinition } from 'core/types'
-import { ModesEnum, MultiRatiosChartState, Ratios } from '../types'
+import { ModesEnum, MultiRatiosChartState } from '../types'
 import { RatiosEnum } from '@devographics/types'
 
 export const getDefaultState = ({ block }: { block: BlockVariantDefinition }) => {

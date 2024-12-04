@@ -26,12 +26,18 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
 
     const className = `multiexp multiexp-groupedBy-${grouping}`
 
+    // not used but expected by Rows.tsx
+    const viewDefinition = {
+        formatValue: (v: any) => v
+    }
+
     const commonProps = {
         chartState,
         block,
         question,
         pageContext,
-        series
+        series,
+        viewDefinition
     }
 
     const options =

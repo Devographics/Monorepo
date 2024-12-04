@@ -1,7 +1,6 @@
 import React from 'react'
 import take from 'lodash/take'
 import { useTheme } from 'styled-components'
-import { getEditionByYear } from '../helpers/other'
 import {
     BasicPointData,
     LineItem,
@@ -85,7 +84,7 @@ export const Line = <SerieData, PointData extends BasicPointData, ChartStateType
     const interval = width / totalColumns
     const totalItems = legendItems.length
 
-    const getXCoord = (yearIndex: number) => interval * yearIndex + interval / 2
+    const getXCoord = (columnIndex: number) => interval * columnIndex + interval / 2
     const getYCoord = (value: number) => {
         // SVG coordinates are inverted by default
         const v = invertYAxis ? value : maxValue - value
@@ -114,9 +113,9 @@ export const Line = <SerieData, PointData extends BasicPointData, ChartStateType
             }`}
         >
             {take(points, points.length - 1).map((point, i) => {
-                // line starts at the index for the current edition's year
+                // line starts at the index for the current point
                 const startIndex = point.columnIndex
-                // line ends at the index for the next edition's year
+                // line ends at the index for the next point
                 const nextPoint = points[i + 1]
                 const endIndex = nextPoint.columnIndex
                 return (
@@ -131,14 +130,16 @@ export const Line = <SerieData, PointData extends BasicPointData, ChartStateType
                 )
             })}
             {columnIds.map((columnId, i) => {
-                const edition = getEditionByYear(columnId, points)
-                return edition ? (
+                // find the point corresponding to the current column, if it exists
+                // (some lines might skip across columns sometimes)
+                const point = points.find(p => p.columnId === columnId)
+                return point ? (
                     <Dot<SerieData, PointData, ChartStateType>
                         {...commonProps}
-                        key={edition.editionId}
-                        editionIndex={i}
+                        key={point.id}
+                        pointIndex={i}
                         columnId={columnId}
-                        value={getPointValue(edition, chartState)}
+                        value={getPointValue(point, chartState)}
                     />
                 ) : null
             })}

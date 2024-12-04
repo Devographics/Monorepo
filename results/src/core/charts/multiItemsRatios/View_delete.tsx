@@ -4,7 +4,7 @@ import {
     LineItem,
     VerticalBarViewDefinition
 } from 'core/charts/verticalBar2/types'
-import { EditionWithRank, ModesEnum, MultiRatiosChartState } from './types'
+import { EditionWithRankAndPointData, ModesEnum, MultiRatiosChartState } from './types'
 import { StandardQuestionData } from '@devographics/types'
 import { getEditionByYear } from '../verticalBar2/helpers/other'
 import sortBy from 'lodash/sortBy'
@@ -20,7 +20,7 @@ export const getAllEditions = (item: StandardQuestionData) => item?.responses?.a
 
 export const multiRatiosViewDefinition: VerticalBarViewDefinition<
     StandardQuestionData[],
-    EditionWithRank,
+    EditionWithRankAndPointData,
     MultiRatiosChartState
 > = {
     getLineItems: ({ serie, question, chartState }) => {
@@ -95,7 +95,7 @@ export const multiRatiosViewDefinition: VerticalBarViewDefinition<
                             columnId={columnId}
                         />
                     ))}
-                    <Lines<EditionWithRank> {...props} />
+                    <Lines<EditionWithRankAndPointData> {...props} />
                 </>
             </Columns>
         )

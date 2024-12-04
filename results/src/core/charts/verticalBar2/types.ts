@@ -60,7 +60,8 @@ export type VerticalBarViewDefinition<
     /**
      * Generate list of ids for all columns
      */
-    getColumnIds?: (lineItems: LineItem<PointData>[]) => string[]
+    getColumnIds: (lineItems: LineItem<PointData>[]) => string[]
+    component?: (props: VerticalBarViewProps<ChartStateType>) => JSX.Element | null
 }
 
 export type VerticalBarViewProps<ChartStateType> = {

@@ -88,23 +88,6 @@ export const getChartBuckets = ({
     return buckets
 }
 
-export const getRowComponent = (bucket: Bucket, chartState: HorizontalBarChartState) => {
-    const { view } = chartState
-    const { facetBuckets } = bucket
-    const hasFacetBuckets = facetBuckets && facetBuckets.length > 0
-    if (hasFacetBuckets) {
-        if (view === HorizontalBarViews.BOXPLOT) {
-            return null
-        } else if (view === HorizontalBarViews.PERCENTAGE_BUCKET) {
-            return null
-        } else {
-            return null
-        }
-    } else {
-        return null
-    }
-}
-
 export const useQuestionMetadata = (facet?: FacetItem) => {
     if (!facet) return
     const { id, sectionId } = facet

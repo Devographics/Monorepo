@@ -24,6 +24,6 @@ export interface MultiRatiosChartState {
 
 export type MultiRatiosChartValues = VerticalBarChartValues & { legendItems: LegendItem[] }
 
-export type EditionWithRank = EditionWithPointData & {
+export type EditionWithRankAndPointData = EditionWithPointData & {
     rank: number
 }

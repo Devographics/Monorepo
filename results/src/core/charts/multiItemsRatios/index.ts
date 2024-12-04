@@ -1,1 +1,1 @@
-export { default } from './MultiRatiosBlock'
+export { default } from './RatiosByEdition'

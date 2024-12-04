@@ -1,5 +1,5 @@
 id: '${sectionId}_happiness'
-blockType: AverageByEdition
+blockType: VerticalBarBlock2
 showDescription: false
 i18nNamespace: tools
 hasSponsor: true

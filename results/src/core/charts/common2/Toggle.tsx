@@ -30,16 +30,21 @@ export type ToggleItemType = {
     gradient?: string[]
 }
 
-type ToggleProps = {
+type ToggleProps<ValueType> = {
     labelId: string
     items: ToggleItemType[]
-    handleSelect: (id: string | number) => void
+    handleSelect: (id: ValueType) => void
     hasDefault?: boolean
 }
 
 const DEFAULT_SORT = 'default'
 
-export const Toggle = ({ labelId, items, handleSelect, hasDefault = false }: ToggleProps) => {
+export const Toggle = <ValueType,>({
+    labelId,
+    items,
+    handleSelect,
+    hasDefault = false
+}: ToggleProps<ValueType>) => {
     const [useDropdown, setUseDropdown] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
     const currentWidth = useWidth(ref)

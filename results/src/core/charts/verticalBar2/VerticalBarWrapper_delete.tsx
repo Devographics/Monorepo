@@ -8,7 +8,7 @@ import { DataSeries } from 'core/filters/types'
 import { ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
 import ChartData from '../common2/ChartData'
 import ChartShare from '../common2/ChartShare'
-import { VerticalBarSerie } from './VerticalBarSerie'
+import { VerticalBarSerie } from './VerticalBarSerie_delete'
 
 export interface VerticalBarWrapperProps extends BlockComponentProps {
     data: StandardQuestionData

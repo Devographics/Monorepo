@@ -7,7 +7,7 @@ const dotRadius = 6
 
 export type DotComponentProps<SerieData, PointData extends BasicPointData, ChartStateType> = {
     lineLabel: string
-    editionIndex: number
+    pointIndex: number
     value: number
     question: QuestionMetadata
     columnId: string
@@ -19,7 +19,7 @@ export type DotComponentProps<SerieData, PointData extends BasicPointData, Chart
 
 export const Dot = <SerieData, PointData extends BasicPointData, ChartStateType>({
     lineLabel,
-    editionIndex,
+    pointIndex,
     value,
     viewDefinition,
     question,
@@ -29,7 +29,7 @@ export const Dot = <SerieData, PointData extends BasicPointData, ChartStateType>
     chartState
 }: DotComponentProps<SerieData, PointData, ChartStateType>) => {
     const { formatValue } = viewDefinition
-    const cx = getXCoord(editionIndex)
+    const cx = getXCoord(pointIndex)
     const cy = getYCoord(value)
     return (
         <Tooltip

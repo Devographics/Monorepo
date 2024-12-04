@@ -13,7 +13,7 @@ const ModeSwitcher = ({ chartState }: { chartState: MultiRatiosChartState }) => 
             label: getString(`modes.${id}`)?.t
         }
     })
-    return <Toggle labelId="charts.mode" items={items} handleSelect={setMode} />
+    return <Toggle<ModesEnum> labelId="charts.mode" items={items} handleSelect={setMode} />
 }
 
 export default ModeSwitcher

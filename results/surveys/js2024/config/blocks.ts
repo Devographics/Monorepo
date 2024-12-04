@@ -19,7 +19,7 @@ import MultiItemsExperienceBlock from 'core/charts/multiItemsExperience'
 import MultiItemsRatiosBlock from 'core/charts/multiItemsRatios'
 
 // historical trend charts
-import { AverageByEdition } from 'core/charts/verticalBar2/variants/AverageByEdition'
+import { TimeSeriesByDateBlock } from 'core/charts/timeSeriesByDate/TimeSeriesByDateBlock'
 import { RatiosByEdition } from 'core/charts/multiItemsRatios/RatiosByEdition'
 
 // features
@@ -46,7 +46,7 @@ const chartBlocks = {
     HorizontalBarBlock2,
     VerticalBarBlock,
     VerticalBarBlock2,
-    AverageByEdition,
+    TimeSeriesByDateBlock,
     RatiosByEdition,
     LineChartDates,
     PeopleBlock,
