@@ -828,6 +828,12 @@
 
       - id: created_at_date
         template: multiple_options2
+        blockType: TimeSeriesByDateBlock
+        defaultView: count
+        parameters:
+            showNoAnswer: false,
+            cutoff: 10,
+            sort: { order: asc, property: id }
         queryOptions:
             addQuestionComments: false
 

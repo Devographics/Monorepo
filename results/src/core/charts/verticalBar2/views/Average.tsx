@@ -48,7 +48,7 @@ export const Average: VerticalBarViewDefinition<
         const years = range(minYear, maxYear + 1)
         return years.map(y => y.toString())
     },
-    getPointValue: edition => edition.average || 0,
+    getPointValue: point => point.average || 0,
     getTicks: () => [{ value: 0 }, { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }],
     formatValue: formatQuestionValue,
     dataFilters: [

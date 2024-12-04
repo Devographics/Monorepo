@@ -12,9 +12,10 @@ export interface VerticalBarChartState {
     setHighlighted: Dispatch<SetStateAction<string | null>>
 }
 
-export enum VerticalBarViews {
+export enum VerticalBarViewsEnum {
     PERCENTAGE_QUESTION = 'percentageQuestion',
-    AVERAGE = 'average'
+    AVERAGE = 'average',
+    COUNT = 'count'
 }
 
 export type Control = {
@@ -23,6 +24,10 @@ export type Control = {
     isChecked?: boolean
     icon: (props: IconProps) => React.JSX.Element
     onClick: (e: SyntheticEvent) => void
+}
+
+type TickItem = {
+    value: number
 }
 
 export type VerticalBarViewDefinition<
@@ -54,19 +59,29 @@ export type VerticalBarViewDefinition<
     /**
      * Takes a point object and return its value
      */
-    getPointValue?: (point: PointData, chartState: ChartStateType) => number
+    getPointValue: (point: PointData, chartState: ChartStateType) => number
     getBucketValue?: (bucket: Bucket) => number
     dataFilters?: DataFilter[]
     /**
      * Generate list of ids for all columns
      */
     getColumnIds: (lineItems: LineItem<PointData>[]) => string[]
-    component?: (props: VerticalBarViewProps<ChartStateType>) => JSX.Element | null
+    formatColumn: ({ columnId, columnIndex }: { columnId: string; columnIndex: number }) => string
+    component?: (
+        props: VerticalBarViewComponentProps<SerieData, PointData, ChartStateType>
+    ) => JSX.Element | null
 }
 
-export type VerticalBarViewProps<ChartStateType> = {
+export type VerticalBarViewComponentProps<
+    SerieData,
+    PointData extends BasicPointData,
+    ChartStateType
+> = {
+    question: QuestionMetadata
+    serie: DataSeries<SerieData>
     chartState: ChartStateType
     block: BlockVariantDefinition
+    viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
 }
 
 export interface VerticalBarChartValues extends ChartValues {
@@ -79,7 +94,7 @@ export interface VerticalBarChartValues extends ChartValues {
 export type DataFilter = (buckets: Bucket[]) => Bucket[]
 
 export type ColumnComponentProps<PointData extends BasicPointData> =
-    VerticalBarViewProps<PointData> & {
+    VerticalBarViewComponentProps<PointData> & {
         edition: ResponseEditionData
         columnIndex: number
         columnId: string

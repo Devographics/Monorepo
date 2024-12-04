@@ -1,7 +1,11 @@
-import { QuestionMetadata, ResponseEditionData } from '@devographics/types'
-import { BasicPointData, LineItem, VerticalBarChartState, VerticalBarChartValues } from '../types'
+import { QuestionMetadata } from '@devographics/types'
+import {
+    BasicPointData,
+    LineItem,
+    VerticalBarChartValues,
+    VerticalBarViewDefinition
+} from '../types'
 import { BlockVariantDefinition } from 'core/types'
-import { getViewDefinition } from './views'
 import max from 'lodash/max'
 import min from 'lodash/min'
 import range from 'lodash/range'
@@ -16,35 +20,43 @@ export const getYears = (allYears: number[]) => {
     return years
 }
 
-export const useChartValues = <PointData extends BasicPointData>({
+export const useChartValues = <SerieData, PointData extends BasicPointData, ChartStateType>({
     lineItems,
     chartState,
     block,
-    question
+    question,
+    viewDefinition
 }: {
     lineItems: LineItem<PointData>[]
-    chartState: VerticalBarChartState
+    chartState: ChartStateType
     block: BlockVariantDefinition
     question: QuestionMetadata
+    viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
 }) => {
     const { i18nNamespace } = block
-    const { view } = chartState
-    const viewDefinition = getViewDefinition(view)
-    const { getTicks, getColumnIds } = viewDefinition
-
+    // const { view } = chartState
+    // const viewDefinition = getViewDefinition(view)
+    const { getTicks, getColumnIds, getPointValue } = viewDefinition
+    console.log(viewDefinition)
     const columnIds = getColumnIds(lineItems)
+
+    const maxValue = max(
+        lineItems
+            .map(lineItem => lineItem.points.map(point => getPointValue(point, chartState)))
+            .flat()
+    ) as number
 
     const chartValues: VerticalBarChartValues = {
         i18nNamespace,
         question,
         columnIds,
         totalColumns: columnIds.length,
-        maxValue: 0
+        maxValue
     }
     if (getTicks) {
-        const ticks = getTicks()
+        const ticks = getTicks(maxValue)
         chartValues.ticks = ticks
-        chartValues.maxValue = max(ticks.map(tick => tick.value)) || 0
     }
+    console.log(chartValues)
     return chartValues
 }

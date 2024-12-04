@@ -1,28 +1,26 @@
 import React from 'react'
-import '../common2/ChartsCommon.scss'
-import './VerticalBar.scss'
 import Metadata from '../common2/Metadata'
 import { BlockComponentProps } from 'core/types'
 import { StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
 import { getDefaultState, useChartState } from './helpers/chartState'
-import { getAllEditions } from './helpers/other'
 import { ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
 import ChartData from '../common2/ChartData'
-import { VerticalBarChartState } from './types'
 import ChartShare from '../common2/ChartShare'
 import { getViewDefinition } from './helpers/views'
-import { VerticalBarSerieWrapper } from './VerticalBarSerieWrapper'
+import { VerticalBarSerieWrapper } from '../verticalBar2/VerticalBarSerieWrapper'
+import { getChartCurrentEdition } from '../horizontalBar2/helpers/other'
+import { TimeSeriesByDateChartState } from './types'
 
 export interface VerticalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
     series: DataSeries<StandardQuestionData>[]
 }
 
-export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
+export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
     const { block, series, question, pageContext, variant } = props
-    const allEditions = getAllEditions({ serie: series[0], block })
-    const currentEdition = allEditions.at(-1)
+    const currentEdition = getChartCurrentEdition({ serie: series[0], block })
+
     if (currentEdition === undefined) {
         throw new Error(`${block.id}: empty allEditions array`)
     }
@@ -53,7 +51,7 @@ export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
 
                 <GridWrapper seriesCount={series.length}>
                     {series.map((serie, serieIndex) => (
-                        <VerticalBarSerieWrapper<StandardQuestionData, VerticalBarChartState>
+                        <VerticalBarSerieWrapper<StandardQuestionData, TimeSeriesByDateChartState>
                             key={serie.name}
                             serie={serie}
                             serieIndex={serieIndex}
@@ -89,4 +87,4 @@ export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
     )
 }
 
-export default VerticalBarBlock2
+export default TimeSeriesByDateBlock

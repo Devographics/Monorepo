@@ -1,0 +1,124 @@
+import React from 'react'
+import { formatQuestionValue } from 'core/charts/common2/helpers/format'
+// import { removeNoAnswer } from '../helpers/steps'
+import max from 'lodash/max'
+import min from 'lodash/min'
+import range from 'lodash/range'
+import sortBy from 'lodash/sortBy'
+import { StandardQuestionData } from '@devographics/types'
+import Columns from 'core/charts/verticalBar2/columns/Columns'
+import { ColumnWrapper } from 'core/charts/verticalBar2/columns/ColumnWrapper'
+import { Lines } from 'core/charts/verticalBar2/lines'
+import {
+    LineItem,
+    VerticalBarChartState,
+    VerticalBarViewDefinition
+} from 'core/charts/verticalBar2/types'
+import { DateBucketWithPointData, TimeSeriesByDateChartState } from '../types'
+import * as d3 from 'd3'
+import { addDaysToDate, diffDays, formatDateToYMD } from '../helpers/other'
+import { useChartValues } from 'core/charts/verticalBar2/helpers/chartValues'
+
+export const Count: VerticalBarViewDefinition<
+    StandardQuestionData,
+    DateBucketWithPointData,
+    TimeSeriesByDateChartState
+> = {
+    getLineItems: ({ serie, question }) => {
+        let buckets = serie.data.responses.currentEdition.buckets
+        // make sure buckets are sorted by date (id)
+        buckets = sortBy(buckets, 'id')
+        const points = buckets.map(bucket => {
+            const startDate = new Date(min(buckets.map(e => Number(e.id))) || 0)
+            const currentDate = new Date(Number(bucket.id))
+
+            return {
+                ...bucket,
+                date: Number(bucket.id),
+                columnId: formatDateToYMD(currentDate),
+                columnIndex: diffDays(startDate, currentDate)
+            }
+        })
+        // this view returns a single line item for now
+        const lineItem = { id: question.id, entity: question.entity, points }
+        return [lineItem]
+    },
+    getColumnIds: (lineItems: LineItem<DateBucketWithPointData>[]) => {
+        // in case we have multiple lines, make sure we collect years from all of them
+        const allDates = lineItems
+            .map(l => l.points)
+            .flat()
+            .map(p => p.date)
+
+        const minDate = new Date(min(allDates) as number)
+        const maxDate = new Date(max(allDates) as number)
+        const dateCount = diffDays(minDate, maxDate)
+        if (minDate === undefined || maxDate === undefined) {
+            return []
+        }
+        const dates = range(dateCount + 1).map(daysFromStart => {
+            return addDaysToDate(minDate, daysFromStart)
+        })
+        const columnIds = dates.map(formatDateToYMD)
+        return columnIds
+    },
+    formatColumn: ({ columnId, columnIndex }) => {
+        const [year, month, date] = columnId.split('-')
+        return columnIndex % 2 === 0 ? `${month}/${date}` : ''
+    },
+    getPointValue: point => point.count || 0,
+    getTicks: maxValue => {
+        if (!maxValue) {
+            return []
+        }
+
+        const scale = d3.scaleLinear().domain([0, maxValue])
+
+        return scale.ticks(10).map(s => ({ value: s }))
+    },
+    formatValue: formatQuestionValue,
+    dataFilters: [
+        /*removeNoAnswer*/
+    ],
+    component: props => {
+        const { serie, question, chartState, block, viewDefinition } = props
+        const { getLineItems } = viewDefinition
+        const lineItems = getLineItems({ serie, question, chartState })
+        const chartValues = useChartValues({
+            lineItems,
+            chartState,
+            block,
+            question,
+            viewDefinition: Count
+        })
+        const { columnIds } = chartValues
+        return (
+            <Columns
+                {...props}
+                chartValues={chartValues}
+                hasZebra={true}
+                labelId="chart_units.average"
+            >
+                <>
+                    {columnIds.map((columnId, i) => (
+                        <ColumnWrapper<
+                            StandardQuestionData,
+                            DateBucketWithPointData,
+                            VerticalBarChartState
+                        >
+                            {...props}
+                            columnIndex={i}
+                            key={columnId}
+                            columnId={columnId}
+                        />
+                    ))}
+                    <Lines<StandardQuestionData, DateBucketWithPointData, VerticalBarChartState>
+                        {...props}
+                        lineItems={lineItems}
+                        chartValues={chartValues}
+                    />
+                </>
+            </Columns>
+        )
+    }
+}

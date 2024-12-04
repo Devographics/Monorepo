@@ -1,14 +1,13 @@
 import { useState } from 'react'
-import { VerticalBarChartState, VerticalBarViewsEnum } from '../types'
 import { BlockVariantDefinition } from 'core/types'
-import { getViewDefinition } from './views'
+import { VerticalBarChartState, VerticalBarViewsEnum } from 'core/charts/verticalBar2/types'
 
 export const getDefaultState = ({ block }: { block: BlockVariantDefinition }) => {
     const defaultState = {} as VerticalBarChartState
     if (block.defaultView) {
         defaultState.view = block.defaultView
     } else {
-        defaultState.view = VerticalBarViewsEnum.AVERAGE
+        defaultState.view = VerticalBarViewsEnum.COUNT
     }
     return defaultState
 }
@@ -17,7 +16,7 @@ export const useChartState = (defaultState: {
     [P in keyof VerticalBarChartState]?: VerticalBarChartState[P]
 }) => {
     const [view, setView] = useState<VerticalBarChartState['view']>(
-        defaultState.view || VerticalBarViewsEnum.AVERAGE
+        defaultState.view || VerticalBarViewsEnum.COUNT
     )
     const [highlighted, setHighlighted] = useState<string | null>(null)
 

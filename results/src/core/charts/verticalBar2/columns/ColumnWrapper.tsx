@@ -1,15 +1,22 @@
 import './Column.scss'
 import React from 'react'
-import { BasicPointData, EmptyColumnProps } from '../types'
+import { BasicPointData, EmptyColumnProps, VerticalBarViewDefinition } from '../types'
 
-export const ColumnWrapper = <PointData extends BasicPointData>(
-    props: EmptyColumnProps<PointData> & {
-        rowMetadata?: JSX.Element
-        children?: JSX.Element
-    }
+type ColumnWrapperProps<
+    SerieData,
+    PointData extends BasicPointData,
+    ChartStateType
+> = EmptyColumnProps<PointData> & {
+    rowMetadata?: JSX.Element
+    children?: JSX.Element
+    viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
+}
+
+export const ColumnWrapper = <SerieData, PointData extends BasicPointData, ChartStateType>(
+    props: ColumnWrapperProps<SerieData, PointData, ChartStateType>
 ) => {
-    const { columnId, columnIndex, children, rowMetadata } = props
-
+    const { columnId, columnIndex, children, rowMetadata, viewDefinition } = props
+    const { formatColumn } = viewDefinition
     /*
 
     We add +1 because grid columns are 1-indexed, and +1 again to
@@ -32,7 +39,7 @@ export const ColumnWrapper = <PointData extends BasicPointData>(
             )}
 
             <div className="chart-column-bottom">
-                <div className="chart-column-id">{columnId}</div>
+                <div className="chart-column-id">{formatColumn({ columnId, columnIndex })}</div>
             </div>
         </div>
     )

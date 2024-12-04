@@ -1,12 +1,12 @@
 import { VerticalBarViewDefinition, VerticalBarViewsEnum } from '../../verticalBar2/types'
-import { Average, PercentageQuestion } from '../views'
+import { Count } from '../views'
 
-export const viewDefinitions: { [key: string]: VerticalBarViewDefinition } = {
+export const viewDefinitions: { [key: string]: any } = {
     // regular views
-    [VerticalBarViewsEnum.PERCENTAGE_QUESTION]: PercentageQuestion,
-    // [VerticalBarViews.COUNT]: Count,
+    // [VerticalBarViews.PERCENTAGE_QUESTION]: PercentageQuestion,
+    [VerticalBarViewsEnum.COUNT]: Count
     // faceted views
-    [VerticalBarViewsEnum.AVERAGE]: Average
+    // [VerticalBarViews.AVERAGE]: Average
     // [Views.FACET_COUNTS]: FacetCounts,
     // [Views.PERCENTAGE_BUCKET]: PercentageBucket
 }
