@@ -48,6 +48,7 @@ export const Average: VerticalBarViewDefinition<
         const years = range(minYear, maxYear + 1)
         return years.map(y => y.toString())
     },
+    formatColumn: ({ columnId }) => columnId,
     getPointValue: point => point.average || 0,
     getTicks: () => [{ value: 0 }, { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }],
     formatValue: formatQuestionValue,
@@ -58,7 +59,13 @@ export const Average: VerticalBarViewDefinition<
         const { serie, question, chartState, block, viewDefinition } = props
         const { getLineItems } = viewDefinition
         const lineItems = getLineItems({ serie, question, chartState })
-        const chartValues = useChartValues({ lineItems, chartState, block, question })
+        const chartValues = useChartValues({
+            lineItems,
+            chartState,
+            block,
+            question,
+            viewDefinition: Average
+        })
         const { columnIds } = chartValues
         return (
             <Columns
@@ -69,7 +76,11 @@ export const Average: VerticalBarViewDefinition<
             >
                 <>
                     {columnIds.map((columnId, i) => (
-                        <ColumnWrapper<EditionWithPointData>
+                        <ColumnWrapper<
+                            StandardQuestionData,
+                            EditionWithPointData,
+                            VerticalBarChartState
+                        >
                             {...props}
                             columnIndex={i}
                             key={columnId}

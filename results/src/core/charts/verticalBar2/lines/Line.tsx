@@ -54,6 +54,7 @@ export const Line = <SerieData, PointData extends BasicPointData, ChartStateType
     const {
         totalColumns,
         maxValue,
+        maxTick,
         columnIds,
         question,
         legendItems = [],
@@ -86,9 +87,12 @@ export const Line = <SerieData, PointData extends BasicPointData, ChartStateType
 
     const getXCoord = (columnIndex: number) => interval * columnIndex + interval / 2
     const getYCoord = (value: number) => {
+        // we use either the largest tick value, or the largest chart value
+        // (can be different if ticks are defined manually)
+        const chartMax = maxTick ?? maxValue
         // SVG coordinates are inverted by default
-        const v = invertYAxis ? value : maxValue - value
-        return (v * height) / maxValue
+        const v = invertYAxis ? value : chartMax - value
+        return (v * height) / chartMax
     }
 
     const commonProps = {
@@ -99,6 +103,7 @@ export const Line = <SerieData, PointData extends BasicPointData, ChartStateType
         totalItems,
         lineLabel,
         maxValue,
+        maxTick,
         question,
         getXCoord,
         getYCoord

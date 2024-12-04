@@ -114,7 +114,16 @@ const Serie = (
         >
             <>
                 {columnIds.map((columnId, i) => (
-                    <ColumnWrapper {...props} columnIndex={i} key={columnId} columnId={columnId} />
+                    <ColumnWrapper<
+                        StandardQuestionData[],
+                        EditionWithRankAndPointData,
+                        MultiRatiosChartState
+                    >
+                        {...commonProps}
+                        columnIndex={i}
+                        key={columnId}
+                        columnId={columnId}
+                    />
                 ))}
                 <Lines<StandardQuestionData[], EditionWithRankAndPointData, MultiRatiosChartState>
                     {...commonProps}

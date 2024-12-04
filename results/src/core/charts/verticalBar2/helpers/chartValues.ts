@@ -56,7 +56,8 @@ export const useChartValues = <SerieData, PointData extends BasicPointData, Char
     if (getTicks) {
         const ticks = getTicks(maxValue)
         chartValues.ticks = ticks
+        chartValues.maxTick = max(ticks.map(t => t.value)) || 0
     }
-    console.log(chartValues)
+    console.log({ chartValues })
     return chartValues
 }

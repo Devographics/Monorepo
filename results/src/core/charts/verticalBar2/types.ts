@@ -89,6 +89,7 @@ export interface VerticalBarChartValues extends ChartValues {
     columnIds: string[]
     ticks?: Tick[]
     maxValue: number
+    maxTick?: number
 }
 
 export type DataFilter = (buckets: Bucket[]) => Bucket[]
