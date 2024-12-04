@@ -175,7 +175,6 @@ export const getBlockTakeaway = ({
         keysList.unshift(block.takeawayKey)
     }
     const tObject = getFallbacks(keysList, values)
-    console.log(tObject)
     return tObject?.tHtml || tObject?.t
 }
 

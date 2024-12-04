@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ChartContainer from 'core/charts/ChartContainer'
 import { ToolsArrowsChart } from './ToolsArrowsChart'
 import {
@@ -11,6 +11,7 @@ import { DataSeries } from 'core/filters/types'
 import { ChartFooter, ChartWrapper, Note } from '../common2'
 import ChartShare from '../common2/ChartShare'
 import { BlockVariantDefinition } from 'core/types'
+import MultiItemsCategories from '../multiItemsExperience/MultiItemsCategories'
 
 interface ToolsArrowsBlockProps {
     index: number
@@ -20,25 +21,42 @@ interface ToolsArrowsBlockProps {
 }
 
 // convert data from new 3-option format back to old 5-option format
-const convertData = (data: StandardQuestionData[]) => {
-    return data.map(tool => {
-        // console.log('////')
-        // console.log(tool)
+const convertData = (data: StandardQuestionData[], sectionId: string) => {
+    let allTools = data.map(tool => {
         return {
             ...tool,
             responses: {
                 ...tool.responses,
                 allEditions: tool.responses.allEditions.map(edition => {
-                    // console.log(edition)
                     const findFacetBucket = (id: string, id1: string, id2: string) => {
                         const bucket = edition.buckets.find(b => b.id === id1)
-
-                        // console.log(id, id1, id2)
-                        // console.log(bucket)
                         const facetBucket = bucket?.facetBuckets?.find(fb => fb.id === id2)
+
+                        let percentageQuestion = facetBucket?.percentageQuestion || 0
+                        const neutralFacetBucket = bucket?.facetBuckets?.find(
+                            fb => fb.id === SimplifiedSentimentOptions.NEUTRAL_SENTIMENT
+                        )
+                        if (
+                            [FeaturesOptions.HEARD, FeaturesOptions.USED].includes(
+                                id1 as FeaturesOptions
+                            ) &&
+                            neutralFacetBucket
+                        ) {
+                            // for heard/used, if neutral bucket exists, account for it
+
+                            // percentage of respondents who picked "heard" or "used"
+                            // and also picked a sentiment
+                            const withSentimentPercentage =
+                                100 - (neutralFacetBucket?.percentageQuestion || 0)
+
+                            // multiply percentageQuestion by withSentimentPercentage
+                            percentageQuestion =
+                                (percentageQuestion * 100) / withSentimentPercentage
+                        }
+
                         return {
                             id,
-                            percentageQuestion: facetBucket?.percentageQuestion,
+                            percentageQuestion,
                             count: facetBucket?.count
                         }
                     }
@@ -74,6 +92,10 @@ const convertData = (data: StandardQuestionData[]) => {
             }
         }
     })
+    if (sectionId) {
+        allTools = allTools.filter(tool => tool._metadata.sectionId === sectionId)
+    }
+    return allTools
 }
 export const ToolsArrowsBlock = ({
     block,
@@ -83,16 +105,23 @@ export const ToolsArrowsBlock = ({
 }: ToolsArrowsBlockProps) => {
     const controlledCurrent = triggerId
     const { data } = series[0]
-
+    const [filter, setFilter] = useState<string | undefined>()
+    const chartState = {
+        filter,
+        setFilter
+    }
     return (
         <ChartWrapper question={question}>
             <>
                 <ChartContainer>
-                    <ToolsArrowsChart
-                        data={convertData(data)}
-                        current={controlledCurrent}
-                        activeCategory="all"
-                    />
+                    <>
+                        <MultiItemsCategories block={block} chartState={chartState} />
+                        <ToolsArrowsChart
+                            data={convertData(data, filter)}
+                            current={controlledCurrent}
+                            activeCategory="all"
+                        />
+                    </>
                 </ChartContainer>
                 <Note block={block} />
 

@@ -224,9 +224,28 @@
         template: multi_items_experience
         chartOptions:
             limit: 10
+            categories:
+                [
+                    front_end_frameworks,
+                    meta_frameworks,
+                    testing,
+                    mobile_desktop,
+                    build_tools,
+                    monorepo_tools
+                ]
 
       - id: tools_arrows
         template: tools_arrows
+        chartOptions:
+            categories:
+                [
+                    front_end_frameworks,
+                    meta_frameworks,
+                    testing,
+                    mobile_desktop,
+                    build_tools,
+                    monorepo_tools
+                ]
 
       - id: rich_harris
         template: picks
