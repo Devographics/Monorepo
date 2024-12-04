@@ -12,7 +12,7 @@ export const addPreviousParticipations = async (args) => {
   const selector = {
     surveyId,
     editionId,
-    [`user_info.${PREVIOUS_PARTICIPATIONS}`]: { $exists: false },
+    [PREVIOUS_PARTICIPATIONS]: { $exists: false },
   };
 
   const total = await Responses.countDocuments(selector);
