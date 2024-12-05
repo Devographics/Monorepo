@@ -51,6 +51,7 @@ export const MultiItemsCategories = ({ block, chartState }: MultiItemsCategories
             // className: `column-heading-sort column-heading-order-${order} ${
             //     isEnabled ? 'column-heading-sort-enabled' : ''
             // }`,
+            labelKey: key,
             label: shortLabel,
             tooltip: (
                 <T

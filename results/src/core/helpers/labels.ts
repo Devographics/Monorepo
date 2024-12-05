@@ -76,10 +76,15 @@ export const getItemLabel = (options: {
         }
 
         // else, try using an i18n key
+        // TODO: get rid of these exceptions?
         // note: make an exception for "features" namespace because it does not use the
         // "options." prefix
         const defaultKey =
-            i18nNamespace === 'features' ? `features.${id}` : `options.${i18nNamespace}.${id}`
+            i18nNamespace === 'tools'
+                ? `tools.${id}`
+                : i18nNamespace === 'features'
+                ? `features.${id}`
+                : `options.${i18nNamespace}.${id}`
         const predefinedKey = predefinedKeys[id]
 
         key = predefinedKey || defaultKey

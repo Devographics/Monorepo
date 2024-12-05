@@ -23,6 +23,7 @@ const getMinToggleWidth = (items: ToggleItemType[]) =>
 
 export type ToggleItemType = {
     label: string
+    labelKey: string
     id: string | number | null
     isEnabled: boolean
     className?: string
@@ -106,8 +107,12 @@ const Dropdown = ({
 }
 
 const DropdownItem = ({ item }: { item: ToggleItemType }) => {
-    const { label, id } = item
-    return <option value={id}>{label}</option>
+    const { label, id, labelKey } = item
+    return (
+        <option value={id} data-labelKey={labelKey}>
+            {label}
+        </option>
+    )
 }
 
 const SegmentedControl = ({
@@ -130,7 +135,7 @@ const SegmentedControlItem = ({
     item: ToggleItemType
     handleSelect: ToggleProps['handleSelect']
 }) => {
-    const { label, id, isEnabled, gradient, className, tooltip } = item
+    const { label, labelKey, id, isEnabled, gradient, className, tooltip } = item
     const ref = useRef<HTMLDivElement>(null)
 
     const component = (
@@ -146,7 +151,9 @@ const SegmentedControlItem = ({
             ref={ref}
         >
             {gradient && <ItemColor gradient={gradient} />}
-            <span className="legend-item-label">{label}</span>
+            <span className="legend-item-label" data-labelKey={labelKey}>
+                {label}
+            </span>
             {/* <CellLabel label={shortLabel} /> */}
             <span className="order-asc">↑</span>
             <span className="order-desc">↓</span>
