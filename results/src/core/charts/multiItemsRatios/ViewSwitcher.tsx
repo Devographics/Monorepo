@@ -7,13 +7,15 @@ import { RatiosEnum } from '@devographics/types'
 const ViewSwitcher = ({ chartState }: { chartState: MultiRatiosChartState }) => {
     const { view, setView } = chartState
     const { getString } = useI18n()
-    const items: ToggleItemType[] = Object.values(RatiosEnum).map(id => {
-        return {
-            id,
-            isEnabled: view === id,
-            label: getString(`ratios.${id}`)?.t
-        }
-    })
+    const items: ToggleItemType[] = Object.values(RatiosEnum)
+        .filter(r => r !== RatiosEnum.POSITIVITY)
+        .map(id => {
+            return {
+                id,
+                isEnabled: view === id,
+                label: getString(`ratios.${id}`)?.t
+            }
+        })
     return <Toggle<RatiosEnum> labelId="charts.view" handleSelect={setView} items={items} />
 }
 

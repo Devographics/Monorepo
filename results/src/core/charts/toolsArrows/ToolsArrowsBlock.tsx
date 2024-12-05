@@ -115,7 +115,9 @@ export const ToolsArrowsBlock = ({
             <>
                 <ChartContainer>
                     <>
-                        <MultiItemsCategories block={block} chartState={chartState} />
+                        <div className="tools-arrows-view-switcher">
+                            <MultiItemsCategories block={block} chartState={chartState} />
+                        </div>
                         <ToolsArrowsChart
                             data={convertData(data, filter)}
                             current={controlledCurrent}

@@ -1,231 +1,248 @@
-@import "src/stylesheets/to-remove/colors.scss";
+@import 'src/stylesheets/to-remove/colors.scss';
+
+.tools-arrows-view-switcher {
+    margin-bottom: var(--spacing);
+}
 
 .ToolsArrowsChart {
-  position: relative;
-  margin: auto;
-  margin-bottom: 2.5rem;
-  @media (max-width: 800px) {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  display: flex;
-  // align-items: center;
-  // justify-content: center;
+    position: relative;
+    margin: auto;
+    margin-bottom: 2.5rem;
+    @media (max-width: 800px) {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    display: flex;
+    // align-items: center;
+    // justify-content: center;
 
-  svg {
-    fill: $greyLight;
-    overflow: visible;
-  }
-  &__svg {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
+    svg {
+        fill: $greyLight;
+        overflow: visible;
+    }
+    &__svg {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
 
-  @keyframes fadeIn {
-      0% { opacity: 0; }
-    100% { opacity: 1; }
-  }
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
 
-  &__axis {
-    stroke: $navyLighter;
-    stroke-width: 1px;
+    &__axis {
+        stroke: $navyLighter;
+        stroke-width: 1px;
+
+        &__label {
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.66em;
+            font-weight: 600;
+            fill-opacity: 0.5;
+            dominant-baseline: middle;
+        }
+    }
+
+    @keyframes gradientLineSegmentIn {
+        0% {
+            stroke-opacity: 0;
+        }
+        100% {
+            stroke-opacity: 1;
+        }
+        //   0% { stroke-dashoffset: -20px; }
+        // 100% { stroke-dashoffset: 0; }
+    }
+    &__tool {
+        &--is {
+            &-hidden {
+                opacity: 0;
+                pointer-events: none;
+            }
+            &-active {
+                .ToolsArrowsChart {
+                    &__gradient-line {
+                        stroke-opacity: 0;
+                        animation: gradientLineSegmentIn 0.2s ease-out;
+                        animation-fill-mode: forwards;
+                        @for $i from 0 to 100 {
+                            &--nth-#{$i} {
+                                animation-delay: #{$i * 0.03}s;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &-hovering {
+                .ToolsArrowsChart {
+                    &__year {
+                        fill-opacity: 1;
+                    }
+                }
+            }
+
+            &-hovering-other {
+                // opacity: 0.3;
+
+                text {
+                    fill-opacity: 0;
+                    stroke-opacity: 0;
+                    // opacity: 0;
+                }
+
+                .ToolsArrowsChart {
+                    &__gradient-line {
+                        stroke: $navy;
+                        stroke-width: 1 !important;
+                    }
+
+                    &__now {
+                        fill-opacity: 0.2 !important;
+                    }
+                }
+            }
+        }
+    }
+    &__hover-background {
+        stroke-width: 30px;
+        stroke: rgba(0, 0, 0, 0);
+        fill: none;
+    }
+
+    &__now {
+    }
+    &__year {
+        fill-opacity: 0;
+    }
+
+    &__gradient-line {
+        fill: none;
+        stroke-width: 4.5px;
+        mix-blend-mode: lighten;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        pointer-events: none;
+    }
+
+    @keyframes fadeInSlideUp {
+        0% {
+            fill-opacity: 0;
+            transform: translateY(1em);
+        }
+        100% {
+            fill-opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    &__year {
+        font-size: 0.8em;
+        font-weight: 600;
+        pointer-events: none;
+        // fill-opacity: 0; transform: translateY(1em);
+        // animation: fadeInSlideUp 0.2s ease-out;
+        // animation-fill-mode: forwards;
+    }
+    &__label-background {
+        font-size: 0.8em;
+        font-weight: 600;
+        stroke: $navyDark;
+        stroke-width: 3px;
+    }
 
     &__label {
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-size: 0.66em;
-      font-weight: 600;
-      fill-opacity: 0.5;
-      dominant-baseline: middle;
-    }
-  }
+        font-size: 0.8em;
+        font-weight: 600;
+        // opacity: 0;
+        // animation: fadeIn 0.9s ease-out;
+        // animation-fill-mode: forwards;
+        // animation-delay: 0.1s;
 
-  @keyframes gradientLineSegmentIn {
-      0% { stroke-opacity: 0; }
-    100% { stroke-opacity: 1; }
-    //   0% { stroke-dashoffset: -20px; }
-    // 100% { stroke-dashoffset: 0; }
-  }
-  &__tool {
-    &--is {
-      &-hidden {
-        opacity: 0;
-        pointer-events: none;
-      }
-      &-active {
-        .ToolsArrowsChart {
-          &__gradient-line {
-            stroke-opacity: 0;
-            animation: gradientLineSegmentIn 0.2s ease-out;
-            animation-fill-mode: forwards;
-            @for $i from 0 to 100 {
-              &--nth-#{$i} {
-                animation-delay: #{$i * 0.03}s;
-              }
+        &__box {
+            cursor: default;
+
+            text {
+                pointer-events: none;
+                user-select: none;
             }
-          }
         }
-      }
-
-      &-hovering {
-        .ToolsArrowsChart {
-            &__year {
-            fill-opacity: 1;
-          }
-        }
-      }
-
-      &-hovering-other {
-        // opacity: 0.3;
-
-        text {
-          fill-opacity: 0;
-          stroke-opacity: 0;
-          // opacity: 0;
-        }
-
-        .ToolsArrowsChart {
-          &__gradient-line {
-            stroke: $navy;
-            stroke-width: 1 !important;
-          }
-
-          &__now {
-            fill-opacity: 0.2 !important;
-          }
-        }
-      }
     }
-  }
-  &__hover-background {
-    stroke-width: 30px;
-    stroke: rgba(0, 0, 0, 0);
-    fill: none;
-  }
-
-  &__now {
-  }
-  &__year {
-    fill-opacity: 0;
-  }
-
-  &__gradient-line {
-    fill: none;
-    stroke-width: 4.5px;
-    mix-blend-mode: lighten;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    pointer-events: none;
-  }
-
-  @keyframes fadeInSlideUp {
-      0% { fill-opacity: 0; transform: translateY(1em); }
-    100% { fill-opacity: 1; transform: translateY(0); }
-  }
-
-  &__year {
-    font-size: 0.8em;
-    font-weight: 600;
-    pointer-events: none;
-    // fill-opacity: 0; transform: translateY(1em);
-    // animation: fadeInSlideUp 0.2s ease-out;
-    // animation-fill-mode: forwards;
-  }
-  &__label-background {
-    font-size: 0.8em;
-    font-weight: 600;
-    stroke: $navyDark;
-    stroke-width: 3px;
-  }
-
-  &__label {
-    font-size: 0.8em;
-    font-weight: 600;
-    // opacity: 0;
-    // animation: fadeIn 0.9s ease-out;
-    // animation-fill-mode: forwards;
-    // animation-delay: 0.1s;
-
-    &__box {
-      cursor: default;
-
-      text {
-        pointer-events: none;
-        user-select: none;
-      }
+    &__listener {
+        fill: transparent;
     }
-  }
-  &__listener {
-    fill: transparent;
-  }
 }
 
 .ToolsArrowsChart__label {
-  cursor: pointer;
-  &:hover {
-    fill: $white;
-  }
+    cursor: pointer;
+    &:hover {
+        fill: $white;
+    }
 }
 
 .hide_visually {
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
 }
 
 .legend {
-  max-width: 25rem;
-  margin-top: -6rem;
-  
-  position: absolute;
-  right: 0;
+    max-width: 25rem;
+    margin-top: -6rem;
+
+    position: absolute;
+    right: 0;
 }
 
 .legend_label {
-  fill: $text-color;
-  text-anchor: start;
-  font-size: 0.8rem;
-  line-height: 1.25rem;
-  max-width: 12rem;
-  margin-top: 0rem;
-  box-sizing: border-box;
-  margin-bottom: 0;
+    fill: $text-color;
+    text-anchor: start;
+    font-size: 0.8rem;
+    line-height: 1.25rem;
+    max-width: 12rem;
+    margin-top: 0rem;
+    box-sizing: border-box;
+    margin-bottom: 0;
 
-  &.left {
-    border-left: 1px solid $text-color;
-    padding-left: 0.5rem;
-    // padding-right: 4rem;
-    padding-top: 0.25rem;
-  }
-  &.right {
-    border-right: 1px solid $text-color;
-    text-align: right;
-    padding-right: 0.5rem;
-    // padding-left: 4rem;
-    padding-bottom: 0.35rem;
-    padding-top: 0.1rem;
-  }
+    &.left {
+        border-left: 1px solid $text-color;
+        padding-left: 0.5rem;
+        // padding-right: 4rem;
+        padding-top: 0.25rem;
+    }
+    &.right {
+        border-right: 1px solid $text-color;
+        text-align: right;
+        padding-right: 0.5rem;
+        // padding-left: 4rem;
+        padding-bottom: 0.35rem;
+        padding-top: 0.1rem;
+    }
 }
 
-
 .legend_colors {
-  display: block;
-  width: 12rem;
-  height: 1rem;
+    display: block;
+    width: 12rem;
+    height: 1rem;
 
-  background-position: top center;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 
-  border-left: 1px solid $text-color;
-  border-right: 1px solid $text-color;
+    border-left: 1px solid $text-color;
+    border-right: 1px solid $text-color;
 
-  margin-top: 0;
+    margin-top: 0;
 }

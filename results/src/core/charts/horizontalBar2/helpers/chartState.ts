@@ -13,19 +13,16 @@ export const getDefaultState = ({
     block: BlockVariantDefinition
 }) => {
     const defaultState = {} as HorizontalBarChartState
-    if (block.defaultView) {
-        defaultState.view = block.defaultView
-    } else {
-        if (facetQuestion) {
-            defaultState.facet = { id: facetQuestion.id, sectionId: facetQuestion.sectionId }
-            if (facetQuestion.optionsAreRange || facetQuestion.optionsAreNumeric) {
-                defaultState.view = HorizontalBarViews.BOXPLOT
-            } else {
-                defaultState.view = HorizontalBarViews.PERCENTAGE_BUCKET
-            }
+
+    if (facetQuestion) {
+        defaultState.facet = { id: facetQuestion.id, sectionId: facetQuestion.sectionId }
+        if (facetQuestion.optionsAreRange || facetQuestion.optionsAreNumeric) {
+            defaultState.view = HorizontalBarViews.BOXPLOT
         } else {
-            defaultState.view = HorizontalBarViews.PERCENTAGE_QUESTION
+            defaultState.view = HorizontalBarViews.PERCENTAGE_BUCKET
         }
+    } else {
+        defaultState.view = block.defaultView ?? HorizontalBarViews.PERCENTAGE_QUESTION
     }
     if (block?.chartOptions?.limit) {
         defaultState.rowsLimit = block.chartOptions.limit

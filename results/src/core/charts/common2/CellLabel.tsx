@@ -3,7 +3,7 @@ import React from 'react'
 import { CharWrapper, characters } from 'core/components/Characters'
 
 export const CellLabel = ({ label }: { label: string }) => (
-    <span className="chart-cell-label">
+    <span className="chart-cell-label" role="img" aria-label={label}>
         {[...label].map((char, index) => {
             const Component = characters[char]
             return (

@@ -222,6 +222,7 @@
       - id: all_tools_experience
         titleId: tools.all_items.experience
         template: multi_items_experience
+        i18nNamespace: tools
         chartOptions:
             limit: 10
             categories:
@@ -236,6 +237,7 @@
 
       - id: tools_arrows
         template: tools_arrows
+        i18nNamespace: tools
         chartOptions:
             categories:
                 [
@@ -888,6 +890,32 @@
             limit: 20
         queryOptions:
             addQuestionComments: false
+        variants:
+            - id: source_outreach
+              fieldId: source
+              tabId: tabs.outreach
+              template: multiple_options2_freeform
+              parameters:
+                  limit: 20
+                  cutoff: 1
+              queryOptions:
+                  addQuestionComments: false
+              filtersState:
+                  # note: not enough data to make it possible to enable this
+                  # facet:
+                  #     sectionId: user_info
+                  #     id: gender
+                  bucketsFilter:
+                      in:
+                          - shruti_kapoor
+                          - afor_digital
+                          - stephanie_walter
+                          - self_teach_me
+                          - black_girls_code
+                          - diversify_tech
+                          - codebar
+                          - black_tech_pipeline
+                          - referral_5n0w
 
 - id: about
   path: /about

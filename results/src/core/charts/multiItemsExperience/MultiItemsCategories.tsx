@@ -38,11 +38,12 @@ export const MultiItemsCategories = ({ block, chartState }: MultiItemsCategories
     }
     const items = categories.map(categoryId => {
         const isEnabled = categoryId === filter
-        const { label, shortLabel, key } = getItemLabel({
+        const i18nObject = getItemLabel({
             id: categoryId,
             getString,
             i18nNamespace
         })
+        const { label, shortLabel, key } = i18nObject
         const columnLabel = shortLabel
         return {
             id: categoryId,
@@ -51,6 +52,7 @@ export const MultiItemsCategories = ({ block, chartState }: MultiItemsCategories
             // className: `column-heading-sort column-heading-order-${order} ${
             //     isEnabled ? 'column-heading-sort-enabled' : ''
             // }`,
+            i18nObject,
             labelKey: key,
             label: shortLabel,
             tooltip: (
@@ -62,6 +64,7 @@ export const MultiItemsCategories = ({ block, chartState }: MultiItemsCategories
             )
         }
     })
+    console.log(items)
     return (
         <Toggle
             labelId="charts.filter_by"

@@ -145,7 +145,16 @@ export const FreeformAnswersModal = ({
 }) => {
     const [data, setData] = useState<RawDataItem[]>([])
     const [isLoading, setIsLoading] = useState(false)
+
+    if (queryOptions.questionId === 'source') {
+        // since "source" is a composite field, overwrite queryOptions to instead
+        // show raw data for user_info.how_did_user_find_out_about_the_survey
+        queryOptions.sectionId = 'user_info'
+        queryOptions.questionId = 'how_did_user_find_out_about_the_survey'
+    }
+
     const { surveyId, editionId, sectionId, questionId } = queryOptions
+
     useEffect(() => {
         const getData = async () => {
             setIsLoading(true)
@@ -162,6 +171,7 @@ export const FreeformAnswersModal = ({
             )
             const questionData = result?.surveys?.[surveyId]?.[editionId]?.[sectionId]?.[questionId]
             const rawData = questionData?.freeform?.rawData
+
             if (rawData) {
                 setData(rawData)
             }
