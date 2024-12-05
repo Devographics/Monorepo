@@ -17,6 +17,10 @@ import ToolFeatureExperienceBlock from 'core/charts/toolFeatureExperience'
 import MultiItemsExperienceBlock from 'core/charts/multiItemsExperience'
 import MultiItemsRatiosBlock from 'core/charts/multiItemsRatios'
 
+// historical trend charts
+import { TimeSeriesByDateBlock } from 'core/charts/timeSeriesByDate/TimeSeriesByDateBlock'
+import { RatiosByEdition } from 'core/charts/multiItemsRatios/RatiosByEdition'
+
 // features
 import FeaturesOverviewBlock from 'core/charts/featuresOverview'
 
@@ -42,6 +46,9 @@ const chartBlocks = {
     VerticalBarBlock,
     VerticalBarBlock2,
     PeopleBlock,
+
+    TimeSeriesByDateBlock,
+    RatiosByEdition,
 
     MultiItemsExperienceBlock,
     MultiItemsRatiosBlock,
