@@ -8,7 +8,7 @@ import {
     ResolverParent,
     IncludeEnum
 } from '../types/surveys'
-import { getPath, getEditionById, getSectionType } from './helpers'
+import { getPath, getEditionById, getSectionType, getGeneralMetadata } from './helpers'
 import { genericComputeFunction, getGenericCacheKey } from '../compute'
 import { useCache } from '../helpers/caching'
 import { getRawCommentsWithCache } from '../compute/comments'
@@ -167,7 +167,7 @@ export const generateResolvers = async ({
 Always get a fresh copy of `surveys` from memory
 
 */
-const getGlobalMetadataResolver = (): ResolverType => async (parent, args) => {
+const getGlobalMetadataResolver = (): ResolverType => async (parent, args, context) => {
     console.log('// getGlobalMetadataResolver')
     const { surveyId, editionId } = args
     const isDevOrTest = !!(
@@ -185,7 +185,9 @@ const getGlobalMetadataResolver = (): ResolverType => async (parent, args) => {
     } else if (surveyId) {
         filteredSurveys = surveys.filter(s => s.id === surveyId)
     }
-    return { surveys: filteredSurveys }
+    const general = await getGeneralMetadata({ context })
+    console.log(general)
+    return { surveys: filteredSurveys, general }
 }
 
 const getSurveyResolver =

@@ -615,7 +615,17 @@ type Query {
 }
 
 type APIMetadata {
+    general: GeneralMetadata
     surveys: [SurveyMetadata]
+}
+
+type GeneralMetadata {
+    creators: [Creator]
+}
+
+type Creator {
+    id: String
+    entity: Entity
 }
 
 type TranslationString {
