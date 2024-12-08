@@ -63,6 +63,7 @@ type StageLogItem = {
     startAt: Date
     endAt: Date
     duration: number
+    bucketCount: number
 }
 
 export const convertOrder = (order: SortOrder): SortOrderNumeric => (order === 'asc' ? 1 : -1)
@@ -207,9 +208,10 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     const runStage = async (f: (...args: any[]) => Promise<any>, args: any) => {
         const startAt = new Date()
         const result = await f.apply(null, args)
+        const bucketCount = result?.[0]?.buckets?.length
         const endAt = new Date()
         const duration = Math.abs(endAt.getTime() - startAt.getTime())
-        const logItem = { name: f.name, startAt, endAt, duration }
+        const logItem = { name: f.name, startAt, endAt, duration, bucketCount }
         stageLog.push(logItem)
         return result
     }
@@ -481,6 +483,14 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             if (axis2.enableBucketGroups && axis2.question.groups) {
                 axis2.options = axis2.question.groups
             }
+
+            await runStage(addEntities, [results, context, axis2])
+            await runStage(addTokens, [results, context, axis2])
+
+            // restrict buckets to the ones specified in bucketsFilter if needed
+            // note: this uses entity tags so do it after addEntities
+            await runStage(restrictBuckets, [results, axis2])
+
             await runStage(sortData, [results, axis2, axis1])
 
             await runStage(limitData, [results, axis2, axis1])
@@ -524,6 +534,14 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             if (axis1.enableBucketGroups && axis1.question.groups) {
                 axis1.options = axis1.question.groups
             }
+
+            await runStage(addEntities, [results, context, axis1])
+            await runStage(addTokens, [results, context, axis1])
+
+            // restrict buckets to the ones specified in bucketsFilter if needed
+            // note: this uses entity tags so do it after addEntities
+            await runStage(restrictBuckets, [results, axis1])
+
             await runStage(sortData, [results, axis1])
             await runStage(limitData, [results, axis1])
 
@@ -534,13 +552,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await runStage(addLabels, [results, axis1])
         await runStage(addMetadata, [results, axis1])
     }
-
-    await runStage(addEntities, [results, context, axis1])
-    await runStage(addTokens, [results, context, axis1])
-
-    // restrict buckets to the ones specified in bucketsFilter if needed
-    // note: this uses entity tags so do it after addEntities
-    await runStage(restrictBuckets, [results, axis1])
 
     await runStage(detectNaN, [results, isDebug, logPath])
 
@@ -553,7 +564,11 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
             startAt,
             endAt,
             duration: Math.abs((startAt.getTime() - endAt.getTime()) / 1000),
-            log: stageLog.map(({ name, duration }) => ({ name, duration }))
+            log: stageLog.map(({ name, duration, bucketCount }) => ({
+                name,
+                duration,
+                bucketCount
+            }))
         }
         await logToFile(`${logPath}/stages.yml`, log)
     }
