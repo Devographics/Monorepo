@@ -22,7 +22,7 @@ import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
 import { localesResolvers } from '../resolvers/locales'
 import { subFields } from './subfields'
-import { ResponsesParameters, ResultsSubFieldEnum } from '@devographics/types'
+import { Creator, ResponsesParameters, ResultsSubFieldEnum } from '@devographics/types'
 import { loadOrGetParsedSurveys } from '../load/surveys'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
@@ -56,6 +56,8 @@ export const generateResolvers = async ({
             ...entitiesResolvers,
             ...localesResolvers
         },
+        GeneralMetadata: generalMetadataResolverMap,
+        Creator: creatorResolverMap,
         Surveys: surveysFieldsResolvers,
         ItemComments: commentsResolverMap,
         CreditItem: creditResolverMap,
@@ -185,9 +187,25 @@ const getGlobalMetadataResolver = (): ResolverType => async (parent, args, conte
     } else if (surveyId) {
         filteredSurveys = surveys.filter(s => s.id === surveyId)
     }
-    const general = await getGeneralMetadata({ context })
-    console.log(general)
-    return { surveys: filteredSurveys, general }
+    return { surveys: filteredSurveys, general: {} }
+}
+
+export const generalMetadataResolverMap = {
+    creators: async (parent_: any, context: RequestContext) => {
+        console.log('// creators resolver')
+
+        const general = getGeneralMetadata({ context })
+        return general.creators
+    }
+}
+
+export const creatorResolverMap = {
+    entity: async (parent: Creator, {}, context: RequestContext) => {
+        console.log('// creators entity resolver')
+        const { id } = parent
+        const entity = await getEntity({ id, context })
+        return entity
+    }
 }
 
 const getSurveyResolver =

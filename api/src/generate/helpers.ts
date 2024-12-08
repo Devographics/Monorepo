@@ -222,14 +222,12 @@ export const getEditionById = async (editionId: string) => {
     return edition
 }
 
-export const getGeneralMetadata = async ({ context }: { context: RequestContext }) => {
+export const getGeneralMetadata = ({ context }: { context: RequestContext }) => {
     // TODO: import this from YAML
     return {
-        creators: ['stephanie_walter', 'afor_digital', 'codebar', 'shruti_kapoor'].map(
-            async id => ({
-                id,
-                entity: await getEntity({ id, context })
-            })
-        )
+        creators: ['stephanie_walter', 'afor_digital', 'codebar', 'shruti_kapoor'].map(id => ({
+            id
+            // entity: await getEntity({ id, context })
+        }))
     }
 }
