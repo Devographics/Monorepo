@@ -6,7 +6,9 @@ import EditionPlaceholder from '@components/EditionPlaceholder.astro'
 import LastEdition from '@components/LastEdition.astro'
 import { statuses } from '@helpers/constants'
 import { getLocaleSubset } from '@helpers/translator'
-const { survey, locale, surveys } = Astro.props
+import Partners from './Partners.astro'
+import Creators from './Creators.astro'
+const { survey, locale, surveys, generalMetadata } = Astro.props
 const { editions =[]} = survey
 const allEditions = (editions)
     .sort((e1, e2) => e2.year - e1.year)
@@ -48,6 +50,10 @@ const [lastEdition, ...pastEditions] = allEditions
             <PastEditions editions={pastEditions} locale={locale} survey={survey}/>
         )
     }
+
+    {survey.partners && <Partners {...Astro.props} />}
+
+    <Creators locale={locale} creators={generalMetadata.creators} />
 </div>
 
 <style lang="scss">
