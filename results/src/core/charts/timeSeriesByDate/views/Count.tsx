@@ -31,13 +31,15 @@ export const Count: VerticalBarViewDefinition<
         const points = buckets.map(bucket => {
             const startDate = new Date(min(buckets.map(e => Number(e.id))) || 0)
             const currentDate = new Date(Number(bucket.id))
-
-            return {
+            const columnId = formatDateToYMD(currentDate)
+            const columnIndex = diffDays(startDate, currentDate)
+            const point: DateBucketWithPointData = {
                 ...bucket,
                 date: Number(bucket.id),
-                columnId: formatDateToYMD(currentDate),
-                columnIndex: diffDays(startDate, currentDate)
+                columnId,
+                columnIndex
             }
+            return point
         })
         // this view returns a single line item for now
         const lineItem = { id: question.id, entity: question.entity, points }
@@ -62,9 +64,17 @@ export const Count: VerticalBarViewDefinition<
         const columnIds = dates.map(formatDateToYMD)
         return columnIds
     },
-    formatColumn: ({ columnId, columnIndex }) => {
+    formatColumnId: ({ columnId, columnIndex, chartValues }) => {
+        const { totalColumns } = chartValues
         const [year, month, date] = columnId.split('-')
-        return columnIndex % 2 === 0 ? `${month}/${date}` : ''
+        const label = `${month}/${date}`
+        if (totalColumns < 8) {
+            return label
+        } else if (totalColumns < 12) {
+            return columnIndex % 2 === 0 ? label : ''
+        } else {
+            return columnIndex % 3 === 0 ? label : ''
+        }
     },
     getPointValue: point => point.count || 0,
     getTicks: maxValue => {
@@ -93,11 +103,11 @@ export const Count: VerticalBarViewDefinition<
         })
         const { columnIds } = chartValues
         return (
-            <Columns
+            <Columns<StandardQuestionData, DateBucketWithPointData, TimeSeriesByDateChartState>
                 {...props}
                 chartValues={chartValues}
                 hasZebra={true}
-                labelId="chart_units.average"
+                labelId="chart_units.count"
             >
                 <>
                     {columnIds.map((columnId, i) => (
@@ -110,6 +120,7 @@ export const Count: VerticalBarViewDefinition<
                             columnIndex={i}
                             key={columnId}
                             columnId={columnId}
+                            chartValues={chartValues}
                         />
                     ))}
                     <Lines<StandardQuestionData, DateBucketWithPointData, VerticalBarChartState>

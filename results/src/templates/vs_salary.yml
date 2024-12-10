@@ -10,8 +10,6 @@ parameters:
     cutoff: 10
     # sort: { property: medianByFacet }
 filtersState:
-    options:
-        mode: facet
     facet:
         sectionId: user_info
         id: yearly_salary

@@ -125,7 +125,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     )
 }
 
-const FacetHeading = (
+export const FacetHeading = (
     props: CommonProps<HorizontalBarChartState> & {
         series: DataSeries<StandardQuestionData>[]
         facetQuestion: QuestionMetadata

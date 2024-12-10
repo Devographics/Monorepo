@@ -471,6 +471,85 @@
         wrapBlock: false
         disableExport: true
 
+- id: user_metadata
+  path: /metadata
+  blocks:
+      - template: page_introduction
+
+      - id: locale
+        template: multiple_options2
+        defaultView: percentageSurvey
+        parameters: { cutoff: 20 }
+        queryOptions:
+            addQuestionComments: false
+
+      - id: completion_stats
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: authmode
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: device
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: browser
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      # - id: version
+      #   template: multiple_options2
+      #   queryOptions:
+      #       addQuestionComments: false
+
+      - id: os
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: previous_surveys
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+            addBucketsEntities: true
+
+      - id: same_survey_count
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: created_at_date
+        template: multiple_options2
+        blockType: TimeSeriesByDateBlock
+        defaultView: count
+        parameters:
+            showNoAnswer: false,
+            cutoff: 10,
+            sort: { order: asc, property: id }
+        queryOptions:
+            addQuestionComments: false
+
+      - id: source
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        parameters:
+            limit: 20
+        queryOptions:
+            addQuestionComments: false
+
 # note: other pages need to be included in the sitemap too so they can get the proper
 # locale passed to them
 

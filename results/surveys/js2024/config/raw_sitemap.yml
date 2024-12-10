@@ -73,6 +73,17 @@
         template: multiple_options2
         variants:
             - template: vs_salary
+            - id: age_vs_disability
+              fieldId: age
+              blockType: HorizontalBarBlock2
+              hasData: true
+              parameters:
+                  showNoAnswer: true
+                  cutoff: 10
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: disability_status
 
       - id: years_of_experience
         template: multiple_options2
@@ -89,11 +100,31 @@
 
       - id: yearly_salary
         template: multiple_options2
+        variants:
+            - id: yearly_salary_us_vs_world
+              fieldId: yearly_salary
+              tabId: tabs.usa_vs_the_world
+              blockType: HorizontalBarBlock2
+              hasData: true
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: in
+                              value: [USA]
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value: [USA]
 
       - id: job_title
         template: multiple_options2_freeform
         variants:
             - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
               queryOptions:
                   subField: freeform
 
@@ -130,10 +161,21 @@
             The survey's non-white population tended to be younger and have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
         variants:
             - template: vs_years_of_experience
+              parameters:
+                  sort: { property: medianByFacet }
             - template: vs_age
+              parameters:
+                  sort: { property: medianByFacet }
 
       - id: disability_status
         template: multiple_options2_combined
+        variants:
+            - template: vs_age
+              parameters:
+                  sort: { property: medianByFacet }
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
 
       - id: user_info_resources
         items: [fm-javascript-first-steps, fm-getting-a-job-v2]
@@ -176,10 +218,10 @@
         template: multiple_options2
         i18nNamespace: features
 
-      - id: dax_raad
+      - id: jack_herrington
         template: picks
         variables:
-            url: https://replicache.dev/
+            url: https://tanstack.com/
 
       - id: browser_api_features
         template: multiple_options2
@@ -193,10 +235,10 @@
         template: multiple_options2_freeform
         i18nNamespace: features
 
-      - id: arisa_fukuzaki
+      - id: josefine_schaefer
         template: picks
         variables:
-            url: https://x.com/dawntraoz
+            url: https://bento.me/arisa-fukuzaki
 
       - id: reading_list
         template: multiple_options2
@@ -249,10 +291,10 @@
                     monorepo_tools
                 ]
 
-      - id: rich_harris
+      - id: cassie_evans
         template: picks
         variables:
-            url: https://www.localfirst.fm/
+            url: https://github.com/workeffortwaste/gsap-video-export?tab=readme-ov-file#page-export
 
       - id: tier_list
         template: tier_list
@@ -278,9 +320,9 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: front_end_frameworks_experience
-              template: multi_items_experience
-              i18nNamespace: tools
+            # - id: front_end_frameworks_experience
+            #   template: multi_items_experience
+            #   i18nNamespace: tools
 
             - id: tool_modal_hint
               template: hint
@@ -288,14 +330,14 @@
             - id: front_end_frameworks_others
               template: section_prenormalized_tools
 
-            - id: front_end_frameworks_work
-              template: multiple_options2
-              i18nNamespace: features
+            # - id: front_end_frameworks_work
+            #   template: multiple_options2
+            #   i18nNamespace: tools
 
-            - id: emma_bostian
+            - id: tania_rascia
               template: picks
               variables:
-                  url: https://leaddev.com/personal-development/how-build-trust-new-engineering-manager
+                  url: https://cassidoo.co/
 
             - template: happiness2
 
@@ -324,9 +366,9 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: meta_frameworks_experience
-              template: multi_items_experience
-              i18nNamespace: tools
+            # - id: meta_frameworks_experience
+            #   template: multi_items_experience
+            #   i18nNamespace: tools
 
             - id: tool_modal_hint
               template: hint
@@ -334,14 +376,14 @@
             - id: meta_frameworks_others
               template: section_prenormalized_tools
 
-            - id: meta_frameworks_work
-              template: multiple_options2
-              i18nNamespace: features
+            # - id: meta_frameworks_work
+            #   template: multiple_options2
+            #   i18nNamespace: tools
 
-            - id: fireship
+            - id: salma_alam_naylor
               template: picks
               variables:
-                  url: https://pocketbase.io
+                  url: https://thebreedling.com/
 
             - template: happiness2
 
@@ -367,9 +409,9 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: testing_experience
-              template: multi_items_experience
-              i18nNamespace: tools
+            # - id: testing_experience
+            #   template: multi_items_experience
+            #   i18nNamespace: tools
 
             - id: tool_modal_hint
               template: hint
@@ -377,14 +419,14 @@
             - id: testing_others
               template: section_prenormalized_tools
 
-            - id: testing_work
-              template: multiple_options2
-              i18nNamespace: features
+            # - id: testing_work
+            #   template: multiple_options2
+            #   i18nNamespace: tools
 
-            - id: quarkstuff
+            - id: shaundai_person
               template: picks
               variables:
-                  url: https://unjs.io/
+                  url: https://www.youtube.com/@shrutikapoor08
 
             - template: happiness2
 
@@ -410,9 +452,9 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: mobile_desktop_experience
-              template: multi_items_experience
-              i18nNamespace: tools
+            # - id: mobile_desktop_experience
+            #   template: multi_items_experience
+            #   i18nNamespace: tools
 
             - id: tool_modal_hint
               template: hint
@@ -420,14 +462,14 @@
             - id: mobile_desktop_others
               template: section_prenormalized_tools
 
-            - id: mobile_desktop_work
-              template: multiple_options2
-              i18nNamespace: features
+            # - id: mobile_desktop_work
+            #   template: multiple_options2
+            #   i18nNamespace: tools
 
-            - id: david_khourshid
-              template: picks
-              variables:
-                  url: https://tldraw.com
+            # - id: david_khourshid
+            #   template: picks
+            #   variables:
+            #       url: https://tldraw.com
 
             - template: happiness2
 
@@ -453,9 +495,9 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: build_tools_experience
-              template: multi_items_experience
-              i18nNamespace: tools
+            # - id: build_tools_experience
+            #   template: multi_items_experience
+            #   i18nNamespace: tools
 
             - id: tool_modal_hint
               template: hint
@@ -463,14 +505,14 @@
             - id: build_tools_others
               template: section_prenormalized_tools
 
-            - id: build_tools_work
-              template: multiple_options2
-              i18nNamespace: features
+            # - id: build_tools_work
+            #   template: multiple_options2
+            #   i18nNamespace: tools
 
             - id: sacha_greif
               template: picks
               variables:
-                  url: https://auto-animate.formkit.com/
+                  url: https://bsky.app/
 
             - template: happiness2
 
@@ -496,9 +538,9 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: monorepo_tools_experience
-              template: multi_items_experience
-              i18nNamespace: tools
+            # - id: monorepo_tools_experience
+            #   template: multi_items_experience
+            #   i18nNamespace: tools
 
             - id: tool_modal_hint
               template: hint
@@ -506,14 +548,14 @@
             - id: monorepo_tools_others
               template: section_prenormalized_tools
 
-            - id: monorepo_tools_work
-              template: multiple_options2
-              i18nNamespace: features
+            # - id: monorepo_tools_work
+            #   template: multiple_options2
+            #   i18nNamespace: tools
 
-            - id: german_jablonski
-              template: picks
-              variables:
-                  url: https://lexical.dev/
+            # - id: german_jablonski
+            #   template: picks
+            #   variables:
+            #       url: https://lexical.dev/
 
             - template: happiness2
 
@@ -539,10 +581,10 @@
       - id: libraries
         template: multiple_options2_combined
 
-      - id: alina_listunova
-        template: picks
-        variables:
-            url: https://marvinh.dev/blog/speeding-up-javascript-ecosystem/
+      # - id: alina_listunova
+      #   template: picks
+      #   variables:
+      #       url: https://marvinh.dev/blog/speeding-up-javascript-ecosystem/
 
       - id: graphics_animation
         template: multiple_options2_combined
@@ -556,10 +598,10 @@
       - id: edge_runtimes
         template: multiple_options2_combined
 
-      - id: augustin_mauroy
-        template: picks
-        variables:
-            url: https://x.com/wunderacle
+      # - id: augustin_mauroy
+      #   template: picks
+      #   variables:
+      #       url: https://x.com/wunderacle
 
       - id: non_js_languages
         template: multiple_options2_combined
@@ -573,10 +615,10 @@
       - id: sharing_hint
         template: hint
 
-      - id: shadowingszy
-        template: picks
-        variables:
-            url: https://www.rspack.dev/
+      # - id: shadowingszy
+      #   template: picks
+      #   variables:
+      #       url: https://www.rspack.dev/
 
       - id: tools_others_resources
         items: [fm-node-js, fm-fullstack-v3]
@@ -599,24 +641,33 @@
       - id: usage_type
         template: multiple_options2
 
-      - id: kilian_valkhof
-        template: picks
-        variables:
-            url: https://www.electronjs.org/
+      # - id: kilian_valkhof
+      #   template: picks
+      #   variables:
+      #       url: https://www.electronjs.org/
 
       - id: what_do_you_use_js_for
         template: multiple_options2_combined
 
       - id: industry_sector
         template: multiple_options2_combined
+        variants:
+            - template: vs_salary
+              queryOptions:
+                  subField: combined
+              parameters:
+                  limit: 20
+                  sort: { property: medianByFacet, order: desc }
+              chartOptions:
+                  limit: 10
 
       - id: js_app_patterns
         template: multiple_options2_combined
 
-      - id: gustavo_vasquez
-        template: picks
-        variables:
-            url: https://medium.com/@devgustavovasquez/the-future-of-web-development-embracing-interoperable-runtimes-bd2006e9b9d7
+      # - id: gustavo_vasquez
+      #   template: picks
+      #   variables:
+      #       url: https://medium.com/@devgustavovasquez/the-future-of-web-development-embracing-interoperable-runtimes-bd2006e9b9d7
 
       - id: top_js_pain_points
         template: multiple_options2_combined
@@ -654,10 +705,10 @@
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
 
-      - id: rexhent
-        template: picks
-        variables:
-            url: https://nuxt.com/
+      # - id: rexhent
+      #   template: picks
+      #   variables:
+      #       url: https://nuxt.com/
 
       - id: newsletters
         template: multiple_options2_combined
@@ -676,10 +727,10 @@
         variants:
             - template: hastags_spanish
 
-      - id: martin_heidegger
-        template: picks
-        variables:
-            url: https://www.npmjs.com/package/tess2
+      # - id: martin_heidegger
+      #   template: picks
+      #   variables:
+      #       url: https://www.npmjs.com/package/tess2
 
       - id: people
         template: multiple_options2_freeform
@@ -837,13 +888,13 @@
             addQuestionComments: false
 
       - id: device
-        template: multiple_options2
+        template: multiple_options2_freeform
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
 
       - id: browser
-        template: multiple_options2
+        template: multiple_options2_freeform
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
@@ -854,7 +905,7 @@
       #       addQuestionComments: false
 
       - id: os
-        template: multiple_options2
+        template: multiple_options2_freeform
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
@@ -882,6 +933,26 @@
             sort: { order: asc, property: id }
         queryOptions:
             addQuestionComments: false
+        variants:
+            - id: created_at_date_by_source
+              fieldId: created_at_date
+              template: multiple_options2
+              blockType: TimeSeriesByDateBlock
+              defaultView: count
+              parameters:
+                  showNoAnswer: false,
+                  cutoff: 10,
+                  sort: { order: asc, property: id }
+                  facetLimit: 3
+                  enableAddOverallBucket: false
+                  mergeOtherBuckets: true
+              queryOptions:
+                  addBucketsEntities: true
+                  addQuestionComments: false
+              filtersState:
+                  facet:
+                      sectionId: user_metadata
+                      id: source
 
       - id: source
         template: multiple_options2_freeform

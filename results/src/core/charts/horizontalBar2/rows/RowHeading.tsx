@@ -1,6 +1,7 @@
 import React from 'react'
 import { ChartItem } from '../../common2/item'
 import { RowComponentProps } from '../types'
+import { FreeformIndicator } from 'core/charts/common2'
 
 export const RowHeading = ({
     bucket,
@@ -24,6 +25,8 @@ export const RowHeading = ({
                 label={label}
                 serieMetadata={serieMetadata}
             />
+
+            {isFreeformData && <FreeformIndicator />}
             {setShowGroupedBuckets && (
                 <button
                     onClick={() => setShowGroupedBuckets(!showGroupedBuckets)}

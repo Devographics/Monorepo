@@ -8,6 +8,8 @@ import {
 } from '../types'
 import max from 'lodash/max'
 import range from 'lodash/range'
+import sum from 'lodash/sum'
+import round from 'lodash/round'
 import { viewDefinition } from './viewDefinition'
 import { LineItem } from 'core/charts/verticalBar2/types'
 import { LegendItem } from 'core/charts/common2/types'
@@ -25,8 +27,19 @@ export const useChartValues = ({
     legendItems: LegendItem[]
 }) => {
     const { mode } = chartState
-    const { getColumnIds } = viewDefinition
+    const { getColumnIds, getPointValue } = viewDefinition
     const columnIds = getColumnIds(lineItems)
+
+    // calculate average value for each column
+    const columnAverages = columnIds.map(columnId => {
+        const columnPoints = lineItems
+            .map(lineItem => lineItem.points.find(p => p.columnId === columnId))
+            .filter(point => !!point)
+        const pointValues = columnPoints.map(point => getPointValue(point, chartState))
+        const average = round(sum(pointValues) / pointValues.length, 1)
+        return { columnId, average }
+    })
+
     const ticks =
         mode === ModesEnum.VALUE
             ? [
@@ -47,7 +60,8 @@ export const useChartValues = ({
         totalColumns: columnIds.length,
         legendItems,
         maxValue: max(ticks.map(tick => tick.value)) || 0,
-        ticks
+        ticks,
+        columnAverages
     }
     return chartValues
 }

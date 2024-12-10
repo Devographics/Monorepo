@@ -32,15 +32,17 @@ export type ToggleItemType = {
 }
 
 type ToggleProps<ValueType> = {
-    labelId: string
+    alwaysExpand?: boolean
+    labelId?: string
     items: ToggleItemType[]
-    handleSelect: (id: ValueType) => void
+    handleSelect?: (id: ValueType) => void
     hasDefault?: boolean
 }
 
 const DEFAULT_SORT = 'default'
 
 export const Toggle = <ValueType,>({
+    alwaysExpand = false,
     labelId,
     items,
     handleSelect,
@@ -63,30 +65,32 @@ export const Toggle = <ValueType,>({
 
     return (
         <div className="chart-toggle">
-            <h4 className="chart-toggle-heading">
-                <T k={labelId} />
-            </h4>
+            {labelId && (
+                <h4 className="chart-toggle-heading">
+                    <T k={labelId} />
+                </h4>
+            )}
             <div
                 className={`chart-toggle-control chart-toggle-control-${
                     useDropdown ? 'dropdown' : 'buttongroup'
                 }`}
                 ref={ref}
             >
-                {useDropdown ? (
-                    <Dropdown {...commonProps} />
+                {!alwaysExpand && useDropdown ? (
+                    <Dropdown<ValueType> {...commonProps} />
                 ) : (
-                    <SegmentedControl {...commonProps} />
+                    <SegmentedControl<ValueType> {...commonProps} />
                 )}
             </div>
         </div>
     )
 }
 
-const Dropdown = ({
+const Dropdown = <ValueType,>({
     handleSelect,
     hasDefault,
     items
-}: Pick<ToggleProps, 'handleSelect' | 'hasDefault' | 'items'>) => {
+}: Pick<ToggleProps<ValueType>, 'handleSelect' | 'hasDefault' | 'items'>) => {
     const { getString } = useI18n()
 
     return (
@@ -115,10 +119,10 @@ const DropdownItem = ({ item }: { item: ToggleItemType }) => {
     )
 }
 
-const SegmentedControl = ({
+const SegmentedControl = <ValueType,>({
     handleSelect,
     items
-}: Pick<ToggleProps, 'handleSelect' | 'hasDefault' | 'items'>) => {
+}: Pick<ToggleProps<ValueType>, 'handleSelect' | 'hasDefault' | 'items'>) => {
     return (
         <ButtonGroup className="chart-toggle-buttongroup chart-toggle-items">
             {items.map(item => (

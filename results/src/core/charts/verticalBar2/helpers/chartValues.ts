@@ -9,6 +9,7 @@ import { BlockVariantDefinition } from 'core/types'
 import max from 'lodash/max'
 import min from 'lodash/min'
 import range from 'lodash/range'
+import { useAllQuestionsWithOptions } from 'core/charts/hooks'
 
 export const getYears = (allYears: number[]) => {
     const minYear = min(allYears)
@@ -25,7 +26,8 @@ export const useChartValues = <SerieData, PointData extends BasicPointData, Char
     chartState,
     block,
     question,
-    viewDefinition
+    viewDefinition,
+    facetOptions
 }: {
     lineItems: LineItem<PointData>[]
     chartState: ChartStateType
@@ -38,6 +40,8 @@ export const useChartValues = <SerieData, PointData extends BasicPointData, Char
     // const viewDefinition = getViewDefinition(view)
     const { getTicks, getColumnIds, getPointValue } = viewDefinition
     const columnIds = getColumnIds(lineItems)
+    const allQuestions = useAllQuestionsWithOptions()
+    const { facet } = chartState
 
     const maxValue = max(
         lineItems
@@ -50,12 +54,18 @@ export const useChartValues = <SerieData, PointData extends BasicPointData, Char
         question,
         columnIds,
         totalColumns: columnIds.length,
-        maxValue
+        maxValue,
+        facetOptions
     }
     if (getTicks) {
         const ticks = getTicks(maxValue)
         chartValues.ticks = ticks
         chartValues.maxTick = max(ticks.map(t => t.value)) || 0
+    }
+    if (facet) {
+        chartValues.facetQuestion = allQuestions.find(
+            q => q.sectionId === facet.sectionId && q.id === facet.id
+        )
     }
     return chartValues
 }

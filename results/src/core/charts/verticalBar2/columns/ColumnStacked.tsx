@@ -1,41 +1,70 @@
-import { ColumnComponentProps } from '../types'
+import {
+    BasicPointData,
+    EmptyColumnProps,
+    VerticalBarChartValues,
+    VerticalBarViewDefinition
+} from '../types'
 import React from 'react'
 import { Cell } from '../VerticalBarCell'
 import { useGradient } from '../../common2/helpers/colors'
 import sum from 'lodash/sum'
 import take from 'lodash/take'
 import { ColumnWrapper } from './ColumnWrapper'
-import { getViewComponent } from '../helpers/views'
+import { FacetBucket } from '@devographics/types'
 
-export const ColumnStacked = (props: ColumnComponentProps) => {
-    const { edition, chartState, chartValues } = props
-    const { view } = chartState
-    const viewDefinition = getViewComponent(view)
-    const { getBucketValue } = viewDefinition
-    if (!getBucketValue) {
-        throw new Error('getBucketValue not defined')
+type ColumnStackedProps<
+    SerieData,
+    PointData extends BasicPointData,
+    ChartStateType
+> = EmptyColumnProps<PointData> & {
+    columnId: string
+    chartValues: VerticalBarChartValues
+    point: PointData
+    rowMetadata?: JSX.Element
+    children?: JSX.Element
+    viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
+}
+
+export const ColumnStacked = <
+    SerieData,
+    PointData extends BasicPointData & { facetBuckets: FacetBucket[] },
+    ChartStateType
+>(
+    props: ColumnStackedProps<SerieData, PointData, ChartStateType>
+) => {
+    const { edition, chartState, chartValues, viewDefinition, point, columnId } = props
+    const { getPointValue } = viewDefinition
+    if (!getPointValue) {
+        throw new Error('getPointValue not defined')
     }
-    const { question, maxValue } = chartValues
+    const { facetQuestion } = chartState
+    const { question, facetOptions, maxValue } = chartValues
 
     // const rowDimensions = allRowsCellDimensions[rowIndex]
     // const rowOffset = allRowsOffsets[rowIndex]
-
     return (
-        <ColumnWrapper {...props}>
+        <ColumnWrapper<SerieData, PointData, ChartStateType> {...props}>
             <div className="chart-faceted-bar">
-                {edition.buckets.map((bucket, index) => {
-                    const { id } = bucket
-                    const gradient = useGradient({ id: bucket.id, question })
+                {point.facetBuckets.map((facetBucket, index) => {
+                    const { id } = facetBucket
+                    const gradient = useGradient({
+                        id: facetBucket.id,
+                        question: { ...facetQuestion, options: facetOptions }
+                    })
 
-                    const value = getBucketValue(bucket)
-                    const height = (value * 100) / maxValue
-                    const values = edition.buckets.map(bucket => getBucketValue(bucket))
+                    const value = getPointValue(facetBucket, chartState)
+                    const getHeight = (v: number) => (v * 100) / maxValue
+                    const height = getHeight(value)
+                    const values = point.facetBuckets.map(facetBucket =>
+                        getHeight(getPointValue(facetBucket, chartState))
+                    )
                     const offset = sum(take(values, index))
 
                     return (
                         <Cell
                             key={id}
-                            edition={edition}
+                            cellId={id}
+                            point={point}
                             value={value}
                             chartState={chartState}
                             height={height}
@@ -43,6 +72,7 @@ export const ColumnStacked = (props: ColumnComponentProps) => {
                             cellIndex={index}
                             chartValues={chartValues}
                             gradient={gradient}
+                            viewDefinition={viewDefinition}
                         />
                     )
                 })}

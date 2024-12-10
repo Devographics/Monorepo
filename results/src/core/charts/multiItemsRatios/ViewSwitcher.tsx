@@ -3,6 +3,7 @@ import { MultiRatiosChartState } from './types'
 import { Toggle, ToggleItemType } from '../common2'
 import { useI18n } from '@devographics/react-i18n'
 import { RatiosEnum } from '@devographics/types'
+import T from 'core/i18n/T'
 
 const ViewSwitcher = ({ chartState }: { chartState: MultiRatiosChartState }) => {
     const { view, setView } = chartState
@@ -10,11 +11,19 @@ const ViewSwitcher = ({ chartState }: { chartState: MultiRatiosChartState }) => 
     const items: ToggleItemType[] = Object.values(RatiosEnum)
         .filter(r => r !== RatiosEnum.POSITIVITY)
         .map(id => {
-            return {
+            const labelKey = `ratios.${id}`
+            const descriptionKey = `${labelKey}.description`
+            const item: ToggleItemType = {
                 id,
                 isEnabled: view === id,
-                label: getString(`ratios.${id}`)?.t
+                labelKey,
+                label: getString(labelKey)?.t
             }
+            const description = getString(descriptionKey)
+            if (description) {
+                item.tooltip = <T k={descriptionKey} html={true} md={true} />
+            }
+            return item
         })
     return <Toggle<RatiosEnum> labelId="charts.view" handleSelect={setView} items={items} />
 }

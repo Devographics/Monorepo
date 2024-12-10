@@ -12,6 +12,7 @@
     // &:nth-last-child(1 of .chart-column) {
     //     padding-right: var(--doubleSpacing);
     // }
+    min-width: 0;
 }
 .chart-column {
     .chart-bar,
@@ -38,12 +39,17 @@
 .chart-column-content {
     // grid-row-start: 1;
     // grid-row-end: 2;
-    padding: 0 var(--spacing);
+    // TODO: make padding dynamic somehow depending on number of bars?
+    padding: 0 var(--quarterSpacing);
 }
 .chart-column-bottom {
     grid-row: 2 / 3;
+    position: relative;
 }
-.chart-column-id {
+.chart-column-label {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     margin-top: 10px;
     text-align: center;
     @include small {

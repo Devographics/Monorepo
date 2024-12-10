@@ -73,7 +73,7 @@ export const viewDefinition: VerticalBarViewDefinition<
         const years = range(minYear, maxYear + 1)
         return years.map(y => y.toString())
     },
-    formatColumn: ({ columnId }) => columnId,
+    formatColumnId: ({ columnId }) => columnId,
     formatValue: (value, _question, chartState) =>
         chartState.mode === ModesEnum.VALUE ? formatPercentage(value) : `#${value + 1}`,
     getPointValue: (point, chartState) =>

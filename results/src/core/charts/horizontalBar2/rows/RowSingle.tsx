@@ -56,11 +56,6 @@ export const RowSingle = (props: RowComponentProps) => {
                     chartValues={chartValues}
                     gradient={gradient}
                 />
-                {isFreeformData && (
-                    <div className="chart-row-freeform-icon-wrapper" style={{ '--offset': width }}>
-                        <FreeformIndicator />
-                    </div>
-                )}
                 {hasInsufficientData && (
                     <div className="chart-row-insufficient-data-wrapper">
                         <InsufficientDataIndicator />

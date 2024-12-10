@@ -9,8 +9,10 @@ import ChartData from '../common2/ChartData'
 import ChartShare from '../common2/ChartShare'
 import { getViewDefinition } from './helpers/views'
 import { VerticalBarSerieWrapper } from '../verticalBar2/VerticalBarSerieWrapper'
-import { getChartCurrentEdition } from '../horizontalBar2/helpers/other'
+import { getChartCurrentEdition, useQuestionMetadata } from '../horizontalBar2/helpers/other'
 import { TimeSeriesByDateChartState } from './types'
+import { FacetHeading } from '../verticalBar2/FacetHeading'
+import uniqBy from 'lodash/uniqBy'
 
 export interface VerticalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -27,7 +29,10 @@ export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
 
     const { average, percentiles, completion } = currentEdition
 
-    const chartState = useChartState(getDefaultState({ block }))
+    const facet = block?.filtersState?.facet
+
+    const facetQuestion = useQuestionMetadata(facet)
+    const chartState = useChartState(getDefaultState({ block, facetQuestion }))
     const { view } = chartState
     const viewDefinition = getViewDefinition(view)
     const ViewComponent = viewDefinition.component
@@ -39,15 +44,27 @@ export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
         pageContext,
         chartState,
         viewDefinition,
-        block
+        block,
+        facetQuestion
+    }
+
+    if (facetQuestion) {
+        const allFacetBuckets = series
+            .map(serie => serie.data.responses.currentEdition.buckets.map(b => b?.facetBuckets))
+            .flat()
+            .flat()
+            .flat()
+        const facetOptions = uniqBy(allFacetBuckets, fb => fb.id)
+        commonProps.facetOptions = facetOptions
     }
 
     return (
-        <ChartWrapper question={question} className="chart-vertical-bar">
+        <ChartWrapper block={block} question={question} className="chart-vertical-bar">
             <>
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>
                 </pre> */}
+                {facetQuestion && <FacetHeading {...commonProps} />}
 
                 <GridWrapper seriesCount={series.length}>
                     {series.map((serie, serieIndex) => (
@@ -86,5 +103,3 @@ export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
         </ChartWrapper>
     )
 }
-
-export default TimeSeriesByDateBlock

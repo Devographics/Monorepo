@@ -5,6 +5,7 @@ import { BAR_HEIGHT } from '../horizontalBar2/rows/RowGroup'
 import { QuestionMetadata } from '@devographics/types'
 
 export const ChartWrapper = ({
+    block,
     children,
     className = '',
     question
@@ -17,7 +18,7 @@ export const ChartWrapper = ({
     const style = {
         '--barHeight': `${BAR_HEIGHT}px`
     }
-    const classes = ['chart-wrapper', className]
+    const classes = ['chart-wrapper', `chart-${block?.id}`, className]
     return (
         <div className={classes.join(' ')} ref={parent} style={style}>
             {children}

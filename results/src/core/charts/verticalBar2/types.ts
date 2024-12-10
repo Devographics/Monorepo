@@ -1,21 +1,30 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from 'react'
 import { ChartValues, Tick, ViewDefinition } from '../common2/types'
 import { IconProps } from 'core/icons/IconWrapper'
-import { Bucket, Entity, QuestionMetadata, ResponseEditionData } from '@devographics/types'
+import {
+    Bucket,
+    Entity,
+    FacetBucket,
+    QuestionMetadata,
+    ResponseEditionData
+} from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
-import { DataSeries } from 'core/filters/types'
+import { DataSeries, FacetItem } from 'core/filters/types'
 
 export interface VerticalBarChartState {
     view: string
     setView: Dispatch<SetStateAction<string>>
     highlighted: string | null
     setHighlighted: Dispatch<SetStateAction<string | null>>
+    facetQuestion?: QuestionMetadata
 }
 
 export enum VerticalBarViewsEnum {
     PERCENTAGE_QUESTION = 'percentageQuestion',
     AVERAGE = 'average',
-    COUNT = 'count'
+    COUNT = 'count',
+    COUNT_BAR = 'countBar',
+    COUNT_STACKED_BAR = 'countStackedBar'
 }
 
 export type Control = {
@@ -66,7 +75,15 @@ export type VerticalBarViewDefinition<
      * Generate list of ids for all columns
      */
     getColumnIds: (lineItems: LineItem<PointData>[]) => string[]
-    formatColumn: ({ columnId, columnIndex }: { columnId: string; columnIndex: number }) => string
+    formatColumnId: ({
+        columnId,
+        columnIndex,
+        chartValues
+    }: {
+        columnId: string
+        columnIndex: number
+        chartValues: VerticalBarChartValues
+    }) => string
     component?: (
         props: VerticalBarViewComponentProps<SerieData, PointData, ChartStateType>
     ) => JSX.Element | null
@@ -90,6 +107,12 @@ export interface VerticalBarChartValues extends ChartValues {
     ticks?: Tick[]
     maxValue: number
     maxTick?: number
+    columnAverages?: ColumnAverage[]
+}
+
+export interface ColumnAverage {
+    columnId: string
+    average: number
 }
 
 export type DataFilter = (buckets: Bucket[]) => Bucket[]
@@ -111,6 +134,7 @@ export type BasicPointData = {
     id: string
     columnId: string
     columnIndex: number
+    // value: number
 }
 
 export type EditionWithPointData = ResponseEditionData & BasicPointData

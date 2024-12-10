@@ -28,7 +28,8 @@ export const Average: VerticalBarViewDefinition<
             ...e,
             id: e.editionId,
             columnId: e.year.toString(),
-            columnIndex: e.year - startYear
+            columnIndex: e.year - startYear,
+            value: e.average || 0
         }))
         // this view returns a single line item for now
         const lineItem = { id: question.id, entity: question.entity, points }
@@ -48,7 +49,7 @@ export const Average: VerticalBarViewDefinition<
         const years = range(minYear, maxYear + 1)
         return years.map(y => y.toString())
     },
-    formatColumn: ({ columnId }) => columnId,
+    formatColumnId: ({ columnId }) => columnId,
     getPointValue: point => point.average || 0,
     getTicks: () => [{ value: 0 }, { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }],
     formatValue: formatQuestionValue,
@@ -85,6 +86,7 @@ export const Average: VerticalBarViewDefinition<
                             columnIndex={i}
                             key={columnId}
                             columnId={columnId}
+                            chartValues={chartValues}
                         />
                     ))}
                     <Lines<StandardQuestionData, EditionWithPointData, VerticalBarChartState>

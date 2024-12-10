@@ -1,12 +1,20 @@
 import './Column.scss'
 import React from 'react'
-import { BasicPointData, EmptyColumnProps, VerticalBarViewDefinition } from '../types'
+import {
+    BasicPointData,
+    EmptyColumnProps,
+    VerticalBarChartValues,
+    VerticalBarViewDefinition
+} from '../types'
+import Tooltip from 'core/components/Tooltip'
+import T from 'core/i18n/T'
 
 type ColumnWrapperProps<
     SerieData,
     PointData extends BasicPointData,
     ChartStateType
 > = EmptyColumnProps<PointData> & {
+    chartValues: VerticalBarChartValues
     rowMetadata?: JSX.Element
     children?: JSX.Element
     viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
@@ -15,8 +23,17 @@ type ColumnWrapperProps<
 export const ColumnWrapper = <SerieData, PointData extends BasicPointData, ChartStateType>(
     props: ColumnWrapperProps<SerieData, PointData, ChartStateType>
 ) => {
-    const { columnId, columnIndex, children, rowMetadata, viewDefinition } = props
-    const { formatColumn } = viewDefinition
+    const {
+        columnId,
+        columnIndex,
+        children,
+        rowMetadata,
+        viewDefinition,
+        chartValues,
+        chartState
+    } = props
+    const { formatColumnId, formatValue } = viewDefinition
+    const { columnAverages } = chartValues
     /*
 
     We add +1 because grid columns are 1-indexed, and +1 again to
@@ -27,19 +44,32 @@ export const ColumnWrapper = <SerieData, PointData extends BasicPointData, Chart
         '--columnStart': columnIndex + 2,
         '--columnEnd': columnIndex + 3
     }
+
+    const columnAverage = columnAverages?.find(c => c.columnId === columnId)?.average
+
+    const columnLabel = <span> {formatColumnId({ columnId, columnIndex, chartValues })}</span>
     return (
         <div className="chart-column" style={style}>
             {rowMetadata && <div className="chart-column-top">{rowMetadata}</div>}
-
-            {children && (
-                <div className="chart-column-content">
-                    {/* {ticks && <Gridlines ticks={ticks} />} */}
-                    <div className="chart-bar">{children}</div>
+            <div className="chart-column-content">
+                {children && <div className="chart-bar">{children}</div>}
+            </div>
+            <div className="chart-column-bottom chart-axis">
+                <div className="chart-column-label">
+                    {columnAverage ? (
+                        <Tooltip
+                            trigger={columnLabel}
+                            contents={
+                                <T
+                                    k="charts.average_value"
+                                    values={{ value: formatValue(columnAverage, {}, chartState) }}
+                                />
+                            }
+                        />
+                    ) : (
+                        columnLabel
+                    )}
                 </div>
-            )}
-
-            <div className="chart-column-bottom">
-                <div className="chart-column-id">{formatColumn({ columnId, columnIndex })}</div>
             </div>
         </div>
     )

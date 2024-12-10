@@ -187,6 +187,17 @@ export const CharDot = () => (
     </>
 )
 
+export const CharComma = () => (
+    <>
+        <path className="inner" d="M6.677 13.824h4.56l-3.288 7.8h-2.64z"></path>
+        <path
+            className="outer"
+            fillRule="evenodd"
+            d="M4.997 11.824h9.253l-4.974 11.8H2.928zm1.68 2h4.56l-3.288 7.8h-2.64z"
+            clipRule="evenodd"
+        ></path>
+    </>
+)
 export const characters: { [key in string | number]: () => JSX.Element } = {
     1: Char1,
     2: Char2,
@@ -199,5 +210,6 @@ export const characters: { [key in string | number]: () => JSX.Element } = {
     9: Char9,
     0: Char0,
     '.': CharDot,
-    '%': CharPercent
+    '%': CharPercent,
+    ',': CharComma
 }
