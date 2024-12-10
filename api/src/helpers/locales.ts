@@ -218,8 +218,10 @@ export const checkForDuplicates = (
 ) => {
     const allKeys = strings.filter(s => !s.aliasFor).map(s => s.key)
     const duplicateKeys = findDuplicates(allKeys)
-    for (const duplicateKey of duplicateKeys) {
-        report.duplicates.push({ context, duplicateKey })
+    if (report) {
+        for (const duplicateKey of duplicateKeys) {
+            report.duplicates.push({ context, duplicateKey })
+        }
     }
 }
 
@@ -332,10 +334,12 @@ Process all locales
 */
 export const processLocales = ({
     rawLocales,
-    rawEnLocale
+    rawEnLocale,
+    report
 }: {
     rawLocales: Array<RawLocale>
     rawEnLocale: RawLocale
+    report: any
 }): Array<Locale> => {
     const allLocales = []
     let i = 0
@@ -343,7 +347,7 @@ export const processLocales = ({
     // parse en-US strings only once outside of main loop to
     // avoid repeating work
     const enParsedStringFiles = rawEnLocale.stringFiles.map((stringFile: StringFile) => {
-        return processStringFile({ locale: rawEnLocale, stringFile })
+        return processStringFile({ locale: rawEnLocale, stringFile, report })
     })
 
     for (const locale of rawLocales) {
