@@ -756,3 +756,11 @@ input GenericFilter {
     nin: [String]
     hasTags: [EntitiesTagsEnum]
 }
+
+type Cardinalities {
+    n: Int
+    heard_count: Float
+    used_count: Float
+    heard_percentageSurvey: Float
+    used_percentageSurvey: Float
+}

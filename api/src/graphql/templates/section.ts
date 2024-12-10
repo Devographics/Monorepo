@@ -52,6 +52,7 @@ export const generateSectionType = ({
         typeType: TypeTypeEnum.SECTION,
         typeDef: `type ${typeName} {
             ${isFeatureOrToolSection ? `_items: [${getFeatureFieldTypeName({ survey })}]` : ''}
+            ${isFeatureOrToolSection ? `_cardinalities: [Cardinalities]` : ''}
     ${section.questions
         .filter(q => q.hasApiEndpoint !== false)
         .map((question: QuestionApiObject) => {
