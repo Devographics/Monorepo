@@ -70,7 +70,6 @@ export const addPreviousParticipations = async (args) => {
     }
 
     if (bulkOperations.length > 0) {
-      console.log(JSON.stringify(bulkOperations, null, 2));
       const operationResult = await Responses.bulkWrite(bulkOperations, {
         ordered: false,
       });
