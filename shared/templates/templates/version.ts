@@ -1,4 +1,4 @@
-import { QuestionTemplateOutput, TemplateFunction } from '@devographics/types'
+import { DbPathsEnum, QuestionTemplateOutput, TemplateFunction } from '@devographics/types'
 
 export const version: TemplateFunction = ({ survey, edition, question, section }) => {
     const output: QuestionTemplateOutput = {
@@ -7,7 +7,7 @@ export const version: TemplateFunction = ({ survey, edition, question, section }
             response: 'common__user_info__version'
         },
         normPaths: {
-            response: `user_info.version`
+            [DbPathsEnum.OTHER]: `user_info.version`
         },
         ...question
     }

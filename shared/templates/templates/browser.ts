@@ -1,4 +1,4 @@
-import { QuestionTemplateOutput, TemplateFunction } from '@devographics/types'
+import { DbPathsEnum, QuestionTemplateOutput, TemplateFunction } from '@devographics/types'
 
 export const browser: TemplateFunction = ({ survey, edition, question, section }) => {
     const output: QuestionTemplateOutput = {
@@ -7,7 +7,7 @@ export const browser: TemplateFunction = ({ survey, edition, question, section }
             response: 'common__user_info__browser'
         },
         normPaths: {
-            response: `user_info.browser`
+            [DbPathsEnum.OTHER]: `user_info.browser`
         },
         ...question
     }
