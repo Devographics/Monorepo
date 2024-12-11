@@ -5,6 +5,8 @@ import resources from 'Config/recommended_resources.yml'
 import { mq, spacing, fontSize, fontWeight } from 'core/theme'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
+import { RecommendedResource, RecommendedResourceJob } from 'core/types/other'
+import './RecommendedResources.scss'
 
 const trackClick = (id, resource, label) => {
     // TODO: add plausible event tracking
@@ -19,7 +21,7 @@ const RecommendedResourcesBlock = ({ block, data }) => {
         return null
     }
     const { id } = block
-    const sectionResources = sponsors
+    const sectionResources: RecommendedResource[] = sponsors
         .map((sponsorId: string) => resources.find(r => r.id === sponsorId))
         .filter(s => !!s)
 
@@ -70,6 +72,7 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                                         className="Resource__description"
                                         dangerouslySetInnerHTML={{ __html: resource.description }}
                                     />
+                                    {resource.jobs && <Jobs resource={resource} />}
                                 </ResourceContent>
                             </Resource>
                         )
@@ -83,6 +86,26 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                 </Sponsoring>
             </div>
         </div>
+    )
+}
+
+const Jobs = ({ resource }: { resource: RecommendedResource }) => {
+    const { jobs } = resource
+    return (
+        <div className="recommended-resource-jobs">
+            {jobs?.map((job, i) => (
+                <Job key={i} job={job} />
+            ))}
+        </div>
+    )
+}
+const Job = ({ job }: { job: RecommendedResourceJob }) => {
+    const { position, company, url } = job
+    return (
+        <a href={url} className="recommended-resource-job">
+            <h5>{company}</h5>
+            <h4>{position}</h4>
+        </a>
     )
 }
 

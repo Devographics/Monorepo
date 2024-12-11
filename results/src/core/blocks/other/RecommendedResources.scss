@@ -1,0 +1,35 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
+.recommended-resource-jobs {
+    display: flex;
+    gap: var(--halfSpacing);
+    margin-top: var(--halfSpacing);
+
+    @include small {
+        flex-direction: column;
+    }
+}
+
+.recommended-resource-job {
+    @include small {
+        display: block;
+    }
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--borderColor);
+    border-radius: 3px;
+    padding: var(--quarterSpacing) var(--halfSpacing);
+    h4,
+    h5 {
+        margin: 0;
+    }
+    h5 {
+        text-transform: uppercase;
+        font-weight: normal;
+        color: var(--textColor);
+    }
+    &:hover {
+        background: var(--backgroundColor);
+        text-decoration: none;
+    }
+}
