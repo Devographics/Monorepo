@@ -178,7 +178,7 @@
                   sort: { property: medianByFacet }
 
       - id: user_info_resources
-        items: [fm-javascript-first-steps, fm-getting-a-job-v2]
+        items: [td-relocate]
         template: recommended_resources
 
 - id: features
@@ -252,7 +252,7 @@
             limit: 10
 
       - id: features_resources
-        items: [fm-javascript-quiz, fm-javascript-hard-parts-v2]
+        items: [fm-web-dev-quiz, fm-javascript-hard-parts-v2]
         template: recommended_resources
 
 - id: libraries
@@ -307,7 +307,7 @@
       #   template: tools_cardinality_by_user_js
 
       - id: libraries_resources
-        items: [fm-vite, fm-design-systems-v2]
+        items: [fm-enterprise-ui-dev, frontend-system-design]
         template: recommended_resources
 
   children:
@@ -440,7 +440,7 @@
               i18nNamespace: tools
 
             - id: testing_resources
-              items: [fm-enterprise-ui-dev, fm-web-app-testing]
+              items: [fm-testing, fm-web-app-testing]
               template: recommended_resources
 
       - id: mobile_desktop
@@ -466,10 +466,10 @@
             #   template: multiple_options2
             #   i18nNamespace: tools
 
-            # - id: david_khourshid
-            #   template: picks
-            #   variables:
-            #       url: https://tldraw.com
+            - id: dominik_dorfmeister
+              template: picks
+              variables:
+                  url: https://knip.dev/
 
             - template: happiness2
 
@@ -483,7 +483,7 @@
               i18nNamespace: tools
 
             - id: mobile_desktop_resources
-              items: [fm-react-native-v2, fm-electron-v3]
+              items: [fm-react-native-v3, fm-electron-v3]
               template: recommended_resources
 
       - id: build_tools
@@ -552,10 +552,10 @@
             #   template: multiple_options2
             #   i18nNamespace: tools
 
-            # - id: german_jablonski
-            #   template: picks
-            #   variables:
-            #       url: https://lexical.dev/
+            - id: sebastien_lorber
+              template: picks
+              variables:
+                  url: https://rspack.dev/
 
             - template: happiness2
 
@@ -742,8 +742,8 @@
       - id: other_surveys
         template: multiple_options2_combined
 
-      - id: resources_resources
-        items: [fm-algorithms, fm-primeagen]
+      - id: usage_resources
+        items: [al-vue-reactivity, ad-self-teach-me]
         template: recommended_resources
 
 - id: awards
@@ -839,6 +839,10 @@
       # - id: awards_resources
       #   items: [road-to-react]
       #   template: recommended_resources
+
+      - id: awards_resources
+        items: [fm-javascript-first-steps, fm-getting-a-job-v2]
+        template: recommended_resources
 
 - id: conclusion
   path: /conclusion
@@ -987,6 +991,10 @@
                           - codebar
                           - black_tech_pipeline
                           - referral_5n0w
+
+      - id: resources_resources
+        items: [fm-algorithms, fm-podcast]
+        template: recommended_resources
 
 - id: about
   path: /about
