@@ -5,7 +5,7 @@ import { OtherParticipationData } from "@devographics/types";
 // how many bulk operations to perform in one go
 const operationsPerStep = 1000;
 
-export const addPreviousParticipations = async (args) => {
+export const addPastParticipations = async (args) => {
   const { surveyId, editionId } = args;
   const Responses = await getRawResponsesCollection();
 
@@ -85,6 +85,6 @@ export const addPreviousParticipations = async (args) => {
   }
 };
 
-addPreviousParticipations.args = ["surveyId", "editionId"];
+addPastParticipations.args = ["surveyId", "editionId"];
 
-addPreviousParticipations.description = `Add previous edition counts (how many times someone has taken the same survey before) where missing.`;
+addPastParticipations.description = `Add previous edition counts (how many times someone has taken the same survey before) where missing.`;
