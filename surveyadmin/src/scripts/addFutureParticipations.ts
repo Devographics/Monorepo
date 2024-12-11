@@ -1,11 +1,11 @@
-import { PAST_PARTICIPATIONS } from "@devographics/constants";
+import { FUTURE_PARTICIPATIONS } from "@devographics/constants";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { OtherParticipationData } from "@devographics/types";
 
 // how many bulk operations to perform in one go
 const operationsPerStep = 1000;
 
-export const addPreviousParticipations = async (args) => {
+export const addFutureParticipations = async (args) => {
   const { surveyId, editionId } = args;
   const Responses = await getRawResponsesCollection();
 
@@ -14,7 +14,6 @@ export const addPreviousParticipations = async (args) => {
   const selector = {
     surveyId,
     editionId,
-    [PAST_PARTICIPATIONS]: { $exists: false },
     common__user_info__authmode: { $ne: "anonymous" },
   };
 
@@ -22,7 +21,7 @@ export const addPreviousParticipations = async (args) => {
   const totalSteps = Math.floor(total / operationsPerStep);
 
   console.log(
-    `// Found ${total} responses for edition ${editionId} with missing "${PAST_PARTICIPATIONS}" field, processing…`
+    `// Found ${total} responses for edition ${editionId}, processing…`
   );
 
   for (let step = 0; step <= totalSteps; step++) {
@@ -42,29 +41,31 @@ export const addPreviousParticipations = async (args) => {
     for await (const response of responses) {
       count++;
 
-      const { userId, createdAt } = response;
+      const { _id, userId, createdAt } = response;
 
-      // find all of the user's *past* responses
+      // find all of the user's *future* responses
       // (compared to the current edition)
-      const allOtherResponses = await Responses.find({
+      const futureResponses = await Responses.find({
         userId,
         editionId: { $ne: editionId },
-        createdAt: { $lt: createdAt },
+        createdAt: { $gt: createdAt },
       }).toArray();
 
-      const surveys = [...new Set(allOtherResponses.map((r) => r.surveyId))];
-      const editions = allOtherResponses.map((r) => r.editionId);
+      const surveys = [...new Set(futureResponses.map((r) => r.surveyId))];
+      const editions = futureResponses.map((r) => r.editionId);
 
-      const same_survey = allOtherResponses.filter(
+      const same_survey = futureResponses.filter(
         (r) => r.surveyId === surveyId
       );
 
-      const participationData: OtherParticipationData = {
+      const futureParticipationData: OtherParticipationData = {
         surveys,
         editions,
         same_survey_count: same_survey.length,
       };
-      const setObject = { [PAST_PARTICIPATIONS]: participationData };
+      const setObject = {
+        [FUTURE_PARTICIPATIONS]: futureParticipationData,
+      };
 
       bulkOperations.push({
         updateOne: {
@@ -85,6 +86,6 @@ export const addPreviousParticipations = async (args) => {
   }
 };
 
-addPreviousParticipations.args = ["surveyId", "editionId"];
+addFutureParticipations.args = ["surveyId", "editionId"];
 
-addPreviousParticipations.description = `Add previous edition counts (how many times someone has taken the same survey before) where missing.`;
+addFutureParticipations.description = `Add previous edition counts (how many times someone has taken the same survey before) where missing.`;

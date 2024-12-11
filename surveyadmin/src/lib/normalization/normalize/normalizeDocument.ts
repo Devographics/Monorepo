@@ -249,14 +249,20 @@ const normalizeResponse = async (
 
   // note: even if the base steps modify the response,
   // we don't count that towards keeping or discarding the operation
-  const baseSteps = [
+  const beforeSteps = [
     "copyFields",
     "setUuid",
     "handleLocale",
     "normalizeCountryField",
     // "normalizeSourceField",
   ];
-  for (const stepName of baseSteps) {
+
+  const afterSteps = [
+    "calculateCardinalities",
+    // "normalizeSourceField",
+  ];
+
+  for (const stepName of beforeSteps) {
     const step: StepFunction = steps[stepName];
     normResp = await step({ ...normalizationParams, normResp });
   }
@@ -291,6 +297,11 @@ const normalizeResponse = async (
         // do not have db data associated with them; just skip them
       }
     }
+  }
+
+  for (const stepName of afterSteps) {
+    const step: StepFunction = steps[stepName];
+    normResp = await step({ ...normalizationParams, normResp });
   }
 
   // if none of the normalizeField steps have modified the response,

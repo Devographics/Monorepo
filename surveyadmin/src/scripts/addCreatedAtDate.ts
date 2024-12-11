@@ -1,6 +1,6 @@
-import { PREVIOUS_PARTICIPATIONS } from "@devographics/constants";
+import { PAST_PARTICIPATIONS } from "@devographics/constants";
 import { getRawResponsesCollection } from "@devographics/mongo";
-import { PreviousParticipationData } from "@devographics/types";
+import { OtherParticipationData } from "@devographics/types";
 
 // how many bulk operation to perform in one go
 const operationsPerStep = 1000;

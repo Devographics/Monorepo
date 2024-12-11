@@ -17,4 +17,5 @@ export * from "./migrateToolsPaths";
 export * from "./renameRawField";
 export * from "./convertHappiness";
 export * from "./addPreviousParticipations";
+export * from "./addFutureParticipations";
 export * from "./addCreatedAtDate";
