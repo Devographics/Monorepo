@@ -64,3 +64,4 @@ export const SENTIMENT_FACET = '_sentiment'
 export const CATCHALL_PREFIX = 'catchall_'
 
 export const PAST_PARTICIPATIONS = 'past_participations'
+export const FUTURE_PARTICIPATIONS = 'future_participations'
