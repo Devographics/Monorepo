@@ -66,9 +66,10 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                                             {resource.name}
                                         </a>
                                     </Title>
-                                    <Description className="Resource__description">
-                                        {resource.description}
-                                    </Description>
+                                    <Description
+                                        className="Resource__description"
+                                        dangerouslySetInnerHTML={{ __html: resource.description }}
+                                    />
                                 </ResourceContent>
                             </Resource>
                         )
