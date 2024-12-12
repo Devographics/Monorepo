@@ -12,7 +12,9 @@ import {
     SortSpecifier,
     SortOrder,
     SortOrderNumeric,
-    ExecutionContext
+    ExecutionContext,
+    DbMatch,
+    MatchNin
 } from '../types'
 import {
     discardEmptyIds,
@@ -359,9 +361,10 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     }
 
     const surveyId = survey.id
-    let match: any = {
+    const ninObject: MatchNin = { $nin: [null, '', [], {}] }
+    let match = {
         surveyId,
-        [dbPath]: { $nin: [null, '', [], {}] }
+        [dbPath]: ninObject
     }
     if (filters) {
         const filtersQuery = await runStage(generateFiltersQuery, [{ filters, dbPath, surveyId }])

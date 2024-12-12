@@ -13,8 +13,16 @@ export interface FilterQuery<T> {
     $gt?: T
 }
 
+export type DbMatch = {
+    surveyId: string
+} & { [key: string]: MatchNin }
+
 export type FiltersQuery = {
-    [key: string]: FilterQuery<string | number>
-} & {
-    $or?: Array<FilterQuery<string | number>>
+    $and: Array<FiltersQueryOr>
 }
+
+export type MatchNin = {
+    $nin: [null, '', [], {}]
+}
+
+export type FiltersQueryOr = { $or?: Array<FilterQuery<string | number>> }
