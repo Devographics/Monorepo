@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Tooltip from 'core/components/Tooltip'
 import { Bucket, FacetBucket } from '@devographics/types'
-import { HorizontalBarChartState, HorizontalBarChartValues } from './types'
+import {
+    HorizontalBarChartState,
+    HorizontalBarChartValues,
+    HorizontalBarViewDefinition
+} from './types'
 import T from 'core/i18n/T'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
@@ -30,7 +34,8 @@ export const Cell = ({
     width,
     offset,
     cellIndex,
-    gradient
+    gradient,
+    viewDefinition
 }: {
     bucket: Bucket | FacetBucket
     chartState: HorizontalBarChartState
@@ -39,6 +44,7 @@ export const Cell = ({
     offset: number
     cellIndex: number
     gradient: string[]
+    viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
 }) => {
     const { ref, isWideEnough: showLabel } = useIsWideEnough()
 
@@ -46,7 +52,6 @@ export const Cell = ({
     // const entity = entities.find(e => e.id === bucket.id)
     const { question, facetQuestion } = chartValues
     const { sort, view } = chartState
-    const viewDefinition = getViewDefinition(view)
     const { getValue, formatValue } = viewDefinition
     const { getString } = useI18n()
 
@@ -62,7 +67,7 @@ export const Cell = ({
 
     const { key, label } = getItemLabel({
         getString,
-        i18nNamespace: facetQuestion?.id || question.id,
+        i18nNamespace: facetQuestion?.id || question?.id,
         id,
         entity
     })

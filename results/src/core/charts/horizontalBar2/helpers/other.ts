@@ -7,7 +7,7 @@ import {
     SimplifiedSentimentOptions,
     StandardQuestionData
 } from '@devographics/types'
-import { HorizontalBarChartState, HorizontalBarViews } from '../types'
+import { HorizontalBarChartState, HorizontalBarViewDefinition, HorizontalBarViews } from '../types'
 import { DataSeries, FacetItem } from 'core/filters/types'
 import { usePageContext } from 'core/helpers/pageContext'
 import { applySteps } from './steps'
@@ -146,14 +146,14 @@ Calculate metadata about all series (in the cases where we're showing multiple)
 export const getSeriesMetadata = ({
     series,
     block,
-    chartState
+    chartState,
+    viewDefinition
 }: {
     series: CommonProps<HorizontalBarChartState>['series']
     block: BlockVariantDefinition
     chartState: HorizontalBarChartState
+    viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
 }) => {
-    const { view } = chartState
-    const viewDefinition = getViewDefinition(view)
     const { getValue } = viewDefinition
     const allSeriesValues = series
         .map(serie => {

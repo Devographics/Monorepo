@@ -51,7 +51,7 @@ export type Control = {
 
 type GetValueType = (bucket: Bucket | FacetBucket) => number
 
-export type HorizontalBarViewDefinition = ViewDefinition & {
+export type HorizontalBarViewDefinition<ChartStateType> = ViewDefinition<ChartStateType> & {
     getValue: GetValueType
     dataFilters?: DataFilter[]
     component: (props: HorizontalBarViewProps) => JSX.Element | null
@@ -65,6 +65,7 @@ export type HorizontalBarViewProps = {
     isReversed?: boolean
     seriesMetadata: SeriesMetadata
     serieMetadata: ResponseEditionMetadata
+    viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
 }
 
 export type DataFilter = (buckets: Bucket[]) => Bucket[]
@@ -85,4 +86,5 @@ export type RowComponentProps = Omit<RowGroupProps, 'rowComponent'> & {
     showGroupedBuckets?: boolean
     setShowGroupedBuckets?: Dispatch<SetStateAction<boolean>>
     isGroupedBucket?: boolean
+    viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
 }

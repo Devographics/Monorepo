@@ -1,0 +1,40 @@
+id: '${sectionId}_cardinalities'
+titleId: tools.cardinalities
+descriptionKey: tools.cardinalities.description
+blockType: CardinalitiesBlock
+defaultView: percentageSurvey
+hasData: true
+customizationModes: [filters]
+parameters:
+    cutoff: 1
+
+query: >
+    surveys {
+      ${surveyId} {
+        ${editionId} {
+          ${sectionId} {
+            ${sectionId}_cardinalities: _cardinalities {
+              id
+              _metadata {
+                sectionId
+              }
+              responses(parameters: {sort: {order: asc, property: id}}) {
+                currentEdition {
+                  buckets {
+                    count
+                    id
+                    percentageQuestion
+                    percentageSurvey
+                  }
+                  completion {
+                    count
+                    percentageSurvey
+                    total
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }

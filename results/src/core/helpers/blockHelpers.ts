@@ -195,7 +195,7 @@ In order of priority, use:
 
 */
 export const getBlockDescriptionKey = (block: BlockVariantDefinition) =>
-    `${getBlockKey({ block })}.description`
+    block.descriptionKey ?? `${getBlockKey({ block })}.description`
 export const getBlockDescription = ({
     block,
     pageContext,

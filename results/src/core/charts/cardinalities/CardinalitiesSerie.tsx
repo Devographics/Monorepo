@@ -1,22 +1,22 @@
 import React from 'react'
-import { sortProperties, StandardQuestionData } from '@devographics/types'
+import { StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
-import { getChartBuckets, getChartCurrentEdition, getSerieMetadata } from './helpers/other'
-import { useChartValues } from './helpers/chartValues'
+import { getSerieMetadata } from '../horizontalBar2/helpers/other'
+import { useChartValues } from '../horizontalBar2/helpers/chartValues'
 import { GridItem } from '../common2'
 import { CommonProps } from '../common2/types'
-import take from 'lodash/take'
-import { getViewComponent, getViewDefinition } from './helpers/views'
 import { getItemFilters } from '../common2/helpers/filters'
-import { HorizontalBarChartState, HorizontalBarViewProps, HorizontalBarViews } from './types'
-import { applyRowsLimit } from '../multiItemsExperience/helpers'
+import { HorizontalBarViewProps } from '../horizontalBar2/types'
+import { getSerieBuckets } from './helpers/other'
+import { getViewComponent, getViewDefinition } from './helpers/views'
+import { CardinalitiesChartState } from './types'
 
-export const HorizontalBarSerie = (
+export const CardinalitiesSerie = (
     props: {
         serie: DataSeries<StandardQuestionData>
         serieIndex: number
         isReversed?: boolean
-    } & CommonProps<HorizontalBarChartState>
+    } & CommonProps<CardinalitiesChartState>
 ) => {
     const {
         seriesMetadata,
@@ -28,11 +28,11 @@ export const HorizontalBarSerie = (
         question,
         isReversed = false
     } = props
-    const { rowsLimit } = chartState
 
-    let buckets = getChartBuckets({ serie, block, chartState })
-
+    const buckets = getSerieBuckets({ serie, block, chartState })
     const viewDefinition = getViewDefinition(chartState.view)
+    console.log({ buckets })
+    console.log({ viewDefinition })
 
     const chartValues = useChartValues({
         seriesMetadata,
@@ -42,19 +42,7 @@ export const HorizontalBarSerie = (
         viewDefinition
     })
 
-    if (applyRowsLimit(rowsLimit, chartValues.totalRows)) {
-        buckets = take(buckets, chartState.rowsLimit)
-    }
-
-    // let allRowOffsets = allRowsCellDimensions.map(cd =>
-    //     getRowOffset({
-    //         firstRowCellDimensions: allRowsCellDimensions[0],
-    //         cellDimensions: cd,
-    //         chartState
-    //     })
-    // )
     const serieMetadata = getSerieMetadata({ serie, block })
-
     const viewProps: HorizontalBarViewProps = {
         ...props,
         isReversed,
@@ -63,10 +51,9 @@ export const HorizontalBarSerie = (
         serieMetadata,
         viewDefinition
     }
-
     const itemFilters = getItemFilters({ variant, block, serieIndex })
 
-    const ViewComponent = getViewComponent(chartState.view as HorizontalBarViews)
+    const ViewComponent = getViewComponent(chartState.view)
 
     const currentSort = serieMetadata?.axis1Sort?.property
     return (

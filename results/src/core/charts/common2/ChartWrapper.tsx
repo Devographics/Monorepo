@@ -3,6 +3,7 @@ import './ChartWrapper.scss'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { BAR_HEIGHT } from '../horizontalBar2/rows/RowGroup'
 import { QuestionMetadata } from '@devographics/types'
+import { BlockVariantDefinition } from 'core/types'
 
 export const ChartWrapper = ({
     block,
@@ -10,6 +11,7 @@ export const ChartWrapper = ({
     className = '',
     question
 }: {
+    block: BlockVariantDefinition
     children: JSX.Element
     className?: string
     question: QuestionMetadata

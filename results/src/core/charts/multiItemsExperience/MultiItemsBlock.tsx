@@ -3,7 +3,7 @@ import '../common2/ChartsCommon.scss'
 import './MultiItems.scss'
 import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
 import { MultiItemsExperienceControls } from './MultiItemsControls'
-import { COMMENTS, GroupingOptions, MultiItemsExperienceBlockProps } from './types'
+import { COMMENTS, GroupingOptions, MultiItemSerie } from './types'
 import { useChartState } from './helpers'
 import { ChartControls, ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
 import { useTheme } from 'styled-components'
@@ -14,8 +14,13 @@ import MultiItemsSerie from './MultiItemsSerie'
 import MultiItemsCategories from './MultiItemsCategories'
 import { MultiItemsStats } from './MultiItemsStats'
 import ChartData from '../common2/ChartData'
+import { BlockComponentProps } from 'core/types'
 
 const defaultLimit = 5
+
+export interface MultiItemsExperienceBlockProps extends BlockComponentProps {
+    series: MultiItemSerie[]
+}
 
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
     const { series, block, question, pageContext } = props

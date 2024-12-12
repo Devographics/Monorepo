@@ -344,6 +344,8 @@
               variables:
                   url: https://cassidoo.co/
 
+            - template: cardinalities
+
             - template: happiness2
 
             # - template: happiness2
@@ -390,6 +392,8 @@
               variables:
                   url: https://thebreedling.com/
 
+            - template: cardinalities
+
             - template: happiness2
 
             # - id: meta_frameworks_happiness
@@ -432,6 +436,8 @@
               template: picks
               variables:
                   url: https://www.youtube.com/@shrutikapoor08
+
+            - template: cardinalities
 
             - template: happiness2
 
@@ -476,6 +482,8 @@
               variables:
                   url: https://knip.dev/
 
+            - template: cardinalities
+
             - template: happiness2
 
             # - id: mobile_desktop_happiness
@@ -519,6 +527,8 @@
               variables:
                   url: https://bsky.app/
 
+            - template: cardinalities
+
             - template: happiness2
 
             # - id: build_tools_happiness
@@ -561,6 +571,8 @@
               template: picks
               variables:
                   url: https://rspack.dev/
+
+            - template: cardinalities
 
             - template: happiness2
 
@@ -775,41 +787,41 @@
               template: award
               awards:
                   - id: vite
-                    value: '+25%'
-                  - id: esbuild
-                    value: '+21%'
+                    value: '+30%'
                   - id: vitest
-                    value: '+20%'
+                    value: '+26%'
+                  - id: esbuild
+                    value: '+19%'
 
             - id: tool_satisfaction_award
               template: award
               awards:
+                  - id: vitest
+                    value: '98%'
                   - id: vite
                     value: '98%'
-                  - id: vitest
-                    value: '96%'
-                  - id: playwright
-                    value: '95%'
+                  - id: astro
+                    value: '94%'
 
             - id: tool_interest_award
               template: award
               awards:
+                  - id: rolldown
+                    value: '86%'
                   - id: vitest
-                    value: '79%'
+                    value: '82%'
                   - id: vite
-                    value: '77%'
-                  - id: playwright
-                    value: '76%'
+                    value: '82%'
 
             - id: most_write_ins_award
               template: award
               awards:
-                  - id: bun
-                    value: '353'
-                  - id: astro
-                    value: '299'
-                  - id: ember
-                    value: '81'
+                  - id: analog
+                    value: '108'
+                  - id: nitro
+                    value: '107'
+                  - id: valibot
+                    value: '98'
 
             # - id: most_commented_feature_award
             #   template: award
@@ -824,22 +836,22 @@
             - id: most_commented_tool_award
               template: award
               awards:
-                  - id: react
-                    value: 119
-                  - id: nextjs
-                    value: 92
+                  - id: angular
+                    value: 31
                   - id: storybook
-                    value: 72
+                    value: 39
+                  - id: webpack
+                    value: 35
 
             - id: most_loved_tool_award
               template: award
               awards:
                   - id: vite
-                    value: '88.7%'
-                  - id: jest
-                    value: '73.2%'
+                    value: '56%'
                   - id: react
-                    value: '71.2%'
+                    value: '46.7%'
+                  - id: vue
+                    value: '42.3%'
 
       # - id: awards_resources
       #   items: [road-to-react]

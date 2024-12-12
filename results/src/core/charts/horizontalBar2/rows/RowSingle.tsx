@@ -12,11 +12,18 @@ import { getViewDefinition } from '../helpers/views'
 
 export const RowSingle = (props: RowComponentProps) => {
     const theme = useTheme()
-    const { block, bucket, chartState, chartValues, showCount = true, hasGroupedBuckets } = props
+    const {
+        block,
+        bucket,
+        chartState,
+        chartValues,
+        showCount = true,
+        hasGroupedBuckets,
+        viewDefinition
+    } = props
     const { isFreeformData, hasInsufficientData } = bucket
     const { question, maxOverallValue = 1 } = chartValues
     const { view } = chartState
-    const viewDefinition = getViewDefinition(view)
     const { getValue } = viewDefinition
     const value = getValue(bucket)
     const width = (100 * value) / maxOverallValue
@@ -55,6 +62,7 @@ export const RowSingle = (props: RowComponentProps) => {
                     cellIndex={0}
                     chartValues={chartValues}
                     gradient={gradient}
+                    viewDefinition={viewDefinition}
                 />
                 {hasInsufficientData && (
                     <div className="chart-row-insufficient-data-wrapper">

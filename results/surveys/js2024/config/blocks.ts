@@ -10,6 +10,7 @@
 // generic charts
 import HorizontalBarBlock from 'core/charts/horizontalBar/index'
 import HorizontalBarBlock2 from 'core/charts/horizontalBar2'
+import { CardinalitiesBlock } from 'core/charts/cardinalities'
 import VerticalBarBlock from 'core/charts/verticalBar'
 import VerticalBarBlock2 from 'core/charts/verticalBar2'
 import PeopleBlock from 'core/charts/people'
@@ -43,6 +44,7 @@ import TakeawaysBlock from 'core/blocks/other/TakeawaysBlock.tsx'
 const chartBlocks = {
     HorizontalBarBlock,
     HorizontalBarBlock2,
+    CardinalitiesBlock,
     VerticalBarBlock,
     VerticalBarBlock2,
     TimeSeriesByDateBlock,

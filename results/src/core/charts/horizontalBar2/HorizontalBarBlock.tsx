@@ -47,10 +47,13 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 
     const chartState = useChartState(getDefaultState({ facetQuestion, block }))
 
+    const viewDefinition = getViewDefinition(chartState.view)
+
     const seriesMetadata = getSeriesMetadata({
         series,
         block,
-        chartState
+        chartState,
+        viewDefinition
     })
 
     const commonProps: CommonProps<HorizontalBarChartState> = {

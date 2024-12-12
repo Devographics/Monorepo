@@ -5,9 +5,9 @@ import { DataSeries } from 'core/filters/types'
 import { CustomVariant } from 'core/filters/helpers'
 import { Dispatch, SetStateAction } from 'react'
 
-export interface ChartStateWithView {
+export interface ChartStateWithView<ViewType> {
     view: string
-    setView: Dispatch<SetStateAction<string>>
+    setView: Dispatch<SetStateAction<ViewType>>
 }
 
 export interface ChartStateWithSort {
