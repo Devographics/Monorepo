@@ -3,7 +3,7 @@ import { QuestionTemplateOutput, TemplateFunction } from '@devographics/types'
 
 const id = 'editions'
 
-export const previous_editions: TemplateFunction = ({ survey, edition, question, section }) => {
+export const past_editions: TemplateFunction = ({ survey, edition, question, section }) => {
     const output: QuestionTemplateOutput = {
         id,
         rawPaths: {

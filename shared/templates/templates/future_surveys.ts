@@ -1,9 +1,9 @@
 import { FUTURE_PARTICIPATIONS } from '@devographics/constants'
 import { QuestionTemplateOutput, TemplateFunction } from '@devographics/types'
 
-const id = 'editions'
+const id = 'surveys'
 
-export const next_editions: TemplateFunction = ({ survey, edition, question, section }) => {
+export const future_surveys: TemplateFunction = ({ survey, edition, question, section }) => {
     const output: QuestionTemplateOutput = {
         id,
         rawPaths: {

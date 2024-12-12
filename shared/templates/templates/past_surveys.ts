@@ -1,9 +1,9 @@
 import { PAST_PARTICIPATIONS } from '@devographics/constants'
 import { QuestionTemplateOutput, TemplateFunction } from '@devographics/types'
 
-const id = 'same_survey_count'
+const id = 'surveys'
 
-export const same_survey_count: TemplateFunction = ({ survey, edition, question, section }) => {
+export const past_surveys: TemplateFunction = ({ survey, edition, question, section }) => {
     const output: QuestionTemplateOutput = {
         id,
         rawPaths: {
