@@ -160,6 +160,7 @@
         takeaway: >
             The survey's non-white population tended to be younger and have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
         variants:
+            - template: vs_salary
             - template: vs_years_of_experience
               parameters:
                   sort: { property: medianByFacet }
