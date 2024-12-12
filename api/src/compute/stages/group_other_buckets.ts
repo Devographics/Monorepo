@@ -54,7 +54,8 @@ export async function groupOtherBuckets(
                         buckets: specialBuckets,
                         mergedProps: { id: OTHER_ANSWERS },
                         primaryAxis: axis1,
-                        secondaryAxis: axis2
+                        secondaryAxis: axis2,
+                        isFacetBuckets: true
                     })
 
                     bucket.facetBuckets = [...regularBuckets, combinedOtherBucket]
