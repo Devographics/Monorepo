@@ -915,18 +915,22 @@
         queryOptions:
             addQuestionComments: false
 
-      - id: previous_surveys
+      - id: past_surveys
         template: multiple_options2
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
             addBucketsEntities: true
+        parameters:
+            showNoAnswer: true
 
-      - id: same_survey_count
+      - id: past_same_survey_count
         template: multiple_options2
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
+        parameters:
+            showNoAnswer: true
 
       - id: created_at_date
         template: multiple_options2

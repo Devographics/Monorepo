@@ -19,7 +19,7 @@ const getTicks = (maxValue?: number) => {
 }
 
 const dataFilters = [
-    removeNoAnswer
+    // removeNoAnswer
     // removeOverLimit,
     // removeUnderCutoff,
     // removeOtherAnswers
