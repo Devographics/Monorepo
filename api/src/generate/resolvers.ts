@@ -27,7 +27,7 @@ import { loadOrGetParsedSurveys } from '../load/surveys'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
 import StringOrFloatOrArray from '../graphql/string_or_array'
-import { getCardinalities } from '../compute/cardinality'
+import { getCardinalities } from '../compute/cardinalities'
 
 export const generateResolvers = async ({
     surveys,
