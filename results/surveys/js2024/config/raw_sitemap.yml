@@ -128,6 +128,10 @@
               queryOptions:
                   subField: freeform
 
+      - id: user_info_resources_1
+        items: [td-relocate]
+        template: recommended_resources
+
       - id: higher_education_degree
         template: multiple_options2
         variants:
@@ -178,8 +182,8 @@
               parameters:
                   sort: { property: medianByFacet }
 
-      - id: user_info_resources
-        items: [td-relocate]
+      - id: user_info_resources_2
+        items: [fm-javascript-first-steps, fm-getting-a-job-v2]
         template: recommended_resources
 
 - id: features
@@ -743,8 +747,8 @@
       - id: other_surveys
         template: multiple_options2_combined
 
-      - id: usage_resources
-        items: [al-vue-reactivity, ad-self-teach-me]
+      - id: resources_resources
+        items: [fm-algorithms, fm-podcast]
         template: recommended_resources
 
 - id: awards
@@ -841,10 +845,6 @@
       #   items: [road-to-react]
       #   template: recommended_resources
 
-      - id: awards_resources
-        items: [fm-javascript-first-steps, fm-getting-a-job-v2]
-        template: recommended_resources
-
 - id: conclusion
   path: /conclusion
   blocks:
@@ -935,7 +935,7 @@
       - id: created_at_date
         template: multiple_options2
         blockType: TimeSeriesByDateBlock
-        defaultView: count
+        defaultView: countBar
         parameters:
             showNoAnswer: false,
             cutoff: 10,
@@ -997,8 +997,8 @@
                           - black_tech_pipeline
                           - referral_5n0w
 
-      - id: resources_resources
-        items: [fm-algorithms, fm-podcast]
+      - id: metadata_resources
+        items: [al-vue-reactivity, ad-self-teach-me]
         template: recommended_resources
 
 - id: about

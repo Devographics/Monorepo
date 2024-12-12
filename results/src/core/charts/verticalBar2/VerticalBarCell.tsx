@@ -26,7 +26,7 @@ export const useIsTallEnough = () => {
 }
 
 type CellProps<SerieData, PointData extends BasicPointData, ChartStateType> = {
-    cellId: string
+    cellId?: string
     point: PointData
     value: number
     chartState: ChartStateType
@@ -64,6 +64,7 @@ export const Cell = <SerieData, PointData extends BasicPointData, ChartStateType
 
     const v = formatValue(value, question, chartState)
 
+    const label = cellId ? `${point.columnId} ${cellId}` : point.columnId
     return (
         <Tooltip
             trigger={
@@ -79,7 +80,7 @@ export const Cell = <SerieData, PointData extends BasicPointData, ChartStateType
             }
             contents={
                 <div>
-                    {point.columnId} {cellId}: <strong>{v}</strong>{' '}
+                    {label}: <strong>{v}</strong>{' '}
                 </div>
             }
             showBorder={false}
