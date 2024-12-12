@@ -7,6 +7,10 @@ import { NormalizationParams, StepFunction } from "../types";
 import clone from "lodash/clone";
 import { emptyValues } from "../helpers/getSelectors";
 import { GenericResponseDocument, FeaturesOptions } from "@devographics/types";
+import {
+  PAST_PARTICIPATIONS,
+  FUTURE_PARTICIPATIONS,
+} from "@devographics/constants";
 
 // const replaceAll = function (target, search, replacement) {
 //   return target.replace(new RegExp(search, "g"), replacement);
@@ -74,7 +78,9 @@ export const getFieldsToCopy = (
   // @ts-ignore Legacy
   ["common__user_info__authmode", "user_info.authmode"],
   // @ts-ignore Legacy
-  ["previous_participations", "user_info.previous_participations"],
+  [PAST_PARTICIPATIONS, `user_info.${PAST_PARTICIPATIONS}`],
+  // @ts-ignore Legacy
+  [FUTURE_PARTICIPATIONS, `user_info.${FUTURE_PARTICIPATIONS}`],
 ];
 
 export const copyFields: StepFunction = async ({
