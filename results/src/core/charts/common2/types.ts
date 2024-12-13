@@ -54,7 +54,7 @@ export type CommonProps<ChartStateType> = {
     block: BlockVariantDefinition
     series: DataSeries<any>[]
     variant?: CustomVariant
-    question: QuestionMetadata
+    question?: QuestionMetadata
     seriesMetadata?: SeriesMetadata
 }
 

@@ -49,8 +49,13 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                                         href={`${url}&utm_content=textlink`}
                                         title={resource.name}
                                         padding={resource.padding}
+                                        className="resource-image-link"
                                     >
-                                        <ImageImage src={resource.image} alt={resource.name} />
+                                        <ImageImage
+                                            src={resource.image}
+                                            alt={resource.name}
+                                            className="resource-image-image"
+                                        />
                                     </ImageLink>
                                     {resource.teacher && (
                                         <>

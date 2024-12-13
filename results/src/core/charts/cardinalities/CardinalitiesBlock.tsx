@@ -1,6 +1,6 @@
 import React from 'react'
 import { StandardQuestionData } from '@devographics/types'
-import { ChartControls, ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
+import { ChartControls, ChartFooter, ChartWrapper, GridWrapper, Metadata, Note } from '../common2'
 import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
 import ChartShare from '../common2/ChartShare'
@@ -10,21 +10,24 @@ import { CardinalitiesSerie } from './CardinalitiesSerie'
 import { BlockComponentProps } from 'core/types'
 import { useChartState } from './helpers/chartState'
 import { CardinalitiesChartState } from './types'
-import { getSeriesMetadata } from './helpers/other'
+import { getSerieBuckets, getSeriesMetadata } from './helpers/other'
 import { getViewDefinition } from './helpers/views'
 import ViewSwitcher from './ViewSwitcher'
 import './Cardinalities.scss'
+import sum from 'lodash/sum'
+import round from 'lodash/round'
 
 type CardinalitiesBlockProps = BlockComponentProps & {
     series: DataSeries<StandardQuestionData[]>[]
 }
 
 export const CardinalitiesBlock = (props: CardinalitiesBlockProps) => {
-    const { block, series, question, pageContext, variant } = props
+    const { block, series, pageContext, variant } = props
 
     const chartState = useChartState()
 
     const viewDefinition = getViewDefinition(chartState.view)
+    const { getValue } = viewDefinition
 
     const seriesMetadata = getSeriesMetadata({
         series,
@@ -35,7 +38,6 @@ export const CardinalitiesBlock = (props: CardinalitiesBlockProps) => {
 
     const commonProps: CommonProps<CardinalitiesChartState> = {
         variant,
-        question,
         series,
         pageContext,
         chartState,
@@ -43,14 +45,17 @@ export const CardinalitiesBlock = (props: CardinalitiesBlockProps) => {
         seriesMetadata
     }
 
+    const firstSeriebuckets = getSerieBuckets({ serie: series[0], chartState })
+    const firstSerieAverage = round(
+        sum(firstSeriebuckets.map(b => Number(b.id) * (b?.count ?? 0))) /
+            sum(firstSeriebuckets.map(b => b?.count ?? 0)),
+        1
+    )
+
     const useBackToBackSeriesView = series.length === 2
 
     return (
-        <ChartWrapper
-            className="chart-horizontal-bar chart-cardinalities"
-            block={block}
-            question={question}
-        >
+        <ChartWrapper className="chart-horizontal-bar chart-cardinalities" block={block}>
             <>
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>
@@ -74,14 +79,13 @@ export const CardinalitiesBlock = (props: CardinalitiesBlockProps) => {
                 <Note block={block} />
 
                 <ChartFooter
-                    // left={
-                    //     <Metadata
-                    //         average={average}
-                    //         median={percentiles?.p50}
-                    //         completion={completion}
-                    //         {...commonProps}
-                    //     />
-                    // }
+                    left={
+                        <Metadata
+                            average={firstSerieAverage}
+                            // median={percentiles?.p50}
+                            // completion={completion}
+                        />
+                    }
                     right={
                         <>
                             <ChartShare {...commonProps} />

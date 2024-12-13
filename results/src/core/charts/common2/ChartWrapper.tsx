@@ -14,7 +14,7 @@ export const ChartWrapper = ({
     block: BlockVariantDefinition
     children: JSX.Element
     className?: string
-    question: QuestionMetadata
+    question?: QuestionMetadata
 }) => {
     const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
     const style = {

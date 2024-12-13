@@ -3,12 +3,11 @@ import { RowWrapper } from './RowWrapper'
 import { Cell } from '../HorizontalBarCell'
 import { RowComponentProps } from '../types'
 import { useTheme } from 'styled-components'
-import { FreeformIndicator, RespondentCount } from '../../common2'
+import { RespondentCount } from '../../common2'
 import { FreeformAnswersTrigger } from '../../common2/FreeformAnswers'
 import { CUTOFF_ANSWERS, OVERLIMIT_ANSWERS } from '@devographics/constants'
 import { InsufficientDataIndicator } from 'core/charts/common2/InsufficientDataIndicator'
 import { ResultsSubFieldEnum } from '@devographics/types'
-import { getViewDefinition } from '../helpers/views'
 
 export const RowSingle = (props: RowComponentProps) => {
     const theme = useTheme()

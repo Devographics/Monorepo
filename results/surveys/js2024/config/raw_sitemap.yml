@@ -128,9 +128,10 @@
               queryOptions:
                   subField: freeform
 
-      - id: user_info_resources_1
+      - id: tokyodev_resources
         items: [td-relocate]
         template: recommended_resources
+        titleId: null
 
       - id: higher_education_degree
         template: multiple_options2
@@ -860,17 +861,17 @@
 - id: conclusion
   path: /conclusion
   blocks:
-      - id: conclusion_cassidy
+      - id: conclusion_fernando
         template: conclusion
         variables:
-            author: cassidy_williams
-            entities: '"cassidy_williams"'
+            author: fernando_herrera
+            entities: '"fernando_herrera"'
 
-      - id: conclusion_theo
-        template: conclusion
-        variables:
-            author: theo_browne
-            entities: '"theo_browne"'
+      # - id: conclusion_theo
+      #   template: conclusion
+      #   variables:
+      #       author: theo_browne
+      #       entities: '"theo_browne"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock

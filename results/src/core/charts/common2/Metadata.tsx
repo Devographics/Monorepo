@@ -10,23 +10,30 @@ import { formatNumber, formatPercentage, formatQuestionValue } from './helpers/f
 export const Metadata = ({
     completion,
     average,
+    total: total_,
     question,
     median
 }: {
-    completion: YearCompletion
+    completion?: YearCompletion
     average?: number
     median?: number
-    question: QuestionMetadata
+    total?: number
+    question?: QuestionMetadata
 }) => {
-    if (!completion) {
-        return <div>No completion data</div>
+    const items = []
+    const total = formatNumber(total_ ?? completion?.total ?? 0)
+
+    if (completion) {
+        const { count, percentageSurvey } = completion
+
+        items.push({ id: 'respondents', icon: UserIcon, value: formatNumber(count), total })
+        items.push({
+            id: 'completion',
+            icon: PercentIcon,
+            value: formatPercentage(percentageSurvey),
+            total
+        })
     }
-    const { count, percentageSurvey, total: total_ } = completion
-    const total = formatNumber(total_)
-    const items = [
-        { id: 'respondents', icon: UserIcon, value: formatNumber(count), total },
-        { id: 'completion', icon: PercentIcon, value: formatPercentage(percentageSurvey), total }
-    ]
     if (average) {
         items.push({
             id: 'average',
@@ -44,7 +51,7 @@ export const Metadata = ({
         })
     }
 
-    return (
+    return items.length > 0 ? (
         <div className="chart-metadata">
             {items.map(item => (
                 <MetadataItem key={item.id} {...item} />
@@ -57,7 +64,7 @@ export const Metadata = ({
                 md={true}
             /> */}
         </div>
-    )
+    ) : null
 }
 
 export const MetadataItem = ({

@@ -5,36 +5,10 @@ blockType: CardinalitiesBlock
 defaultView: percentageSurvey
 hasData: true
 customizationModes: [filters]
+queryOptions:
+    questionId: _cardinalities
+    addQuestionComments: false
+    addBucketsEntities: false
 parameters:
     cutoff: 1
-
-query: >
-    surveys {
-      ${surveyId} {
-        ${editionId} {
-          ${sectionId} {
-            ${sectionId}_cardinalities: _cardinalities {
-              id
-              _metadata {
-                sectionId
-              }
-              responses(parameters: {sort: {order: asc, property: id}}) {
-                currentEdition {
-                  buckets {
-                    count
-                    id
-                    percentageQuestion
-                    percentageSurvey
-                  }
-                  completion {
-                    count
-                    percentageSurvey
-                    total
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+    sort: { order: asc, property: id }

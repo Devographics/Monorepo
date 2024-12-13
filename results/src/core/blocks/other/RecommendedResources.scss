@@ -28,8 +28,21 @@
         font-weight: normal;
         color: var(--textColor);
     }
+    h4 {
+        font-size: 0.85rem;
+    }
     &:hover {
         background: var(--backgroundColor);
         text-decoration: none;
+    }
+}
+
+.tabs-wrapper-tokyodev_resources {
+    .block-header-top {
+        display: none;
+    }
+    .resource-image-link {
+        border: none;
+        border-radius: 0;
     }
 }

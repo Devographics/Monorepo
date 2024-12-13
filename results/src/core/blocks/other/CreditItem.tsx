@@ -9,7 +9,8 @@ const CreditItem = ({ entity, role, labelId }: Credit & { labelId?: string }) =>
     if (!entity) {
         return null
     }
-    const { name, homepage, twitter, company } = entity
+    const { name, homepage, twitter, company, alias } = entity
+    const nameLabel = alias ? `${name} (${alias})` : name
     return (
         <CreditItemDiv>
             {entity?.avatar?.url && (
@@ -19,7 +20,7 @@ const CreditItem = ({ entity, role, labelId }: Credit & { labelId?: string }) =>
             )}
             <Details>
                 <Name>
-                    <a href={homepage?.url || twitter?.url}>{name}</a>
+                    <a href={homepage?.url || twitter?.url}>{nameLabel}</a>
                 </Name>
                 {!!company && (
                     <Company>

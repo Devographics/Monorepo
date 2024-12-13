@@ -63,8 +63,10 @@ export const formatPercentage = (value: number) => {
     return `${roundPercentage(value)}%`
 }
 
-export const formatQuestionValue = (value: number, question: QuestionMetadata) => {
-    if (isDollar(question)) {
+export const formatQuestionValue = (value: number, question?: QuestionMetadata) => {
+    if (!question) {
+        return formatNumber(value)
+    } else if (isDollar(question)) {
         return usdFormatter.format(value)
     } else if (isYen(question)) {
         return `¥${largeNumberFormatter(value)}`

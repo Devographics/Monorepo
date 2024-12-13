@@ -31,8 +31,6 @@ export const CardinalitiesSerie = (
 
     const buckets = getSerieBuckets({ serie, block, chartState })
     const viewDefinition = getViewDefinition(chartState.view)
-    console.log({ buckets })
-    console.log({ viewDefinition })
 
     const chartValues = useChartValues({
         seriesMetadata,

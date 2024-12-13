@@ -46,7 +46,11 @@ export const RatiosByEdition = (props: RatiosByEditionProps) => {
     // const note = getString(key, {})?.t
 
     return (
-        <ChartWrapper question={question} className="chart-vertical-bar chart-multi-ratios">
+        <ChartWrapper
+            block={block}
+            question={question}
+            className="chart-vertical-bar chart-multi-ratios"
+        >
             <>
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>

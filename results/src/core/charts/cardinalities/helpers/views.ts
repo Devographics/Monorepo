@@ -1,8 +1,9 @@
 import { FeaturesOptions } from '@devographics/types'
 import { Heard } from '../views/Heard'
 import { Used } from '../views/Used'
+import { CardinalitiesViewDefinition } from '../types'
 
-export const viewDefinitions: { [key: string]: any } = {
+export const viewDefinitions: { [key: string]: CardinalitiesViewDefinition } = {
     [FeaturesOptions.HEARD]: Heard,
     [FeaturesOptions.USED]: Used
 }

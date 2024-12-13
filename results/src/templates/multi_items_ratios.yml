@@ -8,6 +8,7 @@ queryOptions:
     addRatios: true
     addQuestionEntity: true
     allEditions: true
+    addQuestionComments: false
 parameters:
     cutoffPercent: 0
     facetCutoffPercent: 0
