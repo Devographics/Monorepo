@@ -359,11 +359,10 @@
 
 ## TokyoDev
 
-- name: |
-      Japan's labor shortage is creating opportunities for international developers
+- name: TokyoDev
   id: td-relocate
   description: |
-      Our job board features opportunities for English-speaking frontend developers and more looking to relocate.
+      Japan's labor shortage is creating opportunities for international developers. Our job board features opportunities for English-speaking frontend developers and more looking to relocate.
   url: https://www.tokyodev.com/jobs?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2024
   image: https://assets.devographics.com/other/tokyodev-logo-square.png
 

@@ -362,7 +362,7 @@
               i18nNamespace: tools
 
             - id: front_end_frameworks_resources
-              items: [fm-react, fm-vanilla-js-apps]
+              items: [al-vue-reactivity, ad-self-teach-me]
               template: recommended_resources
 
       - id: meta_frameworks
@@ -858,6 +858,10 @@
       #   items: [road-to-react]
       #   template: recommended_resources
 
+      - id: awards_resources
+        items: [fm-react, fm-vanilla-js-apps]
+        template: recommended_resources
+
 - id: conclusion
   path: /conclusion
   blocks:
@@ -1009,10 +1013,6 @@
                           - codebar
                           - black_tech_pipeline
                           - referral_5n0w
-
-      - id: metadata_resources
-        items: [al-vue-reactivity, ad-self-teach-me]
-        template: recommended_resources
 
 - id: about
   path: /about
