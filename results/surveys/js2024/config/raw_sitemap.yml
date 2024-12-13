@@ -129,9 +129,8 @@
                   subField: freeform
 
       - id: tokyodev_resources
-        items: [td-relocate]
+        items: [td-article]
         template: recommended_resources
-        titleId: null
 
       - id: higher_education_degree
         template: multiple_options2

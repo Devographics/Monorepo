@@ -42,7 +42,8 @@ export const CardinalitiesBlock = (props: CardinalitiesBlockProps) => {
         pageContext,
         chartState,
         block,
-        seriesMetadata
+        seriesMetadata,
+        viewDefinition
     }
 
     const firstSeriebuckets = getSerieBuckets({ serie: series[0], chartState })
@@ -62,7 +63,12 @@ export const CardinalitiesBlock = (props: CardinalitiesBlockProps) => {
                 </pre> */}
                 <ChartControls right={<ViewSwitcher chartState={chartState} />} />
                 {useBackToBackSeriesView ? (
-                    <BackToBack serie1={series[0]} serie2={series[1]} {...commonProps} />
+                    <BackToBack
+                        component={CardinalitiesSerie}
+                        serie1={series[0]}
+                        serie2={series[1]}
+                        {...commonProps}
+                    />
                 ) : (
                     <GridWrapper seriesCount={series.length}>
                         {series.map((serie, serieIndex) => (

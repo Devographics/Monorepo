@@ -172,7 +172,8 @@ export const pageFromConfig = async (page: PageDef, pageIndex: number, editionVa
                     variants.push(blockVariant)
                 }
 
-                blocks.push({ id: block.id, variants })
+                const mainBlockId = block.id ?? variants[0].id
+                blocks.push({ id: mainBlockId, variants })
             }
 
             page.blocks = blocks

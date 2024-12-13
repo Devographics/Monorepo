@@ -11,6 +11,9 @@
         grid-template-columns: 1fr min-content 1fr;
         gap: var(--quarterSpacing);
     }
+    .back-to-back-serie {
+        min-width: 0;
+    }
     .back-to-back-serie-1,
     .back-to-back-serie-2 {
         .chart-row-left {
@@ -31,7 +34,7 @@
             overflow: hidden;
         }
         .chart-rows {
-            grid-template-columns: min-content 0px 0px;
+            grid-template-columns: 1fr 0px 0px;
             gap: 0px;
         }
         .chart-row-content {

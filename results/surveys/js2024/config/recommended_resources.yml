@@ -367,6 +367,14 @@
   image: https://assets.devographics.com/other/tokyodev-logo-square.png
 
 - name: |
+      TokyoDev: Japan Needs International Developers
+  id: td-article
+  description: |
+      How Japan's labor shortage equals career opportunities for certain international software developers.
+  url: https://www.tokyodev.com/articles/japan-needs-international-developers?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2024
+  image: https://assets.devographics.com/other/tokyodev-intl-dev-article.jpg
+
+- name: |
       Find your deam developer job in Japan today with TokyoDev!
   id: td-jobboard
   description: |

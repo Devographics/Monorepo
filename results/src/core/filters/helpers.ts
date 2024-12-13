@@ -67,11 +67,13 @@ export const getNewCondition = ({
 }): CustomizationFiltersCondition => {
     let value
     const field = filter
-    const { id: fieldId, sectionId, options, optionsAreNumeric } = field
-    if (optionsAreNumeric) {
+    const { id: fieldId, sectionId, options, groups, optionsAreNumeric } = field
+    const optionsOrGroups = groups ?? options
+
+    if (!optionsOrGroups) {
         value = null
     } else {
-        const option = providedOption || options?.[0]
+        const option = providedOption || optionsOrGroups?.[0]
         value = option?.id
     }
     return {
@@ -136,20 +138,18 @@ export const getNewSeries = ({
         const firstConditionField = allFilters.find(
             f => f.id === firstCondition.fieldId
         ) as FilterItem
-        if (!firstConditionField?.options) {
+        const optionsOrGroups = firstConditionField?.groups ?? firstConditionField?.options
+
+        if (!optionsOrGroups) {
             // if options are not provided (e.g. question is numeric)
             conditionOptions = { filter: firstConditionField }
         } else {
             const optionsInUse = getOptionsInUse({ filterId: firstCondition.fieldId, filtersState })
             // exclude any option currently in use
-            const availableOptions = firstConditionField?.options.filter(
-                o => !optionsInUse.includes(o.id)
-            )
+            const availableOptions = optionsOrGroups.filter(o => !optionsInUse.includes(o.id))
             // get first available option, unless no option is available
             // in which case just take first option from default list
-            const option =
-                availableOptions.length > 0 ? availableOptions[0] : firstConditionField?.options[0]
-
+            const option = availableOptions.length > 0 ? availableOptions[0] : optionsOrGroups[0]
             conditionOptions = { filter: firstConditionField, option }
         }
     }

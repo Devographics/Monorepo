@@ -11,26 +11,25 @@ import { HorizontalBarSerie } from '../horizontalBar2/HorizontalBarSerie'
 export const BackToBack = ({
     serie1,
     serie2,
+    component: component_,
     ...commonProps
 }: {
     serie1: DataSeries<StandardQuestionData>
     serie2: DataSeries<StandardQuestionData>
+    component?: React.ReactNode
 } & CommonProps<HorizontalBarChartState>) => {
+    const Component = component_ ?? HorizontalBarSerie
+    console.log(commonProps)
     return (
         <div className="back-to-back-wrapper">
-            <div className="back-to-back-serie-1 serie-reversed">
-                <HorizontalBarSerie
-                    serie={serie1}
-                    serieIndex={0}
-                    {...commonProps}
-                    isReversed={true}
-                />
+            <div className="back-to-back-serie back-to-back-serie-1 serie-reversed">
+                <Component serie={serie1} serieIndex={0} {...commonProps} isReversed={true} />
             </div>
             <div className="back-to-back-axis serie-axis">
-                <HorizontalBarSerie serie={serie1} serieIndex={0} {...commonProps} />
+                <Component serie={serie1} serieIndex={0} {...commonProps} />
             </div>
-            <div className="back-to-back-serie-2">
-                <HorizontalBarSerie serie={serie2} serieIndex={1} {...commonProps} />
+            <div className="back-to-back-serie back-to-back-serie-2">
+                <Component serie={serie2} serieIndex={1} {...commonProps} />
             </div>
         </div>
     )

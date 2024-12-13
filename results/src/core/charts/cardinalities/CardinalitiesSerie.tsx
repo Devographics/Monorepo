@@ -26,11 +26,11 @@ export const CardinalitiesSerie = (
         chartState,
         variant,
         question,
-        isReversed = false
+        isReversed = false,
+        viewDefinition
     } = props
 
     const buckets = getSerieBuckets({ serie, block, chartState })
-    const viewDefinition = getViewDefinition(chartState.view)
 
     const chartValues = useChartValues({
         seriesMetadata,

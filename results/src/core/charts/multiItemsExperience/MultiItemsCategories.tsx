@@ -64,7 +64,6 @@ export const MultiItemsCategories = ({ block, chartState }: MultiItemsCategories
             )
         }
     })
-    console.log(items)
     return (
         <Toggle
             labelId="charts.filter_by"
