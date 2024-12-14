@@ -124,7 +124,10 @@
         variants:
             - template: vs_salary
               parameters:
+                  limit: 20
                   sort: { property: medianByFacet }
+              chartOptions:
+                  limit: 10
               queryOptions:
                   subField: freeform
 
