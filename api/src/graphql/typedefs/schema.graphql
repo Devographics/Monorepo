@@ -17,6 +17,8 @@ type SurveyMetadata {
     domain: String
     hashtag: String
 
+    isDemo: Boolean
+
     imageUrl: String
     responsesCollectionName: String
     normalizedCollectionName: String
