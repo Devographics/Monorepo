@@ -10,8 +10,6 @@ const allEditions = surveys.map((s) => s.editions).flat();
 const upcomingEditions = allEditions.filter(
   (e) => e.status === SurveyStatusEnum.HIDDEN
 );
-console.log(surveys.map((s) => s.id));
-console.log(upcomingEditions.map((e) => e.id));
 const editionsWithSurveys = upcomingEditions.map((e) => ({
   ...e,
   survey: surveys.find((s) => s.id === e.surveyId),

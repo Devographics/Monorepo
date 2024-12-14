@@ -771,7 +771,7 @@
       - id: awards
         template: awards
         variables:
-            entities: '"vite","esbuild","vitest","playwright","bun","astro","ember","react","nextjs","storybook","jest"'
+            entities: '"vite", "vitest", "esbuild", "atro", "rolldown","analog", "nitro", "valibot", "angular", "storybook","webpack","react","vue"'
         awards:
             # - id: feature_adoption_delta_award
             #   template: award
