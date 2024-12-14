@@ -93,9 +93,7 @@ export const Answer = ({
     (id) => !tokens.map((t) => t.id).includes(id)
   );
 
-  const customTokens = regularTokens.filter(
-    (t) => t.pattern === CUSTOM_NORMALIZATION
-  );
+  const customTokens = tokens.filter((t) => t.pattern === CUSTOM_NORMALIZATION);
 
   const suggestedTokens = customNormalization?.suggestedTokens;
 

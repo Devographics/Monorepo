@@ -114,6 +114,7 @@ export interface CommonNormalizationProps extends NormalizationProps {
   unnormalizedAnswers: IndividualAnswer[];
   normalizedAnswers: IndividualAnswer[];
   discardedAnswers: IndividualAnswer[];
+  customAnswers: IndividualAnswer[];
   tokenFilter: string[] | null;
   setTokenFilter: (
     filterQuery: string[] | null,
@@ -184,7 +185,11 @@ export type CustomNormalization = {
   tokens: string[];
 };
 
-export type AnswerVariant = "normalized" | "unnormalized" | "discarded";
+export type AnswerVariant =
+  | "normalized"
+  | "unnormalized"
+  | "discarded"
+  | "custom";
 
 export const answerVariants = [
   {
@@ -206,6 +211,11 @@ export const answerVariants = [
     id: "discarded",
     label: "Discarded",
     tooltip: "Empty answers, random characters, etc.",
+  },
+  {
+    id: "custom",
+    label: "Custom Normalizations",
+    tooltip: "Answers with manually defined tokens",
   },
 ];
 
@@ -305,6 +315,7 @@ export const Normalization = (props: NormalizationProps) => {
     normalizedAnswers,
     unnormalizedAnswers,
     discardedAnswers,
+    customAnswers,
   } = splitResponses(responses);
 
   const commonProps: CommonNormalizationProps = {
@@ -324,6 +335,7 @@ export const Normalization = (props: NormalizationProps) => {
     normalizedAnswers,
     unnormalizedAnswers,
     discardedAnswers,
+    customAnswers,
     variant,
     setVariant,
     actionLog,
@@ -347,6 +359,9 @@ export const Normalization = (props: NormalizationProps) => {
 
   return (
     <div className="admin-normalization admin-content">
+      <pre>
+        <code>cn: {customNormalizations.length}</code>
+      </pre>
       <Actions {...commonProps} {...segmentProps} />
       {segments.length > 0 && <Progress {...commonProps} {...segmentProps} />}
       {responses ? (

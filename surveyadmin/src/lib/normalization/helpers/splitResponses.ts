@@ -1,5 +1,8 @@
 import { NormalizationResponse } from "../hooks";
-import { DISCARDED_ANSWER } from "@devographics/constants";
+import {
+  CUSTOM_NORMALIZATION,
+  DISCARDED_ANSWER,
+} from "@devographics/constants";
 import { NormalizationMetadata } from "@devographics/types";
 
 /*
@@ -42,10 +45,15 @@ export function splitResponses(responses: NormalizationResponse[]) {
   const discardedAnswers = answersWithNormalization.filter((a) =>
     answerIsDiscarded(a)
   );
+  const customAnswers = allAnswers.filter((a) =>
+    a?.tokens?.some((t) => t.pattern === CUSTOM_NORMALIZATION)
+  );
+
   return {
     allAnswers,
     normalizedAnswers,
     unnormalizedAnswers,
     discardedAnswers,
+    customAnswers,
   };
 }
