@@ -1,0 +1,80 @@
+---
+import { SurveyStatusEnum } from "@devographics/types";
+import T from "./T";
+import sortBy from "lodash/sortBy";
+
+const { surveys, locale } = Astro.props;
+import { Debug } from "astro/components";
+
+const allEditions = surveys.map((s) => s.editions).flat();
+const upcomingEditions = allEditions.filter(
+  (e) => e.status === SurveyStatusEnum.HIDDEN
+);
+console.log(surveys.map((s) => s.id));
+console.log(upcomingEditions.map((e) => e.id));
+const editionsWithSurveys = upcomingEditions.map((e) => ({
+  ...e,
+  survey: surveys.find((s) => s.id === e.surveyId),
+}));
+
+const sortedEditions = sortBy(
+  editionsWithSurveys,
+  (e) => new Date(e.feedbackAt)
+);
+---
+
+<section class="calendar">
+  <h2><T locale={locale} k="calendar.heading" /></h2>
+
+  <div class="calendar-events">
+    {
+      sortedEditions.map((edition) => {
+        const { feedbackAt, startedAt, endedAt, releasedAt, feedbackUrl } =
+          edition;
+        return (
+          <div class="calendar-edition">
+            <h4>
+              {edition.survey.name} {edition.year}
+            </h4>
+            <table class="calendar-table">
+              <thead>
+                <tr>
+                  <th>
+                    <T locale={locale} k="calendar.feedbackAt" />
+                  </th>
+                  <th>
+                    <T locale={locale} k="calendar.startedAt" />
+                  </th>
+                  <th>
+                    <T locale={locale} k="calendar.endedAt" />
+                  </th>
+                  <th>
+                    <T locale={locale} k="calendar.releasedAt" />
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href={feedbackUrl}>{feedbackAt}</a>
+                  </td>
+                  <td>{startedAt}</td>
+                  <td>{endedAt}</td>
+                  <td>{releasedAt}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        );
+      })
+    }
+  </div>
+</section>
+
+<style lang="scss">
+  @use "../stylesheets/_breakpoints.scss";
+
+  .calendar-edition {
+    margin-bottom: var(--doublespacing);
+  }
+</style>

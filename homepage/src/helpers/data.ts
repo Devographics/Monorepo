@@ -43,13 +43,14 @@ export const getData = async () => {
 
         locales.push(localeWithStrings)
     }
-    const allSurveys = (allSurveysData || [])
-        // remove surveys with no open/closed edition (new preview surveys, hidden surveys)
-        .filter(s =>
-            s.editions.some(e =>
-                [SurveyStatusEnum.OPEN, SurveyStatusEnum.CLOSED].includes(e.status)
-            )
-        )
+    // remove demo survey
+    const allSurveys = (allSurveysData || []).filter(s => !s.isDemo)
+    // // remove surveys with no open/closed edition (new preview surveys, hidden surveys)
+    // .filter(s =>
+    //     s.editions.some(e =>
+    //         [SurveyStatusEnum.OPEN, SurveyStatusEnum.CLOSED].includes(e.status)
+    //     )
+    // )
     const data = { allSurveys, locales, generalMetadata }
     return data
 }

@@ -1,0 +1,38 @@
+:root {
+  --pico-spacing: 10px;
+  --pico-border-width: 1px;
+  --pico-table-border-color: #ffffff44;
+  --pico-background-color: #ffffff11;
+  --pico-color: inherit;
+  --pico-font-weight: inherit;
+}
+/**
+ * Table
+ */
+:where(table) {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  text-indent: 0;
+}
+
+th,
+td {
+  padding: calc(var(--pico-spacing) / 2) var(--pico-spacing);
+  border-bottom: var(--pico-border-width) solid var(--pico-table-border-color);
+  background-color: var(--pico-background-color);
+  color: var(--pico-color);
+  font-weight: var(--pico-font-weight);
+  text-align: left;
+  text-align: start;
+}
+
+tfoot th,
+tfoot td {
+  border-top: var(--pico-border-width) solid var(--pico-table-border-color);
+  border-bottom: 0;
+}
+
+.calendar-table {
+  table-layout: fixed;
+}
