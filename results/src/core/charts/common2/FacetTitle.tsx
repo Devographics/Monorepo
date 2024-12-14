@@ -28,7 +28,7 @@ export const FacetTitle = ({
         i18nNamespace: block.sectionId
     })
 
-    const { label: facetLabel } = getQuestionLabel({
+    const { label: facetLabel, question: facetQuestionLabel } = getQuestionLabel({
         getString,
         block,
         question: facetQuestion,
@@ -46,7 +46,7 @@ export const FacetTitle = ({
                         <QuestionIcon size="petite" />
                     </span>
                 }
-                contents={facetLabel}
+                contents={facetQuestionLabel}
             />
         </div>
     )
