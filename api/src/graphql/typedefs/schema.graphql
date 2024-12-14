@@ -45,6 +45,8 @@ type EditionMetadata {
 
     startedAt: String
     endedAt: String
+    feedbackAt: String
+    releasedAt: String
 
     questionsUrl: String
     resultsUrl: String

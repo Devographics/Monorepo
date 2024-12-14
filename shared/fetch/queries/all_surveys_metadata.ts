@@ -33,8 +33,10 @@ query SurveysMetadataQuery {
         feedbackUrl
         resultsUrl
         surveyId
+        feedbackAt
         startedAt
         endedAt
+        releasedAt
         year
         status
         resultsStatus
