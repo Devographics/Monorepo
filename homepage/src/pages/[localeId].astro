@@ -1,24 +1,36 @@
 ---
-import Homepage from '../components/Homepage.astro'
+import Homepage from "../components/Homepage.astro";
 
-import { getData } from '@helpers/data'
-import { type CommonProps } from '@helpers/typings'
-import DefaultLayout from '../layouts/DefaultLayout.astro'
+import { getData } from "@helpers/data";
+import { type CommonProps } from "@helpers/typings";
+import DefaultLayout from "../layouts/DefaultLayout.astro";
 
 export async function getStaticPaths() {
-    const data = await getData()
-    const { allSurveys: surveys, locales, generalMetadata } = data
-    return locales.map(locale => ({
-        params: { localeId: locale.id },
-        props: { locale, locales, surveys, generalMetadata }
-    }));
+  const data = await getData();
+  const { allSurveys: surveys, locales, generalMetadata } = data;
+  return locales.map((locale) => ({
+    params: { localeId: locale.id },
+    props: { locale, locales, surveys, generalMetadata },
+  }));
 }
 
-const { locale, locales, surveys, generalMetadata } = Astro.props
-export type Props = CommonProps
-const survey = surveys.find(s => s.id === import.meta.env.SURVEYID)
+const { locale, locales, surveys, generalMetadata } = Astro.props;
+export type Props = CommonProps;
+const survey = surveys.find((s) => s.id === import.meta.env.SURVEYID);
 ---
 
-<DefaultLayout surveys={surveys} locale={locale} locales={locales} survey={survey} generalMetadata={generalMetadata}>
-    <Homepage surveys={surveys} locale={locale} locales={locales} survey={survey} generalMetadata={generalMetadata}/>
+<DefaultLayout
+  surveys={surveys}
+  locale={locale}
+  locales={locales}
+  survey={survey}
+  generalMetadata={generalMetadata}
+>
+  <Homepage
+    surveys={surveys}
+    locale={locale}
+    locales={locales}
+    survey={survey}
+    generalMetadata={generalMetadata}
+  />
 </DefaultLayout>

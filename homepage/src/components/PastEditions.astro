@@ -1,45 +1,44 @@
 ---
-import SurveyEdition from '@components/SurveyEdition.astro'
-import T from '@components/T'
+import SurveyEdition from "@components/SurveyEdition.astro";
+import T from "@components/T";
 
-const { editions, locale, survey } = Astro.props
-
+const { editions, locale, survey } = Astro.props;
 ---
 
 <section class="past-editions">
-    <h2>
-        <T locale={locale} k="homepage.past_surveys" />
-    </h2>
-    <div class="past-editions-items">
-        {editions.map(edition => (
-            <SurveyEdition
-                locale={locale}
-                key={edition.surveyId}
-                edition={edition}
-                survey={survey}
-            />
-        ))}
-    </div>
+  <h2>
+    <T locale={locale} k="homepage.past_surveys" />
+  </h2>
+  <div class="past-editions-items">
+    {
+      editions.map((edition) => (
+        <SurveyEdition
+          locale={locale}
+          key={edition.surveyId}
+          edition={edition}
+          survey={survey}
+        />
+      ))
+    }
+  </div>
 </section>
 
-
 <style lang="scss">
-    @use '../stylesheets/_breakpoints.scss';
+  @use "../stylesheets/_breakpoints.scss";
 
+  .last-edition,
+  .past-editions {
+    margin-bottom: var(--doublespacing);
+  }
 
-    .last-edition,
-    .past-editions {
-        margin-bottom: var(--doublespacing);
+  .past-editions-items {
+    display: grid;
+    column-gap: var(--doublespacing);
+    row-gap: var(--doublespacing);
+    grid-template-columns: 1fr 1fr;
+
+    @include breakpoints.small {
+      grid-template-columns: 1fr;
     }
-
-    .past-editions-items {
-        display: grid;
-        column-gap: var(--doublespacing);
-        row-gap: var(--doublespacing);
-        grid-template-columns: 1fr 1fr;
-
-        @include breakpoints.small {
-            grid-template-columns: 1fr;
-        }
-    }
+  }
 </style>

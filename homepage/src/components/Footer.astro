@@ -1,53 +1,59 @@
 ---
-import T from './T'
-import LanguageSwitcher from './LanguageSwitcher.astro'
-import { CommonProps } from '@helpers/typings'
+import T from "./T";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+import { CommonProps } from "@helpers/typings";
 
-const { survey, locale, locales } = Astro.props
-export type Props = CommonProps
+const { survey, locale, locales } = Astro.props;
+export type Props = CommonProps;
 
 const getLinks = (survey) => [
-    {
-        link: 'https://www.devographics.com',
-        k: 'homepage.made_by_devographics'
-    },
-    {
-        link: 'https://astro.build',
-        k: 'homepage.astro_link'
-    },
-    // {
-    //     link: 'https://www.netlify.com',
-    //     k: 'homepage.netlify_link'
-    // },
-    {
-        link: 'https://github.com/StateOfJS/Monorepo/issues',
-        k: 'homepage.leave_issue'
-    },
-    {
-        link: 'https://discord.gg/zRDb35jfrt',
-        k: 'homepage.join_discord'
-    }
-]
-
+  {
+    link: "https://www.devographics.com",
+    k: "homepage.made_by_devographics",
+  },
+  {
+    link: "https://astro.build",
+    k: "homepage.astro_link",
+  },
+  // {
+  //     link: 'https://www.netlify.com',
+  //     k: 'homepage.netlify_link'
+  // },
+  {
+    link: "https://github.com/StateOfJS/Monorepo/issues",
+    k: "homepage.leave_issue",
+  },
+  {
+    link: "https://discord.gg/zRDb35jfrt",
+    k: "homepage.join_discord",
+  },
+];
 ---
 
 <footer>
-    <LanguageSwitcher canonicalUrl={Astro.url} locale={locale} locales={locales} survey={survey} />
-    {getLinks(survey).map(({ link, k }) => (
-    <span>
+  <LanguageSwitcher
+    canonicalUrl={Astro.url}
+    locale={locale}
+    locales={locales}
+    survey={survey}
+  />
+  {
+    getLinks(survey).map(({ link, k }) => (
+      <span>
         <T locale={locale} k={k} values={{ link }} html={true} md={true} />
-    </span>
-    ))}
+      </span>
+    ))
+  }
 </footer>
 
 <style lang="scss">
-    footer {
-        text-align: center;
-        margin-bottom: var(--doublespacing);
-    }
+  footer {
+    text-align: center;
+    margin-bottom: var(--doublespacing);
+  }
 
-    span {
-        display: inline-flex;
-        margin: 0 var(--halfspacing);
-    }
+  span {
+    display: inline-flex;
+    margin: 0 var(--halfspacing);
+  }
 </style>

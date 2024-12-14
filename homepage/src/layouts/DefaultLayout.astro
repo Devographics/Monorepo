@@ -1,22 +1,23 @@
 ---
-import { I18nProvider } from '../helpers/i18nContext'
-import Footer from '@components/Footer.astro'
-import Partners from '@components/Partners.astro'
-import OtherSurveys from '@components/OtherSurveys.astro'
-import { getMeta } from '@helpers/meta'
-import { type CommonProps } from '@helpers/typings'
+import { I18nProvider } from "../helpers/i18nContext";
+import Footer from "@components/Footer.astro";
+import Partners from "@components/Partners.astro";
+import OtherSurveys from "@components/OtherSurveys.astro";
+import { getMeta } from "@helpers/meta";
+import { type CommonProps } from "@helpers/typings";
 
-import '../stylesheets/main.scss'
+import "../stylesheets/main.scss";
 
 const { surveys, survey, locale, locales } = Astro.props;
-export type Props = CommonProps
-const { editions } = survey
+export type Props = CommonProps;
+const { editions } = survey;
 
-const lastEdition = editions.sort((e1, e2) => e2.year - e1.year)[0]
-const { colors, faviconUrl } = lastEdition
-const meta = getMeta({ survey, locale, lastEdition })
+const lastEdition = editions.sort((e1, e2) => e2.year - e1.year)[0];
+const { colors, faviconUrl } = lastEdition;
+const meta = getMeta({ survey, locale, lastEdition });
 
-const { primary, secondary, background, backgroundSecondary, text } = (colors || {})
+const { primary, secondary, background, backgroundSecondary, text } =
+  colors || {};
 
 const variables = `
 :root {
@@ -26,42 +27,43 @@ const variables = `
         --backgroundSecondary: ${backgroundSecondary};
         --text: ${text};
       }
-`
+`;
 ---
 
-  <html lang="en">
-
+<html lang="en">
   <head>
-
     <title>{survey.name}</title>
-    {meta.map((tag) =>
-    <meta {...tag} />)}
+    {meta.map((tag) => <meta {...tag} />)}
 
     <link rel="icon" type="image/x-icon" href={faviconUrl} />
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
-    <style set:html={variables}/>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
 
-    <script defer data-domain={survey.domain} src="https://plausible.io/js/script.js"></script>
+    <style set:html={variables}></style>
 
+    <script
+      defer
+      data-domain={survey.domain}
+      src="https://plausible.io/js/script.js"></script>
   </head>
 
   <body>
-<I18nProvider client:load locale={locale} locales={locales}>
+    <I18nProvider client:load locale={locale} locales={locales}>
       <OtherSurveys locale={locale} surveys={surveys} survey={survey} />
       <div class="layout">
         <div>
-        <slot />
+          <slot />
         </div>
         <Footer {...Astro.props} />
       </div>
-</I18nContextProvider>
+    </I18nProvider>
   </body>
-
-  </html>
+</html>
 
 <style lang="scss" is:global>
   body {
@@ -84,7 +86,6 @@ const variables = `
   a:focus {
     color: var(--primary);
   }
-
 
   .layout {
     max-width: var(--layout-width);
