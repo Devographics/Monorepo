@@ -61,10 +61,16 @@
 
       - id: country
         template: multiple_options2
-        parameters: { limit: 20 }
+        parameters: { limit: 40 }
+        chartOptions:
+            limit: 20
+        queryOptions:
+            addBucketsEntities: false
         variants:
             - template: vs_salary
-              parameters: { cutoff: 100, limit: 20, sort: { property: medianByFacet, order: desc } }
+              parameters: { limit: 40, sort: { property: medianByFacet, order: desc } }
+              chartOptions:
+                  limit: 20
 
       - id: hint_hint
         template: hint
@@ -73,6 +79,7 @@
         template: multiple_options2
         variants:
             - template: vs_salary
+            - template: vs_gender
             - id: age_vs_disability
               fieldId: age
               blockType: HorizontalBarBlock2
@@ -89,6 +96,7 @@
         template: multiple_options2
         variants:
             - template: vs_salary
+            - template: vs_gender
 
       - id: company_size
         template: multiple_options2
@@ -130,6 +138,29 @@
                   limit: 10
               queryOptions:
                   subField: freeform
+            - template: vs_age
+              parameters:
+                  limit: 20
+                  sort: { property: medianByFacet, order: asc }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_gender
+              parameters:
+                  limit: 20
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
 
       - id: tokyodev_resources
         items: [td-article]
@@ -146,13 +177,15 @@
         #     Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
         variants:
             - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
             - id: country_vs_gender
               fieldId: country
               tabId: tabs.by_country
               template: multiple_options2
               parameters:
                   showNoAnswer: true
-                  limit: 15
+                  limit: 20
               filtersState:
                   options:
                       mode: facet
@@ -168,6 +201,17 @@
             The survey's non-white population tended to be younger and have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
         variants:
             - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
+            - template: vs_gender
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
             - template: vs_years_of_experience
               parameters:
                   sort: { property: medianByFacet }
@@ -180,7 +224,7 @@
         variants:
             - template: vs_age
               parameters:
-                  sort: { property: medianByFacet }
+                  sort: { property: medianByFacet, order: asc }
             - template: vs_salary
               parameters:
                   sort: { property: medianByFacet }

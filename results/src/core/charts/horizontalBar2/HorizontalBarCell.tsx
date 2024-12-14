@@ -12,6 +12,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { useWidth } from '../common2/helpers'
 import { CellLabel } from '../common2'
 import { getViewDefinition } from './helpers/views'
+import { getQuestionLabel } from '../common2/helpers/labels'
 
 // hide labels for cells under this size
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
@@ -65,7 +66,16 @@ export const Cell = ({
         '--color2': gradient[1]
     }
 
-    const { key, label } = getItemLabel({
+    let facetQuestionLabel
+    if (facetQuestion) {
+        const facetQuestionLabelObject = getQuestionLabel({
+            getString,
+            question: facetQuestion
+        })
+        facetQuestionLabel = facetQuestionLabelObject.label
+    }
+
+    const { key: key2, label: cellLabel } = getItemLabel({
         getString,
         i18nNamespace: facetQuestion?.id || question?.id,
         id,
@@ -77,6 +87,7 @@ export const Cell = ({
     const isActiveSort = sort === id
     const className = `chart-cell horizontal-chart-cell ${isActiveSort ? 'active-sort' : ''}`
 
+    const label = facetQuestionLabel ? `${facetQuestionLabel}: ${cellLabel}` : cellLabel
     return (
         <Tooltip
             trigger={
@@ -86,7 +97,7 @@ export const Cell = ({
             }
             contents={
                 <div>
-                    {label}: <strong>{v}</strong>{' '}
+                    [{label}] <strong>{v}</strong>{' '}
                     <T k="charts.facet_respondents" values={{ count }} />
                 </div>
             }
