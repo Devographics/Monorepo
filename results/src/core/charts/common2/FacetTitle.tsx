@@ -21,14 +21,18 @@ export const FacetTitle = ({
 }) => {
     const { getString } = useI18n()
 
-    const { label: questionLabel } = getQuestionLabel({
+    const { key: questionLabelKey, label: questionLabel } = getQuestionLabel({
         getString,
         block,
         question,
-        i18nNamespace: block.sectionId
+        i18nNamespace: block.i18nNamespace ?? block.sectionId
     })
 
-    const { label: facetLabel, question: facetQuestionLabel } = getQuestionLabel({
+    const {
+        key: facetLabelKey,
+        label: facetLabel,
+        question: facetQuestionLabel
+    } = getQuestionLabel({
         getString,
         block,
         question: facetQuestion,
@@ -37,11 +41,19 @@ export const FacetTitle = ({
 
     return (
         <div className="chart-facet-title">
-            <span className="chart-facet-title-item chart-facet-question">{questionLabel}</span>{' '}
+            <span
+                data-key={questionLabelKey}
+                className="chart-facet-title-item chart-facet-question"
+            >
+                {questionLabel}
+            </span>{' '}
             <T k="charts.vs" />{' '}
             <Tooltip
                 trigger={
-                    <span className="chart-facet-title-item chart-facet-facet">
+                    <span
+                        data-key={facetLabelKey}
+                        className="chart-facet-title-item chart-facet-facet"
+                    >
                         {facetLabel}
                         <QuestionIcon size="petite" />
                     </span>

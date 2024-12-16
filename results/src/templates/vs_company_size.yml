@@ -1,0 +1,15 @@
+id: ${mainBlockId}_vs_company_size
+fieldId: ${mainBlockId}
+# i18nNamespace: ${mainBlockId}
+# tabId: tabs.by_salary
+# defaultUnits: percentilesByFacet
+blockType: HorizontalBarBlock2
+hasData: true
+parameters:
+    showNoAnswer: true
+filtersState:
+    options:
+        mode: facet
+    facet:
+        sectionId: user_info
+        id: company_size

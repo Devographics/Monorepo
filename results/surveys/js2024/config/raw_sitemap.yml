@@ -148,6 +148,15 @@
                   limit: 10
               queryOptions:
                   subField: freeform
+            - template: vs_years_of_experience
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet, order: asc }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
             - template: vs_gender
               parameters:
                   limit: 20
@@ -385,9 +394,22 @@
             - id: front_end_frameworks_others
               template: section_prenormalized_tools
 
-            # - id: front_end_frameworks_work
-            #   template: multiple_options2
-            #   i18nNamespace: tools
+            - id: front_end_frameworks_work
+              template: multiple_options2
+              i18nNamespace: tools
+              variants:
+                  - template: vs_salary
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: desc }
+                  - template: vs_years_of_experience
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
+                  - template: vs_company_size
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
 
             - id: tania_rascia
               template: picks
@@ -433,9 +455,22 @@
             - id: meta_frameworks_others
               template: section_prenormalized_tools
 
-            # - id: meta_frameworks_work
-            #   template: multiple_options2
-            #   i18nNamespace: tools
+            - id: meta_frameworks_work
+              template: multiple_options2
+              i18nNamespace: tools
+              variants:
+                  - template: vs_salary
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: desc }
+                  - template: vs_years_of_experience
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
+                  - template: vs_company_size
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
 
             - id: salma_alam_naylor
               template: picks
@@ -478,9 +513,22 @@
             - id: testing_others
               template: section_prenormalized_tools
 
-            # - id: testing_work
-            #   template: multiple_options2
-            #   i18nNamespace: tools
+            - id: testing_work
+              template: multiple_options2
+              i18nNamespace: tools
+              variants:
+                  - template: vs_salary
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: desc }
+                  - template: vs_years_of_experience
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
+                  - template: vs_company_size
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
 
             - id: shaundai_person
               template: picks
@@ -523,9 +571,22 @@
             - id: mobile_desktop_others
               template: section_prenormalized_tools
 
-            # - id: mobile_desktop_work
-            #   template: multiple_options2
-            #   i18nNamespace: tools
+            - id: mobile_desktop_work
+              template: multiple_options2
+              i18nNamespace: tools
+              variants:
+                  - template: vs_salary
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: desc }
+                  - template: vs_years_of_experience
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
+                  - template: vs_company_size
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
 
             - id: dominik_dorfmeister
               template: picks
@@ -568,9 +629,22 @@
             - id: build_tools_others
               template: section_prenormalized_tools
 
-            # - id: build_tools_work
-            #   template: multiple_options2
-            #   i18nNamespace: tools
+            - id: build_tools_work
+              template: multiple_options2
+              i18nNamespace: tools
+              variants:
+                  - template: vs_salary
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: desc }
+                  - template: vs_years_of_experience
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
+                  - template: vs_company_size
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
 
             - id: sacha_greif
               template: picks
@@ -613,9 +687,22 @@
             - id: monorepo_tools_others
               template: section_prenormalized_tools
 
-            # - id: monorepo_tools_work
-            #   template: multiple_options2
-            #   i18nNamespace: tools
+            - id: monorepo_tools_work
+              template: multiple_options2
+              i18nNamespace: tools
+              variants:
+                  - template: vs_salary
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: desc }
+                  - template: vs_years_of_experience
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
+                  - template: vs_company_size
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
 
             - id: sebastien_lorber
               template: picks
@@ -821,7 +908,7 @@
       - id: awards
         template: awards
         variables:
-            entities: '"vite", "vitest", "esbuild", "atro", "rolldown","analog", "nitro", "valibot", "angular", "storybook","webpack","react","vue"'
+            entities: '"vite", "vitest", "esbuild", "astro", "rolldown","analog", "nitro", "valibot", "angular", "storybook","webpack","react","vuejs"'
         awards:
             # - id: feature_adoption_delta_award
             #   template: award
@@ -900,7 +987,7 @@
                     value: '56%'
                   - id: react
                     value: '46.7%'
-                  - id: vue
+                  - id: vuejs
                     value: '42.3%'
 
       # - id: awards_resources
