@@ -11,6 +11,7 @@ import { Entity } from '@devographics/types'
 import { getQuestionLabel } from './helpers/labels'
 import { BlockVariantDefinition } from 'core/types'
 import { CommentsWrapper } from './Comments'
+import Button from 'core/components/Button'
 
 export const CommentsTrigger = ({
     block,
@@ -48,14 +49,14 @@ export const CommentsTrigger = ({
                 <div className="chart-comments-wrapper">
                     <Tooltip
                         trigger={
-                            <button className="chart-comments">
+                            <Button className="button-round chart-comments">
                                 <CommentIcon
                                     size={'small'}
                                     label={commentLabel}
                                     enableTooltip={false}
                                 />{' '}
                                 {commentsCount || 0}
-                            </button>
+                            </Button>
                         }
                         contents={
                             <T k="comments.comments_for" values={{ name: label.label }} md={true} />
