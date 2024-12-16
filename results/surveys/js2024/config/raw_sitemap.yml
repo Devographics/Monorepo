@@ -384,13 +384,6 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            # - id: front_end_frameworks_experience
-            #   template: multi_items_experience
-            #   i18nNamespace: tools
-
-            - id: tool_modal_hint
-              template: hint
-
             - id: front_end_frameworks_others
               template: section_prenormalized_tools
 
@@ -445,13 +438,6 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            # - id: meta_frameworks_experience
-            #   template: multi_items_experience
-            #   i18nNamespace: tools
-
-            - id: tool_modal_hint
-              template: hint
-
             - id: meta_frameworks_others
               template: section_prenormalized_tools
 
@@ -502,13 +488,6 @@
             - id: testing_ratios
               template: multi_items_ratios
               i18nNamespace: tools
-
-            # - id: testing_experience
-            #   template: multi_items_experience
-            #   i18nNamespace: tools
-
-            - id: tool_modal_hint
-              template: hint
 
             - id: testing_others
               template: section_prenormalized_tools
@@ -561,13 +540,6 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            # - id: mobile_desktop_experience
-            #   template: multi_items_experience
-            #   i18nNamespace: tools
-
-            - id: tool_modal_hint
-              template: hint
-
             - id: mobile_desktop_others
               template: section_prenormalized_tools
 
@@ -619,13 +591,6 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            # - id: build_tools_experience
-            #   template: multi_items_experience
-            #   i18nNamespace: tools
-
-            - id: tool_modal_hint
-              template: hint
-
             - id: build_tools_others
               template: section_prenormalized_tools
 
@@ -676,13 +641,6 @@
             - id: monorepo_tools_ratios
               template: multi_items_ratios
               i18nNamespace: tools
-
-            # - id: monorepo_tools_experience
-            #   template: multi_items_experience
-            #   i18nNamespace: tools
-
-            - id: tool_modal_hint
-              template: hint
 
             - id: monorepo_tools_others
               template: section_prenormalized_tools
