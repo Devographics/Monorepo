@@ -1007,6 +1007,12 @@
             author: fernando_herrera
             entities: '"fernando_herrera"'
 
+      - id: conclusion_shaundai
+        template: conclusion
+        variables:
+            author: shaundai_person
+            entities: '"shaundai_person"'
+
       # - id: conclusion_theo
       #   template: conclusion
       #   variables:

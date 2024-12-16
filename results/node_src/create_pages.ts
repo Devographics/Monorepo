@@ -150,10 +150,8 @@ export const createPagesSingleLoop = async ({
             throw new FatalError(err)
         }
 
-        // TODO: only build pages for locales that are actively being maintained
-        // const activeLocales = locales.filter(l => l.active)
-
-        const activeLocales = locales
+        const buildInactivelocales = process.env.BUILD_INACTIVE_LOCALES === 'true'
+        const activeLocales = buildInactivelocales ? locales : locales.filter(l => l.active)
 
         buildInfo.localeCount = activeLocales.length
 
