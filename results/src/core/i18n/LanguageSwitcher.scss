@@ -1,3 +1,5 @@
+@import '../../stylesheets/_breakpoints.scss';
+
 button.language-switcher-trigger {
     height: 100%;
     &,
@@ -11,5 +13,24 @@ button.language-switcher-trigger {
         polygon {
             fill: var(--textColor);
         }
+    }
+    .Pagination & {
+        @include small-medium {
+            display: none;
+        }
+    }
+    .Sidebar & {
+        @include large {
+            display: none;
+        }
+    }
+}
+.sidebar-locales {
+    display: flex;
+    flex-direction: column;
+    gap: var(--quarterSpacing);
+    align-items: center;
+    @include large {
+        display: none;
     }
 }

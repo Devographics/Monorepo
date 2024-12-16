@@ -39,14 +39,22 @@ const LanguageSwitcher = (/*{ position = 'bottom', positionOpen = 'top' }*/) => 
                 </Button>
             }
         >
+            <LanguageSwitcherContents />
+        </Popover>
+    ) : null
+}
+
+export const LanguageSwitcherContents = () => {
+    return (
+        <>
             <Locales />
             <LanguageSwitcherHelp className="LanguageSwitcherHelp">
                 <a href={translationLink}>
                     <T k="general.help_us_translate" />
                 </a>
             </LanguageSwitcherHelp>
-        </Popover>
-    ) : null
+        </>
+    )
 }
 
 // const LanguageSwitcher = ({ position = 'bottom', positionOpen = 'top' }) => {
