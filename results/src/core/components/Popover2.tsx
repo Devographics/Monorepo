@@ -5,21 +5,20 @@ import { CloseIcon } from 'core/icons'
 
 const PopoverComponent = ({
     trigger,
+    onOpenChange,
     children
 }: {
     trigger: React.ReactNode
+    onOpenChange: (isOpen: boolean) => void
     children: React.ReactNode
 }) => {
     return (
-        <Popover.Root>
+        <Popover.Root onOpenChange={onOpenChange}>
             {/** @ts-expect-error TODO: Radix-ui seems to indicate that this is actually valid, not sure why it raises an error */}
             <Popover.Trigger asChild>{trigger}</Popover.Trigger>
             <Popover.Portal>
                 <PopoverContent_ className="PopoverContent" sideOffset={5}>
                     {children}
-                    <PopoverClose_ className="PopoverClose" aria-label="Close">
-                        <CloseIcon />
-                    </PopoverClose_>
                     <PopoverArrow_ className="PopoverArrow" />
                 </PopoverContent_>
             </Popover.Portal>

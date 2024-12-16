@@ -1,25 +1,44 @@
 // This code is specific to the result app
 // no need to move it to shared i18n code
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { spacing, fontSize } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
-import Popover from 'core/components/Popover'
 import { T } from './T'
 import { Locales } from './Locales'
+import Popover from 'core/components/Popover2'
+import './LanguageSwitcher.scss'
+import Button from 'core/components/Button'
 
 // const svgs = {
 //     top: <polygon stroke="#000" points="0,50 100,50 50,0" />,
 //     bottom: <polygon stroke="#000" points="0,0 100,0 50,50" />,
 // }
 
+const svgs = {
+    top: <polygon stroke="#000" points="0,50 100,50 50,0" />,
+    bottom: <polygon stroke="#000" points="0,0 100,0 50,50" />
+}
+
 const translationLink = 'https://github.com/Devographics/locale-en-US'
 
 const LanguageSwitcher = (/*{ position = 'bottom', positionOpen = 'top' }*/) => {
     const context = usePageContext()
     const locales = context?.locales || []
+
+    const [isOpened, setIsOpened] = useState(false)
     return locales.length > 1 ? (
-        <Popover label={context?.locale?.label}>
+        <Popover
+            onOpenChange={setIsOpened}
+            trigger={
+                <Button className="language-switcher-trigger">
+                    <span>{context?.locale?.label}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50">
+                        {isOpened ? svgs['top'] : svgs['bottom']}
+                    </svg>
+                </Button>
+            }
+        >
             <Locales />
             <LanguageSwitcherHelp className="LanguageSwitcherHelp">
                 <a href={translationLink}>

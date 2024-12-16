@@ -23,6 +23,7 @@ import { Bucket, FacetBucket, RawDataItem, StandardQuestionData } from '@devogra
 import { CATCHALL_PREFIX } from '@devographics/constants'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { BlockVariantDefinition } from 'core/types'
+import Button from 'core/components/Button'
 
 type GetQueryNameProps = {
     editionId: string
@@ -112,9 +113,9 @@ export const FreeformAnswersTrigger = (props: {
                 <div>
                     <Tooltip
                         trigger={
-                            <button className="chart-freeform-answers chart-freeform-answers-button">
+                            <Button className="button-round chart-freeform-answers chart-freeform-answers-button">
                                 {label}
-                            </button>
+                            </Button>
                         }
                         contents={
                             <T k="answers.answers_for" values={{ name: tokenLabel }} md={true} />

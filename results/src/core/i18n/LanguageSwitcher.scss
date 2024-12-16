@@ -1,0 +1,15 @@
+button.language-switcher-trigger {
+    height: 100%;
+    &,
+    &:hover {
+        border: none;
+    }
+    svg {
+        display: block;
+        width: 12px;
+        position: relative;
+        polygon {
+            fill: var(--textColor);
+        }
+    }
+}
