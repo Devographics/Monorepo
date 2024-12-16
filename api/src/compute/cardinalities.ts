@@ -1,21 +1,24 @@
-import { EditionApiObject, RequestContext, SectionApiObject, SurveyApiObject } from '../types'
-import { getSectionItems } from '../generate/helpers'
+import {
+    EditionApiObject,
+    QuestionApiObject,
+    RequestContext,
+    SectionApiObject,
+    SurveyApiObject
+} from '../types'
 import { FeaturesOptions } from '@devographics/types'
-import { COUNT, PERCENTAGE_SURVEY } from '@devographics/constants'
-import { getNormResponsesCollection } from '@devographics/mongo'
-import { genericComputeFunction } from './generic'
-import { getEntity } from '../load/entities'
 
 export const getCardinalities = async ({
     survey,
     edition,
     section,
+    questionObjects,
     type,
     context
 }: {
     survey: SurveyApiObject
     edition: EditionApiObject
     section: SectionApiObject
+    questionObjects: QuestionApiObject[]
     type: 'tools' | 'features'
     context: RequestContext
 }) => {
@@ -34,7 +37,8 @@ export const getCardinalities = async ({
             survey,
             edition,
             section,
-            question: cardinality
+            question: cardinality,
+            questionObjects
         }
     })
 }

@@ -109,7 +109,8 @@ export const generateResolvers = async ({
                                 getSectionResolver({
                                     survey,
                                     edition,
-                                    section
+                                    section,
+                                    questionObjects
                                 })
                             ]
                         }) || []
@@ -263,11 +264,13 @@ const getSectionResolver =
     ({
         survey,
         edition,
-        section
+        section,
+        questionObjects
     }: {
         survey: SurveyApiObject
         edition: EditionApiObject
         section: SectionApiObject
+        questionObjects: QuestionApiObject[]
     }): ResolverType =>
     async (parent, args, context, info) => {
         console.log('// section resolver')
@@ -284,6 +287,7 @@ const getSectionResolver =
             edition,
             section,
             type,
+            questionObjects,
             context
         })
         return {
