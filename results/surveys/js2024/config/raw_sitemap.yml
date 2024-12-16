@@ -1054,8 +1054,8 @@
         blockType: TimeSeriesByDateBlock
         defaultView: countBar
         parameters:
-            showNoAnswer: false,
-            cutoff: 10,
+            showNoAnswer: false
+            cutoff: 10
             sort: { order: asc, property: id }
         queryOptions:
             addQuestionComments: false
@@ -1066,8 +1066,8 @@
               blockType: TimeSeriesByDateBlock
               defaultView: count
               parameters:
-                  showNoAnswer: false,
-                  cutoff: 10,
+                  showNoAnswer: false
+                  cutoff: 10
                   sort: { order: asc, property: id }
                   facetLimit: 3
                   enableAddOverallBucket: false
