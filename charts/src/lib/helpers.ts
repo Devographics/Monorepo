@@ -35,24 +35,12 @@ export const getBlock = (options: {
     sitemap: SitemapSection[]
 }): BlockVariantDefinition => {
     const { blockId, sectionId, subSectionId, sitemap } = options
-    const section = sitemap.find(section => section.id === sectionId)
-    const subSection =
-        subSectionId && section?.children?.find(section => section.id === subSectionId)
-    const sectionOrSubSection = subSection || section
-    if (!sectionOrSubSection?.blocks) {
-        throw new Error(
-            `getBlock: section ${sectionId}/${subSectionId} does not have any blocks defined`
-        )
-    }
-    const variants = sectionOrSubSection.blocks.map(b => b.variants).flat()
-    const allSectionVariants = compact([
-        ...sectionOrSubSection.blocks,
-        ...variants
-    ]) as BlockVariantDefinition[]
-    const block = allSectionVariants.find(b => b.id === blockId)
-    if (!block) {
-        console.error("Possible blocks where: ", allSectionVariants)
+    const allSections = sitemap
+    const allBlocks = allSections.map(section => section.blocks).flat()
+    const allVariants = allBlocks.map(block => block.variants).flat()
+    const blockVariant = allVariants.find(block => block.id)
+    if (!blockVariant) {
         throw new Error(`getBlock: could not find block for id ${blockId}`)
     }
-    return block
+    return blockVariant
 }

@@ -37,7 +37,7 @@ const SharePermalink = ({ block }: { block: BlockVariantDefinition }) => {
     const { getString } = useI18n()
     const pageContext = usePageContext()
     const blockMeta = getBlockMeta({ block, pageContext, getString })
-
+    console.log(blockMeta)
     return (
         <Link
             // onClick={track('Permalink', trackingId)}

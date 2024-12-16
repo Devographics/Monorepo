@@ -40,7 +40,6 @@ export async function decodeChartParams(chartParamsStr: string): Promise<ChartPa
         blockId: params.get('blockId'),
         params: params.get('params')
     }
-    console.log(paramsObject)
     // @ts-ignore TODO: zod type is wrong somehow
     return paramsSchema.parse(paramsObject)
 }
