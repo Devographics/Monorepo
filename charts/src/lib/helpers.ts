@@ -38,7 +38,7 @@ export const getBlock = (options: {
     const allSections = sitemap
     const allBlocks = allSections.map(section => section.blocks).flat()
     const allVariants = allBlocks.map(block => block.variants).flat()
-    const blockVariant = allVariants.find(block => block.id)
+    const blockVariant = allVariants.find(block => block?.id)
     if (!blockVariant) {
         throw new Error(`getBlock: could not find block for id ${blockId}`)
     }
