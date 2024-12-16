@@ -46,7 +46,6 @@ async function queryForChart(chartParams: ChartParams): Promise<string | undefin
         surveyId: chartParams.surveyId,
         editionId: chartParams.editionId
     })
-    console.log({ query })
     // TODO:
     return query
     /*print(gql`

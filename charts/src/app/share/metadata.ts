@@ -78,8 +78,8 @@ export async function getBlockMetaFromParams(chartParams: ChartParams) {
         console.log(localeError)
         throw new Error(`Could not get locales strings (${JSON.stringify(chartParams)})`)
     }
-    const { strings, ...localeWithoutStrings } = locale
-    console.log('Got locale with string for block metadata', localeWithoutStrings)
+    const { strings, dict, ...localeWithoutStrings } = locale
+    console.log('Got locale for block metadata', localeWithoutStrings)
 
     const getString = getStringTranslator(locale as unknown as Locale)
 
