@@ -65,13 +65,13 @@
     display: none;
 }
 .order-asc {
-    .column-heading-order-asc.column-heading-sort-enabled & {
+    .chart-toggle-order-asc & {
         opacity: 1;
         display: block;
     }
 }
 .order-desc {
-    .column-heading-order-desc.column-heading-sort-enabled & {
+    .chart-toggle-order-desc & {
         opacity: 1;
         display: block;
     }

@@ -24,6 +24,11 @@ import { CATCHALL_PREFIX } from '@devographics/constants'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { BlockVariantDefinition } from 'core/types'
 import Button from 'core/components/Button'
+import Toggle, { DEFAULT_SORT, ToggleItemType } from './Toggle'
+import { OrderOptions } from './types'
+import sortBy from 'lodash/sortBy'
+
+const LENGTH = 'length'
 
 type GetQueryNameProps = {
     editionId: string
@@ -182,14 +187,17 @@ export const FreeformAnswersModal = ({
 
         getData()
     }, [])
+
+    const count = data.length
+
     return (
         <div>
             <h2 className="chart-freeform-answers-heading">
                 {questionLabel}:{' '}
-                <T k="answers.answers_for" values={{ name: tokenLabel }} md={true} />
+                <T k="answers.answers_for" values={{ count, name: tokenLabel }} md={true} />
             </h2>
             <p>
-                <T k="answers.description" values={{ name: tokenLabel }} md={true} />
+                <T k="answers.description" values={{ count, name: tokenLabel }} md={true} />
             </p>
             <div>
                 {isLoading ? (
@@ -207,7 +215,7 @@ export const FreeformAnswersModal = ({
 }
 
 const FreeformAnswers = ({
-    answers,
+    answers: answers_,
     questionLabel,
     tokenLabel
 }: {
@@ -215,8 +223,71 @@ const FreeformAnswers = ({
     questionLabel: string
     tokenLabel: string
 }) => {
+    const { getString } = useI18n()
+    const [filter, setFilter] = useState<string | undefined>()
+    const [sort, setSort] = useState<string | undefined>()
+    const [order, setOrder] = useState<OrderOptions | undefined>()
+
+    const handleSelect = (optionId: string) => {
+        const isEnabled = sort === optionId
+        if (optionId === DEFAULT_SORT) {
+            setSort(undefined)
+            setOrder(undefined)
+        } else if (!isEnabled) {
+            setSort(optionId as string)
+            setOrder(OrderOptions.ASC)
+        } else if (sort && order === OrderOptions.ASC) {
+            setOrder(OrderOptions.DESC)
+        } else {
+            setSort(undefined)
+            setOrder(undefined)
+        }
+    }
+
+    const labelKey = 'answers.length'
+    const toggleItems: ToggleItemType[] = [
+        {
+            id: LENGTH,
+            label: getString(labelKey)?.t,
+            labelKey,
+            isEnabled: sort === LENGTH
+        }
+    ]
+
+    let answers = answers_
+    if (sort) {
+        answers = sortBy(answers, a => a.raw.length)
+    }
+    if (order && order === OrderOptions.DESC) {
+        answers = answers.toReversed()
+    }
+    if (filter) {
+        answers = answers.filter(answer => answer.raw.toLowerCase().includes(filter.toLowerCase()))
+    }
     return (
         <div className="freeform-answers-list">
+            <div className="freeform-answers-options">
+                <div className="freeform-answers-filter">
+                    <h4>
+                        <T k="answers.keyword" />
+                    </h4>
+                    <input
+                        type="text"
+                        value={filter}
+                        onChange={e => {
+                            setFilter(e.target.value)
+                        }}
+                    />
+                    {filter && <T k="answers.keyword_count" values={{ count: answers.length }} />}
+                </div>
+                <Toggle
+                    sortOrder={order}
+                    labelId="charts.sort_by"
+                    handleSelect={handleSelect}
+                    items={toggleItems}
+                    hasDefault={true}
+                />
+            </div>
             {answers?.map((answer, i) => (
                 <FreeformAnswerItem
                     key={i}
@@ -224,6 +295,7 @@ const FreeformAnswers = ({
                     {...answer}
                     questionLabel={questionLabel}
                     tokenLabel={tokenLabel}
+                    keyword={filter}
                 />
             ))}
         </div>
@@ -235,8 +307,14 @@ const FreeformAnswerItem = ({
     responseId,
     index,
     questionLabel,
-    tokenLabel
-}: RawDataItem & { index: number; questionLabel: string; tokenLabel: string }) => {
+    tokenLabel,
+    keyword
+}: RawDataItem & {
+    index: number
+    questionLabel: string
+    tokenLabel: string
+    keyword?: string
+}) => {
     return (
         <CommentItem_>
             <CommentMessageWrapper>

@@ -7,6 +7,7 @@ import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 import { useWidth } from './helpers'
 import sum from 'lodash/sum'
+import { OrderOptions } from './types'
 
 // Calculate minimum width for a legend item to be readable
 
@@ -37,11 +38,13 @@ type ToggleProps<ValueType> = {
     items: ToggleItemType[]
     handleSelect?: (id: ValueType) => void
     hasDefault?: boolean
+    sortOrder?: OrderOptions
 }
 
-const DEFAULT_SORT = 'default'
+export const DEFAULT_SORT = 'default'
 
 export const Toggle = <ValueType,>({
+    sortOrder,
     alwaysExpand = false,
     labelId,
     items,
@@ -63,8 +66,9 @@ export const Toggle = <ValueType,>({
         }
     }, [currentWidth]) // The empty dependency array makes sure this runs only once after component mount
 
+    const className = `chart-toggle chart-toggle-order-${sortOrder}`
     return (
-        <div className="chart-toggle">
+        <div className={className}>
             {labelId && (
                 <h4 className="chart-toggle-heading">
                     <T k={labelId} />
