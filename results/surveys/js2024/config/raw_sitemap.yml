@@ -932,7 +932,7 @@
               template: award
               awards:
                   - id: angular
-                    value: 31
+                    value: 41
                   - id: storybook
                     value: 39
                   - id: webpack

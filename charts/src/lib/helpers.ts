@@ -1,4 +1,4 @@
-import { BlockVariantDefinition, SitemapSection } from '@devographics/types'
+import { BlockVariantComputed, BlockVariantDefinition, SitemapSection } from '@devographics/types'
 import compact from 'lodash/compact.js'
 
 export const getAllBlocks = ({ sitemap }: { sitemap: SitemapSection[] }) => {
@@ -33,7 +33,7 @@ export const getBlock = (options: {
     sectionId: string
     subSectionId?: string
     sitemap: SitemapSection[]
-}): BlockVariantDefinition => {
+}): BlockVariantComputed => {
     const { blockId, sectionId, subSectionId, sitemap } = options
     const allSections = sitemap
     const allBlocks = allSections.map(section => section.blocks).flat()

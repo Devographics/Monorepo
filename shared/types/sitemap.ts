@@ -31,9 +31,13 @@ export interface BlockVariantDefinition {
     canCustomize: boolean
 }
 
+export interface BlockVariantComputed extends BlockVariantDefinition {
+    path: string
+}
+
 export interface BlockDefinition {
     id: string
-    variants: BlockVariantDefinition[]
+    variants: BlockVariantComputed[]
 }
 
 export interface SitemapBlockParameters {

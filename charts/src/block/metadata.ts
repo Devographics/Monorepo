@@ -12,7 +12,12 @@
 // import { getSiteTitle } from './pageHelpers'
 
 // TODO: enable shared folders
-import { BlockVariantDefinition, EditionMetadata, Entity } from '@devographics/types'
+import {
+    BlockVariantComputed,
+    BlockVariantDefinition,
+    EditionMetadata,
+    Entity
+} from '@devographics/types'
 import { PageContextValue } from './typings'
 import type { StringTranslator } from '@/i18n/typings'
 
@@ -104,7 +109,7 @@ const getBlockLink = ({
     pageContext,
     useRedirect = true
 }: {
-    block: BlockVariantDefinition
+    block: BlockVariantComputed
     pageContext: PageContextValue
     useRedirect?: boolean
 }) => {
@@ -137,7 +142,7 @@ export const getBlockMeta = ({
     pageContext,
     getString
 }: {
-    block: BlockVariantDefinition
+    block: BlockVariantComputed
     blockParameters: any
     pageContext: PageContextValue
     getString: StringTranslator
