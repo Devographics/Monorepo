@@ -15,8 +15,8 @@ export async function generateStaticParams(): Promise<Array<{ chartParams: strin
     const prerendered: Array<ChartParams> = [
         {
             localeId: 'en-US',
-            surveyId: 'state_of_css',
-            editionId: 'css2023',
+            surveyId: 'state_of_js',
+            editionId: 'js2024',
             sectionId: 'user_info',
             blockId: 'country'
         }

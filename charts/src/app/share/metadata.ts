@@ -51,7 +51,7 @@ export async function getBlockMetaFromParams(chartParams: ChartParams) {
     // TODO: might need to be reused elsewhere
     // see survey form for a RSC version of this call (here we don't need request-level caching)
 
-    const blockDefinition = getBlock({ blockId, sectionId, subSectionId, sitemap })
+    const blockDefinition = getBlock({ blockId, editionId, sitemap })
 
     const { data: possibleLocales, error: possibleLocalesError } = await fetchAllLocalesIds({
         calledFrom: 'charts'

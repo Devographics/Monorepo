@@ -4,5 +4,6 @@ export enum AppName {
     API = 'api',
     RESULTS = 'results',
     RESULTS_ASTRO = 'results-astro',
-    GRAPHIQL = 'graphiql'
+    GRAPHIQL = 'graphiql',
+    CHARTS = 'charts'
 }

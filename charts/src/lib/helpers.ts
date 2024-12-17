@@ -30,17 +30,16 @@ their subsections, their blocks, and the block variants.
 */
 export const getBlock = (options: {
     blockId: string
-    sectionId: string
-    subSectionId?: string
+    editionId: string
     sitemap: SitemapSection[]
 }): BlockVariantComputed => {
-    const { blockId, sectionId, subSectionId, sitemap } = options
+    const { blockId, sitemap, editionId } = options
     const allSections = sitemap
     const allBlocks = allSections.map(section => section.blocks).flat()
     const allVariants = allBlocks.map(block => block.variants).flat()
     const blockVariant = allVariants.find(block => block?.id === blockId)
     if (!blockVariant) {
-        throw new Error(`getBlock: could not find block for id ${blockId}`)
+        throw new Error(`getBlock: could not find block for id ${editionId}/${blockId}`)
     }
     return blockVariant
 }
