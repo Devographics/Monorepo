@@ -707,6 +707,7 @@ type SitemapSubSection {
 
 type SitemapBlock {
     id: String
+    path: String
     fieldId: String
     tabId: String
     titleId: String
@@ -726,6 +727,7 @@ type SitemapBlock {
 
 type SitemapBlockVariant {
     id: String
+    path: String
     fieldId: String
     tabId: String
     titleId: String

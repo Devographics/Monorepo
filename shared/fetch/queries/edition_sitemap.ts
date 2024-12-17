@@ -84,6 +84,7 @@ export const getEditionSitemapQuery = ({ editionId }: { editionId: string }) => 
               titleId
               blocks {
                 id
+                path
                 entity {
                     ${getEntityFragment()}
                 }
@@ -110,6 +111,7 @@ export const getEditionSitemapQuery = ({ editionId }: { editionId: string }) => 
                 }
                 variants {
                   id
+                  path
                   entity {
                       ${getEntityFragment()}
                   }
@@ -139,6 +141,7 @@ export const getEditionSitemapQuery = ({ editionId }: { editionId: string }) => 
             }
             blocks {
               id
+              path
               entity {
                   ${getEntityFragment()}
               }
@@ -165,6 +168,7 @@ export const getEditionSitemapQuery = ({ editionId }: { editionId: string }) => 
               }
               variants {
                 id
+                path
                 entity {
                     ${getEntityFragment()}
                 }
