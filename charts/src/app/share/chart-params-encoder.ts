@@ -13,9 +13,10 @@ import { ChartParams } from './typings'
 const paramsSchema = z.object({
     surveyId: z.string(),
     editionId: z.string(),
-    sectionId: z.string(),
     localeId: z.string(),
-    subSectionId: z.string().optional().nullable(),
+    // not needed anymore because we assume unique block ids
+    // sectionId: z.string(),
+    // subSectionId: z.string().optional().nullable(),
     blockId: z.string(),
     params: z.string().optional().nullable()
 })
@@ -35,8 +36,9 @@ export async function decodeChartParams(chartParamsStr: string): Promise<ChartPa
         localeId: params.get('localeId'),
         surveyId: params.get('surveyId'),
         editionId: params.get('editionId'),
-        sectionId: params.get('sectionId'),
-        subSectionId: params.get('subSectionId'),
+        // not needed anymore since we assume unique block ids
+        // sectionId: params.get('sectionId'),
+        // subSectionId: params.get('subSectionId'),
         blockId: params.get('blockId'),
         params: params.get('params')
     }

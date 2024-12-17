@@ -108,17 +108,12 @@ const getBlockLink = ({
     pageContext: PageContextValue
     useRedirect?: boolean
 }) => {
-    const { id: blockId } = block
-    const { edition, localeId, sectionId, subSectionId } = pageContext
+    const { id: blockId, path } = block
+    const { edition, localeId } = pageContext
     const { resultsUrl } = edition
-
-    const segments = [
-        localeId,
-        sectionId === 'user_info' ? 'demographics' : sectionId.replaceAll('_', '-')
-    ]
-    if (subSectionId) {
-        segments.push(subSectionId.replaceAll('_', '-'))
-    }
+    const pathSegments = path.split('/').filter(s => s !== '')
+    pathSegments.pop()
+    const segments = [localeId, ...pathSegments]
     const pathname = `/${segments.join('/')}/#${blockId}`
     const url = new URL(pathname, resultsUrl)
     const link = url.toString()
