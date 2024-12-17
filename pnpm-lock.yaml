@@ -112,8 +112,8 @@ importers:
         specifier: ^1.5.2
         version: 1.15.1
       web-features:
-        specifier: ^2.0.0
-        version: 2.0.0
+        specifier: ^2.13.0
+        version: 2.13.0
     optionalDependencies:
       '@types/jest':
         specifier: ^29.5.6
@@ -43127,8 +43127,8 @@ packages:
     optionalDependencies:
       '@zxing/text-encoding': 0.9.0
 
-  /web-features@2.0.0:
-    resolution: {integrity: sha512-v0athEao8WP5wxHO7WFlkS8XoOepeM1vqeT74ERPImqyzY4KENQH67xVnAYka8GeNwYUP9JAmrJSn7pK8uC/zQ==}
+  /web-features@2.13.0:
+    resolution: {integrity: sha512-BudrtKo8LjRu3eWc1ugN3SFkB5C6hZ3KRh5B9dd3AU7R40HFprgU/MIuHCG1fAc62lV4x5mnJmoG6MtWgtY+Zw==}
     dev: false
 
   /web-namespaces@1.1.4:
