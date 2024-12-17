@@ -194,7 +194,7 @@ export const FreeformAnswersModal = ({
         <div>
             <h2 className="chart-freeform-answers-heading">
                 {questionLabel}:{' '}
-                <T k="answers.answers_for" values={{ count, name: tokenLabel }} md={true} />
+                <T k="answers.answers_for_count" values={{ count, name: tokenLabel }} md={true} />
             </h2>
             <p>
                 <T k="answers.description" values={{ count, name: tokenLabel }} md={true} />
