@@ -257,6 +257,25 @@ export const processStringFile = ({
     return processedStringFile
 }
 
+export const initLocaleReport = () => ({
+    missingContexts: [] as string[],
+    duplicates: [],
+    unresolvedAliases: []
+})
+
+export const logLocaleReport = (localeId: string, report: any) => {
+    logToFile(`locales_processed/${localeId}-report.yml`, report)
+    if (
+        report.missingContexts.length > 0 ||
+        report.unresolvedAliases.length > 0 ||
+        report.duplicates.length > 0
+    ) {
+        console.warn(
+            `⚠️ ${report.missingContexts.length} missing contexts, ${report.unresolvedAliases.length} unresolved aliases, ${report.duplicates.length} duplicates. Check ${localeId}-report.yml file for details. `
+        )
+    }
+}
+
 /*
 
 Take a single locale and process it
@@ -266,11 +285,7 @@ export const processLocale = (
     locale: RawLocale,
     enParsedStringFiles: Array<StringFile>
 ): Locale => {
-    let report = {
-        missingContexts: [] as string[],
-        duplicates: [],
-        unresolvedAliases: []
-    }
+    let report = initLocaleReport()
     const parsedStringFiles: StringFile[] = []
 
     // always use en-US as reference to know what to include
@@ -313,17 +328,10 @@ export const processLocale = (
     const untranslatedStrings = computeUntranslatedStrings(locale, processedLocale.strings)
     const processedLocaleWithMetadata = addLocaleMetadata(processedLocale, untranslatedStrings)
 
-    logToFile(`locales_processed/${processedLocale.id}-report.yml`, report)
     logToFile(`locales_processed/${processedLocale.id}.yml`, processedLocaleWithMetadata)
-    if (
-        report.missingContexts.length > 0 ||
-        report.unresolvedAliases.length > 0 ||
-        report.duplicates.length > 0
-    ) {
-        console.warn(
-            `⚠️ ${report.missingContexts.length} missing contexts, ${report.unresolvedAliases.length} unresolved aliases, ${report.duplicates.length} duplicates. Check ${processedLocale.id}-report.yml file for details. `
-        )
-    }
+
+    logLocaleReport(processedLocale.id, report)
+
     return processedLocaleWithMetadata
 }
 
@@ -334,21 +342,21 @@ Process all locales
 */
 export const processLocales = ({
     rawLocales,
-    rawEnLocale,
-    report
+    rawEnLocale
 }: {
     rawLocales: Array<RawLocale>
     rawEnLocale: RawLocale
-    report: any
 }): Array<Locale> => {
     const allLocales = []
     let i = 0
 
     // parse en-US strings only once outside of main loop to
     // avoid repeating work
+    const enLocalReport = initLocaleReport()
     const enParsedStringFiles = rawEnLocale.stringFiles.map((stringFile: StringFile) => {
-        return processStringFile({ locale: rawEnLocale, stringFile, report })
+        return processStringFile({ locale: rawEnLocale, stringFile, report: enLocalReport })
     })
+    logLocaleReport(rawEnLocale.id, enLocalReport)
 
     for (const locale of rawLocales) {
         let j = 0

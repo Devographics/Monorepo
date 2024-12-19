@@ -39,7 +39,8 @@ export const getBlock = (options: {
     const allVariants = allBlocks.map(block => block.variants).flat()
     const blockVariant = allVariants.find(block => block?.id === blockId)
     if (!blockVariant) {
-        throw new Error(`getBlock: could not find block for id ${editionId}/${blockId}`)
+        console.warn(`getBlock: could not find block for id ${editionId}/${blockId}`)
+        return
     }
     return blockVariant
 }

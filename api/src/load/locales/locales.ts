@@ -2,7 +2,12 @@ import { Locale, RawLocale } from '@devographics/types'
 import { EnvVar, getEnvVar, parseEnvVariableArray } from '@devographics/helpers'
 
 import { RequestContext } from '../../types'
-import { getLocaleDiff, processLocales } from '../../helpers/locales'
+import {
+    getLocaleDiff,
+    initLocaleReport,
+    logLocaleReport,
+    processLocales
+} from '../../helpers/locales'
 import { loadAllLocally } from './local'
 import { loadAllFromGitHub } from './github'
 

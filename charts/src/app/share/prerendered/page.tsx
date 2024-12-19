@@ -140,21 +140,27 @@ export default async function StaticChartRedirectionPage({ searchParams }) {
                     </div>
                     <div>
                         <h3>Link</h3>
-                        <a href={blockMeta.link}>{blockMeta.link}</a>
+                        <p>
+                            <a href={link}>{link}</a>
+                        </p>
+                        <h3>Title</h3>
+                        <p>{title}</p>
+                        <h3>Description</h3>
+                        <p>{description}</p>
                     </div>
                 </div>
                 <head>
-                    {/* <meta httpEquiv="refresh" content={`5; URL="${blockMeta.link}"`}></meta> */}
+                    {/* <meta httpEquiv="refresh" content={`5; URL="${redirectLink}"`}></meta> */}
                 </head>
             </div>
         )
     }
     // A server redirect isn't appropriate here, we wan't the browser to trigger the redirect:
     // @see https://github.com/vercel/next.js/issues/54437
-    // redirect(blockMeta.link)
+    // redirect(redirectLink)
     return (
         <head>
-            <meta httpEquiv="refresh" content={`0; URL="${blockMeta.link}"`}></meta>
+            <meta httpEquiv="refresh" content={`0; URL="${link}"`}></meta>
         </head>
     )
     // equivalent to <meta http-equiv="refresh" content="5; URL=...">
