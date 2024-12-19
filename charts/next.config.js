@@ -31,6 +31,11 @@ const nextConfig = {
                         value: 's-maxage=60, stale-while-revalidate=59',
                     },
                 ],
+                redirects: {
+                    source: "/share/fly",
+                    destination: "/share/prerendered",
+                    permanent: false
+                }
             },
         ];
     },
