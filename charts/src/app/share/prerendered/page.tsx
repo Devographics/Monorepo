@@ -3,31 +3,13 @@
  * See "capture" folder for instructions
  * Images are hosted at
  */
-import { NextPageParams } from '@/app/typings'
-import { decodeChartParams, encodeChartParams } from '@/app/share/chart-params-encoder'
 import { getBlockMetaFromParams } from '@/app/share/metadata'
 import { Metadata } from 'next'
-import { redirect } from 'next/navigation'
-import { ChartParams } from '@/app/share/typings'
+// import { redirect } from 'next/navigation'
+import { ChartParams, chartParamsSchema } from '@/app/share/typings'
 import { getAppConfig } from '@/config/server'
-
-export async function generateStaticParams(): Promise<Array<{ chartParams: string }>> {
-    const prerendered: Array<ChartParams> = [
-        {
-            localeId: 'en-US',
-            surveyId: 'state_of_js',
-            editionId: 'js2024',
-            sectionId: 'user_info',
-            blockId: 'country'
-        }
-        // Prerender wharever combination you want
-        // other combinations will be rendered on demand
-    ]
-    // encode the params in a single route parameters
-    return prerendered.map(chartParams => ({
-        chartParams: encodeChartParams(chartParams)
-    }))
-}
+import { chartParamsFromSearch } from '../chart-params-encoder'
+import { notFound } from 'next/navigation'
 
 /**
  * Demo path using the Devographics/images repository
@@ -61,7 +43,7 @@ function githubUrl({
     return `https://raw.githubusercontent.com/${org}/${repo}/main/captures/${editionId}/${localeId}/${chart.blockId}.png`
 }
 
-function devographicsUrl({
+function devographicsImageUrl({
     editionId,
     localeId,
     blockId
@@ -83,14 +65,16 @@ function devographicsUrl({
     return `${capturesUrl}/${localeId}/${blockId}.png`
 }
 
-export async function generateMetadata({
-    params
-}: NextPageParams<{ chartParams: string }>): Promise<Metadata> {
-    const chartParams = await decodeChartParams(params.chartParams)
+export async function generateMetadata({ searchParams }): Promise<Metadata> {
+    const chartParams = chartParamsFromSearch(searchParams)
+    if (!chartParams) {
+        // will use the root layout default metadata in case of error
+        return {}
+    }
     const { blockDefinition, blockMeta } = await getBlockMetaFromParams(chartParams)
     const { title, description, link } = blockMeta
 
-    const imgUrl = devographicsUrl({
+    const imgUrl = devographicsImageUrl({
         editionId: chartParams.editionId,
         localeId: chartParams.localeId,
         blockId: chartParams.blockId
@@ -115,16 +99,16 @@ export async function generateMetadata({
     }
 }
 
-export default async function StaticChartRedirectionPage({
-    params
-}: NextPageParams<{ chartParams: string }>) {
-    const chartParams = await decodeChartParams(params.chartParams)
-    console.log('PARAMS', chartParams, params.chartParams)
+export default async function StaticChartRedirectionPage({ searchParams }) {
+    const chartParams = chartParamsFromSearch(searchParams)
+    if (!chartParams) {
+        // 404 if params are not valid
+        return notFound()
+    }
     const { blockDefinition, blockMeta } = await getBlockMetaFromParams(chartParams)
-    console.log('Redirecting to:', blockMeta.link)
     const config = getAppConfig()
     if (config.isDev || config.isDebug) {
-        const imgUrl = devographicsUrl({
+        const imgUrl = devographicsImageUrl({
             editionId: chartParams.editionId,
             localeId: chartParams.localeId,
             blockId: chartParams.blockId

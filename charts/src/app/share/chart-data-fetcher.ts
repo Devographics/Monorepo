@@ -2,7 +2,7 @@
  * Getting charts data
  * TODO: this is based on legacy results app
  */
-import { ChartFilter, ChartParams } from './typings'
+import { ChartParams } from './typings'
 import { BlockDefinition } from '@/block/typings'
 import { getAppConfig } from '@/config/server'
 
@@ -146,7 +146,7 @@ query css2022cssFrameworksExperienceLinechartQuery {
  *
  * @returns
  */
-export async function fetchChartData(chart: ChartParams, filter?: ChartFilter): Promise<ChartData> {
+export async function fetchChartData(chart: ChartParams, filter?: any): Promise<ChartData> {
     // TODO: validate filter structure with zod
     const { chartDataApi } = getAppConfig()
     const query = await queryForChart(chart)
