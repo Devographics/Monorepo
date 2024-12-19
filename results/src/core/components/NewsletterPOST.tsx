@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
@@ -33,6 +33,26 @@ export default function NewsletterPOST({ locale }: { locale?: any }) {
         console.log(result)
     }
 
+    useEffect(() => {
+        // Select the container
+        const container = document.getElementById('mailing-list-container')
+        if (container) {
+            // Create the script element
+            const script = document.createElement('script')
+            script.src = 'https://www.tokyodev.com/mailing_list_widget.js'
+            script.async = true
+
+            // Append the script to the container
+            container.appendChild(script)
+
+            // Cleanup function to remove the script when the component unmounts
+            return () => {
+                container.removeChild(script)
+            }
+        }
+    }, [])
+
+    const useScript = process.env.GATSBY_EMAIL_USE_TOKYODEV_SCRIPT === 'true'
     return (
         <div className="newsletter">
             <h3 className="newsletter-heading">
@@ -41,18 +61,28 @@ export default function NewsletterPOST({ locale }: { locale?: any }) {
             <p className="newsletter-details">
                 <T k="newsletter.leave_your_email" />
             </p>{' '}
-            {success ? (
-                <div className="newsletter-message newsletter-success">{success.message}</div>
+            {useScript ? (
+                <div id="mailing-list-container"></div>
             ) : (
-                <NewsletterForm
-                    email={email}
-                    loading={loading}
-                    handleSubmit={handleSubmit}
-                    handleChange={handleChange}
-                />
-            )}
-            {error && (
-                <Error_ className="newsletter-message newsletter-error">{error.message}</Error_>
+                <>
+                    {success ? (
+                        <div className="newsletter-message newsletter-success">
+                            {success.message}
+                        </div>
+                    ) : (
+                        <NewsletterForm
+                            email={email}
+                            loading={loading}
+                            handleSubmit={handleSubmit}
+                            handleChange={handleChange}
+                        />
+                    )}
+                    {error && (
+                        <Error_ className="newsletter-message newsletter-error">
+                            {error.message}
+                        </Error_>
+                    )}
+                </>
             )}
         </div>
     )
