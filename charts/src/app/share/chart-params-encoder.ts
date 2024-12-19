@@ -21,6 +21,9 @@ const paramsSchema = z.object({
     params: z.string().optional().nullable()
 })
 
+const cleanString = (s: string) => {
+    return s
+}
 /**
  * Asynchronous because validation might require accessing
  * some configuration asynchronously (surveys list for instance)
@@ -28,8 +31,9 @@ const paramsSchema = z.object({
  * @returns
  */
 export async function decodeChartParams(chartParamsStr: string): Promise<ChartParams> {
-    const decodedParams = decodeURIComponent(chartParamsStr)
-    console.log('decoding', { decodedParams, chartParamsStr })
+    const cleanChartParamsStr = cleanString(chartParamsStr)
+    const decodedParams = decodeURIComponent(cleanChartParamsStr)
+    console.log('decoding', { decodedParams, chartParamsStr, cleanChartParamsStr })
     const params = new URLSearchParams(decodedParams)
     // TODO: use Zod to actually validate the params
     const paramsObject = {

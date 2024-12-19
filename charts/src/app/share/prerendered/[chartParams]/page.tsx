@@ -5,11 +5,12 @@
  */
 import { NextPageParams } from '@/app/typings'
 import { decodeChartParams, encodeChartParams } from '@/app/share/chart-params-encoder'
-import { getBlockMetaFromParams } from '@/app/share/metadata'
+import { getBlockMetaFromParams, getEdition, getEditionOrBlock } from '@/app/share/metadata'
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { ChartParams } from '@/app/share/typings'
 import { getAppConfig } from '@/config/server'
+import { fetchEditionSitemap } from '@devographics/fetch'
 
 export async function generateStaticParams(): Promise<Array<{ chartParams: string }>> {
     const prerendered: Array<ChartParams> = [
@@ -61,41 +62,12 @@ function githubUrl({
     return `https://raw.githubusercontent.com/${org}/${repo}/main/captures/${editionId}/${localeId}/${chart.blockId}.png`
 }
 
-function devographicsUrl({
-    editionId,
-    localeId,
-    blockId
-}: {
-    /**
-     * css2022
-     */
-    editionId: string
-    /**
-     * fr-FR
-     */
-    localeId: string
-    /**
-     * Unique block id = question
-     */
-    blockId: string
-}) {
-    const capturesUrl = `https://assets.devographics.com/captures/${editionId}`
-    return `${capturesUrl}/${localeId}/${blockId}.png`
-}
-
 export async function generateMetadata({
     params
 }: NextPageParams<{ chartParams: string }>): Promise<Metadata> {
     const chartParams = await decodeChartParams(params.chartParams)
-    const { blockDefinition, blockMeta } = await getBlockMetaFromParams(chartParams)
-    const { title, description, link } = blockMeta
-
-    const imgUrl = devographicsUrl({
-        editionId: chartParams.editionId,
-        localeId: chartParams.localeId,
-        blockId: chartParams.blockId
-    })
-
+    const { imgUrl, link, blockDefinition, blockMeta, title, description } =
+        await getEditionOrBlock(chartParams)
     return {
         // TODO: set more params like the site name
         // depending on the current survey etc.
@@ -119,16 +91,15 @@ export default async function StaticChartRedirectionPage({
     params
 }: NextPageParams<{ chartParams: string }>) {
     const chartParams = await decodeChartParams(params.chartParams)
+    const { surveyId, editionId } = chartParams
     console.log('PARAMS', chartParams, params.chartParams)
-    const { blockDefinition, blockMeta } = await getBlockMetaFromParams(chartParams)
-    console.log('Redirecting to:', blockMeta.link)
+
+    const { imgUrl, link, blockDefinition, blockMeta, title, description } =
+        await getEditionOrBlock(chartParams)
+
+    console.log('Redirecting to:', link)
     const config = getAppConfig()
     if (config.isDev || config.isDebug) {
-        const imgUrl = devographicsUrl({
-            editionId: chartParams.editionId,
-            localeId: chartParams.localeId,
-            blockId: chartParams.blockId
-        })
         return (
             <div>
                 <h1>DEV MODE</h1>
@@ -156,21 +127,27 @@ export default async function StaticChartRedirectionPage({
                     </div>
                     <div>
                         <h3>Link</h3>
-                        <a href={blockMeta.link}>{blockMeta.link}</a>
+                        <p>
+                            <a href={link}>{link}</a>
+                        </p>
+                        <h3>Title</h3>
+                        <p>{title}</p>
+                        <h3>Description</h3>
+                        <p>{description}</p>
                     </div>
                 </div>
                 <head>
-                    {/* <meta httpEquiv="refresh" content={`5; URL="${blockMeta.link}"`}></meta> */}
+                    {/* <meta httpEquiv="refresh" content={`5; URL="${redirectLink}"`}></meta> */}
                 </head>
             </div>
         )
     }
     // A server redirect isn't appropriate here, we wan't the browser to trigger the redirect:
     // @see https://github.com/vercel/next.js/issues/54437
-    // redirect(blockMeta.link)
+    // redirect(redirectLink)
     return (
         <head>
-            <meta httpEquiv="refresh" content={`0; URL="${blockMeta.link}"`}></meta>
+            <meta httpEquiv="refresh" content={`0; URL="${link}"`}></meta>
         </head>
     )
     // equivalent to <meta http-equiv="refresh" content="5; URL=...">
