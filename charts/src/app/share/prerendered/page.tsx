@@ -11,6 +11,8 @@ import { ChartParams } from '@/app/share/typings'
 import { getAppConfig } from '@/config/server'
 import { chartParamsFromSearch } from '../chart-params-encoder'
 
+export const dynamic = 'force-dynamic'
+
 /**
  * Demo path using the Devographics/images repository
  * as our image database
