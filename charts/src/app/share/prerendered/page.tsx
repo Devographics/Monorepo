@@ -3,13 +3,15 @@
  * See "capture" folder for instructions
  * Images are hosted at
  */
-import { getBlockMetaFromParams } from '@/app/share/metadata'
+import { getBlockMetaFromParams, getEdition, getEditionOrBlock } from '@/app/share/metadata'
+
 import { Metadata } from 'next'
 // import { redirect } from 'next/navigation'
 import { ChartParams, chartParamsSchema } from '@/app/share/typings'
 import { getAppConfig } from '@/config/server'
 import { chartParamsFromSearch } from '../chart-params-encoder'
 import { notFound } from 'next/navigation'
+import { fetchEditionSitemap } from '@devographics/fetch'
 
 /**
  * Demo path using the Devographics/images repository
@@ -43,42 +45,18 @@ function githubUrl({
     return `https://raw.githubusercontent.com/${org}/${repo}/main/captures/${editionId}/${localeId}/${chart.blockId}.png`
 }
 
-function devographicsImageUrl({
-    editionId,
-    localeId,
-    blockId
-}: {
-    /**
-     * css2022
-     */
-    editionId: string
-    /**
-     * fr-FR
-     */
-    localeId: string
-    /**
-     * Unique block id = question
-     */
-    blockId: string
-}) {
-    const capturesUrl = `https://assets.devographics.com/captures/${editionId}`
-    return `${capturesUrl}/${localeId}/${blockId}.png`
-}
-
 export async function generateMetadata({ searchParams }): Promise<Metadata> {
     const chartParams = chartParamsFromSearch(searchParams)
     if (!chartParams) {
         // will use the root layout default metadata in case of error
         return {}
     }
-    const { blockDefinition, blockMeta } = await getBlockMetaFromParams(chartParams)
-    const { title, description, link } = blockMeta
+    const { surveyId, editionId } = chartParams
 
-    const imgUrl = devographicsImageUrl({
-        editionId: chartParams.editionId,
-        localeId: chartParams.localeId,
-        blockId: chartParams.blockId
-    })
+    const { imgUrl, link, blockDefinition, blockMeta, title, description } =
+        await getEditionOrBlock(chartParams)
+
+    console.log('Redirecting to:', link)
 
     return {
         // TODO: set more params like the site name
@@ -105,14 +83,12 @@ export default async function StaticChartRedirectionPage({ searchParams }) {
         // 404 if params are not valid
         return notFound()
     }
-    const { blockDefinition, blockMeta } = await getBlockMetaFromParams(chartParams)
+    const { imgUrl, link, blockDefinition, blockMeta, title, description } =
+        await getEditionOrBlock(chartParams)
+
+    console.log('Redirecting to:', link)
     const config = getAppConfig()
     if (config.isDev || config.isDebug) {
-        const imgUrl = devographicsImageUrl({
-            editionId: chartParams.editionId,
-            localeId: chartParams.localeId,
-            blockId: chartParams.blockId
-        })
         return (
             <div>
                 <h1>DEV MODE</h1>
