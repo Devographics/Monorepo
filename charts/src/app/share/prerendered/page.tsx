@@ -125,6 +125,9 @@ function DevView({ blockDefinition, blockMeta, imgUrl, link, title, description 
     )
 }
 
+/**
+ * NOTE: cache control is set up in next.config.js
+ */
 export default async function StaticChartRedirectionPage({ searchParams }) {
     const config = getAppConfig()
     const chartParams = chartParamsFromSearch(searchParams)
