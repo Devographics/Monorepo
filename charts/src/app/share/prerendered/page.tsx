@@ -140,8 +140,6 @@ export default async function StaticChartRedirectionPage({ searchParams }) {
             sp.toString(),
             'will redirect to survey'
         )
-        let url = 'https://stateofjs.com/en-US'
-        // TODO: point towards the right survey if surveyId/editionId are available
         const surveyId = sp.get('surveyId')
         const editionId = sp.get('editionId')
         if (surveyId && editionId) {
@@ -154,18 +152,17 @@ export default async function StaticChartRedirectionPage({ searchParams }) {
                 console.error('Error while fetching edition metadata:', err)
             }
         }
-    } else {
-        // If charts params are available, try to redirect
-        const block = await getEditionOrBlock(chartParams)
-        const { link } = block
-        redirectUrl = link
-        console.log('Redirecting to:', redirectUrl)
-        // In dev show a page instead of running the redirection
-        if (config.isDev || config.isDebug) {
-            return <DevView {...block} />
-        }
+        if (config.isDev) return <div>Block not found, falling back to: {redirectUrl}</div>
     }
-    if (config.isDev) return <div>Block not found, falling back to: {redirectUrl}</div>
+    // If charts params are available, try to redirect
+    const block = await getEditionOrBlock(chartParams)
+    const { link } = block
+    redirectUrl = link
+    console.log('Redirecting to:', redirectUrl)
+    // In dev show a page instead of running the redirection
+    if (config.isDev || config.isDebug) {
+        return <DevView {...block} />
+    }
     // A server redirect isn't appropriate here, we wan't the browser to trigger the redirect:
     // @see https://github.com/vercel/next.js/issues/54437
     // redirect(redirectLink)
