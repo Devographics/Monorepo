@@ -2,7 +2,7 @@ import { fetchChartData } from '@/app/share/chart-data-fetcher'
 import { chartParamsFromSearch } from '@/app/share/chart-params-encoder'
 import { renderChartSvg, svg2png } from '@/app/share/chart-renderer'
 import { notFound } from 'next/navigation'
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * We use a GET method, so the image can be generated without having to rely

@@ -45,7 +45,8 @@ function githubUrl({
     return `https://raw.githubusercontent.com/${org}/${repo}/main/captures/${editionId}/${localeId}/${chart.blockId}.png`
 }
 
-export async function generateMetadata({ searchParams }): Promise<Metadata> {
+export async function generateMetadata(props): Promise<Metadata> {
+    const searchParams = await props.searchParams
     const chartParams = chartParamsFromSearch(searchParams)
     if (!chartParams) {
         // will use the root layout default metadata in case of error
@@ -130,7 +131,8 @@ function DevView({ blockDefinition, blockMeta, imgUrl, link, title, description 
 /**
  * NOTE: cache control is set up in next.config.js
  */
-export default async function StaticChartRedirectionPage({ searchParams }) {
+export default async function StaticChartRedirectionPage(props) {
+    const searchParams = await props.searchParams
     const config = getAppConfig()
     const chartParams = chartParamsFromSearch(searchParams)
     let redirectUrl = 'https://stateofjs.com/en-US'
@@ -155,6 +157,7 @@ export default async function StaticChartRedirectionPage({ searchParams }) {
             }
         }
         if (config.isDev) return <div>Block not found, falling back to: {redirectUrl}</div>
+        return <HttpRedir url={redirectUrl} />
     }
     // If charts params are available, try to redirect
     const block = await getEditionOrBlock(chartParams)

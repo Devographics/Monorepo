@@ -27,7 +27,7 @@ export const applyTemplate = ({
     key: string
 }) => {
     try {
-        return template(t, { interpolate: /{([\s\S]+?)}/g })(values)
+        return template(t, { interpolate: /{([\s\S]+?)}/g })(values);
     } catch (error) {
         console.error(error)
         return `[${locale.id}][ERR] ${key}`
