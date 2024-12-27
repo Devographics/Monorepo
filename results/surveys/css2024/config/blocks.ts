@@ -13,6 +13,7 @@ import VerticalBarBlock2 from 'core/charts/verticalBar2'
 import ToolFeatureExperienceBlock from 'core/charts/toolFeatureExperience'
 import MultiItemsExperienceBlock from 'core/charts/multiItemsExperience'
 import MultiItemsRatiosBlock from 'core/charts/multiItemsRatios'
+import { TimeSeriesByDateBlock } from 'core/charts/timeSeriesByDate/TimeSeriesByDateBlock'
 
 // features
 import FeaturesOverviewBlock from 'core/charts/featuresOverview'
@@ -36,6 +37,7 @@ import BracketWinsBlock from 'core/charts/brackets/BracketWinsBlock.tsx'
 const chartBlocks = {
     HorizontalBarBlock2,
     VerticalBarBlock2,
+    TimeSeriesByDateBlock,
     MultiItemsExperienceBlock,
     MultiItemsRatiosBlock,
 

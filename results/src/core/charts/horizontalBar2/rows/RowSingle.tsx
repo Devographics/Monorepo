@@ -8,6 +8,7 @@ import { FreeformAnswersTrigger } from '../../common2/FreeformAnswers'
 import { CUTOFF_ANSWERS, OVERLIMIT_ANSWERS } from '@devographics/constants'
 import { InsufficientDataIndicator } from 'core/charts/common2/InsufficientDataIndicator'
 import { ResultsSubFieldEnum } from '@devographics/types'
+import { getTopBound } from '../views'
 
 export const RowSingle = (props: RowComponentProps) => {
     const theme = useTheme()
@@ -25,7 +26,7 @@ export const RowSingle = (props: RowComponentProps) => {
     const { view } = chartState
     const { getValue } = viewDefinition
     const value = getValue(bucket)
-    const width = (100 * value) / maxOverallValue
+    const width = (100 * value) / getTopBound(maxOverallValue)
     const gradient = theme.colors.barChart.primaryGradient
 
     // TODO: do this better

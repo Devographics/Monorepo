@@ -13,6 +13,7 @@ export const source: TemplateFunction = ({ survey, edition, question, section })
     const options = edition.sources || []
     if (options.length === 0) {
         console.warn(`Survey ${edition?.id} has no sources`)
+        options.push({ id: 'no_sources_defined' })
     }
     const output: QuestionTemplateOutput = {
         id: 'source',

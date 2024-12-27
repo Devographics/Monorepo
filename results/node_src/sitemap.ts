@@ -168,6 +168,7 @@ export const pageFromConfig = async (page: PageDef, pageIndex: number, editionVa
                     blockVariant.path = `${page.path}${blockVariant.id}/`
 
                     blockVariant.sectionId = page.id
+                    blockVariant.sectioni18nNamespace = page.i18nNamespace
 
                     variants.push(blockVariant)
                 }

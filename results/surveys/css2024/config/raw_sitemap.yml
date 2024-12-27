@@ -471,7 +471,9 @@
         wrapBlock: false
         disableExport: true
 
-- id: user_metadata
+- id: _user_metadata
+  intlId: user_metadata
+  i18nNamespace: user_metadata
   path: /metadata
   blocks:
       - template: page_introduction
@@ -496,13 +498,13 @@
             addQuestionComments: false
 
       - id: device
-        template: multiple_options2
+        template: multiple_options2_freeform
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
 
       - id: browser
-        template: multiple_options2
+        template: multiple_options2_freeform
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
@@ -513,34 +515,58 @@
       #       addQuestionComments: false
 
       - id: os
-        template: multiple_options2
+        template: multiple_options2_freeform
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
 
-      - id: previous_surveys
+      - id: past_surveys
         template: multiple_options2
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
             addBucketsEntities: true
+        parameters:
+            showNoAnswer: true
 
-      - id: same_survey_count
+      - id: past_same_survey_count
         template: multiple_options2
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
+        parameters:
+            showNoAnswer: true
 
       - id: created_at_date
         template: multiple_options2
         blockType: TimeSeriesByDateBlock
-        defaultView: count
+        defaultView: countBar
         parameters:
-            showNoAnswer: false,
-            cutoff: 10,
+            showNoAnswer: false
+            cutoff: 10
             sort: { order: asc, property: id }
         queryOptions:
             addQuestionComments: false
+        variants:
+            - id: created_at_date_by_source
+              fieldId: created_at_date
+              template: multiple_options2
+              blockType: TimeSeriesByDateBlock
+              defaultView: count
+              parameters:
+                  showNoAnswer: false
+                  cutoff: 10
+                  sort: { order: asc, property: id }
+                  facetLimit: 3
+                  enableAddOverallBucket: false
+                  mergeOtherBuckets: true
+              queryOptions:
+                  addBucketsEntities: true
+                  addQuestionComments: false
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: source
 
       - id: source
         template: multiple_options2_freeform

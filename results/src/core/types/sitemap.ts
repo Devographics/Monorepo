@@ -6,6 +6,7 @@ import { BlockVariantDefinition } from './block'
  */
 export interface RawPageDef {
     id: string
+    i18nNamespace?: string
     path: string
     showTitle?: boolean
     /**

@@ -13,6 +13,7 @@ import { getChartCurrentEdition, useQuestionMetadata } from '../horizontalBar2/h
 import { TimeSeriesByDateChartState } from './types'
 import { FacetHeading } from '../verticalBar2/FacetHeading'
 import uniqBy from 'lodash/uniqBy'
+import compact from 'lodash/compact'
 
 export interface VerticalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -54,7 +55,8 @@ export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
             .flat()
             .flat()
             .flat()
-        const facetOptions = uniqBy(allFacetBuckets, fb => fb.id)
+        console.log(allFacetBuckets)
+        const facetOptions = uniqBy(compact(allFacetBuckets), fb => fb.id)
         commonProps.facetOptions = facetOptions
     }
 

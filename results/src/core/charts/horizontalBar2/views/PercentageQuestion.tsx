@@ -9,10 +9,16 @@ import { formatPercentage } from 'core/charts/common2/helpers/format'
 
 const getValue = (bucket: Bucket | FacetBucket) => bucket[BucketUnits.PERCENTAGE_QUESTION] || 0
 
+export const getTopBound = (maxValue?: number) => {
+    // const topBound = maxValue
+    const topBound = 100
+    return topBound
+}
+
 const getTicks = (maxValue?: number) => {
     const NUMBER_OF_TICKS = 5
     const ticks = [...Array(NUMBER_OF_TICKS + 1)].map(
-        (a, i) => ({ value: round((i * (maxValue || 0)) / NUMBER_OF_TICKS) }),
+        (a, i) => ({ value: round((i * (getTopBound() || 0)) / NUMBER_OF_TICKS) }),
         1
     )
     return ticks
