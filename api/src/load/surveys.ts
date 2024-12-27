@@ -6,13 +6,17 @@ import { existsSync } from 'fs'
 import { readdir, readFile, lstat } from 'fs/promises'
 import { EnvVar, getEnvVar } from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
-
 import path from 'path'
 import { setCache } from '../helpers/caching'
 import { parseSurveys } from '../generate/generate'
 import { getRepoSHA, listGitHubFiles } from '../external_apis'
 import { exec } from 'child_process'
 import { promisify } from 'util'
+
+import defaultUserMetadataSection from './user_metadata.yml'
+
+const USER_METADATA_SECTION = '_user_metadata'
+
 const execPromise = promisify(exec)
 
 let allSurveys: Survey[] = []
@@ -38,6 +42,18 @@ export const loadOrGetSurveys = async (options: LoadOrGetSurveysOptions = {}) =>
 
     if (forceReload || allSurveys.length === 0) {
         const { surveys, sha } = await loadSurveys()
+
+        for (const survey of surveys) {
+            for (const edition of survey.editions) {
+                // if user_metadata section doesn't exist, add default section
+                if (!edition.apiSections) {
+                    edition.apiSections = [defaultUserMetadataSection]
+                } else if (!edition.apiSections.find(s => s.id === USER_METADATA_SECTION)) {
+                    edition.apiSections.push(defaultUserMetadataSection)
+                }
+            }
+        }
+
         allSurveys = surveys
         surveysHash = sha
     }
