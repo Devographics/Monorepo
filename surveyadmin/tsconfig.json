@@ -46,7 +46,6 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     // helps having Node types in the config
-    "tsup.config.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [

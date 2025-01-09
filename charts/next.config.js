@@ -4,10 +4,6 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    transpilePackages: [
-        // TODO: not sure it handles regex/globs
-        "@devographics/*",
-    ],
     webpack: (
         config,
         { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }
