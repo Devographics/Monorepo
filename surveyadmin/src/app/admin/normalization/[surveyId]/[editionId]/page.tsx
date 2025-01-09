@@ -24,7 +24,8 @@ import {
   rscSurveysMetadata,
 } from "~/fetchers/rscEditionMetadata";
 
-export default async function Page({ params }) {
+export default async function Page(props) {
+  const params = await props.params;
   const { surveyId, editionId } = params;
   const { data: surveys } = await rscSurveysMetadata({
     shouldGetFromCache: true,

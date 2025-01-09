@@ -7,7 +7,8 @@ import { getEditionQuestions } from "~/lib/normalization/helpers/getEditionQuest
 // We don't want static rendering in survey admin
 export const dynamic = "force-dynamic";
 
-export default async function Page({ params }) {
+export default async function Page(props) {
+  const params = await props.params;
   const { surveyId, editionId, questionId } = params;
   const { data: surveys } = await fetchSurveysMetadata({
     shouldGetFromCache: false,

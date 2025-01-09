@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction, cloneElement, useState } from "react";
+import { Dispatch, SetStateAction, cloneElement, useState, type JSX } from "react";
 import Dialog from "./Dialog";
 
 export const ModalTrigger = ({
