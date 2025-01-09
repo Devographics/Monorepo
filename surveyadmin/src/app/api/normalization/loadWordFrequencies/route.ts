@@ -5,7 +5,7 @@ import { getWordFrequencies } from "~/lib/normalization/actions/getWordFrequenci
 // Avoid statically rendering route handlers
 export const dynamic = "force-dynamic";
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
   const surveyId = req.nextUrl.searchParams.get("surveyId")!;
   const editionId = req.nextUrl.searchParams.get("editionId")!;
   const sectionId = req.nextUrl.searchParams.get("sectionId")!;

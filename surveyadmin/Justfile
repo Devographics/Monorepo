@@ -1,6 +1,0 @@
-# From root directory, you can run "just surveyform/<your-command>"
-analyze-bundle: 
-    ANALYZE=true pnpm run build
-
-auto-changelog: 
-    pnpm exec auto-changelog -u

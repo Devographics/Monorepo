@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { captureException } from "@sentry/nextjs";
 import { renameTokens } from "~/lib/normalization/actions/tokens/renameTokens";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   console.log("// renameTokens");
   try {
     // Get body data as JSON
