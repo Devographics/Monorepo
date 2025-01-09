@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import type { BrowserData } from "@devographics/types"
 
+import type { PrefilledResponse, BrowserData } from "@devographics/types";
 // for some reason this throws error?
 // TODO: do we need a dynamic require?
 import bowser from "bowser";
@@ -13,7 +13,7 @@ export const useSurveyActionParams = (): {
 } => {
   // note: source and referrer are set by ClientLayout on first page load
   const params: any = {};
-  const { source, referrer } = useReferrer()
+  const { source, referrer } = useReferrer();
   if (source) {
     params.source = source as string;
   }
@@ -57,13 +57,6 @@ export const useBrowserData = (): BrowserData => {
   return browserData;
 };
 
-
-export interface PrefilledData extends BrowserData {
-  surveyId?: string;
-  editionId?: string;
-  locale: string;
-}
-
 export const useClientData = ({
   editionId,
   surveyId,
@@ -72,9 +65,9 @@ export const useClientData = ({
   surveyId?: string;
 }) => {
   const { source, referrer } = useSurveyActionParams();
-  const { locale } = useI18n()
+  const { locale } = useI18n();
   // prefilled data
-  let data: PrefilledData = {
+  let data: PrefilledResponse = {
     locale: locale.id,
     editionId,
     surveyId,

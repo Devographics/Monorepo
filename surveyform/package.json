@@ -48,12 +48,13 @@
     "@devographics/templates": "workspace:^1.0.0",
     "@devographics/types": "workspace:^1.0.0",
     "@hapi/iron": "6.0.0",
-    "@next/env": "^13.5.3",
+    "@next/env": "15.0.3",
     "@sentry/nextjs": "^6.19.7",
     "@sentry/node": "^7.19.0",
     "@sentry/react": "^7.19.0",
     "@upstash/ratelimit": "^2.0.3",
     "@vercel/analytics": "^0.1.5",
+    "@vercel/functions": "^1.5.0",
     "@vercel/speed-insights": "^1.0.12",
     "bowser": "^2.11.0",
     "cookie": "^0.5.0",
@@ -64,7 +65,7 @@
     "lodash": "^4.17.21",
     "nanoid": "3.3.6",
     "new-github-issue-url": "^1.0.0",
-    "next": "14.2.4",
+    "next": "15.0.3",
     "next-connect": "^0.9.1",
     "next-plausible": "^3.11.1",
     "node-cache": "^5.1.2",
@@ -75,18 +76,18 @@
     "passport-magic-login": "^1.2.0",
     "polished": "^3.7.2",
     "postcss-nested": "^4.2.3",
-    "react": "^18.2.0",
-    "react-bootstrap": "^2.8.0",
+    "react": "19.0.0-rc-66855b96-20241106",
+    "react-bootstrap": "^2.10.6",
     "react-bootstrap-typeahead": "^6.3.1",
     "react-confetti": "^6.1.0",
     "react-cookie": "^4.1.1",
     "react-countup": "^6.3.2",
-    "react-dom": "18.2.0",
+    "react-dom": "19.0.0-rc-66855b96-20241106",
     "sass": "^1.56.1",
     "server-only": "^0.0.1",
     "swr": "^2.0.1",
     "uuid": "^8.3.2",
-    "zod": "^3.21.4"
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.2",
@@ -101,8 +102,8 @@
     "@types/node": "^13.13.52",
     "@types/nodemailer": "^6.4.6",
     "@types/passport": "^1.0.12",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
+    "@types/react": "npm:types-react@19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "@types/shelljs": "^0.8.11",
     "@types/unist": "^2.0.6",
     "@types/uuid": "^9.0.1",
@@ -111,7 +112,7 @@
     "eslint": "^7.32.0",
     "mongodb": "^5.5.0",
     "mongodb-memory-server": "^7.6.3",
-    "react-is": "^16.13.1",
+    "react-is": "19.0.0-rc-66855b96-20241106",
     "source-map-support": "^0.5.21",
     "supertest": "^6.3.1",
     "ts-jest": "^29.0.5",
@@ -142,5 +143,11 @@
   "packageManager": "pnpm@8.7.0",
   "engines": {
     "node": ">=18.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "npm:types-react@19.0.0-rc.1",
+      "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
+    }
   }
 }

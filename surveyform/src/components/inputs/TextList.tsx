@@ -1,13 +1,10 @@
 "use client";
 import React, { useRef, useState, useEffect, memo, useCallback } from "react";
-import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
 import { useI18n } from "@devographics/react-i18n";
 import { getQuestioni18nIds } from "~/lib/i18n/survey";
-
-const MemoFormControl = memo(FormControl);
 
 type KeyEvent = React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>;
 
@@ -579,14 +576,15 @@ const TextListItem = memo(function TextListItem({
     [onItemKeyDown]
   );
   const onKeyUp = useCallback((evt) => onItemKeyUp(evt), [onItemKeyUp]);
+  const Component = question.longText ? "textarea" : "input";
   return (
-    <MemoFormControl
-      // id={itemId(item)}
-      // boostrap ain't happy with id, we just need a way to select the input imperatively to handle focus
+    <Component
+      id={itemId(item.key)}
+      className="form-control"
+      // bootstrap wasn't happy with id, we just need a way to select the input imperatively to handle focus
       data-id={itemId(item.key)}
       style={formControlStyle}
       // TODO: use different templates to simplify?
-      as={question.longText ? "textarea" : "input"}
       placeholder={placeholder?.t}
       defaultValue={item.initialValue}
       onBlur={onBlur}

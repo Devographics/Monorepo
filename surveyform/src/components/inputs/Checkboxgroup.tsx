@@ -1,30 +1,16 @@
 "use client";
 import { useState } from "react";
-import Form from "react-bootstrap/Form";
 import without from "lodash/without.js";
 import { useI18n } from "@devographics/react-i18n";
 import { Button } from "~/components/ui/Button";
 import { FormItem } from "~/components/form/FormItem";
 import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
-import { alphaSort, randomSort, seededShuffle } from "~/lib/utils";
-import {
-  DbPathsEnum,
-  OPTION_NA,
-  OptionMetadata,
-  OptionsOrder,
-} from "@devographics/types";
+import { alphaSort, randomSort } from "~/lib/utils";
+import { OPTION_NA, OptionMetadata, OptionsOrder } from "@devographics/types";
 import OtherOption from "./OtherOption";
-import sortBy from "lodash/sortBy";
 import { getFormPaths } from "@devographics/templates";
-import get from "lodash/get.js";
-import isEmpty from "lodash/isEmpty.js";
 
-import {
-  FollowupData,
-  FollowUpComment,
-  FollowUps,
-} from "./experience/Followup2";
 import { useFormStateContext } from "../form/FormStateContext";
 
 const defaultCutoff = 99;
@@ -200,19 +186,22 @@ const Checkbox = (
     }
   };
   return (
-    <Form.Check className={[checkClass, `form-option-${option.id}`].join(" ")}>
-      <Form.Check.Label htmlFor={`${path}.${index}`}>
+    <div
+      className={[checkClass, "form-check", `form-option-${option.id}`].join(
+        " "
+      )}
+    >
+      <label className="form-check-label" htmlFor={`${path}.${index}`}>
         <div className="form-input-wrapper">
-          <Form.Check.Input
+          <input
+            className="form-check-input"
             type="checkbox"
             checked={isChecked}
             disabled={disabled}
             id={`${path}.${index}`}
             name={path}
             value={option.id}
-            // ref={refFunction}
             onChange={(event) => {
-              // event.preventDefault();
               const isChecked = event.target.checked;
               const newValue = getNewValue(isChecked);
               updateCurrentValues({ [path]: newValue });
@@ -220,8 +209,8 @@ const Checkbox = (
           />
         </div>
         <FormOption {...props} isChecked={isChecked} option={option} />
-      </Form.Check.Label>
-    </Form.Check>
+      </label>
+    </div>
   );
 };
 export default FormComponentCheckboxGroup;

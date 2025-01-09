@@ -1,9 +1,8 @@
 import { Entity } from "@devographics/types";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
-import { Code, Question } from "../icons";
+import { Code } from "../icons";
 import { CodeExample } from "../inputs/experience/Experience2";
-import { EntityLabelContents } from "./EntityLabel";
 import { ReactNode, useState } from "react";
 
 export const EntityPopoverTrigger = ({

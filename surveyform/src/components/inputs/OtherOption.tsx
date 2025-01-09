@@ -1,14 +1,13 @@
 "use client";
 import { Dispatch, useState, SetStateAction } from "react";
-import Form from "react-bootstrap/Form";
 import { FormInputProps } from "~/components/form/typings";
 import { FormOption } from "~/components/form/FormOption";
 import debounce from "lodash/debounce.js";
-import FormControl from "react-bootstrap/FormControl";
 import { OPTION_NA } from "@devographics/types";
 import { getFormPaths } from "@devographics/templates";
 import { useI18n } from "@devographics/react-i18n";
 import { useFormStateContext } from "../form/FormStateContext";
+import { FormCheck, FormCheckInput, FormCheckLabel } from "../form/FormCheck";
 
 const OtherOption = (
   props: FormInputProps & {
@@ -16,7 +15,7 @@ const OtherOption = (
     setShowOther: Dispatch<SetStateAction<boolean>>;
     type: "radio" | "checkbox";
     mainValue: string | number | Array<string | number>;
-  },
+  }
 ) => {
   const {
     edition,
@@ -33,7 +32,7 @@ const OtherOption = (
   const path = formPaths.other!;
   const otherValue = response?.[path];
 
-  const { t } = useI18n()
+  const { t } = useI18n();
   // keep track of "other" field value locally
   const [localValue, setLocalValue] = useState(otherValue);
 
@@ -58,16 +57,17 @@ const OtherOption = (
 
   return (
     <div className="form-option-other">
-      <Form.Check className={checkClass}>
-        <Form.Check.Label htmlFor={`${path}.other`}>
+      <FormCheck className={checkClass}>
+        <FormCheckLabel htmlFor={`${path}.other`}>
           <div className="form-input-wrapper">
-            <Form.Check.Input
+            <FormCheckInput
               id={`${path}.other`}
               name={path}
               type={type}
               checked={showOther}
               disabled={disabled}
               onChange={(event) => {
+                // @ts-ignore
                 const isChecked = event.target.checked;
                 setShowOther(isChecked);
                 if (type === "radio") {
@@ -82,18 +82,17 @@ const OtherOption = (
             isChecked={showOther}
             option={{ id: "other", intlId: "options.other" }}
           />
-        </Form.Check.Label>
-      </Form.Check>
+        </FormCheckLabel>
+      </FormCheck>
       {showOther && (
-        <FormControl
+        <input
+          className="form-control"
           type="text"
           value={localValue || ""}
           onChange={handleChangeDebounced}
           onBlur={handleChange}
           disabled={disabled}
-          placeholder={
-            t("options.other.placeholder")
-          }
+          placeholder={t("options.other.placeholder")}
         />
       )}
     </div>

@@ -35,7 +35,7 @@
   list-style-type: none;
 }
 .user-response-item {
-  margin-bottom: $spacing/2;
+  margin-bottom: $spacing-half;
   border: 1px solid var(--border-color);
   padding: $spacing;
   border-radius: 3px;
@@ -49,7 +49,7 @@
   display: flex;
   align-items: center;
   font-size: $large-font;
-  margin-bottom: $spacing/4;
+  margin-bottom: $spacing-quarter;
   .survey-status {
     margin-left: 10px;
   }

@@ -43,7 +43,7 @@
 }
 .survey-login-option-description {
   font-size: $smallish-font;
-  margin-bottom: $spacing/2;
+  margin-bottom: $spacing-half;
 }
 .survey-login-option-note {
   margin-top: $spacing;
@@ -60,7 +60,7 @@
     display: none;
   }
   input {
-    margin-bottom: $spacing/2;
+    margin-bottom: $spacing-half;
   }
 }
 .account-message {

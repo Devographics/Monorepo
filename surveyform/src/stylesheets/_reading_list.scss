@@ -1,7 +1,7 @@
 .reading-list-summary {
   .reading-list {
     &-title {
-      margin-bottom: $spacing/3;
+      margin-bottom: $spacing-third;
     }
 
     &-description {
@@ -15,8 +15,8 @@
     }
 
     &-item {
-      padding-top: $spacing/3;
-      margin-top: $spacing/3;
+      padding-top: $spacing-third;
+      margin-top: $spacing-third;
       border-top: $border;
       font-size: $medium-font;
       display: flex;
@@ -71,7 +71,7 @@
       font-size: $largeish-font;
       text-transform: uppercase;
       display: flex;
-      gap: $spacing/2;
+      gap: $spacing-half;
       align-items: center;
 
       &::before,
@@ -114,7 +114,7 @@
         &-domain {
           font-size: $small-font;
           display: inline-block;
-          margin-left: $spacing/4;
+          margin-left: $spacing-quarter;
           color: var(--text-color-dark);
         }
       }
@@ -122,8 +122,8 @@
       &-title {
         display: flex;
         align-items: center;
-        gap: $spacing/2;
-        margin-bottom: $spacing/2;
+        gap: $spacing-half;
+        margin-bottom: $spacing-half;
         font-size: $large-font;
 
         &-link {
@@ -157,7 +157,7 @@
     &-link-button {
       display: flex;
       align-items: center;
-      gap: $spacing/6;
+      gap: $spacing-sixth;
       padding: 4px 8px;
       font-size: $small-font;
 
@@ -187,7 +187,7 @@
       padding: 3px 6px;
       display: flex;
       align-items: center;
-      gap: $spacing/6;
+      gap: $spacing-sixth;
 
       span {
         display: block;
@@ -223,7 +223,7 @@
     &-form {
       display: flex;
       align-items: center;
-      gap: $spacing/2;
+      gap: $spacing-half;
     }
   }
 
@@ -253,7 +253,7 @@
   position: absolute;
   top: -1px;
   right: -1px;
-  margin-left: $spacing/2;
+  margin-left: $spacing-half;
 
   .btn {
     // border-radius: 100%;
@@ -284,7 +284,6 @@
 }
 
 @keyframes glowing {
-
   from,
   to {
     box-shadow: 0 0 0px hsl(180 90% 68% / 0.8);

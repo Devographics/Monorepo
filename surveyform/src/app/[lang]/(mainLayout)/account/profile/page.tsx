@@ -25,7 +25,8 @@ const getResponses = cache(
   }
 );
 
-const Profile = async ({ params }) => {
+const Profile = async props => {
+  const params = await props.params;
   const { data: surveys } = await rscFetchSurveysMetadata({
     calledFrom: "UserResponses",
   });
