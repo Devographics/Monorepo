@@ -9,6 +9,15 @@ import { SitemapSection } from './sitemap'
 import { Entity } from './entities'
 import { Survey, Edition, Section, Option, QuestionTemplateOutput } from './outlines'
 
+export interface GeneralMetadata {
+    creators: Creator[]
+}
+
+export interface Creator {
+    id: string
+    entity: Entity
+}
+
 export interface SurveyMetadata extends Omit<Survey, 'editions'> {
     editions: EditionMetadata[]
 }

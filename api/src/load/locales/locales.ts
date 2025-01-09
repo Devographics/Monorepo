@@ -2,7 +2,12 @@ import { Locale, RawLocale } from '@devographics/types'
 import { EnvVar, getEnvVar, parseEnvVariableArray } from '@devographics/helpers'
 
 import { RequestContext } from '../../types'
-import { getLocaleDiff, processLocales } from '../../helpers/locales'
+import {
+    getLocaleDiff,
+    initLocaleReport,
+    logLocaleReport,
+    processLocales
+} from '../../helpers/locales'
 import { loadAllLocally } from './local'
 import { loadAllFromGitHub } from './github'
 
@@ -103,7 +108,7 @@ export const getLocalesLoadMethod = () => (getEnvVar(EnvVar.LOCALES_PATH) ? 'loc
 export const getLocaleIds = () => {
     const enableFastBuild = process.env.FAST_BUILD === 'true'
     const envLocaleIds = parseEnvVariableArray(getEnvVar(EnvVar.LOCALE_IDS))
-    const localeIds = enableFastBuild ? ['en-US', 'ru-RU', 'ua-UA', 'es-ES'] : envLocaleIds || []
+    const localeIds = enableFastBuild ? ['en-US', 'ru-RU', 'es-ES', 'ua-UA'] : envLocaleIds || []
     return localeIds
 }
 

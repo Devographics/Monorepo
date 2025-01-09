@@ -1,90 +1,106 @@
 ---
-import T from '@components/T'
-import Newsletter from '@components/Newsletter'
-import PastEditions from '@components/PastEditions.astro'
-import EditionPlaceholder from '@components/EditionPlaceholder.astro'
-import LastEdition from '@components/LastEdition.astro'
-import { statuses } from '@helpers/constants'
-import { getLocaleSubset } from '@helpers/translator'
-const { survey, locale, surveys } = Astro.props
-const { editions =[]} = survey
-const allEditions = (editions)
-    .sort((e1, e2) => e2.year - e1.year)
-    .filter(e => [statuses.preview, statuses.open, statuses.closed].includes(e.status))
-const { id } = survey
+import T from "@components/T";
+import Newsletter from "@components/Newsletter";
+import PastEditions from "@components/PastEditions.astro";
+import EditionPlaceholder from "@components/EditionPlaceholder.astro";
+import LastEdition from "@components/LastEdition.astro";
+import { statuses } from "@helpers/constants";
+import { getLocaleSubset } from "@helpers/translator";
+import Partners from "./Partners.astro";
+import Creators from "./Creators.astro";
+import Calendar from "./Calendar.astro";
+const { survey, locale, surveys, generalMetadata } = Astro.props;
+const { editions = [] } = survey;
+const allEditions = editions
+  .sort((e1, e2) => e2.year - e1.year)
+  .filter((e) =>
+    [statuses.preview, statuses.open, statuses.closed].includes(e.status),
+  );
+const { id } = survey;
 
-const [lastEdition, ...pastEditions] = allEditions
+const [lastEdition, ...pastEditions] = allEditions;
 // const openEdition = allEditions.find(e => e.status === statuses.open)
 // const closedEditions = allEditions.filter(e => e.status === statuses.closed)
 ---
 
 <div class="homepage">
-    <h1>
-        {survey.name}
-    </h1>
-    <p class="survey-description">
-        <T locale={locale} k={`general.${id}.description`} />
-    </p>
+  <h1>
+    {survey.name}
+  </h1>
+  <p class="survey-description">
+    <T locale={locale} k={`general.${id}.description`} />
+  </p>
 
-    {lastEdition ? <LastEdition edition={lastEdition} locale={locale}/> : <EditionPlaceholder survey={survey} locale={locale}/>}
+  {
+    lastEdition ? (
+      <LastEdition edition={lastEdition} locale={locale} />
+    ) : (
+      <EditionPlaceholder survey={survey} locale={locale} />
+    )
+  }
 
-    <div class="intro">
-        <T locale={locale} k={`general.${id}.intro`} md={true} />
-    </div>
+  <div class="intro">
+    <T locale={locale} k={`general.${id}.intro`} md={true} />
+  </div>
 
-    <Newsletter
-        client:load
-        locale={getLocaleSubset(locale, [
-            'newsletter.stay_tuned',
-            'newsletter.leave_your_email',
-            'newsletter.email',
-            'newsletter.submit'
-        ])}
-        submitUrl={survey.emailOctopus.submitUrl}
-    />
+  <Newsletter
+    client:load
+    locale={getLocaleSubset(locale, [
+      "newsletter.stay_tuned",
+      "newsletter.leave_your_email",
+      "newsletter.email",
+      "newsletter.submit",
+    ])}
+    submitUrl={survey.emailOctopus.submitUrl}
+  />
 
-    {
-        pastEditions && pastEditions.length > 0 && (
-            <PastEditions editions={pastEditions} locale={locale} survey={survey}/>
-        )
-    }
+  {
+    pastEditions && pastEditions.length > 0 && (
+      <PastEditions editions={pastEditions} locale={locale} survey={survey} />
+    )
+  }
+
+  {survey.partners && <Partners {...Astro.props} />}
+
+  <Creators locale={locale} creators={generalMetadata.creators} />
+
+  <Calendar locale={locale} surveys={surveys} />
 </div>
 
 <style lang="scss">
-    @use '../stylesheets/_breakpoints.scss';
+  @use "../stylesheets/_breakpoints.scss";
 
-    h1 {
-        font-size: var(--title-font);
-        text-align: center;
-        margin-bottom: var(--halfspacing);
-        line-height: 1;
+  h1 {
+    font-size: var(--title-font);
+    text-align: center;
+    margin-bottom: var(--halfspacing);
+    line-height: 1;
 
-        @include breakpoints.small {
-            font-size: var(--largest-font);
-        }
+    @include breakpoints.small {
+      font-size: var(--largest-font);
     }
+  }
 
-    .survey-description {
-        font-size: var(--large-font);
-        margin-bottom: var(--doublespacing);
-        text-align: center;
-        opacity: var(--secondary-opacity);
+  .survey-description {
+    font-size: var(--large-font);
+    margin-bottom: var(--doublespacing);
+    text-align: center;
+    opacity: var(--secondary-opacity);
+  }
+
+  h2 {
+    font-size: var(--larger-font);
+    margin-bottom: var(--doublespacing);
+    text-align: center;
+  }
+
+  .intro {
+    font-size: var(--large-font);
+    margin-bottom: var(--doublespacing);
+    text-align: center;
+
+    @include breakpoints.small {
+      font-size: var(--medium-font);
     }
-
-    h2 {
-        font-size: var(--larger-font);
-        margin-bottom: var(--doublespacing);
-        text-align: center;
-    }
-
-    .intro {
-        font-size: var(--large-font);
-        margin-bottom: var(--doublespacing);
-        text-align: center;
-
-        @include breakpoints.small {
-            font-size: var(--medium-font);
-        }
-    }
-
+  }
 </style>

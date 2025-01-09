@@ -53,6 +53,7 @@ query: >
                     usage
                     retention
                     positivity
+                    positivityRelative
                   }
                   buckets {
                     count

@@ -95,8 +95,10 @@ export const getBlockQuery = ({
     } else {
         series = [defaultSeries]
     }
+    const query = getDefaultQueryFragment({ queryOptions, series })
+
     return {
-        query: getDefaultQueryFragment({ queryOptions, series }),
+        query,
         seriesNames: series.map(s => s.name)
     }
 }

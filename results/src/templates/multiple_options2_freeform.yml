@@ -6,6 +6,10 @@ queryOptions:
     subField: freeform
     addGroupedBuckets: true
 customizationModes: [filters, facets]
-parameters: { showNoAnswer: true, cutoff: 10, limit: 20, mergeOtherBuckets: true }
+parameters:
+    showNoAnswer: true
+    cutoff: 10
+    limit: 20
+    mergeOtherBuckets: true
 chartOptions:
     limit: 10

@@ -1,36 +1,67 @@
 import React from 'react'
 import take from 'lodash/take'
 import { useTheme } from 'styled-components'
-import { getEditionByYear } from '../helpers/other'
-import Tooltip from 'core/components/Tooltip'
-import { LineComponentProps } from '../types'
-import { ViewDefinition } from 'core/charts/common2/types'
-import { QuestionMetadata } from '@devographics/types'
+import {
+    BasicPointData,
+    LineItem,
+    VerticalBarChartValues,
+    VerticalBarViewDefinition
+} from '../types'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import { getQuestionLabel } from 'core/charts/common2/helpers/labels'
+import { ModesEnum } from 'core/charts/multiItemsRatios/types'
+import { BlockVariantDefinition } from 'core/types'
+import { Dot } from './Dot'
+import { LineSegment } from './LineSegment'
 
-const dotRadius = 6
+export type LineComponentProps<
+    SerieData,
+    PointData extends BasicPointData,
+    ChartStateType
+> = LineItem<PointData> & {
+    chartState: ChartStateType
+    chartValues: VerticalBarChartValues
+    block: BlockVariantDefinition
+    lineIndex: number
+    width: number
+    height: number
+    hasMultiple?: boolean
+    viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
+}
 
-export const Line = ({
-    id,
-    entity,
-    chartState,
-    chartValues,
-    editions,
-    lineIndex,
-    width,
-    height,
-    hasMultiple = false
-}: LineComponentProps) => {
+export const Line = <SerieData, PointData extends BasicPointData, ChartStateType>(
+    props: LineComponentProps<SerieData, PointData, ChartStateType>
+) => {
+    const {
+        id,
+        entity,
+        chartState,
+        chartValues,
+        viewDefinition,
+        points,
+        lineIndex,
+        width,
+        height,
+        hasMultiple = false
+    } = props
     const { getString } = useI18n()
 
     const theme = useTheme()
-    const { viewDefinition, highlighted } = chartState
-    const { getEditionValue, formatValue, invertYAxis } = viewDefinition
-    const { totalColumns, maxValue, years, question, legendItems = [], i18nNamespace } = chartValues
-    if (!getEditionValue) {
-        throw new Error(`getEditionValue not defined`)
+    const { highlighted, view, mode } = chartState
+    const { getPointValue } = viewDefinition
+    const invertYAxis = mode === ModesEnum.RANK
+    const {
+        totalColumns,
+        maxValue,
+        maxTick,
+        columnIds,
+        question,
+        legendItems = [],
+        i18nNamespace
+    } = chartValues
+    if (!getPointValue) {
+        throw new Error(`getPointValue not defined for view ${view}`)
     }
 
     const lineColor = hasMultiple
@@ -54,23 +85,25 @@ export const Line = ({
     const interval = width / totalColumns
     const totalItems = legendItems.length
 
-    const getXCoord = (yearIndex: number) => interval * yearIndex + interval / 2
+    const getXCoord = (columnIndex: number) => interval * columnIndex + interval / 2
     const getYCoord = (value: number) => {
+        // we use either the largest tick value, or the largest chart value
+        // (can be different if ticks are defined manually)
+        const chartMax = maxTick ?? maxValue
         // SVG coordinates are inverted by default
-        const v = invertYAxis ? value : maxValue - value
-        return (v * height) / maxValue
+        const v = invertYAxis ? value : chartMax - value
+        return (v * height) / chartMax
     }
 
     const commonProps = {
-        chartState,
-        chartValues,
+        ...props,
         interval,
         width,
         height,
         totalItems,
         lineLabel,
         maxValue,
-        formatValue,
+        maxTick,
         question,
         getXCoord,
         getYCoord
@@ -84,116 +117,37 @@ export const Line = ({
                 isHighlighted ? 'chart-line-highlighted' : ''
             }`}
         >
-            {take(editions, editions.length - 1).map((edition, i) => {
-                // line starts at the index for the current edition's year
-                const startIndex = years.findIndex(year => year === edition.year)
-                // line ends at the index for the next edition's year
-                const nextEdition = editions[i + 1]
-                const endIndex = years.findIndex(year => year === nextEdition.year)
+            {take(points, points.length - 1).map((point, i) => {
+                // line starts at the index for the current point
+                const startIndex = point.columnIndex
+                // line ends at the index for the next point
+                const nextPoint = points[i + 1]
+                const endIndex = nextPoint.columnIndex
                 return (
                     <LineSegment
                         {...commonProps}
-                        key={edition.editionId}
+                        key={point.id}
                         startIndex={startIndex}
                         endIndex={endIndex}
-                        value1={getEditionValue(edition, chartState)}
-                        value2={getEditionValue(editions[i + 1], chartState)}
+                        value1={getPointValue(point, chartState)}
+                        value2={getPointValue(points[i + 1], chartState)}
                     />
                 )
             })}
-            {years.map((year, i) => {
-                const edition = getEditionByYear(year, editions)
-                return edition ? (
-                    <Dot
+            {columnIds.map((columnId, i) => {
+                // find the point corresponding to the current column, if it exists
+                // (some lines might skip across columns sometimes)
+                const point = points.find(p => p.columnId === columnId)
+                return point ? (
+                    <Dot<SerieData, PointData, ChartStateType>
                         {...commonProps}
-                        key={edition.editionId}
-                        editionIndex={i}
-                        year={year}
-                        value={getEditionValue(edition, chartState)}
+                        key={point.id}
+                        pointIndex={i}
+                        columnId={columnId}
+                        value={getPointValue(point, chartState)}
                     />
                 ) : null
             })}
         </g>
-    )
-}
-
-const Dot = ({
-    lineLabel,
-    editionIndex,
-    value,
-    formatValue,
-    question,
-    year,
-    getXCoord,
-    getYCoord
-}: {
-    lineLabel: string
-    editionIndex: number
-    value: number
-    formatValue: ViewDefinition['formatValue']
-    question: QuestionMetadata
-    year: number
-    getXCoord: (value: number) => number
-    getYCoord: (value: number) => number
-}) => {
-    const cx = getXCoord(editionIndex)
-    const cy = getYCoord(value)
-    return (
-        <Tooltip
-            trigger={
-                <g className="chart-line-dot" transform-origin={`${cx} ${cy}`}>
-                    <circle className="chart-line-dot-visible" cx={cx} cy={cy} r={dotRadius} />
-                    <circle
-                        className="chart-line-dot-invisible"
-                        cx={cx}
-                        cy={cy}
-                        r={dotRadius * 3}
-                    />
-                    <text className="chart-line-label" x={cx} y={`${cy + 20}`}>
-                        {formatValue(value, question)}
-                    </text>
-                </g>
-            }
-            contents={`${lineLabel}: ${formatValue(value, question)} (${year})`}
-            asChild={true}
-        />
-    )
-}
-
-const LineSegment = ({
-    lineLabel,
-    startIndex,
-    endIndex,
-    value1,
-    value2,
-    getXCoord,
-    getYCoord
-}: {
-    lineLabel: string
-    startIndex: number
-    endIndex: number
-    value1: number
-    value2: number
-    getXCoord: (value: number) => number
-    getYCoord: (value: number) => number
-}) => {
-    const x1 = getXCoord(startIndex)
-    const x2 = getXCoord(endIndex)
-    const y1 = getYCoord(value1)
-    const y2 = getYCoord(value2)
-    return (
-        <Tooltip
-            trigger={
-                <g>
-                    <path className="chart-line-segment" d={`M${x1} ${y1} L${x2} ${y2}`} />
-                    <path
-                        className="chart-line-segment-invisible"
-                        d={`M${x1} ${y1} L${x2} ${y2}`}
-                    />
-                </g>
-            }
-            contents={lineLabel}
-            asChild={true}
-        />
     )
 }

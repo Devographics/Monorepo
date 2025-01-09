@@ -7,7 +7,7 @@ import {
     SimplifiedSentimentOptions,
     StandardQuestionData
 } from '@devographics/types'
-import { HorizontalBarChartState, HorizontalBarViews } from '../types'
+import { HorizontalBarChartState, HorizontalBarViewDefinition, HorizontalBarViews } from '../types'
 import { DataSeries, FacetItem } from 'core/filters/types'
 import { usePageContext } from 'core/helpers/pageContext'
 import { applySteps } from './steps'
@@ -19,6 +19,7 @@ import { RowSingle } from '../rows/RowSingle'
 import { RowStacked } from '../rows/RowStacked'
 import { allDataFilters } from '../helpers/steps'
 import max from 'lodash/max'
+import { getViewDefinition } from './views'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -87,23 +88,6 @@ export const getChartBuckets = ({
     return buckets
 }
 
-export const getRowComponent = (bucket: Bucket, chartState: HorizontalBarChartState) => {
-    const { view } = chartState
-    const { facetBuckets } = bucket
-    const hasFacetBuckets = facetBuckets && facetBuckets.length > 0
-    if (hasFacetBuckets) {
-        if (view === HorizontalBarViews.BOXPLOT) {
-            return null
-        } else if (view === HorizontalBarViews.PERCENTAGE_BUCKET) {
-            return RowSingle
-        } else {
-            return RowStacked
-        }
-    } else {
-        return RowSingle
-    }
-}
-
 export const useQuestionMetadata = (facet?: FacetItem) => {
     if (!facet) return
     const { id, sectionId } = facet
@@ -162,15 +146,15 @@ Calculate metadata about all series (in the cases where we're showing multiple)
 export const getSeriesMetadata = ({
     series,
     block,
-    chartState
+    chartState,
+    viewDefinition
 }: {
     series: CommonProps<HorizontalBarChartState>['series']
     block: BlockVariantDefinition
     chartState: HorizontalBarChartState
+    viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
 }) => {
-    const { viewDefinition } = chartState
     const { getValue } = viewDefinition
-    console.log(series)
     const allSeriesValues = series
         .map(serie => {
             const buckets = getChartBuckets({ serie, block, chartState })

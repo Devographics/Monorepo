@@ -4,7 +4,72 @@ import { getLocaleDict } from '@devographics/i18n/server'
 import { ChartParams } from './typings'
 import { getBlock } from '@/lib/helpers'
 import { getStringTranslator } from '@/lib/i18n'
-import { Locale } from '@devographics/types'
+import { EditionMetadata, Locale } from '@devographics/types'
+
+function devographicsUrl({
+    editionId,
+    localeId,
+    blockId
+}: {
+    /**
+     * css2022
+     */
+    editionId: string
+    /**
+     * fr-FR
+     */
+    localeId: string
+    /**
+     * Unique block id = question
+     */
+    blockId: string
+}) {
+    const capturesUrl = `https://assets.devographics.com/captures/${editionId}`
+    return `${capturesUrl}/${localeId}/${blockId}.png`
+}
+
+export async function getEditionOrBlock(chartParams: ChartParams) {
+    let imgUrl, link, blockDefinition, blockMeta, title, description
+
+    const { surveyId, editionId } = chartParams
+    const edition = await getEdition(surveyId, editionId)
+
+    const blockMetaResult = await getBlockMetaFromParams(chartParams, edition)
+
+    if (blockMetaResult) {
+        blockDefinition = blockMetaResult.blockDefinition
+        blockMeta = blockMetaResult.blockMeta
+        imgUrl = devographicsUrl({
+            editionId,
+            localeId: chartParams.localeId,
+            blockId: chartParams.blockId
+        })
+        link = blockMeta.link
+        title = blockMeta.title
+        description = blockMeta.description
+    } else {
+        imgUrl = `https://assets.devographics.com/surveys/${chartParams.editionId}-og.png`
+        link = edition.resultsUrl
+        title = `${edition.survey.name} ${edition.year}`
+        description = title
+    }
+
+    return { imgUrl, link, blockDefinition, blockMeta, title, description }
+}
+export async function getEdition(surveyId: string, editionId: string) {
+    const editionFetchResult = await fetchEditionSitemap({
+        surveyId,
+        editionId,
+        calledFrom: 'charts'
+    })
+    const { data: edition, error } = editionFetchResult
+    if (error) {
+        throw new Error(
+            `Error while fetching edition metadata (survey: ${surveyId}, edition: ${editionId}): ${error.toString()}`
+        )
+    }
+    return edition
+}
 
 /*
 
@@ -13,7 +78,7 @@ Example link:
 https://share.stateofcss.com/share/prerendered?localeId=en-US&surveyId=state_of_css&editionId=css2023&blockId=subgrid&params=&sectionId=features&subSectionId=layout
 
 */
-export async function getBlockMetaFromParams(chartParams: ChartParams) {
+export async function getBlockMetaFromParams(chartParams: ChartParams, edition: EditionMetadata) {
     const {
         surveyId,
         editionId,
@@ -29,30 +94,22 @@ export async function getBlockMetaFromParams(chartParams: ChartParams) {
     //     editionId: chartParams.edition,
     //     calledFrom: 'charts'
     // })
-    const editionFetchResult = await fetchEditionSitemap({
-        surveyId,
-        editionId,
-        calledFrom: 'charts'
-    })
 
-    const { data: edition, error } = editionFetchResult
     const { sitemap } = edition
 
     if (!sitemap) {
         throw new Error(`getBlockMetaFromParams: no sitemap found for edition ${editionId}`)
     }
 
-    if (error) {
-        throw new Error(
-            `Error while fetching edition metadata (survey: ${surveyId}, edition: ${editionId}): ${error.toString()}`
-        )
-    }
     // i18n
     // TODO: might need to be reused elsewhere
     // see survey form for a RSC version of this call (here we don't need request-level caching)
 
-    const blockDefinition = getBlock({ blockId, sectionId, subSectionId, sitemap })
+    const blockDefinition = getBlock({ blockId, editionId, sitemap })
 
+    if (!blockDefinition) {
+        return
+    }
     const { data: possibleLocales, error: possibleLocalesError } = await fetchAllLocalesIds({
         calledFrom: 'charts'
     })
@@ -78,8 +135,8 @@ export async function getBlockMetaFromParams(chartParams: ChartParams) {
         console.log(localeError)
         throw new Error(`Could not get locales strings (${JSON.stringify(chartParams)})`)
     }
-    const { strings, ...localeWithoutStrings } = locale
-    console.log('Got locale with string for block metadata', localeWithoutStrings)
+    const { strings, dict, ...localeWithoutStrings } = locale
+    console.log('Got locale for block metadata', localeWithoutStrings)
 
     const getString = getStringTranslator(locale as unknown as Locale)
 

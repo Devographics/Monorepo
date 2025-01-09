@@ -1,6 +1,13 @@
 import { loadOrGetSurveys } from './load/surveys'
 import { getQuestionObjects } from './generate/generate'
-import { Filter, Filters, FilterQuery, FiltersQuery, ComputeAxisParameters } from './types'
+import {
+    Filter,
+    Filters,
+    FilterQuery,
+    FiltersQuery,
+    ComputeAxisParameters,
+    FiltersQueryOr
+} from './types'
 import { MongoCondition, OptionGroup } from '@devographics/types'
 import range from 'lodash/range.js'
 import { getMainSubfieldPath } from './helpers/surveys'
@@ -193,19 +200,23 @@ function expandFilter(filter: Filter<string | number>, groups?: OptionGroup[]) {
  *      "employer_info.current_employer.choices": {
  *        "$nin": [null, "", [], {}]
  *      },
- *      "$or": [
- *        {
- *          "user_info.years_of_experience.choices": {
- *            "$in": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
- *          }
- *        },
- *        {
- *          "user_info.years_of_experience.choices": {
- *            "$gt": 20
- *          }
- *        }
- *      ]
+ *      "$and": [
+ *        "$or": [
+ *           {
+ *             "user_info.years_of_experience.choices": {
+ *               "$in": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+ *             }
+ *           },
+ *           {
+ *             "user_info.years_of_experience.choices": {
+ *               "$gt": 20
+ *             }
+ *           }
+ *         ]
+ *       ]
  *    }
+ *
+ *
  */
 export const generateFiltersQuery = async ({
     filters,
@@ -217,7 +228,7 @@ export const generateFiltersQuery = async ({
     const { surveys } = await loadOrGetSurveys()
     const questionObjects = getQuestionObjects({ surveys })
 
-    const match: FiltersQuery = {}
+    const match: FiltersQuery = { $and: [] }
     if (filters) {
         for (const filterKey of Object.keys(filters)) {
             const [sectionId, filterId] = filterKey.split('__')
@@ -232,7 +243,7 @@ export const generateFiltersQuery = async ({
             if (subFieldPath) {
                 const expandedFilters = expandFilter(filter, filterField.groups)
                 const conditions = mapFilter<string | number>(expandedFilters)
-                match.$or = conditions.map(c => ({ [subFieldPath]: c }))
+                match.$and.push({ $or: conditions.map(c => ({ [subFieldPath]: c })) })
             }
         }
     }

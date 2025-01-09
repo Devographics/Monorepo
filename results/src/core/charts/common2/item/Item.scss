@@ -16,13 +16,16 @@
         border-bottom: none;
     }
 }
-button.chart-item {
-    padding: 4px 8px 4px 4px;
+button.button-round {
+    padding: 4px 8px 4px 8px;
     border-radius: 500px;
     font-size: 0.9rem;
     white-space: nowrap;
     background: var(--backgroundColor);
     z-index: 1;
+}
+button.chart-item {
+    padding: 4px 8px 4px 4px;
 }
 .item-name {
     margin-bottom: 5px;

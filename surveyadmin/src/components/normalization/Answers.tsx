@@ -62,7 +62,6 @@ const Answers = (props: AnswersProps) => {
     responsesCount,
     allAnswers,
     questionData,
-    // variant,
     entities,
     customNormalizations,
     unnormalizedAnswers,

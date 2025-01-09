@@ -20,6 +20,10 @@
     @include small {
         flex-direction: column;
     }
+    .chart-created_at_date_by_source & {
+        flex-direction: column;
+        border: none;
+    }
 }
 .chart-bar {
     // position: relative;

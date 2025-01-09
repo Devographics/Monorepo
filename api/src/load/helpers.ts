@@ -111,7 +111,16 @@ async function checkImageExists(url: string): Promise<boolean> {
     }
 }
 
-export const getAvatar = async (entity: Entity) => {
+// TODO: WIP
+export const getAllAvatars = async ({ entities }: { entities: Entity[] }) => {
+    const avatars = []
+    for (const entity of entities) {
+        avatars.push(getAvatar({ entity }))
+    }
+    return avatars
+}
+
+export const getAvatar = async ({ entity }: { entity: Entity }) => {
     const avatarUrl = `${process.env.ASSETS_URL}/avatars/${entity.id}.jpg`
     const imageExists = await checkImageExists(avatarUrl)
     if (imageExists) {

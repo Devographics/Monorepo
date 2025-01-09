@@ -7,6 +7,7 @@ import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 import { useWidth } from './helpers'
 import sum from 'lodash/sum'
+import { OrderOptions } from './types'
 
 // Calculate minimum width for a legend item to be readable
 
@@ -18,11 +19,12 @@ const MIN_WIDTH_PER_CHAR = 8
 const RATIO = 0.7
 
 const getMinToggleWidth = (items: ToggleItemType[]) =>
-    sum(items.map(item => item.label.length * MIN_WIDTH_PER_CHAR)) * RATIO +
+    sum(items.map(item => (item?.label?.length || 0) * MIN_WIDTH_PER_CHAR)) * RATIO +
     items.length * PADDING_PER_ITEM
 
 export type ToggleItemType = {
     label: string
+    labelKey: string
     id: string | number | null
     isEnabled: boolean
     className?: string
@@ -30,16 +32,25 @@ export type ToggleItemType = {
     gradient?: string[]
 }
 
-type ToggleProps = {
-    labelId: string
+type ToggleProps<ValueType> = {
+    alwaysExpand?: boolean
+    labelId?: string
     items: ToggleItemType[]
-    handleSelect: (id: string | number) => void
+    handleSelect?: (id: ValueType) => void
     hasDefault?: boolean
+    sortOrder?: OrderOptions
 }
 
-const DEFAULT_SORT = 'default'
+export const DEFAULT_SORT = 'default'
 
-export const Toggle = ({ labelId, items, handleSelect, hasDefault = false }: ToggleProps) => {
+export const Toggle = <ValueType,>({
+    sortOrder,
+    alwaysExpand = false,
+    labelId,
+    items,
+    handleSelect,
+    hasDefault = false
+}: ToggleProps<ValueType>) => {
     const [useDropdown, setUseDropdown] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
     const currentWidth = useWidth(ref)
@@ -55,32 +66,35 @@ export const Toggle = ({ labelId, items, handleSelect, hasDefault = false }: Tog
         }
     }, [currentWidth]) // The empty dependency array makes sure this runs only once after component mount
 
+    const className = `chart-toggle chart-toggle-order-${sortOrder}`
     return (
-        <div className="chart-toggle">
-            <h4 className="chart-toggle-heading">
-                <T k={labelId} />
-            </h4>
+        <div className={className}>
+            {labelId && (
+                <h4 className="chart-toggle-heading">
+                    <T k={labelId} />
+                </h4>
+            )}
             <div
                 className={`chart-toggle-control chart-toggle-control-${
                     useDropdown ? 'dropdown' : 'buttongroup'
                 }`}
                 ref={ref}
             >
-                {useDropdown ? (
-                    <Dropdown {...commonProps} />
+                {!alwaysExpand && useDropdown ? (
+                    <Dropdown<ValueType> {...commonProps} />
                 ) : (
-                    <SegmentedControl {...commonProps} />
+                    <SegmentedControl<ValueType> {...commonProps} />
                 )}
             </div>
         </div>
     )
 }
 
-const Dropdown = ({
+const Dropdown = <ValueType,>({
     handleSelect,
     hasDefault,
     items
-}: Pick<ToggleProps, 'handleSelect' | 'hasDefault' | 'items'>) => {
+}: Pick<ToggleProps<ValueType>, 'handleSelect' | 'hasDefault' | 'items'>) => {
     const { getString } = useI18n()
 
     return (
@@ -101,14 +115,18 @@ const Dropdown = ({
 }
 
 const DropdownItem = ({ item }: { item: ToggleItemType }) => {
-    const { label, id } = item
-    return <option value={id}>{label}</option>
+    const { label, id, labelKey } = item
+    return (
+        <option value={id} data-labelKey={labelKey}>
+            {label}
+        </option>
+    )
 }
 
-const SegmentedControl = ({
+const SegmentedControl = <ValueType,>({
     handleSelect,
     items
-}: Pick<ToggleProps, 'handleSelect' | 'hasDefault' | 'items'>) => {
+}: Pick<ToggleProps<ValueType>, 'handleSelect' | 'hasDefault' | 'items'>) => {
     return (
         <ButtonGroup className="chart-toggle-buttongroup chart-toggle-items">
             {items.map(item => (
@@ -125,7 +143,7 @@ const SegmentedControlItem = ({
     item: ToggleItemType
     handleSelect: ToggleProps['handleSelect']
 }) => {
-    const { label, id, isEnabled, gradient, className, tooltip } = item
+    const { label, labelKey, id, isEnabled, gradient, className, tooltip } = item
     const ref = useRef<HTMLDivElement>(null)
 
     const component = (
@@ -141,7 +159,9 @@ const SegmentedControlItem = ({
             ref={ref}
         >
             {gradient && <ItemColor gradient={gradient} />}
-            <span className="legend-item-label">{label}</span>
+            <span className="legend-item-label" data-labelKey={labelKey}>
+                {label}
+            </span>
             {/* <CellLabel label={shortLabel} /> */}
             <span className="order-asc">↑</span>
             <span className="order-desc">↓</span>

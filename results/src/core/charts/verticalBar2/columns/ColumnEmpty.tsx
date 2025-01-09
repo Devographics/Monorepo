@@ -1,7 +1,9 @@
-import { EmptyColumnProps } from '../types'
+import { BasicPointData, EmptyColumnProps } from '../types'
 import React from 'react'
 import { ColumnWrapper } from './ColumnWrapper'
 
-export const ColumnEmpty = (props: EmptyColumnProps) => {
+export const ColumnEmpty = <PointData extends BasicPointData>(
+    props: EmptyColumnProps<PointData>
+) => {
     return <ColumnWrapper {...props} />
 }

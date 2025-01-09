@@ -33,11 +33,13 @@ export interface EntityResolvedFields {
 
 export interface Entity extends EntityResolvedFields {
     id: string
+    idAliases?: string[]
     parentId?: string
     belongsTo?: string
     name: string
     nameClean?: string
     nameHtml?: string
+    alias?: string
     category?: string
     description?: string
     descriptionClean?: string

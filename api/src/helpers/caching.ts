@@ -75,7 +75,7 @@ const getEnableCache = (
  */
 export const useCache = async <F extends DynamicComputeCall>(options: {
     func: F
-    context: RequestContext
+    context?: RequestContext
     funcOptions?: any
     // args?: ArgumentTypes<F>
     key?: string
@@ -83,7 +83,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
 }): Promise<ResultType<F>> => {
     const startedAt = new Date()
     const { func, context, key, funcOptions = {} } = options
-    const { redisClient, isDebug = false } = context
+    const { redisClient, isDebug = false } = context || {}
     const { disableCache, cacheType } = appSettings
     let value, verb
 
@@ -94,7 +94,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     // always pass context to cached function just in case it's needed
     const funcOptionsWithContext = { ...funcOptions, context }
 
-    const enableCache = getEnableCache(context, appSettings, options.enableCache)
+    const enableCache = context && getEnableCache(context, appSettings, options.enableCache)
 
     const settings = { isDebug, disableCache, cacheType }
     const settingsLogs = JSON.stringify(settings)
@@ -105,16 +105,17 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
             verb = '✅ Cache hit'
             value = existingCachedValue
         } else {
-            verb = '⭕ Cache miss (cache updated)'
+            verb = '⭕ Cache miss'
             value = await func(funcOptionsWithContext)
             if (value) {
+                verb += ' (cache updated)'
                 await setCache(key, JSON.stringify(value), context)
             }
         }
     } else {
         verb = '🟤 Cache bypass (cache updated)'
         value = await func(funcOptionsWithContext)
-        if (value) {
+        if (context && value) {
             await setCache(key, JSON.stringify(value), context)
         }
     }

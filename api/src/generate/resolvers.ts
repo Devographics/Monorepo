@@ -8,7 +8,7 @@ import {
     ResolverParent,
     IncludeEnum
 } from '../types/surveys'
-import { getPath, getEditionById, getSectionType } from './helpers'
+import { getPath, getEditionById, getSectionType, getGeneralMetadata } from './helpers'
 import { genericComputeFunction, getGenericCacheKey } from '../compute'
 import { useCache } from '../helpers/caching'
 import { getRawCommentsWithCache } from '../compute/comments'
@@ -22,11 +22,12 @@ import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
 import { localesResolvers } from '../resolvers/locales'
 import { subFields } from './subfields'
-import { ResponsesParameters, ResultsSubFieldEnum } from '@devographics/types'
+import { Creator, ResponsesParameters, ResultsSubFieldEnum } from '@devographics/types'
 import { loadOrGetParsedSurveys } from '../load/surveys'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
 import StringOrFloatOrArray from '../graphql/string_or_array'
+import { getCardinalities } from '../compute/cardinalities'
 
 export const generateResolvers = async ({
     surveys,
@@ -56,6 +57,8 @@ export const generateResolvers = async ({
             ...entitiesResolvers,
             ...localesResolvers
         },
+        GeneralMetadata: generalMetadataResolverMap,
+        Creator: creatorResolverMap,
         Surveys: surveysFieldsResolvers,
         ItemComments: commentsResolverMap,
         CreditItem: creditResolverMap,
@@ -106,7 +109,8 @@ export const generateResolvers = async ({
                                 getSectionResolver({
                                     survey,
                                     edition,
-                                    section
+                                    section,
+                                    questionObjects
                                 })
                             ]
                         }) || []
@@ -167,7 +171,7 @@ export const generateResolvers = async ({
 Always get a fresh copy of `surveys` from memory
 
 */
-const getGlobalMetadataResolver = (): ResolverType => async (parent, args) => {
+const getGlobalMetadataResolver = (): ResolverType => async (parent, args, context) => {
     console.log('// getGlobalMetadataResolver')
     const { surveyId, editionId } = args
     const isDevOrTest = !!(
@@ -185,7 +189,25 @@ const getGlobalMetadataResolver = (): ResolverType => async (parent, args) => {
     } else if (surveyId) {
         filteredSurveys = surveys.filter(s => s.id === surveyId)
     }
-    return { surveys: filteredSurveys }
+    return { surveys: filteredSurveys, general: {} }
+}
+
+export const generalMetadataResolverMap = {
+    creators: async (parent_: any, context: RequestContext) => {
+        console.log('// creators resolver')
+
+        const general = getGeneralMetadata({ context })
+        return general.creators
+    }
+}
+
+export const creatorResolverMap = {
+    entity: async (parent: Creator, {}, context: RequestContext) => {
+        console.log('// creators entity resolver')
+        const { id } = parent
+        const entity = await getEntity({ id, context })
+        return entity
+    }
 }
 
 const getSurveyResolver =
@@ -242,11 +264,13 @@ const getSectionResolver =
     ({
         survey,
         edition,
-        section
+        section,
+        questionObjects
     }: {
         survey: SurveyApiObject
         edition: EditionApiObject
         section: SectionApiObject
+        questionObjects: QuestionApiObject[]
     }): ResolverType =>
     async (parent, args, context, info) => {
         console.log('// section resolver')
@@ -258,9 +282,18 @@ const getSectionResolver =
             type,
             context
         })
+        const _cardinalities = await getCardinalities({
+            survey,
+            edition,
+            section,
+            type,
+            questionObjects,
+            context
+        })
         return {
             ...section,
-            _items
+            _items,
+            _cardinalities
         }
     }
 

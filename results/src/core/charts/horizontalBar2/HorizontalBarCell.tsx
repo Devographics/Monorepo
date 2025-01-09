@@ -1,12 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Tooltip from 'core/components/Tooltip'
 import { Bucket, FacetBucket } from '@devographics/types'
-import { HorizontalBarChartState, HorizontalBarChartValues } from './types'
+import {
+    HorizontalBarChartState,
+    HorizontalBarChartValues,
+    HorizontalBarViewDefinition
+} from './types'
 import T from 'core/i18n/T'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import { useWidth } from '../common2/helpers'
 import { CellLabel } from '../common2'
+import { getViewDefinition } from './helpers/views'
+import { getQuestionLabel } from '../common2/helpers/labels'
 
 // hide labels for cells under this size
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
@@ -29,7 +35,8 @@ export const Cell = ({
     width,
     offset,
     cellIndex,
-    gradient
+    gradient,
+    viewDefinition
 }: {
     bucket: Bucket | FacetBucket
     chartState: HorizontalBarChartState
@@ -38,13 +45,14 @@ export const Cell = ({
     offset: number
     cellIndex: number
     gradient: string[]
+    viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
 }) => {
     const { ref, isWideEnough: showLabel } = useIsWideEnough()
 
     // const entities = useEntities()
     // const entity = entities.find(e => e.id === bucket.id)
     const { question, facetQuestion } = chartValues
-    const { sort, viewDefinition } = chartState
+    const { sort, view } = chartState
     const { getValue, formatValue } = viewDefinition
     const { getString } = useI18n()
 
@@ -58,9 +66,18 @@ export const Cell = ({
         '--color2': gradient[1]
     }
 
-    const { key, label } = getItemLabel({
+    let facetQuestionLabel
+    if (facetQuestion) {
+        const facetQuestionLabelObject = getQuestionLabel({
+            getString,
+            question: facetQuestion
+        })
+        facetQuestionLabel = facetQuestionLabelObject.label
+    }
+
+    const { key: key2, label: cellLabel } = getItemLabel({
         getString,
-        i18nNamespace: facetQuestion?.id || question.id,
+        i18nNamespace: facetQuestion?.id || question?.id,
         id,
         entity
     })
@@ -70,6 +87,7 @@ export const Cell = ({
     const isActiveSort = sort === id
     const className = `chart-cell horizontal-chart-cell ${isActiveSort ? 'active-sort' : ''}`
 
+    const label = facetQuestionLabel ? `${facetQuestionLabel}: ${cellLabel}` : cellLabel
     return (
         <Tooltip
             trigger={
@@ -79,7 +97,7 @@ export const Cell = ({
             }
             contents={
                 <div>
-                    {label}: <strong>{v}</strong>{' '}
+                    [{label}] <strong>{v}</strong>{' '}
                     <T k="charts.facet_respondents" values={{ count }} />
                 </div>
             }

@@ -6,7 +6,11 @@ import { getUUID } from "~/lib/email";
 import { NormalizationParams, StepFunction } from "../types";
 import clone from "lodash/clone";
 import { emptyValues } from "../helpers/getSelectors";
-import type { GenericResponseDocument } from "@devographics/types";
+import { GenericResponseDocument, FeaturesOptions } from "@devographics/types";
+import {
+  PAST_PARTICIPATIONS,
+  FUTURE_PARTICIPATIONS,
+} from "@devographics/constants";
 
 // const replaceAll = function (target, search, replacement) {
 //   return target.replace(new RegExp(search, "g"), replacement);
@@ -49,6 +53,7 @@ export const getFieldsToCopy = (
   ["surveyId"],
   ["editionId"],
   ["createdAt"],
+  ["createdAtDate"],
   ["updatedAt"],
   ["finishedAt"],
   ["completion", "user_info.completion"],
@@ -73,7 +78,9 @@ export const getFieldsToCopy = (
   // @ts-ignore Legacy
   ["common__user_info__authmode", "user_info.authmode"],
   // @ts-ignore Legacy
-  ["previous_participations", "user_info.previous_participations"],
+  [PAST_PARTICIPATIONS, `user_info.${PAST_PARTICIPATIONS}`],
+  // @ts-ignore Legacy
+  [FUTURE_PARTICIPATIONS, `user_info.${FUTURE_PARTICIPATIONS}`],
 ];
 
 export const copyFields: StepFunction = async ({
@@ -256,3 +263,37 @@ export const handleLocale: StepFunction = async ({
 //     //set(normResp, "user_info.hash", createHash(response.email));
 //   }
 // };
+
+export const calculateCardinalities: StepFunction = async ({
+  normResp: normResp_,
+  response,
+  survey,
+  edition,
+}: NormalizationParams) => {
+  const _cardinalities = {};
+  const normResp = clone(normResp_);
+  const toolsSections = edition.sections.filter(
+    (s) => s.template && ["tool", "toolv3"].includes(s.template)
+  );
+  for (const section of toolsSections) {
+    let heardCount = 0,
+      usedCount = 0;
+
+    for (const question of section.questions) {
+      const experience = normResp?.tools?.[question.id]?.experience;
+      if (experience === FeaturesOptions.HEARD) {
+        heardCount++;
+      }
+      if (experience === FeaturesOptions.USED) {
+        usedCount++;
+      }
+    }
+    _cardinalities[section.id] = {
+      [FeaturesOptions.HEARD]: heardCount,
+      [FeaturesOptions.USED]: usedCount,
+    };
+  }
+  normResp._cardinalities = _cardinalities;
+
+  return normResp;
+};

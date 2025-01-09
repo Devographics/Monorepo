@@ -156,7 +156,9 @@ export const generateFiltersTypeObjects = ({
     surveys: SurveyApiObject[]
     questionObjects: QuestionApiObject[]
 }) => {
-    return surveys.map(survey => generateFiltersType({ survey, questionObjects }))
+    return surveys
+        .map(survey => generateFiltersType({ survey, questionObjects }))
+        .filter(output => !!output)
 }
 
 export const generateFacetsTypeObjects = ({

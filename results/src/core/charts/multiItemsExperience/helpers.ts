@@ -312,11 +312,7 @@ export const useChartState = (defaultState?: {
     )
     const [facetId, setFacetId] = useState<MultiItemsChartState['facetId']>('sentiment')
 
-    // not used but expected by Rows.tsx
-    const viewDefinition = {}
-
     const chartState: MultiItemsChartState = {
-        viewDefinition,
         facetId,
         setFacetId,
         grouping,

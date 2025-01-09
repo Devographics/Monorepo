@@ -381,6 +381,7 @@
       - surveyform
       - results
       - results-astro
+      - homepage
 
 - id: PORT
   optional: true

@@ -61,49 +61,45 @@
 
       - id: country
         template: multiple_options2
-        parameters: { limit: 20 }
-        takeaway: >
-            While **16%** of respondents came from the U.S., we also had strong representation from the JavaScript community in Germany, France, and the U.K.,(**19% combined**).
+        parameters: { limit: 40 }
+        chartOptions:
+            limit: 20
+        queryOptions:
+            addBucketsEntities: false
         variants:
             - template: vs_salary
-              parameters: { cutoff: 100, limit: 20, sort: { property: medianByFacet, order: desc } }
-
-      - id: locale
-        template: multiple_options2
-        parameters: { cutoff: 20 }
-        takeaway: >
-            The language respondents selected to fill out the survey.
-        queryOptions:
-            addQuestionComments: false
+              parameters: { limit: 40, sort: { property: medianByFacet, order: desc } }
+              chartOptions:
+                  limit: 20
 
       - id: hint_hint
         template: hint
 
-      - id: completion_stats
-        template: multiple_options2
-        takeaway: >
-            The proportion of the survey filled out by respondents.
-        queryOptions:
-            addQuestionComments: false
-
       - id: age
         template: multiple_options2
-        takeaway: >
-            Survey respondents were on average **31.7** years old, slightly lower than the [State of HTML](https://2022.stateofjs.com) (**33.6**) and [State of CSS](https://2023.stateofcss.com) (**33.5**) surveys.
         variants:
             - template: vs_salary
+            - template: vs_gender
+            - id: age_vs_disability
+              fieldId: age
+              blockType: HorizontalBarBlock2
+              hasData: true
+              parameters:
+                  showNoAnswer: true
+                  cutoff: 10
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: disability_status
 
       - id: years_of_experience
         template: multiple_options2
-        takeaway: >
-            Respondents had on average **9.3** years of web development experience.
         variants:
             - template: vs_salary
+            - template: vs_gender
 
       - id: company_size
         template: multiple_options2
-        takeaway: >
-            Respondents tended to work for mostly mid-sized organizations, with a median company size of **75** employees.
         variants:
             - template: vs_salary
 
@@ -112,20 +108,78 @@
 
       - id: yearly_salary
         template: multiple_options2
-        takeaway: >
-            Respondents had a median income of USD $75,000, noticeably higher than the **$59,970** figure reported by the [Stack Overflow Developer Survey](https://survey.stackoverflow.co/2023/#section-salary-salary-by-developer-type).
+        variants:
+            - id: yearly_salary_us_vs_world
+              fieldId: yearly_salary
+              tabId: tabs.usa_vs_the_world
+              blockType: HorizontalBarBlock2
+              hasData: true
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: in
+                              value: [USA]
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value: [USA]
 
       - id: job_title
         template: multiple_options2_freeform
-        takeaway: >
-            Respondents tended to work for mostly mid-sized organizations, with a median company size of **75** employees.
         variants:
             - template: vs_salary
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_age
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet, order: asc }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_years_of_experience
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet, order: asc }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_gender
+              parameters:
+                  limit: 20
+                  cutoff: 100
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+
+      - id: tokyodev_resources
+        items: [td-article]
+        template: recommended_resources
 
       - id: higher_education_degree
         template: multiple_options2
-        takeaway: >
-            Having a higher-education degree did not translate in meaningful differences in yearly income.
         variants:
             - template: vs_salary
 
@@ -135,13 +189,15 @@
         #     Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
         variants:
             - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
             - id: country_vs_gender
               fieldId: country
               tabId: tabs.by_country
               template: multiple_options2
               parameters:
                   showNoAnswer: true
-                  limit: 15
+                  limit: 20
               filtersState:
                   options:
                       mode: facet
@@ -156,20 +212,36 @@
         takeaway: >
             The survey's non-white population tended to be younger and have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
         variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
+            - template: vs_gender
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
             - template: vs_years_of_experience
+              parameters:
+                  sort: { property: medianByFacet }
             - template: vs_age
+              parameters:
+                  sort: { property: medianByFacet }
 
       - id: disability_status
         template: multiple_options2_combined
+        variants:
+            - template: vs_age
+              parameters:
+                  sort: { property: medianByFacet, order: asc }
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
 
-      - id: source
-        template: multiple_options2_freeform
-        parameters:
-            limit: 20
-        queryOptions:
-            addQuestionComments: false
-
-      - id: user_info_resources
+      - id: user_info_resources_2
         items: [fm-javascript-first-steps, fm-getting-a-job-v2]
         template: recommended_resources
 
@@ -210,10 +282,10 @@
         template: multiple_options2
         i18nNamespace: features
 
-      - id: dax_raad
+      - id: jack_herrington
         template: picks
         variables:
-            url: https://replicache.dev/
+            url: https://tanstack.com/
 
       - id: browser_api_features
         template: multiple_options2
@@ -227,10 +299,10 @@
         template: multiple_options2_freeform
         i18nNamespace: features
 
-      - id: arisa_fukuzaki
+      - id: josefine_schaefer
         template: picks
         variables:
-            url: https://x.com/dawntraoz
+            url: https://bento.me/arisa-fukuzaki
 
       - id: reading_list
         template: multiple_options2
@@ -244,7 +316,7 @@
             limit: 10
 
       - id: features_resources
-        items: [fm-javascript-quiz, fm-javascript-hard-parts-v2]
+        items: [fm-web-dev-quiz, fm-javascript-hard-parts-v2]
         template: recommended_resources
 
 - id: libraries
@@ -256,16 +328,37 @@
       - id: all_tools_experience
         titleId: tools.all_items.experience
         template: multi_items_experience
+        i18nNamespace: tools
         chartOptions:
             limit: 10
+            categories:
+                [
+                    front_end_frameworks,
+                    meta_frameworks,
+                    testing,
+                    mobile_desktop,
+                    build_tools,
+                    monorepo_tools
+                ]
 
       - id: tools_arrows
         template: tools_arrows
+        i18nNamespace: tools
+        chartOptions:
+            categories:
+                [
+                    front_end_frameworks,
+                    meta_frameworks,
+                    testing,
+                    mobile_desktop,
+                    build_tools,
+                    monorepo_tools
+                ]
 
-      - id: rich_harris
+      - id: cassie_evans
         template: picks
         variables:
-            url: https://www.localfirst.fm/
+            url: https://github.com/workeffortwaste/gsap-video-export?tab=readme-ov-file#page-export
 
       - id: tier_list
         template: tier_list
@@ -278,7 +371,7 @@
       #   template: tools_cardinality_by_user_js
 
       - id: libraries_resources
-        items: [fm-vite, fm-design-systems-v2]
+        items: [fm-enterprise-ui-dev, frontend-system-design]
         template: recommended_resources
 
   children:
@@ -291,24 +384,32 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: front_end_frameworks_experience
-              template: multi_items_experience
-              i18nNamespace: tools
-
-            - id: tool_modal_hint
-              template: hint
-
             - id: front_end_frameworks_others
               template: section_prenormalized_tools
 
             - id: front_end_frameworks_work
               template: multiple_options2
-              i18nNamespace: features
+              i18nNamespace: tools
+              variants:
+                  - template: vs_salary
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: desc }
+                  - template: vs_years_of_experience
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
+                  - template: vs_company_size
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
 
-            - id: emma_bostian
+            - id: tania_rascia
               template: picks
               variables:
-                  url: https://leaddev.com/personal-development/how-build-trust-new-engineering-manager
+                  url: https://cassidoo.co/
+
+            - template: cardinalities
 
             - template: happiness2
 
@@ -325,7 +426,7 @@
               i18nNamespace: tools
 
             - id: front_end_frameworks_resources
-              items: [fm-react, fm-vanilla-js-apps]
+              items: [al-vue-reactivity, ad-self-teach-me]
               template: recommended_resources
 
       - id: meta_frameworks
@@ -337,24 +438,32 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: meta_frameworks_experience
-              template: multi_items_experience
-              i18nNamespace: tools
-
-            - id: tool_modal_hint
-              template: hint
-
             - id: meta_frameworks_others
               template: section_prenormalized_tools
 
             - id: meta_frameworks_work
               template: multiple_options2
-              i18nNamespace: features
+              i18nNamespace: tools
+              variants:
+                  - template: vs_salary
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: desc }
+                  - template: vs_years_of_experience
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
+                  - template: vs_company_size
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
 
-            - id: fireship
+            - id: salma_alam_naylor
               template: picks
               variables:
-                  url: https://pocketbase.io
+                  url: https://thebreedling.com/
+
+            - template: cardinalities
 
             - template: happiness2
 
@@ -380,24 +489,32 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: testing_experience
-              template: multi_items_experience
-              i18nNamespace: tools
-
-            - id: tool_modal_hint
-              template: hint
-
             - id: testing_others
               template: section_prenormalized_tools
 
             - id: testing_work
               template: multiple_options2
-              i18nNamespace: features
+              i18nNamespace: tools
+              variants:
+                  - template: vs_salary
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: desc }
+                  - template: vs_years_of_experience
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
+                  - template: vs_company_size
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
 
-            - id: quarkstuff
+            - id: shaundai_person
               template: picks
               variables:
-                  url: https://unjs.io/
+                  url: https://www.youtube.com/@shrutikapoor08
+
+            - template: cardinalities
 
             - template: happiness2
 
@@ -411,7 +528,7 @@
               i18nNamespace: tools
 
             - id: testing_resources
-              items: [fm-enterprise-ui-dev, fm-web-app-testing]
+              items: [fm-testing, fm-web-app-testing]
               template: recommended_resources
 
       - id: mobile_desktop
@@ -423,24 +540,32 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: mobile_desktop_experience
-              template: multi_items_experience
-              i18nNamespace: tools
-
-            - id: tool_modal_hint
-              template: hint
-
             - id: mobile_desktop_others
               template: section_prenormalized_tools
 
             - id: mobile_desktop_work
               template: multiple_options2
-              i18nNamespace: features
+              i18nNamespace: tools
+              variants:
+                  - template: vs_salary
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: desc }
+                  - template: vs_years_of_experience
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
+                  - template: vs_company_size
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
 
-            - id: david_khourshid
+            - id: dominik_dorfmeister
               template: picks
               variables:
-                  url: https://tldraw.com
+                  url: https://knip.dev/
+
+            - template: cardinalities
 
             - template: happiness2
 
@@ -454,7 +579,7 @@
               i18nNamespace: tools
 
             - id: mobile_desktop_resources
-              items: [fm-react-native-v2, fm-electron-v3]
+              items: [fm-react-native-v3, fm-electron-v3]
               template: recommended_resources
 
       - id: build_tools
@@ -466,24 +591,32 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: build_tools_experience
-              template: multi_items_experience
-              i18nNamespace: tools
-
-            - id: tool_modal_hint
-              template: hint
-
             - id: build_tools_others
               template: section_prenormalized_tools
 
             - id: build_tools_work
               template: multiple_options2
-              i18nNamespace: features
+              i18nNamespace: tools
+              variants:
+                  - template: vs_salary
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: desc }
+                  - template: vs_years_of_experience
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
+                  - template: vs_company_size
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
 
             - id: sacha_greif
               template: picks
               variables:
-                  url: https://auto-animate.formkit.com/
+                  url: https://bsky.app/
+
+            - template: cardinalities
 
             - template: happiness2
 
@@ -509,24 +642,32 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
-            - id: monorepo_tools_experience
-              template: multi_items_experience
-              i18nNamespace: tools
-
-            - id: tool_modal_hint
-              template: hint
-
             - id: monorepo_tools_others
               template: section_prenormalized_tools
 
             - id: monorepo_tools_work
               template: multiple_options2
-              i18nNamespace: features
+              i18nNamespace: tools
+              variants:
+                  - template: vs_salary
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: desc }
+                  - template: vs_years_of_experience
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
+                  - template: vs_company_size
+                    i18nNamespace: tools
+                    parameters:
+                        sort: { property: medianByFacet, order: asc }
 
-            - id: german_jablonski
+            - id: sebastien_lorber
               template: picks
               variables:
-                  url: https://lexical.dev/
+                  url: https://rspack.dev/
+
+            - template: cardinalities
 
             - template: happiness2
 
@@ -552,10 +693,10 @@
       - id: libraries
         template: multiple_options2_combined
 
-      - id: alina_listunova
-        template: picks
-        variables:
-            url: https://marvinh.dev/blog/speeding-up-javascript-ecosystem/
+      # - id: alina_listunova
+      #   template: picks
+      #   variables:
+      #       url: https://marvinh.dev/blog/speeding-up-javascript-ecosystem/
 
       - id: graphics_animation
         template: multiple_options2_combined
@@ -569,10 +710,10 @@
       - id: edge_runtimes
         template: multiple_options2_combined
 
-      - id: augustin_mauroy
-        template: picks
-        variables:
-            url: https://x.com/wunderacle
+      # - id: augustin_mauroy
+      #   template: picks
+      #   variables:
+      #       url: https://x.com/wunderacle
 
       - id: non_js_languages
         template: multiple_options2_combined
@@ -586,10 +727,10 @@
       - id: sharing_hint
         template: hint
 
-      - id: shadowingszy
-        template: picks
-        variables:
-            url: https://www.rspack.dev/
+      # - id: shadowingszy
+      #   template: picks
+      #   variables:
+      #       url: https://www.rspack.dev/
 
       - id: tools_others_resources
         items: [fm-node-js, fm-fullstack-v3]
@@ -612,24 +753,33 @@
       - id: usage_type
         template: multiple_options2
 
-      - id: kilian_valkhof
-        template: picks
-        variables:
-            url: https://www.electronjs.org/
+      # - id: kilian_valkhof
+      #   template: picks
+      #   variables:
+      #       url: https://www.electronjs.org/
 
       - id: what_do_you_use_js_for
         template: multiple_options2_combined
 
       - id: industry_sector
         template: multiple_options2_combined
+        variants:
+            - template: vs_salary
+              queryOptions:
+                  subField: combined
+              parameters:
+                  limit: 20
+                  sort: { property: medianByFacet, order: desc }
+              chartOptions:
+                  limit: 10
 
       - id: js_app_patterns
         template: multiple_options2_combined
 
-      - id: gustavo_vasquez
-        template: picks
-        variables:
-            url: https://medium.com/@devgustavovasquez/the-future-of-web-development-embracing-interoperable-runtimes-bd2006e9b9d7
+      # - id: gustavo_vasquez
+      #   template: picks
+      #   variables:
+      #       url: https://medium.com/@devgustavovasquez/the-future-of-web-development-embracing-interoperable-runtimes-bd2006e9b9d7
 
       - id: top_js_pain_points
         template: multiple_options2_combined
@@ -663,22 +813,22 @@
       - template: page_introduction
 
       - id: courses
-        template: multiple_options2_freeform
+        template: multiple_options2_combined
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
 
-      - id: rexhent
-        template: picks
-        variables:
-            url: https://nuxt.com/
+      # - id: rexhent
+      #   template: picks
+      #   variables:
+      #       url: https://nuxt.com/
 
       - id: newsletters
-        template: multiple_options2_freeform
+        template: multiple_options2_combined
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
 
       - id: podcasts
-        template: multiple_options2_freeform
+        template: multiple_options2_combined
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
 
@@ -689,10 +839,10 @@
         variants:
             - template: hastags_spanish
 
-      - id: martin_heidegger
-        template: picks
-        variables:
-            url: https://www.npmjs.com/package/tess2
+      # - id: martin_heidegger
+      #   template: picks
+      #   variables:
+      #       url: https://www.npmjs.com/package/tess2
 
       - id: people
         template: multiple_options2_freeform
@@ -705,7 +855,7 @@
         template: multiple_options2_combined
 
       - id: resources_resources
-        items: [fm-algorithms, fm-primeagen]
+        items: [fm-algorithms, fm-podcast]
         template: recommended_resources
 
 - id: awards
@@ -716,7 +866,7 @@
       - id: awards
         template: awards
         variables:
-            entities: '"vite","esbuild","vitest","playwright","bun","astro","ember","react","nextjs","storybook","jest"'
+            entities: '"vite", "vitest", "esbuild", "astro", "rolldown","analog", "nitro", "valibot", "angular", "storybook","webpack","react","vuejs"'
         awards:
             # - id: feature_adoption_delta_award
             #   template: award
@@ -732,41 +882,41 @@
               template: award
               awards:
                   - id: vite
-                    value: '+25%'
-                  - id: esbuild
-                    value: '+21%'
+                    value: '+30%'
                   - id: vitest
-                    value: '+20%'
+                    value: '+26%'
+                  - id: esbuild
+                    value: '+19%'
 
             - id: tool_satisfaction_award
               template: award
               awards:
+                  - id: vitest
+                    value: '98%'
                   - id: vite
                     value: '98%'
-                  - id: vitest
-                    value: '96%'
-                  - id: playwright
-                    value: '95%'
+                  - id: astro
+                    value: '94%'
 
             - id: tool_interest_award
               template: award
               awards:
+                  - id: rolldown
+                    value: '86%'
                   - id: vitest
-                    value: '79%'
+                    value: '82%'
                   - id: vite
-                    value: '77%'
-                  - id: playwright
-                    value: '76%'
+                    value: '82%'
 
             - id: most_write_ins_award
               template: award
               awards:
-                  - id: bun
-                    value: '353'
-                  - id: astro
-                    value: '299'
-                  - id: ember
-                    value: '81'
+                  - id: analog
+                    value: '108'
+                  - id: nitro
+                    value: '107'
+                  - id: valibot
+                    value: '98'
 
             # - id: most_commented_feature_award
             #   template: award
@@ -781,41 +931,51 @@
             - id: most_commented_tool_award
               template: award
               awards:
-                  - id: react
-                    value: 119
-                  - id: nextjs
-                    value: 92
+                  - id: angular
+                    value: 41
                   - id: storybook
-                    value: 72
+                    value: 39
+                  - id: webpack
+                    value: 35
 
             - id: most_loved_tool_award
               template: award
               awards:
                   - id: vite
-                    value: '88.7%'
-                  - id: jest
-                    value: '73.2%'
+                    value: '56%'
                   - id: react
-                    value: '71.2%'
+                    value: '46.7%'
+                  - id: vuejs
+                    value: '42.3%'
 
       # - id: awards_resources
       #   items: [road-to-react]
       #   template: recommended_resources
 
+      - id: awards_resources
+        items: [fm-react, fm-vanilla-js-apps]
+        template: recommended_resources
+
 - id: conclusion
   path: /conclusion
   blocks:
-      - id: conclusion_cassidy
+      - id: conclusion_fernando
         template: conclusion
         variables:
-            author: cassidy_williams
-            entities: '"cassidy_williams"'
+            author: fernando_herrera
+            entities: '"fernando_herrera"'
 
-      - id: conclusion_theo
+      - id: conclusion_shaundai
         template: conclusion
         variables:
-            author: theo_browne
-            entities: '"theo_browne"'
+            author: shaundai_person
+            entities: '"shaundai_person"'
+
+      # - id: conclusion_theo
+      #   template: conclusion
+      #   variables:
+      #       author: theo_browne
+      #       entities: '"theo_browne"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock
@@ -824,6 +984,136 @@
 
 # note: other pages need to be included in the sitemap too so they can get the proper
 # locale passed to them
+
+- id: _user_metadata
+  i18nNamespace: user_metadata
+  path: /metadata
+  blocks:
+      - template: page_introduction
+
+      - id: locale
+        template: multiple_options2
+        defaultView: percentageSurvey
+        parameters: { cutoff: 20 }
+        queryOptions:
+            addQuestionComments: false
+
+      - id: completion_stats
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: authmode
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: device
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: browser
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      # - id: version
+      #   template: multiple_options2
+      #   queryOptions:
+      #       addQuestionComments: false
+
+      - id: os
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: past_surveys
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+            addBucketsEntities: true
+        parameters:
+            showNoAnswer: true
+
+      - id: past_same_survey_count
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+        parameters:
+            showNoAnswer: true
+
+      - id: created_at_date
+        template: multiple_options2
+        blockType: TimeSeriesByDateBlock
+        defaultView: countBar
+        parameters:
+            showNoAnswer: false
+            cutoff: 10
+            sort: { order: asc, property: id }
+        queryOptions:
+            addQuestionComments: false
+        variants:
+            - id: created_at_date_by_source
+              fieldId: created_at_date
+              template: multiple_options2
+              blockType: TimeSeriesByDateBlock
+              defaultView: count
+              parameters:
+                  showNoAnswer: false
+                  cutoff: 10
+                  sort: { order: asc, property: id }
+                  facetLimit: 3
+                  enableAddOverallBucket: false
+                  mergeOtherBuckets: true
+              queryOptions:
+                  addBucketsEntities: true
+                  addQuestionComments: false
+              filtersState:
+                  facet:
+                      sectionId: user_metadata
+                      id: source
+
+      - id: source
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        parameters:
+            limit: 20
+        queryOptions:
+            addQuestionComments: false
+        variants:
+            - id: source_outreach
+              fieldId: source
+              tabId: tabs.outreach
+              template: multiple_options2_freeform
+              parameters:
+                  limit: 20
+                  cutoff: 1
+              queryOptions:
+                  addQuestionComments: false
+              filtersState:
+                  # note: not enough data to make it possible to enable this
+                  # facet:
+                  #     sectionId: user_info
+                  #     id: gender
+                  bucketsFilter:
+                      in:
+                          - shruti_kapoor
+                          - afor_digital
+                          - stephanie_walter
+                          - self_teach_me
+                          - black_girls_code
+                          - diversify_tech
+                          - codebar
+                          - black_tech_pipeline
+                          - referral_5n0w
 
 - id: about
   path: /about

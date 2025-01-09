@@ -81,8 +81,8 @@ export const TabsWrapper = ({
     const regularVariants = block.variants
 
     return (
-        <Wrapper className="tabs-wrapper" withMargin={withMargin}>
-            <BlockHeaderTop_>
+        <Wrapper className={`tabs-wrapper tabs-wrapper-${block.id}`} withMargin={withMargin}>
+            <BlockHeaderTop_ className="block-header-top">
                 <BlockTitle block={firstBlockVariant} />
                 {/* <BlockDescriptionContents block={firstBlockVariant} /> */}
                 <BlockTakeaway block={firstBlockVariant} />

@@ -77,14 +77,16 @@ export default async function Page({ params }) {
       <table className="questions-list">
         <thead>
           <tr>
+            <th></th>
             <th>Question</th>
             <th colSpan={99}>Normalization Progress</th>
           </tr>
         </thead>
         <tbody>
-          {questions.map((question) => (
+          {questions.map((question, i) => (
             <Question
               key={question.id}
+              index={i}
               survey={survey}
               edition={edition}
               question={question}
@@ -124,11 +126,13 @@ const hasLowProgress = (stats) =>
   stats.percentage < 75 && stats.totalCount - stats.normalizedCount > 200;
 
 const Question = ({
+  index,
   survey,
   edition,
   question,
   normalizationPercentages,
 }: {
+  index: number;
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionMetadata;
@@ -137,6 +141,7 @@ const Question = ({
   const stats = normalizationPercentages?.[question.id];
   return (
     <tr>
+      <th>{index + 1}.</th>
       <th>
         <Link
           href={routes.admin.normalization.href({

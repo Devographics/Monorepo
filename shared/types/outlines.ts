@@ -9,6 +9,8 @@ export interface SurveyConfig {
     domain: string
     hashtag: string
 
+    isDemo?: boolean
+
     responsesCollectionName?: string
     normalizedCollectionName?: string
 
@@ -40,6 +42,8 @@ export type Edition = {
     // TODO: should these be strings or dates?
     startedAt: string
     endedAt: string
+    feedbackAt: string
+    releasedAt: string
     // TODO: maybe we should use a string here, so we can have "Summer 2023" instead of "2023"
     // it's never really used as a number in the code
     year: number

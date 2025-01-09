@@ -1,6 +1,6 @@
 import React from 'react'
 import { RowStacked } from '../rows/RowStacked'
-import { HorizontalBarViewDefinition } from '../types'
+import { HorizontalBarChartState, HorizontalBarViewDefinition } from '../types'
 import { removeNoAnswer, removeOtherAnswers, removeOverLimit } from '../helpers/steps'
 import { BucketUnits, FacetBucket } from '@devographics/types'
 import { getCellDimensions, getRowOffset } from '../helpers/dimensions'
@@ -13,7 +13,7 @@ import { formatPercentage } from 'core/charts/common2/helpers/format'
 
 const getValue = (facetBucket: FacetBucket) => facetBucket[BucketUnits.PERCENTAGE_BUCKET] || 0
 
-export const PercentageBucket: HorizontalBarViewDefinition = {
+export const PercentageBucket: HorizontalBarViewDefinition<HorizontalBarChartState> = {
     getValue,
     formatValue: formatPercentage,
     getTicks: () => [

@@ -4,14 +4,25 @@
         align-items: center;
         gap: 5px;
     }
-    &-button {
-        background: none;
-        border: none;
-        padding: 0;
-    }
 }
 .chart-freeform-answers-heading {
     div {
         display: inline;
+    }
+}
+
+.freeform-answers-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing);
+}
+
+.freeform-answers-filter {
+    display: flex;
+    align-items: center;
+    gap: var(--quarterSpacing);
+    h4 {
+        margin: 0;
     }
 }

@@ -1,0 +1,72 @@
+---
+import T from "./T";
+
+const { creators, locale } = Astro.props;
+import { Debug } from "astro/components";
+---
+
+<section class="creators">
+  <h2><T locale={locale} k="creators.heading" /></h2>
+  <p class="creators-description">
+    <T locale={locale} k="creators.description" />
+  </p>
+  <div class="creators-list">
+    {
+      creators.map(({ id, entity }) => {
+        const { homepageUrl, name, avatar } = entity;
+        return (
+          <div class="creator">
+            <h4 class="creator-name">
+              <a href={homepageUrl} title={name}>
+                {avatar && (
+                  <img class="creator-avatar" src={avatar.url} alt={name} />
+                )}
+                <span>{name}</span>
+              </a>
+            </h4>
+            <p>
+              <T locale={locale} k={`creators.${id}.description`} />
+            </p>
+          </div>
+        );
+      })
+    }
+  </div>
+</section>
+
+<style lang="scss">
+  @use "../stylesheets/_breakpoints.scss";
+
+  .creators {
+    text-align: center;
+    margin-bottom: var(--spacing);
+  }
+  .creators-description {
+    margin-bottom: var(--spacing);
+  }
+  .creators-list {
+    @include breakpoints.medium-large {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing);
+    }
+  }
+  .creator {
+    display: flex;
+    align-items: center;
+    // justify-content: center;
+    flex-direction: column;
+  }
+  .creator-name {
+    a {
+      display: flex;
+      align-items: center;
+      gap: var(--halfspacing);
+    }
+  }
+  .creator-avatar {
+    width: 60px;
+    border-radius: 100%;
+    aspect-ratio: 1/1;
+  }
+</style>

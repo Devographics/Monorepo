@@ -1,9 +1,13 @@
 import {
+    CUTOFF_ANSWERS,
     DEFAULT,
     INSUFFICIENT_DATA,
     NOT_APPLICABLE,
     NO_ANSWER,
-    OVERALL
+    NO_MATCH,
+    OTHER_ANSWERS,
+    OVERALL,
+    OVERLIMIT_ANSWERS
 } from '@devographics/constants'
 import { QuestionMetadata } from '@devographics/types'
 import { useTheme } from 'styled-components'
@@ -16,6 +20,8 @@ export type ColorScale = {
     [key: string]: string[]
 }
 
+const otherBucketIds = [NO_ANSWER, NO_MATCH, CUTOFF_ANSWERS, OTHER_ANSWERS, OVERLIMIT_ANSWERS]
+
 export const useDefaultColorScale = () => {
     const theme = useTheme()
     const { colors } = theme
@@ -24,6 +30,7 @@ export const useDefaultColorScale = () => {
         [NOT_APPLICABLE]: [neutralColor, neutralColor],
         [NO_ANSWER]: [neutralColor, neutralColor],
         [OVERALL]: [neutralColor, neutralColor],
+        [OVERLIMIT_ANSWERS]: [neutralColor, neutralColor],
         [INSUFFICIENT_DATA]: [neutralColor2, neutralColor2]
     } as ColorScale
 }
@@ -46,7 +53,7 @@ export const useColorScale = ({ question }: { question: QuestionMetadata }) => {
                 })
             } else {
                 question.options.forEach((option, index) => {
-                    if (option.id === NOT_APPLICABLE) {
+                    if (otherBucketIds.includes(String(option.id))) {
                         colorScale[option.id] = [neutralColor, neutralColor]
                     } else {
                         const color = theme.colors.distinct[index % theme.colors.distinct.length]

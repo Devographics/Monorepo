@@ -4,9 +4,13 @@ import classNames from 'classnames'
 import { OVERALL } from '@devographics/constants'
 import { Gridlines } from './Gridlines'
 import { RowComponentProps } from '../types'
+import { FreeformIndicator } from 'core/charts/common2'
 
 export const RowWrapper = (
-    props: RowComponentProps & { rowMetadata?: JSX.Element; children: JSX.Element }
+    props: RowComponentProps & {
+        rowMetadata?: JSX.Element
+        children: JSX.Element
+    }
 ) => {
     const {
         chartState,
@@ -18,7 +22,6 @@ export const RowWrapper = (
         rowIndex
     } = props
     const { ticks } = chartValues
-    const { isFreeformData } = bucket
     const isOverallBucket = bucket.id === OVERALL
     const className = classNames(
         'chart-row',

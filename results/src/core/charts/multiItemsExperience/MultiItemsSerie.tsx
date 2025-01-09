@@ -45,7 +45,7 @@ export const MultiItemsSerie = (
         serieIndex: number
     } & CommonProps<MultiItemsChartState>
 ) => {
-    const { serie, chartState, question, variant, block, serieIndex } = props
+    const { serie, chartState, question, variant, block, serieIndex, viewDefinition } = props
     const items = serie.data
 
     if (!items) {
@@ -119,7 +119,8 @@ export const MultiItemsSerie = (
         chartValues,
         block,
         allRowsCellDimensions,
-        allRowOffsets: allRowsOffsets
+        allRowOffsets: allRowsOffsets,
+        viewDefinition
     }
 
     const itemFilters = getItemFilters({ variant, block, serieIndex })

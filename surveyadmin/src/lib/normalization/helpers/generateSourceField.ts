@@ -39,8 +39,8 @@ export async function generateSourceField2({
   // note: ordered from lowest to highest priority
   const sourceFields = [
     "referrer",
-    "sourcetag",
     "how_did_user_find_out_about_the_survey",
+    "sourcetag",
   ];
 
   const sourceFieldPath = `user_info.source`;

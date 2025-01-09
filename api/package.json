@@ -34,7 +34,7 @@
         "sharp": "^0.31.3",
         "strip-markdown": "^5.0.0",
         "twitter-api-v2": "^1.5.2",
-        "web-features": "^2.0.0"
+        "web-features": "^2.13.0"
     },
     "devDependencies": {
         "@devographics/types": "workspace:*",

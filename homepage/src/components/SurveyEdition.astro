@@ -1,147 +1,156 @@
 ---
-
-import T from '@components/T'
-import { statuses } from '@helpers/constants'
-import TakeSurvey from '@components/TakeSurvey'
-import { getLocaleSubset } from '@helpers/translator'
-import { EditionMetadata, ResultsStatusEnum, SurveyMetadata } from '@devographics/types'
-import { getEditionImageUrl } from '@helpers/getEditionImageUrl'
+import T from "@components/T";
+import { statuses } from "@helpers/constants";
+import TakeSurvey from "@components/TakeSurvey";
+import { getLocaleSubset } from "@helpers/translator";
+import {
+  EditionMetadata,
+  ResultsStatusEnum,
+  SurveyMetadata,
+} from "@devographics/types";
+import { getEditionImageUrl } from "@helpers/getEditionImageUrl";
 
 interface Props {
-    survey: SurveyMetadata
-    edition: EditionMetadata
-    locale: any
-    isLast: boolean
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  locale: any;
+  isLast: boolean;
 }
 
-const { survey, edition, locale, isLast } = Astro.props
-const { year, questionsUrl, resultsUrl, imageUrl, status, colors } = edition
-const { background } = colors
-const isOpen = status === statuses.open
-const isPreview = status === statuses.preview
-const mainLink = isOpen || isPreview ? questionsUrl : resultsUrl
+const { survey, edition, locale, isLast } = Astro.props;
+const { year, questionsUrl, resultsUrl, imageUrl, status, colors } = edition;
+const { background } = colors;
+const isOpen = status === statuses.open;
+const isPreview = status === statuses.preview;
+const mainLink = isOpen || isPreview ? questionsUrl : resultsUrl;
 
-let marker
+let marker;
 if (isOpen) {
-    marker = 'homepage.survey_open_now'
+  marker = "homepage.survey_open_now";
 } else if (isPreview) {
-    marker = 'homepage.survey_preview'
+  marker = "homepage.survey_preview";
 } else if (isLast) {
-    marker = 'homepage.most_recent_survey'
+  marker = "homepage.most_recent_survey";
 }
 
-const editionImageUrl = getEditionImageUrl(edition)
+const editionImageUrl = getEditionImageUrl(edition);
 ---
 
-<div class:list={['survey-edition', { 'survey-edition-last': isLast }]}>
-    <div class="survey-edition-card" style={`background: ${background};`}>
-        {
-            marker && (
-                <h4 class="survey-edition-status">
-                    <T locale={locale} k={marker} />
-                </h4>
-            )
-        }
-
-        <h4 class="survey-edition-year">{year}</h4>
-
-        <a class="image-wrapper" href={mainLink}
-            ><span class="image-inner" style={`background-image: url(${editionImageUrl})`}></span>
-        </a>
-    </div>
+<div class:list={["survey-edition", { "survey-edition-last": isLast }]}>
+  <div class="survey-edition-card" style={`background: ${background};`}>
     {
-        isOpen ? (
-            <div class="survey-edition-actions survey-open">
-                <TakeSurvey
-                    client:load
-                    locale={getLocaleSubset(locale, ['homepage.take_survey'])}
-                    url={questionsUrl}
-                />
-            </div>
-        ) : (
-            <div class="survey-edition-actions survey-closed button-group">
-                {questionsUrl && (
-                    <a href={questionsUrl} class="button">
-                        <T
-                            locale={locale}
-                            k={isPreview ? 'homepage.preview_questions' : 'homepage.view_questions'}
-                        />
-                    </a>
-                )}
-                {resultsUrl && edition.resultsStatus === ResultsStatusEnum.PUBLISHED ? (
-                    <a href={resultsUrl} class="button">
-                        <T locale={locale} k="homepage.view_results" />
-                    </a>
-                ) : (
-                    <span class="button">
-                        <T locale={locale} k="homepage.results_coming_soon" />
-                    </span>
-                )}
-            </div>
-        )
+      marker && (
+        <h4 class="survey-edition-status">
+          <T locale={locale} k={marker} />
+        </h4>
+      )
     }
+
+    <h4 class="survey-edition-year">{year}</h4>
+
+    <a class="image-wrapper" href={mainLink}
+      ><span
+        class="image-inner"
+        style={`background-image: url(${editionImageUrl})`}></span>
+    </a>
+  </div>
+  {
+    isOpen ? (
+      <div class="survey-edition-actions survey-open">
+        <TakeSurvey
+          client:load
+          locale={getLocaleSubset(locale, ["homepage.take_survey"])}
+          url={questionsUrl}
+        />
+      </div>
+    ) : (
+      <div class="survey-edition-actions survey-closed button-group">
+        {questionsUrl && (
+          <a href={questionsUrl} class="button">
+            <T
+              locale={locale}
+              k={
+                isPreview
+                  ? "homepage.preview_questions"
+                  : "homepage.view_questions"
+              }
+            />
+          </a>
+        )}
+        {resultsUrl && edition.resultsStatus === ResultsStatusEnum.PUBLISHED ? (
+          <a href={resultsUrl} class="button">
+            <T locale={locale} k="homepage.view_results" />
+          </a>
+        ) : (
+          <span class="button">
+            <T locale={locale} k="homepage.results_coming_soon" />
+          </span>
+        )}
+      </div>
+    )
+  }
 </div>
 
 <style lang="scss">
-    .survey-edition-card {
-        // border: var(--border);
-        // background: linear-gradient(0deg, var(--background), var(--backgroundSecondary));
-        // padding: var(--spacing);
-        position: relative;
-        border-radius: 3px;
-        overflow: hidden;
-        margin-bottom: var(--quarterspacing);
-    }
+  .survey-edition-card {
+    // border: var(--border);
+    // background: linear-gradient(0deg, var(--background), var(--backgroundSecondary));
+    // padding: var(--spacing);
+    position: relative;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: var(--quarterspacing);
+  }
 
-    .survey-edition-status,
-    .survey-edition-year {
-        position: absolute;
-        background: var(--primary);
-        color: var(--background);
-        padding: var(--quarterspacing) var(--halfspacing);
-        top: 0;
-    }
+  .survey-edition-status,
+  .survey-edition-year {
+    position: absolute;
+    background: var(--primary);
+    color: var(--background);
+    padding: var(--quarterspacing) var(--halfspacing);
+    top: 0;
+  }
 
-    .survey-edition-status {
-        left: 0;
-        text-transform: uppercase;
-        background: var(--secondary);
-        color: var(--text);
-    }
+  .survey-edition-status {
+    left: 0;
+    text-transform: uppercase;
+    background: var(--secondary);
+    color: var(--text);
+  }
 
-    .survey-edition-year {
-        right: 0;
-    }
+  .survey-edition-year {
+    right: 0;
+  }
 
+  .image-wrapper {
+    padding: var(--spacing) var(--halfspacing);
+    aspect-ratio: 300/200;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+
+  .image-inner {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+  }
+
+  .survey-edition-last {
     .image-wrapper {
-        padding: var(--spacing) var(--halfspacing);
-        aspect-ratio: 300/200;
-        display: grid;
-        place-items: center;
-        overflow: hidden;
+      aspect-ratio: 400/200;
     }
+  }
 
-    .image-inner {
-        width: 100%;
-        height: 100%;
-        display: block;
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center center;
-    }
-
-    img {
-        max-width: 100%;
-        max-height: 100%;
-        display: block;
-    }
-
-    .survey-edition-last {
-        .image-wrapper {
-            aspect-ratio: 400/200;
-        }
-    }
-
-    .survey-open {
-    }
+  .survey-open {
+  }
 </style>

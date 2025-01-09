@@ -26,14 +26,19 @@ export const generateFiltersType = ({
 }: {
     survey: SurveyApiObject
     questionObjects: QuestionApiObject[]
-}): TypeDefTemplateOutput => {
+}): TypeDefTemplateOutput | undefined => {
     const typeName = getFiltersTypeName(survey.id)
+    const surveyQuestions = questionObjects.filter(
+        q => q.filterTypeName && q.surveyId === survey.id
+    )
+    if (surveyQuestions.length === 0) {
+        return
+    }
     return {
         generatedBy: 'filters',
         typeName,
         typeDef: `input ${typeName} {
-    ${questionObjects
-        .filter(q => q.filterTypeName && q.surveyId === survey.id)
+    ${surveyQuestions
         .sort((q1, q2) => q1?.sectionIds?.at(-1)?.localeCompare(q2?.sectionIds?.at(-1) ?? '') ?? 0)
         .sort((q1, q2) => (q1?.sectionIndex || 0) - (q2?.sectionIndex || 0))
         .map(q => `${q?.sectionIds?.at(-1)}__${q.id}: ${q.filterTypeName}`)

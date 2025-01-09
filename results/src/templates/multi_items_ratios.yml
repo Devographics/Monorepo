@@ -1,5 +1,5 @@
 id: ${sectionId}_ratios
-blockType: MultiItemsRatiosBlock
+blockType: RatiosByEdition
 hasSponsor: true
 customizationModes: ['filters']
 queryOptions:
@@ -8,6 +8,7 @@ queryOptions:
     addRatios: true
     addQuestionEntity: true
     allEditions: true
+    addQuestionComments: false
 parameters:
     cutoffPercent: 0
     facetCutoffPercent: 0
@@ -58,6 +59,7 @@ query: >
                     usage
                     retention
                     positivity
+                    positivityRelative
                   }
                   completion {
                     count

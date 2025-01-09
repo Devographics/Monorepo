@@ -11,6 +11,9 @@ query: >
           ${sectionId} {
             ${questionId}: _items {
               id
+              _metadata {
+                sectionId
+              }
               entity {
                 name
                 nameClean
@@ -54,6 +57,7 @@ query: >
                     usage
                     retention
                     positivity
+                    positivityRelative
                   }
                   buckets {
                     count

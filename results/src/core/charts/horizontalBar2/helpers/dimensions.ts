@@ -6,6 +6,7 @@ import { Dimension } from 'core/charts/multiItemsExperience/types'
 import { Bucket } from '@devographics/types'
 import sumBy from 'lodash/sumBy'
 import round from 'lodash/round'
+import { getViewDefinition } from './views'
 
 export const getCellDimensions = ({
     facetBuckets,
@@ -14,7 +15,8 @@ export const getCellDimensions = ({
     facetBuckets: FacetBucket[]
     chartState: HorizontalBarChartState
 }) => {
-    const { viewDefinition } = chartState
+    const { view } = chartState
+    const viewDefinition = getViewDefinition(view)
     const { getValue } = viewDefinition
 
     const dimensions: Dimension[] = facetBuckets.map((facetBucket, index) => {
@@ -51,7 +53,8 @@ export const getRowOffset = ({
     bucket: Bucket
     chartState: HorizontalBarChartState
 }) => {
-    const { view, sort, viewDefinition } = chartState
+    const { view, sort } = chartState
+    const viewDefinition = getViewDefinition(view)
     const { getValue } = viewDefinition
     if (
         getValue &&

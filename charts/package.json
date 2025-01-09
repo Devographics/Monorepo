@@ -1,40 +1,46 @@
 {
-    "name": "charts",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "dev": "next dev --port 3040",
-        "build": "next build",
-        "start": "next start",
-        "lint": "next lint",
-        "typecheck": "tsc --noEmit --p tsconfig.json"
-    },
-    "dependencies": {
-        "@devographics/debug": "workspace:^1.0.0",
-        "@devographics/fetch": "workspace:^1.0.0",
-        "@devographics/helpers": "workspace:^1.0.0",
-        "@devographics/i18n": "workspace:^1.0.0",
-        "@devographics/types": "workspace:^1.0.0",
-        "@picocss/pico": "^1.5.10",
-        "@types/lodash": "^4.14.197",
-        "@types/node": "20.5.0",
-        "@types/react": "18.2.20",
-        "@types/react-dom": "18.2.7",
-        "eslint": "8.47.0",
-        "eslint-config-next": "13.4.16",
-        "lodash": "^4.17.21",
-        "mongodb": "^5.7.0",
-        "next": "13.4.16",
-        "react": "18.2.0",
-        "react-dom": "18.2.0",
-        "zod": "^3.21.4"
-    },
-    "devDependencies": {
-        "@types/mongodb": "^4.0.7",
-        "typescript": "5.6.2"
-    },
-    "packageManager": "pnpm@8.7.0",
-    "engines": {
-        "node": ">=18.0.0"
+  "name": "charts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3040",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit --p tsconfig.json"
+  },
+  "dependencies": {
+    "@devographics/debug": "workspace:^1.0.0",
+    "@devographics/fetch": "workspace:^1.0.0",
+    "@devographics/helpers": "workspace:^1.0.0",
+    "@devographics/i18n": "workspace:^1.0.0",
+    "@devographics/types": "workspace:^1.0.0",
+    "@picocss/pico": "^1.5.10",
+    "@types/lodash": "^4.14.197",
+    "@types/node": "20.5.0",
+    "@types/react": "19.0.2",
+    "@types/react-dom": "19.0.2",
+    "eslint": "8.47.0",
+    "eslint-config-next": "15.1.2",
+    "lodash": "^4.17.21",
+    "mongodb": "^5.7.0",
+    "next": "15.1.2",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@types/mongodb": "^4.0.7",
+    "typescript": "5.6.2"
+  },
+  "packageManager": "pnpm@8.7.0",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.0.2",
+      "@types/react-dom": "19.0.2"
     }
+  }
 }

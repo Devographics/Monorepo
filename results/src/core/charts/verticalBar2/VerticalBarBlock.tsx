@@ -8,22 +8,17 @@ import { DataSeries } from 'core/filters/types'
 import { getDefaultState, useChartState } from './helpers/chartState'
 import { getAllEditions } from './helpers/other'
 import { ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
-import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
-import { VerticalBarSerie } from './VerticalBarSerie'
 import { VerticalBarChartState } from './types'
 import ChartShare from '../common2/ChartShare'
+import { getViewDefinition } from './helpers/views'
+import { VerticalBarSerieWrapper } from './VerticalBarSerieWrapper'
 
 export interface VerticalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
     series: DataSeries<StandardQuestionData>[]
 }
 
-/*
-
-Note: always used for historical data
-
-*/
 export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
     const { block, series, question, pageContext, variant } = props
     const allEditions = getAllEditions({ serie: series[0], block })
@@ -35,13 +30,17 @@ export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
     const { average, percentiles, completion } = currentEdition
 
     const chartState = useChartState(getDefaultState({ block }))
+    const { view } = chartState
+    const viewDefinition = getViewDefinition(view)
+    const ViewComponent = viewDefinition.component
 
-    const commonProps: CommonProps<VerticalBarChartState> = {
+    const commonProps = {
         variant,
         question,
         series,
         pageContext,
         chartState,
+        viewDefinition,
         block
     }
 
@@ -54,12 +53,14 @@ export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
 
                 <GridWrapper seriesCount={series.length}>
                     {series.map((serie, serieIndex) => (
-                        <VerticalBarSerie
+                        <VerticalBarSerieWrapper<StandardQuestionData, VerticalBarChartState>
                             key={serie.name}
                             serie={serie}
                             serieIndex={serieIndex}
                             {...commonProps}
-                        />
+                        >
+                            <ViewComponent serie={serie} serieIndex={serieIndex} {...commonProps} />
+                        </VerticalBarSerieWrapper>
                     ))}
                 </GridWrapper>
 

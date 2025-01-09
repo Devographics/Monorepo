@@ -13,6 +13,7 @@ import { removeNoAnswer } from '../../helpers/steps'
 import { BAR_HEIGHT, RowGroup } from '../../rows/RowGroup'
 import { RowWrapper, Rows } from '../../rows'
 import { formatQuestionValue } from 'core/charts/common2/helpers/format'
+import { getViewDefinition } from '../../helpers/views'
 
 const PIXEL_PER_TICKS = 100
 
@@ -30,7 +31,8 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
         return null
     }
 
-    const { viewDefinition } = chartState
+    const { view } = chartState
+    const viewDefinition = getViewDefinition(view)
     const { formatValue } = viewDefinition
 
     // note: we need a placeholder that's part of the grid/subgrid layout

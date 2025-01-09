@@ -29,10 +29,6 @@ export enum GroupingOptions {
 
 export type MultiItemSerie = DataSeries<StandardQuestionData[]>
 
-export interface MultiItemsExperienceBlockProps extends BlockComponentProps {
-    series: MultiItemSerie[]
-}
-
 export const COMMENTS = 'comments' as const
 export type ColumnId = FeaturesOptions | SimplifiedSentimentOptions | typeof COMMENTS
 

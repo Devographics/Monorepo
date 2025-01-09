@@ -45,37 +45,37 @@ const applyTemplate = ({
  */
 export const makeTranslatorFunc =
     (locale: Locale) /*: StringTranslator*/ =>
-        // TODO: here optimize the strings to use Map instead of navigating an array which will be super slow
-        (key: string, { values }: Record<string, any> = {}, fallback?: string) => {
-            const { strings = [], ...rest } = locale
-            let result: Partial<StringTranslatorResult> = { key, locale: rest }
+    // TODO: here optimize the strings to use Map instead of navigating an array which will be super slow
+    (key: string, { values }: Record<string, any> = {}, fallback?: string) => {
+        const { strings = [], ...rest } = locale
+        let result: Partial<StringTranslatorResult> = { key, locale: rest }
 
-            const stringObject = findString(key, strings)
+        const stringObject = findString(key, strings)
 
-            if (stringObject) {
-                result = { ...result, ...stringObject }
-            } else {
-                result.missing = true
-                if (fallback) {
-                    result.t = fallback
-                }
+        if (stringObject) {
+            result = { ...result, ...stringObject }
+        } else {
+            result.missing = true
+            if (fallback) {
+                result.t = fallback
             }
-
-            const injectValues = (s: string) =>
-                values ? applyTemplate({ t: s, values, locale, key }) : s
-
-            if (result.t) {
-                const t = injectValues(result.t)
-                result.t = t
-                result.tClean = injectValues(result.tClean ?? t)
-                result.tHtml = injectValues(result.tHtml ?? t)
-            }
-
-            // TODO: this seems consistant with "results" app usage of this function,
-            // it returns a string and not the initial value
-            //return result
-            return result as StringTranslatorResult
         }
+
+        const injectValues = (s: string) =>
+            values ? applyTemplate({ t: s, values, locale, key }) : s
+
+        if (result.t) {
+            const t = injectValues(result.t)
+            result.t = t
+            result.tClean = injectValues(result.tClean ?? t)
+            result.tHtml = injectValues(result.tHtml ?? t)
+        }
+
+        // TODO: this seems consistant with "results" app usage of this function,
+        // it returns a string and not the initial value
+        //return result
+        return result as StringTranslatorResult
+    }
 
 /** Matches anything betwen { }, tolerate spaces, allow multiple interpolations */
 const INTERPOLATION_REGEX = /{([\s\S]+?)}/g
@@ -87,7 +87,12 @@ function injectValues(str: string, values: Record<string, any>) {
     try {
         return template(str, { interpolate: INTERPOLATION_REGEX })(values)
     } catch (error) {
-        console.warn("Couldn't inject values into a string, a value may be missing", str, values, error)
+        console.warn(
+            "Couldn't inject values into a string, a value may be missing",
+            str,
+            values,
+            error
+        )
         return str
     }
 }
@@ -114,7 +119,15 @@ export function makeTranslationFunction(locale: LocaleParsed) {
             locale: { id: locale.id, label: locale.label },
             t: fallback || ''
         }
-        const translation = locale.dict[key]
+        // backwards-compatibility with locale.strings
+        let translation
+        // TODO: get rid of this
+        if (locale.strings) {
+            translation = locale.strings.find(s => s.key === key)
+        } else if (locale.dict) {
+            translation = locale.dict[key]
+        }
+
         if (!translation) {
             result.missing = true
         } else {

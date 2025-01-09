@@ -3,7 +3,7 @@ import '../common2/ChartsCommon.scss'
 import './MultiItems.scss'
 import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
 import { MultiItemsExperienceControls } from './MultiItemsControls'
-import { COMMENTS, GroupingOptions, MultiItemsExperienceBlockProps } from './types'
+import { COMMENTS, GroupingOptions, MultiItemSerie } from './types'
 import { useChartState } from './helpers'
 import { ChartControls, ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
 import { useTheme } from 'styled-components'
@@ -13,8 +13,14 @@ import ViewSwitcher from '../horizontalBar2/ViewSwitcher'
 import MultiItemsSerie from './MultiItemsSerie'
 import MultiItemsCategories from './MultiItemsCategories'
 import { MultiItemsStats } from './MultiItemsStats'
+import ChartData from '../common2/ChartData'
+import { BlockComponentProps } from 'core/types'
 
 const defaultLimit = 5
+
+export interface MultiItemsExperienceBlockProps extends BlockComponentProps {
+    series: MultiItemSerie[]
+}
 
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
     const { series, block, question, pageContext } = props
@@ -25,20 +31,24 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
 
     const className = `multiexp multiexp-groupedBy-${grouping}`
 
+    // not used but expected by Rows.tsx
+    const viewDefinition = {
+        formatValue: (v: any) => v
+    }
+
     const commonProps = {
         chartState,
         block,
         question,
         pageContext,
-        series
+        series,
+        viewDefinition
     }
 
     const options =
         grouping === GroupingOptions.EXPERIENCE
             ? Object.values(FeaturesOptions).map(option => ({ id: option }))
-            : Object.values(SimplifiedSentimentOptions)
-                  .filter(o => o !== SimplifiedSentimentOptions.NEUTRAL_SENTIMENT)
-                  .map(option => ({ id: option }))
+            : Object.values(SimplifiedSentimentOptions).map(option => ({ id: option }))
 
     const colorScale =
         grouping === GroupingOptions.EXPERIENCE
@@ -93,7 +103,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
                     right={
                         <>
                             <ChartShare {...commonProps} />
-                            {/* <ChartData {...commonProps} /> */}
+                            <ChartData {...commonProps} />
                         </>
                     }
                 />

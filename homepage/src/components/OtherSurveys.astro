@@ -1,15 +1,19 @@
 ---
-import T from '@components/T'
-const { survey, surveys, locale } = Astro.props
-const otherSurveys = surveys.filter(s => s.id !== survey.id)
+import T from "@components/T";
+const { survey, surveys, locale } = Astro.props;
+const otherSurveys = surveys.filter((s) => s.id !== survey.id);
 ---
 
 <div class="other-surveys">
   <div class="other-surveys-inner">
     <T locale={locale} k="homepage.other_surveys" />
-    {otherSurveys.map(
-    ({name, domain})=> (<a class="other-survey-link" href={`https://${domain}`}>{name}</a>)
-    )}
+    {
+      otherSurveys.map(({ name, domain }) => (
+        <a class="other-survey-link" href={`https://${domain}`}>
+          {name}
+        </a>
+      ))
+    }
   </div>
 </div>
 

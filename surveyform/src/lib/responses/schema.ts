@@ -32,6 +32,16 @@ export const responseBaseSchema: Schema = {
     requiredDuring: Actions.CREATE,
     onCreate: () => new Date(),
   },
+  // same as createdAt but with hours set at midnight to only keep createdAt day
+  createdAtDate: {
+    type: Date,
+    requiredDuring: Actions.CREATE,
+    onCreate: () => {
+      let date = new Date();
+      date.setUTCHours(0, 0, 0, 0);
+      return date;
+    },
+  },
   updatedAt: {
     type: Date,
     requiredDuring: Actions.UPDATE,

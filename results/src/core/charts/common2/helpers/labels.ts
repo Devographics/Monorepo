@@ -22,7 +22,7 @@ export const getQuestionLabel = ({
     i18nNamespace?: string
     block?: BlockVariantDefinition
 }) => {
-    let key, label, i18nNamespace_
+    let key, label, i18nNamespace_, questionLabel
     const { sectionId, template, entity, id } = question
     const entityName = entity && getEntityName(entity)
     if (entityName) {
@@ -45,9 +45,11 @@ export const getQuestionLabel = ({
             key = `${i18nNamespace_}.${id}`
         }
         const s = getString(key)
+        const q = getString(`${key}.question`)
         label = s?.tClean || s?.t || id
+        questionLabel = q?.tClean || q?.t
     }
-    return { key, label }
+    return { key, label, question: questionLabel }
 }
 
 export const useFiltersLabel = (filters: CustomizationFiltersSeries) => {

@@ -7,8 +7,15 @@ import { RespondentCount } from '../../common2'
 import { Bucket } from '@devographics/types'
 
 export const RowStacked = (props: RowComponentProps) => {
-    const { bucket, chartState, chartValues, rowIndex, allRowsCellDimensions, allRowsOffsets } =
-        props
+    const {
+        bucket,
+        chartState,
+        chartValues,
+        rowIndex,
+        allRowsCellDimensions,
+        allRowsOffsets,
+        viewDefinition
+    } = props
     // assume this is a root bucket and not a facet bucket
     const bucket_ = bucket as Bucket
     const { facetQuestion } = chartValues
@@ -38,6 +45,7 @@ export const RowStacked = (props: RowComponentProps) => {
                             cellIndex={index}
                             chartValues={chartValues}
                             gradient={gradient}
+                            viewDefinition={viewDefinition}
                         />
                     )
                 })}

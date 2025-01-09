@@ -5,6 +5,8 @@ import resources from 'Config/recommended_resources.yml'
 import { mq, spacing, fontSize, fontWeight } from 'core/theme'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
+import { RecommendedResource, RecommendedResourceJob } from 'core/types/other'
+import './RecommendedResources.scss'
 
 const trackClick = (id, resource, label) => {
     // TODO: add plausible event tracking
@@ -19,7 +21,7 @@ const RecommendedResourcesBlock = ({ block, data }) => {
         return null
     }
     const { id } = block
-    const sectionResources = sponsors
+    const sectionResources: RecommendedResource[] = sponsors
         .map((sponsorId: string) => resources.find(r => r.id === sponsorId))
         .filter(s => !!s)
 
@@ -47,8 +49,13 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                                         href={`${url}&utm_content=textlink`}
                                         title={resource.name}
                                         padding={resource.padding}
+                                        className="resource-image-link"
                                     >
-                                        <ImageImage src={resource.image} alt={resource.name} />
+                                        <ImageImage
+                                            src={resource.image}
+                                            alt={resource.name}
+                                            className="resource-image-image"
+                                        />
                                     </ImageLink>
                                     {resource.teacher && (
                                         <>
@@ -66,9 +73,11 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                                             {resource.name}
                                         </a>
                                     </Title>
-                                    <Description className="Resource__description">
-                                        {resource.description}
-                                    </Description>
+                                    <Description
+                                        className="Resource__description"
+                                        dangerouslySetInnerHTML={{ __html: resource.description }}
+                                    />
+                                    {resource.jobs && <Jobs resource={resource} />}
                                 </ResourceContent>
                             </Resource>
                         )
@@ -82,6 +91,26 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                 </Sponsoring>
             </div>
         </div>
+    )
+}
+
+const Jobs = ({ resource }: { resource: RecommendedResource }) => {
+    const { jobs } = resource
+    return (
+        <div className="recommended-resource-jobs">
+            {jobs?.map((job, i) => (
+                <Job key={i} job={job} />
+            ))}
+        </div>
+    )
+}
+const Job = ({ job }: { job: RecommendedResourceJob }) => {
+    const { position, company, url } = job
+    return (
+        <a href={url} className="recommended-resource-job">
+            <h5>{company}</h5>
+            <h4>{position}</h4>
+        </a>
     )
 }
 

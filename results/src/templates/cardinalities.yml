@@ -1,0 +1,14 @@
+id: '${sectionId}_cardinalities'
+titleId: tools.cardinalities
+descriptionKey: tools.cardinalities.description
+blockType: CardinalitiesBlock
+defaultView: percentageSurvey
+hasData: true
+customizationModes: [filters]
+queryOptions:
+    questionId: _cardinalities
+    addQuestionComments: false
+    addBucketsEntities: false
+parameters:
+    cutoff: 1
+    sort: { order: asc, property: id }

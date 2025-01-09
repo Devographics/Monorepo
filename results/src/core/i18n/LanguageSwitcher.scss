@@ -1,0 +1,36 @@
+@import '../../stylesheets/_breakpoints.scss';
+
+button.language-switcher-trigger {
+    height: 100%;
+    &,
+    &:hover {
+        border: none;
+    }
+    svg {
+        display: block;
+        width: 12px;
+        position: relative;
+        polygon {
+            fill: var(--textColor);
+        }
+    }
+    .Pagination & {
+        @include small-medium {
+            display: none;
+        }
+    }
+    .Sidebar & {
+        @include large {
+            display: none;
+        }
+    }
+}
+.sidebar-locales {
+    display: flex;
+    flex-direction: column;
+    gap: var(--quarterSpacing);
+    align-items: center;
+    @include large {
+        display: none;
+    }
+}

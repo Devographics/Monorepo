@@ -3,29 +3,38 @@ import { RowWrapper } from './RowWrapper'
 import { Cell } from '../HorizontalBarCell'
 import { RowComponentProps } from '../types'
 import { useTheme } from 'styled-components'
-import { FreeformIndicator, RespondentCount } from '../../common2'
+import { RespondentCount } from '../../common2'
 import { FreeformAnswersTrigger } from '../../common2/FreeformAnswers'
-import { CUTOFF_ANSWERS, NO_MATCH, OVERLIMIT_ANSWERS } from '@devographics/constants'
-import T from 'core/i18n/T'
-import Tooltip from 'core/components/Tooltip'
+import { CUTOFF_ANSWERS, OVERLIMIT_ANSWERS } from '@devographics/constants'
 import { InsufficientDataIndicator } from 'core/charts/common2/InsufficientDataIndicator'
+import { ResultsSubFieldEnum } from '@devographics/types'
+import { getTopBound } from '../views'
 
 export const RowSingle = (props: RowComponentProps) => {
     const theme = useTheme()
-    const { block, bucket, chartState, chartValues, showCount = true, hasGroupedBuckets } = props
+    const {
+        block,
+        bucket,
+        chartState,
+        chartValues,
+        showCount = true,
+        hasGroupedBuckets,
+        viewDefinition
+    } = props
     const { isFreeformData, hasInsufficientData } = bucket
     const { question, maxOverallValue = 1 } = chartValues
-    const { viewDefinition } = chartState
+    const { view } = chartState
     const { getValue } = viewDefinition
     const value = getValue(bucket)
-    const width = (100 * value) / maxOverallValue
+    const width = (100 * value) / getTopBound(maxOverallValue)
     const gradient = theme.colors.barChart.primaryGradient
 
     // TODO: do this better
     const isFreeformQuestion =
-        block.template &&
-        ['multiple_options2_freeform'].includes(block.template) &&
-        block.id !== 'source'
+        block.queryOptions?.subField === ResultsSubFieldEnum.FREEFORM ||
+        (block.template &&
+            ['multiple_options2_freeform'].includes(block.template) &&
+            block.id !== 'source')
 
     const isSpecialBucket = [OVERLIMIT_ANSWERS, CUTOFF_ANSWERS].includes(bucket.id)
     const showFreeformAnswers = !isSpecialBucket && (isFreeformQuestion || isFreeformData)
@@ -53,12 +62,8 @@ export const RowSingle = (props: RowComponentProps) => {
                     cellIndex={0}
                     chartValues={chartValues}
                     gradient={gradient}
+                    viewDefinition={viewDefinition}
                 />
-                {isFreeformData && (
-                    <div className="chart-row-freeform-icon-wrapper" style={{ '--offset': width }}>
-                        <FreeformIndicator />
-                    </div>
-                )}
                 {hasInsufficientData && (
                     <div className="chart-row-insufficient-data-wrapper">
                         <InsufficientDataIndicator />

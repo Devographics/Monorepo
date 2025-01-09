@@ -3,4 +3,4 @@ export const statuses = {
   open: 2,
   closed: 3,
   hidden: 4,
-}
+};

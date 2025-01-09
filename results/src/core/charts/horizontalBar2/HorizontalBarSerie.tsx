@@ -6,7 +6,7 @@ import { useChartValues } from './helpers/chartValues'
 import { GridItem } from '../common2'
 import { CommonProps } from '../common2/types'
 import take from 'lodash/take'
-import { getViewComponent } from './helpers/views'
+import { getViewComponent, getViewDefinition } from './helpers/views'
 import { getItemFilters } from '../common2/helpers/filters'
 import { HorizontalBarChartState, HorizontalBarViewProps, HorizontalBarViews } from './types'
 import { applyRowsLimit } from '../multiItemsExperience/helpers'
@@ -31,7 +31,16 @@ export const HorizontalBarSerie = (
     const { rowsLimit } = chartState
 
     let buckets = getChartBuckets({ serie, block, chartState })
-    const chartValues = useChartValues({ seriesMetadata, buckets, chartState, question })
+
+    const viewDefinition = getViewDefinition(chartState.view)
+
+    const chartValues = useChartValues({
+        seriesMetadata,
+        buckets,
+        chartState,
+        question,
+        viewDefinition
+    })
 
     if (applyRowsLimit(rowsLimit, chartValues.totalRows)) {
         buckets = take(buckets, chartState.rowsLimit)
@@ -51,7 +60,8 @@ export const HorizontalBarSerie = (
         isReversed,
         buckets,
         chartValues,
-        serieMetadata
+        serieMetadata,
+        viewDefinition
     }
 
     const itemFilters = getItemFilters({ variant, block, serieIndex })

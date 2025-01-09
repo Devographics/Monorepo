@@ -1,8 +1,5 @@
 import Breadcrumbs from "~/components/normalization/Breadcrumbs";
-import {
-  NormalizeQuestion,
-  NormalizeQuestionWithProvider,
-} from "~/components/normalization/NormalizeQuestion";
+import { NormalizeQuestionWithProvider } from "~/components/normalization/NormalizeQuestion";
 import { fetchSurveysMetadata } from "@devographics/fetch";
 import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
 import { getEditionQuestions } from "~/lib/normalization/helpers/getEditionQuestions";

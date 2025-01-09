@@ -12,7 +12,12 @@
 // import { getSiteTitle } from './pageHelpers'
 
 // TODO: enable shared folders
-import { BlockVariantDefinition, EditionMetadata, Entity } from '@devographics/types'
+import {
+    BlockVariantComputed,
+    BlockVariantDefinition,
+    EditionMetadata,
+    Entity
+} from '@devographics/types'
 import { PageContextValue } from './typings'
 import type { StringTranslator } from '@/i18n/typings'
 
@@ -104,21 +109,16 @@ const getBlockLink = ({
     pageContext,
     useRedirect = true
 }: {
-    block: BlockVariantDefinition
+    block: BlockVariantComputed
     pageContext: PageContextValue
     useRedirect?: boolean
 }) => {
-    const { id: blockId } = block
-    const { edition, localeId, sectionId, subSectionId } = pageContext
+    const { id: blockId, path } = block
+    const { edition, localeId } = pageContext
     const { resultsUrl } = edition
-
-    const segments = [
-        localeId,
-        sectionId === 'user_info' ? 'demographics' : sectionId.replaceAll('_', '-')
-    ]
-    if (subSectionId) {
-        segments.push(subSectionId.replaceAll('_', '-'))
-    }
+    const pathSegments = path.split('/').filter(s => s !== '')
+    pathSegments.pop()
+    const segments = [localeId, ...pathSegments]
     const pathname = `/${segments.join('/')}/#${blockId}`
     const url = new URL(pathname, resultsUrl)
     const link = url.toString()
@@ -142,7 +142,7 @@ export const getBlockMeta = ({
     pageContext,
     getString
 }: {
-    block: BlockVariantDefinition
+    block: BlockVariantComputed
     blockParameters: any
     pageContext: PageContextValue
     getString: StringTranslator

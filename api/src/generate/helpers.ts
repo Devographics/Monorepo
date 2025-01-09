@@ -16,6 +16,8 @@ import {
 } from '../types/surveys'
 import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'
+import { getEntity } from '../load/entities'
+import { RequestContext } from '../types'
 
 export const graphqlize = (str: string) => capitalizeFirstLetter(snakeToCamel(str))
 
@@ -218,4 +220,14 @@ export const getEditionById = async (editionId: string) => {
         throw new Error(`getEditionById: could not find edition with id ${editionId}`)
     }
     return edition
+}
+
+export const getGeneralMetadata = ({ context }: { context: RequestContext }) => {
+    // TODO: import this from YAML
+    return {
+        creators: ['stephanie_walter', 'afor_digital', 'codebar', 'shruti_kapoor'].map(id => ({
+            id
+            // entity: await getEntity({ id, context })
+        }))
+    }
 }

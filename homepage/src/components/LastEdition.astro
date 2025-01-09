@@ -1,20 +1,21 @@
 ---
-import SurveyEdition from '@components/SurveyEdition.astro'
+import SurveyEdition from "@components/SurveyEdition.astro";
 
-const { edition, locale, survey } = Astro.props
-
-
+const { edition, locale, survey } = Astro.props;
 ---
+
 <section class="last-edition">
-    <SurveyEdition locale={locale} edition={edition} survey={survey} isLast={true} />
+  <SurveyEdition
+    locale={locale}
+    edition={edition}
+    survey={survey}
+    isLast={true}
+  />
 </section>
 
-
 <style lang="scss">
-
-    .last-edition,
-    .past-editions {
-        margin-bottom: var(--doublespacing);
-    }
-
+  .last-edition,
+  .past-editions {
+    margin-bottom: var(--doublespacing);
+  }
 </style>

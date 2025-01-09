@@ -4,7 +4,9 @@ import type { Metadata } from 'next'
 import '@/config/server'
 import '../stylesheets/main.scss'
 
-export const metadata: Metadata = {}
+export const metadata: Metadata = {
+    title: 'Devographics surveys'
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (

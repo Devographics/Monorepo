@@ -1,31 +1,47 @@
-import { QuestionMetadata, StandardQuestionData } from '@devographics/types'
+import { QuestionMetadata } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
-import { Modes, MultiRatiosChartState, MultiRatiosChartValues } from '../types'
+import {
+    EditionWithRankAndPointData,
+    ModesEnum,
+    MultiRatiosChartState,
+    MultiRatiosChartValues
+} from '../types'
 import max from 'lodash/max'
-import { getYears } from 'core/charts/verticalBar2/helpers/chartValues'
-import { LegendItem } from '../Legend-old'
 import range from 'lodash/range'
-import { getAllEditions } from './other'
+import sum from 'lodash/sum'
+import round from 'lodash/round'
+import { viewDefinition } from './viewDefinition'
+import { LineItem } from 'core/charts/verticalBar2/types'
+import { LegendItem } from 'core/charts/common2/types'
 
 export const useChartValues = ({
-    items,
+    lineItems,
     chartState,
-    block,
     question,
     legendItems
 }: {
-    items: StandardQuestionData[]
+    lineItems: LineItem<EditionWithRankAndPointData>[]
     chartState: MultiRatiosChartState
     block: BlockVariantDefinition
     question: QuestionMetadata
     legendItems: LegendItem[]
 }) => {
     const { mode } = chartState
-    const allYears = items.map(item => getAllEditions(item).map(edition => edition.year)).flat()
-    const years = getYears(allYears)
-    const allEditionsCounts = items.map(item => getAllEditions(item).length || 0)
+    const { getColumnIds, getPointValue } = viewDefinition
+    const columnIds = getColumnIds(lineItems)
+
+    // calculate average value for each column
+    const columnAverages = columnIds.map(columnId => {
+        const columnPoints = lineItems
+            .map(lineItem => lineItem.points.find(p => p.columnId === columnId))
+            .filter(point => !!point)
+        const pointValues = columnPoints.map(point => getPointValue(point, chartState))
+        const average = round(sum(pointValues) / pointValues.length, 1)
+        return { columnId, average }
+    })
+
     const ticks =
-        mode === Modes.VALUE
+        mode === ModesEnum.VALUE
             ? [
                   { value: 0 },
                   { value: 20 },
@@ -40,11 +56,12 @@ export const useChartValues = ({
 
     const chartValues: MultiRatiosChartValues = {
         question,
-        years,
-        totalColumns: years.length,
+        columnIds,
+        totalColumns: columnIds.length,
         legendItems,
         maxValue: max(ticks.map(tick => tick.value)) || 0,
-        ticks
+        ticks,
+        columnAverages
     }
     return chartValues
 }

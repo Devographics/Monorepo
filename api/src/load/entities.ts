@@ -12,7 +12,7 @@ import path from 'path'
 
 import { RequestContext } from '../types'
 import { SurveyApiObject, EditionApiObject } from '../types/surveys'
-import { setCache } from '../helpers/caching'
+import { setCache, useCache } from '../helpers/caching'
 import { EntityResolverMap, entityResolverMap } from '../resolvers/entities'
 import isEmpty from 'lodash/isEmpty.js'
 import { OptionId } from '@devographics/types'
@@ -244,7 +244,8 @@ export const findEntity = (id: string, entities: Entity[], tag?: string) => {
         return (
             (e.id && e.id.toLowerCase() === id) ||
             (e.id && e.id.toLowerCase().replace(/\-/g, '_') === id) ||
-            (e.name && e.name.toLowerCase() === id)
+            (e.name && e.name.toLowerCase() === id) ||
+            e.idAliases?.includes(id)
         )
     })
 
@@ -288,9 +289,14 @@ export const getEntity = async ({
 
     entity.entityType = getEntityType(entity)
 
-    if (entity.entityType === EntityType.PEOPLE) {
-        // TODO: find a way to cache this somehow?
-        const avatar = await getAvatar(entity)
+    if (entity.hasAvatar || [EntityType.PEOPLE].includes(entity.entityType)) {
+        const avatarCacheKey = `avatar__${entity.id}`
+        const avatar = await useCache({
+            func: getAvatar,
+            context,
+            funcOptions: { entity },
+            key: avatarCacheKey
+        })
         if (avatar) {
             entity.avatar = avatar
         }

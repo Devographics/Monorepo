@@ -125,12 +125,17 @@ export interface ResponseEditionMetadata {
     limit: number
 }
 
-export interface RatiosData {
-    awareness: number
-    interest: number
-    usage: number
-    retention: number
-    positivity: number
+export enum RatiosEnum {
+    USAGE = 'usage',
+    AWARENESS = 'awareness',
+    INTEREST = 'interest',
+    RETENTION = 'retention',
+    POSITIVITY = 'positivity',
+    RELATIVE_POSITIVITY = 'positivityRelative'
+}
+
+export type RatiosData = {
+    [key in RatiosEnum]: number
 }
 
 export interface OptionData extends Option {

@@ -1,5 +1,5 @@
-import { fetchSurveysMetadata } from '@devographics/fetch'
-import { getAllLocaleDefinitions, getLocaleDict } from "@devographics/i18n/server"
+import { fetchGeneralMetadata, fetchSurveysMetadata } from '@devographics/fetch'
+import { getAllLocaleDefinitions, getLocaleDict } from '@devographics/i18n/server'
 import { getConfig } from '@devographics/helpers'
 import { SurveyStatusEnum } from '@devographics/types'
 import { LocaleParsed } from '@devographics/i18n'
@@ -24,6 +24,9 @@ export const getData = async () => {
         redisUrl: import.meta.env.REDIS_UPSTASH_URL,
         redisToken: import.meta.env.REDIS_TOKEN
     }
+
+    const { data: generalMetadata } = await fetchGeneralMetadata(options)
+
     const { data: allSurveysData } = await fetchSurveysMetadata(options)
 
     const { locales: allLocalesMetadata } = await getAllLocaleDefinitions()
@@ -40,13 +43,14 @@ export const getData = async () => {
 
         locales.push(localeWithStrings)
     }
-    const allSurveys = (allSurveysData || [])
-        // remove surveys with no open/closed edition (new preview surveys, hidden surveys)
-        .filter(s =>
-            s.editions.some(e =>
-                [SurveyStatusEnum.OPEN, SurveyStatusEnum.CLOSED].includes(e.status)
-            )
-        )
-    const data = { allSurveys, locales }
+    // remove demo survey
+    const allSurveys = (allSurveysData || []).filter(s => !s.isDemo)
+    // // remove surveys with no open/closed edition (new preview surveys, hidden surveys)
+    // .filter(s =>
+    //     s.editions.some(e =>
+    //         [SurveyStatusEnum.OPEN, SurveyStatusEnum.CLOSED].includes(e.status)
+    //     )
+    // )
+    const data = { allSurveys, locales, generalMetadata }
     return data
 }

@@ -50,6 +50,7 @@ export interface BlockVariantDefinition {
     bucketKeysName?: string
     fieldId?: string
     sectionId: string
+    sectioni18nNamespace?: string
     template?: string
     blockType?: string
     tabId?: string
@@ -79,6 +80,7 @@ export interface BlockVariantDefinition {
 
     // config
     mode?: BlockMode
+
     // will default to the id of the chart
     i18nNamespace?: string
     colorVariant?: string

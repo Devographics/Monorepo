@@ -1,0 +1,59 @@
+id: _user_metadata
+questions:
+    - id: locale
+      template: locale
+      variables:
+          options: { cutoff: 20 }
+
+    - id: completion_stats
+      template: completion_stats
+
+    - id: skipped
+      template: skipped
+
+    - id: source
+      template: source
+      variables:
+          options: { limit: 20 }
+
+    - id: device
+      template: device
+
+    - id: browser
+      template: browser
+
+    - id: version
+      template: version
+
+    - id: os
+      template: os
+
+    - id: past_surveys
+      template: past_surveys
+
+    - id: past_editions
+      template: past_editions
+
+    - id: past_same_survey_count
+      template: past_same_survey_count
+
+    - id: future_surveys
+      template: future_surveys
+
+    - id: future_editions
+      template: future_editions
+
+    - id: future_same_survey_count
+      template: future_same_survey_count
+
+    - id: created_at_date
+      template: created_at_date
+
+    - id: authmode
+      template: authmode
+
+    - id: referrer
+      template: referrer
+
+    - id: sourcetag
+      template: sourcetag

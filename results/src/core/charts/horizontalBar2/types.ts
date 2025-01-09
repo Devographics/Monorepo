@@ -14,19 +14,21 @@ import { BlockVariantDefinition } from 'core/types'
 import { Dimension } from '../multiItemsExperience/types'
 
 export interface HorizontalBarChartState extends ChartStateWithSort {
+    view: HorizontalBarViews
+    setView: Dispatch<SetStateAction<HorizontalBarViews>>
+    viewDefinition: HorizontalBarViewDefinition
     columnMode: ColumnModes
     setColumnMode: Dispatch<SetStateAction<ColumnModes>>
-    facet: FacetItem | undefined
-    setFacet: Dispatch<SetStateAction<FacetItem | undefined>>
+    facet?: FacetItem
     rowsLimit: number
     setRowsLimit: Dispatch<SetStateAction<number>>
-    viewDefinition: HorizontalBarViewDefinition
 }
 
 export enum HorizontalBarViews {
     BOXPLOT = 'percentilesByFacet',
     PERCENTAGE_BUCKET = 'percentageBucket',
     PERCENTAGE_QUESTION = 'percentageQuestion',
+    PERCENTAGE_SURVEY = 'percentageSurvey',
     FACET_COUNTS = 'facetCounts',
     COUNT = 'count',
     AVERAGE = 'average'
@@ -49,7 +51,7 @@ export type Control = {
 
 type GetValueType = (bucket: Bucket | FacetBucket) => number
 
-export type HorizontalBarViewDefinition = ViewDefinition & {
+export type HorizontalBarViewDefinition<ChartStateType> = ViewDefinition<ChartStateType> & {
     getValue: GetValueType
     dataFilters?: DataFilter[]
     component: (props: HorizontalBarViewProps) => JSX.Element | null
@@ -63,6 +65,7 @@ export type HorizontalBarViewProps = {
     isReversed?: boolean
     seriesMetadata: SeriesMetadata
     serieMetadata: ResponseEditionMetadata
+    viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
 }
 
 export type DataFilter = (buckets: Bucket[]) => Bucket[]
@@ -83,4 +86,5 @@ export type RowComponentProps = Omit<RowGroupProps, 'rowComponent'> & {
     showGroupedBuckets?: boolean
     setShowGroupedBuckets?: Dispatch<SetStateAction<boolean>>
     isGroupedBucket?: boolean
+    viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
 }

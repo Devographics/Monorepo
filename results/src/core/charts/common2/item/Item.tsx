@@ -95,7 +95,7 @@ export const ChartItem = ({
             <Popover
                 trigger={
                     <Button
-                        className={`chart-item chart-item-entity chart-item-${entity.entityType}`}
+                        className={`button-round chart-item chart-item-entity chart-item-${entity.entityType}`}
                     >
                         <IconComponent entity={entity} size="petite" />
                         <Label label={labelObject} />

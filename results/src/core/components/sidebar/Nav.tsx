@@ -6,7 +6,7 @@ import sitemap from 'Config/raw_sitemap.yml'
 import { mq, fancyLinkMixin, spacing, fontSize, fontWeight } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
 import PageLink from 'core/pages/PageLink'
-import LanguageSwitcher from 'core/i18n/LanguageSwitcher'
+import LanguageSwitcher, { LanguageSwitcherContents } from 'core/i18n/LanguageSwitcher'
 import { getPageLabelKey } from 'core/helpers/pageHelpers'
 import T from 'core/i18n/T'
 import { PageContextValue } from 'core/types'
@@ -226,9 +226,6 @@ export const Nav = ({ closeSidebar }: { closeSidebar: () => void }) => {
 
     return (
         <NavContainer>
-            <LanguageSwitcherWrapper>
-                <LanguageSwitcher />
-            </LanguageSwitcherWrapper>
             {filteredNav.map((page: any, i: number) => (
                 <NavItem
                     key={i}
@@ -237,6 +234,12 @@ export const Nav = ({ closeSidebar }: { closeSidebar: () => void }) => {
                     closeSidebar={closeSidebar}
                 />
             ))}
+            <div className="sidebar-locales">
+                <h4>
+                    <T k="general.surveys_available_languages" />
+                </h4>
+                <LanguageSwitcherContents />
+            </div>
         </NavContainer>
     )
 }

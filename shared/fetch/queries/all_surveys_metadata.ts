@@ -10,6 +10,7 @@ query SurveysMetadataQuery {
     surveys {
       id
       name
+      isDemo
       responsesCollectionName
       normalizedCollectionName
       domain
@@ -33,8 +34,10 @@ query SurveysMetadataQuery {
         feedbackUrl
         resultsUrl
         surveyId
+        feedbackAt
         startedAt
         endedAt
+        releasedAt
         year
         status
         resultsStatus

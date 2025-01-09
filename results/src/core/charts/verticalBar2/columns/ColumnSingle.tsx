@@ -1,34 +1,52 @@
-import { ColumnComponentProps } from '../types'
+import {
+    BasicPointData,
+    EmptyColumnProps,
+    VerticalBarChartValues,
+    VerticalBarViewDefinition
+} from '../types'
 import { useTheme } from 'styled-components'
 import { RespondentCount } from '../../common2'
 import React from 'react'
 import { Cell } from '../VerticalBarCell'
 import { ColumnWrapper } from './ColumnWrapper'
 
-export const ColumnSingle = (props: ColumnComponentProps) => {
+type ColumnSingleProps<
+    SerieData,
+    PointData extends BasicPointData,
+    ChartStateType
+> = EmptyColumnProps<PointData> & {
+    chartValues: VerticalBarChartValues
+    point: PointData
+    rowMetadata?: JSX.Element
+    children?: JSX.Element
+    viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
+}
+
+export const ColumnSingle = <SerieData, PointData extends BasicPointData, ChartStateType>(
+    props: ColumnSingleProps<SerieData, PointData, ChartStateType>
+) => {
     const theme = useTheme()
-    const { year, edition, chartState, chartValues, showCount = true } = props
-    const { viewDefinition } = chartState
-    const { getEditionValue } = viewDefinition
+    const { point, chartState, chartValues, showCount = true, viewDefinition } = props
+    const { getPointValue } = viewDefinition
     const { maxValue } = chartValues
 
-    if (!getEditionValue) {
-        throw new Error('getEditionValue not defined')
+    if (!getPointValue) {
+        throw new Error('getPointValue not defined')
     }
 
-    const value = edition && getEditionValue(edition, chartState)
+    const value = point && getPointValue(point, chartState)
 
     const gradient = theme.colors.barChart.primaryGradient
 
-    const rowMetadata = <RespondentCount count={edition.completion.count} />
-    const rowWrapperProps = showCount ? { ...props, rowMetadata } : props
+    const rowMetadata = <RespondentCount count={point?.completion?.count} />
+    const columnWrapperProps = showCount ? { ...props, rowMetadata } : props
 
     const height = (value * 100) / maxValue
 
     return (
-        <ColumnWrapper {...rowWrapperProps}>
+        <ColumnWrapper {...columnWrapperProps}>
             <Cell
-                edition={edition}
+                point={point}
                 value={value}
                 chartState={chartState}
                 offset={0}
@@ -36,6 +54,7 @@ export const ColumnSingle = (props: ColumnComponentProps) => {
                 cellIndex={0}
                 chartValues={chartValues}
                 gradient={gradient}
+                viewDefinition={viewDefinition}
             />
         </ColumnWrapper>
     )

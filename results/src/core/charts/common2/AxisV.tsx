@@ -1,8 +1,5 @@
-import T from 'core/i18n/T'
 import './AxisV.scss'
 import React from 'react'
-import max from 'lodash/max'
-import round from 'lodash/round'
 import { FormatValueType, Tick } from './types'
 import { QuestionMetadata } from '@devographics/types'
 
@@ -18,18 +15,20 @@ import { QuestionMetadata } from '@devographics/types'
 
 export const getInterval = (tickCount: number) => 100 / (tickCount - 1)
 
-export const AxisV = ({
+export const AxisV = <ChartStateType,>({
     variant,
     ticks,
     question,
     labelId,
-    formatValue
+    formatValue,
+    chartState
 }: {
     variant: 'left' | 'right'
     ticks: Tick[]
     question: QuestionMetadata
     labelId?: string
     formatValue: FormatValueType
+    chartState: ChartStateType
 }) => {
     const interval = getInterval(ticks.length)
 
@@ -51,7 +50,7 @@ export const AxisV = ({
                                 }}
                             >
                                 <div className="chart-axis-tick-label">
-                                    {formatValue(tick.value, question)}
+                                    {formatValue(tick.value, question, chartState)}
                                 </div>
                             </div>
                         )

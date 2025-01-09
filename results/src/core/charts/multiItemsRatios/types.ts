@@ -1,39 +1,29 @@
 import { DataSeries } from 'core/filters/types'
-import { QuestionMetadata, ResponseEditionData, StandardQuestionData } from '@devographics/types'
+import { RatiosData, RatiosEnum, StandardQuestionData } from '@devographics/types'
 import { Dispatch, SetStateAction } from 'react'
-import { FormatValueType, Tick } from '../common2/types'
-import { EditionWithRank, VerticalBarChartValues } from '../verticalBar2/types'
-import { LegendItem } from './Legend-old'
+import { EditionWithPointData, VerticalBarChartValues } from '../verticalBar2/types'
+import { LegendItem } from '../common2/types'
 
 export type MultiRatioSerie = DataSeries<StandardQuestionData[]>
 
-export enum Ratios {
-    USAGE = 'usage',
-    AWARENESS = 'awareness',
-    INTEREST = 'interest',
-    RETENTION = 'retention',
-    POSITIVITY = 'positivity'
-}
+export type Ratios = keyof RatiosData
 
-export enum Modes {
+export enum ModesEnum {
     VALUE = 'value',
     RANK = 'rank'
 }
 
-export type MultiRatiosViewDefinition = {
-    getEditionValue?: (edition: EditionWithRank, chartState: MultiRatiosChartState) => number
-    formatValue: FormatValueType
-    invertYAxis?: boolean
-}
-
-export type MultiRatiosChartState = {
-    view: Ratios
-    setView: Dispatch<SetStateAction<Ratios>>
-    mode: Modes
-    setMode: Dispatch<SetStateAction<Modes>>
-    viewDefinition: MultiRatiosViewDefinition
+export interface MultiRatiosChartState {
+    view: RatiosEnum
+    setView: Dispatch<SetStateAction<RatiosEnum>>
+    mode: ModesEnum
+    setMode: Dispatch<SetStateAction<ModesEnum>>
     highlighted: string | null
     setHighlighted: Dispatch<SetStateAction<string | null>>
 }
 
 export type MultiRatiosChartValues = VerticalBarChartValues & { legendItems: LegendItem[] }
+
+export type EditionWithRankAndPointData = EditionWithPointData & {
+    rank: number
+}

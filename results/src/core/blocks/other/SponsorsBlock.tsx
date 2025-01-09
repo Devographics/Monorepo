@@ -53,14 +53,14 @@ const Header = styled.h3`
 
 const SponsorList = styled.div`
     @media ${mq.large} {
-        /* display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         column-gap: ${spacing(4)};
-        row-gap: ${spacing(4)}; */
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: ${spacing(4)};
+        row-gap: ${spacing(4)};
+        /* display: flex; */
+        /* justify-content: center; */
+        /* flex-wrap: wrap; */
+        /* gap: ${spacing(4)}; */
     }
 `
 
@@ -76,7 +76,7 @@ const Sponsor = styled.div`
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        width: 250px;
+        /* width: 250px; */
         /* width: 33%; */
     }
 `

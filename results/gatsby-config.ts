@@ -47,7 +47,7 @@ export default {
                 fieldName: 'dataAPI',
                 url: process.env.GATSBY_API_URL,
                 headers: {
-                    DisableCache: process.env.DISABLE_CACHE === 'true'
+                    DisableCache: true
                 }
             }
         },
