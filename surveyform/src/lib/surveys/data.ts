@@ -61,6 +61,12 @@ export const getSurveyParamsTable = (): SurveyParamsTable => ({
     2023: { surveyId: "tokyodev", editionId: "td2023" },
     2024: { surveyId: "tokyodev", editionId: "td2024" },
   },
+  "state-of-ai": {
+    2025: { surveyId: "state_of_ai", editionId: "ai2025" },
+  },
+  "state-of-devs": {
+    2025: { surveyId: "state_of_devs", editionId: "devs2025" },
+  },
 });
 
 export const surveyParamsLookup = ({
