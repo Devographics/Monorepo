@@ -31,6 +31,7 @@ export const getSurveyParamsTable = (): SurveyParamsTable => ({
     2022: { surveyId: "state_of_css", editionId: "css2022" },
     2023: { surveyId: "state_of_css", editionId: "css2023" },
     2024: { surveyId: "state_of_css", editionId: "css2024" },
+    2025: { surveyId: "state_of_css", editionId: "css2025" },
   },
   "state-of-graphql": {
     2022: { surveyId: "state_of_graphql", editionId: "graphql2022" },
@@ -45,14 +46,17 @@ export const getSurveyParamsTable = (): SurveyParamsTable => ({
     2022: { surveyId: "state_of_js", editionId: "js2022" },
     2023: { surveyId: "state_of_js", editionId: "js2023" },
     2024: { surveyId: "state_of_js", editionId: "js2024" },
+    2025: { surveyId: "state_of_js", editionId: "js2025" },
   },
   "state-of-react": {
     2023: { surveyId: "state_of_react", editionId: "react2023" },
     2024: { surveyId: "state_of_react", editionId: "react2024" },
+    2025: { surveyId: "state_of_react", editionId: "react2025" },
   },
   "state-of-html": {
     2023: { surveyId: "state_of_html", editionId: "html2023" },
     2024: { surveyId: "state_of_html", editionId: "html2024" },
+    2025: { surveyId: "state_of_html", editionId: "html2025" },
   },
   tokyodev: {
     2020: { surveyId: "tokyodev", editionId: "td2020" },
@@ -60,6 +64,7 @@ export const getSurveyParamsTable = (): SurveyParamsTable => ({
     2022: { surveyId: "tokyodev", editionId: "td2022" },
     2023: { surveyId: "tokyodev", editionId: "td2023" },
     2024: { surveyId: "tokyodev", editionId: "td2024" },
+    2025: { surveyId: "tokyodev", editionId: "td2025" },
   },
   "state-of-ai": {
     2025: { surveyId: "state_of_ai", editionId: "ai2025" },
