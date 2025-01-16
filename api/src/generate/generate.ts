@@ -89,7 +89,7 @@ export const getSectionObject = ({
         edition,
         section
     }))
-    const apiOnly = questions.every(q => q.apiOnly)
+    const apiOnly = section.apiOnly || questions.every(q => q.apiOnly)
     return {
         ...section,
         questions,
