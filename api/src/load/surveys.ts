@@ -26,7 +26,6 @@ let surveysHash: string
 const makeAPIOnly = (sections: Section[]) =>
     sections.map(s => ({
         ...s,
-        apiOnly: true,
         questions: s.questions.map(q => ({ ...q, apiOnly: true }))
     }))
 
