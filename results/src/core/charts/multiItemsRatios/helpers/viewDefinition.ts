@@ -8,6 +8,7 @@ import { formatPercentage } from 'core/charts/common2/helpers/format'
 import max from 'lodash/max'
 import min from 'lodash/min'
 import range from 'lodash/range'
+import compact from 'lodash/compact'
 
 export const getAllEditions = (item: StandardQuestionData) => item?.responses?.allEditions || []
 
@@ -28,33 +29,43 @@ export const viewDefinition: VerticalBarViewDefinition<
             const itemAllEditions = getAllEditions(lineItem)
             return {
                 ...lineItem,
-                points: itemAllEditions.map(currentEdition => {
-                    // find ratios for all line items for current year/edition
-                    let allItemsRatios = lineItems.map(currentItem => {
-                        // for each line item, get the edition of the same year
-                        // as the edition we're currently looking at
-                        const sameYearEdition = getEditionByYear(
-                            currentEdition.year,
-                            getAllEditions(currentItem)
-                        )
-                        const ratio = sameYearEdition?.ratios?.[view]
-                        return { id: currentItem.id, ratio }
+                points: compact(
+                    itemAllEditions.map(currentEdition => {
+                        const value = currentEdition?.ratios?.[view]
+                        if (value === 0) {
+                            // if a ratio is 0, it almost certainly means
+                            // we don't have enough data for this point
+                            // and it should not be displayed
+                            return
+                        } else {
+                            // find ratios for all line items for current year/edition
+                            let allItemsRatios = lineItems.map(currentItem => {
+                                // for each line item, get the edition of the same year
+                                // as the edition we're currently looking at
+                                const sameYearEdition = getEditionByYear(
+                                    currentEdition.year,
+                                    getAllEditions(currentItem)
+                                )
+                                const ratio = sameYearEdition?.ratios?.[view]
+                                return { id: currentItem.id, ratio }
+                            })
+                            // discard any undefined ratios
+                            allItemsRatios = allItemsRatios.filter(r => r.ratio !== undefined)
+                            // sort by ratio, descending
+                            allItemsRatios = sortBy(allItemsRatios, r => r.ratio).toReversed()
+                            // find current item's rank among all items (for same edition)
+                            const rank = allItemsRatios.findIndex(r => r.id === lineItem.id) + 1
+                            return {
+                                ...currentEdition,
+                                id: currentEdition.editionId,
+                                rank,
+                                value,
+                                columnId: currentEdition.year.toString(),
+                                columnIndex: currentEdition.year - startYear
+                            }
+                        }
                     })
-                    // discard any undefined ratios
-                    allItemsRatios = allItemsRatios.filter(r => r.ratio !== undefined)
-                    // sort by ratio, descending
-                    allItemsRatios = sortBy(allItemsRatios, r => r.ratio).toReversed()
-                    // find current item's rank among all items (for same edition)
-                    const rank = allItemsRatios.findIndex(r => r.id === lineItem.id) + 1
-                    return {
-                        ...currentEdition,
-                        id: currentEdition.editionId,
-                        rank,
-                        value: currentEdition?.ratios?.[view],
-                        columnId: currentEdition.year.toString(),
-                        columnIndex: currentEdition.year - startYear
-                    }
-                })
+                )
             }
         })
         return lineItemsWithRank
