@@ -359,9 +359,6 @@ export const Normalization = (props: NormalizationProps) => {
 
   return (
     <div className="admin-normalization admin-content">
-      <pre>
-        <code>cn: {customNormalizations.length}</code>
-      </pre>
       <Actions {...commonProps} {...segmentProps} />
       {segments.length > 0 && <Progress {...commonProps} {...segmentProps} />}
       {responses ? (
