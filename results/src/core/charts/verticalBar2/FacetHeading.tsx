@@ -5,29 +5,21 @@ import { getQuestionGroups, getQuestionOptions } from '../horizontalBar2/helpers
 import { getAllFacetBucketIds } from '../horizontalBar2/helpers/other'
 import { FacetTitle } from '../common2/FacetTitle'
 import Legend from '../verticalBar2/Legend'
+import { CommonProps } from '../common2/types'
 
-type FacetHeadingProps = {}
+type FacetHeadingProps<ChartStateType> = CommonProps<ChartStateType>
 
-export const FacetHeading = (props: FacetHeadingProps) => {
-    const {
-        block,
-        viewDefinition,
-        facetQuestion,
-        facetOptions,
-        chartState,
-        pageContext,
-        series,
-        question
-    } = props
+export const FacetHeading = <ChartStateType,>(props: FacetHeadingProps<ChartStateType>) => {
+    const { block, facetQuestion, facetOptions, chartState, pageContext, question } = props
     const entities = useEntities()
 
     // const controls = getControls({ chartState, chartValues })
 
-    const allOptions = getQuestionOptions({
+    const allOptions = getQuestionOptions<ChartStateType>({
         question: facetQuestion,
         chartState
     })
-    const allGroups = getQuestionGroups({
+    const allGroups = getQuestionGroups<ChartStateType>({
         question: facetQuestion,
         chartState
     })
@@ -55,6 +47,7 @@ export const FacetHeading = (props: FacetHeadingProps) => {
                     options={facetOptions}
                     colorScale={colorScale}
                     i18nNamespace={facetQuestion.id}
+                    enableSort={false}
                 />
             )}
         </div>

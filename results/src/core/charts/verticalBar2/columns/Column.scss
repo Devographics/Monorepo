@@ -28,6 +28,11 @@
     height: calc(var(--height) * 1%);
     bottom: calc(var(--offset) * 1%);
 }
+.chart-column-highlightActive {
+    .chart-cell-notHighlighted {
+        opacity: 0.2;
+    }
+}
 
 .chart-column {
     &:nth-child(2n of .chart-column) {

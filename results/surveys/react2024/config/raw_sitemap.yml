@@ -366,7 +366,8 @@
         template: multi_items_experience
         chartOptions:
             limit: 10
-
+            categories:
+                [component_libraries, state_management, data_loading, back_end_infrastructure]
       # - id: tier_list
       #   template: tier_list
 

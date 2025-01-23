@@ -51,7 +51,8 @@ export const Cell = <SerieData, PointData extends BasicPointData, ChartStateType
     gradient
 }: CellProps<SerieData, PointData, ChartStateType>) => {
     const { ref, cellHeight, isTallEnough: showLabel } = useIsTallEnough()
-
+    const { highlighted } = chartState
+    const isHighlighted = highlighted === cellId
     const style = {
         '--color1': gradient[0],
         '--color2': gradient[1],
@@ -71,7 +72,9 @@ export const Cell = <SerieData, PointData extends BasicPointData, ChartStateType
                 <div
                     data-id={cellId}
                     data-value={value}
-                    className="chart-cell vertical-chart-cell"
+                    className={`chart-cell vertical-chart-cell chart-cell-${
+                        isHighlighted ? 'highlighted' : 'notHighlighted'
+                    }`}
                     style={style}
                     ref={ref}
                 >

@@ -1,4 +1,4 @@
-import { Bucket, Entity, QuestionMetadata } from '@devographics/types'
+import { Bucket, Entity, FacetBucket, QuestionMetadata } from '@devographics/types'
 import { MultiItemsChartValues } from '../multiItemsExperience/types'
 import { BlockVariantDefinition, PageContextValue } from 'core/types'
 import { DataSeries } from 'core/filters/types'
@@ -56,6 +56,8 @@ export type CommonProps<ChartStateType> = {
     variant?: CustomVariant
     question?: QuestionMetadata
     seriesMetadata?: SeriesMetadata
+    facetQuestion?: QuestionMetadata
+    facetOptions?: FacetBucket[]
 }
 
 export type ViewProps<ChartStateType> = CommonProps<ChartStateType> & {
