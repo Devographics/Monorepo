@@ -57,10 +57,6 @@ const SponsorList = styled.div`
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         column-gap: ${spacing(4)};
         row-gap: ${spacing(4)};
-        /* display: flex; */
-        /* justify-content: center; */
-        /* flex-wrap: wrap; */
-        /* gap: ${spacing(4)}; */
     }
 `
 
@@ -72,20 +68,21 @@ const Sponsor = styled.div`
         }
     }
     @media ${mq.large} {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        /* width: 250px; */
-        /* width: 33%; */
     }
 `
 
 const SponsorLogo = styled.div`
-    height: 80px;
-
-    display: grid;
-    place-items: center;
+    a {
+        height: 100px;
+        display: grid;
+        place-items: center;
+    }
+    img,
+    svg {
+        display: block;
+        max-height: 100px;
+        max-width: 200px;
+    }
 
     margin-bottom: ${spacing()};
 
@@ -93,12 +90,6 @@ const SponsorLogo = styled.div`
         margin: 0;
     }
 
-    a,
-    svg,
-    img {
-        display: block;
-        width: 200px;
-    }
     &--designcode {
         width: 50px;
     }
