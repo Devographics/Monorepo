@@ -32,7 +32,7 @@ const getMode = (units: Units, mode: Mode) => {
     }
 }
 
-// get all of one type of unit for a buucket
+// get all of one type of unit for a bucket
 // (count__1, count__2, etc. )
 const getAllBucketUnits = (bucket: Bucket, unit: BucketUnits) => {
     const bucketWithAllOneUnits = pickBy(bucket, (value, key) => key.includes(unit))
