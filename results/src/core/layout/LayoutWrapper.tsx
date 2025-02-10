@@ -26,6 +26,7 @@ const ThemedLayout = (props: LayoutProps) => {
     const { colors } = theme
     const variables = {
         '--textColor': colors.text,
+        '--textColorInverted': colors.textInverted,
         '--textAltColor': colors.textAlt,
         '--backgroundColor': colors.background,
         '--backgroundBackgroundColor': colors.backgroundBackground,

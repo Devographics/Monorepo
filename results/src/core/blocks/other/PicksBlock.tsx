@@ -89,7 +89,7 @@ const PickContentWrapper = styled.div`
 `
 const PickContent = styled.div`
     background: ${color('backgroundInvertedAlt')};
-    color: ${color('textInverted')};
+    color: var(--textColorInverted);
     position: relative;
     margin-bottom: ${spacing(0.75)};
     @media ${mq.small} {
@@ -107,6 +107,10 @@ const PickContent = styled.div`
         height: ${spacing(triangleWidth / 2)};
         bottom: -${spacing(triangleWidth / 2)};
         left: ${spacing(triangleWidth)};
+    }
+    a {
+        color: var(--textColorInverted);
+        text-decoration: underline;
     }
 `
 

@@ -174,10 +174,6 @@
                       sectionId: user_info
                       id: gender
 
-      - id: tokyodev_resources
-        items: [td-article]
-        template: recommended_resources
-
       - id: higher_education_degree
         template: multiple_options2
         variants:
@@ -241,8 +237,8 @@
               parameters:
                   sort: { property: medianByFacet }
 
-      - id: user_info_resources
-        items: [fm-javascript-first-steps, fm-getting-a-job-v2]
+      - id: gitnation_resources
+        items: [gitnation]
         template: recommended_resources
 
 - id: features
@@ -265,7 +261,7 @@
       - id: jack_herrington
         template: picks
         variables:
-            url: https://zustand-demo.pmnd.rs
+            url: https://tanstack.com/start/latest
 
       - id: hooks_pain_points
         template: multiple_options2_freeform
@@ -371,10 +367,10 @@
       # - id: tier_list
       #   template: tier_list
 
-      - id: alex_sidorenko
+      - id: sebastien_lorber
         template: picks
         variables:
-            url: https://react.dev/reference/rsc/server-components
+            url: https://tanstack.com/router/latest
 
       - id: scatterplot_overview
         i18nNamespace: tools
@@ -408,10 +404,10 @@
               i18nNamespace: tools
               template: multiple_options2_freeform
 
-            - id: sam_selikoff
+            - id: aurora_scharff
               template: picks
               variables:
-                  url: https://youtube.com/watch?v=zqhE-CepH2g
+                  url: https://nuqs.47ng.com/
 
             - id: animation_libraries
               template: multiple_options2_combined
@@ -458,10 +454,10 @@
               i18nNamespace: tools
               template: multiple_options2_freeform
 
-            - id: sebastien_lorber
+            - id: shaundai_person
               template: picks
               variables:
-                  url: https://www.remotion.dev/
+                  url: https://codetv.dev/
 
             - id: state_management_pain_points
               template: multiple_options2_freeform
@@ -484,10 +480,10 @@
               i18nNamespace: tools
               template: multiple_options2_freeform
 
-            - id: aurora_scharff
+            - id: josh_comeau
               template: picks
               variables:
-                  url: https://buildui.com/posts/instant-search-params-with-react-server-components
+                  url: https://lucide.dev/
 
             - id: data_loading_pain_points
               template: multiple_options2_freeform
@@ -518,10 +514,10 @@
               template: multiple_options2_combined
               i18nNamespace: tools
 
-            - id: josh_comeau
+            - id: sacha_greif
               template: picks
               variables:
-                  url: https://mui.com/blog/introducing-pigment-css/
+                  url: https://react-scan.com/
 
             - id: other_services
               template: multiple_options2_combined
@@ -557,10 +553,10 @@
         template: multiple_options2_combined
         i18nNamespace: tools
 
-      - id: carl_vitullo
-        template: picks
-        variables:
-            url: https://www.propelauth.com/post/nextjs-challenges
+      # - id: carl_vitullo
+      #   template: picks
+      #   variables:
+      #       url: https://www.propelauth.com/post/nextjs-challenges
 
       - id: auth
         template: multiple_options2_combined
@@ -597,10 +593,10 @@
       - id: js_app_patterns
         template: multiple_options2_combined
 
-      - id: miguel_angel_duran
-        template: picks
-        variables:
-            url: https://sonner.emilkowal.ski
+      # - id: miguel_angel_duran
+      #   template: picks
+      #   variables:
+      #       url: https://sonner.emilkowal.ski
 
       # - id: state_of_react
       #   template: happiness2
@@ -640,10 +636,10 @@
         parameters: { limit: 40 }
         chartOptions: { limit: 20 }
 
-      - id: lydia_hallie
-        template: picks
-        variables:
-            url: https://docs.expo.dev/router/introduction/
+      # - id: lydia_hallie
+      #   template: picks
+      #   variables:
+      #       url: https://docs.expo.dev/router/introduction/
 
       - id: video_creators
         template: multiple_options2_combined
@@ -759,11 +755,11 @@
 - id: conclusion
   path: /conclusion
   blocks:
-      - id: conclusion_josh
+      - id: conclusion_sebastien
         template: conclusion
         variables:
-            author: josh_comeau
-            entities: '"josh_comeau"'
+            author: sebastien_lorber
+            entities: '"sebastien_lorber"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock
