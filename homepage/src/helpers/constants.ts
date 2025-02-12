@@ -4,3 +4,9 @@ export const statuses = {
   closed: 3,
   hidden: 4,
 };
+
+export const calendarSections = {
+  past: "past",
+  ongoing: "ongoing",
+  upcoming: "upcoming",
+};

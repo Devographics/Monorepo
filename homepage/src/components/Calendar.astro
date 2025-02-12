@@ -2,15 +2,16 @@
 import { SurveyStatusEnum } from "@devographics/types";
 import T from "./T";
 import sortBy from "lodash/sortBy";
+import CalendarSection from "./CalendarSection.astro";
 
 const { surveys, locale } = Astro.props;
 import { Debug } from "astro/components";
+import { calendarSections } from "@helpers/constants";
 
 const allEditions = surveys.map((s) => s.editions).flat();
-const upcomingEditions = allEditions.filter(
-  (e) => e.status === SurveyStatusEnum.HIDDEN
-);
-const editionsWithSurveys = upcomingEditions.map((e) => ({
+const currentYear = new Date().getFullYear();
+const currentYearEditions = allEditions.filter((e) => e.year === currentYear);
+const editionsWithSurveys = currentYearEditions.map((e) => ({
   ...e,
   survey: surveys.find((s) => s.id === e.surveyId),
 }));
@@ -19,54 +20,39 @@ const sortedEditions = sortBy(
   editionsWithSurveys,
   (e) => new Date(e.feedbackAt)
 );
+
+const currentDate = new Date();
+const pastEditions = sortedEditions.filter(
+  (e) => currentDate > new Date(e.endedAt)
+);
+const ongoingEditions = sortedEditions.filter(
+  (e) =>
+    currentDate > new Date(e.startedAt) && currentDate < new Date(e.endedAt)
+);
+const upcomingEditions = sortedEditions.filter(
+  (e) => currentDate < new Date(e.startedAt)
+);
 ---
 
 <section id="calendar" class="calendar">
-  <h2><T locale={locale} k="calendar.heading" /></h2>
+  <h2><T locale={locale} k="calendar.heading" values={{ currentYear }} /></h2>
 
-  <div class="calendar-events">
-    {
-      sortedEditions.map((edition) => {
-        const { feedbackAt, startedAt, endedAt, releasedAt, feedbackUrl } =
-          edition;
-        return (
-          <div class="calendar-edition">
-            <h4>
-              {edition.survey.name} {edition.year}
-            </h4>
-            <table class="calendar-table">
-              <thead>
-                <tr>
-                  <th>
-                    <T locale={locale} k="calendar.feedbackAt" />
-                  </th>
-                  <th>
-                    <T locale={locale} k="calendar.startedAt" />
-                  </th>
-                  <th>
-                    <T locale={locale} k="calendar.endedAt" />
-                  </th>
-                  <th>
-                    <T locale={locale} k="calendar.releasedAt" />
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <a href={feedbackUrl}>{feedbackAt}</a>
-                  </td>
-                  <td>{startedAt}</td>
-                  <td>{endedAt}</td>
-                  <td>{releasedAt}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        );
-      })
-    }
-  </div>
+  <CalendarSection
+    locale={locale}
+    editions={pastEditions}
+    sectionId={calendarSections.past}
+    ]
+  />
+  <CalendarSection
+    locale={locale}
+    editions={ongoingEditions}
+    sectionId={calendarSections.ongoing}
+  />
+  <CalendarSection
+    locale={locale}
+    editions={upcomingEditions}
+    sectionId={calendarSections.upcoming}
+  />
 </section>
 
 <style lang="scss">

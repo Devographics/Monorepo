@@ -1,0 +1,39 @@
+---
+import T from "./T";
+const { editions, sectionId, locale } = Astro.props;
+import CalendarEdition from "./CalendarEdition.astro";
+const labelId = `calendar.${sectionId}_editions`;
+---
+
+<div class="calendar-section">
+  <h4 class="calendar-section-heading"><T locale={locale} k={labelId} /></h4>
+  <div class="calendar-events">
+    {
+      editions.length > 0 ? (
+        editions.map((edition) => {
+          return (
+            <CalendarEdition
+              edition={edition}
+              locale={locale}
+              sectionId={sectionId}
+            />
+          );
+        })
+      ) : (
+        <T locale={locale} k="calendar.no_editions" />
+      )
+    }
+  </div>
+</div>
+
+<style lang="scss">
+  @use "../stylesheets/_breakpoints.scss";
+
+  .calendar-section {
+    margin-bottom: var(--spacing);
+  }
+  .calendar-section-heading {
+    background: #00000033;
+    padding: 4px 10px;
+  }
+</style>
