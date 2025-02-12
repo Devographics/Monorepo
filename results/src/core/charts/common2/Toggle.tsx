@@ -22,41 +22,45 @@ const getMinToggleWidth = (items: ToggleItemType[]) =>
     sum(items.map(item => (item?.label?.length || 0) * MIN_WIDTH_PER_CHAR)) * RATIO +
     items.length * PADDING_PER_ITEM
 
+type ToggleValueType = string | number
+
 export type ToggleItemType = {
     label: string
     labelKey: string
-    id: string | number | null
+    id: ToggleValueType
     isEnabled: boolean
     className?: string
     tooltip?: JSX.Element
     gradient?: string[]
 }
 
-type ToggleProps<ValueType> = {
+type ToggleProps = {
     alwaysExpand?: boolean
     labelId?: string
     items: ToggleItemType[]
-    handleSelect?: (id: ValueType) => void
+    handleSelect?: (id: ToggleValueType | null) => void
+    handleHover?: (id: ToggleValueType | null) => void
     hasDefault?: boolean
     sortOrder?: OrderOptions
 }
 
 export const DEFAULT_SORT = 'default'
 
-export const Toggle = <ValueType,>({
+export const Toggle = ({
     sortOrder,
     alwaysExpand = false,
     labelId,
     items,
     handleSelect,
+    handleHover,
     hasDefault = false
-}: ToggleProps<ValueType>) => {
+}: ToggleProps) => {
     const [useDropdown, setUseDropdown] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
     const currentWidth = useWidth(ref)
     const minimumWidth = getMinToggleWidth(items)
 
-    const commonProps = { handleSelect, hasDefault, items }
+    const commonProps = { handleSelect, handleHover, hasDefault, items }
 
     useEffect(() => {
         // note: only make calculation once currentWidth is defined
@@ -81,29 +85,29 @@ export const Toggle = <ValueType,>({
                 ref={ref}
             >
                 {!alwaysExpand && useDropdown ? (
-                    <Dropdown<ValueType> {...commonProps} />
+                    <Dropdown {...commonProps} />
                 ) : (
-                    <SegmentedControl<ValueType> {...commonProps} />
+                    <SegmentedControl {...commonProps} />
                 )}
             </div>
         </div>
     )
 }
 
-const Dropdown = <ValueType,>({
+const Dropdown = ({
     handleSelect,
     hasDefault,
     items
-}: Pick<ToggleProps<ValueType>, 'handleSelect' | 'hasDefault' | 'items'>) => {
+}: Pick<ToggleProps, 'handleSelect' | 'hasDefault' | 'items'>) => {
     const { getString } = useI18n()
-
+    const props: { onChange?: (e: SyntheticEvent) => void } = {}
+    if (handleSelect) {
+        props.onChange = e => {
+            handleSelect((e.target as HTMLSelectElement).value)
+        }
+    }
     return (
-        <select
-            className="chart-toggle-dropdown chart-toggle-items"
-            onChange={e => {
-                handleSelect(e.target.value)
-            }}
-        >
+        <select className="chart-toggle-dropdown chart-toggle-items" {...props}>
             {hasDefault && (
                 <option value={DEFAULT_SORT}>{getString('filters.legend.default')?.t}</option>
             )}
@@ -123,14 +127,20 @@ const DropdownItem = ({ item }: { item: ToggleItemType }) => {
     )
 }
 
-const SegmentedControl = <ValueType,>({
+const SegmentedControl = ({
     handleSelect,
+    handleHover,
     items
-}: Pick<ToggleProps<ValueType>, 'handleSelect' | 'hasDefault' | 'items'>) => {
+}: Pick<ToggleProps, 'handleSelect' | 'handleHover' | 'hasDefault' | 'items'>) => {
     return (
         <ButtonGroup className="chart-toggle-buttongroup chart-toggle-items">
             {items.map(item => (
-                <SegmentedControlItem key={item.id} item={item} handleSelect={handleSelect} />
+                <SegmentedControlItem
+                    key={item.id}
+                    item={item}
+                    handleSelect={handleSelect}
+                    handleHover={handleHover}
+                />
             ))}
         </ButtonGroup>
     )
@@ -138,24 +148,41 @@ const SegmentedControl = <ValueType,>({
 
 const SegmentedControlItem = ({
     item,
-    handleSelect
+    handleSelect,
+    handleHover
 }: {
     item: ToggleItemType
     handleSelect: ToggleProps['handleSelect']
+    handleHover: ToggleProps['handleHover']
 }) => {
     const { label, labelKey, id, isEnabled, gradient, className, tooltip } = item
     const ref = useRef<HTMLDivElement>(null)
-
+    const props: {
+        onClick?: (e: SyntheticEvent) => void
+        onMouseEnter?: (e: SyntheticEvent) => void
+        onMouseLeave?: (e: SyntheticEvent) => void
+    } = {}
+    if (handleSelect) {
+        props.onClick = (e: SyntheticEvent) => {
+            e.preventDefault()
+            handleSelect(id)
+        }
+    }
+    if (handleHover) {
+        props.onMouseEnter = () => {
+            handleHover(id)
+        }
+        props.onMouseLeave = () => {
+            handleHover(null)
+        }
+    }
     const component = (
         <Button
             className={`chart-toggle-item column-heading chart-toggle-item-${
                 isEnabled ? 'enabled' : 'disabled'
             } ${className}`}
             size="small"
-            onClick={(e: SyntheticEvent) => {
-                e.preventDefault()
-                handleSelect(id)
-            }}
+            {...props}
             ref={ref}
         >
             {gradient && <ItemColor gradient={gradient} />}

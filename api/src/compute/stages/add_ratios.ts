@@ -4,6 +4,10 @@ import floor from 'lodash/floor.js'
 
 const getCount = (bucket: Bucket) => bucket.count || 0
 
+// TODO: currently, if a bucket has insufficient data and has been removed
+// the resulting count will go to 0.
+// in the future, find a way to distinguish between this scenario and the
+// scenario where there are *actually* 0 positive/negative respondents
 const getPositiveCount = (bucket: Bucket) =>
     bucket?.facetBuckets?.find(fb => fb.id === SimplifiedSentimentOptions.POSITIVE_SENTIMENT)
         ?.count || 0

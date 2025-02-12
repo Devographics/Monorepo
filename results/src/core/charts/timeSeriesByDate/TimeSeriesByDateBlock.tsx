@@ -14,6 +14,7 @@ import { TimeSeriesByDateChartState } from './types'
 import { FacetHeading } from '../verticalBar2/FacetHeading'
 import uniqBy from 'lodash/uniqBy'
 import compact from 'lodash/compact'
+import { CommonProps } from '../common2/types'
 
 export interface VerticalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -38,7 +39,7 @@ export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
     const viewDefinition = getViewDefinition(view)
     const ViewComponent = viewDefinition.component
 
-    const commonProps = {
+    const commonProps: CommonProps<TimeSeriesByDateChartState> & { viewDefinition: any } = {
         variant,
         question,
         series,
@@ -55,7 +56,6 @@ export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
             .flat()
             .flat()
             .flat()
-        console.log(allFacetBuckets)
         const facetOptions = uniqBy(compact(allFacetBuckets), fb => fb.id)
         commonProps.facetOptions = facetOptions
     }
@@ -66,8 +66,7 @@ export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>
                 </pre> */}
-                {facetQuestion && <FacetHeading {...commonProps} />}
-
+                {facetQuestion && <FacetHeading<TimeSeriesByDateChartState> {...commonProps} />}
                 <GridWrapper seriesCount={series.length}>
                     {series.map((serie, serieIndex) => (
                         <VerticalBarSerieWrapper<StandardQuestionData, TimeSeriesByDateChartState>
@@ -80,9 +79,7 @@ export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
                         </VerticalBarSerieWrapper>
                     ))}
                 </GridWrapper>
-
                 <Note block={block} />
-
                 <ChartFooter
                     left={
                         <Metadata
@@ -99,7 +96,6 @@ export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
                         </>
                     }
                 />
-
                 {/* <Actions {...commonProps} /> */}
             </>
         </ChartWrapper>

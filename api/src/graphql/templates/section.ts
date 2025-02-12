@@ -11,6 +11,7 @@ import {
     TypeTypeEnum
 } from '../../types'
 import { getFeatureFieldTypeName } from '../../generate/templates/feature'
+import { getToolFieldTypeName } from '../../generate/templates'
 /*
 
 Sample output:
@@ -40,10 +41,17 @@ export const generateSectionType = ({
     const typeName = `${graphqlize(edition.id)}${graphqlize(section.id)}Section`
 
     // TODO: find better way to figure out if a section is a feature or tool section
-    const isFeatureOrToolSection =
+    const isFeatureSection =
+        section.id === 'features' || (section.template && ['featurev3'].includes(section.template))
+
+    const isToolSection =
         section.id === 'libraries' ||
-        section.id === 'features' ||
-        (section.template && ['featurev3', 'tool', 'toolv3'].includes(section.template))
+        (section.template && ['tool', 'toolv3'].includes(section.template))
+
+    const isFeatureOrToolSection = isFeatureSection || isToolSection
+    const featureOrToolTypeName = isFeatureSection
+        ? getFeatureFieldTypeName({ survey })
+        : getToolFieldTypeName({ survey })
 
     return {
         generatedBy: 'section',
@@ -51,12 +59,8 @@ export const generateSectionType = ({
         typeName,
         typeType: TypeTypeEnum.SECTION,
         typeDef: `type ${typeName} {
-            ${isFeatureOrToolSection ? `_items: [${getFeatureFieldTypeName({ survey })}]` : ''}
-            ${
-                isFeatureOrToolSection
-                    ? `_cardinalities: [${getFeatureFieldTypeName({ survey })}]`
-                    : ''
-            }
+            ${isFeatureOrToolSection ? `_items: [${featureOrToolTypeName}]` : ''}
+            ${isFeatureOrToolSection ? `_cardinalities: [${featureOrToolTypeName}]` : ''}
     ${section.questions
         .filter(q => q.hasApiEndpoint !== false)
         .map((question: QuestionApiObject) => {

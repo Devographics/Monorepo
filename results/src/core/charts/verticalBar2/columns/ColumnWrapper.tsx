@@ -32,6 +32,7 @@ export const ColumnWrapper = <SerieData, PointData extends BasicPointData, Chart
         chartValues,
         chartState
     } = props
+    const { highlighted } = chartState
     const { formatColumnId, formatValue } = viewDefinition
     const { columnAverages } = chartValues
     /*
@@ -49,7 +50,12 @@ export const ColumnWrapper = <SerieData, PointData extends BasicPointData, Chart
 
     const columnLabel = <span> {formatColumnId({ columnId, columnIndex, chartValues })}</span>
     return (
-        <div className="chart-column" style={style}>
+        <div
+            className={`chart-column chart-column-${
+                highlighted === null ? 'highlightInactive' : 'highlightActive'
+            }`}
+            style={style}
+        >
             {rowMetadata && <div className="chart-column-top">{rowMetadata}</div>}
             <div className="chart-column-content">
                 {children && <div className="chart-bar">{children}</div>}

@@ -1078,7 +1078,7 @@
                   addQuestionComments: false
               filtersState:
                   facet:
-                      sectionId: user_metadata
+                      sectionId: _user_metadata
                       id: source
 
       - id: source

@@ -88,4 +88,4 @@ export const addFutureParticipations = async (args) => {
 
 addFutureParticipations.args = ["surveyId", "editionId"];
 
-addFutureParticipations.description = `Add previous edition counts (how many times someone has taken the same survey before) where missing.`;
+addFutureParticipations.description = `Add future edition counts (how many times someone has taken the same survey afterwards) where missing.`;

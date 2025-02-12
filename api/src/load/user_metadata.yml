@@ -1,4 +1,5 @@
 id: _user_metadata
+apiOnly: true
 questions:
     - id: locale
       template: locale

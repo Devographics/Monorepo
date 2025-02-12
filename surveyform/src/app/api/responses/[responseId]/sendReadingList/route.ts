@@ -51,7 +51,7 @@ export async function POST(req: NextRequest, props: RouteHandlerOptions<{ respon
       });
 
     const from =
-      survey.domain && `${survey.name} <hello@mail.${survey.domain}>`;
+      survey.domain && `${survey.name} <hello@mail.devographics.com>`;
 
     const emailObject = {
       from,
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest, props: RouteHandlerOptions<{ respon
     // console.log("---------------------------------------------");
 
     const res = await localMailTransport.sendMail(emailObject);
-    console.log("Sent a reading list to", email)
+    console.log("Sent a reading list to", email);
 
     return NextResponse.json({ data: { emailObject } });
   } catch (error) {

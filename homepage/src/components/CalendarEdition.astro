@@ -1,0 +1,70 @@
+---
+import { calendarSections } from "@helpers/constants";
+import T from "./T";
+
+const { edition, locale, sectionId } = Astro.props;
+const {
+  startedAt,
+  endedAt,
+  releasedAt,
+  feedbackUrl,
+  questionsUrl,
+  resultsUrl,
+} = edition;
+---
+
+<div class="calendar-edition">
+  <h4>
+    {edition.survey.name}
+    {edition.year}
+  </h4>
+  <table class="calendar-table">
+    <thead>
+      <tr>
+        <th>
+          <T locale={locale} k="calendar.startedAt" />
+        </th>
+        <th>
+          <T locale={locale} k="calendar.endedAt" />
+        </th>
+        <th>
+          <T locale={locale} k="calendar.releasedAt" />
+        </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{startedAt}</td>
+        <td>{endedAt}</td>
+        <td>{releasedAt}</td>
+
+        <td>
+          {
+            sectionId === calendarSections.past ? (
+              <a href={resultsUrl}>
+                <T locale={locale} k="calendar.view_results" />
+              </a>
+            ) : sectionId === calendarSections.ongoing ? (
+              <a href={questionsUrl}>
+                <T locale={locale} k="calendar.take_survey" />
+              </a>
+            ) : sectionId === calendarSections.upcoming ? (
+              <a href={feedbackUrl}>
+                <T locale={locale} k="calendar.give_feedback" />{" "}
+              </a>
+            ) : null
+          }
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <style lang="scss">
+    @use "../stylesheets/_breakpoints.scss";
+
+    .calendar-edition {
+      margin-bottom: var(--doublespacing);
+    }
+  </style>
+</div>

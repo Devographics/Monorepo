@@ -65,14 +65,9 @@ export const sendMagicLinkEmail = async ({
     calledFrom: "sendMagicLinkEmail",
   });
   const survey = edition.survey;
-  if (!survey.domain) {
-    console.warn(
-      `No survey domain found for id ${surveyId}, cannot set 'from'`
-    );
-  }
 
   const defaultEmail =
-    survey.domain && `${survey.name} <login@mail.${survey.domain}>`;
+    survey.domain && `${survey.name} <login@mail.devographics.com>`;
   const from = process.env.DEFAULT_MAIL_FROM || defaultEmail;
 
   /**

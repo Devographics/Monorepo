@@ -2,12 +2,12 @@ import { NOT_APPLICABLE, NO_ANSWER } from '@devographics/constants'
 import { QuestionMetadata } from '@devographics/types'
 import { HorizontalBarChartState } from '../types'
 
-export const getQuestionOptions = ({
+export const getQuestionOptions = <ChartStateType>({
     question,
     chartState
 }: {
     question: QuestionMetadata
-    chartState: HorizontalBarChartState
+    chartState: ChartStateType
 }) => {
     if (!question.options) {
         return []
@@ -16,12 +16,12 @@ export const getQuestionOptions = ({
     }
 }
 
-export const getQuestionGroups = ({
+export const getQuestionGroups = <ChartStateType>({
     question,
     chartState
 }: {
     question: QuestionMetadata
-    chartState: HorizontalBarChartState
+    chartState: ChartStateType
 }) => {
     if (!question.groups) {
         return []
