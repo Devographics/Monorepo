@@ -8,9 +8,6 @@ const moduleExports = (phase, { defaultConfig }) => {
    **/
   let nextConfig = {
     ...defaultConfig,
-    experimental: {
-      instrumentationHook: true,
-    },
     // Disable linting during build => the linter may have optional dev dependencies
     // (eslint-plugin-cypress) that wont exist during prod build
     // You should lint manually only

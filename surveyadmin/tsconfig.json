@@ -14,7 +14,7 @@
     "lib": [
       "ESNext.Array",
       "dom",
-      "es2022"
+      "es2023"
     ],
     "module": "esnext",
     "moduleResolution": "Bundler",
