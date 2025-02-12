@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { routes } from "~/lib/routes";
 import { LogoutButton } from "~/components/users";
 import { Button } from "~/components/ui/Button";
-import classes from "./DefaultError.module.scss";
 
 // NOTE: this expects a latin language. Might need improvements/more reusability
 const addPointToSentence = (sentence?: string | null) => {
@@ -40,8 +39,8 @@ const getTitleFromError = (error: Error | undefined, t: any) => {
 
 /**
  * Expect to be nested below the translation context
- * @param param0 
- * @returns 
+ * @param param0
+ * @returns
  */
 export const DefaultErrorDisplay = ({
   error,
@@ -57,7 +56,7 @@ export const DefaultErrorDisplay = ({
 }: DefaultErrorProps) => {
   //const classes = useStyles();
   //const { t } = useTranslation("common");
-  const { t } = useI18n()  // TODO: detect when intl is not set and display the fallback messages instead
+  const { t } = useI18n(); // TODO: detect when intl is not set and display the fallback messages instead
   const router = useRouter();
 
   // const hasAccessToken = !!getAccessToken();
@@ -80,11 +79,11 @@ export const DefaultErrorDisplay = ({
     title || (titleI18nToken ? t(titleI18nToken) : defaultErrorTitle);
 
   return (
-    <div className={classes.wrapper}>
+    <div className={"defaulterror"}>
       {/*<WarningIcon fontSize="large" />*/}
       <h2>
         {errorTitle}
-        {error?.name && <span> { }</span>}
+        {error?.name && <span> {}</span>}
       </h2>
       {!!errorMessage && (
         <p>
@@ -93,7 +92,7 @@ export const DefaultErrorDisplay = ({
         </p>
       )}
       {hasButtons && (
-        <div className={classes.buttonsWrapper}>
+        <div className={"buttonsWrapper"}>
           {proposeReload && (
             <>
               <p /*className={classes.tryReloadMessage}*/>
@@ -142,10 +141,9 @@ export const DefaultErrorDisplay = ({
   );
 };
 
-
 /**
  * Can be placed outside the i18n context, won't try to access the i18n context
- * @returns 
+ * @returns
  */
 export const RawErrorDisplay = ({
   error,
@@ -172,18 +170,16 @@ export const RawErrorDisplay = ({
     proposeHomeRedirection ||
     proposeLoginRedirection ||
     shouldProposeLogout;
-  const errorMessage =
-    message || error?.message || "An error has occurred"
+  const errorMessage = message || error?.message || "An error has occurred";
 
-  const errorTitle =
-    title || error?.name
+  const errorTitle = title || error?.name;
 
   return (
-    <div className={classes.wrapper}>
+    <div className={"defaulterror"}>
       {/*<WarningIcon fontSize="large" />*/}
       <h2>
         {errorTitle}
-        {error?.name && <span> { }</span>}
+        {error?.name && <span> {}</span>}
       </h2>
       {!!errorMessage && (
         <p>
@@ -192,7 +188,7 @@ export const RawErrorDisplay = ({
         </p>
       )}
       {hasButtons && (
-        <div className={classes.buttonsWrapper}>
+        <div className={"buttonsWrapper"}>
           {proposeReload && (
             <>
               <p /*className={classes.tryReloadMessage}*/>

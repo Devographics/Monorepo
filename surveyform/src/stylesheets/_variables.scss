@@ -1,3 +1,5 @@
+@use "colors";
+
 @use "sass:math";
 $spacing: 20px;
 $spacing-half: math.div($spacing, 2);
@@ -7,8 +9,8 @@ $spacing-two-thirds: math.div($spacing * 2, 3);
 $spacing-eighth: math.div($spacing, 8);
 $spacing-sixth: math.div($spacing, 6);
 
-$antsBg: $navyLight;
-$antsFg: $pink;
+$antsBg: colors.$navyLight;
+$antsFg: colors.$pink;
 
 @mixin flex-center {
   display: flex;
@@ -34,15 +36,15 @@ $border-radius: 3px;
 }
 
 @mixin text-shadow {
-  text-shadow: 0px 2px 5px rgba($pink, 0.6);
+  text-shadow: 0px 2px 5px rgba(colors.$pink, 0.6);
 }
 
 @mixin text-shadow-faint {
-  text-shadow: 0px 2px 3px rgba($pink, 0.5);
+  text-shadow: 0px 2px 3px rgba(colors.$pink, 0.5);
 }
 
 @mixin box-shadow {
-  box-shadow: 0px 2px 5px rgba($pink, 0.6);
+  box-shadow: 0px 2px 5px rgba(colors.$pink, 0.6);
 }
 
 @mixin clearfix {

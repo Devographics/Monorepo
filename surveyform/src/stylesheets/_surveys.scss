@@ -1,15 +1,20 @@
+@use "breakpoints";
+@use "colors";
+@use "typography";
+@use "variables";
+
 @use "sass:math";
 // locale selector
 .locale-selector {
   max-width: 600px;
   margin: 0 auto;
-  margin-bottom: $spacing * 2;
+  margin-bottom: variables.$spacing * 2;
   text-align: center;
-  padding: $spacing;
-  background: $bg-color-light;
+  padding: variables.$spacing;
+  background: colors.$bg-color-light;
   &-languages {
-    @include font-regular;
-    font-size: $small-font;
+    @include typography.font-regular;
+    font-size: typography.$small-font;
     margin-bottom: 5px;
   }
   &-item {
@@ -17,21 +22,21 @@
     // margin-left: 5px;
   }
   &-help {
-    font-size: $small-font;
+    font-size: typography.$small-font;
   }
 }
 // surveys page
 
 .surveys-title {
   text-align: center;
-  margin-bottom: $spacing;
+  margin-bottom: variables.$spacing;
 }
 .account,
 .contents-narrow {
   max-width: 650px;
   margin: 0 auto;
-  @include small {
-    padding: 0 math.div($spacing, 2);
+  @include breakpoints.small {
+    padding: 0 math.div(variables.$spacing, 2);
   }
 }
 .surveys {
@@ -39,30 +44,30 @@
 .surveys-group {
   max-width: 300px;
   margin: 0 auto;
-  margin-bottom: $spacing * 3;
+  margin-bottom: variables.$spacing * 3;
 }
 .surveys-none {
   text-align: center;
-  font-size: $medium-font;
+  font-size: typography.$medium-font;
 }
 .survey-item {
-  margin-bottom: $spacing * 2;
+  margin-bottom: variables.$spacing * 2;
 }
 .survey-link {
   position: relative;
   display: block;
-  @include border;
-  @include border-radius;
+  @include variables.border;
+  @include variables.border-radius;
   &:hover {
     &,
     .survey-name span {
-      border-color: $hover-color;
-      background: $bg-color-light;
+      border-color: colors.$hover-color;
+      background: colors.$bg-color-light;
     }
   }
 }
 .survey-image-inner {
-  padding: $spacing;
+  padding: variables.$spacing;
   width: 300px;
   max-height: 200px;
   & img {
@@ -72,7 +77,7 @@
   }
 }
 .survey-name {
-  font-size: $large-font;
+  font-size: typography.$large-font;
   position: absolute;
   bottom: 0;
   margin-left: 50%;
@@ -83,16 +88,16 @@
   margin-bottom: 0;
   span {
     padding: 5px 10px;
-    @include border;
+    @include variables.border;
     border-radius: 30px;
     white-space: nowrap;
-    font-size: $small-font;
+    font-size: typography.$small-font;
   }
 }
 .survey-results {
   display: block;
   text-align: center;
-  margin-bottom: $spacing * 1.5;
+  margin-bottom: variables.$spacing * 1.5;
 }
 .surveys-group-heading {
   text-align: center;
@@ -100,20 +105,20 @@
 
 // Survey Section
 .survey-section {
-  @include large {
+  @include breakpoints.large {
     display: grid;
     grid-template-rows: auto auto;
     grid-template-columns: 2fr 1fr;
     grid-template-areas:
       "heading heading"
       "contents sidebar";
-    column-gap: $spacing;
+    column-gap: variables.$spacing;
   }
-  @include xlarge {
+  @include breakpoints.xlarge {
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
     grid-template-areas: "heading contents sidebar";
-    column-gap: $spacing * 2;
+    column-gap: variables.$spacing * 2;
   }
 }
 .section-heading {
@@ -134,63 +139,63 @@
 }
 .form-section-nav {
   &-top {
-    margin-bottom: $spacing;
+    margin-bottom: variables.$spacing;
   }
 }
 .section-heading {
-  @include small {
-    margin: $spacing * 2 0;
-    padding: $spacing;
+  @include breakpoints.small {
+    margin: variables.$spacing * 2 0;
+    padding: variables.$spacing;
     background: var(--bg-color-light);
   }
-  @include medium-large {
-    margin-bottom: $spacing;
+  @include breakpoints.medium-large {
+    margin-bottom: variables.$spacing;
   }
 }
 .section-heading-contents {
-  @include xlarge {
+  @include breakpoints.xlarge {
     text-align: right;
     position: sticky;
-    top: $spacing * 2;
+    top: variables.$spacing * 2;
   }
 }
 .section-title {
-  @include small-medium {
-    font-size: $larger-font;
+  @include breakpoints.small-medium {
+    font-size: typography.$larger-font;
   }
-  @include large {
-    font-size: $largestest-font;
+  @include breakpoints.large {
+    font-size: typography.$largestest-font;
   }
-  margin-bottom: math.div($spacing, 2);
+  margin-bottom: math.div(variables.$spacing, 2);
   line-height: 1;
 }
 .section-title-pagenumber {
-  @include font-regular;
+  @include typography.font-regular;
   opacity: 0.4;
   display: none;
 }
 .section-description {
-  font-size: $large-font;
-  @include font-regular;
+  font-size: typography.$large-font;
+  @include typography.font-regular;
   line-height: 1.7;
   margin: 0;
 }
 .section-toc {
   display: none;
-  @include xlarge {
+  @include breakpoints.xlarge {
     display: block;
   }
-  margin-top: $spacing;
+  margin-top: variables.$spacing;
   ol {
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    gap: $spacing-half;
+    gap: variables.$spacing-half;
   }
   li {
     a {
-      font-size: $smallish-font;
-      @include font-regular;
+      font-size: typography.$smallish-font;
+      @include typography.font-regular;
       &.not-highlighted {
         &:link,
         &:visited {
@@ -213,32 +218,32 @@
   }
 }
 .survey-message {
-  padding: $spacing;
-  margin-bottom: $spacing * 2;
+  padding: variables.$spacing;
+  margin-bottom: variables.$spacing * 2;
   text-align: center;
   &.survey-closed,
   &.survey-error {
-    background: $redTransparent;
+    background: colors.$redTransparent;
   }
   &.survey-preview,
   &.survey-finished,
   &.survey-success {
-    background: $greenTransparent;
+    background: colors.$greenTransparent;
   }
 }
 .login-error {
   text-align: left;
-  margin-top: $spacing-half;
+  margin-top: variables.$spacing-half;
   margin-bottom: 0;
-  padding: $spacing-half;
+  padding: variables.$spacing-half;
 }
 
 .survey-page-block {
-  margin-bottom: $spacing * 3;
+  margin-bottom: variables.$spacing * 3;
 }
 
 .survey-page-block-heading {
-  margin-bottom: $spacing * 2;
+  margin-bottom: variables.$spacing * 2;
   text-align: center;
 }
 
@@ -249,17 +254,17 @@
 }
 .form-section-message {
   background: var(--bg-color-light);
-  padding: $spacing;
-  margin-bottom: $spacing;
-  background: $greenTransparent;
+  padding: variables.$spacing;
+  margin-bottom: variables.$spacing;
+  background: colors.$greenTransparent;
 }
 
 .response-details {
-  margin-top: $spacing-half;
-  font-size: $smallish-font;
+  margin-top: variables.$spacing-half;
+  font-size: typography.$smallish-font;
   color: var(--text-color-dark);
   text-align: center;
   p {
-    margin-bottom: $spacing-eighth;
+    margin-bottom: variables.$spacing-eighth;
   }
 }

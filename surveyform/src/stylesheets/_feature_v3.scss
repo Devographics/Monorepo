@@ -1,3 +1,7 @@
+@use "breakpoints";
+@use "typography";
+@use "variables";
+
 .sentiments {
   display: inline-flex;
   gap: 0.6em;
@@ -116,7 +120,7 @@
       opacity: 0.6;
     }
 
-    @include small {
+    @include breakpoints.small {
       /* mobile */
       /* Not selected */
 
@@ -149,7 +153,7 @@
   .form-check {
     align-items: center;
     justify-content: flex-start;
-    gap: $spacing;
+    gap: variables.$spacing;
     .form-check-label {
       flex: inherit;
     }
@@ -258,7 +262,7 @@
 .feature-unimplemented {
   background: var(--bg-color-light);
   border-radius: 0.2em;
-  font-size: $smallish-font;
+  font-size: typography.$smallish-font;
   padding: 0.35em 0.8em 0.2em;
   text-transform: uppercase;
   font-weight: 600;

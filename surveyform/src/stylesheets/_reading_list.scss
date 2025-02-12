@@ -1,11 +1,15 @@
+@use "breakpoints";
+@use "typography";
+@use "variables";
+
 .reading-list-summary {
   .reading-list {
     &-title {
-      margin-bottom: $spacing-third;
+      margin-bottom: variables.$spacing-third;
     }
 
     &-description {
-      font-size: $smallish-font;
+      font-size: typography.$smallish-font;
     }
 
     &-items {
@@ -15,10 +19,10 @@
     }
 
     &-item {
-      padding-top: $spacing-third;
-      margin-top: $spacing-third;
-      border-top: $border;
-      font-size: $medium-font;
+      padding-top: variables.$spacing-third;
+      margin-top: variables.$spacing-third;
+      border-top: variables.$border;
+      font-size: typography.$medium-font;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -37,15 +41,15 @@
     }
   }
 
-  @include small-medium {
-    margin-top: $spacing;
+  @include breakpoints.small-medium {
+    margin-top: variables.$spacing;
   }
 }
 
 .reading-list-summary {
-  @include large {
+  @include breakpoints.large {
     position: sticky;
-    top: $spacing * 2;
+    top: variables.$spacing * 2;
     opacity: 0.4;
     transition: all 300ms ease-in;
 
@@ -62,16 +66,16 @@
 
 .reading-list-results {
   background: var(--bg-color-light);
-  padding: $spacing * 2;
-  margin-bottom: $spacing;
+  padding: variables.$spacing * 2;
+  margin-bottom: variables.$spacing;
 
   .reading-list {
     &-title {
       text-align: center;
-      font-size: $largeish-font;
+      font-size: typography.$largeish-font;
       text-transform: uppercase;
       display: flex;
-      gap: $spacing-half;
+      gap: variables.$spacing-half;
       align-items: center;
 
       &::before,
@@ -90,14 +94,14 @@
     }
 
     &-description {
-      font-size: $large-font;
-      margin-bottom: $spacing;
-      @include secondary-font;
+      font-size: typography.$large-font;
+      margin-bottom: variables.$spacing;
+      @include typography.secondary-font;
       text-align: center;
     }
 
     &-items {
-      margin-bottom: $spacing;
+      margin-bottom: variables.$spacing;
     }
 
     &-show-more {
@@ -106,15 +110,15 @@
     }
 
     &-item {
-      padding-top: $spacing;
-      margin-top: $spacing;
-      border-top: $border;
+      padding-top: variables.$spacing;
+      margin-top: variables.$spacing;
+      border-top: variables.$border;
 
       &-resources-item {
         &-domain {
-          font-size: $small-font;
+          font-size: typography.$small-font;
           display: inline-block;
-          margin-left: $spacing-quarter;
+          margin-left: variables.$spacing-quarter;
           color: var(--text-color-dark);
         }
       }
@@ -122,9 +126,9 @@
       &-title {
         display: flex;
         align-items: center;
-        gap: $spacing-half;
-        margin-bottom: $spacing-half;
-        font-size: $large-font;
+        gap: variables.$spacing-half;
+        margin-bottom: variables.$spacing-half;
+        font-size: typography.$large-font;
 
         &-link {
           display: flex;
@@ -141,7 +145,7 @@
       }
 
       &-summary {
-        font-size: $medium-font;
+        font-size: typography.$medium-font;
       }
 
       &-links {
@@ -150,22 +154,22 @@
         padding: 0;
         display: flex;
         align-items: center;
-        gap: $spacing;
+        gap: variables.$spacing;
       }
     }
 
     &-link-button {
       display: flex;
       align-items: center;
-      gap: $spacing-sixth;
+      gap: variables.$spacing-sixth;
       padding: 4px 8px;
-      font-size: $small-font;
+      font-size: typography.$small-font;
 
       // @include primary-font;
       span {
         display: block;
         line-height: 1;
-        @include font-regular;
+        @include typography.font-regular;
       }
 
       svg {
@@ -181,13 +185,13 @@
       border-radius: 10px;
       display: block;
       color: var(--text-color);
-      font-weight: $medium;
-      @include primary-font;
-      font-size: $small-font;
+      font-weight: typography.$medium;
+      @include typography.primary-font;
+      font-size: typography.$small-font;
       padding: 3px 6px;
       display: flex;
       align-items: center;
-      gap: $spacing-sixth;
+      gap: variables.$spacing-sixth;
 
       span {
         display: block;
@@ -208,14 +212,14 @@
     }
 
     &-send {
-      padding-top: $spacing;
-      margin-top: $spacing;
-      border-top: $border;
+      padding-top: variables.$spacing;
+      margin-top: variables.$spacing;
+      border-top: variables.$border;
 
       &-title {
-        font-size: $large-font;
-        margin-bottom: $spacing;
-        @include secondary-font;
+        font-size: typography.$large-font;
+        margin-bottom: variables.$spacing;
+        @include typography.secondary-font;
         text-align: center;
       }
     }
@@ -223,13 +227,13 @@
     &-form {
       display: flex;
       align-items: center;
-      gap: $spacing-half;
+      gap: variables.$spacing-half;
     }
   }
 
   .survey-message {
     margin: 0;
-    margin-top: $spacing;
+    margin-top: variables.$spacing;
   }
 }
 
@@ -253,7 +257,7 @@
   position: absolute;
   top: -1px;
   right: -1px;
-  margin-left: $spacing-half;
+  margin-left: variables.$spacing-half;
 
   .btn {
     // border-radius: 100%;

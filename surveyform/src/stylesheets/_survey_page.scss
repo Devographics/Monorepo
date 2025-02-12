@@ -1,18 +1,23 @@
+@use "breakpoints";
+@use "colors";
+@use "typography";
+@use "variables";
+
 @use "sass:math";
 .survey-item-contents {
-  @include small {
+  @include breakpoints.small {
     text-align: center;
   }
-  @include medium-large {
+  @include breakpoints.medium-large {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  margin-bottom: $spacing;
+  margin-bottom: variables.$spacing;
 }
 .survey-image {
   max-width: 600px;
-  margin: 0 auto $spacing * 1.5 auto;
+  margin: 0 auto variables.$spacing * 1.5 auto;
   img {
     display: block;
     width: 100%;
@@ -26,28 +31,28 @@
   text-align: center;
 }
 .survey-login-options {
-  @include medium-large {
+  @include breakpoints.medium-large {
     display: flex;
-    gap: $spacing * 2;
+    gap: variables.$spacing * 2;
     justify-content: space-around;
     /*grid-template-columns: 1fr 1fr;*/
   }
 }
 .survey-login-option {
-  @include border;
+  @include variables.border;
   flex-basis: 50%;
-  padding: $spacing;
-  @include small {
-    margin-bottom: $spacing;
+  padding: variables.$spacing;
+  @include breakpoints.small {
+    margin-bottom: variables.$spacing;
   }
 }
 .survey-login-option-description {
-  font-size: $smallish-font;
-  margin-bottom: $spacing-half;
+  font-size: typography.$smallish-font;
+  margin-bottom: variables.$spacing-half;
 }
 .survey-login-option-note {
-  margin-top: $spacing;
-  font-size: $small-font;
+  margin-top: variables.$spacing;
+  font-size: typography.$small-font;
 }
 .survey-login-action {
   input,
@@ -60,14 +65,14 @@
     display: none;
   }
   input {
-    margin-bottom: $spacing-half;
+    margin-bottom: variables.$spacing-half;
   }
 }
 .account-message {
   h3 {
-    font-size: $large-font;
+    font-size: typography.$large-font;
   }
-  margin-top: $spacing * 2;
+  margin-top: variables.$spacing * 2;
   // p, li{
   //   font-size: $smallish-font;
   // }
@@ -77,7 +82,7 @@
   }
 }
 .survey-action {
-  margin: 0 auto $spacing auto;
+  margin: 0 auto variables.$spacing auto;
   max-width: 400px;
 }
 
@@ -86,15 +91,15 @@
   justify-content: center;
 }
 .survey-action-closed {
-  background: $bg-color-light;
-  padding: math.div($spacing, 2);
+  background: colors.$bg-color-light;
+  padding: math.div(variables.$spacing, 2);
   text-align: center;
 }
 .survey-item-error {
-  margin-top: math.div($spacing, 2);
+  margin-top: math.div(variables.$spacing, 2);
   background: rgba(255, 93, 93, 0.3);
   color: rgba(253, 232, 232, 0.9);
 }
 .error-code {
-  font-size: $smallish-font;
+  font-size: typography.$smallish-font;
 }

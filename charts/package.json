@@ -15,7 +15,7 @@
     "@devographics/helpers": "workspace:^1.0.0",
     "@devographics/i18n": "workspace:^1.0.0",
     "@devographics/types": "workspace:^1.0.0",
-    "@picocss/pico": "^1.5.10",
+    "@picocss/pico": "^2.0.6",
     "@types/lodash": "^4.14.197",
     "@types/node": "20.5.0",
     "@types/react": "19.0.2",

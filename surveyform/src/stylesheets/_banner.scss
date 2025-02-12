@@ -1,20 +1,25 @@
+@use "breakpoints";
+@use "colors";
+@use "typography";
+@use "variables";
+
 .devographics-banner {
-  background: $tealDarker;
+  background: colors.$tealDarker;
   background: linear-gradient(0deg, #594ab0 0%, #51b1da 100%);
   position: relative;
-  padding: $spacing-half;
+  padding: variables.$spacing-half;
 }
 
 .devographics-banner-inner {
   text-align: center;
-  font-size: $small-font;
-  color: $greyLightest;
+  font-size: typography.$small-font;
+  color: colors.$greyLightest;
   text-shadow: 0px 1px rgba(0, 0, 0, 0.4);
   a {
-    color: $greyLightest;
+    color: colors.$greyLightest;
     text-decoration: underline;
   }
-  @include small {
+  @include breakpoints.small {
     padding-right: 40px;
   }
 }
@@ -24,7 +29,7 @@
   display: grid;
   place-items: center;
   cursor: pointer;
-  font-size: $larger-font;
+  font-size: typography.$larger-font;
   position: absolute;
   right: 10px;
   top: 0px;

@@ -1,7 +1,13 @@
+@use "sass:color";
+@use "breakpoints";
+@use "colors";
+@use "typography";
+@use "variables";
+
 @use "sass:math";
 .survey-section {
   .form-item-wrapper {
-    margin-bottom: $spacing;
+    margin-bottom: variables.$spacing;
   }
   // .form-control {
   //   background: $bg-color-lightest;
@@ -13,30 +19,30 @@
       border-color: var(--link-color);
       // background: $greyDarkish;
     }
-    @include small {
-      margin-bottom: $spacing * 2;
+    @include breakpoints.small {
+      margin-bottom: variables.$spacing * 2;
     }
-    @include medium {
-      @include border;
-      padding: math.div($spacing, 2) math.div($spacing, 2) $spacing
-        math.div($spacing, 2);
+    @include breakpoints.medium {
+      @include variables.border;
+      padding: math.div(variables.$spacing, 2) math.div(variables.$spacing, 2) variables.$spacing
+        math.div(variables.$spacing, 2);
     }
-    @include large {
-      @include border;
-      padding: $spacing $spacing $spacing $spacing;
+    @include breakpoints.large {
+      @include variables.border;
+      padding: variables.$spacing variables.$spacing variables.$spacing variables.$spacing;
       &.form-item-skipped {
-        padding: $spacing;
+        padding: variables.$spacing;
       }
     }
   }
   .form-item:has(.form-help) {
     background: var(--bg-color-light);
     border: 0;
-    @include small-medium {
-      padding: math.div($spacing, 2);
+    @include breakpoints.small-medium {
+      padding: math.div(variables.$spacing, 2);
     }
-    @include large {
-      padding: $spacing;
+    @include breakpoints.large {
+      padding: variables.$spacing;
     }
     :last-child {
       margin: 0;
@@ -46,7 +52,7 @@
     margin: 0;
   }
   .form-label-heading {
-    margin-bottom: math.div($spacing, 2);
+    margin-bottom: math.div(variables.$spacing, 2);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -58,36 +64,36 @@
   }
   .form-label {
     margin: 0;
-    @include small-medium {
-      font-size: $large-font;
+    @include breakpoints.small-medium {
+      font-size: typography.$large-font;
     }
-    @include large {
-      font-size: $largeish-font;
+    @include breakpoints.large {
+      font-size: typography.$largeish-font;
     }
-    @include font-bold;
+    @include typography.font-bold;
     display: flex;
     align-items: center;
     line-height: 1.7;
     code {
-      font-size: $medium-font;
+      font-size: typography.$medium-font;
     }
     .entity-label {
       // white-space: nowrap;
     }
     .question-label-new {
       text-transform: uppercase;
-      background: $active-color-dark;
-      color: $text-color-inverted;
+      background: colors.$active-color-dark;
+      color: colors.$text-color-inverted;
       padding: 1px 5px;
-      margin-left: math.div($spacing, 2);
-      font-size: $smaller-font;
+      margin-left: math.div(variables.$spacing, 2);
+      font-size: typography.$smaller-font;
       // @include font-regular;
     }
     &-number {
       opacity: 0.3;
       margin-right: 8px;
-      @include font-regular;
-      font-size: $medium-font;
+      @include typography.font-regular;
+      font-size: typography.$medium-font;
     }
   }
   .form-check {
@@ -98,7 +104,7 @@
       display: flex;
       // align-items: center;
     }
-    padding: 0 math.div($spacing, 2);
+    padding: 0 math.div(variables.$spacing, 2);
     &:last-of-type {
       margin: 0;
     }
@@ -110,7 +116,7 @@
       background: rgba(255, 255, 255, 0.04);
     }
     &:hover {
-      background: $bg-color-light;
+      background: colors.$bg-color-light;
     }
   }
   .form-component-text {
@@ -126,13 +132,13 @@
     }
   }
   .form-input-wrapper {
-    margin: 7px math.div($spacing, 1.5) 0 0;
+    margin: 7px math.div(variables.$spacing, 1.5) 0 0;
     position: relative;
     display: block;
   }
   .form-check-label {
     flex: 1;
-    padding: math.div($spacing, 2) 0;
+    padding: math.div(variables.$spacing, 2) 0;
   }
   // .form-item-contents {
   //   display: flex;
@@ -142,13 +148,13 @@
     textarea,
     input[type="text"],
     select {
-      background-color: $greyLightest;
-      color: $greyDarker;
+      background-color: colors.$greyLightest;
+      color: colors.$greyDarker;
     }
     textarea,
     input[type="text"] {
       &:disabled {
-        background: $greyMedium;
+        background: colors.$greyMedium;
       }
     }
   }
@@ -157,10 +163,10 @@
     justify-content: space-between;
     .prev-placeholder,
     .form-btn {
-      @include small-medium {
+      @include breakpoints.small-medium {
         flex-basis: 49%;
       }
-      @include large {
+      @include breakpoints.large {
         flex-basis: 35%;
       }
       button {
@@ -184,40 +190,40 @@
   }
 
   .form-submit-help {
-    margin-top: $spacing;
+    margin-top: variables.$spacing;
     text-align: center;
-    font-size: $small-font;
+    font-size: typography.$small-font;
   }
 
   .form-component-clear {
-    @include flex-center;
+    @include variables.flex-center;
     height: 30px;
     width: 30px;
-    @include border;
+    @include variables.border;
     background: transparent;
     top: 0;
     right: 0;
     border-radius: 0 0 0 3px;
     span {
-      font-size: $medium-font;
+      font-size: typography.$medium-font;
     }
   }
 }
 
 .form-submit-back {
-  margin-bottom: $spacing;
+  margin-bottom: variables.$spacing;
 }
 
 .input-css2020__user_info__skin_tone {
   .form-check {
     margin-bottom: 5px;
     label {
-      font-size: $largest-font;
-      background: $white;
+      font-size: typography.$largest-font;
+      background: colors.$white;
       flex: 0;
       padding: 3px;
-      @include border-radius;
-      @include emoji-font;
+      @include variables.border-radius;
+      @include typography.emoji-font;
     }
     img {
       height: 32px;
@@ -227,8 +233,8 @@
 }
 
 .rbt-token {
-  background-color: $grey;
-  color: $greyDarker;
+  background-color: colors.$grey;
+  color: colors.$greyDarker;
 }
 
 .rbt-menu {
@@ -236,10 +242,10 @@
     &,
     &:link,
     &:visited {
-      color: $text-color-inverted;
+      color: colors.$text-color-inverted;
     }
     &:hover {
-      background: $bg-color-lightest;
+      background: colors.$bg-color-lightest;
     }
   }
 }
@@ -254,25 +260,25 @@
 
 .magic-error,
 .magic-success {
-  padding: $spacing-half;
-  font-size: $smallish-font;
-  margin-top: $spacing;
+  padding: variables.$spacing-half;
+  font-size: typography.$smallish-font;
+  margin-top: variables.$spacing;
 }
 .magic-error {
-  border: 3px solid $red;
+  border: 3px solid colors.$red;
 }
 
 .magic-success {
-  border: 3px solid $green;
+  border: 3px solid colors.$green;
 }
 
 .form-note {
   // background: var(--bg-color-light);
   // padding: $spacing-half;
-  margin-top: $spacing-half;
+  margin-top: variables.$spacing-half;
   display: block;
   color: var(--text-color-dark);
-  font-size: $small-font;
+  font-size: typography.$small-font;
   p:last-child {
     margin: 0;
   }
@@ -285,9 +291,9 @@
 }
 
 .form-race-ethnicity-not-allowed {
-  padding: $spacing-two-thirds;
-  background: $redTransparent;
-  margin-bottom: $spacing;
+  padding: variables.$spacing-two-thirds;
+  background: colors.$redTransparent;
+  margin-bottom: variables.$spacing;
   p {
     margin: 0;
   }
@@ -296,9 +302,9 @@
 .code-example {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
-  padding: $spacing * 1.5 $spacing;
+  padding: variables.$spacing * 1.5 variables.$spacing;
   // margin-top: $spacing;
-  margin-bottom: $spacing-half;
+  margin-bottom: variables.$spacing-half;
   position: relative;
   // background: $bg-color-light;
 
@@ -315,10 +321,10 @@
     position: absolute;
     right: 0px;
     top: 0px;
-    margin: 0 0 math.div($spacing, 3) 0;
+    margin: 0 0 math.div(variables.$spacing, 3) 0;
     opacity: 0.7;
     text-transform: uppercase;
-    font-size: $small-font;
+    font-size: typography.$small-font;
     // border-bottom: 1px solid rgba(255, 255, 255, 0.25);
     // padding: $spacing-half $spacing-third;
   }
@@ -327,20 +333,20 @@
 .form-item-description {
   margin-bottom: 0;
   color: var(--text-color);
-  font-size: $medium-font;
+  font-size: typography.$medium-font;
   p:last-child {
     margin: 0;
   }
 }
 
 .form-item-limit {
-  margin-bottom: $spacing;
-  font-size: $smallish-font;
+  margin-bottom: variables.$spacing;
+  font-size: typography.$smallish-font;
   color: var(--text-color-dark);
 }
 
 .form-slider {
-  padding: $spacing 0 $spacing * 2 0;
+  padding: variables.$spacing 0 variables.$spacing * 2 0;
   &-options {
     display: grid;
     grid-auto-columns: minmax(0, 1fr);
@@ -348,8 +354,8 @@
     column-gap: 2px;
   }
   .form-check {
-    background: $bg-color-light;
-    padding: math.div($spacing, 2);
+    background: colors.$bg-color-light;
+    padding: math.div(variables.$spacing, 2);
     position: relative;
     margin: 0;
     & > label {
@@ -376,7 +382,7 @@
       // display: none;
     }
     &:hover {
-      background: $bg-color-lighter;
+      background: colors.$bg-color-lighter;
     }
     &:nth-child(1),
     &:nth-child(9) {
@@ -422,7 +428,7 @@
       }
     }
   }
-  @include small {
+  @include breakpoints.small {
     .form-check {
       &:nth-child(1) {
         .form-option {
@@ -442,13 +448,13 @@
 }
 
 .experience-contents {
-  @include medium-large {
+  @include breakpoints.medium-large {
     // display: grid;
     // grid-template-columns: 1fr min-content;
   }
 }
 .comment-trigger-wrapper {
-  @include medium-large {
+  @include breakpoints.medium-large {
     // display: flex;
     // flex-direction: column;
     // justify-content: flex-end;
@@ -460,14 +466,14 @@
   // right: 0px;
   // border-top: 1px solid var(--dark-border-color);
   // border-left: 1px solid var(--dark-border-color);
-  padding: math.div($spacing, 2);
+  padding: math.div(variables.$spacing, 2);
   // display: grid;
   // place-items: center;
   // aspect-ratio: 1/1;
   background: none;
   border: none;
   margin: 0;
-  color: $text-color;
+  color: colors.$text-color;
   &-inactive {
     svg {
       opacity: 0.5;
@@ -483,17 +489,17 @@
 
 .comment-input {
   position: relative;
-  margin-top: math.div($spacing, 2);
-  background: $bg-color-light;
-  padding: $spacing;
+  margin-top: math.div(variables.$spacing, 2);
+  background: colors.$bg-color-light;
+  padding: variables.$spacing;
   // border-radius: 5px;
   &-heading {
-    margin-bottom: math.div($spacing, 2);
-    font-size: $medium-font;
+    margin-bottom: math.div(variables.$spacing, 2);
+    font-size: typography.$medium-font;
   }
   &-subheading {
-    margin-bottom: $spacing;
-    font-size: $smallish-font;
+    margin-bottom: variables.$spacing;
+    font-size: typography.$smallish-font;
   }
   &::after {
     bottom: 100%;
@@ -508,7 +514,7 @@
     position: absolute;
     pointer-events: none;
     border-color: rgba(102, 213, 47, 0);
-    border-bottom-color: $bg-color-light;
+    border-bottom-color: colors.$bg-color-light;
     border-width: 12px;
     margin-left: -12px;
   }
@@ -530,30 +536,30 @@
   justify-content: center;
 }
 .form-option-label {
-  @include small {
-    font-size: $smallish-font;
+  @include breakpoints.small {
+    font-size: typography.$smallish-font;
   }
   display: block;
-  font-size: $medium-font;
+  font-size: typography.$medium-font;
   display: flex;
   align-items: center;
-  gap: $spacing-half;
+  gap: variables.$spacing-half;
 }
 
 .form-option-description {
   display: block;
-  font-size: $smallish-font;
+  font-size: typography.$smallish-font;
   color: var(--text-color-dark);
 
   code {
     padding: 0.05em 0.3em 0.1em;
-    background: transparentize($bg-color-light, 0.6);
+    background: color.adjust(colors.$bg-color-light, $alpha: -0.6);
   }
 }
 
 .form-show-more {
-  margin-top: $spacing;
-  @include small {
+  margin-top: variables.$spacing;
+  @include breakpoints.small {
     width: 100%;
   }
 }
@@ -568,7 +574,7 @@
   background: none;
   backdrop-filter: blur(6px);
   &:not(:last-child) {
-    margin-bottom: $spacing-half;
+    margin-bottom: variables.$spacing-half;
   }
 }
 .form-message-error {
@@ -593,10 +599,10 @@
   }
 }
 .form-message-debug-link {
-  margin-top: $spacing-half;
+  margin-top: variables.$spacing-half;
   display: flex;
   align-items: center;
-  gap: $spacing-quarter;
+  gap: variables.$spacing-quarter;
   svg {
     height: 16px;
     width: 16px;
@@ -604,12 +610,12 @@
 }
 
 .followups {
-  margin: $spacing-half;
+  margin: variables.$spacing-half;
   // background: var(--bg-color-light);
-  padding: $spacing;
-  font-size: $medium-font;
-  border-radius: $border-radius;
-  @include border;
+  padding: variables.$spacing;
+  font-size: typography.$medium-font;
+  border-radius: variables.$border-radius;
+  @include variables.border;
   position: relative;
   &:after,
   &:before {
@@ -635,9 +641,9 @@
   }
 
   h5 {
-    font-size: $medium-font;
-    margin-bottom: $spacing;
-    @include font-regular;
+    font-size: typography.$medium-font;
+    margin-bottom: variables.$spacing;
+    @include typography.font-regular;
   }
   .form-check-input {
     margin: 0;
@@ -645,15 +651,15 @@
   &-predefined {
     display: flex;
     flex-wrap: wrap;
-    gap: $spacing-half;
-    margin-bottom: $spacing;
+    gap: variables.$spacing-half;
+    margin-bottom: variables.$spacing;
     &-item {
     }
     &-label {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: $spacing-half;
+      gap: variables.$spacing-half;
     }
   }
 }
@@ -704,21 +710,21 @@
 }
 
 .skip-question {
-  @include small {
-    margin-top: $spacing;
+  @include breakpoints.small {
+    margin-top: variables.$spacing;
     display: flex;
     justify-content: flex-end;
   }
-  @include medium-large {
+  @include breakpoints.medium-large {
     position: absolute;
     bottom: -1px;
     right: -1px;
   }
   .btn {
-    @include small {
+    @include breakpoints.small {
       border-radius: 3px;
     }
-    @include medium-large {
+    @include breakpoints.medium-large {
       border-radius: 3px 0 0 0;
     }
     display: flex !important;
@@ -743,7 +749,7 @@
 .form-item-contents-inner {
   display: flex;
   flex-direction: column;
-  gap: $spacing-half;
+  gap: variables.$spacing-half;
   // use overflow: clip instead of overflow: hidden because
   // it doesn't interfere with position: sticky
   // https://stackoverflow.com/a/74462258
@@ -778,7 +784,7 @@
 
 .form-input-moreThanOneYear {
   .form-check-label {
-    gap: $spacing-half;
+    gap: variables.$spacing-half;
   }
   input[type="number"] {
     width: 100px;
@@ -789,8 +795,8 @@
   .form-item-input {
     display: flex;
     flex-direction: column;
-    gap: $spacing-half;
-    @include small {
+    gap: variables.$spacing-half;
+    @include breakpoints.small {
       position: relative;
     }
   }
@@ -806,29 +812,29 @@
   // display: grid;
   // grid-template-columns: 1fr 1fr;
   display: flex;
-  padding: $spacing-half;
+  padding: variables.$spacing-half;
   &:nth-child(2n) {
     background: rgba(255, 255, 255, 0.04);
   }
-  @include small {
+  @include breakpoints.small {
     flex-direction: column;
   }
-  @include medium-large {
+  @include breakpoints.medium-large {
     justify-content: space-between;
     align-items: center;
-    gap: $spacing;
+    gap: variables.$spacing;
   }
 }
 .likert-options,
 .likert-legends {
   display: flex;
-  gap: $spacing-half;
-  @include small {
+  gap: variables.$spacing-half;
+  @include breakpoints.small {
     justify-content: space-between;
-    padding: 0 $spacing * 1;
+    padding: 0 variables.$spacing * 1;
   }
-  @include medium-large {
-    margin-right: $spacing * 2;
+  @include breakpoints.medium-large {
+    margin-right: variables.$spacing * 2;
   }
 }
 
@@ -838,11 +844,11 @@
     place-items: center;
     padding: 0;
     .form-check-label {
-      @include small {
-        padding: $spacing-third $spacing-quarter;
+      @include breakpoints.small {
+        padding: variables.$spacing-third variables.$spacing-quarter;
       }
-      @include medium-large {
-        padding: $spacing-third;
+      @include breakpoints.medium-large {
+        padding: variables.$spacing-third;
       }
       display: block;
     }
@@ -855,14 +861,14 @@
 }
 .likert-legends {
   height: 100%;
-  @include medium-large {
+  @include breakpoints.medium-large {
     justify-content: flex-end;
   }
 }
 .likert-legends-wrapper {
   height: 110px;
-  padding: 0 $spacing-half;
-  @include small {
+  padding: 0 variables.$spacing-half;
+  @include breakpoints.small {
     padding-bottom: 5px;
     position: sticky;
     top: 0px;
@@ -892,7 +898,7 @@
 .form-input-number-wrapper {
   display: flex;
   align-items: center;
-  gap: $spacing-half;
+  gap: variables.$spacing-half;
 }
 
 .invalid-feedback {
@@ -913,7 +919,7 @@
     background: var(--bg-color);
     z-index: 1;
     display: inline-block;
-    padding: 0 $spacing 0 0;
+    padding: 0 variables.$spacing 0 0;
     // color: var(--text-color-darker);
   }
   &::after {
@@ -928,8 +934,8 @@
 }
 
 .snowball-sampling-note {
-  margin-top: $spacing;
-  padding: $spacing;
+  margin-top: variables.$spacing;
+  padding: variables.$spacing;
   background: #d4cc3322;
   input {
     background: #00000066;
@@ -937,8 +943,8 @@
     display: block;
     width: 100%;
     border: none;
-    @include monospace;
-    color: $text-color;
+    @include typography.monospace;
+    color: colors.$text-color;
     font-size: 0.8rem;
   }
 }

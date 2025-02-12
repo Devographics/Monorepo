@@ -238,8 +238,8 @@ importers:
         specifier: workspace:^1.0.0
         version: link:../shared/types
       '@picocss/pico':
-        specifier: ^1.5.10
-        version: 1.5.13
+        specifier: ^2.0.6
+        version: 2.0.6
       '@types/lodash':
         specifier: ^4.14.197
         version: 4.17.15
@@ -9552,10 +9552,6 @@ packages:
       '@parcel/utils': 2.8.3
       chrome-trace-event: 1.0.4
       nullthrows: 1.1.1
-    dev: false
-
-  /@picocss/pico@1.5.13:
-    resolution: {integrity: sha512-BPTeE4JC95+7/vsG9r+6hDR1qUkV4YZ1blI/TI6peOmM94XubjmUDE3jUi4f6DBV6WmCL76ueTct/NerJ33E8A==}
     dev: false
 
   /@picocss/pico@2.0.6:
