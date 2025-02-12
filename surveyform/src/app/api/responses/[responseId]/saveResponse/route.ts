@@ -4,9 +4,11 @@ import { loadResponse } from "~/lib/responses/db-actions/load";
 import { saveResponse } from "~/lib/responses/db-actions/save";
 import { HandlerError } from "~/lib/handler-error";
 import { handlerMustHaveCurrentUser } from "~/lib/users/route-handlers/getters";
-// import { captureException } from "@sentry/nextjs";
 
-export async function POST(req: NextRequest, props: RouteHandlerOptions<{ responseId: string }>) {
+export async function POST(
+  req: NextRequest,
+  props: RouteHandlerOptions<{ responseId: string }>
+) {
   const params = await props.params;
   try {
     // Get current user
@@ -65,7 +67,7 @@ export async function POST(req: NextRequest, props: RouteHandlerOptions<{ respon
             error,
           },
         },
-        { status: 500 },
+        { status: 500 }
       );
     }
   }

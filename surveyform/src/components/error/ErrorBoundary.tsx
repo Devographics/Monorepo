@@ -1,10 +1,6 @@
 "use client";
 import React, { Component, ComponentType } from "react";
 
-import { Extras } from "@sentry/types";
-
-import { captureException } from "@sentry/nextjs";
-// import { captureException } from "~/services/SentryService";
 import {
   DefaultErrorDisplay,
   DefaultErrorProps,
@@ -53,7 +49,8 @@ export class ErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    captureException(error, { extra: errorInfo as unknown as Extras });
+    // captureException(error, { extra: errorInfo as unknown as Extras });
+    console.error(error, errorInfo);
   }
 
   render() {

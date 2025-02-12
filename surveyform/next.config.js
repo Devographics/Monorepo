@@ -3,8 +3,6 @@ const path = require("path");
 // See the how Vulcan Next docs are setup with next-mdx-remote
 // which is more advanced (loading remote MD, supporting styling correctly etc.)
 
-// const { withSentryConfig } = require("@sentry/nextjs");
-
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
 const moduleExports = (phase, { defaultConfig }) => {
   /**

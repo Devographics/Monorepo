@@ -10,7 +10,6 @@
 import passport from "passport";
 import nextConnect from "next-connect";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { apiWrapper } from "~/lib/server/sentry";
 
 import { anonymousLoginStrategy } from "~/lib/account/anonymousLogin/api/passport/anonymous-strategy";
 import { connectToAppDbMiddleware } from "~/lib/server/middlewares/mongoAppConnection";
@@ -18,7 +17,7 @@ import { setToken } from "~/lib/account/middlewares/setToken";
 
 passport.use(anonymousLoginStrategy);
 
-interface AnonymousLoginReqBody { }
+interface AnonymousLoginReqBody {}
 // NOTE: adding NextApiRequest, NextApiResponse is required to get the right typings in next-connect
 // this is the normal behaviour
 // @ts-ignore TODO Eric
@@ -49,4 +48,4 @@ const login = nextConnect<NextApiRequest, NextApiResponse>()
     }
   );
 
-export default apiWrapper(login);
+export default login;

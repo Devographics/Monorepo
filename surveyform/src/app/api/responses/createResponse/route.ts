@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { createResponse } from "~/lib/responses/db-actions/create";
 import { HandlerError } from "~/lib/handler-error";
 import { handlerMustHaveCurrentUser } from "~/lib/users/route-handlers/getters";
-// import { captureException } from "@sentry/nextjs";
 
 export async function POST(req: NextRequest) {
   try {
