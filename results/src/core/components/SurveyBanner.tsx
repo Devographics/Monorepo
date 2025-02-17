@@ -43,6 +43,10 @@ const Banner_ = styled.div`
     position: relative;
     padding: 7px 10px;
     border-bottom: 1px dashed var(--borderColor);
+
+    @media ${mq.small} {
+        padding-right: 30px;
+    }
     /* a {
         color: var(--textColor);
     } */
@@ -61,6 +65,9 @@ const Banner_ = styled.div`
         right: 10px;
         top: 50%;
         transform: translateY(-50%);
+        @media ${mq.small} {
+            right: 5px;
+        }
     }
     .survey-ongoing {
         background: var(--bannerButton, var(--linkColor));
@@ -69,6 +76,9 @@ const Banner_ = styled.div`
         color: var(--textColorInverted);
         padding: 2px 6px;
         font-size: 0.8rem;
+        @media ${mq.small} {
+            display: none;
+        }
     }
 `
 
