@@ -108,7 +108,9 @@ const PickContent = styled.div`
         bottom: -${spacing(triangleWidth / 2)};
         left: ${spacing(triangleWidth)};
     }
-    a {
+    a,
+    a:link,
+    a:visited {
         color: var(--textColorInverted);
         text-decoration: underline;
     }
