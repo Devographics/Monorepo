@@ -50,7 +50,9 @@ const Banner_ = styled.div`
     /* a {
         color: var(--textColor);
     } */
-    a {
+    a,
+    a:link,
+    a:visited {
         color: var(--bannerText);
         display: flex;
         justify-content: center;
