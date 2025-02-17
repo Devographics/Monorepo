@@ -3,6 +3,7 @@
  * used to enable translation mode
  */
 export const TOKEN_DATASET = "dgTk"
+export const DATA_KEY = "data-key"
 /** Data attribute containing the translation token for a given piece of text */
 export const DATA_TOKEN_ATTR = "data-dg-tk"
 /** If enabled, a fallback string was used */

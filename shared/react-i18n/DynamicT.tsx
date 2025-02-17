@@ -2,6 +2,7 @@
 import { useTeapot } from "./i18nContext";
 import {
   DATA_FALLBACK_CHILDREN_ATTR,
+  DATA_KEY,
   DATA_MISSING_ATTR,
   DATA_TOKEN_ATTR,
 } from "@devographics/i18n";
@@ -62,6 +63,7 @@ export function InternalT({
   const message = getMessage(token, values, fallback);
   //const Tag = tag // uppercase for JSX
   const wrapperProps = {
+    [DATA_KEY]: token,
     [DATA_TOKEN_ATTR]: token,
     // @ts-ignore Weird error with Children due to different versions of React
     ...otherProps,
