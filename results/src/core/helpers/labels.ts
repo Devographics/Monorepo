@@ -94,13 +94,23 @@ export const getItemLabel = (options: {
 
     // 3. look for entity metadata
     if (entity) {
-        key = 'entity'
-        label = getFields(entity, ['alias', html ? 'nameHtml' : 'nameClean', 'name']) as string
-        description = getFields(entity, [
+        const entityLabel = getFields(entity, [
+            'alias',
+            html ? 'nameHtml' : 'nameClean',
+            'name'
+        ]) as string
+        if (entityLabel) {
+            label = entityLabel
+            key = 'entity'
+            source = LabelSourcesEnum.ENTITY
+        }
+        const entityDescription = getFields(entity, [
             html ? 'descriptionHtml' : 'descriptionClean',
             'description'
         ])
-        source = LabelSourcesEnum.ENTITY
+        if (entityDescription) {
+            description = entityDescription
+        }
     }
 
     // 4. look for entity translation
@@ -171,6 +181,7 @@ export const getItemLabel = (options: {
     if (!shortLabel) {
         shortLabel = label
     }
-    const result = { key, label, shortLabel, descriptionKey, description, values, source }
+    const result = { id, key, label, shortLabel, descriptionKey, description, values, source }
+
     return result
 }
