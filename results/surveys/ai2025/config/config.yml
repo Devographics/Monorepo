@@ -1,0 +1,10 @@
+translationContexts: [homepage, common, results, countries, state_of_ai, ai2025]
+
+baseUrl: http://localhost:8001
+# baseUrl: http://localhost:9000
+sitemap: ../../../.logs/flat_sitemap.yml
+# bannerId: general.react2024.ai2025_banner
+# bannerLink: https://survey.devographics.com/en-US/survey/state-of-ai/2025?source=react2024_banner
+# bannerBg: '#212424'
+# bannerText: '#cdf4ff'
+# bannerButton: '#61dafb'
