@@ -356,6 +356,7 @@ export const fetchGraphQLApi = async <T = any>({
     const key = key_ || extractQueryName(query)
     await logToFile(`graphql/${key}.gql`, query)
 
+    const body = JSON.stringify({ query, variables: {} })
     // console.debug(`// querying ${apiUrl} (${query.slice(0, 15)}...)`)
     const response = await fetch(apiUrl, {
         method: 'POST',
@@ -363,13 +364,16 @@ export const fetchGraphQLApi = async <T = any>({
             'Content-Type': 'application/json',
             Accept: 'application/json'
         },
-        body: JSON.stringify({ query, variables: {} }),
+        body,
         cache: cache || undefined
     })
     const json: any = await response.json()
     if (json.errors) {
         console.error(`// fetchGraphQLApi error 1 for query ${key}.gql (${apiUrl})`)
+        console.log('// JSON.errors')
         console.error(JSON.stringify(json.errors, null, 2))
+        console.log('// QUERY')
+        console.log(query)
         throw new Error(json.errors[0].message)
     }
 
