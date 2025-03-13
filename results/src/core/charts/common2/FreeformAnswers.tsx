@@ -28,7 +28,7 @@ import Toggle, { DEFAULT_SORT, ToggleItemType } from './Toggle'
 import { OrderOptions } from './types'
 import sortBy from 'lodash/sortBy'
 
-const LENGTH = 'length'
+export const LENGTH = 'length'
 
 type GetQueryNameProps = {
     editionId: string
@@ -224,9 +224,101 @@ const FreeformAnswers = ({
     tokenLabel: string
 }) => {
     const { getString } = useI18n()
-    const [filter, setFilter] = useState<string | undefined>()
-    const [sort, setSort] = useState<string | undefined>()
-    const [order, setOrder] = useState<OrderOptions | undefined>()
+    const [filter, setFilter] = useState<string | null>(null)
+    const [sort, setSort] = useState<string | null>(null)
+    const [order, setOrder] = useState<OrderOptions | null>(null)
+
+    const labelKey = 'answers.length'
+
+    let answers = answers_
+    if (sort) {
+        answers = sortBy(answers, a => a.raw.length)
+    }
+    if (order && order === OrderOptions.DESC) {
+        answers = answers.toReversed()
+    }
+    if (filter) {
+        answers = answers.filter(answer => answer.raw.toLowerCase().includes(filter.toLowerCase()))
+    }
+    return (
+        <div className="freeform-answers-list">
+            <div className="freeform-answers-options">
+                <KeywordFilter
+                    keywordFilter={filter}
+                    setKeywordFilter={setFilter}
+                    items={answers}
+                />
+                <OrderToggle sort={sort} setSort={setSort} order={order} setOrder={setOrder} />
+                {/* <Toggle
+                    sortOrder={order}
+                    labelId="charts.sort_by"
+                    handleSelect={handleSelect}
+                    items={toggleItems}
+                    hasDefault={true}
+                /> */}
+            </div>
+            {answers?.map((answer, i) => (
+                <FreeformAnswerItem
+                    key={i}
+                    index={i}
+                    {...answer}
+                    questionLabel={questionLabel}
+                    tokenLabel={tokenLabel}
+                    keyword={filter}
+                />
+            ))}
+        </div>
+    )
+}
+
+export const KeywordFilter = ({
+    keywordFilter,
+    setKeywordFilter,
+    items
+}: {
+    keywordFilter: string | null
+    setKeywordFilter: React.Dispatch<React.SetStateAction<string | null>>
+    items: any[]
+}) => {
+    return (
+        <div className="freeform-answers-filter">
+            <h4>
+                <T k="answers.keyword" />
+            </h4>
+            <input
+                type="text"
+                value={keywordFilter || ''}
+                onChange={e => {
+                    setKeywordFilter(e.target.value)
+                }}
+            />
+            <T k="answers.keyword_count" values={{ count: items.length }} />
+        </div>
+    )
+}
+
+export const OrderToggle = ({
+    sort,
+    setSort,
+    order,
+    setOrder
+}: {
+    sort: string | null
+    setSort: React.Dispatch<React.SetStateAction<string | null>>
+    order: OrderOptions | null
+    setOrder: React.Dispatch<React.SetStateAction<OrderOptions | null>>
+}) => {
+    const { getString } = useI18n()
+
+    const labelKey = 'answers.length'
+    const toggleItems: ToggleItemType[] = [
+        {
+            id: LENGTH,
+            label: getString(labelKey)?.t,
+            labelKey,
+            isEnabled: sort === LENGTH
+        }
+    ]
 
     const handleSelect = (optionId: string) => {
         const isEnabled = sort === optionId
@@ -244,61 +336,14 @@ const FreeformAnswers = ({
         }
     }
 
-    const labelKey = 'answers.length'
-    const toggleItems: ToggleItemType[] = [
-        {
-            id: LENGTH,
-            label: getString(labelKey)?.t,
-            labelKey,
-            isEnabled: sort === LENGTH
-        }
-    ]
-
-    let answers = answers_
-    if (sort) {
-        answers = sortBy(answers, a => a.raw.length)
-    }
-    if (order && order === OrderOptions.DESC) {
-        answers = answers.toReversed()
-    }
-    if (filter) {
-        answers = answers.filter(answer => answer.raw.toLowerCase().includes(filter.toLowerCase()))
-    }
     return (
-        <div className="freeform-answers-list">
-            <div className="freeform-answers-options">
-                <div className="freeform-answers-filter">
-                    <h4>
-                        <T k="answers.keyword" />
-                    </h4>
-                    <input
-                        type="text"
-                        value={filter}
-                        onChange={e => {
-                            setFilter(e.target.value)
-                        }}
-                    />
-                    <T k="answers.keyword_count" values={{ count: answers.length }} />
-                </div>
-                <Toggle
-                    sortOrder={order}
-                    labelId="charts.sort_by"
-                    handleSelect={handleSelect}
-                    items={toggleItems}
-                    hasDefault={true}
-                />
-            </div>
-            {answers?.map((answer, i) => (
-                <FreeformAnswerItem
-                    key={i}
-                    index={i}
-                    {...answer}
-                    questionLabel={questionLabel}
-                    tokenLabel={tokenLabel}
-                    keyword={filter}
-                />
-            ))}
-        </div>
+        <Toggle
+            sortOrder={order}
+            labelId="charts.sort_by"
+            handleSelect={handleSelect}
+            items={toggleItems}
+            hasDefault={true}
+        />
     )
 }
 

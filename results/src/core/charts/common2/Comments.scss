@@ -27,15 +27,17 @@
 
 .comments-header {
     display: flex;
-    // justify-content: space-between;
+    justify-content: space-between;
+    align-items: center;
     gap: var(--spacing);
-    flex-direction: column;
+    flex-direction: row;
     margin-bottom: var(--spacing);
 }
 
 .comments-filter {
     display: flex;
     gap: var(--quarterSpacing);
+    flex-direction: column;
 }
 
 .comment-item {

@@ -26,7 +26,7 @@ type ToggleValueType = string | number
 
 export type ToggleItemType = {
     label: string
-    labelKey: string
+    labelKey?: string
     id: ToggleValueType
     isEnabled: boolean
     className?: string

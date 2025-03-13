@@ -11,6 +11,8 @@ import {
 import './Comments.scss'
 import { CommentsFilters } from './CommentsFilters'
 import { CommentItem } from './CommentItem'
+import { OrderOptions } from './types'
+import sortBy from 'lodash/sortBy'
 
 type GetQueryNameProps = {
     editionId: string
@@ -141,6 +143,12 @@ export interface CommentsFiltersState {
     setSentimentFilter: React.Dispatch<React.SetStateAction<SimplifiedSentimentOptions | null>>
     valueFilter: string | null
     setValueFilter: React.Dispatch<React.SetStateAction<string | null>>
+    sort: string | null
+    setSort: React.Dispatch<React.SetStateAction<string | null>>
+    order: OrderOptions | null
+    setOrder: React.Dispatch<React.SetStateAction<OrderOptions | null>>
+    keywordFilter: string | null
+    setKeywordFilter: React.Dispatch<React.SetStateAction<string | null>>
 }
 
 export const CommentsContent = ({
@@ -154,13 +162,23 @@ export const CommentsContent = ({
     const [sentimentFilter, setSentimentFilter] = useState<SimplifiedSentimentOptions | ''>('')
     const [valueFilter, setValueFilter] = useState<string | number>('')
 
+    const [sort, setSort] = useState<string | null>(null)
+    const [order, setOrder] = useState<OrderOptions | null>(null)
+    const [keywordFilter, setKeywordFilter] = useState<string | null>(null)
+
     const stateStuff = {
         experienceFilter,
         setExperienceFilter,
         sentimentFilter,
         setSentimentFilter,
         valueFilter,
-        setValueFilter
+        setValueFilter,
+        sort,
+        setSort,
+        order,
+        setOrder,
+        keywordFilter,
+        setKeywordFilter
     }
 
     let filteredComments = comments
@@ -168,9 +186,26 @@ export const CommentsContent = ({
     filteredComments = filterCommentsByExperience(filteredComments, experienceFilter)
     filteredComments = filterCommentsBySentiment(filteredComments, sentimentFilter)
     filteredComments = filterCommentsByValue(filteredComments, valueFilter)
+
+    if (sort) {
+        filteredComments = sortBy(filteredComments, comment => comment.message.length)
+    }
+    if (order && order === OrderOptions.DESC) {
+        filteredComments = filteredComments.toReversed()
+    }
+
+    if (keywordFilter) {
+        filteredComments = filteredComments.filter(comment =>
+            comment.message.toLowerCase().includes(keywordFilter.toLowerCase())
+        )
+    }
     return (
         <div>
-            <CommentsFilters comments={comments} question={question} stateStuff={stateStuff} />
+            <CommentsFilters
+                comments={filteredComments}
+                question={question}
+                stateStuff={stateStuff}
+            />
             <div className="comments-list">
                 {filteredComments?.map((comment, i) => (
                     <CommentItem key={i} index={i} {...comment} name={name} question={question} />
