@@ -219,6 +219,7 @@ export const loadTokyoDevCSV = async () => {
   const { data: allSurveysMetadata } = await fetchSurveysMetadata({
     appName: AppName.SURVEYADMIN,
     shouldGetFromCache: false,
+    addCredits: false,
   });
   const { data: entities } = await fetchEntitiesNormalization({
     appName: AppName.SURVEYADMIN,

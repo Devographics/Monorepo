@@ -19,7 +19,7 @@ export const getQuestionResponses = async ({
   surveyId,
   editionId,
   questionId,
-  shouldGetFromCache = true,
+  shouldGetFromCache,
 }: GetQuestionResponsesParams) => {
   const { survey, edition, section, question, durations } =
     await getSurveyEditionSectionQuestion({ surveyId, editionId, questionId });

@@ -5,7 +5,9 @@ import { routes } from "~/lib/routes";
 
 export default async function Page({ params }) {
   const { surveyId } = params;
-  const { data: surveys } = await fetchSurveysMetadata();
+  const { data: surveys } = await fetchSurveysMetadata({
+    addCredits: false,
+  });
   const survey = surveys.find((s) => s.id === surveyId)!;
   return (
     <div>

@@ -34,7 +34,7 @@ export const getNormalizationPercentages = async (
   const { surveyId, editionId, shouldGetFromCache = true, ...rest } = options;
 
   const { data: surveys, duration: fetchSurveysMetadataDuration } =
-    await fetchSurveysMetadata({ shouldGetFromCache });
+    await fetchSurveysMetadata({ shouldGetFromCache, addCredits: false });
   const survey = surveys.find((s) => s.id === surveyId);
   if (!survey) {
     throw new Error(`Could not find survey with id ${surveyId}`);

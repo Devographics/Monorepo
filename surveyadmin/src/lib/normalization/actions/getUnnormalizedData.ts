@@ -1,9 +1,6 @@
-import { fetchSurveysMetadata, fetchQuestionData } from "@devographics/fetch";
-import { fetchEditionMetadataAdmin } from "~/lib/api/fetch";
+import { fetchQuestionData } from "@devographics/fetch";
 import { getQuestionResponsesCount } from "../normalize/helpers";
-import { getEditionQuestionById } from "../helpers/getEditionQuestionById";
 import { getUnnormalizedResponses } from "../helpers/getUnnormalizedResponses";
-import { getEditionQuestions } from "../helpers/getEditionQuestions";
 import get from "lodash/get";
 import { ResultsSubFieldEnum } from "@devographics/types";
 import { getSurveyEditionSectionQuestion } from "../helpers/getSurveyEditionQuestion";

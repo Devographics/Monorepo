@@ -14,7 +14,7 @@ export const getQuestionData = async ({
   editionId,
   sectionId,
   questionId,
-  shouldGetFromCache = true,
+  shouldGetFromCache,
 }: GetQuestionDataArgs) => {
   const queryOptions = {
     surveyId,

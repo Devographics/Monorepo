@@ -38,7 +38,9 @@ export const normalizeEdition = async (args: NormalizeEditionArgs) => {
   } = args;
   const startAt = new Date();
 
-  const { data: surveys } = await fetchSurveysMetadata();
+  const { data: surveys } = await fetchSurveysMetadata({
+    addCredits: false,
+  });
   const survey = surveys.find((s) => s.id === surveyId);
   if (!survey) {
     throw new Error(`Could not find survey for surveyId ${surveyId}`);

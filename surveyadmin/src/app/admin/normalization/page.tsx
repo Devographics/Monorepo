@@ -4,7 +4,9 @@ import { fetchSurveysMetadata } from "@devographics/fetch";
 import { routes } from "~/lib/routes";
 
 export default async function Page({ params }) {
-  const { data: surveys } = await fetchSurveysMetadata();
+  const { data: surveys } = await fetchSurveysMetadata({
+    addCredits: false,
+  });
   return (
     <div>
       <Breadcrumbs surveys={surveys} />

@@ -11,6 +11,7 @@ export const rscEditionMetadataAdmin = cache(
   async ({ surveyId, editionId }: { surveyId: string; editionId: string }) => {
     const { data: surveys } = await rscSurveysMetadata({
       shouldGetFromCache: true,
+      addCredits: false,
     });
     const survey = surveys.find((s) => s.id === surveyId)!;
     const { data: edition } = await fetchEditionMetadataAdmin({

@@ -28,6 +28,7 @@ export default async function Page({ params }) {
   const { surveyId, editionId } = params;
   const { data: surveys } = await rscSurveysMetadata({
     shouldGetFromCache: true,
+    addCredits: false,
   });
   const { survey, edition } = await rscEditionMetadataAdmin({
     surveyId,

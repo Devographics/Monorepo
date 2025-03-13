@@ -13,7 +13,10 @@ const AdminExportPageWithSurveys = async ({
   searchParams: { surveyId: string; editionId: string };
 }) => {
   // TODO: fetch survey data using shared code
-  const res = await fetchSurveysMetadata({ calledFrom: "surveyadmin" });
+  const res = await fetchSurveysMetadata({
+    calledFrom: "surveyadmin",
+    addCredits: false,
+  });
   if (res.error) {
     return <p>Couldn't load surveys: ${res.error}</p>;
   }

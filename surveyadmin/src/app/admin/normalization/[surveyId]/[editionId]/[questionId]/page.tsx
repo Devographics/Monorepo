@@ -11,6 +11,7 @@ export default async function Page({ params }) {
   const { surveyId, editionId, questionId } = params;
   const { data: surveys } = await fetchSurveysMetadata({
     shouldGetFromCache: false,
+    addCredits: false,
   });
   const survey = surveys.find((s) => s.id === surveyId)!;
   const { data: edition } = await fetchEditionMetadataAdmin({

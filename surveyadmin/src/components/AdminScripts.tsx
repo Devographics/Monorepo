@@ -1,8 +1,5 @@
 "use client";
-import { fetchSurveysMetadata } from "@devographics/fetch";
-import Link from "next/link";
 import { useState } from "react";
-import { routes } from "~/lib/routes";
 import { runScript } from "~/lib/scripts/services";
 // import { MutationButton } from "~/core/components/ui/MutationButton";
 
