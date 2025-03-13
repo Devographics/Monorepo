@@ -52,13 +52,13 @@ export const makeTranslatorFunc =
 
         const stringObject = findString(key, strings)
 
-        if (stringObject) {
-            result = { ...result, ...stringObject }
-        } else {
+        if (!key || !stringObject) {
             result.missing = true
             if (fallback) {
                 result.t = fallback
             }
+        } else {
+            result = { ...result, ...stringObject }
         }
 
         const injectValues = (s: string) =>
