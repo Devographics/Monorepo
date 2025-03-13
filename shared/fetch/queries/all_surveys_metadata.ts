@@ -4,7 +4,7 @@ Unless specified, these queries are designed to be used by surveyform
 
 */
 
-export const getSurveysQuery = () => `
+export const getSurveysQuery = ({ addCredits = true }) => `
 query SurveysMetadataQuery {
   _metadata {
     surveys {
@@ -46,7 +46,9 @@ query SurveysMetadataQuery {
         sections {
           id
         }
-        credits {
+        ${
+            addCredits
+                ? `credits {
           id
           role
           entity {
@@ -61,6 +63,8 @@ query SurveysMetadataQuery {
               }
             }
           }
+        }`
+                : ''
         }
         colors {
           primary

@@ -9,14 +9,21 @@ import { getCacheOption } from '../helpers'
  * Fetch metadata for all surveys
  * @returns
  */
-export const fetchSurveysMetadata = async (options?: FetcherFunctionOptions) => {
+export const fetchSurveysMetadata = async (
+    options?: FetcherFunctionOptions & { addCredits?: boolean }
+) => {
+    const addCredits = options?.addCredits
     const getQuery = options?.getQuery || getSurveysQuery
-    const query = getQuery()
+    const query = getQuery({ addCredits })
     const key = surveysMetadataCacheKey(options)
     const result = await getFromCache<Array<SurveyMetadata>>({
         key,
         fetchFunction: async () => {
-            const result = await fetchGraphQLApi({ query, key, cache: getCacheOption() })
+            const result = await fetchGraphQLApi({
+                query,
+                key,
+                cache: getCacheOption()
+            })
             if (!result) throw new Error(`Couldn't fetch surveys`)
             const surveys = result._metadata.surveys as SurveyMetadata[]
             return surveys
