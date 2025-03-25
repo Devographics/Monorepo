@@ -194,7 +194,13 @@ const SegmentedControlItem = ({
             <span className="order-desc">↓</span>
         </Button>
     )
-    return tooltip ? <Tooltip trigger={component} contents={tooltip} /> : component
+    // if no tooltip is specified just show label
+    // useful for when label is truncated using overflow-ellipsis
+    return tooltip ? (
+        <Tooltip trigger={component} contents={tooltip} />
+    ) : (
+        <Tooltip trigger={component} contents={label} />
+    )
 }
 
 const ItemColor = ({ gradient }: { gradient: string[] }) => {

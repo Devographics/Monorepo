@@ -203,6 +203,7 @@ export const CommentsContent = ({
         <div>
             <CommentsFilters
                 comments={filteredComments}
+                allComments={comments}
                 question={question}
                 stateStuff={stateStuff}
             />

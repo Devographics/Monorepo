@@ -74,9 +74,25 @@ export const getItemLabel = (options: {
         values = {},
         html = false
     } = options
+    // console.log('// getItemLabel')
+    // console.log(options)
 
-    // 1. use id as default
-    let key = String(id),
+    // TODO: get rid of these exceptions?
+    // note: make an exception for "features" and "tools" namespaces
+    // because they do not use the "options." prefix
+    let namespace
+    if (i18nNamespace === 'tools') {
+        namespace = 'tools'
+    } else if (i18nNamespace === 'features') {
+        namespace = 'features'
+    } else {
+        namespace = `options.${i18nNamespace}`
+    }
+
+    const i18nLabelKey = `${namespace}.${id}`
+
+    // 1. use i18n id as default
+    let key = i18nLabelKey,
         label = String(id),
         shortLabel,
         description,
@@ -136,22 +152,8 @@ export const getItemLabel = (options: {
 
     // 5. look for regular translation
 
-    // TODO: get rid of these exceptions?
-    // note: make an exception for "features" and "tools" namespaces
-    // because they do not use the "options." prefix
-    let namespace
-    if (i18nNamespace === 'tools') {
-        namespace = 'tools'
-    } else if (i18nNamespace === 'features') {
-        namespace = 'features'
-    } else {
-        namespace = `options.${i18nNamespace}`
-    }
-
-    const i18nLabelKey = `${namespace}.${id}`
     const i18nLabelObject = getString(i18nLabelKey, { values })
     if (!i18nLabelObject.missing) {
-        key = i18nLabelKey
         label = getFields(i18nLabelObject, [html ? 'tHtml' : 'tClean', 't']) as string
         source = LabelSourcesEnum.I18N
     }
@@ -183,5 +185,8 @@ export const getItemLabel = (options: {
     }
     const result = { id, key, label, shortLabel, descriptionKey, description, values, source }
 
+    // console.log('// labelObject')
+    // console.log(result)
+    // console.log(result.key)
     return result
 }

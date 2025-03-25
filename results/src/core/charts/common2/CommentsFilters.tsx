@@ -17,6 +17,7 @@ import {
     filterCommentsByValue
 } from './Comments'
 import { KeywordFilter, OrderToggle } from './FreeformAnswers'
+import { count } from 'console'
 
 type OptionToggleItems = {
     id: OptionId
@@ -26,10 +27,12 @@ type OptionToggleItems = {
 
 export const CommentsFilters = ({
     comments,
+    allComments,
     question,
     stateStuff
 }: {
     comments: Comment[]
+    allComments: Comment[]
     question: QuestionMetadata
     stateStuff: CommentsFiltersState
 }) => {
@@ -64,6 +67,7 @@ export const CommentsFilters = ({
                     />
                     <ExperienceSentimentFilters
                         comments={comments}
+                        allComments={comments}
                         experienceFilter={experienceFilter}
                         setExperienceFilter={setExperienceFilter}
                         sentimentFilter={sentimentFilter}
@@ -74,21 +78,24 @@ export const CommentsFilters = ({
             </div>
         )
     } else if (options) {
-        const items: OptionToggleItems[] = options.map(option => {
-            const { id, entity } = option
-            const { shortLabel } = getItemLabel({
-                id,
-                entity,
-                getString,
-                i18nNamespace: question.id
+        const items: OptionToggleItems[] = options
+            .map(option => {
+                const { id, entity } = option
+                const { shortLabel } = getItemLabel({
+                    id,
+                    entity,
+                    getString,
+                    i18nNamespace: question.id
+                })
+                const count = filterCommentsByValue(allComments, option.id).length
+                return {
+                    id: option.id,
+                    label: `${shortLabel} (${count})`,
+                    isEnabled: option.id === valueFilter,
+                    count
+                }
             })
-            return {
-                id: option.id,
-                label: `${shortLabel} (${filterCommentsByValue(comments, option.id).length})`,
-                isEnabled: option.id === valueFilter
-            }
-        })
-
+            .filter(item => item.count > 0)
         return (
             <div className="comments-header">
                 <div className="comments-filter">
@@ -99,7 +106,7 @@ export const CommentsFilters = ({
                     />
                     <OptionsValuesFilters
                         items={items}
-                        comments={comments}
+                        allComments={allComments}
                         valueFilter={valueFilter}
                         setValueFilter={setValueFilter}
                     />
@@ -113,12 +120,14 @@ export const CommentsFilters = ({
 }
 
 const ExperienceSentimentFilters = ({
+    allComments,
     comments,
     experienceFilter,
     setExperienceFilter,
     sentimentFilter,
     setSentimentFilter
 }: {
+    allComments: Comment[]
     comments: Comment[]
     experienceFilter: FeaturesOptions | null
     setExperienceFilter: React.Dispatch<React.SetStateAction<FeaturesOptions | null>>
@@ -140,7 +149,7 @@ const ExperienceSentimentFilters = ({
                     ...Object.values(FeaturesOptions).map(id => ({
                         id,
                         label: `${getString(`options.features.${id}.label.short`)?.t} (${
-                            filterCommentsByExperience(comments, id).length
+                            filterCommentsByExperience(allComments, id).length
                         })`,
                         isEnabled: id === experienceFilter
                     }))
@@ -160,7 +169,7 @@ const ExperienceSentimentFilters = ({
                     ...Object.values(SimplifiedSentimentOptions).map(id => ({
                         id,
                         label: `${getString(`options.sentiment.${id}.label.short`)?.t} (${
-                            filterCommentsBySentiment(comments, id).length
+                            filterCommentsBySentiment(allComments, id).length
                         })`,
                         isEnabled: id === sentimentFilter
                     }))
@@ -174,12 +183,12 @@ const ExperienceSentimentFilters = ({
 }
 
 const OptionsValuesFilters = ({
-    comments,
+    allComments,
     items,
     valueFilter,
     setValueFilter
 }: {
-    comments: Comment[]
+    allComments: Comment[]
     items: OptionToggleItems[]
     valueFilter: string | null
     setValueFilter: React.Dispatch<React.SetStateAction<string | null>>
@@ -191,7 +200,7 @@ const OptionsValuesFilters = ({
             labelId="charts.filter_by"
             items={[
                 {
-                    label: `${getString('comments.filter.all')?.t} (${comments.length})`,
+                    label: `${getString('comments.filter.all')?.t} (${allComments.length})`,
                     id: '',
                     isEnabled: valueFilter === null
                 },

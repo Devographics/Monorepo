@@ -13,6 +13,7 @@ import { useWidth } from '../common2/helpers'
 import { CellLabel } from '../common2'
 import { getViewDefinition } from './helpers/views'
 import { getQuestionLabel } from '../common2/helpers/labels'
+import { BlockVariantDefinition } from 'core/types'
 
 // hide labels for cells under this size
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
@@ -29,6 +30,7 @@ export const useIsWideEnough = () => {
 }
 
 export const Cell = ({
+    block,
     bucket,
     chartState,
     chartValues,
@@ -38,6 +40,7 @@ export const Cell = ({
     gradient,
     viewDefinition
 }: {
+    block: BlockVariantDefinition
     bucket: Bucket | FacetBucket
     chartState: HorizontalBarChartState
     chartValues: HorizontalBarChartValues
@@ -75,19 +78,31 @@ export const Cell = ({
         facetQuestionLabel = facetQuestionLabelObject.label
     }
 
-    const { key: key2, label: cellLabel } = getItemLabel({
+    const i18nNamespace =
+        block.i18nNamespace ||
+        facetQuestion?.i18nNamespace ||
+        question?.i18nNamespace ||
+        facetQuestion?.id ||
+        question?.id ||
+        block.fieldId ||
+        block.id
+
+    const itemLabel = getItemLabel({
         getString,
-        i18nNamespace: facetQuestion?.id || question?.id,
+        i18nNamespace,
+
         id,
         entity
     })
+    const { label: cellLabel } = itemLabel
 
-    const v = formatValue(value)
+    const v = formatValue(value, question, chartState)
 
     const isActiveSort = sort === id
     const className = `chart-cell horizontal-chart-cell ${isActiveSort ? 'active-sort' : ''}`
 
     const label = facetQuestionLabel ? `${facetQuestionLabel}: ${cellLabel}` : cellLabel
+
     return (
         <Tooltip
             trigger={

@@ -55,6 +55,7 @@ export const RowSingle = (props: RowComponentProps) => {
         <RowWrapper {...rowWrapperProps}>
             <>
                 <Cell
+                    block={block}
                     bucket={bucket}
                     chartState={chartState}
                     width={width}

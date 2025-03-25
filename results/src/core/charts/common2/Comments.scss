@@ -26,18 +26,21 @@
 }
 
 .comments-header {
-    display: flex;
-    justify-content: space-between;
+    // display: flex;
+    // justify-content: space-between;
     align-items: center;
-    gap: var(--spacing);
-    flex-direction: row;
+    gap: var(--doubleSpacing);
+    // flex-direction: row;
     margin-bottom: var(--spacing);
+    display: grid;
+    grid-template-columns: 1fr minmax(0, min-content);
 }
 
 .comments-filter {
     display: flex;
-    gap: var(--quarterSpacing);
+    gap: var(--halfSpacing);
     flex-direction: column;
+    min-width: 0;
 }
 
 .comment-item {
