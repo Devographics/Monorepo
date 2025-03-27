@@ -612,8 +612,8 @@
       - id: conclusion_sebastien
         template: conclusion
         variables:
-            author: sebastien_lorber
-            entities: '"sebastien_lorber"'
+            author: ashok_gelal
+            entities: '"ashok_gelal"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock
