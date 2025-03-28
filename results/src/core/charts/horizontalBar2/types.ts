@@ -36,6 +36,8 @@ export enum HorizontalBarViews {
 
 export interface HorizontalBarChartValues extends ChartValues {
     maxOverallValue?: number
+    totalRespondents: number
+    totalResponses: number
     totalRows: number
     facetQuestion?: QuestionMetadata
     ticks?: Tick[]

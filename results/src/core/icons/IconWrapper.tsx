@@ -42,7 +42,7 @@ const Icon = styled.span`
         height: ${getIconSize};
         width: ${getIconSize};
         display: block;
-        color: ${props => props.theme.colors.text};
+        /* color: ${props => props.theme.colors.text}; */
         /* path, circle {
                 fill: ${props => props.theme.colors.text};
             } */

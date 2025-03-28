@@ -72,6 +72,9 @@ query {
                                 optionsAreNumeric
                                 optionsAreRange
                                 optionsAreSequential
+                                allowMultiple
+                                allowComment
+                                allowOther
                                 entity {
                                     id
                                     name

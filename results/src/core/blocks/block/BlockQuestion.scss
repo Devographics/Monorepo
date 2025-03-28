@@ -1,0 +1,10 @@
+.block-question {
+    margin-bottom: var(--spacing);
+}
+
+.question-right {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: var(--spacing);
+}

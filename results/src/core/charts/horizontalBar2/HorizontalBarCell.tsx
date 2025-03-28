@@ -38,7 +38,8 @@ export const Cell = ({
     offset,
     cellIndex,
     gradient,
-    viewDefinition
+    viewDefinition,
+    oversizedBar = false
 }: {
     block: BlockVariantDefinition
     bucket: Bucket | FacetBucket
@@ -49,12 +50,13 @@ export const Cell = ({
     cellIndex: number
     gradient: string[]
     viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
+    oversizedBar: boolean
 }) => {
     const { ref, isWideEnough: showLabel } = useIsWideEnough()
 
     // const entities = useEntities()
     // const entity = entities.find(e => e.id === bucket.id)
-    const { question, facetQuestion } = chartValues
+    const { question, facetQuestion, totalRespondents } = chartValues
     const { sort, view } = chartState
     const { getValue, formatValue } = viewDefinition
     const { getString } = useI18n()
@@ -90,7 +92,6 @@ export const Cell = ({
     const itemLabel = getItemLabel({
         getString,
         i18nNamespace,
-
         id,
         entity
     })
@@ -108,15 +109,40 @@ export const Cell = ({
             trigger={
                 <div className={className} style={style} ref={ref}>
                     {showLabel && <CellLabel label={v} />}
+                    {oversizedBar && <Oversized />}
                 </div>
             }
             contents={
                 <div>
                     [{label}] <strong>{v}</strong>{' '}
-                    <T k="charts.facet_respondents" values={{ count }} />
+                    <T k="charts.facet_detail" values={{ count, totalRespondents }} />
                 </div>
             }
             showBorder={false}
         />
+    )
+}
+
+const Oversized = () => {
+    return (
+        <span className="oversized-indicator">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="39"
+                height="73"
+                fill="none"
+                viewBox="0 0 39 73"
+            >
+                <path
+                    className="break-fill"
+                    d="M4 27.53 12-1h23l-5.765 23.271H35l-5.765 23.272H35L28 74H4l6.222-23.235H4l6.222-23.236z"
+                ></path>
+                <path
+                    className="break-stroke"
+                    strokeWidth="6"
+                    d="M12-1 4 27.53h6.222L4 50.764h6.222L4 74M35-1l-5.765 23.271H35l-5.765 23.272H35L28 74"
+                ></path>
+            </svg>
+        </span>
     )
 }

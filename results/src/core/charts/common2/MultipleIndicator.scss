@@ -1,4 +1,4 @@
-.chart-freeform {
+.chart-multiple {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,14 +9,14 @@
     gap: var(--quarterSpacing);
 }
 
-.chart-row-freeform-icon-wrapper {
+.chart-row-multiple-icon-wrapper {
     position: absolute;
     left: calc(var(--offset) * 1% + 7px);
     height: var(--barHeight);
     display: flex;
     align-items: center;
 }
-.chart-row-freeform-icon {
+.chart-row-multiple-icon {
     display: block;
     opacity: 0.5;
 }

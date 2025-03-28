@@ -16,3 +16,25 @@
         z-index: 1;
     }
 }
+
+.oversized-indicator {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 100%;
+    svg {
+        height: 100%;
+        .break-stroke {
+            stroke: #ffffffaa;
+        }
+    }
+}
+
+.chart-rows-zebra .chart-row:nth-child(1n) .break-fill {
+    fill: var(--backgroundColor);
+}
+
+.chart-rows-zebra .chart-row:nth-child(2n) .break-fill {
+    fill: color-mix(in srgb, var(--backgroundAltColor) 50%, transparent);
+}

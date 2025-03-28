@@ -20,6 +20,7 @@ import BlockQuestion from './BlockQuestion'
 import { BlockDefinition } from 'core/types'
 import { BlockDescriptionContents } from './BlockChart'
 import { getBlockSeriesData } from 'core/helpers/data'
+import { getAllQuestions } from 'core/helpers/options'
 
 export const getRegularTabId = (index: number) => `tab-${index}`
 export const getCustomTabId = (id: string) => `tabCustom-${id}`
@@ -80,6 +81,10 @@ export const TabsWrapper = ({
 
     const regularVariants = block.variants
 
+    const question = getAllQuestions(pageContext.currentEdition).find(
+        q => q.id === (firstBlockVariant.fieldId ?? firstBlockVariant.id)
+    )
+
     return (
         <Wrapper className={`tabs-wrapper tabs-wrapper-${block.id}`} withMargin={withMargin}>
             <BlockHeaderTop_ className="block-header-top">
@@ -87,6 +92,8 @@ export const TabsWrapper = ({
                 {/* <BlockDescriptionContents block={firstBlockVariant} /> */}
                 <BlockTakeaway block={firstBlockVariant} />
             </BlockHeaderTop_>
+            <BlockQuestion block={firstBlockVariant} question={question} />
+
             {showTabs ? (
                 <Tabs.Root
                     defaultValue="tab0"
@@ -191,7 +198,6 @@ export const TabsWrapper = ({
                     variantIndex={0}
                 />
             )}
-            <BlockQuestion block={firstBlockVariant} />
         </Wrapper>
     )
 }

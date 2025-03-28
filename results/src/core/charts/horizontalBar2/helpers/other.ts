@@ -3,6 +3,7 @@ import {
     FeaturesOptions,
     QuestionMetadata,
     ResponseData,
+    ResponseEditionData,
     ResultsSubFieldEnum,
     SimplifiedSentimentOptions,
     StandardQuestionData
@@ -147,13 +148,17 @@ export const getSeriesMetadata = ({
     series,
     block,
     chartState,
-    viewDefinition
+    viewDefinition,
+    currentEdition
 }: {
     series: CommonProps<HorizontalBarChartState>['series']
     block: BlockVariantDefinition
     chartState: HorizontalBarChartState
     viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
+    currentEdition: ResponseEditionData
 }) => {
+    const { completion } = currentEdition
+
     const { getValue } = viewDefinition
     const allSeriesValues = series
         .map(serie => {
@@ -163,7 +168,11 @@ export const getSeriesMetadata = ({
         })
         .flat()
     const seriesMaxValue = max(allSeriesValues) || 0
-    const metadata: SeriesMetadata = { seriesMaxValue }
+    const metadata: SeriesMetadata = {
+        seriesMaxValue,
+        totalRespondents: completion.count,
+        totalResponses: completion.answersCount
+    }
     return metadata
 }
 

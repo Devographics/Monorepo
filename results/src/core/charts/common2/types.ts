@@ -87,4 +87,6 @@ export type LegendItem = {
 
 export interface SeriesMetadata {
     seriesMaxValue: number
+    totalRespondents: number
+    totalResponses: number
 }

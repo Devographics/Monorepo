@@ -28,7 +28,9 @@ export const useChartValues = ({
     const { facet } = chartState
     const chartValues: HorizontalBarChartValues = {
         question,
-        totalRows: buckets.length
+        totalRows: buckets.length,
+        totalRespondents: seriesMetadata.totalRespondents,
+        totalResponses: seriesMetadata.totalResponses
     }
     const maxOverallValue = seriesMetadata.seriesMaxValue || getMaxValue({ values, view })
 

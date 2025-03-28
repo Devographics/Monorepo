@@ -26,7 +26,13 @@ export const RowSingle = (props: RowComponentProps) => {
     const { view } = chartState
     const { getValue } = viewDefinition
     const value = getValue(bucket)
-    const width = (100 * value) / getTopBound(maxOverallValue)
+    let widthValue = value
+    let oversizedBar = false
+    if (widthValue > 100) {
+        widthValue = 100
+        oversizedBar = true
+    }
+    const width = (100 * widthValue) / getTopBound(maxOverallValue)
     const gradient = theme.colors.barChart.primaryGradient
 
     // TODO: do this better
@@ -64,6 +70,7 @@ export const RowSingle = (props: RowComponentProps) => {
                     chartValues={chartValues}
                     gradient={gradient}
                     viewDefinition={viewDefinition}
+                    oversizedBar={oversizedBar}
                 />
                 {hasInsufficientData && (
                     <div className="chart-row-insufficient-data-wrapper">

@@ -460,13 +460,11 @@
 
       - id: newsletters
         template: multiple_options2_freeform
-        parameters: { limit: 40 }
-        chartOptions: { limit: 20 }
+        parameters: { limit: 20, cutoff: 5 }
 
       - id: podcasts
-        template: multiple_options2_combined
-        parameters: { limit: 40 }
-        chartOptions: { limit: 20 }
+        template: multiple_options2_freeform
+        parameters: { limit: 20, cutoff: 5 }
 
       # - id: lydia_hallie
       #   template: picks
@@ -474,13 +472,13 @@
       #       url: https://docs.expo.dev/router/introduction/
 
       - id: video_creators
-        template: multiple_options2_combined
-        parameters: { limit: 40 }
+        template: multiple_options2_freeform
+        parameters: { limit: 40, cutoff: 5 }
         chartOptions: { limit: 20 }
 
       - id: people
-        template: multiple_options2_combined
-        parameters: { limit: 40 }
+        template: multiple_options2_freeform
+        parameters: { limit: 40, cutoff: 5 }
         chartOptions: { limit: 20 }
 
       - id: other_surveys
@@ -609,7 +607,7 @@
 - id: conclusion
   path: /conclusion
   blocks:
-      - id: conclusion_sebastien
+      - id: conclusion_ashok
         template: conclusion
         variables:
             author: ashok_gelal

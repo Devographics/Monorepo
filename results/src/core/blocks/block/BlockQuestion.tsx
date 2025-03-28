@@ -4,25 +4,32 @@ import { fontSize, spacing } from 'core/theme'
 import { useBlockQuestion } from 'core/helpers/blockHelpers'
 import { BlockVariantDefinition } from 'core/types'
 import { QuestionIcon } from 'core/icons'
-import { FreeformIndicator } from 'core/charts/common2'
+import { FreeformIndicator } from 'core/charts/common2/FreeformIndicator'
+import { MultipleIndicator } from 'core/charts/common2/MultipleIndicator'
 import Tooltip from 'core/components/Tooltip'
+import './BlockQuestion.scss'
+import { QuestionMetadata } from '@devographics/types'
 
 export const BlockQuestion = ({
     block,
     question
 }: {
     block?: BlockVariantDefinition
-    question?: string
+    question?: QuestionMetadata
 }) => {
-    const blockQuestion = question || (block && useBlockQuestion({ block }))
+    const blockQuestion = block && useBlockQuestion({ block })
     const isFreeformQuestion = ['multiple_options2_freeform'].includes(block.template)
+    const isMultipleQuestion = question?.allowMultiple
     if (blockQuestion) {
         return (
-            <Question_ className="Block__Question">
+            <Question_ className="block-question">
                 <QuestionLeft_>
                     <QuestionIcon /> <QuestionContents_>{blockQuestion}</QuestionContents_>
                 </QuestionLeft_>
-                {isFreeformQuestion && <FreeformIndicator showLabel={true} />}
+                <div className="question-right">
+                    {isFreeformQuestion && <FreeformIndicator showLabel={true} />}
+                    {isMultipleQuestion && <MultipleIndicator showLabel={true} />}
+                </div>
             </Question_>
         )
     }

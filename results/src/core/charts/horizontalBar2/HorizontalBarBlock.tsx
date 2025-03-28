@@ -53,7 +53,8 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
         series,
         block,
         chartState,
-        viewDefinition
+        viewDefinition,
+        currentEdition
     })
 
     const commonProps: CommonProps<HorizontalBarChartState> = {
