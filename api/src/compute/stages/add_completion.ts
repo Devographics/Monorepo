@@ -10,15 +10,23 @@ export async function addCompletionCounts(
     completionByYear: CompletionResult[]
 ) {
     for (let editionData of resultsByEdition) {
-        const totalRespondents =
-            totalRespondentsByYear.find(e => e.editionId === editionData.editionId)?.total ?? 0
-        const questionRespondents =
-            completionByYear.find(e => e.editionId === editionData.editionId)?.total ?? 0
+        const surveyCompletion = totalRespondentsByYear.find(
+            e => e.editionId === editionData.editionId
+        )
+        const questionCompletion = completionByYear.find(e => e.editionId === editionData.editionId)
+
+        const totalSurveyRespondents = surveyCompletion?.total ?? 0
+        const totalQuestionRespondents = questionCompletion?.totalRespondents ?? 0
+        const totalAnswers = questionCompletion?.totalAnswers ?? 0
 
         editionData.completion = {
-            total: totalRespondents,
-            count: questionRespondents,
-            percentageSurvey: ratioToPercentage(questionRespondents / totalRespondents)
+            // number of survey respondents
+            total: totalSurveyRespondents,
+            // number of question respondents
+            count: totalQuestionRespondents,
+            // number of question answers
+            answersCount: totalAnswers,
+            percentageSurvey: ratioToPercentage(totalQuestionRespondents / totalSurveyRespondents)
         }
         // TODO: this is probably not needed anymore?
         // for (let bucket of editionData.buckets) {

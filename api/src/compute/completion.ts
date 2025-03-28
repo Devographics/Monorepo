@@ -5,29 +5,47 @@ import { inspect } from 'util'
 
 export interface CompletionResult {
     editionId: string
-    total: number
+    totalAnswers: number
+    totalRespondents: number
 }
 
-export async function computeCompletionByYear({
-    context,
-    match,
-    survey
-}: {
-    context: RequestContext
-    match: any
-    survey: Survey
-}): Promise<CompletionResult[]> {
-    const { db } = context
-    const collection = getCollection(db, survey)
-
-    const aggregationPipeline = [
+const getPipeline = (match: any, dbPath: string, unwind: boolean = false) => {
+    const pipeline = [
         {
             $match: match
         },
         {
             $group: {
-                _id: { editionId: '$editionId' },
-                total: {
+                _id: {
+                    editionId: '$editionId'
+                },
+                totalRespondents: {
+                    $sum: 1
+                },
+                allNormalized: {
+                    $push: `$${dbPath}`
+                }
+            }
+        },
+        {
+            $unwind: {
+                path: '$allNormalized'
+            }
+        },
+        {
+            $unwind: {
+                path: '$allNormalized'
+            }
+        },
+        {
+            $group: {
+                _id: {
+                    editionId: '$_id.editionId'
+                },
+                totalRespondents: {
+                    $first: '$totalRespondents'
+                },
+                totalAnswers: {
                     $sum: 1
                 }
             }
@@ -35,25 +53,46 @@ export async function computeCompletionByYear({
         {
             $project: {
                 editionId: '$_id.editionId',
-                total: 1
+                totalRespondents: 1,
+                totalAnswers: 1
             }
         }
     ]
+
+    return pipeline
+}
+export async function computeCompletionByYear({
+    context,
+    match,
+    survey,
+    dbPath
+}: {
+    context: RequestContext
+    match: any
+    survey: Survey
+    dbPath: string
+}): Promise<CompletionResult[]> {
+    const { db } = context
+    const collection = getCollection(db, survey)
+
+    const aggregationPipeline = getPipeline(match, dbPath)
 
     const completionResults = (await collection
         .aggregate(aggregationPipeline)
         .toArray()) as CompletionResult[]
 
-    // console.log('// computeCompletionByYear')
-    // console.log(
-    //     inspect(
-    //         {
-    //             aggregationPipeline,
-    //             completionResults
-    //         },
-    //         { colors: true, depth: null }
-    //     )
-    // )
+    console.log('// computeCompletionByYear')
+    console.log(
+        inspect(
+            {
+                aggregationPipeline,
+                completionResults
+            },
+            { colors: true, depth: null }
+        )
+    )
 
     return completionResults
 }
+
+// completionResults: [ { _id: { editionId: 'ai2025' }, total: 223, editionId: 'ai2025' } ]

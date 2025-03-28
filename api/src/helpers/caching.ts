@@ -113,10 +113,10 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
             }
         }
     } else {
-        verb = '🟤 Cache bypass (cache updated)'
+        verb = '🟤 Cache bypass (cache disabled)'
         value = await func(funcOptionsWithContext)
         if (context && value) {
-            await setCache(key, JSON.stringify(value), context)
+            // await setCache(key, JSON.stringify(value), context)
         }
     }
     const finishedAt = new Date()

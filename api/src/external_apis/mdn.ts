@@ -37,7 +37,7 @@ export const fetchMdnResource = async ({ path }: { path: string }) => {
 
         return normalizeMdnResource(json)
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         console.error(`an error occurred while fetching mdn resource ${url}`)
         // throw error
         return

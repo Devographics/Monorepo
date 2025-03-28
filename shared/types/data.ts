@@ -147,6 +147,8 @@ export interface YearCompletion {
     total: number
     // current number of respondents
     count: number
+    // total number of answers
+    answersCount: number
     // percentage of respondents compared to the total number of participants
     percentageSurvey: number
 }

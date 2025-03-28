@@ -3,13 +3,17 @@ Completion ratio and count
 """
 type YearCompletion {
     """
-    Total number of respondents who have answered the survey for a specific year
+    Total number of respondents who have answered a question for a specific year (backwards compatibility)
     """
     total: Int
     """
     Number of respondents who have answered this question for a specific year
     """
     count: Int
+    """
+    Total number of answers to question for a specific year
+    """
+    answersCount: Int
     """
     Completion percentage relative to total number of survey respondents for a given year
     """

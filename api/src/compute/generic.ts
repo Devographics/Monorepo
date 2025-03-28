@@ -389,7 +389,9 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
     // TODO: merge these counts into the main aggregation pipeline if possible
     const totalRespondentsByYear = await runStage(computeParticipationByYear, [{ context, survey }])
-    const completionByYear = await runStage(computeCompletionByYear, [{ context, match, survey }])
+    const completionByYear = await runStage(computeCompletionByYear, [
+        { context, match, survey, dbPath }
+    ])
 
     const pipelineProps = {
         surveyId: survey.id,
