@@ -23,7 +23,7 @@ const getGroupAverage = (group: OptionGroup) => {
     }
 }
 
-// Given a bucket, find the corresponding average corresponding to its range
+// Given a bucket, find the average corresponding to its range
 export const getBucketAverage = (
     bucket: FacetBucket | Bucket,
     axis: ComputeAxisParameters
@@ -44,11 +44,18 @@ export const getBucketAverage = (
                   groupedBuckets.length
         return average
     } else {
-        // bucket is not a group, we just get the average from the corresponding option;
-        // or the bucket id itself if the question is numeric
-        const average = axis?.question?.optionsAreNumeric
-            ? Number(bucket.id)
-            : axis?.options?.find(o => o.id === bucket.id)?.average
+        const bucketOption = axis?.options?.find(o => o.id === bucket.id)
+        let average
+        if (bucketOption?.average !== undefined) {
+            // bucket is a range, use its specified average value
+            return bucketOption?.average
+        } else if (bucketOption?.value !== undefined) {
+            // bucket has a specified numerical value that is different from its id
+            return bucketOption?.value
+        } else if (axis?.question?.optionsAreNumeric) {
+            // bucket has numeric options; use number version of id
+            return Number(bucket.id)
+        }
         if (typeof average === 'undefined') {
             console.log({ bucket })
             console.log({ axis })

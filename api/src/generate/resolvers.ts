@@ -8,7 +8,14 @@ import {
     ResolverParent,
     IncludeEnum
 } from '../types/surveys'
-import { getPath, getEditionById, getSectionType, getGeneralMetadata } from './helpers'
+import {
+    getPath,
+    getEditionById,
+    getSectionType,
+    getGeneralMetadata,
+    addGroupsAverages,
+    addOptionsAverages
+} from './helpers'
 import { genericComputeFunction, getGenericCacheKey } from '../compute'
 import { useCache } from '../helpers/caching'
 import { getRawCommentsWithCache } from '../compute/comments'
@@ -22,7 +29,13 @@ import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
 import { localesResolvers } from '../resolvers/locales'
 import { subFields } from './subfields'
-import { Creator, ResponsesParameters, ResultsSubFieldEnum } from '@devographics/types'
+import {
+    Creator,
+    Entity,
+    Option,
+    ResponsesParameters,
+    ResultsSubFieldEnum
+} from '@devographics/types'
 import { loadOrGetParsedSurveys } from '../load/surveys'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
@@ -521,22 +534,36 @@ export const questionMetadataResolverMap = {
 
     options: async (parent: QuestionApiObject, {}, context: RequestContext) => {
         const { template, options, editionId } = parent
-
+        if (!options) {
+            return
+        }
         const optionEntities = await getEntities({
             ids: options?.map(o => o.id),
             context
         })
-        const optionsWithEntities = options
-            ?.filter(option => option.editions?.includes(editionId!))
-            .map(option => ({
-                ...omit(option, 'editions'),
-                entity: optionEntities.find(o => o.id === option.id)
-            }))
+        const currentEditionOptions = options.filter(option =>
+            option.editions?.includes(editionId!)
+        )
+        const optionsWithEntities = currentEditionOptions.map(option => ({
+            ...omit(option, 'editions'),
+            entity: optionEntities.find(o => o.id === option.id)
+        }))
         // avoid repeating the options for feature and tool questions
         // since there's so many of them
         // NOTE: disabled since it does saves a few kb, but at the cost of a lot of downstream complexity
         // return ['feature', 'tool'].includes(template) ? [] : optionsWithEntities
-        return optionsWithEntities
+
+        // add averages if needed
+        const optionsWithAverages = addOptionsAverages(optionsWithEntities)
+        return optionsWithAverages
+    },
+    groups: async (parent: QuestionApiObject, {}, context: RequestContext) => {
+        const { groups } = parent
+        if (!groups) {
+            return
+        }
+        const groupsWithAverages = addGroupsAverages(groups)
+        return groupsWithAverages
     }
 }
 

@@ -1,4 +1,4 @@
-import { OptionGroup } from '@devographics/types'
+import { OptionGroup, QuestionMetadata } from '@devographics/types'
 import { loadOrGetParsedSurveys } from '../load/surveys'
 import {
     Survey,
@@ -230,4 +230,34 @@ export const getGeneralMetadata = ({ context }: { context: RequestContext }) => 
             // entity: await getEntity({ id, context })
         }))
     }
+}
+
+/*
+
+If only lowerBound/upperBound are defined on groups, 
+also calculate and add average values
+
+*/
+export const addGroupsAverages = (groups: OptionGroup[]) => {
+    return groups.map(group => {
+        const { lowerBound, upperBound, average } = group
+        if (lowerBound && upperBound && !average) {
+            group.average = lowerBound + (upperBound - lowerBound) / 2
+        }
+        return group
+    })
+}
+
+/*
+
+If option value is defined, copy it over to average field as well
+
+*/
+export const addOptionsAverages = (options: Option[]) => {
+    return options.map(option => {
+        if (option.value && !option.average) {
+            option.average = option.value
+        }
+        return option
+    })
 }

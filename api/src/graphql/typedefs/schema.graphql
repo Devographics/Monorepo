@@ -215,6 +215,16 @@ type OptionMetadata {
     id: StringOrInt
     intlId: String
     label: String
+    lowerBound: Float
+    upperBound: Float
+    """
+    Value associated with this option, if different from id
+    """
+    value: Float
+
+    """
+    For ranges, average of the range
+    """
     average: Float
     entity: Entity
 }
@@ -361,6 +371,10 @@ type Bucket {
     """
     count: Int
     """
+    Numerical value associated with this bucket
+    """
+    value: Float
+    """
     Percentage relative to question respondents
     """
     percentageQuestion: Float
@@ -427,6 +441,10 @@ type GroupedBucket {
     Respondent count
     """
     count: Int
+    """
+    Numerical value associated with this bucket
+    """
+    value: Float
     """
     Percentage relative to question respondents
     """
