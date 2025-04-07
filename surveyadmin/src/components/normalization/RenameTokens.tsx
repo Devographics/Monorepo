@@ -7,7 +7,7 @@ export const RenameTokens = (props) => {
   return (
     <ModalTrigger
       isButton={false}
-      label="🏷 Rename Tokens"
+      label="🔁 Rename Tokens"
       tooltip="Rename custom tokens"
       header={<div>Rename Custom Tokens</div>}
     >
@@ -24,8 +24,8 @@ const Rename = (props) => {
   return (
     <section>
       <p>
-        Note: this will only affect custom tokens. To rename regular tokens,
-        relaunch normalization on entire dataset.{" "}
+        Note: this will only affect custom & AI tokens. To rename regular
+        tokens, relaunch normalization on entire dataset.{" "}
       </p>
       <hr />
       <label>

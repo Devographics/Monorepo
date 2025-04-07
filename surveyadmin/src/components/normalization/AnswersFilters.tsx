@@ -141,9 +141,9 @@ const AnswersFilters = (props: AnswersFiltersProps) => {
         </select>
       </div>
 
-      <div className="control control-tokens">
+      {/* <div className="control control-tokens">
         <TokensTrigger {...props} />
-      </div>
+      </div> */}
 
       <div className="control control-search">
         <input

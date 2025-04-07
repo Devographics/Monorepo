@@ -35,6 +35,7 @@ import { apiRoutes } from "~/lib/apiRoutes";
 import { GetQuestionResponsesParams } from "~/lib/normalization/actions/getQuestionResponses";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ResultsPayload } from "~/lib/normalization/services";
+import { NormalizeAll } from "./NormalizeAll";
 
 interface NormalizeQuestionProps {
   survey: SurveyMetadata;
@@ -114,6 +115,7 @@ export interface CommonNormalizationProps extends NormalizationProps {
   unnormalizedAnswers: IndividualAnswer[];
   normalizedAnswers: IndividualAnswer[];
   discardedAnswers: IndividualAnswer[];
+  aiAnswers: IndividualAnswer[];
   customAnswers: IndividualAnswer[];
   tokenFilter: string[] | null;
   setTokenFilter: (
@@ -189,7 +191,8 @@ export type AnswerVariant =
   | "normalized"
   | "unnormalized"
   | "discarded"
-  | "custom";
+  | "custom"
+  | "ai";
 
 export const answerVariants = [
   {
@@ -211,6 +214,11 @@ export const answerVariants = [
     id: "discarded",
     label: "Discarded",
     tooltip: "Empty answers, random characters, etc.",
+  },
+  {
+    id: "ai",
+    label: "AI Normalizations",
+    tooltip: "Answers with AI-generated tokens",
   },
   {
     id: "custom",
@@ -315,6 +323,7 @@ export const Normalization = (props: NormalizationProps) => {
     normalizedAnswers,
     unnormalizedAnswers,
     discardedAnswers,
+    aiAnswers,
     customAnswers,
   } = splitResponses(responses);
 
@@ -334,6 +343,7 @@ export const Normalization = (props: NormalizationProps) => {
     allAnswers,
     normalizedAnswers,
     unnormalizedAnswers,
+    aiAnswers,
     discardedAnswers,
     customAnswers,
     variant,
@@ -362,7 +372,7 @@ export const Normalization = (props: NormalizationProps) => {
       <Actions {...commonProps} {...segmentProps} />
       {segments.length > 0 && <Progress {...commonProps} {...segmentProps} />}
       {responses ? (
-        <AllAnswers {...commonProps} />
+        <AllAnswers {...commonProps} {...segmentProps} />
       ) : (
         <div>No responses data found.</div>
       )}
@@ -370,7 +380,7 @@ export const Normalization = (props: NormalizationProps) => {
   );
 };
 
-const AllAnswers = (props: CommonNormalizationProps) => {
+const AllAnswers = (props: CommonNormalizationProps & SegmentProps) => {
   return (
     <>
       <datalist id="entities-list">
@@ -381,7 +391,11 @@ const AllAnswers = (props: CommonNormalizationProps) => {
           <option key={t} value={t}></option>
         ))}
       </datalist>
-      <h3>Answers ({props.allAnswers.length})</h3>
+      <div className="answers-header">
+        <h3>Answers ({props.allAnswers.length})</h3>
+        <NormalizeAll {...props} />
+      </div>
+
       <Answers {...props} />
       {/* <Answers {...fieldsProps} variant="unnormalized" /> */}
       {/* <Answers {...fieldsProps} variant="discarded" /> */}

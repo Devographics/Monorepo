@@ -63,8 +63,11 @@ export const apiRoutes = {
     disableRegularTokens: {
       href: (params) => `/api/normalization/disableRegularTokens`,
     },
-    importNormalizations: {
-      href: (params) => `/api/normalization/importNormalizations`,
+    importNormalizationsCSV: {
+      href: (params) => `/api/normalization/importNormalizationsCSV`,
+    },
+    importNormalizationsJSON: {
+      href: (params) => `/api/normalization/importNormalizationsJSON`,
     },
   },
   export: {

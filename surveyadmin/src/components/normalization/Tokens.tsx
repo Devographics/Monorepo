@@ -15,20 +15,87 @@ import { CommonNormalizationProps } from "./NormalizeQuestion";
 import { usePresets } from "./hooks";
 import without from "lodash/without";
 import { NormTokenAction } from "./NormTokenAction";
+import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
 
-const EMPTY_TAG = "EMPTY_TAG";
+export const EMPTY_TAG = "EMPTY_TAG";
 
 type Sort = "alphabetical" | "matches";
 
 type Token = Entity & { tag: string; matchCount: number };
 
-const TokensTrigger = (props) => {
+export const getQuestionTokens = ({
+  question,
+  allAnswers,
+  entities,
+  filterQuery = "",
+  sort,
+}: {
+  question: QuestionWithSection;
+  allAnswers: IndividualAnswer[];
+  entities: Entity[];
+  filterQuery?: string;
+  sort?: string;
+}) => {
+  const allTags = [question.id, ...(question?.matchTags || [])];
+
+  const allTokens = uniq(
+    allTags
+      .map((tag) => {
+        const tagEntities = entities.filter((e) => e?.tags?.includes(tag));
+        const emptyEntities = [{ id: EMPTY_TAG }];
+
+        return (tagEntities.length > 0 ? tagEntities : emptyEntities)
+          .map((e) => {
+            const matchCount = allAnswers.filter((a) =>
+              a.tokens?.map((t) => t.id).includes(e.id)
+            ).length;
+            return {
+              ...e,
+              matchCount,
+              tag,
+            };
+          })
+          .toSorted((a, b) => {
+            if (sort === "alphabetical") {
+              return a.id.localeCompare(b.id);
+            } else if (sort === "matches") {
+              return b.matchCount - a.matchCount;
+            }
+            return 1;
+          });
+      })
+      .flat()
+      .filter((token) => token.id.includes(filterQuery))
+  ) as Array<Token>;
+  return allTokens;
+};
+
+export const TokensTrigger = (props) => {
   const { tokenFilter, question } = props;
   return (
     <ModalTrigger
       isButton={true}
       className="button-ghost"
       label={`🏷️ Tokens… ${tokenFilter ? `[${tokenFilter.join(",")}]` : ""}`}
+      tooltip="View entity tokens for current question"
+      header={
+        <span>
+          Tokens for <code>{question.id}</code>
+        </span>
+      }
+    >
+      <Tokens {...props} />
+    </ModalTrigger>
+  );
+};
+
+export const TokensTriggerLink = (props) => {
+  const { tokenFilter, question } = props;
+  return (
+    <ModalTrigger
+      isButton={false}
+      className="button-ghost"
+      label={`🏷️ Tokens ${tokenFilter ? `(${tokenFilter.length})` : ""}`}
       tooltip="View entity tokens for current question"
       header={
         <span>
@@ -67,37 +134,13 @@ const Tokens = ({
     question,
   })!;
 
-  const allTags = [question.id, ...(question?.matchTags || [])];
-
-  const allTokens = uniq(
-    allTags
-      .map((tag) => {
-        const tagEntities = entities.filter((e) => e?.tags?.includes(tag));
-        const emptyEntities = [{ id: EMPTY_TAG }];
-
-        return (tagEntities.length > 0 ? tagEntities : emptyEntities)
-          .map((e) => {
-            const matchCount = allAnswers.filter((a) =>
-              a.tokens?.map((t) => t.id).includes(e.id)
-            ).length;
-            return {
-              ...e,
-              matchCount,
-              tag,
-            };
-          })
-          .toSorted((a, b) => {
-            if (sort === "alphabetical") {
-              return a.id.localeCompare(b.id);
-            } else if (sort === "matches") {
-              return b.matchCount - a.matchCount;
-            }
-            return 1;
-          });
-      })
-      .flat()
-      .filter((token) => token.id.includes(filterQuery))
-  ) as Array<Token>;
+  const allTokens = getQuestionTokens({
+    question,
+    allAnswers,
+    entities,
+    filterQuery,
+    sort,
+  });
 
   const { enabledPresets, setEnabledPresets, customPresets, setCustomPresets } =
     usePresets({ edition, question });
@@ -303,6 +346,7 @@ const Row = (props: RowProps) => {
             {parentId && "↳ "}
             <NormTokenAction
               id={id}
+              hideAction={true}
               setTokenFilter={setTokenFilter}
               onClick={() => {
                 setShowModal(false);

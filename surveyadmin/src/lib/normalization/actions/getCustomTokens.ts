@@ -13,6 +13,7 @@ export const getCustomTokens = async ({ rawPath }: { rawPath: string }) => {
       responseId: 1,
       normalizationId: 1,
       customTokens: 1,
+      aiTokens: 1,
       suggestedTokens: 1,
       disabledTokens: 1,
       answerIndex: 1,

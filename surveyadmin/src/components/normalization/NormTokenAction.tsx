@@ -24,13 +24,17 @@ export const getAction = ({
   isDisabled,
   isCustom,
   isPreset,
+  hideAction,
 }: {
   isRegular?: boolean;
   isDisabled?: boolean;
   isCustom?: boolean;
   isPreset?: boolean;
+  hideAction?: boolean;
 }) => {
-  if (isRegular) {
+  if (hideAction) {
+    return;
+  } else if (isRegular) {
     if (isDisabled) {
       // enable regular token
       return tokenActions.enableRegularTokens;
@@ -42,12 +46,11 @@ export const getAction = ({
     if (isPreset) {
       // add custom tokens
       return tokenActions.addCustomTokens;
-    } else if (isCustom) {
+    } else {
       // remove custom tokens
       return tokenActions.removeCustomTokens;
     }
   }
-  return;
 };
 
 export interface NormTokenProps {
@@ -66,11 +69,13 @@ export interface NormTokenActionProps extends NormTokenProps {
   answerIndex?: number;
   onClick?: () => void;
 
+  hideAction?: boolean;
   isRegular?: boolean;
   isDisabled?: boolean;
   isCustom?: boolean;
   isPreset?: boolean;
   isSuggested?: boolean;
+  isAI?: boolean;
 }
 
 /*
@@ -122,6 +127,8 @@ export const NormTokenAction = (props: NormTokenActionProps) => {
     setTokenFilter,
     onClick,
     isSuggested,
+    isAI,
+    hideAction,
   } = props;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -145,7 +152,7 @@ export const NormTokenAction = (props: NormTokenActionProps) => {
       <code
         className={`normalization-token ${action?.className} ${
           isSuggested ? "normalization-token-suggested" : ""
-        }`}
+        } ${isAI ? "normalization-token-ai" : ""}`}
         aria-busy={isLoading}
       >
         <span
@@ -157,7 +164,9 @@ export const NormTokenAction = (props: NormTokenActionProps) => {
               onClick();
             }
           }}
-          data-tooltip={`Filter by ${id}`}
+          data-tooltip={`Filter by ${id} ${isAI ? "[AI]" : ""} ${
+            isSuggested ? "[Suggestion]" : ""
+          }`}
         >
           {id}
         </span>

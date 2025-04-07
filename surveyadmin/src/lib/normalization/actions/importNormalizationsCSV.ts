@@ -21,7 +21,9 @@ interface NormDef {
   entityId: string;
 }
 
-export const importNormalizations = async (args: ImportNormalizationArgs) => {
+export const importNormalizationsCSV = async (
+  args: ImportNormalizationArgs
+) => {
   const { surveyId, editionId, questionId, data } = args;
 
   const { survey, edition, section, question, durations } =
@@ -78,7 +80,7 @@ export const importNormalizations = async (args: ImportNormalizationArgs) => {
         ?.map((t) => t.id)
         .includes(entityId);
       const customTokenExists =
-        customNormalization?.customTokens.includes(entityId);
+        customNormalization?.customTokens?.includes(entityId);
 
       const tokenAlreadyExists = regularTokenExists || customTokenExists;
 

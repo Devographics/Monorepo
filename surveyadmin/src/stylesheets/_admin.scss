@@ -205,6 +205,9 @@
 .normalization-token-suggested {
   border-color: rgb(225, 109, 67);
 }
+.normalization-token-ai {
+  border-color: rgb(24, 227, 220);
+}
 .normalization-token-preset {
   border-style: dashed;
   background: none;
@@ -562,4 +565,28 @@ button.button-ghost,
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: $spacing;
+}
+
+.answers-header {
+  display: flex;
+  // justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing;
+  gap: $spacing;
+  h3 {
+    margin: 0;
+  }
+}
+
+.tokens-table {
+  td {
+    vertical-align: top;
+  }
+  .tokens-table-tokenId {
+    position: relative;
+    .normalization-token {
+      position: sticky;
+      top: 0;
+    }
+  }
 }

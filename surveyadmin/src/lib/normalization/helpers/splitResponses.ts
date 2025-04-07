@@ -1,5 +1,6 @@
 import { NormalizationResponse } from "../hooks";
 import {
+  AI_NORMALIZATION,
   CUSTOM_NORMALIZATION,
   DISCARDED_ANSWER,
 } from "@devographics/constants";
@@ -48,6 +49,9 @@ export function splitResponses(responses: NormalizationResponse[]) {
   const customAnswers = allAnswers.filter((a) =>
     a?.tokens?.some((t) => t.pattern === CUSTOM_NORMALIZATION)
   );
+  const aiAnswers = allAnswers.filter((a) =>
+    a?.tokens?.some((t) => t.pattern === AI_NORMALIZATION)
+  );
 
   return {
     allAnswers,
@@ -55,5 +59,6 @@ export function splitResponses(responses: NormalizationResponse[]) {
     unnormalizedAnswers,
     discardedAnswers,
     customAnswers,
+    aiAnswers,
   };
 }

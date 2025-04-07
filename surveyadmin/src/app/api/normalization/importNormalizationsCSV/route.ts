@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { captureException } from "@sentry/nextjs";
-import { importNormalizations } from "~/lib/normalization/actions";
-
+import { importNormalizationsCSV } from "~/lib/normalization/actions";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
@@ -11,7 +10,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     } catch (err) {
       throw err;
     }
-    const data = await importNormalizations(body);
+    const data = await importNormalizationsCSV(body);
     return NextResponse.json({ data });
   } catch (error) {
     console.error(error);

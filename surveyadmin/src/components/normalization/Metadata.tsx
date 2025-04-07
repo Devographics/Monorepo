@@ -36,7 +36,7 @@ const Metadata = ({ survey, edition, question }: MetadataProps) => {
           DB info for <code>{question.id}</code>
         </span>
       }
-      label="🗃️ Database Info"
+      label="🗃️ Database"
     >
       <div>
         <p>

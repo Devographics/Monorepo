@@ -230,7 +230,7 @@ const Answers = (props: AnswersProps) => {
   );
 };
 
-export const ResponseId = ({ id }: { id: string }) => {
+export const ResponseId = ({ id = "" }: { id: string }) => {
   const [copied, copy, setCopied] = useCopy(id);
 
   const truncated = id.slice(0, 3) + "…";

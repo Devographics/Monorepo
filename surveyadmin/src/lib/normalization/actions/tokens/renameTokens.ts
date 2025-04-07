@@ -4,22 +4,43 @@ import { RenameTokensParams } from "../../services";
 export const renameTokens = async (params: RenameTokensParams) => {
   const { tokens } = params;
   console.log(tokens);
+  const modifiedIds: string[] = [];
   let modifiedCount = 0;
   const customNormCollection = await getCustomNormalizationsCollection();
+  const modifier: any = { $set: {} };
   for (const token of tokens) {
-    const { from, to } = token;
-    console.log(`// Renaming token ${from} to ${to}…`);
+    const { from: fromToken, to: toToken } = token;
+    console.log(`// Renaming token ${fromToken} to ${toToken}…`);
 
     const itemsToRename = await customNormCollection
-      .find({ customTokens: from })
+      .find({ $or: [{ customTokens: fromToken }, { aiTokens: fromToken }] })
       .toArray();
     for (const item of itemsToRename) {
-      const { _id, customTokens } = item;
-      const tokenIndex = customTokens.findIndex((t) => t === from);
-      customTokens[tokenIndex] = to;
-      customNormCollection.updateOne({ _id }, { $set: { customTokens } });
-      modifiedCount++;
+      const { _id, customTokens = [], aiTokens = [] } = item;
+
+      const customTokenIndex = customTokens.findIndex((t) => t === fromToken);
+      if (customTokenIndex > -1) {
+        customTokens[customTokenIndex] = toToken;
+        modifier.$set.customTokens = customTokens;
+        modifiedCount++;
+      }
+
+      const aiTokenIndex = aiTokens.findIndex((t) => t === fromToken);
+      if (aiTokenIndex > -1) {
+        aiTokens[aiTokenIndex] = toToken;
+        modifier.$set.aiTokens = aiTokens;
+        modifiedCount++;
+      }
+
+      if (customTokenIndex > -1 || aiTokenIndex > -1) {
+        modifiedIds.push(_id);
+        customNormCollection.updateOne({ _id }, modifier);
+      }
     }
   }
+  console.log(
+    `→ Renamed ${modifiedCount} tokens for ids ${modifiedIds.join(", ")}`
+  );
+
   return { action: "renameTokens", modifiedCount };
 };

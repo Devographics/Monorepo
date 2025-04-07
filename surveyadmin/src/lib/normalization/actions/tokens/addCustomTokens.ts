@@ -18,9 +18,14 @@ it doesn't exist yet
 
 */
 export const addCustomTokens = async (params: CustomNormalizationParams) => {
-  const { tokens, isSuggestion, ...rest } = params;
+  const { tokens, isSuggestion, isAI, ...rest } = params;
   const normalizationId = getNormalizationId(params);
   const customNormCollection = await getCustomNormalizationsCollection();
+  const tokenType = isSuggestion
+    ? "suggestedTokens"
+    : isAI
+    ? "aiTokens"
+    : "customTokens";
   const updateResult = await customNormCollection.findOneAndUpdate(
     { normalizationId },
     {
@@ -29,7 +34,7 @@ export const addCustomTokens = async (params: CustomNormalizationParams) => {
         ...rest,
       },
       $addToSet: {
-        [isSuggestion ? "suggestedTokens" : "customTokens"]: { $each: tokens },
+        [tokenType]: { $each: tokens },
       },
     },
     { upsert: true, returnDocument: "after" }

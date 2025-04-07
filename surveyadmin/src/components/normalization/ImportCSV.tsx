@@ -11,7 +11,7 @@ import {
 import LoadingButton from "../LoadingButton";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ImportNormalizationArgs } from "~/lib/normalization/actions";
-import { importNormalizations } from "~/lib/normalization/services";
+import { importNormalizationsCSV } from "~/lib/normalization/services";
 import { getCustomNormalizationsCacheKey } from "./NormalizeQuestion";
 import ModalTrigger from "../ui/ModalTrigger";
 
@@ -39,7 +39,7 @@ export const Import = ({
 
   const mutation = useMutation({
     mutationFn: async (params: ImportNormalizationArgs) =>
-      await importNormalizations(params),
+      await importNormalizationsCSV(params),
     onSuccess: (data, variables) => {
       queryClient.setQueryData(
         [getCustomNormalizationsCacheKey(commonParams)],

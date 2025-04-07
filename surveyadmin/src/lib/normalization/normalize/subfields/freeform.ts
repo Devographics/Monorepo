@@ -7,6 +7,7 @@ import {
   NO_MATCH,
   DISCARDED_ANSWER,
   CUSTOM_NORMALIZATION,
+  AI_NORMALIZATION,
 } from "@devographics/constants";
 import compact from "lodash/compact";
 import pick from "lodash/pick";
@@ -105,6 +106,7 @@ export const freeform: SubfieldProcessFunction = async ({
             if (customNormalization) {
               const {
                 customTokens: customTokensIds,
+                aiTokens: aiTokensIds,
                 disabledTokens: disabledTokensIds,
               } = customNormalization;
               if (customTokensIds) {
@@ -117,6 +119,17 @@ export const freeform: SubfieldProcessFunction = async ({
                     pattern: CUSTOM_NORMALIZATION,
                   }));
                 tokens = [...tokens, ...customTokens];
+              }
+              if (aiTokensIds) {
+                logIfVerbose(`⛰️ AI tokens: [${aiTokensIds.join()}]`);
+                // only keep custom token that are not already included in regular norm. tokens
+                const aiTokens = aiTokensIds
+                  .filter((id) => !tokens.map((t) => t.id).includes(id))
+                  .map((id) => ({
+                    id,
+                    pattern: AI_NORMALIZATION,
+                  }));
+                tokens = [...tokens, ...aiTokens];
               }
               if (disabledTokensIds) {
                 logIfVerbose(

@@ -7,6 +7,8 @@ export const cleanUpIfNeeded = async (document) => {
   // if document has no tokens after update, we can delete the entire
   // customNormalization document
   if (
+    (!document?.aiTokens || document?.aiTokens?.length === 0) &&
+    (!document?.suggestedTokens || document?.suggestedTokens?.length === 0) &&
     (!document?.customTokens || document?.customTokens?.length === 0) &&
     (!document?.disabledTokens || document?.disabledTokens?.length === 0)
   ) {
@@ -29,6 +31,8 @@ export const removeCustomTokens = async (params: CustomNormalizationParams) => {
         // does not work for some reason
         // customTokens: {$in: tokens},
         customTokens: tokens[0],
+        aiTokens: tokens[0],
+        suggestedTokens: tokens[0],
       },
     },
     { returnDocument: "after" }

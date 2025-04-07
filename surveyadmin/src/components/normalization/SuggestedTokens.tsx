@@ -16,15 +16,18 @@ type SuggestedToken = CustomNormalizationDocument & {
   answer: IndividualAnswer;
 };
 
+export const getAnswer = (
+  allAnswers: IndividualAnswer[],
+  customNorm: CustomNormalizationDocument
+) =>
+  allAnswers.find(
+    (a) =>
+      a._id === customNorm.responseId &&
+      a.answerIndex === customNorm.answerIndex
+  );
+
 export const SuggestedTokens = (props: ActionProps) => {
   const { customNormalizations, allAnswers } = props;
-
-  const getAnswer = (customNorm: CustomNormalizationDocument) =>
-    allAnswers.find(
-      (a) =>
-        a._id === customNorm.responseId &&
-        a.answerIndex === customNorm.answerIndex
-    )!;
 
   const suggestedTokens: SuggestedToken[] = customNormalizations
     .filter((c) => c.suggestedTokens)
@@ -32,7 +35,18 @@ export const SuggestedTokens = (props: ActionProps) => {
       customNorm.suggestedTokens!.map((id) => ({
         id,
         ...customNorm,
-        answer: getAnswer(customNorm),
+        answer: getAnswer(allAnswers, customNorm),
+      }))
+    )
+    .flat();
+
+  const aiTokens: SuggestedToken[] = customNormalizations
+    .filter((c) => c.aiTokens)
+    .map((customNorm) =>
+      customNorm.aiTokens!.map((id) => ({
+        id,
+        ...customNorm,
+        answer: getAnswer(allAnswers, customNorm),
       }))
     )
     .flat();
@@ -40,11 +54,18 @@ export const SuggestedTokens = (props: ActionProps) => {
   return (
     <ModalTrigger
       isButton={false}
-      label={`🗳️ Suggested Tokens (${suggestedTokens.length})`}
+      label={`🗳️ Suggested Tokens ${
+        suggestedTokens.length ? `(${suggestedTokens.length})` : ""
+      }`}
       tooltip="Suggested tokens pending approval"
       header={<div>Suggested Tokens</div>}
     >
-      <Suggested {...props} suggestedTokens={suggestedTokens} />
+      <>
+        <h3>Manual Suggestions</h3>
+        <Suggested {...props} suggestedTokens={suggestedTokens} />
+        <h3>AI Tokens</h3>
+        <AiTokens {...props} aiTokens={aiTokens} />
+      </>
     </ModalTrigger>
   );
 };
@@ -55,6 +76,9 @@ const Suggested = (
   }
 ) => {
   const { suggestedTokens, setTokenFilter } = props;
+  if (suggestedTokens.length === 0) {
+    return <p>No token suggestions.</p>;
+  }
   return (
     <section>
       <table>
@@ -74,6 +98,44 @@ const Suggested = (
               key={token.id}
               token={token}
               setTokenFilter={setTokenFilter}
+              type="suggested"
+            />
+          ))}
+        </tbody>
+      </table>
+    </section>
+  );
+};
+
+const AiTokens = (
+  props: ActionProps & {
+    aiTokens: Array<SuggestedToken>;
+  }
+) => {
+  const { aiTokens, setTokenFilter } = props;
+  if (aiTokens.length === 0) {
+    return <p>No AI tokens.</p>;
+  }
+  return (
+    <section>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Answer</th>
+            <th>Token</th>
+            {/* <th>Rename To</th>
+            <th>Dismiss</th>
+            <th>Approve</th> */}
+          </tr>
+        </thead>
+        <tbody>
+          {aiTokens.map((token) => (
+            <Token
+              key={token.id}
+              token={token}
+              setTokenFilter={setTokenFilter}
+              type="ai"
             />
           ))}
         </tbody>
@@ -85,16 +147,14 @@ const Suggested = (
 const Token = (props: {
   token: SuggestedToken;
   setTokenFilter: ActionProps["setTokenFilter"];
+  type: "suggested" | "ai";
 }) => {
-  const { token, setTokenFilter } = props;
+  const { token, setTokenFilter, type } = props;
   const { id, answer, _id: customNormId, normalizationId } = token;
   const [renameTo, setRenameTo] = useState(id);
 
-  console.log(token);
-
   const tokenPayload = { id, renameTo, customNormId, normalizationId };
 
-  console.log({ tokenPayload });
   return (
     <tr>
       <td>
@@ -106,48 +166,54 @@ const Token = (props: {
       <td>
         <NormTokenAction
           id={id}
-          isSuggested={true}
+          isSuggested={type === "suggested"}
+          isAI={type === "ai"}
           setTokenFilter={setTokenFilter}
+          hideAction={true}
         />
       </td>
-      <td>
-        <input
-          type="text"
-          value={renameTo}
-          onChange={(e) => {
-            setRenameTo(e.target.value);
-          }}
-        />
-      </td>
-      <td>
-        <LoadingButton
-          label="Dismiss"
-          tooltip="Dismiss suggestion"
-          action={async () => {
-            const results = await approveTokens({
-              tokens: [
-                {
-                  ...tokenPayload,
-                  shouldDismiss: true,
-                },
-              ],
-            });
-            console.log(results);
-          }}
-        />
-      </td>
-      <td>
-        <LoadingButton
-          label="Approve"
-          tooltip="Promote to regular custom token"
-          action={async () => {
-            const results = await approveTokens({
-              tokens: [tokenPayload],
-            });
-            console.log(results);
-          }}
-        />
-      </td>
+      {type === "suggested" && (
+        <>
+          <td>
+            <input
+              type="text"
+              value={renameTo}
+              onChange={(e) => {
+                setRenameTo(e.target.value);
+              }}
+            />
+          </td>
+          <td>
+            <LoadingButton
+              label="Dismiss"
+              tooltip="Dismiss suggestion"
+              action={async () => {
+                const results = await approveTokens({
+                  tokens: [
+                    {
+                      ...tokenPayload,
+                      shouldDismiss: true,
+                    },
+                  ],
+                });
+                console.log(results);
+              }}
+            />
+          </td>
+          <td>
+            <LoadingButton
+              label="Approve"
+              tooltip="Promote to regular custom token"
+              action={async () => {
+                const results = await approveTokens({
+                  tokens: [tokenPayload],
+                });
+                console.log(results);
+              }}
+            />
+          </td>
+        </>
+      )}
     </tr>
   );
 };

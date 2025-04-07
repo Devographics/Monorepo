@@ -216,9 +216,26 @@ export async function loadQuestionData(params: GetQuestionDataArgs) {
   return result;
 }
 
-export async function importNormalizations(params: ImportNormalizationArgs) {
+export async function importNormalizationsCSV(params: ImportNormalizationArgs) {
   const fetchRes = await fetch(
-    apiRoutes.normalization.importNormalizations.href(params),
+    apiRoutes.normalization.importNormalizationsCSV.href(params),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    }
+  );
+  const result: ResultsPayload = await fetchRes.json();
+  return result;
+}
+
+export async function importNormalizationsJSON(
+  params: ImportNormalizationArgs
+) {
+  const fetchRes = await fetch(
+    apiRoutes.normalization.importNormalizationsJSON.href(params),
     {
       method: "POST",
       headers: {

@@ -10,7 +10,7 @@ export const Slider = (props: FormInputProps) => {
   const { path, value, question, readOnly, updateCurrentValues } = props;
   const { options } = question;
   const hasValue = value !== "";
-  const { t } = useI18n()
+  const { t } = useI18n();
   return (
     <FormItem {...props}>
       <div className="form-slider">
@@ -58,7 +58,9 @@ export const Slider = (props: FormInputProps) => {
                   ) : (
                     <div className="form-option">
                       <div className="form-option-item">
-                        <span className="form-option-label">{i + 1}</span>
+                        <span className="form-option-label form-option-label-numeric">
+                          {i + 1}
+                        </span>
                       </div>
                     </div>
                   )}

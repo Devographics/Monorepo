@@ -1,0 +1,122 @@
+"use client";
+import { useState } from "react";
+import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
+import Dialog from "../ui/Dialog";
+import {
+  EditionMetadata,
+  SurveyMetadata,
+  Entity,
+  QuestionWithSection,
+} from "@devographics/types";
+import LoadingButton from "../LoadingButton";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ImportNormalizationArgs } from "~/lib/normalization/actions";
+import { importNormalizationsJSON } from "~/lib/normalization/services";
+import { getCustomNormalizationsCacheKey } from "./NormalizeQuestion";
+import ModalTrigger from "../ui/ModalTrigger";
+
+export const Import = ({
+  survey,
+  edition,
+  question,
+  entities,
+  isButton = true,
+}: {
+  survey: SurveyMetadata;
+  edition: EditionMetadata;
+  question: QuestionWithSection;
+  entities: Entity[];
+  isButton?: boolean;
+}) => {
+  const [value, setValue] = useState("");
+  const queryClient = useQueryClient();
+
+  const commonParams = {
+    surveyId: survey.id,
+    editionId: edition.id,
+    questionId: question.id,
+  };
+
+  const mutation = useMutation({
+    mutationFn: async (params: ImportNormalizationArgs) =>
+      await importNormalizationsJSON(params),
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(
+        [getCustomNormalizationsCacheKey(commonParams)],
+        (previous) => {
+          //   return updateCustomNormalization(previous, data, variables, action);
+        }
+      );
+    },
+  });
+
+  return (
+    <div>
+      <ModalTrigger
+        isButton={false}
+        label="📥 Import"
+        tooltip="Import JSON normalizations"
+        header={
+          <span>
+            Import normalizations for <code>{question.id}</code>
+          </span>
+        }
+      >
+        <>
+          <textarea
+            onChange={(e) => {
+              setValue(e.target.value);
+            }}
+          >
+            {value}
+          </textarea>
+          <LoadingButton
+            action={async () => {
+              await mutation.mutateAsync({
+                ...commonParams,
+                data: value,
+              });
+            }}
+            label="Submit"
+            tooltip="Import Normalizations"
+          />
+          <hr />
+          <p>
+            <h4>JSON Example</h4>
+            <pre>
+              <code>
+                {`{
+  "tokens": {
+    "accuracy_issues": "accuracy_issues",
+    "hallucination": "hallucination",
+    "understanding_issues": "understanding_issues"
+  },
+  "matches": [
+    {
+      "index": 1,
+      "answer": "o3-mini and 4o are horrible at making websites",
+      "answerId": "TmBZzUTTiF6v3VQThbDhq___0",
+      "tokenId": [
+        "accuracy_issues"
+      ]
+    },
+    {
+      "index": 2,
+      "answer": "Unnecessarily long answers; Instead of answering code questions it copy pastes the whole file as a reply",
+      "answerId": "31NfL1eR-0yBEjvtyQsSH___1",
+      "tokenId": [
+        "verbosity_formatting",
+        "code_modification_behavior",
+        "understanding_issues"
+      ]
+    }
+  ]
+}`}
+              </code>
+            </pre>
+          </p>
+        </>
+      </ModalTrigger>
+    </div>
+  );
+};
