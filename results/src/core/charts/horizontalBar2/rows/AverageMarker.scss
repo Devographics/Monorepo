@@ -1,0 +1,29 @@
+.chart-average-marker {
+    position: relative;
+}
+.chart-average-marker-inner {
+    position: absolute;
+    height: 3px;
+    left: 0px;
+    right: var(--spacing);
+    top: calc(
+        var(--offsetCoefficient) * (var(--barHeight) + var(--rowPadding) * 2) * var(--numberOfRows)
+    );
+    transform: translateY(-50%);
+    // z-index: 1;
+    background-color: var(--borderAltColor) !important;
+    grid-area: content;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+    z-index: 1;
+}
+
+.chart-average-marker-label {
+    border-radius: 50px;
+    border: 2px solid var(--borderAltColor);
+    background: var(--backgroundColor);
+    padding: 1px 8px;
+    font-size: 0.8rem;
+}

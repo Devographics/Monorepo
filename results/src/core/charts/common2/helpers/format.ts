@@ -25,7 +25,7 @@ export const isYen = (question: QuestionMetadata) =>
     ['current_total_annual_compensation'].includes(question.id)
 
 export const isPercentage = (question: QuestionMetadata) =>
-    ['completion_stats'].includes(question.id)
+    ['completion_stats'].includes(question.id) || ['slider'].includes(question.template)
 
 // https://stackoverflow.com/a/9462382
 function largeNumberFormatter(num: number, digits = 1) {

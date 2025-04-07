@@ -15,11 +15,7 @@ import { FacetHeading } from '../verticalBar2/FacetHeading'
 import uniqBy from 'lodash/uniqBy'
 import compact from 'lodash/compact'
 import { CommonProps } from '../common2/types'
-
-export interface VerticalBarBlock2Props extends BlockComponentProps {
-    data: StandardQuestionData
-    series: DataSeries<StandardQuestionData>[]
-}
+import { VerticalBarBlock2Props } from '../verticalBar2/VerticalBarBlock'
 
 export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
     const { block, series, question, pageContext, variant } = props

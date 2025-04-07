@@ -1,4 +1,4 @@
-import { Bucket, Entity, FacetBucket, QuestionMetadata } from '@devographics/types'
+import { Bucket, Entity, FacetBucket, QuestionMetadata, YearCompletion } from '@devographics/types'
 import { MultiItemsChartValues } from '../multiItemsExperience/types'
 import { BlockVariantDefinition, PageContextValue } from 'core/types'
 import { DataSeries } from 'core/filters/types'
@@ -48,6 +48,12 @@ export enum ColumnModes {
     STACKED = 'stacked'
 }
 
+export type MetadataProps = {
+    average?: number
+    median?: number
+    completion?: YearCompletion
+}
+
 export type CommonProps<ChartStateType> = {
     pageContext: PageContextValue
     chartState: ChartStateType
@@ -58,6 +64,7 @@ export type CommonProps<ChartStateType> = {
     seriesMetadata?: SeriesMetadata
     facetQuestion?: QuestionMetadata
     facetOptions?: FacetBucket[]
+    metadataProps: MetadataProps
 }
 
 export type ViewProps<ChartStateType> = CommonProps<ChartStateType> & {
@@ -89,4 +96,11 @@ export interface SeriesMetadata {
     seriesMaxValue: number
     totalRespondents: number
     totalResponses: number
+}
+
+export interface SerieMetadata {
+    completion?: YearCompletion
+    average?: number
+    median?: number
+    total?: number
 }

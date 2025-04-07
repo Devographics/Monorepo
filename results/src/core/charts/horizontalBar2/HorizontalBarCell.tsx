@@ -81,7 +81,7 @@ export const Cell = ({
     }
 
     const i18nNamespace =
-        block.i18nNamespace ||
+        block?.i18nNamespace ||
         facetQuestion?.i18nNamespace ||
         question?.i18nNamespace ||
         facetQuestion?.id ||

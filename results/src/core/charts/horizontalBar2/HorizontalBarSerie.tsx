@@ -1,7 +1,12 @@
 import React from 'react'
 import { sortProperties, StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
-import { getChartBuckets, getChartCurrentEdition, getSerieMetadata } from './helpers/other'
+import {
+    getChartBuckets,
+    getChartCurrentEdition,
+    getSerieMetadata,
+    getSerieMetadataProps
+} from './helpers/other'
 import { useChartValues } from './helpers/chartValues'
 import { GridItem } from '../common2'
 import { CommonProps } from '../common2/types'
@@ -55,12 +60,18 @@ export const HorizontalBarSerie = (
     // )
     const serieMetadata = getSerieMetadata({ serie, block })
 
+    const serieMetadataProps = getSerieMetadataProps({ serie, block })
+
     const viewProps: HorizontalBarViewProps = {
         ...props,
         isReversed,
         buckets,
         chartValues,
+        // metadata about the API response
         serieMetadata,
+        // metadata about completion, average, etc.
+        // TODO: find better naming
+        serieMetadataProps,
         viewDefinition
     }
 

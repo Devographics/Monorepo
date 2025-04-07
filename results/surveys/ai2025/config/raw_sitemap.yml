@@ -266,6 +266,8 @@
       #   variables:
       #       url: https://nuqs.47ng.com/
 
+      - template: cardinalities
+
       - id: models_pain_points
         template: multiple_options2_freeform
         i18nNamespace: ai_pain_points
@@ -293,6 +295,8 @@
       - id: ides_others
         i18nNamespace: tools
         template: multiple_options2_freeform
+
+      - template: cardinalities
 
       # - id: aurora_scharff
       #   template: picks
@@ -327,6 +331,8 @@
         i18nNamespace: tools
         template: multiple_options2_freeform
 
+      - template: cardinalities
+
       # - id: aurora_scharff
       #   template: picks
       #   variables:
@@ -359,6 +365,8 @@
       - id: code_generation_others
         i18nNamespace: tools
         template: multiple_options2_freeform
+
+      - template: cardinalities
 
       # - id: aurora_scharff
       #   template: picks
@@ -411,9 +419,11 @@
 
       - id: ai_generated_code_balance
         template: multiple_options2
+        showAverage: true
 
       - id: ai_generated_code_refactoring
         template: multiple_options2
+        showAverage: true
 
       - id: ai_code_refactoring_reasons
         template: multiple_options2_combined

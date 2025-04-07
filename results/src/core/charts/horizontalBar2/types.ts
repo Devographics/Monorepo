@@ -3,6 +3,7 @@ import {
     ChartStateWithSort,
     ChartValues,
     ColumnModes,
+    SerieMetadata,
     SeriesMetadata,
     Tick,
     ViewDefinition
@@ -66,7 +67,10 @@ export type HorizontalBarViewProps = {
     block: BlockVariantDefinition
     isReversed?: boolean
     seriesMetadata: SeriesMetadata
+    // metadata about the API response
     serieMetadata: ResponseEditionMetadata
+    // metadata about completion, average, etc.
+    serieMetadataProps: SerieMetadata
     viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
 }
 

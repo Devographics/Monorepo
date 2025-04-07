@@ -58,6 +58,7 @@
 }
 
 .chart-row {
+    --rowPadding: var(--halfSpacing);
     &-grouped {
         background: #ffffff11;
     }
@@ -70,7 +71,7 @@
 }
 
 .chart-row-content {
-    padding: var(--halfSpacing) 0;
+    padding: var(--rowPadding) 0;
     @include medium-large {
         position: relative;
     }

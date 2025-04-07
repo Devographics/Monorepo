@@ -6,6 +6,7 @@ import { AverageIcon, MedianIcon, PercentIcon, UserIcon } from 'core/icons'
 import { IconProps } from 'core/icons/IconWrapper'
 import React from 'react'
 import { formatNumber, formatPercentage, formatQuestionValue } from './helpers/format'
+import { SerieMetadata } from './types'
 
 export const Metadata = ({
     completion,
@@ -13,11 +14,7 @@ export const Metadata = ({
     total: total_,
     question,
     median
-}: {
-    completion?: YearCompletion
-    average?: number
-    median?: number
-    total?: number
+}: SerieMetadata & {
     question?: QuestionMetadata
 }) => {
     const items = []

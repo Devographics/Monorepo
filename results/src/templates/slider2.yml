@@ -1,5 +1,4 @@
-blockType: HorizontalBarBlock2
-i18nNamespace: opinions
+blockType: SliderBlock
 hasSponsor: true
 hasData: true
 translateData: true

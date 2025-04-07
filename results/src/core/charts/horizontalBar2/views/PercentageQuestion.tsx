@@ -1,11 +1,12 @@
 import React from 'react'
-import { HorizontalBarViewDefinition } from '../types'
+import { HorizontalBarChartState, HorizontalBarViewDefinition } from '../types'
 import { removeNoAnswer } from '../helpers/steps'
 import { Bucket, BucketUnits, FacetBucket } from '@devographics/types'
 import round from 'lodash/round'
 import { RowSingle } from '../rows/RowSingle'
 import { RowGroup, Rows } from '../rows'
 import { formatPercentage } from 'core/charts/common2/helpers/format'
+import { AverageMarker } from '../rows/AverageMarker'
 
 const getValue = (bucket: Bucket | FacetBucket) => bucket[BucketUnits.PERCENTAGE_QUESTION] || 0
 
@@ -31,7 +32,7 @@ const dataFilters = [
     // removeOtherAnswers
 ]
 
-export const PercentageQuestion: HorizontalBarViewDefinition = {
+export const PercentageQuestion: HorizontalBarViewDefinition<HorizontalBarChartState> = {
     getValue,
     formatValue: formatPercentage,
     getTicks,
@@ -43,6 +44,7 @@ export const PercentageQuestion: HorizontalBarViewDefinition = {
                 labelId="charts.axis_legends.users_percentage_question"
                 hasZebra={true}
             >
+                <AverageMarker {...props} />
                 {props.buckets.map((bucket, i) => (
                     <RowGroup
                         key={bucket.id}

@@ -86,10 +86,14 @@ query {
                                     ${getEntityFragment()}
                                     id
                                     average
+                                    lowerBound
+                                    upperBound
                                 }
                                 groups {
                                     id
                                     average
+                                    lowerBound
+                                    upperBound
                                 }
                             }
                         }

@@ -192,3 +192,18 @@ export const getSerieMetadata = ({
     const metadata = currentEdition?._metadata
     return metadata
 }
+export const getSerieMetadataProps = ({
+    serie,
+    block
+}: {
+    serie: DataSeries<any>
+    block: BlockVariantDefinition
+}) => {
+    const currentEdition = getChartCurrentEdition({ serie, block })
+    const { average, percentiles, completion } = currentEdition
+    return {
+        average,
+        median: percentiles?.p50,
+        completion
+    }
+}

@@ -74,5 +74,11 @@
             justify-content: flex-end;
             padding-right: var(--halfSpacing);
         }
+        .chart-average-marker-inner {
+            right: 0px;
+            left: var(--spacing);
+
+            justify-content: flex-start;
+        }
     }
 }

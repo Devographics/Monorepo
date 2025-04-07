@@ -19,7 +19,7 @@ import { FacetTitle } from '../common2/FacetTitle'
 import { getQuestionGroups, getQuestionOptions } from './helpers/options'
 import { useColorScale } from '../common2/helpers/colors'
 import { HorizontalBarChartState, HorizontalBarViews } from './types'
-import { CommonProps } from '../common2/types'
+import { CommonProps, SerieMetadata } from '../common2/types'
 import ChartData from '../common2/ChartData'
 import { HorizontalBarSerie } from './HorizontalBarSerie'
 import ChartShare from '../common2/ChartShare'
@@ -57,6 +57,12 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
         currentEdition
     })
 
+    const metadataProps: SerieMetadata = {
+        average,
+        median: percentiles?.p50,
+        completion
+    }
+
     const commonProps: CommonProps<HorizontalBarChartState> = {
         variant,
         question,
@@ -64,7 +70,8 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
         pageContext,
         chartState,
         block,
-        seriesMetadata
+        seriesMetadata,
+        metadataProps
     }
 
     // figure out if all series are sorted by options
@@ -100,14 +107,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                 <Note block={block} />
 
                 <ChartFooter
-                    left={
-                        <Metadata
-                            average={average}
-                            median={percentiles?.p50}
-                            completion={completion}
-                            {...commonProps}
-                        />
-                    }
+                    left={<Metadata {...commonProps} {...metadataProps} />}
                     right={
                         <>
                             <ChartShare {...commonProps} />
