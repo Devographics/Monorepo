@@ -59,6 +59,7 @@ import { computeKey } from '../helpers/caching'
 import isEmpty from 'lodash/isEmpty.js'
 import { logToFile } from '@devographics/debug'
 import { SENTIMENT_FACET } from '@devographics/constants'
+import { addValues } from './stages/add_values'
 
 type StageLogItem = {
     name: string
@@ -491,6 +492,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
             await runStage(addEntities, [results, context, axis2])
             await runStage(addTokens, [results, context, axis2])
+            await runStage(addValues, [results, context, axis2, axis1])
 
             // restrict buckets to the ones specified in bucketsFilter if needed
             // note: this uses entity tags so do it after addEntities
@@ -542,6 +544,7 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
 
             await runStage(addEntities, [results, context, axis1])
             await runStage(addTokens, [results, context, axis1])
+            await runStage(addValues, [results, context, axis1])
 
             // restrict buckets to the ones specified in bucketsFilter if needed
             // note: this uses entity tags so do it after addEntities
