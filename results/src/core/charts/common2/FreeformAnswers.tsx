@@ -24,10 +24,11 @@ import { CATCHALL_PREFIX } from '@devographics/constants'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { BlockVariantDefinition } from 'core/types'
 import Button from 'core/components/Button'
-import Toggle, { DEFAULT_SORT, ToggleItemType } from './Toggle'
+import Toggle, { DEFAULT_SORT, ToggleItemType, ToggleValueType } from './Toggle'
 import { OrderOptions } from './types'
 import sortBy from 'lodash/sortBy'
 
+export const ALPHA = 'alphabetical'
 export const LENGTH = 'length'
 
 type GetQueryNameProps = {
@@ -214,6 +215,14 @@ export const FreeformAnswersModal = ({
     )
 }
 
+type FreeformAnswersState = {
+    filter: string | undefined
+    setFilter: React.Dispatch<React.SetStateAction<string | undefined>>
+    sort: string | undefined
+    setSort: React.Dispatch<React.SetStateAction<string | undefined>>
+    order: OrderOptions | undefined
+    setOrder: React.Dispatch<React.SetStateAction<OrderOptions | undefined>>
+}
 const FreeformAnswers = ({
     answers: answers_,
     questionLabel,
@@ -224,16 +233,27 @@ const FreeformAnswers = ({
     tokenLabel: string
 }) => {
     const { getString } = useI18n()
-    const [filter, setFilter] = useState<string | null>(null)
-    const [sort, setSort] = useState<string | null>(null)
-    const [order, setOrder] = useState<OrderOptions | null>(null)
+    const [filter, setFilter] = useState<string | undefined>()
+    const [sort, setSort] = useState<string | undefined>()
+    const [order, setOrder] = useState<OrderOptions | undefined>()
 
     const labelKey = 'answers.length'
 
-    let answers = answers_
-    if (sort) {
-        answers = sortBy(answers, a => a.raw.length)
+    const freeformAnswersState: FreeformAnswersState = {
+        filter,
+        setFilter,
+        sort,
+        setSort,
+        order,
+        setOrder
     }
+    let answers = answers_
+    if (sort === LENGTH) {
+        answers = sortBy(answers, a => a.raw.length)
+    } else if (sort === ALPHA) {
+        answers = sortBy(answers, a => a.raw.toLowerCase())
+    }
+
     if (order && order === OrderOptions.DESC) {
         answers = answers.toReversed()
     }
@@ -248,7 +268,7 @@ const FreeformAnswers = ({
                     setKeywordFilter={setFilter}
                     items={answers}
                 />
-                <OrderToggle sort={sort} setSort={setSort} order={order} setOrder={setOrder} />
+                <OrderToggle {...freeformAnswersState} />
                 {/* <Toggle
                     sortOrder={order}
                     labelId="charts.sort_by"
@@ -276,8 +296,8 @@ export const KeywordFilter = ({
     setKeywordFilter,
     items
 }: {
-    keywordFilter: string | null
-    setKeywordFilter: React.Dispatch<React.SetStateAction<string | null>>
+    keywordFilter: FreeformAnswersState['filter']
+    setKeywordFilter: FreeformAnswersState['setFilter']
     items: any[]
 }) => {
     return (
@@ -303,24 +323,31 @@ export const OrderToggle = ({
     order,
     setOrder
 }: {
-    sort: string | null
-    setSort: React.Dispatch<React.SetStateAction<string | null>>
-    order: OrderOptions | null
-    setOrder: React.Dispatch<React.SetStateAction<OrderOptions | null>>
+    sort: FreeformAnswersState['sort']
+    setSort: FreeformAnswersState['setSort']
+    order: FreeformAnswersState['order']
+    setOrder: FreeformAnswersState['setOrder']
 }) => {
     const { getString } = useI18n()
 
-    const labelKey = 'answers.length'
+    const labelKey1 = 'answers.alphabetical'
+    const labelKey2 = 'answers.length'
     const toggleItems: ToggleItemType[] = [
         {
+            id: ALPHA,
+            label: getString(labelKey1)?.t,
+            labelKey: labelKey1,
+            isEnabled: sort === ALPHA
+        },
+        {
             id: LENGTH,
-            label: getString(labelKey)?.t,
-            labelKey,
+            label: getString(labelKey2)?.t,
+            labelKey: labelKey2,
             isEnabled: sort === LENGTH
         }
     ]
 
-    const handleSelect = (optionId: string) => {
+    const handleSelect = (optionId: ToggleValueType | null) => {
         const isEnabled = sort === optionId
         if (optionId === DEFAULT_SORT) {
             setSort(undefined)
@@ -338,6 +365,7 @@ export const OrderToggle = ({
 
     return (
         <Toggle
+            sortId={sort}
             sortOrder={order}
             labelId="charts.sort_by"
             handleSelect={handleSelect}

@@ -22,7 +22,7 @@ const getMinToggleWidth = (items: ToggleItemType[]) =>
     sum(items.map(item => (item?.label?.length || 0) * MIN_WIDTH_PER_CHAR)) * RATIO +
     items.length * PADDING_PER_ITEM
 
-type ToggleValueType = string | number
+export type ToggleValueType = string | number
 
 export type ToggleItemType = {
     label: string
@@ -41,12 +41,16 @@ type ToggleProps = {
     handleSelect?: (id: ToggleValueType | null) => void
     handleHover?: (id: ToggleValueType | null) => void
     hasDefault?: boolean
+    // id of the currently active sort
+    sortId?: string
+    // whether the currently active sort is asc/desc
     sortOrder?: OrderOptions
 }
 
 export const DEFAULT_SORT = 'default'
 
 export const Toggle = ({
+    sortId,
     sortOrder,
     alwaysExpand = false,
     labelId,
@@ -60,7 +64,7 @@ export const Toggle = ({
     const currentWidth = useWidth(ref)
     const minimumWidth = getMinToggleWidth(items)
 
-    const commonProps = { handleSelect, handleHover, hasDefault, items }
+    const commonProps = { handleSelect, handleHover, hasDefault, items, sortId, sortOrder }
 
     useEffect(() => {
         // note: only make calculation once currentWidth is defined
@@ -130,8 +134,13 @@ const DropdownItem = ({ item }: { item: ToggleItemType }) => {
 const SegmentedControl = ({
     handleSelect,
     handleHover,
-    items
-}: Pick<ToggleProps, 'handleSelect' | 'handleHover' | 'hasDefault' | 'items'>) => {
+    items,
+    sortId,
+    sortOrder
+}: Pick<
+    ToggleProps,
+    'handleSelect' | 'handleHover' | 'hasDefault' | 'items' | 'sortId' | 'sortOrder'
+>) => {
     return (
         <ButtonGroup className="chart-toggle-buttongroup chart-toggle-items">
             {items.map(item => (
@@ -140,6 +149,8 @@ const SegmentedControl = ({
                     item={item}
                     handleSelect={handleSelect}
                     handleHover={handleHover}
+                    sortId={sortId}
+                    sortOrder={sortOrder}
                 />
             ))}
         </ButtonGroup>
@@ -149,11 +160,15 @@ const SegmentedControl = ({
 const SegmentedControlItem = ({
     item,
     handleSelect,
-    handleHover
+    handleHover,
+    sortId,
+    sortOrder
 }: {
     item: ToggleItemType
     handleSelect: ToggleProps['handleSelect']
     handleHover: ToggleProps['handleHover']
+    sortId: ToggleProps['sortId']
+    sortOrder: ToggleProps['sortOrder']
 }) => {
     const { label, labelKey, id, isEnabled, gradient, className, tooltip } = item
     const ref = useRef<HTMLDivElement>(null)
@@ -190,8 +205,7 @@ const SegmentedControlItem = ({
                 {label}
             </span>
             {/* <CellLabel label={shortLabel} /> */}
-            <span className="order-asc">↑</span>
-            <span className="order-desc">↓</span>
+            {sortId && sortId === id && sortOrder && <SortIndicator sortOrder={sortOrder} />}
         </Button>
     )
     // if no tooltip is specified just show label
@@ -203,6 +217,15 @@ const SegmentedControlItem = ({
     )
 }
 
+const SortIndicator = ({ sortOrder }: { sortOrder: OrderOptions }) => {
+    if (sortOrder === OrderOptions.ASC) {
+        return <span className="order-asc">↑</span>
+    } else if (sortOrder === OrderOptions.DESC) {
+        return <span className="order-desc">↓</span>
+    } else {
+        return null
+    }
+}
 const ItemColor = ({ gradient }: { gradient: string[] }) => {
     const style = {
         '--color1': gradient[0],

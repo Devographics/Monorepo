@@ -13,6 +13,7 @@ import { CommentsFilters } from './CommentsFilters'
 import { CommentItem } from './CommentItem'
 import { OrderOptions } from './types'
 import sortBy from 'lodash/sortBy'
+import { ALPHA, LENGTH } from './FreeformAnswers'
 
 type GetQueryNameProps = {
     editionId: string
@@ -137,12 +138,12 @@ export const filterCommentsBySentiment = (comments: Comment[], value: string | n
     value === '' ? comments : comments.filter(c => String(c.sentiment) === String(value))
 
 export interface CommentsFiltersState {
-    experienceFilter: FeaturesOptions | null
-    setExperienceFilter: React.Dispatch<React.SetStateAction<FeaturesOptions | null>>
-    sentimentFilter: SimplifiedSentimentOptions | null
-    setSentimentFilter: React.Dispatch<React.SetStateAction<SimplifiedSentimentOptions | null>>
-    valueFilter: string | null
-    setValueFilter: React.Dispatch<React.SetStateAction<string | null>>
+    experienceFilter: FeaturesOptions | ''
+    setExperienceFilter: React.Dispatch<React.SetStateAction<FeaturesOptions | ''>>
+    sentimentFilter: SimplifiedSentimentOptions | ''
+    setSentimentFilter: React.Dispatch<React.SetStateAction<SimplifiedSentimentOptions | ''>>
+    valueFilter: string | number | ''
+    setValueFilter: React.Dispatch<React.SetStateAction<string | number | ''>>
     sort: string | null
     setSort: React.Dispatch<React.SetStateAction<string | null>>
     order: OrderOptions | null
@@ -166,7 +167,7 @@ export const CommentsContent = ({
     const [order, setOrder] = useState<OrderOptions | null>(null)
     const [keywordFilter, setKeywordFilter] = useState<string | null>(null)
 
-    const stateStuff = {
+    const stateStuff: CommentsFiltersState = {
         experienceFilter,
         setExperienceFilter,
         sentimentFilter,
@@ -187,8 +188,10 @@ export const CommentsContent = ({
     filteredComments = filterCommentsBySentiment(filteredComments, sentimentFilter)
     filteredComments = filterCommentsByValue(filteredComments, valueFilter)
 
-    if (sort) {
+    if (sort === LENGTH) {
         filteredComments = sortBy(filteredComments, comment => comment.message.length)
+    } else if (sort === ALPHA) {
+        filteredComments = sortBy(filteredComments, comment => comment.message.toLowerCase())
     }
     if (order && order === OrderOptions.DESC) {
         filteredComments = filteredComments.toReversed()

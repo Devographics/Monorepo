@@ -17,7 +17,6 @@ import {
     filterCommentsByValue
 } from './Comments'
 import { KeywordFilter, OrderToggle } from './FreeformAnswers'
-import { count } from 'console'
 
 type OptionToggleItems = {
     id: OptionId
@@ -129,10 +128,10 @@ const ExperienceSentimentFilters = ({
 }: {
     allComments: Comment[]
     comments: Comment[]
-    experienceFilter: FeaturesOptions | null
-    setExperienceFilter: React.Dispatch<React.SetStateAction<FeaturesOptions | null>>
-    sentimentFilter: SimplifiedSentimentOptions | null
-    setSentimentFilter: React.Dispatch<React.SetStateAction<SimplifiedSentimentOptions | null>>
+    experienceFilter: CommentsFiltersState['experienceFilter']
+    setExperienceFilter: CommentsFiltersState['setExperienceFilter']
+    sentimentFilter: CommentsFiltersState['sentimentFilter']
+    setSentimentFilter: CommentsFiltersState['setSentimentFilter']
 }) => {
     const { getString } = useI18n()
 
@@ -190,8 +189,8 @@ const OptionsValuesFilters = ({
 }: {
     allComments: Comment[]
     items: OptionToggleItems[]
-    valueFilter: string | null
-    setValueFilter: React.Dispatch<React.SetStateAction<string | null>>
+    valueFilter: CommentsFiltersState['valueFilter']
+    setValueFilter: CommentsFiltersState['setValueFilter']
 }) => {
     const { getString } = useI18n()
 

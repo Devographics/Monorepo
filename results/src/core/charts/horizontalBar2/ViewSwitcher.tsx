@@ -74,7 +74,15 @@ export const ViewSwitcher = ({
             )
         }
     })
-    return <Toggle labelId="charts.sort_by" handleSelect={handleSelect} items={items} />
+    return (
+        <Toggle
+            labelId="charts.sort_by"
+            sortId={sort}
+            sortOrder={order}
+            handleSelect={handleSelect}
+            items={items}
+        />
+    )
 }
 
 export default ViewSwitcher
