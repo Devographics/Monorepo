@@ -9,13 +9,15 @@ export interface CustomNormalizationParams {
   answerIndex: number;
   tokens: string[];
   isSuggestion?: boolean;
+  isAI?: boolean;
 }
 
 export interface CustomNormalizationDocument
   extends Omit<CustomNormalizationParams, "tokens"> {
   _id: string;
   normalizationId: string;
-  customTokens: string[];
+  customTokens?: string[];
   suggestedTokens?: string[];
+  aiTokens?: string[];
   disabledTokens: string[];
 }

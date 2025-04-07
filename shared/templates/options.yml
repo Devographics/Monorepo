@@ -63,20 +63,35 @@ company_size:
     options:
         - id: range_1
           average: 1
+          lowerBound: 0
+          upperBound: 1
         - id: range_1_5
           average: 3
+          lowerBound: 1
+          upperBound: 5
         - id: range_5_10
           average: 7
+          lowerBound: 5
+          upperBound: 10
         - id: range_10_20
           average: 15
+          lowerBound: 10
+          upperBound: 20
         - id: range_20_50
           average: 35
+          lowerBound: 20
+          upperBound: 50
         - id: range_50_100
           average: 75
+          lowerBound: 50
+          upperBound: 100
         - id: range_100_1000
           average: 550
+          lowerBound: 100
+          upperBound: 1000
         - id: range_more_than_1000
           average: 1000
+          lowerBound: 1000
         - id: na
 
 # company_size_v2:
@@ -125,20 +140,35 @@ yearly_salary_v2:
         #   average: 0
         - id: range_0_20
           average: 10000
+          lowerBound: 0
+          upperBound: 20000
         - id: range_20_40
           average: 30000
+          lowerBound: 20000
+          upperBound: 40000
         - id: range_40_60
           average: 50000
+          lowerBound: 40000
+          upperBound: 60000
         - id: range_60_80
           average: 70000
+          lowerBound: 60000
+          upperBound: 80000
         - id: range_80_100
           average: 90000
+          lowerBound: 80000
+          upperBound: 100000
         - id: range_100_150
           average: 125000
+          lowerBound: 100000
+          upperBound: 150000
         - id: range_150_200
           average: 175000
+          lowerBound: 150000
+          upperBound: 200000
         - id: range_more_than_200
           average: 200000
+          lowerBound: 200000
         - id: na
 
 gender:
@@ -175,3 +205,24 @@ higher_education_degree:
         - id: no_degree
         - id: yes_related
         - id: yes_unrelated
+
+slider:
+    options:
+        - id: 0
+          value: 0
+        - id: 1
+          value: 12.5
+        - id: 2
+          value: 25
+        - id: 3
+          value: 37.5
+        - id: 4
+          value: 50
+        - id: 5
+          value: 62.5
+        - id: 6
+          value: 75
+        - id: 7
+          value: 87.5
+        - id: 8
+          value: 100

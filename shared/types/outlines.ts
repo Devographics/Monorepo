@@ -265,10 +265,13 @@ export enum NumericalUnits {
 
 export type Option = {
     id: OptionId
+    value?: number
     intlId?: string
     editions?: string[]
     average?: number
     label?: string
+    lowerBound?: number
+    upperBound?: number
 }
 
 export type OptionId = string | number
@@ -277,8 +280,8 @@ export type OptionId = string | number
 export interface OptionGroup {
     id: string
     average?: number
-    upperBound?: number
     lowerBound?: number
+    upperBound?: number
     items?: string[]
     label?: string
 }

@@ -202,6 +202,7 @@ export interface BucketMetadata {
     entity?: Entity
     token?: Token
     label?: string
+    value?: number
     hasInsufficientData?: boolean
     isFreeformData?: boolean
     facetsCountSum?: number
