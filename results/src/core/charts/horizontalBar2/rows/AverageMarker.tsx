@@ -38,7 +38,10 @@ const getOffsetCoefficient = (question: QuestionMetadata, buckets: Bucket[], ave
             return (relevantBarIndex + 1) / totalBars - halfBarOffset
         }
     } else {
-        const maxValue = maxBy(options, 'average')?.average || 0
+        const maxValue = maxBy(options, 'average')?.average
+        if (maxValue === undefined) {
+            return
+        }
         return average / maxValue
     }
     return
@@ -50,9 +53,10 @@ export const AverageMarker = (
     const { average } = serieMetadataProps
     if (question && average) {
         const averageFormatted = formatQuestionValue(average, question)
-        console.log(props)
         const offset = getOffsetCoefficient(question, buckets, average)
-
+        if (offset === undefined) {
+            return null
+        }
         const style = {
             '--offsetCoefficient': offset,
             '--numberOfRows': buckets.length
