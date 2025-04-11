@@ -139,7 +139,7 @@ interface RankingChartProps {
 
 /*
 
-Note: when displaying mulitple series via DynamicDataLoader
+Note: when displaying multiple series via DynamicDataLoader
 we need to call processBlockData() again whenever the metric changes, 
 which will not happen unless we call it from within the chart
 
