@@ -1,5 +1,4 @@
 import {
-    Bucket,
     FeaturesOptions,
     QuestionMetadata,
     ResponseData,
@@ -16,11 +15,8 @@ import sortBy from 'lodash/sortBy'
 import { CommonProps, OrderOptions, SeriesMetadata } from 'core/charts/common2/types'
 import { BlockVariantDefinition } from 'core/types'
 import uniq from 'lodash/uniq'
-import { RowSingle } from '../rows/RowSingle'
-import { RowStacked } from '../rows/RowStacked'
 import { allDataFilters } from '../helpers/steps'
 import max from 'lodash/max'
-import { getViewDefinition } from './views'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -193,13 +189,10 @@ export const getSerieMetadata = ({
     return metadata
 }
 export const getSerieMetadataProps = ({
-    serie,
-    block
+    currentEdition
 }: {
-    serie: DataSeries<any>
-    block: BlockVariantDefinition
+    currentEdition: ResponseEditionData
 }) => {
-    const currentEdition = getChartCurrentEdition({ serie, block })
     const { average, percentiles, completion } = currentEdition
     return {
         average,

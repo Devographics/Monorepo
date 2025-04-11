@@ -73,23 +73,23 @@
     }
 }
 
-.order-asc,
-.order-desc {
-    opacity: 0.5;
-    display: none;
-}
-.order-asc {
-    .column-heading-order-asc.column-heading-sort-enabled & {
-        opacity: 1;
-        display: block;
-    }
-}
-.order-desc {
-    .column-heading-order-desc.column-heading-sort-enabled & {
-        opacity: 1;
-        display: block;
-    }
-}
+// .order-asc,
+// .order-desc {
+//     opacity: 0.5;
+//     display: none;
+// }
+// .order-asc {
+//     .column-heading-order-asc.column-heading-sort-enabled & {
+//         opacity: 1;
+//         display: block;
+//     }
+// }
+// .order-desc {
+//     .column-heading-order-desc.column-heading-sort-enabled & {
+//         opacity: 1;
+//         display: block;
+//     }
+// }
 
 .chart-legend-2 {
     border: 1px solid var(--borderColor);

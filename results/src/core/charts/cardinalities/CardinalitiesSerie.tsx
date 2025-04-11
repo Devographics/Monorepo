@@ -1,7 +1,7 @@
 import React from 'react'
 import { StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
-import { getSerieMetadata } from '../horizontalBar2/helpers/other'
+import { getSerieMetadata, getSerieMetadataProps } from '../horizontalBar2/helpers/other'
 import { useChartValues } from '../horizontalBar2/helpers/chartValues'
 import { GridItem } from '../common2'
 import { CommonProps } from '../common2/types'
@@ -30,6 +30,8 @@ export const CardinalitiesSerie = (
         viewDefinition
     } = props
 
+    const { currentEdition } = serie.data.find(data => data.id === chartState.view).responses
+
     const buckets = getSerieBuckets({ serie, block, chartState })
 
     const chartValues = useChartValues({
@@ -41,14 +43,20 @@ export const CardinalitiesSerie = (
     })
 
     const serieMetadata = getSerieMetadata({ serie, block })
+
+    const serieMetadataProps = getSerieMetadataProps({ currentEdition })
+
     const viewProps: HorizontalBarViewProps = {
         ...props,
         isReversed,
         buckets,
         chartValues,
         serieMetadata,
+        // TODO: find better naming
+        serieMetadataProps,
         viewDefinition
     }
+
     const itemFilters = getItemFilters({ variant, block, serieIndex })
 
     const ViewComponent = getViewComponent(chartState.view)

@@ -237,9 +237,9 @@
               parameters:
                   sort: { property: medianByFacet }
 
-      - id: gitnation_resources
-        items: [gitnation]
-        template: recommended_resources
+      # - id: gitnation_resources
+      #   items: [gitnation]
+      #   template: recommended_resources
 
 - id: models
   path: /models
@@ -454,10 +454,12 @@
 
       - id: ai_missing_features
         template: multiple_options2_freeform
+        parameters:
+            limit: 10
 
-      # TODO: add this back in 2026 so we can show a trend; or use different template?
-      # - id: ai_happiness
-      #   template: happiness2
+      - id: ai_happiness
+        i18nNamespace: happiness
+        template: multiple_options2
 
       # - id: usage_resources
       #   items: [fm-professional, fm-react]
@@ -494,9 +496,9 @@
       - id: other_surveys
         template: multiple_options2_combined
 
-      - id: resources_resources
-        items: [fm-react, fm-primeagen]
-        template: recommended_resources
+      # - id: resources_resources
+      #   items: [fm-react, fm-primeagen]
+      #   template: recommended_resources
 
 - id: opinions
   path: /opinions

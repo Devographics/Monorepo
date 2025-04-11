@@ -4,6 +4,7 @@ import { formatPercentage } from 'core/charts/common2/helpers/format'
 import { RowGroup, Rows, RowSingle } from 'core/charts/horizontalBar2/rows'
 import { CardinalitiesViewDefinition } from '../types'
 import { getTicks } from 'core/charts/horizontalBar2/views'
+import { AverageMarker } from 'core/charts/horizontalBar2/rows/AverageMarker'
 
 /*
 
@@ -26,6 +27,7 @@ export const Heard: CardinalitiesViewDefinition = {
     component: props => {
         return (
             <Rows labelId="charts.axis_legends.users_percentage_survey" {...props}>
+                <AverageMarker {...props} />
                 {props.buckets.map((bucket, i) => (
                     <RowGroup
                         rowIndex={i}

@@ -6,6 +6,7 @@ import round from 'lodash/round'
 import { RowSingle } from '../rows/RowSingle'
 import { RowGroup, Rows } from '../rows'
 import { formatPercentage } from 'core/charts/common2/helpers/format'
+import { AverageMarker } from '../rows/AverageMarker'
 
 const getValue = (bucket: Bucket | FacetBucket) => bucket[BucketUnits.PERCENTAGE_SURVEY] || 0
 
@@ -33,6 +34,7 @@ export const PercentageSurvey: HorizontalBarViewDefinition = {
     component: props => {
         return (
             <Rows {...props} labelId="charts.axis_legends.users_percentage_survey" hasZebra={true}>
+                <AverageMarker {...props} />
                 {props.buckets.map((bucket, i) => (
                     <RowGroup
                         key={bucket.id}

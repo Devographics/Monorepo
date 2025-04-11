@@ -9,6 +9,7 @@ import {
     getAllFacetBucketIds,
     getChartCurrentEdition,
     getSerieMetadata,
+    getSerieMetadataProps,
     getSeriesMetadata,
     useQuestionMetadata
 } from './helpers/other'
@@ -39,7 +40,6 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     if (!currentEdition) {
         return <NoData />
     }
-    const { average, percentiles, completion } = currentEdition
 
     const facet = block?.filtersState?.facet
 
@@ -57,11 +57,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
         currentEdition
     })
 
-    const metadataProps: SerieMetadata = {
-        average,
-        median: percentiles?.p50,
-        completion
-    }
+    const metadataProps = getSerieMetadataProps({ currentEdition })
 
     const commonProps: CommonProps<HorizontalBarChartState> = {
         variant,

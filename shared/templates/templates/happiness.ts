@@ -33,7 +33,8 @@ export const happiness: TemplateFunction = options => {
         optionsAreNumeric: true,
         options: [...Array(5)].map((x, i) => ({
             id: i,
-            intlId: `options.happiness.${String(i)}`
+            intlId: `options.happiness.${String(i)}`,
+            value: i + 1
         })),
         rawPaths: {
             response: `happiness__${questionSegment}`,

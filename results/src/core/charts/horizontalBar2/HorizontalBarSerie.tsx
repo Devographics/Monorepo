@@ -60,7 +60,9 @@ export const HorizontalBarSerie = (
     // )
     const serieMetadata = getSerieMetadata({ serie, block })
 
-    const serieMetadataProps = getSerieMetadataProps({ serie, block })
+    const currentEdition = getChartCurrentEdition({ serie, block })
+
+    const serieMetadataProps = getSerieMetadataProps({ currentEdition })
 
     const viewProps: HorizontalBarViewProps = {
         ...props,

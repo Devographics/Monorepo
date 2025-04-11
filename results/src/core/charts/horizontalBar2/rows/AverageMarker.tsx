@@ -1,11 +1,15 @@
 import { CommonProps } from 'core/charts/common2/types'
-import React from 'react'
+import React, { useState } from 'react'
 import { HorizontalBarChartState, HorizontalBarViewProps } from '../types'
 import { formatQuestionValue } from 'core/charts/common2/helpers/format'
 import './AverageMarker.scss'
 import { Bucket, QuestionMetadata } from '@devographics/types'
 import maxBy from 'lodash/maxBy'
 import T from 'core/i18n/T'
+import Tooltip from 'core/components/Tooltip'
+
+const AVERAGE = 'average' as const
+const MEDIAN = 'median' as const
 
 export const isInBounds = (n: number, lowerBound?: number, upperBound?: number) => {
     if (typeof lowerBound !== 'undefined' && typeof upperBound !== 'undefined') {
@@ -19,8 +23,16 @@ export const isInBounds = (n: number, lowerBound?: number, upperBound?: number) 
     }
 }
 
-const getOffsetCoefficient = (question: QuestionMetadata, buckets: Bucket[], average: number) => {
-    const { options, groups, optionsAreRange } = question
+const getOffsetCoefficient = ({
+    question,
+    buckets,
+    value
+}: {
+    question?: QuestionMetadata
+    buckets: Bucket[]
+    value: number
+}) => {
+    const { options, groups, optionsAreRange } = question || {}
     if ((optionsAreRange && options) || groups) {
         // if options are range or we're dealing with groups, then
         // each bar represents a range of possible values
@@ -31,29 +43,33 @@ const getOffsetCoefficient = (question: QuestionMetadata, buckets: Bucket[], ave
             const relevantBarIndex = optionsOrGroups?.findIndex(
                 og =>
                     (og.lowerBound || og.upperBound) &&
-                    isInBounds(average, og.lowerBound, og.upperBound)
+                    isInBounds(value, og.lowerBound, og.upperBound)
             )
             const totalBars = optionsOrGroups.length
             const halfBarOffset = 1 / (totalBars * 2)
             return (relevantBarIndex + 1) / totalBars - halfBarOffset
         }
     } else {
-        const maxValue = maxBy(options, 'average')?.average
+        const maxValue = maxBy(buckets, 'value')?.value
         if (maxValue === undefined) {
             return
         }
-        return average / maxValue
+        return value / maxValue
     }
     return
 }
+
 export const AverageMarker = (
     props: CommonProps<HorizontalBarChartState> & HorizontalBarViewProps
 ) => {
+    console.log(props.block.id)
+    console.log(props)
+    const [type, setType] = useState<typeof AVERAGE | typeof MEDIAN>(AVERAGE)
     const { serieMetadataProps, question, buckets } = props
-    const { average } = serieMetadataProps
-    if (question && average) {
-        const averageFormatted = formatQuestionValue(average, question)
-        const offset = getOffsetCoefficient(question, buckets, average)
+    const value = serieMetadataProps[type]
+    if (value) {
+        const averageFormatted = formatQuestionValue(value, question)
+        const offset = getOffsetCoefficient({ question, buckets, value })
         if (offset === undefined) {
             return null
         }
@@ -64,13 +80,23 @@ export const AverageMarker = (
         return (
             <div style={style} className="chart-row chart-average-marker chart-subgrid">
                 <div className="chart-average-marker-inner chart-row-content">
-                    <div className="chart-average-marker-label">
-                        <T
-                            k="charts.average.marker"
-                            md={true}
-                            values={{ value: averageFormatted }}
-                        />
-                    </div>
+                    <Tooltip
+                        contents={<T k={`charts.marker.toggle.${type}`} />}
+                        trigger={
+                            <button
+                                className="chart-average-marker-label"
+                                onClick={() => {
+                                    setType(type === AVERAGE ? MEDIAN : AVERAGE)
+                                }}
+                            >
+                                <T
+                                    k={`charts.${type}.marker`}
+                                    md={true}
+                                    values={{ value: averageFormatted }}
+                                />
+                            </button>
+                        }
+                    />
                 </div>
             </div>
         )
