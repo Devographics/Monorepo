@@ -15,19 +15,15 @@ import { importNormalizationsJSON } from "~/lib/normalization/services";
 import { getCustomNormalizationsCacheKey } from "./NormalizeQuestion";
 import ModalTrigger from "../ui/ModalTrigger";
 
-export const Import = ({
-  survey,
-  edition,
-  question,
-  entities,
-  isButton = true,
-}: {
+export const Import = (props: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
   question: QuestionWithSection;
   entities: Entity[];
   isButton?: boolean;
 }) => {
+  const { survey, edition, question, entities, isButton = true } = props;
+  console.log(props);
   const [value, setValue] = useState("");
   const queryClient = useQueryClient();
 
@@ -41,6 +37,7 @@ export const Import = ({
     mutationFn: async (params: ImportNormalizationArgs) =>
       await importNormalizationsJSON(params),
     onSuccess: (data, variables) => {
+      console.log(data);
       queryClient.setQueryData(
         [getCustomNormalizationsCacheKey(commonParams)],
         (previous) => {
@@ -63,6 +60,7 @@ export const Import = ({
         }
       >
         <>
+          <h1>Import</h1>
           <textarea
             onChange={(e) => {
               setValue(e.target.value);
@@ -72,10 +70,11 @@ export const Import = ({
           </textarea>
           <LoadingButton
             action={async () => {
-              await mutation.mutateAsync({
+              const result = await mutation.mutateAsync({
                 ...commonParams,
                 data: value,
               });
+              return result;
             }}
             label="Submit"
             tooltip="Import Normalizations"

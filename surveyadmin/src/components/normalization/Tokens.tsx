@@ -21,9 +21,44 @@ export const EMPTY_TAG = "EMPTY_TAG";
 
 type Sort = "alphabetical" | "matches";
 
-type Token = Entity & { tag: string; matchCount: number };
+export type Token = Entity & { tag: string; matchCount: number };
 
 export const getQuestionTokens = ({
+  question,
+  allAnswers,
+  entities,
+}: {
+  question: QuestionWithSection;
+  allAnswers: IndividualAnswer[];
+  entities: Entity[];
+}) => {
+  const allTags = [question.id, ...(question?.matchTags || [])];
+
+  const allTokens = uniq(
+    allTags
+      .map((tag) => {
+        const tagEntities = entities.filter((e) => e?.tags?.includes(tag));
+        const emptyEntities = [{ id: EMPTY_TAG }];
+
+        return (tagEntities.length > 0 ? tagEntities : emptyEntities).map(
+          (e) => {
+            const matchCount = allAnswers.filter((a) =>
+              a.tokens?.map((t) => t.id).includes(e.id)
+            ).length;
+            return {
+              ...e,
+              matchCount,
+              tag,
+            };
+          }
+        );
+      })
+      .flat()
+  ) as Array<Token>;
+  return allTokens;
+};
+
+export const getSortedQuestionTokens = ({
   question,
   allAnswers,
   entities,
@@ -134,7 +169,7 @@ const Tokens = ({
     question,
   })!;
 
-  const allTokens = getQuestionTokens({
+  const allTokens = getSortedQuestionTokens({
     question,
     allAnswers,
     entities,

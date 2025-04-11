@@ -1,5 +1,5 @@
 "use client";
-import { CustomNormalizationDocument } from "@devographics/types";
+import { EditionMetadata } from "@devographics/types";
 import ModalTrigger from "../ui/ModalTrigger";
 import { ActionProps } from "./NormalizeQuestionActions";
 import { NormTokenAction } from "./NormTokenAction";
@@ -12,6 +12,13 @@ import sortBy from "lodash/sortBy";
 import { ResponseId } from "./Answers";
 import { useState } from "react";
 import { CommonNormalizationProps } from "./NormalizeQuestion";
+import LoadingButton from "../LoadingButton";
+import {
+  deleteTokens,
+  removeCustomTokens,
+  renameTokens,
+} from "~/lib/normalization/services";
+import { Token } from "./Tokens";
 
 const showAnswersCount = 3;
 
@@ -26,7 +33,8 @@ type AiTokenGrouped = {
 };
 
 export const AiTokensTrigger = (props: ActionProps) => {
-  const { customNormalizations, allAnswers } = props;
+  console.log(props);
+  const { customNormalizations, allAnswers, questionTokens } = props;
 
   // const aiTokens: AiToken[] = customNormalizations
   //   .map((customNorm) => customNorm.aiTokens || [])
@@ -75,7 +83,7 @@ export const AiTokens = (
     aiTokens: Array<AiTokenGrouped>;
   }
 ) => {
-  const { aiTokens, setTokenFilter } = props;
+  const { aiTokens, edition } = props;
   if (aiTokens.length === 0) {
     return <p>No AI tokens.</p>;
   }
@@ -86,8 +94,9 @@ export const AiTokens = (
           <tr>
             <th></th>
             <th>Token</th>
-            <th> Answers</th>
             <th>Sample Answers</th>
+            <th>Rename to</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -101,15 +110,23 @@ export const AiTokens = (
 };
 
 const Token = (props: {
+  edition: EditionMetadata;
   token: AiTokenGrouped;
   setTokenFilter: CommonNormalizationProps["setTokenFilter"];
+  questionTokens: Token[];
   i: number;
 }) => {
-  const { token, setTokenFilter, i } = props;
+  const { edition, token, setTokenFilter, i, questionTokens } = props;
   const { tokenId, answers } = token;
   const [showAll, setShowAll] = useState(false);
+  const [renameTo, setRenameTo] = useState("");
+  const [loading, setLoading] = useState(false);
+  const isRegular = questionTokens.map((t) => t.id).includes(tokenId);
   return (
-    <tr key={tokenId}>
+    <tr
+      key={`${tokenId}_${i}`}
+      className={`ai-token-row ai-token-row-${isRegular ? "regular" : "ai"}`}
+    >
       <td>{i + 1}.</td>
       <td className="tokens-table-tokenId">
         <NormTokenAction
@@ -119,11 +136,10 @@ const Token = (props: {
           hideAction={true}
         />
       </td>
-      <td>{answers.length}</td>
       <td>
         <table>
           <tbody>
-            {(showAll ? answers : take(answers, showAnswersCount)).map(
+            {(showAll ? answers : answers.slice(0, showAnswersCount)).map(
               (a, i) => (
                 <tr key={a._id}>
                   <td>{i + 1}.</td>
@@ -145,16 +161,60 @@ const Token = (props: {
             className="outline secondary"
             onClick={() => setShowAll(false)}
           >
-            Hide
+            Hide ({answers.length})
           </button>
         ) : (
           <button
             className="outline secondary"
             onClick={() => setShowAll(true)}
           >
-            Show All
+            Show All ({answers.length})
           </button>
         )}
+      </td>
+      <td>
+        <label>
+          <input
+            type="text"
+            disabled={loading}
+            value={renameTo}
+            onChange={(e) => {
+              setRenameTo(e.target.value);
+            }}
+          />
+        </label>
+        <LoadingButton
+          action={async () => {
+            setLoading(true);
+            const tokens = [{ from: tokenId, to: renameTo }];
+            const result = await renameTokens({
+              tokens,
+            });
+            setLoading(false);
+            return result;
+          }}
+          label="Rename"
+          tooltip="Rename token"
+        />
+      </td>
+      <td>
+        <LoadingButton
+          action={async () => {
+            if (
+              confirm(`Really delete token ${tokenId} everywhere it appears?`)
+            ) {
+              setLoading(true);
+              const result = await deleteTokens({
+                editionId: edition.id,
+                tokens: [tokenId],
+              });
+              setLoading(false);
+              return result;
+            }
+          }}
+          label="Delete"
+          tooltip="Delete token"
+        />
       </td>
     </tr>
   );

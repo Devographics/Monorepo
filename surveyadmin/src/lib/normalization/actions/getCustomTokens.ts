@@ -7,7 +7,7 @@ Get all custom tokens for a given question based on its rawPath
 */
 export const getCustomTokens = async ({ rawPath }: { rawPath: string }) => {
   const customNormCollection = await getCustomNormalizationsCollection();
-  const result = customNormCollection
+  const result = await customNormCollection
     .find({ rawPath })
     .project({
       responseId: 1,

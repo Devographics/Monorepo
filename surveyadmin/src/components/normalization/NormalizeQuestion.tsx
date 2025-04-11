@@ -36,6 +36,8 @@ import { GetQuestionResponsesParams } from "~/lib/normalization/actions/getQuest
 import { Dispatch, SetStateAction, useState } from "react";
 import { ResultsPayload } from "~/lib/normalization/services";
 import { NormalizeAll } from "./NormalizeAll";
+import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
+import { Token, getQuestionTokens, getSortedQuestionTokens } from "./Tokens";
 
 interface NormalizeQuestionProps {
   survey: SurveyMetadata;
@@ -138,6 +140,7 @@ export interface CommonNormalizationProps extends NormalizationProps {
   setShowActionLog: Dispatch<SetStateAction<boolean>>;
   localSuggestedTokens: string[];
   addLocalSuggestedToken: (token: string) => void;
+  questionTokens: Token[];
 }
 
 export const NormalizeQuestion = (props: NormalizeQuestionProps) => {
@@ -327,6 +330,12 @@ export const Normalization = (props: NormalizationProps) => {
     customAnswers,
   } = splitResponses(responses);
 
+  const questionTokens = getQuestionTokens({
+    question,
+    allAnswers,
+    entities,
+  });
+
   const commonProps: CommonNormalizationProps = {
     survey,
     edition,
@@ -356,6 +365,7 @@ export const Normalization = (props: NormalizationProps) => {
     setFilterQuery,
     localSuggestedTokens,
     addLocalSuggestedToken,
+    questionTokens,
   };
 
   const segmentProps = {

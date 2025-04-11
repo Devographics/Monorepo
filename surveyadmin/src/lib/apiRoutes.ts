@@ -51,6 +51,9 @@ export const apiRoutes = {
     renameTokens: {
       href: (params) => `/api/normalization/renameTokens`,
     },
+    deleteTokens: {
+      href: (params) => `/api/normalization/deleteTokens`,
+    },
     approveTokens: {
       href: (params) => `/api/normalization/approveTokens`,
     },

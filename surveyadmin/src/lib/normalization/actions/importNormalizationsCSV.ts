@@ -14,6 +14,7 @@ export interface ImportNormalizationArgs {
   editionId: string;
   questionId: string;
   data: string;
+  rawPath: string;
 }
 
 interface NormDef {

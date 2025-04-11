@@ -590,3 +590,23 @@ button.button-ghost,
     }
   }
 }
+
+.error {
+  color: #f98595;
+}
+
+.success {
+  color: #85f9aa;
+}
+
+.ai-token-row-regular {
+  td {
+    // background: #85f9aa11;
+  }
+}
+
+.ai-token-row-ai {
+  td {
+    background: #f9859511;
+  }
+}

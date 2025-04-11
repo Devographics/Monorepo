@@ -1,6 +1,11 @@
 import { getCustomNormalizationsCollection } from "@devographics/mongo";
 import { RenameTokensParams } from "../../services";
 
+export type RenameTokensData = {
+  modifiedCount: number;
+  success: string;
+};
+
 export const renameTokens = async (params: RenameTokensParams) => {
   const { tokens } = params;
   console.log(tokens);
@@ -38,9 +43,11 @@ export const renameTokens = async (params: RenameTokensParams) => {
       }
     }
   }
-  console.log(
-    `→ Renamed ${modifiedCount} tokens for ids ${modifiedIds.join(", ")}`
-  );
+  const success = `→ Renamed ${modifiedCount} tokens (${tokens
+    .map((t) => t.to)
+    .join(", ")}) for ids ${modifiedIds.join(", ")}`;
 
-  return { action: "renameTokens", modifiedCount };
+  console.log(success);
+
+  return { modifiedCount, success } as RenameTokensData;
 };

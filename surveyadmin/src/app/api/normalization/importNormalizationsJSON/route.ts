@@ -11,7 +11,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       throw err;
     }
     const data = await importNormalizationsJSON(body);
-    return NextResponse.json({ data });
+    return NextResponse.json({ data, success: data.success });
   } catch (error) {
     console.error(error);
     captureException(error);

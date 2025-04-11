@@ -132,6 +132,26 @@ export async function renameTokens(params: RenameTokensParams) {
   return result;
 }
 
+export interface DeleteTokensParams {
+  editionId: string;
+  tokens: Array<string>;
+}
+
+export async function deleteTokens(params: DeleteTokensParams) {
+  const fetchRes = await fetch(
+    apiRoutes.normalization.deleteTokens.href(params),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    }
+  );
+  const result: ResultsPayload = await fetchRes.json();
+  return result;
+}
+
 export interface ApproveTokensParams {
   tokens: Array<{
     normalizationId: string;

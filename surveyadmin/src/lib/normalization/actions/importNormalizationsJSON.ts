@@ -33,7 +33,11 @@ export const importNormalizationsJSON = async (
   const { surveyId, editionId, questionId, data } = args;
 
   const { survey, edition, section, question, durations } =
-    await getSurveyEditionSectionQuestion({ surveyId, editionId, questionId });
+    await getSurveyEditionSectionQuestion({
+      surveyId,
+      editionId,
+      questionId,
+    });
 
   const paths = getFormPaths({ edition, question });
 
@@ -42,7 +46,7 @@ export const importNormalizationsJSON = async (
   let normalizationsImported = 0;
   let normalizationsSkipped = 0;
 
-  const rawPath = paths.response!;
+  const rawPath = paths.other!;
   const items = parsedData.matches;
 
   console.log(
@@ -53,25 +57,26 @@ export const importNormalizationsJSON = async (
     const { answer, answerId, tokenIds } = item;
     const [responseId, answerIndex] = answerId.split("___");
 
-    normalizationsImported++;
+    if (tokenIds && tokenIds.length > 0) {
+      normalizationsImported++;
 
-    const args = {
-      surveyId,
-      editionId,
-      questionId,
-      responseId,
-      rawPath,
-      normPath: question.normPaths?.response!,
-      rawValue: answer,
-      tokens: tokenIds,
-      answerIndex: Number(answerIndex),
-      isAI: true,
-    };
-    const { updateResult } = await addCustomTokens(args);
-    // console.log(updateResult);
+      const args = {
+        surveyId,
+        editionId,
+        questionId,
+        responseId,
+        rawPath,
+        normPath: question.normPaths?.response!,
+        rawValue: answer,
+        tokens: tokenIds,
+        answerIndex: Number(answerIndex),
+        isAI: true,
+      };
+      const { updateResult } = await addCustomTokens(args);
+      console.log(updateResult);
+    }
   }
-  console.log(
-    `// importNormalizationsJSON: Done, added ${normalizationsImported} valid normalization tokens`
-  );
-  return { normalizationsImported, normalizationsSkipped };
+  const success = `importNormalizationsJSON: Done, added ${normalizationsImported} valid normalization tokens`;
+  console.log(`// ${success}`);
+  return { normalizationsImported, normalizationsSkipped, success };
 };

@@ -1,5 +1,5 @@
 import { getCustomNormalizationsCollection } from "@devographics/mongo";
-import { cleanUpIfNeeded } from "./removeCustomTokens";
+import { cleanTokensUpIfNeeded } from "./removeCustomTokens";
 import { getNormalizationId } from "./addCustomTokens";
 import { CustomNormalizationParams } from "@devographics/types";
 
@@ -24,7 +24,7 @@ export const enableRegularTokens = async (
     { returnDocument: "after" }
   );
   const document = updateResult.value;
-  const deleteResult = await cleanUpIfNeeded(document);
+  const deleteResult = await cleanTokensUpIfNeeded(document);
   return {
     action: "enableRegularTokens",
     updateResult,

@@ -2,7 +2,7 @@ import { getCustomNormalizationsCollection } from "@devographics/mongo";
 import { getNormalizationId } from "./addCustomTokens";
 import { CustomNormalizationParams } from "@devographics/types";
 
-export const cleanUpIfNeeded = async (document) => {
+export const cleanTokensUpIfNeeded = async (document) => {
   const customNormCollection = await getCustomNormalizationsCollection();
   // if document has no tokens after update, we can delete the entire
   // customNormalization document
@@ -17,11 +17,12 @@ export const cleanUpIfNeeded = async (document) => {
 };
 /*
 
-Remove one or more tokens from a custom normalization entry
+Remove a token from a specific custom normalization entry
 
 */
 export const removeCustomTokens = async (params: CustomNormalizationParams) => {
   const { tokens } = params;
+  const tokenToRemove = tokens[0];
   const normalizationId = getNormalizationId(params);
   const customNormCollection = await getCustomNormalizationsCollection();
   const updateResult = await customNormCollection.findOneAndUpdate(
@@ -30,14 +31,14 @@ export const removeCustomTokens = async (params: CustomNormalizationParams) => {
       $pull: {
         // does not work for some reason
         // customTokens: {$in: tokens},
-        customTokens: tokens[0],
-        aiTokens: tokens[0],
-        suggestedTokens: tokens[0],
+        customTokens: tokenToRemove,
+        aiTokens: tokenToRemove,
+        suggestedTokens: tokenToRemove,
       },
     },
     { returnDocument: "after" }
   );
   const document = updateResult.value;
-  const deleteResult = await cleanUpIfNeeded(document);
+  const deleteResult = await cleanTokensUpIfNeeded(document);
   return { action: "removeCustomTokens", updateResult, deleteResult, document };
 };
