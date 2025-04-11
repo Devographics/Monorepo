@@ -9,7 +9,9 @@ export async function addValues(
 ) {
     for (let editionData of resultsByEdition) {
         for (let bucket of editionData.buckets) {
-            const bucketValue = axis1?.options?.find(o => o.id === bucket.id)?.value
+            const optionValue = axis1?.options?.find(o => o.id === bucket.id)?.value
+            const idValue = axis1.question.optionsAreNumeric ? Number(bucket.id) : undefined
+            const bucketValue = optionValue ?? idValue
             if (bucketValue !== undefined) {
                 bucket.value = bucketValue
             }

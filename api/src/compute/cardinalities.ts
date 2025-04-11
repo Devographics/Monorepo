@@ -25,11 +25,13 @@ export const getCardinalities = async ({
     const cardinalities = [
         {
             id: `${FeaturesOptions.HEARD}`,
-            normPaths: { response: `_cardinalities.${section.id}.${FeaturesOptions.HEARD}` }
+            normPaths: { response: `_cardinalities.${section.id}.${FeaturesOptions.HEARD}` },
+            optionsAreNumeric: true
         },
         {
             id: `${FeaturesOptions.USED}`,
-            normPaths: { response: `_cardinalities.${section.id}.${FeaturesOptions.USED}` }
+            normPaths: { response: `_cardinalities.${section.id}.${FeaturesOptions.USED}` },
+            optionsAreNumeric: true
         }
     ]
     return cardinalities.map(async cardinality => {
