@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Tooltip from 'core/components/Tooltip'
-import { ResponseEditionData } from '@devographics/types'
+import { Entity, ResponseEditionData } from '@devographics/types'
 import {
     BasicPointData,
     VerticalBarChartState,
@@ -10,6 +10,9 @@ import {
 import { useHeight } from '../common2/helpers'
 import { CellLabel } from '../common2'
 import { getViewComponent, getViewDefinition } from './helpers/views'
+import { getItemLabel } from 'core/helpers/labels'
+import { useI18n } from '@devographics/react-i18n'
+import { BlockVariantDefinition } from 'core/types'
 
 // hide labels for cells under this height
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 20
@@ -38,18 +41,29 @@ type CellProps<SerieData, PointData extends BasicPointData, ChartStateType> = {
     viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
 }
 
-export const Cell = <SerieData, PointData extends BasicPointData, ChartStateType>({
-    cellId,
-    point,
-    value,
-    chartState,
-    chartValues,
-    height,
-    offset,
-    viewDefinition,
-    cellIndex,
-    gradient
-}: CellProps<SerieData, PointData, ChartStateType>) => {
+export const Cell = <SerieData, PointData extends BasicPointData, ChartStateType>(
+    props: CellProps<SerieData, PointData, ChartStateType> & {
+        block: BlockVariantDefinition
+        entity: Entity
+    }
+) => {
+    const {
+        block,
+        entity,
+        cellId,
+        point,
+        value,
+        chartState,
+        chartValues,
+        height,
+        offset,
+        viewDefinition,
+        cellIndex,
+        gradient
+    } = props
+    const { getString } = useI18n()
+
+    const { i18nNamespace } = block
     const { ref, cellHeight, isTallEnough: showLabel } = useIsTallEnough()
     const { highlighted } = chartState
     const isHighlighted = highlighted === cellId
@@ -65,7 +79,16 @@ export const Cell = <SerieData, PointData extends BasicPointData, ChartStateType
 
     const v = formatValue(value, question, chartState)
 
-    const label = cellId ? `${point.columnId} ${cellId}` : point.columnId
+    let label = point.columnId
+    if (cellId) {
+        const { label: cellLabel } = getItemLabel({
+            id: cellId,
+            entity,
+            getString,
+            i18nNamespace
+        })
+        label = `${point.columnId} ${cellLabel}`
+    }
     return (
         <Tooltip
             trigger={

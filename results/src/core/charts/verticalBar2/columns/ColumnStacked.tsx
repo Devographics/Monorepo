@@ -38,7 +38,7 @@ export const ColumnStacked = <
         throw new Error('getPointValue not defined')
     }
     const { facetQuestion } = chartState
-    const { question, facetOptions, maxValue } = chartValues
+    const { question, facetBuckets, maxValue } = chartValues
 
     // const rowDimensions = allRowsCellDimensions[rowIndex]
     // const rowOffset = allRowsOffsets[rowIndex]
@@ -49,7 +49,7 @@ export const ColumnStacked = <
                     const { id } = facetBucket
                     const gradient = useGradient({
                         id: facetBucket.id,
-                        question: { ...facetQuestion, options: facetOptions }
+                        question: { ...facetQuestion, options: facetBuckets }
                     })
 
                     const value = getPointValue(facetBucket, chartState)
@@ -60,9 +60,12 @@ export const ColumnStacked = <
                     )
                     const offset = sum(take(values, index))
 
+                    const entity = facetBuckets.find(o => o.id === id)?.entity
                     return (
                         <Cell
+                            {...props}
                             key={id}
+                            entity={entity}
                             cellId={id}
                             point={point}
                             value={value}

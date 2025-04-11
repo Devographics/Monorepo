@@ -27,7 +27,7 @@ export const useChartValues = <SerieData, PointData extends BasicPointData, Char
     block,
     question,
     viewDefinition,
-    facetOptions
+    facetBuckets
 }: {
     lineItems: LineItem<PointData>[]
     chartState: ChartStateType
@@ -55,7 +55,7 @@ export const useChartValues = <SerieData, PointData extends BasicPointData, Char
         columnIds,
         totalColumns: columnIds.length,
         maxValue,
-        facetOptions
+        facetBuckets
     }
     if (getTicks) {
         const ticks = getTicks(maxValue)

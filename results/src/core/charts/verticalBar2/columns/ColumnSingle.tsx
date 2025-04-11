@@ -46,6 +46,7 @@ export const ColumnSingle = <SerieData, PointData extends BasicPointData, ChartS
     return (
         <ColumnWrapper {...columnWrapperProps}>
             <Cell
+                {...props}
                 point={point}
                 value={value}
                 chartState={chartState}

@@ -63,7 +63,7 @@ export type CommonProps<ChartStateType> = {
     question?: QuestionMetadata
     seriesMetadata?: SeriesMetadata
     facetQuestion?: QuestionMetadata
-    facetOptions?: FacetBucket[]
+    facetBuckets?: FacetBucket[]
     metadataProps: MetadataProps
 }
 

@@ -52,8 +52,8 @@ export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
             .flat()
             .flat()
             .flat()
-        const facetOptions = uniqBy(compact(allFacetBuckets), fb => fb.id)
-        commonProps.facetOptions = facetOptions
+        const facetBuckets = uniqBy(compact(allFacetBuckets), fb => fb.id)
+        commonProps.facetBuckets = facetBuckets
     }
 
     return (

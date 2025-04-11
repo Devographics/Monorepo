@@ -6,11 +6,12 @@ import { getAllFacetBucketIds } from '../horizontalBar2/helpers/other'
 import { FacetTitle } from '../common2/FacetTitle'
 import Legend from '../verticalBar2/Legend'
 import { CommonProps } from '../common2/types'
+import { OptionMetadata } from '@devographics/types'
 
 type FacetHeadingProps<ChartStateType> = CommonProps<ChartStateType>
 
 export const FacetHeading = <ChartStateType,>(props: FacetHeadingProps<ChartStateType>) => {
-    const { block, facetQuestion, facetOptions, chartState, pageContext, question } = props
+    const { block, facetQuestion, facetBuckets, chartState, pageContext, question } = props
     const entities = useEntities()
 
     // const controls = getControls({ chartState, chartValues })
@@ -30,7 +31,7 @@ export const FacetHeading = <ChartStateType,>(props: FacetHeadingProps<ChartStat
     //     allFacetBucketIds.includes(String(optionOrGroup.id))
     // )
     const colorScale =
-        facetQuestion && useColorScale({ question: { ...facetQuestion, options: facetOptions } })
+        facetQuestion && useColorScale({ question: { ...facetQuestion, options: facetBuckets } })
 
     return (
         <div className="chart-heading">
@@ -44,7 +45,7 @@ export const FacetHeading = <ChartStateType,>(props: FacetHeadingProps<ChartStat
             {facetQuestion && colorScale && (
                 <Legend
                     {...props}
-                    options={facetOptions}
+                    options={facetBuckets as OptionMetadata[]}
                     colorScale={colorScale}
                     i18nNamespace={facetQuestion.id}
                     enableSort={false}

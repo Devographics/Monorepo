@@ -16,7 +16,7 @@ export const CountStackedBar: VerticalBarViewDefinition<
 > = {
     ...Count,
     component: props => {
-        const { serie, question, chartState, block, viewDefinition, facetOptions } = props
+        const { serie, question, chartState, block, viewDefinition, facetBuckets } = props
         const { getLineItems } = viewDefinition
         const lineItems = getLineItems({ serie, question, chartState })
         const chartValues = useChartValues({
@@ -25,7 +25,7 @@ export const CountStackedBar: VerticalBarViewDefinition<
             block,
             question,
             viewDefinition: Count,
-            facetOptions
+            facetBuckets
         })
         const commonProps = {
             ...props,
