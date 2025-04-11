@@ -96,9 +96,7 @@ const SponsorLogo = styled.div`
 `
 
 const SponsorDescription = styled.div`
-    @media ${mq.smallMedium} {
-        text-align: center;
-    }
+    text-align: center;
 `
 const Support = styled.div`
     text-align: center;

@@ -7,7 +7,7 @@ export const os: TemplateFunction = ({ survey, edition, question, section }) => 
             response: 'common__user_info__os'
         },
         normPaths: {
-            [DbPathsEnum.OTHER]: `user_info.os`
+            [DbPathsEnum.RESPONSE]: `user_info.os`
         },
         ...question
     }

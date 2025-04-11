@@ -661,13 +661,13 @@
             addQuestionComments: false
 
       - id: device
-        template: multiple_options2_freeform
+        template: multiple_options2
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
 
       - id: browser
-        template: multiple_options2_freeform
+        template: multiple_options2
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
@@ -678,7 +678,7 @@
       #       addQuestionComments: false
 
       - id: os
-        template: multiple_options2_freeform
+        template: multiple_options2
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false

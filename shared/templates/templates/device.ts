@@ -7,7 +7,7 @@ export const device: TemplateFunction = ({ survey, edition, question, section })
             response: 'common__user_info__device'
         },
         normPaths: {
-            [DbPathsEnum.OTHER]: `user_info.device`
+            [DbPathsEnum.RESPONSE]: `user_info.device`
         },
         ...question
     }

@@ -7,7 +7,7 @@ export const browser: TemplateFunction = ({ survey, edition, question, section }
             response: 'common__user_info__browser'
         },
         normPaths: {
-            [DbPathsEnum.OTHER]: `user_info.browser`
+            [DbPathsEnum.RESPONSE]: `user_info.browser`
         },
         ...question
     }

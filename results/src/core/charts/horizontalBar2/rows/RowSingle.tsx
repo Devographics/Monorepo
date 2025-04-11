@@ -44,6 +44,7 @@ export const RowSingle = (props: RowComponentProps) => {
 
     const isSpecialBucket = [OVERLIMIT_ANSWERS, CUTOFF_ANSWERS].includes(bucket.id)
     const showFreeformAnswers = !isSpecialBucket && (isFreeformQuestion || isFreeformData)
+
     const rowMetadata = showFreeformAnswers ? (
         <FreeformAnswersTrigger
             bucket={bucket}
