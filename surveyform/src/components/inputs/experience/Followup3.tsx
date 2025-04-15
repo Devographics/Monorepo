@@ -26,7 +26,7 @@ import {
 } from "@devographics/types";
 import without from "lodash/without.js";
 
-import { CommentTextarea } from "~/components/form/FormComment";
+import { CommentTextarea } from "~/components/form/form_item/Comment";
 import { ExperienceProps } from "./Experience";
 import { FormInputProps } from "~/components/form/typings";
 import { Dispatch, SetStateAction } from "react";

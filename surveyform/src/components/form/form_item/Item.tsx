@@ -15,7 +15,7 @@ import React, {
 
 import Form from "react-bootstrap/Form";
 import { FormInputProps } from "../typings";
-import { CommentTrigger, CommentInput } from "../FormComment";
+import { CommentTrigger, CommentInput } from "./Comment";
 import { getFormPaths } from "@devographics/templates";
 
 import { useFormStateContext } from "../FormStateContext";
