@@ -86,7 +86,7 @@ export const CommentInput = (props: CommentInputProps) => {
       <h5 className="comment-input-heading">
         <T token="experience.leave_comment" />
       </h5>
-      <p className="comment-input-subheading">
+      <div className="comment-input-subheading">
         {hasCustomPrompt ? (
           <T token={intlIds.commentPrompt} />
         ) : hasQuestionValue ? (
@@ -101,7 +101,7 @@ export const CommentInput = (props: CommentInputProps) => {
         ) : (
           <T token="experience.tell_us_more_no_value" />
         )}
-      </p>
+      </div>
       <CommentTextarea
         readOnly={!!readOnly}
         value={commentValue}

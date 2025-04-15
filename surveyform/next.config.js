@@ -13,9 +13,6 @@ const moduleExports = (phase, { defaultConfig }) => {
   let nextConfig = {
     // NOTE: the doc is unclear about whether we should merge this default config or not
     ...defaultConfig,
-    experimental: {
-      instrumentationHook: true,
-    },
     transpilePackages: [
       "@devographics/permissions",
       "@devographics/core-models",
@@ -31,7 +28,7 @@ const moduleExports = (phase, { defaultConfig }) => {
       ignoreDuringBuilds: true,
     },
     env: {
-      NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV
+      NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
     },
     webpack: function (configArg, otherArgs) {
       // run previously configured function!
