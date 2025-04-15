@@ -1,0 +1,23 @@
+{
+    "name": "@devographics/icons",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",
+    "exports": {
+        ".": "./index.ts"
+    },
+    "types": "./index.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@devographics/components": "workspace:^",
+        "@devographics/types": "workspace:*",
+        "styled-components": "^5.3.6"
+    },
+    "devDependencies": {
+        "@types/node": "^18.11.18"
+    }
+}
