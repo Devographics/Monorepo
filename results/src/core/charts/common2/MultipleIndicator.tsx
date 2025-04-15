@@ -1,6 +1,6 @@
 import './MultipleIndicator.scss'
 import React from 'react'
-import { MultipleIcon } from 'core/icons'
+import { MultipleIcon } from '@devographics/icons'
 import T from 'core/i18n/T'
 import Tooltip from 'core/components/Tooltip'
 
