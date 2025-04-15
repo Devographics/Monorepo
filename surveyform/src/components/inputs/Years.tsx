@@ -114,11 +114,14 @@ export const FormComponentYears = (props: FormInputProps) => {
             onChange={handleChangeDebounced}
             onBlur={handleChange}
             disabled={readOnly}
-            className={
-              "form-control form-input-number" + " " + checkIsValid(localValue)
-                ? "is-valid"
-                : "is-invalid"
-            }
+            className={`
+              form-control form-input-number ${
+                localValue
+                  ? checkIsValid(localValue)
+                    ? "is-valid"
+                    : "is-invalid"
+                  : ""
+              }`}
           />
 
           <Label labelId="years.years" />

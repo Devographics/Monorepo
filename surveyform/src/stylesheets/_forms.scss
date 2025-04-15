@@ -24,12 +24,13 @@
     }
     @include breakpoints.medium {
       @include variables.border;
-      padding: math.div(variables.$spacing, 2) math.div(variables.$spacing, 2) variables.$spacing
-        math.div(variables.$spacing, 2);
+      padding: math.div(variables.$spacing, 2) math.div(variables.$spacing, 2)
+        variables.$spacing math.div(variables.$spacing, 2);
     }
     @include breakpoints.large {
       @include variables.border;
-      padding: variables.$spacing variables.$spacing variables.$spacing variables.$spacing;
+      padding: variables.$spacing variables.$spacing variables.$spacing
+        variables.$spacing;
       &.form-item-skipped {
         padding: variables.$spacing;
       }
@@ -733,6 +734,8 @@
     align-items: center;
     gap: 5px;
     background: var(--bg-color) !important;
+    color: var(--text-color) !important;
+    border: 1px var(--dark-border-color) solid;
   }
   .icon-wrapper svg {
     height: 18px;
