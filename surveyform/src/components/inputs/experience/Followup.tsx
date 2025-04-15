@@ -7,7 +7,7 @@ import { OptionMetadata } from "@devographics/types";
 import without from "lodash/without.js";
 
 import { Button } from "~/components/ui/Button";
-import { CommentTextarea } from "~/components/form/FormComment";
+import { CommentTextarea } from "~/components/form/form_item/Comment";
 import { ExperienceProps } from "./Experience";
 
 export interface FollowupData {
@@ -35,7 +35,7 @@ export const FollowUps = (
   props: ExperienceProps & {
     option: OptionMetadata;
     followupData: FollowupData;
-  },
+  }
 ) => {
   const {
     updateCurrentValues,
@@ -57,11 +57,11 @@ export const FollowUps = (
 
   if (!predefinedFollowupPath || !freeformFollowupPath) {
     throw new Error(
-      `Could not find predefinedFollowupPath or freeformFollowupPath for question ${question.id}`,
+      `Could not find predefinedFollowupPath or freeformFollowupPath for question ${question.id}`
     );
   }
 
-  const { t } = useI18n()
+  const { t } = useI18n();
   const placeholder = t(`followups.placeholder`);
 
   return (
@@ -73,7 +73,7 @@ export const FollowUps = (
         <div className="followups-predefined">
           {optionFollowUps.map((followupOption, index) => {
             const isChecked = predefinedFollowupValue?.includes(
-              followupOption.id,
+              followupOption.id
             );
             return (
               <Button

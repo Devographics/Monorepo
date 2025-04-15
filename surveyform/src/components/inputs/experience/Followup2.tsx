@@ -11,7 +11,7 @@ import {
 } from "@devographics/types";
 import without from "lodash/without.js";
 
-import { CommentTextarea } from "~/components/form/FormComment";
+import { CommentTextarea } from "~/components/form/form_item/Comment";
 import { ExperienceProps } from "./Experience";
 import { FormInputProps } from "~/components/form/typings";
 import { Dispatch, SetStateAction } from "react";
@@ -36,7 +36,7 @@ export const FollowUps = (
     setShowReadingListPrompt?: Dispatch<SetStateAction<boolean>>;
     followupMode?: "radio" | "checkbox";
     formPaths?: DbPaths;
-  },
+  }
 ) => {
   const {
     updateCurrentValues,
@@ -55,14 +55,14 @@ export const FollowUps = (
 
   const { followups = [] } = question;
   const optionFollowUps = followups.find(
-    (f) => f.id === option.id || f.id === "default",
+    (f) => f.id === option.id || f.id === "default"
   )?.options;
 
   const { predefinedFollowupValue, predefinedFollowupPath } = followupData;
 
   if (!predefinedFollowupPath) {
     throw new Error(
-      `Could not find predefinedFollowupPath for question ${question.id}`,
+      `Could not find predefinedFollowupPath for question ${question.id}`
     );
   }
 
@@ -122,7 +122,7 @@ export const FollowUps = (
                   if (allPredefinedFollowupPaths) {
                     // when a follow-up is clicked, also clear all other predefined follow-ups
                     for (const followUpPath of Object.values(
-                      allPredefinedFollowupPaths,
+                      allPredefinedFollowupPaths
                     )) {
                       updateCurrentValues({ [followUpPath]: null });
                     }
@@ -148,7 +148,7 @@ export const FollowUps = (
 
                 // show reading list prompt if needed
                 const hasSeenPromptString = localStorage.getItem(
-                  "hasSeenReadingListPrompt",
+                  "hasSeenReadingListPrompt"
                 );
                 const hasSeenPrompt =
                   hasSeenPromptString && JSON.parse(hasSeenPromptString);
@@ -181,7 +181,7 @@ export const FollowUpComment = (
   props: ExperienceProps & {
     option: OptionMetadata;
     followupData: FollowupData;
-  },
+  }
 ) => {
   const {
     updateCurrentValues,
@@ -196,7 +196,7 @@ export const FollowUpComment = (
 
   if (!freeformFollowupPath) {
     throw new Error(
-      `Could not find freeformFollowupPath for question ${question.id}`,
+      `Could not find freeformFollowupPath for question ${question.id}`
     );
   }
 
