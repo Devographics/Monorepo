@@ -97,6 +97,8 @@ export const getQuestioni18nIds = ({
     note: joinWithBase("note"),
     // e.g. resources.video_creators.others => "Other video creators" (legacy)
     others: joinWithBase("others"),
+    // e.g. career.workplace_issues.commentPrompt => "Please avoid any personally identifying information"
+    commentPrompt: joinWithBase("commentPrompt"),
   };
 
   return ids;

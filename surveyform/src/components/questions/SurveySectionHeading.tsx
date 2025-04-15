@@ -59,7 +59,9 @@ const SurveySectionHeading = ({ section }: FormLayoutProps) => {
         <div className="section-toc">
           <ol>
             {section.questions
-              .filter((q) => !q.hidden && !["subheading"].includes(q.template))
+              .filter(
+                (q) => !q.hidden && !["subheading", "help"].includes(q.template)
+              )
               .map((question) => (
                 <QuestionItem
                   key={question.id}

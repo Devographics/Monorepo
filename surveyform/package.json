@@ -38,10 +38,12 @@
     "tokyodev": "dotenv -e .env.tokyodev.local next"
   },
   "dependencies": {
+    "@devographics/components": "workspace:^",
     "@devographics/debug": "workspace:^1.0.0",
     "@devographics/fetch": "workspace:^1.0.0",
     "@devographics/helpers": "workspace:^1.0.0",
     "@devographics/i18n": "workspace:1.0.0",
+    "@devographics/icons": "workspace:^1.0.0",
     "@devographics/mongo": "workspace:^1.0.0",
     "@devographics/react-i18n": "workspace:1.0.0",
     "@devographics/redis": "workspace:^1.0.0",

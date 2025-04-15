@@ -9,7 +9,7 @@ import debounce from "lodash/debounce.js";
 import IconComment from "~/components/icons/Comment";
 import IconCommentDots from "~/components/icons/CommentDots";
 import { FormInputProps } from "./typings";
-import { getOptioni18nIds } from "~/lib/i18n/survey";
+import { getOptioni18nIds, getQuestioni18nIds } from "~/lib/i18n/survey";
 import isEmpty from "lodash/isEmpty";
 import { useFormStateContext } from "./FormStateContext";
 
@@ -19,7 +19,7 @@ export const CommentTrigger = ({
   setShowCommentInput,
 }) => {
   const isActive = showCommentInput || !!value;
-  const { t } = useI18n()
+  const { t } = useI18n();
   const target = useRef(null);
 
   return (
@@ -34,8 +34,9 @@ export const CommentTrigger = ({
       >
         <button
           ref={target}
-          className={`comment-trigger comment-trigger-${isActive ? "active" : "inactive"
-            }`}
+          className={`comment-trigger comment-trigger-${
+            isActive ? "active" : "inactive"
+          }`}
           type="button"
           aria-describedby="popover-basic"
           aria-label={t("experience.leave_comment")}
@@ -59,7 +60,7 @@ interface CommentInputProps extends FormInputProps {
 }
 
 export const CommentInput = (props: CommentInputProps) => {
-  const { t } = useI18n();
+  const { t, getMessage } = useI18n();
   const {
     commentPath,
     commentValue,
@@ -76,13 +77,19 @@ export const CommentInput = (props: CommentInputProps) => {
   const i18n = option && getOptioni18nIds({ ...props, option });
   translatedAnswer = i18n && t(i18n.base);
 
+  const intlIds = getQuestioni18nIds(props);
+  const customCommentPrompt = getMessage(intlIds.commentPrompt);
+  const hasCustomPrompt = !customCommentPrompt.missing;
+
   return (
     <div className="comment-input">
       <h5 className="comment-input-heading">
         <T token="experience.leave_comment" />
       </h5>
       <p className="comment-input-subheading">
-        {hasQuestionValue ? (
+        {hasCustomPrompt ? (
+          <T token={intlIds.commentPrompt} />
+        ) : hasQuestionValue ? (
           translatedAnswer ? (
             <T
               token="experience.tell_us_more"
@@ -123,20 +130,20 @@ export const CommentTextarea = ({
 
   const handleChange =
     (isDebounced = false) =>
-      (event) => {
-        let value = event.target.value;
-        setLocalValue(value);
-        const _updateCurrentValues = isDebounced
-          ? updateCurrentValuesDebounced
-          : updateCurrentValues;
-        if (value === "") {
-          // @ts-ignore
-          _updateCurrentValues({ [path]: null });
-        } else {
-          // @ts-ignore
-          _updateCurrentValues({ [path]: value });
-        }
-      };
+    (event) => {
+      let value = event.target.value;
+      setLocalValue(value);
+      const _updateCurrentValues = isDebounced
+        ? updateCurrentValuesDebounced
+        : updateCurrentValues;
+      if (value === "") {
+        // @ts-ignore
+        _updateCurrentValues({ [path]: null });
+      } else {
+        // @ts-ignore
+        _updateCurrentValues({ [path]: value });
+      }
+    };
 
   return (
     <FormControl
@@ -146,8 +153,8 @@ export const CommentTextarea = ({
       value={localValue || ""}
       disabled={readOnly}
       placeholder={placeholder}
-    // ref={refFunction}
-    // {...inputProperties}
+      // ref={refFunction}
+      // {...inputProperties}
     />
   );
 };

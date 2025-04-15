@@ -29,7 +29,7 @@
       }
     }
   }
-  .form-item:has(.form-help) {
+  .form-item-wrapper:has(.form-help) {
     background: var(--bg-color-light);
     border: 0;
     @include small-medium {
@@ -941,4 +941,36 @@
     color: $text-color;
     font-size: 0.8rem;
   }
+}
+
+.form-item-checkAll {
+  // color: $text-color-darker;
+}
+.form-item-indications {
+  display: flex;
+  flex-direction: column;
+  gap: var(--halfSpacing);
+  margin-bottom: var(--halfSpacing);
+}
+.form-item-indication {
+  display: flex;
+  align-items: center;
+  gap: var(--halfSpacing);
+  color: var(--textAltColor);
+  font-size: 0.9rem;
+  svg {
+    color: var(--textAltColor);
+  }
+}
+
+.form-item-indications-limit {
+  border: 1px solid var(--textAltColor);
+  padding: 2px;
+  display: grid;
+  place-items: center;
+  height: 24px;
+  width: 24px;
+  font-size: 0.7rem;
+  border-radius: 100%;
+  line-height: 1;
 }
