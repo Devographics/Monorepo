@@ -22,8 +22,8 @@ export default async function WithSectionLayout(
   return (
     // TODO: useParams should be enough, we don't need data fetching here
     // but it's not yet implemented in Next 13.0.6 (07/12/2022)
-    <SectionProvider section={parseInt(params.sectionNumber)}>
+    (<SectionProvider section={parseInt(params.sectionNumber)}>
       {children}
-    </SectionProvider>
+    </SectionProvider>)
   );
 }

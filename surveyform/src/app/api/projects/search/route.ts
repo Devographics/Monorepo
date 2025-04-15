@@ -2,9 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { HandlerError } from "~/lib/handler-error";
 import { searchProjects } from "~/lib/projects/db-actions/search";
 
-export const dynamic = "force-dynamic"
-
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
   try {
     const query = req.nextUrl.searchParams.get("query");
     const projects = (query && (await searchProjects({ query }))) || [];

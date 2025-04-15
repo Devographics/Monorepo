@@ -1,3 +1,8 @@
+@use "breakpoints";
+@use "colors";
+@use "typography";
+@use "variables";
+
 @use "sass:math";
 .btn {
   // This selector was there to gain specificity? It doesn't work anymore
@@ -9,19 +14,19 @@
   &-primary.disabled,
   &-primary:disabled {
     background: none;
-    @include border;
-    padding: math.div($spacing, 2) $spacing;
+    @include variables.border;
+    padding: math.div(variables.$spacing, 2) variables.$spacing;
     cursor: pointer;
     display: block;
     text-align: center;
     white-space: nowrap;
-    @include font-bold;
-    @include secondary-font;
-    @include small {
-      font-size: $small-font;
+    @include typography.font-bold;
+    @include typography.secondary-font;
+    @include breakpoints.small {
+      font-size: typography.$small-font;
     }
-    @include medium-large {
-      font-size: $medium-font;
+    @include breakpoints.medium-large {
+      font-size: typography.$medium-font;
     }
     white-space: nowrap;
     // transition: color 400ms, border-color 400ms;
@@ -29,38 +34,38 @@
     &,
     &:link,
     &:visited {
-      color: $text-color;
+      color: colors.$text-color;
       color: var(--text-color);
       text-decoration: none;
     }
 
     &--small,
     &.btn-sm {
-      font-size: $small-font;
-      padding: math.div($spacing, 5) math.div($spacing, 2);
+      font-size: typography.$small-font;
+      padding: math.div(variables.$spacing, 5) math.div(variables.$spacing, 2);
     }
 
     &--large {
-      padding: $spacing $spacing;
-      font-size: $large-font;
+      padding: variables.$spacing variables.$spacing;
+      font-size: typography.$large-font;
     }
 
     &--disabled {
-      color: $active-color-dark;
+      color: colors.$active-color-dark;
     }
 
     &--active {
       border-style: solid;
     }
     .admin-content & {
-      color: $text-color-inverted;
-      border-color: $text-color-inverted;
+      color: colors.$text-color-inverted;
+      border-color: colors.$text-color-inverted;
     }
     .modal-dialog & {
-      color: $text-color-inverted;
+      color: colors.$text-color-inverted;
     }
     &.loading-button-loading {
-      background: $greyMediumer;
+      background: colors.$greyMediumer;
       cursor: default;
     }
   }
@@ -68,17 +73,17 @@
   &:not(:disabled):not(.disabled).active,
   &.active {
     &:hover {
-      color: $hover-color;
+      color: colors.$hover-color;
       color: var(--text-color);
       border-color: var(--link-color);
       border-style: solid;
       text-decoration: none;
-      background: $bg-color-light;
+      background: colors.$bg-color-light;
     }
 
     &:active,
     &:focus {
-      color: $white;
+      color: colors.$white;
       border-color: var(--link-color);
       border-style: solid;
       text-decoration: none;
@@ -92,8 +97,8 @@
   }
 
   &.btn-sm {
-    font-size: $small-font;
-    padding: math.div($spacing, 5) math.div($spacing, 2);
+    font-size: typography.$small-font;
+    padding: math.div(variables.$spacing, 5) math.div(variables.$spacing, 2);
   }
 }
 
@@ -105,15 +110,15 @@
     border-left-width: 0;
 
     &:hover {
-      border-left-color: $border-color;
-      border-right-color: $border-color;
+      border-left-color: colors.$border-color;
+      border-right-color: colors.$border-color;
 
       &:first-child {
-        border-left-color: $hover-color;
+        border-left-color: colors.$hover-color;
         border-right-style: dashed;
       }
       &:last-child {
-        border-right-color: $hover-color;
+        border-right-color: colors.$hover-color;
         border-left-style: dashed;
       }
     }

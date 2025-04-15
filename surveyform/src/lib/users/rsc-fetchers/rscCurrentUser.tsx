@@ -1,19 +1,16 @@
-/**
- * Methods here are supposed to be cached
- * So they can be used directly in RSC
- */
-import { cookies, type UnsafeUnwrappedCookies } from "next/headers";
+import { cookies } from "next/headers";
 import { cache } from "react";
-import { TOKEN_NAME, getSessionFromToken } from "~/lib/account/session";
+import { AUTH_TOKEN, getSessionFromToken } from "~/lib/account/session";
 import { loadUser } from "~/lib/users/db-actions/load";
 import { loadUserWithResponses } from "~/lib/users/db-actions/loadWithResponses";
 
-export async function getToken() {
-  const c = (await cookies()) as unknown as UnsafeUnwrappedCookies;
-  return c.get(TOKEN_NAME)?.value;
+async function getAuthToken() {
+  const c = await cookies();
+  return c.get(AUTH_TOKEN)?.value;
 }
+
 export const rscCurrentUser = cache(async () => {
-  const token = await getToken();
+  const token = await getAuthToken();
   if (!token) return null;
   const session = await getSessionFromToken(token);
   const user = session?._id ? await loadUser({ userId: session._id }) : null;
@@ -21,7 +18,7 @@ export const rscCurrentUser = cache(async () => {
 });
 
 export const rscCurrentUserWithResponses = cache(async () => {
-  const token = await getToken();
+  const token = await getAuthToken();
   if (!token) return null;
   const session = await getSessionFromToken(token);
   const user = session?._id

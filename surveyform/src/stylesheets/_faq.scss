@@ -1,17 +1,21 @@
+@use "breakpoints";
+@use "typography";
+@use "variables";
+
 .faq-contents {
-  @include medium-large {
+  @include breakpoints.medium-large {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: $spacing * 2;
-    row-gap: $spacing * 2;
+    column-gap: variables.$spacing * 2;
+    row-gap: variables.$spacing * 2;
   }
 }
 .faq-item {
   margin: 0;
   background: none;
   border: none;
-  @include small {
-    margin-bottom: $spacing;
+  @include breakpoints.small {
+    margin-bottom: variables.$spacing;
   }
 }
 .faq-item-heading {
@@ -21,7 +25,7 @@
     text-align: left;
     padding: 0;
     color: var(--text-color);
-    @include font-bold;
+    @include typography.font-bold;
     color: var(--link-color);
     &:hover {
       color: var(--hover-color);
@@ -33,7 +37,7 @@
   }
 }
 .faq-item-body {
-  font-size: $smallish-font;
+  font-size: typography.$smallish-font;
   padding: 0;
   margin: 0;
   p {

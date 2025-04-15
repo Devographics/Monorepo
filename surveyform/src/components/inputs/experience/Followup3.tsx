@@ -12,25 +12,21 @@ css2024__features__at_scope__sentiment
 
 */
 "use client";
-import Form from "react-bootstrap/Form";
 
-import { T, useI18n } from "@devographics/react-i18n";
+import { T } from "@devographics/react-i18n";
 
 import {
   DbPaths,
-  DbPathsEnum,
   FeaturesOptions,
   OptionMetadata,
-  SentimentOptions,
   SimplifiedSentimentOptions,
 } from "@devographics/types";
 import without from "lodash/without.js";
 
-import { CommentTextarea } from "~/components/form/form_item/Comment";
-import { ExperienceProps } from "./Experience";
 import { FormInputProps } from "~/components/form/typings";
 import { Dispatch, SetStateAction } from "react";
 import isEmpty from "lodash/isEmpty";
+import { FormCheckInput } from "~/components/form/FormCheck";
 
 export interface FollowupData {
   sentimentPath?: string;
@@ -102,13 +98,12 @@ export const FollowUps = (
             className={`followups-predefined-label2 sentiment ${sentimentClasses[index]} ${isCheckedClass}`}
             {...roleProp}
           >
-            <Form.Check.Input
+            <FormCheckInput
               className="visually-hidden"
               type={followupMode}
               checked={isChecked}
               disabled={readOnly}
               id={`${path}.followup.${index}`}
-              // ref={refFunction}
               {...tabIndexProp}
               onClick={(event) => {
                 // if follow up option is already part of the selected options,
@@ -121,7 +116,7 @@ export const FollowUps = (
                 }
               }}
               onChange={(event) => {
-                const isChecked = event.target.checked;
+                const isChecked = event.currentTarget.checked;
 
                 if (parentMode === "radio") {
                   // check "main" parent answer

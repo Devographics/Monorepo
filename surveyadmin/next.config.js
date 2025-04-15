@@ -7,17 +7,7 @@ const moduleExports = (phase, { defaultConfig }) => {
    * @type {import('next/dist/next-server/server/config').NextConfig}
    **/
   let nextConfig = {
-    // NOTE: the doc is unclear about whether we should merge this default config or not
     ...defaultConfig,
-    experimental: {
-      instrumentationHook: true,
-    },
-    transpilePackages: [
-      "@devographics/permissions",
-      "@devographics/react-hooks",
-      "@devographics/react-form",
-      "@devographics/types",
-    ],
     // Disable linting during build => the linter may have optional dev dependencies
     // (eslint-plugin-cypress) that wont exist during prod build
     // You should lint manually only
@@ -50,18 +40,6 @@ const moduleExports = (phase, { defaultConfig }) => {
   };
 
   let extendedConfig = nextConfig;
-
-  //*** */ Enable Webpack analyzer
-  if (process.env.ANALYZE) {
-    const debug = require("debug")("webpack");
-    debug("Enabling Webpack bundle analyzer");
-    const withBundleAnalyzer = require("@next/bundle-analyzer")({
-      enabled: !!process.env.ANALYZE,
-    });
-    extendedConfig = withBundleAnalyzer(extendedConfig);
-  }
-
-
   if (process.env.MAINTENANCE_MODE) {
     extendedConfig.redirects = async () => {
       return [

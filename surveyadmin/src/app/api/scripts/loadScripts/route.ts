@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { captureException } from "@sentry/nextjs";
 import { getScripts } from "~/lib/scripts/actions";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   try {
     const data = await getScripts();
     return NextResponse.json({ data });

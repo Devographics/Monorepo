@@ -1,23 +1,27 @@
+@use "colors";
+@use "typography";
+@use "variables";
+
 @use "sass:math";
 
 .accounts-ui {
   .fields {
     .field {
-      margin-bottom: $spacing;
+      margin-bottom: variables.$spacing;
     }
   }
   .buttons {
-    @include flex-center;
+    @include variables.flex-center;
     flex-direction: column;
     .btn-primary {
-      margin: $spacing auto $spacing auto !important;
+      margin: variables.$spacing auto variables.$spacing auto !important;
       min-width: 200px;
     }
     a {
       display: block;
       text-align: center;
-      margin-bottom: math.div($spacing, 2);
-      font-size: $smallish-font;
+      margin-bottom: math.div(variables.$spacing, 2);
+      font-size: typography.$smallish-font;
     }
   }
   .warning {
@@ -25,7 +29,7 @@
   }
   .error,
   .warning {
-    background: $redTransparent;
+    background: colors.$redTransparent;
   }
 }
 
@@ -35,21 +39,21 @@
   list-style-type: none;
 }
 .user-response-item {
-  margin-bottom: $spacing/2;
+  margin-bottom: variables.$spacing-half;
   border: 1px solid var(--border-color);
-  padding: $spacing;
+  padding: variables.$spacing;
   border-radius: 3px;
   & .response-details {
     display: flex;
-    gap: $spacing;
+    gap: variables.$spacing;
     flex-wrap: wrap;
   }
 }
 .user-response-item-survey {
   display: flex;
   align-items: center;
-  font-size: $large-font;
-  margin-bottom: $spacing/4;
+  font-size: typography.$large-font;
+  margin-bottom: variables.$spacing-quarter;
   .survey-status {
     margin-left: 10px;
   }
@@ -59,7 +63,7 @@
   background: var(--bg-color-light);
   padding: 4px 8px;
   border-radius: 3px;
-  font-size: $small-font;
+  font-size: typography.$small-font;
 
   &-preview {
   }
@@ -70,5 +74,5 @@
 }
 
 .account-userId {
-  font-size: $smallish-font;
+  font-size: typography.$smallish-font;
 }

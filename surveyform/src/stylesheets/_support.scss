@@ -1,9 +1,11 @@
+@use "variables";
+
 .support {
 }
 
 .support-item {
-  @include flex-center;
-  margin-bottom: $spacing * 2;
+  @include variables.flex-center;
+  margin-bottom: variables.$spacing * 2;
   a {
     display: block;
     width: 100%;

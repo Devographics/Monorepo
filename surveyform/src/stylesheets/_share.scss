@@ -1,3 +1,6 @@
+@use "colors";
+@use "variables";
+
 @use 'sass:math';
 .ShareSite__Content {
   // border-top: $border;
@@ -6,28 +9,28 @@
   //   border-right: $border;
   position: relative;
   z-index: 1;
-  margin-top: $spacing;
-  margin-bottom: $spacing * 2;
+  margin-top: variables.$spacing;
+  margin-bottom: variables.$spacing * 2;
 }
 
 .share__link {
   display: block;
   flex-shrink: 0;
-  border: $border;
+  border: variables.$border;
   flex-grow: 1;
   text-align: center;
-  padding: 22px math.div($spacing, 3);
+  padding: 22px math.div(variables.$spacing, 3);
   transition: none;
   margin-left: -1px;
   &:hover {
-    background: $bg-color-light;
+    background: colors.$bg-color-light;
   }
   &:first-child {
     margin: 0;
-    border-radius: $border-radius 0 0 $border-radius;
+    border-radius: variables.$border-radius 0 0 variables.$border-radius;
   }
   &:last-child {
-    border-radius: 0 $border-radius $border-radius 0;
+    border-radius: 0 variables.$border-radius variables.$border-radius 0;
     margin-right: 0;
   }
   svg {

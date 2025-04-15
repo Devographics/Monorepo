@@ -1,5 +1,5 @@
 import "~/stylesheets/main.scss";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { getConfig, setAppName } from "@devographics/helpers";
 import { AppName } from "@devographics/types";
@@ -45,10 +45,10 @@ export default function RootLayout({
 export const metadata: Metadata = {
   title: "Devographics Admin",
   description: "Admin app for the Devographics surveys",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-  },
   // /app/favicon.ico is automatically used as icon
+};
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };

@@ -3,8 +3,6 @@ const path = require("path");
 // See the how Vulcan Next docs are setup with next-mdx-remote
 // which is more advanced (loading remote MD, supporting styling correctly etc.)
 
-// const { withSentryConfig } = require("@sentry/nextjs");
-
 // @see https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration
 const moduleExports = (phase, { defaultConfig }) => {
   /**
@@ -41,40 +39,6 @@ const moduleExports = (phase, { defaultConfig }) => {
         test: /\.ya?ml$/,
         use: "js-yaml-loader",
       });
-
-      // Support differentiated import for the same folder
-      if (!config.resolve.mainFiles) {
-        config.resolve.mainFiles = [
-          "index.js",
-          "index.ts",
-          "index.jsx",
-          "index.tsx",
-        ];
-      }
-      if (otherArgs.isServer) {
-        config.resolve.mainFiles.push(
-          "index.server.ts",
-          "index.server.tsx",
-          "index.server.js",
-          "index.server.jsx"
-        );
-      } else {
-        config.resolve.mainFiles.push(
-          "index.client.ts",
-          "index.client.tsx",
-          "index.client.js",
-          "index.client.jsx"
-        );
-      }
-      if (!config.resolve) config.resolve = {};
-      // This is still needed for Storybook or 3rd party Webpack baseds tools
-      // However Next is able to resolve based just on the tsconfig.json
-      // @see https://github.com/vercel/next.js/issues/19345 for progress on this
-      config.resolve.alias = {
-        ...(config.resolve.alias || {}),
-        "~": path.join(__dirname, "src"),
-      };
-
       config.experiments.topLevelAwait = true;
       return config;
     },

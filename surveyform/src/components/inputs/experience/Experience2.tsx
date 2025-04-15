@@ -1,6 +1,5 @@
 "use client";
 import { FormItem } from "~/components/form/FormItem";
-import Form from "react-bootstrap/Form";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
@@ -23,9 +22,14 @@ import get from "lodash/get.js";
 import { FollowupData, /*FollowUpComment,*/ FollowUps } from "./Followup3";
 // import { CommentTrigger } from "~/components/form/FormComment";
 
-import Alert from "react-bootstrap/Alert";
 import { useFormPropsContext } from "~/components/form/FormPropsContext";
 import { useFormStateContext } from "~/components/form/FormStateContext";
+import {
+  FormCheck,
+  FormCheckInput,
+  FormCheckLabel,
+} from "~/components/form/FormCheck";
+import { Alert } from "~/components/ui/Alert";
 
 export interface ExperienceProps extends FormInputProps {
   showDescription: boolean;
@@ -154,23 +158,23 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
       className={`form-experience-option ${hasValueClass} ${unimplementedClass}`}
     >
       <div className="form-experience-option-inner">
-        <Form.Check
+        <FormCheck
           key={i}
           // layout="elementOnly"
           type="radio"
         >
-          <Form.Check.Label htmlFor={`${path}.${i}`}>
+          <FormCheckLabel htmlFor={`${path}.${i}`}>
             <div className="form-input-wrapper">
-              <Form.Check.Input
+              <FormCheckInput
                 onClick={(e) => {
-                  const target = e.target as HTMLInputElement;
+                  const target = e.currentTarget as HTMLInputElement;
                   const clickedValue = target.value;
                   if (clickedValue === value) {
                     updateCurrentValues({ [path]: null });
                   }
                 }}
                 onChange={(e) => {
-                  updateCurrentValues({ [path]: e.target.value });
+                  updateCurrentValues({ [path]: e.currentTarget.value });
                   if (sentimentPath) {
                     // when main experience value changes, set sentiment to "neutral" by default
                     updateCurrentValues({
@@ -183,14 +187,13 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
                 value={option.id}
                 name={path}
                 id={`${path}.${i}`}
-                // ref={refFunction}
                 checked={isChecked}
                 className={checkClass}
                 disabled={readOnly}
               />
             </div>
             <FormOption {...props} isChecked={isChecked} option={option} />
-          </Form.Check.Label>
+          </FormCheckLabel>
           {unimplemented && (
             <OverlayTrigger
               placement="top"
@@ -221,7 +224,7 @@ const ExperienceOption = (props: ExperienceOptionProps) => {
               formPaths={formPaths}
             />
           )}
-        </Form.Check>
+        </FormCheck>
         {/* <CommentTrigger /> */}
       </div>
       {showReadingListPrompt && (

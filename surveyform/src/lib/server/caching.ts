@@ -3,7 +3,7 @@
  * packages/vulcan-lib/lib/server/caching.js
  * we prefer to define this at app level
  */
-// import { captureException } from "@sentry/nextjs";
+
 import NodeCache from "node-cache";
 
 /**
@@ -54,7 +54,7 @@ export const cachedPromise =
         nodeCache.del(cacheKey);
         console.error(
           `Error in a cached promise "${cacheKey}", will flush the cache and return undefined`,
-          err,
+          err
         );
         // NOTE: if you don't use a node cache with "useClones: false" you will never be able to catch the error
         // because the promise gets cloned! Be careful to pass a "promisesNodeCache" with the right options

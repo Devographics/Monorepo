@@ -1,13 +1,17 @@
+@use "breakpoints";
+@use "typography";
+@use "variables";
+
 @use 'sass:math';
 .survey-credits {
 }
 
 .survey-credits-items {
-  column-gap: $spacing * 2;
-  row-gap: $spacing * 2;
+  column-gap: variables.$spacing * 2;
+  row-gap: variables.$spacing * 2;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  @include small {
+  @include breakpoints.small {
     grid-template-columns: repeat(1, 1fr);
   }
 }
@@ -15,7 +19,7 @@
   display: flex;
 }
 .survey-credits-item-avatar {
-  margin-right: math.div($spacing, 2);
+  margin-right: math.div(variables.$spacing, 2);
   overflow: hidden;
   border-radius: 100%;
   height: 60px;
@@ -32,21 +36,21 @@
   justify-content: center;
 }
 .survey-credits-item-name {
-  font-size: $large-font;
+  font-size: typography.$large-font;
   margin-bottom: 3px;
 }
 .survey-credits-item-company {
   margin-bottom: 0;
-  font-size: $smallish-font;
+  font-size: typography.$smallish-font;
   a {
-    font-weight: $medium;
+    font-weight: typography.$medium;
   }
 }
 .survey-credits-item-twitter {
   margin-bottom: 0;
-  font-size: $small-font;
+  font-size: typography.$small-font;
 }
 .survey-credits-item-role {
-  font-size: $small-font;
+  font-size: typography.$small-font;
   margin-bottom: 0;
 }
