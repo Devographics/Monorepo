@@ -200,6 +200,17 @@ disability_status:
         # - id: not_listed
         - id: na
 
+disability_status2:
+    options:
+        - id: visual_impairments
+        - id: hearing_impairments
+        - id: mobility_impairments
+        - id: neurodivergent_conditions
+        - id: mental_health_conditions
+        - id: chronic_illnesses
+        # - id: not_listed
+        - id: na
+
 higher_education_degree:
     options:
         - id: no_degree
