@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import FormControl from "react-bootstrap/FormControl";
 import debounce from "lodash/debounce.js";
 import { FormItem } from "~/components/form/FormItem";
 import { FormInputProps } from "~/components/form/typings";
@@ -24,8 +23,8 @@ export const FormComponentTextarea = (props: FormInputProps) => {
 
   return (
     <FormItem {...props}>
-      <FormControl
-        as="textarea"
+      <textarea
+        className="form-control"
         value={localValue}
         onChange={handleChangeDebounced}
         onBlur={handleChange}

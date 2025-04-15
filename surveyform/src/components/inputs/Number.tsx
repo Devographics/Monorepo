@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import FormControl from "react-bootstrap/FormControl";
 import { FormInputProps } from "~/components/form/typings";
 import { FormItem } from "~/components/form/FormItem";
 import debounce from "lodash/debounce.js";
 import { T } from "@devographics/react-i18n";
+import { FormFeedback } from "../form/FormFeedback";
 
 const checkIsValid = (rawValue) =>
   !isNaN(Number(rawValue)) && Number(rawValue) >= 0;
@@ -51,24 +51,26 @@ export const FormComponentNumber = (props: FormInputProps) => {
   return (
     <FormItem {...props} isInvalid={!checkIsValid(localValue)}>
       <div className="form-input-number-wrapper">
-        <FormControl
-          // type="number"
+        <input
+          // inputs of type number are not relevant in most case when field is not ordinal
+          // so we use text + relevant attributes to make sure the input is numeric
           type="text"
+          // So virtual keyboards on mobile devices default to numeric input
           inputMode="numeric"
           pattern="[0-9]*"
           value={localValue}
           onChange={handleChangeDebounced}
           onBlur={handleChange}
           disabled={readOnly}
-          className="form-input-number"
+          className="form-control form-input-number"
         />
         {units && <T token={`general.numeric_input.unit.${units}`} />}
       </div>
 
       {!checkIsValid(localValue) && (
-        <FormControl.Feedback type="invalid">
+        <FormFeedback type="invalid">
           <T token="general.numeric_input.invalid_input" />
-        </FormControl.Feedback>
+        </FormFeedback>
       )}
     </FormItem>
   );

@@ -1,14 +1,17 @@
+@use "colors";
+@use "variables";
+
 .debug-database,
 .admin-content {
-  background: $white;
-  padding: $spacing;
-  color: $text-color-inverted;
+  background: colors.$white;
+  padding: variables.$spacing;
+  color: colors.$text-color-inverted;
   h3 {
-    color: $text-color-inverted;
+    color: colors.$text-color-inverted;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: $spacing;
+    gap: variables.$spacing;
     .dropdown {
       display: inline-block;
     }

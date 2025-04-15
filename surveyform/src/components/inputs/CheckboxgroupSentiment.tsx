@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import Form from "react-bootstrap/Form";
 import without from "lodash/without.js";
 import { useI18n } from "@devographics/react-i18n";
 import { Button } from "~/components/ui/Button";
@@ -40,12 +39,12 @@ const cutoffMargin = 2;
  * @returns
  */
 export const FormComponentCheckboxGroup = (
-  props: FormInputProps<string[] | number[]>,
+  props: FormInputProps<string[] | number[]>
 ) => {
   const { value, edition, question } = props;
   const { response } = useFormStateContext();
   const hasValue = value?.length > 0;
-  const { t } = useI18n()
+  const { t } = useI18n();
   const formPaths = getFormPaths({ edition, question });
   const otherValue = response?.[formPaths.other!];
 
@@ -63,7 +62,7 @@ export const FormComponentCheckboxGroup = (
 
   if (!options_) {
     throw new Error(
-      `Question ${question.id} does not have any options defined.`,
+      `Question ${question.id} does not have any options defined.`
     );
   }
 
@@ -172,7 +171,7 @@ const Checkbox = (
     hasValue: boolean;
     hasReachedLimit: boolean;
     value: Array<string | number>;
-  },
+  }
 ) => {
   const {
     index,
@@ -239,23 +238,24 @@ const Checkbox = (
   };
 
   return (
-    <Form.Check
+    <div
       className={[
         checkClass,
+        "form-check",
         `form-option-${option.id}`,
         "form-checkbox-option",
       ].join(" ")}
     >
-      <Form.Check.Label htmlFor={`${path}.${index}`}>
+      <label className="form-check-label" htmlFor={`${path}.${index}`}>
         <div className="form-input-wrapper">
-          <Form.Check.Input
+          <input
+            className="form-check-input"
             type="checkbox"
             checked={isChecked}
             disabled={disabled}
             id={`${path}.${index}`}
             name={path}
             value={option.id}
-            // ref={refFunction}
             onChange={(event) => {
               const isChecked = event.target.checked;
               const newValue = getNewValue(isChecked);
@@ -278,8 +278,8 @@ const Checkbox = (
           value={value}
           isChecked={isChecked}
         />
-      </Form.Check.Label>
-    </Form.Check>
+      </label>
+    </div>
   );
 };
 export default FormComponentCheckboxGroup;

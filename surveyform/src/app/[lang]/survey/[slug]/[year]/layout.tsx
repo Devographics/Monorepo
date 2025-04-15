@@ -24,11 +24,12 @@ interface SurveyPageServerProps {
   year: string;
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: SurveyPageServerProps;
-}): Promise<Metadata | undefined> {
+export async function generateMetadata(
+  props: {
+    params: Promise<SurveyPageServerProps>;
+  }
+): Promise<Metadata | undefined> {
+  const params = await props.params;
   return await rscGetMetadata({ params });
 }
 
@@ -37,13 +38,18 @@ export async function generateMetadata({
  * @param param0
  * @returns
  */
-export default async function SurveyLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: { slug: string; year: string; lang: string };
-}) {
+export default async function SurveyLayout(
+  props: {
+    children: React.ReactNode;
+    params: Promise<{ slug: string; year: string; lang: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const { data: edition } = await rscMustGetSurveyEditionFromUrl(params);
   const {
     locale,

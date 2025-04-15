@@ -20,7 +20,13 @@ const Item = ({
   itemProps,
   //linkProps,
   ...rest
-}: { index: number, label?: string | React.ReactNode, component?: any, componentProps?: any, itemProps?: any }) => {
+}: {
+  index: number;
+  label?: string | React.ReactNode;
+  component?: any;
+  componentProps?: any;
+  itemProps?: any;
+}) => {
   let menuComponent;
 
   if (component) {
@@ -28,7 +34,7 @@ const Item = ({
   } else if (typeof label === "string") {
     menuComponent = <span>{label}</span>;
   } else {
-    menuComponent = label
+    menuComponent = label;
   }
 
   const item = (
@@ -36,32 +42,10 @@ const Item = ({
       {menuComponent}
     </DropdownItem>
   );
-
-  /*
-  @depreacted Instead wrap the item yourself with the relevant link
-  return to ? (
-    <LinkContainer to={to} {...linkProps}>
-      {item}
-    </LinkContainer>
-  ) : (
-    item
-  );*/
   return item;
 };
 
-/*
-Item.propTypes = {
-  index: PropTypes.number, // index
-  to: PropTypes.any, // a string or object, used to generate the router path for the menu item
-  labelId: PropTypes.string, // an i18n id for the item label
-  label: PropTypes.string, // item label string, used if id is not provided
-  component: PropTypes.object, // a component to use as menu item
-  componentProps: PropTypes.object, // props passed to the component
-  itemProps: PropTypes.object, // props for the <MenuItem/> component
-};
-*/
-/*
-
+/**
 A node contains a menu item, and optionally a list of child items
 
 */
@@ -79,13 +63,8 @@ const Node = ({ childrenItems, ...rest }: any) => {
     </>
   );
 };
-/*
-Node.propTypes = {
-  childrenItems: PropTypes.array, // an array of dropdown items used as children of the current item
-};
-*/
 
-type MenuItem = { label?: string | React.ReactNode } | "divider"
+type MenuItem = { label?: string | React.ReactNode } | "divider";
 
 export const Dropdown = ({
   label,
@@ -96,18 +75,23 @@ export const Dropdown = ({
   buttonProps,
   ...dropdownProps
 }: {
-  label: string | React.ReactNode, trigger: any, menuContents?: React.ReactNode, menuItems?: Array<MenuItem>, variant?: "dropdown" | "flat", buttonProps?: any
+  label: string | React.ReactNode;
+  trigger: any;
+  menuContents?: React.ReactNode;
+  menuItems?: Array<MenuItem>;
+  variant?: "dropdown" | "flat";
+  buttonProps?: any;
   // dropdown props
 } & DropdownProps) => {
   const menuBody = menuContents
     ? menuContents
     : (menuItems || []).map((item, index) => {
-      if (item === "divider") {
-        return <BsDropdown.Divider key={index} />;
-      } else {
-        return <Node {...item} key={index} index={index} />;
-      }
-    });
+        if (item === "divider") {
+          return <BsDropdown.Divider key={index} />;
+        } else {
+          return <Node {...item} key={index} index={index} />;
+        }
+      });
 
   if (variant === "flat") {
     return menuBody;

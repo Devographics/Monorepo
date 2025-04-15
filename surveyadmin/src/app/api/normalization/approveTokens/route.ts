@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { captureException } from "@sentry/nextjs";
 import { approveTokens } from "~/lib/normalization/actions/tokens/approveTokens";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   console.log("// approveTokens");
   try {
     // Get body data as JSON

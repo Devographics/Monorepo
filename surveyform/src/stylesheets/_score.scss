@@ -1,9 +1,12 @@
+@use "typography";
+@use "variables";
+
 .score {
-  margin-bottom: $spacing * 2;
+  margin-bottom: variables.$spacing * 2;
   text-align: center;
   border: 1px solid transparent;
 
-  @include border-radius;
+  @include variables.border-radius;
   position: relative;
   --used-color: var(--accent-color);
   --heard-color: var(--accent-color-2);
@@ -22,12 +25,12 @@
 }
 
 .score-calculation {
-  padding: $spacing * 2;
+  padding: variables.$spacing * 2;
   background: var(--bg-color);
 }
 
 .score-calcuation-heading {
-  font-size: $largest-font;
+  font-size: typography.$largest-font;
   // text-transform: uppercase;
 }
 
@@ -35,7 +38,7 @@
   // Note: Do NOT apply position to this element, it breaks the confetti
   font-size: 6rem;
   line-height: 1;
-  margin-bottom: $spacing;
+  margin-bottom: variables.$spacing;
 
   .score-suffix {
     font-size: 1rem;
@@ -45,11 +48,11 @@
 }
 
 .score-ratio {
-  font-size: $large-font;
+  font-size: typography.$large-font;
 }
 
 .score-number {
-  @include font-bold;
+  @include typography.font-bold;
   color: var(--color);
 }
 
@@ -67,8 +70,8 @@
   overflow: hidden;
 }
 .score-share {
-  @include flex-center;
-  margin-top: $spacing * 2;
+  @include variables.flex-center;
+  margin-top: variables.$spacing * 2;
 }
 
 // features
@@ -79,18 +82,18 @@
   // column-gap: $spacing;
   // row-gap: $spacing;
   // display: none;
-  margin-top: $spacing * 2;
+  margin-top: variables.$spacing * 2;
 }
 .score-features-heading {
   display: inline;
   margin-bottom: 0;
-  font-size: $smallish-font;
-  @include font-regular;
+  font-size: typography.$smallish-font;
+  @include typography.font-regular;
 }
 .score-features-items{
   display: inline;
 }
 .score-feature {
   display: inline;
-  font-size: $smallish-font;
+  font-size: typography.$smallish-font;
 }

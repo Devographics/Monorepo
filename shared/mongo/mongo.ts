@@ -66,12 +66,6 @@ export const getPublicDb = async () =>
         dbName: getEnvVar(EnvVar.MONGO_PUBLIC_DB)
     })
 
-export const getPublicDbReadOnly = async () =>
-    await getMongoDb({
-        dbUri: getEnvVar(EnvVar.MONGO_PUBLIC_URI_READONLY),
-        dbName: getEnvVar(EnvVar.MONGO_PUBLIC_DB)
-    })
-
 /*
  * Generate a new STRING id for Mongo
  * To be used when calling "insertOne"

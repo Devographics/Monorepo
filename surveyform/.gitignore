@@ -67,8 +67,6 @@ scripts/dist
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
-# Sentry
-.sentryclirc
 /test-results/
 /playwright-report/
 /blob-report/

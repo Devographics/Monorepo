@@ -1,6 +1,5 @@
 "use client";
 import { useRef, useState } from "react";
-import FormControl from "react-bootstrap/FormControl";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
@@ -146,15 +145,13 @@ export const CommentTextarea = ({
     };
 
   return (
-    <FormControl
-      as="textarea"
+    <textarea
       onChange={handleChange(true)}
       onBlur={handleChange(false)}
       value={localValue || ""}
       disabled={readOnly}
       placeholder={placeholder}
-      // ref={refFunction}
-      // {...inputProperties}
+      className="form-control"
     />
   );
 };

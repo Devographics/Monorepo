@@ -1,11 +1,11 @@
 import { NextRequest } from "next/server";
-import { getSessionFromToken, TOKEN_NAME } from "~/lib/account/session";
+import { getSessionFromToken, AUTH_TOKEN } from "~/lib/account/session";
 import { UserDocument } from "~/lib/users/typings";
 import { HandlerError } from "~/lib/handler-error";
 import { loadUser } from "~/lib/users/db-actions/load";
 
 export async function getUserIdFromReq(req: NextRequest) {
-  const token = req.cookies.get(TOKEN_NAME)?.value;
+  const token = req.cookies.get(AUTH_TOKEN)?.value;
   if (!token) return null;
   const session = await getSessionFromToken(token);
   //token as string)

@@ -5,7 +5,7 @@ import { fetchEditionMetadata } from "@devographics/fetch";
 import { EditionMetadata } from "@devographics/types";
 import { getResponseSchema } from "~/lib/responses/schema";
 import { restoreTypes, runFieldCallbacks, OnCreateProps } from "~/lib/schemas";
-import type { ResponseDocument } from "@devographics/types";
+import type { PrefilledResponse, ResponseDocument } from "@devographics/types";
 import { HandlerError } from "~/lib/handler-error";
 import { validateResponse } from "./validate";
 
@@ -16,7 +16,7 @@ export async function createResponse({
   clientData,
 }: {
   currentUser: any;
-  clientData: ResponseDocument;
+  clientData: PrefilledResponse;
 }) {
   connectToRedis();
 

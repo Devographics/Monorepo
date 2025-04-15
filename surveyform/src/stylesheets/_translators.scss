@@ -1,25 +1,29 @@
+@use "breakpoints";
+@use "typography";
+@use "variables";
+
 .translators {
   max-width: 900px;
   margin-left: auto;
   margin-right: auto;
-  padding: $spacing * 2;
-  @include border2;
-  @include border-radius;
+  padding: variables.$spacing * 2;
+  @include variables.border2;
+  @include variables.border-radius;
   &-locales {
-    @include large {
+    @include breakpoints.large {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      column-gap: $spacing;
-      row-gap: $spacing;
+      column-gap: variables.$spacing;
+      row-gap: variables.$spacing;
     }
   }
   &-locale {
-    @include small {
-      margin-bottom: $spacing/2;
+    @include breakpoints.small {
+      margin-bottom: variables.$spacing-half;
     }
   }
   &-locale-heading {
-    font-size: $smallish-font;
+    font-size: typography.$smallish-font;
     // margin-bottom: math.div($spacing,4);
     display: inline;
     &::after {
@@ -30,12 +34,12 @@
     display: inline;
   }
   &-locale-translator {
-    font-size: $smallish-font;
+    font-size: typography.$smallish-font;
   }
 }
 
 .translators-help {
   text-align: center;
-  margin-top: $spacing * 2;
-  font-size: $medium-font;
+  margin-top: variables.$spacing * 2;
+  font-size: typography.$medium-font;
 }

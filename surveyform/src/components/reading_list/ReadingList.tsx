@@ -27,7 +27,7 @@ const useHasChanged = (val: any) => {
 };
 
 const usePrevious = (value) => {
-  const ref = useRef();
+  const ref = useRef(undefined);
   useEffect(() => {
     ref.current = value;
   });

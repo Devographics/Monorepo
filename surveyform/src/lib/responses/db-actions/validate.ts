@@ -1,4 +1,4 @@
-import type { ResponseDocument } from "@devographics/types";
+import type { PrefilledResponse, ResponseDocument } from "@devographics/types";
 import {
   EditionMetadata,
   SurveyMetadata,
@@ -23,7 +23,7 @@ export const validateResponse = ({
   currentUser: UserDocument;
   existingResponse?: ResponseDocument;
   updatedResponse?: ResponseDocument;
-  clientData: ResponseDocument;
+  clientData: ResponseDocument | PrefilledResponse;
   serverData: ResponseDocument;
   survey: SurveyMetadata;
   edition: EditionMetadata;

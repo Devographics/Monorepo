@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { captureException } from "@sentry/nextjs";
 import { removeCustomTokens } from "~/lib/normalization/actions";
 
-
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   try {
     // Get body data as JSON
     let body: any;

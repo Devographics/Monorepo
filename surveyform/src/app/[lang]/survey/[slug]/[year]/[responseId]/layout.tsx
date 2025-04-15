@@ -14,7 +14,7 @@ export default WithErrorCatcher(async function ResponseLayout({
   children,
   params,
 }: NextLayoutParams<{ slug: string; year: string; responseId: string }>) {
-  const { slug, year, responseId } = params;
+  const { slug, year, responseId } = await params;
   /** NOTE:
    * user checks in the layouts are NOT security mechanism
    * the static pages under a layout can still be accessible

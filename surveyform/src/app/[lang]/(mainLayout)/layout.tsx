@@ -20,11 +20,10 @@ interface PageServerProps {
   lang: string;
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: PageServerProps;
+export async function generateMetadata(props: {
+  params: Promise<PageServerProps>;
 }): Promise<Metadata> {
+  const params = await props.params;
   const { t, error } = await rscTeapot({ localeId: params.lang });
   if (error) return defaultMetadata;
   const title = t("general.title");
@@ -39,11 +38,11 @@ export async function generateMetadata({
  * so it will treat the file as the [lang] parameter, erroneously
  * so lang = "/apple-touch-icon.png" for instance
  * We need to catch this scenario in the layout
- * @param params 
+ * @param params
  */
 function ignoreNotFoundFile(params) {
   if (params.lang.includes(".")) {
-    notFound()
+    notFound();
   }
 }
 
@@ -54,17 +53,18 @@ function ignoreNotFoundFile(params) {
  * - Dropdown too
  */
 
-export default async function RootLayout({
-  children,
-  params,
-}: {
+export default async function RootLayout(props: {
   children: React.ReactNode;
-  params: {
+  params: Promise<{
     lang: string;
-  };
+  }>;
 }) {
-  ignoreNotFoundFile(params)
-  const { locale, localeId, error } = await rscLocaleFromParams({
+  const params = await props.params;
+
+  const { children } = props;
+
+  ignoreNotFoundFile(params);
+  const { locale, error } = await rscLocaleFromParams({
     ...params,
     contexts: getCommonContexts(),
   });
@@ -74,11 +74,7 @@ export default async function RootLayout({
     return <div>{JSON.stringify(error, null, 2)}</div>;
   }
   return (
-    <ClientLayout
-      params={params}
-      locales={locales}
-      localeStrings={locale}
-    >
+    <ClientLayout params={params} locales={locales} localeStrings={locale}>
       {/*<DebugRSC
         {...{ ___rscLocale_CommonContexts, ___rscAllLocalesMetadata }}
   />*/}

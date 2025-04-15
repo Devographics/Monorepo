@@ -1,9 +1,9 @@
 "use client";
 import { useI18n } from "@devographics/react-i18n";
 import type { FormInputProps } from "~/components/form/typings";
-import Form from "react-bootstrap/Form";
 import { FormItem } from "~/components/form/FormItem";
 import { getOptioni18nIds } from "~/lib/i18n/survey";
+import { FormSelect } from "../form/FormSelect";
 
 export const FormComponentSelect = (props: FormInputProps) => {
   const {
@@ -28,11 +28,9 @@ export const FormComponentSelect = (props: FormInputProps) => {
   const allOptions = [noneOption, ...otherOptions];
   return (
     <FormItem {...props}>
-      <Form.Select
-        // ref={refFunction}
-        // defaultValue={emptyValue}
+      <FormSelect
         onChange={(e) => {
-          updateCurrentValues({ [path]: e.target.value });
+          updateCurrentValues({ [path]: e.currentTarget.value });
         }}
         disabled={readOnly}
         value={value ? value.toString() : emptyValue}
@@ -43,16 +41,14 @@ export const FormComponentSelect = (props: FormInputProps) => {
             question,
             option,
           });
-          const optionLabel =
-            label ||
-            t(i18n.base);
+          const optionLabel = label || t(i18n.base);
           return (
             <option key={id} value={id}>
               {optionLabel}
             </option>
           );
         })}
-      </Form.Select>
+      </FormSelect>
     </FormItem>
   );
 };

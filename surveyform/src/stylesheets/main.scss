@@ -1,44 +1,46 @@
 // Import State of js styles
-@import "_bootstrap.scss";
+@use "_bootstrap.scss";
 
-@import "_colors.scss";
-@import "_variables.scss";
-@import "_breakpoints.scss";
-@import "_typography.scss";
-@import "_icons.scss";
+@use "_colors.scss";
+@use "_variables.scss";
+@use "_breakpoints.scss";
+@use "_typography.scss";
+@use "_icons.scss";
 
-@import "_overrides.scss";
-@import "_forms.scss";
-@import "_buttons.scss";
-@import "_datatable.scss";
+@use "_overrides.scss";
+@use "_forms.scss";
+@use "_buttons.scss";
+@use "_datatable.scss";
 // @import "_spinner.scss";
-@import "_loader.scss";
-@import "_share.scss";
+@use "_loader.scss";
+@use "_share.scss";
 
-@import "_global.scss";
-@import "_layout.scss";
-@import "_header.scss";
+@use "_global.scss";
+@use "_layout.scss";
+@use "_header.scss";
 
-@import "_banner.scss";
-@import "_survey_page.scss";
-@import "_surveys.scss";
-@import "_surveys_nav.scss";
-@import "_reading_list.scss";
-@import "_accounts.scss";
-@import "_score.scss";
-@import "_brackets.scss";
-@import "_credits.scss";
-@import "_entities.scss";
-@import "_translators.scss";
-@import "_faq.scss";
-@import "_admin.scss";
-@import "_support.scss";
-@import "_rtl_support.scss";
-@import "_hljs.scss";
+@use "_banner.scss";
+@use "_survey_page.scss";
+@use "_surveys.scss";
+@use "_surveys_nav.scss";
+@use "_reading_list.scss";
+@use "_accounts.scss";
+@use "_score.scss";
+@use "_brackets.scss";
+@use "_credits.scss";
+@use "_entities.scss";
+@use "_translators.scss";
+@use "_faq.scss";
+@use "_admin.scss";
+@use "_support.scss";
+@use "_rtl_support.scss";
+@use "_hljs.scss";
 
-@import "_feature_v3.scss";
+@use "_feature_v3.scss";
 
-@import "_survey_overrides.scss";
+@use "_survey_overrides.scss";
 
 /* A quick light mode for a11y */
-@import "_lightmode.scss";
+@use "_lightmode.scss";
+
+@use "_defaulterror.scss";

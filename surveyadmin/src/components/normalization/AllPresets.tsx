@@ -7,15 +7,9 @@ import {
   NormalizationToken,
 } from "@devographics/types";
 import { Dispatch, SetStateAction, useState } from "react";
-import trim from "lodash/trim";
-import without from "lodash/without";
-import { useLocalStorage } from "../hooks";
-import { addCustomTokens } from "~/lib/normalization/services";
 import { NormalizeInBulkResult } from "~/lib/normalization/types";
-import { NormalizationResult } from "./NormalizationResult";
 import { FieldValue } from "./FieldValue";
-import { EntityList, getAddEntityUrl, getEditEntityUrl } from "./EntityInput";
-import type { CustomNormalization } from "./NormalizeQuestion";
+import { EntityList } from "./EntityInput";
 import { usePresets } from "./hooks";
 import { useCustomNormalizationMutation } from "./NormTokenAction";
 import { addCustomTokensAction } from "./tokenActions";

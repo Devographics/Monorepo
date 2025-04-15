@@ -1,4 +1,4 @@
-import { PrefilledData } from "~/components/page/hooks";
+import type { PrefilledResponse } from "@devographics/types";
 import { apiRoutes } from "~/lib/apiRoutes";
 /**
  * Sends the token from the magic link in order to finalize magic login.
@@ -11,21 +11,21 @@ export async function verifyMagicToken({
 }: {
   token: string;
   /**
-   * If it contains a surveyId and editionId, 
+   * If it contains a surveyId and editionId,
    * we will try to create a response for the user
    * unless user already has a response for this survey
    */
-  clientData?: PrefilledData;
+  clientData?: PrefilledResponse;
 }) {
-  const createResponse = clientData?.surveyId && clientData?.editionId
+  const createResponse = clientData?.surveyId && clientData?.editionId;
   const url = createResponse
     ? apiRoutes.account.magicLogin.verifyTokenAndFindCreateResponse.href({
-      token,
-      ...clientData,
-    })
+        token,
+        ...clientData,
+      })
     : apiRoutes.account.magicLogin.verifyToken.href({
-      token,
-    });
+        token,
+      });
 
   // TODO: would be nice to use POST instead of GET here but passport
   // does not seem to accept POST?

@@ -1,3 +1,7 @@
+@use "breakpoints";
+@use "typography";
+@use "variables";
+
 /*
 
 These styles will only be active for specific surveys and/or editions
@@ -42,14 +46,14 @@ These styles will only be active for specific surveys and/or editions
   }
   .header {
     background-image: linear-gradient(to right, var(--tw-gradient-stops));
-    padding: $spacing/1.5;
+    padding: variables.$spacing-two-thirds;
   }
   .nav-wrapper {
     background: var(--bg-color-dark);
     border-radius: 0.375rem;
     border: 0;
-    padding: $spacing $spacing;
-    margin-bottom: -$spacing;
+    padding: variables.$spacing variables.$spacing;
+    margin-bottom: -(variables.$spacing);
   }
   // h1,
   // h2,
@@ -64,7 +68,7 @@ These styles will only be active for specific surveys and/or editions
   .tokyodev-info {
     max-width: 800px;
     margin: 0 auto;
-    margin-bottom: $spacing * 2;
+    margin-bottom: variables.$spacing * 2;
     // background-image: repeating-radial-gradient(
     //     circle at 0px 0px,
     //     transparent 0px,
@@ -72,14 +76,14 @@ These styles will only be active for specific surveys and/or editions
     //   ),
     //   repeating-linear-gradient(rgba(8, 34, 54, 0.333), rgb(8, 34, 54));
     background-image: linear-gradient(to right, var(--tw-gradient-stops));
-    padding: $spacing/2;
+    padding: variables.$spacing-half;
     .tokyodev-info-inner {
       background: rgb(3, 13, 31);
-      padding: $spacing;
-      @include medium-large {
+      padding: variables.$spacing;
+      @include breakpoints.medium-large {
         display: grid;
         grid-template-columns: 150px 1fr;
-        column-gap: $spacing * 2;
+        column-gap: variables.$spacing * 2;
       }
     }
     .tokyodev-info-founder {
@@ -89,8 +93,8 @@ These styles will only be active for specific surveys and/or editions
         border-radius: 100%;
       }
       h5 {
-        font-size: $smallish-font;
-        margin-top: $spacing/2;
+        font-size: typography.$smallish-font;
+        margin-top: variables.$spacing-half;
         text-align: center;
         line-height: 1.5;
       }

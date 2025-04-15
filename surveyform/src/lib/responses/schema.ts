@@ -9,7 +9,7 @@ import { Schema, extendSchema } from "~/lib/schemas";
 import { nanoid } from "nanoid";
 import { getCompletionPercentage, getKnowledgeScore } from "./helpers";
 import { getFormPaths } from "@devographics/templates";
-// import { captureException } from "@sentry/nextjs";
+
 import { serverConfig } from "~/config/server";
 
 export enum Actions {

@@ -1,3 +1,6 @@
+@use "colors";
+@use "variables";
+
 @use "sass:math";
 $root-size-mobile: 15px;
 $root-size: 17px;
@@ -56,7 +59,7 @@ $bold: 600;
 pre,
 code {
   @include monospace;
-  color: $text-color;
+  color: colors.$text-color;
 }
 
 strong {
@@ -67,22 +70,22 @@ strong {
   float: left;
   display: block;
   font-size: 6rem;
-  margin-right: math.div($spacing, 2);
+  margin-right: math.div(variables.$spacing, 2);
   line-height: 1;
 }
 
 .section-questions {
   code {
-    background: $bg-color-light;
+    background: colors.$bg-color-light;
     color: var(--text-color) !important;
     // background: #F3F4F4;
     // color: #24292e;
     padding: .15em .5em;
     @include font-regular;
-    @include border-radius;
+    @include variables.border-radius;
   }
   pre {
-    background: $bg-color-light;
+    background: colors.$bg-color-light;
     code {
       background: none;
       padding: 0;

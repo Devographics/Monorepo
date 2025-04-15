@@ -7,11 +7,12 @@ import {
 } from "@devographics/fetch";
 import { AdminExportPage } from "./components";
 
-const AdminExportPageWithSurveys = async ({
-  searchParams,
-}: {
-  searchParams: { surveyId: string; editionId: string };
-}) => {
+const AdminExportPageWithSurveys = async (
+  props: {
+    searchParams: Promise<{ surveyId: string; editionId: string }>;
+  }
+) => {
+  const searchParams = await props.searchParams;
   // TODO: fetch survey data using shared code
   const res = await fetchSurveysMetadata({
     calledFrom: "surveyadmin",

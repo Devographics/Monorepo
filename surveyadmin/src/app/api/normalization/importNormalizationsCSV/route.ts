@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { captureException } from "@sentry/nextjs";
 import { importNormalizationsCSV } from "~/lib/normalization/actions";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   try {
     let body: any;
     try {

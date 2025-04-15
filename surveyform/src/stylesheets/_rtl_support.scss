@@ -1,3 +1,5 @@
+@use "variables";
+
 @use 'sass:math';
 html.rtl {
   direction: rtl;
@@ -5,7 +7,7 @@ html.rtl {
 
   .survey-section {
     .form-check-input {
-      margin: 0px 0 0 math.div($spacing, 1.5) !important;
+      margin: 0px 0 0 math.div(variables.$spacing, 1.5) !important;
     }
   }
 }

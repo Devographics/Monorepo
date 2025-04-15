@@ -1,3 +1,8 @@
+@use "breakpoints";
+@use "colors";
+@use "typography";
+@use "variables";
+
 @use "sass:math";
 :focus:not(:focus-visible) {
   outline: none;
@@ -14,28 +19,28 @@ html {
 }
 
 ::selection {
-  background: $text-color;
+  background: colors.$text-color;
   background: var(--text-color);
-  color: $bg-color;
+  color: colors.$bg-color;
   color: var(--bg-color);
 }
 
 body {
-  background: $bg-color;
+  background: colors.$bg-color;
   background: var(--bg-color);
-  color: $text-color;
+  color: colors.$text-color;
   color: var(--text-color);
   padding: 0;
   font-feature-settings: "liga" 0;
   line-height: 1.7;
 
   // background: linear-gradient(180deg, rgb(30, 32, 32) 0%, rgb(55, 58, 58) 100%) fixed;
-  @include primary-font;
-  @include small {
-    font-size: $root-size-mobile;
+  @include typography.primary-font;
+  @include breakpoints.small {
+    font-size: typography.$root-size-mobile;
   }
-  @include large {
-    font-size: $root-size;
+  @include breakpoints.large {
+    font-size: typography.$root-size;
     // border: 10px solid $active-color;
     // padding: 10px;
     min-height: 100vh;
@@ -48,38 +53,38 @@ h3,
 h4,
 h5,
 h6 {
-  @include secondary-font;
-  margin: 0 0 $spacing 0;
+  @include typography.secondary-font;
+  margin: 0 0 variables.$spacing 0;
 }
 
 p,
 ul,
 ol {
-  margin: 0 0 $spacing 0;
-  @include small {
+  margin: 0 0 variables.$spacing 0;
+  @include breakpoints.small {
     line-height: 1.6;
   }
-  @include medium-large {
+  @include breakpoints.medium-large {
     line-height: 1.8;
   }
 }
 
 a {
   text-decoration: none;
-  @include font-bold;
+  @include typography.font-bold;
   // transition: all ease-in 300ms;
   &,
   &:link,
   &:visited,
   &:active,
   &:focus {
-    color: $link-color;
+    color: colors.$link-color;
     color: var(--link-color);
   }
   &:hover {
     text-decoration: underline;
     position: relative;
-    color: $hover-color;
+    color: colors.$hover-color;
     color: var(--hover-color);
   }
   &.button,
@@ -113,7 +118,7 @@ a {
 .conclusion__byline {
   text-align: right;
   display: block;
-  @include font-bold;
+  @include typography.font-bold;
 }
 
 // .note {
@@ -128,20 +133,20 @@ Page-specific styles
 .PageLayout--introduction {
   .block__content {
     p:first-child {
-      @include medium-large {
-        font-size: $larger-font;
+      @include breakpoints.medium-large {
+        font-size: typography.$larger-font;
       }
     }
   }
 }
 
 .desktop {
-  @include small {
+  @include breakpoints.small {
     display: none;
   }
 }
 .mobile {
-  @include medium-large {
+  @include breakpoints.medium-large {
     display: none;
   }
 }
@@ -154,22 +159,22 @@ Page-specific styles
 
 .main-logo-wrapper {
   max-width: 500px;
-  margin: 0 auto $spacing * 2 auto;
+  margin: 0 auto variables.$spacing * 2 auto;
 }
 
 .main-contents,
 .header {
   flex: 1 0 auto;
-  padding: $spacing;
+  padding: variables.$spacing;
 
-  @include small {
-    padding: math.div($spacing, 2);
+  @include breakpoints.small {
+    padding: math.div(variables.$spacing, 2);
   }
-  @include medium {
-    padding: $spacing;
+  @include breakpoints.medium {
+    padding: variables.$spacing;
   }
-  @include large {
-    padding: $spacing $spacing * 2;
+  @include breakpoints.large {
+    padding: variables.$spacing variables.$spacing * 2;
   }
 }
 
@@ -187,26 +192,26 @@ Page-specific styles
 .modal-content {
   &,
   .btn {
-    color: $text-color-inverted;
+    color: colors.$text-color-inverted;
   }
 }
 
 .message {
-  background: $bg-color-light;
-  padding: $spacing;
-  margin-bottom: $spacing;
+  background: colors.$bg-color-light;
+  padding: variables.$spacing;
+  margin-bottom: variables.$spacing;
 }
 
 .footer {
   text-align: center;
-  margin: $spacing * 2 $spacing 0 $spacing;
-  border-top: $border;
-  font-size: $smallish-font;
-  padding: $spacing;
+  margin: variables.$spacing * 2 variables.$spacing 0 variables.$spacing;
+  border-top: variables.$border;
+  font-size: typography.$smallish-font;
+  padding: variables.$spacing;
 }
 .footer-top {
   display: flex;
-  gap: $spacing;
+  gap: variables.$spacing;
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -223,17 +228,17 @@ Page-specific styles
   }
 }
 .footer-bottom {
-  margin-top: $spacing;
+  margin-top: variables.$spacing;
 }
 .debug-message {
   text-align: left;
-  padding: $spacing;
-  @include border;
+  padding: variables.$spacing;
+  @include variables.border;
 }
 .survey-section {
   pre,
   code {
-    color: $text-color;
+    color: colors.$text-color;
   }
 }
 
@@ -243,8 +248,8 @@ Page-specific styles
   left: 0;
   bottom: 0;
   right: 0;
-  @include flex-center;
-  background: white(0.3);
+  @include variables.flex-center;
+  background: variables.white(0.3);
   z-index: 1000;
   backdrop-filter: blur(5px);
 }
@@ -252,10 +257,10 @@ Page-specific styles
 .t-modkeydown {
   &.t-fallback,
   &.t-missing {
-    text-shadow: 0px 2px 5px rgba($green, 0.6);
+    text-shadow: 0px 2px 5px rgba(colors.$green, 0.6);
     &:hover {
       cursor: pointer;
-      text-shadow: 0px 2px 5px rgba($pink, 0.6);
+      text-shadow: 0px 2px 5px rgba(colors.$pink, 0.6);
     }
   }
 }
@@ -295,7 +300,7 @@ Page-specific styles
 .tooltip-inner {
   background: rgba(0, 0, 0, 0.8);
   border-radius: 3px;
-  @include primary-font;
+  @include typography.primary-font;
   padding: 8px 14px;
 }
 

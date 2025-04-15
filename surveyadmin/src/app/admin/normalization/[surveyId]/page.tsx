@@ -3,7 +3,8 @@ import Breadcrumbs from "~/components/normalization/Breadcrumbs";
 import { fetchSurveysMetadata } from "@devographics/fetch";
 import { routes } from "~/lib/routes";
 
-export default async function Page({ params }) {
+export default async function Page(props) {
+  const params = await props.params;
   const { surveyId } = params;
   const { data: surveys } = await fetchSurveysMetadata({
     addCredits: false,
