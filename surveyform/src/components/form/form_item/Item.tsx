@@ -37,7 +37,7 @@ export interface FormItemProps extends FormInputProps {
 }
 
 export const FormItem = function FormItem(
-  props: { ref: RefObject<HTMLDivElement> } & FormItemProps
+  props: { ref?: RefObject<HTMLDivElement | null> } & FormItemProps
 ) {
   // TODO: using response here makes the component rerender for nothing
   // TODO: depending on stateStuff forces component to rerender systematically
