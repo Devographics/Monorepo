@@ -5,7 +5,8 @@ interface Params {
   surveyId: string;
   editionId: string;
 }
-export default async function Page({ params }: { params: Params }) {
+export default async function Page(props: { params: Promise<Params> }) {
+  const params = await props.params;
   const { surveyId, editionId } = params;
   const result = await fetchEditionMetadata({
     surveyId,

@@ -10,21 +10,27 @@ interface SurveySectionParams {
   sectionNumber: string;
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: SurveySectionParams;
-}): Promise<Metadata | undefined> {
+export async function generateMetadata(
+  props: {
+    params: Promise<SurveySectionParams>;
+  }
+): Promise<Metadata | undefined> {
+  const params = await props.params;
   return await rscGetMetadata({ params });
 }
 
-export default async function WithSectionLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: SurveySectionParams;
-}) {
+export default async function WithSectionLayout(
+  props: {
+    children: React.ReactNode;
+    params: Promise<SurveySectionParams>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const edition = await rscGetSurveyEditionFromUrl(params);
 
   if (!edition) {

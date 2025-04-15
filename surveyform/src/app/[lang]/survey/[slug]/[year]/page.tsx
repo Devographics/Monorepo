@@ -79,11 +79,12 @@ const EditionPageComponent = ({
   );
 };
 
-export default async function SurveyPage({
-  params,
-}: {
-  params: SurveyPageServerProps;
-}) {
+export default async function SurveyPage(
+  props: {
+    params: Promise<SurveyPageServerProps>;
+  }
+) {
+  const params = await props.params;
   const { slug, year } = params;
   const { data: edition, ___metadata: ___rscMustGetSurveyEditionFromUrl } =
     await rscMustGetSurveyEditionFromUrl({

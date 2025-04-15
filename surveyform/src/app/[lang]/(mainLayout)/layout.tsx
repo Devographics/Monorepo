@@ -20,11 +20,12 @@ interface PageServerProps {
   lang: string;
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: PageServerProps;
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<PageServerProps>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const { t, error } = await rscTeapot({ localeId: params.lang });
   if (error) return defaultMetadata;
   const title = t("general.title");
@@ -54,15 +55,20 @@ function ignoreNotFoundFile(params) {
  * - Dropdown too
  */
 
-export default async function RootLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: {
-    lang: string;
-  };
-}) {
+export default async function RootLayout(
+  props: {
+    children: React.ReactNode;
+    params: Promise<{
+      lang: string;
+    }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   ignoreNotFoundFile(params)
   const { locale, localeId, error } = await rscLocaleFromParams({
     ...params,

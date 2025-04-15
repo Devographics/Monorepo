@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
-const SurveyFromResponseIdPage = ({ params }) => {
+const SurveyFromResponseIdPage = async props => {
+  const params = await props.params;
   // TODO: not sure if relative redirect is ok
   //redirect("./1");
   const { lang, slug, year, responseId } = params;
