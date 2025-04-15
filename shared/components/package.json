@@ -1,0 +1,26 @@
+{
+    "name": "@devographics/components",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",
+    "exports": {
+        ".": "./index.ts"
+    },
+    "types": "./index.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@devographics/types": "workspace:*",
+        "@radix-ui/react-tooltip": "^1.0.2",
+        "react": "^19.1.0",
+        "styled-components": "^5.3.11"
+    },
+    "devDependencies": {
+        "@types/node": "^18.11.18",
+        "@types/react": "^19.1.1",
+        "@types/styled-components": "^5.1.26"
+    }
+}
