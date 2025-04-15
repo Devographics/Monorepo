@@ -20,7 +20,7 @@ export const CommentTrigger = ({
   const isActive = showCommentInput || !!value;
   const { t } = useI18n();
   const target = useRef(null);
-  const foo = 123;
+  const foo = 456;
   return (
     <div className="comment-trigger-wrapper">
       <OverlayTrigger
