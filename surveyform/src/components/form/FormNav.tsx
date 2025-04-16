@@ -52,9 +52,9 @@ const FormNav = (props: FormLayoutProps) => {
           /*throw new Error(
             `currentFocusIndex was not null, but currentTabindex was null during keypress`
           );*/
-          console.error(
-            `currentFocusIndex was not null, but currentTabindex was null during keypress`
-          );
+          // console.error(
+          //   `currentFocusIndex was not null, but currentTabindex was null during keypress`
+          // );
           return;
         }
         if (e.key === "ArrowUp") {
@@ -85,8 +85,9 @@ const FormNav = (props: FormLayoutProps) => {
 
   return (
     <nav
-      className={`section-nav ${shown ? "section-nav-shown" : "section-nav-hidden"
-        }`}
+      className={`section-nav ${
+        shown ? "section-nav-shown" : "section-nav-hidden"
+      }`}
       style={style}
       aria-label={`${edition.survey.name} ${edition.year}`}
     >

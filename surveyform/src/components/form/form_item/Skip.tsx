@@ -37,6 +37,7 @@ export const SkipButton = ({
         <Button
           size="sm"
           onClick={(e) => {
+            e.preventDefault();
             toggleSkipped();
           }}
         >

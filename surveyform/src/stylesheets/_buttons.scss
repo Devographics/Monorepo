@@ -8,7 +8,7 @@
   // This selector was there to gain specificity? It doesn't work anymore
   // &:not(:disabled):not(.disabled),
   // &:not(:disabled):not(.disabled).active,
-  &.btn-default, // replaced the "disabled" non-working to gain specificity
+  &,&.btn-default, // replaced the "disabled" non-working to gain specificity
   &.active,
   &.btn-primary,
   &-primary.disabled,
@@ -34,8 +34,7 @@
     &,
     &:link,
     &:visited {
-      color: colors.$text-color;
-      color: var(--text-color);
+      color: var(--textColor);
       text-decoration: none;
     }
 
