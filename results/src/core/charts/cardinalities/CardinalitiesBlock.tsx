@@ -61,7 +61,7 @@ export const CardinalitiesBlock = (props: CardinalitiesBlockProps) => {
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>
                 </pre> */}
-                <ChartControls right={<ViewSwitcher chartState={chartState} />} />
+                {/* <ChartControls right={<ViewSwitcher chartState={chartState} />} /> */}
                 {useBackToBackSeriesView ? (
                     <BackToBack
                         component={CardinalitiesSerie}
