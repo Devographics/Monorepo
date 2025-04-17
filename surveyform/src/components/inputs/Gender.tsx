@@ -14,7 +14,11 @@ export const Gender = (props: FormInputProps<string>) => {
       {value === "female" && (
         <div className="snowball-sampling-note">
           <T token="user_info.gender.snowball_sampling" />
-          <input type="text" value={snowballLink} onFocus={handleFocus} />
+          <input
+            type="text"
+            defaultValue={snowballLink}
+            onFocus={handleFocus}
+          />
         </div>
       )}
     </div>

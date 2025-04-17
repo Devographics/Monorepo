@@ -81,6 +81,7 @@ export const Email2 = (props: FormInputProps) => {
             onChange={handleChangeDebounced}
             onBlur={handleChange}
             disabled={disabled}
+            className="form-control"
           />
         </div>
       )}
