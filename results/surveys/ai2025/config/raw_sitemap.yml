@@ -473,10 +473,12 @@
       - template: page_introduction
 
       - id: newsletters
+        questionKey: resources.ai_newsletters.question
         template: multiple_options2_freeform
         parameters: { limit: 20, cutoff: 5 }
 
       - id: podcasts
+        questionKey: resources.ai_podcasts.question
         template: multiple_options2_freeform
         parameters: { limit: 20, cutoff: 5 }
 
@@ -486,11 +488,13 @@
       #       url: https://docs.expo.dev/router/introduction/
 
       - id: video_creators
+        questionKey: resources.ai_video_creators.question
         template: multiple_options2_freeform
         parameters: { limit: 40, cutoff: 5 }
         chartOptions: { limit: 20 }
 
       - id: people
+        questionKey: resources.ai_people.question
         template: multiple_options2_freeform
         parameters: { limit: 40, cutoff: 5 }
         chartOptions: { limit: 20 }
