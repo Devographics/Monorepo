@@ -58,7 +58,7 @@ export type PermissionChecker = (
 export type PermissionDefinition = PermissionGroupString | PermissionChecker
 
 /**
- * If a function is ommited,
+ * If a function is omitted,
  * only admin/server-side calls can read, set or update the value
  * 
  */
