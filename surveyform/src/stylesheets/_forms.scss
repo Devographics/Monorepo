@@ -29,7 +29,7 @@
     }
     @include breakpoints.large {
       @include variables.border;
-      padding: variables.$spacing variables.$spacing variables.$spacing
+      padding: variables.$spacing variables.$spacing variables.$spacing * 2
         variables.$spacing;
       &.form-item-skipped {
         padding: variables.$spacing;
@@ -734,6 +734,11 @@
     align-items: center;
     gap: 5px;
     font-size: 0.8rem;
+    padding: 5px 8px;
+
+    .form-item-skipped & {
+      border-color: var(--darker-border-color);
+    }
   }
   .icon-wrapper svg {
     height: 18px;
