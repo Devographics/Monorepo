@@ -19,7 +19,6 @@ export const BackToBack = ({
     component?: React.ReactNode
 } & CommonProps<HorizontalBarChartState>) => {
     const Component = component_ ?? HorizontalBarSerie
-    console.log(commonProps)
     return (
         <div className="back-to-back-wrapper">
             <div className="back-to-back-serie back-to-back-serie-1 serie-reversed">
