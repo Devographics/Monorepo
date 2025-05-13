@@ -1,0 +1,10 @@
+translationContexts: [homepage, common, results, countries, state_of_devs, devs2025]
+
+baseUrl: http://localhost:8001
+# baseUrl: http://localhost:9000
+sitemap: ../../../.logs/flat_sitemap.yml
+# bannerId: general.ai2025.devs2025_banner
+# bannerLink: https://survey.devographics.com/en-US/survey/state-of-devs/2025?source=ai2025_banner
+# bannerBg: '#242B21'
+# bannerText: '#E6FFD5'
+# bannerButton: '#8CC672'

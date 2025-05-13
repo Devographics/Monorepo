@@ -1,0 +1,581 @@
+- id: introduction
+  path: /
+  showTitle: false
+  blocks:
+      # - id: survey_livestream
+      #   blockType: LivestreamBlock
+      #   disableExport: true
+      #   wrapBlock: false
+      - id: survey_intro
+        blockType: SurveyIntroBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_credits
+        template: credits
+      - id: survey_newsletter
+        blockType: NewsletterBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_sponsors
+        template: sponsors
+      - id: survey_partners
+        template: sponsors
+        blockType: PartnersBlock
+      - id: survey_translators
+        blockType: TranslatorsBlock
+        disableExport: true
+        wrapBlock: false
+
+# - id: tshirt
+#   path: /tshirt
+#   showTitle: false
+#   blocks:
+#       - id: tshirt_intro
+#         template: page_introduction
+#       - id: tshirt_block
+#         blockType: TshirtBlock
+#         wrapBlock: false
+#         disableExport: true
+
+# - id: data_explorer
+#   titleId: sections.data_explorer.title
+#   path: /explorer
+#   blocks:
+#       - template: page_introduction
+
+#       - id: data_explorer
+#         showTitle: false
+#         chartOnly: true
+#         wrapBlock: false
+#         template: data_explorer
+#         parameters: { showNoAnswer: true }
+#         variables:
+#             xAxis: user_info__yearly_salary
+#             yAxis: user_info__years_of_experience
+
+- id: user_info
+  titleId: sections.demographics.title
+  path: /demographics
+  blocks:
+      - template: page_introduction
+
+      - id: country
+        template: multiple_options2
+        parameters: { limit: 40 }
+        chartOptions:
+            limit: 20
+        queryOptions:
+            addBucketsEntities: false
+        variants:
+            - template: vs_salary
+              parameters: { limit: 40, sort: { property: medianByFacet, order: desc } }
+              chartOptions:
+                  limit: 20
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
+
+      - id: hint_hint
+        template: hint
+
+      - id: variants_hint
+        template: hint
+
+      - id: gender
+        template: multiple_options2
+        # takeaway: >
+        #     Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
+            - id: country_vs_gender
+              fieldId: country
+              tabId: tabs.by_country
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+                  limit: 20
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+
+      - id: race_ethnicity
+        template: multiple_options2_combined
+        takeaway: >
+            The survey's non-white population tended to be younger and have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
+            - template: vs_gender
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+            - template: vs_years_of_experience
+              parameters:
+                  sort: { property: medianByFacet }
+              filtersState:
+                  facet:
+                      sectionId: career
+                      id: years_of_experience
+            - template: vs_age
+              parameters:
+                  sort: { property: medianByFacet }
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: age
+
+- id: career
+  path: /career
+  blocks:
+      - id: years_of_experience
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
+            - template: vs_gender
+
+      - id: higher_education_degree
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
+
+      - id: how_many_jobs
+        template: multiple_options2
+
+      - id: employment_status
+        template: multiple_options2_combined
+
+      - id: career_issues
+        template: multiple_options2_combined
+
+      - id: discrimination_issues
+        template: multiple_options2_combined
+
+      - id: negative_impacts
+        template: multiple_options2_combined
+
+      - id: laid_off
+        template: single_option2
+
+- id: workplace
+  path: /workplace
+  blocks:
+      - id: company_size
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
+
+      - id: job_title
+        template: multiple_options2_freeform
+        variants:
+            - template: vs_salary
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
+            - template: vs_age
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet, order: asc }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: age
+            - template: vs_years_of_experience
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet, order: asc }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+              filtersState:
+                  facet:
+                      sectionId: career
+                      id: years_of_experience
+            - template: vs_gender
+              parameters:
+                  limit: 20
+                  cutoff: 100
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+      - id: yearly_salary
+        template: multiple_options2
+        variants:
+            - id: yearly_salary_us_vs_world
+              fieldId: yearly_salary
+              tabId: tabs.usa_vs_the_world
+              blockType: HorizontalBarBlock2
+              hasData: true
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: in
+                              value: [USA]
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value: [USA]
+
+      - id: income_evolution
+        template: single_option2
+
+      - id: job_finding_application_count
+        template: single_option2
+
+      - id: job_finding_methods
+        template: multiple_options2_combined
+
+      - id: remote_work_policy
+        template: single_option2
+
+      - id: work_hours_per_week
+        template: single_option2
+
+      - id: job_happiness
+        template: single_option2
+
+      - id: workplace_perks
+        template: multiple_options2_combined
+
+      - id: workplace_difficulties
+        template: multiple_options2_combined
+
+- id: technology
+  path: /technology
+  blocks:
+      - id: mobile_os
+        template: single_option2_combined
+
+      - id: desktop_os
+        template: single_option2_combined
+
+      - id: programming_languages
+        template: multiple_options2_combined
+
+      - id: productivity_apps
+        template: multiple_options2_combined
+
+      - id: chat_apps
+        template: multiple_options2_combined
+
+      - id: social_media
+        template: multiple_options2_combined
+
+      - id: community_involvement
+        template: multiple_options2_combined
+
+      - id: community_contributions
+        template: multiple_options2_combined
+
+      - id: open_source_involvement
+        template: multiple_options2_combined
+
+- id: health
+  path: /health
+  blocks:
+      - id: age
+        template: single_option2
+        variants:
+            - template: vs_salary
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
+
+            - template: vs_gender
+            - id: age_vs_disability
+              fieldId: age
+              blockType: HorizontalBarBlock2
+              hasData: true
+              parameters:
+                  showNoAnswer: true
+                  cutoff: 10
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: disability_status
+
+      - id: disability_status
+        template: multiple_options2_combined
+        variants:
+            - template: vs_age
+              parameters:
+                  sort: { property: medianByFacet, order: asc }
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: age
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
+
+      - id: health_issues
+        template: multiple_options2_combined
+
+      - id: sleep_quantity
+        template: single_option2
+
+      - id: sleep_measures
+        template: multiple_options2_combined
+
+- id: worldview
+  path: /worldview
+  blocks:
+      - id: global_issues
+        template: multiple_options2_combined
+
+      - id: happiness_factors
+        template: multiple_options2_combined
+
+      - id: relocation
+        template: multiple_options2_freeform
+        limit: 3
+
+      - id: overall_happiness
+        template: single_option2
+
+- id: hobbies
+  path: /hobbies
+  blocks:
+      - id: hobbies
+        template: multiple_options2_combined
+
+      - id: physical_activity
+        template: multiple_options2_combined
+
+      - id: favorite_musical_artists
+        limit: 3
+        template: multiple_options2_freeform
+
+      - id: favorite_movies
+        limit: 3
+        template: multiple_options2_freeform
+
+      - id: favorite_tv
+        limit: 3
+        template: multiple_options2_freeform
+
+      - id: favorite_video_games
+        limit: 3
+        template: multiple_options2_freeform
+
+      - id: video_game_platforms
+        template: multiple_options2_combined
+
+- id: conclusion
+  path: /conclusion
+  blocks:
+      - id: conclusion_ashok
+        template: conclusion
+        variables:
+            author: ashok_gelal
+            entities: '"ashok_gelal"'
+
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+        wrapBlock: false
+        disableExport: true
+
+# note: other pages need to be included in the sitemap too so they can get the proper
+# locale passed to them
+
+- id: _user_metadata
+  i18nNamespace: user_metadata
+  path: /metadata
+  blocks:
+      - template: page_introduction
+
+      - id: locale
+        template: multiple_options2
+        defaultView: percentageSurvey
+        parameters: { cutoff: 20 }
+        queryOptions:
+            addQuestionComments: false
+
+      - id: completion_stats
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: authmode
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: device
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: browser
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      # - id: version
+      #   template: multiple_options2
+      #   queryOptions:
+      #       addQuestionComments: false
+
+      - id: os
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: past_surveys
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+            addBucketsEntities: true
+        parameters:
+            showNoAnswer: true
+
+      # - id: past_same_survey_count
+      #   template: multiple_options2
+      #   defaultView: percentageSurvey
+      #   queryOptions:
+      #       addQuestionComments: false
+      #   parameters:
+      #       showNoAnswer: true
+
+      - id: created_at_date
+        template: multiple_options2
+        blockType: TimeSeriesByDateBlock
+        defaultView: countBar
+        parameters:
+            showNoAnswer: false
+            cutoff: 10
+            sort: { order: asc, property: id }
+        queryOptions:
+            addQuestionComments: false
+        variants:
+            - id: created_at_date_by_source
+              fieldId: created_at_date
+              template: multiple_options2
+              blockType: TimeSeriesByDateBlock
+              defaultView: count
+              parameters:
+                  showNoAnswer: false
+                  cutoff: 10
+                  sort: { order: asc, property: id }
+                  facetLimit: 3
+                  enableAddOverallBucket: false
+                  mergeOtherBuckets: true
+              queryOptions:
+                  addBucketsEntities: true
+                  addQuestionComments: false
+              filtersState:
+                  facet:
+                      sectionId: _user_metadata
+                      id: source
+
+      - id: source
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        parameters:
+            limit: 20
+        queryOptions:
+            addQuestionComments: false
+
+- id: about
+  path: /about
+  blocks:
+      - id: about_contents
+        blockType: AboutBlock
+        wrapBlock: false
+        disableExport: true
+
+- id: support
+  path: /support
+  is_hidden: true
+  blocks:
+      - id: support
+        template: page_introduction
+
+- id: sponsor_finish
+  path: /sponsor-chart-finish
+  is_hidden: true
+  blocks:
+      - id: sponsor_finish
+        blockType: SponsorFinishBlock
+        wrapBlock: false
+
+- id: notfound
+  titleId: notfound.title
+  path: /404
+  is_hidden: true
+  blocks:
+      - id: notfound
+        blockType: NotFoundBlock
+        wrapBlock: false
