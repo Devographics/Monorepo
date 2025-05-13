@@ -12,6 +12,9 @@ import {
 } from '../../types'
 import { getFeatureFieldTypeName } from '../../generate/templates/feature'
 import { getToolFieldTypeName } from '../../generate/templates'
+import { getFeaturesEnumTypeName } from './features_enum'
+import { getToolsEnumTypeName } from './tools_enum'
+
 /*
 
 Sample output:
@@ -58,8 +61,22 @@ export const generateSectionType = ({
         path,
         typeName,
         typeType: TypeTypeEnum.SECTION,
+        /*
+
+        Note: itemIds argument does not currently work because _items is 
+        obtained through a property on the section, not its own resolver
+        
+        */
         typeDef: `type ${typeName} {
-            ${isFeatureOrToolSection ? `_items: [${featureOrToolTypeName}]` : ''}
+            ${
+                isFeatureOrToolSection
+                    ? `_items(itemIds:[${
+                          isFeatureSection
+                              ? getFeaturesEnumTypeName(survey)
+                              : getToolsEnumTypeName(survey)
+                      }]): [${featureOrToolTypeName}]`
+                    : ''
+            }
             ${isFeatureOrToolSection ? `_cardinalities: [${featureOrToolTypeName}]` : ''}
     ${section.questions
         .filter(q => q.hasApiEndpoint !== false)

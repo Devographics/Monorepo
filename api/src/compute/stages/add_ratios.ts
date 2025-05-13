@@ -79,13 +79,19 @@ export async function addRatios(
 
         const positivityRelative = allPositive / withSentimentTotal
 
+        // Positivity shift between respondents who **haven't used**
+        // an item and those who **have**, in percentage points gained
+
+        const appreciation = retention - interest
+
         const ratios = {
             awareness: roundRatio(awareness),
             interest: roundRatio(interest),
             usage: roundRatio(usage),
             retention: roundRatio(retention),
             positivity: roundRatio(positivity),
-            positivityRelative: roundRatio(positivityRelative)
+            positivityRelative: roundRatio(positivityRelative),
+            appreciation: roundRatio(appreciation)
         }
         editionData.ratios = ratios
     }

@@ -26,6 +26,7 @@ export const tool: ApiTemplateFunction = options => {
         autogenerateFilterType: false,
         autogenerateOptionType: false,
         autogenerateEnumType: false,
+        generatedBy: 'tool',
         typeDef: `type ${fieldTypeName} {
     id: String
     _metadata: QuestionMetadata

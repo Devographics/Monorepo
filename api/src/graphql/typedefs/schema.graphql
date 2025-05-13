@@ -352,6 +352,9 @@ type RatiosData {
 
     # all positive / total (with sentiment)
     positivityRelative: Float
+
+    # difference between not-used positive and used positive
+    appreciation: Float
 }
 
 type NormalizationToken {

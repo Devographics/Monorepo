@@ -101,6 +101,7 @@ export interface QuestionApiTemplateOutput extends QuestionTemplateOutput {
     optionTypeName?: string
     enumTypeName?: string
 
+    generatedBy?: string
     typeDef?: string
 }
 
