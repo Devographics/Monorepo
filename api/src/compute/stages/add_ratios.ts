@@ -82,7 +82,7 @@ export async function addRatios(
         // Positivity shift between respondents who **haven't used**
         // an item and those who **have**, in percentage points gained
 
-        const appreciation = retention - interest
+        const appreciation = interest === 0 || retention === 0 ? 0 : retention - interest
 
         const ratios = {
             awareness: roundRatio(awareness),
