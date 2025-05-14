@@ -70,12 +70,21 @@ export type CombinedBucket = {
     ids: string[]
     bucket: Bucket
     facetBucket: FacetBucket
+    count: number
     value: number
     groupIndex: number
     subGroupIndex: number
 }
 
-export type Totals = { id: string } & { [key in ColumnId]: number }
+type ValueSuffix = '__value'
+type CountSuffix = '__count'
+
+export type ValueKey = `${ColumnId}${ValueSuffix}`
+export type CountKey = `${ColumnId}${CountSuffix}`
+
+export type Totals = { id: string } & { [key in ColumnId as `${key}${ValueSuffix}`]: number } & {
+    [key in ColumnId as `${key}${CountSuffix}`]: number
+}
 
 export type MaxValue = { id: ColumnId; maxValue: number }
 

@@ -247,9 +247,11 @@
       - template: page_introduction
 
       - id: all_features
+        i18nNamespace: features
         template: multi_items_experience
         chartOptions:
             limit: 10
+            categories: [main_apis, hooks, new_apis]
 
       - id: main_apis_pain_points
         template: multiple_options2_freeform
@@ -393,6 +395,8 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
+            - template: cardinalities
+
             # - id: component_libraries_experience
             #   template: multi_items_experience
             #   i18nNamespace: tools
@@ -450,6 +454,8 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
+            - template: cardinalities
+
             - id: state_management_others
               i18nNamespace: tools
               template: multiple_options2_freeform
@@ -476,6 +482,8 @@
               template: multi_items_ratios
               i18nNamespace: tools
 
+            - template: cardinalities
+
             - id: data_loading_others
               i18nNamespace: tools
               template: multiple_options2_freeform
@@ -501,6 +509,8 @@
             - id: meta_frameworks_ratios
               template: multi_items_ratios
               i18nNamespace: tools
+
+            - template: cardinalities
 
             - id: meta_frameworks_others
               i18nNamespace: tools
@@ -795,13 +805,13 @@
             addQuestionComments: false
 
       - id: device
-        template: multiple_options2_freeform
+        template: multiple_options2
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
 
       - id: browser
-        template: multiple_options2_freeform
+        template: multiple_options2
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
@@ -812,7 +822,7 @@
       #       addQuestionComments: false
 
       - id: os
-        template: multiple_options2_freeform
+        template: multiple_options2
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false

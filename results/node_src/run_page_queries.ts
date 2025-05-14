@@ -21,6 +21,7 @@ import {
 Try loading data from disk or GitHub, or else run queries for *each block* in a page
 
 */
+
 export const runPageQueries = async ({ page, graphql, surveyId, editionId, currentEdition }) => {
     const startedAt = new Date()
     const useFilesystemCache = allowedCachingMethods().filesystem
@@ -122,6 +123,10 @@ export const runPageQueries = async ({ page, graphql, surveyId, editionId, curre
                     data = result.data
 
                     if (!data) {
+                        logToFile(queryFileName, newQueryFormatted, {
+                            mode: 'overwrite',
+                            subDir: 'error_queries'
+                        })
                         console.log(result)
                     }
                     logToFile(dataFileName, data, {

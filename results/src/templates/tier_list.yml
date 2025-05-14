@@ -54,6 +54,7 @@ query: >
                     retention
                     positivity
                     positivityRelative
+                    appreciation
                   }
                   buckets {
                     count

@@ -20,6 +20,8 @@ import { ColumnWrapper } from '../verticalBar2/columns/ColumnWrapper'
 import { useChartValues } from './helpers/chartValues'
 import { viewDefinition } from './helpers/viewDefinition'
 import { VerticalBarSerieWrapper } from '../verticalBar2/VerticalBarSerieWrapper'
+import T from 'core/i18n/T'
+import './RatiosByEdition.scss'
 
 export interface RatiosByEditionProps extends BlockComponentProps {
     series: MultiRatioSerie[]
@@ -112,29 +114,46 @@ const Serie = (
     }
 
     return (
-        <Columns<StandardQuestionData[], EditionWithRankAndPointData, MultiRatiosChartState>
-            {...commonProps}
-            hasZebra={true}
-        >
-            <>
-                {columnIds.map((columnId, i) => (
-                    <ColumnWrapper<
+        <>
+            <div className="ratio-description chart-note">
+                <h4>
+                    <T k={`ratios.${chartState.view}`} />:{' '}
+                </h4>
+                <T
+                    k={`ratios.${chartState.view}.description`}
+                    md={true}
+                    html={true}
+                    element="span"
+                />
+            </div>
+            <Columns<StandardQuestionData[], EditionWithRankAndPointData, MultiRatiosChartState>
+                {...commonProps}
+                hasZebra={true}
+            >
+                <>
+                    {columnIds.map((columnId, i) => (
+                        <ColumnWrapper<
+                            StandardQuestionData[],
+                            EditionWithRankAndPointData,
+                            MultiRatiosChartState
+                        >
+                            {...commonProps}
+                            columnIndex={i}
+                            key={columnId}
+                            columnId={columnId}
+                        />
+                    ))}
+                    <Lines<
                         StandardQuestionData[],
                         EditionWithRankAndPointData,
                         MultiRatiosChartState
                     >
                         {...commonProps}
-                        columnIndex={i}
-                        key={columnId}
-                        columnId={columnId}
+                        lineItems={lineItems}
                     />
-                ))}
-                <Lines<StandardQuestionData[], EditionWithRankAndPointData, MultiRatiosChartState>
-                    {...commonProps}
-                    lineItems={lineItems}
-                />
-            </>
-        </Columns>
+                </>
+            </Columns>
+        </>
     )
 }
 

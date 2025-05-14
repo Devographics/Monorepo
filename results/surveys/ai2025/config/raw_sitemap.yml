@@ -93,13 +93,13 @@
                       id: disability_status
 
       - id: years_of_experience
-        template: multiple_options2
+        template: single_option2
         variants:
             - template: vs_salary
             - template: vs_gender
 
       - id: company_size
-        template: multiple_options2
+        template: single_option2
         variants:
             - template: vs_salary
 
@@ -107,7 +107,7 @@
         template: hint
 
       - id: yearly_salary
-        template: multiple_options2
+        template: single_option2
         variants:
             - id: yearly_salary_us_vs_world
               fieldId: yearly_salary
@@ -175,12 +175,12 @@
       #                 id: gender
 
       - id: higher_education_degree
-        template: multiple_options2
+        template: single_option2
         variants:
             - template: vs_salary
 
       - id: gender
-        template: multiple_options2
+        template: single_option2
         # takeaway: >
         #     Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
         variants:

@@ -20,7 +20,9 @@ import {
     MaxValue,
     Totals,
     Variable,
-    COMMENTS
+    COMMENTS,
+    ValueKey,
+    CountKey
 } from './types'
 import sortBy from 'lodash/sortBy'
 import max from 'lodash/max'
@@ -81,6 +83,7 @@ export const combineBuckets = (buckets: Bucket[], variable: Variable): CombinedB
                     ids: [bucket.id, facetBucket.id],
                     bucket,
                     facetBucket,
+                    count: facetBucket.count || 0,
                     value: facetBucket[variable] || 0,
                     groupIndex,
                     subGroupIndex
@@ -109,7 +112,7 @@ export const sortItems = ({
         if (sort === COMMENTS) {
             return item.commentsCount
         } else {
-            return groupedTotals.find(total => total.id === item.id)?.[sort]
+            return groupedTotals.find(total => total.id === item.id)?.[getValueKey(sort)]
         }
     })
     if (order === OrderOptions.DESC) {
@@ -133,6 +136,12 @@ export const getItemTotals = ({
     columnIds: ColumnId[]
 }) => combinedItems.map(item => getGroupedTotals({ item, columnIds }))
 
+const VALUE_SUFFIX = '__value'
+const COUNT_SUFFIX = '__count'
+
+export const getValueKey = (columnId: ColumnId) => `${columnId}${VALUE_SUFFIX}` as ValueKey
+export const getCountKey = (columnId: ColumnId) => `${columnId}${COUNT_SUFFIX}` as CountKey
+
 export const getGroupedTotals = ({
     item,
     columnIds
@@ -143,8 +152,12 @@ export const getGroupedTotals = ({
     const totals = { id: item.id } as Totals
     columnIds.forEach(columnId => {
         const relevantBuckets = item.combinedBuckets.filter(b => b.ids.includes(columnId))
-        totals[columnId] = round(
+        totals[getValueKey(columnId)] = round(
             sumBy(relevantBuckets, b => b.value || 0),
+            1
+        )
+        totals[getCountKey(columnId)] = round(
+            sumBy(relevantBuckets, b => b.count || 0),
             1
         )
     })

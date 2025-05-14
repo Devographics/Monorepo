@@ -6,5 +6,6 @@ export const getRatiosFragment = () => `
       retention
       positivity
       positivityRelative
+      appreciation
     }
 `

@@ -131,6 +131,7 @@ export enum RatiosEnum {
     INTEREST = 'interest',
     RETENTION = 'retention',
     POSITIVITY = 'positivity',
+    APPRECIATION = 'appreciation',
     RELATIVE_POSITIVITY = 'positivityRelative'
 }
 

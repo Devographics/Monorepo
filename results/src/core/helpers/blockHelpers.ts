@@ -333,7 +333,7 @@ export const getBlockLinkRemote = ({
 
     const urlParamsString = new URLSearchParams(urlParams).toString()
 
-    const url = `https://share.${currentSurvey.domain}/share/prerendered?${urlParamsString}`
+    const url = `https://share.devographics.com/share/prerendered?${urlParamsString}`
     // remove any double slashes
     // path = path.replaceAll('//', '/')
     // const link = `${pageContext.host}${path}`

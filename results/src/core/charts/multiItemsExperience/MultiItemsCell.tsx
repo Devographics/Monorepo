@@ -8,6 +8,7 @@ import { useTheme } from 'styled-components'
 import { formatPercentage } from '../common2/helpers/format'
 import { useIsWideEnough } from '../horizontalBar2/HorizontalBarCell'
 import { CellLabel } from '../common2'
+import { COUNT_SUFFIX, getCountKey, getValueKey, VALUE_SUFFIX } from './helpers'
 
 export const getExperienceKey = (id: FeaturesOptions) => `options.experience.${id}.label.short`
 
@@ -34,11 +35,13 @@ export const MultiItemsCell = ({
     const { variable } = chartState
     const { bucket, facetBucket } = combinedBucket
 
+    const count = facetBucket.count || 0
     const value = facetBucket[variable] || 0
     const experienceKey = getExperienceKey(bucket.id as FeaturesOptions)
     const sentimentKey = getSentimentKey(facetBucket.id as SimplifiedSentimentOptions)
 
     const values = {
+        count,
         value,
         experience: getString(experienceKey)?.t || '?',
         sentiment: getString(sentimentKey)?.t || '?'
@@ -108,27 +111,30 @@ export const ColumnTotal = ({
         '--width': width,
         '--offset': offset
     }
-    const columnTotal = groupedTotals[columnId]
+    const columnValue = groupedTotals[getValueKey(columnId)]
+    const columnCount = groupedTotals[getCountKey(columnId)]
     const answerKey =
         grouping === GroupingOptions.EXPERIENCE
             ? getExperienceKey(columnId as FeaturesOptions)
             : getSentimentKey(columnId as SimplifiedSentimentOptions)
 
     const answer = getString(answerKey)?.t
+
+    const values = { count: columnCount, value: columnValue, answer }
     return (
         <Tooltip
             trigger={
                 <div className="multiexp-column-total" style={style}>
                     <div className="multiexp-column-total-border" />
-                    {columnTotal > 3 && (
-                        <div className="multiexp-column-total-value">{columnTotal}%</div>
+                    {columnValue > 3 && (
+                        <div className="multiexp-column-total-value">{columnValue}%</div>
                     )}
                 </div>
             }
             contents={
                 <T
                     k={`charts.multiexp.cell_group_tooltip.${grouping}`}
-                    values={{ value: columnTotal, answer }}
+                    values={values}
                     html={true}
                     md={true}
                 />
