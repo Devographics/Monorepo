@@ -202,7 +202,7 @@ const SegmentedControlItem = ({
             {...props}
             ref={ref}
         >
-            {icon && <Icon />}
+            {icon && <Icon size="petite" />}
             {gradient && <ItemColor gradient={gradient} />}
             <span className="legend-item-label" data-labelKey={labelKey}>
                 {label}
@@ -214,9 +214,9 @@ const SegmentedControlItem = ({
     // if no tooltip is specified just show label
     // useful for when label is truncated using overflow-ellipsis
     return tooltip ? (
-        <Tooltip trigger={component} contents={tooltip} />
+        <Tooltip trigger={component} contents={tooltip} showBorder={false} />
     ) : (
-        <Tooltip trigger={component} contents={label} />
+        <Tooltip trigger={component} contents={label} showBorder={false} />
     )
 }
 
