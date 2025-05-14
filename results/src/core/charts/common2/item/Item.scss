@@ -4,12 +4,34 @@
     gap: 10px;
     max-width: 100%;
 }
-.chart-item-label {
+@keyframes scroll-text {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+.chart-item-label-wrapper {
     text-align: right;
     font-size: 0.8rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
     max-width: 150px;
+    display: flex;
+    overflow: hidden;
+}
+.chart-item-label {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-left: 0%;
+
+    .chart-item-label-wrapper:hover & {
+        text-overflow: initial;
+        overflow: visible;
+        translate: -100%;
+        margin-left: 100%;
+        transition: 1s linear;
+    }
 }
 .chart-item-entity {
     .tooltip-trigger {

@@ -125,12 +125,14 @@ const Label = ({ label: label_, href }: { label: LabelObject; href?: string }) =
     const tooltipContents = description || longLabel
     const LabelElement = href ? 'a' : 'span'
     const labelComponent = (
-        <LabelElement
-            data-key={key}
-            className={`chart-item-label ${tooltipContents ? 'withTooltip' : ''}`}
-            {...(href ? { href } : {})}
-            dangerouslySetInnerHTML={{ __html: shortLabel }}
-        />
+        <span className="chart-item-label-wrapper">
+            <LabelElement
+                data-key={key}
+                className={`chart-item-label ${tooltipContents ? 'withTooltip' : ''}`}
+                {...(href ? { href } : {})}
+                dangerouslySetInnerHTML={{ __html: shortLabel }}
+            />
+        </span>
     )
     return tooltipContents ? (
         <Tooltip
