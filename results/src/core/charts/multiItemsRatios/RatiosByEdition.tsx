@@ -8,7 +8,7 @@ import ChartData from '../common2/ChartData'
 import { MultiRatioSerie, MultiRatiosChartState } from './types'
 import ChartShare from '../common2/ChartShare'
 import { getDefaultState, useChartState } from './helpers/chartState'
-import ViewSwitcher from './ViewSwitcher'
+import ViewSwitcher, { ratioViewsIcons } from './ViewSwitcher'
 import Legend from '../common2/Legend'
 import uniqBy from 'lodash/uniqBy'
 import ModeSwitcher from './ModeSwitcher'
@@ -113,12 +113,15 @@ const Serie = (
         viewDefinition
     }
 
+    const Icon = ratioViewsIcons[chartState.view]
+
     return (
         <>
             <div className="ratio-description chart-note">
+                <Icon />{' '}
                 <h4>
-                    <T k={`ratios.${chartState.view}`} />:{' '}
-                </h4>
+                    <T k={`ratios.${chartState.view}`} />:
+                </h4>{' '}
                 <T
                     k={`ratios.${chartState.view}.description`}
                     md={true}

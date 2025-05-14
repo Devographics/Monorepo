@@ -1,6 +1,16 @@
 .ratio-description {
+    h4,
+    .icon-wrapper {
+        display: inline-block;
+    }
+    .icon-wrapper,
+    svg {
+        height: 19px;
+        width: 19px;
+        vertical-align: sub;
+    }
     h4 {
-        display: inline;
+        margin: 0;
     }
     margin-top: 0;
     margin-bottom: var(--doubleSpacing);

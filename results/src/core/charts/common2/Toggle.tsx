@@ -32,6 +32,7 @@ export type ToggleItemType = {
     className?: string
     tooltip?: JSX.Element
     gradient?: string[]
+    icon?: JSX.Element
 }
 
 type ToggleProps = {
@@ -170,7 +171,7 @@ const SegmentedControlItem = ({
     sortId: ToggleProps['sortId']
     sortOrder: ToggleProps['sortOrder']
 }) => {
-    const { label, labelKey, id, isEnabled, gradient, className, tooltip } = item
+    const { label, labelKey, id, isEnabled, gradient, className, tooltip, icon } = item
     const ref = useRef<HTMLDivElement>(null)
     const props: {
         onClick?: (e: SyntheticEvent) => void
@@ -191,6 +192,7 @@ const SegmentedControlItem = ({
             handleHover(null)
         }
     }
+    const Icon = icon
     const component = (
         <Button
             className={`chart-toggle-item column-heading chart-toggle-item-${
@@ -200,6 +202,7 @@ const SegmentedControlItem = ({
             {...props}
             ref={ref}
         >
+            {icon && <Icon />}
             {gradient && <ItemColor gradient={gradient} />}
             <span className="legend-item-label" data-labelKey={labelKey}>
                 {label}

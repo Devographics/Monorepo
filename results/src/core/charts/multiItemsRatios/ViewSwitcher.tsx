@@ -4,6 +4,24 @@ import { Toggle, ToggleItemType } from '../common2'
 import { useI18n } from '@devographics/react-i18n'
 import { RatiosEnum } from '@devographics/types'
 import T from 'core/i18n/T'
+import {
+    SatisfactionIcon,
+    AppreciationIcon,
+    AwarenessIcon,
+    InterestIcon,
+    PositivityIcon,
+    UsageIcon
+} from '@devographics/icons'
+
+export const ratioViewsIcons = {
+    [RatiosEnum.USAGE]: UsageIcon,
+    [RatiosEnum.AWARENESS]: AwarenessIcon,
+    [RatiosEnum.INTEREST]: InterestIcon,
+    [RatiosEnum.RETENTION]: SatisfactionIcon,
+    [RatiosEnum.POSITIVITY]: PositivityIcon,
+    [RatiosEnum.APPRECIATION]: AppreciationIcon,
+    [RatiosEnum.RELATIVE_POSITIVITY]: PositivityIcon
+}
 
 const ViewSwitcher = ({ chartState }: { chartState: MultiRatiosChartState }) => {
     const { view, setView } = chartState
@@ -17,7 +35,8 @@ const ViewSwitcher = ({ chartState }: { chartState: MultiRatiosChartState }) => 
                 id,
                 isEnabled: view === id,
                 labelKey,
-                label: getString(labelKey)?.t
+                label: getString(labelKey)?.t,
+                icon: ratioViewsIcons[id]
             }
             const description = getString(descriptionKey)
             if (description) {
