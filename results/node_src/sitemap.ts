@@ -140,7 +140,7 @@ export const pageFromConfig = async (page: PageDef, pageIndex: number, editionVa
 
                         const contextVariables = {
                             ...editionVariables,
-                            sectionId: page.id,
+                            sectionId: block?.queryOptions?.sectionId || page.id,
                             questionId: blockVariant.id
                         }
 

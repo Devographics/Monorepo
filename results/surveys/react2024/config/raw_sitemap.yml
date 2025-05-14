@@ -253,17 +253,39 @@
             limit: 10
             categories: [main_apis, hooks, new_apis]
 
+      # - id: features_ratios
+      #   template: multi_items_ratios
+      #   i18nNamespace: features
+
+      - id: main_apis_ratios
+        template: multi_items_ratios
+        i18nNamespace: features
+        queryOptions:
+            sectionId: main_apis
+
+      - id: hooks_ratios
+        template: multi_items_ratios
+        i18nNamespace: features
+        queryOptions:
+            sectionId: hooks
+
+      - id: new_apis_ratios
+        template: multi_items_ratios
+        i18nNamespace: features
+        queryOptions:
+            sectionId: new_apis
+
+      - id: jack_herrington
+        template: picks
+        variables:
+            url: https://tanstack.com/start/latest
+
       - id: main_apis_pain_points
         template: multiple_options2_freeform
         i18nNamespace: features
         parameters: { limit: 10 }
         queryOptions:
             sectionId: main_apis
-
-      - id: jack_herrington
-        template: picks
-        variables:
-            url: https://tanstack.com/start/latest
 
       - id: hooks_pain_points
         template: multiple_options2_freeform

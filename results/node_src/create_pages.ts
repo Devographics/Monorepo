@@ -172,6 +172,8 @@ export const createPagesSingleLoop = async ({
             editionId
         }
 
+        // TODO: footgun warning: some template variables are replaced a first time here,
+        // and another time in parseCustomQuery()
         const { flat } = await computeSitemap(rawSitemap, editionVariables)
 
         const flatSitemap = { locales: cleanLocales, contents: flat }
