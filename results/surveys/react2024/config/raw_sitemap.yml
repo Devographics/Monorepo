@@ -282,21 +282,21 @@
 
       - id: main_apis_pain_points
         template: multiple_options2_freeform
-        i18nNamespace: features
+        i18nNamespace: react_pain_points
         parameters: { limit: 10 }
         queryOptions:
             sectionId: main_apis
 
       - id: hooks_pain_points
         template: multiple_options2_freeform
-        i18nNamespace: features
+        i18nNamespace: react_pain_points
         parameters: { limit: 10 }
         queryOptions:
             sectionId: hooks
 
       - id: new_apis_pain_points
         template: multiple_options2_freeform
-        i18nNamespace: features
+        i18nNamespace: react_pain_points
         parameters: { limit: 10 }
         queryOptions:
             sectionId: new_apis
@@ -461,7 +461,7 @@
 
             - id: component_libraries_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: tools
+              i18nNamespace: react_pain_points
 
             - id: component_libraries_resources
               items: [fm-tailwind-css, fm-design-systems-v2]
@@ -489,7 +489,7 @@
 
             - id: state_management_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: tools
+              i18nNamespace: react_pain_points
 
             - id: state_management_resources
               items: [fm-advanced-redux, fm-xstate-react]
@@ -517,7 +517,8 @@
 
             - id: data_loading_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: tools
+              i18nNamespace: react_pain_points
+              i18nNamespaces: react_pain_points, common_pain_points
 
             - id: data_loading_resources
               items: [fm-client-graphql-react-v2]
@@ -561,7 +562,7 @@
 
             - id: back_end_infrastructure_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: tools
+              i18nNamespace: react_pain_points
 
             - id: back_end_infrastructure_resources
               items: [fm-intermediate-next-js, fm-fullstack]
@@ -638,6 +639,7 @@
 
       - id: usage_pain_points
         template: multiple_options2_freeform
+        i18nNamespace: react_pain_points
 
       - id: usage_resources
         items: [fm-professional, fm-react]

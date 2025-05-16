@@ -51,7 +51,9 @@ export const Average: VerticalBarViewDefinition<
     },
     formatColumnId: ({ columnId }) => columnId,
     getPointValue: point => point.average || 0,
-    getTicks: () => [{ value: 0 }, { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }],
+    // TODO: this seems hardcoded for happiness questions,
+    // will probably break if used for other question types with different scales?
+    getTicks: () => [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
     formatValue: formatQuestionValue,
     dataFilters: [
         /*removeNoAnswer*/

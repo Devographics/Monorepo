@@ -232,6 +232,57 @@
                     other_features
                 ]
 
+      # not enabled in 2024 because previous editions did not
+      # ask about feature sentiment
+
+      # - id: layout_ratios
+      #   template: multi_items_ratios
+      #   i18nNamespace: features
+      #   queryOptions:
+      #       sectionId: layout
+
+      # - id: shapes_graphics_ratios
+      #   template: multi_items_ratios
+      #   i18nNamespace: features
+      #   queryOptions:
+      #       sectionId: shapes_graphics
+
+      # - id: colors_ratios
+      #   template: multi_items_ratios
+      #   i18nNamespace: features
+      #   queryOptions:
+      #       sectionId: colors
+
+      # - id: interactions_ratios
+      #   template: multi_items_ratios
+      #   i18nNamespace: features
+      #   queryOptions:
+      #       sectionId: interactions
+
+      # - id: typography_ratios
+      #   template: multi_items_ratios
+      #   i18nNamespace: features
+      #   queryOptions:
+      #       sectionId: typography
+
+      # - id: accessibility_ratios
+      #   template: multi_items_ratios
+      #   i18nNamespace: features
+      #   queryOptions:
+      #       sectionId: accessibility
+
+      # - id: math_features_ratios
+      #   template: multi_items_ratios
+      #   i18nNamespace: features
+      #   queryOptions:
+      #       sectionId: math_features
+
+      # - id: other_features_ratios
+      #   template: multi_items_ratios
+      #   i18nNamespace: features
+      #   queryOptions:
+      #       sectionId: other_features
+
       # - id: features_ratios_over_time
       #   template: multi_items_ratios
       #   tabId: blocks.tools_experience_ranking.percentages
