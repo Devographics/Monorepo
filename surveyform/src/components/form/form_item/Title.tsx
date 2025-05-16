@@ -18,13 +18,14 @@ export const FormItemTitle = (
 
   const { tClean: label } = useQuestionTitle({ section, question });
 
+  const currentYear = new Date().getFullYear();
   return (
     <legend className="form-label-legend">
       <h3 className="form-label-heading" id={question.id}>
         <Form.Label>
           <QuestionLabel section={section} question={question} />
 
-          {yearAdded === 2024 && (
+          {yearAdded === currentYear && (
             <OverlayTrigger
               placement="top"
               overlay={

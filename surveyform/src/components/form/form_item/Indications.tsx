@@ -13,7 +13,9 @@ export const FormItemIndications = ({ question, section }: FormItemProps) => {
   const { limit } = question;
   const checkAll =
     question.allowMultiple &&
-    ["multiple", "multipleWithOther"].includes(question.template);
+    ["multiple", "multipleWithOther", "multipleWithOtherSentiment"].includes(
+      question.template
+    );
 
   let indications: Indication[] = [];
 
