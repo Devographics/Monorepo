@@ -19,7 +19,7 @@
         "express": "^4.17.1",
         "graphql": "16.6.0",
         "graphql-type-json": "^0.3.2",
-        "highlight.js": "^11.6.0",
+        "highlight.js": "^11.11.1",
         "html-entities": "^2.3.3",
         "js-yaml": "^4.1.0",
         "lodash": "^4.17.21",

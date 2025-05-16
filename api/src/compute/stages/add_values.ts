@@ -12,7 +12,7 @@ export async function addValues(
             const optionValue = axis1?.options?.find(o => o.id === bucket.id)?.value
             const idValue = axis1.question.optionsAreNumeric ? Number(bucket.id) : undefined
             const bucketValue = optionValue ?? idValue
-            if (bucketValue !== undefined) {
+            if (bucketValue !== undefined && !Number.isNaN(bucketValue)) {
                 bucket.value = bucketValue
             }
             if (bucket.facetBuckets) {
