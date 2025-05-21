@@ -1,0 +1,21 @@
+id: ${mainBlockId}_men_vs_non_men
+fieldId: ${mainBlockId}
+blockType: HorizontalBarBlock2
+hasData: true
+parameters:
+    showNoAnswer: true
+defaultUnits: percentageQuestion
+tabId: tabs.men_vs_non_men
+filtersState:
+    filters:
+        - conditions:
+              - fieldId: gender
+                sectionId: user_info
+                operator: in
+                value:
+                    - male
+        - conditions:
+              - fieldId: gender
+                sectionId: user_info
+                operator: nin
+                value: male

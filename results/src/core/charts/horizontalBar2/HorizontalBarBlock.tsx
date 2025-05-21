@@ -108,7 +108,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                     right={
                         <>
                             <ChartShare {...commonProps} />
-                            <ChartData {...commonProps} />
+                            <ChartData<HorizontalBarChartState> {...commonProps} />
                         </>
                     }
                 />

@@ -158,6 +158,8 @@
                       sectionId: workplace
                       id: yearly_salary
             - template: vs_gender
+            - template: men_vs_non_men
+            - template: white_vs_non_white
 
       - id: higher_education_degree
         template: multiple_options2
@@ -167,24 +169,51 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
+            - template: vs_gender
+            - template: men_vs_non_men
+            - template: white_vs_non_white
 
       - id: how_many_jobs
         template: multiple_options2
+        variants:
+            - template: vs_gender
+            - template: men_vs_non_men
+            - template: white_vs_non_white
 
       - id: employment_status
         template: multiple_options2_combined
+        variants:
+            - template: vs_gender
+            - template: men_vs_non_men
+            - template: white_vs_non_white
 
       - id: career_issues
         template: multiple_options2_combined
+        variants:
+            - template: vs_gender
+            - template: men_vs_non_men
+            - template: white_vs_non_white
 
       - id: discrimination_issues
         template: multiple_options2_combined
+        variants:
+            - template: vs_gender
+            - template: men_vs_non_men
+            - template: white_vs_non_white
 
       - id: negative_impacts
         template: multiple_options2_combined
+        variants:
+            - template: vs_gender
+            - template: men_vs_non_men
+            - template: white_vs_non_white
 
       - id: laid_off
         template: single_option2
+        variants:
+            - template: vs_gender
+            - template: men_vs_non_men
+            - template: white_vs_non_white
 
 - id: workplace
   path: /workplace
@@ -398,6 +427,7 @@
 
       - id: overall_happiness
         template: single_option2
+        i18nNamespace: happiness
 
 - id: hobbies
   path: /hobbies

@@ -1,11 +1,11 @@
-import { Bucket, QuestionMetadata } from '@devographics/types'
+import { Bucket, QuestionMetadata, ResponseEditionMetadata } from '@devographics/types'
 import {
     HorizontalBarChartState,
     HorizontalBarChartValues,
     HorizontalBarViewDefinition
 } from '../types'
 import { useAllQuestionsWithOptions } from '../../hooks'
-import { SeriesMetadata } from 'core/charts/common2/types'
+import { SerieMetadataProps, SeriesMetadata } from 'core/charts/common2/types'
 import { getMaxValue } from './other'
 
 export const useChartValues = ({
@@ -13,12 +13,16 @@ export const useChartValues = ({
     chartState,
     question,
     seriesMetadata,
+    serieMetadata,
+    serieMetadataProps,
     viewDefinition
 }: {
     buckets: Bucket[]
     chartState: HorizontalBarChartState
     question: QuestionMetadata
     seriesMetadata: SeriesMetadata
+    serieMetadata: ResponseEditionMetadata
+    serieMetadataProps: SerieMetadataProps
     viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
 }) => {
     const { view } = chartState
@@ -30,7 +34,9 @@ export const useChartValues = ({
         question,
         totalRows: buckets.length,
         totalRespondents: seriesMetadata.totalRespondents,
-        totalResponses: seriesMetadata.totalResponses
+        totalResponses: seriesMetadata.totalResponses,
+        serieMetadata,
+        serieMetadataProps
     }
     const maxOverallValue = seriesMetadata.seriesMaxValue || getMaxValue({ values, view })
 

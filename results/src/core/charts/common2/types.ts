@@ -1,4 +1,11 @@
-import { Bucket, Entity, FacetBucket, QuestionMetadata, YearCompletion } from '@devographics/types'
+import {
+    Bucket,
+    Entity,
+    FacetBucket,
+    QuestionMetadata,
+    ResponseEditionMetadata,
+    YearCompletion
+} from '@devographics/types'
 import { MultiItemsChartValues } from '../multiItemsExperience/types'
 import { BlockVariantDefinition, PageContextValue } from 'core/types'
 import { DataSeries } from 'core/filters/types'
@@ -22,9 +29,17 @@ export interface ChartStateWithFilter extends ChartStateWithSort {
     setFilter: Dispatch<SetStateAction<string | undefined>>
 }
 
+export type SerieMetadataProps = {
+    average: number | undefined
+    median: number | undefined
+    completion: YearCompletion
+}
+
 export interface ChartValues {
     question: QuestionMetadata
     i18nNamespace?: string
+    serieMetadata: ResponseEditionMetadata
+    serieMetadataProps: SerieMetadataProps
 }
 
 export type ViewDefinition<ChartStateType> = {

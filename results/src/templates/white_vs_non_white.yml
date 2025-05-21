@@ -1,0 +1,21 @@
+id: ${mainBlockId}_white_vs_non_white
+fieldId: ${mainBlockId}
+blockType: HorizontalBarBlock2
+hasData: true
+parameters:
+    showNoAnswer: true
+defaultUnits: percentageQuestion
+tabId: tabs.white_vs_non_white
+filtersState:
+    filters:
+        - conditions:
+              - fieldId: race_ethnicity
+                sectionId: user_info
+                operator: in
+                value:
+                    - white_european
+        - conditions:
+              - fieldId: race_ethnicity
+                sectionId: user_info
+                operator: nin
+                value: white_european

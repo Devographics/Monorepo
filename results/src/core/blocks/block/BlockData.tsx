@@ -120,6 +120,17 @@ export const GraphQLExport = ({ query }: { query: string }) => {
     )
 }
 
+export const DebugExport = ({ chartState }: { chartState: any }) => {
+    return (
+        <div>
+            <h3>
+                <code>chartState</code>
+            </h3>
+            <AutoSelectText value={JSON.stringify(chartState, null, 2)} />
+        </div>
+    )
+}
+
 export const FiltersExport = ({ filtersState }: { filtersState: CustomizationDefinition }) => {
     return (
         <div>

@@ -51,7 +51,7 @@ export const getBlockTabTitle = ({
     entities: Entity[]
 }) => {
     if (block.tabId) {
-        return getString(block.tabId)?.t
+        return getString(block.tabId)?.t || block.tabId
     } else if (variantIndex === 0) {
         return getString('tabs.all_respondents')?.t
     } else {

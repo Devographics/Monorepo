@@ -39,14 +39,21 @@ export const HorizontalBarSerie = (
 
     const viewDefinition = getViewDefinition(chartState.view)
 
+    const serieMetadata = getSerieMetadata({ serie, block })
+
+    const currentEdition = getChartCurrentEdition({ serie, block })
+
+    const serieMetadataProps = getSerieMetadataProps({ currentEdition })
+
     const chartValues = useChartValues({
         seriesMetadata,
+        serieMetadata,
+        serieMetadataProps,
         buckets,
         chartState,
         question,
         viewDefinition
     })
-
     if (applyRowsLimit(rowsLimit, chartValues.totalRows)) {
         buckets = take(buckets, chartState.rowsLimit)
     }
@@ -58,11 +65,6 @@ export const HorizontalBarSerie = (
     //         chartState
     //     })
     // )
-    const serieMetadata = getSerieMetadata({ serie, block })
-
-    const currentEdition = getChartCurrentEdition({ serie, block })
-
-    const serieMetadataProps = getSerieMetadataProps({ currentEdition })
 
     const viewProps: HorizontalBarViewProps = {
         ...props,

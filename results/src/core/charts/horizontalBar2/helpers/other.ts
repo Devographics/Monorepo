@@ -5,14 +5,20 @@ import {
     ResponseEditionData,
     ResultsSubFieldEnum,
     SimplifiedSentimentOptions,
-    StandardQuestionData
+    StandardQuestionData,
+    YearCompletion
 } from '@devographics/types'
 import { HorizontalBarChartState, HorizontalBarViewDefinition, HorizontalBarViews } from '../types'
 import { DataSeries, FacetItem } from 'core/filters/types'
 import { usePageContext } from 'core/helpers/pageContext'
 import { applySteps } from './steps'
 import sortBy from 'lodash/sortBy'
-import { CommonProps, OrderOptions, SeriesMetadata } from 'core/charts/common2/types'
+import {
+    CommonProps,
+    OrderOptions,
+    SerieMetadataProps,
+    SeriesMetadata
+} from 'core/charts/common2/types'
 import { BlockVariantDefinition } from 'core/types'
 import uniq from 'lodash/uniq'
 import { allDataFilters } from '../helpers/steps'
@@ -188,11 +194,12 @@ export const getSerieMetadata = ({
     const metadata = currentEdition?._metadata
     return metadata
 }
+
 export const getSerieMetadataProps = ({
     currentEdition
 }: {
     currentEdition: ResponseEditionData
-}) => {
+}): SerieMetadataProps => {
     const { average, percentiles, completion } = currentEdition
     return {
         average,

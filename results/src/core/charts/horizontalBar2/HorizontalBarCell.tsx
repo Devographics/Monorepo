@@ -56,7 +56,9 @@ export const Cell = ({
 
     // const entities = useEntities()
     // const entity = entities.find(e => e.id === bucket.id)
-    const { question, facetQuestion, totalRespondents } = chartValues
+    const { question, facetQuestion, totalRespondents, serieMetadataProps } = chartValues
+    const { completion } = serieMetadataProps
+    const { count: totalSerieRespondents } = completion
     const { sort, view } = chartState
     const { getValue, formatValue } = viewDefinition
     const { getString } = useI18n()
@@ -115,7 +117,10 @@ export const Cell = ({
             contents={
                 <div>
                     [{label}] <strong>{v}</strong>{' '}
-                    <T k="charts.facet_detail" values={{ count, totalRespondents }} />
+                    <T
+                        k="charts.facet_detail"
+                        values={{ count, totalRespondents: totalSerieRespondents }}
+                    />
                 </div>
             }
             showBorder={false}
