@@ -1,0 +1,120 @@
+import React, { useState, useEffect } from 'react'
+import T from 'core/i18n/T'
+import { runQuery } from 'core/explorer/data'
+import { StandardQuestionData } from '@devographics/types'
+import { Comments } from './Comments'
+import { CommentsCommonProps, CommentsData } from './types'
+
+type GetQueryProps = {
+    surveyId: string
+    editionId: string
+    sectionId: string
+    questionId: string
+}
+
+type GetQueryNameProps = {
+    editionId: string
+    questionId: string
+}
+const getQueryName = ({ editionId, questionId }: GetQueryNameProps) =>
+    `${editionId}${questionId}CommentsQuery`
+
+const getQuery = ({ surveyId, editionId, sectionId, questionId }: GetQueryProps) => {
+    return `
+query ${getQueryName({ editionId, questionId })} {
+    surveys {
+        ${surveyId} {
+            ${editionId} {
+                ${sectionId} {
+                    ${questionId} {
+                        comments {
+                            currentEdition {
+                                commentsRaw {
+                                    message
+                                    experience
+                                    sentiment
+                                    responseId
+                                    responseValue
+                                }
+                                commentsStats {
+                                    word
+                                    count
+                                }
+                                count
+                                year
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}`
+}
+
+export const CommentsQueryWrapper = ({
+    queryOptions,
+    name,
+    question
+}: { queryOptions: GetQueryProps } & CommentsCommonProps) => {
+    const [data, setData] = useState<CommentsData>()
+    const [error, setError] = useState<any>(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const { surveyId, editionId, sectionId, questionId } = queryOptions
+    useEffect(() => {
+        const getData = async () => {
+            setIsLoading(true)
+            const query = getQuery(queryOptions)
+
+            const url = process.env.GATSBY_API_URL
+            if (!url) {
+                throw new Error('GATSBY_API_URL env variable is not set')
+            }
+            const { result, error } = await runQuery<StandardQuestionData>(
+                url,
+                query,
+                getQueryName(queryOptions)
+            )
+            if (error) {
+                setError(error)
+            } else {
+                const questionData =
+                    result?.surveys?.[surveyId]?.[editionId]?.[sectionId]?.[questionId]
+                const comments = questionData?.comments?.currentEdition?.commentsRaw
+                const stats = questionData?.comments?.currentEdition?.commentsStats
+                if (comments && stats) {
+                    setData({ comments, stats })
+                }
+            }
+            setIsLoading(false)
+        }
+
+        getData()
+    }, [])
+    return (
+        <div>
+            <h2>
+                <T k="comments.comments_for" values={{ name }} />
+            </h2>
+            <p>
+                <T k="comments.description" />
+            </p>
+            <div>
+                {isLoading ? (
+                    <div>Loading…</div>
+                ) : error ? (
+                    <div className="error">
+                        <code>{error?.message}</code>
+                    </div>
+                ) : data ? (
+                    <Comments
+                        comments={data?.comments}
+                        stats={data?.stats}
+                        name={name}
+                        question={question}
+                    />
+                ) : null}
+            </div>
+        </div>
+    )
+}

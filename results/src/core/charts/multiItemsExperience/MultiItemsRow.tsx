@@ -15,7 +15,7 @@ import { RespondentCount } from '../common2'
 import { Comments } from '../common2/Comments'
 import { sortOptions } from './MultiItemsSerie'
 import { BlockVariantDefinition } from 'core/types'
-import { CommentsTrigger } from '../common2/CommentsTrigger'
+import { CommentsTrigger } from '../common2/comments/CommentsTrigger'
 
 type MultiItemsRowProps = {
     block: BlockVariantDefinition

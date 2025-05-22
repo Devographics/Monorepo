@@ -10,10 +10,9 @@ import {
     SimplifiedSentimentOptions
 } from '@devographics/types'
 import { getExperienceKey, getSentimentKey } from 'core/charts/multiItemsExperience/MultiItemsCell'
-import './Comments.scss'
 import { useI18n } from '@devographics/react-i18n'
 import { getItemLabel } from 'core/helpers/labels'
-import { CommentsFiltersState } from './Comments'
+import { CommentsFiltersState } from './types'
 
 export const getCommentReportUrl = ({
     responseId,
@@ -49,7 +48,7 @@ export const CommentItem = ({
     question: QuestionMetadata
     stateStuff: CommentsFiltersState
 }) => {
-    const { keywordFilter } = stateStuff
+    const { keywordFilter, searchFilter } = stateStuff
     // extract any options that were inlcuded in the user's corresponding response
     const responseValueArray = Array.isArray(responseValue) ? responseValue : [responseValue]
     const questionOptions =
@@ -61,6 +60,12 @@ export const CommentItem = ({
         formattedMessage = formattedMessage.replaceAll(
             keywordFilter,
             `<span class="highlight">${keywordFilter}</span>`
+        )
+    }
+    if (searchFilter) {
+        formattedMessage = formattedMessage.replaceAll(
+            searchFilter,
+            `<span class="highlight">${searchFilter}</span>`
         )
     }
 

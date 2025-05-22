@@ -11,8 +11,7 @@ import BlockSponsor from 'core/blocks/block/sponsor_chart/BlockSponsor'
 import { useEntities } from 'core/helpers/entities'
 import { BlockVariantDefinition } from 'core/types'
 import { getBlockSeriesData } from 'core/helpers/data'
-import { Comments } from 'core/charts/common2/Comments'
-import { CommentsTrigger } from 'core/charts/common2/CommentsTrigger'
+import { CommentsTrigger } from 'core/charts/common2/comments/CommentsTrigger'
 
 const BlockTitleContents = ({ block }: { block: BlockVariantDefinition }) => {
     const title = useBlockTitle({ block })

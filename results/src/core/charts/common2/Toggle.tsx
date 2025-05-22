@@ -43,9 +43,9 @@ type ToggleProps = {
     handleHover?: (id: ToggleValueType | null) => void
     hasDefault?: boolean
     // id of the currently active sort
-    sortId?: string
+    sortId?: string | null
     // whether the currently active sort is asc/desc
-    sortOrder?: OrderOptions
+    sortOrder?: OrderOptions | null
 }
 
 export const DEFAULT_SORT = 'default'

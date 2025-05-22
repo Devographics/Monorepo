@@ -1,28 +1,24 @@
-import './Comments.scss'
 import React from 'react'
 import { CommentIcon } from 'core/icons/Comment'
 import ModalTrigger from 'core/components/ModalTrigger'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from '@devographics/react-i18n'
-import { useAllQuestionsMetadata } from '../horizontalBar2/helpers/other'
+import { useAllQuestionsMetadata } from '../../horizontalBar2/helpers/other'
 import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
-import { Entity } from '@devographics/types'
-import { getQuestionLabel } from './helpers/labels'
+import { getQuestionLabel } from '../helpers/labels'
 import { BlockVariantDefinition } from 'core/types'
-import { CommentsWrapper } from './Comments'
 import Button from 'core/components/Button'
+import { CommentsQueryWrapper } from './CommentsQueryWrapper'
 
 export const CommentsTrigger = ({
     block,
     questionId,
-    commentsCount,
-    entity
+    commentsCount
 }: {
     block: BlockVariantDefinition
     questionId: string
     commentsCount: number
-    entity?: Entity
 }) => {
     const { getString } = useI18n()
     const pageContext = usePageContext()
@@ -66,7 +62,11 @@ export const CommentsTrigger = ({
                 </div>
             }
         >
-            <CommentsWrapper queryOptions={queryOptions} name={label.label} question={question} />
+            <CommentsQueryWrapper
+                queryOptions={queryOptions}
+                name={label.label}
+                question={question}
+            />
         </ModalTrigger>
     )
 }
