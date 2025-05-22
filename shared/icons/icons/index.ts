@@ -45,6 +45,8 @@ export * from './Library'
 export * from './Average'
 export * from './Median'
 export * from './Multiple'
+export * from './Heart'
+export * from './Heart2'
 
 export * from './Satisfaction'
 export * from './Appreciation'

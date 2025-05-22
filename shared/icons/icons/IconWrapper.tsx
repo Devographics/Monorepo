@@ -57,7 +57,7 @@ export interface IconProps {
     enableHover?: boolean
     enableTooltip?: boolean
     labelId?: string
-    label?: string
+    label?: string | JSX.Element
     values?: any
     inSVG?: boolean
     size?: 'small' | 'petite' | 'medium' | 'large'
