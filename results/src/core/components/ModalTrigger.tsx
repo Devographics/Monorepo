@@ -111,7 +111,7 @@ const getMaxWidth = size => {
         case 'm':
             return '950px'
         case 'l':
-            return 'calc(100%-40px)'
+            return 'calc(100% - 80px)'
     }
 }
 
@@ -136,7 +136,7 @@ const Content = styled.div<{ size: string }>`
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: calc(100% - 40px);
+        width: calc(100% - 80px);
         max-width: ${({ size }) => getMaxWidth(size)};
     }
 `
@@ -151,7 +151,7 @@ const Inner = styled.div`
     }
     @media ${mq.mediumLarge} {
         padding: ${spacing(2)};
-        max-height: calc(100vh - 40px);
+        max-height: calc(100vh - 80px);
     }
 `
 

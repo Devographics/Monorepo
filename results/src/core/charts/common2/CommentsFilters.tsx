@@ -4,7 +4,8 @@ import {
     FeaturesOptions,
     OptionId,
     QuestionMetadata,
-    SimplifiedSentimentOptions
+    SimplifiedSentimentOptions,
+    WordCount
 } from '@devographics/types'
 import './Comments.scss'
 import { Toggle } from 'core/charts/common2'
@@ -16,7 +17,8 @@ import {
     filterCommentsBySentiment,
     filterCommentsByValue
 } from './Comments'
-import { KeywordFilter, OrderToggle } from './FreeformAnswers'
+import { OrderToggle } from './FreeformAnswers'
+import { KeywordFilter } from './KeywordFilter'
 
 type OptionToggleItems = {
     id: OptionId
@@ -28,12 +30,14 @@ export const CommentsFilters = ({
     comments,
     allComments,
     question,
-    stateStuff
+    stateStuff,
+    stats
 }: {
     comments: Comment[]
     allComments: Comment[]
     question: QuestionMetadata
     stateStuff: CommentsFiltersState
+    stats: WordCount[]
 }) => {
     const { getString } = useI18n()
 
@@ -63,6 +67,7 @@ export const CommentsFilters = ({
                         keywordFilter={keywordFilter}
                         setKeywordFilter={setKeywordFilter}
                         items={comments}
+                        stats={stats}
                     />
                     <ExperienceSentimentFilters
                         comments={comments}
@@ -102,6 +107,7 @@ export const CommentsFilters = ({
                         keywordFilter={keywordFilter}
                         setKeywordFilter={setKeywordFilter}
                         items={comments}
+                        stats={stats}
                     />
                     <OptionsValuesFilters
                         items={items}

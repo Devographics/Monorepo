@@ -18,11 +18,17 @@
     margin-bottom: var(--spacing);
 }
 
-.freeform-answers-filter {
-    display: flex;
+.keyword-filter {
+    // display: flex;
     align-items: center;
     gap: var(--quarterSpacing);
     h4 {
         margin: 0;
     }
+}
+
+.keyword-frequencies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--halfSpacing);
 }

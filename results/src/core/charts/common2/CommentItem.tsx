@@ -13,6 +13,7 @@ import { getExperienceKey, getSentimentKey } from 'core/charts/multiItemsExperie
 import './Comments.scss'
 import { useI18n } from '@devographics/react-i18n'
 import { getItemLabel } from 'core/helpers/labels'
+import { CommentsFiltersState } from './Comments'
 
 export const getCommentReportUrl = ({
     responseId,
@@ -40,19 +41,38 @@ export const CommentItem = ({
     responseValue,
     index,
     question,
-    name
-}: Comment & { name: string; index: number; question: QuestionMetadata }) => {
+    name,
+    stateStuff
+}: Comment & {
+    name: string
+    index: number
+    question: QuestionMetadata
+    stateStuff: CommentsFiltersState
+}) => {
+    const { keywordFilter } = stateStuff
     // extract any options that were inlcuded in the user's corresponding response
     const responseValueArray = Array.isArray(responseValue) ? responseValue : [responseValue]
     const questionOptions =
         question?.options?.filter(o => responseValueArray.map(String).includes(String(o.id))) || []
+
+    let formattedMessage = message.replaceAll('\n', '<br/>')
+
+    if (keywordFilter) {
+        formattedMessage = formattedMessage.replaceAll(
+            keywordFilter,
+            `<span class="highlight">${keywordFilter}</span>`
+        )
+    }
 
     return (
         <div className="comment-item">
             <div className="comment-message-wrapper">
                 <div className="comment-quote">“</div>
                 <div className="comment-index">#{index + 1}</div>
-                <div className="comment-message">{message}</div>
+                <div
+                    className="comment-message"
+                    dangerouslySetInnerHTML={{ __html: formattedMessage }}
+                />
             </div>
             <div className="comment-footer">
                 {experience ? (

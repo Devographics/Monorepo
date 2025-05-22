@@ -45,6 +45,7 @@ export const CommentsTrigger = ({
 
     return (
         <ModalTrigger
+            size="l"
             trigger={
                 <div className="chart-comments-wrapper">
                     <Tooltip

@@ -20,6 +20,8 @@ export interface HorizontalBarChartState extends ChartStateWithSort {
     viewDefinition: HorizontalBarViewDefinition
     columnMode: ColumnModes
     setColumnMode: Dispatch<SetStateAction<ColumnModes>>
+    highlightedRow: string | null
+    setHighlightedRow: Dispatch<SetStateAction<string | null>>
     facet?: FacetItem
     rowsLimit: number
     setRowsLimit: Dispatch<SetStateAction<number>>

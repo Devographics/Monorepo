@@ -6,7 +6,8 @@ import {
     FeaturesOptions,
     QuestionMetadata,
     SimplifiedSentimentOptions,
-    StandardQuestionData
+    StandardQuestionData,
+    WordCount
 } from '@devographics/types'
 import './Comments.scss'
 import { CommentsFilters } from './CommentsFilters'
@@ -45,6 +46,10 @@ query ${getQueryName({ editionId, questionId })} {
                                     responseId
                                     responseValue
                                 }
+                                commentsStats {
+                                    word
+                                    count
+                                }
                                 count
                                 year
                             }
@@ -61,12 +66,17 @@ interface CommentsCommonProps {
     name: string
     question: QuestionMetadata
 }
+interface CommentsData {
+    comments: Comment[]
+    stats: WordCount[]
+}
+
 export const CommentsWrapper = ({
     queryOptions,
     name,
     question
 }: { queryOptions: GetQueryProps } & CommentsCommonProps) => {
-    const [data, setData] = useState<Comment[]>([])
+    const [data, setData] = useState<CommentsData>()
     const [error, setError] = useState<any>(null)
     const [isLoading, setIsLoading] = useState(false)
     const { surveyId, editionId, sectionId, questionId } = queryOptions
@@ -90,8 +100,9 @@ export const CommentsWrapper = ({
                 const questionData =
                     result?.surveys?.[surveyId]?.[editionId]?.[sectionId]?.[questionId]
                 const comments = questionData?.comments?.currentEdition?.commentsRaw
-                if (comments) {
-                    setData(comments)
+                const stats = questionData?.comments?.currentEdition?.commentsStats
+                if (comments && stats) {
+                    setData({ comments, stats })
                 }
             }
             setIsLoading(false)
@@ -114,9 +125,14 @@ export const CommentsWrapper = ({
                     <div className="error">
                         <code>{error?.message}</code>
                     </div>
-                ) : (
-                    <CommentsContent comments={data} name={name} question={question} />
-                )}
+                ) : data ? (
+                    <CommentsContent
+                        comments={data?.comments}
+                        stats={data?.stats}
+                        name={name}
+                        question={question}
+                    />
+                ) : null}
             </div>
         </div>
     )
@@ -154,10 +170,12 @@ export interface CommentsFiltersState {
 
 export const CommentsContent = ({
     comments,
+    stats,
     name,
     question
 }: {
     comments: Comment[]
+    stats: WordCount[]
 } & CommentsCommonProps) => {
     const [experienceFilter, setExperienceFilter] = useState<FeaturesOptions | ''>('')
     const [sentimentFilter, setSentimentFilter] = useState<SimplifiedSentimentOptions | ''>('')
@@ -203,16 +221,26 @@ export const CommentsContent = ({
         )
     }
     return (
-        <div>
-            <CommentsFilters
-                comments={filteredComments}
-                allComments={comments}
-                question={question}
-                stateStuff={stateStuff}
-            />
+        <div className="comments-contents">
+            <div className="comments-header-wrapper">
+                <CommentsFilters
+                    comments={filteredComments}
+                    allComments={comments}
+                    question={question}
+                    stateStuff={stateStuff}
+                    stats={stats}
+                />
+            </div>
             <div className="comments-list">
                 {filteredComments?.map((comment, i) => (
-                    <CommentItem key={i} index={i} {...comment} name={name} question={question} />
+                    <CommentItem
+                        key={i}
+                        index={i}
+                        {...comment}
+                        name={name}
+                        question={question}
+                        stateStuff={stateStuff}
+                    />
                 ))}
             </div>
         </div>

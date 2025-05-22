@@ -21,6 +21,7 @@ export const RowWrapper = (
         rowMetadata,
         rowIndex
     } = props
+    const { highlightedRow, setHighlightedRow } = chartState
     const { ticks } = chartValues
     const isOverallBucket = bucket.id === OVERALL
     const className = classNames(
@@ -28,11 +29,20 @@ export const RowWrapper = (
         'chart-subgrid',
         { 'chart-row-grouped': isGroupedBucket },
         { 'chart-row-overall': isOverallBucket },
-        { 'chart-row-insufficient-data': bucket.hasInsufficientData }
+        { 'chart-row-insufficient-data': bucket.hasInsufficientData },
+        { 'chart-row-highlighted': highlightedRow === bucket.id }
     )
 
     return (
-        <div className={className}>
+        <div
+            className={className}
+            onMouseEnter={() => {
+                setHighlightedRow(bucket.id)
+            }}
+            onMouseLeave={() => {
+                setHighlightedRow(null)
+            }}
+        >
             <div className="chart-row-left">
                 <div className="chart-row-index">{rowIndex + 1}</div>
                 <RowHeading {...props} />

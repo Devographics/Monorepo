@@ -27,6 +27,7 @@ import Button from 'core/components/Button'
 import Toggle, { DEFAULT_SORT, ToggleItemType, ToggleValueType } from './Toggle'
 import { OrderOptions } from './types'
 import sortBy from 'lodash/sortBy'
+import { KeywordFilter } from './KeywordFilter'
 
 export const ALPHA = 'alphabetical'
 export const LENGTH = 'length'
@@ -287,32 +288,6 @@ const FreeformAnswers = ({
                     keyword={filter}
                 />
             ))}
-        </div>
-    )
-}
-
-export const KeywordFilter = ({
-    keywordFilter,
-    setKeywordFilter,
-    items
-}: {
-    keywordFilter: FreeformAnswersState['filter']
-    setKeywordFilter: FreeformAnswersState['setFilter']
-    items: any[]
-}) => {
-    return (
-        <div className="freeform-answers-filter">
-            <h4>
-                <T k="answers.keyword" />
-            </h4>
-            <input
-                type="text"
-                value={keywordFilter || ''}
-                onChange={e => {
-                    setKeywordFilter(e.target.value)
-                }}
-            />
-            <T k="answers.keyword_count" values={{ count: items.length }} />
         </div>
     )
 }

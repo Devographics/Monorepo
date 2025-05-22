@@ -25,14 +25,25 @@
     }
 }
 
+.comments-contents {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: var(--spacing);
+}
+
+.comments-header-wrapper {
+    // position: relative;
+}
 .comments-header {
     // display: flex;
     // justify-content: space-between;
+    // position: sticky;
+    // top: var(--spacing);
     align-items: center;
     gap: var(--doubleSpacing);
     // flex-direction: row;
     margin-bottom: var(--spacing);
-    display: grid;
+    // display: grid;
     grid-template-columns: 1fr minmax(0, min-content);
 }
 
@@ -75,6 +86,10 @@
 }
 
 .comment-message {
+    .highlight {
+        display: inline-block;
+        background: #ffffba33;
+    }
 }
 
 .comment-report-link {
