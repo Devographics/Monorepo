@@ -7,8 +7,18 @@
     padding: 0;
 }
 
+.comment-response {
+    display: flex;
+    gap: 10px;
+    position: relative;
+    top: -20px;
+    left: 20px;
+    flex-wrap: wrap;
+}
+
 .experience-item,
-.sentiment-item {
+.sentiment-item,
+.value-item {
     // background-color: var(--bgColor);
     // border: 2px solid var(--color);
     font-size: 0.7rem;
@@ -19,10 +29,10 @@
     text-shadow: 1px 1px #000000bb;
     font-weight: bold;
     text-transform: uppercase;
-    &.value-item {
-        background: var(--backgroundBackgroundColor);
-        box-shadow: 1px 1px 2px #00000088;
-    }
+    white-space: nowrap;
+
+    background: #827a90;
+    box-shadow: 1px 1px 2px #00000088;
 }
 
 .comments-wrapper {
@@ -85,8 +95,14 @@
     gap: var(--halfSpacing);
 }
 
-.comment-item {
+.comment-item-wrapper {
     margin-bottom: var(--spacing);
+    display: flex;
+    gap: var(--halfSpacing);
+}
+
+.comment-item {
+    flex-grow: 1;
 }
 
 .comment-message-wrapper {
@@ -94,16 +110,19 @@
     background: var(--backgroundAlt2Color);
     padding: var(--spacing);
     position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing);
 }
 
 .comment-index {
-    font-weight: bold;
-    font-size: 1.8rem;
-    position: absolute;
-    text-align: right;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 15px;
+    // font-weight: bold;
+    font-size: 1.5rem;
+    // position: absolute;
+    // text-align: right;
+    // top: 50%;
+    // transform: translateY(-50%);
+    // right: 15px;
     opacity: 0.15;
 }
 .comment-quote {
@@ -130,6 +149,7 @@
     margin-top: 3px;
     text-align: right;
     display: block;
+    white-space: nowrap;
 }
 .comment-footer {
     display: flex;
@@ -137,21 +157,26 @@
     margin-top: 10px;
 }
 
-.comment-response {
-    display: flex;
-    gap: 10px;
-    position: relative;
-    top: -20px;
-    left: 20px;
-}
-
 .comment-filter-item {
     font-size: 0.9rem;
     border-radius: 50px;
     border: none;
     background: var(--backgroundBackgroundColor);
+    text-align: left;
     &:hover,
     &-active {
         background: var(--backgroundAlt2Color);
+    }
+}
+
+.comment-like {
+    display: flex;
+    gap: var(--quarterSpacing);
+    align-items: center;
+    border-radius: 50px;
+    opacity: 0.5;
+    &-liked,
+    &:hover {
+        opacity: 1;
     }
 }

@@ -14,6 +14,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { getItemLabel } from 'core/helpers/labels'
 import { CommentsFiltersState } from './types'
 import { escapeRegExp } from './Comments'
+import { CommentsLikes } from './CommentsLikes'
 
 export const getCommentReportUrl = ({
     responseId,
@@ -74,36 +75,39 @@ export const CommentItem = ({
     }
 
     return (
-        <div className="comment-item">
-            <div className="comment-message-wrapper">
-                <div className="comment-quote">“</div>
-                <div className="comment-index">#{index + 1}</div>
-                <div
-                    className="comment-message"
-                    dangerouslySetInnerHTML={{ __html: formattedMessage }}
-                />
-            </div>
-            <div className="comment-footer">
-                {experience ? (
-                    <div className="comment-response">
-                        <ExperienceItem experience={experience} />
-                        {sentiment && sentiment !== 'neutral' && (
-                            <SentimentItem sentiment={sentiment} />
-                        )}
-                    </div>
-                ) : questionOptions.length > 0 ? (
-                    <div className="comment-response">
-                        {questionOptions.map(option => (
-                            <ValueItem key={option.id} option={option} question={question} />
-                        ))}
-                    </div>
-                ) : null}
-                <a
-                    className="comment-report-link"
-                    href={getCommentReportUrl({ responseId, message, name })}
-                >
-                    <T k="comments.report_abuse" />
-                </a>
+        <div className="comment-item-wrapper">
+            <div className="comment-index">{index + 1}.</div>
+            <div className="comment-item">
+                <div className="comment-message-wrapper">
+                    <div className="comment-quote">“</div>
+                    <div
+                        className="comment-message"
+                        dangerouslySetInnerHTML={{ __html: formattedMessage }}
+                    />
+                    <CommentsLikes />
+                </div>
+                <div className="comment-footer">
+                    {experience ? (
+                        <div className="comment-response">
+                            <ExperienceItem experience={experience} />
+                            {sentiment && sentiment !== 'neutral' && (
+                                <SentimentItem sentiment={sentiment} />
+                            )}
+                        </div>
+                    ) : questionOptions.length > 0 ? (
+                        <div className="comment-response">
+                            {questionOptions.map(option => (
+                                <ValueItem key={option.id} option={option} question={question} />
+                            ))}
+                        </div>
+                    ) : null}
+                    <a
+                        className="comment-report-link"
+                        href={getCommentReportUrl({ responseId, message, name })}
+                    >
+                        <T k="comments.report_abuse" />
+                    </a>
+                </div>
             </div>
         </div>
     )
@@ -124,7 +128,7 @@ const ValueItem = ({
         getString,
         i18nNamespace: question.id
     })
-    return <span className="experience-item value-item">{shortLabel}</span>
+    return <span className="value-item">{shortLabel}</span>
 }
 
 const ExperienceItem = ({ experience }: { experience: FeaturesOptions }) => {
