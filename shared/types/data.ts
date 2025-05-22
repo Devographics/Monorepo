@@ -85,6 +85,12 @@ export interface EditionComments {
     year: number
     count: number
     commentsRaw: Comment[]
+    commentsStats: WordCount[]
+}
+
+export interface WordCount {
+    word: string
+    count: number
 }
 
 export interface Comment {

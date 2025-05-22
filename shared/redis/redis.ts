@@ -8,13 +8,15 @@ const TTL_SECONDS = process.env.NODE_ENV === 'development' ? 60 * 3 : 60 * 30
 
 let redis: Redis | undefined = undefined
 
+export { Redis } from '@upstash/redis'
+
 /**
  * If url/token not passed,
  * will use REDIS_UPSTASH_URL and REDIS_TOKEN
  * If already initialized, will return the existing client
- * @param url_ 
- * @param token_ 
- * @returns 
+ * @param url_
+ * @param token_
+ * @returns
  */
 export function initRedis(url_?: string, token_?: string) {
     const url = url_ || getEnvVar(EnvVar.REDIS_UPSTASH_URL)
@@ -32,7 +34,7 @@ export function initRedis(url_?: string, token_?: string) {
             url,
             token,
             // @see https://github.com/upstash/redis-js/issues/397
-            cache: "default"
+            cache: 'default'
         })
     }
     return redis
