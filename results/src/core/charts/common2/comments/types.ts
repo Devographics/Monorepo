@@ -6,6 +6,7 @@ import {
     Comment
 } from '@devographics/types'
 import { FreeformAnswersState } from '../freeform_answers/types'
+import { BlockVariantDefinition } from 'core/types'
 
 export interface CommentsFiltersState extends FreeformAnswersState {
     experienceFilter: FeaturesOptions | null
@@ -17,7 +18,7 @@ export interface CommentsFiltersState extends FreeformAnswersState {
 }
 
 export interface CommentsCommonProps {
-    name: string
+    block: BlockVariantDefinition
     question: QuestionMetadata
 }
 export interface CommentsData {

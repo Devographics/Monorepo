@@ -25,25 +25,37 @@
     }
 }
 
+.comments-wrapper {
+    .block-question {
+        background-color: var(--backgroundBackgroundColor);
+    }
+}
+.comments-wrapper-note {
+    font-size: 0.9rem;
+    margin-bottom: var(--halfSpacing);
+    color: var(--textAltColor);
+}
 .comments-contents {
     display: grid;
     grid-template-columns: 300px 1fr;
     gap: var(--doubleSpacing);
 }
-
-.comments-header {
-    // display: flex;
-    // justify-content: space-between;
-    // position: sticky;
-    // top: var(--spacing);
+.comments-heading-top {
+    display: flex;
     align-items: center;
-    gap: var(--doubleSpacing);
-    // flex-direction: row;
-    margin-bottom: var(--spacing);
-    // display: grid;
-    grid-template-columns: 1fr minmax(0, min-content);
+    justify-content: space-between;
+    h3 {
+        margin: 0;
+    }
 }
-
+.comments-count {
+    font-size: 1.2rem;
+}
+.comments-count-current {
+}
+.comments-count-all {
+    color: var(--textAltColor);
+}
 .comments-filters {
     display: flex;
     gap: var(--doubleSpacing);
@@ -105,9 +117,11 @@
 }
 
 .comment-message {
-    .highlight {
+    .highlight,
+    mark {
         display: inline-block;
         background: #ffffba33;
+        color: var(--textColor);
     }
 }
 

@@ -62,11 +62,7 @@ export const CommentsTrigger = ({
                 </div>
             }
         >
-            <CommentsQueryWrapper
-                queryOptions={queryOptions}
-                name={label.label}
-                question={question}
-            />
+            <CommentsQueryWrapper queryOptions={queryOptions} block={block} question={question} />
         </ModalTrigger>
     )
 }

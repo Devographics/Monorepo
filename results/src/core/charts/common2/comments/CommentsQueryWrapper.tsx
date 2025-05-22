@@ -4,6 +4,9 @@ import { runQuery } from 'core/explorer/data'
 import { StandardQuestionData } from '@devographics/types'
 import { Comments } from './Comments'
 import { CommentsCommonProps, CommentsData } from './types'
+import { getQuestionLabel } from '../helpers/labels'
+import { useI18n } from '@devographics/react-i18n'
+import BlockQuestion from 'core/blocks/block/BlockQuestion'
 
 type GetQueryProps = {
     surveyId: string
@@ -53,14 +56,15 @@ query ${getQueryName({ editionId, questionId })} {
 }
 
 export const CommentsQueryWrapper = ({
+    block,
     queryOptions,
-    name,
     question
 }: { queryOptions: GetQueryProps } & CommentsCommonProps) => {
     const [data, setData] = useState<CommentsData>()
     const [error, setError] = useState<any>(null)
     const [isLoading, setIsLoading] = useState(false)
     const { surveyId, editionId, sectionId, questionId } = queryOptions
+
     useEffect(() => {
         const getData = async () => {
             setIsLoading(true)
@@ -92,13 +96,11 @@ export const CommentsQueryWrapper = ({
         getData()
     }, [])
     return (
-        <div>
-            <h2>
-                <T k="comments.comments_for" values={{ name }} />
-            </h2>
-            <p>
+        <div className="comments-wrapper">
+            <div className="comments-wrapper-note">
                 <T k="comments.description" />
-            </p>
+            </div>
+
             <div>
                 {isLoading ? (
                     <div>Loading…</div>
@@ -110,8 +112,9 @@ export const CommentsQueryWrapper = ({
                     <Comments
                         comments={data?.comments}
                         stats={data?.stats}
-                        name={name}
+                        block={block}
                         question={question}
+                        sectionId={sectionId}
                     />
                 ) : null}
             </div>

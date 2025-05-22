@@ -12,6 +12,10 @@ import { OrderOptions } from '../types'
 import sortBy from 'lodash/sortBy'
 import { CommentsCommonProps, CommentsFiltersState } from './types'
 import { ALPHA, LENGTH } from './constants'
+import BlockQuestion from 'core/blocks/block/BlockQuestion'
+import T from 'core/i18n/T'
+import { getQuestionLabel } from '../helpers/labels'
+import { useI18n } from '@devographics/react-i18n'
 
 export const filterCommentsByValue = (comments: Comment[], value: string | number | null) =>
     value === ''
@@ -28,15 +32,76 @@ export const filterCommentsByExperience = (comments: Comment[], value: string | 
 export const filterCommentsBySentiment = (comments: Comment[], value: string | number | null) =>
     value === '' ? comments : comments.filter(c => String(c.sentiment) === String(value))
 
+function matchWordStart(text: string, word: string): boolean {
+    const regex = new RegExp(`\\b${escapeRegExp(word)}`, 'i')
+    return regex.test(text)
+}
+
+export function escapeRegExp(str: string) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // escape regex chars
+}
+
+const filterComments = (comments: Comment[], stateStuff: CommentsFiltersState) => {
+    const {
+        experienceFilter,
+        sentimentFilter,
+        valueFilter,
+        searchFilter,
+        sort,
+        order,
+        keywordFilter
+    } = stateStuff
+
+    let filteredComments = [...comments]
+
+    if (experienceFilter) {
+        filteredComments = filterCommentsByExperience(filteredComments, experienceFilter)
+    }
+    if (sentimentFilter) {
+        filteredComments = filterCommentsBySentiment(filteredComments, sentimentFilter)
+    }
+    if (valueFilter) {
+        filteredComments = filterCommentsByValue(filteredComments, valueFilter)
+    }
+    if (sort === LENGTH) {
+        filteredComments = sortBy(filteredComments, comment => comment.message.length)
+    } else if (sort === ALPHA) {
+        filteredComments = sortBy(filteredComments, comment => comment.message.toLowerCase())
+    }
+    if (order && order === OrderOptions.DESC) {
+        filteredComments = filteredComments.toReversed()
+    }
+
+    if (keywordFilter) {
+        filteredComments = filteredComments.filter(comment =>
+            matchWordStart(comment.message, keywordFilter)
+        )
+    }
+    if (searchFilter) {
+        filteredComments = filteredComments.filter(comment =>
+            matchWordStart(comment.message, searchFilter)
+        )
+    }
+    return filteredComments
+}
+
 export const Comments = ({
     comments,
     stats,
-    name,
-    question
+    block,
+    question,
+    sectionId
 }: {
     comments: Comment[]
     stats: WordCount[]
+    sectionId: string
 } & CommentsCommonProps) => {
+    const { getString } = useI18n()
+
+    const i18nNamespace = block.i18nNamespace || sectionId
+
+    const label = getQuestionLabel({ question, getString, i18nNamespace, block })
+
     const [experienceFilter, setExperienceFilter] =
         useState<CommentsFiltersState['experienceFilter']>(null)
     const [sentimentFilter, setSentimentFilter] =
@@ -64,52 +129,43 @@ export const Comments = ({
         setKeywordFilter
     }
 
-    let filteredComments = comments
+    const filteredComments = filterComments(comments, stateStuff)
 
-    filteredComments = filterCommentsByExperience(filteredComments, experienceFilter)
-    filteredComments = filterCommentsBySentiment(filteredComments, sentimentFilter)
-    filteredComments = filterCommentsByValue(filteredComments, valueFilter)
-
-    if (sort === LENGTH) {
-        filteredComments = sortBy(filteredComments, comment => comment.message.length)
-    } else if (sort === ALPHA) {
-        filteredComments = sortBy(filteredComments, comment => comment.message.toLowerCase())
-    }
-    if (order && order === OrderOptions.DESC) {
-        filteredComments = filteredComments.toReversed()
-    }
-
-    if (keywordFilter) {
-        filteredComments = filteredComments.filter(comment =>
-            comment.message.toLowerCase().includes(keywordFilter.toLowerCase())
-        )
-    }
-    if (searchFilter) {
-        filteredComments = filteredComments.filter(comment =>
-            comment.message.toLowerCase().includes(searchFilter.toLowerCase())
-        )
-    }
     return (
-        <div className="comments-contents">
-            <CommentsFilters
-                comments={filteredComments}
-                allComments={comments}
-                question={question}
-                stateStuff={stateStuff}
-                stats={stats}
-            />
-            <div className="comments-list">
-                {filteredComments?.map((comment, i) => (
-                    <CommentItem
-                        key={i}
-                        index={i}
-                        {...comment}
-                        name={name}
-                        question={question}
-                        stateStuff={stateStuff}
-                    />
-                ))}
+        <>
+            <div className="comments-heading">
+                <div className="comments-heading-top">
+                    <h3>
+                        <T k="comments.comments_for" values={{ name: label.label }} />
+                    </h3>
+                    <div className="comments-count">
+                        <span className="comments-count-current">{filteredComments.length}</span>/
+                        <span className="comments-count-all">{comments.length}</span>
+                    </div>
+                </div>
+                <BlockQuestion block={block} question={question} />
             </div>
-        </div>
+
+            <div className="comments-contents">
+                <CommentsFilters
+                    comments={filteredComments}
+                    allComments={comments}
+                    question={question}
+                    stateStuff={stateStuff}
+                    stats={stats}
+                />
+                <div className="comments-list">
+                    {filteredComments?.map((comment, i) => (
+                        <CommentItem
+                            key={i}
+                            index={i}
+                            {...comment}
+                            question={question}
+                            stateStuff={stateStuff}
+                        />
+                    ))}
+                </div>
+            </div>
+        </>
     )
 }

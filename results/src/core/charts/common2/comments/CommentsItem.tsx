@@ -13,6 +13,7 @@ import { getExperienceKey, getSentimentKey } from 'core/charts/multiItemsExperie
 import { useI18n } from '@devographics/react-i18n'
 import { getItemLabel } from 'core/helpers/labels'
 import { CommentsFiltersState } from './types'
+import { escapeRegExp } from './Comments'
 
 export const getCommentReportUrl = ({
     responseId,
@@ -30,6 +31,15 @@ export const getCommentReportUrl = ({
         labels: ['reported comment'],
         body: `Please explain below why you think this comment should be deleted. \n\n ### Reported Comment \n\n - question: ${name} \n - comment ID: ${responseId} \n - comment: \n\n > ${message} \n\n ### Your Report \n\n --explain why you're reporting this comment here--`
     })
+}
+
+export function highlightWordStarts(text: string, word: string): string {
+    if (!word) return text
+
+    const escaped = escapeRegExp(word)
+    const regex = new RegExp(`\\b(${escaped}\\w*)`, 'gi')
+
+    return text.replace(regex, '<mark>$1</mark>')
 }
 
 export const CommentItem = ({
@@ -57,16 +67,10 @@ export const CommentItem = ({
     let formattedMessage = message.replaceAll('\n', '<br/>')
 
     if (keywordFilter) {
-        formattedMessage = formattedMessage.replaceAll(
-            keywordFilter,
-            `<span class="highlight">${keywordFilter}</span>`
-        )
+        formattedMessage = highlightWordStarts(formattedMessage, keywordFilter)
     }
     if (searchFilter) {
-        formattedMessage = formattedMessage.replaceAll(
-            searchFilter,
-            `<span class="highlight">${searchFilter}</span>`
-        )
+        formattedMessage = highlightWordStarts(formattedMessage, searchFilter)
     }
 
     return (
