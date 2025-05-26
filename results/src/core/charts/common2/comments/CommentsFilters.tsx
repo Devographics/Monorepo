@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Comment, QuestionMetadata, WordCount } from '@devographics/types'
 import { CommentsFiltersState } from './types'
 import T from 'core/i18n/T'
@@ -22,35 +22,50 @@ export const CommentsFilters = ({
     stateStuff: CommentsFiltersState
     stats: WordCount[]
 }) => {
+    const [showFiltersOnMobile, setShowFiltersOnMobile] = useState(false)
     // const optionsOrGroups = groups || options
     const isExperienceQuestion = ['featurev3', 'toolv3'].includes(question.template)
 
     return (
-        <div className="comments-filters">
-            <FilterSearch stateStuff={stateStuff} />
+        <div
+            className={`comments-filters-wrapper comments-filters-wrapper-${
+                showFiltersOnMobile ? 'show' : 'hide'
+            }`}
+        >
+            <div className="comments-filters">
+                <FilterSearch stateStuff={stateStuff} />
 
-            {isExperienceQuestion ? (
-                <>
-                    <FilterExperience
-                        comments={comments}
-                        allComments={comments}
+                {isExperienceQuestion ? (
+                    <>
+                        <FilterExperience
+                            comments={comments}
+                            allComments={comments}
+                            stateStuff={stateStuff}
+                        />
+                        <FilterSentiment
+                            comments={comments}
+                            allComments={comments}
+                            stateStuff={stateStuff}
+                        />
+                    </>
+                ) : question.options ? (
+                    <FilterOptions
+                        question={question}
+                        allComments={allComments}
                         stateStuff={stateStuff}
                     />
-                    <FilterSentiment
-                        comments={comments}
-                        allComments={comments}
-                        stateStuff={stateStuff}
-                    />
-                </>
-            ) : question.options ? (
-                <FilterOptions
-                    question={question}
-                    allComments={allComments}
-                    stateStuff={stateStuff}
-                />
-            ) : null}
+                ) : null}
 
-            <FilterKeywords stateStuff={stateStuff} stats={stats} />
+                <FilterKeywords stateStuff={stateStuff} stats={stats} />
+            </div>
+            <Button
+                onClick={(e: any) => {
+                    e.preventDefault()
+                    setShowFiltersOnMobile(!showFiltersOnMobile)
+                }}
+            >
+                <T k={`comments.filter.${showFiltersOnMobile ? 'hide' : 'show'}`} />
+            </Button>
         </div>
     )
 }

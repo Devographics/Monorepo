@@ -87,26 +87,28 @@ export const CommentItem = ({
                     <CommentsLikes />
                 </div>
                 <div className="comment-footer">
-                    <div className="comment-response">
-                        {experience ? (
-                            <>
-                                <ExperienceItem experience={experience} />
-                                {sentiment && sentiment !== 'neutral' && (
-                                    <SentimentItem sentiment={sentiment} />
-                                )}
-                            </>
-                        ) : questionOptions.length > 0 ? (
-                            <>
-                                {' '}
-                                {questionOptions.map(option => (
-                                    <ValueItem
-                                        key={option.id}
-                                        option={option}
-                                        question={question}
-                                    />
-                                ))}
-                            </>
-                        ) : null}
+                    <div className="comment-response-wrapper">
+                        <div className="comment-response">
+                            {experience ? (
+                                <>
+                                    <ExperienceItem experience={experience} />
+                                    {sentiment && sentiment !== 'neutral' && (
+                                        <SentimentItem sentiment={sentiment} />
+                                    )}
+                                </>
+                            ) : questionOptions.length > 0 ? (
+                                <>
+                                    {' '}
+                                    {questionOptions.map(option => (
+                                        <ValueItem
+                                            key={option.id}
+                                            option={option}
+                                            question={question}
+                                        />
+                                    ))}
+                                </>
+                            ) : null}
+                        </div>
                     </div>
                     <a
                         className="comment-report-link"

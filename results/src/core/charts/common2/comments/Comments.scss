@@ -1,39 +1,4 @@
-.chart-comments {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    border-color: transparent;
-    background: none;
-    padding: 0;
-}
-
-.comment-response {
-    display: flex;
-    gap: 10px;
-    position: relative;
-    top: -20px;
-    left: 20px;
-    flex-wrap: wrap;
-}
-
-.experience-item,
-.sentiment-item,
-.value-item {
-    // background-color: var(--bgColor);
-    // border: 2px solid var(--color);
-    font-size: 0.7rem;
-    border-radius: 30px;
-    padding: 2px 8px;
-    background: var(--backgroundColor);
-    background: var(--color);
-    text-shadow: 1px 1px #000000bb;
-    font-weight: bold;
-    text-transform: uppercase;
-    white-space: nowrap;
-
-    background: #827a90;
-    box-shadow: 1px 1px 2px #00000088;
-}
+@import '../../../../stylesheets/_breakpoints.scss';
 
 .comments-wrapper {
     .block-question {
@@ -46,9 +11,11 @@
     color: var(--textAltColor);
 }
 .comments-contents {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: var(--doubleSpacing);
+    @include large {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: var(--doubleSpacing);
+    }
 }
 .comments-heading-top {
     display: flex;
@@ -72,11 +39,27 @@
     flex-direction: column;
     min-width: 0;
 }
-
+.comments-filters-wrapper {
+    @include small {
+        margin-bottom: var(--spacing);
+    }
+    & > .Button {
+        display: block;
+        width: 100%;
+        margin-top: var(--spacing);
+    }
+    &-show .comments-filters {
+        display: flex;
+    }
+    &-hide .comments-filters {
+        display: none;
+    }
+}
 .filter-section-heading {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr min-content;
     align-items: center;
-    justify-content: space-between;
+    // justify-content: space-between;
     border-bottom: 1px solid var(--borderColor);
     padding-bottom: var(--halfSpacing);
     margin-bottom: var(--halfSpacing);
@@ -107,13 +90,18 @@
 
 .comment-index {
     // font-weight: bold;
-    font-size: 1.3rem;
+    @include small {
+        font-size: 1rem;
+    }
+    @include medium-large {
+        font-size: 1.3rem;
+    }
     // position: absolute;
     text-align: right;
     // top: 50%;
     // transform: translateY(-50%);
     // right: 15px;
-    opacity: 0.15;
+    opacity: 0.35;
 }
 .comment-quote {
     font-size: 6rem;
@@ -148,7 +136,6 @@
 
 .comment-report-link {
     font-size: 0.7rem;
-    text-align: right;
     display: block;
     white-space: nowrap;
     &,
@@ -158,11 +145,16 @@
     &:hover {
         color: var(--linkColor);
     }
+    @include small {
+        margin-top: var(--halfSpacing);
+    }
 }
 .comment-footer {
-    display: flex;
-    justify-content: space-between;
     margin-top: 8px;
+    @include medium-large {
+        display: flex;
+        justify-content: space-between;
+    }
 }
 
 .comment-filter-item {
@@ -191,4 +183,41 @@
     &:hover {
         opacity: 1;
     }
+}
+
+.chart-comments {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-color: transparent;
+    background: none;
+    padding: 0;
+}
+
+.comment-response {
+    display: flex;
+    gap: 10px;
+    position: relative;
+    margin-top: -20px;
+    left: 20px;
+    flex-wrap: wrap;
+}
+
+.experience-item,
+.sentiment-item,
+.value-item {
+    // background-color: var(--bgColor);
+    // border: 2px solid var(--color);
+    font-size: 0.7rem;
+    border-radius: 30px;
+    padding: 2px 8px;
+    background: var(--backgroundColor);
+    background: var(--color);
+    text-shadow: 1px 1px #000000bb;
+    font-weight: bold;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    background: #827a90;
+    box-shadow: 1px 1px 2px #00000088;
 }
