@@ -44,6 +44,8 @@ import { initProjects } from './load/projects'
 import { getEntitiesLoadMethod, loadOrGetEntities } from './load/entities'
 import { getLocaleIds, getLocalesLoadMethod } from './load/locales/locales'
 import { loadSettings } from './helpers/settings'
+import { getLikeHandler } from './routes/like'
+import { getLikesHandler } from './routes/likes'
 
 const envPath = process.env.ENV_FILE ? process.env.ENV_FILE : '.env'
 dotenv.config({ path: envPath })
@@ -303,6 +305,9 @@ const start = async () => {
     //     await cacheAvatars({ context })
     //     res.status(200).send('Cache cleared')
     // })
+
+    app.post('/like', getLikeHandler(redisClient))
+    app.get('/likes', getLikesHandler(redisClient))
 
     app.use(Sentry.Handlers.errorHandler())
 

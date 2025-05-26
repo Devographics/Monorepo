@@ -17,6 +17,12 @@ type EditionComments {
     year: Int
     count: Int
     commentsRaw: [Comment]
+    commentsStats: [WordCount]
+}
+
+type WordCount {
+    word: String
+    count: Int
 }
 
 """

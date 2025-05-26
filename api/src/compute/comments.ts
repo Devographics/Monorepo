@@ -5,6 +5,7 @@ import uniq from 'lodash/uniq.js'
 import { useCache } from '../helpers/caching'
 import { Survey, QuestionApiObject } from '../types/surveys'
 import { getCollection } from '../helpers/db'
+import { calculateWordFrequencies } from '@devographics/helpers'
 
 // note currently working because of "Dynamic require of "util" is not supported" error
 
@@ -36,10 +37,12 @@ const groupByEdition = (allComments: CommentObject[]) => {
     const allEditions = uniq(allComments.map((c: CommentObject) => c.editionId))
     return allEditions.map(editionId => {
         const commentsRaw = allComments.filter(c => c.editionId === editionId)
+        const commentsStats = calculateWordFrequencies(commentsRaw.map(c => c.message))
         return {
             editionId,
             commentsRaw,
-            count: commentsRaw.length
+            count: commentsRaw.length,
+            commentsStats
         }
     })
 }
@@ -123,6 +126,5 @@ export const getRawComments = async ({
     // results = await addSentimentAnalysis(results)
     const resultsByEdition = groupByEdition(comments)
     // console.log(JSON.stringify(resultsByYear, null, 2))
-
     return editionId ? resultsByEdition[0] : resultsByEdition
 }
