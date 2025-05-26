@@ -8,7 +8,7 @@ export const CommentsLikes = () => {
     const hasLiked = false
     return (
         <div>
-            <Tooltip
+            {/* <Tooltip
                 trigger={
                     <Button
                         size="small"
@@ -23,7 +23,7 @@ export const CommentsLikes = () => {
                 }
                 showBorder={false}
                 contents={<T k="comment.like.description" />}
-            />
+            /> */}
         </div>
     )
 }

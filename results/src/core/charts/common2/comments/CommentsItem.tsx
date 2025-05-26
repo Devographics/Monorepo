@@ -87,20 +87,27 @@ export const CommentItem = ({
                     <CommentsLikes />
                 </div>
                 <div className="comment-footer">
-                    {experience ? (
-                        <div className="comment-response">
-                            <ExperienceItem experience={experience} />
-                            {sentiment && sentiment !== 'neutral' && (
-                                <SentimentItem sentiment={sentiment} />
-                            )}
-                        </div>
-                    ) : questionOptions.length > 0 ? (
-                        <div className="comment-response">
-                            {questionOptions.map(option => (
-                                <ValueItem key={option.id} option={option} question={question} />
-                            ))}
-                        </div>
-                    ) : null}
+                    <div className="comment-response">
+                        {experience ? (
+                            <>
+                                <ExperienceItem experience={experience} />
+                                {sentiment && sentiment !== 'neutral' && (
+                                    <SentimentItem sentiment={sentiment} />
+                                )}
+                            </>
+                        ) : questionOptions.length > 0 ? (
+                            <>
+                                {' '}
+                                {questionOptions.map(option => (
+                                    <ValueItem
+                                        key={option.id}
+                                        option={option}
+                                        question={question}
+                                    />
+                                ))}
+                            </>
+                        ) : null}
+                    </div>
                     <a
                         className="comment-report-link"
                         href={getCommentReportUrl({ responseId, message, name })}
