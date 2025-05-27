@@ -343,7 +343,7 @@ export function calculateWordFrequencies(data: string[]) {
         })
     })
 
-    wordFrequencies = wordFrequencies.filter(w => w.count > 10)
+    wordFrequencies = wordFrequencies.filter(w => w.count > 5)
     wordFrequencies = sortBy(wordFrequencies, 'count')
     wordFrequencies.reverse()
     return wordFrequencies
