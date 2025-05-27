@@ -85,8 +85,8 @@ export const CommentsQueryWrapper = ({
                 const questionData =
                     result?.surveys?.[surveyId]?.[editionId]?.[sectionId]?.[questionId]
                 const comments = questionData?.comments?.currentEdition?.commentsRaw
-                const stats = questionData?.comments?.currentEdition?.commentsStats
-                if (comments && stats) {
+                const stats = questionData?.comments?.currentEdition?.commentsStats || []
+                if (comments) {
                     setData({ comments, stats })
                 }
             }
