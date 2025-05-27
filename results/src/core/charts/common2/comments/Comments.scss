@@ -3,6 +3,8 @@
 .comments-wrapper {
     .block-question {
         background-color: var(--backgroundBackgroundColor);
+        margin: 0;
+        margin-top: var(--halfSpacing);
     }
 }
 .comments-wrapper-note {
@@ -16,6 +18,9 @@
         grid-template-columns: 300px 1fr;
         gap: var(--doubleSpacing);
     }
+}
+.comments-heading {
+    margin-bottom: var(--spacing);
 }
 .comments-heading-top {
     display: flex;

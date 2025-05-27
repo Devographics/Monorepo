@@ -37,20 +37,21 @@ export const FreeformAnswersTrigger = (props: {
         questionId,
         token: id.replace(CATCHALL_PREFIX, '')
     }
-    const i18nNamespace = sectionId
+    const i18nNamespace = block.i18nNamespace || sectionId
 
     const allQuestions = useAllQuestionsMetadata()
     const question = allQuestions.find(q => q.id === questionId)
 
     const questionLabel = getBlockTitle({ block, pageContext, getString })
 
-    const { label: tokenLabel } = getItemLabel({
+    const labelObject = getItemLabel({
         id,
         getString,
         i18nNamespace,
         entity,
         html: true
     })
+    const tokenLabel = labelObject.label
 
     const answersLabel = getString('answers.answers_for', { values: { name: tokenLabel } })?.t
 
@@ -63,6 +64,7 @@ export const FreeformAnswersTrigger = (props: {
 
     return enableModal ? (
         <ModalTrigger
+            size="l"
             trigger={
                 <div>
                     <Tooltip

@@ -60,7 +60,7 @@ export const FreeformAnswers = ({
             <div className="comments-heading">
                 <div className="comments-heading-top">
                     <h3>
-                        <T k="answers.answers_for" values={{ name: tokenLabel }} />
+                        <T k="answers.answers_for" values={{ name: tokenLabel }} md={true} />
                     </h3>
                     <div className="comments-count">
                         <span className="comments-count-current">{filteredAnswers.length}</span>/
@@ -85,6 +85,7 @@ export const FreeformAnswers = ({
                             {...answer}
                             questionLabel={questionLabel}
                             tokenLabel={tokenLabel}
+                            stateStuff={stateStuff}
                         />
                     ))}
                 </div>
