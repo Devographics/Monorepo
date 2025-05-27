@@ -101,7 +101,7 @@ export const CommentsQueryWrapper = ({
                 <T k="comments.description" />
             </div>
 
-            <div>
+            <div className="comments-main">
                 {isLoading ? (
                     <div>Loading…</div>
                 ) : error ? (
@@ -116,7 +116,11 @@ export const CommentsQueryWrapper = ({
                         question={question}
                         sectionId={sectionId}
                     />
-                ) : null}
+                ) : (
+                    <div className="error">
+                        <code>Could not load data</code>
+                    </div>
+                )}
             </div>
         </div>
     )

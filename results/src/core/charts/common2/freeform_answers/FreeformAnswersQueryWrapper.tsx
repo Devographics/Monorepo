@@ -106,7 +106,7 @@ export const FreeformAnswersQueryWrapper = ({
             <div>
                 {isLoading ? (
                     <div>Loading…</div>
-                ) : (
+                ) : data ? (
                     <FreeformAnswers
                         answers={data}
                         questionLabel={questionLabel}
@@ -114,6 +114,10 @@ export const FreeformAnswersQueryWrapper = ({
                         block={block}
                         question={question}
                     />
+                ) : (
+                    <div className="error">
+                        <code>Could not load data</code>
+                    </div>
                 )}
             </div>
         </div>
