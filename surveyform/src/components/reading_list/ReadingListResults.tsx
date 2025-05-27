@@ -90,7 +90,7 @@ export const ReadingList = ({
           <SendByEmail response={response} edition={edition} />
         </>
       ) : (
-        <p>
+        <p className="reading-list-description">
           <T token="readinglist.empty" />
         </p>
       )}
