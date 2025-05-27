@@ -1,10 +1,5 @@
 import React, { useState } from 'react'
-import {
-    Comment,
-    FeaturesOptions,
-    SimplifiedSentimentOptions,
-    WordCount
-} from '@devographics/types'
+import { Comment, WordCount } from '@devographics/types'
 import './Comments.scss'
 import { CommentsFilters } from './CommentsFilters'
 import { CommentItem } from './CommentsItem'
@@ -162,6 +157,7 @@ export const Comments = ({
                             {...comment}
                             question={question}
                             stateStuff={stateStuff}
+                            questionLabel={label?.label}
                         />
                     ))}
                 </div>

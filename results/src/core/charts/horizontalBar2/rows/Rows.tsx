@@ -4,7 +4,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react'
 import Axis from '../../common2/Axis'
 import { ShowAll } from '../../common2/ShowAll'
 import { HorizontalBarViewProps } from '../types'
-import { applyRowsLimit } from 'core/charts/multiItemsExperience/helpers'
+import { applyRowsLimit } from 'core/charts/multiItemsExperience/helpers/helpers'
 import { getViewDefinition } from '../helpers/views'
 
 export const Rows = ({

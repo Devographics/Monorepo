@@ -12,9 +12,8 @@ import {
     getMaxValues,
     getRowOffset,
     sortBuckets,
-    sortItems,
-    useChartValues
-} from './helpers'
+    sortItems
+} from './helpers/helpers'
 import { MultiItemsRow } from './MultiItemsRow'
 import Rows from '../horizontalBar2/rows/Rows'
 import min from 'lodash/min'
@@ -28,6 +27,7 @@ import { CommonProps } from '../common2/types'
 import { MultiItemSerie, MultiItemsChartState } from './types'
 import { getItemFilters } from '../common2/helpers'
 import { NoData } from '../common2/NoData'
+import { useChartValues } from './helpers/chartValues'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),

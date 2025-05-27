@@ -1,10 +1,10 @@
 import React from 'react'
 import { Comment, FeaturesOptions } from '@devographics/types'
-import { Toggle } from 'core/charts/common2'
 import { useI18n } from '@devographics/react-i18n'
 import { filterCommentsByExperience } from '../Comments'
 import { CommentsFiltersState } from '../types'
 import { FilterSection } from '../CommentsFilters'
+import { FilterItem } from '../FilterItem'
 
 export const FilterExperience = ({
     allComments,
@@ -21,31 +21,27 @@ export const FilterExperience = ({
     return (
         <FilterSection
             headingId="experience"
-            showClear={false}
+            showClear={experienceFilter !== null}
             onClear={() => {
-                return
+                setExperienceFilter(null)
             }}
         >
-            <Toggle
-                labelId="comments.filter.experience"
-                items={[
-                    {
-                        label: `${getString('comments.filter.all')?.t} (${comments.length})`,
-                        id: '',
-                        isEnabled: experienceFilter === null
-                    },
-                    ...Object.values(FeaturesOptions).map(id => ({
-                        id,
-                        label: `${getString(`options.features.${id}.label.short`)?.t} (${
-                            filterCommentsByExperience(allComments, id).length
-                        })`,
-                        isEnabled: id === experienceFilter
-                    }))
-                ]}
-                handleSelect={id => {
-                    setExperienceFilter(id as FeaturesOptions)
-                }}
-            />
+            <>
+                {Object.values(FeaturesOptions).map(id => {
+                    const count = filterCommentsByExperience(allComments, id).length
+                    return (
+                        <FilterItem
+                            key={id}
+                            label={getString(`options.features.${id}.label.short`)?.t}
+                            count={count}
+                            isActive={id === experienceFilter}
+                            clickHandler={() => {
+                                setExperienceFilter(id)
+                            }}
+                        />
+                    )
+                })}
+            </>
         </FilterSection>
     )
 }

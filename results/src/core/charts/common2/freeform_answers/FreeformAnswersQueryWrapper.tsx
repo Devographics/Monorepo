@@ -3,6 +3,8 @@ import T from 'core/i18n/T'
 import { runQuery } from 'core/explorer/data'
 import { RawDataItem, StandardQuestionData } from '@devographics/types'
 import { FreeformAnswers } from './FreeformAnswers'
+import { BlockVariantDefinition } from 'core/types'
+import { CommentsCommonProps } from '../comments/types'
 
 type GetQueryNameProps = {
     editionId: string
@@ -47,12 +49,14 @@ query ${getQueryName({ editionId, questionId, token })} {
 export const FreeformAnswersQueryWrapper = ({
     queryOptions,
     questionLabel,
-    tokenLabel
+    tokenLabel,
+    question,
+    block
 }: {
     queryOptions: GetQueryProps
     questionLabel: string
     tokenLabel: string
-}) => {
+} & CommentsCommonProps) => {
     const [data, setData] = useState<RawDataItem[]>([])
     const [isLoading, setIsLoading] = useState(false)
 
@@ -95,14 +99,10 @@ export const FreeformAnswersQueryWrapper = ({
     const count = data.length
 
     return (
-        <div>
-            <h2 className="chart-freeform-answers-heading">
-                {questionLabel}:{' '}
-                <T k="answers.answers_for" values={{ count, name: tokenLabel }} md={true} />
-            </h2>
-            <p>
+        <div className="comments-wrapper">
+            <div className="comments-wrapper-note">
                 <T k="answers.description" values={{ count, name: tokenLabel }} md={true} />
-            </p>
+            </div>
             <div>
                 {isLoading ? (
                     <div>Loading…</div>
@@ -111,6 +111,8 @@ export const FreeformAnswersQueryWrapper = ({
                         answers={data}
                         questionLabel={questionLabel}
                         tokenLabel={tokenLabel}
+                        block={block}
+                        question={question}
                     />
                 )}
             </div>

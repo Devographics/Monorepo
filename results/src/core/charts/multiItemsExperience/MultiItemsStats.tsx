@@ -1,6 +1,6 @@
 import React from 'react'
 import { MultiItemSerie, Totals } from './types'
-import { combineItems, getItemTotals } from './helpers'
+import { combineItems, getItemTotals } from './helpers/helpers'
 import { CommonProps } from '../common2/types'
 import { MultiItemsChartState } from './types'
 import { allColumnIds } from './MultiItemsSerie'

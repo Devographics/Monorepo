@@ -14,6 +14,7 @@ import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { BlockVariantDefinition } from 'core/types'
 import Button from 'core/components/Button'
 import { FreeformAnswersQueryWrapper } from './FreeformAnswersQueryWrapper'
+import { useAllQuestionsMetadata } from 'core/charts/horizontalBar2/helpers/other'
 
 export const FreeformAnswersTrigger = (props: {
     bucket: Bucket | FacetBucket
@@ -37,6 +38,9 @@ export const FreeformAnswersTrigger = (props: {
         token: id.replace(CATCHALL_PREFIX, '')
     }
     const i18nNamespace = sectionId
+
+    const allQuestions = useAllQuestionsMetadata()
+    const question = allQuestions.find(q => q.id === questionId)
 
     const questionLabel = getBlockTitle({ block, pageContext, getString })
 
@@ -78,6 +82,8 @@ export const FreeformAnswersTrigger = (props: {
                 queryOptions={queryOptions}
                 questionLabel={questionLabel}
                 tokenLabel={tokenLabel}
+                block={block}
+                question={question}
             />
         </ModalTrigger>
     ) : (

@@ -8,7 +8,7 @@ import { useTheme } from 'styled-components'
 import { formatPercentage } from '../common2/helpers/format'
 import { useIsWideEnough } from '../horizontalBar2/HorizontalBarCell'
 import { CellLabel } from '../common2'
-import { COUNT_SUFFIX, getCountKey, getValueKey, VALUE_SUFFIX } from './helpers'
+import { COUNT_SUFFIX, getCountKey, getValueKey, VALUE_SUFFIX } from './helpers/helpers'
 
 export const getExperienceKey = (id: FeaturesOptions) => `options.experience.${id}.label.short`
 

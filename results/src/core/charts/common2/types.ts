@@ -12,12 +12,16 @@ import { DataSeries } from 'core/filters/types'
 import { CustomVariant } from 'core/filters/helpers'
 import { Dispatch, SetStateAction } from 'react'
 
-export interface ChartStateWithView<ViewType> {
+export interface ChartStateWithHighlightedRow {
+    highlightedRow: string | null
+    setHighlightedRow: Dispatch<SetStateAction<string | null>>
+}
+export interface ChartStateWithView<ViewType> extends ChartStateWithHighlightedRow {
     view: string
     setView: Dispatch<SetStateAction<ViewType>>
 }
 
-export interface ChartStateWithSort {
+export interface ChartStateWithSort extends ChartStateWithHighlightedRow {
     sort: string | undefined
     setSort: Dispatch<SetStateAction<string | undefined>>
     order: OrderOptions

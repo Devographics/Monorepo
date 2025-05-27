@@ -14,7 +14,7 @@ import take from 'lodash/take'
 import { getViewComponent, getViewDefinition } from './helpers/views'
 import { getItemFilters } from '../common2/helpers/filters'
 import { HorizontalBarChartState, HorizontalBarViewProps, HorizontalBarViews } from './types'
-import { applyRowsLimit } from '../multiItemsExperience/helpers'
+import { applyRowsLimit } from '../multiItemsExperience/helpers/helpers'
 
 export const HorizontalBarSerie = (
     props: {

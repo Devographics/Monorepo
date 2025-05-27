@@ -34,17 +34,18 @@ export const CardinalitiesSerie = (
 
     const buckets = getSerieBuckets({ serie, block, chartState })
 
+    const serieMetadata = getSerieMetadata({ serie, block })
+
+    const serieMetadataProps = getSerieMetadataProps({ currentEdition })
+
     const chartValues = useChartValues({
         seriesMetadata,
         buckets,
         chartState,
         question,
-        viewDefinition
+        viewDefinition,
+        serieMetadataProps
     })
-
-    const serieMetadata = getSerieMetadata({ serie, block })
-
-    const serieMetadataProps = getSerieMetadataProps({ currentEdition })
 
     const viewProps: HorizontalBarViewProps = {
         ...props,

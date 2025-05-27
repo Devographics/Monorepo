@@ -9,72 +9,86 @@ import { OrderToggle } from '../comments/OrderToggle'
 import { ALPHA, LENGTH } from '../comments/constants'
 import { FreeformAnswersState } from './types'
 import { FreeformAnswerItem } from './FreeformAnswersItem'
+import { FilterSearch } from '../comments/filters/FilterSearch'
+import BlockQuestion from 'core/blocks/block/BlockQuestion'
+import T from 'core/i18n/T'
+import { CommentsCommonProps } from '../comments/types'
 
 export const FreeformAnswers = ({
-    answers: answers_,
+    answers,
     questionLabel,
-    tokenLabel
+    tokenLabel,
+    block,
+    question
 }: {
     answers: RawDataItem[]
     questionLabel: string
     tokenLabel: string
-}) => {
-    const { getString } = useI18n()
+} & CommentsCommonProps) => {
     const [keywordFilter, setKeywordFilter] = useState<FreeformAnswersState['keywordFilter']>(null)
+    const [searchFilter, setSearchFilter] = useState<FreeformAnswersState['searchFilter']>(null)
     const [sort, setSort] = useState<FreeformAnswersState['sort']>(null)
     const [order, setOrder] = useState<FreeformAnswersState['order']>(null)
 
-    const labelKey = 'answers.length'
-
-    const freeformAnswersState: FreeformAnswersState = {
+    const stateStuff: FreeformAnswersState = {
         keywordFilter,
         setKeywordFilter,
         sort,
         setSort,
         order,
-        setOrder
+        setOrder,
+        searchFilter,
+        setSearchFilter
     }
-    let answers = answers_
+    let filteredAnswers = answers
     if (sort === LENGTH) {
-        answers = sortBy(answers, a => a.raw.length)
+        filteredAnswers = sortBy(filteredAnswers, a => a.raw.length)
     } else if (sort === ALPHA) {
-        answers = sortBy(answers, a => a.raw.toLowerCase())
+        filteredAnswers = sortBy(filteredAnswers, a => a.raw.toLowerCase())
     }
 
     if (order && order === OrderOptions.DESC) {
-        answers = answers.toReversed()
+        filteredAnswers = filteredAnswers.toReversed()
     }
-    if (keywordFilter) {
-        answers = answers.filter(answer =>
-            answer.raw.toLowerCase().includes(keywordFilter.toLowerCase())
+    if (searchFilter) {
+        filteredAnswers = filteredAnswers.filter(answer =>
+            answer.raw.toLowerCase().includes(searchFilter.toLowerCase())
         )
     }
     return (
-        <div className="freeform-answers-list">
-            <div className="freeform-answers-options">
-                <FilterKeywords
-                    keywordFilter={keywordFilter}
-                    setKeywordFilter={setKeywordFilter}
-                    items={answers}
-                />
-                <OrderToggle {...freeformAnswersState} />
-                {/* <Toggle
-                    sortOrder={order}
-                    labelId="charts.sort_by"
-                    handleSelect={handleSelect}
-                    items={toggleItems}
-                    hasDefault={true}
-                /> */}
+        <>
+            <div className="comments-heading">
+                <div className="comments-heading-top">
+                    <h3>
+                        <T k="answers.answers_for" values={{ name: tokenLabel }} />
+                    </h3>
+                    <div className="comments-count">
+                        <span className="comments-count-current">{filteredAnswers.length}</span>/
+                        <span className="comments-count-all">{answers.length}</span>
+                    </div>
+                </div>
+                <BlockQuestion block={block} question={question} />
             </div>
-            {answers?.map((answer, i) => (
-                <FreeformAnswerItem
-                    key={i}
-                    index={i}
-                    {...answer}
-                    questionLabel={questionLabel}
-                    tokenLabel={tokenLabel}
-                />
-            ))}
-        </div>
+
+            <div className="comments-contents">
+                <div className={`comments-filters-wrapper comments-filters-wrapper-show`}>
+                    <div className="comments-filters">
+                        <FilterSearch stateStuff={stateStuff} />
+                    </div>
+                </div>
+
+                <div className="comments-list">
+                    {filteredAnswers?.map((answer, i) => (
+                        <FreeformAnswerItem
+                            key={i}
+                            index={i}
+                            {...answer}
+                            questionLabel={questionLabel}
+                            tokenLabel={tokenLabel}
+                        />
+                    ))}
+                </div>
+            </div>
+        </>
     )
 }

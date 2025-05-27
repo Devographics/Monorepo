@@ -7,7 +7,7 @@ import {
     CombinedBucket,
     Totals
 } from './types'
-import { combineBuckets, getGroupedTotals } from './helpers'
+import { combineBuckets, getGroupedTotals } from './helpers/helpers'
 import { MultiItemsCell, ColumnTotal } from './MultiItemsCell'
 import { RowWrapper } from '../horizontalBar2/rows/RowWrapper'
 import { Bucket, FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'

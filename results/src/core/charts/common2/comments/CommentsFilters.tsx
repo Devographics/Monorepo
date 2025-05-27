@@ -56,7 +56,7 @@ export const CommentsFilters = ({
                     />
                 ) : null}
 
-                <FilterKeywords stateStuff={stateStuff} stats={stats} />
+                {stats?.length > 0 && <FilterKeywords stateStuff={stateStuff} stats={stats} />}
             </div>
             <Button
                 onClick={(e: any) => {

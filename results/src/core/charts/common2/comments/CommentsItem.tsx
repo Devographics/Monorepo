@@ -14,23 +14,23 @@ import { useI18n } from '@devographics/react-i18n'
 import { getItemLabel } from 'core/helpers/labels'
 import { CommentsFiltersState } from './types'
 import { escapeRegExp } from './Comments'
-import { CommentsLikes } from './CommentsLikes'
+import { CommentsItemWrapper } from './CommentsItemWrapper'
 
 export const getCommentReportUrl = ({
     responseId,
     message,
-    name
+    questionLabel
 }: {
     responseId: string
     message: string
-    name: string
+    questionLabel: string
 }) => {
     return newGithubIssueUrl({
         user: 'devographics',
         repo: 'surveys',
-        title: `[Comment Report] ${name} / ${responseId}`,
+        title: `[Comment Report] ${questionLabel} / ${responseId}`,
         labels: ['reported comment'],
-        body: `Please explain below why you think this comment should be deleted. \n\n ### Reported Comment \n\n - question: ${name} \n - comment ID: ${responseId} \n - comment: \n\n > ${message} \n\n ### Your Report \n\n --explain why you're reporting this comment here--`
+        body: `Please explain below why you think this comment should be deleted. \n\n ### Reported Comment \n\n - question: ${questionLabel} \n - comment ID: ${responseId} \n - comment: \n\n > ${message} \n\n ### Your Report \n\n --explain why you're reporting this comment here--`
     })
 }
 
@@ -51,10 +51,10 @@ export const CommentItem = ({
     responseValue,
     index,
     question,
-    name,
+    questionLabel,
     stateStuff
 }: Comment & {
-    name: string
+    questionLabel: string
     index: number
     question: QuestionMetadata
     stateStuff: CommentsFiltersState
@@ -75,60 +75,46 @@ export const CommentItem = ({
     }
 
     return (
-        <div className="comment-item-wrapper">
-            <div className="comment-index">{index + 1}.</div>
-            <div className="comment-item">
-                <div className="comment-message-wrapper">
-                    <div className="comment-quote">“</div>
-                    <div
-                        className="comment-message"
-                        dangerouslySetInnerHTML={{ __html: formattedMessage }}
-                    />
-                    <CommentsLikes />
-                </div>
-                <div className="comment-footer">
-                    <div className="comment-response-wrapper">
-                        <div className="comment-response">
-                            {experience ? (
-                                <>
-                                    <ExperienceItem experience={experience} />
-                                    {sentiment && sentiment !== 'neutral' && (
-                                        <SentimentItem sentiment={sentiment} />
-                                    )}
-                                </>
-                            ) : questionOptions.length > 0 ? (
-                                <>
-                                    {' '}
-                                    {questionOptions.map(option => (
-                                        <ValueItem
-                                            key={option.id}
-                                            option={option}
-                                            question={question}
-                                        />
-                                    ))}
-                                </>
-                            ) : null}
-                        </div>
-                    </div>
-                    <a
-                        className="comment-report-link"
-                        href={getCommentReportUrl({ responseId, message, name })}
-                    >
-                        <T k="comments.report_abuse" />
-                    </a>
-                </div>
-            </div>
-        </div>
+        <CommentsItemWrapper
+            index={index}
+            contents={formattedMessage}
+            answer={
+                experience ? (
+                    <>
+                        <ExperienceItem experience={experience} />
+                        {sentiment && sentiment !== 'neutral' && (
+                            <SentimentItem sentiment={sentiment} />
+                        )}
+                    </>
+                ) : questionOptions.length > 0 ? (
+                    <>
+                        {' '}
+                        {questionOptions.map(option => (
+                            <ValueItem
+                                key={option.id}
+                                option={option}
+                                question={question}
+                                stateStuff={stateStuff}
+                            />
+                        ))}
+                    </>
+                ) : null
+            }
+            reportLink={getCommentReportUrl({ responseId, message, questionLabel })}
+        />
     )
 }
 
 const ValueItem = ({
     option,
-    question
+    question,
+    stateStuff
 }: {
     option: OptionMetadata
     question: QuestionMetadata
+    stateStuff: CommentsFiltersState
 }) => {
+    const { setValueFilter } = stateStuff
     const { getString } = useI18n()
     const { id, entity } = option
     const { label, shortLabel, key } = getItemLabel({
@@ -137,7 +123,17 @@ const ValueItem = ({
         getString,
         i18nNamespace: question.id
     })
-    return <span className="value-item">{shortLabel}</span>
+    return (
+        <button
+            className="value-item"
+            onClick={e => {
+                e.preventDefault()
+                setValueFilter(id)
+            }}
+        >
+            {shortLabel}
+        </button>
+    )
 }
 
 const ExperienceItem = ({ experience }: { experience: FeaturesOptions }) => {

@@ -1,10 +1,10 @@
 import React from 'react'
 import { Comment, SimplifiedSentimentOptions } from '@devographics/types'
-import { Toggle } from 'core/charts/common2'
 import { useI18n } from '@devographics/react-i18n'
 import { CommentsFiltersState } from '../types'
 import { FilterSection } from '../CommentsFilters'
 import { filterCommentsBySentiment } from '../Comments'
+import { FilterItem } from '../FilterItem'
 
 export const FilterSentiment = ({
     allComments,
@@ -22,31 +22,27 @@ export const FilterSentiment = ({
     return (
         <FilterSection
             headingId="sentiment"
-            showClear={false}
+            showClear={sentimentFilter !== null}
             onClear={() => {
-                return
+                setSentimentFilter(null)
             }}
         >
-            <Toggle
-                labelId="comments.filter.sentiment"
-                items={[
-                    {
-                        label: `${getString('comments.filter.all')?.t} (${comments.length})`,
-                        id: '',
-                        isEnabled: sentimentFilter === null
-                    },
-                    ...Object.values(SimplifiedSentimentOptions).map(id => ({
-                        id,
-                        label: `${getString(`options.sentiment.${id}.label.short`)?.t} (${
-                            filterCommentsBySentiment(allComments, id).length
-                        })`,
-                        isEnabled: id === sentimentFilter
-                    }))
-                ]}
-                handleSelect={id => {
-                    setSentimentFilter(id as SimplifiedSentimentOptions)
-                }}
-            />
+            <>
+                {Object.values(SimplifiedSentimentOptions).map(id => {
+                    const count = filterCommentsBySentiment(allComments, id).length
+                    return (
+                        <FilterItem
+                            key={id}
+                            label={getString(`options.sentiment.${id}.label.short`)?.t}
+                            count={count}
+                            isActive={id === sentimentFilter}
+                            clickHandler={() => {
+                                setSentimentFilter(id)
+                            }}
+                        />
+                    )
+                })}
+            </>
         </FilterSection>
     )
 }

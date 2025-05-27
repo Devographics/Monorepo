@@ -2,7 +2,6 @@ import {
     Bucket,
     FacetBucket,
     FeaturesOptions,
-    QuestionMetadata,
     SimplifiedSentimentOptions,
     StandardQuestionData
 } from '@devographics/types'
@@ -10,11 +9,9 @@ import sumBy from 'lodash/sumBy'
 import {
     CellDimension,
     MultiItemsChartState,
-    MultiItemsChartValues,
     ColumnId,
     CombinedBucket,
     CombinedItem,
-    DEFAULT_VARIABLE,
     Dimension,
     GroupingOptions,
     MaxValue,
@@ -23,14 +20,13 @@ import {
     COMMENTS,
     ValueKey,
     CountKey
-} from './types'
+} from '../types'
 import sortBy from 'lodash/sortBy'
 import max from 'lodash/max'
 import sum from 'lodash/sum'
 import take from 'lodash/take'
 import round from 'lodash/round'
-import { useState } from 'react'
-import { ColumnModes, OrderOptions } from '../common2/types'
+import { OrderOptions } from '../../common2/types'
 
 export const ITEM_GAP_PERCENT = 0
 export const COLUMN_GAP_PERCENT = 2
@@ -306,61 +302,3 @@ export const applyRatio = <T extends Dimension>(cellDimensions: T[], ratio: numb
 
 export const applyRowsLimit = (rowsLimit: number, totalRows: number) =>
     rowsLimit && rowsLimit + 3 < totalRows
-
-export const useChartState = (defaultState?: {
-    [P in keyof MultiItemsChartState]?: MultiItemsChartState[P]
-}) => {
-    const [rowsLimit, setRowsLimit] = useState<MultiItemsChartState['rowsLimit']>(
-        defaultState?.rowsLimit || 0
-    )
-    const [grouping, setGrouping] = useState<MultiItemsChartState['grouping']>(
-        GroupingOptions.EXPERIENCE
-    )
-    const [sort, setSort] = useState<MultiItemsChartState['sort']>(FeaturesOptions.USED)
-    const [filter, setFilter] = useState<MultiItemsChartState['filter']>()
-    const [order, setOrder] = useState<MultiItemsChartState['order']>(OrderOptions.DESC)
-    const [variable, setVariable] = useState<MultiItemsChartState['variable']>(DEFAULT_VARIABLE)
-    const [columnMode, setColumnMode] = useState<MultiItemsChartState['columnMode']>(
-        ColumnModes.STACKED
-    )
-    const [facetId, setFacetId] = useState<MultiItemsChartState['facetId']>('sentiment')
-
-    const chartState: MultiItemsChartState = {
-        facetId,
-        setFacetId,
-        grouping,
-        setGrouping,
-        sort,
-        setSort,
-        filter,
-        setFilter,
-        order,
-        setOrder,
-        variable,
-        setVariable,
-        columnMode,
-        setColumnMode,
-        rowsLimit,
-        setRowsLimit
-    }
-    return chartState
-}
-
-export const useChartValues = ({
-    items,
-    chartState,
-    question
-}: {
-    items: CombinedItem[]
-    chartState: MultiItemsChartState
-    question: QuestionMetadata
-}) => {
-    const chartValues: MultiItemsChartValues = {
-        totalRows: items.length,
-        question,
-        facetQuestion: {
-            id: '_sentiment'
-        } as QuestionMetadata
-    }
-    return chartValues
-}

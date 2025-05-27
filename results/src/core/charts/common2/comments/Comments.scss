@@ -42,17 +42,23 @@
 .comments-filters-wrapper {
     @include small {
         margin-bottom: var(--spacing);
+
+        & > .Button {
+            display: block;
+            width: 100%;
+            margin-top: var(--spacing);
+        }
+        &-show .comments-filters {
+            display: flex;
+        }
+        &-hide .comments-filters {
+            display: none;
+        }
     }
-    & > .Button {
-        display: block;
-        width: 100%;
-        margin-top: var(--spacing);
-    }
-    &-show .comments-filters {
-        display: flex;
-    }
-    &-hide .comments-filters {
-        display: none;
+    @include medium-large {
+        & > .Button {
+            display: none;
+        }
     }
 }
 .filter-section-heading {
@@ -208,6 +214,7 @@
 .value-item {
     // background-color: var(--bgColor);
     // border: 2px solid var(--color);
+    border: none;
     font-size: 0.7rem;
     border-radius: 30px;
     padding: 2px 8px;
