@@ -1,7 +1,7 @@
 import { getRawResponsesCollection } from "@devographics/mongo";
 
 export const addEditionIdSurveyId = async () => {
-  const Responses = await getRawResponsesCollection()
+  const Responses = await getRawResponsesCollection();
 
   const cursor = {
     $or: [{ editionId: { $exists: false } }, { surveyId: { $exists: false } }],
@@ -26,5 +26,7 @@ export const addEditionIdSurveyId = async () => {
 };
 
 addEditionIdSurveyId.description = `Add "editionId" and "surveyId" fields to all responses`;
+
+addEditionIdSurveyId.deprecated = true;
 
 export default addEditionIdSurveyId;

@@ -57,4 +57,6 @@ updateLegacyAccountsHashes.done = true;
 
 updateLegacyAccountsHashes.description = `Create two new email hashes for VulcanMeteor legacy accounts, based on current and future encryption keys. `;
 
+updateLegacyAccountsHashes.deprecated = true;
+
 export default updateLegacyAccountsHashes;

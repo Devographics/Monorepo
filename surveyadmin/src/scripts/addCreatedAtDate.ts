@@ -1,6 +1,4 @@
-import { PAST_PARTICIPATIONS } from "@devographics/constants";
 import { getRawResponsesCollection } from "@devographics/mongo";
-import { OtherParticipationData } from "@devographics/types";
 
 // how many bulk operation to perform in one go
 const operationsPerStep = 1000;
@@ -68,3 +66,5 @@ export const addCreatedAtDate = async (args) => {
 addCreatedAtDate.args = ["surveyId", "editionId"];
 
 addCreatedAtDate.description = `Add createdAtDate where missing.`;
+
+addCreatedAtDate.deprecated = true;

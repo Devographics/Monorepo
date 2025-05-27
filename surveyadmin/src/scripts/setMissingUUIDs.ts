@@ -29,7 +29,7 @@ export const setMissingUUIDs = async ({ limit = 20 }) => {
     const { _id, userId } = normResponse;
 
     const user = await Users.findOne({ _id: userId });
-    if (!user) throw new Error(`Can't find user with _id ${userId}`)
+    if (!user) throw new Error(`Can't find user with _id ${userId}`);
 
     const { emailHash } = user;
     const uuid = await getUUID(emailHash, userId);
@@ -51,5 +51,7 @@ export const setMissingUUIDs = async ({ limit = 20 }) => {
 setMissingUUIDs.args = ["limit"];
 
 setMissingUUIDs.description = `Add UUIDs (used for cohort tracking) to normalized responses that lack one. `;
+
+setMissingUUIDs.deprecated = true;
 
 export default setMissingUUIDs;

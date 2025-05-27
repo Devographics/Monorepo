@@ -4,9 +4,34 @@ import { runScript } from "~/lib/scripts/services";
 // import { MutationButton } from "~/core/components/ui/MutationButton";
 
 const AdminScripts = ({ scripts, surveys }) => {
+  const activeScripts = scripts.filter((s) => !s.deprecated);
+  const deprecatedScripts = scripts.filter((s) => s.deprecated);
   return (
     <div className="admin-scripts admin-content">
       <h2>Scripts</h2>
+      <ScriptList
+        heading="Migrations"
+        scripts={activeScripts.filter((s) => s.category === "migrations")}
+        surveys={surveys}
+      />
+      <ScriptList
+        heading="Utilities"
+        scripts={activeScripts.filter((s) => s.category === "utilities")}
+        surveys={surveys}
+      />
+      <ScriptList
+        heading="Deprecated"
+        scripts={deprecatedScripts}
+        surveys={surveys}
+      />
+    </div>
+  );
+};
+
+const ScriptList = ({ heading, scripts, surveys }) => {
+  return (
+    <div>
+      <h3>{heading}</h3>
       <table className="admin-scripts-table">
         <thead>
           <tr>
@@ -26,7 +51,6 @@ const AdminScripts = ({ scripts, surveys }) => {
     </div>
   );
 };
-
 const Script = ({ id, description, args, done, surveys }) => {
   const [result, setResult] = useState<any | undefined>();
   const [scriptArgs, setScriptArgs] = useState({});
@@ -35,6 +59,7 @@ const Script = ({ id, description, args, done, surveys }) => {
 
   const handleSubmit = async () => {
     setLoading(true);
+    setResult(null);
     const result = await runScript({ id, scriptArgs });
     setResult(result);
     setLoading(false);
@@ -82,7 +107,7 @@ const Script = ({ id, description, args, done, surveys }) => {
                 X
               </button>
               <pre>
-                <textarea>{JSON.stringify(result, null, 2)}</textarea>
+                <textarea value={JSON.stringify(result, null, 2)} />
               </pre>
             </div>
           </td>

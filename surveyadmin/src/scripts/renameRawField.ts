@@ -20,3 +20,5 @@ renameRawField.args = [
 ];
 
 renameRawField.description = `Rename raw responses field path`;
+
+renameRawField.deprecated = true;

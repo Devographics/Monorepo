@@ -363,3 +363,5 @@ export const loadTokyoDevCSV = async () => {
 };
 
 loadTokyoDevCSV.description = `Load data from TokyoDev CSV file.`;
+
+loadTokyoDevCSV.deprecated = true;

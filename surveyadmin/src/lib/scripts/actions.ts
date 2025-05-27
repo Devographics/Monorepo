@@ -9,6 +9,8 @@ export const getScripts = async () => {
       description: script.description,
       args: script.args,
       done: script.done,
+      deprecated: script.deprecated,
+      category: script.category,
     };
   });
 };

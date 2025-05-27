@@ -13,8 +13,7 @@ export const deleteUser = async ({ email, reallyDelete = 0 }) => {
   console.log(
     `// Finding and deleting all user data associated with email "${cleanEmail}" (reallyDelete = ${reallyDelete})`
   );
-  let legacyUser,
-    legacyResponses = [] as any[],
+  let legacyResponses = [] as any[],
     newResponses = [] as any[];
 
   const users = await getUsersCollection<UserDocument>();
@@ -25,7 +24,7 @@ export const deleteUser = async ({ email, reallyDelete = 0 }) => {
   const emailHash2 = createEmailHash(email, process.env.ENCRYPTION_KEY2);
 
   // 1. look for account with this email (legacy system)
-  legacyUser = await users.findOne({ email });
+  const legacyUser = await users.findOne({ email });
 
   if (legacyUser) {
     console.log(`// Found 1 legacy user document`);
@@ -39,19 +38,26 @@ export const deleteUser = async ({ email, reallyDelete = 0 }) => {
     );
   }
 
+  type Match = { [key: string]: string };
+  const match: Array<Match> = [{ emailHash1 }, { emailHash2 }];
+  if (legacyUser) {
+    match.push({ olderUserId: legacyUser?._id });
+  }
   // 3. look for newer account pointing to legacy account OR with matching email hash
   const newUser = await users.findOne({
     email: { $exists: false },
-    $or: [{ olderUserId: legacyUser?._id }, { emailHash1 }, { emailHash2 }],
+    $or: match,
   });
 
-  if (!newUser) throw new Error(`User ${legacyUser?._id} not found`)
+  if (!legacyUser && !newUser) {
+    throw new Error(`User with email ${email} not found`);
+  }
 
   // track which field(s) were actually matched
   const matches = [
-    { key: "olderUserId", match: newUser.olderUserId === legacyUser._id },
-    { key: "emailHash1", match: newUser.emailHash1 === emailHash1 },
-    { key: "emailHash2", match: newUser.emailHash2 === emailHash2 },
+    { key: "olderUserId", match: newUser?.olderUserId === legacyUser?._id },
+    { key: "emailHash1", match: newUser?.emailHash1 === emailHash1 },
+    { key: "emailHash2", match: newUser?.emailHash2 === emailHash2 },
   ];
 
   if (newUser) {
@@ -83,8 +89,12 @@ export const deleteUser = async ({ email, reallyDelete = 0 }) => {
     console.log(`// Deleting everything…`);
 
     // 6. delete everything
-    await users.deleteOne({ _id: legacyUser._id });
-    await users.deleteOne({ _id: newUser._id });
+    if (legacyUser) {
+      await users.deleteOne({ _id: legacyUser._id });
+    }
+    if (newUser) {
+      await users.deleteOne({ _id: newUser._id });
+    }
     await responses.deleteMany({ _id: { $in: responseIds } });
     await normResponses.deleteMany({ _id: { $in: normalizedResponsesIds } });
   }
@@ -101,3 +111,5 @@ export const deleteUser = async ({ email, reallyDelete = 0 }) => {
 deleteUser.args = ["email", "reallyDelete"];
 
 deleteUser.description = `Delete any user and user data associated with an email. (default reallyDelete = 0) `;
+
+deleteUser.category = "migrations";

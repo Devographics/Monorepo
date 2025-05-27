@@ -8,3 +8,5 @@ export const generateSourceField = async (args) => {
 generateSourceField.args = ["surveyId", "editionId"];
 
 generateSourceField.description = `Generate source field for an edition`;
+
+generateSourceField.deprecated = true;

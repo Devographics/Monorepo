@@ -8,3 +8,5 @@ export const migrateToolsPaths = async (args) => {
 migrateToolsPaths.args = ["surveyId", "editionId"];
 
 migrateToolsPaths.description = `Migrate raw responses paths from "tools_others" and "other_tools" to just "tools"`;
+
+migrateToolsPaths.deprecated = true;

@@ -1,15 +1,16 @@
 import { getNormResponsesCollection } from "@devographics/mongo";
 
 const happinessFields = [
-  "front_end_frameworks",
-  "rendering_frameworks", // old name for meta_frameworks
-  "meta_frameworks",
-  "testing",
-  "mobile_desktop",
-  "build_tools",
-  "monorepo_tools",
-  "state_of_the_web",
-  "state_of_js",
+  // "front_end_frameworks",
+  // "rendering_frameworks", // old name for meta_frameworks
+  // "meta_frameworks",
+  // "testing",
+  // "mobile_desktop",
+  // "build_tools",
+  // "monorepo_tools",
+  // "state_of_the_web",
+  // "state_of_js",
+  "state_of_css",
 ];
 const tempPath = "convertHappinessTemp";
 
@@ -47,3 +48,5 @@ export const convertHappiness = async (args) => {
 convertHappiness.args = [];
 
 convertHappiness.description = `Convert normalized happiness from foo.happiness to foo.happiness.choices for all surveys`;
+
+convertHappiness.deprecated = true;

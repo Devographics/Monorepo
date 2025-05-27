@@ -3,16 +3,21 @@
  * we need to call non-graphql endpoints meant to force reloads
  */
 const getUrl = (path, apiUrl) =>
-  `${apiUrl?.replace("/graphql", "")}/${path}?key=${process.env.API_SECRET_KEY}`;
+  `${apiUrl?.replace("/graphql", "")}/${path}?key=${
+    process.env.API_SECRET_KEY
+  }`;
 
-type Target = "production" | "staging" | "local"
+type Target = "production" | "staging" | "local";
 const reload = async (path, args: { target?: Target }) => {
   const { target } = args;
   const apiUrl =
     target === "production"
       ? process.env.API_URL_PRODUCTION
       : process.env.API_URL;
-  if (!apiUrl) throw new Error(`API_URL or API_URL_PRODUCTION is not defined, target is: ${target}`)
+  if (!apiUrl)
+    throw new Error(
+      `API_URL or API_URL_PRODUCTION is not defined, target is: ${target}`
+    );
   const url = getUrl(path, apiUrl);
   console.log("// reload");
   console.log(path);
@@ -29,10 +34,16 @@ export const reloadAPISurveys = async (args) => {
   return await reload("reinitialize-surveys", args);
 };
 
+reloadAPISurveys.category = "utilities";
+
 export const reloadAPILocales = async (args) => {
   return await reload("reinitialize-locales", args);
 };
 
+reloadAPILocales.category = "utilities";
+
 export const reloadAPIEntities = async (args) => {
   return await reload("reinitialize-entities", args);
 };
+
+reloadAPIEntities.category = "utilities";

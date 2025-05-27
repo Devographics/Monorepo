@@ -1,10 +1,14 @@
-import { getNormResponsesCollection, getRawResponsesCollection, getUsersCollection } from "@devographics/mongo";
+import {
+  getNormResponsesCollection,
+  getRawResponsesCollection,
+  getUsersCollection,
+} from "@devographics/mongo";
 import { UserDocument } from "./typings";
 
 export const findDuplicateAccounts = async ({ limit = 10000, skip = 0 }) => {
   limit = Number(limit);
   skip = Number(skip);
-  const Users = await getUsersCollection<UserDocument>()
+  const Users = await getUsersCollection<UserDocument>();
   let i = 0;
   const result = { duplicateAccountsCount: 0, duplicateUsers: [] };
 
@@ -60,12 +64,12 @@ export const findDuplicateAccounts = async ({ limit = 10000, skip = 0 }) => {
       const modifier = { $set: { userId: newerDuplicateAccount._id } };
 
       // update all responses and normalized responses to use new userId
-      const Responses = await getRawResponsesCollection()
+      const Responses = await getRawResponsesCollection();
       const responsesUpdated = await Responses.updateMany(selector, modifier);
       // console.log("// responsesUpdated");
       // console.log(responsesUpdated);
 
-      const NormalizedResponses = await getNormResponsesCollection()
+      const NormalizedResponses = await getNormResponsesCollection();
       const normResponesUpdated = await NormalizedResponses.updateMany(
         selector,
         modifier
@@ -82,5 +86,7 @@ export const findDuplicateAccounts = async ({ limit = 10000, skip = 0 }) => {
 findDuplicateAccounts.args = ["limit", "skip"];
 
 findDuplicateAccounts.description = `Find users that have the same email hash.`;
+
+findDuplicateAccounts.category = "utilities";
 
 export default findDuplicateAccounts;

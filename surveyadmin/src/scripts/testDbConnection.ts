@@ -13,4 +13,6 @@ export const testDbConnection = async ({ limit = 20 }) => {
 
 testDbConnection.description = `Test the connection to the private and public MongoDB databases.`;
 
+testDbConnection.category = "utilities";
+
 export default testDbConnection;

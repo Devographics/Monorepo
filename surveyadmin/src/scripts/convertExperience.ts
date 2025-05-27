@@ -8,3 +8,5 @@ export const convertExperience = async (args) => {
 convertExperience.args = ["surveyId", "editionId"];
 
 convertExperience.description = `Convert experience from 5-option format to 3-option + sentiment format`;
+
+convertExperience.deprecated = true;

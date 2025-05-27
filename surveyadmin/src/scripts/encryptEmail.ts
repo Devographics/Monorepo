@@ -15,3 +15,5 @@ export const encryptEmail = async ({ email, hashSalt }) => {
 encryptEmail.args = ["email", "hashSalt"];
 
 encryptEmail.description = `Test out email hashes with any salt. `;
+
+encryptEmail.category = "utilities";

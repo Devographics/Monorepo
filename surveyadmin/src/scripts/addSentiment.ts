@@ -8,3 +8,5 @@ export const addSentiment = async (args) => {
 addSentiment.args = ["surveyId", "editionId"];
 
 addSentiment.description = `Add dedicated sentiment field to all questions that support sentiment`;
+
+addSentiment.deprecated = true;
