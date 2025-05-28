@@ -41,6 +41,7 @@ import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
 import StringOrFloatOrArray from '../graphql/string_or_array'
 import { getCardinalities } from '../compute/cardinalities'
+import { calculateWordFrequencies } from '@devographics/helpers'
 
 export const generateResolvers = async ({
     surveys,
@@ -422,10 +423,20 @@ export const rawDataResolver: ResolverType = async (parent, args, context, info)
     return rawData
 }
 
+export const rawDataStatsResolver: ResolverType = async (parent, args, context, info) => {
+    console.log('// rawDataStatsResolver')
+    const { survey, edition, section, question } = parent
+    const { token } = args
+    const rawData = await getRawData({ survey, edition, section, question, context, token })
+    const rawDataStats = rawData && calculateWordFrequencies(rawData.map(item => item.raw))
+    return rawDataStats
+}
+
 export const responsesResolverMap: ResolverMap = {
     allEditions: allEditionsResolver,
     currentEdition: currentEditionResolver,
-    rawData: rawDataResolver
+    rawData: rawDataResolver,
+    rawDataStats: rawDataStatsResolver
 }
 /*
 
