@@ -7,15 +7,16 @@ import { NO_ANSWER, OVERALL } from '@devographics/constants'
 
 Create "overall" bucket using overall data as facets
 
-Note: filter out no answer bucket to avoid going over 100%
-when adding all facets' percentageBucket
+REMOVED / Note: filter out no answer bucket to avoid going over 100%
+when adding all facets' percentageBucket / REMOVED
 
 */
 export const getOverallBucket = (overallEditionData: ResponseEditionData) => {
     const overallBucket = {
         id: OVERALL,
         count: overallEditionData.completion.count,
-        facetBuckets: overallEditionData.buckets.filter(bucket => bucket.id !== NO_ANSWER)
+        // facetBuckets: overallEditionData.buckets.filter(bucket => bucket.id !== NO_ANSWER)
+        facetBuckets: overallEditionData.buckets
     }
     return overallBucket
 }
