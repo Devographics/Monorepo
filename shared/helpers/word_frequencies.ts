@@ -1,5 +1,3 @@
-import sortBy from 'lodash/sortBy.js'
-
 // Define a set of common English stop words
 const stopWords: Set<string> = new Set([
     'the',
@@ -316,6 +314,12 @@ export type FrequencyItem = {
     word: string
     count: number
 }
+
+// cannot use lodash/sortBy on Vercel edge…
+const sortBy = (key: string) => {
+    return (a: any, b: any) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0)
+}
+
 // Function to calculate word frequencies in an array of strings, excluding stop words
 export function calculateWordFrequencies(data: string[]) {
     let wordFrequencies: FrequencyItem[] = []
@@ -344,7 +348,7 @@ export function calculateWordFrequencies(data: string[]) {
     })
 
     wordFrequencies = wordFrequencies.filter(w => w.count > 5)
-    wordFrequencies = sortBy(wordFrequencies, 'count')
+    wordFrequencies = wordFrequencies.concat().sort(sortBy('count'))
     wordFrequencies.reverse()
     return wordFrequencies
 }
