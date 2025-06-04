@@ -26,7 +26,7 @@ export const useQuestionTitle = ({
   };
 
   const defaultTitle = {
-    key: question.id,
+    key: i18n.base,
     t: question.id,
     tHtml: question.id,
     tClean: question.id,

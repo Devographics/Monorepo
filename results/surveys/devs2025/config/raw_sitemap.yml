@@ -79,9 +79,6 @@
       - id: hint_hint
         template: hint
 
-      - id: variants_hint
-        template: hint
-
       - id: gender
         template: multiple_options2
         # takeaway: >
@@ -173,6 +170,9 @@
             - template: men_vs_non_men
             - template: white_vs_non_white
 
+      - id: variants_hint
+        template: hint
+
       - id: how_many_jobs
         template: multiple_options2
         variants:
@@ -191,6 +191,7 @@
         template: multiple_options2_combined
         variants:
             - template: vs_gender
+            - template: vs_race_ethnicity
             - template: men_vs_non_men
             - template: white_vs_non_white
 
@@ -320,6 +321,20 @@
 
       - id: work_hours_per_week
         template: single_option2
+        variants:
+            - id: work_hours_per_week_per_country
+              fieldId: country
+              tabId: tabs.by_country
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+                  limit: 20
+              filtersState:
+                  options:
+                      mode: facet
+                  facet:
+                      sectionId: user_info
+                      id: country
 
       - id: job_happiness
         template: single_option2

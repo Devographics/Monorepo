@@ -105,6 +105,7 @@ export interface ResponseData {
     allEditions: ResponseEditionData[]
     currentEdition: ResponseEditionData
     rawData: RawDataItem[]
+    rawDataStats: WordCount[]
 }
 
 export interface ResponseEditionData {
