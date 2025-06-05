@@ -1,0 +1,831 @@
+# ------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------------
+# Pages Properties
+# - id: the unique (survey-wide) ID of the page
+# - path: the page's path
+# - children: the page's children pages
+# - blocks: the page's blocks
+# - pageTemplate: a template from which to inherit its properties (not used)
+# - showTitle: whether to show the page title or not
+# - variables: page variables (compiled during sitemap generation)
+
+# Block Properties
+# - id: the unique (survey-wide) ID of the block
+# - blockName: the name of the block (used for titles, descriptions, etc.)
+# - bucketKeysName: the name of the block's keys (used for legends, formatting data, etc.)
+# - blockType: the type of block (which component to use)
+# - query: the query used to populate the block's data
+# - dataPath: the path to use (from the query root) to access the block's data
+# - showLegend: whether to show the block's legend
+# - showDescription: whether to show the block's description
+# - template: a template from which to inherit its properties
+# - translateData: whether to try and translate
+# - variables: block variables (compiled during sitemap generation)
+
+- id: introduction
+  path: /
+  showTitle: false
+  blocks:
+      - id: survey_intro
+        blockType: SurveyIntroBlock
+        disableExport: true
+        wrapBlock: false
+
+      - id: survey_start
+        blockType: SurveyStartBlock
+        disableExport: true
+        wrapBlock: false
+
+      - id: survey_sponsors
+        template: sponsors
+
+      - id: survey_partners
+        template: sponsors
+        blockType: PartnersBlock
+
+      - id: survey_credits
+        template: credits
+
+      - id: survey_newsletter
+        blockType: NewsletterBlock
+        disableExport: true
+        wrapBlock: false
+
+      - id: survey_translators
+        blockType: TranslatorsBlock
+        disableExport: true
+        wrapBlock: false
+
+- id: tshirt
+  path: /tshirt
+  showTitle: false
+  blocks:
+      - id: tshirt_intro
+        template: page_introduction
+      - id: tshirt_block
+        blockType: TshirtBlock
+        wrapBlock: false
+        disableExport: true
+
+# - id: data_explorer
+#   titleId: sections.data_explorer.title
+#   path: /explorer
+#   blocks:
+#       - template: page_introduction
+
+#       - id: data_explorer
+#         showTitle: false
+#         chartOnly: true
+#         wrapBlock: false
+#         template: data_explorer
+#         parameters: { showNoAnswer: true }
+#         variables:
+#             xAxis: user_info__yearly_salary
+#             yAxis: user_info__years_of_experience
+
+- id: user_info
+  titleId: sections.demographics.title
+  path: /demographics
+  blocks:
+      - template: page_introduction
+
+      - id: country
+        template: multiple_options2
+        parameters: { limit: 20 }
+        variants:
+            - template: vs_salary
+              parameters: { cutoff: 100, limit: 20, sort: { property: medianByFacet, order: desc } }
+
+      # - id: locale
+      #   template: multiple_options2
+      #   parameters: { cutoff: 20 }
+
+      - id: hint_hint
+        template: hint
+
+      # - id: completion_stats
+      #   template: multiple_options2
+
+      - id: age
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: options }
+
+      - id: years_of_experience
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: options }
+
+      - id: augustin_mauroy
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/:has
+
+      - id: company_size
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: options }
+
+      - id: variants_hint
+        template: hint
+
+      - id: yearly_salary
+        template: multiple_options2
+        variants:
+            - id: yearly_salary_us_vs_world
+              fieldId: yearly_salary
+              tabId: tabs.usa_vs_the_world
+              blockType: HorizontalBarBlock2
+              hasData: true
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: in
+                              value: [USA]
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value: [USA]
+
+      - id: job_title
+        template: multiple_options2_freeform
+        variants:
+            - template: vs_salary
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_age
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet, order: asc }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_years_of_experience
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet, order: asc }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_gender
+              parameters:
+                  limit: 20
+                  cutoff: 100
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+
+      - id: higher_education_degree
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: options }
+
+      - id: lea_verou
+        template: picks
+        variables:
+            url: https://developer.chrome.com/docs/css-ui/style-queries
+
+      - id: gender
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+            - id: country_vs_gender
+              fieldId: country
+              tabId: tabs.by_country
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+                  limit: 15
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+
+      - id: race_ethnicity
+        template: multiple_options2_combined
+        variants:
+            - template: vs_years_of_experience
+            - template: vs_age
+
+      - id: disability_status
+        template: multiple_options2_combined
+
+      - id: source
+        template: multiple_options2_freeform
+        parameters:
+            limit: 20
+        queryOptions:
+            addQuestionComments: false
+
+      - id: user_info_resources
+        items: [fm-learncss]
+        template: recommended_resources
+
+- id: features
+  path: /features
+  descriptionId: sections.features.description.css2024
+  blocks:
+      - template: page_introduction
+
+      - id: all_features
+        template: multi_items_experience
+        i18nNamespace: features
+        chartOptions:
+            limit: 10
+            categories:
+                [
+                    layout,
+                    shapes_graphics,
+                    colors,
+                    interactions,
+                    typography,
+                    accessibility,
+                    math_features,
+                    other_features
+                ]
+
+      # - id: knowledge_score
+      #   template: demographics
+      - id: features_ratios_over_time
+        template: multi_items_ratios
+        tabId: blocks.tools_experience_ranking.percentages
+
+      - id: chris_coyier
+        template: picks
+        variables:
+            url: https://web.dev/
+
+      - id: reading_list
+        template: multiple_options2
+        parameters:
+            limit: 20
+        queryOptions:
+            sectionId: reading_list
+            addQuestionComments: false
+        chartOptions:
+            dataFilters: [removeOverLimit, removeNoAnswer]
+            limit: 10
+
+      - id: features_resources
+        items: [fm-cssvariables, fm-accessibility]
+        template: recommended_resources
+
+  children:
+      - id: layout
+        blocks:
+            - id: layout_ratios
+              template: multi_items_ratios
+              i18nNamespace: features
+
+            - id: layout_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+      - id: shapes_graphics
+        blocks:
+            - id: shapes_graphics_ratios
+              template: multi_items_ratios
+              i18nNamespace: features
+
+            - id: shapes_graphics_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+      - id: colors
+        blocks:
+            - id: colors_ratios
+              template: multi_items_ratios
+              i18nNamespace: features
+
+            - id: colors_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+      - id: interactions
+        blocks:
+            - id: interactions_ratios
+              template: multi_items_ratios
+              i18nNamespace: features
+
+            - id: interactions_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+      - id: typography
+        blocks:
+            - id: typography_ratios
+              template: multi_items_ratios
+              i18nNamespace: features
+
+            - id: typography_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+      - id: math_features
+        blocks:
+            - id: math_features_ratios
+              template: multi_items_ratios
+              i18nNamespace: features
+
+            - id: math_features_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+      - id: other_features
+        blocks:
+            - id: other_features_ratios
+              template: multi_items_ratios
+              i18nNamespace: features
+
+            - id: other_features_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+- id: other_tools
+  path: /tools
+  titleId: sections.tools.css2024
+  descriptionId: sections.tools.description.css2024
+  blocks:
+      - id: tools_others_intro
+        template: page_introduction
+
+      - id: css_frameworks
+        template: multiple_options2_combined
+        i18nNamespace: tools
+
+      - id: css_in_js
+        template: multiple_options2_combined
+        i18nNamespace: tools
+
+      - id: temani_afif
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/@property
+
+      - id: pre_post_processors
+        template: multiple_options2_combined
+        i18nNamespace: tools
+
+      - id: utilities
+        template: multiple_options2_combined
+        i18nNamespace: tools
+
+      - id: josh_comeau
+        template: picks
+        variables:
+            url: https://css-articles.com/
+
+      - id: browsers
+        template: multiple_options2_combined
+        i18nNamespace: tools
+
+      - id: other_tools_resources
+        items: [fm-gridsflexbox, fm-practicallayouts]
+        template: recommended_resources
+
+- id: usage
+  descriptionId: sections.usage.description.css2024
+  intlId: usage_css
+  path: /usage
+  blocks:
+      - template: page_introduction
+
+      - id: form_factors
+        template: multiple_options2_combined
+
+      - id: sharing_hint
+        template: hint
+
+      - id: what_do_you_use_css_for
+        template: multiple_options2_combined
+
+      - id: adam_argyle
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/blog/custom-easing-in-css-with-linear/
+
+      - id: industry_sector
+        template: multiple_options2_combined
+
+      - id: css_interoperability_features
+        template: multiple_options2_freeform
+
+      - id: andy_bell
+        template: picks
+        variables:
+            url: https://polypane.app/blog/getting-stuck-all-the-ways-position-sticky-can-fail/
+
+      - id: css_missing_features
+        template: multiple_options2_freeform
+
+      - id: css_pain_points
+        template: multiple_options2_freeform
+
+      - id: favorite_new_features
+        template: multiple_options2_freeform
+
+      - id: gamechanger_feature
+        template: single_option2_freeform
+
+      - id: baseline_awareness
+        template: single_option2
+
+      - id: css_pace_of_change
+        template: single_option2
+
+      - id: ahmad_shadeed
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll-driven_animations
+
+      - id: state_of_the_web_happiness
+        template: happiness2
+        i18nNamespace: usage
+
+      - id: state_of_css_happiness
+        template: happiness2
+        i18nNamespace: usage
+
+      - id: usage_resources
+        items: [fm-svg, fm-design-developers]
+        template: recommended_resources
+
+- id: resources
+  intlId: resources_css
+  descriptionId: sections.resources.description.css2024
+  path: /resources
+  blocks:
+      - template: page_introduction
+
+      - id: miguel_angel_duran
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/@view-transition
+
+      - id: podcasts
+        template: multiple_options2_freeform
+
+      - id: video_creators
+        template: multiple_options2_freeform
+
+      - id: people
+        template: multiple_options2_freeform
+
+      - id: sacha_greif
+        template: picks
+        variables:
+            url: https://www.sarasoueidan.com/
+
+      - id: web_platform_resources
+        template: multiple_options2_combined
+
+      - id: other_surveys
+        template: multiple_options2_combined
+
+      - id: resources_resources
+        items: [fm-animations-transitions, fm-typography]
+        template: recommended_resources
+
+- id: awards
+  path: /awards
+  blocks:
+      - template: page_introduction
+
+      - id: awards
+        template: awards
+        variables:
+            entities: '"filter_effects","has_selector","intrinsic_sizing","subgrid","hanging_punctuation","forced_colors","view_timeline","aspect_ratio", "line_clamp", "aspect_ratio", "css_nesting"'
+        awards:
+            - id: most_used_feature_award
+              template: award
+              awards:
+                  - id: filter_effects
+                    value: '75.4%'
+                  - id: has_selector
+                    value: '72.8%'
+                  - id: intrinsic_sizing
+                    value: '72.5%'
+
+            - id: least_used_feature_award
+              template: award
+              awards:
+                  - id: hanging_punctuation
+                    value: '1.6%'
+                  - id: forced_colors
+                    value: '1.7%'
+                  - id: view_timeline
+                    value: '2.3%'
+
+            - id: most_loved_feature_award
+              template: award
+              awards:
+                  - id: subgrid
+                    value: '51.5%'
+                  - id: has_selector
+                    value: '46.9%'
+                  - id: aspect_ratio
+                    value: '46.8%'
+
+            - id: most_commented_feature_award
+              template: award
+              awards:
+                  - id: subgrid
+                    value: 331
+                  - id: line_clamp
+                    value: 100
+                  - id: css_nesting
+                    value: 99
+
+- id: conclusion
+  path: /conclusion
+  blocks:
+      - id: conclusion
+        template: conclusion
+        variables:
+            author: ahmad_shadeed
+            entities: '"ahmad_shadeed"'
+
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+        wrapBlock: false
+        disableExport: true
+
+- id: _user_metadata
+  intlId: user_metadata
+  i18nNamespace: user_metadata
+  path: /metadata
+  blocks:
+      - template: page_introduction
+
+      - id: locale
+        template: multiple_options2
+        defaultView: percentageSurvey
+        parameters: { cutoff: 20 }
+        queryOptions:
+            addQuestionComments: false
+
+      - id: completion_stats
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: authmode
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: device
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: browser
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      # - id: version
+      #   template: multiple_options2
+      #   queryOptions:
+      #       addQuestionComments: false
+
+      - id: os
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: past_surveys
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+            addBucketsEntities: true
+        parameters:
+            showNoAnswer: true
+
+      - id: past_same_survey_count
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+        parameters:
+            showNoAnswer: true
+
+      - id: created_at_date
+        template: multiple_options2
+        blockType: TimeSeriesByDateBlock
+        defaultView: countBar
+        parameters:
+            showNoAnswer: false
+            cutoff: 10
+            sort: { order: asc, property: id }
+        queryOptions:
+            addQuestionComments: false
+        variants:
+            - id: created_at_date_by_source
+              fieldId: created_at_date
+              template: multiple_options2
+              blockType: TimeSeriesByDateBlock
+              defaultView: count
+              parameters:
+                  showNoAnswer: false
+                  cutoff: 10
+                  sort: { order: asc, property: id }
+                  facetLimit: 3
+                  enableAddOverallBucket: false
+                  mergeOtherBuckets: true
+              queryOptions:
+                  addBucketsEntities: true
+                  addQuestionComments: false
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: source
+
+      - id: source
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        parameters:
+            limit: 20
+        queryOptions:
+            addQuestionComments: false
+
+# note: other pages need to be included in the sitemap too so they can get the proper
+# locale passed to them
+
+- id: about
+  path: /about
+  blocks:
+      - id: about_contents
+        blockType: AboutBlock
+        wrapBlock: false
+        disableExport: true
+
+# - id: how_to_help
+#   path: /how_to_help
+#   blocks:
+
+#     - id: how_to_help_contents
+#       blockType: HowToHelpBlock
+#       wrapBlock: false
+#       disableExport: true
+
+- id: support
+  path: /support
+  is_hidden: true
+  blocks:
+      - id: support
+        template: page_introduction
+
+- id: sponsor_finish
+  path: /sponsor-chart-finish
+  is_hidden: true
+  blocks:
+      - id: sponsor_finish
+        blockType: SponsorFinishBlock
+        wrapBlock: false
+
+- id: notfound
+  titleId: notfound.title
+  path: /404
+  is_hidden: true
+  blocks:
+      - id: notfound
+        blockType: NotFoundBlock
+# - id: report
+#   showTitle: false
+#   path: /report
+#   is_hidden: true
+#   showSidebar: false
+#   blocks:
+#     - id: report_contents
+#       isReport: true
+#       blockType: ReportBlock
+
+#     - id: country
+#       isReport: true
+#       template: demographics
+#       blockType: ParticipationByCountryBlock
+#       hidden: true
+#       pageId: user_info
+
+#     - template: features_overview
+#       isReport: true
+#       hidden: true
+
+#     - template: knowledgeScoreTemplate
+#       isReport: true
+#       hidden: true
+#       pageId: features
+
+#     - template: tools_experience_marimekko
+#       isReport: true
+#       hidden: true
+#       variables:
+#         parentId: css_in_js
+
+#     - template: tools_section_streams
+#       isReport: true
+#       hidden: true
+#       variables:
+#         parentId: css_in_js
+
+#     - template: tools_experience_ranking
+#       isReport: true
+#       hidden: true
+#       variables:
+#         parentId: css_frameworks_abridged
+
+#     - id: scatterplot_overview
+#       isReport: true
+#       template: scatterplot_overview
+#       hidden: true
+
+#     - id: grid
+#       isReport: true
+#       template: feature_experience
+#       hidden: true
+
+#     - id: subgrid
+#       isReport: true
+#       template: feature_experience
+#       hidden: true
+
+#     - id: logical_properties
+#       isReport: true
+#       template: feature_experience
+#       hidden: true
+
+#     - id: prefers_reduced_motion
+#       isReport: true
+#       template: feature_experience
+#       hidden: true
+
+#     - id: prefers_color_scheme
+#       isReport: true
+#       template: feature_experience
+#       hidden: true
+
+#     - id: utility_classes_to_be_avoided
+#       isReport: true
+#       hidden: true
+#       template: opinion
+#       pageId: opinions
+
+#     - id: css_is_programming_language
+#       isReport: true
+#       template: opinion
+#       hidden: true
+#       pageId: opinions
+
+#     - id: state_of_css
+#       template: opinionHappinessTemplate
+#       isReport: true
+#       hidden: true
+#       pageId: opinions
+
+#     - id: currently_missing_from_css
+#       template: opinions_others
+#       isReport: true
+#       hidden: true
+#       pageId: opinions
