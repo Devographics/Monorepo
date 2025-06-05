@@ -245,13 +245,6 @@
       - id: disability_status
         template: multiple_options2_combined
 
-      - id: source
-        template: multiple_options2_freeform
-        parameters:
-            limit: 20
-        queryOptions:
-            addQuestionComments: false
-
       - id: user_info_resources
         items: [fm-learncss]
         template: recommended_resources
@@ -307,6 +300,7 @@
 
   children:
       - id: layout
+        path: /layout
         blocks:
             - id: layout_ratios
               template: multi_items_ratios
@@ -314,9 +308,10 @@
 
             - id: layout_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: tools
+              i18nNamespace: features
 
       - id: shapes_graphics
+        path: /shapes-graphics
         blocks:
             - id: shapes_graphics_ratios
               template: multi_items_ratios
@@ -324,9 +319,10 @@
 
             - id: shapes_graphics_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: tools
+              i18nNamespace: features
 
       - id: colors
+        path: /colors
         blocks:
             - id: colors_ratios
               template: multi_items_ratios
@@ -334,9 +330,10 @@
 
             - id: colors_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: tools
+              i18nNamespace: features
 
       - id: interactions
+        path: /interactions
         blocks:
             - id: interactions_ratios
               template: multi_items_ratios
@@ -344,9 +341,10 @@
 
             - id: interactions_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: tools
+              i18nNamespace: features
 
       - id: typography
+        path: /typography
         blocks:
             - id: typography_ratios
               template: multi_items_ratios
@@ -354,9 +352,10 @@
 
             - id: typography_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: tools
+              i18nNamespace: features
 
       - id: math_features
+        path: /math
         blocks:
             - id: math_features_ratios
               template: multi_items_ratios
@@ -364,9 +363,10 @@
 
             - id: math_features_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: tools
+              i18nNamespace: features
 
       - id: other_features
+        path: /other-features
         blocks:
             - id: other_features_ratios
               template: multi_items_ratios
@@ -374,10 +374,10 @@
 
             - id: other_features_pain_points
               template: multiple_options2_freeform
-              i18nNamespace: tools
+              i18nNamespace: features
 
 - id: other_tools
-  path: /tools
+  path: /other-tools
   titleId: sections.tools.css2024
   descriptionId: sections.tools.description.css2024
   blocks:
@@ -586,7 +586,6 @@
         disableExport: true
 
 - id: _user_metadata
-  intlId: user_metadata
   i18nNamespace: user_metadata
   path: /metadata
   blocks:
@@ -612,13 +611,13 @@
             addQuestionComments: false
 
       - id: device
-        template: multiple_options2_freeform
+        template: multiple_options2
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
 
       - id: browser
-        template: multiple_options2_freeform
+        template: multiple_options2
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
@@ -629,7 +628,7 @@
       #       addQuestionComments: false
 
       - id: os
-        template: multiple_options2_freeform
+        template: multiple_options2
         defaultView: percentageSurvey
         queryOptions:
             addQuestionComments: false
@@ -679,7 +678,7 @@
                   addQuestionComments: false
               filtersState:
                   facet:
-                      sectionId: user_info
+                      sectionId: _user_metadata
                       id: source
 
       - id: source
