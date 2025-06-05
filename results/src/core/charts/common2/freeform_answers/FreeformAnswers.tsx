@@ -1,7 +1,7 @@
 import './FreeformAnswers.scss'
 import React, { useState } from 'react'
 import { useI18n } from '@devographics/react-i18n'
-import { RawDataItem } from '@devographics/types'
+import { RawDataItem, WordCount } from '@devographics/types'
 import { OrderOptions } from '../types'
 import sortBy from 'lodash/sortBy'
 import { FilterKeywords } from '../comments/filters/FilterKeywords'
@@ -13,17 +13,20 @@ import { FilterSearch } from '../comments/filters/FilterSearch'
 import BlockQuestion from 'core/blocks/block/BlockQuestion'
 import T from 'core/i18n/T'
 import { CommentsCommonProps } from '../comments/types'
+import { matchWordStart } from '../comments/Comments'
 
 export const FreeformAnswers = ({
     answers,
     questionLabel,
     tokenLabel,
     block,
-    question
+    question,
+    stats
 }: {
     answers: RawDataItem[]
     questionLabel: string
     tokenLabel: string
+    stats: WordCount[]
 } & CommentsCommonProps) => {
     const [keywordFilter, setKeywordFilter] = useState<FreeformAnswersState['keywordFilter']>(null)
     const [searchFilter, setSearchFilter] = useState<FreeformAnswersState['searchFilter']>(null)
@@ -51,8 +54,11 @@ export const FreeformAnswers = ({
         filteredAnswers = filteredAnswers.toReversed()
     }
     if (searchFilter) {
+        filteredAnswers = filteredAnswers.filter(answer => matchWordStart(answer.raw, searchFilter))
+    }
+    if (keywordFilter) {
         filteredAnswers = filteredAnswers.filter(answer =>
-            answer.raw.toLowerCase().includes(searchFilter.toLowerCase())
+            matchWordStart(answer.raw, keywordFilter)
         )
     }
     return (
@@ -74,6 +80,9 @@ export const FreeformAnswers = ({
                 <div className={`comments-filters-wrapper comments-filters-wrapper-show`}>
                     <div className="comments-filters">
                         <FilterSearch stateStuff={stateStuff} />
+                        {stats?.length > 0 && (
+                            <FilterKeywords stateStuff={stateStuff} stats={stats} />
+                        )}
                     </div>
                 </div>
 

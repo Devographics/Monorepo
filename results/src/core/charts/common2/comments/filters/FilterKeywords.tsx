@@ -5,7 +5,7 @@ import { FilterItem } from '../FilterItem'
 import { FreeformAnswersState } from '../../freeform_answers/types'
 import { FilterSection } from '../CommentsFilters'
 
-export const KEYWORD_COUNT = 25
+export const KEYWORD_COUNT = 20
 
 export const FilterKeywords = ({
     stateStuff,

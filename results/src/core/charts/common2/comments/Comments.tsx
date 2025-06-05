@@ -27,7 +27,7 @@ export const filterCommentsByExperience = (comments: Comment[], value: string | 
 export const filterCommentsBySentiment = (comments: Comment[], value: string | number | null) =>
     value === '' ? comments : comments.filter(c => String(c.sentiment) === String(value))
 
-function matchWordStart(text: string, word: string): boolean {
+export function matchWordStart(text: string, word: string): boolean {
     const regex = new RegExp(`\\b${escapeRegExp(word)}`, 'i')
     return regex.test(text)
 }

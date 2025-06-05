@@ -1,4 +1,4 @@
-id: ${mainBlockId}_vs_gender
+id: ${mainBlockId}_vs_race_ethnicity
 fieldId: ${mainBlockId}
 blockType: HorizontalBarBlock2
 hasData: true
@@ -9,4 +9,4 @@ filtersState:
         mode: facet
     facet:
         sectionId: user_info
-        id: gender
+        id: race_ethnicity

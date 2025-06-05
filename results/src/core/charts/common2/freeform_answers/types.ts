@@ -1,3 +1,4 @@
+import { RawDataItem, WordCount } from '@devographics/types'
 import { OrderOptions } from '../types'
 
 export type FreeformAnswersState = {
@@ -9,4 +10,9 @@ export type FreeformAnswersState = {
     setKeywordFilter: React.Dispatch<React.SetStateAction<string | null>>
     searchFilter: string | null
     setSearchFilter: React.Dispatch<React.SetStateAction<string | null>>
+}
+
+export interface FreeformAnswersData {
+    answers: RawDataItem[]
+    stats: WordCount[]
 }
