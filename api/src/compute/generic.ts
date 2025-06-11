@@ -69,6 +69,8 @@ type StageLogItem = {
     bucketCount: number
 }
 
+export const ninObject: MatchNin = { $nin: [null, '', [], {}] }
+
 export const convertOrder = (order: SortOrder): SortOrderNumeric => (order === 'asc' ? 1 : -1)
 
 export const convertOrderReverse = (order: SortOrderNumeric): SortOrder =>
@@ -362,7 +364,6 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     }
 
     const surveyId = survey.id
-    const ninObject: MatchNin = { $nin: [null, '', [], {}] }
     let match = {
         surveyId,
         [dbPath]: ninObject

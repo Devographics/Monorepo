@@ -6,13 +6,15 @@ import {
     FilterQuery,
     FiltersQuery,
     ComputeAxisParameters,
-    FiltersQueryOr
+    FiltersQueryOr,
+    MatchNin
 } from './types'
 import { MongoCondition, OptionGroup } from '@devographics/types'
 import range from 'lodash/range.js'
 import { getMainSubfieldPath } from './helpers/surveys'
 import merge from 'lodash/merge.js'
 import clone from 'lodash/clone.js'
+import { ninObject } from './compute'
 
 /**
  * Map natural operators (exposed by the API), to MongoDB operators.
@@ -31,9 +33,12 @@ import clone from 'lodash/clone.js'
  *   { $gt: 7}
  * ]
  */
+
+type FilterValue<T> = T | null | '' | [] | {}
+
 const mapFilter = <T>(filter: Filter<T>) => {
     const { eq, /* in, */ nin, lt, gt } = filter
-    const conditions: Array<MongoCondition<T>> = []
+    const conditions: Array<MongoCondition<FilterValue<T>>> = []
     if (eq !== undefined) {
         conditions.push({ $eq: eq })
     }
@@ -47,7 +52,15 @@ const mapFilter = <T>(filter: Filter<T>) => {
         if (!Array.isArray(nin)) {
             throw new Error(`'nin' operator only supports arrays`)
         }
-        conditions.push({ $nin: nin })
+        /*
+
+        Whenever we use a negative $nin condition, we need to make sure
+        that fiels is not empty. Otherwise { gender: { $nin: ['male']}}
+        would also match fields where gender is not defined at all, 
+        which is probably not what we want. 
+
+        */
+        conditions.push({ $nin: [...nin, null, '', [], {}] })
     }
     if (lt !== undefined) {
         conditions.push({ $lt: lt })
