@@ -154,9 +154,9 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
-            - template: vs_gender
-            - template: men_vs_non_men
-            - template: white_vs_non_white
+            # - template: vs_gender
+            # - template: men_vs_non_men
+            # - template: white_vs_non_white
 
       - id: higher_education_degree
         template: multiple_options2
@@ -166,9 +166,9 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
-            - template: vs_gender
-            - template: men_vs_non_men
-            - template: white_vs_non_white
+            # - template: vs_gender
+            # - template: men_vs_non_men
+            # - template: white_vs_non_white
 
       - id: variants_hint
         template: hint
@@ -176,45 +176,112 @@
       - id: how_many_jobs
         template: multiple_options2
         variants:
-            - template: vs_gender
-            - template: men_vs_non_men
-            - template: white_vs_non_white
+            - id: age_vs_how_many_jobs
+              fieldId: age
+              queryOptions:
+                  sectionId: health
+              tabId: tabs.by_age
+              blockType: HorizontalBarBlock2
+              hasData: true
+              parameters:
+                  showNoAnswer: true
+              filtersState:
+                  options:
+                      mode: facet
+                  facet:
+                      sectionId: career
+                      id: how_many_jobs
 
       - id: employment_status
         template: multiple_options2_combined
         variants:
-            - template: vs_gender
-            - template: men_vs_non_men
-            - template: white_vs_non_white
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
 
       - id: career_issues
         template: multiple_options2_combined
         variants:
-            - template: vs_gender
-            - template: vs_race_ethnicity
+            # - template: vs_gender
+            # - template: vs_race_ethnicity
             - template: men_vs_non_men
-            - template: white_vs_non_white
+            # - template: white_vs_non_white
 
       - id: discrimination_issues
         template: multiple_options2_combined
         variants:
-            - template: vs_gender
+            # - template: vs_gender
+            - id: age_vs_discrimination_issues
+              blockType: HorizontalBarBlock2
+              tabId: tabs.by_age
+              hasData: true
+              parameters:
+                  showNoAnswer: true
+              queryOptions:
+                  sectionId: health
+              fieldId: age
+              filtersState:
+                  facet:
+                      sectionId: career
+                      id: discrimination_issues
             - template: men_vs_non_men
             - template: white_vs_non_white
 
       - id: negative_impacts
         template: multiple_options2_combined
         variants:
-            - template: vs_gender
+            # - template: vs_gender
             - template: men_vs_non_men
             - template: white_vs_non_white
+            # - id: negative_impacts_overall_by_gender
+            #   fieldId: negative_impacts
+            #   blockType: HorizontalBarBlock2
+            #   hasData: true
+            #   parameters:
+            #       showNoAnswer: true
+            #   defaultUnits: percentageQuestion
+            #   tabId: tabs.by_gender
+            #   filtersState:
+            #       filters:
+            #           - conditions:
+            #                 - fieldId: gender
+            #                   sectionId: user_info
+            #                   operator: in
+            #                   value: [male]
+            #           - conditions:
+            #                 - fieldId: gender
+            #                   sectionId: user_info
+            #                   operator: in
+            #                   value: [female]
+            #           - conditions:
+            #                 - fieldId: gender
+            #                   sectionId: user_info
+            #                   operator: in
+            #                   value: [non_binary, not_listed]
 
       - id: laid_off
         template: single_option2
         variants:
-            - template: vs_gender
-            - template: men_vs_non_men
-            - template: white_vs_non_white
+            - id: laid_off_vs_country
+              template: vs_facet
+              tabId: tabs.by_country
+              queryOptions:
+                  sectionId: user_info
+              fieldId: country
+              parameters:
+                  limit: 15
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: yes_before
+                      order: desc
+                  facet:
+                      sectionId: career
+                      id: laid_off
 
 - id: workplace
   path: /workplace
@@ -227,6 +294,12 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
+            - id: company_size_vs_income_evolution
+              template: vs_facet
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: income_evolution
 
       - id: job_title
         template: multiple_options2_freeform
@@ -244,19 +317,6 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
-            - template: vs_age
-              parameters:
-                  limit: 20
-                  cutoff: 100
-                  sort: { property: medianByFacet, order: asc }
-              chartOptions:
-                  limit: 10
-              queryOptions:
-                  subField: freeform
-              filtersState:
-                  facet:
-                      sectionId: health
-                      id: age
             - template: vs_years_of_experience
               parameters:
                   limit: 20
@@ -286,55 +346,98 @@
                   facet:
                       sectionId: user_info
                       id: gender
+
       - id: yearly_salary
         template: multiple_options2
         variants:
-            - id: yearly_salary_us_vs_world
-              fieldId: yearly_salary
-              tabId: tabs.usa_vs_the_world
-              blockType: HorizontalBarBlock2
-              hasData: true
+            - id: country_vs_yearly_salary
+              template: vs_facet
+              fieldId: country
+              queryOptions:
+                  sectionId: user_info
+              tabId: tabs.by_country
+              parameters:
+                  limit: 20
+                  sort: { property: medianByFacet }
               filtersState:
-                  filters:
-                      - conditions:
-                            - fieldId: country
-                              sectionId: user_info
-                              operator: in
-                              value: [USA]
-                      - conditions:
-                            - fieldId: country
-                              sectionId: user_info
-                              operator: nin
-                              value: [USA]
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
 
       - id: income_evolution
         template: single_option2
 
       - id: job_finding_application_count
         template: single_option2
+        variants:
+            - id: years_of_experience_vs_job_finding_application_count
+              template: vs_facet
+              tabId: tabs.by_experience
+              queryOptions:
+                  sectionId: career
+              fieldId: years_of_experience
+              filtersState:
+                  options:
+                      mode: facet
+                  facet:
+                      sectionId: workplace
+                      id: job_finding_application_count
 
       - id: job_finding_methods
         template: multiple_options2_combined
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
 
       - id: remote_work_policy
         template: single_option2
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
+            - id: remote_work_policy_vs_job_happiness
+              template: vs_facet
+              parameters:
+                  sort: { property: medianByFacet }
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: job_happiness
 
       - id: work_hours_per_week
         template: single_option2
         variants:
+            - template: vs_salary
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
             - id: work_hours_per_week_per_country
+              queryOptions:
+                  sectionId: user_info
               fieldId: country
               tabId: tabs.by_country
               template: multiple_options2
               parameters:
                   showNoAnswer: true
                   limit: 20
+                  sort: { property: medianByFacet }
+                  cutoff: 100
               filtersState:
                   options:
                       mode: facet
                   facet:
-                      sectionId: user_info
-                      id: country
+                      sectionId: workplace
+                      id: work_hours_per_week
 
       - id: job_happiness
         template: single_option2
@@ -359,15 +462,47 @@
 
       - id: productivity_apps
         template: multiple_options2_combined
+        variants:
+            - id: productivity_apps_vs_company_size
+              template: vs_facet
+              queryOptions:
+                  subField: combined
+              parameters:
+                  cutoff: 100
+                  limit: 20
+                  sort: { property: medianByFacet }
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: company_size
 
       - id: chat_apps
         template: multiple_options2_combined
 
       - id: social_media
         template: multiple_options2_combined
+        variants:
+            - template: vs_age
+              parameters:
+                  sort: { property: medianByFacet }
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: age
 
       - id: community_involvement
         template: multiple_options2_combined
+        variants:
+            - template: vs_age
+              queryOptions:
+                  subField: combined
+              parameters:
+                  cutoff: 10
+                  sort: { property: medianByFacet }
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: age
 
       - id: community_contributions
         template: multiple_options2_combined
@@ -386,6 +521,8 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
+              parameters:
+                  sort: { property: medianByFacet }
 
             - template: vs_gender
             - id: age_vs_disability
@@ -420,6 +557,16 @@
 
       - id: health_issues
         template: multiple_options2_combined
+        variants:
+            - id: gender_vs_health_issues
+              template: vs_facet
+              queryOptions:
+                  sectionId: user_info
+              fieldId: gender
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: health_issues
 
       - id: sleep_quantity
         template: single_option2

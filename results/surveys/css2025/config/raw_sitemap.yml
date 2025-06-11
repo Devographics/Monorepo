@@ -378,8 +378,6 @@
 
 - id: other_tools
   path: /other-tools
-  titleId: sections.tools.css2024
-  descriptionId: sections.tools.description.css2024
   blocks:
       - id: tools_others_intro
         template: page_introduction
