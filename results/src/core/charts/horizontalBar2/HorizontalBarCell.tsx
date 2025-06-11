@@ -59,7 +59,7 @@ export const Cell = ({
     const { question, facetQuestion, totalRespondents, serieMetadataProps } = chartValues
     const { completion } = serieMetadataProps
     const { count: totalSerieRespondents } = completion
-    const { sort, view } = chartState
+    const { sort, view, highlightedCell, setHighlightedCell } = chartState
     const { getValue, formatValue } = viewDefinition
     const { getString } = useI18n()
 
@@ -102,14 +102,27 @@ export const Cell = ({
     const v = formatValue(value, question, chartState)
 
     const isActiveSort = sort === id
-    const className = `chart-cell horizontal-chart-cell ${isActiveSort ? 'active-sort' : ''}`
+    const isHighlighted = highlightedCell === id
+    const className = `chart-cell chart-cell-${
+        isHighlighted ? 'highlighted' : ''
+    } horizontal-chart-cell ${isActiveSort ? 'active-sort' : ''}`
 
     const label = facetQuestionLabel ? `${facetQuestionLabel}: ${cellLabel}` : cellLabel
 
     return (
         <Tooltip
             trigger={
-                <div className={className} style={style} ref={ref}>
+                <div
+                    className={className}
+                    style={style}
+                    ref={ref}
+                    onMouseEnter={() => {
+                        setHighlightedCell(id)
+                    }}
+                    onMouseLeave={() => {
+                        setHighlightedCell(null)
+                    }}
+                >
                     {showLabel && <CellLabel label={v} />}
                     {oversizedBar && <Oversized />}
                 </div>

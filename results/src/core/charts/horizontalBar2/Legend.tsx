@@ -6,7 +6,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { HorizontalBarChartState } from './types'
 import { OrderOptions } from '../common2/types'
 import T from 'core/i18n/T'
-import { Toggle, ToggleItemType } from '../common2'
+import { Toggle, ToggleItemType, ToggleValueType } from '../common2'
 
 type LegendProps = {
     chartState: HorizontalBarChartState
@@ -67,21 +67,21 @@ export const useOptionsToggleItems = ({
 export const Legend = ({ chartState, i18nNamespace, options, colorScale }: LegendProps) => {
     const { getString } = useI18n()
 
-    const { sort, setSort, order, setOrder } = chartState
+    const { sort, setSort, order, setOrder, setHighlightedCell } = chartState
 
-    const handleSelect = (optionId: string) => {
+    const handleSelect = (optionId: ToggleValueType | null) => {
         const isEnabled = sort === optionId
         if (optionId === DEFAULT_SORT) {
             setSort(undefined)
-            setOrder(OrderOptions.ASC)
+            setOrder(OrderOptions.DESC)
         } else if (!isEnabled) {
             setSort(optionId as string)
-            setOrder(OrderOptions.ASC)
+            setOrder(OrderOptions.DESC)
         } else if (sort && order === OrderOptions.ASC) {
             setOrder(OrderOptions.DESC)
         } else {
             setSort(undefined)
-            setOrder(OrderOptions.ASC)
+            setOrder(OrderOptions.DESC)
         }
     }
 
@@ -90,11 +90,15 @@ export const Legend = ({ chartState, i18nNamespace, options, colorScale }: Legen
     return (
         <div className="chart-legend">
             <Toggle
+                sortId={sort}
                 sortOrder={order}
                 labelId="charts.sort_by"
                 handleSelect={handleSelect}
                 items={items}
                 hasDefault={true}
+                handleHover={id => {
+                    setHighlightedCell(id)
+                }}
             />
         </div>
     )

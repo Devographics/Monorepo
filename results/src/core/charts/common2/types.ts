@@ -13,8 +13,10 @@ import { CustomVariant } from 'core/filters/helpers'
 import { Dispatch, SetStateAction } from 'react'
 
 export interface ChartStateWithHighlightedRow {
-    highlightedRow: string | null
-    setHighlightedRow: Dispatch<SetStateAction<string | null>>
+    highlightedRow: string | number | null
+    setHighlightedRow: Dispatch<SetStateAction<string | number | null>>
+    highlightedCell: string | number | null
+    setHighlightedCell: Dispatch<SetStateAction<string | number | null>>
 }
 export interface ChartStateWithView<ViewType> extends ChartStateWithHighlightedRow {
     view: string

@@ -5,7 +5,7 @@ hasData: true
 parameters:
     showNoAnswer: true
 defaultUnits: percentageQuestion
-tabId: tabs.men_vs_non_men
+tabId: tabs.by_gender
 filtersState:
     filters:
         - conditions:
@@ -17,5 +17,8 @@ filtersState:
         - conditions:
               - fieldId: gender
                 sectionId: user_info
-                operator: nin
-                value: male
+                operator: in
+                value:
+                    - female
+                    - non_binary
+                    - not_listed

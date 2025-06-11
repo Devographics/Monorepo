@@ -55,6 +55,9 @@ export const useChartState = (defaultState: {
     const [highlightedRow, setHighlightedRow] =
         useState<HorizontalBarChartState['highlightedRow']>(null)
 
+    const [highlightedCell, setHighlightedCell] =
+        useState<HorizontalBarChartState['highlightedCell']>(null)
+
     const viewDefinition = getViewDefinition(view)
 
     const chartState: HorizontalBarChartState = {
@@ -71,7 +74,9 @@ export const useChartState = (defaultState: {
         rowsLimit,
         setRowsLimit,
         highlightedRow,
-        setHighlightedRow
+        setHighlightedRow,
+        highlightedCell,
+        setHighlightedCell
     }
     return chartState
 }

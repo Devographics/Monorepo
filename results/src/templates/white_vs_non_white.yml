@@ -5,7 +5,7 @@ hasData: true
 parameters:
     showNoAnswer: true
 defaultUnits: percentageQuestion
-tabId: tabs.white_vs_non_white
+tabId: tabs.by_race_ethnicity
 filtersState:
     filters:
         - conditions:

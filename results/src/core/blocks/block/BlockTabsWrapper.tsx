@@ -104,62 +104,64 @@ export const TabsWrapper = ({
                         setActiveTab(value)
                     }}
                 >
-                    <BlockHeader className="block-header">
-                        <BlockHeaderRight_>
-                            <TabsList aria-label="tabs example">
-                                {block.variants.map((block, variantIndex) => (
-                                    <Tab_ key={block.id}>
-                                        <TabsTrigger value={getRegularTabId(variantIndex)}>
-                                            {getBlockTabTitle({
-                                                block,
-                                                pageContext,
-                                                variantIndex,
-                                                getString,
-                                                entities
-                                            })}
-                                        </TabsTrigger>
-                                    </Tab_>
-                                ))}
-                                {blockCustomVariants.map((variant, variantIndex) => (
-                                    <Tab_ key={variant.name}>
-                                        <TabsTrigger value={getCustomTabId(variant.id)}>
-                                            {variant.name ? (
-                                                variant.name
-                                            ) : (
-                                                <T
-                                                    k="charts.custom_variant"
-                                                    values={{ index: variantIndex + 1 }}
-                                                />
-                                            )}
-                                        </TabsTrigger>
+                    <BlockHeaderWrapper>
+                        <BlockHeader className="block-header">
+                            <BlockHeaderRight_>
+                                <TabsList aria-label="tabs example">
+                                    {block.variants.map((block, variantIndex) => (
+                                        <Tab_ key={block.id}>
+                                            <TabsTrigger value={getRegularTabId(variantIndex)}>
+                                                {getBlockTabTitle({
+                                                    block,
+                                                    pageContext,
+                                                    variantIndex,
+                                                    getString,
+                                                    entities
+                                                })}
+                                            </TabsTrigger>
+                                        </Tab_>
+                                    ))}
+                                    {blockCustomVariants.map((variant, variantIndex) => (
+                                        <Tab_ key={variant.name}>
+                                            <TabsTrigger value={getCustomTabId(variant.id)}>
+                                                {variant.name ? (
+                                                    variant.name
+                                                ) : (
+                                                    <T
+                                                        k="charts.custom_variant"
+                                                        values={{ index: variantIndex + 1 }}
+                                                    />
+                                                )}
+                                            </TabsTrigger>
 
-                                        <ModalTrigger
-                                            trigger={
-                                                <EditIcon
-                                                    size="petite"
-                                                    labelId="filters.edit_variant"
-                                                />
-                                            }
-                                        >
-                                            <FiltersPanel {...variantProps} variant={variant} />
-                                        </ModalTrigger>
-                                    </Tab_>
-                                ))}
-                            </TabsList>
+                                            <ModalTrigger
+                                                trigger={
+                                                    <EditIcon
+                                                        size="petite"
+                                                        labelId="filters.edit_variant"
+                                                    />
+                                                }
+                                            >
+                                                <FiltersPanel {...variantProps} variant={variant} />
+                                            </ModalTrigger>
+                                        </Tab_>
+                                    ))}
+                                </TabsList>
 
-                            {firstBlockVariant.customizationModes && (
-                                <ModalTrigger
-                                    trigger={
-                                        <CustomizeButton_ variant="link">
-                                            <T k="filters.customize_chart" />
-                                        </CustomizeButton_>
-                                    }
-                                >
-                                    <FiltersPanel {...variantProps} />
-                                </ModalTrigger>
-                            )}
-                        </BlockHeaderRight_>
-                    </BlockHeader>
+                                {firstBlockVariant.customizationModes && (
+                                    <ModalTrigger
+                                        trigger={
+                                            <CustomizeButton_ variant="link">
+                                                <T k="filters.customize_chart" />
+                                            </CustomizeButton_>
+                                        }
+                                    >
+                                        <FiltersPanel {...variantProps} />
+                                    </ModalTrigger>
+                                )}
+                            </BlockHeaderRight_>
+                        </BlockHeader>
+                    </BlockHeaderWrapper>
                     {regularVariants.map((block, variantIndex) => (
                         <Tabs.Content key={block.id} value={getRegularTabId(variantIndex)}>
                             <BlockSwitcher
@@ -214,12 +216,17 @@ const Wrapper = styled.section`
         `}
 `
 
+const BlockHeaderWrapper = styled.div`
+    overflow-x: scroll;
+`
 const BlockHeader = styled.div`
     /* display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     align-items: flex-end;
     gap: ${spacing(0.5)}; */
+    min-width: 100%;
+    width: max-content;
     border-bottom: ${props => props.theme.border};
 `
 

@@ -25,7 +25,7 @@ export const FacetTitle = ({
         getString,
         block,
         question,
-        i18nNamespace: block.i18nNamespace ?? block.sectionId
+        i18nNamespace: block.i18nNamespace ?? block?.queryOptions?.sectionId ?? block.sectionId
     })
 
     const {

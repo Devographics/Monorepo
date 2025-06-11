@@ -1,0 +1,7 @@
+fieldId: ${mainBlockId}
+blockType: HorizontalBarBlock2
+hasData: true
+parameters:
+    showNoAnswer: true
+    cutoff: 10
+    # sort: { property: medianByFacet }
