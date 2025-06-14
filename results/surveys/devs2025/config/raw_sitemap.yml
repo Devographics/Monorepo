@@ -202,6 +202,16 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
+            - id: employment_status_vs_income_evolution
+              template: vs_facet
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: increased
+                      order: desc
+                  facet:
+                      sectionId: workplace
+                      id: income_evolution
 
       - id: career_issues
         template: multiple_options2_combined
@@ -366,6 +376,25 @@
 
       - id: income_evolution
         template: single_option2
+        variants:
+            - id: income_evolution_vs_country
+              template: vs_facet
+              tabId: tabs.by_country
+              queryOptions:
+                  sectionId: user_info
+              fieldId: country
+              parameters:
+                  limit: 30
+              chartOptions:
+                  limit: 10
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: increased
+                      order: desc
+                  facet:
+                      sectionId: workplace
+                      id: income_evolution
 
       - id: job_finding_application_count
         template: single_option2
@@ -441,6 +470,17 @@
 
       - id: job_happiness
         template: single_option2
+        variants:
+            - id: job_happiness_vs_years_of_experience
+              queryOptions:
+                  sectionId: career
+              fieldId: years_of_experience
+              template: vs_facet
+              tabId: tabs.by_experience
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: job_happiness
 
       - id: workplace_perks
         template: multiple_options2_combined
