@@ -26,7 +26,7 @@ export const useDefaultColorScale = () => {
     const theme = useTheme()
     const { colors } = theme
     return {
-        [DEFAULT]: [colors.velocity[4], colors.velocity[8]],
+        [DEFAULT]: [colors.barChart.primaryGradient[1], colors.barChart.primaryGradient[0]],
         [NOT_APPLICABLE]: [neutralColor, neutralColor],
         [NO_ANSWER]: [neutralColor, neutralColor],
         [OVERALL]: [neutralColor, neutralColor],

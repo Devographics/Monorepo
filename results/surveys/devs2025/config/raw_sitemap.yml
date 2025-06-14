@@ -494,21 +494,37 @@
         template: multiple_options2_combined
         variants:
             - template: vs_age
-              queryOptions:
-                  subField: combined
               parameters:
-                  cutoff: 10
                   sort: { property: medianByFacet }
               filtersState:
                   facet:
                       sectionId: health
                       id: age
 
+            # - template: vs_age
+            #   queryOptions:
+            #       subField: combined
+            #   parameters:
+            #       cutoff: 10
+            #       sort: { property: medianByFacet }
+            #   filtersState:
+            #       facet:
+            #           sectionId: health
+            #           id: age
+
       - id: community_contributions
         template: multiple_options2_combined
+        variants:
+            - template: men_vs_non_men
+              queryOptions:
+                  subField: combined
 
       - id: open_source_involvement
         template: multiple_options2_combined
+        variants:
+            - template: men_vs_non_men
+              queryOptions:
+                  subField: combined
 
 - id: health
   path: /health

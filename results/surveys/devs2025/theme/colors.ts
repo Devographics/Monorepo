@@ -157,21 +157,21 @@ const distinct = [
 ]
 
 const stateOfJSThemeColors: DefaultTheme['colors'] = {
-    background: '#182C36',
+    background: '#242B21',
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',
     backgroundAlt3: '#27242E',
-    backgroundBackground: '#375D70',
+    backgroundBackground: '#566063',
     backgroundForeground: colors.navyLighter,
-    backgroundAlt: '#26495B',
+    backgroundAlt: '#506A61',
     backgroundAltTrans: 'rgba(49, 68, 72, 0.4)',
-    backgroundAlt2: colors.lilacDarkest2,
+    backgroundAlt2: '#414D50',
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
-    text: colors.white,
+    text: '#E6FFD5',
     textAlt: 'rgba(255, 246, 229, 0.5)',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
-    link: '#76DFFF',
+    link: '#B1E599',
     linkActive: '#5C63E0',
     contrast: '#0bdf67',
     border: '#FFF6E6',
@@ -253,8 +253,8 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         gradient: [colors.greyLight, colors.greyLightest]
     },
     barChart: {
-        primary: '#76DFFF',
-        primaryGradient: ['#42B0D1', '#76DFFF'],
+        primary: '#8CC672',
+        primaryGradient: ['#B1E599', '#8CC672'],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.pink,
