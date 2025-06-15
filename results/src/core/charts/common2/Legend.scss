@@ -8,9 +8,9 @@
     @include small {
         justify-content: space-between;
     }
-    @include medium-large {
-        justify-content: flex-end;
-    }
+    // @include medium-large {
+    //     justify-content: flex-end;
+    // }
     // grid-column-start: 2;
     // grid-column-end: 4;
     &-heading {

@@ -167,8 +167,12 @@
                       sectionId: workplace
                       id: yearly_salary
             - template: vs_facet
-              id: years_of_experience_vs_gender
+              id: gender_vs_years_of_experience
               tabId: tabs.by_gender
+              # future syntax
+              # axis1:
+              #   sectionId: user_info
+              #   fieldId: gender
               queryOptions:
                   sectionId: user_info
               fieldId: gender

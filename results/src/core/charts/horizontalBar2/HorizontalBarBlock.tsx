@@ -43,7 +43,8 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     }
 
     // note: block.filtersState will also reflect filters set using the query builder
-    const facet = block?.filtersState?.axis2
+    // note: keep block?.filtersState?.axis2 for backwards compatibility with YAML configs for now
+    const facet = block?.filtersState?.axis2 || block?.filtersState?.facet
 
     const facetQuestion = useQuestionMetadata(facet)
 
@@ -87,7 +88,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                 </pre> */}
                 {/* {
                     <pre>
-                        <code>{JSON.stringify(block?.filtersState, null, 2)}</code>
+                        <code>{JSON.stringify(facetQuestion, null, 2)}</code>
                     </pre>
                 } */}
                 {facetQuestion && <FacetHeading facetQuestion={facetQuestion} {...commonProps} />}

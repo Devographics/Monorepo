@@ -72,14 +72,19 @@ export const Legend = ({ chartState, i18nNamespace, options, colorScale }: Legen
     const handleSelect = (optionId: ToggleValueType | null) => {
         const isEnabled = sort === optionId
         if (optionId === DEFAULT_SORT) {
+            // we're explicitely clearing the sort (used with select menus)
             setSort(undefined)
             setOrder(OrderOptions.DESC)
         } else if (!isEnabled) {
+            // if no sort is enabled when we click, we switch to DESC
             setSort(optionId as string)
             setOrder(OrderOptions.DESC)
-        } else if (sort && order === OrderOptions.ASC) {
-            setOrder(OrderOptions.DESC)
+        } else if (sort && order === OrderOptions.DESC) {
+            // if we're sorting by DESC order when we click, we switch to ASC
+            setOrder(OrderOptions.ASC)
         } else {
+            // any other scenario (e.g. we're sorting by ASC order when we click)
+            // we clear the sort
             setSort(undefined)
             setOrder(OrderOptions.DESC)
         }

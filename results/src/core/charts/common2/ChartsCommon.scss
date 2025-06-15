@@ -15,11 +15,10 @@
     border-bottom: 1px solid #ffffff33;
     padding-bottom: 20px;
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
+    flex-direction: column;
     gap: var(--spacing);
-    @include small {
-        flex-direction: column;
-    }
+
     .chart-created_at_date_by_source & {
         flex-direction: column;
         border: none;

@@ -72,11 +72,12 @@ export const getBlockDataPath = ({
     const { currentSurvey: survey, currentEdition: edition } = pageContext
     // if a different sectionId is specified in the query options, use that as
     // part of the data path
-    console.log({ chartFilters })
     const sectionId =
         chartFilters?.axis1?.sectionId || block?.queryOptions?.sectionId || pageContext.id
     const section = { id: sectionId } as SectionMetadata
-    const questionId = chartFilters?.axis1?.id || block.fieldId || block.id
+    // todo: currently query does not use block.fieldId so
+    // todo: we can't use it here either
+    const questionId = chartFilters?.axis1?.id || block.id
     const question = { id: questionId } as QuestionMetadata
     const dataPath =
         block.dataPath ||
