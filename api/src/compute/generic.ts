@@ -52,7 +52,8 @@ import {
     ResponsesParameters,
     Filters,
     ResultsSubFieldEnum,
-    SortProperty
+    SortProperty,
+    Survey
 } from '@devographics/types'
 import { getPastNEditions } from '../helpers/surveys'
 import { computeKey } from '../helpers/caching'
@@ -60,6 +61,7 @@ import isEmpty from 'lodash/isEmpty.js'
 import { logToFile } from '@devographics/debug'
 import { SENTIMENT_FACET } from '@devographics/constants'
 import { addValues } from './stages/add_values'
+import { getQuestionObjects } from '../generate/generate'
 
 type StageLogItem = {
     name: string
@@ -205,6 +207,48 @@ export type GenericComputeOptions = {
 }
 
 const DEFAULT_LIMIT = 50
+
+export const getMatch = async ({
+    survey,
+    edition,
+    dbPath,
+    filters,
+    questionObjects,
+    selectedEditionId,
+    editionCount,
+    testForNull = true
+}: {
+    survey: SurveyMetadata
+    edition: EditionMetadata
+    dbPath: string
+    filters?: Filters
+    questionObjects: QuestionApiObject[]
+    selectedEditionId?: string
+    editionCount?: number
+    testForNull?: boolean
+}) => {
+    const surveyId = survey.id
+    let match = {
+        surveyId
+    }
+    if (testForNull) {
+        match[dbPath] = ninObject
+    }
+    if (filters) {
+        const filtersQuery = generateFiltersQuery({ filters, surveyId, questionObjects })
+        match = { ...match, ...filtersQuery }
+    }
+    if (selectedEditionId) {
+        // if edition is passed, restrict aggregation to specific edition
+        match.editionId = selectedEditionId
+    } else {
+        // restrict aggregation to current and past editions, to avoid including results from the future
+        // when regenerating older surveys
+        const pastEditions = getPastNEditions({ survey, edition, editionCount })
+        match.editionId = { $in: pastEditions.map(e => e.id) }
+    }
+    return match
+}
 
 export async function genericComputeFunction(options: GenericComputeOptions) {
     const startAt = new Date()
@@ -363,24 +407,16 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         )
     }
 
-    const surveyId = survey.id
-    let match = {
-        surveyId,
-        [dbPath]: ninObject
+    const matchOptions = {
+        survey,
+        edition,
+        editionCount,
+        selectedEditionId,
+        dbPath,
+        filters,
+        questionObjects
     }
-    if (filters) {
-        const filtersQuery = await runStage(generateFiltersQuery, [{ filters, dbPath, surveyId }])
-        match = { ...match, ...filtersQuery }
-    }
-    if (selectedEditionId) {
-        // if edition is passed, restrict aggregation to specific edition
-        match.editionId = selectedEditionId
-    } else {
-        // restrict aggregation to current and past editions, to avoid including results from the future
-        // when regenerating older surveys
-        const pastEditions = getPastNEditions({ survey, edition, editionCount })
-        match.editionId = { $in: pastEditions.map(e => e.id) }
-    }
+    const match = await getMatch(matchOptions)
 
     if (isDebug) {
         await logToFile(`${logPath}/computeArguments.json`, computeArguments)
@@ -390,9 +426,11 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
     }
 
     // TODO: merge these counts into the main aggregation pipeline if possible
-    const totalRespondentsByYear = await runStage(computeParticipationByYear, [{ context, survey }])
+    const totalRespondentsByYear = await runStage(computeParticipationByYear, [
+        { context, survey, logPath, isDebug }
+    ])
     const completionByYear = await runStage(computeCompletionByYear, [
-        { context, match, survey, dbPath }
+        { context, matchOptions, survey, dbPath, logPath, isDebug }
     ])
 
     const pipelineProps = {
@@ -405,7 +443,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         responsesType,
         showNoAnswer,
         survey,
-        edition
+        edition,
+        questionObjects
     }
 
     const pipeline = await runStage(getGenericPipeline, [pipelineProps])

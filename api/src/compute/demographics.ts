@@ -4,13 +4,18 @@ import { RequestContext, EditionParticipation } from '../types'
 import { Survey } from '../types/surveys'
 import { inspect } from 'util'
 import { getCollection } from '../helpers/db'
+import { logToFile } from '@devographics/debug'
 
 export async function computeParticipationByYear({
     context,
-    survey
+    survey,
+    logPath,
+    isDebug
 }: {
     context: RequestContext
     survey: Survey
+    logPath: string
+    isDebug: boolean
 }): Promise<EditionParticipation[]> {
     const { db } = context
     const collection = getCollection(db, survey)
@@ -37,11 +42,17 @@ export async function computeParticipationByYear({
             }
         }
     ]
+
     const participantsByYear = (await collection
         .aggregate(aggregationPipeline)
         .toArray()) as EditionParticipation[]
 
     const results = orderBy(participantsByYear, 'year')
+
+    if (isDebug) {
+        await logToFile(`${logPath}/participation_pipeline.json`, aggregationPipeline)
+        await logToFile(`${logPath}/participation_results.json`, results)
+    }
 
     // console.log('// computeParticipationByYear')
     // console.log(

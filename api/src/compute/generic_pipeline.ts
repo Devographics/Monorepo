@@ -1,7 +1,7 @@
 import { generateFiltersQuery } from '../filters'
-import { ComputeAxisParameters, GenericComputeParameters } from '../types'
+import { ComputeAxisParameters, GenericComputeParameters, QuestionApiObject } from '../types'
 import { NO_ANSWER } from '@devographics/constants'
-import { getDbPath } from './generic'
+import { getDbPath, getMatch } from './generic'
 import { EditionMetadata, ResponsesTypes, SurveyMetadata } from '@devographics/types'
 import { getPastNEditions } from '../helpers/surveys'
 
@@ -14,6 +14,7 @@ export interface PipelineProps extends GenericComputeParameters {
     axis2?: ComputeAxisParameters | null
     survey: SurveyMetadata
     edition: EditionMetadata
+    questionObjects: QuestionApiObject[]
 }
 
 // generate an aggregation pipeline for all years, or
@@ -29,7 +30,8 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
         showNoAnswer = false,
         responsesType,
         survey,
-        edition
+        edition,
+        questionObjects
     } = pipelineProps
 
     /*
@@ -65,7 +67,12 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
     }
 
     if (filters) {
-        const filtersQuery = await generateFiltersQuery({ filters, dbPath: axis1DbPath, surveyId })
+        const filtersQuery = generateFiltersQuery({
+            filters,
+            // dbPath: axis1DbPath,
+            surveyId,
+            questionObjects
+        })
         match = { ...match, ...filtersQuery }
     }
 

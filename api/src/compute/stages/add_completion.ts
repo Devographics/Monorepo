@@ -22,6 +22,8 @@ export async function addCompletionCounts(
         editionData.completion = {
             // number of survey respondents
             total: totalSurveyRespondents,
+            // number of respondents that match filters
+            filteredTotal: 999, // todo
             // number of question respondents
             count: totalQuestionRespondents,
             // number of question answers

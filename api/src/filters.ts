@@ -7,7 +7,8 @@ import {
     FiltersQuery,
     ComputeAxisParameters,
     FiltersQueryOr,
-    MatchNin
+    MatchNin,
+    QuestionApiObject
 } from './types'
 import { MongoCondition, OptionGroup } from '@devographics/types'
 import range from 'lodash/range.js'
@@ -231,16 +232,15 @@ function expandFilter(filter: Filter<string | number>, groups?: OptionGroup[]) {
  *
  *
  */
-export const generateFiltersQuery = async ({
+export const generateFiltersQuery = ({
     filters,
-    surveyId
+    surveyId,
+    questionObjects
 }: {
     filters?: Filters
     surveyId: string
-}): Promise<FiltersQuery> => {
-    const { surveys } = await loadOrGetSurveys()
-    const questionObjects = getQuestionObjects({ surveys })
-
+    questionObjects: QuestionApiObject[]
+}): FiltersQuery => {
     const match: FiltersQuery = { $and: [] }
     if (filters) {
         for (const filterKey of Object.keys(filters)) {

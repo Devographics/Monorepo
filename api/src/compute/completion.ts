@@ -2,6 +2,8 @@ import config from '../config'
 import { getCollection } from '../helpers/db'
 import { RequestContext, Survey } from '../types'
 import { inspect } from 'util'
+import { logToFile } from '@devographics/debug'
+import { getMatch } from './generic'
 
 export interface CompletionResult {
     editionId: string
@@ -63,34 +65,36 @@ const getPipeline = (match: any, dbPath: string, unwind: boolean = false) => {
 }
 export async function computeCompletionByYear({
     context,
-    match,
+    matchOptions,
     survey,
-    dbPath
+    dbPath,
+    logPath,
+    isDebug
 }: {
     context: RequestContext
-    match: any
+    matchOptions: any
     survey: Survey
     dbPath: string
+    logPath: string
+    isDebug: boolean
 }): Promise<CompletionResult[]> {
     const { db } = context
     const collection = getCollection(db, survey)
 
+    // todo: actually do this
+    // at the match stage we want to know the total number of
+    // survey respondents, not just those who filled out the question
+    const match = await getMatch({ ...matchOptions, testForNull: true })
     const aggregationPipeline = getPipeline(match, dbPath)
 
     const completionResults = (await collection
         .aggregate(aggregationPipeline)
         .toArray()) as CompletionResult[]
 
-    console.log('// computeCompletionByYear')
-    console.log(
-        inspect(
-            {
-                aggregationPipeline,
-                completionResults
-            },
-            { colors: true, depth: null }
-        )
-    )
+    if (isDebug) {
+        await logToFile(`${logPath}/completion_pipeline.json`, aggregationPipeline)
+        await logToFile(`${logPath}/completion_results.json`, completionResults)
+    }
 
     return completionResults
 }

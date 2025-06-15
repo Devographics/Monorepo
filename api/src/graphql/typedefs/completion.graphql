@@ -7,6 +7,10 @@ type YearCompletion {
     """
     total: Int
     """
+    Total number of respondents who match the current set of filters
+    """
+    filteredTotal: Int
+    """
     Number of respondents who have answered this question for a specific year
     """
     count: Int
