@@ -40,8 +40,9 @@ export const likert: ApiTemplateFunction = ({ question: question_, survey, editi
     ]
     const includedSubFields = subFields.filter(s => subFieldIds.includes(s.id))
 
-    return {
+    const typeDef = {
         ...question,
+        generatedBy: 'likert',
         id: `${question.id}_likert`,
         fieldTypeName,
         typeDef: `type ${fieldTypeName} {
@@ -52,4 +53,5 @@ ${question.options
         }`,
         resolverMap: getResolverMap(question)
     }
+    return typeDef
 }

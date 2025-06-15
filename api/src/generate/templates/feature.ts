@@ -19,6 +19,7 @@ import { Survey } from '@devographics/types'
 export const getFeatureFieldTypeName = ({ survey }: { survey: Survey }) =>
     `${graphqlize(survey.id)}Feature`
 
+// not used anymore?
 const getTypeDef = ({
     fieldTypeName,
     survey,
@@ -38,8 +39,14 @@ const getTypeDef = ({
     )},  parameters: Parameters, facet: ${getFacetsTypeName(survey.id)}): ${getResponseTypeName(
     survey.id
 )}
+    combined(filters: ${getFiltersTypeName(
+        survey.id
+    )},  parameters: Parameters, facet: ${getFacetsTypeName(survey.id)}): ${getResponseTypeName(
+    survey.id
+)}
 }
 `
+
 export const feature: ApiTemplateFunction = options => {
     const { survey, question } = options
     const fieldTypeName = `${graphqlize(survey.id)}Feature`
@@ -80,6 +87,7 @@ export const featurev3: ApiTemplateFunction = options => {
         autogenerateFilterType: false,
         autogenerateOptionType: false,
         autogenerateEnumType: false,
+        generatedBy: 'feature',
         typeDef: getTypeDef({ fieldTypeName, survey, addFollowups: false })
     }
     return output

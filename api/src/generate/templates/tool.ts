@@ -16,6 +16,7 @@ import { Survey, SurveyMetadata } from '@devographics/types'
 export const getToolFieldTypeName = ({ survey }: { survey: Survey }) =>
     `${graphqlize(survey.id)}Tool`
 
+// not used anymore?
 export const tool: ApiTemplateFunction = options => {
     const { survey, question } = options
     const fieldTypeName = getToolFieldTypeName({ survey })
@@ -38,6 +39,11 @@ export const tool: ApiTemplateFunction = options => {
     )},  parameters: Parameters, facet: ${getFacetsTypeName(survey.id)}): ${getResponseTypeName(
             survey.id
         )}
+    combined(filters: ${getFiltersTypeName(
+        survey.id
+    )},  parameters: Parameters, facet: ${getFacetsTypeName(survey.id)}): ${getResponseTypeName(
+            survey.id
+        )}
 }`
         // resolverMap: {
         //     id: idResolverFunction,
@@ -50,6 +56,7 @@ export const tool: ApiTemplateFunction = options => {
     return output
 }
 
+// this one is used!!
 const getTypeDef = ({
     fieldTypeName,
     survey,
@@ -69,9 +76,15 @@ const getTypeDef = ({
     )},  parameters: Parameters, facet: ${getFacetsTypeName(survey.id)}): ${getResponseTypeName(
     survey.id
 )}
+    combined(filters: ${getFiltersTypeName(
+        survey.id
+    )},  parameters: Parameters, facet: ${getFacetsTypeName(survey.id)}): ${getResponseTypeName(
+    survey.id
+)}
 }
 `
 
+// this one is used!
 export const toolv3: ApiTemplateFunction = options => {
     const { survey, question } = options
     const fieldTypeName = `${graphqlize(survey.id)}Tool`
@@ -82,6 +95,7 @@ export const toolv3: ApiTemplateFunction = options => {
         autogenerateFilterType: false,
         autogenerateOptionType: false,
         autogenerateEnumType: false,
+        generatedBy: 'toolv3',
         typeDef: getTypeDef({ fieldTypeName, survey, addFollowups: false })
     }
     return output

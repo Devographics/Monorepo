@@ -32,10 +32,11 @@ export const generateFieldType = async ({
             includedSubFields.push(subField)
         }
     }
+
     if (!fieldTypeName || includedSubFields.length === 0) {
         return
     } else {
-        return {
+        const typeDef = {
             generatedBy: 'field',
             typeName: fieldTypeName,
             typeType: TypeTypeEnum.FIELD_GENERATED,
@@ -43,6 +44,8 @@ export const generateFieldType = async ({
                 ${includedSubFields.map(({ def }) => def(question)).join('\n  ')}
               }`
         }
+
+        return typeDef
     }
 }
 

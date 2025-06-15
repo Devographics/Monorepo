@@ -65,7 +65,9 @@ export const subFields: Array<SubField> = [
     {
         id: ResultsSubFieldEnum.COMBINED,
         def: question => getResponsesTypeDef(question, ResultsSubFieldEnum.COMBINED),
-        addIf: ({ normPaths }) => !!normPaths?.other && !!normPaths?.response,
+        // addIf: ({ normPaths }) => !!normPaths?.other && !!normPaths?.response,
+        // always add combined to simplify things
+        addIf: ({ normPaths }) => !!normPaths?.other || !!normPaths?.response,
         resolverFunction: responsesResolverFunction
     },
     {

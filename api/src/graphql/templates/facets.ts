@@ -30,8 +30,9 @@ export const generateFacetsType = ({
 }): TypeDefTemplateOutput => {
     const typeName = getFacetsTypeName(survey.id)
     // TODO: add support for likert scale questions
-    const questionObjectsWithFilters = questionObjects
-        .filter(q => typeof q.filterTypeName !== 'undefined' && q.surveyId === survey.id)
+    const surveyQuestions = questionObjects.filter(q => q.surveyId === survey.id)
+    const questionObjectsWithFilters = surveyQuestions
+        .filter(q => typeof q.filterTypeName !== 'undefined')
         .filter(q => q.template !== 'likert')
 
     return {

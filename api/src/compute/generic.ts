@@ -481,7 +481,8 @@ export async function genericComputeFunction(options: GenericComputeOptions) {
         await runStage(moveFacetBucketsToDefaultBuckets, [results])
     }
 
-    if (responsesType === ResponsesTypes.COMBINED) {
+    const freeformDbPath = getDbPath(question, ResponsesTypes.FREEFORM)
+    if (responsesType === ResponsesTypes.COMBINED && freeformDbPath) {
         results = await runStage(combineWithFreeform, [results, options])
     }
 
