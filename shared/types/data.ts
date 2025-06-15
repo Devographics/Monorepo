@@ -153,6 +153,8 @@ export interface OptionData extends Option {
 export interface YearCompletion {
     // total number of participants
     total: number
+    // total number of participants with filters applied
+    filteredTotal: number
     // current number of respondents
     count: number
     // total number of answers
