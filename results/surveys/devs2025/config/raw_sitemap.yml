@@ -665,7 +665,12 @@
 
       - id: relocation
         template: multiple_options2_freeform
+        i18nNamespace: country
         limit: 3
+
+      - id: relocation_tokyodev
+        blockType: TokyoDevRelocationBlock
+        showTitle: false
 
       - id: overall_happiness
         template: single_option2

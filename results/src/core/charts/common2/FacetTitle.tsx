@@ -26,8 +26,14 @@ export const FacetTitle = ({
     const { key: questionLabelKey, label: questionLabel } = getQuestionLabel({
         getString,
         block,
-        question,
-        i18nNamespace: block.i18nNamespace ?? block?.queryOptions?.sectionId ?? block.sectionId
+        question: {
+            sectionId: block?.filtersState?.axis1?.sectionId || question.sectionId,
+            id: block?.filtersState?.axis1?.id || question.id
+        },
+        i18nNamespace:
+            (block?.filtersState?.axis1?.sectionId || block.i18nNamespace) ??
+            block?.queryOptions?.sectionId ??
+            block.sectionId
     })
 
     const {
@@ -50,7 +56,7 @@ export const FacetTitle = ({
             >
                 {questionLabel}
             </span>{' '}
-            <T k="charts.vs" /> {view === HorizontalBarViews.BOXPLOT && <T k="charts.median" />}
+            <T k="charts.vs" />
             <Tooltip
                 trigger={
                     <span
@@ -63,6 +69,12 @@ export const FacetTitle = ({
                 }
                 contents={facetQuestionLabel}
             />
+            {view === HorizontalBarViews.BOXPLOT && (
+                <>
+                    {' '}
+                    <T k="charts.median" />
+                </>
+            )}
         </div>
     )
 }

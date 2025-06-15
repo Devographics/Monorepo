@@ -18,8 +18,6 @@ import FiltersPanel from 'core/filters/FiltersPanel'
 import { EditIcon } from 'core/icons'
 import BlockQuestion from './BlockQuestion'
 import { BlockDefinition } from 'core/types'
-import { BlockDescriptionContents } from './BlockChart'
-import { getBlockSeriesData } from 'core/helpers/data'
 import { getAllQuestions } from 'core/helpers/options'
 
 export const getRegularTabId = (index: number) => `tab-${index}`
@@ -52,6 +50,9 @@ export const TabsWrapper = ({
             // titleLink: blockEntity?.homepage?.url
         }
     }
+
+    // this handles state for both compile-time (YAML) variants and
+    // dynamic (query builder) variants and merges them all together
     const {
         customVariants: customVariants_,
         deleteVariant,
@@ -108,19 +109,22 @@ export const TabsWrapper = ({
                         <BlockHeader className="block-header">
                             <BlockHeaderRight_>
                                 <TabsList aria-label="tabs example">
-                                    {block.variants.map((block, variantIndex) => (
-                                        <Tab_ key={block.id}>
-                                            <TabsTrigger value={getRegularTabId(variantIndex)}>
-                                                {getBlockTabTitle({
-                                                    block,
-                                                    pageContext,
-                                                    variantIndex,
-                                                    getString,
-                                                    entities
-                                                })}
-                                            </TabsTrigger>
-                                        </Tab_>
-                                    ))}
+                                    {block.variants.map((block, variantIndex) => {
+                                        const { key, label } = getBlockTabTitle({
+                                            block,
+                                            pageContext,
+                                            variantIndex,
+                                            getString,
+                                            entities
+                                        })
+                                        return (
+                                            <Tab_ key={block.id}>
+                                                <TabsTrigger value={getRegularTabId(variantIndex)}>
+                                                    <span data-key={key}>{label}</span>
+                                                </TabsTrigger>
+                                            </Tab_>
+                                        )
+                                    })}
                                     {blockCustomVariants.map((variant, variantIndex) => (
                                         <Tab_ key={variant.name}>
                                             <TabsTrigger value={getCustomTabId(variant.id)}>

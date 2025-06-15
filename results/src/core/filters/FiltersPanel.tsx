@@ -1,5 +1,5 @@
 import './FiltersPanel.scss'
-import React, { useState, useEffect, SyntheticEvent } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
 import { spacing, fontSize } from 'core/theme'
@@ -20,8 +20,6 @@ import { AutoSelectText, ExportButton, GraphQLTrigger, TextArea } from 'core/blo
 import { getCustomTabId, getRegularTabId, TabsList } from 'core/blocks/block/BlockTabsWrapper'
 import FacetSelection from './FacetSelection'
 import FiltersSelection from './FiltersSelection'
-import { MODE_DEFAULT, MODE_FACET, MODE_GRID } from './constants'
-import cloneDeep from 'lodash/cloneDeep'
 import { BlockVariantDefinition } from '../types/index'
 import { useStickyState, getFiltersLink } from './helpers'
 import { CheckIcon, EditIcon } from 'core/icons'
@@ -43,11 +41,6 @@ export type FiltersPanelPropsType = {
     deleteVariant: DeleteVariantType
     closeModal?: any
     setActiveTab: (value: string) => void
-}
-
-type TabConfigItem = {
-    mode: SupportedMode
-    component: React.FC
 }
 
 const FiltersPanel = ({
@@ -90,8 +83,8 @@ const FiltersPanel = ({
         } else {
             // nice-to-have: try to generate title when a facet is selected
             const defaultNameSegments = []
-            if (filtersState?.facet) {
-                const field = allFilters.find(q => q.id === filtersState?.facet?.id)
+            if (filtersState?.axis2) {
+                const field = allFilters.find(q => q.id === filtersState?.axis2?.id)
                 if (field) {
                     const { label: name } = getFieldLabel({ getString, field, entities })
                     defaultNameSegments.push(getString('filters.vs_x', { values: { name } })?.t)
@@ -172,17 +165,22 @@ const FiltersPanel = ({
                 </a>
             </FiltersTop_>
             <div className="filters-sections">
+                {customizationModes.includes('facets') && (
+                    <>
+                        <Details labelId="filters.axis1" defaultOpen={true}>
+                            <FacetSelection {...props} axisIndex={1} />
+                        </Details>
+                        <Details labelId="filters.axis2" isOptional={true} defaultOpen={true}>
+                            <FacetSelection {...props} axisIndex={2} />
+                        </Details>
+                    </>
+                )}
                 {customizationModes.includes('filters') && (
-                    <Details labelId="filters.grid_mode" defaultOpen={true}>
+                    <Details labelId="filters.grid_mode" isOptional={true} defaultOpen={false}>
                         <FiltersSelection {...props} />
                     </Details>
                 )}
-                {customizationModes.includes('facets') && (
-                    <Details labelId="filters.facet_mode" defaultOpen={true}>
-                        <FacetSelection {...props} />
-                    </Details>
-                )}
-                <Details labelId="filters.advanced_options" defaultOpen={false}>
+                <Details labelId="filters.advanced_options" isOptional={true} defaultOpen={false}>
                     <AdvancedOptions {...props} />
                 </Details>
             </div>

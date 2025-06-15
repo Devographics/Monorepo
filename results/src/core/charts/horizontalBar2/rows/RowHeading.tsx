@@ -13,7 +13,8 @@ export const RowHeading = ({
 }: RowComponentProps) => {
     const { entity, id, label } = bucket
     const { isFreeformData } = bucket
-    const i18nNamespace = block.i18nNamespace || block.fieldId || block.id
+    const i18nNamespace =
+        block?.filtersState?.axis1?.id || block.i18nNamespace || block.fieldId || block.id
     return (
         <h3 className="chart-row-heading">
             {isGroupedBucket && <span className="chart-row-heading-grouped">↳&nbsp;</span>}

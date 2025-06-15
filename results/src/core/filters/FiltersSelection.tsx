@@ -76,12 +76,12 @@ const FiltersSelection = ({ allFilters, block, stateStuff }: FiltersSelectionPro
                         )}
                     </SeriesList_>
                 </div>
-                <div className="filters-section-image">
+                {/* <div className="filters-section-image">
                     <FiltersImage />
                     <figcaption>
                         <T k="filters.grid_view" />
                     </figcaption>
-                </div>
+                </div> */}
             </div>
         </Wrapper_>
     )

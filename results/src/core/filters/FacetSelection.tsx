@@ -19,9 +19,10 @@ interface FacetSelectionProps {
     block: BlockVariantDefinition
     allFilters: FilterItem[]
     stateStuff: PanelState
+    axisIndex: 1 | 2
 }
 
-const FacetSelection = ({ block, allFilters, stateStuff }: FacetSelectionProps) => {
+const FacetSelection = ({ block, allFilters, stateStuff, axisIndex }: FacetSelectionProps) => {
     const { filtersState, setFiltersState } = stateStuff
     const enabledFacets = allFilters.filter(f => !disabledFacets.includes(f.id))
 
@@ -30,7 +31,7 @@ const FacetSelection = ({ block, allFilters, stateStuff }: FacetSelectionProps) 
             <div className="filters-section">
                 <div className="filters-section-controls">
                     <div className="filters-section-description">
-                        <T k="filters.facets.description" html={true} md={true} />
+                        <T k={`filters.axis${axisIndex}.description`} html={true} md={true} />{' '}
                     </div>
                     <label>
                         {/* <T k="filters.facet" />{' '} */}
@@ -40,12 +41,15 @@ const FacetSelection = ({ block, allFilters, stateStuff }: FacetSelectionProps) 
                                 setFiltersState(fState => {
                                     const newState = cloneDeep(fState)
                                     const field = allFilters.find(f => f.id === value) as FilterItem
-                                    newState.facet = { sectionId: field.sectionId, id: value }
+                                    newState[`axis${axisIndex}`] = {
+                                        sectionId: field.sectionId,
+                                        id: value
+                                    }
                                     return newState
                                 })
                             }}
-                            value={filtersState?.facet?.id}
-                            defaultValue=""
+                            value={filtersState[`axis${axisIndex}`]?.id}
+                            defaultValue={''}
                         >
                             <ItemSelectOptions
                                 currentQuestionId={block.fieldId || block.id}
@@ -55,12 +59,12 @@ const FacetSelection = ({ block, allFilters, stateStuff }: FacetSelectionProps) 
                     </label>
                 </div>
 
-                <div className="filters-section-image">
+                {/* <div className="filters-section-image">
                     <FacetsImage />
                     <figcaption>
                         <T k="filters.facet_view" />
                     </figcaption>
-                </div>
+                </div> */}
             </div>
         </Wrapper_>
     )

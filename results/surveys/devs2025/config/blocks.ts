@@ -97,6 +97,8 @@ import HowToHelpBlock from 'core/blocks/other/HowToHelpBlock'
 import SponsorFinishBlock from 'core/blocks/block/sponsor_chart/SponsorFinishBlock'
 import LivestreamBlock from 'core/blocks/other/LivestreamBlock'
 
+import TokyoDevRelocationBlock from 'core/blocks/other/TokyoDevRelocationBlock.tsx'
+
 const otherBlocks = {
     PageIntroductionBlock,
     TextBlock,
@@ -119,7 +121,8 @@ const otherBlocks = {
     SponsorFinishBlock,
     LivestreamBlock,
     TakeawaysBlock,
-    DataExplorerBlock
+    DataExplorerBlock,
+    TokyoDevRelocationBlock
 }
 
 export default { ...chartBlocks, ...otherBlocks }

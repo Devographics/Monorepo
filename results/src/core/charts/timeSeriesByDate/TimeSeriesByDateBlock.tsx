@@ -27,7 +27,7 @@ export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
 
     const { average, percentiles, completion } = currentEdition
 
-    const facet = block?.filtersState?.facet
+    const facet = block?.filtersState?.axis2
 
     const facetQuestion = useQuestionMetadata(facet)
     const chartState = useChartState(getDefaultState({ block, facetQuestion }))

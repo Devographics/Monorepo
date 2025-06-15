@@ -157,18 +157,18 @@ const distinct = [
 ]
 
 const stateOfJSThemeColors: DefaultTheme['colors'] = {
-    background: '#242B21',
+    background: '#242B21', // main bg
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',
     backgroundAlt3: '#27242E',
-    backgroundBackground: '#475053',
     backgroundForeground: colors.navyLighter,
-    backgroundAlt: '#506A61',
+    backgroundAlt: '#2f423b', // questions, zebra striping, modal bg
+    backgroundBackground: '#475053', // questions in modals, buttons in modals, fieldset headings in modals
     backgroundAltTrans: 'rgba(49, 68, 72, 0.4)',
     backgroundAlt2: '#475053',
-    backgroundInverted: '#FFF6E6',
-    backgroundInvertedAlt: '#E3D8C4',
+    backgroundInverted: '#afc8bf', // comments
+    backgroundInvertedAlt: '#91aa93',
     text: '#E6FFD5',
-    textAlt: 'rgba(255, 246, 229, 0.5)',
+    textAlt: 'rgba(255, 246, 229, 0.5)', // comments text
     textInverted: '#272325',
     textHighlight: colors.greenDark,
     link: '#B1E599',

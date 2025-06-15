@@ -60,19 +60,24 @@ export const getBlockDataPath = ({
     block,
     pageContext,
     addRootNode = true,
-    suffix = ''
+    suffix = '',
+    chartFilters
 }: {
     block: BlockVariantDefinition
     pageContext: PageContextValue
     addRootNode?: boolean
     suffix?: string
+    chartFilters?: CustomizationDefinition
 }) => {
     const { currentSurvey: survey, currentEdition: edition } = pageContext
     // if a different sectionId is specified in the query options, use that as
     // part of the data path
-    const sectionId = block?.queryOptions?.sectionId || pageContext.id
+    console.log({ chartFilters })
+    const sectionId =
+        chartFilters?.axis1?.sectionId || block?.queryOptions?.sectionId || pageContext.id
     const section = { id: sectionId } as SectionMetadata
-    const question = block as QuestionMetadata
+    const questionId = chartFilters?.axis1?.id || block.fieldId || block.id
+    const question = { id: questionId } as QuestionMetadata
     const dataPath =
         block.dataPath ||
         getDefaultDataPath({
@@ -98,7 +103,12 @@ export const getBlockSeriesData = ({
     if (filtersState?.filters) {
         return filtersState.filters.map((filters, i) => {
             const suffix = `_${i + 1}`
-            const dataPath = getBlockDataPath({ block, pageContext, suffix })
+            const dataPath = getBlockDataPath({
+                chartFilters: filtersState,
+                block,
+                pageContext,
+                suffix
+            })
             return {
                 dataPath,
                 filters,
@@ -107,7 +117,7 @@ export const getBlockSeriesData = ({
             }
         })
     } else {
-        const dataPath = getBlockDataPath({ block, pageContext })
+        const dataPath = getBlockDataPath({ chartFilters: filtersState, block, pageContext })
         return [{ dataPath, name: block.id, data: get(pageContext.pageData, dataPath) }]
     }
 }

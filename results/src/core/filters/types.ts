@@ -5,7 +5,8 @@ import { OrderOptions } from 'core/charts/common2/types'
 export interface CustomizationDefinition {
     options: CustomizationOptions
     filters?: CustomizationFiltersSeries[]
-    facet?: FacetItem
+    axis1: FacetItem
+    axis2?: FacetItem
     bucketsFilter?: BucketsFilterDefinition
 }
 

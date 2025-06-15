@@ -7,11 +7,13 @@ import { ChevronDownIcon } from 'core/icons'
 export const Details = ({
     labelId,
     defaultOpen = false,
-    children
+    children,
+    isOptional = false
 }: {
     labelId: string
     defaultOpen: boolean
     children: JSX.Element
+    isOptional?: boolean
 }) => {
     const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
 
@@ -26,6 +28,12 @@ export const Details = ({
             >
                 <h3 className="details-heading">
                     <T k={labelId} />
+                    {isOptional && (
+                        <>
+                            {' '}
+                            <T k="filters.optional" />
+                        </>
+                    )}
                 </h3>
                 <ChevronDownIcon className="details-icon" />
             </button>

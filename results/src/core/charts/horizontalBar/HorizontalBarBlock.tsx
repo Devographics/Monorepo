@@ -66,10 +66,10 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
         BucketUnits.PERCENTAGE_QUESTION,
         BucketUnits.COUNT
     ]
-    if (chartFilters.facet) {
+    if (chartFilters.axis2) {
         // if filtering by facet, use special units
         unitsOptions = [BucketUnits.PERCENTAGE_BUCKET, BucketUnits.COUNT]
-        const facetQuestion = allFilters.find(o => o.id === chartFilters?.facet?.id)
+        const facetQuestion = allFilters.find(o => o.id === chartFilters?.axis2?.id)
         // if this facet is in the form of numerical ranges, add the average of each range as unit too
         if (facetQuestion?.optionsAreRange || facetQuestion?.optionsAreNumeric) {
             unitsOptions.push(BucketUnits.AVERAGE)
@@ -133,7 +133,7 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
         mode,
         units,
         colorVariant: 'primary' as const,
-        facet: chartFilters.facet,
+        facet: chartFilters.axis2,
         legends: chartLegends
     }
 

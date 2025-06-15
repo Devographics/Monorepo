@@ -42,7 +42,8 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
         return <NoData<HorizontalBarBlock2Props> {...props} />
     }
 
-    const facet = block?.filtersState?.facet
+    // note: block.filtersState will also reflect filters set using the query builder
+    const facet = block?.filtersState?.axis2
 
     const facetQuestion = useQuestionMetadata(facet)
 
@@ -84,6 +85,11 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>
                 </pre> */}
+                {/* {
+                    <pre>
+                        <code>{JSON.stringify(block?.filtersState, null, 2)}</code>
+                    </pre>
+                } */}
                 {facetQuestion && <FacetHeading facetQuestion={facetQuestion} {...commonProps} />}
 
                 {useBackToBackSeriesView ? (

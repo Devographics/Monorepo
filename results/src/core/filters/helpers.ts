@@ -589,8 +589,8 @@ export const useFilterLegends = ({
                 ? [defaultLegendItem, ...seriesLegendItems]
                 : seriesLegendItems
         }
-    } else if (chartFilters.options.mode === MODE_FACET && chartFilters.facet) {
-        const facetField = allFilters.find(f => f.id === chartFilters?.facet?.id) as FilterItem
+    } else if (chartFilters.options.mode === MODE_FACET && chartFilters.axis2) {
+        const facetField = allFilters.find(f => f.id === chartFilters?.axis2?.id) as FilterItem
 
         // clone array to avoid modifying original one when adding elements to validOptions
         let validOptions = facetField?.options ? [...facetField.options] : []
@@ -686,6 +686,10 @@ export const getInitFilters = ({
     }
     return {
         options,
+        axis1: {
+            sectionId: block.queryOptions?.sectionId || block.sectionId,
+            id: block.fieldId || block.id
+        },
         filters: []
     }
 }
@@ -811,7 +815,7 @@ export async function fetchSeriesData({
     if (error) {
         return { error, query, seriesNames }
     } else {
-        const dataPath = getBlockDataPath({ block, pageContext, addRootNode: false })
+        const dataPath = getBlockDataPath({ chartFilters, block, pageContext, addRootNode: false })
 
         // apply dataPath to get block data for each series
         const seriesData = seriesNames.map((seriesName, seriesIndex) => {
@@ -820,7 +824,7 @@ export async function fetchSeriesData({
                 data,
                 name: seriesName,
                 filters: chartFilters.filters[seriesIndex],
-                facet: chartFilters.facet
+                facet: chartFilters.axis2
             }
         })
         return { result: seriesData, query, seriesNames }

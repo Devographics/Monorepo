@@ -92,6 +92,8 @@
 .comment-message-wrapper {
     border-radius: 5px;
     background: var(--backgroundAlt2Color);
+    background: var(--backgroundInvertedColor);
+    color: var(--textColorInverted);
     padding: var(--spacing);
     position: relative;
     display: flex;
@@ -230,6 +232,6 @@
     text-transform: uppercase;
     white-space: nowrap;
 
-    background: #827a90;
+    background: var(--backgroundBackgroundColor);
     box-shadow: 1px 1px 2px #00000088;
 }

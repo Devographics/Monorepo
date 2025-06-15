@@ -52,13 +52,13 @@ export const getBlockQuery = ({
     edition: EditionMetadata
     section: { id: SectionMetadata['id'] }
 }) => {
-    const { facet, filters, bucketsFilter, options = {} } = chartFilters || {}
+    const { axis1, axis2, filters, bucketsFilter, options = {} } = chartFilters || {}
     const { showDefaultSeries } = options
-    const questionId = block.fieldId || block.id
+    const questionId = axis1?.id || block.fieldId || block.id
     const queryOptions = {
         surveyId: survey?.id,
         editionId: edition?.id,
-        sectionId: section?.id,
+        sectionId: axis1?.sectionId || section?.id,
         questionId,
         subField: block?.queryOptions?.subField || ResultsSubFieldEnum.RESPONSES,
         ...block.queryOptions
@@ -70,14 +70,14 @@ export const getBlockQuery = ({
     }
 
     const defaultQueryArgs = {
-        facet,
+        facet: axis2,
         parameters,
         bucketsFilter
     }
     const hasFilters = filters && filters.length > 0
     // ? do we need custom seriesName here?
     // const seriesName = facet ? `${questionId}_by_${facet.id}` : `${questionId}`
-    const seriesName = block.id
+    const seriesName = questionId
     const defaultSeriesName = hasFilters ? `${seriesName}_default` : seriesName
 
     const defaultSeries = { name: defaultSeriesName, queryArgs: defaultQueryArgs }

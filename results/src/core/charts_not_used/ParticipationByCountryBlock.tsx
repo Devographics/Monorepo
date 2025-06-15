@@ -33,10 +33,10 @@ const ParticipationByCountryBlock = ({
     const allChartsOptions = useAllQuestionsWithOptions()
 
     let unitsOptions = defaultOptions
-    if (chartFilters.facet) {
+    if (chartFilters.axis2) {
         // if filtering by facet, use special units
         unitsOptions = ['percentage_bucket', 'count']
-        const facetOptions = allChartsOptions[chartFilters.facet]
+        const facetOptions = allChartsOptions[chartFilters.axis2]
         // if this facet can be quantified numerically and has averages, add that as unit too
         if (typeof facetOptions[0].average !== 'undefined') {
             unitsOptions.push('average')
@@ -77,7 +77,7 @@ const ParticipationByCountryBlock = ({
                         mode={mode}
                         units={units}
                         data={data}
-                        facet={chartFilters.facet}
+                        facet={chartFilters.axis2}
                     />
                 </ChartContainer>
             </DynamicDataLoader>

@@ -50,14 +50,19 @@ export const getBlockTabTitle = ({
     getString: StringTranslator
     entities: Entity[]
 }) => {
+    let key, label
     if (block.tabId) {
-        return getString(block.tabId)?.t || block.tabId
+        key = block.tabId
+        label = getString(block.tabId)?.t || block.tabId
     } else if (variantIndex === 0) {
-        return getString('tabs.all_respondents')?.t
+        key = 'tabs.all_respondents'
+        label = getString(key)?.t
     } else {
+        // todo: "facet" has been renamed to "axis2" for consistency with
+        // todo: API, but it would also need to be renamed in all the YAML configs
         const facetBlock = {
-            id: block.filtersState?.facet?.id,
-            sectionId: block.filtersState?.facet?.sectionId
+            id: block.filtersState?.axis2?.id || block.filtersState?.facet?.id,
+            sectionId: block.filtersState?.axis2?.sectionId || block.filtersState?.facet?.sectionId
         } as BlockVariantDefinition
 
         const facetTitle = getBlockTitle({
@@ -66,12 +71,16 @@ export const getBlockTabTitle = ({
             getString,
             entities
         })
+
         if (facetTitle) {
-            return getString('charts.vs')?.t + ' ' + facetTitle
+            key = 'charts.vs'
+            label = getString(key)?.t + ' ' + facetTitle
         } else {
-            return getString(getBlockTitleKey({ block, pageContext }))?.t
+            key = getBlockTitleKey({ block, pageContext })
+            label = getString(label)?.t
         }
     }
+    return { key, label }
 }
 
 export const getBlockNoteKey = ({ block }: { block: BlockVariantDefinition }) =>

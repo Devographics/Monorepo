@@ -32,6 +32,8 @@ const ThemedLayout = (props: LayoutProps) => {
         '--backgroundBackgroundColor': colors.backgroundBackground,
         '--backgroundAltColor': colors.backgroundAlt,
         '--backgroundAlt2Color': colors.backgroundAlt2,
+        '--backgroundAlt3Color': colors.backgroundAlt3,
+        '--backgroundInvertedColor': colors.backgroundInverted,
         '--borderColor': colors.border,
         '--borderAltColor': colors.borderAlt,
         '--linkColor': colors.link,

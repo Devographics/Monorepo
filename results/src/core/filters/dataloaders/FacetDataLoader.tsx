@@ -44,8 +44,8 @@ function FacetDataLoader<T>({
 
     // const [isLoading, setIsLoading] = useState(false)
 
-    allFilters.find(o => o.id === chartFilters?.facet?.id)
-    const facetQuestion = allFilters.find(o => o.id === chartFilters?.facet?.id)
+    allFilters.find(o => o.id === chartFilters?.axis2?.id)
+    const facetQuestion = allFilters.find(o => o.id === chartFilters?.axis2?.id)
 
     useEffect(() => {
         const getData = async () => {
@@ -76,7 +76,7 @@ function FacetDataLoader<T>({
             setIsLoading(false)
         }
 
-        if (!chartFilters.options.preventQuery && !isEmpty(chartFilters.facet)) {
+        if (!chartFilters.options.preventQuery && !isEmpty(chartFilters.axis2)) {
             getData()
         }
     }, [chartFilters])
@@ -86,7 +86,7 @@ function FacetDataLoader<T>({
         : {
               series,
               chartDisplayMode: CHART_MODE_STACKED,
-              facet: chartFilters.facet,
+              facet: chartFilters.axis2,
               showDefaultSeries,
               filterLegends
           }

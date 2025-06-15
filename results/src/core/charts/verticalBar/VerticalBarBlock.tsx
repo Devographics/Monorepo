@@ -54,10 +54,10 @@ const VerticalBarBlock = ({ block, data, series, pageContext }: VerticalBarBlock
         BucketUnits.PERCENTAGE_QUESTION,
         BucketUnits.COUNT
     ]
-    if (chartFilters.facet) {
+    if (chartFilters.axis2) {
         // if filtering by facet, use special units
         unitsOptions = [BucketUnits.PERCENTAGE_BUCKET, BucketUnits.COUNT]
-        const facetQuestion = allChartsOptions.find(o => o.id === chartFilters?.facet?.id)
+        const facetQuestion = allChartsOptions.find(o => o.id === chartFilters?.axis2?.id)
         // if this facet can be quantified numerically and has averages, add that as unit too
         if (facetQuestion?.optionsAreRange) {
             unitsOptions.push(BucketUnits.AVERAGE)
