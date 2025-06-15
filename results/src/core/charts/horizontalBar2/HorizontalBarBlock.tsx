@@ -104,7 +104,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                 <Note block={block} />
 
                 <ChartFooter
-                    left={<Metadata {...commonProps} {...metadataProps} />}
+                    left={<Metadata<HorizontalBarChartState> {...commonProps} {...metadataProps} />}
                     right={
                         <>
                             <ChartShare {...commonProps} />

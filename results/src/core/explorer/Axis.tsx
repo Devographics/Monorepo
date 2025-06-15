@@ -92,7 +92,7 @@ const AxisItem = (props: AxisItemProps) => {
     const total = totals.find(t => t.id === id) as Total
     const { count: totalCount, percentage: totalPercentage } = total
 
-    const answerLabel = getValueLabel({
+    const { label: answerLabel } = getValueLabel({
         getString,
         field: allFilters.find(f => f.id === questionId) as FilterItem,
         value: id,

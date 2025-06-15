@@ -15,6 +15,8 @@ import {
     FacetCounts,
     PercentageSurvey
 } from '../views'
+import { QuestionMetadata } from '@devographics/types'
+import { BlockVariantDefinition } from 'core/types'
 
 const controlIcons = {
     [HorizontalBarViews.BOXPLOT]: BoxplotIcon,
@@ -76,4 +78,24 @@ export const getViewComponent = (view: HorizontalBarViews) => {
 
 export const getViewDefinition = (view: HorizontalBarViews) => {
     return viewDefinitions[view]
+}
+
+export const getChartView = ({
+    facetQuestion,
+    block
+}: {
+    facetQuestion?: QuestionMetadata
+    block: BlockVariantDefinition
+}) => {
+    let view
+    if (facetQuestion) {
+        if (facetQuestion.optionsAreRange || facetQuestion.optionsAreNumeric) {
+            view = HorizontalBarViews.BOXPLOT
+        } else {
+            view = HorizontalBarViews.PERCENTAGE_BUCKET
+        }
+    } else {
+        view = block.defaultView ?? HorizontalBarViews.PERCENTAGE_QUESTION
+    }
+    return view
 }

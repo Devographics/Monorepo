@@ -82,7 +82,7 @@ export type CommonProps<ChartStateType> = {
     series: DataSeries<any>[]
     variant?: CustomVariant
     question?: QuestionMetadata
-    seriesMetadata?: SeriesMetadata
+    seriesMetadata: SeriesMetadata
     facetQuestion?: QuestionMetadata
     facetBuckets?: FacetBucket[]
     metadataProps: MetadataProps
@@ -115,6 +115,7 @@ export type LegendItem = {
 
 export interface SeriesMetadata {
     seriesMaxValue: number
+    seriesMaxBucketCount: number
     totalRespondents: number
     totalResponses: number
 }

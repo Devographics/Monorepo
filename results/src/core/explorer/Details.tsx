@@ -83,7 +83,7 @@ const Details = (props: DetailsProps) => {
         normalizedPercentageDelta
     } = cellData
 
-    const xAnswerLabel = getValueLabel({
+    const { label: xAnswerLabel } = getValueLabel({
         getString,
         field: allFilters.find(f => f.id === xField) as FilterItem,
         value: xKey,
@@ -91,7 +91,7 @@ const Details = (props: DetailsProps) => {
         entity: entities.find(e => e.id === xKey)
     })
 
-    const yAnswerLabel = getValueLabel({
+    const { label: yAnswerLabel } = getValueLabel({
         getString,
         field: allFilters.find(f => f.id === yField) as FilterItem,
         value: yKey,

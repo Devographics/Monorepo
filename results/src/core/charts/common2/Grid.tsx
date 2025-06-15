@@ -5,7 +5,7 @@ import { useFiltersLabel } from './helpers/labels'
 import T from 'core/i18n/T'
 import { SortProperty } from '@devographics/types'
 import Tooltip from 'core/components/Tooltip'
-import { getChartCurrentEdition } from '../horizontalBar2/helpers/other'
+import { getChartCurrentEdition, getSerieMetadata } from '../horizontalBar2/helpers/other'
 import { BlockVariantDefinition } from 'core/types'
 
 export const GridWrapper = ({

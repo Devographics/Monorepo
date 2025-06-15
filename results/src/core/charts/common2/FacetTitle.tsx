@@ -7,6 +7,8 @@ import Tooltip from 'core/components/Tooltip'
 import { QuestionIcon } from 'core/icons'
 import T from 'core/i18n/T'
 import { getQuestionLabel } from './helpers/labels'
+import { getChartView } from '../horizontalBar2/helpers/views'
+import { HorizontalBarViews } from '../horizontalBar2/types'
 
 export const FacetTitle = ({
     facetQuestion,
@@ -39,6 +41,7 @@ export const FacetTitle = ({
         i18nNamespace: facetQuestion.i18nNamespace
     })
 
+    const view = getChartView({ facetQuestion, block })
     return (
         <div className="chart-facet-title">
             <span
@@ -47,7 +50,7 @@ export const FacetTitle = ({
             >
                 {questionLabel}
             </span>{' '}
-            <T k="charts.vs" />{' '}
+            <T k="charts.vs" /> {view === HorizontalBarViews.BOXPLOT && <T k="charts.median" />}
             <Tooltip
                 trigger={
                     <span

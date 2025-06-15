@@ -6,17 +6,28 @@ import { AverageIcon, MedianIcon, PercentIcon, UserIcon } from 'core/icons'
 import { IconProps } from 'core/icons/IconWrapper'
 import React from 'react'
 import { formatNumber, formatPercentage, formatQuestionValue } from './helpers/format'
-import { SerieMetadata } from './types'
+import { CommonProps, SerieMetadata } from './types'
+import { getSerieMetadata } from '../horizontalBar2/helpers/other'
+import { useI18n } from '@devographics/react-i18n'
 
-export const Metadata = ({
+export const Metadata = <T,>({
     completion,
     average,
     total: total_,
     question,
-    median
-}: SerieMetadata & {
-    question?: QuestionMetadata
-}) => {
+    median,
+    series,
+    block,
+    seriesMetadata
+}: CommonProps<T> &
+    SerieMetadata & {
+        question?: QuestionMetadata
+    }) => {
+    const { getString } = useI18n()
+    const { seriesMaxBucketCount } = seriesMetadata
+
+    const firstSerieMetadata = getSerieMetadata({ serie: series[0], block })
+    const { limit, cutoff, axis1Sort } = firstSerieMetadata
     const items = []
     const total = formatNumber(total_ ?? completion?.total ?? 0)
 
@@ -45,6 +56,30 @@ export const Metadata = ({
             icon: MedianIcon,
             value: formatQuestionValue(median, question),
             total
+        })
+    }
+
+    if (limit && limit < seriesMaxBucketCount) {
+        // only show limit if it's actually being enforced
+        items.push({
+            id: 'limit',
+            icon: MedianIcon,
+            value: limit
+        })
+    }
+    if (cutoff && cutoff > 1) {
+        // only show cutoff if it's actually being enforced
+        items.push({
+            id: 'cutoff',
+            icon: MedianIcon,
+            value: cutoff
+        })
+    }
+    if (axis1Sort) {
+        items.push({
+            id: `sort_${axis1Sort.order}`,
+            icon: MedianIcon,
+            value: getString(`chart_units.${axis1Sort.property}`)?.t
         })
     }
 

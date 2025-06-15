@@ -170,7 +170,16 @@ export const getSeriesMetadata = ({
         })
         .flat()
     const seriesMaxValue = max(allSeriesValues) || 0
+    const seriesMaxBucketCount = Math.max(
+        ...series
+            .map(serie => {
+                const buckets = getChartBuckets({ serie, block, chartState })
+                return buckets.length
+            })
+            .flat()
+    )
     const metadata: SeriesMetadata = {
+        seriesMaxBucketCount,
         seriesMaxValue,
         totalRespondents: completion.count,
         totalResponses: completion.answersCount

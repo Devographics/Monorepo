@@ -3,7 +3,7 @@ import { QuestionMetadata } from '@devographics/types'
 import { ColumnModes, OrderOptions } from '../../common2/types'
 import { HorizontalBarChartState, HorizontalBarViews } from '../types'
 import { BlockVariantDefinition } from 'core/types'
-import { getViewDefinition } from './views'
+import { getChartView, getViewDefinition } from './views'
 
 export const getDefaultState = ({
     facetQuestion,
@@ -14,15 +14,9 @@ export const getDefaultState = ({
 }) => {
     const defaultState = {} as HorizontalBarChartState
 
+    defaultState.view = getChartView({ facetQuestion, block })
     if (facetQuestion) {
         defaultState.facet = { id: facetQuestion.id, sectionId: facetQuestion.sectionId }
-        if (facetQuestion.optionsAreRange || facetQuestion.optionsAreNumeric) {
-            defaultState.view = HorizontalBarViews.BOXPLOT
-        } else {
-            defaultState.view = HorizontalBarViews.PERCENTAGE_BUCKET
-        }
-    } else {
-        defaultState.view = block.defaultView ?? HorizontalBarViews.PERCENTAGE_QUESTION
     }
     if (block?.chartOptions?.limit) {
         defaultState.rowsLimit = block.chartOptions.limit

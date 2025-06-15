@@ -80,17 +80,18 @@ const ValueSegmentField = ({
                         {getString && getString('explorer.select_item')?.t}
                     </option>
                     {groupsOrOptions.map(optionOrGroup => {
-                        const { id, label } = optionOrGroup
+                        const { id, label: optionLabel } = optionOrGroup
+                        const { key, label } = getValueLabel({
+                            getString,
+                            field,
+                            value: id,
+                            allFilters,
+                            entity: optionOrGroup?.entity,
+                            label: optionLabel
+                        })
                         return (
-                            <option key={id} value={id}>
-                                {getValueLabel({
-                                    getString,
-                                    field,
-                                    value: id,
-                                    allFilters,
-                                    entity: optionOrGroup?.entity,
-                                    label
-                                })}
+                            <option key={id} value={id} data-key={key}>
+                                {label}
                             </option>
                         )
                     })}

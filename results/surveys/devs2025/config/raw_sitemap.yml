@@ -106,6 +106,18 @@
                   facet:
                       sectionId: user_info
                       id: gender
+            - template: vs_years_of_experience
+              filtersState:
+                  facet:
+                      sectionId: career
+                      id: years_of_experience
+              parameters:
+                  sort: { property: medianByFacet }
+            - template: vs_age
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: age
 
       - id: race_ethnicity
         template: multiple_options2_combined
@@ -154,6 +166,18 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
+            - template: vs_facet
+              id: years_of_experience_vs_gender
+              tabId: tabs.by_gender
+              queryOptions:
+                  sectionId: user_info
+              fieldId: gender
+              parameters:
+                  sort: { property: medianByFacet }
+              filtersState:
+                  facet:
+                      sectionId: career
+                      id: years_of_experience
             # - template: vs_gender
             # - template: men_vs_non_men
             # - template: white_vs_non_white

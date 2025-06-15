@@ -423,7 +423,7 @@ export const getValueLabel = ({
     value,
     allFilters,
     entity,
-    label
+    label: providedLabel
 }: {
     getString: StringTranslator
     field: FilterItem
@@ -433,40 +433,50 @@ export const getValueLabel = ({
     label?: string
 }) => {
     const { template } = field
+    let key, label
     if (value === NO_ANSWER) {
-        return getString('charts.no_answer').t
-    } else if (label) {
-        return label
+        key = 'charts.no_answer'
+        label = getString(key).t
+    } else if (providedLabel) {
+        key = 'provided'
+        label = providedLabel
     } else if (entity) {
-        return getEntityName(entity)
+        key = 'entity'
+        label = getEntityName(entity)
     } else if (isFeatureTemplate(template)) {
-        return getString(`options.experience.${value}`)?.t
+        key = `options.experience.${value}`
+        label = getString(key)?.t
     } else if (isToolTemplate(template)) {
-        return getString(`options.experience.${value}.short`)?.t
+        key = `options.experience.${value}.short`
+        label = getString(key)?.t
     } else {
         switch (field.id) {
             case 'source': {
                 const source = allFilters
                     ?.find(q => q.id === 'source')
                     ?.options.find(s => s.id === value)
-                return source?.entity?.name || value
+                label = source?.entity?.name || value
+                break
             }
             case 'locale': {
                 const locale = allFilters
                     ?.find(q => q.id === 'locale')
                     ?.options.find(l => l.id === value)
                 const fallback = locale?.label
-                return getString(`options.${field.id}.${value}`, {}, fallback)?.t
+                key = `options.${field.id}.${value}`
+                label = getString(key, {}, fallback)?.t
+                break
             }
             default: {
-                const key = `options.${field.id}.${value}`
-                const regular = getString(key, {}, value)?.t
+                key = `options.${field.id}.${value}`
+                label = getString(key, {}, value)?.t
                 // const short = getString(`${key}.short`, {}, regular)?.t
                 // note: using short descriptions here isn't clear enough
-                return regular
+                break
             }
         }
     }
+    return { key, label }
 }
 
 /*
