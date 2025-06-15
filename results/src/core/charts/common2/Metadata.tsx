@@ -1,6 +1,6 @@
 import Tooltip from 'core/components/Tooltip'
 import './Metadata.scss'
-import { QuestionMetadata, YearCompletion } from '@devographics/types'
+import { QuestionMetadata, sortProperties, YearCompletion } from '@devographics/types'
 import T from 'core/i18n/T'
 import { AverageIcon, MedianIcon, PercentIcon, UserIcon } from 'core/icons'
 import { IconProps } from 'core/icons/IconWrapper'
@@ -75,11 +75,11 @@ export const Metadata = <T,>({
             value: cutoff
         })
     }
-    if (axis1Sort) {
+    if (axis1Sort && axis1Sort.property !== sortProperties.OPTIONS) {
         items.push({
             id: `sort_${axis1Sort.order}`,
             icon: MedianIcon,
-            value: getString(`chart_units.${axis1Sort.property}`)?.t
+            value: getString(`chart_units.${axis1Sort.property}`, {}, axis1Sort.property)?.t
         })
     }
 

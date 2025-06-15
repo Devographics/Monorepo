@@ -129,6 +129,8 @@ const FiltersPanel = ({
     })
 
     const { customizationModes = [] } = block
+
+    const hasFilters = filtersState.filters && filtersState.filters.length > 0
     return (
         <Filters_>
             <FiltersTop_>
@@ -176,7 +178,7 @@ const FiltersPanel = ({
                     </>
                 )}
                 {customizationModes.includes('filters') && (
-                    <Details labelId="filters.grid_mode" isOptional={true} defaultOpen={false}>
+                    <Details labelId="filters.grid_mode" isOptional={true} defaultOpen={hasFilters}>
                         <FiltersSelection {...props} />
                     </Details>
                 )}
@@ -232,8 +234,7 @@ const FiltersPanel = ({
             </FiltersBottom_>
             {/* <pre>
                 <code>{JSON.stringify(filtersState, null, 2)}</code>
-            </pre>
-            <GraphQLExport query={query} /> */}
+            </pre> */}
         </Filters_>
     )
 }

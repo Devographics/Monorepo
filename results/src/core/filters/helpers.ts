@@ -809,8 +809,6 @@ export async function fetchSeriesData({
         throw new Error('GATSBY_API_URL env variable is not set')
     }
     const { result, error } = await runQuery<AllQuestionData>(url, query, `${block.id}FiltersQuery`)
-    // console.log('// result')
-    // console.log(result)
 
     if (error) {
         return { error, query, seriesNames }
@@ -819,7 +817,10 @@ export async function fetchSeriesData({
 
         // apply dataPath to get block data for each series
         const seriesData = seriesNames.map((seriesName, seriesIndex) => {
-            const data = get(result, dataPath.replace(block.id, seriesName)) as AllQuestionData
+            const id = chartFilters?.axis1?.id || block.id
+            const dataPath2 = dataPath.replace(id, seriesName)
+            const data = get(result, dataPath2) as AllQuestionData
+
             return {
                 data,
                 name: seriesName,
@@ -827,7 +828,8 @@ export async function fetchSeriesData({
                 facet: chartFilters.axis2
             }
         })
-        return { result: seriesData, query, seriesNames }
+        const returnObject = { result: seriesData, query, seriesNames }
+        return returnObject
     }
 }
 

@@ -155,6 +155,38 @@
                       sectionId: health
                       id: age
 
+      - id: relationship_status
+        template: multiple_options2_combined
+        variants:
+            - id: age_vs_relationship_status
+              queryOptions:
+                  sectionId: health
+              fieldId: age
+              tabId: tabs.by_age
+              template: multiple_options2
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: relationship_status
+            - id: country_vs_relationship_status
+              fieldId: country
+              tabId: tabs.by_country
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+                  limit: 20
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: single
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: relationship_status
+
+      - id: number_of_kids
+        template: single_option2
+
 - id: career
   path: /career
   blocks:
@@ -166,22 +198,6 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
-            - template: vs_facet
-              id: gender_vs_years_of_experience
-              tabId: tabs.by_gender
-              # future syntax
-              # axis1:
-              #   sectionId: user_info
-              #   fieldId: gender
-              queryOptions:
-                  sectionId: user_info
-              fieldId: gender
-              parameters:
-                  sort: { property: medianByFacet }
-              filtersState:
-                  facet:
-                      sectionId: career
-                      id: years_of_experience
             # - template: vs_gender
             # - template: men_vs_non_men
             # - template: white_vs_non_white
@@ -593,6 +609,20 @@
             - template: men_vs_non_men
               queryOptions:
                   subField: combined
+
+- id: to_be_continued
+  path: /to_be_continued
+  blocks:
+      - id: to_be_continued
+        template: conclusion
+        variables:
+            author: sacha_greif
+            entities: '"sacha_greif"'
+
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+        wrapBlock: false
+        disableExport: true
 
 - id: health
   path: /health

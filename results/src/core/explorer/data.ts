@@ -28,7 +28,7 @@ export const runQuery = async <T>(
     queryName: string,
     variables: any = {}
 ): Promise<QueryData<T>> => {
-    console.log(query)
+    console.log({ query })
     const startAt = new Date()
     const response = await fetch(url, {
         method: 'POST',

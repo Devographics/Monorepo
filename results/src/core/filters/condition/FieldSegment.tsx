@@ -98,7 +98,7 @@ export const ItemSelectOptions = ({
                                     key={o.id}
                                     value={o.id}
                                     data-key={key}
-                                    disabled={[...disabledList, currentQuestionId]?.includes(o.id)}
+                                    disabled={[...disabledList]?.includes(o.id)}
                                 >
                                     {label}
                                 </option>

@@ -97,8 +97,10 @@ export const getBlockQuery = ({
     }
     const query = getDefaultQueryFragment({ queryOptions, series })
 
-    return {
+    const blockQuery = {
         query,
         seriesNames: series.map(s => s.name)
     }
+
+    return blockQuery
 }
