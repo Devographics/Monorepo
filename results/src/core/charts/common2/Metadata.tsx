@@ -2,7 +2,16 @@ import Tooltip from 'core/components/Tooltip'
 import './Metadata.scss'
 import { QuestionMetadata, sortProperties, YearCompletion } from '@devographics/types'
 import T from 'core/i18n/T'
-import { AverageIcon, MedianIcon, PercentIcon, UserIcon } from 'core/icons'
+import {
+    AverageIcon,
+    MedianIcon,
+    PercentIcon,
+    UserIcon,
+    CutoffIcon,
+    LimitIcon,
+    SortDescIcon,
+    SortAscIcon
+} from '@devographics/icons'
 import { IconProps } from 'core/icons/IconWrapper'
 import React from 'react'
 import { formatNumber, formatPercentage, formatQuestionValue } from './helpers/format'
@@ -24,7 +33,7 @@ export const Metadata = <T,>({
         question?: QuestionMetadata
     }) => {
     const { getString } = useI18n()
-    const { seriesMaxBucketCount } = seriesMetadata
+    const seriesMaxBucketCount = seriesMetadata?.seriesMaxBucketCount
 
     const firstSerieMetadata = getSerieMetadata({ serie: series[0], block })
     const { limit, cutoff, axis1Sort } = firstSerieMetadata
@@ -59,11 +68,11 @@ export const Metadata = <T,>({
         })
     }
 
-    if (limit && limit < seriesMaxBucketCount) {
+    if (seriesMaxBucketCount && limit && limit < seriesMaxBucketCount) {
         // only show limit if it's actually being enforced
         items.push({
             id: 'limit',
-            icon: MedianIcon,
+            icon: LimitIcon,
             value: limit
         })
     }
@@ -71,17 +80,20 @@ export const Metadata = <T,>({
         // only show cutoff if it's actually being enforced
         items.push({
             id: 'cutoff',
-            icon: MedianIcon,
+            icon: CutoffIcon,
             value: cutoff
         })
     }
-    if (axis1Sort && axis1Sort.property !== sortProperties.OPTIONS) {
-        items.push({
-            id: `sort_${axis1Sort.order}`,
-            icon: MedianIcon,
-            value: getString(`chart_units.${axis1Sort.property}`, {}, axis1Sort.property)?.t
-        })
-    }
+
+    // todo: disabled for now because it doesn't properly reflect
+    // todo: dynamic sort when user clicks a facet
+    // if (axis1Sort && axis1Sort.property !== sortProperties.OPTIONS) {
+    //     items.push({
+    //         id: `sort_${axis1Sort.order}`,
+    //         icon: axis1Sort.order === 'desc' ? SortDescIcon : SortAscIcon,
+    //         value: getString(`chart_units.${axis1Sort.property}`, {}, axis1Sort.property)?.t
+    //     })
+    // }
 
     return items.length > 0 ? (
         <div className="chart-metadata">

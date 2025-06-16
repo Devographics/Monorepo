@@ -68,7 +68,9 @@
             addBucketsEntities: false
         variants:
             - template: vs_salary
-              parameters: { limit: 40, sort: { property: medianByFacet, order: desc } }
+              parameters:
+                  limit: 40
+                  sort: { property: medianByFacet, order: desc }
               chartOptions:
                   limit: 20
               filtersState:
@@ -632,6 +634,7 @@
 
 - id: health
   path: /health
+  is_hidden: true
   blocks:
       - id: age
         template: single_option2
@@ -695,6 +698,7 @@
         template: multiple_options2_combined
 
 - id: worldview
+  is_hidden: true
   path: /worldview
   blocks:
       - id: global_issues
@@ -717,6 +721,7 @@
         i18nNamespace: happiness
 
 - id: hobbies
+  is_hidden: true
   path: /hobbies
   blocks:
       - id: hobbies
@@ -745,6 +750,7 @@
         template: multiple_options2_combined
 
 - id: conclusion
+  is_hidden: true
   path: /conclusion
   blocks:
       - id: conclusion_ashok
@@ -762,6 +768,7 @@
 # locale passed to them
 
 - id: _user_metadata
+  is_hidden: true
   i18nNamespace: user_metadata
   path: /metadata
   blocks:
@@ -866,6 +873,7 @@
             addQuestionComments: false
 
 - id: about
+  is_hidden: true
   path: /about
   blocks:
       - id: about_contents
