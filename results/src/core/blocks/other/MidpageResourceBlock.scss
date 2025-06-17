@@ -9,19 +9,20 @@
 }
 .midpage-resource-wrapper {
     display: grid;
-    grid-template-columns: min-content 1fr;
+    grid-template-columns: 20% 1fr;
     gap: var(--spacing);
     background: var(--backgroundAltColor);
     padding: var(--spacing);
     border-radius: 100px;
+    align-items: center;
     h2 {
         margin-bottom: var(--quarterSpacing);
     }
 }
 
 .midpage-resource-image {
-    width: 150px;
-    height: 150px;
+    width: 100%;
+    aspect-ratio: 1/1;
     border-radius: 100%;
     background-size: cover;
 }
