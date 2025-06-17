@@ -1,0 +1,34 @@
+.midpage-resource-block {
+    margin-top: calc(-2 * var(--spacing));
+    margin-bottom: calc(4 * var(--spacing));
+    a {
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
+.midpage-resource-wrapper {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    gap: var(--spacing);
+    background: var(--backgroundAltColor);
+    padding: var(--spacing);
+    border-radius: 100px;
+    h2 {
+        margin-bottom: var(--quarterSpacing);
+    }
+}
+
+.midpage-resource-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    background-size: cover;
+}
+
+.midpage-resource-logo {
+    width: 200px;
+}
+.midpage-resource-description {
+    color: var(--textColor);
+}

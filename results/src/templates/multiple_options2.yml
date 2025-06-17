@@ -5,5 +5,5 @@ translateData: true
 customizationModes: [filters, facets]
 parameters:
     showNoAnswer: true
-    mergeOtherBuckets: false
+    mergeOtherBuckets: true
     cutoff: 10

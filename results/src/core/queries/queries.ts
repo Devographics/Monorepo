@@ -52,7 +52,12 @@ export const getBlockQuery = ({
     edition: EditionMetadata
     section: { id: SectionMetadata['id'] }
 }) => {
-    const { axis1, axis2, filters, bucketsFilter, options = {} } = chartFilters || {}
+    const { axis1, axis2: axis2_, filters, bucketsFilter, options = {} } = chartFilters || {}
+    let axis2 = axis2_
+    // backwards compatibility with YAML configs
+    if (chartFilters?.facet) {
+        axis2 = chartFilters?.facet
+    }
     const { showDefaultSeries } = options
     const questionId = axis1?.id || block.fieldId || block.id
     const queryOptions = {
@@ -77,7 +82,7 @@ export const getBlockQuery = ({
     const hasFilters = filters && filters.length > 0
     // ? do we need custom seriesName here?
     // const seriesName = facet ? `${questionId}_by_${facet.id}` : `${questionId}`
-    const seriesName = questionId
+    const seriesName = axis1?.id || block.id
     const defaultSeriesName = hasFilters ? `${seriesName}_default` : seriesName
 
     const defaultSeries = { name: defaultSeriesName, queryArgs: defaultQueryArgs }

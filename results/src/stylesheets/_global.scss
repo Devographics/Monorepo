@@ -169,3 +169,19 @@ Capture
         width: 908px;
     }
 }
+
+.icon-inline {
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    color: var(--textColor);
+    text-indent: -1000000%;
+    vertical-align: middle;
+    margin-right: -5px;
+    margin-left: 5px;
+    position: relative;
+    top: -2px;
+    &-comment {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' stroke-width='1.5' color='rgba(255,255,255,0.8)' viewBox='0 0 24 24' aria-hidden='true'><path stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' d='M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5L2.5 21.5l4.5-.838A9.955 9.955 0 0012 22z'></path></svg>");
+    }
+}

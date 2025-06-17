@@ -64,12 +64,14 @@
         parameters: { limit: 40 }
         chartOptions:
             limit: 20
+            cutoff: 20
         queryOptions:
             addBucketsEntities: false
         variants:
             - template: vs_salary
               parameters:
                   limit: 40
+                  cutoff: 20
                   sort: { property: medianByFacet, order: desc }
               chartOptions:
                   limit: 20
@@ -93,6 +95,29 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
+            - template: vs_salary
+              id: gender_vs_salary_experience_fixed
+              tabId: tabs.by_salary_experience_fixed
+              parameters:
+                  sort: { property: medianByFacet }
+              filtersState:
+                  filters:
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: career
+                              operator: eq
+                              value: range_10_14
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: career
+                              operator: eq
+                              value: range_15_19
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
+
             - id: country_vs_gender
               fieldId: country
               tabId: tabs.by_country
@@ -115,11 +140,11 @@
                       id: years_of_experience
               parameters:
                   sort: { property: medianByFacet }
-            - template: vs_age
-              filtersState:
-                  facet:
-                      sectionId: health
-                      id: age
+            # - template: vs_age
+            #   filtersState:
+            #       facet:
+            #           sectionId: health
+            #           id: age
 
       - id: race_ethnicity
         template: multiple_options2_combined
@@ -159,6 +184,8 @@
 
       - id: relationship_status
         template: multiple_options2_combined
+        parameters:
+            sort: { property: count }
         variants:
             - id: age_vs_relationship_status
               queryOptions:
@@ -238,11 +265,33 @@
               parameters:
                   showNoAnswer: true
               filtersState:
-                  options:
-                      mode: facet
                   facet:
                       sectionId: career
                       id: how_many_jobs
+            - template: vs_salary
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
+            - template: vs_salary
+              tabId: tabs.by_salary_experience_fixed
+              filtersState:
+                  filters:
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: career
+                              operator: eq
+                              value: range_10_14
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: career
+                              operator: eq
+                              value: range_15_19
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
 
       - id: employment_status
         template: multiple_options2_combined
@@ -283,6 +332,7 @@
               hasData: true
               parameters:
                   showNoAnswer: true
+                  facetLimit: 5
               queryOptions:
                   sectionId: health
               fieldId: age
@@ -408,6 +458,10 @@
                   facet:
                       sectionId: user_info
                       id: gender
+
+      - id: frontend_masters_learning_path
+        blockType: FEMLearningPathBlock
+        wrapBlock: false
 
       - id: yearly_salary
         template: multiple_options2
@@ -714,7 +768,7 @@
 
       - id: relocation_tokyodev
         blockType: TokyoDevRelocationBlock
-        showTitle: false
+        wrapBlock: false
 
       - id: overall_happiness
         template: single_option2

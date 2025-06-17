@@ -180,7 +180,7 @@ const ResourceContent = styled.div`
     flex: 1;
 `
 
-const Sponsoring = styled.div`
+export const Sponsoring = styled.div`
     font-weight: ${fontWeight('bold')};
     font-size: ${fontSize('smaller')};
     text-align: center;
