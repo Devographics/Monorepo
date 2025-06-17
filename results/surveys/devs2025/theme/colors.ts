@@ -165,7 +165,7 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     backgroundBackground: '#475053', // questions in modals, buttons in modals, fieldset headings in modals
     backgroundAltTrans: 'rgba(49, 68, 72, 0.4)',
     backgroundAlt2: '#475053',
-    backgroundInverted: '#afc8bf', // comments
+    backgroundInverted: '#DEDECF', // comments
     backgroundInvertedAlt: '#91aa93',
     text: '#E6FFD5',
     textAlt: 'rgba(255, 246, 229, 0.5)', // comments text

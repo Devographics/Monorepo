@@ -97,8 +97,7 @@ import HowToHelpBlock from 'core/blocks/other/HowToHelpBlock'
 import SponsorFinishBlock from 'core/blocks/block/sponsor_chart/SponsorFinishBlock'
 import LivestreamBlock from 'core/blocks/other/LivestreamBlock'
 
-import TokyoDevRelocationBlock from 'core/blocks/other/TokyoDevRelocationBlock'
-import FEMLearningPathBlock from 'core/blocks/other/FEMLearningPathBlock'
+import MidpageResourceBlock from 'core/blocks/other/MidpageResourceBlock'
 
 const otherBlocks = {
     PageIntroductionBlock,
@@ -123,8 +122,7 @@ const otherBlocks = {
     LivestreamBlock,
     TakeawaysBlock,
     DataExplorerBlock,
-    TokyoDevRelocationBlock,
-    FEMLearningPathBlock
+    MidpageResourceBlock
 }
 
 export default { ...chartBlocks, ...otherBlocks }

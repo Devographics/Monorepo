@@ -130,8 +130,7 @@
     .highlight,
     mark {
         display: inline-block;
-        background: #ffffba33;
-        color: var(--textColor);
+        background: #9f9f1366;
     }
 }
 .comments-list {
@@ -178,7 +177,7 @@
     text-align: left;
     &:hover,
     &-active {
-        background: var(--backgroundAlt2Color);
+        background: var(--backgroundAlt3Color);
     }
 }
 

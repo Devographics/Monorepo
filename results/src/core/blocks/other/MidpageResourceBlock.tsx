@@ -4,20 +4,11 @@ import './MidpageResourceBlock.scss'
 import { useI18n } from '@devographics/react-i18n'
 import { Sponsoring } from './RecommendedResourcesBlock'
 import Link from 'core/components/LocaleLink'
+import { BlockVariantDefinition } from 'core/types'
 
-export const MidpageResourceBlock = ({
-    id,
-    labelId,
-    imageUrl,
-    logoUrl,
-    link
-}: {
-    id: string
-    labelId: string
-    imageUrl: string
-    logoUrl: string
-    link: string
-}) => {
+export const MidpageResourceBlock = ({ block }: { block: BlockVariantDefinition }) => {
+    const { variables } = block
+    const { id, labelId, imageUrl, logoUrl, link } = variables
     const { getString } = useI18n()
     return (
         <div className={`midpage-resource-block ${id}`}>
@@ -48,3 +39,5 @@ export const MidpageResourceBlock = ({
         </div>
     )
 }
+
+export default MidpageResourceBlock
