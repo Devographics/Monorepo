@@ -78,7 +78,9 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
         const serieMetadata = getSerieMetadata({ serie, block })
         return serieMetadata?.axis1Sort?.property === sortProperties.OPTIONS
     })
-    const useBackToBackSeriesView = series.length === 2 && allSortedByOptions
+
+    // we now always use back-to-back view when there's only two charts
+    const useBackToBackSeriesView = series.length === 2
 
     return (
         <ChartWrapper question={question} className="chart-horizontal-bar">

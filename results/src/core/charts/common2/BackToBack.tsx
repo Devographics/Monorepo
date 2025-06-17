@@ -7,6 +7,37 @@ import { StandardQuestionData } from '@devographics/types'
 import { CommonProps } from './types'
 import { HorizontalBarChartState } from '../horizontalBar2/types'
 import { HorizontalBarSerie } from '../horizontalBar2/HorizontalBarSerie'
+import { BlockVariantDefinition } from 'core/types'
+import { getChartCurrentEdition } from '../horizontalBar2/helpers/other'
+
+/* 
+
+Take two series, and sort the buckets of serie 2 to be in the same order
+as the buckets of serie 1.
+
+Note: will mutate serie 2.
+
+*/
+const sortS2LikeS1 = ({
+    serie1,
+    serie2,
+    block
+}: {
+    serie1: DataSeries<StandardQuestionData>
+    serie2: DataSeries<StandardQuestionData>
+    block: BlockVariantDefinition
+}) => {
+    const s1Data = getChartCurrentEdition({ serie: serie1, block })
+    const s2Data = getChartCurrentEdition({ serie: serie2, block })
+    const { buckets: s1Buckets } = s1Data
+    const { buckets: s2Buckets } = s2Data
+    const s2BucketsSorted = s2Buckets.toSorted((b1, b2) => {
+        const index1 = s1Buckets.findIndex(b => b.id === b1.id)
+        const index2 = s1Buckets.findIndex(b => b.id === b2.id)
+        return index1 - index2
+    })
+    s2Data.buckets = s2BucketsSorted
+}
 
 export const BackToBack = ({
     serie1,
@@ -16,9 +47,11 @@ export const BackToBack = ({
 }: {
     serie1: DataSeries<StandardQuestionData>
     serie2: DataSeries<StandardQuestionData>
-    component?: React.ReactNode
+    component?: () => React.JSX.Element
 } & CommonProps<HorizontalBarChartState>) => {
     const Component = component_ ?? HorizontalBarSerie
+    const { block } = commonProps
+    sortS2LikeS1({ serie1, serie2, block })
     return (
         <div className="back-to-back-wrapper">
             <div className="back-to-back-serie back-to-back-serie-1 serie-reversed">
