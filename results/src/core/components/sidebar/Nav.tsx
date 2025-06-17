@@ -93,7 +93,9 @@ const excludedTemplatesAndIds = [
     'recommended_resources',
     'picks',
     'conclusion',
-    'conclusion_newsletter'
+    'conclusion_newsletter',
+    'frontend_masters_learning_path',
+    'relocation_tokyodev'
 ]
 
 const NavItem = ({

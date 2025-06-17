@@ -82,6 +82,7 @@ const SponsorLogo = styled.div`
         display: block;
         max-height: 100px;
         max-width: 200px;
+        width: 100%;
     }
 
     margin-bottom: ${spacing()};
