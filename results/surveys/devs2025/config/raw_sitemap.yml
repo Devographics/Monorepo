@@ -610,6 +610,25 @@
 
       - id: programming_languages
         template: multiple_options2_combined
+        paramters:
+            limit: 40
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
+                  limit: 40
+              filtersState:
+                  facet:
+                      sectionId: workplace
+                      id: yearly_salary
+            - template: vs_years_of_experience
+              parameters:
+                  sort: { property: medianByFacet }
+                  limit: 40
+              filtersState:
+                  facet:
+                      sectionId: career
+                      id: years_of_experience
 
       - id: storyblok_technologies
         template: midpage_resource
