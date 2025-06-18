@@ -1,0 +1,27 @@
+# Exported from Render on 2025-06-18T02:09:29Z
+services:
+    - type: web
+      name: Results
+      runtime: static
+      repo: https://github.com/Devographics/Monorepo
+      envVars:
+          - key: SURVEYID
+            sync: false
+          - key: PLAUSIBLE_DOMAIN
+            sync: false
+          - key: EDITIONID
+            sync: false
+          - key: DISABLE_REDIS_CACHE
+            sync: false
+          - key: APP_NAME
+            sync: false
+          - fromGroup: Devographics Production
+      buildCommand: pnpm install && pnpm run build
+      staticPublishPath: public
+      routes:
+          - type: redirect
+            source: /
+            destination: /en-US
+      autoDeployTrigger: commit
+      rootDir: results
+version: '1'
