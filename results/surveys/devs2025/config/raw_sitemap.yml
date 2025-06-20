@@ -288,7 +288,8 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
-            - template: vs_salary
+            - id: how_many_jobs_vs_salary_fixed
+              template: vs_salary
               tabId: tabs.by_salary_experience_fixed
               filtersState:
                   filters:
@@ -932,28 +933,203 @@
   blocks:
       - id: hobbies
         template: multiple_options2_combined
+        variants:
+            - id: age_vs_hobbies
+              template: vs_facet
+              queryOptions:
+                  sectionId: health
+              fieldId: age
+              tabId: tabs.by_age
+              filtersState:
+                  facet:
+                      sectionId: hobbies
+                      id: hobbies
+            - id: gender_vs_hobbies
+              template: vs_facet
+              queryOptions:
+                  sectionId: user_info
+              fieldId: gender
+              tabId: tabs.by_gender
+              filtersState:
+                  facet:
+                      sectionId: hobbies
+                      id: hobbies
 
       - id: physical_activity
         template: multiple_options2_combined
+        variants:
+            - id: gender_vs_physical_activity
+              template: vs_facet
+              queryOptions:
+                  sectionId: user_info
+              fieldId: gender
+              tabId: tabs.by_gender
+              filtersState:
+                  facet:
+                      sectionId: hobbies
+                      id: physical_activity
 
       - id: favorite_musical_artists
-        limit: 3
         template: multiple_options2_freeform
+        variants:
+            - id: favorite_musical_artists_vs_age
+              template: vs_facet
+              queryOptions:
+                  sectionId: hobbies
+              fieldId: favorite_musical_artists
+              tabId: tabs.by_age
+              parameters:
+                  cutoff: 40
+                  sort: { property: medianByFacet, order: asc }
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: age
+            - id: favorite_musical_artists_by_gender
+              template: vs_facet
+              queryOptions:
+                  sectionId: hobbies
+              fieldId: favorite_musical_artists
+              tabId: tabs.by_gender
+              parameters:
+                  limit: 20
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: in
+                              value: [male]
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: nin
+                              value: [male]
 
       - id: favorite_movies
-        limit: 3
         template: multiple_options2_freeform
+        variants:
+            - id: favorite_movies_vs_age
+              template: vs_facet
+              queryOptions:
+                  sectionId: hobbies
+              fieldId: favorite_movies
+              tabId: tabs.by_age
+              parameters:
+                  cutoff: 40
+                  sort: { property: medianByFacet, order: asc }
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: age
+            - id: favorite_movies_by_gender
+              template: vs_facet
+              queryOptions:
+                  sectionId: hobbies
+              fieldId: favorite_movies
+              tabId: tabs.by_gender
+              parameters:
+                  limit: 20
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: in
+                              value: [male]
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: nin
+                              value: [male]
 
       - id: favorite_tv
-        limit: 3
         template: multiple_options2_freeform
+        variants:
+            - id: favorite_tv_vs_age
+              template: vs_facet
+              queryOptions:
+                  sectionId: hobbies
+              fieldId: favorite_tv
+              tabId: tabs.by_age
+              parameters:
+                  cutoff: 40
+                  sort: { property: medianByFacet, order: asc }
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: age
+            - id: favorite_tv_by_gender
+              template: vs_facet
+              queryOptions:
+                  sectionId: hobbies
+              fieldId: favorite_tv
+              tabId: tabs.by_gender
+              parameters:
+                  limit: 20
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: in
+                              value: [male]
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: nin
+                              value: [male]
 
       - id: favorite_video_games
-        limit: 3
         template: multiple_options2_freeform
+        variants:
+            - id: favorite_video_games_vs_age
+              template: vs_facet
+              queryOptions:
+                  sectionId: hobbies
+              fieldId: favorite_video_games
+              tabId: tabs.by_age
+              parameters:
+                  cutoff: 40
+                  sort: { property: medianByFacet, order: asc }
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: age
+            - id: favorite_video_games_by_gender
+              template: vs_facet
+              queryOptions:
+                  sectionId: hobbies
+              fieldId: favorite_video_games
+              tabId: tabs.by_gender
+              parameters:
+                  limit: 20
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: in
+                              value: [male]
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: nin
+                              value: [male]
 
       - id: video_game_platforms
         template: multiple_options2_combined
+        variants:
+            - id: video_game_platforms_vs_age
+              template: vs_facet
+              queryOptions:
+                  sectionId: health
+              fieldId: age
+              tabId: tabs.by_age
+              filtersState:
+                  facet:
+                      sectionId: hobbies
+                      id: video_game_platforms
 
 - id: conclusion
   is_hidden: true

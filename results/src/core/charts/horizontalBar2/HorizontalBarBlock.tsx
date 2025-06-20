@@ -74,14 +74,27 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
         metadataProps
     }
 
-    // figure out if all series are sorted by options
-    const allSortedByOptions = series.every(serie => {
-        const serieMetadata = getSerieMetadata({ serie, block })
-        return serieMetadata?.axis1Sort?.property === sortProperties.OPTIONS
-    })
+    // // figure out if all series are sorted by options
+    // const allSortedByOptions = series.every(serie => {
+    //     const serieMetadata = getSerieMetadata({ serie, block })
+    //     return serieMetadata?.axis1Sort?.property === sortProperties.OPTIONS
+    // })
 
-    // we now always use back-to-back view when there's only two charts
-    const useBackToBackSeriesView = series.length === 2
+    const useBackToBackSeriesView = () => {
+        if (series.length === 2) {
+            // make sure both series have same items in order to use back-to-back view
+            const s1 = series[0]
+            const s2 = series[1]
+            const e1 = getChartCurrentEdition({ serie: s1 })
+            const e2 = getChartCurrentEdition({ serie: s2 })
+            const b1 = e1.buckets
+            const b2 = e2.buckets
+            const items1 = b1.map(b => b.id).toSorted()
+            const items2 = b2.map(b => b.id).toSorted()
+            return JSON.stringify(items1) === JSON.stringify(items2)
+        }
+        return false
+    }
 
     return (
         <ChartWrapper question={question} className="chart-horizontal-bar">
@@ -96,7 +109,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                 } */}
                 {facetQuestion && <FacetHeading facetQuestion={facetQuestion} {...commonProps} />}
 
-                {useBackToBackSeriesView ? (
+                {useBackToBackSeriesView() ? (
                     <BackToBack serie1={series[0]} serie2={series[1]} {...commonProps} />
                 ) : (
                     <GridWrapper seriesCount={series.length}>

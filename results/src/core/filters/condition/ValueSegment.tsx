@@ -177,18 +177,21 @@ const ValueSegmentArray = ({
                             <option value="" disabled>
                                 {getString && getString('explorer.select_item')?.t}
                             </option>
-                            {groupsOrOptions.map(({ id, entity, label }) => (
-                                <option key={id} value={id}>
-                                    {getValueLabel({
-                                        getString,
-                                        field,
-                                        value: id,
-                                        allFilters,
-                                        entity,
-                                        label
-                                    })}
-                                </option>
-                            ))}
+                            {groupsOrOptions.map(({ id, entity, label }) => {
+                                const labelObject = getValueLabel({
+                                    getString,
+                                    field,
+                                    value: id,
+                                    allFilters,
+                                    entity,
+                                    label
+                                })
+                                return (
+                                    <option key={id} value={id} data-key={labelObject.key}>
+                                        {labelObject.label}
+                                    </option>
+                                )
+                            })}
                         </Select_>
                     </Label_>
 

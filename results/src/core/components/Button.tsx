@@ -141,7 +141,8 @@ const Button = styled.button.attrs(
 
         @media ${mq.mediumLarge} {
             border-left-width: 0;
-            &:first-child {
+            &:first-child,
+            .chart-toggle-wrap & {
                 border-left-width: 1px;
             }
 

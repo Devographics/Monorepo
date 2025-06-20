@@ -46,6 +46,7 @@ type ToggleProps = {
     sortId?: string | null
     // whether the currently active sort is asc/desc
     sortOrder?: OrderOptions | null
+    wrapItems?: boolean
 }
 
 export const DEFAULT_SORT = 'default'
@@ -58,7 +59,8 @@ export const Toggle = ({
     items,
     handleSelect,
     handleHover,
-    hasDefault = false
+    hasDefault = false,
+    wrapItems = true
 }: ToggleProps) => {
     const [useDropdown, setUseDropdown] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
@@ -69,13 +71,15 @@ export const Toggle = ({
 
     useEffect(() => {
         // note: only make calculation once currentWidth is defined
-        if (currentWidth) {
+        if (currentWidth && !wrapItems) {
             const isSmushed = currentWidth < minimumWidth
             setUseDropdown(isSmushed)
         }
     }, [currentWidth]) // The empty dependency array makes sure this runs only once after component mount
 
-    const className = `chart-toggle chart-toggle-order-${sortOrder}`
+    const className = `chart-toggle chart-toggle-order-${sortOrder} chart-toggle-${
+        wrapItems ? 'wrap' : 'nowrap'
+    }`
     return (
         <div className={className}>
             {labelId && (

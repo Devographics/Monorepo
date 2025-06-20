@@ -107,7 +107,9 @@ export const Cell = ({
         isHighlighted ? 'highlighted' : ''
     } horizontal-chart-cell ${isActiveSort ? 'active-sort' : ''}`
 
-    const label = facetQuestionLabel ? `${facetQuestionLabel}: ${cellLabel}` : cellLabel
+    const label = facetQuestionLabel
+        ? `${facetQuestionLabel}: <strong>${cellLabel}</strong>`
+        : cellLabel
 
     return (
         <Tooltip
@@ -129,7 +131,7 @@ export const Cell = ({
             }
             contents={
                 <div>
-                    [{label}] <strong>{v}</strong>{' '}
+                    [<span dangerouslySetInnerHTML={{ __html: label }} />] <strong>{v}</strong>{' '}
                     <T
                         k="charts.facet_detail"
                         values={{ count, totalRespondents: totalSerieRespondents }}

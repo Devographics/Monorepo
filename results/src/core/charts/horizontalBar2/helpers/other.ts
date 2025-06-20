@@ -32,13 +32,7 @@ export const sortOptions = {
     sentiment: Object.values(SimplifiedSentimentOptions)
 }
 
-export const getChartCurrentEdition = ({
-    serie,
-    block
-}: {
-    serie: DataSeries<any>
-    block: BlockVariantDefinition
-}) => {
+export const getChartCurrentEdition = ({ serie }: { serie: DataSeries<StandardQuestionData> }) => {
     const subFieldObject =
         serie?.data?.[ResultsSubFieldEnum.COMBINED] ||
         serie?.data?.[ResultsSubFieldEnum.FREEFORM] ||

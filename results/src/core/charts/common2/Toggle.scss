@@ -30,7 +30,12 @@
     width: 100%;
     // flex-wrap: wrap;
     justify-content: center;
+
+    .chart-toggle-wrap & {
+        flex-wrap: wrap;
+    }
 }
+
 .chart-toggle-item-enabled {
     background: var(--backgroundAltColor) !important;
     .ModalContent & {
