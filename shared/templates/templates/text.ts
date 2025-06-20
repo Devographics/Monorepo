@@ -29,6 +29,7 @@ export const text: TemplateFunction = options => {
         [DbPathsEnum.RAW]: `${basePath}.${DbSuffixes.RAW}`,
         [DbPathsEnum.METADATA]: `${basePath}.${DbSuffixes.METADATA}`,
         [DbPathsEnum.ERROR]: `${basePath}.${DbSuffixes.ERROR}`,
+        [DbPathsEnum.RESPONSE]: `${basePath}.${DbSuffixes.NORMALIZED}`,
         [DbPathsEnum.OTHER]: `${basePath}.${DbSuffixes.NORMALIZED}`,
         [DbPathsEnum.SKIP]: `${basePath}.${DbPathsEnum.SKIP}`,
         [DbPathsEnum.COMMENT]: `${basePath}.${DbPathsEnum.COMMENT}`
