@@ -5,7 +5,6 @@ import { computeCompletionByYear } from './completion'
 import {
     RequestContext,
     GenericComputeArguments,
-    Section,
     QuestionApiObject,
     ComputeAxisParameters,
     EditionApiObject,
@@ -14,7 +13,8 @@ import {
     SortOrderNumeric,
     ExecutionContext,
     DbMatch,
-    MatchNin
+    MatchNin,
+    SurveyApiObject
 } from '../types'
 import {
     discardEmptyIds,
@@ -53,7 +53,9 @@ import {
     Filters,
     ResultsSubFieldEnum,
     SortProperty,
-    Survey
+    Survey,
+    StandardQuestionData,
+    ResponseEditionData
 } from '@devographics/types'
 import { getPastNEditions } from '../helpers/surveys'
 import { computeKey } from '../helpers/caching'
@@ -61,7 +63,6 @@ import isEmpty from 'lodash/isEmpty.js'
 import { logToFile } from '@devographics/debug'
 import { SENTIMENT_FACET } from '@devographics/constants'
 import { addValues } from './stages/add_values'
-import { getQuestionObjects } from '../generate/generate'
 
 type StageLogItem = {
     name: string
@@ -164,7 +165,8 @@ export const getGenericCacheKey = ({
     editionCount,
     parameters,
     filters,
-    facet
+    facet,
+    prefix = 'generic'
 }: {
     edition: EditionApiObject
     question: QuestionApiObject
@@ -174,6 +176,7 @@ export const getGenericCacheKey = ({
     parameters?: ResponsesParameters
     filters?: Filters
     facet?: string
+    prefix?: string
 }) => {
     const cacheKeyOptions: any = {
         editionId: selectedEditionId || `allEditions(${edition.id})`,
@@ -193,14 +196,13 @@ export const getGenericCacheKey = ({
     if (!isEmpty(facet)) {
         cacheKeyOptions.facet = { facet }
     }
-    return computeKey('generic', cacheKeyOptions)
+    return computeKey(prefix, cacheKeyOptions)
 }
 
 export type GenericComputeOptions = {
     context: RequestContext
-    survey: SurveyMetadata
-    edition: EditionMetadata
-    section: Section // not used
+    survey: SurveyApiObject
+    edition: EditionApiObject
     question: QuestionApiObject
     questionObjects: QuestionApiObject[]
     computeArguments: GenericComputeArguments
@@ -218,8 +220,8 @@ export const getMatch = async ({
     editionCount,
     testForNull = true
 }: {
-    survey: SurveyMetadata
-    edition: EditionMetadata
+    survey: SurveyApiObject
+    edition: EditionApiObject
     dbPath: string
     filters?: Filters
     questionObjects: QuestionApiObject[]
@@ -250,7 +252,9 @@ export const getMatch = async ({
     return match
 }
 
-export async function genericComputeFunction(options: GenericComputeOptions) {
+export async function genericComputeFunction(
+    options: GenericComputeOptions
+): Promise<ResponseEditionData[]> {
     const startAt = new Date()
     const stageLog: StageLogItem[] = []
 

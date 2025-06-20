@@ -138,6 +138,7 @@ export interface QuestionApiObject extends QuestionApiTemplateOutput {
     sectionIds?: string[]
     sectionIndex?: number
     surveyId: string
+    survey: SurveyApiObject
 
     // only when this appears as part of a complete edition metadata tree
     editionId?: string

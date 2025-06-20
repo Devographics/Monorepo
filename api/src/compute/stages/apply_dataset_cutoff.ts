@@ -4,6 +4,7 @@ import sortBy from 'lodash/sortBy.js'
 import sum from 'lodash/sum.js'
 import { INSUFFICIENT_DATA } from '@devographics/constants'
 import { zeroPercentiles } from './add_percentiles'
+import { specialBucketIds } from './limit_data'
 
 // when a filter is applied, never publish any dataset with fewer than 10 *total* items;
 // when a facet is applied, require every *individual facet* to have more than 10 items
@@ -77,9 +78,14 @@ export const applyBucketCutoff = ({
 
     To avoid this, also zero our the next smallest facet in those cases
 
+    Note: make an exception for special buckets such as NO_ANSWER, those do not provide 
+    any sensitive data by definition. 
+    
     */
     const singleFacetUnderCutoff =
-        facetBucketsWithCutoff.filter(fb => fb.hasInsufficientData).length === 1
+        facetBucketsWithCutoff
+            .filter(fb => !specialBucketIds.includes(fb.id))
+            .filter(fb => fb.hasInsufficientData).length === 1
     if (singleFacetUnderCutoff && facetBucketsWithCutoff.length > 1) {
         const sortedFacetBuckets = sortBy(facetBucketsWithCutoff, fb => fb.count)
         const secondSmallestFacetBucket = sortedFacetBuckets[1]

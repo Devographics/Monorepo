@@ -27,6 +27,7 @@ import {
     generateEntitiesTypeObjects
 } from './typedefs'
 import uniq from 'lodash/uniq.js'
+import { RequestContext } from '../types'
 
 /*
 
@@ -108,11 +109,13 @@ avoid duplicating similar GraphQL types and reuse definitions for similar questi
 export const generateTypeObjects = async ({
     surveys,
     questionObjects,
-    entities
+    entities,
+    context
 }: {
     surveys: SurveyApiObject[]
     questionObjects: QuestionApiObject[]
     entities: Entity[]
+    context: RequestContext
 }): Promise<TypeObject[]> => {
     const i18nTypeObjects = await generateI18nTypeObjects({
         surveys
@@ -121,7 +124,8 @@ export const generateTypeObjects = async ({
         surveys
     })
     const questionsTypeObjects = await generateQuestionsTypeObjects({
-        questionObjects
+        questionObjects,
+        context
     })
     const filtersTypeObjects = generateFiltersTypeObjects({
         surveys,
@@ -156,23 +160,16 @@ But there will also be a separate `id: blogs_news_magazines` object for css2021,
 with typeName StateOfCssBlogsNewsMagazines and different options. 
 
 */
-export const getQuestionObjects = ({ surveys }: { surveys: Survey[] }) => {
+export const getQuestionObjects = ({ surveys }: { surveys: SurveyApiObject[] }) => {
     let allQuestionObjects: QuestionApiObject[] = []
 
     for (const survey of surveys) {
         const surveyQuestionObjects: QuestionApiObject[] = []
         for (const edition of survey.editions) {
-            const allSections = mergeSections(edition.sections, edition.apiSections)
-
-            if (allSections) {
-                for (const section of allSections) {
+            if (edition.sections) {
+                for (const section of edition.sections) {
                     for (const question of section?.questions) {
-                        const questionObject = getQuestionObject({
-                            survey,
-                            edition,
-                            section,
-                            question
-                        })
+                        const questionObject = question
                         const existingQuestionObjectIndex = surveyQuestionObjects.findIndex(
                             q => q.id === questionObject.id
                         )
@@ -235,6 +232,7 @@ export const getQuestionObject = ({
         sectionIds: [section.id], // a question can belong to more than one section in different editions
         sectionIndex: edition?.sections?.findIndex(s => s.id === section.id), // just a simple way to group questions together when belonging to same section
         surveyId: survey.id,
+        survey,
         editions: [edition.id],
         ...templateObject
     }
@@ -246,6 +244,13 @@ export const getQuestionObject = ({
 
     questionObject.contentType = getContentType(questionObject)
 
+    const hasOptions = questionObject.options || questionObject.groups
+    const isFreeform = ['text', 'longtext', 'textList'].includes(question.template)
+
+    // note: at this point we do not know yet if the question actually has options,
+    // at least in the case of dynamic options. So this might not be the best place
+    // to do this, since we rely on the existence of filterTypeName here to know
+    // whether to reference it in other types
     if (questionObject.options || questionObject.groups) {
         if (!questionObject.optionTypeName) {
             questionObject.optionTypeName = fieldTypeName + 'Option'

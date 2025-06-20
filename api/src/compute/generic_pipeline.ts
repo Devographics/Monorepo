@@ -36,14 +36,14 @@ export const getGenericPipeline = async (pipelineProps: PipelineProps) => {
 
     /*
 
-    TODO: currently we can't specify the subfield for a facet. In other words we can only facet
-    by main responses values, not by freeform values.
+    TODO: since we can't specify the subfield for a facet, we always use COMBINED so that it 
+    works both for predefined and freeform values
 
-    For that reason, if two axes are specified, hardcode axis 1's subfield to be "responses"
+    For that reason, if two axes are specified, hardcode axis 1's subfield to be "COMBINED"
     (axis 1 is actually the second axis, they're inverted for whatever reason)
 
     */
-    const responseType1 = axis2 ? ResponsesTypes.RESPONSES : responsesType
+    const responseType1 = axis2 ? ResponsesTypes.COMBINED : responsesType
     const axis1DbPath = getDbPath(axis1.question, responseType1)
     const axis1Id = axis1.question.id
 

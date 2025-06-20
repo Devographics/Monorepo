@@ -31,7 +31,12 @@ import { getSurveysLoadMethod, loadOrGetSurveys } from './load/surveys'
 
 //import Tracing from '@sentry/tracing'
 
-import { generateTypeObjects, getQuestionObjects, parseSurveys } from './generate/generate'
+import {
+    generateTypeObjects,
+    getQuestionObjects,
+    getSurveyObject,
+    parseSurveys
+} from './generate/generate'
 import { generateResolvers } from './generate/resolvers'
 
 import { watchFiles } from './helpers/watch'
@@ -147,18 +152,28 @@ const start = async () => {
 
     const { surveys } = await loadOrGetSurveys()
 
-    const questionObjects = getQuestionObjects({ surveys })
+    const surveysApiObjects = surveys.map(survey => getSurveyObject({ survey }))
+    const questionObjects = getQuestionObjects({ surveys: surveysApiObjects })
 
     const parsedSurveys = parseSurveys({ surveys })
 
     const typeObjects = await generateTypeObjects({
         surveys: parsedSurveys,
         questionObjects,
-        entities
+        entities,
+        context
     })
     const allTypeDefsString = typeObjects.map(t => t.typeDef).join('\n\n')
 
-    await logToFile('questionObjects.yml', questionObjects)
+    // omit `survey` property when logging question out to avoid
+    // logging out huge objects
+    await logToFile(
+        'questionObjects.yml',
+        questionObjects.map(q => {
+            const { survey, ...rest } = q
+            return rest
+        })
+    )
     await logToFile('typeDefs.yml', typeObjects)
     await logToFile('typeDefs.graphql', allTypeDefsString)
 

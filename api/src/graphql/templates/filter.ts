@@ -20,8 +20,7 @@ export const generateFilterType = ({
     const { filterTypeName, enumTypeName, optionsAreNumeric } = question
     if (!filterTypeName) return
     let typeDef
-    const hasGroupsOrOptions = question.groups || question.options
-    if (hasGroupsOrOptions) {
+    if (enumTypeName) {
         typeDef = `input ${filterTypeName} {
             eq: ${enumTypeName}
             in: [${enumTypeName}]

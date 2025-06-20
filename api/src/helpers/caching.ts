@@ -80,9 +80,10 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     // args?: ArgumentTypes<F>
     key?: string
     enableCache?: boolean
+    enableLog?: boolean
 }): Promise<ResultType<F>> => {
     const startedAt = new Date()
-    const { func, context, key, funcOptions = {} } = options
+    const { func, context, key, funcOptions = {}, enableLog = true } = options
     const { redisClient, isDebug = false } = context || {}
     const { disableCache, cacheType } = appSettings
     let value, verb
@@ -120,11 +121,13 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
         }
     }
     const finishedAt = new Date()
-    console.log(
-        `> ${verb} for key: ${key} in ${
-            finishedAt.getTime() - startedAt.getTime()
-        }ms ( ${settingsLogs} )`
-    )
+    if (enableLog) {
+        console.log(
+            `> ${verb} for key: ${key} in ${
+                finishedAt.getTime() - startedAt.getTime()
+            }ms ( ${settingsLogs} )`
+        )
+    }
     return value
 }
 
