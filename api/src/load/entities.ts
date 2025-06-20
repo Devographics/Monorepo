@@ -19,6 +19,7 @@ import { OptionId } from '@devographics/types'
 import clone from 'lodash/clone.js'
 import {
     getAvatar,
+    getAvatarAlways,
     getEntitiesFromYaml,
     getEntityType,
     getIdFromFileName,
@@ -290,16 +291,20 @@ export const getEntity = async ({
     entity.entityType = getEntityType(entity)
 
     if (entity.hasAvatar || [EntityType.PEOPLE].includes(entity.entityType)) {
-        const avatarCacheKey = `avatar__${entity.id}`
-        const avatar = await useCache({
-            func: getAvatar,
-            context,
-            funcOptions: { entity },
-            key: avatarCacheKey
-        })
-        if (avatar) {
-            entity.avatar = avatar
-        }
+        // version 1: async version that checks if image actually exists
+        // const avatarCacheKey = `avatar__${entity.id}`
+        // const avatar = await useCache({
+        //     func: getAvatar,
+        //     context,
+        //     funcOptions: { entity },
+        //     key: avatarCacheKey,
+        //     enableCache: true
+        // })
+        // if (avatar) {
+        //     entity.avatar = avatar
+        // }
+        // version 2: assume it always exists and let client handle errors
+        entity.avatar = getAvatarAlways({ entity })
     }
 
     if (entity.belongsTo) {

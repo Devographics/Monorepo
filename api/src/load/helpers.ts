@@ -128,6 +128,12 @@ export const getAvatar = async ({ entity }: { entity: Entity }) => {
     }
 }
 
+// version that doesn't actually check, to save time
+export const getAvatarAlways = ({ entity }: { entity: Entity }) => {
+    const avatarUrl = `${process.env.ASSETS_URL}/avatars/${entity.id}.jpg`
+    return { url: avatarUrl } as Avatar
+}
+
 export const getEntityType = (entity: Entity) => {
     if (entity?.tags?.includes('people')) {
         return EntityType.PEOPLE
