@@ -240,6 +240,8 @@
 - id: career
   path: /career
   blocks:
+      - template: page_introduction
+
       - id: years_of_experience
         template: multiple_options2
         variants:
@@ -414,6 +416,8 @@
 - id: workplace
   path: /workplace
   blocks:
+      - template: page_introduction
+
       - id: company_size
         template: multiple_options2
         variants:
@@ -618,6 +622,8 @@
 - id: technology
   path: /technology
   blocks:
+      - template: page_introduction
+
       - id: mobile_os
         template: single_option2_combined
 
@@ -738,6 +744,8 @@
 - id: health
   path: /health
   blocks:
+      - template: page_introduction
+
       - id: age
         template: single_option2
         variants:
@@ -837,6 +845,8 @@
 - id: worldview
   path: /worldview
   blocks:
+      - template: page_introduction
+
       - id: global_issues
         template: multiple_options2_combined
         variants:
@@ -963,6 +973,8 @@
 - id: hobbies
   path: /hobbies
   blocks:
+      - template: page_introduction
+
       - id: hobbies
         template: multiple_options2_combined
         variants:
