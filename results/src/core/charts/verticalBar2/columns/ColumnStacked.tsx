@@ -6,7 +6,7 @@ import {
 } from '../types'
 import React from 'react'
 import { Cell } from '../VerticalBarCell'
-import { useGradient } from '../../common2/helpers/colors'
+import { useColorScale, useGradient } from '../../common2/helpers/colors'
 import sum from 'lodash/sum'
 import take from 'lodash/take'
 import { ColumnWrapper } from './ColumnWrapper'
@@ -42,6 +42,7 @@ export const ColumnStacked = <
 
     // const rowDimensions = allRowsCellDimensions[rowIndex]
     // const rowOffset = allRowsOffsets[rowIndex]
+    const colorScale = useColorScale({ question: facetQuestion })
     return (
         <ColumnWrapper<SerieData, PointData, ChartStateType> {...props}>
             <div className="chart-faceted-bar">
@@ -49,7 +50,8 @@ export const ColumnStacked = <
                     const { id } = facetBucket
                     const gradient = useGradient({
                         id: facetBucket.id,
-                        question: { ...facetQuestion, options: facetBuckets }
+                        question: { ...facetQuestion, options: facetBuckets },
+                        colorScale
                     })
 
                     const value = getPointValue(facetBucket, chartState)

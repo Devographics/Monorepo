@@ -9,7 +9,7 @@ import { BlockVariantDefinition } from 'core/types'
 import max from 'lodash/max'
 import min from 'lodash/min'
 import range from 'lodash/range'
-import { useAllQuestionsWithOptions } from 'core/charts/hooks'
+import { useAllQuestions, useAllQuestionsWithOptions } from 'core/charts/hooks'
 
 export const getYears = (allYears: number[]) => {
     const minYear = min(allYears)
@@ -40,7 +40,7 @@ export const useChartValues = <SerieData, PointData extends BasicPointData, Char
     // const viewDefinition = getViewDefinition(view)
     const { getTicks, getColumnIds, getPointValue } = viewDefinition
     const columnIds = getColumnIds(lineItems)
-    const allQuestions = useAllQuestionsWithOptions()
+    const allQuestions = useAllQuestions()
     const { facet } = chartState
 
     const maxValue = max(

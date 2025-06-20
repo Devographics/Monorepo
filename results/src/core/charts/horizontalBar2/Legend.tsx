@@ -47,6 +47,7 @@ export const useOptionsToggleItems = ({
         const columnLabel = shortLabel
         const orderLabel = getString(`charts.order.${order}`)?.t
         return {
+            labelKey: key,
             id,
             gradient: getGradient(option),
             isEnabled,
@@ -93,7 +94,7 @@ export const Legend = ({ chartState, i18nNamespace, options, colorScale }: Legen
     const items = useOptionsToggleItems({ options, colorScale, sort, order, i18nNamespace })
 
     return (
-        <div className="chart-legend">
+        <div className="chart-legend chart-legend-horizontalBar">
             <Toggle
                 sortId={sort}
                 sortOrder={order}

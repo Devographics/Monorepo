@@ -43,14 +43,14 @@ const Item = <ChartStateType,>({
     const { setHighlighted } = chartState
     const lineColor = color || theme.colors.distinct[lineIndex]
 
-    const label =
-        label_ ||
-        getItemLabel({
-            id,
-            entity,
-            getString
-            // i18nNamespace
-        })?.shortLabel
+    const labelObject = getItemLabel({
+        id,
+        entity,
+        getString,
+        label: label_
+        // i18nNamespace
+    })
+    const label = labelObject?.shortLabel
 
     const style = {
         '--color1': lineColor,
@@ -68,7 +68,9 @@ const Item = <ChartStateType,>({
             }}
         >
             <div className="legend-item-color" />
-            <span className="legend-item-label">{label}</span>
+            <span className="legend-item-label" data-key={labelObject.key}>
+                {label}
+            </span>
         </div>
     )
 }

@@ -65,8 +65,7 @@ export const getBlockQuery = ({
         editionId: edition?.id,
         sectionId: axis1?.sectionId || section?.id,
         questionId,
-        subField: block?.queryOptions?.subField || ResultsSubFieldEnum.RESPONSES,
-        ...block.queryOptions
+        subField: ResultsSubFieldEnum.COMBINED
     }
     let parameters = block.parameters || {}
 

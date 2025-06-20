@@ -35,29 +35,50 @@ export const useDefaultColorScale = () => {
     } as ColorScale
 }
 
-export const useColorScale = ({ question }: { question: QuestionMetadata }) => {
+export const useColorScale = ({
+    question,
+    bucketIds
+}: {
+    question: QuestionMetadata
+    bucketIds?: string[]
+}) => {
     const theme = useTheme()
     let colorScale = {} as ColorScale
     const defaultColors = useDefaultColorScale()
-    const questionScale = colors?.ranges?.[question.id]
 
-    if (questionScale) {
-        colorScale = { ...questionScale, ...defaultColors }
+    if (!question) {
+        colorScale = defaultColors
     } else {
-        colorScale = defaultColors as { [key: string]: string[] }
-        if (question.options) {
-            if (question.optionsAreSequential || question.optionsAreNumeric) {
-                question.options.forEach((option, index) => {
-                    const color = theme.colors.velocity[index]
-                    colorScale[option.id] = [color, color]
-                })
-            } else {
-                question.options.forEach((option, index) => {
-                    if (otherBucketIds.includes(String(option.id))) {
-                        colorScale[option.id] = [neutralColor, neutralColor]
+        const questionScale = colors?.ranges?.[question.id]
+
+        if (questionScale) {
+            colorScale = { ...questionScale, ...defaultColors }
+        } else {
+            colorScale = defaultColors as { [key: string]: string[] }
+            if (question.options) {
+                if (question.optionsAreSequential || question.optionsAreNumeric) {
+                    question.options.forEach((option, index) => {
+                        const color = theme.colors.velocity[index]
+                        colorScale[option.id] = [color, color]
+                    })
+                } else {
+                    question.options.forEach((option, index) => {
+                        if (otherBucketIds.includes(String(option.id))) {
+                            colorScale[option.id] = [neutralColor, neutralColor]
+                        } else {
+                            const color =
+                                theme.colors.distinct[index % theme.colors.distinct.length]
+                            colorScale[option.id] = [color, color]
+                        }
+                    })
+                }
+            } else if (bucketIds) {
+                bucketIds.forEach((id, index) => {
+                    if (otherBucketIds.includes(String(id))) {
+                        colorScale[id] = [neutralColor, neutralColor]
                     } else {
                         const color = theme.colors.distinct[index % theme.colors.distinct.length]
-                        colorScale[option.id] = [color, color]
+                        colorScale[id] = [color, color]
                     }
                 })
             }
@@ -66,11 +87,18 @@ export const useColorScale = ({ question }: { question: QuestionMetadata }) => {
     return colorScale
 }
 
-export const useGradient = ({ question, id }: { question?: QuestionMetadata; id: string }) => {
+export const useGradient = ({
+    question,
+    id,
+    colorScale
+}: {
+    question?: QuestionMetadata
+    id: string
+    colorScale: ColorScale
+}) => {
     if (!question) {
         return [neutralColor, neutralColor]
     } else {
-        const colorScale = useColorScale({ question })
         const color = colorScale[id]
         if (color) {
             return color

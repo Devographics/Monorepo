@@ -4,7 +4,7 @@ import {
     HorizontalBarChartValues,
     HorizontalBarViewDefinition
 } from '../types'
-import { useAllQuestionsWithOptions } from '../../hooks'
+import { useAllQuestions, useAllQuestionsWithOptions } from '../../hooks'
 import { SerieMetadataProps, SeriesMetadata } from 'core/charts/common2/types'
 import { getMaxValue } from './other'
 
@@ -27,7 +27,7 @@ export const useChartValues = ({
 }) => {
     const { view } = chartState
     const { getValue, getTicks } = viewDefinition
-    const allQuestions = useAllQuestionsWithOptions()
+    const allQuestions = useAllQuestions()
     const values = buckets.map(getValue)
     const { facet } = chartState
     const chartValues: HorizontalBarChartValues = {

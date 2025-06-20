@@ -488,13 +488,24 @@ export const useAllQuestionsWithOptions2 = (): FilterItem[] => {
     return keys
 }
 
+export const useAllQuestions = (): FilterItem[] => {
+    const context = usePageContext()
+    const { currentEdition } = context
+    const keys = []
+    for (const section of currentEdition.sections) {
+        for (const question of section.questions) {
+            keys.push({ sectionId: section.id, ...question })
+        }
+    }
+    return keys
+}
 /*
 
 Get all available filters, while optionally filtering out the current question's id
 
 */
 export const useAllFilters = (excludeFilterId?: string) => {
-    const allFilters = useAllQuestionsWithOptions2()
+    const allFilters = useAllQuestions()
     return allFilters.filter(q => q.id !== excludeFilterId)
 }
 

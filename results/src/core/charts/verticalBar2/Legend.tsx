@@ -99,7 +99,7 @@ export const Legend = ({
     const items = useOptionsToggleItems({ options, colorScale, i18nNamespace, enableSort })
 
     return (
-        <div className="chart-legend">
+        <div className="chart-legend chart-legend-verticalBar">
             <Toggle
                 alwaysExpand={true}
                 // labelId="charts.sort_by"

@@ -2,13 +2,15 @@ import React from 'react'
 import { RowWrapper } from './RowWrapper'
 import { Cell } from '../HorizontalBarCell'
 import { RowComponentProps } from '../types'
-import { useGradient } from '../../common2/helpers/colors'
+import { useColorScale, useGradient } from '../../common2/helpers/colors'
 import { RespondentCount } from '../../common2'
 import { Bucket } from '@devographics/types'
+import { getBlockAllFacetBucketIds, getBucketsAllFacetBucketIds } from '../helpers/other'
 
 export const RowStacked = (props: RowComponentProps) => {
     const {
         bucket,
+        buckets,
         chartState,
         chartValues,
         rowIndex,
@@ -21,6 +23,9 @@ export const RowStacked = (props: RowComponentProps) => {
     const { facetQuestion } = chartValues
     const { facetBuckets } = bucket_
 
+    // if (!facetQuestion) {
+    //     throw new Error(`facetQuestion not defined in RowStacked`)
+    // }
     if (!allRowsCellDimensions || !allRowsOffsets) {
         throw new Error('Missing allRowsCellDimensions or allRowsOffsets')
     }
@@ -28,13 +33,20 @@ export const RowStacked = (props: RowComponentProps) => {
     const rowDimensions = allRowsCellDimensions[rowIndex]
     const rowOffset = allRowsOffsets[rowIndex]
 
+    const allFacetBucketIds = getBucketsAllFacetBucketIds(buckets)
+    const colorScale = useColorScale({ question: facetQuestion, bucketIds: allFacetBucketIds })
+
     return (
         <RowWrapper {...props} rowMetadata={<RespondentCount count={bucket.count} />}>
             <div className="chart-faceted-bar">
                 {facetBuckets.map((facetBucket, index) => {
                     const { id } = facetBucket
                     const { width, offset } = rowDimensions[index]
-                    const gradient = useGradient({ id: facetBucket.id, question: facetQuestion })
+                    const gradient = useGradient({
+                        id: facetBucket.id,
+                        question: facetQuestion,
+                        colorScale
+                    })
                     return (
                         <Cell
                             key={id}

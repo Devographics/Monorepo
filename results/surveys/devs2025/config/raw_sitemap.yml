@@ -212,6 +212,21 @@
                   facet:
                       sectionId: user_info
                       id: relationship_status
+            - id: gender_vs_relationship_status
+              fieldId: gender
+              tabId: tabs.by_gender
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+                  limit: 20
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: single
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: relationship_status
 
       - id: number_of_kids
         template: single_option2
@@ -721,7 +736,6 @@
 
 - id: health
   path: /health
-  is_hidden: true
   blocks:
       - id: age
         template: single_option2
@@ -731,10 +745,21 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
-              parameters:
-                  sort: { property: medianByFacet }
 
-            - template: vs_gender
+            - id: gender_vs_age
+              template: vs_facet
+              fieldId: gender
+              tabId: tabs.by_gender
+              queryOptions:
+                  sectionId: user_info
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: age
+
+      - id: disability_status
+        template: multiple_options2_combined
+        variants:
             - id: age_vs_disability
               fieldId: age
               blockType: HorizontalBarBlock2
@@ -746,32 +771,24 @@
                   facet:
                       sectionId: health
                       id: disability_status
-
-      - id: disability_status
-        template: multiple_options2_combined
-        variants:
-            - template: vs_age
-              parameters:
-                  sort: { property: medianByFacet, order: asc }
-              filtersState:
-                  facet:
-                      sectionId: health
-                      id: age
-            - template: vs_salary
-              parameters:
-                  sort: { property: medianByFacet }
-              filtersState:
-                  facet:
-                      sectionId: workplace
-                      id: yearly_salary
+            # - template: vs_salary
+            #   parameters:
+            #       sort: { property: medianByFacet }
+            #   filtersState:
+            #       facet:
+            #           sectionId: workplace
+            #           id: yearly_salary
 
       - id: health_issues
         template: multiple_options2_combined
         variants:
             - id: gender_vs_health_issues
               template: vs_facet
+              tabId: tabs.by_gender
               queryOptions:
                   sectionId: user_info
+              parameters:
+                  facetLimit: 6
               fieldId: gender
               filtersState:
                   facet:
@@ -785,19 +802,86 @@
         template: multiple_options2_combined
 
 - id: worldview
-  is_hidden: true
   path: /worldview
   blocks:
       - id: global_issues
         template: multiple_options2_combined
+        variants:
+            - id: country_vs_global_issues
+              tabId: tabs.by_country
+              template: vs_facet
+              queryOptions:
+                  sectionId: user_info
+              fieldId: country
+              parameters:
+                  limit: 20
+              filtersState:
+                  facet:
+                      sectionId: worldview
+                      id: global_issues
+            - id: age_vs_global_issues
+              tabId: tabs.by_age
+              template: vs_facet
+              queryOptions:
+                  sectionId: health
+              fieldId: age
+              filtersState:
+                  facet:
+                      sectionId: worldview
+                      id: global_issues
 
       - id: happiness_factors
         template: multiple_options2_combined
+        variants:
+            - id: country_vs_happiness_factors
+              tabId: tabs.by_country
+              template: vs_facet
+              queryOptions:
+                  sectionId: user_info
+              fieldId: country
+              parameters:
+                  limit: 20
+              filtersState:
+                  facet:
+                      sectionId: worldview
+                      id: happiness_factors
+            - id: gender_vs_happiness_factors
+              tabId: tabs.by_gender
+              template: vs_facet
+              queryOptions:
+                  sectionId: user_info
+              fieldId: gender
+              filtersState:
+                  facet:
+                      sectionId: worldview
+                      id: happiness_factors
+            - id: age_vs_happiness_factors
+              tabId: tabs.by_age
+              template: vs_facet
+              queryOptions:
+                  sectionId: health
+              fieldId: age
+              filtersState:
+                  facet:
+                      sectionId: worldview
+                      id: happiness_factors
 
       - id: relocation
         template: multiple_options2_freeform
-        i18nNamespace: country
-        limit: 3
+        variants:
+            - id: country_vs_relocation
+              template: vs_facet
+              tabId: tabs.by_country
+              queryOptions:
+                  sectionId: user_info
+              fieldId: country
+              parameters:
+                  facetLimit: 5
+                  limit: 20
+              filtersState:
+                  facet:
+                      sectionId: worldview
+                      id: relocation
 
       - id: relocation_tokyodev
         template: midpage_resource
@@ -811,9 +895,39 @@
       - id: overall_happiness
         template: single_option2
         i18nNamespace: happiness
+        variants:
+            - id: sleep_quantity_vs_overall_happiness
+              tabId: tabs.vs_sleep_quantity
+              template: vs_facet
+              queryOptions:
+                  sectionId: health
+              fieldId: sleep_quantity
+              filtersState:
+                  facet:
+                      sectionId: worldview
+                      id: overall_happiness
+            - id: income_evolution_vs_overall_happiness
+              tabId: tabs.vs_income_evolution
+              template: vs_facet
+              queryOptions:
+                  sectionId: workplace
+              fieldId: income_evolution
+              filtersState:
+                  facet:
+                      sectionId: worldview
+                      id: overall_happiness
+            - id: relationship_status_vs_overall_happiness
+              tabId: tabs.vs_relationship_status
+              template: vs_facet
+              queryOptions:
+                  sectionId: user_info
+              fieldId: relationship_status
+              filtersState:
+                  facet:
+                      sectionId: worldview
+                      id: overall_happiness
 
 - id: hobbies
-  is_hidden: true
   path: /hobbies
   blocks:
       - id: hobbies
@@ -965,7 +1079,6 @@
 #             addQuestionComments: false
 
 - id: about
-  is_hidden: true
   path: /about
   blocks:
       - id: about_contents

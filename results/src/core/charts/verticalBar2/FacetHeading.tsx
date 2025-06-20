@@ -2,7 +2,7 @@ import React from 'react'
 import { useEntities } from 'core/helpers/entities'
 import { useColorScale } from '../common2/helpers/colors'
 import { getQuestionGroups, getQuestionOptions } from '../horizontalBar2/helpers/options'
-import { getAllFacetBucketIds } from '../horizontalBar2/helpers/other'
+import { getBlockAllFacetBucketIds } from '../horizontalBar2/helpers/other'
 import { FacetTitle } from '../common2/FacetTitle'
 import Legend from '../verticalBar2/Legend'
 import { CommonProps } from '../common2/types'
@@ -31,7 +31,10 @@ export const FacetHeading = <ChartStateType,>(props: FacetHeadingProps<ChartStat
     //     allFacetBucketIds.includes(String(optionOrGroup.id))
     // )
     const colorScale =
-        facetQuestion && useColorScale({ question: { ...facetQuestion, options: facetBuckets } })
+        facetQuestion &&
+        useColorScale({
+            question: { ...facetQuestion, options: facetBuckets }
+        })
 
     return (
         <div className="chart-heading">

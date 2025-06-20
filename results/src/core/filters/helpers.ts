@@ -491,6 +491,7 @@ export type FilterLegend = {
     label: string
     shortLabel: string
 }
+
 export const useFilterLegends = ({
     chartFilters,
     block,
@@ -595,12 +596,7 @@ export const useFilterLegends = ({
         // clone array to avoid modifying original one when adding elements to validOptions
         let validOptions = facetField?.options ? [...facetField.options] : []
 
-        const findValidIds = (buckets: Bucket[] | FacetBucket[]) =>
-            buckets.filter(b => b.count && b.count > 0).map(b => b.id)
-        const allFacetBucketIds = compact(
-            uniq(buckets.map(b => b.facetBuckets && findValidIds(b.facetBuckets)).flat())
-        )
-
+        const allFacetBucketIds = getAllFacetBucketIds(buckets)
         // unless options are sequential and all of them need to be included,
         // filter out options that don't appear in the data either as buckets or facetBuckets,
         // or whose count is 0

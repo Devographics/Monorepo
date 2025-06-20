@@ -31,7 +31,7 @@ export const FacetTitle = ({
             id: block?.filtersState?.axis1?.id || question.id
         },
         i18nNamespace:
-            (block?.filtersState?.axis1?.sectionId || block.i18nNamespace) ??
+            block?.filtersState?.axis1?.sectionId ??
             block?.queryOptions?.sectionId ??
             block.sectionId
     })

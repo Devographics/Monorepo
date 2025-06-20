@@ -1,4 +1,6 @@
 import {
+    Bucket,
+    FacetBucket,
     FeaturesOptions,
     QuestionMetadata,
     ResponseData,
@@ -23,6 +25,7 @@ import { BlockVariantDefinition } from 'core/types'
 import uniq from 'lodash/uniq'
 import { allDataFilters } from '../helpers/steps'
 import max from 'lodash/max'
+import compact from 'lodash/compact'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -36,8 +39,10 @@ export const getChartCurrentEdition = ({
     serie: DataSeries<any>
     block: BlockVariantDefinition
 }) => {
-    const subField = block?.queryOptions?.subField || ResultsSubFieldEnum.RESPONSES
-    const subFieldObject = serie?.data?.[subField] as ResponseData
+    const subFieldObject =
+        serie?.data?.[ResultsSubFieldEnum.COMBINED] ||
+        serie?.data?.[ResultsSubFieldEnum.FREEFORM] ||
+        (serie?.data?.[ResultsSubFieldEnum.RESPONSES] as ResponseData)
     return subFieldObject?.currentEdition
 }
 
@@ -111,7 +116,7 @@ export const useAllQuestionsMetadata = () => {
     return questions as Array<QuestionMetadata & { sectionId: string }>
 }
 
-export const getAllFacetBucketIds = ({
+export const getBlockAllFacetBucketIds = ({
     series,
     block,
     chartState
@@ -124,15 +129,21 @@ export const getAllFacetBucketIds = ({
         series
             .map(serie => {
                 const buckets = getChartBuckets({ serie, block, chartState })
-                return (
-                    buckets.map(bucket =>
-                        bucket?.facetBuckets?.map(facetBucket => facetBucket.id)
-                    ) || []
-                )
+                return getBucketsAllFacetBucketIds(buckets)
             })
             .flat()
             .flat()
     )
+}
+
+const findValidIds = (buckets: Bucket[] | FacetBucket[]) =>
+    buckets.filter(b => b.count && b.count > 0).map(b => b.id)
+
+export const getBucketsAllFacetBucketIds = (buckets: Bucket[]) => {
+    const allFacetBucketIds = compact(
+        uniq(buckets.map(b => b.facetBuckets && findValidIds(b.facetBuckets)).flat())
+    )
+    return allFacetBucketIds
 }
 
 export const getMaxValue = ({ values, view }: { values: number[]; view: HorizontalBarViews }) => {

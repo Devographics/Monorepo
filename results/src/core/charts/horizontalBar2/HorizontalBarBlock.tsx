@@ -6,7 +6,7 @@ import { BlockComponentProps, PageContextValue } from 'core/types'
 import { QuestionMetadata, StandardQuestionData, sortProperties } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
 import {
-    getAllFacetBucketIds,
+    getBlockAllFacetBucketIds,
     getChartCurrentEdition,
     getSerieMetadata,
     getSerieMetadataProps,
@@ -28,6 +28,7 @@ import Legend from './Legend'
 import { BackToBack } from '../common2/BackToBack'
 import { NoData } from '../common2/NoData'
 import { getViewDefinition } from './helpers/views'
+import { NO_ANSWER, OTHER_ANSWERS } from '@devographics/constants'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -150,24 +151,15 @@ export const FacetHeading = (
 
     // const controls = getControls({ chartState, chartValues })
 
-    const colorScale = facetQuestion && useColorScale({ question: facetQuestion })
+    const facetBucketIds = getBlockAllFacetBucketIds({ series, block, chartState })
 
-    const allOptions = getQuestionOptions({
-        question: facetQuestion,
-        chartState
-    })
-    const allGroups = getQuestionGroups({
-        question: facetQuestion,
-        chartState
-    })
-    const allGroupsOrOptions = allGroups?.length > 1 ? allGroups : allOptions
+    const colorScale =
+        facetQuestion && useColorScale({ question: facetQuestion, bucketIds: facetBucketIds })
 
-    const allFacetBucketIds = getAllFacetBucketIds({ series, block, chartState })
-
-    // only keep options that are actually used in the current dataset
-    const usedOptions = allGroupsOrOptions.filter(optionOrGroup =>
-        allFacetBucketIds.includes(String(optionOrGroup.id))
-    )
+    // get options based on facets used in the current dataset
+    const usedOptions = facetBucketIds
+        .filter(id => ![NO_ANSWER, OTHER_ANSWERS].includes(id))
+        .map(id => ({ id }))
 
     return (
         <div className="chart-heading">
