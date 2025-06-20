@@ -798,9 +798,41 @@
 
       - id: sleep_quantity
         template: single_option2
+        variants:
+            - id: number_of_kids_vs_sleep_quantity
+              template: vs_facet
+              tabId: tabs.vs_number_of_kids
+              queryOptions:
+                  sectionId: user_info
+              fieldId: number_of_kids
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: sleep_quantity
+            - id: age_vs_sleep_quantity
+              template: vs_facet
+              tabId: tabs.by_age
+              queryOptions:
+                  sectionId: health
+              fieldId: age
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: sleep_quantity
 
       - id: sleep_measures
         template: multiple_options2_combined
+        variants:
+            - id: sleep_measures_vs_sleep_quantity
+              template: vs_facet
+              tabId: tabs.vs_sleep_quantity
+              queryOptions:
+                  sectionId: health
+              fieldId: sleep_measures
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: sleep_quantity
 
 - id: worldview
   path: /worldview

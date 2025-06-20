@@ -6,5 +6,5 @@ sitemap: ../../../.logs/flat_sitemap.yml
 bannerId: general.devs2025.css2025_banner
 bannerLink: https://survey.devographics.com/en-US/survey/state-of-css/2025?source=devs2025_banner
 bannerBg: '#3A163C'
-bannerText: '#E2A4E5'
+bannerText: '#EBC4ED'
 bannerButton: '#D068D5'
