@@ -736,6 +736,7 @@
         disableExport: true
 
 - id: health
+  is_hidden: true
   path: /health
   blocks:
       - id: age
@@ -803,6 +804,7 @@
         template: multiple_options2_combined
 
 - id: worldview
+  is_hidden: true
   path: /worldview
   blocks:
       - id: global_issues
@@ -929,6 +931,7 @@
                       id: overall_happiness
 
 - id: hobbies
+  is_hidden: true
   path: /hobbies
   blocks:
       - id: hobbies
