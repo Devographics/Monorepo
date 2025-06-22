@@ -1,4 +1,4 @@
-import { Entity, OptionGroup } from '@devographics/types'
+import { Entity, OptionGroup, ResponsesTypes } from '@devographics/types'
 import {
     Survey,
     Edition,
@@ -29,6 +29,7 @@ import {
 } from './typedefs'
 import uniq from 'lodash/uniq.js'
 import { RequestContext } from '../types'
+import { getDbPath } from '../compute'
 
 /*
 
@@ -289,10 +290,7 @@ export const addQuestionOptions = async ({
     const { options, groups, fieldTypeName } = question
     const hasOptions = options || groups
     let hasDynamicOptions = false
-    // note: at this point we do not know yet if the question actually has options,
-    // at least in the case of dynamic options. So this might not be the best place
-    // to do this, since we rely on the existence of filterTypeName here to know
-    // whether to reference it in other types
+
     if (!hasOptions) {
         const dynamicOptions = await getDynamicOptions({
             question: question,
