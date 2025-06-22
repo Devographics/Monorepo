@@ -165,9 +165,6 @@ export const generateQuestionsTypeObjects = async ({
                 questionObjects,
                 context
             })
-            if (fieldTypeName === 'StateOfReactMetaFrameworksOthers') {
-                console.log(questionObject)
-            }
             if (enumType) {
                 if (!questionObject.enumTypeName) {
                     questionObject.enumTypeName = enumTypeName
