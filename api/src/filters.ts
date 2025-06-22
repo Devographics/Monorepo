@@ -1,21 +1,8 @@
-import { loadOrGetSurveys } from './load/surveys'
-import { getQuestionObjects } from './generate/generate'
-import {
-    Filter,
-    Filters,
-    FilterQuery,
-    FiltersQuery,
-    ComputeAxisParameters,
-    FiltersQueryOr,
-    MatchNin,
-    QuestionApiObject
-} from './types'
+import { Filter, Filters, FiltersQuery, QuestionApiObject } from './types'
 import { MongoCondition, OptionGroup } from '@devographics/types'
 import range from 'lodash/range.js'
 import { getMainSubfieldPath } from './helpers/surveys'
-import merge from 'lodash/merge.js'
 import clone from 'lodash/clone.js'
-import { ninObject } from './compute'
 
 /**
  * Map natural operators (exposed by the API), to MongoDB operators.

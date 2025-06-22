@@ -1,4 +1,4 @@
-import { Survey, Edition } from '../types/surveys'
+import { Survey, Edition, SurveyApiObject } from '../types/surveys'
 import { RequestContext, Section } from '../types'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
@@ -19,7 +19,7 @@ const USER_METADATA_SECTION = '_user_metadata'
 
 const execPromise = promisify(exec)
 
-let allSurveys: Survey[] = []
+let allSurveys: SurveyApiObject[] = []
 let surveysHash: string
 
 // add `apiOnly` flags to questins
@@ -31,6 +31,7 @@ const makeAPIOnly = (sections: Section[]) =>
 
 interface LoadOrGetSurveysOptions {
     forceReload?: boolean
+    context?: RequestContext
 }
 /**
  * Load surveys if not yet loaded on startup
@@ -38,31 +39,25 @@ interface LoadOrGetSurveysOptions {
  * This will include hidden surveys
  */
 export const loadOrGetSurveys = async (options: LoadOrGetSurveysOptions = {}) => {
-    const { forceReload } = options
+    const { forceReload, context } = options
 
-    if (forceReload || allSurveys.length === 0) {
+    if (context && (forceReload || allSurveys.length === 0)) {
         const { surveys, sha } = await loadSurveys()
 
         for (const survey of surveys) {
             for (const edition of survey.editions) {
                 // if user_metadata section doesn't exist, add default section
-                if (!edition.apiSections) {
-                    edition.apiSections = [defaultUserMetadataSection]
-                } else if (!edition.apiSections.find(s => s.id === USER_METADATA_SECTION)) {
-                    edition.apiSections.push(defaultUserMetadataSection)
+                if (!edition.sections) {
+                    edition.sections = [defaultUserMetadataSection]
+                } else if (!edition.sections.find(s => s.id === USER_METADATA_SECTION)) {
+                    edition.sections.push(defaultUserMetadataSection)
                 }
             }
         }
-
-        allSurveys = surveys
+        allSurveys = await parseSurveys({ surveys, context })
         surveysHash = sha
     }
     return { surveys: allSurveys, sha: surveysHash }
-}
-
-export const loadOrGetParsedSurveys = async (options: LoadOrGetSurveysOptions = {}) => {
-    const { surveys } = await loadOrGetSurveys(options)
-    return parseSurveys({ surveys })
 }
 
 const getGitHubYamlFile = async (url: string) => {

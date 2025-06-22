@@ -6,7 +6,7 @@ import { computeKey, useCache } from '../helpers/caching'
 import { getEntity } from '../load/entities'
 import compact from 'lodash/compact.js'
 import { getEntities } from '../load/entities'
-import { loadOrGetParsedSurveys } from '../load/surveys'
+import { loadOrGetSurveys } from '../load/surveys'
 import { features } from 'web-features'
 
 // const getSimulatedGithub = (id: string): GitHub | null => {
@@ -246,7 +246,7 @@ export const entityResolverMap: EntityResolverMap = {
     appearsIn: async (entity: Entity) => {
         const { id } = entity
         const appearances: EntityAppearance[] = []
-        const surveys = await loadOrGetParsedSurveys()
+        const { surveys } = await loadOrGetSurveys()
         for (const survey of surveys) {
             for (const edition of survey.editions) {
                 for (const section of edition.sections) {

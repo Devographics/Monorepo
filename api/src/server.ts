@@ -1,13 +1,12 @@
 import { ApolloServer } from 'apollo-server-express'
-import { MongoClient } from 'mongodb'
 // @see https://github.com/apollographql/apollo-server/issues/6022
 import responseCachePluginPkg from 'apollo-server-plugin-response-cache'
-const responseCachePlugin = (responseCachePluginPkg as any).default
 import dotenv from 'dotenv'
+const responseCachePlugin = (responseCachePluginPkg as any).default
 
 import defaultTypeDefs from './graphql/typedefs/schema.graphql'
 import { RequestContext } from './types'
-import express, { Request, Response, json } from 'express'
+import express, { Request, Response } from 'express'
 import { reinitialize } from './init'
 import path from 'path'
 import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
@@ -31,12 +30,7 @@ import { getSurveysLoadMethod, loadOrGetSurveys } from './load/surveys'
 
 //import Tracing from '@sentry/tracing'
 
-import {
-    generateTypeObjects,
-    getQuestionObjects,
-    getSurveyObject,
-    parseSurveys
-} from './generate/generate'
+import { generateTypeObjects, getQuestionObjects } from './generate/generate'
 import { generateResolvers } from './generate/resolvers'
 
 import { watchFiles } from './helpers/watch'
@@ -44,7 +38,6 @@ import { watchFiles } from './helpers/watch'
 import { initRedis } from '@devographics/redis'
 import { getPublicDb } from '@devographics/mongo'
 import { ghActions, ghWebhooks } from './webhooks'
-import { getRepoSHA } from './external_apis'
 import { initProjects } from './load/projects'
 import { getEntitiesLoadMethod, loadOrGetEntities } from './load/entities'
 import { getLocaleIds, getLocalesLoadMethod } from './load/locales/locales'
@@ -150,15 +143,11 @@ const start = async () => {
     const entities = await loadOrGetEntities({})
     const context: RequestContext = { db, redisClient, entities }
 
-    const { surveys } = await loadOrGetSurveys()
-
-    const surveysApiObjects = surveys.map(survey => getSurveyObject({ survey }))
-    const questionObjects = getQuestionObjects({ surveys: surveysApiObjects })
-
-    const parsedSurveys = parseSurveys({ surveys })
+    const { surveys } = await loadOrGetSurveys({ context })
+    const questionObjects = getQuestionObjects({ surveys })
 
     const typeObjects = await generateTypeObjects({
-        surveys: parsedSurveys,
+        surveys,
         questionObjects,
         entities,
         context
@@ -182,7 +171,7 @@ const start = async () => {
         JSONObject: GraphQLJSONObject
     }
     const generatedResolvers = await generateResolvers({
-        surveys: parsedSurveys,
+        surveys,
         questionObjects,
         typeObjects
     })
