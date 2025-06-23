@@ -7,10 +7,12 @@ import { useEntities } from 'core/helpers/entities'
 import { FacetTitle } from '../common2/FacetTitle'
 import { getQuestionGroups, getQuestionOptions } from './helpers/options'
 import { useColorScale } from '../common2/helpers/colors'
-import { HorizontalBarChartState } from './types'
+import { HorizontalBarChartState, HorizontalBarViews } from './types'
 import { CommonProps } from '../common2/types'
 import Legend from './Legend'
 import { getViewDefinition } from './helpers/views'
+import { Toggle } from '../common2'
+import { useI18n } from '@devographics/react-i18n'
 
 export const FacetHeading = (
     props: CommonProps<HorizontalBarChartState> & {
@@ -48,8 +50,9 @@ export const FacetHeading = (
     const usedOptions = allGroupsOrOptions.filter(optionOrGroup =>
         allFacetBucketIds.includes(String(optionOrGroup.id))
     )
+    const showToggle = [HorizontalBarViews.AVERAGE, HorizontalBarViews.BOXPLOT].includes(view)
     return (
-        <div className="chart-heading">
+        <div className={`chart-heading chart-heading-${showToggle ? 'withToggle' : ''}`}>
             <FacetTitle
                 block={block}
                 facetQuestion={facetQuestion}
@@ -57,6 +60,7 @@ export const FacetHeading = (
                 entities={entities}
                 question={question}
             />
+            {showToggle && <ViewToggle chartState={chartState} />}
             {viewDefinition.showLegend && facetQuestion && colorScale && (
                 <Legend
                     {...props}
@@ -67,5 +71,20 @@ export const FacetHeading = (
             )}
         </div>
     )
+}
+
+const ViewToggle = ({ chartState }: { chartState: HorizontalBarChartState }) => {
+    const { getString } = useI18n()
+    const { view, setView } = chartState
+    const items = [HorizontalBarViews.BOXPLOT, HorizontalBarViews.AVERAGE].map(id => {
+        const labelKey = `chart_units.${id}`
+        return {
+            labelKey,
+            id,
+            isEnabled: view === id,
+            label: getString(labelKey)?.t
+        }
+    })
+    return <Toggle labelId="charts.toggle_view" handleSelect={setView} items={items} />
 }
 export default FacetHeading

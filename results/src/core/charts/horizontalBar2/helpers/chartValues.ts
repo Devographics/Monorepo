@@ -15,7 +15,8 @@ export const useChartValues = ({
     seriesMetadata,
     serieMetadata,
     serieMetadataProps,
-    viewDefinition
+    viewDefinition,
+    contentWidth
 }: {
     buckets: Bucket[]
     chartState: HorizontalBarChartState
@@ -24,6 +25,7 @@ export const useChartValues = ({
     serieMetadata: ResponseEditionMetadata
     serieMetadataProps: SerieMetadataProps
     viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
+    contentWidth?: number
 }) => {
     const { view } = chartState
     const { getValue, getTicks } = viewDefinition
@@ -43,7 +45,12 @@ export const useChartValues = ({
     chartValues.maxOverallValue = maxOverallValue
 
     if (getTicks) {
-        chartValues.ticks = getTicks(maxOverallValue)
+        chartValues.ticks = getTicks({
+            maxValue: maxOverallValue,
+            contentWidth,
+            buckets,
+            seriesMetadata
+        })
     }
     if (facet) {
         chartValues.facetQuestion = allQuestions.find(

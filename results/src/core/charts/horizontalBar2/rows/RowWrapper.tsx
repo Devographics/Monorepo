@@ -19,7 +19,8 @@ export const RowWrapper = (
         isGroupedBucket = false,
         children,
         rowMetadata,
-        rowIndex
+        rowIndex,
+        contentRef
     } = props
     const { highlightedRow, setHighlightedRow } = chartState
     const { ticks } = chartValues
@@ -47,7 +48,7 @@ export const RowWrapper = (
                 <div className="chart-row-index">{rowIndex + 1}</div>
                 <RowHeading {...props} />
             </div>
-            <div className="chart-row-content">
+            <div className="chart-row-content" ref={contentRef}>
                 {ticks && <Gridlines ticks={ticks} />}
                 <div className="chart-bar">{children}</div>
             </div>

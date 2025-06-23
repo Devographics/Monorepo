@@ -99,7 +99,7 @@ export const Cell = ({
     })
     const { label: cellLabel } = itemLabel
 
-    const v = formatValue(value, question, chartState)
+    const v = formatValue(value, facetQuestion || question, chartState)
 
     const isActiveSort = sort === id
     const isHighlighted = highlightedCell === id
