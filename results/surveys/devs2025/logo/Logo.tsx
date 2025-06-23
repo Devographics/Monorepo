@@ -1,15 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
+import { mq, spacing, fontSize, secondaryFontMixin } from 'core/theme'
 
 export const Logo = props => (
     <LogoWrapper>
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1161"
-            height="424"
-            fill="none"
-            viewBox="0 0 1161 424"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1161 424">
             <g fill="#E6FFD5" clipPath="url(#clip0_1554_3576)">
                 <path d="M306.321 378.164h3.671v22.078h-3.671zM302.625 400.242h3.696v3.695h-3.696zM302.625 374.468h3.696v3.696h-3.696zM298.953 403.937h3.672v7.344h-3.672zM298.953 367.124h3.672v7.343h-3.672z"></path>
                 <path d="M287.914 411.281v-44.156h11.039v-3.695h-29.448v-3.672h-3.671v3.672h-11.061v-3.672h-3.671v3.672h-14.713v3.695h47.829v44.156h-47.829v3.696h62.564v-3.696z"></path>
@@ -229,7 +224,12 @@ const LogoWrapper = styled.div`
     display: grid;
     place-items: center;
     svg {
-        max-width: 800px;
+        max-width: 700px;
+        width: 100%;
+        margin: 0 0 calc(var(--spacing) * 3) 0;
+        @media ${mq.small} {
+            margin: calc(var(--spacing) * 2) 0;
+        }
     }
 `
 

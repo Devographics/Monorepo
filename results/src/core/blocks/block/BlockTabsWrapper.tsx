@@ -266,6 +266,7 @@ export const Tab_ = styled.div`
     margin-right: ${spacing(0.5)};
     margin-bottom: -1px;
     font-size: ${fontSize('smallish')};
+    color: var(--textColor);
     display: flex;
     align-items: center;
     /* gap: 5px; */
