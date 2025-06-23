@@ -37,7 +37,9 @@ export const generateEnumType = ({
         if (isValidGraphQLName(String(option.id))) {
             return true
         } else {
-            console.warn(`⚠️ “${option.id}” (${question.id}) is not valid as a GraphQL property`)
+            console.warn(
+                `⚠️ “${option.id}” (${question.edition?.id}/${question.id}) is not valid as a GraphQL property`
+            )
             return false
         }
     })

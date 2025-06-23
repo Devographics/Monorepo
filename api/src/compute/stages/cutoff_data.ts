@@ -63,19 +63,21 @@ export async function cutoffData(
     if ((axis1.cutoff && axis1.cutoff > 1) || axis1.cutoffPercent || axis2?.cutoffPercent) {
         for (let editionData of resultsByEdition) {
             // first, limit regular buckets
-            if (axis1.mergeOtherBuckets === false && axis1.sort === 'options') {
-                // when mergeOtherBuckets is false, and aggregations are sorted along
-                // predefined options, do not apply cutoff
-                // as that might result in unexpectedly missing buckets
-                // (ex: missing "#2" bucket in "rank satisfaction from 1 to 5" question)
-            } else {
-                // group together all buckets that don't make cutoff
-                editionData.buckets = groupUnderCutoff<Bucket>({
-                    buckets: editionData.buckets,
-                    primaryAxis: axis1,
-                    secondaryAxis: axis2
-                })
-            }
+            /* 
+                
+            WARNING: when aggregations are sorted along
+            predefined options, applying cutoff can result in unexpectedly missing buckets
+            (ex: missing "#2" bucket in "rank satisfaction from 1 to 5" question)
+            
+            Disable cutoff on a case-by-case basis.
+            
+            */
+            // group together all buckets that don't make cutoff
+            editionData.buckets = groupUnderCutoff<Bucket>({
+                buckets: editionData.buckets,
+                primaryAxis: axis1,
+                secondaryAxis: axis2
+            })
 
             if (axis2) {
                 // then, cutoff facetBuckets if they exist
