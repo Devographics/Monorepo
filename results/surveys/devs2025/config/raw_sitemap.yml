@@ -1197,6 +1197,7 @@
 # locale passed to them
 
 - id: _user_metadata
+  is_hidden: true
   i18nNamespace: user_metadata
   path: /metadata
   blocks:
