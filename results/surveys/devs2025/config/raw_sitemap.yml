@@ -1193,110 +1193,109 @@
 # note: other pages need to be included in the sitemap too so they can get the proper
 # locale passed to them
 
-# - id: _user_metadata
-#   is_hidden: true
-#   i18nNamespace: user_metadata
-#   path: /metadata
-#   blocks:
-#       - template: page_introduction
+- id: _user_metadata
+  i18nNamespace: user_metadata
+  path: /metadata
+  blocks:
+      - template: page_introduction
 
-#       - id: locale
-#         template: multiple_options2
-#         defaultView: percentageSurvey
-#         parameters: { cutoff: 20 }
-#         queryOptions:
-#             addQuestionComments: false
+      - id: locale
+        template: multiple_options2
+        defaultView: percentageSurvey
+        parameters: { cutoff: 20 }
+        queryOptions:
+            addQuestionComments: false
 
-#       - id: completion_stats
-#         template: multiple_options2
-#         defaultView: percentageSurvey
-#         queryOptions:
-#             addQuestionComments: false
+      - id: completion_stats
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
 
-#       - id: authmode
-#         template: multiple_options2
-#         defaultView: percentageSurvey
-#         queryOptions:
-#             addQuestionComments: false
+      - id: authmode
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
 
-#       - id: device
-#         template: multiple_options2
-#         defaultView: percentageSurvey
-#         queryOptions:
-#             addQuestionComments: false
+      - id: device
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
 
-#       - id: browser
-#         template: multiple_options2
-#         defaultView: percentageSurvey
-#         queryOptions:
-#             addQuestionComments: false
+      - id: browser
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
 
-#       # - id: version
-#       #   template: multiple_options2
-#       #   queryOptions:
-#       #       addQuestionComments: false
+      # - id: version
+      #   template: multiple_options2
+      #   queryOptions:
+      #       addQuestionComments: false
 
-#       - id: os
-#         template: multiple_options2
-#         defaultView: percentageSurvey
-#         queryOptions:
-#             addQuestionComments: false
+      - id: os
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
 
-#       - id: past_surveys
-#         template: multiple_options2
-#         defaultView: percentageSurvey
-#         queryOptions:
-#             addQuestionComments: false
-#             addBucketsEntities: true
-#         parameters:
-#             showNoAnswer: true
+      - id: past_surveys
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+            addBucketsEntities: true
+        parameters:
+            showNoAnswer: true
 
-#       # - id: past_same_survey_count
-#       #   template: multiple_options2
-#       #   defaultView: percentageSurvey
-#       #   queryOptions:
-#       #       addQuestionComments: false
-#       #   parameters:
-#       #       showNoAnswer: true
+      # - id: past_same_survey_count
+      #   template: multiple_options2
+      #   defaultView: percentageSurvey
+      #   queryOptions:
+      #       addQuestionComments: false
+      #   parameters:
+      #       showNoAnswer: true
 
-#       - id: created_at_date
-#         template: multiple_options2
-#         blockType: TimeSeriesByDateBlock
-#         defaultView: countBar
-#         parameters:
-#             showNoAnswer: false
-#             cutoff: 10
-#             sort: { order: asc, property: id }
-#         queryOptions:
-#             addQuestionComments: false
-#         variants:
-#             - id: created_at_date_by_source
-#               fieldId: created_at_date
-#               template: multiple_options2
-#               blockType: TimeSeriesByDateBlock
-#               defaultView: count
-#               parameters:
-#                   showNoAnswer: false
-#                   cutoff: 10
-#                   sort: { order: asc, property: id }
-#                   facetLimit: 3
-#                   enableAddOverallBucket: false
-#                   mergeOtherBuckets: true
-#               queryOptions:
-#                   addBucketsEntities: true
-#                   addQuestionComments: false
-#               filtersState:
-#                   facet:
-#                       sectionId: _user_metadata
-#                       id: source
+      - id: created_at_date
+        template: multiple_options2
+        blockType: TimeSeriesByDateBlock
+        defaultView: countBar
+        parameters:
+            showNoAnswer: false
+            cutoff: 10
+            sort: { order: asc, property: id }
+        queryOptions:
+            addQuestionComments: false
+        variants:
+            - id: created_at_date_by_source
+              fieldId: created_at_date
+              template: multiple_options2
+              blockType: TimeSeriesByDateBlock
+              defaultView: count
+              parameters:
+                  showNoAnswer: false
+                  cutoff: 10
+                  sort: { order: asc, property: id }
+                  facetLimit: 3
+                  enableAddOverallBucket: false
+                  mergeOtherBuckets: true
+              queryOptions:
+                  addBucketsEntities: true
+                  addQuestionComments: false
+              filtersState:
+                  facet:
+                      sectionId: _user_metadata
+                      id: source
 
-#       - id: source
-#         template: multiple_options2_freeform
-#         defaultView: percentageSurvey
-#         parameters:
-#             limit: 20
-#         queryOptions:
-#             addQuestionComments: false
+      - id: source
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        parameters:
+            limit: 20
+        queryOptions:
+            addQuestionComments: false
 
 - id: about
   path: /about
