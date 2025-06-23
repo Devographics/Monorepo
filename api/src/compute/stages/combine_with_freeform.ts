@@ -1,6 +1,6 @@
 import { NO_ANSWER } from '@devographics/constants'
 import { ResponseEditionData, ResponsesTypes } from '@devographics/types'
-import { GenericComputeOptions, genericComputeFunction } from '../generic'
+import { GenericComputeOptions, genericComputeFunction, getDbPath } from '../generic'
 import { ExecutionContext } from '../../types'
 
 /*
@@ -81,10 +81,12 @@ export const combineWithFreeform = async (
             executionContext: ExecutionContext.COMBINED
         }
     }
-    const freeformResults = await genericComputeFunction(newOptions)
-    if (freeformResults) {
-        return combineResults(responseResults, freeformResults)
-    } else {
-        return responseResults
+    const freeformDbPath = getDbPath(options.question, ResponsesTypes.FREEFORM)
+    if (freeformDbPath) {
+        const freeformResults = await genericComputeFunction(newOptions)
+        if (freeformResults) {
+            return combineResults(responseResults, freeformResults)
+        }
     }
+    return responseResults
 }

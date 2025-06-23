@@ -169,11 +169,22 @@ export const FacetHeading = (
     const colorScale =
         facetQuestion && useColorScale({ question: facetQuestion, bucketIds: facetBucketIds })
 
-    // get options based on facets used in the current dataset
-    const usedOptions = facetBucketIds
-        .filter(id => ![NO_ANSWER, OTHER_ANSWERS].includes(id))
-        .map(id => ({ id }))
+    const allOptions = getQuestionOptions({
+        question: facetQuestion,
+        chartState
+    })
+    const allGroups = getQuestionGroups({
+        question: facetQuestion,
+        chartState
+    })
+    const allGroupsOrOptions = allGroups?.length > 1 ? allGroups : allOptions
 
+    const allFacetBucketIds = getBlockAllFacetBucketIds({ series, block, chartState })
+
+    // only keep options that are actually used in the current dataset
+    const usedOptions = allGroupsOrOptions.filter(optionOrGroup =>
+        allFacetBucketIds.includes(String(optionOrGroup.id))
+    )
     return (
         <div className="chart-heading">
             <FacetTitle

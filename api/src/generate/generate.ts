@@ -1,4 +1,4 @@
-import { Entity, OptionGroup } from '@devographics/types'
+import { Entity, OptionGroup, ResponsesTypes } from '@devographics/types'
 import {
     Survey,
     Edition,
@@ -16,7 +16,8 @@ import {
     applyQuestionTemplate,
     mergeOptions,
     mergeSections,
-    getContentType
+    getContentType,
+    getDynamicOptions
 } from './helpers'
 import {
     generateSurveysTypeObjects,
@@ -28,35 +29,54 @@ import {
 } from './typedefs'
 import uniq from 'lodash/uniq.js'
 import { RequestContext } from '../types'
+import { getDbPath } from '../compute'
 
 /*
 
 Parse surveys and generate a "rich" version of the outline tree
 
 */
-export const parseSurveys = ({ surveys }: { surveys: Survey[] }): SurveyApiObject[] => {
-    return surveys.map(survey => getSurveyObject({ survey }))
+export const parseSurveys = async ({
+    surveys,
+    context
+}: {
+    surveys: Survey[]
+    context: RequestContext
+}): Promise<SurveyApiObject[]> => {
+    return await Promise.all(surveys.map(survey => getSurveyObject({ survey, context })))
 }
 
 // Take a Survey and return a SurveyApiObject
-export const getSurveyObject = ({ survey }: { survey: Survey }): SurveyApiObject => {
+export const getSurveyObject = async ({
+    survey,
+    context
+}: {
+    survey: Survey
+    context: RequestContext
+}): SurveyApiObject => {
     return {
         ...survey,
-        editions: survey.editions.map(edition => getEditionObject({ survey, edition }))
+        editions: await Promise.all(
+            survey.editions.map(edition => getEditionObject({ survey, edition, context }))
+        )
     }
 }
 
 // Take an Edition and return an EditionApiObject
-export const getEditionObject = ({
+export const getEditionObject = async ({
     survey,
-    edition
+    edition,
+    context
 }: {
     survey: Survey
     edition: Edition
-}): EditionApiObject => {
+    context: RequestContext
+}): Promise<EditionApiObject> => {
     const { apiSections, sections, ...rest } = edition
-    const allSections = mergeSections(edition.sections, edition.apiSections).map(section =>
-        getSectionObject({ survey, edition, section })
+    const allSections = await Promise.all(
+        mergeSections(edition.sections, edition.apiSections).map(section =>
+            getSectionObject({ survey, edition, section, context })
+        )
     )
     return {
         ...rest,
@@ -75,25 +95,31 @@ appear across different survey editions, so we make sure to generate a new quest
 for every question. 
 
 */
-export const getSectionObject = ({
+export const getSectionObject = async ({
     survey,
     edition,
-    section
+    section,
+    context
 }: {
     survey: Survey
     edition: Edition
     section: Section
-}): SectionApiObject => {
-    const questions = section.questions.map(question => ({
-        ...getQuestionObject({ survey, edition, section, question }),
-        editionId: edition.id,
-        edition,
-        section
-    }))
-    const apiOnly = section.apiOnly || questions.every(q => q.apiOnly)
+    context: RequestContext
+}): Promise<SectionApiObject> => {
+    let questionObjects = section.questions.map(question =>
+        getQuestionObject({ survey, edition, section, question })
+    )
+    // do another pass to add options and options types, especially dynamic options
+    questionObjects = await Promise.all(
+        questionObjects.map(question =>
+            addQuestionOptions({ question, questionObjects, edition, context })
+        )
+    )
+
+    const apiOnly = section.apiOnly || questionObjects.every(q => q.apiOnly)
     return {
         ...section,
-        questions,
+        questions: questionObjects,
         apiOnly
     }
 }
@@ -234,6 +260,9 @@ export const getQuestionObject = ({
         surveyId: survey.id,
         survey,
         editions: [edition.id],
+        editionId: edition.id,
+        edition,
+        section,
         ...templateObject
     }
 
@@ -244,42 +273,71 @@ export const getQuestionObject = ({
 
     questionObject.contentType = getContentType(questionObject)
 
-    const hasOptions = questionObject.options || questionObject.groups
-    const isFreeform = ['text', 'longtext', 'textList'].includes(question.template)
-
-    // note: at this point we do not know yet if the question actually has options,
-    // at least in the case of dynamic options. So this might not be the best place
-    // to do this, since we rely on the existence of filterTypeName here to know
-    // whether to reference it in other types
-    if (questionObject.options || questionObject.groups) {
-        if (!questionObject.optionTypeName) {
-            questionObject.optionTypeName = fieldTypeName + 'Option'
-        }
-        if (!questionObject.enumTypeName) {
-            questionObject.enumTypeName = fieldTypeName + 'ID'
-        }
-        if (!questionObject.filterTypeName) {
-            questionObject.filterTypeName = fieldTypeName + 'Filter'
-        }
-    }
-
-    // add editions field to options
-    if (questionObject.options) {
-        questionObject.options = questionObject.options.map((o: Option) => ({
-            ...o,
-            editions: [edition.id]
-        }))
-    }
-
-    // add editions field to options
-    if (questionObject.groups) {
-        questionObject.groups = questionObject.groups.map((o: OptionGroup) => ({
-            ...o,
-            editions: [edition.id]
-        }))
-    }
-
     return questionObject
+}
+
+export const addQuestionOptions = async ({
+    question,
+    questionObjects,
+    edition,
+    context
+}: {
+    question: QuestionApiObject
+    questionObjects: QuestionApiObject[]
+    edition: Edition
+    context: RequestContext
+}) => {
+    const { options, groups, fieldTypeName } = question
+    const hasOptions = options || groups
+    let hasDynamicOptions = false
+
+    // if question doesn't have predefined options, try to generate
+    // them dynamically from the top X most popular answers
+    // to this question for the latest survey edition
+    if (!hasOptions) {
+        const dynamicOptions = await getDynamicOptions({
+            question: question,
+            questionObjects,
+            context
+        })
+        if (dynamicOptions) {
+            question.options = dynamicOptions
+            hasDynamicOptions = true
+        }
+    }
+
+    if (hasOptions || hasDynamicOptions) {
+        if (!question.optionTypeName) {
+            question.optionTypeName = fieldTypeName + 'Option'
+        }
+        if (!question.enumTypeName) {
+            if (hasDynamicOptions) {
+                question.enumTypeName = fieldTypeName + 'DynamicID'
+            } else {
+                question.enumTypeName = fieldTypeName + 'ID'
+            }
+        }
+        if (!question.filterTypeName) {
+            question.filterTypeName = fieldTypeName + 'Filter'
+        }
+    }
+
+    // add editions field to options
+    if (question.options) {
+        question.options = question.options.map((o: Option) => ({
+            ...o,
+            editions: [edition.id]
+        }))
+    }
+
+    // add editions field to groups
+    if (question.groups) {
+        question.groups = question.groups.map((o: OptionGroup) => ({
+            ...o,
+            editions: [edition.id]
+        }))
+    }
+    return question
 }
 
 export const mergeQuestionObjects = (q1: QuestionApiObject, q2: QuestionApiObject) => {

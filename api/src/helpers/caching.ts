@@ -5,6 +5,11 @@ import NodeCache from 'node-cache'
 import { appSettings } from '../server'
 const nodeCache = new NodeCache()
 import compact from 'lodash/compact.js'
+import fs from 'fs'
+import path from 'path'
+import { logToFile } from '@devographics/debug'
+
+const cacheDir = `.cache`
 
 type DynamicComputeCall = (...args: any[]) => Promise<any>
 
@@ -134,6 +139,13 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
 export const getCache = async (key: string, context: RequestContext) => {
     const { cacheType } = appSettings
     if (cacheType === 'local') {
+        const dataFilePath = `${process.env.LOGS_PATH}/${cacheDir}/${key}.json`
+        const existingData = await getLocalJSON({
+            localPath: dataFilePath
+        })
+        return existingData
+    }
+    if (cacheType === 'memory') {
         const value: string | undefined = nodeCache.get(key)
         return value && JSON.parse(value)
     } else {
@@ -151,6 +163,10 @@ export const getCache = async (key: string, context: RequestContext) => {
 export const setCache = async (key: string, value: any, context: RequestContext) => {
     const { cacheType } = appSettings
     if (cacheType === 'local') {
+        await logToFile(`${cacheDir}/${key}.json`, value, {
+            mode: 'overwrite'
+        })
+    } else if (cacheType === 'memory') {
         nodeCache.set(key, value)
     } else {
         try {
@@ -167,3 +183,24 @@ export const setCache = async (key: string, value: any, context: RequestContext)
 // const result = await collection.deleteMany({})
 // return result
 // }
+
+/*
+
+Get a file from the disk or from GitHub
+
+*/
+export const getLocalJSON = async ({ localPath }: { localPath: string }) => {
+    let contents, data
+    if (fs.existsSync(localPath)) {
+        contents = fs.readFileSync(localPath, 'utf8')
+    }
+    if (contents) {
+        try {
+            data = JSON.parse(contents)
+        } catch (error) {
+            return
+        }
+        return data
+    }
+    return
+}

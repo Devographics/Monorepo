@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 
 export interface AppSettings {
-    cacheType: 'local' | 'redis'
+    cacheType: 'local' | 'memory' | 'redis'
     disableCache: boolean
     /**
      * Whether we get entities and surveys from local folders
@@ -27,7 +27,7 @@ export interface AppSettings {
  *    values might be undefined
  */
 export const loadSettings = () => {
-    const cacheType = process.env.CACHE_TYPE === 'local' ? 'local' : 'redis'
+    const cacheType = process.env.CACHE_TYPE
     const disableCache = process.env.DISABLE_CACHE === 'true'
     const loadLocalesMode = process.env.LOAD_DATA
     // if (loadLocalesMode && !['local'].includes(loadLocalesMode)) {

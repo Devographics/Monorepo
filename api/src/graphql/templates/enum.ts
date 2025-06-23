@@ -1,6 +1,7 @@
 import { Option, OptionGroup } from '@devographics/types'
 import { formatNumericOptions } from '../../generate/helpers'
 import { QuestionApiObject, TypeDefTemplateOutput, TypeTypeEnum } from '../../types'
+import { isValidGraphQLName } from '../helpers'
 
 /*
 
@@ -32,6 +33,14 @@ export const generateEnumType = ({
     } else {
         return
     }
+    formattedOptions = formattedOptions.filter(option => {
+        if (isValidGraphQLName(String(option.id))) {
+            return true
+        } else {
+            console.warn(`⚠️ “${option.id}” (${question.id}) is not valid as a GraphQL property`)
+            return false
+        }
+    })
     return {
         generatedBy: `enum/[${question.editions?.join(',')}]/${question.id}`,
         typeName: enumTypeName,

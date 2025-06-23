@@ -1,5 +1,5 @@
-import { OptionGroup, QuestionMetadata } from '@devographics/types'
-import { loadOrGetParsedSurveys } from '../load/surveys'
+import { OptionGroup, ResponsesTypes, ResultsSubFieldEnum } from '@devographics/types'
+import { loadOrGetSurveys } from '../load/surveys'
 import {
     Survey,
     Edition,
@@ -10,14 +10,14 @@ import {
     QuestionTemplateOutput,
     SectionApiObject,
     EditionApiObject,
-    SurveyApiObject,
-    ResponseEditionData,
-    Bucket
+    SurveyApiObject
 } from '../types/surveys'
 import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'
-import { getEntity } from '../load/entities'
-import { RequestContext } from '../types'
+import { ExecutionContext, RequestContext } from '../types'
+import { useCache } from '../helpers/caching'
+import { genericComputeFunction, getGenericCacheKey } from '../compute'
+import { specialBucketIds } from '../compute/stages'
 
 export const graphqlize = (str: string) => capitalizeFirstLetter(snakeToCamel(str))
 
@@ -213,7 +213,7 @@ export const getContentType = (question: QuestionTemplateOutput) =>
     question.optionsAreNumeric ? 'number' : 'string'
 
 export const getEditionById = async (editionId: string) => {
-    const surveys = await loadOrGetParsedSurveys()
+    const { surveys } = await loadOrGetSurveys()
     const allEditions = surveys.map(s => s.editions).flat()
     const edition = allEditions.find(e => e.id === editionId)
     if (!edition) {
@@ -260,4 +260,133 @@ export const addOptionsAverages = (options: Option[]) => {
         }
         return option
     })
+}
+
+/*
+
+How many items will be made available in the enum
+
+*/
+const OPTIONS_LIMIT = 15
+
+/*
+
+Disallow some fields because their contents would not be valid GraphQL
+enum members. In the future use normalization to make sure that data
+is properly formatted in the database itself.
+
+*/
+const disallowFields = [
+    'version',
+    'locale',
+    'past_same_survey_count',
+    'created_at_date',
+    'css_proficiency',
+    'javascript_proficiency',
+    'backend_proficiency',
+    'future_same_survey_count',
+    'browser'
+]
+
+export const getDynamicOptions = async ({
+    question,
+    context,
+    questionObjects
+}: {
+    question: QuestionApiObject
+    context: RequestContext
+    questionObjects: QuestionApiObject[]
+}): Promise<Option[] | undefined> => {
+    const { survey, editions, normPaths = {} } = question
+
+    if (disallowFields.includes(question.id)) {
+        return
+    }
+    /*
+
+    Note: in theory each survey edition should have its own enum since the same question
+    in different surveys can have different top answers. But to keep things simpler
+    we only consider the most recent edition. 
+
+    */
+    const selectedEditionId = editions?.at(-1)!
+    const edition = survey.editions.find(e => e.id === selectedEditionId)!
+
+    // figure out which field to look in to generate dynamic options
+    // in no particular order for now
+    let subfield
+    if (normPaths.prenormalized) {
+        subfield = ResponsesTypes.PRENORMALIZED
+    } else if (normPaths.other) {
+        subfield = ResponsesTypes.FREEFORM
+    } else if (normPaths.response) {
+        subfield = ResponsesTypes.RESPONSES
+    } else {
+        // no valid paths found
+        // console.log(
+        //     `// no normPaths found for ${edition.id}/${question.id}, can't generate dynamic options`
+        // )
+        return
+    }
+
+    const parameters = { limit: OPTIONS_LIMIT, showNoAnswer: false }
+    const computeArguments = {
+        executionContext: ExecutionContext.REGULAR,
+        responsesType: subfield,
+        // bucketsFilter,
+        parameters
+        // filters,
+        // facet,
+        // selectedEditionId,
+        // editionCount
+    }
+    const funcOptions = {
+        survey,
+        edition,
+        question,
+        context: { ...context, isDebug: true },
+        questionObjects,
+        computeArguments
+    }
+
+    const cacheKeyOptions = {
+        edition,
+        question,
+        subField: ResultsSubFieldEnum.COMBINED,
+        selectedEditionId,
+        editionCount: 1,
+        parameters,
+        prefix: 'enumDynamic'
+    }
+
+    const enableCache = true
+
+    try {
+        const result = await useCache({
+            key: getGenericCacheKey(cacheKeyOptions),
+            func: genericComputeFunction,
+            context,
+            funcOptions,
+            enableCache,
+            enableLog: false
+        })
+        // const result = await genericComputeFunction(funcOptions)
+
+        const options = result[0]?.buckets
+            .filter(b => !specialBucketIds.includes(b.id))
+            .map(b => ({ id: b.id }))
+
+        if (!options || options.length === 0) {
+            // if question does not have any response data associated for whatever reason
+            // console.log('// no options found')
+            // console.log(question.id)
+            return
+        }
+
+        return options
+    } catch (error) {
+        console.log(`// getDynamicOptions error for question ${question.id}`)
+        console.log(error)
+        return
+    }
 }

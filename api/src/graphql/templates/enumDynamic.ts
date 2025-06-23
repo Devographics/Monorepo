@@ -83,12 +83,14 @@ export const generateDynamicEnumType = async ({
         prefix: 'enumDynamic'
     }
 
+    const enableCache = true
+
     const result = await useCache({
         key: getGenericCacheKey(cacheKeyOptions),
         func: genericComputeFunction,
         context,
         funcOptions,
-        enableCache: true,
+        enableCache,
         enableLog: false
     })
     // const result = await genericComputeFunction(funcOptions)
@@ -99,8 +101,8 @@ export const generateDynamicEnumType = async ({
 
     if (!options || options.length === 0) {
         // if question does not have any response data associated for whatever reason
-        console.log('// no options found')
-        console.log(question.id)
+        // console.log('// no options found')
+        // console.log(question.id)
         return
     }
 

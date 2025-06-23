@@ -29,14 +29,8 @@ import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
 import { localesResolvers } from '../resolvers/locales'
 import { subFields } from './subfields'
-import {
-    Creator,
-    Entity,
-    Option,
-    ResponsesParameters,
-    ResultsSubFieldEnum
-} from '@devographics/types'
-import { loadOrGetParsedSurveys } from '../load/surveys'
+import { Creator, ResultsSubFieldEnum } from '@devographics/types'
+import { loadOrGetSurveys } from '../load/surveys'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
 import StringOrFloatOrArray from '../graphql/string_or_array'
@@ -191,7 +185,7 @@ const getGlobalMetadataResolver = (): ResolverType => async (parent, args, conte
     const isDevOrTest = !!(
         process.env.NODE_ENV && ['test', 'development'].includes(process.env.NODE_ENV)
     )
-    const surveys = await loadOrGetParsedSurveys()
+    const { surveys } = await loadOrGetSurveys()
     let filteredSurveys = surveys
     if (editionId) {
         filteredSurveys = filteredSurveys
@@ -243,8 +237,8 @@ const getSurveyMetadataResolver =
     ({ survey }: { survey: SurveyApiObject }): ResolverType =>
     async (parent, args, context, info) => {
         console.log(`// survey metadata resolver: ${survey.id}`)
-        const parsedSurveys = await loadOrGetParsedSurveys()
-        const freshSurvey = parsedSurveys.find(s => s.id === survey.id)
+        const { surveys } = await loadOrGetSurveys()
+        const freshSurvey = surveys.find(s => s.id === survey.id)
         return freshSurvey
     }
 

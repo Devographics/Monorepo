@@ -130,64 +130,39 @@ export const generateQuestionsTypeObjects = async ({
         } = questionObject
 
         const hasOptions = options || groups
-        const isFreeform = ['text', 'longtext', 'textList'].includes(questionObject.template)
 
         if (hasOptions) {
-            if (autogenerateFilterType && !typeObjects.find(t => t.typeName === filterTypeName)) {
-                const filterType = generateFilterType({ question: questionObject })
-                filterType && typeObjects.push(filterType)
-            }
-
-            if (autogenerateOptionType && !typeObjects.find(t => t.typeName === optionTypeName)) {
-                const optionType = generateOptionType({ question: questionObject })
-                optionType && typeObjects.push(optionType)
-            }
-
+            // enum typedefs
             if (autogenerateEnumType && !typeObjects.find(t => t.typeName === enumTypeName)) {
                 const enumType = generateEnumType({ question: questionObject })
                 enumType && typeObjects.push(enumType)
             }
+            if (!questionObject.enumTypeName) {
+                questionObject.enumTypeName = fieldTypeName + 'ID'
+            }
+
+            // options typedefs
+            if (autogenerateOptionType && !typeObjects.find(t => t.typeName === optionTypeName)) {
+                const optionType = generateOptionType({ question: questionObject })
+                optionType && typeObjects.push(optionType)
+            }
             if (!questionObject.optionTypeName) {
                 questionObject.optionTypeName = fieldTypeName + 'Option'
             }
-            if (!questionObject.enumTypeName) {
-                questionObject.enumTypeName = fieldTypeName + 'ID'
+
+            // filter typedefs
+            if (autogenerateFilterType && !typeObjects.find(t => t.typeName === filterTypeName)) {
+                const filterType = generateFilterType({ question: questionObject })
+                filterType && typeObjects.push(filterType)
             }
             if (!questionObject.filterTypeName) {
                 questionObject.filterTypeName = fieldTypeName + 'Filter'
             }
-        } else if (isFreeform) {
-            // pass enumTypeName here but we'll only add it to questionObject
-            // if dynamicEnum actually returns something
-            const enumTypeName = fieldTypeName + 'ID'
-            const enumType = await generateDynamicEnumType({
-                question: { ...questionObject, enumTypeName },
-                questionObjects,
-                context
-            })
-            if (fieldTypeName === 'StateOfReactMetaFrameworksOthers') {
-                console.log(questionObject)
-            }
-            if (enumType) {
-                if (!questionObject.enumTypeName) {
-                    questionObject.enumTypeName = enumTypeName
-                }
-                enumType && typeObjects.push(enumType)
-
-                if (!questionObject.filterTypeName) {
-                    questionObject.filterTypeName = fieldTypeName + 'Filter'
-                }
-
-                if (
-                    autogenerateFilterType &&
-                    !typeObjects.find(t => t.typeName === filterTypeName)
-                ) {
-                    const filterType = generateFilterType({ question: questionObject })
-                    filterType && typeObjects.push(filterType)
-                }
-            }
+        } else {
+            // console.log(`// no options for field ${fieldTypeName}`)
         }
 
+        // field typedefs
         if (fieldTypeName && !typeObjects.find(t => t.typeName === fieldTypeName)) {
             if (typeDef) {
                 typeObjects.push({ typeName: fieldTypeName, typeDef, typeType: 'field' })
