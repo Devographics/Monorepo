@@ -4,6 +4,11 @@
         position: relative;
     }
 }
+.chart-row-overall {
+    .chart-item-label-wrapper {
+        opacity: 0.5;
+    }
+}
 .horizontal-chart-cell {
     position: absolute;
     background: linear-gradient(to left, var(--color1), var(--color2));

@@ -2,33 +2,26 @@ import React from 'react'
 import '../common2/ChartsCommon.scss'
 import './HorizontalBar.scss'
 import Metadata from '../common2/Metadata'
-import { BlockComponentProps, PageContextValue } from 'core/types'
-import { QuestionMetadata, StandardQuestionData, sortProperties } from '@devographics/types'
+import { BlockComponentProps } from 'core/types'
+import { StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
 import {
-    getBlockAllFacetBucketIds,
     getChartCurrentEdition,
-    getSerieMetadata,
     getSerieMetadataProps,
     getSeriesMetadata,
     useQuestionMetadata
 } from './helpers/other'
 import { getDefaultState, useChartState } from './helpers/chartState'
 import { ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
-import { useEntities } from 'core/helpers/entities'
-import { FacetTitle } from '../common2/FacetTitle'
-import { getQuestionGroups, getQuestionOptions } from './helpers/options'
-import { useColorScale } from '../common2/helpers/colors'
-import { HorizontalBarChartState, HorizontalBarViews } from './types'
-import { CommonProps, SerieMetadata } from '../common2/types'
+import { HorizontalBarChartState } from './types'
+import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
 import { HorizontalBarSerie } from './HorizontalBarSerie'
 import ChartShare from '../common2/ChartShare'
-import Legend from './Legend'
 import { BackToBack } from '../common2/BackToBack'
 import { NoData } from '../common2/NoData'
 import { getViewDefinition } from './helpers/views'
-import { NO_ANSWER, OTHER_ANSWERS } from '@devographics/constants'
+import FacetHeading from './FacetHeading'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -146,63 +139,6 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
             </pre> */}
             </>
         </ChartWrapper>
-    )
-}
-
-export const FacetHeading = (
-    props: CommonProps<HorizontalBarChartState> & {
-        series: DataSeries<StandardQuestionData>[]
-        facetQuestion: QuestionMetadata
-        chartState: HorizontalBarChartState
-        pageContext: PageContextValue
-    }
-) => {
-    const { block, facetQuestion, chartState, pageContext, series, question } = props
-    const { view } = chartState
-    const viewDefinition = getViewDefinition(view)
-    const entities = useEntities()
-
-    // const controls = getControls({ chartState, chartValues })
-
-    const facetBucketIds = getBlockAllFacetBucketIds({ series, block, chartState })
-
-    const colorScale =
-        facetQuestion && useColorScale({ question: facetQuestion, bucketIds: facetBucketIds })
-
-    const allOptions = getQuestionOptions({
-        question: facetQuestion,
-        chartState
-    })
-    const allGroups = getQuestionGroups({
-        question: facetQuestion,
-        chartState
-    })
-    const allGroupsOrOptions = allGroups?.length > 1 ? allGroups : allOptions
-
-    const allFacetBucketIds = getBlockAllFacetBucketIds({ series, block, chartState })
-
-    // only keep options that are actually used in the current dataset
-    const usedOptions = allGroupsOrOptions.filter(optionOrGroup =>
-        allFacetBucketIds.includes(String(optionOrGroup.id))
-    )
-    return (
-        <div className="chart-heading">
-            <FacetTitle
-                block={block}
-                facetQuestion={facetQuestion}
-                pageContext={pageContext}
-                entities={entities}
-                question={question}
-            />
-            {viewDefinition.showLegend && facetQuestion && colorScale && (
-                <Legend
-                    {...props}
-                    options={usedOptions}
-                    colorScale={colorScale}
-                    i18nNamespace={facetQuestion.id}
-                />
-            )}
-        </div>
     )
 }
 export default HorizontalBarBlock2
