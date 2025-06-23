@@ -46,17 +46,24 @@ export const getBlockQuery = ({
     edition: EditionMetadata
     section: SectionMetadata
 }) => {
-    const { facet, filters, bucketsFilter, options = {} } = chartFilters || {}
+    const { axis1, axis2: axis2_, facet, filters, bucketsFilter, options = {} } = chartFilters || {}
+    let axis2 = axis2_
+    // backwards compatibility with YAML configs
+    if (chartFilters?.facet) {
+        axis2 = chartFilters?.facet
+    }
+
     const { showDefaultSeries } = options
-    const questionId = block.fieldId || block.id
+    const questionId = axis1?.id || block.fieldId || block.id
+
     const queryOptions = {
         surveyId: survey?.id,
         editionId: edition?.id,
-        sectionId: section?.id,
+        sectionId: axis1?.sectionId || section?.id,
         questionId,
-        subField: block?.queryOptions?.subField || ResultsSubFieldEnum.RESPONSES,
-        ...block.queryOptions
+        subField: ResultsSubFieldEnum.COMBINED
     }
+
     let parameters = block.parameters || {}
 
     if (options && !isEmpty(options)) {
