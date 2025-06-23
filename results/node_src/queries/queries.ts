@@ -57,6 +57,7 @@ export const getBlockQuery = ({
     const questionId = axis1?.id || block.fieldId || block.id
 
     const queryOptions = {
+        ...block.queryOptions,
         surveyId: survey?.id,
         editionId: edition?.id,
         sectionId: axis1?.sectionId || section?.id,
