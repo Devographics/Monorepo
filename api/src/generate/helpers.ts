@@ -267,7 +267,7 @@ export const addOptionsAverages = (options: Option[]) => {
 How many items will be made available in the enum
 
 */
-const OPTIONS_LIMIT = 10
+const OPTIONS_LIMIT = 15
 
 /*
 
