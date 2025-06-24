@@ -8,18 +8,20 @@ import { QuestionIcon } from 'core/icons'
 import T from 'core/i18n/T'
 import { getQuestionLabel } from './helpers/labels'
 import { getChartView } from '../horizontalBar2/helpers/views'
-import { HorizontalBarViews } from '../horizontalBar2/types'
+import { HorizontalBarChartState, HorizontalBarViews } from '../horizontalBar2/types'
 
 export const FacetTitle = ({
     facetQuestion,
     block,
-    question
+    question,
+    chartState
 }: {
     facetQuestion: QuestionMetadata
     block: BlockVariantDefinition
     pageContext: PageContextValue
     entities: Entity[]
     question: QuestionMetadata
+    chartState: HorizontalBarChartState
 }) => {
     const { getString } = useI18n()
 
@@ -47,7 +49,7 @@ export const FacetTitle = ({
         i18nNamespace: facetQuestion.i18nNamespace
     })
 
-    const view = getChartView({ facetQuestion, block })
+    const { view } = chartState
     return (
         <div className="chart-facet-title">
             <span
