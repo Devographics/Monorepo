@@ -266,7 +266,6 @@ export const Tab_ = styled.div`
     margin-right: ${spacing(0.5)};
     margin-bottom: -1px;
     font-size: ${fontSize('smallish')};
-    color: var(--textColor);
     display: flex;
     align-items: center;
     /* gap: 5px; */
@@ -283,6 +282,9 @@ export const Tab_ = styled.div`
         display: grid;
         place-items: center;
         margin-right: ${spacing(0.5)};
+    }
+    button {
+        color: var(--textColor);
     }
 `
 export const TabsTrigger = styled(Tabs.Trigger)`
