@@ -236,6 +236,15 @@
                   facet:
                       sectionId: health
                       id: age
+            - id: gender_vs_number_of_kids
+              tabId: tabs.by_gender
+              template: vs_facet
+              fieldId: gender
+              defaultView: average
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: number_of_kids
 
 - id: career
   path: /career
