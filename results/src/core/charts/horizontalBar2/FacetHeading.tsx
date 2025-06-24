@@ -59,6 +59,7 @@ export const FacetHeading = (
                 pageContext={pageContext}
                 entities={entities}
                 question={question}
+                chartState={chartState}
             />
             {showToggle && <ViewToggle chartState={chartState} />}
             {viewDefinition.showLegend && facetQuestion && colorScale && (
@@ -85,6 +86,14 @@ const ViewToggle = ({ chartState }: { chartState: HorizontalBarChartState }) => 
             label: getString(labelKey)?.t
         }
     })
-    return <Toggle labelId="charts.toggle_view" handleSelect={setView} items={items} />
+    return (
+        <Toggle
+            labelId="charts.toggle_view"
+            handleSelect={id => {
+                setView(id as HorizontalBarViews)
+            }}
+            items={items}
+        />
+    )
 }
 export default FacetHeading
