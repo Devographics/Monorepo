@@ -10,7 +10,7 @@ import { AverageMarker } from '../rows/AverageMarker'
 
 const getValue = (bucket: Bucket | FacetBucket) => bucket[BucketUnits.PERCENTAGE_SURVEY] || 0
 
-export const getTicks = (maxValue?: number) => {
+export const getTicks = ({ maxValue }: { maxValue?: number }) => {
     const NUMBER_OF_TICKS = 5
     const ticks = [...Array(NUMBER_OF_TICKS + 1)].map(
         (a, i) => ({ value: round((i * (maxValue || 0)) / NUMBER_OF_TICKS) }),

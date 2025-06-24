@@ -48,9 +48,21 @@ export interface ChartValues {
     serieMetadataProps: SerieMetadataProps
 }
 
+export type GetTicksType = ({
+    maxValue,
+    contentWidth,
+    buckets,
+    seriesMetadata
+}: {
+    maxValue: number
+    contentWidth?: number
+    buckets?: Bucket[]
+    seriesMetadata?: SeriesMetadata
+}) => Tick[]
+
 export type ViewDefinition<ChartStateType> = {
     formatValue: FormatValueType<ChartStateType>
-    getTicks?: (maxValue?: number) => Tick[]
+    getTicks?: GetTicksType
     showLegend?: boolean
 }
 

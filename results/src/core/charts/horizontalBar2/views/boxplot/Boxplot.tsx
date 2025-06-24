@@ -1,6 +1,11 @@
 import './Boxplot.scss'
 import React, { useMemo, useRef } from 'react'
-import { HorizontalBarViewDefinition, HorizontalBarViewProps, RowComponentProps } from '../../types'
+import {
+    HorizontalBarChartState,
+    HorizontalBarViewDefinition,
+    HorizontalBarViewProps,
+    RowComponentProps
+} from '../../types'
 import { Axis, RespondentCount } from 'core/charts/common2'
 import { BoxProps, HorizontalBox } from './Box'
 import { Tick } from 'core/charts/common2/types'
@@ -8,17 +13,12 @@ import { useTheme } from 'styled-components'
 import * as d3 from 'd3'
 import { BlockLegend } from 'core/types'
 import { useWidth } from 'core/charts/common2/helpers'
-import { useBoxplotData, useScales } from './helpers'
+import { getDatasetValues, useBoxplotData, useTicks, useXScale, useYScale } from './helpers'
 import { removeNoAnswer } from '../../helpers/steps'
 import { BAR_HEIGHT, RowGroup } from '../../rows/RowGroup'
 import { RowWrapper, Rows } from '../../rows'
 import { formatQuestionValue } from 'core/charts/common2/helpers/format'
 import { getViewDefinition } from '../../helpers/views'
-
-const PIXEL_PER_TICKS = 100
-
-// use a value slightly larger than max to leave margin for labels, etc. on right side of chart
-const MAX_COEFF = 1.2
 
 const BoxplotView = (viewProps: HorizontalBarViewProps) => {
     const { chartState, chartValues, seriesMetadata } = viewProps
@@ -41,34 +41,19 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
     const contentWidth = useWidth(contentRef) || 0
 
     // Compute everything derived from the dataset:
-    const { chartMin, chartMax, groups } = useMemo(() => {
-        // const [chartMin, chartMax] = d3.extent(data.map(d => d.value)) as [number, number]
-        const allP10 = buckets.map(bucket => bucket.percentilesByFacet?.p10 || 0)
-
-        const allP90 = buckets.map(bucket => bucket.percentilesByFacet?.p90 || 0)
-        // to ensure all series have same scale, use global series max if available
-        const p90Max = seriesMetadata.seriesMaxValue || Math.max(...allP90)
-        const [chartMin, chartMax] = [Math.min(...allP10), p90Max]
-        const groups = [...new Set(buckets.map(bucket => bucket.id))]
-        return { chartMin, chartMax: chartMax * MAX_COEFF, groups }
-    }, [buckets])
+    const { chartMin, chartMax, groups } = useMemo(
+        () => getDatasetValues({ buckets, seriesMetadata }),
+        [buckets]
+    )
 
     const labelFormatter = (value: number) => formatValue(value, facetQuestion)
 
     const legends = [] as BlockLegend[]
 
-    const { xScale, yScale } = useScales({ chartMax, contentHeight, contentWidth, groups })
+    const xScale = useXScale({ chartMax, contentWidth })
+    const yScale = useYScale({ contentHeight, groups })
 
-    const range = xScale.range()
-
-    const ticks: Tick[] = useMemo(() => {
-        const width = range[1] - range[0]
-        const numberOfTicksTarget = Math.floor(width / PIXEL_PER_TICKS)
-        return xScale.ticks(numberOfTicksTarget).map(value => ({
-            value,
-            xOffset: xScale(value)
-        }))
-    }, [xScale])
+    const ticks: Tick[] = useMemo(() => useTicks(xScale), [xScale])
 
     const rowProps = {
         ...viewProps,
@@ -163,8 +148,9 @@ const BoxplotRow = (props: BoxplotRowProps) => {
     )
 }
 
-export const Boxplot: HorizontalBarViewDefinition = {
+export const Boxplot: HorizontalBarViewDefinition<HorizontalBarChartState> = {
     component: BoxplotView,
+    // this is used to calculate max values, so use p90 and not p50
     getValue: b => b.percentilesByFacet?.p90 || 0,
     formatValue: formatQuestionValue,
     dataFilters: [removeNoAnswer]

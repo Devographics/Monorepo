@@ -1,3 +1,5 @@
+@import '../../../../stylesheets/_breakpoints.scss';
+
 .chart-average-marker {
     position: relative;
 }
@@ -6,9 +8,20 @@
     height: 3px;
     left: 0px;
     right: var(--spacing);
-    top: calc(
-        var(--offsetCoefficient) * (var(--barHeight) + var(--rowPadding) * 2) * var(--numberOfRows)
-    );
+    @include small {
+        // take into account the fact that labels wrap on small viewports
+        top: calc(
+            var(--offsetCoefficient) * (var(--barHeight) * 2 + var(--spacing) * 3) *
+                var(--numberOfRows)
+        );
+        width: 85%;
+    }
+    @include medium-large {
+        top: calc(
+            var(--offsetCoefficient) * (var(--barHeight) + var(--rowPadding) * 2) *
+                var(--numberOfRows)
+        );
+    }
     transform: translateY(-50%);
     // z-index: 1;
     background-color: var(--borderAltColor) !important;

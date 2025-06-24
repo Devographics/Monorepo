@@ -771,23 +771,21 @@
         template: multiple_options2_combined
         variants:
             - id: age_vs_disability
+              template: vs_facet
+              tabId: tabs.by_age
               fieldId: age
-              blockType: HorizontalBarBlock2
-              hasData: true
-              parameters:
-                  showNoAnswer: true
-                  cutoff: 10
               filtersState:
                   facet:
                       sectionId: health
                       id: disability_status
-            # - template: vs_salary
-            #   parameters:
-            #       sort: { property: medianByFacet }
-            #   filtersState:
-            #       facet:
-            #           sectionId: workplace
-            #           id: yearly_salary
+            - id: disability_status_vs_gender
+              template: vs_facet
+              tabId: tabs.by_gender
+              fieldId: disability_status
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: gender
 
       - id: health_issues
         template: multiple_options2_combined
@@ -797,9 +795,17 @@
               tabId: tabs.by_gender
               queryOptions:
                   sectionId: user_info
-              parameters:
-                  facetLimit: 6
               fieldId: gender
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: health_issues
+            - id: age_vs_health_issues
+              template: vs_facet
+              tabId: tabs.by_age
+              queryOptions:
+                  sectionId: health
+              fieldId: age
               filtersState:
                   facet:
                       sectionId: health
@@ -809,6 +815,7 @@
         template: single_option2
         variants:
             - id: number_of_kids_vs_sleep_quantity
+              defaultView: average
               template: vs_facet
               tabId: tabs.vs_number_of_kids
               queryOptions:
@@ -819,6 +826,7 @@
                       sectionId: health
                       id: sleep_quantity
             - id: age_vs_sleep_quantity
+              defaultView: average
               template: vs_facet
               tabId: tabs.by_age
               queryOptions:
@@ -874,6 +882,20 @@
                   facet:
                       sectionId: worldview
                       id: global_issues
+            - id: global_issues_vs_gender
+              template: vs_facet
+              tabId: tabs.by_gender
+              queryOptions:
+                  sectionId: worldview
+              fieldId: global_issues
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
 
       - id: happiness_factors
         template: multiple_options2_combined
@@ -942,6 +964,7 @@
         i18nNamespace: happiness
         variants:
             - id: sleep_quantity_vs_overall_happiness
+              defaultView: average
               tabId: tabs.vs_sleep_quantity
               template: vs_facet
               queryOptions:
@@ -1015,6 +1038,19 @@
                   facet:
                       sectionId: hobbies
                       id: physical_activity
+            - id: physical_activity_vs_age
+              template: vs_facet
+              queryOptions:
+                  sectionId: hobbies
+              fieldId: physical_activity
+              tabId: tabs.by_age
+              filtersState:
+                  facet:
+                      sectionId: health
+                      id: age
+              parameters:
+                  cutoff: 30
+                  sort: { property: medianByFacet, order: asc }
 
       - id: favorite_musical_artists
         template: multiple_options2_freeform

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { sortProperties, StandardQuestionData } from '@devographics/types'
 import { DataSeries } from 'core/filters/types'
 import {
@@ -15,6 +15,7 @@ import { getViewComponent, getViewDefinition } from './helpers/views'
 import { getItemFilters } from '../common2/helpers/filters'
 import { HorizontalBarChartState, HorizontalBarViewProps, HorizontalBarViews } from './types'
 import { applyRowsLimit } from '../multiItemsExperience/helpers/helpers'
+import { useWidth } from '../common2/helpers'
 
 export const HorizontalBarSerie = (
     props: {
@@ -45,6 +46,11 @@ export const HorizontalBarSerie = (
 
     const serieMetadataProps = getSerieMetadataProps({ currentEdition })
 
+    // note: we need a placeholder that's part of the grid/subgrid layout
+    // to be able to calculate the content width
+    const contentRef = useRef<HTMLDivElement>(null)
+    const contentWidth = useWidth(contentRef) || 0
+
     const chartValues = useChartValues({
         seriesMetadata,
         serieMetadata,
@@ -52,7 +58,8 @@ export const HorizontalBarSerie = (
         buckets,
         chartState,
         question,
-        viewDefinition
+        viewDefinition,
+        contentWidth
     })
     if (applyRowsLimit(rowsLimit, chartValues.totalRows)) {
         buckets = take(buckets, chartState.rowsLimit)
@@ -76,7 +83,8 @@ export const HorizontalBarSerie = (
         // metadata about completion, average, etc.
         // TODO: find better naming
         serieMetadataProps,
-        viewDefinition
+        viewDefinition,
+        contentRef
     }
 
     const itemFilters = getItemFilters({ variant, block, serieIndex })

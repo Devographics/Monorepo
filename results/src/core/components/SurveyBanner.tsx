@@ -70,6 +70,9 @@ const Banner_ = styled.div`
         @media ${mq.small} {
             right: 5px;
         }
+        svg {
+            color: var(--bannerText);
+        }
     }
     .survey-ongoing {
         background: var(--bannerButton, var(--linkColor));

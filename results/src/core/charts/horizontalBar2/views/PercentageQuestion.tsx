@@ -16,7 +16,7 @@ export const getTopBound = (maxValue?: number) => {
     return topBound
 }
 
-const getTicks = (maxValue?: number) => {
+const getTicks = () => {
     const NUMBER_OF_TICKS = 5
     const ticks = [...Array(NUMBER_OF_TICKS + 1)].map(
         (a, i) => ({ value: round((i * (getTopBound() || 0)) / NUMBER_OF_TICKS) }),
