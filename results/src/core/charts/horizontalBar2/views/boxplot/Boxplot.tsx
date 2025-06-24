@@ -4,10 +4,10 @@ import {
     HorizontalBarChartState,
     HorizontalBarViewDefinition,
     HorizontalBarViewProps,
+    HorizontalBarViews,
     RowComponentProps
 } from '../../types'
 import { Axis, RespondentCount } from 'core/charts/common2'
-import { BoxProps, HorizontalBox } from './Box'
 import { Tick } from 'core/charts/common2/types'
 import { useTheme } from 'styled-components'
 import * as d3 from 'd3'
@@ -19,6 +19,8 @@ import { BAR_HEIGHT, RowGroup } from '../../rows/RowGroup'
 import { RowWrapper, Rows } from '../../rows'
 import { formatQuestionValue } from 'core/charts/common2/helpers/format'
 import { getViewDefinition } from '../../helpers/views'
+import { AverageBox } from './Average'
+import { BoxProps, PercentilesBox } from './Percentiles'
 
 const BoxplotView = (viewProps: HorizontalBarViewProps) => {
     const { chartState, chartValues, seriesMetadata } = viewProps
@@ -66,7 +68,8 @@ const BoxplotView = (viewProps: HorizontalBarViewProps) => {
         yScale,
         contentWidth,
         ticks,
-        isReversed
+        isReversed,
+        chartState
     }
 
     const axisProps = { ticks, formatValue, question: facetQuestion }
@@ -115,13 +118,23 @@ type BoxplotRowProps = RowComponentProps & {
     xScale: d3.ScaleLinear<number, number, never>
     yScale: d3.ScaleBand<string>
     isReversed?: boolean
+    chartState: HorizontalBarChartState
 }
 
 const BoxplotRow = (props: BoxplotRowProps) => {
-    const { bucket, xScale, yScale, labelFormatter, contentWidth, isReversed = false } = props
+    const {
+        bucket,
+        xScale,
+        yScale,
+        labelFormatter,
+        contentWidth,
+        isReversed = false,
+        chartState
+    } = props
 
     const theme = useTheme()
 
+    const { view } = chartState
     const boxData = useBoxplotData({ bucket, xScale, yScale, isReversed })
     if (!bucket.percentilesByFacet || !boxData) {
         return null
@@ -136,13 +149,19 @@ const BoxplotRow = (props: BoxplotRowProps) => {
         rowHeight: BAR_HEIGHT,
         boxData,
         contentWidth,
-        isReversed
+        isReversed,
+        xScale,
+        chartState
     }
 
     return (
         <RowWrapper {...props} rowMetadata={<RespondentCount count={bucket.count} />}>
             <svg style={{ height: BAR_HEIGHT }} className="boxplot-svg">
-                <HorizontalBox {...boxProps} />
+                {view === HorizontalBarViews.AVERAGE ? (
+                    <AverageBox {...boxProps} />
+                ) : (
+                    <PercentilesBox {...boxProps} />
+                )}
             </svg>
         </RowWrapper>
     )

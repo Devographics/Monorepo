@@ -66,7 +66,8 @@ export const viewDefinitions: { [key: string]: HorizontalBarViewDefinition } = {
     [HorizontalBarViews.PERCENTAGE_SURVEY]: PercentageSurvey,
     [HorizontalBarViews.COUNT]: Count,
     // faceted views
-    [HorizontalBarViews.AVERAGE]: Average,
+    // note: we use the boxplot component for the average view as well
+    [HorizontalBarViews.AVERAGE]: Boxplot,
     [HorizontalBarViews.BOXPLOT]: Boxplot,
     [HorizontalBarViews.FACET_COUNTS]: FacetCounts,
     [HorizontalBarViews.PERCENTAGE_BUCKET]: PercentageBucket
