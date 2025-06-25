@@ -4,6 +4,7 @@ blockType: HorizontalBarBlock2
 hasData: true
 parameters:
     showNoAnswer: true
+    cutoff: 20
 defaultUnits: percentageQuestion
 tabId: tabs.by_race_ethnicity
 filtersState:
