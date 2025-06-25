@@ -3,23 +3,17 @@
  * To achieve that, load possible source from db or a config file on github
  * before generating the API graphql schema
  */
-import { QuestionTemplateOutput, TemplateFunction } from '@devographics/types'
+import { DbPathsEnum, QuestionTemplateOutput, TemplateFunction } from '@devographics/types'
 import { DbSuffixes } from '@devographics/types'
 
 /**
  * Sources are meant to be added in the yml config file of each edition
  */
 export const source: TemplateFunction = ({ survey, edition, question, section }) => {
-    const options = edition.sources || []
-    if (options.length === 0) {
-        console.warn(`Survey ${edition?.id} has no sources`)
-        options.push({ id: 'no_sources_defined' })
-    }
     const output: QuestionTemplateOutput = {
         id: 'source',
-        options,
         normPaths: {
-            other: `user_info.source.${DbSuffixes.NORMALIZED}`
+            [DbPathsEnum.OTHER]: `user_info.source.${DbSuffixes.NORMALIZED}`
         },
         ...question
     }
