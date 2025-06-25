@@ -315,7 +315,7 @@
                             - fieldId: years_of_experience
                               sectionId: career
                               operator: eq
-                              value: range_15_19
+                              value: range_10_14
                   facet:
                       sectionId: workplace
                       id: yearly_salary
