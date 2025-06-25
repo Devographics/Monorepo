@@ -485,8 +485,24 @@ export async function genericComputeFunction(
         await runStage(moveFacetBucketsToDefaultBuckets, [results])
     }
 
+    /*
+
+    Combine with freeform if
+
+    1. this is still the regular execution context
+    2. we're querying the combined subfield
+    3. there are freeform responses
+    4. the predefined and freeform responses have different dbPaths
+    
+    */
+    const responseDbPath = getDbPath(question, ResponsesTypes.RESPONSES)
     const freeformDbPath = getDbPath(question, ResponsesTypes.FREEFORM)
-    if (responsesType === ResponsesTypes.COMBINED && freeformDbPath) {
+    if (
+        executionContext === ExecutionContext.REGULAR &&
+        responsesType === ResponsesTypes.COMBINED &&
+        freeformDbPath &&
+        responseDbPath != freeformDbPath
+    ) {
         results = await runStage(combineWithFreeform, [results, options])
     }
 

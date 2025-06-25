@@ -87,12 +87,11 @@ export const combineWithFreeform = async (
             executionContext: ExecutionContext.COMBINED
         }
     }
-    const freeformDbPath = getDbPath(options.question, ResponsesTypes.FREEFORM)
-    if (freeformDbPath) {
-        const freeformResults = await genericComputeFunction(newOptions)
-        if (freeformResults) {
-            return combineResults(responseResults, freeformResults)
-        }
+
+    const freeformResults = await genericComputeFunction(newOptions)
+    if (freeformResults) {
+        return combineResults(responseResults, freeformResults)
     }
+
     return responseResults
 }
