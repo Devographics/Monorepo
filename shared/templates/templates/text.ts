@@ -29,6 +29,8 @@ export const text: TemplateFunction = options => {
         [DbPathsEnum.RAW]: `${basePath}.${DbSuffixes.RAW}`,
         [DbPathsEnum.METADATA]: `${basePath}.${DbSuffixes.METADATA}`,
         [DbPathsEnum.ERROR]: `${basePath}.${DbSuffixes.ERROR}`,
+        // TODO: watch out for issue where same path will be queried twice
+        // when using COMBINED mode
         [DbPathsEnum.RESPONSE]: `${basePath}.${DbSuffixes.NORMALIZED}`,
         [DbPathsEnum.OTHER]: `${basePath}.${DbSuffixes.NORMALIZED}`,
         [DbPathsEnum.SKIP]: `${basePath}.${DbPathsEnum.SKIP}`,

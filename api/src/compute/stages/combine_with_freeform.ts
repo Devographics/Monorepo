@@ -50,6 +50,12 @@ export const combineResults = (
     responseResults: ResponseEditionData[],
     freeformResults: ResponseEditionData[]
 ) => {
+    if (!responseResults || responseResults.length === 0) {
+        return freeformResults
+    }
+    if (!freeformResults || freeformResults.length === 0) {
+        return responseResults
+    }
     const combinedResults: ResponseEditionData[] = []
     for (let editionResponseData of responseResults) {
         const editionFreeformData = freeformResults.find(
@@ -81,12 +87,11 @@ export const combineWithFreeform = async (
             executionContext: ExecutionContext.COMBINED
         }
     }
-    const freeformDbPath = getDbPath(options.question, ResponsesTypes.FREEFORM)
-    if (freeformDbPath) {
-        const freeformResults = await genericComputeFunction(newOptions)
-        if (freeformResults) {
-            return combineResults(responseResults, freeformResults)
-        }
+
+    const freeformResults = await genericComputeFunction(newOptions)
+    if (freeformResults) {
+        return combineResults(responseResults, freeformResults)
     }
+
     return responseResults
 }

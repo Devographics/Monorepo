@@ -6,7 +6,7 @@ import {
 } from '../types'
 import React from 'react'
 import { Cell } from '../VerticalBarCell'
-import { useColorScale, useGradient } from '../../common2/helpers/colors'
+import { ColorScale, useColorScale, useGradient } from '../../common2/helpers/colors'
 import sum from 'lodash/sum'
 import take from 'lodash/take'
 import { ColumnWrapper } from './ColumnWrapper'
@@ -23,6 +23,7 @@ type ColumnStackedProps<
     rowMetadata?: JSX.Element
     children?: JSX.Element
     viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
+    colorScale: ColorScale
 }
 
 export const ColumnStacked = <
@@ -32,7 +33,7 @@ export const ColumnStacked = <
 >(
     props: ColumnStackedProps<SerieData, PointData, ChartStateType>
 ) => {
-    const { edition, chartState, chartValues, viewDefinition, point, columnId } = props
+    const { edition, chartState, chartValues, viewDefinition, point, columnId, colorScale } = props
     const { getPointValue } = viewDefinition
     if (!getPointValue) {
         throw new Error('getPointValue not defined')
@@ -42,7 +43,7 @@ export const ColumnStacked = <
 
     // const rowDimensions = allRowsCellDimensions[rowIndex]
     // const rowOffset = allRowsOffsets[rowIndex]
-    const colorScale = useColorScale({ question: facetQuestion })
+
     return (
         <ColumnWrapper<SerieData, PointData, ChartStateType> {...props}>
             <div className="chart-faceted-bar">
@@ -53,7 +54,6 @@ export const ColumnStacked = <
                         question: { ...facetQuestion, options: facetBuckets },
                         colorScale
                     })
-
                     const value = getPointValue(facetBucket, chartState)
                     const getHeight = (v: number) => (v * 100) / maxValue
                     const height = getHeight(value)

@@ -1182,12 +1182,14 @@
               fieldId: favorite_video_games
               tabId: tabs.by_age
               parameters:
-                  cutoff: 40
+                  cutoff: 50
                   sort: { property: medianByFacet, order: asc }
               filtersState:
                   facet:
                       sectionId: health
                       id: age
+              chartOptions:
+                  limit: 10
             - id: favorite_video_games_by_gender
               template: vs_facet
               queryOptions:
@@ -1299,13 +1301,20 @@
 #         parameters:
 #             showNoAnswer: true
 
-#       # - id: past_same_survey_count
-#       #   template: multiple_options2
-#       #   defaultView: percentageSurvey
-#       #   queryOptions:
-#       #       addQuestionComments: false
-#       #   parameters:
-#       #       showNoAnswer: true
+# - id: past_same_survey_count
+#   template: multiple_options2
+#   defaultView: percentageSurvey
+#   queryOptions:
+#       addQuestionComments: false
+#   parameters:
+#       showNoAnswer: true
+#   - id: source
+#     template: multiple_options2_freeform
+#     defaultView: percentageSurvey
+#     parameters:
+#         limit: 20
+#     queryOptions:
+#         addQuestionComments: false
 
 #       - id: created_at_date
 #         template: multiple_options2
@@ -1337,14 +1346,6 @@
 #                   facet:
 #                       sectionId: _user_metadata
 #                       id: source
-
-#       - id: source
-#         template: multiple_options2_freeform
-#         defaultView: percentageSurvey
-#         parameters:
-#             limit: 20
-#         queryOptions:
-#             addQuestionComments: false
 
 - id: about
   is_hidden: true

@@ -27,7 +27,8 @@ export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
 
     const { average, percentiles, completion } = currentEdition
 
-    const facet = block?.filtersState?.axis2
+    // backwards-compatibility
+    const facet = block?.filtersState?.axis2 || block?.filtersState?.facet
 
     const facetQuestion = useQuestionMetadata(facet)
     const chartState = useChartState(getDefaultState({ block, facetQuestion }))
@@ -48,7 +49,7 @@ export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
 
     if (facetQuestion) {
         const allFacetBuckets = series
-            .map(serie => serie.data.responses.currentEdition.buckets.map(b => b?.facetBuckets))
+            .map(serie => serie.data.combined.currentEdition.buckets.map(b => b?.facetBuckets))
             .flat()
             .flat()
             .flat()
