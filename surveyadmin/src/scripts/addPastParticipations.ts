@@ -2,6 +2,13 @@ import { PAST_PARTICIPATIONS } from "@devographics/constants";
 import { getRawResponsesCollection } from "@devographics/mongo";
 import { OtherParticipationData } from "@devographics/types";
 
+/*
+
+Note: this only adds past participation data to raw responses collection,
+NOT normalized_responses
+
+*/
+
 // how many bulk operations to perform in one go
 const operationsPerStep = 1000;
 
