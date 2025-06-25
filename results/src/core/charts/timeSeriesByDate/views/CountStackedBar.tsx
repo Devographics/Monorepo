@@ -8,6 +8,7 @@ import { Count } from './Count'
 import Columns from 'core/charts/verticalBar2/columns/Columns'
 import { ColumnStacked } from 'core/charts/verticalBar2/columns/ColumnStacked'
 import { ColumnWrapper } from 'core/charts/verticalBar2/columns/ColumnWrapper'
+import { useColorScale } from 'core/charts/common2/helpers/colors'
 
 export const CountStackedBar: VerticalBarViewDefinition<
     StandardQuestionData,
@@ -33,6 +34,11 @@ export const CountStackedBar: VerticalBarViewDefinition<
         }
         const { columnIds } = chartValues
         const lineItem = lineItems[0]
+
+        const { facetQuestion } = chartState
+
+        const colorScale = useColorScale({ question: facetQuestion })
+
         return (
             <Columns<StandardQuestionData, DateBucketWithPointData, TimeSeriesByDateChartState>
                 {...commonProps}
@@ -54,6 +60,7 @@ export const CountStackedBar: VerticalBarViewDefinition<
                             columnId={columnId}
                             point={point}
                             showCount={false}
+                            colorScale={colorScale}
                         />
                     ) : (
                         <ColumnWrapper<

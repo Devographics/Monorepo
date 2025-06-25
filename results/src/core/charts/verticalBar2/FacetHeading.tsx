@@ -14,28 +14,14 @@ export const FacetHeading = <ChartStateType,>(props: FacetHeadingProps<ChartStat
     const { block, facetQuestion, facetBuckets, chartState, pageContext, question } = props
     const entities = useEntities()
 
-    // const controls = getControls({ chartState, chartValues })
+    // by using facetBuckets as options we only keep options that are actually used in the current dataset
+    const options = facetBuckets as OptionMetadata[]
 
-    const allOptions = getQuestionOptions<ChartStateType>({
-        question: facetQuestion,
-        chartState
-    })
-    const allGroups = getQuestionGroups<ChartStateType>({
-        question: facetQuestion,
-        chartState
-    })
-    const allGroupsOrOptions = allGroups?.length > 1 ? allGroups : allOptions
-
-    // only keep options that are actually used in the current dataset
-    // const usedOptions = allGroupsOrOptions.filter(optionOrGroup =>
-    //     allFacetBucketIds.includes(String(optionOrGroup.id))
-    // )
     const colorScale =
         facetQuestion &&
         useColorScale({
-            question: { ...facetQuestion, options: facetBuckets }
+            question: facetQuestion
         })
-
     return (
         <div className="chart-heading">
             <FacetTitle
@@ -44,11 +30,12 @@ export const FacetHeading = <ChartStateType,>(props: FacetHeadingProps<ChartStat
                 pageContext={pageContext}
                 entities={entities}
                 question={question}
+                chartState={chartState}
             />
             {facetQuestion && colorScale && (
                 <Legend
                     {...props}
-                    options={facetBuckets as OptionMetadata[]}
+                    options={options}
                     colorScale={colorScale}
                     i18nNamespace={facetQuestion.id}
                     enableSort={false}

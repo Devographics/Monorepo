@@ -25,7 +25,7 @@ export const Count: VerticalBarViewDefinition<
     TimeSeriesByDateChartState
 > = {
     getLineItems: ({ serie, question }) => {
-        let buckets = serie.data.responses.currentEdition.buckets
+        let buckets = serie?.data?.combined?.currentEdition?.buckets || []
         // make sure buckets are sorted by date (id)
         buckets = sortBy(buckets, 'id')
         const points = buckets.map(bucket => {
