@@ -35,6 +35,7 @@ export const Cell = ({
     otherBucket,
     chartState,
     chartValues,
+    width: width_,
     getWidth,
     offset,
     cellIndex,
@@ -47,7 +48,8 @@ export const Cell = ({
     otherBucket?: Bucket | FacetBucket
     chartState: HorizontalBarChartState
     chartValues: HorizontalBarChartValues
-    getWidth: (v: number) => number
+    width?: number
+    getWidth?: (v: number) => number
     offset: number
     cellIndex: number
     gradient: string[]
@@ -67,9 +69,14 @@ export const Cell = ({
 
     const { id, count, entity, token } = bucket
     const value = getValue(bucket)
+
+    // sometimes we pass an explicit width, sometimes we pass
+    // a getWidth function
+    const width = width_ || (getWidth && getWidth(value))
+
     const style = {
         '--percentageValue': value,
-        '--width': getWidth(value),
+        '--width': width,
         '--offset': offset,
         '--color1': gradient[0],
         '--color2': gradient[1]
@@ -143,8 +150,8 @@ export const Cell = ({
                 }
                 showBorder={false}
             />
-
-            {otherBucket && (
+            {/* we need getWidth to be able to figure out the dimensions for the other bucket marker */}
+            {otherBucket && getWidth && (
                 <OtherBucketMarker
                     viewDefinition={viewDefinition}
                     mainBucket={bucket}
