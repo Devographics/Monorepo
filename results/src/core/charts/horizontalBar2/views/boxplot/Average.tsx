@@ -44,9 +44,9 @@ export const AverageBox = ({
         </g>
     ) : (
         <>
-            <AverageDot value={average} xCoord={xCoord} {...dotProps} />
+            {/* <AverageDot value={average} xCoord={xCoord} {...dotProps} /> */}
             <ValueLabel
-                xCoord={xCoord + 50}
+                xCoord={xCoord}
                 stroke={stroke}
                 value={average}
                 labelFormatter={labelFormatter}
