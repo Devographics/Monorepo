@@ -80,8 +80,14 @@
                       sectionId: workplace
                       id: yearly_salary
 
-      - id: hint_hint
-        template: hint
+      #   - id: hint_hint
+      #     template: hint
+
+      - id: figure_gender
+        template: figure
+        variables:
+            value: 18
+            unit: percentage
 
       - id: gender
         template: multiple_options2
@@ -275,8 +281,8 @@
             # - template: men_vs_non_men
             # - template: white_vs_non_white
 
-      - id: variants_hint
-        template: hint
+      #   - id: variants_hint
+      #     template: hint
 
       - id: how_many_jobs
         template: multiple_options2
@@ -341,6 +347,12 @@
                       sectionId: workplace
                       id: income_evolution
 
+      - id: figure_career_issues_discrimination
+        template: figure
+        variables:
+            value: 26
+            unit: percentage
+
       - id: career_issues
         template: multiple_options2_combined
         variants:
@@ -348,6 +360,12 @@
             # - template: vs_race_ethnicity
             - template: men_vs_non_men
             # - template: white_vs_non_white
+
+      - id: figure_discrimination_therapy
+        template: figure
+        variables:
+            value: 20
+            unit: percentage
 
       - id: discrimination_issues
         template: multiple_options2_combined
@@ -427,6 +445,12 @@
   blocks:
       - template: page_introduction
 
+      - id: figure_company_size_income_evolution
+        template: figure
+        variables:
+            value: 66
+            unit: percentage
+
       - id: company_size
         template: multiple_options2
         variants:
@@ -441,6 +465,12 @@
                   facet:
                       sectionId: workplace
                       id: income_evolution
+
+      - id: figure_job_title_income
+        template: figure
+        variables:
+            value: 27210
+            unit: usd
 
       - id: job_title
         template: multiple_options2_freeform
@@ -497,6 +527,12 @@
             logoUrl: https://assets.devographics.com/sponsors/frontend-masters-dark.png
             link: https://frontendmasters.com/learn/professional/?utm_source=stateofdevs&utm_medium=website&utm_campaign=devs2025
 
+      - id: figure_yearly_salary_usa_world
+        template: figure
+        variables:
+            value: 70332
+            unit: usd
+
       - id: yearly_salary
         template: multiple_options2
         variants:
@@ -513,6 +549,22 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
+            - id: yearly_salary_us_vs_world
+              fieldId: yearly_salary
+              tabId: tabs.usa_vs_the_world
+              template: vs_facet
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: in
+                              value: [USA]
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value: [USA]
 
       - id: income_evolution
         template: single_option2
@@ -535,6 +587,12 @@
                   facet:
                       sectionId: workplace
                       id: income_evolution
+
+      - id: figure_job_finding_application_count
+        template: figure
+        variables:
+            value: 4
+            unit: count
 
       - id: job_finding_application_count
         template: single_option2
@@ -563,6 +621,12 @@
                       sectionId: workplace
                       id: yearly_salary
 
+      - id: figure_remote_work_policy_happiness
+        template: figure
+        variables:
+            value: 0.7
+            unit: count
+
       - id: remote_work_policy
         template: single_option2
         variants:
@@ -573,14 +637,24 @@
                   facet:
                       sectionId: workplace
                       id: yearly_salary
-            - id: remote_work_policy_vs_job_happiness
+            - id: job_happiness_by_remote_work_policy
+              tabId: tabs.vs_job_happiness
               template: vs_facet
-              parameters:
-                  sort: { property: medianByFacet }
+              queryOptions:
+                  sectionId: workplace
+              fieldId: job_happiness
               filtersState:
-                  facet:
-                      sectionId: workplace
-                      id: job_happiness
+                  filters:
+                      - conditions:
+                            - fieldId: remote_work_policy
+                              sectionId: workplace
+                              operator: in
+                              value: [no_remote_work]
+                      - conditions:
+                            - fieldId: remote_work_policy
+                              sectionId: workplace
+                              operator: nin
+                              value: [no_remote_work]
 
       - id: work_hours_per_week
         template: single_option2
@@ -695,10 +769,17 @@
             - template: vs_age
               parameters:
                   sort: { property: medianByFacet }
+                  cutoff: 20
               filtersState:
                   facet:
                       sectionId: health
                       id: age
+
+      - id: figure_community_involvement
+        template: figure
+        variables:
+            value: 40
+            unit: count
 
       - id: community_involvement
         template: multiple_options2_combined

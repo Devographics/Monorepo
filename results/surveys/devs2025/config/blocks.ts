@@ -98,6 +98,7 @@ import SponsorFinishBlock from 'core/blocks/block/sponsor_chart/SponsorFinishBlo
 import LivestreamBlock from 'core/blocks/other/LivestreamBlock'
 
 import MidpageResourceBlock from 'core/blocks/other/MidpageResourceBlock'
+import FigureBlock from 'core/blocks/other/FigureBlock'
 
 const otherBlocks = {
     PageIntroductionBlock,
@@ -122,7 +123,8 @@ const otherBlocks = {
     LivestreamBlock,
     TakeawaysBlock,
     DataExplorerBlock,
-    MidpageResourceBlock
+    MidpageResourceBlock,
+    FigureBlock
 }
 
 export default { ...chartBlocks, ...otherBlocks }

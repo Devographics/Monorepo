@@ -94,7 +94,8 @@ const excludedTemplatesAndIds = [
     'picks',
     'conclusion',
     'conclusion_newsletter',
-    'midpage_resource'
+    'midpage_resource',
+    'figure'
 ]
 
 const NavItem = ({

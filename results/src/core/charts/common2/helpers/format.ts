@@ -63,6 +63,26 @@ export const formatPercentage = (value: number) => {
     return `${roundPercentage(value)}%`
 }
 
+enum ValueUnits {
+    COUNT = 'count',
+    PERCENTAGE = 'percentage',
+    USD = 'usd',
+    JPY = 'jpy'
+}
+export const formatUnitValue = (value: number, unit: ValueUnits) => {
+    if (!unit || unit === ValueUnits.COUNT) {
+        return formatNumber(value)
+    } else if (unit === ValueUnits.USD) {
+        return usdFormatter.format(value)
+    } else if (unit === ValueUnits.JPY) {
+        return `¥${largeNumberFormatter(value)}`
+    } else if (unit === ValueUnits.PERCENTAGE) {
+        return formatPercentage(value)
+    } else {
+        return formatNumber(value)
+    }
+}
+
 export const formatQuestionValue = (value: number, question?: QuestionMetadata) => {
     if (!question) {
         return formatNumber(value)
