@@ -236,7 +236,8 @@ const BlockHeader = styled.div`
 
 const BlockHeaderRight_ = styled.div`
     display: flex;
-    /* justify-content: flex-end; */
+    justify-content: space-between;
+    width: 100%;
     align-items: center;
     gap: 10px;
     @media ${mq.large} {
@@ -247,7 +248,7 @@ const BlockHeaderRight_ = styled.div`
 
     @media ${mq.large} {
         overflow: visible;
-        width: max-content;
+        /* width: max-content; */
     }
 `
 

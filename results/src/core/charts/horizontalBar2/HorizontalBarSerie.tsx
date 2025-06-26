@@ -22,6 +22,7 @@ export const HorizontalBarSerie = (
         serie: DataSeries<StandardQuestionData>
         serieIndex: number
         isReversed?: boolean
+        otherSerie?: DataSeries<StandardQuestionData>
     } & CommonProps<HorizontalBarChartState>
 ) => {
     const {
@@ -32,11 +33,14 @@ export const HorizontalBarSerie = (
         chartState,
         variant,
         question,
-        isReversed = false
+        isReversed = false,
+        otherSerie
     } = props
     const { rowsLimit } = chartState
 
     let buckets = getChartBuckets({ serie, block, chartState })
+
+    let otherBuckets = otherSerie && getChartBuckets({ serie: otherSerie, block, chartState })
 
     const viewDefinition = getViewDefinition(chartState.view)
 
@@ -77,6 +81,7 @@ export const HorizontalBarSerie = (
         ...props,
         isReversed,
         buckets,
+        otherBuckets,
         chartValues,
         // metadata about the API response
         serieMetadata,

@@ -88,10 +88,8 @@ export const getChartView = ({
     facetQuestion?: QuestionMetadata
     block: BlockVariantDefinition
 }) => {
-    let view = HorizontalBarViews.PERCENTAGE_QUESTION
-    if (block.defaultView) {
-        view = block.defaultView
-    } else if (facetQuestion) {
+    let view = block.defaultView || HorizontalBarViews.PERCENTAGE_QUESTION
+    if (facetQuestion) {
         if (facetQuestion.optionsAreRange || facetQuestion.optionsAreNumeric) {
             view = HorizontalBarViews.BOXPLOT
         } else {

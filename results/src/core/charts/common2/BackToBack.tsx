@@ -61,7 +61,7 @@ export const BackToBack = ({
                 <Component serie={serie1} serieIndex={0} {...commonProps} />
             </div>
             <div className="back-to-back-serie back-to-back-serie-2">
-                <Component serie={serie2} serieIndex={1} {...commonProps} />
+                <Component otherSerie={serie1} serie={serie2} serieIndex={1} {...commonProps} />
             </div>
         </div>
     )

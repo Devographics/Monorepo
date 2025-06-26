@@ -64,6 +64,8 @@ export type HorizontalBarViewProps = {
     chartState: HorizontalBarChartState
     chartValues: HorizontalBarChartValues
     buckets: Bucket[]
+    // other set of buckets to compare the main buckets to
+    otherBuckets?: Bucket[]
     block: BlockVariantDefinition
     isReversed?: boolean
     seriesMetadata: SeriesMetadata
