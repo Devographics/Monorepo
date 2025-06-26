@@ -32,9 +32,10 @@ export const useIsWideEnough = () => {
 export const Cell = ({
     block,
     bucket,
+    otherBucket,
     chartState,
     chartValues,
-    width,
+    getWidth,
     offset,
     cellIndex,
     gradient,
@@ -43,9 +44,10 @@ export const Cell = ({
 }: {
     block: BlockVariantDefinition
     bucket: Bucket | FacetBucket
+    otherBucket?: Bucket | FacetBucket
     chartState: HorizontalBarChartState
     chartValues: HorizontalBarChartValues
-    width: number
+    getWidth: (v: number) => number
     offset: number
     cellIndex: number
     gradient: string[]
@@ -67,7 +69,7 @@ export const Cell = ({
     const value = getValue(bucket)
     const style = {
         '--percentageValue': value,
-        '--width': width,
+        '--width': getWidth(value),
         '--offset': offset,
         '--color1': gradient[0],
         '--color2': gradient[1]
@@ -112,34 +114,45 @@ export const Cell = ({
         : cellLabel
 
     return (
-        <Tooltip
-            trigger={
-                <div
-                    className={className}
-                    style={style}
-                    ref={ref}
-                    onMouseEnter={() => {
-                        setHighlightedCell(id)
-                    }}
-                    onMouseLeave={() => {
-                        setHighlightedCell(null)
-                    }}
-                >
-                    {showLabel && <CellLabel label={v} />}
-                    {oversizedBar && <Oversized />}
-                </div>
-            }
-            contents={
-                <div>
-                    [<span dangerouslySetInnerHTML={{ __html: label }} />] <strong>{v}</strong>{' '}
-                    <T
-                        k="charts.facet_detail"
-                        values={{ count, totalRespondents: totalSerieRespondents }}
-                    />
-                </div>
-            }
-            showBorder={false}
-        />
+        <div
+            className={className}
+            style={style}
+            ref={ref}
+            onMouseEnter={() => {
+                setHighlightedCell(id)
+            }}
+            onMouseLeave={() => {
+                setHighlightedCell(null)
+            }}
+        >
+            <Tooltip
+                trigger={
+                    <div className="chart-cell-inner">
+                        {showLabel && <CellLabel label={v} />}
+                        {oversizedBar && <Oversized />}
+                    </div>
+                }
+                contents={
+                    <div>
+                        [<span dangerouslySetInnerHTML={{ __html: label }} />] <strong>{v}</strong>{' '}
+                        <T
+                            k="charts.facet_detail"
+                            values={{ count, totalRespondents: totalSerieRespondents }}
+                        />
+                    </div>
+                }
+                showBorder={false}
+            />
+
+            {otherBucket && (
+                <OtherBucketMarker
+                    viewDefinition={viewDefinition}
+                    mainBucket={bucket}
+                    otherBucket={otherBucket}
+                    getWidth={getWidth}
+                />
+            )}
+        </div>
     )
 }
 
@@ -164,5 +177,59 @@ const Oversized = () => {
                 ></path>
             </svg>
         </span>
+    )
+}
+
+const OtherBucketMarker = ({
+    mainBucket,
+    otherBucket,
+    getWidth,
+    viewDefinition
+}: {
+    mainBucket: Bucket | FacetBucket
+    otherBucket: Bucket | FacetBucket
+    getWidth: (v: number) => number
+    viewDefinition: HorizontalBarChartState['viewDefinition']
+}) => {
+    const { getValue, formatValue } = viewDefinition
+
+    const mainValue = getValue(mainBucket)
+    const mainWidth = getWidth(mainValue)
+    const otherValue = getValue(otherBucket)
+    const delta = otherValue - mainValue
+    const absoluteDelta = Math.abs(delta)
+    const deltaIsNegative = otherValue > mainValue
+    // if (deltaIsNegative) {
+    //     return null
+    // }
+    const deltaAbsoluteWidth = getWidth(absoluteDelta)
+    // we need to express the delta's width as a percentage of the main width
+    const deltaRelativeWidth = (deltaAbsoluteWidth * 100) / mainWidth
+    const style = { '--deltaWidthPercentage': deltaRelativeWidth }
+    return (
+        <Tooltip
+            trigger={
+                <div
+                    className={`chart-cell-other-bucket chart-cell-other-bucket-${
+                        deltaIsNegative ? 'negativeDelta' : 'positiveDelta'
+                    }`}
+                    style={style}
+                >
+                    {otherBucket.percentageQuestion}
+                </div>
+            }
+            contents={
+                <div>
+                    {deltaIsNegative ? '-' : '+'}
+                    {formatValue(absoluteDelta)}
+                    {/* [<span dangerouslySetInnerHTML={{ __html: label }} />] <strong>{v}</strong>{' '}
+                    <T
+                        k="charts.facet_detail"
+                        values={{ count, totalRespondents: totalSerieRespondents }}
+                    /> */}
+                </div>
+            }
+            showBorder={false}
+        />
     )
 }

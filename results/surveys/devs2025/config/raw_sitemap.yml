@@ -113,7 +113,7 @@
                             - fieldId: years_of_experience
                               sectionId: career
                               operator: eq
-                              value: range_15_19
+                              value: range_10_14
                   facet:
                       sectionId: workplace
                       id: yearly_salary
@@ -1315,6 +1315,22 @@
 #         limit: 20
 #     queryOptions:
 #         addQuestionComments: false
+#     variants:
+#         - id: source_vs_gender
+#           template: vs_facet
+#           tabId: tabs.by_gender
+#           queryOptions:
+#               sectionId: _user_metadata
+#               addQuestionComments: false
+#           fieldId: source
+#           filtersState:
+#               options:
+#                   mode: facet
+#                   sort: female
+#                   order: desc
+#               facet:
+#                   sectionId: user_info
+#                   id: gender
 
 #       - id: created_at_date
 #         template: multiple_options2

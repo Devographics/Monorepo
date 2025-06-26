@@ -19,11 +19,12 @@ export const RowSingle = (props: RowComponentProps) => {
         chartValues,
         showCount = true,
         hasGroupedBuckets,
-        viewDefinition
+        viewDefinition,
+        otherBuckets
     } = props
     const { isFreeformData, hasInsufficientData } = bucket
+    const otherBucket = otherBuckets && otherBuckets.find(b => b.id === bucket.id)
     const { question, maxOverallValue = 1 } = chartValues
-    const { view } = chartState
     const { getValue } = viewDefinition
     const value = getValue(bucket)
     let widthValue = value
@@ -32,7 +33,11 @@ export const RowSingle = (props: RowComponentProps) => {
         widthValue = 100
         oversizedBar = true
     }
-    const width = (100 * widthValue) / getTopBound(maxOverallValue)
+
+    const getWidth = (widthValue: number) => {
+        return (100 * widthValue) / getTopBound(maxOverallValue)
+    }
+
     const gradient = theme.colors.barChart.primaryGradient
 
     // TODO: do this better
@@ -64,8 +69,9 @@ export const RowSingle = (props: RowComponentProps) => {
                 <Cell
                     block={block}
                     bucket={bucket}
+                    otherBucket={otherBucket}
                     chartState={chartState}
-                    width={width}
+                    getWidth={getWidth}
                     offset={0}
                     cellIndex={0}
                     chartValues={chartValues}
