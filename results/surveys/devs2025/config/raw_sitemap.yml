@@ -810,10 +810,19 @@
               queryOptions:
                   subField: combined
 
+      - id: figure_community_involvement
+        template: figure
+        variables:
+            value: 40
+            unit: count
+
       - id: open_source_involvement
         template: multiple_options2_combined
         variants:
             - template: men_vs_non_men
+              queryOptions:
+                  subField: combined
+            - template: white_vs_non_white
               queryOptions:
                   subField: combined
 
