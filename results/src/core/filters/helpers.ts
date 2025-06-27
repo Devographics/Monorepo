@@ -809,19 +809,31 @@ export async function fetchSeriesData({
     if (error) {
         return { error, query, seriesNames }
     } else {
-        const dataPath = getBlockDataPath({ chartFilters, block, pageContext, addRootNode: false })
+        const baseDataPath = getBlockDataPath({
+            chartFilters,
+            block,
+            pageContext,
+            addRootNode: false
+        })
 
         // apply dataPath to get block data for each series
         const seriesData = seriesNames.map((seriesName, seriesIndex) => {
             const id = chartFilters?.axis1?.id || block.id
-            const dataPath2 = dataPath.replace(id, seriesName)
-            const data = get(result, dataPath2) as AllQuestionData
+            // make sure we replace the question segment, which comes last
+            const pathSegments = baseDataPath.split('.')
+            pathSegments[pathSegments.length - 1] = seriesName
+            const serieDataPath = pathSegments.join('.')
+            // const serieDataPath = baseDataPath.replace(id, seriesName)
+            const data = get(result, serieDataPath) as AllQuestionData
 
             return {
                 data,
                 name: seriesName,
                 filters: chartFilters.filters[seriesIndex],
-                facet: chartFilters.axis2
+                facet: chartFilters.axis2,
+                id,
+                baseDataPath,
+                serieDataPath
             }
         })
         const returnObject = { result: seriesData, query, seriesNames }

@@ -64,7 +64,7 @@ export const getBlockQuery = ({
         ...block.queryOptions,
         surveyId: survey?.id,
         editionId: edition?.id,
-        sectionId: axis1?.sectionId || section?.id,
+        sectionId: axis1?.sectionId || block.queryOptions?.sectionId || section?.id,
         questionId,
         subField: ResultsSubFieldEnum.COMBINED
     }

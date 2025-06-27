@@ -24,7 +24,10 @@ export const RowSingle = (props: RowComponentProps) => {
     } = props
     const { isFreeformData, hasInsufficientData } = bucket
     const otherBucket = otherBuckets && otherBuckets.find(b => b.id === bucket.id)
-    const { question, maxOverallValue = 1 } = chartValues
+    const { question, maxOverallValue = 1, serieMetadataProps } = chartValues
+    const { completion } = serieMetadataProps
+    const { count: totalSerieRespondents } = completion
+
     const { getValue } = viewDefinition
     const value = getValue(bucket)
     let widthValue = value
@@ -78,6 +81,7 @@ export const RowSingle = (props: RowComponentProps) => {
                     gradient={gradient}
                     viewDefinition={viewDefinition}
                     oversizedBar={oversizedBar}
+                    parentTotal={totalSerieRespondents}
                 />
                 {hasInsufficientData && (
                     <div className="chart-row-insufficient-data-wrapper">
