@@ -1166,6 +1166,12 @@
                   cutoff: 30
                   sort: { property: medianByFacet, order: asc }
 
+      - id: figure_favorite_musical_artists_pink_floyd
+        template: figure
+        variables:
+            value: 47
+            unit: count
+
       - id: favorite_musical_artists
         template: multiple_options2_freeform
         variants:
