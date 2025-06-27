@@ -469,7 +469,7 @@
       - id: figure_job_title_income
         template: figure
         variables:
-            value: 27210
+            value: 44939
             unit: usd
 
       - id: job_title
@@ -517,6 +517,36 @@
                   facet:
                       sectionId: user_info
                       id: gender
+            - id: yearly_income_developers_engineers
+              template: vs_facet
+              tabId: tabs.developers_engineers
+              queryOptions:
+                  sectionId: workplace
+              fieldId: yearly_salary
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: job_title
+                              sectionId: workplace
+                              operator: in
+                              value:
+                                  - developer
+                                  - frontend_developer
+                                  - senior_developer
+                                  - fullstack_developer
+                                  - lead_developer
+                      - conditions:
+                            - fieldId: job_title
+                              sectionId: workplace
+                              operator: in
+                              value:
+                                  - software_engineer
+                                  - senior_engineer
+                                  - frontend_engineer
+                                  - lead_engineer
+                                  - director_of_engineering
+                                  - fullstack_engineer
+                                  - engineering_manager
 
       - id: frontend_masters_learning_path
         template: midpage_resource
