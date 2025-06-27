@@ -6,6 +6,7 @@ import { useColorScale, useGradient } from '../../common2/helpers/colors'
 import { RespondentCount } from '../../common2'
 import { Bucket } from '@devographics/types'
 import { getBlockAllFacetBucketIds, getBucketsAllFacetBucketIds } from '../helpers/other'
+import { AnswersCount } from 'core/charts/common2/AnswersCount'
 
 export const RowStacked = (props: RowComponentProps) => {
     const {
@@ -37,7 +38,7 @@ export const RowStacked = (props: RowComponentProps) => {
     const colorScale = useColorScale({ question: facetQuestion, bucketIds: allFacetBucketIds })
 
     return (
-        <RowWrapper {...props} rowMetadata={<RespondentCount count={bucket.count} />}>
+        <RowWrapper {...props} rowMetadata={<AnswersCount count={bucket.count} />}>
             <div className="chart-faceted-bar">
                 {facetBuckets.map((facetBucket, index) => {
                     const { id } = facetBucket
@@ -58,6 +59,7 @@ export const RowStacked = (props: RowComponentProps) => {
                             chartValues={chartValues}
                             gradient={gradient}
                             viewDefinition={viewDefinition}
+                            parentTotal={bucket.count || 0}
                         />
                     )
                 })}

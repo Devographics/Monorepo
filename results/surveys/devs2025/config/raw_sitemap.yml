@@ -810,11 +810,11 @@
               queryOptions:
                   subField: combined
 
-      - id: figure_community_involvement
+      - id: figure_open_source_involvement
         template: figure
         variables:
-            value: 40
-            unit: count
+            value: 15
+            unit: percentage
 
       - id: open_source_involvement
         template: multiple_options2_combined
@@ -909,6 +909,12 @@
                       sectionId: health
                       id: health_issues
 
+      - id: figure_sleep_quantity
+        template: figure
+        variables:
+            value: 6.9
+            unit: count
+
       - id: sleep_quantity
         template: single_option2
         variants:
@@ -953,6 +959,12 @@
   path: /worldview
   blocks:
       - template: page_introduction
+
+      - id: figure_global_issues
+        template: figure
+        variables:
+            value: 71
+            unit: percentage
 
       - id: global_issues
         template: multiple_options2_combined
@@ -1029,6 +1041,12 @@
                   facet:
                       sectionId: worldview
                       id: happiness_factors
+
+      - id: figure_relocation_japan
+        template: figure
+        variables:
+            value: 1270
+            unit: count
 
       - id: relocation
         template: multiple_options2_freeform

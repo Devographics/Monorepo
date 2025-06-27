@@ -14,6 +14,7 @@ import { CellLabel } from '../common2'
 import { getViewDefinition } from './helpers/views'
 import { getQuestionLabel } from '../common2/helpers/labels'
 import { BlockVariantDefinition } from 'core/types'
+import { ColumnModes } from '../common2/types'
 
 // hide labels for cells under this size
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
@@ -41,7 +42,8 @@ export const Cell = ({
     cellIndex,
     gradient,
     viewDefinition,
-    oversizedBar = false
+    oversizedBar = false,
+    parentTotal
 }: {
     block: BlockVariantDefinition
     bucket: Bucket | FacetBucket
@@ -55,15 +57,14 @@ export const Cell = ({
     gradient: string[]
     viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
     oversizedBar: boolean
+    parentTotal: number
 }) => {
     const { ref, isWideEnough: showLabel } = useIsWideEnough()
 
     // const entities = useEntities()
     // const entity = entities.find(e => e.id === bucket.id)
     const { question, facetQuestion, totalRespondents, serieMetadataProps } = chartValues
-    const { completion } = serieMetadataProps
-    const { count: totalSerieRespondents } = completion
-    const { sort, view, highlightedCell, setHighlightedCell } = chartState
+    const { sort, view, highlightedCell, setHighlightedCell, columnMode } = chartState
     const { getValue, formatValue } = viewDefinition
     const { getString } = useI18n()
 
@@ -120,6 +121,10 @@ export const Cell = ({
         ? `${facetQuestionLabel}: <strong>${cellLabel}</strong>`
         : cellLabel
 
+    // when we're in stacked column mode, we're counting answers, not
+    // respondents (because many questions allow more than one answers)
+    const isStacked = columnMode === ColumnModes.STACKED
+
     return (
         <div
             className={className}
@@ -142,10 +147,17 @@ export const Cell = ({
                 contents={
                     <div>
                         [<span dangerouslySetInnerHTML={{ __html: label }} />] <strong>{v}</strong>{' '}
-                        <T
-                            k="charts.facet_detail"
-                            values={{ count, totalRespondents: totalSerieRespondents }}
-                        />
+                        {isStacked ? (
+                            <T
+                                k="charts.facet_detail_answers"
+                                values={{ count, totalAnswers: parentTotal }}
+                            />
+                        ) : (
+                            <T
+                                k="charts.facet_detail"
+                                values={{ count, totalRespondents: parentTotal }}
+                            />
+                        )}
                     </div>
                 }
                 showBorder={false}

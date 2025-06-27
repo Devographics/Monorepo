@@ -37,7 +37,7 @@ export const FreeformAnswersTrigger = (props: {
         questionId,
         token: id.replace(CATCHALL_PREFIX, '')
     }
-    const i18nNamespace = block.i18nNamespace || sectionId
+    const i18nNamespace = block.i18nNamespace || questionId
 
     const allQuestions = useAllQuestionsMetadata()
     const question = allQuestions.find(q => q.id === questionId)

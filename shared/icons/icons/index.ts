@@ -51,6 +51,7 @@ export * from './Cutoff'
 export * from './Limit'
 export * from './SortDesc'
 export * from './SortAsc'
+export * from './Document'
 
 export * from './Satisfaction'
 export * from './Appreciation'
