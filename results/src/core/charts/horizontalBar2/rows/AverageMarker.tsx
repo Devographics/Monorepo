@@ -65,7 +65,7 @@ export const AverageMarker = (
     const [type, setType] = useState<typeof AVERAGE | typeof MEDIAN>(AVERAGE)
     const { serieMetadataProps, question, buckets } = props
     const value = serieMetadataProps[type]
-    if (value !== undefined) {
+    if (value !== undefined && value !== null) {
         const averageFormatted = formatQuestionValue(value, question)
         const offset = getOffsetCoefficient({ question, buckets, value })
         if (offset === undefined) {
