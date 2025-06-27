@@ -66,7 +66,9 @@ export const getBlockQuery = ({
         editionId: edition?.id,
         sectionId: axis1?.sectionId || block.queryOptions?.sectionId || section?.id,
         questionId,
-        subField: ResultsSubFieldEnum.COMBINED
+        subField: ResultsSubFieldEnum.COMBINED,
+        // we never need comments when querying from the client
+        addQuestionComments: false
     }
     let parameters = block.parameters || {}
 

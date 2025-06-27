@@ -71,6 +71,15 @@ type ItemSelectOptionsProps = {
     disabledList?: string[]
 }
 
+// TODO: do this better to avoid hardcoding this list here
+const disallowedQuestions = [
+    'referrer',
+    'sourcetag',
+    'future_surveys',
+    'future_editions',
+    'future_same_survey_count'
+]
+
 export const ItemSelectOptions = ({
     allFilters,
     currentQuestionId,
@@ -88,17 +97,23 @@ export const ItemSelectOptions = ({
                 {getString && getString('explorer.select_item')?.t}
             </option>
             {orderedSections.map(section => {
-                const sectionItems = allFilters.filter(o => o.sectionId === section.id)
+                const sectionItems = allFilters
+                    .filter(q => q.sectionId === section.id)
+                    .filter(q => !disallowedQuestions.includes(q.id))
                 return sectionItems.length > 0 ? (
                     <optgroup key={section.id} label={getSectionLabel({ getString, section })}>
-                        {sectionItems.map((o: FilterItem) => {
-                            const { label, key } = getFieldLabel({ getString, field: o, entities })
+                        {sectionItems.map((question: FilterItem) => {
+                            const { label, key } = getFieldLabel({
+                                getString,
+                                field: question,
+                                entities
+                            })
                             return (
                                 <option
-                                    key={o.id}
-                                    value={o.id}
+                                    key={question.id}
+                                    value={question.id}
                                     data-key={key}
-                                    disabled={[...disabledList]?.includes(o.id)}
+                                    disabled={[...disabledList]?.includes(question.id)}
                                 >
                                     {label}
                                 </option>
