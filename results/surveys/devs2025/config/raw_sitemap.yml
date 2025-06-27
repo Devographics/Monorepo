@@ -821,6 +821,27 @@
                   facet:
                       sectionId: health
                       id: age
+            - id: community_involvement_by_gender
+              template: vs_facet
+              queryOptions:
+                  sectionId: technology
+                  subField: responses
+              fieldId: community_involvement
+              tabId: tabs.by_gender
+              parameters:
+                  limit: 20
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: in
+                              value: [male]
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: nin
+                              value: [male]
 
             # - template: vs_age
             #   queryOptions:
