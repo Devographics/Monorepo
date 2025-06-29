@@ -877,20 +877,6 @@
               queryOptions:
                   subField: combined
 
-- id: to_be_continued
-  path: /to_be_continued
-  blocks:
-      - id: to_be_continued
-        template: conclusion
-        variables:
-            author: sacha_greif
-            entities: '"sacha_greif"'
-
-      - id: conclusion_newsletter
-        blockType: NewsletterBlock
-        wrapBlock: false
-        disableExport: true
-
 - id: health
   path: /health
   blocks:
@@ -1388,14 +1374,19 @@
                       id: video_game_platforms
 
 - id: conclusion
-  is_hidden: true
   path: /conclusion
   blocks:
-      - id: conclusion_ashok
+      - id: conclusion_anjana
         template: conclusion
         variables:
-            author: ashok_gelal
-            entities: '"ashok_gelal"'
+            author: anjana_vakil
+            entities: '"anjana_vakil"'
+
+      - id: conclusion_josh
+        template: conclusion
+        variables:
+            author: josh_comeau
+            entities: '"josh_comeau"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock

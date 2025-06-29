@@ -51,6 +51,7 @@ const Conclusion = styled.div`
         max-width: 700px;
         margin: 0 auto;
         margin-bottom: ${spacing(4)};
+        font-size: 1.1rem;
     }
     .first-line {
         @media ${mq.mediumLarge} {
