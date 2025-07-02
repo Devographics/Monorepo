@@ -77,6 +77,7 @@ export enum OrderOptions {
 }
 
 export enum ColumnModes {
+    REGULAR = 'regular',
     SPLIT = 'split',
     STACKED = 'stacked'
 }

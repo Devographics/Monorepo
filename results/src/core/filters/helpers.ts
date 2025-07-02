@@ -792,6 +792,8 @@ export async function fetchSeriesData({
 }: FetchSeriesDataOptions): Promise<FetchSeriesDataPayload> {
     const { currentEdition, currentSurvey, id: pageId } = pageContext
 
+    const questionId = chartFilters?.axis1?.id || block.fieldId || block.id
+
     const { query, seriesNames } = getBlockQuery({
         block,
         survey: currentSurvey,
@@ -818,7 +820,6 @@ export async function fetchSeriesData({
 
         // apply dataPath to get block data for each series
         const seriesData = seriesNames.map((seriesName, seriesIndex) => {
-            const id = chartFilters?.axis1?.id || block.id
             // make sure we replace the question segment, which comes last
             const pathSegments = baseDataPath.split('.')
             pathSegments[pathSegments.length - 1] = seriesName
@@ -831,9 +832,9 @@ export async function fetchSeriesData({
                 name: seriesName,
                 filters: chartFilters.filters[seriesIndex],
                 facet: chartFilters.axis2,
-                id,
                 baseDataPath,
-                serieDataPath
+                serieDataPath,
+                questionId
             }
         })
         const returnObject = { result: seriesData, query, seriesNames }

@@ -17,6 +17,9 @@ export const getDefaultState = ({
     defaultState.view = getChartView({ facetQuestion, block })
     if (facetQuestion) {
         defaultState.facet = { id: facetQuestion.id, sectionId: facetQuestion.sectionId }
+        defaultState.columnMode = ColumnModes.STACKED
+    } else {
+        defaultState.columnMode = ColumnModes.REGULAR
     }
     if (block?.chartOptions?.limit) {
         defaultState.rowsLimit = block.chartOptions.limit

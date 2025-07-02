@@ -22,15 +22,16 @@ export const BlockQuestion = ({
     const isMultipleQuestion = question?.allowMultiple
     if (blockQuestion) {
         return (
-            <Question_ className="block-question">
-                <QuestionLeft_>
-                    <QuestionIcon /> <QuestionContents_>{blockQuestion}</QuestionContents_>
-                </QuestionLeft_>
-                <div className="question-right">
-                    {isFreeformQuestion && <FreeformIndicator showLabel={true} />}
-                    {isMultipleQuestion && <MultipleIndicator showLabel={true} />}
+            <div className="block-question">
+                <QuestionIcon />
+                <div className="block-question-inner">
+                    <div className="block-question-left">{blockQuestion}</div>
+                    <div className="block-question-right">
+                        {isFreeformQuestion && <FreeformIndicator showLabel={true} />}
+                        {isMultipleQuestion && <MultipleIndicator showLabel={true} />}
+                    </div>
                 </div>
-            </Question_>
+            </div>
         )
     }
     return null
@@ -59,31 +60,5 @@ export const BlockQuestionTooltip = ({
     }
     return null
 }
-
-const Question_ = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: ${({ theme }) => theme.colors.backgroundAlt};
-    border-radius: 100px;
-    padding: ${spacing(0.5)};
-    font-size: ${fontSize('small')};
-    margin-top: var(--spacing);
-`
-const QuestionLeft_ = styled.div`
-    .rawchartmode & {
-        display: none;
-    }
-    display: flex;
-    align-items: center;
-    gap: ${spacing(0.5)};
-    p {
-        &:last-child {
-            margin: 0;
-        }
-    }
-`
-
-const QuestionContents_ = styled.div``
 
 export default BlockQuestion

@@ -46,13 +46,13 @@ const BlockSwitcher = ({
     }
     const BlockComponent = blockRegistry[blockType]
 
-    const question = getAllQuestions(pageContext.currentEdition).find(
-        q => q.id === (block.fieldId ?? block.id)
-    )
     const series = isCustomVariant
         ? series_
         : getBlockSeriesData({ block, pageContext, filtersState })
 
+    const questionId = (series?.[0]?.questionId || block.fieldId) ?? block.id
+
+    const question = getAllQuestions(pageContext.currentEdition).find(q => q.id === questionId)
 
     const blockProps = {
         block,

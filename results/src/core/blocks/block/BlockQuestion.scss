@@ -1,10 +1,48 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
 .block-question {
-    margin-bottom: var(--spacing);
+    background: var(--backgroundAltColor);
+    padding: var(--halfSpacing) var(--spacing);
+    border-radius: 100px;
+    font-size: var(--fontSmall);
+    display: flex;
+    margin: var(--spacing) 0 var(--doubleSpacing) 0;
+    align-items: center;
+    gap: var(--spacing);
+}
+.block-question-inner {
+    display: flex;
+    gap: var(--spacing);
+    @include small {
+        flex-direction: column;
+    }
+    @include medium-large {
+        align-items: center;
+        justify-content: space-between;
+    }
 }
 
-.question-right {
+.block-question-left {
+    .rawchartmode & {
+        display: none;
+    }
     display: flex;
-    align-items: flex-end;
-    justify-content: center;
+    align-items: center;
+    gap: var(--halfSpacing);
+    p {
+        &:last-child {
+            margin: 0;
+        }
+    }
+}
+
+.block-question-right {
+    display: flex;
     gap: var(--spacing);
+    @include small {
+    }
+    @include medium-large {
+        align-items: flex-end;
+        justify-content: center;
+    }
 }
