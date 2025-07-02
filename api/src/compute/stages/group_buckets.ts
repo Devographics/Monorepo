@@ -38,10 +38,10 @@ async function getGroupedBuckets<T extends Bucket | FacetBucket>({
     for (const group of groups) {
         const { id: groupId, upperBound, lowerBound, items } = group
         let selectedBuckets: T[]
-        if (typeof lowerBound !== 'undefined' || typeof upperBound !== 'undefined') {
-            selectedBuckets = buckets.filter(b => isInBounds(Number(b.id), lowerBound, upperBound))
-        } else if (items) {
+        if (items) {
             selectedBuckets = buckets.filter(b => items.includes(b.id))
+        } else if (typeof lowerBound !== 'undefined' || typeof upperBound !== 'undefined') {
+            selectedBuckets = buckets.filter(b => isInBounds(Number(b.id), lowerBound, upperBound))
         } else {
             throw new Error(
                 `groupBuckets: please specify lowerBound/upperBound or items array for group ${groupId}`
