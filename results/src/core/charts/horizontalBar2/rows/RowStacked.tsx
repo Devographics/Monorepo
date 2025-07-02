@@ -7,6 +7,7 @@ import { RespondentCount } from '../../common2'
 import { Bucket } from '@devographics/types'
 import { getBlockAllFacetBucketIds, getBucketsAllFacetBucketIds } from '../helpers/other'
 import { AnswersCount } from 'core/charts/common2/AnswersCount'
+import { InsufficientDataIndicator } from 'core/charts/common2/InsufficientDataIndicator'
 
 export const RowStacked = (props: RowComponentProps) => {
     const {
@@ -22,7 +23,7 @@ export const RowStacked = (props: RowComponentProps) => {
     // assume this is a root bucket and not a facet bucket
     const bucket_ = bucket as Bucket
     const { facetQuestion } = chartValues
-    const { facetBuckets } = bucket_
+    const { facetBuckets, hasInsufficientData } = bucket_
 
     // if (!facetQuestion) {
     //     throw new Error(`facetQuestion not defined in RowStacked`)
@@ -40,29 +41,35 @@ export const RowStacked = (props: RowComponentProps) => {
     return (
         <RowWrapper {...props} rowMetadata={<AnswersCount count={bucket.count} />}>
             <div className="chart-faceted-bar">
-                {facetBuckets.map((facetBucket, index) => {
-                    const { id } = facetBucket
-                    const { width, offset } = rowDimensions[index]
-                    const gradient = useGradient({
-                        id: facetBucket.id,
-                        question: facetQuestion,
-                        colorScale
+                {hasInsufficientData ? (
+                    <div className="chart-row-insufficient-data-wrapper">
+                        <InsufficientDataIndicator />
+                    </div>
+                ) : (
+                    facetBuckets.map((facetBucket, index) => {
+                        const { id } = facetBucket
+                        const { width, offset } = rowDimensions[index]
+                        const gradient = useGradient({
+                            id: facetBucket.id,
+                            question: facetQuestion,
+                            colorScale
+                        })
+                        return (
+                            <Cell
+                                key={id}
+                                bucket={facetBucket}
+                                chartState={chartState}
+                                width={width}
+                                offset={offset - rowOffset}
+                                cellIndex={index}
+                                chartValues={chartValues}
+                                gradient={gradient}
+                                viewDefinition={viewDefinition}
+                                parentTotal={bucket.count || 0}
+                            />
+                        )
                     })
-                    return (
-                        <Cell
-                            key={id}
-                            bucket={facetBucket}
-                            chartState={chartState}
-                            width={width}
-                            offset={offset - rowOffset}
-                            cellIndex={index}
-                            chartValues={chartValues}
-                            gradient={gradient}
-                            viewDefinition={viewDefinition}
-                            parentTotal={bucket.count || 0}
-                        />
-                    )
-                })}
+                )}
             </div>
         </RowWrapper>
     )

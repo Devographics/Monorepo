@@ -61,7 +61,7 @@ const FiltersPanel = ({
     const { id, name, chartFilters } = variant || {}
     const [variantName, setVariantName] = useState(name)
 
-    const chartName = getBlockTitle({ block, pageContext, getString, entities })
+    const { label: chartName } = getBlockTitle({ block, pageContext, getString, entities })
 
     let initState = getInitFilters({ block })
 

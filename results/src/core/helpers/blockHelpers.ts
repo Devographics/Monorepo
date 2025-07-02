@@ -65,7 +65,7 @@ export const getBlockTabTitle = ({
             sectionId: block.filtersState?.axis2?.sectionId || block.filtersState?.facet?.sectionId
         } as BlockVariantDefinition
 
-        const facetTitle = getBlockTitle({
+        const { key: facetKey, label: facetTitle } = getBlockTitle({
             block: facetBlock,
             pageContext,
             getString,
@@ -101,6 +101,7 @@ export const getBlockTitle = (options: {
     useShortLabel?: boolean
     useFullVersion?: boolean
 }) => {
+    let key, label
     const {
         block,
         pageContext,
@@ -113,11 +114,11 @@ export const getBlockTitle = (options: {
     const entity = entities?.find(e => e.id === block.id)
     const entityName = entity?.nameClean || entity?.name
     const specifiedTitle = block.titleId && getString(block.titleId)?.tClean
-    const key = getBlockKey({ block })
-    const defaultTitle = getString(key)?.tClean
+    const defaultKey = getBlockKey({ block })
+    const defaultTitle = getString(defaultKey)?.tClean
 
     if (useShortLabel) {
-        shortTitle = getString(key + '.short')?.tClean
+        shortTitle = getString(defaultKey + '.short')?.tClean
     }
 
     const fieldTitle =
@@ -125,15 +126,41 @@ export const getBlockTitle = (options: {
         getString(
             getBlockKey({ block: { ...block, i18nNamespace: block.sectionId, id: block.fieldId } })
         )?.t
+
     // when sharing block we want full version (e.g. "Years of Experience By Salary") but
     // in other context we might not
     const tabTitle =
         block.tabId && useFullVersion
             ? `${fieldTitle || block.fieldId} ${getString(block.tabId)?.tClean}`
             : getString(block.tabId)?.tClean
-    const values = [specifiedTitle, shortTitle, defaultTitle, tabTitle, fieldTitle, entityName, key]
+
+    // const values = [specifiedTitle, shortTitle, defaultTitle, tabTitle, fieldTitle, entityName, key]
     // console.table(values)
-    return values.find(v => v !== undefined)
+
+    if (specifiedTitle) {
+        key = 'specified'
+        label = specifiedTitle
+    } else if (shortTitle) {
+        key = defaultKey + '.short'
+        label = shortTitle
+    } else if (defaultTitle) {
+        key = defaultKey
+        label = defaultTitle
+    } else if (tabTitle) {
+        key = block.tabId
+        label = tabTitle
+    } else if (fieldTitle) {
+        key = getBlockKey({
+            block: { ...block, i18nNamespace: block.sectionId, id: block.fieldId }
+        })
+        label = fieldTitle
+    } else if (entityName) {
+        key = 'entity'
+        label = entityName
+    } else {
+        label = key
+    }
+    return { key, label }
 }
 
 export const useBlockTitle = ({ block }: { block: BlockVariantDefinition }) => {
@@ -363,7 +390,7 @@ export const getBlockMeta = ({
     block,
     pageContext,
     getString,
-    title
+    title: title_
 }: {
     block: BlockVariantDefinition
     pageContext: PageContextValue
@@ -376,7 +403,8 @@ export const getBlockMeta = ({
     const { year, hashtag } = currentEdition
     const trackingId = `${pageContext.currentPath}${id}`.replace(/^\//, '')
 
-    title = title || getBlockTitle({ block, pageContext, getString })
+    const { label: blockTitle } = getBlockTitle({ block, pageContext, getString })
+    const title = title_ || blockTitle
 
     const subtitle = getBlockDescription({ block, pageContext, getString })
 

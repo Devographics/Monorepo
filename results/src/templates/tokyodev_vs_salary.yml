@@ -10,6 +10,7 @@ queryOptions:
 parameters:
     showNoAnswer: true
     sort: { property: medianByFacet }
+    cutoff: 10
 filtersState:
     facet:
         sectionId: compensation

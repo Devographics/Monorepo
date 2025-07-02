@@ -96,7 +96,7 @@ const BlockChart = (props: BlockChartProps) => {
 }
 
 export const BlockDescriptionContents = ({ block }: { block: BlockVariantDefinition }) => {
-    const blockTitle = useBlockTitle({ block })
+    const { key, label: blockTitle } = useBlockTitle({ block })
     const blockDescription = useBlockDescription({ block, values: { name: blockTitle } })
     if (blockDescription) {
         return (

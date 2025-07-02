@@ -4,7 +4,11 @@
         align-items: center;
         gap: 5px;
     }
+    .chart-row-insufficient-data & {
+        display: none;
+    }
 }
+
 .chart-freeform-answers-heading {
     div {
         display: inline;

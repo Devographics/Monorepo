@@ -75,7 +75,7 @@ const CommentsTrigger = ({
     block: BlockVariantDefinition
     originalData: any
 }) => {
-    const title = useBlockTitle({ block })
+    const { key, label: title } = useBlockTitle({ block })
     const pageContext = usePageContext()
 
     const surveyId = pageContext.currentSurvey.id

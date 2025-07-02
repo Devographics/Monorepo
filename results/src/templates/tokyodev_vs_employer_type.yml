@@ -9,6 +9,7 @@ queryOptions:
     addBucketsEntities: false
 parameters:
     showNoAnswer: true
+    cutoff: 10
     # sort: { property: count }
 filtersState:
     facet:

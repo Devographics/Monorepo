@@ -321,10 +321,16 @@
         parameters: { showNoAnswer: true, cutoff: 10 }
         variants:
             - template: tokyodev_vs_salary
+              parameters:
+                  limit: 20
             - template: tokyodev_vs_employer_type
+              parameters:
+                  limit: 20
             - template: tokyodev_variant_base
               id: industry_sector_by_japanese_usage
               tabId: tabs.by_japanese_usage
+              parameters:
+                  limit: 20
               filtersState:
                   facet:
                       sectionId: job_info
@@ -477,7 +483,7 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
-            - template: tokyodev_vs_current_employer
+            # - template: tokyodev_vs_current_employer
 
       - id: languages_used_colleagues_english
         template: tokyodev_multiple_options2
@@ -489,7 +495,7 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
-            - template: tokyodev_vs_current_employer
+            # - template: tokyodev_vs_current_employer
 
       - id: coworker_gender_engineers
         template: tokyodev_multiple_options2
@@ -644,7 +650,8 @@
                   limit: 1
               filtersState:
                   bucketsFilter:
-                      - remote_work
+                      in:
+                          - remote_work
                   filters:
                       - conditions:
                             - fieldId: remote_work_policy

@@ -42,7 +42,7 @@ export const FreeformAnswersTrigger = (props: {
     const allQuestions = useAllQuestionsMetadata()
     const question = allQuestions.find(q => q.id === questionId)
 
-    const questionLabel = getBlockTitle({ block, pageContext, getString })
+    const { label: questionLabel } = getBlockTitle({ block, pageContext, getString })
 
     const labelObject = getItemLabel({
         id,

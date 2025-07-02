@@ -179,6 +179,13 @@ const BlockItem = ({ block, closeSidebar, page }) => {
     const pageContext = usePageContext()
     const { getString } = useI18n()
     const entities = useEntities()
+    const { key, label } = getBlockTitle({
+        block,
+        pageContext,
+        getString,
+        entities,
+        useShortLabel: true
+    })
     return (
         <InternalLinkWrapper_>
             <InternalLink_
@@ -186,8 +193,9 @@ const BlockItem = ({ block, closeSidebar, page }) => {
                 href={`#${block.id}`}
                 onClick={closeSidebar}
                 page={page}
+                data-key={key}
             >
-                {getBlockTitle({ block, pageContext, getString, entities, useShortLabel: true })}
+                {label}
                 {/* <T k={getBlockTitleKey({ block: { ...block, sectionId: page.id } })} /> */}
             </InternalLink_>
         </InternalLinkWrapper_>

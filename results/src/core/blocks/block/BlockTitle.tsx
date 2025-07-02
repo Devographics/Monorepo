@@ -14,8 +14,8 @@ import { getBlockSeriesData } from 'core/helpers/data'
 import { CommentsTrigger } from 'core/charts/common2/comments/CommentsTrigger'
 
 const BlockTitleContents = ({ block }: { block: BlockVariantDefinition }) => {
-    const title = useBlockTitle({ block })
-    return <Title dangerouslySetInnerHTML={{ __html: title }} />
+    const { key, label: title } = useBlockTitle({ block })
+    return <Title dangerouslySetInnerHTML={{ __html: title }} data-key={key} />
 }
 
 const Title = styled.span``
@@ -46,7 +46,7 @@ const BlockTitle = ({
     const { getString } = useI18n()
 
     const entities = useEntities()
-    const blockTitle = getBlockTitle({ block, pageContext, getString, entities })
+    const { key, label: blockTitle } = getBlockTitle({ block, pageContext, getString, entities })
 
     const properties = {
         context: pageContext,
