@@ -7,12 +7,14 @@ import { mq, fancyLinkMixin, spacing, fontSize, fontWeight } from 'core/theme'
 import { usePageContext } from 'core/helpers/pageContext'
 import PageLink from 'core/pages/PageLink'
 import LanguageSwitcher, { LanguageSwitcherContents } from 'core/i18n/LanguageSwitcher'
-import { getPageLabelKey } from 'core/helpers/pageHelpers'
+import { getPageLabel, getPageLabelKey } from 'core/helpers/pageHelpers'
 import T from 'core/i18n/T'
 import { PageContextValue } from 'core/types'
 import { getBlockTitle, getBlockTitleKey } from 'core/helpers/blockHelpers'
 import { useI18n } from '@devographics/react-i18n'
 import { useEntities } from 'core/helpers/entities'
+import Avatar, { AvatarNotLink } from '../Avatar'
+import './Nav.scss'
 
 interface PageConfig {
     is_hidden?: boolean
@@ -60,12 +62,12 @@ const getStyledLink = component => styled(component)`
     }
 
     &._is-active {
-        span span::before {
+        span .page-link-inner::before {
             content: '> ';
         }
 
         @media ${mq.smallMedium} {
-            span span::after {
+            span .page-link-inner::after {
                 content: ' <';
             }
         }
@@ -113,6 +115,7 @@ const NavItem = ({
     isHidden?: boolean
     depth?: number
 }) => {
+    const { getString } = useI18n()
     const pageContext = usePageContext()
 
     const isActive = currentPath.indexOf(page.path) !== -1
@@ -132,6 +135,8 @@ const NavItem = ({
                 )
         )
 
+    const { key, label } = getPageLabel({ pageContext: page, getString })
+    const imageUrl = page?.variables?.imageUrl
     return (
         <>
             <StyledPageLink
@@ -142,7 +147,15 @@ const NavItem = ({
                 isHidden={isHidden}
                 parentPage={parentPage}
             >
-                <T k={getPageLabelKey({ pageContext: page })} />
+                <span className="page-link-inner" data-key={key}>
+                    <span>{label}</span>
+                    {imageUrl && (
+                        <AvatarNotLink
+                            size={24}
+                            entity={{ name: label, avatar: { url: imageUrl } }}
+                        />
+                    )}
+                </span>
             </StyledPageLink>
             {match && currentPageBlocks.length > 1 && (
                 <InternalLinks_ className={`internal-links-depth-${depth}`}>

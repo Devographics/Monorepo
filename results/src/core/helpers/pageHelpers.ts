@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import { getBlockImage } from './blockHelpers'
 import { PageContextValue } from 'core/types'
-import { StringTranslator } from '@devographics/react-i18n';
+import { StringTranslator } from '@devographics/react-i18n'
 
 // TODO: doesn't seem to be used
 export const getTranslationValuesFromContext = (
@@ -32,14 +32,24 @@ export const getPageLabel = ({
     getString: StringTranslator
     options?: { includeWebsite?: boolean }
 }) => {
-    let label
+    let label, key
 
-    label = getString(getPageLabelKey({ pageContext }))?.t
+    const defaultKey = getPageLabelKey({ pageContext })
+    const defaultTitle = getString(defaultKey)?.t
+    const shortKey = `${defaultKey}.short`
+    const shortTitle = getString(shortKey)?.t
+    if (shortTitle) {
+        key = shortKey
+        label = shortTitle
+    } else if (defaultTitle) {
+        key = defaultKey
+        label = defaultTitle
+    }
     if (options.includeWebsite === true) {
         label = `${pageContext.currentSurvey.name} ${pageContext.currentEdition.year}: ${label}`
     }
 
-    return label || ''
+    return { key, label }
 }
 
 /**
@@ -49,7 +59,7 @@ export const getPageLabel = ({
 export const getPageImageUrl = ({ pageContext }: { pageContext: PageContextValue }) => {
     const { currentEdition, block } = pageContext
     // TODO: seems to happen in dev?
-    if (!currentEdition) return ""
+    if (!currentEdition) return ''
 
     let imageUrl
     if (block !== undefined) {
@@ -83,7 +93,7 @@ export const getPageMeta = ({
         url,
         title: isRoot
             ? getSiteTitle({ pageContext })
-            : getPageLabel({ pageContext, getString, options: { includeWebsite: true } }),
+            : getPageLabel({ pageContext, getString, options: { includeWebsite: true } }).label,
         imageUrl,
         ...overrides
     }

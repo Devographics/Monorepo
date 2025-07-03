@@ -17,11 +17,13 @@ const PageHeader = () => {
 
 const PageTitle = styled.h2.attrs({ className: 'PageTitle' })`
     ${secondaryFontMixin}
+    line-height: 1.1;
+
     @media ${mq.small} {
-        font-size: ${fontSize('larger')};
+        font-size: 3rem;
     }
     @media ${mq.mediumLarge} {
-        font-size: ${fontSize('huger')};
+        font-size: 6rem;
     }
 `
 

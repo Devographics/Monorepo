@@ -1,0 +1,14 @@
+.avatar {
+    display: block;
+    /* margin-right: ${spacing(0.5)}; */
+    /* flex-shrink: 0; */
+    overflow: hidden;
+    border-radius: 100%;
+    height: calc(var(--size) * 1px);
+    width: calc(var(--size) * 1px);
+    img {
+        display: block;
+        height: 100%;
+        width: 100%;
+    }
+}

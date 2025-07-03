@@ -1,28 +1,20 @@
 import React from 'react'
 import { spacing, mq, fontSize } from 'core/theme'
 import styled from 'styled-components'
+import './Avatar.scss'
 
 const getUrl = entity => entity?.homepage?.url || entity?.twitter?.url
 
-const Avatar = ({ entity, size = 60 }) => (
-    <Avatar_ href={getUrl(entity)} size={size}>
+export const Avatar = ({ entity, size = 60 }) => (
+    <a className="avatar avatar-link" href={getUrl(entity)} style={{ '--size': size }}>
         <img src={entity?.avatar?.url} alt={entity.name} />
-    </Avatar_>
+    </a>
 )
 
-const Avatar_ = styled.a`
-    display: block;
-    /* margin-right: ${spacing(0.5)}; */
-    /* flex-shrink: 0; */
-    overflow: hidden;
-    border-radius: 100%;
-    height: ${({ size }) => size}px;
-    width: ${({ size }) => size}px;
-    img {
-        display: block;
-        height: 100%;
-        width: 100%;
-    }
-`
+export const AvatarNotLink = ({ entity, size = 60 }) => (
+    <span className="avatar" style={{ '--size': size }}>
+        <img src={entity?.avatar?.url} alt={entity.name} />
+    </span>
+)
 
 export default Avatar

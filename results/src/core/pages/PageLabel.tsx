@@ -13,8 +13,12 @@ const PageLabel = ({
 }) => {
     const { getString } = useI18n()
     // const { getToolName } = useTools()
-
-    return <>{getPageLabel({ pageContext: page, getString, options: { includeWebsite } })}</>
+    const { key, label } = getPageLabel({
+        pageContext: page,
+        getString,
+        options: { includeWebsite }
+    })
+    return <span key={key}>{label}</span>
 }
 
 export default PageLabel
