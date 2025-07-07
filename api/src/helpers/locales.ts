@@ -20,16 +20,18 @@ export const filterContexts = ({ locale, contexts }: { locale: Locale; contexts:
 
 Look through all stringFiles to find the "real" string being aliased
 
+Note: always keep the last version we find in case of duplicates
+
 */
 const findRealString = (aliasKey: string, localeRawData: RawLocale) => {
-    let realString
+    const matches = []
     for (const sf of localeRawData.stringFiles) {
         const rs = sf?.strings?.find((ss: TranslationStringObject) => ss.key === aliasKey)
         if (rs) {
-            return rs
-            break
+            matches.push(rs)
         }
     }
+    return matches.at(-1)
 }
 
 export const resolveAliases = (stringFile: StringFile, localeRawData: RawLocale, report) => {
@@ -61,7 +63,8 @@ export const resolveAliases = (stringFile: StringFile, localeRawData: RawLocale,
 
     - key: foo.bar
       t: Foobar 
-      aliases: foo.baz
+      aliases: 
+        - foo.baz
 
     */
 
@@ -219,10 +222,11 @@ export const checkForDuplicates = (
     const allKeys = strings.filter(s => !s.aliasFor).map(s => s.key)
     const duplicateKeys = findDuplicates(allKeys)
     if (report) {
-        for (const duplicateKey of duplicateKeys) {
-            report.duplicates.push({ context, duplicateKey })
+        for (const { duplicateKey /*, count*/ } of duplicateKeys) {
+            report.duplicates.push({ context, duplicateKey /*, count */ })
         }
     }
+    return duplicateKeys
 }
 
 /*
@@ -321,6 +325,14 @@ export const processLocale = (
     }
 
     const allLocaleStrings: TranslationStringObject[] = flattenStringFiles(parsedStringFiles)
+
+    const allDuplicateKeys = checkForDuplicates(locale, allLocaleStrings, 'allContexts', report)
+
+    // remove the first instance of any duplicate keys
+    for (const { duplicateKey } of allDuplicateKeys) {
+        const duplicateIndex = allLocaleStrings.findIndex(s => s.key === duplicateKey)
+        allLocaleStrings.splice(duplicateIndex, 1)
+    }
 
     const { stringFiles, ...localeWithoutStringfiles } = locale
     let processedLocale = { ...localeWithoutStringfiles, strings: allLocaleStrings }
