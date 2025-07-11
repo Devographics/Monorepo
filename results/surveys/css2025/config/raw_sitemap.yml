@@ -451,7 +451,7 @@
       - id: css_missing_features
         template: multiple_options2_freeform
 
-      - id: css_pain_points
+      - id: css_general_pain_points
         template: multiple_options2_freeform
 
       - id: favorite_new_features
