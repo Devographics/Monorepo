@@ -26,6 +26,7 @@ import uniq from 'lodash/uniq'
 import { allDataFilters } from '../helpers/steps'
 import max from 'lodash/max'
 import compact from 'lodash/compact'
+import { getSubfieldObject } from 'core/charts/verticalBar2/helpers/other'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -33,11 +34,8 @@ export const sortOptions = {
 }
 
 export const getChartCurrentEdition = ({ serie }: { serie: DataSeries<StandardQuestionData> }) => {
-    const subFieldObject =
-        serie?.data?.[ResultsSubFieldEnum.COMBINED] ||
-        serie?.data?.[ResultsSubFieldEnum.FREEFORM] ||
-        (serie?.data?.[ResultsSubFieldEnum.RESPONSES] as ResponseData)
-    return subFieldObject?.currentEdition
+    const subFieldObject = getSubfieldObject(serie)
+    return subFieldObject?.allEditions?.at(-1) || subFieldObject?.currentEdition
 }
 
 const getDataFilters = (dataFilters: string[]) =>

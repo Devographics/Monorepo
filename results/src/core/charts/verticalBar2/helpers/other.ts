@@ -7,6 +7,14 @@ import {
 import { DataSeries } from 'core/filters/types'
 import { BlockVariantDefinition } from 'core/types'
 
+export const getSubfieldObject = (serie: DataSeries<StandardQuestionData>) => {
+    return (
+        serie?.data?.[ResultsSubFieldEnum.COMBINED] ||
+        serie?.data?.[ResultsSubFieldEnum.FREEFORM] ||
+        serie?.data?.[ResultsSubFieldEnum.RESPONSES]
+    )
+}
+
 export const getAllEditions = ({
     serie,
     block
@@ -14,8 +22,9 @@ export const getAllEditions = ({
     serie: DataSeries<StandardQuestionData>
     block: BlockVariantDefinition
 }) => {
-    const subField = block?.queryOptions?.subField || ResultsSubFieldEnum.RESPONSES
-    const { allEditions } = serie.data[subField] as ResponseData
+    const subFieldObject = getSubfieldObject(serie)
+
+    const allEditions = subFieldObject?.allEditions
     return allEditions
 }
 

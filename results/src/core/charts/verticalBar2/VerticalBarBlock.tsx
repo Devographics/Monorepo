@@ -13,6 +13,7 @@ import { VerticalBarChartState } from './types'
 import ChartShare from '../common2/ChartShare'
 import { getViewDefinition } from './helpers/views'
 import { VerticalBarSerieWrapper } from './VerticalBarSerieWrapper'
+import { NoData } from '../common2/NoData'
 
 export interface VerticalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -22,11 +23,13 @@ export interface VerticalBarBlock2Props extends BlockComponentProps {
 export const VerticalBarBlock2 = (props: VerticalBarBlock2Props) => {
     const { block, series, question, pageContext, variant } = props
     const allEditions = getAllEditions({ serie: series[0], block })
-    const currentEdition = allEditions.at(-1)
-    if (currentEdition === undefined) {
-        throw new Error(`${block.id}: empty allEditions array`)
-    }
+    const currentEdition = allEditions?.at(-1)
 
+    if (!currentEdition) {
+        console.log(allEditions)
+        console.log(props)
+        return <NoData<VerticalBarBlock2Props> {...props} />
+    }
     const { average, percentiles, completion } = currentEdition
 
     const chartState = useChartState(getDefaultState({ block }))

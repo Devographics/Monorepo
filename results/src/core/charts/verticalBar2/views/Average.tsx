@@ -15,6 +15,7 @@ import range from 'lodash/range'
 import { StandardQuestionData } from '@devographics/types'
 import { ColumnWrapper } from '../columns/ColumnWrapper'
 import { useChartValues } from '../helpers/chartValues'
+import { getSubfieldObject } from '../helpers/other'
 
 export const Average: VerticalBarViewDefinition<
     StandardQuestionData,
@@ -22,7 +23,8 @@ export const Average: VerticalBarViewDefinition<
     VerticalBarChartState
 > = {
     getLineItems: ({ serie, question }) => {
-        const { allEditions } = serie.data.responses
+        const subFieldObject = getSubfieldObject(serie)
+        const { allEditions } = subFieldObject
         const startYear = min(allEditions.map(e => e.year)) ?? 0
         const points = allEditions.map(e => ({
             ...e,
