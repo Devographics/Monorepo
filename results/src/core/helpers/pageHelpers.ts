@@ -32,12 +32,15 @@ export const getPageLabel = ({
     getString: StringTranslator
     options?: { includeWebsite?: boolean }
 }) => {
-    let label, key
-
     const defaultKey = getPageLabelKey({ pageContext })
+
+    let label,
+        key = defaultKey
+
     const defaultTitle = getString(defaultKey)?.t
     const shortKey = `${defaultKey}.short`
     const shortTitle = getString(shortKey)?.t
+
     if (shortTitle) {
         key = shortKey
         label = shortTitle
