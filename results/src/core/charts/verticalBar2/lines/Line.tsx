@@ -53,8 +53,10 @@ export const Line = <SerieData, PointData extends BasicPointData, ChartStateType
     const invertYAxis = mode === ModesEnum.RANK
     const {
         totalColumns,
+        minValue,
         maxValue,
         maxTick,
+        minTick,
         columnIds,
         question,
         legendItems = [],
@@ -90,9 +92,15 @@ export const Line = <SerieData, PointData extends BasicPointData, ChartStateType
         // we use either the largest tick value, or the largest chart value
         // (can be different if ticks are defined manually)
         const chartMax = maxTick ?? maxValue
+
+        // we use either the smallest tick value, or the smallest chart value
+        // (can be different if ticks are defined manually)
+        const chartMin = minTick ?? minValue
         // SVG coordinates are inverted by default
         const v = invertYAxis ? value : chartMax - value
-        return (v * height) / chartMax
+        // calculate delta between lower axis (min value) and top axis (max value)
+        const delta = chartMax - chartMin
+        return (v * height) / delta
     }
 
     const commonProps = {

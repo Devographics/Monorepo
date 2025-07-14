@@ -43,17 +43,18 @@ export const useChartValues = <SerieData, PointData extends BasicPointData, Char
     const allQuestions = useAllQuestions()
     const { facet } = chartState
 
-    const maxValue = max(
-        lineItems
-            .map(lineItem => lineItem.points.map(point => getPointValue(point, chartState)))
-            .flat()
-    ) as number
+    const flatLineItemValues = lineItems
+        .map(lineItem => lineItem.points.map(point => getPointValue(point, chartState)))
+        .flat()
+    const minValue = min(flatLineItemValues) as number
+    const maxValue = max(flatLineItemValues) as number
 
     const chartValues: VerticalBarChartValues = {
         i18nNamespace,
         question,
         columnIds,
         totalColumns: columnIds.length,
+        minValue,
         maxValue,
         facetBuckets
     }
@@ -61,6 +62,7 @@ export const useChartValues = <SerieData, PointData extends BasicPointData, Char
         const ticks = getTicks(maxValue)
         chartValues.ticks = ticks
         chartValues.maxTick = max(ticks.map(t => t.value)) || 0
+        chartValues.minTick = min(ticks.map(t => t.value)) || 0
     }
     if (facet) {
         chartValues.facetQuestion = allQuestions.find(
