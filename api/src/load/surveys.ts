@@ -15,7 +15,7 @@ import { promisify } from 'util'
 
 import defaultUserMetadataSection from './user_metadata.yml'
 
-const USER_METADATA_SECTION = '_user_metadata'
+export const USER_METADATA_SECTION = '_user_metadata'
 
 const execPromise = promisify(exec)
 

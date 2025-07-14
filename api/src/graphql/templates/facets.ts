@@ -1,6 +1,7 @@
 import { Survey, QuestionApiObject, SurveyApiObject, TypeDefTemplateOutput } from '../../types'
 import { getFacetsTypeName } from '../../generate/helpers'
 import { SENTIMENT_FACET } from '@devographics/constants'
+import { USER_METADATA_SECTION } from '../../load/surveys'
 
 /*
 
@@ -43,7 +44,14 @@ export const generateFacetsType = ({
     ${questionObjectsWithFilters
         .sort((q1, q2) => q1?.sectionIds?.at(-1)?.localeCompare(q2?.sectionIds?.at(-1) ?? '') ?? 0)
         .sort((q1, q2) => (q1?.sectionIndex || 0) - (q2?.sectionIndex || 0))
-        .map(q => `${q?.sectionIds?.at(-1)}__${q.id}`)
+        .map(q => {
+            // some fields such as referrer, sourcetag, etc. exist in both user_info and
+            // _user_metadata sections; if that's the case use _user_metadata
+            const sectionId = q.sectionIds?.includes(USER_METADATA_SECTION)
+                ? USER_METADATA_SECTION
+                : q?.sectionIds?.at(-1)
+            return `${sectionId}__${q.id}`
+        })
         .join('\n    ')}
 }`
     }
