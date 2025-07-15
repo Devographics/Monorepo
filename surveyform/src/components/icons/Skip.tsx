@@ -14,8 +14,8 @@ export const Skip = (props: IconProps) => (
       strokeLinejoin="round"
       {...props.svgProps}
     >
-      <polygon points="5 4 15 12 5 20 5 4"></polygon>
-      <line x1="19" y1="5" x2="19" y2="19"></line>
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
     </svg>
   </IconWrapper>
 );
