@@ -223,6 +223,7 @@ type WebFeature {
     name: String
     spec: [String]
     status: WebFeatureStatus
+    url: String
 }
 
 type WebFeatureStatus {

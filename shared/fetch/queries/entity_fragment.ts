@@ -48,6 +48,25 @@ twitter {
   url
   name
 }
+webFeature {
+  name
+  status {
+    baseline
+    baseline_low_date
+    support {
+      chrome
+      chrome_android
+      edge
+      firefox
+      firefox_android
+      safari
+      safari_ios
+    }
+  }
+  id
+  description_html
+  url
+}
 tags
 ${
     isFull

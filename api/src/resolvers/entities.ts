@@ -238,7 +238,8 @@ export const entityResolverMap: EntityResolverMap = {
                 ...webFeatureData,
                 spec: specArray,
                 group: groupArray,
-                id: entity.webFeaturesId
+                id: entity.webFeaturesId,
+                url: `https://web-platform-dx.github.io/web-features-explorer/features/${entity.webFeaturesId}/`
             }
             return data
         }
