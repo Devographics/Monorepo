@@ -8,6 +8,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { SectionMetadata } from "@devographics/types";
 import { FormItemProps } from "./Item";
+import BaselineLabel from "../BaselineLabel";
 
 export const FormItemTitle = (
   props: FormItemProps & { section: SectionMetadata }
@@ -25,6 +26,8 @@ export const FormItemTitle = (
         <Form.Label>
           <QuestionLabel section={section} question={question} />
 
+          <BaselineLabel entity={question.entity} />
+
           {yearAdded === currentYear && (
             <OverlayTrigger
               placement="top"
@@ -38,7 +41,7 @@ export const FormItemTitle = (
                 className="question-label-new"
                 title={t("general.newly_added")}
               >
-                {yearAdded}
+                ✨
               </span>
             </OverlayTrigger>
           )}

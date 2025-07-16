@@ -73,6 +73,7 @@
     }
     @include typography.font-bold;
     display: flex;
+    gap: var(--halfSpacing);
     align-items: center;
     line-height: 1.7;
     code {
@@ -82,12 +83,11 @@
       // white-space: nowrap;
     }
     .question-label-new {
-      text-transform: uppercase;
-      background: colors.$active-color-dark;
-      color: colors.$text-color-inverted;
-      padding: 1px 5px;
-      margin-left: math.div(variables.$spacing, 2);
-      font-size: typography.$smaller-font;
+      // text-transform: uppercase;
+      // background: colors.$active-color-dark;
+      // color: colors.$text-color-inverted;
+      // padding: 1px 5px;
+      // font-size: typography.$smaller-font;
       // @include font-regular;
     }
     &-number {
