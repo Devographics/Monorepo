@@ -124,6 +124,7 @@ export interface WebFeature {
     name: string
     spec: string[]
     status: WebFeatureStatus
+    url: string
 }
 
 export interface WebFeatureStatus {
