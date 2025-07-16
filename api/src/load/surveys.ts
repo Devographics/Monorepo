@@ -296,9 +296,9 @@ export const loadSurveys = async () => {
     return { surveys, sha }
 }
 
-export const initSurveys = async () => {
+export const initSurveys = async ({ context }: { context: RequestContext }) => {
     console.log('// initializing surveys')
-    const { surveys } = await loadOrGetSurveys({ forceReload: true })
+    const { surveys } = await loadOrGetSurveys({ context, forceReload: true })
     logToFile('surveys.json', surveys, { mode: 'overwrite' })
     allSurveys = surveys
     return surveys

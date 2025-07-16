@@ -199,7 +199,7 @@ export const loadEntities = async () => {
     return entities
 }
 
-export const initEntities = async (context: RequestContext) => {
+export const initEntities = async ({ context }: { context: RequestContext }) => {
     console.log('// initializing entities…')
     const entities = await loadOrGetEntities({ forceReload: true }, context)
     Entities = entities

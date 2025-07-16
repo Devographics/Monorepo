@@ -54,10 +54,11 @@ Load locales if not yet loaded
 
 */
 export const loadOrGetLocales = async (
-    options: { forceReload?: boolean; localeIds?: string[] } = { forceReload: false },
-    context?: RequestContext
+    options: { context?: RequestContext; forceReload?: boolean; localeIds?: string[] } = {
+        forceReload: false
+    }
 ): Promise<Array<Locale>> => {
-    const { forceReload } = options
+    const { forceReload, context } = options || {}
     const localeIds = options.localeIds || getLocaleIds()
     const localeContexts = getLocaleContexts()
     if (forceReload || Locales.length === 0) {
@@ -75,8 +76,14 @@ export const loadOrGetLocales = async (
     return Locales
 }
 
-export const initLocales = async ({ localeIds }: { localeIds?: string[] }) => {
-    const locales = await loadOrGetLocales({ forceReload: true, localeIds })
+export const initLocales = async ({
+    context,
+    localeIds
+}: {
+    context: RequestContext
+    localeIds?: string[]
+}) => {
+    const locales = await loadOrGetLocales({ context, forceReload: true, localeIds })
     Locales = locales
 }
 
