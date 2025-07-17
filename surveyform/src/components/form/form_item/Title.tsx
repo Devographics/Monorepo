@@ -9,6 +9,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { SectionMetadata } from "@devographics/types";
 import { FormItemProps } from "./Item";
 import BaselineLabel from "../BaselineLabel";
+import ExperimentalLabel from "../ExperimentalLabel";
 
 export const FormItemTitle = (
   props: FormItemProps & { section: SectionMetadata }
@@ -26,6 +27,7 @@ export const FormItemTitle = (
         <Form.Label>
           <QuestionLabel section={section} question={question} />
 
+          <ExperimentalLabel entity={question.entity} />
           <BaselineLabel entity={question.entity} />
 
           {yearAdded === currentYear && (

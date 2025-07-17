@@ -28,7 +28,7 @@ export const BaselineLabel = ({ entity }: { entity?: Entity }) => {
     <OverlayTrigger
       placement="top"
       overlay={
-        <Tooltip id="general.skip_question.description">
+        <Tooltip>
           <T token={"baseline.baseline"} />{" "}
           <T token={`baseline.support.${baselineStatus}`} />
         </Tooltip>
