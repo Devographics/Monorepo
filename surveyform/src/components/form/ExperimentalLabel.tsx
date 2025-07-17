@@ -20,7 +20,7 @@ export const ExperimentalLabel = ({ entity }: { entity?: Entity }) => {
       }
     >
       <span className="baseline-icon">
-        <ExperimentalIcon />
+        <ExperimentalIcon size="petite" />
       </span>
     </OverlayTrigger>
   );
