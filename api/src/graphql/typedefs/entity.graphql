@@ -66,6 +66,7 @@ type Entity {
     example: Example
     webFeaturesId: String
     webFeature: WebFeature
+    isExperimental: Boolean
 
     # for people
     avatar: Avatar

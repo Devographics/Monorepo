@@ -69,6 +69,7 @@ export interface Entity extends EntityResolvedFields {
 
     webFeaturesId?: string
     webFeature?: WebFeature
+    isExperimental?: boolean
 
     appearsIn: EntityAppearance[]
 

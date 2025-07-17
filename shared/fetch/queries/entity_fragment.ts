@@ -67,6 +67,7 @@ webFeature {
   description_html
   url
 }
+isExperimental
 tags
 ${
     isFull
