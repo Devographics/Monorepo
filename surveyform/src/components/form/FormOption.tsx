@@ -83,6 +83,11 @@ const OptionDescription = (props: FormOptionProps) => {
       // a matter of whether you recognize the name or not
       return null;
     }
+    if (entity?.tags?.includes("features")) {
+      // we don't need to show description for features since it's just
+      // a matter of whether you recognize the name or not
+      return null;
+    }
     return (
       <span
         className="form-option-description"

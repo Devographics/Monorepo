@@ -23,7 +23,7 @@ const MagicLinkHtml = ({
   survey?: SurveyMetadata;
   locale?: String;
 }) =>
-  `<h3>${survey?.name}</h3>
+  `<h3>Devographics</h3>
   <p><a href="${magicLink}">Log in to the survey.</a></p>`;
 
 export const magicLinkEmailParameters = ({
@@ -37,8 +37,8 @@ export const magicLinkEmailParameters = ({
 }): Partial<Mail.Options> => {
   return {
     // TODO: customize with current survey?
-    subject: `${survey?.name}: Log in to your account`,
-    text: `Click this link to log in to the ${survey?.name} survey: ${magicLink}.`,
+    subject: `Devographics: Log in to your account`,
+    text: `Click this link to log in to Devographics surveys: ${magicLink}.`,
     html: MagicLinkHtml({ magicLink, survey, locale }),
   };
 };
