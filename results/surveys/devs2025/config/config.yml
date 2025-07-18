@@ -3,8 +3,8 @@ translationContexts: [homepage, common, results, countries, state_of_devs, devs2
 baseUrl: http://localhost:8001
 # baseUrl: http://localhost:9000
 sitemap: ../../../.logs/flat_sitemap.yml
-bannerId: general.devs2025.css2025_banner
-bannerLink: https://survey.devographics.com/en-US/survey/state-of-css/2025?source=devs2025_banner
-bannerBg: '#3A163C'
-bannerText: '#EBC4ED'
-bannerButton: '#D068D5'
+# bannerId: general.devs2025.css2025_banner
+# bannerLink: https://survey.devographics.com/en-US/survey/state-of-css/2025?source=devs2025_banner
+# bannerBg: '#3A163C'
+# bannerText: '#EBC4ED'
+# bannerButton: '#D068D5'
