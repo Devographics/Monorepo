@@ -5,7 +5,7 @@ import { captureException } from "@sentry/nextjs";
 // consistent manner for all routes
 export const getApiRouteHandler =
   (routeName: string, action: (body: any) => any) =>
-  async (req: NextRequest, res: NextResponse) => {
+  async (req: NextRequest) => {
     console.log(`// ${routeName}`);
     try {
       // Get body data as JSON
