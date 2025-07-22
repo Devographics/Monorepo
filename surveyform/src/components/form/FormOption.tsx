@@ -78,7 +78,10 @@ const OptionDescription = (props: FormOptionProps) => {
     );
   } else if (entityDescription) {
     // 3. entity has a hardcoded description
-    if (entity?.tags?.includes("libraries")) {
+    if (
+      entity?.tags?.includes("libraries") ||
+      entity?.tags?.includes("languages")
+    ) {
       // we don't need to show description for libraries since it's just
       // a matter of whether you recognize the name or not
       return null;
