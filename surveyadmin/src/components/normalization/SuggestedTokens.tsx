@@ -13,7 +13,7 @@ import { ResponseId } from "./Answers";
 
 type SuggestedToken = CustomNormalizationDocument & {
   id: string;
-  answer: IndividualAnswer;
+  answer?: IndividualAnswer;
 };
 
 export const getAnswer = (
@@ -160,9 +160,7 @@ const Token = (props: {
       <td>
         <ResponseId id={customNormId} />
       </td>
-      <td>
-        <FieldValue raw={answer.raw} />
-      </td>
+      <td>{answer?.raw && <FieldValue raw={answer.raw} />}</td>
       <td>
         <NormTokenAction
           id={id}

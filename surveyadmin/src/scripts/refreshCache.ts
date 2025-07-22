@@ -3,8 +3,12 @@ import {
   refreshLocalesCache as refreshLocalesCache_,
 } from "@devographics/fetch";
 
-export const refreshSurveysCache = refreshSurveysCache_;
+export const refreshSurveysCache = () => {
+  return refreshSurveysCache_({});
+};
 refreshSurveysCache.category = "utilities";
 
-export const refreshLocalesCache = refreshLocalesCache_;
+export const refreshLocalesCache = () => {
+  return refreshLocalesCache_({});
+};
 refreshLocalesCache.category = "utilities";

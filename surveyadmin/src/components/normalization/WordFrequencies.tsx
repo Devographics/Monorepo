@@ -8,8 +8,8 @@ import {
 } from "./NormalizeQuestion";
 import { apiRoutes } from "~/lib/apiRoutes";
 import { ActionProps } from "./NormalizeQuestionActions";
-import { FrequencyItem } from "~/lib/normalization/actions/getWordFrequencies";
 import { Dispatch, SetStateAction } from "react";
+import { FrequencyItem } from "@devographics/helpers";
 
 export const WordFrequencies = (props: ActionProps) => {
   return (

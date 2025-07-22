@@ -145,7 +145,7 @@ const Question = ({
     <tr>
       <th>{index + 1}.</th>
       <th>
-        {question.section.id}/
+        {question?.sectionId}/
         <Link
           href={routes.admin.normalization.href({
             surveyId: survey.id,
