@@ -18,6 +18,7 @@ hljs.registerLanguage('css', css)
 hljs.registerLanguage('graphql', graphql)
 hljs.registerLanguage('json', json)
 import trim from 'lodash/trim.js'
+import { cleanHtmlString } from '../helpers/locales'
 
 // entities
 
@@ -69,9 +70,7 @@ export const parseEntitiesMarkdown = (entities: Entity[]) => {
 
                 if (field !== fieldHtml || containsTagRegex.test(field)) {
                     entity[`${fieldName}Html`] = sanitizeHtml(fieldHtml)
-                    entity[`${fieldName}Clean`] = sanitizeHtml(fieldHtml, {
-                        allowedTags: []
-                    })
+                    entity[`${fieldName}Clean`] = cleanHtmlString(fieldHtml)
                         .replace(htmlEntitiesRegex, '')
                         .replace('\n', '')
                 } else {

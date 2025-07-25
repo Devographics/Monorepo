@@ -87,9 +87,28 @@ export const resolveAliases = (stringFile: StringFile, localeRawData: RawLocale,
 
 /*
 
+Input: HTML string such as <code>&lt;svg&gt;</code>
+
+0. original md string: `<svg>` was converted to HTML to remove md formatting
+
+1. first sanitize input to remove <code> </code>
+
+2. then transform &lt;svg&gt; to <svg>
+
+*/
+export const cleanHtmlString = (s: string) =>
+    decode(
+        sanitizeHtml(s, {
+            allowedTags: []
+        })
+    )
+
+/*
+
 Parse a string file and add parsed markdown versions where needed
 
 */
+
 export const parseMarkdown = (stringFile: StringFile) => {
     stringFile.strings = stringFile.strings.map((s: TranslationStringObject) => {
         const str = String(s.t).trim()
@@ -102,6 +121,7 @@ export const parseMarkdown = (stringFile: StringFile) => {
         tHtml = tHtml.replaceAll('%7B', `{`)
         tHtml = tHtml.replaceAll('%7D', `}`)
         const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
+
         // if markdown-parsed version of the string is different from original,
         // or original contains one or more HTML tags, add it as HTML
         if (tHtml !== s.t || containsTagRegex.test(s.t)) {
@@ -113,11 +133,7 @@ export const parseMarkdown = (stringFile: StringFile) => {
                     '*': ['aria-hidden', 'href', 'name', 'target']
                 }
             })
-            s.tClean = decode(
-                sanitizeHtml(tHtml, {
-                    allowedTags: []
-                })
-            )
+            s.tClean = cleanHtmlString(tHtml)
         }
         return s
     })
