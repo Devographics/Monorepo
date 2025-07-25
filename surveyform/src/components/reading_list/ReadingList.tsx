@@ -67,14 +67,15 @@ export const ReadingList = (props: FormLayoutProps) => {
 
   return (
     <div
-      className={`reading-list reading-list-summary ${animate ? "reading-list-animate" : ""
-        }`}
+      className={`reading-list reading-list-summary ${
+        animate ? "reading-list-animate" : ""
+      }`}
     >
       <h5 className="reading-list-title">
         <T token="readinglist.title" />
       </h5>
       <div className="reading-list-description">
-        <T token="readinglist.description" />
+        <T token="readinglist.description2" />
       </div>
       <ul className="reading-list-items">
         {cutoffReadingList.map((itemId) => {
@@ -97,9 +98,7 @@ export const ReadingList = (props: FormLayoutProps) => {
             setShowMore((showMore) => !showMore);
           }}
         >
-          <T
-            token={showMore ? "forms.less_options" : "forms.more_options"}
-          />
+          <T token={showMore ? "forms.less_options" : "forms.more_options"} />
         </Button>
       )}
     </div>

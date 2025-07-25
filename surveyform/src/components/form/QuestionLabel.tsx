@@ -20,7 +20,8 @@ export const QuestionLabel = ({
     variant,
   });
 
-  let labelClass = key === "entity" ? "entity-label" : "question-label";
+  let labelClass =
+    key === "entity" ? "question-label entity-label" : "question-label";
   labelClass += formatCode ? " label-html" : " label-plaintext";
   return formatCode ? (
     <span

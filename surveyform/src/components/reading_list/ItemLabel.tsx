@@ -5,7 +5,7 @@ import { useI18n } from "@devographics/react-i18n";
 import OptionLabel from "../form/OptionLabel";
 
 const ItemLabel = ({ entity }: { entity: EntityWithQuestion }) => {
-  const { t } = useI18n()
+  const { t } = useI18n();
   const { question, id } = entity;
   if (!question) {
     return null;
@@ -28,7 +28,7 @@ const ItemLabel = ({ entity }: { entity: EntityWithQuestion }) => {
 const QuestionItem = ({ question }) => {
   return (
     <QuestionLabel
-      formatCode={false}
+      formatCode={true}
       section={question.section}
       question={question}
     />

@@ -19,6 +19,7 @@ import {
   DbPaths,
   FeaturesOptions,
   OptionMetadata,
+  SentimentOptions,
   SimplifiedSentimentOptions,
 } from "@devographics/types";
 import without from "lodash/without.js";
@@ -27,6 +28,9 @@ import { FormInputProps } from "~/components/form/typings";
 import { Dispatch, SetStateAction } from "react";
 import isEmpty from "lodash/isEmpty";
 import { FormCheckInput } from "~/components/form/FormCheck";
+import { useFormStateContext } from "~/components/form/FormStateContext";
+import { useMessagesContext } from "~/components/common/UserMessagesContext";
+import { useQuestionTitle } from "~/lib/surveys/helpers/useQuestionTitle";
 
 export interface FollowupData {
   sentimentPath?: string;
@@ -50,6 +54,7 @@ export const FollowUps = (
   const {
     updateCurrentValues,
     option,
+    section,
     question,
     readOnly,
     path,
@@ -60,6 +65,13 @@ export const FollowUps = (
     optionIsChecked,
     followupMode = "radio",
   } = props;
+
+  const { response } = useFormStateContext();
+  const { addMessage } = useMessagesContext();
+
+  const title = useQuestionTitle({ section, question });
+  const { tHtml, tClean, t } = title;
+  const questionLabel = tHtml || tClean || t;
 
   const sentimentOptions = [
     { id: SimplifiedSentimentOptions.POSITIVE_SENTIMENT },
@@ -83,8 +95,12 @@ export const FollowUps = (
 
   const tabIndexProp = optionIsChecked ? {} : { tabIndex: -1 };
 
+  const readingList = response?.readingList || [];
+
+  const isAlreadyInList = readingList.includes(question.id);
+
   return sentimentOptions ? (
-    <fieldset className={`followups-v2 sentiments ${hasValueClass}`}>
+    <fieldset className={`followups-v3 sentiments ${hasValueClass}`}>
       <legend className="sr-only">
         <T token="followups.description.short" />
       </legend>
@@ -127,6 +143,24 @@ export const FollowUps = (
                   updateCurrentValues({ [path]: [...parentValue, option.id] });
                 }
 
+                const isInterested =
+                  [FeaturesOptions.NEVER_HEARD, FeaturesOptions.HEARD].includes(
+                    option.id as FeaturesOptions
+                  ) &&
+                  SimplifiedSentimentOptions.POSITIVE_SENTIMENT ===
+                    followupOption.id;
+
+                if (isInterested && isChecked && !isAlreadyInList) {
+                  updateCurrentValues({
+                    readingList: [...readingList, question.id],
+                  });
+                  addMessage({
+                    type: "success",
+                    bodyId: "readinglist.added_to_list",
+                    bodyValues: { label: questionLabel },
+                  });
+                }
+
                 if (followupMode === "checkbox") {
                   // checkbox version
                   const newValue = isChecked
@@ -141,24 +175,24 @@ export const FollowUps = (
                 }
 
                 // show reading list prompt if needed
-                const hasSeenPromptString = localStorage.getItem(
-                  "hasSeenReadingListPrompt"
-                );
-                const hasSeenPrompt =
-                  hasSeenPromptString && JSON.parse(hasSeenPromptString);
-                if (
-                  setHighlightReadingList &&
-                  setShowReadingListPrompt &&
-                  isChecked &&
-                  option.id === FeaturesOptions.HEARD &&
-                  followupOption.id ===
-                    SimplifiedSentimentOptions.POSITIVE_SENTIMENT &&
-                  !hasSeenPrompt
-                ) {
-                  setHighlightReadingList(true);
-                  setShowReadingListPrompt(true);
-                  localStorage.setItem("hasSeenReadingListPrompt", "true");
-                }
+                // const hasSeenPromptString = localStorage.getItem(
+                //   "hasSeenReadingListPrompt"
+                // );
+                // const hasSeenPrompt =
+                //   hasSeenPromptString && JSON.parse(hasSeenPromptString);
+                // if (
+                //   setHighlightReadingList &&
+                //   setShowReadingListPrompt &&
+                //   isChecked &&
+                //   option.id === FeaturesOptions.HEARD &&
+                //   followupOption.id ===
+                //     SimplifiedSentimentOptions.POSITIVE_SENTIMENT &&
+                //   !hasSeenPrompt
+                // ) {
+                //   setHighlightReadingList(true);
+                //   setShowReadingListPrompt(true);
+                //   localStorage.setItem("hasSeenReadingListPrompt", "true");
+                // }
               }}
             />
             <span className="sentiment-icon" aria-hidden={true} />
