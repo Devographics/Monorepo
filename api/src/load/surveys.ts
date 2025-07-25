@@ -299,7 +299,8 @@ export const loadSurveys = async () => {
 export const initSurveys = async ({ context }: { context: RequestContext }) => {
     console.log('// initializing surveys')
     const { surveys } = await loadOrGetSurveys({ context, forceReload: true })
-    logToFile('surveys.json', surveys, { mode: 'overwrite' })
+    // TODO: fix RangeError: Invalid string length error
+    // logToFile('surveys.json', surveys, { mode: 'overwrite' })
     allSurveys = surveys
     return surveys
 }
