@@ -6,6 +6,7 @@ import {
     MultiRatiosChartState,
     MultiRatiosChartValues
 } from '../types'
+import min from 'lodash/min'
 import max from 'lodash/max'
 import range from 'lodash/range'
 import sum from 'lodash/sum'
@@ -54,12 +55,19 @@ export const useChartValues = ({
                   .map(i => ({ value: i }))
                   .toReversed()
 
+    const tickValues = ticks.map(tick => tick.value)
+    const minValue = min(tickValues) || 0
+    const maxValue = max(tickValues) || 0
+
     const chartValues: MultiRatiosChartValues = {
         question,
         columnIds,
         totalColumns: columnIds.length,
         legendItems,
-        maxValue: max(ticks.map(tick => tick.value)) || 0,
+        minValue,
+        maxValue,
+        minTick: minValue,
+        maxTick: maxValue,
         ticks,
         columnAverages
     }

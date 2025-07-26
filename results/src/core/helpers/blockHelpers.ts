@@ -101,7 +101,6 @@ export const getBlockTitle = (options: {
     useShortLabel?: boolean
     useFullVersion?: boolean
 }) => {
-    let key, label
     const {
         block,
         pageContext,
@@ -110,6 +109,9 @@ export const getBlockTitle = (options: {
         useShortLabel,
         useFullVersion = true
     } = options
+    let key = block.id,
+        label = block.id
+
     let shortTitle
     const entity = entities?.find(e => e.id === block.id)
     const entityName = entity?.nameClean || entity?.name
