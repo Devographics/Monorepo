@@ -10,7 +10,7 @@ import {
     OVERLIMIT_ANSWERS
 } from '@devographics/constants'
 import { QuestionMetadata } from '@devographics/types'
-import { useTheme } from 'styled-components'
+import { DefaultTheme, useTheme } from 'styled-components'
 import colors from 'Theme/colors'
 
 export const neutralColor = '#ffffff44'
@@ -21,6 +21,8 @@ export type ColorScale = {
 }
 
 const otherBucketIds = [NO_ANSWER, NO_MATCH, CUTOFF_ANSWERS, OTHER_ANSWERS, OVERLIMIT_ANSWERS]
+
+export const getDistinctColor = (colors: string[], index: number) => colors[index % colors.length]
 
 export const useDefaultColorScale = () => {
     const theme = useTheme()
@@ -66,8 +68,7 @@ export const useColorScale = ({
                         if (otherBucketIds.includes(String(option.id))) {
                             colorScale[option.id] = [neutralColor, neutralColor]
                         } else {
-                            const color =
-                                theme.colors.distinct[index % theme.colors.distinct.length]
+                            const color = getDistinctColor(theme.colors.distinct, index)
                             colorScale[option.id] = [color, color]
                         }
                     })

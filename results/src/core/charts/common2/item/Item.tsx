@@ -14,13 +14,14 @@ import Button from 'core/components/Button'
 // import Popover from 'core/components/Popover'
 import Popover from 'core/components/Popover2'
 import { PeopleIcon, PeopleModal, services } from './People'
-import { FeatureModal } from './Feature'
+import { baselineStatuses, FeatureModal } from './Feature'
 import { LibraryModal } from './Library'
 import { FeatureIcon, LibraryIcon } from 'core/icons'
 import Tooltip from 'core/components/Tooltip'
 import { usePageContext } from 'core/helpers/pageContext'
 import T from 'core/i18n/T'
 import { SeriesMetadata } from '../types'
+import { BaselineIcon } from './BaselineIcon'
 
 const entityComponents = {
     [EntityType.PEOPLE]: { icon: PeopleIcon, modal: PeopleModal },
@@ -90,20 +91,17 @@ export const ChartItem = ({
     } else {
         const { icon: IconComponent, modal: ModalComponent } = entityComponents[entity.entityType]
 
-        const baseline = entity?.webFeature?.status?.baseline
         return (
             <Popover
                 trigger={
                     <Button
                         className={`button-round chart-item chart-item-entity chart-item-${entity.entityType}`}
                     >
-                        <IconComponent entity={entity} size="petite" />
-                        <Label label={labelObject} />
-                        {baseline && (
-                            <span className={`baseline-indicator baseline-indicator-${baseline}`}>
-                                <T k="baseline.baseline" /> <T k={`baseline.support.${baseline}`} />
-                            </span>
+                        {entity.entityType === EntityType.PEOPLE && (
+                            <IconComponent entity={entity} size="petite" />
                         )}
+                        <Label label={labelObject} />
+                        <BaselineIcon status={entity?.webFeature?.status?.baseline} />
                     </Button>
                 }
             >

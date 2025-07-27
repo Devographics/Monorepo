@@ -54,6 +54,13 @@ export * from './SortAsc'
 export * from './Document'
 export * from './Experimental'
 
+// browsers
+export * from './Chrome'
+export * from './Safari'
+export * from './Firefox'
+export * from './Edge'
+
+// sentiment
 export * from './Satisfaction'
 export * from './Appreciation'
 export * from './Interest'

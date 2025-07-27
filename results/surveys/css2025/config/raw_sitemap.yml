@@ -277,6 +277,8 @@
       - id: features_ratios_over_time
         template: multi_items_ratios
         tabId: blocks.tools_experience_ranking.percentages
+        chartOptions:
+            limit: 12
 
       - id: chris_coyier
         template: picks

@@ -66,6 +66,7 @@ export const getEntityFragment = () => `entity {
         group
         name
         spec
+        url
         status {
             baseline
             baseline_low_date

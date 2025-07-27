@@ -14,6 +14,7 @@ import { ModesEnum } from 'core/charts/multiItemsRatios/types'
 import { BlockVariantDefinition } from 'core/types'
 import { Dot } from './Dot'
 import { LineSegment } from './LineSegment'
+import { getDistinctColor } from 'core/charts/common2/helpers/colors'
 
 export type LineComponentProps<
     SerieData,
@@ -67,7 +68,7 @@ export const Line = <SerieData, PointData extends BasicPointData, ChartStateType
     }
 
     const lineColor = hasMultiple
-        ? theme.colors.distinct[lineIndex]
+        ? getDistinctColor(theme.colors.distinct, lineIndex)
         : theme.colors.barChart.primaryGradient[0]
     const style = {
         color: lineColor

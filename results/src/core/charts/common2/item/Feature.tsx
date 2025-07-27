@@ -3,13 +3,33 @@ import { LabelProps } from './types'
 import CodeExample from 'core/components/CodeExample'
 import { ItemLinks } from './People'
 import { Entity, WebFeature, WebFeatureSupport } from '@devographics/types'
-import { ChromeIcon } from 'core/icons/Chrome'
-import { EdgeIcon } from 'core/icons/Edge'
-import { FirefoxIcon } from 'core/icons/Firefox'
-import { SafariIcon } from 'core/icons/Safari'
 import './Feature.scss'
 import T from 'core/i18n/T'
-import { CheckIcon, CloseIcon } from 'core/icons'
+import {
+    CheckIcon,
+    CloseIcon,
+    ChromeIcon,
+    EdgeIcon,
+    FirefoxIcon,
+    SafariIcon,
+    LimitedAvailability,
+    NewlyAvailable,
+    WidelyAvailable
+} from '@devographics/icons'
+import { BaselineIcon } from './BaselineIcon'
+
+export const browsers: Array<{ id: keyof WebFeatureSupport; icon: React.ReactNode }> = [
+    { id: 'chrome', icon: ChromeIcon },
+    { id: 'edge', icon: EdgeIcon },
+    { id: 'firefox', icon: FirefoxIcon },
+    { id: 'safari', icon: SafariIcon }
+]
+
+export const baselineStatuses = {
+    high: { icon: WidelyAvailable, id: 'widely_available' },
+    low: { icon: NewlyAvailable, id: 'newly_available' },
+    false: { icon: LimitedAvailability, id: 'limited_availability' }
+}
 
 export const FeatureModal = ({ entity }: LabelProps) => (
     <div>
@@ -31,7 +51,7 @@ export const FeatureModal = ({ entity }: LabelProps) => (
 
         {entity.webFeature && (
             <>
-                <WebFeatureData data={entity.webFeature} />
+                <WebFeatureData entity={entity} />
                 {/* <baseline-status featureId={entity.webFeature.id}></baseline-status>
                 <pre>
                     <code>{JSON.stringify(entity.webFeature, null, 2)}</code>
@@ -41,30 +61,33 @@ export const FeatureModal = ({ entity }: LabelProps) => (
     </div>
 )
 
-const browsers: Array<{ id: keyof WebFeatureSupport; icon: React.ReactNode }> = [
-    { id: 'chrome', icon: ChromeIcon },
-    { id: 'edge', icon: EdgeIcon },
-    { id: 'firefox', icon: FirefoxIcon },
-    { id: 'safari', icon: SafariIcon }
-]
-
-const WebFeatureData = ({ data }: { data: WebFeature }) => {
+const WebFeatureData = ({ entity }: { entity: Entity }) => {
+    const { webFeature } = entity
+    if (!webFeature) {
+        return null
+    }
     return (
         <div className="baseline-data">
             <h4>
                 <T k="baseline.baseline" />{' '}
                 <span
-                    className={`baseline-indicator-text baseline-indicator-text-${data.status.baseline}`}
+                    className={`baseline-indicator-text baseline-indicator-text-${webFeature.status.baseline}`}
                 >
-                    <T k={`baseline.support.${data.status.baseline}`} />
+                    <T k={`baseline.support.${webFeature.status.baseline}`} />
                 </span>
+                {/* <BaselineIcon status={webFeature.status.baseline} /> */}
             </h4>
             <div className="baseline-support">
                 {browsers.map(({ id, icon }) => (
-                    <Browser key={id} id={id} icon={icon} support={data?.status?.support?.[id]} />
+                    <Browser
+                        key={id}
+                        id={id}
+                        icon={icon}
+                        support={webFeature?.status?.support?.[id]}
+                    />
                 ))}
             </div>
-            <a href="https://web-platform-dx.github.io/web-features/">
+            <a href={webFeature?.url}>
                 <T k="baseline.learn_more" />
             </a>
         </div>

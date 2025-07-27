@@ -4,6 +4,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { useTheme } from 'styled-components'
 import { getItemLabel } from 'core/helpers/labels'
 import { LegendItem } from './types'
+import { getDistinctColor } from './helpers/colors'
 
 export const Legend = <ChartStateType,>({
     items,
@@ -41,7 +42,7 @@ const Item = <ChartStateType,>({
     const { id, entity, label: label_, color } = item
 
     const { setHighlighted } = chartState
-    const lineColor = color || theme.colors.distinct[lineIndex]
+    const lineColor = color || getDistinctColor(theme.colors.distinct, lineIndex)
 
     const labelObject = getItemLabel({
         id,

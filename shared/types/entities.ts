@@ -129,7 +129,7 @@ export interface WebFeature {
 }
 
 export interface WebFeatureStatus {
-    baseline: string
+    baseline: 'high' | 'low' | 'false'
     baseline_low_date: string
     support: WebFeatureSupport
 }

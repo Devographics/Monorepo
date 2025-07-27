@@ -6,6 +6,12 @@
     h4 {
         margin: 0;
     }
+
+    .baseline-icon {
+        svg {
+            margin-left: 10px;
+        }
+    }
 }
 
 .baseline-support {
@@ -13,7 +19,6 @@
     align-items: center;
     gap: calc(var(--spacing) * 1.5);
 }
-
 .baseline-support-icon {
     position: relative;
     &-disabled {

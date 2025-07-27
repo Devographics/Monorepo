@@ -38,7 +38,7 @@ export const RowSingle = (props: RowComponentProps) => {
     }
 
     const getWidth = (widthValue: number) => {
-        return (100 * widthValue) / getTopBound(maxOverallValue)
+        return Math.min(100, (100 * widthValue) / getTopBound(maxOverallValue))
     }
 
     const gradient = theme.colors.barChart.primaryGradient
