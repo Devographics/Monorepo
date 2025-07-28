@@ -65,12 +65,14 @@ export const MultiItemsCategories = ({ block, chartState }: MultiItemsCategories
         }
     })
     return (
-        <Toggle
-            labelId="charts.filter_by"
-            handleSelect={handleSelect}
-            items={[allItem, ...items]}
-            hasDefault={true}
-        />
+        <div className="multi-items-categories">
+            <Toggle
+                labelId="charts.filter_by"
+                handleSelect={handleSelect}
+                items={[allItem, ...items]}
+                hasDefault={true}
+            />
+        </div>
     )
 }
 

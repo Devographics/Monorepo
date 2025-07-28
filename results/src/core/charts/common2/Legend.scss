@@ -46,6 +46,15 @@
     flex-shrink: 1;
     overflow: hidden;
 }
+.chart-legend-hasHighlight {
+    .chart-legend-item-notHighlighted {
+        opacity: 0.35;
+    }
+    .chart-legend-item-highlighted {
+        opacity: 1;
+    }
+}
+
 .legend-item-color {
     // display: none;
     background: linear-gradient(to left, var(--color1), var(--color2));

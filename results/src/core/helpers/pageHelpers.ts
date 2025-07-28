@@ -34,7 +34,7 @@ export const getPageLabel = ({
 }) => {
     const defaultKey = getPageLabelKey({ pageContext })
 
-    let label,
+    let label = defaultKey,
         key = defaultKey
 
     const defaultTitle = getString(defaultKey)?.t

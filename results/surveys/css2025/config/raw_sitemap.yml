@@ -276,6 +276,9 @@
       #   template: demographics
       - id: features_ratios_over_time
         template: multi_items_ratios
+        i18nNamespace: features
+        variables:
+            enableMultiSection: true
         tabId: blocks.tools_experience_ranking.percentages
         chartOptions:
             limit: 12

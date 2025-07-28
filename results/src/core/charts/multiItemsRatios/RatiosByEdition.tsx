@@ -22,6 +22,7 @@ import { viewDefinition } from './helpers/viewDefinition'
 import { VerticalBarSerieWrapper } from '../verticalBar2/VerticalBarSerieWrapper'
 import T from 'core/i18n/T'
 import './RatiosByEdition.scss'
+import SubsetControls, { getTopItems } from './SubsetControls'
 
 export interface RatiosByEditionProps extends BlockComponentProps {
     series: MultiRatioSerie[]
@@ -30,10 +31,14 @@ export interface RatiosByEditionProps extends BlockComponentProps {
 export const RatiosByEdition = (props: RatiosByEditionProps) => {
     // const { getString } = useI18n()
     const { block, series, question, pageContext, variant } = props
+    const { variables } = block
+    const enableMultiSection = variables?.enableMultiSection
+
+    const { i18nNamespace } = block
+
+    const chartState = useChartState(getDefaultState({ block, series, question }))
 
     const legendItems = uniqBy(series.map(serie => serie.data).flat(), item => item.id)
-
-    const chartState = useChartState(getDefaultState({ block }))
 
     const commonProps: CommonProps<MultiRatiosChartState> = {
         variant,
@@ -51,31 +56,62 @@ export const RatiosByEdition = (props: RatiosByEditionProps) => {
         <ChartWrapper
             block={block}
             question={question}
-            className="chart-vertical-bar chart-multi-ratios"
+            className={`chart-vertical-bar chart-multi-ratios ${
+                enableMultiSection ? 'chart-multi-ratios-multiSection' : ''
+            }`}
         >
             <>
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>
                 </pre> */}
 
-                <Legend chartState={chartState} items={legendItems} />
+                {!enableMultiSection && (
+                    <Legend
+                        chartState={chartState}
+                        items={legendItems}
+                        i18nNamespace={i18nNamespace}
+                    />
+                )}
+
                 <ChartControls
-                    left={<ModeSwitcher chartState={chartState} />}
+                    left={!enableMultiSection && <ModeSwitcher chartState={chartState} />}
                     right={<ViewSwitcher chartState={chartState} />}
                 />
 
-                <GridWrapper seriesCount={series.length}>
-                    {series.map((serie, serieIndex) => (
-                        <VerticalBarSerieWrapper
-                            key={serie.name}
-                            serie={serie}
-                            serieIndex={serieIndex}
-                            {...commonProps}
-                        >
-                            <Serie {...commonProps} serie={serie} legendItems={legendItems} />
-                        </VerticalBarSerieWrapper>
-                    ))}
-                </GridWrapper>
+                <RatioDescriptionNote chartState={chartState} />
+                {enableMultiSection && (
+                    <SubsetControls
+                        series={series}
+                        question={question}
+                        chartState={chartState}
+                        i18nNamespace={i18nNamespace}
+                        pageContext={pageContext}
+                    />
+                )}
+
+                <div className="chart-multi-ratios-content">
+                    <GridWrapper seriesCount={series.length}>
+                        {series.map((serie, serieIndex) => (
+                            <VerticalBarSerieWrapper
+                                key={serie.name}
+                                serie={serie}
+                                serieIndex={serieIndex}
+                                {...commonProps}
+                            >
+                                <RatiosByEditionSerie
+                                    {...commonProps}
+                                    serie={serie}
+                                    legendItems={legendItems}
+                                />
+                            </VerticalBarSerieWrapper>
+                        ))}
+                    </GridWrapper>
+                    <Legend
+                        chartState={chartState}
+                        items={legendItems}
+                        i18nNamespace={i18nNamespace}
+                    />
+                </div>
 
                 <Note block={block} />
 
@@ -92,13 +128,30 @@ export const RatiosByEdition = (props: RatiosByEditionProps) => {
     )
 }
 
-const Serie = (
+export const RatioDescriptionNote = (props: { chartState: MultiRatiosChartState }) => {
+    const { chartState } = props
+
+    const Icon = ratioViewsIcons[chartState.view]
+
+    return (
+        <div className="ratio-description chart-note">
+            <Icon />{' '}
+            <h4>
+                <T k={`ratios.${chartState.view}`} />:
+            </h4>{' '}
+            <T k={`ratios.${chartState.view}.description`} md={true} html={true} element="span" />
+        </div>
+    )
+}
+
+export const RatiosByEditionSerie = (
     props: CommonProps<MultiRatiosChartState> & {
         serie: MultiRatioSerie
         legendItems: LegendItem[]
     }
 ) => {
     const { serie, question, chartState, block, legendItems } = props
+    const { subset } = chartState
     const { getLineItems } = viewDefinition
     const lineItems = getLineItems({ serie, question, chartState })
 
@@ -113,22 +166,8 @@ const Serie = (
         viewDefinition
     }
 
-    const Icon = ratioViewsIcons[chartState.view]
-
     return (
         <>
-            <div className="ratio-description chart-note">
-                <Icon />{' '}
-                <h4>
-                    <T k={`ratios.${chartState.view}`} />:
-                </h4>{' '}
-                <T
-                    k={`ratios.${chartState.view}.description`}
-                    md={true}
-                    html={true}
-                    element="span"
-                />
-            </div>
             <Columns<StandardQuestionData[], EditionWithRankAndPointData, MultiRatiosChartState>
                 {...commonProps}
                 hasZebra={true}

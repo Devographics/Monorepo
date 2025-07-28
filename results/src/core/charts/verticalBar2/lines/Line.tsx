@@ -15,6 +15,7 @@ import { BlockVariantDefinition } from 'core/types'
 import { Dot } from './Dot'
 import { LineSegment } from './LineSegment'
 import { getDistinctColor } from 'core/charts/common2/helpers/colors'
+import { ChartStateWithHighlighted } from 'core/charts/common2/types'
 
 export type LineComponentProps<
     SerieData,
@@ -31,7 +32,11 @@ export type LineComponentProps<
     viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
 }
 
-export const Line = <SerieData, PointData extends BasicPointData, ChartStateType>(
+export const Line = <
+    SerieData,
+    PointData extends BasicPointData,
+    ChartStateType extends ChartStateWithHighlighted
+>(
     props: LineComponentProps<SerieData, PointData, ChartStateType>
 ) => {
     const {
@@ -49,7 +54,7 @@ export const Line = <SerieData, PointData extends BasicPointData, ChartStateType
     const { getString } = useI18n()
 
     const theme = useTheme()
-    const { highlighted, view, mode } = chartState
+    const { highlighted, setHighlighted, view, mode, subset } = chartState
     const { getPointValue } = viewDefinition
     const invertYAxis = mode === ModesEnum.RANK
     const {
@@ -67,9 +72,14 @@ export const Line = <SerieData, PointData extends BasicPointData, ChartStateType
         throw new Error(`getPointValue not defined for view ${view}`)
     }
 
-    const lineColor = hasMultiple
+    const isDisabled = subset && !subset.includes(id)
+
+    const lineColor = isDisabled
+        ? 'rgba(255,255,255)'
+        : hasMultiple
         ? getDistinctColor(theme.colors.distinct, lineIndex)
         : theme.colors.barChart.primaryGradient[0]
+
     const style = {
         color: lineColor
     }
@@ -122,9 +132,15 @@ export const Line = <SerieData, PointData extends BasicPointData, ChartStateType
         <g
             data-id={id}
             style={style}
-            className={`chart-line ${highlightIsActive ? 'chart-line-highlightActive' : ''} ${
-                isHighlighted ? 'chart-line-highlighted' : ''
-            }`}
+            className={`chart-line ${isDisabled ? 'chart-line-disabled' : 'chart-line-enabled'} ${
+                highlightIsActive ? 'chart-line-highlightActive' : ''
+            } ${isHighlighted ? 'chart-line-highlighted' : ''}`}
+            onMouseOver={() => {
+                setHighlighted(id)
+            }}
+            onMouseLeave={() => {
+                setHighlighted(null)
+            }}
         >
             {take(points, points.length - 1).map((point, i) => {
                 // line starts at the index for the current point

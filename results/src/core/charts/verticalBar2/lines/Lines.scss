@@ -53,6 +53,10 @@
 .chart-line-highlightActive {
     opacity: 0.25;
 }
+.chart-line-disabled {
+    opacity: 0.05;
+}
+
 .chart-line-highlighted {
     opacity: 1;
     .chart-line-segment {
