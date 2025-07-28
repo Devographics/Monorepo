@@ -8,14 +8,15 @@ import {
 } from '../types'
 import { Line } from './Line'
 import { useHeight, useWidth } from 'core/charts/common2/helpers'
-import { BlockVariantDefinition } from 'core/types'
+import { BlockVariantDefinition, PageContextValue } from 'core/types'
 
-type LinesComponentProps<SerieData, PointData extends BasicPointData, ChartStateType> = {
+export type LinesComponentProps<SerieData, PointData extends BasicPointData, ChartStateType> = {
     chartState: ChartStateType
     block: BlockVariantDefinition
     lineItems: LineItem<PointData>[]
     chartValues: VerticalBarChartValues
     viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
+    pageContext: PageContextValue
 }
 
 export const Lines = <SerieData, PointData extends BasicPointData, ChartStateType>(

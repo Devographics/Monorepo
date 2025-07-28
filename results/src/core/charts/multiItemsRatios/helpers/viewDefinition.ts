@@ -18,18 +18,14 @@ export const viewDefinition: VerticalBarViewDefinition<
     MultiRatiosChartState
 > = {
     getLineItems: ({ serie, chartState }) => {
-        const { view, subset } = chartState
+        const { view } = chartState
         const lineItems = serie.data
         const allYears = lineItems
             .map(item => item.responses.allEditions)
             .flat()
             .map(e => e.year)
         const startYear = min(allYears) ?? 0
-        // const lineItemsSubset = subset
-        //     ? lineItems.filter(item => subset.includes(item.id))
-        //     : lineItems
-        const lineItemsSubset = lineItems
-        const lineItemsWithRank = lineItemsSubset.map(lineItem => {
+        const lineItemsWithRank = lineItems.map(lineItem => {
             const itemAllEditions = getAllEditions(lineItem)
             return {
                 ...lineItem,

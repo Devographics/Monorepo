@@ -13,11 +13,11 @@ import { CustomVariant } from 'core/filters/helpers'
 import { Dispatch, SetStateAction } from 'react'
 
 export type ChartStateWithSubset = {
-    subset: Array<string | number> | null
-    setSubset: Dispatch<SetStateAction<Array<string | number> | null>>
+    subset: string | number | null
+    setSubset: Dispatch<SetStateAction<string | number | null>>
 }
 
-export type ChartStateWithHighlighted = {
+export type ChartStateWithHighlighted = ChartStateWithSubset & {
     highlighted: string | number | null
     setHighlighted: Dispatch<SetStateAction<string | number | null>>
 }

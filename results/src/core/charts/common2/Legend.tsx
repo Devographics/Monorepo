@@ -15,17 +15,16 @@ export const Legend = <ChartStateType extends ChartStateWithHighlighted>({
     chartState: ChartStateType
     i18nNamespace?: string
 }) => {
-    const { highlighted, subset } = chartState
+    const { highlighted } = chartState
     const hasHighlight = highlighted !== null
 
-    const itemsSubset = subset ? items.filter(item => subset.includes(item.id)) : items
     return (
         <div
             className={`chart-legend-2 chart-legend-${
                 hasHighlight ? 'hasHighlight' : 'noHighlight'
             }`}
         >
-            {itemsSubset.map((item, i) => (
+            {items.map((item, i) => (
                 <Item<ChartStateType>
                     key={item.id}
                     item={item}

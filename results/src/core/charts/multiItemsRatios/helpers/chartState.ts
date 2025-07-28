@@ -1,29 +1,18 @@
 import { useState } from 'react'
 import { BlockVariantDefinition } from 'core/types'
-import { ModesEnum, MultiRatiosChartState, MultiRatioSerie } from '../types'
-import { QuestionMetadata, RatiosEnum } from '@devographics/types'
-import { viewDefinition } from './viewDefinition'
-import { getTopItems } from '../SubsetControls'
+import { ModesEnum, MultiRatiosChartState } from '../types'
+import { RatiosEnum } from '@devographics/types'
+import { SubsetPresets } from './subsets'
 
-export const getDefaultState = ({
-    block,
-    series,
-    question
-}: {
-    block: BlockVariantDefinition
-    series: MultiRatioSerie[]
-    question: QuestionMetadata
-}) => {
-    const chartState = { view: RatiosEnum.USAGE, mode: ModesEnum.VALUE } as MultiRatiosChartState
+export const getDefaultState = ({ block }: { block: BlockVariantDefinition }) => {
     const { variables } = block
     const enableMultiSection = variables?.enableMultiSection
 
-    const { getLineItems } = viewDefinition
-    const items = getLineItems({ serie: series[0], question, chartState })
-
-    // if multiSection mode is enabled, we don't show all items
-    // instead we show the top 10 items by default
-    chartState.subset = enableMultiSection ? getTopItems(items).map(item => item.id) : null
+    const chartState = {
+        view: RatiosEnum.USAGE,
+        mode: ModesEnum.VALUE,
+        subset: enableMultiSection ? SubsetPresets.TOP_ITEMS : null
+    } as MultiRatiosChartState
 
     return chartState
 }

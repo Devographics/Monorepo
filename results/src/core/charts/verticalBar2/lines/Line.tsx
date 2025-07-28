@@ -1,36 +1,29 @@
 import React from 'react'
 import take from 'lodash/take'
 import { useTheme } from 'styled-components'
-import {
-    BasicPointData,
-    LineItem,
-    VerticalBarChartValues,
-    VerticalBarViewDefinition
-} from '../types'
+import { BasicPointData, LineItem } from '../types'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import { getQuestionLabel } from 'core/charts/common2/helpers/labels'
 import { ModesEnum } from 'core/charts/multiItemsRatios/types'
-import { BlockVariantDefinition } from 'core/types'
 import { Dot } from './Dot'
 import { LineSegment } from './LineSegment'
 import { getDistinctColor } from 'core/charts/common2/helpers/colors'
 import { ChartStateWithHighlighted } from 'core/charts/common2/types'
+import { getSubsetIds, subsetFunctions } from 'core/charts/multiItemsRatios/helpers/subsets'
+import { LinesComponentProps } from './Lines'
 
 export type LineComponentProps<
     SerieData,
     PointData extends BasicPointData,
     ChartStateType
-> = LineItem<PointData> & {
-    chartState: ChartStateType
-    chartValues: VerticalBarChartValues
-    block: BlockVariantDefinition
-    lineIndex: number
-    width: number
-    height: number
-    hasMultiple?: boolean
-    viewDefinition: VerticalBarViewDefinition<SerieData, PointData, ChartStateType>
-}
+> = LinesComponentProps<SerieData, PointData, ChartStateType> &
+    LineItem<PointData> & {
+        lineIndex: number
+        width: number
+        height: number
+        hasMultiple?: boolean
+    }
 
 export const Line = <
     SerieData,
@@ -49,10 +42,11 @@ export const Line = <
         lineIndex,
         width,
         height,
-        hasMultiple = false
+        hasMultiple = false,
+        lineItems,
+        pageContext
     } = props
     const { getString } = useI18n()
-
     const theme = useTheme()
     const { highlighted, setHighlighted, view, mode, subset } = chartState
     const { getPointValue } = viewDefinition
@@ -72,7 +66,9 @@ export const Line = <
         throw new Error(`getPointValue not defined for view ${view}`)
     }
 
-    const isDisabled = subset && !subset.includes(id)
+    const sections = pageContext?.currentEdition.sections
+    const subsetIds = getSubsetIds({ subset, lineItems, sections })
+    const isDisabled = subset && !subsetIds.includes(id)
 
     const lineColor = isDisabled
         ? 'rgba(255,255,255)'

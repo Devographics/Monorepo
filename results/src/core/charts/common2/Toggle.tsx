@@ -131,7 +131,7 @@ const DropdownItem = ({ item }: { item: ToggleItemType }) => {
     const { label, id, labelKey } = item
     return (
         <option value={id} data-key={labelKey}>
-            {label}
+            {label || labelKey}
         </option>
     )
 }
@@ -209,7 +209,7 @@ const SegmentedControlItem = ({
             {icon && <Icon size="petite" />}
             {gradient && <ItemColor gradient={gradient} />}
             <span className="legend-item-label" data-key={labelKey}>
-                {label}
+                {label || labelKey}
             </span>
             {/* <CellLabel label={shortLabel} /> */}
             {sortId && sortId === id && sortOrder && <SortIndicator sortOrder={sortOrder} />}

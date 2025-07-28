@@ -23,6 +23,7 @@ import { VerticalBarSerieWrapper } from '../verticalBar2/VerticalBarSerieWrapper
 import T from 'core/i18n/T'
 import './RatiosByEdition.scss'
 import SubsetControls, { getTopItems } from './SubsetControls'
+import { getSubsetIds } from './helpers/subsets'
 
 export interface RatiosByEditionProps extends BlockComponentProps {
     series: MultiRatioSerie[]
@@ -61,9 +62,9 @@ export const RatiosByEdition = (props: RatiosByEditionProps) => {
             }`}
         >
             <>
-                {/* <pre>
+                <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>
-                </pre> */}
+                </pre>
 
                 {!enableMultiSection && (
                     <Legend
@@ -89,29 +90,22 @@ export const RatiosByEdition = (props: RatiosByEditionProps) => {
                     />
                 )}
 
-                <div className="chart-multi-ratios-content">
-                    <GridWrapper seriesCount={series.length}>
-                        {series.map((serie, serieIndex) => (
-                            <VerticalBarSerieWrapper
-                                key={serie.name}
-                                serie={serie}
-                                serieIndex={serieIndex}
+                <GridWrapper seriesCount={series.length}>
+                    {series.map((serie, serieIndex) => (
+                        <VerticalBarSerieWrapper
+                            key={serie.name}
+                            serie={serie}
+                            serieIndex={serieIndex}
+                            {...commonProps}
+                        >
+                            <RatiosByEditionSerie
                                 {...commonProps}
-                            >
-                                <RatiosByEditionSerie
-                                    {...commonProps}
-                                    serie={serie}
-                                    legendItems={legendItems}
-                                />
-                            </VerticalBarSerieWrapper>
-                        ))}
-                    </GridWrapper>
-                    <Legend
-                        chartState={chartState}
-                        items={legendItems}
-                        i18nNamespace={i18nNamespace}
-                    />
-                </div>
+                                serie={serie}
+                                legendItems={legendItems}
+                            />
+                        </VerticalBarSerieWrapper>
+                    ))}
+                </GridWrapper>
 
                 <Note block={block} />
 
@@ -150,11 +144,11 @@ export const RatiosByEditionSerie = (
         legendItems: LegendItem[]
     }
 ) => {
-    const { serie, question, chartState, block, legendItems } = props
+    const { serie, question, chartState, block, legendItems, pageContext } = props
     const { subset } = chartState
     const { getLineItems } = viewDefinition
     const lineItems = getLineItems({ serie, question, chartState })
-
+    const { i18nNamespace, variables } = block
     const chartValues = useChartValues({ lineItems, chartState, block, question, legendItems })
 
     const { columnIds } = chartValues
@@ -166,8 +160,17 @@ export const RatiosByEditionSerie = (
         viewDefinition
     }
 
+    const sections = pageContext?.currentEdition.sections
+    const subsetIds = getSubsetIds({ subset, lineItems, sections })
+
+    const legendItemsSubset =
+        subsetIds.length > 0 ? legendItems.filter(item => subsetIds.includes(item.id)) : legendItems
+
+    console.log(legendItems)
+    console.log(subsetIds)
+    console.log(legendItemsSubset)
     return (
-        <>
+        <div className="chart-multi-ratios-content">
             <Columns<StandardQuestionData[], EditionWithRankAndPointData, MultiRatiosChartState>
                 {...commonProps}
                 hasZebra={true}
@@ -195,7 +198,15 @@ export const RatiosByEditionSerie = (
                     />
                 </>
             </Columns>
-        </>
+
+            {variables.enableMultiSection && (
+                <Legend
+                    chartState={chartState}
+                    items={legendItemsSubset}
+                    i18nNamespace={i18nNamespace}
+                />
+            )}
+        </div>
     )
 }
 
