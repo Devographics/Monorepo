@@ -125,8 +125,8 @@ export const Line = <
     return (
         <g
             data-id={id}
-            data-lineIndex={lineIndex}
-            data-subsetLineIndex={subsetLineIndex}
+            data-lineindex={lineIndex}
+            data-subsetlineindex={subsetLineIndex}
             style={style}
             className={`chart-line ${isDisabled ? 'chart-line-disabled' : 'chart-line-enabled'} ${
                 highlightIsActive ? 'chart-line-highlightActive' : ''

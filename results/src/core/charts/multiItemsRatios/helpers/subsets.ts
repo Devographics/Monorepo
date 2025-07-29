@@ -7,7 +7,9 @@ import intersection from 'lodash/intersection'
 const ITEMS_TO_KEEP = 10
 
 const getItemsSortedByValue = (items: LineItem<EditionWithRankAndPointData>[]) => {
-    return sortBy(items, item => item?.points?.at(-1)?.value)
+    // only consider items with points
+    const itemsWithPoints = items.filter(item => item.points.length > 0)
+    return sortBy(itemsWithPoints, item => item?.points?.at(-1)?.value)
 }
 export const getTopItems = (items: LineItem<EditionWithRankAndPointData>[]) => {
     return getItemsSortedByValue(items).toReversed().slice(0, ITEMS_TO_KEEP)
@@ -23,7 +25,7 @@ const getItemsSortedByDelta = (items: LineItem<EditionWithRankAndPointData>[]) =
     const itemsWithAtLeastTwoPoints = items.filter(item => item.points.length > 1)
     return sortBy(
         itemsWithAtLeastTwoPoints,
-        item => (item?.points?.at(-1)?.value || 0) - (item?.points?.at(0)?.value || 0)
+        item => (item?.points?.at(-1)?.value || 0) - (item?.points?.at(-2)?.value || 0)
     )
 }
 const getLargestIncrease = (items: LineItem<EditionWithRankAndPointData>[]) => {

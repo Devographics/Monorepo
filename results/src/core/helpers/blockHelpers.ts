@@ -50,7 +50,8 @@ export const getBlockTabTitle = ({
     getString: StringTranslator
     entities: Entity[]
 }) => {
-    let key, label
+    let key,
+        label = key
     if (block.tabId) {
         key = block.tabId
         label = getString(block.tabId)?.t || block.tabId
@@ -77,7 +78,7 @@ export const getBlockTabTitle = ({
             label = getString(key)?.t + ' ' + facetTitle
         } else {
             key = getBlockTitleKey({ block, pageContext })
-            label = getString(label)?.t
+            label = getString(key)?.t
         }
     }
     return { key, label }
@@ -109,14 +110,16 @@ export const getBlockTitle = (options: {
         useShortLabel,
         useFullVersion = true
     } = options
-    let key = block.id,
-        label = block.id
+
+    const defaultKey = getBlockKey({ block })
+
+    let key = defaultKey,
+        label = defaultKey
 
     let shortTitle
     const entity = entities?.find(e => e.id === block.id)
     const entityName = entity?.nameClean || entity?.name
     const specifiedTitle = block.titleId && getString(block.titleId)?.tClean
-    const defaultKey = getBlockKey({ block })
     const defaultTitle = getString(defaultKey)?.tClean
 
     if (useShortLabel) {

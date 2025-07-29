@@ -39,12 +39,12 @@ export const CommentsFilters = ({
                     <>
                         <FilterExperience
                             comments={comments}
-                            allComments={comments}
+                            allComments={allComments}
                             stateStuff={stateStuff}
                         />
                         <FilterSentiment
                             comments={comments}
-                            allComments={comments}
+                            allComments={allComments}
                             stateStuff={stateStuff}
                         />
                     </>
