@@ -38,24 +38,33 @@ export const getChartCurrentEdition = ({ serie }: { serie: DataSeries<StandardQu
     return subFieldObject?.allEditions?.at(-1) || subFieldObject?.currentEdition
 }
 
+export const getChartPreviousEdition = ({ serie }: { serie: DataSeries<StandardQuestionData> }) => {
+    const subFieldObject = getSubfieldObject(serie)
+    return subFieldObject?.allEditions?.at(-2)
+}
+
 const getDataFilters = (dataFilters: string[]) =>
     dataFilters.map(filterName => allDataFilters[filterName])
 
 export const getChartBuckets = ({
     serie,
     block,
-    chartState
+    chartState,
+    usePreviousEdition = false
 }: {
     serie: DataSeries<StandardQuestionData>
     block: BlockVariantDefinition
     chartState: HorizontalBarChartState
+    usePreviousEdition?: boolean
 }) => {
     const { view, sort, facet, order, rowsLimit } = chartState
     const { viewDefinition } = chartState
     const { dataFilters: viewDataFilters, getValue } = viewDefinition
-    const currentEdition = getChartCurrentEdition({ serie, block })
+    const edition = usePreviousEdition
+        ? getChartPreviousEdition({ serie })
+        : getChartCurrentEdition({ serie })
 
-    let buckets = currentEdition.buckets
+    let buckets = edition.buckets
 
     const { chartOptions = {} } = block
     const { dataFilters: blockDataFilters } = chartOptions

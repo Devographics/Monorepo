@@ -34,7 +34,7 @@ export const getSerieFragment = ({
     }
 
     const queryArgsString = getQueryArgsString(queryArgs)
-    const editionType = allEditions ? 'allEditions' : 'currentEdition'
+    const editionType = allEditions ? 'allEditions' : 'allEditions(editionCount: 2)'
 
     const questionIdString = name ? `${name}: ${questionId}` : questionId
 
@@ -46,7 +46,7 @@ export const getSerieFragment = ({
             ${subField}${queryArgsString} {
             ${editionType} {
                 ${getResponseMetadataFragment()}
-                ${allEditions ? getAllEditionsFragment() : ''}
+                ${getAllEditionsFragment()}
                 completion {
                     count
                     percentageSurvey

@@ -4,6 +4,7 @@ import { DataSeries } from 'core/filters/types'
 import {
     getChartBuckets,
     getChartCurrentEdition,
+    getChartPreviousEdition,
     getSerieMetadata,
     getSerieMetadataProps
 } from './helpers/other'
@@ -40,7 +41,25 @@ export const HorizontalBarSerie = (
 
     let buckets = getChartBuckets({ serie, block, chartState })
 
-    let otherBuckets = otherSerie && getChartBuckets({ serie: otherSerie, block, chartState })
+    let otherBuckets
+    const previousEdition = getChartPreviousEdition({ serie })
+
+    // the "other buckets" we want to compare with come from…
+    if (otherSerie) {
+        // …a different serie altogether
+        otherBuckets = getChartBuckets({ serie: otherSerie, block, chartState })
+    } else if (previousEdition) {
+        // …the same serie, but the previosu year
+        otherBuckets = getChartBuckets({
+            serie,
+            block,
+            chartState,
+            usePreviousEdition: true
+        })
+        console.log(serie.name)
+        console.log(buckets)
+        console.log(otherBuckets)
+    }
 
     const viewDefinition = getViewDefinition(chartState.view)
 
