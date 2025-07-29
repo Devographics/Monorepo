@@ -20,9 +20,11 @@ export type LineComponentProps<
 > = LinesComponentProps<SerieData, PointData, ChartStateType> &
     LineItem<PointData> & {
         lineIndex: number
+        subsetLineIndex: number
         width: number
         height: number
         hasMultiple?: boolean
+        isDisabled: boolean
     }
 
 export const Line = <
@@ -40,11 +42,11 @@ export const Line = <
         viewDefinition,
         points,
         lineIndex,
+        subsetLineIndex,
         width,
         height,
         hasMultiple = false,
-        lineItems,
-        pageContext
+        isDisabled
     } = props
     const { getString } = useI18n()
     const theme = useTheme()
@@ -66,14 +68,10 @@ export const Line = <
         throw new Error(`getPointValue not defined for view ${view}`)
     }
 
-    const sections = pageContext?.currentEdition.sections
-    const subsetIds = getSubsetIds({ subset, lineItems, sections })
-    const isDisabled = subset && !subsetIds.includes(id)
-
     const lineColor = isDisabled
         ? 'rgba(255,255,255)'
         : hasMultiple
-        ? getDistinctColor(theme.colors.distinct, lineIndex)
+        ? getDistinctColor(theme.colors.distinct, subsetLineIndex)
         : theme.colors.barChart.primaryGradient[0]
 
     const style = {
@@ -127,6 +125,8 @@ export const Line = <
     return (
         <g
             data-id={id}
+            data-lineIndex={lineIndex}
+            data-subsetLineIndex={subsetLineIndex}
             style={style}
             className={`chart-line ${isDisabled ? 'chart-line-disabled' : 'chart-line-enabled'} ${
                 highlightIsActive ? 'chart-line-highlightActive' : ''

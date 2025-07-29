@@ -9,6 +9,7 @@ import {
 import { Line } from './Line'
 import { useHeight, useWidth } from 'core/charts/common2/helpers'
 import { BlockVariantDefinition, PageContextValue } from 'core/types'
+import { getSubsetIds } from 'core/charts/multiItemsRatios/helpers/subsets'
 
 export type LinesComponentProps<SerieData, PointData extends BasicPointData, ChartStateType> = {
     chartState: ChartStateType
@@ -22,13 +23,23 @@ export type LinesComponentProps<SerieData, PointData extends BasicPointData, Cha
 export const Lines = <SerieData, PointData extends BasicPointData, ChartStateType>(
     props: LinesComponentProps<SerieData, PointData, ChartStateType>
 ) => {
-    const { lineItems, chartState } = props
+    const { lineItems, chartState, pageContext } = props
 
     // since SVG doesn't support z-index, we need to put any highlighted line last in the
     // DOM to make sure it appears above the others
-    const { highlighted } = chartState
+    const { highlighted, subset } = chartState
 
-    const itemsWithIndex = lineItems.map((lineItem, i) => ({ ...lineItem, lineIndex: i }))
+    const sections = pageContext?.currentEdition.sections
+    const subsetIds = getSubsetIds({ subset, lineItems, sections })
+
+    const itemsWithIndex = lineItems.map((lineItem, i) => ({
+        ...lineItem,
+        lineIndex: i,
+        // index within the subset of enabled lines
+        subsetLineIndex: subset ? subsetIds.indexOf(lineItem.id) : i,
+        isDisabled: subset && !subsetIds.includes(lineItem.id)
+    }))
+    console.log(itemsWithIndex)
     const regularItems = itemsWithIndex.filter(lineItem => lineItem.id !== highlighted)
     const highlightedItem = itemsWithIndex.filter(lineItem => lineItem.id === highlighted)
 
@@ -36,6 +47,7 @@ export const Lines = <SerieData, PointData extends BasicPointData, ChartStateTyp
     const width = useWidth(ref)
     const height = useHeight(ref)
     const commonProps = { ...props, hasMultiple: lineItems.length > 1 }
+
     return (
         <div className="chart-lines-wrapper" ref={ref}>
             {height && width && (

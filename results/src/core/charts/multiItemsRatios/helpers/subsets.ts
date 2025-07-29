@@ -4,7 +4,7 @@ import sortBy from 'lodash/sortBy'
 import { SectionMetadata } from '@devographics/types'
 import intersection from 'lodash/intersection'
 
-const ITEMS_TO_KEEP = 12
+const ITEMS_TO_KEEP = 10
 
 const getItemsSortedByValue = (items: LineItem<EditionWithRankAndPointData>[]) => {
     return sortBy(items, item => item?.points?.at(-1)?.value)
@@ -13,7 +13,10 @@ export const getTopItems = (items: LineItem<EditionWithRankAndPointData>[]) => {
     return getItemsSortedByValue(items).toReversed().slice(0, ITEMS_TO_KEEP)
 }
 const getBottomItems = (items: LineItem<EditionWithRankAndPointData>[]) => {
-    return getItemsSortedByValue(items).slice(0, ITEMS_TO_KEEP)
+    const sortedItems = getItemsSortedByValue(items).slice(0, ITEMS_TO_KEEP)
+    // we always return items sorted by current year value descending
+    // to help sort legend in a way that visually matches the chart
+    return sortedItems.toReversed()
 }
 
 const getItemsSortedByDelta = (items: LineItem<EditionWithRankAndPointData>[]) => {
@@ -24,10 +27,16 @@ const getItemsSortedByDelta = (items: LineItem<EditionWithRankAndPointData>[]) =
     )
 }
 const getLargestIncrease = (items: LineItem<EditionWithRankAndPointData>[]) => {
-    return getItemsSortedByDelta(items).toReversed().slice(0, ITEMS_TO_KEEP)
+    const sortedItems = getItemsSortedByDelta(items).toReversed().slice(0, ITEMS_TO_KEEP)
+    // we always return items sorted by current year value descending
+    // to help sort legend in a way that visually matches the chart
+    return getItemsSortedByValue(sortedItems).toReversed()
 }
 const getLargestDecrease = (items: LineItem<EditionWithRankAndPointData>[]) => {
-    return getItemsSortedByDelta(items).slice(0, ITEMS_TO_KEEP)
+    const sortedItems = getItemsSortedByDelta(items).slice(0, ITEMS_TO_KEEP)
+    // we always return items sorted by current year value descending
+    // to help sort legend in a way that visually matches the chart
+    return getItemsSortedByValue(sortedItems).toReversed()
 }
 
 export enum SubsetPresets {
@@ -59,10 +68,13 @@ export const getSubsetIds = ({
         const subsetSection = sections.find(section => section.id === subset)
         const subsetFunction = subsetFunctions[subset]
         if (subsetSection) {
-            return intersection(
-                subsetSection.questions.map(q => q.id),
-                lineItems.map(item => item.id)
+            // sort by current year value, descending
+            const allSortedItems = getItemsSortedByValue(lineItems).toReversed()
+            const sectionItems = intersection(
+                allSortedItems.map(item => item.id),
+                subsetSection.questions.map(q => q.id)
             )
+            return sectionItems
         } else if (subsetFunction) {
             return subsetFunction(lineItems).map(item => item.id)
         } else {

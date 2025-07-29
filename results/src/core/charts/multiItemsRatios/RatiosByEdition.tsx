@@ -22,7 +22,7 @@ import { viewDefinition } from './helpers/viewDefinition'
 import { VerticalBarSerieWrapper } from '../verticalBar2/VerticalBarSerieWrapper'
 import T from 'core/i18n/T'
 import './RatiosByEdition.scss'
-import SubsetControls, { getTopItems } from './SubsetControls'
+import SubsetControls from './SubsetControls'
 import { getSubsetIds } from './helpers/subsets'
 
 export interface RatiosByEditionProps extends BlockComponentProps {
@@ -62,31 +62,21 @@ export const RatiosByEdition = (props: RatiosByEditionProps) => {
             }`}
         >
             <>
-                <pre>
+                {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>
-                </pre>
+                </pre> */}
 
-                {!enableMultiSection && (
-                    <Legend
-                        chartState={chartState}
-                        items={legendItems}
+                {enableMultiSection ? (
+                    <SubsetModeHeading
+                        {...commonProps}
+                        legendItems={legendItems}
                         i18nNamespace={i18nNamespace}
                     />
-                )}
-
-                <ChartControls
-                    left={!enableMultiSection && <ModeSwitcher chartState={chartState} />}
-                    right={<ViewSwitcher chartState={chartState} />}
-                />
-
-                <RatioDescriptionNote chartState={chartState} />
-                {enableMultiSection && (
-                    <SubsetControls
-                        series={series}
-                        question={question}
-                        chartState={chartState}
+                ) : (
+                    <RegularModeHeading
+                        {...commonProps}
+                        legendItems={legendItems}
                         i18nNamespace={i18nNamespace}
-                        pageContext={pageContext}
                     />
                 )}
 
@@ -119,6 +109,42 @@ export const RatiosByEdition = (props: RatiosByEditionProps) => {
                 />
             </>
         </ChartWrapper>
+    )
+}
+
+type HeadingProps = CommonProps<MultiRatiosChartState> & {
+    legendItems: LegendItem[]
+    i18nNamespace?: string
+}
+
+export const RegularModeHeading = (props: HeadingProps) => {
+    const { chartState, legendItems, i18nNamespace } = props
+    return (
+        <>
+            <Legend chartState={chartState} items={legendItems} i18nNamespace={i18nNamespace} />
+            <ChartControls
+                left={<ModeSwitcher chartState={chartState} />}
+                right={<ViewSwitcher chartState={chartState} />}
+            />
+            <RatioDescriptionNote chartState={chartState} />
+        </>
+    )
+}
+
+export const SubsetModeHeading = (props: HeadingProps) => {
+    const { chartState, series, question, i18nNamespace, pageContext } = props
+    return (
+        <>
+            <ChartControls right={<ViewSwitcher chartState={chartState} />} />
+            <RatioDescriptionNote chartState={chartState} />
+            <SubsetControls
+                series={series}
+                question={question}
+                chartState={chartState}
+                i18nNamespace={i18nNamespace}
+                pageContext={pageContext}
+            />
+        </>
     )
 }
 
@@ -162,13 +188,15 @@ export const RatiosByEditionSerie = (
 
     const sections = pageContext?.currentEdition.sections
     const subsetIds = getSubsetIds({ subset, lineItems, sections })
+    let legendItemsSubset = legendItems
+    if (subsetIds.length > 0) {
+        // only keep items in subset
+        // and also make sure legend is sorted in same order as subset ids
+        legendItemsSubset = legendItems
+            .filter(item => subsetIds.includes(item.id))
+            .toSorted((a, b) => subsetIds.indexOf(a.id) - subsetIds.indexOf(b.id))
+    }
 
-    const legendItemsSubset =
-        subsetIds.length > 0 ? legendItems.filter(item => subsetIds.includes(item.id)) : legendItems
-
-    console.log(legendItems)
-    console.log(subsetIds)
-    console.log(legendItemsSubset)
     return (
         <div className="chart-multi-ratios-content">
             <Columns<StandardQuestionData[], EditionWithRankAndPointData, MultiRatiosChartState>
@@ -199,7 +227,7 @@ export const RatiosByEditionSerie = (
                 </>
             </Columns>
 
-            {variables.enableMultiSection && (
+            {variables?.enableMultiSection && (
                 <Legend
                     chartState={chartState}
                     items={legendItemsSubset}
