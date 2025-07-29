@@ -73,7 +73,6 @@
 #   path: /explorer
 #   blocks:
 #       - template: page_introduction
-
 #       - id: data_explorer
 #         showTitle: false
 #         chartOnly: true
@@ -83,6 +82,378 @@
 #         variables:
 #             xAxis: user_info__yearly_salary
 #             yAxis: user_info__years_of_experience
+- id: features
+  path: /features
+  descriptionId: sections.features.description.css2024
+  blocks:
+      - template: page_introduction
+
+      - id: all_features
+        template: multi_items_experience
+        i18nNamespace: features
+        chartOptions:
+            limit: 5
+            categories:
+                [
+                    layout,
+                    shapes_graphics,
+                    colors,
+                    interactions,
+                    typography,
+                    accessibility,
+                    math_features,
+                    other_features
+                ]
+
+      # - id: knowledge_score
+      #   template: demographics
+      - id: features_ratios_over_time
+        template: multi_items_ratios
+        i18nNamespace: features
+        variables:
+            enableMultiSection: true
+
+      - id: chris_coyier
+        template: picks
+        variables:
+            url: https://web.dev/
+
+      - id: layout_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: layout
+        chartOptions:
+            limit: 5
+
+      - id: shapes_graphics_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: shapes_graphics
+        chartOptions:
+            limit: 5
+
+      - id: colors_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: colors
+        chartOptions:
+            limit: 5
+
+      - id: interactions_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: interactions
+        chartOptions:
+            limit: 5
+
+      - id: typography_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: typography
+        chartOptions:
+            limit: 5
+
+      - id: math_features_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: math_features
+        chartOptions:
+            limit: 5
+
+      - id: other_features_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: other_features
+        chartOptions:
+            limit: 5
+
+      # - id: layout_pain_points
+      #   titleId: features.pain_points
+      #   tabId: features.layout
+      #   template: multiple_options2_freeform
+      #   i18nNamespace: features
+      #   queryOptions:
+      #       sectionId: layout
+      #   variants:
+      #       - id: shapes_graphics_pain_points
+      #         tabId: features.shapes_graphics
+      #         template: multiple_options2_freeform
+      #         i18nNamespace: features
+      #         queryOptions:
+      #             sectionId: shapes_graphics
+      #       - id: colors_pain_points
+      #         tabId: features.colors
+      #         template: multiple_options2_freeform
+      #         i18nNamespace: features
+      #         queryOptions:
+      #             sectionId: colors
+      #       - id: interactions_pain_points
+      #         tabId: features.interactions
+      #         template: multiple_options2_freeform
+      #         i18nNamespace: features
+      #         queryOptions:
+      #             sectionId: interactions
+      #       - id: typography_pain_points
+      #         tabId: features.typography
+      #         template: multiple_options2_freeform
+      #         i18nNamespace: features
+      #         queryOptions:
+      #             sectionId: typography
+      #       - id: math_features_pain_points
+      #         tabId: features.math_features
+      #         template: multiple_options2_freeform
+      #         i18nNamespace: features
+      #         queryOptions:
+      #             sectionId: math_features
+      #       - id: other_features_pain_points
+      #         tabId: features.other_features
+      #         template: multiple_options2_freeform
+      #         i18nNamespace: features
+      #         queryOptions:
+      #             sectionId: other_features
+
+      - id: reading_list
+        template: multiple_options2
+        parameters:
+            limit: 20
+        queryOptions:
+            sectionId: reading_list
+            addQuestionComments: false
+        chartOptions:
+            dataFilters: [removeOverLimit, removeNoAnswer]
+            limit: 10
+
+      - id: features_resources
+        items: [fm-cssvariables, fm-accessibility]
+        template: recommended_resources
+
+  # children:
+  #     - id: layout
+  #       path: /layout
+  #       blocks:
+  #           - id: layout_ratios
+  #             template: multi_items_ratios
+  #             i18nNamespace: features
+
+  #           - id: layout_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+
+  #     - id: shapes_graphics
+  #       path: /shapes-graphics
+  #       blocks:
+  #           - id: shapes_graphics_ratios
+  #             template: multi_items_ratios
+  #             i18nNamespace: features
+
+  #           - id: shapes_graphics_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+
+  #     - id: colors
+  #       path: /colors
+  #       blocks:
+  #           - id: colors_ratios
+  #             template: multi_items_ratios
+  #             i18nNamespace: features
+
+  #           - id: colors_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+
+  #     - id: interactions
+  #       path: /interactions
+  #       blocks:
+  #           - id: interactions_ratios
+  #             template: multi_items_ratios
+  #             i18nNamespace: features
+
+  #           - id: interactions_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+
+  #     - id: typography
+  #       path: /typography
+  #       blocks:
+  #           - id: typography_ratios
+  #             template: multi_items_ratios
+  #             i18nNamespace: features
+
+  #           - id: typography_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+
+  #     - id: math_features
+  #       path: /math
+  #       blocks:
+  #           - id: math_features_ratios
+  #             template: multi_items_ratios
+  #             i18nNamespace: features
+
+  #           - id: math_features_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+
+  #     - id: other_features
+  #       path: /other-features
+  #       blocks:
+  #           - id: other_features_ratios
+  #             template: multi_items_ratios
+  #             i18nNamespace: features
+
+  #           - id: other_features_pain_points
+  #             template: multiple_options2_freeform
+  #             i18nNamespace: features
+
+- id: other_tools
+  path: /other-tools
+  blocks:
+      - id: tools_others_intro
+        template: page_introduction
+
+      - id: css_frameworks
+        template: multiple_options2_combined
+        i18nNamespace: tools
+
+      - id: css_in_js
+        template: multiple_options2_combined
+        i18nNamespace: tools
+
+      - id: temani_afif
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/@property
+
+      - id: pre_post_processors
+        template: multiple_options2_combined
+        i18nNamespace: tools
+
+      - id: utilities
+        template: multiple_options2_combined
+        i18nNamespace: tools
+
+      - id: josh_comeau
+        template: picks
+        variables:
+            url: https://css-articles.com/
+
+      - id: browsers
+        template: multiple_options2_combined
+        i18nNamespace: tools
+
+      - id: other_tools_resources
+        items: [fm-gridsflexbox, fm-practicallayouts]
+        template: recommended_resources
+
+- id: usage
+  descriptionId: sections.usage.description.css2024
+  intlId: usage_css
+  path: /usage
+  blocks:
+      - template: page_introduction
+
+      - id: form_factors
+        template: multiple_options2_combined
+
+      - id: sharing_hint
+        template: hint
+
+      - id: what_do_you_use_css_for
+        template: multiple_options2_combined
+
+      - id: adam_argyle
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/blog/custom-easing-in-css-with-linear/
+
+      - id: industry_sector
+        template: multiple_options2_combined
+
+      - id: css_interoperability_features
+        template: multiple_options2_freeform
+
+      - id: andy_bell
+        template: picks
+        variables:
+            url: https://polypane.app/blog/getting-stuck-all-the-ways-position-sticky-can-fail/
+
+      - id: css_missing_features
+        template: multiple_options2_freeform
+
+      - id: css_general_pain_points
+        template: multiple_options2_freeform
+
+      - id: favorite_new_features
+        template: multiple_options2_freeform
+
+      - id: gamechanger_feature
+        template: single_option2_freeform
+
+      - id: baseline_awareness
+        template: single_option2
+
+      - id: css_pace_of_change
+        template: single_option2
+
+      - id: ahmad_shadeed
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll-driven_animations
+
+      - id: state_of_the_web_happiness
+        template: happiness2
+        i18nNamespace: usage
+
+      - id: state_of_css_happiness
+        template: happiness2
+        i18nNamespace: usage
+
+      - id: usage_resources
+        items: [fm-svg, fm-design-developers]
+        template: recommended_resources
+
+- id: resources
+  intlId: resources_css
+  descriptionId: sections.resources.description.css2024
+  path: /resources
+  blocks:
+      - template: page_introduction
+
+      - id: miguel_angel_duran
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/@view-transition
+
+      - id: podcasts
+        template: multiple_options2_freeform
+
+      - id: video_creators
+        template: multiple_options2_freeform
+
+      - id: people
+        template: multiple_options2_freeform
+
+      - id: sacha_greif
+        template: picks
+        variables:
+            url: https://www.sarasoueidan.com/
+
+      - id: web_platform_resources
+        template: multiple_options2_combined
+
+      - id: other_surveys
+        template: multiple_options2_combined
+
+      - id: resources_resources
+        items: [fm-animations-transitions, fm-typography]
+        template: recommended_resources
 
 - id: user_info
   titleId: sections.demographics.title
@@ -247,281 +618,6 @@
 
       - id: user_info_resources
         items: [fm-learncss]
-        template: recommended_resources
-
-- id: features
-  path: /features
-  descriptionId: sections.features.description.css2024
-  blocks:
-      - template: page_introduction
-
-      - id: all_features
-        template: multi_items_experience
-        i18nNamespace: features
-        chartOptions:
-            limit: 10
-            categories:
-                [
-                    layout,
-                    shapes_graphics,
-                    colors,
-                    interactions,
-                    typography,
-                    accessibility,
-                    math_features,
-                    other_features
-                ]
-
-      # - id: knowledge_score
-      #   template: demographics
-      - id: features_ratios_over_time
-        template: multi_items_ratios
-        i18nNamespace: features
-        variables:
-            enableMultiSection: true
-        tabId: blocks.tools_experience_ranking.percentages
-        chartOptions:
-            limit: 12
-
-      - id: chris_coyier
-        template: picks
-        variables:
-            url: https://web.dev/
-
-      - id: reading_list
-        template: multiple_options2
-        parameters:
-            limit: 20
-        queryOptions:
-            sectionId: reading_list
-            addQuestionComments: false
-        chartOptions:
-            dataFilters: [removeOverLimit, removeNoAnswer]
-            limit: 10
-
-      - id: features_resources
-        items: [fm-cssvariables, fm-accessibility]
-        template: recommended_resources
-
-  children:
-      - id: layout
-        path: /layout
-        blocks:
-            - id: layout_ratios
-              template: multi_items_ratios
-              i18nNamespace: features
-
-            - id: layout_pain_points
-              template: multiple_options2_freeform
-              i18nNamespace: features
-
-      - id: shapes_graphics
-        path: /shapes-graphics
-        blocks:
-            - id: shapes_graphics_ratios
-              template: multi_items_ratios
-              i18nNamespace: features
-
-            - id: shapes_graphics_pain_points
-              template: multiple_options2_freeform
-              i18nNamespace: features
-
-      - id: colors
-        path: /colors
-        blocks:
-            - id: colors_ratios
-              template: multi_items_ratios
-              i18nNamespace: features
-
-            - id: colors_pain_points
-              template: multiple_options2_freeform
-              i18nNamespace: features
-
-      - id: interactions
-        path: /interactions
-        blocks:
-            - id: interactions_ratios
-              template: multi_items_ratios
-              i18nNamespace: features
-
-            - id: interactions_pain_points
-              template: multiple_options2_freeform
-              i18nNamespace: features
-
-      - id: typography
-        path: /typography
-        blocks:
-            - id: typography_ratios
-              template: multi_items_ratios
-              i18nNamespace: features
-
-            - id: typography_pain_points
-              template: multiple_options2_freeform
-              i18nNamespace: features
-
-      - id: math_features
-        path: /math
-        blocks:
-            - id: math_features_ratios
-              template: multi_items_ratios
-              i18nNamespace: features
-
-            - id: math_features_pain_points
-              template: multiple_options2_freeform
-              i18nNamespace: features
-
-      - id: other_features
-        path: /other-features
-        blocks:
-            - id: other_features_ratios
-              template: multi_items_ratios
-              i18nNamespace: features
-
-            - id: other_features_pain_points
-              template: multiple_options2_freeform
-              i18nNamespace: features
-
-- id: other_tools
-  path: /other-tools
-  blocks:
-      - id: tools_others_intro
-        template: page_introduction
-
-      - id: css_frameworks
-        template: multiple_options2_combined
-        i18nNamespace: tools
-
-      - id: css_in_js
-        template: multiple_options2_combined
-        i18nNamespace: tools
-
-      - id: temani_afif
-        template: picks
-        variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/@property
-
-      - id: pre_post_processors
-        template: multiple_options2_combined
-        i18nNamespace: tools
-
-      - id: utilities
-        template: multiple_options2_combined
-        i18nNamespace: tools
-
-      - id: josh_comeau
-        template: picks
-        variables:
-            url: https://css-articles.com/
-
-      - id: browsers
-        template: multiple_options2_combined
-        i18nNamespace: tools
-
-      - id: other_tools_resources
-        items: [fm-gridsflexbox, fm-practicallayouts]
-        template: recommended_resources
-
-- id: usage
-  descriptionId: sections.usage.description.css2024
-  intlId: usage_css
-  path: /usage
-  blocks:
-      - template: page_introduction
-
-      - id: form_factors
-        template: multiple_options2_combined
-
-      - id: sharing_hint
-        template: hint
-
-      - id: what_do_you_use_css_for
-        template: multiple_options2_combined
-
-      - id: adam_argyle
-        template: picks
-        variables:
-            url: https://developer.mozilla.org/en-US/blog/custom-easing-in-css-with-linear/
-
-      - id: industry_sector
-        template: multiple_options2_combined
-
-      - id: css_interoperability_features
-        template: multiple_options2_freeform
-
-      - id: andy_bell
-        template: picks
-        variables:
-            url: https://polypane.app/blog/getting-stuck-all-the-ways-position-sticky-can-fail/
-
-      - id: css_missing_features
-        template: multiple_options2_freeform
-
-      - id: css_general_pain_points
-        template: multiple_options2_freeform
-
-      - id: favorite_new_features
-        template: multiple_options2_freeform
-
-      - id: gamechanger_feature
-        template: single_option2_freeform
-
-      - id: baseline_awareness
-        template: single_option2
-
-      - id: css_pace_of_change
-        template: single_option2
-
-      - id: ahmad_shadeed
-        template: picks
-        variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll-driven_animations
-
-      - id: state_of_the_web_happiness
-        template: happiness2
-        i18nNamespace: usage
-
-      - id: state_of_css_happiness
-        template: happiness2
-        i18nNamespace: usage
-
-      - id: usage_resources
-        items: [fm-svg, fm-design-developers]
-        template: recommended_resources
-
-- id: resources
-  intlId: resources_css
-  descriptionId: sections.resources.description.css2024
-  path: /resources
-  blocks:
-      - template: page_introduction
-
-      - id: miguel_angel_duran
-        template: picks
-        variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/@view-transition
-
-      - id: podcasts
-        template: multiple_options2_freeform
-
-      - id: video_creators
-        template: multiple_options2_freeform
-
-      - id: people
-        template: multiple_options2_freeform
-
-      - id: sacha_greif
-        template: picks
-        variables:
-            url: https://www.sarasoueidan.com/
-
-      - id: web_platform_resources
-        template: multiple_options2_combined
-
-      - id: other_surveys
-        template: multiple_options2_combined
-
-      - id: resources_resources
-        items: [fm-animations-transitions, fm-typography]
         template: recommended_resources
 
 - id: awards
