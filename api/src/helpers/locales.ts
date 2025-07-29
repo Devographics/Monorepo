@@ -35,6 +35,10 @@ const findRealString = (aliasKey: string, localeRawData: RawLocale) => {
 }
 
 export const resolveAliases = (stringFile: StringFile, localeRawData: RawLocale, report) => {
+    if (!stringFile.strings) {
+        console.warn(`‼️ no strings found for locale ${localeRawData.id}/${stringFile.context}`)
+        return stringFile
+    }
     const aliasedStrings: TranslationStringObject[] = []
     /*
     pattern 1: 
