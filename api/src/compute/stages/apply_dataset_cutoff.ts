@@ -2,13 +2,25 @@ import { Bucket, BucketUnits, FacetBucket, ResponseEditionData } from '@devograp
 import { ComputeAxisParameters, GenericComputeArguments } from '../../types'
 import sortBy from 'lodash/sortBy.js'
 import sum from 'lodash/sum.js'
-import { INSUFFICIENT_DATA } from '@devographics/constants'
+import { INSUFFICIENT_DATA, SENTIMENT_FACET } from '@devographics/constants'
 import { zeroPercentiles } from './add_percentiles'
 import { specialBucketIds } from './limit_data'
 
-// when a filter is applied, never publish any dataset with fewer than 10 *total* items;
-// when a facet is applied, require every *individual facet* to have more than 10 items
+/* 
+
+When a filter is applied, never publish any dataset with fewer than 10 *total* items;
+When a facet is applied, require every *individual facet* to have more than 10 items
+
+*/
 const DEFAULT_DATASET_CUTOFF = 10
+
+/*
+
+There are some datapoints that we don't need to censor out because
+they are not sensitive or private personal information
+
+*/
+const allowList = [SENTIMENT_FACET]
 
 /*
 
@@ -146,6 +158,13 @@ export const applyDatasetCutoff = async (
 ) => {
     const hasFilter = !!computeArguments.filters
     const hasFacet = !!computeArguments.facet
+    if (
+        !computeArguments.filters &&
+        computeArguments.facet &&
+        allowList.includes(computeArguments.facet)
+    ) {
+        return
+    }
     if (hasFilter || hasFacet) {
         for (let editionData of resultsByEdition) {
             // "censor" out data for any bucket that comes under cutoff
