@@ -39,7 +39,7 @@ export const Lines = <SerieData, PointData extends BasicPointData, ChartStateTyp
         subsetLineIndex: subset ? subsetIds.indexOf(lineItem.id) : i,
         isDisabled: subset && !subsetIds.includes(lineItem.id)
     }))
-    console.log(itemsWithIndex)
+
     const regularItems = itemsWithIndex.filter(lineItem => lineItem.id !== highlighted)
     const highlightedItem = itemsWithIndex.filter(lineItem => lineItem.id === highlighted)
 

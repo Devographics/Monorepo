@@ -105,7 +105,7 @@ export const TabsWrapper = ({
                         setActiveTab(value)
                     }}
                 >
-                    <BlockHeaderWrapper>
+                    <BlockHeaderWrapper className="block-header-wrapper">
                         <BlockHeader className="block-header">
                             <BlockHeaderRight_>
                                 <TabsList aria-label="tabs example">
@@ -220,10 +220,11 @@ const Wrapper = styled.section`
         `}
 `
 
-const BlockHeaderWrapper = styled.div`
+export const BlockHeaderWrapper = styled.div`
     overflow-x: scroll;
 `
-const BlockHeader = styled.div`
+
+export const BlockHeader = styled.div`
     /* display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -234,7 +235,7 @@ const BlockHeader = styled.div`
     border-bottom: ${props => props.theme.border};
 `
 
-const BlockHeaderRight_ = styled.div`
+export const BlockHeaderRight_ = styled.div`
     display: flex;
     justify-content: space-between;
     width: 100%;

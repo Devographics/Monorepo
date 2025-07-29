@@ -29,3 +29,18 @@
         }
     }
 }
+
+.ratios-tabs-tab {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    .icon-wrapper {
+        margin: 0;
+    }
+}
+
+.tabs-wrapper-features_ratios_over_time {
+    .block-header-wrapper {
+        display: none;
+    }
+}

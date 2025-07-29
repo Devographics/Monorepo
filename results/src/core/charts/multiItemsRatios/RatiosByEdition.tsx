@@ -13,7 +13,7 @@ import Legend from '../common2/Legend'
 import uniqBy from 'lodash/uniqBy'
 import ModeSwitcher from './ModeSwitcher'
 import { EditionWithRankAndPointData } from './types'
-import { StandardQuestionData } from '@devographics/types'
+import { RatiosEnum, StandardQuestionData } from '@devographics/types'
 import Columns from '../verticalBar2/columns/Columns'
 import { Lines } from '../verticalBar2/lines'
 import { ColumnWrapper } from '../verticalBar2/columns/ColumnWrapper'
@@ -24,6 +24,17 @@ import T from 'core/i18n/T'
 import './RatiosByEdition.scss'
 import SubsetControls from './SubsetControls'
 import { getSubsetIds } from './helpers/subsets'
+import {
+    BlockHeader,
+    BlockHeaderRight_,
+    BlockHeaderWrapper,
+    Tab_,
+    TabsList,
+    TabsTrigger
+} from 'core/blocks/block/BlockTabsWrapper'
+import * as Tabs from '@radix-ui/react-tabs'
+import { useI18n } from '@devographics/react-i18n'
+import Tooltip from 'core/components/Tooltip'
 
 export interface RatiosByEditionProps extends BlockComponentProps {
     series: MultiRatioSerie[]
@@ -133,9 +144,61 @@ export const RegularModeHeading = (props: HeadingProps) => {
 
 export const SubsetModeHeading = (props: HeadingProps) => {
     const { chartState, series, question, i18nNamespace, pageContext } = props
+    const { view, setView } = chartState
+    const { getString } = useI18n()
+
+    const ratios = Object.values(RatiosEnum).filter(r => r !== RatiosEnum.POSITIVITY)
+
     return (
         <>
-            <ChartControls right={<ViewSwitcher chartState={chartState} />} />
+            <Tabs.Root
+                defaultValue="tab0"
+                orientation="horizontal"
+                value={view}
+                activationMode="manual"
+                onValueChange={(value: RatiosEnum) => {
+                    setView(value)
+                }}
+            >
+                <BlockHeaderWrapper>
+                    <BlockHeader className="block-header">
+                        <BlockHeaderRight_>
+                            <TabsList aria-label="tabs example">
+                                {ratios.map(id => {
+                                    const labelKey = `ratios.${id}`
+                                    const descriptionKey = `${labelKey}.description`
+                                    const label = getString(labelKey)?.t
+                                    const Icon = ratioViewsIcons[id]
+                                    return (
+                                        <Tab_ key={id}>
+                                            <TabsTrigger value={id}>
+                                                <Tooltip
+                                                    showBorder={false}
+                                                    trigger={
+                                                        <span className="ratios-tabs-tab">
+                                                            <Icon size="petite" />{' '}
+                                                            <span data-key={id}>{label}</span>
+                                                        </span>
+                                                    }
+                                                    contents={
+                                                        <T
+                                                            k={descriptionKey}
+                                                            html={true}
+                                                            md={true}
+                                                        />
+                                                    }
+                                                />
+                                            </TabsTrigger>
+                                        </Tab_>
+                                    )
+                                })}
+                            </TabsList>
+                        </BlockHeaderRight_>
+                    </BlockHeader>
+                </BlockHeaderWrapper>
+            </Tabs.Root>
+
+            {/* <ViewSwitcher chartState={chartState} /> */}
             <RatioDescriptionNote chartState={chartState} />
             <SubsetControls
                 series={series}
