@@ -213,6 +213,7 @@ export interface BucketMetadata {
     token?: Token
     label?: string
     value?: number
+    index: number
     hasInsufficientData?: boolean
     isFreeformData?: boolean
     facetsCountSum?: number

@@ -128,8 +128,15 @@ export interface WebFeature {
     url: string
 }
 
+export enum BaselineStatuses {
+    HIGH = 'high',
+    LOW = 'low',
+    FALSE = 'false',
+    UNKNOWN = 'unknown'
+}
+
 export interface WebFeatureStatus {
-    baseline: 'high' | 'low' | 'false'
+    baseline: BaselineStatuses
     baseline_low_date: string
     support: WebFeatureSupport
 }
