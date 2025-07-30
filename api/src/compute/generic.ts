@@ -43,7 +43,9 @@ import {
     addRatios,
     detectNaN,
     addMetadata,
-    restrictBuckets
+    restrictBuckets,
+    addValues,
+    addIndexes
 } from './stages'
 import {
     ResponsesTypes,
@@ -62,7 +64,6 @@ import { computeKey } from '../helpers/caching'
 import isEmpty from 'lodash/isEmpty.js'
 import { logToFile } from '@devographics/debug'
 import { SENTIMENT_FACET } from '@devographics/constants'
-import { addValues } from './stages/add_values'
 
 type StageLogItem = {
     name: string
@@ -621,6 +622,8 @@ export async function genericComputeFunction(
         await runStage(addLabels, [results, axis1])
         await runStage(addMetadata, [results, axis1])
     }
+
+    await runStage(addIndexes, [results, context, axis1])
 
     await runStage(detectNaN, [results, isDebug, logPath])
 
