@@ -660,7 +660,6 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
 const Wrapper = styled.div`
     margin: 0 auto;
     margin-bottom: ${spacing()};
-    max-width: 700px;
     width: 100%;
 
     [hidden] {
@@ -716,7 +715,7 @@ const Wrapper = styled.div`
         position: relative;
         display: grid;
         width: 100vmin;
-        max-width: 600px;
+        max-width: 500px;
         aspect-ratio: 1;
         margin: auto;
         background: none;

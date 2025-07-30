@@ -11,10 +11,10 @@ import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import { useWidth } from '../common2/helpers'
 import { CellLabel } from '../common2'
-import { getViewDefinition } from './helpers/views'
 import { getQuestionLabel } from '../common2/helpers/labels'
 import { BlockVariantDefinition } from 'core/types'
 import { ColumnModes } from '../common2/types'
+import OtherBucketMarker from './OtherBucketMarker'
 
 // hide labels for cells under this size
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
@@ -60,6 +60,8 @@ export const Cell = ({
     parentTotal: number
 }) => {
     const { ref, isWideEnough: showLabel } = useIsWideEnough()
+    const { variables = {} } = block
+    const { disableOtherBucket = false } = variables
 
     // const entities = useEntities()
     // const entity = entities.find(e => e.id === bucket.id)
@@ -163,13 +165,15 @@ export const Cell = ({
                 showBorder={false}
             />
             {/* we need getWidth to be able to figure out the dimensions for the other bucket marker */}
-            {otherBucket && getWidth && (
-                <OtherBucketMarker
-                    viewDefinition={viewDefinition}
-                    mainBucket={bucket}
-                    otherBucket={otherBucket}
-                    getWidth={getWidth}
-                />
+            {otherBucket && getWidth && !disableOtherBucket && (
+                <>
+                    <OtherBucketMarker
+                        viewDefinition={viewDefinition}
+                        mainBucket={bucket}
+                        otherBucket={otherBucket}
+                        getWidth={getWidth}
+                    />
+                </>
             )}
         </div>
     )
@@ -196,59 +200,5 @@ const Oversized = () => {
                 ></path>
             </svg>
         </span>
-    )
-}
-
-const OtherBucketMarker = ({
-    mainBucket,
-    otherBucket,
-    getWidth,
-    viewDefinition
-}: {
-    mainBucket: Bucket | FacetBucket
-    otherBucket: Bucket | FacetBucket
-    getWidth: (v: number) => number
-    viewDefinition: HorizontalBarChartState['viewDefinition']
-}) => {
-    const { getValue, formatValue } = viewDefinition
-
-    const mainValue = getValue(mainBucket)
-    const mainWidth = getWidth(mainValue)
-    const otherValue = getValue(otherBucket)
-    const delta = otherValue - mainValue
-    const absoluteDelta = Math.abs(delta)
-    const deltaIsNegative = otherValue > mainValue
-    // if (deltaIsNegative) {
-    //     return null
-    // }
-    const deltaAbsoluteWidth = getWidth(absoluteDelta)
-    // we need to express the delta's width as a percentage of the main width
-    const deltaRelativeWidth = (deltaAbsoluteWidth * 100) / mainWidth
-    const style = { '--deltaWidthPercentage': deltaRelativeWidth }
-    return (
-        <Tooltip
-            trigger={
-                <div
-                    className={`chart-cell-other-bucket chart-cell-other-bucket-${
-                        deltaIsNegative ? 'negativeDelta' : 'positiveDelta'
-                    }`}
-                    style={style}
-                >
-                    {otherBucket.percentageQuestion}
-                </div>
-            }
-            contents={
-                <div>
-                    {deltaIsNegative ? '-' : '+'}
-                    {formatValue(absoluteDelta)}
-                    {/* [<span dangerouslySetInnerHTML={{ __html: label }} />] <strong>{v}</strong>{' '}
-                    <T
-                        k="charts.facet_detail"
-                        values={{ count, totalRespondents: totalSerieRespondents }}
-                    /> */}
-                </div>
-            }
-            showBorder={false}
-        />
     )
 }

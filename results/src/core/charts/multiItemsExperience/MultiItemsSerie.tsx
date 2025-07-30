@@ -1,7 +1,7 @@
 import React from 'react'
 import '../common2/ChartsCommon.scss'
 import './MultiItems.scss'
-import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
+import { BaselineStatuses, FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types'
 import { CellDimension } from './types'
 import {
     applyRatio,
@@ -61,7 +61,21 @@ export const MultiItemsSerie = (
 
     // filter items if needed
     if (filter) {
-        combinedItems = combinedItems.filter(i => i._metadata.sectionId === filter)
+        if (Object.values(BaselineStatuses).includes(filter as BaselineStatuses)) {
+            // we are filtering based on a baseline status
+            if (filter === BaselineStatuses.UNKNOWN) {
+                combinedItems = combinedItems.filter(
+                    item => item?.entity?.webFeature?.status?.baseline === undefined
+                )
+            } else {
+                combinedItems = combinedItems.filter(
+                    item => item?.entity?.webFeature?.status?.baseline === filter
+                )
+            }
+        } else {
+            // we are filtering based on a section id
+            combinedItems = combinedItems.filter(item => item._metadata.sectionId === filter)
+        }
     }
 
     // get column-by-column grouped totals

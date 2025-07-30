@@ -56,9 +56,6 @@ export const HorizontalBarSerie = (
             chartState,
             usePreviousEdition: true
         })
-        console.log(serie.name)
-        console.log(buckets)
-        console.log(otherBuckets)
     }
 
     const viewDefinition = getViewDefinition(chartState.view)

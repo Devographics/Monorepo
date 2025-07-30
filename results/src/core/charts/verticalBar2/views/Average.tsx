@@ -33,7 +33,6 @@ export const Average: VerticalBarViewDefinition<
             columnIndex: e.year - startYear,
             value: e.average || 0
         }))
-        console.log(points)
         // this view returns a single line item for now
         const lineItem = { id: question.id, entity: question.entity, points }
         return [lineItem]

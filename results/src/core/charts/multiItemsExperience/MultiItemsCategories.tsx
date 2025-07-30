@@ -1,6 +1,4 @@
 import React from 'react'
-import { OptionMetadata } from '@devographics/types'
-import { ColorScale } from '../common2/helpers/colors'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import { ChartStateWithFilter } from '../common2/types'
@@ -67,7 +65,7 @@ export const MultiItemsCategories = ({ block, chartState }: MultiItemsCategories
     return (
         <div className="multi-items-categories">
             <Toggle
-                labelId="charts.filter_by"
+                labelId="charts.filter_by.sections"
                 handleSelect={handleSelect}
                 items={[allItem, ...items]}
                 hasDefault={true}

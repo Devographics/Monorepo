@@ -16,6 +16,7 @@ export const getBucketsFragment = (options: {
                     count
                     id
                     value
+                    index
                     percentageQuestion
                     percentageSurvey
                     isFreeformData

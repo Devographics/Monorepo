@@ -321,10 +321,14 @@
       - id: css_frameworks
         template: multiple_options2_combined
         i18nNamespace: tools
+        variables:
+            disableOtherBucket: true
 
       - id: css_in_js
         template: multiple_options2_combined
         i18nNamespace: tools
+        variables:
+            disableOtherBucket: true
 
       - id: temani_afif
         template: picks

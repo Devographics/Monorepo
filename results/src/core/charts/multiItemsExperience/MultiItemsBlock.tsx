@@ -15,6 +15,7 @@ import MultiItemsCategories from './MultiItemsCategories'
 import { MultiItemsStats } from './MultiItemsStats'
 import ChartData from '../common2/ChartData'
 import { BlockComponentProps } from 'core/types'
+import MultiItemsBaseline from './MultiItemsBaseline'
 
 const defaultLimit = 5
 
@@ -63,9 +64,14 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
                 </pre> */}
                 <ChartControls
                     top={
-                        block?.chartOptions?.categories ? (
-                            <MultiItemsCategories {...commonProps} />
-                        ) : undefined
+                        <>
+                            {block?.chartOptions?.categories && (
+                                <MultiItemsCategories {...commonProps} />
+                            )}
+                            {block?.chartOptions?.categories && (
+                                <MultiItemsBaseline {...commonProps} />
+                            )}
+                        </>
                     }
                     left={<MultiItemsExperienceControls {...commonProps} />}
                     right={
