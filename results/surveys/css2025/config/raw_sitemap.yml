@@ -632,47 +632,77 @@
       - id: awards
         template: awards
         variables:
-            entities: '"filter_effects","has_selector","intrinsic_sizing","subgrid","hanging_punctuation","forced_colors","view_timeline","aspect_ratio", "line_clamp", "aspect_ratio", "css_nesting"'
+            entities: '"has_selector","aspect_ratio","intrinsic_sizing","sibling_count","sibling_index","scroll_state","light_dark","anchor_positioning","text_wrap_pretty","css_nesting","trigonometric_functions","writing_modes","wide_gamut_colors","line_clamp"'
         awards:
             - id: most_used_feature_award
               template: award
               awards:
-                  - id: filter_effects
-                    value: '75.4%'
                   - id: has_selector
-                    value: '72.8%'
+                    value: '80.4%'
+                  - id: aspect_ratio
+                    value: '76.2%'
                   - id: intrinsic_sizing
-                    value: '72.5%'
+                    value: '75%'
 
             - id: least_used_feature_award
               template: award
               awards:
-                  - id: hanging_punctuation
+                  - id: sibling_count
+                    value: '1.5%'
+                  - id: sibling_index
                     value: '1.6%'
-                  - id: forced_colors
-                    value: '1.7%'
-                  - id: view_timeline
-                    value: '2.3%'
+                  - id: scroll_state
+                    value: '1.9%'
+
+            - id: largest_awareness_progression_award
+              template: award
+              awards:
+                  - id: light_dark
+                    value: '23%'
+                  - id: anchor_positioning
+                    value: '21%'
+                  - id: text_wrap_pretty
+                    value: '20%'
+
+            - id: largest_usage_progression_award
+              template: award
+              awards:
+                  - id: text_wrap_pretty
+                    value: '17%'
+                  - id: css_nesting
+                    value: '13%'
+                  - id: light_dark
+                    value: '13%'
 
             - id: most_loved_feature_award
               template: award
               awards:
-                  - id: subgrid
-                    value: '51.5%'
                   - id: has_selector
-                    value: '46.9%'
+                    value: '51.5%'
+                  - id: subgrid
+                    value: '50.6%'
                   - id: aspect_ratio
-                    value: '46.8%'
+                    value: '47.6%'
+
+            - id: most_hated_feature_award
+              template: award
+              awards:
+                  - id: trigonometric_functions
+                    value: '9.1%'
+                  - id: writing_modes
+                    value: '8.8%'
+                  - id: wide_gamut_colors
+                    value: '7.2%'
 
             - id: most_commented_feature_award
               template: award
               awards:
                   - id: subgrid
-                    value: 331
+                    value: 167
                   - id: line_clamp
-                    value: 100
+                    value: 114
                   - id: css_nesting
-                    value: 99
+                    value: 87
 
 - id: conclusion
   path: /conclusion
