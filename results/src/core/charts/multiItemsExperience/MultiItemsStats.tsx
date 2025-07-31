@@ -53,7 +53,7 @@ const StatItem = ({
     itemId: FeaturesOptions | SimplifiedSentimentOptions
     groupedTotals: Totals[]
 }) => {
-    const allTotals = groupedTotals.map(item => item[itemId])
+    const allTotals = groupedTotals.map(item => item[`${itemId}__value`])
     const totalsSum = sum(allTotals)
     const average = totalsSum / allTotals.length
     return (
