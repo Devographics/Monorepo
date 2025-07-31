@@ -632,7 +632,7 @@
       - id: awards
         template: awards
         variables:
-            entities: '"has_selector","aspect_ratio","intrinsic_sizing","sibling_count","sibling_index","scroll_state","light_dark","anchor_positioning","text_wrap_pretty","css_nesting","trigonometric_functions","writing_modes","wide_gamut_colors","line_clamp"'
+            entities: '"has_selector","aspect_ratio","intrinsic_sizing","sibling_count","sibling_index","scroll_state","light_dark","anchor_positioning","text_wrap_pretty","css_nesting","trigonometric_functions","writing_modes","wide_gamut_colors","line_clamp","subgrid"'
         awards:
             - id: most_used_feature_award
               template: award
