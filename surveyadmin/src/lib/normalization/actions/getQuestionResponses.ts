@@ -71,7 +71,7 @@ export const getQuestionResponses = async ({
       pick(e, ["id", "parentId", "patterns", "tags", "descriptionClean"])
     );
 
-  return {
+  const result = {
     responsesCount,
     responses: allResponses,
     responsesSelector: selector,
@@ -85,4 +85,5 @@ export const getQuestionResponses = async ({
       fetchEntitiesDuration,
     },
   };
+  return result;
 };

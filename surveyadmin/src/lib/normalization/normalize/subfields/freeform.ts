@@ -61,7 +61,7 @@ export const freeform: SubfieldProcessFunction = async ({
 
   const modifiedFields: FieldLogItem[] = [];
 
-  const customNormalization = customNormalizations.find(
+  const allAnswersCustomNormalizations = customNormalizations.filter(
     (c) => c.responseId === response._id && c.questionId === questionObject.id
   );
 
@@ -102,13 +102,17 @@ export const freeform: SubfieldProcessFunction = async ({
               timestamp,
             })) as NormalizationToken[];
 
+            const currentAnswerCustomNormalization =
+              allAnswersCustomNormalizations.find(
+                (norm) => norm.answerIndex === i
+              );
             // if custom norm. tokens have been defined, also add their id
-            if (customNormalization) {
+            if (currentAnswerCustomNormalization) {
               const {
                 customTokens: customTokensIds,
                 aiTokens: aiTokensIds,
                 disabledTokens: disabledTokensIds,
-              } = customNormalization;
+              } = currentAnswerCustomNormalization;
               if (customTokensIds) {
                 logIfVerbose(`⛰️ Custom tokens: [${customTokensIds.join()}]`);
                 // only keep custom token that are not already included in regular norm. tokens
