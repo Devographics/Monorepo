@@ -49,7 +49,10 @@ export const TimeSeriesByDateBlock = (props: VerticalBarBlock2Props) => {
 
     if (facetQuestion) {
         const allFacetBuckets = series
-            .map(serie => serie.data.combined.currentEdition.buckets.map(b => b?.facetBuckets))
+            .map(serie => {
+                const currentEdition = getChartCurrentEdition({ serie })
+                return currentEdition.buckets.map(b => b?.facetBuckets)
+            })
             .flat()
             .flat()
             .flat()

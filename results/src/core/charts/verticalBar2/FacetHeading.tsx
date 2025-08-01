@@ -1,8 +1,6 @@
 import React from 'react'
 import { useEntities } from 'core/helpers/entities'
 import { useColorScale } from '../common2/helpers/colors'
-import { getQuestionGroups, getQuestionOptions } from '../horizontalBar2/helpers/options'
-import { getBlockAllFacetBucketIds } from '../horizontalBar2/helpers/other'
 import { FacetTitle } from '../common2/FacetTitle'
 import Legend from '../verticalBar2/Legend'
 import { CommonProps } from '../common2/types'

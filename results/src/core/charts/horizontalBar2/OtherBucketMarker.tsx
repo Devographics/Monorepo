@@ -36,6 +36,7 @@ export const OtherBucketMarker = ({
     const style = { '--deltaWidthPercentage': deltaRelativeWidth }
 
     const indexDelta = otherBucket.index - mainBucket.index
+    const absoluteIndexDelta = Math.abs(indexDelta)
     const indexDeltaIsNegative = indexDelta < 0
 
     const tooltipSegments = []
@@ -48,11 +49,11 @@ export const OtherBucketMarker = ({
                 )?.t
             )
         }
-        if (Math.abs(indexDelta) > 0) {
+        if (absoluteIndexDelta > 0) {
             tooltipSegments.push(
                 getString(
                     `charts.other_bucket.ranks.${indexDeltaIsNegative ? 'negative' : 'positive'}`,
-                    { values: { value: indexDelta } }
+                    { values: { value: absoluteIndexDelta } }
                 )?.t
             )
         }

@@ -18,6 +18,7 @@ import { DateBucketWithPointData, TimeSeriesByDateChartState } from '../types'
 import * as d3 from 'd3'
 import { addDaysToDate, diffDays, formatDateToYMD } from '../helpers/other'
 import { useChartValues } from 'core/charts/verticalBar2/helpers/chartValues'
+import { getChartCurrentEdition } from 'core/charts/horizontalBar2/helpers/other'
 
 export const Count: VerticalBarViewDefinition<
     StandardQuestionData,
@@ -25,7 +26,8 @@ export const Count: VerticalBarViewDefinition<
     TimeSeriesByDateChartState
 > = {
     getLineItems: ({ serie, question }) => {
-        let buckets = serie?.data?.combined?.currentEdition?.buckets || []
+        const currentEdition = getChartCurrentEdition({ serie })
+        let buckets = currentEdition?.buckets || []
         // make sure buckets are sorted by date (id)
         buckets = sortBy(buckets, 'id')
         const points = buckets.map(bucket => {

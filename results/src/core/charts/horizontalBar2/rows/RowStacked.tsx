@@ -11,6 +11,7 @@ import { InsufficientDataIndicator } from 'core/charts/common2/InsufficientDataI
 
 export const RowStacked = (props: RowComponentProps) => {
     const {
+        block,
         bucket,
         buckets,
         chartState,
@@ -56,6 +57,7 @@ export const RowStacked = (props: RowComponentProps) => {
                         })
                         return (
                             <Cell
+                                block={block}
                                 key={id}
                                 bucket={facetBucket}
                                 chartState={chartState}
