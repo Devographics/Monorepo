@@ -28,7 +28,7 @@ const getLocaleContextCacheKey = (localeId: string, context: string) =>
 
 /**
  * Get list of locales, without strings
- * 
+ *
  * TODO: contexts are probably unused in this scenario, since we don't get strings
  *
  * @param param0
@@ -86,10 +86,16 @@ export const getLocaleContextGraphQL = async ({
 
 /**
  * Replaces fetchAllLocalesMetadata
- * @param param0 
- * @returns 
+ * @param param0
+ * @returns
  */
-export async function getAllLocaleDefinitions(): Promise<{ error: Error, locales: undefined } | { error: undefined, locales: Array<Pick<Locale, "label" | "id" | "translators" | "completion">> }> {
+export async function getAllLocaleDefinitions(): Promise<
+    | { error: Error; locales: undefined }
+    | {
+          error: undefined
+          locales: Array<Pick<Locale, 'label' | 'id' | 'translators' | 'completion'>>
+      }
+> {
     const allLocalesKey = allLocalesCacheKey()
     const { data: localeDefinitions, error } = await cachedPipeline<Array<Locale>>({
         cacheKey: allLocalesKey
@@ -144,9 +150,11 @@ export async function getLocaleDict({
         cacheKey
     })
         .fetcher(async () => {
+            const query = localeWithStringsQuery({ localeId, contexts })
+            logToFile(`${cacheKey}.gql`, query)
             const { data, errors } = await graphqlFetcher<{
                 locale: LocaleWithStrings
-            }>(localeWithStringsQuery({ localeId, contexts }))
+            }>(query)
             if (errors?.length) throw new Error(errors.map(e => e.message).join('\n'))
             return data?.locale
         })
