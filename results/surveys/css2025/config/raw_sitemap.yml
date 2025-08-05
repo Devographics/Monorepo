@@ -88,6 +88,12 @@
   blocks:
       - template: page_introduction
 
+      - id: figure_has_usage
+        template: figure
+        variables:
+            value: 80.4
+            unit: percentage
+
       - id: all_features
         template: multi_items_experience
         i18nNamespace: features
@@ -104,6 +110,12 @@
                     math_features,
                     other_features
                 ]
+
+      - id: figure_light_dark_awareness
+        template: figure
+        variables:
+            value: 23
+            unit: percentage
 
       # - id: knowledge_score
       #   template: demographics
@@ -224,6 +236,11 @@
       #         queryOptions:
       #             sectionId: other_features
 
+      - id: ana_rodrigues
+        template: picks
+        variables:
+            url: https://modern-fluid-typography.vercel.app/
+
       - id: reading_list
         template: multiple_options2
         parameters:
@@ -329,6 +346,12 @@
         variables:
             disableOtherBucket: true
 
+      - id: figure_css_in_js
+        template: figure
+        variables:
+            value: 29
+            unit: percentage
+
       - id: css_in_js
         template: multiple_options2_combined
         i18nNamespace: tools
@@ -347,6 +370,12 @@
       - id: utilities
         template: multiple_options2_combined
         i18nNamespace: tools
+
+      - id: figure_css_in_js
+        template: figure
+        variables:
+            value: 29
+            unit: percentage
 
       - id: browsers
         template: multiple_options2_combined
@@ -379,6 +408,12 @@
 
       - id: industry_sector
         template: multiple_options2_combined
+
+      - id: figure_anchor_positioning
+        template: figure
+        variables:
+            value: 9
+            unit: percentage
 
       - id: css_interoperability_features
         template: multiple_options2_freeform
@@ -709,8 +744,8 @@
       - id: conclusion
         template: conclusion
         variables:
-            author: ahmad_shadeed
-            entities: '"ahmad_shadeed"'
+            author: amit_sheen
+            entities: '"amit_sheen"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock
