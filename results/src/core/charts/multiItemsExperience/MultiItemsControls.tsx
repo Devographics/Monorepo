@@ -39,46 +39,12 @@ export const MultiItemsExperienceControls = ({
         }
     })
     return (
-        <div className="multiexp-controls">
-            <div className="multiexp-control multiexp-control-grouping">
-                <Toggle
-                    labelId="charts.group_by"
-                    handleSelect={(id: string) => {
-                        setGrouping(id as GroupingOptions)
-                    }}
-                    items={items}
-                />
-            </div>
-
-            {false && (
-                <div className="multiexp-control multiexp-control-columns">
-                    {/* <h4>{getString('charts.display_mode')?.t}</h4> */}
-                    {Object.values(ColumnModes).map(option => {
-                        const Icon = icons[option]
-                        const isChecked = columnMode === option
-                        const label = getString(`charts.display_mode.${option}`)?.t
-                        return (
-                            <label
-                                key={option}
-                                htmlFor={option}
-                                className={`radio ${
-                                    isChecked ? 'radio-checked' : 'radio-unchecked'
-                                }`}
-                            >
-                                {Icon && <Icon label={label} />}{' '}
-                                <input
-                                    type="radio"
-                                    id={option}
-                                    name="grouping"
-                                    value={option}
-                                    checked={isChecked}
-                                    onChange={() => setColumnMode(option)}
-                                />
-                            </label>
-                        )
-                    })}
-                </div>
-            )}
-        </div>
+        <Toggle
+            labelId="charts.group_by"
+            handleSelect={(id: string) => {
+                setGrouping(id as GroupingOptions)
+            }}
+            items={items}
+        />
     )
 }

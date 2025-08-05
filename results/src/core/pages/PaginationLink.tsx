@@ -5,7 +5,7 @@ import { mq, spacing, fontSize } from 'core/theme'
 import PageLabel from './PageLabel'
 import PageLink from './PageLink'
 import { PageContextValue } from 'core/types'
-
+import './PaginationLink.scss'
 const StyledLink = styled(PageLink)`
     display: flex;
     align-items: center;
@@ -17,14 +17,6 @@ const StyledLink = styled(PageLink)`
 
     @media ${mq.smallMedium} {
         font-size: ${fontSize('smaller')};
-        span {
-            display: block;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-            width: 100%;
-            text-align: center;
-        }
     }
     @media ${mq.large} {
         font-size: ${fontSize('medium')};
@@ -47,19 +39,19 @@ const PaginationLink = ({
 }) => (
     <StyledLink
         page={page}
-        className={`pagination__link pagination__${type} ${className}`}
+        className={`pagination-link pagination__link pagination__${type} ${className}`}
         type={type}
     >
         {type === 'previous' && (
-            <span>
-                «&nbsp;
+            <span className="pagination-link-inner pagination-link-inner-previous">
+                <span className="pagination-link-arrow">«&nbsp;</span>
                 <PageLabel page={page} />
             </span>
         )}
         {type === 'next' && (
-            <span>
+            <span className="pagination-link-inner pagination-link-inner-next">
                 <PageLabel page={page} />
-                &nbsp;»
+                <span className="pagination-link-arrow">&nbsp;»</span>
             </span>
         )}
     </StyledLink>

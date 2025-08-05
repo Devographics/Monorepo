@@ -18,8 +18,10 @@
 }
 .chart-toggle-control {
     overflow: hidden;
+    @include small {
+        width: 100%;
+    }
     // flex: 1;
-    // width: 100%;
 }
 
 .chart-toggle-items {

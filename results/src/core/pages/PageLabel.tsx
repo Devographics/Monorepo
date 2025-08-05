@@ -18,7 +18,11 @@ const PageLabel = ({
         getString,
         options: { includeWebsite }
     })
-    return <span key={key}>{label}</span>
+    return (
+        <span className="pagination-link-label" key={key}>
+            {label}
+        </span>
+    )
 }
 
 export default PageLabel

@@ -1,0 +1,26 @@
+@import '../../stylesheets/_breakpoints.scss';
+.pagination-link {
+    @include small-medium {
+        .page-link-inner {
+            display: block;
+            width: 100%;
+        }
+    }
+}
+.pagination-link-inner {
+    display: flex;
+    white-space: nowrap;
+    &-previous {
+        justify-content: flex-start;
+    }
+    &-next {
+        justify-content: flex-end;
+    }
+}
+
+.pagination-link-label {
+    @include small-medium {
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+}

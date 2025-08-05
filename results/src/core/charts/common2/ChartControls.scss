@@ -16,6 +16,7 @@
     gap: var(--halfSpacing);
     @include small {
         flex-direction: column;
+        gap: var(--spacing);
     }
     @include medium-large {
         justify-content: space-between;

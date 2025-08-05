@@ -26,7 +26,7 @@ const PageLink = ({
         activeClassName={activeClassName}
         onClick={onClick}
     >
-        <span>{children}</span>
+        <span className="page-link-inner">{children}</span>
     </Link>
 )
 
