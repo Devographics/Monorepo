@@ -628,7 +628,7 @@ type Query {
     """
     Translate a string
     """
-    translation(key: String!, localeId: LocaleID!): TranslationString
+    translation(key: String!, localeId: LocaleID!, context: I18nContext): TranslationString
     """
     Get a locale
     """

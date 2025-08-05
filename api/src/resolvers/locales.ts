@@ -32,10 +32,14 @@ export const localesResolvers = {
     },
     translation: async (
         root: any,
-        { key, localeId }: { localeId: string; key: string },
+        {
+            key,
+            localeId,
+            context: localeContext
+        }: { localeId: string; key: string; context: string },
         context: RequestContext
     ) => {
-        return await getTranslation({ localeId: convert(localeId), key, context })
+        return await getTranslation({ localeId: convert(localeId), key, localeContext, context })
     }
 }
 
@@ -95,18 +99,22 @@ Reverse array first so that strings added last take priority
 export const getTranslation = async ({
     key,
     localeId,
+    localeContext,
     context
 }: {
     key: string
     localeId: string
+    localeContext: string
     context: RequestContext
 }) => {
-    console.log(`// translation resolver for key ${key} [${localeId}]`)
+    console.log(`// translation resolver for key ${key} [${localeId}/${localeContext || '*'}]`)
     const locales = await loadOrGetLocales()
     const locale = locales.find(l => l.id === localeId)
     if (!locale) {
         throw new Error(`getTranslation error: could not find locale with id ${localeId}`)
     }
-    const t = locale.strings?.toReversed().find((s: any) => s.key === key)
+    const t = locale.strings?.toReversed().find(s => {
+        return localeContext ? s.context === localeContext && s.key === key : s.key === key
+    })
     return t
 }
