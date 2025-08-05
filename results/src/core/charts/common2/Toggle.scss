@@ -12,6 +12,9 @@
         margin: 0;
     }
     overflow: hidden;
+    @include small {
+        flex-direction: column;
+    }
 }
 .chart-toggle-control {
     overflow: hidden;

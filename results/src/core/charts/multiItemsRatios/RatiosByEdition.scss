@@ -1,3 +1,5 @@
+@import '../../../stylesheets/_breakpoints.scss';
+
 .ratio-description {
     h4,
     .icon-wrapper {
@@ -17,15 +19,22 @@
 
 .chart-multi-ratios-content {
     .chart-multi-ratios-multiSection & {
-        display: grid;
-        grid-template-columns: 1fr minmax(400px, min-content);
-        grid-template-areas: 'content sidebar';
-        gap: var(--doubleSpacing);
-        .chart-legend {
-            grid-area: sidebar;
+        @include small-medium {
+            display: flex;
+            flex-direction: column;
+            gap: var(--doubleSpacing);
         }
-        .chart-wrapper-single {
-            grid-area: content;
+        @include large {
+            display: grid;
+            grid-template-columns: 1fr minmax(400px, min-content);
+            grid-template-areas: 'content sidebar';
+            gap: var(--doubleSpacing);
+            .chart-legend {
+                grid-area: sidebar;
+            }
+            .chart-wrapper-single {
+                grid-area: content;
+            }
         }
     }
 }
