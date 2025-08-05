@@ -4,8 +4,12 @@ import styled from 'styled-components'
 // import ReactMarkdown from 'react-markdown'
 import { mq, spacing, fontSize, color } from 'core/theme'
 import T from 'core/i18n/T'
+import { usePageContext } from 'core/helpers/pageContext'
 
 const PicksBlock = ({ block, data: entity }) => {
+    const pageContext = usePageContext()
+    const { currentEdition } = pageContext
+
     const { id: pickId, variables } = block
     const { url } = variables
     if (!entity) {
@@ -24,7 +28,7 @@ const PicksBlock = ({ block, data: entity }) => {
                         <PickContent>
                             <PickTitle>
                                 <span>
-                                    <T k="picks.my_pick" />
+                                    <T k={`picks.my_pick.${currentEdition.id}`} />
                                 </span>{' '}
                                 <PickTitleLink href={url}>
                                     <T k={`picks.${pickId}.name`} md={true} element="span" />

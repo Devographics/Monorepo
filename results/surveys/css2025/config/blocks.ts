@@ -89,6 +89,9 @@ import HowToHelpBlock from 'core/blocks/other/HowToHelpBlock'
 import SponsorFinishBlock from 'core/blocks/block/sponsor_chart/SponsorFinishBlock'
 import LivestreamBlock from 'core/blocks/other/LivestreamBlock'
 
+import MidpageResourceBlock from 'core/blocks/other/MidpageResourceBlock'
+import FigureBlock from 'core/blocks/other/FigureBlock'
+
 const otherBlocks = {
     PageIntroductionBlock,
     TextBlock,
@@ -110,6 +113,8 @@ const otherBlocks = {
     HowToHelpBlock,
     SponsorFinishBlock,
     LivestreamBlock,
+    MidpageResourceBlock,
+    FigureBlock,
 
     DataExplorerBlock
 }

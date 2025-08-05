@@ -20,6 +20,8 @@ export const FacetHeading = <ChartStateType,>(props: FacetHeadingProps<ChartStat
         useColorScale({
             question: facetQuestion
         })
+    console.log(colorScale)
+    console.log(facetQuestion)
     return (
         <div className="chart-heading">
             <FacetTitle

@@ -113,10 +113,10 @@
         variables:
             enableMultiSection: true
 
-      - id: chris_coyier
+      - id: josh_comeau
         template: picks
         variables:
-            url: https://web.dev/
+            url: https://linear-easing-generator.netlify.app/
 
       - id: layout_pain_points
         template: multiple_options2_freeform
@@ -149,6 +149,11 @@
             sectionId: interactions
         chartOptions:
             limit: 5
+
+      - id: kilian_valkhof
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap
 
       - id: typography_pain_points
         template: multiple_options2_freeform
@@ -231,7 +236,7 @@
             limit: 10
 
       - id: features_resources
-        items: [fm-cssvariables, fm-accessibility]
+        items: [fm-css-grid, fm-animations-transitions]
         template: recommended_resources
 
   # children:
@@ -330,10 +335,10 @@
         variables:
             disableOtherBucket: true
 
-      - id: temani_afif
+      - id: ahmad_shadeed
         template: picks
         variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/@property
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/if
 
       - id: pre_post_processors
         template: multiple_options2_combined
@@ -343,17 +348,12 @@
         template: multiple_options2_combined
         i18nNamespace: tools
 
-      - id: josh_comeau
-        template: picks
-        variables:
-            url: https://css-articles.com/
-
       - id: browsers
         template: multiple_options2_combined
         i18nNamespace: tools
 
       - id: other_tools_resources
-        items: [fm-gridsflexbox, fm-practicallayouts]
+        items: [fm-tailwind-css-v2, fm-frontend-system-design]
         template: recommended_resources
 
 - id: usage
@@ -372,10 +372,10 @@
       - id: what_do_you_use_css_for
         template: multiple_options2_combined
 
-      - id: adam_argyle
+      - id: ana_tudor
         template: picks
         variables:
-            url: https://developer.mozilla.org/en-US/blog/custom-easing-in-css-with-linear/
+            url: https://codepen.io/thebabydino/pen/LEExpVg
 
       - id: industry_sector
         template: multiple_options2_combined
@@ -383,10 +383,10 @@
       - id: css_interoperability_features
         template: multiple_options2_freeform
 
-      - id: andy_bell
+      - id: amit_sheen
         template: picks
         variables:
-            url: https://polypane.app/blog/getting-stuck-all-the-ways-position-sticky-can-fail/
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Values_and_Units/Using_CSS_math_functions
 
       - id: css_missing_features
         template: multiple_options2_freeform
@@ -406,11 +406,6 @@
       - id: css_pace_of_change
         template: single_option2
 
-      - id: ahmad_shadeed
-        template: picks
-        variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll-driven_animations
-
       - id: state_of_the_web_happiness
         template: happiness2
         i18nNamespace: usage
@@ -420,7 +415,7 @@
         i18nNamespace: usage
 
       - id: usage_resources
-        items: [fm-svg, fm-design-developers]
+        items: [fm-getting-started-css-v2, fm-svg]
         template: recommended_resources
 
 - id: resources
@@ -429,11 +424,6 @@
   path: /resources
   blocks:
       - template: page_introduction
-
-      - id: miguel_angel_duran
-        template: picks
-        variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/@view-transition
 
       - id: podcasts
         template: multiple_options2_freeform
@@ -447,7 +437,7 @@
       - id: sacha_greif
         template: picks
         variables:
-            url: https://www.sarasoueidan.com/
+            url: https://miocene.io/
 
       - id: web_platform_resources
         template: multiple_options2_combined
@@ -456,7 +446,7 @@
         template: multiple_options2_combined
 
       - id: resources_resources
-        items: [fm-animations-transitions, fm-typography]
+        items: [fm-pro-css, fm-theming-style-queries]
         template: recommended_resources
 
 - id: user_info
@@ -496,10 +486,10 @@
               parameters:
                   sort: { property: options }
 
-      - id: augustin_mauroy
+      - id: julia_miocene
         template: picks
         variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/:has
+            url: https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API
 
       - id: company_size
         template: multiple_options2
@@ -579,6 +569,15 @@
                       sectionId: user_info
                       id: gender
 
+      - id: frontend_masters_learning_path
+        template: midpage_resource
+        variables:
+            id: fem-learning-path
+            labelId: frontendmasters.learning_path
+            imageUrl: https://assets.devographics.com/sponsors/fem-background-intermediate.jpg
+            logoUrl: https://assets.devographics.com/sponsors/frontend-masters-dark.png
+            link: https://frontendmasters.com/learn/professional/?utm_source=stateofdevs&utm_medium=website&utm_campaign=css2025
+
       - id: higher_education_degree
         template: multiple_options2
         variants:
@@ -586,10 +585,10 @@
               parameters:
                   sort: { property: options }
 
-      - id: lea_verou
-        template: picks
-        variables:
-            url: https://developer.chrome.com/docs/css-ui/style-queries
+      # - id: lea_verou
+      #   template: picks
+      #   variables:
+      #       url: https://developer.chrome.com/docs/css-ui/style-queries
 
       - id: gender
         template: multiple_options2
@@ -621,7 +620,7 @@
         template: multiple_options2_combined
 
       - id: user_info_resources
-        items: [fm-learncss]
+        items: [fm-homepage]
         template: recommended_resources
 
 - id: awards

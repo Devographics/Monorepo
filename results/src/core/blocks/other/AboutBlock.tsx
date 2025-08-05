@@ -2,11 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
+import { usePageContext } from 'core/helpers/pageContext'
 
 const AboutBlock = () => {
+    const { currentEdition } = usePageContext()
+
     return (
         <About>
-            <T k="about.content" md={true} />
+            <T k={`about.content.${currentEdition.id}`} md={true} />
         </About>
     )
 }
