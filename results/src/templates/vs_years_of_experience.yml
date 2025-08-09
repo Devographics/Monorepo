@@ -7,9 +7,8 @@ blockType: HorizontalBarBlock2
 hasData: true
 parameters:
     showNoAnswer: true
+    cutoff: 20
 filtersState:
-    options:
-        mode: facet
     facet:
         sectionId: user_info
         id: years_of_experience

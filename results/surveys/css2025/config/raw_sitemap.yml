@@ -345,6 +345,10 @@
         i18nNamespace: tools
         variables:
             disableOtherBucket: true
+        variants:
+            - template: vs_years_of_experience
+              parameters:
+                  sort: { property: medianByFacet }
 
       - id: figure_css_in_js
         template: figure
@@ -357,6 +361,10 @@
         i18nNamespace: tools
         variables:
             disableOtherBucket: true
+        # variants:
+        #     - template: vs_years_of_experience
+        #       parameters:
+        #           sort: { property: medianByFacet }
 
       - id: ahmad_shadeed
         template: picks
@@ -366,6 +374,10 @@
       - id: pre_post_processors
         template: multiple_options2_combined
         i18nNamespace: tools
+        # variants:
+        #     - template: vs_years_of_experience
+        #       parameters:
+        #           sort: { property: medianByFacet }
 
       - id: utilities
         template: multiple_options2_combined
@@ -380,6 +392,23 @@
       - id: browsers
         template: multiple_options2_combined
         i18nNamespace: tools
+        variants:
+            - id: browsers_by_os
+              fieldId: browsers
+              template: multiple_options2_combined
+              tabId: tabs.by_os
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: os
+                              sectionId: _user_metadata
+                              operator: eq
+                              value: macOS
+                      - conditions:
+                            - fieldId: os
+                              sectionId: _user_metadata
+                              operator: eq
+                              value: Windows
 
       - id: other_tools_resources
         items: [fm-tailwind-css-v2, fm-frontend-system-design]
@@ -394,6 +423,17 @@
 
       - id: form_factors
         template: multiple_options2_combined
+        variants:
+            - id: company_size_vs_form_factors
+              template: multiple_options2_combined
+              tabId: tabs.vs_company_size
+              queryOptions:
+                  sectionId: user_info
+              fieldId: company_size
+              filtersState:
+                  facet:
+                      sectionId: usage
+                      id: form_factors
 
       - id: sharing_hint
         template: hint
@@ -432,14 +472,39 @@
       - id: favorite_new_features
         template: multiple_options2_freeform
 
+      - id: saron_yitbarek
+        template: picks
+        variables:
+            url: https://piccalil.li/blog/
+
       - id: gamechanger_feature
         template: single_option2_freeform
 
       - id: baseline_awareness
         template: single_option2
+        variants:
+            - id: age_vs_baseline_awareness
+              tabId: tabs.vs_age
+              template: single_option2
+              queryOptions:
+                  sectionId: user_info
+              fieldId: age
+              filtersState:
+                  facet:
+                      sectionId: usage
+                      id: baseline_awareness
 
       - id: css_pace_of_change
         template: single_option2
+        variants:
+            - template: vs_years_of_experience
+              parameters:
+                  sort: { property: medianByFacet }
+
+      - id: sara_joy
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/light-dark
 
       - id: state_of_the_web_happiness
         template: happiness2
