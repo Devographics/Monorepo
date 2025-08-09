@@ -348,11 +348,14 @@ export const processLocale = (
 
     const allDuplicateKeys = checkForDuplicates(locale, allLocaleStrings, 'allContexts', report)
 
+    // Note: cannot do that because of keys like "picks.josh_comeau.name"
+    // that are the same across multiple surveys
+
     // remove the first instance of any duplicate keys
-    for (const { duplicateKey } of allDuplicateKeys) {
-        const duplicateIndex = allLocaleStrings.findIndex(s => s.key === duplicateKey)
-        allLocaleStrings.splice(duplicateIndex, 1)
-    }
+    // for (const { duplicateKey } of allDuplicateKeys) {
+    //     const duplicateIndex = allLocaleStrings.findIndex(s => s.key === duplicateKey)
+    //     allLocaleStrings.splice(duplicateIndex, 1)
+    // }
 
     const { stringFiles, ...localeWithoutStringfiles } = locale
     let processedLocale = { ...localeWithoutStringfiles, strings: allLocaleStrings }
