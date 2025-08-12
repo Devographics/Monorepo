@@ -28,13 +28,14 @@ const getOptions = pluginOptions => {
     }
 }
 
-exports.onRenderBody = ({ setHeadComponents }, pluginOptions) => {
+import { Minimatch } from 'minimatch'
+
+export const onRenderBody = ({ setHeadComponents }, pluginOptions) => {
     if (process.env.NODE_ENV === 'production') {
         const { plausibleDomain, scriptURI, domain, excludePaths, trackAcquisition } =
             getOptions(pluginOptions)
 
         const plausibleExcludePaths = []
-        const Minimatch = require(`minimatch`).Minimatch
         excludePaths.map(exclude => {
             const mm = new Minimatch(exclude)
             plausibleExcludePaths.push(mm.makeRe())

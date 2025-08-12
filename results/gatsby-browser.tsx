@@ -33,10 +33,8 @@ export const onRouteUpdate = ({ location, prevLocation }) => {
             pageContent.scrollTop = 0
         }
     }
-}
 
-// https://github.com/pixelplicity/gatsby-plugin-plausible/blob/master/src/gatsby-browser.js
-exports.onRouteUpdate = function ({ location }) {
+    // https://github.com/pixelplicity/gatsby-plugin-plausible/blob/master/src/gatsby-browser.js
     if (process.env.NODE_ENV === `production` && typeof window.plausible === `object`) {
         const pathIsExcluded =
             location &&
