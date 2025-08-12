@@ -25,7 +25,7 @@ const PartnersBlock = ({ data }) => {
                             <SponsorLogo>
                                 <a
                                     onClick={() => {
-                                        trackClick('sponsor_logo', { id })
+                                        trackClick(`sponsor_logo_${id}`, { id })
                                     }}
                                     href={url}
                                     title={name}

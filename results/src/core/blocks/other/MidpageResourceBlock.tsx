@@ -16,7 +16,7 @@ export const MidpageResourceBlock = ({ block }: { block: BlockVariantDefinition 
             <a
                 href={link}
                 onClick={() => {
-                    trackClick('sponsor_logo', { id })
+                    trackClick(`sponsor_logo_${id}`, { id })
                 }}
             >
                 <div className="midpage-resource-wrapper">

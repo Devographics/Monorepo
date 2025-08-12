@@ -43,7 +43,7 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                                 >
                                     <ImageLink
                                         onClick={() => {
-                                            trackClick('recommended_resource_click', { id })
+                                            trackClick(`recommended_resource_click_${id}`, { id })
                                         }}
                                         href={`${url}&utm_content=textlink`}
                                         title={resource.name}
@@ -67,7 +67,9 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                                     <Title className="Resource__title">
                                         <a
                                             onClick={() => {
-                                                trackClick('recommended_resource_click', { id })
+                                                trackClick(`recommended_resource_click_${id}`, {
+                                                    id
+                                                })
                                             }}
                                             href={`${url}&utm_content=textlink`}
                                         >
