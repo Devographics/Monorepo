@@ -8,8 +8,6 @@ hasData: true
 parameters:
     showNoAnswer: true
 filtersState:
-    options:
-        mode: facet
     facet:
         sectionId: user_info
         id: company_size

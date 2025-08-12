@@ -8,8 +8,10 @@ import { usePageContext } from 'core/helpers/pageContext'
 import { RecommendedResource, RecommendedResourceJob } from 'core/types/other'
 import './RecommendedResources.scss'
 
-const trackClick = (id, resource, label) => {
-    // TODO: add plausible event tracking
+const trackClick = (id: string, props: any) => {
+    if (window && window.plausible) {
+        window.plausible(id, props)
+    }
 }
 
 const RecommendedResourcesBlock = ({ block, data }) => {
@@ -45,7 +47,9 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                                     isWide={resource.imageRatio === 'wide'}
                                 >
                                     <ImageLink
-                                        onClick={() => trackClick(id, resource, 'text')}
+                                        onClick={() => {
+                                            trackClick('recommended_resource_click', { id })
+                                        }}
                                         href={`${url}&utm_content=textlink`}
                                         title={resource.name}
                                         padding={resource.padding}
@@ -67,7 +71,9 @@ const RecommendedResourcesBlock = ({ block, data }) => {
                                 <ResourceContent className="Resource__content">
                                     <Title className="Resource__title">
                                         <a
-                                            onClick={() => trackClick(id, resource, 'text')}
+                                            onClick={() => {
+                                                trackClick('recommended_resource_click', { id })
+                                            }}
                                             href={`${url}&utm_content=textlink`}
                                         >
                                             {resource.name}
