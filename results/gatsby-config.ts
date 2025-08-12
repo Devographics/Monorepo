@@ -71,7 +71,8 @@ export default {
         {
             resolve: `gatsby-plugin-plausible`,
             options: {
-                domain: process.env.PLAUSIBLE_DOMAIN
+                domain: process.env.PLAUSIBLE_DOMAIN,
+                scriptURI: 'https://plausible.io/js/script.outbound-links.tagged-events.js'
             }
         }
     ]
