@@ -19,14 +19,9 @@ dotenv.config({
 
 export const createPages = createPagesSingleLoop
 
-
 // Allow absolute imports and inject `ENV`
 export const onCreateWebpackConfig = ({ stage, actions, plugins }: CreateWebpackConfigArgs) => {
-    console.log(
-
-        "THEME",
-        path.resolve(__dirname, `surveys/${process.env.EDITIONID}/theme`),
-    )
+    console.log('THEME', path.resolve(__dirname, `surveys/${process.env.EDITIONID}/theme`))
     actions.setWebpackConfig({
         resolve: {
             alias: {
@@ -67,4 +62,11 @@ export const onCreateWebpackConfig = ({ stage, actions, plugins }: CreateWebpack
             })
         ]
     })
+}
+
+// https://github.com/pixelplicity/gatsby-plugin-plausible/blob/master/src/gatsby-node.js
+exports.onPreInit = ({ reporter }, options) => {
+    if (!process.env.PLAUSIBLE_DOMAIN) {
+        reporter.warn(`The Plausible Analytics plugin requires a domain. Did you mean to add it?`)
+    }
 }
