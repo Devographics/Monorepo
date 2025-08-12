@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
+import { trackClick } from 'core/helpers/trackClick'
 
 const PartnersBlock = ({ data }) => {
     const context = usePageContext()
@@ -22,7 +23,13 @@ const PartnersBlock = ({ data }) => {
                     {partners.map(({ name, imageUrl, url, id }) => (
                         <Sponsor className={`Sponsor Sponsor--${id}`} key={name}>
                             <SponsorLogo>
-                                <a href={url} title={name}>
+                                <a
+                                    onClick={() => {
+                                        trackClick('sponsor_logo', { id })
+                                    }}
+                                    href={url}
+                                    title={name}
+                                >
                                     <img src={imageUrl} alt={name} />
                                 </a>
                             </SponsorLogo>

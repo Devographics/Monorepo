@@ -5,6 +5,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { Sponsoring } from './RecommendedResourcesBlock'
 import Link from 'core/components/LocaleLink'
 import { BlockVariantDefinition } from 'core/types'
+import { trackClick } from 'core/helpers/trackClick'
 
 export const MidpageResourceBlock = ({ block }: { block: BlockVariantDefinition }) => {
     const { variables } = block
@@ -12,7 +13,12 @@ export const MidpageResourceBlock = ({ block }: { block: BlockVariantDefinition 
     const { getString } = useI18n()
     return (
         <div className={`midpage-resource-block ${id}`}>
-            <a href={link}>
+            <a
+                href={link}
+                onClick={() => {
+                    trackClick('sponsor_logo', { id })
+                }}
+            >
                 <div className="midpage-resource-wrapper">
                     <div
                         className="midpage-resource-image"

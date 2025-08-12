@@ -7,12 +7,7 @@ import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 import { RecommendedResource, RecommendedResourceJob } from 'core/types/other'
 import './RecommendedResources.scss'
-
-const trackClick = (id: string, props: any) => {
-    if (window && window.plausible) {
-        window.plausible(id, props)
-    }
-}
+import { trackClick } from 'core/helpers/trackClick'
 
 const RecommendedResourcesBlock = ({ block, data }) => {
     const context = usePageContext()
