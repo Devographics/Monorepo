@@ -34,9 +34,19 @@ const findRealString = (aliasKey: string, localeRawData: RawLocale) => {
     return matches.at(-1)
 }
 
-export const resolveAliases = (stringFile: StringFile, localeRawData: RawLocale, report) => {
+export const resolveAliases = ({
+    enStringFile,
+    stringFile,
+    locale,
+    report
+}: {
+    enStringFile?: StringFile
+    stringFile: StringFile
+    locale: RawLocale
+    report: any
+}) => {
     if (!stringFile.strings) {
-        console.warn(`‼️ no strings found for locale ${localeRawData.id}/${stringFile.context}`)
+        console.warn(`‼️ no strings found for locale ${locale.id}/${stringFile.context}`)
         return stringFile
     }
     const aliasedStrings: TranslationStringObject[] = []
@@ -50,10 +60,10 @@ export const resolveAliases = (stringFile: StringFile, localeRawData: RawLocale,
       aliasFor: foo.bar
 
     */
-    stringFile.strings = stringFile.strings.map((s: TranslationStringObject) => {
+    stringFile.strings = stringFile.strings.map(s => {
         // resolve alias
         if (s.aliasFor) {
-            const realString = findRealString(s.aliasFor, localeRawData)
+            const realString = findRealString(s.aliasFor, locale)
             if (realString) {
                 s = { ...realString, key: s.key, aliasFor: s.aliasFor }
             } else {
@@ -62,6 +72,28 @@ export const resolveAliases = (stringFile: StringFile, localeRawData: RawLocale,
         }
         return s
     })
+    /* 
+    
+    if an english stringFile has also been provided, add *its* aliases as well
+    (but only if the current stringFile doesn't specify anything for that key). 
+    
+    e.g. if `foo.bar` is an alias for `foo.baz` in english, then
+    `foo.bar` should also be an alias for `foo.baz` in Japanese without having to
+    redefined the alias
+    
+    */
+    if (enStringFile) {
+        enStringFile.strings.forEach(s => {
+            const currentLocaleString = stringFile.strings.find(s_ => s_.key === s.key)
+            if (!currentLocaleString && s.aliasFor) {
+                const realString = findRealString(s.aliasFor, locale)
+                if (realString) {
+                    stringFile.strings.push({ ...realString, key: s.key, aliasFor: s.aliasFor })
+                }
+            }
+        })
+    }
+
     /*
     pattern 2: (better)
 
@@ -265,7 +297,7 @@ export const processStringFile = ({
     enStringFile?: StringFile
     report: any
 }) => {
-    let processedStringFile = resolveAliases(stringFile, locale, report)
+    let processedStringFile = resolveAliases({ enStringFile, stringFile, locale, report })
     processedStringFile = parseMarkdown(processedStringFile)
     if (enStringFile) {
         processedStringFile = addFallbacks(processedStringFile, locale, enStringFile)
