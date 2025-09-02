@@ -8,6 +8,8 @@ import { ResultsSubFieldEnum } from "@devographics/types";
 import pick from "lodash/pick";
 import { getSurveyEditionSectionQuestion } from "../helpers/getSurveyEditionQuestion";
 
+const foo = 123;
+
 export interface GetQuestionResponsesParams {
   surveyId: string;
   editionId: string;
