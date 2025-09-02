@@ -25,6 +25,6 @@
         "dev": "NODE_ENV=development tsup --watch ./src --onSuccess='cp -R public/ dist/ && node ./dist/server.mjs'"
     },
     "engines": {
-        "node": "^18.10.0"
+        "node": "^20.11.1"
     }
 }
