@@ -6,6 +6,7 @@ import {
   SurveyMetadata,
   Entity,
   QuestionWithSection,
+  QuestionTemplateOutputWithSection,
 } from "@devographics/types";
 import sortBy from "lodash/sortBy";
 import ModalTrigger from "../ui/ModalTrigger";
@@ -195,6 +196,7 @@ const Tokens = ({
       <MatchTagsDetails questionObject={questionObject} />
       <PatternsDetails />
       <ExportDetails allTokens={allTokens} />
+
       <p className="tokens-actions">
         {/* <button
             className="button-ghost"
@@ -451,9 +453,19 @@ const Row = (props: RowProps) => {
   );
 };
 
-const MatchTagsDetails = ({ questionObject }) => (
+const MatchTagsDetails = ({
+  questionObject,
+}: {
+  questionObject: QuestionTemplateOutputWithSection;
+}) => (
   <Details label="About Question Match Tags">
     <ul>
+      <li>
+        Match tags: <code>{questionObject.id}</code>
+        {questionObject?.matchTags?.map((tag) => (
+          <code key={tag}>{tag}</code>
+        ))}
+      </li>
       <li>
         A question's match tags are defined in the survey outline under the
         <code>matchTags</code> property.
