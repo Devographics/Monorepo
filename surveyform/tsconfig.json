@@ -24,6 +24,7 @@
         "name": "next"
       }
     ],
+    "lib": ["dom", "es2023"],
     "strict": false,
     "strictNullChecks": true
   }
