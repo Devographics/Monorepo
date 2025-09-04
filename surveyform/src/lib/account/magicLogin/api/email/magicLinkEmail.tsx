@@ -14,6 +14,8 @@ import { fetchEditionMetadata } from "@devographics/fetch";
 import { SurveyMetadata, AppName } from "@devographics/types";
 import { MagicLoginSendEmailBody } from "../../typings/requests-body";
 
+const orgName = process.env.CONFIG === "tokyodev" ? "TokyoDev" : "Devographics";
+
 const MagicLinkHtml = ({
   magicLink,
   survey,
@@ -23,7 +25,7 @@ const MagicLinkHtml = ({
   survey?: SurveyMetadata;
   locale?: String;
 }) =>
-  `<h3>Devographics</h3>
+  `<h3>${orgName}</h3>
   <p><a href="${magicLink}">Log in to the survey.</a></p>`;
 
 export const magicLinkEmailParameters = ({
@@ -37,8 +39,8 @@ export const magicLinkEmailParameters = ({
 }): Partial<Mail.Options> => {
   return {
     // TODO: customize with current survey?
-    subject: `Devographics: Log in to your account`,
-    text: `Click this link to log in to Devographics surveys: ${magicLink}.`,
+    subject: `${orgName}: Log in to your account`,
+    text: `Click this link to log in to ${orgName} surveys: ${magicLink}.`,
     html: MagicLinkHtml({ magicLink, survey, locale }),
   };
 };
