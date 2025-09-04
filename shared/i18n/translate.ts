@@ -127,7 +127,7 @@ export function makeTranslationFunction(locale: LocaleParsed) {
             // appears last in the locale files in case of multiple conflicting keys
 
             // @ts-ignore
-            translation = Array.reverse([...locale.strings]).find(s => s.key === key)
+            translation = locale.strings.toReversed().find(s => s.key === key)
         } else if (locale.dict) {
             translation = locale.dict[key]
         }

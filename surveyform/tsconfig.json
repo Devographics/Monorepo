@@ -19,6 +19,7 @@
   // (this is a trick to correctly handle colocated non-built files such as unit tests)
   "compilerOptions": {
     "incremental": true,
+    "lib": ["dom", "es2023"],
     "plugins": [
       {
         "name": "next"
