@@ -17,7 +17,7 @@ export const FormComponentSelect = (props: FormInputProps) => {
     readOnly,
   } = props;
   const { options, optionsAreNumeric } = question;
-  const { t } = useI18n();
+  const { t, getMessage } = useI18n();
   const emptyValue = "";
   const noneOption = {
     label: t("forms.select_option"),
@@ -41,7 +41,7 @@ export const FormComponentSelect = (props: FormInputProps) => {
             question,
             option,
           });
-          const optionLabel = label || t(i18n.base);
+          const optionLabel = getMessage(i18n.base, {}, label)?.t;
           return (
             <option key={id} value={id}>
               {optionLabel}
