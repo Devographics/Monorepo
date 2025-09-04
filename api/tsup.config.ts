@@ -26,6 +26,7 @@ export default defineConfig([
             '@devographics/helpers',
             '@devographics/debug',
             '@devographics/redis',
+            '@devographics/i18n',
             '@devographics/mongo'
         ]
     }
