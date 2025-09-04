@@ -123,7 +123,11 @@ export function makeTranslationFunction(locale: LocaleParsed) {
         let translation
         // TODO: get rid of this
         if (locale.strings) {
-            translation = locale.strings.find(s => s.key === key)
+            // add toReversed() to make sure we use the version of the key that
+            // appears last in the locale files in case of multiple conflicting keys
+
+            // @ts-ignore
+            translation = locale.strings.toReversed().find(s => s.key === key)
         } else if (locale.dict) {
             translation = locale.dict[key]
         }
