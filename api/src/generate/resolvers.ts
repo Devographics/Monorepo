@@ -27,15 +27,17 @@ import { RequestContext, SectionApiObject } from '../types'
 import { getSectionItems, getEditionItems } from './helpers'
 import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
-import { localesResolvers } from '../resolvers/locales'
+import { localesResolvers, unconvertLocaleId } from '../resolvers/locales'
 import { subFields } from './subfields'
-import { Creator, ResultsSubFieldEnum } from '@devographics/types'
+import { Creator, ResultsSubFieldEnum, SectionMetadata } from '@devographics/types'
 import { loadOrGetSurveys } from '../load/surveys'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
 import StringOrFloatOrArray from '../graphql/string_or_array'
 import { getCardinalities } from '../compute/cardinalities'
 import { calculateWordFrequencies } from '@devographics/helpers'
+import { getQuestioni18nIds, makeTranslatorFunc } from '@devographics/i18n'
+import { loadOrGetLocales } from '../load/locales/locales'
 
 export const generateResolvers = async ({
     surveys,
@@ -569,6 +571,39 @@ export const questionMetadataResolverMap = {
         }
         const groupsWithAverages = addGroupsAverages(groups)
         return groupsWithAverages
+    },
+    translationKeys: async (parent: QuestionApiObject, {}, context: RequestContext) => {
+        const question = parent
+        const section = question.section as SectionMetadata
+        if (!section) {
+            return
+        }
+        const i18nIds = getQuestioni18nIds({ section, question })
+        return { ...i18nIds, name: i18nIds.base }
+    },
+    translations: async (parent: QuestionApiObject, {}, context: RequestContext) => {
+        const question = parent
+        const section = question.section as SectionMetadata
+        if (!section) {
+            return
+        }
+        const i18nIds = getQuestioni18nIds({ section, question })
+        const locales = await loadOrGetLocales()
+        const translations = locales.map(locale => {
+            const getMessage = makeTranslatorFunc(locale)
+
+            const name = getMessage(i18nIds.base)?.t
+            const question = getMessage(i18nIds.question)?.t
+            const prompt = getMessage(i18nIds.prompt)?.t
+
+            return {
+                localeId: unconvertLocaleId(locale.id),
+                name,
+                question,
+                prompt
+            }
+        })
+        return translations
     }
 }
 

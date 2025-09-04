@@ -12,7 +12,8 @@ export interface LocaleWithExtraProps extends Locale {
     contexts?: string[]
 }
 
-const convert = (localeId: string) => localeId.replace('_', '-')
+export const convertLocaleId = (localeId: string) => localeId.replace('_', '-')
+export const unconvertLocaleId = (localeId: string) => localeId.replace('-', '_')
 
 export const localesResolvers = {
     locale: async (
@@ -21,14 +22,14 @@ export const localesResolvers = {
         context: RequestContext
     ) => {
         console.log(`// locale resolver: ${localeId} ${contexts ? `(${contexts.join(', ')})` : ''}`)
-        return await getLocale({ localeId: convert(localeId), contexts, context })
+        return await getLocale({ localeId: convertLocaleId(localeId), contexts, context })
     },
     locales: async (
         root: any,
         { localeIds, contexts }: { localeIds: string[]; contexts: string[] },
         context: RequestContext
     ) => {
-        return await getLocales({ localeIds: localeIds?.map(convert), contexts, context })
+        return await getLocales({ localeIds: localeIds?.map(convertLocaleId), contexts, context })
     },
     translation: async (
         root: any,
@@ -39,7 +40,12 @@ export const localesResolvers = {
         }: { localeId: string; key: string; context: string },
         context: RequestContext
     ) => {
-        return await getTranslation({ localeId: convert(localeId), key, localeContext, context })
+        return await getTranslation({
+            localeId: convertLocaleId(localeId),
+            key,
+            localeContext,
+            context
+        })
     }
 }
 

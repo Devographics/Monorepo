@@ -6,6 +6,7 @@
         "@devographics/constants": "workspace:^1.0.0",
         "@devographics/debug": "workspace:^1.0.0",
         "@devographics/helpers": "workspace:^1.0.0",
+        "@devographics/i18n": "workspace:^",
         "@devographics/mongo": "workspace:^1.0.0",
         "@devographics/redis": "workspace:^1.0.0",
         "@devographics/templates": "workspace:^1.0.0",

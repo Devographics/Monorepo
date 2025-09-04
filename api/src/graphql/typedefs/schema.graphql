@@ -172,6 +172,22 @@ type QuestionMetadata {
     longText: Boolean
     # for numerical questions, specify value units
     units: String
+    # translations
+    translationKeys: QuestionTranslationKeys
+    translations: [QuestionTranslation]
+}
+
+type QuestionTranslationKeys {
+    name: String
+    question: String
+    prompt: String
+}
+
+type QuestionTranslation {
+    localeId: LocaleID
+    name: String
+    question: String
+    prompt: String
 }
 
 type RawDbPaths {

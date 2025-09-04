@@ -1,0 +1,43 @@
+import { SectionMetadata, QuestionMetadata } from '@devographics/types'
+
+export const separator = '.'
+
+export const getQuestioni18nIds = ({
+    section,
+    question
+}: {
+    section: SectionMetadata
+    question: QuestionMetadata
+}) => {
+    const { id: sectionId, slug } = section
+    const { id: questionId, sectionId: questionSectionId, i18nNamespace, intlId } = question
+
+    const sectionNamespace = questionSectionId || slug || sectionId
+    const questionNamespace = i18nNamespace || questionId
+
+    const baseSegments = [sectionNamespace, questionNamespace]
+    const base = intlId || baseSegments.join(separator)
+
+    const joinWithBase = (suffix: string) => [base, suffix].join(separator)
+
+    const ids = {
+        // e.g. user_info.yearly_salary => "Yearly Salary" (legacy)
+        base,
+        // e.g. user_info.yearly_salary.title => "Yearly Salary"
+        title: joinWithBase('title'),
+        // e.g. user_info.yearly_salary.description => "How much do you earn?" (legacy)
+        description: joinWithBase('description'),
+        // e.g. user_info.yearly_salary.prompt => "In USD, pre-tax income"
+        prompt: joinWithBase('prompt'),
+        // e.g. user_info.yearly_salary.question => "How much do you earn?"
+        question: joinWithBase('question'),
+        // e.g. user_info.yearly_salary.note => a note about the question displayed below
+        note: joinWithBase('note'),
+        // e.g. resources.video_creators.others => "Other video creators" (legacy)
+        others: joinWithBase('others'),
+        // e.g. career.workplace_issues.commentPrompt => "Please avoid any personally identifying information"
+        commentPrompt: joinWithBase('commentPrompt')
+    }
+
+    return ids
+}
