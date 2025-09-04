@@ -1,6 +1,13 @@
 {
-    "include": ["**/*.ts", "**/*.tsx"],
-    "exclude": ["**/*.test.ts", "**/*.tests.ts", "node_modules"],
+    "include": [
+        "**/*.ts",
+        "**/*.tsx"
+    ],
+    "exclude": [
+        "**/*.test.ts",
+        "**/*.tests.ts",
+        "node_modules"
+    ],
     "compilerOptions": {
         /**
       /!\ This is important for pnpm to load the right versions
@@ -13,7 +20,10 @@
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": true,
         "jsx": "preserve",
-        "lib": ["dom", "es2021"],
+        "lib": [
+            "dom",
+            "es2021"
+        ],
         "module": "esnext",
         "moduleResolution": "node",
         "noEmit": true,
@@ -21,7 +31,9 @@
         "noUnusedLocals": false, // won't fail on unused variables
         "noUnusedParameters": false,
         "paths": {
-            "~/*": ["src/*"]
+            "~/*": [
+                "src/*"
+            ]
         },
         "resolveJsonModule": true,
         "skipLibCheck": true,

@@ -20,7 +20,7 @@
         "jsx": "preserve",
         "lib": [
             "dom",
-            "es2023"
+            "es2021"
         ],
         "module": "esnext",
         "moduleResolution": "node",

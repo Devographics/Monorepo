@@ -1,6 +1,11 @@
 {
-    "include": ["**/*.ts", "**/*.tsx"],
-    "exclude": ["node_modules"],
+    "include": [
+        "**/*.ts",
+        "**/*.tsx"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
     "compilerOptions": {
         /**
       /!\ This is important for pnpm to load the right versions
@@ -13,7 +18,10 @@
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": true,
         "jsx": "preserve",
-        "lib": ["dom", "es2021"],
+        "lib": [
+            "dom",
+            "es2021"
+        ],
         "module": "esnext",
         "moduleResolution": "node",
         "noEmit": true,
