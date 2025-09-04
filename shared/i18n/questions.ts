@@ -2,6 +2,32 @@ import { SectionMetadata, QuestionMetadata } from '@devographics/types'
 
 export const separator = '.'
 
+/**
+ * When using this function,
+ * be careful to define client tokens accordingly
+ * @returns
+ */
+export const getSectioni18nIds = ({ section }: { section: SectionMetadata }) => {
+    const { id: sectionId, intlId } = section
+
+    const sectionNamespace = sectionId
+    const baseSegments = ['sections', sectionNamespace]
+    const base = intlId || baseSegments.join(separator)
+
+    const joinWithBase = (suffix: string) => [base, suffix].join(separator)
+
+    const ids = {
+        // e.g. user_info (not used)
+        base,
+        // e.g. user_info.title => "About You"
+        title: joinWithBase('title'),
+        // e.g. user_info.prompt => "Let's get to know the real you."
+        prompt: joinWithBase('prompt')
+    }
+
+    return ids
+}
+
 export const getQuestioni18nIds = ({
     section,
     question

@@ -36,7 +36,7 @@ import { getRawData } from '../compute/raw'
 import StringOrFloatOrArray from '../graphql/string_or_array'
 import { getCardinalities } from '../compute/cardinalities'
 import { calculateWordFrequencies } from '@devographics/helpers'
-import { getQuestioni18nIds, makeTranslatorFunc } from '@devographics/i18n'
+import { getQuestioni18nIds, getSectioni18nIds, makeTranslatorFunc } from '@devographics/i18n'
 import { loadOrGetLocales } from '../load/locales/locales'
 
 export const generateResolvers = async ({
@@ -512,6 +512,29 @@ export const sectionMetadataResolverMap = {
         context: RequestContext
     ) => {
         return filterItems(parent.questions, parent.include)
+    },
+    translationKeys: async (parent: SectionApiObject, {}, context: RequestContext) => {
+        const section = parent as SectionMetadata
+        const i18nIds = getSectioni18nIds({ section })
+        return { ...i18nIds, name: i18nIds.base }
+    },
+    translations: async (parent: SectionApiObject, {}, context: RequestContext) => {
+        const section = parent as SectionMetadata
+        const i18nIds = getSectioni18nIds({ section })
+        const locales = await loadOrGetLocales()
+        const translations = locales.map(locale => {
+            const getMessage = makeTranslatorFunc(locale)
+
+            const name = getMessage(i18nIds.title)?.t
+            const prompt = getMessage(i18nIds.prompt)?.t
+
+            return {
+                localeId: unconvertLocaleId(locale.id),
+                name,
+                prompt
+            }
+        })
+        return translations
     }
 }
 
@@ -587,14 +610,18 @@ export const questionMetadataResolverMap = {
         if (!section) {
             return
         }
+        const entity = await getEntity({ id: question.id, context })
         const i18nIds = getQuestioni18nIds({ section, question })
         const locales = await loadOrGetLocales()
         const translations = locales.map(locale => {
+            const isEn = locale.id === 'en-US'
             const getMessage = makeTranslatorFunc(locale)
 
-            const name = getMessage(i18nIds.base)?.t
+            const nameFallback = isEn ? entity?.name : undefined
+            const name = getMessage(i18nIds.base, {}, nameFallback)?.t
             const question = getMessage(i18nIds.question)?.t
-            const prompt = getMessage(i18nIds.prompt)?.t
+            const promptFallback = isEn ? entity?.description : undefined
+            const prompt = getMessage(i18nIds.prompt, {}, promptFallback)?.t
 
             return {
                 localeId: unconvertLocaleId(locale.id),

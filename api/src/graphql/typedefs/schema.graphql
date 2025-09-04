@@ -125,6 +125,21 @@ type SectionMetadata {
     # whether a section only exists in the API and not the ouline
     apiOnly: Boolean
     template: String
+    # translations
+    translationKeys: SectionTranslationKeys
+    translations: [SectionTranslation]
+}
+type SectionTranslationKeys {
+    name: String
+    question: String
+    prompt: String
+}
+
+type SectionTranslation {
+    localeId: LocaleID
+    name: String
+    question: String
+    prompt: String
 }
 
 # Keep in sync with the corresponding queries in shared/helpers/queries.ts
