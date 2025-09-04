@@ -1,0 +1,12 @@
+translationContexts: [homepage, common, results, countries, state_of_html, html2025]
+
+baseUrl: http://localhost:8001
+# baseUrl: http://localhost:9000
+sitemap: ../../../.logs/flat_sitemap.yml
+# bannerId: general.css2022.js2022_banner
+
+# bannerId: general.css2025.html2025_banner
+# bannerLink: https://survey.devographics.com/en-US/survey/state-of-html/2025?source=css2025_banner
+# bannerBg: '#39695E'
+# bannerText: '#FFFCBC'
+# bannerButton: '#64CE6C'

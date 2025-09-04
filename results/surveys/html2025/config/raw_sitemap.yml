@@ -1,0 +1,645 @@
+- id: introduction
+  path: /
+  showTitle: false
+  blocks:
+      - id: survey_intro
+        blockType: SurveyIntroBlock
+        disableExport: true
+        wrapBlock: false
+
+      # - id: survey_disclaimer
+      #   blockType: DisclaimerBlock
+      #   disableExport: true
+      #   wrapBlock: false
+
+      - id: survey_sponsors
+        template: sponsors
+
+      - id: survey_partners
+        template: sponsors
+        blockType: PartnersBlock
+
+      - id: survey_credits
+        template: credits
+
+      - id: survey_newsletter
+        blockType: NewsletterBlock
+        disableExport: true
+        wrapBlock: false
+
+      - id: survey_translators
+        blockType: TranslatorsBlock
+        disableExport: true
+        wrapBlock: false
+
+- id: tshirt
+  path: /tshirt
+  showTitle: false
+  blocks:
+      - id: tshirt_intro
+        template: page_introduction
+      - id: tshirt_block
+        blockType: TshirtBlock
+        wrapBlock: false
+        disableExport: true
+
+# - id: data_explorer
+#   titleId: sections.data_explorer.title
+#   path: /explorer
+#   blocks:
+#       - template: page_introduction
+
+#       - id: data_explorer
+#         showTitle: false
+#         chartOnly: true
+#         wrapBlock: false
+#         template: data_explorer
+#         parameters: { showNoAnswer: true }
+#         variables:
+#             xAxis: user_info__yearly_salary
+#             yAxis: user_info__years_of_experience
+
+- id: features
+  path: /features
+  descriptionId: sections.features.description.css2024
+  blocks:
+      - template: page_introduction
+
+      - id: figure_has_usage
+        template: figure
+        variables:
+            value: 80.4
+            unit: percentage
+
+      - id: all_features
+        template: multi_items_experience
+        i18nNamespace: features
+        chartOptions:
+            limit: 10
+            categories:
+                [
+                    layout,
+                    shapes_graphics,
+                    colors,
+                    interactions,
+                    typography,
+                    accessibility,
+                    math_features,
+                    other_features
+                ]
+
+      - id: figure_light_dark_awareness
+        template: figure
+        variables:
+            value: 23
+            unit: percentage
+
+      # - id: knowledge_score
+      #   template: demographics
+      - id: features_ratios_over_time
+        template: multi_items_ratios
+        i18nNamespace: features
+        variables:
+            enableMultiSection: true
+
+      - id: josh_comeau
+        template: picks
+        variables:
+            url: https://linear-easing-generator.netlify.app/
+
+      - id: forms_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: forms
+        chartOptions:
+            limit: 10
+
+      - id: graphics_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: graphics_multimedia
+        chartOptions:
+            limit: 10
+
+      - id: content_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: content
+        chartOptions:
+            limit: 10
+
+      - id: performance_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: performance
+        chartOptions:
+            limit: 10
+
+      - id: kilian_valkhof
+        template: picks
+        variables:
+            url: https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap
+
+      - id: web_components_common_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: web_components
+        chartOptions:
+            limit: 10
+
+      - id: web_components_other_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: web_components
+        chartOptions:
+            limit: 10
+
+      - id: system_capabilities_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        queryOptions:
+            sectionId: system_capabilities
+        chartOptions:
+            limit: 10
+
+      - id: ana_rodrigues
+        template: picks
+        variables:
+            url: https://modern-fluid-typography.vercel.app/
+
+      - id: reading_list
+        template: multiple_options2
+        parameters:
+            limit: 20
+        queryOptions:
+            sectionId: reading_list
+            addQuestionComments: false
+        chartOptions:
+            dataFilters: [removeOverLimit, removeNoAnswer]
+            limit: 10
+
+      - id: features_resources
+        items: [fm-css-grid, fm-animations-transitions]
+        template: recommended_resources
+
+- id: accessibility
+  path: /accessibility
+  blocks:
+      - template: page_introduction
+
+      - id: accessibility_techniques
+        template: multiple_options2_combined
+
+      - id: accessibility_disabilities
+        template: multiple_options2_combined
+
+      - id: accessibility_screenreaders
+        template: multiple_options2_combined
+
+      - id: accessibility_tools
+        template: multiple_options2_combined
+
+      - id: accessibility_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        chartOptions:
+            limit: 10
+
+      - id: other_tools_resources
+        items: [fm-next-js-v3]
+        template: recommended_resources
+
+- id: usage
+  path: /usage
+  blocks:
+      - template: page_introduction
+
+      - id: html_interoperability_features
+        template: multiple_options2_freeform
+        parameters: { limit: 20 }
+
+      - id: html_functionality_features
+        template: multiple_options2_freeform
+        parameters: { limit: 20 }
+
+      - id: html_missing_elements
+        template: multiple_options2_combined
+        parameters: { cutoff: 25, cutoffPercent: 0 }
+
+      - id: html_styling_issues
+        template: multiple_options2_freeform
+        parameters: { limit: 20 }
+
+      - id: component_strategies
+        template: multiple_options2_freeform
+        parameters: { limit: 20 }
+
+      - id: design_system_strategies
+        template: multiple_options2_freeform
+        parameters: { limit: 20 }
+
+      - id: html_css_js_balance
+        template: multiple_options2
+
+      - id: what_do_you_use_html_for
+        template: multiple_options2_combined
+
+      - id: sharing_hint
+        template: hint
+
+      - id: html_pain_points_freeform
+        template: multiple_options2_freeform
+        i18nNamespace: features
+        chartOptions:
+            limit: 10
+
+      - id: usage_resources
+        items: [fm-homepage]
+        template: recommended_resources
+
+- id: opinions
+  path: /opinions
+  blocks:
+      - template: page_introduction
+
+      - id: accessibility_is_valued
+        template: multiple_options2
+
+      - id: validation_is_important
+        template: multiple_options2
+
+      - id: keeping_informed_is_challenging
+        template: multiple_options2
+
+      - id: browser_interoperability_is_obstacle
+        template: multiple_options2
+
+      - id: browser_interoperability_pace
+        template: multiple_options2
+
+      - id: web_platform_right_direction
+        template: multiple_options2
+
+      - id: usage_resources
+        items: [fm-homepage]
+        template: recommended_resources
+
+- id: user_info
+  titleId: sections.demographics.title
+  # descriptionId: sections.user_info.description.css2023
+  path: /demographics
+  blocks:
+      - template: page_introduction
+
+      - id: country
+        template: multiple_options2
+        parameters: { limit: 20 }
+        variants:
+            - template: vs_salary
+              parameters: { limit: 20, sort: { property: medianByFacet, order: desc } }
+
+      - id: hint_hint
+        template: hint
+
+      - id: age
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+
+      - id: years_of_experience
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+
+      - id: company_size
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+
+      - id: variants_hint
+        template: hint
+
+      - id: job_title
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+
+      - id: yearly_salary
+        template: multiple_options2
+        variants:
+            - id: yearly_salary_us_vs_world
+              fieldId: yearly_salary
+              tabId: tabs.usa_vs_the_world
+              blockType: HorizontalBarBlock2
+              hasData: true
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: in
+                              value: [USA]
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value: [USA]
+
+      - id: higher_education_degree
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+
+      - id: gender
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+            - id: country_vs_gender
+              fieldId: country
+              tabId: tabs.by_country
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+                  limit: 15
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+
+      - id: race_ethnicity
+        template: multiple_options2_combined
+        variants:
+            - template: vs_years_of_experience
+            - template: vs_age
+
+      - id: disability_status
+        template: multiple_options2_combined
+
+      - id: other_surveys
+        template: multiple_options2_combined
+        queryOptions:
+            sectionId: resources
+        parameters:
+            cutoff: 20
+
+      # - id: how_can_we_improve
+      #   template: multiple_options2_freeform
+
+      # - id: data_explorer
+      #   titleId: sections.data_explorer.title
+      #   descriptionId: sections.data_explorer.description
+      #   showTitle: true
+      #   chartOnly: true
+      #   wrapBlock: true
+      #   template: data_explorer
+      #   parameters: { showNoAnswer: true }
+      #   variables:
+      #       xAxis: user_info__yearly_salary
+      #       yAxis: user_info__years_of_experience
+
+      - items: [renderatl]
+        template: recommended_resources
+        titleId: blocks.recommended_events
+        variables:
+            isEvent: true
+
+# - id: awards
+#   path: /awards
+#   blocks:
+#       - template: page_introduction
+
+#       - id: awards
+#         template: awards
+#         variables:
+#             entities: '"has_selector","at_container","viewport_percentage_length_units","subgrid","at_container","css_nesting","open_props","css_modules","uno_css","panda_css","material_ui","yandex"'
+#         awards:
+#             - id: feature_adoption_delta_award
+#               template: award
+#               awards:
+#                   - id: has_selector
+#                     value: '+16.4%'
+#                   - id: at_container
+#                     value: '+14.1%'
+#                   - id: viewport_percentage_length_units
+#                     value: '+13%'
+
+#             - id: most_commented_feature_award
+#               template: award
+#               awards:
+#                   - id: subgrid
+#                     value: 531
+#                   - id: at_container
+#                     value: 78
+#                   - id: css_nesting
+#                     value: 65
+
+#             # - id: tool_usage_delta_award
+#             #   template: award
+#             #   awards:
+#             #     - id: tailwind_css
+#             #       value: "+17.8%"
+#             #     - id: atomic_css
+#             #       value: "+10.8%"
+#             #     - id: css_modules
+#             #       value: "+10.1%"
+
+#             - id: tool_satisfaction_award
+#               template: award
+#               awards:
+#                   - id: open_props
+#                     value: '91%'
+#                   - id: css_modules
+#                     value: '84.5%'
+#                   - id: uno_css
+#                     value: '82%'
+
+#             # - id: tool_interest_award
+#             #   template: award
+#             #   awards:
+#             #     - id: css_modules
+#             #       value: "74%"
+#             #     - id: vanilla_extract
+#             #       value: "68%"
+#             #     - id: stitches
+#             #       value: "55%"
+
+#             - id: most_write_ins_award
+#               template: award
+#               awards:
+#                   - id: panda_css
+#                     value: 52
+#                   - id: material_ui
+#                     value: 38
+#                   - id: yandex
+#                     value: 24
+
+- id: conclusion
+  path: /conclusion
+  blocks:
+      - id: conclusion
+        template: conclusion
+        blockType: ConclusionBlock
+        variables:
+            author: patrick_brosset
+
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+        wrapBlock: false
+        disableExport: true
+
+# note: other pages need to be included in the sitemap too so they can get the proper
+# locale passed to them
+
+- id: _user_metadata
+  i18nNamespace: user_metadata
+  path: /metadata
+  blocks:
+      - template: page_introduction
+
+      - id: locale
+        template: multiple_options2
+        defaultView: percentageSurvey
+        parameters: { cutoff: 20 }
+        queryOptions:
+            addQuestionComments: false
+
+      - id: completion_stats
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: authmode
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: device
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: browser
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      # - id: version
+      #   template: multiple_options2
+      #   queryOptions:
+      #       addQuestionComments: false
+
+      - id: os
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: past_surveys
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+            addBucketsEntities: true
+        parameters:
+            showNoAnswer: true
+
+      - id: past_same_survey_count
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+        parameters:
+            showNoAnswer: true
+
+      - id: created_at_date
+        template: multiple_options2
+        blockType: TimeSeriesByDateBlock
+        defaultView: countBar
+        parameters:
+            showNoAnswer: false
+            cutoff: 10
+            sort: { order: asc, property: id }
+        queryOptions:
+            addQuestionComments: false
+        variants:
+            - id: created_at_date_by_source
+              fieldId: created_at_date
+              template: multiple_options2
+              blockType: TimeSeriesByDateBlock
+              defaultView: count
+              parameters:
+                  showNoAnswer: false
+                  cutoff: 10
+                  sort: { order: asc, property: id }
+                  facetLimit: 3
+                  enableAddOverallBucket: false
+                  mergeOtherBuckets: true
+              queryOptions:
+                  addBucketsEntities: true
+                  addQuestionComments: false
+              filtersState:
+                  facet:
+                      sectionId: _user_metadata
+                      id: source
+
+      - id: source
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        parameters:
+            limit: 20
+        queryOptions:
+            addQuestionComments: false
+
+- id: about
+  path: /about
+  blocks:
+      - id: about_contents
+        blockType: AboutBlock
+        wrapBlock: false
+        disableExport: true
+
+# - id: how_to_help
+#   path: /how_to_help
+#   blocks:
+
+#     - id: how_to_help_contents
+#       blockType: HowToHelpBlock
+#       wrapBlock: false
+#       disableExport: true
+
+- id: support
+  path: /support
+  is_hidden: true
+  blocks:
+      - id: support
+        template: page_introduction
+
+- id: sponsor_finish
+  path: /sponsor-chart-finish
+  is_hidden: true
+  blocks:
+      - id: sponsor_finish
+        blockType: SponsorFinishBlock
+        wrapBlock: false
+
+- id: notfound
+  titleId: notfound.title
+  path: /404
+  is_hidden: true
+  blocks:
+      - id: notfound
+        blockType: NotFoundBlock

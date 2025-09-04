@@ -1,4 +1,4 @@
-translationContexts: [homepage, common, results, countries, state_of_js, state_of_js_2023]
+translationContexts: [homepage, common, results, countries, state_of_js, js2024]
 
 baseUrl: http://localhost:8001
 # baseUrl: http://localhost:9000

@@ -1,0 +1,79 @@
+# Front End Masters
+
+- name: Tailwind CSS, v2
+  id: fm-tailwind-css-v2
+  description: |
+      Learn Tailwind CSS's utility-first approach to build out entire web designs without any custom CSS! Compose any design directly in markup and implement advanced responsive layouts with flexbox, grid, and container queries.
+  url: https://frontendmasters.com/courses/tailwind-css-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2025
+  image: https://static.frontendmasters.com/assets/teachers/kinney/thumb@2x.webp
+  teacher: Steve Kinney
+  company: Temporal
+
+- name: Front-End System Design
+  id: fm-frontend-system-design
+  description: |
+      Dive into front-end system design to create scalable, efficient user interfaces! Master core UI fundamentals: box model, browser rendering, DOM manipulation, state management, and performance.
+  url: https://frontendmasters.com/courses/frontend-system-design/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2025
+  image: https://static.frontendmasters.com/assets/teachers/ray/thumb@2x.webp
+  teacher: Evgenii Ray
+  company: Staff UI Engineer
+
+- name: Build a Modern Website From Scratch
+  id: fm-pro-css
+  description: |
+      Make full use of the latest CSS features to tackle layout and styling challenges with less code and more control. Tools like cascade layers, custom properties, and new layout techniques help simplify even the trickiest designs.
+  url: https://frontendmasters.com/courses/pro-css/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2025
+  image: https://static.frontendmasters.com/assets/teachers/powell/thumb@2x.webp
+  teacher: Kevin Powell
+  company: Youtuber
+
+- name: Site-Wide Theming with Style Queries
+  id: fm-theming-style-queries
+  description: |
+      Theming with custom properties can involve duplicating your custom properties, which can be annoying. Style queries are one way we can get around that.
+  url: https://frontendmasters.com/tutorials/kevin-powell/theming-style-queries/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2025
+  image: https://static.frontendmasters.com/assets/teachers/powell/thumb@2x.webp
+  teacher: Kevin Powell
+  company: Youtuber
+
+- name: Getting Started with CSS, v2
+  id: fm-getting-started-css-v2
+  description: |
+      Build a modern portfolio with CSS! Learn the foundations of layout and UI design as you explore semantic HTML markup, navigation styles, media queries, and CSS custom properties.
+  url: https://frontendmasters.com/courses/getting-started-css-v2/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2025
+  image: https://static.frontendmasters.com/assets/teachers/kramer/thumb@2x.webp
+  teacher: Jen Kramer
+  company: AnnieCannons
+
+- name: Ultimate CSS Grid & Layout Techniques, v3
+  id: fm-css-grid
+  description: |
+      CSS Grid is the most important tool in a modern web developer's toolkit for laying out web pages. With its two-dimensional structure, precise positioning, and overlapping elements, you’ll learn to achieve complex layouts with minimal code.
+  url: https://frontendmasters.com/courses/css-grid/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2025
+  image: https://static.frontendmasters.com/assets/teachers/kramer/thumb@2x.webp
+  teacher: Jen Kramer
+  company: AnnieCannons
+
+- name: CSS Animations and Transitions
+  id: fm-animations-transitions
+  description: |
+      Learn CSS animation basics and transition to advanced concepts like orchestration and choreography.
+  url: https://frontendmasters.com/courses/css-animations/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
+  image: https://static.frontendmasters.com/assets/teachers/khourshid/thumb@2x.webp
+  teacher: David Khourshid
+  company: Microsoft
+
+- name: SVG Essentials & Animation, v2
+  id: fm-svg
+  description: |
+      In this course, you'll learn to create immersive graphics and make them alive with animations!
+  url: https://frontendmasters.com/courses/svg-essentials-animation/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2024
+  image: https://static.frontendmasters.com/assets/teachers/drasner/thumb@2x.webp
+  teacher: Sarah Drasner
+  company: Google
+
+- name: Frontend Masters
+  id: fm-homepage
+  description: Advance Your Skills with In-Depth, Modern Front-End Engineering Courses
+  url: https://frontendmasters.com/?utm_source=stateofcss&utm_medium=website&utm_campaign=stateofcss2025
+  image: https://static.frontendmasters.com/assets/brand/logos/m-black.jpg
