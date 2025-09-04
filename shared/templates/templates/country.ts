@@ -1345,8 +1345,11 @@ export const country: TemplateFunction = options => {
 
     const output: QuestionTemplateOutput = {
         id: 'country',
+        // options: countries
+        //     .filter(country => enabledCountries.includes(country['alpha-3']))
+        //     .map(country => ({ id: country['alpha-3'], label: country.name })),
         options: countries
-            .filter(country => enabledCountries.includes(country['alpha-3']))
+            // .filter(country => enabledCountries.includes(country['alpha-3']))
             .map(country => ({ id: country['alpha-3'], label: country.name })),
         rawPaths: {
             response: 'user_info__country',
