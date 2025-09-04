@@ -28,6 +28,6 @@
         "strict": false,
         "strictNullChecks": true,
         "sourceMap": true,
-        "target": "es2021"
+        "target": "es2023"
     }
 }
