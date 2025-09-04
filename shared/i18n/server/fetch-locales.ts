@@ -6,20 +6,24 @@
 import { getLocalesQuery, getLocaleContextQuery, localeWithStringsQuery } from './graphql'
 import { logToFile } from '@devographics/debug'
 import { Locale, LocaleParsed, LocaleWithStrings, Translation } from '../typings'
-import {
-    allowedCachingMethods,
-    graphqlFetcher,
-    cachedPipeline,
-    localeWithStringsCacheKey
-} from '@devographics/fetch'
+import { cachedPipeline, localeWithStringsCacheKey, fetchGraphQLApi } from '@devographics/fetch'
 
-export function removeNull(obj: any): any {
+// Thanks AI for generating this type
+type DeepRemoveNull<T> = T extends null | undefined
+    ? never
+    : T extends (infer U)[]
+    ? DeepRemoveNull<U>[]
+    : T extends Record<string, any>
+    ? { [K in keyof T]: T[K] extends null | undefined ? never : DeepRemoveNull<T[K]> }
+    : T
+
+export function removeNull<T>(obj: T): DeepRemoveNull<T> {
     const clean = Object.fromEntries(
-        Object.entries(obj)
+        Object.entries(obj as any)
             .map(([k, v]) => [k, v === Object(v) ? removeNull(v) : v])
             .filter(([_, v]) => v != null && (v !== Object(v) || Object.keys(v).length))
     )
-    return Array.isArray(obj) ? Object.values(clean) : clean
+    return (Array.isArray(obj) ? Object.values(clean) : clean) as DeepRemoveNull<T>
 }
 
 const allLocalesCacheKey = () => `${process.env.APP_NAME}__allLocales__metadata`
@@ -45,17 +49,15 @@ export const getLocalesGraphQL = async ({
     //
     logToFile(`locales/${key}.graphql`, localesQuery)
 
-    const fullResult = await graphqlFetcher(
-        `
-                ${localesQuery}
-            `
-    )
+    const fullResult = await fetchGraphQLApi<{ locales: Array<LocaleWithStrings> }>({
+        query: localesQuery
+    })
     if (!fullResult) throw new Error('Graphql fetcher function did not return an object')
     // TODO: maybe it should be the responsibilit of the graphql fetch to remove null fields?
     const localesResults = removeNull(fullResult)
     logToFile(`locales/${key}.json`, localesResults)
     console.log('fullResults', fullResult)
-    const locales = localesResults.data.locales
+    const locales = localesResults.locales
     return locales
 }
 
@@ -72,14 +74,12 @@ export const getLocaleContextGraphQL = async ({
     logToFile(`locales/${key}.graphql`, localesQuery)
 
     const localesResults = removeNull(
-        await graphqlFetcher(
-            `
-                ${localesQuery}
-            `
-        )
+        await fetchGraphQLApi<{ locale: Array<LocaleWithStrings> }>({
+            query: localesQuery
+        })
     )
     logToFile(`locales/${key}.json`, localesResults)
-    const locale = localesResults.data.locale
+    const locale = localesResults.locale
 
     return locale
 }
@@ -115,7 +115,6 @@ export async function getAllLocaleDefinitions(): Promise<
 }
 
 async function getLocaleContextStrings({ locale, context }: { locale: Locale; context: string }) {
-    const allowedCaches = allowedCachingMethods()
     const contextKey = getLocaleContextCacheKey(locale.id, context)
     const strings = await cachedPipeline<Array<Translation>>({
         cacheKey: contextKey
@@ -152,10 +151,9 @@ export async function getLocaleDict({
         .fetcher(async () => {
             const query = localeWithStringsQuery({ localeId, contexts })
             logToFile(`${cacheKey}.gql`, query)
-            const { data, errors } = await graphqlFetcher<{
-                locale: LocaleWithStrings
-            }>(query)
-            if (errors?.length) throw new Error(errors.map(e => e.message).join('\n'))
+            const data = await fetchGraphQLApi<{ locale: LocaleWithStrings }>({
+                query: query
+            })
             return data?.locale
         })
         .run()
