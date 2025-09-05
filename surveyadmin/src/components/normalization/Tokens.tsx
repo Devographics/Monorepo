@@ -4,6 +4,8 @@ import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject
 import {
   EditionMetadata,
   SurveyMetadata,
+  QuestionMetadata,
+  OptionMetadata,
   Entity,
   QuestionWithSection,
   QuestionTemplateOutputWithSection,
@@ -17,6 +19,8 @@ import { usePresets } from "./hooks";
 import without from "lodash/without";
 import { NormTokenAction } from "./NormTokenAction";
 import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
+import { T, useI18n } from "@devographics/react-i18n";
+import { getOptioni18nIds } from "@devographics/i18n";
 
 export const EMPTY_TAG = "EMPTY_TAG";
 
@@ -268,6 +272,7 @@ const Tokens = ({
         <thead>
           <tr>
             <th>Token</th>
+            <th>Name</th>
             <th>Matches</th>
             <th>Patterns</th>
             {/* <th>Other Tags</th> */}
@@ -280,6 +285,7 @@ const Tokens = ({
             <Row
               key={`${token.id}_${index}`}
               {...{
+                question,
                 token,
                 allTokens,
                 index,
@@ -300,6 +306,7 @@ const Tokens = ({
   );
 };
 interface RowProps {
+  question: QuestionMetadata;
   token: Token;
   allTokens: Token[];
   index: number;
@@ -314,7 +321,9 @@ interface RowProps {
 }
 
 const Row = (props: RowProps) => {
+  const { getMessage } = useI18n();
   const {
+    question,
     token,
     allTokens,
     index,
@@ -355,6 +364,23 @@ const Row = (props: RowProps) => {
     setEnabledPresets(without(enabledPresets, id));
   };
 
+  const option = { id } as OptionMetadata;
+  const i18nIds = getOptioni18nIds({ question, option });
+
+  const i18nLabel = getMessage(i18nIds.base)?.t;
+  const tokenLabel = token.nameClean;
+  const labelKind = i18nLabel ? "i18n" : tokenLabel ? "entity" : "none";
+  const label = i18nLabel || tokenLabel || "";
+
+  const i18nDescription = getMessage(i18nIds.description)?.t;
+  const tokenDescription = token.descriptionClean;
+  const descriptionKind = i18nDescription
+    ? "i18n"
+    : tokenDescription
+    ? "entity"
+    : "none";
+  const description = i18nDescription || tokenDescription;
+
   return (
     <Fragment>
       {showMatchTag && (
@@ -390,6 +416,21 @@ const Row = (props: RowProps) => {
               }}
             />
           </div>
+        </td>
+        <td>
+          <span className="token-label">
+            {labelKind === "i18n" && (
+              <span data-tooltip={i18nIds.base}>🌐</span>
+            )}
+            {labelKind === "entity" && (
+              <span data-tooltip={`entity label`}>📄</span>
+            )}{" "}
+            {description ? (
+              <span data-tooltip={description}>{label}</span>
+            ) : (
+              <span>{label}</span>
+            )}
+          </span>
         </td>
         <td>{matchCount > 0 && <span>{matchCount}</span>}</td>
         <td>

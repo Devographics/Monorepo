@@ -70,7 +70,14 @@ export const getQuestionResponses = async ({
       )
     )
     .map((e) =>
-      pick(e, ["id", "parentId", "patterns", "tags", "descriptionClean"])
+      pick(e, [
+        "id",
+        "parentId",
+        "patterns",
+        "tags",
+        "nameClean",
+        "descriptionClean",
+      ])
     );
 
   const result = {

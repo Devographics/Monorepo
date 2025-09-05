@@ -184,9 +184,8 @@ const Row = ({
     entity?.nameHtml || entity?.name || token?.nameHtml || token?.name || "";
   const description = token?.descriptionClean || entity?.descriptionClean || "";
 
-  const option = { id, intlId: id } as OptionMetadata;
+  const option = { id } as OptionMetadata;
   const i18nIds = getOptioni18nIds({ question, option });
-  console.log(i18nIds);
 
   return (
     <tr key={id} className={rowClass}>
@@ -217,7 +216,7 @@ const Row = ({
         />
       </td>
       <td>
-        <T token={`options.job_title.${id}`} fallback={"-"} />
+        <T token={i18nIds.base} fallback={"-"} />
       </td>
       <td>{count}</td>
     </tr>
