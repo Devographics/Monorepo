@@ -32,10 +32,10 @@ export const getQuestioni18nIds = ({
     section,
     question
 }: {
-    section: SectionMetadata
+    section?: SectionMetadata
     question: QuestionMetadata
 }) => {
-    const { id: sectionId, slug } = section
+    const { id: sectionId, slug } = section || {}
     const { id: questionId, sectionId: questionSectionId, i18nNamespace, intlId } = question
 
     const sectionNamespace = questionSectionId || slug || sectionId

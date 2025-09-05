@@ -3,6 +3,7 @@ import { getQuestioni18nIds } from "@devographics/i18n";
 import {
   EditionMetadata,
   QuestionMetadata,
+  QuestionWithSection,
   SurveyMetadata,
 } from "@devographics/types";
 import Link from "next/link";
@@ -20,7 +21,7 @@ const Breadcrumbs = ({
   surveys?: SurveyMetadata[];
   survey?: SurveyMetadata;
   edition?: EditionMetadata;
-  question?: QuestionMetadata;
+  question?: QuestionWithSection;
   heading?: React.ReactNode;
 }) => {
   return (
@@ -81,7 +82,7 @@ const QuestionSegment = ({
 }: {
   survey: SurveyMetadata;
   edition: EditionMetadata;
-  question: QuestionMetadata;
+  question: QuestionWithSection;
 }) => {
   const { getMessage } = useI18n();
 

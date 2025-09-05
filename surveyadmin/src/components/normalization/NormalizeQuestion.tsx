@@ -261,8 +261,6 @@ export const Normalization = (props: NormalizationProps) => {
     questionDataQuery,
     durations,
   } = responsesData;
-  console.log(responsesData);
-  console.log(entities);
   const keyParams = {
     surveyId: survey.id,
     editionId: edition.id,
