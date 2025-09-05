@@ -1430,9 +1430,15 @@ importers:
       '@devographics/helpers':
         specifier: workspace:^1.0.0
         version: link:../shared/helpers
+      '@devographics/i18n':
+        specifier: workspace:^
+        version: link:../shared/i18n
       '@devographics/mongo':
         specifier: workspace:^1.0.0
         version: link:../shared/mongo
+      '@devographics/react-i18n':
+        specifier: workspace:^
+        version: link:../shared/react-i18n
       '@devographics/redis':
         specifier: workspace:^1.0.0
         version: link:../shared/redis

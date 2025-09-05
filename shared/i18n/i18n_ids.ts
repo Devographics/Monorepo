@@ -1,4 +1,4 @@
-import { SectionMetadata, QuestionMetadata } from '@devographics/types'
+import { SectionMetadata, QuestionMetadata, OptionMetadata } from '@devographics/types'
 
 export const separator = '.'
 
@@ -63,6 +63,30 @@ export const getQuestioni18nIds = ({
         others: joinWithBase('others'),
         // e.g. career.workplace_issues.commentPrompt => "Please avoid any personally identifying information"
         commentPrompt: joinWithBase('commentPrompt')
+    }
+
+    return ids
+}
+
+export const getOptioni18nIds = ({
+    question,
+    option
+}: {
+    question: QuestionMetadata
+    option: OptionMetadata
+}) => {
+    const { id, intlId } = option
+    const { id: questionId, i18nNamespace } = question
+    const questionNamespace = i18nNamespace || questionId
+
+    const baseSegments = ['options', questionNamespace, id]
+    const base = intlId || baseSegments.join(separator)
+
+    const ids = {
+        // e.g. options.yearly_salary.range_1000_2000
+        base,
+        // e.g. options.yearly_salary.range_1000_2000.description
+        description: [base, 'description'].join(separator)
     }
 
     return ids
