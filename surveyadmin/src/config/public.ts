@@ -16,4 +16,5 @@ export const publicConfig = {
    * @deprecated
    */
   environment: "development",
+  isDev: process.env.NEXT_PUBLIC_NODE_ENV === "development",
 };

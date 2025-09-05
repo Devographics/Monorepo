@@ -33,7 +33,6 @@ type AiTokenGrouped = {
 };
 
 export const AiTokensTrigger = (props: ActionProps) => {
-  console.log(props);
   const { customNormalizations, allAnswers, questionTokens } = props;
 
   // const aiTokens: AiToken[] = customNormalizations

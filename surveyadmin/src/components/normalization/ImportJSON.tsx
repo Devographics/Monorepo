@@ -23,7 +23,6 @@ export const Import = (props: {
   isButton?: boolean;
 }) => {
   const { survey, edition, question, entities, isButton = true } = props;
-  console.log(props);
   const [value, setValue] = useState("");
   const queryClient = useQueryClient();
 

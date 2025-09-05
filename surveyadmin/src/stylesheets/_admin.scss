@@ -476,9 +476,13 @@ button.button-ghost,
   margin: 0px -1 * $spacing;
   // margin-bottom: $spacing;
   padding: $spacing;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   h2,
   h3,
-  h4 {
+  h4,
+  h5 {
     margin: 0;
   }
   .dropdown {

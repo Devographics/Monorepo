@@ -2,6 +2,8 @@
 import {
   SurveyMetadata,
   EditionMetadata,
+  QuestionMetadata,
+  OptionMetadata,
   ResponseData,
   Entity,
   QuestionWithSection,
@@ -15,6 +17,8 @@ import { loadQuestionData } from "~/lib/normalization/services";
 import ModalTrigger from "../ui/ModalTrigger";
 import { NormTokenAction } from "./NormTokenAction";
 import { CommonNormalizationProps } from "./NormalizeQuestion";
+import { T } from "@devographics/react-i18n";
+import { getOptioni18nIds } from "@devographics/i18n";
 
 type QuestionDataProps = {
   questionData: ResponseData;
@@ -102,10 +106,8 @@ const QuestionData = ({
       ) : (
         <div>
           <p>
-            <p>
-              This table shows aggregated counts for the subset of the data that
-              has already been processed.
-            </p>
+            This table shows aggregated counts for the subset of the data that
+            has already been processed.
           </p>
           <div>
             <table>
@@ -113,7 +115,8 @@ const QuestionData = ({
                 <tr>
                   <th></th>
                   <th>ID</th>
-                  <th>Label</th>
+                  <th>Label (entity)</th>
+                  <th>Label (i18n)</th>
                   <th>Count</th>
                 </tr>
               </thead>
@@ -124,6 +127,7 @@ const QuestionData = ({
                   return (
                     <Fragment key={id}>
                       <Row
+                        question={question}
                         bucket={bucket}
                         index={index}
                         hasGroupedBuckets={hasGroupedBuckets}
@@ -132,6 +136,7 @@ const QuestionData = ({
                       />
                       {groupedBuckets?.map((groupedBucket, index) => (
                         <Row
+                          question={question}
                           key={groupedBucket.id}
                           index={index}
                           bucket={groupedBucket}
@@ -153,6 +158,7 @@ const QuestionData = ({
 };
 
 const Row = ({
+  question,
   bucket,
   index,
   hasGroupedBuckets = false,
@@ -162,6 +168,7 @@ const Row = ({
   setTokenFilter,
   setShowModal,
 }: {
+  question: QuestionMetadata;
   bucket: Bucket;
   index: number;
   hasGroupedBuckets?: boolean;
@@ -176,6 +183,11 @@ const Row = ({
   const label =
     entity?.nameHtml || entity?.name || token?.nameHtml || token?.name || "";
   const description = token?.descriptionClean || entity?.descriptionClean || "";
+
+  const option = { id, intlId: id } as OptionMetadata;
+  const i18nIds = getOptioni18nIds({ question, option });
+  console.log(i18nIds);
+
   return (
     <tr key={id} className={rowClass}>
       <td>{!isGroupedBucket && `${index + 1}.`}</td>
@@ -203,6 +215,9 @@ const Row = ({
             __html: label,
           }}
         />
+      </td>
+      <td>
+        <T token={`options.job_title.${id}`} fallback={"-"} />
       </td>
       <td>{count}</td>
     </tr>
