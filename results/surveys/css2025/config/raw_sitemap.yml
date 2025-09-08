@@ -99,14 +99,13 @@
         i18nNamespace: features
         chartOptions:
             limit: 5
-            categories:
-                [
+            categories: [
                     layout,
                     shapes_graphics,
                     colors,
                     interactions,
                     typography,
-                    accessibility,
+                    # accessibility,
                     math_features,
                     other_features
                 ]
