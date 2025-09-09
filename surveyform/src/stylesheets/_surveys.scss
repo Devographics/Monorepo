@@ -33,6 +33,7 @@
 }
 .account,
 .contents-narrow {
+  width: 100%;
   max-width: 650px;
   margin: 0 auto;
   @include breakpoints.small {

@@ -18,11 +18,9 @@ const orgName = process.env.CONFIG === "tokyodev" ? "TokyoDev" : "Devographics";
 
 const MagicLinkHtml = ({
   magicLink,
-  survey,
   locale,
 }: {
   magicLink: string;
-  survey?: SurveyMetadata;
   locale?: String;
 }) =>
   `<h3>${orgName}</h3>
@@ -30,24 +28,19 @@ const MagicLinkHtml = ({
 
 export const magicLinkEmailParameters = ({
   magicLink,
-  survey,
   locale,
 }: {
   magicLink: string;
-  survey?: SurveyMetadata;
   locale?: String;
 }): Partial<Mail.Options> => {
   return {
     // TODO: customize with current survey?
     subject: `${orgName}: Log in to your account`,
     text: `Click this link to log in to ${orgName} surveys: ${magicLink}.`,
-    html: MagicLinkHtml({ magicLink, survey, locale }),
+    html: MagicLinkHtml({ magicLink, locale }),
   };
 };
 
-const defaultSurveyId = "state_of_js";
-// TODO: should not be needed we only need the surveyId actually
-const defaultEditionId = "js2022";
 export const sendMagicLinkEmail = async ({
   email,
   magicLink,
@@ -58,18 +51,17 @@ export const sendMagicLinkEmail = async ({
   magicLink: string;
   email: string;
 }) => {
-  /**
-   * We use state of js as the default context when user is connecting from the generic form
-   */
-  const { data: edition } = await fetchEditionMetadata({
-    surveyId: surveyId || defaultSurveyId,
-    editionId: editionId || defaultEditionId,
-    calledFrom: "sendMagicLinkEmail",
-  });
-  const survey = edition.survey;
+  //   let survey;
+  //   if (surveyId && editionId) {
+  //     const { data: edition } = await fetchEditionMetadata({
+  //       surveyId,
+  //       editionId,
+  //       calledFrom: "sendMagicLinkEmail",
+  //     });
+  //     survey = edition.survey;
+  //   }
 
-  const defaultEmail =
-    survey.domain && `${survey.name} <login@mail.devographics.com>`;
+  const defaultEmail = `${orgName} <login@mail.devographics.com>`;
   const from = process.env.DEFAULT_MAIL_FROM || defaultEmail;
 
   /**
@@ -84,7 +76,7 @@ export const sendMagicLinkEmail = async ({
   const emailObject = {
     from,
     to: email,
-    ...magicLinkEmailParameters({ magicLink, survey, locale }),
+    ...magicLinkEmailParameters({ magicLink, locale }),
   };
 
   //const magicLink = makeMagicLink(token);

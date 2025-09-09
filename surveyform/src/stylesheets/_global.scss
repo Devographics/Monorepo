@@ -178,6 +178,12 @@ Page-specific styles
   }
 }
 
+.main-contents {
+  display: flex;
+  flex-direction: column;
+  gap: variables.$spacing * 2;
+}
+
 .datatable-above {
   display: flex;
   justify-content: space-between;
@@ -224,7 +230,7 @@ Page-specific styles
   font-weight: bold;
   &:hover {
     text-decoration: underline;
-    color: var(--hover-color)
+    color: var(--hover-color);
   }
 }
 .footer-bottom {

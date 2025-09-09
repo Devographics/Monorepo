@@ -6,8 +6,17 @@ import ReadingListResults from "~/components/reading_list/ReadingListResults";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
 import { ThanksBackButton } from "./ThanksBackButton";
 import { DynamicT } from "@devographics/react-i18n";
+import { Button } from "../ui/Button";
+import GoalMeter from "../common/GoalMeter";
+// import { useCurrentUser } from "~/lib/users/hooks";
+import { rscCurrentUser } from "~/lib/users/rsc-fetchers/rscCurrentUser";
+import ChatAppShare from "../common/ChatAppShare";
+import s from "./Finish.module.scss";
+import { rscTotalResponses } from "~/lib/responses/stats";
 
-export const Finish = ({
+const goal = 1000;
+
+export const Finish = async ({
   edition,
   response,
   readOnly,
@@ -16,17 +25,25 @@ export const Finish = ({
   edition: EditionMetadata;
   response: ResponseDocument;
 }) => {
+  const currentUser = await rscCurrentUser();
+  // const { currentUser, loading } = useCurrentUser();
+
   const imageUrl = getEditionImageUrl(edition);
   const { survey, year } = edition;
+  const { responsesGoal } = edition;
   const { name } = survey;
+
+  const currentProgressCount = await rscTotalResponses({ edition });
   const featureSections = edition.sections.filter(
     (section) => section.slug === "features"
   );
   const enableScore = response && featureSections.length > 0;
   const enableReadingList = edition.enableReadingList;
 
+  const trackingId = `user__${currentUser?._id?.slice(0, 5)}`;
+
   return (
-    <div className="contents-narrow thanks">
+    <div className={`${s.finish_page} contents-narrow thanks`}>
       <ThanksBackButton
         readOnly={readOnly}
         edition={edition}
@@ -35,26 +52,32 @@ export const Finish = ({
       <div className="survey-message survey-finished">
         <DynamicT token="general.thanks1" />
       </div>
-      <h1 className="survey-image survey-image-small">
+
+      {enableScore && <Score response={response} edition={edition} />}
+
+      <h1 className={`${s.finish_page_image} survey-image survey-image-small`}>
         {imageUrl && (
           <img
-            width={420}
-            height={280}
             src={imageUrl}
             alt={getEditionTitle({ edition })}
             //quality={100}
           />
         )}
       </h1>
-      {enableScore && <Score response={response} edition={edition} />}
+      {/* <div>
+        <DynamicT token="general.thanks2" />
+      </div> */}
+      {currentProgressCount !== undefined && responsesGoal !== undefined && (
+        <GoalMeter progress={currentProgressCount} goal={responsesGoal} />
+      )}
+
+      <ChatAppShare edition={edition} />
+
+      <ShareSite edition={edition} />
+
       {enableReadingList && response && (
         <ReadingListResults response={response} edition={edition} />
       )}
-
-      <div>
-        <DynamicT token="general.thanks2" />
-      </div>
-      <ShareSite edition={edition} />
     </div>
   );
 };

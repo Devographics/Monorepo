@@ -3,6 +3,7 @@
 @use "sass:math";
 $spacing: 20px;
 $spacing-half: math.div($spacing, 2);
+$spacing-double: math.div($spacing, 0.5);
 $spacing-quarter: math.div($spacing, 4);
 $spacing-third: math.div($spacing, 3);
 $spacing-two-thirds: math.div($spacing * 2, 3);
@@ -12,6 +13,7 @@ $spacing-sixth: math.div($spacing, 6);
 :root {
   --spacing: #{$spacing};
   --halfSpacing: #{$spacing-half};
+  --doubleSpacing: #{$spacing-double};
   --borderColor: var(--dark-border-color);
   --backgroundColor: var(--bg-color);
   --textColor: var(--text-color);

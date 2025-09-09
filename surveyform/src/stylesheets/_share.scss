@@ -1,7 +1,7 @@
 @use "colors";
 @use "variables";
 
-@use 'sass:math';
+@use "sass:math";
 .ShareSite__Content {
   // border-top: $border;
   display: flex;
@@ -10,7 +10,6 @@
   position: relative;
   z-index: 1;
   margin-top: variables.$spacing;
-  margin-bottom: variables.$spacing * 2;
 }
 
 .share__link {

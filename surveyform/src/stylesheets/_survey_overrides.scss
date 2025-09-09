@@ -48,6 +48,9 @@ These styles will only be active for specific surveys and/or editions
     background-image: linear-gradient(to right, var(--tw-gradient-stops));
     padding: variables.$spacing-two-thirds;
   }
+  .goal_progress_inner {
+    background-image: linear-gradient(to right, var(--tw-gradient-stops));
+  }
   .nav-wrapper {
     background: var(--bg-color-dark);
     border-radius: 0.375rem;

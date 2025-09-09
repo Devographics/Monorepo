@@ -1,0 +1,8 @@
+.chat_app_share_heading {
+  margin-bottom: var(--halfSpacing);
+}
+.chat_app_share_contents {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  gap: var(--spacing);
+}

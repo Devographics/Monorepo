@@ -5,20 +5,21 @@ const ShareEmail = ({
   subject,
   body,
 }: //trackingId,
-  {
-    subject: string;
-    body: string;
-    //trackingId?: string;
-  }) => {
+{
+  subject: string;
+  body: string;
+  //trackingId?: string;
+}) => {
   const { t } = useI18n();
   return (
     <a
       // onClick={track('Email', trackingId)}
       className="share__link--email share__link"
       href={`mailto:?subject=${encodeURIComponent(
-        subject,
+        subject
       )}&body=${encodeURIComponent(body)}`}
-      target="_self"
+      target="_blank"
+      rel="nofollow noreferrer"
       aria-label={t("share.email")}
     >
       <div className="resp-sharing-button resp-sharing-button--email resp-sharing-button--small">
@@ -40,9 +41,7 @@ const ShareEmail = ({
           </svg>
         </div>
       </div>
-      <span className="sr-only">
-        {t("share.email")}
-      </span>
+      <span className="sr-only">{t("share.email")}</span>
     </a>
   );
 };
