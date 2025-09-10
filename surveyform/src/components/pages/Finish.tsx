@@ -49,9 +49,9 @@ export const Finish = async ({
         edition={edition}
         response={response}
       />
-      <div className="survey-message survey-finished">
+      {/* <div className="survey-message survey-finished">
         <DynamicT token="general.thanks1" />
-      </div>
+      </div> */}
 
       {enableScore && <Score response={response} edition={edition} />}
 
@@ -68,7 +68,11 @@ export const Finish = async ({
         <DynamicT token="general.thanks2" />
       </div> */}
       {currentProgressCount !== undefined && responsesGoal !== undefined && (
-        <GoalMeter progress={currentProgressCount} goal={responsesGoal} />
+        <GoalMeter
+          edition={edition}
+          progress={currentProgressCount}
+          goal={responsesGoal}
+        />
       )}
 
       <ChatAppShare edition={edition} />
