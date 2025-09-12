@@ -22,7 +22,9 @@ const { year, questionsUrl, resultsUrl, imageUrl, status, colors } = edition;
 const { background } = colors;
 const isOpen = status === statuses.open;
 const isPreview = status === statuses.preview;
-const mainLink = isOpen || isPreview ? questionsUrl : resultsUrl;
+const isResultsPublished =
+  edition.resultsStatus === ResultsStatusEnum.PUBLISHED;
+const mainLink = isResultsPublished ? resultsUrl : questionsUrl;
 
 let marker;
 if (isOpen) {
@@ -48,8 +50,8 @@ const editionImageUrl = getEditionImageUrl(edition);
 
     <h4 class="survey-edition-year">{year}</h4>
 
-    <a class="image-wrapper" href={mainLink}
-      ><span
+    <a class="image-wrapper" href={mainLink}>
+      <span
         class="image-inner"
         style={`background-image: url(${editionImageUrl})`}></span>
     </a>
@@ -77,7 +79,7 @@ const editionImageUrl = getEditionImageUrl(edition);
             />
           </a>
         )}
-        {resultsUrl && edition.resultsStatus === ResultsStatusEnum.PUBLISHED ? (
+        {resultsUrl && isResultsPublished ? (
           <a href={resultsUrl} class="button">
             <T locale={locale} k="homepage.view_results" />
           </a>
