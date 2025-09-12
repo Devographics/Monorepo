@@ -1,7 +1,15 @@
+@use "sass:math";
 $spacing: 20px;
 
 $antsBg: $navyLight;
 $antsFg: $pink;
+
+$halfSpacing: math.div($spacing, 2);
+
+:root {
+  --spacing: #{$spacing};
+  --halfSpacing: #{$halfSpacing};
+}
 
 @mixin flex-center {
   display: flex;

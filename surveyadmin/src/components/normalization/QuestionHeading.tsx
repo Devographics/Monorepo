@@ -6,14 +6,18 @@ import {
   QuestionWithSection,
 } from "@devographics/types";
 import { T } from "@devographics/react-i18n";
+import s from "./QuestionHeading.module.scss";
 
 const QuestionHeading = ({ question }: { question: QuestionWithSection }) => {
   const i18nIds = getQuestioni18nIds({ section: question.section, question });
   return (
-    <div className="question-heading">
+    <div className={s.question_heading}>
       <h5>
         <T token={i18nIds.question} />
       </h5>
+      <p>
+        <T token={i18nIds.prompt} />
+      </p>
     </div>
   );
 };
