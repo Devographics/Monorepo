@@ -77,16 +77,14 @@
         chartOptions:
             limit: 10
             categories:
-                [
-                    layout,
-                    shapes_graphics,
-                    colors,
-                    interactions,
-                    typography,
-                    accessibility,
-                    math_features,
-                    other_features
-                ]
+                - forms
+                - interactivity
+                - graphics_multimedia
+                - content
+                - performance
+                - web_components
+                - accessibility
+                - system_capabilities
 
       - id: figure_light_dark_awareness
         template: figure
@@ -145,7 +143,7 @@
             url: https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap
 
       - id: web_components_common_pain_points
-        template: multiple_options2_freeform
+        template: multiple_options2_combined
         i18nNamespace: features
         queryOptions:
             sectionId: web_components
@@ -233,15 +231,15 @@
         parameters: { cutoff: 25, cutoffPercent: 0 }
 
       - id: html_styling_issues
-        template: multiple_options2_freeform
+        template: multiple_options2_combined
         parameters: { limit: 20 }
 
       - id: component_strategies
-        template: multiple_options2_freeform
+        template: multiple_options2_combined
         parameters: { limit: 20 }
 
       - id: design_system_strategies
-        template: multiple_options2_freeform
+        template: multiple_options2_combined
         parameters: { limit: 20 }
 
       - id: html_css_js_balance
@@ -255,7 +253,6 @@
 
       - id: html_pain_points_freeform
         template: multiple_options2_freeform
-        i18nNamespace: features
         chartOptions:
             limit: 10
 
