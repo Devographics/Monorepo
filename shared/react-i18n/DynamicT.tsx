@@ -28,7 +28,7 @@ export type TProps = {
    * Fallback string
    * If you need a React component as fallback, use "children" instead
    */
-  fallback?: string;
+  fallback?: string | null;
   /**
    * Use the HTML instead of the default "t" value
    * TODO: not yet actually used, not sure of use cases at this point, need to check existing code
@@ -81,7 +81,9 @@ export function InternalT({
   }
   if (message.missing) {
     // Try to use children value as fallback
-    if (fallback && children) {
+    if (fallback === null) {
+      return null;
+    } else if (fallback && children) {
       console.warn(
         `Ambiguous fallback for token ${token}. Use either "fallback" props or React "children", but not both. Will use "fallback" prop.`
       );
