@@ -112,7 +112,7 @@ export function makeTranslationFunction(locale: LocaleParsed) {
     /**
      * Get the full translation with metadata, HTML and clean versions
      */
-    function getMessage(key: string, values: ValuesType = {}, fallback?: string) {
+    function getMessage(key: string, values: ValuesType = {}, fallback?: string | null) {
         // get the string or template
         let result: StringTranslatorResult = {
             key,
