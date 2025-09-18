@@ -76,6 +76,8 @@ type EditionMetadata {
     enableReadingList: Boolean
     enableChartSponsorships: Boolean
     enableSkip: Boolean
+    enableGoal: Boolean
+    enableScore: Boolean
     responsesGoal: Int
 
     sitemap: [SitemapSection]

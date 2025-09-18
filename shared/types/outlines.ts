@@ -61,9 +61,11 @@ export type Edition = {
     tshirt: Tshirt
     colors: Colors
     sponsors?: SponsorItem[]
-    enableReadingList: boolean
-    enableChartSponsorships: boolean
-    enableSkip: boolean
+    enableReadingList?: boolean
+    enableChartSponsorships?: boolean
+    enableSkip?: boolean
+    enableGoal?: boolean
+    enableScore?: boolean
     responsesGoal?: number
     /**
      * Where the user found out about the survey

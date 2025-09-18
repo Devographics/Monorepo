@@ -31,6 +31,8 @@ export const getEditionMetadataQuery = ({ editionId }: { editionId: string }) =>
           enableReadingList
           enableChartSponsorships
           enableSkip
+          enableGoal
+          enableScore
           responsesGoal
           colors {
             primary
