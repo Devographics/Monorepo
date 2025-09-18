@@ -5,6 +5,7 @@ import { Button } from "../ui/Button";
 import s from "./ChatAppShare.module.scss";
 import { useState } from "react";
 import { T, useI18n } from "@devographics/react-i18n";
+import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 
 const ChatAppShare = ({ edition }: { edition: EditionMetadata }) => {
   const { getMessage } = useI18n();
@@ -13,13 +14,23 @@ const ChatAppShare = ({ edition }: { edition: EditionMetadata }) => {
 
   const link = `${questionsUrl}?source=post_survey_share_chat`;
 
-  const shareContent = getMessage(`finish.share_message.${edition.id}`, {
+  const surveyName = getEditionTitle({ edition });
+  const defaultShareContent = getMessage(`general.share_text`, {
+    surveyName,
     link,
   })?.t;
 
+  const editionShareContent = getMessage(
+    `finish.share_message.${edition.id}`,
+    {
+      link,
+    },
+    defaultShareContent
+  )?.t;
+
   const handleCopyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(shareContent);
+      await navigator.clipboard.writeText(editionShareContent);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000); // Reset "copied" state after 2 seconds
     } catch (err) {
@@ -36,7 +47,7 @@ const ChatAppShare = ({ edition }: { edition: EditionMetadata }) => {
         <T token="finish.share_colleagues.description" />
       </p>
       <div className={s.chat_app_share_contents}>
-        <textarea className="form-control" defaultValue={shareContent} />
+        <textarea className="form-control" defaultValue={editionShareContent} />
         <Button onClick={handleCopyToClipboard}>
           {copied ? <T token="finish.copied" /> : <T token="finish.copy" />}
         </Button>

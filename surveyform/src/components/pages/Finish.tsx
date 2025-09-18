@@ -30,14 +30,18 @@ export const Finish = async ({
 
   const imageUrl = getEditionImageUrl(edition);
   const { survey, year } = edition;
-  const { responsesGoal } = edition;
+  const { responsesGoal, enableGoal, enableScore } = edition;
   const { name } = survey;
 
   const currentProgressCount = await rscTotalResponses({ edition });
+  const showGoal =
+    enableGoal &&
+    currentProgressCount !== undefined &&
+    responsesGoal !== undefined;
   const featureSections = edition.sections.filter(
     (section) => section.slug === "features"
   );
-  const enableScore = response && featureSections.length > 0;
+  const showScore = enableScore && response && featureSections.length > 0;
   const enableReadingList = edition.enableReadingList;
 
   const trackingId = `user__${currentUser?._id?.slice(0, 5)}`;
@@ -53,7 +57,7 @@ export const Finish = async ({
         <DynamicT token="general.thanks1" />
       </div> */}
 
-      {enableScore && <Score response={response} edition={edition} />}
+      {showScore && <Score response={response} edition={edition} />}
 
       <h1 className={`${s.finish_page_image} survey-image survey-image-small`}>
         {imageUrl && (
@@ -67,7 +71,7 @@ export const Finish = async ({
       {/* <div>
         <DynamicT token="general.thanks2" />
       </div> */}
-      {currentProgressCount !== undefined && responsesGoal !== undefined && (
+      {showGoal && (
         <GoalMeter
           edition={edition}
           progress={currentProgressCount}

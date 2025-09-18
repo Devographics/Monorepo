@@ -20,14 +20,17 @@ const GoalMeter = ({
   const regularMessage = getMessage(messageKey)?.t;
   const customMessageKey = `${messageKey}.${edition.id}`;
   const customMessage = getMessage(customMessageKey)?.t;
+
+  const currentFormatted = intl.format(progress);
+  const goalFormatted = intl.format(goal);
   return (
     <div className={s.goal_progress_block}>
       <h2 className={s.goal_progress_heading}>
         <T token="finish.goal_heading" />
       </h2>
       <p className={s.goal_progress_description}>
-        <T token={customMessageKey} values={{ count: goal }}>
-          <T token={messageKey} values={{ count: goal }} />
+        <T token={customMessageKey} values={{ count: goalFormatted }}>
+          <T token={messageKey} values={{ count: goalFormatted }} />
         </T>
       </p>
       <div className={s.goal_progress_outer}>
@@ -42,7 +45,7 @@ const GoalMeter = ({
               className={s.goal_progress_marker_current}
               style={{ "--percentage": percentage }}
             >
-              <T token="finish.goal_currently" /> {intl.format(progress)}
+              <T token="finish.goal_currently" /> {currentFormatted}
             </div>
           </div>
         </div>
@@ -53,7 +56,7 @@ const GoalMeter = ({
           <span>
             <T token="finish.goal_goal" />
           </span>
-          <figure>{intl.format(goal)}</figure>
+          <figure>{goalFormatted}</figure>
           <span>
             <T token="finish.goal_responses" />
           </span>
