@@ -535,6 +535,11 @@ export async function genericComputeFunction(
         await runStage(addPercentiles, [results, axis2, axis1])
 
         if (executionContext === ExecutionContext.REGULAR) {
+            // decorating with entities and tokens need to come before grouping stage
+            // because we use token's `parentId` to group
+            await runStage(addEntities, [results, context, axis2])
+            await runStage(addTokens, [results, context, axis2])
+
             // bucket grouping
             await runStage(groupBuckets, [results, axis2, axis1])
 
@@ -552,8 +557,6 @@ export async function genericComputeFunction(
                 axis2.options = axis2.question.groups
             }
 
-            await runStage(addEntities, [results, context, axis2])
-            await runStage(addTokens, [results, context, axis2])
             await runStage(addValues, [results, context, axis2, axis1])
 
             // restrict buckets to the ones specified in bucketsFilter if needed
@@ -593,6 +596,11 @@ export async function genericComputeFunction(
         await runStage(addPercentiles, [results, axis1])
 
         if (executionContext === ExecutionContext.REGULAR) {
+            // decorating with entities and tokens need to come before grouping stage
+            // because we use token's `parentId` to group
+            await runStage(addEntities, [results, context, axis1])
+            await runStage(addTokens, [results, context, axis1])
+
             await runStage(groupBuckets, [results, axis1])
 
             await runStage(cutoffData, [results, axis1])
@@ -604,8 +612,6 @@ export async function genericComputeFunction(
                 axis1.options = axis1.question.groups
             }
 
-            await runStage(addEntities, [results, context, axis1])
-            await runStage(addTokens, [results, context, axis1])
             await runStage(addValues, [results, context, axis1])
 
             // restrict buckets to the ones specified in bucketsFilter if needed
