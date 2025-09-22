@@ -15,6 +15,7 @@ import { getQuestionLabel } from '../common2/helpers/labels'
 import { BlockVariantDefinition } from 'core/types'
 import { ColumnModes } from '../common2/types'
 import OtherBucketMarker from './OtherBucketMarker'
+import { OTHER_ANSWERS } from '@devographics/constants'
 
 // hide labels for cells under this size
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
@@ -73,6 +74,7 @@ export const Cell = ({
     const { id, count, entity, token } = bucket
     const value = getValue(bucket)
 
+    const isOtherAnswersBucket = id === OTHER_ANSWERS
     // sometimes we pass an explicit width, sometimes we pass
     // a getWidth function
     const width = width_ || (getWidth && getWidth(value))
@@ -165,7 +167,7 @@ export const Cell = ({
                 showBorder={false}
             />
             {/* we need getWidth to be able to figure out the dimensions for the other bucket marker */}
-            {otherBucket && getWidth && !disableOtherBucket && (
+            {otherBucket && getWidth && !disableOtherBucket && !isOtherAnswersBucket && (
                 <>
                     <OtherBucketMarker
                         viewDefinition={viewDefinition}
