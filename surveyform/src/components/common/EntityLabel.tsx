@@ -2,6 +2,7 @@ import { Entity } from "@devographics/types";
 import { T } from "@devographics/react-i18n";
 import { getEntityNameHtml } from "~/lib/surveys/helpers/getEntityName";
 import { EntityPopoverTrigger } from "./EntityPopover";
+import BaselineLabel from "../form/BaselineLabel";
 
 /**
  * When using an entity as the label, based on their id
@@ -25,6 +26,7 @@ export const EntityLabel = (props: EntityLabelProps) => {
           entity={entity}
         />
       )}
+      {entity && entity.webFeature && <BaselineLabel entity={entity} />}
     </span>
   );
 };
