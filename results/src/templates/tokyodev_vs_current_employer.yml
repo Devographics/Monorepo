@@ -9,5 +9,6 @@ parameters:
     showNoAnswer: true
 filtersState:
     facet:
-        sectionId: employer_info
+        # sectionId: employer_info
+        sectionId: job_info
         id: current_employer

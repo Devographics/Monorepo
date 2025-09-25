@@ -13,7 +13,8 @@ parameters:
     # sort: { property: count }
 filtersState:
     facet:
-        sectionId: employer_info
+        # sectionId: employer_info
+        sectionId: job_info
         id: current_employer
     # filters:
     #     - year: 2024
