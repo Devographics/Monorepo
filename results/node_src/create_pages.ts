@@ -147,6 +147,9 @@ export const createPagesSingleLoop = async ({
                 //editionId
             })
         } catch (err) {
+            console.error('🌐 getLocalesWithStrings error')
+            console.error(localeIds)
+            console.error(translationContexts)
             throw new FatalError(err)
         }
 
