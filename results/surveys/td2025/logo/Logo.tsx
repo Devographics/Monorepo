@@ -12,8 +12,8 @@ interface LogoProps {
 export const Logo = ({ className, animated = true, showText = true, size = 'l' }: LogoProps) => (
     <Wrapper>
         <img
-            src="https://assets.surveys.tokyodev.com/images/surveys/td2024-wide.png"
-            alt="TokyoDev Developer Survey 2024"
+            src="https://assets.surveys.tokyodev.com/images/surveys/td2025-wide.png"
+            alt="TokyoDev Developer Survey 2025"
         />
     </Wrapper>
 )
