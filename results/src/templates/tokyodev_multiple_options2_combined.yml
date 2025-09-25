@@ -2,7 +2,7 @@ blockType: HorizontalBarBlock2
 hasSponsor: true
 hasData: true
 queryOptions:
-    addBucketsEntities: false
+    addBucketsEntities: true
     subField: combined
     addGroupedBuckets: true
 customizationModes: [filters, facets]
