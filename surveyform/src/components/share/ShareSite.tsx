@@ -7,6 +7,7 @@ import { T, useI18n } from "@devographics/react-i18n";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import ShareBluesky from "./ShareBluesky";
 import { EditionMetadata } from "@devographics/types";
+import ShareMastodon from "./ShareMastodon";
 
 const ShareSite = ({ edition }: { edition: EditionMetadata }) => {
   const { t } = useI18n();
@@ -26,6 +27,7 @@ const ShareSite = ({ edition }: { edition: EditionMetadata }) => {
       <div className="ShareSite__Content">
         <ShareTwitter text={getBody("twitter")} />
         <ShareBluesky text={getBody("bluesky")} />
+        <ShareMastodon text={getBody("mastodon")} />
         <ShareFacebook link={getLink("facebook")} quote={getBody("facebook")} />
         <ShareLinkedIn
           link={getLink("linkedin")}

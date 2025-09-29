@@ -10,16 +10,6 @@ $spacing-two-thirds: math.div($spacing * 2, 3);
 $spacing-eighth: math.div($spacing, 8);
 $spacing-sixth: math.div($spacing, 6);
 
-:root {
-  --spacing: #{$spacing};
-  --halfSpacing: #{$spacing-half};
-  --doubleSpacing: #{$spacing-double};
-  --borderColor: var(--dark-border-color);
-  --backgroundColor: var(--bg-color);
-  --textColor: var(--text-color);
-  --textAltColor: var(--text-color-dark);
-}
-
 $antsBg: colors.$navyLight;
 $antsFg: colors.$pink;
 
@@ -166,4 +156,18 @@ $border-radius: 3px;
   transform: rotate(0deg);
   animation: rotateAnim 50s linear infinite;
   animation-fill-mode: forwards;
+}
+
+:root {
+  --spacing: #{$spacing};
+  --halfSpacing: #{$spacing-half};
+  --doubleSpacing: #{$spacing-double};
+
+  --borderColor: var(--dark-border-color);
+  --borderRadius: #{$border-radius};
+  --border: 1px solid var(--dark-border-color);
+
+  --backgroundColor: var(--bg-color);
+  --textColor: var(--text-color);
+  --textAltColor: var(--text-color-dark);
 }
