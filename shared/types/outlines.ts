@@ -9,6 +9,7 @@ export interface SurveyConfig {
     domain: string
     hashtag: string
 
+    homepageUrl?: string
     isDemo?: boolean
 
     responsesCollectionName?: string

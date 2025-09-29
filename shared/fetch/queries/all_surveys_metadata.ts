@@ -16,6 +16,7 @@ query SurveysMetadataQuery {
       domain
       hashtag
       imageUrl
+      homepageUrl
       emailOctopus {
         listId
         submitUrl
