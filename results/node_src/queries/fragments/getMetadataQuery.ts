@@ -10,12 +10,23 @@ export const getMetadataQuery = ({
     return `
 query {
     dataAPI {
+        _metadata {
+            surveys {
+                id
+                name
+                homepageUrl
+                isDisabled
+                imageUrl
+            }
+        }
         surveys {
             ${surveyId} {
                 _metadata {
                     domain
                     id
                     name
+                    homepageUrl
+                    imageUrl
                     emailOctopus {
                         listId
                         submitUrl
@@ -29,6 +40,7 @@ query {
                         year
                         id
                         resultsUrl
+                        imageUrl
                     }
                 }
                 ${editionId} {

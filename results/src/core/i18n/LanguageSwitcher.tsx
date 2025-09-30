@@ -9,16 +9,7 @@ import { Locales } from './Locales'
 import Popover from 'core/components/Popover2'
 import './LanguageSwitcher.scss'
 import Button from 'core/components/Button'
-
-// const svgs = {
-//     top: <polygon stroke="#000" points="0,50 100,50 50,0" />,
-//     bottom: <polygon stroke="#000" points="0,0 100,0 50,50" />,
-// }
-
-const svgs = {
-    top: <polygon stroke="#000" points="0,50 100,50 50,0" />,
-    bottom: <polygon stroke="#000" points="0,0 100,0 50,50" />
-}
+import PopoverIndicator from 'core/components/PopoverIndicator'
 
 const translationLink = 'https://github.com/Devographics/locale-en-US'
 
@@ -33,9 +24,7 @@ const LanguageSwitcher = (/*{ position = 'bottom', positionOpen = 'top' }*/) => 
             trigger={
                 <Button className="language-switcher-trigger">
                     <span>{context?.locale?.label}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50">
-                        {isOpened ? svgs['top'] : svgs['bottom']}
-                    </svg>
+                    <PopoverIndicator isOpened={isOpened} />
                 </Button>
             }
         >

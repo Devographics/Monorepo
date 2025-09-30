@@ -6,9 +6,9 @@ import { useI18n } from '@devographics/react-i18n'
 import { mq, color, screenReadersOnlyMixin } from 'core/theme'
 import colors from 'core/theme/colors'
 import { Nav } from './Nav'
-import SidebarLogo from 'Logo/SidebarLogo'
 import { usePageContext } from 'core/helpers/pageContext'
 import { getSiteTitle } from 'core/helpers/pageHelpers'
+import SurveyPopover from './SurveyPopover'
 
 const CloseIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -37,10 +37,13 @@ export const Sidebar = ({
                 </SidebarScreenReadersTitle>
 
                 <SidebarHeader>
-                    <SidebarLogoLink to="/">
+                    <SidebarLogoContainer>
+                        <SurveyPopover />
+                    </SidebarLogoContainer>
+                    {/* <SidebarLogoLink to="/">
                         <SidebarLogo />
                         <ScreenReadersHint>{translate('general.back_to_intro')}</ScreenReadersHint>
-                    </SidebarLogoLink>
+                    </SidebarLogoLink> */}
                     <SidebarCloseButton
                         onClick={closeSidebar}
                         aria-haspopup="menu"
@@ -104,6 +107,16 @@ const SidebarHeader = styled.div`
     }
 `
 
+const SidebarLogoContainer = styled.div`
+    grid-area: logo;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+        max-height: 76px;
+    }
+`
 const SidebarLogoLink = styled(Link)`
     grid-area: logo;
     display: flex;

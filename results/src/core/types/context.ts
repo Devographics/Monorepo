@@ -28,6 +28,7 @@ interface SurveyPageContext {
         orders?: Array<SponsorOrder>
     }
     config?: any
+    allSurveys: SurveyMetadata[]
     currentSurvey: SurveyMetadata
     currentEdition: EditionMetadata
     locale?: Locale
