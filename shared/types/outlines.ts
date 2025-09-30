@@ -11,6 +11,8 @@ export interface SurveyConfig {
 
     homepageUrl?: string
     isDemo?: boolean
+    isDisabled?: boolean
+    imageUrl?: string
 
     responsesCollectionName?: string
     normalizedCollectionName?: string

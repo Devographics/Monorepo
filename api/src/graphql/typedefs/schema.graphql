@@ -19,6 +19,7 @@ type SurveyMetadata {
 
     homepageUrl: String
 
+    isDisabled: Boolean
     isDemo: Boolean
 
     imageUrl: String
