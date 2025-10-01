@@ -1,0 +1,1105 @@
+- id: introduction
+  path: /
+  showTitle: false
+  blocks:
+      # - id: survey_livestream
+      #   blockType: LivestreamBlock
+      #   disableExport: true
+      #   wrapBlock: false
+      - id: survey_intro
+        blockType: SurveyIntroBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_credits
+        template: credits
+      - id: survey_newsletter
+        blockType: NewsletterBlock
+        disableExport: true
+        wrapBlock: false
+      - id: survey_sponsors
+        template: sponsors
+      - id: survey_partners
+        template: sponsors
+        blockType: PartnersBlock
+      - id: survey_translators
+        blockType: TranslatorsBlock
+        disableExport: true
+        wrapBlock: false
+
+- id: tshirt
+  path: /tshirt
+  showTitle: false
+  blocks:
+      - id: tshirt_intro
+        template: page_introduction
+      - id: tshirt_block
+        blockType: TshirtBlock
+        wrapBlock: false
+        disableExport: true
+
+# - id: data_explorer
+#   titleId: sections.data_explorer.title
+#   path: /explorer
+#   blocks:
+#       - template: page_introduction
+
+#       - id: data_explorer
+#         showTitle: false
+#         chartOnly: true
+#         wrapBlock: false
+#         template: data_explorer
+#         parameters: { showNoAnswer: true }
+#         variables:
+#             xAxis: user_info__yearly_salary
+#             yAxis: user_info__years_of_experience
+
+- id: user_info
+  titleId: sections.demographics.title
+  path: /demographics
+  blocks:
+      - template: page_introduction
+
+      - id: country
+        template: multiple_options2
+        parameters: { limit: 40 }
+        chartOptions:
+            limit: 20
+        queryOptions:
+            addBucketsEntities: false
+        variants:
+            - template: vs_salary
+              parameters: { limit: 40, sort: { property: medianByFacet, order: desc } }
+              chartOptions:
+                  limit: 20
+
+      - id: hint_hint
+        template: hint
+
+      - id: age
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+            - template: vs_gender
+            - id: age_vs_disability
+              fieldId: age
+              blockType: HorizontalBarBlock2
+              hasData: true
+              parameters:
+                  showNoAnswer: true
+                  cutoff: 10
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: disability_status
+
+      - id: years_of_experience
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+            - template: vs_gender
+
+      - id: company_size
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+
+      - id: variants_hint
+        template: hint
+
+      - id: yearly_salary
+        template: multiple_options2
+        variants:
+            - id: yearly_salary_us_vs_world
+              fieldId: yearly_salary
+              tabId: tabs.usa_vs_the_world
+              blockType: HorizontalBarBlock2
+              hasData: true
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: in
+                              value: [USA]
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value: [USA]
+
+      - id: job_title
+        template: multiple_options2_freeform
+        variants:
+            - template: vs_salary
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_age
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet, order: asc }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_years_of_experience
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet, order: asc }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_gender
+              parameters:
+                  limit: 20
+                  cutoff: 100
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+
+      - id: tokyodev_resources
+        items: [td-article]
+        template: recommended_resources
+
+      - id: higher_education_degree
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+
+      - id: gender
+        template: multiple_options2
+        # takeaway: >
+        #     Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
+            - id: country_vs_gender
+              fieldId: country
+              tabId: tabs.by_country
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+                  limit: 20
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+
+      - id: race_ethnicity
+        template: multiple_options2_combined
+        takeaway: >
+            The survey's non-white population tended to be younger and have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
+            - template: vs_gender
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+            - template: vs_years_of_experience
+              parameters:
+                  sort: { property: medianByFacet }
+            - template: vs_age
+              parameters:
+                  sort: { property: medianByFacet }
+
+      - id: disability_status
+        template: multiple_options2_combined
+        variants:
+            - template: vs_age
+              parameters:
+                  sort: { property: medianByFacet, order: asc }
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
+
+      - id: user_info_resources_2
+        items: [fm-javascript-first-steps, fm-getting-a-job-v2]
+        template: recommended_resources
+
+- id: features
+  path: /features
+  blocks:
+      - template: page_introduction
+
+      # Note: JS 2023 did not have any "main features", only "mini-features"
+
+      # - id: features_overview
+      #   template: features_overview
+
+      # - id: knowledge_score
+      #   template: multiple_options
+
+      - id: syntax_features
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: string_features
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: array_features
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: set_features
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: object_features
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: async_features
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: jack_herrington
+        template: picks
+        variables:
+            url: https://tanstack.com/
+
+      - id: browser_api_features
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: language_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+
+      - id: browser_apis_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: features
+
+      - id: josefine_schaefer
+        template: picks
+        variables:
+            url: https://bento.me/arisa-fukuzaki
+
+      - id: js_new_features
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: top_currently_missing_from_js
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: native_types_proposal
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: js_pace_of_change
+        template: multiple_options2
+        i18nNamespace: features
+
+      - id: reading_list
+        template: multiple_options2
+        parameters:
+            limit: 20
+        queryOptions:
+            sectionId: reading_list
+            addQuestionComments: false
+        chartOptions:
+            dataFilters: [removeOverLimit, removeNoAnswer]
+            limit: 10
+
+      - id: features_resources
+        items: [fm-web-dev-quiz, fm-javascript-hard-parts-v2]
+        template: recommended_resources
+
+- id: libraries
+  path: /libraries
+  blocks:
+      - id: librariesIntroduction
+        template: page_introduction
+
+      - id: all_tools_experience
+        titleId: tools.all_items.experience
+        template: multi_items_experience
+        i18nNamespace: tools
+        chartOptions:
+            limit: 10
+            categories: [
+                    front_end_frameworks,
+                    back_end_frameworks,
+                    meta_frameworks,
+                    testing,
+                    # mobile_desktop,
+                    build_tools
+                    # monorepo_tools
+                ]
+
+      - id: tools_arrows
+        template: tools_arrows
+        i18nNamespace: tools
+        chartOptions:
+            categories: [
+                    front_end_frameworks,
+                    back_end_frameworks,
+                    meta_frameworks,
+                    testing,
+                    # mobile_desktop,
+                    build_tools
+                    # monorepo_tools
+                ]
+
+      - id: cassie_evans
+        template: picks
+        variables:
+            url: https://github.com/workeffortwaste/gsap-video-export?tab=readme-ov-file#page-export
+
+      - id: tier_list
+        template: tier_list
+
+      - id: tools_ratios_over_time
+        template: multi_items_ratios
+        i18nNamespace: tools
+        variables:
+            enableMultiSection: true
+
+      - id: scatterplot_overview
+        i18nNamespace: tools
+        template: scatterplot_overview
+
+      # - id: all_sections_tools_cardinality_by_user
+      #   template: tools_cardinality_by_user_js
+
+      - id: libraries_resources
+        items: [fm-enterprise-ui-dev, frontend-system-design]
+        template: recommended_resources
+
+  children:
+      - id: front_end_frameworks
+        path: /front-end-frameworks
+        blocks:
+            - template: page_introduction
+
+            - id: front_end_frameworks_ratios
+              template: multi_items_ratios
+              i18nNamespace: tools
+
+            - id: front_end_frameworks_others
+              template: section_prenormalized_tools
+
+            - id: tania_rascia
+              template: picks
+              variables:
+                  url: https://cassidoo.co/
+
+            - template: cardinalities
+
+            - template: happiness2
+
+            # - template: happiness2
+            #   defaultView: percentageQuestion
+
+            # - id: front_end_frameworks_happiness
+            #   template: multiple_options2
+            #   i18nNamespace: features
+            #   parameters: { limit: 10 }
+
+            - id: front_end_frameworks_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+            - id: front_end_frameworks_resources
+              items: [al-vue-reactivity, ad-self-teach-me]
+              template: recommended_resources
+
+      - id: meta_frameworks
+        path: /meta-frameworks
+        blocks:
+            - template: page_introduction
+
+            - id: meta_frameworks_ratios
+              template: multi_items_ratios
+              i18nNamespace: tools
+
+            - id: meta_frameworks_others
+              template: section_prenormalized_tools
+
+            - id: salma_alam_naylor
+              template: picks
+              variables:
+                  url: https://thebreedling.com/
+
+            - template: cardinalities
+
+            - template: happiness2
+
+            # - id: meta_frameworks_happiness
+            #   template: multiple_options2
+            #   i18nNamespace: features
+            #   parameters: { limit: 10 }
+
+            - id: meta_frameworks_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+            - id: meta_frameworks_resources
+              items: [fm-nextjs-v3, fullstack-app-next-v3]
+              template: recommended_resources
+
+      - id: back_end_frameworks
+        path: /back-end-frameworks
+        blocks:
+            - template: page_introduction
+
+            - id: back_end_frameworks_ratios
+              template: multi_items_ratios
+              i18nNamespace: tools
+
+            - id: back_end_frameworks_others
+              template: section_prenormalized_tools
+
+            - id: dominik_dorfmeister
+              template: picks
+              variables:
+                  url: https://knip.dev/
+
+            - template: cardinalities
+
+            - template: happiness2
+
+            # - id: mobile_desktop_happiness
+            #   template: multiple_options2
+            #   i18nNamespace: features
+            #   parameters: { limit: 10 }
+
+            - id: back_end_frameworks_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+            - id: back_end_frameworks_resources
+              items: [fm-react-native-v3, fm-electron-v3]
+              template: recommended_resources
+
+      - id: testing
+        path: /testing
+        blocks:
+            - template: page_introduction
+
+            - id: testing_ratios
+              template: multi_items_ratios
+              i18nNamespace: tools
+
+            - id: testing_others
+              template: section_prenormalized_tools
+
+            - id: shaundai_person
+              template: picks
+              variables:
+                  url: https://www.youtube.com/@shrutikapoor08
+
+            - template: cardinalities
+
+            - template: happiness2
+
+            # - id: testing_happiness
+            #   template: multiple_options2
+            #   i18nNamespace: features
+            #   parameters: { limit: 10 }
+
+            - id: testing_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+            - id: testing_resources
+              items: [fm-testing, fm-web-app-testing]
+              template: recommended_resources
+
+      # - id: mobile_desktop
+      #   path: /mobile-desktop
+      #   blocks:
+      #       - template: page_introduction
+
+      #       - id: mobile_desktop_ratios
+      #         template: multi_items_ratios
+      #         i18nNamespace: tools
+
+      #       - id: mobile_desktop_others
+      #         template: section_prenormalized_tools
+
+      #       - id: dominik_dorfmeister
+      #         template: picks
+      #         variables:
+      #             url: https://knip.dev/
+
+      #       - template: cardinalities
+
+      #       - template: happiness2
+
+      #       # - id: mobile_desktop_happiness
+      #       #   template: multiple_options2
+      #       #   i18nNamespace: features
+      #       #   parameters: { limit: 10 }
+
+      #       - id: mobile_desktop_pain_points
+      #         template: multiple_options2_freeform
+      #         i18nNamespace: tools
+
+      #       - id: mobile_desktop_resources
+      #         items: [fm-react-native-v3, fm-electron-v3]
+      #         template: recommended_resources
+
+      - id: build_tools
+        path: /build-tools
+        blocks:
+            - template: page_introduction
+
+            - id: build_tools_ratios
+              template: multi_items_ratios
+              i18nNamespace: tools
+
+            - id: build_tools_others
+              template: section_prenormalized_tools
+
+            - id: sacha_greif
+              template: picks
+              variables:
+                  url: https://bsky.app/
+
+            - template: cardinalities
+
+            - template: happiness2
+
+            # - id: build_tools_happiness
+            #   template: multiple_options2
+            #   i18nNamespace: features
+            #   parameters: { limit: 10 }
+
+            - id: build_tools_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: tools
+
+            - id: build_tools_resources
+              items: [fm-vite, fm-webpack-fundamentals]
+              template: recommended_resources
+
+      # - id: monorepo_tools
+      #   path: /monorepo_tools
+      #   blocks:
+      #       - template: page_introduction
+
+      #       - id: monorepo_tools_ratios
+      #         template: multi_items_ratios
+      #         i18nNamespace: tools
+
+      #       - id: monorepo_tools_others
+      #         template: section_prenormalized_tools
+
+      #       - id: sebastien_lorber
+      #         template: picks
+      #         variables:
+      #             url: https://rspack.dev/
+
+      #       - template: cardinalities
+
+      #       - template: happiness2
+
+      #       # - id: monorepo_tools_happiness
+      #       #   template: multiple_options2
+      #       #   i18nNamespace: features
+      #       #   parameters: { limit: 10 }
+
+      #       - id: monorepo_tools_pain_points
+      #         template: multiple_options2_freeform
+      #         i18nNamespace: tools
+
+      #       - id: monorepo_tools_resources
+      #         items: [fm-monorepos, fm-git]
+      #         template: recommended_resources
+
+- id: other_tools
+  path: /other-tools
+  blocks:
+      - id: tools_others_intro
+        template: page_introduction
+
+      - id: libraries
+        template: multiple_options2_combined
+
+      # - id: alina_listunova
+      #   template: picks
+      #   variables:
+      #       url: https://marvinh.dev/blog/speeding-up-javascript-ecosystem/
+
+      - id: graphics_animation
+        template: multiple_options2_combined
+
+      - id: utilities
+        template: multiple_options2_combined
+
+      - id: runtimes
+        template: multiple_options2_combined
+
+      - id: hosting
+        template: multiple_options2_combined
+
+      - id: edge_runtimes
+        template: multiple_options2_combined
+
+      - id: text_editors
+        template: multiple_options2_combined
+
+      # - id: augustin_mauroy
+      #   template: picks
+      #   variables:
+      #       url: https://x.com/wunderacle
+
+      - id: ai_tools
+        template: multiple_options2_combined
+
+      - id: mobile_desktop
+        template: multiple_options2_combined
+
+      - id: monorepo_tools
+        template: multiple_options2_combined
+
+      - id: non_js_languages
+        template: multiple_options2_combined
+
+      - id: non_js_languages_features
+        template: multiple_options2_freeform
+
+      - id: sharing_hint
+        template: hint
+
+      # - id: shadowingszy
+      #   template: picks
+      #   variables:
+      #       url: https://www.rspack.dev/
+
+      - id: tools_others_resources
+        items: [fm-node-js, fm-fullstack-v3]
+        template: recommended_resources
+- id: usage
+  intlId: usage_js
+  path: /usage
+  blocks:
+      - template: page_introduction
+
+      - id: js_ts_balance
+        template: multiple_options2
+
+      - id: compiled_code_balance
+        template: multiple_options2
+
+      - id: build_step_advantages
+        template: multiple_options2_combined
+
+      - id: ai_generated_code_balance
+        template: multiple_options2
+
+      # - id: kilian_valkhof
+      #   template: picks
+      #   variables:
+      #       url: https://www.electronjs.org/
+
+      - id: what_do_you_use_js_for
+        template: multiple_options2_combined
+
+      - id: industry_sector
+        template: multiple_options2_combined
+        variants:
+            - template: vs_salary
+              queryOptions:
+                  subField: combined
+              parameters:
+                  limit: 20
+                  sort: { property: medianByFacet, order: desc }
+              chartOptions:
+                  limit: 10
+
+      - id: js_app_patterns
+        template: multiple_options2_combined
+
+      # - id: gustavo_vasquez
+      #   template: picks
+      #   variables:
+      #       url: https://medium.com/@devgustavovasquez/the-future-of-web-development-embracing-interoperable-runtimes-bd2006e9b9d7
+
+      - id: top_js_pain_points
+        template: multiple_options2_combined
+
+      - id: state_of_the_web_happiness
+        titleId: happiness.state_of_the_web
+        questionKey: happiness.state_of_the_web.question
+        template: happiness2
+
+      - id: state_of_js_happiness
+        titleId: happiness.state_of_js
+        questionKey: happiness.state_of_js.question
+        template: happiness2
+
+      - id: usage_resources
+        items: [fm-professional, fm-fullstack]
+        template: recommended_resources
+
+- id: resources
+  path: /resources
+  blocks:
+      - template: page_introduction
+
+      - id: courses
+        template: multiple_options2_combined
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
+
+      # - id: rexhent
+      #   template: picks
+      #   variables:
+      #       url: https://nuxt.com/
+
+      - id: newsletters
+        template: multiple_options2_combined
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
+
+      - id: podcasts
+        template: multiple_options2_combined
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
+
+      - id: video_creators
+        template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
+        variants:
+            - template: hastags_spanish
+
+      # - id: martin_heidegger
+      #   template: picks
+      #   variables:
+      #       url: https://www.npmjs.com/package/tess2
+
+      - id: people
+        template: multiple_options2_freeform
+        parameters: { limit: 40 }
+        chartOptions: { limit: 20 }
+        variants:
+            - template: hastags_spanish
+
+      - id: other_surveys
+        template: multiple_options2_combined
+
+      - id: resources_resources
+        items: [fm-algorithms, fm-podcast]
+        template: recommended_resources
+
+- id: awards
+  path: /awards
+  blocks:
+      - template: page_introduction
+
+      - id: awards
+        template: awards
+        variables:
+            entities: '"vite", "vitest", "esbuild", "astro", "rolldown","analog", "nitro", "valibot", "angular", "storybook","webpack","react","vuejs"'
+        awards:
+            # - id: feature_adoption_delta_award
+            #   template: award
+            #   awards:
+            #       - id: top_level_await
+            #         value: '+26.4%'
+            #       - id: array_at
+            #         value: '+14.2%'
+            #       - id: string_replace_all
+            #         value: '+9.6%'
+
+            - id: tool_usage_delta_award
+              template: award
+              awards:
+                  - id: vite
+                    value: '+30%'
+                  - id: vitest
+                    value: '+26%'
+                  - id: esbuild
+                    value: '+19%'
+
+            - id: tool_satisfaction_award
+              template: award
+              awards:
+                  - id: vitest
+                    value: '98%'
+                  - id: vite
+                    value: '98%'
+                  - id: astro
+                    value: '94%'
+
+            - id: tool_interest_award
+              template: award
+              awards:
+                  - id: rolldown
+                    value: '86%'
+                  - id: vitest
+                    value: '82%'
+                  - id: vite
+                    value: '82%'
+
+            - id: most_write_ins_award
+              template: award
+              awards:
+                  - id: analog
+                    value: '108'
+                  - id: nitro
+                    value: '107'
+                  - id: valibot
+                    value: '98'
+
+            # - id: most_commented_feature_award
+            #   template: award
+            #   awards:
+            #       - id: private_fields
+            #         value: 102
+            #       - id: proxies
+            #         value: 71
+            #       - id: nullish_coalescing
+            #         value: 66
+
+            - id: most_commented_tool_award
+              template: award
+              awards:
+                  - id: angular
+                    value: 41
+                  - id: storybook
+                    value: 39
+                  - id: webpack
+                    value: 35
+
+            - id: most_loved_tool_award
+              template: award
+              awards:
+                  - id: vite
+                    value: '56%'
+                  - id: react
+                    value: '46.7%'
+                  - id: vuejs
+                    value: '42.3%'
+
+      # - id: awards_resources
+      #   items: [road-to-react]
+      #   template: recommended_resources
+
+      - id: awards_resources
+        items: [fm-react, fm-vanilla-js-apps]
+        template: recommended_resources
+
+- id: conclusion
+  path: /conclusion
+  blocks:
+      - id: conclusion_fernando
+        template: conclusion
+        variables:
+            author: fernando_herrera
+            entities: '"fernando_herrera"'
+
+      - id: conclusion_shaundai
+        template: conclusion
+        variables:
+            author: shaundai_person
+            entities: '"shaundai_person"'
+
+      # - id: conclusion_theo
+      #   template: conclusion
+      #   variables:
+      #       author: theo_browne
+      #       entities: '"theo_browne"'
+
+      - id: conclusion_newsletter
+        blockType: NewsletterBlock
+        wrapBlock: false
+        disableExport: true
+
+# note: other pages need to be included in the sitemap too so they can get the proper
+# locale passed to them
+
+- id: _user_metadata
+  i18nNamespace: user_metadata
+  path: /metadata
+  blocks:
+      - template: page_introduction
+
+      - id: locale
+        template: multiple_options2
+        defaultView: percentageSurvey
+        parameters: { cutoff: 20 }
+        queryOptions:
+            addQuestionComments: false
+
+      - id: completion_stats
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: authmode
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: device
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: browser
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      # - id: version
+      #   template: multiple_options2
+      #   queryOptions:
+      #       addQuestionComments: false
+
+      - id: os
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: past_surveys
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+            addBucketsEntities: true
+        parameters:
+            showNoAnswer: true
+
+      - id: past_same_survey_count
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+        parameters:
+            showNoAnswer: true
+
+      - id: created_at_date
+        template: multiple_options2
+        blockType: TimeSeriesByDateBlock
+        defaultView: countBar
+        parameters:
+            showNoAnswer: false
+            cutoff: 10
+            sort: { order: asc, property: id }
+        queryOptions:
+            addQuestionComments: false
+        variants:
+            - id: created_at_date_by_source
+              fieldId: created_at_date
+              template: multiple_options2
+              blockType: TimeSeriesByDateBlock
+              defaultView: count
+              parameters:
+                  showNoAnswer: false
+                  cutoff: 10
+                  sort: { order: asc, property: id }
+                  facetLimit: 3
+                  enableAddOverallBucket: false
+                  mergeOtherBuckets: true
+              queryOptions:
+                  addBucketsEntities: true
+                  addQuestionComments: false
+              filtersState:
+                  facet:
+                      sectionId: _user_metadata
+                      id: source
+
+      - id: source
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        parameters:
+            limit: 20
+        queryOptions:
+            addQuestionComments: false
+        # variants:
+        #     - id: source_outreach
+        #       fieldId: source
+        #       tabId: tabs.outreach
+        #       template: multiple_options2_freeform
+        #       parameters:
+        #           limit: 20
+        #           cutoff: 1
+        #       queryOptions:
+        #           addQuestionComments: false
+        #       filtersState:
+        #           # note: not enough data to make it possible to enable this
+        #           # facet:
+        #           #     sectionId: user_info
+        #           #     id: gender
+        #           bucketsFilter:
+        #               in:
+        #                   - shruti_kapoor
+        #                   - afor_digital
+        #                   - stephanie_walter
+        #                   - self_teach_me
+        #                   - black_girls_code
+        #                   - diversify_tech
+        #                   - codebar
+        #                   - black_tech_pipeline
+        #                   - referral_5n0w
+
+- id: about
+  path: /about
+  blocks:
+      - id: about_contents
+        blockType: AboutBlock
+        wrapBlock: false
+        disableExport: true
+
+- id: support
+  path: /support
+  is_hidden: true
+  blocks:
+      - id: support
+        template: page_introduction
+
+- id: sponsor_finish
+  path: /sponsor-chart-finish
+  is_hidden: true
+  blocks:
+      - id: sponsor_finish
+        blockType: SponsorFinishBlock
+        wrapBlock: false
+
+- id: notfound
+  titleId: notfound.title
+  path: /404
+  is_hidden: true
+  blocks:
+      - id: notfound
+        blockType: NotFoundBlock
+        wrapBlock: false
