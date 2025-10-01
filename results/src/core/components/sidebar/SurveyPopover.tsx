@@ -20,6 +20,8 @@ import { useI18n } from '@devographics/react-i18n'
 import styled from 'styled-components'
 import Button from '../Button'
 import T from 'core/i18n/T'
+import { getEditionImageUrl } from '@devographics/helpers'
+import Tooltip from '../Tooltip'
 
 const icons = {
     state_of_js: StateOfJSIcon,
@@ -58,6 +60,10 @@ const Contents = () => {
     const pageContext = usePageContext()
     const { allSurveys, currentSurvey, currentEdition } = pageContext
     const { editions } = currentSurvey
+    const filteredEditions = editions
+        .filter(e => e.id !== currentEdition.id)
+        .filter(e => e.resultsUrl)
+        .sort((a, b) => b.year - a.year)
     return (
         <div className="survey-popover">
             <section>
@@ -65,14 +71,21 @@ const Contents = () => {
                     <T k="general.previous_editions" />
                 </h3>
                 <div className="survey-popover-items">
-                    {editions
-                        .reverse()
-                        .filter(e => e.id !== currentEdition.id)
-                        .filter(e => e.resultsUrl)
-                        .map(edition => (
-                            <Edition survey={currentSurvey} edition={edition} key={edition.id} />
-                        ))}
+                    {filteredEditions.slice(0, 3).map(edition => (
+                        <Edition survey={currentSurvey} edition={edition} key={edition.id} />
+                    ))}
                 </div>
+                {filteredEditions.length > 3 && (
+                    <div>
+                        <a
+                            href={currentSurvey.homepageUrl}
+                            target="_blank"
+                            rel="noreferrer nofollow"
+                        >
+                            <T k="general.all_editions" />
+                        </a>
+                    </div>
+                )}
             </section>
             {/* <div>
                 All Editions:{' '}
@@ -99,20 +112,32 @@ const Contents = () => {
 }
 
 const Edition = ({ survey, edition }: { survey: SurveyMetadata; edition: EditionMetadata }) => {
-    const { id, resultsUrl, year, imageUrl } = edition
+    const { id, resultsUrl, year } = edition
     const Icon = icons[survey.id]
+    const assetUrl = process.env.GATSBY_ASSETS_URL || ''
+    const imageUrl = getEditionImageUrl({ edition, assetUrl })
     return (
         <div className="survey-popover-item survey-popover-edition">
-            <Button
-                as={'a'}
-                href={resultsUrl}
-                className="survey-popover-item-wrapper"
-                target="_blank"
-                rel="noreferrer nofollow"
-            >
-                {/* <Icon /> */}
-                <img src={imageUrl.replace('.png', '@05x.png')} />
-            </Button>
+            <Tooltip
+                trigger={
+                    <Button
+                        as={'a'}
+                        href={resultsUrl}
+                        className="survey-popover-item-wrapper"
+                        target="_blank"
+                        rel="noreferrer nofollow"
+                    >
+                        {/* <Icon /> */}
+                        <img src={imageUrl?.replace('.png', '@05x.png')} />
+                    </Button>
+                }
+                contents={
+                    <span>
+                        {survey.name} {year}
+                    </span>
+                }
+            />
+
             <h4 className="survey-popover-item-year">
                 <a href={resultsUrl} target="_blank" rel="noreferrer nofollow">
                     {year}
@@ -127,15 +152,21 @@ const Survey = ({ survey }: { survey: SurveyMetadata }) => {
     const Icon = icons[id]
     return (
         <div className="survey-popover-item survey-popover-survey">
-            <Button
-                as={'a'}
-                href={homepageUrl}
-                className="survey-popover-item-wrapper"
-                target="_blank"
-                rel="noreferrer nofollow"
-            >
-                <Icon />
-            </Button>
+            <Tooltip
+                trigger={
+                    <Button
+                        as={'a'}
+                        href={homepageUrl}
+                        className="survey-popover-item-wrapper"
+                        target="_blank"
+                        rel="noreferrer nofollow"
+                    >
+                        <Icon />
+                    </Button>
+                }
+                contents={<span>{name}</span>}
+            />
+
             {/* <h4>
                 <a href={homepageUrl} target="_blank" rel="noreferrer nofollow">
                     {name}
