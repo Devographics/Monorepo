@@ -8,10 +8,10 @@ import { publicConfig } from "~/config/public";
 import { rscMustGetSurveyEditionFromUrl } from "~/app/[lang]/survey/[slug]/[year]/rsc-fetchers";
 import { getCommonContexts, getEditionContexts } from "~/lib/i18n/config";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
-import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import { getSectionTokens } from "~/lib/i18n/survey";
 import { serverConfig } from "~/config/server";
 import { rscTeapot } from "~/lib/i18n/components/ServerT";
+import { getEditionImageUrl } from "@devographics/helpers";
 
 const MIN_YEAR = 2020;
 
@@ -26,11 +26,9 @@ export const rscFetchSurveysMetadata = cache(
       ...survey,
       editions: survey?.editions
         // remove older editions that don't have an API context anymore
-        ?.filter(e => e.year >= MIN_YEAR)
+        ?.filter((e) => e.year >= MIN_YEAR)
         // remove survey editions with no questions
-        ?.filter(
-          (edition) => edition?.sections?.length > 0
-        )
+        ?.filter((edition) => edition?.sections?.length > 0),
     }));
 
     return result;
@@ -63,7 +61,12 @@ export const rscGetMetadata = async ({
   const { socialImageUrl, year } = edition;
   const { name = "" } = edition.survey;
 
-  const imageUrl = getEditionImageUrl(edition, "og");
+  const imageUrl = getEditionImageUrl({
+    edition,
+    assetUrl: publicConfig.assetUrl || "",
+    variant: "og",
+  });
+
   let imageAbsoluteUrl = socialImageUrl || imageUrl;
   const url = edition.questionsUrl || publicConfig.appUrl;
   const description = t("general.take_survey", { name, year: year + "" });

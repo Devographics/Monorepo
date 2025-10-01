@@ -1,5 +1,4 @@
 import Support from "~/components/common/Support";
-import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import { rscMustGetSurveyEditionFromUrl } from "./rsc-fetchers";
 import { DebugRSC } from "~/components/debug/DebugRSC";
 import Faq from "~/components/common/Faq";
@@ -13,6 +12,8 @@ import { EditionMain } from "./client-components";
 
 import TokyoDev from "~/components/common/TokyoDev";
 import { DynamicT } from "@devographics/react-i18n";
+import { publicConfig } from "~/config/public";
+import { getEditionImageUrl } from "@devographics/helpers";
 
 // revalidating is important so we get fresh values from the cache every now and then without having to redeploy
 export const revalidate = 54000; // 15mn
@@ -89,7 +90,11 @@ export default async function SurveyPage(props: {
       year,
     });
 
-  const imageUrl = getEditionImageUrl(edition);
+  const imageUrl = getEditionImageUrl({
+    edition,
+    assetUrl: publicConfig.assetUrl || "",
+  });
+
   return (
     <div>
       <DebugRSC {...{ ___rscMustGetSurveyEditionFromUrl }} />

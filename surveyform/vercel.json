@@ -8,7 +8,7 @@
   },
   "crons": [
     {
-      "path": "/api/stats/score-quantiles/compute?editionId=html2025",
+      "path": "/api/stats/score-quantiles/compute?editionId=js2025",
       "schedule": "0 6 * * *"
     }
   ]

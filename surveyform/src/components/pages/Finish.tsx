@@ -1,6 +1,5 @@
 import ShareSite from "../share/ShareSite";
 import Score from "../common/Score";
-import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import ReadingListResults from "~/components/reading_list/ReadingListResults";
 import { EditionMetadata, ResponseDocument } from "@devographics/types";
@@ -13,6 +12,8 @@ import { rscCurrentUser } from "~/lib/users/rsc-fetchers/rscCurrentUser";
 import ChatAppShare from "../common/ChatAppShare";
 import s from "./Finish.module.scss";
 import { rscTotalResponses } from "~/lib/responses/stats";
+import { getEditionImageUrl } from "@devographics/helpers";
+import { publicConfig } from "~/config/public";
 
 const goal = 1000;
 
@@ -28,7 +29,11 @@ export const Finish = async ({
   const currentUser = await rscCurrentUser();
   // const { currentUser, loading } = useCurrentUser();
 
-  const imageUrl = getEditionImageUrl(edition);
+  const imageUrl = getEditionImageUrl({
+    edition,
+    assetUrl: publicConfig.assetUrl || "",
+  });
+
   const { survey, year } = edition;
   const { responsesGoal, enableGoal, enableScore } = edition;
   const { name } = survey;

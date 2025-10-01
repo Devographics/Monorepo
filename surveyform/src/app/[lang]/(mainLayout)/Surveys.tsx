@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { SurveyStatusEnum } from "@devographics/types";
 import { EditionMetadata, SurveyMetadata } from "@devographics/types";
-import { getEditionImageUrl } from "~/lib/surveys/helpers/getEditionImageUrl";
 import { getEditionTitle } from "~/lib/surveys/helpers/getEditionTitle";
 import { getEditionHomePath } from "~/lib/surveys/helpers/getEditionHomePath";
 import sortBy from "lodash/sortBy";
 import { rscCurrentUserWithResponses } from "~/lib/users/rsc-fetchers/rscCurrentUser";
 import { ResponseDetails } from "~/components/surveys/ResponseDetails";
 import { T } from "@devographics/react-i18n";
+import { getEditionImageUrl } from "@devographics/helpers";
+import { publicConfig } from "~/config/public";
 
 const EditionItem = async ({
   edition,
@@ -18,7 +19,10 @@ const EditionItem = async ({
 }) => {
   const { survey, year, status } = edition;
   const { name } = survey;
-  const imageUrl = getEditionImageUrl(edition);
+  const imageUrl = getEditionImageUrl({
+    edition,
+    assetUrl: publicConfig.assetUrl || "",
+  });
 
   const currentUser = await rscCurrentUserWithResponses();
   const response = currentUser?.responses?.find(
@@ -41,7 +45,7 @@ const EditionItem = async ({
                   height={200}
                   src={imageUrl}
                   alt={getEditionTitle({ edition })}
-                //quality={100}
+                  //quality={100}
                 />
               )}
             </div>
@@ -102,18 +106,30 @@ const EditionGroup = ({
   );
 };
 
-const Surveys = ({ surveys, localeId }: { surveys: Array<SurveyMetadata>, localeId: string }) => {
+const Surveys = ({
+  surveys,
+  localeId,
+}: {
+  surveys: Array<SurveyMetadata>;
+  localeId: string;
+}) => {
   const allEditions = surveys
     .map((survey) => survey.editions.map((e) => ({ ...e, survey })))
     .flat();
   return (
     <div className="surveys">
-      <EditionGroup localeId={localeId} allEditions={allEditions} status={SurveyStatusEnum.OPEN} />
-      <EditionGroup localeId={localeId}
+      <EditionGroup
+        localeId={localeId}
+        allEditions={allEditions}
+        status={SurveyStatusEnum.OPEN}
+      />
+      <EditionGroup
+        localeId={localeId}
         allEditions={allEditions}
         status={SurveyStatusEnum.PREVIEW}
       />
-      <EditionGroup localeId={localeId}
+      <EditionGroup
+        localeId={localeId}
         allEditions={allEditions}
         status={SurveyStatusEnum.CLOSED}
       />
