@@ -105,33 +105,34 @@ export async function addAverages(
     const calculateAxis2Average =
         axis2 && (axis2.question.optionsAreRange || axis2.question.optionsAreNumeric)
 
-    if (calculateAxis1Average || calculateAxis2Average) {
-        for (let editionData of resultsByEdition) {
-            // calculate average of all top-level buckets
-            if (calculateAxis1Average) {
-                const buckets = editionData.buckets.filter(b => b.id !== OVERALL)
-                editionData.average = calculateAverage({
-                    buckets,
-                    axis: axis1
-                })
-            }
-            // calculate averages of all facet buckets for each top-level bucket
-            if (calculateAxis2Average) {
-                for (let bucket of editionData.buckets) {
-                    if (bucket.id !== NOT_APPLICABLE) {
-                        if (bucket.hasInsufficientData) {
-                            bucket[BucketUnits.AVERAGE] = 0
-                        } else {
-                            const buckets = bucket.facetBuckets
-                            if (buckets) {
-                                const average = calculateAverage({
-                                    buckets,
-                                    axis: axis2
-                                })
-                                if (!isNil(average) && !isNaN(average)) {
-                                    bucket[BucketUnits.AVERAGE] = average
-                                }
-                            }
+    for (let editionData of resultsByEdition) {
+        // calculate average of all top-level buckets
+        if (calculateAxis1Average) {
+            const buckets = editionData.buckets.filter(b => b.id !== OVERALL)
+            editionData.average = calculateAverage({
+                buckets,
+                axis: axis1
+            })
+        }
+        // calculate averages of all facet buckets for each top-level bucket
+        for (let bucket of editionData.buckets) {
+            if (bucket.id !== NOT_APPLICABLE) {
+                if (bucket.hasInsufficientData) {
+                    bucket[BucketUnits.AVERAGE] = 0
+                } else {
+                    const option = axis1?.options?.find(o => o.id === bucket.id)
+                    if (option?.average) {
+                        // bucket is a range with a hardcoded average value
+                        // note: this is not actually an "averageByFacet" but we can reuse
+                        // the same property for now
+                        bucket[BucketUnits.AVERAGE] = option.average
+                    } else if (bucket.facetBuckets && calculateAxis2Average) {
+                        const average = calculateAverage({
+                            buckets: bucket.facetBuckets,
+                            axis: axis2
+                        })
+                        if (!isNil(average) && !isNaN(average)) {
+                            bucket[BucketUnits.AVERAGE] = 999
                         }
                     }
                 }
