@@ -9,7 +9,9 @@ export async function addValues(
 ) {
     for (let editionData of resultsByEdition) {
         for (let bucket of editionData.buckets) {
-            const optionValue = axis1?.options?.find(o => o.id === bucket.id)?.value
+            const option = axis1?.options?.find(o => o.id === bucket.id)
+            // note: value can either be actual value, or the average value (for a range)
+            const optionValue = option?.value || option?.average
             const idValue = axis1.question.optionsAreNumeric ? Number(bucket.id) : undefined
             const bucketValue = optionValue ?? idValue
             if (bucketValue !== undefined && !Number.isNaN(bucketValue)) {
