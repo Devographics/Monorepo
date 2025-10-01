@@ -3,11 +3,11 @@ import sum from 'lodash/sum.js'
 import sumBy from 'lodash/sumBy.js'
 import round from 'lodash/round.js'
 import { BucketData, BucketUnits } from '@devographics/types'
-import { mergePercentiles } from './cutoff_data'
 import { NO_ANSWER } from '@devographics/constants'
 import uniq from 'lodash/uniq.js'
 import compact from 'lodash/compact.js'
 import { sortBuckets } from './sort_data'
+import { PercentileData, Percentiles } from '@devographics/types'
 
 export function mergeBuckets<T extends Bucket | FacetBucket>({
     buckets,
@@ -27,25 +27,29 @@ export function mergeBuckets<T extends Bucket | FacetBucket>({
 
     const groupedBuckets = sortBuckets(buckets, primaryAxis)
 
-    const mergedPercentiles = mergePercentiles(buckets)
-
     const mergedBucket = {
         groupedBuckets,
         groupedBucketIds: groupedBuckets.map(b => b.id),
         [BucketUnits.COUNT]: getSum(BucketUnits.COUNT),
         [BucketUnits.PERCENTAGE_QUESTION]: getSum(BucketUnits.PERCENTAGE_QUESTION),
         [BucketUnits.PERCENTAGE_SURVEY]: getSum(BucketUnits.PERCENTAGE_SURVEY),
-        [BucketUnits.AVERAGE]: round(
-            sumBy(buckets, b => b[BucketUnits.AVERAGE] || 0) / buckets.length,
-            2
-        ),
-        [BucketUnits.PERCENTILES]: mergedPercentiles,
-        [BucketUnits.MEDIAN]: mergedPercentiles.p50,
         ...(isFacetBuckets
             ? { [BucketUnits.PERCENTAGE_BUCKET]: getSum(BucketUnits.PERCENTAGE_BUCKET) }
             : {}),
         ...mergedProps
     } as T
+
+    const mergedAverage = mergeAverages(buckets)
+    if (mergedAverage) {
+        mergedBucket[BucketUnits.AVERAGE] = mergedAverage
+    }
+
+    const mergedPercentiles = mergePercentiles(buckets)
+    if (mergedPercentiles) {
+        // make sure merged buckets actually have percentiles
+        mergedBucket[BucketUnits.PERCENTILES] = mergedPercentiles
+        mergedBucket[BucketUnits.MEDIAN] = mergedPercentiles.p50
+    }
 
     // if these are top-level buckets we also combine all *their* facet buckets
     // with one another to generate a new merged facetBuckets array
@@ -66,6 +70,33 @@ export function mergeBuckets<T extends Bucket | FacetBucket>({
     }
 
     return mergedBucket
+}
+
+function mergeAverages(buckets: Bucket[] | FacetBucket[]) {
+    const bucketsWithAverages = buckets.filter(b => b[BucketUnits.AVERAGE])
+    if (bucketsWithAverages.length === 0) {
+        return null
+    } else {
+        return round(
+            sumBy(buckets, b => (b[BucketUnits.COUNT] || 0) * (b[BucketUnits.AVERAGE] || 0)) /
+                sumBy(buckets, b => b[BucketUnits.COUNT] || 0),
+            2
+        )
+    }
+}
+
+function mergePercentiles(buckets: Bucket[] | FacetBucket[]) {
+    const percentileKeys = ['p0', 'p10', 'p25', 'p50', 'p75', 'p90', 'p100'] as Percentiles[]
+    const percentiles = {} as PercentileData
+    for (const key of percentileKeys) {
+        const values = compact(buckets.map(b => b?.[BucketUnits.PERCENTILES]?.[key]))
+        if (values.length === 0) {
+            // if one or more percentile doesn't exist in any of the buckets, abort
+            return null
+        }
+        percentiles[key] = round(sum(values) / buckets.length, 2)
+    }
+    return percentiles
 }
 
 /*

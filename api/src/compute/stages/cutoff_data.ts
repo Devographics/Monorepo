@@ -1,21 +1,8 @@
 import { COUNT, CUTOFF_ANSWERS } from '@devographics/constants'
 import { ResponseEditionData, ComputeAxisParameters, Bucket, FacetBucket } from '../../types'
-import sum from 'lodash/sum.js'
-import compact from 'lodash/compact.js'
-import round from 'lodash/round.js'
-import { BucketUnits, PercentileData, Percentiles } from '@devographics/types'
+import { BucketUnits } from '@devographics/types'
 import { isSpecialBucket } from './limit_data'
 import { mergeBuckets } from './mergeBuckets'
-
-export function mergePercentiles(buckets: Bucket[] | FacetBucket[]) {
-    const percentileKeys = ['p0', 'p10', 'p25', 'p50', 'p75', 'p90', 'p100'] as Percentiles[]
-    const percentiles = {} as PercentileData
-    for (const key of percentileKeys) {
-        const values = compact(buckets.map(b => b?.percentilesByFacet?.[key]))
-        percentiles[key] = round(sum(values) / buckets.length, 2)
-    }
-    return percentiles
-}
 
 /*
 
