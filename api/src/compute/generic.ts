@@ -540,6 +540,8 @@ export async function genericComputeFunction(
             await runStage(addEntities, [results, context, axis2])
             await runStage(addTokens, [results, context, axis2])
 
+            await runStage(addValues, [results, context, axis2, axis1])
+
             // bucket grouping
             await runStage(groupBuckets, [results, axis2, axis1])
 
@@ -556,8 +558,6 @@ export async function genericComputeFunction(
             if (axis2.enableBucketGroups && axis2.question.groups) {
                 axis2.options = axis2.question.groups
             }
-
-            await runStage(addValues, [results, context, axis2, axis1])
 
             // restrict buckets to the ones specified in bucketsFilter if needed
             // note: this uses entity tags so do it after addEntities
@@ -601,6 +601,8 @@ export async function genericComputeFunction(
             await runStage(addEntities, [results, context, axis1])
             await runStage(addTokens, [results, context, axis1])
 
+            await runStage(addValues, [results, context, axis1])
+
             await runStage(groupBuckets, [results, axis1])
 
             await runStage(cutoffData, [results, axis1])
@@ -611,8 +613,6 @@ export async function genericComputeFunction(
             if (axis1.enableBucketGroups && axis1.question.groups) {
                 axis1.options = axis1.question.groups
             }
-
-            await runStage(addValues, [results, context, axis1])
 
             // restrict buckets to the ones specified in bucketsFilter if needed
             // note: this uses entity tags so do it after addEntities
