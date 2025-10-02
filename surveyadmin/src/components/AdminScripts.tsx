@@ -52,10 +52,15 @@ const ScriptList = ({ heading, scripts, surveys }) => {
   );
 };
 const Script = ({ id, description, args, done, surveys }) => {
+  const defaultSurvey = surveys[0];
+  const defaultEditionIds = defaultSurvey.editions.map((e) => e.id);
   const [result, setResult] = useState<any | undefined>();
-  const [scriptArgs, setScriptArgs] = useState({});
+  const [scriptArgs, setScriptArgs] = useState({
+    surveyId: defaultSurvey.id,
+    editionId: defaultEditionIds[0],
+  });
   const [loading, setLoading] = useState(false);
-  const [editionIds, setEditionIds] = useState([]);
+  const [editionIds, setEditionIds] = useState(defaultEditionIds);
 
   const handleSubmit = async () => {
     setLoading(true);

@@ -21,7 +21,7 @@ export const addFutureParticipations = async (args) => {
   const totalSteps = Math.floor(total / operationsPerStep);
 
   console.log(
-    `// Found ${total} responses for edition ${editionId}, processing…`
+    `// Found ${total} responses for survey ${surveyId}, edition ${editionId}, processing…`
   );
 
   for (let step = 0; step <= totalSteps; step++) {

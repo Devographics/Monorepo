@@ -29,7 +29,7 @@ export const addPastParticipations = async (args) => {
   const totalSteps = Math.floor(total / operationsPerStep);
 
   console.log(
-    `// Found ${total} responses for edition ${editionId} with missing "${PAST_PARTICIPATIONS}" field, processing…`
+    `// Found ${total} responses for survey ${surveyId}, edition ${editionId} with missing "${PAST_PARTICIPATIONS}" field, processing…`
   );
 
   for (let step = 0; step <= totalSteps; step++) {

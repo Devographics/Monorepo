@@ -196,6 +196,11 @@ const Row = ({
           id
         ) : (
           <span>
+            {token?.parentId && (
+              <div className="id-parent-above">
+                <span className="id id-parent">{token.parentId}</span> ↴
+              </div>
+            )}
             <NormTokenAction
               id={id.replace("catchall_", "")}
               setTokenFilter={setTokenFilter}
