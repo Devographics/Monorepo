@@ -699,15 +699,6 @@
         queryOptions:
             addQuestionComments: false
 
-      - id: past_surveys
-        template: multiple_options2
-        defaultView: percentageSurvey
-        queryOptions:
-            addQuestionComments: false
-            addBucketsEntities: true
-        parameters:
-            showNoAnswer: true
-
       - id: past_same_survey_count
         template: multiple_options2
         defaultView: percentageSurvey
