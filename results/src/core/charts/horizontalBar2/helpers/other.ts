@@ -101,7 +101,9 @@ export const useQuestionMetadata = (facet?: FacetItem) => {
     if (!facet) return
     const { id, sectionId } = facet
     const allQuestions = useAllQuestionsMetadata()
-    const question = allQuestions.find(q => q.id === id && q.sectionId === sectionId)
+    // note: we do not look up question metadata based on sectionId here
+    // because sectionId can be wrong when question has changed sections
+    const question = allQuestions.find(q => q.id === id)
     return question
 }
 

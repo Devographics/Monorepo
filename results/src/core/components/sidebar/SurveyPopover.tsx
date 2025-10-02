@@ -64,6 +64,9 @@ const Contents = () => {
         .filter(e => e.id !== currentEdition.id)
         .filter(e => e.resultsUrl)
         .sort((a, b) => b.year - a.year)
+    const otherSurveys = allSurveys
+        .filter(s => !s.isDisabled)
+        .filter(s => s.id !== currentSurvey.id)
     return (
         <div className="survey-popover">
             <section>
@@ -94,19 +97,18 @@ const Contents = () => {
                 </a>
             </div> */}
             {/* <hr /> */}
-            <section>
-                <h3>
-                    <T k="general.other_surveys" />
-                </h3>
-                <div className="survey-popover-items">
-                    {allSurveys
-                        .filter(s => !s.isDisabled)
-                        .filter(s => s.id !== currentSurvey.id)
-                        .map(survey => (
+            {otherSurveys.length > 0 && (
+                <section>
+                    <h3>
+                        <T k="general.other_surveys" />
+                    </h3>
+                    <div className="survey-popover-items">
+                        {otherSurveys.map(survey => (
                             <Survey survey={survey} key={survey.id} />
                         ))}
-                </div>
-            </section>
+                    </div>
+                </section>
+            )}
         </div>
     )
 }

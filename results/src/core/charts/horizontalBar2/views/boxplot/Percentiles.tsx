@@ -149,9 +149,6 @@ export const PercentileDot = ({
         values: { percentile: p, value: valueLabel }
     })?.t
 
-    console.log(pKey)
-    console.log(boxData)
-    console.log(xCoord)
     return (
         <Dot
             xCoord={xCoord}

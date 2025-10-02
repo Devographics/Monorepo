@@ -7,3 +7,4 @@ parameters:
 defaultUnits: percentageBucket
 queryOptions:
     addBucketsEntities: false
+    editionsCount: 1

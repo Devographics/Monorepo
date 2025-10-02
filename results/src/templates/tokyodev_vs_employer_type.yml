@@ -7,6 +7,7 @@ blockType: HorizontalBarBlock2
 hasData: true
 queryOptions:
     addBucketsEntities: false
+    editionsCount: 1
 parameters:
     showNoAnswer: true
     cutoff: 10

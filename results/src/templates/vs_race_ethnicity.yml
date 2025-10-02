@@ -2,6 +2,8 @@ id: ${mainBlockId}_vs_race_ethnicity
 fieldId: ${mainBlockId}
 blockType: HorizontalBarBlock2
 hasData: true
+queryOptions:
+    editionsCount: 1
 parameters:
     showNoAnswer: true
 filtersState:

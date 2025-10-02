@@ -4,6 +4,8 @@ blockType: HorizontalBarBlock2
 hasData: true
 parameters:
     showNoAnswer: true
+queryOptions:
+    editionsCount: 1
 filtersState:
     options:
         mode: facet

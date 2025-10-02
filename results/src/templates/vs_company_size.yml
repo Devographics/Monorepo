@@ -5,6 +5,8 @@ fieldId: ${mainBlockId}
 # defaultUnits: percentilesByFacet
 blockType: HorizontalBarBlock2
 hasData: true
+queryOptions:
+    editionsCount: 1
 parameters:
     showNoAnswer: true
 filtersState:

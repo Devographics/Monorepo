@@ -27,6 +27,7 @@ export interface QueryArgs {
 
 export interface ProvidedQueryOptions {
     allEditions?: boolean
+    editionsCount?: number
     addBucketsEntities?: boolean
     isLog?: boolean
     addRootNode?: boolean

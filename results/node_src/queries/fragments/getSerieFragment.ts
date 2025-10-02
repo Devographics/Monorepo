@@ -21,6 +21,7 @@ export const getSerieFragment = ({
         subField = 'responses',
         addBucketsEntities = true,
         allEditions = false,
+        editionsCount = 2,
         addQuestionEntity = false,
         addQuestionComments = true,
         addBuckets = true,
@@ -34,7 +35,7 @@ export const getSerieFragment = ({
     }
 
     const queryArgsString = getQueryArgsString(queryArgs)
-    const editionType = allEditions ? 'allEditions' : 'allEditions(editionCount: 2)'
+    const editionType = allEditions ? 'allEditions' : `allEditions(editionCount: ${editionsCount})`
 
     const questionIdString = name ? `${name}: ${questionId}` : questionId
 

@@ -1,6 +1,8 @@
 fieldId: ${mainBlockId}
 blockType: HorizontalBarBlock2
 hasData: true
+queryOptions:
+    editionsCount: 1
 parameters:
     showNoAnswer: true
     cutoff: 20
