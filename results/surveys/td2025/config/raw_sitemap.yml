@@ -97,9 +97,15 @@
 
       - id: relationship_status
         template: tokyodev_multiple_options2
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: number_of_kids
         template: tokyodev_multiple_options2
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: gender
         template: tokyodev_multiple_options2
@@ -389,9 +395,15 @@
 
       - id: discrimination_issues
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: job_happiness
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: industry_sector
         template: tokyodev_multiple_options2_combined
@@ -416,6 +428,9 @@
 
       - id: meeting_hours_per_week
         template: tokyodev_multiple_options2
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: remote_work_policy
         template: tokyodev_multiple_options2
@@ -481,6 +496,9 @@
 
       - id: income_evolution
         template: tokyodev_multiple_options2
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
 - id: technology
   path: /technology
@@ -602,54 +620,99 @@
 
       - id: software_engineering_practices
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: social_media
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
 - id: ai_usage
   path: /ai-usage
   blocks:
       - id: ai_tools
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: ai_uses
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: ai_generated_code_balance
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: ai_code_generation_frequency
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: ai_pain_points
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: more_productive
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: job_security_threat
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
 - id: life_in_japan
   path: /life-in-japan
   blocks:
       - id: friend_group_balance
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: initial_attraction
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: hobbies
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: life_japan_positive_aspects
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: life_japan_negative_aspects
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
       - id: communities
         template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
 
 - id: _user_metadata
   i18nNamespace: user_metadata
