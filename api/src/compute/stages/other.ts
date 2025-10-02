@@ -97,10 +97,11 @@ const getZeroBucketItem = <T extends Bucket | FacetBucket>({
 }) => {
     let zeroBucket = { ...zeroBucketItem, id } as T
     if (axis) {
-        const optionsOrGroups = axis.question.groups || axis.question.options
+        // note: do not use groups here as this happens before grouping step
+        const options = axis.question.options
         zeroBucket = {
             ...zeroBucket,
-            facetBuckets: optionsOrGroups?.map(o => ({
+            facetBuckets: options?.map(o => ({
                 ...zeroBucketItem,
                 id: o.id
             }))

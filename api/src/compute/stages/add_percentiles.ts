@@ -194,8 +194,6 @@ export const zeroPercentiles = {
     p100: 0
 }
 
-const calculatePercentiles = calculatePercentiles2
-
 export async function addPercentiles(
     resultsByEdition: ResponseEditionData[],
     axis1: ComputeAxisParameters,
@@ -210,7 +208,7 @@ export async function addPercentiles(
         for (let editionData of resultsByEdition) {
             // calculate percentiles of all top-level buckets
             if (calculateAxis1Percentiles) {
-                const percentiles = calculatePercentiles({
+                const percentiles = calculatePercentiles2({
                     buckets: editionData.buckets.filter(b => b.id !== OVERALL),
                     axis: axis1
                 })
@@ -222,7 +220,7 @@ export async function addPercentiles(
                 for (let bucket of editionData.buckets) {
                     const percentiles = bucket.hasInsufficientData
                         ? zeroPercentiles
-                        : calculatePercentiles({
+                        : calculatePercentiles2({
                               buckets: bucket.facetBuckets,
                               axis: axis2
                           })

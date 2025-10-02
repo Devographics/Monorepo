@@ -132,7 +132,7 @@ export async function addAverages(
                             axis: axis2
                         })
                         if (!isNil(average) && !isNaN(average)) {
-                            bucket[BucketUnits.AVERAGE] = 999
+                            bucket[BucketUnits.AVERAGE] = average
                         }
                     }
                 }
