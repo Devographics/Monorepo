@@ -311,7 +311,7 @@
                               operator: in
                               value: ['range_10_12', 'range_13_15', 'range_16_20', 'range_over_20']
 
-      - id: languages_used_colleagues_japanese
+      - id: languages_used_colleagues_english
         template: tokyodev_multiple_options2
         defaultUnits: percentageQuestion
         variants:
@@ -323,7 +323,7 @@
                   sort: { property: options }
             # - template: tokyodev_vs_current_employer
 
-      - id: languages_used_colleagues_english
+      - id: languages_used_colleagues_japanese
         template: tokyodev_multiple_options2
         defaultUnits: percentageQuestion
         variants:
@@ -650,6 +650,136 @@
 
       - id: communities
         template: tokyodev_multiple_options2_combined
+
+- id: _user_metadata
+  i18nNamespace: user_metadata
+  path: /metadata
+  blocks:
+      - template: page_introduction
+
+      - id: locale
+        template: multiple_options2
+        defaultView: percentageSurvey
+        parameters: { cutoff: 20 }
+        queryOptions:
+            addQuestionComments: false
+
+      - id: completion_stats
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: authmode
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: device
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: browser
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      # - id: version
+      #   template: multiple_options2
+      #   queryOptions:
+      #       addQuestionComments: false
+
+      - id: os
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+
+      - id: past_surveys
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+            addBucketsEntities: true
+        parameters:
+            showNoAnswer: true
+
+      - id: past_same_survey_count
+        template: multiple_options2
+        defaultView: percentageSurvey
+        queryOptions:
+            addQuestionComments: false
+        parameters:
+            showNoAnswer: true
+
+      - id: created_at_date
+        template: multiple_options2
+        blockType: TimeSeriesByDateBlock
+        defaultView: countBar
+        parameters:
+            showNoAnswer: false
+            cutoff: 10
+            sort: { order: asc, property: id }
+        queryOptions:
+            addQuestionComments: false
+        variants:
+            - id: created_at_date_by_source
+              fieldId: created_at_date
+              template: multiple_options2
+              blockType: TimeSeriesByDateBlock
+              defaultView: count
+              parameters:
+                  showNoAnswer: false
+                  cutoff: 10
+                  sort: { order: asc, property: id }
+                  facetLimit: 3
+                  enableAddOverallBucket: false
+                  mergeOtherBuckets: true
+              queryOptions:
+                  addBucketsEntities: true
+                  addQuestionComments: false
+              filtersState:
+                  facet:
+                      sectionId: _user_metadata
+                      id: source
+
+      - id: source
+        template: multiple_options2_freeform
+        defaultView: percentageSurvey
+        parameters:
+            limit: 20
+        queryOptions:
+            addQuestionComments: false
+        # variants:
+        #     - id: source_outreach
+        #       fieldId: source
+        #       tabId: tabs.outreach
+        #       template: multiple_options2_freeform
+        #       parameters:
+        #           limit: 20
+        #           cutoff: 1
+        #       queryOptions:
+        #           addQuestionComments: false
+        #       filtersState:
+        #           # note: not enough data to make it possible to enable this
+        #           # facet:
+        #           #     sectionId: user_info
+        #           #     id: gender
+        #           bucketsFilter:
+        #               in:
+        #                   - shruti_kapoor
+        #                   - afor_digital
+        #                   - stephanie_walter
+        #                   - self_teach_me
+        #                   - black_girls_code
+        #                   - diversify_tech
+        #                   - codebar
+        #                   - black_tech_pipeline
+        #                   - referral_5n0w
 
 - id: conclusion
   path: /conclusion

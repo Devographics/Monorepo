@@ -13,20 +13,23 @@ import HorizontalBarBlock2 from 'core/charts/horizontalBar2'
 import VerticalBarBlock from 'core/charts/verticalBar'
 import VerticalBarBlock2 from 'core/charts/verticalBar2'
 import PeopleBlock from 'core/charts/people'
-import ToolFeatureExperienceBlock from 'core/charts/toolFeatureExperience'
+// import ToolFeatureExperienceBlock from 'core/charts/toolFeatureExperience'
+
+// historical trend charts
+import { TimeSeriesByDateBlock } from 'core/charts/timeSeriesByDate/TimeSeriesByDateBlock'
 
 // features
-import FeaturesOverviewBlock from 'core/charts/featuresOverview'
+// import FeaturesOverviewBlock from 'core/charts/featuresOverview'
 
 // tools
-import ToolsArrowsBlock from 'core/charts/toolsArrows'
-import ToolsTierListBlock from 'core/charts/toolsTierList'
-import ToolsScatterplotBlock from 'core/charts/toolsScatterplot'
+// import ToolsArrowsBlock from 'core/charts/toolsArrows'
+// import ToolsTierListBlock from 'core/charts/toolsTierList'
+// import ToolsScatterplotBlock from 'core/charts/toolsScatterplot'
 
-import ToolsRatiosLineChartBlock from 'core/charts/toolsRatiosLineChart'
-import ToolsRatiosRankingBlock from 'core/charts/toolsRatiosRanking'
-import ToolsSectionStreamsBlock from 'core/charts/toolsSectionStreams'
-import ToolsExperienceMarimekkoBlock from 'core/charts/toolsMarimekko'
+// import ToolsRatiosLineChartBlock from 'core/charts/toolsRatiosLineChart'
+// import ToolsRatiosRankingBlock from 'core/charts/toolsRatiosRanking'
+// import ToolsSectionStreamsBlock from 'core/charts/toolsSectionStreams'
+// import ToolsExperienceMarimekkoBlock from 'core/charts/toolsMarimekko'
 
 // opinions
 import OpinionBlock from 'core/charts/opinion'
@@ -38,18 +41,7 @@ const chartBlocks = {
     VerticalBarBlock2,
     PeopleBlock,
 
-    ToolFeatureExperienceBlock,
-
-    FeaturesOverviewBlock,
-
-    ToolsArrowsBlock,
-    ToolsTierListBlock,
-    ToolsScatterplotBlock,
-
-    ToolsRatiosLineChartBlock,
-    ToolsRatiosRankingBlock,
-    ToolsSectionStreamsBlock,
-    ToolsExperienceMarimekkoBlock,
+    TimeSeriesByDateBlock,
 
     OpinionBlock
 }
