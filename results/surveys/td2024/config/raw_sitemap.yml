@@ -419,7 +419,7 @@
                                   - range_over_20
 
       - id: current_total_annual_compensation
-        queryOptions: { sectionId: compensation }
+        queryOptions: { sectionId: compensation, editionsCount: 1 }
         template: tokyodev_multiple_options2
         defaultUnits: percentageQuestion
         titleId: compensation.current_total_annual_compensation
@@ -612,22 +612,22 @@
                   filters:
                       - conditions:
                             - fieldId: remote_work_policy
-                              sectionId: employer_info
+                              sectionId: job_info
                               operator: eq
                               value: no_remote_work
                       - conditions:
                             - fieldId: remote_work_policy
-                              sectionId: employer_info
+                              sectionId: job_info
                               operator: eq
                               value: hybrid
                       - conditions:
                             - fieldId: remote_work_policy
-                              sectionId: employer_info
+                              sectionId: job_info
                               operator: eq
                               value: up_to_employee
                       - conditions:
                             - fieldId: remote_work_policy
-                              sectionId: employer_info
+                              sectionId: job_info
                               operator: eq
                               value: fully_remote
 
@@ -655,17 +655,17 @@
                   filters:
                       - conditions:
                             - fieldId: remote_work_policy
-                              sectionId: employer_info
+                              sectionId: job_info
                               operator: eq
                               value: hybrid
                       - conditions:
                             - fieldId: remote_work_policy
-                              sectionId: employer_info
+                              sectionId: job_info
                               operator: eq
                               value: up_to_employee
                       - conditions:
                             - fieldId: remote_work_policy
-                              sectionId: employer_info
+                              sectionId: job_info
                               operator: eq
                               value: fully_remote
 
@@ -694,12 +694,12 @@
                   filters:
                       - conditions:
                             - fieldId: current_employer
-                              sectionId: employer_info
+                              sectionId: job_info
                               operator: eq
                               value: japanese_company
                       - conditions:
                             - fieldId: current_employer
-                              sectionId: employer_info
+                              sectionId: job_info
                               operator: eq
                               value: japanese_subsidiary
             # - template: tokyodev_variant_base
@@ -897,7 +897,7 @@
                   addBucketsEntities: true
               filtersState:
                   facet:
-                      sectionId: employer_info
+                      sectionId: job_info
                       id: industry_sector
 
 - id: satisfaction
@@ -931,14 +931,14 @@
                   filters:
                       - conditions:
                             - fieldId: remote_work_policy
-                              sectionId: employer_info
+                              sectionId: job_info
                               operator: in
                               value:
                                   - no_remote_work
                                   - hybrid
                       - conditions:
                             - fieldId: remote_work_policy
-                              sectionId: employer_info
+                              sectionId: job_info
                               operator: in
                               value:
                                   - up_to_employee
@@ -1159,22 +1159,22 @@
                   filters:
                       - conditions:
                             - fieldId: remote_work_policy
-                              sectionId: employer_info
+                              sectionId: job_info
                               operator: eq
                               value: no_remote_work
                       - conditions:
                             - fieldId: remote_work_policy
-                              sectionId: employer_info
+                              sectionId: job_info
                               operator: eq
                               value: hybrid
                       - conditions:
                             - fieldId: remote_work_policy
-                              sectionId: employer_info
+                              sectionId: job_info
                               operator: eq
                               value: up_to_employee
                       - conditions:
                             - fieldId: remote_work_policy
-                              sectionId: employer_info
+                              sectionId: job_info
                               operator: eq
                               value: fully_remote
 
