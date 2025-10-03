@@ -71,7 +71,7 @@ const Contents = () => {
         <div className="survey-popover">
             <section>
                 <h3>
-                    <T k="general.previous_editions" />
+                    <T k="general.other_editions" />
                 </h3>
                 <div className="survey-popover-items">
                     {filteredEditions.slice(0, 3).map(edition => (
