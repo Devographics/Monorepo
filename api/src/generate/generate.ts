@@ -365,14 +365,14 @@ recent edition
 export const mergeQuestionObjectsv2 = (q1: QuestionApiObject, q2: QuestionApiObject) => {
     const q1IsMoreRecent = (q1?.edition?.year || 0) > (q2?.edition?.year || 0)
 
-    const q = q1IsMoreRecent ? q1 : q2
+    const [oldQ, newQ] = q1IsMoreRecent ? [q2, q1] : [q1, q2]
 
-    const editions = uniq([...(q1?.editions || []), ...(q2?.editions || [])])
+    const editions = uniq([...(oldQ?.editions || []), ...(newQ?.editions || [])])
 
-    const sectionIds = uniq([...(q1.sectionIds || []), ...(q2.sectionIds || [])])
+    const sectionIds = uniq([...(oldQ.sectionIds || []), ...(newQ.sectionIds || [])])
 
     return {
-        ...q,
+        ...newQ,
         sectionIds,
         editions
     }

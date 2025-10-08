@@ -36,7 +36,7 @@ export const generateFacetsType = ({
         .filter(q => typeof q.filterTypeName !== 'undefined')
         .filter(q => q.template !== 'likert')
 
-    return {
+    const typeObject = {
         generatedBy: 'facets',
         typeName,
         typeDef: `enum ${typeName} {
@@ -55,4 +55,5 @@ export const generateFacetsType = ({
         .join('\n    ')}
 }`
     }
+    return typeObject
 }
