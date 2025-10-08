@@ -95,11 +95,10 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>
                 </pre> */}
-                {/* {
-                    <pre>
-                        <code>{JSON.stringify(facetQuestion, null, 2)}</code>
-                    </pre>
-                } */}
+
+                {/* <pre>
+                    <code>{JSON.stringify(facetQuestion, null, 2)}</code>
+                </pre> */}
                 {facetQuestion && <FacetHeading facetQuestion={facetQuestion} {...commonProps} />}
 
                 {useBackToBackSeriesView() ? (

@@ -69,7 +69,9 @@ export enum NumericOperatorEnum {
 
 export type FilterItem = QuestionMetadata
 
-export type FacetItem = Pick<QuestionMetadata, 'id' | 'sectionId' | 'optionsAreSequential'>
+export type FacetItem = Pick<QuestionMetadata, 'id' | 'sectionId' | 'optionsAreSequential'> & {
+    sectionIdOverride?: string
+}
 
 export type FilterValue = FilterValueString | FilterValueArray
 

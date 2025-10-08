@@ -9,14 +9,18 @@ export const getDefaultState = ({
     facetQuestion,
     block
 }: {
-    facetQuestion?: QuestionMetadata
+    facetQuestion?: QuestionMetadata & { sectionIdOverride?: string }
     block: BlockVariantDefinition
 }) => {
     const defaultState = {} as HorizontalBarChartState
 
     defaultState.view = getChartView({ facetQuestion, block })
     if (facetQuestion) {
-        defaultState.facet = { id: facetQuestion.id, sectionId: facetQuestion.sectionId }
+        defaultState.facet = {
+            id: facetQuestion.id,
+            sectionId: facetQuestion.sectionId,
+            sectionIdOverride: facetQuestion.sectionIdOverride
+        }
         defaultState.columnMode = ColumnModes.STACKED
     } else {
         defaultState.columnMode = ColumnModes.REGULAR

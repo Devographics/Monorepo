@@ -3,8 +3,8 @@ import { FacetItem } from 'core/filters/types'
 import { QueryArgs, ResponseArgumentsStrings } from './types'
 import { SENTIMENT_FACET } from '@devographics/constants'
 
-export const facetItemToFacet = ({ sectionId, id }: FacetItem) =>
-    id === SENTIMENT_FACET ? SENTIMENT_FACET : `${sectionId}__${id}`
+export const facetItemToFacet = ({ sectionId, sectionIdOverride, id }: FacetItem) =>
+    id === SENTIMENT_FACET ? SENTIMENT_FACET : `${sectionIdOverride || sectionId}__${id}`
 
 export const getQueryArgsString = ({
     facet,

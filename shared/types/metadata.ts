@@ -35,7 +35,8 @@ export interface SectionMetadata extends Omit<Section, 'questions'> {
 }
 
 export interface QuestionMetadata extends Omit<QuestionTemplateOutput, 'options'> {
-    sectionId?: string
+    sectionId?: string // deprecated
+    sectionIdOverride?: string // new name
     label?: string
     entity?: Entity
     options?: OptionMetadata[]

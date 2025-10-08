@@ -25,7 +25,6 @@ interface FacetSelectionProps {
 const FacetSelection = ({ block, allFilters, stateStuff, axisIndex }: FacetSelectionProps) => {
     const { filtersState, setFiltersState } = stateStuff
     const enabledFacets = allFilters.filter(f => !disabledFacets.includes(f.id))
-
     return (
         <Wrapper_>
             <div className="filters-section">
@@ -42,7 +41,7 @@ const FacetSelection = ({ block, allFilters, stateStuff, axisIndex }: FacetSelec
                                     const newState = cloneDeep(fState)
                                     const field = allFilters.find(f => f.id === value) as FilterItem
                                     newState[`axis${axisIndex}`] = {
-                                        sectionId: field.sectionId,
+                                        sectionId: field.sectionIdOverride || field.sectionId,
                                         id: value
                                     }
                                     return newState

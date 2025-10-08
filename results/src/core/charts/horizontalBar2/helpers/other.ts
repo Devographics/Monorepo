@@ -104,7 +104,7 @@ export const useQuestionMetadata = (facet?: FacetItem) => {
     // note: we do not look up question metadata based on sectionId here
     // because sectionId can be wrong when question has changed sections
     const question = allQuestions.find(q => q.id === id)
-    return question
+    return { ...question, sectionIdOverride: sectionId }
 }
 
 export const useAllQuestionsMetadata = () => {

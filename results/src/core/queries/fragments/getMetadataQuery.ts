@@ -80,6 +80,7 @@ query {
                             id
                             questions {
                                 id
+                                sectionIdOverride
                                 template
                                 optionsAreNumeric
                                 optionsAreRange
