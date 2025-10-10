@@ -49,19 +49,6 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   cutoff: 10
-            - id: japan_province_by_social_life_satisfaction
-              fieldId: japan_province
-              blockType: HorizontalBarBlock2
-              hasData: true
-              parameters:
-                  showNoAnswer: true
-                  limit: 10
-              defaultUnits: percentilesByFacet
-              tabId: tabs.by_social_life_satisfaction
-              filtersState:
-                  facet:
-                      sectionId: other
-                      id: life_in_japan__social_life
 
       - id: residency_status
         template: tokyodev_multiple_options2_combined
@@ -198,26 +185,6 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
-            - template: tokyodev_variant_base
-              fieldId: years_of_experience
-              i18nNamespace: years
-              id: years_of_experience_by_compensation_and_qualifications
-              tabId: tabs.by_compensation_and_qualifications
-              filtersState:
-                  filters:
-                      - conditions:
-                            - fieldId: professional_qualifications
-                              sectionId: user_info
-                              operator: eq
-                              value: coding_bootcamp
-                      - conditions:
-                            - fieldId: professional_qualifications
-                              sectionId: user_info
-                              operator: eq
-                              value: bachelors_degree
-                  facet:
-                      sectionId: compensation
-                      id: current_total_annual_compensation
 
       - id: language_proficiency_english
         template: tokyodev_multiple_options2
@@ -243,12 +210,7 @@
               parameters:
                   sort: { property: options }
             - id: language_proficiency_japanese_by_years_in_japan
-              fieldId: language_proficiency_japanese
-              blockType: HorizontalBarBlock2
-              hasData: true
-              parameters:
-                  showNoAnswer: true
-              defaultUnits: percentageBucket
+              template: tokyodev_variant_base
               tabId: tabs.by_years_in_japan
               filtersState:
                   facet:
@@ -287,35 +249,6 @@
                   facet:
                       sectionId: user_info
                       id: residency_status
-            - template: tokyodev_variant_base
-              queryOptions: { sectionId: job_info }
-              id: current_employer_by_compensation_and_experience
-              tabId: tabs.by_compensation_and_experience
-              filtersState:
-                  facet:
-                      sectionId: compensation
-                      id: current_total_annual_compensation
-                  filters:
-                      - conditions:
-                            - fieldId: years_of_experience
-                              sectionId: user_info
-                              operator: eq
-                              value: range_under_1
-                      - conditions:
-                            - fieldId: years_of_experience
-                              sectionId: user_info
-                              operator: eq
-                              value: range_1_3
-                      - conditions:
-                            - fieldId: years_of_experience
-                              sectionId: user_info
-                              operator: in
-                              value: ['range_4_6', 'range_7_9']
-                      - conditions:
-                            - fieldId: years_of_experience
-                              sectionId: user_info
-                              operator: in
-                              value: ['range_10_12', 'range_13_15', 'range_16_20', 'range_over_20']
 
       - id: languages_used_colleagues_english
         template: tokyodev_multiple_options2
@@ -350,6 +283,15 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
+            - id: work_hours_per_week_vs_job_search_status
+              template: tokyodev_variant_base
+              tabId: tabs.by_job_search_status
+              parameters:
+                  sort: { property: options }
+              filtersState:
+                  facet:
+                      sectionId: job_info
+                      id: searching_for_job
 
       - id: regular_work_location
         template: tokyodev_multiple_options2
@@ -360,6 +302,18 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
+            - id: regular_work_location_remote_work_policy_up_to_employee
+              tabId: tabs.remote_work_policy
+              template: tokyodev_variant_base
+              filtersState:
+                  filters:
+                      - year: 2025
+                        conditions:
+                            - fieldId: remote_work_policy
+                              sectionId: job_info
+                              operator: in
+                              value:
+                                  - up_to_employee
 
       - id: searching_for_job
         template: tokyodev_multiple_options2
@@ -398,12 +352,31 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
+            - id: discrimination_issues_by_gender
+              template: tokyodev_variant_base
+              tabId: tabs.by_gender
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: woman
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: man
 
       - id: job_happiness
         template: tokyodev_multiple_options2_combined
         variants:
             - template: tokyodev_vs_salary
+              parameters:
+                  sort: { property: options }
             - template: tokyodev_vs_employer_type
+              parameters:
+                  sort: { property: options }
 
       - id: industry_sector
         template: tokyodev_multiple_options2_combined
@@ -547,6 +520,7 @@
             #           id: company_size
 
       - id: web_frameworks
+        noteId: technology.web_frameworks.note.td2025
         template: tokyodev_multiple_options2_combined
         defaultUnits: percentageQuestion
         parameters: { cutoff: 10 }
@@ -579,6 +553,7 @@
                               value: developer_back_end
 
       - id: other_frameworks_libraries
+        noteId: technology.other_frameworks_libraries.note.td2025
         template: tokyodev_multiple_options2_combined
         defaultUnits: percentageQuestion
         parameters: { cutoff: 10 }
@@ -605,6 +580,7 @@
                               value: data_scientist_or_machine_learning
 
       - id: cloud_platforms
+        noteId: technology.cloud_platforms.note.td2025
         template: tokyodev_multiple_options2_combined
         defaultUnits: percentageQuestion
         parameters: { cutoff: 10 }
@@ -647,8 +623,13 @@
 
       - id: ai_generated_code_balance
         template: tokyodev_multiple_options2_combined
+        parameters:
+            cutoff: 1
         variants:
             - template: tokyodev_vs_salary
+              parameters:
+                  cutoff: 1
+                  sort: { property: options }
             - template: tokyodev_vs_employer_type
 
       - id: ai_code_generation_frequency
@@ -656,6 +637,13 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
+            - id: ai_code_generation_frequency_by_years_of_experience
+              tabId: tabs.by_experience
+              template: tokyodev_variant_base
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: years_of_experience
 
       - id: ai_pain_points
         template: tokyodev_multiple_options2_combined
@@ -664,13 +652,13 @@
             - template: tokyodev_vs_employer_type
 
       - id: more_productive
-        template: tokyodev_multiple_options2_combined
+        template: opinion2
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
 
       - id: job_security_threat
-        template: tokyodev_multiple_options2_combined
+        template: opinion2
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
@@ -689,6 +677,23 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
+            - id: initial_attraction_usa_vs_india
+              tabId: tabs.usa_vs_india
+              template: tokyodev_variant_base
+              filtersState:
+                  filters:
+                      - year: 2025
+                        conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: eq
+                              value: USA
+                      - year: 2025
+                        conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: eq
+                              value: IND
 
       - id: hobbies
         template: tokyodev_multiple_options2_combined
