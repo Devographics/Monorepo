@@ -343,6 +343,7 @@ export const getDynamicOptions = async ({
     const funcOptions = {
         survey,
         edition,
+        selectedEditionId,
         question,
         context: { ...context, isDebug: true },
         questionObjects,
@@ -360,10 +361,10 @@ export const getDynamicOptions = async ({
     }
 
     const enableCache = true
-
+    const cacheKey = getGenericCacheKey(cacheKeyOptions)
     try {
         const result = await useCache({
-            key: getGenericCacheKey(cacheKeyOptions),
+            key: cacheKey,
             func: genericComputeFunction,
             context,
             funcOptions,

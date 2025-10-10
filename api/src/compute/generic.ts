@@ -65,6 +65,9 @@ import isEmpty from 'lodash/isEmpty.js'
 import { logToFile } from '@devographics/debug'
 import { SENTIMENT_FACET } from '@devographics/constants'
 
+const DEFAULT_LIMIT = 50
+const DEFAULT_CUTOFF = 10
+
 type StageLogItem = {
     name: string
     startAt: Date
@@ -209,8 +212,6 @@ export type GenericComputeOptions = {
     computeArguments: GenericComputeArguments
 }
 
-const DEFAULT_LIMIT = 50
-
 export const getMatch = async ({
     survey,
     edition,
@@ -288,13 +289,13 @@ export async function genericComputeFunction(
         executionContext = ExecutionContext.REGULAR
     } = computeArguments
     const {
-        cutoff = 1,
+        cutoff = DEFAULT_CUTOFF,
         cutoffPercent,
         sort,
         limit = DEFAULT_LIMIT,
         facetSort,
         facetLimit = DEFAULT_LIMIT,
-        facetCutoff = 1,
+        facetCutoff = DEFAULT_CUTOFF,
         facetCutoffPercent,
         showNoAnswer,
         mergeOtherBuckets = true,
