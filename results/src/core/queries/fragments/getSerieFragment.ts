@@ -8,6 +8,8 @@ import { getRatiosFragment } from './getRatiosFragment'
 import { SENTIMENT_FACET } from '@devographics/constants'
 import { getResponseMetadataFragment } from './getResponseMetadataFragment'
 
+const DEFAULT_EDITION_COUNT = 1
+
 export const getSerieFragment = ({
     queryOptions,
     serie
@@ -21,7 +23,7 @@ export const getSerieFragment = ({
         subField = 'responses',
         addBucketsEntities = true,
         allEditions = false,
-        editionsCount = 2,
+        editionsCount = DEFAULT_EDITION_COUNT,
         addQuestionEntity = false,
         addQuestionComments = true,
         addBuckets = true,

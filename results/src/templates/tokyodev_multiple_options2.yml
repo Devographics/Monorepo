@@ -3,6 +3,6 @@ hasSponsor: true
 hasData: true
 translateData: true
 customizationModes: [filters, facets]
-parameters: { showNoAnswer: true, mergeOtherBuckets: false }
+parameters: { showNoAnswer: true, mergeOtherBuckets: false, cutoff: 10 }
 queryOptions:
     addBucketsEntities: false
