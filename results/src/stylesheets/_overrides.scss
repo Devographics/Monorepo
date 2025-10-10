@@ -48,3 +48,27 @@
         // display: none;
     }
 }
+
+.survey-popover-trigger {
+    .survey-tokyodev & {
+        svg {
+            height: 95%;
+        }
+    }
+}
+
+.tabs-wrapper-tokyodev_resources {
+    .block-header-top {
+        display: none;
+    }
+    .resource-image-link {
+        border: none;
+        border-radius: 0;
+    }
+}
+
+.tabs-wrapper-ai_code_generation_frequency {
+    .chart-average-marker-inner {
+        display: none;
+    }
+}
