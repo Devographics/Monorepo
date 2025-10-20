@@ -107,7 +107,7 @@
 
       - id: forms_pain_points
         template: multiple_options2_freeform
-        i18nNamespace: features
+        i18nNamespace: html_pain_points
         queryOptions:
             sectionId: forms
         chartOptions:
@@ -115,7 +115,7 @@
 
       - id: graphics_pain_points
         template: multiple_options2_freeform
-        i18nNamespace: features
+        i18nNamespace: html_pain_points
         queryOptions:
             sectionId: graphics_multimedia
         chartOptions:
@@ -123,7 +123,7 @@
 
       - id: content_pain_points
         template: multiple_options2_freeform
-        i18nNamespace: features
+        i18nNamespace: html_pain_points
         queryOptions:
             sectionId: content
         chartOptions:
@@ -131,7 +131,7 @@
 
       - id: performance_pain_points
         template: multiple_options2_freeform
-        i18nNamespace: features
+        i18nNamespace: html_pain_points
         queryOptions:
             sectionId: performance
         chartOptions:
@@ -144,7 +144,7 @@
 
       - id: web_components_common_pain_points
         template: multiple_options2_combined
-        i18nNamespace: features
+        # i18nNamespace: html_pain_points
         queryOptions:
             sectionId: web_components
         chartOptions:
@@ -152,7 +152,7 @@
 
       - id: web_components_other_pain_points
         template: multiple_options2_freeform
-        i18nNamespace: features
+        i18nNamespace: web_components_common_pain_points
         queryOptions:
             sectionId: web_components
         chartOptions:
@@ -160,7 +160,7 @@
 
       - id: system_capabilities_pain_points
         template: multiple_options2_freeform
-        i18nNamespace: features
+        i18nNamespace: html_pain_points
         queryOptions:
             sectionId: system_capabilities
         chartOptions:
