@@ -121,12 +121,7 @@ export async function addAverages(
                     bucket[BucketUnits.AVERAGE] = 0
                 } else {
                     const option = axis1?.options?.find(o => o.id === bucket.id)
-                    if (option?.average) {
-                        // bucket is a range with a hardcoded average value
-                        // note: this is not actually an "averageByFacet" but we can reuse
-                        // the same property for now
-                        bucket[BucketUnits.AVERAGE] = option.average
-                    } else if (bucket.facetBuckets && calculateAxis2Average) {
+                    if (bucket.facetBuckets && calculateAxis2Average) {
                         const average = calculateAverage({
                             buckets: bucket.facetBuckets,
                             axis: axis2
@@ -134,6 +129,12 @@ export async function addAverages(
                         if (!isNil(average) && !isNaN(average)) {
                             bucket[BucketUnits.AVERAGE] = average
                         }
+                    } else if (option?.average) {
+                        // bucket is a range with a hardcoded average value
+                        // note: this is not actually an "averageByFacet" but we can reuse
+                        // the same property for now
+                        // TODO: add a note explaining in which scenario we use this
+                        bucket[BucketUnits.AVERAGE] = option.average
                     }
                 }
             }
