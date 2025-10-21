@@ -40,6 +40,8 @@ export const CUSTOM_NORMALIZATION = 'custom_normalization'
 
 export const AI_NORMALIZATION = 'ai_normalization'
 
+export const IMPORTED_NORMALIZATION = 'imported_normalization'
+
 export const INSUFFICIENT_DATA = 'insufficient_data'
 
 export const PERCENTAGE_SURVEY = 'percentageSurvey'

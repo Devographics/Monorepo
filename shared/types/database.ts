@@ -19,5 +19,6 @@ export interface CustomNormalizationDocument
   customTokens?: string[];
   suggestedTokens?: string[];
   aiTokens?: string[];
-  disabledTokens: string[];
+  disabledTokens?: string[];
+  importedTokens?: string[];
 }

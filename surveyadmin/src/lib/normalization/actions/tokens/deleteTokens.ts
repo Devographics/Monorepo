@@ -25,6 +25,7 @@ export const deleteTokens = async (params: DeleteTokensParams) => {
         $pull: {
           customTokens: tokenToRemove,
           aiTokens: tokenToRemove,
+          importedTokens: tokenToRemove,
           suggestedTokens: tokenToRemove,
         },
       },

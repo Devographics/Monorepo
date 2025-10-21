@@ -21,7 +21,12 @@ export const renameTokens = async (params: RenameTokensParams) => {
       .find({ $or: [{ customTokens: fromToken }, { aiTokens: fromToken }] })
       .toArray();
     for (const item of itemsToRename) {
-      const { _id, customTokens = [], aiTokens = [] } = item;
+      const {
+        _id,
+        customTokens = [],
+        aiTokens = [],
+        importedTokens = [],
+      } = item;
 
       const customTokenIndex = customTokens.findIndex((t) => t === fromToken);
       if (customTokenIndex > -1) {
@@ -34,6 +39,15 @@ export const renameTokens = async (params: RenameTokensParams) => {
       if (aiTokenIndex > -1) {
         aiTokens[aiTokenIndex] = toToken;
         modifier.$set.aiTokens = aiTokens;
+        modifiedCount++;
+      }
+
+      const importedTokenIndex = importedTokens.findIndex(
+        (t) => t === fromToken
+      );
+      if (importedTokenIndex > -1) {
+        importedTokens[importedTokenIndex] = toToken;
+        modifier.$set.importedTokens = importedTokens;
         modifiedCount++;
       }
 

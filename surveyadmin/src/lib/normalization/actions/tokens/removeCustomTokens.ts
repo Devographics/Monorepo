@@ -8,6 +8,7 @@ export const cleanTokensUpIfNeeded = async (document) => {
   // customNormalization document
   if (
     (!document?.aiTokens || document?.aiTokens?.length === 0) &&
+    (!document?.importedTokens || document?.importedTokens?.length === 0) &&
     (!document?.suggestedTokens || document?.suggestedTokens?.length === 0) &&
     (!document?.customTokens || document?.customTokens?.length === 0) &&
     (!document?.disabledTokens || document?.disabledTokens?.length === 0)

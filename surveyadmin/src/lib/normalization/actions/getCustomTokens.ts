@@ -14,6 +14,7 @@ export const getCustomTokens = async ({ rawPath }: { rawPath: string }) => {
       normalizationId: 1,
       customTokens: 1,
       aiTokens: 1,
+      importedTokens: 1,
       suggestedTokens: 1,
       disabledTokens: 1,
       answerIndex: 1,
