@@ -156,6 +156,7 @@
         "dev": "gatsby develop --port 8001",
         "tokyodev": "ENV_FILE=.env.tokyodev.local gatsby develop --port 9001",
         "tokyodev:build": "ENV_FILE=.env.tokyodev.local gatsby build",
+        "tokyodev:serve": "ENV_FILE=.env.tokyodev.local gatsby serve",
         "tokyodev:clean": "rm -rf .cache && ENV_FILE=.env.tokyodev.local DISABLE_CACHE=true gatsby develop --port 9001",
         "clean": "rm -rf .cache",
         "dev:clean": "rm -rf .cache && DISABLE_CACHE=true gatsby develop --port 8001",

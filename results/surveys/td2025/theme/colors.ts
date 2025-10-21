@@ -105,8 +105,6 @@ const velocity = [
     '#0C8C6D',
     '#16AF8A',
     '#23D2A8',
-    '#34E1B7',
-    '#51F2CB',
     '#75FBDA',
     '#A1FFE8',
     '#C9FFF2',

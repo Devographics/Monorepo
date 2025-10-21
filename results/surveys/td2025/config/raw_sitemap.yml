@@ -93,6 +93,21 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
+            - id: number_of_kids_married
+              template: tokyodev_variant_base
+              tabId: tabs.by_relationship_status
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: relationship_status
+                              sectionId: user_info
+                              operator: nin
+                              value: [married]
+                      - conditions:
+                            - fieldId: relationship_status
+                              sectionId: user_info
+                              operator: in
+                              value: [married]
 
       - id: gender
         template: tokyodev_multiple_options2
@@ -228,6 +243,13 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
+            - id: employment_status_vs_english_ability
+              template: tokyodev_variant_base
+              tabId: tabs.by_english_ability
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: language_proficiency_english
 
       - id: job_title
         template: tokyodev_multiple_options2_combined
@@ -321,8 +343,8 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
-            - template: tokyodev_variant_base
-              id: most_important_benefit_by_remote_work_policy
+            - id: most_important_benefit_by_remote_work_policy
+              template: tokyodev_variant_base
               tabId: tabs.by_remote_work_policy
               filtersState:
                   filters:
@@ -346,6 +368,13 @@
                               sectionId: job_info
                               operator: eq
                               value: fully_remote
+            - id: searching_for_job_vs_years_of_experience
+              template: tokyodev_variant_base
+              tabId: tabs.by_years_of_experience
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: years_of_experience
 
       - id: discrimination_issues
         template: tokyodev_multiple_options2_combined
@@ -377,6 +406,13 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
+            - id: job_happiness_vs_job_search_status
+              template: tokyodev_variant_base
+              tabId: tabs.by_job_search_status
+              filtersState:
+                  facet:
+                      sectionId: job_info
+                      id: searching_for_job
 
       - id: industry_sector
         template: tokyodev_multiple_options2_combined
