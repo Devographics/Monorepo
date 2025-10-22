@@ -1,4 +1,6 @@
+id: ${mainBlockId}_by_years_of_experience
 fieldId: ${mainBlockId}
+tabId: tabs.by_experience
 blockType: HorizontalBarBlock2
 hasData: true
 parameters:
@@ -8,3 +10,7 @@ defaultUnits: percentageBucket
 queryOptions:
     addBucketsEntities: true
     editionsCount: 1
+filtersState:
+    facet:
+        sectionId: user_info
+        id: years_of_experience

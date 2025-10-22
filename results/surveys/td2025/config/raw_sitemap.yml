@@ -115,13 +115,7 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
-            - template: tokyodev_variant_base
-              id: gender_by_experience
-              tabId: tabs.by_experience
-              filtersState:
-                  facet:
-                      sectionId: user_info
-                      id: years_of_experience
+            - template: tokyodev_vs_years_of_experience
             - template: tokyodev_variant_base
               id: gender_by_compensation_by_experience
               tabId: tabs.by_compensation_by_experience
@@ -282,7 +276,6 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
-            # - template: tokyodev_vs_current_employer
 
       - id: languages_used_colleagues_japanese
         template: tokyodev_multiple_options2
@@ -294,7 +287,6 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
-            # - template: tokyodev_vs_current_employer
 
       - id: work_hours_per_week
         template: tokyodev_multiple_options2
@@ -368,13 +360,7 @@
                               sectionId: job_info
                               operator: eq
                               value: fully_remote
-            - id: searching_for_job_vs_years_of_experience
-              template: tokyodev_variant_base
-              tabId: tabs.by_years_of_experience
-              filtersState:
-                  facet:
-                      sectionId: user_info
-                      id: years_of_experience
+            - template: tokyodev_vs_years_of_experience
 
       - id: discrimination_issues
         template: tokyodev_multiple_options2_combined
@@ -440,6 +426,7 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
+            - template: tokyodev_vs_years_of_experience
 
       - id: remote_work_policy
         template: tokyodev_multiple_options2
@@ -454,23 +441,8 @@
               queryOptions: { sectionId: job_info }
               parameters:
                   sort: { property: options }
-            - template: tokyodev_variant_base
+            - template: tokyodev_vs_years_of_experience
               queryOptions: { sectionId: job_info }
-              id: remote_work_policy_by_years_of_experience
-              tabId: tabs.by_years_of_experience
-              filtersState:
-                  facet:
-                      sectionId: user_info
-                      id: years_of_experience
-
-            - template: tokyodev_variant_base
-              queryOptions: { sectionId: job_info }
-              id: remote_work_policy_by_professional_life_satisfaction
-              tabId: tabs.by_professional_life_satisfaction
-              filtersState:
-                  facet:
-                      sectionId: other
-                      id: life_in_japan__professional_life
 
       - id: company_size
         template: tokyodev_multiple_options2
@@ -482,7 +454,6 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
-            - template: tokyodev_vs_current_employer
             - template: tokyodev_variant_base
               id: company_size_high_salaries
               tabId: tabs.high_salaries
@@ -502,12 +473,15 @@
         defaultUnits: percentageQuestion
         titleId: compensation.current_total_annual_compensation
         questionKey: compensation.current_total_annual_compensation.question
+        chartOptions:
+            defaultMarker: median
 
       - id: income_evolution
         template: tokyodev_multiple_options2
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
+            - template: tokyodev_vs_years_of_experience
 
 - id: technology
   path: /technology
@@ -525,23 +499,8 @@
             - template: tokyodev_vs_employer_type
               queryOptions:
                   addBucketsEntities: true
-            - template: tokyodev_variant_base
-              queryOptions:
-                  addBucketsEntities: true
-              id: programming_languages_by_current_employer
-              tabId: tabs.by_current_employer
-              filtersState:
-                  filters:
-                      - conditions:
-                            - fieldId: current_employer
-                              sectionId: job_info
-                              operator: eq
-                              value: japanese_company
-                      - conditions:
-                            - fieldId: current_employer
-                              sectionId: job_info
-                              operator: eq
-                              value: japanese_subsidiary
+            - template: tokyodev_vs_years_of_experience
+
             # - template: tokyodev_variant_base
             #   queryOptions:
             #       addBucketsEntities: true
@@ -569,24 +528,6 @@
             - template: tokyodev_vs_employer_type
               queryOptions:
                   addBucketsEntities: true
-            - template: tokyodev_variant_base
-              id: web_frameworks_by_current_job_description
-              tabId: tabs.frontend_vs_backend
-              queryOptions:
-                  addBucketsEntities: true
-              filtersState:
-                  filters:
-                      - conditions:
-                            - fieldId: current_job_description
-                              sectionId: job_info
-                              operator: in
-                              value:
-                                  - developer_front_end
-                      - conditions:
-                            - fieldId: current_job_description
-                              sectionId: job_info
-                              operator: eq
-                              value: developer_back_end
 
       - id: other_frameworks_libraries
         noteId: technology.other_frameworks_libraries.note.td2025
@@ -602,18 +543,6 @@
             - template: tokyodev_vs_employer_type
               queryOptions:
                   addBucketsEntities: true
-            - template: tokyodev_variant_base
-              queryOptions:
-                  addBucketsEntities: true
-              id: other_frameworks_libraries_by_data_scientist_or_machine_learning
-              tabId: tabs.data_science
-              filtersState:
-                  filters:
-                      - conditions:
-                            - fieldId: current_job_description
-                              sectionId: job_info
-                              operator: eq
-                              value: data_scientist_or_machine_learning
 
       - id: cloud_platforms
         noteId: technology.cloud_platforms.note.td2025
@@ -673,13 +602,7 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
-            - id: ai_code_generation_frequency_by_years_of_experience
-              tabId: tabs.by_experience
-              template: tokyodev_variant_base
-              filtersState:
-                  facet:
-                      sectionId: user_info
-                      id: years_of_experience
+            - template: tokyodev_vs_years_of_experience
 
       - id: ai_pain_points
         template: tokyodev_multiple_options2_combined
