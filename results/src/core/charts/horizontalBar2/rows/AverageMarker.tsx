@@ -62,8 +62,11 @@ const getOffsetCoefficient = ({
 export const AverageMarker = (
     props: CommonProps<HorizontalBarChartState> & HorizontalBarViewProps
 ) => {
-    const [type, setType] = useState<typeof AVERAGE | typeof MEDIAN>(AVERAGE)
-    const { serieMetadataProps, question, buckets } = props
+    const { serieMetadataProps, question, buckets, block } = props
+    const { chartOptions = {} } = block
+    const { defaultMarker = AVERAGE } = chartOptions
+    const [type, setType] = useState<typeof AVERAGE | typeof MEDIAN>(defaultMarker)
+
     const value = serieMetadataProps[type]
     if (value !== undefined && value !== null) {
         const averageFormatted = formatQuestionValue(value, question)

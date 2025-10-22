@@ -112,6 +112,7 @@ export interface ChartOptions {
     limit?: number
     dataFilters?: string[]
     categories?: string[]
+    defaultMarker?: 'average' | 'median'
 }
 
 export interface BlockWithAwards {
