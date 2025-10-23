@@ -564,12 +564,48 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
+            - template: tokyodev_variant_base
+              id: software_engineering_practices_vs_language_used
+              tabId: tabs.by_english_usage
+              parameters:
+                  cutoff: 5
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: languages_used_colleagues_english
+                              sectionId: job_info
+                              operator: in
+                              value:
+                                  - never
+                                  - rarely
+                      - conditions:
+                            - fieldId: languages_used_colleagues_english
+                              sectionId: job_info
+                              operator: in
+                              value:
+                                  - frequently
+                                  - always
 
       - id: social_media
         template: tokyodev_multiple_options2_combined
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
+            - template: tokyodev_variant_base
+              id: social_media_vs_language_proficiency
+              tabId: tabs.by_native_language
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: language_proficiency_japanese
+                              sectionId: user_info
+                              operator: eq
+                              value: native_bilingual
+                      - conditions:
+                            - fieldId: language_proficiency_english
+                              sectionId: user_info
+                              operator: eq
+                              value: native_bilingual
 
 - id: ai_usage
   path: /ai-usage
@@ -585,6 +621,27 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
+            - template: tokyodev_variant_base
+              id: ai_uses_vs_job_title
+              tabId: tabs.by_job_title_leadership
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: job_title
+                              sectionId: job_info
+                              operator: in
+                              value:
+                                  - director_of_engineering
+                                  - engineering_manager
+                                  - manager
+                      - conditions:
+                            - fieldId: job_title
+                              sectionId: job_info
+                              operator: nin
+                              value:
+                                  - director_of_engineering
+                                  - engineering_manager
+                                  - manager
 
       - id: ai_generated_code_balance
         template: tokyodev_multiple_options2_combined
@@ -609,17 +666,38 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
+            - id: ai_pain_points_vs_gender
+              template: tokyodev_variant_base
+              tabId: tabs.by_gender
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: woman
+                      - conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: man
 
       - id: more_productive
         template: opinion2
         variants:
             - template: tokyodev_vs_salary
+              i18nNamespace: opinions
+              parameters:
+                  sort: { order: asc, property: id }
             - template: tokyodev_vs_employer_type
 
       - id: job_security_threat
         template: opinion2
         variants:
             - template: tokyodev_vs_salary
+              i18nNamespace: opinions
+              parameters:
+                  sort: { order: asc, property: id }
             - template: tokyodev_vs_employer_type
 
 - id: life_in_japan
@@ -630,29 +708,35 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
-
-      - id: initial_attraction
-        template: tokyodev_multiple_options2_combined
-        variants:
-            - template: tokyodev_vs_salary
-            - template: tokyodev_vs_employer_type
-            - id: initial_attraction_usa_vs_india
-              tabId: tabs.usa_vs_india
-              template: tokyodev_variant_base
+            - template: tokyodev_variant_base
+              id: friend_group_balance_vs_language_proficiency_japanese
+              tabId: tabs.by_japanese_ability
               filtersState:
                   filters:
-                      - year: 2025
-                        conditions:
-                            - fieldId: country
+                      - conditions:
+                            - fieldId: language_proficiency_japanese
                               sectionId: user_info
                               operator: eq
-                              value: USA
-                      - year: 2025
-                        conditions:
-                            - fieldId: country
+                              value: none
+                      - conditions:
+                            - fieldId: language_proficiency_japanese
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - basic
+                                  - conversational
+                      - conditions:
+                            - fieldId: language_proficiency_japanese
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - business
+                                  - fluent
+                      - conditions:
+                            - fieldId: language_proficiency_japanese
                               sectionId: user_info
                               operator: eq
-                              value: IND
+                              value: native_bilingual
 
       - id: hobbies
         template: tokyodev_multiple_options2_combined
@@ -660,23 +744,115 @@
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
 
+      - id: initial_attraction
+        template: tokyodev_multiple_options2_combined
+        variants:
+            - template: tokyodev_vs_salary
+            - template: tokyodev_vs_employer_type
+            - id: initial_attraction_vs_country
+              tabId: tabs.by_country
+              template: tokyodev_variant_base
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: eq
+                              value: USA
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: eq
+                              value: IND
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: eq
+                              value: JPN
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value:
+                                  - USA
+                                  - IND
+                                  - JPN
+
       - id: life_japan_positive_aspects
         template: tokyodev_multiple_options2_combined
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
+            - id: life_japan_positive_aspects_vs_country
+              tabId: tabs.by_country
+              template: tokyodev_variant_base
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: eq
+                              value: USA
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: eq
+                              value: IND
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: eq
+                              value: JPN
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value:
+                                  - USA
+                                  - IND
+                                  - JPN
 
       - id: life_japan_negative_aspects
         template: tokyodev_multiple_options2_combined
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
+            - id: life_japan_negative_aspects_vs_country
+              tabId: tabs.by_country
+              template: tokyodev_variant_base
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: eq
+                              value: USA
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: eq
+                              value: IND
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: eq
+                              value: JPN
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value:
+                                  - USA
+                                  - IND
+                                  - JPN
 
       - id: communities
+        noteId: technology.communities.note.td2025
         template: tokyodev_multiple_options2_combined
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
+            - template: tokyodev_vs_years_of_experience
 
 - id: _user_metadata
   i18nNamespace: user_metadata
