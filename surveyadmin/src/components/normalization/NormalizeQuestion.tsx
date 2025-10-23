@@ -220,13 +220,18 @@ export const answerVariants = [
   },
   {
     id: "ai",
-    label: "AI Normalizations",
+    label: "AI Assignments",
     tooltip: "Answers with AI-generated tokens",
   },
   {
+    id: "imported",
+    label: "Imported Assignments",
+    tooltip: "Answers with tokens manually defined and imported",
+  },
+  {
     id: "custom",
-    label: "Custom Normalizations",
-    tooltip: "Answers with manually defined tokens",
+    label: "Custom Assignments",
+    tooltip: "Answers with tokens manually defined through the dashboard",
   },
 ];
 

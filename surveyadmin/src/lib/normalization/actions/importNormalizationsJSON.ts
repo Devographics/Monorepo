@@ -55,7 +55,7 @@ export const importNormalizationsJSON = async (
 
   for (const item of items) {
     const { answer, answerId, tokenIds } = item;
-    const [responseId, answerIndex] = answerId.split("___");
+    const [responseId, questionId_, answerIndex] = answerId.split("___");
 
     if (tokenIds && tokenIds.length > 0) {
       normalizationsImported++;

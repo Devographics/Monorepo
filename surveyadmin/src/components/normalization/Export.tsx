@@ -183,7 +183,7 @@ const Contents = ({
     items.map(({ raw, answerIndex, index, responseId }) => ({
       index,
       answer: raw,
-      answerId: `${responseId}___${answerIndex}`,
+      answerId: `${responseId}___${question.id}___${answerIndex}`,
     })),
     null,
     2

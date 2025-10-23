@@ -84,6 +84,10 @@ export const Import = (props: {
             <pre>
               <code>
                 {`{
+  "_metadata": {
+    "source": "chatgpt",
+    "exportedAt": "Thu Oct 23 2025 10:33:25 GMT+0900 (Japan Standard Time)",
+  },
   "tokens": {
     "accuracy_issues": "accuracy_issues",
     "hallucination": "hallucination",
@@ -93,16 +97,16 @@ export const Import = (props: {
     {
       "index": 1,
       "answer": "o3-mini and 4o are horrible at making websites",
-      "answerId": "TmBZzUTTiF6v3VQThbDhq___0",
-      "tokenId": [
+      "answerId": "TmBZzUTTiF6v3VQThbDhq___performance_issues___0",
+      "tokenIds": [
         "accuracy_issues"
       ]
     },
     {
       "index": 2,
       "answer": "Unnecessarily long answers; Instead of answering code questions it copy pastes the whole file as a reply",
-      "answerId": "31NfL1eR-0yBEjvtyQsSH___1",
-      "tokenId": [
+      "answerId": "31NfL1eR-0yBEjvtyQsSH___performance_issues___1",
+      "tokenIds": [
         "verbosity_formatting",
         "code_modification_behavior",
         "understanding_issues"
