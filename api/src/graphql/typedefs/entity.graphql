@@ -82,6 +82,7 @@ type EntityAppearance {
     question: QuestionMetadata
     option: OptionMetadata
     as: String
+    data: [ResponseEditionData]
 }
 
 """

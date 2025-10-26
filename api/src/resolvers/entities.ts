@@ -1,5 +1,13 @@
-import { EntityResolvedFields, Entity, EntityAppearance } from '@devographics/types'
-import { RequestContext } from '../types'
+import {
+    EntityResolvedFields,
+    Entity,
+    EntityAppearance,
+    QuestionMetadata,
+    EditionMetadata,
+    ResponsesTypes,
+    ResultsSubFieldEnum
+} from '@devographics/types'
+import { ExecutionContext, QuestionApiObject, RequestContext } from '../types'
 // import projects from '../data/bestofjs.yml'
 import { fetchMdnResource, fetchTwitterUser } from '../external_apis'
 import { computeKey, useCache } from '../helpers/caching'
@@ -8,6 +16,7 @@ import compact from 'lodash/compact.js'
 import { getEntities } from '../load/entities'
 import { loadOrGetSurveys } from '../load/surveys'
 import { features } from 'web-features'
+import { genericComputeFunction, getGenericCacheKey } from '../compute'
 
 // const getSimulatedGithub = (id: string): GitHub | null => {
 //     const project = projects.find((p: Entity) => p.id === id)
@@ -244,7 +253,7 @@ export const entityResolverMap: EntityResolverMap = {
             return data
         }
     },
-    appearsIn: async (entity: Entity) => {
+    appearsIn: async (entity: Entity, parameters, context) => {
         const { id } = entity
         const appearances: EntityAppearance[] = []
         const { surveys } = await loadOrGetSurveys()
@@ -253,16 +262,36 @@ export const entityResolverMap: EntityResolverMap = {
                 for (const section of edition.sections) {
                     for (const question of section.questions) {
                         if (question.id === id) {
-                            appearances.push({ survey, edition, section, question, as: 'question' })
+                            const data = await getAppearsInQuestionData({
+                                edition,
+                                question,
+                                context
+                            })
+
+                            appearances.push({
+                                survey,
+                                edition,
+                                section,
+                                question,
+                                data,
+                                as: 'question'
+                            })
                         }
                         if (question.options) {
                             for (const option of question.options) {
                                 if (option.id === id) {
+                                    const data = await getAppearsInQuestionData({
+                                        edition,
+                                        question,
+                                        context
+                                    })
+
                                     appearances.push({
                                         survey,
                                         edition,
                                         section,
                                         question,
+                                        data,
                                         option,
                                         as: 'option'
                                     })
@@ -274,5 +303,83 @@ export const entityResolverMap: EntityResolverMap = {
             }
         }
         return appearances
+    }
+}
+
+type GetQuestionDataOptions = {
+    edition: EditionMetadata
+    question: QuestionApiObject
+    context: RequestContext
+}
+
+async function getAppearsInQuestionData({ edition, question, context }: GetQuestionDataOptions) {
+    const { survey, normPaths = {} } = question
+    const { questionObjects } = context
+    const selectedEditionId = edition.id
+    // figure out which field to look in to generate dynamic options
+    // in no particular order for now
+    let subfield
+    if (normPaths.prenormalized) {
+        subfield = ResponsesTypes.PRENORMALIZED
+    } else if (normPaths.other) {
+        subfield = ResponsesTypes.FREEFORM
+    } else if (normPaths.response) {
+        subfield = ResponsesTypes.RESPONSES
+    } else {
+        // no valid paths found
+        // console.log(
+        //     `// no normPaths found for ${edition.id}/${question.id}, can't generate dynamic options`
+        // )
+        return
+    }
+
+    const parameters = { showNoAnswer: false }
+    const computeArguments = {
+        executionContext: ExecutionContext.REGULAR,
+        responsesType: subfield,
+        // bucketsFilter,
+        parameters
+        // filters,
+        // facet,
+        // selectedEditionId,
+        // editionCount
+    }
+    const funcOptions = {
+        survey,
+        edition,
+        selectedEditionId,
+        question,
+        context: { ...context, isDebug: true },
+        questionObjects,
+        computeArguments
+    }
+
+    const cacheKeyOptions = {
+        edition,
+        question,
+        subField: ResultsSubFieldEnum.COMBINED,
+        selectedEditionId,
+        editionCount: 1,
+        parameters,
+        prefix: 'appearsIn'
+    }
+
+    const enableCache = true
+    const cacheKey = getGenericCacheKey(cacheKeyOptions)
+    try {
+        const result = await useCache({
+            key: cacheKey,
+            func: genericComputeFunction,
+            context,
+            funcOptions,
+            enableCache,
+            enableLog: false
+        })
+
+        return result
+    } catch (error) {
+        console.log(`// getAppearsInQuestionData error for question ${question.id}`)
+        console.log(error)
+        return
     }
 }

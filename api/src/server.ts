@@ -146,6 +146,8 @@ const start = async () => {
     const { surveys } = await loadOrGetSurveys({ context })
     const questionObjects = getQuestionObjects({ surveys })
 
+    context.questionObjects = questionObjects
+
     const typeObjects = await generateTypeObjects({
         surveys,
         questionObjects,

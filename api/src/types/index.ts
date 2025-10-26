@@ -1,5 +1,6 @@
 import { Db } from 'mongodb'
 import { Entity, Locale } from '@devographics/types'
+import { QuestionApiObject } from './surveys'
 
 /**
  * This context is injected in each and every requests.
@@ -11,6 +12,7 @@ export interface RequestContext {
     entities?: Entity[]
     locales?: Locale[]
     disableCache?: boolean
+    questionObjects?: QuestionApiObject[]
 }
 
 export type WatchedItem = 'locales' | 'entities' | 'surveys' | 'projects'
