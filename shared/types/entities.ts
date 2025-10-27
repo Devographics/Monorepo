@@ -3,7 +3,7 @@
  *
  */
 
-import { ResponseEditionData } from 'data'
+import { ResponseData, ResponseEditionData } from 'data'
 import {
     EditionMetadata,
     OptionMetadata,
@@ -83,7 +83,7 @@ export type EntityAppearance = {
     edition: EditionMetadata
     section: SectionMetadata
     question: QuestionMetadata
-    data: ResponseEditionData
+    responses: ResponseData
     option?: OptionMetadata
     as: 'question' | 'option'
 }

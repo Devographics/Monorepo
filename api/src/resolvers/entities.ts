@@ -5,9 +5,15 @@ import {
     QuestionMetadata,
     EditionMetadata,
     ResponsesTypes,
-    ResultsSubFieldEnum
+    ResultsSubFieldEnum,
+    SurveyMetadata
 } from '@devographics/types'
-import { ExecutionContext, QuestionApiObject, RequestContext } from '../types'
+import {
+    ExecutionContext,
+    GenericComputeParameters,
+    QuestionApiObject,
+    RequestContext
+} from '../types'
 // import projects from '../data/bestofjs.yml'
 import { fetchMdnResource, fetchTwitterUser } from '../external_apis'
 import { computeKey, useCache } from '../helpers/caching'
@@ -253,7 +259,7 @@ export const entityResolverMap: EntityResolverMap = {
             return data
         }
     },
-    appearsIn: async (entity: Entity, parameters, context) => {
+    appearsIn: async (entity: Entity, args, context) => {
         const { id } = entity
         const appearances: EntityAppearance[] = []
         const { surveys } = await loadOrGetSurveys()
@@ -262,36 +268,22 @@ export const entityResolverMap: EntityResolverMap = {
                 for (const section of edition.sections) {
                     for (const question of section.questions) {
                         if (question.id === id) {
-                            const data = await getAppearsInQuestionData({
-                                edition,
-                                question,
-                                context
-                            })
-
                             appearances.push({
                                 survey,
                                 edition,
                                 section,
                                 question,
-                                data,
                                 as: 'question'
                             })
                         }
                         if (question.options) {
                             for (const option of question.options) {
                                 if (option.id === id) {
-                                    const data = await getAppearsInQuestionData({
-                                        edition,
-                                        question,
-                                        context
-                                    })
-
                                     appearances.push({
                                         survey,
                                         edition,
                                         section,
                                         question,
-                                        data,
                                         option,
                                         as: 'option'
                                     })
@@ -306,14 +298,47 @@ export const entityResolverMap: EntityResolverMap = {
     }
 }
 
-type GetQuestionDataOptions = {
-    edition: EditionMetadata
-    question: QuestionApiObject
-    context: RequestContext
+export const entityAppearanceResolverMap = {
+    responses: async (
+        parent: EntityAppearance,
+        args: { parameters: GenericComputeParameters; facet: string | undefined },
+        context: RequestContext
+    ) => {
+        const { survey, edition, section, question, as } = parent
+        const { parameters, facet } = args
+        console.log('// entity appearsIn responses resolver')
+        console.log(parent)
+        console.log(args)
+        const responses = await getAppearsInResponses({
+            survey,
+            edition,
+            question,
+            parameters,
+            facet,
+            context
+        })
+        return responses
+    }
 }
 
-async function getAppearsInQuestionData({ edition, question, context }: GetQuestionDataOptions) {
-    const { survey, normPaths = {} } = question
+type GetQuestionDataOptions = {
+    survey: SurveyMetadata
+    edition: EditionMetadata
+    question: QuestionMetadata
+    context: RequestContext
+    parameters: GenericComputeParameters
+    facet: string | undefined
+}
+
+async function getAppearsInResponses({
+    survey,
+    edition,
+    parameters,
+    facet,
+    question,
+    context
+}: GetQuestionDataOptions) {
+    const { normPaths = {} } = question
     const { questionObjects } = context
     const selectedEditionId = edition.id
     // figure out which field to look in to generate dynamic options
@@ -333,14 +358,13 @@ async function getAppearsInQuestionData({ edition, question, context }: GetQuest
         return
     }
 
-    const parameters = { showNoAnswer: false }
     const computeArguments = {
         executionContext: ExecutionContext.REGULAR,
         responsesType: subfield,
         // bucketsFilter,
-        parameters
+        parameters,
         // filters,
-        // facet,
+        facet
         // selectedEditionId,
         // editionCount
     }
@@ -364,10 +388,10 @@ async function getAppearsInQuestionData({ edition, question, context }: GetQuest
         prefix: 'appearsIn'
     }
 
-    const enableCache = true
+    const enableCache = parameters?.enableCache
     const cacheKey = getGenericCacheKey(cacheKeyOptions)
     try {
-        const result = await useCache({
+        const allEditions = await useCache({
             key: cacheKey,
             func: genericComputeFunction,
             context,
@@ -375,8 +399,9 @@ async function getAppearsInQuestionData({ edition, question, context }: GetQuest
             enableCache,
             enableLog: false
         })
-
-        return result
+        // only keep data for the edition we actually need
+        const currentEdition = allEditions.find(e => e.editionId === edition.id)
+        return { currentEdition }
     } catch (error) {
         console.log(`// getAppearsInQuestionData error for question ${question.id}`)
         console.log(error)

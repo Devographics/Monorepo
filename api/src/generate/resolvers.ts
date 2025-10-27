@@ -21,7 +21,11 @@ import { useCache } from '../helpers/caching'
 import { getRawCommentsWithCache } from '../compute/comments'
 import { getEntity, getEntities } from '../load/entities'
 import omit from 'lodash/omit.js'
-import { entitiesResolvers, entityResolverMap } from '../resolvers/entities'
+import {
+    entitiesResolvers,
+    entityAppearanceResolverMap,
+    entityResolverMap
+} from '../resolvers/entities'
 import { getResponseTypeName } from '../graphql/templates/responses'
 import { RequestContext, SectionApiObject } from '../types'
 import { getSectionItems, getEditionItems } from './helpers'
@@ -73,6 +77,7 @@ export const generateResolvers = async ({
         ItemComments: commentsResolverMap,
         CreditItem: creditResolverMap,
         Entity: entityResolverMap,
+        EntityAppearance: entityAppearanceResolverMap,
         EditionMetadata: editionMetadataResolverMap,
         SectionMetadata: sectionMetadataResolverMap,
         QuestionMetadata: questionMetadataResolverMap,
