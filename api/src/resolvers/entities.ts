@@ -10,6 +10,7 @@ import {
 } from '@devographics/types'
 import {
     ExecutionContext,
+    GenericComputeArguments,
     GenericComputeParameters,
     QuestionApiObject,
     RequestContext
@@ -23,6 +24,7 @@ import { getEntities } from '../load/entities'
 import { loadOrGetSurveys } from '../load/surveys'
 import { features } from 'web-features'
 import { genericComputeFunction, getGenericCacheKey } from '../compute'
+import { SENTIMENT_FACET } from '@devographics/constants'
 
 // const getSimulatedGithub = (id: string): GitHub | null => {
 //     const project = projects.find((p: Entity) => p.id === id)
@@ -306,10 +308,8 @@ export const entityAppearanceResolverMap = {
     ) => {
         const { survey, edition, section, question, as } = parent
         const { parameters, facet } = args
-        console.log('// entity appearsIn responses resolver')
-        console.log(parent)
-        console.log(args)
         const responses = await getAppearsInResponses({
+            as,
             survey,
             edition,
             question,
@@ -322,6 +322,7 @@ export const entityAppearanceResolverMap = {
 }
 
 type GetQuestionDataOptions = {
+    as: string
     survey: SurveyMetadata
     edition: EditionMetadata
     question: QuestionMetadata
@@ -331,6 +332,7 @@ type GetQuestionDataOptions = {
 }
 
 async function getAppearsInResponses({
+    as,
     survey,
     edition,
     parameters,
@@ -358,20 +360,34 @@ async function getAppearsInResponses({
         return
     }
 
-    const computeArguments = {
+    const computeArguments: GenericComputeArguments = {
         executionContext: ExecutionContext.REGULAR,
         responsesType: subfield,
         // bucketsFilter,
         parameters,
         // filters,
-        facet
-        // selectedEditionId,
-        // editionCount
+        selectedEditionId,
+        editionCount: 1
     }
+
+    if (as === 'question') {
+        /* 
+        
+        Since we only support the sentiment facet here anyway, we can 
+        hardcode it instead of passing it as an argument. 
+
+        Note that the facet only works for feature/tool questions, 
+        in other words when as = 'question'. When an entity appears as an option,
+        passing the facet would result in an empty dataset, so we don't
+        want to do that. 
+
+        */
+        computeArguments.facet = SENTIMENT_FACET
+    }
+
     const funcOptions = {
         survey,
         edition,
-        selectedEditionId,
         question,
         context: { ...context, isDebug: true },
         questionObjects,

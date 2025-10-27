@@ -82,12 +82,9 @@ type EntityAppearance {
     question: QuestionMetadata
     option: OptionMetadata
     as: String
-    responses(parameters: Parameters, facet: AppearsInFacets): AppearsInResponses
+    responses(parameters: Parameters): AppearsInResponses
 }
 
-enum AppearsInFacets {
-    _sentiment
-}
 type AppearsInResponses {
     currentEdition: ResponseEditionData
 }
