@@ -294,7 +294,7 @@ export const addQuestionOptions = async ({
     // if question doesn't have predefined options, try to generate
     // them dynamically from the top X most popular answers
     // to this question for the latest survey edition
-    if (!hasOptions) {
+    if (!hasOptions && process.env.DISABLE_DYNAMIC_OPTIONS !== 'true') {
         const dynamicOptions = await getDynamicOptions({
             question: question,
             questionObjects,
