@@ -199,6 +199,8 @@ const BlockItem = ({ block, closeSidebar, page }) => {
         entities,
         useShortLabel: true
     })
+    const emojiKey = `${key}.emoji`
+    const hasEmoji = !getString(emojiKey).missing
     return (
         <InternalLinkWrapper_>
             <InternalLink_
@@ -208,6 +210,11 @@ const BlockItem = ({ block, closeSidebar, page }) => {
                 page={page}
                 data-key={key}
             >
+                {hasEmoji && (
+                    <span className="question-emoji">
+                        <T k={emojiKey} />{' '}
+                    </span>
+                )}
                 {label}
                 {/* <T k={getBlockTitleKey({ block: { ...block, sectionId: page.id } })} /> */}
             </InternalLink_>

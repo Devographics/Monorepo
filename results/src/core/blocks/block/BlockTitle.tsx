@@ -12,10 +12,23 @@ import { useEntities } from 'core/helpers/entities'
 import { BlockVariantDefinition } from 'core/types'
 import { getBlockSeriesData } from 'core/helpers/data'
 import { CommentsTrigger } from 'core/charts/common2/comments/CommentsTrigger'
+import T from 'core/i18n/T'
 
 const BlockTitleContents = ({ block }: { block: BlockVariantDefinition }) => {
+    const { getString } = useI18n()
     const { key, label: title } = useBlockTitle({ block })
-    return <Title dangerouslySetInnerHTML={{ __html: title }} data-key={key} />
+    const emojiKey = `${key}.emoji`
+    const hasEmoji = !getString(emojiKey).missing
+    return (
+        <>
+            {hasEmoji && (
+                <span className="question-emoji">
+                    <T k={emojiKey} />{' '}
+                </span>
+            )}
+            <Title dangerouslySetInnerHTML={{ __html: title }} data-key={key} />
+        </>
+    )
 }
 
 const Title = styled.span``
