@@ -154,8 +154,6 @@
                       id: current_total_annual_compensation
 
       - id: years_of_experience
-        titleId: user_info.years_of_experience
-        questionKey: user_info.years_of_experience.question
         template: tokyodev_multiple_options2
         defaultUnits: percentageQuestion
         variants:
@@ -165,12 +163,19 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
+            - template: tokyodev_variant_base
+              id: years_of_experience_vs_job_happiness
+              tabId: tabs.by_job_happiness
+              chartOptions:
+                  defaultView: average
+              filtersState:
+                  facet:
+                      sectionId: job_info
+                      id: job_happiness
 
       - id: years_in_japan
         template: tokyodev_multiple_options2
         defaultUnits: percentageQuestion
-        titleId: user_info.years_in_japan
-        questionKey: user_info.years_in_japan.question
         variants:
             - template: tokyodev_vs_salary
               parameters:
@@ -443,6 +448,15 @@
                   sort: { property: options }
             - template: tokyodev_vs_years_of_experience
               queryOptions: { sectionId: job_info }
+            - template: tokyodev_variant_base
+              id: remote_work_policy_vs_job_happiness
+              tabId: tabs.by_job_happiness
+              chartOptions:
+                  defaultView: average
+              filtersState:
+                  facet:
+                      sectionId: job_info
+                      id: job_happiness
 
       - id: company_size
         template: tokyodev_multiple_options2
@@ -471,8 +485,6 @@
       - id: current_total_annual_compensation
         template: tokyodev_multiple_options2
         defaultUnits: percentageQuestion
-        titleId: compensation.current_total_annual_compensation
-        questionKey: compensation.current_total_annual_compensation.question
         chartOptions:
             defaultMarker: median
 
@@ -566,7 +578,7 @@
             - template: tokyodev_vs_employer_type
             - template: tokyodev_variant_base
               id: software_engineering_practices_vs_language_used
-              tabId: tabs.by_english_usage
+              tabId: tabs.by_english_usage_japanese_hq
               parameters:
                   cutoff: 5
               filtersState:
@@ -578,6 +590,10 @@
                               value:
                                   - never
                                   - rarely
+                            - fieldId: current_employer
+                              sectionId: job_info
+                              operator: eq
+                              value: japanese_company
                       - conditions:
                             - fieldId: languages_used_colleagues_english
                               sectionId: job_info
@@ -585,6 +601,10 @@
                               value:
                                   - frequently
                                   - always
+                            - fieldId: current_employer
+                              sectionId: job_info
+                              operator: eq
+                              value: japanese_company
 
       - id: social_media
         template: tokyodev_multiple_options2_combined
