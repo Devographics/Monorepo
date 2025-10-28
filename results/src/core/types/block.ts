@@ -113,6 +113,7 @@ export interface ChartOptions {
     dataFilters?: string[]
     categories?: string[]
     defaultMarker?: 'average' | 'median'
+    defaultView?: string
 }
 
 export interface BlockWithAwards {
