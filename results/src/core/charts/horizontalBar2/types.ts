@@ -87,6 +87,7 @@ export type RowGroupProps = HorizontalBarViewProps & {
     showCount?: boolean
     allRowsCellDimensions?: Dimension[][]
     allRowsOffsets?: number[]
+    depth?: number
 }
 
 export type RowComponentProps = Omit<RowGroupProps, 'rowComponent'> & {
@@ -95,4 +96,5 @@ export type RowComponentProps = Omit<RowGroupProps, 'rowComponent'> & {
     setShowGroupedBuckets?: Dispatch<SetStateAction<boolean>>
     isGroupedBucket?: boolean
     viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
+    depth?: number
 }

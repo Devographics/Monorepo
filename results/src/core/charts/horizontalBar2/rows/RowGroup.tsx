@@ -6,12 +6,13 @@ export const BAR_HEIGHT = 25
 
 export const RowGroup = (props: RowGroupProps) => {
     const [showGroupedBuckets, setShowGroupedBuckets] = useState(false)
-    const { bucket, rowComponent } = props
+    const { bucket, rowComponent, depth = 0 } = props
     const { groupedBuckets } = bucket
     const hasGroupedBuckets = groupedBuckets && groupedBuckets.length > 0
     const RowComponent = rowComponent
     const rowComponentProps = {
         ...props,
+        depth,
         hasGroupedBuckets,
         ...(hasGroupedBuckets ? { showGroupedBuckets, setShowGroupedBuckets } : {})
     }
@@ -21,13 +22,29 @@ export const RowGroup = (props: RowGroupProps) => {
             {hasGroupedBuckets &&
                 showGroupedBuckets &&
                 groupedBuckets.map(groupedBucket => (
-                    <RowComponent
-                        key={groupedBucket.id}
+                    <RowGroup
                         {...props}
-                        bucket={groupedBucket}
                         isGroupedBucket={true}
+                        bucket={groupedBucket}
+                        key={groupedBucket.id}
+                        depth={depth + 1}
                     />
                 ))}
         </>
     )
+    // return (
+    //     <>
+    //         <RowComponent {...rowComponentProps} />
+    //         {hasGroupedBuckets &&
+    //             showGroupedBuckets &&
+    //             groupedBuckets.map(groupedBucket => (
+    //                 <RowComponent
+    //                     key={groupedBucket.id}
+    //                     {...props}
+    //                     bucket={groupedBucket}
+    //                     isGroupedBucket={true}
+    //                 />
+    //             ))}
+    //     </>
+    // )
 }

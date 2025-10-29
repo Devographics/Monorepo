@@ -19,6 +19,7 @@ export const RowWrapper = (
         children,
         rowMetadata,
         rowIndex,
+        depth,
         contentRef
     } = props
     const { highlightedRow, setHighlightedRow } = chartState
@@ -26,6 +27,7 @@ export const RowWrapper = (
     const isOverallBucket = bucket.id === OVERALL
     const className = classNames(
         'chart-row',
+        `chart-row-depth-${depth}`,
         'chart-subgrid',
         { 'chart-row-grouped': isGroupedBucket },
         { 'chart-row-overall': isOverallBucket },

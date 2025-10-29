@@ -65,7 +65,8 @@ export const getSerieFragment = ({
                         ? getBucketsFragment({
                               addBucketsEntities,
                               addGroupedBuckets,
-                              queryArgs
+                              queryArgs,
+                              currentDepth: 0
                           })
                         : ''
                 }

@@ -59,8 +59,19 @@
 
 .chart-row {
     --rowPadding: var(--halfSpacing);
-    &-grouped {
-        background: #ffffff11;
+    // &-grouped {
+    //     background: #ffffff11;
+    // }
+    &-depth-0 {
+    }
+    &-depth-1 {
+        background: #00ffff11;
+    }
+    &-depth-2 {
+        background: #ff00ff22;
+    }
+    &-depth-3 {
+        background: #ffff0033;
     }
     &-overall {
         // background: #ffffff22;

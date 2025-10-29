@@ -4,13 +4,22 @@ import { getFacetFragment } from './getFacetFragment'
 import { getPercentilesFragment } from './getPercentilesFragment'
 import { QueryArgs } from '../types'
 
+const MAX_DEPTH = 3
+
 export const getBucketsFragment = (options: {
     addBucketsEntities: boolean
     queryArgs: QueryArgs
     addGroupedBuckets: boolean
     fieldName?: string
+    currentDepth: number
 }): string => {
-    const { addBucketsEntities, queryArgs, addGroupedBuckets, fieldName = 'buckets' } = options
+    const {
+        addBucketsEntities,
+        queryArgs,
+        addGroupedBuckets,
+        fieldName = 'buckets',
+        currentDepth
+    } = options
     const { facet } = queryArgs
     return `${fieldName} {
                     count
@@ -26,11 +35,12 @@ export const getBucketsFragment = (options: {
                     ${facet ? getPercentilesFragment() : ''}
                     ${facet ? getFacetFragment(addBucketsEntities) : ''}
                     ${
-                        addGroupedBuckets
+                        addGroupedBuckets && currentDepth < MAX_DEPTH
                             ? getBucketsFragment({
                                   ...options,
                                   fieldName: 'groupedBuckets',
-                                  addGroupedBuckets: false
+                                  addGroupedBuckets: true,
+                                  currentDepth: currentDepth + 1
                               })
                             : ''
                     }
