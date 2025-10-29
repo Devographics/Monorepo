@@ -240,7 +240,6 @@ export const getEntities = async (
 }
 
 export const findEntity = (id: string, entities: Entity[], tag?: string) => {
-    let parentId
     const exactMatches = entities.filter(e => e.id && e.id.toLowerCase() === id)
     const aliasesMatches = entities.filter(e => e.idAliases?.includes(id))
     const nameMatches = entities.filter(e => e.name && e.name.toLowerCase() === id)
@@ -254,11 +253,11 @@ export const findEntity = (id: string, entities: Entity[], tag?: string) => {
     if (tag) {
         const entityWithTag = matchingEntities.find(e => e.tags?.includes(tag))
         if (entityWithTag) {
-            parentId = entityWithTag?.parentId
+            entity.parentId = entityWithTag?.parentId
         }
     }
 
-    return { ...entity, parentId }
+    return entity
 }
 
 export const getEntity = async ({

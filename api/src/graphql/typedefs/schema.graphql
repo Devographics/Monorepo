@@ -470,7 +470,7 @@ type Bucket {
     """
     If bucket was created by grouping other buckets, contents of these grouped buckets
     """
-    groupedBuckets: [GroupedBucket]
+    groupedBuckets: [Bucket]
 }
 
 """
@@ -651,11 +651,11 @@ type Query {
     """
     Data about a specific entity (tool, library, framework, features, etc.)
     """
-    entity(id: ID!): Entity
+    entity(id: ID!, tag: String): Entity
     """
     Data about a specific normalization token
     """
-    token(id: ID!): Token
+    token(id: ID!, tag: String): Token
     """
     Get multiple entities (tools, libraries, frameworks, features, etc.)
     """

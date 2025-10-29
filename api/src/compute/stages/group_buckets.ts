@@ -18,6 +18,7 @@ const isInBounds = (n: number, lowerBound?: number, upperBound?: number) => {
     }
 }
 
+// group buckets based on predefined groups
 async function getGroupedBuckets<T extends Bucket | FacetBucket>({
     groups,
     buckets,
@@ -110,25 +111,63 @@ async function getGroupedBuckets<T extends Bucket | FacetBucket>({
     return groupedBuckets
 }
 
-function getParentIdGroups(buckets: Bucket[]): OptionGroup[] | undefined {
-    // get the ids of all the main parent buckets, if there are any defined
-    const parentIds = uniq(compact(buckets.map(b => b.token?.parentId)))
+// grouped buckets based on parentId property on tokens/entities
+function getNestedBucketTree(buckets: Bucket[]): Bucket[] {
+    const lookup = new Map<string, Bucket>()
 
-    if (parentIds.length === 0) {
-        return
-    } else {
-        const parentIdGroups = parentIds.map(parentId => {
-            // define a group that contains all the buckets that
-            // have the current parentId as parentId
-            const items = buckets.filter(b => b.token?.parentId === parentId).map(b => b.id)
-            return {
-                id: parentId,
-                items
-            }
-        })
-        return parentIdGroups
+    // First, create a node for every item
+    for (const bucket of buckets) {
+        lookup.set(bucket.id, { ...bucket, groupedBuckets: [] })
     }
+
+    const roots: Bucket[] = []
+
+    // Then, link children to their parents
+    for (const bucket of buckets) {
+        const node = lookup.get(bucket.id)!
+        if (bucket.token?.parentId) {
+            const parent = lookup.get(bucket.token?.parentId)
+            if (parent) {
+                parent.groupedBuckets!.push(node)
+            }
+        } else {
+            roots.push(node)
+        }
+    }
+
+    // Optionally clean up empty children arrays
+    function pruneEmptyChildren(nodes: Bucket[]) {
+        for (const n of nodes) {
+            if (n.groupedBuckets && n.groupedBuckets.length === 0) delete n.groupedBuckets
+            else if (n.groupedBuckets) pruneEmptyChildren(n.groupedBuckets)
+        }
+    }
+    pruneEmptyChildren(roots)
+
+    return roots
 }
+
+// not used
+
+// function getParentIdGroups(buckets: Bucket[]): OptionGroup[] | undefined {
+//     // get the ids of all the main parent buckets, if there are any defined
+//     const parentIds = uniq(compact(buckets.map(b => b.token?.parentId)))
+
+//     if (parentIds.length === 0) {
+//         return
+//     } else {
+//         const parentIdGroups = parentIds.map(parentId => {
+//             // define a group that contains all the buckets that
+//             // have the current parentId as parentId
+//             const items = buckets.filter(b => b.token?.parentId === parentId).map(b => b.id)
+//             return {
+//                 id: parentId,
+//                 items
+//             }
+//         })
+//         return parentIdGroups
+//     }
+// }
 
 /*
 
@@ -155,15 +194,19 @@ export async function groupBuckets(
             }
         }
         if (axis1.enableBucketGroups) {
-            const groups = axis1.question.groups || getParentIdGroups(editionData.buckets)
-            if (groups) {
+            if (axis1.question.groups) {
                 const groupedBuckets = await getGroupedBuckets<Bucket>({
-                    groups,
+                    groups: axis1.question.groups,
                     buckets: editionData.buckets,
                     primaryAxis: axis1,
                     secondaryAxis: axis2
                 })
                 editionData.buckets = groupedBuckets
+            } else if (editionData.buckets.filter(b => b.token?.parentId).length > 0) {
+                // if at least one bucket has a token with a parentId,
+                // nest all buckets
+                const nestedBuckets = getNestedBucketTree(editionData.buckets)
+                editionData.buckets = nestedBuckets
             }
         }
     }

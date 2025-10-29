@@ -46,12 +46,20 @@ import { SENTIMENT_FACET } from '@devographics/constants'
 // }
 
 export const entitiesResolvers = {
-    entity: async (root: any, { id }: { id: string }, context: RequestContext) => {
+    entity: async (
+        root: any,
+        { id, tag }: { id: string; tag?: string },
+        context: RequestContext
+    ) => {
         console.log(`// entity resolver: ${id}`)
-        return await getEntity({ id, context })
+        return await getEntity({ id, tag, context })
     },
-    token: async (root: any, { id }: { id: string }, context: RequestContext) => {
-        return await getEntity({ id, context, includeNormalizationEntities: true })
+    token: async (
+        root: any,
+        { id, tag }: { id: string; tag?: string },
+        context: RequestContext
+    ) => {
+        return await getEntity({ id, tag, context, includeNormalizationEntities: true })
     },
     entities: async (
         root: any,
