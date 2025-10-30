@@ -243,8 +243,12 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         primaryGradient: ['#B937C0', '#EA99EE'],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
-        secondary: colors.pink,
-        secondaryGradient: [colors.pinkDark, colors.pink]
+        secondary: colors.indigo,
+        secondaryGradient: [colors.indigoDark, colors.indigo],
+        ternary: colors.green,
+        ternaryGradient: [colors.greenDarker, colors.green],
+        quaternary: colors.yellow,
+        quaternaryGradient: [colors.yellowDark, colors.yellow]
     },
     ranges: {
         tools: {

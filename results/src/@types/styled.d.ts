@@ -70,6 +70,10 @@ declare module 'styled-components' {
                 primaryGradient: [string, string]
                 secondary: string
                 secondaryGradient: [string, string]
+                ternary: string
+                ternaryGradient: [string, string]
+                quaternary: string
+                quaternaryGradient: [string, string]
             }
             ranges: {
                 sentiment: Record<string>

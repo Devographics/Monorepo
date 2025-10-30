@@ -20,7 +20,8 @@ export const RowSingle = (props: RowComponentProps) => {
         showCount = true,
         hasGroupedBuckets,
         viewDefinition,
-        otherBuckets
+        otherBuckets,
+        depth = 0
     } = props
     const { isFreeformData, hasInsufficientData } = bucket
     const otherBucket = otherBuckets && otherBuckets.find(b => b.id === bucket.id)
@@ -41,7 +42,14 @@ export const RowSingle = (props: RowComponentProps) => {
         return Math.min(100, (100 * widthValue) / getTopBound(maxOverallValue))
     }
 
-    const gradient = theme.colors.barChart.primaryGradient
+    const gradientsByDepth = [
+        theme.colors.barChart.primaryGradient,
+        theme.colors.barChart.secondaryGradient,
+        theme.colors.barChart.ternaryGradient || theme.colors.barChart.secondaryGradient,
+        theme.colors.barChart.quaternaryGradient || theme.colors.barChart.secondaryGradient
+    ]
+
+    const gradient = gradientsByDepth[depth]
 
     // TODO: do this better
     const isFreeformQuestion =

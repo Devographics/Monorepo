@@ -58,20 +58,86 @@
 }
 
 .chart-row {
+    .chart-row-index {
+        // visibility: hidden;
+        color: transparent;
+    }
+    position: relative;
     --rowPadding: var(--halfSpacing);
     // &-grouped {
     //     background: #ffffff11;
     // }
     &-depth-0 {
     }
+    &-expanded {
+        background: #00ffff11;
+    }
     &-depth-1 {
         background: #00ffff11;
     }
     &-depth-2 {
-        background: #ff00ff22;
+        background: #00ffff11;
     }
     &-depth-3 {
-        background: #ffff0033;
+        background: #00ffff11;
+    }
+    &-depth-1,
+    &-depth-2,
+    &-depth-3 {
+        .chart-row-index {
+            visibility: hidden;
+        }
+    }
+    &-hasGroupedBuckets {
+        border-left: 5px solid #ffffff33;
+    }
+
+    &-depth-0.chart-row-expanded,
+    &-depth-1,
+    &-depth-2xx,
+    &-depth-3xx {
+        border-left: 5px solid #4861eccc;
+    }
+    &-depth-2,
+    &-depth-3 {
+        border-left: 5px solid transparent;
+    }
+    &-depth-1,
+    &-depth-2,
+    &-depth-3 {
+        // &::after {
+        //     position: absolute;
+        //     left: 0px;
+        //     height: 5px;
+        //     width: 10px;
+        //     top: 50%;
+        //     content: ' ';
+        //     display: block;
+        //     background: #4861eccc;
+        // }
+    }
+    &-depth-1.chart-row-expanded,
+    &-depth-2,
+    &-depth-3 {
+        &::before {
+            position: absolute;
+            left: 5px;
+            height: 100%;
+            content: ' ';
+            display: block;
+            border-left: 5px solid #85eba288;
+        }
+    }
+    &-depth-2.chart-row-expanded,
+    &-depth-3 {
+        &::after {
+            position: absolute;
+            left: 15px;
+            height: 100%;
+            content: ' ';
+            display: block;
+            border-left: 5px solid #fbf34c88;
+        }
     }
     &-overall {
         // background: #ffffff22;
