@@ -17,7 +17,7 @@ export const RowHeading = ({
         block?.filtersState?.axis1?.id || block.i18nNamespace || block.fieldId || block.id
     return (
         <h3 className="chart-row-heading">
-            {isGroupedBucket && <span className="chart-row-heading-grouped">↳&nbsp;</span>}
+            {/* {isGroupedBucket && <span className="chart-row-heading-grouped">↳&nbsp;</span>} */}
             <ChartItem
                 id={id}
                 entity={entity}
@@ -28,14 +28,14 @@ export const RowHeading = ({
             />
 
             {isFreeformData && <FreeformIndicator />}
-            {setShowGroupedBuckets && (
+            {/* {setShowGroupedBuckets && (
                 <button
                     onClick={() => setShowGroupedBuckets(!showGroupedBuckets)}
                     aria-expanded={showGroupedBuckets}
                 >
                     {showGroupedBuckets ? '-' : `+${bucket.groupedBuckets?.length}`}
                 </button>
-            )}
+            )} */}
         </h3>
     )
 }

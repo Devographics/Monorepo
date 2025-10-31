@@ -19,6 +19,7 @@ export const RowSingle = (props: RowComponentProps) => {
         chartValues,
         showCount = true,
         hasGroupedBuckets,
+        showGroupedBuckets,
         viewDefinition,
         otherBuckets,
         depth = 0
@@ -49,7 +50,7 @@ export const RowSingle = (props: RowComponentProps) => {
         theme.colors.barChart.quaternaryGradient || theme.colors.barChart.secondaryGradient
     ]
 
-    const gradient = gradientsByDepth[depth]
+    const gradient = showGroupedBuckets ? gradientsByDepth[depth + 1] : gradientsByDepth[depth]
 
     // TODO: do this better
     const isFreeformQuestion =

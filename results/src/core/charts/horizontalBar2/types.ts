@@ -92,9 +92,10 @@ export type RowGroupProps = HorizontalBarViewProps & {
 
 export type RowComponentProps = Omit<RowGroupProps, 'rowComponent'> & {
     hasGroupedBuckets?: boolean
-    showGroupedBuckets?: boolean
-    setShowGroupedBuckets?: Dispatch<SetStateAction<boolean>>
+    showGroupedBuckets: boolean
+    setShowGroupedBuckets: Dispatch<SetStateAction<boolean>>
     isGroupedBucket?: boolean
     viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
     depth?: number
+    isLastChild?: boolean
 }

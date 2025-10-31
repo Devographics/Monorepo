@@ -21,12 +21,13 @@ export const RowGroup = (props: RowGroupProps) => {
             <RowComponent {...rowComponentProps} />
             {hasGroupedBuckets &&
                 showGroupedBuckets &&
-                groupedBuckets.map(groupedBucket => (
+                groupedBuckets.map((groupedBucket, index) => (
                     <RowGroup
                         {...props}
                         isGroupedBucket={true}
                         bucket={groupedBucket}
                         key={groupedBucket.id}
+                        isLastChild={index === groupedBuckets.length - 1}
                         depth={depth + 1}
                     />
                 ))}

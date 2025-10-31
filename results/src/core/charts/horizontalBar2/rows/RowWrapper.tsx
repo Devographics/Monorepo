@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { OVERALL } from '@devographics/constants'
 import { Gridlines } from './Gridlines'
 import { RowComponentProps } from '../types'
+import { RowDepth } from './RowDepth'
 
 export const RowWrapper = (
     props: RowComponentProps & {
@@ -19,9 +20,11 @@ export const RowWrapper = (
         children,
         rowMetadata,
         rowIndex,
-        depth,
+        depth = 0,
         hasGroupedBuckets,
         showGroupedBuckets,
+        setShowGroupedBuckets,
+        isLastChild,
         contentRef
     } = props
     const { highlightedRow, setHighlightedRow } = chartState
@@ -31,13 +34,17 @@ export const RowWrapper = (
         'chart-row',
         `chart-row-depth-${depth}`,
         { 'chart-row-hasGroupedBuckets': hasGroupedBuckets },
+        { 'chart-row-collapsed': !showGroupedBuckets },
         { 'chart-row-expanded': showGroupedBuckets },
         'chart-subgrid',
         { 'chart-row-grouped': isGroupedBucket },
         { 'chart-row-overall': isOverallBucket },
+        { 'chart-row-lastChild': isLastChild },
         { 'chart-row-insufficient-data': bucket.hasInsufficientData },
         { 'chart-row-highlighted': highlightedRow === bucket.id }
     )
+
+    const showDepthIndicator = hasGroupedBuckets || depth > 0
 
     return (
         <div
@@ -51,6 +58,17 @@ export const RowWrapper = (
         >
             <div className="chart-row-left">
                 <div className="chart-row-index">{rowIndex + 1}</div>
+                {showDepthIndicator ? (
+                    <RowDepth
+                        groupedBuckets={bucket.groupedBuckets}
+                        hasGroupedBuckets={hasGroupedBuckets}
+                        setShowGroupedBuckets={setShowGroupedBuckets}
+                        showGroupedBuckets={showGroupedBuckets}
+                        depth={depth}
+                    />
+                ) : (
+                    <div />
+                )}
                 <RowHeading {...props} />
             </div>
             <div className="chart-row-content" ref={contentRef}>
