@@ -60,12 +60,18 @@ export type HorizontalBarViewDefinition<ChartStateType> = ViewDefinition<ChartSt
     component: (props: HorizontalBarViewProps) => JSX.Element | null
 }
 
+export enum OtherBucketsType {
+    PREVIOUS_EDITION = 'previous_edition',
+    DIFFERENT_SERIE = 'different_serie'
+}
+
 export type HorizontalBarViewProps = {
     chartState: HorizontalBarChartState
     chartValues: HorizontalBarChartValues
     buckets: Bucket[]
     // other set of buckets to compare the main buckets to
     otherBuckets?: Bucket[]
+    otherBucketsType?: OtherBucketsType
     block: BlockVariantDefinition
     isReversed?: boolean
     seriesMetadata: SeriesMetadata

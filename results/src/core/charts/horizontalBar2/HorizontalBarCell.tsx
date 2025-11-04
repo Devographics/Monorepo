@@ -4,7 +4,8 @@ import { Bucket, FacetBucket } from '@devographics/types'
 import {
     HorizontalBarChartState,
     HorizontalBarChartValues,
-    HorizontalBarViewDefinition
+    HorizontalBarViewDefinition,
+    OtherBucketsType
 } from './types'
 import T from 'core/i18n/T'
 import { getItemLabel } from 'core/helpers/labels'
@@ -35,6 +36,7 @@ export const Cell = ({
     block,
     bucket,
     otherBucket,
+    otherBucketsType,
     chartState,
     chartValues,
     width: width_,
@@ -49,6 +51,7 @@ export const Cell = ({
     block: BlockVariantDefinition
     bucket: Bucket | FacetBucket
     otherBucket?: Bucket | FacetBucket
+    otherBucketsType?: OtherBucketsType
     chartState: HorizontalBarChartState
     chartValues: HorizontalBarChartValues
     width?: number
@@ -167,16 +170,21 @@ export const Cell = ({
                 showBorder={false}
             />
             {/* we need getWidth to be able to figure out the dimensions for the other bucket marker */}
-            {otherBucket && getWidth && !disableOtherBucket && !isOtherAnswersBucket && (
-                <>
-                    <OtherBucketMarker
-                        viewDefinition={viewDefinition}
-                        mainBucket={bucket}
-                        otherBucket={otherBucket}
-                        getWidth={getWidth}
-                    />
-                </>
-            )}
+            {otherBucket &&
+                otherBucketsType &&
+                getWidth &&
+                !disableOtherBucket &&
+                !isOtherAnswersBucket && (
+                    <>
+                        <OtherBucketMarker
+                            viewDefinition={viewDefinition}
+                            mainBucket={bucket}
+                            otherBucket={otherBucket}
+                            otherBucketsType={otherBucketsType}
+                            getWidth={getWidth}
+                        />
+                    </>
+                )}
         </div>
     )
 }

@@ -14,7 +14,12 @@ import { CommonProps } from '../common2/types'
 import take from 'lodash/take'
 import { getViewComponent, getViewDefinition } from './helpers/views'
 import { getItemFilters } from '../common2/helpers/filters'
-import { HorizontalBarChartState, HorizontalBarViewProps, HorizontalBarViews } from './types'
+import {
+    HorizontalBarChartState,
+    HorizontalBarViewProps,
+    HorizontalBarViews,
+    OtherBucketsType
+} from './types'
 import { applyRowsLimit } from '../multiItemsExperience/helpers/helpers'
 import { useWidth } from '../common2/helpers'
 
@@ -41,21 +46,23 @@ export const HorizontalBarSerie = (
 
     let buckets = getChartBuckets({ serie, block, chartState })
 
-    let otherBuckets
+    let otherBuckets, otherBucketsType
     const previousEdition = getChartPreviousEdition({ serie })
 
     // the "other buckets" we want to compare with come from…
     if (otherSerie) {
         // …a different serie altogether
         otherBuckets = getChartBuckets({ serie: otherSerie, block, chartState })
+        otherBucketsType = OtherBucketsType.DIFFERENT_SERIE
     } else if (previousEdition) {
-        // …the same serie, but the previosu year
+        // …the same serie, but the previous year
         otherBuckets = getChartBuckets({
             serie,
             block,
             chartState,
             usePreviousEdition: true
         })
+        otherBucketsType = OtherBucketsType.PREVIOUS_EDITION
     }
 
     const viewDefinition = getViewDefinition(chartState.view)
@@ -98,6 +105,7 @@ export const HorizontalBarSerie = (
         isReversed,
         buckets,
         otherBuckets,
+        otherBucketsType,
         chartValues,
         // metadata about the API response
         serieMetadata,

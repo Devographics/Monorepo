@@ -23,6 +23,7 @@ export const RowSingle = (props: RowComponentProps) => {
         showGroupedBuckets,
         viewDefinition,
         otherBuckets,
+        otherBucketsType,
         depth = 0
     } = props
     const { isFreeformData, hasInsufficientData } = bucket
@@ -84,6 +85,7 @@ export const RowSingle = (props: RowComponentProps) => {
                     block={block}
                     bucket={bucket}
                     otherBucket={otherBucket}
+                    otherBucketsType={otherBucketsType}
                     chartState={chartState}
                     getWidth={getWidth}
                     offset={0}

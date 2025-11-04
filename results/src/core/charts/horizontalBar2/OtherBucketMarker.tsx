@@ -1,7 +1,7 @@
 import React from 'react'
 import Tooltip from 'core/components/Tooltip'
 import { Bucket, FacetBucket } from '@devographics/types'
-import { HorizontalBarChartState } from './types'
+import { HorizontalBarChartState, OtherBucketsType } from './types'
 import './OtherBucketMarker.scss'
 import { useI18n } from '@devographics/react-i18n'
 
@@ -10,11 +10,13 @@ const compareWithPreviousEdition = true
 export const OtherBucketMarker = ({
     mainBucket,
     otherBucket,
+    otherBucketsType,
     getWidth,
     viewDefinition
 }: {
     mainBucket: Bucket | FacetBucket
     otherBucket: Bucket | FacetBucket
+    otherBucketsType: OtherBucketsType
     getWidth: (v: number) => number
     viewDefinition: HorizontalBarChartState['viewDefinition']
 }) => {
@@ -40,11 +42,14 @@ export const OtherBucketMarker = ({
     const indexDeltaIsNegative = indexDelta < 0
 
     const tooltipSegments = []
+
     if (compareWithPreviousEdition) {
         if (absoluteDelta > 0) {
             tooltipSegments.push(
                 getString(
-                    `charts.other_bucket.percents.${deltaIsNegative ? 'negative' : 'positive'}`,
+                    `charts.other_bucket.${otherBucketsType}.percents.${
+                        deltaIsNegative ? 'negative' : 'positive'
+                    }`,
                     { values: { value: absoluteDelta } }
                 )?.t
             )
