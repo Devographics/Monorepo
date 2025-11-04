@@ -163,15 +163,6 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
-            - template: tokyodev_variant_base
-              id: years_of_experience_vs_job_happiness
-              tabId: tabs.by_job_happiness
-              chartOptions:
-                  defaultView: average
-              filtersState:
-                  facet:
-                      sectionId: job_info
-                      id: job_happiness
 
       - id: years_in_japan
         template: tokyodev_multiple_options2
@@ -199,6 +190,23 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
+            - template: tokyodev_variant_base
+              id: professional_qualifications_by_gender
+              tabId: tabs.by_gender
+              filtersState:
+                  filters:
+                      - year: 2025
+                        conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: man
+                      - year: 2025
+                        conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: woman
 
       - id: language_proficiency_english
         template: tokyodev_multiple_options2
@@ -281,6 +289,80 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
+            - template: tokyodev_variant_base
+              id: languages_used_colleagues_english_by_years_of_experience
+              tabId: tabs.by_years_of_experience
+              filtersState:
+                  filters:
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_under_1
+                                  - range_1_3
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: eq
+                              value: range_4_6
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: eq
+                              value: range_7_9
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_10_12
+                                  - range_13_15
+                                  - range_16_20
+                                  - range_over_20
+            - template: tokyodev_variant_base
+              id: languages_used_colleagues_english_vs_compensation_by_years_of_experience
+              tabId: tabs.by_compensation_by_experience
+              filtersState:
+                  facet:
+                      sectionId: compensation
+                      id: current_total_annual_compensation
+                  filters:
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_under_1
+                                  - range_1_3
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_4_6
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: eq
+                              value: range_7_9
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_10_12
+                                  - range_13_15
+                                  - range_16_20
+                                  - range_over_20
 
       - id: languages_used_colleagues_japanese
         template: tokyodev_multiple_options2
@@ -292,6 +374,80 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   sort: { property: options }
+            - template: tokyodev_variant_base
+              id: languages_used_colleagues_japanese_by_years_of_experience
+              tabId: tabs.by_years_of_experience
+              filtersState:
+                  filters:
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_under_1
+                                  - range_1_3
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: eq
+                              value: range_4_6
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: eq
+                              value: range_7_9
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_10_12
+                                  - range_13_15
+                                  - range_16_20
+                                  - range_over_20
+            - template: tokyodev_variant_base
+              id: languages_used_colleagues_japanese_vs_compensation_by_years_of_experience
+              tabId: tabs.by_compensation_by_experience
+              filtersState:
+                  facet:
+                      sectionId: compensation
+                      id: current_total_annual_compensation
+                  filters:
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_under_1
+                                  - range_1_3
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_4_6
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: eq
+                              value: range_7_9
+                      - year: 2025
+                        conditions:
+                            - fieldId: years_of_experience
+                              sectionId: user_info
+                              operator: in
+                              value:
+                                  - range_10_12
+                                  - range_13_15
+                                  - range_16_20
+                                  - range_over_20
 
       - id: work_hours_per_week
         template: tokyodev_multiple_options2
