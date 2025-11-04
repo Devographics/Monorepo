@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import T from 'core/i18n/T'
 import { runQuery } from 'core/explorer/data'
-import { RawDataItem, StandardQuestionData } from '@devographics/types'
+import { RawDataItem, StandardQuestionData, Bucket } from '@devographics/types'
 import { FreeformAnswers } from './FreeformAnswers'
 import { BlockVariantDefinition } from 'core/types'
 import { CommentsCommonProps } from '../comments/types'
@@ -54,11 +54,13 @@ query ${getQueryName({ editionId, questionId, token })} {
 export const FreeformAnswersQueryWrapper = ({
     queryOptions,
     questionLabel,
+    buckets,
     tokenLabel,
     question,
     block
 }: {
     queryOptions: GetQueryProps
+    buckets: Bucket[]
     questionLabel: string
     tokenLabel: string
 } & CommentsCommonProps) => {
@@ -117,6 +119,7 @@ export const FreeformAnswersQueryWrapper = ({
                         tokenLabel={tokenLabel}
                         block={block}
                         question={question}
+                        buckets={buckets}
                     />
                 ) : (
                     <div className="error">

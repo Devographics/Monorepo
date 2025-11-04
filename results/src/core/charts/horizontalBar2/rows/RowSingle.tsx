@@ -15,6 +15,7 @@ export const RowSingle = (props: RowComponentProps) => {
     const {
         block,
         bucket,
+        buckets,
         chartState,
         chartValues,
         showCount = true,
@@ -65,10 +66,11 @@ export const RowSingle = (props: RowComponentProps) => {
     const rowMetadata = showFreeformAnswers ? (
         <FreeformAnswersTrigger
             bucket={bucket}
+            buckets={buckets}
             questionId={question.id}
             sectionId={block.sectionId}
             block={block}
-            enableModal={!hasGroupedBuckets}
+            enableModal={true}
         />
     ) : (
         <RespondentCount count={bucket.count} />

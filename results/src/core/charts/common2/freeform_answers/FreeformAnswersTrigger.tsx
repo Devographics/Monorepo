@@ -18,12 +18,13 @@ import { useAllQuestionsMetadata } from 'core/charts/horizontalBar2/helpers/othe
 
 export const FreeformAnswersTrigger = (props: {
     bucket: Bucket | FacetBucket
+    buckets: Bucket[]
     questionId: string
     sectionId: string
     block: BlockVariantDefinition
     enableModal: boolean
 }) => {
-    const { questionId, bucket, sectionId, block, enableModal } = props
+    const { questionId, bucket, buckets, sectionId, block, enableModal } = props
     const { id, count, entity, token } = bucket
     const { getString } = useI18n()
     const pageContext = usePageContext()
@@ -86,6 +87,7 @@ export const FreeformAnswersTrigger = (props: {
                 tokenLabel={tokenLabel}
                 block={block}
                 question={question}
+                buckets={buckets}
             />
         </ModalTrigger>
     ) : (

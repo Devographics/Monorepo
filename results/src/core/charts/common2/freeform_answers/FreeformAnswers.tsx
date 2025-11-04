@@ -1,7 +1,7 @@
 import './FreeformAnswers.scss'
 import React, { useState } from 'react'
 import { useI18n } from '@devographics/react-i18n'
-import { RawDataItem, WordCount } from '@devographics/types'
+import { RawDataItem, WordCount, Bucket } from '@devographics/types'
 import { OrderOptions } from '../types'
 import sortBy from 'lodash/sortBy'
 import { FilterKeywords } from '../comments/filters/FilterKeywords'
@@ -21,12 +21,14 @@ export const FreeformAnswers = ({
     tokenLabel,
     block,
     question,
+    buckets,
     stats
 }: {
     answers: RawDataItem[]
     questionLabel: string
     tokenLabel: string
     stats: WordCount[]
+    buckets: buckets[]
 } & CommentsCommonProps) => {
     const [keywordFilter, setKeywordFilter] = useState<FreeformAnswersState['keywordFilter']>(null)
     const [searchFilter, setSearchFilter] = useState<FreeformAnswersState['searchFilter']>(null)
@@ -95,6 +97,7 @@ export const FreeformAnswers = ({
                             questionLabel={questionLabel}
                             tokenLabel={tokenLabel}
                             stateStuff={stateStuff}
+                            buckets={buckets}
                         />
                     ))}
                 </div>
