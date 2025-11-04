@@ -220,7 +220,8 @@
 
 .experience-item,
 .sentiment-item,
-.value-item {
+.value-item,
+.token-item {
     // background-color: var(--bgColor);
     // border: 2px solid var(--color);
     border: none;
@@ -228,12 +229,44 @@
     border-radius: 30px;
     padding: 2px 8px;
     background: var(--backgroundColor);
-    background: var(--color);
+    // background: var(--color);
     text-shadow: 1px 1px #000000bb;
     font-weight: bold;
     text-transform: uppercase;
     white-space: nowrap;
 
-    background: var(--backgroundBackgroundColor);
+    // background: var(--backgroundBackgroundColor);
     box-shadow: 1px 1px 2px #00000088;
+}
+
+.token-items {
+    display: flex;
+    gap: 10px;
+    position: relative;
+    top: 0px;
+    left: 0px;
+}
+
+.token-item {
+    padding: 2px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    &-main {
+        background-color: var(--backgroundAlt2Color);
+    }
+    &-ancestors {
+        font-size: 0.6rem;
+        display: flex;
+        gap: 4px;
+        opacity: 0.8;
+    }
+    &-ancestor-separator {
+        &::after {
+            content: '>';
+        }
+    }
+    &-label {
+        font-size: 0.8rem;
+    }
 }

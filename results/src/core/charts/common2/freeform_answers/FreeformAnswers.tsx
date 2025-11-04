@@ -18,6 +18,7 @@ import { matchWordStart } from '../comments/Comments'
 export const FreeformAnswers = ({
     answers,
     questionLabel,
+    tokenId,
     tokenLabel,
     block,
     question,
@@ -26,6 +27,7 @@ export const FreeformAnswers = ({
 }: {
     answers: RawDataItem[]
     questionLabel: string
+    tokenId: string
     tokenLabel: string
     stats: WordCount[]
     buckets: buckets[]
@@ -95,6 +97,7 @@ export const FreeformAnswers = ({
                             index={i}
                             {...answer}
                             questionLabel={questionLabel}
+                            tokenId={tokenId}
                             tokenLabel={tokenLabel}
                             stateStuff={stateStuff}
                             buckets={buckets}

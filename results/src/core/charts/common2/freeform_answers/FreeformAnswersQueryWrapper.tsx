@@ -116,6 +116,7 @@ export const FreeformAnswersQueryWrapper = ({
                         answers={data?.answers}
                         stats={data?.stats}
                         questionLabel={questionLabel}
+                        tokenId={queryOptions.token}
                         tokenLabel={tokenLabel}
                         block={block}
                         question={question}

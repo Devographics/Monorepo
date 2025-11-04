@@ -5,7 +5,7 @@ export interface NormalizationMetadata {
 
 export interface NormalizationToken {
     id: string
-    pattern: string
+    pattern?: string
 }
 
 export interface CustomNormalizationToken extends NormalizationToken {

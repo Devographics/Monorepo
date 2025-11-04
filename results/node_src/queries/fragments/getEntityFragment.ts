@@ -7,6 +7,7 @@ export const getEntityFragment = () => `entity {
     descriptionHtml
     descriptionClean
     id
+    parentId
     entityType
     example {
       label
