@@ -16,9 +16,9 @@ import {
     applyQuestionTemplate,
     mergeOptions,
     mergeSections,
-    getContentType,
-    getDynamicOptions
+    getContentType
 } from './helpers'
+import { getDynamicOptions } from './getDynamicOptions'
 import {
     generateSurveysTypeObjects,
     generateQuestionsTypeObjects,
