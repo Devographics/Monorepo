@@ -3,7 +3,18 @@ import { getGenericCacheKey, genericComputeFunction } from '../compute'
 import { specialBucketIds } from '../compute/stages'
 import { useCache } from '../helpers/caching'
 import { QuestionApiObject, RequestContext, ExecutionContext } from '../types'
-import { disallowFields, OPTIONS_LIMIT } from './helpers'
+import { disallowFields } from './helpers'
+import sortBy from 'lodash/sortBy.js'
+import take from 'lodash/take.js'
+import uniqBy from 'lodash/uniqBy.js'
+import takeRight from 'lodash/takeRight.js'
+
+/*
+
+How many items will be made available in the enum
+
+*/
+export const OPTIONS_LIMIT = 20
 
 export const getDynamicOptions = async ({
     question,
@@ -79,6 +90,7 @@ export const getDynamicOptions = async ({
 
     const enableCache = true
     const cacheKey = getGenericCacheKey(cacheKeyOptions)
+
     try {
         const result = await useCache({
             key: cacheKey,
@@ -86,10 +98,21 @@ export const getDynamicOptions = async ({
             context,
             funcOptions,
             enableCache,
-            enableLog: false
+            enableLog: true
         })
-        // const result = await genericComputeFunction(funcOptions)
-        const options = result[0]?.buckets
+
+        // look at past two editions to generate dynamic options
+        const pastTwoEditionsBuckets = takeRight(result, 2)
+            .map(result => result.buckets)
+            .flat()
+        // get rid of duplicates
+        const uniqueBuckets = uniqBy(pastTwoEditionsBuckets, bucket => bucket.id)
+        // sort by count, descending
+        const bucketsSorted = sortBy(uniqueBuckets, bucket => bucket.count).toReversed()
+        // keep top 20 items
+        const bucketsLimited = take(bucketsSorted, OPTIONS_LIMIT)
+
+        const options = bucketsLimited
             .filter(b => !specialBucketIds.includes(b.id))
             .map(b => ({ id: b.id }))
 

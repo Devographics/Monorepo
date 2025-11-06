@@ -261,13 +261,6 @@ export const addOptionsAverages = (options: Option[]) => {
 
 /*
 
-How many items will be made available in the enum
-
-*/
-export const OPTIONS_LIMIT = 20
-
-/*
-
 Disallow some fields because their contents would not be valid GraphQL
 enum members. In the future use normalization to make sure that data
 is properly formatted in the database itself.
