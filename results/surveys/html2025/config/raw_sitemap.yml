@@ -120,6 +120,44 @@
             sectionId: graphics_multimedia
         chartOptions:
             limit: 10
+        # filtersState:
+        #     bucketsFilter:
+        #         nin: [limitations, interop]
+        variants:
+            - template: multiple_options2_freeform
+              id: graphics_pain_points_interop
+              fieldId: graphics_pain_points
+              tabId: tabs.browser_support
+              i18nNamespace: html_pain_points
+              queryOptions:
+                  sectionId: graphics_multimedia
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: graphics_pain_points
+                              sectionId: graphics_multimedia
+                              operator: in
+                              value:
+                                  - interop
+                  bucketsFilter:
+                      nin: [limitations, interop]
+            - template: multiple_options2_freeform
+              id: graphics_pain_points_limitations
+              fieldId: graphics_pain_points
+              tabId: tabs.limitations
+              i18nNamespace: html_pain_points
+              queryOptions:
+                  sectionId: graphics_multimedia
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: graphics_pain_points
+                              sectionId: graphics_multimedia
+                              operator: in
+                              value:
+                                  - limitations
+                  bucketsFilter:
+                      nin: [limitations, interop]
 
       - id: content_pain_points
         template: multiple_options2_freeform

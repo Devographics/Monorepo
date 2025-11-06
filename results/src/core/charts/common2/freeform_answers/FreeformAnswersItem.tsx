@@ -151,8 +151,9 @@ const Tokens = ({
 
 const Token = ({ mainTokenId, token }: { mainTokenId: string; token: TokenWithAncestors }) => {
     const { id, ancestors } = token
+    const isHighlighted = ancestors?.includes(mainTokenId) || mainTokenId === id
     return (
-        <div className={`token-item token-item-${mainTokenId === id ? 'main' : ''}`}>
+        <div className={`token-item token-item-${isHighlighted ? 'main' : ''}`}>
             {ancestors && (
                 <div className="token-item-ancestors">
                     {ancestors?.map((tokenId, index) => {
