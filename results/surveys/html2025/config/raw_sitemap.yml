@@ -129,6 +129,32 @@
         chartOptions:
             limit: 10
 
+      - id: interactivity_pain_points
+        template: multiple_options2_freeform
+        i18nNamespace: html_pain_points
+        queryOptions:
+            sectionId: interactivity
+        chartOptions:
+            limit: 10
+        variants:
+            - template: multiple_options2_freeform
+              id: interactivity_pain_points_interop
+              fieldId: interactivity_pain_points
+              tabId: tabs.browser_support
+              i18nNamespace: html_pain_points
+              queryOptions:
+                  sectionId: interactivity
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: interactivity_pain_points
+                              sectionId: interactivity
+                              operator: in
+                              value:
+                                  - interop
+                  bucketsFilter:
+                      nin: interop
+
       - id: performance_pain_points
         template: multiple_options2_freeform
         i18nNamespace: html_pain_points
