@@ -250,6 +250,8 @@ export type Question = {
     matchType?: 'single' | 'multiple'
     matchTags?: string[]
     disallowedTokenIds?: string[]
+    // disable regex matching on a per-question basis
+    disableRegexMatching?: boolean
 
     // a question that's in the outline but not in the API
     hasApiEndpoint?: boolean

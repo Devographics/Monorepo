@@ -181,6 +181,8 @@ type QuestionMetadata {
     matchTags: [String]
     # token ids that should never be matched for this question
     disallowedTokenIds: [String]
+    # disable regex matching on a per-question basis
+    disableRegexMatching: Boolean
     limit: Int
     # options/values for the question are numeric
     optionsAreNumeric: Boolean
