@@ -131,7 +131,8 @@ const NavItem = ({
                 !(
                     excludedTemplatesAndIds.includes(b.id) ||
                     excludedTemplatesAndIds.includes(b.template) ||
-                    b.hidden
+                    b.hidden ||
+                    b.showInNav === false
                 )
         )
 

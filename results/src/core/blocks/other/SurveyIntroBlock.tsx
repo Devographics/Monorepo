@@ -6,19 +6,24 @@ import { mq, fontSize } from 'core/theme'
 // TODO: could not figure how to avoid IntroLogo typing conflict here
 import IntroLogo from 'Logo/IntroLogo'
 import { usePageContext } from 'core/helpers/pageContext'
+import { useI18n } from '@devographics/react-i18n'
 
 const SurveyIntroBlock = () => {
     const { currentEdition } = usePageContext()
-
+    const { getString } = useI18n()
+    const introKey = `introduction.${currentEdition.id}`
+    const introText = getString(introKey)
     return (
-        <IntroWrapper_>
+        <IntroWrapper_ className="intro-wrapper">
             {/** @ts-ignore */}
-            <IntroLogo />
-            <div className="SurveyIntro">
-                <Content className="SurveyIntro__Content">
-                    <T k={`introduction.${currentEdition.id}`} md={true} />
-                </Content>
-            </div>
+            <IntroLogo className="intro-logo" />
+            {!introText.missing && (
+                <div className="SurveyIntro">
+                    <Content className="SurveyIntro__Content">
+                        <T k={introKey} md={true} />
+                    </Content>
+                </div>
+            )}
         </IntroWrapper_>
     )
 }

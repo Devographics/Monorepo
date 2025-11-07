@@ -93,6 +93,7 @@ export interface BlockVariantDefinition {
     hasComments?: boolean
 
     wrapBlock?: boolean
+    showInNav?: boolean
 
     dataPath?: string
     isFreeform?: boolean

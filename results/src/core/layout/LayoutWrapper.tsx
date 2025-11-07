@@ -41,6 +41,8 @@ const ThemedLayout = (props: LayoutProps) => {
         '--halfSpacing': `${theme.dimensions.spacing / 2}px`,
         '--quarterSpacing': `${theme.dimensions.spacing / 4}px`,
         '--doubleSpacing': `${theme.dimensions.spacing * 2}px`,
+        '--tripleSpacing': `${theme.dimensions.spacing * 3}px`,
+        '--quadrupleSpacing': `${theme.dimensions.spacing * 4}px`,
         '--secondaryFontFamily': `${theme.typography.fontFamily2}`
     }
     return (

@@ -72,3 +72,30 @@
         display: none;
     }
 }
+
+.edition-td2025.Page--overview {
+    .Page__Contents {
+        display: flex;
+        flex-direction: column;
+        gap: var(--tripleSpacing);
+    }
+    .tabs-wrapper-survey_intro,
+    .intro-wrapper,
+    .logo-wrapper {
+        margin-bottom: 0;
+    }
+    .block--text {
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 0 auto;
+        h1 {
+            margin-top: 0;
+        }
+    }
+    .chart-wrapper {
+        margin-top: 0;
+    }
+    .chart-footer {
+        display: none;
+    }
+}
