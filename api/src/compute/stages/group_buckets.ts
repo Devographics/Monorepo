@@ -111,7 +111,6 @@ async function getGroupedBuckets<T extends Bucket | FacetBucket>({
     return groupedBuckets
 }
 
-// grouped buckets based on parentId property on tokens/entities
 function getNestedBucketTree(buckets: Bucket[]): Bucket[] {
     const lookup = new Map<string, Bucket>()
 
@@ -126,7 +125,7 @@ function getNestedBucketTree(buckets: Bucket[]): Bucket[] {
     for (const bucket of buckets) {
         const node = lookup.get(bucket.id)!
         if (bucket.token?.parentId) {
-            const parent = lookup.get(bucket.token?.parentId)
+            const parent = lookup.get(bucket.token.parentId)
             if (parent) {
                 parent.groupedBuckets!.push(node)
             }
@@ -135,14 +134,23 @@ function getNestedBucketTree(buckets: Bucket[]): Bucket[] {
         }
     }
 
-    // Optionally clean up empty children arrays
-    function pruneEmptyChildren(nodes: Bucket[]) {
+    // Recursively sort groupedBuckets by count, descending
+    function sortAndPrune(nodes: Bucket[]) {
         for (const n of nodes) {
-            if (n.groupedBuckets && n.groupedBuckets.length === 0) delete n.groupedBuckets
-            else if (n.groupedBuckets) pruneEmptyChildren(n.groupedBuckets)
+            if (n.groupedBuckets && n.groupedBuckets.length > 0) {
+                // Sort descending by count
+                n.groupedBuckets.sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
+                sortAndPrune(n.groupedBuckets)
+            } else {
+                delete n.groupedBuckets
+            }
         }
     }
-    pruneEmptyChildren(roots)
+
+    sortAndPrune(roots)
+
+    // Finally, sort the root level as well
+    roots.sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
 
     return roots
 }
