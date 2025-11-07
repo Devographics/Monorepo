@@ -18,15 +18,13 @@ const Content = styled.div`
 `
 
 const TextBlock = ({ block }: { block: BlockVariantDefinition }) => {
-    const { currentEdition } = usePageContext()
     const { id } = block
     const cssClass = `block block--text`
 
     return (
         <div className={cssClass}>
             <Content className="block__content">
-                {/* <ReactMarkdown rehypePlugins={[rehypeRaw]}>{text}</ReactMarkdown> */}
-                <T k={`text.${id}.${currentEdition.id}`} md={true} html={true} />
+                <T k={id} md={true} html={true} />
             </Content>
         </div>
     )

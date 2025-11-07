@@ -8,7 +8,7 @@
         wrapBlock: false
         showInNav: false
 
-      - id: overview_1_median_compensation
+      - id: overview_1_median_compensation.td2025
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
@@ -27,7 +27,7 @@
         parameters:
             sort: { property: options }
 
-      - id: overview_2_international_companies
+      - id: overview_2_international_companies.td2025
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
@@ -44,7 +44,7 @@
         fieldId: current_employer
         defaultUnits: percentageQuestion
 
-      - id: overview_3_japanese_companies_english_adoption
+      - id: overview_3_japanese_companies_english_adoption.td2025
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
@@ -87,7 +87,7 @@
                         operator: eq
                         value: japanese_company
 
-      - id: overview_4_greater_english_usage
+      - id: overview_4_greater_english_usage.td2025
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
@@ -106,7 +106,7 @@
         parameters:
             sort: { property: options }
 
-      - id: overview_5_english_professional_experience
+      - id: overview_5_english_professional_experience.td2025
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
@@ -125,7 +125,7 @@
         parameters:
             sort: { property: options }
 
-      - id: overview_6_english_similar_experience
+      - id: overview_6_english_similar_experience.td2025
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
@@ -178,7 +178,7 @@
                             - range_16_20
                             - range_over_20
 
-      - id: overview_7_english_experienced_respondents
+      - id: overview_7_english_experienced_respondents.td2025
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
@@ -227,7 +227,7 @@
                             - range_16_20
                             - range_over_20
 
-      - id: overview_8_optional_remote_work
+      - id: overview_8_optional_remote_work.td2025
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
@@ -243,7 +243,7 @@
         queryOptions: { sectionId: job_info }
         fieldId: remote_work_policy
 
-      - id: overview_9_remote_work_happiness
+      - id: overview_9_remote_work_happiness.td2025
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
@@ -266,7 +266,7 @@
                 sectionId: job_info
                 id: job_happiness
 
-      - id: overview_10_remote_work_searching_for_job
+      - id: overview_10_remote_work_searching_for_job.td2025
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
@@ -305,7 +305,7 @@
                         operator: eq
                         value: fully_remote
 
-      - id: overview_11_views_on_life_in_japan
+      - id: overview_11_views_on_life_in_japan.td2025
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
@@ -321,7 +321,7 @@
         queryOptions:
             sectionId: user_info
 
-      - id: overview_12_gender_gap
+      - id: overview_12_gender_gap.td2025
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
@@ -371,7 +371,7 @@
                 sectionId: compensation
                 id: current_total_annual_compensation
 
-      - id: overview_13_conclusion
+      - id: overview_13_conclusion.td2025
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
