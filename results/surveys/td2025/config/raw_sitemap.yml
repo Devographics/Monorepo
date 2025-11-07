@@ -1,4 +1,4 @@
-- id: introduction
+- id: overview
   path: /
   showTitle: false
   blocks:
@@ -6,27 +6,398 @@
         blockType: SurveyIntroBlock
         disableExport: true
         wrapBlock: false
+        showInNav: false
 
-      - id: takeaways
-        blockType: TakeawaysBlock
+      - id: overview_1_median_compensation
+        blockType: TextBlock
         disableExport: true
         wrapBlock: false
-        items:
-            - median_compensation_2025
-            - gender_2025
-            - language_2025
-            - employer_2025
-            - gaming_2025
-            - hours_per_week_2025
-            - remote_work_2025
-            - training_2025
-            - satisfaction_2025
-            - favourite_thing_about_japan_2025
+        showInNav: false
+
+      - template: tokyodev_vs_salary
+        wrapBlock: false
+        disableExport: true
+        showInNav: false
+        id: years_of_experience_vs_salary
+        i18nNamespace: years_of_experience
+        queryOptions:
+            sectionId: user_info
+        fieldId: years_of_experience
+        defaultUnits: percentageQuestion
+        parameters:
+            sort: { property: options }
+
+      - id: overview_2_international_companies
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - template: tokyodev_vs_salary
+        wrapBlock: false
+        disableExport: true
+        showInNav: false
+        id: current_employer_vs_salary
+        i18nNamespace: current_employer
+        queryOptions:
+            sectionId: job_info
+        fieldId: current_employer
+        defaultUnits: percentageQuestion
+
+      - id: overview_3_japanese_companies_english_adoption
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - template: tokyodev_variant_base
+        wrapBlock: false
+        disableExport: true
+        showInNav: false
+        queryOptions:
+            sectionId: technology
+        fieldId: software_engineering_practices
+        i18nNamespace: software_engineering_practices
+        id: software_engineering_practices_vs_language_used
+        tabId: tabs.by_english_usage_japanese_hq
+        parameters:
+            cutoff: 5
+        filtersState:
+            filters:
+                - conditions:
+                      - fieldId: languages_used_colleagues_english
+                        sectionId: job_info
+                        operator: in
+                        value:
+                            - never
+                            - rarely
+                      - fieldId: current_employer
+                        sectionId: job_info
+                        operator: eq
+                        value: japanese_company
+                - conditions:
+                      - fieldId: languages_used_colleagues_english
+                        sectionId: job_info
+                        operator: in
+                        value:
+                            - frequently
+                            - always
+                      - fieldId: current_employer
+                        sectionId: job_info
+                        operator: eq
+                        value: japanese_company
+
+      - id: overview_4_greater_english_usage
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - template: tokyodev_vs_salary
+        wrapBlock: false
+        disableExport: true
+        showInNav: false
+        id: languages_used_colleagues_english_vs_salary
+        i18nNamespace: languages_used_colleagues_english
+        queryOptions:
+            sectionId: job_info
+        fieldId: languages_used_colleagues_english
+        defaultUnits: percentageQuestion
+        parameters:
+            sort: { property: options }
+
+      - id: overview_5_english_professional_experience
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - template: tokyodev_vs_years_of_experience
+        wrapBlock: false
+        disableExport: true
+        showInNav: false
+        id: languages_used_colleagues_english_vs_years_of_experience
+        i18nNamespace: languages_used_colleagues_english
+        queryOptions:
+            sectionId: job_info
+        fieldId: languages_used_colleagues_english
+        defaultUnits: percentageQuestion
+        parameters:
+            sort: { property: options }
+
+      - id: overview_6_english_similar_experience
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - template: tokyodev_variant_base
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+        i18nNamespace: languages_used_colleagues_english
+        queryOptions:
+            sectionId: job_info
+        fieldId: languages_used_colleagues_english
+        id: languages_used_colleagues_english_vs_compensation_by_years_of_experience
+        tabId: tabs.by_compensation_by_experience
+        filtersState:
+            facet:
+                sectionId: compensation
+                id: current_total_annual_compensation
+            filters:
+                - year: 2025
+                  conditions:
+                      - fieldId: years_of_experience
+                        sectionId: user_info
+                        operator: in
+                        value:
+                            - range_under_1
+                            - range_1_3
+                - year: 2025
+                  conditions:
+                      - fieldId: years_of_experience
+                        sectionId: user_info
+                        operator: in
+                        value:
+                            - range_4_6
+                - year: 2025
+                  conditions:
+                      - fieldId: years_of_experience
+                        sectionId: user_info
+                        operator: eq
+                        value: range_7_9
+                - year: 2025
+                  conditions:
+                      - fieldId: years_of_experience
+                        sectionId: user_info
+                        operator: in
+                        value:
+                            - range_10_12
+                            - range_13_15
+                            - range_16_20
+                            - range_over_20
+
+      - id: overview_7_english_experienced_respondents
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - template: tokyodev_variant_base
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+        i18nNamespace: languages_used_colleagues_english
+        queryOptions:
+            sectionId: job_info
+        fieldId: languages_used_colleagues_english
+        id: languages_used_colleagues_english_by_years_of_experience
+        tabId: tabs.by_years_of_experience
+        filtersState:
+            filters:
+                - year: 2025
+                  conditions:
+                      - fieldId: years_of_experience
+                        sectionId: user_info
+                        operator: in
+                        value:
+                            - range_under_1
+                            - range_1_3
+                - year: 2025
+                  conditions:
+                      - fieldId: years_of_experience
+                        sectionId: user_info
+                        operator: eq
+                        value: range_4_6
+                - year: 2025
+                  conditions:
+                      - fieldId: years_of_experience
+                        sectionId: user_info
+                        operator: eq
+                        value: range_7_9
+                - year: 2025
+                  conditions:
+                      - fieldId: years_of_experience
+                        sectionId: user_info
+                        operator: in
+                        value:
+                            - range_10_12
+                            - range_13_15
+                            - range_16_20
+                            - range_over_20
+
+      - id: overview_8_optional_remote_work
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: remote_work_policy
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+        i18nNamespace: remote_work_policy
+        template: tokyodev_multiple_options2
+        defaultUnits: percentageQuestion
+        queryOptions: { sectionId: job_info }
+        fieldId: remote_work_policy
+
+      - id: overview_9_remote_work_happiness
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - template: tokyodev_variant_base
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+        i18nNamespace: remote_work_policy
+        queryOptions:
+            sectionId: job_info
+        fieldId: remote_work_policy
+        id: remote_work_policy_vs_job_happiness
+        tabId: tabs.by_job_happiness
+        chartOptions:
+            defaultView: average
+        filtersState:
+            facet:
+                sectionId: job_info
+                id: job_happiness
+
+      - id: overview_10_remote_work_searching_for_job
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: searching_for_job_by_remote_work_policy
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+        i18nNamespace: searching_for_job
+        fieldId: searching_for_job
+        queryOptions:
+            sectionId: job_info
+        template: tokyodev_variant_base
+        tabId: tabs.by_remote_work_policy
+        filtersState:
+            filters:
+                - conditions:
+                      - fieldId: remote_work_policy
+                        sectionId: job_info
+                        operator: eq
+                        value: no_remote_work
+                - conditions:
+                      - fieldId: remote_work_policy
+                        sectionId: job_info
+                        operator: eq
+                        value: hybrid
+                - conditions:
+                      - fieldId: remote_work_policy
+                        sectionId: job_info
+                        operator: eq
+                        value: up_to_employee
+                - conditions:
+                      - fieldId: remote_work_policy
+                        sectionId: job_info
+                        operator: eq
+                        value: fully_remote
+
+      - id: overview_11_views_on_life_in_japan
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: gender
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+        template: tokyodev_multiple_options2
+        defaultUnits: percentageQuestion
+        i18nNamespace: gender
+        queryOptions:
+            sectionId: user_info
+
+      - id: overview_12_gender_gap
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - template: tokyodev_variant_base
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+        fieldId: gender
+        queryOptions:
+            sectionId: user_info
+        i18nNamespace: gender
+        id: gender_by_compensation_by_experience
+        tabId: tabs.by_compensation_by_experience
+        filtersState:
+            filters:
+                - conditions:
+                      - fieldId: years_of_experience
+                        sectionId: user_info
+                        operator: in
+                        value:
+                            - range_under_1
+                            - range_1_3
+                - conditions:
+                      - fieldId: years_of_experience
+                        sectionId: user_info
+                        operator: in
+                        value:
+                            - range_4_6
+                - conditions:
+                      - fieldId: years_of_experience
+                        sectionId: user_info
+                        operator: in
+                        value:
+                            - range_7_9
+                - conditions:
+                      - fieldId: years_of_experience
+                        sectionId: user_info
+                        operator: in
+                        value:
+                            - range_10_12
+                            - range_13_15
+                            - range_16_20
+                            - range_over_20
+            facet:
+                sectionId: compensation
+                id: current_total_annual_compensation
+
+      - id: overview_13_conclusion
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      # - id: takeaways
+      #   blockType: TakeawaysBlock
+      #   disableExport: true
+      #   wrapBlock: false
+      #   items:
+      #       - median_compensation_2025
+      #       - gender_2025
+      #       - language_2025
+      #       - employer_2025
+      #       - gaming_2025
+      #       - hours_per_week_2025
+      #       - remote_work_2025
+      #       - training_2025
+      #       - satisfaction_2025
+      #       - favourite_thing_about_japan_2025
 
       - id: survey_newsletter
         blockType: NewsletterBlock
         disableExport: true
         wrapBlock: false
+        showInNav: false
 
 - id: user_info
   titleId: sections.demographics.title
@@ -496,7 +867,7 @@
         variants:
             - template: tokyodev_vs_salary
             - template: tokyodev_vs_employer_type
-            - id: most_important_benefit_by_remote_work_policy
+            - id: searching_for_job_by_remote_work_policy
               template: tokyodev_variant_base
               tabId: tabs.by_remote_work_policy
               filtersState:
