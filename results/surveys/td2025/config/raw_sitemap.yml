@@ -445,6 +445,8 @@
       - id: age
         template: tokyodev_multiple_options2
         defaultUnits: percentageQuestion
+        queryOptions:
+            editionsCount: 1
         variants:
             - template: tokyodev_vs_salary
               parameters:
