@@ -166,7 +166,7 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     textAlt: 'rgba(134 139 163)',
     textInverted: '#272325',
     textHighlight: colors.yellowDarker,
-    link: 'rgba(16, 185, 129, 0.9)',
+    link: '#FF9E59',
     linkActive: '#4E46DD',
     contrast: '#4E46DD',
     border: '#FFF6E6',
@@ -239,12 +239,12 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     ],
     barColorDefault: {
         id: 'barColorDefault',
-        color: 'rgba(16, 185, 129, 0.9)',
-        gradient: ['rgba(16, 185, 129, 0.9)', 'rgba(16, 185, 129, 0.6)']
+        color: '#FFB759',
+        gradient: ['#FFB759dd', '#FFB759aa']
     },
     barColorOverall: {
         id: 'barColorOverall',
-        color: '#F99C61',
+        color: '#FF9E59',
         gradient: ['#F99C61', '#D76B26']
     },
     barColorNoAnswer: {
@@ -253,8 +253,8 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         gradient: [colors.greyLight, colors.greyLightest]
     },
     barChart: {
-        primary: 'rgba(16, 185, 129, 0.9)',
-        primaryGradient: ['rgba(16, 185, 129, 0.9)', 'rgba(16, 185, 129, 0.6)'],
+        primary: '#FF9E59',
+        primaryGradient: ['#FF9E59dd', '#FF9E59aa'],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.pink,
