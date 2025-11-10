@@ -18,7 +18,7 @@ hljs.registerLanguage('css', css)
 hljs.registerLanguage('graphql', graphql)
 hljs.registerLanguage('json', json)
 import trim from 'lodash/trim.js'
-import { cleanHtmlString } from '../helpers/locales'
+import { cleanHtmlString } from '../helpers/strings'
 
 // entities
 

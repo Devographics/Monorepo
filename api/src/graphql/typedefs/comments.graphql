@@ -3,6 +3,8 @@ Comment
 """
 type Comment {
     message: String
+    messageHtml: String
+    messageClean: String
     responseId: String
     experience: String
     sentiment: String

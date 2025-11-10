@@ -6,6 +6,8 @@ import { useCache } from '../helpers/caching'
 import { Survey, QuestionApiObject } from '../types/surveys'
 import { getCollection } from '../helpers/db'
 import { calculateWordFrequencies } from '@devographics/helpers'
+import marked from 'marked'
+import { cleanHtmlString, parseHtmlString, sanitizeHtmlString } from '../helpers/strings'
 
 // note currently working because of "Dynamic require of "util" is not supported" error
 
@@ -25,6 +27,8 @@ import { calculateWordFrequencies } from '@devographics/helpers'
 
 type CommentObject = {
     message: string
+    messageHtml: string
+    messageClean: string
     responseId: string
     editionId: string
     responseValue?: string | string[] | number | number[]
@@ -107,9 +111,16 @@ export const getRawComments = async ({
     // console.log(JSON.stringify(results, null, 2))
 
     const comments = results.map(r => {
+        const message = get(r, commentPath) as string
+        const messageParsed = parseHtmlString(message)
+        const messageHtml = sanitizeHtmlString(messageParsed)
+        const messageClean = cleanHtmlString(messageHtml)
+
         const comment: CommentObject = {
             editionId: r.editionId,
-            message: get(r, commentPath) as string,
+            message,
+            messageHtml,
+            messageClean,
             responseId: r._id as unknown as string
         }
         if (responsePath) {

@@ -5,6 +5,7 @@ import { decode } from 'html-entities'
 import { logToFile } from '@devographics/debug'
 import { findDuplicates } from './utilities'
 import sortBy from 'lodash/sortBy.js'
+import { cleanHtmlString, sanitizeHtmlString } from './strings'
 
 export const filterContexts = ({ locale, contexts }: { locale: Locale; contexts: string[] }) => {
     return {
@@ -120,34 +121,6 @@ export const resolveAliases = ({
     stringFile.strings = [...stringFile.strings, ...aliasedStrings]
     return stringFile
 }
-
-export const sanitizeHtmlString = (s: string) =>
-    sanitizeHtml(s, {
-        allowedClasses: {
-            '*': ['*']
-        },
-        allowedAttributes: {
-            '*': ['aria-hidden', 'href', 'name', 'target']
-        }
-    })
-
-/*
-
-Input: HTML string such as <code>&lt;svg&gt;</code>
-
-0. original md string: `<svg>` was converted to HTML to remove md formatting
-
-1. first sanitize input to remove <code> </code>
-
-2. then transform &lt;svg&gt; to <svg>
-
-*/
-export const cleanHtmlString = (s: string) =>
-    decode(
-        sanitizeHtml(s, {
-            allowedTags: []
-        })
-    )
 
 /*
 
