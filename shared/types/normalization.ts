@@ -21,6 +21,8 @@ export interface FullNormalizationToken extends CustomNormalizationToken {
 
 export interface RawDataItem {
     responseId: string
-    raw: string
+    rawHtml: string
+    rawHtml: string
+    rawClean: string
     tokens: NormalizationToken[]
 }

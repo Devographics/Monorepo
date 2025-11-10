@@ -373,6 +373,8 @@ type ResponseEditionMetadata {
 type RawData {
     responseId: String
     raw: String
+    rawHtml: String
+    rawClean: String
     tokens: [NormalizationToken]
 }
 

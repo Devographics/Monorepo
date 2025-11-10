@@ -15,6 +15,8 @@ import { getCollection } from '../helpers/db'
 import get from 'lodash/get.js'
 import { NormalizationMetadata, RawDataItem } from '@devographics/types'
 import { NO_MATCH } from '@devographics/constants'
+import { cleanHtmlString, sanitizeHtmlString } from '../helpers/locales'
+import marked from 'marked'
 
 type GetRawDataOptions = {
     survey: SurveyApiObject
@@ -51,11 +53,19 @@ export const getRawData = async ({
         let data: RawDataItem[] = results
             .map(response => {
                 const answers = get(response, metadata) as NormalizationMetadata[]
+                return answers.map(answer => {
+                    const { raw } = answer
+                    let rawHtml = marked.parse(raw)
+                    rawHtml = sanitizeHtmlString(rawHtml)
+                    const rawClean = cleanHtmlString(rawHtml)
 
-                return answers.map(answer => ({
-                    ...answer,
-                    responseId: response._id.toString()
-                }))
+                    return {
+                        ...answer,
+                        rawHtml,
+                        rawClean,
+                        responseId: response._id.toString()
+                    }
+                })
             })
             .flat()
 

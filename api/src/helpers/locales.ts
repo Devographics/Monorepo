@@ -121,6 +121,16 @@ export const resolveAliases = ({
     return stringFile
 }
 
+export const sanitizeHtmlString = (s: string) =>
+    sanitizeHtml(s, {
+        allowedClasses: {
+            '*': ['*']
+        },
+        allowedAttributes: {
+            '*': ['aria-hidden', 'href', 'name', 'target']
+        }
+    })
+
 /*
 
 Input: HTML string such as <code>&lt;svg&gt;</code>
@@ -161,14 +171,7 @@ export const parseMarkdown = (stringFile: StringFile) => {
         // if markdown-parsed version of the string is different from original,
         // or original contains one or more HTML tags, add it as HTML
         if (tHtml !== s.t || containsTagRegex.test(s.t)) {
-            s.tHtml = sanitizeHtml(tHtml, {
-                allowedClasses: {
-                    '*': ['*']
-                },
-                allowedAttributes: {
-                    '*': ['aria-hidden', 'href', 'name', 'target']
-                }
-            })
+            s.tHtml = sanitizeHtmlString(tHtml)
             s.tClean = cleanHtmlString(tHtml)
         }
         return s
