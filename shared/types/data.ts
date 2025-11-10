@@ -95,6 +95,8 @@ export interface WordCount {
 
 export interface Comment {
     message: string
+    messageHtml: string
+    messageClean: string
     responseId: string
     responseValue: string
     experience: FeaturesOptions
