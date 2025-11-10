@@ -36,7 +36,7 @@ query ${getQueryName({ editionId, questionId, token })} {
                                 tokens {
                                     id
                                 }
-                                raw
+                                rawHtml
                             }
                             rawDataStats(token: "${token}") {
                                 count

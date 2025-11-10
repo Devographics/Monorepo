@@ -131,6 +131,9 @@
         display: inline-block;
         background: #9f9f1366;
     }
+    p:last-child {
+        margin-bottom: 0;
+    }
 }
 .comments-list {
     @include medium-large {

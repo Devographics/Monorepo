@@ -33,7 +33,7 @@ query ${getQueryName({ editionId, questionId })} {
                         comments {
                             currentEdition {
                                 commentsRaw {
-                                    message
+                                    messageHtml
                                     experience
                                     sentiment
                                     responseId

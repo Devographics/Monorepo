@@ -7,7 +7,7 @@ import { CommentsItemWrapper } from '../comments/CommentsItemWrapper'
 import { FreeformAnswersState } from './types'
 
 export const FreeformAnswerItem = ({
-    raw,
+    rawHtml,
     responseId,
     index,
     questionLabel,
@@ -25,7 +25,7 @@ export const FreeformAnswerItem = ({
     buckets: Bucket[]
 }) => {
     const { keywordFilter, searchFilter } = stateStuff
-    let formattedMessage = raw
+    let formattedMessage = rawHtml
     if (keywordFilter) {
         formattedMessage = highlightWordStarts(formattedMessage, keywordFilter)
     }
@@ -53,7 +53,7 @@ export const FreeformAnswerItem = ({
             }
             reportLink={getCommentReportUrl({
                 responseId,
-                message: raw,
+                message: rawHtml,
                 questionLabel: questionLabel + '/' + tokenLabel
             })}
         />

@@ -44,7 +44,7 @@ export function highlightWordStarts(text: string, word: string): string {
 }
 
 export const CommentItem = ({
-    message,
+    messageHtml,
     experience,
     sentiment,
     responseId,
@@ -65,7 +65,7 @@ export const CommentItem = ({
     const questionOptions =
         question?.options?.filter(o => responseValueArray.map(String).includes(String(o.id))) || []
 
-    let formattedMessage = message.replaceAll('\n', '<br/>')
+    let formattedMessage = messageHtml
 
     if (keywordFilter) {
         formattedMessage = highlightWordStarts(formattedMessage, keywordFilter)
@@ -100,7 +100,7 @@ export const CommentItem = ({
                     </>
                 ) : null
             }
-            reportLink={getCommentReportUrl({ responseId, message, questionLabel })}
+            reportLink={getCommentReportUrl({ responseId, message: messageHtml, questionLabel })}
         />
     )
 }
