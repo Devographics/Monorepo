@@ -79,15 +79,15 @@ function pruneTree(buckets: Bucket[], allowedIds: string[]): Bucket[] {
 
     for (const bucket of buckets) {
         // If item has nested children, prune them recursively
-        if (bucket.groupedBuckets && bucket.groupedBuckets.length > 0) {
-            const prunedChildren = pruneTree(bucket.groupedBuckets, allowedIds)
+        if (bucket.nestedBuckets && bucket.nestedBuckets.length > 0) {
+            const prunedChildren = pruneTree(bucket.nestedBuckets, allowedIds)
 
             // Keep this node if it has any remaining children after pruning
             // OR if it itself is in the allowed list
             if (prunedChildren.length > 0 || allowedIds.includes(bucket.id)) {
                 pruned.push({
                     ...bucket,
-                    groupedBuckets: prunedChildren.length > 0 ? prunedChildren : undefined
+                    nestedBuckets: prunedChildren.length > 0 ? prunedChildren : undefined
                 })
             }
         } else {
@@ -112,10 +112,10 @@ function getLeavesWithAncestors(buckets: Bucket[], ancestors: string[] = []): To
 
     for (const bucket of buckets) {
         const currentAncestors = [...ancestors]
-        if (bucket.groupedBuckets && bucket.groupedBuckets.length > 0) {
+        if (bucket.nestedBuckets && bucket.nestedBuckets.length > 0) {
             // Recurse into children, passing the current item as an ancestor
             result.push(
-                ...getLeavesWithAncestors(bucket.groupedBuckets, [bucket.id, ...currentAncestors])
+                ...getLeavesWithAncestors(bucket.nestedBuckets, [bucket.id, ...currentAncestors])
             )
         } else {
             // Leaf node — include ancestors if any
@@ -139,9 +139,9 @@ function flattenBucketsTree(buckets: Bucket[]): Bucket[] {
     const result: Bucket[] = []
     for (const bucket of buckets) {
         result.push(bucket)
-        if (bucket.groupedBuckets && bucket.groupedBuckets.length > 0) {
+        if (bucket.nestedBuckets && bucket.nestedBuckets.length > 0) {
             // Recurse into children, passing the current item as an ancestor
-            result.push(...flattenBucketsTree(bucket.groupedBuckets))
+            result.push(...flattenBucketsTree(bucket.nestedBuckets))
         }
     }
     return result

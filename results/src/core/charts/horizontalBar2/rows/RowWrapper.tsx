@@ -16,14 +16,14 @@ export const RowWrapper = (
         chartState,
         chartValues,
         bucket,
-        isGroupedBucket = false,
+        isNestedBucket = false,
         children,
         rowMetadata,
         rowIndex,
         depth = 0,
-        hasGroupedBuckets,
-        showGroupedBuckets,
-        setShowGroupedBuckets,
+        hasNestedBuckets,
+        showNestedBuckets,
+        setShowNestedBuckets,
         isLastChild,
         contentRef
     } = props
@@ -33,18 +33,18 @@ export const RowWrapper = (
     const className = classNames(
         'chart-row',
         `chart-row-depth-${depth}`,
-        { 'chart-row-hasGroupedBuckets': hasGroupedBuckets },
-        { 'chart-row-collapsed': !showGroupedBuckets },
-        { 'chart-row-expanded': showGroupedBuckets },
+        { 'chart-row-hasNestedBuckets': hasNestedBuckets },
+        { 'chart-row-collapsed': !showNestedBuckets },
+        { 'chart-row-expanded': showNestedBuckets },
         'chart-subgrid',
-        { 'chart-row-grouped': isGroupedBucket },
+        { 'chart-row-grouped': isNestedBucket },
         { 'chart-row-overall': isOverallBucket },
         { 'chart-row-lastChild': isLastChild },
         { 'chart-row-insufficient-data': bucket.hasInsufficientData },
         { 'chart-row-highlighted': highlightedRow === bucket.id }
     )
 
-    const showDepthIndicator = hasGroupedBuckets || depth > 0
+    const showDepthIndicator = hasNestedBuckets || depth > 0
 
     return (
         <div
@@ -60,10 +60,10 @@ export const RowWrapper = (
                 <div className="chart-row-index">{rowIndex + 1}</div>
                 {showDepthIndicator ? (
                     <RowDepth
-                        groupedBuckets={bucket.groupedBuckets}
-                        hasGroupedBuckets={hasGroupedBuckets}
-                        setShowGroupedBuckets={setShowGroupedBuckets}
-                        showGroupedBuckets={showGroupedBuckets}
+                        nestedBuckets={bucket.nestedBuckets}
+                        hasNestedBuckets={hasNestedBuckets}
+                        setShowNestedBuckets={setShowNestedBuckets}
+                        showNestedBuckets={showNestedBuckets}
                         depth={depth}
                     />
                 ) : (
