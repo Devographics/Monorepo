@@ -1,8 +1,6 @@
 import { Entity, FacetBucket, OptionGroup, Token } from '@devographics/types'
 import { ResponseEditionData, ComputeAxisParameters, Bucket } from '../../types'
 import { CATCHALL_PREFIX, NO_ANSWER } from '@devographics/constants'
-import uniq from 'lodash/uniq.js'
-import compact from 'lodash/compact.js'
 import { mergeBuckets } from './mergeBuckets'
 import { getEntity } from '../../load/entities'
 
@@ -111,72 +109,6 @@ async function getGroupedBuckets<T extends Bucket | FacetBucket>({
     return groupedBuckets
 }
 
-function getNestedBucketTree(buckets: Bucket[]): Bucket[] {
-    const lookup = new Map<string, Bucket>()
-
-    // First, create a node for every item
-    for (const bucket of buckets) {
-        lookup.set(bucket.id, { ...bucket, groupedBuckets: [] })
-    }
-
-    const roots: Bucket[] = []
-
-    // Then, link children to their parents
-    for (const bucket of buckets) {
-        const node = lookup.get(bucket.id)!
-        if (bucket.token?.parentId) {
-            const parent = lookup.get(bucket.token.parentId)
-            if (parent) {
-                parent.groupedBuckets!.push(node)
-            }
-        } else {
-            roots.push(node)
-        }
-    }
-
-    // Recursively sort groupedBuckets by count, descending
-    function sortAndPrune(nodes: Bucket[]) {
-        for (const n of nodes) {
-            if (n.groupedBuckets && n.groupedBuckets.length > 0) {
-                // Sort descending by count
-                n.groupedBuckets.sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
-                sortAndPrune(n.groupedBuckets)
-            } else {
-                delete n.groupedBuckets
-            }
-        }
-    }
-
-    sortAndPrune(roots)
-
-    // Finally, sort the root level as well
-    roots.sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
-
-    return roots
-}
-
-// not used
-
-// function getParentIdGroups(buckets: Bucket[]): OptionGroup[] | undefined {
-//     // get the ids of all the main parent buckets, if there are any defined
-//     const parentIds = uniq(compact(buckets.map(b => b.token?.parentId)))
-
-//     if (parentIds.length === 0) {
-//         return
-//     } else {
-//         const parentIdGroups = parentIds.map(parentId => {
-//             // define a group that contains all the buckets that
-//             // have the current parentId as parentId
-//             const items = buckets.filter(b => b.token?.parentId === parentId).map(b => b.id)
-//             return {
-//                 id: parentId,
-//                 items
-//             }
-//         })
-//         return parentIdGroups
-//     }
-// }
-
 /*
 
 Take a list of groups and group the buckets in each edition dataset
@@ -210,11 +142,6 @@ export async function groupBuckets(
                     secondaryAxis: axis2
                 })
                 editionData.buckets = groupedBuckets
-            } else if (editionData.buckets.filter(b => b.token?.parentId).length > 0) {
-                // if at least one bucket has a token with a parentId,
-                // nest all buckets
-                const nestedBuckets = getNestedBucketTree(editionData.buckets)
-                editionData.buckets = nestedBuckets
             }
         }
     }

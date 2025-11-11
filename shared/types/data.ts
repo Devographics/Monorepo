@@ -228,6 +228,7 @@ export interface Bucket extends BucketData, BucketMetadata {
     percentilesByFacet?: PercentileData
     groupedBuckets?: Bucket[]
     groupedBucketIds?: string[]
+    nestedBuckets?: Bucket[]
 }
 
 export type CombinedBucketData = {

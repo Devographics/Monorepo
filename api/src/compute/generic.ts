@@ -45,7 +45,8 @@ import {
     addMetadata,
     restrictBuckets,
     addValues,
-    addIndexes
+    addIndexes,
+    nestBuckets
 } from './stages'
 import {
     ResponsesTypes,
@@ -300,6 +301,7 @@ export async function genericComputeFunction(
         showNoAnswer,
         mergeOtherBuckets = true,
         enableBucketGroups = true,
+        enableBucketNesting = true,
         enableAddOverallBucket = true,
         enableAddMissingBuckets
     } = parameters
@@ -330,6 +332,7 @@ export async function genericComputeFunction(
         groupOverLimit,
         mergeOtherBuckets,
         enableBucketGroups,
+        enableBucketNesting,
         enableAddMissingBuckets,
         bucketsFilter,
         limit
@@ -391,6 +394,7 @@ export async function genericComputeFunction(
                     groupOverLimit,
                     mergeOtherBuckets,
                     enableBucketGroups,
+                    enableBucketNesting,
                     enableAddMissingBuckets,
                     limit: facetLimit
                 }
@@ -546,6 +550,9 @@ export async function genericComputeFunction(
             // bucket grouping
             await runStage(groupBuckets, [results, axis2, axis1])
 
+            // bucket nesting
+            await runStage(nestBuckets, [results, axis2, axis1])
+
             // cutoff data
             await runStage(cutoffData, [results, axis2, axis1])
 
@@ -605,6 +612,8 @@ export async function genericComputeFunction(
             await runStage(addValues, [results, context, axis1])
 
             await runStage(groupBuckets, [results, axis1])
+
+            await runStage(nestBuckets, [results, axis1])
 
             await runStage(cutoffData, [results, axis1])
 

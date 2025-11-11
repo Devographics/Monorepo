@@ -49,6 +49,7 @@ export interface GenericComputeParameters {
     groupOverLimit?: boolean
     mergeOtherBuckets?: boolean
     enableBucketGroups?: boolean
+    enableBucketNesting?: boolean
     enableAddOverallBucket?: boolean
     enableAddMissingBuckets?: boolean
     responsesType?: ResponsesTypes
@@ -64,6 +65,7 @@ export interface ComputeAxisParameters {
     groupOverLimit?: boolean
     mergeOtherBuckets?: boolean
     enableBucketGroups?: boolean
+    enableBucketNesting?: boolean
     enableAddMissingBuckets?: boolean
     limit: number
     options?: Option[]

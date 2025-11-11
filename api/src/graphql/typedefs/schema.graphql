@@ -295,6 +295,7 @@ input Parameters {
     showNoAnswer: Boolean
     showNoMatch: Boolean
     enableBucketGroups: Boolean
+    enableBucketNesting: Boolean
     # Merge cutoff answers and unmatched answers into a single "other answers" bucket
     mergeOtherBuckets: Boolean
     enableAddOverallBucket: Boolean
@@ -474,7 +475,11 @@ type Bucket {
     """
     If bucket was created by grouping other buckets, contents of these grouped buckets
     """
-    groupedBuckets: [Bucket]
+    groupedBuckets: [GroupedBucket]
+    """
+    Used when nesting buckets into a tree structure
+    """
+    nestedBuckets: [Bucket]
 }
 
 """
