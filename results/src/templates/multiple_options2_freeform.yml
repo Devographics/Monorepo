@@ -4,7 +4,8 @@ hasData: true
 queryOptions:
     addBucketsEntities: true
     subField: freeform
-    addGroupedBuckets: true
+    addGroupedBuckets: false
+    addNestedBuckets: true
 customizationModes: [filters, facets]
 parameters:
     showNoAnswer: true

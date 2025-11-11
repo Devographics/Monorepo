@@ -36,6 +36,7 @@ export interface ProvidedQueryOptions {
     addRatios?: boolean
     addBuckets?: boolean
     addGroupedBuckets?: boolean
+    addNestedBuckets?: boolean
     fieldId?: string
 }
 

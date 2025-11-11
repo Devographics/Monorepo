@@ -10,6 +10,7 @@ export const getBucketsFragment = (options: {
     addBucketsEntities: boolean
     queryArgs: QueryArgs
     addGroupedBuckets: boolean
+    addNestedBuckets: boolean
     fieldName?: string
     currentDepth: number
 }): string => {
@@ -17,6 +18,7 @@ export const getBucketsFragment = (options: {
         addBucketsEntities,
         queryArgs,
         addGroupedBuckets,
+        addNestedBuckets,
         fieldName = 'buckets',
         currentDepth
     } = options
@@ -35,11 +37,22 @@ export const getBucketsFragment = (options: {
                     ${facet ? getPercentilesFragment() : ''}
                     ${facet ? getFacetFragment(addBucketsEntities) : ''}
                     ${
-                        addGroupedBuckets && currentDepth < MAX_DEPTH
+                        addGroupedBuckets && currentDepth === 0
                             ? getBucketsFragment({
                                   ...options,
                                   fieldName: 'groupedBuckets',
                                   addGroupedBuckets: true,
+                                  addNestedBuckets: false,
+                                  currentDepth: currentDepth + 1
+                              })
+                            : ''
+                    }
+                    ${
+                        addNestedBuckets && currentDepth < MAX_DEPTH
+                            ? getBucketsFragment({
+                                  ...options,
+                                  fieldName: 'nestedBuckets',
+                                  addNestedBuckets: true,
                                   currentDepth: currentDepth + 1
                               })
                             : ''

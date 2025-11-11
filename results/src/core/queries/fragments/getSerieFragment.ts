@@ -28,7 +28,8 @@ export const getSerieFragment = ({
         addQuestionComments = true,
         addBuckets = true,
         addRatios = false,
-        addGroupedBuckets = false
+        addGroupedBuckets = false,
+        addNestedBuckets = false
     } = queryOptions
 
     // for ratios to work, the facet needs to be "_sentiment"
@@ -65,6 +66,7 @@ export const getSerieFragment = ({
                         ? getBucketsFragment({
                               addBucketsEntities,
                               addGroupedBuckets,
+                              addNestedBuckets,
                               queryArgs,
                               currentDepth: 0
                           })
