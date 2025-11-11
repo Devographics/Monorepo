@@ -33,8 +33,6 @@ export const CommentsFilters = ({
             }`}
         >
             <div className="comments-filters">
-                <FilterSearch stateStuff={stateStuff} />
-
                 {isExperienceQuestion ? (
                     <>
                         <FilterExperience
@@ -55,6 +53,8 @@ export const CommentsFilters = ({
                         stateStuff={stateStuff}
                     />
                 ) : null}
+
+                <FilterSearch stateStuff={stateStuff} />
 
                 {stats?.length > 0 && <FilterKeywords stateStuff={stateStuff} stats={stats} />}
             </div>

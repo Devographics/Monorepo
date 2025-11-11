@@ -5,6 +5,8 @@ import { RawDataItem, NormalizationToken, Bucket } from '@devographics/types'
 import { getCommentReportUrl, highlightWordStarts } from '../comments/CommentsItem'
 import { CommentsItemWrapper } from '../comments/CommentsItemWrapper'
 import { FreeformAnswersState } from './types'
+import { getItemLabel } from 'core/helpers/labels'
+import { useI18n } from '@devographics/react-i18n'
 
 export const FreeformAnswerItem = ({
     rawHtml,
@@ -128,6 +130,23 @@ function getLeavesWithAncestors(buckets: Bucket[], ancestors: string[] = []): To
     return result
 }
 
+/*
+
+Flatten out nested buckets tree
+
+*/
+function flattenBucketsTree(buckets: Bucket[]): Bucket[] {
+    const result: Bucket[] = []
+    for (const bucket of buckets) {
+        result.push(bucket)
+        if (bucket.groupedBuckets && bucket.groupedBuckets.length > 0) {
+            // Recurse into children, passing the current item as an ancestor
+            result.push(...flattenBucketsTree(bucket.groupedBuckets))
+        }
+    }
+    return result
+}
+
 const Tokens = ({
     mainTokenId,
     tokens,
@@ -140,28 +159,70 @@ const Tokens = ({
     const tokenIds = tokens.map(token => token.id)
     const prunedBuckets = pruneTree(buckets, tokenIds)
     const leafTokens = getLeavesWithAncestors(prunedBuckets)
+    const allBuckets = flattenBucketsTree(buckets)
+
     return (
         <div className="token-items">
             {leafTokens.map(token => (
-                <Token key={token.id} token={token} mainTokenId={mainTokenId} />
+                <Token
+                    key={token.id}
+                    token={token}
+                    mainTokenId={mainTokenId}
+                    allBuckets={allBuckets}
+                />
             ))}
         </div>
     )
 }
 
-const Token = ({ mainTokenId, token }: { mainTokenId: string; token: TokenWithAncestors }) => {
+const Token = ({
+    mainTokenId,
+    token,
+    allBuckets
+}: {
+    mainTokenId: string
+    token: TokenWithAncestors
+    allBuckets: Bucket[]
+}) => {
     const { id, ancestors } = token
+    const { getString } = useI18n()
     const isHighlighted = ancestors?.includes(mainTokenId) || mainTokenId === id
+    const bucket = allBuckets.find(b => b.id === id)
+
+    const labelObject = getItemLabel({
+        id,
+        entity: bucket?.entity,
+        getString,
+        // i18nNamespace,
+        html: true
+    })
+    const { key, label } = labelObject
+
+    console.log({ bucket })
+
     return (
         <div className={`token-item token-item-${isHighlighted ? 'main' : ''}`}>
             {ancestors && (
                 <div className="token-item-ancestors">
                     {ancestors?.map((tokenId, index) => {
+                        const ancestorBucket = allBuckets.find(b => b.id === tokenId)
+                        const ancestorLabelObject = getItemLabel({
+                            id,
+                            entity: ancestorBucket?.entity,
+                            getString,
+                            // i18nNamespace,
+                            html: true
+                        })
+                        console.log({ ancestorBucket })
+
+                        const { key, label: ancestorLabel } = ancestorLabelObject
                         return (
                             <>
-                                <span key={tokenId} className="token-item-ancestor">
-                                    {tokenId}
-                                </span>
+                                <span
+                                    key={tokenId}
+                                    className="token-item-ancestor"
+                                    dangerouslySetInnerHTML={{ __html: ancestorLabel }}
+                                />
                                 {index < ancestors.length - 1 && (
                                     <span className="token-item-ancestor-separator" />
                                 )}
@@ -170,7 +231,7 @@ const Token = ({ mainTokenId, token }: { mainTokenId: string; token: TokenWithAn
                     })}
                 </div>
             )}
-            <div className="token-item-label">{id}</div>
+            <div className="token-item-label" dangerouslySetInnerHTML={{ __html: label }} />
         </div>
     )
 }

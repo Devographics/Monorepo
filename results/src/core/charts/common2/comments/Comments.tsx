@@ -59,9 +59,9 @@ const filterComments = (comments: Comment[], stateStuff: CommentsFiltersState) =
         filteredComments = filterCommentsByValue(filteredComments, valueFilter)
     }
     if (sort === LENGTH) {
-        filteredComments = sortBy(filteredComments, comment => comment.message.length)
+        filteredComments = sortBy(filteredComments, comment => comment.messageHtml.length)
     } else if (sort === ALPHA) {
-        filteredComments = sortBy(filteredComments, comment => comment.message.toLowerCase())
+        filteredComments = sortBy(filteredComments, comment => comment.messageHtml.toLowerCase())
     }
     if (order && order === OrderOptions.DESC) {
         filteredComments = filteredComments.toReversed()
@@ -69,12 +69,12 @@ const filterComments = (comments: Comment[], stateStuff: CommentsFiltersState) =
 
     if (keywordFilter) {
         filteredComments = filteredComments.filter(comment =>
-            matchWordStart(comment.message, keywordFilter)
+            matchWordStart(comment.messageHtml, keywordFilter)
         )
     }
     if (searchFilter) {
         filteredComments = filteredComments.filter(comment =>
-            matchWordStart(comment.message, searchFilter)
+            matchWordStart(comment.messageHtml, searchFilter)
         )
     }
     return filteredComments
