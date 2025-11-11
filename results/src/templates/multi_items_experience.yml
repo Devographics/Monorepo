@@ -9,6 +9,7 @@ queryOptions:
     addQuestionEntity: true
     allEditions: false
 parameters:
+    cutoff: 1
     cutoffPercent: 0
     facetCutoffPercent: 0
     limit: 0
@@ -81,7 +82,7 @@ query: >
                   count
                 }
               }
-              responses(facet: _sentiment) {
+              responses(facet: _sentiment, parameters: {cutoff: 1, limit: 0}) {
                 currentEdition {
                   ratios {
                     awareness
