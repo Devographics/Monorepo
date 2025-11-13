@@ -13,7 +13,7 @@ import {
 } from '../types'
 import { getCollection } from '../helpers/db'
 import get from 'lodash/get.js'
-import { NormalizationMetadata, RawDataItem } from '@devographics/types'
+import { NormalizationMetadata, RawDataAnswer } from '@devographics/types'
 import { NO_MATCH } from '@devographics/constants'
 import { cleanHtmlString, parseHtmlString, sanitizeHtmlString } from '../helpers/strings'
 
@@ -49,7 +49,7 @@ export const getRawData = async ({
         const projection = { _id: 1, [metadata]: 1, [normalized]: 1 }
 
         const results = await collection.find(selector, { projection }).toArray()
-        let data: RawDataItem[] = results
+        let data: RawDataAnswer[] = results
             .map(response => {
                 const answers = get(response, metadata) as NormalizationMetadata[]
                 return answers.map(answer => {

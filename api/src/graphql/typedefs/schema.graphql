@@ -372,6 +372,13 @@ type ResponseEditionMetadata {
 }
 
 type RawData {
+    answers: [RawDataAnswer]
+    stats: [WordCount]
+    entities: [Entity]
+    tokens: [TokenWithCount]
+}
+
+type RawDataAnswer {
     responseId: String
     raw: String
     rawHtml: String

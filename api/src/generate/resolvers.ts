@@ -33,7 +33,7 @@ import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
 import { localesResolvers, unconvertLocaleId } from '../resolvers/locales'
 import { subFields } from './subfields'
-import { Creator, ResultsSubFieldEnum, SectionMetadata } from '@devographics/types'
+import { Creator, ResultsSubFieldEnum, SectionMetadata, Token } from '@devographics/types'
 import { loadOrGetSurveys } from '../load/surveys'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
@@ -42,6 +42,8 @@ import { getCardinalities } from '../compute/cardinalities'
 import { calculateWordFrequencies } from '@devographics/helpers'
 import { getQuestioni18nIds, getSectioni18nIds, makeTranslatorFunc } from '@devographics/i18n'
 import { loadOrGetLocales } from '../load/locales/locales'
+import uniqBy from 'lodash/uniqBy.js'
+import sortBy from 'lodash/sortBy.js'
 
 export const generateResolvers = async ({
     surveys,
@@ -420,24 +422,45 @@ export const rawDataResolver: ResolverType = async (parent, args, context, info)
     console.log('// rawDataResolver')
     const { survey, edition, section, question } = parent
     const { token } = args
-    const rawData = await getRawData({ survey, edition, section, question, context, token })
-    return rawData
-}
 
-export const rawDataStatsResolver: ResolverType = async (parent, args, context, info) => {
-    console.log('// rawDataStatsResolver')
-    const { survey, edition, section, question } = parent
-    const { token } = args
-    const rawData = await getRawData({ survey, edition, section, question, context, token })
-    const rawDataStats = rawData && calculateWordFrequencies(rawData.map(item => item.raw))
-    return rawDataStats
+    // helper function to get count of how many times a token appears across all answers
+    const getTokenCount = (tokenId: string) =>
+        answers?.filter(a => a.tokens.map(t => t.id).includes(tokenId)).length
+
+    // get all raw answers for this question
+    const answers = await getRawData({ survey, edition, section, question, context, token })
+
+    // get word frequency stats
+    const stats = answers && calculateWordFrequencies(answers.map(item => item.raw))
+
+    // get all entities available, including tokens
+    const allEntities = await getEntities({ context, includeNormalizationEntities: true })
+
+    // get full list of all unique tokens ids for all answers to the question
+    const answerTokens =
+        answers && uniqBy(answers.map(answer => answer.tokens).flat(), token => token.id)
+    const answerTokensIds = answerTokens?.map(token => token.id)
+
+    // use answerTokensIds to find all matching entities to also get parentId, name, description, etc.
+    const fullAnswerTokens = allEntities.filter(e => answerTokensIds?.includes(e.id)) as Token[]
+
+    // add counts
+    const answerTokensWithCounts = fullAnswerTokens?.map(token => ({
+        ...token,
+        count: getTokenCount(token.id)
+    }))
+    // sort and reverse
+    const tokens = sortBy(answerTokensWithCounts, 'count').toReversed()
+
+    const entities = allEntities.filter(entity => answerTokensIds?.includes(entity.id))
+
+    return { answers, stats, entities, tokens }
 }
 
 export const responsesResolverMap: ResolverMap = {
     allEditions: allEditionsResolver,
     currentEdition: currentEditionResolver,
-    rawData: rawDataResolver,
-    rawDataStats: rawDataStatsResolver
+    rawData: rawDataResolver
 }
 /*
 

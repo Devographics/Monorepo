@@ -210,6 +210,20 @@ type Token {
     descriptionHtml: String
 }
 
+type TokenWithCount {
+    id: String
+    parentId: String
+    tags: [String]
+    patterns: [String]
+    name: String
+    nameClean: String
+    nameHtml: String
+    description: String
+    descriptionClean: String
+    descriptionHtml: String
+    count: Int
+}
+
 """
 Link to an avatar
 """

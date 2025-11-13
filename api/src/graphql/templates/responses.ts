@@ -31,8 +31,7 @@ export const generateResponsesType = ({
         typeDef: `type ${typeName} {
     allEditions(editionCount: Int, editionId: AllEditionsID): [ResponseEditionData]
     currentEdition: ResponseEditionData
-    rawData(token: String): [RawData]
-    rawDataStats(token: String): [WordCount]
+    rawData(token: String): RawData
 }`
     }
 }
