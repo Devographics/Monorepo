@@ -106,7 +106,7 @@ export interface Comment {
 export interface ResponseData {
     allEditions: ResponseEditionData[]
     currentEdition: ResponseEditionData
-    rawData: RawDataItem[]
+    rawData: RawDataItem
     rawDataStats: WordCount[]
 }
 

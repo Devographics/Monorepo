@@ -1,3 +1,6 @@
+import { WordCount } from 'data'
+import { Entity, Token } from 'entities'
+
 export interface NormalizationMetadata {
     raw: string
     tokens: NormalizationToken[]
@@ -7,6 +10,8 @@ export interface NormalizationToken {
     id: string
     pattern?: string
 }
+
+export type TokenWithCount = Token & { count: number }
 
 export interface CustomNormalizationToken extends NormalizationToken {
     match?: string
@@ -20,8 +25,15 @@ export interface FullNormalizationToken extends CustomNormalizationToken {
 }
 
 export interface RawDataItem {
+    answers: RawDataAnswer[]
+    stats: WordCount[]
+    entities: Entity[]
+    tokens: TokenWithCount[]
+}
+
+export interface RawDataAnswer {
     responseId: string
-    rawHtml: string
+    raw: string
     rawHtml: string
     rawClean: string
     tokens: NormalizationToken[]
