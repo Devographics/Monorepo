@@ -3,9 +3,8 @@ import T from 'core/i18n/T'
 import { runQuery } from 'core/explorer/data'
 import { RawDataItem, StandardQuestionData, Bucket } from '@devographics/types'
 import { FreeformAnswers } from './FreeformAnswers'
-import { BlockVariantDefinition } from 'core/types'
 import { CommentsCommonProps } from '../comments/types'
-import { FreeformAnswersData } from './types'
+import { getEntityFragmentContents } from 'core/queries'
 
 type GetQueryNameProps = {
     editionId: string
@@ -32,15 +31,27 @@ query ${getQueryName({ editionId, questionId, token })} {
                     ${questionId} {
                         freeform {
                             rawData(token: "${token}") {
-                                responseId
+                                answers {
+                                    responseId
+                                    tokens {
+                                        id
+                                    }
+                                    rawHtml
+                                }
+                                stats {
+                                    count
+                                    word
+                                }
+                                entities {
+                                    ${getEntityFragmentContents()}
+                                }
                                 tokens {
                                     id
+                                    parentId
+                                    count
+                                    nameHtml
+                                    descriptionHtml
                                 }
-                                rawHtml
-                            }
-                            rawDataStats(token: "${token}") {
-                                count
-                                word
                             }
                         }
                     }
@@ -64,7 +75,7 @@ export const FreeformAnswersQueryWrapper = ({
     questionLabel: string
     tokenLabel: string
 } & CommentsCommonProps) => {
-    const [data, setData] = useState<FreeformAnswersData>()
+    const [data, setData] = useState<RawDataItem>()
     const [isLoading, setIsLoading] = useState(false)
 
     if (queryOptions.questionId === 'source') {
@@ -91,10 +102,12 @@ export const FreeformAnswersQueryWrapper = ({
                 getQueryName(queryOptions)
             )
             const questionData = result?.surveys?.[surveyId]?.[editionId]?.[sectionId]?.[questionId]
-            const rawData = questionData?.freeform?.rawData
-            const rawDataStats = questionData?.freeform?.rawDataStats || []
-            if (rawData) {
-                setData({ answers: rawData, stats: rawDataStats })
+            const answers = questionData?.freeform?.rawData?.answers
+            const stats = questionData?.freeform?.rawData?.stats || []
+            const entities = questionData?.freeform?.rawData?.entities || []
+            const tokens = questionData?.freeform?.rawData?.tokens || []
+            if (answers) {
+                setData({ answers, stats, entities, tokens })
             }
 
             setIsLoading(false)
@@ -115,6 +128,8 @@ export const FreeformAnswersQueryWrapper = ({
                     <FreeformAnswers
                         answers={data?.answers}
                         stats={data?.stats}
+                        entities={data?.entities}
+                        tokens={data?.tokens}
                         questionLabel={questionLabel}
                         tokenId={queryOptions.token}
                         tokenLabel={tokenLabel}

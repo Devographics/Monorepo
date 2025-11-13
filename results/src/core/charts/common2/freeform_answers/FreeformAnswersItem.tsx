@@ -1,7 +1,6 @@
 import './FreeformAnswers.scss'
 import React from 'react'
-import T from 'core/i18n/T'
-import { RawDataItem, NormalizationToken, Bucket } from '@devographics/types'
+import { RawDataAnswer, NormalizationToken, Bucket, TokenWithCount } from '@devographics/types'
 import { getCommentReportUrl, highlightWordStarts } from '../comments/CommentsItem'
 import { CommentsItemWrapper } from '../comments/CommentsItemWrapper'
 import { FreeformAnswersState } from './types'
@@ -17,14 +16,16 @@ export const FreeformAnswerItem = ({
     tokenLabel,
     tokens,
     stateStuff,
-    buckets
-}: RawDataItem & {
+    buckets,
+    allTokens
+}: RawDataAnswer & {
     index: number
     questionLabel: string
     tokenId: string
     tokenLabel: string
     stateStuff: FreeformAnswersState
     buckets: Bucket[]
+    allTokens: TokenWithCount[]
 }) => {
     const { keywordFilter, searchFilter } = stateStuff
     let formattedMessage = rawHtml
@@ -40,7 +41,13 @@ export const FreeformAnswerItem = ({
             index={index}
             contents={formattedMessage}
             answer={
-                <Tokens mainTokenId={tokenId} tokens={tokens} buckets={buckets} />
+                <Tokens
+                    mainTokenId={tokenId}
+                    allTokens={allTokens}
+                    tokens={tokens}
+                    buckets={buckets}
+                    stateStuff={stateStuff}
+                />
                 // <>
                 //     {' '}
                 //     {tokens.map(token => (
@@ -135,7 +142,7 @@ function getLeavesWithAncestors(buckets: Bucket[], ancestors: string[] = []): To
 Flatten out nested buckets tree
 
 */
-function flattenBucketsTree(buckets: Bucket[]): Bucket[] {
+export function flattenBucketsTree(buckets: Bucket[]): Bucket[] {
     const result: Bucket[] = []
     for (const bucket of buckets) {
         result.push(bucket)
@@ -150,17 +157,35 @@ function flattenBucketsTree(buckets: Bucket[]): Bucket[] {
 const Tokens = ({
     mainTokenId,
     tokens,
-    buckets
+    allTokens,
+    buckets,
+    stateStuff
 }: {
     mainTokenId: string
     tokens: NormalizationToken[]
+    allTokens: TokenWithCount[]
     buckets: Bucket[]
+    stateStuff: FreeformAnswersState
 }) => {
+    /*
+
+    Note: nested structure currently comes from question buckets, which
+    doesn't work for "extra" tokens that are *not* included in the question
+    (for example: question view is limited to first 10 items, but raw data
+    inculdes tokens beyond those)
+
+    TODO: rework this so nesting is based on tokens issued 
+    from raw data GraphQL query instead of question buckets.
+
+    */
     const tokenIds = tokens.map(token => token.id)
     const prunedBuckets = pruneTree(buckets, tokenIds)
     const leafTokens = getLeavesWithAncestors(prunedBuckets)
     const allBuckets = flattenBucketsTree(buckets)
+    const allBucketsIds = allBuckets.map(b => b.id)
+    const extraTokens = tokens.filter(token => !allBucketsIds.includes(token.id))
 
+    console.log({ allTokens })
     return (
         <div className="token-items">
             {leafTokens.map(token => (
@@ -168,9 +193,22 @@ const Tokens = ({
                     key={token.id}
                     token={token}
                     mainTokenId={mainTokenId}
+                    allTokens={allTokens}
                     allBuckets={allBuckets}
+                    stateStuff={stateStuff}
                 />
             ))}
+            {extraTokens.length > 0 &&
+                extraTokens.map(token => (
+                    <Token
+                        key={token.id}
+                        token={token}
+                        mainTokenId={mainTokenId}
+                        allTokens={allTokens}
+                        allBuckets={allBuckets}
+                        stateStuff={stateStuff}
+                    />
+                ))}
         </div>
     )
 }
@@ -178,27 +216,32 @@ const Tokens = ({
 const Token = ({
     mainTokenId,
     token,
-    allBuckets
+    allTokens,
+    allBuckets,
+    stateStuff
 }: {
     mainTokenId: string
     token: TokenWithAncestors
+    allTokens: TokenWithCount[]
     allBuckets: Bucket[]
+    stateStuff: FreeformAnswersState
 }) => {
+    const fullToken = allTokens.find(t => t.id === token.id)
+    const { tokenFilter } = stateStuff
     const { id, ancestors } = token
     const { getString } = useI18n()
-    const isHighlighted = ancestors?.includes(mainTokenId) || mainTokenId === id
+    const isHighlighted =
+        ancestors?.includes(mainTokenId) || mainTokenId === id || tokenFilter === id
     const bucket = allBuckets.find(b => b.id === id)
 
     const labelObject = getItemLabel({
         id,
-        entity: bucket?.entity,
+        entity: bucket?.entity || fullToken,
         getString,
         // i18nNamespace,
         html: true
     })
     const { key, label } = labelObject
-
-    console.log({ bucket })
 
     return (
         <div className={`token-item token-item-${isHighlighted ? 'main' : ''}`}>

@@ -1,5 +1,8 @@
 export const getEntityFragment = () => `entity {
-    name
+    ${getEntityFragmentContents()}
+}`
+
+export const getEntityFragmentContents = () => `name
     nameHtml
     nameClean
     alias
@@ -81,5 +84,4 @@ export const getEntityFragment = () => `entity {
             safari_ios
             }
         }
-    }
-}`
+    }`

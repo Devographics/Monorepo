@@ -5,8 +5,8 @@
     font-size: 0.7rem;
     border-radius: 30px;
     padding: 2px 8px;
-    background: var(--backgroundColor);
-    background: var(--color);
+    // background: var(--backgroundColor);
+    background: var(--color, var(--backgroundColor));
     text-shadow: 1px 1px #000000bb;
     font-weight: bold;
     text-transform: uppercase;

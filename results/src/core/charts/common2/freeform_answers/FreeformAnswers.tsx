@@ -1,7 +1,7 @@
 import './FreeformAnswers.scss'
 import React, { useState } from 'react'
 import { useI18n } from '@devographics/react-i18n'
-import { RawDataItem, WordCount, Bucket } from '@devographics/types'
+import { RawDataAnswer, WordCount, Bucket, Entity, TokenWithCount } from '@devographics/types'
 import { OrderOptions } from '../types'
 import sortBy from 'lodash/sortBy'
 import { FilterKeywords } from '../comments/filters/FilterKeywords'
@@ -14,6 +14,7 @@ import BlockQuestion from 'core/blocks/block/BlockQuestion'
 import T from 'core/i18n/T'
 import { CommentsCommonProps } from '../comments/types'
 import { matchWordStart } from '../comments/Comments'
+import { FilterTokens } from '../comments/filters/FilterTokens'
 
 export const FreeformAnswers = ({
     answers,
@@ -23,16 +24,21 @@ export const FreeformAnswers = ({
     block,
     question,
     buckets,
-    stats
+    stats,
+    entities,
+    tokens
 }: {
-    answers: RawDataItem[]
+    answers: RawDataAnswer[]
     questionLabel: string
     tokenId: string
     tokenLabel: string
     stats: WordCount[]
-    buckets: buckets[]
+    buckets: Bucket[]
+    entities: Entity[]
+    tokens: TokenWithCount[]
 } & CommentsCommonProps) => {
     const [keywordFilter, setKeywordFilter] = useState<FreeformAnswersState['keywordFilter']>(null)
+    const [tokenFilter, setTokenFilter] = useState<FreeformAnswersState['tokenFilter']>(null)
     const [searchFilter, setSearchFilter] = useState<FreeformAnswersState['searchFilter']>(null)
     const [sort, setSort] = useState<FreeformAnswersState['sort']>(null)
     const [order, setOrder] = useState<FreeformAnswersState['order']>(null)
@@ -40,6 +46,8 @@ export const FreeformAnswers = ({
     const stateStuff: FreeformAnswersState = {
         keywordFilter,
         setKeywordFilter,
+        tokenFilter,
+        setTokenFilter,
         sort,
         setSort,
         order,
@@ -65,6 +73,11 @@ export const FreeformAnswers = ({
             matchWordStart(answer.raw, keywordFilter)
         )
     }
+    if (tokenFilter) {
+        filteredAnswers = filteredAnswers.filter(answer =>
+            answer.tokens.map(t => t.id).includes(tokenFilter)
+        )
+    }
     return (
         <>
             <div className="comments-heading">
@@ -83,6 +96,13 @@ export const FreeformAnswers = ({
             <div className="comments-contents">
                 <div className={`comments-filters-wrapper comments-filters-wrapper-show`}>
                     <div className="comments-filters">
+                        <FilterTokens
+                            tokenId={tokenId}
+                            stateStuff={stateStuff}
+                            buckets={buckets}
+                            entities={entities}
+                            allTokens={tokens}
+                        />
                         <FilterSearch stateStuff={stateStuff} />
                         {stats?.length > 0 && (
                             <FilterKeywords stateStuff={stateStuff} stats={stats} />
@@ -101,6 +121,7 @@ export const FreeformAnswers = ({
                             tokenLabel={tokenLabel}
                             stateStuff={stateStuff}
                             buckets={buckets}
+                            allTokens={tokens}
                         />
                     ))}
                 </div>

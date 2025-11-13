@@ -9,7 +9,7 @@ import {
     NOT_APPLICABLE
 } from '@devographics/constants'
 import { StringTranslator } from '@devographics/react-i18n'
-import { Entity } from '@devographics/types'
+import { Entity, Token } from '@devographics/types'
 
 const predefinedKeys: { [key: string]: string } = {
     [NOT_APPLICABLE]: 'options.na',
@@ -56,7 +56,7 @@ export const getItemLabel = (options: {
     // section: SectionMetadata
     // question: QuestionMetadata
     // option: OptionMetadata
-    entity?: Entity
+    entity?: Entity | Token
     getString: StringTranslator
     i18nNamespace?: string
     values?: any

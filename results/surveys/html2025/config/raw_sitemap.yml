@@ -449,7 +449,7 @@
       - id: other_surveys
         template: multiple_options2_combined
         queryOptions:
-            sectionId: resources
+            sectionId: user_info
         parameters:
             cutoff: 20
 

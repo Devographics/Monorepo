@@ -2,7 +2,7 @@
 
 .comments-wrapper {
     .block-question {
-        background-color: var(--backgroundBackgroundColor);
+        background-color: var(--backgroundColor);
         margin: 0;
         margin-top: var(--halfSpacing);
     }
@@ -179,11 +179,11 @@
     font-size: 0.9rem;
     border-radius: 50px;
     border: none;
-    background: var(--backgroundBackgroundColor);
+    background: var(--backgroundAlt3Color);
     text-align: left;
     &:hover,
     &-active {
-        background: var(--backgroundAlt3Color);
+        background: var(--backgroundAlt2Color);
     }
 }
 
@@ -231,7 +231,7 @@
     font-size: 0.7rem;
     border-radius: 30px;
     padding: 2px 8px;
-    background: var(--backgroundColor);
+    background: var(--color, var(--backgroundColor));
     // background: var(--color);
     text-shadow: 1px 1px #000000bb;
     font-weight: bold;

@@ -53,198 +53,6 @@
 #             xAxis: user_info__yearly_salary
 #             yAxis: user_info__years_of_experience
 
-- id: user_info
-  titleId: sections.demographics.title
-  path: /demographics
-  blocks:
-      - template: page_introduction
-
-      - id: country
-        template: multiple_options2
-        parameters: { limit: 40 }
-        chartOptions:
-            limit: 20
-        queryOptions:
-            addBucketsEntities: false
-        variants:
-            - template: vs_salary
-              parameters: { limit: 40, sort: { property: medianByFacet, order: desc } }
-              chartOptions:
-                  limit: 20
-
-      - id: hint_hint
-        template: hint
-
-      - id: age
-        template: multiple_options2
-        variants:
-            - template: vs_salary
-            - template: vs_gender
-            - id: age_vs_disability
-              fieldId: age
-              blockType: HorizontalBarBlock2
-              hasData: true
-              parameters:
-                  showNoAnswer: true
-                  cutoff: 10
-              filtersState:
-                  facet:
-                      sectionId: user_info
-                      id: disability_status
-
-      - id: years_of_experience
-        template: multiple_options2
-        variants:
-            - template: vs_salary
-            - template: vs_gender
-
-      - id: company_size
-        template: multiple_options2
-        variants:
-            - template: vs_salary
-
-      - id: variants_hint
-        template: hint
-
-      - id: yearly_salary
-        template: multiple_options2
-        variants:
-            - id: yearly_salary_us_vs_world
-              fieldId: yearly_salary
-              tabId: tabs.usa_vs_the_world
-              blockType: HorizontalBarBlock2
-              hasData: true
-              filtersState:
-                  filters:
-                      - conditions:
-                            - fieldId: country
-                              sectionId: user_info
-                              operator: in
-                              value: [USA]
-                      - conditions:
-                            - fieldId: country
-                              sectionId: user_info
-                              operator: nin
-                              value: [USA]
-
-      - id: job_title
-        template: multiple_options2_freeform
-        variants:
-            - template: vs_salary
-              parameters:
-                  limit: 20
-                  cutoff: 100
-                  sort: { property: medianByFacet }
-              chartOptions:
-                  limit: 10
-              queryOptions:
-                  subField: freeform
-            - template: vs_age
-              parameters:
-                  limit: 20
-                  cutoff: 100
-                  sort: { property: medianByFacet, order: asc }
-              chartOptions:
-                  limit: 10
-              queryOptions:
-                  subField: freeform
-            - template: vs_years_of_experience
-              parameters:
-                  limit: 20
-                  cutoff: 100
-                  sort: { property: medianByFacet, order: asc }
-              chartOptions:
-                  limit: 10
-              queryOptions:
-                  subField: freeform
-            - template: vs_gender
-              parameters:
-                  limit: 20
-                  cutoff: 100
-              chartOptions:
-                  limit: 10
-              queryOptions:
-                  subField: freeform
-              filtersState:
-                  options:
-                      mode: facet
-                      sort: female
-                      order: desc
-                  facet:
-                      sectionId: user_info
-                      id: gender
-
-      - id: tokyodev_resources
-        items: [td-article]
-        template: recommended_resources
-
-      - id: higher_education_degree
-        template: multiple_options2
-        variants:
-            - template: vs_salary
-
-      - id: gender
-        template: multiple_options2
-        # takeaway: >
-        #     Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
-        variants:
-            - template: vs_salary
-              parameters:
-                  sort: { property: medianByFacet }
-            - id: country_vs_gender
-              fieldId: country
-              tabId: tabs.by_country
-              template: multiple_options2
-              parameters:
-                  showNoAnswer: true
-                  limit: 20
-              filtersState:
-                  options:
-                      mode: facet
-                      sort: female
-                      order: desc
-                  facet:
-                      sectionId: user_info
-                      id: gender
-
-      - id: race_ethnicity
-        template: multiple_options2_combined
-        takeaway: >
-            The survey's non-white population tended to be younger and have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
-        variants:
-            - template: vs_salary
-              parameters:
-                  sort: { property: medianByFacet }
-            - template: vs_gender
-              filtersState:
-                  options:
-                      mode: facet
-                      sort: female
-                      order: desc
-                  facet:
-                      sectionId: user_info
-                      id: gender
-            - template: vs_years_of_experience
-              parameters:
-                  sort: { property: medianByFacet }
-            - template: vs_age
-              parameters:
-                  sort: { property: medianByFacet }
-
-      - id: disability_status
-        template: multiple_options2_combined
-        variants:
-            - template: vs_age
-              parameters:
-                  sort: { property: medianByFacet, order: asc }
-            - template: vs_salary
-              parameters:
-                  sort: { property: medianByFacet }
-
-      - id: user_info_resources_2
-        items: [fm-javascript-first-steps, fm-getting-a-job-v2]
-        template: recommended_resources
-
 - id: features
   path: /features
   blocks:
@@ -687,8 +495,23 @@
       - id: non_js_languages
         template: multiple_options2_combined
 
-      - id: non_js_languages_features
+      - id: non_js_languages_features_top_features
+        fieldId: non_js_languages_features
         template: multiple_options2_freeform
+        tabId: tabs.top_features
+        filtersState:
+            bucketsFilter:
+                hasTags:
+                    - js_missing_features
+        variants:
+            - id: non_js_languages_features_top_languages
+              fieldId: non_js_languages_features
+              template: multiple_options2_freeform
+              tabId: tabs.top_languages
+              filtersState:
+                  bucketsFilter:
+                      hasTags:
+                          - languages
 
       - id: sharing_hint
         template: hint
@@ -813,6 +636,198 @@
 
       - id: resources_resources
         items: [fm-algorithms, fm-podcast]
+        template: recommended_resources
+
+- id: user_info
+  titleId: sections.demographics.title
+  path: /demographics
+  blocks:
+      - template: page_introduction
+
+      - id: country
+        template: multiple_options2
+        parameters: { limit: 40 }
+        chartOptions:
+            limit: 20
+        queryOptions:
+            addBucketsEntities: false
+        variants:
+            - template: vs_salary
+              parameters: { limit: 40, sort: { property: medianByFacet, order: desc } }
+              chartOptions:
+                  limit: 20
+
+      - id: hint_hint
+        template: hint
+
+      - id: age
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+            - template: vs_gender
+            - id: age_vs_disability
+              fieldId: age
+              blockType: HorizontalBarBlock2
+              hasData: true
+              parameters:
+                  showNoAnswer: true
+                  cutoff: 10
+              filtersState:
+                  facet:
+                      sectionId: user_info
+                      id: disability_status
+
+      - id: years_of_experience
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+            - template: vs_gender
+
+      - id: company_size
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+
+      - id: variants_hint
+        template: hint
+
+      - id: yearly_salary
+        template: multiple_options2
+        variants:
+            - id: yearly_salary_us_vs_world
+              fieldId: yearly_salary
+              tabId: tabs.usa_vs_the_world
+              blockType: HorizontalBarBlock2
+              hasData: true
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: in
+                              value: [USA]
+                      - conditions:
+                            - fieldId: country
+                              sectionId: user_info
+                              operator: nin
+                              value: [USA]
+
+      - id: job_title
+        template: multiple_options2_freeform
+        variants:
+            - template: vs_salary
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_age
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet, order: asc }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_years_of_experience
+              parameters:
+                  limit: 20
+                  cutoff: 100
+                  sort: { property: medianByFacet, order: asc }
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+            - template: vs_gender
+              parameters:
+                  limit: 20
+                  cutoff: 100
+              chartOptions:
+                  limit: 10
+              queryOptions:
+                  subField: freeform
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+
+      - id: tokyodev_resources
+        items: [td-article]
+        template: recommended_resources
+
+      - id: higher_education_degree
+        template: multiple_options2
+        variants:
+            - template: vs_salary
+
+      - id: gender
+        template: multiple_options2
+        # takeaway: >
+        #     Gender did not correlate with income gaps, but there were notable differences between countries. Canada and the U.S. led the rankings in terms of diversity, while European countries had a higher proportion of male respondents.
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
+            - id: country_vs_gender
+              fieldId: country
+              tabId: tabs.by_country
+              template: multiple_options2
+              parameters:
+                  showNoAnswer: true
+                  limit: 20
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+
+      - id: race_ethnicity
+        template: multiple_options2_combined
+        takeaway: >
+            The survey's non-white population tended to be younger and have less experience, confirming a trend first observed in other surveys. This might indicate that the next generation of front end developers will be more diverse than the current one.
+        variants:
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
+            - template: vs_gender
+              filtersState:
+                  options:
+                      mode: facet
+                      sort: female
+                      order: desc
+                  facet:
+                      sectionId: user_info
+                      id: gender
+            - template: vs_years_of_experience
+              parameters:
+                  sort: { property: medianByFacet }
+            - template: vs_age
+              parameters:
+                  sort: { property: medianByFacet }
+
+      - id: disability_status
+        template: multiple_options2_combined
+        variants:
+            - template: vs_age
+              parameters:
+                  sort: { property: medianByFacet, order: asc }
+            - template: vs_salary
+              parameters:
+                  sort: { property: medianByFacet }
+
+      - id: user_info_resources_2
+        items: [fm-javascript-first-steps, fm-getting-a-job-v2]
         template: recommended_resources
 
 - id: awards
@@ -1071,6 +1086,11 @@
         #                   - codebar
         #                   - black_tech_pipeline
         #                   - referral_5n0w
+
+      - id: why_did_you_take_the_survey
+        template: multiple_options2_combined
+        queryOptions:
+            sectionId: user_info
 
 - id: about
   path: /about
