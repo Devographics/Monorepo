@@ -13,11 +13,10 @@ function getNestedBucketTree(buckets: Bucket[]): Bucket[] {
     // Then, link children to their parents
     for (const bucket of buckets) {
         const node = lookup.get(bucket.id)!
-        if (bucket.token?.parentId) {
-            const parent = lookup.get(bucket.token.parentId)
-            if (parent) {
-                parent.nestedBuckets!.push(node)
-            }
+        const parentId = bucket.token?.parentId
+        const parent = parentId && lookup.get(parentId)
+        if (parent) {
+            parent.nestedBuckets!.push(node)
         } else {
             roots.push(node)
         }
