@@ -311,6 +311,38 @@
         wrapBlock: false
         showInNav: false
 
+      - id: life_japan_positive_aspects
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+        template: tokyodev_multiple_options2
+        defaultUnits: percentageQuestion
+        i18nNamespace: life_japan_positive_aspects
+        queryOptions:
+            sectionId: life_in_japan
+
+      - id: overview_12_ai_usage.td2025
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
+      - id: ai_uses
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+        template: tokyodev_multiple_options2
+        defaultUnits: percentageQuestion
+        i18nNamespace: ai_uses
+        queryOptions:
+            sectionId: ai_usage
+
+      - id: overview_13_gender_gap.td2025
+        blockType: TextBlock
+        disableExport: true
+        wrapBlock: false
+        showInNav: false
+
       - id: gender
         disableExport: true
         wrapBlock: false
@@ -321,7 +353,7 @@
         queryOptions:
             sectionId: user_info
 
-      - id: overview_12_gender_gap.td2025
+      - id: overview_14_gender_gap2.td2025
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
@@ -371,7 +403,7 @@
                 sectionId: compensation
                 id: current_total_annual_compensation
 
-      - id: overview_13_conclusion.td2025
+      - id: overview_15_conclusion.td2025
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
@@ -420,6 +452,23 @@
             - template: tokyodev_vs_employer_type
               parameters:
                   cutoff: 10
+            - template: tokyodev_variant_base
+              id: japan_province_by_gender
+              tabId: tabs.by_gender
+              filtersState:
+                  filters:
+                      - year: 2025
+                        conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: man
+                      - year: 2025
+                        conditions:
+                            - fieldId: gender
+                              sectionId: user_info
+                              operator: eq
+                              value: woman
 
       - id: residency_status
         template: tokyodev_multiple_options2_combined
@@ -862,6 +911,19 @@
                               operator: in
                               value:
                                   - up_to_employee
+            - id: regular_work_location_vs_job_search_status
+              tabId: tabs.by_job_search_status
+              template: tokyodev_variant_base
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: remote_work_policy
+                              sectionId: job_info
+                              operator: eq
+                              value: up_to_employee
+                  facet:
+                      sectionId: job_info
+                      id: searching_for_job
 
       - id: searching_for_job
         template: tokyodev_multiple_options2
@@ -1400,7 +1462,11 @@
         template: tokyodev_multiple_options2_combined
         variants:
             - template: tokyodev_vs_salary
+              queryOptions:
+                  addBucketsEntities: true
             - template: tokyodev_vs_employer_type
+              queryOptions:
+                  addBucketsEntities: true
             - template: tokyodev_vs_years_of_experience
 
 - id: _user_metadata
