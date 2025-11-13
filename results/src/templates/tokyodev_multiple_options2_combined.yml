@@ -5,7 +5,15 @@ queryOptions:
     addBucketsEntities: true
     subField: combined
     addGroupedBuckets: true
+    addNestedBuckets: false
 customizationModes: [filters, facets]
-parameters: { showNoAnswer: true, cutoff: 10, limit: 20, mergeOtherBuckets: true }
+parameters:
+    {
+        showNoAnswer: true,
+        cutoff: 10,
+        limit: 20,
+        mergeOtherBuckets: true,
+        enableBucketNesting: false
+    }
 chartOptions:
     limit: 10

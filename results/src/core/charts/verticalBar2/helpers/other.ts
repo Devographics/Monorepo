@@ -11,7 +11,8 @@ export const getSubfieldObject = (serie: DataSeries<StandardQuestionData>) => {
     return (
         serie?.data?.[ResultsSubFieldEnum.COMBINED] ||
         serie?.data?.[ResultsSubFieldEnum.FREEFORM] ||
-        serie?.data?.[ResultsSubFieldEnum.RESPONSES]
+        serie?.data?.[ResultsSubFieldEnum.RESPONSES] ||
+        serie?.data?.[ResultsSubFieldEnum.PRENORMALIZED]
     )
 }
 

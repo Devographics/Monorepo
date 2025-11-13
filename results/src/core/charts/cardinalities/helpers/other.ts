@@ -18,7 +18,7 @@ export const getSerieBuckets = ({
     if (!item) {
         throw new Error(`cardinalities/getSerieBuckets: could not find item for view ${view}`)
     }
-    const buckets = item.responses.currentEdition.buckets
+    const buckets = item.responses.allEditions[0].buckets
     return buckets
 }
 

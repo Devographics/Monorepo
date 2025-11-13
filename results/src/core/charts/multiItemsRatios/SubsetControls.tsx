@@ -105,7 +105,7 @@ const Sections = ({
             label: getString(labelKey)?.t
         }
         const description = getString(descriptionKey)
-        if (description) {
+        if (!description.missing) {
             item.tooltip = <T k={descriptionKey} html={true} md={true} />
         }
         return item

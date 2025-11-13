@@ -35,7 +35,7 @@ export const Metadata = <T,>({
     const { getString } = useI18n()
     const seriesMaxBucketCount = seriesMetadata?.seriesMaxBucketCount
 
-    const firstSerieMetadata = getSerieMetadata({ serie: series[0], block })
+    const firstSerieMetadata = getSerieMetadata({ serie: series[0], block }) || {}
     const { limit, cutoff, axis1Sort } = firstSerieMetadata
     const items = []
     const total = formatNumber(total_ ?? completion?.total ?? 0)

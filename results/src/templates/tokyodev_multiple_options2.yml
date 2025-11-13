@@ -6,3 +6,4 @@ customizationModes: [filters, facets]
 parameters: { showNoAnswer: true, mergeOtherBuckets: false, cutoff: 10 }
 queryOptions:
     addBucketsEntities: false
+    enableBucketNesting: false

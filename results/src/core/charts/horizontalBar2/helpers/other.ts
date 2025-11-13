@@ -213,7 +213,7 @@ export const getSerieMetadata = ({
     serie: DataSeries<any>
     block: BlockVariantDefinition
 }) => {
-    const currentEdition = getChartCurrentEdition({ serie, block })
+    const currentEdition = getChartCurrentEdition({ serie })
     const metadata = currentEdition?._metadata
     return metadata
 }

@@ -32,6 +32,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     const { block, series, question, pageContext, variant } = props
     const currentEdition = getChartCurrentEdition({ serie: series[0] })
     if (!currentEdition) {
+        console.log('// no data found')
         console.log(props)
         return <NoData<HorizontalBarBlock2Props> {...props} />
     }

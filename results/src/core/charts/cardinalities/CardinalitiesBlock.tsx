@@ -88,6 +88,7 @@ export const CardinalitiesBlock = (props: CardinalitiesBlockProps) => {
                     left={
                         <Metadata
                             average={firstSerieAverage}
+                            series={series}
                             // median={percentiles?.p50}
                             // completion={completion}
                         />

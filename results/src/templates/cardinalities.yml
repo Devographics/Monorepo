@@ -9,6 +9,8 @@ queryOptions:
     questionId: _cardinalities
     addQuestionComments: false
     addBucketsEntities: false
+    editionsCount: 1
+    subField: responses
 parameters:
     cutoff: 1
     sort: { order: asc, property: id }

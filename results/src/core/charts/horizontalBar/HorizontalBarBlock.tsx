@@ -36,13 +36,16 @@ const HorizontalBarBlock = ({ block, question, data, series }: HorizontalBarBloc
     const chartLegends = useLegends({ block, addNoAnswer })
 
     const completion =
-        data?.combined?.currentEdition?.completion || data?.responses?.currentEdition?.completion
+        data?.combined?.currentEdition?.completion ||
+        data?.responses?.currentEdition?.completion ||
+        data?.prenormalized?.currentEdition?.completion
     const total = completion?.total
 
     const chartData = series ? getChartData(series[0].data, block) : getChartData(data, block)
 
     if (!chartData) {
-        console.log(block)
+        console.log('// no chart data found')
+        console.log({ block })
         if (series) {
             console.log({ series })
             console.log(getChartData(series[0].data, block))

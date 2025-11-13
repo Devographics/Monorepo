@@ -30,7 +30,8 @@ export const CardinalitiesSerie = (
         viewDefinition
     } = props
 
-    const { currentEdition } = serie.data.find(data => data.id === chartState.view).responses
+    const responses = serie.data.find(data => data.id === chartState.view).responses
+    const currentEdition = responses.allEditions[0]
 
     const buckets = getSerieBuckets({ serie, block, chartState })
 
