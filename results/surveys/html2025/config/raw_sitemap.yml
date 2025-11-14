@@ -235,16 +235,16 @@
         variables:
             url: https://modern-fluid-typography.vercel.app/
 
-      - id: reading_list
-        template: multiple_options2
-        parameters:
-            limit: 20
-        queryOptions:
-            sectionId: reading_list
-            addQuestionComments: false
-        chartOptions:
-            dataFilters: [removeOverLimit, removeNoAnswer]
-            limit: 10
+      # - id: reading_list
+      #   template: multiple_options2
+      #   parameters:
+      #       limit: 20
+      #   queryOptions:
+      #       sectionId: reading_list
+      #       addQuestionComments: false
+      #   chartOptions:
+      #       dataFilters: [removeOverLimit, removeNoAnswer]
+      #       limit: 10
 
       - id: features_resources
         items: [fm-css-grid, fm-animations-transitions]

@@ -66,11 +66,13 @@ export const FreeformAnswers = ({
         filteredAnswers = filteredAnswers.toReversed()
     }
     if (searchFilter) {
-        filteredAnswers = filteredAnswers.filter(answer => matchWordStart(answer.raw, searchFilter))
+        filteredAnswers = filteredAnswers.filter(answer =>
+            matchWordStart(answer.rawHtml, searchFilter)
+        )
     }
     if (keywordFilter) {
         filteredAnswers = filteredAnswers.filter(answer =>
-            matchWordStart(answer.raw, keywordFilter)
+            matchWordStart(answer.rawHtml, keywordFilter)
         )
     }
     if (tokenFilter) {
