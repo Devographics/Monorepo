@@ -3,10 +3,17 @@ import { RefObject, useEffect, useState } from 'react'
 export const useWidth = (ref: RefObject<HTMLElement>) => {
     const [width, setWidth] = useState<number | undefined>()
 
+    // TODO: replace this with a ResizeObserver
     useEffect(() => {
-        if (ref.current) {
-            setWidth(ref.current.offsetWidth)
-        }
+        let lastWidth = -1
+        const int = setInterval(() => {
+            const width = ref.current?.offsetWidth ?? -1
+            if (lastWidth !== width) {
+                lastWidth = width
+                setWidth(lastWidth)
+            }
+        }, 10)
+        return () => clearInterval(int)
     }, []) // The empty dependency array makes sure this runs only once after component mount
     return width
 }

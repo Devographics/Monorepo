@@ -128,6 +128,9 @@ export const Comments = ({
 
     return (
         <>
+            {/* <pre>
+                <code>{JSON.stringify(stateStuff, null, 2)}</code>
+            </pre> */}
             <div className="comments-heading">
                 <div className="comments-heading-top">
                     <h3>

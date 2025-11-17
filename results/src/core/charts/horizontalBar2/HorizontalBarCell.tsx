@@ -138,10 +138,10 @@ export const Cell = ({
             style={style}
             ref={ref}
             onMouseEnter={() => {
-                setHighlightedCell(id)
+                setHighlightedCell && setHighlightedCell(id)
             }}
             onMouseLeave={() => {
-                setHighlightedCell(null)
+                setHighlightedCell && setHighlightedCell(null)
             }}
         >
             <Tooltip
