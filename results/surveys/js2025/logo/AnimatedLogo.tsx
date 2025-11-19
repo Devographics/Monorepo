@@ -10,18 +10,17 @@ interface LogoProps {
 }
 
 export const Logo = ({ className, animated = true, showText = true, size = 'l' }: LogoProps) => (
-    <Wrapper aria-label="State of JS 2024" className="logo__wrapper">
+    <Wrapper aria-label="State of JS 2025" className="logo__wrapper">
         <div className="soj-logo__wrapper">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
-                width="1620"
-                height="740"
+                width={1620}
+                height={740}
                 viewBox="0 0 1620 740"
                 className="soj-logo"
-                aria-label="State of JS 2024"
             >
-                <title>{'State of JS 2024'}</title>
+                <title>{'State of JS 2025'}</title>
                 <defs>
                     <symbol id="soj-shape-js">
                         <path
@@ -518,7 +517,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                                 y={330}
                                 data-year-char={1}
                             >
-                                {'2'}
+                                {'\n          2\n        '}
                             </text>
                         </g>
                         <g
@@ -533,7 +532,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                                 y={330}
                                 data-year-char={2}
                             >
-                                {'0'}
+                                {'\n          0\n        '}
                             </text>
                         </g>
                         <g
@@ -548,7 +547,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                                 y={330}
                                 data-year-char={3}
                             >
-                                {'2'}
+                                {'\n          2\n        '}
                             </text>
                         </g>
                         <g
@@ -563,7 +562,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                                 y={330}
                                 data-year-char={4}
                             >
-                                {'4'}
+                                {'\n          5\n        '}
                             </text>
                         </g>
                     </g>
@@ -605,38 +604,37 @@ const Wrapper = styled.div`
         font-display: swap;
         src: url(./BebasNeue-STATEOFDIGITS.woff2) format('woff2');
     }
-
     .soj-logo__wrapper {
-        --color-frame: #ffa0c8;
+        --color-frame: #ffe337;
         --color-text: #ded5c6;
         --color-bg: #272325;
-        --color-grad-shade: #b4279a;
-        --color-grad-inner-cube-a: #f7579a;
-        --color-grad-inner-cube-b: #e84aed;
-        --color-grad-inner-cube-c: #eb88f2;
-        --color-grad-inner-cube-d: #ec8fff;
-        --color-grad-inner-cube-e: #f282ee;
-        --color-grad-inner-cube-f: #dd62df;
-        --color-grad-logo-shape-a: #475440;
-        --color-grad-logo-shape-b: #aca595;
+        --color-grad-shade: #787511;
+        --color-grad-inner-cube-a: #f77f57;
+        --color-grad-inner-cube-b: #ffe337;
+        --color-grad-inner-cube-c: #c6ae10;
+        --color-grad-inner-cube-d: #c2ad24;
+        --color-grad-inner-cube-e: #f5e57a;
+        --color-grad-inner-cube-f: #f4e371;
+        --color-grad-logo-shape-a: #544d40;
+        --color-grad-logo-shape-b: #aca495;
         --color-grad-logo-shape-c: #dbd2c3;
         --color-grad-logo-shape-d: #e9e0d1;
-        --color-grad-logo-cube-shape-a: #e85ee6;
-        --color-grad-logo-cube-shape-b: #d661b3;
-        --color-grad-cube-lighting-left-a: #b224ff;
-        --color-grad-cube-lighting-left-b: #cb3cfa;
-        --color-grad-cube-lighting-left-c: #e250f5;
-        --color-grad-cube-lighting-left-d: #f260f2;
-        --color-grad-cube-lighting-left-e: #ef6be2;
-        --color-grad-cube-lighting-left-f: #ee6fd7;
-        --color-grad-cube-lighting-left-g: #ed6ed1;
-        --color-grad-cube-lighting-left-h: #bf3237;
-        --color-grad-cube-lighting-right-a: #9900f1;
-        --color-grad-cube-lighting-right-b: #c800ff;
-        --color-grad-cube-lighting-right-c: #fb24ff;
-        --color-grad-cube-lighting-top-a: #bf3266;
-        --color-grad-cube-lighting-top-b: #de6eed;
-        --color-grad-cube-lighting-top-c: #6924ff;
+        --color-grad-logo-cube-shape-a: #333110;
+        --color-grad-logo-cube-shape-b: #656629;
+        --color-grad-cube-lighting-left-a: #ffd724;
+        --color-grad-cube-lighting-left-b: #faea3c;
+        --color-grad-cube-lighting-left-c: #edf550;
+        --color-grad-cube-lighting-left-d: #daf260;
+        --color-grad-cube-lighting-left-e: #e7ef6b;
+        --color-grad-cube-lighting-left-f: #cbee6d;
+        --color-grad-cube-lighting-left-g: #e5ee72;
+        --color-grad-cube-lighting-left-h: #bfba31;
+        --color-grad-cube-lighting-right-a: #f1e900;
+        --color-grad-cube-lighting-right-b: #e1ff00;
+        --color-grad-cube-lighting-right-c: #baff24;
+        --color-grad-cube-lighting-top-a: #bfba32;
+        --color-grad-cube-lighting-top-b: #eed372;
+        --color-grad-cube-lighting-top-c: #fff824;
         --timeline-base-delay: 100ms;
         --timeline-logo-anim: 800ms;
         --timeline-logo-delay: var(--timeline-base-delay);
