@@ -25,18 +25,21 @@ export const generateFilterType = ({
             eq: ${enumTypeName}
             in: [${enumTypeName}]
             nin: [${enumTypeName}]
+            hasTags: [EntitiesTagsEnum]
         }`
     } else if (optionsAreNumeric) {
         typeDef = `input ${filterTypeName} {
             eq: Float
             lt: Float
             gt: Float
+            hasTags: [EntitiesTagsEnum]
         }`
     } else {
         typeDef = `input ${filterTypeName} {
             eq: String
             in: String
             nin: String
+            hasTags: [EntitiesTagsEnum]
         }`
     }
     return {
