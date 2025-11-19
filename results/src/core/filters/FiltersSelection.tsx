@@ -32,14 +32,14 @@ const FiltersSelection = ({ allFilters, block, stateStuff }: FiltersSelectionPro
 
     const canAddSeries = (filtersState?.filters?.length || 0) < maxSeriesCount
 
-    const emptySeries = getNewSeries({
-        filtersState,
-        allFilters,
-        year: currentEdition.year
-    })
-
     const handleAddSeries = () => {
         setFiltersState((fState: CustomizationDefinition) => {
+            const emptySeries = getNewSeries({
+                filtersState,
+                allFilters,
+                year: currentEdition.year
+            })
+
             const newState = cloneDeep(fState)
             newState.filters = [...(newState.filters || []), emptySeries]
             return newState

@@ -72,7 +72,7 @@ type ItemSelectOptionsProps = {
 }
 
 // TODO: do this better to avoid hardcoding this list here
-const disallowedQuestions = [
+export const disallowedQuestions = [
     'referrer',
     'sourcetag',
     'future_surveys',

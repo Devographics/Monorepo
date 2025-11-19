@@ -57,6 +57,7 @@ import pick from 'lodash/pick'
 import { getItemLabel } from 'core/helpers/labels'
 import merge from 'lodash/merge'
 import { isFeatureTemplate, isToolTemplate } from '@devographics/helpers'
+import { disallowedQuestions } from './condition/FieldSegment'
 
 export const getNewCondition = ({
     filter,
@@ -130,7 +131,9 @@ export const getNewSeries = ({
 }): CustomizationFiltersSeries => {
     let conditionOptions
     if (filtersState.filters.length === 0) {
-        const userInfoFilters = allFilters.filter(f => f.sectionId === 'user_info')
+        const userInfoFilters = allFilters
+            .filter(f => f.sectionId === 'user_info')
+            .filter(f => !disallowedQuestions.includes(f.id))
         conditionOptions = { filter: userInfoFilters[0] }
     } else {
         const firstFilter = filtersState.filters[0]
