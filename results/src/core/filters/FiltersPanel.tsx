@@ -2,7 +2,7 @@ import './FiltersPanel.scss'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import T from 'core/i18n/T'
-import { spacing, fontSize } from 'core/theme'
+import { spacing, fontSize, mq } from 'core/theme'
 import Button from 'core/components/Button'
 import {
     CreateVariantType,
@@ -135,28 +135,33 @@ const FiltersPanel = ({
         <Filters_>
             <FiltersTop_>
                 <Heading_>
-                    <span>{chartName}</span>
-                    <span>–</span>
-                    {id ? (
-                        <>
-                            <T k="filters.edit_variant_with_name" values={{ name: variantName }} />
-                            <EditIcon
-                                size="petite"
-                                labelId="filters.edit_name"
-                                onClick={() => {
-                                    const newName = prompt(
-                                        getString('filters.edit_name.description')?.t,
-                                        name
-                                    )
-                                    if (newName) {
-                                        setVariantName(newName)
-                                    }
-                                }}
-                            />
-                        </>
-                    ) : (
-                        <T k="filters.create_variant" />
-                    )}
+                    <span className="filters-heading-title">{chartName}</span>
+                    <span className="filters-heading-separator">–</span>
+                    <span className="filters-heading-subtitle">
+                        {id ? (
+                            <>
+                                <T
+                                    k="filters.edit_variant_with_name"
+                                    values={{ name: variantName }}
+                                />
+                                <EditIcon
+                                    size="petite"
+                                    labelId="filters.edit_name"
+                                    onClick={() => {
+                                        const newName = prompt(
+                                            getString('filters.edit_name.description')?.t,
+                                            name
+                                        )
+                                        if (newName) {
+                                            setVariantName(newName)
+                                        }
+                                    }}
+                                />
+                            </>
+                        ) : (
+                            <T k="filters.create_variant" />
+                        )}
+                    </span>
                 </Heading_>
                 <a
                     href="https://github.com/Devographics/docs/blob/main/results/filters.md"
@@ -347,6 +352,11 @@ export const FiltersTop_ = styled.div`
     align-items: center;
     justify-content: space-between;
     margin-bottom: ${spacing()};
+    @media ${mq.smallMedium} {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: ${spacing(0.5)};
+    }
 `
 
 export const Heading_ = styled.h3`
@@ -354,6 +364,25 @@ export const Heading_ = styled.h3`
     display: flex;
     align-items: center;
     gap: 5px;
+
+    @media ${mq.smallMedium} {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: ${spacing(0.5)};
+    }
+    .filters-heading-title {
+    }
+    .filters-heading-separator {
+        @media ${mq.smallMedium} {
+            display: none;
+        }
+    }
+    .filters-heading-subtitle {
+        display: flex;
+        align-items: center;
+        gap: ${spacing(0.5)};
+    }
 `
 
 export const TabsTrigger_ = styled(Tabs.Trigger)`

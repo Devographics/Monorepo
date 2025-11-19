@@ -155,6 +155,7 @@ const Segments_ = styled.div`
     grid-auto-flow: column;
     column-gap: ${spacing()};
     @media ${mq.smallMedium} {
+        display: flex;
         flex-direction: column;
         align-items: center;
         gap: ${spacing(0.5)};
