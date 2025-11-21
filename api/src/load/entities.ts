@@ -242,9 +242,10 @@ export const getEntities = async (
 export const findEntity = (id: string, entities: Entity[], tag?: string) => {
     const exactMatches = entities.filter(e => e.id && e.id.toLowerCase() === id)
     const aliasesMatches = entities.filter(e => e.idAliases?.includes(id))
-    const nameMatches = entities.filter(e => e.name && e.name.toLowerCase() === id)
+    // do not match using entity names anymore, too many false positives
+    // const nameMatches = entities.filter(e => e.name && e.name.toLowerCase() === id)
 
-    const matchingEntities = [...exactMatches, ...aliasesMatches, ...nameMatches]
+    const matchingEntities = [...exactMatches, ...aliasesMatches]
     // keep the first entity we found
     const entity = matchingEntities[0]
 

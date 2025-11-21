@@ -586,8 +586,10 @@ export const questionMetadataResolverMap = {
     // },
 
     entity: async (parent: QuestionApiObject, {}, context: RequestContext) => {
+        console.log('// question metadata entity resolver')
         const { id } = parent
-        return await getEntity({ id, context })
+        const entity = await getEntity({ id, context })
+        return entity
     },
 
     options: async (parent: QuestionApiObject, {}, context: RequestContext) => {
