@@ -11,7 +11,7 @@ export const FormItemDescription = (
   const { entity } = question;
   const { t, getMessage } = useI18n();
   const intlIds = getQuestioni18nIds(props);
-  const i18nDescription = getMessage(intlIds.description);
+  const { key, missing } = getMessage(intlIds.description);
   const i18nPrompt = getMessage(intlIds.prompt);
 
   const entityDescription = entity?.descriptionHtml || entity?.descriptionClean;
@@ -20,9 +20,12 @@ export const FormItemDescription = (
   // a matter of whether you recognize the name or not
   const showDescription =
     entityDescription && !entity?.tags?.includes("libraries");
+
+  let labelClass =
+    key === "entity" ? "description-label entity-label" : "description-label";
+
   if (
-    i18nDescription &&
-    !i18nDescription.missing //.type !== TokenType.KEY_FALLBACK
+    !missing //.type !== TokenType.KEY_FALLBACK
   ) {
     return (
       <div className="form-item-description">
@@ -33,6 +36,8 @@ export const FormItemDescription = (
     return (
       <p className="form-item-description">
         <span
+          data-key={key}
+          className={labelClass}
           dangerouslySetInnerHTML={{
             __html: entityDescription,
           }}
