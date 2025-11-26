@@ -57,7 +57,7 @@ export const getDynamicOptions = async ({
         return
     }
 
-    const parameters = { limit: OPTIONS_LIMIT, showNoAnswer: false }
+    const parameters = { limit: OPTIONS_LIMIT, showNoAnswer: false, enableBucketGroups: false }
     const computeArguments = {
         executionContext: ExecutionContext.REGULAR,
         responsesType: subfield,
@@ -122,7 +122,6 @@ export const getDynamicOptions = async ({
             // console.log(question.id)
             return
         }
-
         return options
     } catch (error) {
         console.log(`// getDynamicOptions error for question ${question.id}`)
