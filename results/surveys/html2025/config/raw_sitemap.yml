@@ -176,7 +176,7 @@
             limit: 10
         variants:
             - template: multiple_options2_freeform
-              id: interactivity_pain_points_interop
+              id: interactivity_pain_points_interop2
               fieldId: interactivity_pain_points
               tabId: tabs.browser_support
               i18nNamespace: html_pain_points
@@ -193,13 +193,77 @@
                   bucketsFilter:
                       nin: interop
 
+            - template: multiple_options2_freeform
+              id: interactivity_pain_points_interop6
+              fieldId: interactivity_pain_points
+              tabId: tabs.dx
+              i18nNamespace: html_pain_points
+              queryOptions:
+                  sectionId: interactivity
+              filtersState:
+                  filters:
+                      - conditions:
+                            - fieldId: interactivity_pain_points
+                              sectionId: interactivity
+                              operator: in
+                              value:
+                                  - dx
+                  bucketsFilter:
+                      nin: dx
+            - template: multiple_options2_freeform
+              id: interactivity_pain_points_interop3
+              fieldId: interactivity_pain_points
+              tabId: tabs.no_nesting
+              i18nNamespace: html_pain_points
+              parameters:
+                  enableBucketNesting: false
+              queryOptions:
+                  sectionId: interactivity
+              filtersState:
+                  bucketsFilter:
+                      nin:
+                          - limitations
+                          - dx
+                          - interop
+            - template: multiple_options2_freeform
+              id: interactivity_pain_points_interop4
+              fieldId: interactivity_pain_points
+              tabId: tabs.no_nesting2
+              i18nNamespace: html_pain_points
+              parameters:
+                  enableBucketNesting: false
+              queryOptions:
+                  sectionId: interactivity
+            - template: multiple_options2_freeform
+              id: interactivity_pain_points_interop5
+              fieldId: interactivity_pain_points
+              tabId: tabs.features
+              i18nNamespace: html_pain_points
+              parameters:
+                  enableBucketNesting: false
+              queryOptions:
+                  sectionId: interactivity
+              filtersState:
+                  bucketsFilter:
+                      hasTags:
+                          - features
+
+      # - id: performance_pain_points
+      #   template: multiple_options2_freeform
+      #   i18nNamespace: html_pain_points
+      #   queryOptions:
+      #       sectionId: performance
+      #   chartOptions:
+      #       limit: 10
+
       - id: performance_pain_points
-        template: multiple_options2_freeform
-        i18nNamespace: html_pain_points
+        template: nested_pain_points
         queryOptions:
             sectionId: performance
-        chartOptions:
-            limit: 10
+        variants:
+            - template: nested_pain_points_limitations
+            - template: nested_pain_points_interop
+            - template: nested_pain_points_features
 
       - id: kilian_valkhof
         template: picks
@@ -215,20 +279,22 @@
             limit: 10
 
       - id: web_components_other_pain_points
-        template: multiple_options2_freeform
-        i18nNamespace: web_components_common_pain_points
+        template: nested_pain_points
         queryOptions:
             sectionId: web_components
-        chartOptions:
-            limit: 10
+        variants:
+            - template: nested_pain_points_limitations
+            - template: nested_pain_points_interop
+            - template: nested_pain_points_features
 
       - id: system_capabilities_pain_points
-        template: multiple_options2_freeform
-        i18nNamespace: html_pain_points
+        template: nested_pain_points
         queryOptions:
             sectionId: system_capabilities
-        chartOptions:
-            limit: 10
+        variants:
+            - template: nested_pain_points_limitations
+            - template: nested_pain_points_interop
+            - template: nested_pain_points_features
 
       - id: ana_rodrigues
         template: picks
