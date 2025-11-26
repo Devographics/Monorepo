@@ -73,7 +73,7 @@
     }
 }
 
-.edition-td2025.Page--overview {
+.Page--overview {
     .Page__Contents {
         display: flex;
         flex-direction: column;
@@ -96,6 +96,18 @@
         margin-top: 0;
     }
     .chart-footer {
+        display: none;
+    }
+    .block-header-wrapper {
+        display: none;
+    }
+}
+
+.chart-performance_pain_points,
+.chart-performance_pain_points_limitations,
+.chart-performance_pain_points_interop,
+.chart-performance_pain_points_features {
+    .chart-grid-item-heading {
         display: none;
     }
 }

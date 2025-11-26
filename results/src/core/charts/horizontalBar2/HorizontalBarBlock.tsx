@@ -22,6 +22,8 @@ import { BackToBack } from '../common2/BackToBack'
 import { NoData } from '../common2/NoData'
 import { getViewDefinition } from './helpers/views'
 import FacetHeading from './FacetHeading'
+import BucketsFilterHeading from '../common2/BucketsFilterHeading'
+import { getBucketsFilter } from '../common2/helpers'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -44,6 +46,8 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     const facetQuestion = useQuestionMetadata(facet)
 
     const chartState = useChartState(getDefaultState({ facetQuestion, block }))
+
+    const bucketsFilter = getBucketsFilter({ variant, block })
 
     const viewDefinition = getViewDefinition(chartState.view)
 
@@ -91,7 +95,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     }
 
     return (
-        <ChartWrapper question={question} className="chart-horizontal-bar">
+        <ChartWrapper block={block} question={question} className="chart-horizontal-bar">
             <>
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>
@@ -102,6 +106,10 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                 </pre> */}
 
                 {facetQuestion && <FacetHeading facetQuestion={facetQuestion} {...commonProps} />}
+
+                {bucketsFilter && (
+                    <BucketsFilterHeading {...commonProps} bucketsFilter={bucketsFilter} />
+                )}
 
                 {useBackToBackSeriesView() ? (
                     <BackToBack serie1={series[0]} serie2={series[1]} {...commonProps} />

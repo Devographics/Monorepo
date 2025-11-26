@@ -23,3 +23,14 @@ export const getItemFilters = ({
     const itemFilters = filters?.[serieIndex]
     return itemFilters
 }
+
+export const getBucketsFilter = ({
+    variant,
+    block
+}: {
+    variant?: CustomVariant
+    block?: BlockVariantDefinition
+}) => {
+    const filtersState = variant?.chartFilters || block?.filtersState
+    return filtersState?.bucketsFilter
+}

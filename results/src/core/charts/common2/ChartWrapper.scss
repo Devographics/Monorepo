@@ -4,3 +4,11 @@
     flex-direction: column;
     gap: var(--doubleSpacing);
 }
+
+.chart-description {
+    margin-top: var(--doubleSpacing);
+}
+
+.chart-description + .chart-wrapper {
+    margin-top: var(--spacing);
+}
