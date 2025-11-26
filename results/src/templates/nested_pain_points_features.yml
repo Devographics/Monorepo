@@ -1,0 +1,31 @@
+blockType: HorizontalBarBlock2
+fieldId: ${mainBlockId}
+hasSponsor: true
+hasData: true
+queryOptions:
+    addBucketsEntities: true
+    subField: freeform
+    addGroupedBuckets: false
+    addNestedBuckets: true
+    sectionId: ${sectionId}
+
+customizationModes: [filters, facets]
+parameters:
+    showNoAnswer: true
+    cutoff: 10
+    limit: 20
+    mergeOtherBuckets: true
+chartOptions:
+    limit: 10
+
+i18nNamespace: html_pain_points
+
+descriptionId: features.pain_points.features
+
+id: ${mainBlockId}_features
+tabId: tabs.features
+filtersState:
+    filters:
+    bucketsFilter:
+        hasTags:
+            - features
