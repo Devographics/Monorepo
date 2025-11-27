@@ -35,3 +35,4 @@ filtersState:
     bucketsFilter:
         nin:
             - limitations
+            - dx

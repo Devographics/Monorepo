@@ -35,3 +35,5 @@ filtersState:
     bucketsFilter:
         nin:
             - interop
+            - limitations
+            - dx
