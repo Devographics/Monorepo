@@ -24,6 +24,7 @@ import { getViewDefinition } from './helpers/views'
 import FacetHeading from './FacetHeading'
 import BucketsFilterHeading from '../common2/BucketsFilterHeading'
 import { getBucketsFilter } from '../common2/helpers'
+import ChartNestedToggle from '../common2/ChartNestedToggle'
 
 export interface HorizontalBarBlock2Props extends BlockComponentProps {
     data: StandardQuestionData
@@ -60,6 +61,8 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
     })
 
     const metadataProps = getSerieMetadataProps({ currentEdition })
+
+    const hasNestedData = block?.queryOptions?.addNestedBuckets
 
     const commonProps: CommonProps<HorizontalBarChartState> = {
         variant,
@@ -105,11 +108,10 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
                     <code>{JSON.stringify(facetQuestion, null, 2)}</code>
                 </pre> */}
 
+                {hasNestedData && <ChartNestedToggle {...commonProps} />}
                 {facetQuestion && <FacetHeading facetQuestion={facetQuestion} {...commonProps} />}
 
-                {bucketsFilter && (
-                    <BucketsFilterHeading {...commonProps} bucketsFilter={bucketsFilter} />
-                )}
+                {bucketsFilter && <BucketsFilterHeading bucketsFilter={bucketsFilter} />}
 
                 {useBackToBackSeriesView() ? (
                     <BackToBack serie1={series[0]} serie2={series[1]} {...commonProps} />

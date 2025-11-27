@@ -1,11 +1,10 @@
 import React from 'react'
-import { QuestionMetadata, Bucket, Entity, TokenWithCount } from '@devographics/types'
+import { Bucket, Entity, TokenWithCount } from '@devographics/types'
 import { useI18n } from '@devographics/react-i18n'
 import { FilterItem } from '../FilterItem'
 import { FilterSection } from '../CommentsFilters'
 import { FreeformAnswersState } from '../../freeform_answers/types'
 import { getItemLabel } from 'core/helpers/labels'
-import { flattenBucketsTree } from '../../freeform_answers/FreeformAnswersItem'
 import take from 'lodash/take.js'
 
 const TOKEN_LIMIT = 10
@@ -26,6 +25,10 @@ export const FilterTokens = ({
     const { tokenFilter, setTokenFilter } = stateStuff
     const { getString } = useI18n()
 
+    const tokens = take(allTokens, TOKEN_LIMIT).filter(token => token.id !== tokenId)
+
+    console.log(allTokens)
+    console.log(tokens)
     return (
         <FilterSection
             headingId="token"
@@ -35,29 +38,27 @@ export const FilterTokens = ({
             }}
         >
             <>
-                {take(allTokens, TOKEN_LIMIT)
-                    .filter(token => token.id !== tokenId)
-                    .map(token => {
-                        const { id, count } = token
-                        const entity = entities.find(e => e.id === id) || token
-                        const { shortLabel } = getItemLabel({
-                            id,
-                            entity,
-                            getString
-                            // i18nNamespace: question.id
-                        })
-                        return (
-                            <FilterItem
-                                key={id}
-                                label={shortLabel}
-                                count={count}
-                                isActive={id === tokenFilter}
-                                clickHandler={() => {
-                                    setTokenFilter(id)
-                                }}
-                            />
-                        )
-                    })}
+                {tokens.map(token => {
+                    const { id, count } = token
+                    const entity = entities.find(e => e.id === id) || token
+                    const { shortLabel } = getItemLabel({
+                        id,
+                        entity,
+                        getString
+                        // i18nNamespace: question.id
+                    })
+                    return (
+                        <FilterItem
+                            key={id}
+                            label={shortLabel}
+                            count={count}
+                            isActive={id === tokenFilter}
+                            clickHandler={() => {
+                                setTokenFilter(id)
+                            }}
+                        />
+                    )
+                })}
             </>
         </FilterSection>
     )

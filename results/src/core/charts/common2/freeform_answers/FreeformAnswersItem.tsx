@@ -6,6 +6,7 @@ import { CommentsItemWrapper } from '../comments/CommentsItemWrapper'
 import { FreeformAnswersState } from './types'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
+import sortBy from 'lodash/sortBy.js'
 
 export const FreeformAnswerItem = ({
     rawHtml,
@@ -142,14 +143,19 @@ function getLeavesWithAncestors(buckets: Bucket[], ancestors: string[] = []): To
 Flatten out nested buckets tree
 
 */
+export function getFlattenedBucketsTree(buckets: Bucket[]): Bucket[] {
+    return flattenBucketsTree(buckets)
+}
+
 export function flattenBucketsTree(buckets: Bucket[]): Bucket[] {
     const result: Bucket[] = []
     for (const bucket of buckets) {
-        result.push(bucket)
         if (bucket.nestedBuckets && bucket.nestedBuckets.length > 0) {
             // Recurse into children, passing the current item as an ancestor
             result.push(...flattenBucketsTree(bucket.nestedBuckets))
         }
+        const { nestedBuckets, ...bucketWithoutNestedBuckets } = bucket
+        result.push(bucketWithoutNestedBuckets)
     }
     return result
 }
@@ -181,11 +187,10 @@ const Tokens = ({
     const tokenIds = tokens.map(token => token.id)
     const prunedBuckets = pruneTree(buckets, tokenIds)
     const leafTokens = getLeavesWithAncestors(prunedBuckets)
-    const allBuckets = flattenBucketsTree(buckets)
+    const allBuckets = getFlattenedBucketsTree(buckets)
     const allBucketsIds = allBuckets.map(b => b.id)
     const extraTokens = tokens.filter(token => !allBucketsIds.includes(token.id))
 
-    console.log({ allTokens })
     return (
         <div className="token-items">
             {leafTokens.map(token => (
@@ -256,7 +261,6 @@ const Token = ({
                             // i18nNamespace,
                             html: true
                         })
-                        console.log({ ancestorBucket })
 
                         const { key, label: ancestorLabel } = ancestorLabelObject
                         return (

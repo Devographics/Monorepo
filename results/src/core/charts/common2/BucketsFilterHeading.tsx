@@ -1,20 +1,9 @@
 import React from 'react'
-import { PageContextValue } from 'core/types'
-import { QuestionMetadata, StandardQuestionData } from '@devographics/types'
-import { BucketsFilterDefinition, DataSeries } from 'core/filters/types'
-import { CommonProps } from '../common2/types'
+import { BucketsFilterDefinition } from 'core/filters/types'
 import T from 'core/i18n/T'
 
 const formatList = (list: string[]) => list.map(item => `<strong>${item}</strong>`).join(', ')
-export const BucketsFilterHeading = (
-    props: CommonProps<HorizontalBarChartState> & {
-        series: DataSeries<StandardQuestionData>[]
-        facetQuestion: QuestionMetadata
-        chartState: HorizontalBarChartState
-        pageContext: PageContextValue
-        bucketsFilter: BucketsFilterDefinition
-    }
-) => {
+export const BucketsFilterHeading = (props: { bucketsFilter: BucketsFilterDefinition }) => {
     const { bucketsFilter } = props
     const keys = Object.keys(bucketsFilter)
     return (

@@ -3,12 +3,9 @@ import {
     FacetBucket,
     FeaturesOptions,
     QuestionMetadata,
-    ResponseData,
     ResponseEditionData,
-    ResultsSubFieldEnum,
     SimplifiedSentimentOptions,
-    StandardQuestionData,
-    YearCompletion
+    StandardQuestionData
 } from '@devographics/types'
 import { HorizontalBarChartState, HorizontalBarViewDefinition, HorizontalBarViews } from '../types'
 import { DataSeries, FacetItem } from 'core/filters/types'
@@ -17,6 +14,7 @@ import { applySteps } from './steps'
 import sortBy from 'lodash/sortBy'
 import {
     CommonProps,
+    NestedEnum,
     OrderOptions,
     SerieMetadataProps,
     SeriesMetadata
@@ -27,6 +25,8 @@ import { allDataFilters } from '../helpers/steps'
 import max from 'lodash/max'
 import compact from 'lodash/compact'
 import { getSubfieldObject } from 'core/charts/verticalBar2/helpers/other'
+import { getFlattenedBucketsTree } from 'core/charts/common2/freeform_answers/FreeformAnswersItem'
+import { OTHER_ANSWERS } from '@devographics/constants'
 
 export const sortOptions = {
     experience: Object.values(FeaturesOptions),
@@ -57,7 +57,7 @@ export const getChartBuckets = ({
     chartState: HorizontalBarChartState
     usePreviousEdition?: boolean
 }) => {
-    const { view, sort, facet, order, rowsLimit } = chartState
+    const { view, sort, facet, order, rowsLimit, nested } = chartState
     const { viewDefinition } = chartState
     const { dataFilters: viewDataFilters, getValue } = viewDefinition
     const edition = usePreviousEdition
@@ -72,9 +72,15 @@ export const getChartBuckets = ({
     if (dataFilters) {
         buckets = applySteps(buckets, dataFilters)
     }
+    if (nested === NestedEnum.FLAT) {
+        // flatten all buckets
+        buckets = getFlattenedBucketsTree(buckets)
+    }
     if (sort && getValue) {
+        const otherAnswersBucket = buckets.find(b => b.id === OTHER_ANSWERS)
+        let sortableBuckets = buckets.filter(b => b.id !== OTHER_ANSWERS)
         if (facet) {
-            buckets = sortBy(buckets, bucket => {
+            sortableBuckets = sortBy(sortableBuckets, bucket => {
                 // find the facet bucket targeted by the sort
                 const relevantFacetBucket = bucket.facetBuckets.find(fb => fb.id == sort)
                 if (!relevantFacetBucket) {
@@ -85,15 +91,18 @@ export const getChartBuckets = ({
                 }
             })
         } else {
-            buckets = sortBy(buckets, bucket => {
+            sortableBuckets = sortBy(sortableBuckets, bucket => {
                 const value = getValue(bucket)
                 return value
             })
         }
         if (order === OrderOptions.DESC) {
-            buckets = buckets.toReversed()
+            sortableBuckets = sortableBuckets.toReversed()
         }
+        // make sure other answers bucket remains at the bottom even if we resort
+        buckets = otherAnswersBucket ? [...sortableBuckets, otherAnswersBucket] : sortableBuckets
     }
+    console.log(buckets)
     return buckets
 }
 

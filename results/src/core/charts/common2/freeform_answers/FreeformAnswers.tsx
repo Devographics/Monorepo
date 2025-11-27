@@ -26,7 +26,8 @@ export const FreeformAnswers = ({
     buckets,
     stats,
     entities,
-    tokens
+    tokens,
+    defaultTokenFilter
 }: {
     answers: RawDataAnswer[]
     questionLabel: string
@@ -36,9 +37,12 @@ export const FreeformAnswers = ({
     buckets: Bucket[]
     entities: Entity[]
     tokens: TokenWithCount[]
+    defaultTokenFilter?: string
 } & CommentsCommonProps) => {
     const [keywordFilter, setKeywordFilter] = useState<FreeformAnswersState['keywordFilter']>(null)
-    const [tokenFilter, setTokenFilter] = useState<FreeformAnswersState['tokenFilter']>(null)
+    const [tokenFilter, setTokenFilter] = useState<FreeformAnswersState['tokenFilter']>(
+        defaultTokenFilter || null
+    )
     const [searchFilter, setSearchFilter] = useState<FreeformAnswersState['searchFilter']>(null)
     const [sort, setSort] = useState<FreeformAnswersState['sort']>(null)
     const [order, setOrder] = useState<FreeformAnswersState['order']>(null)

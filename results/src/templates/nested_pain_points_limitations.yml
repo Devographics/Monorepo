@@ -24,6 +24,11 @@ descriptionId: features.pain_points.limitations
 
 id: ${mainBlockId}_limitations
 tabId: tabs.limitations
+
+variables:
+    defaultTokenFilter: limitations
+    defaultNested: flat
+
 filtersState:
     filters:
         - conditions:

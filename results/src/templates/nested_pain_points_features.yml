@@ -22,6 +22,9 @@ i18nNamespace: html_pain_points
 
 descriptionId: features.pain_points.features
 
+variables:
+    defaultNested: flat
+
 id: ${mainBlockId}_features
 tabId: tabs.features
 filtersState:

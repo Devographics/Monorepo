@@ -1,6 +1,5 @@
 // export * from './Controls_notused'
 export * from './Legend'
-export * from './Metadata'
 export * from './SeriesHeading'
 export * from './ChartWrapper'
 export * from './Note'

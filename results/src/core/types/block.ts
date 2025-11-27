@@ -36,6 +36,7 @@ export interface BlockQueryOptions {
     addBucketsEntities?: boolean
     addQuestionEntity?: boolean
     addQuestionComments?: boolean
+    addNestedBuckets?: boolean
     subField?: ResultsSubFieldEnum
     sectionId?: string
 }

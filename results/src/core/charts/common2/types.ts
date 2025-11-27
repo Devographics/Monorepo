@@ -12,7 +12,17 @@ import { DataSeries } from 'core/filters/types'
 import { CustomVariant } from 'core/filters/helpers'
 import { Dispatch, SetStateAction } from 'react'
 
-export type ChartStateWithSubset = {
+export enum NestedEnum {
+    NESTED = 'nested',
+    FLAT = 'flat'
+}
+
+export type ChartStateWithNestedToggle = {
+    nested: NestedEnum
+    setNested: Dispatch<SetStateAction<NestedEnum>>
+}
+
+export type ChartStateWithSubset = ChartStateWithNestedToggle & {
     subset: string | number | null
     setSubset: Dispatch<SetStateAction<string | number | null>>
 }
@@ -22,7 +32,7 @@ export type ChartStateWithHighlighted = ChartStateWithSubset & {
     setHighlighted: Dispatch<SetStateAction<string | number | null>>
 }
 
-export interface ChartStateWithHighlightedRow {
+export interface ChartStateWithHighlightedRow extends ChartStateWithNestedToggle {
     highlightedRow: string | number | null
     setHighlightedRow: Dispatch<SetStateAction<string | number | null>>
     highlightedCell: string | number | null

@@ -17,7 +17,7 @@ import { Dimension } from '../multiItemsExperience/types'
 export interface HorizontalBarChartState extends ChartStateWithSort {
     view: HorizontalBarViews
     setView: Dispatch<SetStateAction<HorizontalBarViews>>
-    viewDefinition: HorizontalBarViewDefinition
+    viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
     columnMode: ColumnModes
     setColumnMode: Dispatch<SetStateAction<ColumnModes>>
     facet?: FacetItem

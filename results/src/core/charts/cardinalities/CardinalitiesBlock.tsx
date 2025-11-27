@@ -1,6 +1,6 @@
 import React from 'react'
 import { StandardQuestionData } from '@devographics/types'
-import { ChartControls, ChartFooter, ChartWrapper, GridWrapper, Metadata, Note } from '../common2'
+import { ChartControls, ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
 import { CommonProps } from '../common2/types'
 import ChartData from '../common2/ChartData'
 import ChartShare from '../common2/ChartShare'
@@ -16,6 +16,7 @@ import ViewSwitcher from './ViewSwitcher'
 import './Cardinalities.scss'
 import sum from 'lodash/sum'
 import round from 'lodash/round'
+import Metadata from '../common2/Metadata'
 
 type CardinalitiesBlockProps = BlockComponentProps & {
     series: DataSeries<StandardQuestionData[]>[]

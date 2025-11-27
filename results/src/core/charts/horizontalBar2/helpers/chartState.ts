@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { QuestionMetadata } from '@devographics/types'
-import { ColumnModes, OrderOptions } from '../../common2/types'
+import { QuestionMetadata, sortProperties } from '@devographics/types'
+import { ColumnModes, NestedEnum, OrderOptions } from '../../common2/types'
 import { HorizontalBarChartState, HorizontalBarViews } from '../types'
 import { BlockVariantDefinition } from 'core/types'
 import { getChartView, getViewDefinition } from './views'
@@ -34,6 +34,9 @@ export const getDefaultState = ({
     if (block?.filtersState?.options?.order) {
         defaultState.order = block?.filtersState?.options?.order
     }
+    if (block?.variables?.defaultNested) {
+        defaultState.nested = block?.variables?.defaultNested
+    }
     return defaultState
 }
 
@@ -43,7 +46,9 @@ export const useChartState = (defaultState: {
     const [rowsLimit, setRowsLimit] = useState<HorizontalBarChartState['rowsLimit']>(
         defaultState?.rowsLimit || 0
     )
-    const [sort, setSort] = useState<HorizontalBarChartState['sort']>(defaultState.sort)
+    const [sort, setSort] = useState<HorizontalBarChartState['sort']>(
+        defaultState.sort || sortProperties.COUNT
+    )
     const [order, setOrder] = useState<HorizontalBarChartState['order']>(
         defaultState.order || OrderOptions.DESC
     )
@@ -59,6 +64,9 @@ export const useChartState = (defaultState: {
     const [highlightedCell, setHighlightedCell] =
         useState<HorizontalBarChartState['highlightedCell']>(null)
 
+    const [nested, setNested] = useState<HorizontalBarChartState['nested']>(
+        defaultState.nested || NestedEnum.NESTED
+    )
     const viewDefinition = getViewDefinition(view)
 
     const chartState: HorizontalBarChartState = {
@@ -77,7 +85,9 @@ export const useChartState = (defaultState: {
         highlightedRow,
         setHighlightedRow,
         highlightedCell,
-        setHighlightedCell
+        setHighlightedCell,
+        nested,
+        setNested
     }
     return chartState
 }

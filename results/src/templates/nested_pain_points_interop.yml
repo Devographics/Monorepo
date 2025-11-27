@@ -24,6 +24,11 @@ descriptionId: features.pain_points.interop
 
 id: ${mainBlockId}_interop
 tabId: tabs.browser_support
+
+variables:
+    defaultTokenFilter: interop
+    defaultNested: flat
+
 filtersState:
     filters:
         - conditions:

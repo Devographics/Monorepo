@@ -68,12 +68,14 @@ export const FreeformAnswersQueryWrapper = ({
     buckets,
     tokenLabel,
     question,
-    block
+    block,
+    defaultTokenFilter
 }: {
     queryOptions: GetQueryProps
     buckets: Bucket[]
     questionLabel: string
     tokenLabel: string
+    defaultTokenFilter?: string
 } & CommentsCommonProps) => {
     const [data, setData] = useState<RawDataItem>()
     const [isLoading, setIsLoading] = useState(false)
@@ -91,6 +93,7 @@ export const FreeformAnswersQueryWrapper = ({
         const getData = async () => {
             setIsLoading(true)
             const query = getQuery(queryOptions)
+            console.log({ query })
 
             const url = process.env.GATSBY_API_URL
             if (!url) {
@@ -116,6 +119,7 @@ export const FreeformAnswersQueryWrapper = ({
         getData()
     }, [])
 
+    console.log({ data })
     return (
         <div className="comments-wrapper">
             <div className="comments-wrapper-note">
@@ -136,6 +140,7 @@ export const FreeformAnswersQueryWrapper = ({
                         block={block}
                         question={question}
                         buckets={buckets}
+                        defaultTokenFilter={defaultTokenFilter}
                     />
                 ) : (
                     <div className="error">

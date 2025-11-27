@@ -88,6 +88,7 @@ export const FreeformAnswersTrigger = (props: {
                 block={block}
                 question={question}
                 buckets={buckets}
+                defaultTokenFilter={block?.variables?.defaultTokenFilter}
             />
         </ModalTrigger>
     ) : (
