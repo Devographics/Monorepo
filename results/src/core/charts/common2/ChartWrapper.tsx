@@ -21,7 +21,7 @@ export const ChartWrapper = ({
     const style = {
         '--barHeight': `${BAR_HEIGHT}px`
     }
-    const classes = ['chart-wrapper', `chart-${block?.id}`, className]
+    const classes = ['chart-wrapper', `chart-${block?.id}`, `chart-${block?.template}`, className]
     const { descriptionId } = block
     return (
         <div className="chart-wrapper-outer">
