@@ -20,6 +20,7 @@ chartOptions:
 
 i18nNamespace: html_pain_points
 
+tabId: tabs.all_pain_points
 descriptionId: features.pain_points.default
 
 filtersState:

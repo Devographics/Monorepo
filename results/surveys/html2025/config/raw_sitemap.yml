@@ -106,147 +106,40 @@
             url: https://linear-easing-generator.netlify.app/
 
       - id: forms_pain_points
-        template: multiple_options2_freeform
-        i18nNamespace: html_pain_points
+        template: nested_pain_points
         queryOptions:
             sectionId: forms
-        chartOptions:
-            limit: 10
+        variants:
+            - template: nested_pain_points_limitations
+            - template: nested_pain_points_interop
+            - template: nested_pain_points_features
 
       - id: graphics_pain_points
-        template: multiple_options2_freeform
-        i18nNamespace: html_pain_points
+        template: nested_pain_points
         queryOptions:
             sectionId: graphics_multimedia
-        chartOptions:
-            limit: 10
-        # filtersState:
-        #     bucketsFilter:
-        #         nin: [limitations, interop]
         variants:
-            - template: multiple_options2_freeform
-              id: graphics_pain_points_interop
-              fieldId: graphics_pain_points
-              tabId: tabs.browser_support
-              i18nNamespace: html_pain_points
-              queryOptions:
-                  sectionId: graphics_multimedia
-              filtersState:
-                  filters:
-                      - conditions:
-                            - fieldId: graphics_pain_points
-                              sectionId: graphics_multimedia
-                              operator: in
-                              value:
-                                  - interop
-                  bucketsFilter:
-                      nin: [limitations, interop]
-            - template: multiple_options2_freeform
-              id: graphics_pain_points_limitations
-              fieldId: graphics_pain_points
-              tabId: tabs.limitations
-              i18nNamespace: html_pain_points
-              queryOptions:
-                  sectionId: graphics_multimedia
-              filtersState:
-                  filters:
-                      - conditions:
-                            - fieldId: graphics_pain_points
-                              sectionId: graphics_multimedia
-                              operator: in
-                              value:
-                                  - limitations
-                  bucketsFilter:
-                      nin: [limitations, interop]
+            - template: nested_pain_points_limitations
+            - template: nested_pain_points_interop
+            - template: nested_pain_points_features
 
       - id: content_pain_points
-        template: multiple_options2_freeform
-        i18nNamespace: html_pain_points
+        template: nested_pain_points
         queryOptions:
             sectionId: content
-        chartOptions:
-            limit: 10
+        variants:
+            - template: nested_pain_points_limitations
+            - template: nested_pain_points_interop
+            - template: nested_pain_points_features
 
       - id: interactivity_pain_points
-        template: multiple_options2_freeform
-        i18nNamespace: html_pain_points
+        template: nested_pain_points
         queryOptions:
             sectionId: interactivity
-        chartOptions:
-            limit: 10
         variants:
-            - template: multiple_options2_freeform
-              id: interactivity_pain_points_interop2
-              fieldId: interactivity_pain_points
-              tabId: tabs.browser_support
-              i18nNamespace: html_pain_points
-              queryOptions:
-                  sectionId: interactivity
-              filtersState:
-                  filters:
-                      - conditions:
-                            - fieldId: interactivity_pain_points
-                              sectionId: interactivity
-                              operator: in
-                              value:
-                                  - interop
-                  bucketsFilter:
-                      nin: interop
-
-            - template: multiple_options2_freeform
-              id: interactivity_pain_points_interop6
-              fieldId: interactivity_pain_points
-              tabId: tabs.dx
-              i18nNamespace: html_pain_points
-              queryOptions:
-                  sectionId: interactivity
-              filtersState:
-                  filters:
-                      - conditions:
-                            - fieldId: interactivity_pain_points
-                              sectionId: interactivity
-                              operator: in
-                              value:
-                                  - dx
-                  bucketsFilter:
-                      nin: dx
-            - template: multiple_options2_freeform
-              id: interactivity_pain_points_interop3
-              fieldId: interactivity_pain_points
-              tabId: tabs.no_nesting
-              i18nNamespace: html_pain_points
-              parameters:
-                  enableBucketNesting: false
-              queryOptions:
-                  sectionId: interactivity
-              filtersState:
-                  bucketsFilter:
-                      nin:
-                          - limitations
-                          - dx
-                          - interop
-            - template: multiple_options2_freeform
-              id: interactivity_pain_points_interop4
-              fieldId: interactivity_pain_points
-              tabId: tabs.no_nesting2
-              i18nNamespace: html_pain_points
-              parameters:
-                  enableBucketNesting: false
-              queryOptions:
-                  sectionId: interactivity
-            - template: multiple_options2_freeform
-              id: interactivity_pain_points_interop5
-              fieldId: interactivity_pain_points
-              tabId: tabs.features
-              i18nNamespace: html_pain_points
-              parameters:
-                  enableBucketNesting: false
-              queryOptions:
-                  sectionId: interactivity
-              filtersState:
-                  bucketsFilter:
-                      hasTags:
-                          - features
+            - template: nested_pain_points_limitations
+            - template: nested_pain_points_interop
+            - template: nested_pain_points_features
 
       # - id: performance_pain_points
       #   template: multiple_options2_freeform
