@@ -40,7 +40,7 @@ export const ToolsScatterplotBlock = ({
     }))
 
     return (
-        <ChartWrapper question={question}>
+        <ChartWrapper block={block} question={question}>
             <>
                 <Legend items={legendItems} chartState={chartState} />
 

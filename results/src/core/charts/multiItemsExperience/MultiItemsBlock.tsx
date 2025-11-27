@@ -57,7 +57,7 @@ export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps)
             : theme.colors.ranges.sentiment
 
     return (
-        <ChartWrapper question={question} className={className}>
+        <ChartWrapper block={block} question={question} className={className}>
             <>
                 {/* <pre>
                     <code>{JSON.stringify(chartState, null, 2)}</code>

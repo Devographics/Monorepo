@@ -111,7 +111,7 @@ export const ToolsArrowsBlock = ({
         setFilter
     }
     return (
-        <ChartWrapper question={question}>
+        <ChartWrapper block={block} question={question}>
             <>
                 <ChartContainer>
                     <>

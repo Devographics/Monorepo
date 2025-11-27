@@ -6,11 +6,15 @@ import { Note } from './Note'
 import ChartFooter from './ChartFooter'
 import ChartShare from './ChartShare'
 import ChartData from './ChartData'
+import { QuestionMetadata } from '@devographics/types'
+import { BlockVariantDefinition } from 'core/types'
 
-export const NoData = <NoDataProps,>(props: NoDataProps) => {
+export const NoData = <NoDataProps,>(
+    props: NoDataProps & { question: QuestionMetadata; block: BlockVariantDefinition }
+) => {
     const { question, block } = props
     return (
-        <ChartWrapper question={question} className="chart-horizontal-bar">
+        <ChartWrapper block={block} question={question} className="chart-horizontal-bar">
             <>
                 <div className="no-data warning">
                     <T k="charts.no_data" />

@@ -97,7 +97,7 @@ const TierListBlock = (props: TierListBlockProps) => {
     }))
 
     return (
-        <ChartWrapper question={question} className="tier-list">
+        <ChartWrapper block={block} question={question} className="tier-list">
             <>
                 <Legend items={legendItems} chartState={chartState} />
                 <TierListChart data={chartData} currentCategory={currentCategory} />

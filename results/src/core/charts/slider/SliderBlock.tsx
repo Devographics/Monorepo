@@ -13,7 +13,7 @@ export const SliderBlock = (props: SliderBlockProps) => {
     const { block, series, question, pageContext, variant } = props
 
     return (
-        <ChartWrapper question={question} className="chart-horizontal-bar">
+        <ChartWrapper block={block} question={question} className="chart-horizontal-bar">
             <div>slider</div>
         </ChartWrapper>
     )

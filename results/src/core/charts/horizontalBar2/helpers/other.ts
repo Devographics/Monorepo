@@ -64,7 +64,7 @@ export const getChartBuckets = ({
         ? getChartPreviousEdition({ serie })
         : getChartCurrentEdition({ serie })
 
-    let buckets = edition.buckets
+    let buckets = edition?.buckets || []
 
     const { chartOptions = {} } = block
     const { dataFilters: blockDataFilters } = chartOptions

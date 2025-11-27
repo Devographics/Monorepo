@@ -47,6 +47,8 @@ export const getQueryArgsString = ({
 // v2: {"foo": "bar"} => {foo: bar} (for enums)
 const unquote = (s: string) => s.replaceAll('"', '')
 
+const unquoteValuesOnly = (s: string) => s.replace(/"([^"]+)":/g, '$1:')
+
 const wrapArguments = (args: ResponseArgumentsStrings) => {
     const keys = Object.keys(args)
 
