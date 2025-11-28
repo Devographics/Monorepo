@@ -6,7 +6,8 @@ import {
     ResponseEditionData,
     SimplifiedSentimentOptions,
     StandardQuestionData,
-    OrderOptions
+    OrderOptions,
+    sortProperties
 } from '@devographics/types'
 import { HorizontalBarChartState, HorizontalBarViewDefinition, HorizontalBarViews } from '../types'
 import { DataSeries, FacetItem } from 'core/filters/types'
@@ -77,30 +78,34 @@ export const getChartBuckets = ({
         buckets = getFlattenedBucketsTree(buckets)
     }
     if (sort && getValue) {
-        const otherAnswersBucket = buckets.find(b => b.id === OTHER_ANSWERS)
-        let sortableBuckets = buckets.filter(b => b.id !== OTHER_ANSWERS)
-        if (facet) {
-            sortableBuckets = sortBy(sortableBuckets, bucket => {
-                // find the facet bucket targeted by the sort
-                const relevantFacetBucket = bucket.facetBuckets.find(fb => fb.id == sort)
-                if (!relevantFacetBucket) {
-                    return 0
-                } else {
-                    const value = getValue(relevantFacetBucket)
+        if (sort === sortProperties.COUNT) {
+            const otherAnswersBucket = buckets.find(b => b.id === OTHER_ANSWERS)
+            let sortableBuckets = buckets.filter(b => b.id !== OTHER_ANSWERS)
+            if (facet) {
+                sortableBuckets = sortBy(sortableBuckets, bucket => {
+                    // find the facet bucket targeted by the sort
+                    const relevantFacetBucket = bucket.facetBuckets.find(fb => fb.id == sort)
+                    if (!relevantFacetBucket) {
+                        return 0
+                    } else {
+                        const value = getValue(relevantFacetBucket)
+                        return value
+                    }
+                })
+            } else {
+                sortableBuckets = sortBy(sortableBuckets, bucket => {
+                    const value = getValue(bucket)
                     return value
-                }
-            })
-        } else {
-            sortableBuckets = sortBy(sortableBuckets, bucket => {
-                const value = getValue(bucket)
-                return value
-            })
+                })
+            }
+            if (order === OrderOptions.DESC) {
+                sortableBuckets = sortableBuckets.toReversed()
+            }
+            // make sure other answers bucket remains at the bottom even if we resort
+            buckets = otherAnswersBucket
+                ? [...sortableBuckets, otherAnswersBucket]
+                : sortableBuckets
         }
-        if (order === OrderOptions.DESC) {
-            sortableBuckets = sortableBuckets.toReversed()
-        }
-        // make sure other answers bucket remains at the bottom even if we resort
-        buckets = otherAnswersBucket ? [...sortableBuckets, otherAnswersBucket] : sortableBuckets
     }
     console.log(buckets)
     return buckets
