@@ -436,13 +436,18 @@ export const rawDataResolver: ResolverType = async (parent, args, context, info)
     // get all entities available, including tokens
     const allEntities = await getEntities({ context, includeNormalizationEntities: true })
 
-    // get full list of all unique tokens ids for all answers to the question
-    const answerTokens =
-        answers && uniqBy(answers.map(answer => answer.tokens).flat(), token => token.id)
+    // get full list of all tokens ids for all answers to the question
+    const allAnswerTokens = answers && answers.map(answer => answer.tokens).flat()
+
+    // deduplicate tokens
+    const answerTokens = uniqBy(allAnswerTokens, token => token.id)
     const answerTokensIds = answerTokens?.map(token => token.id)
 
-    // use answerTokensIds to find all matching entities to also get parentId, name, description, etc.
-    const fullAnswerTokens = allEntities.filter(e => answerTokensIds?.includes(e.id)) as Token[]
+    // decorate tokens with matching entity data to also get parentId, name, description, etc.
+    const fullAnswerTokens = answerTokens.map(token => {
+        const entity = allEntities.find(e => e.id === token.id)
+        return { ...token, ...entity }
+    })
 
     // add counts
     const answerTokensWithCounts = fullAnswerTokens?.map(token => ({
