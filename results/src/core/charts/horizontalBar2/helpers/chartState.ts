@@ -46,9 +46,7 @@ export const useChartState = (defaultState: {
     const [rowsLimit, setRowsLimit] = useState<HorizontalBarChartState['rowsLimit']>(
         defaultState?.rowsLimit || 0
     )
-    const [sort, setSort] = useState<HorizontalBarChartState['sort']>(
-        defaultState.sort || sortProperties.COUNT
-    )
+    const [sort, setSort] = useState<HorizontalBarChartState['sort']>(defaultState.sort)
     const [order, setOrder] = useState<HorizontalBarChartState['order']>(
         defaultState.order || OrderOptions.DESC
     )
