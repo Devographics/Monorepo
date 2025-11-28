@@ -1,7 +1,7 @@
 import React from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import Toggle, { DEFAULT_SORT, ToggleItemType, ToggleValueType } from '../Toggle'
-import { OrderOptions } from '../types'
+import { OrderOptions } from '@devographics/types'
 import { FreeformAnswersState } from '../freeform_answers/types'
 import { ALPHA, LENGTH } from './constants'
 

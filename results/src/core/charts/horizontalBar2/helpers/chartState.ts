@@ -1,19 +1,21 @@
 import { useState } from 'react'
-import { QuestionMetadata, sortProperties } from '@devographics/types'
-import { ColumnModes, NestedEnum, OrderOptions } from '../../common2/types'
+import { QuestionMetadata, ResponseEditionData, OrderOptions } from '@devographics/types'
+import { ColumnModes, NestedEnum } from '../../common2/types'
 import { HorizontalBarChartState, HorizontalBarViews } from '../types'
 import { BlockVariantDefinition } from 'core/types'
 import { getChartView, getViewDefinition } from './views'
 
 export const getDefaultState = ({
     facetQuestion,
-    block
+    block,
+    currentEdition
 }: {
     facetQuestion?: QuestionMetadata & { sectionIdOverride?: string }
     block: BlockVariantDefinition
+    currentEdition: ResponseEditionData
 }) => {
     const defaultState = {} as HorizontalBarChartState
-
+    const { _metadata } = currentEdition
     defaultState.view = getChartView({ facetQuestion, block })
     if (facetQuestion) {
         defaultState.facet = {
@@ -25,17 +27,21 @@ export const getDefaultState = ({
     } else {
         defaultState.columnMode = ColumnModes.REGULAR
     }
-    if (block?.chartOptions?.limit) {
-        defaultState.rowsLimit = block.chartOptions.limit
+    const limit = block?.chartOptions?.limit
+    if (limit) {
+        defaultState.rowsLimit = limit
     }
-    if (block?.filtersState?.options?.sort) {
-        defaultState.sort = block?.filtersState?.options?.sort
+    const sort = block?.filtersState?.options?.sort || _metadata?.axis1Sort?.property
+    if (sort) {
+        defaultState.sort = sort
     }
-    if (block?.filtersState?.options?.order) {
-        defaultState.order = block?.filtersState?.options?.order
+    const order = block?.filtersState?.options?.order || _metadata?.axis1Sort?.order
+    if (order) {
+        defaultState.order = order
     }
-    if (block?.variables?.defaultNested) {
-        defaultState.nested = block?.variables?.defaultNested
+    const nested = block?.variables?.defaultNested
+    if (nested) {
+        defaultState.nested = nested
     }
     return defaultState
 }

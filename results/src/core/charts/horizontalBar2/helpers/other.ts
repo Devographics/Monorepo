@@ -5,7 +5,8 @@ import {
     QuestionMetadata,
     ResponseEditionData,
     SimplifiedSentimentOptions,
-    StandardQuestionData
+    StandardQuestionData,
+    OrderOptions
 } from '@devographics/types'
 import { HorizontalBarChartState, HorizontalBarViewDefinition, HorizontalBarViews } from '../types'
 import { DataSeries, FacetItem } from 'core/filters/types'
@@ -15,7 +16,6 @@ import sortBy from 'lodash/sortBy'
 import {
     CommonProps,
     NestedEnum,
-    OrderOptions,
     SerieMetadataProps,
     SeriesMetadata
 } from 'core/charts/common2/types'

@@ -46,7 +46,7 @@ export const HorizontalBarBlock2 = (props: HorizontalBarBlock2Props) => {
 
     const facetQuestion = useQuestionMetadata(facet)
 
-    const chartState = useChartState(getDefaultState({ facetQuestion, block }))
+    const chartState = useChartState(getDefaultState({ facetQuestion, block, currentEdition }))
 
     const bucketsFilter = getBucketsFilter({ variant, block })
 

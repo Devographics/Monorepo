@@ -3,7 +3,8 @@ import {
     FacetBucket,
     FeaturesOptions,
     SimplifiedSentimentOptions,
-    StandardQuestionData
+    StandardQuestionData,
+    OrderOptions
 } from '@devographics/types'
 import sumBy from 'lodash/sumBy'
 import {
@@ -26,7 +27,6 @@ import max from 'lodash/max'
 import sum from 'lodash/sum'
 import take from 'lodash/take'
 import round from 'lodash/round'
-import { OrderOptions } from '../../common2/types'
 
 export const ITEM_GAP_PERCENT = 0
 export const COLUMN_GAP_PERCENT = 2

@@ -7,7 +7,7 @@ import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 import { useWidth } from './helpers'
 import sum from 'lodash/sum'
-import { OrderOptions } from './types'
+import { OrderOptions } from '@devographics/types'
 
 // Calculate minimum width for a legend item to be readable
 

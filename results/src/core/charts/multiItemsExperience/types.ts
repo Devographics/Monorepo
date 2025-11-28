@@ -6,7 +6,8 @@ import {
     FeaturesOptions,
     QuestionMetadata,
     SimplifiedSentimentOptions,
-    StandardQuestionData
+    StandardQuestionData,
+    OrderOptions
 } from '@devographics/types'
 import { BlockComponentProps } from 'core/types'
 import { PERCENTAGE_QUESTION, SENTIMENT_FACET } from '@devographics/constants'
@@ -15,7 +16,6 @@ import {
     ChartStateWithSort,
     ChartValues,
     ColumnModes,
-    OrderOptions,
     Tick
 } from '../common2/types'
 import { DataSeries } from 'core/filters/types'

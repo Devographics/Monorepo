@@ -1,4 +1,4 @@
-import { OrderOptions } from '../types'
+import { OrderOptions } from '@devographics/types'
 
 export type FreeformAnswersState = {
     sort: string | null

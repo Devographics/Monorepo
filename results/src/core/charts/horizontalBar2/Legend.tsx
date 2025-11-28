@@ -1,10 +1,9 @@
 import React from 'react'
-import { OptionMetadata } from '@devographics/types'
+import { OptionMetadata, OrderOptions } from '@devographics/types'
 import { ColorScale, neutralColor } from '../common2/helpers/colors'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import { HorizontalBarChartState } from './types'
-import { OrderOptions } from '../common2/types'
 import T from 'core/i18n/T'
 import { Toggle, ToggleItemType, ToggleValueType } from '../common2'
 

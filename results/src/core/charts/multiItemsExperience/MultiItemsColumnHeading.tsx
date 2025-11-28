@@ -4,7 +4,7 @@ import { useI18n } from '@devographics/react-i18n'
 import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
 import { MultiItemsChartState, ColumnId } from './types'
-import { OrderOptions } from '../common2/types'
+import { OrderOptions } from '@devographics/types'
 
 export const ColumnHeading = ({
     columnId,

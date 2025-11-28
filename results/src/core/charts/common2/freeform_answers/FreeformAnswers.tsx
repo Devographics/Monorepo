@@ -1,11 +1,15 @@
 import './FreeformAnswers.scss'
 import React, { useState } from 'react'
-import { useI18n } from '@devographics/react-i18n'
-import { RawDataAnswer, WordCount, Bucket, Entity, TokenWithCount } from '@devographics/types'
-import { OrderOptions } from '../types'
+import {
+    RawDataAnswer,
+    WordCount,
+    Bucket,
+    Entity,
+    TokenWithCount,
+    OrderOptions
+} from '@devographics/types'
 import sortBy from 'lodash/sortBy'
 import { FilterKeywords } from '../comments/filters/FilterKeywords'
-import { OrderToggle } from '../comments/OrderToggle'
 import { ALPHA, LENGTH } from '../comments/constants'
 import { FreeformAnswersState } from './types'
 import { FreeformAnswerItem } from './FreeformAnswersItem'

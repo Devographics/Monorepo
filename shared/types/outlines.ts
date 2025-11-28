@@ -176,7 +176,12 @@ export const sortProperties = {
 
 export type SortProperty = (typeof sortProperties)[keyof typeof sortProperties]
 
-export type SortOrder = 'asc' | 'desc'
+export enum OrderOptions {
+    ASC = 'asc',
+    DESC = 'desc'
+}
+
+export type SortOrder = OrderOptions.ASC | OrderOptions.DESC
 export type SortOrderNumeric = 1 | -1
 
 /**

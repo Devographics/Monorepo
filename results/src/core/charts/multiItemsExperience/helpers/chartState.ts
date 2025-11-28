@@ -1,7 +1,7 @@
-import { FeaturesOptions } from '@devographics/types'
+import { FeaturesOptions, OrderOptions } from '@devographics/types'
 import { MultiItemsChartState, DEFAULT_VARIABLE, GroupingOptions } from '../types'
 import { useState } from 'react'
-import { ColumnModes, OrderOptions } from '../../common2/types'
+import { ColumnModes } from '../../common2/types'
 
 export const useChartState = (defaultState?: {
     [P in keyof MultiItemsChartState]?: MultiItemsChartState[P]

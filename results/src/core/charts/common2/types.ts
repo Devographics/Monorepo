@@ -4,7 +4,8 @@ import {
     FacetBucket,
     QuestionMetadata,
     ResponseEditionMetadata,
-    YearCompletion
+    YearCompletion,
+    OrderOptions
 } from '@devographics/types'
 import { MultiItemsChartValues } from '../multiItemsExperience/types'
 import { BlockVariantDefinition, PageContextValue } from 'core/types'
@@ -89,11 +90,6 @@ export type ViewDefinition<ChartStateType> = {
 export enum PercentViews {
     PERCENTAGE_BUCKET = 'percentageBucket',
     PERCENTAGE_QUESTION = 'percentageQuestion'
-}
-
-export enum OrderOptions {
-    ASC = 'asc',
-    DESC = 'desc'
 }
 
 export enum ColumnModes {
