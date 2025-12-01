@@ -105,136 +105,144 @@
         variables:
             url: https://linear-easing-generator.netlify.app/
 
-      - id: forms_pain_points
-        template: nested_pain_points
-        queryOptions:
-            sectionId: forms
-        variants:
-            - template: nested_pain_points_limitations
-            - template: nested_pain_points_interop
-            - template: nested_pain_points_features
+  children:
+      - id: forms
+        path: /forms
+        blocks:
+            - id: forms_pain_points
+              template: nested_pain_points
+              variants:
+                  - template: nested_pain_points_limitations
+                  - template: nested_pain_points_interop
+                  - template: nested_pain_points_features
 
-      - id: graphics_pain_points
-        template: nested_pain_points
-        queryOptions:
-            sectionId: graphics_multimedia
-        variants:
-            - template: nested_pain_points_limitations
-            - template: nested_pain_points_interop
-            - template: nested_pain_points_features
+      - id: graphics_multimedia
+        path: /graphics-multimedia
+        blocks:
+            - id: graphics_pain_points
+              template: nested_pain_points
+              variants:
+                  - template: nested_pain_points_limitations
+                  - template: nested_pain_points_interop
+                  - template: nested_pain_points_features
 
-      - id: content_pain_points
-        template: nested_pain_points
-        queryOptions:
-            sectionId: content
-        variants:
-            - template: nested_pain_points_limitations
-            - template: nested_pain_points_interop
-            - template: nested_pain_points_features
+      - id: content
+        path: /content
+        blocks:
+            - id: content_pain_points
+              template: nested_pain_points
+              variants:
+                  - template: nested_pain_points_limitations
+                  - template: nested_pain_points_interop
+                  - template: nested_pain_points_features
 
-      - id: interactivity_pain_points
-        template: nested_pain_points
-        queryOptions:
-            sectionId: interactivity
-        variants:
-            - template: nested_pain_points_limitations
-            - template: nested_pain_points_interop
-            - template: nested_pain_points_features
+      - id: interactivity
+        path: /interactivity
+        blocks:
+            - id: interactivity_pain_points
+              template: nested_pain_points
+              queryOptions:
+                  sectionId: interactivity
+              variants:
+                  - template: nested_pain_points_limitations
+                  - template: nested_pain_points_interop
+                  - template: nested_pain_points_features
 
-      # - id: performance_pain_points
-      #   template: multiple_options2_freeform
-      #   i18nNamespace: html_pain_points
-      #   queryOptions:
-      #       sectionId: performance
-      #   chartOptions:
-      #       limit: 10
+        # - id: performance_pain_points
+        #   template: multiple_options2_freeform
+        #   i18nNamespace: html_pain_points
+        #   queryOptions:
+        #       sectionId: performance
+        #   chartOptions:
+        #       limit: 10
 
-      - id: performance_pain_points
-        template: nested_pain_points
-        queryOptions:
-            sectionId: performance
-        variants:
-            - template: nested_pain_points_limitations
-            - template: nested_pain_points_interop
-            - template: nested_pain_points_features
+      - id: performance
+        path: /performance
+        blocks:
+            - id: performance_pain_points
+              template: nested_pain_points
+              variants:
+                  - template: nested_pain_points_limitations
+                  - template: nested_pain_points_interop
+                  - template: nested_pain_points_features
 
-      - id: kilian_valkhof
-        template: picks
-        variables:
-            url: https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap
+            - id: kilian_valkhof
+              template: picks
+              variables:
+                  url: https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap
 
-      - id: web_components_common_pain_points
-        template: multiple_options2_combined
-        # i18nNamespace: html_pain_points
-        queryOptions:
-            sectionId: web_components
-        chartOptions:
-            limit: 10
+      - id: web_components
+        path: /web_components
+        blocks:
+            - id: web_components_common_pain_points
+              template: multiple_options2_combined
+              # i18nNamespace: html_pain_points
+              chartOptions:
+                  limit: 10
 
-      - id: web_components_other_pain_points
-        template: nested_pain_points
-        queryOptions:
-            sectionId: web_components
-        variants:
-            - template: nested_pain_points_limitations
-            - template: nested_pain_points_interop
-            - template: nested_pain_points_features
+            - id: web_components_other_pain_points
+              template: nested_pain_points
+              variants:
+                  - template: nested_pain_points_limitations
+                  - template: nested_pain_points_interop
+                  - template: nested_pain_points_features
 
-      - id: system_capabilities_pain_points
-        template: nested_pain_points
-        queryOptions:
-            sectionId: system_capabilities
-        variants:
-            - template: nested_pain_points_limitations
-            - template: nested_pain_points_interop
-            - template: nested_pain_points_features
+      - id: system_capabilities
+        path: /system-capabilities
+        blocks:
+            - id: system_capabilities_pain_points
+              template: nested_pain_points
+              variants:
+                  - template: nested_pain_points_limitations
+                  - template: nested_pain_points_interop
+                  - template: nested_pain_points_features
 
-      - id: ana_rodrigues
-        template: picks
-        variables:
-            url: https://modern-fluid-typography.vercel.app/
+            - id: ana_rodrigues
+              template: picks
+              variables:
+                  url: https://modern-fluid-typography.vercel.app/
 
-      # - id: reading_list
-      #   template: multiple_options2
-      #   parameters:
-      #       limit: 20
-      #   queryOptions:
-      #       sectionId: reading_list
-      #       addQuestionComments: false
-      #   chartOptions:
-      #       dataFilters: [removeOverLimit, removeNoAnswer]
-      #       limit: 10
+            # - id: reading_list
+            #   template: multiple_options2
+            #   parameters:
+            #       limit: 20
+            #   queryOptions:
+            #       sectionId: reading_list
+            #       addQuestionComments: false
+            #   chartOptions:
+            #       dataFilters: [removeOverLimit, removeNoAnswer]
+            #       limit: 10
 
-      - id: features_resources
-        items: [fm-css-grid, fm-animations-transitions]
-        template: recommended_resources
+            - id: features_resources
+              items: [fm-css-grid, fm-animations-transitions]
+              template: recommended_resources
 
-- id: accessibility
-  path: /accessibility
-  blocks:
-      - template: page_introduction
+      - id: accessibility
+        path: /accessibility
+        blocks:
+            - template: page_introduction
 
-      - id: accessibility_techniques
-        template: multiple_options2_combined
+            - id: accessibility_techniques
+              template: multiple_options2_combined
 
-      - id: accessibility_disabilities
-        template: multiple_options2_combined
+            - id: accessibility_disabilities
+              template: multiple_options2_combined
 
-      - id: accessibility_screenreaders
-        template: multiple_options2_combined
+            - id: accessibility_screenreaders
+              template: multiple_options2_combined
 
-      - id: accessibility_tools
-        template: multiple_options2_combined
+            - id: accessibility_tools
+              template: multiple_options2_combined
 
-      - id: accessibility_pain_points
-        template: multiple_options2_freeform
-        i18nNamespace: features
-        chartOptions:
-            limit: 10
+            - id: accessibility_pain_points
+              template: multiple_options2_freeform
+              i18nNamespace: features
+              chartOptions:
+                  limit: 10
 
-      - id: other_tools_resources
-        items: [fm-next-js-v3]
-        template: recommended_resources
+            - id: other_tools_resources
+              items: [fm-next-js-v3]
+              template: recommended_resources
 
 - id: usage
   path: /usage
