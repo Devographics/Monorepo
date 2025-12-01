@@ -2,6 +2,7 @@ import React from 'react'
 import { ChartStateWithNestedToggle, CommonProps, NestedEnum } from '../common2/types'
 import Toggle from './Toggle'
 import { useI18n } from '@devographics/react-i18n'
+import './ChartNestedToggle.scss'
 
 export const ChartNestedToggle = (props: CommonProps<ChartStateWithNestedToggle>) => {
     const { chartState } = props

@@ -5,7 +5,8 @@ import {
     HorizontalBarChartState,
     HorizontalBarChartValues,
     HorizontalBarViewDefinition,
-    OtherBucketsType
+    OtherBucketsType,
+    RowComponentProps
 } from './types'
 import T from 'core/i18n/T'
 import { getItemLabel } from 'core/helpers/labels'
@@ -17,6 +18,8 @@ import { BlockVariantDefinition } from 'core/types'
 import { ColumnModes } from '../common2/types'
 import OtherBucketMarker from './OtherBucketMarker'
 import { OTHER_ANSWERS } from '@devographics/constants'
+import classNames from 'classnames'
+import { ChevronUpIcon, ChevronDownIcon } from '@devographics/icons'
 
 // hide labels for cells under this size
 export const MINIMUM_CELL_SIZE_TO_SHOW_LABEL = 30
@@ -46,7 +49,9 @@ export const Cell = ({
     gradient,
     viewDefinition,
     oversizedBar = false,
-    parentTotal
+    parentTotal,
+    showNestedBuckets,
+    setShowNestedBuckets
 }: {
     block: BlockVariantDefinition
     bucket: Bucket | FacetBucket
@@ -62,6 +67,8 @@ export const Cell = ({
     viewDefinition: HorizontalBarViewDefinition<HorizontalBarChartState>
     oversizedBar: boolean
     parentTotal: number
+    showNestedBuckets: RowComponentProps['showNestedBuckets']
+    setShowNestedBuckets: RowComponentProps['setShowNestedBuckets']
 }) => {
     const { ref, isWideEnough: showLabel } = useIsWideEnough()
     const { variables = {} } = block
@@ -120,9 +127,21 @@ export const Cell = ({
 
     const isActiveSort = sort === id
     const isHighlighted = highlightedCell === id
-    const className = `chart-cell chart-cell-${
-        isHighlighted ? 'highlighted' : ''
-    } horizontal-chart-cell ${isActiveSort ? 'active-sort' : ''}`
+
+    const hasNestedBuckets = !!setShowNestedBuckets
+
+    const className = classNames(
+        'chart-cell',
+        'horizontal-chart-cell',
+        { 'chart-cell-highlighted': isHighlighted },
+        { 'chart-cell-hasNestedBuckets': hasNestedBuckets },
+        { 'chart-cell-showNestedBuckets': showNestedBuckets },
+        { 'active-sort': isActiveSort }
+    )
+
+    // `chart-cell chart-cell-${
+    //     isHighlighted ? 'highlighted' : ''
+    // } horizontal-chart-cell ${isActiveSort ? 'active-sort' : ''}`
 
     const label = facetQuestionLabel
         ? `${facetQuestionLabel}: <strong>${cellLabel}</strong>`
@@ -143,12 +162,21 @@ export const Cell = ({
             onMouseLeave={() => {
                 setHighlightedCell && setHighlightedCell(null)
             }}
+            onClick={() => {
+                setShowNestedBuckets && setShowNestedBuckets(!showNestedBuckets)
+            }}
         >
             <Tooltip
                 trigger={
                     <div className="chart-cell-inner">
                         {showLabel && <CellLabel label={v} />}
                         {oversizedBar && <Oversized />}
+                        {hasNestedBuckets && (
+                            <>
+                                <ChevronUpIcon className="chart-cell-expand chart-cell-expand-up" />
+                                <ChevronDownIcon className="chart-cell-expand chart-cell-expand-down" />
+                            </>
+                        )}
                     </div>
                 }
                 contents={
