@@ -115,7 +115,7 @@
         }
     }
     @include medium-large {
-        justify-content: space-between;
+        // justify-content: space-between;
         align-items: center;
         gap: var(--spacing);
     }
