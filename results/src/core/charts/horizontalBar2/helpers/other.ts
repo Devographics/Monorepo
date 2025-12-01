@@ -75,7 +75,7 @@ export const getChartBuckets = ({
     }
     if (nested === NestedEnum.FLAT) {
         // flatten all buckets
-        buckets = getFlattenedBucketsTree(buckets)
+        buckets = getFlattenedBucketsTree(buckets, true)
     }
     if (sort && getValue) {
         if (sort === sortProperties.COUNT) {
@@ -107,7 +107,6 @@ export const getChartBuckets = ({
                 : sortableBuckets
         }
     }
-    console.log(buckets)
     return buckets
 }
 

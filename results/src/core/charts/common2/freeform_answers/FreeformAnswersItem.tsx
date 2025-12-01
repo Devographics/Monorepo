@@ -143,19 +143,25 @@ function getLeavesWithAncestors(buckets: Bucket[], ancestors: string[] = []): To
 Flatten out nested buckets tree
 
 */
-export function getFlattenedBucketsTree(buckets: Bucket[]): Bucket[] {
-    return flattenBucketsTree(buckets)
+export function getFlattenedBucketsTree(buckets: Bucket[], keepRootNodes = true): Bucket[] {
+    return flattenBucketsTree(buckets, keepRootNodes)
 }
 
-export function flattenBucketsTree(buckets: Bucket[]): Bucket[] {
+export function flattenBucketsTree(buckets: Bucket[], keepRootNodes = true): Bucket[] {
     const result: Bucket[] = []
     for (const bucket of buckets) {
-        if (bucket.nestedBuckets && bucket.nestedBuckets.length > 0) {
-            // Recurse into children, passing the current item as an ancestor
-            result.push(...flattenBucketsTree(bucket.nestedBuckets))
-        }
         const { nestedBuckets, ...bucketWithoutNestedBuckets } = bucket
-        result.push(bucketWithoutNestedBuckets)
+        if (nestedBuckets && nestedBuckets.length > 0) {
+            // Recurse into children, passing the current item as an ancestor
+            result.push(...flattenBucketsTree(nestedBuckets))
+            if (keepRootNodes) {
+                // has children, only add if we're keeping non-leaves/root nodes
+                result.push(bucketWithoutNestedBuckets)
+            }
+        } else {
+            // no children, always add leaves
+            result.push(bucketWithoutNestedBuckets)
+        }
     }
     return result
 }
