@@ -157,7 +157,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     textAlt: 'rgba(255, 246, 229, 0.5)',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
-    link: '#6BE35C',
+    link: '#8bee7d',
     linkActive: '#5C63E0',
     contrast: '#0bdf67',
     border: '#FFF6E6',
@@ -239,8 +239,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
         gradient: [colors.greyLight, colors.greyLightest]
     },
     barChart: {
-        primary: '#6BE35C',
-        primaryGradient: ['#45a838ff', '#6BE35C'],
+        primary: '#8bee7d',
+        primaryGradient: ['#55c347ff', '#8bee7d'],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.indigo,

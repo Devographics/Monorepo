@@ -109,6 +109,8 @@
       - id: forms
         path: /forms
         blocks:
+            - template: page_introduction
+
             - id: forms_pain_points
               template: nested_pain_points
               variants:
@@ -119,6 +121,8 @@
       - id: graphics_multimedia
         path: /graphics-multimedia
         blocks:
+            - template: page_introduction
+
             - id: graphics_pain_points
               template: nested_pain_points
               variants:
@@ -129,6 +133,8 @@
       - id: content
         path: /content
         blocks:
+            - template: page_introduction
+
             - id: content_pain_points
               template: nested_pain_points
               variants:
@@ -139,6 +145,8 @@
       - id: interactivity
         path: /interactivity
         blocks:
+            - template: page_introduction
+
             - id: interactivity_pain_points
               template: nested_pain_points
               queryOptions:
@@ -159,6 +167,8 @@
       - id: performance
         path: /performance
         blocks:
+            - template: page_introduction
+
             - id: performance_pain_points
               template: nested_pain_points
               variants:
@@ -174,6 +184,8 @@
       - id: web_components
         path: /web_components
         blocks:
+            - template: page_introduction
+
             - id: web_components_common_pain_points
               template: multiple_options2_combined
               # i18nNamespace: html_pain_points
@@ -190,6 +202,8 @@
       - id: system_capabilities
         path: /system-capabilities
         blocks:
+            - template: page_introduction
+
             - id: system_capabilities_pain_points
               template: nested_pain_points
               variants:

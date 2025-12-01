@@ -10,32 +10,26 @@ import rehypeRaw from 'rehype-raw'
 const PageIntroductionBlock = ({ block }) => {
     const context = usePageContext()
     const { currentEdition } = context
-    const { getString } = useI18n()
+    const { getString, getFallbacks } = useI18n()
+
     const contents = block.variables?.contents
-    const editionKey =
-        context.descriptionId ||
-        `sections.${context.intlId || context.id}.description.${currentEdition.id}`
-    const surveyKey = `sections.${context.intlId || context.id}.description`
-    const editionIntro = getString(editionKey)
-    const surveyIntro = getString(surveyKey)
-    if (contents) {
-        return (
-            <Introduction>
-                <ReactMarkdown rehypePlugins={[rehypeRaw]}>{contents}</ReactMarkdown>
-            </Introduction>
-        )
-    } else if (editionIntro?.tHtml) {
-        return (
-            <Introduction
-                className="Page__Introduction"
-                dangerouslySetInnerHTML={{ __html: editionIntro?.tHtml }}
-            />
-        )
-    } else if (surveyIntro?.tHtml) {
+
+    const keysList = [
+        block.descriptionId,
+        `sections.${context.intlId || context.id}.description.${currentEdition.id}`,
+        `sections.${context.intlId || context.id}.prompt.${currentEdition.id}`,
+        `sections.${context.intlId || context.id}.description`,
+        `sections.${context.intlId || context.id}.prompt`
+    ]
+    console.log(keysList)
+    const tObject = getFallbacks(keysList)
+
+    console.log(tObject)
+    if (!tObject?.missing) {
         return (
             <Introduction
                 className="Page__Introduction"
-                dangerouslySetInnerHTML={{ __html: surveyIntro?.tHtml }}
+                dangerouslySetInnerHTML={{ __html: tObject?.tHtml }}
             />
         )
     } else {
