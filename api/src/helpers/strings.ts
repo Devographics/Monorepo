@@ -2,6 +2,26 @@ import sanitizeHtml from 'sanitize-html'
 import { decode } from 'html-entities'
 import marked from 'marked'
 
+/*
+
+It looks like marked.parse() already auto-escapes any < > inside
+a code block (`...`). So use this regex to NOT escape those characters
+to avoid having them be escaped twice. 
+
+*/
+export function escapeAnglesOutsideBackticks(str: string): string {
+    return str
+        .split(/(`[^`]*`)/) // keep backtick-delimited code spans as separate tokens
+        .map((part, index) => {
+            // Even indexes = outside code spans
+            if (index % 2 === 0) {
+                return part.replace(/[<>]/g, m => (m === '<' ? '&lt;' : '&gt;'))
+            }
+            return part // Inside backticks → leave unchanged
+        })
+        .join('')
+}
+
 export const parseHtmlString = (s: string) => {
     /*
 
@@ -10,7 +30,7 @@ export const parseHtmlString = (s: string) => {
     so we escape it first here. 
 
     */
-    const escapedString = s.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+    const escapedString = escapeAnglesOutsideBackticks(s)
     return marked.parse(escapedString)
 }
 

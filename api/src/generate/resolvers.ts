@@ -44,6 +44,7 @@ import { getQuestioni18nIds, getSectioni18nIds, makeTranslatorFunc } from '@devo
 import { loadOrGetLocales } from '../load/locales/locales'
 import uniqBy from 'lodash/uniqBy.js'
 import sortBy from 'lodash/sortBy.js'
+import compact from 'lodash/compact.js'
 
 export const generateResolvers = async ({
     surveys,
@@ -425,7 +426,7 @@ export const rawDataResolver: ResolverType = async (parent, args, context, info)
 
     // helper function to get count of how many times a token appears across all answers
     const getTokenCount = (tokenId: string) =>
-        answers?.filter(a => a.tokens.map(t => t.id).includes(tokenId)).length
+        answers?.filter(a => a.tokens && a.tokens.map(t => t.id).includes(tokenId)).length
 
     // get all raw answers for this question
     const answers = await getRawData({ survey, edition, section, question, context, token })
@@ -437,7 +438,12 @@ export const rawDataResolver: ResolverType = async (parent, args, context, info)
     const allEntities = await getEntities({ context, includeNormalizationEntities: true })
 
     // get full list of all tokens ids for all answers to the question
-    const allAnswerTokens = answers && answers.map(answer => answer.tokens).flat()
+    const allAnswerTokens =
+        answers &&
+        answers
+            .filter(answer => !!answer.tokens)
+            .map(answer => answer.tokens)
+            .flat()
 
     // deduplicate tokens
     const answerTokens = uniqBy(allAnswerTokens, token => token.id)
