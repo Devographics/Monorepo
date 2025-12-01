@@ -7,6 +7,7 @@ type DepthIndicatorProps = {
     showNestedBuckets: boolean
     setShowNestedBuckets: React.Dispatch<React.SetStateAction<boolean>>
     depth?: number
+    totalDepth?: number
 }
 
 export const RowDepth = ({
@@ -14,10 +15,13 @@ export const RowDepth = ({
     showNestedBuckets,
     setShowNestedBuckets,
     nestedBuckets,
-    depth = 0
+    depth = 0,
+    // not used
+    totalDepth = 0
 }: DepthIndicatorProps) => {
+    // note: totalDepth does not work yet
     return (
-        <div className="chart-depth-indicator" style={{ '--totalDepth': depth }}>
+        <div className="chart-depth-indicator" style={{ '--depth': depth, '--totalDepth': 99 }}>
             <div className="chart-depth-vertical">
                 {[...Array(depth + 1)].map((x, index) => (
                     <div
@@ -30,7 +34,7 @@ export const RowDepth = ({
                 ))}
             </div>
             <div className="chart-depth-horizontal">
-                <div className="chart-depth-line" />
+                {depth > 0 && <div className="chart-depth-line" />}
                 {hasNestedBuckets ? (
                     <button
                         className="chart-depth-node chart-depth-node-button"

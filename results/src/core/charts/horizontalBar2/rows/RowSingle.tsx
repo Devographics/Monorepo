@@ -21,6 +21,7 @@ export const RowSingle = (props: RowComponentProps) => {
         showCount = true,
         hasNestedBuckets,
         showNestedBuckets,
+        setShowNestedBuckets,
         viewDefinition,
         otherBuckets,
         otherBucketsType,
@@ -95,6 +96,8 @@ export const RowSingle = (props: RowComponentProps) => {
                     viewDefinition={viewDefinition}
                     oversizedBar={oversizedBar}
                     parentTotal={totalSerieRespondents}
+                    showNestedBuckets={showNestedBuckets}
+                    setShowNestedBuckets={setShowNestedBuckets}
                 />
                 {hasInsufficientData && (
                     <div className="chart-row-insufficient-data-wrapper">

@@ -195,7 +195,8 @@
     --lineWidth: 1px;
     position: relative;
     height: 100%;
-    width: calc(var(--totalDepth) * var(--gap));
+    // note: should be --totalDepth but that does not work yet
+    width: calc(var(--depth) * var(--gap));
 }
 .chart-depth-vertical {
     position: absolute;
@@ -274,6 +275,8 @@ should hide their first and second vertical segments
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    // alternate position
+    // justify-content: flex-start;
     &-inner {
         width: 25%;
         display: flex;
@@ -284,6 +287,9 @@ should hide their first and second vertical segments
         height: var(--lineWidth);
         width: var(--gap);
         background: white;
+        // alternate position
+        // position: absolute;
+        // left: calc(calc(var(--depth) - 1) * var(--gap));
     }
 }
 
@@ -298,6 +304,9 @@ should hide their first and second vertical segments
     // position: relative;
     // z-index: 10;
     transform: translateX(50%);
+    // alternate position
+    // transform: translateX(-50%);
+    // left: calc(var(--depth) * var(--gap));
 }
 .chart-depth-node-button {
     height: 28px;

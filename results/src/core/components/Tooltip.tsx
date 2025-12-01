@@ -59,7 +59,7 @@ export const Tooltip = ({
                 {trigger}
             </Trigger>
             <RadixTooltip.Portal>
-                <TooltipContent_ side="top">
+                <TooltipContent_ side="top" sideOffset={10}>
                     {contents}
                     {/* <Arrow /> */}
                 </TooltipContent_>
