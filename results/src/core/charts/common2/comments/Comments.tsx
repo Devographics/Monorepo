@@ -48,13 +48,13 @@ const filterComments = (comments: Comment[], stateStuff: CommentsFiltersState) =
 
     let filteredComments = [...comments]
 
-    if (experienceFilter) {
+    if (experienceFilter !== null) {
         filteredComments = filterCommentsByExperience(filteredComments, experienceFilter)
     }
-    if (sentimentFilter) {
+    if (sentimentFilter !== null) {
         filteredComments = filterCommentsBySentiment(filteredComments, sentimentFilter)
     }
-    if (valueFilter) {
+    if (valueFilter !== null) {
         filteredComments = filterCommentsByValue(filteredComments, valueFilter)
     }
     if (sort === LENGTH) {
@@ -66,12 +66,12 @@ const filterComments = (comments: Comment[], stateStuff: CommentsFiltersState) =
         filteredComments = filteredComments.toReversed()
     }
 
-    if (keywordFilter) {
+    if (keywordFilter !== null) {
         filteredComments = filteredComments.filter(comment =>
             matchWordStart(comment.messageHtml, keywordFilter)
         )
     }
-    if (searchFilter) {
+    if (searchFilter !== null) {
         filteredComments = filteredComments.filter(comment =>
             matchWordStart(comment.messageHtml, searchFilter)
         )

@@ -4,11 +4,13 @@ import React from 'react'
 export const KEYWORD_COUNT = 25
 
 export const FilterItem = ({
+    id,
     label,
     count,
     clickHandler,
     isActive
 }: {
+    id: string | number
     label: string
     count: number
     clickHandler: () => void
@@ -16,7 +18,7 @@ export const FilterItem = ({
 }) => {
     return (
         <button
-            className={`comment-filter-item comment-filter-item-${
+            className={`comment-filter-item comment-filter-item-${id} comment-filter-item-${
                 isActive ? 'active' : 'inactive'
             }`}
             onClick={e => {

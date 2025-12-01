@@ -46,14 +46,21 @@ export const RowSingle = (props: RowComponentProps) => {
         return Math.min(100, (100 * widthValue) / getTopBound(maxOverallValue))
     }
 
-    const gradientsByDepth = [
-        theme.colors.barChart.primaryGradient,
-        theme.colors.barChart.secondaryGradient,
-        theme.colors.barChart.ternaryGradient || theme.colors.barChart.secondaryGradient,
-        theme.colors.barChart.quaternaryGradient || theme.colors.barChart.secondaryGradient
-    ]
+    let gradient
+    if (question.template === 'opinion') {
+        console.log(theme)
+        gradient =
+            theme?.colors?.ranges?.opinions?.[bucket.id] || theme.colors.barChart.primaryGradient
+    } else {
+        const gradientsByDepth = [
+            theme.colors.barChart.primaryGradient,
+            theme.colors.barChart.secondaryGradient,
+            theme.colors.barChart.ternaryGradient || theme.colors.barChart.secondaryGradient,
+            theme.colors.barChart.quaternaryGradient || theme.colors.barChart.secondaryGradient
+        ]
 
-    const gradient = showNestedBuckets ? gradientsByDepth[depth + 1] : gradientsByDepth[depth]
+        gradient = showNestedBuckets ? gradientsByDepth[depth + 1] : gradientsByDepth[depth]
+    }
 
     // TODO: do this better
     const isFreeformQuestion =

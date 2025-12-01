@@ -46,6 +46,7 @@ export const FilterOptions = ({
                     return (
                         <FilterItem
                             key={option.id}
+                            id={option.id}
                             label={shortLabel}
                             count={count}
                             isActive={option.id === valueFilter}

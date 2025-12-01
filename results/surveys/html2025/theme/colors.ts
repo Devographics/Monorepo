@@ -339,11 +339,11 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
             yes_unrelated: velocity[4]
         },
         opinions: {
-            4: [velocity[9], velocity[8]],
-            3: [velocity[7], velocity[6]],
-            2: [velocity[5], velocity[4]],
-            1: [velocity[3], velocity[2]],
-            0: [velocity[1], velocity[0]]
+            0: ['#ae4e4eff', '#e45959'],
+            1: ['#8b4b4bff', '#a67272'],
+            2: ['#6c6c6cff', '#959595ff'],
+            3: ['#509b6eff', '#7ab190'],
+            4: ['#167f40ff', '#2eba66']
         },
         bracket: {
             round1: [velocity[2], velocity[3]],

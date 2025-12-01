@@ -125,7 +125,7 @@ const ValueItem = ({
     })
     return (
         <button
-            className="value-item"
+            className={`value-item value-item-${id}`}
             onClick={e => {
                 e.preventDefault()
                 setValueFilter(id)
