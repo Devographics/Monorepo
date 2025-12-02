@@ -229,6 +229,7 @@ export interface Bucket extends BucketData, BucketMetadata {
     groupedBuckets?: Bucket[]
     groupedBucketIds?: string[]
     nestedBuckets?: Bucket[]
+    _metadata?: { sectionId?: string }
 }
 
 export type CombinedBucketData = {

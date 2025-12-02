@@ -18,7 +18,7 @@ export const RowHeading = ({
         block?.filtersState?.axis1?.id || block.i18nNamespace || block.fieldId || block.id
     const sectionId = bucket?._metadata?.sectionId
     return (
-        <h3 className="chart-row-heading">
+        <div className="chart-row-heading">
             {sectionId && (
                 <span className="chart-row-heading-section">
                     <T k={`${i18nNamespace}.${sectionId}`} />
@@ -35,6 +35,6 @@ export const RowHeading = ({
                 />
                 {isFreeformData && <FreeformIndicator />}
             </div>
-        </h3>
+        </div>
     )
 }

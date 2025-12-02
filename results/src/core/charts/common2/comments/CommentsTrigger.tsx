@@ -55,9 +55,7 @@ export const CommentsTrigger = ({
                                 {commentsCount || 0}
                             </Button>
                         }
-                        contents={
-                            <T k="comments.comments_for" values={{ name: label.label }} md={true} />
-                        }
+                        contents={<T k="comments.comments_for" values={{ name: label.label }} />}
                     />
                 </div>
             }

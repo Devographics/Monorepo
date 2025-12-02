@@ -66,9 +66,7 @@ export const RowWrapper = (
                         showNestedBuckets={showNestedBuckets}
                         depth={depth}
                     />
-                ) : (
-                    <div />
-                )}
+                ) : null}
                 <RowHeading {...props} />
             </div>
             <div className="chart-row-content" ref={contentRef}>
