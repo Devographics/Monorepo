@@ -156,6 +156,23 @@
 }
 
 .chart-row-heading {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: var(--halfSpacing);
+}
+.chart-row-heading-section {
+    font-size: 0.8rem;
+    color: var(--textAltColor);
+    display: none;
+    .tabs-wrapper-all_features &,
+    .tabs-wrapper-all_libraries & {
+        // only show on these two charts
+        display: block;
+    }
+}
+.chart-row-heading-content {
     margin: 0;
     font-size: var(--chartFontColumnHeading);
     height: var(--barHeight);
