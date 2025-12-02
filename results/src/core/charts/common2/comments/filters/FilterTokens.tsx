@@ -1,5 +1,5 @@
 import React from 'react'
-import { Bucket, Entity, TokenWithCount } from '@devographics/types'
+import { Bucket, Entity, TokenWithCount, QuestionMetadata } from '@devographics/types'
 import { useI18n } from '@devographics/react-i18n'
 import { FilterItem } from '../FilterItem'
 import { FilterSection } from '../CommentsFilters'
@@ -14,13 +14,15 @@ export const FilterTokens = ({
     stateStuff,
     entities,
     buckets,
-    allTokens
+    allTokens,
+    question
 }: {
     tokenId: string
     stateStuff: FreeformAnswersState
     entities: Entity[]
     buckets: Bucket[]
     allTokens: TokenWithCount[]
+    question: QuestionMetadata
 }) => {
     const { tokenFilter, setTokenFilter } = stateStuff
     const { getString } = useI18n()
@@ -50,6 +52,8 @@ export const FilterTokens = ({
                     return (
                         <FilterItem
                             key={id}
+                            id={id}
+                            question={question}
                             label={shortLabel}
                             count={count}
                             isActive={id === tokenFilter}

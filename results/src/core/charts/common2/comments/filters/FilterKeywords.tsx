@@ -1,5 +1,5 @@
 import React from 'react'
-import { WordCount } from '@devographics/types'
+import { WordCount, QuestionMetadata } from '@devographics/types'
 import take from 'lodash/take'
 import { FilterItem } from '../FilterItem'
 import { FreeformAnswersState } from '../../freeform_answers/types'
@@ -9,10 +9,12 @@ export const KEYWORD_COUNT = 20
 
 export const FilterKeywords = ({
     stateStuff,
-    stats
+    stats,
+    question
 }: {
     stateStuff: FreeformAnswersState
     stats: WordCount[]
+    question: QuestionMetadata
 }) => {
     const { keywordFilter, setKeywordFilter } = stateStuff
     const allWords = stats.map(k => k.word)
@@ -28,6 +30,8 @@ export const FilterKeywords = ({
                 {take(stats, KEYWORD_COUNT).map(keyword => (
                     <FilterItem
                         key={keyword.word}
+                        id={keyword.word}
+                        question={question}
                         count={keyword.count}
                         label={keyword.word}
                         isActive={keyword.word === keywordFilter}

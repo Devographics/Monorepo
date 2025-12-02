@@ -39,11 +39,13 @@ export const CommentsFilters = ({
                             comments={comments}
                             allComments={allComments}
                             stateStuff={stateStuff}
+                            question={question}
                         />
                         <FilterSentiment
                             comments={comments}
                             allComments={allComments}
                             stateStuff={stateStuff}
+                            question={question}
                         />
                     </>
                 ) : question.options ? (
@@ -56,7 +58,9 @@ export const CommentsFilters = ({
 
                 <FilterSearch stateStuff={stateStuff} />
 
-                {stats?.length > 0 && <FilterKeywords stateStuff={stateStuff} stats={stats} />}
+                {stats?.length > 0 && (
+                    <FilterKeywords stateStuff={stateStuff} stats={stats} question={question} />
+                )}
             </div>
             <Button
                 onClick={(e: any) => {

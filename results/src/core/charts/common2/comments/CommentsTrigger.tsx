@@ -1,5 +1,5 @@
 import React from 'react'
-import { CommentIcon } from 'core/icons/Comment'
+import { CommentIcon } from '@devographics/icons'
 import ModalTrigger from 'core/components/ModalTrigger'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from '@devographics/react-i18n'

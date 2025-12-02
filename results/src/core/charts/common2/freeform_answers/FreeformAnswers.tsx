@@ -112,10 +112,15 @@ export const FreeformAnswers = ({
                             buckets={buckets}
                             entities={entities}
                             allTokens={tokens}
+                            question={question}
                         />
                         <FilterSearch stateStuff={stateStuff} />
                         {stats?.length > 0 && (
-                            <FilterKeywords stateStuff={stateStuff} stats={stats} />
+                            <FilterKeywords
+                                stateStuff={stateStuff}
+                                stats={stats}
+                                question={question}
+                            />
                         )}
                     </div>
                 </div>
