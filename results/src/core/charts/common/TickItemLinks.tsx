@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { LinkIcon, NpmIcon, TwitterIcon, GitHubIcon, MastodonIcon } from 'core/icons'
+import { LinkIcon, NpmIcon, TwitterIcon, GitHubIcon, MastodonIcon } from '@devographics/icons'
 import get from 'lodash/get'
 
 export const socialLinks = [

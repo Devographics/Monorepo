@@ -1,7 +1,7 @@
 import React from 'react'
 import Avatar from 'core/components/Avatar'
 import { Entity } from '@devographics/types'
-import { MDNIcon, UserIcon } from 'core/icons'
+import { MDNIcon, UserIcon } from '@devographics/icons'
 import { LabelProps, ServiceDefinition } from './types'
 import {
     LinkIcon,
@@ -12,11 +12,11 @@ import {
     YouTubeIcon,
     TwitchIcon,
     RSSIcon,
-    BlogIcon
-} from 'core/icons'
+    BlogIcon,
+    BlueskyIcon,
+    ThreadsIcon
+} from '@devographics/icons'
 import T from 'core/i18n/T'
-import { ThreadsIcon } from 'core/icons/Threads'
-import { BlueskyIcon } from 'core/icons/Bluesky'
 
 export const services: ServiceDefinition[] = [
     {

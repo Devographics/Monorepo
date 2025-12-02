@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from 'react'
 import { ChartValues, Tick, ViewDefinition } from '../common2/types'
-import { IconProps } from 'core/icons/IconWrapper'
+import { IconProps } from '@devographics/icons'
 import {
     Bucket,
     Entity,

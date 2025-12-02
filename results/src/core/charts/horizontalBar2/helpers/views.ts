@@ -5,7 +5,7 @@ import {
     HorizontalBarChartValues,
     HorizontalBarViews
 } from '../types'
-import { Bars, FacetBars, Boxplot as BoxplotIcon, FacetCountsBars } from 'core/icons'
+import { Bars, FacetBars, Boxplot as BoxplotIcon, FacetCountsBars } from '@devographics/icons'
 import {
     Average,
     Boxplot,

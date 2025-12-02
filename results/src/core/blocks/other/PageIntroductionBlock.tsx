@@ -21,10 +21,8 @@ const PageIntroductionBlock = ({ block }) => {
         `sections.${context.intlId || context.id}.description`,
         `sections.${context.intlId || context.id}.prompt`
     ]
-    console.log(keysList)
     const tObject = getFallbacks(keysList)
 
-    console.log(tObject)
     if (!tObject?.missing) {
         return (
             <Introduction

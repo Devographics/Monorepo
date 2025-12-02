@@ -12,7 +12,7 @@ import {
 } from '../types'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
-import { DeleteIcon, PlusIcon } from 'core/icons'
+import { DeleteIcon, PlusIcon } from '@devographics/icons'
 import { Input_, Label_, Select_ } from './FieldSegment'
 import { OptionGroup, OptionMetadata } from '@devographics/types'
 import Button from 'core/components/Button'

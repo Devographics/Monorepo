@@ -10,9 +10,9 @@ import {
     CutoffIcon,
     LimitIcon,
     SortDescIcon,
-    SortAscIcon
+    SortAscIcon,
+    IconProps
 } from '@devographics/icons'
-import { IconProps } from 'core/icons/IconWrapper'
 import React from 'react'
 import { formatNumber, formatPercentage, formatQuestionValue } from './helpers/format'
 import { CommonProps, SerieMetadata } from './types'

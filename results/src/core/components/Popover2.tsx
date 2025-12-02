@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import * as Popover from '@radix-ui/react-popover'
-import { CloseIcon } from 'core/icons'
+import { CloseIcon } from '@devographics/icons'
 
 const PopoverComponent = ({
     trigger,

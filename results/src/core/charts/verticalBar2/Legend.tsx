@@ -4,7 +4,7 @@ import { ColorScale, neutralColor } from '../common2/helpers/colors'
 import { getItemLabel } from 'core/helpers/labels'
 import { useI18n } from '@devographics/react-i18n'
 import T from 'core/i18n/T'
-import { Toggle, ToggleItemType } from '../common2'
+import { Toggle, ToggleItemType, ToggleMode } from '../common2'
 import { VerticalBarChartState } from './types'
 
 type LegendProps = {
@@ -100,7 +100,7 @@ export const Legend = ({
     return (
         <div className="chart-legend chart-legend-verticalBar">
             <Toggle
-                alwaysExpand={true}
+                mode={ToggleMode.SEGMENTED}
                 // labelId="charts.sort_by"
                 handleSelect={() => {
                     return

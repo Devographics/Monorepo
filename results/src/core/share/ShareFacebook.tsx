@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useI18n } from '@devographics/react-i18n'
 import track from './tracking'
 import ShareLink from './ShareLink'
-import { FacebookIcon } from 'core/icons'
+import { FacebookIcon } from '@devographics/icons'
 
 const ShareFacebook = ({ link, trackingId, ...rest }) => {
     const { translate } = useI18n()

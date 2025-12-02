@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { spacing } from 'core/theme'
 import T from 'core/i18n/T'
-import { EditIcon } from 'core/icons'
+import { EditIcon } from '@devographics/icons'
 import Button from 'core/components/Button'
 
 const EditInline = ({ defaultValue }: { defaultValue: string }) => {

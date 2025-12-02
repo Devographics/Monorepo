@@ -1,6 +1,6 @@
 import './FreeformIndicator.scss'
 import React from 'react'
-import { FreeformIcon } from 'core/icons'
+import { FreeformIcon } from '@devographics/icons'
 import T from 'core/i18n/T'
 import Tooltip from 'core/components/Tooltip'
 

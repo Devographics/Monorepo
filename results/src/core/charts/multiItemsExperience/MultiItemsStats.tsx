@@ -8,7 +8,7 @@ import { FeaturesOptions, SimplifiedSentimentOptions } from '@devographics/types
 import sum from 'lodash/sum.js'
 import { formatPercentage } from 'core/explorer/helpers'
 import T from 'core/i18n/T'
-import { AverageIcon } from 'core/icons'
+import { AverageIcon } from '@devographics/icons'
 
 export const MultiItemsStats = ({
     series,

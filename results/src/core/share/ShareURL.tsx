@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useI18n } from '@devographics/react-i18n'
 import track from './tracking'
 import ShareLink from './ShareLink'
-import { LinkIcon, CheckIcon } from 'core/icons'
+import { LinkIcon, CheckIcon } from '@devographics/icons'
 import { copyTextToClipboard, removeDoubleSlashes } from 'core/helpers/utils'
 import { usePageContext } from 'core/helpers/pageContext'
 

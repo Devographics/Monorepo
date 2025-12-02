@@ -1,4 +1,4 @@
-import { UserIcon } from 'core/icons'
+import { UserIcon } from '@devographics/icons'
 import './RespondentCount.scss'
 import React from 'react'
 import { formatNumber } from './helpers/format'

@@ -10,7 +10,7 @@ import UnitsSelector from './UnitsSelector'
 import ControlsModal from './ControlsModal'
 import ShareModal from './ShareModal'
 import DataModal from './DataModal'
-import { EditIcon } from 'core/icons'
+import { EditIcon } from '@devographics/icons'
 import Legend from './Legend'
 
 const Heading = (props: CommonProps) => {

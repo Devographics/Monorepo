@@ -1,6 +1,6 @@
 import React from 'react'
 import ModalTrigger from 'core/components/ModalTrigger'
-import { FiltersIcon } from 'core/icons'
+import { FiltersIcon } from '@devographics/icons'
 import FiltersPanel, { FiltersPanelPropsType } from './FiltersPanel'
 import { BlockVariantDefinition } from 'core/types'
 import { CreateVariantType, UpdateVariantType } from './helpers'

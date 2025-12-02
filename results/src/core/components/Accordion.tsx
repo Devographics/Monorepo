@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
-import { ChevronDownIcon } from 'core/icons'
+import { ChevronDownIcon } from '@devographics/icons'
 import * as Accordion from '@radix-ui/react-accordion'
 
 export const AccordionRoot = styled(Accordion.Root)`

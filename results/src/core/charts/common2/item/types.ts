@@ -1,5 +1,5 @@
 import { Entity } from '@devographics/types'
-import { IconProps } from 'core/icons/IconWrapper'
+import { IconProps } from '@devographics/icons'
 
 export type LabelProps = {
     entity: Entity

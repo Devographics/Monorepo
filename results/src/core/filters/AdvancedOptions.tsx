@@ -1,7 +1,7 @@
 import Tooltip from 'core/components/Tooltip'
 import './AdvancedOptions.scss'
 import React from 'react'
-import { QuestionIcon } from 'core/icons'
+import { QuestionIcon } from '@devographics/icons'
 import T from 'core/i18n/T'
 import { CustomizationOptions, FilterItem, PanelState } from './types'
 import cloneDeep from 'lodash/cloneDeep.js'

@@ -2,7 +2,7 @@ import T from 'core/i18n/T'
 import './Details.scss'
 import React, { useState } from 'react'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { ChevronDownIcon } from 'core/icons'
+import { ChevronDownIcon } from '@devographics/icons'
 
 export const Details = ({
     labelId,

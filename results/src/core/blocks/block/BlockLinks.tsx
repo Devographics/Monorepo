@@ -3,8 +3,7 @@ import styled from 'styled-components'
 import { mq, spacing, fontSize } from 'core/theme'
 import T from 'core/i18n/T'
 
-import { TwitterIcon } from 'core/icons/Twitter'
-import { MDNIcon, NpmIcon } from 'core/icons'
+import { TwitterIcon, MDNIcon, NpmIcon } from '@devographics/icons'
 import Button from 'core/components/Button'
 
 const links = [

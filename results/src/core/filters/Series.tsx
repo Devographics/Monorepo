@@ -8,7 +8,7 @@ import difference from 'lodash/difference.js'
 import cloneDeep from 'lodash/cloneDeep.js'
 import { getNewCondition } from './helpers'
 import { Condition_ } from './condition/Condition'
-import { DeleteIcon } from 'core/icons'
+import { DeleteIcon } from '@devographics/icons'
 import { useTheme } from 'styled-components'
 import YearSelector from './YearSelector'
 import {

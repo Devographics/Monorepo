@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import track from './tracking'
 import ShareLink from './ShareLink'
-import { LinkedInIcon } from 'core/icons'
+import { LinkedInIcon } from '@devographics/icons'
 
 const ShareLinkedIn = ({ link, title, summary = '', trackingId, ...rest }) => {
     return (

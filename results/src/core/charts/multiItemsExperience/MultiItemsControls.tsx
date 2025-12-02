@@ -1,7 +1,7 @@
 import React from 'react'
 import { MultiItemsChartState, GroupingOptions } from './types'
 import { useI18n } from '@devographics/react-i18n'
-import { SplitIcon, StackedIcon } from 'core/icons'
+import { SplitIcon, StackedIcon } from '@devographics/icons'
 import ButtonGroup from 'core/components/ButtonGroup'
 import Button from 'core/components/Button'
 import T from 'core/i18n/T'

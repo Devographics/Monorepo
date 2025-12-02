@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import { mq, spacing, color } from 'core/theme'
 import config from 'Config/config.yml'
 import T from 'core/i18n/T'
-import { CloseIcon } from 'core/icons'
+import { CloseIcon } from '@devographics/icons'
 import { useStickyState } from 'core/filters/helpers'
 
 const SurveyBanner = () => {

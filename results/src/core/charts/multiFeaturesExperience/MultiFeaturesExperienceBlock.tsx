@@ -12,7 +12,7 @@ import { useI18n } from '@devographics/react-i18n'
 import { getTableData, groupDataByYears } from 'core/helpers/datatables'
 import Popover from 'core/components/Popover'
 import CodeExample from 'core/components/CodeExample'
-import { CodeIcon } from 'core/icons'
+import { CodeIcon } from '@devographics/icons'
 import T from 'core/i18n/T'
 
 // convert relative links into absolute MDN links

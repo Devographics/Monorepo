@@ -19,7 +19,7 @@ import {
     TwitchIcon,
     RSSIcon,
     BlogIcon
-} from 'core/icons'
+} from '@devographics/icons'
 import DynamicDataLoader from 'core/filters/dataloaders/DynamicDataLoader'
 import { useChartFilters } from 'core/filters/helpers'
 import { MODE_GRID } from 'core/filters/constants'

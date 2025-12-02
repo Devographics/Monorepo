@@ -35,8 +35,13 @@ export type ToggleItemType = {
     icon?: JSX.Element
 }
 
+export enum ToggleMode {
+    AUTO = 'auto',
+    DROPDOWN = 'dropdown',
+    SEGMENTED = 'segmented'
+}
+
 type ToggleProps = {
-    alwaysExpand?: boolean
     labelId?: string
     items: ToggleItemType[]
     handleSelect?: (id: ToggleValueType | null) => void
@@ -47,6 +52,7 @@ type ToggleProps = {
     // whether the currently active sort is asc/desc
     sortOrder?: OrderOptions | null
     wrapItems?: boolean
+    mode?: ToggleMode
 }
 
 export const DEFAULT_SORT = 'default'
@@ -54,7 +60,7 @@ export const DEFAULT_SORT = 'default'
 export const Toggle = ({
     sortId,
     sortOrder,
-    alwaysExpand = false,
+    mode = ToggleMode.AUTO,
     labelId,
     items,
     handleSelect,
@@ -62,7 +68,7 @@ export const Toggle = ({
     hasDefault = false,
     wrapItems = true
 }: ToggleProps) => {
-    const [useDropdown, setUseDropdown] = useState(false)
+    const [useDropdown, setUseDropdown] = useState(mode === ToggleMode.DROPDOWN)
     const ref = useRef<HTMLDivElement>(null)
     const currentWidth = useWidth(ref)
     const minimumWidth = getMinToggleWidth(items)
@@ -71,7 +77,7 @@ export const Toggle = ({
 
     useEffect(() => {
         // note: only make calculation once currentWidth is defined
-        if (currentWidth && !wrapItems) {
+        if (mode === ToggleMode.AUTO && currentWidth && !wrapItems) {
             const isSmushed = currentWidth < minimumWidth
             setUseDropdown(isSmushed)
         }
@@ -93,7 +99,7 @@ export const Toggle = ({
                 }`}
                 ref={ref}
             >
-                {!alwaysExpand && useDropdown ? (
+                {useDropdown ? (
                     <Dropdown {...commonProps} />
                 ) : (
                     <SegmentedControl {...commonProps} />

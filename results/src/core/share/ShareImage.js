@@ -2,7 +2,7 @@ import React from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import track from './tracking'
 import ShareLink from './ShareLink'
-import { ImageIcon } from 'core/icons'
+import { ImageIcon } from '@devographics/icons'
 
 const ShareImage = ({ trackingId, url, ...rest }) => {
     const { translate } = useI18n()

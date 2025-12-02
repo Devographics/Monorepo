@@ -5,7 +5,7 @@ import Button from 'core/components/Button'
 import T from 'core/i18n/T'
 import { useI18n } from '@devographics/react-i18n'
 
-import { ShareIcon, DataIcon, FiltersIcon } from 'core/icons'
+import { ShareIcon, DataIcon, FiltersIcon } from '@devographics/icons'
 import { CommonProps } from './types'
 
 const actions = [

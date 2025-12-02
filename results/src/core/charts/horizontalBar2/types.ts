@@ -9,7 +9,7 @@ import {
     ViewDefinition
 } from '../common2/types'
 import { FacetItem } from 'core/filters/types'
-import { IconProps } from 'core/icons/IconWrapper'
+import { IconProps } from '@devographics/icons'
 import { Bucket, FacetBucket, QuestionMetadata, ResponseEditionMetadata } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 import { Dimension } from '../multiItemsExperience/types'
