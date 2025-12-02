@@ -182,6 +182,9 @@
     background: var(--backgroundAlt3Color);
     text-align: left;
     border: 2px solid transparent;
+    text-shadow: 1px 1px #00000099;
+    font-weight: bold;
+
     &:hover,
     &-active {
         background: var(--backgroundAlt2Color);
@@ -264,6 +267,22 @@
 .value-item-opinion.value-item-4,
 .comment-filter-item-opinion.comment-filter-item-4 {
     background-color: #2eba66;
+}
+
+.comment-filter-item-used {
+    background-color: #129dc0;
+}
+.comment-filter-item-heard {
+    background-color: #aeefff;
+}
+.comment-filter-item-never_heard {
+    background-color: #8b8085;
+}
+.comment-filter-item-positive {
+    background-color: #5ce593;
+}
+.comment-filter-item-negative {
+    background-color: #e45959;
 }
 
 .token-items {
