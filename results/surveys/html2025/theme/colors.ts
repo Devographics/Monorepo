@@ -230,8 +230,8 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     ],
     barColorDefault: {
         id: 'barColorDefault',
-        color: '#64FF3E',
-        gradient: ['#61EC4C', '#19B330']
+        color: '#8bee7d',
+        gradient: ['#55c347ff', '#8bee7d']
     },
     barColorNoAnswer: {
         id: 'barColorNoAnswer',

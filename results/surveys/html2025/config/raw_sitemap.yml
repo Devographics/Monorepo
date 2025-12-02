@@ -111,6 +111,12 @@
         blocks:
             - template: page_introduction
 
+            - id: forms_features
+              template: multi_items_experience
+              i18nNamespace: features
+              chartOptions:
+                  limit: 99
+
             - id: forms_pain_points
               template: nested_pain_points
               variants:
@@ -122,6 +128,12 @@
         path: /graphics-multimedia
         blocks:
             - template: page_introduction
+
+            - id: graphics_multimedia_features
+              template: multi_items_experience
+              i18nNamespace: features
+              chartOptions:
+                  limit: 99
 
             - id: graphics_pain_points
               template: nested_pain_points
@@ -135,6 +147,12 @@
         blocks:
             - template: page_introduction
 
+            - id: forms_features
+              template: multi_items_experience
+              i18nNamespace: features
+              chartOptions:
+                  limit: 99
+
             - id: content_pain_points
               template: nested_pain_points
               variants:
@@ -146,6 +164,12 @@
         path: /interactivity
         blocks:
             - template: page_introduction
+
+            - id: interactivity_features
+              template: multi_items_experience
+              i18nNamespace: features
+              chartOptions:
+                  limit: 99
 
             - id: interactivity_pain_points
               template: nested_pain_points
@@ -169,6 +193,12 @@
         blocks:
             - template: page_introduction
 
+            - id: performance_features
+              template: multi_items_experience
+              i18nNamespace: features
+              chartOptions:
+                  limit: 99
+
             - id: performance_pain_points
               template: nested_pain_points
               variants:
@@ -185,6 +215,12 @@
         path: /web_components
         blocks:
             - template: page_introduction
+
+            - id: web_components_features
+              template: multi_items_experience
+              i18nNamespace: features
+              chartOptions:
+                  limit: 99
 
             - id: web_components_common_pain_points
               template: multiple_options2_combined
@@ -203,6 +239,12 @@
         path: /system-capabilities
         blocks:
             - template: page_introduction
+
+            - id: system_capabilities_features
+              template: multi_items_experience
+              i18nNamespace: features
+              chartOptions:
+                  limit: 99
 
             - id: system_capabilities_pain_points
               template: nested_pain_points
@@ -235,6 +277,12 @@
         path: /accessibility
         blocks:
             - template: page_introduction
+
+            - id: accessibility_features
+              template: multi_items_experience
+              i18nNamespace: features
+              chartOptions:
+                  limit: 99
 
             - id: accessibility_techniques
               template: multiple_options2_combined
