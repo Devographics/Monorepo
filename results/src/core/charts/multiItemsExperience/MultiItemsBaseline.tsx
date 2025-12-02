@@ -2,7 +2,7 @@ import React from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import { ChartStateWithFilter } from '../common2/types'
 import T from 'core/i18n/T'
-import { Toggle } from '../common2'
+import { Toggle, ToggleMode } from '../common2'
 import { BlockVariantDefinition } from 'core/types'
 import { BaselineStatuses } from '@devographics/types'
 
@@ -49,7 +49,8 @@ export const MultiItemsBaseline = ({ chartState }: MultiItemsCategoriesProps) =>
                 labelId="charts.filter_by.baseline"
                 handleSelect={handleSelect}
                 items={[allItem, ...items]}
-                hasDefault={true}
+                hasDefault={false}
+                mode={ToggleMode.DROPDOWN}
             />
         </div>
     )

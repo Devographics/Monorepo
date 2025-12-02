@@ -5,7 +5,7 @@ import { MultiRatiosChartState, MultiRatioSerie } from './types'
 import { BlockComponentProps, PageContextValue } from 'core/types'
 import { viewDefinition } from './helpers/viewDefinition'
 import { SubsetPresets } from './helpers/subsets'
-import { Toggle, ToggleItemType } from '../common2'
+import { Toggle, ToggleItemType, ToggleMode } from '../common2'
 import T from 'core/i18n/T'
 import { SectionMetadata } from '@devographics/types'
 import intersection from 'lodash/intersection'
@@ -48,11 +48,69 @@ export const SubsetControls = ({
                 hasHighlight ? 'hasHighlight' : 'noHighlight'
             }`}
         >
-            <Presets chartState={chartState} />
+            <AllPresets
+                chartState={chartState}
+                sections={itemSections}
+                i18nNamespace={i18nNamespace}
+            />
+            {/* <Presets chartState={chartState} />
             <Sections
                 chartState={chartState}
                 sections={itemSections}
                 i18nNamespace={i18nNamespace}
+            /> */}
+        </div>
+    )
+}
+
+const AllPresets = ({
+    sections,
+    chartState,
+    i18nNamespace
+}: {
+    chartState: MultiRatiosChartState
+    sections: SectionMetadata[]
+    i18nNamespace?: string
+}) => {
+    const { getString } = useI18n()
+    const { subset, setSubset } = chartState
+    const generalPresets: ToggleItemType[] = Object.values(SubsetPresets).map(id => {
+        const labelKey = `charts.subsets.${id}`
+        const descriptionKey = `${labelKey}.description`
+        const item: ToggleItemType = {
+            id,
+            isEnabled: subset === id,
+            labelKey,
+            label: getString(labelKey)?.t
+        }
+        const description = getString(descriptionKey)
+        if (description) {
+            item.tooltip = <T k={descriptionKey} html={true} md={true} />
+        }
+        return item
+    })
+    const sectionPresets: ToggleItemType[] = sections.map(section => {
+        const { id } = section
+        const labelKey = `${i18nNamespace}.${id}`
+        const descriptionKey = `${labelKey}.description`
+        const item: ToggleItemType = {
+            id,
+            isEnabled: subset === id,
+            labelKey,
+            label: getString(labelKey)?.t
+        }
+        const description = getString(descriptionKey)
+        if (!description.missing) {
+            item.tooltip = <T k={descriptionKey} html={true} md={true} />
+        }
+        return item
+    })
+    return (
+        <div className="subset-controls-group subset-controls-group-sections">
+            <Toggle
+                labelId="charts.subsets.presets"
+                handleSelect={setSubset}
+                items={[...generalPresets, ...sectionPresets]}
             />
         </div>
     )
@@ -77,7 +135,7 @@ const Presets = ({ chartState }: { chartState: MultiRatiosChartState }) => {
         return item
     })
     return (
-        <div className="subset-controls-group">
+        <div className="subset-controls-group subset-controls-group-presets">
             <Toggle labelId="charts.subsets.presets" handleSelect={setSubset} items={items} />
         </div>
     )
@@ -111,7 +169,7 @@ const Sections = ({
         return item
     })
     return (
-        <div className="subset-controls-group">
+        <div className="subset-controls-group subset-controls-group-sections">
             <Toggle labelId="charts.subsets.sections" handleSelect={setSubset} items={items} />
         </div>
     )

@@ -7,9 +7,10 @@
 }
 .chart-controls-top {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: var(--spacing);
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
 }
 .chart-controls-bottom {
     display: flex;
