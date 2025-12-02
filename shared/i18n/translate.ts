@@ -156,13 +156,15 @@ export function makeTranslationFunction(locale: LocaleParsed) {
     ) {
         let message: StringTranslatorResult
         for (const keyOrFunction of keys) {
-            if (typeof keyOrFunction === 'function') {
-                message = keyOrFunction(values)
-            } else {
-                message = getMessage(keyOrFunction, values)
-            }
-            if (message?.t && !message?.missing) {
-                return message
+            if (keyOrFunction) {
+                if (typeof keyOrFunction === 'function') {
+                    message = keyOrFunction(values)
+                } else {
+                    message = getMessage(keyOrFunction, values)
+                }
+                if (message?.t && !message?.missing) {
+                    return message
+                }
             }
         }
     }

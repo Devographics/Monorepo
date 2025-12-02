@@ -1,3 +1,5 @@
+export * from './IconWrapper'
+
 export * from './Chart'
 export * from './Share'
 export * from './Data'
@@ -9,6 +11,7 @@ export * from './GitHub'
 export * from './Mastodon'
 export * from './Twitter'
 export * from './Bluesky'
+export * from './Threads'
 export * from './Email'
 export * from './Facebook'
 export * from './LinkedIn'
