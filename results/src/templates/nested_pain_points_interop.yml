@@ -12,7 +12,7 @@ queryOptions:
 customizationModes: [filters, facets]
 parameters:
     showNoAnswer: true
-    cutoff: 10
+    cutoff: 5
     limit: 20
     mergeOtherBuckets: true
 chartOptions:
@@ -20,13 +20,13 @@ chartOptions:
 
 i18nNamespace: html_pain_points
 
-descriptionId: features.pain_points.interop
+descriptionId: features.pain_points.interop_issues
 
-id: ${mainBlockId}_interop
+id: ${mainBlockId}_interop_issues
 tabId: tabs.browser_support
 
 variables:
-    defaultTokenFilter: interop
+    defaultTokenFilter: interop_issues
     defaultNested: flat
 
 filtersState:
@@ -36,9 +36,8 @@ filtersState:
                 sectionId: ${sectionId}
                 operator: in
                 value:
-                    - interop
+                    - interop_issues
     bucketsFilter:
         nin:
-            - interop
+            - interop_issues
             - limitations
-            - dx

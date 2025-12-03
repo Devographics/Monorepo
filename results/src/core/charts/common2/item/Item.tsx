@@ -65,7 +65,7 @@ export const ChartItem = ({
     if (!entity) {
         return (
             <Wrapper type="noEntity">
-                <Label label={labelObject} />
+                <Label label={labelObject} id={id} />
             </Wrapper>
         )
     } else if (
@@ -78,13 +78,13 @@ export const ChartItem = ({
         if (linkUrl) {
             return (
                 <Wrapper type="default">
-                    <Label label={labelObject} href={linkUrl} />
+                    <Label label={labelObject} href={linkUrl} id={id} />
                 </Wrapper>
             )
         } else {
             return (
                 <Wrapper type="default">
-                    <Label label={labelObject} />
+                    <Label label={labelObject} id={id} />
                 </Wrapper>
             )
         }
@@ -100,7 +100,7 @@ export const ChartItem = ({
                         {entity.entityType === EntityType.PEOPLE && (
                             <IconComponent entity={entity} size="petite" />
                         )}
-                        <Label label={labelObject} />
+                        <Label label={labelObject} id={id} />
                         <BaselineIcon status={entity?.webFeature?.status?.baseline} />
                     </Button>
                 }
@@ -117,7 +117,7 @@ const Wrapper = ({ children, type }: { children: ReactNode; type: string }) => (
     <span className={`chart-item chart-item-${type}`}>{children}</span>
 )
 
-const Label = ({ label: label_, href }: { label: LabelObject; href?: string }) => {
+const Label = ({ label: label_, href, id }: { label: LabelObject; href?: string; id: string }) => {
     const { label, description, shortLabel, key } = label_
     const longLabel = label !== shortLabel ? label : null
     const tooltipContents = description || longLabel
@@ -126,6 +126,7 @@ const Label = ({ label: label_, href }: { label: LabelObject; href?: string }) =
         <span className="chart-item-label-wrapper">
             <LabelElement
                 data-key={key}
+                data-id={id}
                 className={`chart-item-label ${tooltipContents ? 'withTooltip' : ''}`}
                 {...(href ? { href } : {})}
                 dangerouslySetInnerHTML={{ __html: shortLabel }}

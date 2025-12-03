@@ -108,7 +108,7 @@ const AllPresets = ({
     return (
         <div className="subset-controls-group subset-controls-group-sections">
             <Toggle
-                labelId="charts.subsets.presets"
+                labelId="charts.subsets.filters"
                 handleSelect={setSubset}
                 items={[...generalPresets, ...sectionPresets]}
             />

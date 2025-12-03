@@ -12,7 +12,7 @@ queryOptions:
 customizationModes: [filters, facets]
 parameters:
     showNoAnswer: true
-    cutoff: 10
+    cutoff: 5
     limit: 20
     mergeOtherBuckets: true
 chartOptions:

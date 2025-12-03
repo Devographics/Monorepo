@@ -37,7 +37,11 @@ export const OtherBucketMarker = ({
     const deltaRelativeWidth = (deltaAbsoluteWidth * 100) / mainWidth
     const style = { '--deltaWidthPercentage': deltaRelativeWidth }
 
-    const indexDelta = otherBucket.index - mainBucket.index
+    let indexDelta = otherBucket.index - mainBucket.index
+    if (isNaN(indexDelta)) {
+        // will happen for nested charts where buckets don't have indexes
+        indexDelta = 0
+    }
     const absoluteIndexDelta = Math.abs(indexDelta)
     const indexDeltaIsNegative = indexDelta < 0
 
@@ -78,8 +82,12 @@ export const OtherBucketMarker = ({
 
                         {indexDelta !== 0 && (
                             <span className="other-bucket-index-delta" style={style}>
-                                {indexDelta > 0 ? '+' : '-'}
-                                {Math.abs(indexDelta)}
+                                <span className="other-bucket-index-delta-sign">
+                                    {indexDelta > 0 ? '+' : '-'}
+                                </span>
+                                <span className="other-bucket-index-delta-value">
+                                    {Math.abs(indexDelta)}
+                                </span>
                             </span>
                         )}
                     </div>

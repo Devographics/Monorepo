@@ -12,11 +12,11 @@ queryOptions:
 customizationModes: [filters, facets]
 parameters:
     showNoAnswer: true
-    cutoff: 10
+    cutoff: 5
     limit: 20
     mergeOtherBuckets: true
-chartOptions:
-    limit: 10
+# chartOptions:
+#     limit: 10
 
 i18nNamespace: html_pain_points
 
@@ -25,4 +25,5 @@ descriptionId: features.pain_points.default
 
 filtersState:
     bucketsFilter:
-        nin: [limitations, dx]
+        nin:
+            - limitations
