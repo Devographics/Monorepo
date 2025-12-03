@@ -65,10 +65,10 @@
   blocks:
       - template: page_introduction
 
-      - id: figure_has_usage
+      - id: figure_lazy_loading_usage
         template: figure
         variables:
-            value: 80.4
+            value: 70
             unit: percentage
 
       - id: all_features
@@ -86,10 +86,10 @@
                 - accessibility
                 - system_capabilities
 
-      - id: figure_light_dark_awareness
+      - id: figure_content_security_usage
         template: figure
         variables:
-            value: 23
+            value: 10
             unit: percentage
 
       # - id: knowledge_score
@@ -100,16 +100,22 @@
         variables:
             enableMultiSection: true
 
-      - id: josh_comeau
-        template: picks
-        variables:
-            url: https://linear-easing-generator.netlify.app/
+      # - id: josh_comeau
+      #   template: picks
+      #   variables:
+      #       url: https://linear-easing-generator.netlify.app/
 
   children:
       - id: forms
         path: /forms
         blocks:
             - template: page_introduction
+
+            - id: figure_forms_features
+              template: figure
+              variables:
+                  value: 10
+                  unit: percentage
 
             - id: forms_features
               template: multi_items_experience
@@ -147,7 +153,7 @@
         blocks:
             - template: page_introduction
 
-            - id: forms_features
+            - id: content_features
               template: multi_items_experience
               i18nNamespace: features
               chartOptions:
@@ -206,10 +212,10 @@
                   - template: nested_pain_points_interop
                   - template: nested_pain_points_features
 
-            - id: kilian_valkhof
-              template: picks
-              variables:
-                  url: https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap
+            # - id: kilian_valkhof
+            #   template: picks
+            #   variables:
+            #       url: https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap
 
       - id: web_components
         path: /web_components
@@ -253,10 +259,10 @@
                   - template: nested_pain_points_interop
                   - template: nested_pain_points_features
 
-            - id: ana_rodrigues
-              template: picks
-              variables:
-                  url: https://modern-fluid-typography.vercel.app/
+            # - id: ana_rodrigues
+            #   template: picks
+            #   variables:
+            #       url: https://modern-fluid-typography.vercel.app/
 
             # - id: reading_list
             #   template: multiple_options2
@@ -297,10 +303,11 @@
               template: multiple_options2_combined
 
             - id: accessibility_pain_points
-              template: multiple_options2_freeform
-              i18nNamespace: features
-              chartOptions:
-                  limit: 10
+              template: nested_pain_points
+              variants:
+                  - template: nested_pain_points_limitations
+                  - template: nested_pain_points_interop
+                  - template: nested_pain_points_features
 
             - id: other_tools_resources
               items: [fm-next-js-v3]
@@ -311,13 +318,23 @@
   blocks:
       - template: page_introduction
 
-      - id: html_interoperability_features
-        template: multiple_options2_freeform
-        parameters: { limit: 20 }
+      - id: html_interoperability_features_features_only
+        template: nested_pain_points_features
+        fieldId: html_interoperability_features
+        variants:
+            - id: html_interoperability_features
+              template: multiple_options2_freeform
+              parameters: { limit: 20 }
+              tabId: tabs.all_topics
 
-      - id: html_functionality_features
-        template: multiple_options2_freeform
-        parameters: { limit: 20 }
+      - id: html_functionality_features_features_only
+        template: nested_pain_points_features
+        fieldId: html_functionality_features
+        variants:
+            - id: html_functionality_features
+              template: multiple_options2_freeform
+              parameters: { limit: 20 }
+              tabId: tabs.all_topics
 
       - id: html_missing_elements
         template: multiple_options2_combined
@@ -345,9 +362,11 @@
         template: hint
 
       - id: html_pain_points_freeform
-        template: multiple_options2_freeform
-        chartOptions:
-            limit: 10
+        template: nested_pain_points
+        variants:
+            - template: nested_pain_points_limitations
+            - template: nested_pain_points_interop
+            - template: nested_pain_points_features
 
       - id: usage_resources
         items: [fm-homepage]
