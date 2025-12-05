@@ -7,7 +7,6 @@ import { EnvVar, getEnvVar, parseEnvVariableArray } from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
 
 import path from 'path'
-
 // import hljs from 'highlight.js/lib/common'
 
 import { RequestContext } from '../types'
@@ -17,6 +16,9 @@ import { EntityResolverMap, entityResolverMap } from '../resolvers/entities'
 import isEmpty from 'lodash/isEmpty.js'
 import { OptionId } from '@devographics/types'
 import clone from 'lodash/clone.js'
+import merge from 'lodash/merge.js'
+import uniq from 'lodash/uniq.js'
+import compact from 'lodash/compact.js'
 import {
     getAvatar,
     getAvatarAlways,
@@ -240,23 +242,32 @@ export const getEntities = async (
 }
 
 export const findEntity = (id: string, entities: Entity[], tag?: string) => {
+    let entity
     const exactMatches = entities.filter(e => e.id && e.id.toLowerCase() === id)
     const aliasesMatches = entities.filter(e => e.idAliases?.includes(id))
     // do not match using entity names anymore, too many false positives
     // const nameMatches = entities.filter(e => e.name && e.name.toLowerCase() === id)
 
     const matchingEntities = [...exactMatches, ...aliasesMatches]
-    // keep the first entity we found
-    const entity = matchingEntities[0]
 
-    // if we're passing a tag, then find the version of the entity with that tag,
-    // and use that to figure out the parentId
+    // merge the entities we found
+    entity = merge(...[{}, ...matchingEntities])
+
+    // keep the first entity we found
+    // const entity = matchingEntities[0]
+
+    // if we're passing a tag, then make sure we overwrite everything with
+    // the version of the entity with that tag coming last
     if (tag) {
         const entityWithTag = matchingEntities.find(e => e.tags?.includes(tag))
         if (entityWithTag) {
             entity.parentId = entityWithTag?.parentId
         }
     }
+
+    // don't merge tags arrays (which would overwrite the value) but instead concatenate them
+    const allTags = compact(uniq(matchingEntities.map(e => e.tags).flat()))
+    entity.tags = allTags
 
     return entity
 }
