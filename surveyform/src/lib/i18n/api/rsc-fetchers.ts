@@ -14,20 +14,20 @@ import { type LocaleParsed } from "@devographics/i18n";
  * /!\ Will not automatically merge cache if contexts are repeated
  * (eg fetching ["general"] then ["general", "survey"])
  */
-export const rscLocaleNew = cache(
+export const rscLocale = cache(
   async (options: {
     localeId: string;
     contexts: Array<string>;
   }): // FIXME: the type is not properly inferred at time of writing, despite being correct in the package
-    Promise<
-      | { locale: LocaleParsed; error?: undefined }
-      | { error: Error; locale?: undefined }
-    > => {
+  Promise<
+    | { locale: LocaleParsed; error?: undefined }
+    | { error: Error; locale?: undefined }
+  > => {
     const { locale, error } = (await getLocaleDict(options)) as
       | { locale: LocaleParsed; error?: undefined }
       | { locale?: undefined; error: Error };
     if (error) {
-      console.log("// rscLocaleNew error");
+      console.log("// rscLocale error");
       console.log(error);
       return { error };
     }
@@ -46,19 +46,16 @@ interface LocaleParams {
  *
  * To be used in pages and layouts
  * @see rscLocaleCached to get the locale from server components
+ *
+ * TODO: Next 16 will include a "use cache" directive that replaces "unstable_cache"
+ * @see https://nextjs.org/blog/composable-caching
  */
 export const rscLocaleFromParams = (params: LocaleParams) =>
   unstable_cache(
     async (params: LocaleParams) => {
       const contexts = params.contexts || getCommonContexts();
       const localeId = safeLocaleIdFromParams({ lang: params.lang });
-      // TODO: our previous implemention returns "data", "error", common in graphql
-      // while the pipeline system insteads return the data or throw
-      /*const {
-    data: locale,
-    error,
-    ___metadata: ___rscLocale_CommonContexts,
-  }*/ const { locale, error } = await rscLocaleNew({
+      const { locale, error } = await rscLocale({
         localeId,
         contexts,
       });
