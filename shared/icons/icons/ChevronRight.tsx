@@ -1,7 +1,7 @@
 import React from 'react'
 import IconWrapper, { IconProps } from './IconWrapper'
 
-export const ChevronUpIcon = (props: IconProps) => (
+export const ChevronRightIcon = (props: IconProps) => (
     <IconWrapper {...props}>
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -14,7 +14,7 @@ export const ChevronUpIcon = (props: IconProps) => (
             strokeLinecap="butt"
             strokeLinejoin="round"
         >
-            <path d="m18 15-6-6-6 6"></path>
+            <path d="m9 18 6-6-6-6"></path>
         </svg>
     </IconWrapper>
 )
