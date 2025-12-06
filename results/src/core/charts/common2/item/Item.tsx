@@ -29,8 +29,9 @@ const entityComponents = {
     [EntityType.LIBRARY]: { icon: LibraryIcon, modal: LibraryModal }
 }
 
+const chipTriggerFields = ['description', 'example']
 const entityHasData = (entity: Entity) =>
-    ['description', 'example', ...services.map(s => s.service)].some(
+    [...chipTriggerFields, ...services.map(s => s.service)].some(
         property => !!entity[property as keyof Entity]
     )
 

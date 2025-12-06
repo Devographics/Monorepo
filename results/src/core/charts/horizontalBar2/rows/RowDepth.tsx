@@ -1,5 +1,7 @@
 import React from 'react'
 import { Bucket } from '@devographics/types'
+import { ChevronDownIcon, ChevronRightIcon } from '@devographics/icons'
+import './RowDepth.scss'
 
 type DepthIndicatorProps = {
     hasNestedBuckets?: boolean
