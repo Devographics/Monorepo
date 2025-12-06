@@ -38,15 +38,22 @@ export const RowDepth = ({
             <div className="chart-depth-horizontal">
                 {depth > 0 && <div className="chart-depth-line" />}
                 {hasNestedBuckets ? (
+                    // <button
+                    //     className="chart-depth-node chart-depth-node-button"
+                    //     onClick={() => setShowNestedBuckets(!showNestedBuckets)}
+                    //     aria-expanded={showNestedBuckets}
+                    // >
+                    //     {showNestedBuckets ? '-' : `+${nestedBuckets?.length}`}
+                    // </button>
                     <button
                         className="chart-depth-node chart-depth-node-button"
                         onClick={() => setShowNestedBuckets(!showNestedBuckets)}
                         aria-expanded={showNestedBuckets}
                     >
-                        {showNestedBuckets ? '-' : `+${nestedBuckets?.length}`}
+                        {showNestedBuckets ? <ChevronDownIcon /> : <ChevronRightIcon />}
                     </button>
                 ) : (
-                    <div className="chart-depth-node" />
+                    <div className="chart-depth-node-empty" />
                 )}
             </div>
         </div>

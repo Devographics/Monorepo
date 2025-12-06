@@ -52,14 +52,15 @@ export const RowSingle = (props: RowComponentProps) => {
         gradient =
             theme?.colors?.ranges?.opinions?.[bucket.id] || theme.colors.barChart.primaryGradient
     } else {
-        const gradientsByDepth = [
-            theme.colors.barChart.primaryGradient,
-            theme.colors.barChart.secondaryGradient,
-            theme.colors.barChart.ternaryGradient || theme.colors.barChart.secondaryGradient,
-            theme.colors.barChart.quaternaryGradient || theme.colors.barChart.secondaryGradient
-        ]
+        // const gradientsByDepth = [
+        //     theme.colors.barChart.primaryGradient,
+        //     theme.colors.barChart.secondaryGradient,
+        //     theme.colors.barChart.ternaryGradient || theme.colors.barChart.secondaryGradient,
+        //     theme.colors.barChart.quaternaryGradient || theme.colors.barChart.secondaryGradient
+        // ]
 
-        gradient = showNestedBuckets ? gradientsByDepth[depth + 1] : gradientsByDepth[depth]
+        // gradient = showNestedBuckets ? gradientsByDepth[depth + 1] : gradientsByDepth[depth]
+        gradient = theme.colors.barChart.primaryGradient
     }
 
     // TODO: do this better

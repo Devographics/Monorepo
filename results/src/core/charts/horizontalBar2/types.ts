@@ -99,6 +99,7 @@ export type RowGroupProps = HorizontalBarViewProps & {
 }
 
 export type RowComponentProps = Omit<RowGroupProps, 'rowComponent'> & {
+    nestedBuckets?: Bucket[]
     hasNestedBuckets?: boolean
     showNestedBuckets: boolean
     setShowNestedBuckets: Dispatch<SetStateAction<boolean>>

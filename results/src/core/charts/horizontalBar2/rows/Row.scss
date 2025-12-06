@@ -30,6 +30,25 @@
         position: relative;
     }
 }
+
+@keyframes pulse {
+    from {
+        box-shadow: 0px 0px 0px var(--linkColor);
+    }
+    to {
+        box-shadow: 0px 0px 8px var(--linkColor);
+    }
+}
+.chart-row-hasNestedBuckets:hover {
+    .chart-depth-node-button {
+        border-color: var(--linkColor);
+        // box-shadow: 0px 0px 5px var(--linkColor);
+        animation: 1s linear infinite alternate pulse;
+        svg {
+            stroke: var(--linkColor);
+        }
+    }
+}
 .chart-axis {
     align-items: center;
     @include small {
@@ -161,6 +180,7 @@
     justify-content: flex-start;
     align-items: flex-start;
     gap: var(--halfSpacing);
+    flex-grow: 1;
 }
 .chart-row-heading-section {
     font-size: 0.8rem;
@@ -181,15 +201,27 @@
     height: var(--barHeight);
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     font-size: 0.9rem;
     font-weight: normal;
     gap: 10px;
     max-width: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;
+    width: 100%;
 }
 
+.chart-row-heading-content-count {
+    color: var(--textAltColor2);
+    background: var(--backgroundAltColor);
+    border-radius: 100%;
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    font-size: 0.8rem;
+    line-height: 1;
+}
 .chart-row-heading-grouped {
     opacity: 0.5;
 }
