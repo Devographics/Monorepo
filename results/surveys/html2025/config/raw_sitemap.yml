@@ -114,8 +114,8 @@
             - id: figure_forms_features
               template: figure
               variables:
-                  value: 10
-                  unit: percentage
+                  value: 66
+                  # unit: percentage
 
             - id: forms_features
               template: multi_items_experience
