@@ -50,7 +50,7 @@ export const RowWrapper = (
         <div
             className={className}
             onClick={() => {
-                setShowNestedBuckets(!showNestedBuckets)
+                setShowNestedBuckets && setShowNestedBuckets(!showNestedBuckets)
             }}
             onMouseEnter={() => {
                 setHighlightedRow(bucket.id)

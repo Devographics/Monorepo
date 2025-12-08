@@ -63,6 +63,7 @@ export const ChartItem = ({
         html: true,
         values: serieMetadata
     })
+
     if (!entity) {
         return (
             <Wrapper type="noEntity">

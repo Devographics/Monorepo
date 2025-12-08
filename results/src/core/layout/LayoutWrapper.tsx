@@ -30,7 +30,6 @@ const ThemedLayout = (props: LayoutProps) => {
         '--textAltColor': colors.textAlt,
         '--textAltColor2': colors.textAlt2 || colors.textAlt,
         '--backgroundColor': colors.background,
-        '--backgroundBackgroundColor': colors.backgroundBackground,
         '--backgroundAltColor': colors.backgroundAlt,
         '--backgroundAlt2Color': colors.backgroundAlt2,
         '--backgroundAlt3Color': colors.backgroundAlt3,

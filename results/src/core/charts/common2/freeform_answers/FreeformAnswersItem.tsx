@@ -242,7 +242,10 @@ const Token = ({
     const { id, ancestors } = token
     const { getString } = useI18n()
     const isHighlighted =
-        ancestors?.includes(mainTokenId) || mainTokenId === id || tokenFilter === id
+        ancestors?.includes(mainTokenId) ||
+        mainTokenId === id ||
+        (tokenFilter && ancestors?.includes(tokenFilter)) ||
+        tokenFilter === id
     const bucket = allBuckets.find(b => b.id === id)
 
     const labelObject = getItemLabel({

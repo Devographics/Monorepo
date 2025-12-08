@@ -16,7 +16,7 @@ export const FigureBlock = ({ block }: { block: BlockVariantDefinition }) => {
             <div className="figure-block-number">{formattedValue}</div>
 
             <div className="figure-block-text">
-                <T k={`figure.${block.id}.${currentEdition.id}`} />
+                <T k={`figure.${block.id}.${currentEdition.id}`} html={true} md={true} />
             </div>
         </div>
     )

@@ -36,6 +36,8 @@
 .chart-item-entity {
     .tooltip-trigger {
         border-bottom: none;
+        display: flex;
+        align-items: center;
     }
 }
 button.button-round {

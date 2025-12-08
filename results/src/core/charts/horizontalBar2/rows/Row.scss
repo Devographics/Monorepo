@@ -88,7 +88,7 @@
     &-depth-1,
     &-depth-2,
     &-depth-3 {
-        background: #ffffff18;
+        // background: #ffffff18;
     }
     .chart-row-index {
         display: none;
@@ -97,10 +97,10 @@
         // background: #ffffff22;
     }
     &:hover {
-        background: #ffffff33;
+        background: var(--rowHoverColor);
     }
     &.chart-row-highlighted {
-        background: #ffffff33;
+        background: var(--rowHoverColor);
     }
 }
 
