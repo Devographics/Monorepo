@@ -210,7 +210,11 @@
     white-space: nowrap;
     width: 100%;
 }
-
+.chart-row-heading-content-left {
+    display: flex;
+    align-items: center;
+    gap: var(--halfSpacing);
+}
 .chart-row-heading-content-count {
     color: var(--textAltColor2);
     background: var(--backgroundAltColor);
