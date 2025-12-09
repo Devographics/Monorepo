@@ -29,8 +29,6 @@ export const FilterTokens = ({
 
     const tokens = take(allTokens, TOKEN_LIMIT).filter(token => token.id !== tokenId)
 
-    console.log(allTokens)
-    console.log(tokens)
     return (
         <FilterSection
             headingId="token"

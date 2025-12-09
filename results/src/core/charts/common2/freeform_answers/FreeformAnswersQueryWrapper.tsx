@@ -93,7 +93,6 @@ export const FreeformAnswersQueryWrapper = ({
         const getData = async () => {
             setIsLoading(true)
             const query = getQuery(queryOptions)
-            console.log({ query })
 
             const url = process.env.GATSBY_API_URL
             if (!url) {
@@ -119,7 +118,6 @@ export const FreeformAnswersQueryWrapper = ({
         getData()
     }, [])
 
-    console.log({ data })
     return (
         <div className="comments-wrapper">
             <div className="comments-wrapper-note">

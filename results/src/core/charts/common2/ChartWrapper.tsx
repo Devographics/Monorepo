@@ -2,20 +2,17 @@ import React from 'react'
 import './ChartWrapper.scss'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { BAR_HEIGHT } from '../horizontalBar2/rows/RowGroup'
-import { QuestionMetadata } from '@devographics/types'
 import { BlockVariantDefinition } from 'core/types'
 import T from 'core/i18n/T'
 
 export const ChartWrapper = ({
     block,
     children,
-    className = '',
-    question
+    className = ''
 }: {
     block: BlockVariantDefinition
     children: JSX.Element
     className?: string
-    question?: QuestionMetadata
 }) => {
     const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
     const style = {

@@ -99,6 +99,13 @@
     color: var(--textColorInverted);
     padding: var(--spacing);
     position: relative;
+    a {
+        color: var(--textInvertedColor);
+        text-decoration: underline;
+        &:hover {
+            color: var(--linkColor);
+        }
+    }
 }
 
 .comment-index {

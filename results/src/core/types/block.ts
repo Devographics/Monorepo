@@ -28,7 +28,7 @@ export type BlockMode = 'absolute' | 'relative'
 export interface BlockComponentProps {
     block: BlockVariantDefinition
     pageContext: PageContextValue
-    question: QuestionMetadata
+    question?: QuestionMetadata
     variant?: CustomVariant
 }
 
