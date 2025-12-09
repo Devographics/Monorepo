@@ -559,6 +559,10 @@ export async function genericComputeFunction(
             // note: unlike bucket grouping, bucket nesting does not change bucket counts
             // so we can run it after cutoff steps
 
+            // restrict buckets to the ones specified in bucketsFilter if needed
+            // note: this uses entity tags so do it after addEntities
+            await runStage(restrictBuckets, [results, axis2])
+
             // bucket nesting
             await runStage(nestBuckets, [results, axis2, axis1])
 
@@ -569,10 +573,6 @@ export async function genericComputeFunction(
             if (axis2.enableBucketGroups && axis2.question.groups) {
                 axis2.options = axis2.question.groups
             }
-
-            // restrict buckets to the ones specified in bucketsFilter if needed
-            // note: this uses entity tags so do it after addEntities
-            await runStage(restrictBuckets, [results, axis2])
 
             await runStage(sortData, [results, axis2, axis1])
 
@@ -620,6 +620,10 @@ export async function genericComputeFunction(
 
             await runStage(applyDatasetCutoff, [results, computeArguments, axis1])
 
+            // restrict buckets to the ones specified in bucketsFilter if needed
+            // note: this uses entity tags so do it after addEntities
+            await runStage(restrictBuckets, [results, axis1])
+
             // note: unlike bucket grouping, bucket nesting does not change bucket counts
             // so we can run it after cutoff steps
             await runStage(nestBuckets, [results, axis1])
@@ -628,10 +632,6 @@ export async function genericComputeFunction(
             if (axis1.enableBucketGroups && axis1.question.groups) {
                 axis1.options = axis1.question.groups
             }
-
-            // restrict buckets to the ones specified in bucketsFilter if needed
-            // note: this uses entity tags so do it after addEntities
-            await runStage(restrictBuckets, [results, axis1])
 
             await runStage(sortData, [results, axis1])
             await runStage(limitData, [results, axis1])
