@@ -33,7 +33,7 @@ const ThemedLayout = (props: LayoutProps) => {
         '--backgroundAltColor': colors.backgroundAlt,
         '--backgroundAlt2Color': colors.backgroundAlt2,
         '--backgroundAlt3Color': colors.backgroundAlt3,
-        '--rowHoverColor': colors.rowHover || '#ffffff33',
+        '--rowHoverColor': colors.rowHover || colors.backgroundAlt,
         '--backgroundInvertedColor': colors.backgroundInverted,
         '--borderColor': colors.border,
         '--borderAltColor': colors.borderAlt,

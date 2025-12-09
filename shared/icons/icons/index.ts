@@ -6,6 +6,7 @@ export * from './Data'
 export * from './Debug'
 export * from './Edit'
 
+export * from './ExternalLink'
 export * from './Twitch'
 export * from './GitHub'
 export * from './Mastodon'

@@ -16,7 +16,7 @@ import Popover from 'core/components/Popover2'
 import { PeopleIcon, PeopleModal, services } from './People'
 import { baselineStatuses, FeatureModal } from './Feature'
 import { LibraryModal } from './Library'
-import { FeatureIcon, LibraryIcon } from '@devographics/icons'
+import { ExternalLinkIcon, FeatureIcon, LibraryIcon } from '@devographics/icons'
 import Tooltip from 'core/components/Tooltip'
 import { usePageContext } from 'core/helpers/pageContext'
 import T from 'core/i18n/T'
@@ -130,9 +130,14 @@ const Label = ({ label: label_, href, id }: { label: LabelObject; href?: string;
                 data-key={key}
                 data-id={id}
                 className={`chart-item-label ${tooltipContents ? 'withTooltip' : ''}`}
-                {...(href ? { href } : {})}
-                dangerouslySetInnerHTML={{ __html: shortLabel }}
-            />
+                {...(href ? { href, target: '_blank' } : {})}
+                onClick={e => {
+                    e.stopPropagation()
+                }}
+            >
+                <span dangerouslySetInnerHTML={{ __html: shortLabel }} />
+                {href && <ExternalLinkIcon />}
+            </LabelElement>
         </span>
     )
     return tooltipContents ? (

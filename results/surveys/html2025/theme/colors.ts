@@ -156,7 +156,7 @@ const stateOfCSSThemeColors: DefaultTheme['colors'] = {
     backgroundAlt2: '#598253ff',
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
-    rowHover: '#6b9a6366',
+    // rowHover: '#485347ff',
     text: colors.white,
     textAlt: 'rgba(255, 246, 229, 0.65)',
     textAlt2: 'rgba(255, 246, 229, 0.8)',

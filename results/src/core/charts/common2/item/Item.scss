@@ -18,13 +18,23 @@
     max-width: 200px;
     display: flex;
     overflow: hidden;
+    .icon-wrapper {
+        height: 16px;
+        width: 16px;
+        svg {
+            height: 100%;
+            width: 100%;
+        }
+    }
 }
 .chart-item-label {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     margin-left: 0%;
-
+    display: flex;
+    align-items: center;
+    gap: var(--quarterSpacing);
     .chart-item-label-wrapper:hover & {
         text-overflow: initial;
         overflow: visible;
