@@ -644,7 +644,9 @@ export async function genericComputeFunction(
         await runStage(addMetadata, [results, axis1])
     }
 
-    await runStage(addIndexes, [results, context, axis1])
+    if (executionContext === ExecutionContext.REGULAR) {
+        await runStage(addIndexes, [results, context, axis1])
+    }
 
     await runStage(detectNaN, [results, isDebug, logPath])
 
