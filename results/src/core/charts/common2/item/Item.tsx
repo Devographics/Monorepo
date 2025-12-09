@@ -29,7 +29,7 @@ const entityComponents = {
     [EntityType.LIBRARY]: { icon: LibraryIcon, modal: LibraryModal }
 }
 
-const chipTriggerFields = ['description', 'example']
+const chipTriggerFields = ['example']
 const entityHasData = (entity: Entity) =>
     [...chipTriggerFields, ...services.map(s => s.service)].some(
         property => !!entity[property as keyof Entity]
@@ -130,10 +130,15 @@ const Label = ({ label: label_, href, id }: { label: LabelObject; href?: string;
                 data-key={key}
                 data-id={id}
                 className={`chart-item-label ${tooltipContents ? 'withTooltip' : ''}`}
-                {...(href ? { href, target: '_blank' } : {})}
-                onClick={e => {
-                    e.stopPropagation()
-                }}
+                {...(href
+                    ? {
+                          href,
+                          target: '_blank',
+                          onClick: e => {
+                              e.stopPropagation()
+                          }
+                      }
+                    : {})}
             >
                 <span dangerouslySetInnerHTML={{ __html: shortLabel }} />
                 {href && <ExternalLinkIcon />}
