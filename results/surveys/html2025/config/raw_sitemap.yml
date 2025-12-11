@@ -111,6 +111,11 @@
         blocks:
             - template: page_introduction
 
+            - id: highlight_forms_features
+              template: highlight
+              variables:
+                  itemId: customizable_select
+
             - id: figure_forms_features
               template: figure
               variables:

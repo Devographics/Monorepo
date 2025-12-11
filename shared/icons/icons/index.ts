@@ -60,6 +60,8 @@ export * from './SortDesc'
 export * from './SortAsc'
 export * from './Document'
 export * from './Experimental'
+export * from './Lightbulb'
+export * from './LightbulbOn'
 
 // browsers
 export * from './Chrome'

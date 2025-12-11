@@ -110,6 +110,8 @@ export const PeopleModal = ({ entity }: LabelProps) => {
 
 export const ItemLinks = ({ entity }: { entity: Entity }) => {
     const links = getSocialLinks(entity)
+    console.log(entity)
+    console.log(links)
     return (
         <ul className="item-links">
             {links.map(({ service, url, icon }, index) => (

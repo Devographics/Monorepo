@@ -23,7 +23,8 @@ import T from 'core/i18n/T'
 import { SeriesMetadata } from '../types'
 import { BaselineIcon } from './BaselineIcon'
 
-const entityComponents = {
+export const entityComponents = {
+    [EntityType.DEFAULT]: { icon: FeatureIcon, modal: FeatureModal },
     [EntityType.PEOPLE]: { icon: PeopleIcon, modal: PeopleModal },
     [EntityType.FEATURE]: { icon: FeatureIcon, modal: FeatureModal },
     [EntityType.LIBRARY]: { icon: LibraryIcon, modal: LibraryModal }
