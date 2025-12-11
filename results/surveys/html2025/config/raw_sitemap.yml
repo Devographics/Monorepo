@@ -140,6 +140,11 @@
         blocks:
             - template: page_introduction
 
+            - id: highlight_graphics_features
+              template: highlight
+              variables:
+                  itemId: jpeg_xl
+
             - id: graphics_multimedia_features
               template: multi_items_experience
               i18nNamespace: features
@@ -158,6 +163,11 @@
         blocks:
             - template: page_introduction
 
+            - id: highlight_content_features
+              template: highlight
+              variables:
+                  itemId: intl_segmenter
+
             - id: content_features
               template: multi_items_experience
               i18nNamespace: features
@@ -175,6 +185,11 @@
         path: /interactivity
         blocks:
             - template: page_introduction
+
+            - id: highlight_interactivity_features
+              template: highlight
+              variables:
+                  itemId: popover_api
 
             - id: interactivity_features
               template: multi_items_experience
@@ -204,6 +219,11 @@
         blocks:
             - template: page_introduction
 
+            - id: highlight_performance_features
+              template: highlight
+              variables:
+                  itemId: lazy_loading
+
             - id: performance_features
               template: multi_items_experience
               i18nNamespace: features
@@ -226,6 +246,11 @@
         path: /web_components
         blocks:
             - template: page_introduction
+
+            - id: highlight_web_components_features
+              template: highlight
+              variables:
+                  itemId: shadow_dom
 
             - id: web_components_features
               template: multi_items_experience
@@ -250,6 +275,11 @@
         path: /system-capabilities
         blocks:
             - template: page_introduction
+
+            - id: highlight_system_capabilities_features
+              template: highlight
+              variables:
+                  itemId: payment_request_api
 
             - id: system_capabilities_features
               template: multi_items_experience
@@ -288,6 +318,11 @@
         path: /accessibility
         blocks:
             - template: page_introduction
+
+            - id: highlight_accessibility_features
+              template: highlight
+              variables:
+                  itemId: landmark_elements
 
             - id: accessibility_features
               template: multi_items_experience

@@ -1,5 +1,6 @@
 blockType: HighlightBlock
 wrapBlock: false
+showInNav: false
 dataPath: dataAPI.highlight_${itemId}
 query: >
     highlight_${itemId}: entity(id: "${itemId}") {
