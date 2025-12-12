@@ -60,6 +60,7 @@ query ${editionId}MetadataQuery {
             matchType
             matchTags
             disallowedTokenIds
+            disableRegexMatching
             followups {
               id
               options {

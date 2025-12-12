@@ -155,6 +155,8 @@ export const getEditionSelector = async ({
 }) => {
   const selector = {
     editionId: edition.id,
+    // if a response has been manually flagged as suspect, just skip it
+    isFlagged: { $ne: true },
   };
   return selector;
 };

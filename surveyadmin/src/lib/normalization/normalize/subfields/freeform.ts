@@ -60,6 +60,8 @@ export const freeform: SubfieldProcessFunction = async ({
     }
   };
 
+  const { disallowedTokenIds = [], disableRegexMatching } = questionObject;
+
   const modifiedFields: FieldLogItem[] = [];
 
   const allAnswersCustomNormalizations = customNormalizations.filter(
@@ -92,21 +94,24 @@ export const freeform: SubfieldProcessFunction = async ({
           let metadata = [] as NormalizationMetadata[];
           let i = 0;
           for (const raw of valuesArrayClean) {
-            let tokens;
+            let tokens: NormalizationToken[] = [];
 
-            tokens = (await normalize({
-              values: [raw],
-              entityRules,
-              edition,
-              questionObject,
-              verbose,
-              timestamp,
-            })) as NormalizationToken[];
+            if (!disableRegexMatching) {
+              tokens = await normalize({
+                values: [raw],
+                entityRules,
+                edition,
+                questionObject,
+                verbose,
+                timestamp,
+              });
+            }
 
             const currentAnswerCustomNormalization =
               allAnswersCustomNormalizations.find(
                 (norm) => norm.answerIndex === i
               );
+
             // if custom norm. tokens have been defined, also add their id
             if (currentAnswerCustomNormalization) {
               const {
@@ -115,10 +120,11 @@ export const freeform: SubfieldProcessFunction = async ({
                 importedTokens: importedTokensIds,
                 disabledTokens: disabledTokensIds,
               } = currentAnswerCustomNormalization;
+
               if (customTokensIds) {
                 logIfVerbose(`⛰️ Custom tokens: [${customTokensIds.join()}]`);
-                // only keep custom token that are not already included in regular norm. tokens
                 const customTokens = customTokensIds
+                  // only keep custom token that are not already included in regular norm. tokens
                   .filter((id) => !tokens.map((t) => t.id).includes(id))
                   .map((id) => ({
                     id,
@@ -126,10 +132,11 @@ export const freeform: SubfieldProcessFunction = async ({
                   }));
                 tokens = [...tokens, ...customTokens];
               }
+
               if (aiTokensIds) {
                 logIfVerbose(`⛰️ AI tokens: [${aiTokensIds.join()}]`);
-                // only keep custom token that are not already included in regular norm. tokens
                 const aiTokens = aiTokensIds
+                  // only keep custom token that are not already included in regular norm. tokens
                   .filter((id) => !tokens.map((t) => t.id).includes(id))
                   .map((id) => ({
                     id,
@@ -137,12 +144,13 @@ export const freeform: SubfieldProcessFunction = async ({
                   }));
                 tokens = [...tokens, ...aiTokens];
               }
+
               if (importedTokensIds) {
                 logIfVerbose(
                   `⛰️ Imported tokens: [${importedTokensIds.join()}]`
                 );
-                // only keep custom token that are not already included in regular norm. tokens
                 const importedTokens = importedTokensIds
+                  // only keep custom token that are not already included in regular norm. tokens
                   .filter((id) => !tokens.map((t) => t.id).includes(id))
                   .map((id) => ({
                     id,
@@ -150,6 +158,7 @@ export const freeform: SubfieldProcessFunction = async ({
                   }));
                 tokens = [...tokens, ...importedTokens];
               }
+
               if (disabledTokensIds) {
                 logIfVerbose(
                   `⛰️ Disabled tokens: [${disabledTokensIds.join()}]`
@@ -157,6 +166,16 @@ export const freeform: SubfieldProcessFunction = async ({
                 // if some tokens are disabled, remove them
                 tokens = tokens.filter(
                   (t) => !disabledTokensIds.includes(t.id)
+                );
+              }
+
+              if (disallowedTokenIds) {
+                logIfVerbose(
+                  `⛰️ Disallowed tokens: [${disallowedTokenIds.join()}]`
+                );
+                // if some tokens are disallowed, remove them
+                tokens = tokens.filter(
+                  (t) => !disallowedTokenIds.includes(t.id)
                 );
               }
             }
