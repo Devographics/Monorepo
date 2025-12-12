@@ -1,4 +1,4 @@
-import { Bucket, BucketUnits, FacetBucket, ResponseEditionData } from '@devographics/types'
+import { Bucket, BucketUnits, FacetBucket, Filters, ResponseEditionData } from '@devographics/types'
 import { ComputeAxisParameters, GenericComputeArguments } from '../../types'
 import sortBy from 'lodash/sortBy.js'
 import sum from 'lodash/sum.js'
@@ -150,22 +150,45 @@ export const applyBucketCutoff = ({
     return { ...bucketWithCutoff, facetBuckets: facetBucketsWithCutoff }
 }
 
+const facetIsAllowed = (facet: string) => allowList.includes(facet)
+
+/*
+
+Make an exception for the special case where we're filtering a field based on
+its own value as a way to take a subset of the current dataset
+(no risk of malicious cross-referencing here)
+
+*/
+const isSubsetFilter = (filters: Filters, axis1: ComputeAxisParameters) => {
+    const allFilterKeys = Object.keys(filters)
+    if (allFilterKeys.length > 1) {
+        // if there's more than one filter we can't be filtering only by
+        // the current question field
+        return false
+    } else {
+        const filterKey = allFilterKeys[0]
+        const [sectionId, filterId] = filterKey.split('__')
+        return filterId === axis1.question.id
+    }
+}
+
 export const applyDatasetCutoff = async (
     resultsByEdition: ResponseEditionData[],
     computeArguments: GenericComputeArguments,
     axis1: ComputeAxisParameters,
     axis2?: ComputeAxisParameters
 ) => {
-    const hasFilter = !!computeArguments.filters
-    const hasFacet = !!computeArguments.facet
-    if (
-        !computeArguments.filters &&
-        computeArguments.facet &&
-        allowList.includes(computeArguments.facet)
-    ) {
-        return
+    let shouldCutoff = false
+    if (computeArguments.filters && !isSubsetFilter(computeArguments.filters, axis1)) {
+        shouldCutoff = true
     }
-    if (hasFilter || hasFacet) {
+    if (computeArguments.facet && !facetIsAllowed(computeArguments.facet)) {
+        shouldCutoff = true
+    }
+
+    if (shouldCutoff) {
+        const hasFilter = !!computeArguments.filters
+        const hasFacet = !!computeArguments.facet
         for (let editionData of resultsByEdition) {
             // "censor" out data for any bucket that comes under cutoff
             editionData.buckets = editionData.buckets.map(bucket =>

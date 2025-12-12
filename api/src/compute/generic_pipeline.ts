@@ -2,14 +2,14 @@ import { generateFiltersQuery } from '../filters'
 import { ComputeAxisParameters, GenericComputeParameters, QuestionApiObject } from '../types'
 import { NO_ANSWER } from '@devographics/constants'
 import { getDbPath, getMatch } from './generic'
-import { EditionMetadata, ResponsesTypes, SurveyMetadata } from '@devographics/types'
+import { EditionMetadata, Filters, ResponsesTypes, SurveyMetadata } from '@devographics/types'
 import { getPastNEditions } from '../helpers/surveys'
 
 export interface PipelineProps extends GenericComputeParameters {
     surveyId: string
     selectedEditionId?: string
     editionCount?: number
-    filters?: any
+    filters?: Filters
     axis1: ComputeAxisParameters
     axis2?: ComputeAxisParameters | null
     survey: SurveyMetadata
