@@ -10,7 +10,7 @@ export const ChevronUpIcon = (props: IconProps) => (
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="3"
+            strokeWidth="2"
             strokeLinecap="butt"
             strokeLinejoin="round"
         >

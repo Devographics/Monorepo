@@ -276,7 +276,7 @@ export const Tab_ = styled.div`
     }
     &:has([data-state='inactive']) {
         opacity: 0.6;
-        background: ${props => props.theme.colors.backgroundBackground};
+        background: var(--backgroundAltColor);
     }
     .icon-wrapper {
         height: 24px;

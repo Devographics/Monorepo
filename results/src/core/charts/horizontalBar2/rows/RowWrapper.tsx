@@ -49,6 +49,9 @@ export const RowWrapper = (
     return (
         <div
             className={className}
+            onClick={() => {
+                setShowNestedBuckets && setShowNestedBuckets(!showNestedBuckets)
+            }}
             onMouseEnter={() => {
                 setHighlightedRow(bucket.id)
             }}
@@ -66,8 +69,10 @@ export const RowWrapper = (
                         showNestedBuckets={showNestedBuckets}
                         depth={depth}
                     />
-                ) : null}
-                <RowHeading {...props} />
+                ) : (
+                    <div className="chart-depth-placeholder" />
+                )}
+                <RowHeading {...props} nestedBuckets={bucket.nestedBuckets} />
             </div>
             <div className="chart-row-content" ref={contentRef}>
                 {ticks && <Gridlines ticks={ticks} />}

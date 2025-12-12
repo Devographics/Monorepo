@@ -1,4 +1,22 @@
+import { Bucket, FacetBucket } from '@devographics/types'
 import { ResponseEditionData, RequestContext, ComputeAxisParameters } from '../../types'
+
+const addIndexRecursively = (buckets: Array<Bucket | FacetBucket>) => {
+    let i = 0
+    for (let bucket of buckets) {
+        bucket.index = i
+        i++
+        if ('facetBuckets' in bucket && bucket.facetBuckets) {
+            addIndexRecursively(bucket.facetBuckets)
+        }
+        if ('groupedBuckets' in bucket && bucket.groupedBuckets) {
+            addIndexRecursively(bucket.groupedBuckets)
+        }
+        if ('nestedBuckets' in bucket && bucket.nestedBuckets) {
+            addIndexRecursively(bucket.nestedBuckets)
+        }
+    }
+}
 
 // add indexes
 export async function addIndexes(
@@ -10,16 +28,7 @@ export async function addIndexes(
     for (let editionData of resultsByEdition) {
         let i = 0
         for (let bucket of editionData.buckets) {
-            bucket.index = i
-            i++
-            if (bucket.facetBuckets) {
-                let j = 0
-
-                for (let facetBucket of bucket.facetBuckets) {
-                    facetBucket.index = j
-                    j++
-                }
-            }
+            addIndexRecursively(editionData.buckets)
         }
     }
 }

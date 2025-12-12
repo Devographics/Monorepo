@@ -30,6 +30,25 @@
         position: relative;
     }
 }
+
+@keyframes pulse {
+    from {
+        box-shadow: 0px 0px 0px var(--linkColor);
+    }
+    to {
+        box-shadow: 0px 0px 8px var(--linkColor);
+    }
+}
+.chart-row-hasNestedBuckets:hover {
+    .chart-depth-node-button {
+        border-color: var(--linkColor);
+        // box-shadow: 0px 0px 5px var(--linkColor);
+        animation: 1s linear infinite alternate pulse;
+        svg {
+            stroke: var(--linkColor);
+        }
+    }
+}
 .chart-axis {
     align-items: center;
     @include small {
@@ -69,7 +88,7 @@
     &-depth-1,
     &-depth-2,
     &-depth-3 {
-        background: #ffffff18;
+        // background: #ffffff18;
     }
     .chart-row-index {
         display: none;
@@ -78,10 +97,10 @@
         // background: #ffffff22;
     }
     &:hover {
-        background: #ffffff33;
+        background: var(--rowHoverColor);
     }
     &.chart-row-highlighted {
-        background: #ffffff33;
+        background: var(--rowHoverColor);
     }
 }
 
@@ -161,6 +180,7 @@
     justify-content: flex-start;
     align-items: flex-start;
     gap: var(--halfSpacing);
+    flex-grow: 1;
 }
 .chart-row-heading-section {
     font-size: 0.8rem;
@@ -181,15 +201,31 @@
     height: var(--barHeight);
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     font-size: 0.9rem;
     font-weight: normal;
     gap: 10px;
     max-width: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;
+    width: 100%;
 }
-
+.chart-row-heading-content-left {
+    display: flex;
+    align-items: center;
+    gap: var(--halfSpacing);
+}
+.chart-row-heading-content-count {
+    color: var(--textAltColor2);
+    background: var(--backgroundAltColor);
+    border-radius: 100%;
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    font-size: 0.8rem;
+    line-height: 1;
+}
 .chart-row-heading-grouped {
     opacity: 0.5;
 }
@@ -208,130 +244,4 @@
     bottom: 0px;
     width: 1px;
     border-right: 1px dotted var(--borderAltColor);
-}
-
-.chart-depth-indicator {
-    --gap: 20px;
-    --lineWidth: 1px;
-    position: relative;
-    height: 100%;
-    // note: should be --totalDepth but that does not work yet
-    width: calc(var(--depth) * var(--gap));
-}
-.chart-depth-vertical {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    .chart-depth-segment {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: calc(var(--depth) * var(--gap));
-        width: var(--lineWidth);
-        background: white;
-        .chart-row-lastChild & {
-        }
-    }
-}
-
-/* if a row is collapsed, always hide its last segment */
-.chart-row-collapsed .chart-depth-segment:last-of-type {
-    visibility: hidden;
-}
-
-/* if a row is expanded, its edge segment should be half top */
-.chart-row-expanded .chart-depth-segment:last-of-type {
-    top: 50%;
-    bottom: 0;
-}
-
-/* if a row is the last child, its second-to-last segment should be half top */
-.chart-row-lastChild .chart-depth-segment:nth-last-child(2) {
-    top: 0;
-    bottom: 50%;
-}
-
-/* 
-
-if a row is the last child at depth = 1, subsequent nodes at deeper levels 
-should hide their first vertical segment
-
-*/
-.chart-row-lastChild.chart-row-depth-1 {
-    & ~ .chart-row-depth-2,
-    & ~ .chart-row-depth-3 {
-        .chart-depth-vertical .chart-depth-segment:nth-child(1) {
-            visibility: hidden;
-        }
-    }
-}
-
-/* 
-
-if a row is the last child at depth = 2, subsequent nodes at deeper levels 
-should hide their first and second vertical segments
-
-*/
-.chart-row-lastChild.chart-row-depth-2 {
-    & ~ .chart-row-depth-3 {
-        .chart-depth-vertical .chart-depth-segment:nth-child(1),
-        .chart-depth-vertical .chart-depth-segment:nth-child(2) {
-            visibility: hidden;
-        }
-    }
-}
-
-.chart-depth-horizontal {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    // alternate position
-    // justify-content: flex-start;
-    &-inner {
-        width: 25%;
-        display: flex;
-        align-items: center;
-    }
-
-    .chart-depth-line {
-        height: var(--lineWidth);
-        width: var(--gap);
-        background: white;
-        // alternate position
-        // position: absolute;
-        // left: calc(calc(var(--depth) - 1) * var(--gap));
-    }
-}
-
-.chart-depth-node {
-    border-radius: 100%;
-    height: 8px;
-    width: 8px;
-    background: var(--backgroundColor);
-    position: absolute;
-    // right: -5px;
-    border: var(--lineWidth) solid white;
-    // position: relative;
-    // z-index: 10;
-    transform: translateX(50%);
-    // alternate position
-    // transform: translateX(-50%);
-    // left: calc(var(--depth) * var(--gap));
-}
-.chart-depth-node-button {
-    height: 28px;
-    width: 28px;
-    padding: 0;
-    font-size: 0.8rem;
-    // background: ;
 }

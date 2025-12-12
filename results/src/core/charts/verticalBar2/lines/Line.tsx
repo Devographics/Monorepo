@@ -82,7 +82,7 @@ export const Line = <
     if (entity) {
         const labelObject = getItemLabel({ id, entity, getString, i18nNamespace })
         lineLabel = labelObject.label
-    } else {
+    } else if (question) {
         const labelObject = getQuestionLabel({ question, getString, i18nNamespace })
         lineLabel = labelObject.label
     }

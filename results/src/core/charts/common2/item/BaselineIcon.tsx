@@ -2,6 +2,8 @@ import React from 'react'
 import { LimitedAvailability, NewlyAvailable, WidelyAvailable } from '@devographics/icons'
 import { WebFeatureStatus } from '@devographics/types'
 import './BaselineIcon.scss'
+import Tooltip from 'core/components/Tooltip'
+import T from 'core/i18n/T'
 
 export const baselineStatuses = {
     high: { icon: WidelyAvailable, id: 'widely_available' },
@@ -15,8 +17,17 @@ export const BaselineIcon = ({ status }: { status: WebFeatureStatus['baseline'] 
         return null
     }
     return (
-        <span className="baseline-icon">
-            <BaselineIcon />
-        </span>
+        <Tooltip
+            trigger={
+                <span className="baseline-icon">
+                    <BaselineIcon />
+                </span>
+            }
+            contents={
+                <>
+                    <T k="baseline.baseline" /> <T k={`baseline.support.${status}`} />
+                </>
+            }
+        />
     )
 }

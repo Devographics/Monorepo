@@ -16,7 +16,7 @@ export const CommentsItemWrapper = ({
         <div className="comment-item-wrapper">
             <div className="comment-index">{index + 1}.</div>
             <div className="comment-item">
-                <div className="comment-message-wrapper">
+                <div className="comment-message-wrapper inverted">
                     <div className="comment-quote">“</div>
                     <div
                         className="comment-message"

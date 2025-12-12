@@ -61,7 +61,7 @@ export const FeatureModal = ({ entity }: LabelProps) => (
     </div>
 )
 
-const WebFeatureData = ({ entity }: { entity: Entity }) => {
+export const WebFeatureData = ({ entity }: { entity: Entity }) => {
     const { webFeature } = entity
     if (!webFeature) {
         return null
@@ -117,7 +117,7 @@ const Browser = ({
     )
 }
 
-const ResourceLinks = ({ resources }: { resources: Entity['resources'] }) => {
+export const ResourceLinks = ({ resources }: { resources: Entity['resources'] }) => {
     return (
         <ul className="item-resources">
             {resources?.map(({ url, title }) => (

@@ -25,7 +25,7 @@ const filteredNav =
 
 const getStyledLink = component => styled(component)`
     display: flex;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     margin: 0 0 ${spacing(0.33)} 0;
     font-size: ${props =>
         props.depth > 0
@@ -44,7 +44,7 @@ const getStyledLink = component => styled(component)`
     }
 
     @media ${mq.large} {
-        & > span {
+        .page-link-inner-label {
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
@@ -62,10 +62,15 @@ const getStyledLink = component => styled(component)`
     }
 
     &._is-active {
-        span .page-link-inner::before {
-            content: '> ';
+        span .page-link-inner {
+            position: relative;
+            &::before {
+                content: '> ';
+                display: block;
+                position: absolute;
+                right: 110%;
+            }
         }
-
         @media ${mq.smallMedium} {
             span .page-link-inner::after {
                 content: ' <';
@@ -149,7 +154,7 @@ const NavItem = ({
                 parentPage={parentPage}
             >
                 <span className="page-link-inner" data-key={key}>
-                    <span>{label}</span>
+                    <span className="page-link-inner-label">{label}</span>
                     {imageUrl && (
                         <AvatarNotLink
                             size={24}

@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import * as RadixTooltip from '@radix-ui/react-tooltip'
 
 export const getTooltipContent = (element: any) => styled(element)`
-    background: var(--backgroundBackgroundColor);
+    background: var(--backgroundAltColor);
     font-size: 0.8rem;
     padding: 6px 12px;
     border: 1px solid var(--borderColor);

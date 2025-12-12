@@ -143,18 +143,23 @@ const distinct = [
 ]
 
 const stateOfCSSThemeColors: DefaultTheme['colors'] = {
-    background: '#272325',
+    // background: '#272325',
+    background: '#262a26',
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',
-    backgroundAlt3: '#2c3033',
-    backgroundBackground: colors.electricBlueDarkest,
-    backgroundForeground: colors.navyLighter,
-    backgroundAlt: '#314448',
-    backgroundAltTrans: 'rgba(49, 68, 72, 0.4)',
-    backgroundAlt2: colors.electricBlueDarkerer,
+    // backgroundAlt3: '#2c3033',
+    backgroundAlt3: '#333a32',
+    backgroundBackground: '#e71b88ff', // not needed?
+    backgroundForeground: '#f09d1fff', // not needed?
+    backgroundAlt: '#485347ff',
+    backgroundAltTrans: 'rgba(8, 206, 246, 0.4)',
+    // backgroundAlt2: '#07657D',
+    backgroundAlt2: '#598253ff',
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
+    // rowHover: '#485347ff',
     text: colors.white,
-    textAlt: 'rgba(255, 246, 229, 0.5)',
+    textAlt: 'rgba(255, 246, 229, 0.65)',
+    textAlt2: 'rgba(255, 246, 229, 0.8)',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
     link: '#8bee7d',

@@ -395,6 +395,8 @@ export const Normalization = (props: NormalizationProps) => {
 };
 
 const AllAnswers = (props: CommonNormalizationProps & SegmentProps) => {
+  const { question } = props;
+  const { disableRegexMatching } = question;
   return (
     <>
       <datalist id="entities-list">
@@ -408,6 +410,9 @@ const AllAnswers = (props: CommonNormalizationProps & SegmentProps) => {
       <div className="answers-header">
         <h3>Answers ({props.allAnswers.length})</h3>
         <NormalizeAll {...props} />
+        {disableRegexMatching && (
+          <div className="error">Regex Matching Disabled</div>
+        )}
       </div>
 
       <Answers {...props} />

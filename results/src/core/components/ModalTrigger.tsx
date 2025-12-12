@@ -19,6 +19,7 @@ const ModalTrigger = ({ label, trigger, size = 'm', children }: ModalTriggerProp
     const { translate } = useI18n()
 
     const openModal = e => {
+        e.stopPropagation()
         e && e.preventDefault()
         setIsOpen(true)
     }

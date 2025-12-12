@@ -91,6 +91,7 @@ import LivestreamBlock from 'core/blocks/other/LivestreamBlock'
 
 import MidpageResourceBlock from 'core/blocks/other/MidpageResourceBlock'
 import FigureBlock from 'core/blocks/other/FigureBlock'
+import HighlightBlock from 'core/blocks/other/HighlightBlock'
 
 const otherBlocks = {
     PageIntroductionBlock,
@@ -115,7 +116,7 @@ const otherBlocks = {
     LivestreamBlock,
     MidpageResourceBlock,
     FigureBlock,
-
+    HighlightBlock,
     DataExplorerBlock
 }
 

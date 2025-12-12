@@ -67,7 +67,6 @@ export const RatiosByEdition = (props: RatiosByEditionProps) => {
     return (
         <ChartWrapper
             block={block}
-            question={question}
             className={`chart-vertical-bar chart-multi-ratios ${
                 enableMultiSection ? 'chart-multi-ratios-multiSection' : ''
             }`}
