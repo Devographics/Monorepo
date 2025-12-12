@@ -26,7 +26,7 @@ export const HighlightBlock = ({
             <div className="highlight-block-inner">
                 <div className="highlight-block-heading">
                     <h2>
-                        <T k="highlight.heading" /> <strong>{entity.name}</strong>
+                        <T k="highlight.heading.feature" /> <strong>{entity.name}</strong>
                         <QuestionIcon size="petite" label={<T k="highlight.description" />} />
                     </h2>
                     {/* <InfoComponent entity={entity} /> */}
