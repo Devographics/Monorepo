@@ -278,7 +278,7 @@ export const canFilterDocument = (
  * Keep only fields readable by current user
  *
  * DOESN'T SUPPORT NESTING
- * Use a second schema + cutom code for nesting
+ * Use a second schema + custom code for nesting
  * Remove restricted fields from a  document
  * @param document
  * @param schema
