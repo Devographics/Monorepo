@@ -140,7 +140,7 @@
                   - template: nested_pain_points_features
 
             - id: forms_resources
-              items: [fm-web-development-v3]
+              items: [fm-css-form-validation-hints]
               template: recommended_resources
 
       - id: graphics_multimedia
@@ -166,6 +166,10 @@
                   - template: nested_pain_points_interop
                   - template: nested_pain_points_features
 
+            - id: graphics_multimedia_resources
+              items: [fm-svg]
+              template: recommended_resources
+
       - id: content
         path: /content
         blocks:
@@ -190,8 +194,9 @@
                   - template: nested_pain_points_features
 
             - id: content_resources
-              items: [fm-svg-essentials-animation]
+              items: [fm-web-security-v2]
               template: recommended_resources
+
       - id: interactivity
         path: /interactivity
         blocks:
@@ -226,7 +231,7 @@
             #       limit: 10
 
             - id: interactivity_resources
-              items: [fm-vanilla-js-apps]
+              items: [fm-the-dom]
               template: recommended_resources
 
       - id: performance
@@ -334,7 +339,7 @@
             #       limit: 10
 
             - id: mobile_web_apps_resources
-              items: [fm-pwas]
+              items: [fm-web-capabilities]
               template: recommended_resources
 
       - id: accessibility
@@ -373,7 +378,7 @@
                   - template: nested_pain_points_features
 
             - id: accessibility_resources
-              items: [fm-react-accessibility]
+              items: [fm-website-a11y-v3]
               template: recommended_resources
 
 - id: usage

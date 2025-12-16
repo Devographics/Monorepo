@@ -1,77 +1,3 @@
-# Front End Masters
-
-- name: Tailwind CSS, v2
-  id: fm-tailwind-css-v2
-  description: |
-      Learn Tailwind CSS's utility-first approach to build out entire web designs without any custom CSS! Compose any design directly in markup and implement advanced responsive layouts with flexbox, grid, and container queries.
-  url: https://frontendmasters.com/courses/tailwind-css-v2/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
-  image: https://static.frontendmasters.com/assets/teachers/kinney/thumb@2x.webp
-  teacher: Steve Kinney
-  company: Temporal
-
-- name: Front-End System Design
-  id: fm-frontend-system-design
-  description: |
-      Dive into front-end system design to create scalable, efficient user interfaces! Master core UI fundamentals: box model, browser rendering, DOM manipulation, state management, and performance.
-  url: https://frontendmasters.com/courses/frontend-system-design/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
-  image: https://static.frontendmasters.com/assets/teachers/ray/thumb@2x.webp
-  teacher: Evgenii Ray
-  company: Staff UI Engineer
-
-- name: Build a Modern Website From Scratch
-  id: fm-pro-css
-  description: |
-      Make full use of the latest CSS features to tackle layout and styling challenges with less code and more control. Tools like cascade layers, custom properties, and new layout techniques help simplify even the trickiest designs.
-  url: https://frontendmasters.com/courses/pro-css/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
-  image: https://static.frontendmasters.com/assets/teachers/powell/thumb@2x.webp
-  teacher: Kevin Powell
-  company: Youtuber
-
-- name: Site-Wide Theming with Style Queries
-  id: fm-theming-style-queries
-  description: |
-      Theming with custom properties can involve duplicating your custom properties, which can be annoying. Style queries are one way we can get around that.
-  url: https://frontendmasters.com/tutorials/kevin-powell/theming-style-queries/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
-  image: https://static.frontendmasters.com/assets/teachers/powell/thumb@2x.webp
-  teacher: Kevin Powell
-  company: Youtuber
-
-- name: Getting Started with CSS, v2
-  id: fm-getting-started-css-v2
-  description: |
-      Build a modern portfolio with CSS! Learn the foundations of layout and UI design as you explore semantic HTML markup, navigation styles, media queries, and CSS custom properties.
-  url: https://frontendmasters.com/courses/getting-started-css-v2/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
-  image: https://static.frontendmasters.com/assets/teachers/kramer/thumb@2x.webp
-  teacher: Jen Kramer
-  company: AnnieCannons
-
-- name: Ultimate CSS Grid & Layout Techniques, v3
-  id: fm-css-grid
-  description: |
-      CSS Grid is the most important tool in a modern web developer's toolkit for laying out web pages. With its two-dimensional structure, precise positioning, and overlapping elements, you’ll learn to achieve complex layouts with minimal code.
-  url: https://frontendmasters.com/courses/css-grid/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
-  image: https://static.frontendmasters.com/assets/teachers/kramer/thumb@2x.webp
-  teacher: Jen Kramer
-  company: AnnieCannons
-
-- name: CSS Animations and Transitions
-  id: fm-animations-transitions
-  description: |
-      Learn CSS animation basics and transition to advanced concepts like orchestration and choreography.
-  url: https://frontendmasters.com/courses/css-animations/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
-  image: https://static.frontendmasters.com/assets/teachers/khourshid/thumb@2x.webp
-  teacher: David Khourshid
-  company: Microsoft
-
-- name: SVG Essentials & Animation, v2
-  id: fm-svg
-  description: |
-      In this course, you'll learn to create immersive graphics and make them alive with animations!
-  url: https://frontendmasters.com/courses/svg-essentials-animation/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
-  image: https://static.frontendmasters.com/assets/teachers/drasner/thumb@2x.webp
-  teacher: Sarah Drasner
-  company: Google
-
 - name: Frontend Masters
   id: fm-homepage
   description: Advance Your Skills with In-Depth, Modern Front-End Engineering Courses
@@ -85,3 +11,56 @@
   teacher: Todd Gardner
   company: Request Metrics
   url: https://frontendmasters.com/courses/web-perf-v2/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
+
+- name: SVG Essentials & Animation, v2
+  id: fm-svg
+  description: |
+      In this course, you'll learn to create immersive graphics and make them alive with animations!
+  url: https://frontendmasters.com/courses/svg-essentials-animation/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
+  image: https://static.frontendmasters.com/assets/teachers/drasner/thumb@2x.webp
+  teacher: Sarah Drasner
+  company: Google
+
+- name: Web Security, v2
+  id: fm-web-security-v2
+  description: |
+      Take control of your application's security! Learn how to protect against common vulnerabilities every developer should know.
+  url: https://frontendmasters.com/courses/web-security-v2/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
+  image: https://static.frontendmasters.com/assets/teachers/kinney/thumb@2x.webp
+  teacher: Steve Kinney
+  company: Temporal
+
+- name: A Tour of Web Capabilities
+  id: fm-web-capabilities
+  description: |
+      Explore APIs you may not realize exist on the web! Get an overview of new Web APIs and their maturities, such as speech recognition, Permissions Policy and security, sensors, geolocation, and more.
+  url: https://frontendmasters.com/courses/device-web-apis/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
+  image: https://static.frontendmasters.com/assets/teachers/firtman/thumb@2x.webp
+  teacher: Maximiliano Firtman
+  company: Software Engineer & Educator
+
+- name: Website Accessibility, v3
+  id: fm-website-a11y-v3
+  description: |
+      Build content for everyone and become your company's accessibility expert! Learn the importance of semantic HTML and alt text for ensuring screen readers can navigate your site.
+  url: https://frontendmasters.com/courses/accessibility-v3/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
+  teacher: Jon Kuperman
+  company: Bloomberg
+  image: https://static.frontendmasters.com/assets/teachers/kuperman/thumb@2x.webp
+
+- name: CSS-only Form Validation Hints
+  id: fm-css-form-validation-hints
+  description: |
+      A look at how we can use CSS to add contextual hints to users as they fill out a form, including creating an SVG by hand and animating it based on whether a field is valid or invalid.
+  url: https://frontendmasters.com/tutorials/kevin-powell/styling-contextual-hints/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
+  teacher: Kevin Powell
+  image: https://static.frontendmasters.com/assets/teachers/powell/thumb@2x.webp
+
+- name: The DOM
+  id: fm-the-dom
+  description: |
+      Brian discusses the DOM (document object model) as where JavaScript, HTML, and CSS interact. The DOM represents the page so that programs can change the document structure, style, and content.
+  url: https://frontendmasters.com/courses/web-development-v3/the-dom/?utm_source=stateofhtml&utm_medium=website&utm_campaign=stateofhtml2025
+  teacher: Brian Holt
+  company: Databricks
+  image: https://static.frontendmasters.com/assets/teachers/holt/thumb@2x.webp
