@@ -105,9 +105,9 @@
       #   variables:
       #       url: https://linear-easing-generator.netlify.app/
 
-      - id: features_resources
-        items: [fm-intermediate-html-css]
-        template: recommended_resources
+      # - id: features_resources
+      #   items: [fm-intermediate-html-css]
+      #   template: recommended_resources
 
   children:
       - id: forms
