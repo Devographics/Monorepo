@@ -290,7 +290,7 @@
               i18nNamespace: features
               parameters: { limit: 15 }
 
-            - id: interactivity_resources
+            - id: content_resources
               items: [fm-svg-essentials-animation]
               template: recommended_resources
 

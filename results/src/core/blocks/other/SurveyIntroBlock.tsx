@@ -7,9 +7,13 @@ import { mq, fontSize } from 'core/theme'
 import IntroLogo from 'Logo/IntroLogo'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from '@devographics/react-i18n'
+import Button from 'core/components/Button'
+import Link from 'core/components/LocaleLink'
+import './SurveyIntroBlock.scss'
 
 const SurveyIntroBlock = () => {
-    const { currentEdition } = usePageContext()
+    const context = usePageContext()
+    const { currentEdition } = context
     const { getString } = useI18n()
     const introKey = `introduction.${currentEdition.id}`
     const introText = getString(introKey)
@@ -24,6 +28,13 @@ const SurveyIntroBlock = () => {
                     </Content>
                 </div>
             )}
+            <Button
+                as={Link}
+                className="PageFooter__Link PageFooter__Link--next Button"
+                to={context?.next?.path}
+            >
+                <T k="results.start" />
+            </Button>
         </IntroWrapper_>
     )
 }
