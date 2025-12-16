@@ -4,13 +4,20 @@ import styled from 'styled-components'
 import T from 'core/i18n/T'
 import Avatar from 'core/components/Avatar'
 import { Credit } from '@devographics/types'
+import { useI18n } from '@devographics/react-i18n'
+import { usePageContext } from 'core/helpers/pageContext'
 
 const CreditItem = ({ entity, role, labelId }: Credit & { labelId?: string }) => {
+    const { getString } = useI18n()
+    const { currentEdition } = usePageContext()
+
     if (!entity) {
         return null
     }
     const { name, homepage, twitter, company, alias } = entity
-    const nameLabel = alias ? `${name} (${alias})` : name
+    const namei18nLabel = getString(`conclusion.${currentEdition.id}.${entity.id}.name`)?.t
+    const nameEntityLabel = alias ? `${name} (${alias})` : name
+    const nameLabel = namei18nLabel || nameEntityLabel
     return (
         <CreditItemDiv>
             {entity?.avatar?.url && (
