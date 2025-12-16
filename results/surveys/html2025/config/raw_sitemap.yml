@@ -120,11 +120,11 @@
               variables:
                   itemId: customizable_select
 
-            - id: figure_forms_features
-              template: figure
-              variables:
-                  value: 66
-                  # unit: percentage
+            # - id: figure_forms_features
+            #   template: figure
+            #   variables:
+            #       value: 66
+            #       # unit: percentage
 
             - id: forms_features
               template: multi_items_experience
@@ -583,12 +583,6 @@
       #   variables:
       #       xAxis: user_info__yearly_salary
       #       yAxis: user_info__years_of_experience
-
-      - items: [renderatl]
-        template: recommended_resources
-        titleId: blocks.recommended_events
-        variables:
-            isEvent: true
 
 # - id: awards
 #   path: /awards
