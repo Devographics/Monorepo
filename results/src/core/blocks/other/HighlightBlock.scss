@@ -8,6 +8,9 @@
     color: var(--textAltColor);
     margin-bottom: var(--halfSpacing);
     text-align: center;
+    @include small {
+        margin-bottom: calc(var(--spacing) * 1.5);
+    }
 }
 .highlight-block-wrapper {
     padding: var(--doubleSpacing);

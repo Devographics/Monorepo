@@ -164,6 +164,8 @@
     @include small {
         justify-content: flex-end;
         padding-right: var(--quarterSpacing);
+        position: relative;
+        z-index: 1;
     }
 }
 
