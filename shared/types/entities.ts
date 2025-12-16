@@ -2,8 +2,8 @@
  * Entity = Person or Organization, with infos and Twitter, Github accounts etc.
  *
  */
-
-import { ResponseData, ResponseEditionData } from 'data'
+// @ts-ignore
+import { ResponseData } from 'data'
 import {
     EditionMetadata,
     OptionMetadata,

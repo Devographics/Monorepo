@@ -1,4 +1,6 @@
+// @ts-ignore
 import { WordCount } from 'data'
+// @ts-ignore
 import { Entity, Token } from 'entities'
 
 export interface NormalizationMetadata {
