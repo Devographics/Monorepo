@@ -13,7 +13,7 @@ customizationModes: [filters, facets]
 parameters:
     showNoAnswer: true
     cutoff: 5
-    limit: 20
+    limit: 25
     mergeOtherBuckets: true
 chartOptions:
     limit: 10
