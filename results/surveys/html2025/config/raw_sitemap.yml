@@ -166,7 +166,7 @@
             - id: highlight_content_features
               template: highlight
               variables:
-                  itemId: intl_segmenter
+                  itemId: hidden_until_found
 
             - id: content_features
               template: multi_items_experience
@@ -222,7 +222,7 @@
             - id: highlight_performance_features
               template: highlight
               variables:
-                  itemId: lazy_loading
+                  itemId: blocking_render
 
             - id: performance_features
               template: multi_items_experience
@@ -322,7 +322,7 @@
             - id: highlight_accessibility_features
               template: highlight
               variables:
-                  itemId: landmark_elements
+                  itemId: search_element
 
             - id: accessibility_features
               template: multi_items_experience
@@ -639,7 +639,7 @@
         template: conclusion
         blockType: ConclusionBlock
         variables:
-            author: patrick_brosset
+            author: lea_verou
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock
