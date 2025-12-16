@@ -19,33 +19,41 @@ export const HighlightBlock = ({
     const InfoComponent = entityComponents[entity.entityType].modal
     const { id } = entity
     return (
-        <div className="highlight-block inverted">
-            <div className="highlight-block-icon">
-                <LightbulbIconOn />
-            </div>
-            <div className="highlight-block-inner">
-                <div className="highlight-block-heading">
-                    <h2>
-                        <T k="highlight.heading.feature" /> <strong>{entity.name}</strong>
-                        <QuestionIcon size="petite" label={<T k="highlight.description" />} />
-                    </h2>
-                    {/* <InfoComponent entity={entity} /> */}
+        <div className="highlight-block">
+            <h4 className="highlight-block-description">
+                <T k="highlight.description" />
+            </h4>
+            <div className="highlight-block-wrapper inverted">
+                <div className="highlight-block-icon">
+                    <LightbulbIconOn />
                 </div>
-                <div className="highlight-block-info">
-                    <div className="highlight-block-contents">
-                        <div className="highlight-block-text">
-                            <T k={`highlight.${id}.html2025`} md={true} />
+                <div className="highlight-block-inner">
+                    <div className="highlight-block-heading">
+                        <h2>
+                            <T k="highlight.heading.feature" />{' '}
+                            <strong
+                                dangerouslySetInnerHTML={{ __html: entity.nameHtml || entity.name }}
+                            />
+                            {/* <QuestionIcon size="petite" label={<T k="highlight.description" />} /> */}
+                        </h2>
+                        {/* <InfoComponent entity={entity} /> */}
+                    </div>
+                    <div className="highlight-block-info">
+                        <div className="highlight-block-contents">
+                            <div className="highlight-block-text">
+                                <T k={`highlight.${id}.html2025`} md={true} />
+                            </div>
+                            {entity.webFeature && <WebFeatureData entity={entity} />}
                         </div>
-                        {entity.webFeature && <WebFeatureData entity={entity} />}
                     </div>
                 </div>
-            </div>
-            <div className="highlight-block-resources">
-                <h3>
-                    <T k="highlight.resources" />
-                </h3>
-                <ItemLinks entity={entity} />
-                {entity.resources && <ResourceLinks resources={entity.resources} />}
+                <div className="highlight-block-resources">
+                    <h3>
+                        <T k="highlight.resources" />
+                    </h3>
+                    <ItemLinks entity={entity} />
+                    {entity.resources && <ResourceLinks resources={entity.resources} />}
+                </div>
             </div>
         </div>
     )

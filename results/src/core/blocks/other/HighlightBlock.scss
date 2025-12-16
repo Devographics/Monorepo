@@ -1,6 +1,15 @@
 @import '../../../stylesheets/_breakpoints.scss';
 
 .highlight-block {
+    margin-bottom: var(--quadrupleSpacing);
+}
+.highlight-block-description {
+    font-weight: var(--fontLight);
+    color: var(--textAltColor);
+    margin-bottom: var(--halfSpacing);
+    text-align: center;
+}
+.highlight-block-wrapper {
     padding: var(--doubleSpacing);
     border-radius: 20px;
     position: relative;

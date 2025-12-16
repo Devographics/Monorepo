@@ -13,6 +13,7 @@ import MainLayout from 'core/layout/MainLayout'
 import ReportLayout from 'core/report/ReportLayout'
 import theme from 'Theme/index.ts'
 import { PageContextValue } from 'core/types'
+import { fontWeight } from 'core/theme'
 
 interface LayoutProps {
     context: any
@@ -44,7 +45,10 @@ const ThemedLayout = (props: LayoutProps) => {
         '--doubleSpacing': `${theme.dimensions.spacing * 2}px`,
         '--tripleSpacing': `${theme.dimensions.spacing * 3}px`,
         '--quadrupleSpacing': `${theme.dimensions.spacing * 4}px`,
-        '--secondaryFontFamily': `${theme.typography.fontFamily2}`
+        '--secondaryFontFamily': `${theme.typography.fontFamily2}`,
+        '--fontLight': fontWeight('light'),
+        '--fontMedium': fontWeight('medium'),
+        '--fontBold': fontWeight('bold')
     }
     return (
         // @ts-expect-errors legacy
