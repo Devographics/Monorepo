@@ -64,3 +64,12 @@
   teacher: Brian Holt
   company: Databricks
   image: https://static.frontendmasters.com/assets/teachers/holt/thumb@2x.webp
+
+- name: Web Components
+  id: fm-web-components
+  description: |
+      Learn where to find excellent Web Components to build web apps. You’ll also learn how to create your own custom components using JavaScript and libraries like Lit that will help you make them faster!
+  url: https://frontendmasters.com/courses/web-components/?utm_source=stateofhtml&utm_medium=website&utm_campaign=html2023
+  image: https://static.frontendmasters.com/assets/teachers/rupert/thumb@2x.webp
+  teacher: Dave Rupert
+  company: Paravel
