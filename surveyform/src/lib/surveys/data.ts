@@ -81,6 +81,19 @@ export const getSurveyParamsTable = (): SurveyParamsTable => ({
   },
 });
 
+const reverseTable = {
+  demo_survey: "demo-survey",
+  state_of_css: "state-of-css",
+  state_of_graphql: "state-of-graphql",
+  state_of_js: "state-of-js",
+  state_of_react: "state-of-react",
+  state_of_html: "state-of-html",
+  tokyodev: "tokyodev",
+  state_of_ai: "state-of-ai",
+  state_of_devs: "state-of-devs",
+};
+export const getSurveySlug = (surveyId: string) => reverseTable[surveyId];
+
 export const surveyParamsLookup = ({
   surveySlug,
   editionSlug,
