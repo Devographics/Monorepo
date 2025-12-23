@@ -296,7 +296,7 @@
                   - template: nested_pain_points_features
 
             - id: web_components_resources
-              items: [fm-web-components]
+              items: [fm-vanilla-js]
               template: recommended_resources
 
       - id: system_capabilities

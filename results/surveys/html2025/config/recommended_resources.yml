@@ -73,3 +73,13 @@
   image: https://static.frontendmasters.com/assets/teachers/rupert/thumb@2x.webp
   teacher: Dave Rupert
   company: Paravel
+
+- name: |
+      Vanilla JS: You Might Not Need a Framework
+  id: fm-vanilla-js
+  description: |
+      See how you can build rich web apps and websites without depending on libraries or frameworks, using only the core JavaScript language.
+  url: https://frontendmasters.com/courses/vanilla-js-apps/?utm_source=stateofhtml&utm_medium=website&utm_campaign=html2023
+  image: https://static.frontendmasters.com/assets/teachers/firtman/thumb@2x.webp
+  teacher: Maximiliano Firtman
+  company: Software Engineer & Educator
