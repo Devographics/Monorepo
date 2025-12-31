@@ -73,7 +73,7 @@ const browserDataSchema = z.object({
  * TODO: move to devographics/types but check if a dependency on zod doesn't break everything
  * also check why surveyId is optional in @devographics/types
  */
-export const prefilledResponseSchema = browserDataSchema.augment({
+export const prefilledResponseSchema = browserDataSchema.extend({
     surveyId: z.string().optional(),
     editionId: z.string().optional(),
     locale: z.string().optional()
