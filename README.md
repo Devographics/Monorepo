@@ -207,7 +207,6 @@ See "docker-compose.yml" and "Justfile" for our local setup.
 When running locally, data are stored in a ".mongo" folder in the monorepo folder.
 You can delete this folder to reset the local database.
 
-
 ### 💾 Cache Database
 
 Redis database.
@@ -219,7 +218,6 @@ Redis database.
 ##### Hosted On
 
 -   https://upstash.com/
-
 
 ##### Local dev
 
@@ -287,23 +285,22 @@ Static image files.
 
 -   https://assets.devographics.com
 
-
 ## Contribute
 
 Emojis to distinguish commits within the monorepo:
-- 🅿️ `:parking:` for the whole monorepo ("P" for "Pnpm")
-- ⚙  `:gear:` for the shared folder
-- 🔍 `:mag:` for graphiql
-- 📡 `:satellite:`for the api
-- 📊 `:bar_chart:`for the results
-- 🏠 `:house:`for the homepage
-- ✍ ️`:writing_hand:` for the surveyform
-- 🔒 `:lock:` for the surveyadmin
-- 🌐 `:globe_with_meridians:` for the locales
-- 📖 `:book:` for the surveys
-- 🙎 `:person_pouting:` for the entities
-- 🖼️ `:frame_photo:` for the images
 
+-   🅿️ `:parking:` for the whole monorepo ("P" for "Pnpm")
+-   ⚙ `:gear:` for the shared folder
+-   🔍 `:mag:` for graphiql
+-   📡 `:satellite:`for the api
+-   📊 `:bar_chart:`for the results
+-   🏠 `:house:`for the homepage
+-   ✍ ️`:writing_hand:` for the surveyform
+-   🔒 `:lock:` for the surveyadmin
+-   🌐 `:globe_with_meridians:` for the locales
+-   📖 `:book:` for the surveys
+-   🙎 `:person_pouting:` for the entities
+-   🖼️ `:frame_photo:` for the images
 
 ---
 
@@ -382,4 +379,185 @@ EMAIL_OCTOPUS_APIKEY
 
 ## Other 3rd party services
 
-- Plausible for analytics
+-   Plausible for analytics
+
+## Glossary
+
+A glossary of terms used internally throughout the code and apps.
+
+### Answer
+
+A single answer to a survey question. Note that some questions accept multiple answers.
+
+### API
+
+The Node.js app that serves the GraphQL API which in turn gives all other apps (as well as any external client) access to the data.
+
+### \_cardinalities
+
+A special auto-generated API field that returns how many respondents use 1 item in the current section, 2 items, 3 items, etc.
+
+### Code
+
+In the context of processing (or “coding”) freeform data, is synonymous with Token.
+
+### Combined Data
+
+A dataset containing both freeform and fixed responses.
+
+### Comments
+
+Optional comments left by respondents in relation with a specific question.
+
+### Config File
+
+A `config.yml` file used to configure a given survey or survey edition.
+
+### Dynamic Options
+
+For freeform questions that do not have a pre-established list of options, a list of options can be generated based on the dataset dynamically. This is useful for filtering.
+
+### Edition
+
+A specific edition (i.e. year) of a survey.
+
+### Entities Repo
+
+The [repo](https://github.com/Devographics/entities/) containing all entities definitions.
+
+### Entity
+
+Any item, person, concept, etc. that can potentially be referenced in the surveys. Defined in the [entities repo](<[repo](https://github.com/Devographics/entities/)>).
+
+When used in opposition to Token, indicates a “real” item such as a feature, library, person, tc. with a homepage, social media links, or other associated metadata.
+
+### Explorer
+
+The GraphiQL Explorer can be used to navigate the GraphQL API.
+
+### Fixed Data
+
+Data providing from a fixed list of options (e.g. multiple choice questions, dropdown questions, etc. ).
+
+### Freeform Data
+
+Data providing from a freeform text area and not a fixed list of questions.
+
+### GraphiQL
+
+The IDE that lets you query the API.
+
+### GraphQL
+
+The protocol used to define and query the API.
+
+### \_items
+
+A special auto-generated API field that returns all items belonging to the current section.
+
+### \_metadata
+
+A special auto-generated API field that returns metadata about the current item.
+
+### Normalized Data
+
+Data that has gone through the normalization process, which includes:
+
+-   Removing empty responses.
+-   Assigning entities/tokens to freeform answers.
+-   Copying/renaming fields.
+-   etc.
+
+### Normalized Data Collection
+
+The MongoDB collection (a.k.a. Database Table) that stores normalized data, as created by the Surveyadmin app.
+
+This collection or its contents can be made public, either through the GraphQL API or by sharing CSV or JSON files containing a survey edition's entire dataset.
+
+### Options
+
+The list of fixed options available to choose from to answer a given question.
+
+See also: Dynamic Options.
+
+### Patterns
+
+Regex-defined string matching patterns (in a question's `patterns` field) used to match freeform data to entities.
+
+Rules of patterns:
+
+-   An entity's `id` is automatically used to match strings.
+-   Any `_` in the `id` can also match `-` or spaces.
+-   Matching is case-insensitive.
+-   Patterns automatically match their plural form (`animation` will also match `animations`).
+-   Patterns can also use the following modifiers:
+    -   `[p]` (partial): Match partial word fragments.
+    -   `[l]` (list): Comma-separated list of items to match in any order.
+    -   `[e]` (entire): Match entire answer exactly.
+    -   `[w]` (whole): Match whole words (default).
+
+### Predefined Data
+
+Data providing from a practically unlimited, yet still predefined list of options (such as a list of all Best of JS projects, or all GitHub repos).
+
+### Question
+
+A question asked in a survey.
+
+### Question Response
+
+A response to a specific question by a specific respondent. Note that some responses can contain more than one answer.
+
+### Questions Outline
+
+A YAML file definining the shape of a survey's questions. Stored in the [surveys repo](https://github.com/Devographics/surveys/).
+
+### Raw Answers (or: Raw Data)
+
+The raw list of answers for any given question.
+
+### Response (or: Survey Response)
+
+The entire response document containing all of a single respondent's data for a given survey.
+
+### Results Outline
+
+A YAML file defining the shape of a survey's results site. Currently stored in the [monorepo repo](https://github.com/Devographics/Monorepo/tree/main/results/surveys) but should eventually migrate to the [surveys repo](https://github.com/Devographics/surveys/).
+
+### Section
+
+A survey section.
+
+### Survey
+
+A specific kind of survey (State of JS, State of CSS, etc.).
+
+### Surveys Repo
+
+The [repo](https://github.com/Devographics/surveys/) containing all survey definitions and associated data.
+
+### Tag
+
+An optional tag that can be assigned to an entity to categorize it. This can then be referenced by a question to select a subset of entities.
+
+Rules of tags:
+
+-   Entities defined in `foo.yml` automatically get assigned the tag `foo`.
+-   Entities also automatically get assigned the names of all parent directories as tags.
+-   Other tags can be explitly defined in an entity's `tags` field.
+-   Questions can reference tags in their `matchTags` field.
+-   Questions automatically reference any tag corresponding to their own `id` field.
+
+### Token
+
+A special sub-type of entities that correspond to concepts (such as “hard learning curve”) and not “real” items.
+
+### Unnormalized Data
+
+Data that has not gone through the normalization process yet.
+
+### Unnormalized Data Collection
+
+The MongoDB collection (a.k.a. Database Table) that stores unnormalized data, as provided by the Surveyform app.
+
+This collection or its contents should never be made public.
