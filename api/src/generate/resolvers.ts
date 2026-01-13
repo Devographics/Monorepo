@@ -45,6 +45,7 @@ import { loadOrGetLocales } from '../load/locales/locales'
 import uniqBy from 'lodash/uniqBy.js'
 import sortBy from 'lodash/sortBy.js'
 import compact from 'lodash/compact.js'
+import take from 'lodash/take.js'
 
 export const generateResolvers = async ({
     surveys,
@@ -421,15 +422,21 @@ export const currentEditionResolver: ResolverType = async (parent, args, context
 
 export const rawDataResolver: ResolverType = async (parent, args, context, info) => {
     console.log('// rawDataResolver')
-    const { survey, edition, section, question } = parent
+    const { survey, edition, section, question, responseArguments } = parent
     const { token } = args
+    const { parameters } = responseArguments || {}
+    const { limit } = parameters || {}
 
     // helper function to get count of how many times a token appears across all answers
     const getTokenCount = (tokenId: string) =>
         answers?.filter(a => a.tokens && a.tokens.map(t => t.id).includes(tokenId)).length
 
     // get all raw answers for this question
-    const answers = await getRawData({ survey, edition, section, question, context, token })
+    let answers = await getRawData({ survey, edition, section, question, context, token })
+
+    if (limit) {
+        answers = take(answers, limit)
+    }
 
     // get word frequency stats
     const stats = answers && calculateWordFrequencies(answers.map(item => item.raw))
