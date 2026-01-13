@@ -389,7 +389,7 @@ A glossary of terms used internally throughout the code and apps.
 
 A single answer to a survey question. Note that some questions accept multiple answers.
 
-### API
+### 📡 API (app)
 
 The Node.js app that serves the GraphQL API which in turn gives all other apps (as well as any external client) access to the data.
 
@@ -421,7 +421,7 @@ For freeform questions that do not have a pre-established list of options, a lis
 
 A specific edition (i.e. year) of a survey.
 
-### Entities Repo
+### 👨 Entities Repo
 
 The [repo](https://github.com/Devographics/entities/) containing all entities definitions.
 
@@ -435,13 +435,9 @@ When used in opposition to Token, indicates a “real” item such as a feature,
 
 The GraphiQL Explorer can be used to navigate the GraphQL API.
 
-### Fixed Data
-
-Data providing from a fixed list of options (e.g. multiple choice questions, dropdown questions, etc. ).
-
 ### Freeform Data
 
-Data providing from a freeform text area and not a fixed list of questions.
+Data resulting from a freeform text area and not a fixed list of questions.
 
 ### GraphiQL
 
@@ -451,9 +447,17 @@ The IDE that lets you query the API.
 
 The protocol used to define and query the API.
 
+### 🏠 Homepage (app)
+
+The app used to generate an individual survey's homepage (such as https://stateofjs.com).
+
 ### \_items
 
 A special auto-generated API field that returns all items belonging to the current section.
+
+### 🌐 Locales Repos
+
+A collection of repos (such as [locale-en-US](https://github.com/Devographics/locale-en-us)) containing localized content for the surveys.
 
 ### \_metadata
 
@@ -498,7 +502,15 @@ Rules of patterns:
 
 ### Predefined Data
 
-Data providing from a practically unlimited, yet still predefined list of options (such as a list of all Best of JS projects, or all GitHub repos).
+Data resulting from a fixed list of options (e.g. multiple choice questions, dropdown questions, etc. ).
+
+### Prenormalized Data
+
+Data resulting from a practically unlimited, yet still predefined list of options (such as a list of all Best of JS projects, or all GitHub repos).
+
+### Query Builder
+
+A client-side query-building UI provided in the Results app that lets end users dynamically build and run GraphQL queries to generate custom charts.
 
 ### Question
 
@@ -508,7 +520,7 @@ A question asked in a survey.
 
 A response to a specific question by a specific respondent. Note that some responses can contain more than one answer.
 
-### Questions Outline
+### Questions Outline (or: Sitemap)
 
 A YAML file definining the shape of a survey's questions. Stored in the [surveys repo](https://github.com/Devographics/surveys/).
 
@@ -520,6 +532,10 @@ The raw list of answers for any given question.
 
 The entire response document containing all of a single respondent's data for a given survey.
 
+### 📊 Results (app)
+
+The app used to compile a dataset into a static, public-facing results site.
+
 ### Results Outline
 
 A YAML file defining the shape of a survey's results site. Currently stored in the [monorepo repo](https://github.com/Devographics/Monorepo/tree/main/results/surveys) but should eventually migrate to the [surveys repo](https://github.com/Devographics/surveys/).
@@ -528,11 +544,23 @@ A YAML file defining the shape of a survey's results site. Currently stored in t
 
 A survey section.
 
+### ⚙️ Shared (monorepo sub-directory)
+
+A sub-directory of the monorepo containing code shared by other sub-apps (and imported as local packages via PNPM).
+
 ### Survey
 
 A specific kind of survey (State of JS, State of CSS, etc.).
 
-### Surveys Repo
+### 🔒 Surveyadmin (app)
+
+The app used internally to normalize surveys datasets and run scripts.
+
+### ✍️ Surveyform (app)
+
+The survey form app used to collect survey responses.
+
+### 📖 Surveys Repo
 
 The [repo](https://github.com/Devographics/surveys/) containing all survey definitions and associated data.
 
@@ -547,6 +575,10 @@ Rules of tags:
 -   Other tags can be explitly defined in an entity's `tags` field.
 -   Questions can reference tags in their `matchTags` field.
 -   Questions automatically reference any tag corresponding to their own `id` field.
+
+### Template
+
+In the context of question definitions (either in the questions outline or results outline), a set of predefined parameters that a question can extend to keep code DRYer.
 
 ### Token
 
