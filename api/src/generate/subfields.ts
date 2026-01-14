@@ -1,8 +1,9 @@
 import { QuestionApiObject, ResolverType } from '../types/surveys'
 import { getFiltersTypeName, getFacetsTypeName, graphqlize } from '../generate/helpers'
-import { Option, ResultsSubFieldEnum } from '@devographics/types'
+import { Option, ResultsSubFieldEnum, subfieldDocs } from '@devographics/types'
 import { getEntities, getEntity } from '../load/entities'
 import { getResponseTypeName } from '../graphql/templates'
+import intersection from 'lodash/intersection.js'
 
 interface SubField {
     id: ResultsSubFieldEnum
@@ -15,14 +16,24 @@ interface SubField {
 export const getResponsesTypeDef = (
     question: QuestionApiObject,
     subField: ResultsSubFieldEnum | string
-) =>
-    `${subField}(bucketsFilter: ${
+) => {
+    const docs = subfieldDocs[subField as ResultsSubFieldEnum]
+    const docsBlock = docs
+        ? `"""
+    ${docs}
+    """`
+        : ''
+
+    return `
+    ${docsBlock}
+    ${subField}(bucketsFilter: ${
         question.filterTypeName || 'GenericFilter'
     }, filters: ${getFiltersTypeName(
         question.surveyId
     )}, parameters: Parameters, facet: ${getFacetsTypeName(
         question.surveyId
     )}): ${getResponseTypeName()}`
+}
 
 const responsesResolverFunction: ResolverType = async (parent, args, context, info) => {
     console.log('// responses resolver')
@@ -48,6 +59,18 @@ export const subFields: Array<SubField> = [
             // note: providing the question's original sectionId is useful for filtering
             const sectionId = question?.section?.id
             return { ...question, sectionId }
+        }
+    },
+    {
+        id: ResultsSubFieldEnum.RELEVANT_ENTITIES,
+        def: () => `_entities: [Entity]`,
+        addIf: ({ normPaths }) => !!normPaths?.other,
+        resolverFunction: async ({ question }) => {
+            console.log('// question relevant entities resolver')
+            const matchTags = question?.matchTags
+            const allEntities = await getEntities({ includeNormalizationEntities: true })
+            const _entities = allEntities.filter(e => intersection(e.tags, matchTags).length > 0)
+            return _entities
         }
     },
     {

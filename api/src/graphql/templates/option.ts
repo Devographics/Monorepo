@@ -32,6 +32,9 @@ export const generateOptionType = ({
     id: ${optionsAreNumeric ? 'Float' : enumTypeName}
     label: String
     entity: Entity
+    """
+    Which editions these options appear in. 
+    """
     editions: [${graphqlize(surveyId)}EditionID]${optionsHaveAverage ? '\n    average: Float' : ''}
 }`
     }

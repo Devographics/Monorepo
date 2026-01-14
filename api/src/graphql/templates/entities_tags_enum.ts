@@ -32,7 +32,10 @@ export const generateEntitiesTagsEnum = ({
         generatedBy: `entities_tags_enum`,
         typeName: entitiesTagsEnumTypeName,
         typeType: TypeTypeEnum.ENUM,
-        typeDef: `enum ${entitiesTagsEnumTypeName} {
+        typeDef: `"""
+        A list of all entities tags
+        """
+        enum ${entitiesTagsEnumTypeName} {
     ${tags.join('\n    ')}
 }`
     }

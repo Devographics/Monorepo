@@ -70,14 +70,23 @@ export const generateSectionType = ({
         typeDef: `type ${typeName} {
             ${
                 isFeatureOrToolSection
-                    ? `_items(itemIds:[${
-                          isFeatureSection
-                              ? getFeaturesEnumTypeName(survey)
-                              : getToolsEnumTypeName(survey)
-                      }]): [${featureOrToolTypeName}]`
+                    ? `"""
+                    Query all items included in this section at once.
+                    """
+                    _items(itemIds:[${
+                        isFeatureSection
+                            ? getFeaturesEnumTypeName(survey)
+                            : getToolsEnumTypeName(survey)
+                    }]): [${featureOrToolTypeName}]`
                     : ''
             }
-            ${isFeatureOrToolSection ? `_cardinalities: [${featureOrToolTypeName}]` : ''}
+            ${
+                isFeatureOrToolSection
+                    ? `"""
+                Get cardinalities data for this section (how many respondents used 1 item, how many used 2, etc.)
+                """_cardinalities: [${featureOrToolTypeName}]`
+                    : ''
+            }
     ${section.questions
         .filter(q => q.hasApiEndpoint !== false)
         .map((question: QuestionApiObject) => {

@@ -20,7 +20,28 @@ export enum ResultsSubFieldEnum {
     OPTIONS = 'options',
     ENTITY = 'entity',
     ID = 'id',
-    METADATA = '_metadata'
+    METADATA = '_metadata',
+    RELEVANT_ENTITIES = '_entities'
+}
+
+export const subfieldDocs = {
+    [ResultsSubFieldEnum.RESPONSES]:
+        'Data resulting from a fixed list of options (e.g. multiple choice questions, dropdown questions, etc. ).',
+    [ResultsSubFieldEnum.COMBINED]:
+        'Data resulting from a fixed list of options and freeform text fields combined.',
+    [ResultsSubFieldEnum.COMMENTS]: 'Optional respondent comments relating to this question.',
+    [ResultsSubFieldEnum.FREEFORM]:
+        'Data resulting from a freeform text area or multiple freeform fields (and not a fixed list of questions).',
+    [ResultsSubFieldEnum.PRENORMALIZED]:
+        'Data resulting from a practically unlimited, yet still predefined list of options (such as a list of all Best of JS projects, or all GitHub repos).',
+    [ResultsSubFieldEnum.ENTITY]: 'The entity associated with this question.',
+    [ResultsSubFieldEnum.OPTIONS]: 'The predefined options associated with this question.',
+    [ResultsSubFieldEnum.RELEVANT_ENTITIES]:
+        "Relevant entities that could potentially match the question's contents",
+    [ResultsSubFieldEnum.FOLLOWUPS]: null,
+    [ResultsSubFieldEnum.MEDIANS]: null,
+    [ResultsSubFieldEnum.ID]: null,
+    [ResultsSubFieldEnum.METADATA]: null
 }
 
 export enum DbPathsEnum {

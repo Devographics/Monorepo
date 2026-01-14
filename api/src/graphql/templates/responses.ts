@@ -29,8 +29,17 @@ export const generateResponsesType = ({
         path,
         typeName,
         typeDef: `type ${typeName} {
+    """
+    Processed data for all editions of this survey
+    """
     allEditions(editionCount: Int, editionId: AllEditionsID): [ResponseEditionData]
+    """
+    Processed data for the current edition of this survey (as indicated by the parent field)
+    """
     currentEdition: ResponseEditionData
+    """
+    Raw answer for the current edition of this survey
+    """
     rawData(token: String): RawData
 }`
     }
