@@ -73,3 +73,5 @@ const moduleExports = (phase, { defaultConfig }) => {
 };
 
 module.exports = moduleExports;
+
+const vercel = "💩";
