@@ -16,6 +16,18 @@ const moduleExports = (phase, { defaultConfig }) => {
       // your project has ESLint errors.
       ignoreDuringBuilds: true,
     },
+    turbopack: {
+      rules: {
+        "*.yaml": {
+          loaders: ["yaml-loader"],
+          as: "*.js", // Important: Loaders must return JavaScript
+        },
+        "*.yml": {
+          loaders: ["yaml-loader"],
+          as: "*.js",
+        },
+      },
+    },
     webpack: function (configArg, ...otherArgs) {
       //console.log(util.inspect(configArg.module.rules, false, null, true));
       //*** */ Yaml support

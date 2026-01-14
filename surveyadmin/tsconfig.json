@@ -10,7 +10,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "lib": [
       "ESNext.Array",
       "dom",
@@ -39,14 +39,15 @@
         "name": "next"
       }
     ],
-    "strict": false,
+    "strict": false
   },
   "include": [
     "next-env.d.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
     // helps having Node types in the config
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": [
     "**/*.test.ts",
@@ -54,5 +55,5 @@
     // must exclude collocated code too
     // can create inconsistencies with VS Code...
     "node_modules"
-  ],
+  ]
 }
