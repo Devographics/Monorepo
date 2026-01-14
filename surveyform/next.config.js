@@ -28,6 +28,19 @@ const moduleExports = (phase, { defaultConfig }) => {
     env: {
       NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
     },
+
+    turbopack: {
+      rules: {
+        "*.yaml": {
+          loaders: ["yaml-loader"],
+          as: "*.js", // Important: Loaders must return JavaScript
+        },
+        "*.yml": {
+          loaders: ["yaml-loader"],
+          as: "*.js",
+        },
+      },
+    },
     webpack: function (configArg, otherArgs) {
       // run previously configured function!
       /** @type {import("webpack").Configuration} */
