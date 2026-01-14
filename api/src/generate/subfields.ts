@@ -43,7 +43,7 @@ const responsesResolverFunction: ResolverType = async (parent, args, context, in
 export const subFields: Array<SubField> = [
     {
         id: ResultsSubFieldEnum.ID,
-        def: () => `id: String`,
+        def: () => `${ResultsSubFieldEnum.ID}: String`,
         addIf: () => true,
         resolverFunction: ({ question }) => {
             console.log('// question id resolver')
@@ -52,7 +52,7 @@ export const subFields: Array<SubField> = [
     },
     {
         id: ResultsSubFieldEnum.METADATA,
-        def: () => `_metadata: QuestionMetadata`,
+        def: () => `${ResultsSubFieldEnum.METADATA}: QuestionMetadata`,
         addIf: () => true,
         resolverFunction: ({ question }) => {
             console.log('// question metadata resolver')
@@ -63,7 +63,7 @@ export const subFields: Array<SubField> = [
     },
     {
         id: ResultsSubFieldEnum.RELEVANT_ENTITIES,
-        def: () => `_entities: [Entity]`,
+        def: () => `${ResultsSubFieldEnum.RELEVANT_ENTITIES}: [Entity]`,
         addIf: ({ normPaths }) => !!normPaths?.other,
         resolverFunction: async ({ question }) => {
             console.log('// question relevant entities resolver')
@@ -101,7 +101,7 @@ export const subFields: Array<SubField> = [
     },
     {
         id: ResultsSubFieldEnum.COMMENTS,
-        def: () => 'comments: ItemComments',
+        def: () => `${ResultsSubFieldEnum.COMMENTS}: ItemComments`,
         addIf: ({ normPaths }) => !!normPaths?.comment,
         resolverFunction: (parent, args) => {
             // empty pass-through resolver
@@ -111,7 +111,7 @@ export const subFields: Array<SubField> = [
     },
     {
         id: ResultsSubFieldEnum.OPTIONS,
-        def: ({ optionTypeName }) => `options: [${optionTypeName}]`,
+        def: ({ optionTypeName }) => `${ResultsSubFieldEnum.OPTIONS}: [${optionTypeName}]`,
         addIf: ({ optionTypeName, options }) => !!(optionTypeName && options),
         resolverFunction: async ({ question }, args, context) => {
             console.log('// question options resolver')
@@ -130,7 +130,7 @@ export const subFields: Array<SubField> = [
     },
     {
         id: ResultsSubFieldEnum.ENTITY,
-        def: () => `entity: Entity`,
+        def: () => `${ResultsSubFieldEnum.ENTITY}: Entity`,
         addIf: () => false, // will be overridden by addIfAsync
         addIfAsync: async ({ id }) => !!(await getEntity({ id })),
         resolverFunction: async ({ question }, args, context) => {
