@@ -25,7 +25,6 @@ export const CardinalitiesSerie = (
         block,
         chartState,
         variant,
-        question,
         isReversed = false,
         viewDefinition
     } = props
@@ -43,7 +42,6 @@ export const CardinalitiesSerie = (
         seriesMetadata,
         buckets,
         chartState,
-        question,
         viewDefinition,
         serieMetadataProps
     })

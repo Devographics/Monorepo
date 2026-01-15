@@ -47,8 +47,8 @@ export const RowSingle = (props: RowComponentProps) => {
     }
 
     let gradient
-    if (question.template === 'opinion') {
-        console.log(theme)
+
+    if (question?.template === 'opinion') {
         gradient =
             theme?.colors?.ranges?.opinions?.[bucket.id] || theme.colors.barChart.primaryGradient
     } else {
