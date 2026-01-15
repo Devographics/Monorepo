@@ -5,7 +5,6 @@ import { approveTokens, renameTokens } from "~/lib/normalization/services";
 import { ActionProps } from "./NormalizeQuestionActions";
 import { NormTokenAction } from "./NormTokenAction";
 import { CustomNormalizationDocument } from "@devographics/types";
-import { Action } from "@sentry/react/types/types";
 import { IndividualAnswer } from "~/lib/normalization/helpers/splitResponses";
 import FieldValue from "./FieldValue";
 import LoadingButton from "../LoadingButton";

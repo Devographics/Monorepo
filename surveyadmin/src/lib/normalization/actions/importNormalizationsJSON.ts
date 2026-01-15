@@ -21,7 +21,7 @@ type AnswerMatch = {
   answerId: string;
   tokenIds: string[];
 };
-type JSONPayload = {
+type NormalizationJSONPayload = {
   tokens: string[];
   matches: AnswerMatch[];
 };
@@ -41,7 +41,7 @@ export const importNormalizationsJSON = async (
 
   const paths = getFormPaths({ edition, question });
 
-  const parsedData = JSON.parse(data) as JSONPayload;
+  const parsedData = JSON.parse(data) as NormalizationJSONPayload;
 
   let normalizationsImported = 0;
   let normalizationsSkipped = 0;

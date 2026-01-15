@@ -37,7 +37,11 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { ResultsPayload } from "~/lib/normalization/services";
 import { NormalizeAll } from "./NormalizeAll";
 import { getQuestionObject } from "~/lib/normalization/helpers/getQuestionObject";
-import { Token, getQuestionTokens, getSortedQuestionTokens } from "./Tokens";
+import {
+  TokenType,
+  getQuestionTokens,
+  getSortedQuestionTokens,
+} from "./Tokens";
 
 interface NormalizeQuestionProps {
   survey: SurveyMetadata;
@@ -140,7 +144,7 @@ export interface CommonNormalizationProps extends NormalizationProps {
   setShowActionLog: Dispatch<SetStateAction<boolean>>;
   localSuggestedTokens: string[];
   addLocalSuggestedToken: (token: string) => void;
-  questionTokens: Token[];
+  questionTokens: TokenType[];
 }
 
 export const NormalizeQuestion = (props: NormalizeQuestionProps) => {

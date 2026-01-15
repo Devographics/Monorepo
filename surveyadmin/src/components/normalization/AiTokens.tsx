@@ -18,7 +18,7 @@ import {
   removeCustomTokens,
   renameTokens,
 } from "~/lib/normalization/services";
-import { Token } from "./Tokens";
+import type { TokenType } from "./Tokens";
 
 const showAnswersCount = 3;
 
@@ -112,7 +112,7 @@ const Token = (props: {
   edition: EditionMetadata;
   token: AiTokenGrouped;
   setTokenFilter: CommonNormalizationProps["setTokenFilter"];
-  questionTokens: Token[];
+  questionTokens: TokenType[];
   i: number;
 }) => {
   const { edition, token, setTokenFilter, i, questionTokens } = props;

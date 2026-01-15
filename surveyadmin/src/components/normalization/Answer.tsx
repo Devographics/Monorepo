@@ -84,7 +84,11 @@ export const Answer = ({
   };
 
   const regularTokens = tokens.filter(
-    (t) => ![CUSTOM_NORMALIZATION, AI_NORMALIZATION].includes(t.pattern)
+    (t) =>
+      !(
+        t.pattern &&
+        [CUSTOM_NORMALIZATION, AI_NORMALIZATION].includes(t.pattern)
+      )
   );
   const allTokenIds = [
     ...tokens.map((t) => t.id),

@@ -9,6 +9,7 @@ import {
 } from "~/lib/normalization/types";
 import { defaultSegmentSize } from "./hooks";
 import { highlightMatches } from "../hooks";
+import compact from "lodash/compact.js";
 
 const errorColor = "#cf2710";
 
@@ -284,7 +285,9 @@ export const NormField = ({
                             dangerouslySetInnerHTML={{
                               __html: highlightMatches(
                                 rawValue,
-                                metadataItem.tokens.map((t) => t.pattern)
+                                compact(
+                                  metadataItem.tokens.map((t) => t.pattern)
+                                )
                               ),
                             }}
                           ></code>

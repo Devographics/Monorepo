@@ -28,8 +28,7 @@ export const deleteTokens = async (params: DeleteTokensParams) => {
           importedTokens: tokenToRemove,
           suggestedTokens: tokenToRemove,
         },
-      },
-      { returnDocument: "after" }
+      }
     );
     modifiedCount += updateResult.modifiedCount;
   }

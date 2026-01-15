@@ -26,7 +26,7 @@ export const EMPTY_TAG = "EMPTY_TAG";
 
 type Sort = "alphabetical" | "matches";
 
-export type Token = Entity & { tag: string; matchCount: number };
+export type TokenType = Entity & { tag: string; matchCount: number };
 
 export const getQuestionTokens = ({
   question,
@@ -59,7 +59,7 @@ export const getQuestionTokens = ({
         );
       })
       .flat()
-  ) as Array<Token>;
+  ) as Array<TokenType>;
   return allTokens;
 };
 
@@ -106,7 +106,7 @@ export const getSortedQuestionTokens = ({
       })
       .flat()
       .filter((token) => token.id.includes(filterQuery))
-  ) as Array<Token>;
+  ) as Array<TokenType>;
   return allTokens;
 };
 
@@ -307,8 +307,8 @@ const Tokens = ({
 };
 interface RowProps {
   question: QuestionMetadata;
-  token: Token;
-  allTokens: Token[];
+  token: TokenType;
+  allTokens: TokenType[];
   index: number;
   entities: Entity[];
   tokenFilter: CommonNormalizationProps["tokenFilter"];

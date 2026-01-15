@@ -79,6 +79,7 @@ export const Import = ({
               await mutation.mutateAsync({
                 ...commonParams,
                 data: value,
+                rawPath: "unknown",
               });
             }}
             label="Submit"

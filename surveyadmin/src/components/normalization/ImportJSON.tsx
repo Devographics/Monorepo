@@ -72,6 +72,7 @@ export const Import = (props: {
               const result = await mutation.mutateAsync({
                 ...commonParams,
                 data: value,
+                rawPath: "unknown",
               });
               return result;
             }}
