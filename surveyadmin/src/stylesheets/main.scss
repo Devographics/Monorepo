@@ -1,22 +1,20 @@
-// @use "pico";
+@use "pico";
 
 // @use "pico" with (
 //   $theme-color: "yellow"
 // );
 
 // @import "water.scss";
-@import "colors.scss";
-@import "variables.scss";
-@import "typography.scss";
-@import "breakpoints.scss";
-@import "admin.scss";
+@use "colors.scss";
+@use "variables.scss";
+@use "typography.scss";
+@use "breakpoints.scss";
+@use "admin.scss";
 // @import "pico.scss";
-
-@import "@picocss/pico/scss/pico";
 
 body {
   padding: 20px;
-  font-size: $root-size;
+  font-size: typography.$root-size;
 }
 :root {
   --pico-font-size: $root-size;

@@ -15,12 +15,12 @@
     "dependencies": {
         "@devographics/helpers": "workspace:^",
         "@devographics/types": "workspace:*",
-        "ioredis": "^5.2.4",
-        "mongodb": "^5.4.0",
-        "mongodb-client-encryption": "^2.7.1",
-        "nanoid": "^4.0.2"
+        "ioredis": "^5.9.1",
+        "mongodb": "^7.0.0",
+        "mongodb-client-encryption": "^7.0.0",
+        "nanoid": "^5.1.6"
     },
     "devDependencies": {
-        "@types/node": "^18.11.18"
+        "@types/node": "^25.0.8"
     }
 }

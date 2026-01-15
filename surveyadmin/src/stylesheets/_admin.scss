@@ -1,10 +1,14 @@
+@use "colors";
+@use "typography";
+@use "variables";
+
 @use "sass:math";
 
 .main-nav {
   background: rgb(240, 240, 240);
   background-color: rgb(109, 109, 109);
   margin: -20px -20px 0 -20px;
-  padding: 0 $spacing;
+  padding: 0 variables.$spacing;
   color: white;
   a {
     color: white;
@@ -18,14 +22,14 @@
   // justify-content: space-between;
   // padding: $spacing;
   margin-top: 0;
-  margin: 0 -1 * $spacing;
-  padding: $spacing;
+  margin: 0 -1 * variables.$spacing;
+  padding: variables.$spacing;
   border-bottom: 1px solid var(--border-color);
   background-color: rgb(236, 236, 236);
   @media (prefers-color-scheme: dark) {
     background-color: rgb(27, 27, 27);
   }
-  margin-bottom: $spacing;
+  margin-bottom: variables.$spacing;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -33,7 +37,7 @@
   .secondary {
     display: flex;
     align-items: center;
-    gap: $spacing * 2;
+    gap: variables.$spacing * 2;
   }
   .primary {
     justify-content: flex-start;
@@ -49,7 +53,7 @@
 .normalize-responses {
   display: flex;
   align-items: center;
-  gap: $spacing;
+  gap: variables.$spacing;
 }
 
 .normalization-progress {
@@ -62,17 +66,17 @@
 .normalization-options {
   display: flex;
   flex-direction: column;
-  gap: math.div($spacing, 2);
+  gap: math.div(variables.$spacing, 2);
 }
 
 .admin-scripts-table {
   &,
   tr {
-    border: 1px solid $border-color;
+    border: 1px solid colors.$border-color;
   }
-  font-size: $smallish-font;
+  font-size: typography.$smallish-font;
   th {
-    background: $bg-color-lightest;
+    background: colors.$bg-color-lightest;
   }
   td,
   th {
@@ -82,12 +86,12 @@
 
 .admin-args {
   display: flex;
-  gap: math.div($spacing, 2);
+  gap: math.div(variables.$spacing, 2);
   align-items: center;
   label {
     display: flex;
     flex-direction: column;
-    font-size: $small-font;
+    font-size: typography.$small-font;
   }
   input {
     width: 100px;
@@ -109,7 +113,7 @@
 .cache-dashboard {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: $spacing;
+  gap: variables.$spacing;
 }
 
 .manualinput {
@@ -473,9 +477,9 @@ button.button-ghost,
   @media (prefers-color-scheme: dark) {
     background-color: rgb(50, 50, 50);
   }
-  margin: 0px -1 * $spacing;
+  margin: 0px -1 * variables.$spacing;
   // margin-bottom: $spacing;
-  padding: $spacing;
+  padding: variables.$spacing;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -522,7 +526,7 @@ button.button-ghost,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: $spacing;
+  gap: variables.$spacing;
 
   .control-search {
     min-width: 200px;
@@ -532,7 +536,7 @@ button.button-ghost,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: math.div($spacing, 2);
+  gap: math.div(variables.$spacing, 2);
   button {
     white-space: nowrap;
   }
@@ -541,19 +545,19 @@ button.button-ghost,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: math.div($spacing, 2);
+  gap: math.div(variables.$spacing, 2);
 }
 
 .actionlog-item {
   border: 1px solid var(--border-color);
-  padding: math.div($spacing, 2);
+  padding: math.div(variables.$spacing, 2);
   border-radius: 3px;
   summary {
     display: flex;
     justify-content: space-between;
     div {
       display: flex;
-      gap: $spacing;
+      gap: variables.$spacing;
     }
   }
 }
@@ -571,15 +575,15 @@ button.button-ghost,
 .word-frequencies-lists {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: $spacing;
+  gap: variables.$spacing;
 }
 
 .answers-header {
   display: flex;
   // justify-content: space-between;
   align-items: center;
-  margin-bottom: $spacing;
-  gap: $spacing;
+  margin-bottom: variables.$spacing;
+  gap: variables.$spacing;
   h3 {
     margin: 0;
   }
