@@ -128,7 +128,7 @@ const ListItem = ({
     <div className="reading-list-item">
       <h5 className="reading-list-item-title">
         {homepage?.url ? (
-          <a href={homepage.url} className="reading-list-item-title-link">
+          <a target="_blank" href={homepage.url} className="reading-list-item-title-link">
             <ItemLabel entity={entity} />
             <Share />
           </a>
