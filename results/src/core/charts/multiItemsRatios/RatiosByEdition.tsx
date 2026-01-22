@@ -1,7 +1,7 @@
 import React from 'react'
 import { BlockComponentProps } from 'core/types'
 import { ChartControls, ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
-import { CommonProps, LegendItem } from '../common2/types'
+import { CommonProps, LegendItemType } from '../common2/types'
 import ChartData from '../common2/ChartData'
 // import { getBlockNoteKey } from 'core/helpers/blockHelpers'
 // import { useI18n } from '@devographics/react-i18n'
@@ -123,7 +123,7 @@ export const RatiosByEdition = (props: RatiosByEditionProps) => {
 }
 
 type HeadingProps = CommonProps<MultiRatiosChartState> & {
-    legendItems: LegendItem[]
+    legendItems: LegendItemType[]
     i18nNamespace?: string
 }
 
@@ -229,7 +229,7 @@ export const RatioDescriptionNote = (props: { chartState: MultiRatiosChartState 
 export const RatiosByEditionSerie = (
     props: CommonProps<MultiRatiosChartState> & {
         serie: MultiRatioSerie
-        legendItems: LegendItem[]
+        legendItems: LegendItemType[]
     }
 ) => {
     const { serie, question, chartState, block, legendItems, pageContext } = props

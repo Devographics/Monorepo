@@ -2,7 +2,7 @@ import { DataSeries } from 'core/filters/types'
 import { RatiosData, RatiosEnum, StandardQuestionData } from '@devographics/types'
 import { Dispatch, SetStateAction } from 'react'
 import { EditionWithPointData, VerticalBarChartValues } from '../verticalBar2/types'
-import { ChartStateWithHighlighted, ChartStateWithSubset, LegendItem } from '../common2/types'
+import { ChartStateWithHighlighted, ChartStateWithSubset, LegendItemType } from '../common2/types'
 
 export type MultiRatioSerie = DataSeries<StandardQuestionData[]>
 
@@ -21,7 +21,7 @@ export type MultiRatiosChartState = {
 } & ChartStateWithSubset &
     ChartStateWithHighlighted
 
-export type MultiRatiosChartValues = VerticalBarChartValues & { legendItems: LegendItem[] }
+export type MultiRatiosChartValues = VerticalBarChartValues & { legendItems: LegendItemType[] }
 
 export type EditionWithRankAndPointData = EditionWithPointData & {
     value: number

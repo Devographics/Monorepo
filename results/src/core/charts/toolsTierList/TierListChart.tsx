@@ -5,20 +5,18 @@ import { useEntity } from 'core/helpers/entities'
 import { QuestionData } from '@devographics/types'
 
 interface CustomImagesList {
-    [key: string]: 'png' | 'svg' | 'jpg'
+    [key: string]: 'png' | 'svg' | 'jpg' | 'webp'
 }
 const customImages: CustomImagesList = {
     testing_library: 'png',
-    tsc: 'svg',
-    npm_workspaces: 'svg',
-    capacitor: 'svg',
     yarn_workspaces: 'png',
     reactnative: 'png',
     lerna: 'png',
     cordova: 'jpg',
-    vuejs: 'svg',
-    pnpm: 'svg',
-    selenium: 'png'
+    selenium: 'png',
+    hono: 'webp',
+    tsup: 'webp',
+    koa: 'webp'
 }
 
 type ToolsSectionId = string

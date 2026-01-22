@@ -3,7 +3,7 @@ import React from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import { useTheme } from 'styled-components'
 import { getItemLabel } from 'core/helpers/labels'
-import { ChartStateWithHighlighted, LegendItem } from './types'
+import { ChartStateWithHighlighted, LegendItemType } from './types'
 import { getDistinctColor } from './helpers/colors'
 
 export const Legend = <ChartStateType extends ChartStateWithHighlighted>({
@@ -11,7 +11,7 @@ export const Legend = <ChartStateType extends ChartStateWithHighlighted>({
     chartState,
     i18nNamespace
 }: {
-    items: LegendItem[]
+    items: LegendItemType[]
     chartState: ChartStateType
     i18nNamespace?: string
 }) => {
@@ -25,7 +25,7 @@ export const Legend = <ChartStateType extends ChartStateWithHighlighted>({
             }`}
         >
             {items.map((item, i) => (
-                <Item<ChartStateType>
+                <LegendItem<ChartStateType>
                     key={item.id}
                     item={item}
                     lineIndex={i}
@@ -37,13 +37,13 @@ export const Legend = <ChartStateType extends ChartStateWithHighlighted>({
     )
 }
 
-const Item = <ChartStateType extends ChartStateWithHighlighted>({
+const LegendItem = <ChartStateType extends ChartStateWithHighlighted>({
     item,
     lineIndex,
     chartState,
     i18nNamespace
 }: {
-    item: LegendItem
+    item: LegendItemType
     lineIndex: number
     chartState: ChartStateType
     i18nNamespace?: string

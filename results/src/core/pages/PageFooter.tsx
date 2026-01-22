@@ -54,6 +54,10 @@ const PageFooter = () => {
                         <T k="general.translator_mode" />{' '}
                     </>
                 )}
+                <span>
+                    &copy; {new Date().getFullYear()}{' '}
+                    <a href="https://devographics.com/">Devographics</a>
+                </span>
             </Notes>
         </Container>
     )

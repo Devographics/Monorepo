@@ -135,7 +135,7 @@ export type FormatValueType<ChartStateType> = (
     chartState: ChartStateType
 ) => string
 
-export type LegendItem = {
+export type LegendItemType = {
     id: string
     label?: string
     color?: string

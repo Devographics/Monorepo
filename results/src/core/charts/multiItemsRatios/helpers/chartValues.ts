@@ -13,7 +13,7 @@ import sum from 'lodash/sum'
 import round from 'lodash/round'
 import { viewDefinition } from './viewDefinition'
 import { LineItem } from 'core/charts/verticalBar2/types'
-import { LegendItem } from 'core/charts/common2/types'
+import { LegendItemType } from 'core/charts/common2/types'
 
 export const useChartValues = ({
     lineItems,
@@ -25,7 +25,7 @@ export const useChartValues = ({
     chartState: MultiRatiosChartState
     block: BlockVariantDefinition
     question: QuestionMetadata
-    legendItems: LegendItem[]
+    legendItems: LegendItemType[]
 }) => {
     const { mode } = chartState
     const { getColumnIds, getPointValue } = viewDefinition
