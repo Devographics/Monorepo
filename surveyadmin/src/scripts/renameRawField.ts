@@ -1,11 +1,19 @@
 import { renameRawField as renameRawField_ } from "~/lib/normalization/helpers/renameRawField";
 
 export const renameRawField = async (args) => {
-  const { surveyId, editionId, sectionId, oldFieldId, newFieldId } = args;
+  const {
+    surveyId,
+    editionId,
+    oldSectionId,
+    newSectionId,
+    oldFieldId,
+    newFieldId,
+  } = args;
   return await renameRawField_({
     surveyId,
     editionId,
-    sectionId,
+    oldSectionId,
+    newSectionId,
     oldFieldId,
     newFieldId,
   });
@@ -14,7 +22,8 @@ export const renameRawField = async (args) => {
 renameRawField.args = [
   "surveyId",
   "editionId",
-  "sectionId",
+  "oldSectionId",
+  "newSectionId",
   "oldFieldId",
   "newFieldId",
 ];

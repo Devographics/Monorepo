@@ -20,3 +20,4 @@ export * from "./addPastParticipations";
 export * from "./addFutureParticipations";
 export * from "./addCreatedAtDate";
 export * from "./deleteComment";
+export * from "./migrateField";

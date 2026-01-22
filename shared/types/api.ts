@@ -46,6 +46,7 @@ export const subfieldDocs = {
 
 export enum DbPathsEnum {
     BASE = 'base',
+    CHOICES = 'choices',
     RESPONSE = 'response',
     OTHER = 'other',
     OTHERS = 'others',
