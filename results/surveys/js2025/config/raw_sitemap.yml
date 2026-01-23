@@ -26,276 +26,276 @@
         disableExport: true
         wrapBlock: false
 
-- id: overview
-  path: /overview
-  blocks:
-      - id: survey_intro
-        blockType: SurveyIntroBlock
-        wrapBlock: false
-        showInNav: false
+# - id: overview
+#   path: /overview
+#   blocks:
+#       - id: survey_intro
+#         blockType: SurveyIntroBlock
+#         wrapBlock: false
+#         showInNav: false
 
-      # front-end
+#       # front-end
 
-      - id: overview_1_frontend_fatigue.js2025
-        blockType: TextBlock
-        wrapBlock: false
-        showInNav: false
+#       - id: overview_1_frontend_fatigue.js2025
+#         blockType: TextBlock
+#         wrapBlock: false
+#         showInNav: false
 
-      - id: front_end_frameworks_ratios
-        titleId: front_end_frameworks.front_end_frameworks_ratios
-        queryOptions:
-            sectionId: front_end_frameworks
-        template: multi_items_ratios
-        i18nNamespace: tools
-        showInNav: false
+#       - id: front_end_frameworks_ratios
+#         titleId: front_end_frameworks.front_end_frameworks_ratios
+#         queryOptions:
+#             sectionId: front_end_frameworks
+#         template: multi_items_ratios
+#         i18nNamespace: tools
+#         showInNav: false
 
-      # - template: happiness2
-      #   titleId: front_end_frameworks.front_end_frameworks_happiness
-      #   questionKey: front_end_frameworks.front_end_frameworks_happiness.question
-      #   queryOptions:
-      #       sectionId: front_end_frameworks
-      #   showInNav: false
+#       # - template: happiness2
+#       #   titleId: front_end_frameworks.front_end_frameworks_happiness
+#       #   questionKey: front_end_frameworks.front_end_frameworks_happiness.question
+#       #   queryOptions:
+#       #       sectionId: front_end_frameworks
+#       #   showInNav: false
 
-      - id: front_end_frameworks_others
-        titleId: front_end_frameworks.front_end_frameworks_others
-        # questionKey: tools.other_tools.description
-        queryOptions:
-            sectionId: front_end_frameworks
-        template: section_prenormalized_tools
-        i18nNamespace: tools
-        showInNav: false
+#       - id: front_end_frameworks_others
+#         titleId: front_end_frameworks.front_end_frameworks_others
+#         # questionKey: tools.other_tools.description
+#         queryOptions:
+#             sectionId: front_end_frameworks
+#         template: section_prenormalized_tools
+#         i18nNamespace: tools
+#         showInNav: false
 
-      - id: meta_frameworks_ripple.js2025
-        blockType: ImageBlock
-        wrapBlock: false
-        showInNav: false
-        variables:
-            imageUrl: '/talk/ripple.png'
+#       - id: meta_frameworks_ripple.js2025
+#         blockType: ImageBlock
+#         wrapBlock: false
+#         showInNav: false
+#         variables:
+#             imageUrl: '/talk/ripple.png'
 
-      # meta-frameworks
-      - id: overview_2_whats_next.js2025
-        blockType: TextBlock
-        disableExport: true
-        wrapBlock: false
-        showInNav: false
+#       # meta-frameworks
+#       - id: overview_2_whats_next.js2025
+#         blockType: TextBlock
+#         disableExport: true
+#         wrapBlock: false
+#         showInNav: false
 
-      - id: meta_frameworks_ratios
-        titleId: meta_frameworks.meta_frameworks_ratios
-        queryOptions:
-            sectionId: meta_frameworks
-        template: multi_items_ratios
-        i18nNamespace: tools
-        showInNav: false
+#       - id: meta_frameworks_ratios
+#         titleId: meta_frameworks.meta_frameworks_ratios
+#         queryOptions:
+#             sectionId: meta_frameworks
+#         template: multi_items_ratios
+#         i18nNamespace: tools
+#         showInNav: false
 
-      # - id: meta_frameworks_resig.js2025
-      #   blockType: ImageBlock
-      #   wrapBlock: false
-      #   showInNav: false
-      #   variables:
-      #       title: jQuery Creator John Resig
-      #       imageUrl: '/talk/resig.png'
+#       # - id: meta_frameworks_resig.js2025
+#       #   blockType: ImageBlock
+#       #   wrapBlock: false
+#       #   showInNav: false
+#       #   variables:
+#       #       title: jQuery Creator John Resig
+#       #       imageUrl: '/talk/resig.png'
 
-      - id: meta_frameworks_tanstack.js2025
-        blockType: ImageBlock
-        wrapBlock: false
-        showInNav: false
-        variables:
-            # title: jQuery Creator John Resig
-            imageUrl: '/talk/tanstack.png'
+#       - id: meta_frameworks_tanstack.js2025
+#         blockType: ImageBlock
+#         wrapBlock: false
+#         showInNav: false
+#         variables:
+#             # title: jQuery Creator John Resig
+#             imageUrl: '/talk/tanstack.png'
 
-      - id: meta_frameworks_others
-        titleId: meta_frameworks.meta_frameworks_others
-        # questionKey: tools.other_tools.description
-        queryOptions:
-            sectionId: meta_frameworks
-        template: section_prenormalized_tools
-        i18nNamespace: tools
-        showInNav: false
+#       - id: meta_frameworks_others
+#         titleId: meta_frameworks.meta_frameworks_others
+#         # questionKey: tools.other_tools.description
+#         queryOptions:
+#             sectionId: meta_frameworks
+#         template: section_prenormalized_tools
+#         i18nNamespace: tools
+#         showInNav: false
 
-      # back-end
+#       # back-end
 
-      - id: overview_3_back_in_business.js2025
-        blockType: TextBlock
-        disableExport: true
-        wrapBlock: false
-        showInNav: false
+#       - id: overview_3_back_in_business.js2025
+#         blockType: TextBlock
+#         disableExport: true
+#         wrapBlock: false
+#         showInNav: false
 
-      - id: back_end_frameworks_ratios
-        titleId: back_end_frameworks.back_end_frameworks_ratios
-        queryOptions:
-            sectionId: back_end_frameworks
-        template: multi_items_ratios
-        i18nNamespace: tools
-        showInNav: false
+#       - id: back_end_frameworks_ratios
+#         titleId: back_end_frameworks.back_end_frameworks_ratios
+#         queryOptions:
+#             sectionId: back_end_frameworks
+#         template: multi_items_ratios
+#         i18nNamespace: tools
+#         showInNav: false
 
-      - id: meta_frameworks_nitro.js2025
-        blockType: ImageBlock
-        wrapBlock: false
-        showInNav: false
-        variables:
-            imageUrl: '/talk/nitro.png'
-        notes: used by Nuxt
+#       - id: meta_frameworks_nitro.js2025
+#         blockType: ImageBlock
+#         wrapBlock: false
+#         showInNav: false
+#         variables:
+#             imageUrl: '/talk/nitro.png'
+#         notes: used by Nuxt
 
-      - id: meta_frameworks_elysiajs.js2025
-        blockType: ImageBlock
-        wrapBlock: false
-        showInNav: false
-        variables:
-            imageUrl: '/talk/elysiajs.png'
-        notes: works with Bun
+#       - id: meta_frameworks_elysiajs.js2025
+#         blockType: ImageBlock
+#         wrapBlock: false
+#         showInNav: false
+#         variables:
+#             imageUrl: '/talk/elysiajs.png'
+#         notes: works with Bun
 
-      - id: meta_frameworks_hono.js2025
-        blockType: ImageBlock
-        wrapBlock: false
-        showInNav: false
-        variables:
-            imageUrl: '/talk/hono.png'
-        notes: developed in Japan by Yusuke Wada
+#       - id: meta_frameworks_hono.js2025
+#         blockType: ImageBlock
+#         wrapBlock: false
+#         showInNav: false
+#         variables:
+#             imageUrl: '/talk/hono.png'
+#         notes: developed in Japan by Yusuke Wada
 
-      # build tools
+#       # build tools
 
-      - id: overview_4_build_it.js2025
-        blockType: TextBlock
-        disableExport: true
-        wrapBlock: false
-        showInNav: false
+#       - id: overview_4_build_it.js2025
+#         blockType: TextBlock
+#         disableExport: true
+#         wrapBlock: false
+#         showInNav: false
 
-      - id: overview_4_vite.js2025
-        blockType: ImageBlock
-        wrapBlock: false
-        showInNav: false
-        variables:
-            imageUrl: '/talk/vite.png'
+#       - id: overview_4_vite.js2025
+#         blockType: ImageBlock
+#         wrapBlock: false
+#         showInNav: false
+#         variables:
+#             imageUrl: '/talk/vite.png'
 
-      - id: build_tools_ratios
-        titleId: build_tools.build_tools_ratios
-        queryOptions:
-            sectionId: build_tools
-        template: multi_items_ratios
-        i18nNamespace: tools
-        showInNav: false
+#       - id: build_tools_ratios
+#         titleId: build_tools.build_tools_ratios
+#         queryOptions:
+#             sectionId: build_tools
+#         template: multi_items_ratios
+#         i18nNamespace: tools
+#         showInNav: false
 
-      - id: overview_4_rolldown.js2025
-        blockType: ImageBlock
-        wrapBlock: false
-        showInNav: false
-        variables:
-            imageUrl: '/talk/rolldown.png'
+#       - id: overview_4_rolldown.js2025
+#         blockType: ImageBlock
+#         wrapBlock: false
+#         showInNav: false
+#         variables:
+#             imageUrl: '/talk/rolldown.png'
 
-      - id: compiled_code_balance
-        template: multiple_options2_combined
-        titleId: usage.compiled_code_balance
-        questionKey: usage.compiled_code_balance.question
-        queryOptions:
-            sectionId: usage
-        showInNav: false
+#       - id: compiled_code_balance
+#         template: multiple_options2_combined
+#         titleId: usage.compiled_code_balance
+#         questionKey: usage.compiled_code_balance.question
+#         queryOptions:
+#             sectionId: usage
+#         showInNav: false
 
-      - id: build_step_advantages
-        template: multiple_options2_combined
-        titleId: usage.build_step_advantages
-        questionKey: usage.build_step_advantages.question
-        queryOptions:
-            sectionId: usage
-        showInNav: false
+#       - id: build_step_advantages
+#         template: multiple_options2_combined
+#         titleId: usage.build_step_advantages
+#         questionKey: usage.build_step_advantages.question
+#         queryOptions:
+#             sectionId: usage
+#         showInNav: false
 
-      # static typing
+#       # static typing
 
-      - id: overview_5_static_typing.js2025
-        blockType: TextBlock
-        disableExport: true
-        wrapBlock: false
-        showInNav: false
+#       - id: overview_5_static_typing.js2025
+#         blockType: TextBlock
+#         disableExport: true
+#         wrapBlock: false
+#         showInNav: false
 
-      - id: js_ts_balance
-        template: multiple_options2
-        titleId: usage.js_ts_balance
-        questionKey: usage.js_ts_balance.question
-        queryOptions:
-            sectionId: usage
-        showInNav: false
+#       - id: js_ts_balance
+#         template: multiple_options2
+#         titleId: usage.js_ts_balance
+#         questionKey: usage.js_ts_balance.question
+#         queryOptions:
+#             sectionId: usage
+#         showInNav: false
 
-      - id: top_currently_missing_from_js
-        template: multiple_options2
-        i18nNamespace: features
-        titleId: features.top_currently_missing_from_js
-        questionKey: features.top_currently_missing_from_js.question
-        queryOptions:
-            sectionId: features
-        showInNav: false
+#       - id: top_currently_missing_from_js
+#         template: multiple_options2
+#         i18nNamespace: features
+#         titleId: features.top_currently_missing_from_js
+#         questionKey: features.top_currently_missing_from_js.question
+#         queryOptions:
+#             sectionId: features
+#         showInNav: false
 
-      - id: native_types_proposal
-        template: multiple_options2
-        titleId: features.native_types_proposal
-        questionKey: features.native_types_proposal.question
-        queryOptions:
-            sectionId: features
-        showInNav: false
-        parameters:
-            sort:
-                order: desc
-                property: count
+#       - id: native_types_proposal
+#         template: multiple_options2
+#         titleId: features.native_types_proposal
+#         questionKey: features.native_types_proposal.question
+#         queryOptions:
+#             sectionId: features
+#         showInNav: false
+#         parameters:
+#             sort:
+#                 order: desc
+#                 property: count
 
-      # other languages
+#       # other languages
 
-      - id: overview_6_other_languages.js2025
-        blockType: TextBlock
-        disableExport: true
-        wrapBlock: false
-        showInNav: false
+#       - id: overview_6_other_languages.js2025
+#         blockType: TextBlock
+#         disableExport: true
+#         wrapBlock: false
+#         showInNav: false
 
-      - id: non_js_languages
-        template: multiple_options2_combined
-        titleId: other_tools.non_js_languages
-        questionKey: tools.non_js_languages.question
-        queryOptions:
-            sectionId: other_tools
-        showInNav: false
+#       - id: non_js_languages
+#         template: multiple_options2_combined
+#         titleId: other_tools.non_js_languages
+#         questionKey: tools.non_js_languages.question
+#         queryOptions:
+#             sectionId: other_tools
+#         showInNav: false
 
-      - id: non_js_languages_features_top_features
-        titleId: other_tools.non_js_languages_features_top_features
-        questionKey: other_tools.non_js_languages_features.question
-        queryOptions:
-            sectionId: other_tools
-        showInNav: false
-        fieldId: non_js_languages_features
-        template: multiple_options2_freeform
-        tabId: tabs.top_features
-        filtersState:
-            bucketsFilter:
-                hasTags:
-                    - js_missing_features
+#       - id: non_js_languages_features_top_features
+#         titleId: other_tools.non_js_languages_features_top_features
+#         questionKey: other_tools.non_js_languages_features.question
+#         queryOptions:
+#             sectionId: other_tools
+#         showInNav: false
+#         fieldId: non_js_languages_features
+#         template: multiple_options2_freeform
+#         tabId: tabs.top_features
+#         filtersState:
+#             bucketsFilter:
+#                 hasTags:
+#                     - js_missing_features
 
-      - id: non_js_languages_features_top_languages
-        titleId: other_tools.non_js_languages_features_top_languages
-        questionKey: other_tools.non_js_languages_features.question
-        queryOptions:
-            sectionId: other_tools
-        showInNav: false
-        fieldId: non_js_languages_features
-        template: multiple_options2_freeform
-        tabId: tabs.top_languages
-        filtersState:
-            bucketsFilter:
-                hasTags:
-                    - languages
+#       - id: non_js_languages_features_top_languages
+#         titleId: other_tools.non_js_languages_features_top_languages
+#         questionKey: other_tools.non_js_languages_features.question
+#         queryOptions:
+#             sectionId: other_tools
+#         showInNav: false
+#         fieldId: non_js_languages_features
+#         template: multiple_options2_freeform
+#         tabId: tabs.top_languages
+#         filtersState:
+#             bucketsFilter:
+#                 hasTags:
+#                     - languages
 
-      # conclusion
+#       # conclusion
 
-      - id: overview_7_state_of_react.js2025
-        blockType: ImageBlock
-        wrapBlock: false
-        showInNav: false
-        variables:
-            title: State of React 2025
-            imageUrl: '/talk/state_of_react_2025_jsconf.png'
+#       - id: overview_7_state_of_react.js2025
+#         blockType: ImageBlock
+#         wrapBlock: false
+#         showInNav: false
+#         variables:
+#             title: State of React 2025
+#             imageUrl: '/talk/state_of_react_2025_jsconf.png'
 
-      - id: overview_7_state_of_js.js2025
-        blockType: ImageBlock
-        wrapBlock: false
-        showInNav: false
-        variables:
-            title: Sign up to be notified
-            imageUrl: '/talk/stateofjsqrcode.png'
+#       - id: overview_7_state_of_js.js2025
+#         blockType: ImageBlock
+#         wrapBlock: false
+#         showInNav: false
+#         variables:
+#             title: Sign up to be notified
+#             imageUrl: '/talk/stateofjsqrcode.png'
 
 - id: tshirt
   path: /tshirt
@@ -413,7 +413,7 @@
             limit: 10
 
       - id: features_resources
-        items: [fm-web-dev-quiz, fm-javascript-hard-parts-v2]
+        items: [fm-javascript-hard-parts-v2, fm-getting-started-js]
         template: recommended_resources
 
 - id: libraries
@@ -474,7 +474,7 @@
       #   template: tools_cardinality_by_user_js
 
       - id: libraries_resources
-        items: [fm-enterprise-ui-dev, frontend-system-design]
+        items: [fm-react-v8, fm-typescript-fundamentals]
         template: recommended_resources
 
   children:
@@ -512,7 +512,7 @@
               i18nNamespace: tools
 
             - id: front_end_frameworks_resources
-              items: [al-vue-reactivity, ad-self-teach-me]
+              items: [fm-react-performance, fm-angular-fundamentals]
               template: recommended_resources
 
       - id: meta_frameworks
@@ -546,7 +546,7 @@
               i18nNamespace: tools
 
             - id: meta_frameworks_resources
-              items: [fm-nextjs-v3, fullstack-app-next-v3]
+              items: [fm-nextjs-v4, fm-react-state-management]
               template: recommended_resources
 
       - id: back_end_frameworks
@@ -580,7 +580,7 @@
               i18nNamespace: tools
 
             - id: back_end_frameworks_resources
-              items: [fm-react-native-v3, fm-electron-v3]
+              items: [fm-api-design-node, fm-backend-system-design]
               template: recommended_resources
 
       - id: testing
@@ -614,7 +614,7 @@
               i18nNamespace: tools
 
             - id: testing_resources
-              items: [fm-testing, fm-web-app-testing]
+              items: [fm-testing-fundamentals, fm-enterprise-ui-dev]
               template: recommended_resources
 
       # - id: mobile_desktop
@@ -682,7 +682,7 @@
               i18nNamespace: tools
 
             - id: build_tools_resources
-              items: [fm-vite, fm-webpack-fundamentals]
+              items: [fm-vite, fm-web-perf]
               template: recommended_resources
 
       # - id: monorepo_tools
@@ -795,8 +795,9 @@
       #       url: https://www.rspack.dev/
 
       - id: tools_others_resources
-        items: [fm-node-js, fm-fullstack-v3]
+        items: [fm-ai-setup, fm-dev-setup]
         template: recommended_resources
+
 - id: usage
   intlId: usage_js
   path: /usage
@@ -857,7 +858,7 @@
         template: happiness2
 
       - id: usage_resources
-        items: [fm-professional, fm-fullstack]
+        items: [fm-prompt-engineering, frontend-system-design]
         template: recommended_resources
 
 - id: resources
@@ -908,7 +909,7 @@
         template: multiple_options2_combined
 
       - id: resources_resources
-        items: [fm-algorithms, fm-podcast]
+        items: [fm-algorithms, fm-learning-paths]
         template: recommended_resources
 
 - id: user_info
@@ -1100,7 +1101,7 @@
                   sort: { property: medianByFacet }
 
       - id: user_info_resources_2
-        items: [fm-javascript-first-steps, fm-getting-a-job-v2]
+        items: [fm-getting-a-job-v3, fm-free]
         template: recommended_resources
 
 - id: awards
@@ -1198,7 +1199,7 @@
       #   template: recommended_resources
 
       - id: awards_resources
-        items: [fm-react, fm-vanilla-js-apps]
+        items: [fm-award-winning-websites, fm-vanilla-js-apps]
         template: recommended_resources
 
 - id: conclusion
