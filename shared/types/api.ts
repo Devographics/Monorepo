@@ -21,7 +21,8 @@ export enum ResultsSubFieldEnum {
     ENTITY = 'entity',
     ID = 'id',
     METADATA = '_metadata',
-    RELEVANT_ENTITIES = 'entities'
+    RELEVANT_ENTITIES = 'entities',
+    RELEVANT_ENTITIES_COUNT = 'entitiesCount'
 }
 
 export const subfieldDocs = {

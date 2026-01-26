@@ -74,6 +74,18 @@ export const subFields: Array<SubField> = [
         }
     },
     {
+        id: ResultsSubFieldEnum.RELEVANT_ENTITIES_COUNT,
+        def: () => `${ResultsSubFieldEnum.RELEVANT_ENTITIES_COUNT}: Int`,
+        addIf: ({ normPaths }) => !!normPaths?.other,
+        resolverFunction: async ({ question }) => {
+            console.log('// question relevant entities count resolver')
+            const matchTags = question?.matchTags
+            const allEntities = await getEntities({ includeNormalizationEntities: true })
+            const _entities = allEntities.filter(e => intersection(e.tags, matchTags).length > 0)
+            return _entities.length
+        }
+    },
+    {
         id: ResultsSubFieldEnum.RESPONSES,
         def: question => getResponsesTypeDef(question, ResultsSubFieldEnum.RESPONSES),
         addIf: ({ normPaths }) => !!normPaths?.response,
