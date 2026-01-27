@@ -361,11 +361,6 @@
         template: multiple_options2
         i18nNamespace: features
 
-      - id: aurora_scharff
-        template: picks
-        variables:
-            url: https://www.youtube.com/watch?v=f--3aG0XfCw
-
       - id: browser_api_features
         template: multiple_options2
         i18nNamespace: features
@@ -816,10 +811,10 @@
       - id: ai_generated_code_balance
         template: multiple_options2
 
-      # - id: kilian_valkhof
-      #   template: picks
-      #   variables:
-      #       url: https://www.electronjs.org/
+      - id: aurora_scharff
+        template: picks
+        variables:
+            url: https://www.youtube.com/watch?v=f--3aG0XfCw
 
       - id: what_do_you_use_js_for
         template: multiple_options2_combined
@@ -1112,7 +1107,7 @@
       - id: awards
         template: awards
         variables:
-            entities: '"vite", "vitest", "esbuild", "astro", "rolldown","analog", "nitro", "valibot", "angular", "storybook","webpack","react","vuejs"'
+            entities: '"vite", "playwright", "turbopack", "vitest", "hono", "rolldown", "fnm", "oxlint", "tanstack_start", "nextjs", "react", "webpack"'
         awards:
             # - id: feature_adoption_delta_award
             #   template: award
@@ -1127,42 +1122,42 @@
             - id: tool_usage_delta_award
               template: award
               awards:
-                  - id: vite
-                    value: '+30%'
                   - id: vitest
-                    value: '+26%'
-                  - id: esbuild
-                    value: '+19%'
+                    value: '+14%'
+                  - id: playwright
+                    value: '+14%'
+                  - id: turbopack
+                    value: '+9%'
 
             - id: tool_satisfaction_award
               template: award
               awards:
-                  - id: vitest
-                    value: '98%'
                   - id: vite
                     value: '98%'
-                  - id: astro
-                    value: '94%'
+                  - id: vitest
+                    value: '97%'
+                  - id: hono
+                    value: '95%'
 
             - id: tool_interest_award
               template: award
               awards:
-                  - id: rolldown
-                    value: '86%'
                   - id: vitest
-                    value: '82%'
-                  - id: vite
-                    value: '82%'
+                    value: '83%'
+                  - id: rolldown
+                    value: '80%'
+                  - id: playwright
+                    value: '76%'
 
             - id: most_write_ins_award
               template: award
               awards:
-                  - id: analog
-                    value: '108'
-                  - id: nitro
-                    value: '107'
-                  - id: valibot
-                    value: '98'
+                  - id: fnm
+                    value: '319'
+                  - id: tanstack_start
+                    value: '235'
+                  - id: oxlint
+                    value: '123'
 
             # - id: most_commented_feature_award
             #   template: award
@@ -1177,22 +1172,22 @@
             - id: most_commented_tool_award
               template: award
               awards:
-                  - id: angular
-                    value: 41
-                  - id: storybook
-                    value: 39
+                  - id: nextjs
+                    value: 69
                   - id: webpack
-                    value: 35
-
-            - id: most_loved_tool_award
-              template: award
-              awards:
-                  - id: vite
-                    value: '56%'
+                    value: 59
                   - id: react
-                    value: '46.7%'
-                  - id: vuejs
-                    value: '42.3%'
+                    value: 51
+
+            # - id: most_loved_tool_award
+            #   template: award
+            #   awards:
+            #       - id: vite
+            #         value: '56%'
+            #       - id: react
+            #         value: '46.7%'
+            #       - id: vuejs
+            #         value: '42.3%'
 
       # - id: awards_resources
       #   items: [road-to-react]

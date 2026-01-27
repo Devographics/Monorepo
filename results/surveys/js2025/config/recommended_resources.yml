@@ -229,11 +229,20 @@
   company: Vercel
 
 - name: |
-
-  id: fm-
+      Vanilla JS: You Might Not Need a Framework
+  id: fm-vanilla-js-apps
   description: >
+      See how you can build rich web apps and websites without depending on libraries or frameworks, using only the core JavaScript language. You'll learn fundamental concepts like the DOM API, finding and modifying elements in the DOM, and event handling.
+  url: https://frontendmasters.com/courses/vanilla-js-apps/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2025
+  image: https://static.frontendmasters.com/assets/teachers/firtman/thumb@2x.webp
+  teacher: Maximiliano Firtman
+  company: Independent Consultant
+# - name: |
 
-  url: xxx/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2025
-  image:
-  teacher:
-  company:
+#   id: fm-
+#   description: >
+
+#   url: xxx/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2025
+#   image:
+#   teacher:
+#   company:
