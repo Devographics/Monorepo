@@ -114,7 +114,7 @@ const SidebarLogoContainer = styled.div`
     align-items: center;
 
     svg {
-        max-height: 76px;
+        max-height: 36px;
     }
 `
 const SidebarLogoLink = styled(Link)`
@@ -124,7 +124,7 @@ const SidebarLogoLink = styled(Link)`
     align-items: center;
 
     svg {
-        max-height: 76px;
+        max-height: 36px;
     }
 
     &:hover {
