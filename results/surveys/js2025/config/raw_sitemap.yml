@@ -361,10 +361,10 @@
         template: multiple_options2
         i18nNamespace: features
 
-      - id: jack_herrington
+      - id: aurora_scharff
         template: picks
         variables:
-            url: https://tanstack.com/
+            url: https://www.youtube.com/watch?v=f--3aG0XfCw
 
       - id: browser_api_features
         template: multiple_options2
@@ -378,10 +378,10 @@
         template: multiple_options2_freeform
         i18nNamespace: features
 
-      - id: josefine_schaefer
+      - id: ankita_kulkarni
         template: picks
         variables:
-            url: https://bento.me/arisa-fukuzaki
+            url: https://x.com/delba_oliveira
 
       - id: js_new_features
         template: multiple_options2
@@ -452,10 +452,10 @@
                     # monorepo_tools
                 ]
 
-      - id: cassie_evans
+      - id: shaundai_person
         template: picks
         variables:
-            url: https://github.com/workeffortwaste/gsap-video-export?tab=readme-ov-file#page-export
+            url: https://www.bytesofbree.com/
 
       - id: tier_list
         template: tier_list
@@ -490,10 +490,10 @@
             - id: front_end_frameworks_others
               template: section_prenormalized_tools
 
-            - id: tania_rascia
+            - id: sam_selikoff
               template: picks
               variables:
-                  url: https://cassidoo.co/
+                  url: https://rscexplorer.dev/
 
             - template: cardinalities
 
@@ -527,10 +527,10 @@
             - id: meta_frameworks_others
               template: section_prenormalized_tools
 
-            - id: salma_alam_naylor
+            - id: declan_chidlow
               template: picks
               variables:
-                  url: https://thebreedling.com/
+                  url: https://weborigami.org/
 
             - template: cardinalities
 
@@ -561,10 +561,10 @@
             - id: back_end_frameworks_others
               template: section_prenormalized_tools
 
-            - id: dominik_dorfmeister
+            - id: jenn_schiffer
               template: picks
               variables:
-                  url: https://knip.dev/
+                  url: https://atproto.com/
 
             - template: cardinalities
 
@@ -595,10 +595,10 @@
             - id: testing_others
               template: section_prenormalized_tools
 
-            - id: shaundai_person
+            - id: michael_rambeau
               template: picks
               variables:
-                  url: https://www.youtube.com/@shrutikapoor08
+                  url: https://sst.dev/
 
             - template: cardinalities
 
@@ -666,7 +666,7 @@
             - id: sacha_greif
               template: picks
               variables:
-                  url: https://bsky.app/
+                  url: https://www.kitlangton.com/
 
             - template: cardinalities
 
@@ -728,10 +728,10 @@
       - id: libraries
         template: multiple_options2_combined
 
-      # - id: alina_listunova
-      #   template: picks
-      #   variables:
-      #       url: https://marvinh.dev/blog/speeding-up-javascript-ecosystem/
+      - id: adam_argyle
+        template: picks
+        variables:
+            url: https://observablehq.com/framework/
 
       - id: graphics_animation
         template: multiple_options2_combined
@@ -1205,23 +1205,11 @@
 - id: conclusion
   path: /conclusion
   blocks:
-      - id: conclusion_fernando
+      - id: conclusion_daniel_roe
         template: conclusion
         variables:
-            author: fernando_herrera
-            entities: '"fernando_herrera"'
-
-      - id: conclusion_shaundai
-        template: conclusion
-        variables:
-            author: shaundai_person
-            entities: '"shaundai_person"'
-
-      # - id: conclusion_theo
-      #   template: conclusion
-      #   variables:
-      #       author: theo_browne
-      #       entities: '"theo_browne"'
+            author: daniel_roe
+            entities: '"daniel_roe"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock
