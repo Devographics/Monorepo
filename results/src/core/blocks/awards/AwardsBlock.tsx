@@ -27,6 +27,7 @@ const AwardsBlock = ({
 )
 
 const Wrapper = styled.div`
+    margin-bottom: var(--quadrupleSpacing);
     @media ${mq.mediumLarge} {
         display: grid;
         grid-template-columns: 1fr 1fr;

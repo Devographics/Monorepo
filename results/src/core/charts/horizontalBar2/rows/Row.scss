@@ -150,6 +150,9 @@
         display: none;
     }
 }
+.chart-row-index-spacer {
+    visibility: hidden;
+}
 .chart-row-content {
     grid-area: content;
     @include small {

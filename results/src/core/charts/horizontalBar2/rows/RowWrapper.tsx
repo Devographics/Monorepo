@@ -16,6 +16,8 @@ export const RowWrapper = (
         chartState,
         chartValues,
         bucket,
+        buckets,
+        items,
         isNestedBucket = false,
         children,
         rowMetadata,
@@ -46,6 +48,11 @@ export const RowWrapper = (
 
     const showDepthIndicator = hasNestedBuckets || depth > 0
 
+    const rowIndex_ = rowIndex + 1
+
+    const itemLength = buckets?.length || items?.length
+    const showSpacer = itemLength >= 10 && rowIndex_ < 10
+
     return (
         <div
             className={className}
@@ -60,7 +67,10 @@ export const RowWrapper = (
             }}
         >
             <div className="chart-row-left">
-                <div className="chart-row-index">{rowIndex + 1}</div>
+                <div className="chart-row-index">
+                    {showSpacer && <span className="chart-row-index-spacer">0</span>}
+                    {rowIndex_}
+                </div>
                 {showDepthIndicator ? (
                     <RowDepth
                         nestedBuckets={bucket.nestedBuckets}

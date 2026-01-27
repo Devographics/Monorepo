@@ -17,6 +17,7 @@ const SurveyIntroBlock = () => {
     const { getString } = useI18n()
     const introKey = `introduction.${currentEdition.id}`
     const introText = getString(introKey)
+    console.log(introText)
     return (
         <IntroWrapper_ className="intro-wrapper">
             {/** @ts-ignore */}
@@ -24,7 +25,7 @@ const SurveyIntroBlock = () => {
             {!introText.missing && (
                 <div className="SurveyIntro">
                     <Content className="SurveyIntro__Content">
-                        <T k={introKey} md={true} />
+                        <T k={introKey} md={true} html={true} />
                     </Content>
                 </div>
             )}
