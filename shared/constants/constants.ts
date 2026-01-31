@@ -1,3 +1,12 @@
+export const TOOLS_TYPE = 'tools'
+export const FEATURES_TYPE = 'features'
+
+export const TOOLS_SECTION = '_libraries'
+export const FEATURES_SECTION = '_features'
+
+export const ITEMS_ID = '_items'
+export const CARDINALITIES_ID = '_cardinalities'
+
 export const TOOLS_OPTIONS = [
     'would_use',
     'would_not_use',

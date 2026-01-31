@@ -14,6 +14,12 @@ import { getFeatureFieldTypeName } from '../../generate/templates/feature'
 import { getToolFieldTypeName } from '../../generate/templates'
 import { getFeaturesEnumTypeName } from './features_enum'
 import { getToolsEnumTypeName } from './tools_enum'
+import {
+    CARDINALITIES_ID,
+    FEATURES_SECTION,
+    ITEMS_ID,
+    TOOLS_SECTION
+} from '@devographics/constants'
 
 /*
 
@@ -30,6 +36,13 @@ type Js2021UserInfoSection {
 
 */
 
+export const getSectionTypeName = ({
+    edition,
+    section
+}: {
+    edition: EditionApiObject
+    section: SectionApiObject
+}) => `${graphqlize(edition.id)}${graphqlize(section.id)}Section`
 export const generateSectionType = ({
     survey,
     edition,
@@ -41,14 +54,17 @@ export const generateSectionType = ({
     section: SectionApiObject
     path: string
 }): TypeDefTemplateOutput => {
-    const typeName = `${graphqlize(edition.id)}${graphqlize(section.id)}Section`
+    const typeName = getSectionTypeName({ edition, section })
 
     // TODO: find better way to figure out if a section is a feature or tool section
     const isFeatureSection =
-        section.id === 'features' || (section.template && ['featurev3'].includes(section.template))
+        section.id === 'features' ||
+        section.id === FEATURES_SECTION ||
+        (section.template && ['featurev3'].includes(section.template))
 
     const isToolSection =
         section.id === 'libraries' ||
+        section.id === TOOLS_SECTION ||
         (section.template && ['tool', 'toolv3'].includes(section.template))
 
     const isFeatureOrToolSection = isFeatureSection || isToolSection
@@ -73,26 +89,30 @@ export const generateSectionType = ({
                     ? `"""
                     Query all items included in this section at once.
                     """
-                    _items(itemIds:[${
-                        isFeatureSection
-                            ? getFeaturesEnumTypeName(survey)
-                            : getToolsEnumTypeName(survey)
-                    }]): [${featureOrToolTypeName}]`
+                    ${ITEMS_ID}(itemIds:[${
+                          isFeatureSection
+                              ? getFeaturesEnumTypeName(survey)
+                              : getToolsEnumTypeName(survey)
+                      }]): [${featureOrToolTypeName}]`
                     : ''
             }
             ${
                 isFeatureOrToolSection
                     ? `"""
                 Get cardinalities data for this section (how many respondents used 1 item, how many used 2, etc.)
-                """_cardinalities: [${featureOrToolTypeName}]`
+                """${CARDINALITIES_ID}: [${featureOrToolTypeName}]`
                     : ''
             }
-    ${section.questions
-        .filter(q => q.hasApiEndpoint !== false)
-        .map((question: QuestionApiObject) => {
-            return `${question.id}: ${question.fieldTypeName}`
-        })
-        .join('\n    ')}
+    ${
+        section?.questions
+            ? section.questions
+                  .filter(q => q.hasApiEndpoint !== false)
+                  .map((question: QuestionApiObject) => {
+                      return `${question.id}: ${question.fieldTypeName}`
+                  })
+                  .join('\n    ')
+            : ''
+    }
 }`
     }
 }

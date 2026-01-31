@@ -25,9 +25,8 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@devographics/constants": "workspace:^",
         "@types/lodash": "^4.14.175",
-        "@vulcanjs/graphql": "^0.7.1",
-        "@vulcanjs/mongo": "^0.7.1",
         "graphql-tag": "^2.12.6",
         "ioredis": "^5.2.4",
         "js-yaml": "^4.1.0",

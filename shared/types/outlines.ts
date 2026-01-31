@@ -141,7 +141,7 @@ export type Section = {
     apiOnly: boolean
     messageId?: string
     intlId?: string
-    slug: string // TODO: maybe get rid of this?
+    slug?: string // TODO: maybe get rid of this?
     questions: Question[]
     /**
      * Define a default template for all questions in this section

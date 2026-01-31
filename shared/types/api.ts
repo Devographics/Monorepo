@@ -1,3 +1,4 @@
+import { FEATURES_TYPE, TOOLS_TYPE } from '@devographics/constants'
 import { SortSpecifier } from './data'
 import { ResponsesTypes } from './metadata'
 
@@ -152,3 +153,5 @@ export interface ResponsesParameters {
     showNoAnswer?: boolean
     mergeOtherBuckets?: boolean
 }
+
+export type ApiSectionTypes = typeof TOOLS_TYPE | typeof FEATURES_TYPE

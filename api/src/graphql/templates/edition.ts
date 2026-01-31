@@ -1,3 +1,4 @@
+import { FEATURES_SECTION, TOOLS_SECTION } from '@devographics/constants'
 import { graphqlize } from '../../generate/helpers'
 import {
     SurveyApiObject,
@@ -5,6 +6,7 @@ import {
     SectionApiObject,
     TypeDefTemplateOutput
 } from '../../types'
+import { getSectionTypeName } from './section'
 
 /*
 
@@ -26,11 +28,15 @@ type StateOfJs2021Edition {
 export const generateEditionType = ({
     survey,
     edition,
-    path
+    path,
+    addAutoFeaturesSection,
+    addAutoToolsSection
 }: {
     survey: SurveyApiObject
     edition: EditionApiObject
     path: string
+    addAutoFeaturesSection: Boolean
+    addAutoToolsSection: Boolean
 }): TypeDefTemplateOutput => {
     const typeName = `${graphqlize(edition.id)}Edition`
     const allSections = edition.sections
@@ -46,10 +52,23 @@ export const generateEditionType = ({
             ? allSections
                   .map(
                       (section: SectionApiObject) =>
-                          `${section.id}: ${graphqlize(edition.id)}${graphqlize(section.id)}Section`
+                          `${section.id}: ${getSectionTypeName({ edition, section })}`
                   )
                   .join('\n    ')
             : 'empty: Boolean'
+    }
+    ${
+        addAutoFeaturesSection
+            ? `${FEATURES_SECTION}: ${getSectionTypeName({
+                  edition,
+                  section: { id: FEATURES_SECTION }
+              })}`
+            : ''
+    }
+    ${
+        addAutoToolsSection
+            ? `${TOOLS_SECTION}: ${getSectionTypeName({ edition, section: { id: TOOLS_SECTION } })}`
+            : ''
     }
 }`
     }

@@ -119,7 +119,7 @@ export interface EditionApiObject extends Omit<Edition, 'sections' | 'apiSection
 }
 
 export interface SectionApiObject extends Omit<Section, 'questions'> {
-    questions: QuestionApiObject[]
+    questions?: QuestionApiObject[]
 
     // a section that's in the API but not the outline
     apiOnly?: boolean

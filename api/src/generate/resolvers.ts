@@ -33,7 +33,13 @@ import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
 import { localesResolvers, unconvertLocaleId } from '../resolvers/locales'
 import { subFields } from './subfields'
-import { Creator, ResultsSubFieldEnum, SectionMetadata, Token } from '@devographics/types'
+import {
+    ApiSectionTypes,
+    Creator,
+    ResultsSubFieldEnum,
+    SectionMetadata,
+    Token
+} from '@devographics/types'
 import { loadOrGetSurveys } from '../load/surveys'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
@@ -46,6 +52,7 @@ import uniqBy from 'lodash/uniqBy.js'
 import sortBy from 'lodash/sortBy.js'
 import compact from 'lodash/compact.js'
 import take from 'lodash/take.js'
+import { CARDINALITIES_ID, ITEMS_ID } from '@devographics/constants'
 
 export const generateResolvers = async ({
     surveys,
@@ -292,16 +299,16 @@ const getSectionResolver =
         questionObjects: QuestionApiObject[]
     }): ResolverType =>
     async (parent, args, context, info) => {
-        console.log('// section resolver')
+        console.log(`// section resolver: ${section.id}`)
         const type = getSectionType(section)
-        const _items = await getItems({
+        const items = await getItems({
             survey,
             edition,
             section,
             type,
             context
         })
-        const _cardinalities = await getCardinalities({
+        const cardinalities = await getCardinalities({
             survey,
             edition,
             section,
@@ -311,8 +318,8 @@ const getSectionResolver =
         })
         return {
             ...section,
-            _items,
-            _cardinalities
+            [ITEMS_ID]: items,
+            [CARDINALITIES_ID]: cardinalities
         }
     }
 
@@ -723,7 +730,7 @@ const getItems = async ({
     survey: SurveyApiObject
     edition: EditionApiObject
     section: SectionApiObject
-    type: 'tools' | 'features'
+    type: ApiSectionTypes
     context: RequestContext
 }) => {
     const items = ['features', 'tools', 'libraries'].includes(section.id)
@@ -740,7 +747,7 @@ const getItems = async ({
 }
 
 export const getSectionToolsFeaturesResolverMap = async (
-    type: 'tools' | 'features'
+    type: ApiSectionTypes
 ): Promise<ResolverMap> => ({
     items: async (parent, args, context) =>
         await getItems({

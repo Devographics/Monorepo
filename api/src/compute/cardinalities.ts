@@ -1,3 +1,4 @@
+import { CARDINALITIES_ID } from '@devographics/constants'
 import {
     EditionApiObject,
     QuestionApiObject,
@@ -25,12 +26,12 @@ export const getCardinalities = async ({
     const cardinalities = [
         {
             id: `${FeaturesOptions.HEARD}`,
-            normPaths: { response: `_cardinalities.${section.id}.${FeaturesOptions.HEARD}` },
+            normPaths: { response: `${CARDINALITIES_ID}.${section.id}.${FeaturesOptions.HEARD}` },
             optionsAreNumeric: true
         },
         {
             id: `${FeaturesOptions.USED}`,
-            normPaths: { response: `_cardinalities.${section.id}.${FeaturesOptions.USED}` },
+            normPaths: { response: `${CARDINALITIES_ID}.${section.id}.${FeaturesOptions.USED}` },
             optionsAreNumeric: true
         }
     ]

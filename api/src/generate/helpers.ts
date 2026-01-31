@@ -1,4 +1,4 @@
-import { OptionGroup } from '@devographics/types'
+import { ApiSectionTypes, OptionGroup } from '@devographics/types'
 import { loadOrGetSurveys } from '../load/surveys'
 import {
     Survey,
@@ -180,7 +180,7 @@ export const getSectionType = (section: SectionApiObject) => {
     }
 }
 
-export const getSectionItems = (section: SectionApiObject, type: 'tools' | 'features') =>
+export const getSectionItems = (section: SectionApiObject, type: ApiSectionTypes) =>
     type === 'tools' ? getSectionTools(section) : getSectionFeatures(section)
 // TODO: do this better
 export const getSectionFeatures = (section: SectionApiObject) =>
@@ -189,7 +189,7 @@ export const getSectionTools = (section: SectionApiObject) => {
     return section?.questions?.filter(q => ['tool', 'toolv3'].includes(q.template))
 }
 
-export const getEditionItems = (edition: EditionApiObject, type: 'tools' | 'features') => {
+export const getEditionItems = (edition: EditionApiObject, type: ApiSectionTypes) => {
     let items: QuestionApiObject[] = []
     for (const section of edition.sections) {
         items = [...items, ...getSectionItems(section, type)]
