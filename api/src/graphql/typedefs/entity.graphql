@@ -25,6 +25,16 @@ type Entity {
     description: String
     descriptionClean: String
     descriptionHtml: String
+    """
+    Description for when the item is used in the context of pain points
+    """
+    descriptionIssues: String
+    descriptionIssuesClean: String
+    descriptionIssuesHtml: String
+    """
+    Instructions for the LLM
+    """
+    instructions: String
     tags: [String]
     patterns: [String]
     exactMatch: Boolean

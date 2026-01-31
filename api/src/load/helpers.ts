@@ -54,9 +54,9 @@ export const getEntitiesFromYaml = ({
 export const getIdFromFileName = (fileName: string) =>
     fileName.replace('./', '').replace('.yml', '')
 
-type MarkdownFields = 'name' | 'description'
+type MarkdownFields = 'name' | 'description' | 'descriptionIssues'
 
-const markdownFields: MarkdownFields[] = ['name', 'description']
+const markdownFields: MarkdownFields[] = ['name', 'description', 'descriptionIssues']
 
 const containsTagRegex = new RegExp(/(<([^>]+)>)/i)
 const htmlEntitiesRegex = new RegExp(/&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-fA-F]{1,6});/gi)
