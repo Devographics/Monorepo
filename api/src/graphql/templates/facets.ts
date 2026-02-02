@@ -1,7 +1,6 @@
 import { Survey, QuestionApiObject, SurveyApiObject, TypeDefTemplateOutput } from '../../types'
 import { getFacetsTypeName } from '../../generate/helpers'
-import { SENTIMENT_FACET } from '@devographics/constants'
-import { USER_METADATA_SECTION } from '../../load/surveys'
+import { SENTIMENT_FACET, USER_METADATA_SECTION } from '@devographics/constants'
 
 /*
 

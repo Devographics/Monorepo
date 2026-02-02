@@ -24,9 +24,8 @@ export const getResponsesTypeDef = (
     """`
         : ''
 
-    return `
-    ${docsBlock}
-    ${subField}(bucketsFilter: ${
+    return `${docsBlock}
+${subField}(bucketsFilter: ${
         question.filterTypeName || 'GenericFilter'
     }, filters: ${getFiltersTypeName(
         question.surveyId
@@ -151,3 +150,11 @@ export const subFields: Array<SubField> = [
         }
     }
 ]
+
+export const getSubfield = (id: ResultsSubFieldEnum) => {
+    const subfield = subFields.find(s => s.id === id)
+    if (!subfield) {
+        throw Error(`getSubfield error: no subfield with id ${id}`)
+    }
+    return subfield
+}

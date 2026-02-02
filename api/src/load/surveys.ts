@@ -5,7 +5,6 @@ import yaml from 'js-yaml'
 import { existsSync } from 'fs'
 import { readdir, readFile, lstat } from 'fs/promises'
 import { EnvVar, getEnvVar } from '@devographics/helpers'
-import { logToFile } from '@devographics/debug'
 import path from 'path'
 import { setCache } from '../helpers/caching'
 import { parseSurveys } from '../generate/generate'
@@ -13,9 +12,11 @@ import { getRepoSHA, listGitHubFiles } from '../external_apis'
 import { exec } from 'child_process'
 import { promisify } from 'util'
 
-import defaultUserMetadataSection from './user_metadata.yml'
+import userMetadataSection from './_user_metadata.yml'
+import allFeaturesSection from './_all_features.yml'
+import allLibrariesSection from './_all_libraries.yml'
 
-export const USER_METADATA_SECTION = '_user_metadata'
+import { addAutoFeatures, addAutoLibraries } from '../helpers/sections'
 
 const execPromise = promisify(exec)
 
@@ -46,11 +47,17 @@ export const loadOrGetSurveys = async (options: LoadOrGetSurveysOptions = {}) =>
 
         for (const survey of surveys) {
             for (const edition of survey.editions) {
-                // if user_metadata section doesn't exist, add default section
-                if (!edition.sections) {
-                    edition.sections = [defaultUserMetadataSection]
-                } else if (!edition.sections.find(s => s.id === USER_METADATA_SECTION)) {
-                    edition.sections.push(defaultUserMetadataSection)
+                if (!edition.apiSections) {
+                    edition.apiSections = []
+                }
+                // add default user_metadata section
+                edition.apiSections.push(userMetadataSection)
+
+                if (addAutoFeatures(edition)) {
+                    edition.apiSections.push(allFeaturesSection)
+                }
+                if (addAutoLibraries(edition)) {
+                    edition.apiSections.push(allLibrariesSection)
                 }
             }
         }

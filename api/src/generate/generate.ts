@@ -106,17 +106,19 @@ export const getSectionObject = async ({
     section: Section
     context: RequestContext
 }): Promise<SectionApiObject> => {
-    let questionObjects = section.questions.map(question =>
+    let apiOnly = section.apiOnly
+    let questionObjects = section?.questions?.map(question =>
         getQuestionObject({ survey, edition, section, question })
     )
-    // do another pass to add options and options types, especially dynamic options
-    questionObjects = await Promise.all(
-        questionObjects.map(question =>
-            addQuestionOptions({ question, questionObjects, edition, context })
+    if (questionObjects) {
+        // do another pass to add options and options types, especially dynamic options
+        questionObjects = await Promise.all(
+            questionObjects.map(question =>
+                addQuestionOptions({ question, questionObjects, edition, context })
+            )
         )
-    )
-
-    const apiOnly = section.apiOnly || questionObjects.every(q => q.apiOnly)
+        apiOnly = section.apiOnly ?? questionObjects.every(q => q.apiOnly)
+    }
     return {
         ...section,
         questions: questionObjects,

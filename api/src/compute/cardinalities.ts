@@ -6,7 +6,7 @@ import {
     SectionApiObject,
     SurveyApiObject
 } from '../types'
-import { FeaturesOptions } from '@devographics/types'
+import { ApiSectionTypes, FeaturesOptions } from '@devographics/types'
 
 export const getCardinalities = async ({
     survey,
@@ -20,7 +20,7 @@ export const getCardinalities = async ({
     edition: EditionApiObject
     section: SectionApiObject
     questionObjects: QuestionApiObject[]
-    type: 'tools' | 'features'
+    type: ApiSectionTypes
     context: RequestContext
 }) => {
     const cardinalities = [
@@ -35,7 +35,7 @@ export const getCardinalities = async ({
             optionsAreNumeric: true
         }
     ]
-    return cardinalities.map(async cardinality => {
+    const result = cardinalities.map(cardinality => {
         return {
             survey,
             edition,
@@ -44,4 +44,5 @@ export const getCardinalities = async ({
             questionObjects
         }
     })
+    return result
 }

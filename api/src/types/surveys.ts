@@ -90,6 +90,7 @@ export type TransformFunction = (
 
 export interface QuestionApiTemplateOutput extends QuestionTemplateOutput {
     resolverMap?: ResolverMap
+    resolver?: ResolverType
     transformFunction?: TransformFunction
 
     autogenerateOptionType?: boolean
@@ -103,6 +104,9 @@ export interface QuestionApiTemplateOutput extends QuestionTemplateOutput {
 
     generatedBy?: string
     typeDef?: string
+    // instead of a typename, the question can also specify the value of its
+    // type inline
+    typeValue?: string
 }
 
 export interface SurveyApiObject extends Omit<Survey, 'editions'> {

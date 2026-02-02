@@ -1,8 +1,5 @@
 import { graphqlize } from '../../generate/helpers'
 import {
-    Survey,
-    Edition,
-    Section,
     QuestionApiObject,
     SectionApiObject,
     EditionApiObject,
@@ -14,12 +11,8 @@ import { getFeatureFieldTypeName } from '../../generate/templates/feature'
 import { getToolFieldTypeName } from '../../generate/templates'
 import { getFeaturesEnumTypeName } from './features_enum'
 import { getToolsEnumTypeName } from './tools_enum'
-import {
-    CARDINALITIES_ID,
-    FEATURES_SECTION,
-    ITEMS_ID,
-    TOOLS_SECTION
-} from '@devographics/constants'
+import { CARDINALITIES_ID, ITEMS_ID } from '@devographics/constants'
+import { isFeatureSection, isLibrarySection } from '../../helpers/sections'
 
 /*
 
@@ -57,20 +50,29 @@ export const generateSectionType = ({
     const typeName = getSectionTypeName({ edition, section })
 
     // TODO: find better way to figure out if a section is a feature or tool section
-    const isFeatureSection =
-        section.id === 'features' ||
-        section.id === FEATURES_SECTION ||
-        (section.template && ['featurev3'].includes(section.template))
+    const isFeature = isFeatureSection(section)
+    const isTool = isLibrarySection(section)
 
-    const isToolSection =
-        section.id === 'libraries' ||
-        section.id === TOOLS_SECTION ||
-        (section.template && ['tool', 'toolv3'].includes(section.template))
-
-    const isFeatureOrToolSection = isFeatureSection || isToolSection
-    const featureOrToolTypeName = isFeatureSection
+    const isFeatureOrToolSection = isFeature || isTool
+    const featureOrToolTypeName = isFeature
         ? getFeatureFieldTypeName({ survey })
         : getToolFieldTypeName({ survey })
+
+    const itemsTypeDef = isFeatureOrToolSection
+        ? `"""
+    Query all items included in this section at once.
+    """
+    ${ITEMS_ID}(itemIds:[${
+              isFeature ? getFeaturesEnumTypeName(survey) : getToolsEnumTypeName(survey)
+          }]): [${featureOrToolTypeName}]`
+        : ''
+
+    const cardinalitiesTypeDef = isFeatureOrToolSection
+        ? `"""
+    Get cardinalities data for this section (how many respondents used 1 item, how many used 2, etc.)
+    """
+    ${CARDINALITIES_ID}: [CardinalitiesItem]`
+        : ''
 
     return {
         generatedBy: 'section',
@@ -84,31 +86,14 @@ export const generateSectionType = ({
         
         */
         typeDef: `type ${typeName} {
-            ${
-                isFeatureOrToolSection
-                    ? `"""
-                    Query all items included in this section at once.
-                    """
-                    ${ITEMS_ID}(itemIds:[${
-                          isFeatureSection
-                              ? getFeaturesEnumTypeName(survey)
-                              : getToolsEnumTypeName(survey)
-                      }]): [${featureOrToolTypeName}]`
-                    : ''
-            }
-            ${
-                isFeatureOrToolSection
-                    ? `"""
-                Get cardinalities data for this section (how many respondents used 1 item, how many used 2, etc.)
-                """${CARDINALITIES_ID}: [${featureOrToolTypeName}]`
-                    : ''
-            }
+    ${itemsTypeDef}
+    ${cardinalitiesTypeDef}
     ${
         section?.questions
             ? section.questions
                   .filter(q => q.hasApiEndpoint !== false)
                   .map((question: QuestionApiObject) => {
-                      return `${question.id}: ${question.fieldTypeName}`
+                      return question.typeValue || `${question.id}: ${question.fieldTypeName}`
                   })
                   .join('\n    ')
             : ''

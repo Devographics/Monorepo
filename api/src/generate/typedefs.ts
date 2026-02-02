@@ -24,10 +24,9 @@ import {} from '../graphql/templates/locale_id_enum'
 import { generateToolsEnumType } from '../graphql/templates/tools_enum'
 import { RequestContext, TypeDefTemplateOutput } from '../types'
 import { SurveyApiObject, QuestionApiObject, TypeObject } from '../types/surveys'
-import { getEditionItems, getPath } from './helpers'
+import { getPath } from './helpers'
 import isEmpty from 'lodash/isEmpty.js'
-import { generateDynamicEnumType } from '../graphql/templates/enumDynamic'
-import { FEATURES_SECTION, FEATURES_TYPE, TOOLS_SECTION, TOOLS_TYPE } from '@devographics/constants'
+import { addAutoFeatures, addAutoLibraries } from '../helpers/sections'
 
 export const generateI18nTypeObjects = async ({}) => {
     let typeObjects = []
@@ -73,11 +72,8 @@ export const generateSurveysTypeObjects = async ({ surveys }: { surveys: SurveyA
         for (const edition of survey.editions) {
             path = getPath({ survey, edition })
 
-            const editionFeatures = getEditionItems(edition, FEATURES_TYPE)
-            const addAutoFeaturesSection = editionFeatures.length > 0
-
-            const editionTools = getEditionItems(edition, TOOLS_TYPE)
-            const addAutoToolsSection = editionTools.length > 0
+            const addAutoFeaturesSection = addAutoFeatures(edition)
+            const addAutoToolsSection = addAutoLibraries(edition)
 
             // type for all editions of a survey
             addToTypeObjects(
@@ -90,32 +86,6 @@ export const generateSurveysTypeObjects = async ({ surveys }: { surveys: SurveyA
                 })
             )
 
-            if (addAutoFeaturesSection) {
-                const featuresSection = {
-                    id: FEATURES_SECTION
-                }
-                addToTypeObjects(
-                    generateSectionType({
-                        survey,
-                        edition,
-                        section: featuresSection,
-                        path
-                    })
-                )
-            }
-            if (addAutoToolsSection) {
-                const librariesSection = {
-                    id: TOOLS_SECTION
-                }
-                addToTypeObjects(
-                    generateSectionType({
-                        survey,
-                        edition,
-                        section: librariesSection,
-                        path
-                    })
-                )
-            }
             if (!isEmpty(edition.sections)) {
                 for (const section of edition.sections) {
                     path = getPath({ survey, edition, section })

@@ -1,4 +1,3 @@
-import { FEATURES_SECTION, TOOLS_SECTION } from '@devographics/constants'
 import { graphqlize } from '../../generate/helpers'
 import {
     SurveyApiObject,
@@ -56,19 +55,6 @@ export const generateEditionType = ({
                   )
                   .join('\n    ')
             : 'empty: Boolean'
-    }
-    ${
-        addAutoFeaturesSection
-            ? `${FEATURES_SECTION}: ${getSectionTypeName({
-                  edition,
-                  section: { id: FEATURES_SECTION }
-              })}`
-            : ''
-    }
-    ${
-        addAutoToolsSection
-            ? `${TOOLS_SECTION}: ${getSectionTypeName({ edition, section: { id: TOOLS_SECTION } })}`
-            : ''
     }
 }`
     }
