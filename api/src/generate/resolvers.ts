@@ -10,15 +10,15 @@ import {
     entitiesResolvers,
     entityAppearanceResolverMap,
     entityResolverMap
-} from '../resolvers/entities'
+} from './resolvers/entities'
 import { getResponseTypeName } from '../graphql/templates/responses'
 import { RequestContext, SectionApiObject } from '../types'
 import { getEditionItems } from './helpers'
 import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
-import { localesResolvers } from '../resolvers/locales'
+import { localesResolvers } from './resolvers/locales'
 import { ApiSectionTypes } from '@devographics/types'
-import { sitemapBlockResolverMap } from '../resolvers/sitemap'
+import { sitemapBlockResolverMap } from './resolvers/sitemap'
 import StringOrFloatOrArray from '../graphql/string_or_array'
 import { CARDINALITIES_ID, ITEMS_ID } from '@devographics/constants'
 import { logToFile } from '@devographics/debug'

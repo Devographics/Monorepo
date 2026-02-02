@@ -1,5 +1,5 @@
-import { RequestContext } from '../types'
-import { getEntity } from '../load/entities'
+import { RequestContext } from '../../types'
+import { getEntity } from '../../load/entities'
 
 export const sitemapBlockResolverMap = {
     entity: async (parent: any, args: any, context: RequestContext) => {

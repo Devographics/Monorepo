@@ -1,7 +1,7 @@
-import { RequestContext } from '../types'
-import { filterContexts } from '../helpers/locales'
+import { RequestContext } from '../../types'
+import { filterContexts } from '../../helpers/locales'
 import { Locale } from '@devographics/types'
-import { loadOrGetLocales } from '../load/locales/locales'
+import { loadOrGetLocales } from '../../load/locales/locales'
 
 /*
 

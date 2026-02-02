@@ -5,7 +5,7 @@ import { getQuestioni18nIds, makeTranslatorFunc } from '@devographics/i18n'
 import omit from 'lodash/omit.js'
 import { getEntity, getEntities } from '../../load/entities'
 import { loadOrGetLocales } from '../../load/locales/locales'
-import { unconvertLocaleId } from '../../resolvers/locales'
+import { unconvertLocaleId } from './locales'
 import { addOptionsAverages, addGroupsAverages } from '../helpers'
 
 export const getQuestionResolverMap = async ({

@@ -1,7 +1,7 @@
 import { getSectioni18nIds, makeTranslatorFunc } from '@devographics/i18n'
 import { SectionMetadata } from '@devographics/types'
 import { loadOrGetLocales } from '../../load/locales/locales'
-import { unconvertLocaleId } from '../../resolvers/locales'
+import { unconvertLocaleId } from './locales'
 import {
     SurveyApiObject,
     EditionApiObject,
