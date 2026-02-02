@@ -347,6 +347,7 @@ export interface QuestionTemplateOutput extends QuestionWithId {
     options?: Option[]
     extends?: string
     filterFunction?: (value: any) => boolean
+    templateMissing?: boolean
 }
 
 export interface QuestionTemplateOutputWithSection extends QuestionTemplateOutput {
