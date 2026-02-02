@@ -1,5 +1,5 @@
 import { generateFiltersQuery } from '../filters'
-import { computeParticipationByYear } from './demographics'
+import { computeParticipationByYear } from './participation'
 import { getGenericPipeline } from './generic_pipeline'
 import { computeCompletionByYear } from './completion'
 import {

@@ -1,4 +1,4 @@
-import { computeParticipationByYear } from './demographics'
+import { computeParticipationByYear } from './participation'
 import { YearCompletion, Survey, RequestContext } from '../types'
 import round from 'lodash/round.js'
 
