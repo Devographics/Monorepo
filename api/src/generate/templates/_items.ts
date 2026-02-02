@@ -1,4 +1,5 @@
-import { getEditionToolsFeaturesResolverMap, getItems } from '../resolvers'
+import { getEditionToolsFeaturesResolverMap } from '../resolvers'
+import { getItems } from '../../helpers/sections'
 import { ApiTemplateFunction, ResolverMap, ResolverParent, ResolverType } from '../../types/surveys'
 import { getFeatureFieldTypeName } from './feature'
 import { ALL_FEATURES_SECTION, FEATURES_TYPE, ITEMS_ID, TOOLS_TYPE } from '@devographics/constants'

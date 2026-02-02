@@ -1,26 +1,11 @@
 import {
     SurveyApiObject,
-    EditionApiObject,
     QuestionApiObject,
     TypeObject,
-    ResolverType,
     ResolverMap,
-    ResolverParent,
     IncludeEnum
 } from '../types/surveys'
-import {
-    getPath,
-    getEditionById,
-    getSectionType,
-    getGeneralMetadata,
-    addGroupsAverages,
-    addOptionsAverages
-} from './helpers'
-import { genericComputeFunction, getGenericCacheKey } from '../compute'
-import { useCache } from '../helpers/caching'
-import { getRawCommentsWithCache } from '../compute/comments'
-import { getEntity, getEntities } from '../load/entities'
-import omit from 'lodash/omit.js'
+import { getPath, getSectionType } from './helpers'
 import {
     entitiesResolvers,
     entityAppearanceResolverMap,
@@ -28,32 +13,37 @@ import {
 } from '../resolvers/entities'
 import { getResponseTypeName } from '../graphql/templates/responses'
 import { RequestContext, SectionApiObject } from '../types'
-import { getSectionItems, getEditionItems } from './helpers'
+import { getEditionItems } from './helpers'
 import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
-import { localesResolvers, unconvertLocaleId } from '../resolvers/locales'
-import { getSubfield, subFields } from './subfields'
-import { ApiSectionTypes, Creator, ResultsSubFieldEnum, SectionMetadata } from '@devographics/types'
-import { loadOrGetSurveys } from '../load/surveys'
+import { localesResolvers } from '../resolvers/locales'
+import { ApiSectionTypes } from '@devographics/types'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
-import { getRawData } from '../compute/raw'
 import StringOrFloatOrArray from '../graphql/string_or_array'
-import { calculateWordFrequencies } from '@devographics/helpers'
-import { getQuestioni18nIds, getSectioni18nIds, makeTranslatorFunc } from '@devographics/i18n'
-import { loadOrGetLocales } from '../load/locales/locales'
-import uniqBy from 'lodash/uniqBy.js'
-import sortBy from 'lodash/sortBy.js'
-import take from 'lodash/take.js'
-import {
-    ALL_FEATURES_SECTION,
-    ALL_TOOLS_SECTION,
-    CARDINALITIES_ID,
-    ITEMS_ID
-} from '@devographics/constants'
+import { CARDINALITIES_ID, ITEMS_ID } from '@devographics/constants'
 import { logToFile } from '@devographics/debug'
 import util from 'util'
-import { isFeatureSection, isLibrarySection } from '../helpers/sections'
+import { getItems, isFeatureSection, isLibrarySection } from '../helpers/sections'
 import { getCardinalitiesResolver, getItemsResolver } from './templates'
+import { cardinalitiesResolverMap } from './resolvers/cardinalities'
+import {
+    getQuestionResolver,
+    getQuestionResolverMap,
+    questionMetadataResolverMap
+} from './resolvers/questions'
+import { getSectionResolver, sectionMetadataResolverMap } from './resolvers/sections'
+import {
+    editionMetadataResolverMap,
+    getEditionMetadataResolver,
+    getEditionResolver
+} from './resolvers/editions'
+import { getSurveyMetadataResolver, getSurveyResolver } from './resolvers/surveys'
+import { commentsResolverMap } from './resolvers/comments'
+import { creditResolverMap } from './resolvers/credits'
+import { responsesResolverMap } from './resolvers/responses'
+import { creatorResolverMap } from './resolvers/creator'
+import { getGlobalMetadataResolver } from './resolvers/global_metadata'
+import { generalMetadataResolverMap } from './resolvers/general_metadata'
 
 export const generateResolvers = async ({
     surveys,
@@ -213,324 +203,10 @@ export const generateResolvers = async ({
     return resolvers
 }
 
-/*
-
-Always get a fresh copy of `surveys` from memory
-
-*/
-const getGlobalMetadataResolver = (): ResolverType => async (parent, args, context) => {
-    console.log('// getGlobalMetadataResolver')
-    const { surveyId, editionId } = args
-    const isDevOrTest = !!(
-        process.env.NODE_ENV && ['test', 'development'].includes(process.env.NODE_ENV)
-    )
-    const { surveys } = await loadOrGetSurveys()
-    let filteredSurveys = surveys
-    if (editionId) {
-        filteredSurveys = filteredSurveys
-            .map(s => ({
-                ...s,
-                editions: s.editions.filter(e => e.id === editionId)
-            }))
-            .filter(s => s.editions.length > 0)
-    } else if (surveyId) {
-        filteredSurveys = surveys.filter(s => s.id === surveyId)
-    }
-    return { surveys: filteredSurveys, general: {} }
-}
-
-export const generalMetadataResolverMap = {
-    creators: async (parent_: any, context: RequestContext) => {
-        console.log('// creators resolver')
-
-        const general = getGeneralMetadata({ context })
-        return general.creators
-    }
-}
-
-export const creatorResolverMap = {
-    entity: async (parent: Creator, {}, context: RequestContext) => {
-        console.log('// creators entity resolver')
-        const { id } = parent
-        const entity = await getEntity({ id, context })
-        return entity
-    }
-}
-
-const getSurveyResolver =
-    ({ survey }: { survey: SurveyApiObject }): ResolverType =>
-    (parent, args, context, info) => {
-        console.log(`// survey resolver: ${survey.id}`)
-        return survey
-    }
-
-/*
-
-Note: although a survey object is passed as argument, that object
-may be stale if surveys have been reinitialized since app start. 
-So we only use its id and then make sure to get a "fresh"
-copy of the survey metadata from memory
-
-*/
-const getSurveyMetadataResolver =
-    ({ survey }: { survey: SurveyApiObject }): ResolverType =>
-    async (parent, args, context, info) => {
-        console.log(`// survey metadata resolver: ${survey.id}`)
-        const { surveys } = await loadOrGetSurveys()
-        const freshSurvey = surveys.find(s => s.id === survey.id)
-        return freshSurvey
-    }
-
-const getEditionResolver =
-    ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
-    (parent, args, context, info) => {
-        console.log(`// edition resolver: ${edition.id}`)
-        return edition
-    }
-
-/*
-
-See getSurveyMetadataResolver() note above
-
-*/
-const getEditionMetadataResolver =
-    ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
-    async (parent, args, context, info) => {
-        console.log(`// edition metadata resolver: ${edition.id}`)
-        const freshEdition = await getEditionById(edition.id)
-        const sections = freshEdition.sections.map(section => ({
-            ...section,
-            questions: section.questions
-                .filter(question => question?.editions?.includes(edition.id))
-                .map(q => ({ ...q, editionId: edition.id }))
-        }))
-        return { ...freshEdition, surveyId: survey.id, survey, sections }
-    }
-
-const getSectionResolver =
-    ({
-        survey,
-        edition,
-        section,
-        questionObjects
-    }: {
-        survey: SurveyApiObject
-        edition: EditionApiObject
-        section: SectionApiObject
-        questionObjects: QuestionApiObject[]
-    }): ResolverType =>
-    async (parent, args, context, info) => {
-        console.log(`// section resolver: ${section.id}`)
-        return section
-    }
-
-const getQuestionResolverMap = async ({
-    questionObject
-}: {
-    questionObject: QuestionApiObject
-}) => {
-    if (questionObject.resolverMap) {
-        return questionObject.resolverMap
-    } else {
-        const resolverMap = {} as { [key in ResultsSubFieldEnum]: ResolverType }
-        subFields.forEach(async ({ id, addIf, addIfAsync, resolverFunction }) => {
-            const addSubField = addIfAsync
-                ? await addIfAsync(questionObject)
-                : addIf(questionObject)
-            if (resolverFunction && addSubField) {
-                resolverMap[id] = resolverFunction
-            }
-        })
-        return resolverMap
-    }
-}
-
-const cardinalitiesResolverMap = {
-    id: getSubfield(ResultsSubFieldEnum.ID).resolverFunction,
-    responses: getSubfield(ResultsSubFieldEnum.RESPONSES).resolverFunction
-}
-
-const getQuestionResolver =
-    (data: ResolverParent, context: RequestContext): ResolverType =>
-    async () => {
-        console.log('// question resolver')
-        const { survey, edition, section, question, questionObjects } = data
-        if (question?.resolver) {
-            return question.resolver(data, {}, context, {})
-        }
-        return data
-    }
-
-/*
-
-Responses 
-
-*/
-export const allEditionsResolver: ResolverType = async (parent, args, context, info) => {
-    console.log('// allEditionsResolver')
-    if (process.env.DISABLE_DATA_ACCESS && process.env.DISABLE_DATA_ACCESS !== 'false') {
-        throw new Error(`Data access currently disabled. Set DISABLE_DATA_ACCESS=false to enable`)
-    }
-    const subField: ResultsSubFieldEnum = info?.path?.prev?.key
-
-    const { survey, edition, section, question, responseArguments, questionObjects } = parent
-    const {
-        parameters = {},
-        filters,
-        facet,
-        responsesType = subField,
-        bucketsFilter
-    } = responseArguments || {}
-
-    const { editionCount, editionId: selectedEditionId } = args
-    const computeArguments = {
-        responsesType,
-        bucketsFilter,
-        parameters,
-        filters,
-        facet,
-        selectedEditionId,
-        editionCount
-    }
-    const funcOptions = {
-        survey,
-        edition,
-        section,
-        question,
-        context,
-        questionObjects,
-        computeArguments
-    }
-    const cacheKeyOptions = {
-        edition,
-        question,
-        subField,
-        selectedEditionId,
-        editionCount,
-        parameters,
-        filters,
-        facet
-    }
-
-    let result = await useCache({
-        key: getGenericCacheKey(cacheKeyOptions),
-        func: genericComputeFunction,
-        context,
-        funcOptions,
-        enableCache: parameters.enableCache
-    })
-
-    if (question.transformFunction) {
-        result = question.transformFunction(parent, result, context)
-    }
-    return result
-}
-
-export const currentEditionResolver: ResolverType = async (parent, args, context, info) => {
-    console.log('// currentEditionResolver')
-    const result = await allEditionsResolver(
-        parent,
-        { editionId: parent.edition.id },
-        context,
-        info
-    )
-    return result[0]
-}
-
-export const rawDataResolver: ResolverType = async (parent, args, context, info) => {
-    console.log('// rawDataResolver')
-    const { survey, edition, section, question, responseArguments } = parent
-    const { token } = args
-    const { parameters } = responseArguments || {}
-    const { limit } = parameters || {}
-
-    // helper function to get count of how many times a token appears across all answers
-    const getTokenCount = (tokenId: string) =>
-        answers?.filter(a => a.tokens && a.tokens.map(t => t.id).includes(tokenId)).length
-
-    // get all raw answers for this question
-    let answers = await getRawData({ survey, edition, section, question, context, token })
-
-    if (limit) {
-        answers = take(answers, limit)
-    }
-
-    // get word frequency stats
-    const stats = answers && calculateWordFrequencies(answers.map(item => item.raw))
-
-    // get all entities available, including tokens
-    const allEntities = await getEntities({ context, includeNormalizationEntities: true })
-
-    // get full list of all tokens ids for all answers to the question
-    const allAnswerTokens =
-        answers &&
-        answers
-            .filter(answer => !!answer.tokens)
-            .map(answer => answer.tokens)
-            .flat()
-
-    // deduplicate tokens
-    const answerTokens = uniqBy(allAnswerTokens, token => token.id)
-    const answerTokensIds = answerTokens?.map(token => token.id)
-
-    // decorate tokens with matching entity data to also get parentId, name, description, etc.
-    const fullAnswerTokens = answerTokens.map(token => {
-        const entity = allEntities.find(e => e.id === token.id)
-        return { ...token, ...entity }
-    })
-
-    // add counts
-    const answerTokensWithCounts = fullAnswerTokens?.map(token => ({
-        ...token,
-        count: getTokenCount(token.id)
-    }))
-    // sort and reverse
-    const tokens = sortBy(answerTokensWithCounts, 'count').toReversed()
-
-    const entities = allEntities.filter(entity => answerTokensIds?.includes(entity.id))
-
-    return { answers, stats, entities, tokens }
-}
-
-export const responsesResolverMap: ResolverMap = {
-    allEditions: allEditionsResolver,
-    currentEdition: currentEditionResolver,
-    rawData: rawDataResolver
-}
-/*
-
-Comments
-
-*/
-export const commentsResolverMap: ResolverMap = {
-    allEditions: async ({ survey, question }, args, context) =>
-        await getRawCommentsWithCache({
-            survey,
-            question,
-            context,
-            args
-        }),
-    currentEdition: async ({ survey, edition, question, args }, args2, context) =>
-        await getRawCommentsWithCache({
-            survey,
-            question,
-            editionId: edition.id,
-            context,
-            args
-        })
-}
-
-/*
-
-Credit
-
-*/
-export const creditResolverMap = {
-    entity: async ({ id }: { id: string }, {}, context: RequestContext) =>
-        await getEntity({ id, context })
-}
-
-const filterItems = (items: Array<SectionApiObject | QuestionApiObject>, include: IncludeEnum) => {
+export const filterItems = (
+    items: Array<SectionApiObject | QuestionApiObject>,
+    include: IncludeEnum
+) => {
     switch (include) {
         case IncludeEnum.OUTLINE_ONLY:
             return items.filter(q => q.apiOnly !== true)
@@ -544,170 +220,9 @@ const filterItems = (items: Array<SectionApiObject | QuestionApiObject>, include
     }
 }
 
-type EditionSectionMetadataArgs = {
+export type EditionSectionMetadataArgs = {
     include: IncludeEnum
 }
-
-/*
-
-Edition Metadata (remove "virtual" apiOnly questions from metadata if needed)
-
-*/
-export const editionMetadataResolverMap = {
-    sections: async (
-        parent: EditionApiObject,
-        args: EditionSectionMetadataArgs,
-        context: RequestContext
-    ) => {
-        return filterItems(parent.sections, args.include).map(s => ({ ...s, ...args }))
-    }
-}
-
-/*
-
-Section Metadata (remove "virtual" apiOnly questions from metadata if needed)
-
-*/
-export const sectionMetadataResolverMap = {
-    questions: async (
-        parent: SectionApiObject & { include: IncludeEnum },
-        args: EditionSectionMetadataArgs,
-        context: RequestContext
-    ) => {
-        return filterItems(parent.questions, parent.include)
-    },
-    translationKeys: async (parent: SectionApiObject, {}, context: RequestContext) => {
-        const section = parent as SectionMetadata
-        const i18nIds = getSectioni18nIds({ section })
-        return { ...i18nIds, name: i18nIds.base }
-    },
-    translations: async (parent: SectionApiObject, {}, context: RequestContext) => {
-        const section = parent as SectionMetadata
-        const i18nIds = getSectioni18nIds({ section })
-        const locales = await loadOrGetLocales()
-        const translations = locales.map(locale => {
-            const getMessage = makeTranslatorFunc(locale)
-
-            const name = getMessage(i18nIds.title)?.t
-            const prompt = getMessage(i18nIds.prompt)?.t
-
-            return {
-                localeId: unconvertLocaleId(locale.id),
-                name,
-                prompt
-            }
-        })
-        return translations
-    }
-}
-
-/*
-
-Questions Metadata (decorate with entities)
-
-*/
-export const questionMetadataResolverMap = {
-    // intlId: async (parent: QuestionApiObject, {}, context: RequestContext) => {
-    //     const { id, intlId, section } = parent
-    //     console.log('// intlId')
-    //     console.log(parent)
-    //     // if intlId is explicitely specified on question object use that
-    //     if (intlId) {
-    //         return intlId
-    //     }
-    //     const sectionSegment = section!.id
-    //     const questionSegment = id
-    //     return [sectionSegment, questionSegment].join('.')
-    // },
-
-    entity: async (parent: QuestionApiObject, {}, context: RequestContext) => {
-        console.log('// question metadata entity resolver')
-        const { id } = parent
-        const entity = await getEntity({ id, context })
-        return entity
-    },
-
-    options: async (parent: QuestionApiObject, {}, context: RequestContext) => {
-        const { template, options, editionId } = parent
-        if (!options) {
-            return
-        }
-        const optionEntities = await getEntities({
-            ids: options?.map(o => o.id),
-            context
-        })
-        const currentEditionOptions = options.filter(option =>
-            option.editions?.includes(editionId!)
-        )
-        const optionsWithEntities = currentEditionOptions.map(option => ({
-            ...omit(option, 'editions'),
-            entity: optionEntities.find(o => o.id === option.id)
-        }))
-        // avoid repeating the options for feature and tool questions
-        // since there's so many of them
-        // NOTE: disabled since it does saves a few kb, but at the cost of a lot of downstream complexity
-        // return ['feature', 'tool'].includes(template) ? [] : optionsWithEntities
-
-        // add averages if needed
-        const optionsWithAverages = addOptionsAverages(optionsWithEntities)
-        return optionsWithAverages
-    },
-    groups: async (parent: QuestionApiObject, {}, context: RequestContext) => {
-        const { groups } = parent
-        if (!groups) {
-            return
-        }
-        const groupsWithAverages = addGroupsAverages(groups)
-        return groupsWithAverages
-    },
-    translationKeys: async (parent: QuestionApiObject, {}, context: RequestContext) => {
-        const question = parent
-        const section = question.section as SectionMetadata
-        if (!section) {
-            return
-        }
-        const i18nIds = getQuestioni18nIds({ section, question })
-        return { ...i18nIds, name: i18nIds.base }
-    },
-    translations: async (parent: QuestionApiObject, {}, context: RequestContext) => {
-        const question = parent
-        const section = question.section as SectionMetadata
-        if (!section) {
-            return
-        }
-        const entity = await getEntity({ id: question.id, context })
-        const i18nIds = getQuestioni18nIds({ section, question })
-        const locales = await loadOrGetLocales()
-        const translations = locales.map(locale => {
-            const isEn = locale.id === 'en-US'
-            const getMessage = makeTranslatorFunc(locale)
-
-            const nameFallback = isEn ? entity?.name : undefined
-            const name = getMessage(i18nIds.base, {}, nameFallback)?.t
-            const question = getMessage(i18nIds.question)?.t
-            const promptFallback = isEn ? entity?.description : undefined
-            const prompt = getMessage(i18nIds.prompt, {}, promptFallback)?.t
-
-            return {
-                localeId: unconvertLocaleId(locale.id),
-                name,
-                question,
-                prompt
-            }
-        })
-        return translations
-    }
-}
-
-/*
-
-Other Resolvers
-
-*/
-export const entityResolverFunction: ResolverType = ({ question }, args, context) =>
-    getEntity({ id: question.id, context })
-
-export const idResolverFunction: ResolverType = ({ question }) => question.id
 
 /*
 
@@ -722,47 +237,6 @@ export const getEditionToolsFeaturesResolverMap = (type: ApiSectionTypes): Resol
     ids: parent => getEditionItems(parent.edition, type).map(q => q.id),
     years: parent => parent.survey.editions.map(e => e.year)
 })
-
-/*
-
-Resolver map used for section_features, section_tools
-
-*/
-
-// if this is the main "Features" or "Tools" section, return every item; else return
-// only items for current section
-
-export const getItems = async ({
-    survey,
-    edition,
-    section,
-    type,
-    context
-}: {
-    survey: SurveyApiObject
-    edition: EditionApiObject
-    section: SectionApiObject
-    type: ApiSectionTypes
-    context: RequestContext
-}) => {
-    const items = [
-        'features',
-        'tools',
-        'libraries',
-        ALL_FEATURES_SECTION,
-        ALL_TOOLS_SECTION
-    ].includes(section.id)
-        ? getEditionItems(edition, type)
-        : getSectionItems(section, type)
-
-    return items.map(async question => ({
-        survey,
-        edition,
-        section,
-        question,
-        entity: await getEntity({ id: question.id, context })
-    }))
-}
 
 // NOT USED?
 export const getSectionToolsFeaturesResolverMap = async (

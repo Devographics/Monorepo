@@ -7,7 +7,7 @@ import { getResponsesTypeDef } from '../subfields'
 import { QuestionApiObject } from '../../types/surveys'
 import { subFields } from '../../generate/subfields'
 import { ResultsSubFieldEnum } from '@devographics/types'
-import { allEditionsResolver } from '../resolvers'
+import { allEditionsResolver } from '../resolvers/editions'
 
 export const getResolverMap = async (question: QuestionApiObject): Promise<ResolverMap> => {
     const resolvers: ResolverMap = {}

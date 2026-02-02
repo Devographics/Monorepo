@@ -13,7 +13,8 @@ import {
     GenericComputeArguments,
     GenericComputeParameters,
     QuestionApiObject,
-    RequestContext
+    RequestContext,
+    ResolverType
 } from '../types'
 // import projects from '../data/bestofjs.yml'
 import { fetchMdnResource, fetchTwitterUser } from '../external_apis'
@@ -432,3 +433,11 @@ async function getAppearsInResponses({
         return
     }
 }
+/*
+
+Other Resolvers
+
+*/
+
+export const entityResolverFunction: ResolverType = ({ question }, args, context) =>
+    getEntity({ id: question.id, context })
