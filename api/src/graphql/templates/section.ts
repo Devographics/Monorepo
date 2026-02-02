@@ -8,7 +8,11 @@ import {
     TypeTypeEnum
 } from '../../types'
 import { getFeatureFieldTypeName } from '../../generate/templates/feature'
-import { getToolFieldTypeName } from '../../generate/templates'
+import {
+    getCardinalitiesTypeValue,
+    getItemsTypeValue,
+    getToolFieldTypeName
+} from '../../generate/templates'
 import { getFeaturesEnumTypeName } from './features_enum'
 import { getToolsEnumTypeName } from './tools_enum'
 import { CARDINALITIES_ID, ITEMS_ID } from '@devographics/constants'
@@ -58,21 +62,15 @@ export const generateSectionType = ({
         ? getFeatureFieldTypeName({ survey })
         : getToolFieldTypeName({ survey })
 
+    const featureOrToolEnum = isFeature
+        ? getFeaturesEnumTypeName(survey)
+        : getToolsEnumTypeName(survey)
+
     const itemsTypeDef = isFeatureOrToolSection
-        ? `"""
-    Query all items included in this section at once.
-    """
-    ${ITEMS_ID}(itemIds:[${
-              isFeature ? getFeaturesEnumTypeName(survey) : getToolsEnumTypeName(survey)
-          }]): [${featureOrToolTypeName}]`
+        ? getItemsTypeValue(featureOrToolEnum, featureOrToolTypeName)
         : ''
 
-    const cardinalitiesTypeDef = isFeatureOrToolSection
-        ? `"""
-    Get cardinalities data for this section (how many respondents used 1 item, how many used 2, etc.)
-    """
-    ${CARDINALITIES_ID}: [CardinalitiesItem]`
-        : ''
+    const cardinalitiesTypeDef = isFeatureOrToolSection ? getCardinalitiesTypeValue() : ''
 
     return {
         generatedBy: 'section',

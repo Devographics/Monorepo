@@ -32,36 +32,39 @@ import { getSectionItems, getEditionItems } from './helpers'
 import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
 import { localesResolvers, unconvertLocaleId } from '../resolvers/locales'
-import { subFields } from './subfields'
-import {
-    ApiSectionTypes,
-    Creator,
-    ResultsSubFieldEnum,
-    SectionMetadata,
-    Token
-} from '@devographics/types'
+import { getSubfield, subFields } from './subfields'
+import { ApiSectionTypes, Creator, ResultsSubFieldEnum, SectionMetadata } from '@devographics/types'
 import { loadOrGetSurveys } from '../load/surveys'
 import { sitemapBlockResolverMap } from '../resolvers/sitemap'
 import { getRawData } from '../compute/raw'
 import StringOrFloatOrArray from '../graphql/string_or_array'
-import { getCardinalities } from '../compute/cardinalities'
 import { calculateWordFrequencies } from '@devographics/helpers'
 import { getQuestioni18nIds, getSectioni18nIds, makeTranslatorFunc } from '@devographics/i18n'
 import { loadOrGetLocales } from '../load/locales/locales'
 import uniqBy from 'lodash/uniqBy.js'
 import sortBy from 'lodash/sortBy.js'
-import compact from 'lodash/compact.js'
 import take from 'lodash/take.js'
-import { CARDINALITIES_ID, ITEMS_ID } from '@devographics/constants'
+import {
+    ALL_FEATURES_SECTION,
+    ALL_TOOLS_SECTION,
+    CARDINALITIES_ID,
+    ITEMS_ID
+} from '@devographics/constants'
+import { logToFile } from '@devographics/debug'
+import util from 'util'
+import { isFeatureSection, isLibrarySection } from '../helpers/sections'
+import { getCardinalitiesResolver, getItemsResolver } from './templates'
 
 export const generateResolvers = async ({
     surveys,
     questionObjects,
-    typeObjects
+    typeObjects,
+    context
 }: {
     surveys: SurveyApiObject[]
     questionObjects: QuestionApiObject[]
     typeObjects: TypeObject[]
+    context: RequestContext
 }) => {
     // generate resolver map for root survey fields (i.e. each survey)
     const surveysFieldsResolvers = Object.fromEntries(
@@ -95,7 +98,8 @@ export const generateResolvers = async ({
         SitemapBlock: sitemapBlockResolverMap,
         SitemapBlockVariant: sitemapBlockResolverMap,
         StringOrInt: new GraphQLScalarType(stringOrInt),
-        StringOrFloatOrArray: new GraphQLScalarType(StringOrFloatOrArray)
+        StringOrFloatOrArray: new GraphQLScalarType(StringOrFloatOrArray),
+        CardinalitiesItem: cardinalitiesResolverMap
     } as any
 
     for (const survey of surveys) {
@@ -158,25 +162,42 @@ export const generateResolvers = async ({
                         q => q.hasApiEndpoint !== false
                     )
 
+                    if (isFeatureSection(section) || isLibrarySection(section)) {
+                        questionsToInclude.push({
+                            id: ITEMS_ID,
+                            resolver: getItemsResolver(getSectionType(section), context)
+                        } as unknown as QuestionApiObject)
+                        questionsToInclude.push({
+                            id: CARDINALITIES_ID,
+                            resolver: getCardinalitiesResolver(getSectionType(section))
+                        } as unknown as QuestionApiObject)
+                    }
+
                     if (sectionTypeObject) {
                         // generate resolver map for each section field (i.e. each section question)
                         resolvers[sectionTypeObject.typeName] = Object.fromEntries(
                             questionsToInclude.map((questionObject: QuestionApiObject) => {
                                 return [
                                     questionObject.id,
-                                    getQuestionResolver({
-                                        survey,
-                                        edition,
-                                        section,
-                                        question: questionObject,
-                                        questionObjects
-                                    })
+                                    getQuestionResolver(
+                                        {
+                                            survey,
+                                            edition,
+                                            section,
+                                            question: questionObject,
+                                            questionObjects
+                                        },
+                                        context
+                                    )
                                 ]
                             })
                         )
                     }
 
                     for (const questionObject of questionsToInclude) {
+                        // note: this will overwrite earlier definitions for one resolver map
+                        // with later ones, so that the final resolver map should be based
+                        // on the most recent survey
                         if (questionObject.fieldTypeName) {
                             const questionResolverMap = await getQuestionResolverMap({
                                 questionObject
@@ -188,7 +209,7 @@ export const generateResolvers = async ({
             }
         }
     }
-    // console.log(resolvers)
+    await logToFile('resolvers.js', util.inspect(resolvers))
     return resolvers
 }
 
@@ -300,27 +321,7 @@ const getSectionResolver =
     }): ResolverType =>
     async (parent, args, context, info) => {
         console.log(`// section resolver: ${section.id}`)
-        const type = getSectionType(section)
-        const items = await getItems({
-            survey,
-            edition,
-            section,
-            type,
-            context
-        })
-        const cardinalities = await getCardinalities({
-            survey,
-            edition,
-            section,
-            type,
-            questionObjects,
-            context
-        })
-        return {
-            ...section,
-            [ITEMS_ID]: items,
-            [CARDINALITIES_ID]: cardinalities
-        }
+        return section
     }
 
 const getQuestionResolverMap = async ({
@@ -344,10 +345,19 @@ const getQuestionResolverMap = async ({
     }
 }
 
+const cardinalitiesResolverMap = {
+    id: getSubfield(ResultsSubFieldEnum.ID).resolverFunction,
+    responses: getSubfield(ResultsSubFieldEnum.RESPONSES).resolverFunction
+}
+
 const getQuestionResolver =
-    (data: ResolverParent): ResolverType =>
+    (data: ResolverParent, context: RequestContext): ResolverType =>
     async () => {
         console.log('// question resolver')
+        const { survey, edition, section, question, questionObjects } = data
+        if (question?.resolver) {
+            return question.resolver(data, {}, context, {})
+        }
         return data
     }
 
@@ -703,8 +713,10 @@ export const idResolverFunction: ResolverType = ({ question }) => question.id
 
 Resolver map used for all_features, all_tools
 
+NOT_USED?
+
 */
-export const getEditionToolsFeaturesResolverMap = (type: 'tools' | 'features'): ResolverMap => ({
+export const getEditionToolsFeaturesResolverMap = (type: ApiSectionTypes): ResolverMap => ({
     items: parent =>
         getEditionItems(parent.edition, type).map(question => ({ ...parent, question })),
     ids: parent => getEditionItems(parent.edition, type).map(q => q.id),
@@ -720,7 +732,7 @@ Resolver map used for section_features, section_tools
 // if this is the main "Features" or "Tools" section, return every item; else return
 // only items for current section
 
-const getItems = async ({
+export const getItems = async ({
     survey,
     edition,
     section,
@@ -733,7 +745,13 @@ const getItems = async ({
     type: ApiSectionTypes
     context: RequestContext
 }) => {
-    const items = ['features', 'tools', 'libraries'].includes(section.id)
+    const items = [
+        'features',
+        'tools',
+        'libraries',
+        ALL_FEATURES_SECTION,
+        ALL_TOOLS_SECTION
+    ].includes(section.id)
         ? getEditionItems(edition, type)
         : getSectionItems(section, type)
 
@@ -746,6 +764,7 @@ const getItems = async ({
     }))
 }
 
+// NOT USED?
 export const getSectionToolsFeaturesResolverMap = async (
     type: ApiSectionTypes
 ): Promise<ResolverMap> => ({

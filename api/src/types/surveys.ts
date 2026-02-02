@@ -32,6 +32,7 @@ export type TemplateArguments = {
     edition: Edition
     section: Section
     question: Question
+    context: RequestContext
 }
 
 export type ApiTemplateFunction = (arg0: TemplateArguments) => QuestionApiTemplateOutput

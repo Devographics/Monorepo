@@ -4,5 +4,5 @@ questions:
     - id: _items
       template: _items
 
-    - id: _cardinalities
-      template: _cardinalities
+    # - id: _cardinalities
+    #   template: _cardinalities

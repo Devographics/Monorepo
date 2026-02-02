@@ -15,7 +15,7 @@ import {
 import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'
 import { RequestContext } from '../types'
-import { ALL_TOOLS_SECTION } from '@devographics/constants'
+import { ALL_TOOLS_SECTION, FEATURES_TYPE, TOOLS_TYPE } from '@devographics/constants'
 
 export const graphqlize = (str: string) => capitalizeFirstLetter(snakeToCamel(str))
 
@@ -82,8 +82,9 @@ export const applyQuestionTemplate = (options: {
     edition: Edition
     section: Section
     question: Question
+    context: RequestContext
 }): QuestionTemplateOutput => {
-    const { survey, edition, section, question } = options
+    const { survey, edition, section, question, context } = options
     const template = question.template || section.template
     const id = question.id || 'placeholder'
     let output = { ...question, id }
@@ -175,9 +176,9 @@ export const getSectionType = (section: SectionApiObject) => {
         ['tools', 'libraries', ALL_TOOLS_SECTION].includes(section.id) ||
         (section.template && ['tool', 'toolv3'].includes(section.template))
     ) {
-        return 'tools'
+        return TOOLS_TYPE
     } else {
-        return 'features'
+        return FEATURES_TYPE
     }
 }
 

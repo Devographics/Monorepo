@@ -108,7 +108,7 @@ export const getSectionObject = async ({
 }): Promise<SectionApiObject> => {
     let apiOnly = section.apiOnly
     let questionObjects = section?.questions?.map(question =>
-        getQuestionObject({ survey, edition, section, question })
+        getQuestionObject({ survey, edition, section, question, context })
     )
     if (questionObjects) {
         // do another pass to add options and options types, especially dynamic options
@@ -235,19 +235,22 @@ export const getQuestionObject = ({
     survey,
     edition,
     section,
-    question
+    question,
+    context
 }: {
     survey: Survey
     edition: Edition
     section: Section
     question: Question
+    context: RequestContext
 }): QuestionApiObject => {
     // apply template
     const templateObject = applyQuestionTemplate({
         survey,
         edition,
         section,
-        question
+        question,
+        context
     })
 
     const questionId = question.id || templateObject.id

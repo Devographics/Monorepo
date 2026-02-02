@@ -1,8 +1,8 @@
 export const TOOLS_TYPE = 'tools'
 export const FEATURES_TYPE = 'features'
 
-export const TOOLS_SECTION = '_libraries'
-export const FEATURES_SECTION = '_features'
+export const ALL_TOOLS_SECTION = '_all_libraries'
+export const ALL_FEATURES_SECTION = '_all_features'
 
 export const ITEMS_ID = '_items'
 export const CARDINALITIES_ID = '_cardinalities'
@@ -78,3 +78,5 @@ export const CATCHALL_PREFIX = 'catchall_'
 
 export const PAST_PARTICIPATIONS = 'past_participations'
 export const FUTURE_PARTICIPATIONS = 'future_participations'
+
+export const USER_METADATA_SECTION = '_user_metadata'

@@ -13,15 +13,15 @@ export const getCardinalities = async ({
     edition,
     section,
     questionObjects,
-    type,
-    context
-}: {
+    type
+}: // context
+{
     survey: SurveyApiObject
     edition: EditionApiObject
     section: SectionApiObject
     questionObjects: QuestionApiObject[]
     type: ApiSectionTypes
-    context: RequestContext
+    // context: RequestContext
 }) => {
     const cardinalities = [
         {
