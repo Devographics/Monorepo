@@ -2,12 +2,8 @@
 export * from './feature'
 export * from './tool'
 
-export * from './all_features_DELETE'
-export * from './section_features_DELETE'
 export * from './features_ratios'
 
-export * from './all_tools_DELETE'
-export * from './section_tools'
 export * from './section_tools_ratios'
 // export * from './likert'
 

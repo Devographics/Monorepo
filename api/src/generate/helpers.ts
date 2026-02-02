@@ -16,6 +16,7 @@ import { templates } from './question_templates'
 import uniq from 'lodash/uniq.js'
 import { RequestContext } from '../types'
 import { ALL_TOOLS_SECTION, FEATURES_TYPE, TOOLS_TYPE } from '@devographics/constants'
+import { missingTemplates } from '../server'
 
 export const graphqlize = (str: string) => capitalizeFirstLetter(snakeToCamel(str))
 
@@ -87,7 +88,7 @@ export const applyQuestionTemplate = (options: {
     const { survey, edition, section, question, context } = options
     const template = question.template || section.template
     const id = question.id || 'placeholder'
-    let output = { ...question, id }
+    let output: QuestionTemplateOutput = { ...question, id }
     if (template) {
         const templateFunction = templates[template]
         if (templateFunction) {
@@ -95,7 +96,12 @@ export const applyQuestionTemplate = (options: {
         } else {
             console.log(`// template ${template} not found! (${edition.id})`)
             console.log(question)
-            output = { ...output, template }
+            missingTemplates.push({
+                id: question.id,
+                editionId: edition.id,
+                template: question.template
+            })
+            output = { ...output, template, templateMissing: true }
         }
     } else {
         console.warn(`Question "${edition.id}/${question.id}" does not have a template specified.`)

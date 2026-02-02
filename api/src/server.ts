@@ -53,6 +53,8 @@ const app = express()
 
 const environment = process.env.ENVIRONMENT || process.env.NODE_ENV
 
+export const missingTemplates: Array<{ id?: string; editionId: string; template: string }> = []
+
 Sentry.init({
     dsn: process.env.SENTRY_DSN,
     integrations: [
@@ -145,6 +147,9 @@ const start = async () => {
 
     const { surveys } = await loadOrGetSurveys({ context })
     const questionObjects = getQuestionObjects({ surveys })
+
+    // const missingTemplates = questionObjects.filter(q => q.templateMissing)
+    await logToFile('missing_templates.yml', missingTemplates)
 
     context.questionObjects = questionObjects
 
