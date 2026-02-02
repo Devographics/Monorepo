@@ -1,0 +1,8 @@
+id: _all_libraries
+apiOnly: true
+questions:
+    - id: _items
+      template: _items
+
+    - id: _cardinalities
+      template: _cardinalities
