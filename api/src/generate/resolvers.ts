@@ -68,15 +68,22 @@ export const generateResolvers = async ({
         })
     )
 
+    // Root query resolvers
+    const Query = {
+        _metadata: getGlobalMetadataResolver(),
+        surveys: () => surveys,
+        ...entitiesResolvers,
+        ...localesResolvers
+    }
+
+    // Resolvers for "static" types that are not generated dynamically based
+    // on survey outlines
     const resolvers = {
-        Query: {
-            _metadata: getGlobalMetadataResolver(),
-            surveys: () => surveys,
-            ...entitiesResolvers,
-            ...localesResolvers
-        },
+        // Root query resolvers
+        Query,
         GeneralMetadata: generalMetadataResolverMap,
         Creator: creatorResolverMap,
+        // main surveys resolver
         Surveys: surveysFieldsResolvers,
         ItemComments: commentsResolverMap,
         CreditItem: creditResolverMap,
@@ -87,9 +94,10 @@ export const generateResolvers = async ({
         QuestionMetadata: questionMetadataResolverMap,
         SitemapBlock: sitemapBlockResolverMap,
         SitemapBlockVariant: sitemapBlockResolverMap,
+        CardinalitiesItem: cardinalitiesResolverMap,
+        // Scalars
         StringOrInt: new GraphQLScalarType(stringOrInt),
-        StringOrFloatOrArray: new GraphQLScalarType(StringOrFloatOrArray),
-        CardinalitiesItem: cardinalitiesResolverMap
+        StringOrFloatOrArray: new GraphQLScalarType(StringOrFloatOrArray)
     } as any
 
     for (const survey of surveys) {
@@ -153,6 +161,8 @@ export const generateResolvers = async ({
                     )
 
                     if (isFeatureSection(section) || isLibrarySection(section)) {
+                        // feature/library sections get these two resolvers
+                        // automatically added to them
                         questionsToInclude.push({
                             id: ITEMS_ID,
                             resolver: getItemsResolver(getSectionType(section), context)
@@ -184,8 +194,9 @@ export const generateResolvers = async ({
                         )
                     }
 
+                    // generate resolvers for the types used by the section's question
                     for (const questionObject of questionsToInclude) {
-                        // note: this will overwrite earlier definitions for one resolver map
+                        // note: each iteration will overwrite earlier definitions for one resolver map
                         // with later ones, so that the final resolver map should be based
                         // on the most recent survey
                         if (questionObject.fieldTypeName) {

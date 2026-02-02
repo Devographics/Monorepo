@@ -1,3 +1,5 @@
+// General metadata about Devographics
+
 import { RequestContext } from '../../types'
 import { getGeneralMetadata } from '../helpers'
 

@@ -1,3 +1,5 @@
+// Creator sponsored by Devographics
+
 import { Creator } from '@devographics/types'
 import { getEntity } from '../../load/entities'
 import { RequestContext } from '../../types'
