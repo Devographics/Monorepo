@@ -200,7 +200,7 @@ type QuestionMetadata {
     units: String
     # translations
     translationKeys: QuestionTranslationKeys
-    translations: [QuestionTranslation]
+    translations(localeId: LocaleID): [QuestionTranslation]
 }
 
 type QuestionTranslationKeys {
@@ -210,9 +210,21 @@ type QuestionTranslationKeys {
 }
 
 type QuestionTranslation {
+    """
+    id of the locale (en_US, fr_FR, etc.)
+    """
     localeId: LocaleID
+    """
+    Short question descriptor (e.g. "Top Pain Points")
+    """
     name: String
+    """
+    Question as asked in the survey (e.g. "What are your pain points…")
+    """
     question: String
+    """
+    Additional question prompt (e.g. "Think of pain points related to…")
+    """
     prompt: String
 }
 

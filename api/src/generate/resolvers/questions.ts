@@ -5,7 +5,7 @@ import { getQuestioni18nIds, makeTranslatorFunc } from '@devographics/i18n'
 import omit from 'lodash/omit.js'
 import { getEntity, getEntities } from '../../load/entities'
 import { loadOrGetLocales } from '../../load/locales/locales'
-import { unconvertLocaleId } from './locales'
+import { convertLocaleId, unconvertLocaleId } from './locales'
 import { addOptionsAverages, addGroupsAverages } from '../helpers'
 
 export const getQuestionResolverMap = async ({
@@ -107,8 +107,13 @@ export const questionMetadataResolverMap = {
         const i18nIds = getQuestioni18nIds({ section, question })
         return { ...i18nIds, name: i18nIds.base }
     },
-    translations: async (parent: QuestionApiObject, {}, context: RequestContext) => {
+    translations: async (
+        parent: QuestionApiObject,
+        args: { localeId: string },
+        context: RequestContext
+    ) => {
         const question = parent
+        const localeId = convertLocaleId(args.localeId)
         const section = question.section as SectionMetadata
         if (!section) {
             return
@@ -116,7 +121,8 @@ export const questionMetadataResolverMap = {
         const entity = await getEntity({ id: question.id, context })
         const i18nIds = getQuestioni18nIds({ section, question })
         const locales = await loadOrGetLocales()
-        const translations = locales.map(locale => {
+        const filteredLocales = localeId ? locales.filter(l => l.id === localeId) : locales
+        const translations = filteredLocales.map(locale => {
             const isEn = locale.id === 'en-US'
             const getMessage = makeTranslatorFunc(locale)
 
