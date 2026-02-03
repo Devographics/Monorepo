@@ -866,5 +866,5 @@ type CardinalitiesItem {
     Cardinality can either apply to "heard" or "used"
     """
     id: String
-    responses: Responses
+    responses(parameters: Parameters): Responses
 }

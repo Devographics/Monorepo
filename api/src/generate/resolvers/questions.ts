@@ -113,7 +113,7 @@ export const questionMetadataResolverMap = {
         context: RequestContext
     ) => {
         const question = parent
-        const localeId = convertLocaleId(args.localeId)
+        const localeId = args.localeId && convertLocaleId(args.localeId)
         const section = question.section as SectionMetadata
         if (!section) {
             return
