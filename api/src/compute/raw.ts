@@ -38,31 +38,34 @@ export const getRawData = async ({
     const collection = getCollection(db, survey)
     const { normPaths } = question
     if (normPaths?.metadata) {
-        const metadata = normPaths.metadata as string
-        const normalized = normPaths.other as string
+        const metadataPath = normPaths.metadata as string
+        const normalizedPath = normPaths.other as string
 
-        const selector = { editionId: edition.id, [metadata]: { $exists: true, $ne: '' } }
+        const selector = { editionId: edition.id, [metadataPath]: { $exists: true, $ne: '' } }
         if (token) {
             // if token is specified, only get responses that contain it
-            selector[normalized] = token
+            selector[normalizedPath] = token
         }
-        const projection = { _id: 1, [metadata]: 1, [normalized]: 1 }
+        const projection = { _id: 1, [metadataPath]: 1, [normalizedPath]: 1 }
 
         const results = await collection.find(selector, { projection }).toArray()
         let data: RawDataAnswer[] = results
             .map(response => {
-                const answers = get(response, metadata) as NormalizationMetadata[]
-                return answers.map(answer => {
+                const answers = get(response, metadataPath) as NormalizationMetadata[]
+                return answers.map((answer, answerIndex) => {
                     const { raw } = answer
                     const rawParsed = parseHtmlString(raw)
                     const rawHtml = sanitizeHtmlString(rawParsed)
                     const rawClean = cleanHtmlString(rawHtml)
-
+                    const responseId = response._id.toString()
+                    const answerId = `${responseId}___${question.id}___${answerIndex}`
                     return {
                         ...answer,
+                        answerIndex,
+                        answerId,
                         rawHtml,
                         rawClean,
-                        responseId: response._id.toString()
+                        responseId
                     }
                 })
             })

@@ -392,6 +392,8 @@ type RawData {
 
 type RawDataAnswer {
     responseId: String
+    answerIndex: Int
+    answerId: String
     raw: String
     rawHtml: String
     rawClean: String
