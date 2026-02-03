@@ -33,7 +33,7 @@ const convertToArray = ({
   questionObject: QuestionTemplateOutput;
   value: string;
 }) => {
-  if (questionObject.allowOther) {
+  if (questionObject.allowOther && questionObject.autoSplitOther) {
     // this is a question with an "Other…" checkbox, assume
     // values are comma-separated
     return value.split(",");

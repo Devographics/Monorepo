@@ -241,6 +241,12 @@ export type Question = {
      * "multipleWithOther" is a shortcut to "multiple" + allowOther=true
      */
     allowOther?: boolean
+    /**
+     *
+     * auto-split "other" answer by comma (e.g. "foo.js, bar.js, baz.js"
+     * becomes ['foo.js', 'bar.js', 'baz.js'])
+     */
+    autoSplitOther?: boolean
     allowPrenormalized?: boolean
     allowComment?: boolean
     showCommentInput?: boolean
