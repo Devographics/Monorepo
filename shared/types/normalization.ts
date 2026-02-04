@@ -39,4 +39,7 @@ export interface RawDataAnswer {
     rawHtml: string
     rawClean: string
     tokens: NormalizationToken[]
+    createdAt: Date
+    answerIndex: number
+    answerId: string
 }

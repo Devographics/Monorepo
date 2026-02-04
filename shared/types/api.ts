@@ -23,7 +23,8 @@ export enum ResultsSubFieldEnum {
     ID = 'id',
     METADATA = '_metadata',
     RELEVANT_ENTITIES = 'entities',
-    RELEVANT_ENTITIES_COUNT = 'entitiesCount'
+    RELEVANT_ENTITIES_COUNT = 'entitiesCount',
+    RAW_DATA = 'rawData'
 }
 
 export const subfieldDocs = {
@@ -43,7 +44,8 @@ export const subfieldDocs = {
     [ResultsSubFieldEnum.FOLLOWUPS]: null,
     [ResultsSubFieldEnum.MEDIANS]: null,
     [ResultsSubFieldEnum.ID]: null,
-    [ResultsSubFieldEnum.METADATA]: null
+    [ResultsSubFieldEnum.METADATA]: null,
+    [ResultsSubFieldEnum.RAW_DATA]: 'Raw answer for the current edition of this survey'
 }
 
 export enum DbPathsEnum {
