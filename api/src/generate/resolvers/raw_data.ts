@@ -28,7 +28,7 @@ export const rawDataResolver: ResolverType = async (parent, args: RawDataArgs, c
     const { token, sort = {} } = args
     const { parameters } = responseArguments || {}
     const { limit } = parameters || {}
-    const { property, order } = sort
+    const { property = RawDataSortProperty.ALPHABETICAL, order = OrderOptions.ASC } = sort
     // helper function to get count of how many times a token appears across all answers
     const getTokenCount = (tokenId: string) =>
         answers?.filter(a => a.tokens && a.tokens.map(t => t.id).includes(tokenId)).length
@@ -39,18 +39,14 @@ export const rawDataResolver: ResolverType = async (parent, args: RawDataArgs, c
     if (limit) {
         answers = take(answers, limit)
     }
-    if (property) {
-        if (property === RawDataSortProperty.ALPHABETICAL) {
-            answers = sortBy(answers, a => a.raw.toLowerCase())
-        }
-
-        if (property === RawDataSortProperty.DATE) {
-            answers = sortBy(answers, a => a.createdAt)
-        }
-
-        if (property === RawDataSortProperty.LENGTH) {
-            answers = sortBy(answers, a => a.raw.length)
-        }
+    if (property === RawDataSortProperty.ALPHABETICAL) {
+        answers = sortBy(answers, a => a.raw.toLowerCase())
+    }
+    if (property === RawDataSortProperty.DATE) {
+        answers = sortBy(answers, a => a.createdAt)
+    }
+    if (property === RawDataSortProperty.LENGTH) {
+        answers = sortBy(answers, a => a.raw.length)
     }
     if (order === OrderOptions.DESC) {
         answers = answers?.toReversed()
