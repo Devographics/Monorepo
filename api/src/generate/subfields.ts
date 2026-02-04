@@ -4,6 +4,7 @@ import { Option, ResultsSubFieldEnum, subfieldDocs } from '@devographics/types'
 import { getEntities, getEntity } from '../load/entities'
 import { getResponseTypeName } from '../graphql/templates'
 import intersection from 'lodash/intersection.js'
+import { rawDataResolver } from './resolvers/raw_data'
 
 interface SubField {
     id: ResultsSubFieldEnum
@@ -148,6 +149,13 @@ export const subFields: Array<SubField> = [
             console.log('// question entity resolver')
             return await getEntity({ id: question.id, context })
         }
+    },
+    {
+        id: ResultsSubFieldEnum.RAW_DATA,
+        def: () =>
+            `${ResultsSubFieldEnum.RAW_DATA}(token: String, sort: RawDataSortSpecifier): RawData`,
+        addIf: ({ normPaths }) => !!normPaths?.other,
+        resolverFunction: rawDataResolver
     }
 ]
 

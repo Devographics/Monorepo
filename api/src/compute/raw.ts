@@ -46,7 +46,7 @@ export const getRawData = async ({
             // if token is specified, only get responses that contain it
             selector[normalizedPath] = token
         }
-        const projection = { _id: 1, [metadataPath]: 1, [normalizedPath]: 1 }
+        const projection = { _id: 1, [metadataPath]: 1, [normalizedPath]: 1, createdAt: 1 }
 
         const results = await collection.find(selector, { projection }).toArray()
         let data: RawDataAnswer[] = results
@@ -59,14 +59,17 @@ export const getRawData = async ({
                     const rawClean = cleanHtmlString(rawHtml)
                     const responseId = response._id.toString()
                     const answerId = `${responseId}___${question.id}___${answerIndex}`
-                    return {
+                    const createdAt = response.createdAt
+                    const rawAnswer: RawDataAnswer = {
                         ...answer,
                         answerIndex,
                         answerId,
                         rawHtml,
                         rawClean,
-                        responseId
+                        responseId,
+                        createdAt
                     }
+                    return rawAnswer
                 })
             })
             .flat()

@@ -356,6 +356,17 @@ enum OptionsOrder {
     alphabetical
 }
 
+input RawDataSortSpecifier {
+    property: RawDataSortProperty
+    order: SortOrder
+}
+
+enum RawDataSortProperty {
+    date
+    alphabetical
+    length
+}
+
 type ResponseEditionData {
     """
     Metadata about the current query results
@@ -392,8 +403,10 @@ type RawData {
 
 type RawDataAnswer {
     responseId: String
+    index: Int
     answerIndex: Int
     answerId: String
+    createdAt: String
     raw: String
     rawHtml: String
     rawClean: String

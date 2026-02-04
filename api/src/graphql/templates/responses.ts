@@ -38,6 +38,7 @@ export const generateResponsesType = ({
     """
     currentEdition: ResponseEditionData
     """
+    (DEPRECATED)
     Raw answer for the current edition of this survey
     """
     rawData(token: String): RawData
