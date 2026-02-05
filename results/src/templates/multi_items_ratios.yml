@@ -67,6 +67,10 @@ query: >
                     percentageSurvey
                     total
                   }
+                  buckets {
+                    id
+                    count
+                  }
                 }
               }
             }

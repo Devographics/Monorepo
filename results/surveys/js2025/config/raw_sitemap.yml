@@ -408,7 +408,7 @@
             limit: 10
 
       - id: features_resources
-        items: [fm-javascript-hard-parts-v2, fm-getting-started-js]
+        items: [fm-javascript-hard-parts-v3, fm-getting-started-js]
         template: recommended_resources
 
 - id: libraries
@@ -421,6 +421,8 @@
         titleId: tools.all_items.experience
         template: multi_items_experience
         i18nNamespace: tools
+        queryOptions:
+            sectionId: _all_libraries
         chartOptions:
             limit: 10
             categories: [
@@ -436,6 +438,8 @@
       - id: tools_arrows
         template: tools_arrows
         i18nNamespace: tools
+        queryOptions:
+            sectionId: _all_libraries
         chartOptions:
             categories: [
                     front_end_frameworks,
@@ -458,11 +462,15 @@
       - id: tools_ratios_over_time
         template: multi_items_ratios
         i18nNamespace: tools
+        queryOptions:
+            sectionId: _all_libraries
         variables:
             enableMultiSection: true
 
       - id: scatterplot_overview
         i18nNamespace: tools
+        queryOptions:
+            sectionId: _all_libraries
         template: scatterplot_overview
 
       # - id: all_sections_tools_cardinality_by_user
@@ -477,6 +485,12 @@
         path: /front-end-frameworks
         blocks:
             - template: page_introduction
+
+            - id: highlight_front_end_frameworks
+              template: highlight
+              variables:
+                  type: library
+                  itemId: solid
 
             - id: front_end_frameworks_ratios
               template: multi_items_ratios
@@ -515,6 +529,12 @@
         blocks:
             - template: page_introduction
 
+            - id: highlight_meta_frameworks
+              template: highlight
+              variables:
+                  type: library
+                  itemId: astro
+
             - id: meta_frameworks_ratios
               template: multi_items_ratios
               i18nNamespace: tools
@@ -549,6 +569,12 @@
         blocks:
             - template: page_introduction
 
+            - id: highlight_back_end_frameworks
+              template: highlight
+              variables:
+                  type: library
+                  itemId: elysia
+
             - id: back_end_frameworks_ratios
               template: multi_items_ratios
               i18nNamespace: tools
@@ -582,6 +608,12 @@
         path: /testing
         blocks:
             - template: page_introduction
+
+            - id: highlight_testing
+              template: highlight
+              variables:
+                  type: library
+                  itemId: bun_test
 
             - id: testing_ratios
               template: multi_items_ratios
@@ -650,6 +682,12 @@
         path: /build-tools
         blocks:
             - template: page_introduction
+
+            - id: highlight_build_tools
+              template: highlight
+              variables:
+                  type: library
+                  itemId: rolldown
 
             - id: build_tools_ratios
               template: multi_items_ratios

@@ -76,6 +76,7 @@ const chartBlocks = {
 import DataExplorerBlock from 'core/explorer/DataExplorerBlock'
 
 import TextBlock from 'core/blocks/other/TextBlock'
+import ImageBlock from 'core/blocks/other/ImageBlock'
 import RecommendedResourcesBlock from 'core/blocks/other/RecommendedResourcesBlock'
 import PageIntroductionBlock from 'core/blocks/other/PageIntroductionBlock'
 import SurveyIntroBlock from 'core/blocks/other/SurveyIntroBlock'
@@ -97,9 +98,12 @@ import HowToHelpBlock from 'core/blocks/other/HowToHelpBlock'
 import SponsorFinishBlock from 'core/blocks/block/sponsor_chart/SponsorFinishBlock'
 import LivestreamBlock from 'core/blocks/other/LivestreamBlock'
 
+import HighlightBlock from 'core/blocks/other/HighlightBlock'
+
 const otherBlocks = {
     PageIntroductionBlock,
     TextBlock,
+    ImageBlock,
     RecommendedResourcesBlock,
     TshirtBlock,
     SurveyIntroBlock,
@@ -119,7 +123,8 @@ const otherBlocks = {
     SponsorFinishBlock,
     LivestreamBlock,
     TakeawaysBlock,
-    DataExplorerBlock
+    DataExplorerBlock,
+    HighlightBlock
 }
 
 export default { ...chartBlocks, ...otherBlocks }

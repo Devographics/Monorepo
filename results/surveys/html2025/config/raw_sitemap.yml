@@ -74,6 +74,8 @@
       - id: all_features
         template: multi_items_experience
         i18nNamespace: features
+        queryOptions:
+            sectionId: _all_features
         chartOptions:
             limit: 10
             categories:
@@ -97,6 +99,8 @@
       - id: features_ratios_over_time
         template: multi_items_ratios
         i18nNamespace: features
+        queryOptions:
+            sectionId: _all_features
         variables:
             enableMultiSection: true
 

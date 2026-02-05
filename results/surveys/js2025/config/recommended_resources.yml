@@ -1,9 +1,9 @@
 - name: |
-      JavaScript: The Hard Parts, v2
-  id: fm-javascript-hard-parts-v2
+      New: JavaScript The Hard Parts, v3
+  id: fm-javascript-hard-parts-v3
   description: >
       Combining mental models of JavaScript's inner workings and hands-on programming challenges, this course will give you a solid understanding of callbacks and higher-order functions, closure, asynchronous JavaScript, and object-oriented JavaScript.
-  url: https://frontendmasters.com/courses/javascript-hard-parts-v2/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2025
+  url: https://frontendmasters.com/courses/javascript-hard-parts-v3/?utm_source=stateofjs&utm_medium=website&utm_campaign=stateofjs2025
   image: https://static.frontendmasters.com/assets/teachers/sentance/thumb@2x.webp
   teacher: Will Sentance
   company: Codesmith

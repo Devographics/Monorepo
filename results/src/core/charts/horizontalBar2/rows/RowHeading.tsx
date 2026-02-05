@@ -22,7 +22,7 @@ export const RowHeading = ({
         <div className="chart-row-heading">
             {sectionId && (
                 <span className="chart-row-heading-section">
-                    <T k={`${i18nNamespace}.${sectionId}`} />
+                    <T k={`${i18nNamespace}.${sectionId}`} useShort={true} />
                 </span>
             )}
             <div className="chart-row-heading-content">

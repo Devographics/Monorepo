@@ -15,7 +15,8 @@ export const HighlightBlock = ({
     block: BlockVariantDefinition
     data: Entity
 }) => {
-    const { variables } = block
+    const { variables = {} } = block
+    const { type = 'feature' } = variables
     const InfoComponent = entityComponents[entity.entityType].modal
     const { id } = entity
     return (
@@ -30,7 +31,7 @@ export const HighlightBlock = ({
                 <div className="highlight-block-inner">
                     <div className="highlight-block-heading">
                         <h2>
-                            <T k="highlight.heading.feature" />{' '}
+                            <T k={`highlight.heading.${type}`} />{' '}
                             <strong
                                 dangerouslySetInnerHTML={{ __html: entity.nameHtml || entity.name }}
                             />
