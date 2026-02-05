@@ -76,7 +76,7 @@ const chartBlocks = {
 import DataExplorerBlock from 'core/explorer/DataExplorerBlock'
 
 import TextBlock from 'core/blocks/other/TextBlock'
-import ImageBlock from 'core/blocks/other/ImageBlock'
+// import ImageBlock from 'core/blocks/other/ImageBlock'
 import RecommendedResourcesBlock from 'core/blocks/other/RecommendedResourcesBlock'
 import PageIntroductionBlock from 'core/blocks/other/PageIntroductionBlock'
 import SurveyIntroBlock from 'core/blocks/other/SurveyIntroBlock'
