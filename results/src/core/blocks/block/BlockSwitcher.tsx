@@ -1,6 +1,6 @@
 import React from 'react'
-// import globalBlockRegistry from 'core/helpers/blockRegistry'
-import blockRegistry from 'Config/blocks'
+import surveyBlockRegistry from 'Config/blocks'
+import globalBlockRegistry from 'core/blocks/blockRegistry'
 import isEmpty from 'lodash/isEmpty'
 import { usePageContext } from 'core/helpers/pageContext'
 import { BlockError } from 'core/blocks/block/BlockError'
@@ -9,6 +9,8 @@ import { BlockVariantDefinition } from 'core/types'
 import { getAllQuestions } from 'core/helpers/options'
 import { DataSeries } from 'core/filters/types'
 import { CustomVariant } from 'core/filters/helpers'
+
+const blockRegistry = { ...globalBlockRegistry, ...surveyBlockRegistry }
 
 interface BlockSwitcherProps {
     block: BlockVariantDefinition

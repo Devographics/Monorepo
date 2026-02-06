@@ -17,7 +17,6 @@ const SurveyIntroBlock = () => {
     const { getString } = useI18n()
     const introKey = `introduction.${currentEdition.id}`
     const introText = getString(introKey)
-    console.log(introText)
     return (
         <IntroWrapper_ className="intro-wrapper">
             {/** @ts-ignore */}
