@@ -71,7 +71,7 @@ The file `config/config.yml` should have the following structure:
 ```yaml
 # the base URL to use, can be either local or remote,
 baseUrl: http://localhost:9000
-# optionnaly if you want to use a local sitemap
+# optionally if you want to use a local sitemap
 sitemap: './sitemap.yml'
 # configuration for mosaic generation
 mosaic:

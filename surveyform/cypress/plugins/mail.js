@@ -14,7 +14,7 @@ module.exports = (on, config) => {
   mailServer.bind((addr, id, email) => {
     console.log("--- email ---");
     console.log(addr, id, email);
-    // store the body for the email adress
+    // store the body for the email address
     lastEmail[email.headers.to] = email.html || email.body;
   });
   console.log("mail server at port %d", port);

@@ -264,7 +264,7 @@ export const createPagesSingleLoop = async ({
                 createPage(pageObject)
             }
 
-            // also redirect "naked" paths (whithout a locale) to en-US
+            // also redirect "naked" paths (without a locale) to en-US
             // TODO: this doesn't seem to work during development
             createRedirect({
                 fromPath: getLocalizedPath(page.path, null),

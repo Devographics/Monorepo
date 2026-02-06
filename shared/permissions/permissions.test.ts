@@ -90,7 +90,7 @@ describe("vulcan:users/permissions", () => {
       expect(() => checkFields(null, Dummies, ["adminField"])).toThrow();
       expect(checkFields(null, Dummies, ["guestField"])).toBe(true);
     });
-    test("checkFields with document-based permissions do not throw for ambigous fields (those field need the document to be checked)", () => {
+    test("checkFields with document-based permissions do not throw for ambiguous fields (those field need the document to be checked)", () => {
       const res = checkFields(null, Dummies, [
         "guestField",
         "ownerField",
