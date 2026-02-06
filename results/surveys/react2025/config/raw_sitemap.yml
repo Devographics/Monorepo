@@ -59,6 +59,8 @@
       - id: all_features
         i18nNamespace: features
         template: multi_items_experience
+        queryOptions:
+            sectionId: _all_features
         chartOptions:
             limit: 10
             categories: [main_apis, hooks, new_apis]
@@ -191,8 +193,10 @@
       - id: librariesIntroduction
         template: page_introduction
 
-      - id: all_tools_experience
+      - id: all_libraries
         i18nNamespace: tools
+        queryOptions:
+            sectionId: _all_libraries
         template: multi_items_experience
         chartOptions:
             limit: 10
@@ -206,9 +210,19 @@
         variables:
             url: https://tanstack.com/router/latest
 
-      - id: scatterplot_overview
+      - id: tools_ratios_over_time
+        template: multi_items_ratios
         i18nNamespace: tools
-        template: scatterplot_overview
+        queryOptions:
+            sectionId: _all_libraries
+        variables:
+            enableMultiSection: true
+
+      # - id: scatterplot_overview
+      #   i18nNamespace: tools
+      #   queryOptions:
+      #       sectionId: _all_libraries
+      #   template: scatterplot_overview
 
       # - id: all_sections_tools_cardinality_by_user
       #   template: tools_cardinality_by_user_js
@@ -423,8 +437,8 @@
       - id: react_version
         template: multiple_options2_combined
 
-      - id: usage_type
-        template: multiple_options2_combined
+      # - id: usage_type
+      #   template: multiple_options2_combined
 
       # - id: industry_sector
       #   template: multiple_options2_combined

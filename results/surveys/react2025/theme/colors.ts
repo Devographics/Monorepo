@@ -171,7 +171,7 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
     textAlt: 'rgba(255, 246, 229, 0.5)',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
-    link: '#ffeb66',
+    link: '#ED7BFC',
     linkActive: '#5C63E0',
     contrast: '#0bdf67',
     border: '#FFF6E6',
