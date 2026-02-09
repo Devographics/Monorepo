@@ -253,8 +253,8 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         gradient: [colors.greyLight, colors.greyLightest]
     },
     barChart: {
-        primary: '#ffeb66',
-        primaryGradient: ['#C5B234', '#ffeb66'],
+        primary: '#ED7BFC',
+        primaryGradient: ['#b53ec4ff', '#ef9afbff'],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.pink,
