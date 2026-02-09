@@ -5,7 +5,8 @@ import type {
     Translation,
     StringTranslator,
     StringTranslatorResult,
-    LocaleParsed
+    LocaleParsed,
+    MultiKeysStringTranslator
 } from './typings'
 
 const findString = (key: string, strings: Translation[]) => {
@@ -97,8 +98,6 @@ function injectValues(str: string, values: Record<string, any>) {
     }
 }
 
-type ValuesType = Record<string, any>
-
 /**
  * Generate a translation helper function "t" (and "getMessage")
  * for a given locale
@@ -112,7 +111,7 @@ export function makeTranslationFunction(locale: LocaleParsed) {
     /**
      * Get the full translation with metadata, HTML and clean versions
      */
-    function getMessage(key: string, values: ValuesType = {}, fallback?: string | null) {
+    const getMessage: StringTranslator = (key, values = {}, fallback) => {
         // get the string or template
         let result: StringTranslatorResult = {
             key,
@@ -150,11 +149,9 @@ export function makeTranslationFunction(locale: LocaleParsed) {
     }
 
     // take either i18n keys, or functions that return a message
-    function getFallbacks(
-        keys: Array<string | ((values?: ValuesType) => StringTranslatorResult)>,
-        values?: ValuesType
-    ) {
+    const getFallbacks: MultiKeysStringTranslator = (keys, values, fallback) => {
         let message: StringTranslatorResult
+        // look at each key and return the first hit we get
         for (const keyOrFunction of keys) {
             if (keyOrFunction) {
                 if (typeof keyOrFunction === 'function') {
@@ -167,6 +164,14 @@ export function makeTranslationFunction(locale: LocaleParsed) {
                 }
             }
         }
+        // if there are no hits for any of the keys
+        const defaultKey = keys.filter(k => typeof k === 'string')[0]
+        const defaultResult = {
+            t: fallback || defaultKey,
+            locale,
+            missing: true
+        }
+        return defaultResult
     }
 
     /**

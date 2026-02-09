@@ -37,17 +37,23 @@ export type LocaleWithStrings = Locale & Required<Pick<Locale, 'strings'>>
  * to be used in applications
  */
 export type LocaleParsed = Locale & {
-    dict: Record<string, Translation>,
+    dict: Record<string, Translation>
     /** Contexts used to load the strings */
     contexts?: Array<string>
 }
 
-interface InterpolationValues {
-    values?: { [key: string]: string | number }
-}
+export type ValuesType = Record<string, any>
 
 export interface StringTranslator {
-    (key: string, interpolation?: InterpolationValues, fallback?: string): StringTranslatorResult
+    (key: string, values?: ValuesType, fallback?: string): StringTranslatorResult
+}
+
+export interface MultiKeysStringTranslator {
+    (
+        keys: Array<string | undefined | ((values?: ValuesType) => StringTranslatorResult)>,
+        values?: ValuesType,
+        fallback?: string
+    ): StringTranslatorResult
 }
 
 export interface StringTranslatorResult {
