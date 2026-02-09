@@ -16,7 +16,7 @@ const ShareBlockTemplate = () => {
     const pageContext = mergePageContext(pageContext_, location)
     const { block } = pageContext
 
-    const { label: blockTitle } = getBlockTitle({ block, pageContext, getString, entities })
+    const { tClean: blockTitle } = getBlockTitle({ block, pageContext, getFallbacks, entities })
     const blockDescription = getBlockDescription({
         block,
         pageContext,

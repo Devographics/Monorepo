@@ -37,7 +37,7 @@ export const TabsWrapper = ({
     const [customVariants, setCustomVariants] = useState<CustomVariant[]>([])
     const [activeTab, setActiveTab] = useState(getRegularTabId(0))
     const pageContext = usePageContext()
-    const { getString } = useI18n()
+    const { getString, getFallbacks } = useI18n()
     const entities = useEntities()
     let firstBlockVariant = block.variants[0]
 
@@ -115,6 +115,7 @@ export const TabsWrapper = ({
                                             pageContext,
                                             variantIndex,
                                             getString,
+                                            getFallbacks,
                                             entities
                                         })
                                         return (

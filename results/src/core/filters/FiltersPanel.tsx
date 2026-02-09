@@ -52,7 +52,7 @@ const FiltersPanel = ({
     closeModal,
     setActiveTab
 }: FiltersPanelPropsType) => {
-    const { getString } = useI18n()
+    const { getString, getFallbacks } = useI18n()
     const pageContext = usePageContext()
     const { currentEdition, currentSurvey, id: pageId } = pageContext
     const allFilters = useAllFilters()
@@ -61,7 +61,7 @@ const FiltersPanel = ({
     const { id, name, chartFilters } = variant || {}
     const [variantName, setVariantName] = useState(name)
 
-    const { label: chartName } = getBlockTitle({ block, pageContext, getString, entities })
+    const { tClean: chartName } = getBlockTitle({ block, pageContext, getFallbacks, entities })
 
     let initState = getInitFilters({ block })
 

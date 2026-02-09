@@ -9,7 +9,8 @@ import { usePageContext } from 'core/helpers/pageContext'
 const BlockTakeaway = ({ block }: { block: BlockVariantDefinition }) => {
     const { getFallbacks } = useI18n()
     const pageContext = usePageContext()
-    const takeawayKey = `${getBlockKey({ block })}.takeaway`
+    const blockKey = getBlockKey({ block })
+    const takeawayKey = `${blockKey}.takeaway`
     const { currentEdition } = pageContext
 
     let keysList = []
@@ -23,10 +24,11 @@ const BlockTakeaway = ({ block }: { block: BlockVariantDefinition }) => {
         // generic takeaway
         takeawayKey,
         // descriptionKey specified in sitemap
-        block.descriptionId,
+        block.descriptionKey,
         // generic block description
-        `${getBlockKey({ block })}.description`
+        `${blockKey}.description`
     ]
+
     const hasTakeaway = !getFallbacks(keysList)?.missing
     return hasTakeaway ? (
         <Takeaway_>

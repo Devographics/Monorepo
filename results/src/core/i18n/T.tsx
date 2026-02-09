@@ -9,7 +9,7 @@ const getGitHubSearchUrl = (k: string, localeId = 'en') =>
     }%2F+path%3A%2Fsrc%2Fi18n%2Fen-US%2F&type=Code&ref=advsearch&l=&l=`
 
 interface TProps {
-    t?: string
+    override?: string
     k?: string
     keysList?: Array<string | undefined>
     values?: any
@@ -22,7 +22,7 @@ interface TProps {
 }
 
 export const T = ({
-    t: override,
+    override,
     k,
     keysList,
     values,

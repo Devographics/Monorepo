@@ -196,12 +196,12 @@ const NavItem = ({
 
 const BlockItem = ({ block, closeSidebar, page }) => {
     const pageContext = usePageContext()
-    const { getString } = useI18n()
+    const { getString, getFallbacks } = useI18n()
     const entities = useEntities()
-    const { key, label } = getBlockTitle({
+    const { key, tClean: label } = getBlockTitle({
         block,
         pageContext,
-        getString,
+        getFallbacks,
         entities,
         useShortLabel: true
     })

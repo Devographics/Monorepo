@@ -1,23 +1,27 @@
 import get from 'lodash/get'
 import { BlockVariantDefinition, PageContextValue, StringTranslator } from 'core/types'
 import { Entity } from '@devographics/types'
-import { MultiKeysStringTranslator } from '@devographics/i18n'
+import { MultiKeysStringTranslator, MultiStringKeys } from '@devographics/i18n'
 import { getSiteTitle } from './pageHelpers'
 import { useI18n } from '@devographics/react-i18n'
 import { useEntities } from 'core/helpers/entities'
 import { usePageContext } from 'core/helpers/pageContext'
 import { removeDoubleSlashes } from './utils'
 
-export const replaceOthers = s => s?.replace('_others', '.others')
+export const replaceOthers = (s: string) => s?.replace('_others', '.others')
+
+export const getBlockNamespace = ({ block }: { block: BlockVariantDefinition }) => {
+    if (block.template === 'feature_experience') {
+        return 'features'
+    } else if (block.template === 'tool_experience') {
+        return 'tools'
+    } else {
+        return block.i18nNamespace || block.sectionId
+    }
+}
 
 export const getBlockKey = ({ block }: { block: BlockVariantDefinition }) => {
-    let namespace = block.sectionId
-    if (block.template === 'feature_experience') {
-        namespace = 'features'
-    }
-    if (block.template === 'tool_experience') {
-        namespace = 'tools'
-    }
+    const namespace = getBlockNamespace({ block })
     const blockId = block?.fieldId || block?.id
     return `${namespace}.${blockId}`
 }
@@ -42,12 +46,14 @@ export const getBlockTabTitle = ({
     pageContext,
     variantIndex,
     getString,
+    getFallbacks,
     entities
 }: {
     block: BlockVariantDefinition
     pageContext: PageContextValue
     variantIndex: number
     getString: StringTranslator
+    getFallbacks: MultiKeysStringTranslator
     entities: Entity[]
 }) => {
     let key,
@@ -66,10 +72,10 @@ export const getBlockTabTitle = ({
             sectionId: block.filtersState?.axis2?.sectionId || block.filtersState?.facet?.sectionId
         } as BlockVariantDefinition
 
-        const { key: facetKey, label: facetTitle } = getBlockTitle({
+        const { key: facetKey, tClean: facetTitle } = getBlockTitle({
             block: facetBlock,
             pageContext,
-            getString,
+            getFallbacks,
             entities
         })
 
@@ -84,8 +90,20 @@ export const getBlockTabTitle = ({
     return { key, label }
 }
 
-export const getBlockNoteKey = ({ block }: { block: BlockVariantDefinition }) =>
-    block.noteId || `${getBlockKey({ block })}.note`
+export const getBlockNote = ({
+    block,
+    pageContext,
+    getFallbacks
+}: {
+    block: BlockVariantDefinition
+    pageContext: PageContextValue
+    getFallbacks: MultiKeysStringTranslator
+}) => {
+    const { currentEdition } = pageContext
+    const blockKey = getBlockKey({ block })
+    const keys = [block.noteKey, `${blockKey}.note.${currentEdition.id}`, `${blockKey}.note`]
+    return getFallbacks(keys)
+}
 
 export const getBlockTitleKey = ({
     block
@@ -97,82 +115,38 @@ export const getBlockTitleKey = ({
 export const getBlockTitle = (options: {
     block: BlockVariantDefinition
     pageContext: PageContextValue
-    getString: StringTranslator
+    getFallbacks: MultiKeysStringTranslator
     entities?: Entity[]
     useShortLabel?: boolean
-    useFullVersion?: boolean
 }) => {
-    const {
-        block,
-        pageContext,
-        getString,
-        entities,
-        useShortLabel,
-        useFullVersion = true
-    } = options
+    const { block, pageContext, entities, getFallbacks, useShortLabel = false } = options
 
-    const defaultKey = getBlockKey({ block })
+    const blockKey = getBlockKey({ block })
+    const blockKey_ = useShortLabel ? `${blockKey}.short` : blockKey
 
-    let key = defaultKey,
-        label = defaultKey
+    const fieldKey = getBlockKey({
+        block: { ...block, i18nNamespace: block.sectionId, id: block.fieldId || block.id }
+    })
 
-    let shortTitle
+    const keys: MultiStringKeys = [block.titleId, blockKey_, block.tabId, fieldKey]
+
     const entity = entities?.find(e => e.id === block.id)
-    const entityName = entity?.nameClean || entity?.name
-    const specifiedTitle = block.titleId && getString(block.titleId)?.tClean
-    const defaultTitle = getString(defaultKey)?.tClean
-
-    if (useShortLabel) {
-        shortTitle = getString(defaultKey + '.short')?.tClean
+    if (entity) {
+        const entityName = entity?.nameClean || entity?.name
+        if (entityName) {
+            keys.push(() => ({ t: entityName, key: 'entity', locale: pageContext.locale }))
+        }
     }
+    const result = getFallbacks(keys)
 
-    const fieldTitle =
-        block.fieldId &&
-        getString(
-            getBlockKey({ block: { ...block, i18nNamespace: block.sectionId, id: block.fieldId } })
-        )?.t
-
-    // when sharing block we want full version (e.g. "Years of Experience By Salary") but
-    // in other context we might not
-    const tabTitle =
-        block.tabId && useFullVersion
-            ? `${fieldTitle || block.fieldId} ${getString(block.tabId)?.tClean}`
-            : getString(block.tabId)?.tClean
-
-    // const values = [specifiedTitle, shortTitle, defaultTitle, tabTitle, fieldTitle, entityName, key]
-    // console.table(values)
-
-    if (specifiedTitle) {
-        key = 'specified'
-        label = specifiedTitle
-    } else if (shortTitle) {
-        key = defaultKey + '.short'
-        label = shortTitle
-    } else if (defaultTitle) {
-        key = defaultKey
-        label = defaultTitle
-    } else if (tabTitle) {
-        key = block.tabId
-        label = tabTitle
-    } else if (fieldTitle) {
-        key = getBlockKey({
-            block: { ...block, i18nNamespace: block.sectionId, id: block.fieldId }
-        })
-        label = fieldTitle
-    } else if (entityName) {
-        key = 'entity'
-        label = entityName
-    } else {
-        label = key
-    }
-    return { key, label }
+    return result
 }
 
 export const useBlockTitle = ({ block }: { block: BlockVariantDefinition }) => {
-    const { getString } = useI18n()
+    const { getFallbacks } = useI18n()
     const entities = useEntities()
     const pageContext = usePageContext()
-    return getBlockTitle({ block, pageContext, getString, entities })
+    return getBlockTitle({ block, pageContext, getFallbacks, entities })
 }
 
 /*
@@ -352,7 +326,7 @@ export const getBlockMeta = ({
     const { year, hashtag } = currentEdition
     const trackingId = `${pageContext.currentPath}${id}`.replace(/^\//, '')
 
-    const { label: blockTitle } = getBlockTitle({ block, pageContext, getString })
+    const { tClean: blockTitle } = getBlockTitle({ block, pageContext, getFallbacks })
     const title = title_ || blockTitle
 
     const subtitle = getBlockDescription({ block, pageContext, getFallbacks })

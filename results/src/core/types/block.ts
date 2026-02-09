@@ -58,10 +58,10 @@ export interface BlockVariantDefinition {
     titleId?: string
     questionKey?: string
     description?: string
-    descriptionId?: string
+    descriptionKey?: string
     takeaway?: string
     takeawayKey?: string
-    noteId?: string
+    noteKey?: string
 
     defaultUnits?: BucketUnits
     availableUnits?: Array<BucketUnits>

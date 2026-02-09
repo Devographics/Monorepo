@@ -19,9 +19,9 @@ const BlockTitleContents = ({ block, pageContext }) => {
 const BlockTitle = ({ isShareable, values, block }) => {
     const [showOptions, setShowOptions] = useState(false)
     const pageContext = usePageContext()
-    const { getString } = useI18n()
+    const { getFallbacks } = useI18n()
 
-    const blockTitle = getBlockTitle({ block, pageContext, getString })
+    const blockTitle = getBlockTitle({ block, pageContext, getFallbacks })
 
     return (
         <>

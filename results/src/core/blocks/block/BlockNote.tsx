@@ -4,22 +4,21 @@ import { spacing } from 'core/theme'
 import { useI18n } from '@devographics/react-i18n'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
-import { getBlockNoteKey } from 'core/helpers/blockHelpers'
+import { getBlockNote } from 'core/helpers/blockHelpers'
 import { BlockVariantDefinition } from 'core/types'
 
 const BlockNote = ({ block }: { block: BlockVariantDefinition }) => {
     const pageContext = usePageContext()
-    const { translate } = useI18n()
-    if (block.noteId === null) {
+    const { getFallbacks } = useI18n()
+    if (block.noteKey === null) {
         // hacky way to override default block notes
         return null
     }
-    const key = getBlockNoteKey({ block })
-    const blockNote = translate(key, {})
-    if (blockNote) {
+    const note = getBlockNote({ block, pageContext, getFallbacks })
+    if (!note.missing) {
         return (
             <Note_ className="Block__Note">
-                <T k={key} md={true} />
+                <T k={note.key} md={true} />
             </Note_>
         )
     } else {

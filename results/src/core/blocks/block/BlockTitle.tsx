@@ -6,7 +6,7 @@ import { mq, spacing, fontSize, secondaryFontMixin } from 'core/theme'
 import { useI18n } from '@devographics/react-i18n'
 import { usePageContext } from 'core/helpers/pageContext'
 import SharePermalink from 'core/share/SharePermalink'
-import { getBlockKey, getBlockTitle, useBlockTitle } from 'core/helpers/blockHelpers'
+import { getBlockTitle, useBlockTitle } from 'core/helpers/blockHelpers'
 import BlockSponsor from 'core/blocks/block/sponsor_chart/BlockSponsor'
 import { useEntities } from 'core/helpers/entities'
 import { BlockVariantDefinition } from 'core/types'
@@ -16,7 +16,7 @@ import T from 'core/i18n/T'
 
 const BlockTitleContents = ({ block }: { block: BlockVariantDefinition }) => {
     const { getString } = useI18n()
-    const { key, label: title } = useBlockTitle({ block })
+    const { key, tClean: title } = useBlockTitle({ block })
     const emojiKey = `${key}.emoji`
     const hasEmoji = !getString(emojiKey).missing
     return (
@@ -26,7 +26,7 @@ const BlockTitleContents = ({ block }: { block: BlockVariantDefinition }) => {
                     <T k={emojiKey} />{' '}
                 </span>
             )}
-            <Title dangerouslySetInnerHTML={{ __html: title }} data-key={key} />
+            <T k={key} html={true} md={true} />
         </>
     )
 }
@@ -56,10 +56,15 @@ const BlockTitle = ({
     const { isCapturing, currentEdition } = pageContext
 
     const { enableChartSponsorships } = currentEdition
-    const { getString } = useI18n()
+    const { getFallbacks } = useI18n()
 
     const entities = useEntities()
-    const { key, label: blockTitle } = getBlockTitle({ block, pageContext, getString, entities })
+    const { key, tClean: blockTitle } = getBlockTitle({
+        block,
+        pageContext,
+        getFallbacks,
+        entities
+    })
 
     const properties = {
         context: pageContext,
@@ -89,7 +94,7 @@ const BlockTitle = ({
                 <LeftPart_>
                     <BlockTitleText className="BlockTitleText">
                         <SharePermalink block={block} />
-                        <div className="block-title-contents" data-key={getBlockKey({ block })}>
+                        <div className="block-title-contents">
                             <BlockTitleContents block={block} />
                             {/* {completion && !pageContext.isCapturing && (
                                 <BlockCompletionIndicator completion={completion} />

@@ -3,8 +3,6 @@ import { BlockComponentProps } from 'core/types'
 import { ChartControls, ChartFooter, ChartWrapper, GridWrapper, Note } from '../common2'
 import { CommonProps, LegendItemType } from '../common2/types'
 import ChartData from '../common2/ChartData'
-// import { getBlockNoteKey } from 'core/helpers/blockHelpers'
-// import { useI18n } from '@devographics/react-i18n'
 import { MultiRatioSerie, MultiRatiosChartState } from './types'
 import ChartShare from '../common2/ChartShare'
 import { getDefaultState, useChartState } from './helpers/chartState'
@@ -60,10 +58,6 @@ export const RatiosByEdition = (props: RatiosByEditionProps) => {
         chartState,
         block
     }
-
-    // const key = getBlockNoteKey({ block })
-    // const note = getString(key, {})?.t
-
     return (
         <ChartWrapper
             block={block}

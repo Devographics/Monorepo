@@ -32,9 +32,10 @@ export const entityComponents = {
 
 const chipTriggerFields = ['example']
 const entityHasData = (entity: Entity) =>
-    [...chipTriggerFields, ...services.map(s => s.service)].some(
-        property => !!entity[property as keyof Entity]
-    )
+    [
+        ...chipTriggerFields,
+        ...services.filter(s => s.service !== 'homepage').map(s => s.service)
+    ].some(property => !!entity[property as keyof Entity])
 
 export const ChartItem = ({
     id,

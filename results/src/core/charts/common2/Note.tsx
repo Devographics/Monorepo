@@ -1,8 +1,10 @@
-import { getBlockNoteKey } from 'core/helpers/blockHelpers'
+import { getBlockNote } from 'core/helpers/blockHelpers'
 import './Note.scss'
 import React from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import { BlockVariantDefinition } from 'core/types'
+import { usePageContext } from 'core/helpers/pageContext'
+import T from 'core/i18n/T'
 
 export const Note = ({
     block,
@@ -11,13 +13,17 @@ export const Note = ({
     block: BlockVariantDefinition
     children?: JSX.Element
 }) => {
-    const { getString } = useI18n()
-    const noteKey = getBlockNoteKey({ block })
-    const note = getString(noteKey, {})?.tHtml
+    const pageContext = usePageContext()
+    const { getFallbacks } = useI18n()
+    if (block.noteKey === null) {
+        // hacky way to override default block notes
+        return null
+    }
+    const note = getBlockNote({ block, pageContext, getFallbacks })
     if (children) {
         return <div className="chart-note">{children}</div>
-    } else if (note) {
-        return <div className="chart-note" dangerouslySetInnerHTML={{ __html: note }} />
+    } else if (!note?.missing) {
+        return <T k={note.k} />
     } else {
         return null
     }

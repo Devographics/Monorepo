@@ -26,7 +26,7 @@ export const FreeformAnswersTrigger = (props: {
 }) => {
     const { questionId, bucket, buckets, sectionId, block, enableModal } = props
     const { id, count, entity, token } = bucket
-    const { getString } = useI18n()
+    const { getString, getFallbacks } = useI18n()
     const pageContext = usePageContext()
 
     const surveyId = pageContext.currentSurvey.id
@@ -43,7 +43,7 @@ export const FreeformAnswersTrigger = (props: {
     const allQuestions = useAllQuestionsMetadata()
     const question = allQuestions.find(q => q.id === questionId)
 
-    const { label: questionLabel } = getBlockTitle({ block, pageContext, getString })
+    const { tClean: questionLabel } = getBlockTitle({ block, pageContext, getFallbacks })
 
     const labelObject = getItemLabel({
         id,
