@@ -1,17 +1,17 @@
 // TODO: reuse T component from @devographics/react-i18n
 import React from 'react'
 import { useI18n } from '@devographics/react-i18n'
-// import ReactMarkdown from 'react-markdown'
-// import rehypeRaw from 'rehype-raw'
 import { useKeydownContext } from 'core/helpers/keydownContext'
 
 const getGitHubSearchUrl = (k: string, localeId = 'en') =>
-    `https://github.com/search?q=${k}+repo%3AStateOfJS%2Fstate-of-js-graphql-results-api+path%3A%2Fsrc%2Fi18n%2F${localeId || 'en'
+    `https://github.com/search?q=${k}+repo%3AStateOfJS%2Fstate-of-js-graphql-results-api+path%3A%2Fsrc%2Fi18n%2F${
+        localeId || 'en'
     }%2F+path%3A%2Fsrc%2Fi18n%2Fen-US%2F&type=Code&ref=advsearch&l=&l=`
 
 interface TProps {
     t?: string
-    k: string
+    k?: string
+    keysList?: Array<string>
     values?: any
     md?: boolean
     html?: boolean
@@ -24,6 +24,7 @@ interface TProps {
 export const T = ({
     t: override,
     k,
+    keysList,
     values,
     md = false,
     html = false,
@@ -32,7 +33,7 @@ export const T = ({
     useShort = false,
     element
 }: TProps) => {
-    const { getString } = useI18n()
+    const { getString, getFallbacks } = useI18n()
     const { modKeyDown } = useKeydownContext()
 
     // accept override to just use provided string as translation result
@@ -41,16 +42,31 @@ export const T = ({
     const props: any = {
         'data-key': k
     }
+
     const classNames = ['t']
 
     if (override) {
         classNames.push('t-override')
     } else {
-        // FIXME: expects a fallabck value, not "isFallback boolean"
-        const tFullString = getString(k, { values }, fallback)//isFallback)
-        const tShortString = getString(`${k}.short`, { values }, fallback)// isFallback)
+        let tFullString, tShortString
+        // FIXME: expects a fallback value, not "isFallback boolean"
 
-        const translationObject = useShort && !tShortString.missing ? tShortString : tFullString
+        if (keysList) {
+            tFullString = getFallbacks(keysList, values)
+            tShortString = tFullString
+        } else {
+            tFullString = getString(k, { values }, fallback) //isFallback)
+            tShortString = getString(`${k}.short`, { values }, fallback) // isFallback)
+        }
+
+        const translationObject =
+            useShort && tShortString && !tShortString.missing ? tShortString : tFullString
+
+        if (!translationObject) {
+            throw new Error(`no translationObject object returned for key ${k}`)
+        }
+
+        props['data-key'] = translationObject.key
 
         const handleClick = (e: React.MouseEvent<any>) => {
             // note: `fallback` here denotes whether a string is itself a fallback for a missing string
@@ -84,8 +100,6 @@ export const T = ({
     }
 
     props.className = classNames.join(' ')
-
-    //<ReactMarkdown rehypePlugins={[rehypeRaw]}>{t}</ReactMarkdown>
 
     const isHtml = md || html
     const Element = element ? element : isHtml ? 'div' : 'span'
