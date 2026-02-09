@@ -34,9 +34,9 @@ const Link = styled.a`
 `
 
 const SharePermalink = ({ block }: { block: BlockVariantDefinition }) => {
-    const { getString } = useI18n()
+    const { getString, getFallbacks } = useI18n()
     const pageContext = usePageContext()
-    const blockMeta = getBlockMeta({ block, pageContext, getString })
+    const blockMeta = getBlockMeta({ block, pageContext, getString, getFallbacks })
     return (
         <Link
             // onClick={track('Permalink', trackingId)}

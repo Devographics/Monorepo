@@ -7,11 +7,11 @@ import Debug from '../components/Debug'
 
 const ShareBlockDebug = ({ block }) => {
     const pageContext = usePageContext()
-    const { getString } = useI18n()
+    const { getString, getFallbacks } = useI18n()
 
     if (!pageContext.isDebugEnabled) return null
 
-    const meta = getBlockMeta({ block, pageContext, getString })
+    const meta = getBlockMeta({ block, pageContext, getString, getFallbacks })
     return <Debug title="Block sharing" data={meta} />
 }
 

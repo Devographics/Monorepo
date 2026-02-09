@@ -12,7 +12,7 @@ const ShareBlockTemplate = () => {
     const pageContext_ = usePageContext()
     const entities = useEntities()
     const location = useLocation()
-    const { getString } = useI18n()
+    const { getFallbacks } = useI18n()
     const pageContext = mergePageContext(pageContext_, location)
     const { block } = pageContext
 
@@ -20,11 +20,8 @@ const ShareBlockTemplate = () => {
     const blockDescription = getBlockDescription({
         block,
         pageContext,
-        getString,
-        options: {
-            isHtml: false
-        }
-    })
+        getFallbacks
+    })?.tClean
 
     let title = `${getSiteTitle({ pageContext })}: ${blockTitle}`
 

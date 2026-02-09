@@ -76,8 +76,8 @@ const SponsorModal = ({
     block: BlockVariantDefinition
 }) => {
     const pageContext = usePageContext()
-    const { getString } = useI18n()
-    const meta = getBlockMeta({ block, pageContext, getString })
+    const { getString, getFallbacks } = useI18n()
+    const meta = getBlockMeta({ block, pageContext, getString, getFallbacks })
 
     return (
         <ModalContents>

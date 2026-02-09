@@ -10,7 +10,6 @@ const BlockTakeaway = ({ block }: { block: BlockVariantDefinition }) => {
     const { getFallbacks } = useI18n()
     const pageContext = usePageContext()
     const takeawayKey = `${getBlockKey({ block })}.takeaway`
-    const descriptionKey = getBlockDescriptionKey(block)
     const { currentEdition } = pageContext
 
     let keysList = []
@@ -23,8 +22,10 @@ const BlockTakeaway = ({ block }: { block: BlockVariantDefinition }) => {
         `${takeawayKey}.${currentEdition.id}`,
         // generic takeaway
         takeawayKey,
+        // descriptionKey specified in sitemap
+        block.descriptionId,
         // generic block description
-        descriptionKey
+        `${getBlockKey({ block })}.description`
     ]
     const hasTakeaway = !getFallbacks(keysList)?.missing
     return hasTakeaway ? (

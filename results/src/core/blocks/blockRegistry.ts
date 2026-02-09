@@ -8,13 +8,11 @@
 /* ---------------------------------------------------------------------- */
 
 // generic charts
-import HorizontalBarBlock from 'core/charts/horizontalBar/index'
 import HorizontalBarBlock2 from 'core/charts/horizontalBar2'
 import { CardinalitiesBlock } from 'core/charts/cardinalities'
-import VerticalBarBlock from 'core/charts/verticalBar'
 import VerticalBarBlock2 from 'core/charts/verticalBar2'
 import PeopleBlock from 'core/charts/people'
-import ToolFeatureExperienceBlock from 'core/charts/toolFeatureExperience'
+// import ToolFeatureExperienceBlock from 'core/charts/toolFeatureExperience'
 import MultiItemsExperienceBlock from 'core/charts/multiItemsExperience'
 import MultiItemsRatiosBlock from 'core/charts/multiItemsRatios'
 
@@ -23,29 +21,27 @@ import { TimeSeriesByDateBlock } from 'core/charts/timeSeriesByDate/TimeSeriesBy
 import { RatiosByEdition } from 'core/charts/multiItemsRatios/RatiosByEdition'
 
 // features
-import FeaturesOverviewBlock from 'core/charts/featuresOverview'
+// import FeaturesOverviewBlock from 'core/charts/featuresOverview'
 
 // tools
 import ToolsArrowsBlock from 'core/charts/toolsArrows'
 import ToolsTierListBlock from 'core/charts/toolsTierList'
-import ToolsScatterplotBlock from 'core/charts/toolsScatterplot'
+// import ToolsScatterplotBlock from 'core/charts/toolsScatterplot'
 
-import ToolsRatiosLineChartBlock from 'core/charts/toolsRatiosLineChart'
-import ToolsRatiosRankingBlock from 'core/charts/toolsRatiosRanking'
-import ToolsSectionStreamsBlock from 'core/charts/toolsSectionStreams'
-import ToolsExperienceMarimekkoBlock from 'core/charts/toolsMarimekko'
+// import ToolsRatiosLineChartBlock from 'core/charts/toolsRatiosLineChart'
+// import ToolsRatiosRankingBlock from 'core/charts/toolsRatiosRanking'
+// import ToolsSectionStreamsBlock from 'core/charts/toolsSectionStreams'
+// import ToolsExperienceMarimekkoBlock from 'src/not_used/charts/toolsMarimekko'
 
 // opinions
-import OpinionBlock from 'core/charts/opinion'
+// import OpinionBlock from 'core/charts/opinion'
 
 // takeaways
-import TakeawaysBlock from 'core/blocks/other/TakeawaysBlock.tsx'
+import TakeawaysBlock from 'core/blocks/other/TakeawaysBlock'
 
 const chartBlocks = {
-    HorizontalBarBlock,
     HorizontalBarBlock2,
     CardinalitiesBlock,
-    VerticalBarBlock,
     VerticalBarBlock2,
     TimeSeriesByDateBlock,
     RatiosByEdition,
@@ -54,20 +50,8 @@ const chartBlocks = {
     MultiItemsExperienceBlock,
     MultiItemsRatiosBlock,
 
-    ToolFeatureExperienceBlock,
-
-    FeaturesOverviewBlock,
-
     ToolsArrowsBlock,
-    ToolsTierListBlock,
-    ToolsScatterplotBlock,
-
-    ToolsRatiosLineChartBlock,
-    ToolsRatiosRankingBlock,
-    ToolsSectionStreamsBlock,
-    ToolsExperienceMarimekkoBlock,
-
-    OpinionBlock
+    ToolsTierListBlock
 }
 /* ---------------------------------------------------------------------- */
 /* ----------------------------  Blocks  -------------------------------- */

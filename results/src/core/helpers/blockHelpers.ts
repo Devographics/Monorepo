@@ -1,12 +1,12 @@
 import get from 'lodash/get'
 import { BlockVariantDefinition, PageContextValue, StringTranslator } from 'core/types'
 import { Entity } from '@devographics/types'
+import { MultiKeysStringTranslator } from '@devographics/i18n'
 import { getSiteTitle } from './pageHelpers'
 import { useI18n } from '@devographics/react-i18n'
 import { useEntities } from 'core/helpers/entities'
 import { usePageContext } from 'core/helpers/pageContext'
 import { removeDoubleSlashes } from './utils'
-import snarkdown from 'snarkdown'
 
 export const replaceOthers = s => s?.replace('_others', '.others')
 
@@ -184,33 +184,26 @@ In order of priority, use:
 3. a generic description key (e.g. user_info.age.description.js2022)
 
 */
-export const getBlockDescriptionKey = (block: BlockVariantDefinition) =>
-    block.descriptionKey ?? `${getBlockKey({ block })}.description`
 export const getBlockDescription = ({
     block,
     pageContext,
-    getString,
+    getFallbacks,
     values,
     options
 }: {
     block: BlockVariantDefinition
     pageContext: PageContextValue
-    getString: StringTranslator
+    getFallbacks: MultiKeysStringTranslator
     values?: any
     options?: {
         isHtml?: boolean
     }
 }) => {
-    const descriptionKey = getBlockDescriptionKey(block)
+    const descriptionKey = `${getBlockKey({ block })}.description`
     const { currentEdition } = pageContext
-    const blockDescription =
-        (block.description && snarkdown(block.description)) ||
-        (block.descriptionId && getString(block.descriptionId, { values })?.tHtml)
-    const editionDescription = getString(`${descriptionKey}.${currentEdition.id}`, {
-        values
-    })?.tHtml
-    const genericDescription = getString(descriptionKey, { values })?.tHtml
-    return blockDescription || editionDescription || genericDescription
+    const keys = [block.descriptionId, `${descriptionKey}.${currentEdition.id}`, descriptionKey]
+    const result = getFallbacks(keys, values)
+    return result
 }
 
 export const useBlockDescription = ({
@@ -224,9 +217,9 @@ export const useBlockDescription = ({
         isHtml?: boolean
     }
 }) => {
-    const { getString } = useI18n()
+    const { getFallbacks } = useI18n()
     const pageContext = usePageContext()
-    return getBlockDescription({ block, pageContext, getString, values, options })
+    return getBlockDescription({ block, pageContext, getFallbacks, values, options })
 }
 
 export const getBlockQuestion = ({
@@ -344,11 +337,13 @@ export const getBlockMeta = ({
     block,
     pageContext,
     getString,
+    getFallbacks,
     title: title_
 }: {
     block: BlockVariantDefinition
     pageContext: PageContextValue
     getString: StringTranslator
+    getFallbacks: MultiKeysStringTranslator
     title?: string
 }) => {
     const { id } = block
@@ -360,7 +355,7 @@ export const getBlockMeta = ({
     const { label: blockTitle } = getBlockTitle({ block, pageContext, getString })
     const title = title_ || blockTitle
 
-    const subtitle = getBlockDescription({ block, pageContext, getString })
+    const subtitle = getBlockDescription({ block, pageContext, getFallbacks })
 
     const imageUrl = getBlockImage({ block, pageContext })
 

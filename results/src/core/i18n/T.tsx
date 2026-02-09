@@ -11,7 +11,7 @@ const getGitHubSearchUrl = (k: string, localeId = 'en') =>
 interface TProps {
     t?: string
     k?: string
-    keysList?: Array<string>
+    keysList?: Array<string | undefined>
     values?: any
     md?: boolean
     html?: boolean
@@ -63,7 +63,9 @@ export const T = ({
             useShort && tShortString && !tShortString.missing ? tShortString : tFullString
 
         if (!translationObject) {
-            throw new Error(`no translationObject object returned for key ${k}`)
+            throw new Error(
+                `no translationObject object returned for key(s) ${k ?? keysList?.join()}`
+            )
         }
 
         props['data-key'] = translationObject.key

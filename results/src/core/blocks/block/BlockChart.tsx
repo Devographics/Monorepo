@@ -101,7 +101,7 @@ export const BlockDescriptionContents = ({ block }: { block: BlockVariantDefinit
     if (blockDescription) {
         return (
             <Description className="Block__Description">
-                <div dangerouslySetInnerHTML={{ __html: blockDescription }} />{' '}
+                <T k={blockDescription.key} html={true} md={true} />{' '}
                 {block.isFreeform && <T k="blocks.freeform" />}
             </Description>
         )
