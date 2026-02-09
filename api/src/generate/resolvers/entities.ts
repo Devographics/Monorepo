@@ -99,11 +99,13 @@ export type EntityResolverMap = {
 }
 
 export const entityResolverMap: EntityResolverMap = {
-    github: async ({ id }) => {
+    github: async entity => {
         // note: for now just get local data from projects.yml
         // instead of actually querying github
         // return getSimulatedGithub(id)
-        return {}
+        return {
+            url: entity.github
+        }
         // const projectObject = projects.find(p => p.id === entity.id)
         // return {
         //     ...projectObject
