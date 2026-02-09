@@ -87,10 +87,10 @@
         queryOptions:
             sectionId: new_apis
 
-      - id: jack_herrington
-        template: picks
-        variables:
-            url: https://tanstack.com/start/latest
+      # - id: jack_herrington
+      #   template: picks
+      #   variables:
+      #       url: https://tanstack.com/start/latest
 
       - id: main_apis_pain_points
         template: multiple_options2_freeform
@@ -205,10 +205,10 @@
       # - id: tier_list
       #   template: tier_list
 
-      - id: sebastien_lorber
-        template: picks
-        variables:
-            url: https://tanstack.com/router/latest
+      # - id: sebastien_lorber
+      #   template: picks
+      #   variables:
+      #       url: https://tanstack.com/router/latest
 
       - id: tools_ratios_over_time
         template: multi_items_ratios
@@ -256,10 +256,10 @@
               parameters:
                   cutoff: 5
 
-            - id: aurora_scharff
-              template: picks
-              variables:
-                  url: https://nuqs.47ng.com/
+            # - id: aurora_scharff
+            #   template: picks
+            #   variables:
+            #       url: https://nuqs.47ng.com/
 
             - id: animation_libraries
               template: multiple_options2_combined
@@ -308,10 +308,10 @@
               i18nNamespace: tools
               template: multiple_options2_freeform
 
-            - id: shaundai_person
-              template: picks
-              variables:
-                  url: https://codetv.dev/
+            # - id: shaundai_person
+            #   template: picks
+            #   variables:
+            #       url: https://codetv.dev/
 
             - id: state_management_pain_points
               template: multiple_options2_freeform
@@ -336,10 +336,10 @@
               i18nNamespace: tools
               template: multiple_options2_freeform
 
-            - id: josh_comeau
-              template: picks
-              variables:
-                  url: https://lucide.dev/
+            # - id: josh_comeau
+            #   template: picks
+            #   variables:
+            #       url: https://lucide.dev/
 
             - id: data_loading_pain_points
               template: multiple_options2_freeform
@@ -373,10 +373,10 @@
               template: multiple_options2_combined
               i18nNamespace: tools
 
-            - id: sacha_greif
-              template: picks
-              variables:
-                  url: https://react-scan.com/
+            # - id: sacha_greif
+            #   template: picks
+            #   variables:
+            #       url: https://react-scan.com/
 
             - id: other_services
               template: multiple_options2_combined
@@ -814,8 +814,8 @@
       - id: conclusion_sebastien
         template: conclusion
         variables:
-            author: sebastien_lorber
-            entities: '"sebastien_lorber"'
+            author: aurora_scharff
+            entities: '"aurora_scharff"'
 
       - id: conclusion_newsletter
         blockType: NewsletterBlock
