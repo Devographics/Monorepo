@@ -253,6 +253,8 @@
             - id: component_libraries_others
               i18nNamespace: tools
               template: multiple_options2_freeform
+              parameters:
+                  cutoff: 5
 
             - id: aurora_scharff
               template: picks
