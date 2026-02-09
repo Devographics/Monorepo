@@ -1,11 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { mq, spacing } from 'core/theme'
-import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'
 import { useI18n } from '@devographics/react-i18n'
-import ReactMarkdown from 'react-markdown'
-import rehypeRaw from 'rehype-raw'
 
 const PageIntroductionBlock = ({ block }) => {
     const context = usePageContext()

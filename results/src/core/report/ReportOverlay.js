@@ -1,8 +1,6 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { mq, spacing, color, fontSize } from 'core/theme'
-// import ReactMarkdown from 'react-markdown'
-// import rehypeRaw from 'rehype-raw'
 import { useInView } from 'react-intersection-observer'
 
 // From 0 (top) to 1(bottom), where in the viewport should the trigger happen
@@ -97,7 +95,7 @@ export const OverlayOnScroll = ({ id, triggerId, setTriggerId, isFirst, isLast, 
     return (
         <OverlayContainer className="OverlayContainer">
             <OverlayContents className="OverlayContents" ref={overlayRef} isTriggered={isTriggered}>
-                <ReactMarkdown rehypePlugins={[rehypeRaw]}>{children}</ReactMarkdown>
+                {/* <ReactMarkdown rehypePlugins={[rehypeRaw]}>{children}</ReactMarkdown> */}
             </OverlayContents>
             <OverlaySpacer className="OverlaySpacer" />
         </OverlayContainer>

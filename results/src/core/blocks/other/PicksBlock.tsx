@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-// import ReactMarkdown from 'react-markdown'
 import { mq, spacing, fontSize, color } from 'core/theme'
 import T from 'core/i18n/T'
 import { usePageContext } from 'core/helpers/pageContext'

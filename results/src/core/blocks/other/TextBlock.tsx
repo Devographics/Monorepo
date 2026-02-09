@@ -1,7 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-// import ReactMarkdown from 'react-markdown'
-// import rehypeRaw from 'rehype-raw'
 
 import { spacing } from 'core/theme'
 import T from 'core/i18n/T'
