@@ -48,12 +48,13 @@ export interface StringTranslator {
     (key: string, values?: ValuesType, fallback?: string): StringTranslatorResult
 }
 
+export type MultiStringKeys = Array<
+    string | undefined | ((values?: ValuesType) => StringTranslatorResult)
+>
 export interface MultiKeysStringTranslator {
-    (
-        keys: Array<string | undefined | ((values?: ValuesType) => StringTranslatorResult)>,
-        values?: ValuesType,
-        fallback?: string
-    ): StringTranslatorResult
+    (keys: MultiStringKeys, values?: ValuesType, fallback?: string): StringTranslatorResult & {
+        keys: MultiStringKeys
+    }
 }
 
 export interface StringTranslatorResult {

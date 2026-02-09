@@ -160,13 +160,14 @@ export function makeTranslationFunction(locale: LocaleParsed) {
                     message = getMessage(keyOrFunction, values)
                 }
                 if (message?.t && !message?.missing) {
-                    return message
+                    return { keys, ...message }
                 }
             }
         }
         // if there are no hits for any of the keys
         const defaultKey = keys.filter(k => typeof k === 'string')[0]
         const defaultResult = {
+            keys,
             t: fallback || defaultKey,
             locale,
             missing: true
