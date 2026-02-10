@@ -184,7 +184,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    gap: var(--halfSpacing);
+    gap: var(--quarterSpacing);
     flex-grow: 1;
 }
 .chart-row-heading-section {
@@ -193,7 +193,7 @@
     display: none;
     font-weight: normal;
     // todo: don't rely on magic value
-    margin-top: -27px;
+    // margin-top: -27px;
     .tabs-wrapper-all_features &,
     .tabs-wrapper-all_libraries & {
         // only show on these two charts

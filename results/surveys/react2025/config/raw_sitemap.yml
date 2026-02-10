@@ -126,7 +126,7 @@
             limit: 10
 
       - id: features_resources
-        items: [fm-react, fm-js-patterns]
+        items: [fm-complete-intro-react-v9, fm-js-patterns]
         template: recommended_resources
 
   # children:
@@ -228,7 +228,7 @@
       #   template: tools_cardinality_by_user_js
 
       - id: libraries_resources
-        items: [fm-nextjs-v3, fm-redux-fundamentals]
+        items: [fm-intermediate-react-v6, fm-web-app-a11y]
         template: recommended_resources
 
   children:
@@ -290,7 +290,7 @@
               i18nNamespace: react_pain_points
 
             - id: component_libraries_resources
-              items: [fm-tailwind-css, fm-design-systems-v2]
+              items: [fm-enterprise-ui-development, fm-ui-development]
               template: recommended_resources
 
       - id: state_management
@@ -318,7 +318,7 @@
               i18nNamespace: react_pain_points
 
             - id: state_management_resources
-              items: [fm-advanced-redux, fm-xstate-react]
+              items: [fm-state-management, fm-xstate-react]
               template: recommended_resources
 
       - id: data_loading
@@ -347,7 +347,7 @@
               i18nNamespaces: react_pain_points, common_pain_points
 
             - id: data_loading_resources
-              items: [fm-client-graphql-react-v2]
+              items: [fm-react-performance-v2, fm-client-graphql-react-v2]
               template: recommended_resources
 
       - id: back_end_infrastructure
@@ -391,7 +391,7 @@
               i18nNamespace: react_pain_points
 
             - id: back_end_infrastructure_resources
-              items: [fm-intermediate-next-js, fm-fullstack]
+              items: [fm-nextjs-v4, fm-fullstack-nextjs-v4]
               template: recommended_resources
 
 - id: other_tools
@@ -426,7 +426,7 @@
         i18nNamespace: tools
 
       - id: tools_others_resources
-        items: [fm-enterprise-ui-dev, fm-react-native-v2]
+        items: [fm-redux-fundamentals, fm-react-native-v3]
         template: recommended_resources
 - id: usage
   path: /usage
@@ -476,7 +476,7 @@
         template: happiness2
 
       - id: usage_resources
-        items: [fm-professional, fm-react]
+        items: [fm-react-typescript-v3, fm-intermediate-next-js]
         template: recommended_resources
 
 - id: resources
@@ -523,7 +523,7 @@
         template: multiple_options2_combined
 
       - id: resources_resources
-        items: [fm-react, fm-primeagen]
+        items: [fm-primeagen]
         template: recommended_resources
 
 # - id: awards

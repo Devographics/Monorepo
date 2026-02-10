@@ -615,7 +615,7 @@ export const Logo = ({ className, animated = true, showText = true, size = 'l' }
                             <tspan data-year-char={1}>{'2'}</tspan>
                             <tspan data-year-char={2}>{'0'}</tspan>
                             <tspan data-year-char={3}>{'2'}</tspan>
-                            <tspan data-year-char={4}>{'4'}</tspan>
+                            <tspan data-year-char={4}>{'5'}</tspan>
                         </text>
                     </g>
                 </g>
@@ -691,7 +691,7 @@ const Wrapper = styled.div`
     }
 
     .sor-logo__wrapper {
-        --color-text-a: #ffeb66;
+        --color-text-a: #eb90f7ff;
         --color-text-b: #95f5e8;
         --color-bg: #182c36;
         --timeline-base-delay: 100ms;

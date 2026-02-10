@@ -23,7 +23,11 @@ export const Note = ({
     if (children) {
         return <div className="chart-note">{children}</div>
     } else if (!note?.missing) {
-        return <T k={note.k} />
+        return (
+            <div className="chart-note">
+                <T k={note.key} />
+            </div>
+        )
     } else {
         return null
     }
