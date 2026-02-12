@@ -6,10 +6,12 @@ import { mq, spacing, fontSize, fontWeight } from 'core/theme'
 import BlockCompletionIndicator from 'core/blocks/block/BlockCompletionIndicator'
 
 const Container = styled.div`
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-column-gap: ${spacing(1.5)};
-    grid-row-gap: ${spacing(1.5)};
+    @media ${mq.large} {
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-column-gap: ${spacing(1.5)};
+        grid-row-gap: ${spacing(1.5)};
+    }
 `
 
 const Item = styled.span`

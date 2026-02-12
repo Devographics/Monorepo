@@ -115,20 +115,7 @@ const SidebarLogoContainer = styled.div`
 
     svg {
         max-height: 36px;
-    }
-`
-const SidebarLogoLink = styled(Link)`
-    grid-area: logo;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    svg {
-        max-height: 36px;
-    }
-
-    &:hover {
-        text-decoration: none;
+        width: 75%;
     }
 `
 
