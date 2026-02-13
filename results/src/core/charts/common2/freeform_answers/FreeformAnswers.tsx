@@ -85,7 +85,7 @@ export const FreeformAnswers = ({
     }
     if (tokenFilter) {
         filteredAnswers = filteredAnswers.filter(answer =>
-            answer.tokens.map(t => t.id).includes(tokenFilter)
+            answer?.tokens?.map(t => t.id).includes(tokenFilter)
         )
     }
     return (
