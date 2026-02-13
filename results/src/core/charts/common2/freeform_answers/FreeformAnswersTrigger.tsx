@@ -9,12 +9,21 @@ import Tooltip from 'core/components/Tooltip'
 import T from 'core/i18n/T'
 import { formatNumber } from '../helpers/format'
 import { Bucket, FacetBucket } from '@devographics/types'
-import { CATCHALL_PREFIX } from '@devographics/constants'
+import { CATCHALL_PREFIX, OTHER_ANSWERS } from '@devographics/constants'
 import { getBlockTitle } from 'core/helpers/blockHelpers'
 import { BlockVariantDefinition } from 'core/types'
 import Button from 'core/components/Button'
 import { FreeformAnswersQueryWrapper } from './FreeformAnswersQueryWrapper'
 import { useAllQuestionsMetadata } from 'core/charts/horizontalBar2/helpers/other'
+
+export type RawDataQueryOptions = {
+    surveyId: string
+    editionId: string
+    sectionId: string
+    questionId: string
+    token: string
+    excludedTokens?: string[]
+}
 
 export const FreeformAnswersTrigger = (props: {
     bucket: Bucket | FacetBucket
@@ -31,13 +40,18 @@ export const FreeformAnswersTrigger = (props: {
 
     const surveyId = pageContext.currentSurvey.id
     const editionId = pageContext.currentEdition.id
-    const queryOptions = {
+    const queryOptions: RawDataQueryOptions = {
         surveyId,
         editionId,
         sectionId: block?.queryOptions?.sectionId || sectionId,
         questionId,
         token: id.replace(CATCHALL_PREFIX, '')
     }
+
+    if (id === OTHER_ANSWERS) {
+        queryOptions.excludedTokens = buckets.map(b => b.id).filter(id => id !== OTHER_ANSWERS)
+    }
+
     const i18nNamespace = block.i18nNamespace || questionId
 
     const allQuestions = useAllQuestionsMetadata()

@@ -42,13 +42,15 @@ export const FreeformAnswerItem = ({
             index={index}
             contents={formattedMessage}
             answer={
-                <Tokens
-                    mainTokenId={tokenId}
-                    allTokens={allTokens}
-                    tokens={tokens}
-                    buckets={buckets}
-                    stateStuff={stateStuff}
-                />
+                tokens ? (
+                    <Tokens
+                        mainTokenId={tokenId}
+                        allTokens={allTokens}
+                        tokens={tokens}
+                        buckets={buckets}
+                        stateStuff={stateStuff}
+                    />
+                ) : null
                 // <>
                 //     {' '}
                 //     {tokens.map(token => (
@@ -190,7 +192,7 @@ const Tokens = ({
     from raw data GraphQL query instead of question buckets.
 
     */
-    const tokenIds = tokens.map(token => token.id)
+    const tokenIds = tokens?.map(token => token.id)
     const prunedBuckets = pruneTree(buckets, tokenIds)
     const leafTokens = getLeavesWithAncestors(prunedBuckets)
     const allBuckets = getFlattenedBucketsTree(buckets)

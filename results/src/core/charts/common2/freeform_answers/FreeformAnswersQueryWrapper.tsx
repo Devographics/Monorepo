@@ -5,6 +5,7 @@ import { RawDataItem, StandardQuestionData, Bucket } from '@devographics/types'
 import { FreeformAnswers } from './FreeformAnswers'
 import { CommentsCommonProps } from '../comments/types'
 import { getEntityFragmentContents } from 'core/queries'
+import { RawDataQueryOptions } from './FreeformAnswersTrigger'
 
 type GetQueryNameProps = {
     editionId: string
@@ -14,14 +15,19 @@ type GetQueryNameProps = {
 const getQueryName = ({ editionId, questionId, token }: GetQueryNameProps) =>
     `${editionId}${questionId}__${token}__RawDataQuery`
 
-type GetQueryProps = {
-    surveyId: string
-    editionId: string
-    sectionId: string
-    questionId: string
-    token: string
-}
-const getQuery = ({ surveyId, editionId, sectionId, questionId, token }: GetQueryProps) => {
+const getRawDataQuery = ({
+    surveyId,
+    editionId,
+    sectionId,
+    questionId,
+    token,
+    excludedTokens
+}: RawDataQueryOptions) => {
+    let excludedTokensString = ''
+    if (excludedTokens && excludedTokens.length > 0) {
+        const excludedTokensFormatted = excludedTokens?.map(t => `"${t}"`).join()
+        excludedTokensString = `excludedTokens: [${excludedTokensFormatted}]`
+    }
     return `
 query ${getQueryName({ editionId, questionId, token })} {
     surveys {
@@ -29,29 +35,27 @@ query ${getQueryName({ editionId, questionId, token })} {
             ${editionId} {
                 ${sectionId} {
                     ${questionId} {
-                        freeform {
-                            rawData(token: "${token}") {
-                                answers {
-                                    responseId
-                                    tokens {
-                                        id
-                                    }
-                                    rawHtml
-                                }
-                                stats {
-                                    count
-                                    word
-                                }
-                                entities {
-                                    ${getEntityFragmentContents()}
-                                }
+                        rawData(token: "${token}", ${excludedTokensString}) {
+                            answers {
+                                responseId
                                 tokens {
                                     id
-                                    parentId
-                                    count
-                                    nameHtml
-                                    descriptionHtml
                                 }
+                                rawHtml
+                            }
+                            stats {
+                                count
+                                word
+                            }
+                            entities {
+                                ${getEntityFragmentContents()}
+                            }
+                            tokens {
+                                id
+                                parentId
+                                count
+                                nameHtml
+                                descriptionHtml
                             }
                         }
                     }
@@ -92,7 +96,7 @@ export const FreeformAnswersQueryWrapper = ({
     useEffect(() => {
         const getData = async () => {
             setIsLoading(true)
-            const query = getQuery(queryOptions)
+            const query = getRawDataQuery(queryOptions)
 
             const url = process.env.GATSBY_API_URL
             if (!url) {
@@ -104,10 +108,11 @@ export const FreeformAnswersQueryWrapper = ({
                 getQueryName(queryOptions)
             )
             const questionData = result?.surveys?.[surveyId]?.[editionId]?.[sectionId]?.[questionId]
-            const answers = questionData?.freeform?.rawData?.answers
-            const stats = questionData?.freeform?.rawData?.stats || []
-            const entities = questionData?.freeform?.rawData?.entities || []
-            const tokens = questionData?.freeform?.rawData?.tokens || []
+            const answers = questionData?.rawData?.answers
+            const stats = questionData?.rawData?.stats || []
+            const entities = questionData?.rawData?.entities || []
+            const tokens = questionData?.rawData?.tokens || []
+
             if (answers) {
                 setData({ answers, stats, entities, tokens })
             }
