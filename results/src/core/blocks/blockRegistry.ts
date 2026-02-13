@@ -26,7 +26,7 @@ import { RatiosByEdition } from 'core/charts/multiItemsRatios/RatiosByEdition'
 // tools
 import ToolsArrowsBlock from 'core/charts/toolsArrows'
 import ToolsTierListBlock from 'core/charts/toolsTierList'
-// import ToolsScatterplotBlock from 'core/charts/toolsScatterplot'
+import ToolsScatterplotBlock from 'core/charts/toolsScatterplot'
 
 // import ToolsRatiosLineChartBlock from 'core/charts/toolsRatiosLineChart'
 // import ToolsRatiosRankingBlock from 'core/charts/toolsRatiosRanking'
@@ -51,7 +51,8 @@ const chartBlocks = {
     MultiItemsRatiosBlock,
 
     ToolsArrowsBlock,
-    ToolsTierListBlock
+    ToolsTierListBlock,
+    ToolsScatterplotBlock
 }
 /* ---------------------------------------------------------------------- */
 /* ----------------------------  Blocks  -------------------------------- */
