@@ -29,6 +29,7 @@
         "@devographics/redis": "workspace:^1.0.0",
         "@devographics/types": "workspace:^1.0.0",
         "@formkit/auto-animate": "^0.8.1",
+        "@nivo/core": "0.80.0",
         "@nivo/scatterplot": "0.80.0",
         "@radix-ui/react-accessible-icon": "^1.0.1",
         "@radix-ui/react-accordion": "^1.0.1",
