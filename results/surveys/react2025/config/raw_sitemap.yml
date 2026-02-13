@@ -312,6 +312,8 @@
             - id: state_management_others
               i18nNamespace: tools
               template: multiple_options2_freeform
+              parameters:
+                  cutoff: 5
 
             # - id: shaundai_person
             #   template: picks
@@ -342,6 +344,8 @@
             - id: data_loading_others
               i18nNamespace: tools
               template: multiple_options2_freeform
+              parameters:
+                  cutoff: 5
 
             # - id: josh_comeau
             #   template: picks
@@ -373,6 +377,8 @@
             - id: meta_frameworks_others
               i18nNamespace: tools
               template: multiple_options2_freeform
+              parameters:
+                  cutoff: 5
 
             - id: build_tools
               template: multiple_options2_combined
