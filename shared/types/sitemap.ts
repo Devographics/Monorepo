@@ -17,6 +17,7 @@ export interface BlockVariantDefinition {
     fieldId: string
     tabId: string
     title: string
+    titleKey: string
     descriptionId: string
     i18nNamespace: string
     template: string

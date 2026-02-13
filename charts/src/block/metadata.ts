@@ -50,7 +50,7 @@ const getBlockTitleKey = ({
 }: {
     block: BlockVariantDefinition
     pageContext: PageContextValue
-}) => block.titleId || getBlockKey({ block, pageContext })
+}) => block.titleKey || getBlockKey({ block, pageContext })
 
 const getBlockTitle = ({
     block,
