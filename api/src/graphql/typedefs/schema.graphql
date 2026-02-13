@@ -314,6 +314,10 @@ input Parameters {
     enableAddMissingBuckets: Boolean
 }
 
+input RawDataParameters {
+    limit: Int
+}
+
 input CommentParameters {
     limit: Int
     skip: Int

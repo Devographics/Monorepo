@@ -46,6 +46,7 @@ export type StandardQuestionData = QuestionData & {
     entity: Entity
     comments: ItemComments
     _metadata: QuestionMetadata
+    rawData?: RawDataItem
 } & {
     [key in Exclude<
         ResultsSubFieldEnum,
@@ -53,6 +54,7 @@ export type StandardQuestionData = QuestionData & {
         | ResultsSubFieldEnum.ID
         | ResultsSubFieldEnum.ENTITY
         | ResultsSubFieldEnum.COMMENTS
+        | ResultsSubFieldEnum.RAW_DATA
     >]: ResponseData
 }
 
@@ -106,8 +108,6 @@ export interface Comment {
 export interface ResponseData {
     allEditions: ResponseEditionData[]
     currentEdition: ResponseEditionData
-    rawData: RawDataItem
-    rawDataStats: WordCount[]
 }
 
 export interface ResponseEditionData {

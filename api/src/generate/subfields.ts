@@ -153,7 +153,7 @@ export const subFields: Array<SubField> = [
     {
         id: ResultsSubFieldEnum.RAW_DATA,
         def: () =>
-            `${ResultsSubFieldEnum.RAW_DATA}(token: String, sort: RawDataSortSpecifier): RawData`,
+            `${ResultsSubFieldEnum.RAW_DATA}(token: String, sort: RawDataSortSpecifier, parameters: RawDataParameters, excludedTokens: [String]): RawData`,
         addIf: ({ normPaths }) => !!normPaths?.other,
         resolverFunction: rawDataResolver
     }

@@ -13,9 +13,10 @@ import {
 } from '../types'
 import { getCollection } from '../helpers/db'
 import get from 'lodash/get.js'
-import { NormalizationMetadata, RawDataAnswer } from '@devographics/types'
-import { NO_MATCH } from '@devographics/constants'
+import { NormalizationMetadata, RawDataAnswer, ResponseDocument } from '@devographics/types'
+import { NO_MATCH, OTHER_ANSWERS } from '@devographics/constants'
 import { cleanHtmlString, parseHtmlString, sanitizeHtmlString } from '../helpers/strings'
+import { Filter } from 'mongodb'
 
 type GetRawDataOptions = {
     survey: SurveyApiObject
@@ -24,6 +25,7 @@ type GetRawDataOptions = {
     question: QuestionApiObject
     context: RequestContext
     token?: string
+    excludedTokens?: string[]
 }
 
 export const getRawData = async ({
@@ -32,7 +34,8 @@ export const getRawData = async ({
     section,
     question,
     context,
-    token
+    token,
+    excludedTokens
 }: GetRawDataOptions) => {
     const { db } = context
     const collection = getCollection(db, survey)
@@ -41,10 +44,17 @@ export const getRawData = async ({
         const metadataPath = normPaths.metadata as string
         const normalizedPath = normPaths.other as string
 
-        const selector = { editionId: edition.id, [metadataPath]: { $exists: true, $ne: '' } }
-        if (token) {
+        const selector: Filter<ResponseDocument> = {
+            editionId: edition.id,
+            [metadataPath]: { $exists: true, $ne: '' }
+        }
+        if (token && token !== OTHER_ANSWERS) {
             // if token is specified, only get responses that contain it
             selector[normalizedPath] = token
+        }
+        if (excludedTokens) {
+            // if excludedTokens is specified, only get responses that *don't* contain them
+            selector[normalizedPath] = { $nin: excludedTokens }
         }
         const projection = { _id: 1, [metadataPath]: 1, [normalizedPath]: 1, createdAt: 1 }
 
@@ -74,7 +84,7 @@ export const getRawData = async ({
             })
             .flat()
 
-        if (token) {
+        if (token && token !== OTHER_ANSWERS) {
             // since we can have multiple answers per response, some of them might
             // not contain the token we're filtering by, or even no tokens at all
             data = data.filter(answer => {

@@ -17,16 +17,24 @@ type RawDataSortSpecifier = {
     property?: RawDataSortProperty
     order?: SortOrder
 }
+type RawDataParameters = {
+    limit?: number
+}
+type RawDataExcludeParameters = {
+    cutoff?: number
+    limit?: number
+}
 type RawDataArgs = {
     token?: string
     sort?: RawDataSortSpecifier
+    parameters?: RawDataParameters
+    excludedTokens?: string[]
 }
 
 export const rawDataResolver: ResolverType = async (parent, args: RawDataArgs, context, info) => {
     console.log('// rawDataResolver')
     const { survey, edition, section, question, responseArguments } = parent
-    const { token, sort = {} } = args
-    const { parameters } = responseArguments || {}
+    const { token, sort = {}, parameters, excludedTokens } = args
     const { limit } = parameters || {}
     const { property = RawDataSortProperty.ALPHABETICAL, order = OrderOptions.ASC } = sort
     // helper function to get count of how many times a token appears across all answers
@@ -34,7 +42,15 @@ export const rawDataResolver: ResolverType = async (parent, args: RawDataArgs, c
         answers?.filter(a => a.tokens && a.tokens.map(t => t.id).includes(tokenId)).length
 
     // get all raw answers for this question
-    let answers = await getRawData({ survey, edition, section, question, context, token })
+    let answers = await getRawData({
+        survey,
+        edition,
+        section,
+        question,
+        context,
+        token,
+        excludedTokens
+    })
 
     if (limit) {
         answers = take(answers, limit)
