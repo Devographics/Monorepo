@@ -1,6 +1,7 @@
 // @ts-ignore: we don't have typings for the variables
 import variables from 'Config/variables.yml'
 import { ToolsQuadrantsMetric } from '../types'
+import round from 'lodash/round.js'
 
 const { totalCountRounded } = variables
 
@@ -19,7 +20,7 @@ export const staticProps = {
     margin: { top: 20, right: 0, bottom: 70, left: 70 },
     nodeRadius: 7,
     nodeCaptureRadius: 16,
-    formatPercentage: (value: number) => `${value}%`,
+    formatPercentage: (value: number) => `${round(value, 1)}%`,
     quadrantBorder: 2
 }
 
