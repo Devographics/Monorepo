@@ -20,6 +20,7 @@ export interface RawLocale {
 export interface StringFile {
     strings: TranslationStringObject[]
     context: string
+    subDir?: string
     url?: string
 }
 
