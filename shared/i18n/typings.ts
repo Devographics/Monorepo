@@ -51,10 +51,10 @@ export interface StringTranslator {
 export type MultiStringKeys = Array<
     string | undefined | ((values?: ValuesType) => StringTranslatorResult)
 >
+
+export type MultiKeysStringTranslatorResult = StringTranslatorResult & { keys: MultiStringKeys }
 export interface MultiKeysStringTranslator {
-    (keys: MultiStringKeys, values?: ValuesType, fallback?: string): StringTranslatorResult & {
-        keys: MultiStringKeys
-    }
+    (keys: MultiStringKeys, values?: ValuesType, fallback?: string): MultiKeysStringTranslatorResult
 }
 
 export interface StringTranslatorResult {

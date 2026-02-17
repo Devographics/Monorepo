@@ -6,7 +6,8 @@ import type {
     StringTranslator,
     StringTranslatorResult,
     LocaleParsed,
-    MultiKeysStringTranslator
+    MultiKeysStringTranslator,
+    MultiKeysStringTranslatorResult
 } from './typings'
 
 const findString = (key: string, strings: Translation[]) => {
@@ -160,19 +161,30 @@ export function makeTranslationFunction(locale: LocaleParsed) {
                     message = getMessage(keyOrFunction, values)
                 }
                 if (message?.t && !message?.missing) {
-                    return { keys, ...message }
+                    const result: Partial<MultiKeysStringTranslatorResult> = { keys, ...message }
+                    if (typeof keyOrFunction === 'string') {
+                        result.key = keyOrFunction
+                    }
+                    return result as MultiKeysStringTranslatorResult
                 }
             }
         }
         // if there are no hits for any of the keys
         const defaultKey = keys.filter(k => typeof k === 'string')[0]
-        const defaultResult = {
+        const defaultResult: Partial<MultiKeysStringTranslatorResult> = {
             keys,
-            t: fallback || defaultKey,
             locale,
             missing: true
         }
-        return defaultResult
+        if (fallback) {
+            defaultResult.t = fallback
+            defaultResult.key = 'fallback'
+        }
+        if (defaultKey) {
+            defaultResult.t = defaultKey
+            defaultResult.key = defaultKey
+        }
+        return defaultResult as MultiKeysStringTranslatorResult
     }
 
     /**
