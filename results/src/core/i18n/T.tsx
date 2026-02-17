@@ -68,7 +68,7 @@ export const T = ({
             )
         }
 
-        props['data-key'] = translationObject.key
+        props['data-key'] = translationObject.key || 'no-key'
 
         const handleClick = (e: React.MouseEvent<any>) => {
             // note: `fallback` here denotes whether a string is itself a fallback for a missing string

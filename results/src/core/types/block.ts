@@ -55,6 +55,7 @@ export interface BlockVariantDefinition {
     template?: string
     blockType?: string
     tabId?: string
+    titleKey?: string
     titleId?: string
     questionKey?: string
     description?: string

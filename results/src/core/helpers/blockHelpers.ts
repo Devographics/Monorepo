@@ -21,9 +21,9 @@ export const getBlockNamespace = ({ block }: { block: BlockVariantDefinition }) 
 }
 
 export const getBlockKey = ({ block }: { block: BlockVariantDefinition }) => {
-    const namespace = getBlockNamespace({ block })
+    // const namespace = getBlockNamespace({ block })
     const blockId = block?.fieldId || block?.id
-    return `${namespace}.${blockId}`
+    return `${block.sectionId}.${blockId}`
 }
 
 export const getBlockTabKey = ({
@@ -128,7 +128,7 @@ export const getBlockTitle = (options: {
         block: { ...block, i18nNamespace: block.sectionId, id: block.fieldId || block.id }
     })
 
-    const keys: MultiStringKeys = [block.titleId, blockKey_, block.tabId, fieldKey]
+    const keys: MultiStringKeys = [block.titleKey, block.titleId, blockKey_, block.tabId, fieldKey]
 
     const entity = entities?.find(e => e.id === block.id)
     if (entity) {

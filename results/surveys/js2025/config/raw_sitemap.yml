@@ -418,7 +418,6 @@
         template: page_introduction
 
       - id: all_tools_experience
-        titleId: tools.all_items.experience
         template: multi_items_experience
         i18nNamespace: tools
         queryOptions:
@@ -881,12 +880,10 @@
         template: multiple_options2_combined
 
       - id: state_of_the_web_happiness
-        titleId: happiness.state_of_the_web
         questionKey: happiness.state_of_the_web.question
         template: happiness2
 
       - id: state_of_js_happiness
-        titleId: happiness.state_of_js
         questionKey: happiness.state_of_js.question
         template: happiness2
 
