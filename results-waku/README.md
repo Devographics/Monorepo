@@ -1,6 +1,6 @@
 # results-waku
 
-Minimal Waku scaffold for the results migration.
+Minimal Waku app used for the `results` migration.
 
 ## Setup
 
@@ -13,6 +13,9 @@ pnpm install
 ```sh
 pnpm -C results-waku run dev
 ```
+
+Set env values in `results-waku/.env` (see `.env.example`) before running if you want
+locale data from the API.
 
 ## Build
 
