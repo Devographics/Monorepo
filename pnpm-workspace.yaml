@@ -9,6 +9,7 @@ packages:
     - 'surveyform'
     - 'surveyadmin'
     - 'results'
+    - 'results-waku'
     - 'results-astro'
     - 'results-remix'
     - 'charts'
