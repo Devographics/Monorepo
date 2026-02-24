@@ -42,6 +42,7 @@ export const loadAllLocally = async (options: LoadAllOptions = {}): Promise<RawL
 
             const localeRawData: RawLocale = { ...localeConfig, stringFiles: [] }
             i++
+
             console.log(`-> loading directory ${localeDirName} locally (${i}/${allLocales.length})`)
 
             // start recursive function
@@ -80,21 +81,14 @@ export const loadAllLocally = async (options: LoadAllOptions = {}): Promise<RawL
                     localeRawData
                 )
 
-                const existingLocaleIndex = locales.findIndex(l => l.id === localeRawData.id)
-                if (existingLocaleIndex !== -1) {
-                    locales[existingLocaleIndex] = mergeLocales(
-                        locales[existingLocaleIndex],
-                        localeRawData
-                    )
-                } else {
-                    locales.push(localeRawData)
-                }
                 // recursively call walkDirectory on all subdirectories
                 for (const subDir of subDirectories) {
                     await walkDirectory(currentPath + '/' + subDir.name, subDir.name)
                 }
             }
             await walkDirectory(localeDirPath)
+
+            locales.push(localeRawData)
         }
     }
     return locales
