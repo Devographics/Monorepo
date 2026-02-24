@@ -887,3 +887,8 @@ type CardinalitiesItem {
     id: String
     responses(parameters: Parameters): Responses
 }
+
+type Codebook {
+    entities: [Entity]
+    entitiesCount: Int
+}

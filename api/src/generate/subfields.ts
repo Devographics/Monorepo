@@ -62,27 +62,15 @@ export const subFields: Array<SubField> = [
         }
     },
     {
-        id: ResultsSubFieldEnum.RELEVANT_ENTITIES,
-        def: () => `${ResultsSubFieldEnum.RELEVANT_ENTITIES}: [Entity]`,
+        id: ResultsSubFieldEnum.CODEBOOK,
+        def: () => `${ResultsSubFieldEnum.CODEBOOK}: Codebook`,
         addIf: ({ normPaths }) => !!normPaths?.other,
         resolverFunction: async ({ question }) => {
-            console.log('// question relevant entities resolver')
+            console.log('// question codebook resolver')
             const matchTags = question?.matchTags
             const allEntities = await getEntities({ includeNormalizationEntities: true })
-            const _entities = allEntities.filter(e => intersection(e.tags, matchTags).length > 0)
-            return _entities
-        }
-    },
-    {
-        id: ResultsSubFieldEnum.RELEVANT_ENTITIES_COUNT,
-        def: () => `${ResultsSubFieldEnum.RELEVANT_ENTITIES_COUNT}: Int`,
-        addIf: ({ normPaths }) => !!normPaths?.other,
-        resolverFunction: async ({ question }) => {
-            console.log('// question relevant entities count resolver')
-            const matchTags = question?.matchTags
-            const allEntities = await getEntities({ includeNormalizationEntities: true })
-            const _entities = allEntities.filter(e => intersection(e.tags, matchTags).length > 0)
-            return _entities.length
+            const entities = allEntities.filter(e => intersection(e.tags, matchTags).length > 0)
+            return { entities, entitiesCount: entities.length }
         }
     },
     {

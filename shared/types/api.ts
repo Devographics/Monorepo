@@ -22,8 +22,7 @@ export enum ResultsSubFieldEnum {
     ENTITY = 'entity',
     ID = 'id',
     METADATA = '_metadata',
-    RELEVANT_ENTITIES = 'entities',
-    RELEVANT_ENTITIES_COUNT = 'entitiesCount',
+    CODEBOOK = '_codebook',
     RAW_DATA = 'rawData'
 }
 
@@ -39,8 +38,8 @@ export const subfieldDocs = {
         'Data resulting from a practically unlimited, yet still predefined list of options (such as a list of all Best of JS projects, or all GitHub repos).',
     [ResultsSubFieldEnum.ENTITY]: 'The entity associated with this question.',
     [ResultsSubFieldEnum.OPTIONS]: 'The predefined options associated with this question.',
-    [ResultsSubFieldEnum.RELEVANT_ENTITIES]:
-        "Relevant entities that could potentially match the question's contents",
+    [ResultsSubFieldEnum.CODEBOOK]:
+        "Codebook containing relevant entities that could potentially match the question's contents",
     [ResultsSubFieldEnum.FOLLOWUPS]: null,
     [ResultsSubFieldEnum.MEDIANS]: null,
     [ResultsSubFieldEnum.ID]: null,
