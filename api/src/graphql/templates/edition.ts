@@ -46,6 +46,7 @@ export const generateEditionType = ({
         typeName,
         typeDef: `type ${typeName} {
     _metadata: EditionMetadata
+    _codebook: Codebook
     ${
         allSections.length > 0
             ? allSections

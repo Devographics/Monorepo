@@ -17,7 +17,7 @@ import { getEditionItems } from './helpers'
 import { stringOrInt } from '../graphql/string_or_int'
 import { GraphQLScalarType } from 'graphql'
 import { localesResolvers } from './resolvers/locales'
-import { ApiSectionTypes } from '@devographics/types'
+import { ApiSectionTypes, ResultsSubFieldEnum } from '@devographics/types'
 import { sitemapBlockResolverMap } from './resolvers/sitemap'
 import StringOrFloatOrArray from '../graphql/string_or_array'
 import { CARDINALITIES_ID, ITEMS_ID } from '@devographics/constants'
@@ -34,6 +34,7 @@ import {
 import { getSectionResolver, sectionMetadataResolverMap } from './resolvers/sections'
 import {
     editionMetadataResolverMap,
+    getEditionCodebookResolver,
     getEditionMetadataResolver,
     getEditionResolver
 } from './resolvers/editions'
@@ -146,6 +147,10 @@ export const generateResolvers = async ({
 
                     resolvers[editionTypeObject.typeName] = {
                         _metadata: getEditionMetadataResolver({ survey, edition }),
+                        [ResultsSubFieldEnum.CODEBOOK]: getEditionCodebookResolver({
+                            survey,
+                            edition
+                        }),
                         ...(edition.sections ? editionFieldsResolvers : {})
                     }
                 }

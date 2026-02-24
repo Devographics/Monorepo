@@ -1,10 +1,12 @@
-import { ResultsSubFieldEnum } from '@devographics/types'
+import { Entity, ResultsSubFieldEnum } from '@devographics/types'
 import { getGenericCacheKey, genericComputeFunction } from '../../compute'
 import { useCache } from '../../helpers/caching'
 import { EditionApiObject, RequestContext, ResolverType, SurveyApiObject } from '../../types'
 import { getEditionById } from '../helpers'
 import { EditionSectionMetadataArgs, filterItems } from '../resolvers'
-
+import { getEntities } from '../../load/entities'
+import intersection from 'lodash/intersection.js'
+import uniqBy from 'lodash/uniqBy.js'
 /*
 
 Responses
@@ -79,13 +81,43 @@ export const getEditionMetadataResolver =
     async (parent, args, context, info) => {
         console.log(`// edition metadata resolver: ${edition.id}`)
         const freshEdition = await getEditionById(edition.id)
-        const sections = freshEdition.sections.map(section => ({
-            ...section,
-            questions: section.questions
-                .filter(question => question?.editions?.includes(edition.id))
-                .map(q => ({ ...q, editionId: edition.id }))
-        }))
-        return { ...freshEdition, surveyId: survey.id, survey, sections }
+        /* 
+        
+        none of this seems necessary?
+
+        */
+        // const sections = freshEdition.sections.map(section => ({
+        //     ...section,
+        //     questions:
+        //         section.questions &&
+        //         section.questions
+        //             .filter(question => question?.editions?.includes(edition.id))
+        //             .map(q => ({ ...q, editionId: edition.id }))
+        // }))
+        return { ...freshEdition, surveyId: survey.id, survey }
+    }
+
+export const getEditionCodebookResolver =
+    ({ survey, edition }: { survey: SurveyApiObject; edition: EditionApiObject }): ResolverType =>
+    async (parent, args, context, info) => {
+        console.log(`// edition codebook resolver: ${edition.id}`)
+        const allEntities = await getEntities({ includeNormalizationEntities: true })
+
+        const freshEdition = await getEditionById(edition.id)
+        let entities: Entity[] = []
+        for (const section of freshEdition.sections) {
+            if (section.questions) {
+                for (const question of section.questions) {
+                    const matchTags = question?.matchTags
+                    const questionEntities = allEntities.filter(
+                        e => intersection(e.tags, matchTags).length > 0
+                    )
+                    entities = [...entities, ...questionEntities]
+                }
+            }
+        }
+        entities = uniqBy(entities, e => e.id)
+        return { entities, entitiesCount: entities.length }
     }
 
 export const currentEditionResolver: ResolverType = async (parent, args, context, info) => {
