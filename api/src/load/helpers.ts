@@ -63,17 +63,21 @@ const htmlEntitiesRegex = new RegExp(/&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-fA-F]{1,6}
 
 export const parseEntitiesMarkdown = (entities: Entity[]) => {
     for (const entity of entities) {
-        for (const fieldName of markdownFields) {
-            let field = entity[fieldName]
-            if (field) {
-                field = field?.trimStart().trimEnd()
-                entity[fieldName] = field
-                const fieldHtml = marked.parseInline(field)
-                entity[`${fieldName}Html`] = sanitizeHtml(fieldHtml)
-                entity[`${fieldName}Clean`] = cleanHtmlString(fieldHtml)
-                    .replace(htmlEntitiesRegex, '')
-                    .replace('\n', '')
+        try {
+            for (const fieldName of markdownFields) {
+                let field = entity[fieldName]
+                if (field) {
+                    field = field?.trimStart().trimEnd()
+                    entity[fieldName] = field
+                    const fieldHtml = marked.parseInline(field)
+                    entity[`${fieldName}Html`] = sanitizeHtml(fieldHtml)
+                    entity[`${fieldName}Clean`] = cleanHtmlString(fieldHtml)
+                        .replace(htmlEntitiesRegex, '')
+                        .replace('\n', '')
+                }
             }
+        } catch (error) {
+            throw new Error(`parseEntitiesMarkdown error for entity [${entity.id}]`)
         }
     }
     return entities
