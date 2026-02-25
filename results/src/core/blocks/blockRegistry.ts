@@ -77,6 +77,7 @@ import ConclusionBlock from 'core/blocks/other/ConclusionBlock'
 import NotFoundBlock from 'core/blocks/other/NotFoundBlock'
 import CreditsBlock from 'core/blocks/other/CreditsBlock'
 
+import FigureBlock from 'core/blocks/other/FigureBlock'
 import HintBlock from 'core/blocks/other/HintBlock'
 import AboutBlock from 'core/blocks/other/AboutBlock'
 import HowToHelpBlock from 'core/blocks/other/HowToHelpBlock'
@@ -109,7 +110,8 @@ const otherBlocks = {
     LivestreamBlock,
     TakeawaysBlock,
     DataExplorerBlock,
-    HighlightBlock
+    HighlightBlock,
+    FigureBlock
 }
 
 export default { ...chartBlocks, ...otherBlocks }
