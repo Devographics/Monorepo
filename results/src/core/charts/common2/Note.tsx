@@ -25,7 +25,7 @@ export const Note = ({
     } else if (!note?.missing) {
         return (
             <div className="chart-note">
-                <T k={note.key} />
+                <T k={note.key} html={true} md={true} />
             </div>
         )
     } else {
