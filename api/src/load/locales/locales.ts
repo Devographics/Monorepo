@@ -9,7 +9,7 @@ import {
     processLocales
 } from '../../helpers/locales'
 import { loadAllLocally } from './local'
-import { loadAllFromGitHub } from './github'
+import { loadLocalesFromGitHub } from './github'
 
 let RawLocales: RawLocale[] = []
 let Locales: Locale[] = []
@@ -140,7 +140,7 @@ export const loadLocales = async (
     const locales =
         mode === 'local'
             ? await loadAllLocally({ localeIds, localeContexts })
-            : await loadAllFromGitHub({ localeIds, localeContexts })
+            : await loadLocalesFromGitHub({ localeIds, localeContexts })
     console.log('🌐 done loading locales')
     return locales
 }

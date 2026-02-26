@@ -28,6 +28,7 @@ import {
     highlightEntitiesExampleCode,
     parseEntitiesMarkdown
 } from './helpers'
+import { getOctokit } from '../external_apis'
 
 let Entities: Entity[] = []
 
@@ -52,9 +53,14 @@ export const loadOrGetEntities = async (
 /*                                       Load From GitHub                                  */
 /* --------------------------------------------------------------------------------------- */
 
-export const loadFromGitHub = async () => {
-    const octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
-    const entitiesPathArray = parseEnvVariableArray(getEnvVar(EnvVar.GITHUB_PATH_ENTITIES))
+export const loadEntitiesFromGitHub = async () => {
+    const octokit = getOctokit()
+    const entitiesPathArray = parseEnvVariableArray(
+        getEnvVar(EnvVar.GITHUB_PATH_ENTITIES, {
+            hardFail: true,
+            calledFrom: 'loadEntitiesFromGitHub'
+        })
+    )
 
     let entities: Entity[] = []
 
@@ -195,7 +201,8 @@ export const getEntitiesLoadMethod = () => (getEnvVar(EnvVar.ENTITIES_PATH) ? 'l
 export const loadEntities = async () => {
     const mode = getEntitiesLoadMethod()
     console.log(`// loading entities (mode: ${mode})`)
-    const entities: Entity[] = mode === 'local' ? await loadLocally() : await loadFromGitHub()
+    const entities: Entity[] =
+        mode === 'local' ? await loadLocally() : await loadEntitiesFromGitHub()
     console.log('// done loading entities')
     logToFile('entities.json', entities, { mode: 'overwrite' })
     return entities

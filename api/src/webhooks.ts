@@ -3,6 +3,7 @@ import { checkMainPushAction, verifyGhWebhookMiddleware } from './external_apis'
 import { reinitialize } from './init'
 import { RequestContext } from './types'
 import { initLocales, reloadLocale } from './load/locales/locales'
+import { EnvVar, getEnvVar } from '@devographics/helpers'
 
 /**
  * Hooks to be registered on "/gh"
@@ -83,8 +84,12 @@ export function ghActions(context: RequestContext): Router {
         json(),
 
         async function (req, res) {
-            const secretKey = req.query.secretKey as string
-            if (secretKey !== process.env.I18N_SECRET_KEY) {
+            const i18nSecretKey = getEnvVar(EnvVar.I18N_SECRET_KEY, {
+                hardFail: true,
+                calledFrom: 'ghActions'
+            })
+
+            if ((req.query.secretKey as string) !== i18nSecretKey) {
                 return res.status(400).send('Missing or wrong secret key')
             }
             const localeRepo = req.query.locale as string

@@ -19,6 +19,8 @@ hljs.registerLanguage('graphql', graphql)
 hljs.registerLanguage('json', json)
 import trim from 'lodash/trim.js'
 import { cleanHtmlString } from '../helpers/strings'
+import { EnvVar, getEnvVar } from '@devographics/helpers'
+import { DEFAULT_ASSETS_URL } from '@devographics/constants'
 
 // entities
 
@@ -121,7 +123,11 @@ export const getAllAvatars = async ({ entities }: { entities: Entity[] }) => {
 }
 
 export const getAvatar = async ({ entity }: { entity: Entity }) => {
-    const avatarUrl = `${process.env.ASSETS_URL}/avatars/${entity.id}.jpg`
+    const avatarUrl = `${getEnvVar(EnvVar.ASSETS_URL, {
+        hardFail: true,
+        default: DEFAULT_ASSETS_URL,
+        calledFrom: 'getAvatar'
+    })}/avatars/${entity.id}.jpg`
     const imageExists = await checkImageExists(avatarUrl)
     if (imageExists) {
         return { url: avatarUrl } as Avatar
@@ -130,7 +136,11 @@ export const getAvatar = async ({ entity }: { entity: Entity }) => {
 
 // version that doesn't actually check, to save time
 export const getAvatarAlways = ({ entity }: { entity: Entity }) => {
-    const avatarUrl = `${process.env.ASSETS_URL}/avatars/${entity.id}.jpg`
+    const avatarUrl = `${getEnvVar(EnvVar.ASSETS_URL, {
+        hardFail: true,
+        default: DEFAULT_ASSETS_URL,
+        calledFrom: 'getAvatarAlways'
+    })}/avatars/${entity.id}.jpg`
     return { url: avatarUrl } as Avatar
 }
 

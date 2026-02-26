@@ -1,13 +1,12 @@
 import { RequestContext } from '../types'
-import { AppSettings } from './settings'
 
 import NodeCache from 'node-cache'
-import { appSettings } from '../server'
 const nodeCache = new NodeCache()
 import compact from 'lodash/compact.js'
 import fs from 'fs'
 import path from 'path'
 import { logToFile } from '@devographics/debug'
+import { EnvVar, getEnvVar } from '@devographics/helpers'
 
 const cacheDir = `.cache`
 
@@ -48,30 +47,7 @@ export const computeKey = (funcOrFuncName: Function | string, funcOptions?: any)
         )
     }
 
-    return `${process.env.APP_NAME}__func_${name}(${serializedOptions})`
-}
-
-/**
- * Figure out if cache should be enabled for this request
- */
-const getEnableCache = (
-    context: RequestContext,
-    appSettings: AppSettings,
-    enableCache?: boolean
-) => {
-    if (typeof enableCache !== 'undefined') {
-        // if cache is specified through query parameters, respect that value
-        return enableCache
-    } else if (appSettings.disableCache || context.disableCache || context.isDebug) {
-        // cache is disabled on an app-wide basis
-        // or cache is disabled on a per-request basis,
-        // either manually through disablecache header
-        // or because this is debug mode
-        return false
-    } else {
-        // default to enabling cache
-        return true
-    }
+    return `${getEnvVar(EnvVar.APP_NAME)}__func_${name}(${serializedOptions})`
 }
 
 /**
@@ -80,7 +56,7 @@ const getEnableCache = (
  */
 export const useCache = async <F extends DynamicComputeCall>(options: {
     func: F
-    context?: RequestContext
+    context: RequestContext
     funcOptions?: any
     // args?: ArgumentTypes<F>
     key?: string
@@ -89,8 +65,21 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
 }): Promise<ResultType<F>> => {
     const startedAt = new Date()
     const { func, context, key, funcOptions = {}, enableLog = true } = options
-    const { redisClient, isDebug = false } = context || {}
-    const { disableCache, cacheType } = appSettings
+    const { isDebug = false } = context || {}
+
+    const cacheType = getEnvVar(EnvVar.CACHE_TYPE, { default: 'local' })
+    const envDisableCache = getEnvVar(EnvVar.DISABLE_CACHE, { default: true })
+
+    // else default to enabling cache
+    let enableCache = true
+    if (typeof options.enableCache !== 'undefined') {
+        // set to value of options.enableCache if it's defined
+        enableCache = options.enableCache
+    } else if (envDisableCache || context?.disableCache || isDebug) {
+        // but disable it if needed
+        enableCache = false
+    }
+
     let value, verb
 
     if (!key) {
@@ -99,11 +88,6 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
 
     // always pass context to cached function just in case it's needed
     const funcOptionsWithContext = { ...funcOptions, context }
-
-    const enableCache = context && getEnableCache(context, appSettings, options.enableCache)
-
-    const settings = { isDebug, disableCache, cacheType }
-    const settingsLogs = JSON.stringify(settings)
 
     if (enableCache) {
         const existingCachedValue = await getCache(key, context)
@@ -127,6 +111,8 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     }
     const finishedAt = new Date()
     if (enableLog) {
+        const settings = { isDebug, enableCache, cacheType }
+        const settingsLogs = JSON.stringify(settings)
         console.log(
             `> ${verb} for key: ${key} in ${
                 finishedAt.getTime() - startedAt.getTime()
@@ -136,10 +122,14 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     return value
 }
 
+const defaultLogsPath = './logs'
+
 export const getCache = async (key: string, context: RequestContext) => {
-    const { cacheType } = appSettings
+    const cacheType = getEnvVar(EnvVar.CACHE_TYPE, { default: 'local' })
     if (cacheType === 'local') {
-        const dataFilePath = `${process.env.LOGS_PATH}/${cacheDir}/${key}.json`
+        const dataFilePath = `${getEnvVar(EnvVar.LOGS_PATH, {
+            default: defaultLogsPath
+        })}/${cacheDir}/${key}.json`
         const existingData = await getLocalJSON({
             localPath: dataFilePath
         })
@@ -149,19 +139,24 @@ export const getCache = async (key: string, context: RequestContext) => {
         const value: string | undefined = nodeCache.get(key)
         return value && JSON.parse(value)
     } else {
-        const value = await context.redisClient.get(key)
-        let parsedValue = JSON.parse(value)
-        if (typeof parsedValue === 'string') {
-            // somehow cached values can get "over-stringified"?
-            // see https://stackoverflow.com/a/51955729/649299
-            parsedValue = JSON.parse(parsedValue)
+        try {
+            const value = await context.redisClient.get(key)
+            let parsedValue = JSON.parse(value)
+            if (typeof parsedValue === 'string') {
+                // somehow cached values can get "over-stringified"?
+                // see https://stackoverflow.com/a/51955729/649299
+                parsedValue = JSON.parse(parsedValue)
+            }
+            return parsedValue
+        } catch (error) {
+            console.log(`getCache failed on redis for key ${key} with error:`)
+            console.log(error)
         }
-        return parsedValue
     }
 }
 
 export const setCache = async (key: string, value: any, context: RequestContext) => {
-    const { cacheType } = appSettings
+    const cacheType = getEnvVar(EnvVar.CACHE_TYPE, { default: 'local' })
     if (cacheType === 'local') {
         await logToFile(`${cacheDir}/${key}.json`, value, {
             mode: 'overwrite'
@@ -172,7 +167,7 @@ export const setCache = async (key: string, value: any, context: RequestContext)
         try {
             await context.redisClient.set(key, JSON.stringify(value))
         } catch (error) {
-            console.log(`setCache failed for key ${key} with error:`)
+            console.log(`setCache failed on redis for key ${key} with error:`)
             console.log(error)
         }
     }

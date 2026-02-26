@@ -41,13 +41,11 @@ import { ghActions, ghWebhooks } from './webhooks'
 import { initProjects } from './load/projects'
 import { getEntitiesLoadMethod, loadOrGetEntities } from './load/entities'
 import { getLocaleIds, getLocalesLoadMethod } from './load/locales/locales'
-import { loadSettings } from './helpers/settings'
 import { getLikeHandler } from './routes/like'
 import { getLikesHandler } from './routes/likes'
 
 const envPath = process.env.ENV_FILE ? process.env.ENV_FILE : '.env'
 dotenv.config({ path: envPath })
-export const appSettings = loadSettings()
 
 const app = express()
 
@@ -81,7 +79,11 @@ const isDev = process.env.NODE_ENV === 'development'
  * @param func
  */
 const checkSecretKey = async (req: Request, res: Response, func: () => Promise<void>) => {
-    if (req?.query?.key !== process.env.SECRET_KEY) {
+    const secretKey = getEnvVar(EnvVar.SECRET_KEY, {
+        hardFail: true,
+        calledFrom: 'checkSecretKey'
+    })
+    if (req?.query?.key !== secretKey) {
         // throw new Error('Authorization error')
         res.status(401).send('Not authorized')
     } else {
@@ -103,6 +105,11 @@ const start = async () => {
     dotenv.config(config)
     const appName = AppName.API
     setAppName(appName)
+
+    const isDev = process.env.NODE_ENV === 'development'
+    // call getConfig the first time and show warnings if this is local dev env
+    getConfig({ showWarnings: isDev }, { [EnvVar.APP_NAME]: appName })
+
     const startedAt = new Date()
 
     // const cachingMethods = getCachingMethods()
@@ -117,7 +124,7 @@ const start = async () => {
     console.log(
         `---------------------------------------------------------------
 • 📄 env file = ${envPath}
-• 📄 config = ${process.env.CONFIG}
+• 📄 config = ${getEnvVar(EnvVar.CONFIG, { default: 'devographics' })}
 • 📖 surveys = ${getSurveysLoadMethod()}
 • ⏱️ fast build = ${process.env.FAST_BUILD === 'true'}
 • 🌐 locales = ${
@@ -129,12 +136,10 @@ const start = async () => {
 • 🙎 entities = ${getEntitiesLoadMethod()}
 ---------------------------------------------------------------`
     )
-
-    const isDev = process.env.NODE_ENV === 'development'
-    // call getConfig the first time and show warnings if this is local dev env
-    getConfig({ showWarnings: isDev })
-
-    const redisClient = initRedis()
+    let redisClient
+    try {
+        redisClient = initRedis()
+    } catch (error) {}
     // redisClient.on('error', err => console.log('Redis Client Error', err))
 
     // TODO: there might be mismatch between shared mongodb version
@@ -323,7 +328,7 @@ const start = async () => {
 
     app.use(Sentry.Handlers.errorHandler())
 
-    const port = process.env.PORT || 4030
+    const port = process.env.PORT || 4020
 
     // const data = await initMemoryCache({ context, initList: ['entities', 'surveys'] })
 

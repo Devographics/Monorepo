@@ -2,11 +2,13 @@ import { AppName } from '@devographics/types'
 import config_ from './variables.yml'
 
 export enum EnvVar {
+    CONFIG = 'CONFIG',
     APP_NAME = 'APP_NAME',
     API_URL = 'API_URL',
     APP_URL = 'APP_URL',
     DISABLE_API_CACHE = 'DISABLE_API_CACHE',
     DISABLE_CACHE = 'DISABLE_CACHE',
+    CACHE_TYPE = 'CACHE_TYPE',
     DISABLE_FILESYSTEM_CACHE = 'DISABLE_FILESYSTEM_CACHE',
     DISABLE_REDIS_CACHE = 'DISABLE_REDIS_CACHE',
     MONGO_PRIVATE_URI = 'MONGO_PRIVATE_URI',
@@ -30,6 +32,7 @@ export enum EnvVar {
     SMTP_PASS = 'SMTP_PASS',
     ENCRYPTION_KEY = 'ENCRYPTION_KEY',
     SECRET_KEY = 'SECRET_KEY',
+    I18N_SECRET_KEY = 'I18N_SECRET_KEY',
     ASSETS_URL = 'ASSETS_URL',
     NEXT_PUBLIC_ASSETS_URL = 'NEXT_PUBLIC_ASSETS_URL',
     LOGS_PATH = 'LOGS_PATH',
@@ -45,7 +48,9 @@ export enum EnvVar {
     CUSTOM_LOCALE_CONTEXTS = 'CUSTOM_LOCALE_CONTEXTS',
     FROZEN = 'FROZEN',
     // Feature flags
-    FLAG_ENABLE_STRING_FILTER = 'FLAG_ENABLE_STRING_FILTER'
+    FLAG_ENABLE_STRING_FILTER = 'FLAG_ENABLE_STRING_FILTER',
+    SURVEYFORM_URL = 'SURVEYFORM_URL',
+    DISABLE_DYNAMIC_OPTIONS = 'DISABLE_DYNAMIC_OPTIONS'
 }
 
 interface EnvVariable {
@@ -61,8 +66,9 @@ export const config = config_ as EnvVariable[]
 
 export const getVariables = () => config
 
+export type DefaultConfigValues = Partial<Record<EnvVar, any>>
+
 interface GetConfigOptions {
-    appName?: AppName
     showWarnings?: boolean
 }
 
@@ -88,12 +94,12 @@ export const getAppName = (appName: AppName) => {
     return appNameGlobal
 }
 
-const getValue = (variable: EnvVariable) => {
+const getValue = (variable: EnvVariable, defaultValues: DefaultConfigValues = {}) => {
     const { id, aliases } = variable
     // For Next.js public variables build,
     // we CAN'T move process.env to a variable like const env = process.env,
     // because Next rely on build-time injection when detecting process.env[something] explicitely
-    const value = process.env[id] || envMapGlobal[id]
+    const value = defaultValues[id] || process.env[id] || envMapGlobal[id]
     if (value) {
         return { id, value }
     } else if (aliases) {
@@ -114,22 +120,27 @@ const getValue = (variable: EnvVariable) => {
  * Each app is still responsible for setting the default values for development
  * (via their readme, the tracked .env files etc.)
  */
-export const getConfig = (options: GetConfigOptions = {}) => {
-    const { appName: appName_, showWarnings = false } = options
+export const getConfig = (
+    options: GetConfigOptions = {},
+    defaultValues: DefaultConfigValues = {}
+) => {
+    const { showWarnings = false } = options
     const appName =
-        appName_ || appNameGlobal || (getValue({ id: EnvVar.APP_NAME })?.value as AppName)
+        appNameGlobal || (getValue({ id: EnvVar.APP_NAME }, defaultValues)?.value as AppName)
     if (!appName) {
         throw new Error(
             'getConfig: please pass variable, set env variable, or call setAppName() to specify appName'
         )
     }
+    defaultValues[EnvVar.APP_NAME] = appName
+
     const variables = {} as any
     const optionalVariables: EnvVariable[] = []
     const missingVariables: EnvVariable[] = []
     for (const variable of config) {
         const { usedBy, optional = false } = variable
         if ((usedBy || []).includes(appName)) {
-            const { id, value } = getValue(variable)
+            const { id, value } = getValue(variable, defaultValues)
             if (value) {
                 variables[id] = value
             } else if (optional === true) {
@@ -156,7 +167,29 @@ ${missingVariables.map(formatVariable).join('\n')}`
     return variables as { [id in EnvVar]: string }
 }
 
-export const getEnvVar = (id: EnvVar) => {
+type GetEnvVarOptions = {
+    default?: any
+    hardFail?: Boolean
+    calledFrom?: string
+}
+
+export const getEnvVarMetadata = (id: EnvVar) => getVariables().find(v => v.id === id)
+
+export const getEnvVar = (id: EnvVar, options: GetEnvVarOptions = {}) => {
     const config = getConfig()
-    return config[id]
+    const { hardFail, calledFrom } = options
+    let value = config[id] || options.default
+    if (hardFail && typeof value === 'undefined') {
+        const metadata = getEnvVarMetadata(id)
+        throw new Error(
+            `Environment variable ${id} not found (called from: ${calledFrom}) [${metadata?.description} | example: ${metadata?.example}]`
+        )
+    }
+    if ([1, 'true', 'TRUE'].includes(value)) {
+        value = true
+    }
+    if ([0, 'false', 'FALSE'].includes(value)) {
+        value = false
+    }
+    return value
 }

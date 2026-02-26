@@ -7,6 +7,7 @@ import { EnvVar, getEnvVar, parseEnvVariableArray } from '@devographics/helpers'
 import { logToFile } from '@devographics/debug'
 
 import { LoadAllOptions, addToAllContexts, excludedFiles, mergeLocales } from './locales'
+import { getOctokit } from '../../external_apis'
 
 /*
 
@@ -32,8 +33,7 @@ const loadLocalesFromGitHubSameRepo = async ({
 }) => {
     const url = `repos/${org}/${repo}/contents/${dir}`
     console.log(`🌐 loadLocalesFromGitHubSameRepo (${url})`)
-
-    const octokit = new Octokit({ auth: getEnvVar(EnvVar.GITHUB_TOKEN) })
+    const octokit = getOctokit()
     let i = 0
 
     const contents = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
@@ -124,7 +124,7 @@ const loadLocalesFromGitHubMultiRepo = async ({
     const url = `/orgs/${org}/repos`
     console.log(`🌐 loadLocalesFromGitHubMultiRepo (${url})`)
 
-    const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+    const octokit = getOctokit()
     let i = 0
 
     const result = await octokit.request('GET /orgs/{org}/repos', {
@@ -281,10 +281,16 @@ const processGitHubLocaleFiles = async ({
 Load all locales from GitHub
 
 */
-export const loadAllFromGitHub = async (options: LoadAllOptions = {}): Promise<RawLocale[]> => {
+export const loadLocalesFromGitHub = async (options: LoadAllOptions = {}): Promise<RawLocale[]> => {
     const { localeIds, localeContexts } = options
-    const localesPathArray = parseEnvVariableArray(getEnvVar(EnvVar.GITHUB_PATH_LOCALES))
+    const localesPathArray = parseEnvVariableArray(
+        getEnvVar(EnvVar.GITHUB_PATH_LOCALES, {
+            hardFail: true,
+            calledFrom: 'loadLocalesFromGitHub'
+        })
+    )
     let locales: RawLocale[] = []
+
     if (localesPathArray) {
         let pathIndex = 0
         for (const localesPath of localesPathArray) {

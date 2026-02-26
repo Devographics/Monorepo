@@ -30,6 +30,7 @@ import {
 import uniq from 'lodash/uniq.js'
 import { RequestContext } from '../types'
 import { getDbPath } from '../compute'
+import { EnvVar, getEnvVar } from '@devographics/helpers'
 
 /*
 
@@ -43,6 +44,7 @@ export const parseSurveys = async ({
     surveys: Survey[]
     context: RequestContext
 }): Promise<SurveyApiObject[]> => {
+    console.log('// parsing surveys…')
     return await Promise.all(surveys.map(survey => getSurveyObject({ survey, context })))
 }
 
@@ -106,6 +108,7 @@ export const getSectionObject = async ({
     section: Section
     context: RequestContext
 }): Promise<SectionApiObject> => {
+    // console.log(`// parsing section ${edition.id}/${section.id}…`)
     let apiOnly = section.apiOnly
     let questionObjects = section?.questions?.map(question =>
         getQuestionObject({ survey, edition, section, question, context })
@@ -190,7 +193,7 @@ with typeName StateOfCssBlogsNewsMagazines and different options.
 */
 export const getQuestionObjects = ({ surveys }: { surveys: SurveyApiObject[] }) => {
     let allQuestionObjects: QuestionApiObject[] = []
-
+    console.log('// getQuestionObjects…')
     for (const survey of surveys) {
         const surveyQuestionObjects: QuestionApiObject[] = []
         for (const edition of survey.editions) {
@@ -299,7 +302,8 @@ export const addQuestionOptions = async ({
     // if question doesn't have predefined options, try to generate
     // them dynamically from the top X most popular answers
     // to this question for the latest survey edition
-    if (!hasOptions && process.env.DISABLE_DYNAMIC_OPTIONS !== 'true') {
+    const disableDynamicOptions = getEnvVar(EnvVar.DISABLE_DYNAMIC_OPTIONS)
+    if (!hasOptions && !disableDynamicOptions) {
         const dynamicOptions = await getDynamicOptions({
             question: question,
             questionObjects,

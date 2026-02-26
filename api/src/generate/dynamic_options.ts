@@ -92,14 +92,15 @@ export const getDynamicOptions = async ({
     const cacheKey = getGenericCacheKey(cacheKeyOptions)
 
     try {
-        const result = await useCache({
+        const useCacheOptions = {
             key: cacheKey,
             func: genericComputeFunction,
             context,
             funcOptions,
             enableCache,
             enableLog: true
-        })
+        }
+        const result = await useCache(useCacheOptions)
 
         // look at past two editions to generate dynamic options
         const pastTwoEditionsBuckets = takeRight(result, 2)

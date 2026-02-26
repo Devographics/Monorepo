@@ -6,6 +6,13 @@
 #       - surveyform
 #       - surveyadmin
 
+- id: CONFIG
+  optional: true
+  description: Config name
+  example: devographics, tokyodev…
+  userBy:
+      - api
+
 - id: APP_NAME
   description: Name of the app
   example: surveyform, api, results, surveyadmin
@@ -139,6 +146,7 @@
       - charts
 
 - id: REDIS_TOKEN
+  optional: true
   description: >
       Redis token (needed for Upstash).
       When using a local setup, the token is set when running the Redis proxy (see Docker-compose file).
@@ -157,24 +165,28 @@
 - id: GITHUB_TOKEN
   description: GitHub access token
   example: github_pat_11AndT_knNX54FA...
+  optional: true
   usedBy:
       - api
 
 - id: GITHUB_PATH_SURVEYS
   description: Path to surveys repo/directory on GitHub
   example: owner/repo/subdir (subdir is optional)
+  optional: true
   usedBy:
       - api
 
 - id: GITHUB_PATH_LOCALES
   description: Path to locales repo/directory on GitHub
   example: owner/repo/subdir OR owner (in which case it's assumed all locales have their own repo)
+  optional: true
   usedBy:
       - api
 
 - id: GITHUB_PATH_ENTITIES
   description: Path to entities repo/directory on GitHub
   example: owner/repo/subdir (subdir is optional)
+  optional: true
   usedBy:
       - api
 
@@ -227,7 +239,9 @@
   description: Encryption key to hash emails
   usedBy:
       - surveyform
+
 - id: SECRET_KEY
+  optional: true
   description: >
       Secret key used to verify external webhook requests
       Surveyform and API should have a different key
@@ -237,11 +251,14 @@
   usedBy:
       - surveyform
       - api
+
 - id: I18N_SECRET_KEY
+  optional: true
   description: >
       Secret key used to verify external requests related to i18n GitHub Actions
   usedBy:
       - api
+
 - id: CRON_SECRET
   description: >
       Identical to SECRET_KEY 
@@ -251,6 +268,7 @@
       - surveyform
       - surveyadmin
   optional: true
+
 - id: API_SECRET_KEY
   usedBy:
       - surveyadmin
@@ -263,6 +281,7 @@
       Used to call surveyform webhooks,
       namely to indicate a change in the loaded values (surveys, entities...)
   usedBy: api
+  optional: true
 
 - id: ASSETS_URL
   aliases:
@@ -365,6 +384,17 @@
       - surveyform
       - results
       - results-astro
+      - api
+
+- id: CACHE_TYPE
+  optional: true
+  description: Whether to cache locally, in memory, or on Redis
+  example: local, memory, Redis
+  usedBy:
+      - surveyform
+      - results
+      - results-astro
+      - api
 
 - id: DISABLE_REDIS_CACHE
   optional: true
@@ -386,3 +416,10 @@
       - surveyadmin
       - results
       - graphiql
+
+- id: DISABLE_DYNAMIC_OPTIONS
+  optional: true
+  description: Disable dynamic options, which can take a long time to generate.
+  example: 'true'
+  usedBy:
+      - api

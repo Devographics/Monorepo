@@ -88,10 +88,14 @@ const getGitHubYamlFile = async (url: string) => {
  */
 const skipItem = (fileName: string) => ['_', '.'].includes(fileName.slice(0, 1))
 
-export const loadFromGitHub = async () => {
+export const loadSurveysFromGitHub = async () => {
     const surveys: Survey[] = []
 
-    const [owner, repo, surveysDirPath] = getEnvVar(EnvVar.GITHUB_PATH_SURVEYS)?.split('/') || []
+    const [owner, repo, surveysDirPath] =
+        getEnvVar(EnvVar.GITHUB_PATH_SURVEYS, {
+            hardFail: true,
+            calledFrom: 'loadSurveysFromGitHub'
+        })?.split('/') || []
 
     if (!owner) {
         throw new Error(
@@ -297,7 +301,7 @@ export const getSurveysLoadMethod = () => (getEnvVar(EnvVar.SURVEYS_PATH) ? 'loc
 export const loadSurveys = async () => {
     const mode = getSurveysLoadMethod()
     console.log(`// loading surveys (mode: ${mode})`)
-    const { surveys, sha } = mode === 'local' ? await loadLocally() : await loadFromGitHub()
+    const { surveys, sha } = mode === 'local' ? await loadLocally() : await loadSurveysFromGitHub()
     console.log(`// done loading ${surveys.length} surveys; commit SHA: ${sha}`)
 
     return { surveys, sha }

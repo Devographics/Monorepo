@@ -80,3 +80,7 @@ export const PAST_PARTICIPATIONS = 'past_participations'
 export const FUTURE_PARTICIPATIONS = 'future_participations'
 
 export const USER_METADATA_SECTION = '_user_metadata'
+
+export const DEFAULT_ASSETS_URL = 'https://assets.devographics.com'
+export const DEFAULT_SURVEYFORM_URL = 'https://survey.devographics.com'
+export const DEFAULT_API_URL = 'https://api.devographics.com'
