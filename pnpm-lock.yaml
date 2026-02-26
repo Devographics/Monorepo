@@ -1072,12 +1072,21 @@ importers:
         specifier: 1.0.0-alpha.4
         version: 1.0.0-alpha.4(@types/node@25.3.3)(jiti@2.6.1)(react-dom@19.2.0(react@19.2.0))(react-server-dom-webpack@0.0.0-experimental-c8b778b7f-20220825(react@19.2.0)(webpack@5.88.2))(react@19.2.0)(sass@1.97.3)(terser@5.46.0)(yaml@2.8.2)
     devDependencies:
+      '@playwright/test':
+        specifier: ^1.47.0
+        version: 1.58.2
       '@types/react':
         specifier: ^19.2.2
         version: 19.2.7
       '@types/react-dom':
         specifier: ^19.2.2
         version: 19.2.3(@types/react@19.2.7)
+      pixelmatch:
+        specifier: ^7.1.0
+        version: 7.1.0
+      pngjs:
+        specifier: ^7.0.0
+        version: 7.0.0
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -15655,6 +15664,10 @@ packages:
     resolution: {integrity: sha512-J8B6xqiO37sU/gkcMglv6h5Jbd9xNER7aHzpfRdNmV4IbQBzBpe4l9XmbG+xPF/znacgu2jfEw+wHffaq/YkXA==}
     hasBin: true
 
+  pixelmatch@7.1.0:
+    resolution: {integrity: sha512-1wrVzJ2STrpmONHKBy228LM1b84msXDUoAzVEl0R8Mz4Ce6EPr+IVtxm8+yvrqLYMHswREkjYFaMxnyGnaY3Ng==}
+    hasBin: true
+
   pkg-dir@4.2.0:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
     engines: {node: '>=8'}
@@ -15689,6 +15702,10 @@ packages:
   pngjs@6.0.0:
     resolution: {integrity: sha512-TRzzuFRRmEoSW/p1KVAmiOgPco2Irlah+bGFCeNfJXxxYGwSw7YwAOAcd7X28K/m5bjBWKsC29KyoMfHbypayg==}
     engines: {node: '>=12.13.0'}
+
+  pngjs@7.0.0:
+    resolution: {integrity: sha512-LKWqWJRhstyYo9pGvgor/ivk2w94eSjE3RGVuzLGlr3NmD8bf7RcYGze1mNdEHRP6TRP6rMuDHk5t44hnTRyow==}
+    engines: {node: '>=14.19.0'}
 
   polished@3.7.2:
     resolution: {integrity: sha512-pQKtpZGmsZrW8UUpQMAnR7s3ppHeMQVNyMDKtUyKwuvDmklzcEyM5Kllb3JyE/sE/x7arDmyd35i+4vp99H6sQ==}
@@ -39213,6 +39230,10 @@ snapshots:
     dependencies:
       pngjs: 3.4.0
 
+  pixelmatch@7.1.0:
+    dependencies:
+      pngjs: 7.0.0
+
   pkg-dir@4.2.0:
     dependencies:
       find-up: 4.1.0
@@ -39246,6 +39267,8 @@ snapshots:
   pngjs@3.4.0: {}
 
   pngjs@6.0.0: {}
+
+  pngjs@7.0.0: {}
 
   polished@3.7.2:
     dependencies:
