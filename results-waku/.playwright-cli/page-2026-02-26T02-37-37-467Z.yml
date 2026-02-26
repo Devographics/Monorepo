@@ -1,0 +1,8 @@
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - heading "results-waku" [level=1] [ref=e4]
+    - paragraph [ref=e5]: "status: ok"
+    - paragraph [ref=e6]:
+      - text: "open locale page:"
+      - link /en-US/ [ref=e7] [cursor=pointer]:
+        - /url: /en-US/
