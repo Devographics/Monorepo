@@ -1,6 +1,6 @@
 import { getFallbackLocaleId } from '../lib/i18n'
 
-export default async function IndexPage() {
+export async function HomePage() {
   const localeId = getFallbackLocaleId()
   return (
     <section>
@@ -8,16 +8,10 @@ export default async function IndexPage() {
       <p>status: ok</p>
       <p>
         open locale page:{' '}
-        <a href={`/${localeId}`}>
-          /{localeId}
+        <a href={`/${localeId}/`}>
+          /{localeId}/
         </a>
       </p>
     </section>
   )
-}
-
-export const getConfig = async () => {
-  return {
-    render: 'dynamic',
-  } as const
 }

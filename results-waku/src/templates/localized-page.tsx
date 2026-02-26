@@ -1,11 +1,10 @@
-import type { PageProps } from 'waku/router'
 import {
   getAllLocales,
   getEditionId,
   getSurveyId,
   getTranslationHelpers,
   loadLocaleWithFallback,
-} from '../../lib/i18n'
+} from '../lib/i18n'
 
 const SAMPLE_KEYS = [
   'general.surveys_available_languages',
@@ -13,9 +12,11 @@ const SAMPLE_KEYS = [
   'general.share',
 ] as const
 
-export default async function LocalizedPage({
-  locale: localeId,
-}: PageProps<'/[locale]'>) {
+type LocalizedPageProps = {
+  locale: string
+}
+
+export async function LocalizedPage({ locale: localeId }: LocalizedPageProps) {
   const [localeResult, allLocales] = await Promise.all([
     loadLocaleWithFallback(localeId),
     getAllLocales().catch(() => []),
@@ -54,7 +55,7 @@ export default async function LocalizedPage({
       <h2>locales</h2>
       <ul>
         {allLocales.map((item) => {
-          const href = `/${item.id}`
+          const href = `/${item.id}/`
           return (
             <li key={item.id}>
               <a href={href}>{item.label || item.id}</a> ({item.id})
@@ -64,10 +65,4 @@ export default async function LocalizedPage({
       </ul>
     </section>
   )
-}
-
-export const getConfig = async () => {
-  return {
-    render: 'dynamic',
-  } as const
 }

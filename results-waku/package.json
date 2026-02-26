@@ -3,7 +3,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "waku dev",
+        "dev": "waku dev --port 4400",
         "build": "waku build",
         "start": "waku start",
         "typecheck": "tsc --noEmit"
