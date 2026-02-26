@@ -6,7 +6,9 @@
         "dev": "waku dev --port 4400",
         "build": "waku build",
         "start": "waku start",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit",
+        "test:e2e": "playwright test -c playwright.config.ts",
+        "test:e2e:ui": "playwright test -c playwright.config.ts --ui"
     },
     "dependencies": {
         "react": "19.2.0",
@@ -14,8 +16,11 @@
         "waku": "1.0.0-alpha.4"
     },
     "devDependencies": {
+        "@playwright/test": "^1.47.0",
         "@types/react": "^19.2.2",
         "@types/react-dom": "^19.2.2",
+        "pixelmatch": "^7.1.0",
+        "pngjs": "^7.0.0",
         "typescript": "^5.9.3"
     }
 }
