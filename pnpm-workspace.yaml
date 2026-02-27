@@ -16,3 +16,34 @@ packages:
     - 'homepage'
     - 'graphiql'
     - 'dot_com'
+
+# Security baseline:
+# - review dependency build scripts explicitly (default deny)
+# - block exotic transitive dependencies
+# - avoid very fresh releases from the registry
+# - fail fast when dependency state is out of sync before running scripts
+# - start with strict defaults and relax only if they cause real issues
+strictDepBuilds: true
+blockExoticSubdeps: true
+verifyDepsBeforeRun: error
+minimumReleaseAge: 1440
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 14400
+
+allowBuilds:
+    '@apollo/protobufjs': false
+    '@parcel/watcher': false
+    '@sentry/cli': false
+    core-js: false
+    core-js-pure: false
+    es5-ext: false
+    esbuild: false
+    gatsby: false
+    gatsby-cli: false
+    lmdb: false
+    mongodb-client-encryption: false
+    mongodb-memory-server: false
+    msgpackr-extract: false
+    puppeteer: false
+    sharp: false
+    unrs-resolver: false
