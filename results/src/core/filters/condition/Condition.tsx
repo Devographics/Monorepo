@@ -99,7 +99,7 @@ const Condition = ({
 }
 
 export const Condition_ = styled.div`
-    background: ${({ theme }) => theme.colors.backgroundTrans};
+    background-color: rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     position: relative;
 `
