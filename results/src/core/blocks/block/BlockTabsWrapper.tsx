@@ -222,7 +222,7 @@ const Wrapper = styled.section`
 `
 
 export const BlockHeaderWrapper = styled.div`
-    overflow-x: scroll;
+    overflow-x: auto;
 `
 
 export const BlockHeader = styled.div`
