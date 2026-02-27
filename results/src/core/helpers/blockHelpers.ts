@@ -112,7 +112,7 @@ export const getBlockTitleKey = ({
     pageContext?: PageContextValue
 }) => block.titleId || getBlockKey({ block })
 
-export const getBlockTitle = (options: {
+export const getBlockTitleKeys = (options: {
     block: BlockVariantDefinition
     pageContext: PageContextValue
     getFallbacks: MultiKeysStringTranslator
@@ -131,14 +131,27 @@ export const getBlockTitle = (options: {
     const keys: MultiStringKeys = [block.titleKey, block.titleId, blockKey_, block.tabId, fieldKey]
 
     const entity = entities?.find(e => e.id === block.id)
-    if (entity) {
-        const entityName = entity?.nameClean || entity?.name
-        if (entityName) {
-            keys.push(() => ({ t: entityName, key: 'entity', locale: pageContext.locale }))
-        }
+    if (entity?.name) {
+        keys.push(() => ({
+            t: entity.name,
+            tClean: entity.nameClean,
+            tHtml: entity.nameHtml,
+            key: `entity__${block.id}`,
+            locale: pageContext.locale
+        }))
     }
-    const result = getFallbacks(keys)
+    return keys
+}
 
+export const getBlockTitle = (options: {
+    block: BlockVariantDefinition
+    pageContext: PageContextValue
+    getFallbacks: MultiKeysStringTranslator
+    entities?: Entity[]
+    useShortLabel?: boolean
+}) => {
+    const keys = getBlockTitleKeys(options)
+    const result = options.getFallbacks(keys)
     return result
 }
 
@@ -147,6 +160,13 @@ export const useBlockTitle = ({ block }: { block: BlockVariantDefinition }) => {
     const entities = useEntities()
     const pageContext = usePageContext()
     return getBlockTitle({ block, pageContext, getFallbacks, entities })
+}
+
+export const useBlockTitleKeys = ({ block }: { block: BlockVariantDefinition }) => {
+    const { getFallbacks } = useI18n()
+    const entities = useEntities()
+    const pageContext = usePageContext()
+    return getBlockTitleKeys({ block, pageContext, getFallbacks, entities })
 }
 
 /*

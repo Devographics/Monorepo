@@ -2,6 +2,7 @@
 import React from 'react'
 import { useI18n } from '@devographics/react-i18n'
 import { useKeydownContext } from 'core/helpers/keydownContext'
+import { MultiStringKeys } from '@devographics/i18n'
 
 const getGitHubSearchUrl = (k: string, localeId = 'en') =>
     `https://github.com/search?q=${k}+repo%3AStateOfJS%2Fstate-of-js-graphql-results-api+path%3A%2Fsrc%2Fi18n%2F${
@@ -11,7 +12,7 @@ const getGitHubSearchUrl = (k: string, localeId = 'en') =>
 interface TProps {
     override?: string
     k?: string
-    keysList?: Array<string | undefined>
+    keysList?: MultiStringKeys
     values?: any
     md?: boolean
     html?: boolean
@@ -54,9 +55,11 @@ export const T = ({
         if (keysList) {
             tFullString = getFallbacks(keysList, values)
             tShortString = tFullString
-        } else {
+        } else if (k) {
             tFullString = getString(k, { values }, fallback) //isFallback)
             tShortString = getString(`${k}.short`, { values }, fallback) // isFallback)
+        } else {
+            throw new Error(`<T> component: Please specify either k or keysList prop.`)
         }
 
         const translationObject =
