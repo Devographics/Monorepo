@@ -9,8 +9,6 @@ packages:
     - 'surveyform'
     - 'surveyadmin'
     - 'results'
-    - 'results-astro'
-    - 'results-remix'
     - 'charts'
     - 'jobs'
     - 'homepage'

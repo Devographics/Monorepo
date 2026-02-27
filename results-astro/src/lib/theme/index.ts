@@ -1,6 +1,0 @@
-export * from "./getTheme"
-export * from "./typography"
-export * from "./mq"
-export * from "./spacing"
-export * from "./colors"
-export * from "./mixins"

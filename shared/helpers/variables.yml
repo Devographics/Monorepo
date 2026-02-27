@@ -32,7 +32,6 @@
   example: https://api.devographics.com
   usedBy:
       - results
-      - results-astro
       - graphiql
       - surveyform
       - surveyadmin
@@ -141,7 +140,6 @@
       - surveyform
       - surveyadmin
       - results
-      - results-astro
       - homepage
       - charts
 
@@ -156,7 +154,6 @@
       - surveyform
       - surveyadmin
       - results
-      - results-astro
       - homepage
       - charts
 
@@ -305,7 +302,6 @@
   example: state_of_css
   usedBy:
       - results
-      - results-astro
       - homepage
 
 - id: EDITIONID
@@ -313,7 +309,6 @@
   example: css2023
   usedBy:
       - results
-      - results-astro
 
 - id: FAST_BUILD
   optional: true
@@ -383,7 +378,6 @@
   usedBy:
       - surveyform
       - results
-      - results-astro
       - api
 
 - id: CACHE_TYPE
@@ -393,7 +387,6 @@
   usedBy:
       - surveyform
       - results
-      - results-astro
       - api
 
 - id: DISABLE_REDIS_CACHE
@@ -403,7 +396,6 @@
   usedBy:
       - surveyform
       - results
-      - results-astro
       - homepage
 
 - id: PORT
