@@ -3,7 +3,6 @@ export enum AppName {
     SURVEYADMIN = 'surveyadmin',
     API = 'api',
     RESULTS = 'results',
-    RESULTS_ASTRO = 'results-astro',
     GRAPHIQL = 'graphiql',
     CHARTS = 'charts'
 }

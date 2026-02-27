@@ -1,8 +1,0 @@
-.chart-gridlines-item {
-    position: absolute;
-    left: calc(var(--index) * var(--interval) * 1%);
-    top: 0px;
-    bottom: 0px;
-    width: 1px;
-    border-right: 1px dotted var(--borderAltColor);
-}

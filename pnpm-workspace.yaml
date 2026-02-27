@@ -10,8 +10,6 @@ packages:
     - 'surveyadmin'
     - 'results'
     - 'results-waku'
-    - 'results-astro'
-    - 'results-remix'
     - 'charts'
     - 'jobs'
     - 'homepage'

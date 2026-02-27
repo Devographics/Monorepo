@@ -23,13 +23,11 @@ export async function rscTeapot({ contexts, localeId }: {
 /**
  * A formatted message,
  * using a server component without hydration
- * 
+ *
  * It retrieves the current locale strings in the "server context"
  * setLocaleServerContext(localeId) must be called by the parent page
  * before this component is rendered
  * 
- * See Astro equivalent in the results-astro app
- *
  * KEEP IN SYNC with DynamicT/T from "@devographics/react-i18n" 
  */
 export async function ServerT({ token, values, fallback, children, localeId }: {
