@@ -70,7 +70,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     const cacheType = getEnvVar(EnvVar.CACHE_TYPE, { default: 'local' })
     const envDisableCache = getEnvVar(EnvVar.DISABLE_CACHE, { default: true })
 
-    // else default to enabling cache
+    // default to enabling cache
     let enableCache = true
     if (typeof options.enableCache !== 'undefined') {
         // set to value of options.enableCache if it's defined
