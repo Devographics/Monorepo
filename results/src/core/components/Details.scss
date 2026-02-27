@@ -11,8 +11,17 @@
     border-bottom: 1px solid var(--borderAltColor);
     padding-bottom: var(--halfSpacing);
     margin-bottom: var(--halfSpacing);
-    background-color: var(--backgroundAlt3Color);
     padding: var(--halfSpacing);
+
+    .details-open & {
+        background-color: rgba(0, 0, 0, 0.28);
+    }
+    .details-closed & {
+        background-color: rgba(0, 0, 0, 0.1);
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+    }
 }
 .details-heading {
     margin: 0;
