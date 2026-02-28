@@ -331,9 +331,6 @@ function extractQueryName(queryString: string) {
  * Generic GraphQL fetcher
  *
  * Returns null in case of error
- *
- * @deprecated This function handles file logging internally,
- * it should be handled at app level instead
  */
 export const fetchGraphQLApi = async <T = any>({
     query,
