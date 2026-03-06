@@ -1,17 +1,17 @@
 query GetLocale {
-  locale(localeId: __LOCALE_ID__, contexts: __CONTEXTS__) {
-    id
-    completion
-    label
-    repo
-    totalCount
-    translatedCount
-    translators
-    strings {
-      key
-      t
-      tHtml
-      tClean
+    locale(localeId: __LOCALE_ID__, contexts: __CONTEXTS__) {
+        id
+        completion
+        label
+        repo
+        totalCount
+        translatedCount
+        translators
+        strings {
+            key
+            t
+            tHtml
+            tClean
+        }
     }
-  }
 }

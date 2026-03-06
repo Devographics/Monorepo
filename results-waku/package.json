@@ -6,6 +6,8 @@
         "dev": "waku dev --port 4400",
         "build": "waku build",
         "start": "waku start",
+        "fmt": "oxfmt src",
+        "fmt:check": "oxfmt src --check",
         "typecheck": "tsc --noEmit",
         "test:e2e": "playwright test -c playwright.config.ts",
         "test:e2e:ui": "playwright test -c playwright.config.ts --ui"
@@ -19,6 +21,7 @@
         "@playwright/test": "^1.47.0",
         "@types/react": "^19.2.2",
         "@types/react-dom": "^19.2.2",
+        "oxfmt": "^0.36.0",
         "pixelmatch": "^7.1.0",
         "pngjs": "^7.0.0",
         "typescript": "^5.9.3"

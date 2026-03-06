@@ -1,8 +1,8 @@
 query GetLocales {
-  locales {
-    id
-    label
-    completion
-    translators
-  }
+    locales {
+        id
+        label
+        completion
+        translators
+    }
 }

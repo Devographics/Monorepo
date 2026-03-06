@@ -1,4 +1,4 @@
 declare module '*.graphql' {
-  const document: string
-  export default document
+    const document: string
+    export default document
 }
