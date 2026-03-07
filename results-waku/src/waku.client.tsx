@@ -9,11 +9,11 @@ const wakuGlobal = globalThis as typeof globalThis & {
 
 const getInitialRscPath = () => {
     const pathname = window.location.pathname
-    if (pathname === '/') {
+    const normalized = pathname.replace(/^\/+|\/+$/g, '')
+    if (!normalized) {
         return ''
     }
-    const match = pathname.match(/^\/([A-Za-z0-9-]+)\/?$/)
-    return match ? match[1] : ''
+    return normalized
 }
 
 const rootElement = (
