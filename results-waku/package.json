@@ -13,10 +13,10 @@
         "test:e2e:ui": "playwright test -c playwright.config.ts --ui"
     },
     "dependencies": {
+        "js-yaml": "^4.1.0",
         "react": "19.2.0",
         "react-dom": "19.2.0",
-        "js-yaml": "^4.1.0",
-        "waku": "1.0.0-alpha.4"
+        "waku": "https://pkg.pr.new/waku@6dfbc99"
     },
     "devDependencies": {
         "@playwright/test": "^1.47.0",
