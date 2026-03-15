@@ -5,6 +5,10 @@ import { LocalizedPage } from './templates/localized-page'
 import { HomePage } from './templates/home-page'
 import { loadSitemap } from './load-sitemap'
 import { getAllLocales } from './lib/i18n'
+import {
+    formatStaticPathsForLog,
+    type StaticPathTuple
+} from './lib/static-paths'
 
 const sitemaps = loadSitemap()
 
@@ -12,16 +16,14 @@ const locales = await getAllLocales()
 
 console.log('locales:', locales)
 
-const paths: Array<[locale: string, slug: string]> = sitemaps.map(page => [
-    'en-US',
-    page.path.replace(/^\/|\/$/g, '') || ''
-])
-
-const staticPaths = locales.flatMap<[string, string]>(locale =>
-    sitemaps.map(page => [locale.id, page.path.replace(/^\/|\/$/g, '') || ''])
+const staticPaths: Array<StaticPathTuple> = locales.flatMap(locale =>
+    sitemaps.map(
+        page => [locale.id, page.path.replace(/^\/|\/$/g, '') || ''] as StaticPathTuple
+    )
 )
 
-console.log('paths:', staticPaths)
+const staticPathTreeLines = formatStaticPathsForLog(staticPaths)
+console.log('staticPaths:\n' + staticPathTreeLines.join('\n'))
 
 const pages = createPages(async ({ createPage, createRoot }) => [
     createRoot({
