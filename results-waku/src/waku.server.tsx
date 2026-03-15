@@ -4,17 +4,24 @@ import { RootLayout } from './templates/root-layout'
 import { LocalizedPage } from './templates/localized-page'
 import { HomePage } from './templates/home-page'
 import { loadSitemap } from './load-sitemap'
-
-// export default adapter(handler)
+import { getAllLocales } from './lib/i18n'
 
 const sitemaps = loadSitemap()
+
+const locales = await getAllLocales()
+
+console.log('locales:', locales)
 
 const paths: Array<[locale: string, slug: string]> = sitemaps.map(page => [
     'en-US',
     page.path.replace(/^\/|\/$/g, '') || ''
 ])
 
-console.log('sitemap paths:', paths)
+const staticPaths = locales.flatMap<[string, string]>(locale =>
+    sitemaps.map(page => [locale.id, page.path.replace(/^\/|\/$/g, '') || ''])
+)
+
+console.log('paths:', staticPaths)
 
 const pages = createPages(async ({ createPage, createRoot }) => [
     createRoot({
@@ -32,7 +39,7 @@ const pages = createPages(async ({ createPage, createRoot }) => [
         render: 'static',
         path: '/[locale]/[slug]',
         component: LocalizedPage,
-        staticPaths: paths
+        staticPaths: staticPaths
     })
 ])
 

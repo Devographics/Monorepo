@@ -15,9 +15,9 @@ type GraphqlResponse<T> = {
 const GRAPHQL_PLACEHOLDER_PATTERN = /__([A-Z0-9_]+)__/g
 
 const getGraphqlApiUrl = () => {
-    const apiUrl = process.env.API_URL || process.env.GATSBY_API_URL
+    const apiUrl = process.env.API_URL
     if (!apiUrl) {
-        throw new Error('Missing API_URL (or GATSBY_API_URL)')
+        throw new Error('Missing API_URL')
     }
     return apiUrl
 }
