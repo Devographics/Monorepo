@@ -5,21 +5,14 @@ import { LocalizedPage } from './templates/localized-page'
 import { HomePage } from './templates/home-page'
 import { loadSitemap } from './load-sitemap'
 import { getAllLocales } from './lib/i18n'
-import {
-    formatStaticPathsForLog,
-    type StaticPathTuple
-} from './lib/static-paths'
+import { formatStaticPathsForLog, type StaticPathTuple } from './lib/static-paths'
 
 const sitemaps = loadSitemap()
 
 const locales = await getAllLocales()
 
-console.log('locales:', locales)
-
 const staticPaths: Array<StaticPathTuple> = locales.flatMap(locale =>
-    sitemaps.map(
-        page => [locale.id, page.path.replace(/^\/|\/$/g, '') || ''] as StaticPathTuple
-    )
+    sitemaps.map(page => [locale.id, page.path.replace(/^\/|\/$/g, '') || ''] as StaticPathTuple)
 )
 
 const staticPathTreeLines = formatStaticPathsForLog(staticPaths)
