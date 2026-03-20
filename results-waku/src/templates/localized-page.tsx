@@ -1,11 +1,3 @@
-import {
-    getAllLocales,
-    getEditionId,
-    getSurveyId,
-    getTranslationHelpers,
-    loadLocaleWithFallback
-} from '../lib/i18n'
-
 const SAMPLE_KEYS = [
     'general.surveys_available_languages',
     'general.results.description',

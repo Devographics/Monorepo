@@ -44,14 +44,14 @@ const joinSitemapPath = (parentPath: string, childPath: string) => {
     return normalizeSitemapPath(`${parentPath.replace(/\/+$/g, '')}/${normalizedChild}`)
 }
 
-export const loadSitemap = (): Array<SitemapPageRecord> => {
-    if (!RAW_SITEMAP_PATH || !existsSync(RAW_SITEMAP_PATH)) {
-        console.error(`raw_sitemap.yml not found at expected path: ${RAW_SITEMAP_PATH}`)
+export const loadSitemap = (sitemapPath: string = RAW_SITEMAP_PATH): Array<SitemapPageRecord> => {
+    if (!sitemapPath || !existsSync(sitemapPath)) {
+        console.error(`raw_sitemap.yml not found at expected path: ${sitemapPath}`)
         return []
     }
 
     try {
-        const raw = readFileSync(RAW_SITEMAP_PATH, 'utf8')
+        const raw = readFileSync(sitemapPath, 'utf8')
         const rawSitemap = yaml.load(raw) as Array<RawSitemapPage>
         if (!Array.isArray(rawSitemap)) return []
 
@@ -85,7 +85,10 @@ export const loadSitemap = (): Array<SitemapPageRecord> => {
         visit(rawSitemap)
         return Array.from(map.values())
     } catch (error) {
-        console.warn(`Failed to load raw sitemap at ${RAW_SITEMAP_PATH}`)
+        console.warn(
+            `Failed to load raw sitemap at ${sitemapPath}:`,
+            error instanceof Error ? error.message : error
+        )
         console.warn(error)
         return []
     }
