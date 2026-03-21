@@ -1,0 +1,30 @@
+query GetSyntaxFeatures {
+    surveys {
+        state_of_js {
+            js2025 {
+                features {
+                    syntax_features {
+                        id
+                        responses {
+                            allEditions(editionCount: 1) {
+                                editionId
+                                year
+                                completion {
+                                    count
+                                    percentageSurvey
+                                    total
+                                }
+                                buckets {
+                                    id
+                                    count
+                                    percentageQuestion
+                                    percentageSurvey
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
