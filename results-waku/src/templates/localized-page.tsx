@@ -1,54 +1,13 @@
 import path from 'node:path'
-import getSyntaxFeaturesDocument from '../graphql/get-syntax-features.graphql'
-import { requestGraphql } from '../lib/graphql/client'
 import { loadSitemap, findSitemapPage } from '../load-sitemap'
-
-const EDITIONID = process.env.EDITIONID || 'js2025'
-
-type Bucket = {
-    id: string
-    count: number
-    percentageQuestion: number
-    percentageSurvey: number
-}
-
-type SyntaxFeaturesEdition = {
-    editionId: string
-    year: number
-    completion: { count: number; percentageSurvey: number; total: number }
-    buckets: Bucket[]
-}
-
-type SyntaxFeaturesData = {
-    id: string
-    responses: {
-        allEditions: SyntaxFeaturesEdition[]
-    }
-}
-
-type SyntaxFeaturesQueryResult = {
-    surveys: {
-        state_of_js: {
-            js2025: {
-                features: {
-                    syntax_features: SyntaxFeaturesData
-                }
-            }
-        }
-    }
-}
-
-const fetchSyntaxFeatures = async (): Promise<SyntaxFeaturesEdition | null> => {
-    try {
-        const data = await requestGraphql<SyntaxFeaturesQueryResult>(getSyntaxFeaturesDocument)
-        const editions =
-            data?.surveys?.state_of_js?.js2025?.features?.syntax_features?.responses?.allEditions
-        return editions?.[0] ?? null
-    } catch (error) {
-        console.error('Failed to fetch syntax_features:', error)
-        return null
-    }
-}
+import { getEditionId, getSurveyId } from '../lib/i18n'
+import {
+    fetchBlockData,
+    fetchSectionItems,
+    getBlockQuerySpec,
+    type BlockResult,
+    type SectionItemResult,
+} from '../lib/survey-query'
 
 type LocalizedPageProps = {
     locale: string
@@ -56,40 +15,74 @@ type LocalizedPageProps = {
 }
 
 export async function LocalizedPage({ locale: localeId, slug }: LocalizedPageProps) {
-    const sitemapPath = path.resolve(`./src/surveys/${EDITIONID}/config/raw_sitemap.yml`)
+    const editionId = getEditionId()
+    const surveyId = getSurveyId()
+    const sitemapPath = path.resolve(`./src/surveys/${editionId}/config/raw_sitemap.yml`)
     const sitemapPages = loadSitemap(sitemapPath)
     const pageInfo = findSitemapPage(sitemapPages, `/${slug}/`)
 
-    const hasSyntaxFeatures = pageInfo?.blocks.some(b => b.id === 'syntax_features') ?? false
+    const specs = (pageInfo?.blocks ?? [])
+        .map(block => getBlockQuerySpec(block, pageInfo!.id))
+        .filter(spec => spec !== null)
 
-    const syntaxFeaturesEdition = hasSyntaxFeatures ? await fetchSyntaxFeatures() : null
+    const questionSpecs = specs.filter(s => s.kind === 'question')
+    const itemsSpecs = specs.filter(s => s.kind === 'items')
+
+    // deduplicate items specs by sectionId - each section is fetched once
+    const uniqueItemsSections = [...new Map(itemsSpecs.map(s => [s.sectionId, s])).values()]
+
+    const [blockResults, sectionResults] = await Promise.all([
+        Promise.all(questionSpecs.map(spec => fetchBlockData(surveyId, editionId, spec))),
+        Promise.all(
+            uniqueItemsSections.map(spec => fetchSectionItems(surveyId, editionId, spec.sectionId))
+        ),
+    ])
 
     return (
         <section>
             <h1>results-waku</h1>
-            <p>locale: {localeId}</p>
-            <p>page: {pageInfo?.id ?? slug}</p>
+            <p>
+                locale: {localeId} / page: {pageInfo?.id ?? slug}
+            </p>
 
-            {syntaxFeaturesEdition && (
-                <div>
-                    <h2>Syntax Features</h2>
+            {blockResults.filter((r): r is BlockResult => r !== null).map(result => (
+                <div key={result.blockId}>
+                    <h2>{result.blockId}</h2>
                     <p>
-                        edition: {syntaxFeaturesEdition.editionId} ({syntaxFeaturesEdition.year})
-                    </p>
-                    <p>
-                        respondents: {syntaxFeaturesEdition.completion.count} /{' '}
-                        {syntaxFeaturesEdition.completion.total}
+                        respondents: {result.edition.completion.count} /{' '}
+                        {result.edition.completion.total}
                     </p>
                     <ul>
-                        {syntaxFeaturesEdition.buckets.map(bucket => (
-                            <li key={bucket.id}>
-                                {bucket.id}: {bucket.count} (
-                                {bucket.percentageQuestion.toFixed(1)}%)
+                        {result.edition.buckets.map(b => (
+                            <li key={b.id}>
+                                {b.id}: {b.count} ({b.percentageQuestion.toFixed(1)}%)
                             </li>
                         ))}
                     </ul>
                 </div>
-            )}
+            ))}
+
+            {sectionResults.filter((r): r is SectionItemResult => r !== null).map(result => (
+                <div key={result.sectionId}>
+                    <h2>{result.sectionId}</h2>
+                    <ul>
+                        {result.items.map(item => (
+                            <li key={item.id}>
+                                <strong>{item.id}</strong>: respondents{' '}
+                                {item.edition.completion.count} /{' '}
+                                {item.edition.completion.total}
+                                <ul>
+                                    {item.edition.buckets.map(b => (
+                                        <li key={b.id}>
+                                            {b.id}: {b.count} ({b.percentageQuestion.toFixed(1)}%)
+                                        </li>
+                                    ))}
+                                </ul>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ))}
         </section>
     )
 }
