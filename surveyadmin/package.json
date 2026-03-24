@@ -16,9 +16,9 @@
     "@devographics/debug": "workspace:^1.0.0",
     "@devographics/fetch": "workspace:^1.0.0",
     "@devographics/helpers": "workspace:^1.0.0",
-    "@devographics/i18n": "workspace:^",
+    "@devographics/i18n": "workspace:1.0.0",
     "@devographics/mongo": "workspace:^1.0.0",
-    "@devographics/react-i18n": "workspace:^",
+    "@devographics/react-i18n": "workspace:1.0.0",
     "@devographics/redis": "workspace:^1.0.0",
     "@devographics/templates": "workspace:^1.0.0",
     "@devographics/types": "workspace:^1.0.0",
@@ -92,11 +92,5 @@
   "peerDependencies": {
     "@babel/preset-env": "^7.28.5"
   },
-  "packageManager": "pnpm@10.30.2",
-  "pnpm": {
-    "overrides": {
-      "@types/react": "19.2.7",
-      "@types/react-dom": "19.2.3"
-    }
-  }
+  "packageManager": "pnpm@10.30.2"
 }

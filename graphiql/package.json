@@ -1,6 +1,6 @@
 {
     "name": "example-graphiql-vite",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "private": true,
     "dependencies": {
         "@graphiql/plugin-explorer": "^5.1.1",

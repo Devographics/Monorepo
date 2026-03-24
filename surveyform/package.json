@@ -38,7 +38,7 @@
     "tokyodev": "dotenv -e .env.tokyodev.local next"
   },
   "dependencies": {
-    "@devographics/components": "workspace:^",
+    "@devographics/components": "workspace:1.0.0",
     "@devographics/debug": "workspace:^1.0.0",
     "@devographics/fetch": "workspace:^1.0.0",
     "@devographics/helpers": "workspace:^1.0.0",
@@ -141,11 +141,5 @@
   "packageManager": "pnpm@10.30.2",
   "engines": {
     "node": "20.11.1"
-  },
-  "pnpm": {
-    "overrides": {
-      "@types/react": "npm:types-react@19.0.0-rc.1",
-      "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
-    }
   }
 }
