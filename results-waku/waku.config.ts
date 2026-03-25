@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import type { Config } from 'waku/config'
+import yaml from '@modyfi/vite-plugin-yaml'
 
 const graphqlDocumentPlugin = () => ({
     name: 'graphql-document',
@@ -38,6 +39,6 @@ const envPlugin = () => ({
 
 export default {
     vite: {
-        plugins: [graphqlDocumentPlugin(), envPlugin()]
+        plugins: [graphqlDocumentPlugin(), envPlugin(), yaml()]
     }
 } satisfies Config

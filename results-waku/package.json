@@ -13,12 +13,19 @@
         "test:e2e:ui": "playwright test -c playwright.config.ts --ui"
     },
     "dependencies": {
+        "@modyfi/vite-plugin-yaml": "^1.1.1",
         "js-yaml": "^4.1.0",
         "react": "19.2.0",
         "react-dom": "19.2.0",
         "waku": "https://pkg.pr.new/waku@6dfbc99"
     },
     "devDependencies": {
+        "@devographics/constants": "workspace:*",
+        "@devographics/debug": "workspace:*",
+        "@devographics/fetch": "workspace:*",
+        "@devographics/i18n": "workspace:*",
+        "@devographics/react-i18n": "workspace:*",
+        "@devographics/types": "workspace:*",
         "@playwright/test": "^1.47.0",
         "@types/react": "^19.2.2",
         "@types/react-dom": "^19.2.2",
@@ -26,5 +33,8 @@
         "pixelmatch": "^7.1.0",
         "pngjs": "^7.0.0",
         "typescript": "^5.9.3"
+    },
+    "engines": {
+        "node": "24.x"
     }
 }
