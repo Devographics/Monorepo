@@ -1,6 +1,6 @@
 import getLocaleDocument from '../graphql/get-locale.graphql'
-import getLocalesDocument from '../graphql/get-locales.graphql'
 import { graphqlLiteral, interpolateGraphqlDocument, requestGraphql } from './graphql/client'
+import { getAllLocaleDefinitions, getLocaleDict } from '@devographics/i18n/server'
 
 type Translation = {
     key: string
@@ -124,17 +124,9 @@ const fetchLocale = async (localeId: string, contexts: string[]) => {
     return parsedLocale
 }
 
-const fetchLocales = async () => {
-    if (localesCache) {
-        return localesCache
-    }
-    const data = await requestGraphql<LocalesQueryResult>(getLocalesDocument)
-    localesCache = data.locales || []
-    return localesCache
-}
-
 export const getAllLocales = async () => {
-    const locales = await fetchLocales()
+    const result = await getAllLocaleDefinitions()
+    const locales = result.locales || []
     return locales.filter(locale => locale.active !== false)
 }
 

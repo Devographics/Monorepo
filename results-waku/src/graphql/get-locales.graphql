@@ -1,8 +1,0 @@
-query GetLocales {
-    locales {
-        id
-        label
-        completion
-        translators
-    }
-}
