@@ -1,5 +1,3 @@
-import getLocaleDocument from '../graphql/get-locale.graphql'
-import { graphqlLiteral, interpolateGraphqlDocument, requestGraphql } from './graphql/client'
 import { getAllLocaleDefinitions, getLocaleDict } from '@devographics/i18n/server'
 
 type Translation = {
@@ -79,24 +77,6 @@ export const getTranslationContexts = () => {
     return [...baseContexts, ...customContexts, surveyId, editionId]
 }
 
-const createLocaleQuery = (localeId: string, contexts: string[]) =>
-    interpolateGraphqlDocument(getLocaleDocument, {
-        LOCALE_ID: graphqlLiteral(toEnumValue(localeId)),
-        CONTEXTS: contexts.map(context => graphqlLiteral(toEnumValue(context)))
-    })
-
-const parseLocale = (localeWithStrings: LocaleWithStrings, contexts: string[]): LocaleParsed => {
-    const dict: Record<string, Translation> = {}
-    for (const translation of localeWithStrings.strings) {
-        dict[translation.key] = translation
-    }
-    return {
-        ...localeWithStrings,
-        dict,
-        contexts
-    }
-}
-
 const createEmptyLocale = (localeId: string, contexts: string[]): LocaleParsed => ({
     id: localeId,
     label: localeId,
@@ -106,23 +86,6 @@ const createEmptyLocale = (localeId: string, contexts: string[]): LocaleParsed =
     dict: {},
     contexts
 })
-
-const fetchLocale = async (localeId: string, contexts: string[]) => {
-    const cacheKey = `${localeId}::${contexts.join(',')}`
-    const cached = localeDictCache.get(cacheKey)
-    if (cached) {
-        return cached
-    }
-
-    const data = await requestGraphql<LocaleQueryResult>(createLocaleQuery(localeId, contexts))
-    if (!data.locale) {
-        throw new Error(`Locale "${localeId}" not found`)
-    }
-
-    const parsedLocale = parseLocale(data.locale, contexts)
-    localeDictCache.set(cacheKey, parsedLocale)
-    return parsedLocale
-}
 
 export const getAllLocales = async () => {
     if (localesCache) {
@@ -141,7 +104,10 @@ export const loadLocaleWithFallback = async (
     const contexts = getTranslationContexts()
     const fallbackLocaleId = getFallbackLocaleId()
     try {
-        const locale = await fetchLocale(requestedLocaleId, contexts)
+        const { locale, error } = await getLocaleDict({ localeId: requestedLocaleId, contexts })
+        if (error || !locale) {
+            throw error
+        }
         return {
             locale,
             requestedLocaleId,
@@ -151,7 +117,13 @@ export const loadLocaleWithFallback = async (
     } catch (error) {
         const primaryError = error instanceof Error ? error.message : 'unknown error'
         try {
-            const fallbackLocale = await fetchLocale(fallbackLocaleId, contexts)
+            const { locale: fallbackLocale, error } = await getLocaleDict({
+                localeId: fallbackLocaleId,
+                contexts
+            })
+            if (error || !fallbackLocale) {
+                throw error
+            }
             return {
                 locale: fallbackLocale,
                 requestedLocaleId,
