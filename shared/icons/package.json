@@ -13,7 +13,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@devographics/components": "workspace:^",
+        "@devographics/components": "workspace:1.0.0",
         "@devographics/types": "workspace:*",
         "styled-components": "^5.3.6"
     },

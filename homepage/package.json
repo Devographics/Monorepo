@@ -17,10 +17,10 @@
     "sass": "^1.97.1"
   },
   "dependencies": {
-    "@devographics/fetch": "workspace:^",
-    "@devographics/helpers": "workspace:^",
-    "@devographics/i18n": "workspace:^",
-    "@devographics/types": "workspace:^",
+    "@devographics/fetch": "workspace:1.0.0",
+    "@devographics/helpers": "workspace:1.0.0",
+    "@devographics/i18n": "workspace:1.0.0",
+    "@devographics/types": "workspace:1.0.0",
     "@nanostores/react": "^1.0.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
