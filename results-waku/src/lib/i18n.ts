@@ -125,9 +125,14 @@ const fetchLocale = async (localeId: string, contexts: string[]) => {
 }
 
 export const getAllLocales = async () => {
+    if (localesCache) {
+        return localesCache
+    }
     const result = await getAllLocaleDefinitions()
     const locales = result.locales || []
-    return locales.filter(locale => locale.active !== false)
+    const activeLocales = locales.filter(locale => locale.active !== false)
+    localesCache = activeLocales
+    return activeLocales
 }
 
 export const loadLocaleWithFallback = async (
