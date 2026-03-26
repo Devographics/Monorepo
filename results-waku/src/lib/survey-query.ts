@@ -2,6 +2,11 @@ import type { SitemapBlock } from '../load-sitemap'
 import getBlockDataDocument from '../graphql/get-block-data.graphql'
 import getSectionItemsDocument from '../graphql/get-section-items.graphql'
 import { graphqlLiteral, interpolateGraphqlDocument, requestGraphql } from './graphql/client'
+import type { BlockVariantDefinition, Bucket } from '@devographics/types'
+import { getDataLocations, getFileAsJSON, getFileAsString, getLoadMethod } from './load'
+import path from 'path'
+import { parse } from 'graphql'
+import { print } from 'graphql-print'
 
 const DATA_TEMPLATES: Record<string, string> = {
     multiple_options2: 'responses',
@@ -31,13 +36,6 @@ type ItemsSpec = {
 }
 
 export type BlockQuerySpec = QuestionSpec | ItemsSpec
-
-export type Bucket = {
-    id: string
-    count: number
-    percentageQuestion: number
-    percentageSurvey: number
-}
 
 export type BlockEditionData = {
     editionId: string
@@ -167,15 +165,99 @@ export const fetchBlockData = async (
     editionId: string,
     spec: QuestionSpec
 ): Promise<BlockResult | null> => {
-    const query = interpolateGraphqlDocument(getBlockDataDocument, {
+    // main block variables
+    const { sectionId, blockId, subField } = spec
+
+    // paths
+    const paths = getDataLocations(surveyId, editionId)
+    const basePath = paths.localPath + '/results'
+    const baseUrl = paths.url + '/results'
+
+    const dataDirPath = path.resolve(`${basePath}/data/${sectionId}`)
+    const dataFileName = `${blockId}.json`
+    const dataFilePath = `${dataDirPath}/${dataFileName}`
+    const queryDirPath = path.resolve(`${basePath}/queries/${sectionId}`)
+    const queryFileName = `${blockId}.graphql`
+    const queryFilePath = `${queryDirPath}/${queryFileName}`
+
+    // check for existing data, either locally or remotely
+    const existingData = await getFileAsJSON({
+        localPath: dataFilePath,
+        remoteUrl: `${baseUrl}/data/${sectionId}/${dataFileName}`
+    })
+
+    // check for existing query .graphql document
+    const existingQueryFormatted = await getFileAsString({
+        localPath: queryFilePath,
+        remoteUrl: `${baseUrl}/queries/${sectionId}/${queryFileName}`
+    })
+
+    // TODO: pass block to fetchBlockData()
+    const block = {} as BlockVariantDefinition
+
+    // use either custom block query or default block query
+    const rawQuery = block?.query || getBlockDataDocument
+
+    // interpolate main block variables to get final query
+    const query = interpolateGraphqlDocument(rawQuery, {
         SURVEY_ID: graphqlLiteral(surveyId),
         EDITION_ID: graphqlLiteral(editionId),
-        SECTION_ID: graphqlLiteral(spec.sectionId),
-        QUESTION_ID: graphqlLiteral(spec.blockId),
-        SUB_FIELD: graphqlLiteral(spec.subField)
+        SECTION_ID: graphqlLiteral(sectionId),
+        QUESTION_ID: graphqlLiteral(blockId),
+        SUB_FIELD: graphqlLiteral(subField)
     })
+
+    // check if query has changed compared to existing query document
+    let queryFormatted
     try {
-        const data = await requestGraphql<Record<string, unknown>>(query)
+        const ast = parse(query)
+        queryFormatted = print(ast, { preserveComments: true })
+    } catch (error) {
+        console.warn(error)
+        console.log('⚠️ Detected issue in follwing query: ')
+        console.log(query)
+    }
+    // check if query has changed
+    const queryHasChanged = queryFormatted !== existingQueryFormatted
+
+    // figure out if new data should be fetched
+    let shouldFetchData
+    let reason
+    if (process.env.DISABLE_CACHE === 'true') {
+        shouldFetchData = true
+        reason = '[cache disabled]'
+    } else {
+        if (existingData) {
+            if (queryHasChanged) {
+                if (process.env.FROZEN === 'true') {
+                    shouldFetchData = false
+                    reason = '[query changed but data is frozen]'
+                } else {
+                    shouldFetchData = true
+                    reason = '[query change detected]'
+                }
+            } else {
+                shouldFetchData = false
+                reason = '[no query change detected]'
+            }
+        } else {
+            shouldFetchData = true
+            reason = '[no existing data found]'
+        }
+    }
+
+    try {
+        let data
+        if (shouldFetchData) {
+            console.log(`// 🔍 ${reason} Running uncached query for file ${dataFileName}…`)
+            data = await requestGraphql<Record<string, unknown>>(query)
+        } else {
+            console.log(
+                `// 🎯 ${reason} File ${dataFileName} found on ${getLoadMethod()}, loading its contents…`
+            )
+            data = existingData
+        }
+
         const edition = getBlockEdition(
             data,
             surveyId,

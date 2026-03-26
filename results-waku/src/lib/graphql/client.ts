@@ -1,3 +1,5 @@
+import { removeNull } from '@devographics/fetch'
+
 type GraphqlLiteral = {
     kind: 'literal'
     value: string
@@ -88,5 +90,5 @@ export const requestGraphql = async <T>(query: string): Promise<T> => {
         throw new Error('GraphQL response did not contain data')
     }
 
-    return json.data
+    return removeNull(json.data)
 }

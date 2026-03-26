@@ -14,22 +14,67 @@ export interface SitemapSection extends SitemapSectionFields {
 
 export interface BlockVariantDefinition {
     id: string
-    fieldId: string
-    tabId: string
-    title: string
-    titleKey: string
-    descriptionId: string
-    i18nNamespace: string
-    template: string
-    blockType: string
-    parameters: SitemapBlockParameters
-    filtersState: any // Assuming JSON maps to a general object type
-    year: number
-    items?: string[]
-    defaultUnits: string
-    queryOptions: SitemapBlockQueryOptions
-    entity: Entity // Entity type is referenced but not defined in provided GraphQL code. Assuming it exists elsewhere.
-    canCustomize: boolean
+    bucketKeysName?: string
+    fieldId?: string
+    sectionId: string
+    sectioni18nNamespace?: string
+    template?: string
+    blockType?: string
+    tabId?: string
+    titleKey?: string
+    titleId?: string
+    questionKey?: string
+    description?: string
+    descriptionKey?: string
+    takeaway?: string
+    takeawayKey?: string
+    noteKey?: string
+
+    defaultUnits?: BucketUnits
+    availableUnits?: Array<BucketUnits>
+
+    defaultView?: Views
+
+    // data
+    query?: string
+    variables?: any
+    parameters?: ResponsesParameters
+    filters?: FilterType[]
+    queryOptions?: BlockQueryOptions
+    hideCutoff?: number
+
+    // predefined filters state
+    filtersState?: CustomizationDefinition
+
+    // config
+    mode?: BlockMode
+
+    // will default to the id of the chart
+    i18nNamespace?: string
+    colorVariant?: string
+    overrides?: object
+
+    // booleans
+    legendPosition?: 'bottom' | 'top'
+    translateData?: boolean
+    hasSponsor?: boolean
+    hasComments?: boolean
+
+    wrapBlock?: boolean
+    showInNav?: boolean
+
+    dataPath?: string
+    isFreeform?: boolean
+
+    // from BlockChart
+    switcherPosition?: 'top' | 'bottom'
+    showNote?: boolean
+    customChart?: any
+
+    customizationModes?: string[]
+
+    // options that only affect how the chart is displayed, not the query or data
+    chartOptions: ChartOptions
 }
 
 export interface BlockVariantComputed extends BlockVariantDefinition {

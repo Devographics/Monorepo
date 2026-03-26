@@ -18,7 +18,7 @@ const isNodeRuntime = !process.env.NEXT_RUNTIME || process.env.NEXT_RUNTIME === 
  * GraphQL objects have explicit "foo: null" fields, we can remove them to save space
  * @returns
  */
-function removeNull(obj: any): any {
+export function removeNull(obj: any): any {
     let clean = Object.fromEntries(
         Object.entries(obj)
             .map(([k, v]) => [k, v === Object(v) ? removeNull(v) : v])

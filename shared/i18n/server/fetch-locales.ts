@@ -10,17 +10,9 @@ import {
     allowedCachingMethods,
     graphqlFetcher,
     cachedPipeline,
-    localeWithStringsCacheKey
+    localeWithStringsCacheKey,
+    removeNull
 } from '@devographics/fetch'
-
-export function removeNull(obj: any): any {
-    const clean = Object.fromEntries(
-        Object.entries(obj)
-            .map(([k, v]) => [k, v === Object(v) ? removeNull(v) : v])
-            .filter(([_, v]) => v != null && (v !== Object(v) || Object.keys(v).length))
-    )
-    return Array.isArray(obj) ? Object.values(clean) : clean
-}
 
 const allLocalesCacheKey = () => `${process.env.APP_NAME}__allLocales__metadata`
 const getLocaleContextCacheKey = (localeId: string, context: string) =>
