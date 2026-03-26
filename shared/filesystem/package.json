@@ -1,0 +1,23 @@
+{
+    "name": "@devographics/filesystem",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",
+    "main": "index.ts",
+    "types": "./index.ts",
+    "exports": {
+        ".": "./index.ts",
+        "./edge-light": "./index.edge.ts"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "node-fetch": "^2.6.7"
+    },
+    "devDependencies": {
+        "@types/node": "^18.11.18"
+    }
+}
