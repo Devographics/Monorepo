@@ -36,6 +36,6 @@
     },
     "packageManager": "pnpm@10.30.2",
     "engines": {
-        "node": "v20.11.1"
+        "node": "v24"
     }
 }

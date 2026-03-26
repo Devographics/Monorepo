@@ -1,0 +1,29 @@
+query GetSectionItems {
+    surveys {
+        __SURVEY_ID__ {
+            __EDITION_ID__ {
+                __SECTION_ID__ {
+                    _items {
+                        id
+                        responses {
+                            allEditions(editionCount: 1) {
+                                editionId
+                                year
+                                completion {
+                                    count
+                                    total
+                                }
+                                buckets {
+                                    id
+                                    count
+                                    percentageQuestion
+                                    percentageSurvey
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

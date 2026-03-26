@@ -93,7 +93,7 @@ export async function getAllLocaleDefinitions(): Promise<
     | { error: Error; locales: undefined }
     | {
           error: undefined
-          locales: Array<Pick<Locale, 'label' | 'id' | 'translators' | 'completion'>>
+          locales: Array<Pick<Locale, 'label' | 'id' | 'translators' | 'completion' | 'active'>>
       }
 > {
     const allLocalesKey = allLocalesCacheKey()

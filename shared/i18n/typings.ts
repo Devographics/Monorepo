@@ -25,6 +25,7 @@ export interface Locale {
     repo?: string
     translatedCount?: number
     totalCount?: number
+    active?: boolean
 }
 
 /**

@@ -1,0 +1,29 @@
+query GetBlockData {
+    surveys {
+        __SURVEY_ID__ {
+            __EDITION_ID__ {
+                __SECTION_ID__ {
+                    __QUESTION_ID__ {
+                        id
+                        __SUB_FIELD__ {
+                            allEditions(editionCount: 1) {
+                                editionId
+                                year
+                                completion {
+                                    count
+                                    total
+                                }
+                                buckets {
+                                    id
+                                    count
+                                    percentageQuestion
+                                    percentageSurvey
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,1 +1,0 @@
-export const screenReadersOnly = "screen-readers-only"

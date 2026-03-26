@@ -1,0 +1,22 @@
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - heading "results-waku i18n check" [level=1] [ref=e4]
+    - paragraph [ref=e5]: "survey: state_of_js"
+    - paragraph [ref=e6]: "edition: js2025"
+    - paragraph [ref=e7]: "requested locale: en-US"
+    - paragraph [ref=e8]: "resolved locale: en-US"
+    - paragraph [ref=e9]: "active path: /"
+    - paragraph [ref=e10]: "fallback: enabled (Missing API_URL (or GATSBY_API_URL); fallback failed: Missing API_URL (or GATSBY_API_URL))"
+    - heading "sample translations" [level=2] [ref=e11]
+    - list [ref=e12]:
+      - listitem [ref=e13]:
+        - code [ref=e14]: general.surveys_available_languages
+        - text: ": general.surveys_available_languages (missing)"
+      - listitem [ref=e15]:
+        - code [ref=e16]: general.results.description
+        - text: ": general.results.description (missing)"
+      - listitem [ref=e17]:
+        - code [ref=e18]: general.share
+        - text: ": general.share (missing)"
+    - heading "locales" [level=2] [ref=e19]
+    - list

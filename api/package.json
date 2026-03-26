@@ -78,6 +78,6 @@
         "typecheck": "tsc --noEmit --p ./tsconfig.json"
     },
     "engines": {
-        "node": "^20.11.1"
+        "node": "^24"
     }
 }
