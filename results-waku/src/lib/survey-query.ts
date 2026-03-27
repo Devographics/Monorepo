@@ -2,7 +2,7 @@ import type { SitemapBlock } from '../load-sitemap'
 import getBlockDataDocument from '../graphql/get-block-data.graphql'
 import getSectionItemsDocument from '../graphql/get-section-items.graphql'
 import { graphqlLiteral, interpolateGraphqlDocument, requestGraphql } from './graphql/client'
-import type { BlockVariantDefinition, Bucket } from '@devographics/types'
+import type { BlockVariantDefinition, Bucket, ResponseEditionData } from '@devographics/types'
 import { getDataLocations, getFileAsJSON, getFileAsString, getLoadMethod } from './load'
 import path from 'path'
 import { parse } from 'graphql'
@@ -37,21 +37,14 @@ type ItemsSpec = {
 
 export type BlockQuerySpec = QuestionSpec | ItemsSpec
 
-export type BlockEditionData = {
-    editionId: string
-    year: number
-    completion: { count: number; total: number }
-    buckets: Bucket[]
-}
-
 export type BlockResult = {
     blockId: string
-    edition: BlockEditionData
+    edition: ResponseEditionData
 }
 
 export type SectionItemResult = {
     sectionId: string
-    items: Array<{ id: string; edition: BlockEditionData }>
+    items: Array<{ id: string; edition: ResponseEditionData }>
 }
 
 const isObject = (v: unknown): v is Record<string, unknown> =>
@@ -67,7 +60,7 @@ const isBucket = (v: unknown): v is Bucket =>
 const isCompletion = (v: unknown): v is { count: number; total: number } =>
     isObject(v) && typeof v.count === 'number' && typeof v.total === 'number'
 
-const isBlockEditionData = (v: unknown): v is BlockEditionData =>
+const isResponseEditionData = (v: unknown): v is ResponseEditionData =>
     isObject(v) &&
     typeof v.editionId === 'string' &&
     typeof v.year === 'number' &&
@@ -75,14 +68,14 @@ const isBlockEditionData = (v: unknown): v is BlockEditionData =>
     Array.isArray(v.buckets) &&
     v.buckets.every(isBucket)
 
-const getBlockEdition = (
+const getBlockData = (
     data: Record<string, unknown>,
     surveyId: string,
     editionId: string,
     sectionId: string,
     questionId: string,
     subField: string
-): BlockEditionData | undefined => {
+): ResponseEditionData | undefined => {
     const surveys = data.surveys
     if (!isObject(surveys)) return undefined
     const survey = surveys[surveyId]
@@ -98,7 +91,7 @@ const getBlockEdition = (
     const allEditions = subFieldData.allEditions
     if (!Array.isArray(allEditions)) return undefined
     const first = allEditions[0]
-    return isBlockEditionData(first) ? first : undefined
+    return isResponseEditionData(first) ? first : undefined
 }
 
 type RawSectionItem = { id: string; responses: { allEditions: unknown[] } }
@@ -258,17 +251,10 @@ export const fetchBlockData = async (
             data = existingData
         }
 
-        const edition = getBlockEdition(
-            data,
-            surveyId,
-            editionId,
-            spec.sectionId,
-            spec.blockId,
-            spec.subField
-        )
-        return edition ? { blockId: spec.blockId, edition } : null
+        const edition = getBlockData(data, surveyId, editionId, sectionId, blockId, subField)
+        return edition ? { blockId, edition } : null
     } catch (error) {
-        console.error(`Failed to fetch ${spec.blockId}:`, error)
+        console.error(`Failed to get data for block ${blockId}:`, error)
         return null
     }
 }
@@ -289,8 +275,8 @@ export const fetchSectionItems = async (
         if (!rawItems) return null
         const items = rawItems
             .map(item => ({ id: item.id, edition: item.responses.allEditions[0] }))
-            .filter((item): item is { id: string; edition: BlockEditionData } =>
-                isBlockEditionData(item.edition)
+            .filter((item): item is { id: string; edition: ResponseEditionData } =>
+                isResponseEditionData(item.edition)
             )
         return { sectionId, items }
     } catch (error) {
