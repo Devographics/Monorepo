@@ -2,11 +2,18 @@ import type { SitemapBlock } from '../load-sitemap'
 import getBlockDataDocument from '../graphql/get-block-data.graphql'
 import getSectionItemsDocument from '../graphql/get-section-items.graphql'
 import { graphqlLiteral, interpolateGraphqlDocument, requestGraphql } from './graphql/client'
-import type { BlockVariantDefinition, Bucket, ResponseEditionData } from '@devographics/types'
+import type {
+    BlockVariantDefinition,
+    Bucket,
+    EditionMetadata,
+    ResponseEditionData,
+    SurveyMetadata
+} from '@devographics/types'
 import { getDataLocations, getFileAsJSON, getFileAsString, getLoadMethod } from './load'
 import path from 'path'
 import { parse } from 'graphql'
 import { print } from 'graphql-print'
+import { getBlockQuery } from './queries'
 
 const DATA_TEMPLATES: Record<string, string> = {
     multiple_options2: 'responses',
@@ -186,18 +193,14 @@ export const fetchBlockData = async (
     })
 
     // TODO: pass block to fetchBlockData()
-    const block = {} as BlockVariantDefinition
+    const block = { id: blockId } as BlockVariantDefinition
 
-    // use either custom block query or default block query
-    const rawQuery = block?.query || getBlockDataDocument
-
-    // interpolate main block variables to get final query
-    const query = interpolateGraphqlDocument(rawQuery, {
-        SURVEY_ID: graphqlLiteral(surveyId),
-        EDITION_ID: graphqlLiteral(editionId),
-        SECTION_ID: graphqlLiteral(sectionId),
-        QUESTION_ID: graphqlLiteral(blockId),
-        SUB_FIELD: graphqlLiteral(subField)
+    const { query } = await getBlockQuery({
+        block,
+        survey: { id: surveyId } as SurveyMetadata,
+        edition: { id: editionId } as EditionMetadata,
+        section: { id: sectionId },
+        chartFilters: block.filtersState
     })
 
     // check if query has changed compared to existing query document

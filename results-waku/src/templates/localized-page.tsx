@@ -6,8 +6,9 @@ import {
     fetchSectionItems,
     getBlockQuerySpec,
     type BlockResult,
-    type SectionItemResult,
+    type SectionItemResult
 } from '../lib/survey-query'
+import { allowedCachingMethods } from '@/lib/load'
 
 type LocalizedPageProps = {
     locale: string
@@ -35,7 +36,7 @@ export async function LocalizedPage({ locale: localeId, slug }: LocalizedPagePro
         Promise.all(questionSpecs.map(spec => fetchBlockData(surveyId, editionId, spec))),
         Promise.all(
             uniqueItemsSections.map(spec => fetchSectionItems(surveyId, editionId, spec.sectionId))
-        ),
+        )
     ])
 
     return (
@@ -45,44 +46,49 @@ export async function LocalizedPage({ locale: localeId, slug }: LocalizedPagePro
                 locale: {localeId} / page: {pageInfo?.id ?? slug}
             </p>
 
-            {blockResults.filter((r): r is BlockResult => r !== null).map(result => (
-                <div key={result.blockId}>
-                    <h2>{result.blockId}</h2>
-                    <p>
-                        respondents: {result.edition.completion.count} /{' '}
-                        {result.edition.completion.total}
-                    </p>
-                    <ul>
-                        {result.edition.buckets.map(b => (
-                            <li key={b.id}>
-                                {b.id}: {b.count} ({b.percentageQuestion.toFixed(1)}%)
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            ))}
+            {blockResults
+                .filter((r): r is BlockResult => r !== null)
+                .map(result => (
+                    <div key={result.blockId}>
+                        <h2>{result.blockId}</h2>
+                        <p>
+                            respondents: {result.edition.completion.count} /{' '}
+                            {result.edition.completion.total}
+                        </p>
+                        <ul>
+                            {result.edition.buckets.map(b => (
+                                <li key={b.id}>
+                                    {b.id}: {b.count} ({b.percentageQuestion.toFixed(1)}%)
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
 
-            {sectionResults.filter((r): r is SectionItemResult => r !== null).map(result => (
-                <div key={result.sectionId}>
-                    <h2>{result.sectionId}</h2>
-                    <ul>
-                        {result.items.map(item => (
-                            <li key={item.id}>
-                                <strong>{item.id}</strong>: respondents{' '}
-                                {item.edition.completion.count} /{' '}
-                                {item.edition.completion.total}
-                                <ul>
-                                    {item.edition.buckets.map(b => (
-                                        <li key={b.id}>
-                                            {b.id}: {b.count} ({b.percentageQuestion.toFixed(1)}%)
-                                        </li>
-                                    ))}
-                                </ul>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            ))}
+            {sectionResults
+                .filter((r): r is SectionItemResult => r !== null)
+                .map(result => (
+                    <div key={result.sectionId}>
+                        <h2>{result.sectionId}</h2>
+                        <ul>
+                            {result.items.map(item => (
+                                <li key={item.id}>
+                                    <strong>{item.id}</strong>: respondents{' '}
+                                    {item.edition.completion.count} /{' '}
+                                    {item.edition.completion.total}
+                                    <ul>
+                                        {item.edition.buckets.map(b => (
+                                            <li key={b.id}>
+                                                {b.id}: {b.count} ({b.percentageQuestion.toFixed(1)}
+                                                %)
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
         </section>
     )
 }

@@ -775,6 +775,9 @@ importers:
       js-yaml:
         specifier: ^4.1.0
         version: 4.1.1
+      lodash:
+        specifier: ^4.17.23
+        version: 4.17.23
       react:
         specifier: 19.2.0
         version: 19.2.0
@@ -788,6 +791,9 @@ importers:
       '@playwright/test':
         specifier: ^1.47.0
         version: 1.58.2
+      '@types/lodash':
+        specifier: ^4.17.24
+        version: 4.17.24
       '@types/react':
         specifier: ^19.2.2
         version: 19.2.7

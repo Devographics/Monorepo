@@ -26,12 +26,14 @@
         "graphql": "16.9.0",
         "graphql-print": "^1.0.1",
         "js-yaml": "^4.1.0",
+        "lodash": "^4.17.23",
         "react": "19.2.0",
         "react-dom": "19.2.0",
         "waku": "https://pkg.pr.new/waku@6dfbc99"
     },
     "devDependencies": {
         "@playwright/test": "^1.47.0",
+        "@types/lodash": "^4.17.24",
         "@types/react": "^19.2.2",
         "@types/react-dom": "^19.2.2",
         "oxfmt": "^0.36.0",

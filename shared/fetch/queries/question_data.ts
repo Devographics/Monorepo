@@ -1,18 +1,11 @@
 import { getEntityFragment } from './entity_fragment'
-import {
-    QuestionMetadata,
-    Filters,
-    ResponsesParameters,
-    ResultsSubFieldEnum
-} from '@devographics/types'
+import { Filters, ResponsesParameters, ResultsSubFieldEnum, FacetItem } from '@devographics/types'
 // does not work in edge middlewares or whatever?? really??
 // import isEmpty from 'lodash/isEmpty.js'
 
 function isEmpty(o) {
     return typeof o === 'undefined' || o === null || Object.keys(o).length === 0
 }
-
-export type FacetItem = Pick<QuestionMetadata, 'id' | 'sectionId' | 'optionsAreSequential'>
 
 export interface QueryArgs {
     facet?: FacetItem

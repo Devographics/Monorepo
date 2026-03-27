@@ -1,0 +1,87 @@
+export const getEntityFragment = () => `entity {
+    ${getEntityFragmentContents()}
+}`
+
+export const getEntityFragmentContents = () => `name
+    nameHtml
+    nameClean
+    alias
+    description
+    descriptionHtml
+    descriptionClean
+    id
+    parentId
+    entityType
+    example {
+      label
+      language
+      code
+      codeHighlighted
+    }
+    avatar {
+      url
+    }
+    homepage {
+      url
+    }
+    youtube {
+      url
+    }
+    twitter {
+      url
+    }
+    bluesky {
+      url
+    }
+    threads {
+      url
+    }
+    twitch {
+      url
+    }
+    rss {
+      url
+    }
+    blog {
+        url
+    }
+    mastodon {
+        url
+    }
+    github {
+        url
+    }
+    npm {
+        url
+    }
+    mdn {
+        url
+    }
+    caniuse {
+        url
+    }
+    resources {
+        url
+        title
+    }
+    webFeature {
+        id
+        description_html
+        group
+        name
+        spec
+        url
+        status {
+            baseline
+            baseline_low_date
+            support {
+            chrome
+            chrome_android
+            edge
+            firefox
+            firefox_android
+            safari
+            safari_ios
+            }
+        }
+    }`
