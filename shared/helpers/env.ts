@@ -176,11 +176,10 @@ type GetEnvVarOptions = {
 export const getEnvVarMetadata = (id: EnvVar) => getVariables().find(v => v.id === id)
 
 export const getEnvVar = (id: EnvVar, options: GetEnvVarOptions = {}) => {
-    const config = getConfig()
     const { hardFail, calledFrom } = options
-    let value = config[id] || options.default
+    const metadata = getEnvVarMetadata(id) || { id }
+    let value = getValue(metadata).value || options.default
     if (hardFail && typeof value === 'undefined') {
-        const metadata = getEnvVarMetadata(id)
         throw new Error(
             `Environment variable ${id} not found (called from: ${calledFrom}) [${metadata?.description} | example: ${metadata?.example}]`
         )

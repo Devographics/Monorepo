@@ -29,7 +29,10 @@ const envPlugin = () => ({
                 const match = line.match(/^([^#=\s][^=]*)=(.*)$/)
                 if (match) {
                     const [, key, value] = match
-                    define[`process.env.${key.trim()}`] = JSON.stringify(value.trim())
+                    const envKey = key.trim()
+                    const envValue = value.trim()
+                    process.env[envKey] ||= envValue
+                    define[`process.env.${envKey}`] = JSON.stringify(envValue)
                 }
             }
         } catch {}
