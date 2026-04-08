@@ -1,4 +1,7 @@
+import { BucketUnits } from './data'
 import { Entity } from './entities'
+import { ResponsesParameters } from './api'
+import { CustomNormalizationDefinition } from './responses'
 
 export interface SitemapSectionFields {
     id: string
@@ -10,6 +13,16 @@ export interface SitemapSectionFields {
 
 export interface SitemapSection extends SitemapSectionFields {
     children?: SitemapSectionFields[]
+}
+
+export type BlockMode = 'absolute' | 'relative'
+
+export interface ChartOptions {
+    limit?: number
+    dataFilters?: string[]
+    categories?: string[]
+    defaultMarker?: 'average' | 'median'
+    defaultView?: string
 }
 
 export interface BlockVariantDefinition {
@@ -33,18 +46,18 @@ export interface BlockVariantDefinition {
     defaultUnits?: BucketUnits
     availableUnits?: Array<BucketUnits>
 
-    defaultView?: Views
+    // defaultView?: Views
 
     // data
     query?: string
     variables?: any
     parameters?: ResponsesParameters
-    filters?: FilterType[]
-    queryOptions?: BlockQueryOptions
+    filters?: BiquadFilterType[]
+    queryOptions?: SitemapBlockQueryOptions
     hideCutoff?: number
 
     // predefined filters state
-    filtersState?: CustomizationDefinition
+    filtersState?: CustomNormalizationDefinition
 
     // config
     mode?: BlockMode

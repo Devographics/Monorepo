@@ -69,6 +69,7 @@ export const getVariables = () => config
 export type DefaultConfigValues = Partial<Record<EnvVar, any>>
 
 interface GetConfigOptions {
+    appName?: AppName
     showWarnings?: boolean
 }
 

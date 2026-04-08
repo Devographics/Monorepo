@@ -28,7 +28,7 @@ export type TProps = {
    * Fallback string
    * If you need a React component as fallback, use "children" instead
    */
-  fallback?: string | null;
+  fallback?: string;
   /**
    * Use the HTML instead of the default "t" value
    * TODO: not yet actually used, not sure of use cases at this point, need to check existing code
