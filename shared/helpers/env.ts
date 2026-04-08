@@ -1,6 +1,12 @@
 import { AppName } from '@devographics/types'
 import config_ from './variables.yml'
 
+export enum CacheTypes {
+    LOCAL = 'local',
+    MEMORY = 'memory',
+    REDIS = 'redis'
+}
+
 export enum EnvVar {
     CONFIG = 'CONFIG',
     APP_NAME = 'APP_NAME',

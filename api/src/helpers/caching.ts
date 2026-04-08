@@ -6,7 +6,7 @@ import compact from 'lodash/compact.js'
 import fs from 'fs'
 import path from 'path'
 import { logToFile } from '@devographics/debug'
-import { EnvVar, getEnvVar } from '@devographics/helpers'
+import { CacheTypes, EnvVar, getEnvVar } from '@devographics/helpers'
 
 const cacheDir = `.cache`
 
@@ -67,7 +67,7 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
     const { func, context, key, funcOptions = {}, enableLog = true } = options
     const { isDebug = false } = context || {}
 
-    const cacheType = getEnvVar(EnvVar.CACHE_TYPE, { default: 'local' })
+    const cacheType = getEnvVar(EnvVar.CACHE_TYPE, { default: CacheTypes.LOCAL })
     const envDisableCache = getEnvVar(EnvVar.DISABLE_CACHE, { default: true })
 
     // default to enabling cache
@@ -125,8 +125,8 @@ export const useCache = async <F extends DynamicComputeCall>(options: {
 const defaultLogsPath = './logs'
 
 export const getCache = async (key: string, context: RequestContext) => {
-    const cacheType = getEnvVar(EnvVar.CACHE_TYPE, { default: 'local' })
-    if (cacheType === 'local') {
+    const cacheType = getEnvVar(EnvVar.CACHE_TYPE, { default: CacheTypes.LOCAL })
+    if (cacheType === CacheTypes.LOCAL) {
         const dataFilePath = `${getEnvVar(EnvVar.LOGS_PATH, {
             default: defaultLogsPath
         })}/${cacheDir}/${key}.json`
@@ -135,10 +135,10 @@ export const getCache = async (key: string, context: RequestContext) => {
         })
         return existingData
     }
-    if (cacheType === 'memory') {
+    if (cacheType === CacheTypes.LOCAL) {
         const value: string | undefined = nodeCache.get(key)
         return value && JSON.parse(value)
-    } else {
+    } else if (cacheType === CacheTypes.REDIS) {
         try {
             const value = await context.redisClient.get(key)
             let parsedValue = JSON.parse(value)
@@ -156,14 +156,14 @@ export const getCache = async (key: string, context: RequestContext) => {
 }
 
 export const setCache = async (key: string, value: any, context: RequestContext) => {
-    const cacheType = getEnvVar(EnvVar.CACHE_TYPE, { default: 'local' })
-    if (cacheType === 'local') {
+    const cacheType = getEnvVar(EnvVar.CACHE_TYPE, { default: CacheTypes.LOCAL })
+    if (cacheType === CacheTypes.LOCAL) {
         await logToFile(`${cacheDir}/${key}.json`, value, {
             mode: 'overwrite'
         })
-    } else if (cacheType === 'memory') {
+    } else if (cacheType === CacheTypes.MEMORY) {
         nodeCache.set(key, value)
-    } else {
+    } else if (cacheType === CacheTypes.REDIS) {
         try {
             await context.redisClient.set(key, JSON.stringify(value))
         } catch (error) {
