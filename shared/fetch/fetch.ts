@@ -43,6 +43,23 @@ export const cacheFunctions = {
         fetch: fetchRedis,
         store: storeRedis
     }
+} satisfies Partial<
+    Record<
+        CacheType,
+        {
+            fetch: typeof fetchRedis
+            store: typeof storeRedis
+        }
+    >
+>
+
+const getCacheFunctions = (cacheType: CacheType) => {
+    switch (cacheType) {
+        case CacheType.REDIS:
+            return cacheFunctions[CacheType.REDIS]
+        default:
+            return undefined
+    }
 }
 
 export enum FetchPayloadResultType {
@@ -398,7 +415,12 @@ export async function storePayload<T>(
 ): Promise<boolean> {
     try {
         const { shouldCompress, cacheType } = options
-        const storeFunction = cacheFunctions[cacheType]['store'] as GenericStoreFunction
+        const storeFunction = getCacheFunctions(cacheType)?.store as
+            | GenericStoreFunction
+            | undefined
+        if (!storeFunction) {
+            return false
+        }
 
         if (shouldCompress && isNodeRuntime) {
             const { compressJSON } = await import('./compress')
@@ -432,12 +454,18 @@ export async function fetchPayload<T>(
 ): Promise<FetchPayload<T> | null> {
     try {
         const { cacheType } = options
-        const fetchFunction = cacheFunctions[cacheType]['fetch'] as GenericFetchFunction<T>
+        const fetchFunction = getCacheFunctions(cacheType)?.fetch as
+            | GenericFetchFunction<T>
+            | undefined
+        if (!fetchFunction) {
+            return null
+        }
 
         const payload = await fetchFunction(key)
         if (payload?.___metadata?.isCompressed && isNodeRuntime) {
             const { decompressJSON } = await import('./compress')
-            const uncompressedData = (await decompressJSON(payload.data)) as T
+            const compressedPayload = payload as FetchPayloadCompressed
+            const uncompressedData = (await decompressJSON(compressedPayload.data)) as T
             return {
                 ...payload,
                 data: uncompressedData

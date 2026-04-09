@@ -211,8 +211,7 @@ export const fetchBlockData = async (
         block,
         survey: { id: surveyId } as SurveyMetadata,
         edition: { id: editionId } as EditionMetadata,
-        section: { id: sectionId },
-        chartFilters: block.filtersState
+        section: { id: sectionId }
     })
 
     // check if query has changed compared to existing query document

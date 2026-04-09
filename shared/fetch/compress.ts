@@ -4,7 +4,7 @@ import { promisify } from 'util'
 // Promisify the zlib.gzip function
 const gzip = promisify(zlibGzip)
 
-export async function compressJSON(data) {
+export async function compressJSON(data: unknown) {
     try {
         // Convert JSON object to string
         const jsonString = JSON.stringify(data)
@@ -25,7 +25,7 @@ export async function compressJSON(data) {
 // Promisify the zlib.gunzip function
 const gunzip = promisify(zlibGunzip)
 
-export async function decompressJSON(compressedString) {
+export async function decompressJSON(compressedString: string) {
     try {
         // Convert the base64 string to a buffer
         const compressedBuffer = Buffer.from(compressedString, 'base64')

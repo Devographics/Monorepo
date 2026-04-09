@@ -12,11 +12,20 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@devographics/filesystem": [
+        "./src/shims/devographics-filesystem.d.ts"
+      ],
+      "@devographics/i18n/server": [
+        "./src/shims/devographics-i18n-server.d.ts"
       ]
     }
   },
   "include": [
     "src",
     ".storybook"
+  ],
+  "exclude": [
+    "src/surveys"
   ]
 }

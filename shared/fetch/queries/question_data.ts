@@ -3,7 +3,7 @@ import { Filters, ResponsesParameters, ResultsSubFieldEnum, FacetItem } from '@d
 // does not work in edge middlewares or whatever?? really??
 // import isEmpty from 'lodash/isEmpty.js'
 
-function isEmpty(o) {
+function isEmpty(o: unknown) {
     return typeof o === 'undefined' || o === null || Object.keys(o).length === 0
 }
 
