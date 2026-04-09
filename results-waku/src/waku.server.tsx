@@ -1,5 +1,6 @@
 import adapter from 'waku/adapters/default'
 import { createPages } from 'waku'
+import { AppName } from '@devographics/types'
 import { RootLayout } from './templates/root-layout'
 import { LocalizedPage } from './templates/localized-page'
 import { HomePage } from './templates/home-page'
@@ -10,6 +11,8 @@ import path from 'node:path'
 
 const EDITIONID = process.env.EDITIONID || 'js2025'
 const STATIC_BUID_SITEMAP_PATH = path.resolve(`./src/surveys/${EDITIONID}/config/raw_sitemap.yml`)
+
+process.env.APP_NAME ||= AppName.RESULTS
 
 const sitemaps = loadSitemap(STATIC_BUID_SITEMAP_PATH)
 

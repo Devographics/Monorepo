@@ -7,7 +7,10 @@ import { allowedCachingMethods } from './helpers'
  * Generic get/set for redis, for a given cache key
  */
 export function redisPipelineStep<T = any>(cacheKey: string): FetchPipelineStep<T> {
-    initRedis()
+    const disabled = !allowedCachingMethods().redis
+    if (!disabled) {
+        initRedis()
+    }
     return {
         name: "redis",
         get: async () => {
@@ -16,6 +19,6 @@ export function redisPipelineStep<T = any>(cacheKey: string): FetchPipelineStep<
         set: async (locales) => {
             await storeRedis(cacheKey, locales)
         },
-        disabled: !allowedCachingMethods().redis
+        disabled
     }
 }

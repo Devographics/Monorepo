@@ -1,5 +1,7 @@
 import { getLocalJSON, getLocalString } from '@devographics/filesystem'
 
+const DEFAULT_SURVEYS_URL = 'https://devographics.github.io/surveys'
+
 /**
  * Get caching methods based on current config
  * It can enable or disable either caching or writing, depending on the cache type
@@ -38,12 +40,14 @@ export const allowedCachingMethods = (): {
 
 // if SURVEYS_URL is defined, then use that to load surveys;
 // if not, look in local filesystem
-export const getLoadMethod = () => (process.env.SURVEYS_URL ? 'remote' : 'local')
+export const getLoadMethod = () =>
+    process.env.SURVEYS_PATH && !process.env.SURVEYS_URL ? 'local' : 'remote'
 
 export const getDataLocations = (surveyId: string, editionId: string) => {
+    const surveysUrl = process.env.SURVEYS_URL || DEFAULT_SURVEYS_URL
     return {
         localPath: `${process.env.SURVEYS_PATH}/${surveyId}/${editionId}`,
-        url: `${process.env.SURVEYS_URL}/${surveyId}/${editionId}`
+        url: `${surveysUrl}/${surveyId}/${editionId}`
     }
 }
 
@@ -61,7 +65,7 @@ export const getFileAsJSON = async ({
 }) => {
     let contents, data
     if (getLoadMethod() === 'local') {
-        contents = await getLocalJSON({ localPath })
+        data = await getLocalJSON({ localPath })
     } else {
         console.log(`// fetching ${remoteUrl}…`)
         const response = await fetch(remoteUrl)

@@ -18,7 +18,11 @@ export const allowedCachingMethods = (): {
      */
     redis: boolean
 } => {
-    let cacheLevel = { filesystem: true, api: true, redis: true }
+    let cacheLevel = {
+        filesystem: true,
+        api: true,
+        redis: Boolean(getEnvVar(EnvVar.REDIS_UPSTASH_URL) && getEnvVar(EnvVar.REDIS_TOKEN))
+    }
     if (getEnvVar(EnvVar.DISABLE_CACHE) === 'true') {
         cacheLevel = { filesystem: false, api: false, redis: false }
     } else {
