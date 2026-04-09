@@ -9,7 +9,7 @@ import { EnvVar, parseEnvVariableArray, getEnvVar } from '@devographics/helpers'
 //     return { key };
 //   };
 
-export const refreshSurveysCache = async (args: { target?: string }) => {
+export const refreshSurveysCache = async args => {
     const { target } = args
     const refreshedCacheKeys: string[] = []
     // get list of all surveys
@@ -51,7 +51,7 @@ export const refreshSurveysCache = async (args: { target?: string }) => {
 const baseContexts = ['common', 'surveys', 'accounts']
 
 // see https://youmightnotneed.com/lodash#uniq
-const uniq = <T>(a: T[]) => [...new Set(a)]
+const uniq = a => [...new Set(a)]
 
 // i18n contexts common to all surveys and editions
 export const getCommonContexts = () => {
@@ -67,7 +67,7 @@ export const getCommonContexts = () => {
  * TODO: it might be more robust to issue Redis commands
  * removing keys based on  a prefix instead
  */
-export const refreshLocalesCache = async (args: { localeIds?: string[]; target?: string }) => {
+export const refreshLocalesCache = async args => {
     const { localeIds, target } = args
     const { data: allSurveys } = await fetchSurveysMetadata()
 

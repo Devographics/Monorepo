@@ -73,8 +73,7 @@ export async function storeRedis(key: string, val: any): Promise<boolean> {
         }
         return true
     } catch (error) {
-        const message = error instanceof Error ? error.message : String(error)
-        console.log(`🟠 [${key}] Warning: Redis cache update failed with: ${message}`)
+        console.log(`🟠 [${key}] Warning: Redis cache update failed with: ${error.message}`)
         return false
     }
 }

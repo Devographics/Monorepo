@@ -1,5 +1,3 @@
-import { removeNull } from '@devographics/fetch'
-
 type GraphqlLiteral = {
     kind: 'literal'
     value: string
@@ -12,6 +10,19 @@ type GraphqlInputValue = GraphqlPrimitive | GraphqlLiteral | GraphqlInputValue[]
 type GraphqlResponse<T> = {
     data?: T
     errors?: Array<{ message: string }>
+}
+
+const removeNull = <T>(obj: T): T => {
+    const clean = Object.fromEntries(
+        Object.entries(obj as Record<string, unknown>)
+            .map(([key, value]) => [
+                key,
+                value !== null && typeof value === 'object' ? removeNull(value) : value
+            ])
+            .filter(([, value]) => value != null)
+    )
+
+    return (Array.isArray(obj) ? Object.values(clean) : clean) as T
 }
 
 const GRAPHQL_PLACEHOLDER_PATTERN = /__([A-Z0-9_]+)__/g
