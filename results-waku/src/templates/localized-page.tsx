@@ -39,6 +39,8 @@ export async function LocalizedPage({ locale: localeId, slug }: LocalizedPagePro
         )
     ])
 
+    const getBucketPercentage = (percentageQuestion?: number) => (percentageQuestion ?? 0).toFixed(1)
+
     return (
         <section>
             <h1>results-waku</h1>
@@ -58,7 +60,7 @@ export async function LocalizedPage({ locale: localeId, slug }: LocalizedPagePro
                         <ul>
                             {result.edition.buckets.map(b => (
                                 <li key={b.id}>
-                                    {b.id}: {b.count} ({b.percentageQuestion.toFixed(1)}%)
+                                    {b.id}: {b.count} ({getBucketPercentage(b.percentageQuestion)}%)
                                 </li>
                             ))}
                         </ul>
@@ -79,7 +81,7 @@ export async function LocalizedPage({ locale: localeId, slug }: LocalizedPagePro
                                     <ul>
                                         {item.edition.buckets.map(b => (
                                             <li key={b.id}>
-                                                {b.id}: {b.count} ({b.percentageQuestion.toFixed(1)}
+                                                {b.id}: {b.count} ({getBucketPercentage(b.percentageQuestion)}
                                                 %)
                                             </li>
                                         ))}
