@@ -7,7 +7,7 @@ type SitemapPageProps = {
     editionId?: string
 }
 
-export async function SitemapPage({
+export function SitemapPage({
     locale,
     path,
     pageId,

@@ -6,6 +6,8 @@
         "dev": "waku dev --port 4400",
         "build": "waku build",
         "start": "waku start",
+        "storybook": "storybook dev -p 6006 --ci",
+        "build-storybook": "storybook build",
         "fmt": "oxfmt src",
         "fmt:check": "oxfmt src --check",
         "typecheck": "tsc --noEmit",
@@ -33,13 +35,17 @@
     },
     "devDependencies": {
         "@playwright/test": "^1.47.0",
+        "@storybook/addon-a11y": "10.3.5",
+        "@storybook/react-vite": "10.3.5",
         "@types/lodash": "^4.17.24",
         "@types/react": "^19.2.2",
         "@types/react-dom": "^19.2.2",
         "oxfmt": "^0.36.0",
         "pixelmatch": "^7.1.0",
         "pngjs": "^7.0.0",
-        "typescript": "^5.9.3"
+        "storybook": "10.3.5",
+        "typescript": "^5.9.3",
+        "vite": "7.3.1"
     },
     "engines": {
         "node": "24.x"
