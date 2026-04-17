@@ -16,7 +16,7 @@ import { print } from 'graphql-print'
 import { getBlockQuery } from './queries'
 
 const DATA_TEMPLATES: Record<string, string> = {
-    multiple_options2: 'responses',
+    multiple_options2: 'combined',
     multiple_options2_freeform: 'freeform',
     multiple_options2_combined: 'combined'
 }
@@ -75,6 +75,19 @@ const isResponseEditionData = (v: unknown): v is ResponseEditionData =>
     Array.isArray(v.buckets) &&
     v.buckets.every(isBucket)
 
+const getResponseDataRoot = (data: Record<string, unknown>) => {
+    if (isObject(data.dataAPI)) return data.dataAPI
+    if (isObject(data.data)) return data.data
+    return data
+}
+
+const getCurrentEditionData = (allEditions: unknown[], editionId: string) => {
+    const edition = allEditions.find(
+        edition => isObject(edition) && edition.editionId === editionId
+    )
+    return isResponseEditionData(edition) ? edition : undefined
+}
+
 const getBlockData = (
     data: Record<string, unknown>,
     surveyId: string,
@@ -83,7 +96,7 @@ const getBlockData = (
     questionId: string,
     subField: string
 ): ResponseEditionData | undefined => {
-    const surveys = data.surveys
+    const surveys = getResponseDataRoot(data).surveys
     if (!isObject(surveys)) return undefined
     const survey = surveys[surveyId]
     if (!isObject(survey)) return undefined
@@ -97,8 +110,7 @@ const getBlockData = (
     if (!isObject(subFieldData)) return undefined
     const allEditions = subFieldData.allEditions
     if (!Array.isArray(allEditions)) return undefined
-    const first = allEditions[0]
-    return isResponseEditionData(first) ? first : undefined
+    return getCurrentEditionData(allEditions, editionId)
 }
 
 type RawSectionItem = { id: string; responses: { allEditions: unknown[] } }
@@ -115,7 +127,7 @@ const getSectionRawItems = (
     editionId: string,
     sectionId: string
 ): RawSectionItem[] | undefined => {
-    const surveys = data.surveys
+    const surveys = getResponseDataRoot(data).surveys
     if (!isObject(surveys)) return undefined
     const survey = surveys[surveyId]
     if (!isObject(survey)) return undefined
@@ -199,8 +211,7 @@ export const fetchBlockData = async (
         block,
         survey: { id: surveyId } as SurveyMetadata,
         edition: { id: editionId } as EditionMetadata,
-        section: { id: sectionId },
-        chartFilters: block.filtersState
+        section: { id: sectionId }
     })
 
     // check if query has changed compared to existing query document
@@ -225,9 +236,12 @@ export const fetchBlockData = async (
     } else {
         if (existingData) {
             if (queryHasChanged) {
-                if (process.env.FROZEN === 'true') {
+                if (process.env.FROZEN === 'true' || getLoadMethod() === 'remote') {
                     shouldFetchData = false
-                    reason = '[query changed but data is frozen]'
+                    reason =
+                        getLoadMethod() === 'remote'
+                            ? '[query changed but remote cached data exists]'
+                            : '[query changed but data is frozen]'
                 } else {
                     shouldFetchData = true
                     reason = '[query change detected]'
@@ -277,7 +291,10 @@ export const fetchSectionItems = async (
         const rawItems = getSectionRawItems(data, surveyId, editionId, sectionId)
         if (!rawItems) return null
         const items = rawItems
-            .map(item => ({ id: item.id, edition: item.responses.allEditions[0] }))
+            .map(item => ({
+                id: item.id,
+                edition: getCurrentEditionData(item.responses.allEditions, editionId)
+            }))
             .filter((item): item is { id: string; edition: ResponseEditionData } =>
                 isResponseEditionData(item.edition)
             )

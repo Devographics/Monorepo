@@ -29,6 +29,18 @@ pnpm -C results-waku run build
 pnpm -C results-waku run start
 ```
 
+## Storybook
+
+```sh
+pnpm -C results-waku run storybook
+```
+
+Static build:
+
+```sh
+pnpm -C results-waku run build-storybook
+```
+
 ## E2E Parity Test
 
 The parity test compares the local app against `https://2025.stateofjs.com/en-US/` by:

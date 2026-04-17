@@ -1,11 +1,9 @@
-import { getAllLocaleDefinitions, getLocaleDict } from '@devographics/i18n/server'
-
-type Translation = {
-    key: string
-    t: string
-    tHtml?: string
-    tClean?: string
-}
+import {
+    getAllLocaleDefinitions,
+    getLocaleDict,
+    type LocaleParsed,
+    type Translation
+} from '@devographics/i18n/server'
 
 type LocaleWithStrings = {
     id: string
@@ -16,12 +14,6 @@ type LocaleWithStrings = {
     translatedCount?: number
     translators?: string[]
     strings: Translation[]
-}
-
-type LocaleParsed = Omit<LocaleWithStrings, 'strings'> & {
-    strings: Translation[]
-    dict: Record<string, Translation>
-    contexts: string[]
 }
 
 type LocaleMetadata = {

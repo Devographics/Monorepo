@@ -12,6 +12,18 @@ import { SeriesParams } from './types'
 import { getDefaultQueryFragment } from './fragments/getDefaultQueryFragment'
 import { CustomizationDefinition, CustomizationOptions } from '../filters/types'
 
+const getSectionIdFromQueryOptions = (queryOptions: BlockVariantDefinition['queryOptions']) => {
+    if (
+        queryOptions &&
+        typeof queryOptions === 'object' &&
+        'sectionId' in queryOptions &&
+        typeof queryOptions.sectionId === 'string'
+    ) {
+        return queryOptions.sectionId
+    }
+    return undefined
+}
+
 export const getParameters = (options: CustomizationOptions) => {
     const parameters: ResponsesParameters = {}
     const { cutoff, cutoffType, limit, mergeOtherBuckets } = options
@@ -61,7 +73,7 @@ export const getBlockQuery = ({
         ...block.queryOptions,
         surveyId: survey?.id,
         editionId: edition?.id,
-        sectionId: axis1?.sectionId || block.queryOptions?.sectionId || section?.id,
+        sectionId: axis1?.sectionId || getSectionIdFromQueryOptions(block.queryOptions) || section?.id,
         questionId,
         subField: ResultsSubFieldEnum.COMBINED,
         // we never need comments when querying from the client
