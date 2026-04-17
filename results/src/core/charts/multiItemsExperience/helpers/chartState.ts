@@ -10,11 +10,15 @@ export const useChartState = (defaultState?: {
         defaultState?.rowsLimit || 0
     )
     const [grouping, setGrouping] = useState<MultiItemsChartState['grouping']>(
-        GroupingOptions.EXPERIENCE
+        defaultState?.grouping || GroupingOptions.EXPERIENCE
     )
-    const [sort, setSort] = useState<MultiItemsChartState['sort']>(FeaturesOptions.USED)
+    const [sort, setSort] = useState<MultiItemsChartState['sort']>(
+        defaultState?.sort || FeaturesOptions.USED
+    )
     const [filter, setFilter] = useState<MultiItemsChartState['filter']>()
-    const [order, setOrder] = useState<MultiItemsChartState['order']>(OrderOptions.DESC)
+    const [order, setOrder] = useState<MultiItemsChartState['order']>(
+        defaultState?.order || OrderOptions.DESC
+    )
     const [variable, setVariable] = useState<MultiItemsChartState['variable']>(DEFAULT_VARIABLE)
     const [highlightedRow, setHighlightedRow] =
         useState<MultiItemsChartState['highlightedRow']>(null)

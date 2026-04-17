@@ -25,9 +25,13 @@ export interface MultiItemsExperienceBlockProps extends BlockComponentProps {
 
 export const MultiItemsExperienceBlock = (props: MultiItemsExperienceBlockProps) => {
     const { series, block, question, pageContext } = props
+    const { chartOptions = {} } = block
     const theme = useTheme()
 
-    const chartState = useChartState({ rowsLimit: block?.chartOptions?.limit || defaultLimit })
+    const chartState = useChartState({
+        ...chartOptions,
+        rowsLimit: chartOptions?.limit || defaultLimit
+    })
     const { grouping } = chartState
 
     const className = `multiexp multiexp-groupedBy-${grouping}`

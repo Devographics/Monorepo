@@ -88,7 +88,7 @@ export const FilterSection = ({
     children: JSX.Element
 }) => {
     return (
-        <div className="filter-section">
+        <div className={`filter-section filter-section-${headingId}`}>
             <div className="filter-section-heading">
                 <h4 className="filter-heading">
                     <T k={`comments.filter.by_${headingId}`} />
