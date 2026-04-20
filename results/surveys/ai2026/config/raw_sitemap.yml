@@ -170,19 +170,27 @@
         queryOptions:
             sectionId: risks_pain_points
 
+      - id: survey_newsletter
+        blockType: NewsletterBlock
+        disableExport: true
+        wrapBlock: false
+
       - id: overview.ai_future.ai2026
         blockType: TextBlock
         disableExport: true
         wrapBlock: false
         showInNav: false
 
-      - id: survey_credits
-        template: credits
-
-      - id: survey_newsletter
-        blockType: NewsletterBlock
-        disableExport: true
+      - id: full_survey_cta
+        blockType: CTABlock
         wrapBlock: false
+        showInNav: false
+        variables:
+            ctaKey: general.view_full_results
+            ctaLink: /models/
+
+      # - id: survey_credits
+      #   template: credits
 
       - id: survey_sponsors
         template: sponsors

@@ -10,7 +10,7 @@ const NewsletterBlock = () => {
     const { translate } = useI18n()
 
     return (
-        <Container>
+        <Container className="newsletter-block">
             {process.env.GATSBY_EMAIL_POST_URL ? (
                 <NewsletterPOST />
             ) : process.env.GATSBY_MAILCHIMP_URL ? (

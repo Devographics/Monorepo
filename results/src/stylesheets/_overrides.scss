@@ -104,10 +104,14 @@
     .Block__Title {
         display: none;
     }
-    .tabs-wrapper {
+    .tabs-wrapper,
+    .newsletter-block {
         margin-bottom: 0;
     }
     .chart-note {
+        display: none;
+    }
+    .page-footer {
         display: none;
     }
 }

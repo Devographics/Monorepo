@@ -17,7 +17,7 @@ const PageFooter = () => {
     } = currentEdition
 
     return (
-        <Container>
+        <Container className="page-footer">
             <Nav>
                 {context.previous && !isEmpty(context.previous) && (
                     <PreviousLink

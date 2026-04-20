@@ -86,9 +86,12 @@ import LivestreamBlock from 'core/blocks/other/LivestreamBlock'
 
 import HighlightBlock from 'core/blocks/other/HighlightBlock'
 
+import CTABlock from 'core/blocks/other/CTABlock'
+
 const otherBlocks = {
     PageIntroductionBlock,
     TextBlock,
+    CTABlock,
     // ImageBlock,
     RecommendedResourcesBlock,
     TshirtBlock,
