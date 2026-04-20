@@ -1,9 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { newColorTheme } from '../theme/colors'
-
-const mainColor = newColorTheme.lightOnDark.primary.default
-const secondaryColor = newColorTheme.lightOnDark.text.default
+import { getThemeColor } from 'core/theme_new/colors'
+const mainColor = getThemeColor('primary.default')
+const secondaryColor = getThemeColor('text.default')
 
 export const Logo = props => (
     <LogoWrapper>

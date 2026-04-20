@@ -1,5 +1,6 @@
 import { DefaultTheme } from 'styled-components'
 import colors_ from 'core/theme/colors'
+import { getThemeColor } from 'core/theme_new/colors'
 
 const colors = {
     ...colors_,
@@ -156,7 +157,7 @@ const distinct = [
     colors.kaki
 ]
 
-export const newColorTheme = {
+export const surveyColorTheme = {
     lightOnDark: {
         primary: { default: '#fcac3cff', darker: '#b7781fff' },
         background: { default: '#242220ff', alt: '#56442bff', alt2: '#a47738ff' },
@@ -191,21 +192,21 @@ export const newColorTheme = {
 }
 
 const stateOfJSThemeColors: DefaultTheme['colors'] = {
-    background: newColorTheme.lightOnDark.background.default,
+    background: getThemeColor('background.default'),
     backgroundTrans: 'rgb(39, 35, 37, 0.3)',
     backgroundAlt3: '#27242E',
     backgroundBackground: '#375D70',
     backgroundForeground: colors.navyLighter,
-    backgroundAlt: newColorTheme.lightOnDark.background.alt,
+    backgroundAlt: getThemeColor('background.alt'),
     backgroundAltTrans: 'rgba(49, 68, 72, 0.4)',
-    backgroundAlt2: newColorTheme.lightOnDark.background.alt2,
+    backgroundAlt2: getThemeColor('background.alt2'),
     backgroundInverted: '#FFF6E6',
     backgroundInvertedAlt: '#E3D8C4',
-    text: newColorTheme.lightOnDark.text.default,
+    text: getThemeColor('text.default'),
     textAlt: 'rgba(255, 246, 229, 0.5)',
     textInverted: '#272325',
     textHighlight: colors.greenDark,
-    link: newColorTheme.lightOnDark.primary.default,
+    link: getThemeColor('primary.default'),
     linkActive: '#5C63E0',
     contrast: '#0bdf67',
     border: '#FFF6E6',
@@ -287,11 +288,8 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         gradient: [colors.greyLight, colors.greyLightest]
     },
     barChart: {
-        primary: newColorTheme.lightOnDark.primary.default,
-        primaryGradient: [
-            newColorTheme.lightOnDark.primary.darker,
-            newColorTheme.lightOnDark.primary.default
-        ],
+        primary: getThemeColor('primary.default'),
+        primaryGradient: [getThemeColor('primary.darker'), getThemeColor('primary.default')],
         // secondary: colors.yellowLight,
         // secondaryGradient: [colors.yellow, colors.yellowLight],
         secondary: colors.pink,
@@ -312,31 +310,16 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
             back_end_infrastructure: colors.orange
         },
         sentiment: {
-            positive: [
-                newColorTheme.lightOnDark.sentiment.positive,
-                newColorTheme.lightOnDark.sentiment.positive
-            ],
-            neutral: [
-                newColorTheme.lightOnDark.sentiment.neutral,
-                newColorTheme.lightOnDark.sentiment.neutral
-            ],
-            negative: [
-                newColorTheme.lightOnDark.sentiment.negative,
-                newColorTheme.lightOnDark.sentiment.negative
-            ]
+            positive: [getThemeColor('sentiment.positive'), getThemeColor('sentiment.positive')],
+            neutral: [getThemeColor('sentiment.neutral'), getThemeColor('sentiment.neutral')],
+            negative: [getThemeColor('sentiment.negative'), getThemeColor('sentiment.negative')]
         },
         features: {
-            heard: [
-                newColorTheme.lightOnDark.experience.heard,
-                newColorTheme.lightOnDark.experience.heard
-            ],
-            used: [
-                newColorTheme.lightOnDark.experience.used,
-                newColorTheme.lightOnDark.experience.used
-            ],
+            heard: [getThemeColor('experience.heard'), getThemeColor('experience.heard')],
+            used: [getThemeColor('experience.used'), getThemeColor('experience.used')],
             never_heard: [
-                newColorTheme.lightOnDark.experience.never_heard,
-                newColorTheme.lightOnDark.experience.never_heard
+                getThemeColor('experience.never_heard'),
+                getThemeColor('experience.never_heard')
             ]
         },
         features_categories: {
@@ -391,11 +374,11 @@ const stateOfJSThemeColors: DefaultTheme['colors'] = {
         //     yes_unrelated: velocity[4]
         // },
         opinions: {
-            4: [newColorTheme.lightOnDark.velocity[9], newColorTheme.lightOnDark.velocity[8]],
-            3: [newColorTheme.lightOnDark.velocity[7], newColorTheme.lightOnDark.velocity[6]],
-            2: [newColorTheme.lightOnDark.velocity[5], newColorTheme.lightOnDark.velocity[4]],
-            1: [newColorTheme.lightOnDark.velocity[3], newColorTheme.lightOnDark.velocity[2]],
-            0: [newColorTheme.lightOnDark.velocity[1], newColorTheme.lightOnDark.velocity[0]]
+            4: [getThemeColor('velocity[9]'), getThemeColor('velocity[8]')],
+            3: [getThemeColor('velocity[7]'), getThemeColor('velocity[6]')],
+            2: [getThemeColor('velocity[5]'), getThemeColor('velocity[4]')],
+            1: [getThemeColor('velocity[3]'), getThemeColor('velocity[2]')],
+            0: [getThemeColor('velocity[1]'), getThemeColor('velocity[0]')]
         },
         bracket: {
             round1: [velocity[2], velocity[3]],
